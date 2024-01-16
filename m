@@ -1,61 +1,69 @@
-Return-Path: <linux-kselftest+bounces-3112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF8C182F7BA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 21:29:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15B6282F812
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 21:37:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21A9A1C24B5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 20:29:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E6D71C24ABA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 20:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC05486AD4;
-	Tue, 16 Jan 2024 19:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB74A12CD84;
+	Tue, 16 Jan 2024 19:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxY3mX+r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fODjdGQN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD4886ACB;
-	Tue, 16 Jan 2024 19:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78E824214;
+	Tue, 16 Jan 2024 19:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434576; cv=none; b=RKGi0hccCIGx5PhxyXSFfR2OtkEZZR7QcPQdsWE3s4Dew8VhYSQrlaLJNjfyV3VvfLpCjhK+D7HTXuCVMCwiC4DPtElwe7xDiuTGOiDjoPwgIxl4env3kedO8LRaB//lSDwkcse9vxyAJspGeKu798i0vLYF0gJcRwuCqnCLz1c=
+	t=1705434625; cv=none; b=gpzEYLU0ov2EyWeRom9PBgknx3d3wvPUy+jXXRxDo55iB0MFVGGx6LOC/O0pIkfepy94ochKu1F7LQt61NVWCY3sgqDKnn1QS0PftQcCKfyiXZFy/1g33kp0YmSr+VeLnsIHwtvl1V99QaF2lZPqAgkv7m2jTgHxtelg2DUMJOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434576; c=relaxed/simple;
-	bh=ZkxT3wJQreUP2NRRWbQqJHdUJcswKc1hLjBKWmKB3ZQ=;
+	s=arc-20240116; t=1705434625; c=relaxed/simple;
+	bh=W/wZE/1C8o+w7gHiW4PUYQXU0ahgzy3AaYoVFq7n96o=;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=B4m91uY3ao0VBToBhuTLQhxCQgQGqf+7/R6xPHeZhu4ldenng6Opw5a+MA30cg3RAUI2EExFs1uKkPY46H6ss8mtMY49Dg9/Q0tMDjCYtaxSJyNkzWzn2zkIh9NnECG5KxzaFZ6pr6hesL5mN9QUAhZVzCuLbjGGQaUwvPbW9m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxY3mX+r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 609E8C433A6;
-	Tue, 16 Jan 2024 19:49:35 +0000 (UTC)
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=fuShb12nysvYBQOCRs7f9cefbPce1/0UAqcouKHYc0sQT7isCdu7DA2zyiXR4CAjmVNlvNM9zuHj9+msyr08DyaoS+gHY47ZXIEW4PJxysLx8KIKnXaYgVvwTbI9LIJzAWIC7MlMbPcHGgieyf/Lq8b3H9wXjIXSgTCfL8mTx/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fODjdGQN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43093C433C7;
+	Tue, 16 Jan 2024 19:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705434576;
-	bh=ZkxT3wJQreUP2NRRWbQqJHdUJcswKc1hLjBKWmKB3ZQ=;
+	s=k20201202; t=1705434625;
+	bh=W/wZE/1C8o+w7gHiW4PUYQXU0ahgzy3AaYoVFq7n96o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jxY3mX+rtyecOJz65QZrT1aFH1l1k8G08UC8GCZZXnanOyeINiltMzYW/6+JlMIdj
-	 a62Z8MaFQ1F21zBFTy9RvAoWTEppiT7jmKOv4lhg9NffD1tQYc+a3VmPUk1Bglklnq
-	 ebnxJHMu8pGitR2tgPXovv5LiGdJShA5QjPyNZ9CwIy4PbnQQXoRfWSBMfmozgvt7p
-	 BEEiMUIHvbFp9l7AunRZb177DQ/BxHvQ+kLZ4vpCyjfcOlohu7QKPVbkTR0uH64fg7
-	 f/uL1gAFUeBQJX/0Uaiww9lnCaU7wuAEb/p4Dp4C15pnLdDdyoyJEjQ/HUOgswpVdy
-	 Tqauq9rvKLBbA==
+	b=fODjdGQNaBmZzdqSGKoPNXHLhIlwj2wN1byM6h4PkpIOeV72dYly1BjZqPFFaJAnb
+	 +2PbdIrZeGrKA4L5Le9i1CeGG5a5aTpvGgocBftsz/ShPheniuwXdxUQf9B7SKXIqC
+	 ltTnxQU7CA6SlNySLZ56qU88lGcplnYGByimBxjI4tbpv9WzRtUDXpoNRGZEi1SjpV
+	 yNTjym+mfMdSZo9rspq5fX0+bDKMBo8nwuHI2bzqBQzXgF+VlyNJAh0xfqQYoz4JvH
+	 WMFLjvQAkwSQn2hKrVvt/3x77yOdM058Xkonztuf+jGhCd4Hsjg7tGMiKkayaj75Ug
+	 fI59zZvFd4Stw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Yafang Shao <laoar.shao@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Sasha Levin <sashal@kernel.org>,
-	daniel@iogearbox.net,
+	ast@kernel.org,
 	andrii@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
 	shuah@kernel.org,
+	nathan@kernel.org,
+	sdf@google.com,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 008/104] selftests/bpf: Fix issues in setup_classid_environment()
-Date: Tue, 16 Jan 2024 14:45:34 -0500
-Message-ID: <20240116194908.253437-8-sashal@kernel.org>
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.6 031/104] bpf: Fix a few selftest failures due to llvm18 change
+Date: Tue, 16 Jan 2024 14:45:57 -0500
+Message-ID: <20240116194908.253437-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240116194908.253437-1-sashal@kernel.org>
 References: <20240116194908.253437-1-sashal@kernel.org>
@@ -70,83 +78,97 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.12
 Content-Transfer-Encoding: 8bit
 
-From: Yafang Shao <laoar.shao@gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
 
-[ Upstream commit 4849775587844e44d215289c425bcd70f315efe7 ]
+[ Upstream commit b16904fd9f01b580db357ef2b1cc9e86d89576c2 ]
 
-If the net_cls subsystem is already mounted, attempting to mount it again
-in setup_classid_environment() will result in a failure with the error code
-EBUSY. Despite this, tmpfs will have been successfully mounted at
-/sys/fs/cgroup/net_cls. Consequently, the /sys/fs/cgroup/net_cls directory
-will be empty, causing subsequent setup operations to fail.
+With latest upstream llvm18, the following test cases failed:
 
-Here's an error log excerpt illustrating the issue when net_cls has already
-been mounted at /sys/fs/cgroup/net_cls prior to running
-setup_classid_environment():
+  $ ./test_progs -j
+  #13/2    bpf_cookie/multi_kprobe_link_api:FAIL
+  #13/3    bpf_cookie/multi_kprobe_attach_api:FAIL
+  #13      bpf_cookie:FAIL
+  #77      fentry_fexit:FAIL
+  #78/1    fentry_test/fentry:FAIL
+  #78      fentry_test:FAIL
+  #82/1    fexit_test/fexit:FAIL
+  #82      fexit_test:FAIL
+  #112/1   kprobe_multi_test/skel_api:FAIL
+  #112/2   kprobe_multi_test/link_api_addrs:FAIL
+  [...]
+  #112     kprobe_multi_test:FAIL
+  #356/17  test_global_funcs/global_func17:FAIL
+  #356     test_global_funcs:FAIL
 
-- Before that change
+Further analysis shows llvm upstream patch [1] is responsible for the above
+failures. For example, for function bpf_fentry_test7() in net/bpf/test_run.c,
+without [1], the asm code is:
 
-  $ tools/testing/selftests/bpf/test_progs --name=cgroup_v1v2
-  test_cgroup_v1v2:PASS:server_fd 0 nsec
-  test_cgroup_v1v2:PASS:client_fd 0 nsec
-  test_cgroup_v1v2:PASS:cgroup_fd 0 nsec
-  test_cgroup_v1v2:PASS:server_fd 0 nsec
-  run_test:PASS:skel_open 0 nsec
-  run_test:PASS:prog_attach 0 nsec
-  test_cgroup_v1v2:PASS:cgroup-v2-only 0 nsec
-  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup.procs
-  (cgroup_helpers.c:540: errno: No such file or directory) Opening cgroup classid: /sys/fs/cgroup/net_cls/cgroup-test-work-dir/net_cls.classid
-  run_test:PASS:skel_open 0 nsec
-  run_test:PASS:prog_attach 0 nsec
-  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup-test-work-dir/cgroup.procs
-  run_test:FAIL:join_classid unexpected error: 1 (errno 2)
-  test_cgroup_v1v2:FAIL:cgroup-v1v2 unexpected error: -1 (errno 2)
-  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup.procs
-  #44      cgroup_v1v2:FAIL
-  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+  0000000000000400 <bpf_fentry_test7>:
+     400: f3 0f 1e fa                   endbr64
+     404: e8 00 00 00 00                callq   0x409 <bpf_fentry_test7+0x9>
+     409: 48 89 f8                      movq    %rdi, %rax
+     40c: c3                            retq
+     40d: 0f 1f 00                      nopl    (%rax)
 
-- After that change
-  $ tools/testing/selftests/bpf/test_progs --name=cgroup_v1v2
-  #44      cgroup_v1v2:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+... and with [1], the asm code is:
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Link: https://lore.kernel.org/r/20231111090034.4248-3-laoar.shao@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+  0000000000005d20 <bpf_fentry_test7.specialized.1>:
+    5d20: e8 00 00 00 00                callq   0x5d25 <bpf_fentry_test7.specialized.1+0x5>
+    5d25: c3                            retq
+
+... and <bpf_fentry_test7.specialized.1> is called instead of <bpf_fentry_test7>
+and this caused test failures for #13/#77 etc. except #356.
+
+For test case #356/17, with [1] (progs/test_global_func17.c)), the main prog
+looks like:
+
+  0000000000000000 <global_func17>:
+       0:       b4 00 00 00 2a 00 00 00 w0 = 0x2a
+       1:       95 00 00 00 00 00 00 00 exit
+
+... which passed verification while the test itself expects a verification
+failure.
+
+Let us add 'barrier_var' style asm code in both places to prevent function
+specialization which caused selftests failure.
+
+  [1] https://github.com/llvm/llvm-project/pull/72903
+
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20231127050342.1945270-1-yonghong.song@linux.dev
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/cgroup_helpers.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ net/bpf/test_run.c                                     | 2 +-
+ tools/testing/selftests/bpf/progs/test_global_func17.c | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index 2caee8423ee0..f68fbc6c3f52 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -499,10 +499,20 @@ int setup_classid_environment(void)
- 		return 1;
- 	}
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 0841f8d82419..478ee7aba85f 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -543,7 +543,7 @@ struct bpf_fentry_test_t {
  
--	if (mount("net_cls", NETCLS_MOUNT_PATH, "cgroup", 0, "net_cls") &&
--	    errno != EBUSY) {
--		log_err("mount cgroup net_cls");
--		return 1;
-+	if (mount("net_cls", NETCLS_MOUNT_PATH, "cgroup", 0, "net_cls")) {
-+		if (errno != EBUSY) {
-+			log_err("mount cgroup net_cls");
-+			return 1;
-+		}
-+
-+		if (rmdir(NETCLS_MOUNT_PATH)) {
-+			log_err("rmdir cgroup net_cls");
-+			return 1;
-+		}
-+		if (umount(CGROUP_MOUNT_DFLT)) {
-+			log_err("umount cgroup base");
-+			return 1;
-+		}
- 	}
+ int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
+ {
+-	asm volatile ("");
++	asm volatile ("": "+r"(arg));
+ 	return (long)arg;
+ }
  
- 	cleanup_classid_environment();
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func17.c b/tools/testing/selftests/bpf/progs/test_global_func17.c
+index a32e11c7d933..5de44b09e8ec 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func17.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func17.c
+@@ -5,6 +5,7 @@
+ 
+ __noinline int foo(int *p)
+ {
++	barrier_var(p);
+ 	return p ? (*p = 42) : 0;
+ }
+ 
 -- 
 2.43.0
 
