@@ -1,83 +1,103 @@
-Return-Path: <linux-kselftest+bounces-3072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0301782EE6A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 12:50:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D53EA82EE79
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 12:51:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 152F71C22735
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 11:50:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 880D41F23C6A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 11:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB1A1B955;
-	Tue, 16 Jan 2024 11:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LdpHhIl3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600561B955;
+	Tue, 16 Jan 2024 11:51:28 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8EC1B949;
-	Tue, 16 Jan 2024 11:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A5D4C43390;
-	Tue, 16 Jan 2024 11:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705405825;
-	bh=rXHQ7Ku5XplmODPVNkuObZlHEDW9wYYriss4lusEIF8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LdpHhIl3fcNzvGDoQHgsiL50CeRo3KAFBdFLeFo7b7q9esusicXOu395Gqpsp7ZXW
-	 3YqgPS5UJyZeCPhAA3awOM25+a1dV1GZo+Tqzz/b7wUcB0t2R5/wKfF6klltLapR/3
-	 sxW+B4gPv7YAZw4FUnYommUCcY210sVICxWjfnMS77V5cn5+IWsbS6x9G6oab02t4O
-	 qpv3PhPMwstxsPQyMNdHqCHme/HwzxeysoVrF5e9xkjn6uH9gElzjgrc04J1HesSrB
-	 bSXZ98xN49xbLBGMQZjFaSCxWrwvjIzP4K0pixPU/ng+iY8CwLwi7icT5BpbstZFhQ
-	 ZjopZc+rkLwZw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 092B4D8C985;
-	Tue, 16 Jan 2024 11:50:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E90331B949;
+	Tue, 16 Jan 2024 11:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BD412F4;
+	Tue, 16 Jan 2024 03:52:10 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.90.186])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50E793F5A1;
+	Tue, 16 Jan 2024 03:51:20 -0800 (PST)
+Date: Tue, 16 Jan 2024 11:51:14 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev, linux-um@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org,
+	Frank Rowand <frowand.list@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 1/6] arm64: Unconditionally call unflatten_device_tree()
+Message-ID: <ZaZtbU9hre3YhZam@FVFF77S0Q05N>
+References: <20240112200750.4062441-1-sboyd@kernel.org>
+ <20240112200750.4062441-2-sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: netdevsim: sprinkle more udevadm settle
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170540582503.11912.17731327757214995660.git-patchwork-notify@kernel.org>
-Date: Tue, 16 Jan 2024 11:50:25 +0000
-References: <20240114224726.1210532-1-kuba@kernel.org>
-In-Reply-To: <20240114224726.1210532-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, saeedm@nvidia.com,
- linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240112200750.4062441-2-sboyd@kernel.org>
 
-Hello:
+Hi Stephen,
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+On Fri, Jan 12, 2024 at 12:07:44PM -0800, Stephen Boyd wrote:
+> Call this function unconditionally so that we can populate an empty DTB
+> on platforms that don't boot with a firmware provided or builtin DTB.
+> There's no harm in calling unflatten_device_tree() unconditionally.
 
-On Sun, 14 Jan 2024 14:47:26 -0800 you wrote:
-> Number of tests are failing when netdev renaming is active
-> on the system. Add udevadm settle in logic determining
-> the names.
+For better or worse, that's not true: there are systems the provide both a DTB
+*and* ACPI tables, and we must not consume both at the same time as those can
+clash and cause all sorts of problems. In addition, we don't want people being
+"clever" and describing disparate portions of their system in ACPI and DT.
+
+It is a very deliberate choice to not unflatten the DTB when ACPI is in use,
+and I don't think we want to reopen this can of worms.
+
+Given that, I'm afraid I must NAK this patch.
+
+Thanks
+Mark.
+
+> If there isn't a valid initial_boot_params dtb then unflatten_device_tree()
+> returns early.
 > 
-> Fixes: 242aaf03dc9b ("selftests: add a test for ethtool pause stats")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: <linux-arm-kernel@lists.infradead.org>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  arch/arm64/kernel/setup.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> [...]
-
-Here is the summary with links:
-  - [net] selftests: netdevsim: sprinkle more udevadm settle
-    https://git.kernel.org/netdev/net/c/2c4ca7977298
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+> index 417a8a86b2db..ede3d59dabf0 100644
+> --- a/arch/arm64/kernel/setup.c
+> +++ b/arch/arm64/kernel/setup.c
+> @@ -351,8 +351,7 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>  	/* Parse the ACPI tables for possible boot-time configuration */
+>  	acpi_boot_table_init();
+>  
+> -	if (acpi_disabled)
+> -		unflatten_device_tree();
+> +	unflatten_device_tree();
+>  
+>  	bootmem_init();
+>  
+> -- 
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+> 
+> 
 
