@@ -1,64 +1,61 @@
-Return-Path: <linux-kselftest+bounces-3116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E621B82F92A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 22:01:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D35C882F931
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 22:02:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63CB9289515
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 21:01:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EE4F1F26698
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 21:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE86C2C6AC;
-	Tue, 16 Jan 2024 19:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53112C872;
+	Tue, 16 Jan 2024 19:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFSJEZ5Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TvvyzzuP"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC74B2C6AB;
-	Tue, 16 Jan 2024 19:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866F22C866;
+	Tue, 16 Jan 2024 19:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434921; cv=none; b=c4ZbicC7GSdEQy+Jos01CPjuOoc9IGLIBm5VtIenSltSjXNAt64OQSQfEnN39YjInPu8u3SjB1PG2U5M6dAXdzbCy9ZXxgHtLC99QWSbAJWQnNJOcUaNSViM6HSnPVRf9CY4iGXEws9SU+eEKeUOVwKsdSL4mkAcAFRerKwDQj0=
+	t=1705434924; cv=none; b=cC9pJYxinlkVeDG+sp92ReJJXFiFvCtD9L8HQV97P23Y+fj80vvzrbdllzJxb9ivM0mM7QrLrBckymktZp18WkudemUduC+rqMSEtrF4IeloV9M1sJaU3eSM9T/EJnuTQQVibt2d9PQICiQycsm0tqBMuGt+vDDihUXsa38irAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434921; c=relaxed/simple;
-	bh=hORw/LjtmLslIhMW3hB1p5s4EeH7XhY/u0cxo++nrUU=;
+	s=arc-20240116; t=1705434924; c=relaxed/simple;
+	bh=qe+pNJ+ssyCgfFk2VBJHz5U42mWNKP3MaUbYM8MusOo=;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=bLUf5WoI8FlpbBUCnvud1xJ3ZmR8qWg03xNjXEHNZn9JW8PgUPTb3jLg/5Czvd0H9jc8Dhq5hFS6h1pc7fmCOvLncbtHeGTvP2YRFXiHF71RtPY2f9O4+swjO73sUyfgaVm4jCphbAm0VTbJTBXicuckeinyQm86L/DBXlZMiQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFSJEZ5Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2215C433C7;
-	Tue, 16 Jan 2024 19:55:19 +0000 (UTC)
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=KxA8+bARoyU2JkdiMKQOjEjPKMMGZN0dPfXh5yjI4Ed37bRhXO1rv/Krl9WKQBTrBDwiz2xsXXqj27b8hwbH7On+A1YrBW3cNnejB27MPTkOChP8JpxDtGDchGmqBPBJCsQ5TrZjctJWLPYzISJaiCPDQoifJzp6OEQb0ArNVno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TvvyzzuP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F59C433F1;
+	Tue, 16 Jan 2024 19:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705434921;
-	bh=hORw/LjtmLslIhMW3hB1p5s4EeH7XhY/u0cxo++nrUU=;
+	s=k20201202; t=1705434924;
+	bh=qe+pNJ+ssyCgfFk2VBJHz5U42mWNKP3MaUbYM8MusOo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cFSJEZ5ZzAM3uofM2y9LGVD6DvaesW2VOIsXRg96c8SIr81Hi7zKfHTmzEhpsgGCn
-	 7uYc2i/4nQhUyhzHlZ2zYApQjEk5Ao67BU/0k0nLul4gM2X2VXIVpygOcMtX4kTl3b
-	 HJXcf3+M70GE6g3z+yo21p7wF/A2lTQaRbbAJBVGTG+iM7n5FxcpaA/H4ZBXlUbuGf
-	 LL5kV0cPvXm160a1GA35ltOdBD7bfGcaE90/DULo3ROMnyKNCBOwLk3oR3ws8PZABe
-	 jiEKNYg6QE++UoHeEtZiOAuuBPr1PZ24CvcTpRv4UGsuM6GAIwyXeBV2ILeHpHwamM
-	 bh5dkG/JWzEBQ==
+	b=TvvyzzuPGFX9sUFmfErAU75OVcW3s8RYk9lOltQkwbCI08jY4F4vQ1Gr1dS3H4Qcf
+	 zIbB1Ip4y2dKhMU4xYMlxKNbCMS3Kj7CdMEE5v31wK+tTY9vyYR5/HwODmmKaiG3eC
+	 PQZ8pr9eL2DiBK+Qp85cV6gSm9cL3S2TxnCUELCLBF7vtQORWeHDLekDPK7Tyfvf2F
+	 bGHbErTuABAsC8UACsExeh5mWNkO6qHRPyO6xKQSbwQg8alnSQhqKcf+E5HKwbG9qA
+	 b0WLlCzHpWz916jAm3dmmI1tSJhZWneiVbMkJGeu1dtr4OfmMg/yxEPJH1uS5gUvUx
+	 ubkIGHEj88Jhw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
+Cc: Yafang Shao <laoar.shao@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
+	andrii@kernel.org,
 	daniel@iogearbox.net,
 	shuah@kernel.org,
-	nathan@kernel.org,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 03/68] selftests/bpf: Fix pyperf180 compilation failure with clang18
-Date: Tue, 16 Jan 2024 14:53:02 -0500
-Message-ID: <20240116195511.255854-3-sashal@kernel.org>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 05/68] selftests/bpf: Fix issues in setup_classid_environment()
+Date: Tue, 16 Jan 2024 14:53:04 -0500
+Message-ID: <20240116195511.255854-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240116195511.255854-1-sashal@kernel.org>
 References: <20240116195511.255854-1-sashal@kernel.org>
@@ -73,81 +70,83 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.73
 Content-Transfer-Encoding: 8bit
 
-From: Yonghong Song <yonghong.song@linux.dev>
+From: Yafang Shao <laoar.shao@gmail.com>
 
-[ Upstream commit 100888fb6d8a185866b1520031ee7e3182b173de ]
+[ Upstream commit 4849775587844e44d215289c425bcd70f315efe7 ]
 
-With latest clang18 (main branch of llvm-project repo), when building bpf selftests,
-    [~/work/bpf-next (master)]$ make -C tools/testing/selftests/bpf LLVM=1 -j
+If the net_cls subsystem is already mounted, attempting to mount it again
+in setup_classid_environment() will result in a failure with the error code
+EBUSY. Despite this, tmpfs will have been successfully mounted at
+/sys/fs/cgroup/net_cls. Consequently, the /sys/fs/cgroup/net_cls directory
+will be empty, causing subsequent setup operations to fail.
 
-The following compilation error happens:
-    fatal error: error in backend: Branch target out of insn range
-    ...
-    Stack dump:
-    0.      Program arguments: clang -g -Wall -Werror -D__TARGET_ARCH_x86 -mlittle-endian
-      -I/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include
-      -I/home/yhs/work/bpf-next/tools/testing/selftests/bpf -I/home/yhs/work/bpf-next/tools/include/uapi
-      -I/home/yhs/work/bpf-next/tools/testing/selftests/usr/include -idirafter
-      /home/yhs/work/llvm-project/llvm/build.18/install/lib/clang/18/include -idirafter /usr/local/include
-      -idirafter /usr/include -Wno-compare-distinct-pointer-types -DENABLE_ATOMICS_TESTS -O2 --target=bpf
-      -c progs/pyperf180.c -mcpu=v3 -o /home/yhs/work/bpf-next/tools/testing/selftests/bpf/pyperf180.bpf.o
-    1.      <eof> parser at end of file
-    2.      Code generation
-    ...
+Here's an error log excerpt illustrating the issue when net_cls has already
+been mounted at /sys/fs/cgroup/net_cls prior to running
+setup_classid_environment():
 
-The compilation failure only happens to cpu=v2 and cpu=v3. cpu=v4 is okay
-since cpu=v4 supports 32-bit branch target offset.
+- Before that change
 
-The above failure is due to upstream llvm patch [1] where some inlining behavior
-are changed in clang18.
+  $ tools/testing/selftests/bpf/test_progs --name=cgroup_v1v2
+  test_cgroup_v1v2:PASS:server_fd 0 nsec
+  test_cgroup_v1v2:PASS:client_fd 0 nsec
+  test_cgroup_v1v2:PASS:cgroup_fd 0 nsec
+  test_cgroup_v1v2:PASS:server_fd 0 nsec
+  run_test:PASS:skel_open 0 nsec
+  run_test:PASS:prog_attach 0 nsec
+  test_cgroup_v1v2:PASS:cgroup-v2-only 0 nsec
+  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup.procs
+  (cgroup_helpers.c:540: errno: No such file or directory) Opening cgroup classid: /sys/fs/cgroup/net_cls/cgroup-test-work-dir/net_cls.classid
+  run_test:PASS:skel_open 0 nsec
+  run_test:PASS:prog_attach 0 nsec
+  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup-test-work-dir/cgroup.procs
+  run_test:FAIL:join_classid unexpected error: 1 (errno 2)
+  test_cgroup_v1v2:FAIL:cgroup-v1v2 unexpected error: -1 (errno 2)
+  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup.procs
+  #44      cgroup_v1v2:FAIL
+  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
 
-To workaround the issue, previously all 180 loop iterations are fully unrolled.
-The bpf macro __BPF_CPU_VERSION__ (implemented in clang18 recently) is used to avoid
-unrolling changes if cpu=v4. If __BPF_CPU_VERSION__ is not available and the
-compiler is clang18, the unrollng amount is unconditionally reduced.
+- After that change
+  $ tools/testing/selftests/bpf/test_progs --name=cgroup_v1v2
+  #44      cgroup_v1v2:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
-  [1] https://github.com/llvm/llvm-project/commit/1a2e77cf9e11dbf56b5720c607313a566eebb16e
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Tested-by: Alan Maguire <alan.maguire@oracle.com>
-Link: https://lore.kernel.org/bpf/20231110193644.3130906-1-yonghong.song@linux.dev
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Link: https://lore.kernel.org/r/20231111090034.4248-3-laoar.shao@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/pyperf180.c | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ tools/testing/selftests/bpf/cgroup_helpers.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/pyperf180.c b/tools/testing/selftests/bpf/progs/pyperf180.c
-index c39f559d3100..42c4a8b62e36 100644
---- a/tools/testing/selftests/bpf/progs/pyperf180.c
-+++ b/tools/testing/selftests/bpf/progs/pyperf180.c
-@@ -1,4 +1,26 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2019 Facebook
- #define STACK_MAX_LEN 180
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index e914cc45b766..6f00bee917a0 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -467,10 +467,20 @@ int setup_classid_environment(void)
+ 		return 1;
+ 	}
+ 
+-	if (mount("net_cls", NETCLS_MOUNT_PATH, "cgroup", 0, "net_cls") &&
+-	    errno != EBUSY) {
+-		log_err("mount cgroup net_cls");
+-		return 1;
++	if (mount("net_cls", NETCLS_MOUNT_PATH, "cgroup", 0, "net_cls")) {
++		if (errno != EBUSY) {
++			log_err("mount cgroup net_cls");
++			return 1;
++		}
 +
-+/* llvm upstream commit at clang18
-+ *   https://github.com/llvm/llvm-project/commit/1a2e77cf9e11dbf56b5720c607313a566eebb16e
-+ * changed inlining behavior and caused compilation failure as some branch
-+ * target distance exceeded 16bit representation which is the maximum for
-+ * cpu v1/v2/v3. Macro __BPF_CPU_VERSION__ is later implemented in clang18
-+ * to specify which cpu version is used for compilation. So a smaller
-+ * unroll_count can be set if __BPF_CPU_VERSION__ is less than 4, which
-+ * reduced some branch target distances and resolved the compilation failure.
-+ *
-+ * To capture the case where a developer/ci uses clang18 but the corresponding
-+ * repo checkpoint does not have __BPF_CPU_VERSION__, a smaller unroll_count
-+ * will be set as well to prevent potential compilation failures.
-+ */
-+#ifdef __BPF_CPU_VERSION__
-+#if __BPF_CPU_VERSION__ < 4
-+#define UNROLL_COUNT 90
-+#endif
-+#elif __clang_major__ == 18
-+#define UNROLL_COUNT 90
-+#endif
-+
- #include "pyperf.h"
++		if (rmdir(NETCLS_MOUNT_PATH)) {
++			log_err("rmdir cgroup net_cls");
++			return 1;
++		}
++		if (umount(CGROUP_MOUNT_DFLT)) {
++			log_err("umount cgroup base");
++			return 1;
++		}
+ 	}
+ 
+ 	cleanup_classid_environment();
 -- 
 2.43.0
 
