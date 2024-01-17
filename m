@@ -1,126 +1,142 @@
-Return-Path: <linux-kselftest+bounces-3167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9052830BC6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 18:15:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78414830C2B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 18:41:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9560D28D490
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:15:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1257E1F21F81
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7563E225D9;
-	Wed, 17 Jan 2024 17:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F23822EE0;
+	Wed, 17 Jan 2024 17:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="POFlDrid"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sBevjfMZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A184225A1
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 17:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F8222636;
+	Wed, 17 Jan 2024 17:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705511717; cv=none; b=H6CfAWrWF6MTYcBWaMBaLsMZ2M5pZCnToEjsuraF5mDNlw43z/7QHaX1SRSuUa1ChI2GWo13EPxUsNjpQHKUOgW3IQV+4mtDgEuIQQ1l7qHlfmehZ7bqXyRyT6x+xJ1sMP96McSfZBMV79hz318BDqb0oJLQkGBox+4JtjQ5iGQ=
+	t=1705513277; cv=none; b=i9v6W4pFuy9GGoR7wsfonwnyQDTBhiezlnTvfpUEk1gkbDCVnqslPcf9j1zd/dSAfVhxDfjRQyLzjkdKUgrvJ9bnK8ig39UJwEVpTtiaaaXQSjSnb/mnd7HpMJyKX8ZO5jNqoQZbyoQSwynBqEAuUomNpoftNsekhVISY8cVLzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705511717; c=relaxed/simple;
-	bh=T7IslF0lI3yblMUodVhB9tJHIl2XHIH3degOHlEEIZ4=;
-	h=DKIM-Signature:Received:X-MC-Unique:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:Content-Language:To:Cc:
-	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Scanned-By; b=LFukDD/KsU25dg+f8k7eo4i2ihmUBYwr+JRC1WqNbhEGkStP0Porfm4G5qK8Drk4JJP4lyEOKst77yc7wEGEtlt2eT9Fj786s9aYX2VTD0NNdMBV8C3dHFaWvjvz//aDndDDzYLU5haPW+TSCiJEp6Fn+3dnWP1q+8zkrl613n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=POFlDrid; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705511715;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gGm/eLi1COg3Vpc3apSqmPNHHb4PLdH7xLSc6T9224c=;
-	b=POFlDridqg/rsFuOtpj1oakrxzx5nOGKlm4VcJBEye7/Qh07bAxTWJsmaMjKggvs86tRdY
-	/9xdLu2uu/cUHjTCk+IW8CdxGJestkMmEQABb1RQTcBs2gfzqZn+PtkglcwX4FXFx6Gqv8
-	BsRJlk+om9005AZp9PoR5RW8Dv4Rat8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-631-7Yv0cQF3P-OKvQw7cQLm-g-1; Wed, 17 Jan 2024 12:15:11 -0500
-X-MC-Unique: 7Yv0cQF3P-OKvQw7cQLm-g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0782885CBA5;
-	Wed, 17 Jan 2024 17:15:10 +0000 (UTC)
-Received: from [10.22.16.147] (unknown [10.22.16.147])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C7E4F2026D6F;
-	Wed, 17 Jan 2024 17:15:07 +0000 (UTC)
-Message-ID: <5ee5bf79-6cdc-4d1b-a19f-f0d5165a5f16@redhat.com>
-Date: Wed, 17 Jan 2024 12:15:07 -0500
+	s=arc-20240116; t=1705513277; c=relaxed/simple;
+	bh=oMyiDD+Iv9PCZrZI/1gZAt5oqiBycCP8w9pHbV1lWu4=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To; b=PMS3JKNnFYHfb2sZqv6mqdYH8/AjDA9cjUJjUW7HdDjffxC1fXGT+ZPmwsyntJulvkezwz32rs+FEJyrWn9ZuG7Ot11Vq542odLt904cFRtQtoUSHTtndV4XpHrY4TNrQhOtVv7X67Mjq5/rzXREYHn7ZlwNeD6OZ2KvJxFvEsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sBevjfMZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42424C433F1;
+	Wed, 17 Jan 2024 17:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705513276;
+	bh=oMyiDD+Iv9PCZrZI/1gZAt5oqiBycCP8w9pHbV1lWu4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sBevjfMZJTsk0Z3N2eXC9xsiFZfpBm+jywM0ZqHd+H8ixc7g1WKJjwuH6xtzFfBD2
+	 J/2kI0FLLvGFJZN4w8D6tmXCEt4L5wRmZio7hi+UHK1KJfw/mRDpDl7HjqPpnf4RU8
+	 rqMCyz93kzjJHrIZ6uBDtVnNNvb5d0THqQ/RUACMVD+C0WgEmm8rYEyfKMeGoVowR8
+	 p1/w87TVGdRe5AEc1BSDEQn6sv5oXKeQeodwLxz0UzRKhdNjjCtXYfuLpL1qjXbRLk
+	 xD1bt4pTdG61tolFQUqZjEDIqew5YSFbsSGrjl2HSQMbWLPWwKsm4WGRqvZoskDOwi
+	 /d5zpsGQIe1hQ==
+Date: Wed, 17 Jan 2024 11:41:14 -0600
+From: Rob Herring <robh@kernel.org>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>, linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev, linux-um@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 4/6] of: Create of_root if no dtb provided by firmware
+Message-ID: <20240117174114.GA2779523-robh@kernel.org>
+References: <20240112200750.4062441-1-sboyd@kernel.org>
+ <20240112200750.4062441-5-sboyd@kernel.org>
+ <20240115203230.GA1439771-robh@kernel.org>
+ <cdaadf62222a705cda198dd96dc7c73d.sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/8] cgroup/cpuset: Support RCU_NOCB on isolated
- partitions
-Content-Language: en-US
-To: Tejun Heo <tj@kernel.org>
-Cc: Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Frederic Weisbecker <frederic@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Neeraj Upadhyay <quic_neeraju@quicinc.com>,
- Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
- Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Mrunal Patel <mpatel@redhat.com>,
- Ryan Phillips <rphillips@redhat.com>, Brent Rowsell <browsell@redhat.com>,
- Peter Hunt <pehunt@redhat.com>, Cestmir Kalina <ckalina@redhat.com>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Alex Gladkov <agladkov@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
- Phil Auld <pauld@redhat.com>, Paul Gortmaker <paul.gortmaker@windriver.com>,
- Daniel Bristot de Oliveira <bristot@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Costa Shulyupin <cshulyup@redhat.com>
-References: <20240117163511.88173-1-longman@redhat.com>
- <ZagJPoEsLZ6Dg-NG@mtj.duckdns.org>
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <ZagJPoEsLZ6Dg-NG@mtj.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cdaadf62222a705cda198dd96dc7c73d.sboyd@kernel.org>
 
+On Tue, Jan 16, 2024 at 05:18:15PM -0800, Stephen Boyd wrote:
+> Quoting Rob Herring (2024-01-15 12:32:30)
+> > On Fri, Jan 12, 2024 at 12:07:47PM -0800, Stephen Boyd wrote:
+> > > diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> > > index da9826accb1b..9628e48baa15 100644
+> > > --- a/drivers/of/Kconfig
+> > > +++ b/drivers/of/Kconfig
+> > > @@ -54,9 +54,14 @@ config OF_FLATTREE
+> > >       select CRC32
+> > >  
+> > >  config OF_EARLY_FLATTREE
+> > > -     bool
+> > > +     bool "Functions for accessing Flat Devicetree (FDT) early in boot"
+> > 
+> > I think we could instead just get rid of this kconfig option. Or 
+> > always enable with CONFIG_OF (except on Sparc). The only cost of 
+> > enabling it is init section functions which get freed anyways.
+> 
+> Getting rid of it is a more massive change. It can be the default and
+> kept hidden instead? If it can't be selected on Sparc then it should be
+> hidden there anyway.
 
-On 1/17/24 12:07, Tejun Heo wrote:
-> Hello,
->
-> On Wed, Jan 17, 2024 at 11:35:03AM -0500, Waiman Long wrote:
->> The first 2 patches are adopted from Federic with minor twists to fix
->> merge conflicts and compilation issue. The rests are for implementing
->> the new cpuset.cpus.isolation_full interface which is essentially a flag
->> to globally enable or disable full CPU isolation on isolated partitions.
-> I think the interface is a bit premature. The cpuset partition feature is
-> already pretty restrictive and makes it really clear that it's to isolate
-> the CPUs. I think it'd be better to just enable all the isolation features
-> by default. If there are valid use cases which can't be served without
-> disabling some isolation features, we can worry about adding the interface
-> at that point.
+The easier option is certainly fine for this series. I just don't want 
+it visible.
 
-My current thought is to make isolated partitions act like 
-isolcpus=domain, additional CPU isolation capabilities are optional and 
-can be turned on using isolation_full. However, I am fine with making 
-all these turned on by default if it is the consensus.
+> > >       select DMA_DECLARE_COHERENT if HAS_DMA && HAS_IOMEM
+> > >       select OF_FLATTREE
+> > > +     help
+> > > +       Normally selected by platforms that process an FDT that has been
+> > > +       passed to the kernel by the bootloader.  If the bootloader does not
+> > > +       pass an FDT to the kernel and you need an empty devicetree that
+> > > +       contains only a root node to exist, then say Y here.
+> > >  
+> > >  config OF_PROMTREE
+> > >       bool
+> [...]
+> > > @@ -195,6 +191,17 @@ static inline int of_node_check_flag(const struct device_node *n, unsigned long
+> > >       return test_bit(flag, &n->_flags);
+> > >  }
+> > >  
+> > > +/**
+> > > + * of_have_populated_dt() - Has DT been populated by bootloader
+> > > + *
+> > > + * Return: True if a DTB has been populated by the bootloader and it isn't the
+> > > + * empty builtin one. False otherwise.
+> > > + */
+> > > +static inline bool of_have_populated_dt(void)
+> > > +{
+> > > +     return of_root != NULL && !of_node_check_flag(of_root, OF_EMPTY_ROOT);
+> > 
+> > Just a side comment, but I think many/all callers of this function could 
+> > just be removed.
+> > 
+> > I don't love new flags. Another possible way to handle this would be 
+> > checking for "compatible" being present in the root node. I guess this 
+> > is fine as-is for now at least.
+> 
+> Ok. I can add a check for a compatible property. That's probably better
+> anyway. Should there be a compatible property there to signal that this
+> DT isn't compatible with anything? I worry about DT overlays injecting a
+> compatible string into the root node, but maybe that is already
+> prevented.
 
-Cheers,
-Longman
+I worry about DT overlays injecting anything...
 
+I don't think it is explicitly forbidden, but I have asked that any 
+general purpose interface to apply overlays be restricted to nodes 
+explicitly allowed (e.g. downstream of a connector node). For now, the 
+places (i.e. drivers) overlays are applied are limited.
+
+We could probably restrict the root node to new nodes only and no new 
+or changed properties.
+
+Rob
 
