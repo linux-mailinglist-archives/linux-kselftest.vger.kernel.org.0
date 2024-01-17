@@ -1,60 +1,63 @@
-Return-Path: <linux-kselftest+bounces-3168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78414830C2B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 18:41:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89634830C4D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 18:55:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1257E1F21F81
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:41:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D9692857A1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:55:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F23822EE0;
-	Wed, 17 Jan 2024 17:41:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0248422F19;
+	Wed, 17 Jan 2024 17:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sBevjfMZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGqGmlE2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F8222636;
-	Wed, 17 Jan 2024 17:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C496E2231B;
+	Wed, 17 Jan 2024 17:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705513277; cv=none; b=i9v6W4pFuy9GGoR7wsfonwnyQDTBhiezlnTvfpUEk1gkbDCVnqslPcf9j1zd/dSAfVhxDfjRQyLzjkdKUgrvJ9bnK8ig39UJwEVpTtiaaaXQSjSnb/mnd7HpMJyKX8ZO5jNqoQZbyoQSwynBqEAuUomNpoftNsekhVISY8cVLzw=
+	t=1705514091; cv=none; b=dJTSgyLyNWlaN0FHlhHbNgj3fTeTMA9MTt3rabK2lrrlrWmD4zrnQWcCbREvcbRgnV3xwwaUTAa8vfBMz0RBD8sPaaCYeq2aMK/jxBmzTGScbq8aaJ4ou/vtleI1/KVR7R1E9SkrJgkB1qyZnUtaAxN0ovzv6BM2Euf+nlZgqMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705513277; c=relaxed/simple;
-	bh=oMyiDD+Iv9PCZrZI/1gZAt5oqiBycCP8w9pHbV1lWu4=;
+	s=arc-20240116; t=1705514091; c=relaxed/simple;
+	bh=J77FS0Bpoh8nK3y4ULhNSS2rlyTKBjXxlnteilrvwrU=;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To; b=PMS3JKNnFYHfb2sZqv6mqdYH8/AjDA9cjUJjUW7HdDjffxC1fXGT+ZPmwsyntJulvkezwz32rs+FEJyrWn9ZuG7Ot11Vq542odLt904cFRtQtoUSHTtndV4XpHrY4TNrQhOtVv7X67Mjq5/rzXREYHn7ZlwNeD6OZ2KvJxFvEsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sBevjfMZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42424C433F1;
-	Wed, 17 Jan 2024 17:41:16 +0000 (UTC)
+	 In-Reply-To; b=PL1eijc303G9Wl0aIu3ZkIZzAqiS/kKlbrtKWIF74RxAskpoXjtqEGDxSyW0VCa2+7kJw6Zqa6owxU/A/W6wxJlUUU5nWuI6xpRbpTn20bIYmYmb69hUxLn72MfS7GXYE/UajNrwAlZYJiWXSi8l+Hx9epio/LXq3ljdRKTIMr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGqGmlE2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18862C433C7;
+	Wed, 17 Jan 2024 17:54:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705513276;
-	bh=oMyiDD+Iv9PCZrZI/1gZAt5oqiBycCP8w9pHbV1lWu4=;
+	s=k20201202; t=1705514091;
+	bh=J77FS0Bpoh8nK3y4ULhNSS2rlyTKBjXxlnteilrvwrU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sBevjfMZJTsk0Z3N2eXC9xsiFZfpBm+jywM0ZqHd+H8ixc7g1WKJjwuH6xtzFfBD2
-	 J/2kI0FLLvGFJZN4w8D6tmXCEt4L5wRmZio7hi+UHK1KJfw/mRDpDl7HjqPpnf4RU8
-	 rqMCyz93kzjJHrIZ6uBDtVnNNvb5d0THqQ/RUACMVD+C0WgEmm8rYEyfKMeGoVowR8
-	 p1/w87TVGdRe5AEc1BSDEQn6sv5oXKeQeodwLxz0UzRKhdNjjCtXYfuLpL1qjXbRLk
-	 xD1bt4pTdG61tolFQUqZjEDIqew5YSFbsSGrjl2HSQMbWLPWwKsm4WGRqvZoskDOwi
-	 /d5zpsGQIe1hQ==
-Date: Wed, 17 Jan 2024 11:41:14 -0600
+	b=WGqGmlE25dqAiZWRrRkWSXIKygA+vpQOQvudOI4smF0yF+9MoHfmQC6PyBFpSWkBk
+	 ssQBsIwrkcHj36bazih+ox4UPvJsDWBBoqrvC2nO1FQLqFxRRrSD3aOUfQXqWqyqnl
+	 /zgabKW7Dzp1RbLxvTi0UlZcqiRrV6DRYoYe4Fg4yCDru891/7Zz14jA3v25IFJXt/
+	 +f1Cjw8QPDdc68I8RiydMsFMZdDk5o+Kg+LyFCj9Oit8z1bJ4a9EsNZTwJcJPKCxV2
+	 EQt9YTer5GBiuziU4DiiskqBKqRkDm5xAJPvTFLaCAlyXTHrDUDHQXJOnyL8EKGHq0
+	 cK7aTGGHvFV9g==
+Date: Wed, 17 Jan 2024 11:54:48 -0600
 From: Rob Herring <robh@kernel.org>
 To: Stephen Boyd <sboyd@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>, linux-kernel@vger.kernel.org,
+Cc: Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev, linux-um@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/6] of: Create of_root if no dtb provided by firmware
-Message-ID: <20240117174114.GA2779523-robh@kernel.org>
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org,
+	Frank Rowand <frowand.list@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 1/6] arm64: Unconditionally call unflatten_device_tree()
+Message-ID: <20240117175448.GB2779523-robh@kernel.org>
 References: <20240112200750.4062441-1-sboyd@kernel.org>
- <20240112200750.4062441-5-sboyd@kernel.org>
- <20240115203230.GA1439771-robh@kernel.org>
- <cdaadf62222a705cda198dd96dc7c73d.sboyd@kernel.org>
+ <20240112200750.4062441-2-sboyd@kernel.org>
+ <ZaZtbU9hre3YhZam@FVFF77S0Q05N>
+ <434b21afe1899b1567f3617261594842.sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,80 +66,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cdaadf62222a705cda198dd96dc7c73d.sboyd@kernel.org>
+In-Reply-To: <434b21afe1899b1567f3617261594842.sboyd@kernel.org>
 
-On Tue, Jan 16, 2024 at 05:18:15PM -0800, Stephen Boyd wrote:
-> Quoting Rob Herring (2024-01-15 12:32:30)
-> > On Fri, Jan 12, 2024 at 12:07:47PM -0800, Stephen Boyd wrote:
-> > > diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> > > index da9826accb1b..9628e48baa15 100644
-> > > --- a/drivers/of/Kconfig
-> > > +++ b/drivers/of/Kconfig
-> > > @@ -54,9 +54,14 @@ config OF_FLATTREE
-> > >       select CRC32
-> > >  
-> > >  config OF_EARLY_FLATTREE
-> > > -     bool
-> > > +     bool "Functions for accessing Flat Devicetree (FDT) early in boot"
+On Tue, Jan 16, 2024 at 05:27:18PM -0800, Stephen Boyd wrote:
+> Quoting Mark Rutland (2024-01-16 03:51:14)
+> > Hi Stephen,
 > > 
-> > I think we could instead just get rid of this kconfig option. Or 
-> > always enable with CONFIG_OF (except on Sparc). The only cost of 
-> > enabling it is init section functions which get freed anyways.
+> > On Fri, Jan 12, 2024 at 12:07:44PM -0800, Stephen Boyd wrote:
+> > > Call this function unconditionally so that we can populate an empty DTB
+> > > on platforms that don't boot with a firmware provided or builtin DTB.
+> > > There's no harm in calling unflatten_device_tree() unconditionally.
+> > 
+> > For better or worse, that's not true: there are systems the provide both a DTB
+> > *and* ACPI tables, and we must not consume both at the same time as those can
+> > clash and cause all sorts of problems. In addition, we don't want people being
+> > "clever" and describing disparate portions of their system in ACPI and DT.
+> > 
+> > It is a very deliberate choice to not unflatten the DTB when ACPI is in use,
+> > and I don't think we want to reopen this can of worms.
 > 
-> Getting rid of it is a more massive change. It can be the default and
-> kept hidden instead? If it can't be selected on Sparc then it should be
-> hidden there anyway.
+> Hmm ok. I missed this part. Can we knock out the initial_boot_params in
+> this case so that we don't unflatten a DTB when ACPI is in use?
 
-The easier option is certainly fine for this series. I just don't want 
-it visible.
+You mean so we don't unflatten the boot DTB, but instead unflatten the 
+empty one, right? That sounds fine.
 
-> > >       select DMA_DECLARE_COHERENT if HAS_DMA && HAS_IOMEM
-> > >       select OF_FLATTREE
-> > > +     help
-> > > +       Normally selected by platforms that process an FDT that has been
-> > > +       passed to the kernel by the bootloader.  If the bootloader does not
-> > > +       pass an FDT to the kernel and you need an empty devicetree that
-> > > +       contains only a root node to exist, then say Y here.
-> > >  
-> > >  config OF_PROMTREE
-> > >       bool
-> [...]
-> > > @@ -195,6 +191,17 @@ static inline int of_node_check_flag(const struct device_node *n, unsigned long
-> > >       return test_bit(flag, &n->_flags);
-> > >  }
-> > >  
-> > > +/**
-> > > + * of_have_populated_dt() - Has DT been populated by bootloader
-> > > + *
-> > > + * Return: True if a DTB has been populated by the bootloader and it isn't the
-> > > + * empty builtin one. False otherwise.
-> > > + */
-> > > +static inline bool of_have_populated_dt(void)
-> > > +{
-> > > +     return of_root != NULL && !of_node_check_flag(of_root, OF_EMPTY_ROOT);
-> > 
-> > Just a side comment, but I think many/all callers of this function could 
-> > just be removed.
-> > 
-> > I don't love new flags. Another possible way to handle this would be 
-> > checking for "compatible" being present in the root node. I guess this 
-> > is fine as-is for now at least.
-> 
-> Ok. I can add a check for a compatible property. That's probably better
-> anyway. Should there be a compatible property there to signal that this
-> DT isn't compatible with anything? I worry about DT overlays injecting a
-> compatible string into the root node, but maybe that is already
-> prevented.
-
-I worry about DT overlays injecting anything...
-
-I don't think it is explicitly forbidden, but I have asked that any 
-general purpose interface to apply overlays be restricted to nodes 
-explicitly allowed (e.g. downstream of a connector node). For now, the 
-places (i.e. drivers) overlays are applied are limited.
-
-We could probably restrict the root node to new nodes only and no new 
-or changed properties.
+Another thing to check is kexec because it will still need the original 
+DTB I think. Though if you are doing ACPI boot and kexec'ing, kexec may 
+write out everything needed by the next kernel and the empty DTB would 
+work just fine. Of course those users booting with ACPI and then 
+kexec'ing to DT boot will be broken. Perhaps that's a feature...
 
 Rob
 
