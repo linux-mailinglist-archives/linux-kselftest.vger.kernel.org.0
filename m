@@ -1,106 +1,126 @@
-Return-Path: <linux-kselftest+bounces-3166-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF42B830BB9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 18:11:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9052830BC6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 18:15:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E52F28B97E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:11:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9560D28D490
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 190A4225CF;
-	Wed, 17 Jan 2024 17:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7563E225D9;
+	Wed, 17 Jan 2024 17:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="POFlDrid"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686E7225A1;
-	Wed, 17 Jan 2024 17:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A184225A1
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 17:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705511475; cv=none; b=UvMKZbBTqrxlpsWH0NqYrjXhTZ7AZzhmCEqZjr/fs/ZG3F9VEvjIKXOLbF62kcwS41vInkiu3KYD+e1/RxoXJmilxzMapoRVwNIJawahon63iTY9KxJDbEmgIpLRY4mglhvvd+tbrflHZsg9DcVzgoIWKk0h1iPLDu1Uoovt4cU=
+	t=1705511717; cv=none; b=H6CfAWrWF6MTYcBWaMBaLsMZ2M5pZCnToEjsuraF5mDNlw43z/7QHaX1SRSuUa1ChI2GWo13EPxUsNjpQHKUOgW3IQV+4mtDgEuIQQ1l7qHlfmehZ7bqXyRyT6x+xJ1sMP96McSfZBMV79hz318BDqb0oJLQkGBox+4JtjQ5iGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705511475; c=relaxed/simple;
-	bh=PZbG6wx6NcdMWESuC+ecFyqFqTXV45MvcYYsex4YP8g=;
-	h=Received:X-Google-DKIM-Signature:X-Gm-Message-State:
-	 X-Google-Smtp-Source:X-Received:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding; b=NZEVrEYX4qgqe9DI4BiIBmiGRMcevI1jVDlLN+PxOyDOUxjJ4xXFD39EcDqrD4RyO+q06oppkOpCPQtlhNIata+DvzANbBt2vDM2rsuRaZKNT7/yvincfQtKYR/Iw7Cf54yvPAH+lz6lOwjqinlejPgXIWO1PlToubkLF1COxYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50e7f58c5fbso15360504e87.1;
-        Wed, 17 Jan 2024 09:11:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705511471; x=1706116271;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DP69PvOk+lQM9++boQDvvmgfxQpk6r9vRPbBVvGiiUQ=;
-        b=krbpWVZ61mdHvgvJJ3zFaSrZR6Fi7EjCT4579nNbPKPjgZSOJVUzha4tii//XxkVub
-         6hdSFHqoQ4yUaPd2lHxZp+2rvS53Hfq2Ky5gYoUH+9vaKXuYzxrG8rJpbLC4K5zUDvII
-         K8D3oKrXYSamrutm0oqtH5/lrzIGOQ74ezBW3Nk+Jev4U79TQyyHCdNd5dQEYqT5gqeP
-         D9aJ++TH/enRhNN0z3zjScc4/3j7gvH/WIHvoQ37BCS0BBgr8b9cwHBS5OgljhhT6Xll
-         DI17cZSy781zwUx8RMiwMea0v+DI9iqCrFHS0Gx5EJNamUgWDlIgq+FWbyJljwL82kD+
-         KVmw==
-X-Gm-Message-State: AOJu0YzH97Vq5uO9s2o2N0l+1ztyXUyXHYTb+09djTduGpeQcIm5mf7D
-	6I8AlP+fe5k3buInp8JrQh8=
-X-Google-Smtp-Source: AGHT+IFjaNiYH3oaekOUfuYUMYM7ygcB8kqWaLO9WOSCMI6Gia6+k0oGOt0Aicaumyp4mmYxC/UTew==
-X-Received: by 2002:a05:6512:1155:b0:50e:7be3:c707 with SMTP id m21-20020a056512115500b0050e7be3c707mr5552398lfg.19.1705511471369;
-        Wed, 17 Jan 2024 09:11:11 -0800 (PST)
-Received: from localhost (fwdproxy-cln-005.fbsv.net. [2a03:2880:31ff:5::face:b00c])
-        by smtp.gmail.com with ESMTPSA id p26-20020a1709061b5a00b00a298ade2e72sm7992905ejg.195.2024.01.17.09.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 09:11:11 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: lstoakes@gmail.com,
-	willy@infradead.org,
-	mike.kravetz@oracle.com,
-	linux-mm@kvack.org (open list:MEMORY MANAGEMENT),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] selftests/mm: run_vmtests.sh: add hugetlb_madv_vs_map
-Date: Wed, 17 Jan 2024 09:10:58 -0800
-Message-Id: <20240117171058.2192286-2-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240117171058.2192286-1-leitao@debian.org>
-References: <20240117171058.2192286-1-leitao@debian.org>
+	s=arc-20240116; t=1705511717; c=relaxed/simple;
+	bh=T7IslF0lI3yblMUodVhB9tJHIl2XHIH3degOHlEEIZ4=;
+	h=DKIM-Signature:Received:X-MC-Unique:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:Content-Language:To:Cc:
+	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Scanned-By; b=LFukDD/KsU25dg+f8k7eo4i2ihmUBYwr+JRC1WqNbhEGkStP0Porfm4G5qK8Drk4JJP4lyEOKst77yc7wEGEtlt2eT9Fj786s9aYX2VTD0NNdMBV8C3dHFaWvjvz//aDndDDzYLU5haPW+TSCiJEp6Fn+3dnWP1q+8zkrl613n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=POFlDrid; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705511715;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gGm/eLi1COg3Vpc3apSqmPNHHb4PLdH7xLSc6T9224c=;
+	b=POFlDridqg/rsFuOtpj1oakrxzx5nOGKlm4VcJBEye7/Qh07bAxTWJsmaMjKggvs86tRdY
+	/9xdLu2uu/cUHjTCk+IW8CdxGJestkMmEQABb1RQTcBs2gfzqZn+PtkglcwX4FXFx6Gqv8
+	BsRJlk+om9005AZp9PoR5RW8Dv4Rat8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-631-7Yv0cQF3P-OKvQw7cQLm-g-1; Wed, 17 Jan 2024 12:15:11 -0500
+X-MC-Unique: 7Yv0cQF3P-OKvQw7cQLm-g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0782885CBA5;
+	Wed, 17 Jan 2024 17:15:10 +0000 (UTC)
+Received: from [10.22.16.147] (unknown [10.22.16.147])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C7E4F2026D6F;
+	Wed, 17 Jan 2024 17:15:07 +0000 (UTC)
+Message-ID: <5ee5bf79-6cdc-4d1b-a19f-f0d5165a5f16@redhat.com>
+Date: Wed, 17 Jan 2024 12:15:07 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/8] cgroup/cpuset: Support RCU_NOCB on isolated
+ partitions
+Content-Language: en-US
+To: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Frederic Weisbecker <frederic@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+ Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Mrunal Patel <mpatel@redhat.com>,
+ Ryan Phillips <rphillips@redhat.com>, Brent Rowsell <browsell@redhat.com>,
+ Peter Hunt <pehunt@redhat.com>, Cestmir Kalina <ckalina@redhat.com>,
+ Nicolas Saenz Julienne <nsaenz@kernel.org>,
+ Alex Gladkov <agladkov@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
+ Phil Auld <pauld@redhat.com>, Paul Gortmaker <paul.gortmaker@windriver.com>,
+ Daniel Bristot de Oliveira <bristot@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+ Costa Shulyupin <cshulyup@redhat.com>
+References: <20240117163511.88173-1-longman@redhat.com>
+ <ZagJPoEsLZ6Dg-NG@mtj.duckdns.org>
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <ZagJPoEsLZ6Dg-NG@mtj.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-hugetlb_madv_vs_map selftest was not part of the mm test-suite since we
-didn't have a fix for the problem it found.
 
-Now that the problem is already fixed (see previous commit), let's
-enable this selftest in the default test-suite.
+On 1/17/24 12:07, Tejun Heo wrote:
+> Hello,
+>
+> On Wed, Jan 17, 2024 at 11:35:03AM -0500, Waiman Long wrote:
+>> The first 2 patches are adopted from Federic with minor twists to fix
+>> merge conflicts and compilation issue. The rests are for implementing
+>> the new cpuset.cpus.isolation_full interface which is essentially a flag
+>> to globally enable or disable full CPU isolation on isolated partitions.
+> I think the interface is a bit premature. The cpuset partition feature is
+> already pretty restrictive and makes it really clear that it's to isolate
+> the CPUs. I think it'd be better to just enable all the isolation features
+> by default. If there are valid use cases which can't be served without
+> disabling some isolation features, we can worry about adding the interface
+> at that point.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/mm/run_vmtests.sh | 1 +
- 1 file changed, 1 insertion(+)
+My current thought is to make isolated partitions act like 
+isolcpus=domain, additional CPU isolation capabilities are optional and 
+can be turned on using isolation_full. However, I am fine with making 
+all these turned on by default if it is the consensus.
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index a5e6ba8d3579..f41e1978e4d4 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -256,6 +256,7 @@ nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
- # For this test, we need one and just one huge page
- echo 1 > /proc/sys/vm/nr_hugepages
- CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
-+CATEGORY="hugetlb" run_test ./hugetlb_madv_vs_map
- # Restore the previous number of huge pages, since further tests rely on it
- echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
- 
--- 
-2.34.1
+Cheers,
+Longman
 
 
