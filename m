@@ -1,132 +1,167 @@
-Return-Path: <linux-kselftest+bounces-3153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 845788309EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 16:41:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E86E830A18
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 16:55:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09D541F247E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 15:41:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC54128796B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 15:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8DDB22316;
-	Wed, 17 Jan 2024 15:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C251822304;
+	Wed, 17 Jan 2024 15:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RcIv86ss"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dvk8/f8/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0839621A19;
-	Wed, 17 Jan 2024 15:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F3321A16;
+	Wed, 17 Jan 2024 15:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705506091; cv=none; b=UlodXNK2v/G8OGuxU+wGddkdg8NHpAVHd2fCxLpenilclVFC8ay8t0qz/rcxL0qpVEtTRkOp0K4cicDxvEULU/Hs3MtQ+nffwqEUFgkhhzheG4TQ4yt3+9vY5uHXtdjz5AtsvoHS5tS2ssJMJlLcpCmWQt3S3as1WYT7XS4BlgE=
+	t=1705506904; cv=none; b=ci2eReWfEnlpfOxRwYCqtU9OvOB4vc6PE4IX4CaelxH3hPLQe1WVwIQ3J/whNY14G0sVmeL+pfl3A9NKHcq6iZ8Q0rjp9grWDA6Wvn1i/sQheoXkGC0emu1wjE4vv4IfdTCb1cpUzcao2eqbbg7JkZiVx7gYG/bRQt5G9CayfL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705506091; c=relaxed/simple;
-	bh=yhlyvGOVc0FW/SQnx8rcyUJVQv4hP/dALX7MtsQQ+R4=;
-	h=Received:DKIM-Signature:Received:Received:Received:Received:
-	 Received:Received:Received:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-TM-AS-GCONF:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=LWaJlM2tFzdXQfbT1QmX20yuKefnpVeGw/oSFKQOfVkhqUAJRty3A6lYjZy9OEQFJgEgWqcAUAR59+r4nIQW1z1dOeDmdS6J659SCOt9+vsZ+mSw0LX1GIURNBSS7gX2aylCjGGjvqxR8qqZ7QkzSQkC2z2/LlEBj779d6/j124=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RcIv86ss; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40HFHVnS022560;
-	Wed, 17 Jan 2024 15:41:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=yhlyvGOVc0FW/SQnx8rcyUJVQv4hP/dALX7MtsQQ+R4=;
- b=RcIv86ssfGnwo+8vgXH6za/DtmLnkrlvEXx6WZga9f9lZ92qwOfSq5Z1kvLti7i7d9cH
- o8vGYQvU2Y3Vz3iJJaex/O6H0RPcajgSsWIA/AUhQB23G7L/mgvC25GzQW7sDlqbu6Lk
- enQ6GVqZCqqjB3ibRjLPTzwRE4srOO9w3Xods9rMuyLddMWxWrZ7dBprGr8LdjnBvas9
- gLe1V/pkimbTwZJj8MjRgjea8Bq2+x25/bv1nKKkBzS9dXjIJrrhjsujVbZEN8Fui5D9
- RUxAH4W9C5px0nBILGc6UwHVzCg/+QA29WCb+JkWig42jWRUZiSp/uJA97Uvm6t51Bmn 1w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vphdb0r3w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 15:41:18 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40HFJdB0027609;
-	Wed, 17 Jan 2024 15:41:15 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vphdb0qqv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 15:40:39 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40HENKcQ005320;
-	Wed, 17 Jan 2024 15:40:38 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vm7j1wp6g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 15:40:38 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40HFeZ6k18678328
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Jan 2024 15:40:35 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 97A6420043;
-	Wed, 17 Jan 2024 15:40:35 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5840E20040;
-	Wed, 17 Jan 2024 15:40:35 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 17 Jan 2024 15:40:35 +0000 (GMT)
-Date: Wed, 17 Jan 2024 16:40:34 +0100
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        live-patching@vger.kernel.org
-Subject: Re: [PATCH v6 2/3] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-Message-ID: <Zaf08hx8fBj6TW5/@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
- <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
+	s=arc-20240116; t=1705506904; c=relaxed/simple;
+	bh=ttGJe8J4pcxRkey779Yd+cZv874UqM4wsN7cskxubio=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
+	 From:To:Cc:Message-ID:In-Reply-To:References:Subject:Mime-Version:
+	 Content-Type:Content-Transfer-Encoding; b=ajkBXDmtS7H1Aeo9qSlleNT4HpF/k3t2gUJEsoSuXfZvSWyDb1ws88+Jzn5U3hyAg3RrA0RxYOOqSLb6YGatWOziav9SP444p1Y8oRNfz7VRhpZufQaCkHdlv0SsznfrWdOWmtGaAi9uQSSaFVCHc7SMQhGpqernvnDtiDy6OqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dvk8/f8/; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-680b1335af6so93855216d6.1;
+        Wed, 17 Jan 2024 07:55:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705506902; x=1706111702; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ttGJe8J4pcxRkey779Yd+cZv874UqM4wsN7cskxubio=;
+        b=dvk8/f8/2jB5aZe7zNFkQZ/ejUppjaKbdR/8nxkSG79U+tturBRm51To2SWPC9sHGe
+         aLpDeRpPDva5Q0oYTZnGS54EcmdZDVfhAUXyYfrs8vhfOoQbNKX4q5c+9GonWpsJjcM2
+         +CWJicwLzn7dYvNLztnqu3Njwrf4isYiAvnReX0FvhvZDV16bUDb4CtKS3zTEKC9Lbvb
+         rSrZmPAZLxwDqrGU1TZZiT7geGb3b2DSTtO1NTPXSyzigj7uq7MNmv1P6OM8RhsCPbsk
+         qkwTdM0ojsgQ/dTXVn2p2AG+F7UCvQqAOP4TVkyFyMZB7LvuW1eTkKTVGAK5vF85Vrqh
+         0T1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705506902; x=1706111702;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ttGJe8J4pcxRkey779Yd+cZv874UqM4wsN7cskxubio=;
+        b=jFebSC/WUErS27Edax5RA+EhrAF0vwHYVek/+QFQAKaIZaWCF3H8XBPWdsbQoo3rvy
+         +ZM0c1RxlXtSL/83PqDXRER20WQ7hYPlhtcrxGR48p46HRlO3fvNaknK2gaghfqhCWdj
+         J/DBwc6ZAH85hlfYtnUPpUjkQnT1efgzNSof26kdtXBm+g1azd+FfSsjwd7BO6rG7mS2
+         BOOg0KOMrTwjVktGwvP9woVzb+kMWeng4I5R+1Cpr2SnFcwW9/RtOp58lThKC3tJVeh8
+         +JlTu9yM+NuQtg/GBkhG8Rn0YoBYiISNxkJJabPJ1v8CCMuLbwp8Yex+RJUD2Gns2R+Y
+         7Q4A==
+X-Gm-Message-State: AOJu0YxKCxIrLyS4IzAwpKXJXaIo3n3gnLAf7ZgNUZowLjG/ngnGAYBz
+	xVsIcbAWrVDihVWYWgjlEiA=
+X-Google-Smtp-Source: AGHT+IFUKgLAXPaJ1GM7ZGPSYyL9MUqnyevX9UQH1PtY6537DD4fa9EPrz350Q+gOCYQG6L2WQwC/w==
+X-Received: by 2002:a0c:dd11:0:b0:681:698e:17d8 with SMTP id u17-20020a0cdd11000000b00681698e17d8mr1348439qvk.52.1705506902051;
+        Wed, 17 Jan 2024 07:55:02 -0800 (PST)
+Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
+        by smtp.gmail.com with ESMTPSA id v20-20020ad448d4000000b006817069492bsm1407241qvx.70.2024.01.17.07.55.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jan 2024 07:55:01 -0800 (PST)
+Date: Wed, 17 Jan 2024 10:55:01 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>, 
+ =?UTF-8?B?SsO2cm4tVGhvcmJlbiBIaW56?= <j-t.hinz@alumni.tu-berlin.de>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Deepa Dinamani <deepa.kernel@gmail.com>, 
+ bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <65a7f855821cc_6d500294d0@willemb.c.googlers.com.notmuch>
+In-Reply-To: <51fd5249-140a-4f1b-b20e-703f159e88a3@linux.dev>
+References: <20240115134110.11624-1-j-t.hinz@alumni.tu-berlin.de>
+ <65a69e1be51ef_380df0294d9@willemb.c.googlers.com.notmuch>
+ <51fd5249-140a-4f1b-b20e-703f159e88a3@linux.dev>
+Subject: Re: [PATCH bpf-next] bpf: Allow setting SO_TIMESTAMPING* with
+ bpf_setsockopt()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _3iYNxT1FOrPnC60Y6LJUFeHWTv9eNKh
-X-Proofpoint-ORIG-GUID: ActasdkG0_3XDYGMQlVTCphXIluTp9p6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-17_09,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- mlxlogscore=797 phishscore=0 mlxscore=0 spamscore=0 priorityscore=1501
- impostorscore=0 adultscore=0 clxscore=1011 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401170114
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 12, 2024 at 02:43:51PM -0300, Marcos Paulo de Souza wrote:
+Martin KaFai Lau wrote:
+> On 1/16/24 7:17 AM, Willem de Bruijn wrote:
+> > J=C3=B6rn-Thorben Hinz wrote:
+> >> A BPF application, e.g., a TCP congestion control, might benefit fro=
+m or
+> >> even require precise (=3Dhardware) packet timestamps. These timestam=
+ps are
+> >> already available through __sk_buff.hwtstamp and
+> >> bpf_sock_ops.skb_hwtstamp, but could not be requested: BPF programs =
+were
+> >> not allowed to set SO_TIMESTAMPING* on sockets.
+> =
 
-Hi Marcos!
+> This patch only uses the SOF_TIMESTAMPING_RX_HARDWARE in the selftest. =
+How about =
 
-> Having the modules being built as out-of-modules requires changing the
-> currently used 'modprobe' by 'insmod' and adapt the test scripts that
-> check for the kernel message buffer.
+> others? e.g. the SOF_TIMESTAMPING_TX_* that will affect the sk->sk_erro=
+r_queue =
 
-Please, correct me if I am wrong, but with this change one would
-require a configured build environment and kernel tree that matches
-running kernel in order to run tests. Is that correct?
+> which seems not good. If rx tstamp is useful, tx tstamp should be usefu=
+l also?
 
-Thanks!
+Good point. Or should not be allowed to be set from BPF.
+
+That significantly changes process behavior, e.g., by returning POLLERR.
+ =
+
+> >>
+> >> Enable BPF programs to actively request the generation of timestamps=
+
+> >> from a stream socket. The also required ioctl(SIOCSHWTSTAMP) on the
+> >> network device must still be done separately, in user space.
+> =
+
+> hmm... so both ioctl(SIOCSHWTSTAMP) of the netdevice and the =
+
+> SOF_TIMESTAMPING_RX_HARDWARE of the sk must be done?
+> =
+
+> I likely miss something. When skb is created in the driver rx path, the=
+ sk is =
+
+> not known yet though. How the SOF_TIMESTAMPING_RX_HARDWARE of the sk af=
+fects the =
+
+> skb_shinfo(skb)->hwtstamps?
+
+Indeed it does not seem to do anything in the datapath.
+
+Requesting SOF_TIMESTAMPING_RX_SOFTWARE will call net_enable_timestamp
+to start timestamping packets.
+
+But SOF_TIMESTAMPING_RX_HARDWARE does not so thing.
+
+Drivers do use it in ethtool get_ts_info to signal hardware
+capabilities. But those must be configured using the ioctl.
+
+It is there more for consistency with the other timestamp recording
+options, I suppose.
+
 
