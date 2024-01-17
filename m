@@ -1,111 +1,127 @@
-Return-Path: <linux-kselftest+bounces-3126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0EAC82FD10
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 23:40:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCD4982FE4E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 02:18:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA6ED284438
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 22:40:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 607EB1F26786
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 01:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2701EB57;
-	Tue, 16 Jan 2024 22:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9E6310FF;
+	Wed, 17 Jan 2024 01:18:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FBmMA7aF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UufWcQ3z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070AF1DA4B;
-	Tue, 16 Jan 2024 22:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A2810EB;
+	Wed, 17 Jan 2024 01:18:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705443568; cv=none; b=H5QeBYv6oaKPg4ldMTjNs2jw7JXdAaWnj+PBf0jTk/CmLBSlF1lXzOmB9hE6iMN11uvZSlXmwbcdMZ9coWEHjn+q3Tl0/NrbmBdcPvC7qiy9C1R5qnmLkAdkImxjEDDLuaP62I70T+RjLCrnWzwIS1Xjh+2W+g4zEVtZ7bW6K2A=
+	t=1705454298; cv=none; b=F9blwx/qEDvhnUUiLeFuEejNeJXNKpAtrsoFbQDAAGiz1hV44azt36EzFkrdBunnMAevzCF0QIFwF8ac6R6TTulqwi0Z6jBQBfVaf0YRAfWCmbVAgkAL9jhklZodNdmUP8+f4p2ogHSX/g+HS6IY3sVISpICuw/N6F9u44GXHk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705443568; c=relaxed/simple;
-	bh=ik2oY4JRBWR6rvEPEnHpEDt7BIuzwUBEczKTn6ckrrM=;
-	h=DKIM-Signature:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:Content-Language:To:Cc:References:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding; b=U7jqotkhmzAZVId3rugjDST7f8vjHsSKVrrFDrLrnrc1xQHyrajKAimjoAgeR31nP8nqOyJbv2sYbcZvotdWS4rWWg16/YBvFn8YvPbT0DH8Cg57ywfVy8ZKY2bsV1g4mOko5aTYlYou68jQYoELJ1w9JE0/iu5wxgOWhRh95TU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FBmMA7aF; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=gO384S22CcX+AdiDGbsRafLHAmf11EYzzlC346GiPdM=; b=FBmMA7aFfDHBS2zFkio9GGDiKl
-	ZYzNT0szbWM8hCEJuCQ+iPTwmBOafYjkpJQPMBLAJnud3AP93Bd876K5Zf6c1MGEkEIIlZDBONZ1X
-	T9BZIN44Qu+gH1bQAWgC8Fx0fr8mxnnGSPazpkheTe4P4gGJa6+DZElkjCld1yNmIG75b/IcA55SK
-	FFqzIl9KYx63A94AQ05E2xMmBfnU9tdP57Goa2T2T2hqajs4H4sLNS2WLjINPz3c1BWK2xg4CParl
-	BqMzaxTz4ReP8a9XOv2yheWr/dBlEuH2XX3XDqZoJvoFWF8ckWBrnr0wnNqdV5g102f2naP2Yv5Fi
-	ApJmfc8A==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rPrmD-00DoD6-0D;
-	Tue, 16 Jan 2024 22:19:21 +0000
-Message-ID: <c16ff365-6d7d-40a1-b096-e4d5cc127c68@infradead.org>
-Date: Tue, 16 Jan 2024 14:19:17 -0800
+	s=arc-20240116; t=1705454298; c=relaxed/simple;
+	bh=p9Rh3dyRs/5GUJfFv0bThfhcOx9k3Z/O3iFRLNLB+9Y=;
+	h=Received:DKIM-Signature:Message-ID:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:User-Agent; b=gH4u//CE5tSH3omZWfQpDJoIy3pmLEe1RXL0wMkFf+0WFfkHcMM46VcRZuOJDVDy1K9W3RbuQmYWSRLmoTjI6GX3wWid2CZLunPq6MZlk6sKbVWKsbb+fppo/rtoBaxITmQXiXp4a6mgLkrNFSfMxN4Ja/alJ9/Xq8bNFtXm0IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UufWcQ3z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE289C433C7;
+	Wed, 17 Jan 2024 01:18:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705454297;
+	bh=p9Rh3dyRs/5GUJfFv0bThfhcOx9k3Z/O3iFRLNLB+9Y=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=UufWcQ3zY5TXWZ9yO2rkxrBig+h80cgpqDs9jkj0hrKE5Zmv3LGgrQJYivFsPDX+1
+	 JvpxG/EPiS70zVWhzBCsttd6P9KdHSTlHviGAuCzmt3MtSzpNEOrQGx9PKhfj/O7oK
+	 2q1xpb5tJBIv6ovLlxzcfOxzIlBdoMnJIxdQOFOrYDtnXoyo1E3VLcMLZP4LLB8FAm
+	 MIKw+D75L3kAOtUuOFQ6hNyub/u/JTwhltThkfnalFe08AnrrnBBW0ug6CabnNhs16
+	 EXaHb9DeFDkkRgTIqjjlkgPIfDO6zCXuJO28H4TDnWXBpBL/1G+um75K/Op2/cH/12
+	 5Ez9RKJe0ODOg==
+Message-ID: <cdaadf62222a705cda198dd96dc7c73d.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v4 4/4] mseal:add documentation
-Content-Language: en-US
-To: Jonathan Corbet <corbet@lwn.net>, jeffxu@chromium.org,
- akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
- sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org,
- torvalds@linux-foundation.org, usama.anjum@collabora.com
-Cc: jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
- linux-hardening@vger.kernel.org, deraadt@openbsd.org
-References: <20240104185138.169307-1-jeffxu@chromium.org>
- <20240104185138.169307-5-jeffxu@chromium.org> <87y1cp9gvd.fsf@meer.lwn.net>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <87y1cp9gvd.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240115203230.GA1439771-robh@kernel.org>
+References: <20240112200750.4062441-1-sboyd@kernel.org> <20240112200750.4062441-5-sboyd@kernel.org> <20240115203230.GA1439771-robh@kernel.org>
+Subject: Re: [PATCH 4/6] of: Create of_root if no dtb provided by firmware
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>, linux-kernel@vger.kernel.org, patches@lists.linux.dev, linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org
+To: Rob Herring <robh@kernel.org>
+Date: Tue, 16 Jan 2024 17:18:15 -0800
+User-Agent: alot/0.10
 
+Quoting Rob Herring (2024-01-15 12:32:30)
+> On Fri, Jan 12, 2024 at 12:07:47PM -0800, Stephen Boyd wrote:
+> > diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> > index da9826accb1b..9628e48baa15 100644
+> > --- a/drivers/of/Kconfig
+> > +++ b/drivers/of/Kconfig
+> > @@ -54,9 +54,14 @@ config OF_FLATTREE
+> >       select CRC32
+> > =20
+> >  config OF_EARLY_FLATTREE
+> > -     bool
+> > +     bool "Functions for accessing Flat Devicetree (FDT) early in boot"
+>=20
+> I think we could instead just get rid of this kconfig option. Or=20
+> always enable with CONFIG_OF (except on Sparc). The only cost of=20
+> enabling it is init section functions which get freed anyways.
 
+Getting rid of it is a more massive change. It can be the default and
+kept hidden instead? If it can't be selected on Sparc then it should be
+hidden there anyway.
 
-On 1/16/24 12:13, Jonathan Corbet wrote:
-> jeffxu@chromium.org writes:
-> 
->> From: Jeff Xu <jeffxu@chromium.org>
->>
->> Add documentation for mseal().
->>
->> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
->> ---
->>  Documentation/userspace-api/mseal.rst | 181 ++++++++++++++++++++++++++
->>  1 file changed, 181 insertions(+)
->>  create mode 100644 Documentation/userspace-api/mseal.rst
-> 
-> You need to add this file to index.rst or it won't be part of the docs
-> build.  Sphinx should have warned you about that when you did your test
-> build.
+>=20
+> >       select DMA_DECLARE_COHERENT if HAS_DMA && HAS_IOMEM
+> >       select OF_FLATTREE
+> > +     help
+> > +       Normally selected by platforms that process an FDT that has been
+> > +       passed to the kernel by the bootloader.  If the bootloader does=
+ not
+> > +       pass an FDT to the kernel and you need an empty devicetree that
+> > +       contains only a root node to exist, then say Y here.
+> > =20
+> >  config OF_PROMTREE
+> >       bool
+[...]
+> > @@ -195,6 +191,17 @@ static inline int of_node_check_flag(const struct =
+device_node *n, unsigned long
+> >       return test_bit(flag, &n->_flags);
+> >  }
+> > =20
+> > +/**
+> > + * of_have_populated_dt() - Has DT been populated by bootloader
+> > + *
+> > + * Return: True if a DTB has been populated by the bootloader and it i=
+sn't the
+> > + * empty builtin one. False otherwise.
+> > + */
+> > +static inline bool of_have_populated_dt(void)
+> > +{
+> > +     return of_root !=3D NULL && !of_node_check_flag(of_root, OF_EMPTY=
+_ROOT);
+>=20
+> Just a side comment, but I think many/all callers of this function could =
 
-Yes, I have already asked Jeff to add this to his patch:
+> just be removed.
+>=20
+> I don't love new flags. Another possible way to handle this would be=20
+> checking for "compatible" being present in the root node. I guess this=20
+> is fine as-is for now at least.
 
-diff -- a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -23,6 +23,7 @@ place where this information is gathered
-    ebpf/index
-    ELF
-    ioctl/index
-+   mseal
-    iommu
-    iommufd
-    media/index
-
-
--- 
-#Randy
+Ok. I can add a check for a compatible property. That's probably better
+anyway. Should there be a compatible property there to signal that this
+DT isn't compatible with anything? I worry about DT overlays injecting a
+compatible string into the root node, but maybe that is already
+prevented.
 
