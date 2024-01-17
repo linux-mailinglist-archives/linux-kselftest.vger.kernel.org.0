@@ -1,144 +1,114 @@
-Return-Path: <linux-kselftest+bounces-3174-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 996A0830E93
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 22:24:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA04830FE3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 00:00:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 159E9B25D7D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 21:24:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B47E31F25D36
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 23:00:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299E725574;
-	Wed, 17 Jan 2024 21:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23851E891;
+	Wed, 17 Jan 2024 23:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h6m3Cvnd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WxeT3GBz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4D825570
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 21:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B61286B9;
+	Wed, 17 Jan 2024 23:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705526617; cv=none; b=k7Yy/114UBXwYCHhqZQsKClydjedfgZyQYjW8clAowcVISJ2w9pYxTpgJnpIVDIt9NTe5u2srwyVcKe/6L1krVrXBhs8ZU+CaOZ1awlo+n+jEGwy1CDmNnXXY4XrKgo0NHeDW24P/C2zGCnknLs3PULmkNSUOQRNTH2GWOdV+64=
+	t=1705532450; cv=none; b=i7TNyqKFgHzVHCqyq9nQTayf0JtgxKR67IoJachSoH95ywRnjroZbgTdQ9/fpvXCKjgu3koN3GGPAS+x5wm+7x5Iqk3RvSWUMpitSS/3+RyI/0E5KSiqfODvkdNs10Y0YeEo66l91pOqSGM0GUQx8g6ARv/OM7vJIETjjEyHQI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705526617; c=relaxed/simple;
-	bh=93LlwyHyTkQO2KrqYA5lB0CVoPPZAC3B0Z1WLjl1+Ww=;
-	h=Message-ID:DKIM-Signature:Date:MIME-Version:Subject:
-	 Content-Language:To:Cc:References:X-Report-Abuse:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Migadu-Flow; b=ZKcN2w7nFP0G2ClptLw1tKyuPLdhug7/aEqeFe54/ZjtgcwXdRaJFZA9qhOyLr6XGbh1nNZpym0Sm2Lve4SNWOPiGYJRBCEOf5Zt4F5AWchgesgQfhRvRYTPY0FtkmLJ+kb8l1KwDhIw75jkzo2xdKlscGEMNRGr/RHApHpo4Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h6m3Cvnd; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <73235f05-8474-4341-b70b-34bd0e6dfac5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1705526613;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ct5ToPw3LUaNOoDO1thQP66v+Llmlbh3AXHo2CAPhSc=;
-	b=h6m3CvndLIJ5uzrmzBqR1nJWilSirVxV4yW+4QLzpTzKLqgIyNSmf14X7yh2YdXJREN8jX
-	i/xsrAeU6zEK0x6m8rcAy1E4gxL0gxMcC6UGQXrSJUXqewmGBjkv8WNuBSNwmJLVk5Ceuf
-	eWkXKO6Nc2SIe0RB69QFBga8uc1sZK0=
-Date: Wed, 17 Jan 2024 13:23:25 -0800
+	s=arc-20240116; t=1705532450; c=relaxed/simple;
+	bh=fyXBSC0bnHo3boCpQubXQI92k6WFO1uOlIbnTuqgLD4=;
+	h=Received:DKIM-Signature:Message-ID:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:User-Agent; b=IaBZx9CrwHe7JHXVyjqG3Nf6Glh9LzCsJPfotAucvZiiF8IXXoFV05nMgrIIXp1nac8SrpHABsPiIxnESFWft0xe+fbQwkkYl3TTP8Tn+3b73kytU1JFeWk/T9EO68KQYe1a6wKuy8nrXriUgGCsvAI/40Fhr1T245vaKdzqSWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WxeT3GBz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BAA2C433C7;
+	Wed, 17 Jan 2024 23:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705532450;
+	bh=fyXBSC0bnHo3boCpQubXQI92k6WFO1uOlIbnTuqgLD4=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=WxeT3GBztptAaY54E7E/IibQmlI2auDqcjQAJU/gbKcJrpG8pzf4C7/y1Z3dWzZLM
+	 C3E7KEby6UhIR9QxS/hXvDl6n8eBw+MdcCGzH5yULampXTr/OV2rJLG11LvS9RRIYn
+	 YzrKFeKcLsRcvhdr0fNVMSHKSf2pNYsWc1rDfKFpxAjY7Fq70WYgFnxZbaQTF5F5AK
+	 49xUOHmYbNMTvV9nsg29O/JNZUvnx4yb22BH/iUncI2nMgA9h7/UEOvfcq6VTOJbc5
+	 yXO/XavnF5W6YWnqKq5QzKcjtF2A3erD1aVIOVPukufVmT4wvd8LbVFYOul5+8E2zE
+	 tqh93Yr9GR9WQ==
+Message-ID: <c3f239caee806419a8ad0ed45a627947.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] bpf: Allow setting SO_TIMESTAMPING* with
- bpf_setsockopt()
-Content-Language: en-US
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- =?UTF-8?Q?J=C3=B6rn-Thorben_Hinz?= <j-t.hinz@alumni.tu-berlin.de>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Deepa Dinamani <deepa.kernel@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240115134110.11624-1-j-t.hinz@alumni.tu-berlin.de>
- <65a69e1be51ef_380df0294d9@willemb.c.googlers.com.notmuch>
- <51fd5249-140a-4f1b-b20e-703f159e88a3@linux.dev>
- <65a7f855821cc_6d500294d0@willemb.c.googlers.com.notmuch>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <65a7f855821cc_6d500294d0@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240117175448.GB2779523-robh@kernel.org>
+References: <20240112200750.4062441-1-sboyd@kernel.org> <20240112200750.4062441-2-sboyd@kernel.org> <ZaZtbU9hre3YhZam@FVFF77S0Q05N> <434b21afe1899b1567f3617261594842.sboyd@kernel.org> <20240117175448.GB2779523-robh@kernel.org>
+Subject: Re: [PATCH 1/6] arm64: Unconditionally call unflatten_device_tree()
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, patches@lists.linux.dev, linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Date: Wed, 17 Jan 2024 15:00:48 -0800
+User-Agent: alot/0.10
 
-On 1/17/24 7:55 AM, Willem de Bruijn wrote:
-> Martin KaFai Lau wrote:
->> On 1/16/24 7:17 AM, Willem de Bruijn wrote:
->>> Jörn-Thorben Hinz wrote:
->>>> A BPF application, e.g., a TCP congestion control, might benefit from or
->>>> even require precise (=hardware) packet timestamps. These timestamps are
->>>> already available through __sk_buff.hwtstamp and
->>>> bpf_sock_ops.skb_hwtstamp, but could not be requested: BPF programs were
->>>> not allowed to set SO_TIMESTAMPING* on sockets.
->>
->> This patch only uses the SOF_TIMESTAMPING_RX_HARDWARE in the selftest. How about
->> others? e.g. the SOF_TIMESTAMPING_TX_* that will affect the sk->sk_error_queue
->> which seems not good. If rx tstamp is useful, tx tstamp should be useful also?
-> 
-> Good point. Or should not be allowed to be set from BPF.
-> 
-> That significantly changes process behavior, e.g., by returning POLLERR.
->   
->>>>
->>>> Enable BPF programs to actively request the generation of timestamps
->>>> from a stream socket. The also required ioctl(SIOCSHWTSTAMP) on the
->>>> network device must still be done separately, in user space.
->>
->> hmm... so both ioctl(SIOCSHWTSTAMP) of the netdevice and the
->> SOF_TIMESTAMPING_RX_HARDWARE of the sk must be done?
->>
->> I likely miss something. When skb is created  in the driver rx path, the sk is
->> not known yet though. How the SOF_TIMESTAMPING_RX_HARDWARE of the sk affects the
->> skb_shinfo(skb)->hwtstamps?
-> 
-> Indeed it does not seem to do anything in the datapath.
-> 
-> Requesting SOF_TIMESTAMPING_RX_SOFTWARE will call net_enable_timestamp
-> to start timestamping packets.
-> 
-> But SOF_TIMESTAMPING_RX_HARDWARE does not so thing.
-> 
-> Drivers do use it in ethtool get_ts_info to signal hardware
-> capabilities. But those must be configured using the ioctl.
-> 
-> It is there more for consistency with the other timestamp recording
-> options, I suppose.
-> 
+Quoting Rob Herring (2024-01-17 09:54:48)
+> On Tue, Jan 16, 2024 at 05:27:18PM -0800, Stephen Boyd wrote:
+> > Quoting Mark Rutland (2024-01-16 03:51:14)
+> > > Hi Stephen,
+> > >=20
+> > > On Fri, Jan 12, 2024 at 12:07:44PM -0800, Stephen Boyd wrote:
+> > > > Call this function unconditionally so that we can populate an empty=
+ DTB
+> > > > on platforms that don't boot with a firmware provided or builtin DT=
+B.
+> > > > There's no harm in calling unflatten_device_tree() unconditionally.
+> > >=20
+> > > For better or worse, that's not true: there are systems the provide b=
+oth a DTB
+> > > *and* ACPI tables, and we must not consume both at the same time as t=
+hose can
+> > > clash and cause all sorts of problems. In addition, we don't want peo=
+ple being
+> > > "clever" and describing disparate portions of their system in ACPI an=
+d DT.
+> > >=20
+> > > It is a very deliberate choice to not unflatten the DTB when ACPI is =
+in use,
+> > > and I don't think we want to reopen this can of worms.
+> >=20
+> > Hmm ok. I missed this part. Can we knock out the initial_boot_params in
+> > this case so that we don't unflatten a DTB when ACPI is in use?
+>=20
+> You mean so we don't unflatten the boot DTB, but instead unflatten the=20
+> empty one, right? That sounds fine.
 
-Thanks for the explanation on the SOF_TIMESTAMPING_RX_{HARDWARE,SOFTWARE}.
+Yes. Note, I don't have any ACPI arm64 system on hand to test anything
+with :-(
 
-__sk_buff.hwtstamp should have the NIC rx timestamp then as long as the NIC is 
-ioctl configured.
+>=20
+> Another thing to check is kexec because it will still need the original=20
+> DTB I think. Though if you are doing ACPI boot and kexec'ing, kexec may=20
+> write out everything needed by the next kernel and the empty DTB would=20
+> work just fine.
 
-Jorn, do you need RX_SOFTWARE? From looking at net_timestamp_set(), any socket 
-requested RX_SOFTWARE should be enough to get a skb->tstamp for all skbs. A 
-workaround is to manually create a socket and turn on RX_SOFTWARE.
+Yeah, it looks like dt_is_stub() will keep doing its thing there. The
+empty DTB will have nothing in it and so kexec with ACPI and the empty
+DTB will continue to use ACPI, and then the empty DTB will be added in
+again.
 
-It will still be nice to get proper bpf_setsockopt() support for RX_SOFTWARE but 
-it should be considered together with how SO_TIMESTAMPING_TX_* should work in 
-bpf prog considering the TX tstamping does not have a workaround solution like 
-RX_SOFTWARE.
+> Of course those users booting with ACPI and then=20
+> kexec'ing to DT boot will be broken. Perhaps that's a feature...
 
-It is probably cleaner to have a separate bit in sk->sk_tsflags for bpf such 
-that the bpf prog won't be affected by the userspace turning it on/off and it 
-won't change the userspace's expectation also (e.g. sk_error_queue and POLLERR).
-
-The part that needs more thoughts in the tx tstamp is how to notify the bpf prog 
-to consume it. Potentially the kernel can involve a bpf prog to collect the tx 
-timestamp when the bpf bit in sk->sk_tsflags is set. An example on how TCP-CC is 
-using it will help to think of the approach here.
-
+I don't know how this part works. If you kexec to DT boot won't you run
+through startup again and initial_boot_params will have a non-empty DTB
+in it? I'd think this would keep working.
 
