@@ -1,112 +1,109 @@
-Return-Path: <linux-kselftest+bounces-3164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D93A7830B54
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:39:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEDB3830BAC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 18:07:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2ADA1C214ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 16:39:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71F401F22302
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 17:07:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DC9208B4;
-	Wed, 17 Jan 2024 16:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8545224FE;
+	Wed, 17 Jan 2024 17:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AwspFtYW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MaBHiyK+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF85021A01
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 16:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7800820325;
+	Wed, 17 Jan 2024 17:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705509583; cv=none; b=Xw5UJO3n3GHVL1hTPnKoVJhldrCcWkGIT+UQljbt91q4+YV7M9l0U4+wfmw357uAfqPKEpb2xHuIhjxx1CdS/Fpf8FdQXRjlXwyumgUULuGdEvmZcdoaqqm3XFxYUXWlJx8ekCqX+0cGNw+S9in2GNqzCSrh7EHZQpY0aScdqOM=
+	t=1705511234; cv=none; b=moOv6IFdqVmHsS/Cyf+sb0pknefDifNxew+cPBn+jt2auHvQAOUUk8Tcw+LoVx/xeiOBjmvKHCX7o9ZOwbUvHhAykIiH9FZTyW9iL63unps1ckafEKujVxmQCMociQ/ZJfuToxaG2tbZNllovSLuNSyNLeRZCtuAx4LNLIVrRnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705509583; c=relaxed/simple;
-	bh=M3t4lykNqYhmCjQO4zKq31KhD0/95qJoM+feR8YYTMs=;
-	h=DKIM-Signature:Received:X-MC-Unique:Received:Received:Received:
+	s=arc-20240116; t=1705511234; c=relaxed/simple;
+	bh=z6DHV9nI4jMmYcNar205Ahgb8zqKb0GneJ6hFKq7cfE=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Sender:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:User-Agent:
-	 X-Scanned-By; b=pYwVg7hatszmfDz6RTPlKdRWjQATUe8FYdxVESCY66w3asF3ZWtu8xLpyXQHIHK22HYQjthoZXJpzMXjk0KKvL1AwzGvX9bzM9q8nRm3Doyck6HOoogJhBWOttvK+We4LyjbPIUcgTosJ2M3AwJ46A8Txxjnm6Dwz5Od9/yynno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AwspFtYW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705509581;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9MEKaPLuC4dWjyeAAjRSNgqo7o077s9TgRJfiIfemoI=;
-	b=AwspFtYWECT9vkqfVAFq0o+ilUW2KdTHmgCv1zk+v2jr5oGNHF132bV/2JyNqPJYcDAIV6
-	EGrFMaXVJu2Lq7jaTPKl5J7grTm8trvA7IlzX29fdIVjhiDkRfuTrDCPIskaa5D+CaqTgH
-	0VVh45B7cMtJBcjVYj47N8KQsOVxPdI=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-389-a8vvGCybN5WY-ilt55kkNA-1; Wed,
- 17 Jan 2024 11:39:36 -0500
-X-MC-Unique: a8vvGCybN5WY-ilt55kkNA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 921CE1C29EC6;
-	Wed, 17 Jan 2024 16:39:31 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.121])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 8BF4E3C25;
-	Wed, 17 Jan 2024 16:39:22 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 17 Jan 2024 17:38:18 +0100 (CET)
-Date: Wed, 17 Jan 2024 17:38:09 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Kees Cook <keescook@chromium.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Adrian Reber <areber@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	tiozhang <tiozhang@didiglobal.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=lkOr9MoMXtf9TfoBtsUu2v0xtT8i6cgNZ+SYtDKD+U9CwHwVu5uu2QtREia2i7oL1EEqMbtsdFUc63awqHW2WrWDLtxfP5TTVMn7BnaF+BZD7O8mT+vhkfO45N6N14zgDK9x1GlOqHvrztoBraAiSw5mKDTmfpQ1deCE4/4zx1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MaBHiyK+; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5ce10b5ee01so8167340a12.1;
+        Wed, 17 Jan 2024 09:07:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705511233; x=1706116033; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qc3wJ8un1HLyTnJdIdlaIzF/ByCjBoYDp2Jt1SaaKDA=;
+        b=MaBHiyK+v5MpnxjaJJE5vQUwhO36+Qo4q/DlLTrEeQ3OYTZRDEjCW+il39zPFj6L2W
+         TUyFal5q0AI1ERBiX4rdRo3+4i9e5Vp4Z726J5XKu/k0H0qowGL1kJR1qXZ0H+9J+2CV
+         /BSgtQ3mhfacXWgug1pMNHb2vJPCdNyRfZOVaxGdsrCGCwo6r8yhaLldksK8uh8dd7Kj
+         0NlOqtrUKRz87U38wI3A7nT21MxWnfgoaVl0tcm9Eg7sbWPqW5y0pR2Z+bUL/3u1g0/P
+         fQgMjHmRAPetNdwV0Os46OSmuSp6Yjzi06S+b0KZD9Nj/0bSjvZpi/5FvISMemY6/xaL
+         ehIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705511233; x=1706116033;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qc3wJ8un1HLyTnJdIdlaIzF/ByCjBoYDp2Jt1SaaKDA=;
+        b=NnBQ1IqybStsvx6HQZ0+NskUoOExPinzHr/td3I0/6+5SlPneI3gs21iAnr/np1hx9
+         fwIc9JLQ8ZjWqAlGcEP62Jznt6gA9I7UTsaQiZ+op+2pDPjQMSPuCXmzQ4PtSAmyVsvE
+         cA8m2u0xwTwKm1XiCr+Rj8bx8qtg6Fb3NyzWlWtDhSP+7JSxFdOnph3fup4n47p+Jtmp
+         hEe+g5jxYzESoG+a+nN6EIEiJKP7jhQN/jeKXUisa5dE2ussfXGYBDHVm0+u69t3Nmjd
+         7SpEpc/YmQC+tCdhHv3qoWYWE3+WOxxTGkh9xLCF568NmA0NvL14nhfs0MbmUg40OBvk
+         jY/A==
+X-Gm-Message-State: AOJu0YwrFeTWDJtubPaL7jG1pNn/GWIO7GRU5Xh9h2qnmwVh5bJEhbq8
+	CnsDNcsI0wxMKN5z6HwOPpg=
+X-Google-Smtp-Source: AGHT+IGMktxjM/qsDQ11rUiNkkQ0XT7nVRjtjMGwgTOrfXbrq9w1emNOsCBSN2+HCjKxTRsLWUaoJQ==
+X-Received: by 2002:a05:6a20:9195:b0:19b:5cbd:efd0 with SMTP id v21-20020a056a20919500b0019b5cbdefd0mr1444939pzd.61.1705511232629;
+        Wed, 17 Jan 2024 09:07:12 -0800 (PST)
+Received: from localhost (dhcp-72-235-13-140.hawaiiantel.net. [72.235.13.140])
+        by smtp.gmail.com with ESMTPSA id lp16-20020a056a003d5000b006d9a0902934sm1662630pfb.70.2024.01.17.09.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jan 2024 09:07:12 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Wed, 17 Jan 2024 07:07:10 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
 	Frederic Weisbecker <frederic@kernel.org>,
-	YueHaibing <yuehaibing@huawei.com>,
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Zheng Yejian <zhengyejian1@huawei.com>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>,
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>
-Subject: Re: [PATCH v14] exec: Fix dead-lock in de_thread with ptrace_attach
-Message-ID: <20240117163739.GA32526@redhat.com>
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <20240116152210.GA12342@redhat.com>
- <AS8P193MB128538BC3833E654F56DA801E4722@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	Jonathan Corbet <corbet@lwn.net>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Mrunal Patel <mpatel@redhat.com>,
+	Ryan Phillips <rphillips@redhat.com>,
+	Brent Rowsell <browsell@redhat.com>, Peter Hunt <pehunt@redhat.com>,
+	Cestmir Kalina <ckalina@redhat.com>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>,
+	Alex Gladkov <agladkov@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>, Phil Auld <pauld@redhat.com>,
+	Paul Gortmaker <paul.gortmaker@windriver.com>,
+	Daniel Bristot de Oliveira <bristot@kernel.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Costa Shulyupin <cshulyup@redhat.com>
+Subject: Re: [RFC PATCH 0/8] cgroup/cpuset: Support RCU_NOCB on isolated
+ partitions
+Message-ID: <ZagJPoEsLZ6Dg-NG@mtj.duckdns.org>
+References: <20240117163511.88173-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -115,121 +112,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8P193MB128538BC3833E654F56DA801E4722@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+In-Reply-To: <20240117163511.88173-1-longman@redhat.com>
 
-On 01/17, Bernd Edlinger wrote:
->
-> >>
-> >> The problem happens when a tracer tries to ptrace_attach
-> >> to a multi-threaded process, that does an execve in one of
-> >> the threads at the same time, without doing that in a forked
-> >> sub-process.  That means: There is a race condition, when one
-> >> or more of the threads are already ptraced, but the thread
-> >> that invoked the execve is not yet traced.  Now in this
-> >> case the execve locks the cred_guard_mutex and waits for
-> >> de_thread to complete.  But that waits for the traced
-> >> sibling threads to exit, and those have to wait for the
-> >> tracer to receive the exit signal, but the tracer cannot
-> >> call wait right now, because it is waiting for the ptrace
-> >> call to complete, and this never does not happen.
-> >> The traced process and the tracer are now in a deadlock
-> >> situation, and can only be killed by a fatal signal.
-> >
-> > This looks very confusing to me. And even misleading.
-> >
-> > So IIRC the problem is "simple".
-> >
-> > de_thread() sleeps with cred_guard_mutex waiting for other threads to
-> > exit and pass release_task/__exit_signal.
-> >
-> > If one of the sub-threads is traced, debugger should do ptrace_detach()
-> > or wait() to release this tracee, the killed tracee won't autoreap.
-> >
->
-> Yes. but the tracer has to do its job, and that is ptrace_attach the
-> remaining treads, it does not know that it would avoid a dead-lock
-> when it calls wait(), instead of ptrace_attach.  It does not know
-> that the tracee has just called execve in one of the not yet traced
-> threads.
+Hello,
 
-Hmm. I don't understand you.
+On Wed, Jan 17, 2024 at 11:35:03AM -0500, Waiman Long wrote:
+> The first 2 patches are adopted from Federic with minor twists to fix
+> merge conflicts and compilation issue. The rests are for implementing
+> the new cpuset.cpus.isolation_full interface which is essentially a flag
+> to globally enable or disable full CPU isolation on isolated partitions.
 
-I agree we have a problem which should be fixed. Just the changelog
-looks confusing to me, imo it doesn't explain the race/problem clearly.
+I think the interface is a bit premature. The cpuset partition feature is
+already pretty restrictive and makes it really clear that it's to isolate
+the CPUs. I think it'd be better to just enable all the isolation features
+by default. If there are valid use cases which can't be served without
+disabling some isolation features, we can worry about adding the interface
+at that point.
 
-> > Now. If debugger tries to take the same cred_guard_mutex before
-> > detach/wait we have a deadlock. This is not specific to ptrace_attach(),
-> > proc_pid_attr_write() takes this lock too.
-> >
-> > Right? Or are there other issues?
-> >
->
-> No, proc_pid_attr_write has no problem if it waits for cred_guard_mutex,
-> because it is only called from one of the sibling threads,
+Thanks.
 
-OK, thanks, I was wrong. I forgot about "A task may only write its own attributes".
-So yes, ptrace_attach() is the only source of problematic mutex_lock() today.
-There were more in the past.
-
-> >> +		if (unlikely(t->ptrace)
-> >> +		    && (t != tsk->group_leader || !t->exit_state))
-> >> +			unsafe_execve_in_progress = true;
-> >
-> > The !t->exit_state is not right... This sub-thread can already be a zombie
-> > with ->exit_state != 0 but see above, it won't be reaped until the debugger
-> > does wait().
-> >
->
-> I dont think so.
-> de_thread() handles the group_leader different than normal threads.
-
-I don't follow...
-
-I didn't say that t is a group leader. I said it can be a zombie sub-thread
-with ->exit_state != 0.
-
-> That means normal threads have to wait for being released from the zombie
-> state by the tracer:
-> sig->notify_count > 0, and de_thread is woken up by __exit_signal
-
-That is what I said before. Debugger should release a zombie sub-thread,
-it won't do __exit_signal() on its own.
-
-> >> +	if (unlikely(unsafe_execve_in_progress)) {
-> >> +		spin_unlock_irq(lock);
-> >> +		sig->exec_bprm = bprm;
-> >> +		mutex_unlock(&sig->cred_guard_mutex);
-> >> +		spin_lock_irq(lock);
-> >
-> > I don't understand why do we need to unlock and lock siglock here...
->
-> That is just a precaution because I did want to release the
-> mutexes exactly in the reverse order as they were acquired.
-
-To me this adds the unnecessary complication.
-
-> > But my main question is why do we need the unsafe_execve_in_progress boolean.
-> > If this patch is correct and de_thread() can drop and re-acquire cread_guard_mutex
-> > when one of the threads is traced, then why can't we do this unconditionally ?
-> >
->
-> I just wanted to keep the impact of the change as small as possible,
-
-But the unsafe_execve_in_progress logic increases the impact and complicates
-the patch.
-
-I think the fix should be as simple as possible. (to be honest, right now
-I don't think this is a right approach).
-
-> including
-> possible performance degradation due to double checking of credentials.
-
-Not sure I understand, but you can add the performance improvements later.
-Not to mention that this should be justified, and the for_other_threads()
-loop added by this patch into de_thread() is not nice performance-wise.
-
-Oleg.
-
+-- 
+tejun
 
