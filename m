@@ -1,163 +1,162 @@
-Return-Path: <linux-kselftest+bounces-3140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3141-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B27B83025A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 10:32:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45C48830264
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 10:35:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 497FE1C20FDB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 09:32:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3A6F28676A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jan 2024 09:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B168313FFC;
-	Wed, 17 Jan 2024 09:32:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD91413FFA;
+	Wed, 17 Jan 2024 09:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FcxykHDn"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="hWuxp5vG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3302813FFA
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 09:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E101428D
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 09:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705483946; cv=none; b=SvGrCSTRRQn8BRT6oNskWRg0egoSZG+8qq5znZWIEfqiBZIuBj3hOiwfwVxViKFRNGQOoTAiLpNRS5PWsDtkR1N/tdbeiTfy6pEvPbbZBXJeftIKlOSst/Ybl492y5TZ/ZbcLZbgrKtZwsqk4Y660tjj2yF32VidmkLYKAKSFMg=
+	t=1705484096; cv=none; b=i2/SqHvaS+tWpo3maHyr4mGAGWoE92taFsFCewRB7WLFy0FF3CNIdhekHcl65Ut0SIWytCov0zBsHsWVaVfxEog58V5lobGrc4jTcT4tXdzQzvNR0BaIDy9VvK9ybh9zLNGrx4qOQfSXgwY3S4Um0IMLz5UklZ/yStEynf3i13c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705483946; c=relaxed/simple;
-	bh=/imKL3+ayYzmNpJJNpvrotqiOdwTSn+f9XCWxjze8j4=;
-	h=DKIM-Signature:Received:X-MC-Unique:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Received:
-	 X-Google-Smtp-Source:X-Received:Received:Message-ID:Subject:From:
-	 To:Cc:Date:In-Reply-To:References:Autocrypt:Content-Type:
-	 Content-Transfer-Encoding:User-Agent:MIME-Version; b=LNwK0h8G5jszV/tGaH3f/74a4KV8WBvaYIbtcQi+kBalxJizavVB/0e4pDWlhSccl0Z4llN+n5bx1kGrjlbiPXuXHWxZTi3hZkZTYyYJXDYdU4ZEjBmSonbYofv0lxdzbWZ/ChVlQFJs2xo7RSr/yMovTAcDn06objVhAlmPoZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FcxykHDn; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705483944;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=8qxUADM6Nge0ZwJSS7NywWKjA81kvR0HBVtizsU1Q+o=;
-	b=FcxykHDnJouAYu71wDRsolJELeaDOzHQGO6kZyMPPPcKaD3yRNtcWLy5yzCVpiZ6NH3BSd
-	sTnfxCHVJsLjCx/0y4hlDPJ85NDCfnd8TU3o4837w5Hykg5/XkPAddIWN+HrWE4oqjdF0r
-	3lnSPvDYMAXH6bMtEDIA9AvKQMtzI7Y=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-DrN7lQWLOVSPjJp_NwHNIA-1; Wed, 17 Jan 2024 04:32:22 -0500
-X-MC-Unique: DrN7lQWLOVSPjJp_NwHNIA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-40e354aaf56so14669665e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 01:32:22 -0800 (PST)
+	s=arc-20240116; t=1705484096; c=relaxed/simple;
+	bh=5h5jo0LDbjUDwc963EaETwiGZV4372iYktbYxO7wBYM=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding; b=iWhCjOg+01Y+0v1uc++7chDfTr9wfrlZZHmQpE5Ly/qvkFGMfI7saNbrdlb+k36Aqe1GpVY+eq+VlQ6qElweWJE8UPf5ikJ3CbCd4lwxlYRDy3Aag0KM1PyvJ/B/brtyRq6XnvacWYPdEu7SsCTptBVEN5uP2FLzYwJ1d66HQ54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=hWuxp5vG; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-210a73a5932so113226fac.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 01:34:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1705484094; x=1706088894; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aaqWkweUBCMsM9np/mXYoztcvXQRXft4e1IEJ/ozrjU=;
+        b=hWuxp5vGVbqiSAe9z4n+r1gcgTdBJOsKcxGR1oxv7Ukr3gfVNx+OdqpeM7toaJsuA8
+         pmVc69+23ouo0OnaJVS4WjXPmn1Y3dp1l1MXEqZH1bOyhQd4XilryHwL1OpYEkTdHs+C
+         4IC6s7eaX9URzydCPvmwEKEhyQzP+rcD8Lspwub2vXyEmTIt6LqnHUD+6RTfZfTKjHgg
+         L27c/7Iz9GfvGQ6qY9EAg1wZCR1bGmUNYeWRnbg2jUIgMFivGua4PSSdvHAfNFZOVM7d
+         v0DAuF57YjZwlRoW5G2Zlv16bAXi25bp0pflrPrIUja01w3lMprD7HWrhwPW/RZELk7H
+         QiyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705483941; x=1706088741;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8qxUADM6Nge0ZwJSS7NywWKjA81kvR0HBVtizsU1Q+o=;
-        b=wA0911LoC4nzh5fDbFQdyYHaRLbLw3KhDcNheWX9cmCYzlGgipAWeCok5NNqk18SEP
-         cvkzDSdCae4/izWQ3D3eZ3grHbXPfGRlj+gdGm/M5/BVjh1k8sAOb/prQVvXVsk6icOm
-         KkPRD9/eHHGDIQSxgAJ9x948GbTSJCzmQ+w+H3enwrNvHqfqXZU7RrHzNtOrsK83F3I8
-         +17exGzwbSW/iDJLvcnu+Zod+wRI6Ap//PkoSGZfL4klueT0EI3IKijlRfhjvAoTpTa0
-         EwTeZNuaI+7hWxBehcA7KEd/5g6ZQlJykEuYclaofZya9VMuW7fyXNRUk+nND0sAvi0m
-         5jUA==
-X-Gm-Message-State: AOJu0YwMpxrIOVVY8a+shM6k8EN0mBiODq5b6kM+6JFK6Mmg68Ou8CAP
-	d5emlIDuyGb8GQCoETfkB2yk93/rAOFBOeCvs80S+LkAGmUR0NMAXJiXMu83Osi04bpOCKVkusQ
-	FX8hlZf+18584XRx3dgJPfUPqjtmWHgoTHHhO
-X-Received: by 2002:a05:600c:35d5:b0:40e:89e8:107a with SMTP id r21-20020a05600c35d500b0040e89e8107amr773718wmq.3.1705483941454;
-        Wed, 17 Jan 2024 01:32:21 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEub5ZACmCdZpuL32hhjWjk/eQjhAUjdokVzr1TdN5lc8FiPsxoyenSDdUOv2kFBxz9M82oAw==
-X-Received: by 2002:a05:600c:35d5:b0:40e:89e8:107a with SMTP id r21-20020a05600c35d500b0040e89e8107amr773702wmq.3.1705483941054;
-        Wed, 17 Jan 2024 01:32:21 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-242-208.dyn.eolo.it. [146.241.242.208])
-        by smtp.gmail.com with ESMTPSA id t10-20020a5d6a4a000000b00337b0374a3dsm1213459wrw.57.2024.01.17.01.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 01:32:20 -0800 (PST)
-Message-ID: <9716ed0c1a9f06256d42ed493cda6b7a43cdaee2.camel@redhat.com>
-Subject: Re: [PATCH net] selftests: netdevsim: add a config file
-From: Paolo Abeni <pabeni@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	shuah@kernel.org, jiri@resnulli.us, linux-kselftest@vger.kernel.org
-Date: Wed, 17 Jan 2024 10:32:19 +0100
-In-Reply-To: <20240116103430.600fdb9c@kernel.org>
-References: <20240116154311.1945801-1-kuba@kernel.org>
-	 <397aaa82985c749f03d0c6dc034e479d49df1b32.camel@redhat.com>
-	 <20240116103430.600fdb9c@kernel.org>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+        d=1e100.net; s=20230601; t=1705484094; x=1706088894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aaqWkweUBCMsM9np/mXYoztcvXQRXft4e1IEJ/ozrjU=;
+        b=fwqX1ZSlaJQoI4qyGUpcMSt+SWuLEcvnoiHu3w4dblc6h/8d2IAJejHv5PHW5NrCBA
+         1aTcPHomsZLWEVxa+8Jo/uLZSB2DCSV5MnDRCsLNA906sviApip7ZotPCcGo2qH4GY3F
+         35Fey7YnqJwbIK+Kj61OUTUb5f4QJgLuLvl6D5Mx1olrqQxPLPd2BQcpzbVn3MEjqc7x
+         /vkebjtQ6SBBHc7zNCy1fwRE1pqEsBdEbVMvbN/5BJk2aed7yXhzpZi8uOozDNVE62YG
+         eCKHJBhzdPklNmuPUCo8GRly11ZxUkW26B25xb43S751LNHDZ9PObn8wu4PgwUrbEuiB
+         hxqg==
+X-Gm-Message-State: AOJu0Yw0Q51YbRpoo4l5/TBJTyuPGtdS88U11viBox4U7Wyx6X9aCJhF
+	74W82B7gQYDTqcYfRqyTooEJyzUfctQ3j3Fs0Gg9wARG7scgKA==
+X-Google-Smtp-Source: AGHT+IGm/Gep62eql5SAVLRRUU3yliphqjo5z9Qaiuxv+5wKqX7+/u8z+fEIs7Mgr/WikI4re0xS1rdrLaLknoVLY5o=
+X-Received: by 2002:a05:6870:148a:b0:206:9e36:cfed with SMTP id
+ k10-20020a056870148a00b002069e36cfedmr12283657oab.62.1705484094068; Wed, 17
+ Jan 2024 01:34:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240117082514.42967-1-cuiyunhui@bytedance.com> <20240117-274e425c51d0deaeca80857d@orel>
+In-Reply-To: <20240117-274e425c51d0deaeca80857d@orel>
+From: yunhui cui <cuiyunhui@bytedance.com>
+Date: Wed, 17 Jan 2024 17:34:43 +0800
+Message-ID: <CAEEQ3wmDyj9S6412b3FCVF6Wu+TRRZco11X5mdEiQ5E2s54sHQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] RISC-V: selftests: fix cbo.c compilation error
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: shuah@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, xiao.w.wang@intel.com, linux-kselftest@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	xuzhipeng.1973@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-01-16 at 10:34 -0800, Jakub Kicinski wrote:
-> On Tue, 16 Jan 2024 18:40:49 +0100 Paolo Abeni wrote:
-> > On Tue, 2024-01-16 at 07:43 -0800, Jakub Kicinski wrote:
-> > > netdevsim tests aren't very well integrated with kselftest,
-> > > which has its advantages and disadvantages.=C2=A0 =20
-> >=20
-> > Out of sheer ignorance I don't see the advantage?!?
-> >=20
-> > > But regardless
-> > > of the intended integration - a config file to know what kernel
-> > > to build is very useful, add one. =20
-> >=20
-> > With a complete integration we could more easily ask kbuild to generate
-> > automatically the kernel config suitable for testing; what about
-> > completing such integration?
->=20
-> My bad, I didn't have the right words at my fingertips so I deleted=20
-> the explanation of advantages.
->=20
-> make run_tests doesn't give us the ability to inject logic between
-> each test, AFAIU. The runner for netdevsim I typed up checks after
-> each test whether the VM has any crashes or things got otherwise
-> out of whack. And if so kills the VM and starts a new one to run
-> the next test. For make run_tests we can still more or less zero
-> in on which test caused an oops or crash, but the next test will=20
-> try to keep going.=C2=A0
+Hi drew=EF=BC=8C
 
-I see.
+On Wed, Jan 17, 2024 at 5:16=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Wed, Jan 17, 2024 at 04:25:14PM +0800, Yunhui Cui wrote:
+> > When compiling with -O0, the following error will occur:
+> > cbo.c: In function 'cbo_insn':
+> > cbo.c:43:9: warning: 'asm' operand 1 probably does not match constraint=
+s
+> >    43 |         asm volatile(
+> >       |         ^~~
+> > cbo.c:43:9: warning: 'asm' operand 2 probably does not match constraint=
+s
+> > cbo.c:43:9: error: impossible constraint in 'asm'
+> >
+> > Add __attribute__((optimize("O"))) to fix.
+> >
+> > Fixes: a29e2a48afe3 ("RISC-V: selftests: Add CBO tests")
+> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> > Suggested-by: Zhipeng Xu <xuzhipeng.1973@bytedance.com>
+> > ---
+> >  tools/testing/selftests/riscv/hwprobe/cbo.c | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testin=
+g/selftests/riscv/hwprobe/cbo.c
+> > index 50a2cc8aef38..ff1d8e843d70 100644
+> > --- a/tools/testing/selftests/riscv/hwprobe/cbo.c
+> > +++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
+> > @@ -36,7 +36,7 @@ static void sigill_handler(int sig, siginfo_t *info, =
+void *context)
+> >       regs[0] +=3D 4;
+> >  }
+> >
+> > -static void cbo_insn(char *base, int fn)
+> > +static __always_inline void cbo_insn(char *base, int fn)
+> >  {
+> >       uint32_t insn =3D MK_CBO(fn);
+> >
+> > @@ -47,10 +47,11 @@ static void cbo_insn(char *base, int fn)
+> >       : : "r" (base), "i" (fn), "i" (insn) : "a0", "a1", "memory");
+> >  }
+> >
+> > -static void cbo_inval(char *base) { cbo_insn(base, 0); }
+> > -static void cbo_clean(char *base) { cbo_insn(base, 1); }
+> > -static void cbo_flush(char *base) { cbo_insn(base, 2); }
+> > -static void cbo_zero(char *base)  { cbo_insn(base, 4); }
+> > +#define OPTIMIZE __attribute__((optimize("O")))
+> > +OPTIMIZE static void cbo_inval(char *base) { cbo_insn(base, 0); }
+> > +OPTIMIZE static void cbo_clean(char *base) { cbo_insn(base, 1); }
+> > +OPTIMIZE static void cbo_flush(char *base) { cbo_insn(base, 2); }
+> > +OPTIMIZE static void cbo_zero(char *base)  { cbo_insn(base, 4); }
+> >
+> >  static void test_no_zicbom(void *arg)
+> >  {
+> > --
+> > 2.20.1
+> >
+>
+> Hi Yunhui,
+>
+> Thanks for the bug report, but this isn't the right fix. The real problem
+> is that I didn't ensure operands 1 and 2 match their constraints, just as
+> the warning you discovered says. To do that, I should have made cbo_insn(=
+)
+> a macro and not used the local variable, i.e. ensure 'fn' and 'insn' are
+> indeed constants derived from the 0,1,2,4 constants.
+>
+> I'll send a patch with your reported-by.
+Okay, if you want to use macros to fix it, you can. thanks=EF=BC=81
 
-
-> Even if we force kill it after we see a crash
-> I didn't see in the docs how to continue testing from a specific
-> point.
-
-I think something like the following should do:
-
-cd tools/testing/selftests
-make TARGETS=3D"net drivers/net/bonding <...full relevant targets list>" O=
-=3D<kst_dir> install
-cd <kst_dir>
-
-ARGS=3D""
-for t in $(./run_kselftest.sh -l| sed -n '/<test name>/,$p'); do
-	ARGS=3D"$ARGS -t $t"
-done
-./run_kselftest.sh $ARGS # run all tests after <test name>
-
-Probably it would be nice to add to the kselftest runner the ability to
-check for kernel oops after each test and ev. stop.
-
-> So all in all, yeah, uniformity is good, the hacky approach kinda
-> works. Converting netdevsim to make run_tests is not a priority..
-
-I agree, but also will put the all the above possible improvements in
-my wishlist ;)
-
-Cheers,
-
-Paolo
-
+Thanks=EF=BC=8C
+Yunhui
 
