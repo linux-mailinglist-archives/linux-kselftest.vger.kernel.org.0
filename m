@@ -1,86 +1,169 @@
-Return-Path: <linux-kselftest+bounces-3189-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3190-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 096D08315D9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 10:31:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0736583162F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 10:51:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C58D3284CDA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 09:31:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 399D11C221E6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 09:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EC561D55A;
-	Thu, 18 Jan 2024 09:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BC91F92D;
+	Thu, 18 Jan 2024 09:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lv1sz9XI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dw21sRWg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A2D20338;
-	Thu, 18 Jan 2024 09:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22B31B978
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jan 2024 09:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705570290; cv=none; b=gyy75EnnSyD9cq9ojX7i3e4VfFgE9H027AH1h/br9I0tYyQz8WSReeJZsQ99rvl2HxrzqynYjf+ceFC3P3/zpPLlYgNQN4JpAKPbCkS1DYmIk7y00OM15UHoVF5b+cMhxw8gJ5U9ABJe3hq2Fu+gCpD5YPejQfi4uBh2z+c4cdc=
+	t=1705571469; cv=none; b=nOncpc6gf+cB7M4zush/SbRdJVulFBr523TOQfUysvCOQKhJaQ3wni80eHtJr9j11APFeYTG5++/e7bk6I0nTEFI3Hr27bgHRgEwjkCVeTRtcwo9X6OFxhydTn+J3Ghe75Q27QeE/SsRNKBihNHjO8ojKRYqt3fIMKn303LYa9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705570290; c=relaxed/simple;
-	bh=6xh4ffBeTb64NrHfkNkNDdjf9W4dqgPhPg10T+46fwo=;
-	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
-	 Message-Id:Date:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Mailer; b=paa0OFbhfFEJkBM/+4lhQGiWoWkFCpxOM5lA8CucGY5JQv8ilnJLYBDcYybAQNoESb0GPpUm1uJP8Rx4A7FSniMZXHGDNcJqwfvX/xK2Wu20sqQl5IDiY3MngKxgA8pFjANNqjMFPcdzP/i0yrT9P79F/EV/r/zn2PWyZZWC5b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lv1sz9XI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44AFFC43390;
-	Thu, 18 Jan 2024 09:31:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705570289;
-	bh=6xh4ffBeTb64NrHfkNkNDdjf9W4dqgPhPg10T+46fwo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=lv1sz9XI8maAXYEd3DCKMcvqlhIMLGvuvZdpS3hs8gW8TbZ9i6Gdgm6xsW3+c1gbU
-	 RoddzyN1vjVjUTNam4Q6yfHhe/WD3chRCR7XwCfvjCd82Kairce8D56K/sT0qERmqe
-	 uxauvkDl0HbINHRPtGYYlxEnVBIZL8TvUlajZ7Sj/Lb2KO/lcfB0KyXyG691L+I0Kp
-	 EnnnM3clo8lEKVA/riDuzgZSTx+1zLNfFX9aobnuJuT5gsm2LYSvfhAFkcNFK7IuXW
-	 E0gztQ1X0xhVB3FWfo7yFvmtMPDYaxou/1gODU3pMQ53EkKfkEQ4Xd4Mmfe/uIL//h
-	 Bzg+AyfsFO4PA==
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Jason Gerecke <jason.gerecke@wacom.com>, 
- Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240117-b4-wip-wacom-tests-fixes-v1-1-f317784f3c36@kernel.org>
-References: <20240117-b4-wip-wacom-tests-fixes-v1-1-f317784f3c36@kernel.org>
-Subject: Re: [PATCH] selftests/hid: wacom: fix confidence tests
-Message-Id: <170557028800.2036094.8723176991668141114.b4-ty@kernel.org>
-Date: Thu, 18 Jan 2024 10:31:28 +0100
+	s=arc-20240116; t=1705571469; c=relaxed/simple;
+	bh=s3vUMJLFHAD51DC2yFRfx7iE/+ob/GznEz4ar3z3+bk=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Date:
+	 Mime-Version:X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	b=tvDyLH32LLbH9z9ODx2oJPI2hjKoF3SzhVVUU7hLij/T+rx6hr9D4cgXZgEM1P6CHt9fPlUR2G4idPCH9tivqNigWOTQVO1+tOAqflFl4Looe1C87iRDuGaapArInETVcVlP552/soOdi2qVI6kgGyyUAF9kilv+DPsIOTyuNEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--gthelen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Dw21sRWg; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gthelen.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5ff85fabbecso8166787b3.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jan 2024 01:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1705571467; x=1706176267; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RO6rdO7yon9JVy5o6uihMLS4VCKN6/zkfcB4kXn3j3k=;
+        b=Dw21sRWgO25P5sGKQLu6OP4DyJdA36g7iapH1YdNEM0JzusJTk4F+HyTIVlF7CGt21
+         B9rNP3gSAJ7iz81cw6MPcslp6AnPGlf9LVU/C/A2N4UxGtBg1c+DzVnra4c5Dss3XBN7
+         pji35wkNFln3yfIGos8mRnGJzZW+ZnHJY9gncqHC+UdE+vSBDhORG0yyzUqqFsv/MWX9
+         t6AZ1AeGYWcwlj2ob+wXQ/8d5F7mrGLHfU4JpC7FpoLTiLWSaRchAQW3tDu9zPcPs7rH
+         YzjtVCIKPa6DvRxsb2rWt0Xgnz+cYfgQ52YMSlfiNE9JBoTg4G1hRidCRcLcX9xEJEW8
+         iA2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705571467; x=1706176267;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RO6rdO7yon9JVy5o6uihMLS4VCKN6/zkfcB4kXn3j3k=;
+        b=LJzUON6lDOmL1Fizx1pWBctd1AxCgUsFG9hAP35J3GuyrKfM09C6lyMlHKYb8RvI1M
+         Y9GRBdyRG7KRm6ru9OV6DslMxYIyBl0pHGj2QxhvFhyylmRyGkbqzVV/D3YkgsZJVKbn
+         uw6LqNu4heUc1sW6w+fS0grykCOGnx7gA6kv+fxHekrlx6HpY3V6cAqeP41et3p8AbcS
+         fdtj8Ivpb8bPmoZL8LEILGv+I8gIkv7Ky2YkC4mlSY9/JpCHdjjEe1g2a676E2YPzQVa
+         5vUoWbIZBwF/esn+BFSr9H7mx+lGqLjeaG0NQwYx1lxVdln0UlGhBDIu8h/dc3uXJ5XH
+         +0eg==
+X-Gm-Message-State: AOJu0Yw4rBhuFqTL0Ra3CqS8lMEJXo6/bPWxmVjG/qH1enG4KeNI0KKq
+	cyx2Yi4bmCXdf3FMJj9naxjL5kjAr+9s8CoRMzp6R/dsSHj1VYX0ESXrE1yfBtcnXJ/mVRZ5tW9
+	V8hwlQg==
+X-Google-Smtp-Source: AGHT+IGe18viwrppfstJfi4AUcP2ZanhxP9sww14HmVAsZgEBU6B1iIqZG6+djVghvja7wuNIfkQ57OeetYp
+X-Received: from gthelen-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1b13])
+ (user=gthelen job=sendgmr) by 2002:a25:b112:0:b0:dbe:32b0:9250 with SMTP id
+ g18-20020a25b112000000b00dbe32b09250mr27546ybj.0.1705571466906; Thu, 18 Jan
+ 2024 01:51:06 -0800 (PST)
+Date: Thu, 18 Jan 2024 01:50:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.4
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240118095057.677544-1-gthelen@google.com>
+Subject: [PATCH] selftests/memfd: delete unused declarations
+From: Greg Thelen <gthelen@google.com>
+To: Daniel Verkamp <dverkamp@chromium.org>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Jeff Xu <jeffxu@google.com>, Kees Cook <keescook@chromium.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 17 Jan 2024 14:27:15 +0100, Benjamin Tissoires wrote:
-> The device is exported with a fuzz of 4, meaning that the `+ t` here
-> is removed by the fuzz algorithm, making those tests failing.
-> 
-> Not sure why, but when I run this locally it was passing, but not in the
-> VM.
-> 
-> 
-> [...]
+Commit 32d118ad50a5 ("selftests/memfd: add tests for F_SEAL_EXEC"):
+- added several unused 'nbytes' local variables
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git (for-6.8/upstream-fixes), thanks!
+Commit 6469b66e3f5a ("selftests: improve vm.memfd_noexec sysctl tests"):
+- orphaned 'newpid_thread_fn2()' forward declaration
+- orphaned 'join_newpid_thread()' forward declaration
+- added unused 'pid' local in sysctl_simple_child()
+- orphaned 'fd' local in sysctl_simple_child()
+- added unused 'fd' in sysctl_nested_child()
 
-[1/1] selftests/hid: wacom: fix confidence tests
-      https://git.kernel.org/hid/hid/c/4d695869d3fb
+Delete the unused locals and forward declarations.
 
-Cheers,
+Signed-off-by: Greg Thelen <gthelen@google.com>
+---
+ tools/testing/selftests/memfd/memfd_test.c | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index 3df008677239..18f585684e20 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -44,8 +44,6 @@
+  */
+ static size_t mfd_def_size = MFD_DEF_SIZE;
+ static const char *memfd_str = MEMFD_STR;
+-static int newpid_thread_fn2(void *arg);
+-static void join_newpid_thread(pid_t pid);
+ 
+ static ssize_t fd2name(int fd, char *buf, size_t bufsize)
+ {
+@@ -194,7 +192,6 @@ static unsigned int mfd_assert_get_seals(int fd)
+ static void mfd_assert_has_seals(int fd, unsigned int seals)
+ {
+ 	char buf[PATH_MAX];
+-	int nbytes;
+ 	unsigned int s;
+ 	fd2name(fd, buf, PATH_MAX);
+ 
+@@ -696,7 +693,6 @@ static void mfd_assert_mode(int fd, int mode)
+ {
+ 	struct stat st;
+ 	char buf[PATH_MAX];
+-	int nbytes;
+ 
+ 	fd2name(fd, buf, PATH_MAX);
+ 
+@@ -715,7 +711,6 @@ static void mfd_assert_mode(int fd, int mode)
+ static void mfd_assert_chmod(int fd, int mode)
+ {
+ 	char buf[PATH_MAX];
+-	int nbytes;
+ 
+ 	fd2name(fd, buf, PATH_MAX);
+ 
+@@ -731,7 +726,6 @@ static void mfd_fail_chmod(int fd, int mode)
+ {
+ 	struct stat st;
+ 	char buf[PATH_MAX];
+-	int nbytes;
+ 
+ 	fd2name(fd, buf, PATH_MAX);
+ 
+@@ -1254,9 +1248,6 @@ static void test_sysctl_set_sysctl2(void)
+ 
+ static int sysctl_simple_child(void *arg)
+ {
+-	int fd;
+-	int pid;
+-
+ 	printf("%s sysctl 0\n", memfd_str);
+ 	test_sysctl_set_sysctl0();
+ 
+@@ -1321,7 +1312,6 @@ static void test_sysctl_sysctl2_failset(void)
+ 
+ static int sysctl_nested_child(void *arg)
+ {
+-	int fd;
+ 	int pid;
+ 
+ 	printf("%s nested sysctl 0\n", memfd_str);
 -- 
-Benjamin Tissoires <bentiss@kernel.org>
+2.43.0.429.g432eaa2c6b-goog
 
 
