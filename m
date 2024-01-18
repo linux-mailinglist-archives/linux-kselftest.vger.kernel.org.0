@@ -1,223 +1,236 @@
-Return-Path: <linux-kselftest+bounces-3202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40DAD831BB0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 15:46:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45AE3831BD4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 15:53:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F0E11C20B6F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 14:46:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96A96B21B1E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 14:53:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB531DA2B;
-	Thu, 18 Jan 2024 14:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b2s3Dih+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B3331DDC0;
+	Thu, 18 Jan 2024 14:53:30 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp716.webpack.hosteurope.de (wp716.webpack.hosteurope.de [80.237.130.238])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A63646;
-	Thu, 18 Jan 2024 14:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70F039B;
+	Thu, 18 Jan 2024 14:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705589179; cv=none; b=Abf0YrfiSBgKV8ysXnu6Cab7IzPelj0TUC/oy/CTFbk0iChOtu/KX3JvJtzzJ9QSej8zv5JsBROnXI3PtPVLyuZEftdhx0oBuo9K/Oxv5WXiULwRDaGL8jcT85/l4Nuzq9fLVO1Q19ADBDaHrDmL74Qru+FzE2CEjItYdzBoPFE=
+	t=1705589610; cv=none; b=KkmrVpNFbyY00COWf8C2xmU1zAHXTYn31NrOvBPG0XB1aoc2RTnzjxEQdgVwuVERW8JFu4bnhlSlFSDHn+m957UFIvz2xQo4PglKV9wsYT8bsIHZimZDzE1Z78iUsU4rVeLE0VAPv6RV2fdNnegVgPUnl2hsdRo0NyMJQsu70kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705589179; c=relaxed/simple;
-	bh=V/rb3e7RICwYcaa6sGQk5hX7onXeunnOrGGXPUjSP4s=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
-	 From:To:Cc:Message-ID:In-Reply-To:References:Subject:Mime-Version:
-	 Content-Type:Content-Transfer-Encoding; b=JbI01cXbPwgIwxKVY3BcvNhB15Yrk76nvgh9GDAKJGUsrazDTU46bdMOOES6YI3QZlU+3amiA2qyGSLDk3L8RNXajmzr3MXepSbifd/HbSAnZUD7qFoRO5a4hozTez7E6893cvZ+cu2e63bBJEBziaovkW+GnE3uZ9O3f3OYtiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b2s3Dih+; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-68192840641so2338746d6.1;
-        Thu, 18 Jan 2024 06:46:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705589177; x=1706193977; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V/rb3e7RICwYcaa6sGQk5hX7onXeunnOrGGXPUjSP4s=;
-        b=b2s3Dih+kRIgNm+BIW8vVCPxX42jWdNMQLlFDCtbcXwUZA9gS/B5PET0r40/8yIGQu
-         mm10HhoDzSj/cgqHMwuXoYQX853qJgiMEmSZ9vnQYFoainGHwQp2Pogre0zPjBAezzhk
-         90tqPPm0oIcT+LfdosPSfcwrkvv2+4NgNkejyqOqdW3o9lERHDLp1wF8iiZDPdMgAhD6
-         EQDtjG+rlyS00Czczv3q3efIHu0PODN2r0pdz7iqtFsrsVD3t8N0ArjHqAP1C6D6i2R7
-         +yRhLULldk1tN5GHUVzPzZOPBnc9ez/8vIvcs+HLZqBO66cKi2hMUj8LIML6q1eNlzKQ
-         8eIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705589177; x=1706193977;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=V/rb3e7RICwYcaa6sGQk5hX7onXeunnOrGGXPUjSP4s=;
-        b=MZrI4kbRyn9fPKmOklZQBlcEGRKr+HIsciEfrD2tQgGM7QFe03I5ZntHs4i+biFAWe
-         APwE6CH5EFSR8QCawJm805js1/wzbbElImSf3QapkR1VkvN++LANH5/0L7Q/5a9HMUUZ
-         J3WqjasnvuZRND352oGuQJzX6Nql3kyu8UYLmn6kezFd1vQ8i5OAmmYF6dVJAmKk2zrZ
-         TO6sOj4oPrsnRhHDk2eOPEfrokdDkb+k7IqpM0GxIcPZSDavqxcqYHey+DmKWJKnckV4
-         HKpxPSF16aGRCwsdvGs+EBgvZXGyZe3IgZ4jPutblNHVGm82D+MM3iL3Hruyto6gf5W8
-         F13g==
-X-Gm-Message-State: AOJu0YzfDlxnjOAT4Mqp9fMwNYsFQXLN2nY9d0D1qrU5Xz8tpthxXREU
-	4hPEPgbHgeNbRXFQoKsfnbFNcC7p/7J08vKFO1TyVTf+DvQYvcRV
-X-Google-Smtp-Source: AGHT+IH+TgHvABrEncSHKKQdsk7gG56NyZWGS0rBtCCs3JQZ1KTPsJYVteYbiXaQa404+RhgAHTUBw==
-X-Received: by 2002:a05:6214:d08:b0:681:8230:3136 with SMTP id 8-20020a0562140d0800b0068182303136mr831375qvh.78.1705589176859;
-        Thu, 18 Jan 2024 06:46:16 -0800 (PST)
-Received: from localhost (131.65.194.35.bc.googleusercontent.com. [35.194.65.131])
-        by smtp.gmail.com with ESMTPSA id kh13-20020a056214514d00b006816b56e1desm2425026qvb.129.2024.01.18.06.46.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jan 2024 06:46:16 -0800 (PST)
-Date: Thu, 18 Jan 2024 09:46:16 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: =?UTF-8?B?SsO2cm4tVGhvcmJlbiBIaW56?= <j-t.hinz@alumni.tu-berlin.de>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, 
- Deepa Dinamani <deepa.kernel@gmail.com>
-Message-ID: <65a939b85a763_1c8cde29423@willemb.c.googlers.com.notmuch>
-In-Reply-To: <f4e27abc6741c175b4b1baf1331c30aaedeab290.camel@alumni.tu-berlin.de>
-References: <20240115134110.11624-1-j-t.hinz@alumni.tu-berlin.de>
- <65a69e1be51ef_380df0294d9@willemb.c.googlers.com.notmuch>
- <f4e27abc6741c175b4b1baf1331c30aaedeab290.camel@alumni.tu-berlin.de>
+	s=arc-20240116; t=1705589610; c=relaxed/simple;
+	bh=5QNhidmMxrvL4D2I8M20qaJImWVAaAjHxa9TzR5CbUk=;
+	h=Received:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:Content-Transfer-Encoding:User-Agent:
+	 MIME-Version:X-bounce-key:X-HE-SMSGID; b=pkANOOWrbJZ54L4pIUOOKGibpHyLHUIXc92zGSpNQVdNFtKnlFn18qx424isj4794mqSoBA+UUXJYUTFs4ANoNXgY5NpdW61oifnLcB0lzGczF3ckdaNyKvIboaT7RuI6vD5F5+4irEX0tenn3RVFJmNOHK1tLybpTgUhObLZkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=alumni.tu-berlin.de; spf=none smtp.mailfrom=alumni.tu-berlin.de; arc=none smtp.client-ip=80.237.130.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=alumni.tu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=alumni.tu-berlin.de
+Received: from dynamic-2a01-0c22-ac44-ff00-7b4e-548d-a441-0836.c22.pool.telefonica.de ([2a01:c22:ac44:ff00:7b4e:548d:a441:836] helo=jt.fritz.box); authenticated
+	by wp716.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	id 1rQTle-0004Td-8M; Thu, 18 Jan 2024 15:53:18 +0100
+Message-ID: <b332beac0f22636e7877c681b3adb9d6ff70cde3.camel@alumni.tu-berlin.de>
 Subject: Re: [PATCH bpf-next] bpf: Allow setting SO_TIMESTAMPING* with
  bpf_setsockopt()
+From: =?ISO-8859-1?Q?J=F6rn-Thorben?= Hinz <j-t.hinz@alumni.tu-berlin.de>
+To: Martin KaFai Lau <martin.lau@linux.dev>, Willem de Bruijn
+	 <willemdebruijn.kernel@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,  Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>,  Arnd Bergmann <arnd@arndb.de>, Deepa Dinamani
+ <deepa.kernel@gmail.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Date: Thu, 18 Jan 2024 15:53:17 +0100
+In-Reply-To: <73235f05-8474-4341-b70b-34bd0e6dfac5@linux.dev>
+References: <20240115134110.11624-1-j-t.hinz@alumni.tu-berlin.de>
+	 <65a69e1be51ef_380df0294d9@willemb.c.googlers.com.notmuch>
+	 <51fd5249-140a-4f1b-b20e-703f159e88a3@linux.dev>
+	 <65a7f855821cc_6d500294d0@willemb.c.googlers.com.notmuch>
+	 <73235f05-8474-4341-b70b-34bd0e6dfac5@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-bounce-key: webpack.hosteurope.de;j-t.hinz@alumni.tu-berlin.de;1705589607;d1e87b62;
+X-HE-SMSGID: 1rQTle-0004Td-8M
 
-J=C3=B6rn-Thorben Hinz wrote:
-> On Tue, 2024-01-16 at 10:17 -0500, Willem de Bruijn wrote:
-> > J=C3=B6rn-Thorben Hinz wrote:
-> > > A BPF application, e.g., a TCP congestion control, might benefit
-> > > from or
-> > > even require precise (=3Dhardware) packet timestamps. These
-> > > timestamps are
-> > > already available through __sk_buff.hwtstamp and
-> > > bpf_sock_ops.skb_hwtstamp, but could not be requested: BPF programs=
+Hmm, after taking a new look at it today, I think my patch can be
+disregarded---at least for having a BPF program access *RX* *hardware*
+timestamps. (Sorry about the noise then.)
 
-> > > were
-> > > not allowed to set SO_TIMESTAMPING* on sockets.
-> > > =
+When I looked into this a few months ago, I half-blindly followed
+Documentation/networking/timestamping.rst, afterwards assuming
+bpf_setsockopt(SO_TIMESTAMPING*) will be necessary for my use case (see
+about it at the end).
 
-> > > Enable BPF programs to actively request the generation of
-> > > timestamps
-> > > from a stream socket. The also required ioctl(SIOCSHWTSTAMP) on the=
+Looking at it again today, it seems the ioctl(SIOCSHWTSTAMP) is
+sufficient here: It enables the hardware timestamping on the device,
+which are placed in skb's/skb_shared_info's hwtstamps field. This
+hwtstamps is where the values of __sk_buff.hwtstamp and
+bpf_sock_ops.skb_hwtstamp are coming from. No further timestamp
+processing is involved when a BPF program reads the these two fields.
+Meaning bpf_setsockopt(SOF_TIMESTAMPING_RX_HARDWARE) would be a no-op
+from the view of a BPF program.
 
-> > > network device must still be done separately, in user space.
-> > > =
+I started this message before coming to the above understanding but
+I've left my replies in below.
 
-> > > This patch had previously been submitted in a two-part series
-> > > (first
-> > > link below). The second patch has been independently applied in
-> > > commit
-> > > 7f6ca95d16b9 ("net: Implement missing
-> > > getsockopt(SO_TIMESTAMPING_NEW)")
-> > > (second link below).
-> > > =
+With bpf_setsockopt(SOF_TIMESTAMPING_RX_HARDWARE) being unnecessary,
+and bpf_setsockopt(SOF_TIMESTAMPING_RX_SOFTWARE), as I understand,
+having a number of possibly unwanted implications---should we leave it
+at that here?
 
-> > > On the earlier submission, there was the open question whether to
-> > > only
-> > > allow, thus enforce, SO_TIMESTAMPING_NEW in this patch:
-> > > =
+On Wed, 2024-01-17 at 13:23 -0800, Martin KaFai Lau wrote:
+> > On 1/17/24 7:55 AM, Willem de Bruijn wrote:
+> > > > Martin KaFai Lau wrote:
+> > > > > > On 1/16/24 7:17 AM, Willem de Bruijn wrote:
+> > > > > > > > J=C3=B6rn-Thorben Hinz wrote:
+> > > > > > > > > > A BPF application, e.g., a TCP congestion control,
+> > > > > > > > > > might
+> > > > > > > > > > benefit from or
+> > > > > > > > > > even require precise (=3Dhardware) packet timestamps.
+> > > > > > > > > > These
+> > > > > > > > > > timestamps are
+> > > > > > > > > > already available through __sk_buff.hwtstamp and
+> > > > > > > > > > bpf_sock_ops.skb_hwtstamp, but could not be
+> > > > > > > > > > requested: BPF
+> > > > > > > > > > programs were
+> > > > > > > > > > not allowed to set SO_TIMESTAMPING* on sockets.
+> > > > > >=20
+> > > > > > This patch only uses the SOF_TIMESTAMPING_RX_HARDWARE in
+> > > > > > the
+> > > > > > selftest. How about
+> > > > > > others? e.g. the SOF_TIMESTAMPING_TX_* that will affect the
+> > > > > > sk->sk_error_queue
+> > > > > > which seems not good. If rx tstamp is useful, tx tstamp
+> > > > > > should be
+> > > > > > useful also?
+I admit I only ever looked at enabling and using
+SOF_TIMESTAMPING_RX_HARDWARE for my/our use case. With that, I was not
+aware that _SOFTWARE has more, possibly complicating implications.
 
-> > > For a BPF program, this won't make a difference: A timestamp, when
-> > > accessed through the fields mentioned above, is directly read from
-> > > skb_shared_info.hwtstamps, independent of the places where NEW/OLD
-> > > is
-> > > relevant. See bpf_convert_ctx_access() besides others.
-> > > =
+> > > >=20
+> > > > Good point. Or should not be allowed to be set from BPF.
+> > > >=20
+> > > > That significantly changes process behavior, e.g., by returning
+> > > > POLLERR.
+> > > > =C2=A0=20
+> > > > > > > > > >=20
+> > > > > > > > > > Enable BPF programs to actively request the
+> > > > > > > > > > generation of
+> > > > > > > > > > timestamps
+> > > > > > > > > > from a stream socket. The also required
+> > > > > > > > > > ioctl(SIOCSHWTSTAMP)
+> > > > > > > > > > on the
+> > > > > > > > > > network device must still be done separately, in
+> > > > > > > > > > user space.
+> > > > > >=20
+> > > > > > hmm... so both ioctl(SIOCSHWTSTAMP) of the netdevice and
+> > > > > > the
+> > > > > > SOF_TIMESTAMPING_RX_HARDWARE of the sk must be done?
+> > > > > >=20
+> > > > > > I likely miss something. When skb is created=C2=A0 in the drive=
+r
+> > > > > > rx
+> > > > > > path, the sk is
+> > > > > > not known yet though. How the SOF_TIMESTAMPING_RX_HARDWARE
+> > > > > > of the
+> > > > > > sk affects the
+> > > > > > skb_shinfo(skb)->hwtstamps?
+I mostly followed Documentation/networking/timestamping.rst (section 3)
+to understand how the hardware timestamps are to be setup and used.
 
-> > > I am unsure, though, when it comes to the interconnection of user
-> > > space
-> > > and BPF "space", when both are interested in the timestamps. I
-> > > think it
-> > > would cause an unsolvable conflict when user space is bound to use
-> > > SO_TIMESTAMPING_OLD with a BPF program only allowed to set
-> > > SO_TIMESTAMPING_NEW *on the same socket*? Please correct me if I'm
-> > > mistaken.
-> > =
+From my understanding, the ioctl(SIOCSHWTSTAMP) makes a persistent
+setting for the device/driver, independent of the lifetime of any
+socket or skb.
 
-> > The difference between OLD and NEW only affects the system calls. It
-> > is not reflected in how the data is stored in the skb, or how BPF can=
+I used a simplified program[1] when trying out this patch a few months
+ago.
 
-> > read the data. A process setting SO_TIMESTAMPING_OLD will still allow=
+> > > >=20
+> > > > Indeed it does not seem to do anything in the datapath.
+> > > >=20
+> > > > Requesting SOF_TIMESTAMPING_RX_SOFTWARE will call
+> > > > net_enable_timestamp
+> > > > to start timestamping packets.
+> > > >=20
+> > > > But SOF_TIMESTAMPING_RX_HARDWARE does not so thing.
+> > > >=20
+> > > > Drivers do use it in ethtool get_ts_info to signal hardware
+> > > > capabilities. But those must be configured using the ioctl.
+> > > >=20
+> > > > It is there more for consistency with the other timestamp
+> > > > recording
+> > > > options, I suppose.
+> > > >=20
+> >=20
+> > Thanks for the explanation on the
+> > SOF_TIMESTAMPING_RX_{HARDWARE,SOFTWARE}.
+> >=20
+> > __sk_buff.hwtstamp should have the NIC rx timestamp then as long as
+> > the NIC is=20
+> > ioctl configured.
 
-> > BPF to read data using SO_TIMESTAMPING_NEW.
-> > =
+> >=20
+> > Jorn, do you need RX_SOFTWARE? From looking at net_timestamp_set(),
+> > any socket=20
+> > requested RX_SOFTWARE should be enough to get a skb->tstamp for all
+> > skbs. A=20
+> > workaround is to manually create a socket and turn on RX_SOFTWARE.
+No, my use case was only for the RX hardware timestamps, as close to
+the packet reception time point as possible.
 
-> > But, he one place where I see a conflict is in setting sock_flag
-> > SOCK_TSTAMP_NEW. That affects what getsockopt returns and which cmsg
-> > is written:
-> > =
+> >=20
+> > It will still be nice to get proper bpf_setsockopt() support for
+> > RX_SOFTWARE but=20
+> > it should be considered together with how SO_TIMESTAMPING_TX_*
+> > should
+> > work in=20
+> > bpf prog considering the TX tstamping does not have a workaround
+> > solution like=20
+> > RX_SOFTWARE.
+> >=20
+> > It is probably cleaner to have a separate bit in sk->sk_tsflags for
+> > bpf such=20
+> > that the bpf prog won't be affected by the userspace turning it
+> > on/off and it=20
+> > won't change the userspace's expectation also (e.g. sk_error_queue
+> > and POLLERR).
+> >=20
+> > The part that needs more thoughts in the tx tstamp is how to notify
+> > the bpf prog=20
+> > to consume it. Potentially the kernel can involve a bpf prog to
+> > collect the tx=20
+> > timestamp when the bpf bit in sk->sk_tsflags is set. An example on
+> > how TCP-CC is=20
+> > using it will help to think of the approach here.
+My (academic) application was an implementation[2,3] of PowerTCP[4], a
+CC that (in its simplified variant) profits from precise timestamping.
+Only the RX timestamps would be of use there.
 
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 if (sock_flag(sk, SOCK_TSTAMP_NEW))
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 put=
-_cmsg_scm_timestamping64(msg, tss);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 else
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 put=
-_cmsg_scm_timestamping(msg, tss);
-> > =
+As mentioned above, I used[1] a while ago when I looked into timestamp
+usage. It shows how I imagine the timestamps could be accessed and used
+(similarly implemented in [2]).
 
-> > So a process could issue setsockopt SO_TIMESTAMPING_OLD followed by
-> > a BPF program that issues setsockopt SO_TIMESTAMPING_NEW and this
-> > would flip SOCK_TSTAMP_NEW.
-> > =
+[1] https://github.com/jtdor/bpf_hwtstamps
+[2] https://github.com/inet-tub/powertcp-linux
+[3] https://schmiste.github.io/ebpf23.pdf
+[4] https://schmiste.github.io/nsdi22powertcp.pdf
 
-> > Just allowing BPF to set SO_TIMESTAMPING_OLD does not fix it, as it
-> > just adds the inverse case.
-> Thanks for elaborating on this. I see I only thought of half the
-> possible conflicting situations.
-> =
+> >=20
+> >=20
 
-> > =
-
-> > A related problem is how does the BPF program know which of the two
-> > variants to set. The BPF program is usually compiled and loaded
-> > independently of the running process.
-> True, that is an additional challenge. And with respect to CO-RE, I
-> think a really portable BPF program could (or at least should) not even=
-
-> decide on NEW or OLD at compile time.
-> =
-
-> > =
-
-> > Perhaps one option is to fail the setsockop if it would flip
-> > sock_flag SOCK_TSTAMP_NEW. But only if called from BPF, as else it
-> > changes existing ABI.
-> > =
-
-> > Then a BPF program can attempt to set SO_TIMESTAMPING NEW, be
-> > prepared to handle a particular errno, and retry with
-> > SO_TIMESTAMPING_OLD.
-> Hmm, would be possible, yes. But sounds like a weird and unexpected
-> special-case behavior to the occasional BPF user.
-
-Agreed. So perhaps we're back to where we say: this is a new feature
-for BPF, only support it on modern environments that use
-SO_TIMESTAMPING_NEW?
 
 
