@@ -1,227 +1,204 @@
-Return-Path: <linux-kselftest+bounces-3199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF7F831AB7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 14:39:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CCF0831AC8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 14:45:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4677B2109D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 13:39:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DEFD1C2060E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 13:45:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A902555C;
-	Thu, 18 Jan 2024 13:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D1C02577D;
+	Thu, 18 Jan 2024 13:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LJtXqLfG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u+3MZbe8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2080.outbound.protection.outlook.com [40.107.96.80])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03E224A0B;
-	Thu, 18 Jan 2024 13:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705585146; cv=fail; b=ES3WAVL50lqPz0sUNPCfiVHlkKmYHjvBeHRgQAjqg9dCOh4aCJT1TMILG/FqdKjCL48UWxAbSP2+NTXzNlzZMiZ24bCIfo9V2Ekjsr/G5FBHYoT3TND0i2CqiI8l80IaXSo3o8QG6IVSQQybDxyO9UgZk5RUdDDvltcJuYesx5U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705585146; c=relaxed/simple;
-	bh=gKBhwESUlvwISQPJEqAffvAIPKDwfZpjdnVffAE6evY=;
-	h=ARC-Message-Signature:ARC-Authentication-Results:DKIM-Signature:
-	 Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 Content-Type:Content-Disposition:In-Reply-To:X-ClientProxiedBy:
-	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped; b=tBmYEvqz1kS282gmQ1J3kwVva9ZKLj+JNCCZxzEaMqU6VciUqCyEeolL9dq6R9uOAqWWvqN2RY1D04fz4gWcC2OcP1tPG0Plq+2nNQOZkkwAWEcCP8D0if2eLowxdkSjUvHBLkqzYZypWN+Z+3rKwkJYzxyEIV9oV46zvWn1jYc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LJtXqLfG; arc=fail smtp.client-ip=40.107.96.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SqJcQn2mQdO/BxubneKI2rHtrTSF2tyIRf7P7mHe4Q8oSlAkq8pj4D1r84y47vZb2/vhlzheGOsS3xygneQNfaR83yK8FZm72u1NvFFCpCqPQoSyvfUwxV7hbNEijd1YGRmrT1IZfbtz6N9GLYpeMGERNNHArEoCI68DeTR/LYA1jIhV5jN8VjSPFX5FdQOb0EPu9KC1U/lWyXvfXIfmruHBv21hua4HdeJryFiBIw/kGRlZaWh25Gfi7G6x7VRgxHNBtNRW+Z5nfDqSb0VaM+6LROrLr02M2gvADSHE2dk1dOgPxFXXxoQQJCMe65+bDHolH9EH7t9vg3r1v8Cklw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vwmONdVFu7N6vk8TQP9vS0tPUqnwvIPQ0EK9idtzBAE=;
- b=mAHDCNuaXQDDydjQ1qyU0YaKTbHcjwsIM2Pttg4f4+dvG1QVe5iS4jUvxuSwUr1kNCp3qR1rAd4WkyaAri+LyYjZXJzbUS8QNfIrJEUSTlEkKVk8Z4NQxnfHLrUHrhIPAfBHdZkhZ6u+QKl8CJwD4W4aVzcgNHMOHjYcjk6SOTYjtVdgJvptGx7bImm4/W5No7j+qyWbHYqwqz0M+PX7U9fuM0vLzFqunlcaY/n3tav/XebsJx1ZsFiyyPjf7okJaNr3JB1fn8lq6aD1j9xuNcNeqK9sGrs8EYkD3XPb+L97B7gaA1p2Th7l5CV0M3jpqoEPCsHaeXW0xCuT85CZfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vwmONdVFu7N6vk8TQP9vS0tPUqnwvIPQ0EK9idtzBAE=;
- b=LJtXqLfG64hO+aWpZvHy+msTylu1DePlW716AtwyZ8aBAe5Ov8aCzJPMG2GO7l4HFcNs8KzjzewC8FL+8CgF+6I3Fq3RjjcXu8ynWJ5fmsjh1ijM4R47qh2DruBTDjn93A3jgZgHSC7Umrp6hrDJujxaADGyWwJzG19EB55J/YlpofEyqr7rh1SbxEg5KXaDMSBY4My9WVwf0AOSQ6fxcR0LoftqBe51BvKuMlw3S+gFi0Pt/QULIM7fopSnF3syVCECQ3hkA24CFA3I1wumJUp+2TGpFPuRQO2Y2ZLLCcbI4h1chJ1vrm88Ixu0JmkIaTEbPPh4jLzDg3dKbM6jxw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MN2PR12MB4062.namprd12.prod.outlook.com (2603:10b6:208:1d0::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.23; Thu, 18 Jan
- 2024 13:38:59 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7202.024; Thu, 18 Jan 2024
- 13:38:59 +0000
-Date: Thu, 18 Jan 2024 09:38:57 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Yi Liu <yi.l.liu@intel.com>
-Cc: "Tian, Kevin" <kevin.tian@intel.com>,
-	"joro@8bytes.org" <joro@8bytes.org>,
-	"alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-	"cohuck@redhat.com" <cohuck@redhat.com>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com" <shameerali.kolothum.thodi@huawei.com>,
-	"lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"Zeng, Xin" <xin.zeng@intel.com>,
-	"Zhao, Yan Y" <yan.y.zhao@intel.com>
-Subject: Re: [PATCH 3/8] iommufd: Support attach/replace hwpt per pasid
-Message-ID: <20240118133857.GK734935@nvidia.com>
-References: <20231127063428.127436-1-yi.l.liu@intel.com>
- <20231127063428.127436-4-yi.l.liu@intel.com>
- <20240115172430.GN734935@nvidia.com>
- <BN9PR11MB52761349DFB5DAD2797C3EBF8C732@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20240116125756.GB734935@nvidia.com>
- <BN9PR11MB52763DDDE39C211E761A05168C722@BN9PR11MB5276.namprd11.prod.outlook.com>
- <88e46f6c-4d64-4357-be2a-833797e6de15@intel.com>
- <20240117125625.GF734935@nvidia.com>
- <459d6a3a-0ad9-4980-be37-103211e927c2@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <459d6a3a-0ad9-4980-be37-103211e927c2@intel.com>
-X-ClientProxiedBy: SN4PR0501CA0059.namprd05.prod.outlook.com
- (2603:10b6:803:41::36) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D76B25750;
+	Thu, 18 Jan 2024 13:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705585501; cv=none; b=bR+dT1C5TK8qw5ntr0RsTD6O6vINyETCYzpkA2GsAL6UtiO7thrA02JDsaUdCPrDjGCVQBbHSoZi16u6+BIR9rIqqk4HXYB4vbHAyvO+YRESQgOkFfkvEUadstT1y7uxCUtvKJvmLfrVFToz+SFMEIXeBAUdhxzRWxZl/9fC6y4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705585501; c=relaxed/simple;
+	bh=gT28Fh3wl8eP/Ljj2XHYVD5ng9wv0/Gy376PoOmymDk=;
+	h=Received:DKIM-Signature:Received:X-Gm-Message-State:
+	 X-Google-Smtp-Source:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding; b=EfJZ7eYF6PYzYF4tOIXlXv2yUaB6Y+1ODgrwKtBFlon6zoZfKN+HjVyzOzL/nPtPmYLdQ7w7bsln2nkEB+OcLkoos2w1e2gdir0bOjPluM4YR6SU0kPuA/H//3XGkvF6Vp3PCiBMlHRsWKrEPIzb7KH86GGxp9Pmfco29WLD3ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u+3MZbe8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E69C433A6;
+	Thu, 18 Jan 2024 13:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705585500;
+	bh=gT28Fh3wl8eP/Ljj2XHYVD5ng9wv0/Gy376PoOmymDk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=u+3MZbe8ibF/PsJaydFqyRJp8ldbVeNDlHnif9pS4/4cGJp0RDYpZPhpESX+qacPH
+	 onPkEixPpCI3mbAQKsqT0BLkRVtfsZwSSr2vEPj79v1OGDs/jP3+P2iwCV9iefkdef
+	 6QFcZms6XzJ8vIAUbW2367Ls8jD8nMfDaMUStiiTGymyegb1QmsgMVKR0Efw0kOD2X
+	 THGk7SORQtBkEz0/HgFmjH97kcFVNO6kgR6k42jCF/B5U7i9ivjOs0RtUs84cdmoqb
+	 1k6B1051EFaLPbHRejKw8QHcE007AYh4dLHDYkq67M+cnoRyuHj1bOBwTNVMa0pDs1
+	 6N9eImRIzo7Qg==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ccae380df2so136197601fa.1;
+        Thu, 18 Jan 2024 05:45:00 -0800 (PST)
+X-Gm-Message-State: AOJu0YzD/hSacEpsEOafHEYrVy95+9rqH9uTDGBWWynmLPZmK0BZ2gck
+	4drmaqjmcGh+dlAnlro9L1TIeT5eR/Cckh9PYmybJ9i86I8NTP6GurxAtak7bXLk5/4nMmjXKOQ
+	uAvpBZxsFKIWarAlg290NOKruig==
+X-Google-Smtp-Source: AGHT+IHanadODpHlW5kv28ZPQQm1BxNO/Q4y3N+LkzY5cQvNMtQPZvXZQU5q6BYEcqxNmpGoLRuQA+l7epkP//J5f0Q=
+X-Received: by 2002:a05:651c:107:b0:2cd:9e6c:7f3f with SMTP id
+ a7-20020a05651c010700b002cd9e6c7f3fmr625521ljb.71.1705585498933; Thu, 18 Jan
+ 2024 05:44:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN2PR12MB4062:EE_
-X-MS-Office365-Filtering-Correlation-Id: 17a89a60-47a2-46b3-7dea-08dc182ad337
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	g20uboAKcV+PKdIfzws/0bKm4iIJEtqBL6euzy6uIev40oJ93bAv/AJCYQBL+S7JqSLS9VWhHHt5OaOmTIfB1y2E6LvsE+imOiyonNqOz2AwSGG3LnvRIMATs3wWGV7fgQ4wXNCvJ3D2ceLs+eKwPR3bNSnr61NbfWkVs1zimtEMA9WdPH4OL6qSiFh/Bhw66DIyrc8JEmJy8VGtk3wxLrBFDTyQ4FJLUUvsEiemte0f4H5Da241FlXRAiDW1e4CQkh3g7qX4+JWx/MQM64iP/9kDYBuNNBKMWdGRIlJgAX2mKt13wYosXX8XbR+EJ8/BApIUp3AkJhj8OGo+fMI0AD1aIZJcvP4XgUUW9TlDlkTevloil1955LLF5PQYkGYnFWIt0D830dha5+TgHMrg1O0LL4MwhH6uVP/IJEEXeTC8DLmh1gRPcU39h/B5T+rIw25DVdUQ5fr0nH/kkzvu82DRXHFYs9DYMgBqxJ9ShOR0BqUG5ZEfGg1IWlkt+qaKgIfnFjse3vRaqNuRR69ALIzfe3WYIpg6yRCe40n6C6Bn6iqg3peS/hgTBTUyxEFU0d8r7EAbqob59gp4unOyFSvI6QQubEWaZgZAijohy7gmEwa8Pi0Aj3XPtV3uBJA
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(376002)(136003)(366004)(346002)(230922051799003)(186009)(1800799012)(451199024)(64100799003)(38100700002)(36756003)(86362001)(2616005)(1076003)(83380400001)(26005)(54906003)(6486002)(66476007)(66946007)(8936002)(478600001)(6512007)(6506007)(53546011)(316002)(66556008)(8676002)(6916009)(33656002)(2906002)(5660300002)(7416002)(4326008)(41300700001)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?b0+sbh6bRhFXqlOWvZh0LDHFK1o2HEyH+X7jDy7zN5rlZURnB8j/E684fccz?=
- =?us-ascii?Q?AlQv0y9m58XjSIDu9G9W3L6bAA8oS7uddM5R9ffyJ3jIXV3owtLIl2s57DT2?=
- =?us-ascii?Q?2jpylfnk2p+8te5pApmVz4KzgIwnB3JvroNPR+ojR8zuP3RBnB18urpy0V1N?=
- =?us-ascii?Q?4Gl8CgDBRpKKAGgYCcz22xDvnhTKswBDSMbIB97wgwD2eyM+QEo9z1oM1weV?=
- =?us-ascii?Q?gQ7vlm7jBxGqkK7ClAwPqKsb1v2XICdVOF39AvaiGb7qR7vljlsq7TcAhv4I?=
- =?us-ascii?Q?o5vDo5cAu7bYg19DiBlN5RIuCSUjD73I9w0pzZvkS9bkcAHuEiisYIz4AJKb?=
- =?us-ascii?Q?kVwTZGNDnGKXiGwMvdspgE3L3v93s5ubRmBC9bKxha9eRIHT2v8TsPH1qco/?=
- =?us-ascii?Q?PolKovq+cvsnancmehaC16nJIctbFSI/Y9dCp9TxFkRDszXwYwSQqA0GftI0?=
- =?us-ascii?Q?EN/UbM/5zuOfQmmde6wRlUVbuXFmI0fbLud2Rh/WuRcFYBsxa+YuG/YINNG9?=
- =?us-ascii?Q?CzBygWpErbU4IjjwmLCVpO81/nn156rfc70SJCl98ApXWCwFKwGr9A30eLir?=
- =?us-ascii?Q?Rq4dCnQT0IjWes/gQCX4K6PREmG8HJaevVnzgClneXos41CIjTfHOSq/bFQS?=
- =?us-ascii?Q?8q0LiPu8FwK2TSbhps6P4iKqlq45LqujDhI021qylIn/unGGcQ1NBObrIeUI?=
- =?us-ascii?Q?RigyphcPPYw/fDYa+BuWLXYHlDzmtUJ+3GZZnOQa+ODmHl4NsMKvSKVtrBR6?=
- =?us-ascii?Q?9orLG9jToqmGInRDFfjGDwuCdmWrVqLHUoHUg+Wf07YeUd4u2VssJ2r0mSXI?=
- =?us-ascii?Q?gMMAkGGtOttWL83S9Tzf+tw+worqAe/OtLxHkVNyAV2aJ4sI3jnDFNIk9vFX?=
- =?us-ascii?Q?IoIEa98jRDxF7XB5rch8a/nKkzjgrAPyZfw0QL7eiAgaFoCb88P78ZHpsI8L?=
- =?us-ascii?Q?gclV5nos3afkDZPl5WYowUv7k7+kkDRj5G00CtV4w0Brps8x2ajFelT9VRD/?=
- =?us-ascii?Q?AA5BO8jd0Gtfvvb7GUqoabIJ0//XNAf2yiJlGO6oQqcjJinrvbBOp5nYEq/M?=
- =?us-ascii?Q?q9oD/Z3BrBSwq3pi3V67TdpxAivofTtuDVvUcvwBks2VZGYqJ1kLdpHknq6c?=
- =?us-ascii?Q?UJCRFXTQw6j2BH6PUHjD0rJqPSisyPCk68XMT+2ft8K44eCehULVm3v/gvV9?=
- =?us-ascii?Q?8r2qAeM3rlOv3K03M0EcHYxxUXAHxD8eonsYeGhuwZSJWaDuaV2hratsMxsn?=
- =?us-ascii?Q?G5j1XZ5Cyx367a6ktOhV2hVSMDlVw0zFLn+C+2JjcjM5Bz2BfSmaGncNbvhn?=
- =?us-ascii?Q?fibKCzt/rXAnrcMKqIpHMlLh0I24vCUqCaSjbAmgUthAU3g3+myyG3kSoLY7?=
- =?us-ascii?Q?ddEwQIKoOdN/YsFuHmIiRY3BiBWylylXZbNbQxBBVHfB24wVG61/bHaSKI4A?=
- =?us-ascii?Q?ahllO4PLJs4RNpHayLyWLCag8RxngbTJdzqIkK9DHrAptabgtdhN+2TCcGcI?=
- =?us-ascii?Q?ElaKtnIRcIFgb0xDugOfsLbwOWlp8BONV5Nqwjw1UHhzKp5Wmzcas4xqqg51?=
- =?us-ascii?Q?XNQHnlOEkQ8CpK/eMZM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17a89a60-47a2-46b3-7dea-08dc182ad337
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2024 13:38:59.2166
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E4cFMC4kOvlsnw3/UHHioj1Atsq8oRgtb4+8toLs3TaEsx1E+Ut5sg1Yoh3BurX2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4062
+References: <20240112200750.4062441-1-sboyd@kernel.org> <20240112200750.4062441-5-sboyd@kernel.org>
+ <20240115203230.GA1439771-robh@kernel.org> <cdaadf62222a705cda198dd96dc7c73d.sboyd@kernel.org>
+ <20240117174114.GA2779523-robh@kernel.org> <CAMuHMdXg1Y7mwHKTYi_j7a_XGdMJ7Aa7u5dEv5+xsLe8=BMaRw@mail.gmail.com>
+In-Reply-To: <CAMuHMdXg1Y7mwHKTYi_j7a_XGdMJ7Aa7u5dEv5+xsLe8=BMaRw@mail.gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Thu, 18 Jan 2024 07:44:46 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLO89y6577ACi7s4Zhpexszp3Bby=tKMEoDGzK9MY+9Bw@mail.gmail.com>
+Message-ID: <CAL_JsqLO89y6577ACi7s4Zhpexszp3Bby=tKMEoDGzK9MY+9Bw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] of: Create of_root if no dtb provided by firmware
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Stephen Boyd <sboyd@kernel.org>, Frank Rowand <frowand.list@gmail.com>, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev, 
+	linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
+	devicetree@vger.kernel.org, Simon Glass <sjg@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 18, 2024 at 05:28:01PM +0800, Yi Liu wrote:
-> On 2024/1/17 20:56, Jason Gunthorpe wrote:
-> > On Wed, Jan 17, 2024 at 04:24:24PM +0800, Yi Liu wrote:
-> > > Above indeed makes more sense if there can be concurrent attach/replace/detach
-> > > on a single pasid. Just have one doubt should we add lock to protect the
-> > > whole attach/replace/detach paths. In the attach/replace path[1] [2], the
-> > > xarray entry is verified firstly, and then updated after returning from
-> > > iommu attach/replace API. It is uneasy to protect the xarray operations only
-> > > with xa_lock as a detach path can acquire xa_lock right after attach/replace
-> > > path checks the xarray. To avoid it, may need a mutex to protect the whole
-> > > attach/replace/detach path to avoid race. Or maybe the attach/replace path
-> > > should mark the corresponding entry as a special state that can block the
-> > > other path like detach until the attach/replace path update the final hwpt to
-> > > the xarray. Is there such state in xarray?
-> > 
-> > If the caller is not allowed to make concurrent attaches/detaches to
-> > the same pasid then you can document that in a comment,
-> 
-> yes. I can document it. Otherwise, we may need a mutex for pasid to allow
-> concurrent attaches/detaches.
-> 
-> > but it is
-> > still better to use xarray in a self-consistent way.
-> 
-> sure. I'll try. At least in the detach path, xarray should be what you've
-> suggested in prior email. Currently in the attach path, the logic is as
-> below. Perhaps I can skip the check on old_hwpt since
-> iommu_attach_device_pasid() should fail if there is an existing domain
-> attached on the pasid. Then the xarray should be more consistent. what
-> about your opinion?
-> 
-> 	old_hwpt = xa_load(&idev->pasid_hwpts, pasid);
-> 	if (old_hwpt) {
-> 		/* Attach does not allow overwrite */
-> 		if (old_hwpt == hwpt)
-> 			return NULL;
-> 		else
-> 			return ERR_PTR(-EINVAL);
-> 	}
-> 
-> 	rc = iommu_attach_device_pasid(hwpt->domain, idev->dev, pasid);
-> 	if (rc)
-> 		return ERR_PTR(rc);
-> 
-> 	refcount_inc(&hwpt->obj.users);
-> 	xa_store(&idev->pasid_hwpts, pasid, hwpt, GFP_KERNEL);
+On Thu, Jan 18, 2024 at 2:46=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+>
+> Hi Rob,
+>
+> On Wed, Jan 17, 2024 at 6:41=E2=80=AFPM Rob Herring <robh@kernel.org> wro=
+te:
+> > On Tue, Jan 16, 2024 at 05:18:15PM -0800, Stephen Boyd wrote:
+> > > Quoting Rob Herring (2024-01-15 12:32:30)
+> > > > On Fri, Jan 12, 2024 at 12:07:47PM -0800, Stephen Boyd wrote:
+> > > > > diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> > > > > index da9826accb1b..9628e48baa15 100644
+> > > > > --- a/drivers/of/Kconfig
+> > > > > +++ b/drivers/of/Kconfig
+> > > > > @@ -54,9 +54,14 @@ config OF_FLATTREE
+> > > > >       select CRC32
+> > > > >
+> > > > >  config OF_EARLY_FLATTREE
+> > > > > -     bool
+> > > > > +     bool "Functions for accessing Flat Devicetree (FDT) early i=
+n boot"
+> > > >
+> > > > I think we could instead just get rid of this kconfig option. Or
+> > > > always enable with CONFIG_OF (except on Sparc). The only cost of
+> > > > enabling it is init section functions which get freed anyways.
+> > >
+> > > Getting rid of it is a more massive change. It can be the default and
+> > > kept hidden instead? If it can't be selected on Sparc then it should =
+be
+> > > hidden there anyway.
+> >
+> > The easier option is certainly fine for this series. I just don't want
+> > it visible.
+> >
+> > > > >       select DMA_DECLARE_COHERENT if HAS_DMA && HAS_IOMEM
+> > > > >       select OF_FLATTREE
+> > > > > +     help
+> > > > > +       Normally selected by platforms that process an FDT that h=
+as been
+> > > > > +       passed to the kernel by the bootloader.  If the bootloade=
+r does not
+> > > > > +       pass an FDT to the kernel and you need an empty devicetre=
+e that
+> > > > > +       contains only a root node to exist, then say Y here.
+> > > > >
+> > > > >  config OF_PROMTREE
+> > > > >       bool
+> > > [...]
+> > > > > @@ -195,6 +191,17 @@ static inline int of_node_check_flag(const s=
+truct device_node *n, unsigned long
+> > > > >       return test_bit(flag, &n->_flags);
+> > > > >  }
+> > > > >
+> > > > > +/**
+> > > > > + * of_have_populated_dt() - Has DT been populated by bootloader
+> > > > > + *
+> > > > > + * Return: True if a DTB has been populated by the bootloader an=
+d it isn't the
+> > > > > + * empty builtin one. False otherwise.
+> > > > > + */
+> > > > > +static inline bool of_have_populated_dt(void)
+> > > > > +{
+> > > > > +     return of_root !=3D NULL && !of_node_check_flag(of_root, OF=
+_EMPTY_ROOT);
+> > > >
+> > > > Just a side comment, but I think many/all callers of this function =
+could
+> > > > just be removed.
+> > > >
+> > > > I don't love new flags. Another possible way to handle this would b=
+e
+> > > > checking for "compatible" being present in the root node. I guess t=
+his
+> > > > is fine as-is for now at least.
+> > >
+> > > Ok. I can add a check for a compatible property. That's probably bett=
+er
+> > > anyway. Should there be a compatible property there to signal that th=
+is
+> > > DT isn't compatible with anything? I worry about DT overlays injectin=
+g a
+> > > compatible string into the root node, but maybe that is already
+> > > prevented.
+> >
+> > I worry about DT overlays injecting anything...
+> >
+> > I don't think it is explicitly forbidden, but I have asked that any
+> > general purpose interface to apply overlays be restricted to nodes
+> > explicitly allowed (e.g. downstream of a connector node). For now, the
+> > places (i.e. drivers) overlays are applied are limited.
+> >
+> > We could probably restrict the root node to new nodes only and no new
+> > or changed properties.
+>
+> Changing (<wild dream>or appending to</wild dream>) the root
+> "compatible" and/or "model" properties is useful in case of large
+> extension boards, though.  This is also the case for DTBs created from
+> a base DTB and one or more overlays using fdtoverlay.
 
-Use xa_cmpxchg()
+I think appending by adding another compatible value could be okay.
+Removing or appending to an existing entry is not. We don't want the
+following sequence to be possible:
 
-Jason
+of_machine_is_compatible("foo") --> true
+apply overlay
+of_machine_is_compatible("foo") --> false
+
+For Stephen's case, it's going from no root compatible at all to
+something. I don't think your case would apply here. To put it another
+way, if we've booted with ACPI, compatible in the root node is not
+valid.
+
+
+> For the latter, see also the following threads, where you weren't
+> (but probably should have been) CCed:
+>
+> [1] "[PATCH v9 2/2] arm64: boot: Support Flat Image Tree"
+>      https://lore.kernel.org/all/20231202035511.487946-3-sjg@chromium.org
+> [2] "Proposal: FIT support for extension boards / overlays"
+>     https://lore.kernel.org/all/CAPnjgZ06s64C2ux1rABNAnMv3q4W++sjhNGCO_uP=
+MH_9sTF7Mw@mail.gmail.com
+
+That all seems pretty orthogonal to the issues here.
+
+Rob
 
