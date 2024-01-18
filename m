@@ -1,136 +1,122 @@
-Return-Path: <linux-kselftest+bounces-3181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA7CB831156
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 03:18:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93BCF831187
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 03:51:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAA9B1C219DB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 02:18:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 358DC1F237B4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 02:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C38A65A;
-	Thu, 18 Jan 2024 02:18:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C672610A;
+	Thu, 18 Jan 2024 02:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="MrYHicRD"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="PHPfExvq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849D34698
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jan 2024 02:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108FD53A8
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jan 2024 02:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705544294; cv=none; b=PCyYZWRTNLrRe+XcL2aWq/CHMRPKuYnQi/gOPbP9SkJH79fHmpgPGLLh7tRcDm6zvA/mEyUN4Sa30emiJlgXalteqtwRt+arg4UtWyYy6mkcTLhFlqUtpwO4S7urYhK6DQZ69wSa11oQVqLXU37s6enzXgVid6tpMNHqxAsflsM=
+	t=1705546307; cv=none; b=WYPnOlqFJ1HamY0Gq4FNoUMwR579S48q1soy2PE0HTfSp1fJ2I2UYuylGIDUwxBrj8ft3jzm1ifkPMtg0IeuQDpYvtjABsv8qz6oZ3hSC5jvq78Hd+AOrV+eeslcVJNKB/z0OsO0dGoJ4cSY8SzDpjYuQNxfZ5BpDkbC+GxZMco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705544294; c=relaxed/simple;
-	bh=7voOXuhfPnskEJZAZbR01eqyMrcXZoKXlc+v/f6hkOw=;
+	s=arc-20240116; t=1705546307; c=relaxed/simple;
+	bh=YHhFdreFP9ZE/+rucVuzbm04/JKcvfDc6wo5uMXaSX8=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:
-	 To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding; b=OndcC/HfD9cvcl3iP+OLKyNViefx8bKCFtNB5awyjcz10f+Eptl+3RwwP57cC2Hfs7Cs6BiVZig4rG1+WcnWYFQYpSMVtlowPXgqUvjgf8kY34Poe4MgnbLRrD28ZPAouTMVr+OHOsLuwZPZYgL/1LCwzUIGV2Hu4g3H0fYFr2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=MrYHicRD; arc=none smtp.client-ip=209.85.221.43
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 Content-Transfer-Encoding; b=Cypm/i6me+jNaFwy7X/D5x0/hARUipW8sSk92h6PwIefoQGmNtSZrxd7XV1zTv+dzSSpnA3rOHqgRdF7TjlspiGUDnhWeM6gagyTFTumgEqytJDCCmvN1xKywsyA2P1ZbbKBqeG3xqbub2NUhM7Op+wxHZk44BV18yPsdPfBM6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=PHPfExvq; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3368abe1093so9139134f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 18:18:12 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-337c5eb1bddso884992f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 18:51:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1705544291; x=1706149091; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O8IhQQZ/ZBIwA5q7sDNoEOtDesWDe9PHB37CJuOhzdI=;
-        b=MrYHicRDANyv5yjhAwL5Pi5P5XNFDL1EuFV/k1uoSnRBbrUeZh4XACCGgFAQwTd3te
-         64q88ZShwuA0Pvlt2Z1zRyp8bCqOvYFULgGVKGi+cfbtuRbHyh6zNBoh0vWz2h0f2sPb
-         iARrH9zbZ5MlJI9+tiyrD0H37nLsZYyFdPl1SOTSB+BCwtyq4GzSRAtL1XruOUoRpMwP
-         Hnjd15+sJ1ZKuZVf/itUerPB2F412yQrOTSXCGAM9EGLmpJLEK6GQY4JmgAwq8VoDpOu
-         vnm5UxdzM5oGgBJejeUYMQfNMgR5QSLKh1Dpmk5p0YBWEYsWht0yp4SsOR5kkgqaZCRy
-         Nw9w==
+        d=arista.com; s=google; t=1705546303; x=1706151103; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H5JsUOgz+DPxJOOyNlG1B9EN9snqbFszTDtDaVe5HBM=;
+        b=PHPfExvqFP9dNkw/o1LSkVNxh6G6osL4+UztZaPS6M0NUeISe5flKcZVRQz+UKZbVW
+         oARqCfAPr6CwtY7/naIvTKlrEGSe8pfSmeWSIEE40dcrWIQbuERvvrGEBd1jlGLA+XBA
+         0iEMeDvqlD9WrkZtuA5HFhzlH+OyYaXe+sBgWo0aNsrdHQTjjfUJkJpgaPJxvcuViza3
+         U4d122bRIWi8OtteFp87ekFHFOkw2nCY5vDX2LAiDrHT/Jeg03xaLA5S4Zh4SZ+hOsOL
+         EWB1sxcXlXH1cGAIGs2DeOW9Aa8a8sTZaWoN5S89l9kmZ7NUYqgz5ZxXrAFT3gun6z0G
+         qo1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705544291; x=1706149091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8IhQQZ/ZBIwA5q7sDNoEOtDesWDe9PHB37CJuOhzdI=;
-        b=Iadd8sYroEgIQ/IHBEog+iJeHHoIJHC8yl0vANniQHVogLC9qO9sRxQn6IRcZxgR4q
-         6g042CD1jo9ueBHZ8XO0dIJPt2ossIJH6nVG9nF4ZLLDu9oOB3AwTSgczUcazY5q0o9y
-         ou8g4T3iwbwsW/SyP5B2PR1ThF+ZoNfL+2eMeDsaeGYXO6noS8nI7RiDm6AQdiuSzrpo
-         SPlBKxgUhR4B9MLzvUouhaCveFI82M+euHdm8zgdq680mQzqmimrwgHBiyYlZZ3xeNnM
-         sStyoUtb2E+KVJvXjj4dsERULXJeRfP41cjOdjJY63YBVMdBgqbUwHhXnmDvn2BoT2kO
-         3pGQ==
-X-Gm-Message-State: AOJu0YyYGgAKNQ3e4XST5KjPK78mIaiaj9tyNEidI9nUXIGumcktGIxr
-	+h5FiwXS7kmd75ekmgCXMskUo6CbE8cbVu4xc0gx9cNGvjikighsVs7t7/T1uw==
-X-Google-Smtp-Source: AGHT+IHtXYNC47SOSfQFb4kwiq1nGngPEhY8zTv36muO/vJ1sWAEb6kf6o+6aHmK9LIN/ylM4JYarw==
-X-Received: by 2002:adf:b319:0:b0:337:c155:d130 with SMTP id j25-20020adfb319000000b00337c155d130mr59418wrd.41.1705544290754;
-        Wed, 17 Jan 2024 18:18:10 -0800 (PST)
-Received: from [10.83.37.178] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id n3-20020adffe03000000b003364a0e6983sm2829647wrr.62.2024.01.17.18.18.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jan 2024 18:18:10 -0800 (PST)
-Message-ID: <fe3d5804-706e-40fc-a4e0-819df06f83ff@arista.com>
-Date: Thu, 18 Jan 2024 02:18:08 +0000
+        d=1e100.net; s=20230601; t=1705546303; x=1706151103;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H5JsUOgz+DPxJOOyNlG1B9EN9snqbFszTDtDaVe5HBM=;
+        b=OApBSdSq35UNjQTYXplyioLA8EdDqnbtmOtGZaZPCGI1jWF08VKJ6SR3VjEDxD29p5
+         Xz/tltNOFTiG++IMZoWQGGZH7/ehNcw8Qg6/ysGBySXLiLF9QKJRv1GGr2wh72sFOGVS
+         S/RSx45/C1cZSeilwDeOKrAGTc1dawy2gLv7K8A3g5GdpSzY9p9TkFD3rt6scvoC9sLR
+         Qkostr+2v/ELw9AIFV8OpZJUmz3U5A4Oa6YPWzw3JIfcCyUNAqw0Mtn4zgOkcM266NlI
+         PwakdrriZd7yoPWKrQUFRjX4wjYlAgZXV2/+Azgs1pkMYFYhkBAQS+dbov4YBi+8Z8l7
+         rjDQ==
+X-Gm-Message-State: AOJu0Yz96u5WCwzBvzBwA/t+eXSQA84RCSuSNdaBLd3FUnDCdHPq4rDy
+	wg4PuDhtHBEL8us+EGv9rGu5d0GVzgr44/JOh0ttYsYiNsnUYviKxU4w1iT+Ew==
+X-Google-Smtp-Source: AGHT+IGuu+Qi2Tx2cCYMGpPYN+O0khIiJHE3lWN6J6IrC2aFuK1G0SyFIM92LO01t3+UwG9sk29NlA==
+X-Received: by 2002:a5d:400b:0:b0:333:44e2:16b7 with SMTP id n11-20020a5d400b000000b0033344e216b7mr79098wrp.49.1705546303326;
+        Wed, 17 Jan 2024 18:51:43 -0800 (PST)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id z15-20020a5d440f000000b0033664ffaf5dsm2868219wrq.37.2024.01.17.18.51.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jan 2024 18:51:42 -0800 (PST)
+From: Dmitry Safonov <dima@arista.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Dmitry Safonov <dima@arista.com>,
+	Mohammad Nassiri <mnassiri@ciena.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] selftests/net: A couple of typos fixes in key-management test
+Date: Thu, 18 Jan 2024 02:51:33 +0000
+Message-ID: <20240118-tcp-ao-test-key-mgmt-v1-0-3583ca147113@arista.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/net: argument value mismatch when calling
- verify_counters()
-Content-Language: en-US
-To: Mohammad Nassiri <mnassiri@ciena.com>
-Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- shuah@kernel.org, 0x7f454c46@gmail.com, mohammad.nassiri78@gmail.com,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240116214826.10754-1-mnassiri@ciena.com>
-From: Dmitry Safonov <dima@arista.com>
-In-Reply-To: <20240116214826.10754-1-mnassiri@ciena.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.13-dev-b6b4b
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1705546294; l=736; i=dima@arista.com; s=20231212; h=from:subject:message-id; bh=YHhFdreFP9ZE/+rucVuzbm04/JKcvfDc6wo5uMXaSX8=; b=E1xkCdz0M9XB7LOyp1foBBxJnUvlo7QXSIQqLpKlLQB377ZXUXuwOvQUCG4cuseiQQNIU4E6N RodDkay3j8aAB5yco4ZxHozCAOJCI4dCrc0vyqgUf83CsOC7UR+yKr3
+X-Developer-Key: i=dima@arista.com; a=ed25519; pk=hXINUhX25b0D/zWBKvd6zkvH7W2rcwh/CH6cjEa3OTk=
+Content-Transfer-Encoding: 8bit
 
-Hi Mohammad,
+Two typo fixes, noticed by Mohammad's review.
+And a fix for an issue that got uncovered.
 
-On 1/16/24 21:48, Mohammad Nassiri wrote:
-> The end_server() function only operates in the server thread
-> and always takes an accept socket instead of a listen socket as
-> its input argument. To align with this, invert the boolean values
-> used when calling verify_counters() within the end_server() function.
-> 
-> Fixes: ("3c3ead555648 selftests/net: Add TCP-AO key-management test")
-> Signed-off-by: Mohammad Nassiri <mnassiri@ciena.com>
-> Link: https://lore.kernel.org/all/934627c5-eebb-4626-be23-cfb134c01d1a@arista.com/
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+---
+Dmitry Safonov (2):
+      selftests/net: Rectify key counters checks
+      selftests/net: Clean-up double assignment
 
+Mohammad Nassiri (1):
+      selftests/net: Argument value mismatch when calling verify_counters()
 
-As I've written you off-list, the patch probably was not delivered to
-mailing lists due to SPF check not passing. Please, fix the send-email
-setup when/if you want to send more patches.
+ .../testing/selftests/net/tcp_ao/key-management.c  | 46 ++++++++++++----------
+ tools/testing/selftests/net/tcp_ao/lib/sock.c      |  1 -
+ 2 files changed, 26 insertions(+), 21 deletions(-)
+---
+base-commit: 296455ade1fdcf5f8f8c033201633b60946c589a
+change-id: 20240118-tcp-ao-test-key-mgmt-bb51a5fe15a2
 
-Related to this patch: I'm going to carry and resend it together with 2
-more patches, as this fix made 3 selftests fail and I've looked into that.
-
-> ---
->  tools/testing/selftests/net/tcp_ao/key-management.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/tcp_ao/key-management.c b/tools/testing/selftests/net/tcp_ao/key-management.c
-> index c48b4970ca17..f6a9395e3cd7 100644
-> --- a/tools/testing/selftests/net/tcp_ao/key-management.c
-> +++ b/tools/testing/selftests/net/tcp_ao/key-management.c
-> @@ -843,7 +843,7 @@ static void end_server(const char *tst_name, int sk,
->  	synchronize_threads(); /* 4: verified => closed */
->  	close(sk);
->  
-> -	verify_counters(tst_name, true, false, begin, &end);
-> +	verify_counters(tst_name, false, true, begin, &end);
->  	synchronize_threads(); /* 5: counters */
->  }
->  
-
-Thanks,
-            Dmitry
+Best regards,
+-- 
+Dmitry Safonov <dima@arista.com>
 
 
