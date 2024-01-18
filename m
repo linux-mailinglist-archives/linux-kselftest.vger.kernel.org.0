@@ -1,111 +1,135 @@
-Return-Path: <linux-kselftest+bounces-3208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C59D5831D32
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 17:05:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68D3A831D81
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 17:22:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01D3B1C22C35
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 16:05:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 127C71F238C0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 16:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA5128DCB;
-	Thu, 18 Jan 2024 16:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mB4YVA41"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3790629436;
+	Thu, 18 Jan 2024 16:22:21 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA6F1E4A1;
-	Thu, 18 Jan 2024 16:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A9A2C191;
+	Thu, 18 Jan 2024 16:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705593954; cv=none; b=lG2+0cV1msaYeHNmWId33ndvK1dQJQyUCvLQcODl1PBiGiB/rJwz2pvGM82Iv5dG1T8CF9nvvQlZIPrnpyITAzLnMLeJmQo0cTCqjoda0dDKCLLK4GeKf7apexiWBv7Wmpj+4RsAoC+BgYFglrLvc+0UC0mHtUr0kfhP1JMpVJU=
+	t=1705594941; cv=none; b=V7dfXIGLHngHSHlLQ9h9W++a3ReHopkoVLVUBX+2cTNUH813hLkl7eOUuWw30qxUIhVfyFsCfJa9jMk5wGh2jK6mmwfhIZNxWUlzbcFrFqJI9A58xryAtdy0i2q1bxqNvvH5Izg72ePqg0gu0g6UmmAjUBN2wYWp5k2s7rnTSj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705593954; c=relaxed/simple;
-	bh=wyqG3HNRtLtdXhdqJhqXHf+h1pw8GhH6LaOIARO7qyM=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Autocrypt:Content-Type:Content-Transfer-Encoding:User-Agent:
-	 MIME-Version; b=cZRzb1HyiTm6DOAeR8rR5jfIL/cSsV2HmMq7KDVoePFB+C0Eenc+qlpnu8SmMFHbRl2JmiKJrr8e33Jbnul0zPro24azewWnmXPABHfidyRKIgOM0+CS/HcJ1drAwCqf9jjPm+F1Ur4py11w/+fYCQb2TxBg41H0qrbBdcojCGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mB4YVA41; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1705594941; c=relaxed/simple;
+	bh=qPzK6gVFp3Jx3vDLYl65XpUDJJEvx4TME7a9OfF/BS4=;
+	h=Received:X-Google-DKIM-Signature:X-Gm-Message-State:
+	 X-Google-Smtp-Source:X-Received:Received:Received:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gmail-Original-Message-ID:Message-ID:Subject:To:Cc:Content-Type:
+	 Content-Transfer-Encoding; b=XjVd89ZtgGLiVF31Xkd82685Bz37z9XjyRLoi7Aj25t2MeO8U+awn03cJA5/v3Q/wNEDuf1JMCVYbilI6wfzZg3kb2jkfHxWJCqeIiThnLAyUhY/FWWwfVhQ6tmJ+nCLVR9KIMVIHrvBTXGhb0XoDFtuUYW/olCBzt1beXW57Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-336746c7b6dso10667540f8f.0;
-        Thu, 18 Jan 2024 08:05:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705593951; x=1706198751; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ewpSOiW9RlGueTIhRS4yCwW1pNfEZiBqcXxXwqJipKQ=;
-        b=mB4YVA41qlBB+lQYFpCLxrLOfHw54Cilf9u4lgsHUSkaeVykw3Km+m9LCu9KPTx4Pi
-         L1XgDTtkDQnfMZilh7feDLcYMMMhsmy2+rPlg4tdyXWPgYZ/PPwdaf0djMNrPUa40hBN
-         QlQ6ASzcd8kKaukOTbO+bv/qGKachqEAwBzelMtZfIZ76qT9ulxlyns9nr7o0u2cTZe4
-         HWEXOYr6jO8iM6+ViKSdbgQU5RSOmDrWUzszpgZkj9KBuQqFeTjAxlm2v72QiL6Vfd1r
-         EHqBRy+jVEEzMN+QQA/Sz8ob/3x+9fPNTIuagCurMU9ee4cItd3C4f0MjvoDZqu2+DEV
-         vaDQ==
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5f8cf76ef5bso115564427b3.0;
+        Thu, 18 Jan 2024 08:22:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705593951; x=1706198751;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ewpSOiW9RlGueTIhRS4yCwW1pNfEZiBqcXxXwqJipKQ=;
-        b=YXfmrDtIUZTi+dX52X5VUY6opwc+FKJSAwLa42gv4jStlfgY1H8zJMmf5y9PHauDsC
-         1NRHZCpdaC8Yzceem6szxvDOL53De6QnWQK4huJUNrQOAq4mq3+oua8lsqheo7AduOWe
-         6VYsZZZbhCFBEh9qWIxLxGvS8lOQu7sEbmtL3fXlJdSnQatMd9qMmfkOcql3CXbB7eSQ
-         Wd9hGF+S8sjKZOtRprDykWc5eU1ILWMuzVOyaVc71m7W0//JDW8NrZY2dYQAGwoyASEo
-         ifMgXSR6W57XMkm2sCSmbmBzpqKWs7nd1LxnzodOcpj+66VDQgze4MadTCSc/zQdM30+
-         yjXw==
-X-Gm-Message-State: AOJu0YzOnVP4iIaf7231N4rvWNOn8adAJ5omzfDx3p4BnfbE9DGtDasW
-	hUNRsHjz5raJZHiqp7oDxnb8+N0CvYIbUJ7ULXgEs/cKmIZ7XUZc
-X-Google-Smtp-Source: AGHT+IFN/cFLtbIF8BO48zR0E3rZZkyjEPk0zcajzYzTSRSpiMx6/yub42dUnDKAWuHm3lulQAPf+g==
-X-Received: by 2002:adf:8989:0:b0:337:bc90:2148 with SMTP id x9-20020adf8989000000b00337bc902148mr526067wrx.129.1705593950924;
-        Thu, 18 Jan 2024 08:05:50 -0800 (PST)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id o9-20020a5d4a89000000b00337d8b76b36sm298914wrq.68.2024.01.18.08.05.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jan 2024 08:05:50 -0800 (PST)
-Message-ID: <6c79868f5e66c4a2c2b8c2bd30422cb167b656b2.camel@gmail.com>
-Subject: Re: lsm_cgroup.c selftest fails to compile when CONFIG_PACKET!=y
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Mykola Lysenko
-	 <mykolal@fb.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	 <jolsa@kernel.org>
-Date: Thu, 18 Jan 2024 18:05:44 +0200
-In-Reply-To: <0c0a7705e775b2548f3439600738311830dbe1a9.camel@gmail.com>
-References: 
-	<f4l6fadtxnvttlb27heyl3r2bxettwwfu5vrazqykrshvrl3vm@ejw2ccatg3wi>
-	 <0c0a7705e775b2548f3439600738311830dbe1a9.camel@gmail.com>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+        d=1e100.net; s=20230601; t=1705594938; x=1706199738;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J1ZHBh2IhHUk6R0mb0HwNUYRqWpgjfOFml5hWvgYMDU=;
+        b=gdZlFlMg/+UKTmNa5cZ6eBtX9LavcIF+pE8O+M9s/8xUssjdpxpjvlhpY9Aco4Wh+W
+         DCIJifGShRaTxgrL42LRuyCxCdJxQuhWrXeNyRv93aCCv+8E4D7sL9SXvuJeYhHRSnuh
+         ByWAMtAA1l3ie3cKyMlX396YjrfX7Tbf6sAm9f+w/7wqTM9fHfOaJq8Z55PeO02iI01L
+         z0bWxhAlxA0cZAIfFYMXCWK2GnkT6gYPo5cMw87FWi7nScFujE+JIumpxlSXwsO0UUoG
+         Mdu3qDcz0DfxtddepcWZUuzLszpl0p8ATiajHgA1hMGbmSoPCxCgEAhalc7kfmqvZE+8
+         +Mcw==
+X-Gm-Message-State: AOJu0YwjwYs2jh9hn+V6Pr8NkDkigQzeHNhXQepKXOmcNoy55Q930TfJ
+	t8nfySyz/ZkbZNu6Tj9B2kge9GmzwssR012Mmf0OAuLh6wGmDuGusdI3l//AqeA=
+X-Google-Smtp-Source: AGHT+IHUuGGvnRS3UHcJCDKV6s7skaYjxFy1kjDijpAobnDrNgk8lI82gVuS0UufXdeKFlIMCvW4PQ==
+X-Received: by 2002:a81:de4b:0:b0:5f7:9a2b:fd0a with SMTP id o11-20020a81de4b000000b005f79a2bfd0amr1128415ywl.35.1705594937789;
+        Thu, 18 Jan 2024 08:22:17 -0800 (PST)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id r124-20020a819a82000000b005e92fd632e0sm6806716ywg.24.2024.01.18.08.22.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jan 2024 08:22:17 -0800 (PST)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc23bf7e5aaso2155921276.0;
+        Thu, 18 Jan 2024 08:22:17 -0800 (PST)
+X-Received: by 2002:a25:748a:0:b0:da0:3bfc:b915 with SMTP id
+ p132-20020a25748a000000b00da03bfcb915mr1030675ybc.11.1705594937194; Thu, 18
+ Jan 2024 08:22:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240112200750.4062441-1-sboyd@kernel.org> <20240112200750.4062441-2-sboyd@kernel.org>
+ <ZaZtbU9hre3YhZam@FVFF77S0Q05N> <CAMuHMdU0qtMeX=7SY+32=30-QGMRniFVCCm217REJ1X+ZNJ=Aw@mail.gmail.com>
+ <ZalCcivD0vXpQfr9@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <ZalCcivD0vXpQfr9@FVFF77S0Q05N.cambridge.arm.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 18 Jan 2024 17:22:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVW+zBU-7OEpsMZKFfkFbyN98jatG0RsLuzZmXKWavNAA@mail.gmail.com>
+Message-ID: <CAMuHMdVW+zBU-7OEpsMZKFfkFbyN98jatG0RsLuzZmXKWavNAA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] arm64: Unconditionally call unflatten_device_tree()
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev, linux-um@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, 
+	Frank Rowand <frowand.list@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2024-01-18 at 17:58 +0200, Eduard Zingerman wrote:
-[...]
-> here is how config for x86 CI is prepared:
->=20
-> ./scripts/kconfig/merge_config.sh \
->          ./tools/testing/selftests/bpf/config \
->          ./tools/testing/selftests/bpf/config.vm \
->          ./tools/testing/selftests/bpf/config.x86_64
->=20
+Hi Mark,
 
-(For whatever reason CONFIG_PACKET is defined in .../config.x86_64,
- maybe that should be moved to .../config?)
+On Thu, Jan 18, 2024 at 4:23=E2=80=AFPM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
+> On Tue, Jan 16, 2024 at 03:13:42PM +0100, Geert Uytterhoeven wrote:
+> > On Tue, Jan 16, 2024 at 12:51=E2=80=AFPM Mark Rutland <mark.rutland@arm=
+.com> wrote:
+> > > On Fri, Jan 12, 2024 at 12:07:44PM -0800, Stephen Boyd wrote:
+> > > > Call this function unconditionally so that we can populate an empty=
+ DTB
+> > > > on platforms that don't boot with a firmware provided or builtin DT=
+B.
+> > > > There's no harm in calling unflatten_device_tree() unconditionally.
+> > >
+> > > For better or worse, that's not true: there are systems the provide b=
+oth a DTB
+> > > *and* ACPI tables, and we must not consume both at the same time as t=
+hose can
+> > > clash and cause all sorts of problems. In addition, we don't want peo=
+ple being
+> > > "clever" and describing disparate portions of their system in ACPI an=
+d DT.
+> >
+> > We'd get to the latter anyway, when plugging in a USB device where the
+> > circuitry on/behind the USB device is described in DT.
+>
+> I don't understand what you mean there; where is the DT description of th=
+e USB
+> device coming from if the DTB hasn't been unflattened?
 
+Either stored in (FLASH) ROM on the USB device, or loaded from
+/lib/firmware/.  In both cases that would be handled by the USB driver
+for the device.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
