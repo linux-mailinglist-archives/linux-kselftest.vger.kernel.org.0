@@ -1,138 +1,159 @@
-Return-Path: <linux-kselftest+bounces-3178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D98A58310CF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 02:20:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A34F0831123
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 02:53:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 868FFB25CBB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 01:20:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A7BF281A30
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 01:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E4D4A36;
-	Thu, 18 Jan 2024 01:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF26F1FAF;
+	Thu, 18 Jan 2024 01:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SnZUkPKw"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="W3m259+Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1138B187E;
-	Thu, 18 Jan 2024 01:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC9B23D9
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jan 2024 01:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705540816; cv=none; b=r2RmCMYp0OQoZG04DDREdXN/MLE3CSOgJBmXYNCiC0utzqwMM5MYFUMJK5ujx/jGnOGICDYiRRW4mmECgHFaN2nvPlGp+XwD763QsdvTqlOGEcd3dEapJqKoTYce+OIAUhzbwRrSfs+QzTM8EiLKuhO+JA7A5KUxlZrYy+1Tu7Y=
+	t=1705542783; cv=none; b=pRHG2dWPIG4MPwLTSr5US1nKpbFQqKBEF/t93ZWYZNQud202L208Ibvps3gVmt+x987cSrZPUxV4w1yoOngg8Kl5mHBO2IgD/qsMAiAmCxhBOAbWNf1l0Ra8F+Bz7rzqTMnZ8PXkAlhGtRFAPRsAd30ejZ5msSUtjdrm97WvbS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705540816; c=relaxed/simple;
-	bh=hQlzO6Nz6nP2U2O4TNYunk0ZVeCOA+y7BnbYKdnn7r0=;
+	s=arc-20240116; t=1705542783; c=relaxed/simple;
+	bh=TbGKo9XwnaWFRnDaGJQYGEDB3n+mODCRkk1sjg7BuRA=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
-	 From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=enyn9SF72CGHbIh72BOsAyEy4l88JHdgLBA7NIttaA9uZWvGfoXIAAy2wDg4N/Bag6FsUQS4TF+qLKrbg8Hgm4/INq8+YR4BnVVgZUbQcbmwsw0zpMWxqIAsomHclDiBc761amxUWvJNoOTsTo+t4YzhdZPnJJP6zOHZYnXE9qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SnZUkPKw; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6db79e11596so216536b3a.0;
-        Wed, 17 Jan 2024 17:20:14 -0800 (PST)
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version; b=UhtXiDvyQHY3Gw4GnXfvoxfcZN9o9lfwVn+LCL4qhZxSufHpnHq3KwG8SZe6XOLtqCxXVMv2zfJ7n8kmdUbDBU34T/YgiXtlXRWJlnXOsGzbnGw354pM8HC02SdchLJRXrSZbA3Kop8g0iyYjINIERkJGEDZ580yW2DsXW3yEnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=W3m259+Y; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50ea9daac4cso12530901e87.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 17:53:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705540814; x=1706145614; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysdI4jVmGv6jMMLChdwyA9xpWYrYNxLP2z87qw+R1ZM=;
-        b=SnZUkPKwpGcjxXu5NZ8MAOkdb6AVf8tuno98/EtDo8WZkBT/WVYoqDvPtOYUrOB0YU
-         9AP05Q9O+o0MlO2s02bLjseBHNxqHu6JTvYV1YnRlTwpn/rZebW4DBhCw+YZJIP+6hGK
-         FqF/Ge/JS/2fwjvhjWyFEe8Qev6jQXJv15N+DEmHxEELg18tGjTfzOzOoa/YehSlsdNP
-         4ISL4dPyJh+wmZLKALiaGrZ76V/KZAc53RRtxsIsZOsZPJ/Gwhaci0GK6hy6kI3HAYf/
-         fiZxN8ASgr7rK0/ilqtk+l2kHpFdX66NDf094J7xbA1TuRzl+9k+f4QXDWNLMyldEaIn
-         ZaEg==
+        d=suse.com; s=google; t=1705542778; x=1706147578; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=taCIpUJqzL+JyTaiMa3v4bP+c2WFVuuQ9gZ9COs9zu8=;
+        b=W3m259+YmlnMuOAK6XKKmaoxzp5GGgx3fAtvpII5LF5lLztUFbWKPSw4hN78NgVby3
+         kT5w/VsyaCVOv4qT5OnPO8r0Gevcgxl91/k89Z9nY9E0r9Qfj/23hwnb+577gamTuwiY
+         4fpYgw+oVNniaB63cN/ZK8SclF6Ph3RZBkLdrn/AGFDwUj2cOuzkoxrNnpHBfhSUKrUc
+         jgnK75bXS2guTzpXzDVKqgDemgPEnQ/jYPT6EuoF9/FdybTtSmzis6tdW7Joia7XjPJo
+         F7e2HN73aiFt8eMRng1P5FYZfsj3wvMhWbiKfY4nqnbkw8bgI+reT1IVF9Nx4AjxkBN8
+         WWvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705540814; x=1706145614;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ysdI4jVmGv6jMMLChdwyA9xpWYrYNxLP2z87qw+R1ZM=;
-        b=QTa9sFm/XdGYXJNgzI2O0w8jZNJvN7zgUAKpGvjFc/VAqGuBArP/yGfKxgEaAikbyc
-         o8PFFVaQeAVA6YeQOXcyQ0s/HjGpICJAJjgojHbCKL2b6C1x/dJlOWZA4aOoB38xenVw
-         uuTIPvsc94rc2dGdTIVyUDCDziS7y8vpnbi31GW4Rrd+8FLdNSpK+uMpjYKs6Dwli6CU
-         YuyQp2r01lkTKBR0hFTz49PCf/spbKJop92NtcTCLyBNX+lBZeG9TKfrJmi0JXh1zh30
-         Rt3sEe9uwCjZrIkm9w83LzV0aZzQmhOJQxRhJqXaG7Wi2+n5KiRetsjp+/Rtemp8TWV1
-         I+Pw==
-X-Gm-Message-State: AOJu0YwTeGZfvNF51z12RrvIIBEKaHHKoINQvuZmohCB7Sd7Jm6++M8E
-	WP1DEagdTl0d+eRFIaalzEHyORqEafMU1LUshStoIkzInEFs831w
-X-Google-Smtp-Source: AGHT+IHwu7KcOrtrcuSoiK75C5DVqpoUCAvAcGbY5+FKeB2PVyrUdPC351jnSp4qZNNtSJJKmB/Irg==
-X-Received: by 2002:a05:6a00:23d2:b0:6d9:ad3d:7d8 with SMTP id g18-20020a056a0023d200b006d9ad3d07d8mr260031pfc.19.1705540814285;
-        Wed, 17 Jan 2024 17:20:14 -0800 (PST)
-Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id h20-20020a056a00231400b006dacfab07b6sm2061177pfh.121.2024.01.17.17.20.11
+        d=1e100.net; s=20230601; t=1705542778; x=1706147578;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=taCIpUJqzL+JyTaiMa3v4bP+c2WFVuuQ9gZ9COs9zu8=;
+        b=LMZUFeAVqsjcSa5pqxTm2Mb3t9XsWYrdDPIV8sfFTg5CB5F42fVPzGgwq9LS1mckiW
+         ASeRtmaJyejo8aDiCvlx1w/+jm4uq6uKxul0V6lB+HuXZ1G+rUKlpOp4MJ4+duxrr1yF
+         BHm7ljG5syPOpPk4BSOBiAy0JTQNqY2EHYhhYJNFNqH1Yo+aDsSLuv26a2j1x5bnvnoL
+         0tvFRxqJZ35WRgnat9UmdEuy772hkxzmL052t7MqM32bv/jSp1xYF2a2kX+TCPlCeWOZ
+         yApIJwBU3YMhUidCn/VruJs6+ZtBW3E0SmQjPiRmrMk28xfVJuvJpVY38F6RbSDSTMox
+         ALFw==
+X-Gm-Message-State: AOJu0YxDRO2hC/GLVToCy7KWYvhXDJuCXfYJuQk8f18L2owQJh0b0cwb
+	ZSxrHNxD0v+jmBfSSYgZR7hiiLSXD+RcE85Kxw2TxAGbdjPV23io0Fq1nJhvxQptAp/uph3ZUBo
+	8gYQ=
+X-Google-Smtp-Source: AGHT+IGvzTuyC7iVwlQOSofeR6dJpAULy5A1d7eEifJUQAx27DALwNdCqveNkTX/dJSr0C9xl0HxDg==
+X-Received: by 2002:a2e:9050:0:b0:2cc:a7b9:2fa0 with SMTP id n16-20020a2e9050000000b002cca7b92fa0mr66494ljg.12.1705542778479;
+        Wed, 17 Jan 2024 17:52:58 -0800 (PST)
+Received: from ?IPv6:2804:30c:974:ac00:1b02:e2fd:23be:79bc? ([2804:30c:974:ac00:1b02:e2fd:23be:79bc])
+        by smtp.gmail.com with ESMTPSA id y2-20020a63e242000000b005cd78f13608sm338946pgj.13.2024.01.17.17.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 17:20:13 -0800 (PST)
-Date: Thu, 18 Jan 2024 09:20:09 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Benjamin Poirier <bpoirier@nvidia.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-	Andy Gospodarek <andy@greyhouse.net>, Shuah Khan <shuah@kernel.org>,
-	Liang Li <liali@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests: bonding: Increase timeout to 1200s
-Message-ID: <Zah8yeTwB6Xcc6nd@Laptop-X1>
-References: <20240118001233.304759-1-bpoirier@nvidia.com>
+        Wed, 17 Jan 2024 17:52:58 -0800 (PST)
+Message-ID: <4aaa05fb405e921f25c907ca09ea29976ca0707c.camel@suse.com>
+Subject: Re: [PATCH v6 2/3] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+From: mpdesouza@suse.com
+To: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,  Petr Mladek
+ <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ linux-kselftest@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-s390@vger.kernel.org,
+ live-patching@vger.kernel.org
+Date: Wed, 17 Jan 2024 22:52:51 -0300
+In-Reply-To: <Zaf08hx8fBj6TW5/@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
+	 <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
+	 <Zaf08hx8fBj6TW5/@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240118001233.304759-1-bpoirier@nvidia.com>
 
-On Wed, Jan 17, 2024 at 07:12:32PM -0500, Benjamin Poirier wrote:
-> When tests are run by runner.sh, bond_options.sh gets killed before
-> it can complete:
-> 
-> make -C tools/testing/selftests run_tests TARGETS="drivers/net/bonding"
-> 	[...]
-> 	# timeout set to 120
-> 	# selftests: drivers/net/bonding: bond_options.sh
-> 	# TEST: prio (active-backup miimon primary_reselect 0)                [ OK ]
-> 	# TEST: prio (active-backup miimon primary_reselect 1)                [ OK ]
-> 	# TEST: prio (active-backup miimon primary_reselect 2)                [ OK ]
-> 	# TEST: prio (active-backup arp_ip_target primary_reselect 0)         [ OK ]
-> 	# TEST: prio (active-backup arp_ip_target primary_reselect 1)         [ OK ]
-> 	# TEST: prio (active-backup arp_ip_target primary_reselect 2)         [ OK ]
-> 	#
-> 	not ok 7 selftests: drivers/net/bonding: bond_options.sh # TIMEOUT 120 seconds
-> 
-> This test includes many sleep statements, at least some of which are
-> related to timers in the operation of the bonding driver itself. Increase
-> the test timeout to allow the test to complete.
-> 
-> I ran the test in slightly different VMs (including one without HW
-> virtualization support) and got runtimes of 13m39.760s, 13m31.238s, and
-> 13m2.956s. Use a ~1.5x "safety factor" and set the timeout to 1200s.
-> 
-> Fixes: 42a8d4aaea84 ("selftests: bonding: add bonding prio option test")
-> Reported-by: Jakub Kicinski <kuba@kernel.org>
-> Closes: https://lore.kernel.org/netdev/20240116104402.1203850a@kernel.org/#t
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
-> ---
->  tools/testing/selftests/drivers/net/bonding/settings | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/bonding/settings b/tools/testing/selftests/drivers/net/bonding/settings
-> index 6091b45d226b..79b65bdf05db 100644
-> --- a/tools/testing/selftests/drivers/net/bonding/settings
-> +++ b/tools/testing/selftests/drivers/net/bonding/settings
-> @@ -1 +1 @@
-> -timeout=120
-> +timeout=1200
-> -- 
-> 2.43.0
-> 
+On Wed, 2024-01-17 at 16:40 +0100, Alexander Gordeev wrote:
+> On Fri, Jan 12, 2024 at 02:43:51PM -0300, Marcos Paulo de Souza
+> wrote:
+>=20
+> Hi Marcos!
 
-Thanks, I will check how to use busywait in bonding test.
+Hello!
 
-Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
+>=20
+> > Having the modules being built as out-of-modules requires changing
+> > the
+> > currently used 'modprobe' by 'insmod' and adapt the test scripts
+> > that
+> > check for the kernel message buffer.
+>=20
+> Please, correct me if I am wrong, but with this change one would
+> require a configured build environment and kernel tree that matches
+> running kernel in order to run tests. Is that correct?
+
+You don't need a kernel tree in order to run the tests, you can build
+the modules and use gen_tar to pack them, setting KDIR to the currently
+built kernel:
+		make KDIR=3D$(pwd) TARGETS=3Dlivepatch -C
+tools/testing/selftests
+
+This can be used when packaging the tests, like Joe showed when
+reviewing the v4:
+
+	mkdir /tmp/test-install
+	make KDIR=3D$(pwd) INSTALL_PATH=3D/tmp/test-install
+TARGETS=3Dlivepatch -C tools/testing/selftests install
+
+In this case /tmp/test-install will contain the scripts and the modules
+compiled targeting the same kernel version from the kernel built from
+the kernel tree.
+
+You can also run the tests from the kernel tree but targeting your
+currently running system.
+Using this approach you can run the tests on machines without kernel
+tree and without build environment.
+
+You can also pick the kernel source and run
+	make kselftest TARGETS=3Dlivepatch
+
+As KDIR wasn't set it builds the livepatch test modules targeting
+/lib/modules/<current kernel version/build, and so you can run the
+tests against your currently running kernel. This would require kernel-
+devel package and gcc.
+
+I hope this answer your question, and provides some info about how to
+run the tests on different environments!
+
+Thanks,
+  Marcos
+
+>=20
+> Thanks!
+
 
