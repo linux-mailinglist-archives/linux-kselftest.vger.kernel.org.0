@@ -1,159 +1,143 @@
-Return-Path: <linux-kselftest+bounces-3179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A34F0831123
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 02:53:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EAF1831135
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 03:03:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A7BF281A30
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 01:53:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CCA4B21097
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jan 2024 02:03:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF26F1FAF;
-	Thu, 18 Jan 2024 01:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="W3m259+Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B551FAF;
+	Thu, 18 Jan 2024 02:03:51 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC9B23D9
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jan 2024 01:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0009B28FD
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jan 2024 02:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.191.123.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705542783; cv=none; b=pRHG2dWPIG4MPwLTSr5US1nKpbFQqKBEF/t93ZWYZNQud202L208Ibvps3gVmt+x987cSrZPUxV4w1yoOngg8Kl5mHBO2IgD/qsMAiAmCxhBOAbWNf1l0Ra8F+Bz7rzqTMnZ8PXkAlhGtRFAPRsAd30ejZ5msSUtjdrm97WvbS0=
+	t=1705543431; cv=none; b=pqZxULGadeBc1JarTKLadzYJLlOQOi7LFR5w21ui32+kiu9moJIx09P+mDC+z0gDNLmacLrcBGD8ZyvcCOL7v2Z1pUilg706SaK0AHek8hnw4R4M+T/E2f5W9KDpvi+iQbFmk70sb1WOiNvmoHKGAH3JOIWJER4oPafxqem3d9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705542783; c=relaxed/simple;
-	bh=TbGKo9XwnaWFRnDaGJQYGEDB3n+mODCRkk1sjg7BuRA=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version; b=UhtXiDvyQHY3Gw4GnXfvoxfcZN9o9lfwVn+LCL4qhZxSufHpnHq3KwG8SZe6XOLtqCxXVMv2zfJ7n8kmdUbDBU34T/YgiXtlXRWJlnXOsGzbnGw354pM8HC02SdchLJRXrSZbA3Kop8g0iyYjINIERkJGEDZ580yW2DsXW3yEnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=W3m259+Y; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50ea9daac4cso12530901e87.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 17:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1705542778; x=1706147578; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=taCIpUJqzL+JyTaiMa3v4bP+c2WFVuuQ9gZ9COs9zu8=;
-        b=W3m259+YmlnMuOAK6XKKmaoxzp5GGgx3fAtvpII5LF5lLztUFbWKPSw4hN78NgVby3
-         kT5w/VsyaCVOv4qT5OnPO8r0Gevcgxl91/k89Z9nY9E0r9Qfj/23hwnb+577gamTuwiY
-         4fpYgw+oVNniaB63cN/ZK8SclF6Ph3RZBkLdrn/AGFDwUj2cOuzkoxrNnpHBfhSUKrUc
-         jgnK75bXS2guTzpXzDVKqgDemgPEnQ/jYPT6EuoF9/FdybTtSmzis6tdW7Joia7XjPJo
-         F7e2HN73aiFt8eMRng1P5FYZfsj3wvMhWbiKfY4nqnbkw8bgI+reT1IVF9Nx4AjxkBN8
-         WWvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705542778; x=1706147578;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=taCIpUJqzL+JyTaiMa3v4bP+c2WFVuuQ9gZ9COs9zu8=;
-        b=LMZUFeAVqsjcSa5pqxTm2Mb3t9XsWYrdDPIV8sfFTg5CB5F42fVPzGgwq9LS1mckiW
-         ASeRtmaJyejo8aDiCvlx1w/+jm4uq6uKxul0V6lB+HuXZ1G+rUKlpOp4MJ4+duxrr1yF
-         BHm7ljG5syPOpPk4BSOBiAy0JTQNqY2EHYhhYJNFNqH1Yo+aDsSLuv26a2j1x5bnvnoL
-         0tvFRxqJZ35WRgnat9UmdEuy772hkxzmL052t7MqM32bv/jSp1xYF2a2kX+TCPlCeWOZ
-         yApIJwBU3YMhUidCn/VruJs6+ZtBW3E0SmQjPiRmrMk28xfVJuvJpVY38F6RbSDSTMox
-         ALFw==
-X-Gm-Message-State: AOJu0YxDRO2hC/GLVToCy7KWYvhXDJuCXfYJuQk8f18L2owQJh0b0cwb
-	ZSxrHNxD0v+jmBfSSYgZR7hiiLSXD+RcE85Kxw2TxAGbdjPV23io0Fq1nJhvxQptAp/uph3ZUBo
-	8gYQ=
-X-Google-Smtp-Source: AGHT+IGvzTuyC7iVwlQOSofeR6dJpAULy5A1d7eEifJUQAx27DALwNdCqveNkTX/dJSr0C9xl0HxDg==
-X-Received: by 2002:a2e:9050:0:b0:2cc:a7b9:2fa0 with SMTP id n16-20020a2e9050000000b002cca7b92fa0mr66494ljg.12.1705542778479;
-        Wed, 17 Jan 2024 17:52:58 -0800 (PST)
-Received: from ?IPv6:2804:30c:974:ac00:1b02:e2fd:23be:79bc? ([2804:30c:974:ac00:1b02:e2fd:23be:79bc])
-        by smtp.gmail.com with ESMTPSA id y2-20020a63e242000000b005cd78f13608sm338946pgj.13.2024.01.17.17.52.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 17:52:58 -0800 (PST)
-Message-ID: <4aaa05fb405e921f25c907ca09ea29976ca0707c.camel@suse.com>
-Subject: Re: [PATCH v6 2/3] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-From: mpdesouza@suse.com
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Heiko
- Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Christian
- Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina
- <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,  Petr Mladek
- <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
- linux-kselftest@vger.kernel.org,  linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-s390@vger.kernel.org,
- live-patching@vger.kernel.org
-Date: Wed, 17 Jan 2024 22:52:51 -0300
-In-Reply-To: <Zaf08hx8fBj6TW5/@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
-	 <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
-	 <Zaf08hx8fBj6TW5/@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.1 
+	s=arc-20240116; t=1705543431; c=relaxed/simple;
+	bh=tHPwGIdFqi94LdAZOqJ7np7r/3FQCZ+fdVeRXwSazeE=;
+	h=Received:Received:Received:Received:From:To:CC:Subject:
+	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
+	 Accept-Language:Content-Language:X-MS-Has-Attach:
+	 X-MS-TNEF-Correlator:x-originating-ip:x-sender-location:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version:X-DNSRBL:
+	 X-SPAM-SOURCE-CHECK:X-MAIL; b=N3xEX2VszU/MAXdUsslYt8UBLdnEHzdFs/faZRRAJl/StubaYwFSPg/RkSv5rXmfmYjIKOKjWTZRbldgUXUJbaKrDHweFNWy8V+2O0D6DJ3hiN5L8mABdX6Xsvk5OcOA4jptNQNkB2TxofE17DFwLuInB/NTYnr81L/2PMo75q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com; spf=pass smtp.mailfrom=h3c.com; arc=none smtp.client-ip=60.191.123.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
+Received: from mail.maildlp.com ([172.25.15.154])
+	by h3cspam02-ex.h3c.com with ESMTP id 40I235rx063437;
+	Thu, 18 Jan 2024 10:03:06 +0800 (GMT-8)
+	(envelope-from hu.yadi@h3c.com)
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com (unknown [10.62.14.11])
+	by mail.maildlp.com (Postfix) with ESMTP id D29152004BB7;
+	Thu, 18 Jan 2024 10:07:35 +0800 (CST)
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) by
+ DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.27; Thu, 18 Jan 2024 10:03:04 +0800
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4])
+ by DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4%16]) with
+ mapi id 15.02.1258.027; Thu, 18 Jan 2024 10:03:04 +0800
+From: Huyadi <hu.yadi@h3c.com>
+To: =?utf-8?B?J01pY2thw6tsIFNhbGHDvG4n?= <mic@digikod.net>,
+        "'Christian
+ Brauner'" <brauner@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+CC: "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com"
+	<serge@hallyn.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>,
+        "514118380@qq.com" <514118380@qq.com>,
+        Christian Brauner <brauner@kernel.org>,
+        "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggdjRdIHNlbGZ0ZXN0cy9tb3ZlX21vdW50X3NldF9n?=
+ =?utf-8?Q?roup:Make_tests_build_with_old_libc?=
+Thread-Topic: [PATCH v4] selftests/move_mount_set_group:Make tests build with
+ old libc
+Thread-Index: AQHaRII9d44IpKHVmkiSX1xdCq/Vx7DUFK8AgArGFwA=
+Date: Thu, 18 Jan 2024 02:03:04 +0000
+Message-ID: <b7872e67938f4022ad0537bc617403ed@h3c.com>
+References: <20240111113229.10820-1-hu.yadi@h3c.com>
+ <20240111.mee0ohZie5he@digikod.net>
+In-Reply-To: <20240111.mee0ohZie5he@digikod.net>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-sender-location: DAG2
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:h3cspam02-ex.h3c.com 40I235rx063437
 
-On Wed, 2024-01-17 at 16:40 +0100, Alexander Gordeev wrote:
-> On Fri, Jan 12, 2024 at 02:43:51PM -0300, Marcos Paulo de Souza
-> wrote:
->=20
-> Hi Marcos!
-
-Hello!
-
->=20
-> > Having the modules being built as out-of-modules requires changing
-> > the
-> > currently used 'modprobe' by 'insmod' and adapt the test scripts
-> > that
-> > check for the kernel message buffer.
->=20
-> Please, correct me if I am wrong, but with this change one would
-> require a configured build environment and kernel tree that matches
-> running kernel in order to run tests. Is that correct?
-
-You don't need a kernel tree in order to run the tests, you can build
-the modules and use gen_tar to pack them, setting KDIR to the currently
-built kernel:
-		make KDIR=3D$(pwd) TARGETS=3Dlivepatch -C
-tools/testing/selftests
-
-This can be used when packaging the tests, like Joe showed when
-reviewing the v4:
-
-	mkdir /tmp/test-install
-	make KDIR=3D$(pwd) INSTALL_PATH=3D/tmp/test-install
-TARGETS=3Dlivepatch -C tools/testing/selftests install
-
-In this case /tmp/test-install will contain the scripts and the modules
-compiled targeting the same kernel version from the kernel built from
-the kernel tree.
-
-You can also run the tests from the kernel tree but targeting your
-currently running system.
-Using this approach you can run the tests on machines without kernel
-tree and without build environment.
-
-You can also pick the kernel source and run
-	make kselftest TARGETS=3Dlivepatch
-
-As KDIR wasn't set it builds the livepatch test modules targeting
-/lib/modules/<current kernel version/build, and so you can run the
-tests against your currently running kernel. This would require kernel-
-devel package and gcc.
-
-I hope this answer your question, and provides some info about how to
-run the tests on different environments!
-
-Thanks,
-  Marcos
-
->=20
-> Thanks!
-
+DQo+T24gVGh1LCBKYW4gMTEsIDIwMjQgYXQgMDc6MzI6MjlQTSArMDgwMCwgSHUgWWFkaSB3cm90
+ZToNCj4+IEZyb206ICJIdS5ZYWRpIiA8aHUueWFkaUBoM2MuY29tPg0KPj4gDQo+PiBSZXBsYWNl
+IFNZU188c3lzY2FsbD4gd2l0aCBfX05SXzxzeXNjYWxsPi4gIFVzaW5nIHRoZSBfX05SXzxzeXNj
+YWxsPiANCj4+IG5vdGF0aW9uLCBwcm92aWRlZCBieSBVQVBJLCBpcyB1c2VmdWwgdG8gYnVpbGQg
+dGVzdHMgb24gc3lzdGVtcyANCj4+IHdpdGhvdXQgdGhlIFNZU188c3lzY2FsbD4gZGVmaW5pdGlv
+bnMuDQo+PiANCj4+IFJlcGxhY2UgU1lTX21vdmVfbW91bnQgd2l0aCBfX05SX21vdmVfbW91bnQN
+Cj4+IA0KPj4gU2ltaWxhciBjaGFuZ2VzOiBjb21taXQgODcxMjllZjEzNjAzICgic2VsZnRlc3Rz
+L2xhbmRsb2NrOiBNYWtlIHRlc3RzIA0KPj4gYnVpbGQgd2l0aCBvbGQgbGliYyIpDQo+PiANCj4+
+IEFja2VkLWJ5OiBNaWNrYcOrbCBTYWxhw7xuIDxtaWNAZGlnaWtvZC5uZXQ+DQo+DQo+U29ycnks
+IGl0IHNob3VsZCBoYXZlIGJlZW4gUmV2aWV3ZWQtYnk6IE1pY2thw6tsIFNhbGHDvG4gPG1pY0Bk
+aWdpa29kLm5ldD4NCj4NCj5BbHNvLCB0aGlzIGlzIG1haW50YWluZWQgYnkgdGhlIFZGUyBtYWlu
+dGFpbmVycy4gSSBDQ2VkIHRocmVlIHJlbGV2YW50IGFkZHJlc3Nlcy4NCg0KDQpBbnkgcHJvZ2Vz
+c3MgYWJvdXQgdGhpcyBwYXRjaCA/IA0KVGhhbmtzDQoNCj4NCj4+IFNpZ25lZC1vZmYtYnk6IEh1
+LllhZGkgPGh1LnlhZGlAaDNjLmNvbT4NCj4+IFN1Z2dlc3RlZC1ieTogSmlhbyA8amlhb3h1cG9A
+aDNjLmNvbT4NCj4+IFJldmlld2VkLWJ5OiBCZXJsaW4gPGJlcmxpbkBoM2MuY29tPg0KPj4gLS0t
+DQo+PiBDaGFuZ2VzIHY0IC0+IHYzOg0KPj4gIC0gQWRqdXN0IGNvbW1lbnRzIGZvciBjb25zaXN0
+ZW50DQo+PiAgLSBBZGQgQWNrZWQtYnkNCj4+IENoYW5nZXMgdjIgLT4gdjM6DQo+PiAgLSBBZGp1
+c3QgY29tbWVudHMNCj4+IENoYW5nZXMgdjEgLT4gdjI6DQo+PiAgLSBGaXggbWFpbCBvZiBTdWdn
+ZXN0ZWQtYnkgYW5kIFJldmlld2VkLWJ5DQo+PiANCj4+ICAuLi4vbW92ZV9tb3VudF9zZXRfZ3Jv
+dXAvbW92ZV9tb3VudF9zZXRfZ3JvdXBfdGVzdC5jICAgICAgICAgIHwgNCArKy0tDQo+PiAgMSBm
+aWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4+IA0KPj4gZGlm
+ZiAtLWdpdCANCj4+IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbW92ZV9tb3VudF9zZXRfZ3Jv
+dXAvbW92ZV9tb3VudF9zZXRfZ3JvdXBfdGUNCj4+IHN0LmMgDQo+PiBiL3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL21vdmVfbW91bnRfc2V0X2dyb3VwL21vdmVfbW91bnRfc2V0X2dyb3VwX3RlDQo+
+PiBzdC5jIGluZGV4IDUwZWQ1ZDQ3NWRkMS4uYmNmNTFkNzg1YTM3IDEwMDY0NA0KPj4gLS0tIA0K
+Pj4gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tb3ZlX21vdW50X3NldF9ncm91cC9tb3ZlX21v
+dW50X3NldF9ncm91cF90ZQ0KPj4gc3QuYw0KPj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvbW92ZV9tb3VudF9zZXRfZ3JvdXAvbW92ZV9tb3VudF9zZXRfZ3JvdQ0KPj4gKysrIHBfdGVz
+dC5jDQo+PiBAQCAtMjE4LDcgKzIxOCw3IEBAIHN0YXRpYyBib29sIG1vdmVfbW91bnRfc2V0X2dy
+b3VwX3N1cHBvcnRlZCh2b2lkKQ0KPj4gIAlpZiAobW91bnQoTlVMTCwgU0VUX0dST1VQX0ZST00s
+IE5VTEwsIE1TX1NIQVJFRCwgMCkpDQo+PiAgCQlyZXR1cm4gLTE7DQo+PiAgDQo+PiAtCXJldCA9
+IHN5c2NhbGwoU1lTX21vdmVfbW91bnQsIEFUX0ZEQ1dELCBTRVRfR1JPVVBfRlJPTSwNCj4+ICsJ
+cmV0ID0gc3lzY2FsbChfX05SX21vdmVfbW91bnQsIEFUX0ZEQ1dELCBTRVRfR1JPVVBfRlJPTSwN
+Cj4+ICAJCSAgICAgIEFUX0ZEQ1dELCBTRVRfR1JPVVBfVE8sIE1PVkVfTU9VTlRfU0VUX0dST1VQ
+KTsNCj4+ICAJdW1vdW50MigiL3RtcCIsIE1OVF9ERVRBQ0gpOw0KPj4gIA0KPj4gQEAgLTM2Myw3
+ICszNjMsNyBAQCBURVNUX0YobW92ZV9tb3VudF9zZXRfZ3JvdXAsIGNvbXBsZXhfc2hhcmluZ19j
+b3B5aW5nKQ0KPj4gIAkJICAgICAgIENMT05FX1ZNIHwgQ0xPTkVfRklMRVMpOyBBU1NFUlRfR1Qo
+cGlkLCAwKTsNCj4+ICAJQVNTRVJUX0VRKHdhaXRfZm9yX3BpZChwaWQpLCAwKTsNCj4+ICANCj4+
+IC0JQVNTRVJUX0VRKHN5c2NhbGwoU1lTX21vdmVfbW91bnQsIGNhX2Zyb20ubW50ZmQsICIiLA0K
+Pj4gKwlBU1NFUlRfRVEoc3lzY2FsbChfX05SX21vdmVfbW91bnQsIGNhX2Zyb20ubW50ZmQsICIi
+LA0KPj4gIAkJCSAgY2FfdG8ubW50ZmQsICIiLCBNT1ZFX01PVU5UX1NFVF9HUk9VUA0KPj4gIAkJ
+CSAgfCBNT1ZFX01PVU5UX0ZfRU1QVFlfUEFUSCB8IE1PVkVfTU9VTlRfVF9FTVBUWV9QQVRIKSwN
+Cj4+ICAJCSAgMCk7DQo+PiAtLQ0KPj4gMi4yMy4wDQo+PiANCj4+ICANCg==
 
