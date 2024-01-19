@@ -1,150 +1,127 @@
-Return-Path: <linux-kselftest+bounces-3236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AC7483279A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 11:24:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27ABD83296F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 13:23:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50F411F24340
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 10:24:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CDC1284FD2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 12:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6E73C473;
-	Fri, 19 Jan 2024 10:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28BA4F1F6;
+	Fri, 19 Jan 2024 12:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tUnyka1z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GtYhRW2i"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C352D3C693;
-	Fri, 19 Jan 2024 10:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C613C499;
+	Fri, 19 Jan 2024 12:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705659875; cv=none; b=Ee9QJKCx0km0WBg/+7oI1oSGStf+tMf6QhHFMFMYAENUl6h13upBsyIsJhwVr6A+vtMnRYeKXAvmrsoCc3Vp7OOdcGt51oiZObO19yvwiB9NHHOty+Y5WHB0q8Rj7qQWX0ddWLLXHFAoh5Z/Bssy1LRX/3fgUbrpoDppoTNkRfE=
+	t=1705667029; cv=none; b=Dv6Bcc5jy1EhwrPknfwoHREwX6bB3p1grOkzrz4JsyDJxL1pTPwv1ReOH6cAP0knR69kukhgDFFaZrFI66J+VNT38AbtGZ74XDhydd3LgJ+vzTA2eDjW0Z+4toZFo32nrxuXzIYAMnhP17jZ1HZGq8klGwm2B013ht9gjzYuCgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705659875; c=relaxed/simple;
-	bh=1JTZbN5qh9CT0H6mxkpOji2eqTwX6brav/2vU7IADqY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mmileMnakmbfjnRHiA5qOMQzPS7IV5Tp1e+w4owR/fC5Iis8Vr0HpnchHRm6A1PbevdKLFONqWS2fZS/kWUMzCFYOKybaLxqcSLONYvYFgWxWMFKBd3NR8fBlEs/nq6Vml0Z/PNRvnPdwzJreuHI7f2EJ2umvdOJoGahlMttOE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tUnyka1z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ABBAC433F1;
-	Fri, 19 Jan 2024 10:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705659875;
-	bh=1JTZbN5qh9CT0H6mxkpOji2eqTwX6brav/2vU7IADqY=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=tUnyka1zdEsMcGr0V3gN/gUgHN0bguQ9TLw7nUFX/7fn6ybsx1BktWgGc0xNHLjl/
-	 SvRzF8Gq9PfNJd02epxrJ5++PeV1VC6ajBQVcQIhd5Mm5mQIdnbWFm91ITdtFWfizo
-	 yEBab6oTUeAjecNq/BAOSY7N2fjEY1/BOOrTNHDLqg9Z0Fd3hA5ZJrIAXiAZoKqZ9U
-	 UqjZexiv/FLTaQStfc2v5R2bv0AFx169ErX7s2LMSPofJqGgOXxJr9GPH4cz+vEHoF
-	 t8YN+FLBrbJjDWDEJu7rhvsz1ITB76G7ZUqCw2DrKZ9nspCJ8XbpA5G+5v11U7kgzU
-	 HZwj1KeVkRZjw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id C29F2CE114A; Fri, 19 Jan 2024 02:24:34 -0800 (PST)
-Date: Fri, 19 Jan 2024 02:24:34 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>,
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Mrunal Patel <mpatel@redhat.com>,
-	Ryan Phillips <rphillips@redhat.com>,
-	Brent Rowsell <browsell@redhat.com>, Peter Hunt <pehunt@redhat.com>,
-	Cestmir Kalina <ckalina@redhat.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	Alex Gladkov <agladkov@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>, Phil Auld <pauld@redhat.com>,
-	Paul Gortmaker <paul.gortmaker@windriver.com>,
-	Daniel Bristot de Oliveira <bristot@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Costa Shulyupin <cshulyup@redhat.com>
-Subject: Re: [RFC PATCH 0/8] cgroup/cpuset: Support RCU_NOCB on isolated
- partitions
-Message-ID: <ad806d7c-91ec-4659-9348-1b0bb42dd417@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240117163511.88173-1-longman@redhat.com>
+	s=arc-20240116; t=1705667029; c=relaxed/simple;
+	bh=uBY94QNQ8IlqeoaQVLgckjGtysQqcnaeus3ynVCXJm4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AX9wbrm5cfM3kvnkhqeE9XfrNvkfbuVSAAIuBHEOpTZ7Rkh2wYWN4g8AKwASfEIk1rxXdS9mN2QsgFPDf8L871l39W/0WRoe2Juvqp3hOERtotjjQ6w1Kn6ZU495nJpUbY8UkKJnemi0iTyVEuna3tOM+i95/9kXqtBPS/8MA2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GtYhRW2i; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-337c5eb1bddso595091f8f.3;
+        Fri, 19 Jan 2024 04:23:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705667026; x=1706271826; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v4VkxtsHOdUE4TpdWjEGpimNl0b6w54iAmLNYkEcmy8=;
+        b=GtYhRW2i7W0l3qtcMMFDacou2+93D0qPiaYsqhko6cWmVOmCrcLdaZaznZLV05dosH
+         h9bE7xGLUU0iyHgNNGypbr4afm0+BCvfiHA9XFITH6WGlLIg/qdfGLYLCCw6pWeNmkI4
+         ld0JSk5ezjmLDDlatMC8evbbjCaRgXLhc9p4NLoaRZgWAz0kvld3eHJusVBiqFIuliYo
+         Cx7kWlrtKghUV22ufeml1Xcn6ZShBX2RZnvuqC6L85oRx7eFmZe+CjOs6M0QEq4Xc/xi
+         1mvCG2AqaEWUk4q6lEauuO86X+cbrjSH6A8Vzdy/DuQRL6umwJxKia7xQNy3BbZ6rPZK
+         ovVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705667026; x=1706271826;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v4VkxtsHOdUE4TpdWjEGpimNl0b6w54iAmLNYkEcmy8=;
+        b=FdnvQtUwcU9/6rFUYlI1v7UlvhopLI0DazdLicPSRJCfaIvefTwvN1Vx0XkTZ80NCU
+         B2zFr0D49m8O1RiDBL8JUU1RyiZQSSxBNI3B2FImGJ9ZKbFsM/4tvKTxU85xvZtLOngE
+         qU0RnBeqcg5G30PYamya47GYv4CpgW77xn4C5CTc+xWnwFqkpsMWA9uy9eiTuG6pVG09
+         N9E5GUsNi+Kf6KnHlQkYIRV51Yd3QuhVMsCIDFRkK9HJPKG9Fbb+s4hgAkK+KtumFWOX
+         atc5AA9KJ1lVsDA6XB+iJ/O+ksy5h3TFcOeY6nN6rV6AGAnPHySFu6Pym1xYsGlpQ/38
+         bNhQ==
+X-Gm-Message-State: AOJu0Yx14VB1iDBdzrCv2dG0Msbb6yn1bnsL/vES2T/rbGm1QFfyP65A
+	zCGStgIStp4xG0rKtGUEKEMkhTXDN9OZjaUDlZuaLgh8edFlsA+3
+X-Google-Smtp-Source: AGHT+IF1frQZcgXGi0SS6En7PJKEYIiUU61X/yAcKZ+RPbP1csMmSr+TOLndCJVy0+COd95+vgFQGQ==
+X-Received: by 2002:a05:600c:470c:b0:40e:62e6:d256 with SMTP id v12-20020a05600c470c00b0040e62e6d256mr1387524wmo.21.1705667026341;
+        Fri, 19 Jan 2024 04:23:46 -0800 (PST)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id v11-20020a5d610b000000b00336ca349bdesm6370138wrt.47.2024.01.19.04.23.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jan 2024 04:23:45 -0800 (PST)
+Message-ID: <71ac757d092c6103af7c6d0ebb4634afcaa0969a.camel@gmail.com>
+Subject: Re: Re: lsm_cgroup.c selftest fails to compile when CONFIG_PACKET!=y
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Andrii Nakryiko
+	 <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Yonghong Song
+	 <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 19 Jan 2024 14:23:44 +0200
+In-Reply-To: <uf7fpvox2s3ban33ybixlg2buxbh2ys2gl7wjrphuip2qrdsjr@56dp2546tuuu>
+References: 
+	<f4l6fadtxnvttlb27heyl3r2bxettwwfu5vrazqykrshvrl3vm@ejw2ccatg3wi>
+	 <0c0a7705e775b2548f3439600738311830dbe1a9.camel@gmail.com>
+	 <uf7fpvox2s3ban33ybixlg2buxbh2ys2gl7wjrphuip2qrdsjr@56dp2546tuuu>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240117163511.88173-1-longman@redhat.com>
 
-On Wed, Jan 17, 2024 at 11:35:03AM -0500, Waiman Long wrote:
-> This patch series is based on the RFC patch from Frederic [1]. Instead
-> of offering RCU_NOCB as a separate option, it is now lumped into a
-> root-only cpuset.cpus.isolation_full flag that will enable all the
-> additional CPU isolation capabilities available for isolated partitions
-> if set. RCU_NOCB is just the first one to this party. Additional dynamic
-> CPU isolation capabilities will be added in the future.
-> 
-> The first 2 patches are adopted from Federic with minor twists to fix
-> merge conflicts and compilation issue. The rests are for implementing
-> the new cpuset.cpus.isolation_full interface which is essentially a flag
-> to globally enable or disable full CPU isolation on isolated partitions.
-> On read, it also shows the CPU isolation capabilities that are currently
-> enabled. RCU_NOCB requires that the rcu_nocbs option be present in
-> the kernel boot command line. Without that, the rcu_nocb functionality
-> cannot be enabled even if the isolation_full flag is set. So we allow
-> users to check the isolation_full file to verify that if the desired
-> CPU isolation capability is enabled or not.
-> 
-> Only sanity checking has been done so far. More testing, especially on
-> the RCU side, will be needed.
+On Fri, 2024-01-19 at 16:04 +0800, Shung-Hsi Yu wrote:
 
-There has been some discussion of simplifying the (de-)offloading code
-to handle only offline CPUs.  Along with some discussion of eliminating
-the (de-)offloading capability altogehter.
+[...]
 
-We clearly should converge on the capability to be provided before
-exposing this to userspace.  ;-)
+> Final goal would be have BPF selftests compiled and test against our own
+> kernel, without having to come up with a specific kernel flavor that is
+> used to build and run the selftest. For v5.14 and v5.19-based kernel it
+> works: compilation is successful and I was able to run the verifier
+> tests. (Did not try running the other tests though)
 
-							Thanx, Paul
+You mean ./test_verifier binary, right?
+A lot of tests had been moved from ./test_verifier to ./test_progs since.
 
-> [1] https://lore.kernel.org/lkml/20220525221055.1152307-1-frederic@kernel.org/
-> 
-> Frederic Weisbecker (2):
->   rcu/nocb: Pass a cpumask instead of a single CPU to offload/deoffload
->   rcu/nocb: Prepare to change nocb cpumask from CPU-hotplug protected
->     cpuset caller
-> 
-> Waiman Long (6):
->   rcu/no_cb: Add rcu_nocb_enabled() to expose the rcu_nocb state
->   cgroup/cpuset: Better tracking of addition/deletion of isolated CPUs
->   cgroup/cpuset: Add cpuset.cpus.isolation_full
->   cgroup/cpuset: Enable dynamic rcu_nocb mode on isolated CPUs
->   cgroup/cpuset: Document the new cpuset.cpus.isolation_full control
->     file
->   cgroup/cpuset: Update test_cpuset_prs.sh to handle
->     cpuset.cpus.isolation_full
-> 
->  Documentation/admin-guide/cgroup-v2.rst       |  24 ++
->  include/linux/rcupdate.h                      |  15 +-
->  kernel/cgroup/cpuset.c                        | 237 ++++++++++++++----
->  kernel/rcu/rcutorture.c                       |   6 +-
->  kernel/rcu/tree_nocb.h                        | 118 ++++++---
->  .../selftests/cgroup/test_cpuset_prs.sh       |  23 +-
->  6 files changed, 337 insertions(+), 86 deletions(-)
-> 
-> -- 
-> 2.39.3
-> 
+> > As far as I understand, selftests are supposed to be built and run
+> > using specific configuration, here is how config for x86 CI is prepared=
+:
+> >=20
+> > ./scripts/kconfig/merge_config.sh \
+> >          ./tools/testing/selftests/bpf/config \
+> >          ./tools/testing/selftests/bpf/config.vm \
+> >          ./tools/testing/selftests/bpf/config.x86_64
+> >=20
+> > (root is kernel source).
+> > I'm not sure if other configurations are supposed to be supported.
+>=20
+> Would it make sense to have makefile target that builds/runs a smaller
+> subset of general, config-agnostic selftests that tests the core feature
+> (e.g. verifier + instruction set)?
+
+In ideal world I'd say that ./test_progs should include/exclude tests
+conditioned on current configuration, but I don't know how much work
+would it be to adapt build system for this.
 
