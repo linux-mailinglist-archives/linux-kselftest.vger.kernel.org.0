@@ -1,120 +1,122 @@
-Return-Path: <linux-kselftest+bounces-3243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B9BD832A29
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 14:14:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B68832A39
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 14:20:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC4F51F21B60
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 13:14:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BB6F1F21FA3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 13:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66D7524DC;
-	Fri, 19 Jan 2024 13:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E55D524CD;
+	Fri, 19 Jan 2024 13:19:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dSN1zpzZ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BXjmABxR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28174BABE
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 13:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E704F1E6;
+	Fri, 19 Jan 2024 13:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705670085; cv=none; b=KheXgn1MiYSZW1iGrUSfna+lNgIuEvQc4LfFl8s8J4xvFFr3PG1QXRbDudq/aaa2ugux2iXb7luVYTO9JIQb4zARn3PnsKETUEk7o0XzpziUPZittJgODDZStIdZtRBl0wjtmk9JU217NlgDqojzXeiIWMTl8Fn18qSEGgBbNXE=
+	t=1705670394; cv=none; b=R6L163ncTPxpTudOhKoj2ZySJZLzU1VTc4cg29kwqtNaQmFPQWk+sqcAuEUlekKac6GFe9ne3wevAxitmuYjUEvdvRkTe6nTWWX4JDYAZOWxj+fEkXJcZg1OMuXzTYw9ji54voEKVquv63LpGDUe9c5eMmEfWS4alqaw8INhyak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705670085; c=relaxed/simple;
-	bh=Yd8Hfv3YoXkOkWdBGQbqAsfi6VWsPeqx8i7E6nlEngk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HvJtvAD/7Kw//kAoST7yrNWZJvZobviarKK0Xm6vXOdDN6IXZn/V50U6vigd65IpebptfMGJ1zQc1wDnjcMQvrQ9HK4qfCR1wxRh0FAuOHMLovlOTWbPEjOB+eFvqkpHSmRpQgYxuIbiK/Uug7RmhPFR/zEWpxAlApS2ThdL/og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dSN1zpzZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705670082;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FMCcNkW+birNtx8xk197SfIjTJCrWWEkNPF60sBeOCI=;
-	b=dSN1zpzZtzCKSrtGs9JnvjylOLcsMpVeCS7xMCJn8VteixadiV66E25Q9YpufTBx72zwdh
-	drGxPyQ2fFiuRvOJIa1IM6Ei5B6kOgYj5kTNaV/e0QoGcz0XkfbvsBzy3EK/NVKP0mbXO1
-	VRSV7dl+k+gq8KGOz+i3GM86y1RUuuU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-217--TNxNdLxPgGuY0vHTURHIQ-1; Fri, 19 Jan 2024 08:14:39 -0500
-X-MC-Unique: -TNxNdLxPgGuY0vHTURHIQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7F93185A788;
-	Fri, 19 Jan 2024 13:14:38 +0000 (UTC)
-Received: from localhost.redhat.com (unknown [10.22.32.164])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6286C51D5;
-	Fri, 19 Jan 2024 13:14:38 +0000 (UTC)
-From: Nico Pache <npache@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: akpm@linux-foundation.org,
-	shuah@kernel.org,
-	donettom@linux.vnet.ibm.com
-Subject: [PATCH v2] selftests: mm: fix map_hugetlb failure on 64K page size systems
-Date: Fri, 19 Jan 2024 06:14:29 -0700
-Message-ID: <20240119131429.172448-1-npache@redhat.com>
+	s=arc-20240116; t=1705670394; c=relaxed/simple;
+	bh=dJgYMSNA/LU7JWwce+WL2E1J0qhV5ha58/4r5V6HnYM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fOtMdTLeRCOHGkJGC5cBRGDG+x9M2rd5BBkCZpf811OojlhEIzQIwQlNvGHLEx8maw9ZevFWGIqbYRLe6mZjHNErZDUhMXK2qHVsQwUXAk+WpvRDxRNGsVtkWf6Eg17gmuGu+sw0R9k8112wXgRYQ4AAaGTih6pQDuHZJADPGJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BXjmABxR; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40JCqqq8014644;
+	Fri, 19 Jan 2024 13:19:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Qvu2UtNYQDPQTnD9i9bszivXKf7tCMpnBb8vcZMonug=;
+ b=BXjmABxRmEVa3dgZzvIgAapAMi7y1mCh/C/jsvGDaZ27DVy08dDepFOXimGTmz6vkILN
+ 3swZJ8UmYzfQDEEWbYIWHf8w47KSY8d/FBf47l8PGUui+yUlXEWpSLt7t+84Ba1vrADT
+ vEexTjSIvZKxZi1sT3/nRpLMDzOfZfe6W3CuaOTABNHfy8IW7Iik4tF/umAFRgSZqtmh
+ OB33RVaHerE4+XVW+b/sy0gtecNeNo4JtMN/1HbFblOBq3XcWjxaeMNMMze44pI2lOIM
+ sKSGO7RNGZzxFUSdFGEzTM35ntoa0UmsjKJQ6I8tMTZfi6GXnOf1dCA8UpJV1Q5xqJg+ HA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqsfcgp2n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 19 Jan 2024 13:19:43 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40JCxs0L030790;
+	Fri, 19 Jan 2024 13:19:43 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqsfcgp26-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 19 Jan 2024 13:19:43 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40JB0F4r030427;
+	Fri, 19 Jan 2024 13:19:42 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vm72khbn2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 19 Jan 2024 13:19:41 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40JDJdrG22020654
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 19 Jan 2024 13:19:39 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 307EA20040;
+	Fri, 19 Jan 2024 13:19:39 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 02EFA20043;
+	Fri, 19 Jan 2024 13:19:38 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.85.177])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 19 Jan 2024 13:19:37 +0000 (GMT)
+Date: Fri, 19 Jan 2024 14:19:36 +0100
+From: Alexander Gordeev <agordeev@linux.ibm.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        live-patching@vger.kernel.org
+Subject: Re: [PATCH v6 2/3] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+Message-ID: <Zap26MINbbxREt4c@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
+ <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
+ <Zap04ddls7ZvbL/U@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zap04ddls7ZvbL/U@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DrA398G5w-678hUFOYdvtmSK8cLVFn6c
+X-Proofpoint-ORIG-GUID: Y9Lss7BHjSHspnm5KUirWOZ-K54LSjfL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-19_07,2024-01-19_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=513 suspectscore=0
+ spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2401190069
 
-On systems with 64k page size and 512M huge page sizes, the allocation
-and test succeeds but errors out at the munmap. As the comment states,
-munmap will failure if its not HUGEPAGE aligned. This is due to the
-length of the mapping being 1/2 the size of the hugepage causing the
-munmap to not be hugepage aligned. Fix this by making the mapping length
-the full hugepage if the hugepage is larger than the length of the
-mapping.
+On Fri, Jan 19, 2024 at 02:11:01PM +0100, Alexander Gordeev wrote:
+> FWIW, for s390 part:
+> 
+> Alexander Gordeev <agordeev@linux.ibm.com>
 
-Signed-off-by: Nico Pache <npache@redhat.com>
----
- tools/testing/selftests/mm/map_hugetlb.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
-index 193281560b61..86e8f2048a40 100644
---- a/tools/testing/selftests/mm/map_hugetlb.c
-+++ b/tools/testing/selftests/mm/map_hugetlb.c
-@@ -15,6 +15,7 @@
- #include <unistd.h>
- #include <sys/mman.h>
- #include <fcntl.h>
-+#include "vm_util.h"
- 
- #define LENGTH (256UL*1024*1024)
- #define PROTECTION (PROT_READ | PROT_WRITE)
-@@ -58,10 +59,16 @@ int main(int argc, char **argv)
- {
- 	void *addr;
- 	int ret;
-+	size_t hugepage_size;
- 	size_t length = LENGTH;
- 	int flags = FLAGS;
- 	int shift = 0;
- 
-+	hugepage_size = default_huge_page_size();
-+	/* munmap with fail if the length is not page aligned */
-+	if (hugepage_size > length)
-+		length = hugepage_size;
-+
- 	if (argc > 1)
- 		length = atol(argv[1]) << 20;
- 	if (argc > 2) {
--- 
-2.43.0
-
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
