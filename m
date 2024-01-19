@@ -1,130 +1,100 @@
-Return-Path: <linux-kselftest+bounces-3246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35ECD832C03
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 16:00:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABE0E832C29
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 16:13:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB2D01F21253
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 15:00:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCF441C2120F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 15:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B295F53E24;
-	Fri, 19 Jan 2024 15:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C061F5467F;
+	Fri, 19 Jan 2024 15:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V63X4I0i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7xIpVQf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2A61373;
-	Fri, 19 Jan 2024 15:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992B35466A;
+	Fri, 19 Jan 2024 15:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705676422; cv=none; b=h7uHoqg/xoZIKZ1gRIffqTC9owjnaygEw6TyAif/GXSTe/eDr5XSjjZmSGuaVzgEpkziD65xCvxmqydCUdQ47iCd6NGXUNa5BGYY+Skkx5LIEgAVC5kO9sm/ClEtwVj3+kqm36k/qTKGbZHPQE+iR1l1QrkXjafXh1EEUX6haZ0=
+	t=1705677171; cv=none; b=mkth1sxLXlVIr2+vwwUPMAK+6qpyZrNqrDUJWvBa5iBGBxZ1Dt37gAce9wVIOVW1+g0oiK5js/ImY8PPCbfyRlk7gFKlYR1n+U92EqRlcbS0rp5JG7VTAF2OqGO7JDRO3ADP4HV08Bb6WIW0XyhBsK1B099SzK1dHQeQipfsLlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705676422; c=relaxed/simple;
-	bh=bWIUTavYMubqwaSpp8iZSwdZMoqAFEZR4yiW7lTlw9s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qSokje8tRfmS6PUR7/fNJ5y24VU1uBSzCLu8IxhqijPVNVy/vBYCQ0HsPQ0EMwu9SDzOuLvOTI0V8GbpdNISpsXstOrYOe6PJ8h87qE8As6iAfVsP3ALjoGKyjP8iY46fIYJ4hq22QgUCCjZV28h4+/6ps3j3eKQ2NyYKWvIArc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V63X4I0i; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-42a2945464aso3043651cf.0;
-        Fri, 19 Jan 2024 07:00:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705676420; x=1706281220; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tPEaBZ/KNPZsAhj1QLyGMcDCE3IdnDYTZxSGHiKFnUM=;
-        b=V63X4I0i/WC7e1BBkvtUX9EriN1zJjBxXmAoCI1m0zg5FJHn5N6PR8PjO0SlHe2Uyr
-         QORJyNPGB0snxsf0YWuoAzGvZNfBJu/CUdBIEqBHCkj8jTKsr7vmbdnqtZz7NknIpx1C
-         9BuYCAMLahnbAebfTgENUgzc9K0LU6rgiwwh9iLlokADJKpkEvOz38rcGrdmXeLUFPG6
-         SOqwtXHEods/RFvoRuRBq2ztK2L9V8Wwk3Bfkh9NOjzOeModaD/m6InfCVOZUKpMzQkx
-         5yE+xRpc/TMoTVaaTwNnbAEtd6AVhdzsGEStOxntLhVw7UYaibPufdIuz8kq/y/4Mzpq
-         L4Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705676420; x=1706281220;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tPEaBZ/KNPZsAhj1QLyGMcDCE3IdnDYTZxSGHiKFnUM=;
-        b=XiOhTd23fZ1yUXhyYarInXGA+C6xTLAE7kO2P61CZlPOjjFAnjQ7zijE/DUU8McUbF
-         K1ZVlVw0VcK2BS6NfpYe5ExCabIr415fVEix7DQPmcm8ZqEcRvWPbe5clCfdgVDhL5oc
-         qTJXeSYaV1BLbyDX1sMh+n2Mzspzv1ef1PULDcYWlO8s1e1/Q29VeWiqrtj2ayFPGo98
-         VVtJdRVfycIPNzWSx4+wkPYsj3GL1COY4SAnTqN/07ho+P0kdQALnARPgNQBYercrIAE
-         O6hOjrZnTnH7PkUCmTg8JFa8ZoTYvkd6xkmFjZlw9JXEbSuLyaDPhdAAOsJsjpGBRgrs
-         MM1A==
-X-Gm-Message-State: AOJu0YwKnMxKm3pauM05AkPGelIFWpnHumk6YC7Um3bv3T7/IxDkXBwK
-	y2fobI0B1u0VRfUoDyK81JIyaogz1QenExcJD1lhUAoG3AroJk2qJl6MEaRHxFC6mp3L2O5u2Qo
-	eEkz9nVVa99+W6Kl517gxR8Tgmu8=
-X-Google-Smtp-Source: AGHT+IEsnFNyRPZz6YrAq5qI8dC+tk4lHEoLsb37UawIDZJLBMVHGX4HsRIXwRfMNpL5SFuHconB97HAFzufcUly7cY=
-X-Received: by 2002:a05:622a:202:b0:429:c9b7:a437 with SMTP id
- b2-20020a05622a020200b00429c9b7a437mr3662630qtx.6.1705676420181; Fri, 19 Jan
- 2024 07:00:20 -0800 (PST)
+	s=arc-20240116; t=1705677171; c=relaxed/simple;
+	bh=zcH/nD7seF4AIzh6DZNUoYo/x9uPNtXIux7unOs7EAY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KK3StvT157yvUKotOJQO4PiMQEvqYDoclwfD5zMDaV/hC9qLN7d8gz4PYF5Lroit5w8i0swJYTt+ioui1l0y0hsn1Tr81DPmqg7LXvuL+YnEbs81Vu8txRJ0bPXEOsSjgB3DjuXJRwIDzuSyswWZpZ90NhzeUd4J2ibNiKdmpZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g7xIpVQf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A89D3C433F1;
+	Fri, 19 Jan 2024 15:12:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705677171;
+	bh=zcH/nD7seF4AIzh6DZNUoYo/x9uPNtXIux7unOs7EAY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=g7xIpVQfEfWTmyJWFRNKJOTKkcXJ6arCiwOfWeC4UMta2VgwJ4dGfEYtckX1l2Vec
+	 qU+wi3eTnQE7LTLAApEk713HsNv15lRy5nm2i4tcKXALQL1KNS7ra5PTnxTcuZXEJq
+	 0TrlA24IbM8oJitvvulWU3yVqbjeA3SijtblT2dfuD8/CsE1LUulLBoJdbFu07WkzS
+	 pfVMX6jNfUgvjDIOF+rzlwvFJTeOGURWV2/JE8G73Bd2xBbIZPPn1thquffSIhYKm0
+	 fzw7DslNL17dsiYy9X5MSWYqtoha4LS80R4a/V0praH4WqWpq3Og1+AAc7NQRI9vrd
+	 evP8/vvJicmFw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	horms@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: net: fix rps_default_mask with >32 CPUs
+Date: Fri, 19 Jan 2024 07:12:48 -0800
+Message-ID: <20240119151248.3476897-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f4l6fadtxnvttlb27heyl3r2bxettwwfu5vrazqykrshvrl3vm@ejw2ccatg3wi>
- <0c0a7705e775b2548f3439600738311830dbe1a9.camel@gmail.com>
- <uf7fpvox2s3ban33ybixlg2buxbh2ys2gl7wjrphuip2qrdsjr@56dp2546tuuu> <71ac757d092c6103af7c6d0ebb4634afcaa0969a.camel@gmail.com>
-In-Reply-To: <71ac757d092c6103af7c6d0ebb4634afcaa0969a.camel@gmail.com>
-From: Vincent Li <vincent.mc.li@gmail.com>
-Date: Fri, 19 Jan 2024 07:00:09 -0800
-Message-ID: <CAK3+h2yQBHRxp+rv7VBJqMQWeudADiDnwXZ+KesT4XSOupFMzA@mail.gmail.com>
-Subject: Re: Re: lsm_cgroup.c selftest fails to compile when CONFIG_PACKET!=y
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 19, 2024 at 4:23=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Fri, 2024-01-19 at 16:04 +0800, Shung-Hsi Yu wrote:
->
-> [...]
->
-> > Final goal would be have BPF selftests compiled and test against our ow=
-n
-> > kernel, without having to come up with a specific kernel flavor that is
-> > used to build and run the selftest. For v5.14 and v5.19-based kernel it
-> > works: compilation is successful and I was able to run the verifier
-> > tests. (Did not try running the other tests though)
->
-> You mean ./test_verifier binary, right?
-> A lot of tests had been moved from ./test_verifier to ./test_progs since.
->
-> > > As far as I understand, selftests are supposed to be built and run
-> > > using specific configuration, here is how config for x86 CI is prepar=
-ed:
-> > >
-> > > ./scripts/kconfig/merge_config.sh \
-> > >          ./tools/testing/selftests/bpf/config \
-> > >          ./tools/testing/selftests/bpf/config.vm \
-> > >          ./tools/testing/selftests/bpf/config.x86_64
-> > >
-> > > (root is kernel source).
-> > > I'm not sure if other configurations are supposed to be supported.
-> >
-> > Would it make sense to have makefile target that builds/runs a smaller
-> > subset of general, config-agnostic selftests that tests the core featur=
-e
-> > (e.g. verifier + instruction set)?
->
-> In ideal world I'd say that ./test_progs should include/exclude tests
-> conditioned on current configuration, but I don't know how much work
-> would it be to adapt build system for this.
->
+If there is more than 32 cpus the bitmask will start to contain
+commas, leading to:
 
-I would also suggest skipping building the specific bpf test code when
-a specific CONFIG is removed, sometimes
-I only want to test some bpf selftests code I am interested in :)
+./rps_default_mask.sh: line 36: [: 00000000,00000000: integer expression expected
+
+Remove the commas, bash doesn't interpret leading zeroes as oct
+so that should be good enough.
+
+Fixes: c12e0d5f267d ("self-tests: introduce self-tests for RPS default mask")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: horms@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/rps_default_mask.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
+index a26c5624429f..f8e786e220b6 100755
+--- a/tools/testing/selftests/net/rps_default_mask.sh
++++ b/tools/testing/selftests/net/rps_default_mask.sh
+@@ -33,6 +33,10 @@ chk_rps() {
+ 
+ 	rps_mask=$($cmd /sys/class/net/$dev_name/queues/rx-0/rps_cpus)
+ 	printf "%-60s" "$msg"
++
++	# In case there is more than 32 CPUs we need to remove commas from masks
++	rps_mask=${rps_mask/,}
++	expected_rps_mask=${expected_rps_mask/,}
+ 	if [ $rps_mask -eq $expected_rps_mask ]; then
+ 		echo "[ ok ]"
+ 	else
+-- 
+2.43.0
+
 
