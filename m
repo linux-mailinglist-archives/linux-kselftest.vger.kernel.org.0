@@ -1,121 +1,131 @@
-Return-Path: <linux-kselftest+bounces-3252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D30D7832E03
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 18:20:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66C08832EFB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 19:35:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF8B81C23AD1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 17:19:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 686261C24787
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 18:35:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3613F55C06;
-	Fri, 19 Jan 2024 17:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2439129CF0;
+	Fri, 19 Jan 2024 18:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GnLuMoyk"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="NRPwmz8K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095DD1E89D;
-	Fri, 19 Jan 2024 17:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4DB20B10
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 18:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705684786; cv=none; b=j/k5xCbVGFunFblfZZWwdGr6y5OxuvD5fTcg+FphXeJBhGsiR4z2Tx4vKiJuWS7Kc3PCMBt3QYpJ/4164UvL10zy6mt1RbqHGDGqFf4AunDfZxQFbMgfZvmJi4yBlHUMPJICOAiCWmXvShFbWZrC5OIU78+v/DW7JqKbX7NadwM=
+	t=1705689315; cv=none; b=BtnS0edIztqtNQ16+CJQ0tP80jU+Lo6n8A7G71ktHJ8xkv9AUE3XEbGaWxnIVxRvZG50MgGK3ROFPQ/62imctY/DQw9/DBEUpcuUB8hhZf000zGzi/m+RBWoIZGQdQA5pCYt4S8/auBqa4ejV1td3igq93rJeIY0T8dh0sTXwio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705684786; c=relaxed/simple;
-	bh=bDhF8B6h1xrXw6H8tlXIPJgaraDfw0PAGv0Mm821Yjw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uOicQK5So3kFpgST0Eryu1+AC4qS/gYAD1BztGUDa5k13IGE70bvR2JFiI6svxPGvIGh0QFKzxKqO8V/+dqpY7r9dYoCIBuXUUtcaI1nwsf4Jefe2VwVS9e7Ll4YzwIJKpDlWvxEdXYjtVpKRJr4aWTF7Vy/rzuIBR8S6L4gnK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GnLuMoyk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FF5C433C7;
-	Fri, 19 Jan 2024 17:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705684785;
-	bh=bDhF8B6h1xrXw6H8tlXIPJgaraDfw0PAGv0Mm821Yjw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GnLuMoyk6ly5HfBq21se67MsvK/Q7e7JKHUOerIz5zh609pBTiTfkdbUA2z+79JuE
-	 2jtGT5ofzalSuGd1cpmxrTKVErTR/NwKqmSPjadpk5aHZP7CeedhBLYBkWLoOeNp3u
-	 fdejNEjOLSgU/ShNLSY0AFjDfFa2RIq4YkZythXdDFqHG8y9s5OKnyAv05xo+JOOTH
-	 7XUvxznQh80eSCxo+NdTPODJppFmy6Gy3P1Dz6xccWHF+eB0sLvOR3/4neVRlNWnVE
-	 uNkcMMP6kEYuMjPGk10mktEJwLcmYkx9sJcRZxrvIFXEvEoOiqI4dZ8f4NGz3btAmJ
-	 MRqc1PVl0q/tA==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-50f11e3ba3aso1359085e87.1;
-        Fri, 19 Jan 2024 09:19:44 -0800 (PST)
-X-Gm-Message-State: AOJu0YyHhTXkCOoJtq2iEfzSHHi5EuubrwHL78kkUetCNPahaf46JlWq
-	SIFaqglGQBVAMbOX3lu8gfNWBuQefRPjjE5raCvtvMDD7xKbXzo/tWeTAmULcS+wdyZDN4Ff/aa
-	e5Um1uJe6cCQeGVnO25U33c7iCnk=
-X-Google-Smtp-Source: AGHT+IF/kpB1TaQevR2J9zhea3m456h09vYKNyWY0eT4qO/Q8ILY8mDyHpusW8aOWGt2IG4Oazq2koAmDOD7teUb9fk=
-X-Received: by 2002:a05:6512:401c:b0:50e:246d:7566 with SMTP id
- br28-20020a056512401c00b0050e246d7566mr7313lfb.7.1705684783008; Fri, 19 Jan
- 2024 09:19:43 -0800 (PST)
+	s=arc-20240116; t=1705689315; c=relaxed/simple;
+	bh=xuCFgyn4cz0wIPZBSCrD3dL2scimn4xxXHNjvci2OOE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZfpediIjz0ecls+31mgdMl1QPakuiqSQdnwItLfgNjvgite1g3Tq/WwtSmO+KhdFYWPqQSDAJKW7ZlhwtUxTjzPMNKvP3vXzLFmEawfKsW6ud0YQtB4BXo7EqKN0I2D1MSu8FAIVEcoflj2gRcpl7SsPOUmAFIBeEv5iuEOmIak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=NRPwmz8K; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-337b583453bso990033f8f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 10:35:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1705689311; x=1706294111; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0bAylKPD/2AUXEJVvzIJSovCcFzQteP7UpA1x2mx61w=;
+        b=NRPwmz8KWOGYdUHpGk74fx2fq9BfCUYTrQq/A3zT1adsIaHy0p1Nt2xBEp3V2XCq66
+         M9kp5FhgJ58/LorqW9IrGhk2pRnnLHwh5ontQq5sEcC0A7VxxkoR/H9qeXP6rWrsT1I4
+         HhFFP2PLjl3qSdrwW8XBgRuD0piEPjTlSl7dZ1+o49PuiLNPLcuIEyWr0YNW2W+gWxYZ
+         dX1SK7Mhw6PTaBj7izRtM77xgDkAnrVsmspsPdm0PsDQFpd7t4lBXeepLyLnpxzaNJQO
+         blWV9q2U+C1tWnzx3lQ2ngoby6vA8NUXEeWUGLDFug1A21I9Ar88eFcyPIOZQMQD9YnL
+         ZoUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705689311; x=1706294111;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0bAylKPD/2AUXEJVvzIJSovCcFzQteP7UpA1x2mx61w=;
+        b=l7VTH0aKrIiRVIQbCNFX3YfpxbZe706W0COJU3iX1esO5diSDQG1ym0w+T6iLITWZJ
+         JQbw50Q4k+K4mwRyIebsi2LRkdo1Kkw2E6fWqyDM8snmCbhBvtxwrxbZT+Vu4pmQkE2K
+         0rBmRrllDxmDpFYCvM/8SFxoB94uJAIse6wng6pZSZKyTXfAmtQomMjlb8r/qcwP1Jyf
+         nar6mziTm0T8jt8sTbiOLFSEtQaY4wkoxwWukE1mg+B8Mupf6sQrjeRm2cT6MSLVyyJD
+         2oz6uBo9d7ucGTfXATzgVGY+PbJOr2Z/c3Ff63ged4KRH2HTFLvlMabGY3lEIuxTQxDa
+         PtXQ==
+X-Gm-Message-State: AOJu0YyDQWoBbrNriBEe2BxnxPrlDfWOV7E9rhxB89g2tOoCJF4Qpa1b
+	ZctZdwY2lQGi6Z6D6Ym8JDIkOqGmMhGyrRiqBcEfTjFkDIT/3vQortgFvOdxtA==
+X-Google-Smtp-Source: AGHT+IEmz4Ekqul2zRazQSdNgWFThds0DWXDzxgiZCKOmZLx0ze57Ay8hIE45e6h7me09fPjGggnIg==
+X-Received: by 2002:adf:f20e:0:b0:336:c4c1:2d7d with SMTP id p14-20020adff20e000000b00336c4c12d7dmr63401wro.60.1705689311453;
+        Fri, 19 Jan 2024 10:35:11 -0800 (PST)
+Received: from [10.83.37.178] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id u11-20020adfa18b000000b00337d2d1e0ecsm4362582wru.104.2024.01.19.10.35.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Jan 2024 10:35:10 -0800 (PST)
+Message-ID: <f66f4de0-8ed7-4c23-937b-fc29527835bf@arista.com>
+Date: Fri, 19 Jan 2024 18:35:08 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240119001352.9396-1-khuey@kylehuey.com> <20240119001352.9396-5-khuey@kylehuey.com>
-In-Reply-To: <20240119001352.9396-5-khuey@kylehuey.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 19 Jan 2024 09:19:31 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7Qr_sDDDR_PLZsLKHFM+KHScwonKVvprTWVbK=dEZJ4A@mail.gmail.com>
-Message-ID: <CAPhsuW7Qr_sDDDR_PLZsLKHFM+KHScwonKVvprTWVbK=dEZJ4A@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] selftest/bpf: Test a perf bpf program that
- suppresses side effects.
-To: Kyle Huey <me@kylehuey.com>
-Cc: Kyle Huey <khuey@kylehuey.com>, linux-kernel@vger.kernel.org, 
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, "Robert O'Callahan" <robert@ocallahan.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] selftests/net: Argument value mismatch when calling
+ verify_counters()
+To: Simon Horman <horms@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Dmitry Safonov <0x7f454c46@gmail.com>, Mohammad Nassiri
+ <mnassiri@ciena.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240118-tcp-ao-test-key-mgmt-v1-0-3583ca147113@arista.com>
+ <20240118-tcp-ao-test-key-mgmt-v1-1-3583ca147113@arista.com>
+ <20240119162652.GG89683@kernel.org>
+Content-Language: en-US
+From: Dmitry Safonov <dima@arista.com>
+In-Reply-To: <20240119162652.GG89683@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 18, 2024 at 4:14=E2=80=AFPM Kyle Huey <me@kylehuey.com> wrote:
->
+Hi Simon,
 
-Acked-by: Song Liu <song@kernel.org>
+On 1/19/24 16:26, Simon Horman wrote:
+> On Thu, Jan 18, 2024 at 02:51:34AM +0000, Dmitry Safonov wrote:
+>> From: Mohammad Nassiri <mnassiri@ciena.com>
+>>
+>> The end_server() function only operates in the server thread
+>> and always takes an accept socket instead of a listen socket as
+>> its input argument. To align with this, invert the boolean values
+>> used when calling verify_counters() within the end_server() function.
+> 
+> Hi Dmitry,
+> 
+> I see that this is correct, but I am wondering
+> if it fixes a user-visible bug. If so, could
+> some text about that go here?
 
-with a couple nitpicks below.
+Yep. The test as the result doesn't correctly check tcp counters for
+non-symmetrical scenario, where peer-A uses a key <a:a2> to send data,
+but peer-B uses <b:b2> key to send its data. So, in simple terms,
+different keys for TX and RX on peers.
 
-[...]
-> +int sigio_count, sigtrap_count;
-> +
-> +static void handle_sigio(int sig __always_unused)
-> +{
-> +       ++sigio_count;
-> +}
-> +
-> +static void handle_sigtrap(int signum __always_unused,
-> +                          siginfo_t *info,
-> +                          void *ucontext __always_unused)
-> +{
-> +       ASSERT_EQ(info->si_code, TRAP_PERF, "wrong si_code");
+I'll send v2 with an improved patch message.
 
-nit: I would just call it "si_code", not "wrong si_code".
+>> Fixes: 3c3ead555648 ("selftests/net: Add TCP-AO key-management test")
+>> Signed-off-by: Mohammad Nassiri <mnassiri@ciena.com>
+>> Link: https://lore.kernel.org/all/934627c5-eebb-4626-be23-cfb134c01d1a@arista.com/
+>> [amended 'Fixes' tag and carried-over to lkml]
+>> Signed-off-by: Dmitry Safonov <dima@arista.com>
+> 
+> ...
 
-> +       ++sigtrap_count;
-> +}
-[...]
-> +       if (!ASSERT_OK(sigaction(SIGTRAP, &action, &previous_sigtrap), "s=
-igaction"))
-> +               return;
-> +
-> +       previous_sigio =3D signal(SIGIO, handle_sigio);
-> +       if (!ASSERT_NEQ(previous_sigio, SIG_ERR, "signal"))
-> +               goto cleanup;
+Thanks,
+           Dmitry
 
-nit: If we goto cleanup here, we will do
-
-       signal(SIGIO, SIG_ERR);
-
-This is a no-op, so it is not a real issue. But it is not very clean.
-
-[...]
 
