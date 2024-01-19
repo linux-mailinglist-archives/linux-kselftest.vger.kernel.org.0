@@ -1,100 +1,125 @@
-Return-Path: <linux-kselftest+bounces-3247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABE0E832C29
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 16:13:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 708FC832CDD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 17:09:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCF441C2120F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 15:13:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3E4A1C21A65
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 16:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C061F5467F;
-	Fri, 19 Jan 2024 15:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7xIpVQf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE8D54BF0;
+	Fri, 19 Jan 2024 16:09:51 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992B35466A;
-	Fri, 19 Jan 2024 15:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D7854659;
+	Fri, 19 Jan 2024 16:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705677171; cv=none; b=mkth1sxLXlVIr2+vwwUPMAK+6qpyZrNqrDUJWvBa5iBGBxZ1Dt37gAce9wVIOVW1+g0oiK5js/ImY8PPCbfyRlk7gFKlYR1n+U92EqRlcbS0rp5JG7VTAF2OqGO7JDRO3ADP4HV08Bb6WIW0XyhBsK1B099SzK1dHQeQipfsLlA=
+	t=1705680591; cv=none; b=hknFLml6jATcJ3f7ksqKcyOzaEVU3nx/NzYxGr6WNFyqO/4v81T8Zv4jhHp9qUyaMzY2vEM4JXc3soxrQFvUEcAKFZ39W75jsLqAG4gLCX1OwXYJZBijpF5JeoyPdXQqLm/qZMLBAoZwT/PKStEudgaYAIMAWQfqiqMxLutsnNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705677171; c=relaxed/simple;
-	bh=zcH/nD7seF4AIzh6DZNUoYo/x9uPNtXIux7unOs7EAY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KK3StvT157yvUKotOJQO4PiMQEvqYDoclwfD5zMDaV/hC9qLN7d8gz4PYF5Lroit5w8i0swJYTt+ioui1l0y0hsn1Tr81DPmqg7LXvuL+YnEbs81Vu8txRJ0bPXEOsSjgB3DjuXJRwIDzuSyswWZpZ90NhzeUd4J2ibNiKdmpZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g7xIpVQf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A89D3C433F1;
-	Fri, 19 Jan 2024 15:12:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705677171;
-	bh=zcH/nD7seF4AIzh6DZNUoYo/x9uPNtXIux7unOs7EAY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=g7xIpVQfEfWTmyJWFRNKJOTKkcXJ6arCiwOfWeC4UMta2VgwJ4dGfEYtckX1l2Vec
-	 qU+wi3eTnQE7LTLAApEk713HsNv15lRy5nm2i4tcKXALQL1KNS7ra5PTnxTcuZXEJq
-	 0TrlA24IbM8oJitvvulWU3yVqbjeA3SijtblT2dfuD8/CsE1LUulLBoJdbFu07WkzS
-	 pfVMX6jNfUgvjDIOF+rzlwvFJTeOGURWV2/JE8G73Bd2xBbIZPPn1thquffSIhYKm0
-	 fzw7DslNL17dsiYy9X5MSWYqtoha4LS80R4a/V0praH4WqWpq3Og1+AAc7NQRI9vrd
-	 evP8/vvJicmFw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	horms@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: net: fix rps_default_mask with >32 CPUs
-Date: Fri, 19 Jan 2024 07:12:48 -0800
-Message-ID: <20240119151248.3476897-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1705680591; c=relaxed/simple;
+	bh=+qVwNgKWyvVHNlIWEZ5n9M6EFS+J7PQq+oE9zH58ZMg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i/H08cCNjyZCVuY4ukAhZ/4fMlKWeL+i6ohfTJxS2vYvTPe3FGjXuJTFeTYylXrQOCZMkqbWoi89u4hk6PNUmLOzdH889Yeylmr3wkLjF7nSQH58m9cI5y8E4XZ7FFZRM6c+YAf+CqF5hrLWJSX9EEvlLZXD4x5C7LeCQd251IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73B9D1042;
+	Fri, 19 Jan 2024 08:10:25 -0800 (PST)
+Received: from [10.57.77.97] (unknown [10.57.77.97])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04F803F73F;
+	Fri, 19 Jan 2024 08:09:37 -0800 (PST)
+Message-ID: <ffdba8c4-f1a2-4141-a3d4-0c85dfea6fef@arm.com>
+Date: Fri, 19 Jan 2024 16:09:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: add missing tests
+Content-Language: en-GB
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240116090641.3411660-1-usama.anjum@collabora.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20240116090641.3411660-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If there is more than 32 cpus the bitmask will start to contain
-commas, leading to:
+Hi Muhammad,
 
-./rps_default_mask.sh: line 36: [: 00000000,00000000: integer expression expected
+Afraid this patch is causing a regression on our CI system when it turned up in
+linux-next today. Additionally, 2 of thetests you have added are failing because
+the scripts are not exported correctly...
 
-Remove the commas, bash doesn't interpret leading zeroes as oct
-so that should be good enough.
+On 16/01/2024 09:06, Muhammad Usama Anjum wrote:
+> Add missing tests to run_vmtests.sh. The mm kselftests are run through
+> run_vmtests.sh. If a test isn't present in this script, it'll not run
+> with run_tests or `make -C tools/testing/selftests/mm run_tests`.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/mm/run_vmtests.sh | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index 246d53a5d7f2..a5e6ba8d3579 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -248,6 +248,9 @@ CATEGORY="hugetlb" run_test ./map_hugetlb
+>  CATEGORY="hugetlb" run_test ./hugepage-mremap
+>  CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+>  CATEGORY="hugetlb" run_test ./hugetlb-madvise
+> +CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh
+> +CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh
 
-Fixes: c12e0d5f267d ("self-tests: introduce self-tests for RPS default mask")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: horms@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/rps_default_mask.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+These 2 tests are failing because the test scripts are not exported. You will
+need to add them to the TEST_FILES variable in the Makefile.
 
-diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
-index a26c5624429f..f8e786e220b6 100755
---- a/tools/testing/selftests/net/rps_default_mask.sh
-+++ b/tools/testing/selftests/net/rps_default_mask.sh
-@@ -33,6 +33,10 @@ chk_rps() {
- 
- 	rps_mask=$($cmd /sys/class/net/$dev_name/queues/rx-0/rps_cpus)
- 	printf "%-60s" "$msg"
-+
-+	# In case there is more than 32 CPUs we need to remove commas from masks
-+	rps_mask=${rps_mask/,}
-+	expected_rps_mask=${expected_rps_mask/,}
- 	if [ $rps_mask -eq $expected_rps_mask ]; then
- 		echo "[ ok ]"
- 	else
--- 
-2.43.0
+> +CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
+
+The addition of this test causes 2 later tests to fail with ENOMEM. I suspect
+its a side-effect of marking the hugetlbs as hwpoisoned? (just a guess based on
+the test name!). Once a page is marked poisoned, is there a way to un-poison it?
+If not, I suspect that's why it wasn't part of the standard test script in the
+first place.
+
+These are the tests that start failing:
+
+# # ------------------------------------
+# # running ./uffd-stress hugetlb 128 32
+# # ------------------------------------
+# # nr_pages: 64, nr_pages_per_cpu: 8
+# # ERROR: context init failed (errno=12, @uffd-stress.c:254)
+# # [FAIL]
+# not ok 18 uffd-stress hugetlb 128 32 # exit=1
+# # --------------------------------------------
+# # running ./uffd-stress hugetlb-private 128 32
+# # --------------------------------------------
+# # nr_pages: 64, nr_pages_per_cpu: 8
+# # bounces: 31, mode: rnd racing ver poll, ERROR: UFFDIO_COPY error: -12ERROR:
+UFFDIO_COPY error: -12 (errno=12, @uffd-common.c:614)
+# #  (errno=12, @uffd-common.c:614)
+# # [FAIL]
+
+Quickest way to repo is:
+
+$ sudo ./run_vmtests.sh -t "userfaultfd hugetlb"
+
+Thanks,
+Ryan
+
+
+>  
+>  nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
+>  # For this test, we need one and just one huge page
 
 
