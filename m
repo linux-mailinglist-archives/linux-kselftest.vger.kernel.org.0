@@ -1,179 +1,137 @@
-Return-Path: <linux-kselftest+bounces-3241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3242-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6BC832A1F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 14:11:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 094DA832A22
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 14:12:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9006E28601E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 13:11:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F399B21360
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 13:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98905524BF;
-	Fri, 19 Jan 2024 13:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17D84F1EA;
+	Fri, 19 Jan 2024 13:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eEkPtlKJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OuUH4I/E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D852F33CE9;
-	Fri, 19 Jan 2024 13:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745363C467
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 13:12:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705669882; cv=none; b=gM1hR1+NhGewmhRUGyLqYDiZo1SCFkevGyLgnU27EIP+Gtx9iT7gvk4PK7BwvNcp6ydBn8ECuGAkA8Bsw6cBKSwoILyR+J0DaGwn7oSaIK4TvcGs8AfQWUUmEp2tf/L1/WQZVunJXZ7qUWrY04YQogOaemJRX7JXh3u+ua/cKVU=
+	t=1705669943; cv=none; b=JnJ/easi75PlG7JUAGvQQsiDTPfsDxyp3GQMB0lOxX20YCSFnOBwu4wrfV7Kll0O5WSl+7VNszIBAdRY5TEB61LzihlunCAd9nVSvvhUN4LNSUSTYKhm4jm97vPia6xKA1dglIj4y3D5vOpb9PKOKSRSCnojrL9Jmt332gYyt54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705669882; c=relaxed/simple;
-	bh=0AgduXsuld70K/EMlbZrFK/ZLPaT4SXhbyZdDcrTuzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZO18uSDivgHYs8Xl6/Qc2iMeNzBP0s6BgIXgYGB7P6f6dYGCELrzQxYXGWj/3NGtCb9nSNA7wN1/n4dx0eySgeBnmNLTVCNuHCuCAatQ48lGz5wrvdV9RWzNoFtlnhmZcBo1Z7pL+gdAuu29jhQa4HGZt8SrBDlUB4s/w73+sNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eEkPtlKJ; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40JD0OLp017291;
-	Fri, 19 Jan 2024 13:11:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=y3roZCLy1ySD+5Ai9Ht2UZyOzehoiSJRmh+F6cP6vxc=;
- b=eEkPtlKJixGFZWrJc0a0cE7/OPuyE4AQNMvB4RD4MomJoWpHNtzULXT3rUj8Bra2BKac
- qWF16GxsLGE+tcQpBJbTsD9hLj2TFWYRXspN1fLWKsBEkpL2qRoFNL0P6bAasmJTvX/S
- nUNoHXi5RuFDeJD0n3RqZgDpwfuU0uH5Lp5ymvlZtkCaQAYPpDmQg8ES5pN24/7GIwEx
- j4aLL3+RY3wMFdMYKE/YVrbzneQrqb157DazL2Qu0opFfdx/WIvpIoBFksIhDbyq9woI
- g0FtlH6ZBgQeuk8FRX49KHKwrevYtIsW9m+3HnNITiorZkf0w4h+D//lLEfc0XZUfqX3 eA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqs1jhcrg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Jan 2024 13:11:05 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40JD0nHk018582;
-	Fri, 19 Jan 2024 13:11:05 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqs1jhcr5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Jan 2024 13:11:05 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40JAM1gl030870;
-	Fri, 19 Jan 2024 13:11:04 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vm72khaks-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Jan 2024 13:11:04 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40JDB13E43188718
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 19 Jan 2024 13:11:01 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 585682004B;
-	Fri, 19 Jan 2024 13:11:01 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9E85B20040;
-	Fri, 19 Jan 2024 13:10:59 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.85.177])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 19 Jan 2024 13:10:59 +0000 (GMT)
-Date: Fri, 19 Jan 2024 14:10:57 +0100
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        live-patching@vger.kernel.org
-Subject: Re: [PATCH v6 2/3] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-Message-ID: <Zap04ddls7ZvbL/U@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
- <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
+	s=arc-20240116; t=1705669943; c=relaxed/simple;
+	bh=Ib20zY68P2ii/G09SSPsak2hYrVP9F1ZwDcarzVgh9M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=COQSM1WbcmGUNvq+HyZz5Zzg2vqseMNF9bOjbphcy8atajxrPh4aj2V9M5w6qvNV7sZS0HNSYEugj2EXuvH9fct2EE7+QFvwerOUvMuBslvj3CUBe0y+gUM9M+kF2HLRznKZ0k+RoC/brDp0exBGQtieumY0w2+p8FnN+YdufsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OuUH4I/E; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705669941;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vi/ghrBJ2abck4Wwi0h7DJOTr7ObAnQ+55jlxgP3HjA=;
+	b=OuUH4I/ElixPlLjwG0toH+dcDBtPYPdQ2h+bZSbS7NLVtPUq5bZuPE6LGFWVAu6KwU6b0D
+	GO4+xD+hQe5H3v8SpzkQFgVtyCHoCV/YNkBNQXHYaLYk/x1fA+cBIqDdzeAGRtN+xYr6bc
+	artYrVSH6fwOYafBDEy0z4wJA+YAgY4=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-ihUNu-CZMHClhBmB8iEtQg-1; Fri, 19 Jan 2024 08:12:20 -0500
+X-MC-Unique: ihUNu-CZMHClhBmB8iEtQg-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-5f53b4554b6so11070177b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 05:12:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705669939; x=1706274739;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vi/ghrBJ2abck4Wwi0h7DJOTr7ObAnQ+55jlxgP3HjA=;
+        b=MBesRvZPHdgmLszuMMIYbKljeMMH5APEhflNMVlOAA4PVariPWYAr22Ty7B34+lO6J
+         m24Nz4sHth4DRFsVMVaWy+t1XqTyYGTkbdGinkNfsHlm5FV13YwCBkq1/nHgy56uyjCp
+         KT2eh8wQy8EO9zn/rrDI44H17Wd7HNf957MNnXmERPXXwiaCDyNWgBrJfn4DUhVFeeuP
+         xdyXV1zjGCACaStwFZhPBgn0f4++yTU7VwMk6V2n2+4kMpJI9q8dzkV657PxxTCr9AxE
+         AwTSisCnWqDUz/EKBRA9BYYQmKKzu48RG1eSD3EEGnez3VXZwZBaCFdt/XGklWqSIgTe
+         oRSg==
+X-Gm-Message-State: AOJu0YwBIaIkW+ZIu1CfuR19BBk3Bg8ZD/a1Z+exUYfl0bA5lMWaDZzY
+	zMVrwtyWEi/w2ni4hOdYFU6ORaLbv6sH6mFrTWjHUFvoXafkNDfrUKcmp6Z80h4pHzH7VftFWcq
+	Ayw/UN+ek4p/QBtrX1SW7yiTBLm7EiUI2XZmnOfHW67oZa6jWSqCxKCmQNReWzM/NArd4WQqxdC
+	rzqPm7Yq1NLNQC0N43VpuhGJccOpvKMiEAW9yu0zLg
+X-Received: by 2002:a0d:c645:0:b0:5ff:a425:d64c with SMTP id i66-20020a0dc645000000b005ffa425d64cmr315878ywd.81.1705669939711;
+        Fri, 19 Jan 2024 05:12:19 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGWU7V9Q1CXIQM2Ccn6r6qwMKr0viLEcFyZjGJWi2COiELrL6Ao+cdsiwQaNT8Dcq5w8OWMxHAZin/mrp2Jjac=
+X-Received: by 2002:a0d:c645:0:b0:5ff:a425:d64c with SMTP id
+ i66-20020a0dc645000000b005ffa425d64cmr315869ywd.81.1705669939501; Fri, 19 Jan
+ 2024 05:12:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: p-8a8pwvXQe30bZjF8SmExCBArjrS_A1
-X-Proofpoint-ORIG-GUID: LtCFlP5IylQnTIoJja1a4g7w6R36SAxv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-19_07,2024-01-19_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 priorityscore=1501 spamscore=0 mlxlogscore=875
- bulkscore=0 malwarescore=0 mlxscore=0 adultscore=0 impostorscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311290000 definitions=main-2401190067
+References: <20240119125753.152354-1-npache@redhat.com>
+In-Reply-To: <20240119125753.152354-1-npache@redhat.com>
+From: Nico Pache <npache@redhat.com>
+Date: Fri, 19 Jan 2024 06:11:53 -0700
+Message-ID: <CAA1CXcD55JLQfpW8OzzfHsyaVX5cJHO-y7v8miRyL1t3fnejqg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: mm: fix map_hugetlb failure on 64K page size systems
+To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org
+Cc: akpm@linux-foundation.org, shuah@kernel.org, donettom@linux.vnet.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 12, 2024 at 02:43:51PM -0300, Marcos Paulo de Souza wrote:
-Hi Marcos,
-...
->  arch/s390/configs/debug_defconfig                  |  1 -
->  arch/s390/configs/defconfig                        |  1 -
->  lib/Kconfig.debug                                  | 22 ----------
-...
-> diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
-> index 85490d9373fc..5948afeeb56c 100644
-> --- a/arch/s390/configs/debug_defconfig
-> +++ b/arch/s390/configs/debug_defconfig
-> @@ -884,4 +884,3 @@ CONFIG_ATOMIC64_SELFTEST=y
->  CONFIG_STRING_SELFTEST=y
->  CONFIG_TEST_BITOPS=m
->  CONFIG_TEST_BPF=m
-> -CONFIG_TEST_LIVEPATCH=m
-> diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
-> index fb690fbbf54b..8d8c2989b6fe 100644
-> --- a/arch/s390/configs/defconfig
-> +++ b/arch/s390/configs/defconfig
-> @@ -813,4 +813,3 @@ CONFIG_KPROBES_SANITY_TEST=m
->  CONFIG_PERCPU_TEST=m
->  CONFIG_ATOMIC64_SELFTEST=y
->  CONFIG_TEST_BPF=m
-> -CONFIG_TEST_LIVEPATCH=m
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 97ce28f4d154..c2147caa7da2 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2853,28 +2853,6 @@ config TEST_MEMCAT_P
->  
->  	  If unsure, say N.
->  
-> -config TEST_LIVEPATCH
-> -	tristate "Test livepatching"
-> -	default n
-> -	depends on DYNAMIC_DEBUG
-> -	depends on LIVEPATCH
-> -	depends on m
-> -	help
-> -	  Test kernel livepatching features for correctness.  The tests will
-> -	  load test modules that will be livepatched in various scenarios.
-> -
-> -	  To run all the livepatching tests:
-> -
-> -	  make -C tools/testing/selftests TARGETS=livepatch run_tests
-> -
-> -	  Alternatively, individual tests may be invoked:
-> -
-> -	  tools/testing/selftests/livepatch/test-callbacks.sh
-> -	  tools/testing/selftests/livepatch/test-livepatch.sh
-> -	  tools/testing/selftests/livepatch/test-shadow-vars.sh
-> -
-> -	  If unsure, say N.
-> -
->  config TEST_OBJAGG
->  	tristate "Perform selftest on object aggreration manager"
->  	default n
+NACK.
 
-FWIW, for s390 part:
+I accidentally sent an older version of this patch. Following up with V2.
 
-Alexander Gordeev <agordeev@linux.ibm.com>
+On Fri, Jan 19, 2024 at 5:58=E2=80=AFAM Nico Pache <npache@redhat.com> wrot=
+e:
+>
+> On systems with 64k page size and 512M huge page sizes, the allocation
+> and test succeeds but errors out at the munmap. As the comment states,
+> munmap will failure if its not HUGEPAGE aligned. This is due to the
+> length of the mapping being 1/2 the size of the hugepage causing the
+> munmap to not be hugepage aligned. Fix this by making the mapping length
+> the full hugepage if the hugepage is larger than the length of the
+> mapping.
+>
+> Signed-off-by: Nico Pache <npache@redhat.com>
+> ---
+>  tools/testing/selftests/mm/map_hugetlb.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/sel=
+ftests/mm/map_hugetlb.c
+> index 193281560b61..dcb8095fcd45 100644
+> --- a/tools/testing/selftests/mm/map_hugetlb.c
+> +++ b/tools/testing/selftests/mm/map_hugetlb.c
+> @@ -58,10 +58,16 @@ int main(int argc, char **argv)
+>  {
+>         void *addr;
+>         int ret;
+> +       size_t maplength;
+>         size_t length =3D LENGTH;
+>         int flags =3D FLAGS;
+>         int shift =3D 0;
+>
+> +       maplength =3D default_huge_page_size();
+> +       /* mmap with fail if the length is not page */
+> +       if (maplength > length)
+> +               length =3D maplength;
+> +
+>         if (argc > 1)
+>                 length =3D atol(argv[1]) << 20;
+>         if (argc > 2) {
+> --
+> 2.43.0
+>
 
-Thanks!
 
