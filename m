@@ -1,171 +1,112 @@
-Return-Path: <linux-kselftest+bounces-3239-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D37928329B4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 13:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A916A8329CD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 13:58:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40A4DB22CCD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 12:50:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49DCFB22C4C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 12:58:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12764EB5B;
-	Fri, 19 Jan 2024 12:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF81751C3D;
+	Fri, 19 Jan 2024 12:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="gtndS8/Y"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M51iYifA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [185.125.25.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF88B524A2
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 12:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8F43C470
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 12:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705668625; cv=none; b=WI0U59gkPsxEpkVmpV4TilPfnpy9EiTErpzcMwhRCzf6xLOx1U2gUZupEFHyZBzGElxm4iZiV+ImAsUtOfWyYt0nr4XavenXSEXS47C5FHjlsl/xo6Feq+ntav8nzmIZ74+4ZIK6XX2T4Ob4mpLPcEKXFrUS7jbGM1HjVO3dz90=
+	t=1705669098; cv=none; b=cJKms+efRnYZOPDohsVIvM7K+RcYJ4PEQ/7UK2IfCSVh6RaBch+oyWb0haQmVWkdEyDo3ziNiRDJ7EJ+fOsNl6uyfM95zFH53wYZCRR4bGctFsUYn/W5sftk30MHO13TwQO3DPj2sEY9YRf36XPF81TKYhDedbz/YeSlcHbtnY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705668625; c=relaxed/simple;
-	bh=/rHoGZTfUaI2731SCJ/Ui1obvUcWjbrYkcngo32s3NI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dRLbBDVqC/T5KXEUD9j1RGDhJjxD4EYacFFrLKKHfw+NM/1tMyrOjgNP1utQ+weypcpSayaURHGfZduxF5OhBKPx8Eys3Rr/NH0tB1Zkw5YUvRDp5xcUvIFlkISyn5WgEL6p5ZbrnhYktlQpX8AYT5EJ2hS4E6sQW/8OGp+PIRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=gtndS8/Y; arc=none smtp.client-ip=185.125.25.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TGfBW0CY9zMqsrp;
-	Fri, 19 Jan 2024 13:32:03 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4TGfBT3VQ1z3Y;
-	Fri, 19 Jan 2024 13:32:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1705667522;
-	bh=/rHoGZTfUaI2731SCJ/Ui1obvUcWjbrYkcngo32s3NI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gtndS8/YTII1IUBg6cxIKRVTqllpPrXuv0rGGy+ahVXJ838yhn0MQoFWwMWAOp352
-	 jEpY9qgt/HNKEga06/it/vVXGcuGVm3dtgRLYXAqRXKDuh/4uXdRZdHnagnHv2r/sH
-	 82UnU9NsMyFZT3lQQByOlyR2onA46Nqw3JDEd0rw=
-Date: Fri, 19 Jan 2024 13:31:58 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Hu Yadi <hu.yadi@h3c.com>
-Cc: jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
-	mathieu.desnoyers@efficios.com, amir73il@gmail.com, brauner@kernel.org, avagin@google.com, 
-	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 514118380@qq.com, 
-	konstantin.meskhidze@huawei.com
-Subject: Re: [PATCH v4] selftests/landlock:Fix two build issues
-Message-ID: <20240119.Ugaehae2ze5b@digikod.net>
-References: <20240115102409.19799-1-hu.yadi@h3c.com>
+	s=arc-20240116; t=1705669098; c=relaxed/simple;
+	bh=9oN8WEtKHa5I91ygCWQnS1mqKVl+6aTCIb+eEtvC21Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ab+GVKRAo5WspfCgJiEeybPcm5Lk6EyOJPRU87sxSKld+JQKCanRTaDjpbMXgpBrhpxYs5cM226pc5ltwmuq5luFL8kl5+FpryYb7ua4KzdycibGItSaBnftJgX/cVu9fpIv9H7B6bBKZdilS3T1xnQdfzKMUR5MR/mtYVwCQ/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M51iYifA; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705669096;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tSl8vraS51FiTpTDwvXe67q3UpTXFaFfY6Fu62WAl5w=;
+	b=M51iYifAULJULUrki9vrbZfhZmY2sJddlgOm8ZrNJ2K2SONrSxUcEMiK5HgHdxuaywq1Ba
+	WUlgn064jYBSZG2K7C97GLeDHF9tlmgsog6kzKEVNtw3VOqWr/WwxjUaLBtr+dHNZbIkgG
+	ymiveC2z3+vAtu1xMz6qOSKi6r+cVsA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-396-56YpH6c8NtiCuO0XfASFRw-1; Fri, 19 Jan 2024 07:58:12 -0500
+X-MC-Unique: 56YpH6c8NtiCuO0XfASFRw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3AB5585A597;
+	Fri, 19 Jan 2024 12:58:12 +0000 (UTC)
+Received: from localhost.redhat.com (unknown [10.22.32.164])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A227DC1690E;
+	Fri, 19 Jan 2024 12:58:11 +0000 (UTC)
+From: Nico Pache <npache@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: akpm@linux-foundation.org,
+	shuah@kernel.org,
+	donettom@linux.vnet.ibm.com
+Subject: [PATCH] selftests: mm: fix map_hugetlb failure on 64K page size systems
+Date: Fri, 19 Jan 2024 05:57:53 -0700
+Message-ID: <20240119125753.152354-1-npache@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240115102409.19799-1-hu.yadi@h3c.com>
-X-Infomaniak-Routing: alpha
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-On Mon, Jan 15, 2024 at 06:24:09PM +0800, Hu Yadi wrote:
-> From: "Hu.Yadi" <hu.yadi@h3c.com>
-> 
-> Two issues comes up while building selftest/landlock on my side
-> (gcc 7.3/glibc-2.28/kernel-4.19)
-> 
-> the first one is as to gettid
-> 
-> net_test.c: In function ‘set_service’:
-> net_test.c:91:45: warning: implicit declaration of function ‘gettid’; [-Wimplicit-function-declaration]
->     "_selftests-landlock-net-tid%d-index%d", gettid(),
->                                              ^~~~~~
->                                              getgid
-> net_test.c:(.text+0x4e0): undefined reference to `gettid'
-> 
-> the second is compiler error
-> gcc -Wall -O2 -isystem   fs_test.c -lcap -o selftests/landlock/fs_test
-> fs_test.c:4575:9: error: initializer element is not constant
->   .mnt = mnt_tmp,
->          ^~~~~~~
-> 
-> Fixes: 04f9070e99a4 ("selftests/landlock: Add tests for pseudo filesystems")
-> Fixes: a549d055a22e ("selftests/landlock: Add network tests")
+On systems with 64k page size and 512M huge page sizes, the allocation
+and test succeeds but errors out at the munmap. As the comment states,
+munmap will failure if its not HUGEPAGE aligned. This is due to the
+length of the mapping being 1/2 the size of the hugepage causing the
+munmap to not be hugepage aligned. Fix this by making the mapping length
+the full hugepage if the hugepage is larger than the length of the
+mapping.
 
-Could you please create two patches as requested for v3, one per fix?
-This is useful because it enables to backport these fixes when
-appropriate.
+Signed-off-by: Nico Pache <npache@redhat.com>
+---
+ tools/testing/selftests/mm/map_hugetlb.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> 
-> this patch is to fix them
-> 
-> Signed-off-by: Hu.Yadi <hu.yadi@h3c.com>
-> Suggested-by: Jiao <jiaoxupo@h3c.com>
-> Reviewed-by: Berlin <berlin@h3c.com>
-> ---
-> Changes v4 -> v3:
->   fix gettid error from kernel test robot
->   https://lore.kernel.org/oe-kbuild-all/202401151147.T1s11iHJ-lkp@intel.com/
-> Changes v3 -> v2:
->  - add helper of gettid instead of __NR_gettid
->  - add gcc/glibc version info in comments
-> Changes v1 -> v2:
->  - fix whitespace error
->  - replace SYS_gettid with _NR_gettid
-> 
->  tools/testing/selftests/landlock/fs_test.c  | 5 ++++-
->  tools/testing/selftests/landlock/net_test.c | 7 ++++++-
->  2 files changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index 18e1f86a6234..a992cf7c0ad1 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -4572,7 +4572,10 @@ FIXTURE_VARIANT(layout3_fs)
->  /* clang-format off */
->  FIXTURE_VARIANT_ADD(layout3_fs, tmpfs) {
->  	/* clang-format on */
-> -	.mnt = mnt_tmp,
-> +	.mnt = {
-> +		.type = "tmpfs",
-> +		.data = "size=4m,mode=700",
-> +	},
+diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
+index 193281560b61..dcb8095fcd45 100644
+--- a/tools/testing/selftests/mm/map_hugetlb.c
++++ b/tools/testing/selftests/mm/map_hugetlb.c
+@@ -58,10 +58,16 @@ int main(int argc, char **argv)
+ {
+ 	void *addr;
+ 	int ret;
++	size_t maplength;
+ 	size_t length = LENGTH;
+ 	int flags = FLAGS;
+ 	int shift = 0;
+ 
++	maplength = default_huge_page_size();
++	/* mmap with fail if the length is not page */
++	if (maplength > length)
++		length = maplength;
++
+ 	if (argc > 1)
+ 		length = atol(argv[1]) << 20;
+ 	if (argc > 2) {
+-- 
+2.43.0
 
-I requested some changes here.
-
->  	.file_path = file1_s1d1,
->  };
-> 
-> diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
-> index 929e21c4db05..d50f2920ed82 100644
-> --- a/tools/testing/selftests/landlock/net_test.c
-> +++ b/tools/testing/selftests/landlock/net_test.c
-> @@ -21,6 +21,11 @@
-
-We should include sys/syscall.h
-
-> 
->  #include "common.h"
-> 
-> +static pid_t landlock_gettid(void)
-
-Please rename to sys_gettid().
-
-> +{
-> +        return syscall(__NR_gettid);
-> +}
-> +
->  const short sock_port_start = (1 << 10);
-> 
->  static const char loopback_ipv4[] = "127.0.0.1";
-> @@ -88,7 +93,7 @@ static int set_service(struct service_fixture *const srv,
->  	case AF_UNIX:
->  		srv->unix_addr.sun_family = prot.domain;
->  		sprintf(srv->unix_addr.sun_path,
-> -			"_selftests-landlock-net-tid%d-index%d", gettid(),
-> +			"_selftests-landlock-net-tid%d-index%d", landlock_gettid(),
->  			index);
->  		srv->unix_addr_len = SUN_LEN(&srv->unix_addr);
->  		srv->unix_addr.sun_path[0] = '\0';
-> --
-> 2.23.0
-> 
 
