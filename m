@@ -1,108 +1,103 @@
-Return-Path: <linux-kselftest+bounces-3257-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32434833006
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 21:58:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57F71833010
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 22:07:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 612531C2184D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 20:58:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09A6E28447C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 21:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21AFA56472;
-	Fri, 19 Jan 2024 20:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78AB65732E;
+	Fri, 19 Jan 2024 21:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="apdLSeSl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oAdYHeVy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840AE57861
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 20:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFDC56B96;
+	Fri, 19 Jan 2024 21:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705697890; cv=none; b=RBbWF6KrWLJXrk1k3uytRhg7KIiWefDFySJcixmliid7Lp18KZTN4VrMcrne3gy2bdFkC93rymtulsb2ZGhhyPHUGcdNbfcUVanjoI942ZL7M4SUPvUotHrHCQRdJJ3p3XzFEvdAqVE4BwXAndvWPoMCJQbyB0/iIRZt7YN4o1k=
+	t=1705698444; cv=none; b=P5RxhwpFZpfOS0+ZCPLB/2Z1UHv0JP/ePPEjlQC55rFfuDhjxWab9z6QXaBRkvOfBNx6UAZwu/gG57YiB9ClbrKTcVrvJPs517uIFZaQJN3AlS8owHGUZCiI7536s3pV0zFLgkUhooVmir/LayyPejunlvd2YChFeuZYJ4m26xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705697890; c=relaxed/simple;
-	bh=0Z1mM8NNpnZ3fU/VyC3BK1Nb8rohKjTqsZIj6MBAYNw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OSj2nXNv1ebN7rEmojyRAeLhyah+O+PCnb0Mn+lU5CRVCX6QH1r2CnNqZatTkgTAzVJAGMl3VWyV34hJNf3+gsJj7taaV0Mlh9eSZTSoyK3Bp1OjcCrdllM6F5KYEeRj6crQOFp6b/csBaNMZpWPt8l6Y2MmUW5nu5WyrRWwz+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=apdLSeSl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705697887;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0i1x7JQBWi+X6u0NziMYKO320yAB1+oNZDpaubKiGtc=;
-	b=apdLSeSluCjmFpKj9wEcB8K6nwTa5xWd35Sfn1wQOZfYMvIRqEtLncPqenu9iuEDd0v+Ah
-	f1t8Wd04y1YGEot3owuDwB3F9uMbNlqvZbpPKpyrOghbXkKHXUMxktUQ9q9jfXnPCAybf2
-	ISQ6wdLnxr2r46NdY+rQta6YXxrGvwk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-551-TSUcBbBAMPOZA-Ux8uhT3g-1; Fri, 19 Jan 2024 15:58:04 -0500
-X-MC-Unique: TSUcBbBAMPOZA-Ux8uhT3g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9146A85A589;
-	Fri, 19 Jan 2024 20:58:03 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.32.201])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2EF561C05E0F;
-	Fri, 19 Jan 2024 20:58:03 +0000 (UTC)
-From: Audra Mitchell <audra@redhat.com>
-To: shuah@kernel.org
-Cc: akpm@linux-foundation.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	raquini@redhat.com
-Subject: [PATCH] selftests/mm: Update va_high_addr_switch.sh to check CPU for la57 flag
-Date: Fri, 19 Jan 2024 15:58:01 -0500
-Message-ID: <20240119205801.62769-1-audra@redhat.com>
+	s=arc-20240116; t=1705698444; c=relaxed/simple;
+	bh=tBYFUh0aub60E5WCvZz/nbFsqgKVQ6NbogwE6RsuFo0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tH8iSKLeKz4FtNd2z0+XDg1h2fgtTq2jpsMZWRbU4IMqzaltSLwOIDCcUsCQCPlBzc5waPN7XZEc+IwfAn4lCn7AnhM2oqkL9ifRssOxFnvgTrJh3MI/6DjIW6g2rjYT7RbpA6ImVFQcBSZE77e4bMWvmAemElwz3mg+JO+LGdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oAdYHeVy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A2CC433C7;
+	Fri, 19 Jan 2024 21:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705698443;
+	bh=tBYFUh0aub60E5WCvZz/nbFsqgKVQ6NbogwE6RsuFo0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oAdYHeVyKHgPn0yL2ESfT3g7+scpLulgivhmGCIJRGwhZUWhro7d7k0Lu964cv4yY
+	 ZuximW5ihlBu7cMH58r1mDdYGJJx91dpk+/rtrsGMQjCD1ADjyPYpCXUvDO1/aL5PN
+	 4FgpoNhdl8BU+JxMAQyPzOSKxjeHTZJ9FSY4dAldjaqo9a3q2Un4GIiYwtBjdQxwol
+	 u6cNEU+3KJ0FR/KzKAwHNYN8wTNUsFSbTGfXwui+LsGx4Z+seRKszJAyXorvQQvoAO
+	 XuWf1byb1Xzvtc527TWqIJI8fKJQkFg92y7d1VgJE/uyOEPKScONOa0HxBcXFcWk7f
+	 wGMTxLA3IX0Xw==
+Date: Fri, 19 Jan 2024 21:07:19 +0000
+From: Simon Horman <horms@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net] selftests: net: fix rps_default_mask with >32 CPUs
+Message-ID: <20240119210719.GA110182@kernel.org>
+References: <20240119151248.3476897-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240119151248.3476897-1-kuba@kernel.org>
 
-In order for the page table level 5 to be in use, the CPU must have the
-setting enabled in addition to the CONFIG option. Check for the flag to be
-set to avoid false test failures on systems that do not have this cpu flag
-set.
+On Fri, Jan 19, 2024 at 07:12:48AM -0800, Jakub Kicinski wrote:
+> If there is more than 32 cpus the bitmask will start to contain
+> commas, leading to:
+> 
+> ./rps_default_mask.sh: line 36: [: 00000000,00000000: integer expression expected
+> 
+> Remove the commas, bash doesn't interpret leading zeroes as oct
+> so that should be good enough.
+> 
+> Fixes: c12e0d5f267d ("self-tests: introduce self-tests for RPS default mask")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: shuah@kernel.org
+> CC: horms@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/net/rps_default_mask.sh | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
+> index a26c5624429f..f8e786e220b6 100755
+> --- a/tools/testing/selftests/net/rps_default_mask.sh
+> +++ b/tools/testing/selftests/net/rps_default_mask.sh
+> @@ -33,6 +33,10 @@ chk_rps() {
+>  
+>  	rps_mask=$($cmd /sys/class/net/$dev_name/queues/rx-0/rps_cpus)
+>  	printf "%-60s" "$msg"
+> +
+> +	# In case there is more than 32 CPUs we need to remove commas from masks
+> +	rps_mask=${rps_mask/,}
+> +	expected_rps_mask=${expected_rps_mask/,}
 
-Signed-off-by: Audra Mitchell <audra@redhat.com>
----
- tools/testing/selftests/mm/va_high_addr_switch.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
+Hi Jakub,
 
-diff --git a/tools/testing/selftests/mm/va_high_addr_switch.sh b/tools/testing/selftests/mm/va_high_addr_switch.sh
-index 45cae7cab27e..a0a75f302904 100755
---- a/tools/testing/selftests/mm/va_high_addr_switch.sh
-+++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
-@@ -29,9 +29,15 @@ check_supported_x86_64()
- 	# See man 1 gzip under '-f'.
- 	local pg_table_levels=$(gzip -dcfq "${config}" | grep PGTABLE_LEVELS | cut -d'=' -f 2)
- 
-+	local cpu_supports_pl5=$(awk '/^flags/ {if (/la57/) {print 0;}
-+		else {print 1}; exit}' /proc/cpuinfo 2>/dev/null)
-+
- 	if [[ "${pg_table_levels}" -lt 5 ]]; then
- 		echo "$0: PGTABLE_LEVELS=${pg_table_levels}, must be >= 5 to run this test"
- 		exit $ksft_skip
-+	elif [[ "${cpu_supports_pl5}" -ne 0 ]]; then
-+		echo "$0: CPU does not have the necessary la57 flag to support page table level 5"
-+		exit $ksft_skip
- 	fi
- }
- 
--- 
-2.43.0
+AFAIK this will only remove the first incidence of a comma.
+So I'm assuming this breaks with >64 CPUs.
 
+>  	if [ $rps_mask -eq $expected_rps_mask ]; then
+>  		echo "[ ok ]"
+>  	else
 
