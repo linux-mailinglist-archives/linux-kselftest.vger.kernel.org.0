@@ -1,69 +1,69 @@
-Return-Path: <linux-kselftest+bounces-3264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3A08833198
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 00:35:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDCC08331B1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 00:54:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7C691C224BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 23:35:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CEAC284497
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 23:54:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16365915C;
-	Fri, 19 Jan 2024 23:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1613F59173;
+	Fri, 19 Jan 2024 23:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cztVmGsC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YRV46JY9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61FBE59149;
-	Fri, 19 Jan 2024 23:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1EA55E63;
+	Fri, 19 Jan 2024 23:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705707349; cv=none; b=KbA8xGfNCRdyWLBO7Em+LaycdfPOnBQvYI1MVnKCv9gngDmC2RTsyOT3PcmGbCLiASUVgDmYDQFRgoC91WZ3X2BaAZBDlbIjd5sZsV1A9bVS8b5EREQq+/UPlvvwz6d5zrDTHoIyCh2G/XTVW2qDBx8Tte/lkxIN3Toj/MJWIj8=
+	t=1705708458; cv=none; b=LcF9o8qGmNLkDi8oxBYK4gy+bMGtJ/QSuGoip96n6SZq7YWZbw4efSw2c1msTRLiw4KsFdNE0W5JlXKW7+ME/+QY39s3LidLt5uGYftlFmHslNTquuls9CEK1SZF5xx2XwKgf7wS09SvSi0lZHsiIKyEzPSZE1cHeUDOYD7L+8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705707349; c=relaxed/simple;
-	bh=exMkkn6nljNLcxNUb/zXifJLNV/vy9/cEFYz0eOXRcw=;
+	s=arc-20240116; t=1705708458; c=relaxed/simple;
+	bh=Tw1kfBbroK0xUIYhHQUqENaxo7vsNmH/RC4xN3Xsuso=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V6gNpYmlbyTHgqmlj6Y1rowjE3TeBtLqoLVi8u5vfstmuHv2Aev/WgHceG14MH03ay/pE3j+5oU1iqPz1kNtzv/0WikEljt6EfD9xrvNiGz34dXBFeBC4mpm4FxW83FpJKUWALBYxCC9DgvWqr4PBrf5UOMugDCS56Z5e4QcFzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cztVmGsC; arc=none smtp.client-ip=209.85.161.45
+	 To:Cc:Content-Type; b=YTfalXDATsjSI/k8j+XnEFTq6c4WdAC5+yNI6J/pVi+DLQ6t/MetHTADBeDUdWvdPE/O4XGrhWnxinLEn9/lvOBZ2IFBotx7AZZv/CMp7Pw1Hoqu7AFx3CB8N5fdx7snaFtM5YWbOJz/re14BgEMcn+SU16WruLY7MJ8GKL83C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YRV46JY9; arc=none smtp.client-ip=209.85.160.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-598a2cb5a7cso622338eaf.2;
-        Fri, 19 Jan 2024 15:35:48 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4298e866cd6so8653011cf.0;
+        Fri, 19 Jan 2024 15:54:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705707347; x=1706312147; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705708455; x=1706313255; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Wd3OkOwVBctUQyzGL0HBggWnvI9mKt8wARF3eIT4XQc=;
-        b=cztVmGsCwqfE/eohEVkKi7nfrCJH99Bb0scDcUwQ0vMXu0rDzg/8F8ywRiXCQai84w
-         eYUk7KhDC4br9OcsO40O0laLxWDA8RibQ0jbWbGThZ3YqxtWuyDvcKKEpWWQz0Ad2zXq
-         dWCMNb1fec2v5hEK6KOel7vXjzDBKipizdxYzTKqSbwcr2g6rBmy9FwRI8lR33zOcJt0
-         2QvYhoMGMlxR7cor/L9v+4PHPZsXQN0Y33uopuIlPbbbBhsXcCZo8y+8SHqVZ3dkgNnG
-         ht5V4Cq03g1Ojj20F78XeJOLluyLmdUNx1GRmKRrHBJ+tufw8sLHW6PnCX3Rht8WJ9U/
-         JuCQ==
+        bh=eIpC1Yh2GbIKhd5D8mXJR+ySfViqLAS3kNAflIvdAKM=;
+        b=YRV46JY9TQM+8ewi6zPPIh93tsyZ/Qwq1nPg2mkXhqkIhXdT4pJ3Cxm/fyVd62irDu
+         CbfwiaEZTfe+n/hX5XzcoOkxNz1RiSZtTuF6O6q4nHRhBL9YhqvAEpjbH252BThiwBUP
+         sDvZJoSxSwgFaFY077SttOZHj62xFXaLmjPBSeGaCCEXPCRsKsqgg/JTqbdb+oQFkMvo
+         ozgwsSoIAqYVbJmijQAPDbzzHfun8fpIK18QwMQPiEu16GctDOBQoyHFmjLpu2CLwyq2
+         fox9rAyUp3sC0AQ07A0IVsXmFiCTKC++r7LeX1T1PMuAv/J1L//r/N8Ti61yaqsrvjID
+         YMiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705707347; x=1706312147;
+        d=1e100.net; s=20230601; t=1705708455; x=1706313255;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wd3OkOwVBctUQyzGL0HBggWnvI9mKt8wARF3eIT4XQc=;
-        b=PY8xZhPel4iViY8tzMxTGpJHwn7XUsB5Z1c1agSkYfVVX78if86ZMsDG0SwlEGhVCk
-         Elm4189iqumkUVobOzIZE5E8bosf6GPdpYJjJZ9NrAkYOdhjE3fTkVhYqU23w/k/IZsP
-         BKH/z5VFSGJUEmQ8K9WRBdLikrHoC7H7Lyp4vqlzKDPjxKFZ/pKLtfnCJuz02E+n1nu1
-         b9dBqSTLh3Sa3gzDQUzmCIpeGMEOguXDB0KkQDoYUVAtHE5o0zMQLZ1LAzXfSCoi6WQK
-         A/A+F35/bu1/3bwXCb+HWcZ9Q/B8aSbh6p9R5duyuDrj/g0R7TNJehNDgs9LN2BRNhIs
-         2pjA==
-X-Gm-Message-State: AOJu0YwamXxb0q5vkozzXPIoKyEU2lWp1BhjxCth5ncgpNRU4wCFTHOM
-	dH20uidEhx1zlGRSa9+mY9imx/TJ+66YJ5SDK6gtEHXOWsM+ZD6XlYcfR0EqNPJz6l4MCuUgrR9
-	FEGhPEY8FhiWQdtuQO+AOuJD/bI8=
-X-Google-Smtp-Source: AGHT+IHxOWeHGkUl75J0B7agdy3qcCMAUSuiLNzs7G9dqeo5L5X4AcHLQwKhdO7YuZHPWRFiudZY/hcmHzTlniaT8mM=
-X-Received: by 2002:a05:6358:4b4f:b0:176:277d:347c with SMTP id
- ks15-20020a0563584b4f00b00176277d347cmr530937rwc.27.1705707347302; Fri, 19
- Jan 2024 15:35:47 -0800 (PST)
+        bh=eIpC1Yh2GbIKhd5D8mXJR+ySfViqLAS3kNAflIvdAKM=;
+        b=b/60xdNIHjX6hclzWJyObwbXyrHTuc3JNVdbjzpuf5M9m90m55Z4Fro8wKOifEswsB
+         y+DktKflCijkaw3lYMMZS5eh0tfW4S7+jHQaUupw++Fj+r4yuFDgoh9+C2qkc71jG+ZB
+         YranMJa6uPU++b+5SxSsHTPR8n4uG6bzOMVfSEEbazLjfI0YIL2Lu3Hx3z9GUjGaRjFK
+         qA+wU9mYgKoM2n6JRUqgHhOjY2lKlMJG57pAqBrqDbE2V/d+auG7S2o1EYzCld65WNsO
+         i7EUgutWn3iJ7cl6gmITHiFfuC1BSgaor9c/rAdMXMwzDFbFc4PK+MkdCIgNjDGxNEBX
+         efKA==
+X-Gm-Message-State: AOJu0YyNkzVXQsKvU9gTD5AoxXR9i/c2uFU2R4nW7uxzsw3XZfa2gHFB
+	wYVS/RLlEBc+Qf/nTncUy8FYsKhBLoXmnBRe3xga/OB9wiiNFlbv7Qf3xGnPobkJWmLOa8A0bou
+	pca/JOSlOWCHnIJZ8bH90u27EyMY=
+X-Google-Smtp-Source: AGHT+IF/dfEg52iF8Fr7LCdYwjTvBj3XYBYnaquvHBJPojqniPmgblDW6hmT5RC8L9fU+1h1X65kNhbjMyi2SSHd1qU=
+X-Received: by 2002:a05:622a:282:b0:42a:8c3:65f with SMTP id
+ z2-20020a05622a028200b0042a08c3065fmr615932qtw.137.1705708455323; Fri, 19 Jan
+ 2024 15:54:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,13 +75,14 @@ References: <f4l6fadtxnvttlb27heyl3r2bxettwwfu5vrazqykrshvrl3vm@ejw2ccatg3wi>
  <uf7fpvox2s3ban33ybixlg2buxbh2ys2gl7wjrphuip2qrdsjr@56dp2546tuuu>
  <71ac757d092c6103af7c6d0ebb4634afcaa0969a.camel@gmail.com>
  <CAK3+h2yQBHRxp+rv7VBJqMQWeudADiDnwXZ+KesT4XSOupFMzA@mail.gmail.com>
- <CAADnVQKMy_YchC2RVaGFiho7Qgdwxm9uPaQ74BMcwNE_zwbR4Q@mail.gmail.com> <CAK3+h2waCj=GF2LdV+nWL3N+s9Ke-eHo-NVBhqm6CEsNE6zA5Q@mail.gmail.com>
-In-Reply-To: <CAK3+h2waCj=GF2LdV+nWL3N+s9Ke-eHo-NVBhqm6CEsNE6zA5Q@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 19 Jan 2024 15:35:34 -0800
-Message-ID: <CAEf4BzaGoR4+EYM3jQVQba19r818UR7HoobYPvrNK05V6gYV9g@mail.gmail.com>
+ <CAADnVQKMy_YchC2RVaGFiho7Qgdwxm9uPaQ74BMcwNE_zwbR4Q@mail.gmail.com>
+ <CAK3+h2waCj=GF2LdV+nWL3N+s9Ke-eHo-NVBhqm6CEsNE6zA5Q@mail.gmail.com> <CAEf4BzaGoR4+EYM3jQVQba19r818UR7HoobYPvrNK05V6gYV9g@mail.gmail.com>
+In-Reply-To: <CAEf4BzaGoR4+EYM3jQVQba19r818UR7HoobYPvrNK05V6gYV9g@mail.gmail.com>
+From: Vincent Li <vincent.mc.li@gmail.com>
+Date: Fri, 19 Jan 2024 15:54:04 -0800
+Message-ID: <CAK3+h2y9UVQsUy-COjTH3B-eot2xNNd+T1e848hZ7XDUTS-86A@mail.gmail.com>
 Subject: Re: Re: lsm_cgroup.c selftest fails to compile when CONFIG_PACKET!=y
-To: Vincent Li <vincent.mc.li@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf <bpf@vger.kernel.org>, 
 	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -89,81 +90,94 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Eduard Zingerman <eddyz87
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 19, 2024 at 3:13=E2=80=AFPM Vincent Li <vincent.mc.li@gmail.com=
-> wrote:
+On Fri, Jan 19, 2024 at 3:35=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> On Fri, Jan 19, 2024 at 2:26=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+> On Fri, Jan 19, 2024 at 3:13=E2=80=AFPM Vincent Li <vincent.mc.li@gmail.c=
+om> wrote:
 > >
-> > On Fri, Jan 19, 2024 at 7:00=E2=80=AFAM Vincent Li <vincent.mc.li@gmail=
-.com> wrote:
+> > On Fri, Jan 19, 2024 at 2:26=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
 > > >
-> > > On Fri, Jan 19, 2024 at 4:23=E2=80=AFAM Eduard Zingerman <eddyz87@gma=
+> > > On Fri, Jan 19, 2024 at 7:00=E2=80=AFAM Vincent Li <vincent.mc.li@gma=
 il.com> wrote:
 > > > >
-> > > > On Fri, 2024-01-19 at 16:04 +0800, Shung-Hsi Yu wrote:
-> > > >
-> > > > [...]
-> > > >
-> > > > > Final goal would be have BPF selftests compiled and test against =
-our own
-> > > > > kernel, without having to come up with a specific kernel flavor t=
-hat is
-> > > > > used to build and run the selftest. For v5.14 and v5.19-based ker=
-nel it
-> > > > > works: compilation is successful and I was able to run the verifi=
-er
-> > > > > tests. (Did not try running the other tests though)
-> > > >
-> > > > You mean ./test_verifier binary, right?
-> > > > A lot of tests had been moved from ./test_verifier to ./test_progs =
-since.
-> > > >
-> > > > > > As far as I understand, selftests are supposed to be built and =
-run
-> > > > > > using specific configuration, here is how config for x86 CI is =
-prepared:
-> > > > > >
-> > > > > > ./scripts/kconfig/merge_config.sh \
-> > > > > >          ./tools/testing/selftests/bpf/config \
-> > > > > >          ./tools/testing/selftests/bpf/config.vm \
-> > > > > >          ./tools/testing/selftests/bpf/config.x86_64
-> > > > > >
-> > > > > > (root is kernel source).
-> > > > > > I'm not sure if other configurations are supposed to be support=
-ed.
+> > > > On Fri, Jan 19, 2024 at 4:23=E2=80=AFAM Eduard Zingerman <eddyz87@g=
+mail.com> wrote:
 > > > > >
-> > > > > Would it make sense to have makefile target that builds/runs a sm=
-aller
-> > > > > subset of general, config-agnostic selftests that tests the core =
-feature
-> > > > > (e.g. verifier + instruction set)?
+> > > > > On Fri, 2024-01-19 at 16:04 +0800, Shung-Hsi Yu wrote:
+> > > > >
+> > > > > [...]
+> > > > >
+> > > > > > Final goal would be have BPF selftests compiled and test agains=
+t our own
+> > > > > > kernel, without having to come up with a specific kernel flavor=
+ that is
+> > > > > > used to build and run the selftest. For v5.14 and v5.19-based k=
+ernel it
+> > > > > > works: compilation is successful and I was able to run the veri=
+fier
+> > > > > > tests. (Did not try running the other tests though)
+> > > > >
+> > > > > You mean ./test_verifier binary, right?
+> > > > > A lot of tests had been moved from ./test_verifier to ./test_prog=
+s since.
+> > > > >
+> > > > > > > As far as I understand, selftests are supposed to be built an=
+d run
+> > > > > > > using specific configuration, here is how config for x86 CI i=
+s prepared:
+> > > > > > >
+> > > > > > > ./scripts/kconfig/merge_config.sh \
+> > > > > > >          ./tools/testing/selftests/bpf/config \
+> > > > > > >          ./tools/testing/selftests/bpf/config.vm \
+> > > > > > >          ./tools/testing/selftests/bpf/config.x86_64
+> > > > > > >
+> > > > > > > (root is kernel source).
+> > > > > > > I'm not sure if other configurations are supposed to be suppo=
+rted.
+> > > > > >
+> > > > > > Would it make sense to have makefile target that builds/runs a =
+smaller
+> > > > > > subset of general, config-agnostic selftests that tests the cor=
+e feature
+> > > > > > (e.g. verifier + instruction set)?
+> > > > >
+> > > > > In ideal world I'd say that ./test_progs should include/exclude t=
+ests
+> > > > > conditioned on current configuration, but I don't know how much w=
+ork
+> > > > > would it be to adapt build system for this.
+> > > > >
 > > > >
-> > > > In ideal world I'd say that ./test_progs should include/exclude tes=
-ts
-> > > > conditioned on current configuration, but I don't know how much wor=
-k
-> > > > would it be to adapt build system for this.
-> > > >
+> > > > I would also suggest skipping building the specific bpf test code w=
+hen
+> > > > a specific CONFIG is removed, sometimes
+> > > > I only want to test some bpf selftests code I am interested in :)
 > > >
-> > > I would also suggest skipping building the specific bpf test code whe=
-n
-> > > a specific CONFIG is removed, sometimes
-> > > I only want to test some bpf selftests code I am interested in :)
+> > > I don't think we should be complicating bpf selftests to test
+> > > configurations with reduced kconfig.
+> > > bpf/config.* is what we target in bpf CI and we expect
+> > > developers do the same amount of testing before they send patches.
 > >
-> > I don't think we should be complicating bpf selftests to test
-> > configurations with reduced kconfig.
-> > bpf/config.* is what we target in bpf CI and we expect
-> > developers do the same amount of testing before they send patches.
+> > Totally understand that from the kernel bpf developer perspective. I
+> > am a bpf user learning how to write a bpf program from selftests, but
+> > I guess there is another way to learn,  selftests is not for teaching
+> > bpf users, no need to complicate.
 >
-> Totally understand that from the kernel bpf developer perspective. I
-> am a bpf user learning how to write a bpf program from selftests, but
-> I guess there is another way to learn,  selftests is not for teaching
-> bpf users, no need to complicate.
+> Try libbpf-bootstrap ([0]) as a simple setup to play with new BPF
+> features. minimal or bootstrap examples are usually good starting
+> points.
+>
+>   [0] https://github.com/libbpf/libbpf-bootstrap
 
-Try libbpf-bootstrap ([0]) as a simple setup to play with new BPF
-features. minimal or bootstrap examples are usually good starting
-points.
-
-  [0] https://github.com/libbpf/libbpf-bootstrap
+Thanks! I am aware of libbpf-bootstrap, I am on an old centos 8 distro
+which often miss linux headers that some selftests happens to require,
+especially the ones that are not using vmlinux.h, when a bpf kernel
+developer submit patches and selftests that I am interested in, I want
+to run that selftests and learn the new feature, and then probably
+port the new useful selftests code to a real use case bpf program. I
+often run into other selftests compiling errors when I want to
+selftest the new feature I am interested in. Anyway, it is my build
+environment problem, not selftests.
 
