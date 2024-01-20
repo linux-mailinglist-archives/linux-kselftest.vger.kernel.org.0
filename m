@@ -1,183 +1,153 @@
-Return-Path: <linux-kselftest+bounces-3265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDCC08331B1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 00:54:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44928833248
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 02:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CEAC284497
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jan 2024 23:54:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 654B91C21261
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 01:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1613F59173;
-	Fri, 19 Jan 2024 23:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0140E7FC;
+	Sat, 20 Jan 2024 01:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YRV46JY9"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="UCp7uzu2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1EA55E63;
-	Fri, 19 Jan 2024 23:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E9D10E1
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Jan 2024 01:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705708458; cv=none; b=LcF9o8qGmNLkDi8oxBYK4gy+bMGtJ/QSuGoip96n6SZq7YWZbw4efSw2c1msTRLiw4KsFdNE0W5JlXKW7+ME/+QY39s3LidLt5uGYftlFmHslNTquuls9CEK1SZF5xx2XwKgf7wS09SvSi0lZHsiIKyEzPSZE1cHeUDOYD7L+8s=
+	t=1705714476; cv=none; b=VSfP4oYzIFR/vY9f0BolotoldfXIaavKfW3kQXxjjf2BNaM0leiAg7+7Ap41g5c2MvXYayYDLbNMlymuihqO+iTbbVwG5QlELg0DJtx2bS78YaW+201yCeA3J0q7iLX+iDqYYOUtOKuRF//ZIjtLDVYgJ5fOZo+1nrwGShS/U64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705708458; c=relaxed/simple;
-	bh=Tw1kfBbroK0xUIYhHQUqENaxo7vsNmH/RC4xN3Xsuso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YTfalXDATsjSI/k8j+XnEFTq6c4WdAC5+yNI6J/pVi+DLQ6t/MetHTADBeDUdWvdPE/O4XGrhWnxinLEn9/lvOBZ2IFBotx7AZZv/CMp7Pw1Hoqu7AFx3CB8N5fdx7snaFtM5YWbOJz/re14BgEMcn+SU16WruLY7MJ8GKL83C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YRV46JY9; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4298e866cd6so8653011cf.0;
-        Fri, 19 Jan 2024 15:54:16 -0800 (PST)
+	s=arc-20240116; t=1705714476; c=relaxed/simple;
+	bh=26huEc5Mwf9rHtDTIB9WAm8Uc/lRlNkBs+RET7bxIJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FIoPp5oi/LZ4FykqKc27DseWqL7DTajR5ZD+L34Ym4F82xFt8zXhMEUr9VKZ+qJ3opWYoO2rszs2zygC9AFKKpgPKauoC5tx8PH1jo1G3j3gzRtTJVkKfdyk6Nr0+4KOTb7VNOkjzO21J0UrQL4OX7GyDUDH1hGY7FUR2je97Og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=UCp7uzu2; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6d9bbf71bc8so1028137b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jan 2024 17:34:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705708455; x=1706313255; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eIpC1Yh2GbIKhd5D8mXJR+ySfViqLAS3kNAflIvdAKM=;
-        b=YRV46JY9TQM+8ewi6zPPIh93tsyZ/Qwq1nPg2mkXhqkIhXdT4pJ3Cxm/fyVd62irDu
-         CbfwiaEZTfe+n/hX5XzcoOkxNz1RiSZtTuF6O6q4nHRhBL9YhqvAEpjbH252BThiwBUP
-         sDvZJoSxSwgFaFY077SttOZHj62xFXaLmjPBSeGaCCEXPCRsKsqgg/JTqbdb+oQFkMvo
-         ozgwsSoIAqYVbJmijQAPDbzzHfun8fpIK18QwMQPiEu16GctDOBQoyHFmjLpu2CLwyq2
-         fox9rAyUp3sC0AQ07A0IVsXmFiCTKC++r7LeX1T1PMuAv/J1L//r/N8Ti61yaqsrvjID
-         YMiA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1705714474; x=1706319274; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ESr1s1LQuOTutaWHm69OFuVr1y+EY8ccPvGNNNRU7c=;
+        b=UCp7uzu2SrCb+R9eaVctu2pPOqoDuEKPKwXpHR7XkhnHNkbRA3W+8E6RQb/J23CxWC
+         RAL5FkWrxUT1EU6Djq4IiFvT/uWQg2s15zio4t8pyN7OSoPkW/oO5oSh0158ilgdUh6N
+         dMd+oRMs9CqL8nlJGoi9JzSJCCTTaB7K9TztSsFvt0IkQVObSLRTkXrcLIB+YEbLuJ+t
+         JZoKjWH1T3vPRP30Tt+he4KvTS4SnuoqpZoqH+8IuwN5izgYWB89ubnxoGXAw6NkdDiE
+         mlVnBFYjOfqws2vOOy3XIE7c3faHIV7OIxavzWvRuROh9EPdL7BZO2vr1VM0d0XDYhyF
+         ++jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705708455; x=1706313255;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eIpC1Yh2GbIKhd5D8mXJR+ySfViqLAS3kNAflIvdAKM=;
-        b=b/60xdNIHjX6hclzWJyObwbXyrHTuc3JNVdbjzpuf5M9m90m55Z4Fro8wKOifEswsB
-         y+DktKflCijkaw3lYMMZS5eh0tfW4S7+jHQaUupw++Fj+r4yuFDgoh9+C2qkc71jG+ZB
-         YranMJa6uPU++b+5SxSsHTPR8n4uG6bzOMVfSEEbazLjfI0YIL2Lu3Hx3z9GUjGaRjFK
-         qA+wU9mYgKoM2n6JRUqgHhOjY2lKlMJG57pAqBrqDbE2V/d+auG7S2o1EYzCld65WNsO
-         i7EUgutWn3iJ7cl6gmITHiFfuC1BSgaor9c/rAdMXMwzDFbFc4PK+MkdCIgNjDGxNEBX
-         efKA==
-X-Gm-Message-State: AOJu0YyNkzVXQsKvU9gTD5AoxXR9i/c2uFU2R4nW7uxzsw3XZfa2gHFB
-	wYVS/RLlEBc+Qf/nTncUy8FYsKhBLoXmnBRe3xga/OB9wiiNFlbv7Qf3xGnPobkJWmLOa8A0bou
-	pca/JOSlOWCHnIJZ8bH90u27EyMY=
-X-Google-Smtp-Source: AGHT+IF/dfEg52iF8Fr7LCdYwjTvBj3XYBYnaquvHBJPojqniPmgblDW6hmT5RC8L9fU+1h1X65kNhbjMyi2SSHd1qU=
-X-Received: by 2002:a05:622a:282:b0:42a:8c3:65f with SMTP id
- z2-20020a05622a028200b0042a08c3065fmr615932qtw.137.1705708455323; Fri, 19 Jan
- 2024 15:54:15 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705714474; x=1706319274;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ESr1s1LQuOTutaWHm69OFuVr1y+EY8ccPvGNNNRU7c=;
+        b=F/Vo76BLuqEgQstcYGp0Uj+3OYV2vDaXUklXkbDnj7//hEUI4ydFZtrrI5EAlnqgMc
+         IAac5dDH9kLsA+jXG3ppBz6TBkwM7S5K5h62tDKVW68t3IJN5I5lLs7h8ocCCMyDEaZy
+         BjnY6ZYXlsPSs70rd8TuLGz2wpy4O+qOsUMAq99cHYHUFSX5X+MzwJsSvkDiDq0z+hCR
+         xCIc3DkLk/js46D5qWlaI6Mm9d1co264aYxHhi8SXv5icfho1rC20OacEXUaj1kT7baD
+         AoalUMPWqJHaaTuR8N9oqtlNhq8QMVubIU2CdFctRADBOouxAQsTD2imfX6I9+1c5Wh+
+         sXaQ==
+X-Gm-Message-State: AOJu0YwIC2RG0Gkp25UuUxw5XGV2HYC6edPrhsVm4BDLVwY7FUOcNzz8
+	5oBNV0OQOROWIXZyaUXo8hM4Ca7k5YJfI0oEcSHGuIOjsmCYHXS7YzvjPCmtqoY=
+X-Google-Smtp-Source: AGHT+IFpTaljaK+IhzjIUgqr3GVQ3I9VycDOb1FWOAfJMZG3m5Pa9z8B24GyjvedFp0KN3e6hXYsKA==
+X-Received: by 2002:a05:6a21:185:b0:19a:6830:2334 with SMTP id le5-20020a056a21018500b0019a68302334mr757399pzb.46.1705714474654;
+        Fri, 19 Jan 2024 17:34:34 -0800 (PST)
+Received: from ghost ([12.44.203.122])
+        by smtp.gmail.com with ESMTPSA id r9-20020a170903410900b001d71c89fb32sm1961666pld.269.2024.01.19.17.34.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jan 2024 17:34:34 -0800 (PST)
+Date: Fri, 19 Jan 2024 17:34:31 -0800
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Yangyu Chen <cyy@cyyself.name>
+Cc: alexghiti@rivosinc.com, anup@brainfault.org, aou@eecs.berkeley.edu,
+	conor@kernel.org, jrtc27@jrtc27.com, konstantin@linuxfoundation.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, mick@ics.forth.gr,
+	palmer@rivosinc.com, paul.walmsley@sifive.com,
+	rdunlap@infradead.org
+Subject: Re: [PATCH v10 0/4] RISC-V: mm: Make SV48 the default address space
+Message-ID: <ZasjJ3HPUVuxr2oG@ghost>
+References: <20230809232218.849726-1-charlie@rivosinc.com>
+ <tencent_F9568C6D8872E30EDFAF20ADF686A31D6E06@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f4l6fadtxnvttlb27heyl3r2bxettwwfu5vrazqykrshvrl3vm@ejw2ccatg3wi>
- <0c0a7705e775b2548f3439600738311830dbe1a9.camel@gmail.com>
- <uf7fpvox2s3ban33ybixlg2buxbh2ys2gl7wjrphuip2qrdsjr@56dp2546tuuu>
- <71ac757d092c6103af7c6d0ebb4634afcaa0969a.camel@gmail.com>
- <CAK3+h2yQBHRxp+rv7VBJqMQWeudADiDnwXZ+KesT4XSOupFMzA@mail.gmail.com>
- <CAADnVQKMy_YchC2RVaGFiho7Qgdwxm9uPaQ74BMcwNE_zwbR4Q@mail.gmail.com>
- <CAK3+h2waCj=GF2LdV+nWL3N+s9Ke-eHo-NVBhqm6CEsNE6zA5Q@mail.gmail.com> <CAEf4BzaGoR4+EYM3jQVQba19r818UR7HoobYPvrNK05V6gYV9g@mail.gmail.com>
-In-Reply-To: <CAEf4BzaGoR4+EYM3jQVQba19r818UR7HoobYPvrNK05V6gYV9g@mail.gmail.com>
-From: Vincent Li <vincent.mc.li@gmail.com>
-Date: Fri, 19 Jan 2024 15:54:04 -0800
-Message-ID: <CAK3+h2y9UVQsUy-COjTH3B-eot2xNNd+T1e848hZ7XDUTS-86A@mail.gmail.com>
-Subject: Re: Re: lsm_cgroup.c selftest fails to compile when CONFIG_PACKET!=y
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_F9568C6D8872E30EDFAF20ADF686A31D6E06@qq.com>
 
-On Fri, Jan 19, 2024 at 3:35=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Jan 19, 2024 at 3:13=E2=80=AFPM Vincent Li <vincent.mc.li@gmail.c=
-om> wrote:
-> >
-> > On Fri, Jan 19, 2024 at 2:26=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Fri, Jan 19, 2024 at 7:00=E2=80=AFAM Vincent Li <vincent.mc.li@gma=
-il.com> wrote:
-> > > >
-> > > > On Fri, Jan 19, 2024 at 4:23=E2=80=AFAM Eduard Zingerman <eddyz87@g=
-mail.com> wrote:
-> > > > >
-> > > > > On Fri, 2024-01-19 at 16:04 +0800, Shung-Hsi Yu wrote:
-> > > > >
-> > > > > [...]
-> > > > >
-> > > > > > Final goal would be have BPF selftests compiled and test agains=
-t our own
-> > > > > > kernel, without having to come up with a specific kernel flavor=
- that is
-> > > > > > used to build and run the selftest. For v5.14 and v5.19-based k=
-ernel it
-> > > > > > works: compilation is successful and I was able to run the veri=
-fier
-> > > > > > tests. (Did not try running the other tests though)
-> > > > >
-> > > > > You mean ./test_verifier binary, right?
-> > > > > A lot of tests had been moved from ./test_verifier to ./test_prog=
-s since.
-> > > > >
-> > > > > > > As far as I understand, selftests are supposed to be built an=
-d run
-> > > > > > > using specific configuration, here is how config for x86 CI i=
-s prepared:
-> > > > > > >
-> > > > > > > ./scripts/kconfig/merge_config.sh \
-> > > > > > >          ./tools/testing/selftests/bpf/config \
-> > > > > > >          ./tools/testing/selftests/bpf/config.vm \
-> > > > > > >          ./tools/testing/selftests/bpf/config.x86_64
-> > > > > > >
-> > > > > > > (root is kernel source).
-> > > > > > > I'm not sure if other configurations are supposed to be suppo=
-rted.
-> > > > > >
-> > > > > > Would it make sense to have makefile target that builds/runs a =
-smaller
-> > > > > > subset of general, config-agnostic selftests that tests the cor=
-e feature
-> > > > > > (e.g. verifier + instruction set)?
-> > > > >
-> > > > > In ideal world I'd say that ./test_progs should include/exclude t=
-ests
-> > > > > conditioned on current configuration, but I don't know how much w=
-ork
-> > > > > would it be to adapt build system for this.
-> > > > >
-> > > >
-> > > > I would also suggest skipping building the specific bpf test code w=
-hen
-> > > > a specific CONFIG is removed, sometimes
-> > > > I only want to test some bpf selftests code I am interested in :)
-> > >
-> > > I don't think we should be complicating bpf selftests to test
-> > > configurations with reduced kconfig.
-> > > bpf/config.* is what we target in bpf CI and we expect
-> > > developers do the same amount of testing before they send patches.
-> >
-> > Totally understand that from the kernel bpf developer perspective. I
-> > am a bpf user learning how to write a bpf program from selftests, but
-> > I guess there is another way to learn,  selftests is not for teaching
-> > bpf users, no need to complicate.
->
-> Try libbpf-bootstrap ([0]) as a simple setup to play with new BPF
-> features. minimal or bootstrap examples are usually good starting
-> points.
->
->   [0] https://github.com/libbpf/libbpf-bootstrap
+On Sun, Jan 14, 2024 at 01:26:57AM +0800, Yangyu Chen wrote:
+> Hi, Charlie
+> 
+> Although this patchset has been merged I still have some questions about
+> this patchset. Because it breaks regular mmap if address >= 38 bits on
+> sv48 / sv57 capable systems like qemu. For example, If a userspace program
+> wants to mmap an anonymous page to addr=(1<<45) on an sv48 capable system,
+> it will fail and kernel will mmaped to another sv39 address since it does
 
-Thanks! I am aware of libbpf-bootstrap, I am on an old centos 8 distro
-which often miss linux headers that some selftests happens to require,
-especially the ones that are not using vmlinux.h, when a bpf kernel
-developer submit patches and selftests that I am interested in, I want
-to run that selftests and learn the new feature, and then probably
-port the new useful selftests code to a real use case bpf program. I
-often run into other selftests compiling errors when I want to
-selftest the new feature I am interested in. Anyway, it is my build
-environment problem, not selftests.
+Thank you for raising this concern. To make sure I am understanding
+correctly, you are passing a hint address of (1<<45) and expecting mmap
+to return 1<<45 and if it returns a different address you are describing
+mmap as failing? If you want an address that is in the sv48 space you
+can pass in an address that is greater than 1<<47.
+
+> not meet the requirement to use sv48 as you wrote:
+> 
+> >	else if ((((_addr) >= VA_USER_SV48)) && (VA_BITS >= VA_BITS_SV48)) \
+> >		mmap_end = VA_USER_SV48;			\
+> >	else							\
+> >		mmap_end = VA_USER_SV39;			\
+> 
+> Then, How can a userspace program create a mmap with a hint if the address
+> >= (1<<38) after your patch without MAP_FIXED? The only way to do this is
+> to pass a hint >= (1<<47) on mmap syscall then kernel will return a random
+> address in sv48 address space but the hint address gets lost. I think this
+
+In order to force mmap to return the address provided you must use
+MAP_FIXED. Otherwise, the address is a "hint" and has no guarantees. The
+hint address on riscv is used to mean "don't give me an address that
+uses more bits than this". This behavior is not unique to riscv, arm64
+and powerpc use a similar scheme. In arch/arm64/include/asm/processor.h
+there is the following code:
+
+#define arch_get_mmap_base(addr, base) ((addr > DEFAULT_MAP_WINDOW) ? \
+					base + TASK_SIZE - DEFAULT_MAP_WINDOW :\
+					base)
+
+arm64/powerpc are only concerned with a single boundary so the code is simpler.
+
+> violate the principle of mmap syscall as kernel should take the hint and
+> attempt to create the mapping there.
+
+Although the man page for mmap does say "on Linux, the kernel will pick
+a nearby page boundary" it is still a hint address so there is no strict
+requirement (and the precedent has already been set by arm64/powerpc).
+
+> 
+> I don't think patching in this way is right. However, if we only revert
+> this patch, some programs relying on mmap to return address with effective
+> bits <= 48 will still be an issue and it might expand to other ISAs if
+> they implement larger virtual address space like RISC-V sv57. A better way
+> to solve this might be adding a MAP_48BIT flag to mmap like MAP_32BIT has
+> been introduced for decades.
+> 
+> Thanks,
+> Yangyu Chen
+> 
+
+- Charlie
+
 
