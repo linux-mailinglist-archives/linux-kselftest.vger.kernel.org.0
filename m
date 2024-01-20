@@ -1,61 +1,63 @@
-Return-Path: <linux-kselftest+bounces-3274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F3DB83368A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 22:48:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E4D8833692
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 22:50:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BA9F1F218F0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 21:48:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AAD7B21F6C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 21:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142FE1428C;
-	Sat, 20 Jan 2024 21:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD9614AB9;
+	Sat, 20 Jan 2024 21:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Zf7leXdT"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="BCTJUEnR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C875213AC5;
-	Sat, 20 Jan 2024 21:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0C214F61;
+	Sat, 20 Jan 2024 21:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705787323; cv=none; b=HM8+c2ha+7iAPZJzXPYVEkLZqf9K019qUimMtRgqQ+LRiSFsLJuCID497zABDg5+sYE6Y+WjcgNeFQiZlOqU/AM/wSJTWTKorY2ZCkppu/+axXshDCcS1I846UW6VrG3R9mHHzVXXiLdogCOoJ1wig3x+1w9xwzAp30q0yeLhtk=
+	t=1705787417; cv=none; b=pv0XInkvE2IIsem7Syzt6QChOGGxOmN6nihX9xgIqxuzhZRz509YKIO7U4hM1/CgevdwGsdGHzhxPr7XLwq9D785f5uJVOL25s7BFD2vy6FiCrF144hKT94OfMskkhoXfg9Z9Wo9mjQZZwwRiBo3QjvCsLEPcgeD+fKG5WP3eZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705787323; c=relaxed/simple;
-	bh=UTapdXJqd6/GeU/aS6pjbktBrgPfIjkTYoVhQTZ/yQ4=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=eba+WrKPP9YYSkxtlrGmE70vUejaDIYpn2BVCF+j64DAbnSwGW2awTb0M+x6WS9Ilc6+jVLC3dfpKtge61Xy7yRnPk26XLZs4q6E3kjzRaHpQkfxgMRhmxxcNvkRMfgz9j6493Oie5vzUBo3ndXLjZ7ZUsiqXoPCNKi7VULudl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Zf7leXdT; arc=none smtp.client-ip=203.205.221.221
+	s=arc-20240116; t=1705787417; c=relaxed/simple;
+	bh=I9/wMsxiLV+cUqwajTZ6MfQw4qQvC4xIjXaZaxVW514=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=O5/OmfEa9qdkab9ZRjZsVpb39dIgx/LknRQSqpx3Md0pVBrcTI5Ht2K1TFAkqXwAJ5tPCP4s4AWSXzJSBlEjGHKhEncOu0auLJGQfMQZMse/yLMTSwiQqyFR5chWj5z4n03GoqDCTDGHJil9jBwNj7367ii3tegcdoavh/MyNbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=BCTJUEnR; arc=none smtp.client-ip=203.205.221.235
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1705787311; bh=6U2V9PznT/aHdEhNbmRHZ0xAzvTGSoyQ3tiDTQLv01Y=;
-	h=From:To:Cc:Subject:Date;
-	b=Zf7leXdTRyLHolgwRVNO0JJ8ybL0fo9iCJs/yNoslTvyIEBp+ApMzeOrrcXP6b0rw
-	 0TgoXaq3tj1XNufDdvewTdoAmg2X7MA3OyZrnPYp0b1djY/kXam3si91Jc+wYFQfrk
-	 +qRngseMtYaGWQOYADym1gg+0dspVpY/M2SYr4ro=
+	t=1705787407; bh=4nmX4hKeh/0WuigJrd8ANC0wflYIcPXPQU4r0VNEKp8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=BCTJUEnRp+uC0d0dRxHQsm/zVTkvWgVkAiSDO/Np0gxMBiylPltmYRRlaUxuRE5dT
+	 JNImCpHL9Z4E39CTM/nzV/g84s+7awuJxhKqNJLPRWtD/xn8+67ZyD+5zra9Iqkfk5
+	 J9hS+sWGY04ORFsXjGfpC4+g8/l88pMguMUorMpg=
 Received: from cyy-pc.lan ([240e:379:2240:ed00:c92f:86c3:e615:ca18])
-	by newxmesmtplogicsvrszc5-1.qq.com (NewEsmtp) with SMTP
-	id C1339C79; Sun, 21 Jan 2024 05:48:19 +0800
-X-QQ-mid: xmsmtpt1705787299tg307jjo8
-Message-ID: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
-X-QQ-XMAILINFO: N4/evVE7TFO8CtGPtkNoc+aCCKSp85D26BgfmLO7AQ7zZB5kLxc7ZMOak6XQMh
-	 N5crBuRjsO3x8ZFs1oAsBFekPmMPmz5nYhzCQe2TZX/zw50nA7EeP4w3UwHjygsqGl3Zcp9+fhxa
-	 SHX/6J7KCCW2k1Fr8m4VKyxaupTvvRr19cK5JchF1wFI5gQ8mbHaG1KXLSZ9nCGqA81fw3zU6SkZ
-	 sHSmF7pvwdhR5wPwY+tD4XlXykSivnmZKcKD0sElYvZozC9hro7OdVe7G2V+YJokSMbnYSlu04G8
-	 Xf5ooaLq20OxkDho23odc0UNvp+ThlKCSpw3e5KnWaw1v0LFS2Xp0Wloos63E0sBj6cPhtSvwPH6
-	 bXcR5izmnxPBYeafsfPK7DmliQBEENA7ToITc8DrKU2QonDdwVAPbm1FXAzOVoUNckRq6XhdAa9g
-	 Z7DrlxNkZ2KLUuJm65wvTPZx3bXOyY9o1ZIsKmvDF9X3f/mUyYnrI28d6D3B/cmjXDvDtVOI3E1A
-	 U3xhYVnNAfq1ZMPVAQLltcaQ1JUMosqAmCJY1UQOwLiw22/bZAfefrfulDX8vYnPxh3O9DxtZk8+
-	 oSS/KOv1OQ7fT+JfM7qwox9X22hJCntmqBGfKebcVNjHb5OLXhgsDZyPtIqzO+I+3Rf5iNljK79y
-	 EvxKjR09vGb0NUaMqRs61TBZC3mbbMfRgANe7RL0v9a5JmqLf77KCa/oMiadaiWEtcbx3y4DNP0J
-	 rJOul4O5L9qHT25wZGWSShJ6AKEY3GqMsqA7/16wrF0DlRRJOBITjFYEEp4mdMzltp/eT5bf17YO
-	 8kf7HgBf+HlFF5QIXRRwYryYpbCTy8zCxriOaPsZvku6g4Wht26Lg+CtJ5w0LPsddGmFLiYkstt7
-	 mWEPXxtU/r2QsM09bXb9EIJkLbQhJEvetUdBqt2dnmBFcb0RUKvW3T2+gMftgHjEGGPG3hUrVCO+
-	 kjq2pQVcAI9D3NRADA9Z97NIxn/QbpTx6YDghJW48nB18HxzjF9g1NXIcSpgck
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+	by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+	id C832D4DD; Sun, 21 Jan 2024 05:50:03 +0800
+X-QQ-mid: xmsmtpt1705787403tnr6elyfm
+Message-ID: <tencent_2683632BEE438C6D4854E30BDF9CA0843606@qq.com>
+X-QQ-XMAILINFO: OPDQNGCUQ3qLjMTDsrPToOp8oyErPnL2SII8vV9kBmlMV/zje0JtvQMeaBQSLy
+	 B2QJFDDnOzluHBIoK3YrDakeYq1fWVYfn74YrxBVVRd8tl+v2/yLAywxvW+k44gaNKX0N25jyf+t
+	 WrPkrf8crNxwu7VPCeY43GXT7J1T8nntnPO/6OtzZ27FP6ibc1/EISwFYOuKUF1Ztq1j8CZDEY62
+	 nHhBvzrqDea94mJGzZZ6dTCKXpg8YE6ggXAR1ycnSX1nUuz441T3r9p6eE+dbnEIctVBEgOkYTqY
+	 NZFVL4uwWf6RoC5X3ykYjE9NXqs1aCyf2K7tovE8dlIVLrUAiZTuoIIq04uKiGxF6pKhhtUabb+W
+	 IOscWMkKMcFVpW+LUTdBGEoQ9MgiMAzKEdbRJ01mK5piJuHFw2Rw+PnwunWv3tFZCGKP5yyn5Px9
+	 GtU7ks9X0jco8acac37axmjiySgqH5Sw30F6SAbbCZCK8JwyZQ47x+zrWa35EnSl8FcQDZ5hehbw
+	 qPYQEqQUlgI1Zp5/DNNPJc39PKDeuFD9GOL1WySOS5siYySwsyr04wvTPnPu+iHD37tiMhSmQ2ny
+	 mYsBKzRvjMXAFGRaQKacp39hdh8w1HpeuPmRBoY543PPeXgDQbiPxeAdQWqX+UcQ9GiqV03ul2Rx
+	 BJAqgNlKukFM0q1Cxv8PetFLS2GktGbAjpuuPTBt2dv6uJdZywgTBmm1wWGgkmFGMK2GzBwQRhb4
+	 lUxxrf6bvMi0RNZzzWHQknlNc57BfIoYi9+KlMb6oPd4h2CUgkXcJzylpt23Uw2qiBrJXMO2U0CZ
+	 J6P0lWu2HoLu90um4XA1X+tgwXIvydZVnZzHKOEw7Gpvi1Fi09/ABN4Ub2Pa7RLTIU72Rj87xIkh
+	 bmIN8Db8FDf1vQAURV5C3ZuslG/UO1aJ8Zincg1F4sSugX+WZXDqUYtUCIj2vddR9JwJhuka6alp
+	 ygJd0xxijjWzsLCCayIR99Dfr/ijIim+Z3cuceuUmlob4bU1jZwoh5pvhl8Q2/c10Bj37a/jyDxR
+	 eCDOn+v55wx5G1hZ7R7Lo7MkdxHpg=
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 From: Yangyu Chen <cyy@cyyself.name>
 To: linux-riscv@lists.infradead.org
 Cc: Charlie Jenkins <charlie@rivosinc.com>,
@@ -71,10 +73,12 @@ Cc: Charlie Jenkins <charlie@rivosinc.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Yangyu Chen <cyy@cyyself.name>
-Subject: [PATCH v2 0/3] RISC-V: mm: do not treat hint addr on mmap as the upper bound to search
-Date: Sun, 21 Jan 2024 05:48:09 +0800
-X-OQ-MSGID: <20240120214809.291094-1-cyy@cyyself.name>
+Subject: [PATCH v2 1/3] RISC-V: mm: do not treat hint addr on mmap as the upper bound to search
+Date: Sun, 21 Jan 2024 05:49:58 +0800
+X-OQ-MSGID: <20240120215000.291877-1-cyy@cyyself.name>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
+References: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,78 +87,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Previous patch series[1] changes a mmap behavior that treats the hint
-address as the upper bound of the mmap address range. The motivation of the
-previous patch series is that some user space software may assume 48-bit
-address space and use higher bits to encode some information, which may
-collide with large virtual address space mmap may return. However, to make
-sv48 by default, we don't need to change the meaning of the hint address on
-mmap as the upper bound of the mmap address range, especially when this
-behavior only shows up on the RISC-V. This behavior also breaks some user
-space software which assumes mmap should try to create mapping on the hint
-address if possible.  As the mmap manpage said: 
+This patch reverted the meaning of the addr parameter in the mmap syscall
+change from the previous commit add2cc6b6515 ("RISC-V: mm: Restrict address
+space for sv39,sv48,sv57") from patch[1] which treats hint addr as the
+upper bound of the mmap return address. However, some userspace software
+assumes mmap will attempt to create mapping on the hint address if possible
+without MAP_FIXED set, thus these software will always use the fallback
+path as the return address is not the same as the hint, which may lead to
+some performance overhead. Other ISAs like x86, arm64, and powerpc also
+meet this issue which has userspace virtual address bits larger than 48-bit
+and userspace software may use the MSB beyond 48-bit to store some
+information. Still, these ISAs didn't change the meaning of the hint
+address and only limited the address space to 48-bit when the hint address
+did not go beyond the default map window.
 
-> If addr is not NULL, then the kernel takes it as a hint about where to
-> place the mapping; on Linux, the kernel will pick a nearby page boundary
-> (but always above or equal to the value  specified by 
-> /proc/sys/vm/mmap_min_addr) and attempt to create the mapping there.
+Thus, this patch makes the behavior of mmap syscall on RISC-V sv57 capable
+system align with x86, arm64, powerpc by only limiting the address space to
+DEFAULT_MAP_WINDOW which is defined as not larger than 47-bit. If a user
+program wants to use sv57 address space, it can use mmap with a hint
+address larger than BIT(47) as it is already documented in x86 and arm64.
+And this code is copied from kernel source code on powerpc.
 
-Unfortunately, what mmap said is not true on RISC-V since kernel v6.6.
+[1]. https://lore.kernel.org/r/20230809232218.849726-2-charlie@rivosinc.com
 
-Other ISAs with larger than 48-bit virtual address space like x86, arm64,
-and powerpc do not have this special mmap behavior on hint address. They
-all just make 48-bit / 47-bit virtual address space by default, and if a
-user space software wants to large virtual address space, it only need to
-specify a hint address larger than 48-bit / 47-bit.
+Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+---
+ arch/riscv/include/asm/processor.h | 38 ++++++------------------------
+ 1 file changed, 7 insertions(+), 31 deletions(-)
 
-Thus, this patch series keeps the change of mmap to use sv48 by default but
-does not treat the hint address as the upper bound of the mmap address
-range. After this patch, the behavior of mmap will align with existing
-behavior on other ISAs with larger than 48-bit virtual address space like
-x86, arm64, and powerpc. The user space software will no longer need to
-rewrite their code to fit with this special mmap behavior only on RISC-V.
-
-My concern is that the change of mmap behavior on the hint address is
-already in the upstream kernel since v6.6, and it might be hard to revert
-it although it already brings some regression on some user space software.
-And it will be harder than adding it since v6.6 because mmap not creating
-mapping on the hint address is very common, especially when running on a
-machine without sv57 / sv48. However, if some user space software already
-adopted this special mmap behavior on RISC-V, we should not return a mmap
-address larger than the hint if the address is larger than BIT(38). My
-opinion is that revert this change on the next kernel release might be a
-good choice as only a few of hardware support sv57 / sv48 now, these
-changes will have no impact on sv39 systems.
-
-Moreover, previous patch series said it make sv48 by default, which is
-in the cover letter, kernel documentation and MMAP_VA_BITS defination.
-However, the code on arch_get_mmap_end and arch_get_mmap_base marco still
-use sv39 by default, which makes me confused, and I still use sv48 by
-default in this patch series including arch_get_mmap_end and
-arch_get_mmap_base.
-
-Changes in v2:
-- correct arch_get_mmap_end and arch_get_mmap_base
-- Add description in documentation about mmap behavior on kernel v6.6-6.7.
-- Improve commit message and cover letter
-- Rebase to newest riscv/for-next branch
-- Link to v1: https://lore.kernel.org/linux-riscv/tencent_F3B3B5AB1C9D704763CA423E1A41F8BE0509@qq.com/
-
-[1]. https://lore.kernel.org/linux-riscv/20230809232218.849726-1-charlie@rivosinc.com/
-
-Yangyu Chen (3):
-  RISC-V: mm: do not treat hint addr on mmap as the upper bound to
-    search
-  RISC-V: mm: only test mmap without hint
-  Documentation: riscv: correct sv57 kernel behavior
-
- Documentation/arch/riscv/vm-layout.rst        | 54 ++++++++++++-------
- arch/riscv/include/asm/processor.h            | 38 +++----------
- .../selftests/riscv/mm/mmap_bottomup.c        | 12 -----
- .../testing/selftests/riscv/mm/mmap_default.c | 12 -----
- tools/testing/selftests/riscv/mm/mmap_test.h  | 30 -----------
- 5 files changed, 41 insertions(+), 105 deletions(-)
-
+diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+index a8509cc31ab2..bc604669f18e 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -18,37 +18,13 @@
+ #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
+ #define STACK_TOP_MAX		TASK_SIZE
+ 
+-#define arch_get_mmap_end(addr, len, flags)			\
+-({								\
+-	unsigned long mmap_end;					\
+-	typeof(addr) _addr = (addr);				\
+-	if ((_addr) == 0 || (IS_ENABLED(CONFIG_COMPAT) && is_compat_task())) \
+-		mmap_end = STACK_TOP_MAX;			\
+-	else if ((_addr) >= VA_USER_SV57)			\
+-		mmap_end = STACK_TOP_MAX;			\
+-	else if ((((_addr) >= VA_USER_SV48)) && (VA_BITS >= VA_BITS_SV48)) \
+-		mmap_end = VA_USER_SV48;			\
+-	else							\
+-		mmap_end = VA_USER_SV39;			\
+-	mmap_end;						\
+-})
+-
+-#define arch_get_mmap_base(addr, base)				\
+-({								\
+-	unsigned long mmap_base;				\
+-	typeof(addr) _addr = (addr);				\
+-	typeof(base) _base = (base);				\
+-	unsigned long rnd_gap = DEFAULT_MAP_WINDOW - (_base);	\
+-	if ((_addr) == 0 || (IS_ENABLED(CONFIG_COMPAT) && is_compat_task())) \
+-		mmap_base = (_base);				\
+-	else if (((_addr) >= VA_USER_SV57) && (VA_BITS >= VA_BITS_SV57)) \
+-		mmap_base = VA_USER_SV57 - rnd_gap;		\
+-	else if ((((_addr) >= VA_USER_SV48)) && (VA_BITS >= VA_BITS_SV48)) \
+-		mmap_base = VA_USER_SV48 - rnd_gap;		\
+-	else							\
+-		mmap_base = VA_USER_SV39 - rnd_gap;		\
+-	mmap_base;						\
+-})
++#define arch_get_mmap_end(addr, len, flags) \
++	(((addr) > DEFAULT_MAP_WINDOW) || \
++	 (((flags) & MAP_FIXED) && ((addr) + (len) > DEFAULT_MAP_WINDOW)) ? TASK_SIZE : \
++									    DEFAULT_MAP_WINDOW)
++
++#define arch_get_mmap_base(addr, base) \
++	(((addr) > DEFAULT_MAP_WINDOW) ? (base) + TASK_SIZE - DEFAULT_MAP_WINDOW : (base))
+ 
+ #else
+ #define DEFAULT_MAP_WINDOW	TASK_SIZE
 -- 
 2.43.0
 
