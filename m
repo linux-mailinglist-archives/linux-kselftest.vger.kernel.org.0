@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-3276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E4D8833692
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 22:50:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA6A833694
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 22:50:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AAD7B21F6C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 21:50:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D6FD1F22647
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jan 2024 21:50:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD9614AB9;
-	Sat, 20 Jan 2024 21:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF8E14F9B;
+	Sat, 20 Jan 2024 21:50:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="BCTJUEnR"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="NuCknl05"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0C214F61;
-	Sat, 20 Jan 2024 21:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CED14ABF;
+	Sat, 20 Jan 2024 21:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705787417; cv=none; b=pv0XInkvE2IIsem7Syzt6QChOGGxOmN6nihX9xgIqxuzhZRz509YKIO7U4hM1/CgevdwGsdGHzhxPr7XLwq9D785f5uJVOL25s7BFD2vy6FiCrF144hKT94OfMskkhoXfg9Z9Wo9mjQZZwwRiBo3QjvCsLEPcgeD+fKG5WP3eZs=
+	t=1705787419; cv=none; b=Wc0l9HshJF0l6l6xMVpv5cGq8L3SFn8aJsb69iVrIEyKltiEDLCM7B+pPLR0MdviBQvc2QVPYzVopI0L2oV9YizblZTiUVuhPsP/S+e9OGlyXbFYLyMPEdcBtPdaleQ2LX08+flQDkeBKULv9Dn9h6IOF2vlTwQ5zBirBcs3xfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705787417; c=relaxed/simple;
-	bh=I9/wMsxiLV+cUqwajTZ6MfQw4qQvC4xIjXaZaxVW514=;
+	s=arc-20240116; t=1705787419; c=relaxed/simple;
+	bh=LCZfqnDvDiqcBcxjsUDk3aBxKUjNBfGl18P1CLD+f+w=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=O5/OmfEa9qdkab9ZRjZsVpb39dIgx/LknRQSqpx3Md0pVBrcTI5Ht2K1TFAkqXwAJ5tPCP4s4AWSXzJSBlEjGHKhEncOu0auLJGQfMQZMse/yLMTSwiQqyFR5chWj5z4n03GoqDCTDGHJil9jBwNj7367ii3tegcdoavh/MyNbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=BCTJUEnR; arc=none smtp.client-ip=203.205.221.235
+	 MIME-Version; b=anwLt/cIm4O0OL6dSoU6xA8t89Fu/3vbbzK2fnH2tFzW3T3gtz5NzuHDfMt7S7QL3tXMgxKxn5cUwoYIAqITb3as6N5SEh0J7W/Nw9J2CYES96VFDlyIUrNiydQa/fp5AP0Mk0aqIvbaPE/Y0nsXG0WiJRRVr6oQfYR0nFAtBno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=NuCknl05; arc=none smtp.client-ip=203.205.221.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1705787407; bh=4nmX4hKeh/0WuigJrd8ANC0wflYIcPXPQU4r0VNEKp8=;
+	t=1705787409; bh=SbEh5VB4GzFFImDZ98RQo/aVP6rIyZlESD+33dGh2Zg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BCTJUEnRp+uC0d0dRxHQsm/zVTkvWgVkAiSDO/Np0gxMBiylPltmYRRlaUxuRE5dT
-	 JNImCpHL9Z4E39CTM/nzV/g84s+7awuJxhKqNJLPRWtD/xn8+67ZyD+5zra9Iqkfk5
-	 J9hS+sWGY04ORFsXjGfpC4+g8/l88pMguMUorMpg=
+	b=NuCknl05Y9BtPtHq3TniUiL8depkg9vZKlYCkx+8ht7fkZvZLox6tld6yr4tMCcfK
+	 p2RNjRj9IEN4CFZmKeJ5S14KG4DLVdXaAaYvwDrEax6SUk1nxG4igG2PiqON5T2GOi
+	 TarUkkMa/8+8hJ/D2CuYy/uex17L5WBZDQk5IlS8=
 Received: from cyy-pc.lan ([240e:379:2240:ed00:c92f:86c3:e615:ca18])
 	by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
 	id C832D4DD; Sun, 21 Jan 2024 05:50:03 +0800
-X-QQ-mid: xmsmtpt1705787403tnr6elyfm
-Message-ID: <tencent_2683632BEE438C6D4854E30BDF9CA0843606@qq.com>
-X-QQ-XMAILINFO: OPDQNGCUQ3qLjMTDsrPToOp8oyErPnL2SII8vV9kBmlMV/zje0JtvQMeaBQSLy
-	 B2QJFDDnOzluHBIoK3YrDakeYq1fWVYfn74YrxBVVRd8tl+v2/yLAywxvW+k44gaNKX0N25jyf+t
-	 WrPkrf8crNxwu7VPCeY43GXT7J1T8nntnPO/6OtzZ27FP6ibc1/EISwFYOuKUF1Ztq1j8CZDEY62
-	 nHhBvzrqDea94mJGzZZ6dTCKXpg8YE6ggXAR1ycnSX1nUuz441T3r9p6eE+dbnEIctVBEgOkYTqY
-	 NZFVL4uwWf6RoC5X3ykYjE9NXqs1aCyf2K7tovE8dlIVLrUAiZTuoIIq04uKiGxF6pKhhtUabb+W
-	 IOscWMkKMcFVpW+LUTdBGEoQ9MgiMAzKEdbRJ01mK5piJuHFw2Rw+PnwunWv3tFZCGKP5yyn5Px9
-	 GtU7ks9X0jco8acac37axmjiySgqH5Sw30F6SAbbCZCK8JwyZQ47x+zrWa35EnSl8FcQDZ5hehbw
-	 qPYQEqQUlgI1Zp5/DNNPJc39PKDeuFD9GOL1WySOS5siYySwsyr04wvTPnPu+iHD37tiMhSmQ2ny
-	 mYsBKzRvjMXAFGRaQKacp39hdh8w1HpeuPmRBoY543PPeXgDQbiPxeAdQWqX+UcQ9GiqV03ul2Rx
-	 BJAqgNlKukFM0q1Cxv8PetFLS2GktGbAjpuuPTBt2dv6uJdZywgTBmm1wWGgkmFGMK2GzBwQRhb4
-	 lUxxrf6bvMi0RNZzzWHQknlNc57BfIoYi9+KlMb6oPd4h2CUgkXcJzylpt23Uw2qiBrJXMO2U0CZ
-	 J6P0lWu2HoLu90um4XA1X+tgwXIvydZVnZzHKOEw7Gpvi1Fi09/ABN4Ub2Pa7RLTIU72Rj87xIkh
-	 bmIN8Db8FDf1vQAURV5C3ZuslG/UO1aJ8Zincg1F4sSugX+WZXDqUYtUCIj2vddR9JwJhuka6alp
-	 ygJd0xxijjWzsLCCayIR99Dfr/ijIim+Z3cuceuUmlob4bU1jZwoh5pvhl8Q2/c10Bj37a/jyDxR
-	 eCDOn+v55wx5G1hZ7R7Lo7MkdxHpg=
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+X-QQ-mid: xmsmtpt1705787406tbsozqm54
+Message-ID: <tencent_1A8C66C86EE30ADF9160AC36B46314AE5306@qq.com>
+X-QQ-XMAILINFO: MRMtjO3A6C9XdO4Vg7r72bh7nPfnPN7h7nnFbDIZFVbwGB1EPTLF5c6L4O17kK
+	 okydMi0HSUFb3ygdby52DFLVNzPj6QYxpuKP/VYfWtXuvjyJWsNtwxSP5HGM1zjpBOgCdTLngkQM
+	 arhxCEz+4wmwvCZ6Pz8BstxjVpsrfxUnHbAKBlnwf710ssPN3bFjgFa6RlvLsTlU4KOfmtNjfbet
+	 W1qX99HU3HRJTYqpG2w71qPx0mD91MIvs47SunOsARj5c1c+j6eC29HI+tDRi42NvlWJGMcV8vFy
+	 vno5buf4nACHogJIGezz6ZDGlx+Md+mdT2P2hBlpqhBEWLtCMsS5xDLSa84Q9z7dR2hBn7GcLgDU
+	 OQgJN+cX9ihAqO5O1aNfAEtQ2R2NGpTosfTd/dSYiFwTSHQUnTpAk2csxacyg54NKtQwYl5Cv/g3
+	 DdIZ1R2V803HtjTwvm2HQ6dkgG2Z5O7S3JWmJRoQ7j+ldZgVGvuvmbkPO7C9P5UttbIYZ6YM6b/R
+	 ufXJ17oaFOwmRkcrlQzukx3v6dJZm91qAOkAfqRZ2WH5Q6W/a1NPndCZwB9NOXsEh6dvZnC3/aLw
+	 9RY/JTGFTLFsUvfanbMupBuTUlT9f7eHLh4gCM16c4RYb9gJHg0sxYFnsSOT9hLlIf6MvqtuHdSC
+	 zko3RiXHGhVf7HidLg9OVbjVbYZC+qn5ixDPtkI89rEG9sNSB0NbUfp6rW7IgwNHEPZi6flnV7z1
+	 08eGSe5ow5R4aqwZnhPV9fNG0L8ESzn6mEiwxkTojUSAWqCbQFvYUHYgyNvoPZwwNr+UxAn1YftN
+	 tl47WLcn4IZn3LvtUJpA4qDQsAM3rULwsfLBYiVaPjglnNgZdgTnj7KW6nSuACUEM9d/ywH+XqeY
+	 2bAXEeXvY9PaMVfR2ONG2i88yEh3h/cFq6HSCVY6UHhNSBz1uGQ4cPcsDlDbtUeV/GM1GjVXGG8O
+	 CzFRgV6aJwKNeVr+EctVVgKBxZ5za8xhjzLPo/ljYPJSGoQwrJQEd+nl/ShJyabAc9uCYCHE+dkD
+	 US+Bylb9/aetiTdVGmNmb0p6jQhaQ=
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 From: Yangyu Chen <cyy@cyyself.name>
 To: linux-riscv@lists.infradead.org
 Cc: Charlie Jenkins <charlie@rivosinc.com>,
@@ -73,9 +73,9 @@ Cc: Charlie Jenkins <charlie@rivosinc.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Yangyu Chen <cyy@cyyself.name>
-Subject: [PATCH v2 1/3] RISC-V: mm: do not treat hint addr on mmap as the upper bound to search
-Date: Sun, 21 Jan 2024 05:49:58 +0800
-X-OQ-MSGID: <20240120215000.291877-1-cyy@cyyself.name>
+Subject: [PATCH v2 2/3] RISC-V: mm: only test mmap without hint
+Date: Sun, 21 Jan 2024 05:49:59 +0800
+X-OQ-MSGID: <20240120215000.291877-2-cyy@cyyself.name>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
 References: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
@@ -87,83 +87,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch reverted the meaning of the addr parameter in the mmap syscall
-change from the previous commit add2cc6b6515 ("RISC-V: mm: Restrict address
-space for sv39,sv48,sv57") from patch[1] which treats hint addr as the
-upper bound of the mmap return address. However, some userspace software
-assumes mmap will attempt to create mapping on the hint address if possible
-without MAP_FIXED set, thus these software will always use the fallback
-path as the return address is not the same as the hint, which may lead to
-some performance overhead. Other ISAs like x86, arm64, and powerpc also
-meet this issue which has userspace virtual address bits larger than 48-bit
-and userspace software may use the MSB beyond 48-bit to store some
-information. Still, these ISAs didn't change the meaning of the hint
-address and only limited the address space to 48-bit when the hint address
-did not go beyond the default map window.
+The original test from the previous patchset[1] assumes the hint address
+on mmap is treated as the upper bound of the return address. As we
+reverted this special behavior, this test should be updated to reflect the
+change.
 
-Thus, this patch makes the behavior of mmap syscall on RISC-V sv57 capable
-system align with x86, arm64, powerpc by only limiting the address space to
-DEFAULT_MAP_WINDOW which is defined as not larger than 47-bit. If a user
-program wants to use sv57 address space, it can use mmap with a hint
-address larger than BIT(47) as it is already documented in x86 and arm64.
-And this code is copied from kernel source code on powerpc.
-
-[1]. https://lore.kernel.org/r/20230809232218.849726-2-charlie@rivosinc.com
+[1]. https://lore.kernel.org/linux-riscv/20230809232218.849726-1-charlie@rivosinc.com/
 
 Signed-off-by: Yangyu Chen <cyy@cyyself.name>
 ---
- arch/riscv/include/asm/processor.h | 38 ++++++------------------------
- 1 file changed, 7 insertions(+), 31 deletions(-)
+ .../selftests/riscv/mm/mmap_bottomup.c        | 12 --------
+ .../testing/selftests/riscv/mm/mmap_default.c | 12 --------
+ tools/testing/selftests/riscv/mm/mmap_test.h  | 30 -------------------
+ 3 files changed, 54 deletions(-)
 
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index a8509cc31ab2..bc604669f18e 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -18,37 +18,13 @@
- #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
- #define STACK_TOP_MAX		TASK_SIZE
+diff --git a/tools/testing/selftests/riscv/mm/mmap_bottomup.c b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
+index 1757d19ca89b..1ba703d3f552 100644
+--- a/tools/testing/selftests/riscv/mm/mmap_bottomup.c
++++ b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
+@@ -15,20 +15,8 @@ TEST(infinite_rlimit)
+ 	do_mmaps(&mmap_addresses);
  
--#define arch_get_mmap_end(addr, len, flags)			\
--({								\
--	unsigned long mmap_end;					\
--	typeof(addr) _addr = (addr);				\
--	if ((_addr) == 0 || (IS_ENABLED(CONFIG_COMPAT) && is_compat_task())) \
--		mmap_end = STACK_TOP_MAX;			\
--	else if ((_addr) >= VA_USER_SV57)			\
--		mmap_end = STACK_TOP_MAX;			\
--	else if ((((_addr) >= VA_USER_SV48)) && (VA_BITS >= VA_BITS_SV48)) \
--		mmap_end = VA_USER_SV48;			\
--	else							\
--		mmap_end = VA_USER_SV39;			\
--	mmap_end;						\
--})
+ 	EXPECT_NE(MAP_FAILED, mmap_addresses.no_hint);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_37_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_38_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_46_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_47_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_55_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_56_addr);
+ 
+ 	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.no_hint);
+-	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_37_addr);
+-	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_38_addr);
+-	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_46_addr);
+-	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_47_addr);
+-	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_55_addr);
+-	EXPECT_GT(1UL << 56, (unsigned long)mmap_addresses.on_56_addr);
+ #endif
+ }
+ 
+diff --git a/tools/testing/selftests/riscv/mm/mmap_default.c b/tools/testing/selftests/riscv/mm/mmap_default.c
+index c63c60b9397e..f1ac860dcf04 100644
+--- a/tools/testing/selftests/riscv/mm/mmap_default.c
++++ b/tools/testing/selftests/riscv/mm/mmap_default.c
+@@ -15,20 +15,8 @@ TEST(default_rlimit)
+ 	do_mmaps(&mmap_addresses);
+ 
+ 	EXPECT_NE(MAP_FAILED, mmap_addresses.no_hint);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_37_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_38_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_46_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_47_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_55_addr);
+-	EXPECT_NE(MAP_FAILED, mmap_addresses.on_56_addr);
+ 
+ 	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.no_hint);
+-	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_37_addr);
+-	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_38_addr);
+-	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_46_addr);
+-	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_47_addr);
+-	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_55_addr);
+-	EXPECT_GT(1UL << 56, (unsigned long)mmap_addresses.on_56_addr);
+ #endif
+ }
+ 
+diff --git a/tools/testing/selftests/riscv/mm/mmap_test.h b/tools/testing/selftests/riscv/mm/mmap_test.h
+index 2e0db9c5be6c..d2271426288f 100644
+--- a/tools/testing/selftests/riscv/mm/mmap_test.h
++++ b/tools/testing/selftests/riscv/mm/mmap_test.h
+@@ -10,47 +10,17 @@
+ 
+ struct addresses {
+ 	int *no_hint;
+-	int *on_37_addr;
+-	int *on_38_addr;
+-	int *on_46_addr;
+-	int *on_47_addr;
+-	int *on_55_addr;
+-	int *on_56_addr;
+ };
+ 
+ // Only works on 64 bit
+ #if __riscv_xlen == 64
+ static inline void do_mmaps(struct addresses *mmap_addresses)
+ {
+-	/*
+-	 * Place all of the hint addresses on the boundaries of mmap
+-	 * sv39, sv48, sv57
+-	 * User addresses end at 1<<38, 1<<47, 1<<56 respectively
+-	 */
+-	void *on_37_bits = (void *)(1UL << 37);
+-	void *on_38_bits = (void *)(1UL << 38);
+-	void *on_46_bits = (void *)(1UL << 46);
+-	void *on_47_bits = (void *)(1UL << 47);
+-	void *on_55_bits = (void *)(1UL << 55);
+-	void *on_56_bits = (void *)(1UL << 56);
 -
--#define arch_get_mmap_base(addr, base)				\
--({								\
--	unsigned long mmap_base;				\
--	typeof(addr) _addr = (addr);				\
--	typeof(base) _base = (base);				\
--	unsigned long rnd_gap = DEFAULT_MAP_WINDOW - (_base);	\
--	if ((_addr) == 0 || (IS_ENABLED(CONFIG_COMPAT) && is_compat_task())) \
--		mmap_base = (_base);				\
--	else if (((_addr) >= VA_USER_SV57) && (VA_BITS >= VA_BITS_SV57)) \
--		mmap_base = VA_USER_SV57 - rnd_gap;		\
--	else if ((((_addr) >= VA_USER_SV48)) && (VA_BITS >= VA_BITS_SV48)) \
--		mmap_base = VA_USER_SV48 - rnd_gap;		\
--	else							\
--		mmap_base = VA_USER_SV39 - rnd_gap;		\
--	mmap_base;						\
--})
-+#define arch_get_mmap_end(addr, len, flags) \
-+	(((addr) > DEFAULT_MAP_WINDOW) || \
-+	 (((flags) & MAP_FIXED) && ((addr) + (len) > DEFAULT_MAP_WINDOW)) ? TASK_SIZE : \
-+									    DEFAULT_MAP_WINDOW)
-+
-+#define arch_get_mmap_base(addr, base) \
-+	(((addr) > DEFAULT_MAP_WINDOW) ? (base) + TASK_SIZE - DEFAULT_MAP_WINDOW : (base))
+ 	int prot = PROT_READ | PROT_WRITE;
+ 	int flags = MAP_PRIVATE | MAP_ANONYMOUS;
  
- #else
- #define DEFAULT_MAP_WINDOW	TASK_SIZE
+ 	mmap_addresses->no_hint =
+ 		mmap(NULL, 5 * sizeof(int), prot, flags, 0, 0);
+-	mmap_addresses->on_37_addr =
+-		mmap(on_37_bits, 5 * sizeof(int), prot, flags, 0, 0);
+-	mmap_addresses->on_38_addr =
+-		mmap(on_38_bits, 5 * sizeof(int), prot, flags, 0, 0);
+-	mmap_addresses->on_46_addr =
+-		mmap(on_46_bits, 5 * sizeof(int), prot, flags, 0, 0);
+-	mmap_addresses->on_47_addr =
+-		mmap(on_47_bits, 5 * sizeof(int), prot, flags, 0, 0);
+-	mmap_addresses->on_55_addr =
+-		mmap(on_55_bits, 5 * sizeof(int), prot, flags, 0, 0);
+-	mmap_addresses->on_56_addr =
+-		mmap(on_56_bits, 5 * sizeof(int), prot, flags, 0, 0);
+ }
+ #endif /* __riscv_xlen == 64 */
+ 
 -- 
 2.43.0
 
