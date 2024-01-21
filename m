@@ -1,120 +1,91 @@
-Return-Path: <linux-kselftest+bounces-3278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D588A83372D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jan 2024 01:17:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01D7E8353FB
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jan 2024 01:43:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6732BB2189B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jan 2024 00:16:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B20042830E2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jan 2024 00:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D8819F;
-	Sun, 21 Jan 2024 00:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48CA15AFA;
+	Sun, 21 Jan 2024 00:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jb6xoVCm"
+	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="xNrlzLrv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5498377
-	for <linux-kselftest@vger.kernel.org>; Sun, 21 Jan 2024 00:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB8E14AAB;
+	Sun, 21 Jan 2024 00:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705796213; cv=none; b=ANgB7JKPeL0En+7VrwF0nZVgfpbagUJ260ugzD+uUHVUzmAgZ5BNw9NFPsuR868gKqUTSdxucxZZEf/6iOd1mB3BFL3wdL92RZgQeB9t3hAcBdZGSpcdPtCU8M+SMqWpGTzqYLFSPNHhRntpaNc909AnkvYD0S22wnIHkRW7FoU=
+	t=1705797815; cv=none; b=N2abBiUY7m71MNBXVi2HICiLqT5s7/IYVHh51nVw1i/BnPi5J3VFVXiHxj2FbC+vJ0VvjRypGAFgdWb2aGsn1BY2ndqDRNoYikzIOg0Dr1qXJxzg4NvQ9sZltCWEtCMtwYExnYkOHr+AphohFN/8AjS/7X2GsutR9C2MOksEoJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705796213; c=relaxed/simple;
-	bh=/C66J7wkQwwS2IqQ96WKFgsVf+pRy97LkmCeeYhVdP4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YwnKWebeCCjZiq1oHkwXqUFZaCd5ExFr8Y0spj9KZXg/AcnkkBB94ZbY/fs3mh1PJeymyC/WKdg8wYDUCMVOjsAXMdFOOXwxtUXuD0YZw/jIN6uNb6tbkgidZFEcKzJTFQ3BJL5MCrhP7a3gspkwLjLCQDVHGnf6bMNJ7mhDDvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=jb6xoVCm; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-210aaf2af35so1448355fac.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 20 Jan 2024 16:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1705796211; x=1706401011; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VGx1uUqBJNwaB067t1zS9OZh+thLjfiev6N5olOliBQ=;
-        b=jb6xoVCm4erIHuii7QR+BQMXQW1udD1XI2eGpmGrRN07v1b8g2Dans3F6BK64Hguzm
-         agWG9o5d4WAs+bSZfi/Q6SQQaidl50E81tkc5ANVEDAw1sEsgqRkaAHEwRGh5ZQ0NAbL
-         EjhBG8lpCf1gr06FhT8gVyDJyUCm3wAkpYBL4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705796211; x=1706401011;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VGx1uUqBJNwaB067t1zS9OZh+thLjfiev6N5olOliBQ=;
-        b=ZW3ZGdFVHXwqvkxvcRFdDsxYuUDEpmr0SiRSAOXU7LGrNs4AsaNwUnDB3+4bkqaQKY
-         3Y6uqbO+0Yl3VklCrN1iyzG68AaXEBU/TEmxSheE+iOsDF5L0ZJE45fHEXTAIscKadWJ
-         TnU0PfjUBEgiEIHQh6XXpWrUmrst8HnY9mFMG6W+2zlwJZFckzpkPqRZOU1Z99Yw3ntg
-         gEbkZb1GLUDLIHTfUUCqDd8k8at4tAOKWTbOpveVflooVUIpEy4hh9SY4rKgh7VbXK3G
-         OhttnhqY8JgOtzdjr12VfWR9oTkBQge02p1AYk1ur+7EWVGgkH0vO6w5CkolZCBlTUvU
-         yLLA==
-X-Gm-Message-State: AOJu0YzRnJtOQezqGgaovZzPKudQQeL+FJSj6OUGHYVxvFiiQTasQXhZ
-	Wmg2doBa36n2FD8xmOBfn/klUh3xYLZXLag+oD8qxTHJ1L8Q4LApbN82TeOO0TBHGnJykT46q+C
-	xN6TOVU16AjxW0JD/DV3Y8VM9HjfC4edrSZaw
-X-Google-Smtp-Source: AGHT+IFwp+DKXCAKoixsZuns+yTYxxlyPCYBxSpYdd1fXnL6rdiY+k7qeKJU05Nn//cgId/cR/5b/LaiwJxnDuIsufc=
-X-Received: by 2002:a05:6870:2e06:b0:210:8df6:3b04 with SMTP id
- oi6-20020a0568702e0600b002108df63b04mr2269701oab.102.1705796210854; Sat, 20
- Jan 2024 16:16:50 -0800 (PST)
+	s=arc-20240116; t=1705797815; c=relaxed/simple;
+	bh=6zClxfyv71M0RluUbCbllO0533ZG0kWqfL4wR73NjHM=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=tY2psya8QUMrKVNbFfMKW1/SjR5NNXIMlD1QVabFk9/hMCE0cM21Ir9Vxyrh1R2wGW4t8wjBYe0FGAs2U4fdyI3M4lIIFm5pVSddDm+xbcuf361J2cIy9d4XeMPJzfHUeurIowtEwtf6+wCUlT9Fr9tsZWa3Dc5iEQxJNSHWDy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=xNrlzLrv; arc=none smtp.client-ip=199.185.137.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=6zClxfyv71
+	M0RluUbCbllO0533ZG0kWqfL4wR73NjHM=; h=date:references:in-reply-to:
+	subject:cc:to:from; d=openbsd.org; b=xNrlzLrvdn5TiEK+r0xytg+ig0YyyOzsG
+	5h72+KeTLSNfAWSgxuoV28p6LgEBSpKPm2uXpufBZ9QJ/n/+3TV+7DPPn/2NuEmrqFcBst
+	3q9SxFEPMPkmr5ofcpN1Y4nU2IINcyvAo8zpPHQBiQMvYNKFe3+DgFPjV/Mm1y8fRq8WKK
+	bO+y+/L+iBqm1en9uyXnWDP+77ycPtFteeXzwjPFOq31DSjtchzRjeKcMZkkGWXCFazv7r
+	LHMmUTP8KfXq5K8NgRv1dNfIh05fsSBsZnHoCRFpH0J2BNMMosJtSlzpVknRPVr38/fiY3
+	M318gjyH361AmN6EuvpAvkSoNnb6g==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+	by cvs.openbsd.org (OpenSMTPD) with ESMTP id d3cb4755;
+	Sat, 20 Jan 2024 17:43:32 -0700 (MST)
+From: "Theo de Raadt" <deraadt@openbsd.org>
+To: Jeff Xu <jeffxu@chromium.org>
+cc: Linus Torvalds <torvalds@linux-foundation.org>,
+    =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
+    Jeff Xu <jeffxu@google.com>, akpm@linux-foundation.org,
+    keescook@chromium.org, jannh@google.com, willy@infradead.org,
+    gregkh@linuxfoundation.org, jorgelo@chromium.org,
+    groeck@chromium.org, linux-kernel@vger.kernel.org,
+    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+    pedro.falcato@gmail.com, dave.hansen@intel.com,
+    linux-hardening@vger.kernel.org
+Subject: Re: [RFC PATCH v3 11/11] mseal:add documentation
+In-reply-to: <CABi2SkVXgyG4r-SzkXx0-MOQ2dqhy1ewwhvfXMJLw066i1zJKw@mail.gmail.com>
+References: <20231212231706.2680890-1-jeffxu@chromium.org> <20231212231706.2680890-12-jeffxu@chromium.org> <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com> <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com> <CAHk-=wh_VViVZxjiQ5jtB0q=p=JtJMj2R24UAmj-fL-RNLWxNw@mail.gmail.com> <CAEAAPHZpYXHNPdca+xfj77bwYaL6PY-c_oQ54r+=wtJa6_hmCA@mail.gmail.com> <CAHk-=wiVhHmnXviy1xqStLRozC4ziSugTk=1JOc8ORWd2_0h7g@mail.gmail.com> <CABi2SkUTdF6PHrudHTZZ0oWK-oU+T-5+7Eqnei4yCj2fsW2jHg@mail.gmail.com> <78111.1705764224@cvs.openbsd.org> <CAHk-=wgdhbLeY=pEY27m4OQuDAn9xkzSLHwE9D8m1Dw8a++n=Q@mail.gmail.com> <CABi2SkVXgyG4r-SzkXx0-MOQ2dqhy1ewwhvfXMJLw066i1zJKw@mail.gmail.com>
+Comments: In-reply-to Jeff Xu <jeffxu@chromium.org>
+   message dated "Sat, 20 Jan 2024 16:16:39 -0800."
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212231706.2680890-1-jeffxu@chromium.org> <20231212231706.2680890-12-jeffxu@chromium.org>
- <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com>
- <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
- <CAHk-=wh_VViVZxjiQ5jtB0q=p=JtJMj2R24UAmj-fL-RNLWxNw@mail.gmail.com>
- <CAEAAPHZpYXHNPdca+xfj77bwYaL6PY-c_oQ54r+=wtJa6_hmCA@mail.gmail.com>
- <CAHk-=wiVhHmnXviy1xqStLRozC4ziSugTk=1JOc8ORWd2_0h7g@mail.gmail.com>
- <CABi2SkUTdF6PHrudHTZZ0oWK-oU+T-5+7Eqnei4yCj2fsW2jHg@mail.gmail.com>
- <78111.1705764224@cvs.openbsd.org> <CAHk-=wgdhbLeY=pEY27m4OQuDAn9xkzSLHwE9D8m1Dw8a++n=Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wgdhbLeY=pEY27m4OQuDAn9xkzSLHwE9D8m1Dw8a++n=Q@mail.gmail.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Sat, 20 Jan 2024 16:16:39 -0800
-Message-ID: <CABi2SkVXgyG4r-SzkXx0-MOQ2dqhy1ewwhvfXMJLw066i1zJKw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 11/11] mseal:add documentation
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Theo de Raadt <deraadt@openbsd.org>, =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>, 
-	Jeff Xu <jeffxu@google.com>, akpm@linux-foundation.org, keescook@chromium.org, 
-	jannh@google.com, willy@infradead.org, gregkh@linuxfoundation.org, 
-	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
-	dave.hansen@intel.com, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <98518.1705797812.1@cvs.openbsd.org>
+Date: Sat, 20 Jan 2024 17:43:32 -0700
+Message-ID: <44186.1705797812@cvs.openbsd.org>
 
-On Sat, Jan 20, 2024 at 8:40=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sat, 20 Jan 2024 at 07:23, Theo de Raadt <deraadt@openbsd.org> wrote:
-> >
-> > There is an one large difference remainig between mimmutable() and msea=
-l(),
-> > which is how other system calls behave.
-> >
-> > We return EPERM for failures in all the system calls that fail upon
-> > immutable memory (since Oct 2022).
-> >
-> > You are returning EACESS.
-> >
-> > Before it is too late, do you want to reconsider that return value, or
-> > do you have a justification for the choice?
->
-> I don't think there's any real reason for the difference.
->
-> Jeff - mind changing the EACESS to EPERM, and we'll have something
-> that is more-or-less compatible between Linux and OpenBSD?
->
-Sounds Good. I will make the necessary changes in the next version.
+Jeff Xu <jeffxu@chromium.org> wrote:
 
--Jeff
+> > Jeff - mind changing the EACESS to EPERM, and we'll have something
+> > that is more-or-less compatible between Linux and OpenBSD?
+> >
+> Sounds Good. I will make the necessary changes in the next version.
 
->              Linus
+Thanks!  That is so awesome!
+
+On the OpenBSD side, I am close to landing our madvise / msync changes.
+
+Then we are mostly in sync.
+
+It was on my radar for a year, but delayed because I was ponderingn
+blocking the destructive madvise / msync ops on regular non-writeable
+pages.  These ops remain a page-zero gadget against regular (mutable)
+readonly pages, and it bothers me.  I've heard rumour this has been used
+in a nasty way, and I think the sloppily defined semantics could use
+a strict modernization.
 
