@@ -1,220 +1,151 @@
-Return-Path: <linux-kselftest+bounces-3368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37C388374E6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 22:09:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DCBB837567
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 22:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81194B2893B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 21:08:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 636931C25349
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 21:34:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54766481C2;
-	Mon, 22 Jan 2024 21:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F2D482C3;
+	Mon, 22 Jan 2024 21:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iI9l0jmc"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GxM2tPBt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA6B481B9;
-	Mon, 22 Jan 2024 21:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B4247F76
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 21:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705957709; cv=none; b=HqaLGfM+CT4AOf0vhEOJ1vjEHWSHaLHDNhwQoMUUvZoT0/vkzYLP9ZLFiHZ1Fuk5M4EN/+Klns3i/0GjU8GdrfF5fmp1QhaR5M59fRK9Yi5YoGDFv1eXxHt7sAX9LaL6WpxwEWEy65H5NdzMCsb/oxZHvRxcDZWJdtSu5P25BQ8=
+	t=1705959053; cv=none; b=MOKRjaH9Eu/+Lw1qfKapZjrCXapaD1f0VGlfdnlai7SYBSzUyKFzkpvH6h2Bvn5o2RchsLy7FsNG6H9P+44mN06VT225Iac/8CKgdgrVBmz5szM4tVBRaHHYQqv8KdXJj2PsT1nTocu7C99tJMYF5ZvrcKY7YKBw6bul9Lnng6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705957709; c=relaxed/simple;
-	bh=t77pXwBHIZmQkm4dwW7usuOT7jYVGRdtPqOlVm0lDgU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NB6ZZ7dDZDs2w+LW9txQc4XVsSA3KJ+antTNr1sva5Zx/cM6hcnCgLgBmgfMbDDajQ2q4nukeyq8DYBOvduxn/9COvqDoTGDTfKm1tLdFNPJrd5G8pp85G8U0qyJf3hNa6v6WwehirNSEZZ/ckBjnpwP2JyoGP15QqpzVvKaZPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iI9l0jmc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB85C43390;
-	Mon, 22 Jan 2024 21:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705957709;
-	bh=t77pXwBHIZmQkm4dwW7usuOT7jYVGRdtPqOlVm0lDgU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=iI9l0jmcs/lZb2/NR+5Vq+pbajscZAI9AcX657ziy1imFpM3W5twu9tlpJfCLQ8TB
-	 bf3GMNTYUfKC7utqmRyI0O/pPCOXptIjRgPU6FE1Fb/tutojA04fBmTpKKbc/XzVfY
-	 XLcPZw7RlOYIOjgeHYJFqQYDp5E2fEpBC2fqZ7RvxX/QjFwy7anCWEHVd/2J9g+W5y
-	 amIGaeh6DZGRPo2h4oauGONvNb4Y7o7MzxxWv/Q9YRKdTbCw/J9TwLykONGIqrjOYX
-	 u3IGO1XdQ0Ub1rh5YLu0OMDGs5H34zruy+7EhJmL5HSt9Zjsxdu+7vnORymlqXbzMo
-	 NTh2ImNk5HvMA==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 22 Jan 2024 21:08:18 +0000
-Subject: [PATCH v3 2/2] kselftest/seccomp: Report each expectation we
- assert as a KTAP test
+	s=arc-20240116; t=1705959053; c=relaxed/simple;
+	bh=zoiLe0GmgV6XcV8qaxVsWn9xPRi07vWQTIaZGAPTy18=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YI3UmysWVr47mXmID9niklXX8f/f5dJ/uUh4v7XsUyforTYkl8Z9XYHZ3sbfsi6z0Jw3mM+Jizs3bo9gs85HmZKpToQCqF2kceme3f4t/Eunacoo92S4eCjG5pnB+gBqDU0ys/xWGn8poG//0TTBgxYPrCeMaSlah2heJHggXao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GxM2tPBt; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-290b37bb7deso780380a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 13:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1705959052; x=1706563852; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xKEBr23rbJKu9h7vL24E+EIJQpc/iOsyibRTRHA5Xcc=;
+        b=GxM2tPBt1t3JBPCQCGXTtAnCdO9Ldc417Kde0DIbbhgYphNRBBiKN9zbbCXz77D7is
+         vu18prh4YboCsJTBQ6b6viJp2JevCfRUkbre9TgwaRSGPW4Hy0n9iENFSYJjj/Xnu3/4
+         KLp5uwlGwslDkrb2Y8a6FEy2e2pIjdNY9Rs+4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705959052; x=1706563852;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xKEBr23rbJKu9h7vL24E+EIJQpc/iOsyibRTRHA5Xcc=;
+        b=BdkHRlDP07aaxqW4EEySUhNxDQQtUAeQCTrSvhTVnLUTZAWbTCzKtphnscaSyZn0BG
+         43w/K1MfypcYeDGUsnvXDbuKSX09tmJoTAzkgbU6gCJifrukeszB3qXry6rtfGxjTrlw
+         phv6SaFuoyMcZyaon99MHyg8uEin/C+fGmnKatigtE0chghMzbhCXP0F/vQF5mksfVbK
+         q9eaw4nYJIr+FWS+RSBX4toxqXLhABbeBErnY+H/x4wGHskfGh1rUAbVX2EU06DnnUaE
+         W7EE3GAGB2pyB9DsC1bKpEHWkpO0fmGxgrNJPZLDxNc17OyAbeR67mXSGhGgCw3fQBbI
+         HczA==
+X-Gm-Message-State: AOJu0YwQpd0NwaRmTIsHQy7Ce6Il00LspeMtOLEEsZPm96cz+YTwZk70
+	pEtP6vVcnYB3LztVAR8zvpHn6WaHvCSSHXwmbOkbWK8VG9wgKFtoBy4u4YCWxw==
+X-Google-Smtp-Source: AGHT+IGuu8CRZ67T/sbZ33Kh3Gjp/4gDLn2p+VjWE9BT0X4ASe4DyFux9xBdjaYSy+LIQ61UuJTqIQ==
+X-Received: by 2002:a17:90b:1093:b0:28f:f706:f276 with SMTP id gj19-20020a17090b109300b0028ff706f276mr2415921pjb.80.1705959051711;
+        Mon, 22 Jan 2024 13:30:51 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id l17-20020a17090a409100b00290ae3bf8d7sm2167130pjg.21.2024.01.22.13.30.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jan 2024 13:30:51 -0800 (PST)
+Date: Mon, 22 Jan 2024 13:30:50 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: Oleg Nesterov <oleg@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Adrian Reber <areber@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	tiozhang <tiozhang@didiglobal.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	YueHaibing <yuehaibing@huawei.com>,
+	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
+	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
+	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
+	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
+	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Zheng Yejian <zhengyejian1@huawei.com>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	David Windsor <dwindsor@gmail.com>,
+	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Hans Liljestrand <ishkamiel@gmail.com>
+Subject: Re: [PATCH v14] exec: Fix dead-lock in de_thread with ptrace_attach
+Message-ID: <202401221328.5E7A82C32@keescook>
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <20240116152210.GA12342@redhat.com>
+ <AS8P193MB128538BC3833E654F56DA801E4722@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <20240117163739.GA32526@redhat.com>
+ <AS8P193MB1285FDD902CC57C781AF2770E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240122-b4-kselftest-seccomp-benchmark-ktap-v3-2-785bff4c04fd@kernel.org>
-References: <20240122-b4-kselftest-seccomp-benchmark-ktap-v3-0-785bff4c04fd@kernel.org>
-In-Reply-To: <20240122-b4-kselftest-seccomp-benchmark-ktap-v3-0-785bff4c04fd@kernel.org>
-To: Kees Cook <keescook@chromium.org>, 
- Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>, Anders Roxell <anders.roxell@linaro.org>
-X-Mailer: b4 0.13-dev-5c066
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5070; i=broonie@kernel.org;
- h=from:subject:message-id; bh=t77pXwBHIZmQkm4dwW7usuOT7jYVGRdtPqOlVm0lDgU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlrtlFUrdtPX47N2EhiewOPyZMX/jgPvNrIWZQNk9T
- tPXfBqyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZa7ZRQAKCRAk1otyXVSH0GR7B/
- 0b+BDFYOSEMaG+g3jlTRnQyDa9HuB5LRNk61Sp5OE6Nxj5yvyeVLa43NswujPBcfL1a9z2ilykKPEi
- 2kzvxv1PHzMi1kRg3IVfSlwgTi638fAHVTghjsKxHqW1RvlAe5MvrdXGYa5wvUvtiGITyPy5ryMcfv
- kmRM6A3bPeKYgydizA66ez48fW1OweUFS+O55fVuhEgqqRyiRIlflOn3w7k2r0teC7uNeeFqh106BC
- d0s1pGkkxhvIzCY0CAOwD1aAluQvktdVysDCsgIURZHNQvDIPtjGr59a+RrLtyoJwYKQPvOD7jyZHv
- JOK0LR2RvGsm5FB7p++NUKuGty8OrG
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AS8P193MB1285FDD902CC57C781AF2770E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
 
-The seccomp benchmark test makes a number of checks on the performance it
-measures and logs them to the output but does so in a custom format which
-none of the automated test runners understand meaning that the chances that
-anyone is paying attention are slim. Let's additionally log each result in
-KTAP format so that automated systems parsing the test output will see each
-comparison as a test case. The original logs are left in place since they
-provide the actual numbers for analysis.
+On Mon, Jan 22, 2024 at 02:24:37PM +0100, Bernd Edlinger wrote:
+> The main concern was when a set-suid program is executed by execve.
+> Then it makes a difference if the current thread is traced before the
+> execve or not.  That means if the current thread is already traced,
+> the decision, which credentials will be used is different than otherwise.
+> 
+> So currently there are two possbilities, either the trace happens
+> before the execve, and the suid-bit will be ignored, or the trace
+> happens after the execve, but it is checked that the now potentially
+> more privileged credentials allow the tracer to proceed.
+> 
+> With this patch we will have a third prossibility, that is in order
+> to avoid the possible dead-lock we allow the suid-bit to take effect,
+> but only if the tracer's privileges allow both to attach the current
+> credentials and the new credentials.  But I would only do that as
+> a last resort, to avoid the possible dead-lock, and not unless a dead-lock
+> is really expected to happen.
 
-As part of this rework the flow for the main program so that when we skip
-tests we still log all the tests we skip, this is because the standard KTAP
-headers and footers include counts of the number of expected and run tests.
-
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../testing/selftests/seccomp/seccomp_benchmark.c  | 62 +++++++++++++++-------
- 1 file changed, 42 insertions(+), 20 deletions(-)
-
-diff --git a/tools/testing/selftests/seccomp/seccomp_benchmark.c b/tools/testing/selftests/seccomp/seccomp_benchmark.c
-index 93168dd2c1e3..436a527b8235 100644
---- a/tools/testing/selftests/seccomp/seccomp_benchmark.c
-+++ b/tools/testing/selftests/seccomp/seccomp_benchmark.c
-@@ -98,24 +98,36 @@ bool le(int i_one, int i_two)
- }
- 
- long compare(const char *name_one, const char *name_eval, const char *name_two,
--	     unsigned long long one, bool (*eval)(int, int), unsigned long long two)
-+	     unsigned long long one, bool (*eval)(int, int), unsigned long long two,
-+	     bool skip)
- {
- 	bool good;
- 
-+	if (skip) {
-+		ksft_test_result_skip("%s %s %s\n", name_one, name_eval,
-+				      name_two);
-+		return 0;
-+	}
-+
- 	ksft_print_msg("\t%s %s %s (%lld %s %lld): ", name_one, name_eval, name_two,
- 		       (long long)one, name_eval, (long long)two);
- 	if (one > INT_MAX) {
- 		ksft_print_msg("Miscalculation! Measurement went negative: %lld\n", (long long)one);
--		return 1;
-+		good = false;
-+		goto out;
- 	}
- 	if (two > INT_MAX) {
- 		ksft_print_msg("Miscalculation! Measurement went negative: %lld\n", (long long)two);
--		return 1;
-+		good = false;
-+		goto out;
- 	}
- 
- 	good = eval(one, two);
- 	printf("%s\n", good ? "✔️" : "❌");
- 
-+out:
-+	ksft_test_result(good, "%s %s %s\n", name_one, name_eval, name_two);
-+
- 	return good ? 0 : 1;
- }
- 
-@@ -142,9 +154,13 @@ int main(int argc, char *argv[])
- 	unsigned long long samples, calc;
- 	unsigned long long native, filter1, filter2, bitmap1, bitmap2;
- 	unsigned long long entry, per_filter1, per_filter2;
-+	bool skip = false;
- 
- 	setbuf(stdout, NULL);
- 
-+	ksft_print_header();
-+	ksft_set_plan(7);
-+
- 	ksft_print_msg("Running on:\n");
- 	ksft_print_msg("");
- 	system("uname -a");
-@@ -202,8 +218,10 @@ int main(int argc, char *argv[])
- #define ESTIMATE(fmt, var, what)	do {			\
- 		var = (what);					\
- 		ksft_print_msg("Estimated " fmt ": %llu ns\n", var);	\
--		if (var > INT_MAX)				\
--			goto more_samples;			\
-+		if (var > INT_MAX) {				\
-+			skip = true;				\
-+			ret |= 1;				\
-+		}						\
- 	} while (0)
- 
- 	ESTIMATE("total seccomp overhead for 1 bitmapped filter", calc,
-@@ -222,30 +240,34 @@ int main(int argc, char *argv[])
- 		 (filter2 - native - entry) / 4);
- 
- 	ksft_print_msg("Expectations:\n");
--	ret |= compare("native", "≤", "1 bitmap", native, le, bitmap1);
--	bits = compare("native", "≤", "1 filter", native, le, filter1);
-+	ret |= compare("native", "≤", "1 bitmap", native, le, bitmap1,
-+		       skip);
-+	bits = compare("native", "≤", "1 filter", native, le, filter1,
-+		       skip);
- 	if (bits)
--		goto more_samples;
-+		skip = true;
- 
- 	ret |= compare("per-filter (last 2 diff)", "≈", "per-filter (filters / 4)",
--			per_filter1, approx, per_filter2);
-+		       per_filter1, approx, per_filter2, skip);
- 
- 	bits = compare("1 bitmapped", "≈", "2 bitmapped",
--			bitmap1 - native, approx, bitmap2 - native);
-+		       bitmap1 - native, approx, bitmap2 - native, skip);
- 	if (bits) {
- 		ksft_print_msg("Skipping constant action bitmap expectations: they appear unsupported.\n");
--		goto out;
-+		skip = true;
- 	}
- 
--	ret |= compare("entry", "≈", "1 bitmapped", entry, approx, bitmap1 - native);
--	ret |= compare("entry", "≈", "2 bitmapped", entry, approx, bitmap2 - native);
-+	ret |= compare("entry", "≈", "1 bitmapped", entry, approx,
-+		       bitmap1 - native, skip);
-+	ret |= compare("entry", "≈", "2 bitmapped", entry, approx,
-+		       bitmap2 - native, skip);
- 	ret |= compare("native + entry + (per filter * 4)", "≈", "4 filters total",
--			entry + (per_filter1 * 4) + native, approx, filter2);
--	if (ret == 0)
--		goto out;
-+		       entry + (per_filter1 * 4) + native, approx, filter2,
-+		       skip);
- 
--more_samples:
--	ksft_print_msg("Saw unexpected benchmark result. Try running again with more samples?\n");
--out:
--	return 0;
-+	if (ret) {
-+		ksft_print_msg("Saw unexpected benchmark result. Try running again with more samples?\n");
-+	}
-+
-+	ksft_finished();
- }
+Instead of doing this special cred check (which I am worried could
+become fragile -- I'd prefer all privilege checks happen in the same
+place and in the same way...), could we just fail the ptrace_attach of
+the execve?
 
 -- 
-2.30.2
-
+Kees Cook
 
