@@ -1,289 +1,309 @@
-Return-Path: <linux-kselftest+bounces-3293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EDAD835AFC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 07:27:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01653835C1C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 08:56:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9AE3B26D26
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 06:27:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F6A11C22E3A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 07:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0226139;
-	Mon, 22 Jan 2024 06:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A8FE179BA;
+	Mon, 22 Jan 2024 07:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b="azHSEMWX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EaDCrZNT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAA6DF70
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 06:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705904784; cv=none; b=nD3dmOJQMrE5D/HzssbMlNExDPvBiS+vNiBtq0J64KDd1iM1Dn/Zb8ty6fEyjZkqP6m6WfcAOOMu7I+f5cnEp5ThIxVy+D06X2GU8fSZYDCwUf7wLwe1f9KpAUi0rVH0mT7dGBOodVVwwf1PTrM1tlF0NO0Avipj5sPhQBv4tH4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705904784; c=relaxed/simple;
-	bh=nomzOqG8qtQlSxsBxKy5X1xMNj4S0dr5Ifd+oiSg+rg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s/xebZ/lA/+y721/Fkp5BIWsx1//0GU9cUZCvvpaPIiXU86Vpt4YddsuRRs3CxVN230tKzSm1H0HLyoJiMZN/T4iybYqUoZTpkajIlwPOLylF6C4EhKPS/4xC1Iei60/4x5qUBIyngRSqLDxoBDrYi1M+Baf3gNNUvacFEe0DdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylehuey.com; spf=pass smtp.mailfrom=kylehuey.com; dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b=azHSEMWX; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylehuey.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylehuey.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso2049410a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Jan 2024 22:26:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google; t=1705904782; x=1706509582; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EjezFELGsG5yYdoO8o3jjgWXUKsZRmSJ3eM36KaKRP0=;
-        b=azHSEMWXVXCyiT3KzyyLiDGu21a8ZywlvbfIN+iQ78xfouPHJ2gvFntL1d7k+s0C/w
-         tsjVC0A+OqD9LaqnJIqSc1ptdo2VJY4m+AsbS8UfpIttA+gAX0Zt+7pgK7aDSivAXXY8
-         v3lXHXYsnFJ5CFYAZyDe7zr+MzdT0rumHMjqNXEEHwbziR+wr+P1PUEgAlzpURfiybVu
-         vmjFLXrr5n9C9TBmR5j9U72KBZ914xzeVZPw4beE7s68BnQ4BRYQCpZ5ETDAyNAaGCl5
-         S3JPWR4Rhb5MHbRQssWQCoqCFozBTgEgr/65FabKYplFw5TFmNrOv3WYKMDZl+fil49U
-         qeAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705904782; x=1706509582;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EjezFELGsG5yYdoO8o3jjgWXUKsZRmSJ3eM36KaKRP0=;
-        b=ZQtkZQECafC2af3Mvxa16ElXCSHbisCvRY/q4CxQmJQWy5n7dUZn0T35ahtci+AZmF
-         d8aiEaAl6VEWLKnqkOYahN10OrjfYrbI1ttJvSIIn9Tv6XjZqCyPTuV28TyvnAiOKnkX
-         bdfEjpVKCZPVPfTtBoa4QHMtVPl6kE+PHWHmPw6ow2cSa72E1qWwrkBDLehCXkVdltRS
-         0+odOUr28VjQndvTn91gybzmjlwe5U4oo4468eAt49vYFnZvK5RZ/BbB+SBP30E+17tS
-         z4clbc8ZVgNo3oTle+8n9pMkNAKY3Zr1J3/+Cw3X1VZGY7LOmCG9LPlB4oFBNSm/sDB2
-         oaJA==
-X-Gm-Message-State: AOJu0YxmqhazdG1Oy9EgSnpcliKrMfHR+aPtCtec3tplPzgr+kgFolwm
-	LDdtdbDV/8R7iCqp2Gi+yT6ayIHt17bzJZkUPTtpBfeHJqAaGwvlg//koP18WA==
-X-Google-Smtp-Source: AGHT+IFMW888K8jWC9UqxrFXPqdvN8EA+d82Vk2Kae5kOYRMvM5HyvYhydsHUbRAopyqCX5czH23dg==
-X-Received: by 2002:a17:90a:d384:b0:28e:8210:ddbc with SMTP id q4-20020a17090ad38400b0028e8210ddbcmr1483228pju.20.1705904781945;
-        Sun, 21 Jan 2024 22:26:21 -0800 (PST)
-Received: from zhadum.home.kylehuey.com (c-76-126-33-191.hsd1.ca.comcast.net. [76.126.33.191])
-        by smtp.gmail.com with ESMTPSA id u5-20020a17090282c500b001d7248fdc26sm4317771plz.69.2024.01.21.22.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jan 2024 22:26:21 -0800 (PST)
-From: Kyle Huey <me@kylehuey.com>
-X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
-To: Kyle Huey <khuey@kylehuey.com>,
-	linux-kernel@vger.kernel.org,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Marco Elver <elver@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>
-Cc: Robert O'Callahan <robert@ocallahan.org>,
-	Song Liu <song@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 4/4] selftest/bpf: Test a perf bpf program that suppresses side effects.
-Date: Sun, 21 Jan 2024 22:25:35 -0800
-Message-Id: <20240122062535.8265-5-khuey@kylehuey.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240122062535.8265-1-khuey@kylehuey.com>
-References: <20240122062535.8265-1-khuey@kylehuey.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4001A708;
+	Mon, 22 Jan 2024 07:56:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705910191; cv=fail; b=SJUh6DUIasPRijizjIqmUnnS5XyxmrIf1PbVmguG7zy6pvp4QfaBEIrvf1XMhQfKQiRv5Emvh0ix3n3wYXHQiOqXVIaLVTjNK31U4eGN5Oj7qXU9ftHi2yk0D+nmY66j3T4QKEe/zF4kEmZdWUuU9OnMpKlaelqEEYazLDUxGjI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705910191; c=relaxed/simple;
+	bh=zf+tXUouP8GiPmADGugwru44IBs8AdXt6e3RXp1x5Hc=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=i0gj2Y51aB/MN1c21HArLkvzzq3lHpH9T4gDRaSKaIiricaImV8/y0LJGi9TfnXyxcHlYPosei83k5JsfTNPMUppO1++y1B/PK+Y/8WfRg9lUeiIMOqAFrtG5Z2bFS5CsVUJ/E3YZ/LmyRvwHMmxmZ9D6WJHTSt3E/ghEW1ivEc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EaDCrZNT; arc=fail smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705910189; x=1737446189;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=zf+tXUouP8GiPmADGugwru44IBs8AdXt6e3RXp1x5Hc=;
+  b=EaDCrZNTMHPGvi8GZWmP107g01BLtNvItLypVqGEwxXlEmRVv0K9NFW5
+   50L4MoCpq1rdF+EE+/4IwcmvY7R3EEprNUpLmYKsMNp8Px2oRaM/g3kvo
+   MosI6VePp+vXaCHRlblqBNaexX5j/tcTiM4uP7uB3gqsgSU2LT9WHPSFp
+   1rUm6PUnGAOEAm2jC2cI0+pcVYzcUhpIpzdVIbxu/6ohu+8TPwjP9nX9J
+   4vc4z7sReWpO8xbxOD5gXtIgSez5pqw8+bR2L6UCC83uQMX49c+5uEV5/
+   lgrw4d8ztqgocjocTxyj3NICc9HdnlSkej6mFdp73nIiX+eisc8dDdulX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="1024827"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="1024827"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2024 23:56:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="1032498615"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="1032498615"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 21 Jan 2024 23:56:23 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sun, 21 Jan 2024 23:56:23 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sun, 21 Jan 2024 23:56:22 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Sun, 21 Jan 2024 23:56:22 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Sun, 21 Jan 2024 23:56:22 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kh+zMhHWYtJgNsCLipUMAFLzn1WKdXcoeXpj8cjUc6EfiXbRg4FuZ7z/CbtKZ4/LfOU6vAp3bI38qdCvPrWrylJJndeKL4F6yr+ffopj3I/BKRHxnXk+9sL9R0WD5Rq7/1dekbtEvWFmGz+IoAjpFmMjPEgIJHxf0KU/GXxAaCobcsDL9n1ZLX+ZZrUAm7Msy+KzNUJDWpG9+X8W7Nm/Rd0eOV+M4+cVUyByG+WPuJZT5nw3SCbvQdQEFSY8ode9xnumK0TcdciAoYepMNjByWip+OuRjHdaD+WnbhAtxaPwwVAJAvFhmtDsrbrGh6YdODzWlJgtxJVYrSFNIUxiEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zbOrpLVS5kmTZfWhtJ7m/1bTT1oda1HAugMC6WLA5yM=;
+ b=LiRxl2BDYxnNveTCRuGCDSf3SiX4vwofVuHTdJIVK3JRMe6/ymcF9NzNGf8TGVf64TTarDaxDdjzThiIMxFOT5Ax6OnZV87/68xj94zyjFLRT10t0pY+TgZTbrAC8pmPQ/hJzGS90tw2xe7BIYBjPMdK5B+jynp2lFx5aBPXeq7teKZyFlXB+tAtvSAiKkqx6Yj11gtppXRqFpMvj9pqMXKoYqMmbsS8WWFZh4n6ozl0tg6nYsMSPVW1t8hCnIv6sBmlNw7esCWjsJ34cKClIfXwbz1HS6tmNlk7Bv2P8Gxp4CB2e+k0+LVoaKl1d7JA5C+3ZOG2KwahbQEqwRzuFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by BL3PR11MB6385.namprd11.prod.outlook.com (2603:10b6:208:3b5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.32; Mon, 22 Jan
+ 2024 07:56:20 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::c554:bc40:8b5c:9530]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::c554:bc40:8b5c:9530%4]) with mapi id 15.20.7159.013; Mon, 22 Jan 2024
+ 07:56:20 +0000
+Date: Mon, 22 Jan 2024 08:56:12 +0100
+From: Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>
+To: Reinette Chatre <reinette.chatre@intel.com>
+CC: Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
+	<ilpo.jarvinen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 4/4] selftests/resctrl: Add non-contiguous CBMs CAT
+ test
+Message-ID: <m3bhu3j3jzdo67mmuezjmwu4elyqjdwmoixcxm7qthls5tueqk@h7bvwxmy3l4y>
+References: <cover.1702392177.git.maciej.wieczor-retman@intel.com>
+ <10c3afd7f62c63db31a3d4af86529144a5d7bbf9.1702392177.git.maciej.wieczor-retman@intel.com>
+ <fd6acf6a-2610-406b-b363-220121a45aee@intel.com>
+ <6v4hgra7bd5nwubcgtbsidmoohrgxdw7no4faa4a54g4vrxo63@c6qnujvwn5ej>
+ <73cea732-3757-4aec-a39c-4f0e50f6fb70@intel.com>
+ <su2d6i22icynusoykmowfnzery6hlqugovaw4xcrhb7r3ymbx2@aeimvrxsc5xw>
+ <05db3bdc-9d54-44d2-8aae-07d66053892e@intel.com>
+ <wvehk3j2dcf3lkuantb7shefymxj2mnzv4pgbiqbk4jkmmzeid@lurk3dam5tb6>
+ <92bccaea-b73f-42e0-a386-1a73eb6f88de@intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <92bccaea-b73f-42e0-a386-1a73eb6f88de@intel.com>
+X-ClientProxiedBy: VI1PR10CA0109.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:28::38) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|BL3PR11MB6385:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d177d02-ed78-4254-76af-08dc1b1f9ecc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M0qjPYwmerxidGVbqJuzoZTEdJQNLwqE3PvLzJkrG7bBDi+LguhGRPb7hPqZVX5uHDaIbg3tvZ2AQ1vpK3RTSGlU1pSYncbEj5f+/l/hOfpAGFvJtToOUS82zO0N6Bz23eKCYvXLz/Pz5YqLTINTQYyBVzjY4ZnOm/sPIrmMNOxKcyP0+ECcyLtquWYFX8A7TcrTit8VivXOlKv1F28MifISxUXUE40dCy1PXcND9R91x5kylo+AAGqF+X7vPmNY5UHe54B8cMfDNXSRag/O+FHGsfWmknwYcxaAvS0XYb2SBBRJMvnbW2AqtxzRJ0UPgsdcekvnz4OX67wHZxpPSu551rFb9ijS4eH8bPdEIuQLced7ZHXbzr4lmfFxJf4VlDNYaaLeM57YZKUCdUH9P4M2/2oN4yHWhlMqzIMD5wK929HVJfl0cIsoiOlmOKc60uTxVzds+Pd7jopAQa368DbS/m5jorLxsr6vVgGWWUT1dCiTen18nb9AThiFvkh2KnAzv7p2onR9Xi5bthjqbjEl74tAni0deOwoDvwVJFcXAleN7jiTGFNI3BJuYV6/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(396003)(376002)(136003)(346002)(366004)(39860400002)(230922051799003)(64100799003)(1800799012)(186009)(451199024)(4326008)(6862004)(8676002)(8936002)(66946007)(66556008)(66476007)(54906003)(316002)(6636002)(2906002)(5660300002)(66574015)(26005)(82960400001)(86362001)(6512007)(6666004)(9686003)(6506007)(53546011)(478600001)(6486002)(33716001)(41300700001)(38100700002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?SU3+/aHHGoc/eaxdkZJkWPiVJWbIBsGuj9amTp6RjyFkW/UEfCbfUmtyuE?=
+ =?iso-8859-1?Q?CRfGPZtkwveAFHKnzqFyV0kp485ov7Src5zIcevJFK647mw6H/ZWlTv4sJ?=
+ =?iso-8859-1?Q?ckF/k58cO3fCanlSo01PtpOjCFzhKDhG27H2h/sdC0l7ONpqPSZiYgvbTU?=
+ =?iso-8859-1?Q?1UVrgoPOXPog0/l/alHLXKn6gU/+3Vt+UanYYXpkJgTNmF6MNfZZaFPWDs?=
+ =?iso-8859-1?Q?EHKDBAsLnOikmfk3bTZcea83ZxfBnrGCf3z+ibjI7+2NxRk3rV0W/EW9hj?=
+ =?iso-8859-1?Q?77PcR+xqRep0FXVBbDsNsHdFS6AdPYPSVocZvpQAJ6dLCk7zTR2IPPtk/p?=
+ =?iso-8859-1?Q?eYLme3XMe8l0yPLydMMVGDEYhJ+F7DgbttuexbQRh/R0AsFm7iKx00As0u?=
+ =?iso-8859-1?Q?OWCGlOjswRlbsIpYbROgfPj5pLjoqJrZCv53QQx+lrMHZWStuAG4GQbBoc?=
+ =?iso-8859-1?Q?Y9FxerxgfRN4c4guQMa99YxqYqenp2iVZ8M58QZrgtII2pyZcdwlf66qHI?=
+ =?iso-8859-1?Q?Umf/UETQPrMMIAquKm5ChtgYWU5PdKeoMM8SwaRRu1tHo1pYjEOrWkMM3G?=
+ =?iso-8859-1?Q?JShgyIfjb3e498ZM4icvWWl7tLC/q6n52eF4oplvN9IVfknR3uEf+dtcYf?=
+ =?iso-8859-1?Q?GLBiaN0WvHA5A/fx/MMZxFOdNml7QKEjOZI5+Om+T7GyHW/frIEJGrf87E?=
+ =?iso-8859-1?Q?X8KKoETZMwYvgi7boIkyF+DfF2pby7f5W/yK1/50UvLG98eH4b4WSor/Ek?=
+ =?iso-8859-1?Q?l9j67Lhm+W4KIl/g+v2uSIYPQfVGugQPZPhc9ekp0iTTYHKOaXYykqieUO?=
+ =?iso-8859-1?Q?FfWTJK0MJ109dWoKEcoU4ldOzxiStHCDLEFUWTmyuwrtiV0dMzaM096ndO?=
+ =?iso-8859-1?Q?fdpwDVbpWbKET24wfXCZVZUM/9+uWfWqSRMjvDuEL8E35RE0ZAe+xKwy0M?=
+ =?iso-8859-1?Q?jyyQcTePwMFQxwGiZ6DNwCIM/6GdjvrbUf0WA0A/b60XonbSXMEsHRiU0f?=
+ =?iso-8859-1?Q?CL1d467GP3YQjwoKbqXg4ybsn7kyTup6ceX2jyDDZws68bC/pGRpPvmUE2?=
+ =?iso-8859-1?Q?hGUmO6P6Fr3nfRE5aBh72vhHrjJL73hnfYSjH+xDkiggaB3fUKtgUxCt0J?=
+ =?iso-8859-1?Q?BbKZpBse5aovLqpckx34YGV8LIejr49/oI1LLr5FpYzzbARUr8Ham001gU?=
+ =?iso-8859-1?Q?n3WZJf590QBOmA/cu7CfvRjk0u5Nq5IgCGujGHdJkWhHawKxFPNyy89jgK?=
+ =?iso-8859-1?Q?zabxS9+D6V3TUkMEonFNDRUYn6AT+cWVVHe5RsZQke2tjv4AdeFJlW5m+F?=
+ =?iso-8859-1?Q?iYNXiUbamfXa/oVQBl9fjNmsF+0tqS6jK8nZhMWsBjh8xgzHsEL1mEKAmr?=
+ =?iso-8859-1?Q?pwFmEnOTDXKi487f0HNA6fDLetaY731y9cjJQ9Nhj6LAcnJOw0F4WTCr6N?=
+ =?iso-8859-1?Q?lC+MFmEJek0Y2bWCF4daGHfO+SwQ5jwNZNg/kO/j+9SI0SVWyowSfzYWSs?=
+ =?iso-8859-1?Q?9BgbXNbHahKNQPuynYR4d2BOSHm361SJ656UWh80ADES5kLCL3ghRIIES6?=
+ =?iso-8859-1?Q?QrPBRmXn2NDd547OKin8jnIfE5Bad7X5F13tqvGetpAS3gNrxHbsUhorwK?=
+ =?iso-8859-1?Q?HmSuS2JsDFuh4xfSBbWn8ubUzHJOJKKgkfYKI3fFmfw0WnRD1liiKEJn9i?=
+ =?iso-8859-1?Q?H53cw8kSwsDmQjGKj18=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d177d02-ed78-4254-76af-08dc1b1f9ecc
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2024 07:56:20.4426
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8OXcAA94uUra9T8oZwETc93mBf3855IP3brD8xhWT7/+OTV9Wr1/FFJjAaz1lcFpigtKiGigvSJDuM5RAx4cY04uK23ChlJpg8nHO+vIwHQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6385
+X-OriginatorOrg: intel.com
 
-The test sets a hardware breakpoint and uses a bpf program to suppress the
-side effects of a perf event sample, including I/O availability signals,
-SIGTRAPs, and decrementing the event counter limit, if the ip matches the
-expected value. Then the function with the breakpoint is executed multiple
-times to test that all effects behave as expected.
+Hi!
 
-Signed-off-by: Kyle Huey <khuey@kylehuey.com>
-Acked-by: Song Liu <song@kernel.org>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/perf_skip.c      | 137 ++++++++++++++++++
- .../selftests/bpf/progs/test_perf_skip.c      |  15 ++
- 2 files changed, 152 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
+On 2024-01-19 at 08:39:31 -0800, Reinette Chatre wrote:
+>Hi Maciej,
+>
+>On 1/18/2024 11:37 PM, Maciej Wieczór-Retman wrote:
+>> On 2024-01-18 at 09:15:46 -0800, Reinette Chatre wrote:
+>>> On 1/18/2024 4:02 AM, Maciej Wieczór-Retman wrote:
+>>>> On 2024-01-17 at 10:49:06 -0800, Reinette Chatre wrote:
+>>>>> On 1/17/2024 12:26 AM, Maciej Wieczór-Retman wrote:
+>>>>>> On 2024-01-08 at 14:42:11 -0800, Reinette Chatre wrote:
+>>>>>>> On 12/12/2023 6:52 AM, Maciej Wieczor-Retman wrote:
+>>>
+>>>>>>>> +	bit_center = count_bits(full_cache_mask) / 2;
+>>>>>>>> +	cont_mask = full_cache_mask >> bit_center;
+>>>>>>>> +
+>>>>>>>> +	/* Contiguous mask write check. */
+>>>>>>>> +	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
+>>>>>>>> +	ret = write_schemata("", schemata, uparams->cpu, test->resource);
+>>>>>>>> +	if (ret)
+>>>>>>>> +		return ret;
+>>>>>>>
+>>>>>>> How will user know what failed? I am seeing this single test exercise a few scenarios
+>>>>>>> and it is not obvious to me if the issue will be clear if this test,
+>>>>>>> noncont_cat_run_test(), fails.
+>>>>>>
+>>>>>> write_schemata() either succeeds with '0' or errors out with a negative value. If
+>>>>>> the contiguous mask write fails, write_schemata should print out what was wrong
+>>>>>> and I believe that the test will report an error rather than failure.
+>>>>>
+>>>>> Right. I am trying to understand whether the user will be able to decipher what failed
+>>>>> in case there is an error. Seems like in this case the user is expected to look at the
+>>>>> source code of the test to understand what the test was trying to do at the time it
+>>>>> encountered the failure. In this case user may be "lucky" that this test only has
+>>>>> one write_schemata() call _not_ followed by a ksft_print_msg() so user can use that
+>>>>> reasoning to figure out which write_schemata() failed to further dig what test was
+>>>>> trying to do. 
+>>>>
+>>>> When a write_schemata() is executed the string that is being written gets
+>>>> printed. If there are multiple calls in a single tests and one fails I'd imagine
+>>>> it would be easy for the user to figure out which one failed.
+>>>
+>>> It would be easy for the user the figure out if (a) it is obvious to the user
+>>> what schema a particular write_schema() call attempted to write and (b) all the
+>>> write_schema() calls attempt to write different schema.
+>> 
+>> Okay, your comment made me wonder if on error the schemata still is printed. I
+>> double checked in the code and whether write_schemata() fails or not it has a
+>> goto path where before returning it will print out the schema. So I believe that
+>> satisfies your (a) condition.
+>
+>Let me try with an example.
+>Scenario 1:
+>The test has the following code:
+>	...
+>	write_schemata(..., "0xfff", ...);
+>	...
+>	write_schemata(..., "0xf0f", ...);
+>	...
+>
+>Scenario 2:
+>The test has the following code:
+>	...
+>	write_schemata(..., schemata, ...);
+>	...
+>	write_schemata(..., schemata, ...);
+>	...
+>
+>Any failure of write_schemata() in scenario 1 will be easy to trace. As you
+>state, write_schemata() prints the schemata attempted and it will thus be
+>easy to look at the code to see which write_schemata() call failed since it
+>is obvious from the code which schemata was attempted.
+>A failure of one of the write_schemata() in scenario 2 will not be as easy
+>to trace since the user first needs to determine what the value of "schemata"
+>is at each call and that may depend on the platform, bit shifting done in test,
+>and state of system state at time of test.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
-new file mode 100644
-index 000000000000..37d8618800e4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <test_progs.h>
-+#include "test_perf_skip.skel.h"
-+#include <linux/compiler.h>
-+#include <linux/hw_breakpoint.h>
-+#include <sys/mman.h>
-+
-+#ifndef TRAP_PERF
-+#define TRAP_PERF 6
-+#endif
-+
-+int sigio_count, sigtrap_count;
-+
-+static void handle_sigio(int sig __always_unused)
-+{
-+	++sigio_count;
-+}
-+
-+static void handle_sigtrap(int signum __always_unused,
-+			   siginfo_t *info,
-+			   void *ucontext __always_unused)
-+{
-+	ASSERT_EQ(info->si_code, TRAP_PERF, "si_code");
-+	++sigtrap_count;
-+}
-+
-+static noinline int test_function(void)
-+{
-+	asm volatile ("");
-+	return 0;
-+}
-+
-+void serial_test_perf_skip(void)
-+{
-+	struct sigaction action = {};
-+	struct sigaction previous_sigtrap;
-+	sighandler_t previous_sigio = SIG_ERR;
-+	struct test_perf_skip *skel = NULL;
-+	struct perf_event_attr attr = {};
-+	int perf_fd = -1;
-+	int err;
-+	struct f_owner_ex owner;
-+	struct bpf_link *prog_link = NULL;
-+
-+	action.sa_flags = SA_SIGINFO | SA_NODEFER;
-+	action.sa_sigaction = handle_sigtrap;
-+	sigemptyset(&action.sa_mask);
-+	if (!ASSERT_OK(sigaction(SIGTRAP, &action, &previous_sigtrap), "sigaction"))
-+		return;
-+
-+	previous_sigio = signal(SIGIO, handle_sigio);
-+	if (!ASSERT_NEQ(previous_sigio, SIG_ERR, "signal"))
-+		goto cleanup;
-+
-+	skel = test_perf_skip__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto cleanup;
-+
-+	attr.type = PERF_TYPE_BREAKPOINT;
-+	attr.size = sizeof(attr);
-+	attr.bp_type = HW_BREAKPOINT_X;
-+	attr.bp_addr = (uintptr_t)test_function;
-+	attr.bp_len = sizeof(long);
-+	attr.sample_period = 1;
-+	attr.sample_type = PERF_SAMPLE_IP;
-+	attr.pinned = 1;
-+	attr.exclude_kernel = 1;
-+	attr.exclude_hv = 1;
-+	attr.precise_ip = 3;
-+	attr.sigtrap = 1;
-+	attr.remove_on_exec = 1;
-+
-+	perf_fd = syscall(__NR_perf_event_open, &attr, 0, -1, -1, 0);
-+	if (perf_fd < 0 && (errno == ENOENT || errno == EOPNOTSUPP)) {
-+		printf("SKIP:no PERF_TYPE_BREAKPOINT/HW_BREAKPOINT_X\n");
-+		test__skip();
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(perf_fd < 0, "perf_event_open"))
-+		goto cleanup;
-+
-+	/* Configure the perf event to signal on sample. */
-+	err = fcntl(perf_fd, F_SETFL, O_ASYNC);
-+	if (!ASSERT_OK(err, "fcntl(F_SETFL, O_ASYNC)"))
-+		goto cleanup;
-+
-+	owner.type = F_OWNER_TID;
-+	owner.pid = syscall(__NR_gettid);
-+	err = fcntl(perf_fd, F_SETOWN_EX, &owner);
-+	if (!ASSERT_OK(err, "fcntl(F_SETOWN_EX)"))
-+		goto cleanup;
-+
-+	/* Allow at most one sample. A sample rejected by bpf should
-+	 * not count against this.
-+	 */
-+	err = ioctl(perf_fd, PERF_EVENT_IOC_REFRESH, 1);
-+	if (!ASSERT_OK(err, "ioctl(PERF_EVENT_IOC_REFRESH)"))
-+		goto cleanup;
-+
-+	prog_link = bpf_program__attach_perf_event(skel->progs.handler, perf_fd);
-+	if (!ASSERT_OK_PTR(prog_link, "bpf_program__attach_perf_event"))
-+		goto cleanup;
-+
-+	/* Configure the bpf program to suppress the sample. */
-+	skel->bss->ip = (uintptr_t)test_function;
-+	test_function();
-+
-+	ASSERT_EQ(sigio_count, 0, "sigio_count");
-+	ASSERT_EQ(sigtrap_count, 0, "sigtrap_count");
-+
-+	/* Configure the bpf program to allow the sample. */
-+	skel->bss->ip = 0;
-+	test_function();
-+
-+	ASSERT_EQ(sigio_count, 1, "sigio_count");
-+	ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-+
-+	/* Test that the sample above is the only one allowed (by perf, not
-+	 * by bpf)
-+	 */
-+	test_function();
-+
-+	ASSERT_EQ(sigio_count, 1, "sigio_count");
-+	ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-+
-+cleanup:
-+	bpf_link__destroy(prog_link);
-+	if (perf_fd >= 0)
-+		close(perf_fd);
-+	test_perf_skip__destroy(skel);
-+
-+	if (previous_sigio != SIG_ERR)
-+		signal(SIGIO, previous_sigio);
-+	sigaction(SIGTRAP, &previous_sigtrap, NULL);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_perf_skip.c b/tools/testing/selftests/bpf/progs/test_perf_skip.c
-new file mode 100644
-index 000000000000..7eb8b6de7a57
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_perf_skip.c
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+uintptr_t ip;
-+
-+SEC("perf_event")
-+int handler(struct bpf_perf_event_data *data)
-+{
-+	/* Skip events that have the correct ip. */
-+	return ip != PT_REGS_IP(&data->regs);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Doing things similar to scenario 1 would be great from a debugging perspective
+but since the masks can have different sizes putting literals there seems
+impossible.
+
+Maybe the code could be improved by putting an example CBM in the comment above
+a write_schemata() call? "For a 12 bit maximum CBM value, the contiguous
+schemata will look like '0x3f'" and "For a 12 bit maximum CBM value, the
+non-contiguous schemata will look like '0xf0f'"
+
+This seems like the closest I could get to what you're
+showing in scenario 1 (which I assume would be the best).
+
+>> As for (b) depends on what you meant. Other tests that run more than one
+>> write_schemata() use different ones every time (CAT, MBM, MBA). Do you suggest
+>> that the non-contiguous test should attempt more schematas? For example shift
+>> the bit hole from one side to the other? I assumed one CBM with a centered bit
+>> hole would be enough to check if non-contiguous CBM feature works properly and
+>> more CBMs would be redundant.
+>
+>Let me try with an example.
+>Scenario 1:
+>The test has the following code:
+>	...
+>	write_schemata(..., "0xfff", ...);
+>	...
+>	write_schemata(..., "0xf0f", ...);
+>	...
+>
+>Scenario 2:
+>The test has the following code:
+>	...
+>	write_schemata(..., "0xfff", ...);
+>	...
+>	write_schemata(..., "0xfff", ...);
+>	...
+>
+>A failure of either write_schemata() in scenario 1 will be easy to trace since 
+>the schemata attempted is different in each case. The schemata printed by the
+>write_schemata() error message can thus easily be connected to the specific
+>write_schemata() call.
+>A failure of either write_schemata() in scenario 2 is not so obvious since they
+>both attempted the same schemata so the error message printed by write_schemata()
+>could belong to either. 
+
+I believe my code follows the first scenario example (since one schemata is half
+the full CBM, and the other one is the full CBM with a hole in the middle).
+
+I'm sorry to drag this thread out but I want to be sure if I'm right or are you
+suggesting something and I missed it?
+
+>
+>Reinette
+
 -- 
-2.34.1
-
+Kind regards
+Maciej Wieczór-Retman
 
