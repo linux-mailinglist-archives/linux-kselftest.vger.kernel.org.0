@@ -1,152 +1,143 @@
-Return-Path: <linux-kselftest+bounces-3319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3320-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ADF183652D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 15:12:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5109D836574
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 15:32:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECA92B2416A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 14:09:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AB75288123
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 14:32:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63B53D387;
-	Mon, 22 Jan 2024 14:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9693C3D3B6;
+	Mon, 22 Jan 2024 14:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tm/N0MHP"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="uJ9xhqvT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6D73D0C9
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 14:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EBB3D3B9;
+	Mon, 22 Jan 2024 14:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705932558; cv=none; b=PfDcod4lWbpifOeez4zEsNr7aZziHqfqDN+tAqB1RhGOSfHvT8zNPbxtsy4D1n21dwd5UzasbFZlN+vX6Ie7/hAvQjO88oaVLIa63YgTnkdd01DLefYXpR6pMmk6GEaKQZAWqomjDu7oLBrp9vcfNK/V3FxYPOSmPIWVF8UhV80=
+	t=1705933965; cv=none; b=IP8vwbw3Pp4rpGDFsKEzdKiK2tnORgGFdHZ3f54zfjQGS+kRZSZLzCkoPhOss58WmTxJAtGfrNE+zlZQfRdC5xvo5xp3j6aqcNr8B43zBUMQEzNHcBJC6oLH5TxL5u+/oh/ccKsiZAJpynRLDJv4mWHnpv4OXimTCtlFpyv7K+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705932558; c=relaxed/simple;
-	bh=znrIct7rUFWksSd+UC6un02EtdkHnndXakyNpVQ9a5Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PY1ypjraQMjkM/ZJYQdhgaAhXRgDUBxzrv4CNPUQXCYjm/Xhuakjas6BDNVdmyBspM2FHAM7R9tqWfMyXHYC91T0yhO7lkSKPM/yohOv6JBiKznbMYbnjn3KQttauDx9O3NK/oo8iJic/PZ5jdb5yl6NHULi2/p40tmvuKJynI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tm/N0MHP; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705932556;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=seqmVAFBDnuLvzwL3rN06iKmJlHsjwn1tq37k8ac87U=;
-	b=Tm/N0MHP1bRE93JiRT5A9fkwKpBLB4OFKQs8W7npKkfgf2htGYMjWRJSlR8K/PDacSD8SB
-	wtPntu6lHNrLR1IeGKZ0LtbA9LTtpuypbe4ty58q3w7zy14VnLe7q+eVezMDOSzu481Mdz
-	sIrns0YR2KlliUfXy1ZV4HB5SM2RrCs=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-97-7dqojYSdOSmgweoevYX7fg-1; Mon, 22 Jan 2024 09:09:15 -0500
-X-MC-Unique: 7dqojYSdOSmgweoevYX7fg-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-5ff7cf2fd21so32194267b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 06:09:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705932554; x=1706537354;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=seqmVAFBDnuLvzwL3rN06iKmJlHsjwn1tq37k8ac87U=;
-        b=qVkjiHXtEDNq6sKqnZOtFG1EkTGAoa7k7u4EvchgtpgajML0Q1CG+atzOBuZhHvoBT
-         0GZU80FLudu+ghEQRLF++ElDHI4i3SvQtdF8z1+7ovtx1W5m9dzoDIQIc2YP3q+KCieo
-         vqAZwIdGRMiwq3vWNptnKpcfwJ5PRQZ2oCpEZxolJs2yYeeEQ4FQiOIRp46UizvL14Vo
-         Zx03KK/h9kkvujDNFMOVO1jEYUkeGaZsjTraNie/IP8y3Fw3hsxOs0/8xKsuCcMbmn5U
-         rFHMJezFmY8adDJr1tnv7U6Hj52+eSrMWobJ79+SqxiBpwRHgnHUU73v2A8GxcPjsSd3
-         hQwQ==
-X-Gm-Message-State: AOJu0YzOGvouwQUqKdZz7QKgF1TJQBVyHOYbnW3QCHpH31qQHuizz2Lc
-	qZKrSvUQHyvRbHVSychX/vdbDXeKVANvUjV7ih0qc5WKQR9zJTsTyt1AwHwnESsQkLqtlkiSimo
-	JEIQlZ2rTPdFrhYCXZEgAiHFRzGKYsDo/hQX+hi+fDM8ClJmWih2OrFrE8065nLlH27bXEWqolA
-	ZJnBw976YkHADpamxJi9t+iwSxiFtuK0RkL6oFLTgi
-X-Received: by 2002:a81:8411:0:b0:5ff:b07b:e534 with SMTP id u17-20020a818411000000b005ffb07be534mr1742476ywf.9.1705932554313;
-        Mon, 22 Jan 2024 06:09:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF5TYT+m+Db5kWU9mkYv5aX43/bLG4o8DXbKxjOnIgv6IVDOYqnnpHQAvVW5nvty8UP/kaTKK+uoXudOp0V9CI=
-X-Received: by 2002:a81:8411:0:b0:5ff:b07b:e534 with SMTP id
- u17-20020a818411000000b005ffb07be534mr1742466ywf.9.1705932554072; Mon, 22 Jan
- 2024 06:09:14 -0800 (PST)
+	s=arc-20240116; t=1705933965; c=relaxed/simple;
+	bh=ox9ARHAWa5hbH1NGqyR8MHwCiVjffoCVe3hbDOh/RVo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HPIL5s9IBt4YQRTUYOEXaJj0EPsVGmqp0rggqq875pB6W30+RvOrQoTOda+yNf5Z/NzKfAy2zs9wLr78QqeN/EykKD/utPGHTU2FnzO95FCtVGAiAKZpgr5ytxT5T92ZLvCRDvF7t4ZIKTdgOLuuDtuCZ3HC3gsIyWxmUM5jjzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=uJ9xhqvT; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1705933961;
+	bh=ox9ARHAWa5hbH1NGqyR8MHwCiVjffoCVe3hbDOh/RVo=;
+	h=From:Date:Subject:To:Cc:From;
+	b=uJ9xhqvTww+cYoh9HhMp9tDM9PN+9baaqNJbjFcoDAT5KdbFEGQ7EtZ734huHcDm0
+	 YrSDUqcMtwfCWOV7MfjF3yKcs6UO/oSlOc9jC8jqHuSBdOaH4ROu7wgf0LK68WzFL1
+	 GyXGUvxlwrgmC56uXza3ilSvAD0dEnnsKKKsnbVQ64AP3T1APnzolX/dEtffwnHAXZ
+	 OkmZ66ztc/1a7S/Tta7TacpaqwFi1FcZmvsEFVCzUT5v5MgEhfuxgfo9T2G0DIRqrJ
+	 uFNSrAJ7bCiyiS54z1tUYctF2rURNhzHEYd+j0TKtdoxR06LJNx2cGWwT5TkM6V/DG
+	 i+1ahFYFQuy/Q==
+Received: from [192.168.0.47] (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BC7D03781477;
+	Mon, 22 Jan 2024 14:32:38 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Date: Mon, 22 Jan 2024 11:29:18 -0300
+Subject: [PATCH v2] kselftest: dt: Stop relying on dirname to improve
+ performance
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240119131429.172448-1-npache@redhat.com> <20240120203904.8f36140cd2f507b25e9a09a3@linux-foundation.org>
-In-Reply-To: <20240120203904.8f36140cd2f507b25e9a09a3@linux-foundation.org>
-From: Nico Pache <npache@redhat.com>
-Date: Mon, 22 Jan 2024 07:08:48 -0700
-Message-ID: <CAA1CXcANbz75MHKkJPEVa8AJBX4g8k7kq8i0ZCe9w_j9Oeg=ZA@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: mm: fix map_hugetlb failure on 64K page
- size systems
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, shuah@kernel.org, donettom@linux.vnet.ibm.com, 
-	Christophe Leroy <christophe.leroy@c-s.fr>, Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240122-dt-kselftest-dirname-perf-fix-v2-1-f1630532fd38@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAL17rmUC/zXMTQrCMBBA4auUWTslP63WrryHuEiTiQ22SZkEE
+ UrvbhBcfm/xdsjEgTKMzQ5M75BDihXq1ICdTXwSBlcNSqhOSKXQFXxlWnyhXNAFjmYl3Ig9+vD
+ Bi7OdknR2fhJQHxtTzb///VHtOa1YZibzv2qpxCC1vvZ92w166CVKjJ7Nxsalm03LYqbEprVph
+ eP4AvQCsDaxAAAA
+To: Rob Herring <robh+dt@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@collabora.com, Mark Brown <broonie@kernel.org>, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.12.4
 
-Hi Andrew,
+When walking directory trees, instead of looking for specific files and
+running dirname to get the parent folder, traverse all folders and
+ignore the ones not containing the desired files. This avoids the need
+to call dirname inside the loop, which drastically decreases run time:
+Running locally on a mt8192-asurada-spherion, which reports 160 test
+cases, has gone from 5.5s to 2.9s, while running remotely with an
+nfsroot has gone from 13.5s to 5.5s.
 
-No, I think it's always been broken-- I don't think the test was
-written with 512M huge page sizes in mind.
+This change has a side-effect, which is that the root DT node now
+also shows in the output, even though it isn't expected to bind to a
+driver. However there shouldn't be a matching driver for the board
+compatible, so the end result will be just an extra skipped test:
 
--- Nico
+ok 1 / # SKIP
 
-On Sat, Jan 20, 2024 at 9:39=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Fri, 19 Jan 2024 06:14:29 -0700 Nico Pache <npache@redhat.com> wrote:
->
-> > On systems with 64k page size and 512M huge page sizes, the allocation
-> > and test succeeds but errors out at the munmap. As the comment states,
-> > munmap will failure if its not HUGEPAGE aligned. This is due to the
-> > length of the mapping being 1/2 the size of the hugepage causing the
-> > munmap to not be hugepage aligned. Fix this by making the mapping lengt=
-h
-> > the full hugepage if the hugepage is larger than the length of the
-> > mapping.
->
-> Is
->
-> Fixes: fa7b9a805c79 ("tools/selftest/vm: allow choosing mem size and page=
- size in map_hugetlb")
->
-> a suitable Fixes: target for this?
->
-> > --- a/tools/testing/selftests/mm/map_hugetlb.c
-> > +++ b/tools/testing/selftests/mm/map_hugetlb.c
-> > @@ -15,6 +15,7 @@
-> >  #include <unistd.h>
-> >  #include <sys/mman.h>
-> >  #include <fcntl.h>
-> > +#include "vm_util.h"
-> >
-> >  #define LENGTH (256UL*1024*1024)
-> >  #define PROTECTION (PROT_READ | PROT_WRITE)
-> > @@ -58,10 +59,16 @@ int main(int argc, char **argv)
-> >  {
-> >       void *addr;
-> >       int ret;
-> > +     size_t hugepage_size;
-> >       size_t length =3D LENGTH;
-> >       int flags =3D FLAGS;
-> >       int shift =3D 0;
-> >
-> > +     hugepage_size =3D default_huge_page_size();
-> > +     /* munmap with fail if the length is not page aligned */
-> > +     if (hugepage_size > length)
-> > +             length =3D hugepage_size;
-> > +
-> >       if (argc > 1)
-> >               length =3D atol(argv[1]) << 20;
-> >       if (argc > 2) {
-> > --
-> > 2.43.0
->
+Reported-by: Mark Brown <broonie@kernel.org>
+Closes: https://lore.kernel.org/all/310391e8-fdf2-4c2f-a680-7744eb685177@sirena.org.uk
+Fixes: 14571ab1ad21 ("kselftest: Add new test for detecting unprobed Devicetree devices")
+Tested-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+Changes in v2:
+- Tweaked commit message
+- Added trailer tags
+- Rebased on 6.8-rc1
+---
+ tools/testing/selftests/dt/test_unprobed_devices.sh | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/dt/test_unprobed_devices.sh b/tools/testing/selftests/dt/test_unprobed_devices.sh
+index b07af2a4c4de..7fae90293a9d 100755
+--- a/tools/testing/selftests/dt/test_unprobed_devices.sh
++++ b/tools/testing/selftests/dt/test_unprobed_devices.sh
+@@ -33,8 +33,8 @@ if [[ ! -d "${PDT}" ]]; then
+ fi
+ 
+ nodes_compatible=$(
+-	for node_compat in $(find ${PDT} -name compatible); do
+-		node=$(dirname "${node_compat}")
++	for node in $(find ${PDT} -type d); do
++		[ ! -f "${node}"/compatible ] && continue
+ 		# Check if node is available
+ 		if [[ -e "${node}"/status ]]; then
+ 			status=$(tr -d '\000' < "${node}"/status)
+@@ -46,10 +46,11 @@ nodes_compatible=$(
+ 
+ nodes_dev_bound=$(
+ 	IFS=$'\n'
+-	for uevent in $(find /sys/devices -name uevent); do
+-		if [[ -d "$(dirname "${uevent}")"/driver ]]; then
+-			grep '^OF_FULLNAME=' "${uevent}" | sed -e 's|OF_FULLNAME=||'
+-		fi
++	for dev_dir in $(find /sys/devices -type d); do
++		[ ! -f "${dev_dir}"/uevent ] && continue
++		[ ! -d "${dev_dir}"/driver ] && continue
++
++		grep '^OF_FULLNAME=' "${dev_dir}"/uevent | sed -e 's|OF_FULLNAME=||'
+ 	done
+ 	)
+ 
+
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20240122-dt-kselftest-dirname-perf-fix-7dc421e6dfb0
+
+Best regards,
+-- 
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
