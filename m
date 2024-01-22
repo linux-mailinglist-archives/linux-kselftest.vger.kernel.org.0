@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-3337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4F00836D30
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 18:26:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB75D836D8A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 18:33:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7513428EF78
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 17:26:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EA90B32A9C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 17:26:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC42C679FB;
-	Mon, 22 Jan 2024 16:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE4A67A18;
+	Mon, 22 Jan 2024 16:28:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="loaz/CAD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="emPH6bVQ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4896774D;
-	Mon, 22 Jan 2024 16:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC10367A14;
+	Mon, 22 Jan 2024 16:28:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705940917; cv=none; b=spUG2nLaQ5JfaBAa7fZ2r+StG1VbY6tHtgNKqIvyjaTtrkV6Bwqcw9Zq31kSqPQjTBMrn499hKz3GurSm1NM4gu4//VQmgbQbIK3JNQ8TpZwnRVJDXCLD4M+cR4c0nBm2u0O2beUqm560Qy9hTDqD+L6py1Ey7sKhIgEm8mfRR0=
+	t=1705940920; cv=none; b=dbP0zCDnEAjRSkMDCyRUCOiQKr8xI0DMVywbCQthk2B/NIz8YFAVVLm7Kr9XlX5mb8/xqT65lkrou+LhsDVbN1OWdlmEuVskzWa7CfOtFOB4VXNvpe4FG0QtWvwHVMrs9BkQSVpd9J3se6GNUniico9dRG1jT3310AACLOQUGUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705940917; c=relaxed/simple;
-	bh=lYhaJYrF5xvKkxhGT6KR+gulaOYrM4vUcYbJ6FuCpeo=;
+	s=arc-20240116; t=1705940920; c=relaxed/simple;
+	bh=+pr8+N8Az9rPBwlL16ghSk5vvthU1BeA1Gwu1lfKkCg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cHEv/mK8hmgDmhmnO+0PfWBOHNPpTDmOd8QCAMMT4CO9QV9bb7lHNKDxYd8QxroGu7izWOfhgYDVcI2sPyxYdZ+Z3twfetbB6+4MAMiasxaTAjJh9JNqBA7j/Ewxar+ydp0F/6J7qG3MsSJ0WLYUub8yAh0f6jvsnbc6uMlfcuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=loaz/CAD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0015EC43394;
-	Mon, 22 Jan 2024 16:28:33 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Awc8BKmHGcwSWREAdXOCTn4rfyzrFKM+2tob7zTNK8eI+IYeN/NuCnxV6LLU9SqslANuD9O2aH5IEsWaKSBwHLhUkKqSFi4ZjvVnq5us9+Y1FSgHQVr1YLPyW9kpiZtzxNZ2OfgdRXGlh24D1eYmKkfhfAvAijiqD40UMlAMMTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=emPH6bVQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D2AC433A6;
+	Mon, 22 Jan 2024 16:28:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705940917;
-	bh=lYhaJYrF5xvKkxhGT6KR+gulaOYrM4vUcYbJ6FuCpeo=;
+	s=k20201202; t=1705940920;
+	bh=+pr8+N8Az9rPBwlL16ghSk5vvthU1BeA1Gwu1lfKkCg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=loaz/CADKkUB7ldCby7wZIGzn+JEcsvdqDfHN/aVk7mYl2xb/SwAHlBJwOpZwdWjX
-	 eEtJ8+jnU9futIqm/Pq7vYAHDuB2kyImRRLa1/CJPmcmC/gbJHz9Hzic9oZyW1Po8b
-	 rbeJEjOH8gOuHJtynvk18P4kuPAzvV1P1zdCFopxgWeDs7enUcY8PcNWj+0xtDL+As
-	 qxgpbfyCuxobPHaElKAAlqivs4jaKOnZVxGGqhCg/h9aEfWYERGH8IR01Pvz/LduPK
-	 6uYAIWWY9WPanM3WAV8jJcfE2E1eOxss7DV2bvtHAQh4TQ3pDoydfu18NL60ySlTHw
-	 RZusi3CKjKqiA==
+	b=emPH6bVQpR9YrfpoWnw93UNLoNbTh0Y+361RAoYbshNkNb3paif/pghASXMzUNHC3
+	 R5UNrGzP4IUhb5AjSfRnxqHnkvFwbRNaJyJC9SKiMDKBk8+SNZZiG5rmYPG00XCMq1
+	 m+GeMQcOJKYoqwSjM0RZAUk4e7SSTDTEX5177tftGuh7Eb2UcNPgd0SugL0cvbZbbo
+	 Ve5W65yiB23ZF/KBfPEr6KEXOnae95SDkZX0+1eQ1vyBRs+/GMX7YCWcFBwziN46aV
+	 bxh1vPnXbf1HW+s09vdN64zuX7rHc+hP+pNXCI/C5bZWeanYEm0lEmzMH/Qb0AUOf1
+	 wZuTQ/ZjlSceg==
 From: Mark Brown <broonie@kernel.org>
-Date: Mon, 22 Jan 2024 16:28:06 +0000
-Subject: [PATCH v4 03/14] arm64/fpsimd: Support FEAT_FPMR
+Date: Mon, 22 Jan 2024 16:28:07 +0000
+Subject: [PATCH v4 04/14] arm64/signal: Add FPMR signal handling
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240122-arm64-2023-dpisa-v4-3-776e094861df@kernel.org>
+Message-Id: <20240122-arm64-2023-dpisa-v4-4-776e094861df@kernel.org>
 References: <20240122-arm64-2023-dpisa-v4-0-776e094861df@kernel.org>
 In-Reply-To: <20240122-arm64-2023-dpisa-v4-0-776e094861df@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -65,207 +65,166 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-5c066
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7109; i=broonie@kernel.org;
- h=from:subject:message-id; bh=lYhaJYrF5xvKkxhGT6KR+gulaOYrM4vUcYbJ6FuCpeo=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlrpeddVHRv46awyuFdFR+eQc6M0orp8lLjE4hF4gQ
- eCD0+l6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZa6XnQAKCRAk1otyXVSH0DQOB/
- 9+H+eHgI7ufgspYX3wfXMQeZyItq0Kc+dpBoQWQZOKEh2enm9S4k9G921zZ32FnqdhBFpNgfQH9FmR
- JoqW+c/Xh9JtUH9W41N3qlbS17Q6jaf9clr1WvxgqE2MJJ4betyW5tZkFjQ4Bf7DNbtTBAVQyhlugp
- qhGNjgXSMtUoPJ76DKUJDq+jhfd2C1dSSqUkA5XoJVZHuooUmlc+KQEqNagWnnN2199FYm88Slc9hR
- cZMWTS3zpfRVX6aZrXsIf/bkpeY4b4EY/sD1hElOdjaPfWZnghib6VJ0lJVBYVLkgbU/UGJSuucLur
- icmms8WF22Cc1xL6zVi7DQV863092t
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4176; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=+pr8+N8Az9rPBwlL16ghSk5vvthU1BeA1Gwu1lfKkCg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlrpeemMcjtO3x6aJ7Mp4fDPWsxoGQEEMqHIm04K3m
+ rl/5oHWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZa6XngAKCRAk1otyXVSH0KAUB/
+ oCOckYgqQPWtkIpjbnK5PyBXu7UlJPpDpWBfglbvoK8S/H9Z4HZ0kdtBBefMB5E9ZyuHJti7CF+WSe
+ QYhzzpY2wszuTO1J9aQ7F80OP9Itl80Pr2wpEmkGFVuhpt6b4TV9HTgGr+eQEnD5Z5l0tqLEt0SIHd
+ l4Q5E7CX25F2BLDc7WeNm0TuaSxhdExtsKQGHqQ8HHqRCRmYS9ElU4Nhr4load+VPGPZJZeX8MToW/
+ QZ8tR/MNvV1S5zDLpOc2um68ULskcbSagXXM4Q3oj/mVRmM/BVXFqS4K/rk8GtpZUcdnnBUTA6Wzr2
+ CWqJUvAzFRMkpvfUsB5Z3v+f2hI4jN
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-FEAT_FPMR defines a new EL0 accessible register FPMR use to configure the
-FP8 related features added to the architecture at the same time. Detect
-support for this register and context switch it for EL0 when present.
-
-Due to the sharing of responsibility for saving floating point state
-between the host kernel and KVM FP8 support is not yet implemented in KVM
-and a stub similar to that used for SVCR is provided for FPMR in order to
-avoid bisection issues. To make it easier to share host state with the
-hypervisor we store FPMR as a hardened usercopy field in uw (along with
-some padding).
+Expose FPMR in the signal context on systems where it is supported. The
+kernel validates the exact size of the FPSIMD registers so we can't readily
+add it to fpsimd_context without disruption.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/cpufeature.h |  5 +++++
- arch/arm64/include/asm/fpsimd.h     |  2 ++
- arch/arm64/include/asm/kvm_host.h   |  1 +
- arch/arm64/include/asm/processor.h  |  4 ++++
- arch/arm64/kernel/cpufeature.c      |  9 +++++++++
- arch/arm64/kernel/fpsimd.c          | 13 +++++++++++++
- arch/arm64/kvm/fpsimd.c             |  1 +
- arch/arm64/tools/cpucaps            |  1 +
- 8 files changed, 36 insertions(+)
+ arch/arm64/include/uapi/asm/sigcontext.h |  8 +++++
+ arch/arm64/kernel/signal.c               | 59 ++++++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
 
-diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-index 21c824edf8ce..34fcdbc65d7d 100644
---- a/arch/arm64/include/asm/cpufeature.h
-+++ b/arch/arm64/include/asm/cpufeature.h
-@@ -768,6 +768,11 @@ static __always_inline bool system_supports_tpidr2(void)
- 	return system_supports_sme();
+diff --git a/arch/arm64/include/uapi/asm/sigcontext.h b/arch/arm64/include/uapi/asm/sigcontext.h
+index f23c1dc3f002..8a45b7a411e0 100644
+--- a/arch/arm64/include/uapi/asm/sigcontext.h
++++ b/arch/arm64/include/uapi/asm/sigcontext.h
+@@ -152,6 +152,14 @@ struct tpidr2_context {
+ 	__u64 tpidr2;
+ };
+ 
++/* FPMR context */
++#define FPMR_MAGIC	0x46504d52
++
++struct fpmr_context {
++	struct _aarch64_ctx head;
++	__u64 fpmr;
++};
++
+ #define ZA_MAGIC	0x54366345
+ 
+ struct za_context {
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index 0e8beb3349ea..460823baa603 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -60,6 +60,7 @@ struct rt_sigframe_user_layout {
+ 	unsigned long tpidr2_offset;
+ 	unsigned long za_offset;
+ 	unsigned long zt_offset;
++	unsigned long fpmr_offset;
+ 	unsigned long extra_offset;
+ 	unsigned long end_offset;
+ };
+@@ -182,6 +183,8 @@ struct user_ctxs {
+ 	u32 za_size;
+ 	struct zt_context __user *zt;
+ 	u32 zt_size;
++	struct fpmr_context __user *fpmr;
++	u32 fpmr_size;
+ };
+ 
+ static int preserve_fpsimd_context(struct fpsimd_context __user *ctx)
+@@ -227,6 +230,33 @@ static int restore_fpsimd_context(struct user_ctxs *user)
+ 	return err ? -EFAULT : 0;
  }
  
-+static __always_inline bool system_supports_fpmr(void)
++static int preserve_fpmr_context(struct fpmr_context __user *ctx)
 +{
-+	return alternative_has_cap_unlikely(ARM64_HAS_FPMR);
++	int err = 0;
++
++	current->thread.uw.fpmr = read_sysreg_s(SYS_FPMR);
++
++	__put_user_error(FPMR_MAGIC, &ctx->head.magic, err);
++	__put_user_error(sizeof(*ctx), &ctx->head.size, err);
++	__put_user_error(current->thread.uw.fpmr, &ctx->fpmr, err);
++
++	return err;
 +}
 +
- static __always_inline bool system_supports_cnp(void)
- {
- 	return alternative_has_cap_unlikely(ARM64_HAS_CNP);
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index 50e5f25d3024..6cf72b0d2c04 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -89,6 +89,7 @@ struct cpu_fp_state {
- 	void *sve_state;
- 	void *sme_state;
- 	u64 *svcr;
-+	unsigned long *fpmr;
- 	unsigned int sve_vl;
- 	unsigned int sme_vl;
- 	enum fp_type *fp_type;
-@@ -154,6 +155,7 @@ extern void cpu_enable_sve(const struct arm64_cpu_capabilities *__unused);
- extern void cpu_enable_sme(const struct arm64_cpu_capabilities *__unused);
- extern void cpu_enable_sme2(const struct arm64_cpu_capabilities *__unused);
- extern void cpu_enable_fa64(const struct arm64_cpu_capabilities *__unused);
-+extern void cpu_enable_fpmr(const struct arm64_cpu_capabilities *__unused);
- 
- extern u64 read_smcr_features(void);
- 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 21c57b812569..7993694a54af 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -543,6 +543,7 @@ struct kvm_vcpu_arch {
- 	enum fp_type fp_type;
- 	unsigned int sve_max_vl;
- 	u64 svcr;
-+	unsigned long fpmr;
- 
- 	/* Stage 2 paging state used by the hardware on next switch */
- 	struct kvm_s2_mmu *hw_mmu;
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 5b0a04810b23..b453c66d3fae 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -155,6 +155,8 @@ struct thread_struct {
- 	struct {
- 		unsigned long	tp_value;	/* TLS register */
- 		unsigned long	tp2_value;
-+		unsigned long	fpmr;
-+		unsigned long	pad;
- 		struct user_fpsimd_state fpsimd_state;
- 	} uw;
- 
-@@ -253,6 +255,8 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
- 	BUILD_BUG_ON(sizeof_field(struct thread_struct, uw) !=
- 		     sizeof_field(struct thread_struct, uw.tp_value) +
- 		     sizeof_field(struct thread_struct, uw.tp2_value) +
-+		     sizeof_field(struct thread_struct, uw.fpmr) +
-+		     sizeof_field(struct thread_struct, uw.pad) +
- 		     sizeof_field(struct thread_struct, uw.fpsimd_state));
- 
- 	*offset = offsetof(struct thread_struct, uw);
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index eae59ec0f4b0..0263565f617a 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -272,6 +272,7 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr1[] = {
- };
- 
- static const struct arm64_ftr_bits ftr_id_aa64pfr2[] = {
-+	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR2_EL1_FPMR_SHIFT, 4, 0),
- 	ARM64_FTR_END,
- };
- 
-@@ -2767,6 +2768,14 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
- 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
- 		.matches = has_lpa2,
- 	},
-+	{
-+		.desc = "FPMR",
-+		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-+		.capability = ARM64_HAS_FPMR,
-+		.matches = has_cpuid_feature,
-+		.cpu_enable = cpu_enable_fpmr,
-+		ARM64_CPUID_FIELDS(ID_AA64PFR2_EL1, FPMR, IMP)
-+	},
- 	{},
- };
- 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index a5dc6f764195..8e24b5e5e192 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -359,6 +359,9 @@ static void task_fpsimd_load(void)
- 	WARN_ON(preemptible());
- 	WARN_ON(test_thread_flag(TIF_KERNEL_FPSTATE));
- 
-+	if (system_supports_fpmr())
-+		write_sysreg_s(current->thread.uw.fpmr, SYS_FPMR);
-+
- 	if (system_supports_sve() || system_supports_sme()) {
- 		switch (current->thread.fp_type) {
- 		case FP_STATE_FPSIMD:
-@@ -446,6 +449,9 @@ static void fpsimd_save_user_state(void)
- 	if (test_thread_flag(TIF_FOREIGN_FPSTATE))
- 		return;
- 
-+	if (system_supports_fpmr())
-+		*(last->fpmr) = read_sysreg_s(SYS_FPMR);
-+
- 	/*
- 	 * If a task is in a syscall the ABI allows us to only
- 	 * preserve the state shared with FPSIMD so don't bother
-@@ -688,6 +694,12 @@ static void sve_to_fpsimd(struct task_struct *task)
- 	}
- }
- 
-+void cpu_enable_fpmr(const struct arm64_cpu_capabilities *__always_unused p)
++static int restore_fpmr_context(struct user_ctxs *user)
 +{
-+	write_sysreg_s(read_sysreg_s(SYS_SCTLR_EL1) | SCTLR_EL1_EnFPM_MASK,
-+		       SYS_SCTLR_EL1);
-+}
++	u64 fpmr;
++	int err = 0;
 +
++	if (user->fpmr_size != sizeof(*user->fpmr))
++		return -EINVAL;
++
++	__get_user_error(fpmr, &user->fpmr->fpmr, err);
++	if (!err)
++		write_sysreg_s(fpmr, SYS_FPMR);
++
++	return err;
++}
+ 
  #ifdef CONFIG_ARM64_SVE
- /*
-  * Call __sve_free() directly only if you know task can't be scheduled
-@@ -1680,6 +1692,7 @@ static void fpsimd_bind_task_to_cpu(void)
- 	last->sve_vl = task_get_sve_vl(current);
- 	last->sme_vl = task_get_sme_vl(current);
- 	last->svcr = &current->thread.svcr;
-+	last->fpmr = &current->thread.uw.fpmr;
- 	last->fp_type = &current->thread.fp_type;
- 	last->to_save = FP_STATE_CURRENT;
- 	current->thread.fpsimd_cpu = smp_processor_id();
-diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-index 8c1d0d4853df..e3e611e30e91 100644
---- a/arch/arm64/kvm/fpsimd.c
-+++ b/arch/arm64/kvm/fpsimd.c
-@@ -153,6 +153,7 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
- 		fp_state.sve_vl = vcpu->arch.sve_max_vl;
- 		fp_state.sme_state = NULL;
- 		fp_state.svcr = &vcpu->arch.svcr;
-+		fp_state.fpmr = &vcpu->arch.fpmr;
- 		fp_state.fp_type = &vcpu->arch.fp_type;
  
- 		if (vcpu_has_sve(vcpu))
-diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-index b912b1409fc0..63283550c8e8 100644
---- a/arch/arm64/tools/cpucaps
-+++ b/arch/arm64/tools/cpucaps
-@@ -26,6 +26,7 @@ HAS_ECV
- HAS_ECV_CNTPOFF
- HAS_EPAN
- HAS_EVT
-+HAS_FPMR
- HAS_FGT
- HAS_FPSIMD
- HAS_GENERIC_AUTH
+@@ -590,6 +620,7 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 	user->tpidr2 = NULL;
+ 	user->za = NULL;
+ 	user->zt = NULL;
++	user->fpmr = NULL;
+ 
+ 	if (!IS_ALIGNED((unsigned long)base, 16))
+ 		goto invalid;
+@@ -684,6 +715,17 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 			user->zt_size = size;
+ 			break;
+ 
++		case FPMR_MAGIC:
++			if (!system_supports_fpmr())
++				goto invalid;
++
++			if (user->fpmr)
++				goto invalid;
++
++			user->fpmr = (struct fpmr_context __user *)head;
++			user->fpmr_size = size;
++			break;
++
+ 		case EXTRA_MAGIC:
+ 			if (have_extra_context)
+ 				goto invalid;
+@@ -806,6 +848,9 @@ static int restore_sigframe(struct pt_regs *regs,
+ 	if (err == 0 && system_supports_tpidr2() && user.tpidr2)
+ 		err = restore_tpidr2_context(&user);
+ 
++	if (err == 0 && system_supports_fpmr() && user.fpmr)
++		err = restore_fpmr_context(&user);
++
+ 	if (err == 0 && system_supports_sme() && user.za)
+ 		err = restore_za_context(&user);
+ 
+@@ -928,6 +973,13 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
+ 		}
+ 	}
+ 
++	if (system_supports_fpmr()) {
++		err = sigframe_alloc(user, &user->fpmr_offset,
++				     sizeof(struct fpmr_context));
++		if (err)
++			return err;
++	}
++
+ 	return sigframe_alloc_end(user);
+ }
+ 
+@@ -983,6 +1035,13 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
+ 		err |= preserve_tpidr2_context(tpidr2_ctx);
+ 	}
+ 
++	/* FPMR if supported */
++	if (system_supports_fpmr() && err == 0) {
++		struct fpmr_context __user *fpmr_ctx =
++			apply_user_offset(user, user->fpmr_offset);
++		err |= preserve_fpmr_context(fpmr_ctx);
++	}
++
+ 	/* ZA state if present */
+ 	if (system_supports_sme() && err == 0 && user->za_offset) {
+ 		struct za_context __user *za_ctx =
 
 -- 
 2.30.2
