@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-3307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F8F1835E95
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 10:49:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B705835E9E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 10:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC7071F21C4A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 09:49:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0321C288D2F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 09:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F2F739FE1;
-	Mon, 22 Jan 2024 09:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B829E3A8C0;
+	Mon, 22 Jan 2024 09:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C9my5IT9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b8bypusW"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE38639FE0;
-	Mon, 22 Jan 2024 09:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304AA3B790;
+	Mon, 22 Jan 2024 09:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705916875; cv=none; b=Wz/hXO7bvjz9Y23x3ZtKOHX/iN9QExK82nHTG3jMPb4KCHM1GsAMSUfjgZE+aTlJ7QChU9u77rWHp8nXdzG9J13G+AnI2EylBKSGUmCJqvwb+3bm+zNZoeOiSe2xBd6zPxp1NajFU0pa0nf6HK3tSpZOFy3GV0Xq4ojEtmjfIgE=
+	t=1705916892; cv=none; b=RXIKjsHNCN/f4Be8cIScPwF/eC/Qxq7K2kEGCWROt/BZFQkLInnoKpKp/u6HwQqsEatB1oevicZcFrmIETEk9b/fKijyKcnQjQigss6JayVa6r6KGIrb2Zv4e684DVCUrjsOXy/mLKfG8980v8HH4ijRVP8KXW6ZWrzhrHOnU7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705916875; c=relaxed/simple;
-	bh=mb2fHc2A1yGRLtQVrd7AaiUxf4vQwWHkO6NqfvaU2Rg=;
+	s=arc-20240116; t=1705916892; c=relaxed/simple;
+	bh=2adDNSs11ffydm0AYsw6Seh3zPpXT0ndS2F8Q7hAt1Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pMqdtbKS4CvRq9PvpnYFwpApiahnSDkzLWbpDXNBPGSfU4Og2Rvx6uQZZrUgPZ6Slcx7OVNsusmrn0paAxEp44Bbk2/ql0jntV6heNw75jxUg9fDOgh6VJAvhkoHwumWt6jNRRGxaGNKkck2w+lFIVJwHDzOYJqKR2QiWMrsaFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C9my5IT9; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=p+Ni6hQ2Mt7ZKAiQ4lRIgX7BU5Nrb5fmZSIv1FF8uMvcExrn9KTYcG6XKHWVfH8YxU7bUw35P4pMlFDER3xmNMcXYJjMponKC4HAyY8rCn3JAfBIObxgsZs2qiI3737TFQ7earpl/b/HpbjcgarbAgHxBYncJlDru14Nid+n66A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b8bypusW; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705916874; x=1737452874;
+  t=1705916891; x=1737452891;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mb2fHc2A1yGRLtQVrd7AaiUxf4vQwWHkO6NqfvaU2Rg=;
-  b=C9my5IT9xfJdK8NIKNDmP3+2vFxz6z9zey5Oo/drXzr1psEWwDd3TZbn
-   sdpNhCWHAJmcqnCIeGM3eBoEbID3YEDxrXJ4+5UTaMEg4WPUPj5rjEFlE
-   8Iam6/Ozr/OoKowzxL3voy/StqIH4TWMN2YMc94Zs/dpJ7ESUEXp2mhlf
-   ql46/1qFoRXQSncth+DQzbo6mRWJjGEQP5NtWpKEUQsAOG8eR87dseoQm
-   7quC0o8lni40NHGbrNK/FFyhA0S7vrTOP7V5CX+gE/F3bs4l4PyUVu5/B
-   2f1WqNceyoqUOQoK7x0rEirq6EXVK4Ov4aKJZ2NbXhhw4+qL2Kj4ZEzos
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="22641985"
+  bh=2adDNSs11ffydm0AYsw6Seh3zPpXT0ndS2F8Q7hAt1Q=;
+  b=b8bypusWCG2CK21aj+ju8IMswbpLzD4qa+5Zrx8JiAB+f2ZQ9BHzW4zn
+   te3Fe8zkieUrIRaa4P0Uka1xlEw2R24bgRAabk+7IUVuPBEb4xwDv90PZ
+   51e472tJS+rG/ZmEYS2dT7e1b0jJ1Y8uS2dZ+/+fFNNJIsnlg7xluHnHz
+   fv0t16yXVLzNL5VkrH5vGvb2UsSLC6G4ttj89OVyZ3/gtPPx2Qgg7cMX3
+   a7+5VStGmgoFH3KS+rAAugUfyHX4uuBVTt6o2SteAINIPof7iK8mohMef
+   yf2ji6Q9wBIiXI6iN9uFc8Y1xmmedBwPfyrGsBz0EP8tX3er1pbspMhz1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="22642040"
 X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="22641985"
+   d="scan'208";a="22642040"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 01:47:53 -0800
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 01:48:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="778535568"
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="778535584"
 X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="778535568"
+   d="scan'208";a="778535584"
 Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 01:47:43 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 01:48:00 -0800
 From: Haibo Xu <haibo1.xu@intel.com>
 To: 
 Cc: xiaobo55x@gmail.com,
@@ -73,19 +73,18 @@ Cc: xiaobo55x@gmail.com,
 	Anup Patel <anup@brainfault.org>,
 	Atish Patra <atishp@atishpatra.org>,
 	Guo Ren <guoren@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
 	Mayuresh Chitale <mchitale@ventanamicro.com>,
 	Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
-	wchen <waylingii@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Samuel Holland <samuel@sholland.org>,
 	Minda Chen <minda.chen@starfivetech.com>,
 	Jisheng Zhang <jszhang@kernel.org>,
-	Samuel Holland <samuel@sholland.org>,
 	Sean Christopherson <seanjc@google.com>,
 	Peter Xu <peterx@redhat.com>,
 	Like Xu <likexu@tencent.com>,
 	Vipin Sharma <vipinsh@google.com>,
-	Aaron Lewis <aaronlewis@google.com>,
 	Thomas Huth <thuth@redhat.com>,
+	Aaron Lewis <aaronlewis@google.com>,
 	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
 	linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -94,9 +93,9 @@ Cc: xiaobo55x@gmail.com,
 	linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
 	kvm-riscv@lists.infradead.org
-Subject: [PATCH v5 10/12] KVM: riscv: selftests: Add guest helper to get vcpu id
-Date: Mon, 22 Jan 2024 17:58:40 +0800
-Message-Id: <d463314a4238624e62979b63ad782b064650c8a2.1705916069.git.haibo1.xu@intel.com>
+Subject: [PATCH v5 11/12] KVM: riscv: selftests: Change vcpu_has_ext to a common function
+Date: Mon, 22 Jan 2024 17:58:41 +0800
+Message-Id: <68856b86a93a4188558e5d0ebac0dd6aac8e404c.1705916069.git.haibo1.xu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1705916069.git.haibo1.xu@intel.com>
 References: <cover.1705916069.git.haibo1.xu@intel.com>
@@ -108,64 +107,80 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add guest_get_vcpuid() helper to simplify accessing to per-cpu
-private data. The sscratch CSR was used to store the vcpu id.
+Move vcpu_has_ext to the processor.c and rename it to __vcpu_has_ext
+so that other test cases can use it for vCPU extension check.
 
 Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- tools/testing/selftests/kvm/include/aarch64/processor.h | 4 ----
- tools/testing/selftests/kvm/include/kvm_util_base.h     | 2 ++
- tools/testing/selftests/kvm/lib/riscv/processor.c       | 8 ++++++++
- 3 files changed, 10 insertions(+), 4 deletions(-)
+ tools/testing/selftests/kvm/include/riscv/processor.h |  2 ++
+ tools/testing/selftests/kvm/lib/riscv/processor.c     | 10 ++++++++++
+ tools/testing/selftests/kvm/riscv/get-reg-list.c      | 11 +----------
+ 3 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/aarch64/processor.h b/tools/testing/selftests/kvm/include/aarch64/processor.h
-index c42d683102c7..16ae0ac01879 100644
---- a/tools/testing/selftests/kvm/include/aarch64/processor.h
-+++ b/tools/testing/selftests/kvm/include/aarch64/processor.h
-@@ -226,8 +226,4 @@ void smccc_smc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
- 	       uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5,
- 	       uint64_t arg6, struct arm_smccc_res *res);
+diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+index b68b1b731a34..bd27e1c67579 100644
+--- a/tools/testing/selftests/kvm/include/riscv/processor.h
++++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+@@ -42,6 +42,8 @@ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t idx,
+ #define RISCV_ISA_EXT_REG(idx)	__kvm_reg_id(KVM_REG_RISCV_ISA_EXT, \
+ 					     idx, KVM_REG_SIZE_ULONG)
  
--
--
--uint32_t guest_get_vcpuid(void);
--
- #endif /* SELFTEST_KVM_PROCESSOR_H */
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 135ae2eb5249..666438113d22 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -939,4 +939,6 @@ struct ex_regs;
- typedef void(*exception_handler_fn)(struct ex_regs *);
- void vm_install_exception_handler(struct kvm_vm *vm, int vector, exception_handler_fn handler);
- 
-+uint32_t guest_get_vcpuid(void);
++bool __vcpu_has_ext(struct kvm_vcpu *vcpu, int ext);
 +
- #endif /* SELFTEST_KVM_UTIL_BASE_H */
+ struct ex_regs {
+ 	unsigned long ra;
+ 	unsigned long sp;
 diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-index efd9ac4b0198..39a1e9902dec 100644
+index 39a1e9902dec..dad73ce18164 100644
 --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
 +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-@@ -316,6 +316,9 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
- 	vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.sp), stack_vaddr + stack_size);
- 	vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.pc), (unsigned long)guest_code);
+@@ -15,6 +15,16 @@
  
-+	/* Setup sscratch for guest_get_vcpuid() */
-+	vcpu_set_reg(vcpu, RISCV_CSR_REG(sscratch), vcpu_id);
-+
- 	/* Setup default exception vector of guest */
- 	vcpu_set_reg(vcpu, RISCV_CSR_REG(stvec), (unsigned long)guest_unexp_trap);
+ static vm_vaddr_t exception_handlers;
  
-@@ -436,3 +439,8 @@ void vm_install_interrupt_handler(struct kvm_vm *vm, exception_handler_fn handle
- 
- 	handlers->exception_handlers[1][0] = handler;
- }
-+
-+uint32_t guest_get_vcpuid(void)
++bool __vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
 +{
-+	return csr_read(CSR_SSCRATCH);
++	unsigned long value = 0;
++	int ret;
++
++	ret = __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
++
++	return !ret && !!value;
 +}
++
+ static uint64_t page_align(struct kvm_vm *vm, uint64_t v)
+ {
+ 	return (v + vm->page_size) & ~(vm->page_size - 1);
+diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+index 25de4b8bc347..ed29ba45588c 100644
+--- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
++++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+@@ -75,15 +75,6 @@ bool check_reject_set(int err)
+ 	return err == EINVAL;
+ }
+ 
+-static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+-{
+-	int ret;
+-	unsigned long value;
+-
+-	ret = __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+-	return (ret) ? false : !!value;
+-}
+-
+ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+ {
+ 	unsigned long isa_ext_state[KVM_RISCV_ISA_EXT_MAX] = { 0 };
+@@ -111,7 +102,7 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+ 		__vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(s->feature), 1);
+ 
+ 		/* Double check whether the desired extension was enabled */
+-		__TEST_REQUIRE(vcpu_has_ext(vcpu, s->feature),
++		__TEST_REQUIRE(__vcpu_has_ext(vcpu, s->feature),
+ 			       "%s not available, skipping tests\n", s->name);
+ 	}
+ }
 -- 
 2.34.1
 
