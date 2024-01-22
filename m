@@ -1,167 +1,339 @@
-Return-Path: <linux-kselftest+bounces-3321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E97D836914
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 16:53:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E19836BFF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 17:55:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43C8A1C23661
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 15:53:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD6AC1F24E69
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 16:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C1C74E2A;
-	Mon, 22 Jan 2024 15:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940A65DF15;
+	Mon, 22 Jan 2024 15:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Vt73Fi4M";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Vt73Fi4M"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="O1jM10gZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4374B5D2;
-	Mon, 22 Jan 2024 15:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1313846452
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 15:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936085; cv=none; b=qKLlkOrV2zLkXD5irrhiqLiEKNDnSwXcaMo5273jijxCRPa3eRmmu5RJ/H6vsJM29Dheq4lqb+5I5HgFTgKjXtQpkP04/vdJst+H2p1rb9LY9F68bjCQBsd2UbJH01CFdI60uE0QTmzpkWOYcH+tCeswHWz0qbageP5gHJRKTOs=
+	t=1705937353; cv=none; b=KeymG7Rfi87xReSHg2viNXGUz02WzYeaGtg9TD9ASMufpvcpgepLSaCAe1zZdob9FYxx9jAzycYaTWNK7Nid7G+rr0dr1nkz1YbzD/q+pmZz5ATxzT//NT9+W8UzvbwpSLWBsN/MkqrmjxwJ4xJORgVuP1odL5+3hpziu1tbucA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936085; c=relaxed/simple;
-	bh=4fYcXhWiSJkRIg6Ip7urrvrUSXMdsY9G0tmUF8/+f4s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NNfKb719+3M+hKu6+L5EljWn8dU0KL357DlyS7TqpQFZRwGZf8IQ1CB8RRk6uwHI8XUYxF/zZkQXLuU4AtD5cQ48uI1b1r6HKOcFggi4beyeKVLBjXecSFoadx7tActgTrcODiQriJ9DW1b5S5ZsbJLNqMf1eDNxpx45FI0ZzEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Vt73Fi4M; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Vt73Fi4M; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 065781FC07;
-	Mon, 22 Jan 2024 15:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1705936080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4fYcXhWiSJkRIg6Ip7urrvrUSXMdsY9G0tmUF8/+f4s=;
-	b=Vt73Fi4MXs9fhjCF+W13yZlgGJsMKcIyp7vNlFUQs8CZf06PhXzd4sYXvo6iQLN3kdss75
-	yxXbdsT6u9j7YX1kBBdoamwNEMzhqOu9EoH0Z8OQg6fr+YxHO29NYuosqo/k3E9wic4q4b
-	ARFTkK7bq0IcHQE0Ka91kbR3qrm+tfI=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1705936080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4fYcXhWiSJkRIg6Ip7urrvrUSXMdsY9G0tmUF8/+f4s=;
-	b=Vt73Fi4MXs9fhjCF+W13yZlgGJsMKcIyp7vNlFUQs8CZf06PhXzd4sYXvo6iQLN3kdss75
-	yxXbdsT6u9j7YX1kBBdoamwNEMzhqOu9EoH0Z8OQg6fr+YxHO29NYuosqo/k3E9wic4q4b
-	ARFTkK7bq0IcHQE0Ka91kbR3qrm+tfI=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ACD86136A4;
-	Mon, 22 Jan 2024 15:07:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id s81AKM6ErmW9YgAAD6G6ig
-	(envelope-from <mkoutny@suse.com>); Mon, 22 Jan 2024 15:07:58 +0000
-Date: Mon, 22 Jan 2024 16:07:57 +0100
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Frederic Weisbecker <frederic@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Mrunal Patel <mpatel@redhat.com>, 
-	Ryan Phillips <rphillips@redhat.com>, Brent Rowsell <browsell@redhat.com>, 
-	Peter Hunt <pehunt@redhat.com>, Cestmir Kalina <ckalina@redhat.com>, 
-	Nicolas Saenz Julienne <nsaenz@kernel.org>, Alex Gladkov <agladkov@redhat.com>, 
-	Marcelo Tosatti <mtosatti@redhat.com>, Phil Auld <pauld@redhat.com>, 
-	Paul Gortmaker <paul.gortmaker@windriver.com>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Costa Shulyupin <cshulyup@redhat.com>
-Subject: Re: [RFC PATCH 0/8] cgroup/cpuset: Support RCU_NOCB on isolated
- partitions
-Message-ID: <bql5g22ovp2dm33llmq5oxpmuuhysvdyppj7j6xvrm643xuniv@pkqrwvmqzneh>
-References: <20240117163511.88173-1-longman@redhat.com>
+	s=arc-20240116; t=1705937353; c=relaxed/simple;
+	bh=tqYclGki0Ep8eWqwJNFxv5GiMcJQcDYtapo8Vs1igTo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HNjvC6tj5xdpftfZzHfvUSbVIoVtVzW2Xo9xcwQ74T45/V00MZPiui87qeXzA6tqYmnV1iqaqEanqi9V9r6VHC6LXZ0MG5KkClYva+RTIGSorvKKxw1A4ISoWKxZ9McVejGS6yfp7WpjHXn3Igqh1g3R39WWAk5pK9G0kYaj5CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=O1jM10gZ; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d6fbaaec91so26278305ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 07:29:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1705937348; x=1706542148; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7wQcbezNT+/RjXYY8eCSxvRyrPZ4DMIc5I/z5N1RfdQ=;
+        b=O1jM10gZo3UnNBaoVLMbSm1Sb1V28mx0KyI4W47mlgMXrEcwQW0jy2B11A3JKIv6Jz
+         1/H1aG4p0H4raV99ppfMpAI5RTTrNcde2H5lkCisvHdIo/tQUZh3HDSr2YnowUZmGZ0O
+         EffjYKbVBUEtxOFjIPbnGN7v0B8DLFKwe4vcY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705937348; x=1706542148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7wQcbezNT+/RjXYY8eCSxvRyrPZ4DMIc5I/z5N1RfdQ=;
+        b=CO7EmW68wJPV8OX0kdUYpz41xa9izygjnIDwtZ4Tea8wnNcwad3CMhNNzajakuMdx5
+         qbhqbQtM2/LIjYds8ImNavtu+CfSejjcYuNkQdxlb6j+OPb6Kc7pwtcb4KJfXb3IWV5l
+         BxLzakHsIMCQ+7k78cw1Gq+rX3Irr5qPHdlEof+bgJr2JL7IIYK9qAhKAXHbW18YqBb0
+         c03cKrIRaA94fQaJQrYKU4/HhkDyiWb+yTHmLigQgjKj7Mak2VwSFx6+7kEQOPpM1SP+
+         0T0IZ79kJT6Nr6pmehmW3tt2q8B/PAL3d86T1I0j94AXKDD6WCZX2P/dxyuRSEUmhehv
+         cdwg==
+X-Gm-Message-State: AOJu0YxqtOcPRBNag06JSSn4WDJZz9Pj/kPVR86ujV/VUVAqPCDWg7Z8
+	WwTOoa0/KiVqAVI/E4gFze7rTgvz7PCJEX28Ik3Gtf7FWNY39H/LvNGIg4U6bA==
+X-Google-Smtp-Source: AGHT+IHZ79GK1aXYnnWb9q7+P5nP9QYQp8e6sdlkbYXp1r4C5vMOT6bSo0SU5Rd+GH1MWjerbZ5/EA==
+X-Received: by 2002:a17:902:b702:b0:1d7:57d:2792 with SMTP id d2-20020a170902b70200b001d7057d2792mr4475806pls.103.1705937348244;
+        Mon, 22 Jan 2024 07:29:08 -0800 (PST)
+Received: from localhost (34.85.168.34.bc.googleusercontent.com. [34.168.85.34])
+        by smtp.gmail.com with UTF8SMTPSA id u9-20020a170903124900b001d60a705628sm7285775plh.246.2024.01.22.07.29.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 07:29:07 -0800 (PST)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org,
+	keescook@chromium.org,
+	jannh@google.com,
+	sroettger@google.com,
+	willy@infradead.org,
+	gregkh@linuxfoundation.org,
+	torvalds@linux-foundation.org,
+	usama.anjum@collabora.com,
+	rdunlap@infradead.org
+Cc: jeffxu@google.com,
+	jorgelo@chromium.org,
+	groeck@chromium.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	pedro.falcato@gmail.com,
+	dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org,
+	deraadt@openbsd.org,
+	Jeff Xu <jeffxu@chromium.org>
+Subject: [PATCH v7 0/4] Introduce mseal()
+Date: Mon, 22 Jan 2024 15:28:46 +0000
+Message-ID: <20240122152905.2220849-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="btekknw55nvxl4ky"
-Content-Disposition: inline
-In-Reply-To: <20240117163511.88173-1-longman@redhat.com>
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spamd-Result: default: False [-0.21 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.01)[51.13%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	 R_RATELIMIT(0.00)[to_ip_from(RL6j1h7wxugqfdyj8pnx7tibp9)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 RCPT_COUNT_TWELVE(0.00)[36];
-	 SIGNED_PGP(-2.00)[];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+,1:+,2:~];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[kernel.org,bytedance.com,cmpxchg.org,lwn.net,quicinc.com,joelfernandes.org,joshtriplett.org,gmail.com,goodmis.org,efficios.com,stgolabs.net,vger.kernel.org,redhat.com,windriver.com,infradead.org];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -0.21
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+From: Jeff Xu <jeffxu@chromium.org>
 
---btekknw55nvxl4ky
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patchset proposes a new mseal() syscall for the Linux kernel.
 
-Hello Waiman.
+In a nutshell, mseal() protects the VMAs of a given virtual memory
+range against modifications, such as changes to their permission bits.
 
-On Wed, Jan 17, 2024 at 11:35:03AM -0500, Waiman Long <longman@redhat.com> wrote:
-> This patch series is based on the RFC patch from Frederic [1]. Instead
-> of offering RCU_NOCB as a separate option, it is now lumped into a
-> root-only cpuset.cpus.isolation_full flag that will enable all the
-> additional CPU isolation capabilities available for isolated partitions
-> if set. RCU_NOCB is just the first one to this party. Additional dynamic
-> CPU isolation capabilities will be added in the future.
+Modern CPUs support memory permissions, such as the read/write (RW)
+and no-execute (NX) bits. Linux has supported NX since the release of
+kernel version 2.6.8 in August 2004 [1]. The memory permission feature
+improves the security stance on memory corruption bugs, as an attacker
+cannot simply write to arbitrary memory and point the code to it. The
+memory must be marked with the X bit, or else an exception will occur.
+Internally, the kernel maintains the memory permissions in a data
+structure called VMA (vm_area_struct). mseal() additionally protects
+the VMA itself against modifications of the selected seal type.
 
-IIUC this is similar to what I suggested back in the day and you didn't
-consider it [1]. Do I read this right that you've changed your mind?
+Memory sealing is useful to mitigate memory corruption issues where a
+corrupted pointer is passed to a memory management system. For
+example, such an attacker primitive can break control-flow integrity
+guarantees since read-only memory that is supposed to be trusted can
+become writable or .text pages can get remapped. Memory sealing can
+automatically be applied by the runtime loader to seal .text and
+.rodata pages and applications can additionally seal security critical
+data at runtime. A similar feature already exists in the XNU kernel
+with the VM_FLAGS_PERMANENT [3] flag and on OpenBSD with the
+mimmutable syscall [4]. Also, Chrome wants to adopt this feature for
+their CFI work [2] and this patchset has been designed to be
+compatible with the Chrome use case.
 
-(It's fine if you did, I'm only asking to follow the heading of cpuset
-controller.)
+Two system calls are involved in sealing the map:  mmap() and mseal().
 
-Thanks,
-Michal
+The new mseal() is an syscall on 64 bit CPU, and with
+following signature:
 
-[1] https://lore.kernel.org/r/58c87587-417b-1498-185f-1db6bb612c82@redhat.com/
+int mseal(void addr, size_t len, unsigned long flags)
+addr/len: memory range.
+flags: reserved.
 
---btekknw55nvxl4ky
-Content-Type: application/pgp-signature; name="signature.asc"
+mseal() blocks following operations for the given memory range.
 
------BEGIN PGP SIGNATURE-----
+1> Unmapping, moving to another location, and shrinking the size,
+   via munmap() and mremap(), can leave an empty space, therefore can
+   be replaced with a VMA with a new set of attributes.
 
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZa6EywAKCRAGvrMr/1gc
-jnziAQDeS/BPCM9qEVgM7AdJJ1sdTzQsMQ5YiQ3EnDS8nw0THQD+IlhGeiHOP8eY
-Fif9SqmbUs3GzGds3uUPWNBUWQDsjws=
-=EAx6
------END PGP SIGNATURE-----
+2> Moving or expanding a different VMA into the current location,
+   via mremap().
 
---btekknw55nvxl4ky--
+3> Modifying a VMA via mmap(MAP_FIXED).
+
+4> Size expansion, via mremap(), does not appear to pose any specific
+   risks to sealed VMAs. It is included anyway because the use case is
+   unclear. In any case, users can rely on merging to expand a sealed VMA.
+
+5> mprotect() and pkey_mprotect().
+
+6> Some destructive madvice() behaviors (e.g. MADV_DONTNEED) for anonymous
+   memory, when users don't have write permission to the memory. Those
+   behaviors can alter region contents by discarding pages, effectively a
+   memset(0) for anonymous memory.
+
+In addition: mmap() has two related changes.
+
+The PROT_SEAL bit in prot field of mmap(). When present, it marks
+the map sealed since creation.
+
+The MAP_SEALABLE bit in the flags field of mmap(). When present, it marks
+the map as sealable. A map created without MAP_SEALABLE will not support
+sealing, i.e. mseal() will fail.
+
+Applications that don't care about sealing will expect their behavior
+unchanged. For those that need sealing support, opt-in by adding
+MAP_SEALABLE in mmap().
+
+The idea that inspired this patch comes from Stephen Röttger’s work in
+V8 CFI [5]. Chrome browser in ChromeOS will be the first user of this
+API.
+
+Indeed, the Chrome browser has very specific requirements for sealing,
+which are distinct from those of most applications. For example, in
+the case of libc, sealing is only applied to read-only (RO) or
+read-execute (RX) memory segments (such as .text and .RELRO) to
+prevent them from becoming writable, the lifetime of those mappings
+are tied to the lifetime of the process.
+
+Chrome wants to seal two large address space reservations that are
+managed by different allocators. The memory is mapped RW- and RWX
+respectively but write access to it is restricted using pkeys (or in
+the future ARM permission overlay extensions). The lifetime of those
+mappings are not tied to the lifetime of the process, therefore, while
+the memory is sealed, the allocators still need to free or discard the
+unused memory. For example, with madvise(DONTNEED).
+
+However, always allowing madvise(DONTNEED) on this range poses a
+security risk. For example if a jump instruction crosses a page
+boundary and the second page gets discarded, it will overwrite the
+target bytes with zeros and change the control flow. Checking
+write-permission before the discard operation allows us to control
+when the operation is valid. In this case, the madvise will only
+succeed if the executing thread has PKEY write permissions and PKRU
+changes are protected in software by control-flow integrity.
+
+Although the initial version of this patch series is targeting the
+Chrome browser as its first user, it became evident during upstream
+discussions that we would also want to ensure that the patch set
+eventually is a complete solution for memory sealing and compatible
+with other use cases. The specific scenario currently in mind is
+glibc's use case of loading and sealing ELF executables. To this end,
+Stephen is working on a change to glibc to add sealing support to the
+dynamic linker, which will seal all non-writable segments at startup.
+Once this work is completed, all applications will be able to
+automatically benefit from these new protections.
+
+In closing, I would like to formally acknowledge the valuable
+contributions received during the RFC process, which were instrumental
+in shaping this patch:
+
+Jann Horn: raising awareness and providing valuable insights on the
+destructive madvise operations.
+Linus Torvalds: assisting in defining system call signature and scope.
+Pedro Falcato: suggesting sealing in the mmap().
+Theo de Raadt: sharing the experiences and insights gained from
+implementing mimmutable() in OpenBSD.
+
+Change history:
+===============
+V7:
+- fix index.rst (Randy Dunlap)
+- fix arm build (Randy Dunlap)
+- return EPERM for blocked operations (Theo de Raadt)
+
+V6:
+- Drop RFC from subject, Given Linus's general approval.
+- Adjust syscall number for mseal (main Jan.11/2024) 
+- Code style fix (Matthew Wilcox)
+- selftest: use ksft macros (Muhammad Usama Anjum)
+- Document fix. (Randy Dunlap)
+https://lore.kernel.org/all/20240111234142.2944934-1-jeffxu@chromium.org/
+
+V5:
+- fix build issue in mseal-Wire-up-mseal-syscall
+  (Suggested by Linus Torvalds, and Greg KH)
+- updates on selftest.
+https://lore.kernel.org/lkml/20240109154547.1839886-1-jeffxu@chromium.org/#r
+
+V4:
+(Suggested by Linus Torvalds)
+- new signature: mseal(start,len,flags)
+- 32 bit is not supported. vm_seal is removed, use vm_flags instead.
+- single bit in vm_flags for sealed state.
+- CONFIG_MSEAL kernel config is removed.
+- single bit of PROT_SEAL in the "Prot" field of mmap().
+Other changes:
+- update selftest (Suggested by Muhammad Usama Anjum)
+- update documentation.
+https://lore.kernel.org/all/20240104185138.169307-1-jeffxu@chromium.org/
+
+V3:
+- Abandon per-syscall approach, (Suggested by Linus Torvalds).
+- Organize sealing types around their functionality, such as
+  MM_SEAL_BASE, MM_SEAL_PROT_PKEY.
+- Extend the scope of sealing from calls originated in userspace to
+  both kernel and userspace. (Suggested by Linus Torvalds)
+- Add seal type support in mmap(). (Suggested by Pedro Falcato)
+- Add a new sealing type: MM_SEAL_DISCARD_RO_ANON to prevent
+  destructive operations of madvise. (Suggested by Jann Horn and
+  Stephen Röttger)
+- Make sealed VMAs mergeable. (Suggested by Jann Horn)
+- Add MAP_SEALABLE to mmap()
+- Add documentation - mseal.rst
+https://lore.kernel.org/linux-mm/20231212231706.2680890-2-jeffxu@chromium.org/
+
+v2:
+Use _BITUL to define MM_SEAL_XX type.
+Use unsigned long for seal type in sys_mseal() and other functions.
+Remove internal VM_SEAL_XX type and convert_user_seal_type().
+Remove MM_ACTION_XX type.
+Remove caller_origin(ON_BEHALF_OF_XX) and replace with sealing bitmask.
+Add more comments in code.
+Add a detailed commit message.
+https://lore.kernel.org/lkml/20231017090815.1067790-1-jeffxu@chromium.org/
+
+v1:
+https://lore.kernel.org/lkml/20231016143828.647848-1-jeffxu@chromium.org/
+
+----------------------------------------------------------------
+[1] https://kernelnewbies.org/Linux_2_6_8
+[2] https://v8.dev/blog/control-flow-integrity
+[3] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
+[4] https://man.openbsd.org/mimmutable.2
+[5] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit#heading=h.bvaojj9fu6hc
+[6] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ426FkcgnfUGLvA@mail.gmail.com/
+[7] https://lore.kernel.org/lkml/20230515130553.2311248-1-jeffxu@chromium.org/
+
+Jeff Xu (4):
+  mseal: Wire up mseal syscall
+  mseal: add mseal syscall
+  selftest mm/mseal memory sealing
+  mseal:add documentation
+
+ Documentation/userspace-api/index.rst       |    1 +
+ Documentation/userspace-api/mseal.rst       |  183 ++
+ arch/alpha/kernel/syscalls/syscall.tbl      |    1 +
+ arch/arm/tools/syscall.tbl                  |    1 +
+ arch/arm64/include/asm/unistd.h             |    2 +-
+ arch/arm64/include/asm/unistd32.h           |    2 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |    1 +
+ include/linux/mm.h                          |   48 +
+ include/linux/syscalls.h                    |    1 +
+ include/uapi/asm-generic/mman-common.h      |    8 +
+ include/uapi/asm-generic/unistd.h           |    5 +-
+ kernel/sys_ni.c                             |    1 +
+ mm/Makefile                                 |    4 +
+ mm/madvise.c                                |   12 +
+ mm/mmap.c                                   |   27 +
+ mm/mprotect.c                               |   10 +
+ mm/mremap.c                                 |   31 +
+ mm/mseal.c                                  |  343 ++++
+ tools/testing/selftests/mm/.gitignore       |    1 +
+ tools/testing/selftests/mm/Makefile         |    1 +
+ tools/testing/selftests/mm/mseal_test.c     | 1997 +++++++++++++++++++
+ 33 files changed, 2690 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/userspace-api/mseal.rst
+ create mode 100644 mm/mseal.c
+ create mode 100644 tools/testing/selftests/mm/mseal_test.c
+
+-- 
+2.43.0.429.g432eaa2c6b-goog
+
 
