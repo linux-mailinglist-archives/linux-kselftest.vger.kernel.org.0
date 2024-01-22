@@ -1,143 +1,152 @@
-Return-Path: <linux-kselftest+bounces-3318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9087C8364AB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 14:46:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ADF183652D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 15:12:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBAACB235C6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 13:46:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECA92B2416A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 14:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91153D0DB;
-	Mon, 22 Jan 2024 13:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63B53D387;
+	Mon, 22 Jan 2024 14:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JquJ1ZOY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tm/N0MHP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4332A3D0B6
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 13:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6D73D0C9
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 14:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705931181; cv=none; b=tzSyByd8ZQfI03yXrizoEISBB+NOoM6WCzVp2kbQ8szAgomnIHqWEyQkb6A/yciQorNLAQthmRDfje/cb7D+IZb3uChIuQxWuBCKaH1NcDGsoCMe8jy159vd4MadIg1ve8pn1ZH02XJKQztfEf0vSG3xdQ6I4kYN8np84EFC6zE=
+	t=1705932558; cv=none; b=PfDcod4lWbpifOeez4zEsNr7aZziHqfqDN+tAqB1RhGOSfHvT8zNPbxtsy4D1n21dwd5UzasbFZlN+vX6Ie7/hAvQjO88oaVLIa63YgTnkdd01DLefYXpR6pMmk6GEaKQZAWqomjDu7oLBrp9vcfNK/V3FxYPOSmPIWVF8UhV80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705931181; c=relaxed/simple;
-	bh=TA5S6rkWrfMIGQh8b4nq6v9XJGxLaFmJwtdW6D84hqc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IOY6/6VdDS4pHaALnje0nmcncc5lVlVHqSEOXRZACm4Fkag+8V3GbrYNc9ezz+cVvCs6KwaLQlUmNWnXFCi2mXWO4NaUMw0QaotMVRcEInSMcO4Sh0yHPNv7/gF9nPMfvPS0BsJ1y9nZC+JxBwLVfqK0Bhsfli1e9+jaMDjX89c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JquJ1ZOY; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1705932558; c=relaxed/simple;
+	bh=znrIct7rUFWksSd+UC6un02EtdkHnndXakyNpVQ9a5Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PY1ypjraQMjkM/ZJYQdhgaAhXRgDUBxzrv4CNPUQXCYjm/Xhuakjas6BDNVdmyBspM2FHAM7R9tqWfMyXHYC91T0yhO7lkSKPM/yohOv6JBiKznbMYbnjn3KQttauDx9O3NK/oo8iJic/PZ5jdb5yl6NHULi2/p40tmvuKJynI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tm/N0MHP; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705931179;
+	s=mimecast20190719; t=1705932556;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TA5S6rkWrfMIGQh8b4nq6v9XJGxLaFmJwtdW6D84hqc=;
-	b=JquJ1ZOYwq57aAP/8qhGNOVjpKnp5P+40LJMV8mq4UsSjL2qHCSqWbgA0IkSnhPeuP3knw
-	KHQJvRzHRPU9LzI32G5D2UkRYFR0PD9WV9M9OMi99dE86HxeMT1EwI7wffmoXXmlv7vSEX
-	Hhlt1/kKuKTR1feRrVD5qQZwbS7sZMw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=seqmVAFBDnuLvzwL3rN06iKmJlHsjwn1tq37k8ac87U=;
+	b=Tm/N0MHP1bRE93JiRT5A9fkwKpBLB4OFKQs8W7npKkfgf2htGYMjWRJSlR8K/PDacSD8SB
+	wtPntu6lHNrLR1IeGKZ0LtbA9LTtpuypbe4ty58q3w7zy14VnLe7q+eVezMDOSzu481Mdz
+	sIrns0YR2KlliUfXy1ZV4HB5SM2RrCs=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-584-rOsLYw9bNWC8ERd5q2uA1Q-1; Mon, 22 Jan 2024 08:46:14 -0500
-X-MC-Unique: rOsLYw9bNWC8ERd5q2uA1Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 27D14862CC5;
-	Mon, 22 Jan 2024 13:46:12 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.26])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 14FC1C30BE1;
-	Mon, 22 Jan 2024 13:46:00 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 22 Jan 2024 14:44:58 +0100 (CET)
-Date: Mon, 22 Jan 2024 14:44:46 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Kees Cook <keescook@chromium.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Adrian Reber <areber@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	tiozhang <tiozhang@didiglobal.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	YueHaibing <yuehaibing@huawei.com>,
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Zheng Yejian <zhengyejian1@huawei.com>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>,
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>
-Subject: Re: [PATCH v14] exec: Fix dead-lock in de_thread with ptrace_attach
-Message-ID: <20240122134446.GB22901@redhat.com>
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <20240116152210.GA12342@redhat.com>
- <AS8P193MB128538BC3833E654F56DA801E4722@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <20240117163739.GA32526@redhat.com>
- <AS8P193MB1285FDD902CC57C781AF2770E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ us-mta-97-7dqojYSdOSmgweoevYX7fg-1; Mon, 22 Jan 2024 09:09:15 -0500
+X-MC-Unique: 7dqojYSdOSmgweoevYX7fg-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-5ff7cf2fd21so32194267b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 06:09:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705932554; x=1706537354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=seqmVAFBDnuLvzwL3rN06iKmJlHsjwn1tq37k8ac87U=;
+        b=qVkjiHXtEDNq6sKqnZOtFG1EkTGAoa7k7u4EvchgtpgajML0Q1CG+atzOBuZhHvoBT
+         0GZU80FLudu+ghEQRLF++ElDHI4i3SvQtdF8z1+7ovtx1W5m9dzoDIQIc2YP3q+KCieo
+         vqAZwIdGRMiwq3vWNptnKpcfwJ5PRQZ2oCpEZxolJs2yYeeEQ4FQiOIRp46UizvL14Vo
+         Zx03KK/h9kkvujDNFMOVO1jEYUkeGaZsjTraNie/IP8y3Fw3hsxOs0/8xKsuCcMbmn5U
+         rFHMJezFmY8adDJr1tnv7U6Hj52+eSrMWobJ79+SqxiBpwRHgnHUU73v2A8GxcPjsSd3
+         hQwQ==
+X-Gm-Message-State: AOJu0YzOGvouwQUqKdZz7QKgF1TJQBVyHOYbnW3QCHpH31qQHuizz2Lc
+	qZKrSvUQHyvRbHVSychX/vdbDXeKVANvUjV7ih0qc5WKQR9zJTsTyt1AwHwnESsQkLqtlkiSimo
+	JEIQlZ2rTPdFrhYCXZEgAiHFRzGKYsDo/hQX+hi+fDM8ClJmWih2OrFrE8065nLlH27bXEWqolA
+	ZJnBw976YkHADpamxJi9t+iwSxiFtuK0RkL6oFLTgi
+X-Received: by 2002:a81:8411:0:b0:5ff:b07b:e534 with SMTP id u17-20020a818411000000b005ffb07be534mr1742476ywf.9.1705932554313;
+        Mon, 22 Jan 2024 06:09:14 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF5TYT+m+Db5kWU9mkYv5aX43/bLG4o8DXbKxjOnIgv6IVDOYqnnpHQAvVW5nvty8UP/kaTKK+uoXudOp0V9CI=
+X-Received: by 2002:a81:8411:0:b0:5ff:b07b:e534 with SMTP id
+ u17-20020a818411000000b005ffb07be534mr1742466ywf.9.1705932554072; Mon, 22 Jan
+ 2024 06:09:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AS8P193MB1285FDD902CC57C781AF2770E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+References: <20240119131429.172448-1-npache@redhat.com> <20240120203904.8f36140cd2f507b25e9a09a3@linux-foundation.org>
+In-Reply-To: <20240120203904.8f36140cd2f507b25e9a09a3@linux-foundation.org>
+From: Nico Pache <npache@redhat.com>
+Date: Mon, 22 Jan 2024 07:08:48 -0700
+Message-ID: <CAA1CXcANbz75MHKkJPEVa8AJBX4g8k7kq8i0ZCe9w_j9Oeg=ZA@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: mm: fix map_hugetlb failure on 64K page
+ size systems
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, shuah@kernel.org, donettom@linux.vnet.ibm.com, 
+	Christophe Leroy <christophe.leroy@c-s.fr>, Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I'll try to read your email later, just one note for now...
+Hi Andrew,
 
-On 01/22, Bernd Edlinger wrote:
+No, I think it's always been broken-- I don't think the test was
+written with 512M huge page sizes in mind.
+
+-- Nico
+
+On Sat, Jan 20, 2024 at 9:39=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
 >
-> > I didn't say that t is a group leader. I said it can be a zombie sub-thread
-> > with ->exit_state != 0.
+> On Fri, 19 Jan 2024 06:14:29 -0700 Nico Pache <npache@redhat.com> wrote:
 >
-> the condition here is
+> > On systems with 64k page size and 512M huge page sizes, the allocation
+> > and test succeeds but errors out at the munmap. As the comment states,
+> > munmap will failure if its not HUGEPAGE aligned. This is due to the
+> > length of the mapping being 1/2 the size of the hugepage causing the
+> > munmap to not be hugepage aligned. Fix this by making the mapping lengt=
+h
+> > the full hugepage if the hugepage is larger than the length of the
+> > mapping.
 >
-> (t != tsk->group_leader || !t->exit_state)
+> Is
 >
-> so in other words, if t is a sub-thread, i.e. t != tsk->group_leader
-> then the t->exit_state does not count,
-
-Ah indeed, somehow I misread this check as if you skip the sub-threads
-with ->exit_state != 0.
-
-Sorry for noise.
-
-Oleg.
+> Fixes: fa7b9a805c79 ("tools/selftest/vm: allow choosing mem size and page=
+ size in map_hugetlb")
+>
+> a suitable Fixes: target for this?
+>
+> > --- a/tools/testing/selftests/mm/map_hugetlb.c
+> > +++ b/tools/testing/selftests/mm/map_hugetlb.c
+> > @@ -15,6 +15,7 @@
+> >  #include <unistd.h>
+> >  #include <sys/mman.h>
+> >  #include <fcntl.h>
+> > +#include "vm_util.h"
+> >
+> >  #define LENGTH (256UL*1024*1024)
+> >  #define PROTECTION (PROT_READ | PROT_WRITE)
+> > @@ -58,10 +59,16 @@ int main(int argc, char **argv)
+> >  {
+> >       void *addr;
+> >       int ret;
+> > +     size_t hugepage_size;
+> >       size_t length =3D LENGTH;
+> >       int flags =3D FLAGS;
+> >       int shift =3D 0;
+> >
+> > +     hugepage_size =3D default_huge_page_size();
+> > +     /* munmap with fail if the length is not page aligned */
+> > +     if (hugepage_size > length)
+> > +             length =3D hugepage_size;
+> > +
+> >       if (argc > 1)
+> >               length =3D atol(argv[1]) << 20;
+> >       if (argc > 2) {
+> > --
+> > 2.43.0
+>
 
 
