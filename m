@@ -1,153 +1,118 @@
-Return-Path: <linux-kselftest+bounces-3314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3315-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37F56836321
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 13:24:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A51A08363C3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 13:55:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA63B28B29E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 12:24:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0BE61C24236
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 12:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002D23BB29;
-	Mon, 22 Jan 2024 12:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4718E3BB52;
+	Mon, 22 Jan 2024 12:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="NB8KyfIb"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SQl/V1bc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528EA3BB23
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 12:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE743BB22
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 12:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705926098; cv=none; b=H41bVgNdrmiGzSdSaHgKoVg5YV5f60hSARejzhVXPRdi0iczIIwy+OrwZAD4sKsoQ8omSSpdNwc15J+PMBa+1uAmaj8lmW1y78QbeUhUrlmS5H7KQmWQkYv3FqQUo19aS5zOrA810w0AX88/9H/Z51k8SanwKV5Fe00bJIkOZno=
+	t=1705928116; cv=none; b=c6Mg+qy3fWK2NYgW4hmFq92rVQ8JoIuswWxGhWZ+mQ3NpwHw5KuBXgzQ8JLDx879jI9A6OcDB1vTfyn4fpkBADXzwJpDabkJwinRjGNQkX5i6TsqVTfXXxBxwsCfM0v9EXuHv87COzXsS384xpnEqq+ndW2daiXQedAeu/eYGnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705926098; c=relaxed/simple;
-	bh=vNrKTN+Psy0M2VFW5VqZf+0AB0x8oBNn3f2wlhE/7W8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WAQxzoBJusjIKngREjICKPD/asH46dcAXU4bK1A+8oIM2llHCaz+GfvPiZBIafBh0mLFGEiGKIKylBDKZ9U7DyUEr8ep+EuaWljtjwVN+0KTm3i7YEP2DRQHZZwIXKKIYDCDSYGTRFLqH7QUYJlJkCSOjbW56/wqvkvo11c7Trw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=NB8KyfIb; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-337d32cd9c1so2794211f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 04:21:37 -0800 (PST)
+	s=arc-20240116; t=1705928116; c=relaxed/simple;
+	bh=v+L7PVTpZDw0rKx6LNXPOAvhzXFGb5VQm0BCqFUAkRQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=R16pkjFffedPcUxsZgRWMX6NnKHRTKDAr36Oikp2RoTwhhD06mZZeEng/bHsAhjR00stuEs81UNpLRmru8XzkZAA1tp5k4ZAhtGVkyP63doHTFPVrNyhfpxqoqtVSqC/HbOVXg3q0pqrSrz8heLIE2xKqdaUQrOSiepHmDkn2jE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SQl/V1bc; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-559cef15db5so7396718a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 04:55:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1705926095; x=1706530895; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pNyn/qnqC01DO5aYO0gaP3LnuG+kGrelMJHPp637j+Q=;
-        b=NB8KyfIbFNBVYQ1ufr3ciONyyzqZnvIv3ZeQMM709cDbP6zdSH4PN4XqLfchyAGs8u
-         962FohRvql4G37TQ1wcv1IWqA1UPMsZOM53AM9XHPXhwxP0qsKIX0tF3JDpidGXe96to
-         SiJ+TxzV/JykIbZiNn2fJsJiOBqQwttiPU/1rCExbi1N4Ggh3wy12MjvWZH9Thg7qk7I
-         2NJdeNfxc+8O56Wf6sokLJmvXCm09OtQ6ThZuG1rV1BampBdDG5vcaMrgQ9IsKiMetRR
-         XWhrnPBPM5qX3wdmbQ/2/pdxDePIAA10H8XLv7q+bvtuA/I0foyQ3uEydrfr7NUZm2UW
-         pEMQ==
+        d=suse.com; s=google; t=1705928112; x=1706532912; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IuUKVWtvvYIXVeVdCt3DqjuZg1hGyra7osExMMOSS2E=;
+        b=SQl/V1bcIuhJ5oVnf9KbTKasKw/Xc9CFzbh4SxN5CjzJDNDyaaY7llm9PPRgzR6u9F
+         OHV9I+5WhAMPolI5Ks8oBWlKTDa8gjb7M9JjQ2GD5/j8+Q02z0QUpLTae3EtL0rR60Ni
+         uRxndjWKzk+5iv8yzMlciuJ7hLrbKp3P8Mn2Eif7I1Dok5xbHJ4YDIywdyWj87n1TKJb
+         EqiGacj03JUOdgJlBgTbfxnH2qNueapOZqAM1eEL60M8r250R94FwiwsdvrTqr9XPJiI
+         pHTO8Nz8MvAl2F+2jxO4C2VJW0A7tQ/Hm/2hZOoXgkmrkw0Uu8xpRCbbT+uVHSKx7xyq
+         szVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705926095; x=1706530895;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pNyn/qnqC01DO5aYO0gaP3LnuG+kGrelMJHPp637j+Q=;
-        b=nRyHGb+dvjCLHrGf6igRgYE6BhOQ/5CtdcC2yFBQOwTM70IoCz72H41/gRpYPH4Nle
-         7NlrBTLAUyUc3khkVYThAsAyMKFVvtV2T4KHKCeK1DuaOZ249l8nV0FnrrSYUVbXhbpS
-         NBsmcy0BJqgm/ahMNbzGcGEEz7QKIO51gNv7RCEm+fXXOugfGHe1zSOTNjnRJbp6nP3w
-         Yg2TzY+b34hI1jEGZouEbEUOkqSNCS7BRFNg6EHjtww/qs84d2K+dgv4cyNk7QBT5gso
-         UFSbWUeIiVWY0UaIKtfzV1Zdkg6KVOJyGU0kbJH10INdVzbzkuQH3jAmrpikkpHLXpzX
-         xZ1w==
-X-Gm-Message-State: AOJu0YzG6I/c0iPSJbVAzBtZ6I2wM9Ykpc4C2MQ4PL3hNlW3Yghxi2XU
-	AeKnz7KoYOK/Es0QhwaghDlhITqRjR7xcyclq3xSAwE8ycfShWFHptwy6rau46I=
-X-Google-Smtp-Source: AGHT+IGjstD5P6UroceP4UshiLynFM2AqV73RXt9NzLqzEsWwmxRvB3J0Fsa/nFM64CECZlIeo29pg==
-X-Received: by 2002:a5d:44ce:0:b0:337:c538:6db with SMTP id z14-20020a5d44ce000000b00337c53806dbmr1979837wrr.2.1705926095352;
-        Mon, 22 Jan 2024 04:21:35 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id bw12-20020a0560001f8c00b00337cef427f8sm11306084wrb.70.2024.01.22.04.21.34
+        d=1e100.net; s=20230601; t=1705928112; x=1706532912;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IuUKVWtvvYIXVeVdCt3DqjuZg1hGyra7osExMMOSS2E=;
+        b=j7PqHS3BNkseI7feDb8wZS3ZTNSN8Q2kkkm5ORA7eLC+a2asHR9SUgaTS5RU9I2koc
+         0r93Xx01DjT67bBVYfnmJThDjNr2aLdpIk/kSVD3j5A2I8rpTUy8AgZkE/UzoQD5EmTo
+         aMM4YX4jpasV4+mMg93X5wAq00z+c2eWK5r53ggPxMgAUdX+Ahlwxs5iRwOnZDOBvyDj
+         Mrw1DtQbcWxJe8W3KKBUfLqa8MMvbUNjixS+iqVE4xv2vtXXGKmTRGpQ0ROKCrsg2o85
+         LSOm9dD4yxhtyDLDL7nfBvQAZ5dAQOfa68SHoL2+Y4yADbabzIE3wfVBGil0AeIxPFKa
+         /V3w==
+X-Gm-Message-State: AOJu0YzN0cWtxqhOH31c9BAyWwUFs5Mq6GX7vpS0o8eB/dnWkgB2t3Am
+	OZtSe9FsAROizbWuhwl0OlfrmnTwk0fuJA1uUuB2BqKdr4eqD96BYaT3HYxnryA=
+X-Google-Smtp-Source: AGHT+IFMwp2rvA2TkeKR8EEYT9ihnqdp0q0BkNQSHFUaT5nh8UK+VHg2raGKecMA0Ym1+fdVY83xQA==
+X-Received: by 2002:a17:907:778c:b0:a2f:6053:2ab7 with SMTP id ky12-20020a170907778c00b00a2f60532ab7mr5368477ejc.11.1705928112494;
+        Mon, 22 Jan 2024 04:55:12 -0800 (PST)
+Received: from ?IPv6:2804:30c:974:ac00:1b02:e2fd:23be:79bc? ([2804:30c:974:ac00:1b02:e2fd:23be:79bc])
+        by smtp.gmail.com with ESMTPSA id g10-20020a92cdaa000000b00361b87d1645sm1526721ild.54.2024.01.22.04.55.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 04:21:34 -0800 (PST)
-Date: Mon, 22 Jan 2024 13:21:33 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Haibo Xu <haibo1.xu@intel.com>
-Cc: xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, Guo Ren <guoren@kernel.org>, 
-	Conor Dooley <conor.dooley@microchip.com>, Mayuresh Chitale <mchitale@ventanamicro.com>, 
-	wchen <waylingii@gmail.com>, Daniel Henrique Barboza <dbarboza@ventanamicro.com>, 
-	Samuel Holland <samuel@sholland.org>, Jisheng Zhang <jszhang@kernel.org>, 
-	Minda Chen <minda.chen@starfivetech.com>, Sean Christopherson <seanjc@google.com>, 
-	Peter Xu <peterx@redhat.com>, Like Xu <likexu@tencent.com>, Vipin Sharma <vipinsh@google.com>, 
-	Aaron Lewis <aaronlewis@google.com>, Thomas Huth <thuth@redhat.com>, 
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 02/12] KVM: arm64: selftests: Data type cleanup for
- arch_timer test
-Message-ID: <20240122-0ddedacdeb64808477a7911d@orel>
-References: <cover.1705916069.git.haibo1.xu@intel.com>
- <173c9b64c4c43cd585f6b177a7d434dcedc905fa.1705916069.git.haibo1.xu@intel.com>
+        Mon, 22 Jan 2024 04:55:12 -0800 (PST)
+Message-ID: <53cf93b2efadc0f42712eb92436bd575b5622664.camel@suse.com>
+Subject: Re: [PATCH v6 2/3] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,  Petr Mladek
+ <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ linux-kselftest@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-s390@vger.kernel.org,
+ live-patching@vger.kernel.org
+Date: Mon, 22 Jan 2024 09:55:06 -0300
+In-Reply-To: <Zap26MINbbxREt4c@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
+	 <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
+	 <Zap04ddls7ZvbL/U@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+	 <Zap26MINbbxREt4c@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <173c9b64c4c43cd585f6b177a7d434dcedc905fa.1705916069.git.haibo1.xu@intel.com>
 
-On Mon, Jan 22, 2024 at 05:58:32PM +0800, Haibo Xu wrote:
-> Change signed type to unsigned in test_args struct which
-> only make sense for unsigned value.
-> 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> ---
->  tools/testing/selftests/kvm/aarch64/arch_timer.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
-> index 274b8465b42a..3260fefcc1b3 100644
-> --- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
-> +++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
-> @@ -42,10 +42,10 @@
->  #define TIMER_TEST_MIGRATION_FREQ_MS	2
->  
->  struct test_args {
-> -	int nr_vcpus;
-> -	int nr_iter;
-> -	int timer_period_ms;
-> -	int migration_freq_ms;
-> +	uint32_t nr_vcpus;
-> +	uint32_t nr_iter;
-> +	uint32_t timer_period_ms;
-> +	uint32_t migration_freq_ms;
->  	struct kvm_arm_counter_offset offset;
->  };
->  
-> @@ -57,7 +57,7 @@ static struct test_args test_args = {
->  	.offset = { .reserved = 1 },
->  };
->  
-> -#define msecs_to_usecs(msec)		((msec) * 1000LL)
-> +#define msecs_to_usecs(msec)		((msec) * 1000ULL)
->  
->  #define GICD_BASE_GPA			0x8000000ULL
->  #define GICR_BASE_GPA			0x80A0000ULL
-> @@ -72,7 +72,7 @@ enum guest_stage {
->  
->  /* Shared variables between host and guest */
->  struct test_vcpu_shared_data {
-> -	int nr_iter;
-> +	uint32_t nr_iter;
->  	enum guest_stage guest_stage;
->  	uint64_t xcnt;
->  };
-> -- 
-> 2.34.1
->
+On Fri, 2024-01-19 at 14:19 +0100, Alexander Gordeev wrote:
+> On Fri, Jan 19, 2024 at 02:11:01PM +0100, Alexander Gordeev wrote:
+> > FWIW, for s390 part:
+> >=20
+> > Alexander Gordeev <agordeev@linux.ibm.com>
+>=20
+> Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Thanks Alexandre and Joe for testing and supporting the change.
+
+Shuah, now that the issue found by that Joe was fixed, do you think the
+change is ready to be merged? The patches were reviewed by three
+different people already, and I don't know what else can be missing at
+this point.
+
+Thanks,
+  Marcos
+
+
 
