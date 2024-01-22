@@ -1,99 +1,2140 @@
-Return-Path: <linux-kselftest+bounces-3327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78BC4836C50
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 18:02:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D32C3836D0E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 18:23:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7431A1C26AD9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 17:02:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC252B29527
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jan 2024 16:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADB5F60260;
-	Mon, 22 Jan 2024 15:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55015DF3D;
+	Mon, 22 Jan 2024 15:29:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBcIivUw"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PlTsiohi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814C3482F4;
-	Mon, 22 Jan 2024 15:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097935D8F6
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 15:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705938047; cv=none; b=aff84I0hHNV7lJFYOnpBGXFivy+nd4CG/XzWZoYVA2uONyBG18qGOd7hF2Q3jmH7gDmp5JuMxqjudD63ddExAFMTi1bF/K3q2WLA+W12yHeJ0N+jdu4Kjo/WErcdZaY13NINdurLb7l/Fsxycbb0vpJQQVtUDYAOuCCU2cBaXQE=
+	t=1705937355; cv=none; b=RnaSyotz1h+7/Tv2IFMD7JDqRaMAUV9wKnKIOTXF2/Za7rbThqF8HT8dwa0UcAaHAd6+ebuUvN+hwimaQRTpTiGWBg3oh3fQt8eLlbh4f/L0rvfMMrQIOfctuF84LhatLfTFB2zk7XzmgbR4dh5eaWhjSrx2Z/rkTimhOqhwKeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705938047; c=relaxed/simple;
-	bh=Llm/bGfvWQJffn+yLnx+hItsLkbnebNnRSSuJm4Okcw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qlNLLtrWKCfrouOG6hgkr7j79Mdx7XsWg3HZPDkDsfzdJiTENwl12Qfi9rHk/zdCOa4MH6iXg4579Ignom308goOl+n4y06WESnDXPUx4v5f47eDmdGvUaGd8hj+RXE0/e+1wAtmzbA44dnToBvaqyv/Aik+e7jdAWdmoal+cr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eBcIivUw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2D5C433F1;
-	Mon, 22 Jan 2024 15:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705938045;
-	bh=Llm/bGfvWQJffn+yLnx+hItsLkbnebNnRSSuJm4Okcw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eBcIivUwryCQqSYxtZlJ8Oe2XaMcPw4Dx/pkOKR2BY7QuNUR8r1ujbcqep1cqsz3S
-	 yzUNej2CKbZo4BSc4IufGYJC1SYfkyKwmOkLangoQBjH/7jfqezvjPQAbW7fdtctYB
-	 Dp9xIXCF8DMXTNcD9o0qwmykFOnZj7NTMomaYt5HFeTdmzrGnEbsFoFDb0XQpYKo7o
-	 BOgxsiHQ8zsEFWvYEGSMMxI2wAe0BM2VDr4caw4W+ea5Si6FSnRwRhmXRe30UCMBcN
-	 lU7Zo8lSiuNFmFb6QSESrmzDsK9eIblcXm8CvRDXN+0gYiOuPhSlzp8/s8u365L0h1
-	 fZNb51RXbr55g==
-Date: Mon, 22 Jan 2024 09:40:43 -0600
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
-	devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel@collabora.com,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2] kselftest: dt: Stop relying on dirname to improve
- performance
-Message-ID: <20240122154043.GC601827-robh@kernel.org>
-References: <20240122-dt-kselftest-dirname-perf-fix-v2-1-f1630532fd38@collabora.com>
+	s=arc-20240116; t=1705937355; c=relaxed/simple;
+	bh=+xYtcfRkh15wUX6aw6p51T9B+HarqjMI+cnTSF0wI20=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HTXDoj18/9qlp1jrJ/d9WV1vyBbhTrmP1+n0VmK1Or7GTnwCuVQ3hGfdYT3NJ4YxfN0JhEUTr/0TTXCjv1DcpcHT8ihrrMXB4J5JAHjkKYUEBiVhIr9JGk9toUTz1MHr9CMZbNpIbgQx6zTYF28D78UXJyj5iO+g4sLtLp+nRTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PlTsiohi; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-361a1f8c682so10254145ab.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jan 2024 07:29:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1705937351; x=1706542151; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ckg9xY8eLgestMfrF2KtpTYN5WzutUtvkDINayk0wdE=;
+        b=PlTsiohibQEjeikEueDCE4l+KD4kgV7Zue99Xxzi/90UKedjpjEOn1CaDAVI/ofrzl
+         h/GCpf8+aWq0ZwNRuzR0KL5j2Ol7Y+FvFXPXXXVrDBNNBHlHplrhuH31RFMbB979ZbR0
+         WnU2SnwSETypuYHlPmYowmQYo+9GNdqTrnUjw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705937351; x=1706542151;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ckg9xY8eLgestMfrF2KtpTYN5WzutUtvkDINayk0wdE=;
+        b=bKrBdEZn32JaN7jlG7Bw0GE1mYyrQIA7A3LlJmK5EiRxTu4fidRbEViy1iWNA+WEiJ
+         Z2WqUWz7OJrjL0zpFmAW0uzWnYgQgRYDH3vN/mLAGeJ6X5800i9oLNzfYv4Q6euA65TA
+         Wefb38R+AMIg1xVCc53hjiTxGMupsORLykc5Fj2zs9f7ROYjyf7m7adr2t+5/rrWWrWn
+         kGS0XnRgWBn5Rt06/xPbhbjH3w73qfKd6hJG+kc7MTMWQlzKAiTJdMmqc1aPmFa+KQhL
+         /kI65m0CPEVbTqDEq+zutO++81yva4VsAGzQq7zlRBqeZG0e4bNP4Lao7Ti9mR14DVQn
+         Bkfg==
+X-Gm-Message-State: AOJu0YyIjZ+CBl1Hi9zCQ9Tlxo32ntW81JQg/XdCBJLH72D1vVQvGQuT
+	ruovng9cDKZiprSWQNI/He+Rw73kLmpI1VenwPJAmdLPYccA+wRoLVHLUR6hww==
+X-Google-Smtp-Source: AGHT+IFNjTP0/Q3Fho0UirbcBPEtA5FIV/Mugq3fuLm+0n5rGU72PW44hYOPmJy53zUG9MbE4AmaoQ==
+X-Received: by 2002:a92:d948:0:b0:361:9509:a243 with SMTP id l8-20020a92d948000000b003619509a243mr5160788ilq.26.1705937350819;
+        Mon, 22 Jan 2024 07:29:10 -0800 (PST)
+Received: from localhost (34.85.168.34.bc.googleusercontent.com. [34.168.85.34])
+        by smtp.gmail.com with UTF8SMTPSA id 73-20020a63004c000000b005cd835182c5sm8417668pga.79.2024.01.22.07.29.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 07:29:10 -0800 (PST)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org,
+	keescook@chromium.org,
+	jannh@google.com,
+	sroettger@google.com,
+	willy@infradead.org,
+	gregkh@linuxfoundation.org,
+	torvalds@linux-foundation.org,
+	usama.anjum@collabora.com,
+	rdunlap@infradead.org
+Cc: jeffxu@google.com,
+	jorgelo@chromium.org,
+	groeck@chromium.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	pedro.falcato@gmail.com,
+	dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org,
+	deraadt@openbsd.org,
+	Jeff Xu <jeffxu@chromium.org>
+Subject: [PATCH v7 3/4] selftest mm/mseal memory sealing
+Date: Mon, 22 Jan 2024 15:28:49 +0000
+Message-ID: <20240122152905.2220849-4-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+In-Reply-To: <20240122152905.2220849-1-jeffxu@chromium.org>
+References: <20240122152905.2220849-1-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240122-dt-kselftest-dirname-perf-fix-v2-1-f1630532fd38@collabora.com>
 
-On Mon, Jan 22, 2024 at 11:29:18AM -0300, Nícolas F. R. A. Prado wrote:
-> When walking directory trees, instead of looking for specific files and
-> running dirname to get the parent folder, traverse all folders and
-> ignore the ones not containing the desired files. This avoids the need
-> to call dirname inside the loop, which drastically decreases run time:
-> Running locally on a mt8192-asurada-spherion, which reports 160 test
-> cases, has gone from 5.5s to 2.9s, while running remotely with an
-> nfsroot has gone from 13.5s to 5.5s.
-> 
-> This change has a side-effect, which is that the root DT node now
-> also shows in the output, even though it isn't expected to bind to a
-> driver. However there shouldn't be a matching driver for the board
-> compatible, so the end result will be just an extra skipped test:
-> 
-> ok 1 / # SKIP
-> 
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Closes: https://lore.kernel.org/all/310391e8-fdf2-4c2f-a680-7744eb685177@sirena.org.uk
-> Fixes: 14571ab1ad21 ("kselftest: Add new test for detecting unprobed Devicetree devices")
-> Tested-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
-> Changes in v2:
-> - Tweaked commit message
-> - Added trailer tags
-> - Rebased on 6.8-rc1
-> ---
->  tools/testing/selftests/dt/test_unprobed_devices.sh | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
+From: Jeff Xu <jeffxu@chromium.org>
 
-Applied, thanks.
+selftest for memory sealing change in mmap() and mseal().
 
-Rob
+Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+---
+ tools/testing/selftests/mm/.gitignore   |    1 +
+ tools/testing/selftests/mm/Makefile     |    1 +
+ tools/testing/selftests/mm/mseal_test.c | 1997 +++++++++++++++++++++++
+ 3 files changed, 1999 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/mseal_test.c
+
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index 4ff10ea61461..76474c51c786 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -46,3 +46,4 @@ gup_longterm
+ mkdirty
+ va_high_addr_switch
+ hugetlb_fault_after_madv
++mseal_test
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 2453add65d12..ba36a5c2b1fc 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -59,6 +59,7 @@ TEST_GEN_FILES += mlock2-tests
+ TEST_GEN_FILES += mrelease_test
+ TEST_GEN_FILES += mremap_dontunmap
+ TEST_GEN_FILES += mremap_test
++TEST_GEN_FILES += mseal_test
+ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += pagemap_ioctl
+ TEST_GEN_FILES += thuge-gen
+diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+new file mode 100644
+index 000000000000..0d8b7041a7a0
+--- /dev/null
++++ b/tools/testing/selftests/mm/mseal_test.c
+@@ -0,0 +1,1997 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <sys/mman.h>
++#include <stdint.h>
++#include <unistd.h>
++#include <string.h>
++#include <sys/time.h>
++#include <sys/resource.h>
++#include <stdbool.h>
++#include "../kselftest.h"
++#include <syscall.h>
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <assert.h>
++#include <fcntl.h>
++#include <assert.h>
++#include <sys/ioctl.h>
++#include <sys/vfs.h>
++#include <sys/stat.h>
++
++/*
++ * need those definition for manually build using gcc.
++ * gcc -I ../../../../usr/include   -DDEBUG -O3  -DDEBUG -O3 mseal_test.c -o mseal_test
++ */
++#ifndef MAP_SEALABLE
++#define MAP_SEALABLE 0x8000000
++#endif
++
++#ifndef PROT_SEAL
++#define PROT_SEAL 0x04000000
++#endif
++
++#ifndef PKEY_DISABLE_ACCESS
++# define PKEY_DISABLE_ACCESS    0x1
++#endif
++
++#ifndef PKEY_DISABLE_WRITE
++# define PKEY_DISABLE_WRITE     0x2
++#endif
++
++#ifndef PKEY_BITS_PER_KEY
++#define PKEY_BITS_PER_PKEY      2
++#endif
++
++#ifndef PKEY_MASK
++#define PKEY_MASK       (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
++#endif
++
++#define FAIL_TEST_IF_FALSE(c) do {\
++		if (!(c)) {\
++			ksft_test_result_fail("%s, line:%d\n", __func__, __LINE__);\
++			goto test_end;\
++		} \
++	} \
++	while (0)
++
++#define SKIP_TEST_IF_FALSE(c) do {\
++		if (!(c)) {\
++			ksft_test_result_skip("%s, line:%d\n", __func__, __LINE__);\
++			goto test_end;\
++		} \
++	} \
++	while (0)
++
++
++#define TEST_END_CHECK() {\
++		ksft_test_result_pass("%s\n", __func__);\
++		return;\
++test_end:\
++		return;\
++}
++
++#ifndef u64
++#define u64 unsigned long long
++#endif
++
++static unsigned long get_vma_size(void *addr)
++{
++	FILE *maps;
++	char line[256];
++	int size = 0;
++	uintptr_t  addr_start, addr_end;
++
++	maps = fopen("/proc/self/maps", "r");
++	if (!maps)
++		return 0;
++
++	while (fgets(line, sizeof(line), maps)) {
++		if (sscanf(line, "%lx-%lx", &addr_start, &addr_end) == 2) {
++			if (addr_start == (uintptr_t) addr) {
++				size = addr_end - addr_start;
++				break;
++			}
++		}
++	}
++	fclose(maps);
++	return size;
++}
++
++/*
++ * define sys_xyx to call syscall directly.
++ */
++static int sys_mseal(void *start, size_t len)
++{
++	int sret;
++
++	errno = 0;
++	sret = syscall(__NR_mseal, start, len, 0);
++	return sret;
++}
++
++static int sys_mprotect(void *ptr, size_t size, unsigned long prot)
++{
++	int sret;
++
++	errno = 0;
++	sret = syscall(SYS_mprotect, ptr, size, prot);
++	return sret;
++}
++
++static int sys_mprotect_pkey(void *ptr, size_t size, unsigned long orig_prot,
++		unsigned long pkey)
++{
++	int sret;
++
++	errno = 0;
++	sret = syscall(__NR_pkey_mprotect, ptr, size, orig_prot, pkey);
++	return sret;
++}
++
++static void *sys_mmap(void *addr, unsigned long len, unsigned long prot,
++	unsigned long flags, unsigned long fd, unsigned long offset)
++{
++	void *sret;
++
++	errno = 0;
++	sret = (void *) syscall(__NR_mmap, addr, len, prot,
++		flags, fd, offset);
++	return sret;
++}
++
++static int sys_munmap(void *ptr, size_t size)
++{
++	int sret;
++
++	errno = 0;
++	sret = syscall(SYS_munmap, ptr, size);
++	return sret;
++}
++
++static int sys_madvise(void *start, size_t len, int types)
++{
++	int sret;
++
++	errno = 0;
++	sret = syscall(__NR_madvise, start, len, types);
++	return sret;
++}
++
++static int sys_pkey_alloc(unsigned long flags, unsigned long init_val)
++{
++	int ret = syscall(SYS_pkey_alloc, flags, init_val);
++
++	return ret;
++}
++
++static unsigned int __read_pkey_reg(void)
++{
++	unsigned int eax, edx;
++	unsigned int ecx = 0;
++	unsigned int pkey_reg;
++
++	asm volatile(".byte 0x0f,0x01,0xee\n\t"
++			: "=a" (eax), "=d" (edx)
++			: "c" (ecx));
++	pkey_reg = eax;
++	return pkey_reg;
++}
++
++static void __write_pkey_reg(u64 pkey_reg)
++{
++	unsigned int eax = pkey_reg;
++	unsigned int ecx = 0;
++	unsigned int edx = 0;
++
++	asm volatile(".byte 0x0f,0x01,0xef\n\t"
++			: : "a" (eax), "c" (ecx), "d" (edx));
++	assert(pkey_reg == __read_pkey_reg());
++}
++
++static unsigned long pkey_bit_position(int pkey)
++{
++	return pkey * PKEY_BITS_PER_PKEY;
++}
++
++static u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
++{
++	unsigned long shift = pkey_bit_position(pkey);
++
++	/* mask out bits from pkey in old value */
++	reg &= ~((u64)PKEY_MASK << shift);
++	/* OR in new bits for pkey */
++	reg |= (flags & PKEY_MASK) << shift;
++	return reg;
++}
++
++static void set_pkey(int pkey, unsigned long pkey_value)
++{
++	unsigned long mask = (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE);
++	u64 new_pkey_reg;
++
++	assert(!(pkey_value & ~mask));
++	new_pkey_reg = set_pkey_bits(__read_pkey_reg(), pkey, pkey_value);
++	__write_pkey_reg(new_pkey_reg);
++}
++
++static void setup_single_address(int size, void **ptrOut)
++{
++	void *ptr;
++
++	ptr = sys_mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE | MAP_SEALABLE, -1, 0);
++	assert(ptr != (void *)-1);
++	*ptrOut = ptr;
++}
++
++static void setup_single_address_rw_sealable(int size, void **ptrOut, bool sealable)
++{
++	void *ptr;
++	unsigned long mapflags = MAP_ANONYMOUS | MAP_PRIVATE;
++
++	if (sealable)
++		mapflags |= MAP_SEALABLE;
++
++	ptr = sys_mmap(NULL, size, PROT_READ | PROT_WRITE, mapflags, -1, 0);
++	assert(ptr != (void *)-1);
++	*ptrOut = ptr;
++}
++
++static void clean_single_address(void *ptr, int size)
++{
++	int ret;
++
++	ret = munmap(ptr, size);
++	assert(!ret);
++}
++
++static void seal_single_address(void *ptr, int size)
++{
++	int ret;
++
++	ret = sys_mseal(ptr, size);
++	assert(!ret);
++}
++
++bool seal_support(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++
++	ptr = sys_mmap(NULL, page_size, PROT_READ | PROT_SEAL, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (ptr == (void *) -1)
++		return false;
++
++	ret = sys_mseal(ptr, page_size);
++	if (ret < 0)
++		return false;
++
++	return true;
++}
++
++bool pkey_supported(void)
++{
++	int pkey = sys_pkey_alloc(0, 0);
++
++	if (pkey > 0)
++		return true;
++	return false;
++}
++
++static void test_seal_addseal(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_unmapped_start(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	/* munmap 2 pages from ptr. */
++	ret = sys_munmap(ptr, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* mprotect will fail because 2 pages from ptr are unmapped. */
++	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* mseal will fail because 2 pages from ptr are unmapped. */
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	ret = sys_mseal(ptr + 2 * page_size, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_unmapped_middle(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	/* munmap 2 pages from ptr + page. */
++	ret = sys_munmap(ptr + page_size, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* mprotect will fail, since middle 2 pages are unmapped. */
++	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* mseal will fail as well. */
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* we still can add seal to the first page and last page*/
++	ret = sys_mseal(ptr, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_mseal(ptr + 3 * page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_unmapped_end(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	/* unmap last 2 pages. */
++	ret = sys_munmap(ptr + 2 * page_size, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* mprotect will fail since last 2 pages are unmapped. */
++	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* mseal will fail as well. */
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* The first 2 pages is not sealed, and can add seals */
++	ret = sys_mseal(ptr, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_multiple_vmas(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split the vma into 3. */
++	ret = sys_mprotect(ptr + page_size, 2 * page_size,
++			PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* mprotect will get applied to all 4 pages - 3 VMAs. */
++	ret = sys_mprotect(ptr, size, PROT_READ);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* use mprotect to split the vma into 3. */
++	ret = sys_mprotect(ptr + page_size, 2 * page_size,
++			PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* mseal get applied to all 4 pages - 3 VMAs. */
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_split_start(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split at middle */
++	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal the first page, this will split the VMA */
++	ret = sys_mseal(ptr, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* add seal to the remain 3 pages */
++	ret = sys_mseal(ptr + page_size, 3 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_split_end(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split at middle */
++	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal the last page */
++	ret = sys_mseal(ptr + 3 * page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* Adding seals to the first 3 pages */
++	ret = sys_mseal(ptr, 3 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_invalid_input(void)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(8 * page_size, &ptr);
++	clean_single_address(ptr + 4 * page_size, 4 * page_size);
++
++	/* invalid flag */
++	ret = syscall(__NR_mseal, ptr, size, 0x20);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* unaligned address */
++	ret = sys_mseal(ptr + 1, 2 * page_size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* length too big */
++	ret = sys_mseal(ptr, 5 * page_size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* length overflow */
++	ret = sys_mseal(ptr, UINT64_MAX/page_size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* start is not in a valid VMA */
++	ret = sys_mseal(ptr - page_size, 5 * page_size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_zero_length(void)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	ret = sys_mprotect(ptr, 0, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal 0 length will be OK, same as mprotect */
++	ret = sys_mseal(ptr, 0);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* verify the 4 pages are not sealed by previous call. */
++	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_twice(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	setup_single_address(size, &ptr);
++
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* apply the same seal will be OK. idempotent. */
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	if (seal)
++		seal_single_address(ptr, size);
++
++	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_start_mprotect(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	if (seal)
++		seal_single_address(ptr, page_size);
++
++	/* the first page is sealed. */
++	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	/* pages after the first page is not sealed. */
++	ret = sys_mprotect(ptr + page_size, page_size * 3,
++			PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_end_mprotect(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	if (seal)
++		seal_single_address(ptr + page_size, 3 * page_size);
++
++	/* first page is not sealed */
++	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* last 3 page are sealed */
++	ret = sys_mprotect(ptr + page_size, page_size * 3,
++			PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_unalign_len(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	if (seal)
++		seal_single_address(ptr, page_size * 2 - 1);
++
++	/* 2 pages are sealed. */
++	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_mprotect(ptr + page_size * 2, page_size,
++			PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_unalign_len_variant_2(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++	if (seal)
++		seal_single_address(ptr, page_size * 2 + 1);
++
++	/* 3 pages are sealed. */
++	ret = sys_mprotect(ptr, page_size * 3, PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_mprotect(ptr + page_size * 3, page_size,
++			PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_two_vma(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split */
++	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	if (seal)
++		seal_single_address(ptr, page_size * 4);
++
++	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_mprotect(ptr + page_size * 2, page_size * 2,
++			PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_two_vma_with_split(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split as two vma. */
++	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* mseal can apply across 2 vma, also split them. */
++	if (seal)
++		seal_single_address(ptr + page_size, page_size * 2);
++
++	/* the first page is not sealed. */
++	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* the second page is sealed. */
++	ret = sys_mprotect(ptr + page_size, page_size, PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	/* the third page is sealed. */
++	ret = sys_mprotect(ptr + 2 * page_size, page_size,
++			PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	/* the fouth page is not sealed. */
++	ret = sys_mprotect(ptr + 3 * page_size, page_size,
++			PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_partial_mprotect(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* seal one page. */
++	if (seal)
++		seal_single_address(ptr, page_size);
++
++	/* mprotect first 2 page will fail, since the first page are sealed. */
++	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ | PROT_WRITE);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_two_vma_with_gap(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split. */
++	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* use mprotect to split. */
++	ret = sys_mprotect(ptr + 3 * page_size, page_size,
++			PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* use munmap to free two pages in the middle */
++	ret = sys_munmap(ptr + page_size, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* mprotect will fail, because there is a gap in the address. */
++	/* notes, internally mprotect still updated the first page. */
++	ret = sys_mprotect(ptr, 4 * page_size, PROT_READ);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* mseal will fail as well. */
++	ret = sys_mseal(ptr, 4 * page_size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* the first page is not sealed. */
++	ret = sys_mprotect(ptr, page_size, PROT_READ);
++	FAIL_TEST_IF_FALSE(ret == 0);
++
++	/* the last page is not sealed. */
++	ret = sys_mprotect(ptr + 3 * page_size, page_size, PROT_READ);
++	FAIL_TEST_IF_FALSE(ret == 0);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_split(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split. */
++	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal all 4 pages. */
++	if (seal) {
++		ret = sys_mseal(ptr, 4 * page_size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* mprotect is sealed. */
++	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++
++	ret = sys_mprotect(ptr + 2 * page_size, 2 * page_size, PROT_READ);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mprotect_merge(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split one page. */
++	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal first two pages. */
++	if (seal) {
++		ret = sys_mseal(ptr, 2 * page_size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* 2 pages are sealed. */
++	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	/* last 2 pages are not sealed. */
++	ret = sys_mprotect(ptr + 2 * page_size, 2 * page_size, PROT_READ);
++	FAIL_TEST_IF_FALSE(ret == 0);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_munmap(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* 4 pages are sealed. */
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++/*
++ * allocate 4 pages,
++ * use mprotect to split it as two VMAs
++ * seal the whole range
++ * munmap will fail on both
++ */
++static void test_seal_munmap_two_vma(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* use mprotect to split */
++	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	ret = sys_munmap(ptr, page_size * 2);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_munmap(ptr + page_size, page_size * 2);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++/*
++ * allocate a VMA with 4 pages.
++ * munmap the middle 2 pages.
++ * seal the whole 4 pages, will fail.
++ * note: one of the pages are sealed
++ * munmap the first page will be OK.
++ * munmap the last page will be OK.
++ */
++static void test_seal_munmap_vma_with_gap(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	ret = sys_munmap(ptr + page_size, page_size * 2);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	if (seal) {
++		/* can't have gap in the middle. */
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(ret < 0);
++	}
++
++	ret = sys_munmap(ptr, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_munmap(ptr + page_size * 2, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_munmap(ptr, size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_munmap_start_freed(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	/* unmap the first page. */
++	ret = sys_munmap(ptr, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal the last 3 pages. */
++	if (seal) {
++		ret = sys_mseal(ptr + page_size, 3 * page_size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* unmap from the first page. */
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		/* note: this will be OK, even the first page is */
++		/* already unmapped. */
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_munmap_end_freed(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++	/* unmap last page. */
++	ret = sys_munmap(ptr + page_size * 3, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal the first 3 pages. */
++	if (seal) {
++		ret = sys_mseal(ptr, 3 * page_size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* unmap all pages. */
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_munmap_middle_freed(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++	/* unmap 2 pages in the middle. */
++	ret = sys_munmap(ptr + page_size, page_size * 2);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* seal the first page. */
++	if (seal) {
++		ret = sys_mseal(ptr, page_size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* munmap all 4 pages. */
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_shrink(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* shrink from 4 pages to 2 pages. */
++	ret2 = mremap(ptr, size, 2 * page_size, 0, 0);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else {
++		FAIL_TEST_IF_FALSE(ret2 != MAP_FAILED);
++
++	}
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_expand(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++	/* ummap last 2 pages. */
++	ret = sys_munmap(ptr + 2 * page_size, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	if (seal) {
++		ret = sys_mseal(ptr, 2 * page_size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* expand from 2 page to 4 pages. */
++	ret2 = mremap(ptr, 2 * page_size, 4 * page_size, 0, 0);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else {
++		FAIL_TEST_IF_FALSE(ret2 == ptr);
++
++	}
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_move(bool seal)
++{
++	void *ptr, *newPtr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++	setup_single_address(size, &newPtr);
++	clean_single_address(newPtr, size);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* move from ptr to fixed address. */
++	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_FIXED, newPtr);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else {
++		FAIL_TEST_IF_FALSE(ret2 != MAP_FAILED);
++
++	}
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mmap_overwrite_prot(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* use mmap to change protection. */
++	ret2 = sys_mmap(ptr, size, PROT_NONE,
++			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else
++		FAIL_TEST_IF_FALSE(ret2 == ptr);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mmap_expand(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 12 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++	/* ummap last 4 pages. */
++	ret = sys_munmap(ptr + 8 * page_size, 4 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	if (seal) {
++		ret = sys_mseal(ptr, 8 * page_size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* use mmap to expand. */
++	ret2 = sys_mmap(ptr, size, PROT_READ,
++			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else
++		FAIL_TEST_IF_FALSE(ret2 == ptr);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mmap_shrink(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 12 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* use mmap to shrink. */
++	ret2 = sys_mmap(ptr, 8 * page_size, PROT_READ,
++			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else
++		FAIL_TEST_IF_FALSE(ret2 == ptr);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_shrink_fixed(bool seal)
++{
++	void *ptr;
++	void *newAddr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++	setup_single_address(size, &newAddr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* mremap to move and shrink to fixed address */
++	ret2 = mremap(ptr, size, 2 * page_size, MREMAP_MAYMOVE | MREMAP_FIXED,
++			newAddr);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else
++		FAIL_TEST_IF_FALSE(ret2 == newAddr);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_expand_fixed(bool seal)
++{
++	void *ptr;
++	void *newAddr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(page_size, &ptr);
++	setup_single_address(size, &newAddr);
++
++	if (seal) {
++		ret = sys_mseal(newAddr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* mremap to move and expand to fixed address */
++	ret2 = mremap(ptr, page_size, size, MREMAP_MAYMOVE | MREMAP_FIXED,
++			newAddr);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else
++		FAIL_TEST_IF_FALSE(ret2 == newAddr);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_move_fixed(bool seal)
++{
++	void *ptr;
++	void *newAddr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++	setup_single_address(size, &newAddr);
++
++	if (seal) {
++		ret = sys_mseal(newAddr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* mremap to move to fixed address */
++	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_FIXED, newAddr);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else
++		FAIL_TEST_IF_FALSE(ret2 == newAddr);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_move_fixed_zero(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/*
++	 * MREMAP_FIXED can move the mapping to zero address
++	 */
++	ret2 = mremap(ptr, size, 2 * page_size, MREMAP_MAYMOVE | MREMAP_FIXED,
++			0);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else {
++		FAIL_TEST_IF_FALSE(ret2 == 0);
++
++	}
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_move_dontunmap(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* mremap to move, and don't unmap src addr. */
++	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DONTUNMAP, 0);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else {
++		FAIL_TEST_IF_FALSE(ret2 != MAP_FAILED);
++
++	}
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mremap_move_dontunmap_anyaddr(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	void *ret2;
++
++	setup_single_address(size, &ptr);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/*
++	 * The 0xdeaddead should not have effect on dest addr
++	 * when MREMAP_DONTUNMAP is set.
++	 */
++	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DONTUNMAP,
++			0xdeaddead);
++	if (seal) {
++		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
++		FAIL_TEST_IF_FALSE(errno == EPERM);
++	} else {
++		FAIL_TEST_IF_FALSE(ret2 != MAP_FAILED);
++		FAIL_TEST_IF_FALSE((long)ret2 != 0xdeaddead);
++
++	}
++
++	TEST_END_CHECK();
++}
++
++
++static void test_seal_mmap_seal(void)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	ptr = sys_mmap(NULL, size, PROT_READ | PROT_SEAL, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++
++	ret = sys_munmap(ptr, size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	ret = sys_madvise(ptr, size, MADV_DONTNEED);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_merge_and_split(void)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size;
++	int ret;
++
++	/* (24 RO) */
++	setup_single_address(24 * page_size, &ptr);
++
++	/* use mprotect(NONE) to set out boundary */
++	/* (1 NONE) (22 RO) (1 NONE) */
++	ret = sys_mprotect(ptr, page_size, PROT_NONE);
++	FAIL_TEST_IF_FALSE(!ret);
++	ret = sys_mprotect(ptr + 23 * page_size, page_size, PROT_NONE);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 22 * page_size);
++
++	/* use mseal to split from beginning */
++	/* (1 NONE) (1 RO_SEAL) (21 RO) (1 NONE) */
++	ret = sys_mseal(ptr + page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == page_size);
++	size = get_vma_size(ptr + 2 * page_size);
++	FAIL_TEST_IF_FALSE(size == 21 * page_size);
++
++	/* use mseal to split from the end. */
++	/* (1 NONE) (1 RO_SEAL) (20 RO) (1 RO_SEAL) (1 NONE) */
++	ret = sys_mseal(ptr + 22 * page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr + 22 * page_size);
++	FAIL_TEST_IF_FALSE(size == page_size);
++	size = get_vma_size(ptr + 2 * page_size);
++	FAIL_TEST_IF_FALSE(size == 20 * page_size);
++
++	/* merge with prev. */
++	/* (1 NONE) (2 RO_SEAL) (19 RO) (1 RO_SEAL) (1 NONE) */
++	ret = sys_mseal(ptr + 2 * page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr +  page_size);
++	FAIL_TEST_IF_FALSE(size ==  2 * page_size);
++
++	/* merge with after. */
++	/* (1 NONE) (2 RO_SEAL) (18 RO) (2 RO_SEALS) (1 NONE) */
++	ret = sys_mseal(ptr + 21 * page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr +  21 * page_size);
++	FAIL_TEST_IF_FALSE(size ==  2 * page_size);
++
++	/* split and merge from prev */
++	/* (1 NONE) (3 RO_SEAL) (17 RO) (2 RO_SEALS) (1 NONE) */
++	ret = sys_mseal(ptr + 2 * page_size, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr +  1 * page_size);
++	FAIL_TEST_IF_FALSE(size ==  3 * page_size);
++	ret = sys_munmap(ptr + page_size,  page_size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++	ret = sys_mprotect(ptr + 2 * page_size, page_size,  PROT_NONE);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	/* split and merge from next */
++	/* (1 NONE) (3 RO_SEAL) (16 RO) (3 RO_SEALS) (1 NONE) */
++	ret = sys_mseal(ptr + 20 * page_size, 2 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr +  20 * page_size);
++	FAIL_TEST_IF_FALSE(size ==  3 * page_size);
++
++	/* merge from middle of prev and middle of next. */
++	/* (1 NONE) (22 RO_SEAL) (1 NONE) */
++	ret = sys_mseal(ptr + 2 * page_size, 20 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr +  page_size);
++	FAIL_TEST_IF_FALSE(size ==  22 * page_size);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_mmap_merge(void)
++{
++
++	void *ptr, *ptr2;
++	unsigned long page_size = getpagesize();
++	unsigned long size;
++	int ret;
++
++	/* (24 RO) */
++	setup_single_address(24 * page_size, &ptr);
++
++	/* use mprotect(NONE) to set out boundary */
++	/* (1 NONE) (22 RO) (1 NONE) */
++	ret = sys_mprotect(ptr, page_size, PROT_NONE);
++	FAIL_TEST_IF_FALSE(!ret);
++	ret = sys_mprotect(ptr + 23 * page_size, page_size, PROT_NONE);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 22 * page_size);
++
++	/* use munmap to free 2 segment of memory. */
++	/* (1 NONE) (1 free) (20 RO) (1 free) (1 NONE) */
++	ret = sys_munmap(ptr + page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_munmap(ptr + 22 * page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* apply seal to the middle */
++	/* (1 NONE) (1 free) (20 RO_SEAL) (1 free) (1 NONE) */
++	ret = sys_mseal(ptr + 2 * page_size, 20 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr + 2 * page_size);
++	FAIL_TEST_IF_FALSE(size == 20 * page_size);
++
++	/* allocate a mapping at beginning, and make sure it merges. */
++	/* (1 NONE) (21 RO_SEAL) (1 free) (1 NONE) */
++	ptr2 = sys_mmap(ptr + page_size, page_size, PROT_READ | PROT_SEAL,
++		MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr2 != (void *)-1);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 21 * page_size);
++
++	/* allocate a mapping at end, and make sure it merges. */
++	/* (1 NONE) (22 RO_SEAL) (1 NONE) */
++	ptr2 = sys_mmap(ptr + 22 * page_size, page_size, PROT_READ | PROT_SEAL,
++		MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 22 * page_size);
++
++	TEST_END_CHECK();
++}
++
++static void test_not_sealable(void)
++{
++	int ret;
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	ptr = sys_mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	TEST_END_CHECK();
++}
++
++static void test_mmap_fixed_change_to_sealable(void)
++{
++	int ret;
++	void *ptr, *ptr2;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	ptr = sys_mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	ptr2 = sys_mmap(ptr, size, PROT_READ,
++		MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE | MAP_SEALABLE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr2 == ptr);
++
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_mmap_fixed_change_to_not_sealable(void)
++{
++	int ret;
++	void *ptr, *ptr2;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++
++	ptr = sys_mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE | MAP_SEALABLE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++
++	ptr2 = sys_mmap(ptr, size, PROT_READ,
++		MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr2 == ptr);
++
++	ret = sys_mseal(ptr, size);
++	FAIL_TEST_IF_FALSE(ret < 0);
++
++	TEST_END_CHECK();
++}
++
++static void test_merge_sealable(void)
++{
++	int ret;
++	void *ptr, *ptr2;
++	unsigned long page_size = getpagesize();
++	unsigned long size;
++
++	/* (24 RO) */
++	setup_single_address(24 * page_size, &ptr);
++
++	/* use mprotect(NONE) to set out boundary */
++	/* (1 NONE) (22 RO) (1 NONE) */
++	ret = sys_mprotect(ptr, page_size, PROT_NONE);
++	FAIL_TEST_IF_FALSE(!ret);
++	ret = sys_mprotect(ptr + 23 * page_size, page_size, PROT_NONE);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 22 * page_size);
++
++	/* (1 NONE) (RO) (4 free) (17 RO) (1 NONE) */
++	ret = sys_munmap(ptr + 2 * page_size,  4 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 1 * page_size);
++	size = get_vma_size(ptr +  6 * page_size);
++	FAIL_TEST_IF_FALSE(size == 17 * page_size);
++
++	/* (1 NONE) (RO) (1 free) (2 RO) (1 free) (17 RO) (1 NONE) */
++	ptr2 = sys_mmap(ptr + 3 * page_size, 2 * page_size, PROT_READ,
++		MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE | MAP_SEALABLE, -1, 0);
++	size = get_vma_size(ptr + 3 * page_size);
++	FAIL_TEST_IF_FALSE(size == 2 * page_size);
++
++	/* (1 NONE) (RO) (1 free) (20 RO) (1 NONE) */
++	ptr2 = sys_mmap(ptr + 5 * page_size, 1 * page_size, PROT_READ,
++		MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE | MAP_SEALABLE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr2 != (void *)-1);
++	size = get_vma_size(ptr + 3 * page_size);
++	FAIL_TEST_IF_FALSE(size == 20 * page_size);
++
++	/* (1 NONE) (RO) (1 free) (19 RO) (1 RO_SEAL) (1 NONE) */
++	ret = sys_mseal(ptr + 22 * page_size, page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* (1 NONE) (RO) (not sealable) (19 RO) (1 RO_SEAL) (1 NONE) */
++	ptr2 = sys_mmap(ptr + 2 * page_size, page_size, PROT_READ,
++		MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr2 != (void *)-1);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == page_size);
++	size = get_vma_size(ptr + 2 * page_size);
++	FAIL_TEST_IF_FALSE(size == page_size);
++
++	/* (1 NONE) (1 free) (1 NOT_SEALABLE) (19 free) (1 RO_SEAL) (1 NONE) */
++	ret = sys_munmap(ptr + page_size,  page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++	ret = sys_munmap(ptr + 3 * page_size,  19 * page_size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* (1 NONE) (2 NOT_SEALABLE) (19 free) (1 RO_SEAL) (1 NONE) */
++	ptr2 = sys_mmap(ptr + page_size, page_size, PROT_READ,
++		MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr2 != (void *)-1);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 2 * page_size);
++
++	/* (1 NONE) (21 NOT_SEALABLE)(1 RO_SEAL) (1 NONE) */
++	ptr2 = sys_mmap(ptr + 3 * page_size, 19 * page_size, PROT_READ,
++		MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr2 != (void *)-1);
++	size = get_vma_size(ptr + page_size);
++	FAIL_TEST_IF_FALSE(size == 21 * page_size);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_discard_ro_anon_on_rw(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address_rw_sealable(size, &ptr, seal);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* sealing doesn't take effect on RW memory. */
++	ret = sys_madvise(ptr, size, MADV_DONTNEED);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* base seal still apply. */
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_discard_ro_anon_on_pkey(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	int pkey;
++
++	SKIP_TEST_IF_FALSE(pkey_supported());
++
++	setup_single_address_rw_sealable(size, &ptr, seal);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++
++	pkey = sys_pkey_alloc(0, 0);
++	FAIL_TEST_IF_FALSE(pkey > 0);
++
++	ret = sys_mprotect_pkey((void *)ptr, size, PROT_READ | PROT_WRITE, pkey);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* sealing doesn't take effect if PKRU allow write. */
++	set_pkey(pkey, 0);
++	ret = sys_madvise(ptr, size, MADV_DONTNEED);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	/* sealing will take effect if PKRU deny write. */
++	set_pkey(pkey, PKEY_DISABLE_WRITE);
++	ret = sys_madvise(ptr, size, MADV_DONTNEED);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	/* base seal still apply. */
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_discard_ro_anon_on_filebacked(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	int fd;
++	unsigned long mapflags = MAP_PRIVATE;
++
++	if (seal)
++		mapflags |= MAP_SEALABLE;
++
++	fd = memfd_create("test", 0);
++	FAIL_TEST_IF_FALSE(fd > 0);
++
++	ret = fallocate(fd, 0, 0, size);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	ptr = sys_mmap(NULL, size, PROT_READ, mapflags, fd, 0);
++	FAIL_TEST_IF_FALSE(ptr != MAP_FAILED);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* sealing doesn't apply for file backed mapping. */
++	ret = sys_madvise(ptr, size, MADV_DONTNEED);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++	close(fd);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_discard_ro_anon_on_shared(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++	unsigned long mapflags = MAP_ANONYMOUS | MAP_SHARED;
++
++	if (seal)
++		mapflags |= MAP_SEALABLE;
++
++	ptr = sys_mmap(NULL, size, PROT_READ, mapflags, -1, 0);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
++
++	if (seal) {
++		ret = sys_mseal(ptr, size);
++		FAIL_TEST_IF_FALSE(!ret);
++	}
++
++	/* sealing doesn't apply for shared mapping. */
++	ret = sys_madvise(ptr, size, MADV_DONTNEED);
++	FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++static void test_seal_discard_ro_anon(bool seal)
++{
++	void *ptr;
++	unsigned long page_size = getpagesize();
++	unsigned long size = 4 * page_size;
++	int ret;
++
++	setup_single_address(size, &ptr);
++
++	if (seal)
++		seal_single_address(ptr, size);
++
++	ret = sys_madvise(ptr, size, MADV_DONTNEED);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	ret = sys_munmap(ptr, size);
++	if (seal)
++		FAIL_TEST_IF_FALSE(ret < 0);
++	else
++		FAIL_TEST_IF_FALSE(!ret);
++
++	TEST_END_CHECK();
++}
++
++int main(int argc, char **argv)
++{
++	bool test_seal = seal_support();
++
++	ksft_print_header();
++
++	if (!test_seal)
++		ksft_exit_skip("sealing not supported, check CONFIG_64BIT\n");
++
++	if (!pkey_supported())
++		ksft_print_msg("PKEY not supported\n");
++
++	ksft_set_plan(85);
++
++	test_seal_addseal();
++	test_seal_unmapped_start();
++	test_seal_unmapped_middle();
++	test_seal_unmapped_end();
++	test_seal_multiple_vmas();
++	test_seal_split_start();
++	test_seal_split_end();
++	test_seal_invalid_input();
++	test_seal_zero_length();
++	test_seal_twice();
++
++	test_seal_mprotect(false);
++	test_seal_mprotect(true);
++
++	test_seal_start_mprotect(false);
++	test_seal_start_mprotect(true);
++
++	test_seal_end_mprotect(false);
++	test_seal_end_mprotect(true);
++
++	test_seal_mprotect_unalign_len(false);
++	test_seal_mprotect_unalign_len(true);
++
++	test_seal_mprotect_unalign_len_variant_2(false);
++	test_seal_mprotect_unalign_len_variant_2(true);
++
++	test_seal_mprotect_two_vma(false);
++	test_seal_mprotect_two_vma(true);
++
++	test_seal_mprotect_two_vma_with_split(false);
++	test_seal_mprotect_two_vma_with_split(true);
++
++	test_seal_mprotect_partial_mprotect(false);
++	test_seal_mprotect_partial_mprotect(true);
++
++	test_seal_mprotect_two_vma_with_gap(false);
++	test_seal_mprotect_two_vma_with_gap(true);
++
++	test_seal_mprotect_merge(false);
++	test_seal_mprotect_merge(true);
++
++	test_seal_mprotect_split(false);
++	test_seal_mprotect_split(true);
++
++	test_seal_munmap(false);
++	test_seal_munmap(true);
++	test_seal_munmap_two_vma(false);
++	test_seal_munmap_two_vma(true);
++	test_seal_munmap_vma_with_gap(false);
++	test_seal_munmap_vma_with_gap(true);
++
++	test_munmap_start_freed(false);
++	test_munmap_start_freed(true);
++	test_munmap_middle_freed(false);
++	test_munmap_middle_freed(true);
++	test_munmap_end_freed(false);
++	test_munmap_end_freed(true);
++
++	test_seal_mremap_shrink(false);
++	test_seal_mremap_shrink(true);
++	test_seal_mremap_expand(false);
++	test_seal_mremap_expand(true);
++	test_seal_mremap_move(false);
++	test_seal_mremap_move(true);
++
++	test_seal_mremap_shrink_fixed(false);
++	test_seal_mremap_shrink_fixed(true);
++	test_seal_mremap_expand_fixed(false);
++	test_seal_mremap_expand_fixed(true);
++	test_seal_mremap_move_fixed(false);
++	test_seal_mremap_move_fixed(true);
++	test_seal_mremap_move_dontunmap(false);
++	test_seal_mremap_move_dontunmap(true);
++	test_seal_mremap_move_fixed_zero(false);
++	test_seal_mremap_move_fixed_zero(true);
++	test_seal_mremap_move_dontunmap_anyaddr(false);
++	test_seal_mremap_move_dontunmap_anyaddr(true);
++	test_seal_discard_ro_anon(false);
++	test_seal_discard_ro_anon(true);
++	test_seal_discard_ro_anon_on_rw(false);
++	test_seal_discard_ro_anon_on_rw(true);
++	test_seal_discard_ro_anon_on_shared(false);
++	test_seal_discard_ro_anon_on_shared(true);
++	test_seal_discard_ro_anon_on_filebacked(false);
++	test_seal_discard_ro_anon_on_filebacked(true);
++	test_seal_mmap_overwrite_prot(false);
++	test_seal_mmap_overwrite_prot(true);
++	test_seal_mmap_expand(false);
++	test_seal_mmap_expand(true);
++	test_seal_mmap_shrink(false);
++	test_seal_mmap_shrink(true);
++
++	test_seal_mmap_seal();
++	test_seal_merge_and_split();
++	test_seal_mmap_merge();
++
++	test_not_sealable();
++	test_merge_sealable();
++	test_mmap_fixed_change_to_sealable();
++	test_mmap_fixed_change_to_not_sealable();
++
++	test_seal_discard_ro_anon_on_pkey(false);
++	test_seal_discard_ro_anon_on_pkey(true);
++
++	ksft_finished();
++	return 0;
++}
+-- 
+2.43.0.429.g432eaa2c6b-goog
+
 
