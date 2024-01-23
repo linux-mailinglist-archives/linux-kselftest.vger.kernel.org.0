@@ -1,140 +1,125 @@
-Return-Path: <linux-kselftest+bounces-3396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F10C8388EA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 09:28:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C01A9838A37
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 10:23:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53B991C228EB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 08:28:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BF10B223D3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 09:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A4756B6D;
-	Tue, 23 Jan 2024 08:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bROfarq3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E9D58ACA;
+	Tue, 23 Jan 2024 09:23:40 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AB256756
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 08:27:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2A858ABB;
+	Tue, 23 Jan 2024 09:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705998448; cv=none; b=f2kQRZIXi4xKgquAQhURpoKPfsdenNdPUe89aGeb26B98H7BIuvEyqRCV56Qxu0mmgcYqjtEYeAxFFjUkUFW/uMPucLtBIOpWKYBpmJFI0cWRAnldnaxT0ADBxiUe3+sNgbsVBiJRTV5LzKNnttJzSmeb57mMP0S7SRGcrZYkpg=
+	t=1706001820; cv=none; b=EGyLDLEePS3E/ENmp8U3pdV+zau+7UStqXK2jeVWgXG90WxqSBYakQI6JpCHnchKCDHPQxU05wRPwFuWQT2Ch57op0ZSDz51PFl6bdRNFxaJ/YmQw4kdi2L2OqOZG5e3WhjIXlIukTJPaplYsjmqSWex4VvtjvEA0Q3oynf05o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705998448; c=relaxed/simple;
-	bh=hi46z/y++lYLf5XUo+FHPsGxvUTw4GFFCab8NCMerOE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=niU8TdZNq3ryOVJdB4/KDrHrpe5t+0PYSBW3A1WlFbqTWt8Ad6Bm74WTIVrR2NU3614xY9EJx1BorsJU9BdFsR5pHGQ/nWMb0RfDkX9M5lxLNZtCxWLMPzoC/qfMuvR6aQJsgtrmeGVFzMm7AB6KhOZRA1PFo1E+Vs5FlCkSBt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bROfarq3; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705998445;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=vZkquo4bMVetSqpRmxjz3BksjJwsIQ9ON4CP8bAqCmM=;
-	b=bROfarq3BHhZEK32KSxLhIBTvjCT8Up59C6SLrCcw+dqczzntoWT0PHg3O5+MoOq0LjzFc
-	aIrG5xMyN33UxVXccAdl8yag8K1m8nEgL03eP9ef04HO5vBfQsyJ8jlrLwKwKW+QnFfMDA
-	5tQUVIv95+6oWq96OT2bKqlPX9PS+Yg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-649-yK_c74dCNrmrDaDTWcYN3g-1; Tue, 23 Jan 2024 03:27:20 -0500
-X-MC-Unique: yK_c74dCNrmrDaDTWcYN3g-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40eb6c599fbso1485535e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 00:27:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705998440; x=1706603240;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vZkquo4bMVetSqpRmxjz3BksjJwsIQ9ON4CP8bAqCmM=;
-        b=kJeBERbIv2irTTgrZuBrHNbMRpSdRGw3Sbz1INaAXwP8+EIhptk73YrNvLfsDBUio+
-         9IkrtuOoTVq8RbzORd9JcGEQze030SIIiBv8lqp+ixc3a/fKn7QqCAQY5HhLfexkp+J9
-         AAfMIWXKDSm2K//QXK3fg2J7ZdStZIdSmRJMpXWE81JvjIpJ79G8XyX1vdkvAsMP1j3y
-         sCG9mR7x/vUKVYElmZfhVpt7WCHfKYzPbkbOWjWc3grDgoDyOJTLx8cFJR0BIdg3dER6
-         UJRNG0Cq4/NAAco39P2YLFa6tzgFLvT7+AQOJ45BJ45uGtXY0EmypU+me+IWIu6GliNC
-         9fvQ==
-X-Gm-Message-State: AOJu0YzD5FFQ9uswTxu5dpICA+YkYDCWgJctOzas2SVafNzSGpISIjOJ
-	T3ETzlz+MtwvAG4ISIpenqPUATgwhjq28wstL3tTxnRN69VhdJQezmrnUq2hkdq9/plDga0sTJA
-	GMlXOk7DEopoz8UYUb8zQDhApU6EYtOHtL05EVfsuNE8+7gInA18FQ/D8jFXjLpUTGA==
-X-Received: by 2002:a5d:59a5:0:b0:339:2b19:ad2d with SMTP id p5-20020a5d59a5000000b003392b19ad2dmr7374697wrr.7.1705998439891;
-        Tue, 23 Jan 2024 00:27:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IElw+cOtRGQ+c5SDkkjZhiCjJa7D/X2gkCwG/6yndfINekRmTy7bePrH71rhJAmv4edUMz23g==
-X-Received: by 2002:a5d:59a5:0:b0:339:2b19:ad2d with SMTP id p5-20020a5d59a5000000b003392b19ad2dmr7374681wrr.7.1705998439589;
-        Tue, 23 Jan 2024 00:27:19 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-245-66.dyn.eolo.it. [146.241.245.66])
-        by smtp.gmail.com with ESMTPSA id a17-20020a5d5091000000b003392d3dcf6dsm6568989wrt.0.2024.01.23.00.27.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 00:27:19 -0800 (PST)
-Message-ID: <c029e9d7891fcaf1f635e2a76eae9a5df898f3f6.camel@redhat.com>
-Subject: Re: [PATCH net] selftests: netdevsim: fix the udp_tunnel_nic test
-From: Paolo Abeni <pabeni@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, shuah@kernel.org, 
-	horms@kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 23 Jan 2024 09:27:17 +0100
-In-Reply-To: <20240123060529.1033912-1-kuba@kernel.org>
-References: <20240123060529.1033912-1-kuba@kernel.org>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	s=arc-20240116; t=1706001820; c=relaxed/simple;
+	bh=oG2yIczf8/y17txyC32qJgSVw5RnlOFlFIHspGw8Dc0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ps3ftugxvtNwcoffhO/pgB9cRKxyxckmw9BWpprq2LLMcTcwgts1AnavwXmzU6G2UceD6CPyBepmspbf0hcvGEr5wTeeemjFe2mEU6LAsxMKIPXxVNjDdQTj+05ytOUOlXxlCQZ771MM4zK6sbmbJz7Dkc244j3UZLi6zCwChWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BF331FB;
+	Tue, 23 Jan 2024 01:24:23 -0800 (PST)
+Received: from [10.57.77.165] (unknown [10.57.77.165])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C2423F5A1;
+	Tue, 23 Jan 2024 01:23:36 -0800 (PST)
+Message-ID: <af614809-6d07-466d-8592-94a81ffd7e22@arm.com>
+Date: Tue, 23 Jan 2024 09:23:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: add missing tests
+Content-Language: en-GB
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+References: <20240116090641.3411660-1-usama.anjum@collabora.com>
+ <ffdba8c4-f1a2-4141-a3d4-0c85dfea6fef@arm.com>
+ <e3b2c142-aaae-481d-8206-5e8f374fd37e@collabora.com>
+ <06d796a1-1ae2-4f97-8fd6-0e3529ae2799@arm.com>
+ <de0e9e64-9833-4c60-8234-30b709b135db@collabora.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <de0e9e64-9833-4c60-8234-30b709b135db@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2024-01-22 at 22:05 -0800, Jakub Kicinski wrote:
-> This test is missing a whole bunch of checks for interface
-> renaming and one ifup. Presumably it was only used on a system
-> with renaming disabled and NetworkManager running.
->=20
-> Fixes: 91f430b2c49d ("selftests: net: add a test for UDP tunnel info infr=
-a")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: horms@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  .../selftests/drivers/net/netdevsim/udp_tunnel_nic.sh    | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic=
-.sh b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
-> index 4855ef597a15..f98435c502f6 100755
-> --- a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
-> +++ b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
-> @@ -270,6 +270,7 @@ for port in 0 1; do
->  	echo 1 > $NSIM_DEV_SYS/new_port
->      fi
->      NSIM_NETDEV=3D`get_netdev_name old_netdevs`
-> +    ifconfig $NSIM_NETDEV up
+On 23/01/2024 07:51, Muhammad Usama Anjum wrote:
+> On 1/22/24 2:59 PM, Ryan Roberts wrote:
+>>>>> +CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
+>>>>
+>>>> The addition of this test causes 2 later tests to fail with ENOMEM. I suspect
+>>>> its a side-effect of marking the hugetlbs as hwpoisoned? (just a guess based on
+>>>> the test name!). Once a page is marked poisoned, is there a way to un-poison it?
+>>>> If not, I suspect that's why it wasn't part of the standard test script in the
+>>>> first place.
+>>> hugetlb-read-hwpoison failed as probably the fix in the kernel for the test
+>>> hasn't been merged in the kernel. The other tests (uffd-stress) aren't
+>>> failing on my end and on CI [1][2]
+>>
+>> To be clear, hugetlb-read-hwpoison isn't failing for me, its just causing the
+>> subsequent tests uffd-stress tests to fail. Both of those subsequent tests are
+>> allocating hugetlbs so my guess is that since this test is marking some hugetlbs
+>> as poisoned, there are no longer enough for the subsequent tests.
+>>
+>>>
+>>> [1] https://lava.collabora.dev/scheduler/job/12577207#L3677
+>>> [2] https://lava.collabora.dev/scheduler/job/12577229#L4027
+>>>
+>>> Maybe its configurations issue which is exposed now. Not sure. Maybe
+>>> hugetlb-read-hwpoison is changing some configuration and not restoring it.
+>>
+>> Well yes - its marking some hugetlb pages as HWPOISONED.
+>>
+>>> Maybe your system has less number of hugetlb pages.
+>>
+>> YEs probably; What is hugetlb-read-hwpoison's requirement for size and number of
+>> hugetlb pages? the run_vmtests.sh script allocates the required number of
+>> default-sized hugetlb pages before running any tests (I guess this value should
+>> be increased for hugetlb-read-hwpoison's requirements?).
+>>
+>> Additionally, our CI preallocates non-default sizes from the kernel command line
+>> at boot. Happy to increase these if you can tell me what the new requirement is:
+> I'm not sure about the exact requirement of the number of hugetlb for these
+> tests. But I specify hugepages=1000 and tests work for me.
 
-WoW! I initially thought the above was a typo, before noticing it's
-actually consistent with the whole script :)
+1000 hugepages @2M is ~2G, which is quite a big ask for small arm systems. And
+for big arm systems that use 64K base pages, the default hugepage size is 512M,
+so 1000 of those is 512G which is also quite a big ask. So I'd prefer not to
+make 1000 hugepages the requirement.
 
-Do you think we should look at dropping ifconfig usage from self-tests?
-I guess that in the long run most systems should not have such command
-available in the default install.
+Looking at the test, I think its using 8 default sized hugepages; But supporting
+it properly is still complex as the HWPOISON operation is destructive. I'll
+reply with more detail against the v2 patch.
 
-In any case the patch LGTM.
-
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-
-Cheers,
-
-Paolo
+> 
+> I've sent v2 [1]. Would it be possible to run your CI on that and share
+> results before we merge that one?
+> 
+> [1]
+> https://lore.kernel.org/all/20240123073615.920324-1-usama.anjum@collabora.com
+> 
+>>
+>> hugepagesz=1G hugepages=0:2,1:2 hugepagesz=32M hugepages=0:2,1:2
+>> default_hugepagesz=2M hugepages=0:64,1:64 hugepagesz=64K hugepages=0:2,1:2
+>>
+>> Thanks,
+>> Ryan
+>>
+> 
 
 
