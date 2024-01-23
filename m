@@ -1,119 +1,128 @@
-Return-Path: <linux-kselftest+bounces-3409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93402838E81
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 13:28:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5008838FC6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 14:27:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A37B2888E9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 12:28:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 701E21F2A4F5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 13:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6BDA5EE60;
-	Tue, 23 Jan 2024 12:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9E15F841;
+	Tue, 23 Jan 2024 13:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="tQ7tJGtU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UeG/bYAW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B25E5DF30
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 12:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17ED5F55E
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 13:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706012896; cv=none; b=s+jxJqDVut4NH257QqayFXwSNXvG2JfAz6KKPg5rlUit+N6exrWptVwOURzOC4OBqYq5jxUsaInBBqzFRad4QSp780E2ahS0jefEzAa1ktGw8NDpZT5bU5nd+j/Uj4S6dkNtcutWtin3uScVt7tc60e0EYDxbMIYf0biHAD0L/U=
+	t=1706015872; cv=none; b=aagU1xT47jjx+e33UzFE0QAxDuD/9ORtzSspw0jro17Il5wTXq3oJK1NpdZ7VNXyz93PkgbCmoYojSlf26ZycfceZ7ODF4DoI69Inya4w/u7M/jiMuO1mi9E1aKyBnuzdY7e5V9KvL4hTa6oWCTD9092Fyoehmlt6u2mHrQ57bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706012896; c=relaxed/simple;
-	bh=Ot+bTBOPefhnDDQDaFuxiuUfKC6AG33bf2g9LLIDp3o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZSRdj5N85zQ4EVs9EeQemFt1SXS4CBl5gQvB02LgnTMM57SS3oX5t8MdelLuLsLipoXke+GrAJasxxsGSi+QJeIvMV3spwweQhZCeGVfkMzpij5wbByMMmqYeRbwc9zycvR+Klu2AK/cPsTg2VfFBL0tBRCO1PwqR4wkz8pVd5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=tQ7tJGtU; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d7232dcb3eso17243385ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 04:28:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1706012895; x=1706617695; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=36MRRmXPqllz5KyDGXZTrimLPtySszyCB1oWLfkeCAE=;
-        b=tQ7tJGtUx5zaEJjNxaVyvpH6BVhyDlF37uv/kfxSUGee7v8BRTSZgLX2G7725D+CbC
-         mkd721JiCz2mQBGoRBJbFe5e7HVfQPrQXowz6yTu9QGuuePv0V2H0IFF/2k/I4aD5OuR
-         7en0I0MgVnTDyrfrdJSr7uLTLeMM1vw5dCdimzbhasXH9hDD3E/GKYsqlKR86M5mTfmd
-         x4fi+J/RKaWoehGcJWpZJGeYN9zWRA0+/NOEqBlbSBKaM1TYT8Xp7SWpddXCyBdhN0H7
-         2fOq/xVCFKgwjwR8BzLW/aWKBXlqzTgo3HoKAY+v2QOaZZwVgfZyRDgcbnvDjh3ti7qF
-         zc7g==
+	s=arc-20240116; t=1706015872; c=relaxed/simple;
+	bh=jnct+Lzin4gh/Le8F45er7/TXL58Sl7/KC3E0pdohAo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fXfYyXUtQhE+Dvb0usgTefDdZLZ3BV6pObnI9dm1HuVnMNca2rQZDjsdJDr8cTPy/EJ1zIx5YbXvSriCrEn+xDpfHhF4Dqu0pWycRsegODcYCgEXjK+Jjn83aDxjLP2mCw7CQKRoRW3lVto32rP9s+hCh6riqOBqPEpdeR3/QDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UeG/bYAW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706015869;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wBJWnNPWK6FEDvgCqnbrqrUFcx4g4CvzlBj7l9Q5CZo=;
+	b=UeG/bYAWgURJf7Z9wjnwRJ5BQ/yBMSAVZcuZsmj38CdE2E9/LvTjH7WFV0UKiAGUfP2hyF
+	aEhibpVkF1aMvlWy29B5zqY6NSX8BHkBnYs4ciTVVWuiLg0x9oSUXuo0d1Wvw7+MeWg6uq
+	Qu/UC2G9V3Wu2w6BCWRrum1BeWenHcs=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-527-jbVjFUCDM2ObrOIikzR3fw-1; Tue, 23 Jan 2024 08:17:48 -0500
+X-MC-Unique: jbVjFUCDM2ObrOIikzR3fw-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-5100a0f0c55so398342e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 05:17:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706012895; x=1706617695;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1706015866; x=1706620666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=36MRRmXPqllz5KyDGXZTrimLPtySszyCB1oWLfkeCAE=;
-        b=XYwljHKmWwmr9EbCKVk/Mq8U+vZuu/eKsP3JhZuTA/p5IaZJgPWul+RedDZ4fXzGYs
-         ANRVguU/gapHwsqSSj7AAC5RnwTDQpb8G9b8YEzk+FHM66DrmQ6VYB9woZx0Y9CXjXvW
-         ufYcu9ugZVGR9L+/4OtaeIXSkQFI9N0KuakVwGRtUiPDRPtpXa3xOFDjGmsRj6062WE9
-         9nw1xJgezogVdONfkoeRH9+FXAlrCazUeSl40msyEDqqhEPTTBG111I4BckKj+SPKMxS
-         N5jYAf0xShuEqG+LzPSsO8LYlaA/Hi4Xjux95GW0sQKKLWF2E0qZtnAvLghZt7BTp9jj
-         vhBA==
-X-Gm-Message-State: AOJu0YxwIRd3knGcn943YA/u8S0C8/KQPpBjfRXkDnwEdv9d42lU6YQ5
-	2CH0UQYk7QK9w8s06YU9a40ZjpfADMyhNN8qMDuy/hqNJWQKIxlLknX4EKyvOg==
-X-Google-Smtp-Source: AGHT+IF0D0kljlbjAfG9BQ5CCjJ6VWS3TBt2KIYftFW1fryDQUEvqOl4G6JTG7qZT5ezdUMQ1tcUrw==
-X-Received: by 2002:a17:902:70cc:b0:1d5:5984:df52 with SMTP id l12-20020a17090270cc00b001d55984df52mr3091162plt.60.1706012894834;
-        Tue, 23 Jan 2024 04:28:14 -0800 (PST)
-Received: from rogue-one.tail33bf8.ts.net ([201.17.86.134])
-        by smtp.gmail.com with ESMTPSA id ke5-20020a170903340500b001d33e6521b9sm8867643plb.14.2024.01.23.04.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 04:28:14 -0800 (PST)
-From: Pedro Tammela <pctammela@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	shuah@kernel.org,
-	kuba@kernel.org,
-	vladimir.oltean@nxp.com,
-	dcaratti@redhat.com,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	Pedro Tammela <pctammela@mojatatu.com>
-Subject: [PATCH net-next 4/4] selftests: tc-testing: enable all tdc tests
-Date: Tue, 23 Jan 2024 09:27:36 -0300
-Message-Id: <20240123122736.9915-5-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240123122736.9915-1-pctammela@mojatatu.com>
-References: <20240123122736.9915-1-pctammela@mojatatu.com>
+        bh=wBJWnNPWK6FEDvgCqnbrqrUFcx4g4CvzlBj7l9Q5CZo=;
+        b=kYLiKS6ekvkCbwvEQYc3f7F7ypZ+PuV0k4CiwqUjq7zaYGex4zwmf8vt2NfYR/RY+Y
+         D1RAyTaLpD3Y6ccndVgTC5D4Us849v0fRPxoSa18Ylk1m72JeC3dnYwPNcODgWMfr3Ut
+         xZEai/xuNBzTtnnE+bXNq46mDyOetL+6m8M0ZRumdjfjfeDTHKAoDnv6RVSsL4CTqlEx
+         WWuS1bf8PnQ/AL5SDqfhyHy/Kjeao0Pbj+okiPjn7ZN6b4VQuebVUdgvdHYSFvRcO5+L
+         K+uZSSfQL4wOkTKTmeBl5lynVjuacHVHrzi08tDrdaC7GA0KPhgYwJB00FpyJivhxBJd
+         8aUg==
+X-Gm-Message-State: AOJu0YxB49q7tsMUxllTGz5pq6BjXIcTpsVScOmIQXctQF8uGiB7s1Pb
+	qhjm154sMcARVZRh5PgqbbWirX74HYwwmbfxoSwqhjaulnbbbl2rSwcm05UMNbBP9KyDAgKKyqv
+	WibfykPc6e3Rh9CKE1bMGsCEP4mExgTA9ALqKepsoI1KXADXpLoRc3kEwz0kjM35SBHFem8lp7V
+	kLH/wTUDSO9sRQnkntdlhV+O1wj+JdY5euG6cHBY5y
+X-Received: by 2002:a05:6512:3b84:b0:50e:6168:c99d with SMTP id g4-20020a0565123b8400b0050e6168c99dmr2912640lfv.27.1706015866526;
+        Tue, 23 Jan 2024 05:17:46 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE7bPWvAk9q+1bk1V2Hwy2Rx2s8Ht69Kfn6jl0Hd/iIWEVFa6+7r5fF4lK4xsfj0+ptN1K/qJVhi/WY/v9H5+I=
+X-Received: by 2002:a05:6512:3b84:b0:50e:6168:c99d with SMTP id
+ g4-20020a0565123b8400b0050e6168c99dmr2912627lfv.27.1706015866249; Tue, 23 Jan
+ 2024 05:17:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240123122736.9915-1-pctammela@mojatatu.com> <20240123122736.9915-3-pctammela@mojatatu.com>
+In-Reply-To: <20240123122736.9915-3-pctammela@mojatatu.com>
+From: Davide Caratti <dcaratti@redhat.com>
+Date: Tue, 23 Jan 2024 14:17:34 +0100
+Message-ID: <CAKa-r6s_DO1tfcZdsQNBCwjbE0ytJKnZWnvcKqTR+5epdNq4YQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/4] selftests: tc-testing: check if 'jq' is
+ available in taprio script
+To: Pedro Tammela <pctammela@mojatatu.com>
+Cc: netdev@vger.kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com, 
+	jiri@resnulli.us, shuah@kernel.org, kuba@kernel.org, vladimir.oltean@nxp.com, 
+	edumazet@google.com, pabeni@redhat.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-For the longest time tdc ran only actions and qdiscs tests.
-It's time to enable all the remaining tests so every user visible
-piece of TC is tested by the downstream CIs.
+hi Pedro,
 
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
- tools/testing/selftests/tc-testing/tdc.sh | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Tue, Jan 23, 2024 at 1:28=E2=80=AFPM Pedro Tammela <pctammela@mojatatu.c=
+om> wrote:
+>
+> If 'jq' is not available the taprio tests that use this script will
+> run forever. Check if it exists before entering the while loop.
+>
+> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+> ---
+>  .../selftests/tc-testing/scripts/taprio_wait_for_admin.sh    | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/tools/testing/selftests/tc-testing/scripts/taprio_wait_for_a=
+dmin.sh b/tools/testing/selftests/tc-testing/scripts/taprio_wait_for_admin.=
+sh
+> index f5335e8ad6b4..68f2c6eaa802 100755
+> --- a/tools/testing/selftests/tc-testing/scripts/taprio_wait_for_admin.sh
+> +++ b/tools/testing/selftests/tc-testing/scripts/taprio_wait_for_admin.sh
+> @@ -3,6 +3,11 @@
+>  TC=3D"$1"; shift
+>  ETH=3D"$1"; shift
+>
+> +if ! command -v jq &> /dev/null; then
+> +    echo "Please install jq"
+> +    exit 1
+> +fi
+> +
 
-diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
-index c53ede8b730d..cddff1772e10 100755
---- a/tools/testing/selftests/tc-testing/tdc.sh
-+++ b/tools/testing/selftests/tc-testing/tdc.sh
-@@ -63,5 +63,4 @@ try_modprobe sch_hfsc
- try_modprobe sch_hhf
- try_modprobe sch_htb
- try_modprobe sch_teql
--./tdc.py -J`nproc` -c actions
--./tdc.py -J`nproc` -c qdisc
-+./tdc.py -J`nproc`
--- 
-2.40.1
+nit: what about returning $KSFT_SKIP (that is 4) if jq is not there?
+so the test does not fail.
+thanks!
+--=20
+davide
 
 
