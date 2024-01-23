@@ -1,223 +1,164 @@
-Return-Path: <linux-kselftest+bounces-3417-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3418-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA4FB83916E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 15:32:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3205483919D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 15:45:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12C97B25E04
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 14:32:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64B9C1C20CB2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 14:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B869EEC2;
-	Tue, 23 Jan 2024 14:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EAC50A61;
+	Tue, 23 Jan 2024 14:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="mHk4+LqJ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="oYH9+34T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F432E3E3
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 14:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A241C5026F;
+	Tue, 23 Jan 2024 14:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706020366; cv=none; b=OQ/0akQb9NwqPEtxMWzZ+8Busbbmx6lZaetipaoLCqHF0j3a33r+eg0KLoNuDZkDys8siyAnqYbNqdlo/V55WYpug+21AVBSAjiDQ9sgh+xxi7sqmuYQWY9cKZ/uplPM/nPXrii6skODCAaLP+aH25ktIknLMvq8BeZZLwCS5tk=
+	t=1706021102; cv=none; b=tYa5BBQ4/SFcbDSNXJYa9C/Ds1FWe0NR30Efl/zLrNCAWvQDsaV9/GawikjQ5Jyz4u66WDF5DB7od1pexgPNGFJ/6tsEkbbMSDynRKJq++XFP9t0gjHV7POm6SUm/tjyy5zuVwqit8X/ZclnTn8fQTm0BvkbGwsbVVwknTKs72w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706020366; c=relaxed/simple;
-	bh=kHt9lT0lnj9p9TwTP7A3g9MCBoF52e1rVoPASZtkqqI=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=u9/pLbRJAjnNLg3yba+Hd230UkJiHWJ0Y2NTc4J5m1jicVaoIPpcPWZkOlIUd7XcWUz1CAUvY6HgURDtPV4BNs4p9FjymCjEqr05iSZSfUHdYFr7g5dyvJVMwEDl6CW8gsER5xaEzPghbBHPsJylvaG37x6qJ9WHOigXntAsmkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=mHk4+LqJ; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-290a55f3feaso1523852a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 06:32:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1706020364; x=1706625164; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Co7iJekz2i431vl4/lQ8YhRl41qR0yl18yiHd5wEzwM=;
-        b=mHk4+LqJZ9THZE7SIFIsL+XQlMwujZ3he5LlMRdmYjnCDB2Cbyni/nOFCzuMxyn8DL
-         +nOOYA5zghXB/aeW/l9T8Nwq0saMZUJnytsQfyl6MpahEw43eQpv12QwLL1+gqwAB38j
-         4p5CDHuw5OwabSOSyoJAVzTnXDNu73kJeJ94jDJWV2g8ttNpDP1/FOZ/BQTCgiSOg5XP
-         LradB+KmKExL5YzhxOe5p2wVghROaGxjokCVVT6CW4dt7V2jtxDC4eT7XnG2wa4wFor3
-         7ZupuAr2hahC42EusM6OjqtQZOkJFEfM6eJNTqHs/79uKQKh/yX7h9VebQuz+a4CAuIy
-         dkvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706020364; x=1706625164;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Co7iJekz2i431vl4/lQ8YhRl41qR0yl18yiHd5wEzwM=;
-        b=s4Cut9MRXp70goYRNso772NSSQ0JbHSzV9lUNkAPdDlvD+NXjcYk65kw/PMSgG8tdH
-         9N205QhOvQ4r4l1mi5B/47UnzAiNnRBgXBlSW69/2eVbJG+NWPxrkcNeaP4yOVwaf7bU
-         NutudYPCBpWP2FsgRix5IwOhhiU6gg5Z4p0jfrxjdK5LwOjzWiFuWuhgdndRal50D1Yh
-         d3viOxe2WRL19rNefthqG0Os80HUD1aIiUeB7AywnjT2xsylYbIDi6/FKn9WMOt/DdQG
-         swzyb0b4vfKGgKE3XwmmA63BiLf/JuP0YE0jEaaqzvyQm/rVh8+YhBu5rghigsjNPxlM
-         BZRw==
-X-Gm-Message-State: AOJu0YzCpzFQI0IhUchVxNZeVGiNwtXol//m7xSOeD8VHcmTtJq0QmBq
-	8QNuDz5zyMw3X2En2qznoa1c2GswLOPbWtXTJB1hLRaMDfboHLfdW4SZMgOzIZg=
-X-Google-Smtp-Source: AGHT+IFWOtMBGzzjtjnIdAPAIfPsvD2/uOMhOXozCM9sCm/m8zaMAvgfsWIWe14GD0IPFnMxf3uW8A==
-X-Received: by 2002:a17:90b:890:b0:28d:f5db:70b8 with SMTP id bj16-20020a17090b089000b0028df5db70b8mr3277296pjb.37.1706020363993;
-        Tue, 23 Jan 2024 06:32:43 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id pd14-20020a17090b1dce00b00290e148dbe1sm547347pjb.30.2024.01.23.06.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 06:32:43 -0800 (PST)
-Message-ID: <65afce0b.170a0220.33c32.21d9@mx.google.com>
-Date: Tue, 23 Jan 2024 06:32:43 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1706021102; c=relaxed/simple;
+	bh=+8mWQtyFcnYGhfR0wkSQ68fK9+UKR6e+xL/523DTfrE=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=aU9/kxnr2+YeurUxjFusLPE02lJ9WNkE/QQVwVjiZ5py0OPVmztnX+ilUtjorDnAQh1UJEGNMxJnJp7xqUC23wN4SSLajW0RA+IP6dv1R+yX/lftCv5pifHzCkzyC85RRqYR2QLuhuOKw9g8KH4jVJ3qG3/x3Ca+/3u2evmFvH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=oYH9+34T; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706021099;
+	bh=+8mWQtyFcnYGhfR0wkSQ68fK9+UKR6e+xL/523DTfrE=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=oYH9+34T274wj0pmflwVQkZtj4kzL8X0IozbxHiUB9ZxNClluGgTttaT4fIDBM3zg
+	 /c1PI1tgscghRptoWKdEndPRz85x5eU6/hvZbRgXGcEzBx1qKSGoG2YiotL/+9Cgkh
+	 0wJKLLagQx9oMACCrnO+GquHBAVe+sfJk8P5q3JGCeo7eGpzy2rVybdaE15QyxXOV+
+	 Os1+/IMiq88hvgXLTh1OsOLQNCcWVOL7DFqRR+I2ojRiKPmVS5QRIwzRcKuHmO6dvq
+	 34SAn06OsRTaNegs093K7Ji1pGJo3EF3K4EpazlyotI676TaEKiNelO8qOIS21m3Rh
+	 4thZ6PDfmB0jg==
+Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DC41437820AF;
+	Tue, 23 Jan 2024 14:44:56 +0000 (UTC)
+Message-ID: <4bf9bf87-0622-4824-9026-d7ab5839f433@collabora.com>
+Date: Tue, 23 Jan 2024 19:45:08 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.8-rc1-3-g6c8c9d6e1bce2
-X-Kernelci-Report-Type: test
-Subject: kselftest/fixes kselftest-seccomp: 5 runs,
- 3 regressions (v6.8-rc1-3-g6c8c9d6e1bce2)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 1/2] selftests/mm: run_vmtests.sh: add missing tests
+Content-Language: en-US
+To: Ryan Roberts <ryan.roberts@arm.com>
+References: <20240123073615.920324-1-usama.anjum@collabora.com>
+ <e92f7c49-5268-421e-a017-af268c845b1b@arm.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <e92f7c49-5268-421e-a017-af268c845b1b@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kselftest/fixes kselftest-seccomp: 5 runs, 3 regressions (v6.8-rc1-3-g6c8c9=
-d6e1bce2)
+Hi Ryan,
 
-Regressions Summary
--------------------
+Thank you so much for reviewing and getting involved.
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+On 1/23/24 2:33 PM, Ryan Roberts wrote:
+> On 23/01/2024 07:36, Muhammad Usama Anjum wrote:
+>> Add missing tests to run_vmtests.sh. The mm kselftests are run through
+>> run_vmtests.sh. If a test isn't present in this script, it'll not run
+>> with run_tests or `make -C tools/testing/selftests/mm run_tests`.
+>>
+>> Cc: Ryan Roberts <ryan.roberts@arm.com>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Changes since v1:
+>> - Copy the original scripts and their dependence script to install directory as well
+>> ---
+>>  tools/testing/selftests/mm/Makefile       | 3 +++
+>>  tools/testing/selftests/mm/run_vmtests.sh | 3 +++
+>>  2 files changed, 6 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+>> index 2453add65d12f..c9c8112a7262e 100644
+>> --- a/tools/testing/selftests/mm/Makefile
+>> +++ b/tools/testing/selftests/mm/Makefile
+>> @@ -114,6 +114,9 @@ TEST_PROGS := run_vmtests.sh
+>>  TEST_FILES := test_vmalloc.sh
+>>  TEST_FILES += test_hmm.sh
+>>  TEST_FILES += va_high_addr_switch.sh
+>> +TEST_FILES += charge_reserved_hugetlb.sh
+>> +TEST_FILES += write_hugetlb_memory.sh
+>> +TEST_FILES += hugetlb_reparenting_test.sh
+> 
+> I see you are exporting 3 scripts, but only invoking 2 of them from
+> run_vmtests.sh below. Is one a helper that gets called indirectly?
+Yeah, write_hugetlb_memory.sh is needed by charge_reserved_hugetlb.sh. I'll
+put a comment there.
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+> 
+>>  
+>>  include ../lib.mk
+>>  
+>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+>> index 246d53a5d7f28..12754af00b39c 100755
+>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>> @@ -248,6 +248,9 @@ CATEGORY="hugetlb" run_test ./map_hugetlb
+>>  CATEGORY="hugetlb" run_test ./hugepage-mremap
+>>  CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+>>  CATEGORY="hugetlb" run_test ./hugetlb-madvise
+>> +CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
+>> +CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
+>> +CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
+> 
+> I'm not really a fan of adding this last test here; its destructive because it
+> poisons 8 hugepages. So at a minimum, I think you need to modify the code in
+> run_vmtests.sh to ensure those extra pages are allocated (there is already a
+> section in the script that allocates hugepages).
+> 
+> However, given this test is destructive, I'd prefer that it wasn't run as part
+> of the main test set. Because the first time you run it, it will presumably
+> pass, but now some of the hugepages are poisoned so next time you run it, there
+> won't be enough unpoisoned hugepages and a test will fail. So you have very
+> confusing behaviour for a developer who might be running these tests multiple
+> times per boot (e.g. me).
+> 
+> Perhaps we can add a -d (destructive) option to the script, and this test will
+> only be run if that option is passed?
+Ideally we should be able to fix these tests before enabling them and there
+shouldn't be any side-effect of these. I'm struggling with the
+configurations where I'm getting consistent results. Studying and analyzing
+how and how many hugetlbs are being allocated/deallocated isn't straight
+forward enough in these.
 
-stm32mp157a-dhcor-avenger96  | arm   | lab-broonie   | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
+I'll spend more time to either put it under some flag or modify the tests
+to don't entangle with each other.
 
+> 
+> Thanks,
+> Ryan
+> 
+> 
+>>  
+>>  nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
+>>  # For this test, we need one and just one huge page
+> 
+> 
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/v6.=
-8-rc1-3-g6c8c9d6e1bce2/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: v6.8-rc1-3-g6c8c9d6e1bce2
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      6c8c9d6e1bce2871df58a85d2c0c545007c34f5f =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65afbf00bf72bf376d52a402
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.8-rc1-3-g6c=
-8c9d6e1bce2/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.8-rc1-3-g6c=
-8c9d6e1bce2/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/65afbf00bf72=
-bf376d52a403
-        failing since 461 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
-irst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65afbefebf72bf376d52a3f9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.8-rc1-3-g6c=
-8c9d6e1bce2/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.8-rc1-3-g6c=
-8c9d6e1bce2/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/65afbefebf72=
-bf376d52a3fa
-        failing since 461 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
-irst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-stm32mp157a-dhcor-avenger96  | arm   | lab-broonie   | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65afcbf0ad4d9bff1852a4e8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.8-rc1-3-g6c=
-8c9d6e1bce2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-broonie/kselftest-s=
-eccomp-stm32mp157a-dhcor-avenger96.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.8-rc1-3-g6c=
-8c9d6e1bce2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-broonie/kselftest-s=
-eccomp-stm32mp157a-dhcor-avenger96.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/65afcbf0ad4d=
-9bff1852a4e9
-        new failure (last pass: v6.8-rc1) =
-
- =20
+-- 
+BR,
+Muhammad Usama Anjum
 
