@@ -1,131 +1,157 @@
-Return-Path: <linux-kselftest+bounces-3386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51365838704
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 06:51:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAFAB838711
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 07:05:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7F241F22EF8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 05:51:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDB4D1C22F3F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 06:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DF62582;
-	Tue, 23 Jan 2024 05:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B94645009;
+	Tue, 23 Jan 2024 06:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UmunmPdf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ae5730Jr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2271078B
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 05:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B773FB0F;
+	Tue, 23 Jan 2024 06:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705989056; cv=none; b=TU1M/YZ75ZEG44AjmuT50jRMAHI4KfsjFNHeVjUIGKw+El57VJYXi+mg+HABhQuMwd6ioRp2Vicho60bSTSy15wLAOSOFpSC/DvN6Iy47lyuJyMIPVT4/tSBgzGRvm7OtkxNTwGAR3qUKv/BidlM7xYZzi0+cpzhqKgxS7iDmjw=
+	t=1705989939; cv=none; b=bljRgiu5bEFiAYFzqohPW68rvEYhtidkcAZegNEt+UbJo/+A07y3vyT8f5j89qv9bG3LhO41upDShE+vFSB9P2gJMDHy4JvgiThgEIpl60VvXftLRu+LQsypXxkx+ozBso8uFiCGYq/UDIhJjJ3RlGvrHGhse0wzxj1pl35MR3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705989056; c=relaxed/simple;
-	bh=uUGqYPWkqLqAuYLajkHeoiaksi8vyt5EtObg/cfEv0A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k/ZFF3117wQgfVPxs9Af4h0b4jZ8QmJVrTermEsdo3WgNJLM7uxfGhD/f9zEA5wX/YQPn0tHtJJL3LCEUnLHCytKJqSpgizjugdHpG8nDKL9xIBcC8H1T/kseyO4E5NI6JwsuBSpfPM7z6Gxunerm8TUIX7/LJz2mDDx1rwTKE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UmunmPdf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705989054;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H+rMK0KBBnQyaHb54gBf8clNL10ejkmGqcBgOHn7Pt4=;
-	b=UmunmPdfnT+GnT51x1QezQdsFNCsmbCpPelURaiH6XW5cVekYX+1AB8mjTttha783UyoiC
-	B4Q0KeSB+jkLgPuOwCvfJOF5dwEhqlaHnuQE5HMXt141oi4pnIvHpoWoT3nPE7HiqyLOz1
-	0CYVphKPOL8WwvqllzYDysuBG/d2gmM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-375-JHn3VzyfMY6lUkIpG0Vk8Q-1; Tue, 23 Jan 2024 00:50:48 -0500
-X-MC-Unique: JHn3VzyfMY6lUkIpG0Vk8Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9386885A588;
-	Tue, 23 Jan 2024 05:50:46 +0000 (UTC)
-Received: from [10.22.8.107] (unknown [10.22.8.107])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D71B9492BC6;
-	Tue, 23 Jan 2024 05:50:40 +0000 (UTC)
-Message-ID: <8075b1d2-1260-4f1d-a757-dc991d95710c@redhat.com>
-Date: Mon, 22 Jan 2024 21:50:40 -0800
+	s=arc-20240116; t=1705989939; c=relaxed/simple;
+	bh=+sdw0hQDgpmOLRPB+xoe+83u7va8ZAEDwpSm9bv1KYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cyOys41X1QAy6pNanfuEqh3BHkih7aHQBuhijsV5h4jYgvgRuZ3Y2aks8v8efmlE4abRLyeAa33VzAxhrNdjnd4dnFVt5NG3ZFaagPoW16EqTASJJIRlWJExpfwZap9VqLCuabq+Z4dhHmgUNk0G9A0ily2heWIIUzx5NCo+a5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ae5730Jr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD59C433C7;
+	Tue, 23 Jan 2024 06:05:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705989938;
+	bh=+sdw0hQDgpmOLRPB+xoe+83u7va8ZAEDwpSm9bv1KYY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ae5730JreJ+lZAgla1kVVMvrTZFqwkhMrzqpLeHcNbtf8jf1BBpXX9/rwOwF61rL1
+	 5sUgmxtIw3qvKcVMZPuO5+U8BnaomDFuh+aAVzobh6powFpy3dJV8cWMl4fQbTT4/u
+	 +ABPIf/Od9Bj0isFuVrFGuxR1o6xQfdalQ88MXSKD9AzGkMfn9SlUCpjKExpx+Lobm
+	 UZXViz0GfwZgC1zIXWkTcTPTSCJQD2vz7AyEho2Chy3XjbpnIFJ+5bVAW4qEmOcdY+
+	 DAObi3rfZsK06Uj5F0j1rli+ryA41Dg3nxh+JPOiUmUF2rtWQarrlSHoqs6F3bgGYn
+	 yOrc0dl9sQlgg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	horms@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: netdevsim: fix the udp_tunnel_nic test
+Date: Mon, 22 Jan 2024 22:05:29 -0800
+Message-ID: <20240123060529.1033912-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/8] cgroup/cpuset: Support RCU_NOCB on isolated
- partitions
-Content-Language: en-US
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
- Johannes Weiner <hannes@cmpxchg.org>,
- Frederic Weisbecker <frederic@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Neeraj Upadhyay <quic_neeraju@quicinc.com>,
- Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
- Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Mrunal Patel <mpatel@redhat.com>,
- Ryan Phillips <rphillips@redhat.com>, Brent Rowsell <browsell@redhat.com>,
- Peter Hunt <pehunt@redhat.com>, Cestmir Kalina <ckalina@redhat.com>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Alex Gladkov <agladkov@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
- Phil Auld <pauld@redhat.com>, Paul Gortmaker <paul.gortmaker@windriver.com>,
- Daniel Bristot de Oliveira <bristot@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Costa Shulyupin <cshulyup@redhat.com>
-References: <20240117163511.88173-1-longman@redhat.com>
- <bql5g22ovp2dm33llmq5oxpmuuhysvdyppj7j6xvrm643xuniv@pkqrwvmqzneh>
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <bql5g22ovp2dm33llmq5oxpmuuhysvdyppj7j6xvrm643xuniv@pkqrwvmqzneh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
 
+This test is missing a whole bunch of checks for interface
+renaming and one ifup. Presumably it was only used on a system
+with renaming disabled and NetworkManager running.
 
-On 1/22/24 10:07, Michal Koutný wrote:
-> Hello Waiman.
->
-> On Wed, Jan 17, 2024 at 11:35:03AM -0500, Waiman Long <longman@redhat.com> wrote:
->> This patch series is based on the RFC patch from Frederic [1]. Instead
->> of offering RCU_NOCB as a separate option, it is now lumped into a
->> root-only cpuset.cpus.isolation_full flag that will enable all the
->> additional CPU isolation capabilities available for isolated partitions
->> if set. RCU_NOCB is just the first one to this party. Additional dynamic
->> CPU isolation capabilities will be added in the future.
-> IIUC this is similar to what I suggested back in the day and you didn't
-> consider it [1]. Do I read this right that you've changed your mind?
+Fixes: 91f430b2c49d ("selftests: net: add a test for UDP tunnel info infra")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: horms@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ .../selftests/drivers/net/netdevsim/udp_tunnel_nic.sh    | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-I didn't said that we were not going to do this at the time. It's just 
-that more evaluation will need to be done before we are going to do 
-this. I was also looking to see if there were use cases where such 
-capabilities were needed. Now I am aware that such use cases do exist 
-and we should start looking into it.
-
->
-> (It's fine if you did, I'm only asking to follow the heading of cpuset
-> controller.)
-
-OK, the title of the cover-letter may be too specific. I will make it 
-more general in the next version.
-
-Cheers,
-Longman
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
+index 4855ef597a15..f98435c502f6 100755
+--- a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
++++ b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
+@@ -270,6 +270,7 @@ for port in 0 1; do
+ 	echo 1 > $NSIM_DEV_SYS/new_port
+     fi
+     NSIM_NETDEV=`get_netdev_name old_netdevs`
++    ifconfig $NSIM_NETDEV up
+ 
+     msg="new NIC device created"
+     exp0=( 0 0 0 0 )
+@@ -431,6 +432,7 @@ for port in 0 1; do
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
++    NSIM_NETDEV=`get_netdev_name old_netdevs`
+     ifconfig $NSIM_NETDEV up
+ 
+     overflow_table0 "overflow NIC table"
+@@ -488,6 +490,7 @@ for port in 0 1; do
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
++    NSIM_NETDEV=`get_netdev_name old_netdevs`
+     ifconfig $NSIM_NETDEV up
+ 
+     overflow_table0 "overflow NIC table"
+@@ -544,6 +547,7 @@ for port in 0 1; do
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
++    NSIM_NETDEV=`get_netdev_name old_netdevs`
+     ifconfig $NSIM_NETDEV up
+ 
+     overflow_table0 "destroy NIC"
+@@ -573,6 +577,7 @@ for port in 0 1; do
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
++    NSIM_NETDEV=`get_netdev_name old_netdevs`
+     ifconfig $NSIM_NETDEV up
+ 
+     msg="create VxLANs v6"
+@@ -633,6 +638,7 @@ for port in 0 1; do
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
++    NSIM_NETDEV=`get_netdev_name old_netdevs`
+     ifconfig $NSIM_NETDEV up
+ 
+     echo 110 > $NSIM_DEV_DFS/ports/$port/udp_ports_inject_error
+@@ -688,6 +694,7 @@ for port in 0 1; do
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
++    NSIM_NETDEV=`get_netdev_name old_netdevs`
+     ifconfig $NSIM_NETDEV up
+ 
+     msg="create VxLANs v6"
+@@ -747,6 +754,7 @@ for port in 0 1; do
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
++    NSIM_NETDEV=`get_netdev_name old_netdevs`
+     ifconfig $NSIM_NETDEV up
+ 
+     msg="create VxLANs v6"
+@@ -877,6 +885,7 @@ msg="re-add a port"
+ 
+ echo 2 > $NSIM_DEV_SYS/del_port
+ echo 2 > $NSIM_DEV_SYS/new_port
++NSIM_NETDEV=`get_netdev_name old_netdevs`
+ check_tables
+ 
+ msg="replace VxLAN in overflow table"
+-- 
+2.43.0
 
 
