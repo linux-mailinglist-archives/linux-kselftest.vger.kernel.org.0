@@ -1,312 +1,203 @@
-Return-Path: <linux-kselftest+bounces-3401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E4FC838CF6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 12:09:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8283D838CFB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 12:09:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ED22289B08
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 11:09:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3369428C200
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 11:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97F475EE74;
-	Tue, 23 Jan 2024 11:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA2F5D749;
+	Tue, 23 Jan 2024 11:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="21Y1a1Hg"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WHSJGS+3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C7D5DF3F
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 11:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6AC5F545;
+	Tue, 23 Jan 2024 11:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706008098; cv=none; b=ESJl8rgLTyPvnv7dl1GikSjOFzjwK6Q16tJrmA8jJM2Vec3pz0WMWCgGO/doNx8o9zbBmgWuvJVhZbPqs6WocsBP+R3QD3uARRfiDgmSjmWUPE8CIzWfGkrfRUd7fa8UWY+rYcBiyeQzuJYHl3odu9vChPhTnWAk9NTGVKKXpvw=
+	t=1706008108; cv=none; b=ZDWCZlYcwbk4AKRIHFCumxrjge64zVNi9erBTg8PZbxOrkAY01kKqctkQ0TyaDcJJ9v4hQzwi6WSIl1lizpph4/suta/GvJvVshGBwhn1u8ps147WZHwkFUOUrZkaAOs4ACUj7s8jQOs/eaDDciK48DQ42Mr2LLlWZ8vHVfVuV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706008098; c=relaxed/simple;
-	bh=jzpwCo0HMVI99saI3KiX/DjK1lxlN166EymbCtXFVp8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DuSS/y3feCn+tc2Bq6ZTq7XeWEZYAoOff3ztLQTahv6HSCXH5EwcEpbuUn2qhilAW8pPrIRv1SSlfOQp1LMViZiwVUSaWoFY0MwIEOJYZOMMMcBQkApzFKmtO+X0ibk2uIYTFEzwk6j5SgxdzgGpv8H1nJZ+uog67RY1pQJuayQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=21Y1a1Hg; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-40e9d6a364eso34663735e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 03:08:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706008095; x=1706612895; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=on32GNvkxWDILvYMfSVIpQ/Zr8fKHLMLlVw8UqZ+BYg=;
-        b=21Y1a1HgqV17XDk72W8zaiQUgFOpz+A3umWCn6OacqzZ/FZgortPr4j30Gf+isxEfW
-         +KSZSVeYFt6Ha69275CbVHA6s97JnciucZciv7lyhjfTt4LaXAbfwsj3EVV4r+KWgIiT
-         HTSmNka/4NKIVB5b6vSgF/27Vie6QhFl6xkQtzV81T6iTx0+EthCA3WYGhNReiOHfQAY
-         y1XCNYPukpRu0AI7NvaGLQZjsP8SqXGFF2lq0/BmZIDHmceyE7JwGirmmZAB8kBb4IFX
-         gGN58ITwZB0UAOSlTUxZRG1Zz29S58OdfdFoLAc57ko0dBDjl0KOCTqKRjPgaIK+FjGd
-         f11g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706008095; x=1706612895;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=on32GNvkxWDILvYMfSVIpQ/Zr8fKHLMLlVw8UqZ+BYg=;
-        b=ayiwE9sgMT+x5xKLLydiWmvQmqnQ/mWAjyXhsQydmL41VO/TqvOx17XiiZ5O3EuD6x
-         5DynEztsvm3oySH2HaFOIe8Cqas/yvfWyPQKu2wMUqqqEHsIZeRCE7SqHIoZjlTIR84D
-         EqoZpqt1Z+zUCXVvrV4Y3TmpUrB9YG6NE2TWPpQWPeRP6yjuUSPxMMMqIOkJ6LxC3TJO
-         aops+Q2YnbV+HLp8tMUAO+Rt/F7vmMxQoLsDkQsl0N2+V3/MSIKOC82pMx8QhfdtAr4O
-         48X/vvoyne1cUbuVYmpAwbENgR6XAlpR/Ke+BrliUjorV5AM4RwKSyHoPRuu50SvlcIj
-         hUVg==
-X-Gm-Message-State: AOJu0YwRsNehBen5mYJa7EcL++B5fwTWyS4sh9gkPtJ2D+YUczma/9p0
-	7JJBurHm8FuLr81t5W0+MYulnYS+Nc2L2EmI5o+cL+6RYrOPPY59yC8We7BF9dk+wm13yCPsAYt
-	uxgfDuIlabXFG1PPvww==
-X-Google-Smtp-Source: AGHT+IFczxSO95adCCP1/OQdMVdXuAbrhocNenUfZEJQ6Y/inr3mrpYKphpQLoisODALT2LTe4UZKmi4jxqxDWFY
-X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a05:600c:5104:b0:40d:8587:3399 with
- SMTP id o4-20020a05600c510400b0040d85873399mr13616wms.6.1706008095318; Tue,
- 23 Jan 2024 03:08:15 -0800 (PST)
-Date: Tue, 23 Jan 2024 11:07:57 +0000
-In-Reply-To: <20240123110757.3657908-1-vdonnefort@google.com>
+	s=arc-20240116; t=1706008108; c=relaxed/simple;
+	bh=ePXcq+3ZYklh/Ja9ctOyMj+QSXTswOpfPk1EoxnOuU4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XDms6oNGBbjbFBZHEAKQNWfIG0IgacaoqLLB5DXsD/kfL98f8GT72xgVUuQLbwOfDybIceb37hwjuxOt+2KuvBgs5MIiRCWfUDw5Nb0Qp1f7P7v5hGcSBy24dGUmWc49M6LZDfXdOAWzL4nbRZ6vhZzWbHNqjT8ghwywzSnqxlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WHSJGS+3; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706008104;
+	bh=ePXcq+3ZYklh/Ja9ctOyMj+QSXTswOpfPk1EoxnOuU4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WHSJGS+3u3ESf596ATW3fy0qn2TXktoZ06Uz5ewlpPDDesf2vkDWRY4ohIN1UQU2G
+	 5B520CKex7b/cjHF4YzApi0HsCnwDLfu0N+MKHaV46OWWbL7gXjFGzyr5AI4fmGfWh
+	 LX18pgHn3sZeYDx4HtAsZEdZYMYxgp4QcMBqWqUqFOknwhl961AP9qy1cAJVtjJc0X
+	 Vcu4x/GdUBD21iP3eOWCTWDpw6UxTaUYmGGDLVjM39+ofyez/vvdu3roY7Rm3Q/Jax
+	 jyYby5c7HcVd0z+yH2F21B1DAQqEPuLaVEEaDHmvwzwUcnTt7BEr1sxywPg17uY8mG
+	 rUE1GE3yzdgSw==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0FEB437820AA;
+	Tue, 23 Jan 2024 11:08:23 +0000 (UTC)
+Message-ID: <7aa0df3d-ae9d-414d-ad7f-ed7588e70f3e@collabora.com>
+Date: Tue, 23 Jan 2024 12:08:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240123110757.3657908-1-vdonnefort@google.com>
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240123110757.3657908-7-vdonnefort@google.com>
-Subject: [PATCH v12 6/6] ring-buffer/selftest: Add ring-buffer mapping test
-From: Vincent Donnefort <vdonnefort@google.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Cc: mathieu.desnoyers@efficios.com, kernel-team@android.com, 
-	Vincent Donnefort <vdonnefort@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/3] kselftest: devices: Add sample board file for XPS
+ 13 9300
+Content-Language: en-US
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bjorn Helgaas <bhelgaas@google.com>
+Cc: kernelci@lists.linux.dev, kernel@collabora.com,
+ Tim Bird <Tim.Bird@sony.com>, linux-pci@vger.kernel.org,
+ David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+ Rob Herring <robh+dt@kernel.org>, Doug Anderson <dianders@chromium.org>,
+ linux-usb@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
+ Dan Carpenter <dan.carpenter@linaro.org>, Guenter Roeck
+ <groeck@chromium.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240122-discoverable-devs-ksft-v4-0-d602e1df4aa2@collabora.com>
+ <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-This test maps a ring-buffer and validate the meta-page after reset and
-after emitting few events.
+Il 22/01/24 19:53, Nícolas F. R. A. Prado ha scritto:
+> Add a sample board file describing the file's format and with the list
+> of devices expected to be probed on the XPS 13 9300 machine as an
+> example x86 platform.
+> 
+> Test output:
+> 
+> TAP version 13
+> Using board file: boards/Dell Inc.,XPS 13 9300.yaml
+> 1..22
+> ok 1 /pci-controller/14.0/usb2-controller/9/camera.device
+> ok 2 /pci-controller/14.0/usb2-controller/9/camera.0.driver
+> ok 3 /pci-controller/14.0/usb2-controller/9/camera.1.driver
+> ok 4 /pci-controller/14.0/usb2-controller/9/camera.2.driver
+> ok 5 /pci-controller/14.0/usb2-controller/9/camera.3.driver
+> ok 6 /pci-controller/14.0/usb2-controller/10/bluetooth.device
+> ok 7 /pci-controller/14.0/usb2-controller/10/bluetooth.0.driver
+> ok 8 /pci-controller/14.0/usb2-controller/10/bluetooth.1.driver
+> ok 9 /pci-controller/2.0/gpu.device
+> ok 10 /pci-controller/2.0/gpu.driver
+> ok 11 /pci-controller/4.0/thermal.device
+> ok 12 /pci-controller/4.0/thermal.driver
+> ok 13 /pci-controller/12.0/sensors.device
+> ok 14 /pci-controller/12.0/sensors.driver
+> ok 15 /pci-controller/14.3/wifi.device
+> ok 16 /pci-controller/14.3/wifi.driver
+> ok 17 /pci-controller/1d.0/0.0/ssd.device
+> ok 18 /pci-controller/1d.0/0.0/ssd.driver
+> ok 19 /pci-controller/1d.7/0.0/sdcard-reader.device
+> ok 20 /pci-controller/1d.7/0.0/sdcard-reader.driver
+> ok 21 /pci-controller/1f.3/audio.device
+> ok 22 /pci-controller/1f.3/audio.driver
+> Totals: pass:22 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>   .../devices/boards/Dell Inc.,XPS 13 9300.yaml      | 40 ++++++++++++++++++++++
+>   1 file changed, 40 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml
+> new file mode 100644
+> index 000000000000..ff932eb19f0b
+> --- /dev/null
+> +++ b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml	
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# This is the device definition for the XPS 13 9300.
+> +# The filename "Dell Inc.,XPS 13 9300" was chosen following the format
+> +# "Vendor,Product", where Vendor comes from
+> +# /sys/devices/virtual/dmi/id/sys_vendor, and Product comes from
+> +# /sys/devices/virtual/dmi/id/product_name.
+> +#
+> +# See google,spherion.yaml for more information.
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+What if - instead of taking google,spherion.yaml as an example - you create a new
+file named something like
 
-diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
-new file mode 100644
-index 000000000000..627c5fa6d1ab
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -Wl,-no-as-needed -Wall
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -D_GNU_SOURCE
-+
-+TEST_GEN_PROGS = map_test
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/ring-buffer/config b/tools/testing/selftests/ring-buffer/config
-new file mode 100644
-index 000000000000..ef8214661612
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/config
-@@ -0,0 +1 @@
-+CONFIG_FTRACE=y
-diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
-new file mode 100644
-index 000000000000..ec891e956b83
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/map_test.c
-@@ -0,0 +1,188 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Ring-buffer memory mapping tests
-+ *
-+ * Copyright (c) 2024 Vincent Donnefort <vdonnefort@google.com>
-+ */
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <linux/trace_mmap.h>
-+
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+
-+#include "../user_events/user_events_selftests.h" /* share tracefs setup */
-+#include "../kselftest_harness.h"
-+
-+#define TRACEFS_ROOT "/sys/kernel/tracing"
-+
-+static int __tracefs_write(const char *path, const char *value)
-+{
-+	FILE *file;
-+
-+	file = fopen(path, "w");
-+	if (!file)
-+		return -1;
-+
-+	fputs(value, file);
-+	fclose(file);
-+
-+	return 0;
-+}
-+
-+static int __tracefs_write_int(const char *path, int value)
-+{
-+	char *str;
-+	int ret;
-+
-+	if (asprintf(&str, "%d", value) < 0)
-+		return -1;
-+
-+	ret = __tracefs_write(path, str);
-+
-+	free(str);
-+
-+	return ret;
-+}
-+
-+#define tracefs_write_int(path, value) \
-+	ASSERT_EQ(__tracefs_write_int((path), (value)), 0)
-+
-+static int tracefs_reset(void)
-+{
-+	if (__tracefs_write_int(TRACEFS_ROOT"/tracing_on", 0))
-+		return -1;
-+	if (__tracefs_write_int(TRACEFS_ROOT"/trace", 0))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/set_event", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/current_tracer", "nop"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+FIXTURE(map) {
-+	struct trace_buffer_meta	*meta;
-+	void				*data;
-+	int				cpu_fd;
-+	bool				umount;
-+};
-+
-+FIXTURE_VARIANT(map) {
-+	int	subbuf_size;
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_4k) {
-+	.subbuf_size = 4,
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_8k) {
-+	.subbuf_size = 8,
-+};
-+
-+FIXTURE_SETUP(map)
-+{
-+	int cpu = sched_getcpu(), page_size = getpagesize();
-+	unsigned long meta_len, data_len;
-+	char *cpu_path, *message;
-+	bool fail, umount;
-+	cpu_set_t cpu_mask;
-+	void *map;
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+
-+	ASSERT_GE(cpu, 0);
-+
-+	ASSERT_EQ(tracefs_reset(), 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/buffer_subbuf_size_kb", variant->subbuf_size);
-+
-+	ASSERT_GE(asprintf(&cpu_path,
-+			   TRACEFS_ROOT"/per_cpu/cpu%d/trace_pipe_raw",
-+			   cpu), 0);
-+
-+	self->cpu_fd = open(cpu_path, O_RDONLY | O_NONBLOCK);
-+	ASSERT_GE(self->cpu_fd, 0);
-+	free(cpu_path);
-+
-+	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, self->cpu_fd, 0);
-+	ASSERT_NE(map, MAP_FAILED);
-+	self->meta = (struct trace_buffer_meta *)map;
-+
-+	meta_len = self->meta->meta_page_size;
-+	data_len = self->meta->subbuf_size * self->meta->nr_subbufs;
-+
-+	map = mmap(NULL, data_len, PROT_READ, MAP_SHARED, self->cpu_fd, meta_len);
-+	ASSERT_NE(map, MAP_FAILED);
-+	self->data = map;
-+
-+	/*
-+	 * Ensure generated events will be found on this very same ring-buffer.
-+	 */
-+	CPU_ZERO(&cpu_mask);
-+	CPU_SET(cpu, &cpu_mask);
-+	ASSERT_EQ(sched_setaffinity(0, sizeof(cpu_mask), &cpu_mask), 0);
-+}
-+
-+FIXTURE_TEARDOWN(map)
-+{
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+
-+	munmap(self->data, self->meta->subbuf_size * self->meta->nr_subbufs);
-+	munmap(self->meta, self->meta->meta_page_size);
-+	close(self->cpu_fd);
-+}
-+
-+TEST_F(map, meta_page_check)
-+{
-+	int cnt = 0;
-+
-+	ASSERT_EQ(self->meta->entries, 0);
-+	ASSERT_EQ(self->meta->overrun, 0);
-+	ASSERT_EQ(self->meta->read, 0);
-+	ASSERT_EQ(self->meta->subbufs_touched, 0);
-+	ASSERT_EQ(self->meta->subbufs_lost, 0);
-+
-+	ASSERT_EQ(self->meta->reader.id, 0);
-+	ASSERT_EQ(self->meta->reader.read, 0);
-+
-+	ASSERT_EQ(ioctl(self->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+	ASSERT_EQ(self->meta->reader.id, 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/tracing_on", 1);
-+	for (int i = 0; i < 16; i++)
-+		tracefs_write_int(TRACEFS_ROOT"/trace_marker", i);
-+again:
-+	ASSERT_EQ(ioctl(self->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+
-+	ASSERT_EQ(self->meta->entries, 16);
-+	ASSERT_EQ(self->meta->overrun, 0);
-+	ASSERT_EQ(self->meta->read, 16);
-+	/* subbufs_touched doesn't take into account the commit page */
-+	ASSERT_EQ(self->meta->subbufs_touched, 0);
-+	ASSERT_EQ(self->meta->subbufs_lost, 0);
-+
-+	ASSERT_EQ(self->meta->reader.id, 1);
-+
-+	if (!(cnt++))
-+		goto again;
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.43.0.429.g432eaa2c6b-goog
+"example,device.yaml"
+
+that would be a fantasy device, bringing examples for all .. or most of .. the
+currently supported types/devices?
+
+You would also move the nice documentation that you wrote in spherion.yaml to the
+new example,device.yaml and ask to refer to that instead in all of the real device
+specific definitions.
+
+# SPDX-License-Identifier: GPL-2.0 <--- (GPL-2.0 OR MIT) like device trees perhaps?
+#
+# This is the device definition for the Example Device
+# The filename "Example Device" was chosen following the format
+# "Vendor,Product", where:
+#  - Vendor is "Example" and comes from /sys/devices/virtual/dmi/id/sys_vendor
+#  - Product is "Device" and comes from /sys/devices/virtual/dmi/id/product_name
+#
+# ....the rest of the blurb goes here
+#
+
+- type : .... this that the other
+   devices:
+     - the least amount of device descriptions that you can use for documenting how
+       to write this stuff :-)
+
+Anything against that?
+
+Cheers,
+Angelo
+
+> +#
+> +- type: pci-controller
+> +  # This machine has a single PCI host controller so it's valid to not have any
+> +  # key to identify the controller. If it had more than one controller, the UID
+> +  # of the controller from ACPI could be used to distinguish as follows:
+> +  #acpi-uid: 0
+> +  devices:
+> +    - path: 14.0
+> +      type: usb-controller
+> +      usb-version: 2
+> +      devices:
+> +        - path: 9
+> +          name: camera
+> +          interfaces: [0, 1, 2, 3]
+> +        - path: 10
+> +          name: bluetooth
+> +          interfaces: [0, 1]
+> +    - path: 2.0
+> +      name: gpu
+> +    - path: 4.0
+> +      name: thermal
+> +    - path: 12.0
+> +      name: sensors
+> +    - path: 14.3
+> +      name: wifi
+> +    - path: 1d.0/0.0
+> +      name: ssd
+> +    - path: 1d.7/0.0
+> +      name: sdcard-reader
+> +    - path: 1f.3
+> +      name: audio
+> 
 
 
