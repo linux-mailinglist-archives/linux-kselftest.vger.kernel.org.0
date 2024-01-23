@@ -1,208 +1,214 @@
-Return-Path: <linux-kselftest+bounces-3411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AFC8839048
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 14:37:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1FAD8390B8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 15:00:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5219B28241
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 13:34:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18EFF1F22923
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 14:00:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523FC5F555;
-	Tue, 23 Jan 2024 13:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DEB15F848;
+	Tue, 23 Jan 2024 14:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="P5W2uy7t"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="OpekmM8y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664B15EE7A
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 13:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84115F847
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 14:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706016865; cv=none; b=BScf/2qOJhmXdiA8sXgzT4e5JifcAB2DclERjcCYQg7WPXSqy0upduU3NadB1mtBjmQfEN4CRa/fTNmD6/Jq4zUbMTD0pqR02lBV0HjX5KvYj6nw4w0+pviVaRn5Is3KcOSijV14EiI2g2bo/w2zPmUztFoWQspeVaEJ3nFs1Hs=
+	t=1706018446; cv=none; b=KQN+p4BJwbQCKZOtCKSNs3JKGJR0l3PZhmwxOWQPi2Ix9dAh//gJF9/0j2OTE1oZDjvseK/wj9jUtNDQUSbRwZMeXiALm+7eFw8WqBWlSuGkkAARxe9GkP9Wag0bs1KJioHjO6Rmqek7aWRF0un9Q/xldLTpep2pSDUpUv53vSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706016865; c=relaxed/simple;
-	bh=PKJyniCrYvxTDYJ+wP0zJifH7fLmX25pRae6tJ6+avE=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=mbwfK+d/xVyO+qS70ddp0mFCSrVzOfJ/lpme8USxadBYdr3mUM2P1nlWAXbC8etY3uU6OlzcAu31N0lyT2lXYzMe36wUHBj7Be3xduLdVrOpQlkUqDjKN0eG9SeaUFXrjuPUxNoQKAeL/BC8saCuLdI7CMwksXp+NmPru9TBqUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=P5W2uy7t; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6da202aa138so3311188b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 05:34:23 -0800 (PST)
+	s=arc-20240116; t=1706018446; c=relaxed/simple;
+	bh=HfTTP4HiHIHu/yGIr9ubM6o+VjSVWEcNiX9LA06o0qM=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=DDOt8d1X9/SxRH9FBK2Cfxn1obE63cjs5rYCJOBPs+rqnD6mF+p1ooo8x+cRP9lhkWof89YQDGFpvU7jUJEI3XruiIuc4gJDetIyyuMG232d9gKFaewxd9ZMqB6BHJvSfPH7yojmYIIXfe9kCiEZbMZpFBxlH4Rz2k+bYSBmSps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=OpekmM8y; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2cf0eba6a30so10379471fa.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 06:00:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1706016862; x=1706621662; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=pS7pvOquY6DbNLzoDnvEiN1OeUucFCfxAuRs8+bkAHM=;
-        b=P5W2uy7t8DHx4MplkUDvruAC3UBuiVsW5PojKQdq/NY4YIloOYi/z/zPokW/dx+08Q
-         VBTdpfT6ah4FOxCU4FGzHgqn1l/ob/iXYZ7yDi25uhhptMA3F9g6nsRAWReNEkqGr52O
-         DevfVhV+jJfBK+/Vcma1enL2t9TcqTzTE9bDPD7eqLEmmSUqGTyYij9TRPcATjCGuA97
-         WRwdTd790L8DCf6STqxPY5R3yZJvrn0Z43YObLRoU+LrCm05jfq4RJVnr4CK8eZM5gGT
-         XnnhB/w4sWghfduZjckL0kSKW2GUTvW8V20xk66GPCJw2FOZJXxtSG/5QwrQc/Kr0oK9
-         QLXg==
+        d=cloudflare.com; s=google09082023; t=1706018443; x=1706623243; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=1KHCL2eWY+J5yaLVKaDnfM9HQAC/swZ3GAjvIgfyRfA=;
+        b=OpekmM8yJrmumR72sJoOxHnlsfQPKWCin10Wy2REw9Z1Xn6Iw6QIRd0uEh7KvNwYAd
+         u5NUGrM8Ts8ZsEXhCNNQ+X6/z54Vj7PwuqpJq07b6PSLLHMWM+mCqarnqtQgvDa5fgXf
+         qjRjF3q3LixyATOlRT1uBgkqAUz89fZhOkFrcIXLoEqbLq3fY1kd3rQG5c8cW1N6F0F8
+         95iCfSCDBEW5rBwn1560S3Q1wtkAksyUG7Sb7ZTd4jaWN/9K/e9y1Dr9i1vESDTa71Kf
+         sEyKBSSCK9gKlorRVN4ux46xBvMGjffnnAnaD7bdkihFi+5qZRSrT23Z9NJDAZ2IhAny
+         Qcvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706016862; x=1706621662;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pS7pvOquY6DbNLzoDnvEiN1OeUucFCfxAuRs8+bkAHM=;
-        b=NTCEpfBAOeUCncsh+fboApjGY/3F8l20rqk3Dcn1fBdbPu+0K4MbjQVIO904DRn8A2
-         +gGxNa07Ueki0b3LruzpFSCcOa9eD1HWC0Fbdba8h8saIH2XAhfpqEXn9snvggj+YcMq
-         TGTq1RLkd/w0M/GvnYkYsdjpm7TTovNc/NfNFzAAV798xn9EI/NwNWdhhPUIU2Xy/ZhB
-         hvdw4mnodSWwzK1s9D508gerlRwWgkpInZ34TTqqtbBQR90lBDkjiIXUv6Dr/QAxTBcW
-         jvVsjThzbpACHPiqeB6fUP55WsDy8KQLX5X2Pb82jIXfAx3xlo9KWMaEAyS6QGQV+t/M
-         VvPA==
-X-Gm-Message-State: AOJu0Yxl4rVu0TPT7MbrpmebWMurFgGsMCleeR2CZuWf9qdBA6Ilt7bw
-	359aA93whoRPvQiwSpAIbvnRyA2BUpiM9SfPzZT2V0/SneIchiEtF1WM3GGDw/j0ulXRiVzlqaE
-	m1fY=
-X-Google-Smtp-Source: AGHT+IGqt46eA13n5pNfiH0XmE2BPXXwvj+RYvplZCN6wyd5wQkfs7ToIIyBkvF5G0RwzNg8hSPs9g==
-X-Received: by 2002:a05:6a20:da82:b0:19c:4fb0:98ac with SMTP id iy2-20020a056a20da8200b0019c4fb098acmr2604793pzb.63.1706016862652;
-        Tue, 23 Jan 2024 05:34:22 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id l18-20020a62be12000000b006db3149eacasm11530778pff.104.2024.01.23.05.34.21
+        d=1e100.net; s=20230601; t=1706018443; x=1706623243;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1KHCL2eWY+J5yaLVKaDnfM9HQAC/swZ3GAjvIgfyRfA=;
+        b=aldAH3/+OGCW4COw7HuiY+kEqDHeAaI7bGujFFVoWmAi6JldC7XEUPwH8byLPCMzq8
+         NdrI7VspMqUZqxM/GMqoNKprxy4bKwj6tucJRHimRfTJYGr4SQKUHhcllFgVBDoHn5T4
+         9DZPfMeNt7NGEkTLhr0FLQY86dLTz1lr0As46qAU9EI8jEn9knCRAQj2j2sFXY0auz29
+         F8nsMCFtUhiX+6xGo02ZtujXOhzkd5V8TRo2FeWIXgQ0s5nEA6AWLHQj8Rzbj0OvWN5u
+         0iTPAFohblzo+VouZMwlsx2y+sd3H+HbzBM3fgwzofxAwTGGtQrXC/e3C0xxhTAo/yoU
+         Z8kg==
+X-Gm-Message-State: AOJu0Yy4IVuds/kghtutBdVWokWf8b3/s/RY1TLGroVcxnaTTU1qns+Y
+	iGPSMKWQDROzisQDct1fRo/qpFWCoStn2Y7/UiUGXA5fV3aTZLQCdrEzESMfj90=
+X-Google-Smtp-Source: AGHT+IHLSZ+f7GlY5ABTmNvEvaR9SxzepmPzhZW7LhBSj1vVxbHJE6a6+WytHsG73qmXIo1DQqPf0g==
+X-Received: by 2002:a05:651c:1025:b0:2cf:e66:6408 with SMTP id w5-20020a05651c102500b002cf0e666408mr720855ljm.92.1706018442743;
+        Tue, 23 Jan 2024 06:00:42 -0800 (PST)
+Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:1bb])
+        by smtp.gmail.com with ESMTPSA id q25-20020a056402041900b0055c104274e7sm3347872edv.78.2024.01.23.06.00.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 05:34:22 -0800 (PST)
-Message-ID: <65afc05e.620a0220.bf0a9.8231@mx.google.com>
-Date: Tue, 23 Jan 2024 05:34:22 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 23 Jan 2024 06:00:42 -0800 (PST)
+References: <20240122203528.672004-1-kuba@kernel.org>
+User-agent: mu4e 1.6.10; emacs 28.3
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, razor@blackwall.org,
+ idosch@nvidia.com, horms@kernel.org, kuniyu@amazon.com,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net] selftests: fill in some missing configs for net
+Date: Tue, 23 Jan 2024 14:55:59 +0100
+In-reply-to: <20240122203528.672004-1-kuba@kernel.org>
+Message-ID: <878r4gtaif.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.8-rc1-3-g6c8c9d6e1bce2
-X-Kernelci-Report-Type: build
-Subject: kselftest/fixes build: 6 builds: 2 failed, 4 passed, 2 errors,
- 6 warnings (v6.8-rc1-3-g6c8c9d6e1bce2)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain
 
-kselftest/fixes build: 6 builds: 2 failed, 4 passed, 2 errors, 6 warnings (=
-v6.8-rc1-3-g6c8c9d6e1bce2)
+On Mon, Jan 22, 2024 at 12:35 PM -08, Jakub Kicinski wrote:
+> We are missing a lot of config options from net selftests,
+> it seems:
+>
+> tun/tap:     CONFIG_TUN, CONFIG_MACVLAN, CONFIG_MACVTAP
+> fib_tests:   CONFIG_NET_SCH_FQ_CODEL
+> l2tp:        CONFIG_L2TP, CONFIG_L2TP_V3, CONFIG_L2TP_IP, CONFIG_L2TP_ETH
+> sctp-vrf:    CONFIG_INET_DIAG
+> txtimestamp: CONFIG_NET_CLS_U32
+> vxlan_mdb:   CONFIG_BRIDGE_VLAN_FILTERING
+> gre_gso:     CONFIG_NET_IPGRE_DEMUX, CONFIG_IP_GRE, CONFIG_IPV6_GRE
+> srv6_end_dt*_l3vpn:   CONFIG_IPV6_SEG6_LWTUNNEL
+> ip_local_port_range:  CONFIG_MPTCP
+> fib_test:    CONFIG_NET_CLS_BASIC
+> rtnetlink:   CONFIG_MACSEC, CONFIG_NET_SCH_HTB, CONFIG_XFRM_INTERFACE
+>              CONFIG_NET_IPGRE, CONFIG_BONDING
+> fib_nexthops: CONFIG_MPLS, CONFIG_MPLS_ROUTING
+> vxlan_mdb:   CONFIG_NET_ACT_GACT
+> tls:         CONFIG_TLS, CONFIG_CRYPTO_CHACHA20POLY1305
+> psample:     CONFIG_PSAMPLE
+> fcnal:       CONFIG_TCP_MD5SIG
+>
+> Try to add them in a semi-alphabetical order.
+>
+> Fixes: 62199e3f1658 ("selftests: net: Add VXLAN MDB test")
+> Fixes: c12e0d5f267d ("self-tests: introduce self-tests for RPS default mask")
+> Fixes: ae5439658cce ("selftests/net: Cover the IP_LOCAL_PORT_RANGE socket option")
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/v6.8-rc1-3-g6c8c9d6e1bce2/
+MPTCP coverage is a recent (Dec '23) addition. I must have missed it.
 
-Tree: kselftest
-Branch: fixes
-Git Describe: v6.8-rc1-3-g6c8c9d6e1bce2
-Git Commit: 6c8c9d6e1bce2871df58a85d2c0c545007c34f5f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+Fortunately we don't need to backport that far. Should be:
 
-Build Failures Detected:
+Fixes: 122db5e3634b ("selftests/net: add MPTCP coverage for IP_LOCAL_PORT_RANGE")
 
-i386:
-    i386_defconfig+kselftest: (gcc-10) FAIL
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> --
+> These are not all the options we're missing. Since the merge window
+> is over I may not have the time to dig into it myself :(
+>
+> Adding Fixes tag for 3 semi-random commits which I think missed things.
+> The full list would be very long.
+>
+> CC: shuah@kernel.org
+> CC: razor@blackwall.org
+> CC: idosch@nvidia.com
+> CC: horms@kernel.org
+> CC: jakub@cloudflare.com
+> CC: kuniyu@amazon.com
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/net/config | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+> index 8da562a9ae87..19ff75051660 100644
+> --- a/tools/testing/selftests/net/config
+> +++ b/tools/testing/selftests/net/config
+> @@ -1,5 +1,6 @@
+>  CONFIG_USER_NS=y
+>  CONFIG_NET_NS=y
+> +CONFIG_BONDING=m
+>  CONFIG_BPF_SYSCALL=y
+>  CONFIG_TEST_BPF=m
+>  CONFIG_NUMA=y
+> @@ -14,9 +15,13 @@ CONFIG_VETH=y
+>  CONFIG_NET_IPVTI=y
+>  CONFIG_IPV6_VTI=y
+>  CONFIG_DUMMY=y
+> +CONFIG_BRIDGE_VLAN_FILTERING=y
+>  CONFIG_BRIDGE=y
+> +CONFIG_CRYPTO_CHACHA20POLY1305=m
+>  CONFIG_VLAN_8021Q=y
+>  CONFIG_IFB=y
+> +CONFIG_INET_DIAG=y
+> +CONFIG_IP_GRE=m
+>  CONFIG_NETFILTER=y
+>  CONFIG_NETFILTER_ADVANCED=y
+>  CONFIG_NF_CONNTRACK=m
+> @@ -25,15 +30,36 @@ CONFIG_IP6_NF_IPTABLES=m
+>  CONFIG_IP_NF_IPTABLES=m
+>  CONFIG_IP6_NF_NAT=m
+>  CONFIG_IP_NF_NAT=m
+> +CONFIG_IPV6_GRE=m
+> +CONFIG_IPV6_SEG6_LWTUNNEL=y
+> +CONFIG_L2TP_ETH=m
+> +CONFIG_L2TP_IP=m
+> +CONFIG_L2TP=m
+> +CONFIG_L2TP_V3=y
+> +CONFIG_MACSEC=m
+> +CONFIG_MACVLAN=y
+> +CONFIG_MACVTAP=y
+> +CONFIG_MPLS=y
+> +CONFIG_MPTCP=y
+>  CONFIG_NF_TABLES=m
+>  CONFIG_NF_TABLES_IPV6=y
+>  CONFIG_NF_TABLES_IPV4=y
+>  CONFIG_NFT_NAT=m
+> +CONFIG_NET_ACT_GACT=m
+> +CONFIG_NET_CLS_BASIC=m
+> +CONFIG_NET_CLS_U32=m
+> +CONFIG_NET_IPGRE_DEMUX=m
+> +CONFIG_NET_IPGRE=m
+> +CONFIG_NET_SCH_FQ_CODEL=m
+> +CONFIG_NET_SCH_HTB=m
+>  CONFIG_NET_SCH_FQ=m
+>  CONFIG_NET_SCH_ETF=m
+>  CONFIG_NET_SCH_NETEM=y
+> +CONFIG_PSAMPLE=m
+> +CONFIG_TCP_MD5SIG=y
+>  CONFIG_TEST_BLACKHOLE_DEV=m
+>  CONFIG_KALLSYMS=y
+> +CONFIG_TLS=m
+>  CONFIG_TRACEPOINTS=y
+>  CONFIG_NET_DROP_MONITOR=m
+>  CONFIG_NETDEVSIM=m
+> @@ -48,7 +74,9 @@ CONFIG_BAREUDP=m
+>  CONFIG_IPV6_IOAM6_LWTUNNEL=y
+>  CONFIG_CRYPTO_SM4_GENERIC=y
+>  CONFIG_AMT=m
+> +CONFIG_TUN=y
+>  CONFIG_VXLAN=m
+>  CONFIG_IP_SCTP=m
+>  CONFIG_NETFILTER_XT_MATCH_POLICY=m
+>  CONFIG_CRYPTO_ARIA=y
+> +CONFIG_XFRM_INTERFACE=m
 
-x86_64:
-    x86_64_defconfig+kselftest: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arm64:
-    defconfig+kselftest (gcc-10): 1 warning
-    defconfig+kselftest+arm64-chromebook (gcc-10): 1 warning
-
-arm:
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-
-i386:
-    i386_defconfig+kselftest (gcc-10): 1 error, 1 warning
-
-x86_64:
-    x86_64_defconfig+kselftest (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-Errors summary:
-
-    2    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_me=
-mcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings summary:
-
-    3    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_=
-memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    cc1: all warnings being treated as errors
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x14cfd6
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 1 warning, 0 section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
- 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x14cfd6
-
----
-For more info write to <info@kernelci.org>
 
