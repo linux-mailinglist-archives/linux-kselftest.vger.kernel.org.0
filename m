@@ -1,119 +1,85 @@
-Return-Path: <linux-kselftest+bounces-3420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DC078392C3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 16:33:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 572248392CA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 16:34:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DD13B26494
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 15:33:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AA831C216D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 15:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58A05FDC6;
-	Tue, 23 Jan 2024 15:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DBFD5FEE4;
+	Tue, 23 Jan 2024 15:34:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="XXbo1DEE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQoe1N5I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBF55FDCC
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 15:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB285FDCC;
+	Tue, 23 Jan 2024 15:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706023983; cv=none; b=kAtXMpsxoKoCu03eywVwXKB6cANU4qWGX4vBAhXIzxh8G41D3e+pcQY/AygTobSzv1ICHX1vu4rMMflQkGG37GWM+1/pQIVT2vTChy0f2U+4wzuQeekjmhCAZ9wQzimNsf7+Sqi6Ubt+A3zNxIiO7RgII/RQBibMxwtpOIjjGJ4=
+	t=1706024053; cv=none; b=FG38iGcKjn1fyrSIcQR3BqrNV1m+6MOTjjlSeQc8rN7AMiRngQqIEsdTEaEpE4fJrJtL1UR3+fCF3vMRGOZ14Ibd0oaIpDvCph0fpLZgNTkxe95lqqKVzCRtQB7BPphyuykg0D709nC22Ae/ymK8iB7wy22feBeLyICf3NNnhjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706023983; c=relaxed/simple;
-	bh=zgqI9UR8YogjZoN9u8vWb4dHmJvB8ik8X67zHyKWp0E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A4CplaL0Nhlpua5VwjRKz8kmjVFuzeyeiUqgGtLQMN3D7mQhjWv1ACek4F+E8FxmgKyB5bk4vDtGVj1ryIn+BQiVucAo/29ljUt1bLyJYkRBlK6bSeV5HiVjo7cV5V51/IgTPB826dtO1bOTUjQhIDrpG5yLlPUAY2Y2jAP+eus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=XXbo1DEE; arc=none smtp.client-ip=83.166.143.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TKB1N6n0DzMq5jw;
-	Tue, 23 Jan 2024 16:32:56 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4TKB1M6BnkzrB;
-	Tue, 23 Jan 2024 16:32:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1706023976;
-	bh=zgqI9UR8YogjZoN9u8vWb4dHmJvB8ik8X67zHyKWp0E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XXbo1DEEM3NL5OR6r67arzFI93BlDNA3jzA0bdkXrlPcz9PWoynqbZ9DRchI+s6Hg
-	 sumZzKWpg5rsuUXtHAg+MW1vTX8Wek22Z+dFFd/K6v6792zx7BcdklDSFmE1Z7xIYb
-	 udJuqxRWB40sTpRe3IUczKgQk87Ey5o7YLkGSRLM=
-Date: Tue, 23 Jan 2024 16:32:52 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Huyadi <hu.yadi@h3c.com>
-Cc: "jmorris@namei.org" <jmorris@namei.org>, 
-	"serge@hallyn.com" <serge@hallyn.com>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "amir73il@gmail.com" <amir73il@gmail.com>, 
-	"brauner@kernel.org" <brauner@kernel.org>, "avagin@google.com" <avagin@google.com>, 
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "514118380@qq.com" <514118380@qq.com>, 
-	"konstantin.meskhidze@huawei.com" <konstantin.meskhidze@huawei.com>
-Subject: Re: =?utf-8?B?5Zue5aSN?= =?utf-8?Q?=3A?= [PATCH v4]
- selftests/landlock:Fix two build issues
-Message-ID: <20240123.deeT9hegh4vo@digikod.net>
-References: <20240115102409.19799-1-hu.yadi@h3c.com>
- <20240119.Ugaehae2ze5b@digikod.net>
- <adec399e50c74b30b59480d92c431241@h3c.com>
+	s=arc-20240116; t=1706024053; c=relaxed/simple;
+	bh=VUBnDrHu3wRwT7UFTdkF6jesG1Iu1Riq11ShVr60N2M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PsIeBecVK72F+1UNb3WbQAes8BzyOo3UNhrrqvDpEmYF4FLQIC2wXlY1Sj91dvgNhHrfiBMDd2jF4kKTEWs/BLatPrJuCFkjlGwVnY1MfR5Al8VRl9Lx1Ku+MHVo45BtLeSSZ2uGBHZSdipwmJyT0RnmZDV+5+6jjw9+rchuHCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQoe1N5I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5CDC433C7;
+	Tue, 23 Jan 2024 15:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706024053;
+	bh=VUBnDrHu3wRwT7UFTdkF6jesG1Iu1Riq11ShVr60N2M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=nQoe1N5I8V2TViuknsXbQakxAZiSFlYiGWanyKyvs8cpSFW8WIQeFR0Wnrm4wv7i+
+	 fVjJskYHjvwukA9/DiO9uFjiuoDs3kNiYIZUAXHoul3aVPZu4IDUiJJ3GYyARKzHFI
+	 RF/tbbE2os3uLVtIWQHQtfhGSEfZBeu3j/kAjvDBmCTAcFmCAtTD4IFhGRyt396FZf
+	 MwCpMJQx8hEAw1syaeGJSULJ1Z+5B8ulD9fSejE311zwgOcuHSTBtcLBEtheZVvYOo
+	 114R6sMOV6kvlSGcNgb28XKNhxwiktB27fkCCy608T39xBIAH0IiHuv1LviQCiyN+b
+	 +wWsYiwkzbb3w==
+Date: Tue, 23 Jan 2024 07:34:12 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Petr Machata <petrm@nvidia.com>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "netdev-driver-reviewers@vger.kernel.org"
+ <netdev-driver-reviewers@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [ANN] net-next is OPEN
+Message-ID: <20240123073412.063bc08e@kernel.org>
+In-Reply-To: <87fryonx35.fsf@nvidia.com>
+References: <20240122091612.3f1a3e3d@kernel.org>
+	<87fryonx35.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <adec399e50c74b30b59480d92c431241@h3c.com>
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 23, 2024 at 12:04:17PM +0000, Huyadi wrote:
+On Tue, 23 Jan 2024 10:55:09 +0100 Petr Machata wrote:
+> > If you authored any net or drivers/net selftests, please look around
+> > and see if they are passing. If not - send patches or LMK what I need
+> > to do to make them pass on the runner.. Make sure to scroll down to 
+> > the "Not reporting to patchwork" section.  
 > 
-> >> Changes v3 -> v2:
-> >>  - add helper of gettid instead of __NR_gettid
-> >>  - add gcc/glibc version info in comments Changes v1 -> v2:
-> >>  - fix whitespace error
-> >>  - replace SYS_gettid with _NR_gettid
-> >> 
-> >>  tools/testing/selftests/landlock/fs_test.c  | 5 ++++-  
-> >> tools/testing/selftests/landlock/net_test.c | 7 ++++++-
-> >>  2 files changed, 10 insertions(+), 2 deletions(-)
-> >> 
-> >> diff --git a/tools/testing/selftests/landlock/fs_test.c 
-> >> b/tools/testing/selftests/landlock/fs_test.c
-> >> index 18e1f86a6234..a992cf7c0ad1 100644
-> >> --- a/tools/testing/selftests/landlock/fs_test.c
-> >> +++ b/tools/testing/selftests/landlock/fs_test.c
-> >> @@ -4572,7 +4572,10 @@ FIXTURE_VARIANT(layout3_fs)
-> >>  /* clang-format off */
-> >>  FIXTURE_VARIANT_ADD(layout3_fs, tmpfs) {
-> >>  	/* clang-format on */
-> >> -	.mnt = mnt_tmp,
-> >> +	.mnt = {
-> >> +		.type = "tmpfs",
-> >> +		.data = "size=4m,mode=700",
-> >> +	},
-> >
-> >I requested some changes here.
-> >
-> 
-> Could you give me some inspiration how to fix it? 
-> it looks fine to me to assign value as above, which consistent with other pseudo FS tests.
-> Thanks in advance.
+> A whole bunch of them fail because of no IPv6 support in the runner
+> kernel. E.g. this from bridge-mdb.sh[0]:
 
-Just add and use this for the two tmpfs data:
-#define MNT_TMP_DATA "size=4m,mode=700"
+Thanks a lot for investigating! I take it that you're looking at
+forwarding? Please send a patch to add the missing configs to
 
-You can also make the mnt_tmp variable static const.
+tools/testing/selftests/net/forwarding/config
 
+The runner uses that to configure the kernel on top of defconfig.
 
-> 
-> >>  	.file_path = file1_s1d1,
-> >>  };
-> >> 
->   
+Unless I'm doing it wrong and the sub-directories are supposed to
+inherit the parent directory's config? So net/forwarding/ should
+be built with net/'s config? I could not find the info in docs,
+does anyone know?
 
