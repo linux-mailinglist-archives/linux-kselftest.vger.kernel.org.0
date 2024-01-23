@@ -1,184 +1,81 @@
-Return-Path: <linux-kselftest+bounces-3436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB21F839907
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 20:04:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24786839B48
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 22:43:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B08C295637
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 19:04:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D02681F225C7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 21:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F301823D4;
-	Tue, 23 Jan 2024 18:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDABF39AE5;
+	Tue, 23 Jan 2024 21:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="3HN6C8AJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnpLjQ59"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62856823C6;
-	Tue, 23 Jan 2024 18:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BA8442F;
+	Tue, 23 Jan 2024 21:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706036332; cv=none; b=oCzn7ZVQ23Fxs57fuC9TGRC0lwv1KBdHSZqOmLX3/aumepLsyQY1IzwiuK8D2l5DPzkwb8EIh4V8yp2wziWZc48A0+ympPbqQajBW6fkPWa0IAO8GOVeYaYK70NLsgSrQaGUr3MdUx6N0pU/wqWZKw7b89rV+Y8BmAs7p3+FDJw=
+	t=1706046176; cv=none; b=V52i/RremWrmDV5Dm8obztoEH/7sv/oxNQ7VewcrX9m8Wq/IRRMboWPBqlmffpTHdKaGGmViv1+mbnVFS1VqBPFt0Ud5naO/zZLb2UnIr2gdv7OKm3IcD1tOMV0jInOQDHEBZzCIIyksqdSTN4HiXbXc4ExUtDuL2DeYPPusYA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706036332; c=relaxed/simple;
-	bh=85z1pDLNzf/l+6g12yGP+kL48gcbmAt/Exa7E4EizGU=;
-	h=From:To:Subject:In-reply-to:References:MIME-Version:Content-Type:
-	 Date:Message-ID; b=UGGTZb2XQHE1n3FPNWjsIw7rFBSmwe3tsloCu9e5xn1ykRtzyEq/78FJdwjhol95cI+nvXO+ZGsIsCPfL7IA+3xUcMHP9vCPmK96gDrLZUL598EUHnz0UDB6nLMC6UD+KinB3tcAM7W7DHG34jB/aYiWYYHrtRKBjTQVrNiH2cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=3HN6C8AJ; arc=none smtp.client-ip=199.185.137.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=85z1pDLNzf
-	/l+6g12yGP+kL48gcbmAt/Exa7E4EizGU=; h=date:references:in-reply-to:
-	subject:to:from; d=openbsd.org; b=3HN6C8AJTcP6apML6GvYnBtUjVM7yvJM4qGN
-	fv1+L1Wt7+NSn4MNtQp6zwhhyrrCPm7inbeZioIntZNMgauhNHg8glINfZ8Bq7BevPRSNg
-	ezzIyBqUhFDpFmfuuaePpLXwlNHz8pDVc8IGXxBtGszoTQDe6t0jAOaNupiENVkH1uT7DX
-	Ej1vIXax9CpDddiomfw4zlm1DaSX/L+Z97aetWT7U/9Zo9zvquXPXyfRZ8+lt1Oj+9vqov
-	2ylBate61fs0rb5U2+LKXMd7dtPKSrdVavU1JYms6RQ8kYs4o2InmG9r3PmaOPCIEafFKQ
-	5XujUoKXxpuyzb/C11Aj8M/TGA==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id f1a5780b;
-	Tue, 23 Jan 2024 11:58:41 -0700 (MST)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-    Jeff Xu <jeffxu@chromium.org>, akpm@linux-foundation.org,
-    keescook@chromium.org, jannh@google.com, sroettger@google.com,
-    willy@infradead.org, gregkh@linuxfoundation.org,
-    torvalds@linux-foundation.org, usama.anjum@collabora.com,
-    rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
-    groeck@chromium.org, linux-kernel@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-    pedro.falcato@gmail.com, dave.hansen@intel.com,
-    linux-hardening@vger.kernel.org
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-                  Jeff Xu <jeffxu@chromium.org>,
-                  akpm@linux-foundation.org, keescook@chromium.org,
-                  jannh@google.com, sroettger@google.com,
-                  willy@infradead.org, gregkh@linuxfoundation.org,
-                  torvalds@linux-foundation.org,
-                  usama.anjum@collabora.com, rdunlap@infradead.org,
-                  jeffxu@google.com, jorgelo@chromium.org,
-                  groeck@chromium.org, linux-kernel@vger.kernel.org,
-                  linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-                  pedro.falcato@gmail.com, dave.hansen@intel.com,
-                  linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] Introduce mseal()
-In-reply-to: <20240123173320.2xl3wygzbxnrei2c@revolver>
-References: <20240122152905.2220849-1-jeffxu@chromium.org> <726.1705938579@cvs.openbsd.org> <CABi2SkXrnUZsWvpqS61mHw-SqDBOodqpcfjdoTTyeeYG9tRJGA@mail.gmail.com> <86181.1705962897@cvs.openbsd.org> <20240123173320.2xl3wygzbxnrei2c@revolver>
-Comments: In-reply-to "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-   message dated "Tue, 23 Jan 2024 12:33:20 -0500."
+	s=arc-20240116; t=1706046176; c=relaxed/simple;
+	bh=NpQv4S8oPU0k3iSrzk5lY5kY5ErVmyclbPIdZ/b3Mdg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lAfGwlom+/f4ZQxODYmVYt21VQWIY7wRzo6eXsdjW9zlsDO6g3+hrU/pSbX0XrzTm3GIVRzEGQgpU6JjTZOYPYvBUR50mX0Nw6pStRNYK6Z4067vR0sbrXBxZFnYanL/tD2PFVVCs5OPXlICnlyXcZa7Jfrlz+fQagbkTT2vcBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnpLjQ59; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29041C433C7;
+	Tue, 23 Jan 2024 21:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706046176;
+	bh=NpQv4S8oPU0k3iSrzk5lY5kY5ErVmyclbPIdZ/b3Mdg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=VnpLjQ59l/FGxHgTBTWwHvfhXNNYiMoQwjFCTnU4s2KMeLWDKm61gCzy3ASAVqX7P
+	 DlqSsELBEPkjK0/rttNqaiL3AEOj8P9yV1lNWdh8gZjssuXDos84NuQe56azVCowVR
+	 JC8Kx6jts38gLxw+YUdmh3scK9j52Z6cw6rQPr38VF7xqpuvxRC0IWZt0WoNefoLMx
+	 tQUJ1MAlGcRX1o9h/icbc0LQ6tEUM/zi5L4Yn3MX0OLWS6lInEV0NDSrpAH+IXRr7s
+	 VGvN+vHhQZ44sJVh/OzIF4gkexfxdb4YJff3hHafgVs3XFx7nurMxBQL9JAijRUg9Z
+	 zL3nfD69SX4vQ==
+Date: Tue, 23 Jan 2024 13:42:55 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: Kalle Valo <kvalo@kernel.org>, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ netdev@vger.kernel.org, linux-wireless@vger.kernel.org, David Gow
+ <davidgow@google.com>, Brendan Higgins <brendanhiggins@google.com>, Shuah
+ Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+Subject: Re: pull-request: wireless-2024-01-22
+Message-ID: <20240123134255.3eef6fd9@kernel.org>
+In-Reply-To: <d4c1a7c715a1f47dc45c5d033822d8f47e304bd4.camel@sipsolutions.net>
+References: <20240122153434.E0254C433C7@smtp.kernel.org>
+	<20240123084504.1de9b8ac@kernel.org>
+	<d4c1a7c715a1f47dc45c5d033822d8f47e304bd4.camel@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 23 Jan 2024 11:58:41 -0700
-Message-ID: <85359.1706036321@cvs.openbsd.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Liam R. Howlett <Liam.Howlett@Oracle.com> wrote:
+On Tue, 23 Jan 2024 19:19:35 +0100 Johannes Berg wrote:
+> Looks like that needs adjustments to the config file there, mostly? I
+> can see about adding that, probably not that hard, at least for
+> mac80211/cfg80211.
 
-> * Theo de Raadt <deraadt@openbsd.org> [240122 17:35]:
-> > Jeff Xu <jeffxu@chromium.org> wrote:
-> >=20
-> > > On Mon, Jan 22, 2024 at 7:49=E2=80=AFAM Theo de Raadt <deraadt@openbs=
-d.org> wrote:
-> > > >
-> > > > Regarding these pieces
-> > > >
-> > > > > The PROT_SEAL bit in prot field of mmap(). When present, it marks
-> > > > > the map sealed since creation.
-> > > >
-> > > > OpenBSD won't be doing this.  I had PROT_IMMUTABLE as a draft.  In =
-my
-> > > > research I found basically zero circumstances when you userland does
-> > > > that.  The most common circumstance is you create a RW mapping, fil=
-l it,
-> > > > and then change to a more restrictve mapping, and lock it.
-> > > >
-> > > > There are a few regions in the addressspace that can be locked whil=
-e RW.
-> > > > For instance, the stack.  But the kernel does that, not userland.  I
-> > > > found regions where the kernel wants to do this to the address spac=
-e,
-> > > > but there is no need to export useless functionality to userland.
-> > > >
-> > > I have a feeling that most apps that need to use mmap() in their code
-> > > are likely using RW mappings. Adding sealing to mmap() could stop
-> > > those mappings from being executable. Of course, those apps would
-> > > need to change their code. We can't do it for them.
-> >=20
-> > I don't have a feeling about it.
-> >=20
-> > I spent a year engineering a complete system which exercises the maximum
-> > amount of memory you can lock.
-> >=20
-> > I saw nothing like what you are describing.  I had PROT_IMMUTABLE in my
-> > drafts, and saw it turning into a dangerous anti-pattern.
-> >=20
-> > > Also, I believe adding this to mmap() has no downsides, only
-> > > performance gain, as Pedro Falcato pointed out in [1].
-> > >=20
-> > > [1] https://lore.kernel.org/lkml/CAKbZUD2A+=3Dbp_sd+Q0Yif7NJqMu8p__eb=
-4yguq0agEcmLH8SDQ@mail.gmail.com/
-> >=20
-> > Are you joking?  You don't have any code doing that today.  More feelin=
-gs?
->=20
-> The 'no downside" is to combining two calls together; mmap() & mseal(),
-> at least that is how I read the linked discussion.
->=20
-> The common case (since there are no users today) of just calling
-> mmap()/munmap() will have the downside.
->=20
-> There will be a performance impact once you have can_modify_mm() doing
-> more than just returning true.  Certainly, the impact will be larger
-> in munmap where multiple VMAs may need to be checked (assuming that's
-> the plan?).
->=20
-> This will require a new and earlier walk of the vma tree while holding
-> the mmap_lock.  Since you are checking (potentially multiple) VMAs for
-> something, I don't think there is a way around holding the lock.
->=20
-> I'm not saying the cost will be large, but it will be a positive
-> non-zero number.
+To be clear I was mostly thinking about mac80211/cfg80211...
 
-For future glibc changes, I predict you will have zero cases where you
-can call mmap+immutable or mprotect+immutable, I say so, because I ended
-up having none.  You always have to fill the memory.  (At first glance
-you might think it works for a new DSO's BSS, but RELRO overlaps it, and
-since RELRO mprotect happens quite late, the permission locking is quite
-delayed relative to the allocation).
+> We're also adding unit tests to iwlwifi (slowly), any idea if we should
+> enable that here also? It _is_ now possible to build PCI stuff on kunit,
+> but it requires some additional config options (virt-pci etc.), not sure
+> that's desirable here? It doesn't need it at runtime for the tests, of
+> course.
 
-I think chrome also won't lock memory at allocation.  I suspect the
-generic allocator is quite seperate from the code using the allocation,
-which knows which objects can have their permissions locked and which
-objects can't.
-
-In OpenBSD, the only cases where we could set immutable at the same time
-as creating the mapping was in execve, for a new process's stack regions,
-and that is kernel code, not the userland exposed system call APIs.
-=20
-This change could skip adding PROT_MSEAL today, and add it later when
-there are facts the need.
-
-
-It's the same with MAP_MSEALABLE.  I don't get it. So now there are 3
-memory types:
-       - cannot be sealed, ever
-       - not yet sealed
-       - sealed
-
-What purpose does the first type serve?  Please explain the use case.
-
-Today, processes have control over their entire address space.
-
-What is the purpose of "permissions cannot be locked".  Please supply
-an example.  If I am wrong, I'd like to know where I went wrong.
-
+but curious to hear about driver testing recommendations.
 
