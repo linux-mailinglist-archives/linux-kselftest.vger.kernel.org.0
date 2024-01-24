@@ -1,126 +1,144 @@
-Return-Path: <linux-kselftest+bounces-3451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2163A83AAB9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 14:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F2083AB09
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 14:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9056B21A19
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 13:13:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4027B2393C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 13:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03E9877F22;
-	Wed, 24 Jan 2024 13:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341F277F1E;
+	Wed, 24 Jan 2024 13:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="pJLnA000"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fSok5Cnl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9CF77644
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 13:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A86CA69
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 13:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706102023; cv=none; b=sncO3dlMdBZMdAwsJzjogOIwgxdzfrosdTMcI7ZynaJoGD1WwWXpMu056zfd1m/F0A4S1DkTnbRzKP0wYtMRMWum4+Ru3VZhPJRlAKpbNuk4Obexu961jqZ4G9G/CQxlJhsq3WbjQgVwPunj7lIjnRuzoqwG/uEH41cagwrG54c=
+	t=1706103583; cv=none; b=SSqea2ShzUHO6nbr8WoKqVnKxcz12WaV0YNk5hT18/J76P0Z2xJ5s2HDeJr5O2a7hL5bs9GDYIkkV+Gcp8OHzPnX+sDR76XmI/h46ZnwuXnzlyKvaC292aZAT23AR07RimqJH0EYgHIVRFXlTic52OtbMqMNVPoeL3tNOcBblAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706102023; c=relaxed/simple;
-	bh=qhqzFPGC5WzUW9hc0+JQ5GCvzF1b+01JdIOCtqbDNnc=;
+	s=arc-20240116; t=1706103583; c=relaxed/simple;
+	bh=npa0NVykoMEN5MSYcp671yDBaYHZIPWOdfRNArMuVbk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fpQFP6GhAtC01TEm83ekTAEluZbkmEoWBu/p3dfEsKeinVOq+yrUd6Jm5rQyZh8nwyJJD32nOh5/3ra+aM+hDRivKlmDfqaDu9Xn9s/HnKJTpXqBN9VjdH5BZm3K96L6/ZBVdK8EyjSoaaM/5IWjf0PqlluQ0NfF9ZCsz5/5fP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=pJLnA000; arc=none smtp.client-ip=83.166.143.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TKkt530WvzMr0Hc;
-	Wed, 24 Jan 2024 14:13:33 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4TKkt42D4nz3f;
-	Wed, 24 Jan 2024 14:13:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1706102013;
-	bh=qhqzFPGC5WzUW9hc0+JQ5GCvzF1b+01JdIOCtqbDNnc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pJLnA000aRCpe3+5+q1jJUTDGHYKzn/NNj08aljm1lNuYMRQjnM0LIzbOCULqX9BS
-	 b1OvNM/w8UlNMipfxBDu4VCXKLxgCvKM1ye7V+mjbarRalNWVdtNahxgThs2p4MeeH
-	 5v+3DRfsUVESGFsfU1q+oDsiHkSFRmlUCjZl81ck=
-Date: Wed, 24 Jan 2024 14:13:28 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Hu Yadi <hu.yadi@h3c.com>
-Cc: jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
-	mathieu.desnoyers@efficios.com, amir73il@gmail.com, brauner@kernel.org, avagin@google.com, 
-	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 514118380@qq.com, 
-	konstantin.meskhidze@huawei.com
-Subject: Re: [PATCH] selftests/landlock:Fix fs_test build issues with old libc
-Message-ID: <20240124.oosahMu8chai@digikod.net>
-References: <20240124022908.42100-1-hu.yadi@h3c.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dml0dxJ87p32eGc1weaVdXmVixFusriQfDT+e5Zy7l49WjyCD/AN7BPwv74TWH/b7JsBR66++LGBmTzdqK5/jFK9oA9jC5qsf5mpQYLkO8I/5pC4yTq1aKkL2XrMm3+4I4VSq389GKhHgl7+HT9AodSXw+X/Y1FBYsxaf7cbviw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fSok5Cnl; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706103580;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L2dSIR4rbvdDm+KCVPpjilkj3+2xgOobjinuJW9fE8M=;
+	b=fSok5Cnltk91wJeDsEWXkhkVURnBt6qi3SpoeXsvLTUwQEaH4D1nQR6skIGbqM/ZUQG+aA
+	l7kvWetTU8gNPgkAIXaX0caiO3ZetkYi5hvmYr1U7emcDAhZWOxDUfWCtnIIYnpc3bSA/s
+	5hl3y+F0oiJIzzfdYeAoCzaQZCdpBFQ=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-447-xkn0jY63Mbux5a5ldMJXKg-1; Wed,
+ 24 Jan 2024 08:39:36 -0500
+X-MC-Unique: xkn0jY63Mbux5a5ldMJXKg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B67B1C068CE;
+	Wed, 24 Jan 2024 13:39:35 +0000 (UTC)
+Received: from fedora (unknown [10.22.16.111])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 24A7C40C1430;
+	Wed, 24 Jan 2024 13:39:35 +0000 (UTC)
+Date: Wed, 24 Jan 2024 08:39:33 -0500
+From: Audra Mitchell <audra@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, raquini@redhat.com,
+	Adam Sindelar <adam@wowsignal.io>
+Subject: Re: [PATCH] selftests/mm: Update va_high_addr_switch.sh to check CPU
+ for la57 flag
+Message-ID: <ZbETFZX33L2ELujO@fedora>
+References: <20240119205801.62769-1-audra@redhat.com>
+ <20240121143153.5dcfe26dea53ba0e896dbf85@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240124022908.42100-1-hu.yadi@h3c.com>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20240121143153.5dcfe26dea53ba0e896dbf85@linux-foundation.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
 
-Thanks, it's merged with some fixes:
-https://git.kernel.org/mic/c/82852a3cc2152eb7c7b7007b6430faa979b08fad
+On Sun, Jan 21, 2024 at 02:31:53PM -0800, Andrew Morton wrote:
+> On Fri, 19 Jan 2024 15:58:01 -0500 Audra Mitchell <audra@redhat.com> wrote:
+> 
+> > In order for the page table level 5 to be in use, the CPU must have the
+> > setting enabled in addition to the CONFIG option. Check for the flag to be
+> > set to avoid false test failures on systems that do not have this cpu flag
+> > set.
+> > 
+> 
+> Thanks.
+> 
+> I'll add
+> 
+> Cc: Adam Sindelar <adam@wowsignal.io>
+> Fixes: 4f2930c6718a ("selftests/vm: only run 128TBswitch with 5-level paging")
+> Cc: <stable@vger.kernel.org>
+> 
+> A more complete description of these "test failures" would be helpful
+> please.
+> 
 
-On Wed, Jan 24, 2024 at 10:29:08AM +0800, Hu Yadi wrote:
-> From: "Hu.Yadi" <hu.yadi@h3c.com>
+Hey, sorry for the incomplete description. The test does a series of mmap
+calls including three using the MAP_FIXED flag and specifying an address that
+is 1<<47 or 1<<48. These addresses are only available if you are using level 5
+page tables, which requires both the CPU to have the capabiltiy (la57 flag)
+and the kernel to be configured. Currently the test only checks for the kernel
+configuration option, so this test can still report a false positive. Here are
+the three failing lines:
 
-You might want to fix the extra dot in your name.
+$ ./va_high_addr_switch | grep FAILED
+mmap(ADDR_SWITCH_HINT, 2 * PAGE_SIZE, MAP_FIXED): 0xffffffffffffffff - FAILED
+mmap(HIGH_ADDR, MAP_FIXED): 0xffffffffffffffff - FAILED
+mmap(ADDR_SWITCH_HINT, 2 * PAGE_SIZE, MAP_FIXED): 0xffffffffffffffff - FAILED
 
-> 
-> Fixes: 04f9070e99a4 ("selftests/landlock: Add tests for pseudo filesystems")
-> 
-> one issues comes up while building selftest/landlock on my side
-> (gcc 7.3/glibc-2.28/kernel-4.19)
-> 
-> gcc -Wall -O2 -isystem   fs_test.c -lcap -o selftests/landlock/fs_test
-> fs_test.c:4575:9: error: initializer element is not constant
->   .mnt = mnt_tmp,
->          ^~~~~~~
-> 
-> Signed-off-by: Hu.Yadi <hu.yadi@h3c.com>
-> Suggested-by: Jiao <jiaoxupo@h3c.com>
-> Reviewed-by: Berlin <berlin@h3c.com>
-> ---
->  tools/testing/selftests/landlock/fs_test.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index 18e1f86a6234..1f2584b4dfce 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -40,6 +40,7 @@ int renameat2(int olddirfd, const char *oldpath, int newdirfd,
-> 
->  #define TMP_DIR "tmp"
->  #define BINARY_PATH "./true"
-> +#define MNT_TMP_DATA "size=4m,mode=700"
+I thought (for about a second) refactoring the test so that these three mmap
+calls will only be run on systems with the level 5 page tables available, but
+the whole point of the test is to check the level 5 feature...
 
-The idea was to reuse MNT_TMP_DATA for mnt_tmp too. I fixed that in the
-applied patch, see my next branch.
+If you would like me to also update the description on the patch let me know
+and I'll update it and resubmit. Thanks!
 
+
+
+> > --- a/tools/testing/selftests/mm/va_high_addr_switch.sh
+> > +++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
+> > @@ -29,9 +29,15 @@ check_supported_x86_64()
+> >  	# See man 1 gzip under '-f'.
+> >  	local pg_table_levels=$(gzip -dcfq "${config}" | grep PGTABLE_LEVELS | cut -d'=' -f 2)
+> >  
+> > +	local cpu_supports_pl5=$(awk '/^flags/ {if (/la57/) {print 0;}
+> > +		else {print 1}; exit}' /proc/cpuinfo 2>/dev/null)
+> > +
+> >  	if [[ "${pg_table_levels}" -lt 5 ]]; then
+> >  		echo "$0: PGTABLE_LEVELS=${pg_table_levels}, must be >= 5 to run this test"
+> >  		exit $ksft_skip
+> > +	elif [[ "${cpu_supports_pl5}" -ne 0 ]]; then
+> > +		echo "$0: CPU does not have the necessary la57 flag to support page table level 5"
+> > +		exit $ksft_skip
+> >  	fi
+> >  }
+> >  
+> > -- 
+> > 2.43.0
 > 
->  /* Paths (sibling number and depth) */
->  static const char dir_s1d1[] = TMP_DIR "/s1d1";
-> @@ -4572,7 +4573,10 @@ FIXTURE_VARIANT(layout3_fs)
->  /* clang-format off */
->  FIXTURE_VARIANT_ADD(layout3_fs, tmpfs) {
->  	/* clang-format on */
-> -	.mnt = mnt_tmp,
-> +	.mnt = {
-> +		.type = "tmpfs",
-> +		.data = MNT_TMP_DATA,
-> +	},
->  	.file_path = file1_s1d1,
->  };
-> 
-> --
-> 2.23.0
-> 
-> 
+
 
