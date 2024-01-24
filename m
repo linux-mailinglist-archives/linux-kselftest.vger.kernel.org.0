@@ -1,57 +1,55 @@
-Return-Path: <linux-kselftest+bounces-3488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A8DB83B383
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 22:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87A0283B3CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 22:21:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0458288A1F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 21:02:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 410EA286963
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 21:21:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23AC41350DD;
-	Wed, 24 Jan 2024 21:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA10D1350F8;
+	Wed, 24 Jan 2024 21:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KpIcca8d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="abcUIYLz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3FA811E4;
-	Wed, 24 Jan 2024 21:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEDF7E760;
+	Wed, 24 Jan 2024 21:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706130148; cv=none; b=E2pBT+a/jkixgmLZTqWibxLOgrWx9HB5Txypqt7CFLOlVcwxoXDe+5XCi2MYMjKXVBByem2vAsHbSyL4LDjwMUNheBjofe/tYwkZbNEGgEz2epmoaKivnBtaeLFJYk/wA0M0Bw17GwpMv1F62at+N1GQnlf5riyEHdMndgleeR8=
+	t=1706131309; cv=none; b=SU9sZP/PBzpsMulrsVf4TtYtSMYPIkcjqp+Cb2JSoIg0kJZyOH/6lfVLaMxmo76qy1tbkgs9aNsG+JsmPYS91kt++R88krMGjpvyFyjz2ZubWgy0ASzd01VKWbmXVRGJ4fNiugzFq+UWw00D8HUD23FG3moII1vZ5iWjDGgL0YI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706130148; c=relaxed/simple;
-	bh=GRLg7Fttd7YkkhBg0ew3v+e7tGu/q9kze+tM6Iuq/X8=;
+	s=arc-20240116; t=1706131309; c=relaxed/simple;
+	bh=s4/+h4EL9rYbjtkxDfsWLSUO+hIa4ufy+G4MfaKgqys=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rCBvv9HgQ/W8EFtEa/5XMRO4bBFFyNus2otpDve2DZTdEBFtSjTEQw8CicNeoI1QuxiTCXfp4W8VON4BakbVN9brCeXyAYjEy7MiNcw5Yrlc5MXrgAhWqwcaPYfxlgPhUBp1QdtpTO5eNaTgYGvNNQ+vq1IhltGVYCRmkrHYqxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KpIcca8d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 848AAC433F1;
-	Wed, 24 Jan 2024 21:02:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DJ9xyg0iz05xFPKlPVAO/Kodub8haBDHTjaDsQWaWUWIsH/yydbkjCx1YswHXLnxOS1rnhkeGrZtgYAzlTaFIgZDkjHrQMKJu+Ql8/z0lgYOToF5Nv48Jj+jEbQ1r2JHlDyOwpRJcA2rTh4ofR84ob3mgq99K6yvW6qMmpKqKuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=abcUIYLz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF08C43394;
+	Wed, 24 Jan 2024 21:21:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706130147;
-	bh=GRLg7Fttd7YkkhBg0ew3v+e7tGu/q9kze+tM6Iuq/X8=;
+	s=k20201202; t=1706131309;
+	bh=s4/+h4EL9rYbjtkxDfsWLSUO+hIa4ufy+G4MfaKgqys=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KpIcca8di4rparosYDqBdumPDaTqwMUXRU7uIA4G3UfU2QZZgjT16huRflLWB5SpG
-	 Hmgy9fbtM8hhhrsnsV3AWlCgP8nKldAh/P+sHW9bjluCseSDBl4vBSRInVp3TKP/P1
-	 SadyDfruDp3nmigLEH817zET38Uzy++//LggqVZnOdurCmjE8CCYUPPu0FtdIfnsp8
-	 z53evmErpHmlpyjxVKmJ3FvOszEbzWfOh3DNhyL0QzbZg0lYHiVKfKAlALvvVv2DlM
-	 3qqAw2jgq0cQ8AVqYDv3t+tgq1+J8BUlLlGRpqM9P+p+BzBrz02b4GMnXoF8E+GiNk
-	 b8ZTs632Ls3Aw==
-Date: Wed, 24 Jan 2024 21:02:22 +0000
+	b=abcUIYLz0kTJoe2ctRskesPwzSLbXJELHKAh2rnksL6mY0+pWvfl8oA58qAAcqO8g
+	 O2Aiwa/ZWO+eqTvR6NgsRjGKaPklQIkRaDf+Un3TEr5HDCq+1X1XhzvvN+i79etBq4
+	 Ydlx+YCYfiCEmcVrxJdpk3jCMXEuPF6BbrIbc9aDrai/8V1daY6lC3jpZ500u20kU6
+	 7JM2doZqcluYa2Bwu5QxPPBhxwkl7zkC7lRx5u69/+CtCIexBECjxgwydQTTlO9R5U
+	 bShAd/Jk4lNlAxa0YA+VN28HtiaUhUFdiHne2LvswFfm0hGlEx/h6c/RwYAjryEFQ/
+	 jEfiJhQMk8vdQ==
+Date: Wed, 24 Jan 2024 21:21:44 +0000
 From: Simon Horman <horms@kernel.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv2 net] selftests/net/lib: update busywait timeout value
-Message-ID: <20240124210222.GB217708@kernel.org>
-References: <20240124061344.1864484-1-liuhangbin@gmail.com>
+Subject: Re: [PATCH net v3] selftests: net: fix rps_default_mask with >32 CPUs
+Message-ID: <20240124212144.GA348693@kernel.org>
+References: <20240122195815.638997-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,18 +58,20 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240124061344.1864484-1-liuhangbin@gmail.com>
+In-Reply-To: <20240122195815.638997-1-kuba@kernel.org>
 
-On Wed, Jan 24, 2024 at 02:13:44PM +0800, Hangbin Liu wrote:
-> The busywait timeout value is a millisecond, not a second. So the
-> current setting 2 is too small. On slow/busy host (or VMs) the
-> current timeout can expire even on "correct" execution, causing random
-> failures. Let's copy the WAIT_TIMEOUT from forwarding/lib.sh and set
-> BUSYWAIT_TIMEOUT here.
+On Mon, Jan 22, 2024 at 11:58:15AM -0800, Jakub Kicinski wrote:
+> If there is more than 32 cpus the bitmask will start to contain
+> commas, leading to:
 > 
-> Fixes: 25ae948b4478 ("selftests/net: add lib.sh")
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ./rps_default_mask.sh: line 36: [: 00000000,00000000: integer expression expected
+> 
+> Remove the commas, bash doesn't interpret leading zeroes as oct
+> so that should be good enough. Switch to bash, Simon reports that
+> not all shells support this type of substitution.
+> 
+> Fixes: c12e0d5f267d ("self-tests: introduce self-tests for RPS default mask")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
 Reviewed-by: Simon Horman <horms@kernel.org>
-
 
