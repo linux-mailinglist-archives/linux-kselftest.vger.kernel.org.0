@@ -1,100 +1,142 @@
-Return-Path: <linux-kselftest+bounces-3438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CEE5839BD2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 23:07:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA580839D7F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 01:09:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3A7C1F257B2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jan 2024 22:07:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC428B233EC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 00:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600DD4EB50;
-	Tue, 23 Jan 2024 22:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781EB160;
+	Wed, 24 Jan 2024 00:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="S0lRAysl"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eJmZ88BT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF52A537F5;
-	Tue, 23 Jan 2024 22:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10381ED8
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 00:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706047587; cv=none; b=CzSaDZYB6eJpcpzIV4MR6CpihPVC5LDfzVhu9GXd0sy2zam8h66AAjD3cgDfIfyahBRg5FJ/FcfIxsnWDFApfDrH6a6TJPAM+QkXzMimNNxmqt2+i8PTdsqYc4zLeMrvDKIIW+UuQ0Y6JoHORWvJdWVp9OiP9C8Khq6QTAMr+X4=
+	t=1706054955; cv=none; b=Rq86iXr7RVteHP4fm1HgQwIOzuuO4WnW/wtkmDw0tt/csMZj5XsExw4mPVscQbiqzIC9CXFG3DQRA2gukc/L5uBPo8FpuQjpkBZ2RrfkiRFb3gtcJNrUKzZhmtTvIdYop2gOoUWe6jsiAZ5mZ66eVWaNWNWaTZWR3NmDsaGvcIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706047587; c=relaxed/simple;
-	bh=EBG8FKLDL2yNVWwn82X5TrJOhSSQhARDwLMOkbaC8lQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=i2DUCmVDGg53ZK50AQ8rLtZE3Bc68vayRbEWqPCPSEieayqhsWfYWUCuz89h60ynlzQM5wdLuYy2HP9Lw3N6To76rHGyYHeTyhhtA9GfNxzUr+GwlGRd5viUTMQmvrFJNfjLdxI3xR/DmsE0Ucb3MkP88V+YQPhCXDX9ay9C6qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=S0lRAysl; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=EBG8FKLDL2yNVWwn82X5TrJOhSSQhARDwLMOkbaC8lQ=;
-	t=1706047585; x=1707257185; b=S0lRAysl9QJLH9mzRCts8uJYOAG6U58EfilmPDadRag6sut
-	JoTJCtdYw8mqLFOKAULZUeFfEZV2arWqx6GL5ZfhYbuu6c98OrGX7IFAKcDdb2lquntXq6FbX0SFT
-	FjOCCERgU0sWfHpMI2vCiEz/8gWcutIQRisIJmufWis+4zZJwjxKj5UoAaAFcPZOHzxXTvhkYqLQf
-	mFLT42ZN1ELgJeeJylubU1dy2Y9Q3c0yU5wu+4QCMQr8tK3i1CgXebarjSL04wx368yhK1APVLKRl
-	nszYdWeCD3hwspCMP718/yiwrTvUtGzQt3wI6yvuFFJbfpd/JPpMumaNvaHkMRGQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1rSOuT-0000000FG0g-2jwM;
-	Tue, 23 Jan 2024 23:06:22 +0100
-Message-ID: <d6940d0a80fcb522910c433fd3644ed5c524f6d5.camel@sipsolutions.net>
-Subject: Re: pull-request: wireless-2024-01-22
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Kalle Valo <kvalo@kernel.org>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org, David Gow
- <davidgow@google.com>, Brendan Higgins <brendanhiggins@google.com>, Shuah
- Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com
-Date: Tue, 23 Jan 2024 23:06:20 +0100
-In-Reply-To: <20240123134255.3eef6fd9@kernel.org>
-References: <20240122153434.E0254C433C7@smtp.kernel.org>
-	 <20240123084504.1de9b8ac@kernel.org>
-	 <d4c1a7c715a1f47dc45c5d033822d8f47e304bd4.camel@sipsolutions.net>
-	 <20240123134255.3eef6fd9@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	s=arc-20240116; t=1706054955; c=relaxed/simple;
+	bh=JUZ8e8sDxBYjrwvOx1r1mk2i3gdTETSMbfB/THjmzhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bxs/+0Ls0qM2gj8vOacmJM8DgQRC6xTSWCC20nWBHSszMmBjcSRhpw7hETz2WOqqxdwqoG58BBBQ7FoZRJfgKg/dFT9h0CMSoWHcki2fqAQs+4sWjiVwBbZhvcsNBjO9hNwOo1tFDtQbzn0eYFS0/rVZkUTaMzjxC+7SHC+sHd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eJmZ88BT; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6d9b13fe9e9so3983518b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jan 2024 16:09:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706054953; x=1706659753; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fi/zj5voHDPYKB6Z7ghbg+VPHgNO2bSCRicH9ZX7KmE=;
+        b=eJmZ88BTtH/btdvJOfUcfeKA+WPdJIGPN4SvCnSXe941tLk7Hq58c76rGyjn5IgIQE
+         C5EnI96TD6twb3v6PFGBvhBBaLC7lPA3bFd/9En9lv+3SmHi8GOg9B7iLbaroXfYKx+w
+         QHrYC4slkfd4k3Hrzc0FaErgt2rc9wuZREfXQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706054953; x=1706659753;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fi/zj5voHDPYKB6Z7ghbg+VPHgNO2bSCRicH9ZX7KmE=;
+        b=rTqlLKNZiZOVPBV5AD5uzCVBv63a9lyGa4nlgIXRdOeDBeTTAljSjkDS7EybxZrkPy
+         aNSwqtcJtwg743MyDThV2XD5vxD+DgYWvjduSY4atexu9wqjm5w4cSAqN0e3kY5exPi/
+         uMcHqvEGxe4FwCKxUvbJvGlbyqpqvEM6IlzQp2vR2IP9iC6HCfF5oNkihlfGM0GM6x+T
+         69kNMwraNCre9OSxf6yoDnbqBScnG1XtfA3gXsG1xv6dToXz3A9YdUtHXyLNQe51nlny
+         GBItPzBNxgIoW5ActRSPOrtKvTs9+RbMVKNAmzDg2fyvBUKx22jJO+JO8c96z0M8EHYM
+         TTQA==
+X-Gm-Message-State: AOJu0Yw3pbdIzEuxEv+ditFrLh5KFzvFQRevFPHJPS4eJF8sCKYB41z2
+	k9ztMVnIaRpjqBATfTwnlpraMs8UEBazcp93+7MLSOyDABvXUr7w11hvMlu1yg==
+X-Google-Smtp-Source: AGHT+IF/Rcc9ZWVa1OawRmGE1bBUza9XGJben23P16mFFKh9P3lRowBvA2V6yqh/hwNbfps8sMV1fg==
+X-Received: by 2002:a05:6a00:138b:b0:6dd:8891:81ef with SMTP id t11-20020a056a00138b00b006dd889181efmr407925pfg.43.1706054953404;
+        Tue, 23 Jan 2024 16:09:13 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id r22-20020aa78456000000b006dd7f7b880bsm1841242pfn.133.2024.01.23.16.09.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jan 2024 16:09:12 -0800 (PST)
+Date: Tue, 23 Jan 2024 16:09:12 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: Oleg Nesterov <oleg@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Adrian Reber <areber@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	tiozhang <tiozhang@didiglobal.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	YueHaibing <yuehaibing@huawei.com>,
+	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
+	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
+	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
+	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
+	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Zheng Yejian <zhengyejian1@huawei.com>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	David Windsor <dwindsor@gmail.com>,
+	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Hans Liljestrand <ishkamiel@gmail.com>
+Subject: Re: [PATCH v14] exec: Fix dead-lock in de_thread with ptrace_attach
+Message-ID: <202401231555.59B7EDBB2@keescook>
+References: <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <20240116152210.GA12342@redhat.com>
+ <AS8P193MB128538BC3833E654F56DA801E4722@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <20240117163739.GA32526@redhat.com>
+ <AS8P193MB1285FDD902CC57C781AF2770E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <202401221328.5E7A82C32@keescook>
+ <AS8P193MB1285110CC784C4BB30DAC0CAE4742@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AS8P193MB1285110CC784C4BB30DAC0CAE4742@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
 
-On Tue, 2024-01-23 at 13:42 -0800, Jakub Kicinski wrote:
->=20
-> > We're also adding unit tests to iwlwifi (slowly), any idea if we should
-> > enable that here also? It _is_ now possible to build PCI stuff on kunit=
-,
-> > but it requires some additional config options (virt-pci etc.), not sur=
-e
-> > that's desirable here? It doesn't need it at runtime for the tests, of
-> > course.
->=20
-> but curious to hear about driver testing recommendations.
+On Tue, Jan 23, 2024 at 07:30:52PM +0100, Bernd Edlinger wrote:
+> - Currently a non-privileged program can potentially send such a privileged
+> tracer into a deadlock.
+> - With the alternative patch below that non-privileged can no longer send the
+> tracer into a deadlock, but it can still quickly escape out of the tracer's
+> control.
+> - But with my latest patch a sufficiently privileged tracer can neither be
+> sent into a deadlock nor can the attached process escape.  Mission completed.
 
-Not sure I have any recommendations ... The test we posted is checking
-an invariant (the devinfo array is sorted in the right way); we used to
-have a check for this in the internal driver variant at init time, now
-it's a kunit test and we don't have to carry the delta to upstream here.
+Thanks for the details. And it would be pretty unfriendly to fail the execve()
+too (or, rather, it makes the execve failure unpredictable). I'll keep
+reading your patch...
 
-I think Miri is also working on some additional tests for some driver-
-internal logic though.
-
-So not sure, I guess it'd be just like anything else you could use unit
-testing for, certain self-contained parts of the code that don't really
-otherwise need a device, etc.?
-
-johannes
+-- 
+Kees Cook
 
