@@ -1,120 +1,77 @@
-Return-Path: <linux-kselftest+bounces-3487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A176A83B34D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 21:51:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A8DB83B383
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 22:02:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42A861F236D3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 20:51:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0458288A1F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 21:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1878F1350C2;
-	Wed, 24 Jan 2024 20:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23AC41350DD;
+	Wed, 24 Jan 2024 21:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="43WCwO/h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KpIcca8d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB101292FB;
-	Wed, 24 Jan 2024 20:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3FA811E4;
+	Wed, 24 Jan 2024 21:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706129500; cv=none; b=eQveOtboNHq2NuaL6TiyOT+yltgJhFDBmngOR+JPxNLRGNszWSaH2nacBFuju6AYdTgCzueyUf6oLorj5ef/zDHaDlbUlTTXnj4hA4GnGaMieSpxPq4x5rd/P0xJ957HXWjii2WW02viIVAwNwvxVnMTuhap9XyYKYxpUZKiesU=
+	t=1706130148; cv=none; b=E2pBT+a/jkixgmLZTqWibxLOgrWx9HB5Txypqt7CFLOlVcwxoXDe+5XCi2MYMjKXVBByem2vAsHbSyL4LDjwMUNheBjofe/tYwkZbNEGgEz2epmoaKivnBtaeLFJYk/wA0M0Bw17GwpMv1F62at+N1GQnlf5riyEHdMndgleeR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706129500; c=relaxed/simple;
-	bh=Z6R0DSevUsWp/ES4X1fSbzidtHovZqFHyGVCe23vpOQ=;
-	h=From:To:Subject:In-reply-to:References:MIME-Version:Content-Type:
-	 Date:Message-ID; b=UWOGTIGDuwxKQhU7FmA8qIGThVbVZZQB+b1Dioa5wxtFuqFXoiV2QURFpdP2/DRTp6z954bOnc6uvJFDldwQam3k1n+unHNCC1ibULcIp4ZN4qRPIJakRQDYYtgUP5uNBxreg61HBJ+KXJChqWqDgf8VoZ/zLJYwV0nHlySytVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=43WCwO/h; arc=none smtp.client-ip=199.185.137.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=Z6R0DSevUs
-	Wp/ES4X1fSbzidtHovZqFHyGVCe23vpOQ=; h=date:references:in-reply-to:
-	subject:to:from; d=openbsd.org; b=43WCwO/hWJyeW7jniZUXpoRulSjG7aM+cwLo
-	LzWTShoquiNAk1T+jrBK6SMcVIbDB+V51FxS9Zuoa7yiu+uJnEuLsJ/yl3R4QijJGWRmA+
-	MuBAO63A7qp4qRUizMMMzUN6XAGwCoXnwb0F5rMrZ4VU9kSXuZdV+Jj/ccK03N0lH3Umrl
-	MN7q+ffha9DN63HMmBAKUyeVOvCqaJdaDlJ+terJSrnNEtPcy/81YKlwfVbfv9eMhcxKAo
-	9EwcDoScJoOvaPYrzj+sXkmj/yw3YsTkr8zdGWgUHmkb4NzKMV5P7efFXj4UsndWP7FpdP
-	viVTF2l2zifSmurxqYEMPZ+8LQ==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 302f01a8;
-	Wed, 24 Jan 2024 13:51:37 -0700 (MST)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-    Jeff Xu <jeffxu@chromium.org>, akpm@linux-foundation.org,
-    keescook@chromium.org, jannh@google.com, sroettger@google.com,
-    willy@infradead.org, gregkh@linuxfoundation.org,
-    torvalds@linux-foundation.org, usama.anjum@collabora.com,
-    rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
-    groeck@chromium.org, linux-kernel@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-    pedro.falcato@gmail.com, dave.hansen@intel.com,
-    linux-hardening@vger.kernel.org
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-                  Jeff Xu <jeffxu@chromium.org>,
-                  akpm@linux-foundation.org, keescook@chromium.org,
-                  jannh@google.com, sroettger@google.com,
-                  willy@infradead.org, gregkh@linuxfoundation.org,
-                  torvalds@linux-foundation.org,
-                  usama.anjum@collabora.com, rdunlap@infradead.org,
-                  jeffxu@google.com, jorgelo@chromium.org,
-                  groeck@chromium.org, linux-kernel@vger.kernel.org,
-                  linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-                  pedro.falcato@gmail.com, dave.hansen@intel.com,
-                  linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v7 2/4] mseal: add mseal syscall
-In-reply-to: <98656.1706128621@cvs.openbsd.org>
-References: <20240122152905.2220849-1-jeffxu@chromium.org> <20240122152905.2220849-3-jeffxu@chromium.org> <20240123181457.idckaydk7dt7q2qy@revolver> <CABi2SkX=wKnHmooxXzBnJxxmtfSjvfgYabN1Wh1LxFYjtFoFaQ@mail.gmail.com> <20240124200628.ti327diy7arb7byb@revolver> <98656.1706128621@cvs.openbsd.org>
-Comments: In-reply-to "Theo de Raadt" <deraadt@openbsd.org>
-   message dated "Wed, 24 Jan 2024 13:37:01 -0700."
+	s=arc-20240116; t=1706130148; c=relaxed/simple;
+	bh=GRLg7Fttd7YkkhBg0ew3v+e7tGu/q9kze+tM6Iuq/X8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rCBvv9HgQ/W8EFtEa/5XMRO4bBFFyNus2otpDve2DZTdEBFtSjTEQw8CicNeoI1QuxiTCXfp4W8VON4BakbVN9brCeXyAYjEy7MiNcw5Yrlc5MXrgAhWqwcaPYfxlgPhUBp1QdtpTO5eNaTgYGvNNQ+vq1IhltGVYCRmkrHYqxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KpIcca8d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 848AAC433F1;
+	Wed, 24 Jan 2024 21:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706130147;
+	bh=GRLg7Fttd7YkkhBg0ew3v+e7tGu/q9kze+tM6Iuq/X8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KpIcca8di4rparosYDqBdumPDaTqwMUXRU7uIA4G3UfU2QZZgjT16huRflLWB5SpG
+	 Hmgy9fbtM8hhhrsnsV3AWlCgP8nKldAh/P+sHW9bjluCseSDBl4vBSRInVp3TKP/P1
+	 SadyDfruDp3nmigLEH817zET38Uzy++//LggqVZnOdurCmjE8CCYUPPu0FtdIfnsp8
+	 z53evmErpHmlpyjxVKmJ3FvOszEbzWfOh3DNhyL0QzbZg0lYHiVKfKAlALvvVv2DlM
+	 3qqAw2jgq0cQ8AVqYDv3t+tgq1+J8BUlLlGRpqM9P+p+BzBrz02b4GMnXoF8E+GiNk
+	 b8ZTs632Ls3Aw==
+Date: Wed, 24 Jan 2024 21:02:22 +0000
+From: Simon Horman <horms@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net] selftests/net/lib: update busywait timeout value
+Message-ID: <20240124210222.GB217708@kernel.org>
+References: <20240124061344.1864484-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <38861.1706129497.1@cvs.openbsd.org>
-Date: Wed, 24 Jan 2024 13:51:37 -0700
-Message-ID: <82138.1706129497@cvs.openbsd.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240124061344.1864484-1-liuhangbin@gmail.com>
 
-Theo de Raadt <deraadt@openbsd.org> wrote:
+On Wed, Jan 24, 2024 at 02:13:44PM +0800, Hangbin Liu wrote:
+> The busywait timeout value is a millisecond, not a second. So the
+> current setting 2 is too small. On slow/busy host (or VMs) the
+> current timeout can expire even on "correct" execution, causing random
+> failures. Let's copy the WAIT_TIMEOUT from forwarding/lib.sh and set
+> BUSYWAIT_TIMEOUT here.
+> 
+> Fixes: 25ae948b4478 ("selftests/net: add lib.sh")
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 
-> This discussion about the malloc heap is ridiculous.  Obviously it is
-> programmer error to lock the permissions on memory you will free for
-> reuse.  But you can't fix this problem with malloc(), without breaking
-> other extremely common circumstances where the allocation of memory
-> and PERMANENT-USE-WITHOUT-RELEASE of such memory are seperated over a
-> memory boundary, unless you start telling all open source library authors
-
-  ^^^^^^^^^^^^^^^ library boundary, sorry
-
-> to always use MAP_SEALABLE in their mmap() calls.
-
-Example:
-
-1. libcrypto (or some other library) has some ways to allocate memory and
-   provide it to an application.
-2. Even if this is using malloc(), heap allocations over a pagesize are
-   page-aligned, so even then following assumptions are sound.
-3. I have an application which uses that memory, but will never release the memory
-   until program termination
-4. The library interface is public and used by many programs, so the library
-   author has a choice of using MAP_SEALABLE or not using MAP_SEALABLE
-
-Due to your choice, my application cannot make lock the memory permissions
-unless that library author chooses MAP_SEALABLE
-
-If they choose to use MAP_SEALABLE, all programs get this memory you consider
-less safe.
-
-Exactly what is being gained here?
-
-
-
-
+Reviewed-by: Simon Horman <horms@kernel.org>
 
 
