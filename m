@@ -1,166 +1,114 @@
-Return-Path: <linux-kselftest+bounces-3447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D96183A6D8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 11:32:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98C0883AA85
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 14:02:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50F58B253B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 10:32:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48EE4285CCC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 13:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52FE11FBE;
-	Wed, 24 Jan 2024 10:32:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FBC077F23;
+	Wed, 24 Jan 2024 13:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gGFG5q7m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cpkiq0P8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B5353BA
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 10:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6E977F1A;
+	Wed, 24 Jan 2024 13:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706092321; cv=none; b=QzYYndS93UwHKYmJxCU7pDJhaSPlxCPQTAtY4cG9VmMeqk5siJfT+XaYnkdim8uiCkxK2LWoboSZjLYebcuKn55tTVJcujXNRLscFplvlWaN9i12elLdsCGI6PV6yKTqxa0H+/Hw2ARWQQizPfQgEzw088Zd0qMlKpASHoB2orE=
+	t=1706101244; cv=none; b=UZ+Ith1HkTZ875YE7V/g4dkc9kFurZ0JZwssThasuhsji10jGVXcp0RDaPOEq6Ag1vQzxM+vEQcOaa9bbPRI/xCXd6Vo5LQHGFwUd5Rf+ayDGEGEWOguYvUXyxShFG6x+oHiqsA89AcXJbLwb2vmaueCGKpTWswNtx7iAuX7YEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706092321; c=relaxed/simple;
-	bh=GHdfNJvzHjTnwM7jDAPjCZrXhElTb8flfgKGEP3WWYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lkBSGT5rvq9+BGQ4PVJJkW5m85bqJ2BEe7N1jHSbAHxZghOt/ByFXx4Ar4Vl4tJjbTEdW6LDwWRaC+gB1tXO8BMj5ZBrtFV5RcPyV0w9uGT2540gvd/kYJdmGvHj7Jy3wfh4ockfNL8WII9iyYiF1qa/r341Mnt1sNBwOBAqB00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gGFG5q7m; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706092318;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qCe/8IPSG8wVS4DFIRLbtt63xL0H0bGljwmkzhEiv+0=;
-	b=gGFG5q7mkVrDE4Qf0VcRCH+jAHqwJv7qO4tNg8LMnxUHEoI4xoYwlemxbj3i2fX9q8UoxD
-	GZcE4eK4WVx0lWggfFNWuMfPBWa+q8+Stbpy591N/sbHZDDjJCMg6ZZuaWGtxaN0le41tb
-	JfGON4+R/9ofwv1fpynrT18xgNo7T60=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-401-NLJGTF8UOJynom9YQYePXg-1; Wed, 24 Jan 2024 05:31:56 -0500
-X-MC-Unique: NLJGTF8UOJynom9YQYePXg-1
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2ccc7c01bd7so38755511fa.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 02:31:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706092315; x=1706697115;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qCe/8IPSG8wVS4DFIRLbtt63xL0H0bGljwmkzhEiv+0=;
-        b=fBsknHj6mR77l9KiCbUjq3mV3aGZFW6J9gSRF0aIvsbiiuPMEeXphzOAPDOaj8xrQz
-         D3j/rqmhucl8l6MdZiCh5s/swr2737dO59N0BXvlbfY59+7oc7tfrVDoL/dZIqRQcW1Y
-         GYlBoaTQeZfDcRif69rssi/CkWUgf+wtqCMHR1pPKvVcFyftMfIqO8HZhelKCSaHXWQ1
-         k37Diks2rVmdk/aKEuOnXjDPB3g/Rk36ErgyzyTAzm+xJU5M9vNgA37VBn/wbVpACU4n
-         0ikCLDXbGcCPSsdyHxaFCq5pTlNRkCwetzH4rQvQp5SX2viVomCL+OKSPvf60P938l/L
-         vfAg==
-X-Gm-Message-State: AOJu0Yx9V0uRlZWdv0WX9CC2lxEKMw5lnTfw6oaRTP79NXsv9avT4Uff
-	SPOIvBdsuQ1DTWmz4zuUx/+2xJGcBAbjTB1pqo/CRJoHpZo0HhJAXcN6LOlcfKRHjujV9lGc4+R
-	FTe1gZxz6w23VZlgMrQWvz9YsrgmtAOPqVmzJi7fwz8fVs1CKF8vKybEqG2zJdvqfTlQtU44M/6
-	Zu76SRbFTCk9zjsBBGWGAaWKDCsiMfzDgjLOgVXKyU
-X-Received: by 2002:a05:651c:2117:b0:2cd:f914:bba7 with SMTP id a23-20020a05651c211700b002cdf914bba7mr898807ljq.34.1706092315285;
-        Wed, 24 Jan 2024 02:31:55 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGTEUYC06RcgAw2TEdVmo8Mj1HI6Jfg1lu6NZRvL7qVAFiKge1AjNQTG9AkNhszwBBAdRhy0LAY1idh/+vhjpw=
-X-Received: by 2002:a05:651c:2117:b0:2cd:f914:bba7 with SMTP id
- a23-20020a05651c211700b002cdf914bba7mr898798ljq.34.1706092315005; Wed, 24 Jan
- 2024 02:31:55 -0800 (PST)
+	s=arc-20240116; t=1706101244; c=relaxed/simple;
+	bh=/vkNrDXpJXxQEVwMKcAclY2ef9tG0/Qkc2+hembTXCA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FBB6o+YmPZ813hPJnjtflscJTIRObbPhp/y+H4QO8OUDNR6I+AYkRPPYdQpF5LGgpJnDrp6EebjZgzhEhc6VglxL+bAjmTwZV8HiWRj36dKfu6452xdRqYS3klHZ1jPQ1EM9NBirBH/Tb1ds/g9pu68fVH/ctJIZoJJVX2LbzRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cpkiq0P8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4781BC433F1;
+	Wed, 24 Jan 2024 13:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706101243;
+	bh=/vkNrDXpJXxQEVwMKcAclY2ef9tG0/Qkc2+hembTXCA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=cpkiq0P86Glwwo7ls0WM5gModHbtdp4TmSOjkZn7aXDO0zVmejAX6wD4sRs1eydx3
+	 mJFjxtsYMuFaf/2426+kX7XEKC8rPCtfecdfEutJAGG2rDivi721407YI+8d2XydUp
+	 zByS5e0/VushAH7CZbd3aGOtzEPTrHx9NpmExnoaBAzMCJb4qVBSLZSRh4Mv+cfjjr
+	 K0cR9bceHwscAuTAfGi0CTqp3HbSIEpNFxeXBpr23Qr1+e1d1ND3QLYxKFEt+Te3IL
+	 7sH97TipamMFpf/ZvDra8hhfjhCJ1AUtARsVcgAssGWKFvFiQtzqmyBIzU0JK08q+l
+	 CjwfX5FKZBUgA==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v4 0/2] kselftest/seccomp: Convert to KTAP output
+Date: Wed, 24 Jan 2024 13:00:17 +0000
+Message-Id: <20240124-b4-kselftest-seccomp-benchmark-ktap-v4-0-cfd2bd2a31cf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240123122736.9915-1-pctammela@mojatatu.com> <20240123122736.9915-3-pctammela@mojatatu.com>
- <CAKa-r6s_DO1tfcZdsQNBCwjbE0ytJKnZWnvcKqTR+5epdNq4YQ@mail.gmail.com> <7d92788b-13c5-4f53-8b58-9b6ece26310d@mojatatu.com>
-In-Reply-To: <7d92788b-13c5-4f53-8b58-9b6ece26310d@mojatatu.com>
-From: Davide Caratti <dcaratti@redhat.com>
-Date: Wed, 24 Jan 2024 11:31:43 +0100
-Message-ID: <CAKa-r6vJPGQjE4YAtofa-=Pog8a_2Tu5mGcxLjhkoGCqu0JENQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/4] selftests: tc-testing: check if 'jq' is
- available in taprio script
-To: Pedro Tammela <pctammela@mojatatu.com>
-Cc: netdev@vger.kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com, 
-	jiri@resnulli.us, shuah@kernel.org, kuba@kernel.org, vladimir.oltean@nxp.com, 
-	edumazet@google.com, pabeni@redhat.com, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOIJsWUC/53NvQ6CMBSG4VshnT2mPS1/Tt6HcSjlVBoUSEuIh
+ nDvFhIH46KO7zc838wCeUeBHZKZeZpccH0XQ+0SZhrdXQhcHZshRylQlFApaANd7UhhhEDG9Lc
+ BKupMc9O+hXbUA8g0z7gsUOa8YFEaPFl3315O59iNC2PvH9vpJNb1N38SwMGWJSEWmRQVP7bkO
+ 7rue39h68GEL1RxgfgdihHVVAuZkyatxAcq/0BlRPMiraxVhitbv6HLsjwBkLK/H4EBAAA=
+To: Kees Cook <keescook@chromium.org>, 
+ Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>, Anders Roxell <anders.roxell@linaro.org>
+X-Mailer: b4 0.13-dev-a684c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1459; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=/vkNrDXpJXxQEVwMKcAclY2ef9tG0/Qkc2+hembTXCA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlsQn3ZgOre9hm5oZQLIzXFo6+XtyVqivfhysaNEtc
+ /6uyumCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZbEJ9wAKCRAk1otyXVSH0DkFB/
+ 0bfy6SCjD0imEgAhIiyEUF+LhZpSIr7GV7U1uwQPwHCpwLxP1eD3JRpcyOHCBDpd/84ozflKE4EbzD
+ bSCZ5dxJCAASx1ZKc0EDYEE0h/LzC0U63kC+rr/48ZU6a2+qrq/50YoUmXqYf7JokKokpvVJIxWCuS
+ 6mOlPkxTikR/6YFogHKlScGhLagF4bwvBUqKo1pxjBO9V7lENqltFsxErnfe2HlBAdr0GjbNSd0pm7
+ yR1TDRaMO2I0u8KiGpA1g6Br8ozny8QQgWct+AfTM54+yF01I5hCSbLxgXkN2pH6DmCBLWUJ2w/fYS
+ XDdSRCYBDncwoQKgR2I8RWRyya7aLY
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-hello Pedro, thanks for your answer!
+Currently the seccomp benchmark selftest produces non-standard output,
+meaning that while it makes a number of checks of the performance it
+observes this has to be parsed by humans.  This means that automated
+systems running this suite of tests are almost certainly ignoring the
+results which isn't ideal for spotting problems.  Let's rework things so
+that each check that the program does is reported as a test result to
+the framework.
 
-On Tue, Jan 23, 2024 at 5:47=E2=80=AFPM Pedro Tammela <pctammela@mojatatu.c=
-om> wrote:
->
-> On 23/01/2024 10:17, Davide Caratti wrote:
-> > hi Pedro,
-> >
-> > On Tue, Jan 23, 2024 at 1:28=E2=80=AFPM Pedro Tammela <pctammela@mojata=
-tu.com> wrote:
-> >>
-> >> If 'jq' is not available the taprio tests that use this script will
-> >> run forever. Check if it exists before entering the while loop.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v4:
+- Silence checkpatch noise.
+- Link to v3: https://lore.kernel.org/r/20240122-b4-kselftest-seccomp-benchmark-ktap-v3-0-785bff4c04fd@kernel.org
 
-[...]
+Changes in v3:
+- Re-add signoff.
+- Link to v2: https://lore.kernel.org/r/20240122-b4-kselftest-seccomp-benchmark-ktap-v2-0-aed137eaea41@kernel.org
 
-> > nit: what about returning $KSFT_SKIP (that is 4) if jq is not there?
-> > so the test does not fail.
-> > thanks!
->
-> Since these scripts are run in the setup phase, it has a special treatmen=
-t.
->
-> Take for example this run:
-> ok 1 ba39 - Add taprio Qdisc to multi-queue device (8 queues)
-> ok 2 9462 - Add taprio Qdisc with multiple sched-entry
-> ok 3 8d92 - Add taprio Qdisc with txtime-delay
-> ok 4 d092 - Delete taprio Qdisc with valid handle
-> ok 5 8471 - Show taprio class
-> ok 6 0a85 - Add taprio Qdisc to single-queue device
-> ok 7 3e1e - Add taprio Qdisc with an invalid cycle-time
-> ok 8 39b4 - Reject grafting taprio as child qdisc of software taprio #
-> skipped - "-----> prepare stage" did not complete successfully
->
-> ok 9 e8a1 - Reject grafting taprio as child qdisc of offloaded taprio #
-> skipped - skipped - previous setup failed 9 39b4
+Changes in v2:
+- Rebase onto v6.8-rc1.
+- Link to v1: https://lore.kernel.org/r/20231219-b4-kselftest-seccomp-benchmark-ktap-v1-0-f99e228631b0@kernel.org
 
-[...]
+---
+Mark Brown (2):
+      kselftest/seccomp: Use kselftest output functions for benchmark
+      kselftest/seccomp: Report each expectation we assert as a KTAP test
 
-> As of today it returns 0, success in ksft, even though it clearly
-> wasn't. Looking at the code any failures in the setup/teardown phase
-> will stop the run, skip all the remaining tests but still return success.
->
-> About returning skip from the script, aside from marking it as skip and
-> continuing the suite, we would need to run a silent teardown, one that
-> executes all commands in the specified teardown but
-> ignores errors. In this case we are assuming all setup steps follow KSFT
-> return codes. Not sure if it it's reasonable or not...
+ .../testing/selftests/seccomp/seccomp_benchmark.c  | 104 +++++++++++++--------
+ 1 file changed, 64 insertions(+), 40 deletions(-)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20231219-b4-kselftest-seccomp-benchmark-ktap-357603823708
 
-wouldn't this be fixed by adding this line:
-
-"dependsOn" : "command -v jq >/dev/null"
-
-to test scenarios 39b4 and e8a1 ? I'm asking this because jq is used
-also in verifyCmd after the script, to parse results.
-Background for this question: I see tdc skipping both setup and
-teardown stages for each test case in taprio.json where this line:
-
-     "dependsOn": "command -v ciao >/dev/null",
-
-is present. Rather than doing a setup +  silent teardown, just do
-nothing and go to the next test.
-
-> As your suggestion is not a blocker, I would rather address the above
-> problems in a follow up series since they will require some refactoring.
-> WDYT?
-
-no objections, but I'm curious to see if "dependsOn" would fix this case :)
-thanks!
---=20
-davide
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
 
