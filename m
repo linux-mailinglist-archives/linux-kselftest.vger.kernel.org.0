@@ -1,186 +1,147 @@
-Return-Path: <linux-kselftest+bounces-3478-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3479-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F28B83B196
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 19:56:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 336F583B1BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 20:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08EE21F2561F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 18:56:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64FB01C21513
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 19:04:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E66B131743;
-	Wed, 24 Jan 2024 18:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAE87131E37;
+	Wed, 24 Jan 2024 19:04:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QPRpSzpX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="roPiC3kj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11AF13175C
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 18:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAF512FF86;
+	Wed, 24 Jan 2024 19:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706122582; cv=none; b=OLtr0bS/p+MsJFql6K6SPcGHygfpVaFybPAPFR/OF+GSsgDm1vauLlgpSTZ5pGF43Th7b4tZukuei+sqRzZIowD3homELkItsDOea3w10cTmR+jKYMWPgWZA8NhAGC4zLkYpIxpejiBIInzQF8M9T7mGmq1zmHkv9MSMb5Kn94k=
+	t=1706123073; cv=none; b=FRbTLxvI7+x36ot72P8GsB3RSFJ245MVZoQbsYyT95GpPSahZTQr7Aq3QGB3oSpCIZWIwCgxau0/5z3NAnNSx5GpYdtAvp05LClk0JMqA/CLCW4kWQQwndr50SUDVX8j6leFvBTld9A4MQeSURih0qfmNTEja40pvKD8LWHbbVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706122582; c=relaxed/simple;
-	bh=kvTmUVyu+5YoGL+Mb3PsywwjW5Ffb/120oGIh9eGFfA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=fUQtt8hGwf2P23UBbVHR1xNAIckuMfZZctzcFrSsJjPuM3rzV5gAMik6tCPnI5ixdHyluEKGn+GcJcO66lpp19DJb8lG92YExyvb8d9ybF1KeWkID3HWwexZJQ3jdaUqhS6ettw0V/f7uBm1GsXJXM1JkeBDwsIkwrvlwRQrU88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QPRpSzpX; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-21429ac4dc9so2108195fac.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 10:56:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706122580; x=1706727380; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=flii4r2OO0TnE/OvuRDIQl+ib46GfR+jZZh0in4dSPQ=;
-        b=QPRpSzpX1b9hPwo98NWL7tu+w7wusN8S4eifQypM25L1xp1DfbTuH9ruwGyFh7T/b1
-         J+qep3MdPSA8AbFSACTL7dQzDllJ03r2a0Rp0C/5rRUQ2kHzD8KyuYNBEYqDQFulTKSi
-         DnspGYBxvlkxmGb/FNWT9U39SPIgHHfW3Kd7E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706122580; x=1706727380;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=flii4r2OO0TnE/OvuRDIQl+ib46GfR+jZZh0in4dSPQ=;
-        b=RPWGQZeBoLMYuQsV5rtlTVLCv4P0j3o+AWkH+5uI2GDBhcoZgfPe2O/w+NpcZYHqAu
-         uwQ/3VQV/EkDHcRhQHy4rJbtyCyF8exJcP+dXFLJD8SexnuNF/ToChVN0NWLcd+9q2km
-         KJkU8E8YD6SRmtxBzyWlFbtxEKXWRvJoABRDYFHfj2uOuQ5d4kTilf+aWrSQY8RTWtA+
-         /HqYSlDPrOTCfqTJ/6zZirfuKkG7w+30MxMC8/O8pYJUj1XbXDdJ2TvvKD3S63JVHqhW
-         K1XbN/17BChxXe/k89FiWSVsAYf76Lp+kXFRr8Zh9djkuJHy4xc8D0T7dCIGmBdxDazj
-         1oYg==
-X-Gm-Message-State: AOJu0YxAsgdYvW8h4CtQ/tye+i8pkiofjbwwlw1r1blw7eaIzYUDRNsS
-	IHFqsJvrQmXnzY3JlJESQpcuHl/lMM9v6kl6RAfxHFPTmf5RTrKGjcRyFpz621+dowl8GIVhAvn
-	gLtR62Lm34J97MlKa9GkqAXjulvEHS19DJj0q
-X-Google-Smtp-Source: AGHT+IEokCZUL1ojdQxZQFJ36V2Jcy4lGrhyLp03ij/BLj+yI4uyj0fd4X4i3tCBO73J+D9TXYai3KJPK1EDBvi2YW0=
-X-Received: by 2002:a05:6870:b69b:b0:214:8734:1345 with SMTP id
- cy27-20020a056870b69b00b0021487341345mr35826oab.7.1706122579922; Wed, 24 Jan
- 2024 10:56:19 -0800 (PST)
+	s=arc-20240116; t=1706123073; c=relaxed/simple;
+	bh=of1oTW1JzvLQNNZXy9oaZis6Ni23ookIZw9VErs4lEI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YNb2osw/Jog6+V0lnKq/FbWtrToDjL5n4SkavIsdo+0pjYkpanaNZxcLI+TQdiwvb1AM4WdJ0PQ23ZD+ttZ3kKa9LOM/mTuoHyW+SQn4gJVSsQa3Z826vvsW1RChlmNMS09oVGLFBIUTJYiCrBx7YcCr6ycv7W4vZfrcK5jbhJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=roPiC3kj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D58C433C7;
+	Wed, 24 Jan 2024 19:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706123073;
+	bh=of1oTW1JzvLQNNZXy9oaZis6Ni23ookIZw9VErs4lEI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=roPiC3kjWXq5GHptPY15Wa4Hh55qwJHZ6Ocd5YG/QHMERvVLs680MC5Zkg6fTPoDi
+	 EU0owtZpJ5rcar6vRmarTTv0aq6V+tqYXkBEfz1va5UplLqFhvN2lIE/W+g3b85faL
+	 91ppMn2nVlkzb/tQpnk7d/Pd+/m4tehYqgar1M/I54hXSrYW+uXpXKObL5QJxhiPag
+	 B2PAo53DbdSwOnM9w9FuKT+TOw/qLLMeT89r2YCikICnxbrs4W/QtJb36U3Q9ly+NQ
+	 DssWGsvMy71kDXk5ykpr9zd2/UAHBZ3v79HJX1ll+TBYQIXOaJpreEXKrX/O8U3L4n
+	 8QwYQYnklZ1ag==
+Date: Wed, 24 Jan 2024 11:04:31 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Dmitry Safonov <dima@arista.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>, Mohammad Nassiri
+ <mnassiri@ciena.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] selftests/net: A couple of typos fixes in
+ key-management test
+Message-ID: <20240124110431.3c3eba9a@kernel.org>
+In-Reply-To: <1ad64e3d-5252-4aaf-82be-5162edd1e781@arista.com>
+References: <20240118-tcp-ao-test-key-mgmt-v1-0-3583ca147113@arista.com>
+	<20240118085129.6313054b@kernel.org>
+	<358faa27-3ea3-4e63-a76f-7b5deeed756d@arista.com>
+	<20240118091327.173f3cb0@kernel.org>
+	<a9a5378d-c908-4a83-a63d-3e9928733a3d@arista.com>
+	<20240124071229.6a7262cc@kernel.org>
+	<1ad64e3d-5252-4aaf-82be-5162edd1e781@arista.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122152905.2220849-1-jeffxu@chromium.org> <726.1705938579@cvs.openbsd.org>
- <CABi2SkXrnUZsWvpqS61mHw-SqDBOodqpcfjdoTTyeeYG9tRJGA@mail.gmail.com>
- <86181.1705962897@cvs.openbsd.org> <20240123173320.2xl3wygzbxnrei2c@revolver> <85359.1706036321@cvs.openbsd.org>
-In-Reply-To: <85359.1706036321@cvs.openbsd.org>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Wed, 24 Jan 2024 10:56:08 -0800
-Message-ID: <CABi2SkWfgqA89+_qdy6y7HQB1TjA+N2oCNOwO_ZtV+3cJOmV1Q@mail.gmail.com>
-Subject: Re: [PATCH v7 0/4] Introduce mseal()
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Jeff Xu <jeffxu@chromium.org>, 
-	akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com, 
-	sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org, 
-	torvalds@linux-foundation.org, usama.anjum@collabora.com, 
-	rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org, 
-	groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
-	dave.hansen@intel.com, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 23, 2024 at 10:58=E2=80=AFAM Theo de Raadt <deraadt@openbsd.org=
-> wrote:
->
-> It's the same with MAP_MSEALABLE.  I don't get it. So now there are 3
-> memory types:
->        - cannot be sealed, ever
->        - not yet sealed
->        - sealed
->
-> What purpose does the first type serve?  Please explain the use case.
->
-> Today, processes have control over their entire address space.
->
-> What is the purpose of "permissions cannot be locked".  Please supply
-> an example.  If I am wrong, I'd like to know where I went wrong.
->
-The linux example is in the V3 and V4 cover letter [1] [2] of the open
-discussion section.
+On Wed, 24 Jan 2024 17:46:10 +0000 Dmitry Safonov wrote:
+> >> Thanks!
+> >>
+> >> I'll send a patch for it in version 2 (as I anyway need to address
+> >> Simon's feedback).  
+> > 
+> > Hi Dmitry!
+> > 
+> > I put TCP_AO and VETH in the config and the tests seem to fail with  
+> 
+> Thanks for wiring it up and for https://netdev.bots.linux.dev/status.html!
+> 
+> > selftests: net/tcp_ao: rst_ipv4
+> > not ok 1 # error 834[lib/kconfig.c:143] Failed to initialize kconfig 2: No such file or directory
+> > # Planned tests != run tests (0 != 1)
+> > # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:1  
+> 
+> Hehe, yeah I wanted to detect kernels with !CONFIG_TCP_AO, to SKIP the
+> test, rather than FAIL it, which this lib/kconfig.c does.
+> But from a glance, I think it's failing in your run because there are
+> checks with and without TCP_AO, but I didn't think of checking for
+> the hashing algorithms support.
+> 
+> I think what happens is has_tcp_ao():
+> : strcpy(tmp.alg_name, "hmac(sha1)");
+> ...
+> : if (setsockopt(sk, IPPROTO_TCP, TCP_AO_ADD_KEY, &tmp, sizeof(tmp)) < 0)
+> 
+> Could you check that what I suppose is failing, is actually failing?
+> [dima@Mindolluin linux-master]$ grep -e '\<CONFIG_CRYPTO_SHA1\>' -e
+> '\<CONFIG_CRYPTO_HMAC\>' .config
+> CONFIG_CRYPTO_HMAC=y
+> CONFIG_CRYPTO_SHA1=y
 
-[1] https://lore.kernel.org/linux-mm/20231212231706.2680890-1-jeffxu@chromi=
-um.org/T/
-[2] https://lore.kernel.org/linux-mm/20240104185138.169307-3-jeffxu@chromiu=
-m.org/T/
+FWIW the config used is uploaded with the results. If you click on 
+the remote it should take you to a location like this:
 
-Copied below for ease of reading.
----------------------------------------------------------------------------=
---------------
-During the development of V3, I had new questions and thoughts and
-wished to discuss.
+https://netdev-2.bots.linux.dev/vmksft-tcp-ao/results/435369/
 
-1> shm/aio
-From reading the code, it seems to me that aio/shm can mmap/munmap
-maps on behalf of userspace, e.g. ksys_shmdt() in shm.c. The lifetime
-of those mapping are not tied to the lifetime of the process. If those
-memories are sealed from userspace, then unmap will fail. This isn=E2=80=99=
-t a
-huge problem, since the memory will eventually be freed at exit or
-exec. However, it feels like the solution is not complete, because of
-the leaks in VMA address space during the lifetime of the process.
+and there should be a config file in there. 
 
-2> Brk (heap/stack)
-Currently, userspace applications can seal parts of the heap by
-calling malloc() and mseal(). This raises the question of what the
-expected behavior is when sealing the heap is attempted.
+> If that's the case, I'll  add the detection for hashing algorithms to
+> lib/kconfig.c (together with a patch for
+> tools/testing/selftests/net/config).
+> And also heads up for key-management.c - that tries a bunch of hashing
+> algorithms to check that the work and that the key rotation between
+> different algorithms works:
+> 
+> : const char *test_algos[] = {
+> : 	"cmac(aes128)",
+> : 	"hmac(sha1)", "hmac(sha512)", "hmac(sha384)", "hmac(sha256)",
+> : 	"hmac(sha224)", "hmac(sha3-512)",
+> : 	/* only if !CONFIG_FIPS */
+> : #define TEST_NON_FIPS_ALGOS	2
+> : 	"hmac(rmd160)", "hmac(md5)"
+> : };
 
-let's assume following calls from user space:
+I was stuck in a meeting and I started playing around with the options 
+for TCP-AO :) I added these options now:
 
-ptr =3D malloc(size);
-mprotect(ptr, size, RO);
-mseal(ptr, size, SEAL_PROT_PKEY);
-free(ptr);
+CONFIG_CRYPTO_HMAC=y
+CONFIG_CRYPTO_SHA1=y
+CONFIG_CRYPTO_RMD160=y
+CONFIG_IPV6=y
+CONFIG_TCP_AO=y
+CONFIG_TCP_MD5SIG=y
+CONFIG_VETH=m
 
-Technically, before mseal() is added, the user can change the
-protection of the heap by calling mprotect(RO). As long as the user
-changes the protection back to RW before free(), the memory can be
-reused.
+And it looks much better! There are still some failures:
 
-Adding mseal() into picture, however, the heap is then sealed
-partially, user can still free it, but the memory remains to be RO,
-and the result of brk-shrink is nondeterministic, depending on if
-munmap() will try to free the sealed memory.(brk uses munmap to shrink
-the heap).
+https://netdev.bots.linux.dev/contest.html?branch=net-next-2024-01-24--18-00&executor=vmksft-tcp-ao
 
-3> Above two cases led to the third topic:
-There one option to address the problem mentioned above.
-Option 1:  A =E2=80=9CMAP_SEALABLE=E2=80=9D flag in mmap().
-If a map is created without this flag, the mseal() operation will
-fail. Applications that are not concerned with sealing will expect
-their behavior to be unchanged. For those that are concerned, adding a
-flag at mmap time to opt in is not difficult. For the short term, this
-solves problems 1 and 2 above. The memory in shm/aio/brk will not have
-the MAP_SEALABLE flag at mmap(), and the same is true for the heap.
-
-If we choose not to go with path, all mapping will by default
-sealable. We could document above mentioned limitations so devs are
-more careful at the time to choose what memory to seal. I think
-deny of service through mseal() by attacker is probably not a concern,
-if attackers have access to mseal() and unsealed memory, then they can
-also do other harmful thing to the memory, such as munmap, etc.
-
-4>
-I think it might be possible to seal the stack or other special
-mappings created at runtime (vdso, vsyscall, vvar). This means we can
-enforce and seal W^X for certain types of application. For instance,
-the stack is typically used in read-write mode, but in some cases, it
-can become executable. To defend against unintented addition of
-executable bit to stack, we could let the application to seal it.
-
-Sealing the heap (for adding X) requires special handling, since the
-heap can shrink, and shrink is implemented through munmap().
-
-Indeed, it might be possible that all virtual memory accessible to user
-space, regardless of its usage pattern, could be sealed. However, this
-would require additional research and development work.
-
----------------------------------------------------------------------------=
---------------------------
+I added VRF so that should hopefully take care of the MD5 skips
+on the next run. But the failures of the rst-ip* tests don't look 
+like an obvious config problem.
 
