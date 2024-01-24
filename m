@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-3464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8410883AF1D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 18:04:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC9F283AF20
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 18:04:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 798D5B28F6A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 17:04:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C405B2901A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jan 2024 17:04:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459057F7C7;
-	Wed, 24 Jan 2024 17:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E64687F7DD;
+	Wed, 24 Jan 2024 17:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WkSOdvd1"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ctIx2PVB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60797E79F;
-	Wed, 24 Jan 2024 17:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534EB7F7CA;
+	Wed, 24 Jan 2024 17:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706115841; cv=fail; b=YzpY646tsaCrohGN4vIzxhl89nhrtzXKJCU97zCoeA8W6OoWi4kdeyr33Q+N2Tx0wmajhAl+1VrWS+jkvH7S4F/MDIc086B1uMjENc52taCpUdfdtm0brhEphxfZ1BqNxQKePPzZV2JXcVVGw63Z2z/Yvi84eEs3KqoyAGTRTCM=
+	t=1706115842; cv=fail; b=BhLsP+aPtEfvBrdoJHZoXuDCuLic40qowVGYChz72tKv5vU7TTmoi9a/uOuyqn6hHL8Sd0PQq9bt6psNzlLdrDkiT4dX/6oA3ASVaOPB+f0Uj0mzy6z3fWGBxHCDdsZ0YAA9lCZ9yOn0QdDS38ecwM2rfYNsQrSDRtm3E08vxdQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706115841; c=relaxed/simple;
-	bh=Uw09HnO1RGrPYPpqehDOd9nH5dtg87/DP6mBr00tohs=;
+	s=arc-20240116; t=1706115842; c=relaxed/simple;
+	bh=MXYcopAOAcGd9XoG3HOdytzR9tD8ot43sB4qf8mJ0dw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZQcCrBgOjCdwJ2mfTBfweMRfTspnBe+EGQv6wIoAxzn/HJXdm9gr3SBLTZCuaFvPVgDRbg10ed/Ki2DbeQjFKmXxgqit4+CEtu3IROE9RhM6g0cn215CofHWrelhKLaOLnpmbwWcUnhnI2k2eINdXM5aFiTQEhGANQwQ+QMHjjQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WkSOdvd1; arc=fail smtp.client-ip=40.107.244.85
+	 Content-Type:MIME-Version; b=j590HxCoJSZKfYsanER1Omsk3WL7M/TMX2KOrPmsaQ3RMzJ2gkEluGT5ll27/EocqQ4BI9bNRyT1wdVRH3x0QXdbIs6iokQnOlshSxMabD/GzZKZX3yaKq0Hj7lgvS7fJDqp6/4LuIiLnBxJk7dvWRCyMTVhb1gx49lKAt02RpU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ctIx2PVB; arc=fail smtp.client-ip=40.107.244.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jgg3fmqRTU8GQoaNWg2dzTkiyKLAEXVEzRDLeb/LL/sA9Z9hiPyGS23X3LHq4ujx3rzwZ57lKrHZ3lE1t9iSvH15XaDjTcj/VV2qXl/fqfHogGjIBracHHfpOx5lpyb05mHY8SXOFz61jg02QED/zirnh5pjhM5LGrElB1UMoYJcPpFtjNom8U7GGxYnohFau/1OzG3Sv6kRktCluLEUFDpXcETokOcZc+qRH2Nju7uo8EZ1JYmhtHgQDX2tt0k4LreyJJKGpqn386disaRw0cdrA25kuGJOz4V758UwJ7tIIO7ava618iCzccM07Sz0zbejgppy4YRja7CW6CkZpA==
+ b=jhqQERvBPgi94Ywi4lPdz9KMfQLASl3BmiaxI68QQxzVYPpNcB+qUipLyL5HsvKbJEvJrUujm/NssavRgKXhJaO0fG2td7wjUG4PAntK2IPTPip/2wpoiuVAV6Xc6o3sg9P66ZpVu+4J41b2OFmQaUZ+WgEyeVyQ9xAKE/CoN4HHbiH0/FsrenETlPGyeq21P95o865ONgUr31id37AAzcOI3epHZqlgZdJz6fyGtgnueKFcdnLn+FlvVwPymvIAQRd5fa76iGZpojkFqwtgI5iMUIdI4tKSSy7Et4EK8f9GTGmdzxg+VF2t915QIkDi2aZx7EMG0udoyOrUxVu7uA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3IZ9oAN02i2JdaTWyezQ7UmPk1kKYInDUHcbe4bi2TE=;
- b=WGL5NL01t0p8Ecv1W88tFO8GWKhh2GEfDgfCsOFOGuNxkf3kiWBtHD8gsfhjr6tREFbvfZSpM5nEtjcBMXmZG9wnE61qo9xzrjfCoD0U+7zlkkfZaX9g0Wf9u2gSGBiBRdJ8b4dU+n9B1d3EXDMoh6If7/jeRUoxNJ879XAw4pRjfYtIqBZu47A921emn5bGS7Wyw0dXW6q/XSvTp9ke+N5DVoGnRYu0ZsSYG27JtNGQe41MvoxofSSAmvTsp/9H83YvfgXxPjnXVHkQO0ly10eq5pzNTSfzEbCwJIibfjJQvC4TKX4hJ3qd+Z3iBRp1RPIPHan2/wN9OeDh5zgmwA==
+ bh=88nCtg3EmJgWMImNXLFTCuuQs10ypVAq5YprtByVasY=;
+ b=VBCoQHA/l46MIL4Un/fa3dwtolD12/hIlzfgeo04adgyFJcYh7c/XrlLAblK4IpuRqzs5O1gFnpir1vj4Ng5BIhQyS3o2r6flLe0zrnuvglyrAo2WPGHgXdniyDBuBvocJ8Jjol0ClIRSSPDo2I5mRzVAI2ginSdls33KEaCmr9KrtWt7d9oWg2hSdZf36s/EhmK/I6ibeXfSGOu2QsASMfEBs/WCV3vT6CjJme8jDCWJ4so1d3qEj0Cs0ISmA4OsGQxV0aOHEBmiO8BoRbx1XOaNCukOr68f0t4VQjeY62hwKKZ3jaCNenoqGvbr5ZYy6y3q4gH6eHc+eJ1K8TvTw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3IZ9oAN02i2JdaTWyezQ7UmPk1kKYInDUHcbe4bi2TE=;
- b=WkSOdvd1cEkFmcbrkJH3GK1FL33BO6BZylbw0THmvnRKC7rnbdi7Z0WlDDQSKNSi+lstON4m4n8TbWCF/PHqzlfhuiRw34xV8M7MvQz3iF+QPpFjXainF8lDnIpimaZrC7i3ZP9ISXUpDetTgZoLYP66aihLRaqbCSildvnTHEFWZ1RMa/j85Fv0lmjLXcZ/egNf34Y7hxrGqB1r7/0rHX0BxB3pVuPwuonMVqzK9vc/rGXRiaF6Ne62ay90stGk4g2Qqemfp6Y3YkSXapeNWgeLvgisDkGHbPyvzbWnaiQQp6QeOKxWgMZ/0we4sYCWiJEseE0jQ3I4m4efVc646g==
+ bh=88nCtg3EmJgWMImNXLFTCuuQs10ypVAq5YprtByVasY=;
+ b=ctIx2PVBmNUxbYgg2LUcKKNS5f9ZQzXOZQkInJbku1WbrRZQGUSHfgkyVgCoYhizzQ1jcbbyRMFUJkRYDTMODyHYnQvQF3wXcbBVDNMDkNVN8dPZBVmCFU7PdUOcF5KN1Ppu5YQPfiHLfbNPMMBJByUNTHopePUgzo5OajEBkJGJj4Nyqx/XiaWUSKIoyvmedPhN60IhIEdNzWF5RA6+ThaGN081tLfgJHksW9moHxPvLb2kbVu4QXW9yOV3hXasAz6Bw1ZW/YytUAZ/bnClxhu/cEE8JlFgq6lG8KixH1gwLQEookrBaNw00c08TE3v7KRFo0bdxsChw9C2Knqf6w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8)
@@ -82,16 +82,16 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	Hangbin Liu <liuhangbin@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH net-next 4/6] selftests: dsa: Replace test symlinks by wrapper script
-Date: Wed, 24 Jan 2024 12:02:20 -0500
-Message-ID: <20240124170222.261664-5-bpoirier@nvidia.com>
+Subject: [PATCH net-next 5/6] selftests: forwarding: Redefine relative_path variable
+Date: Wed, 24 Jan 2024 12:02:21 -0500
+Message-ID: <20240124170222.261664-6-bpoirier@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240124170222.261664-1-bpoirier@nvidia.com>
 References: <20240124170222.261664-1-bpoirier@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: YQBPR01CA0065.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:2::37) To MN2PR12MB4373.namprd12.prod.outlook.com
+X-ClientProxiedBy: YQBPR01CA0146.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:7e::14) To MN2PR12MB4373.namprd12.prod.outlook.com
  (2603:10b6:208:261::8)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -101,248 +101,126 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MN2PR12MB4373:EE_|DS7PR12MB5935:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60523cbc-d8d3-4d1c-07fd-08dc1cfe4bd5
+X-MS-Office365-Filtering-Correlation-Id: e4b87f8f-e5ac-4698-a497-08dc1cfe4cac
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	USM4/kL4gV4KXCsEL37nSJBnoiKEwTSl7YcGWUmbx/6B2RBsAljomaE4BbiE8EO9bHNuBsszSAjjnI1hmGm8bXl1D4UnrxxsUz6iuI9Mf7P5DSbrnn8zOhPYNGnlA5b0lh97/3IQ9gdLfrIe5hM45X34skNXG+uRSRI13IaY/n9MENznvphncqO0Bk13qBiSqayWokZP9ZXAqCDZblPKPPzPKmBTO1v1tlxP1eQzawjSps59MdP/xta0dTH9GYGE6ejnKLWZIbSK8gO+zrSMh3yE38EDtv21AewQ6SDof/O3Giy6tFtSDYEPYXrk6DJwKkGcDbw9bUOuGraPhnntDZTajbX2cBn+ekHULnJe9S+kPtMEQkWbMWj4Eu4eURE5aizfcPMVjf/X+bte/UWJLH16W7RAe8aSqIO3JISTwDwXKxmztz10rSWleGT9B6pLVekMKloUxPydJH9SSTAk/fbwA0fw5SAQnt0RaIDgAJ1xQkMRxZsIZFKnvDcF2YdGngWIxNvyHxrDDiwoxSzF727FespP4whuqsIoViIo9i3/hDlC1DkmQc8pUyuhlaDi
+	quQX//S1LnmUQycxcz5EFk3SeRh0PZp8UVSsz57Kh3itquzvSCylpgC3tECTZ6+0O5LmpUOrTtziCP9dwLplPwKunpyLZNm2BBgkeqGVE0iTAzyKFSVQMiyh/WwPnY4PGEZ+J8K3PE86mrybmxDBu3J3sRi9pP26nGqt+LghehJ3Oe3bTKEiOtu2VaKsuB9IVaEheIF78EXjGBcGcdxZDujRDnjmezXOsO9VRzzazoUROx7jmiJciIWP0nr1ZN8sny0k5xbZ1+SOpipUxCJEVlRvPGFBs2tqyxMBvAOGY/lcFy55dp4ICF3CAwwWjATzwFxFk9fU8wqjtPugzugHa+xtFQC7k2UaT5qcN94IG7KYKY7nykV0VxO28UfhLnnRGP/l2WxaUxF9lcTouLOb00rAgnoLBTvQySG8pDPE+4d6SNQW3Sg0Z1zGlPnrZseayQqwkZ1qdbZXjxi4OZUumltQlOR/Xe6OGv+FNJ1lbPSKk3nQ+NqYNnrjFxBFkxtoH1XXx9IcQk3Kl0qllUS8Mrp5zc9wQkMB6OTxsBY9fglctmmqT0nVCffYvekBydt0
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(136003)(366004)(376002)(39860400002)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(2906002)(7416002)(5660300002)(6916009)(66946007)(66556008)(66476007)(54906003)(316002)(4326008)(8936002)(8676002)(478600001)(6512007)(6486002)(36756003)(38100700002)(86362001)(1076003)(26005)(6666004)(2616005)(83380400001)(41300700001)(6506007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kSBemLXY2oXSs/S/jVgy+ac5mnJM5fxbQezNsKFAeUrys820/aTf3+6XtOFI?=
- =?us-ascii?Q?G2vtkg07kBKjDJ9mbMisEo8Hf0PbgWyq3e0i1BGSRX6UqPH5Brz/iRmCJ/eC?=
- =?us-ascii?Q?hKkbOCJKxSPuRkMYHWMrGijJPosivem4vZ3S4vkENosaQHsJbAv/aZOwAcYn?=
- =?us-ascii?Q?nDcLd9pT8MWPyUXzRt15aNgutuY0W8fE8k9WFNbAhAhmkhn6RZ1BP8b3qJvV?=
- =?us-ascii?Q?6cX3k3LKTd9sIx2ogk702zqhQS8HIFvfM09xkn9xh9SoGQz4BKzLio3tew9Q?=
- =?us-ascii?Q?b4Cczu5Xef7ZO2XxoFyE/qN2xwIlQUH9/J0CJSLB5hc+e27cO4FOv8cqRN1g?=
- =?us-ascii?Q?snqluhdY1QeYpJifdmFSsF2vQ8o7yG5r9DbbvWMu7L7PqD0gGVq+yRUlMHP9?=
- =?us-ascii?Q?GA1t7v6DP12G6JLr5RrgofxtMPYLMaIpynW+o7QOEO61pyZ/x5t40mCUN3QB?=
- =?us-ascii?Q?MeQVKuFTARaHufV1mIyAASHio539aKADRL511CBLcdgs/dFji2wW0KLPfyoz?=
- =?us-ascii?Q?QXj3pbz/X3/tloVeMBWdGutWN+hVj/v7CoovZ2mQxsrWN2S9vfyFTjWtE00S?=
- =?us-ascii?Q?Uc9fiR1L0zaGAXLlwlaUsu6b5e9qktt0vAk2anrfsunsQnW5r1G7ZccDEGQ3?=
- =?us-ascii?Q?3esboTGmX+oIxT5SJpbVtXepOv6sLkkgYS3F0IIjHLCKAvsFZanU2pcNHgy5?=
- =?us-ascii?Q?Hysq9qqjdx0hZAf0K2Woxwo+M2/kO5LhKV0+Amo3DpfGcq4McZOt35k3/6/F?=
- =?us-ascii?Q?g9gqYZGLL60xP2WCd+DADcdtBedNNf6uOz5S0hBU8qkcX26e+wfdYZPUiz+Q?=
- =?us-ascii?Q?3wZnHoDvxhVaxD3L22e2eUFVsA/Syhdb2rGLsSphuqoo2Lr/KSN27rs12EEU?=
- =?us-ascii?Q?66rg2HoUFeTu4DTSk2Iman0QyPMp1iH7SLIkCDYILKmUWHwegC5CpM3VcClX?=
- =?us-ascii?Q?yyrXM7iwynKEDJ4bhA8GHg2WkC/M8EjH1oMMN1WGLJyzXOgA0qBfyU4cU+Wm?=
- =?us-ascii?Q?IYZG02TfuDJwbHjxqPn8oPrbJ4aK0Yg8qh32giZUjTYxuWpxjwI3gvxUsXvf?=
- =?us-ascii?Q?7F+eN2X2Tpq185meZ/qTtwAU7v6LvaTc5vNQZ+MjbkB0frrcyln3qA7rakzZ?=
- =?us-ascii?Q?ZwEB3Jhemaz4P3ywvAfoDL7owY8QiooxLexwoNdo+NBAm6q947tiR69jCMie?=
- =?us-ascii?Q?F4lyLrpGOIEy5PXuP5drTCXjPkGlHL8kOnPBO9bGhkqjhp3pykAjakSEd2Fe?=
- =?us-ascii?Q?LjSBKPELFXOW67ZIw3oJE90zTSWFHVbFXevAKHgD5Mm+NIhPJQqW1x2p/lKz?=
- =?us-ascii?Q?FpHF4GIstXy+PB2j8kUv+50knywbwEKd1dTChEv/5dfPReNndgO371ggYwaq?=
- =?us-ascii?Q?xiMrfVCXwGJczl0LfIO0HDvZSTqDvuMg3GatDkBRT+3GlrSSiSpzSlwaSpyU?=
- =?us-ascii?Q?7rG3upd+prbOq6h/flDBWRq1Yq4PGOET1bGN8xqoJEI4FoAD6BkN5oVwsNqK?=
- =?us-ascii?Q?PnmMH6AMJLPFv9nH6KyTMQvyapUpEsPrQ9IND4f3bbwU8TDWx9kgi9+Y1SzK?=
- =?us-ascii?Q?qCFzuIY6LmcHGPssyzPkEMG3DGnv723xgZwb/VNi?=
+	=?us-ascii?Q?ZOFVHxNVaDWZOdtMMDpYgTyYTsgOZAFLqb32Pvn3QB2fKD3+rHl5EC8spxIR?=
+ =?us-ascii?Q?lqcNbrd0GTa55fq8vi/ZOvwOuONA5Qup9C23RdgphDS6ShvIiVrwJoICgKtd?=
+ =?us-ascii?Q?MQykrxFm1JaZ4EKSyHxpctg/DUzZiNHm/sY9b/B/ASHVovku2NdT+hp1NcRg?=
+ =?us-ascii?Q?2btpQL+cNkr+LeZggudgh7U0lpscQ5ZEYF3RSxuJnrFM/4qw0fTfJty4e5Ni?=
+ =?us-ascii?Q?bae8KDt9jhenfiqIGnj2/LDPK5TqiY3Gebo8iDJCCWA8dt8LPrn2Wm169nC3?=
+ =?us-ascii?Q?mf51Yil5UmB/kOlim514Kd6thyeYj/b6LFs+/nx22BtpQIty29rDTLrpa9aR?=
+ =?us-ascii?Q?C0AkFsOZ07t72gXwn4wrWmlP5PHAGiFMJ1vzDdJSqliIaos9VR1tMeXarNEp?=
+ =?us-ascii?Q?0IA34g294Wf0bonukc5VnTcLdME1oM8/AaoeaLkp86MQ1h+jis7t8IpejlTy?=
+ =?us-ascii?Q?+YFe4TSJE/4CEx1N3QTqjmldemsr9jYCYCQKega3bVm1jUvyV6yHRFdGrphp?=
+ =?us-ascii?Q?Y1nfDpBXIQXJQBsuFHOuY6FtTVtQSy01lX4igV3pldGCxg3veZw09N097Xgq?=
+ =?us-ascii?Q?4LEytIQB5oCIJRjcR+0Kzy1aldPrn5zYFZSuTVPU0+T8itwndo6yE/8JRDvA?=
+ =?us-ascii?Q?gcskhYG5tsZZCha8ia1y8cqZIgBNl4jQpx/2PPkAXxozT4fgKL3ngBv9ogw9?=
+ =?us-ascii?Q?cettWyJhQMlDkRjWhj5kcKbc4En4qbwvG90gIfMjEIIY100eby3KJAxgMvyg?=
+ =?us-ascii?Q?8uLQMpEDdqA7GChb0bz3dwjK4FFPfTG1ld9zkQmhAsECZ56XTnNy0ld93wLD?=
+ =?us-ascii?Q?Mrq1AKe3LQqs1mFEBzWWtrrGotwXiG0Lh5FYWqqY3it7g82EAJVbw6SWlo9M?=
+ =?us-ascii?Q?0czJ+xabxRuNiUVgoP/yU8CEfUDBFgfgaSdK6KtrPCnlP64yW5N24POQ0Gq3?=
+ =?us-ascii?Q?boe18pSdAmsAIF76zCWGPa02R3dnVQrg9ceAzkqMHNBOT2Jv9DG45n/mWe7u?=
+ =?us-ascii?Q?/HtC8BJkfCs+nmtpDIDaI2v/qYive4/gOBi2zQaTVHy14a+AsRPcd5lzspdL?=
+ =?us-ascii?Q?mFsx6uC84yTlknrXy6iTAVeyAGMcUxw3yBblcIxZ2rWqeqeNA4JhsISYt+zh?=
+ =?us-ascii?Q?Wb7SvHaUrWvIO7F6iffBYUrfBSHFVw5/GMdeWkS/b0PutI74ILIjLScQ+/c4?=
+ =?us-ascii?Q?+NjiXvqiNzWMg4OXxqL2rMxDL+n0tskw6KjymxXJAlWuCTZ/0PamPN5vpNSI?=
+ =?us-ascii?Q?EaCbH3dajecdasnLFMm2YcO6sPv3o72BscKQY9u4wfE+0ddA7o/d1ihSJ9XE?=
+ =?us-ascii?Q?YifRfFod9X7n+O6g3dm5i2ua4tLdn2ZG2aNW55xl9OVZnaa4hgeC2DuS3qlf?=
+ =?us-ascii?Q?fKlnSgSN5iCt9GP0fbrQZTl3SB2p0xbCvLO7NWc0/1Au3/OD0MtkyLXdTBOJ?=
+ =?us-ascii?Q?zP9rpim6Cbmy5jss4AZn7gX1EIwJMrXNvh5anBls+Fk6Vzcux1VPfaxDWisx?=
+ =?us-ascii?Q?u6OC6KRjDRgZKhAj30vNcj7LUX6xpnxCR/DCcIbzQXuXiQPNKPCRmPteyVa0?=
+ =?us-ascii?Q?gMjx4bOGbv3GMBm//7y0GQ2xphzPg2+t6hreDbRj?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60523cbc-d8d3-4d1c-07fd-08dc1cfe4bd5
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4b87f8f-e5ac-4698-a497-08dc1cfe4cac
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4373.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2024 17:02:50.0484
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2024 17:02:51.4855
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r+E3h4muFJRuJebzk5qCb4/+bnRolE0SuKZXMlldC8CDS35WxmXAN0n5nP6v7iVlyWwf4IsdgQT4/HziHKA3lA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: /u0rrdNjOqBz8miURDK/JKEem/KT1gd9AOhMT0V9KKGLtjKcU/GGuLfOpi0BBhoyKMyjEThzsJc6w8hPnDFT1w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5935
 
-The dsa tests which are symlinks of tests from net/forwarding/ (like
-tc_actions.sh) become regular files after export (because `rsync
---copy-unsafe-links` is used) and expect to source lib.sh
-(net/forwarding/lib.sh) from the same directory.
+The following code which is part of lib.sh:
+relative_path="${BASH_SOURCE%/*}"
+if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
+       relative_path="."
+fi
 
-In the last patch of this series, net/forwarding/lib.sh will source lib.sh
-from its parent directory (ie. net/lib.sh). This would not work for dsa
-tests because net/lib.sh is not present under drivers/net/.
+reimplements functionality that is part of `dirname`:
+$ dirname ""
+.
 
-Since the tests in net/forwarding/ are not meant to be copied and run from
-another directory, as a preparation for that last patch, replace the test
-symlinks by a wrapper script which runs the original tests under
-net/forwarding/. Following from that, the links to shared library scripts
-in dsa/ are no longer used so remove them and add all the original files
-needed from parent directories to TEST_INCLUDES.
+To avoid this duplication, replace "relative_path" by "net_forwarding_dir",
+a new variable defined using dirname.
 
-Suggested-by: Hangbin Liu <liuhangbin@gmail.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+Furthermore, to avoid the potential confusion about what "relative_path" is
+about (cwd, test script directory or test library directory), define
+"net_forwarding_dir" as the absolute path to net/forwarding/.
+
 Tested-by: Petr Machata <petrm@nvidia.com>
 Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
 ---
- .../testing/selftests/drivers/net/dsa/Makefile  | 17 +++++++++++++++--
- .../drivers/net/dsa/bridge_locked_port.sh       |  2 +-
- .../selftests/drivers/net/dsa/bridge_mdb.sh     |  2 +-
- .../selftests/drivers/net/dsa/bridge_mld.sh     |  2 +-
- .../drivers/net/dsa/bridge_vlan_aware.sh        |  2 +-
- .../drivers/net/dsa/bridge_vlan_mcast.sh        |  2 +-
- .../drivers/net/dsa/bridge_vlan_unaware.sh      |  2 +-
- tools/testing/selftests/drivers/net/dsa/lib.sh  |  1 -
- .../drivers/net/dsa/local_termination.sh        |  2 +-
- .../selftests/drivers/net/dsa/no_forwarding.sh  |  2 +-
- .../drivers/net/dsa/run_net_forwarding_test.sh  |  9 +++++++++
- .../selftests/drivers/net/dsa/tc_actions.sh     |  2 +-
- .../selftests/drivers/net/dsa/tc_common.sh      |  1 -
- .../drivers/net/dsa/test_bridge_fdb_stress.sh   |  2 +-
- 14 files changed, 34 insertions(+), 14 deletions(-)
- delete mode 120000 tools/testing/selftests/drivers/net/dsa/lib.sh
- create mode 100755 tools/testing/selftests/drivers/net/dsa/run_net_forwarding_test.sh
- delete mode 120000 tools/testing/selftests/drivers/net/dsa/tc_common.sh
+ tools/testing/selftests/net/forwarding/lib.sh            | 9 +++------
+ tools/testing/selftests/net/forwarding/mirror_gre_lib.sh | 2 +-
+ .../selftests/net/forwarding/mirror_gre_topo_lib.sh      | 2 +-
+ 3 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/dsa/Makefile b/tools/testing/selftests/drivers/net/dsa/Makefile
-index c393e7b73805..83da1d721017 100644
---- a/tools/testing/selftests/drivers/net/dsa/Makefile
-+++ b/tools/testing/selftests/drivers/net/dsa/Makefile
-@@ -11,8 +11,21 @@ TEST_PROGS = bridge_locked_port.sh \
- 	tc_actions.sh \
- 	test_bridge_fdb_stress.sh
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 8a61464ab6eb..cf0ba4bfe50d 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -29,13 +29,10 @@ STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
+ TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
+ TROUTE6=${TROUTE6:=traceroute6}
  
--TEST_PROGS_EXTENDED := lib.sh tc_common.sh
-+TEST_FILES := \
-+	run_net_forwarding_test.sh \
-+	forwarding.config
+-relative_path="${BASH_SOURCE%/*}"
+-if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
+-	relative_path="."
+-fi
++net_forwarding_dir=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
  
--TEST_FILES := forwarding.config
-+TEST_INCLUDES := \
-+	../../../net/forwarding/bridge_locked_port.sh \
-+	../../../net/forwarding/bridge_mdb.sh \
-+	../../../net/forwarding/bridge_mld.sh \
-+	../../../net/forwarding/bridge_vlan_aware.sh \
-+	../../../net/forwarding/bridge_vlan_mcast.sh \
-+	../../../net/forwarding/bridge_vlan_unaware.sh \
-+	../../../net/forwarding/lib.sh \
-+	../../../net/forwarding/local_termination.sh \
-+	../../../net/forwarding/no_forwarding.sh \
-+	../../../net/forwarding/tc_actions.sh \
-+	../../../net/forwarding/tc_common.sh
+-if [[ -f $relative_path/forwarding.config ]]; then
+-	source "$relative_path/forwarding.config"
++if [[ -f $net_forwarding_dir/forwarding.config ]]; then
++	source "$net_forwarding_dir/forwarding.config"
+ fi
  
- include ../../../lib.mk
-diff --git a/tools/testing/selftests/drivers/net/dsa/bridge_locked_port.sh b/tools/testing/selftests/drivers/net/dsa/bridge_locked_port.sh
-index f5eb940c4c7c..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/bridge_locked_port.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/bridge_locked_port.sh
-@@ -1 +1 @@
--../../../net/forwarding/bridge_locked_port.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/bridge_mdb.sh b/tools/testing/selftests/drivers/net/dsa/bridge_mdb.sh
-index 76492da525f7..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/bridge_mdb.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/bridge_mdb.sh
-@@ -1 +1 @@
--../../../net/forwarding/bridge_mdb.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/bridge_mld.sh b/tools/testing/selftests/drivers/net/dsa/bridge_mld.sh
-index 81a7e0df0474..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/bridge_mld.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/bridge_mld.sh
-@@ -1 +1 @@
--../../../net/forwarding/bridge_mld.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/bridge_vlan_aware.sh b/tools/testing/selftests/drivers/net/dsa/bridge_vlan_aware.sh
-index 9831ed74376a..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/bridge_vlan_aware.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/bridge_vlan_aware.sh
-@@ -1 +1 @@
--../../../net/forwarding/bridge_vlan_aware.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/bridge_vlan_mcast.sh b/tools/testing/selftests/drivers/net/dsa/bridge_vlan_mcast.sh
-index 7f3c3f0bf719..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/bridge_vlan_mcast.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/bridge_vlan_mcast.sh
-@@ -1 +1 @@
--../../../net/forwarding/bridge_vlan_mcast.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/bridge_vlan_unaware.sh b/tools/testing/selftests/drivers/net/dsa/bridge_vlan_unaware.sh
-index bf1a57e6bde1..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/bridge_vlan_unaware.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/bridge_vlan_unaware.sh
-@@ -1 +1 @@
--../../../net/forwarding/bridge_vlan_unaware.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/lib.sh b/tools/testing/selftests/drivers/net/dsa/lib.sh
-deleted file mode 120000
-index 39c96828c5ef..000000000000
---- a/tools/testing/selftests/drivers/net/dsa/lib.sh
-+++ /dev/null
-@@ -1 +0,0 @@
--../../../net/forwarding/lib.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/local_termination.sh b/tools/testing/selftests/drivers/net/dsa/local_termination.sh
-index c08166f84501..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/local_termination.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/local_termination.sh
-@@ -1 +1 @@
--../../../net/forwarding/local_termination.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/no_forwarding.sh b/tools/testing/selftests/drivers/net/dsa/no_forwarding.sh
-index b9757466bc97..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/no_forwarding.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/no_forwarding.sh
-@@ -1 +1 @@
--../../../net/forwarding/no_forwarding.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/run_net_forwarding_test.sh b/tools/testing/selftests/drivers/net/dsa/run_net_forwarding_test.sh
-new file mode 100755
-index 000000000000..4106c0a102ea
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/dsa/run_net_forwarding_test.sh
-@@ -0,0 +1,9 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+libdir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
-+testname=$(basename "${BASH_SOURCE[0]}")
-+
-+source "$libdir"/forwarding.config
-+cd "$libdir"/../../../net/forwarding/ || exit 1
-+source "./$testname" "$@"
-diff --git a/tools/testing/selftests/drivers/net/dsa/tc_actions.sh b/tools/testing/selftests/drivers/net/dsa/tc_actions.sh
-index 306213d9430e..d16a65e7595d 120000
---- a/tools/testing/selftests/drivers/net/dsa/tc_actions.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/tc_actions.sh
-@@ -1 +1 @@
--../../../net/forwarding/tc_actions.sh
-\ No newline at end of file
-+run_net_forwarding_test.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/tc_common.sh b/tools/testing/selftests/drivers/net/dsa/tc_common.sh
-deleted file mode 120000
-index bc3465bdc36b..000000000000
---- a/tools/testing/selftests/drivers/net/dsa/tc_common.sh
-+++ /dev/null
-@@ -1 +0,0 @@
--../../../net/forwarding/tc_common.sh
-\ No newline at end of file
-diff --git a/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh b/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh
-index 92acab83fbe2..74682151d04d 100755
---- a/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh
-+++ b/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh
-@@ -19,7 +19,7 @@ REQUIRE_JQ="no"
- REQUIRE_MZ="no"
- NETIF_CREATE="no"
- lib_dir=$(dirname "$0")
--source "$lib_dir"/lib.sh
-+source "$lib_dir"/../../../net/forwarding/lib.sh
+ # Kselftest framework requirement - SKIP code is 4.
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
+index fac486178ef7..0c36546e131e 100644
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- cleanup() {
- 	echo "Cleaning up"
+-source "$relative_path/mirror_lib.sh"
++source "$net_forwarding_dir/mirror_lib.sh"
+ 
+ quick_test_span_gre_dir_ips()
+ {
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
+index 39c03e2867f4..6e615fffa4ef 100644
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
+@@ -33,7 +33,7 @@
+ #   |                                                                         |
+ #   +-------------------------------------------------------------------------+
+ 
+-source "$relative_path/mirror_topo_lib.sh"
++source "$net_forwarding_dir/mirror_topo_lib.sh"
+ 
+ mirror_gre_topo_h3_create()
+ {
 -- 
 2.43.0
 
