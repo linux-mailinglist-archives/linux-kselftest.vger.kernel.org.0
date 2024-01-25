@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-3563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4DB583C144
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 12:47:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8636183C260
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 13:15:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7933E1F2BEAE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 11:47:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17617B22B71
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 12:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0FB2CCBA;
-	Thu, 25 Jan 2024 11:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3DB945023;
+	Thu, 25 Jan 2024 12:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ihl++4Vx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dfDGjcho"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CCB2C6A1;
-	Thu, 25 Jan 2024 11:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EBC132C91;
+	Thu, 25 Jan 2024 12:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706183221; cv=none; b=E5ijn7w4oLhgz6FMBvU/2A4mR1IjrbN2LuPq8IQ+97z1a+1LzcALNI9/kOZrq3+HEnKvBPpeKDSzeps/lV2CDUjFZZEYqtBB+w0ztiHClsVzWtshhsTHXZg9kc1IhMq5jb6Ursk5hD0MNyD7aVg3OeGP864UqjDV7Dl3Bt31XQA=
+	t=1706184913; cv=none; b=PSdUbq4nLPRR5UnO3CNKeYB3p7oKZiX9eGj0rP/ylhaUQXYq9kTrtYdo1qvB8jtv7u7A9vWuHGsC6GtCe4NB1nK0TdjKJpXHJ3vF39W/AL5rmgaNpGql0fcakIO12INoKNKslwp6HpaaYlScH+WggjqzpiitORUJByEtoeYG9iY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706183221; c=relaxed/simple;
-	bh=/qY8+GO9uXyETM6l1xdCOFxzv90yJYBZM6zC5WJjGNs=;
+	s=arc-20240116; t=1706184913; c=relaxed/simple;
+	bh=0MQXl5mvTmeLTzTGvou1AzDpV1uX0rJdnRYCdYPetBA=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=u1mFInHS+XZuAN4ME189quwPsof5GqeJdYkuY2S2ieVfTsgZb/Q8Xeidsh/e75obxc56RIQ/2KtAQ4/wXkhr9XYkqgtXUeUmDvC3KbDGU3MVit4SGJivXeLYJCR5d1q4Y1Bcz82XoIFQnTsSJ6ary8QGr6WCbRVz9+iVMQGs9Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ihl++4Vx; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version:Content-Type; b=ZgNDLykEnakyjR+GoNi43jSz5NURSl22dMC4pOaY76fuGFb6xpPStyllOLtNKgKjNCTBbYOlfzAUVfS/zev/gpX+HlAXmtp8Jc0IXWWlSHZTpFg8AsymEsDy9pcfiEfsDKit9EVllkkesc6R+uMEhuJ669JrB05lVZM+0oOThwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dfDGjcho; arc=none smtp.client-ip=192.55.52.88
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706183220; x=1737719220;
+  t=1706184912; x=1737720912;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=/qY8+GO9uXyETM6l1xdCOFxzv90yJYBZM6zC5WJjGNs=;
-  b=Ihl++4Vx3Fm6mMjrC9ZIUx+0xKLMki7gAhTj/aY5BRqkeEhVfJZcbrwL
-   DkernGUZjYmVSi7NcNRE3KnEIcuTPFkIUV4jkuawguctHbSGpOQ45eB1p
-   9gu9/5n9c3WenGSMW15aEUA6HRpDtnXzAsdkkeCE2omQRr/v1c58IazF+
-   6iY0oXpcHl3/9WDaH1LUDGUpOl7oC2lI4CPU7ONS/q7PsRkC5kVO97wsI
-   HXWeZaJTIS8xiZIIsydCW+dUo70NTZy/R3vN2Nk8fzm3eFHyez0lETJ74
-   bu2fUsZ0tE8ZnN6iwLkrjt+STikPAoLohJLUv0YNUsacuc3QIp7tXbbjq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="20687227"
+  bh=0MQXl5mvTmeLTzTGvou1AzDpV1uX0rJdnRYCdYPetBA=;
+  b=dfDGjchoo8hxeH+gCz7+O0njqd6c2XrNz7Pv8yfmr71caUbZeIKPZr5T
+   cOEL8UjjmQHDEqUEiiAOUdHyYf4DwyQD2d1qpOuluqaw3W+jGAXezP/ga
+   0MIPWGMa+OtwXB156J/qmijXYWOYvoZQP2QVfOSaQSOpbDvOqKHG5OzU9
+   l+ZtXK5mpS0U3vgIpY028c8kyYtB289wp+0ObReQ1/MgvD6v0RXuImwLM
+   BdMivFFHnMGlEAoB1mu8GqO/4I56zfPwSiaCYTI/c/qHhfGSwk2DfZSLw
+   wwXQaa7q9TIUfwKuk3MeEbVVI3Pjh8XrQUi2JsgoyihjQaJT0PleG4Nkj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="433298523"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="20687227"
+   d="scan'208";a="433298523"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 03:46:59 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 04:15:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2228958"
+   d="scan'208";a="2232774"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.94.252.55])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 03:46:57 -0800
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 04:14:59 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 25 Jan 2024 13:46:51 +0200 (EET)
+Date: Thu, 25 Jan 2024 14:14:55 +0200 (EET)
 To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-cc: Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org, 
-    fenghua.yu@intel.com, LKML <linux-kernel@vger.kernel.org>, 
+cc: Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com, 
+    shuah@kernel.org, LKML <linux-kernel@vger.kernel.org>, 
     linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] selftests/resctrl: Split
- validate_resctrl_feature_request()
-In-Reply-To: <415cc65c113143c833ca2eaacd3a03c285c2e841.1706180726.git.maciej.wieczor-retman@intel.com>
-Message-ID: <62310cc5-7756-61a2-9529-8ae0fc247c21@linux.intel.com>
-References: <cover.1706180726.git.maciej.wieczor-retman@intel.com> <415cc65c113143c833ca2eaacd3a03c285c2e841.1706180726.git.maciej.wieczor-retman@intel.com>
+Subject: Re: [PATCH v3 2/5] selftests/resctrl: Add helpers for the non-contiguous
+ test
+In-Reply-To: <85b1efc3ddd698b3ac81aa72a6dc987ee17da3e2.1706180726.git.maciej.wieczor-retman@intel.com>
+Message-ID: <ea9b0e06-c07e-eb4b-9e7d-ed20419b677d@linux.intel.com>
+References: <cover.1706180726.git.maciej.wieczor-retman@intel.com> <85b1efc3ddd698b3ac81aa72a6dc987ee17da3e2.1706180726.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,77 +75,109 @@ Content-Type: text/plain; charset=US-ASCII
 
 On Thu, 25 Jan 2024, Maciej Wieczor-Retman wrote:
 
-> validate_resctrl_feature_request() is used to test both if a resource is
-> present in the info directory, and if a passed monitoring feature is
-> present in the mon_features file.
+> The CAT non-contiguous selftests have to read the file responsible for
+> reporting support of non-contiguous CBMs in kernel (resctrl). Then the
+> test compares if that information matches what is reported by CPUID
+> output.
 > 
-> Refactor validate_resctrl_feature_request() into two smaller functions
-> that each accomplish one check to give feature checking more
-> granularity:
-> - Resource directory presence in the /sys/fs/resctrl/info directory.
-> - Feature name presence in the /sys/fs/resctrl/info/L3_MON/mon_features
->   file.
+> Add a generic helper function to read an unsigned number from a file in
+> /sys/fs/resctrl/info/<RESOURCE>/<FILE>.
 > 
 > Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 > ---
 > Changelog v3:
-> - Move new function to a separate patch. (Reinette)
-> - Rewrite resctrl_mon_feature_exists() only for L3_MON.
+> - Rewrite patch message.
+> - Add documentation and rewrote the function. (Reinette)
 > 
 > Changelog v2:
 > - Add this patch.
 > 
->  tools/testing/selftests/resctrl/cmt_test.c  |  4 +--
->  tools/testing/selftests/resctrl/mba_test.c  |  4 +--
->  tools/testing/selftests/resctrl/mbm_test.c  |  6 ++--
->  tools/testing/selftests/resctrl/resctrl.h   |  3 +-
->  tools/testing/selftests/resctrl/resctrlfs.c | 33 +++++++++++++--------
->  5 files changed, 30 insertions(+), 20 deletions(-)
+>  tools/testing/selftests/resctrl/resctrl.h   |  1 +
+>  tools/testing/selftests/resctrl/resctrlfs.c | 39 +++++++++++++++++++++
+>  2 files changed, 40 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> index dd5ca343c469..428de9df81c8 100644
-> --- a/tools/testing/selftests/resctrl/cmt_test.c
-> +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> @@ -169,8 +169,8 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
->  
->  static bool cmt_feature_check(const struct resctrl_test *test)
->  {
-> -	return test_resource_feature_check(test) &&
-> -	       validate_resctrl_feature_request("L3_MON", "llc_occupancy");
-> +	return resctrl_mon_feature_exists("llc_occupancy") &&
-> +	       resctrl_resource_exists("L3");
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> index a1462029998e..5116ea082d03 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -162,6 +162,7 @@ unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
+>  int get_full_cbm(const char *cache_type, unsigned long *mask);
+>  int get_mask_no_shareable(const char *cache_type, unsigned long *mask);
+>  int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size);
+> +int resource_info_unsigned_get(const char *resource, const char *filename, unsigned int *val);
+>  void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+>  int signal_handler_register(void);
+>  void signal_handler_unregister(void);
+> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+> index 5750662cce57..cb5147c5f9a9 100644
+> --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> @@ -249,6 +249,45 @@ static int get_bit_mask(const char *filename, unsigned long *mask)
+>  	return 0;
 >  }
 >  
->  struct resctrl_test cmt_test = {
-> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-> index da256d2dbe5c..e22285b80e37 100644
-> --- a/tools/testing/selftests/resctrl/mba_test.c
-> +++ b/tools/testing/selftests/resctrl/mba_test.c
-> @@ -170,8 +170,8 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
->  
->  static bool mba_feature_check(const struct resctrl_test *test)
->  {
-> -	return test_resource_feature_check(test) &&
-> -	       validate_resctrl_feature_request("L3_MON", "mbm_local_bytes");
-> +	return resctrl_resource_exists(test->resource) &&
+> +/*
+> + * resource_info_unsigned_get - Read an unsigned value from a file in
+> + * /sys/fs/resctrl/info/RESOURCE/FILENAME
+> + * @resource:	Resource name that matches directory names in
+> + *		/sys/fs/resctrl/info
+> + * @filename:	Filename of a file located in a directory specified with the
+> + *		'resource' variable.
+> + * @val:	Variable where the read value is saved on success.
+> + *
+> + * Return: = 0 on success, < 0 on failure. On success the read value is saved into the 'val'
+> + * variable.
+> + */
+> +int resource_info_unsigned_get(const char *resource, const char *filename,
+> +			       unsigned int *val)
+> +{
+> +	char reason[128], file_path[PATH_MAX];
+> +	FILE *fp;
+> +
+> +	snprintf(file_path, sizeof(file_path), "%s/%s/%s", INFO_PATH, resource,
+> +		 filename);
+> +
+> +	fp = fopen(file_path, "r");
+> +	if (!fp) {
+> +		snprintf(reason, sizeof(reason), "Error in opening %s file\n", filename);
+> +		ksft_perror(reason);
 
-I don't understand what's the advantage of converting away from 
-test_resource_feature_check() in CMT and MBA case?
+Was this the conclusion of the kstf_perror() discussion with Reinette? I 
+expected a bit different outcome when I stopped following it...
 
-> +	       resctrl_mon_feature_exists("mbm_local_bytes");
->  }
+In any case, it would be nice though if ksft_perror() (or some kselftest.h 
+function yet to be added with a different name) would accept full printf 
+interface and just add the errno string into the end of the string so one 
+would not need to build constructs like this at all.
 
-> @@ -756,7 +765,7 @@ bool validate_resctrl_feature_request(const char *resource, const char *feature)
->  
->  bool test_resource_feature_check(const struct resctrl_test *test)
->  {
-> -	return validate_resctrl_feature_request(test->resource, NULL);
-> +	return resctrl_resource_exists(test->resource);
+It will require a bit of macro trickery into kselftest.h. I don't know how 
+it should handle the case where somebody just passes a char pointer to it, 
+not a string literal, but I guess it would just throw an error while 
+compiling if somebody tries to do that as the macro string literal 
+concatenation could not build useful/compilable token.
 
-...The replacement in MBA open coded test_resource_feature_check() 100% 
-and CMT even replaces the test->resource with the string matching to 
-what's in test->resource?
+It would make these prints informative enough to become actually useful 
+without needed to resort to preparing the string in advance which seems
+to be required almost every single case with the current interface.
 
+> +		return -1;
+> +	}
+> +
+> +	if (fscanf(fp, "%u", val) <= 0) {
+> +		snprintf(reason, sizeof(reason), "Could not get %s's contents\n", filename);
+> +		ksft_perror(reason);
+> +		fclose(fp);
+> +		return -1;
+> +	}
+> +
+> +	fclose(fp);
+> +	return 0;
+> +}
+> +
+>  /*
+>   * create_bit_mask- Create bit mask from start, len pair
+>   * @start:	LSB of the mask
+> 
 
 -- 
  i.
