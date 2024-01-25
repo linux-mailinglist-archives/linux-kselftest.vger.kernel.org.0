@@ -1,218 +1,113 @@
-Return-Path: <linux-kselftest+bounces-3550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C2FC83BBA8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 09:18:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5B2783BBCB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 09:23:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1854A1F21AA3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 08:18:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59B37B253A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 08:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2E0175A5;
-	Thu, 25 Jan 2024 08:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2BA8175BC;
+	Thu, 25 Jan 2024 08:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TFix/3bw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fYO+CH9p"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF7D17582
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jan 2024 08:18:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69439175A5
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jan 2024 08:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706170695; cv=none; b=Eq/A9S5aTENOYdX131YlrFSq3Pbuee/yiRs4Pjbi3Zl5jnkD46+jFlLoNFGTMbx2F+shWbrIHJpgdY45jbr9LWavFkK89JHy8KVKJCfmCvui3fGS0qqjPqCUwCQg+iMTEHqg5IIokaD2KHHJu1Nlq/b0hgTWPPg4A5U6H4D7lxo=
+	t=1706170997; cv=none; b=VrvSCI8BVGWrs0jrBEIFHlxVtJALXk79NykgotY8r+advyKfTLnXtnq3N1ZfQYzKV9/py+Vo2fe2S6Bz4AnRgOJDVr1gjaPoepFMBW+Nch584/TTBEi/Mv1w6q0WSGKC282vRjqiyCRt6INQv1k3x5jpgJKBrpNjmidk+iXfxbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706170695; c=relaxed/simple;
-	bh=1Cdj96ruUWkOMFCx+HXr5U6F+uD2KtXlvHZKAxRf9bU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W6DTSACOeD9g586+7b9SumRjgqxNTY8EMJmRaJVYAzkwloQuYoq0bpx4DaNefLbOOhgt04XVrY18l+GDZKHCQG6WY04adBhg1S8KYc3rgESbJTzxFL/nJs32oNv4ePUeDgSSzdBQe9GOiDcVvWGBgpCMFsA7VRD7ZeRW01GXAs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TFix/3bw; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1706170997; c=relaxed/simple;
+	bh=6ij1nPsqsLT0aiLZc+qpWehy7jFch9bLHlKcgWHJR7E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZlJao9XiOQ9xsCoo6xmGV96zplW41xVr/6Kfy7CMe2NHfg4pJBZF+C/mevaYX3w4L9McmaYt8HIgvz8zkp3V/Z7pH7wsBl7x8nniOCKXVB0qFKshQnP6WtStOgxZmhgfnZvyaKO7XKG/CjDdli5VXINZBrJ/8Axa4y7RZEZW4mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fYO+CH9p; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706170693;
+	s=mimecast20190719; t=1706170995;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=uXqJgm/c2OUlFe0pydromqbBJfahkXAhDOZB8V8CPy0=;
-	b=TFix/3bwqCJi/Bmefa54vWyP3vmv+ARAV4oXl5gUkd8psdNuT2MgIN07yIsuJLcH/UVZlf
-	e0foH/DRzzLeQj2DvjTeaw5e9S6NbrWQPxs5qDCcaVaBWMQq2Q5I8gzPlZbBqYlgPzaCw4
-	Pggblqn+zETf31F+ZVfMaYlWFi3wYbg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SnCvL7ZAoQrqIVXvpy75zP/zLF9aHXV+3CjMG/egejE=;
+	b=fYO+CH9pwlgnRI1dih9JazsfPVguWK2mUZ7Zdr2gl8WILMZR8jDQRqP0NGRJjvDFvbJfIf
+	95ipc/pqkXjZH5AfvQ1paMBwJqxWWM4s4n7ZmjLPUl6BTRLc0E+WLUPXydaQqG273Y3KCU
+	Y+D9uERKvjI8XkOjL5AJRqV5F4B/CJo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-295-P6MaKZ-3OBasgfIwRCnQ8Q-1; Thu, 25 Jan 2024 03:18:11 -0500
-X-MC-Unique: P6MaKZ-3OBasgfIwRCnQ8Q-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40e8810b5f3so61021585e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jan 2024 00:18:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706170691; x=1706775491;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uXqJgm/c2OUlFe0pydromqbBJfahkXAhDOZB8V8CPy0=;
-        b=QrTwJKmMiDF8Oa77jl/SM+Pk27OP1NBuUyWIBjS+T5KKgb8BlJgKSf0UGhJyuRQ1M2
-         rj0fKvb0zDUHfxLQWDQMB9UFMN+7r9Mpz/71dwpJFGx2Wc8+5cTgXfMSexEK7If6bbIg
-         F9POSFL63tA20sJkbUCcRuoD5gy0H95jaL/IXPRV/6Wbot2weZFhimBeMt/YA2GzRlCW
-         CEmqgy62zrYDNJQ/2KcY4V8/lesK/BVw3zVeDexi3T3vk56+O3oVWs6DUCyhyhFXJ+bH
-         32KepovxixVE/yqKHfnDAmBlIwIbVoDq91LqYbnd0AaKpQdiqnqHd2I4oA3yNkjzws7U
-         yieA==
-X-Gm-Message-State: AOJu0Yz2IMA8BeCnNOW6GFNr5ILi/dmpnQrzmnS4QyIb9qfmzb2oFImS
-	Lk+utF5JXnyS55VZwc8SMZV+RTOY7Sq1dWz+I2MKqt8HK83St40ICg6GSme/0meVbdiUAjNmc8I
-	Cf4g9tgamJAnoKcMyjKN2eII1fdAVOirE2B/2/r+/3Mls4hAjSQSFhZErwTbA6S3Nkw==
-X-Received: by 2002:a05:600c:c8b:b0:40e:4b11:663d with SMTP id fj11-20020a05600c0c8b00b0040e4b11663dmr267221wmb.66.1706170690819;
-        Thu, 25 Jan 2024 00:18:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEshtEkNFMkm00s60/JsUTo/oUqMCiWSuFJI5nmGq2+g7C4FvJZO0iTHAUzos0dIk+wNed0Hw==
-X-Received: by 2002:a05:600c:c8b:b0:40e:4b11:663d with SMTP id fj11-20020a05600c0c8b00b0040e4b11663dmr267209wmb.66.1706170690365;
-        Thu, 25 Jan 2024 00:18:10 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70a:7600:9a0b:ceef:a304:b9a7? (p200300cbc70a76009a0bceefa304b9a7.dip0.t-ipconnect.de. [2003:cb:c70a:7600:9a0b:ceef:a304:b9a7])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05600c4fce00b0040d30af488asm1658538wmq.40.2024.01.25.00.18.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jan 2024 00:18:09 -0800 (PST)
-Message-ID: <2f34f6aa-99fa-4545-b706-a1d50864f9e9@redhat.com>
-Date: Thu, 25 Jan 2024 09:18:07 +0100
+ us-mta-107-XmBiM_X6NA2iTe4BqmPlxg-1; Thu, 25 Jan 2024 03:23:09 -0500
+X-MC-Unique: XmBiM_X6NA2iTe4BqmPlxg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C49E885A58B;
+	Thu, 25 Jan 2024 08:23:08 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.45.224.166])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3168948B;
+	Thu, 25 Jan 2024 08:23:07 +0000 (UTC)
+From: Paolo Abeni <pabeni@redhat.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Maciej enczykowski <maze@google.com>,
+	Lina Wang <lina.wang@mediatek.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: net: add missing required classifier
+Date: Thu, 25 Jan 2024 09:22:50 +0100
+Message-ID: <7c3643763b331e9a400e1874fe089193c99a1c3f.1706170897.git.pabeni@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 09/28] mm: abstract shadow stack vma behind
- `arch_is_shadow_stack`
-Content-Language: en-US
-To: debug@rivosinc.com, rick.p.edgecombe@intel.com, broonie@kernel.org,
- Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
- ajones@ventanamicro.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
- conor.dooley@microchip.com, cleger@rivosinc.com, atishp@atishpatra.org,
- alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com
-Cc: corbet@lwn.net, aou@eecs.berkeley.edu, oleg@redhat.com,
- akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
- shuah@kernel.org, brauner@kernel.org, guoren@kernel.org,
- samitolvanen@google.com, evan@rivosinc.com, xiao.w.wang@intel.com,
- apatel@ventanamicro.com, mchitale@ventanamicro.com, waylingii@gmail.com,
- greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
- shikemeng@huaweicloud.com, charlie@rivosinc.com, panqinglin2020@iscas.ac.cn,
- willy@infradead.org, vincent.chen@sifive.com, andy.chiu@sifive.com,
- gerg@kernel.org, jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
- ancientmodern4@gmail.com, mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
- bhe@redhat.com, chenjiahao16@huawei.com, ruscur@russell.cc,
- bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il,
- zhangqing@loongson.cn, catalin.marinas@arm.com, revest@chromium.org,
- josh@joshtriplett.org, joey.gouly@arm.com, shr@devkernel.io,
- omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com,
- linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-10-debug@rivosinc.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240125062739.1339782-10-debug@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On 25.01.24 07:21, debug@rivosinc.com wrote:
-> From: Deepak Gupta <debug@rivosinc.com>
-> 
-> x86 has used VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) to encode shadow
-> stack VMA. VM_SHADOW_STACK is thus not possible on 32bit. Some arches may
-> need a way to encode shadow stack on 32bit and 64bit both and they may
-> encode this information differently in VMAs.
-> 
-> This patch changes checks of VM_SHADOW_STACK flag in generic code to call
-> to a function `arch_is_shadow_stack` which will return true if arch
-> supports shadow stack and vma is shadow stack else stub returns false.
-> 
-> There was a suggestion to name it as `vma_is_shadow_stack`. I preferred to
-> keep `arch` prefix in there because it's each arch specific.
-> 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->   include/linux/mm.h | 18 +++++++++++++++++-
->   mm/gup.c           |  5 +++--
->   mm/internal.h      |  2 +-
->   3 files changed, 21 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index dfe0e8118669..15c70fc677a3 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -352,6 +352,10 @@ extern unsigned int kobjsize(const void *objp);
->    * for more details on the guard size.
->    */
->   # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
-> +static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
-> +{
-> +	return (vm_flags & VM_SHADOW_STACK);
-> +}
->   #endif
->   
->   #ifdef CONFIG_RISCV_USER_CFI
-> @@ -362,10 +366,22 @@ extern unsigned int kobjsize(const void *objp);
->    * with VM_SHARED.
->    */
->   #define VM_SHADOW_STACK	VM_WRITE
-> +
-> +static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
-> +{
-> +	return ((vm_flags & (VM_WRITE | VM_READ | VM_EXEC)) == VM_WRITE);
-> +}
-> +
+the udpgro_fraglist self-test uses the BPF classifiers, but the
+current net self-test configuration does not include it, causing
+CI failures:
 
-Please no such hacks just to work around the 32bit vmflags limitation.
+ # selftests: net: udpgro_frglist.sh
+ # ipv6
+ # tcp - over veth touching data
+ # -l 4 -6 -D 2001:db8::1 -t rx -4 -t
+ # Error: TC classifier not found.
+ # We have an error talking to the kernel
+ # Error: TC classifier not found.
+ # We have an error talking to the kernel
 
+Add the missing knob.
+
+Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+---
+ tools/testing/selftests/net/config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 8da562a9ae87..ca4423ee6dc9 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -42,6 +42,7 @@ CONFIG_MPLS_ROUTING=m
+ CONFIG_MPLS_IPTUNNEL=m
+ CONFIG_NET_SCH_INGRESS=m
+ CONFIG_NET_CLS_FLOWER=m
++CONFIG_NET_CLS_BPF=m
+ CONFIG_NET_ACT_TUNNEL_KEY=m
+ CONFIG_NET_ACT_MIRRED=m
+ CONFIG_BAREUDP=m
 -- 
-Cheers,
-
-David / dhildenb
+2.43.0
 
 
