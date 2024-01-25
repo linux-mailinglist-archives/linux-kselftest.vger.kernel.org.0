@@ -1,110 +1,92 @@
-Return-Path: <linux-kselftest+bounces-3504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17ADA83B675
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 02:15:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F234A83B6CE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 02:45:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C12FC1F231AC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 01:15:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA6942860D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 01:45:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E37ECC;
-	Thu, 25 Jan 2024 01:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D81DECC;
+	Thu, 25 Jan 2024 01:45:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hMOeMQzy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXom1+Jy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA1D636;
-	Thu, 25 Jan 2024 01:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D22F1369;
+	Thu, 25 Jan 2024 01:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706145339; cv=none; b=H8zeMf5BG7W0c3jWJBR0v4hprAQzJ0RAA7O6rn7dOwGnTnazesryKjSiQqmNbNkByYJg40i3Scb8iNXVZIg+0KnetvJhpijiY++fa3Py4Fo+u7SA2f38IE/zNlL7pPjUzb0Ij4EmSESJ+rCtN9I89sFobsI+MZJbNuWk6t/nVdM=
+	t=1706147149; cv=none; b=YWimmu1Ce8smdRC8icX9YQZT5uToJYWtgKRvxNXEULT8eepmhL2TJSdk0W/vPbz062Xwb95flLpvhceBv0/bo2mjRv5tNeOq2ByvjNnx4eQCM5zEh9BMCZ8xpPt4+KfZTj0pIA2jJWyd8XU+aTA5RFzD06EykQXIWCB5dNJGPXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706145339; c=relaxed/simple;
-	bh=VBeXYBZis91k3cPZTSipANekOuqKDrI3JcgmDPQThqs=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Lbko5CnOvAvXoVniAiTl7hhMHRs4/ej18TwCgSy+zj1HMZ70Us3GtNH810N7R2k9jmFggFU6I9Gb21/x43Pg8VTzrzbBVpq0fwq4BTrw2TsG5SvXKd73mD5o7Fz43txJLVLLM6gTgsSz8Q8sx6d3cA0jcBHRkHV9l+SXOvM427Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hMOeMQzy; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-78315243c11so397158785a.3;
-        Wed, 24 Jan 2024 17:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706145337; x=1706750137; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wCGVYud7xBqXIPvanc3yk8t0TN4BtyxL4UlXQe7cir4=;
-        b=hMOeMQzyNrd9SM4EZ/rAPLM2tiO5t5vvLAnKh+SW0lymFn1e0ZA1zrCCpAzm+r9PrD
-         g1UOLs8+Yi/aCrbHrWJ2NBrLZwmAS+RNqbAdAX1o8l0I3agpxvBDqEh//t0orKLnkjQ8
-         6WZhziYxwuYMGO1B8kNYQJ25lIZGjWCSMNoEaWjLd3tOz4bQz69yyqJuk+mXXo1idLpf
-         tXEcKiSJAO7h2yXdb9pdI3kZz/5MismHy4M6bbJVvN0aBaYEebGV5v9axtUedSfvz8Qx
-         vjnQHfU7E0R6WT/7WVvaQ23dLyARTaOpZ7vlq785aWwIR2R4F7czmj9VSALNEWPMjweq
-         XWQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706145337; x=1706750137;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wCGVYud7xBqXIPvanc3yk8t0TN4BtyxL4UlXQe7cir4=;
-        b=s2WLgZmudMHnBy2qgnZM6dOy8iTDqekLLCnq1m3te56TuSvFauQJegjQyM6rXYBecf
-         9umhkslgvKm4XV5ruq/F7arUjoM7yiB0ZXFpOdgsNW4qt9vJe97KnY9uCBIAFc3GZD+s
-         oPkBan0SnEk5cu/FkqsqX5t4TVLLVNehuodDGKxCov087VEo8/mDvWnIqJDYPPXHgYnF
-         9gX9tiQw6gnxoPg2yih/tlhSFKkJpt6kg8idyTTjgtMlwVO8ZF1Xla82CgjV4wfyMXxe
-         x2soSKirlCwDmob76Sf4f8+canswKFiShR6sqipzH2lw6Cd8KM/rspRWWjIOqws2Sk5H
-         6Epw==
-X-Gm-Message-State: AOJu0YyctMh5P1fTuNA6V2HchknwIjbAMpyHQ7WLWmH/Z351oM0yilWG
-	UmKTTQHvif2Z+i26j2pCqt4U7II1GdHfQ9iMOajVFiMDKpnuAQ6m
-X-Google-Smtp-Source: AGHT+IFun4XC6lyrcnVNQa6HrRGkVPucF6vHKipHAPYihwgQAQdR0pYMny2Iuc8d3KVUJbqDxJL4YQ==
-X-Received: by 2002:a05:620a:118d:b0:783:22a9:9cc1 with SMTP id b13-20020a05620a118d00b0078322a99cc1mr250965qkk.95.1706145336884;
-        Wed, 24 Jan 2024 17:15:36 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXCQv5gX6FznkvSOr4WFqx8UOmndsJD0tCsfnbo+jyGyR5TtiLWeGnb/GFQRt4XmbnEnQ59EgAN+5q2CwM3nsT7NK/9ClnkItgx7HDlyxEHrt4k2WgO1x942dPfbHqClePaeH43RPo77KMLVB89mCEB5N59QQYmPnaHtXtEzPhCx0jYSXeBTDJdLKDUl2mgfd4TOv7hkPyp7ESbwDW+uHF8Xm5mJrJa8/NbweHrHzG3NZzvGkRigl8lWMqxsyjmC27ktGArKVjpqg==
-Received: from localhost (131.65.194.35.bc.googleusercontent.com. [35.194.65.131])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05620a123000b0078391bc0fddsm4554851qkj.77.2024.01.24.17.15.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jan 2024 17:15:36 -0800 (PST)
-Date: Wed, 24 Jan 2024 20:15:36 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Willem de Bruijn <willemb@google.com>, 
- Lucas Karpinski <lkarpins@redhat.com>, 
+	s=arc-20240116; t=1706147149; c=relaxed/simple;
+	bh=AHVxcRAPR6j6IDs89kAwDqotYq3t/0Kc95kcISPXyck=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oqlZgTag4TXUuM9GyCwm6CoQI+vjXnAsWyi8FxFQ5XDj/Z7H3hD2nD3TRaUudRpec7V1y4rml6A+MTMZyazlbNeDDZLpWYe4DZ8XjntWwmLLyNk1m90q0XCCraLSg/VslJcCTWKxW9dZIz619wcSc2a5TvWD8tyzBuAXVfOzYq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXom1+Jy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9192FC433F1;
+	Thu, 25 Jan 2024 01:45:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706147149;
+	bh=AHVxcRAPR6j6IDs89kAwDqotYq3t/0Kc95kcISPXyck=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oXom1+Jyy95p+9ZapmImf9CsVaPyt5ZfVCADIqTGwbhUHmNpXnJrpXjm6wwrZRFn2
+	 RxFLVojakgH7We3m+d7qL1ZOSj5Qgbn5x/yMjJH7rjx/t5gTiF+bQafltjxm0k2A2g
+	 GzvESYT2MK7cb5e4ZJXj3dZLXQNYr8CMsFTGM2lnvahncYiIJAQ163LP5fIYlR60My
+	 v3nLd26TREm+SO+WpV5unGsdlX0+hPqcwbCwmf5h0p9T5BksNmOVT1kLdcMEcP6Psa
+	 VLgqTaPGEd6HJBbdpm4lodn/SmcAwzupKy/P1/cv519tGNs7W8lJiaZyC09KAQMJoo
+	 i4lAYa6Pd1JVg==
+Date: Wed, 24 Jan 2024 17:45:47 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>, Willem de
+ Bruijn <willemb@google.com>, Lucas Karpinski <lkarpins@redhat.com>,
  linux-kselftest@vger.kernel.org
-Message-ID: <65b1b6386e1da_2505602943@willemb.c.googlers.com.notmuch>
-In-Reply-To: <4d58900fb09cef42749cfcf2ad7f4b91a97d225c.1706131762.git.pabeni@redhat.com>
+Subject: Re: [PATCH net 0/3] selftests: net: a few fixes
+Message-ID: <20240124174547.3325d7bb@kernel.org>
+In-Reply-To: <cover.1706131762.git.pabeni@redhat.com>
 References: <cover.1706131762.git.pabeni@redhat.com>
- <4d58900fb09cef42749cfcf2ad7f4b91a97d225c.1706131762.git.pabeni@redhat.com>
-Subject: Re: [PATCH net 3/3] selftests: net: explicitly wait for listener
- ready
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Paolo Abeni wrote:
-> The UDP GRO forwarding test still hard-code an arbitrary pause
-> to wait for the UDP listener becoming ready in background.
+On Wed, 24 Jan 2024 22:33:19 +0100 Paolo Abeni wrote:
+> This series address self-tests failures for udp gro-related tests.
 > 
-> That causes sporadic failures depending on the host load.
+> The first patch addresses the main problem I observe locally - the XDP
+> program required by such tests, xdp_dummy, is currently build in the
+> ebpf self-tests directory, not available if/when the user targets net
+> only. Arguably is more a refactor than a fix, but still targeting net
+> to hopefully 
 > 
-> Replace the sleep with the existing helper waiting for the desired
-> port being exposed.
+> The second patch fixes the integration of such tests with the build
+> system.
 > 
-> Fixes: a062260a9d5f ("selftests: net: add UDP GRO forwarding self-tests")
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> Patch 3/3 fixes sporadic failures due to races.
+> 
+> Tested with:
+> 
+> make -C tools/testing/selftests/ TARGETS=net install
+> ./tools/testing/selftests/kselftest_install/run_kselftest.sh \
+> 	-t "net:udpgro_bench.sh net:udpgro.sh net:udpgro_fwd.sh \
+> 	    net:udpgro_frglist.sh net:veth.sh"
+> 
+> no failures.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+This series got into net-next-2024-01-25--00-00, looking at the outputs
+it turns out that the iproute2 was crashing somewhere in libbpf :(
+I rebuilt latest iproute2 without libbpf support. It loads xdp_dummy.o
+just fine, so hopefully that's good enough for now, we'll see for sure
+in about 3 hours :)
 
