@@ -1,151 +1,135 @@
-Return-Path: <linux-kselftest+bounces-3510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8227383B6EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 02:55:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E15E583B6FB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 03:04:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25A1B1F23ACE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 01:55:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EFDC28530A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 02:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE5F8495;
-	Thu, 25 Jan 2024 01:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C59467C68;
+	Thu, 25 Jan 2024 02:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="W1FBNt3P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E19A96FD1;
-	Thu, 25 Jan 2024 01:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA11417C2
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jan 2024 02:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706147675; cv=none; b=fFTyljvCtTaFJFAOZmuyoDyhru1pMOrS1lgyqoY3rnH9Q0+ko5kkA35r4H7GCnoLm9wBN2OEQA8u3SmthPiOpqdOusv587y4juFE76Zfybpdl2z9WfHcgIaQ/oQKOqun7q93ZnzbSVNlihulN1KNXN8LDKJwzJB6IvpFyw19Ras=
+	t=1706148281; cv=none; b=uaNPKrKfxVC4ZKC27YFPDVaoQXXBVO6/PmFwP8xTnzkRQWTwAoT3llegnT06AA2ZZ9rIadAmNwCzvjbTXXKvffT3S7mvM4CbsC3Ln1qXkQYOzzEZ8+6+xIK6JW0e3Xo7qbajSw03s4UG4xYJayQpPQKhGWXs+VLNgLeWgL5pcAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706147675; c=relaxed/simple;
-	bh=Gd1Cx3E2E6sNmeQ8ukkg3HzkbrvNLJAwqO0BOOvV/s8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=C9GGEcIZl46uB9E2ygg0hLxw3vgdQes8p0/B1rKLu1DhPMC+i+2V2w4rbks0znNp+akyyeqyThZrpBAbvQRuYyqn+bT5XO0XWCa+K2nwgpl/k4XgosU+S5yJgT0T5CE0b2p1tq+7A6fmc/Zd9+QddCyLsRUxjxiGBYUeRZEpnsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8BxuvBXv7Fltj0FAA--.20271S3;
-	Thu, 25 Jan 2024 09:54:31 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxVMxMv7FlojkYAA--.45641S6;
-	Thu, 25 Jan 2024 09:54:30 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sean Christopherson <seanjc@google.com>
-Cc: Tianrui Zhao <zhaotianrui@loongson.cn>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 4/4] KVM: selftests: Add test cases for LoongArch
-Date: Thu, 25 Jan 2024 09:54:20 +0800
-Message-Id: <20240125015420.1960090-5-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20240125015420.1960090-1-maobibo@loongson.cn>
-References: <20240125015420.1960090-1-maobibo@loongson.cn>
+	s=arc-20240116; t=1706148281; c=relaxed/simple;
+	bh=x+wQbWdcVMPUodjzXD4SxE6xh1+yMDdy02y2PjiYLDY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=ZHZBP6G818drvJIMPzujJNdDttjZu4F6HlsqgAkMlNjxECjgRVYbYxQO0pqfk/hn3MDm0q4rtp3mlU5f3eciRCwsFFt3EruvYDBMjISLuNau71syjXPZnirIlDIUOQAnddiRDNJiTJqKurPxl7KhJR2KYb6/s4WWsvSzPABVJZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=W1FBNt3P; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-210a07b58f3so1816774fac.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jan 2024 18:04:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706148279; x=1706753079; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UXSbpxldRQwJaZgTsF93EIsC+O+YAl5Fx9J2K59JChI=;
+        b=W1FBNt3PElSYMwZujslmnPNk4xLXEy2d8Yx9shFMJ3n2EPg350uOdeJ9It6aF498Un
+         uxN+Nozn7NxOuHPQKwjVUVfqWhqsoQ3IpAjTHSNc7ufaAPXKV745Alz9Lubi+0WpdFXA
+         HtLNskxWuhqWaxO+CAvWWMGwpjddZN5+2qxYo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706148279; x=1706753079;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UXSbpxldRQwJaZgTsF93EIsC+O+YAl5Fx9J2K59JChI=;
+        b=PkGKx8c1gG5Fl8W7dp2RxCor4VsuVCgxapt6+BrPzQJcxPZhAxHyDU5HHTZll27bnx
+         ef6WoKHHtuVPxQ3Hhrxocw0Z9YmIgbP8k5xTJfBP2q0W7VGBRAd759e6+J1vsMhAUNUH
+         VMOT/yXnmMxtYRiBOc9yb4VkJO+B5/3jwl0KfDh2X82ZHrPGSVpT55id42P4plIqCe/8
+         2AdK0SGGVCDxxEpI9kiapDTki0S7HrIqFOVCTUyA54ERTZwLWNBdQRuicjGXDhjJJfzW
+         uC0wDGQDtXKqA+mgUE3xnnQQ1XNg12OtBbLLn8XUKBDZzdR/IVGwQRPumU4zANb0CWNJ
+         nZSg==
+X-Gm-Message-State: AOJu0YxG3jjuSIJXcqd8FTCHiDLxfkv6+jLQdWEnhaf4U1Kh+GJUJzTk
+	o4EBpTvg5VjdFTAy/ra8/JKBClV403WSVqJ5hn5ZP4RN7XiGig5cH0ZPb0+MPifbbdgZxi0szfl
+	ct/WR1En6qH9cg4xvyAfGsTPaS0rFiVc7rLMY
+X-Google-Smtp-Source: AGHT+IHlTe+z1MODYDADlbQ3RXk9t245ULpG2fW9+wJpOLVUAgr4K32ziK9o41eRX3/hO23gIpgTK9SNAOqnz8yLzS4=
+X-Received: by 2002:a05:6871:551:b0:210:b3fe:67a2 with SMTP id
+ t17-20020a056871055100b00210b3fe67a2mr140629oal.66.1706148277276; Wed, 24 Jan
+ 2024 18:04:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8BxVMxMv7FlojkYAA--.45641S6
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZr4fAFy3XrWDWFyDtw1kWFX_yoW5ArWrpa
-	4xCryqvF48CFsrAr1fG34kZa1fGr97KrWIgFyfKw18ur93Jw1xJF1xKasrtFnYk34rXwnI
-	v3WfKw17WaykAwbCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU90b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4j6r4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
-	WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-	xGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWU
-	XVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-	kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY
-	6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-	vEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-	vjDU0xZFpf9x07jz2NtUUUUU=
+References: <20240122152905.2220849-1-jeffxu@chromium.org> <20240122152905.2220849-3-jeffxu@chromium.org>
+ <20240123181457.idckaydk7dt7q2qy@revolver> <CABi2SkX=wKnHmooxXzBnJxxmtfSjvfgYabN1Wh1LxFYjtFoFaQ@mail.gmail.com>
+ <20240124200628.ti327diy7arb7byb@revolver> <CABi2SkV1MgPZvxdE52VSTGA7yxnv9-fZYfWe76xFd27cDyy_8w@mail.gmail.com>
+In-Reply-To: <CABi2SkV1MgPZvxdE52VSTGA7yxnv9-fZYfWe76xFd27cDyy_8w@mail.gmail.com>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Wed, 24 Jan 2024 18:04:24 -0800
+Message-ID: <CABi2SkUxDJXEGVa7gTSPMroX6_Mx8f6HEhp_xBM3PDq6nnt7vw@mail.gmail.com>
+Subject: Re: [PATCH v7 2/4] mseal: add mseal syscall
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Jeff Xu <jeffxu@chromium.org>, 
+	akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com, 
+	sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org, 
+	torvalds@linux-foundation.org, usama.anjum@collabora.com, 
+	rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org, 
+	groeck@chromium.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
+	dave.hansen@intel.com, linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Tianrui Zhao <zhaotianrui@loongson.cn>
+On Wed, Jan 24, 2024 at 2:49=E2=80=AFPM Jeff Xu <jeffxu@chromium.org> wrote=
+:
+>
+> On Wed, Jan 24, 2024 at 12:06=E2=80=AFPM Liam R. Howlett
+> <Liam.Howlett@oracle.com> wrote:
+> >
+> > > Considering this is the MAP_FIXED case, and maybe that is not used
+> > > that often in practice, I think this is acceptable performance-wise,
+> > > unless you know another solution to help this.
+> >
+> > Okay, sure, I haven't been yelled at on the ML for a few weeks.  Here
+> > goes:
+> >
+> > do_mmap() will call get_unmapped_area(), which will return an empty are=
+a
+> > (no need to check mseal, I hope - or we have larger issues here) or a
+> > MAP_FIXED address.
+> >
+> > do_mmap() will pass the address along to mmap_region()
+> >
+> > mmap_region() will then call do_vmi_munmap() - which will either remove
+> > the VMA(s) in the way, or do nothing... or error.
+> >
+> > mmap_region() will return -ENOMEM in the case of an error returned from
+> > do_vmi_munmap() today.  Change that to return the error code, and let
+> > do_vmi_munmap() do the mseal check.  If mseal check fails then the erro=
+r
+> > is propagated the same way -ENOMEM is propagated today.
+> >
+> > This relies on the fact that we only really need to check the mseal
+> > status of existing VMAs and we can only really map over existing VMAs b=
+y
+> > first munmapping them.
+> >
+> > It does move your error return to much later in the call stack, but it
+> > removes duplicate work and less code.  Considering this should be a rar=
+e
+> > event, I don't think that's of concern.
+> >
+> I think that is a great idea, I will try to implement it and get back
+> to you on this.
+>
+I confirm this works. I will add that in the next version. Thanks for
+the suggestion.
 
-Some common KVM testcases are supported on LoongArch now as following:
-	demand_paging_test
-	dirty_log_perf_test
-	dirty_log_test
-	guest_print_test
-	hardware_disable_test
-	kvm_binary_stats_test
-	kvm_create_max_vcpus
-	kvm_page_table_test
-	memslot_modification_stress_test
-	memslot_perf_test
-	set_memory_region_test
-And other test cases are not supported by LoongArch such as rseq_test,
-since it is not supported on LoongArch physical machine neither.
-
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- tools/testing/selftests/kvm/Makefile             | 16 ++++++++++++++++
- .../selftests/kvm/set_memory_region_test.c       |  2 +-
- 2 files changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 492e937fab00..0261c87b0bb3 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -56,6 +56,10 @@ LIBKVM_s390x += lib/s390x/ucall.c
- LIBKVM_riscv += lib/riscv/processor.c
- LIBKVM_riscv += lib/riscv/ucall.c
- 
-+LIBKVM_loongarch += lib/loongarch/processor.c
-+LIBKVM_loongarch += lib/loongarch/ucall.c
-+LIBKVM_loongarch += lib/loongarch/exception.S
-+
- # Non-compiled test targets
- TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
- 
-@@ -196,6 +200,18 @@ TEST_GEN_PROGS_riscv += steal_time
- 
- SPLIT_TESTS += get-reg-list
- 
-+TEST_GEN_PROGS_loongarch += demand_paging_test
-+TEST_GEN_PROGS_loongarch += dirty_log_perf_test
-+TEST_GEN_PROGS_loongarch += dirty_log_test
-+TEST_GEN_PROGS_loongarch += guest_print_test
-+TEST_GEN_PROGS_loongarch += hardware_disable_test
-+TEST_GEN_PROGS_loongarch += kvm_binary_stats_test
-+TEST_GEN_PROGS_loongarch += kvm_create_max_vcpus
-+TEST_GEN_PROGS_loongarch += kvm_page_table_test
-+TEST_GEN_PROGS_loongarch += memslot_modification_stress_test
-+TEST_GEN_PROGS_loongarch += memslot_perf_test
-+TEST_GEN_PROGS_loongarch += set_memory_region_test
-+
- TEST_PROGS += $(TEST_PROGS_$(ARCH_DIR))
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
- TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
-diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-index 075b80dbe237..7b09e59296be 100644
---- a/tools/testing/selftests/kvm/set_memory_region_test.c
-+++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-@@ -333,7 +333,7 @@ static void test_invalid_memory_region_flags(void)
- 	struct kvm_vm *vm;
- 	int r, i;
- 
--#if defined __aarch64__ || defined __x86_64__
-+#if defined __aarch64__ || defined __x86_64__ || __loongarch__
- 	supported_flags |= KVM_MEM_READONLY;
- #endif
- 
--- 
-2.39.3
-
+-Jeff
 
