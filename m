@@ -1,184 +1,130 @@
-Return-Path: <linux-kselftest+bounces-3555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF7083BCDE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 10:10:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1B7883C0C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 12:27:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F010D2903D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 09:10:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9D93B2C32F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 11:16:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DAE61BC50;
-	Thu, 25 Jan 2024 09:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 026051CAAE;
+	Thu, 25 Jan 2024 11:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="F4zvZWNx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z7bnAG8c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2C71BC25;
-	Thu, 25 Jan 2024 09:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.71
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706173589; cv=fail; b=Xnk0G4rNgoestNgRXrREodjFr24d8cfctsvqPQ2arBPXLRHoSo0VOEZ5rN022gySvrQeoBN5fwoHS5fTah31hVVjvPAK+7ieEkrUhruqaDuDG1Vpi6NPy5NhL9saz4OJwuOxO2TV10p3ESdiXsad2PIcTi/jnLEkoSRPQuvztoY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706173589; c=relaxed/simple;
-	bh=2hlAnQYntbkug2Ce51mVzTlNp2T85FVikHnRhKUnHr8=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=rguFAQoe9Yssvq8eGJ6WINcidFQVono7mYGGRdPBgPqr8QPyCXyFAIejmcjDIL6aEtuDTMnAfRVatfaO6psFD4JtuaCiaYlSCQHrvLMXShkjQXaxCxuX3RQ3+WHENSHiAblVxxUHMn+yRjjdv3Txsd1EOJmLZCHR+TU4/Yulyhg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=F4zvZWNx; arc=fail smtp.client-ip=40.107.94.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QGSfAT/qxu49LFZOM+XKjaqPivBFb/YhB123JSixohh5heHzH2Ulh9RKsgQiOLAfeo+Dnf1gQkEm2JYmGPh3O+Iys2U1RkB+rXP/xNwTDr2kPMUCgNpAgfjYx92LjBUPrd2EnUADGmCxPdKH4mu/LIn23GH76wYmQUAv8cwDQ6YxJMXBg2dv18iL313XDfpy61lkBAN2tmeJLFj9cgzlnZRebO1XV2wCautv2f/4QXBCWyFJtpy8nXSJn6/hwk+3ZJcBZnJRzax9BV/l+BcHSTPkmfhHW6KHWJvJtzLOA6jyeIG4K3XfHIpRZF/vCDtZWexSzI3lvI5vmetDeJQAtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QE10+q+bPQZ4yrk7ynqUBqEEcKpIvjkHNs/ynQw5bfA=;
- b=bvphcTou3LrAc97axXLfgRvoN7KtII9pfdH4orBUM9jr4jDoIePZkFDQbX0aq6NZ5KSniRKFNSx8gWMVupXpXY1/tNNC17hQ/XVotNy5xA+MmUuAe7ALHnIhHItxESk/cm5bozuP0/vxTdkjSE06CLC2TDN0T/TYHWn1qMmYmASpTWzupjrP6XxXvda6P2BIb3AnWaTu9bTrvJqMwEL2Ab58u1MlOeqmAYAkWjt36fT0SGRXrU0CqoXj6J4+oE8o9Zh9B78PZap43cZhwe5HS9WT7pKzP2uSdCWdi//9b6As0HzBRdcxQ2xK5SfBSU0Z3bSRsRsk4PQfsRpLHuL8AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QE10+q+bPQZ4yrk7ynqUBqEEcKpIvjkHNs/ynQw5bfA=;
- b=F4zvZWNxdStL3sdiXw6p5tx6o7AtZ3Ncy8uoMZCWFhoQxNAmPGGonhSOqurlbv1IFUOszwVWmHKlH/IxqnTLSIUluESNHrRVNKjPJ2gKmXqXJl66Fwim/HKzCqYa7EnnztteTTWPyKHgzZYSv3n0fhkeKF0yuIanpVzHeZvoasnNepV7PzASSdrBSy2e2wLsYuFIL7O+SLbErymvHEkL5lKmq92Z71krQMXWgiHvszzpEj2tQzjSUz1uT6LICOYytBpsxrbbCtRXlhEhMSDScw7ysKsOjtirEjEHgwDR+1xmTzN9I58XqApume1MOndnhgY26Otcc9VScweeqs8iNw==
-Received: from DM6PR13CA0024.namprd13.prod.outlook.com (2603:10b6:5:bc::37) by
- DM4PR12MB5795.namprd12.prod.outlook.com (2603:10b6:8:62::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7228.22; Thu, 25 Jan 2024 09:06:25 +0000
-Received: from CY4PEPF0000E9D8.namprd05.prod.outlook.com
- (2603:10b6:5:bc:cafe::8c) by DM6PR13CA0024.outlook.office365.com
- (2603:10b6:5:bc::37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.21 via Frontend
- Transport; Thu, 25 Jan 2024 09:06:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000E9D8.mail.protection.outlook.com (10.167.241.83) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7228.16 via Frontend Transport; Thu, 25 Jan 2024 09:06:24 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 25 Jan
- 2024 01:06:15 -0800
-Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 25 Jan
- 2024 01:06:13 -0800
-References: <20240122091612.3f1a3e3d@kernel.org> <87fryonx35.fsf@nvidia.com>
- <20240123073412.063bc08e@kernel.org> <87y1cgm040.fsf@nvidia.com>
- <20240123093834.23ea172a@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Petr Machata <petrm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"netdev-driver-reviewers@vger.kernel.org"
-	<netdev-driver-reviewers@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [ANN] net-next is OPEN
-Date: Wed, 24 Jan 2024 12:06:00 +0100
-In-Reply-To: <20240123093834.23ea172a@kernel.org>
-Message-ID: <87ede5n5oc.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135B523764;
+	Thu, 25 Jan 2024 11:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.120
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706181011; cv=none; b=GVl/5BhEKJW5pjvHw5AQkrZp9Cio5rL8L02su2Ma1oKc/CA/6oirjcKquPousplUYiNLMYHQ9OenY4lSFxVNu+ZnBK6lBqBj0QatK0HVjzpKO45sWtzzMq0gbIjdh2NNHW+DsX+rB0roWKIyzLB6rl2mFFS1sFA5xmpMHJtqhos=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706181011; c=relaxed/simple;
+	bh=Mr/F63IipvcxWrpKyJn4W5DHDoj6d/37xno7IQH+kGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eph2x28a2rWXwisFAjxK14H0/j/+2KWYSGuj6uDLyp2CI9jVt3zWi6O2NtP4GFRmNFuisJsaTV/GPaqGWnHyXRh+sk35MlwyMjfCJMxL8r5SE/TBaEhPROCYKcUuUK6ET0I+vKoWg1+u8gtof81EYNKAfzkKbT2gWH0k403KaPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z7bnAG8c; arc=none smtp.client-ip=192.55.52.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706181010; x=1737717010;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Mr/F63IipvcxWrpKyJn4W5DHDoj6d/37xno7IQH+kGc=;
+  b=Z7bnAG8cplymGG6iAVghnAcZrHygjyvVj/aIx0CXoxw1FxL5UyrRclRc
+   DXBwU3u0gq9EeER+EngkwI0pnoZs5PkmhemeRvJInFi1aAyjCxOTa7SC2
+   Oi/XQvFwOuIESfF8/R+xGbHrd1KkaW0q7fGbbC431NPK4igFJeddihzsa
+   R5WCow7V/ogaUOnQuJreocBYWBC5D6sFmakmi8LGJ9UNk1kjr4ZxEtDuU
+   0/J6X5S9+wLBwSVlk0AeiWzkkrg34807vUebAXB9c+3zBxNiUXA91ayO6
+   bV8HE0X86TohbaJ/Qsdj3rqY+1d0MFcJXAAcaF19PsCJugi4kphF4Pde+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="400987262"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="400987262"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 03:10:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="2394257"
+Received: from apejovix-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.0.239])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 03:10:06 -0800
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: reinette.chatre@intel.com,
+	fenghua.yu@intel.com,
+	shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v3 0/5] selftests/resctrl: Add non-contiguous CBMs in Intel CAT selftest
+Date: Thu, 25 Jan 2024 12:09:42 +0100
+Message-ID: <cover.1706180726.git.maciej.wieczor-retman@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D8:EE_|DM4PR12MB5795:EE_
-X-MS-Office365-Filtering-Correlation-Id: 27b9d9df-426b-4b01-60f3-08dc1d84e859
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	MO1MhCWswr0o4Td07yr4Z6nbNXg7aVXJUWXCaA9THcq9lRoC0qv2NCPwJzv9J4J5t9zqJgUpH++wulv9shey6S+UbJPzILlcs/lXjRd1I3aQfr/Xs+ADdf2D3TJkt3+VPS2VCktIj059TKFus8091wJ2QJL0m8Ysef7QcN5gDBnJFnOwz19vK2UIBLCvMH1NA1MhBvFCEqYWfJrQ0paN99kp8AumONo07YhjIax8ILlv28FmMhBnXMK/PInIvmFcPXjtseMlugQ/wYXsFzFQb8cPy3VOkuI0rC5W/nHUPzBKbBG3prtzULlYI3CCTnolhDa2Or9ihIJ0ZQ7sfHDxaKvbYFdQvXkWX+XJieQNKMzBdxsaJDwcQtds/NrhnH+hefameTubSb8+2kbg3sZgPB70K8/zG+Apv/Mmq6FASyW4Y6h2bfWtx//OEZUF9pl+Vepz9eCuqWztkkvhfsgZbMPZTjYfAk/LUToYy9RYuDRkiFp4f1VNvz88zhQyG5/WBw79t7xmxXqaqp2CSPFceQMlFIbkcu1RC2ZVQm36J5lw3YtDsBf1VV6YQwUJ20Qj0IJ7fdKcRPA3QHDpHZg9hN6+y1lW1yQTee6b96ZtmDIGu5wqPho3+jtJJJZsQl3wAlXwyhV6AEAs2I1N2TKjoc3jWMnJDGfZw9x3+mst/z7OiYocgRzbOYbCz9+plBfIYQY65DlMNKFpJwAd8H/ksme7gYeBS6QGPXg8pNxTOoTXCWSqHkEWimggN8tPqJlmLKQ6wxlztIdhrmtOUJKRGg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(396003)(376002)(346002)(136003)(39860400002)(230922051799003)(451199024)(1800799012)(186009)(82310400011)(64100799003)(36840700001)(46966006)(40470700004)(47076005)(16526019)(2616005)(426003)(26005)(82740400003)(36860700001)(8676002)(336012)(5660300002)(4326008)(8936002)(41300700001)(2906002)(478600001)(966005)(6666004)(6916009)(54906003)(316002)(70206006)(70586007)(36756003)(86362001)(356005)(7636003)(40460700003)(40480700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2024 09:06:24.9734
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27b9d9df-426b-4b01-60f3-08dc1d84e859
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D8.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5795
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Non-contiguous CBM support for Intel CAT has been merged into the kernel
+with Commit 0e3cd31f6e90 ("x86/resctrl: Enable non-contiguous CBMs in
+Intel CAT") but there is no selftest that would validate if this feature
+works correctly.
+The selftest needs to verify if writing non-contiguous CBMs to the
+schemata file behaves as expected in comparison to the information about
+non-contiguous CBMs support.
 
-Jakub Kicinski <kuba@kernel.org> writes:
+The patch series is based on a rework of resctrl selftests that's
+currently in review [1]. The patch also implements a similar
+functionality presented in the bash script included in the cover letter
+of the original non-contiguous CBMs in Intel CAT series [3].
 
-> On Tue, 23 Jan 2024 18:04:19 +0100 Petr Machata wrote:
->> > Unless I'm doing it wrong and the sub-directories are supposed to
->> > inherit the parent directory's config? So net/forwarding/ should
->> > be built with net/'s config? I could not find the info in docs,
->> > does anyone know?  
->> 
->> I don't think they are, net/config defines CONFIG_VXLAN, but then the
->> vxlan tests still complain about unknown device type. Though maybe
->> there's another device type that it's missing...
->> 
->> What do I do to feed the config file to some build script to get a
->> kernel image to test? I can of course just do something like
->> cat config | xargs -n1 scripts/config -m, but I expect there's some
->> automation for it and I just can't find it.
->
-> The CI script is based on virtme-ng. So it does this:
->
-> # $target is net or net/forwarding or drivers/net/bonding etc.
-> make mrproper
-> vng -v -b -f tools/testing/selftests/$target
+Changelog v3:
+- Rebase onto v4 of Ilpo's series [1].
+- Split old patch 3/4 into two parts. One doing refactoring and one
+  adding a new function.
+- Some changes to all the patches after Reinette's review.
 
-Actually:
+Changelog v2:
+- Rebase onto v4 of Ilpo's series [2].
+- Add two patches that prepare helpers for the new test.
+- Move Ilpo's patch that adds test grouping to this series.
+- Apply Ilpo's suggestion to the patch that adds a new test.
 
-# vng -v -b -f tools/testing/selftests/${target}/config
+[1] https://lore.kernel.org/all/20231215150515.36983-1-ilpo.jarvinen@linux.intel.com/
+[2] https://lore.kernel.org/all/20231211121826.14392-1-ilpo.jarvinen@linux.intel.com/
+[3] https://lore.kernel.org/all/cover.1696934091.git.maciej.wieczor-retman@intel.com/
 
-Didn't know about vng, it's way cool!
-(Despite having used virtme for a long time.)
+Older versions of this series:
+[v1] https://lore.kernel.org/all/20231109112847.432687-1-maciej.wieczor-retman@intel.com/
+[v2] https://lore.kernel.org/all/cover.1702392177.git.maciej.wieczor-retman@intel.com/
 
-> # build the scripts
-> make headers
-> make -C tools/testing/selftests/$target
->
-> vng -v -r arch/x86/boot/bzImage --user root
-> # inside the VM
-> make -C tools/testing/selftests TARGETS=$target run_tests
+Ilpo Järvinen (1):
+  selftests/resctrl: Add test groups and name L3 CAT test L3_CAT
 
-I'm working my way through the selftests.
+Maciej Wieczor-Retman (4):
+  selftests/resctrl: Add helpers for the non-contiguous test
+  selftests/resctrl: Split validate_resctrl_feature_request()
+  selftests/resctrl: Add resource_info_file_exists()
+  selftests/resctrl: Add non-contiguous CBMs CAT test
 
-> https://github.com/kuba-moo/nipa/blob/master/contest/remote/vmksft.py#L138
->
-> You're right, it definitely does not "inherit" net's config when
-> running forwarding/net. I can easily make it do so, but I'm not clear
->
-> what the expectation from the kselftest subsystem is. Because if other
-> testers (people testing stable, KernelCI etc. et.c) don't "inherit" we
-> better fill in the config completely so that the tests pass for
-> everyone.
+ tools/testing/selftests/resctrl/cat_test.c    | 84 +++++++++++++++-
+ tools/testing/selftests/resctrl/cmt_test.c    |  4 +-
+ tools/testing/selftests/resctrl/mba_test.c    |  4 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  6 +-
+ tools/testing/selftests/resctrl/resctrl.h     | 11 ++-
+ .../testing/selftests/resctrl/resctrl_tests.c | 18 +++-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 98 ++++++++++++++++---
+ 7 files changed, 199 insertions(+), 26 deletions(-)
 
-Oh, gotcha, the question was not whether it does, but whether it's
-supposed to. OK.
+-- 
+2.43.0
 
-IMHO not necessarily. net/config is for net/*.sh, net/forwarding/config
-for net/forwarding/*.sh. It's not a given that whatever is needed for
-net/ is needed for net/forwarding/ as well.
-
-It will also lead to simpler patches, where enabling config options in
-X/ doesn't imply checking for newly useless duplicities in X's child
-directories.
 
