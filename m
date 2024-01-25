@@ -1,172 +1,105 @@
-Return-Path: <linux-kselftest+bounces-3565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67ECA83C267
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 13:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3905183C27A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 13:27:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF1C51F2134E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 12:16:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEE231F24EBE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jan 2024 12:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6A24502B;
-	Thu, 25 Jan 2024 12:16:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72A445974;
+	Thu, 25 Jan 2024 12:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fTviEwe6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zb5oRwwy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFAD45BFA;
-	Thu, 25 Jan 2024 12:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DBD482D0;
+	Thu, 25 Jan 2024 12:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706184990; cv=none; b=ZiqE6UXB4jOd4w25xAxtSRIxYOn0ru1hhvjKGtiySw4WCjY/WOLqZP13aR3s8k8ENrBVym1+gKOLJ5uAEdxGZf3kOVNuMTySTJJRTZ8ZLYaR/X0yJAOzMtYNGpdovgfqvH8ChpA1zTKsudvpOdXxj90D2FdmrXF/XcKfldc1QEw=
+	t=1706185642; cv=none; b=QjLN1xinvWRSkd+PhvQbTHmE2A1Y6h3ka9Z4GEkqNgAY9FfuPjXKaDOqYCkQjS9nNwx37CULP0TLTSiZ9bZ2zfkxSpQ045X8Y0CWYJK/HYFI7sXETuhy7u6MUB6MInE8txlj/Q8i5GfNX3CmxOyzvQ9OK+uI3jIkI2AxSFxj3gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706184990; c=relaxed/simple;
-	bh=HwBQsm7MBgHhSyzAfl7jjyQrBcB7NcfolPyNJzRBR24=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=kZijhcnsvmpwHLyRVrT9QzTCFBJgyjfRLA5zIJhWgzyMp4VVYy0vnlbN1+5cMCpILdKELXOdmlxAVuRzWnu754FM8TXVpfCc/no3Z9ZcI5RJbYHPHNUrPAL1btcKeTQEUrhmv2nlTbLTmZXluAitQ49B4olMXZkAJtmYjH0HVoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fTviEwe6; arc=none smtp.client-ip=192.55.52.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706184989; x=1737720989;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=HwBQsm7MBgHhSyzAfl7jjyQrBcB7NcfolPyNJzRBR24=;
-  b=fTviEwe6cEsoG2IIZ8LDIKg6skdvj+ETVE7yN1Sv2ZxxrzsA9n3oWL/Y
-   M7fGfpA0iya3UrpCW9EsgcykVEccXN0ZERnIL0xdKK4djD0GjyAJiTgly
-   iI/Xrp4zfB9w6/PbFUzo73RX3LmU/dU7uPRu8piOwR08RAWkDDl9KNIex
-   fzYun0ZjQ5LjOiLj/CJMCpGMqnzEYDpfoidZoQDvWKAQrTiAXMB5W9K6z
-   X1TPuK705CpNCetsJnPzynxPOENBdfnF93rRR5bbgtgba532FR7L/+gQN
-   ae3DiA8HBECS2m1sC0YZ+4Zi3Iao8afFaeik6+waAB9nzK5sIFUAkhaMq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="400999114"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="400999114"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 04:16:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="736300929"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="736300929"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.94.252.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 04:16:25 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 25 Jan 2024 14:16:20 +0200 (EET)
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-cc: Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org, 
-    fenghua.yu@intel.com, LKML <linux-kernel@vger.kernel.org>, 
-    linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] selftests/resctrl: Add
- resource_info_file_exists()
-In-Reply-To: <e73a79210076d6b1b7b584b12d0499e2f2e5f4fe.1706180726.git.maciej.wieczor-retman@intel.com>
-Message-ID: <7452603a-4347-a51e-c91f-ff0b17cc99ad@linux.intel.com>
-References: <cover.1706180726.git.maciej.wieczor-retman@intel.com> <e73a79210076d6b1b7b584b12d0499e2f2e5f4fe.1706180726.git.maciej.wieczor-retman@intel.com>
+	s=arc-20240116; t=1706185642; c=relaxed/simple;
+	bh=wh37IMxjc+9bQCZsbY1TgpxkregHG9E9PMlCKKotk7s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=nLSlQHbCD2Kah3qlD6xcRSn9F5rRR33lYUSNCa8KXHPFfuDpOy85kzWnbCyp74t1IoFSBGtKa6Mu0NvWMzfL/8KKYWsuijIKWDV7srXa707+vyS9sIJ6rhYJof469ZZWwTVt3tUp+aC0lcc88Hg5qRUBagdWwNzs9V5QHPPRmOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zb5oRwwy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC4FC433C7;
+	Thu, 25 Jan 2024 12:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706185641;
+	bh=wh37IMxjc+9bQCZsbY1TgpxkregHG9E9PMlCKKotk7s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Zb5oRwwyg39VNJRcQcMUVEx/ehxJJIOETD2edb9eZCTcZhRTdomAvDAlqmGqdUcHT
+	 o1ddALaJhWhFW1b8UiXK3mOxQxCgvue/wmFUG681aAPSHRLCPZrfAzk/v7qJuDqcjh
+	 AqHylmRX4cXWRz+pSul/XGo9AeG+nh2m29aDuuK29Gsy4GsIWMNx5801Ts+ruTh7aB
+	 AfTsdyp7ujg2R9YvvcvXjEL/NnCR5hS5GpI2ozZUS7fr8q/HlAe94zqxIYQsaEi8Vg
+	 nB53ktzLb29nlnJcVDlO+HgMxFSKc4Mv0C30Ol3JZwWs+HwPBsvBpUver2rYtljGAU
+	 4spjAJSjcICew==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Include runner extras for install target
+Date: Thu, 25 Jan 2024 13:27:15 +0100
+Message-Id: <20240125122715.1443022-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1973767011-1706184980=:1444"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Björn Töpel <bjorn@rivosinc.com>
 
---8323328-1973767011-1706184980=:1444
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+When using the "install" or targets depending on install, e.g.
+"gen_tar", the "runner extras" weren't included for the BPF machine
+flavors.
 
-On Thu, 25 Jan 2024, Maciej Wieczor-Retman wrote:
+Make sure the necessary helper scripts/tools are added to
+corresponding BPF machine flavor.
 
-> Feature checking done by resctrl_mon_feature_exists() covers features
-> represented by the feature name presence inside the 'mon_features' file
-> in /sys/fs/resctrl/info/L3_MON directory. There exists a different way
-> to represent feature support and that is by the presence of 0 or 1 in a
-> single file in the info/resource directory. In this case the filename
-> represents what feature support is being indicated.
->=20
-> Add a generic function to check file presence in the
-> /sys/fs/resctrl/info/<RESOURCE> directory.
->=20
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> ---
-> Changelog v3:
-> - Split off the new function into this patch. (Reinette)
->=20
-> Changelog v2:
-> - Add this patch.
->=20
->  tools/testing/selftests/resctrl/resctrl.h   |  2 ++
->  tools/testing/selftests/resctrl/resctrlfs.c | 26 +++++++++++++++++++++
->  2 files changed, 28 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/se=
-lftests/resctrl/resctrl.h
-> index 4603b215b97e..c39105f46da9 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -138,6 +138,8 @@ int umount_resctrlfs(void);
->  int validate_bw_report_request(char *bw_report);
->  bool resctrl_resource_exists(const char *resource);
->  bool resctrl_mon_feature_exists(const char *feature);
-> +bool resource_info_file_exists(const char *resource,
-> +=09=09=09       const char *feature);
->  bool test_resource_feature_check(const struct resctrl_test *test);
->  char *fgrep(FILE *inf, const char *str);
->  int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity)=
-;
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/=
-selftests/resctrl/resctrlfs.c
-> index e4ba8614fb7b..a6427732e0ad 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -763,6 +763,32 @@ bool resctrl_mon_feature_exists(const char *feature)
->  =09return !!res;
->  }
-> =20
-> +/*
-> + * resource_info_file_exists - Check if a file is present inside
-> + * /sys/fs/resctrl/info/RESOURCE.
-> + * @resource:=09Required resource (Eg: MB, L3, L2, etc.)
-> + * @feature:=09Required feature.
-> + *
-> + * Return: True if the file exists, else false.
-> + */
-> +bool resource_info_file_exists(const char *resource,
-> +=09=09=09       const char *feature)
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+tools/testing/selftests/bpf/Makefile | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Fits to one line.
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index fd15017ed3b1..a5e63ef78bf1 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -747,5 +747,15 @@ override define INSTALL_RULE
+ 	@for DIR in $(TEST_INST_SUBDIRS); do		  \
+ 		mkdir -p $(INSTALL_PATH)/$$DIR;   \
+ 		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
++		rsync -a --copy-unsafe-links \
++			$(OUTPUT)/$$DIR/bpf_testmod.ko \
++			$(OUTPUT)/$$DIR/bpftool \
++			$(OUTPUT)/$$DIR/ima_setup.sh \
++			$(OUTPUT)/$$DIR/liburandom_read.so \
++			$(OUTPUT)/$$DIR/sign-file \
++			$(OUTPUT)/$$DIR/uprobe_multi \
++			$(OUTPUT)/$$DIR/urandom_read \
++			$(OUTPUT)/$$DIR/verify_sig_setup.sh \
++			$(OUTPUT)/$$DIR/xdp_synproxy $(INSTALL_PATH)/$$DIR;\
+ 	done
+ endef
 
-> +{
-> +=09char res_path[PATH_MAX];
-> +=09struct stat statbuf;
-> +
-> +=09if (!feature || !resource)
-> +=09=09return false;
-> +
-> +=09snprintf(res_path, sizeof(res_path), "%s/%s/%s", INFO_PATH, resource,
-> +=09=09 feature);
-> +
-> +=09if (stat(res_path, &statbuf))
-> +=09=09return false;
-> +
-> +=09return true;
-> +}
-> +
->  bool test_resource_feature_check(const struct resctrl_test *test)
->  {
->  =09return resctrl_resource_exists(test->resource);
->=20
+base-commit: c8632acf193beac64bbdaebef013368c480bf74f
+-- 
+2.40.1
 
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
---=20
- i.
-
---8323328-1973767011-1706184980=:1444--
 
