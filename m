@@ -1,96 +1,102 @@
-Return-Path: <linux-kselftest+bounces-3635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3636-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC03B83E2F9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 20:56:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851C383E325
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 21:13:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79045287205
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 19:56:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 254231F25C7B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 20:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7968224CC;
-	Fri, 26 Jan 2024 19:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1A522EE6;
+	Fri, 26 Jan 2024 20:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uc/Htt40"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLWcnnbV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A93E241E5;
-	Fri, 26 Jan 2024 19:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE459241E5;
+	Fri, 26 Jan 2024 20:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706298953; cv=none; b=X2jBt62nqL2GCPtEmDerMyai5LAGouhyZRn3f+IIJzMhDnSvUFDDEl0Ys3KMmkeF8XaWMHpsa/74h0PxeWPISCSVa+Mg/AgwUrsJZl5Wfb71aqEZmCXO/unb6/DAD0xArFgcH79eRYowB0VOa0gRx4zV1neaPOeizCvrh7g79V8=
+	t=1706299992; cv=none; b=gl31gyej5QBJmKBAuZ7wJjF+g4uoo6IzcgY5DTTxvpNMfi/Q02eLAOt3dmarEncyxiBTl1SM5XvJ09he4JZvoacy0XFC1houo2caBGtJm+InrNK4xf/RSRHinMhVhQHB5ClhHiBr3be78LAk86ioL7R4ch6ICtWUt1CIaU4c+z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706298953; c=relaxed/simple;
-	bh=WYU54tXCE/E8uLezCkBmXEQo+LCP1yBck4p57AJ0Nug=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jMCtNoJ5BDWqhKG+RA5Jzw3hE+1FRjqvfhzMVupTDNIe7PWne6LFVW91oxsdCS/JzRPHhzVspM1ce6Sv5IFcUeXOQu5d0f7bIdyqWN/Mpmmndq+EUJXm6IOKl+Tuzak+61KgF3R2pTU0+m0HO7Ce1ctdVVyInovUY4FtPfI9v74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uc/Htt40; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C32C433C7;
-	Fri, 26 Jan 2024 19:55:52 +0000 (UTC)
+	s=arc-20240116; t=1706299992; c=relaxed/simple;
+	bh=nnxJtw6vUHGJJzShkWxwxq1ocDh53plzlcVa4ZjisC8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hOSIA9U6VXLln28Yl+1KdtwbHhtZkGiBTzBG732lmjdybltW3d24SEK3MuqS6iPWx+ymCDj2ycA2rb9HVOEaYil5poDyBFixg01516fb5Umbb0L0huz8nmG6AvEZVBKlgH3/j/RFpqk+wav5Ug0YlD57gcqT2i7PBCMF+HbA/F4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLWcnnbV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5F0C433F1;
+	Fri, 26 Jan 2024 20:13:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706298953;
-	bh=WYU54tXCE/E8uLezCkBmXEQo+LCP1yBck4p57AJ0Nug=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Uc/Htt40d5WwgKbv+jbMRfUP85FOGtqEu9GqifPtfoS1QeWQ/L+X56t6Ro+EGobms
-	 I27j9xlGEgpXr5eBVwfQgr1Ie5qG/sspu8DBIIM5fqSiqYGnk2J7P9TpmVOcNxxp8v
-	 2VzDO0FX4q2drD7EKLUb55BiWT6byu/VwvvN4K/UDs72HIJxLCN+2P1z3iwlIPbRSS
-	 pg14c21730MY7DrVOWj5afRVTeTosV7iSDZpf1ga2zU/zT7enkyRgt5AX6we5WAaX9
-	 XlFOJtOHr4wqHPGT48/kLoLPOFb/Ig+f+7WUDZv5xilqXiyDcWr6Ngu0bno9zXRIJZ
-	 8+46X5QdIpmvA==
-Date: Fri, 26 Jan 2024 11:55:51 -0800
+	s=k20201202; t=1706299992;
+	bh=nnxJtw6vUHGJJzShkWxwxq1ocDh53plzlcVa4ZjisC8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iLWcnnbVSTPt+/cpE1fW/hAT/egcyGCFLEewNYvX7QqJzsTlo+3yL5uSPuwxTRaYW
+	 cDtqXblDgKnGugr3FfoRa60HazZEpZ+UmM1SO01XSQtk2617Vz9erOxTUQbejhBBvm
+	 X7ctZv9O9PNNQvxWBWFI5zbk2vcoO9cwHiXRZsKjd1iJ2ceos4GnaV3f5eoI+2gcb/
+	 p0n0pvzvPYJ6IqSDE2sDKz8bN4N7GPFjK7GSv9TE4RZrJ6krHuytOxYfrLIskU8Pkx
+	 DFyFeNzZ+FPq2p2Jw2pMTfKpjBHSs3QlYQVb0CXTfmH2DfKiJTCjZlJpKz5Pta/nIY
+	 M1vBa+owwaezw==
 From: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>, Xin Long
- <lucien.xin@gmail.com>, Florian Westphal <fw@strlen.de>, Aaron Conole
- <aconole@redhat.com>, Nikolay Aleksandrov <razor@blackwall.org>,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests: net: add missing config for big tcp
- tests
-Message-ID: <20240126115551.176e3888@kernel.org>
-In-Reply-To: <21630ecea872fea13f071342ac64ef52a991a9b5.1706282943.git.pabeni@redhat.com>
-References: <21630ecea872fea13f071342ac64ef52a991a9b5.1706282943.git.pabeni@redhat.com>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: net: add missing config for nftables-backed iptables
+Date: Fri, 26 Jan 2024 12:13:08 -0800
+Message-ID: <20240126201308.2903602-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, 26 Jan 2024 16:32:36 +0100 Paolo Abeni wrote:
-> The big_tcp test-case requires a few kernel knobs currently
-> not specified in the net selftests config, causing the
-> following failure:
-> 
->   # selftests: net: big_tcp.sh
->   # Error: Failed to load TC action module.
->   # We have an error talking to the kernel
-> ...
->   # Testing for BIG TCP:
->   # CLI GSO | GW GRO | GW GSO | SER GRO
->   # ./big_tcp.sh: line 107: test: !=: unary operator expected
-> ...
->   # on        on       on       on      : [FAIL_on_link1]
-> 
-> Add the missing configs
-> 
-> Fixes: 6bb382bcf742 ("selftests: add a selftest for big tcp")
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Modern OSes use iptables implementation with nf_tables as a backend,
+e.g.:
 
-Ah, great, I was missing RF_RAW in the local hack.
-I applied manually because looks like this change is on top of
-something:
+$ iptables -V
+iptables v1.8.8 (nf_tables)
 
-patching file tools/testing/selftests/net/config
-Hunk #3 succeeded at 73 with fuzz 1 (offset -1 lines).
-Hunk #4 succeeded at 82 (offset -1 lines).
+Pablo points out that we need CONFIG_NFT_COMPAT to make that work,
+otherwise we see a lot of:
 
-While at it I reordered the values a little bit to be closer to what 
-I think would get us closer to alphasort. Hope you don't mind.
+  Warning: Extension DNAT revision 0 not supported, missing kernel module?
+
+with DNAT being just an example here, other modules we need
+include udp, TTL, length etc.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+Location for new entry chosen based on `sort --version-sort`.
+
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 413ab9abcf1b..ba56f231e109 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -59,6 +59,7 @@ CONFIG_NET_SCH_HTB=m
+ CONFIG_NET_SCH_FQ=m
+ CONFIG_NET_SCH_ETF=m
+ CONFIG_NET_SCH_NETEM=y
++CONFIG_NFT_COMPAT=m
+ CONFIG_NF_FLOW_TABLE=m
+ CONFIG_PSAMPLE=m
+ CONFIG_TCP_MD5SIG=y
+-- 
+2.43.0
+
 
