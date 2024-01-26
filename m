@@ -1,84 +1,92 @@
-Return-Path: <linux-kselftest+bounces-3630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C446183DE74
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 17:19:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FC6483DF0F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 17:43:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 026961C229D7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 16:19:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 417441C23928
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jan 2024 16:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47211D6BD;
-	Fri, 26 Jan 2024 16:19:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B921DA32;
+	Fri, 26 Jan 2024 16:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="daiM4fnO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fUT6PgVC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E271D545
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jan 2024 16:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1021DA22;
+	Fri, 26 Jan 2024 16:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706285941; cv=none; b=V5LRV0pWlXRq9JuGIq/391Xy4t3Tmu4szCcXubhR7u98LOrQpGD8x3vll9bLieWXBup+qt3cz0+i2SaPSZCUsgxksvtJ4bhurPA7KMaaEXDHSbowtcPxNcDGZx6NnsL2DpWJquwu6rhzkJ1hDQ7B3BEvbyMP+XggRQVZVcVV3Kk=
+	t=1706287411; cv=none; b=O9Lj2oWq/8j6xK2CxrPyWfWHxu9mH0PUdfunohXKw4K3w8cAXJdKa2HiL/KPuftMRPktPud/mT3HwGZGcsCnKV01YGw+DT3ZTCRucyhqUWKBXM1U4VG6PI3pzzGt6iO8iE2YCWKo8pNJ/i3TigZcuT2DysZbxtiz5RnbLNHbBgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706285941; c=relaxed/simple;
-	bh=+frgNUH2ZlZhwZP2UO21VP36KfozIuygrIl6i1D+e7w=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=C46ek9G6ZpokkTcBtoABVa/M7XBLt1HtKouHlA7ceqDm6dkVRyxD73z8Epg6kwegbW7e6q2aV1sJUM9sje2ZWAiAQjMwvhPFV0AXV9gQQiS0Is3HdxzvQaUiyyogWsxncjz2sCTaotYSa0Proe91g1Ab7kQBFdL374CBGAeMyAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=daiM4fnO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706285939;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6RnvoYDcpPaS4iUg5kcJdLzlRXCzjAoYe4p9PjhV4aw=;
-	b=daiM4fnOzVw3mMea15Swtxew67z/CZ9Lj8YhkLO+tmaNItneYt2R3IGOSBfX5XL8jZJEM4
-	jkk627umGeLKuL+cOMXtGPOnasFU62nwoeVBmfwrEBX9YkyzkYT+5aXu3T5jQuPkC8BPbn
-	9157xOmySSndxeIGCpXblgwNeOcgFPU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-155-IRAC04QZMeiIfD3hQUIYgQ-1; Fri,
- 26 Jan 2024 11:18:55 -0500
-X-MC-Unique: IRAC04QZMeiIfD3hQUIYgQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92C0E1C07F43;
-	Fri, 26 Jan 2024 16:18:54 +0000 (UTC)
-Received: from RHTPC1VM0NT (unknown [10.22.33.141])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id CE2251C060AF;
-	Fri, 26 Jan 2024 16:18:53 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Shuah
- Khan <shuah@kernel.org>,  Xin Long <lucien.xin@gmail.com>,  Florian
- Westphal <fw@strlen.de>,  Nikolay Aleksandrov <razor@blackwall.org>,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests: net: add missing config for big tcp tests
-References: <21630ecea872fea13f071342ac64ef52a991a9b5.1706282943.git.pabeni@redhat.com>
-Date: Fri, 26 Jan 2024 11:18:53 -0500
-In-Reply-To: <21630ecea872fea13f071342ac64ef52a991a9b5.1706282943.git.pabeni@redhat.com>
-	(Paolo Abeni's message of "Fri, 26 Jan 2024 16:32:36 +0100")
-Message-ID: <f7til3g130y.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.3 (gnu/linux)
+	s=arc-20240116; t=1706287411; c=relaxed/simple;
+	bh=cEO41twJm//21sagSm9cB4brBkFrMocXWpD2Ra1FT0c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ImUdQqSoCi7eUl7QuvRQHx7tk8Pae+uwR/2x7/9ari7XPIW47raaMMNaws7k3ScMSZpM+akGxNNo88vDH90w+iCwF5Qjr/0NdkiSjMsaPPdrYBt5dGnj5tc/M+dE64F3436OFJo6uDRpPJm8zAuys1lUCo2KEuEi286LsMdSyE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fUT6PgVC; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dc24ead4428so418552276.1;
+        Fri, 26 Jan 2024 08:43:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706287409; x=1706892209; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b/IyLD9a01+rfYxTXTwEcJ4aZx88KemGpDUHBOx8Yi8=;
+        b=fUT6PgVCKJtVp/I1oUd5raMbRhLU9f0NjW5uqAX4Dw5QIH3Do2z55lYLecoqi2KzsL
+         X5QPy0Hoas/XBCuIOXmgB2Ez1Ud03n5WuE8ZVSBkRbovPcUxLliCEmZQlDU6cG04owpj
+         w4jctekMADKhGVshYU+7FVkiYZZdoQXkrs2kQi3/YiR+MEXGJabHScc2nsGDyUgrE0wC
+         txa/OViHRl8y4W6/VSkLyKWOt+LYL1A2EBI4Staw/eGAjDLRWC8ZF2NjnwMZw2KmjC2K
+         rmMCTNe0YuZv2mq7bdrCOpYbx9e0djsxEuD5MaiSSGW/QLrjoO6gp0OHVms+SrokRXJ6
+         T2QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706287409; x=1706892209;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b/IyLD9a01+rfYxTXTwEcJ4aZx88KemGpDUHBOx8Yi8=;
+        b=SkM3SzYUkh6JYNp5ZV9XKWkWWUbYeDvau/B/SNe1XIT8v9epQNmM72i/CzEqplv8aR
+         81Vpras0GH61f4JhlXxDsmtaAQ52yFwUi5yTbYNCAG4u2dcmEmbNAM/B5YrIlbWiZZ3U
+         ubuOeW0lywSr4XYjNEMhsyhOIx3fqY4ZuB1zIb8E+RNVQ1v8zZtdfVOYRQ0Ylh4jll0Z
+         E8w1NfC68F+Xs6CnNLJZINaBqgd4tyn+kPexNDTV5wTNsgh8pi77a3S3UOlzn2TK69E3
+         5om4yr8egp4Ia1f71co28T3hQaS+w9rqNU5UjHKDFXMUEu2cBctYUf519rESjMTHdgkp
+         3GtQ==
+X-Gm-Message-State: AOJu0YwTkLdC8se5XYCL4uwCLQGksOh36/0UkS7sgoBRovCSmrtqeE7S
+	55683d26oM9BChUTcDFE+ewWDnVus+hsPCDUrs3XkxTGA/mSq6yE4YNCl+3HuoxicejJF/+A/uO
+	H5MlaVJGUHXPclUBaSyiy/X3pfs2zr9NHlij46Q==
+X-Google-Smtp-Source: AGHT+IFuUx5RRLX37uksYAMBVchsLD1bTOxNVRHSPfoNOSy1ZsSStsQJ6vkzesCWh4mPJv/w/thwZYSLb/ME1zeANdM=
+X-Received: by 2002:a25:ab04:0:b0:dc2:4053:b813 with SMTP id
+ u4-20020a25ab04000000b00dc24053b813mr148087ybi.42.1706287409382; Fri, 26 Jan
+ 2024 08:43:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+References: <21630ecea872fea13f071342ac64ef52a991a9b5.1706282943.git.pabeni@redhat.com>
+In-Reply-To: <21630ecea872fea13f071342ac64ef52a991a9b5.1706282943.git.pabeni@redhat.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Fri, 26 Jan 2024 11:43:18 -0500
+Message-ID: <CADvbK_fzaAKNNyK5BBQfr+OwdDhSxGVMAcUdhhAj67C7ZErOrQ@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: net: add missing config for big tcp tests
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Florian Westphal <fw@strlen.de>, Aaron Conole <aconole@redhat.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Paolo Abeni <pabeni@redhat.com> writes:
-
+On Fri, Jan 26, 2024 at 10:32=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wr=
+ote:
+>
 > The big_tcp test-case requires a few kernel knobs currently
 > not specified in the net selftests config, causing the
 > following failure:
@@ -89,7 +97,7 @@ Paolo Abeni <pabeni@redhat.com> writes:
 > ...
 >   # Testing for BIG TCP:
 >   # CLI GSO | GW GRO | GW GSO | SER GRO
->   # ./big_tcp.sh: line 107: test: !=: unary operator expected
+>   # ./big_tcp.sh: line 107: test: !=3D: unary operator expected
 > ...
 >   # on        on       on       on      : [FAIL_on_link1]
 >
@@ -97,16 +105,6 @@ Paolo Abeni <pabeni@redhat.com> writes:
 >
 > Fixes: 6bb382bcf742 ("selftests: add a selftest for big tcp")
 > Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> ---
 
-Thanks for the fix.
-
-Maybe we should also add the config for NET_ACT_CT since we will
-invoke it on setup.  I guess there's some dependency that must be
-pulling it in for us already so we don't explicitly call for it, but we
-do require it in setup() if I understand correctly.  I don't think it
-should hold up this patch though.
-
-Acked-by: Aaron Conole <aconole@redhat.com>
-
+Acked-by: Xin Long <lucien.xin@gmail.com>
 
