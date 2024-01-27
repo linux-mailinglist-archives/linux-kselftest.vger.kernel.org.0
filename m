@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-3667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AEA883EF3F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 18:53:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56E4183EF43
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 18:53:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FB541C21EDE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 17:53:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D33511F220B8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 17:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4EE02D60C;
-	Sat, 27 Jan 2024 17:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07A32E652;
+	Sat, 27 Jan 2024 17:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dZVRHHgh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eobIvT+0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFF02D604;
-	Sat, 27 Jan 2024 17:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195B92D04C;
+	Sat, 27 Jan 2024 17:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706377992; cv=none; b=m/C6a8spubuDj2LNRt+9hJRfBm0JjMemNv1FMbsAjtlblAQbm3W8OUPLiq0IXaSp6krDwa5/riLzwp1AvZ7C4GwnVN7qpCb1qCpHg9SEZ5NZD75/B2xbnrEK8mvDISzshItpjW3aZd3YC6n0WQ30ALeInONPIHKqEeJ09jxJcjM=
+	t=1706377996; cv=none; b=VpGCbiYUTPX9NpAd/RNijYpUAYX6yIjssDCnTwbvyJ44qV2QvEKsX3FV1Af5u9pUzqUFDylz0SOOhBEUaerWwxz6ijwuqeqWlk/9KjWL2by9rWfgn3E42WFqXG2WxrxtvvhIFK8acRLvqnTiEGqTslVikSlhu3iRh3locUuVn2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706377992; c=relaxed/simple;
-	bh=VfWPiZ1vRW6H3hWfF649onKg9BA90vIGQzyb70j3pPM=;
+	s=arc-20240116; t=1706377996; c=relaxed/simple;
+	bh=ppuOJbWTKXG47/qhgqZIDczj38nPaUZRQ1q+3ti7jxU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=phVKuevtv26Y6XaiF921MzfGtxz+AYcw0ZFqMNaLCLDEXvfYquIxJP8mxtjbq4948IzyDt9c42Jh4VuM81mmEM0FqJ1tAHwbVy5B6bFf12UPLRXNjd5JBvmZrwN628EEcK/2i8AQDTIUhQRjsqC8jnNaFESlg98vdXK+ECB5hFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dZVRHHgh; arc=none smtp.client-ip=209.85.128.44
+	 MIME-Version; b=Qfi8aI3vuHyrZcz731kRSD+lyxDi2ooYiqqv5qJSo7TRkdwU0V4rjZ2nJ3qHVXiwENDOLdHawSZkCOVa0RWTm9N4GKlrpxGz/O08GDgh2F+ZZzt3TWSWq2s5yAOs03XmvHiakWL/gVLrU1fuyL2HOlXHO1Uc7HjBhXNKVEYSMDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eobIvT+0; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40e5afc18f5so21055775e9.3;
-        Sat, 27 Jan 2024 09:53:10 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a30e445602cso533592066b.0;
+        Sat, 27 Jan 2024 09:53:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706377989; x=1706982789; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706377993; x=1706982793; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=szKrLwGLdzZiKf2ZM55P0AxDZ1c6ft6AGkc0dEme8Fw=;
-        b=dZVRHHghITzSYQfhGL7+df6GFZJJjM5PPs2QJyMH6kHCM2+i5YO6g5HvPS+8X2S7MI
-         LCzhPkM334gzJlxNDwSG4kX3/ivyG+2T01NM6tef6tO/6Um5Tn0O8FMn10G0wqpMne0p
-         MJ2U8GptRLwZFHbQvf7XYAmUQBVnOa1M7ut32csBjI/IIsRPWSqnvF8V7Lw/yV3jovVb
-         6eGlyyxtbzEzvhEV0tdWWfgTZv7HUoloqSWuSazeH7qWmFjSNRc7sID6euzKVXwPVsQs
-         a6pV3ccgBqLw35l9bxnwnfjfDhZ+1giO5eN03vO1I1sW74UUkZ9miihvAwl058DtKpK4
-         nJnw==
+        bh=Gih8YjOYCnRXo89Ub0lhyCjdzkl+eWifpUUwXHuNba8=;
+        b=eobIvT+0zLotwb9EHhtOwEMb2AGAoLIk7blvKh2i9x2F1u6WLYnTg2merdKjligSnL
+         9EghsI1AgI7rZOQORcAK+TPIpd9MPN1CAikDa27DmPP5N+Ih1wYx50hq0bywxxv4+IEF
+         i+Pblhz/xjrn5jvXBOKb2yPxpEi950GEw9DbK/88HL7p8tGQBC5648WWjDEFYpK1ip3O
+         OvFAtv9mLO/aFk+6/sxFuCE2tfM0YfFX7L5wnq1Fixiw3TBcrZCm9fsYDI1UM9o1m/fz
+         XkYrWepso/Fkpk2Mx1rAu4GjYJ2IIJon6/x8uOgvZ/GNaa///EoaRPg6JvF5tLt0JCeN
+         WFgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706377989; x=1706982789;
+        d=1e100.net; s=20230601; t=1706377993; x=1706982793;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=szKrLwGLdzZiKf2ZM55P0AxDZ1c6ft6AGkc0dEme8Fw=;
-        b=tQLAFVucO1K3LCwJEUcJbnu29ye72VAeKILBZN2SiV20GLiKdoxztUVtBK09RbQoTD
-         tTAuCcLOiidKhFKkCeUyCQRu4wb+lwsLc7gcCcunk2MRYYCbbTQzDhnkvBqNQd6ScGlw
-         RhIQYmrXuLflyUPZSKuP7JrH8wPSC2Xm8p2j8RtI8YsqnY+TSUeOpAKGBw4RVX2FwqeN
-         GRFyKrUW+iFGUzAS6muQkf/nz+Pb2MBYNe+VJYMQndwpQQxF3D6ZnoK4Gv8Hgx9ykHOf
-         EYjKQIfSFXGdCBeA21PRc8n4r5o1fF6UVkvQ8KMxg4nsJW49iTP2gMbzjAKuuZVougwO
-         jLcg==
-X-Gm-Message-State: AOJu0Yzp61yiVTNPkB9YQrrGU2MgksdqRDuN07jruR3HPGEqmVqQAxZL
-	ndFxfZy8meRRXtBWegX7OCI+0zLnQqhmcpzKH7hmGNiyQiekeD7B
-X-Google-Smtp-Source: AGHT+IFQkR6le9DuoGJyY0i1r5xR5M4gVp5kXBnw6HCIJujSrmh2WLnMm3dgc+giJwlriNU8Cv4WEg==
-X-Received: by 2002:adf:d1c4:0:b0:33a:e6b3:a924 with SMTP id b4-20020adfd1c4000000b0033ae6b3a924mr733982wrd.130.1706377988851;
-        Sat, 27 Jan 2024 09:53:08 -0800 (PST)
+        bh=Gih8YjOYCnRXo89Ub0lhyCjdzkl+eWifpUUwXHuNba8=;
+        b=FB/FrjszdJGvYOM5V9AealGPsGBcm/s1hWpPQNg0aO7n5Y7q/6WYC4rGnRfe/ihOL/
+         Z6NKb+r1MfONCfJTIHRI8j3APGguL5t2Q0nS54QUaiBoW8w+pQS7hs7WPP2vSGK5rSC3
+         bcnA/jG7Em6QN5MFrbfzk1mIFYQZAErMgmVq+40102/VLdDSS3GiZAAasqnbhs0J9QL1
+         0hActsQoVwOCwJ7ppvVajRJY+nkgUuFvDubR3qcLCUrrNygG904L3SPa3c9Gj+YHjofz
+         mmkf3ozlpDZUu11xHBODH1bMTHXpKMhrymrjZNSb5WnAj4noX3PuCksI/G5AJASFlc59
+         hK6g==
+X-Gm-Message-State: AOJu0Yz68s0wewl0Ku0xiKuQGL67MWd11qm/DTcZzrRe+WvBt+wpMsnQ
+	skD/OVw4kNNC5VgrOQYrOIXUUPIXyUDf3svM/9xW54hpJsk61zWA
+X-Google-Smtp-Source: AGHT+IH/9Nj5WDlsPbIDD1PwT1FxXbii1wmvr/nrJGYxhoi6DMNAq+DmzYtYnoPRfoyLnVY+Q57aig==
+X-Received: by 2002:a17:907:76e9:b0:a2b:130c:a897 with SMTP id kg9-20020a17090776e900b00a2b130ca897mr3789358ejc.17.1706377992884;
+        Sat, 27 Jan 2024 09:53:12 -0800 (PST)
 Received: from localhost ([185.220.101.170])
-        by smtp.gmail.com with ESMTPSA id se27-20020a170906ce5b00b00a349318ea10sm1954018ejb.199.2024.01.27.09.53.07
+        by smtp.gmail.com with ESMTPSA id vu2-20020a170907a64200b00a2cc5199dd0sm1967844ejc.135.2024.01.27.09.53.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jan 2024 09:53:08 -0800 (PST)
+        Sat, 27 Jan 2024 09:53:12 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -87,11 +87,10 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next v3 4/6] selftests/bpf: Add test cases for narrowing fill
-Date: Sat, 27 Jan 2024 19:52:35 +0200
-Message-ID: <20240127175237.526726-5-maxtram95@gmail.com>
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v3 5/6] bpf: handle scalar spill vs all MISC in stacksafe()
+Date: Sat, 27 Jan 2024 19:52:36 +0200
+Message-ID: <20240127175237.526726-6-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240127175237.526726-1-maxtram95@gmail.com>
 References: <20240127175237.526726-1-maxtram95@gmail.com>
@@ -103,137 +102,150 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Maxim Mikityanskiy <maxim@isovalent.com>
+From: Eduard Zingerman <eddyz87@gmail.com>
 
-The previous commit allowed to preserve boundaries and track IDs of
-scalars on narrowing fills. Add test cases for that pattern.
+When check_stack_read_fixed_off() reads value from an spi
+all stack slots of which are set to STACK_{MISC,INVALID},
+the destination register is set to unbound SCALAR_VALUE.
 
-Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Exploit this fact by allowing stacksafe() to use a fake
+unbound scalar register to compare 'mmmm mmmm' stack value
+in old state vs spilled 64-bit scalar in current state
+and vice versa.
+
+Veristat results after this patch show some gains:
+
+./veristat -C -e file,prog,states -f 'states_pct>10'  not-opt after
+File                     Program                States   (DIFF)
+-----------------------  ---------------------  ---------------
+bpf_overlay.o            tail_rev_nodeport_lb4    -45 (-15.85%)
+bpf_xdp.o                tail_lb_ipv4            -541 (-19.57%)
+pyperf100.bpf.o          on_event                -680 (-10.42%)
+pyperf180.bpf.o          on_event               -2164 (-19.62%)
+pyperf600.bpf.o          on_event               -9799 (-24.84%)
+strobemeta.bpf.o         on_event               -9157 (-65.28%)
+xdp_synproxy_kern.bpf.o  syncookie_tc             -54 (-19.29%)
+xdp_synproxy_kern.bpf.o  syncookie_xdp            -74 (-24.50%)
+
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_spill_fill.c | 111 ++++++++++++++++++
- 1 file changed, 111 insertions(+)
+ kernel/bpf/verifier.c | 72 +++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 69 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 3e5d063ea7e8..7f3b1319bd99 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -979,4 +979,115 @@ l0_%=:	r0 = 0;						\
- 	: __clobber_all);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 81b08a0e9e2c..6a174c4849ba 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1155,6 +1155,12 @@ static bool is_spilled_scalar_reg(const struct bpf_stack_state *stack)
+ 	       stack->spilled_ptr.type == SCALAR_VALUE;
  }
  
-+SEC("xdp")
-+__description("32-bit fill after 64-bit spill")
-+__success __retval(0)
-+__naked void fill_32bit_after_spill_64bit(void)
++static bool is_spilled_scalar_reg64(const struct bpf_stack_state *stack)
 +{
-+	asm volatile("					\
-+	/* Randomize the upper 32 bits. */		\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 <<= 32;					\
-+	/* 64-bit spill r0 to stack. */			\
-+	*(u64*)(r10 - 8) = r0;				\
-+	/* 32-bit fill r0 from stack. */		\
-+	"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"r0 = *(u32*)(r10 - 8);"
-+#else
-+	"r0 = *(u32*)(r10 - 4);"
-+#endif
-+	"						\
-+	/* Boundary check on r0 with predetermined result. */\
-+	if r0 == 0 goto l0_%=;				\
-+	/* Dead branch: the verifier should prune it. Do an invalid memory\
-+	 * access if the verifier follows it.		\
-+	 */						\
-+	r0 = *(u64*)(r9 + 0);				\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	return stack->slot_type[0] == STACK_SPILL &&
++	       stack->spilled_ptr.type == SCALAR_VALUE;
 +}
 +
-+SEC("xdp")
-+__description("32-bit fill after 64-bit spill of 32-bit value should preserve ID")
-+__success __retval(0)
-+__naked void fill_32bit_after_spill_64bit_preserve_id(void)
+ /* Mark stack slot as STACK_MISC, unless it is already STACK_INVALID, in which
+  * case they are equivalent, or it's STACK_ZERO, in which case we preserve
+  * more precise STACK_ZERO.
+@@ -2264,8 +2270,7 @@ static void __reg_assign_32_into_64(struct bpf_reg_state *reg)
+ }
+ 
+ /* Mark a register as having a completely unknown (scalar) value. */
+-static void __mark_reg_unknown(const struct bpf_verifier_env *env,
+-			       struct bpf_reg_state *reg)
++static void __mark_reg_unknown_imprecise(struct bpf_reg_state *reg)
+ {
+ 	/*
+ 	 * Clear type, off, and union(map_ptr, range) and
+@@ -2277,10 +2282,20 @@ static void __mark_reg_unknown(const struct bpf_verifier_env *env,
+ 	reg->ref_obj_id = 0;
+ 	reg->var_off = tnum_unknown;
+ 	reg->frameno = 0;
+-	reg->precise = !env->bpf_capable;
++	reg->precise = false;
+ 	__mark_reg_unbounded(reg);
+ }
+ 
++/* Mark a register as having a completely unknown (scalar) value,
++ * initialize .precise as true when not bpf capable.
++ */
++static void __mark_reg_unknown(const struct bpf_verifier_env *env,
++			       struct bpf_reg_state *reg)
 +{
-+	asm volatile ("					\
-+	/* Randomize the lower 32 bits. */		\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xffffffff;				\
-+	/* 64-bit spill r0 to stack - should assign an ID. */\
-+	*(u64*)(r10 - 8) = r0;				\
-+	/* 32-bit fill r1 from stack - should preserve the ID. */\
-+	"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"r1 = *(u32*)(r10 - 8);"
-+#else
-+	"r1 = *(u32*)(r10 - 4);"
-+#endif
-+	"						\
-+	/* Compare r1 with another register to trigger find_equal_scalars. */\
-+	r2 = 0;						\
-+	if r1 != r2 goto l0_%=;				\
-+	/* The result of this comparison is predefined. */\
-+	if r0 == r2 goto l0_%=;				\
-+	/* Dead branch: the verifier should prune it. Do an invalid memory\
-+	 * access if the verifier follows it.		\
-+	 */						\
-+	r0 = *(u64*)(r9 + 0);				\
-+	exit;						\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	__mark_reg_unknown_imprecise(reg);
++	reg->precise = !env->bpf_capable;
 +}
 +
-+SEC("xdp")
-+__description("32-bit fill after 64-bit spill should clear ID")
-+__failure __msg("math between ctx pointer and 4294967295 is not allowed")
-+__naked void fill_32bit_after_spill_64bit_clear_id(void)
+ static void mark_reg_unknown(struct bpf_verifier_env *env,
+ 			     struct bpf_reg_state *regs, u32 regno)
+ {
+@@ -16474,6 +16489,43 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 	}
+ }
+ 
++static struct bpf_reg_state unbound_reg;
++
++static __init int unbound_reg_init(void)
 +{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	/* Roll one bit to force the verifier to track both branches. */\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0x8;					\
-+	/* Put a large number into r1. */		\
-+	r1 = 0xffffffff;				\
-+	r1 <<= 32;					\
-+	r1 += r0;					\
-+	/* 64-bit spill r1 to stack - should assign an ID. */\
-+	*(u64*)(r10 - 8) = r1;				\
-+	/* 32-bit fill r2 from stack - should clear the ID. */\
-+	"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"r2 = *(u32*)(r10 - 8);"
-+#else
-+	"r2 = *(u32*)(r10 - 4);"
-+#endif
-+	"						\
-+	/* Compare r2 with another register to trigger find_equal_scalars.\
-+	 * Having one random bit is important here, otherwise the verifier cuts\
-+	 * the corners. If the ID was mistakenly preserved on fill, this would\
-+	 * cause the verifier to think that r1 is also equal to zero in one of\
-+	 * the branches, and equal to eight on the other branch.\
-+	 */						\
-+	r3 = 0;						\
-+	if r2 != r3 goto l0_%=;				\
-+l0_%=:	r1 >>= 32;					\
-+	/* The verifier shouldn't propagate r2's range to r1, so it should\
-+	 * still remember r1 = 0xffffffff and reject the below.\
-+	 */						\
-+	r6 += r1;					\
-+	r0 = *(u32*)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	__mark_reg_unknown_imprecise(&unbound_reg);
++	unbound_reg.live |= REG_LIVE_READ;
++	return 0;
++}
++late_initcall(unbound_reg_init);
++
++static bool is_stack_all_misc(struct bpf_verifier_env *env,
++			      struct bpf_stack_state *stack)
++{
++	u32 i;
++
++	for (i = 0; i < ARRAY_SIZE(stack->slot_type); ++i) {
++		if ((stack->slot_type[i] == STACK_MISC) ||
++		    (stack->slot_type[i] == STACK_INVALID && env->allow_uninit_stack))
++			continue;
++		return false;
++	}
++
++	return true;
 +}
 +
- char _license[] SEC("license") = "GPL";
++static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_env *env,
++						  struct bpf_stack_state *stack)
++{
++	if (is_spilled_scalar_reg64(stack))
++		return &stack->spilled_ptr;
++
++	if (is_stack_all_misc(env, stack))
++		return &unbound_reg;
++
++	return NULL;
++}
++
+ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		      struct bpf_func_state *cur, struct bpf_idmap *idmap, bool exact)
+ {
+@@ -16512,6 +16564,20 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		if (i >= cur->allocated_stack)
+ 			return false;
+ 
++		/* 64-bit scalar spill vs all slots MISC and vice versa.
++		 * Load from all slots MISC produces unbound scalar.
++		 * Construct a fake register for such stack and call
++		 * regsafe() to ensure scalar ids are compared.
++		 */
++		old_reg = scalar_reg_for_stack(env, &old->stack[spi]);
++		cur_reg = scalar_reg_for_stack(env, &cur->stack[spi]);
++		if (old_reg && cur_reg) {
++			if (!regsafe(env, old_reg, cur_reg, idmap, exact))
++				return false;
++			i += BPF_REG_SIZE - 1;
++			continue;
++		}
++
+ 		/* if old state was safe with misc data in the stack
+ 		 * it will be safe with zero-initialized stack.
+ 		 * The opposite is not true
 -- 
 2.43.0
 
