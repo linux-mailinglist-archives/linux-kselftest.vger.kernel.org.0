@@ -1,69 +1,71 @@
-Return-Path: <linux-kselftest+bounces-3663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7257283EF34
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 18:53:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1238183EF36
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 18:53:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32420281E8A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 17:53:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35EE81C21FEB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 17:53:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7CC22D05C;
-	Sat, 27 Jan 2024 17:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9972D61A;
+	Sat, 27 Jan 2024 17:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NRRieITr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUgCB3to"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5B22D04F;
-	Sat, 27 Jan 2024 17:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312312D600;
+	Sat, 27 Jan 2024 17:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706377975; cv=none; b=k5O79sk6+CkpJcpffQIAP15HMDUqaOnx3Ln97AFSky6L0mYKR2noxukIyOMharjhXmfKNA4h8p+Z8xvSsysyXG0xFSP+lqCTNHPrXQhHouyroFDcFo9RThs22t4gr46Tb+yZeimyCYRmf7SNnj+ZJCrBQel8ax9mi+TDMQAY8fw=
+	t=1706377978; cv=none; b=uOs5zZ+dJxCGPKj6jmS6LibNmeUZguL2czKT7/S9TE+UPIZ5yvt9dXlb+m+tm6qXhW0jAu19T9Zd1UzrvWr7g6CuU+Y3IzVYd2ueWpLu6oNafzVcyrXvZgODfCisS2XLYh7FlmSZhbw7Pvmt33C5r+cgYmhih1uh6/4WeChyToc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706377975; c=relaxed/simple;
-	bh=ZwsqwUJlDVP1h28RN1QvwWqhZf5uSegsBDO8ixMVz3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f2yjgqg2meRGJebgB9tO6C87mEP2MJiYysxWcDL5jGg6dZqykoztBpwVykg7k5b1Oo7FO9JDkVzg5vQjeObkNjQQDU6BCMskCc/FxZTsULWrNUYp7CzMnBI05uh1+oGFOflG8RlVC9hp9tpbrViYUldO8zC0dA2bXu4TiEBCPaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NRRieITr; arc=none smtp.client-ip=209.85.128.44
+	s=arc-20240116; t=1706377978; c=relaxed/simple;
+	bh=VAiI/hRTYsl5Wq3jPFieFFhFWOTUmvZ8ipOqR5Ko1Gw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lvUWxVCkTbQlQZlj5/HTIdMJBGMP0ARzUUAtOQ7jmsjsZ8JYX91aqLtMyOO8dvun61A7VU78HmPNYRFr7DwHiaMK6cJqizP38p3bEO3+mSdZISoNG7oUGMre1Xw8eveoHbw8T1wNN/vYE9Eid+hEMwb/S6HDBZr3hW/SpA7Nu+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUgCB3to; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40ef0908c84so3276095e9.0;
-        Sat, 27 Jan 2024 09:52:53 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40ef0643722so3485635e9.3;
+        Sat, 27 Jan 2024 09:52:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706377972; x=1706982772; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLV1PHlbi5Cz6WfYZSHeOC5ViguutB+3Sy48F+2cQ3E=;
-        b=NRRieITr5//1pa4DTynKSPR6sf2Obeyii3by3JvjthZlc4PaC5XEW5Mq0uZkvTyxcD
-         g1x74xs6+o2wdrWVvOgXK+B8B1z6IYui279Ky8Rnnq3Ba0BO7wfOhCyjTfGivnD0vAdW
-         wZXRUoySyEqCjCXXO1As6aNjgnhXyUERwZwbiYmJPFdJ4ABb9gBKV5vOSWMHPEac/ub2
-         7L9K1gB4PPeKBvMJp/TcSWFs2cuepJ0HHpqHclkMjarIfdBGhTJfYtQzILZaCsSeIBX8
-         LOYJC0KLAQ3mPhcrMdM21jHLk+iEfcIaMvtoL9Jy/7QYnzqoVUP03b5qSOuQkJBI63Tq
-         kGBw==
+        d=gmail.com; s=20230601; t=1706377975; x=1706982775; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=140WdK2PKIttOzK0HYik4RpplzTQ3zPqG6HYXa/6NHA=;
+        b=MUgCB3to8TTtMTqdvNPsW7gOlgBRCmBYcNn8YdvI2Cv9oEHFiBT7HKF63pC5SvUuzA
+         7fvYz9SXwNbmhzTldJtp014Vs8+Oz4hF0bPiPq7ZDSX8Qn0+cXbVdZGALONgEklCdyOS
+         qttLpMRIMT1waWjy7KZ/f13toL1x10NQwVcRBQPfPDFoSpa7t/x9KRvBnNSSRV2COZhr
+         yDBJr/mBVZXQ8PtSFe8X0HxQuL18NlzMs5LLxvhXCegP1TUFOtgygbY2yL3IaIDYUxFh
+         SjsaRfDAjWwmmofDu5N2204VoiWM5gj2ddiXyj9XEZNebbGz4gVPjcrZLEo0riW4UKBq
+         2qOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706377972; x=1706982772;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aLV1PHlbi5Cz6WfYZSHeOC5ViguutB+3Sy48F+2cQ3E=;
-        b=cpSlj6aEmsmR65yaISjZECiVNNhXSpyAeqtIKST25cApyEi2qj/vJZdg4FxBwT0KFd
-         BbS49bjdpffFvcbuo3SfnMnt4StJPraPYtgcBx7UFb8oI4Xq/8euS37V4/NoRI/IB+TH
-         8BPGgLFlBup7wHK7ddk2QJX4wJql8mGXmLeVqERl2YCH1HA2gSYD/6NALuGUwzlDTA6W
-         d2dACaO9OaMxE0O+PMnj2w8OkkwB9gADYf62qnTtLwsgXMlBXqLcDh848VE8ScLh2rQv
-         RurudeXVeOzHzCe25qsdAmuxlUjolLdVfFzuLGdYSEVRcO/vgYcGdN9bFyYQimoRa0cx
-         84KA==
-X-Gm-Message-State: AOJu0YzLqjNngrlq7MvRbD4/LPWOBC5P3znWbzvwthgNg+7lqmjlZgLf
-	4/ea1B0bRj1Y2guILGnZDJhbpaIM7shrr+eeGk1WeJLdY/DZeZvv8kj69ww0dzhyZA==
-X-Google-Smtp-Source: AGHT+IHydjHmX38PMpgKWMy8CTDf2DwkqrIvUnRXble1C1JnF1I2ur4zx3XgkZMyvYL7NUgkS3/kFQ==
-X-Received: by 2002:adf:e64a:0:b0:33a:e7a8:2994 with SMTP id b10-20020adfe64a000000b0033ae7a82994mr153763wrn.138.1706377971498;
-        Sat, 27 Jan 2024 09:52:51 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706377975; x=1706982775;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=140WdK2PKIttOzK0HYik4RpplzTQ3zPqG6HYXa/6NHA=;
+        b=BBZifjBS65gstCElx2df2YFsG8YNgolAm4IjPcEJDu3TsEle297S1p2S0sdYhUzSiH
+         lkiIzFFyhSdEJ7Br1eBYZ0PdCqEM+XZZEWneRgmZqmVUGVB6jexzmkgwl9Pcpcx17ABm
+         mZxD4itBcCfo5Fkqbpgl2AMXVqmi6H8tuAl5edAjODQrdFOSnk0KWmzJtN02fycJg/7f
+         9cvKukeoxO2/rxhLPuAz7SHu+FbTdnqOikV7BEm/Ng0h6f4kqGyGaob/m+sYx1k1ZDTd
+         wWfk1Ztg6QcRt7HyI3J59nWWfRQdbtXo78vxZ/w05B1Kd3zSMQSzNzq1ipQLLsYYb6ZG
+         /0OA==
+X-Gm-Message-State: AOJu0YzvAvs/DwALFx4CmCc44h0DR828J2h2zkVznBR8BpUdwyz+2hIO
+	3Dnpr40jYiAiiCiVJ7qHg2B/L5CKLJY8xfTN77PCtA3HOI0DVMWy
+X-Google-Smtp-Source: AGHT+IGIROIv3bVw5y84GVGgIcSolBbb5CdoA23ygrQqxfrk56y86APtbiL1QNuKZjDtgk4FbvbgFw==
+X-Received: by 2002:adf:e511:0:b0:33a:e75a:6aea with SMTP id j17-20020adfe511000000b0033ae75a6aeamr274965wrm.73.1706377975132;
+        Sat, 27 Jan 2024 09:52:55 -0800 (PST)
 Received: from localhost ([185.220.101.170])
-        by smtp.gmail.com with ESMTPSA id cw1-20020a170907160100b00a35404360a8sm819418ejd.119.2024.01.27.09.52.49
+        by smtp.gmail.com with ESMTPSA id l1-20020a50cbc1000000b00557aa8d72c9sm1801444edi.25.2024.01.27.09.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jan 2024 09:52:50 -0800 (PST)
+        Sat, 27 Jan 2024 09:52:54 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -87,10 +89,12 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next v3 0/6] Improvements for tracking scalars in the BPF verifier
-Date: Sat, 27 Jan 2024 19:52:31 +0200
-Message-ID: <20240127175237.526726-1-maxtram95@gmail.com>
+Subject: [PATCH bpf-next v3 1/6] bpf: Track spilled unbounded scalars
+Date: Sat, 27 Jan 2024 19:52:32 +0200
+Message-ID: <20240127175237.526726-2-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240127175237.526726-1-maxtram95@gmail.com>
+References: <20240127175237.526726-1-maxtram95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -101,90 +105,82 @@ Content-Transfer-Encoding: 8bit
 
 From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-The goal of this series is to extend the verifier's capabilities of
-tracking scalars when they are spilled to stack, especially when the
-spill or fill is narrowing. It also contains a fix by Eduard for
-infinite loop detection and a state pruning optimization by Eduard that
-compensates for a verification complexity regression introduced by
-tracking unbounded scalars. These improvements reduce the surface of
-false rejections that I saw while working on Cilium codebase.
+Support the pattern where an unbounded scalar is spilled to the stack,
+then boundary checks are performed on the src register, after which the
+stack frame slot is refilled into a register.
 
-Patches 1-9 of the original series were previously applied in v2.
+Before this commit, the verifier didn't treat the src register and the
+stack slot as related if the src register was an unbounded scalar. The
+register state wasn't copied, the id wasn't preserved, and the stack
+slot was marked as STACK_MISC. Subsequent boundary checks on the src
+register wouldn't result in updating the boundaries of the spilled
+variable on the stack.
 
-Patches 1-2 (Maxim): Support the case when boundary checks are first
-performed after the register was spilled to the stack.
+After this commit, the verifier will preserve the bond between src and
+dst even if src is unbounded, which permits to do boundary checks on src
+and refill dst later, still remembering its boundaries. Such a pattern
+is sometimes generated by clang when compiling complex long functions.
 
-Patches 3-4 (Maxim): Support narrowing fills.
+One test is adjusted to reflect that now unbounded scalars are tracked.
 
-Patches 5-6 (Eduard): Optimization for state pruning in stacksafe() to
-mitigate the verification complexity regression.
+Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ kernel/bpf/verifier.c                            | 16 +---------------
+ .../selftests/bpf/progs/verifier_spill_fill.c    |  6 +++---
+ 2 files changed, 4 insertions(+), 18 deletions(-)
 
-veristat -e file,prog,states -f '!states_diff<50' -f '!states_pct<10' -f '!states_a<10' -f '!states_b<10' -C ...
-
- * Without patch 5:
-
-File                  Program   States (A)  States (B)  States    (DIFF)
---------------------  --------  ----------  ----------  ----------------
-pyperf100.bpf.o       on_event        4878        6528   +1650 (+33.83%)
-pyperf180.bpf.o       on_event        6936       11032   +4096 (+59.05%)
-pyperf600.bpf.o       on_event       22271       39455  +17184 (+77.16%)
-pyperf600_iter.bpf.o  on_event         400         490     +90 (+22.50%)
-strobemeta.bpf.o      on_event        4895       14028  +9133 (+186.58%)
-
- * With patch 5:
-
-File                     Program        States (A)  States (B)  States   (DIFF)
------------------------  -------------  ----------  ----------  ---------------
-bpf_xdp.o                tail_lb_ipv4         2770        2224   -546 (-19.71%)
-pyperf100.bpf.o          on_event             4878        5848   +970 (+19.89%)
-pyperf180.bpf.o          on_event             6936        8868  +1932 (+27.85%)
-pyperf600.bpf.o          on_event            22271       29656  +7385 (+33.16%)
-pyperf600_iter.bpf.o     on_event              400         450    +50 (+12.50%)
-xdp_synproxy_kern.bpf.o  syncookie_tc          280         226    -54 (-19.29%)
-xdp_synproxy_kern.bpf.o  syncookie_xdp         302         228    -74 (-24.50%)
-
-v2 changes:
-
-Fixed comments in patch 1, moved endianness checks to header files in
-patch 12 where possible, added Eduard's ACKs.
-
-v3 changes:
-
-Maxim: Removed __is_scalar_unbounded altogether, addressed Andrii's
-comments.
-
-Eduard: Patch #5 (#14 in v2) changed significantly:
-- Logical changes:
-  - Handling of STACK_{MISC,ZERO} mix turned out to be incorrect:
-    a mix of MISC and ZERO in old state is not equivalent to e.g.
-    just MISC is current state, because verifier could have deduced
-    zero scalars from ZERO slots in old state for some loads.
-  - There is no reason to limit the change only to cases when
-    old or current stack is a spill of unbounded scalar,
-    it is valid to compare any 64-bit scalar spill with fake
-    register impersonating MISC.
-  - STACK_ZERO vs spilled zero case was dropped,
-    after recent changes for zero handling by Andrii and Yonghong
-    it is hard (impossible?) to conjure all ZERO slots for an spi.
-    => the case does not make any difference in veristat results.
-- Use global static variable for unbound_reg (Andrii)
-- Code shuffling to remove duplication in stacksafe() (Andrii)
-
-Eduard Zingerman (2):
-  bpf: handle scalar spill vs all MISC in stacksafe()
-  selftests/bpf: states pruning checks for scalar vs STACK_MISC
-
-Maxim Mikityanskiy (4):
-  bpf: Track spilled unbounded scalars
-  selftests/bpf: Test tracking spilled unbounded scalars
-  bpf: Preserve boundaries and track scalars on narrowing fill
-  selftests/bpf: Add test cases for narrowing fill
-
- include/linux/bpf_verifier.h                  |   9 +
- kernel/bpf/verifier.c                         | 103 ++++--
- .../selftests/bpf/progs/verifier_spill_fill.c | 324 +++++++++++++++++-
- 3 files changed, 404 insertions(+), 32 deletions(-)
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c5d68a9d8acc..f4b9fd0006d1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4380,20 +4380,6 @@ static u64 reg_const_value(struct bpf_reg_state *reg, bool subreg32)
+ 	return subreg32 ? tnum_subreg(reg->var_off).value : reg->var_off.value;
+ }
+ 
+-static bool __is_scalar_unbounded(struct bpf_reg_state *reg)
+-{
+-	return tnum_is_unknown(reg->var_off) &&
+-	       reg->smin_value == S64_MIN && reg->smax_value == S64_MAX &&
+-	       reg->umin_value == 0 && reg->umax_value == U64_MAX &&
+-	       reg->s32_min_value == S32_MIN && reg->s32_max_value == S32_MAX &&
+-	       reg->u32_min_value == 0 && reg->u32_max_value == U32_MAX;
+-}
+-
+-static bool register_is_bounded(struct bpf_reg_state *reg)
+-{
+-	return reg->type == SCALAR_VALUE && !__is_scalar_unbounded(reg);
+-}
+-
+ static bool __is_pointer_value(bool allow_ptr_leaks,
+ 			       const struct bpf_reg_state *reg)
+ {
+@@ -4504,7 +4490,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		return err;
+ 
+ 	mark_stack_slot_scratched(env, spi);
+-	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) && env->bpf_capable) {
++	if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE && env->bpf_capable) {
+ 		bool reg_value_fits;
+ 
+ 		reg_value_fits = get_reg_width(reg) <= BITS_PER_BYTE * size;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 7013a9694163..317806451762 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -452,9 +452,9 @@ l0_%=:	r1 >>= 16;					\
+ SEC("raw_tp")
+ __log_level(2)
+ __success
+-__msg("fp-8=0m??mmmm")
+-__msg("fp-16=00mm??mm")
+-__msg("fp-24=00mm???m")
++__msg("fp-8=0m??scalar()")
++__msg("fp-16=00mm??scalar()")
++__msg("fp-24=00mm???scalar()")
+ __naked void spill_subregs_preserve_stack_zero(void)
+ {
+ 	asm volatile (
 -- 
 2.43.0
 
