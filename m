@@ -1,262 +1,144 @@
-Return-Path: <linux-kselftest+bounces-3654-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 909CA83E877
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 01:29:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE15983E9BD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 03:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C9A01C21AA1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 00:29:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A9DF1F2761C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jan 2024 02:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F6419A;
-	Sat, 27 Jan 2024 00:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D212965C;
+	Sat, 27 Jan 2024 02:32:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="n7CGtsvJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OXyYgYsH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3F5630
-	for <linux-kselftest@vger.kernel.org>; Sat, 27 Jan 2024 00:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1A2B65D;
+	Sat, 27 Jan 2024 02:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706315349; cv=none; b=PwuZYMyLKdRR83niUUB5EciWqx2cDpVlBnx2uqzgAbJpmUXT0la+YxmBKluogz2DrqoukHUQDnXqFHrCGRRvPWhj9hGKNl7bJCtBY0/arb3XDx5fHHFWnBuUbfRdwE7Cm9NG10eofasqZdgnKPz9iU0s8frifVsLkcp+qjUr4yY=
+	t=1706322744; cv=none; b=e4b5EzqECp+d8KSFhE0qcOl7M2Z4g/ssX9B98amL52mCO/2XnLk94WOI5JK4+QStCZLrEIlQ4czl3jaAnQ1NSS34ogghZIUZwJMBE705uVVJM+R+0rQ9yYMDEMUjArXOXZUjf1NjUDzNalolOf13aL3XwFfkESZyw+IWYRunKb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706315349; c=relaxed/simple;
-	bh=5sEVI83xY5mvEPW0c9LA+P8zBPvgkiJ/KHpqkDMlQSw=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=PdXkbzdqACwETyivel4KFgP6hNUgAcMj8NySFTp5QHZFcQlxIfJ+HmvMJTDQe5cNleSJUhOq0ku4yAySTsD6CYS+fnubrAg6F/JRxDGJiwZKKOfqZrCbINkp49MeghB92rwFdsIpMGVT66pQqkxx6aFd9LdCYuwg2ZxrUW073Ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=n7CGtsvJ; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5EB4C3F5F4
-	for <linux-kselftest@vger.kernel.org>; Sat, 27 Jan 2024 00:28:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1706315337;
-	bh=2zuptboPtpFHfDSk/+RxWCV8mwfG174WDOUFcRIK/LA=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID;
-	b=n7CGtsvJX5lFAlCs7MaSBUMfuJa4Qu//XUO9I+dFs3GttetGEryGA6w28lcycBca0
-	 7KU8SNBKz7w004tK1qecQumTfeTo5EGgPq2C72Bk3CA+nVT0nWd/RTnO1A+xkoOpn0
-	 rgr8892P004yOmosGWQIZghA4zl94oiDFFVJQtD1kjUVeFTHhoE2b/099M0gdUT5v3
-	 9cESHwMQWfVMg3Q83lJQFhfpm2aQJ61ttyTr3Epau1KZADhdR1YLi9vh19jiUitDtZ
-	 g/smXMBCdcvE/lcrSQesdJgelTZAIcdWRG6lxkPJyD1aJXnzjrdEagVsCqcU02oDWI
-	 AXgzI4fyyqsyQ==
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6e1159b1918so268364a34.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jan 2024 16:28:57 -0800 (PST)
+	s=arc-20240116; t=1706322744; c=relaxed/simple;
+	bh=r7RAxwquJVP5asbAoDhEWhNoTCGJG26QY0llMRexe80=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RCHHziCr/aeon25Z9zWgjbejJUs5AixumVoSakfmfFLY+HnTCaLNJS4dGO/gktEy6u2PCZ7W+qWm+GHR00PU1hd9bWBu9DpaVlZbefVD63Pt8E8b4Gjs3Nk+LyQrIpsrMlxgcIPyzf+aKlnMggdRQYoorV0E3UhBStcsF+0dttw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OXyYgYsH; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-680b1335af6so20440816d6.1;
+        Fri, 26 Jan 2024 18:32:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706322742; x=1706927542; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Ji269MoVqaoZ+crSZez3EPRGEYWBb0tQGgumN9NBik=;
+        b=OXyYgYsHTlw49drir6bETGz0nY+k2Y2N4CfcAmBTPbzy/dHGRQHKwNj5JA3437Lui2
+         vx0yg1YOyHIo6rIi8Em4lYlj2XlqwlcG0ryfjicoPqBEHdXo7DR5oYhPlBkYBG2RovPN
+         lHyjyTIjTww6yFS9wDH6E+kbfv2ngnqlaR7mJojHOBi4SXR47SLNt/JNxwYdIYt126/A
+         pelAcD55P7hE70JnZz0ikqmsa3w0mIHFMd6l1KeMTHdhvH0Ijtxrh6j36raH5dcf2BtH
+         wXXPd5kKdDncyqA4b9Rtdq4iswQa3kROdfSpDtQQ3XJmMseTBAdMM6VyeEGhmJrfDfSm
+         a+fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706315336; x=1706920136;
-        h=message-id:date:content-transfer-encoding:content-id:mime-version
-         :comments:references:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2zuptboPtpFHfDSk/+RxWCV8mwfG174WDOUFcRIK/LA=;
-        b=k3gNgKKL3c8e8WDcyXLTKt0kBabV5uVWxaApuI1WPCEkZk7THdaFAq9vumrjqxKsFI
-         HK5ki2T6Z/XKqhkwGhzswqC3qv7FYtQmwNDIwWNk0Eyc98Lk+rxsYn0cNElSpYPm8Iye
-         fCmvwwm7LqoiSqG1g7Mk71wN02rurMMApZouhmMTkoCIMiZmo5YGzvBR9xpscqXKH+ng
-         B15GcuJIbDn6KZp7a4in/LJ0LoqVT773aTSmbtHOB/ovxGs/+SjZE3rEIID8rkjeL4ju
-         0qUeg9Nk+sEcnKibWUZLjSx0vpiAJ6BbpV1M+0LSt8DeI2iQQMRW4/7TYD3VxVGv0GEY
-         ahFQ==
-X-Gm-Message-State: AOJu0YzIdVQI5zNF3ojmBSEeJcIDzhBcweKAGz6ywxm5svj0uJ3HPJe4
-	WrwXTxp6plhP0Rvcc5S7qCLxfzpzo6aEu81dzeBWswUZeZDPfjoteEpajcFBYWiWd3nUAB9AViq
-	1quvI7ROp63x4kk6Xw9yRoAb6aG5ur8PBCxh2xJWd6ShxHfBCe4v7sNWQHpUAUkkXNNDeIa/E1J
-	RJ5sjzdw==
-X-Received: by 2002:a9d:7357:0:b0:6db:cffe:8e8b with SMTP id l23-20020a9d7357000000b006dbcffe8e8bmr615373otk.10.1706315336235;
-        Fri, 26 Jan 2024 16:28:56 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEUfOnZGAiFGpCrG45elfBXGx2d9Hp07QRzna4M9tsXtxq/mI6ptycgdeexO2oAnUbioKTH2A==
-X-Received: by 2002:a9d:7357:0:b0:6db:cffe:8e8b with SMTP id l23-20020a9d7357000000b006dbcffe8e8bmr615343otk.10.1706315335994;
-        Fri, 26 Jan 2024 16:28:55 -0800 (PST)
-Received: from famine.localdomain ([50.125.80.253])
-        by smtp.gmail.com with ESMTPSA id ln8-20020a056a003cc800b006dddf2ed8f0sm1670154pfb.154.2024.01.26.16.28.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Jan 2024 16:28:55 -0800 (PST)
-Received: by famine.localdomain (Postfix, from userid 1000)
-	id 29ADB5FFF6; Fri, 26 Jan 2024 16:28:55 -0800 (PST)
-Received: from famine (localhost [127.0.0.1])
-	by famine.localdomain (Postfix) with ESMTP id 237949FB50;
-	Fri, 26 Jan 2024 16:28:55 -0800 (PST)
-From: Jay Vosburgh <jay.vosburgh@canonical.com>
-To: Benjamin Poirier <bpoirier@nvidia.com>
-cc: netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-    Jonathan Corbet <corbet@lwn.net>,
-    Andy Gospodarek <andy@greyhouse.net>, Andrew Lunn <andrew@lunn.ch>,
-    Florian Fainelli <f.fainelli@gmail.com>,
-    Vladimir Oltean <olteanv@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-    "David S. Miller" <davem@davemloft.net>,
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-    Paolo Abeni <pabeni@redhat.com>, Petr Machata <petrm@nvidia.com>,
-    Danielle Ratson <danieller@nvidia.com>,
-    Nikolay Aleksandrov <razor@blackwall.org>,
-    Ido Schimmel <idosch@nvidia.com>,
-    Johannes Nixdorf <jnixdorf-oss@avm.de>,
-    Davide Caratti <dcaratti@redhat.com>,
-    Tobias Waldekranz <tobias@waldekranz.com>,
-    Zahari Doychev <zdoychev@maxlinear.com>,
-    Hangbin Liu <liuhangbin@gmail.com>, linux-kselftest@vger.kernel.org,
-    linux-doc@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/6] selftests: bonding: Add net/forwarding/lib.sh to TEST_INCLUDES
-In-reply-to: <20240126232123.769784-3-bpoirier@nvidia.com>
-References: <20240126232123.769784-1-bpoirier@nvidia.com> <20240126232123.769784-3-bpoirier@nvidia.com>
-Comments: In-reply-to Benjamin Poirier <bpoirier@nvidia.com>
-   message dated "Fri, 26 Jan 2024 18:21:19 -0500."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+        d=1e100.net; s=20230601; t=1706322742; x=1706927542;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Ji269MoVqaoZ+crSZez3EPRGEYWBb0tQGgumN9NBik=;
+        b=gDtOn3AEBqt8KMUbIaNtmn1GzmGTGOnJ9HjQu/CSvgUCcCkFINflxfOniY10Isjvea
+         kn3RG8UonqOJq9HhK2p1IbA52GkqO/53CkfWJfGO8Le4plES6SXsOPmHlCjm98xd2D4y
+         6rVZWVnroFIs4Uz6TVhAVDHKq9bWd7NSL9SkYoXaBlTVzVnNzl4QQLXhGH5WeSdyCPMX
+         uZbrmAbSzxQL+gTh2taLXlTKkSQ18k8kp6tf2YFu+0Fn5mDBNIffORkflG7ns6tG5XfP
+         lrxKLLAT48/9RJ7UMBubyGJjVBqIpcLrmUjjDnIEIjScpFlXBsqojDUw0geRWBcoQI7L
+         WcNQ==
+X-Gm-Message-State: AOJu0YwsrNJ5GNuDSHhswCV5+UmghXSdErVxf7x0A/8hb31VInNPtvn6
+	4JM6LXpCby6Dh9kzKHv0xVzemvBnpURZKO3gtUIWB/hlv3fVAFQvnZZTVVWC
+X-Google-Smtp-Source: AGHT+IEW/cKR+QgbsF6tBE6UZV1sdPCV+cbFdVwauRAC0X1wn/CvvRVxmBLKE0xjqBtEzJXKssQMyQ==
+X-Received: by 2002:a0c:9d47:0:b0:681:96fd:8b97 with SMTP id n7-20020a0c9d47000000b0068196fd8b97mr2499705qvf.64.1706322742130;
+        Fri, 26 Jan 2024 18:32:22 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXd5cTdLVaK8xHJhiHYZMg8F7fukntKEX8Q/fYIftDku0pdHnoD0Aawy9xis2f5PRn1tPu2rUwbcc6TQnFV81GCY7tqi7aRaEiKIXjzEtRV8JF3I3FpsR/8qBHrB3QXibpvfkyd4Jf+xS8V131Hh+H1Lr8MxO/BogkIo7iYBJxyL4Qh5hKEpTDYJue4mGI5MciYfCQBjAxsuf+ejFU=
+Received: from willemb.c.googlers.com.com (131.65.194.35.bc.googleusercontent.com. [35.194.65.131])
+        by smtp.gmail.com with ESMTPSA id d20-20020a0cdb14000000b00681617e4a72sm1020770qvk.68.2024.01.26.18.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jan 2024 18:32:21 -0800 (PST)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next] selftests/net: calibrate txtimestamp
+Date: Fri, 26 Jan 2024 21:31:51 -0500
+Message-ID: <20240127023212.3746239-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <11807.1706315335.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 26 Jan 2024 16:28:55 -0800
-Message-ID: <11808.1706315335@famine>
+Content-Transfer-Encoding: 8bit
 
-Benjamin Poirier <bpoirier@nvidia.com> wrote:
+From: Willem de Bruijn <willemb@google.com>
 
->In order to avoid duplicated files when both the bonding and forwarding
->tests are exported together, add net/forwarding/lib.sh to TEST_INCLUDES a=
-nd
->include it via its relative path.
->
->Reviewed-by: Petr Machata <petrm@nvidia.com>
->Tested-by: Petr Machata <petrm@nvidia.com>
->Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
->Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+The test sends packets and compares enqueue, transmit and Ack
+timestamps with expected values. It installs netem delays to increase
+latency between these points.
 
-Reviewed-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+The test proves flaky in virtual environment (vng). Increase the
+delays to reduce variance. Scale measurement tolerance accordingly.
 
+Time sensitive tests are difficult to calibrate. Increasing delays 10x
+also increases runtime 10x, for one. And it may still prove flaky at
+some rate.
 
->---
-> tools/testing/selftests/drivers/net/bonding/Makefile        | 6 ++++--
-> .../selftests/drivers/net/bonding/bond-eth-type-change.sh   | 2 +-
-> .../testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh | 2 +-
-> .../testing/selftests/drivers/net/bonding/dev_addr_lists.sh | 2 +-
-> .../drivers/net/bonding/mode-1-recovery-updelay.sh          | 2 +-
-> .../drivers/net/bonding/mode-2-recovery-updelay.sh          | 2 +-
-> .../selftests/drivers/net/bonding/net_forwarding_lib.sh     | 1 -
-> 7 files changed, 9 insertions(+), 8 deletions(-)
-> delete mode 120000 tools/testing/selftests/drivers/net/bonding/net_forwa=
-rding_lib.sh
->
->diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools=
-/testing/selftests/drivers/net/bonding/Makefile
->index 8a72bb7de70f..1e10a1f06faf 100644
->--- a/tools/testing/selftests/drivers/net/bonding/Makefile
->+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
->@@ -15,7 +15,9 @@ TEST_PROGS :=3D \
-> TEST_FILES :=3D \
-> 	lag_lib.sh \
-> 	bond_topo_2d1c.sh \
->-	bond_topo_3d1c.sh \
->-	net_forwarding_lib.sh
->+	bond_topo_3d1c.sh
->+
->+TEST_INCLUDES :=3D \
->+	../../../net/forwarding/lib.sh
-> =
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+---
+ tools/testing/selftests/net/txtimestamp.sh | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-> include ../../../lib.mk
->diff --git a/tools/testing/selftests/drivers/net/bonding/bond-eth-type-ch=
-ange.sh b/tools/testing/selftests/drivers/net/bonding/bond-eth-type-change=
-.sh
->index 862e947e17c7..8293dbc7c18f 100755
->--- a/tools/testing/selftests/drivers/net/bonding/bond-eth-type-change.sh
->+++ b/tools/testing/selftests/drivers/net/bonding/bond-eth-type-change.sh
->@@ -11,7 +11,7 @@ ALL_TESTS=3D"
-> REQUIRE_MZ=3Dno
-> NUM_NETIFS=3D0
-> lib_dir=3D$(dirname "$0")
->-source "$lib_dir"/net_forwarding_lib.sh
->+source "$lib_dir"/../../../net/forwarding/lib.sh
-> =
+diff --git a/tools/testing/selftests/net/txtimestamp.sh b/tools/testing/selftests/net/txtimestamp.sh
+index 31637769f59f..25baca4b148e 100755
+--- a/tools/testing/selftests/net/txtimestamp.sh
++++ b/tools/testing/selftests/net/txtimestamp.sh
+@@ -8,13 +8,13 @@ set -e
+ 
+ setup() {
+ 	# set 1ms delay on lo egress
+-	tc qdisc add dev lo root netem delay 1ms
++	tc qdisc add dev lo root netem delay 10ms
+ 
+ 	# set 2ms delay on ifb0 egress
+ 	modprobe ifb
+ 	ip link add ifb_netem0 type ifb
+ 	ip link set dev ifb_netem0 up
+-	tc qdisc add dev ifb_netem0 root netem delay 2ms
++	tc qdisc add dev ifb_netem0 root netem delay 20ms
+ 
+ 	# redirect lo ingress through ifb0 egress
+ 	tc qdisc add dev lo handle ffff: ingress
+@@ -24,9 +24,11 @@ setup() {
+ }
+ 
+ run_test_v4v6() {
+-	# SND will be delayed 1000us
+-	# ACK will be delayed 6000us: 1 + 2 ms round-trip
+-	local -r args="$@ -v 1000 -V 6000"
++	# SND will be delayed 10ms
++	# ACK will be delayed 60ms: 10 + 20 ms round-trip
++	# allow +/- tolerance of 8ms
++	# wait for ACK to be queued
++	local -r args="$@ -v 10000 -V 60000 -t 8000 -S 80000"
+ 
+ 	./txtimestamp ${args} -4 -L 127.0.0.1
+ 	./txtimestamp ${args} -6 -L ::1
+-- 
+2.43.0.429.g432eaa2c6b-goog
 
-> bond_check_flags()
-> {
->diff --git a/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.s=
-h b/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh
->index a509ef949dcf..0eb7edfb584c 100644
->--- a/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh
->+++ b/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh
->@@ -28,7 +28,7 @@
-> REQUIRE_MZ=3Dno
-> NUM_NETIFS=3D0
-> lib_dir=3D$(dirname "$0")
->-source ${lib_dir}/net_forwarding_lib.sh
->+source "$lib_dir"/../../../net/forwarding/lib.sh
-> =
-
-> s_ns=3D"s-$(mktemp -u XXXXXX)"
-> c_ns=3D"c-$(mktemp -u XXXXXX)"
->diff --git a/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.s=
-h b/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
->index 5cfe7d8ebc25..e6fa24eded5b 100755
->--- a/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
->+++ b/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
->@@ -14,7 +14,7 @@ ALL_TESTS=3D"
-> REQUIRE_MZ=3Dno
-> NUM_NETIFS=3D0
-> lib_dir=3D$(dirname "$0")
->-source "$lib_dir"/net_forwarding_lib.sh
->+source "$lib_dir"/../../../net/forwarding/lib.sh
-> =
-
-> source "$lib_dir"/lag_lib.sh
-> =
-
->diff --git a/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-=
-updelay.sh b/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-u=
-pdelay.sh
->index b76bf5030952..9d26ab4cad0b 100755
->--- a/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay=
-.sh
->+++ b/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay=
-.sh
->@@ -23,7 +23,7 @@ REQUIRE_MZ=3Dno
-> REQUIRE_JQ=3Dno
-> NUM_NETIFS=3D0
-> lib_dir=3D$(dirname "$0")
->-source "$lib_dir"/net_forwarding_lib.sh
->+source "$lib_dir"/../../../net/forwarding/lib.sh
-> source "$lib_dir"/lag_lib.sh
-> =
-
-> cleanup()
->diff --git a/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-=
-updelay.sh b/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-u=
-pdelay.sh
->index 8c2619002147..2d275b3e47dd 100755
->--- a/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay=
-.sh
->+++ b/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay=
-.sh
->@@ -23,7 +23,7 @@ REQUIRE_MZ=3Dno
-> REQUIRE_JQ=3Dno
-> NUM_NETIFS=3D0
-> lib_dir=3D$(dirname "$0")
->-source "$lib_dir"/net_forwarding_lib.sh
->+source "$lib_dir"/../../../net/forwarding/lib.sh
-> source "$lib_dir"/lag_lib.sh
-> =
-
-> cleanup()
->diff --git a/tools/testing/selftests/drivers/net/bonding/net_forwarding_l=
-ib.sh b/tools/testing/selftests/drivers/net/bonding/net_forwarding_lib.sh
->deleted file mode 120000
->index 39c96828c5ef..000000000000
->--- a/tools/testing/selftests/drivers/net/bonding/net_forwarding_lib.sh
->+++ /dev/null
->@@ -1 +0,0 @@
->-../../../net/forwarding/lib.sh
->\ No newline at end of file
->-- =
-
->2.43.0
->
->
 
