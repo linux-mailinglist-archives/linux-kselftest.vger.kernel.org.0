@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-3698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B22F2841224
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 19:37:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D33E0841226
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 19:37:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67FCC1F21857
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 18:37:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 733DD1F23AD5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 18:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA09158D6D;
-	Mon, 29 Jan 2024 18:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C86DC159582;
+	Mon, 29 Jan 2024 18:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KKeisS19"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZkIbB1N"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313436F068;
-	Mon, 29 Jan 2024 18:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1866F08C;
+	Mon, 29 Jan 2024 18:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706553298; cv=none; b=STPKj3o2jS9nAxawFq+uSmGwdRlrBCSGpaLYNTS+mclQVaWXI5NFf5VLL6ceZK0OnLiYAwH4JgPojnSrG0k1/vdP74xoEmL/+Xf6h25l18UoClY50ui0OC6QpLkmXdfzc+SvJJnb8xnUVZ4HKSHX1XlMRVQTe7Y2aKHmVWKNQqw=
+	t=1706553306; cv=none; b=MquS1+LcSHyTis2qn3JnuTNwqFr33GDgkxFMLaSYN9vIWtz6Ugxra9iWjrBMgj6bIbAyxC02k7d8TmLRM+r2GcW0xXwStKrxQmzOyKEsXtjaPspTpJXy7B6T27v8jVTltwS2xalUh+5a9YhmGnHqOwzJJ3VenNHNKmnBF4IYTec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706553298; c=relaxed/simple;
-	bh=PlVbhVGQ8tUCk8layvfua62R163O3sO8M81xazBObPU=;
+	s=arc-20240116; t=1706553306; c=relaxed/simple;
+	bh=H2EIKyHNqt/QqyCRuOiVadg27WBq+mf8PQAQyZ6TLnE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dpvc8gcBI5ufiMnjd8Sa3kIK/itt5/h6wasJzi4cd4ptfHLcSagxA/bC7nn0WN0aPhTP93W2v405y2yVJYJw69qMDq/+ciYgOXpXvQLlsS6K2snnHfGuyvcnMdHGFzAP1uIN0SC5Ow2RTDZJo+PNEsSEKt8EGuJx+Y5ovDMijOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KKeisS19; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390AFC43394;
-	Mon, 29 Jan 2024 18:34:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=mHl9H7uW7mMwqKeIx/76oLL+fS190lt83OI3SSSIzAg6rEAZFets9838nKla6LbAHiDz5ONYcbEplB93jUAi+0/JmYLRBaFXyOQ2aQfNRz4OAvS0Qt2XALCNup8EZdNqhEqAzsAjxgdMz2IqMPVsBMxGm84gYw0J4tn1eJDUyUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZkIbB1N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 755CDC433C7;
+	Mon, 29 Jan 2024 18:35:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706553297;
-	bh=PlVbhVGQ8tUCk8layvfua62R163O3sO8M81xazBObPU=;
+	s=k20201202; t=1706553306;
+	bh=H2EIKyHNqt/QqyCRuOiVadg27WBq+mf8PQAQyZ6TLnE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KKeisS19a0LzsAh5+60QIkdDSvtzZ+1IFJHRx+y+u2zttj1SrrwkXcFIucVvCV3v7
-	 B8uwqHj/BHHnyvBPkWxr9tLMc8JHKdini5MquW/zmjucciJqrTlZflSqr22Y/vF9/g
-	 zyfe/VavSLHWmxOnoXycWeDlcP4UrhupqTHh7NSy332eV8gJk64H1DscwkKD2zdP57
-	 zND5QFa0c85uH4NkNP99G4veJf7R58UkGrQKY78tm5pq5L0Mh5OvVjY2Q1qXrJkrw2
-	 QxSP97EJX6j0A3/1jUUGHMrr3KTE/BFxwPzcY4h+VsJZmLyZVxigPlAsYw/rI1Y2NA
-	 mNewIgcOdoDEw==
+	b=FZkIbB1N9HObInVhKp21/DeVATaGOy3hrLvC7goSDEwZFWt+fZPu0NxN9b3yZkrVH
+	 JfZcs1TQJtvwPVxkqSDVy/pj7PzyGmuqVoGI9AovglyuyKiCUy8yACXb0k4YQFQdzV
+	 c3bhA8mSXpOU5ps5o+Y4+159rL8z5o7PMSDFzN3HCg5ZoRMMl1RYgMMomxj3BUmC+j
+	 OP9CX57/+amLYkOtIJ6J9Le1WmnF3zc4Kd6OmQnr6CObmLiuxtrWtQyHeHE//qYxAk
+	 LFYSRqBEDjFR8ktO0ZUDJptlSrItC3AIXhfR09xn/f9HsIggOhMlxiiypTyPUSaPc/
+	 rvqKj4SClNtZQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,14 @@ Cc: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@vrull.eu>,
 	paul.walmsley@sifive.com,
 	palmer@dabbelt.com,
 	aou@eecs.berkeley.edu,
-	xiao.w.wang@intel.com,
+	bjorn@rivosinc.com,
+	andy.chiu@sifive.com,
+	conor.dooley@microchip.com,
 	linux-kselftest@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.7 05/12] tools: selftests: riscv: Fix compile warnings in cbo
-Date: Mon, 29 Jan 2024 13:34:14 -0500
-Message-ID: <20240129183440.463998-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.7 06/12] tools: selftests: riscv: Fix compile warnings in vector tests
+Date: Mon, 29 Jan 2024 13:34:15 -0500
+Message-ID: <20240129183440.463998-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240129183440.463998-1-sashal@kernel.org>
 References: <20240129183440.463998-1-sashal@kernel.org>
@@ -76,53 +78,58 @@ Content-Transfer-Encoding: 8bit
 
 From: Christoph Müllner <christoph.muellner@vrull.eu>
 
-[ Upstream commit ac7b2a02d62faff8c6d45bacb5cb9ea565b47776 ]
+[ Upstream commit e1baf5e68ed128c1e22ba43e5190526d85de323c ]
 
 GCC prints a couple of format string warnings when compiling
-the cbo test. Let's follow the recommendation in
+the vector tests. Let's follow the recommendation in
 Documentation/printk-formats.txt to fix these warnings.
 
 Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
 Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Link: https://lore.kernel.org/r/20231123185821.2272504-3-christoph.muellner@vrull.eu
+Link: https://lore.kernel.org/r/20231123185821.2272504-5-christoph.muellner@vrull.eu
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/riscv/hwprobe/cbo.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/riscv/vector/v_initval_nolibc.c | 2 +-
+ tools/testing/selftests/riscv/vector/vstate_prctl.c     | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testing/selftests/riscv/hwprobe/cbo.c
-index 50a2cc8aef38..c6a83ab11e22 100644
---- a/tools/testing/selftests/riscv/hwprobe/cbo.c
-+++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
-@@ -97,7 +97,7 @@ static void test_zicboz(void *arg)
- 	block_size = pair.value;
- 	ksft_test_result(rc == 0 && pair.key == RISCV_HWPROBE_KEY_ZICBOZ_BLOCK_SIZE &&
- 			 is_power_of_2(block_size), "Zicboz block size\n");
--	ksft_print_msg("Zicboz block size: %ld\n", block_size);
-+	ksft_print_msg("Zicboz block size: %llu\n", block_size);
+diff --git a/tools/testing/selftests/riscv/vector/v_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
+index 66764edb0d52..1dd94197da30 100644
+--- a/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
++++ b/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
+@@ -27,7 +27,7 @@ int main(void)
  
- 	illegal_insn = false;
- 	cbo_zero(&mem[block_size]);
-@@ -121,7 +121,7 @@ static void test_zicboz(void *arg)
- 		for (j = 0; j < block_size; ++j) {
- 			if (mem[i * block_size + j] != expected) {
- 				ksft_test_result_fail("cbo.zero check\n");
--				ksft_print_msg("cbo.zero check: mem[%d] != 0x%x\n",
-+				ksft_print_msg("cbo.zero check: mem[%llu] != 0x%x\n",
- 					       i * block_size + j, expected);
- 				return;
- 			}
-@@ -201,7 +201,7 @@ int main(int argc, char **argv)
+ 	datap = malloc(MAX_VSIZE);
+ 	if (!datap) {
+-		ksft_test_result_fail("fail to allocate memory for size = %lu\n", MAX_VSIZE);
++		ksft_test_result_fail("fail to allocate memory for size = %d\n", MAX_VSIZE);
+ 		exit(-1);
+ 	}
+ 
+diff --git a/tools/testing/selftests/riscv/vector/vstate_prctl.c b/tools/testing/selftests/riscv/vector/vstate_prctl.c
+index b348b475be57..8ad94e08ff4d 100644
+--- a/tools/testing/selftests/riscv/vector/vstate_prctl.c
++++ b/tools/testing/selftests/riscv/vector/vstate_prctl.c
+@@ -68,7 +68,7 @@ int test_and_compare_child(long provided, long expected, int inherit)
+ 	}
+ 	rc = launch_test(inherit);
+ 	if (rc != expected) {
+-		ksft_test_result_fail("Test failed, check %d != %d\n", rc,
++		ksft_test_result_fail("Test failed, check %d != %ld\n", rc,
+ 				      expected);
+ 		return -2;
+ 	}
+@@ -87,7 +87,7 @@ int main(void)
  	pair.key = RISCV_HWPROBE_KEY_IMA_EXT_0;
- 	rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)&cpus, 0);
- 	if (rc < 0)
--		ksft_exit_fail_msg("hwprobe() failed with %d\n", rc);
-+		ksft_exit_fail_msg("hwprobe() failed with %ld\n", rc);
- 	assert(rc == 0 && pair.key == RISCV_HWPROBE_KEY_IMA_EXT_0);
+ 	rc = riscv_hwprobe(&pair, 1, 0, NULL, 0);
+ 	if (rc < 0) {
+-		ksft_test_result_fail("hwprobe() failed with %d\n", rc);
++		ksft_test_result_fail("hwprobe() failed with %ld\n", rc);
+ 		return -1;
+ 	}
  
- 	if (pair.value & RISCV_HWPROBE_EXT_ZICBOZ) {
 -- 
 2.43.0
 
