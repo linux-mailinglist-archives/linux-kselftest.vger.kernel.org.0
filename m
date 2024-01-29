@@ -1,125 +1,109 @@
-Return-Path: <linux-kselftest+bounces-3691-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09F058409A7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 16:19:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F888840A1D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 16:33:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8D35287868
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 15:19:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 521C81C24C7C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jan 2024 15:33:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EFFC153BD9;
-	Mon, 29 Jan 2024 15:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D95153BF4;
+	Mon, 29 Jan 2024 15:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="bklY6RON"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCAD153BC1;
-	Mon, 29 Jan 2024 15:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B6660EFF;
+	Mon, 29 Jan 2024 15:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706541496; cv=none; b=Gg9kVicy71HEIjl5yT45gk64Z71a+YCns4I9NIpdIlCnbUqfWg/lalYFE1kHQN1S2QcrQEsUIOPxmD1Rd7Q9devjH32dHj+HdN5lsEn2yyZOZsTy6aHMy9bev+8hyUXJIz+3vI3ZBVzKtfcfMt0YdcD1ajrXj1slSqoBXSEhJ0A=
+	t=1706542427; cv=none; b=TpZxbZF2ZryyEnriuLF/wXfrK+CNBoBB4wijSQzECidckkPT35a8EOvOq1PQNeiEXw9/un5NtIMsyhN3XXF0/zY/J2TnGT/zyixrYD6PKoJfmGCNjp4LvFAm/8VyKPZOZa/xPzEP/lgd2Vzck7UMDHkOFHDlm8jFsN0YWpC2RHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706541496; c=relaxed/simple;
-	bh=mbj/GubrUM5ol2t9pipY347bjtlgBP1tVcH6RRQE3wc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=We5HOxRbh3NqqwOt2IVEO1qJDfa1veYVXGoI2olFQ4HCvhNltsDUYxl+460aa2ZGEqBPemQmVbFm8gndmqfIfnChOv+6/0yr8MekJNlbq/xCL0/fp35W8yoWA+hoF8fB+vySCll56//+cGjJ8w3aWUQDh6/Aqy+wgbqkq9iDmv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2148d3d7334so62345fac.1;
-        Mon, 29 Jan 2024 07:18:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706541494; x=1707146294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mbj/GubrUM5ol2t9pipY347bjtlgBP1tVcH6RRQE3wc=;
-        b=N3r+DzYqf0KluXXRVYrFWxGv8GEArMqPYH6GK1YDw49OIvFbTagOuKI4h4i+L+okh7
-         BP2zrVCEZEe/LpWVn1LxxqGd5haYDvl+rjjKjOCDBWTax4+qvXhX5meJpNHGklTaJp/p
-         dyKvRnbHDUMwCrlmH/WjjJy3wIaD1uc4TB6hl0t8zko7zpbYusLJTva0+bog8I1JDGsW
-         TwZQ9MMbDZ2KJc4DQimHEbZzSct4qsMv7NJ1U+YO3L/StyVrXEq2wIvCHMINCqZRWkDT
-         +JL/MJVP0v4LM8yiCs2exAhNJN1M6Bv7rYorZ1ZQ/EG5DsawIJqO74ze4+mzvbfFQheB
-         1K9w==
-X-Gm-Message-State: AOJu0YzQIYjIJR9JMqJyW0vLP4CX4/+DVXy0KuRypVkyEXzsiQ2kNlB7
-	F0dhUuoEi/+ni2tlJCVEUfkTKCpcMMVHyJg2Dr5CyqItpLRkBq7frc8mNmJuDQX1i83IPcIozV4
-	NnVVqQveXbfA4Py1XqJk3n4g2wJk=
-X-Google-Smtp-Source: AGHT+IF4EQ5CmMMdAEPRwd5BhiwlO/wr9Z43o2bbICKJbvBtQl8/eSjsNtzW7mM8AUn1ZTuLaLkOrdQrq9+8mpchb8c=
-X-Received: by 2002:a05:6870:a927:b0:204:5ad3:e6ec with SMTP id
- eq39-20020a056870a92700b002045ad3e6ecmr7295673oab.4.1706541493935; Mon, 29
- Jan 2024 07:18:13 -0800 (PST)
+	s=arc-20240116; t=1706542427; c=relaxed/simple;
+	bh=+R7/JcKIxC377oWJCLZuDlPtntWxUpOP25ZAD15bqkI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eF07Wblbo50i+KTjXiuXLAhsYGjPvrvNTesYYdaMXLyX9sBqeSidgYdXTIy3p2orvIpUyVosWx5+JhmFcXtej+yNmXuHByxGD5aTc8rdnQNNuFjfgtKdzwJ7t3FaTj4W+alDZqbHh/ZzI9vLU+zPF5Q9tfuSfoHqpHJGwUyRpAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=bklY6RON; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3835740E00C5;
+	Mon, 29 Jan 2024 15:33:38 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id H17CwIdTl8uk; Mon, 29 Jan 2024 15:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706542416; bh=ZE+UbbDAySZDxLHmwMn6H2oCiWnq1zxqmdc69CKzfFs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bklY6RONiMKwT9KlqopNnAk3+Hyv90UJqv9pTYGEuyK1qjY/UpA0LUgzgtup7Dkoo
+	 z/qthwHCjoUBgJfKc7Pmmn0EnF+L7BuIJCqZqx6Mi8FghWLV7Gzt2RBRuaUS5k2gxd
+	 pJhOCxWukJwx1Zfp+CO8jQxmJM2U41EYmkoCRQ4GDRz8fRfD9vxQiMCM8FFnQF4RJ7
+	 PPdFh/GSOgOASToW0Zyy6VzK5WtlU4ITe7fiCy9lQWTV6/CiSmgJS8KdSSfaMBs7Rp
+	 A2PE8UJnMMU8QJD8iCVjWl0M1AMDzz2OOsIyJns4vT2AWiufey30iEMDor6WqVb1uY
+	 C4GxBv8v8bHX3B98FiqUgLvsPIRItc22NcAtmbqj+ngCuuVQKSYySBEWplLmAbUMgM
+	 g5LUPgCPeiAB49HY3hhtKQk+shLn4HP36Jzz9AQ/dKh/HAV6qfMjG5xKNXdcoi5l+O
+	 2veyi/A/ehuL3e3+CruO8baAFoSaXwn1r+08eO+KKwEcoa1NtXDr4QkXDD59oASh3b
+	 O3MzmBKcF7T4HdyLLypIiwgHtad+qAMJUaOYcjHzscaIEp6m+oEc+lWIQCi/92JDxe
+	 lOv85El7Xn1ZbZcn905L6iguP5mz+jrfGSLPrJSKleqeXU0tMXSAwaxDquQkFjE04i
+	 +hJFehmK5nndFX0ELb9/8u/o=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E688340E0177;
+	Mon, 29 Jan 2024 15:33:16 +0000 (UTC)
+Date: Mon, 29 Jan 2024 16:33:11 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Meng Li <li.meng@amd.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kselftest@vger.kernel.org,
+	Nathan Fontenot <nathan.fontenot@amd.com>,
+	Deepak Sharma <deepak.sharma@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Shimmer Huang <shimmer.huang@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [PATCH V14 0/7] amd-pstate preferred core
+Message-ID: <20240129153311.GDZbfFN0Twxkw4FnKX@fat_crate.local>
+References: <20240119090502.3869695-1-li.meng@amd.com>
+ <CAJZ5v0gzKdjZJBypEw1+czGN-SHbx0s0-h=Lq96+MDVAO11PYQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240119090502.3869695-1-li.meng@amd.com>
-In-Reply-To: <20240119090502.3869695-1-li.meng@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 29 Jan 2024 16:18:02 +0100
-Message-ID: <CAJZ5v0gzKdjZJBypEw1+czGN-SHbx0s0-h=Lq96+MDVAO11PYQ@mail.gmail.com>
-Subject: Re: [PATCH V14 0/7] amd-pstate preferred core
-To: Meng Li <li.meng@amd.com>, Borislav Petkov <bpetkov@amd.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>, 
-	Deepak Sharma <deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, 
-	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, 
-	Oleksandr Natalenko <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gzKdjZJBypEw1+czGN-SHbx0s0-h=Lq96+MDVAO11PYQ@mail.gmail.com>
 
-On Fri, Jan 19, 2024 at 10:05=E2=80=AFAM Meng Li <li.meng@amd.com> wrote:
->
-> Hi all:
->
-> The core frequency is subjected to the process variation in semiconductor=
-s.
-> Not all cores are able to reach the maximum frequency respecting the
-> infrastructure limits. Consequently, AMD has redefined the concept of
-> maximum frequency of a part. This means that a fraction of cores can reac=
-h
-> maximum frequency. To find the best process scheduling policy for a given
-> scenario, OS needs to know the core ordering informed by the platform thr=
-ough
-> highest performance capability register of the CPPC interface.
->
-> Earlier implementations of amd-pstate preferred core only support a stati=
-c
-> core ranking and targeted performance. Now it has the ability to dynamica=
-lly
-> change the preferred core based on the workload and platform conditions a=
-nd
-> accounting for thermals and aging.
->
-> Amd-pstate driver utilizes the functions and data structures provided by
-> the ITMT architecture to enable the scheduler to favor scheduling on core=
-s
-> which can be get a higher frequency with lower voltage.
-> We call it amd-pstate preferred core.
->
-> Here sched_set_itmt_core_prio() is called to set priorities and
-> sched_set_itmt_support() is called to enable ITMT feature.
-> Amd-pstate driver uses the highest performance value to indicate
-> the priority of CPU. The higher value has a higher priority.
->
-> Amd-pstate driver will provide an initial core ordering at boot time.
-> It relies on the CPPC interface to communicate the core ranking to the
-> operating system and scheduler to make sure that OS is choosing the cores
-> with highest performance firstly for scheduling the process. When amd-pst=
-ate
-> driver receives a message with the highest performance change, it will
-> update the core ranking.
+On Mon, Jan 29, 2024 at 04:18:02PM +0100, Rafael J. Wysocki wrote:
+> You've had comments on the previous version of this.
+> 
+> Have they all been addressed?
 
-Hi Boris,
+Yeah, see patch 1.
 
-You've had comments on the previous version of this.
+Thx.
 
-Have they all been addressed?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
