@@ -1,198 +1,143 @@
-Return-Path: <linux-kselftest+bounces-3755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3757-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EF14842C3C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 20:00:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 998E9842C4E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 20:05:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA3081C238F1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 19:00:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE17D1C21B6C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 19:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4506E7993E;
-	Tue, 30 Jan 2024 19:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8300412CD87;
+	Tue, 30 Jan 2024 19:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="3LamsTUm"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="nq1fs+eL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2076279948
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 19:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3DC6995A
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 19:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706641230; cv=none; b=fSI1TFsr/f13txNFcnlujlNp+oOwo5coidrls1CMb/Oj41m+jNDI69zwp8RLd1mp9q4HR0q9HPQXxGqVm1rvUU6VXey1MY6QDtQqdyxyfG+/0Y2ZAJMZN9fxatazhtMxfC5JjNGrZd9yPeqv2pCZ8W8Sq/2rdBhfmyTYCZBp4+U=
+	t=1706641476; cv=none; b=Xg3622FcUOIo+fqKTGsOtl4p3sy/RkIiEj5qeAaIblq6oz06a+B/YgreSeWczBPMMeYeG+Rwz4mnIPqKPNQSQRweVi3VthMoD1v+3ngB4BhoZPzocdpACOHxbbHTp0BGO+Cz23vVmDRN4ycjzOTfbH+KwCFwogIstigIN1DkDBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706641230; c=relaxed/simple;
-	bh=56elv0L8fFS5lUO6ko+c/MQ6HC+QzOu0kNPycO7ZrGk=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=oWacQZ+vja27dZknuGtlYWDvaiRWw7lH+PpWbFzEWXyxy2a+XiOOmGdSywPKJeYlpVH7hkRgW9Gi5SLP0Qt0s3nXKBhFKnJQ0slu2MWjaLXisGRN+iqVCrFao/eFVvcQnVNsrzIucIElkdNNe29UaQ8c0o36F4j/e5A/QL78sIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=3LamsTUm; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-53fa455cd94so2796193a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 11:00:19 -0800 (PST)
+	s=arc-20240116; t=1706641476; c=relaxed/simple;
+	bh=nus7scvl4gLMAQ9st9lYJlzmjXyvjRvTvEos3E8SaN8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HLX/K1fp3CQIiC54AKCbwFVk3vvc+oMOiP9X86gozOzdy6uvq48S8drTLne3cJI74aRLHSdCxvLZ2CPnVSpBEZQ6AMjAR55WdNz+VNd8LBiMNUwwN1j7UaVb+JXL1TmmDVl972tmP6PiGX4f5vdhfXIjOTLMGxzgStlmTAJl6f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=nq1fs+eL; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5d3912c9a83so2165225a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 11:04:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1706641219; x=1707246019; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9itGHOsjJfhryTIbRBa5covhNN1I2zvlWIf6/+YWowU=;
-        b=3LamsTUmh0MJdjXUSSZpkVoKGTnHromHsFu3tEwE5tgKZmet75aZN/XJPBSJ+zySoL
-         GA0hrQX7oUUC/Ic7pVb3Jmuq7Np5jSDi2hYpuKJ8djbWW5/UlvqC+GrFG/ao1g1z+ESn
-         rapsgiMtiEFkbjjdSUZr1+QYa01wYT9oGS1zGLILJTNZCviXOVZt4KxA5pKatq9OnJjU
-         /HLbwUwY5F/3+TMlXzLtRNGbwrLu8isA6P7VNToKB7HEiRMmMZN8RHaBVH4do55AObg1
-         XLFC3HgO/d8pi6BmUjN2Y+bhkCt/Nr1P/61LnNPrqpj79IU0PD3bWR6Qv5bldC9ty0LD
-         fFdQ==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706641472; x=1707246272; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4D44QK/kPW88RwduNoGSI0iqhkYRS1kC786c0l3XOWc=;
+        b=nq1fs+eLRG59MrNTwnRre/mwxVOl+aj0QMpkHDumPah7ZW1TL0rOO6VrB7qpI6tFa6
+         dpZGcGyYfDYFABPTaT1mfSdsk6oIK69rR6T4wpc2aZXFjQRBjsCFZPGxJa/J3fj0a5TL
+         KmoAlm0AIap6GR3E/rdAJIWn96OsIz2P5DxodQuJ/hmbDCKdU/iOLEjTVC+npNpppJxH
+         0eFJlicOrCDL1/dvNC5cVAB0N+XJeAEvzbUr9pUBxqL7xD39Mhe7G2Hni4pIzl+mmE8g
+         rT84b8AJsg35DA16mj07jEUTdHvbPDXhLl+93Cf+fGAgGN1BXeOlu9bqDXv5R5oh8k9C
+         cMEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706641219; x=1707246019;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1706641472; x=1707246272;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9itGHOsjJfhryTIbRBa5covhNN1I2zvlWIf6/+YWowU=;
-        b=fzDxbzBsjwwJruUl+nqWwxMLNsSqyfyrr8Zw1zxsLYgLC8d6UKxoGpDGM5eGBnf97d
-         KiWuCWMA6tI1dgaDoxRMTnidX95ZXcIFAiPDpE5TuyTT7dxoRssj4AI3cSnHeGTkYcXb
-         BtwhTyh81Pv/Riy9kNQ7n0TnGYvf6b9fPA/YdKEyoWQPMxDRmzr3Q0pD9Kdce7eZmKsR
-         bKUJUYpr+6lI2JBzBKjulxVxuYrVUm42zNvz5ooDKk4q4V0aJSWccD3LisqlU20qjCoT
-         nxHPTjzYVDaJEJxmWZvDRvE6FY5qwApZ0EMguq6RggawKXRqx02SdbVISIkz2bNaS80H
-         1cFg==
-X-Gm-Message-State: AOJu0YxkB0ZhLAL5A70uChuPAYG2A9AzK6AszUHKFpSrrAylZpC9ZHak
-	0/FNnPUBKYhS30zkYWYsGDdVZWcE33ea4JMAAPp67449yo7Ik7tOwqctOrruMKt7F8k5jC4stnJ
-	e
-X-Google-Smtp-Source: AGHT+IEabslO3IWw5s9vQ1QAxLIlUncCO/9l57azPN3DrXffwH26NTnK2M+Cv2ZbMNtpeXRVK70kUQ==
-X-Received: by 2002:a17:902:6e02:b0:1d7:91:4f9e with SMTP id u2-20020a1709026e0200b001d700914f9emr5939186plk.96.1706641219407;
-        Tue, 30 Jan 2024 11:00:19 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id q2-20020a17090311c200b001d919be90fdsm855665plh.42.2024.01.30.11.00.18
+        bh=4D44QK/kPW88RwduNoGSI0iqhkYRS1kC786c0l3XOWc=;
+        b=t5x41ojABl02Y9y6sYyCyWCi1LrjHdMjVW2I0pt3u1WAflDvgCiYod8qEgynpi4lMM
+         Z+2UMrgs4WSLC55wIZvzWMmYYGwMTcx2peEJdSPes4nLFXqcxJEQr4r93sWkabkQVwyI
+         lBrht7wD70Cf5JDXpHsqxd6pGQzJpwwb0HFopg3DxtzRJmrvH+Yxso0xrVoYjBbzt2Lp
+         OHd7lIPz9ln8yEKYIwR1xVai3yCQ0F5zh6jciL0kCnz4JqmTczZTVh3Qe2rXWwvnadus
+         AS3oWid5oRXcn3s1G5X1pdQtHoOnznIkK9ZTLNTEr2CdqB97E436aB8F0T1SdJseTCVY
+         iyaQ==
+X-Gm-Message-State: AOJu0YwJAM0Gc2fY8ugtgVHmRF2lQUAAhgQt/qJY6fS0HevCC4UVDOtB
+	SV9MgBkwbmaikcOI1V87NwT6mHnzpylbtZlfUpinjJV/Od85zDIA7CByI47qccU=
+X-Google-Smtp-Source: AGHT+IHDqzd/dBdeKM2ZuEG20ibf2MrAQHh0T7+zovFIc6n7MNP/9tMbddtfCfApaIPGdcPdBlRWvQ==
+X-Received: by 2002:a05:6a20:291e:b0:199:8ed6:746e with SMTP id t30-20020a056a20291e00b001998ed6746emr4930207pzf.58.1706641472640;
+        Tue, 30 Jan 2024 11:04:32 -0800 (PST)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id f6-20020a17090aec8600b00295c3bb9318sm1196541pjy.54.2024.01.30.11.04.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 11:00:18 -0800 (PST)
-Message-ID: <65b94742.170a0220.6f2a6.3ee3@mx.google.com>
-Date: Tue, 30 Jan 2024 11:00:18 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 30 Jan 2024 11:04:31 -0800 (PST)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Subject: [PATCH v2 0/3] riscv: mm: Use hint address in mmap if available
+Date: Tue, 30 Jan 2024 11:04:29 -0800
+Message-Id: <20240130-use_mmap_hint_address-v2-0-f34ebfd33053@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: fixes
-X-Kernelci-Kernel: v6.8-rc1-4-gb54761f6e9773
-X-Kernelci-Report-Type: build
-Subject: kselftest/fixes build: 5 builds: 2 failed, 3 passed, 2 errors,
- 5 warnings (v6.8-rc1-4-gb54761f6e9773)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAD1IuWUC/3XNQQ6CMBCF4auQrq1hagXrynsYQtoylVnQkhaJh
+ nB3gbBxwfKfZL43sYSRMLF7NrGIIyUKfglxyphttX8hp2ZpJnIhcwDF3wnrrtN93ZIfat00EVP
+ iTjlpwBTu6oAtv31ER5/NfVZLt5SGEL/bzAjrdReFOBBH4MCLwhq8lU6qAh+RxpDI27MN3bqxA
+ +oYyLm0pWz0DS5Gwz9QzfP8AxGwGU3+AAAA
+To: Alexandre Ghiti <alexghiti@rivosinc.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Yangyu Chen <cyy@cyyself.name>
+Cc: linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1706641471; l=2052;
+ i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
+ bh=nus7scvl4gLMAQ9st9lYJlzmjXyvjRvTvEos3E8SaN8=;
+ b=KdPbSOIofsdWCW2zc9sZLA78Ps5RefDdeL5SX6tbIQDoFBXQBMlLBYRg9jpjXuHz+YesaWxjJ
+ OSV+nMMkghNBtK/mt4vwjxEe5eas0TqtgvuALwBT9CPyCLon78uuHuz
+X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
+ pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
 
-kselftest/fixes build: 5 builds: 2 failed, 3 passed, 2 errors, 5 warnings (=
-v6.8-rc1-4-gb54761f6e9773)
+On riscv, mmap currently returns an address from the largest address
+space that can fit entirely inside of the hint address. This makes it
+such that the hint address is almost never returned. This patch raises
+the mappable area up to and including the hint address. This allows mmap
+to often return the hint address, which allows a performance improvement
+over searching for a valid address as well as making the behavior more
+similar to other architectures.
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/v6.8-rc1-4-gb54761f6e9773/
+Note that a previous patch introduced stronger semantics compared to
+other architectures for riscv mmap. On riscv, mmap will not use bits in
+the upper bits of the virtual address depending on the hint address. On
+other architectures, a random address is returned in the address space
+requested. On all architectures the hint address will be returned if it
+is available. This allows riscv applications to configure how many bits
+in the virtual address should be left empty. This has the two benefits
+of being able to request address spaces that are smaller than the
+default and doesn't require the application to know the page table
+layout of riscv.
 
-Tree: kselftest
-Branch: fixes
-Git Describe: v6.8-rc1-4-gb54761f6e9773
-Git Commit: b54761f6e9773350c0d1fb8e1e5aacaba7769d0f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
-
-Build Failures Detected:
-
-i386:
-    i386_defconfig+kselftest: (gcc-10) FAIL
-
-x86_64:
-    x86_64_defconfig+kselftest: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arm64:
-    defconfig+kselftest (gcc-10): 1 warning
-
-arm:
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-
-i386:
-    i386_defconfig+kselftest (gcc-10): 1 error, 1 warning
-
-x86_64:
-    x86_64_defconfig+kselftest (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-Errors summary:
-
-    2    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_me=
-mcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings summary:
-
-    2    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_=
-memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    cc1: all warnings being treated as errors
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x14cfd6
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
- 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x14cfd6
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+---
+Changes in v2:
+- Add back forgotten "mmap_end = STACK_TOP_MAX"
+- Link to v1: https://lore.kernel.org/r/20240129-use_mmap_hint_address-v1-0-4c74da813ba1@rivosinc.com
 
 ---
-For more info write to <info@kernelci.org>
+Charlie Jenkins (3):
+      riscv: mm: Use hint address in mmap if available
+      selftests: riscv: Generalize mm selftests
+      docs: riscv: Define behavior of mmap
+
+ Documentation/arch/riscv/vm-layout.rst           | 16 ++--
+ arch/riscv/include/asm/processor.h               | 22 +++---
+ tools/testing/selftests/riscv/mm/mmap_bottomup.c | 20 +----
+ tools/testing/selftests/riscv/mm/mmap_default.c  | 20 +----
+ tools/testing/selftests/riscv/mm/mmap_test.h     | 93 +++++++++++++-----------
+ 5 files changed, 67 insertions(+), 104 deletions(-)
+---
+base-commit: 556e2d17cae620d549c5474b1ece053430cd50bc
+change-id: 20240119-use_mmap_hint_address-f9f4b1b6f5f1
+-- 
+- Charlie
+
 
