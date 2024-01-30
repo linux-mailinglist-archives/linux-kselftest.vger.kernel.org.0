@@ -1,86 +1,79 @@
-Return-Path: <linux-kselftest+bounces-3773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5799842F67
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 23:10:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2DCA842F6E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 23:12:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 653121F25EAB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 22:10:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5DFA1C22331
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 22:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35D77D3FE;
-	Tue, 30 Jan 2024 22:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DE17D40A;
+	Tue, 30 Jan 2024 22:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="BhYM4fuS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mBWaUsRs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33177D401
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 22:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311EC7D402;
+	Tue, 30 Jan 2024 22:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706652612; cv=none; b=Um2ctrA1V33R/tw4NLVLVbBhrETKz7HrhzZ6F/J+fMGOvzJM4tzc11p2EkEUS5LuSzacnwEMn2vhNx+LDcVD18zkVMEHgiF+tsCxoIeyluCgU0hv14pnEOC/D9WBo9rauVm6FyEGlFcdZBQS6xtbbZ5Gj/Vkq4Pz82TTJPPZJdA=
+	t=1706652764; cv=none; b=uJ/vn11O8Txto3Jo2pC4odixfYdJ5aI8K9mS51k4CUhiCR7AcqhL+I4pFlLakaG0cZm81MQzdFcgMfqEH9B7ZxQsBDMXcWb3lHgxenA2OGZsMGCf5YqaRtopAWjYwqOiF2IZAvZA+2fTrVjQyl8xlh6viJTFUN/FDW/GPvh7hQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706652612; c=relaxed/simple;
-	bh=BbwoA8VEagIWr1NfNJqugPJ+q3NLA6lFHpUPeLk62RI=;
+	s=arc-20240116; t=1706652764; c=relaxed/simple;
+	bh=SdLU3sGcmj4oZljBiGm2nYM+yKHs1TV50H1uosJASlU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e58jLPVhqjv0TKT8L1DLjS+e4lPEUuD6Ec1/q/1Q7+hzneGV7hTFBIeAqv69zz3fqOJvlIcZcQNFoB3HxOe0biSsDbcSqjI1Q8RuO/KJsmqJDlt2wkdAHXDWZz1xumzyJgmf8JGIMxEev7LQeps44Adxk7KE4bbPOjFAsRzWte8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=BhYM4fuS; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5ce6b5e3c4eso2555845a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 14:10:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706652610; x=1707257410; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+NalAEpBOXm2rq7TuoQxf0lFmytzH/73qgpQl7PiKxE=;
-        b=BhYM4fuSgsiTQssJdeC9+p5gC2AWzbZ2bh6XARddS+Ho1YGqm70I7gGUYA36sAxoro
-         48dCZfxS0fon1G9eXQ6PRVVYgbUb9Kkxzq4zoFV8v/X5MRiMSIt9DvOo7Lfd8o2D08ve
-         PQ87zjwedtC96DijGFFE6n9zm4VPaaSWcuTTGF6pELFlS1Bt9XKMLrSFtmGOxgoVdR2O
-         IzVRESY/5SzO5ahCMbaa9mHrOHfZKNiOyZdxbYjB2oR6uSGdiC940kjIRuPLeuiqlLuO
-         nOq55Bvllm7fUKJNvQZby2ak2+Zqs7bT5JpexylDW+jvCY2MT/ipu8npxzGePoahXr8A
-         U3aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706652610; x=1707257410;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+NalAEpBOXm2rq7TuoQxf0lFmytzH/73qgpQl7PiKxE=;
-        b=W+O/hLtnVmeIqFvP/V9P4cGh4CL/zJcPh5TR6ISV3uxMomfI5boUegYTBEC/gtdPRh
-         nziI4TLfKZXTENB66v/+/1O5Xcb9JpBrjnUcVMQvE+QuVn3lnZS8WTpfvUZl8zrpZdo5
-         WhdtwdjWWadLwoY4F0+8ISi4ixTmjo2Nf+QZVesXSE/RWP6Dr5SXFhtcIDAC1kmV252C
-         Za8yxqRqrfeFHKEDlAwcId6jlFo+TC/oOfpUQ6qCn6Qlqq8VuB+888Qx2mHGzSgdzep+
-         rR/Z5RDThmSp3Css2UF2+J0l6TaKUfooB3fYjzqIjUjENAvzzWg4tSOgkapkp1tCIK4e
-         gAGQ==
-X-Gm-Message-State: AOJu0YxNbNxQHqX3t7+HxCSijVRkg0OO3BH8PX91ZQseRA1TUrowY0OT
-	F7efXWZOeAM4yFtswJg63rWRkMErZFn2GXinkfhsGdEdRM9bu/GddN7rw6kzMzM=
-X-Google-Smtp-Source: AGHT+IG0TEzaW4Z3tywTe2xwATbdanx5HuSgB7lDcqkiSgyWa4yxiZlDC4+9TLpHCznT/n5rvfzkJQ==
-X-Received: by 2002:a05:6a20:d819:b0:19c:a0f0:b167 with SMTP id iv25-20020a056a20d81900b0019ca0f0b167mr6839305pzb.3.1706652610266;
-        Tue, 30 Jan 2024 14:10:10 -0800 (PST)
-Received: from ghost ([12.44.203.122])
-        by smtp.gmail.com with ESMTPSA id jw3-20020a056a00928300b006d9b4303f9csm8274107pfb.71.2024.01.30.14.10.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 14:10:09 -0800 (PST)
-Date: Tue, 30 Jan 2024 14:10:07 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Stefan O'Rear <sorear@fastmail.com>
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=s7jgMADJ+EyT3cspD8QPwIHkpHqeBS+DRDVFd99e5eaG+UTDgP/O0KiZuRMC4MowxWouIai9zRUQIjWCxw5B/su9Z8i34DyB1oBrNBjcv2De2kMkPi0Ot9rGlW0IVfIYD/EjxTKJN5WD5zWbXJ5BpGfc2CFCXZBrVihJlSNUfcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mBWaUsRs; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706652763; x=1738188763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SdLU3sGcmj4oZljBiGm2nYM+yKHs1TV50H1uosJASlU=;
+  b=mBWaUsRsIeJczFFsdSlxEzBj+cklkUgXoJ3WhX4rQW6AYJieU1xo9QsD
+   xMJgk/rZ+DlJgCajHIG2jADIUYXg1p+3UxeL2qdmKN5Bp5vdONHPy6W+p
+   VgBipJGmTV6Z4HutFCLv2BBiO+65mlwF0eiCbRa/5LVBsZEhCrcp4ihDw
+   41j8isoukHxKArQk1YhT2lxD4gaC8eekDsprxNWRXu0AyWMBUo1lqM/Db
+   TC6azlJDuJEHdTjIjTji5T7YbMrifOZDHLp9BySJ7jOJB6smI9nW2iXjD
+   M523pUa4DTsvdCfohExusi9pNxBdGwBWkPESCYztWm1ycxf7JYiHF0PIa
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10802454"
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="10802454"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 14:12:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="3848620"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 30 Jan 2024 14:12:38 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rUwLL-0000s1-2r;
+	Tue, 30 Jan 2024 22:12:35 +0000
+Date: Wed, 31 Jan 2024 06:12:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Charlie Jenkins <charlie@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Yangyu Chen <cyy@cyyself.name>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>, Yangyu Chen <cyy@cyyself.name>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 0/3] riscv: mm: Use hint address in mmap if available
-Message-ID: <Zblzv0KqlIZQ0wbF@ghost>
-References: <20240129-use_mmap_hint_address-v1-0-4c74da813ba1@rivosinc.com>
- <5fd69812-f07b-4079-a871-7e0ee857aaca@app.fastmail.com>
- <ZbhbNYLR9kh5dtFU@ghost>
- <6352ff7f-1e69-4f7a-b793-f69d223d4684@app.fastmail.com>
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	Charlie Jenkins <charlie@rivosinc.com>
+Subject: Re: [PATCH 1/3] riscv: mm: Use hint address in mmap if available
+Message-ID: <202401310513.lub8Ilwm-lkp@intel.com>
+References: <20240129-use_mmap_hint_address-v1-1-4c74da813ba1@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,77 +82,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6352ff7f-1e69-4f7a-b793-f69d223d4684@app.fastmail.com>
+In-Reply-To: <20240129-use_mmap_hint_address-v1-1-4c74da813ba1@rivosinc.com>
 
-On Tue, Jan 30, 2024 at 05:04:55PM -0500, Stefan O'Rear wrote:
-> On Mon, Jan 29, 2024, at 9:13 PM, Charlie Jenkins wrote:
-> > On Mon, Jan 29, 2024 at 09:04:50PM -0500, Stefan O'Rear wrote:
-> >> On Mon, Jan 29, 2024, at 7:36 PM, Charlie Jenkins wrote:
-> >> > On riscv, mmap currently returns an address from the largest address
-> >> > space that can fit entirely inside of the hint address. This makes it
-> >> > such that the hint address is almost never returned. This patch raises
-> >> > the mappable area up to and including the hint address. This allows mmap
-> >> > to often return the hint address, which allows a performance improvement
-> >> > over searching for a valid address as well as making the behavior more
-> >> > similar to other architectures.
-> >> 
-> >> This means that if an application or library opts in to Sv48 support by
-> >> passing a nonzero hint, it will lose the benefits of ASLR.
-> >
-> > sv48 is default. However your statement stands for opting into sv57.
-> > If they always pass the same hint address, only the first address will
-> > be deterministic though, correct?
-> 
-> I think this is correct.
-> 
-> >> 
-> >> Allowing applications to opt in to a VA space smaller than the
-> >> architectural minimum seems like an independently useful feature.
-> >> Is there a reason to only add it for riscv64?
-> >> 
-> >
-> > If there is interest, it can be added to other architectures as well.
-> 
-> I meant as opposed to riscv32.
+Hi Charlie,
 
-That is a good point. I can include rv32 as well.
+kernel test robot noticed the following build errors:
 
-- Charlie
+[auto build test ERROR on 556e2d17cae620d549c5474b1ece053430cd50bc]
 
-> 
-> -s
-> 
-> > - Charlie
-> >
-> >> -s
-> >> 
-> >> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> >> > ---
-> >> > Charlie Jenkins (3):
-> >> >       riscv: mm: Use hint address in mmap if available
-> >> >       selftests: riscv: Generalize mm selftests
-> >> >       docs: riscv: Define behavior of mmap
-> >> >
-> >> >  Documentation/arch/riscv/vm-layout.rst           | 16 ++--
-> >> >  arch/riscv/include/asm/processor.h               | 21 ++----
-> >> >  tools/testing/selftests/riscv/mm/mmap_bottomup.c | 20 +----
-> >> >  tools/testing/selftests/riscv/mm/mmap_default.c  | 20 +----
-> >> >  tools/testing/selftests/riscv/mm/mmap_test.h     | 93 +++++++++++++-----------
-> >> >  5 files changed, 66 insertions(+), 104 deletions(-)
-> >> > ---
-> >> > base-commit: 556e2d17cae620d549c5474b1ece053430cd50bc
-> >> > change-id: 20240119-use_mmap_hint_address-f9f4b1b6f5f1
-> >> > -- 
-> >> > - Charlie
-> >> >
-> >> >
-> >> > _______________________________________________
-> >> > linux-riscv mailing list
-> >> > linux-riscv@lists.infradead.org
-> >> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+url:    https://github.com/intel-lab-lkp/linux/commits/Charlie-Jenkins/riscv-mm-Use-hint-address-in-mmap-if-available/20240130-084208
+base:   556e2d17cae620d549c5474b1ece053430cd50bc
+patch link:    https://lore.kernel.org/r/20240129-use_mmap_hint_address-v1-1-4c74da813ba1%40rivosinc.com
+patch subject: [PATCH 1/3] riscv: mm: Use hint address in mmap if available
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20240131/202401310513.lub8Ilwm-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fdac7d0b6f74f919d319b31a0680c77f66732586)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240131/202401310513.lub8Ilwm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401310513.lub8Ilwm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/mmap.c:1703:33: error: expected expression
+    1703 |         const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
+         |                                        ^
+   arch/riscv/include/asm/processor.h:28:2: note: expanded from macro 'arch_get_mmap_end'
+      28 |         else                                                    \
+         |         ^
+   mm/mmap.c:1751:33: error: expected expression
+    1751 |         const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
+         |                                        ^
+   arch/riscv/include/asm/processor.h:28:2: note: expanded from macro 'arch_get_mmap_end'
+      28 |         else                                                    \
+         |         ^
+   2 errors generated.
+
+
+vim +1703 mm/mmap.c
+
+f6795053dac8d4d Steve Capper           2018-12-06  1683  
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1684  /* Get an address range which is currently unmapped.
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1685   * For shmat() with addr=0.
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1686   *
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1687   * Ugly calling convention alert:
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1688   * Return value with the low bits set means error value,
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1689   * ie
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1690   *	if (ret & ~PAGE_MASK)
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1691   *		error = ret;
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1692   *
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1693   * This function "knows" that -ENOMEM has the bits set.
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1694   */
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1695  unsigned long
+4b439e25e29ec33 Christophe Leroy       2022-04-09  1696  generic_get_unmapped_area(struct file *filp, unsigned long addr,
+4b439e25e29ec33 Christophe Leroy       2022-04-09  1697  			  unsigned long len, unsigned long pgoff,
+4b439e25e29ec33 Christophe Leroy       2022-04-09  1698  			  unsigned long flags)
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1699  {
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1700  	struct mm_struct *mm = current->mm;
+1be7107fbe18eed Hugh Dickins           2017-06-19  1701  	struct vm_area_struct *vma, *prev;
+db4fbfb9523c935 Michel Lespinasse      2012-12-11  1702  	struct vm_unmapped_area_info info;
+2cb4de085f383cb Christophe Leroy       2022-04-09 @1703  	const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1704  
+f6795053dac8d4d Steve Capper           2018-12-06  1705  	if (len > mmap_end - mmap_min_addr)
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1706  		return -ENOMEM;
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1707  
+06abdfb47ee745a Benjamin Herrenschmidt 2007-05-06  1708  	if (flags & MAP_FIXED)
+06abdfb47ee745a Benjamin Herrenschmidt 2007-05-06  1709  		return addr;
+06abdfb47ee745a Benjamin Herrenschmidt 2007-05-06  1710  
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1711  	if (addr) {
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1712  		addr = PAGE_ALIGN(addr);
+1be7107fbe18eed Hugh Dickins           2017-06-19  1713  		vma = find_vma_prev(mm, addr, &prev);
+f6795053dac8d4d Steve Capper           2018-12-06  1714  		if (mmap_end - len >= addr && addr >= mmap_min_addr &&
+1be7107fbe18eed Hugh Dickins           2017-06-19  1715  		    (!vma || addr + len <= vm_start_gap(vma)) &&
+1be7107fbe18eed Hugh Dickins           2017-06-19  1716  		    (!prev || addr >= vm_end_gap(prev)))
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1717  			return addr;
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1718  	}
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1719  
+db4fbfb9523c935 Michel Lespinasse      2012-12-11  1720  	info.flags = 0;
+db4fbfb9523c935 Michel Lespinasse      2012-12-11  1721  	info.length = len;
+4e99b02131b280b Heiko Carstens         2013-11-12  1722  	info.low_limit = mm->mmap_base;
+f6795053dac8d4d Steve Capper           2018-12-06  1723  	info.high_limit = mmap_end;
+db4fbfb9523c935 Michel Lespinasse      2012-12-11  1724  	info.align_mask = 0;
+09ef5283fd96ac4 Jaewon Kim             2020-04-10  1725  	info.align_offset = 0;
+db4fbfb9523c935 Michel Lespinasse      2012-12-11  1726  	return vm_unmapped_area(&info);
+^1da177e4c3f415 Linus Torvalds         2005-04-16  1727  }
+4b439e25e29ec33 Christophe Leroy       2022-04-09  1728  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
