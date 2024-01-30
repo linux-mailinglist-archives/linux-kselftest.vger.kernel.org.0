@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-3738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3739-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40F41841AB8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 04:52:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 039E0841ABC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 04:53:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A744F1F26253
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 03:52:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF13B284E27
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jan 2024 03:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAD7381D4;
-	Tue, 30 Jan 2024 03:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0EE538F84;
+	Tue, 30 Jan 2024 03:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="QbuIqwei"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="DGnvXXRu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FC037708
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 03:52:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61FB381C6
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 03:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706586726; cv=none; b=ompKrnGG05bJCJueVFPT832wEw+6gYSY3bZsaAaUeldc/7Muw43U2xJQzAGrfyEDnJRLHRDedApQq4SdMk+yS0+CHJGcJJ+wUwQlmBkzzr0SjS9fAjAioNMAJOMODn1RVbjbPRT5nNHxsXGkEikOizPGQkfenXPOj/DCCcSpIl8=
+	t=1706586728; cv=none; b=ZM1TqP9dMnY85iJtc1k7Jj2rKX20ne+eep5uh2Aci5ksUg73COe2OSumtjwmmNPrhF9FeVXaRC8sVvVEu3GHzgxlFHd8ua5/h4Cviu12o4GwSvnMXSOo9ZxkjPzkIe5d3Qfm2DNZfZG2VkLAdULRIuyGPm8ato04fTcuQC6+wiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706586726; c=relaxed/simple;
-	bh=QZKaym8nFiRV9Re87RifRE/NGc2FIS+/ruqdmA8E/9Y=;
+	s=arc-20240116; t=1706586728; c=relaxed/simple;
+	bh=DuT4NF02kaC5BQypY3Hf8nScd/Iyn4+41SidW6J8xxQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MBbXTukEFiC4g5o+del0M9UNZuHsMS/fEDHRvg3W+aF1L4v4LeKYYBg6tyerrgCql5w/+KeiISAnf5w1oZE/mOPUewK1mXaexIB9V5J9g9rDDKAYfqT2G5v7HzZmHbXyMjioVuyQSY7VS6uzm/Ix0m34aMI95xk1X09Du9o3jVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=QbuIqwei; arc=none smtp.client-ip=209.85.221.46
+	 MIME-Version:Content-Type; b=O2DXBgla8duGYf0eqCj8qNUMlBLUHTKcskq6eKI7anXjsi4CZdQ1JPlJTmJrFWKSc078PfEA1nG/Y3OSGPZd4xrDfWp4Xl4oTxvw8T0Ha9mP2/PEk9E4FqXzYZYdv4Qvh1yB7G6UcsCPmUvfYnPgV/HJ0FyqBFS3tHH8s9pUTjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=DGnvXXRu; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33929364bdaso2440289f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jan 2024 19:52:04 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-33929364bdaso2440301f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jan 2024 19:52:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1706586722; x=1707191522; darn=vger.kernel.org;
+        d=arista.com; s=google; t=1706586724; x=1707191524; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QfduzUl6xeBtvtYJDyMTI1tDFj6QysY3Ss5eP9VLuq4=;
-        b=QbuIqweiBvAxHH3buU1sieBkx34MzaaUZSKSUo0wR8eV8fSpSlvXyn1Te8sFcVzQIF
-         lRW9EzuEJoRJmddAae+Ikv2tuFwcIIezKZ/LhZ23Ct6eHwOfuY84nnnWT4k73x3MTF2q
-         8Vxnx+HpvGg+kLC9PJBrAGZFJ8lbYVeDVDe2rbtNgWedyfZb0n+F05Z66TAskmfxGBa8
-         CMttysAiEevRvbdH2iJvyoQPKKAsZ6gaccVdGMJvfvSOIIsFPLWMHOcD3YdY0BBc1on8
-         XuwkN3Mj6eDhcAjRyI5voAjJ7BJmSxaVyOif5Sj53Hc7Ki25dHwBNPO09skd1fj3iXce
-         1tiw==
+        bh=0Gr9RawEoMTLBvWixWLQ9InE8ituKnBm/PO3iDLKMTs=;
+        b=DGnvXXRuP7fHeGwlHfotvtB7NDR+lSt0QCfkiQoLqF5RVdEjJdv26339kCqSLbQu1C
+         U4ZC/yL7jeEvEfFivqrxG5BE9r6rsQwr4QJ/tlGHXAX6lPZ93LKB0tIQt0bsCRhf1JA9
+         JSaQA8zevL3rUMaour/Vft5Sc3UCcpJWexai1T+O0D8VRW+eo6deBOw/h3LxvC0KIGRA
+         Z9ID25Xvlzu8vDwp0uTA40vOjBaGeR6tFDubIvEV0wP4EAMd810zlbhDi1VpOvWffO+6
+         y0x93kJlUUjgVeaJAlV86Tz6yQ0DY3SxbqrIFE8EfGVD1pQSiU+CtRCG8uyeS+LhaPdb
+         PPuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706586722; x=1707191522;
+        d=1e100.net; s=20230601; t=1706586724; x=1707191524;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QfduzUl6xeBtvtYJDyMTI1tDFj6QysY3Ss5eP9VLuq4=;
-        b=KWIfnkeaMMFjWfsfQuI2Jc3H4ZTL2dciZzMccSZi4KEmJN+tArFk9flVw+FlzfWXbq
-         yh+ovo4SgMsRxpPIoTX+LiK8XMH8Mp6txxhTsjisxHhjkkcIf1nfGE54nBry1VegunAt
-         ZLxeywdWBzXk+3jpOcsRfQYf+d8BxVHFvcNfUEM9zH5Ys9YAfdzKUNYdQtBZs6mMekod
-         DCK+GBogex6PhLhVuV3QxCWB8W9r6QXEuGMO7PRg/5J2rC/DmfNKrOIyzieHwce6QiKA
-         c3xzfyUUOgpco3p1XoXKXZWnHrngGbIQiY2aBT79hifB2c7jlHJm5Mtel0vm8UhbOyYI
-         JocA==
-X-Gm-Message-State: AOJu0YxXtEmwDGzvrYR7UYcKYBqzE/+q8JMtNiWHYe48mfxYgmT1eSy5
-	EuRToKIuhciAbe7uyrPdVH44VzWbchcO9uvhY+BSDS0pHmTkgHeidOOc/jE4mA==
-X-Google-Smtp-Source: AGHT+IEWkeLhdP7cYXdSo5d/XhFN67shLx8ETOlkaxq4ILoIYMlWFY5uN73f1sNTJ96Wm61lIXuUkQ==
-X-Received: by 2002:adf:ea02:0:b0:337:2940:ab7b with SMTP id q2-20020adfea02000000b003372940ab7bmr5253230wrm.1.1706586722579;
-        Mon, 29 Jan 2024 19:52:02 -0800 (PST)
+        bh=0Gr9RawEoMTLBvWixWLQ9InE8ituKnBm/PO3iDLKMTs=;
+        b=h0vGcQv3VpHiPcW5BHqF4DzwcIXgueep7CxtuTj4obTBpZRsfQ8bghJpKkMZfEOy7E
+         i1ZGPz7th0e9ZjfIK8QWnLp+Wi9lIC5gWeey14Yj//PGEnYTEgWXpL40pvz8lUs8tWzr
+         G37wxKBTp9TOQq68gg6RGOGWYUuxgMWW/JIZkB7NMjAzkONUNCzM9ch5drwtwYKZU3j3
+         POYxiGrslc8NkrGuQlfn3PT5IUZ7rK8wKAktRpAFOkOjm+psEa86hIw4EwgcnBvVCACw
+         orTw9FpoYX8aI9typnzuWfjNOiqC9DigOuAjDvgDm+FNzP88TeqwH26ktOTHRUORWG1r
+         qRfQ==
+X-Gm-Message-State: AOJu0Ywwy/R60JVGXcgfCmRw4F7XWri0EOaAIUoHebFEpPka8OSaWRef
+	Gptn+EwHAwbDmZq4KaFq7mQgLSF+mYqMnBYrBTJEZ/j+aygWgjyqI4sUHN3Gqg==
+X-Google-Smtp-Source: AGHT+IFyQ4LX2Vm/L7+rQkFA1LfPv+lk7PmRWfGl1yd8VKGXI87EoFvDwGgcnYP/KPnoH9kGWbiYcA==
+X-Received: by 2002:a5d:6383:0:b0:33a:ed8c:1a6a with SMTP id p3-20020a5d6383000000b0033aed8c1a6amr3210242wru.64.1706586724106;
+        Mon, 29 Jan 2024 19:52:04 -0800 (PST)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id ay13-20020a5d6f0d000000b00337d6aa3912sm9513207wrb.10.2024.01.29.19.52.01
+        by smtp.gmail.com with ESMTPSA id ay13-20020a5d6f0d000000b00337d6aa3912sm9513207wrb.10.2024.01.29.19.52.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jan 2024 19:52:01 -0800 (PST)
+        Mon, 29 Jan 2024 19:52:03 -0800 (PST)
 From: Dmitry Safonov <dima@arista.com>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -79,9 +79,9 @@ Cc: Dmitry Safonov <dima@arista.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] selftests/net: Rectify key counters checks
-Date: Tue, 30 Jan 2024 03:51:53 +0000
-Message-ID: <20240130-tcp-ao-test-key-mgmt-v2-2-d190430a6c60@arista.com>
+Subject: [PATCH v2 3/3] selftests/net: Repair RST passive reset selftest
+Date: Tue, 30 Jan 2024 03:51:54 +0000
+Message-ID: <20240130-tcp-ao-test-key-mgmt-v2-3-d190430a6c60@arista.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240130-tcp-ao-test-key-mgmt-v2-0-d190430a6c60@arista.com>
 References: <20240130-tcp-ao-test-key-mgmt-v2-0-d190430a6c60@arista.com>
@@ -93,139 +93,276 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.13-dev-b6b4b
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1706586711; l=5702; i=dima@arista.com; s=20231212; h=from:subject:message-id; bh=QZKaym8nFiRV9Re87RifRE/NGc2FIS+/ruqdmA8E/9Y=; b=A7UG9vGwH7vWayZbiEoyzrefAGgWlQNbFZPFq30bO+ymDMD8J1nOVvUsafhss4d6gzAdQWgTV GEn70c1m+qYC2y5aqfFVrTcAjYJgStAkrkFm1TFbfmK87csLr/nJJHg
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1706586712; l=10409; i=dima@arista.com; s=20231212; h=from:subject:message-id; bh=DuT4NF02kaC5BQypY3Hf8nScd/Iyn4+41SidW6J8xxQ=; b=hVifgR7SD4AW3xgOjLDaRTI8uyXtdFHKystQvRiDYKg0wi1PLgz3Z0GbL21ICkratszmwTvRa Zp+6bx35hcFA7KVhrfFGvinbcdzCGuxxOKAOBIEy/o2UH2NILXl9eNo
 X-Developer-Key: i=dima@arista.com; a=ed25519; pk=hXINUhX25b0D/zWBKvd6zkvH7W2rcwh/CH6cjEa3OTk=
 Content-Transfer-Encoding: 8bit
 
-As the names of (struct test_key) members didn't reflect whether the key
-was used for TX or RX, the verification for the counters was done
-incorrectly for asymmetrical selftests.
+Currently, the test is racy and seems to not pass anymore.
 
-Rename these with _tx appendix and fix checks in verify_counters().
-While at it, as the checks are now correct, introduce skip_counters_checks,
-which is intended for tests where it's expected that a key that was set
-with setsockopt(sk, IPPROTO_TCP, TCP_AO_INFO, ...) might had no chance
-of getting used on the wire.
+In order to rectify it, aim on TCP_TW_RST.
+Doesn't seem way too good with this sleep() part, but it seems as
+a reasonable compromise for the test. There is a plan in-line comment on
+how-to improve it, going to do it on the top, at this moment I want it
+to run on netdev/patchwork selftests dashboard.
 
-Fixes the following failures, exposed by the previous commit:
-> not ok 51 server: Check current != rnext keys set before connect(): Counter pkt_good was expected to increase 0 => 0 for key 132:5
-> not ok 52 server: Check current != rnext keys set before connect(): Counter pkt_good was not expected to increase 0 => 21 for key 137:10
->
-> not ok 63 server: Check current flapping back on peer's RnextKey request: Counter pkt_good was expected to increase 0 => 0 for key 132:5
-> not ok 64 server: Check current flapping back on peer's RnextKey request: Counter pkt_good was not expected to increase 0 => 40 for key 137:10
+It also slightly changes tcp_ao-lib in order to get SO_ERROR propagated
+to test_client_verify() return value.
 
-Cc: Mohammad Nassiri <mnassiri@ciena.com>
-Fixes: 3c3ead555648 ("selftests/net: Add TCP-AO key-management test")
+Fixes: c6df7b2361d7 ("selftests/net: Add TCP-AO RST test")
 Signed-off-by: Dmitry Safonov <dima@arista.com>
 ---
- .../testing/selftests/net/tcp_ao/key-management.c  | 44 ++++++++++++----------
- 1 file changed, 25 insertions(+), 19 deletions(-)
+ tools/testing/selftests/net/tcp_ao/lib/sock.c |  12 ++-
+ tools/testing/selftests/net/tcp_ao/rst.c      | 138 +++++++++++++++++---------
+ 2 files changed, 98 insertions(+), 52 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tcp_ao/key-management.c b/tools/testing/selftests/net/tcp_ao/key-management.c
-index f6a9395e3cd7..24e62120b792 100644
---- a/tools/testing/selftests/net/tcp_ao/key-management.c
-+++ b/tools/testing/selftests/net/tcp_ao/key-management.c
-@@ -417,9 +417,9 @@ struct test_key {
- 		matches_vrf		: 1,
- 		is_current		: 1,
- 		is_rnext		: 1,
--		used_on_handshake	: 1,
--		used_after_accept	: 1,
--		used_on_client		: 1;
-+		used_on_server_tx	: 1,
-+		used_on_client_tx	: 1,
-+		skip_counters_checks	: 1;
- };
- 
- struct key_collection {
-@@ -609,16 +609,14 @@ static int key_collection_socket(bool server, unsigned int port)
- 				addr = &this_ip_dest;
- 			sndid = key->client_keyid;
- 			rcvid = key->server_keyid;
--			set_current = key->is_current;
--			set_rnext = key->is_rnext;
-+			key->used_on_client_tx = set_current = key->is_current;
-+			key->used_on_server_tx = set_rnext = key->is_rnext;
- 		}
- 
- 		if (test_add_key_cr(sk, key->password, key->len,
- 				    *addr, vrf, sndid, rcvid, key->maclen,
- 				    key->alg, set_current, set_rnext))
- 			test_key_error("setsockopt(TCP_AO_ADD_KEY)", key);
--		if (set_current || set_rnext)
--			key->used_on_handshake = 1;
- #ifdef DEBUG
- 		test_print("%s [%u/%u] key: { %s, %u:%u, %u, %u:%u:%u:%u (%u)}",
- 			   server ? "server" : "client", i, collection.nr_keys,
-@@ -640,22 +638,22 @@ static void verify_counters(const char *tst_name, bool is_listen_sk, bool server
- 	for (i = 0; i < collection.nr_keys; i++) {
- 		struct test_key *key = &collection.keys[i];
- 		uint8_t sndid, rcvid;
--		bool was_used;
-+		bool rx_cnt_expected;
- 
-+		if (key->skip_counters_checks)
-+			continue;
- 		if (server) {
- 			sndid = key->server_keyid;
- 			rcvid = key->client_keyid;
--			if (is_listen_sk)
--				was_used = key->used_on_handshake;
--			else
--				was_used = key->used_after_accept;
-+			rx_cnt_expected = key->used_on_client_tx;
- 		} else {
- 			sndid = key->client_keyid;
- 			rcvid = key->server_keyid;
--			was_used = key->used_on_client;
-+			rx_cnt_expected = key->used_on_server_tx;
- 		}
- 
--		test_tcp_ao_key_counters_cmp(tst_name, a, b, was_used,
-+		test_tcp_ao_key_counters_cmp(tst_name, a, b,
-+					     rx_cnt_expected ? TEST_CNT_KEY_GOOD : 0,
- 					     sndid, rcvid);
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/sock.c b/tools/testing/selftests/net/tcp_ao/lib/sock.c
+index c75d82885a2e..15aeb0963058 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/sock.c
++++ b/tools/testing/selftests/net/tcp_ao/lib/sock.c
+@@ -62,7 +62,9 @@ int test_wait_fd(int sk, time_t sec, bool write)
+ 		return -ETIMEDOUT;
  	}
- 	test_tcp_ao_counters_free(a);
-@@ -916,9 +914,8 @@ static int run_client(const char *tst_name, unsigned int port,
- 		current_index = nr_keys - 1;
- 	if (rnext_index < 0)
- 		rnext_index = nr_keys - 1;
--	collection.keys[current_index].used_on_handshake = 1;
--	collection.keys[rnext_index].used_after_accept = 1;
--	collection.keys[rnext_index].used_on_client = 1;
-+	collection.keys[current_index].used_on_client_tx = 1;
-+	collection.keys[rnext_index].used_on_server_tx = 1;
  
- 	synchronize_threads(); /* 3: accepted => send data */
- 	if (test_client_verify(sk, msg_sz, msg_nr, TEST_TIMEOUT_SEC)) {
-@@ -1059,7 +1056,16 @@ static void check_current_back(const char *tst_name, unsigned int port,
- 		test_error("Can't change the current key");
- 	if (test_client_verify(sk, msg_len, nr_packets, TEST_TIMEOUT_SEC))
- 		test_fail("verify failed");
--	collection.keys[rotate_to_index].used_after_accept = 1;
-+	/* There is a race here: between setting the current_key with
-+	 * setsockopt(TCP_AO_INFO) and starting to send some data - there
-+	 * might have been a segment received with the desired
-+	 * RNext_key set. In turn that would mean that the first outgoing
-+	 * segment will have the desired current_key (flipped back).
-+	 * Which is what the user/test wants. As it's racy, skip checking
-+	 * the counters, yet check what are the resulting current/rnext
-+	 * keys on both sides.
-+	 */
-+	collection.keys[rotate_to_index].skip_counters_checks = 1;
- 
- 	end_client(tst_name, sk, nr_keys, current_index, rnext_index, &tmp);
+-	if (getsockopt(sk, SOL_SOCKET, SO_ERROR, &ret, &slen) || ret)
++	if (getsockopt(sk, SOL_SOCKET, SO_ERROR, &ret, &slen))
++		return -errno;
++	if (ret)
+ 		return -ret;
+ 	return 0;
  }
-@@ -1089,7 +1095,7 @@ static void roll_over_keys(const char *tst_name, unsigned int port,
- 		}
- 		verify_current_rnext(tst_name, sk, -1,
- 				     collection.keys[i].server_keyid);
--		collection.keys[i].used_on_client = 1;
-+		collection.keys[i].used_on_server_tx = 1;
- 		synchronize_threads(); /* verify current/rnext */
+@@ -584,9 +586,11 @@ int test_client_verify(int sk, const size_t msg_len, const size_t nr,
+ {
+ 	size_t buf_sz = msg_len * nr;
+ 	char *buf = alloca(buf_sz);
++	ssize_t ret;
+ 
+ 	randomize_buffer(buf, buf_sz);
+-	if (test_client_loop(sk, buf, buf_sz, msg_len, timeout_sec) != buf_sz)
+-		return -1;
+-	return 0;
++	ret = test_client_loop(sk, buf, buf_sz, msg_len, timeout_sec);
++	if (ret < 0)
++		return (int)ret;
++	return ret != buf_sz ? -1 : 0;
+ }
+diff --git a/tools/testing/selftests/net/tcp_ao/rst.c b/tools/testing/selftests/net/tcp_ao/rst.c
+index ac06009a7f5f..7df8b8700e39 100644
+--- a/tools/testing/selftests/net/tcp_ao/rst.c
++++ b/tools/testing/selftests/net/tcp_ao/rst.c
+@@ -1,10 +1,33 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/* Author: Dmitry Safonov <dima@arista.com> */
++/*
++ * The test checks that both active and passive reset have correct TCP-AO
++ * signature. An "active" reset (abort) here is procured from closing
++ * listen() socket with non-accepted connections in the queue:
++ * inet_csk_listen_stop() => inet_child_forget() =>
++ *                        => tcp_disconnect() => tcp_send_active_reset()
++ *
++ * The passive reset is quite hard to get on established TCP connections.
++ * It could be procured from non-established states, but the synchronization
++ * part from userspace in order to reliably get RST seems uneasy.
++ * So, instead it's procured by corrupting SEQ number on TIMED-WAIT state.
++ *
++ * It's important to test both passive and active RST as they go through
++ * different code-paths:
++ * - tcp_send_active_reset() makes no-data skb, sends it with tcp_transmit_skb()
++ * - tcp_v*_send_reset() create their reply skbs and send them with
++ *   ip_send_unicast_reply()
++ *
++ * In both cases TCP-AO signatures have to be correct, which is verified by
++ * (1) checking that the TCP-AO connection was reset and (2) TCP-AO counters.
++ *
++ * Author: Dmitry Safonov <dima@arista.com>
++ */
+ #include <inttypes.h>
+ #include "../../../../include/linux/kernel.h"
+ #include "aolib.h"
+ 
+ const size_t quota = 1000;
++const size_t packet_sz = 100;
+ /*
+  * Backlog == 0 means 1 connection in queue, see:
+  * commit 64a146513f8f ("[NET]: Revert incorrect accept queue...")
+@@ -59,26 +82,6 @@ static void close_forced(int sk)
+ 	close(sk);
+ }
+ 
+-static int test_wait_for_exception(int sk, time_t sec)
+-{
+-	struct timeval tv = { .tv_sec = sec };
+-	struct timeval *ptv = NULL;
+-	fd_set efds;
+-	int ret;
+-
+-	FD_ZERO(&efds);
+-	FD_SET(sk, &efds);
+-
+-	if (sec)
+-		ptv = &tv;
+-
+-	errno = 0;
+-	ret = select(sk + 1, NULL, NULL, &efds, ptv);
+-	if (ret < 0)
+-		return -errno;
+-	return ret ? sk : 0;
+-}
+-
+ static void test_server_active_rst(unsigned int port)
+ {
+ 	struct tcp_ao_counters cnt1, cnt2;
+@@ -155,17 +158,16 @@ static void test_server_passive_rst(unsigned int port)
+ 			test_fail("server returned %zd", bytes);
  	}
- 	end_client(tst_name, sk, nr_keys, current_index, rnext_index, &tmp);
+ 
+-	synchronize_threads(); /* 3: chekpoint/restore the connection */
++	synchronize_threads(); /* 3: checkpoint the client */
++	synchronize_threads(); /* 4: close the server, creating twsk */
+ 	if (test_get_tcp_ao_counters(sk, &ao2))
+ 		test_error("test_get_tcp_ao_counters()");
+-
+-	synchronize_threads(); /* 4: terminate server + send more on client */
+-	bytes = test_server_run(sk, quota, TEST_RETRANSMIT_SEC);
+ 	close(sk);
++
++	synchronize_threads(); /* 5: restore the socket, send more data */
+ 	test_tcp_ao_counters_cmp("passive RST server", &ao1, &ao2, TEST_CNT_GOOD);
+ 
+-	synchronize_threads(); /* 5: verified => closed */
+-	close(sk);
++	synchronize_threads(); /* 6: server exits */
+ }
+ 
+ static void *server_fn(void *arg)
+@@ -284,7 +286,7 @@ static void test_client_active_rst(unsigned int port)
+ 		test_error("test_wait_fds(): %d", err);
+ 
+ 	synchronize_threads(); /* 3: close listen socket */
+-	if (test_client_verify(sk[0], 100, quota / 100, TEST_TIMEOUT_SEC))
++	if (test_client_verify(sk[0], packet_sz, quota / packet_sz, TEST_TIMEOUT_SEC))
+ 		test_fail("Failed to send data on connected socket");
+ 	else
+ 		test_ok("Verified established tcp connection");
+@@ -323,7 +325,6 @@ static void test_client_passive_rst(unsigned int port)
+ 	struct tcp_sock_state img;
+ 	sockaddr_af saddr;
+ 	int sk, err;
+-	socklen_t slen = sizeof(err);
+ 
+ 	sk = socket(test_family, SOCK_STREAM, IPPROTO_TCP);
+ 	if (sk < 0)
+@@ -337,18 +338,51 @@ static void test_client_passive_rst(unsigned int port)
+ 		test_error("failed to connect()");
+ 
+ 	synchronize_threads(); /* 2: accepted => send data */
+-	if (test_client_verify(sk, 100, quota / 100, TEST_TIMEOUT_SEC))
++	if (test_client_verify(sk, packet_sz, quota / packet_sz, TEST_TIMEOUT_SEC))
+ 		test_fail("Failed to send data on connected socket");
+ 	else
+ 		test_ok("Verified established tcp connection");
+ 
+-	synchronize_threads(); /* 3: chekpoint/restore the connection */
++	synchronize_threads(); /* 3: checkpoint the client */
+ 	test_enable_repair(sk);
+ 	test_sock_checkpoint(sk, &img, &saddr);
+ 	test_ao_checkpoint(sk, &ao_img);
+-	test_kill_sk(sk);
++	test_disable_repair(sk);
+ 
+-	img.out.seq += quota;
++	synchronize_threads(); /* 4: close the server, creating twsk */
++
++	/*
++	 * The "corruption" in SEQ has to be small enough to fit into TCP
++	 * window, see tcp_timewait_state_process() for out-of-window
++	 * segments.
++	 */
++	img.out.seq += 5; /* 5 is more noticeable in tcpdump than 1 */
++
++	/*
++	 * FIXME: This is kind-of ugly and dirty, but it works.
++	 *
++	 * At this moment, the server has close'ed(sk).
++	 * The passive RST that is being targeted here is new data after
++	 * half-duplex close, see tcp_timewait_state_process() => TCP_TW_RST
++	 *
++	 * What is needed here is:
++	 * (1) wait for FIN from the server
++	 * (2) make sure that the ACK from the client went out
++	 * (3) make sure that the ACK was received and processed by the server
++	 *
++	 * Otherwise, the data that will be sent from "repaired" socket
++	 * post SEQ corruption may get to the server before it's in
++	 * TCP_FIN_WAIT2.
++	 *
++	 * (1) is easy with select()/poll()
++	 * (2) is possible by polling tcpi_state from TCP_INFO
++	 * (3) is quite complex: as server's socket was already closed,
++	 *     probably the way to do it would be tcp-diag.
++	 */
++	sleep(TEST_RETRANSMIT_SEC);
++
++	synchronize_threads(); /* 5: restore the socket, send more data */
++	test_kill_sk(sk);
+ 
+ 	sk = socket(test_family, SOCK_STREAM, IPPROTO_TCP);
+ 	if (sk < 0)
+@@ -366,25 +400,33 @@ static void test_client_passive_rst(unsigned int port)
+ 	test_disable_repair(sk);
+ 	test_sock_state_free(&img);
+ 
+-	synchronize_threads(); /* 4: terminate server + send more on client */
+-	if (test_client_verify(sk, 100, quota / 100, 2 * TEST_TIMEOUT_SEC))
+-		test_ok("client connection broken post-seq-adjust");
++	/*
++	 * This is how "passive reset" is acquired in this test from TCP_TW_RST:
++	 *
++	 * IP 10.0.254.1.7011 > 10.0.1.1.59772: Flags [P.], seq 901:1001, ack 1001, win 249,
++	 *    options [tcp-ao keyid 100 rnextkeyid 100 mac 0x10217d6c36a22379086ef3b1], length 100
++	 * IP 10.0.254.1.7011 > 10.0.1.1.59772: Flags [F.], seq 1001, ack 1001, win 249,
++	 *    options [tcp-ao keyid 100 rnextkeyid 100 mac 0x104ffc99b98c10a5298cc268], length 0
++	 * IP 10.0.1.1.59772 > 10.0.254.1.7011: Flags [.], ack 1002, win 251,
++	 *    options [tcp-ao keyid 100 rnextkeyid 100 mac 0xe496dd4f7f5a8a66873c6f93,nop,nop,sack 1 {1001:1002}], length 0
++	 * IP 10.0.1.1.59772 > 10.0.254.1.7011: Flags [P.], seq 1006:1106, ack 1001, win 251,
++	 *    options [tcp-ao keyid 100 rnextkeyid 100 mac 0x1b5f3330fb23fbcd0c77d0ca], length 100
++	 * IP 10.0.254.1.7011 > 10.0.1.1.59772: Flags [R], seq 3215596252, win 0,
++	 *    options [tcp-ao keyid 100 rnextkeyid 100 mac 0x0bcfbbf497bce844312304b2], length 0
++	 */
++	err = test_client_verify(sk, packet_sz, quota / packet_sz, 2 * TEST_TIMEOUT_SEC);
++	/* Make sure that the connection was reset, not timeouted */
++	if (err && err == -ECONNRESET)
++		test_ok("client sock was passively reset post-seq-adjust");
++	else if (err)
++		test_fail("client sock was not reset post-seq-adjust: %d", err);
+ 	else
+-		test_fail("client connection still works post-seq-adjust");
+-
+-	test_wait_for_exception(sk, TEST_TIMEOUT_SEC);
+-
+-	if (getsockopt(sk, SOL_SOCKET, SO_ERROR, &err, &slen))
+-		test_error("getsockopt()");
+-	if (err != ECONNRESET && err != EPIPE)
+-		test_fail("client connection was not reset: %d", err);
+-	else
+-		test_ok("client connection was reset");
++		test_fail("client sock is yet connected post-seq-adjust");
+ 
+ 	if (test_get_tcp_ao_counters(sk, &ao2))
+ 		test_error("test_get_tcp_ao_counters()");
+ 
+-	synchronize_threads(); /* 5: verified => closed */
++	synchronize_threads(); /* 6: server exits */
+ 	close(sk);
+ 	test_tcp_ao_counters_cmp("client passive RST", &ao1, &ao2, TEST_CNT_GOOD);
+ }
+@@ -410,6 +452,6 @@ static void *client_fn(void *arg)
+ 
+ int main(int argc, char *argv[])
+ {
+-	test_init(15, server_fn, client_fn);
++	test_init(14, server_fn, client_fn);
+ 	return 0;
+ }
 
 -- 
 2.43.0
