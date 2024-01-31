@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-3804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7033843379
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 03:17:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6466843393
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 03:18:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E4F11C20F75
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 02:17:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62AC428A7EE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 02:18:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C104B20B2C;
-	Wed, 31 Jan 2024 02:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D478383A4;
+	Wed, 31 Jan 2024 02:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="O6rqaQpH"
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="mDg24hho"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947E7746E;
-	Wed, 31 Jan 2024 02:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABB718AFA;
+	Wed, 31 Jan 2024 02:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706667368; cv=none; b=Pa1mYoBVKQv1xasu4BMIfbxpiGzXHy/6E2W3BnQofubMWojDwbNVSzwbkNyJcqslBvIni7xaK0ZULWowJJUiPxsNRfWar8rWHThl4xKwt1/3WnucRZGG05NpjhupryWFQRrTR+s2xmt7m/YnaINlR2eFgwjwAr1cuLhzPkK77UI=
+	t=1706667370; cv=none; b=nwkflUmP3OBiT66gr+2BopuIOP1P/uvNg+XBAnrXSDxzbJlu4wHtvC8z9bJsbVfOwdtbohUVH2xYkBG2NM32+Wqjo7Y0zZ2Xg7k37LBSPFK48jWHlfWIB98k82MMPHJfFcXVix/LEl/nfWOFMlOrCrj5Usde1PGULGKq2jI99kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706667368; c=relaxed/simple;
-	bh=0/+/hcgGDqBe60bUVEVmocVH9t5svTQdQZc0NkVSSpc=;
+	s=arc-20240116; t=1706667370; c=relaxed/simple;
+	bh=7B5CV9F4s4vjyjGFgVZxdU1S+iuE0jPD0kJ+jDAFB9A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pT3Cao5OFiX1Jer00CwIDCtQCMmDnzuNaReg7khAI9bf8nLQlzUMMAELY+K2Y8AFNJ0DAS7jeWaEnE2YTJeLuuwFSHsVz7ZkRD1POseVKNKz1LZ2r/5vbtQzgSR3Oa8KnKlinZd4wwquvdDO23uN4iFR2FpcWS2gp99EPI+dGS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=O6rqaQpH; arc=none smtp.client-ip=4.36.192.163
+	 MIME-Version; b=tOjKXHLQApQBvFFp2Qg/Z7Cks0N+Z6EPnGTdgD63a5EW+YEqCQ+YTcHHJKpR75j6ILhSn9cvqSNkb7icZ2jHoF5l5EV8EMYDJeK4kAVq1eBANpNyLIgu+eQrr8rI9Jkrs8aGqj4YvERjIcEnRy2Ag94vAfFTnFeOi7qIx7SugIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=mDg24hho; arc=none smtp.client-ip=4.36.192.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=In2g/SxOslWdr0ggX/uaBmW3P5Of+22LEm91YJWAe0A=; b=O6rqaQpHDK+OJLCivF6+Qd0XyV
-	wJQMzjsrn5//04CHK55yjO4hL0I64rS7vXKWVcZ+OErnP0JU8IIXsBCT5mt0T8eBEOOjbcP0KkJmG
-	GDhx2EY9uzYeKaxqiwtKkcDbcb+TsIZFHn4vi5VFmgVpSczH3Y2gDgXbpO9ZivyOBwT2iCJHWG0CX
-	UPKaa3a9dfFyY/SOif9ji24x4+aMRpH1niNLV7rYPLfxjsRLeoJzuuwOokNftlDNEiqLP10aODZBP
-	sxZInVET5kfrRxgrMRQJaAFhS98kKLljV0SENNvAucxDDFA8/jaWeFO1aixdmHa8fxwG+cefI04+7
-	Qu0IqO/w==;
+	bh=kEY81ThKNufG032Um78kKWhIVAmyunZr7IiiHuV5wWQ=; b=mDg24hhoYo2z2gy9XUIyagUrTr
+	vPPfaNvERLV7wmD+M29Y57TvqOTOyWR38WIpGW3YXk+aFQ9hEuoBK7+bzVnz0arEtripOxA/6Jjzh
+	BsAd5iP2gMUlDgAYJB/GCCdRQ64Jss7E4Pg+3JGHxXNMCHxynPJnxtS2i7jAkoELWIA/yx0XEqj1n
+	hOMBgjXlivXFw9L99q1dVsR1jlL8QcZYe/zka43g5Qpu+eXMKvbSclWbNGhyo0C/G3LANBjM9T//T
+	pW3f2Z1GKSvsaiIYKTMd9BB6/UzethYwJ/puySGKKScxv6Vmt8WVNETK7Xyq8OlmXRuHdx52h7CjJ
+	+wfC6WtQ==;
 Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
 	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <zfigura@codeweavers.com>)
-	id 1rV08s-0038Kv-0d;
+	id 1rV08s-0038Kv-2C;
 	Tue, 30 Jan 2024 20:15:58 -0600
 From: Elizabeth Figura <zfigura@codeweavers.com>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -61,9 +61,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [RFC PATCH v2 27/29] selftests: ntsync: Add some tests for wakeup signaling via alerts.
-Date: Tue, 30 Jan 2024 20:13:54 -0600
-Message-ID: <20240131021356.10322-28-zfigura@codeweavers.com>
+Subject: [RFC PATCH v2 28/29] maintainers: Add an entry for ntsync.
+Date: Tue, 30 Jan 2024 20:13:55 -0600
+Message-ID: <20240131021356.10322-29-zfigura@codeweavers.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240131021356.10322-1-zfigura@codeweavers.com>
 References: <20240131021356.10322-1-zfigura@codeweavers.com>
@@ -75,114 +75,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Expand the alert tests to cover alerting a thread mid-wait, to test that the
-relevant scheduling logic works correctly.
+Add myself as maintainer, supported by CodeWeavers.
 
 Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 ---
- .../testing/selftests/drivers/ntsync/ntsync.c | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
-index 6c00a55909aa..09153d0686ac 100644
---- a/tools/testing/selftests/drivers/ntsync/ntsync.c
-+++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
-@@ -1080,9 +1080,12 @@ TEST(wake_all)
- TEST(alert_any)
- {
- 	struct ntsync_event_args event_args = {0};
-+	struct ntsync_wait_args wait_args = {0};
- 	struct ntsync_sem_args sem_args = {0};
- 	__u32 index, count, signaled;
-+	struct wait_args thread_args;
- 	int objs[2], fd, ret;
-+	pthread_t thread;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8d1052fa6a69..7924127d351b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15585,6 +15585,15 @@ T:	git https://github.com/Paragon-Software-Group/linux-ntfs3.git
+ F:	Documentation/filesystems/ntfs3.rst
+ F:	fs/ntfs3/
  
- 	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
- 	ASSERT_LE(0, fd);
-@@ -1130,6 +1133,34 @@ TEST(alert_any)
- 	EXPECT_EQ(0, ret);
- 	EXPECT_EQ(2, index);
- 
-+	/* test wakeup via alert */
++NTSYNC SYNCHRONIZATION PRIMITIVE DRIVER
++M:	Elizabeth Figura <zfigura@codeweavers.com>
++L:	wine-devel@winehq.org
++S:	Supported
++F:	Documentation/userspace-api/ntsync.rst
++F:	drivers/misc/ntsync.c
++F:	include/uapi/linux/ntsync.h
++F:	tools/testing/selftests/drivers/ntsync/
 +
-+	ret = ioctl(event_args.event, NTSYNC_IOC_EVENT_RESET, &signaled);
-+	EXPECT_EQ(0, ret);
-+
-+	wait_args.timeout = get_abs_timeout(1000);
-+	wait_args.objs = (uintptr_t)objs;
-+	wait_args.count = 2;
-+	wait_args.owner = 123;
-+	wait_args.index = 0xdeadbeef;
-+	wait_args.alert = event_args.event;
-+	thread_args.fd = fd;
-+	thread_args.args = &wait_args;
-+	thread_args.request = NTSYNC_IOC_WAIT_ANY;
-+	ret = pthread_create(&thread, NULL, wait_thread, &thread_args);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 100);
-+	EXPECT_EQ(ETIMEDOUT, ret);
-+
-+	ret = ioctl(event_args.event, NTSYNC_IOC_EVENT_SET, &signaled);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 100);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, thread_args.ret);
-+	EXPECT_EQ(2, wait_args.index);
-+
- 	close(event_args.event);
- 
- 	/* test with an auto-reset event */
-@@ -1166,9 +1197,12 @@ TEST(alert_any)
- TEST(alert_all)
- {
- 	struct ntsync_event_args event_args = {0};
-+	struct ntsync_wait_args wait_args = {0};
- 	struct ntsync_sem_args sem_args = {0};
-+	struct wait_args thread_args;
- 	__u32 index, count, signaled;
- 	int objs[2], fd, ret;
-+	pthread_t thread;
- 
- 	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
- 	ASSERT_LE(0, fd);
-@@ -1202,6 +1236,34 @@ TEST(alert_all)
- 	EXPECT_EQ(0, ret);
- 	EXPECT_EQ(2, index);
- 
-+	/* test wakeup via alert */
-+
-+	ret = ioctl(event_args.event, NTSYNC_IOC_EVENT_RESET, &signaled);
-+	EXPECT_EQ(0, ret);
-+
-+	wait_args.timeout = get_abs_timeout(1000);
-+	wait_args.objs = (uintptr_t)objs;
-+	wait_args.count = 2;
-+	wait_args.owner = 123;
-+	wait_args.index = 0xdeadbeef;
-+	wait_args.alert = event_args.event;
-+	thread_args.fd = fd;
-+	thread_args.args = &wait_args;
-+	thread_args.request = NTSYNC_IOC_WAIT_ALL;
-+	ret = pthread_create(&thread, NULL, wait_thread, &thread_args);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 100);
-+	EXPECT_EQ(ETIMEDOUT, ret);
-+
-+	ret = ioctl(event_args.event, NTSYNC_IOC_EVENT_SET, &signaled);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 100);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, thread_args.ret);
-+	EXPECT_EQ(2, wait_args.index);
-+
- 	close(event_args.event);
- 
- 	/* test with an auto-reset event */
+ NUBUS SUBSYSTEM
+ M:	Finn Thain <fthain@linux-m68k.org>
+ L:	linux-m68k@lists.linux-m68k.org
 -- 
 2.43.0
 
