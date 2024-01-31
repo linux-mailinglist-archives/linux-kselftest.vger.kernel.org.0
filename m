@@ -1,112 +1,114 @@
-Return-Path: <linux-kselftest+bounces-3881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6704A844926
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 21:51:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C470844934
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 21:54:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CFE91C21AC7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 20:51:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 583F928EF8C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 20:54:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4995E381D5;
-	Wed, 31 Jan 2024 20:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943CE383AA;
+	Wed, 31 Jan 2024 20:54:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="XtKDfsAJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fYDbUZ2D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC8031A61;
-	Wed, 31 Jan 2024 20:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6284738DD2;
+	Wed, 31 Jan 2024 20:54:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706734308; cv=none; b=jcqbGf5iHempM6tv05m9O3HoUUZ21sb8ZV1FwznWE4R0/c1gJuecNURMSNwCQzessPXS2peAdJn61u6IRO5z0wtjMax6BA2bYszQMouoNY1B++ow6FC0R5suvero537XklBqatb/Ph0NsNjL4ZqodWXmAcBeHXssbWSZ9vrWjwk=
+	t=1706734448; cv=none; b=ZQSTA4hrMl8wFjSjniuIg/EzbitoIXKe1WzsbhV3pU865ugxZVxCiWh677U/AmDX07SNSQBHfwqvcweST0hLk3PRnNtuKcYwch+E6A5LYL/NSHVh0CxM0euQSG3vkLHcWeB6uXr/ClvQcw2oB+17GbzERJ0+9LH79LdJvmysk4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706734308; c=relaxed/simple;
-	bh=vybbYYq9hxEE/rnqs38OpgiASw61KAQjmuklQgJTdi4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jfkFxSOnWzmZtfUTV2SdQ4bbrCBnzROYZYal+M9knMC09Gz15RfISnelwBoklW2+zacgoNeTX4Z1TN7daZTUjFlujU+B96k4+1KG3hyZGR4UI6czA7JIvK91FOIFCvs2mB16XYgozq9spYNwkudCb6xqNoLckA6CcaxZklD4RFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=XtKDfsAJ; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3C92247A94
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1706734303; bh=8074FH1QslNr+keTLp0xQItj4SG0X91J96NvtdBhqvs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=XtKDfsAJjEO4xLQz8MDxx5apYR7PQdBYvZPl1xN7hNAPvrciKLwN8XM8IRQ5a6j8B
-	 ZyGPuTViZj0wLUeCJoflQTen8at7cZNKLlBy6/bbiVEvXrsUTRLN5ZpbLsjDTgAILS
-	 GIE1CrP4Xd/fT2N9tv6RXZh4H210n+qpBzbOZHZ6CuJB8y/BDdJsyN6uQxofzQow4r
-	 ZCxE9hVyZitmqzfyNgGngA1KuNfAG5b9b6hCyjASEjGJQYcwtQSOr2+bjWBnuXdry5
-	 58wh4c8E6sAQQofeFSENZHWDv7NfgAcLQHq03KjQDQ6BxhtlRHMgGpBORXzGpKCf7x
-	 Sc3nVD8auGIjA==
-Received: from localhost (unknown [IPv6:2601:280:5e00:7e19::646])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 3C92247A94;
-	Wed, 31 Jan 2024 20:51:43 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Jeff Xu <jeffxu@chromium.org>
-Cc: akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
- sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org,
- torvalds@linux-foundation.org, usama.anjum@collabora.com,
- rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
- groeck@chromium.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- pedro.falcato@gmail.com, dave.hansen@intel.com,
- linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Subject: Re: [PATCH v7 0/4] Introduce mseal()
-In-Reply-To: <CABi2SkV4Q9CY+vb+t_+7RN_EtFB+FUi4ObHaZWo_+KMt7u4yDA@mail.gmail.com>
-References: <20240122152905.2220849-1-jeffxu@chromium.org>
- <87a5ong41h.fsf@meer.lwn.net>
- <CABi2SkV4Q9CY+vb+t_+7RN_EtFB+FUi4ObHaZWo_+KMt7u4yDA@mail.gmail.com>
-Date: Wed, 31 Jan 2024 13:51:42 -0700
-Message-ID: <87le854469.fsf@meer.lwn.net>
+	s=arc-20240116; t=1706734448; c=relaxed/simple;
+	bh=NpDrXnTuE8BMzuC03lZTD2fYoKrXrjH6wcLbnZRrixs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bj6mjsTZh+o3R0dI0NU9JqBrWXdQqgypHoPso7KynGU3+k8Z3Br7VhSkw3XDS16Kj0AodWIRP87VyOUI03J8SrWtiRzIdE0tz0J+yWiAIWUeyeeJxJgACiZrSnICaLGdnCw0scVj8j20utnRc+LusAV65vy5SbwOklPnEujzRrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fYDbUZ2D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975B4C433C7;
+	Wed, 31 Jan 2024 20:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706734447;
+	bh=NpDrXnTuE8BMzuC03lZTD2fYoKrXrjH6wcLbnZRrixs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fYDbUZ2D4G8Ucpq43YFgIGuEfiMThY0LsPeeaIA52P88VbtH57oOMWzfuAtcjXfyr
+	 BvjfU0FPX2PFTFQ5ylkvicZKJpXTsJcHF4l7uCwD70Jt+FmQdvdbPh8thxozH/Df6+
+	 DIu8J/ooOROKIFpDTTlGy4iVIUzpqRxBrXMypwJuThQYxHSWMREGldwbVtHzrNUItT
+	 wjd1GQ3iD/iNwz5msHrGcEtI14au9Ofef5iAEYLPGiJ/S0wiAJhsx5RqquVNC1nYqB
+	 ewnoD2OrhPprAKwbYEciNYM8dNFv7rrCY9DT2Z01o5wjc3QQAvxOggMJUDJmwUVJ+S
+	 XEBuwdouJOlMA==
+Date: Wed, 31 Jan 2024 14:54:05 -0600
+From: Rob Herring <robh@kernel.org>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+	linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+	devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 1/7] arm64: Unconditionally call
+ unflatten_device_tree()
+Message-ID: <20240131205405.GA2249327-robh@kernel.org>
+References: <20240130004508.1700335-1-sboyd@kernel.org>
+ <20240130004508.1700335-2-sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240130004508.1700335-2-sboyd@kernel.org>
 
-Jeff Xu <jeffxu@chromium.org> writes:
+On Mon, Jan 29, 2024 at 04:45:00PM -0800, Stephen Boyd wrote:
+> Call this function unconditionally so that we can populate an empty DTB
+> on platforms that don't boot with a firmware provided or builtin DTB.
+> Override 'initial_boot_params' to NULL when ACPI is in use but the
+> bootloader has loaded a DTB so that we don't allow both ACPI and DT to
+> be used during boot. If there isn't a valid initial_boot_params dtb then
+> unflatten_device_tree() returns early so this is fine.
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: <linux-arm-kernel@lists.infradead.org>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  arch/arm64/kernel/setup.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+> index 417a8a86b2db..ffb1942724ae 100644
+> --- a/arch/arm64/kernel/setup.c
+> +++ b/arch/arm64/kernel/setup.c
+> @@ -351,8 +351,11 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>  	/* Parse the ACPI tables for possible boot-time configuration */
+>  	acpi_boot_table_init();
+>  
+> -	if (acpi_disabled)
+> -		unflatten_device_tree();
+> +	/* Don't use the FDT from boot if ACPI is in use */
+> +	if (!acpi_disabled)
+> +		initial_boot_params = NULL;
 
-> On Mon, Jan 29, 2024 at 2:37=E2=80=AFPM Jonathan Corbet <corbet@lwn.net> =
-wrote:
->>
->> jeffxu@chromium.org writes:
->>
->> > Although the initial version of this patch series is targeting the
->> > Chrome browser as its first user, it became evident during upstream
->> > discussions that we would also want to ensure that the patch set
->> > eventually is a complete solution for memory sealing and compatible
->> > with other use cases. The specific scenario currently in mind is
->> > glibc's use case of loading and sealing ELF executables. To this end,
->> > Stephen is working on a change to glibc to add sealing support to the
->> > dynamic linker, which will seal all non-writable segments at startup.
->> > Once this work is completed, all applications will be able to
->> > automatically benefit from these new protections.
->>
->> Is this work posted somewhere?  Having a second - and more generally
->> useful - user for this API would do a lot to show that the design is, in
->> fact, right and useful beyond the Chrome browser.
->>
-> Stephen conducted a PoC last year, it will be published once it is comple=
-te.
-> We're super excited about introducing this as a general safety measure
-> for all of Linux!
+I still think this is a problem for kexec. See 
+of_kexec_alloc_and_setup_fdt(). You see it uses initial_boot_params. At 
+first glance it looks like it would just write out everything we need. 
+But for UEFI boot, I think we need all the chosen properties like 
+linux,uefi-mmap-start preserved from the current boot for the next 
+kernel we kexec.
 
-We're excited too, something like mseal() seems like a good thing to
-have.  My point, though, is that it would be good to see this second
-(and more general) user of the API *before* merging it.  As others have
-noted, once mseal() is in a released kernel, it will be difficult to
-change if adjustments turn out to be necessary.
+I think you'll have to check acpi_disabled in unflatten_device_tree() 
+and unflatten the empty tree leaving initial_boot_params alone. That 
+means our FDT and unflattened tree will be different DTs, but I think 
+that's fine.
 
-Thanks,
-
-jon
+Rob
 
