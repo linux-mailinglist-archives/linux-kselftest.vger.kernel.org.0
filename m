@@ -1,56 +1,57 @@
-Return-Path: <linux-kselftest+bounces-3783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 076128432E7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 02:47:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35DBE843311
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 03:00:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0AEA1F25426
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 01:47:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF50FB239A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 01:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 308D11859;
-	Wed, 31 Jan 2024 01:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957EE1C10;
+	Wed, 31 Jan 2024 01:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QKoPAyRN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6s64S2U"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DB51849;
-	Wed, 31 Jan 2024 01:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8C25692;
+	Wed, 31 Jan 2024 01:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706665661; cv=none; b=Vx7y15IQPHTeT3p3ksvjcBL3tEwskwGAEAPHo1O16hJlihGB4hSEy9xZKCoNfzNQtL6XhTRKx5wueq2+suLCIOM1P1lgz8jSgGxvD0K5MqupjDibPlAe/oj0VtNfl6Rs3qbY4+AG42bn5R5Gj0+JtdxXbJ+rQS5tSPTxmXxTTas=
+	t=1706666383; cv=none; b=s7H5YBW4JT9EKCjSg2ienlPDbjodlq+nH/X4Ie0z2b85iB7MESZaAX3Xegzlk7Gxtv20csVwnmruV6bFAmZ2NzXfSKt9EDko77+4O7r4VQFwDbEpJPLavp2/t4SpuOKWnPu319H7Ed2UptB+R+FUoDAb9WR76LzDBfh10gmVG8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706665661; c=relaxed/simple;
-	bh=YE+fSNLLGhXaNKqNnAJc7wI5mkYohvK3KykEhUCuZuk=;
+	s=arc-20240116; t=1706666383; c=relaxed/simple;
+	bh=KrZ+qqIPxkijempbl2Yiu2AoQAsBsmHbnTvDKV5iWbU=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YZO2Ct3/4YPcoVyC7kPzth8u6TzIQDeaKJ+TjMjmu+Ka3ThWo/DBEwtbsFOnsk2rCnuHYsm4Gf/Q2N7iwLT6He/EHArznQPNcP0PCXdCxm1QrsG5XL0vUpgU+RR12pKTgWVnqJtDbgkP7EdgsoOf3DLfSY8UXdRDZRxCw9/I4nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QKoPAyRN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2E8C433C7;
-	Wed, 31 Jan 2024 01:47:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=sy4+25so2JfBb56Z5H+gToiGG/ViYugRGP5vG4VZYE3WTKmtseqA81Npy7jzflFbT3F+Ff0wX1R05B2GWILulbreNOsB/Dx2QgSL5/sVjCAxO29fv4o6YgKdRzlmhc2kZVU5lJZpJICZqUIvRwgTbvSFPA/Kj/b3J4IVZuudfME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6s64S2U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5324FC433F1;
+	Wed, 31 Jan 2024 01:59:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706665660;
-	bh=YE+fSNLLGhXaNKqNnAJc7wI5mkYohvK3KykEhUCuZuk=;
+	s=k20201202; t=1706666382;
+	bh=KrZ+qqIPxkijempbl2Yiu2AoQAsBsmHbnTvDKV5iWbU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QKoPAyRNu2HKIK9fn+FvYleSQOkF27/oP47x2c+lEB7Qnusn/zC3KZfevoQiOmw5e
-	 fhaGHIo7P9znNU3i+Is8WWfknUF2VqjJDSykwsMQ6CV4Nx9RoUwTbt2QM9TxOIiAUg
-	 X3UcnRx2PU4zCkva7P2NbNCLIeEJsLMxH3w0f3qRpQwkMcLrDE+1Zq9ZVFDBJAyPV8
-	 1WrpY96eM0fSALao7yse1f7kvoxpb8isMpygf+GM71jv8dmhnqVcf/WREB3uYNJtTT
-	 fr3fyvdBX/bnq+xNV6nD49C6nRBYyxwryqo7GHuebD4Wki+lpY5BguTu8QMr22N09a
-	 3MyJ5vnFC6NqQ==
-Date: Tue, 30 Jan 2024 17:47:36 -0800
+	b=Y6s64S2UHZAZCZB45ZfmJcEYhOd5VbQKgQdB/nqDClzn264I/OIrxy5vZP9skIPyP
+	 tsn+HFstR+fVuwZr41m6K/g0UAC9WEsTDbXZJTo7Tz5H/8t/Jc3xFIMtK6GGAXqc6P
+	 sVKe6MvpumIdenoWGIA6oedGPlkNMv/WbWLLtKa5ydtKNz/4w5pZQ3kUR99RAFK1xg
+	 FHBFaNh/Emq/ijZprjj8toWzQaHBN48HbmuwnnX3IdIG8zBUVLhL31Rs4sAQ14H5wX
+	 gA9w7yazbzHHRseznKd4zNLXHDLNlDgNsGr0If8OdcbDeByXyfD2+gZXyFsruOblui
+	 +mLQnfYao3IOw==
+Date: Tue, 30 Jan 2024 17:59:38 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, linux-kselftest@vger.kernel.org, Willem de Bruijn
- <willemb@google.com>
-Subject: Re: [PATCH net-next] selftests/net: calibrate txtimestamp
-Message-ID: <20240130174736.03c79071@kernel.org>
-In-Reply-To: <20240127023212.3746239-1-willemdebruijn.kernel@gmail.com>
-References: <20240127023212.3746239-1-willemdebruijn.kernel@gmail.com>
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <davem@davemloft.net>, <pabeni@redhat.com>, <edumazet@google.com>,
+ <shuah@kernel.org>, <razor@blackwall.org>
+Subject: Re: [PATCH net-next] selftests: net: Add missing matchall
+ classifier
+Message-ID: <20240130175938.1d9d50f0@kernel.org>
+In-Reply-To: <20240129123703.1857843-1-idosch@nvidia.com>
+References: <20240129123703.1857843-1-idosch@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,20 +61,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 26 Jan 2024 21:31:51 -0500 Willem de Bruijn wrote:
-> From: Willem de Bruijn <willemb@google.com>
+On Mon, 29 Jan 2024 14:37:03 +0200 Ido Schimmel wrote:
+> One of the test cases in the test_bridge_backup_port.sh selftest relies
+> on a matchall classifier to drop unrelated traffic so that the Tx drop
+> counter on the VXLAN device will only be incremented as a result of
+> traffic generated by the test.
 > 
-> The test sends packets and compares enqueue, transmit and Ack
-> timestamps with expected values. It installs netem delays to increase
-> latency between these points.
+> However, the configuration option for the matchall classifier is
+> missing from the configuration file which might explain the failures we
+> see in the netdev CI [1].
 > 
-> The test proves flaky in virtual environment (vng). Increase the
-> delays to reduce variance. Scale measurement tolerance accordingly.
-> 
-> Time sensitive tests are difficult to calibrate. Increasing delays 10x
-> also increases runtime 10x, for one. And it may still prove flaky at
-> some rate.
+> Fix by adding CONFIG_NET_CLS_MATCHALL to the configuration file.
 
-Willem, do you still want us to apply this as is or should we do 
-the 10x only if [ x$KSFT_MACHINE_SLOW != x ] ?
+Moved to the larger group of NET_CLS knobs, and applied to net,
+thank you!
 
