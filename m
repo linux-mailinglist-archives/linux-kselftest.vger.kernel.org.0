@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-3893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12D7E844A80
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 22:53:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C743844A8E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 22:54:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1B6F280C76
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 21:53:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C3411F22478
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 21:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CD73C469;
-	Wed, 31 Jan 2024 21:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF6C3BB24;
+	Wed, 31 Jan 2024 21:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gm+evdqM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qY3JcUtz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735CE3C06B;
-	Wed, 31 Jan 2024 21:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B51D3FE55;
+	Wed, 31 Jan 2024 21:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706737849; cv=none; b=ZTbuH0gqeGjKmW+NdaSFoKphDOMagxQ7u4HuYTXWNY6qIyEiE5W2cGegIARNud01nJQG4E1btyuGyeSDsajQxvVoFKk5mLxpv5anz2axVKfeGHd2GG/GwbyFjOj9R7NNR4ze/u9GTrleOmj+ZQYjWhLqFwriSL2UhEX/VdYiJsA=
+	t=1706737852; cv=none; b=kbNNag6lLJEPiCcaDpGjwqSHObMwlEhONa1+czwF5J5xc1VXjH0cKin3RMTmSFLRKQeOp6nht5SJF4nIiOcyh+b07gMPRqXdZ9aqUtiBSSTxzIXTQAl+djXS2TlzkQ726JXuvrbB2xmLcu9a6mDgBJk70K/g9WQwDZRszhGwCG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706737849; c=relaxed/simple;
-	bh=3E5/P7Z5DrvNOzf9PuQQ34OuKSGwwV8XI0lmvwYqA1U=;
+	s=arc-20240116; t=1706737852; c=relaxed/simple;
+	bh=7ex8wXU91IizPjh0jQ/bphZFec3+13vRX9xVzm9eVCw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=syye0ulMtXEI0Ffhij40PjC7z66letBaCTTCAxb/jQ4iml98A3gu4YVJdvyC4ZQbKa1oW17uTvefolcmE9EdKIyvW0DVn2ii8mJR+/w772rDgJrUmtIcveOIBYft9lqtithkma+GnSj9TwQP4mx6LUNPGu6umaO2PoRDbBUYyDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gm+evdqM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 526B8C433F1;
-	Wed, 31 Jan 2024 21:50:46 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=MdU0+xR2p+cR24de7jGowGOShw9dXeVBgXbOTTK9F0BoTDYuHVoJbQMxZUvhEGbAAEB2VlAFjIZbsFxXPjwgtjIRxpp+/tNnh+7FOe6K5fBDeBXnw1gFdpq0Y7kY6ERZMEwyK7HODWiXwHt5eFXEoYVU1W7BGisgTvnABoXpY9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qY3JcUtz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FA7EC43394;
+	Wed, 31 Jan 2024 21:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706737848;
-	bh=3E5/P7Z5DrvNOzf9PuQQ34OuKSGwwV8XI0lmvwYqA1U=;
+	s=k20201202; t=1706737852;
+	bh=7ex8wXU91IizPjh0jQ/bphZFec3+13vRX9xVzm9eVCw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Gm+evdqMoXSW09/HxZglSxeyd+zmBrVkCm9crYPm+Xw3wV7DoqyC22sZ4ciyU+Wbz
-	 TY+9TwYByRnoQ+wLf9Q1lkWKt0h32ir3OCY3n6pawsJCMNK6vn8PlMxc12s4N137sl
-	 X7qx1yqolEP0yUHNiT2bYo0K9gC8IjJso3O5iAilfouNHpESpmyKHXk3AaO3XVF1Sh
-	 jBG3WWo5nC4J06dLSUxfTKp0SKYMOJZTlhYcwl3SqnAuEvNZJavkCKsSWl0g8Gg8KZ
-	 3zmg8MGY7qqevCk+YGgAikGKfO07wjf1dpAAiYnMV9xAS8qXs9rY0trJ13Z+BECYpq
-	 5NIUuvud9lmTw==
+	b=qY3JcUtz53czGFGWDQzCYMqGHTnbczPVuwSg8sRLt/wdie8wybw27nU9h2jQEEiju
+	 rX/Do5I9SCd7iM3oD+YZzF+wtgON7453KG5il7kvg3yJL8TJ+h4lQYe/x7NztyPoaT
+	 0sgmQqcKf/ck7UIDDWKi+tOBhEQGuL+yzLGJKSQK6gMhXrBncWk3QZDj+GFXnhw0IV
+	 Oauql7P9KjActzZRh0mI735OV2KEAq+KWSax5488aAuGXplqfFavlNTwVb1F2WZrMT
+	 ip50WNAxhRMPe85TXAfbGJbM1dbxtiBnb9HHbZ1QNj7pF/DNmNtP5GwUA12lcRNj+5
+	 qQG5PaduGtu0g==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 31 Jan 2024 22:49:52 +0100
-Subject: [PATCH net 7/9] selftests: mptcp: allow changing subtests prefix
+Date: Wed, 31 Jan 2024 22:49:53 +0100
+Subject: [PATCH net 8/9] selftests: mptcp: join: stop transfer when check
+ is done (part 1)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240131-upstream-net-20240131-mptcp-ci-issues-v1-7-4c1c11e571ff@kernel.org>
+Message-Id: <20240131-upstream-net-20240131-mptcp-ci-issues-v1-8-4c1c11e571ff@kernel.org>
 References: <20240131-upstream-net-20240131-mptcp-ci-issues-v1-0-4c1c11e571ff@kernel.org>
 In-Reply-To: <20240131-upstream-net-20240131-mptcp-ci-issues-v1-0-4c1c11e571ff@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -62,56 +63,69 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
+ Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1287; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=3E5/P7Z5DrvNOzf9PuQQ34OuKSGwwV8XI0lmvwYqA1U=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlusCgVP/RyFJqdfuGCRCnqm7Lf+FC6U1XH1yrJ
- zwwxFX8ZHaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZbrAoAAKCRD2t4JPQmmg
- c2SOD/9Hf8EGy9fMdNRAEz3WHV6h5wtRScF/MbzimcqOMo82x+yjfx89KxHNd63DeJ4lxmnpohT
- cMV36JMIRnXr2xjs4FBF3blrI4jAWj12Z2bvAAGgfEJy1XFVaTe1gi3iS3+bzGmKXQb0KTNBd9a
- Rae3lTAsd3zh9TpHa4c3Hk71V3LtRc57JFESeulQ3XoKv9uV3FWR4bhlVXV0BfZjfup0/qD3Fc3
- wYqdSR/dSeTxGYBZK5npQpiH39joQAA/xn0TWbHWDSBZjvr7HV6vzmvNm5Z/XSKITUGUpV2GFaY
- ZSZJjP+/qVeIH/ks08wq164J6wntPEirzl3TPV9alPNE8U+UwYgqlYyphvzffCpJ5w0VB9M+I/8
- koAx3YO7Es8uqEU84jDa4pIlIWoKZF4ko6NTj+uMamxTH1ybTK2cTJCD6rdIQ3sNCBJFdxDB3PK
- CUieisApoLF1b/yvpcm5Eq4WJMLNiFRYWWenHvvki1KRAm82gfq/kysu7534D16Ts6gyfvyRXA8
- hrFz7Y79FVFNQqaUbB2koRav7qbseBkEb6GaiZdfOyBnk9No8gU1psHqEiDvQi4FfYIE1UHLWiD
- oE5lqPFfwT6WKHpBYrlD7gfHzxKzdY3qojP5DXBrolHQdIYz0pPzIZEzwl7FPhgMJ/4jzDZX5mR
- 2u/nWeaKXbQrT+g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1739; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=7ex8wXU91IizPjh0jQ/bphZFec3+13vRX9xVzm9eVCw=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlusCgR9aLuvRWOXlG6MziszCQ8mp2GsEAiqtW0
+ GXUzTOESNOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZbrAoAAKCRD2t4JPQmmg
+ c5qfD/9eiCtto60omKuatyDP2V240ksPxO8Qmyf8GNq1eMuF0/67ZZ7+oYWkmftNkti34UhFUeD
+ 21p2ny633/am7IEOyloRo8FP9hEZrSBwDN+YRRI44eygEABZtAYGL9ACVNBI2VsYNJOHwYwCCco
+ JC6BZRxhWjrM54PaBiRAaj8wBHupAhKl1M0MMv04mb+dTVL/FaTDVefjhi4nskpU/9+/1Bc+8BH
+ bpth1dk/DukVe3qjiOkzinjOVby5M4EnBoHwhyXBVToVnGi0IADC6KKXuY0l4Y/i9GnI7PzL8Ke
+ QrHgb0/e/PS0oQtGCa8ipYlEvEZV/PYKUQwSovQ2OdshLT13QgcaZ4SY9CGdifRKgPlH5zuAf++
+ vdITJ2AJvb2zKJukU3BGc4hx19uyxfthenEn8Cr0qv9dsO8A5g06SukguhFZIf6V64c8IpwgsN9
+ I8opQ12Agbgv2Xubx4AEFxwicXSYDBJX9/5qHMZl16yl3laaPOO2Q4pW/0PnjXz4mC0gaSwXhYA
+ IV6D8WipJqcv0HnERcgMGKX5eT8XeLTgCY2VkyiOF7kwPugpJzdDCTfAUlP6e5KFAsr7ilZcrwk
+ XanxsGXAuxdKeJplYs/e7HAke8ewM+IVlDgB81MuujXnv5SLkyrUTEqWZEeZQsmy0BOOn6K3A7o
+ K1mgUQ4j+uJhgFg==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-If a CI executes the same selftest multiple times with different
-options, all results from the same subtests will have the same title,
-which confuse the CI. With the same title printed in TAP, the tests are
-considered as the same ones.
+Since the "Fixes" commit mentioned below, "userspace pm" subtests of
+mptcp_join selftests introduced in v6.5 are launching the whole transfer
+in the background, do the required checks, then wait for the end of
+transfer.
 
-Now, it is possible to override this prefix by using MPTCP_LIB_KSFT_TEST
-env var, and have a different title.
+There is no need to wait longer, especially because the checks at the
+end of the transfer are ignored (which is fine). This saves quite a few
+seconds in slow environments.
 
-While at it, use 'basename' to remove the suffix as well instead of
-using an extra 'sed'.
+Note that old versions will need commit bdbef0a6ff10 ("selftests: mptcp:
+add mptcp_lib_kill_wait") as well to get 'mptcp_lib_kill_wait()' helper.
 
-Fixes: c4192967e62f ("selftests: mptcp: lib: format subtests results in TAP")
-Cc: stable@vger.kernel.org
+Fixes: 4369c198e599 ("selftests: mptcp: test userspace pm out of transfer")
+Cc: stable@vger.kernel.org # 6.5.x: bdbef0a6ff10: selftests: mptcp: add mptcp_lib_kill_wait
+Cc: stable@vger.kernel.org # 6.5.x
+Reviewed-and-tested-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_lib.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index 022262a2cfe0..3a2abae5993e 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -6,7 +6,7 @@ readonly KSFT_FAIL=1
- readonly KSFT_SKIP=4
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 3a5b63026191..85bcc95f4ede 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -3453,7 +3453,7 @@ userspace_tests()
+ 		chk_mptcp_info subflows 0 subflows 0
+ 		chk_subflows_total 1 1
+ 		kill_events_pids
+-		wait $tests_pid
++		mptcp_lib_kill_wait $tests_pid
+ 	fi
  
- # shellcheck disable=SC2155 # declare and assign separately
--readonly KSFT_TEST=$(basename "${0}" | sed 's/\.sh$//g')
-+readonly KSFT_TEST="${MPTCP_LIB_KSFT_TEST:-$(basename "${0}" .sh)}"
+ 	# userspace pm create destroy subflow
+@@ -3475,7 +3475,7 @@ userspace_tests()
+ 		chk_mptcp_info subflows 0 subflows 0
+ 		chk_subflows_total 1 1
+ 		kill_events_pids
+-		wait $tests_pid
++		mptcp_lib_kill_wait $tests_pid
+ 	fi
  
- MPTCP_LIB_SUBTESTS=()
- 
+ 	# userspace pm create id 0 subflow
 
 -- 
 2.43.0
