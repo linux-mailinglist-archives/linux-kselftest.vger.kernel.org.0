@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-3843-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7273D844154
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 15:07:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 425BA844165
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 15:09:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97D9C1C21A2F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 14:07:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46E3CB293F2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 14:07:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AF4129A90;
-	Wed, 31 Jan 2024 14:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3140612A16E;
+	Wed, 31 Jan 2024 14:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3f+BaCVH"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NDduIphe"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908DC8286E;
-	Wed, 31 Jan 2024 14:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9226112A148;
+	Wed, 31 Jan 2024 14:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706709944; cv=none; b=SwNMcNsptKTZPESz80s2sFaSYtiuo6VPzQMmuLfZriG3vomk3m4qdOZnpZNqb7huHPwMHsjbVgxPPlus1vv8KaZLsF45dHzrLq9oeu1194/zW4gGFH0UJkZCyA1n1hXFrwym4GSgVHPcGYzRz0sS6SSX/myK9bQKJMszIABBxAs=
+	t=1706709946; cv=none; b=Og+rE/egHWJCkos191fTuQ72kJaMxGccEnBfEkwzVkD+Oeirf+5z7WM1ZM3xdNFfWdEYJzZ2fCE6mOIxNggSgI/qyMJZWHJOx7pu4/FgLlbNJuCGOahoj2CwYzq3vu31p8A357hWQeXQekZKnf2nMC+3j9/RUMaGSJ3SBBlsePE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706709944; c=relaxed/simple;
-	bh=oFf1K2mfeMM9jrFoVwJzVfcP3pmuBYS1DF+vRN85jqk=;
+	s=arc-20240116; t=1706709946; c=relaxed/simple;
+	bh=2kIkJOhTpv8Q3QiyGfqRKh0McTWdwjht00wQfRsByJM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LxmSD8x/AdSAAtCKNFnv5cnLvt5ZSXKCVUJz//IzoD4C3K6VQPNziHISMNt0Vr/BM+Gwv/KlEopYnespncYG7xzLscLddMvCJQeJlJoTOM0kKahM9DC5BY7vmPWW+czIVprwmjavkS13Gvhzm468E8QyMhFnVsb+fHEuPRZ5MZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=3f+BaCVH; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=Uyc62yhkUekUEF/9WrWlynBW5LWFZJNa1TtyFVrCcDAHnYdzmTVRQZvHxGiaN+VxO3thN2NCZ2k3tt+OJ2xt8t7dA0OejSsiYLEzTfFuA0VTZyDacha54zQagH7di2G5DCBEzoL3hZJe7mTj+BJaeXHHxUbCv4CcBIUCC68weIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NDduIphe; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706709940;
-	bh=oFf1K2mfeMM9jrFoVwJzVfcP3pmuBYS1DF+vRN85jqk=;
+	s=mail; t=1706709943;
+	bh=2kIkJOhTpv8Q3QiyGfqRKh0McTWdwjht00wQfRsByJM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=3f+BaCVH11VOm4tY8FHrLyoUrRQ7PU62w2wjDp5L7h/Jdn4OXG4mCaiCuKGRLr7tb
-	 RPpfVphdNKWzhuFSWjW1iJtzU4WlOyl7f9eNoZI9GtjICj7Eh3l6aTIgqfMllXCJe0
-	 eI9UrT1cjnQIG3FCqyqOflwg7Nx09sTv1sQbMfV8DeRyEGr6ZHHHDhWTAdlUUUAvyP
-	 yOCM0hF1ZMN6uXQgiCZkJLmsQ3/sYAHz0P91TtCaGz8YT0KL+OyugYk+WJAbHpgl8J
-	 57df//bvcexHayvkMJQFhPIgQMS5VBA4VKOWZRpExyZy2XfgLXS8AwfMjcIB5M45Fc
-	 5iU2blGJ+E+nw==
+	b=NDduIphetMOQtuiPrCjAjVqGhbHMOGChazuerTGytlmJkwljYhUqUgJ4eh2KwUdvL
+	 G6QGhqSC6PGhjZRmbzH2RZSat5WaEUBEzUg9bnuze8UHIkUiEdK+7mgLpbWx9Ko+fS
+	 qJSmj+0YAqeQwSiesltDdilDr4ZkJ144vQ6jtdn6y1j7pQmKZ1esdyq7U/C9J9dmYT
+	 Cp3KbS7/TIlhEVUEv0MhVQ9ojxFJgnnxIjguuYQKKA9SiuhWYOtmfU26SoNc9Zn5cp
+	 suHOo24MGltQVnhmARjiYnIg6b6tjm4Uk2B6M2mjNQUJ+JDWVLeZOxnK7XNP4VKk1j
+	 Qcs9zRB8H7bzQ==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 438843782081;
-	Wed, 31 Jan 2024 14:05:39 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A7DA4378200E;
+	Wed, 31 Jan 2024 14:05:41 +0000 (UTC)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -56,9 +56,9 @@ Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 11/12] selftests/mm: transhuge-stress: conform to TAP format output
-Date: Wed, 31 Jan 2024 19:05:21 +0500
-Message-ID: <20240131140528.320252-11-usama.anjum@collabora.com>
+Subject: [PATCH 12/12] selftests/mm: virtual_address_range: conform to TAP format output
+Date: Wed, 31 Jan 2024 19:05:22 +0500
+Message-ID: <20240131140528.320252-12-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20240131140528.320252-1-usama.anjum@collabora.com>
 References: <20240131140528.320252-1-usama.anjum@collabora.com>
@@ -75,142 +75,105 @@ functional change is intended other than the layout of output messages.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/transhuge-stress.c | 36 +++++++++++--------
- tools/testing/selftests/mm/vm_util.c          |  6 ++--
- 2 files changed, 25 insertions(+), 17 deletions(-)
+ .../selftests/mm/virtual_address_range.c      | 44 +++++++++----------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index c61fb9350b8c2..68201192e37c8 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -16,6 +16,7 @@
- #include <string.h>
+diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+index bae0ceaf95b13..7bcf8d48256a6 100644
+--- a/tools/testing/selftests/mm/virtual_address_range.c
++++ b/tools/testing/selftests/mm/virtual_address_range.c
+@@ -12,6 +12,7 @@
+ #include <errno.h>
  #include <sys/mman.h>
- #include "vm_util.h"
+ #include <sys/time.h>
 +#include "../kselftest.h"
  
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -34,6 +35,8 @@ int main(int argc, char **argv)
- 	int pagemap_fd;
- 	int duration = 0;
+ /*
+  * Maximum address range mapped with a single mmap()
+@@ -68,23 +69,15 @@ static char *hind_addr(void)
+ 	return (char *) (1UL << bits);
+ }
+ 
+-static int validate_addr(char *ptr, int high_addr)
++static void validate_addr(char *ptr, int high_addr)
+ {
+ 	unsigned long addr = (unsigned long) ptr;
+ 
+-	if (high_addr) {
+-		if (addr < HIGH_ADDR_MARK) {
+-			printf("Bad address %lx\n", addr);
+-			return 1;
+-		}
+-		return 0;
+-	}
++	if (high_addr && addr < HIGH_ADDR_MARK)
++		ksft_exit_fail_msg("Bad address %lx\n", addr);
+ 
+-	if (addr > HIGH_ADDR_MARK) {
+-		printf("Bad address %lx\n", addr);
+-		return 1;
+-	}
+-	return 0;
++	if (addr > HIGH_ADDR_MARK)
++		ksft_exit_fail_msg("Bad address %lx\n", addr);
+ }
+ 
+ static int validate_lower_address_hint(void)
+@@ -107,23 +100,29 @@ int main(int argc, char *argv[])
+ 	char *hint;
+ 	unsigned long i, lchunks, hchunks;
  
 +	ksft_print_header();
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
-@@ -43,7 +46,8 @@ int main(int argc, char **argv)
- 
- 	while (++i < argc) {
- 		if (!strcmp(argv[i], "-h"))
--			errx(1, "usage: %s [-f <filename>] [-d <duration>] [size in MiB]", argv[0]);
-+			ksft_exit_fail_msg("usage: %s [-f <filename>] [-d <duration>] [size in MiB]\n",
-+					   argv[0]);
- 		else if (!strcmp(argv[i], "-f"))
- 			name = argv[++i];
- 		else if (!strcmp(argv[i], "-d"))
-@@ -52,10 +56,12 @@ int main(int argc, char **argv)
- 			len = atoll(argv[i]) << 20;
- 	}
- 
 +	ksft_set_plan(1);
 +
- 	if (name) {
- 		backing_fd = open(name, O_RDWR);
- 		if (backing_fd == -1)
--			errx(2, "open %s", name);
-+			ksft_exit_fail_msg("open %s\n", name);
- 		mmap_flags = MAP_SHARED;
- 	}
+ 	for (i = 0; i < NR_CHUNKS_LOW; i++) {
+ 		ptr[i] = mmap(NULL, MAP_CHUNK_SIZE, PROT_READ | PROT_WRITE,
+ 					MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
  
-@@ -65,21 +71,21 @@ int main(int argc, char **argv)
- 
- 	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
- 	if (pagemap_fd < 0)
--		err(2, "open pagemap");
-+		ksft_exit_fail_msg("open pagemap\n");
- 
- 	len -= len % HPAGE_SIZE;
- 	ptr = mmap(NULL, len + HPAGE_SIZE, PROT_RW, mmap_flags, backing_fd, 0);
- 	if (ptr == MAP_FAILED)
--		err(2, "initial mmap");
-+		ksft_exit_fail_msg("initial mmap");
- 	ptr += HPAGE_SIZE - (uintptr_t)ptr % HPAGE_SIZE;
- 
- 	if (madvise(ptr, len, MADV_HUGEPAGE))
--		err(2, "MADV_HUGEPAGE");
-+		ksft_exit_fail_msg("MADV_HUGEPAGE");
- 
- 	map_len = ram >> (HPAGE_SHIFT - 1);
- 	map = malloc(map_len);
- 	if (!map)
--		errx(2, "map malloc");
-+		ksft_exit_fail_msg("map malloc\n");
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 
-@@ -103,7 +109,7 @@ int main(int argc, char **argv)
- 				if (idx >= map_len) {
- 					map = realloc(map, idx + 1);
- 					if (!map)
--						errx(2, "map realloc");
-+						ksft_exit_fail_msg("map realloc\n");
- 					memset(map + map_len, 0, idx + 1 - map_len);
- 					map_len = idx + 1;
- 				}
-@@ -114,17 +120,19 @@ int main(int argc, char **argv)
- 
- 			/* split transhuge page, keep last page */
- 			if (madvise(p, HPAGE_SIZE - psize(), MADV_DONTNEED))
--				err(2, "MADV_DONTNEED");
-+				ksft_exit_fail_msg("MADV_DONTNEED");
+ 		if (ptr[i] == MAP_FAILED) {
+-			if (validate_lower_address_hint())
+-				return 1;
++			if (validate_lower_address_hint()) {
++				ksft_test_result_skip("Memory constraint not fulfilled\n");
++				ksft_finished();
++			}
+ 			break;
  		}
- 		clock_gettime(CLOCK_MONOTONIC, &b);
- 		s = b.tv_sec - a.tv_sec + (b.tv_nsec - a.tv_nsec) / 1000000000.;
  
--		warnx("%.3f s/loop, %.3f ms/page, %10.3f MiB/s\t"
--		      "%4d succeed, %4d failed, %4d different pages",
--		      s, s * 1000 / (len >> HPAGE_SHIFT), len / s / (1 << 20),
--		      nr_succeed, nr_failed, nr_pages);
-+		ksft_print_msg("%.3f s/loop, %.3f ms/page, %10.3f MiB/s\t"
-+			       "%4d succeed, %4d failed, %4d different pages\n",
-+			       s, s * 1000 / (len >> HPAGE_SHIFT), len / s / (1 << 20),
-+			       nr_succeed, nr_failed, nr_pages);
- 
--		if (duration > 0 && b.tv_sec - start.tv_sec >= duration)
--			return 0;
-+		if (duration > 0 && b.tv_sec - start.tv_sec >= duration) {
-+			ksft_test_result_pass("Completed\n");
-+			ksft_finished();
-+		}
+-		if (validate_addr(ptr[i], 0))
+-			return 1;
++		validate_addr(ptr[i], 0);
  	}
+ 	lchunks = i;
+ 	hptr = (char **) calloc(NR_CHUNKS_HIGH, sizeof(char *));
+-	if (hptr == NULL)
+-		return 1;
++	if (hptr == NULL) {
++		ksft_test_result_skip("Memory constraint not fulfilled\n");
++		ksft_finished();
++	}
+ 
+ 	for (i = 0; i < NR_CHUNKS_HIGH; i++) {
+ 		hint = hind_addr();
+@@ -133,8 +132,7 @@ int main(int argc, char *argv[])
+ 		if (hptr[i] == MAP_FAILED)
+ 			break;
+ 
+-		if (validate_addr(hptr[i], 1))
+-			return 1;
++		validate_addr(hptr[i], 1);
+ 	}
+ 	hchunks = i;
+ 
+@@ -145,5 +143,7 @@ int main(int argc, char *argv[])
+ 		munmap(hptr[i], MAP_CHUNK_SIZE);
+ 
+ 	free(hptr);
+-	return 0;
++
++	ksft_test_result_pass("Test\n");
++	ksft_finished();
  }
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 05736c615734f..5a62530da3b56 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -232,17 +232,17 @@ int64_t allocate_transhuge(void *ptr, int pagemap_fd)
- 	if (mmap(ptr, HPAGE_SIZE, PROT_READ | PROT_WRITE,
- 		 MAP_FIXED | MAP_ANONYMOUS |
- 		 MAP_NORESERVE | MAP_PRIVATE, -1, 0) != ptr)
--		errx(2, "mmap transhuge");
-+		ksft_exit_fail_msg("mmap transhuge\n");
- 
- 	if (madvise(ptr, HPAGE_SIZE, MADV_HUGEPAGE))
--		err(2, "MADV_HUGEPAGE");
-+		ksft_exit_fail_msg("MADV_HUGEPAGE\n");
- 
- 	/* allocate transparent huge page */
- 	*(volatile void **)ptr = ptr;
- 
- 	if (pread(pagemap_fd, ent, sizeof(ent),
- 		  (uintptr_t)ptr >> (pshift() - 3)) != sizeof(ent))
--		err(2, "read pagemap");
-+		ksft_exit_fail_msg("read pagemap\n");
- 
- 	if (PAGEMAP_PRESENT(ent[0]) && PAGEMAP_PRESENT(ent[1]) &&
- 	    PAGEMAP_PFN(ent[0]) + 1 == PAGEMAP_PFN(ent[1]) &&
 -- 
 2.42.0
 
