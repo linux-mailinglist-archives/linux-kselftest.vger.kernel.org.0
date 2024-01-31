@@ -1,57 +1,57 @@
-Return-Path: <linux-kselftest+bounces-3898-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00593844AB5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 23:05:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0EF5844AB7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 23:05:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEC582910A0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 22:05:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4AAD1C2627C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 22:05:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312BF3A1A8;
-	Wed, 31 Jan 2024 22:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C373A26E;
+	Wed, 31 Jan 2024 22:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SLBTpbOa"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aImREWYd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72CFC39AFD;
-	Wed, 31 Jan 2024 22:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA9C3A1AB;
+	Wed, 31 Jan 2024 22:04:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706738690; cv=none; b=Z20sPkT940nCrIrSRLxtDZM/oJbtYIZHkrPTvNnZ4vGJFvCt+Uf+ES2X/lcgXGKmBVDasf45tr7wUZp4C/RxoYwzY4r7M1SEZXy0l2YPs5OZ1S03ZQ6243Q5FBfFzV9Ev1lpBu8VIpEXjbS4+VyLjQTZePO0UvhsjOBY8yg3UDE=
+	t=1706738691; cv=none; b=pNXlYhkL8lSrPA37GJV+YJBRW+VZytUp9bRXIaet+XAjy9U/JfCIDA/pRHQAtDZRFAK5JUlL3354Yy2QyPqPY/PX7Q7jnFVxIqYd6Mr73o/r6Z5IUQkJTakG8JWVRG8Mi6g6oSCiZLmHcL4y12HnXjPnIrrIIbLI7m2nYDaLsNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706738690; c=relaxed/simple;
-	bh=UlyYLaTBCOQnHnPC0g51OMnV2sy7LcHXFVG1g/sGiv4=;
+	s=arc-20240116; t=1706738691; c=relaxed/simple;
+	bh=ppHfbf9qGqvGLoKdV8hXyPGwjYwRrEFpDWQkMI0RS/Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TX4dH5X6DpTPFt+ZIrdyBrkBqbrtusaAG7rwcKevK10jnMqeXgaNFPD/wR0ZDrTxXLSJqXQubbqnjJowPsFKXtGWGhtBSbeJYokhWZUiHQL5Vuwo+VcaGxvWXSx4IfRj/NjUcbGOUz5dWNGcCmdrazR05NtcoOkIjM0xU2OSu6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=SLBTpbOa; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:To:Cc; b=dtw8PWEM+51yc0XbFsaKWHAq9uUiJww6S7wBZMknu88v1LnNnGfh1LdbO12XSPjyAOZKwsL5XrHcjeF7rCeoLoFFYO9Rig6vh5MrHbapXXwaA09680V3Fv6kqgeIGax5w8KVgxndDyymK3hdSHMK9o1e7F67X5QhLjwoESLA37Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=aImREWYd; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706738686;
-	bh=UlyYLaTBCOQnHnPC0g51OMnV2sy7LcHXFVG1g/sGiv4=;
+	s=mail; t=1706738688;
+	bh=ppHfbf9qGqvGLoKdV8hXyPGwjYwRrEFpDWQkMI0RS/Q=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=SLBTpbOahFRgDA2g4UORL3cKOUb7KPhbu87Goi3Mk93GIealgJaJy5G0Q0997PkZw
-	 Z+wtxdSPccPCdBfr9lp2WO3zYeNhR3m9I16lsbkAsyPxNUaIkgA6HDU0ryoBYCf3Dg
-	 HLLud3FIU/VSAG4+I92ZmcTLMN9ddTrzQYHyVRlJNOMzzYR2x0N8g5+o21evSnSVlD
-	 jL72fnOVoQKWsZnsoZ3vHtkxlvV06umziQXZY7Yxv+6jByUy5oonjhhe3K5Z2VMX7e
-	 LHNvml6cC8XLZxbX1o3gKXQGuo3zSHJxxzEvnHum3Ey0vp5sTaEVjKe00iGC2nM7C5
-	 j0UU2NiBUUxNA==
+	b=aImREWYd/iXeOoZvTIRwYZeAqDtmwpg/dRn+p8kBsTwKT64NB3moS/b79jXi+cQk0
+	 OdwQdJSEUFX2MM/USzRpnkw0t/RuShOOIXmakPI4qPqpKoWdTaZoE6/4CtafaRHFds
+	 rDSVbWoooMZh6WkqbM1zNYHFdp6xQ18iHXRZ/8JbYm2z4ojCx8EVme7V7DVhjEfQKZ
+	 hN6N0n6o0/mOSe+kcEtrV6WHEawuozYdrwKH8HGFQy+uFjfgt0t1AN+nsAZkY4kZ6+
+	 dh+0KsYRaB7vOeb0DoV/NZpri1Qj28qt3AaRlaRH6zzx6FTe9Ew8DfYtc391cMMBcI
+	 +pt66XoatbaYw==
 Received: from [192.168.1.211] (zone.collabora.co.uk [167.235.23.81])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D0576378206F;
-	Wed, 31 Jan 2024 22:04:45 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2961C3782074;
+	Wed, 31 Jan 2024 22:04:47 +0000 (UTC)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Wed, 31 Jan 2024 17:02:41 -0500
-Subject: [PATCH 2/4] selftests: ktap_helpers: Add helper to pass/fail test
- based on exit code
+Date: Wed, 31 Jan 2024 17:02:42 -0500
+Subject: [PATCH 3/4] selftests: ktap_helpers: Add a helper to abort the
+ test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240131-ktap-sh-helpers-extend-v1-2-98ffb468712c@collabora.com>
+Message-Id: <20240131-ktap-sh-helpers-extend-v1-3-98ffb468712c@collabora.com>
 References: <20240131-ktap-sh-helpers-extend-v1-0-98ffb468712c@collabora.com>
 In-Reply-To: <20240131-ktap-sh-helpers-extend-v1-0-98ffb468712c@collabora.com>
 To: Shuah Khan <shuah@kernel.org>
@@ -69,31 +69,27 @@ Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
  =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.12.4
 
-Similar to the C counterpart, add a helper function that runs a command
-and passes or fails the test based on the result.
+Similar to the C counterpart, add a helper function to abort the
+remainder of the test.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- tools/testing/selftests/kselftest/ktap_helpers.sh | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/kselftest/ktap_helpers.sh | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/tools/testing/selftests/kselftest/ktap_helpers.sh b/tools/testing/selftests/kselftest/ktap_helpers.sh
-index ecc1413c22cd..29107924f5c2 100644
+index 29107924f5c2..87f93c6900c5 100644
 --- a/tools/testing/selftests/kselftest/ktap_helpers.sh
 +++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
-@@ -76,6 +76,17 @@ ktap_test_fail() {
- 	KTAP_CNT_FAIL=$((KTAP_CNT_FAIL+1))
+@@ -87,6 +87,13 @@ ktap_test_result() {
+ 	fi
  }
  
-+ktap_test_result() {
-+	description="$1"
-+	shift
++ktap_exit_fail_msg() {
++	echo "Bail out! " $@
++	ktap_print_totals
 +
-+	if $@; then
-+		ktap_test_pass "$description"
-+	else
-+		ktap_test_fail "$description"
-+	fi
++	exit "$KSFT_FAIL"
 +}
 +
  ktap_print_totals() {
