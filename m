@@ -1,103 +1,83 @@
-Return-Path: <linux-kselftest+bounces-3857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 251E98444B5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 17:44:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A5FB844534
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 17:55:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D52AE289631
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 16:44:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F3721F2398A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 16:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D7612AADC;
-	Wed, 31 Jan 2024 16:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E864212BF1C;
+	Wed, 31 Jan 2024 16:52:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dJvb8pjk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nJwAgMef"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B387BAEC
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 16:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E6212BEB7;
+	Wed, 31 Jan 2024 16:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706719476; cv=none; b=icE+83jI+m0BR2rbOXsk6rKlljeJrVUXgB8V1G/pEDqzTh+QGkR1oo5QfokSkKmRUrrX+C4F4X16ykzOKUXv6Be8AyoC5W0cg37ycbnMGH8jTiVbjDUPEv9pRFvIAzr4JIUopLeBwicKhLbVVaYub5DyK0zKlHCdb8z1VJ73QCk=
+	t=1706719924; cv=none; b=n05WNlzY19uApzAR5zHVBRp0f4ZCCwKNDqAO1BIEHn7v6EdSPbFUy08roysZ7OasU3ZZi3X17e5w8FkBHY5/U3iZGOuloqRhEmmYDsBcnJtRhB4hwB8TQ+3HoVzdbHK6PQKFb+oRS7R8FoZPYNSHpQBAeb3HnCYyijWfqn1g+Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706719476; c=relaxed/simple;
-	bh=Cvu0DIhuYA+aigtB5vEn9L4WmipBClGZCuLKOygUPsM=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=Jm7uQh2z1nrKI4ylN3CmkrOzQVpU8CJJPk9hZ+1sA6rsroQokTmG8919O/swzhepTuQ37zPamQUhpWzuWGLBr6svGv7ulga9e/tPp2+WSFY4xfuK5lg9rktE2pIj4YiqXVYX4xe03VM8Vspugu7cwapRD3QiDQdecGX6W8Bwoz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dJvb8pjk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706719473;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cfsQIbJAPyfrnawYlf3IhHhMNM/4DIn/icL/D01AzJc=;
-	b=dJvb8pjki09Tr+t4MPPPE/aqFXXol5k6iWlUKfjNmpqlasepw89vlWkxNhqihdxfzxV5hf
-	ypG1uR7QcxL2xurlcCIE8wUIBzxkK3ZruRmyOQqcYhUz20bR3mNrT17z+/UeVdT0Mc62uT
-	9Ey5bmUEb47MIlGX2sLFEZ/WWRYiXTg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-287-PlsAS4AvMESnmbmO1I-a9A-1; Wed, 31 Jan 2024 11:44:31 -0500
-X-MC-Unique: PlsAS4AvMESnmbmO1I-a9A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA275185A787;
-	Wed, 31 Jan 2024 16:44:30 +0000 (UTC)
-Received: from RHTPC1VM0NT (dhcp-17-72.bos.redhat.com [10.18.17.72])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id C504D1121306;
-	Wed, 31 Jan 2024 16:44:29 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Brad Cowie <brad@faucet.nz>
-Cc: netdev@vger.kernel.org,  pshelar@ovn.org,  davem@davemloft.net,
-  edumazet@google.com,  kuba@kernel.org,  pabeni@redhat.com,
-  shuah@kernel.org,  dev@openvswitch.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: openvswitch: Test ICMP related
- matches work with SNAT
-References: <20240131040822.835867-1-brad@faucet.nz>
-Date: Wed, 31 Jan 2024 11:44:29 -0500
-In-Reply-To: <20240131040822.835867-1-brad@faucet.nz> (Brad Cowie's message of
-	"Wed, 31 Jan 2024 17:08:22 +1300")
-Message-ID: <f7tcythmp02.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.3 (gnu/linux)
+	s=arc-20240116; t=1706719924; c=relaxed/simple;
+	bh=apKmdFeasx/n46RJjkvhzFtb/MkFti7bmqOveLrpMRc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RIrRDHHt2vz9dBUGzJAI81VX/cjVPvfzZCUt4OdSwZKKAmhhHymkkmxsCwy/yAK46pEmLJ3lPGMzqRxHb6ylWhZs0BtXDpW0bDO0fapOvEfwpH+ZYw8W66LxZ2xBUxMgdnt+6SLwm+reWLbc/j5WgIPC6186RUhxX1vHwQZHoq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nJwAgMef; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845C6C43390;
+	Wed, 31 Jan 2024 16:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706719924;
+	bh=apKmdFeasx/n46RJjkvhzFtb/MkFti7bmqOveLrpMRc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=nJwAgMefhiB4YdTc7DkbX6TagPi2hal816ViMdavF8fFK+q7CF1GEcAS2m6Ls0l6q
+	 ErcfXNSeHsauCuh5T9EnHdN6HS+UAvOrzbWy2nptbtI34+iRtYMRdJgyEdIBJu2voM
+	 +JqOpIuSIIFa3GnJWtEieBLNE59GqXY9QkCxV1OnYsEOr8GI0VW9Y+JJvsdq+qSROM
+	 q22msuHeZB2sY2Ijw6Qnr8KQzB3GAzOL+6/+Fech36A1nKGaOAbwXJMusrpGtRw3tP
+	 PR7TrAS6rCSkSPYVf1ne6qEpylCW9k0/t+hA3mBuaL6n8ndswU0LP1tWhwhJhilqgU
+	 ibut1SUaVbgBQ==
+Date: Wed, 31 Jan 2024 08:51:59 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Matthias May <Matthias.May@westermo.com>
+Cc: "davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+ <edumazet@google.com>, "pabeni@redhat.com" <pabeni@redhat.com>,
+ "shuah@kernel.org" <shuah@kernel.org>, "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+ <linux-kselftest@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] selftests: net: add missing config for GENEVE
+Message-ID: <20240131085159.21313974@kernel.org>
+In-Reply-To: <20240130101157.196006-1-matthias.may@westermo.com>
+References: <20240130101157.196006-1-matthias.may@westermo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Brad Cowie <brad@faucet.nz> writes:
+On Tue, 30 Jan 2024 10:12:18 +0000 Matthias May wrote:
+> l2_tos_ttl_inherit.sh verifies the inheritance of tos and ttl
+> for GRETAP, VXLAN and GENEVE.
+> Before testing it checks if the required module is available
+> and if not skips the tests accordingly.
+> Currently only GRETAP and VXLAN are tested because the GENEVE
+> module is missing.
+> 
+> Signed-off-by: Matthias May <matthias.may@westermo.com>
 
-> Add a test case for regression in openvswitch nat that was fixed by
-> commit e6345d2824a3 ("netfilter: nf_nat: fix action not being set for
-> all ct states").
->
-> Link: https://lore.kernel.org/netdev/20231221224311.130319-1-brad@faucet.nz/
-> Link: https://mail.openvswitch.org/pipermail/ovs-dev/2024-January/410476.html
-> Suggested-by: Aaron Conole <aconole@redhat.com>
-> Signed-off-by: Brad Cowie <brad@faucet.nz>
-> ---
+I reshuffled the option to sort slightly more alphabetically,
+added a fixes tag and applied to net, hopefully this will help
+folks testing stable.
 
-I tested this on a patched kernel and as well as an unpatched kernel and
-got the following:
-
-6.5.5-200: TEST: ip4-nat-related: ICMP related matches work with SNAT          [FAIL]
-6.7.0    : TEST: ip4-nat-related: ICMP related matches work with SNAT          [ OK ]
-
-Thanks for adding the test case!
-
-Tested-by: Aaron Conole <aconole@redhat.com>
-Acked-by: Aaron Conole <aconole@redhat.com>
-
+Thank you!
+-- 
+pw-bot: accept
 
