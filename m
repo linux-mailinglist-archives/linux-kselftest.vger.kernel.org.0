@@ -1,179 +1,395 @@
-Return-Path: <linux-kselftest+bounces-3850-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 995AF844171
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 15:10:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D82C8441AC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 15:19:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 506762856AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 14:10:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A127B21B3A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 14:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2320E81ACF;
-	Wed, 31 Jan 2024 14:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01CC782866;
+	Wed, 31 Jan 2024 14:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="h0ihTKgY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a5mJQCFU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2058.outbound.protection.outlook.com [40.107.223.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2F38288C;
-	Wed, 31 Jan 2024 14:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706710214; cv=fail; b=uXnRb9yjEg0s4ryOKXs2s63odvK6fHGic+Fx7SArHDafEnnkQ8oia3Py1TwcexOQPIv5PzjNeajpuQqFzdyEHVCYSyj6UT1WuP1W3tdF/Jf34TnCEDRObK3EZpSQE8XEzJsGO+uujcLZZnCe4C1lD25sf6acz6RXplHfpDxvlg4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706710214; c=relaxed/simple;
-	bh=Bs5Liy3b6dj8f7tWhbOC1DD80bvxyu8KM8Ir7QZ1Zjg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rN4r3aaaYy4P3zSOdrcHVhEo1B/AuKupBYDVnkacFwC8+T5g933bnrORsDTAEZpXefrvC5+xmhvD0V03NGebHLu9iLHXUwdYEu6BZp2ilbpV6RDynVvhUsCEbwOzLwG+i62rOaiV9D0nKOLCbKXrvNljiAhLqCO01kFPCxG015A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=h0ihTKgY; arc=fail smtp.client-ip=40.107.223.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NTup+O12ByHv6ZuzZwGsuI1JMKPR1cMeO/ZUVOPbPoW5gycqtJVQ6EFsx7ZCKCXB6RaKPqQggJp5PxDrEpINezq+iFmBZa3fvNv4zK7lfnZc13kuetgkfSlmdWQ2sf0gM0VVURIVJbmlQ0baW9uUPy1qwjFJRvGxaBMv17WIz3QaR6vjzdzeTQjcDu1Ydmpr/+9mMp0R6Hl4COmF4xvwUT1pxsKvpgxw1/zcnO7m+cAKTNqfpuGAankuJMW3y6PIY8EnhOPHXRaI2zYwX6C0EKyWKnF+w5gnJ5XYII1/UHmfXxy2YSxrRNQN/35ppCvkhnJc86cH4/Ua7azufAUVMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tkZnFm3Zt+QYaGFdRYCMGf3p1Az4yWlmdpVj7w23GbQ=;
- b=gac25rAe1DJS1tzHnt+RZAOnuslpN4YEMsGn6p4NVdvC44PWVpgpSDzRiyqgbUhry5/XAFLZgYGsGr5cflt5+TYAgTGgzHeoEfYRW1uC9wfpmcaO84Xw+1ej/Cxq72sKkwDc2I3JQAZPjvJSLVLSoQH/ymruZd/j3e+WYBIUyVnuUuVreGMbME4TR3nzrV5zsFXDhRiURB3g4pKD2iRewjr5lmLJEA+qB9a5XBko5IW5+CkxYSLugaiQwJOIv3AjyAKYkolsTiB8x0DTDh5Q/ov3yLdAhqH/ppFkQnkX5w9PM7KmLPXG6wLPCnnZJZi1coDEaH1VjVSf0FJuQQiV2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tkZnFm3Zt+QYaGFdRYCMGf3p1Az4yWlmdpVj7w23GbQ=;
- b=h0ihTKgYvhXtHVlE+NLTL2sIRCEKac3ZJiizfOjXtH5jKw8Xqw4VndAgkaimJP0xzOXlGJ/juUKAG/dJKILejka2ZywJ1GLX+lJQsEtzYz9XEhGdajXUeqKYMucUVtemx8Q7D05ruWFefLGetZoqE2Yj1QHjKEPIZh1dPh5UldCOpPOD8oHZEqKfIuWxz9QmsMKVlol3XJ5Q4IgP8b71jo5iV1maFPWYGxWohBjHOQogC6tiumtVRCXefEayaiZbjGqdiCmsP+oiJ+igbfF3gFPCbJFj2mI6su+ENyIMpwPUBr8wS2yT6OpY3q+wgqsrHT6DQENypKpiYZ8Wo60LGw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8)
- by MW4PR12MB6730.namprd12.prod.outlook.com (2603:10b6:303:1ec::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.35; Wed, 31 Jan
- 2024 14:10:03 +0000
-Received: from MN2PR12MB4373.namprd12.prod.outlook.com
- ([fe80::8a95:4c4b:5bd1:3a2c]) by MN2PR12MB4373.namprd12.prod.outlook.com
- ([fe80::8a95:4c4b:5bd1:3a2c%5]) with mapi id 15.20.7249.023; Wed, 31 Jan 2024
- 14:10:03 +0000
-From: Benjamin Poirier <bpoirier@nvidia.com>
-To: netdev@vger.kernel.org
-Cc: Jay Vosburgh <j.vosburgh@gmail.com>,
-	Andy Gospodarek <andy@greyhouse.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Petr Machata <petrm@nvidia.com>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Johannes Nixdorf <jnixdorf-oss@avm.de>,
-	Davide Caratti <dcaratti@redhat.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Tobias Waldekranz <tobias@waldekranz.com>,
-	Coco Li <lixiaoyan@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Lucas Karpinski <lkarpins@redhat.com>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 5/5] selftests: forwarding: List helper scripts in TEST_FILES Makefile variable
-Date: Wed, 31 Jan 2024 09:08:48 -0500
-Message-ID: <20240131140848.360618-6-bpoirier@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240131140848.360618-1-bpoirier@nvidia.com>
-References: <20240131140848.360618-1-bpoirier@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YQBP288CA0001.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c01:6a::14) To MN2PR12MB4373.namprd12.prod.outlook.com
- (2603:10b6:208:261::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC9C69D00
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 14:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706710759; cv=none; b=X0cUhrlOzggk1NR2gL2ZVIG/AdIxWlhk9SZlqn6FGXYdmqjX84u1pER1qNnE6R+nFOXqFTPpyYSxJgOZBcwWixJQQVlvhDJMECVm8BQ2Pdm3F2ZepXXhDKNp07E7wIJA2AccKy27W40mQuLC/+PIutB/IYmqAizLHjqORkx7ZkU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706710759; c=relaxed/simple;
+	bh=YvsXE9OR+IUltygOycGvea6KYYgI+LiZAiXelBwbSdw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=AhT5xLsrEw+yQce4MfmTPmK2mmFAosCnplBd+4A51wdBfzjJsm3xI7LtKq6fZYO4MQ9DB2BKYg2LjvQ5OSMS18d6zv4CHYBsE50guq+NSKo2dKrX58iZFuKeAIGX1fY+3iCWaG9gFnVNOJi0UQsHyzHUbRbwN2lDKK2Ri4JsMGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a5mJQCFU; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-55f12bced3bso1818682a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 06:19:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706710754; x=1707315554; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IaMeGJ0rWB78uo9A8Je3r+q2sT9bnmMm16vK1tzleA8=;
+        b=a5mJQCFUZ+lU3jx08r2hDwm5++dAbuUrLC2LtD1xYZJXj3lrT1/L+L27zWBxdw2RCX
+         Bwtr95WvVu0zIeK5K4iABYM2SxXmmGx9y6LYZOKKTBu5bIsmkp/J+j7o9FRM3dc8tpir
+         MKd2t1OuABcbcxFrXbk0YCdNcXqaly0Zsa9cc075rL9sFn2AMvU5qAewT+d4+sKKpy6Y
+         F2RO9dK2Ctp0VOpEhksqHSUE14AF6Y+snbrdNRsJN47l8Cqs4rOF9reQ8a3LD6pW2RT8
+         6RysvzfjIoT3+82XV3yQgamNqak1DdDdswuR8f58/2EomOp96uB1V4Rywq3J7v5m8sI6
+         SmmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706710754; x=1707315554;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IaMeGJ0rWB78uo9A8Je3r+q2sT9bnmMm16vK1tzleA8=;
+        b=iGpzpeWrFXp7+7bAMCr7ulzmdd1gmuktKbm5CqDl0JKR7fe8JBkI/dodQRR9ithvjy
+         fH7et+ngw7LhK/04kevhPX0k/o994IHHGUoGmC9b1HxV8pHs3nKk/q4UmL/K4inDQFx7
+         TE4QCRnJh65t9YP0OTsC7w9nVneKQlw7Rgqkz1XJ0ozwsi5DOnH98sii0gs4XHK8QdVR
+         v403AdZcIBOjwSIM289QxVvaBqPM1mkyJWzqBI8WBltGLyDTlyrWgwwLdvZS1BOyuhQz
+         /VjdkxB0RqlRH8f6Z//umeQsR3ggsAu/i8iSXntuupZh1HXmmW/YV4w7Nrva7iarA6FS
+         WXhw==
+X-Gm-Message-State: AOJu0YwSffpEL7apXkoLBzwDTNRDXEGMXuRIErhJebQQpYyFu3fzzJ0k
+	smWE8FVQ+90ueugCB7Zkp1AVualcdfZlgOj45H2xp1BVvWn2W745O0b72NkZxwqe4or4lE0UBA=
+	=
+X-Google-Smtp-Source: AGHT+IH1fksSvzeQMmagfUyODYTJ4E+QON8T+tLm4xKVfBz5TBUVM3L+OZBAqEMtOoqN7+rXMWq6gbQOIA==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:5727:e5f5:9cb8:3c6e])
+ (user=elver job=sendgmr) by 2002:a05:6402:b87:b0:55e:f9f8:9025 with SMTP id
+ cf7-20020a0564020b8700b0055ef9f89025mr3587edb.3.1706710753556; Wed, 31 Jan
+ 2024 06:19:13 -0800 (PST)
+Date: Wed, 31 Jan 2024 15:18:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4373:EE_|MW4PR12MB6730:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8180d47c-fda9-4e88-ffe7-08dc226651be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Riw0RRyJtgFiSY4rIdfLE6eqqwNtOyVPCAmPRKRVZoFUyGOhTzfocxG944DxmcIW+DMwCNe7/y59eMdrzC01kYgR41wZo/L78XsZ3S1wP6StzTH0EBlBkbY26un4EMyqoJbQzrdcGpHbFjIj3hw8xKKRT60oJ8CP6MRMyNaHFY3VKY80LhyJFdgmJvEvNernxnzBWtbUNYNER2Bnr5mtqGH9rGV1gEIv8GCCFFr1rJZr59YbfKDjnQj9z7SwRT+WpaI/0VxTeIJHbwQVt0s8nLCIjWIUtxH/W1w7GwqYKxJVaZBR0rvHZ+n0dUwm5cc2JNoL98gXWFRmN3YWMW3gGqlMB0BSiC1MfS6U3eSzYsCtK6x75lhSa2vYRtWgLXOOi4Bfajms6+0BxU9d+SLyNl7xeCcAWaF7RKa+gzzyEoK7VlH9buSn35p6sCmfqNlwar8aBUAk43wpga2OvRRpEnaJpIoX2px8P8RSBx/mOLt2Bk5DUG+tmGdRzFnZSvIoGDDhCJBjZsRkhKDoZissFbBSghj46X+O+HP5/zYlf+AaV90b8qbAP+57ky3HjHQN
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(366004)(39860400002)(136003)(346002)(230922051799003)(186009)(64100799003)(1800799012)(451199024)(66556008)(66476007)(2906002)(7416002)(5660300002)(316002)(8936002)(66946007)(6916009)(54906003)(8676002)(4326008)(36756003)(478600001)(38100700002)(86362001)(6486002)(26005)(6512007)(6666004)(41300700001)(2616005)(1076003)(6506007)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QqU3pS7vxGZi2fnuedvRUFGEaryZPRs6WDCG9gD6/OYLp01Z3JbAYmCasOs+?=
- =?us-ascii?Q?DxaVhSGe8VY7PyUxn0jsgbQi/bxPo208Wo9bdZUJq2Sq1fNNQytoFpHTsiKt?=
- =?us-ascii?Q?Suth6OxTIR7PnsIehnSUKt+Bh39hzSDfAGGfY6TjsFPBUsdOFXXvwaLpdlK6?=
- =?us-ascii?Q?h+wEl17eDHQuKnBkJsecevTaCub+2Mw3Fq+Bgmc133MaGEZcTxvS3SMPk293?=
- =?us-ascii?Q?MoKXoYupjfM8MbjZFbWZMfaSlpjxTwfLu0ZHCp41D1vOjZ0uxuRe2dkmx+a0?=
- =?us-ascii?Q?DcOLKGA808L6s0yA2bMlCdUMSS09dhj0r2TnSfGRmFI/Mt6JcIFjNxAVVirI?=
- =?us-ascii?Q?uBoqp55oJCA7qpCDcCxOcTpSHqSpYIaErjSajvWYZ5wM/Cft54aoxEL8IkmO?=
- =?us-ascii?Q?7mdvGhQvoq74pJiEZ4SgHkZs4Y8tdEeFfOqcFBdGbO1fQrPeVirhfOuOMA2I?=
- =?us-ascii?Q?DxZF+4da+rdljGxWaS8pBE+y51UAomKkJfJylkif9oEks+kKFVo5xnKzRLQK?=
- =?us-ascii?Q?XYD0ILTGyk5twY0BibD89ergIwNdvXnQ8x5pbYUtUI//jZr151MuyL8AtYpz?=
- =?us-ascii?Q?QPLeSqyugafq2oaHy2Y/x2/To3k4rMG6EY/5Agwa7Jc/W/x8xvM9mE1meB4b?=
- =?us-ascii?Q?MGJVSaujWbGSteu6IrhEAnNH3PjMuTrdCJpFXxJVGivzyHQSBqptmHr2nVdN?=
- =?us-ascii?Q?kFm+jvg4GL6HRMAnar7/ic7toZeZLuF4D+OeSEmtXF+O6IB6lCZgHI5cM9Jy?=
- =?us-ascii?Q?nJ/f+aSism/xmamOKQhcnzJAaReYcs9/4YE+bwF5B8noOojVoLM5+UTDg+71?=
- =?us-ascii?Q?Al/b5vtBnPGdaI8sK95KA2Zi4hIIicOUEJlwF+lYDfYWy6SGsfA8VdFijM4q?=
- =?us-ascii?Q?ykTQKG8mm/nqi8/T902P0LqS3wXSuAK8nzHH6mSX5UY/g91KqenN+xuse8/s?=
- =?us-ascii?Q?dClZhhrcQpDv4PudLpjQl+qNNKaHEpw9Y8SKyhxChjDLaN3SpwOiwNEb9NNu?=
- =?us-ascii?Q?OnDMys172BbIv18Sn4AGAkBWh7RsR0hx4am8bIS1IkGZwZiwaauGBxKGNo8h?=
- =?us-ascii?Q?cYOaSE6y7ovvOZPXZGkE9YWjUnjVDU4M/4SmhffgC3q/8S4Kcd+qJB0NwaPw?=
- =?us-ascii?Q?n4/Hm4RL4le3MQuJ2TuCzebj4khnGKYQ9EUQPqFcGdNpco+xqZC0CiOnPvzQ?=
- =?us-ascii?Q?NmDtXDMUkxp857NzdkFbT9bZXzG4flq2xUJtfaYXX32Fy14afZ98mc0XVndh?=
- =?us-ascii?Q?5punSRPHXQN39200yGJX3lre6UIhERPCB8WpFXpifeTVGAEeHIp3aUtEHhDk?=
- =?us-ascii?Q?BoDFVKFPjo1ZpuTXcrfIAAiTtkedg2Fl/nwHHYvcC152bPdh92CdHtY8qGsA?=
- =?us-ascii?Q?pkmI7bEt6pwKepY6XFBXIbsAfGENflBH+9S+6+MSxdfm3fVTFUrRCB3JS5yl?=
- =?us-ascii?Q?2d4COj0mC0T3jofDNCykBlYze5Kuj/E7w7bUz0NuL0BrM3YqFaievY0PAF6+?=
- =?us-ascii?Q?CO8wcHceS4n9iVfuMRSe2LKc3/1d75UG0nMZtiyWsFZk8EQHNZnM7i6AEjoh?=
- =?us-ascii?Q?+bJYFOFFo31AO0iT0ROUlNi+8S+vuJdXlLr+OIJZ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8180d47c-fda9-4e88-ffe7-08dc226651be
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2024 14:10:03.4511
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W3j0JjmV99S/G39sPJESBuVDMRdFZ5TR81tQHhZXBjf4xgb8PSLw+tx/su18Uc+BrfZXB/Y2+JUQ/vq/8v9vKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6730
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240131141858.1149719-1-elver@google.com>
+Subject: [PATCH] bpf: Separate bpf_local_storage_lookup() fast and slow paths
+From: Marco Elver <elver@google.com>
+To: elver@google.com
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Some scripts are not tests themselves; they contain utility functions used
-by other tests. According to Documentation/dev-tools/kselftest.rst, such
-files should be listed in TEST_FILES. Currently they are incorrectly listed
-in TEST_PROGS_EXTENDED so rename the variable.
+To allow the compiler to inline the bpf_local_storage_lookup() fast-
+path, factor it out by making bpf_local_storage_lookup() a static inline
+function and move the slow-path to bpf_local_storage_lookup_slowpath().
 
-Fixes: c085dbfb1cfc ("selftests/net/forwarding: define libs as TEST_PROGS_EXTENDED")
-Suggested-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Base on results from './benchs/run_bench_local_storage.sh' this produces
+improvements in throughput and latency in the majority of cases:
+
+| Hashmap Control
+| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+| num keys: 10
+|  hashmap (control) sequential get:
+|                              <before>                | <after>
+|   hits throughput:           13.895 =C2=B1 0.024 M ops/s  | 14.022 =C2=B1=
+ 0.095 M ops/s	(+0.9%)
+|   hits latency:              71.968 ns/op            | 71.318 ns/op		(-0.=
+9%)
+|   important_hits throughput: 13.895 =C2=B1 0.024 M ops/s  | 14.022 =C2=B1=
+ 0.095 M ops/s	(+0.9%)
+|
+| num keys: 1000
+|  hashmap (control) sequential get:
+|                              <before>                | <after>
+|   hits throughput:           11.793 =C2=B1 0.018 M ops/s  | 11.645 =C2=B1=
+ 0.370 M ops/s	(-1.3%)
+|   hits latency:              84.794 ns/op            | 85.874 ns/op		(+1.=
+3%)
+|   important_hits throughput: 11.793 =C2=B1 0.018 M ops/s  | 11.645 =C2=B1=
+ 0.370 M ops/s	(-1.3%)
+|
+| num keys: 10000
+|  hashmap (control) sequential get:
+|                              <before>                | <after>
+|   hits throughput:           7.113 =C2=B1 0.012 M ops/s   | 7.037 =C2=B1 =
+0.051 M ops/s	(-1.1%)
+|   hits latency:              140.581 ns/op           | 142.113 ns/op		(+1=
+.1%)
+|   important_hits throughput: 7.113 =C2=B1 0.012 M ops/s   | 7.037 =C2=B1 =
+0.051 M ops/s	(-1.1%)
+|
+| num keys: 100000
+|  hashmap (control) sequential get:
+|                              <before>                | <after>
+|   hits throughput:           4.793 =C2=B1 0.034 M ops/s   | 4.990 =C2=B1 =
+0.025 M ops/s	(+4.1%)
+|   hits latency:              208.623 ns/op           | 200.401 ns/op		(-3=
+.9%)
+|   important_hits throughput: 4.793 =C2=B1 0.034 M ops/s   | 4.990 =C2=B1 =
+0.025 M ops/s	(+4.1%)
+|
+| num keys: 4194304
+|  hashmap (control) sequential get:
+|                              <before>                | <after>
+|   hits throughput:           2.088 =C2=B1 0.008 M ops/s   | 2.962 =C2=B1 =
+0.004 M ops/s	(+41.9%)
+|   hits latency:              478.851 ns/op           | 337.648 ns/op		(-2=
+9.5%)
+|   important_hits throughput: 2.088 =C2=B1 0.008 M ops/s   | 2.962 =C2=B1 =
+0.004 M ops/s	(+41.9%)
+|
+| Local Storage
+| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+| num_maps: 1
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           32.598 =C2=B1 0.008 M ops/s  | 38.480 =C2=B1=
+ 0.054 M ops/s	(+18.0%)
+|   hits latency:              30.676 ns/op            | 25.988 ns/op		(-15=
+.3%)
+|   important_hits throughput: 32.598 =C2=B1 0.008 M ops/s  | 38.480 =C2=B1=
+ 0.054 M ops/s	(+18.0%)
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           36.963 =C2=B1 0.045 M ops/s  | 43.847 =C2=B1=
+ 0.037 M ops/s	(+18.6%)
+|   hits latency:              27.054 ns/op            | 22.807 ns/op		(-15=
+.7%)
+|   important_hits throughput: 36.963 =C2=B1 0.045 M ops/s  | 43.847 =C2=B1=
+ 0.037 M ops/s	(+18.6%)
+|
+| num_maps: 10
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           32.078 =C2=B1 0.004 M ops/s  | 37.813 =C2=B1=
+ 0.020 M ops/s	(+17.9%)
+|   hits latency:              31.174 ns/op            | 26.446 ns/op		(-15=
+.2%)
+|   important_hits throughput: 3.208 =C2=B1 0.000 M ops/s   | 3.781 =C2=B1 =
+0.002 M ops/s	(+17.9%)
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           34.564 =C2=B1 0.011 M ops/s  | 40.082 =C2=B1=
+ 0.037 M ops/s	(+16.0%)
+|   hits latency:              28.932 ns/op            | 24.949 ns/op		(-13=
+.8%)
+|   important_hits throughput: 12.344 =C2=B1 0.004 M ops/s  | 14.315 =C2=B1=
+ 0.013 M ops/s	(+16.0%)
+|
+| num_maps: 16
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           32.493 =C2=B1 0.023 M ops/s  | 38.147 =C2=B1=
+ 0.029 M ops/s	(+17.4%)
+|   hits latency:              30.776 ns/op            | 26.215 ns/op		(-14=
+.8%)
+|   important_hits throughput: 2.031 =C2=B1 0.001 M ops/s   | 2.384 =C2=B1 =
+0.002 M ops/s	(+17.4%)
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           34.380 =C2=B1 0.521 M ops/s  | 41.605 =C2=B1=
+ 0.095 M ops/s	(+21.0%)
+|   hits latency:              29.087 ns/op            | 24.035 ns/op		(-17=
+.4%)
+|   important_hits throughput: 10.939 =C2=B1 0.166 M ops/s  | 13.238 =C2=B1=
+ 0.030 M ops/s	(+21.0%)
+|
+| num_maps: 17
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           28.748 =C2=B1 0.028 M ops/s  | 32.248 =C2=B1=
+ 0.080 M ops/s	(+12.2%)
+|   hits latency:              34.785 ns/op            | 31.009 ns/op		(-10=
+.9%)
+|   important_hits throughput: 1.693 =C2=B1 0.002 M ops/s   | 1.899 =C2=B1 =
+0.005 M ops/s	(+12.2%)
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           31.313 =C2=B1 0.030 M ops/s  | 35.911 =C2=B1=
+ 0.020 M ops/s	(+14.7%)
+|   hits latency:              31.936 ns/op            | 27.847 ns/op		(-12=
+.8%)
+|   important_hits throughput: 9.533 =C2=B1 0.009 M ops/s   | 10.933 =C2=B1=
+ 0.006 M ops/s	(+14.7%)
+|
+| num_maps: 24
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           18.475 =C2=B1 0.027 M ops/s  | 19.000 =C2=B1=
+ 0.006 M ops/s	(+2.8%)
+|   hits latency:              54.127 ns/op            | 52.632 ns/op		(-2.=
+8%)
+|   important_hits throughput: 0.770 =C2=B1 0.001 M ops/s   | 0.792 =C2=B1 =
+0.000 M ops/s	(+2.9%)
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           21.361 =C2=B1 0.028 M ops/s  | 22.388 =C2=B1=
+ 0.099 M ops/s	(+4.8%)
+|   hits latency:              46.814 ns/op            | 44.667 ns/op		(-4.=
+6%)
+|   important_hits throughput: 6.009 =C2=B1 0.008 M ops/s   | 6.298 =C2=B1 =
+0.028 M ops/s	(+4.8%)
+|
+| num_maps: 32
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           14.220 =C2=B1 0.006 M ops/s  | 14.168 =C2=B1=
+ 0.020 M ops/s	(-0.4%)
+|   hits latency:              70.323 ns/op            | 70.580 ns/op		(+0.=
+4%)
+|   important_hits throughput: 0.445 =C2=B1 0.000 M ops/s   | 0.443 =C2=B1 =
+0.001 M ops/s	(-0.4%)
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           17.250 =C2=B1 0.011 M ops/s  | 16.650 =C2=B1=
+ 0.021 M ops/s	(-3.5%)
+|   hits latency:              57.971 ns/op            | 60.061 ns/op		(+3.=
+6%)
+|   important_hits throughput: 4.815 =C2=B1 0.003 M ops/s   | 4.647 =C2=B1 =
+0.006 M ops/s	(-3.5%)
+|
+| num_maps: 100
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           5.212 =C2=B1 0.012 M ops/s   | 5.878 =C2=B1 =
+0.004 M ops/s	(+12.8%)
+|   hits latency:              191.877 ns/op           | 170.116 ns/op		(-1=
+1.3%)
+|   important_hits throughput: 0.052 =C2=B1 0.000 M ops/s   | 0.059 =C2=B1 =
+0.000 M ops/s	(+13.5%)
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           6.521 =C2=B1 0.053 M ops/s   | 7.086 =C2=B1 =
+0.010 M ops/s	(+8.7%)
+|   hits latency:              153.343 ns/op           | 141.116 ns/op		(-8=
+.0%)
+|   important_hits throughput: 1.703 =C2=B1 0.014 M ops/s   | 1.851 =C2=B1 =
+0.003 M ops/s	(+8.7%)
+|
+| num_maps: 1000
+|  local_storage cache sequential  get:
+|                              <before>                | <after>
+|   hits throughput:           0.357 =C2=B1 0.005 M ops/s   | 0.325 =C2=B1 =
+0.005 M ops/s	(-9.0%)
+|   hits latency:              2803.738 ns/op          | 3076.923 ns/op		(+=
+9.7%)
+|   important_hits throughput: 0.000 =C2=B1 0.000 M ops/s   | 0.000 =C2=B1 =
+0.000 M ops/s
+|  local_storage cache interleaved get:
+|                              <before>                | <after>
+|   hits throughput:           0.434 =C2=B1 0.007 M ops/s   | 0.447 =C2=B1 =
+0.007 M ops/s	(+3.0%)
+|   hits latency:              2306.539 ns/op          | 2237.687 ns/op		(-=
+3.0%)
+|   important_hits throughput: 0.109 =C2=B1 0.002 M ops/s   | 0.112 =C2=B1 =
+0.002 M ops/s	(+2.8%)
+
+Signed-off-by: Marco Elver <elver@google.com>
 ---
- tools/testing/selftests/net/forwarding/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/bpf_local_storage.h               | 17 ++++++++++++++++-
+ kernel/bpf/bpf_local_storage.c                  | 14 ++++----------
+ .../selftests/bpf/progs/cgrp_ls_recursion.c     |  2 +-
+ .../selftests/bpf/progs/task_ls_recursion.c     |  2 +-
+ 4 files changed, 22 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
-index 452693514be4..4de92632f483 100644
---- a/tools/testing/selftests/net/forwarding/Makefile
-+++ b/tools/testing/selftests/net/forwarding/Makefile
-@@ -112,7 +112,7 @@ TEST_PROGS = bridge_fdb_learning_limit.sh \
- 	vxlan_symmetric_ipv6.sh \
- 	vxlan_symmetric.sh
- 
--TEST_PROGS_EXTENDED := devlink_lib.sh \
-+TEST_FILES := devlink_lib.sh \
- 	ethtool_lib.sh \
- 	fib_offload_lib.sh \
- 	forwarding.config.sample \
--- 
-2.43.0
+diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_st=
+orage.h
+index 173ec7f43ed1..c8cecf7fff87 100644
+--- a/include/linux/bpf_local_storage.h
++++ b/include/linux/bpf_local_storage.h
+@@ -130,9 +130,24 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
+ 			    bool bpf_ma);
+=20
+ struct bpf_local_storage_data *
++bpf_local_storage_lookup_slowpath(struct bpf_local_storage *local_storage,
++				  struct bpf_local_storage_map *smap,
++				  bool cacheit_lockit);
++static inline struct bpf_local_storage_data *
+ bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
+ 			 struct bpf_local_storage_map *smap,
+-			 bool cacheit_lockit);
++			 bool cacheit_lockit)
++{
++	struct bpf_local_storage_data *sdata;
++
++	/* Fast path (cache hit) */
++	sdata =3D rcu_dereference_check(local_storage->cache[smap->cache_idx],
++				      bpf_rcu_lock_held());
++	if (likely(sdata && rcu_access_pointer(sdata->smap) =3D=3D smap))
++		return sdata;
++
++	return bpf_local_storage_lookup_slowpath(local_storage, smap, cacheit_loc=
+kit);
++}
+=20
+ void bpf_local_storage_destroy(struct bpf_local_storage *local_storage);
+=20
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.=
+c
+index 146824cc9689..2ef782a1bd6f 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -415,20 +415,14 @@ void bpf_selem_unlink(struct bpf_local_storage_elem *=
+selem, bool reuse_now)
+ }
+=20
+ /* If cacheit_lockit is false, this lookup function is lockless */
+-struct bpf_local_storage_data *
+-bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
+-			 struct bpf_local_storage_map *smap,
+-			 bool cacheit_lockit)
++noinline struct bpf_local_storage_data *
++bpf_local_storage_lookup_slowpath(struct bpf_local_storage *local_storage,
++				  struct bpf_local_storage_map *smap,
++				  bool cacheit_lockit)
+ {
+ 	struct bpf_local_storage_data *sdata;
+ 	struct bpf_local_storage_elem *selem;
+=20
+-	/* Fast path (cache hit) */
+-	sdata =3D rcu_dereference_check(local_storage->cache[smap->cache_idx],
+-				      bpf_rcu_lock_held());
+-	if (sdata && rcu_access_pointer(sdata->smap) =3D=3D smap)
+-		return sdata;
+-
+ 	/* Slow path (cache miss) */
+ 	hlist_for_each_entry_rcu(selem, &local_storage->list, snode,
+ 				  rcu_read_lock_trace_held())
+diff --git a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c b/tools/=
+testing/selftests/bpf/progs/cgrp_ls_recursion.c
+index a043d8fefdac..9895087a9235 100644
+--- a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
++++ b/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
+@@ -21,7 +21,7 @@ struct {
+ 	__type(value, long);
+ } map_b SEC(".maps");
+=20
+-SEC("fentry/bpf_local_storage_lookup")
++SEC("fentry/bpf_local_storage_lookup_slowpath")
+ int BPF_PROG(on_lookup)
+ {
+ 	struct task_struct *task =3D bpf_get_current_task_btf();
+diff --git a/tools/testing/selftests/bpf/progs/task_ls_recursion.c b/tools/=
+testing/selftests/bpf/progs/task_ls_recursion.c
+index 4542dc683b44..d73b33a4c153 100644
+--- a/tools/testing/selftests/bpf/progs/task_ls_recursion.c
++++ b/tools/testing/selftests/bpf/progs/task_ls_recursion.c
+@@ -27,7 +27,7 @@ struct {
+ 	__type(value, long);
+ } map_b SEC(".maps");
+=20
+-SEC("fentry/bpf_local_storage_lookup")
++SEC("fentry/bpf_local_storage_lookup_slowpath")
+ int BPF_PROG(on_lookup)
+ {
+ 	struct task_struct *task =3D bpf_get_current_task_btf();
+--=20
+2.43.0.429.g432eaa2c6b-goog
 
 
