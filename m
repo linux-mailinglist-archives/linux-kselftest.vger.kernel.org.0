@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-3879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86E668448B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 21:20:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD0358448AD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 21:20:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B76E2847C4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 20:20:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76BDB284673
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 20:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08F83FE2E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73F63FB35;
 	Wed, 31 Jan 2024 20:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2uVbYHm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJEp1Zx7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900B73FB1E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900853EA9B;
 	Wed, 31 Jan 2024 20:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706732429; cv=none; b=kxmt7KKeMn0gxIgfhcXzC9wmyQ1+V/Vcjx2z19LcoRJ/RkQTrD7rGWxTTfrhwhjieI1DeuS6Zvso8vInLFe5AgPR/dR91vL+wDuiHgEY39fp3/G9el7KZ49dNN2tl9fTz4NX6cZ195R3nuGnojHAyce2VTt+gqkaFIrNVV894qM=
+	t=1706732429; cv=none; b=X8mko6YbqDZjMm8mJZbLU7/5cM4wNKkN3xcZeNNIQG0J8zIDeR3RuThtWBE6nW6b4frXNMn4z65vbWPLkrth0Fx0sXJJNTfFf/tSiUUMaBWcx6+3563+rtTthmF53pdA5adTKXJ681CD3+lT+uaVNyOVg1aaeUWt6LDnA1E9R18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706732429; c=relaxed/simple;
-	bh=5n2GPaqqGywO7Qry4eYZWTM4oFGQUDmGZmFT4fN7rrA=;
+	bh=9JS572ehXY5lD1Rr9lCtv1vWQRI6/6GWHLraQyEcM5c=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=V5tk5twx4UxIbCwcBA7Dtjb6dijhsYCcR6BOXxpBk74eKp1vPXTq55COUdt2Vv3sQJ29/ijPYfm/d/4EnZ/XZHyob+wsuSGj6GtEHq82HCpGz/L/uQ5G4tUQhq3XdOj4lB4SN+YNpsJWMzFqBwP+yVnKr0ZUlfZFNipfpvn9flY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2uVbYHm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1644BC43399;
+	 In-Reply-To:To:Cc; b=LI3lDzR/u6KPu3ArT1R9q/2HRe3rkLQmLaLcVpCYdi529APlT8rh+dlLBUoVjkLdxWw/52r8tYWkZbOzkEbc87I7nc7T+1FFDcfdej0LyTaISSk9O/zFjg6bXcJ/raIP2oie4Uspvef6rwInNp+fMjvz/NAB9vK45ebEKyvHHjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eJEp1Zx7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FFD5C433B1;
 	Wed, 31 Jan 2024 20:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1706732429;
-	bh=5n2GPaqqGywO7Qry4eYZWTM4oFGQUDmGZmFT4fN7rrA=;
+	bh=9JS572ehXY5lD1Rr9lCtv1vWQRI6/6GWHLraQyEcM5c=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=j2uVbYHmJ0BNlBHTdgUBgToOHPf+Qp4+Unj1DhM4x0CdZn1Tp36nyKi13zJ4NsBIr
-	 //0kQJg6fwsnmWQYfnR2CZSUXvSIpo3/iGgYh/XaFnVL1jU0DTgM8QBNto5qWBWVDS
-	 vcqbDp7/vd0zLOGyh5KfD4vVhxPymWXNSaVHEQnaHcADHr+VtdaF38ZzDPzu6o8zPU
-	 fWEGnzHYcE7+2/JhZaS3ZIov8rGKSfUD63SwZdSAHH3lFpglQsA/0G3nIPMWrFeXm3
-	 9frtgxX17A8LyAlpcuY9DlRurZmEwHMKebMLzPTzZHfIKjiacmWjriWBzUTbkx54sG
-	 53m66RsqvuGaQ==
+	b=eJEp1Zx7hxRYbyCpAvIRd5JibQu9nwh5C56aGi8V9VWBKEevvRN3In53n92dW8kXg
+	 HkzDQewyoLcoWNhnc18mdgxFv4s1TP2ITNV6jyG94vqNTcGi0kMdUqvWR9THUnnRQj
+	 qoxespwdImxaeAKiVEm9+1Dk+Xg3A5AqHBq7eqKMBVplBJYtT/RNsCAnLtHjitjbqF
+	 T0rvW//DZD7+Hv2aTh58vuMcDJo1rzfR/pL2QBzC4GZsXmpzNjxbDheS5GxYfNlBMA
+	 8ToeLd7uyfpvtGNVaUwM3QM55PsauOPhXPh2gpbE4eZlJ7Dux/k9VKLTTYzgUKZXgn
+	 lB5/crR3iCbFw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2F56DC99E4;
-	Wed, 31 Jan 2024 20:20:28 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 093A8E3237F;
+	Wed, 31 Jan 2024 20:20:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,47 +52,53 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/3] Annotate kfuncs in .BTF_ids section
+Subject: Re: [PATCH net 0/5] selftests: net: More small fixes
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <170673242899.4502.6917209613478941432.git-patchwork-notify@kernel.org>
-Date: Wed, 31 Jan 2024 20:20:28 +0000
-References: <cover.1706491398.git.dxu@dxuuu.xyz>
-In-Reply-To: <cover.1706491398.git.dxu@dxuuu.xyz>
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: linux-trace-kernel@vger.kernel.org, coreteam@netfilter.org,
- bpf@vger.kernel.org, linux-input@vger.kernel.org, cgroups@vger.kernel.org,
- netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- fsverity@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, netfilter-devel@vger.kernel.org,
- alexei.starovoitov@gmail.com, olsajiri@gmail.com, quentin@isovalent.com,
- alan.maguire@oracle.com, memxor@gmail.com
+ <170673242903.4502.18397018894272335280.git-patchwork-notify@kernel.org>
+Date: Wed, 31 Jan 2024 20:20:29 +0000
+References: <20240131140848.360618-1-bpoirier@nvidia.com>
+In-Reply-To: <20240131140848.360618-1-bpoirier@nvidia.com>
+To: Benjamin Poirier <bpoirier@nvidia.com>
+Cc: netdev@vger.kernel.org, j.vosburgh@gmail.com, andy@greyhouse.net,
+ shuah@kernel.org, jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, petrm@nvidia.com, danieller@nvidia.com,
+ idosch@nvidia.com, jnixdorf-oss@avm.de, dcaratti@redhat.com,
+ vladimir.oltean@nxp.com, tobias@waldekranz.com, lixiaoyan@google.com,
+ willemb@google.com, lkarpins@redhat.com, anders.roxell@linaro.org,
+ liuhangbin@gmail.com, linux-kselftest@vger.kernel.org
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Sun, 28 Jan 2024 18:24:05 -0700 you wrote:
-> === Description ===
+On Wed, 31 Jan 2024 09:08:43 -0500 you wrote:
+> Some small fixes for net selftests which follow from these recent commits:
+> dd2d40acdbb2 ("selftests: bonding: Add more missing config options")
+> 49078c1b80b6 ("selftests: forwarding: Remove executable bits from lib.sh")
 > 
-> This is a bpf-treewide change that annotates all kfuncs as such inside
-> .BTF_ids. This annotation eventually allows us to automatically generate
-> kfunc prototypes from bpftool.
-> 
-> We store this metadata inside a yet-unused flags field inside struct
-> btf_id_set8 (thanks Kumar!). pahole will be taught where to look.
+> Benjamin Poirier (5):
+>   selftests: team: Add missing config options
+>   selftests: bonding: Check initial state
+>   selftests: net: Remove executable bits from library scripts
+>   selftests: net: List helper scripts in TEST_FILES Makefile variable
+>   selftests: forwarding: List helper scripts in TEST_FILES Makefile
+>     variable
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v4,1/3] bpf: btf: Support flags for BTF_SET8 sets
-    https://git.kernel.org/bpf/bpf-next/c/79b47344bbc5
-  - [bpf-next,v4,2/3] bpf: btf: Add BTF_KFUNCS_START/END macro pair
-    https://git.kernel.org/bpf/bpf-next/c/2747e0ee57c2
-  - [bpf-next,v4,3/3] bpf: treewide: Annotate BPF kfuncs in BTF
-    https://git.kernel.org/bpf/bpf-next/c/6e7769e6419f
+  - [net,1/5] selftests: team: Add missing config options
+    (no matching commit)
+  - [net,2/5] selftests: bonding: Check initial state
+    (no matching commit)
+  - [net,3/5] selftests: net: Remove executable bits from library scripts
+    https://git.kernel.org/bpf/bpf-next/c/cd1c194ffe28
+  - [net,4/5] selftests: net: List helper scripts in TEST_FILES Makefile variable
+    (no matching commit)
+  - [net,5/5] selftests: forwarding: List helper scripts in TEST_FILES Makefile variable
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
