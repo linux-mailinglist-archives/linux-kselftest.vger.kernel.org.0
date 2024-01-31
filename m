@@ -1,499 +1,166 @@
-Return-Path: <linux-kselftest+bounces-3814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21457843397
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 03:18:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA28F84345C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 04:11:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC30E2867D4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 02:18:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5236B1F251C2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 03:11:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFE8A38F9C;
-	Wed, 31 Jan 2024 02:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDA8F505;
+	Wed, 31 Jan 2024 03:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="cefOX4HX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cialewYm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AEC118AFB;
-	Wed, 31 Jan 2024 02:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7E7FC17
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 03:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706667370; cv=none; b=SpySqll+Nz9DBRKJdS8W/U5Bz7oDUe7wLMESK8hg60Il9d5FjdpqGBtpqKgqo/nIuXc0s1kCvAqSMVzsYCdLi1/pQJsy3yG8yNe2TosJnWgmTbhPuzufWTUOZ8zQXQG0Xmjfxh4ioPs7Ll95hWDkiVJESQd7va+OtRPcpN8M3Go=
+	t=1706670700; cv=none; b=XPULlmX+6fBauuIJSxSafPaeixhd+ejs1Gbr+iXSFAmu28o/W1i3KMW2mXuOqivWI22gB7N9od0MKWXiMYdNbytdo7tbPirzAr0Wl5O2JxS4Lei5qpn8XSk64ntolO4AXKCdxsrj5ZaQ+DdBFqeN0PLofiEP/KcCSy5W1ZLyRbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706667370; c=relaxed/simple;
-	bh=2IVyPvDYPyVF69rC7SvAChwUNS5jjHRV3pawNxVTgo4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IPJm4hh2Sl7qu0VtLUxmR9OEFZcgMYnVdNeVuoZpC0gpdGVnUvKHpGY7o4U7HMYzE3WTOBmG9CzvV6uUw2JKDQLit5I0kkrrF9v7l+flOZwqz0obbietnyCvvhGOcvaimmGmQ0T1iEjLoMN1Q3vxt9tdywHoQ0tHfljcc8/gj5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=cefOX4HX; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=K80ihujOREZkYym2AtMLKgCoT77UvCmld0M4kXW2kiw=; b=cefOX4HXahFzG8KCR8tlvhcz0C
-	IHpIVfbwBmsLcq+Ljiv7hX1ZL/D2UAQfForRH5yZGia4t+NHjT4OJm3zVoq2r7Re+3v0r70KO4pHW
-	RLKkbuwDkubp9NWiwEdWuMMe8ATd3QZBIOawNP0WNJA9KA7jK58ET6cwpgNy7UUQX7+vE7h5fadOP
-	ZnuCHMxHoZ87kCZ2sUQ+n1TIdk81RvXNCtAlj+ZJUK318cJVO1TqE85JGxjvQ+JpitNqoMtzLS4gx
-	ruG2faguZ08E3bc/6JU9nIS8XGwwg6cPTRqcWx0TLF5ZVKn4EvH/3my4ZaPNy+YBa7m7/6FWrpQBJ
-	lk4qh22g==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
-	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1rV08t-0038Kv-04;
-	Tue, 30 Jan 2024 20:15:59 -0600
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	wine-devel@winehq.org,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Arkadiusz Hiler <ahiler@codeweavers.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [RFC PATCH v2 29/29] docs: ntsync: Add documentation for the ntsync uAPI.
-Date: Tue, 30 Jan 2024 20:13:56 -0600
-Message-ID: <20240131021356.10322-30-zfigura@codeweavers.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240131021356.10322-1-zfigura@codeweavers.com>
-References: <20240131021356.10322-1-zfigura@codeweavers.com>
+	s=arc-20240116; t=1706670700; c=relaxed/simple;
+	bh=8A1sNTcqh/vi3qf/rn7lmh0Ujtt2fMYFqdqHx9tLGhU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fdTcZhG30GGCNbVhi7pbv/TeamMgAMWEr3mm80+hi3zIurMMUkIlV0KqCp6yJkC7XTHxWnXVhL7zR59tXUvMXQbd7+yuNhPhvV0CVet1T0SmY4EMWedymevPTJ7tkJQVo/0bPDfsBG+OyrFj+LmD1sL8l8McoOkVYv9CZXPGyw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cialewYm; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706670697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iu3CJL4LbQS98hB4MGDC78q9pGdj3UV5DPUVK7DzfMo=;
+	b=cialewYmOI7mv2yx+FujmNkQumDXIc+/uzJuNFRWAy2FqV4EwZXQ4ucqZkpPaOtTuk/7mw
+	lsVV0gbyEGezuQ2enxTPUn7RNdayhzSyDNyGpt5Ed5hxZzFjXCyru9LfwIe8kEytKeIgBq
+	N7Fo2wtW4mLaZKyZ8x+pn42LqydGujg=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-16-NP90y9_bPvK-qpOVHPvBbA-1; Tue, 30 Jan 2024 22:11:35 -0500
+X-MC-Unique: NP90y9_bPvK-qpOVHPvBbA-1
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3be75cab163so605005b6e.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 19:11:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706670695; x=1707275495;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iu3CJL4LbQS98hB4MGDC78q9pGdj3UV5DPUVK7DzfMo=;
+        b=WMimMrEONTnqS3Xks+c2/4lT2YKq4OVYGVA8LVHjL9FJ0CteXhBW6KO9RZukhAnTDo
+         7ZmlF7D9S5HIV+02wlxTusYQaJHm9Qwg9h2oJhamRyesFw7zKy6vg0bHeb3dTEF90SGW
+         jPEvyK0jx2A3dch3/mmGOOPcp7GmCtHCzMz5m/J0EbxOdPXELD/9rxS9lW1bE8sDozf5
+         VtRnb4Xx39tmhu4WwwPnWNh5G62jdnThAd4pLfiS704E7xg/4+AlyoZ55eRxUWlXXLte
+         sLT8C3yrZjqiRJV/eVVzO0D8BZ8k6QJladFJDwh/4FbLhTqGAduOCVcMqIC/W6QvGxcw
+         T7Pw==
+X-Gm-Message-State: AOJu0Yzx5qj8ClrUGSIA9nMTRQvPMk3RtwJBqCUmUYwpYdyqUSA4QYcO
+	nlASBLpzQXhUfHHOfsH4z/30ykyxcNA6sjJgwx6P27XBt98+MONtAos5rJyX8pAxkiuCHiteI5Y
+	e+0k+tEdgjiNT2wOvLPcRFymEaT2V6LbUZqDy0Xsbb+JY8zDSGicZ9bXDblMzwAqn0A==
+X-Received: by 2002:a05:6808:329a:b0:3be:6bed:70af with SMTP id cg26-20020a056808329a00b003be6bed70afmr574531oib.3.1706670695144;
+        Tue, 30 Jan 2024 19:11:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFmfRksgT7QnfG2CN0xzUAVB0zgkTIWmjGTT9JZuTu7vPmTr2vpPAGzf5rzH88B+9ZKhzkzMg==
+X-Received: by 2002:a05:6808:329a:b0:3be:6bed:70af with SMTP id cg26-20020a056808329a00b003be6bed70afmr574507oib.3.1706670694846;
+        Tue, 30 Jan 2024 19:11:34 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWlTw1dye8bxzwmPtvq8UxMcKWb53stpiyLPATNR6iaQUszWm9J9ynFpckV3yNoZa1PI8CIknSnuWJsBwaO02BqdGhqrfursNiEOkio6a2UGvFqsVKpuU/H5CSPkl+Aa2kxjGVkGMiZrkfwq5bg8R52435X0a6KA1/AbSuJhoyQpkAD+OlfOvHsMt3eGTuITT3pZ5hRXf59RibQDhxuEv0FmCJIGONPRfRNZ93L0Oa8zSOPIpMBk7+pzBn8w2th2H5M99+zW5THY8QAvX/oZjnk9j0cijhnLF+LkcajdzOpCxzEneepW3w+i56pxirHQMbskARfpvCEAFw5kgClUG9W352XhNnU0gEOP6vKEt04bMNk8V7vkIhMeiBB+5sV09Y7rU8hpuw0ZumI+0dFILHnPHNahfEQXvzi9sFHpw==
+Received: from [10.72.116.50] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id p26-20020a62ab1a000000b006ddb85a61cfsm8564500pff.162.2024.01.30.19.11.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jan 2024 19:11:34 -0800 (PST)
+Message-ID: <d2d09269-30fa-461d-9461-16a1ffbde6b6@redhat.com>
+Date: Wed, 31 Jan 2024 11:11:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/5] KVM: selftests: aarch64: Introduce
+ pmu_event_filter_test
+To: Eric Auger <eauger@redhat.com>, Oliver Upton <oliver.upton@linux.dev>,
+ Marc Zyngier <maz@kernel.org>, kvmarm@lists.linux.dev
+Cc: James Morse <james.morse@arm.com>, kvm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Zenghui Yu <yuzenghui@huawei.com>
+References: <20240116060129.55473-1-shahuang@redhat.com>
+ <51ca8edc-81e6-4c6d-9c72-80fe59919868@redhat.com>
+Content-Language: en-US
+From: Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <51ca8edc-81e6-4c6d-9c72-80fe59919868@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add an overall explanation of the driver architecture, and complete and precise
-specification for its intended behaviour.
+Hi Eric,
 
-Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
----
- Documentation/userspace-api/index.rst  |   1 +
- Documentation/userspace-api/ntsync.rst | 390 +++++++++++++++++++++++++
- 2 files changed, 391 insertions(+)
- create mode 100644 Documentation/userspace-api/ntsync.rst
+On 1/26/24 18:25, Eric Auger wrote:
+> Hi Shaoqin,
+> 
+> On 1/16/24 07:01, Shaoqin Huang wrote:
+>> The test is inspired by the pmu_event_filter_test which implemented by x86. On
+>> the arm64 platform, there is the same ability to set the pmu_event_filter
+>> through the KVM_ARM_VCPU_PMU_V3_FILTER attribute. So add the test for arm64.
+>>
+>> The series first move some pmu common code from vpmu_counter_access to
+>> lib/aarch64/vpmu.c and include/aarch64/vpmu.h, which can be used by
+>> pmu_event_filter_test. Then fix a bug related to the [enable|disable]_counter,
+>> and at last, implement the test itself.
+> which branch does it apply on? I fail to apply on top on main.
+> 
+> Or can you provide a branch?
 
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index 09f61bd2ac2e..f5a72ed27def 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -34,6 +34,7 @@ place where this information is gathered.
-    tee
-    isapnp
-    dcdbas
-+   ntsync
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/userspace-api/ntsync.rst b/Documentation/userspace-api/ntsync.rst
-new file mode 100644
-index 000000000000..bda9401f6747
---- /dev/null
-+++ b/Documentation/userspace-api/ntsync.rst
-@@ -0,0 +1,390 @@
-+===================================
-+NT synchronization primitive driver
-+===================================
-+
-+This page documents the user-space API for the ntsync driver.
-+
-+ntsync is a support driver for emulation of NT synchronization
-+primitives by user-space NT emulators. It exists because implementation
-+in user-space, using existing tools, cannot match Windows performance
-+while offering accurate semantics. It is implemented entirely in
-+software, and does not drive any hardware device.
-+
-+This interface is meant as a compatibility tool only, and should not
-+be used for general synchronization. Instead use generic, versatile
-+interfaces such as futex(2) and poll(2).
-+
-+Synchronization primitives
-+==========================
-+
-+The ntsync driver exposes three types of synchronization primitives:
-+semaphores, mutexes, and events.
-+
-+A semaphore holds a single volatile 32-bit counter, and a static 32-bit
-+integer denoting the maximum value. It is considered signaled when the
-+counter is nonzero. The counter is decremented by one when a wait is
-+satisfied. Both the initial and maximum count are established when the
-+semaphore is created.
-+
-+A mutex holds a volatile 32-bit recursion count, and a volatile 32-bit
-+identifier denoting its owner. A mutex is considered signaled when its
-+owner is zero (indicating that it is not owned). The recursion count is
-+incremented when a wait is satisfied, and ownership is set to the given
-+identifier.
-+
-+A mutex also holds an internal flag denoting whether its previous owner
-+has died; such a mutex is said to be abandoned. Owner death is not
-+tracked automatically based on thread death, but rather must be
-+communicated using ``NTSYNC_IOC_MUTEX_KILL``. An abandoned mutex is
-+inherently considered unowned.
-+
-+Except for the "unowned" semantics of zero, the actual value of the
-+owner identifier is not interpreted by the ntsync driver at all. The
-+intended use is to store a thread identifier; however, the ntsync
-+driver does not actually validate that a calling thread provides
-+consistent or unique identifiers.
-+
-+An event holds a volatile boolean state denoting whether it is signaled
-+or not. There are two types of events, auto-reset and manual-reset. An
-+auto-reset event is designaled when a wait is satisfied; a manual-reset
-+event is not. The event type is specified when the event is created.
-+
-+Unless specified otherwise, all operations on an object are atomic and
-+totally ordered with respect to other operations on the same object.
-+
-+Objects are represented by files. When all file descriptors to an
-+object are closed, that object is deleted.
-+
-+Char device
-+===========
-+
-+The ntsync driver creates a single char device /dev/ntsync. Each file
-+description opened on the device represents a unique instance intended
-+to back an individual NT virtual machine. Objects created by one ntsync
-+instance may only be used with other objects created by the same
-+instance.
-+
-+ioctl reference
-+===============
-+
-+All operations on the device are done through ioctls. There are four
-+structures used in ioctl calls::
-+
-+   struct ntsync_sem_args {
-+   	__u32 sem;
-+   	__u32 count;
-+   	__u32 max;
-+   };
-+
-+   struct ntsync_mutex_args {
-+   	__u32 mutex;
-+   	__u32 owner;
-+   	__u32 count;
-+   };
-+
-+   struct ntsync_event_args {
-+   	__u32 event;
-+   	__u32 signaled;
-+   	__u32 manual;
-+   };
-+
-+   struct ntsync_wait_args {
-+   	__u64 timeout;
-+   	__u64 objs;
-+   	__u32 count;
-+   	__u32 owner;
-+   	__u32 index;
-+   	__u32 alert;
-+   };
-+
-+Depending on the ioctl, members of the structure may be used as input,
-+output, or not at all. All ioctls return 0 on success.
-+
-+The ioctls on the device file are as follows:
-+
-+.. c:macro:: NTSYNC_IOC_CREATE_SEM
-+
-+  Create a semaphore object. Takes a pointer to struct
-+  :c:type:`ntsync_sem_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``sem``
-+       - On output, contains a file descriptor to the created semaphore.
-+     * - ``count``
-+       - Initial count of the semaphore.
-+     * - ``max``
-+       - Maximum count of the semaphore.
-+
-+  Fails with ``EINVAL`` if ``count`` is greater than ``max``.
-+
-+.. c:macro:: NTSYNC_IOC_CREATE_MUTEX
-+
-+  Create a mutex object. Takes a pointer to struct
-+  :c:type:`ntsync_mutex_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``mutex``
-+       - On output, contains a file descriptor to the created mutex.
-+     * - ``count``
-+       - Initial recursion count of the mutex.
-+     * - ``owner``
-+       - Initial owner of the mutex.
-+
-+  If ``owner`` is nonzero and ``count`` is zero, or if ``owner`` is
-+  zero and ``count`` is nonzero, the function fails with ``EINVAL``.
-+
-+.. c:macro:: NTSYNC_IOC_CREATE_EVENT
-+
-+  Create an event object. Takes a pointer to struct
-+  :c:type:`ntsync_event_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``event``
-+       - On output, contains a file descriptor to the created event.
-+     * - ``signaled``
-+       - If nonzero, the event is initially signaled, otherwise
-+         nonsignaled.
-+     * - ``manual``
-+       - If nonzero, the event is a manual-reset event, otherwise
-+         auto-reset.
-+
-+The ioctls on the individual objects are as follows:
-+
-+.. c:macro:: NTSYNC_IOC_SEM_POST
-+
-+  Post to a semaphore object. Takes a pointer to a 32-bit integer,
-+  which on input holds the count to be added to the semaphore, and on
-+  output contains its previous count.
-+
-+  If adding to the semaphore's current count would raise the latter
-+  past the semaphore's maximum count, the ioctl fails with
-+  ``EOVERFLOW`` and the semaphore is not affected. If raising the
-+  semaphore's count causes it to become signaled, eligible threads
-+  waiting on this semaphore will be woken and the semaphore's count
-+  decremented appropriately.
-+
-+.. c:macro:: NTSYNC_IOC_MUTEX_UNLOCK
-+
-+  Release a mutex object. Takes a pointer to struct
-+  :c:type:`ntsync_mutex_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``mutex``
-+       - Ignored.
-+     * - ``owner``
-+       - Specifies the owner trying to release this mutex.
-+     * - ``count``
-+       - On output, contains the previous recursion count.
-+
-+  If ``owner`` is zero, the ioctl fails with ``EINVAL``. If ``owner``
-+  is not the current owner of the mutex, the ioctl fails with
-+  ``EPERM``.
-+
-+  The mutex's count will be decremented by one. If decrementing the
-+  mutex's count causes it to become zero, the mutex is marked as
-+  unowned and signaled, and eligible threads waiting on it will be
-+  woken as appropriate.
-+
-+.. c:macro:: NTSYNC_IOC_SET_EVENT
-+
-+  Signal an event object. Takes a pointer to a 32-bit integer, which on
-+  output contains the previous state of the event.
-+
-+  Eligible threads will be woken, and auto-reset events will be
-+  designaled appropriately.
-+
-+.. c:macro:: NTSYNC_IOC_RESET_EVENT
-+
-+  Designal an event object. Takes a pointer to a 32-bit integer, which
-+  on output contains the previous state of the event.
-+
-+.. c:macro:: NTSYNC_IOC_PULSE_EVENT
-+
-+  Wake threads waiting on an event object while leaving it in an
-+  unsignaled state. Takes a pointer to a 32-bit integer, which on
-+  output contains the previous state of the event.
-+
-+  A pulse operation can be thought of as a set followed by a reset,
-+  performed as a single atomic operation. If two threads are waiting on
-+  an auto-reset event which is pulsed, only one will be woken. If two
-+  threads are waiting a manual-reset event which is pulsed, both will
-+  be woken. However, in both cases, the event will be unsignaled
-+  afterwards, and a simultaneous read operation will always report the
-+  event as unsignaled.
-+
-+.. c:macro:: NTSYNC_IOC_READ_SEM
-+
-+  Read the current state of a semaphore object. Takes a pointer to
-+  struct :c:type:`ntsync_sem_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``sem``
-+       - Ignored.
-+     * - ``count``
-+       - On output, contains the current count of the semaphore.
-+     * - ``max``
-+       - On output, contains the maximum count of the semaphore.
-+
-+.. c:macro:: NTSYNC_IOC_READ_MUTEX
-+
-+  Read the current state of a mutex object. Takes a pointer to struct
-+  :c:type:`ntsync_mutex_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``mutex``
-+       - Ignored.
-+     * - ``owner``
-+       - On output, contains the current owner of the mutex, or zero
-+         if the mutex is not currently owned.
-+     * - ``count``
-+       - On output, contains the current recursion count of the mutex.
-+
-+  If the mutex is marked as abandoned, the function fails with
-+  ``EOWNERDEAD``. In this case, ``count`` and ``owner`` are set to
-+  zero.
-+
-+.. c:macro:: NTSYNC_IOC_READ_EVENT
-+
-+  Read the current state of an event object. Takes a pointer to struct
-+  :c:type:`ntsync_event_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``event``
-+       - Ignored.
-+     * - ``signaled``
-+       - On output, contains the current state of the event.
-+     * - ``manual``
-+       - On output, contains 1 if the event is a manual-reset event,
-+         and 0 otherwise.
-+
-+.. c:macro:: NTSYNC_IOC_KILL_OWNER
-+
-+  Mark a mutex as unowned and abandoned if it is owned by the given
-+  owner. Takes an input-only pointer to a 32-bit integer denoting the
-+  owner. If the owner is zero, the ioctl fails with ``EINVAL``. If the
-+  owner does not own the mutex, the function fails with ``EPERM``.
-+
-+  Eligible threads waiting on the mutex will be woken as appropriate
-+  (and such waits will fail with ``EOWNERDEAD``, as described below).
-+
-+.. c:macro:: NTSYNC_IOC_WAIT_ANY
-+
-+  Poll on any of a list of objects, atomically acquiring at most one.
-+  Takes a pointer to struct :c:type:`ntsync_wait_args`, which is
-+  used as follows:
-+
-+  .. list-table::
-+
-+     * - ``timeout``
-+       - Absolute timeout in nanoseconds, measured against the
-+         MONOTONIC clock. If the timeout is equal to or earlier than
-+         the current time, the function returns immediately without
-+         sleeping. If ``timeout`` is U64_MAX, the function will sleep
-+         until an object is signaled, and will not fail with
-+         ``ETIMEDOUT``.
-+     * - ``objs``
-+       - Pointer to an array of ``count`` file descriptors
-+         (specified as an integer so that the structure has the same
-+         size regardless of architecture). If any object is
-+         invalid, the function fails with ``EINVAL``.
-+     * - ``count``
-+       - Number of objects specified in the ``objs`` array.
-+         If greater than ``NTSYNC_MAX_WAIT_COUNT``, the function fails
-+         with ``EINVAL``.
-+     * - ``owner``
-+       - Mutex owner identifier. If any object in ``objs`` is a mutex,
-+         the ioctl will attempt to acquire that mutex on behalf of
-+         ``owner``. If ``owner`` is zero, the ioctl fails with
-+         ``EINVAL``.
-+     * - ``index``
-+       - On success, contains the index (into ``objs``) of the object
-+         which was signaled. If ``alert`` was signaled instead,
-+         this contains ``count``.
-+     * - ``alert``
-+       - Optional event object file descriptor. If nonzero, this
-+         specifies an "alert" event object which, if signaled, will
-+         terminate the wait. If nonzero, the identifier must point to a
-+         valid event.
-+
-+  This function attempts to acquire one of the given objects. If unable
-+  to do so, it sleeps until an object becomes signaled, subsequently
-+  acquiring it, or the timeout expires. In the latter case the ioctl
-+  fails with ``ETIMEDOUT``. The function only acquires one object, even
-+  if multiple objects are signaled.
-+
-+  A semaphore is considered to be signaled if its count is nonzero, and
-+  is acquired by decrementing its count by one. A mutex is considered
-+  to be signaled if it is unowned or if its owner matches the ``owner``
-+  argument, and is acquired by incrementing its recursion count by one
-+  and setting its owner to the ``owner`` argument. An auto-reset event
-+  is acquired by designaling it; a manual-reset event is not affected
-+  by acquisition.
-+
-+  Acquisition is atomic and totally ordered with respect to other
-+  operations on the same object. If two wait operations (with different
-+  ``owner`` identifiers) are queued on the same mutex, only one is
-+  signaled. If two wait operations are queued on the same semaphore,
-+  and a value of one is posted to it, only one is signaled. The order
-+  in which threads are signaled is not specified.
-+
-+  If an abandoned mutex is acquired, the ioctl fails with
-+  ``EOWNERDEAD``. Although this is a failure return, the function may
-+  otherwise be considered successful. The mutex is marked as owned by
-+  the given owner (with a recursion count of 1) and as no longer
-+  abandoned, and ``index`` is still set to the index of the mutex.
-+
-+  The ``alert`` argument is an "extra" event which can terminate the
-+  wait, independently of all other objects. If members of ``objs`` and
-+  ``alert`` are both simultaneously signaled, a member of ``objs`` will
-+  always be given priority and acquired first.
-+
-+  It is valid to pass the same object more than once, including by
-+  passing the same event in the ``objs`` array and in ``alert``. If a
-+  wakeup occurs due to that object being signaled, ``index`` is set to
-+  the lowest index corresponding to that object.
-+
-+  The function may fail with ``EINTR`` if a signal is received.
-+
-+.. c:macro:: NTSYNC_IOC_WAIT_ALL
-+
-+  Poll on a list of objects, atomically acquiring all of them. Takes a
-+  pointer to struct :c:type:`ntsync_wait_args`, which is used
-+  identically to ``NTSYNC_IOC_WAIT_ANY``, except that ``index`` is
-+  always filled with zero on success if not woken via alert.
-+
-+  This function attempts to simultaneously acquire all of the given
-+  objects. If unable to do so, it sleeps until all objects become
-+  simultaneously signaled, subsequently acquiring them, or the timeout
-+  expires. In the latter case the ioctl fails with ``ETIMEDOUT`` and no
-+  objects are modified.
-+
-+  Objects may become signaled and subsequently designaled (through
-+  acquisition by other threads) while this thread is sleeping. Only
-+  once all objects are simultaneously signaled does the ioctl acquire
-+  them and return. The entire acquisition is atomic and totally ordered
-+  with respect to other operations on any of the given objects.
-+
-+  If an abandoned mutex is acquired, the ioctl fails with
-+  ``EOWNERDEAD``. Similarly to ``NTSYNC_IOC_WAIT_ANY``, all objects are
-+  nevertheless marked as acquired. Note that if multiple mutex objects
-+  are specified, there is no way to know which were marked as
-+  abandoned.
-+
-+  As with "any" waits, the ``alert`` argument is an "extra" event which
-+  can terminate the wait. Critically, however, an "all" wait will
-+  succeed if all members in ``objs`` are signaled, *or* if ``alert`` is
-+  signaled. In the latter case ``index`` will be set to ``count``. As
-+  with "any" waits, if both conditions are filled, the former takes
-+  priority, and objects in ``objs`` will be acquired.
-+
-+  Unlike ``NTSYNC_IOC_WAIT_ANY``, it is not valid to pass the same
-+  object more than once, nor is it valid to pass the same object in
-+  ``objs`` and in ``alert``. If this is attempted, the function fails
-+  with ``EINVAL``.
+This was based on v6.7.
+
+> 
+> Eric
+>>
+>> Changelog:
+>> ----------
+>> v2->v3:
+>>    - Check the pmceid in guest code instead of pmu event count since different
+>>    hardware may have different event count result, check pmceid makes it stable
+>>    on different platform.                        [Eric]
+>>    - Some typo fixed and commit message improved.
+>>
+>> v1->v2:
+>>    - Improve the commit message.                 [Eric]
+>>    - Fix the bug in [enable|disable]_counter.    [Raghavendra & Marc]
+>>    - Add the check if kvm has attr KVM_ARM_VCPU_PMU_V3_FILTER.
+>>    - Add if host pmu support the test event throught pmceid0.
+>>    - Split the test_invalid_filter() to another patch. [Eric]
+>>
+>> v1: https://lore.kernel.org/all/20231123063750.2176250-1-shahuang@redhat.com/
+>> v2: https://lore.kernel.org/all/20231129072712.2667337-1-shahuang@redhat.com/
+>>
+>> Shaoqin Huang (5):
+>>    KVM: selftests: aarch64: Make the [create|destroy]_vpmu_vm() public
+>>    KVM: selftests: aarch64: Move pmu helper functions into vpmu.h
+>>    KVM: selftests: aarch64: Fix the buggy [enable|disable]_counter
+>>    KVM: selftests: aarch64: Introduce pmu_event_filter_test
+>>    KVM: selftests: aarch64: Add invalid filter test in
+>>      pmu_event_filter_test
+>>
+>>   tools/testing/selftests/kvm/Makefile          |   2 +
+>>   .../kvm/aarch64/pmu_event_filter_test.c       | 255 ++++++++++++++++++
+>>   .../kvm/aarch64/vpmu_counter_access.c         | 218 ++-------------
+>>   .../selftests/kvm/include/aarch64/vpmu.h      | 135 ++++++++++
+>>   .../testing/selftests/kvm/lib/aarch64/vpmu.c  |  74 +++++
+>>   5 files changed, 490 insertions(+), 194 deletions(-)
+>>   create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>>   create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
+>>   create mode 100644 tools/testing/selftests/kvm/lib/aarch64/vpmu.c
+>>
+> 
+
 -- 
-2.43.0
+Shaoqin
 
 
