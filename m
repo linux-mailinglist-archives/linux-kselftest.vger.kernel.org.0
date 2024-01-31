@@ -1,166 +1,160 @@
-Return-Path: <linux-kselftest+bounces-3815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA28F84345C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 04:11:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3731D8434BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 05:09:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5236B1F251C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 03:11:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 738E51C24730
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 04:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDA8F505;
-	Wed, 31 Jan 2024 03:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19EA8168A3;
+	Wed, 31 Jan 2024 04:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cialewYm"
+	dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b="Tca/RNfa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7E7FC17
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 03:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D98D179BA
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 04:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706670700; cv=none; b=XPULlmX+6fBauuIJSxSafPaeixhd+ejs1Gbr+iXSFAmu28o/W1i3KMW2mXuOqivWI22gB7N9od0MKWXiMYdNbytdo7tbPirzAr0Wl5O2JxS4Lei5qpn8XSk64ntolO4AXKCdxsrj5ZaQ+DdBFqeN0PLofiEP/KcCSy5W1ZLyRbg=
+	t=1706674163; cv=none; b=EOJVzUuDpQ1zX9VQa0i8N+Yqy6F5P/SJzfrKhXYCM7cecGIot2XQGH2HIjRFDwkckp4MF3r680PCUHbiylX/boHFONd7qejUrfrMkIzL31TtXSzpS7DZDW+WtXuYtK0LsAhhaIlNOPUR0ErVnpIs1MtxY+Y5EqU1SX18PzAQdJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706670700; c=relaxed/simple;
-	bh=8A1sNTcqh/vi3qf/rn7lmh0Ujtt2fMYFqdqHx9tLGhU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fdTcZhG30GGCNbVhi7pbv/TeamMgAMWEr3mm80+hi3zIurMMUkIlV0KqCp6yJkC7XTHxWnXVhL7zR59tXUvMXQbd7+yuNhPhvV0CVet1T0SmY4EMWedymevPTJ7tkJQVo/0bPDfsBG+OyrFj+LmD1sL8l8McoOkVYv9CZXPGyw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cialewYm; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706670697;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iu3CJL4LbQS98hB4MGDC78q9pGdj3UV5DPUVK7DzfMo=;
-	b=cialewYmOI7mv2yx+FujmNkQumDXIc+/uzJuNFRWAy2FqV4EwZXQ4ucqZkpPaOtTuk/7mw
-	lsVV0gbyEGezuQ2enxTPUn7RNdayhzSyDNyGpt5Ed5hxZzFjXCyru9LfwIe8kEytKeIgBq
-	N7Fo2wtW4mLaZKyZ8x+pn42LqydGujg=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-16-NP90y9_bPvK-qpOVHPvBbA-1; Tue, 30 Jan 2024 22:11:35 -0500
-X-MC-Unique: NP90y9_bPvK-qpOVHPvBbA-1
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3be75cab163so605005b6e.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jan 2024 19:11:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706670695; x=1707275495;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iu3CJL4LbQS98hB4MGDC78q9pGdj3UV5DPUVK7DzfMo=;
-        b=WMimMrEONTnqS3Xks+c2/4lT2YKq4OVYGVA8LVHjL9FJ0CteXhBW6KO9RZukhAnTDo
-         7ZmlF7D9S5HIV+02wlxTusYQaJHm9Qwg9h2oJhamRyesFw7zKy6vg0bHeb3dTEF90SGW
-         jPEvyK0jx2A3dch3/mmGOOPcp7GmCtHCzMz5m/J0EbxOdPXELD/9rxS9lW1bE8sDozf5
-         VtRnb4Xx39tmhu4WwwPnWNh5G62jdnThAd4pLfiS704E7xg/4+AlyoZ55eRxUWlXXLte
-         sLT8C3yrZjqiRJV/eVVzO0D8BZ8k6QJladFJDwh/4FbLhTqGAduOCVcMqIC/W6QvGxcw
-         T7Pw==
-X-Gm-Message-State: AOJu0Yzx5qj8ClrUGSIA9nMTRQvPMk3RtwJBqCUmUYwpYdyqUSA4QYcO
-	nlASBLpzQXhUfHHOfsH4z/30ykyxcNA6sjJgwx6P27XBt98+MONtAos5rJyX8pAxkiuCHiteI5Y
-	e+0k+tEdgjiNT2wOvLPcRFymEaT2V6LbUZqDy0Xsbb+JY8zDSGicZ9bXDblMzwAqn0A==
-X-Received: by 2002:a05:6808:329a:b0:3be:6bed:70af with SMTP id cg26-20020a056808329a00b003be6bed70afmr574531oib.3.1706670695144;
-        Tue, 30 Jan 2024 19:11:35 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFmfRksgT7QnfG2CN0xzUAVB0zgkTIWmjGTT9JZuTu7vPmTr2vpPAGzf5rzH88B+9ZKhzkzMg==
-X-Received: by 2002:a05:6808:329a:b0:3be:6bed:70af with SMTP id cg26-20020a056808329a00b003be6bed70afmr574507oib.3.1706670694846;
-        Tue, 30 Jan 2024 19:11:34 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWlTw1dye8bxzwmPtvq8UxMcKWb53stpiyLPATNR6iaQUszWm9J9ynFpckV3yNoZa1PI8CIknSnuWJsBwaO02BqdGhqrfursNiEOkio6a2UGvFqsVKpuU/H5CSPkl+Aa2kxjGVkGMiZrkfwq5bg8R52435X0a6KA1/AbSuJhoyQpkAD+OlfOvHsMt3eGTuITT3pZ5hRXf59RibQDhxuEv0FmCJIGONPRfRNZ93L0Oa8zSOPIpMBk7+pzBn8w2th2H5M99+zW5THY8QAvX/oZjnk9j0cijhnLF+LkcajdzOpCxzEneepW3w+i56pxirHQMbskARfpvCEAFw5kgClUG9W352XhNnU0gEOP6vKEt04bMNk8V7vkIhMeiBB+5sV09Y7rU8hpuw0ZumI+0dFILHnPHNahfEQXvzi9sFHpw==
-Received: from [10.72.116.50] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id p26-20020a62ab1a000000b006ddb85a61cfsm8564500pff.162.2024.01.30.19.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jan 2024 19:11:34 -0800 (PST)
-Message-ID: <d2d09269-30fa-461d-9461-16a1ffbde6b6@redhat.com>
-Date: Wed, 31 Jan 2024 11:11:28 +0800
+	s=arc-20240116; t=1706674163; c=relaxed/simple;
+	bh=pnxDDAKEBMo7lWFcc3J2ntyngcKsl4r03QwlqkuSvNQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GbGoTdpdYhTR+ZNpi48YzIP91mb/KgWHwvVbL+jnjj0yGDuGxO8q4FO2S/u6HI/QSdXRvbeEW9b5EtB2DcDRukMoweVqzSfGk2im+WOM7t7UMCBPnT2U7k934TYC/R2DUeBxbLcIA2vDqn2DS1F5XDjvsakJF5dg88PClIdvh4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz; spf=pass smtp.mailfrom=fe-bounces.faucet.nz; dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b=Tca/RNfa; arc=none smtp.client-ip=149.28.215.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.faucet.nz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=faucet.nz;
+ h=Content-Transfer-Encoding: MIME-Version: Message-Id: Date: Subject: Cc:
+ To: From; q=dns/txt; s=fe-4ed8c67516; t=1706674143;
+ bh=WelYVPflxMfIUF+8iQKKCRWtrOjz1iaIT0Kh8otsC8U=;
+ b=Tca/RNfafOnsPZrJDhemomfilOp7ml97MkuVeqcs7Ol3RboyaaW6ppfYCN+XTz62wbG/8hLoM
+ CwiSDuNbMsxvNKPkHO1RyJ4t4F/IC7JMHVxsEWmnSAhmKdZbG9UoLULV0FZpjqef4VRp/csUtXl
+ hSU/whXiviNJZ84Gn7q82JQ=
+From: Brad Cowie <brad@faucet.nz>
+To: netdev@vger.kernel.org
+Cc: pshelar@ovn.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, dev@openvswitch.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Brad Cowie
+ <brad@faucet.nz>, Aaron Conole <aconole@redhat.com>
+Subject: [PATCH net-next] selftests: openvswitch: Test ICMP related matches work with SNAT
+Date: Wed, 31 Jan 2024 17:08:22 +1300
+Message-Id: <20240131040822.835867-1-brad@faucet.nz>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] KVM: selftests: aarch64: Introduce
- pmu_event_filter_test
-To: Eric Auger <eauger@redhat.com>, Oliver Upton <oliver.upton@linux.dev>,
- Marc Zyngier <maz@kernel.org>, kvmarm@lists.linux.dev
-Cc: James Morse <james.morse@arm.com>, kvm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Suzuki K Poulose <suzuki.poulose@arm.com>,
- Zenghui Yu <yuzenghui@huawei.com>
-References: <20240116060129.55473-1-shahuang@redhat.com>
- <51ca8edc-81e6-4c6d-9c72-80fe59919868@redhat.com>
-Content-Language: en-US
-From: Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <51ca8edc-81e6-4c6d-9c72-80fe59919868@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Report-Abuse-To: abuse@forwardemail.net
+X-Report-Abuse: abuse@forwardemail.net
+X-Complaints-To: abuse@forwardemail.net
+X-ForwardEmail-Version: 0.4.40
+X-ForwardEmail-Sender: rfc822; brad@faucet.nz, smtp.forwardemail.net,
+ 149.28.215.223
+X-ForwardEmail-ID: 65b9c7de887f9e7cfa92c933
 
-Hi Eric,
+Add a test case for regression in openvswitch nat that was fixed by
+commit e6345d2824a3 ("netfilter: nf_nat: fix action not being set for
+all ct states").
 
-On 1/26/24 18:25, Eric Auger wrote:
-> Hi Shaoqin,
-> 
-> On 1/16/24 07:01, Shaoqin Huang wrote:
->> The test is inspired by the pmu_event_filter_test which implemented by x86. On
->> the arm64 platform, there is the same ability to set the pmu_event_filter
->> through the KVM_ARM_VCPU_PMU_V3_FILTER attribute. So add the test for arm64.
->>
->> The series first move some pmu common code from vpmu_counter_access to
->> lib/aarch64/vpmu.c and include/aarch64/vpmu.h, which can be used by
->> pmu_event_filter_test. Then fix a bug related to the [enable|disable]_counter,
->> and at last, implement the test itself.
-> which branch does it apply on? I fail to apply on top on main.
-> 
-> Or can you provide a branch?
+Link: https://lore.kernel.org/netdev/20231221224311.130319-1-brad@faucet.nz/
+Link: https://mail.openvswitch.org/pipermail/ovs-dev/2024-January/410476.html
+Suggested-by: Aaron Conole <aconole@redhat.com>
+Signed-off-by: Brad Cowie <brad@faucet.nz>
+---
+ .../selftests/net/openvswitch/openvswitch.sh  | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-This was based on v6.7.
-
-> 
-> Eric
->>
->> Changelog:
->> ----------
->> v2->v3:
->>    - Check the pmceid in guest code instead of pmu event count since different
->>    hardware may have different event count result, check pmceid makes it stable
->>    on different platform.                        [Eric]
->>    - Some typo fixed and commit message improved.
->>
->> v1->v2:
->>    - Improve the commit message.                 [Eric]
->>    - Fix the bug in [enable|disable]_counter.    [Raghavendra & Marc]
->>    - Add the check if kvm has attr KVM_ARM_VCPU_PMU_V3_FILTER.
->>    - Add if host pmu support the test event throught pmceid0.
->>    - Split the test_invalid_filter() to another patch. [Eric]
->>
->> v1: https://lore.kernel.org/all/20231123063750.2176250-1-shahuang@redhat.com/
->> v2: https://lore.kernel.org/all/20231129072712.2667337-1-shahuang@redhat.com/
->>
->> Shaoqin Huang (5):
->>    KVM: selftests: aarch64: Make the [create|destroy]_vpmu_vm() public
->>    KVM: selftests: aarch64: Move pmu helper functions into vpmu.h
->>    KVM: selftests: aarch64: Fix the buggy [enable|disable]_counter
->>    KVM: selftests: aarch64: Introduce pmu_event_filter_test
->>    KVM: selftests: aarch64: Add invalid filter test in
->>      pmu_event_filter_test
->>
->>   tools/testing/selftests/kvm/Makefile          |   2 +
->>   .../kvm/aarch64/pmu_event_filter_test.c       | 255 ++++++++++++++++++
->>   .../kvm/aarch64/vpmu_counter_access.c         | 218 ++-------------
->>   .../selftests/kvm/include/aarch64/vpmu.h      | 135 ++++++++++
->>   .../testing/selftests/kvm/lib/aarch64/vpmu.c  |  74 +++++
->>   5 files changed, 490 insertions(+), 194 deletions(-)
->>   create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
->>   create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
->>   create mode 100644 tools/testing/selftests/kvm/lib/aarch64/vpmu.c
->>
-> 
-
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index f8499d4c87f3..87b80bee6df4 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -17,6 +17,7 @@ tests="
+ 	ct_connect_v4				ip4-ct-xon: Basic ipv4 tcp connection using ct
+ 	connect_v4				ip4-xon: Basic ipv4 ping between two NS
+ 	nat_connect_v4				ip4-nat-xon: Basic ipv4 tcp connection via NAT
++	nat_related_v4				ip4-nat-related: ICMP related matches work with SNAT
+ 	netlink_checks				ovsnl: validate netlink attrs and settings
+ 	upcall_interfaces			ovs: test the upcall interfaces
+ 	drop_reason				drop: test drop reasons are emitted"
+@@ -473,6 +474,67 @@ test_nat_connect_v4 () {
+ 	return 0
+ }
+ 
++# nat_related_v4 test
++#  - client->server ip packets go via SNAT
++#  - client solicits ICMP destination unreachable packet from server
++#  - undo NAT for ICMP reply and test dst ip has been updated
++test_nat_related_v4 () {
++	which nc >/dev/null 2>/dev/null || return $ksft_skip
++
++	sbx_add "test_nat_related_v4" || return $?
++
++	ovs_add_dp "test_nat_related_v4" natrelated4 || return 1
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_nat_related_v4" "natrelated4" "$ns" \
++			"${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
++
++	ip netns exec client ip addr add 172.31.110.10/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add 172.31.110.20/24 dev s1
++	ip netns exec server ip link set s1 up
++
++	ip netns exec server ip route add 192.168.0.20/32 via 172.31.110.10
++
++	# Allow ARP
++	ovs_add_flow "test_nat_related_v4" natrelated4 \
++		"in_port(1),eth(),eth_type(0x0806),arp()" "2" || return 1
++	ovs_add_flow "test_nat_related_v4" natrelated4 \
++		"in_port(2),eth(),eth_type(0x0806),arp()" "1" || return 1
++
++	# Allow IP traffic from client->server, rewrite source IP with SNAT to 192.168.0.20
++	ovs_add_flow "test_nat_related_v4" natrelated4 \
++		"ct_state(-trk),in_port(1),eth(),eth_type(0x0800),ipv4(dst=172.31.110.20)" \
++		"ct(commit,nat(src=192.168.0.20)),recirc(0x1)" || return 1
++	ovs_add_flow "test_nat_related_v4" natrelated4 \
++		"recirc_id(0x1),ct_state(+trk-inv),in_port(1),eth(),eth_type(0x0800),ipv4()" \
++		"2" || return 1
++
++	# Allow related ICMP responses back from server and undo NAT to restore original IP
++	# Drop any ICMP related packets where dst ip hasn't been restored back to original IP
++	ovs_add_flow "test_nat_related_v4" natrelated4 \
++		"ct_state(-trk),in_port(2),eth(),eth_type(0x0800),ipv4()" \
++		"ct(commit,nat),recirc(0x2)" || return 1
++	ovs_add_flow "test_nat_related_v4" natrelated4 \
++		"recirc_id(0x2),ct_state(+rel+trk),in_port(2),eth(),eth_type(0x0800),ipv4(src=172.31.110.20,dst=172.31.110.10,proto=1),icmp()" \
++		"1" || return 1
++	ovs_add_flow "test_nat_related_v4" natrelated4 \
++		"recirc_id(0x2),ct_state(+rel+trk),in_port(2),eth(),eth_type(0x0800),ipv4(dst=192.168.0.20,proto=1),icmp()" \
++		"drop" || return 1
++
++	# Solicit destination unreachable response from server
++	ovs_sbx "test_nat_related_v4" ip netns exec client \
++		bash -c "echo a | nc -u -w 1 172.31.110.20 10000"
++
++	# Check to make sure no packets matched the drop rule with incorrect dst ip
++	python3 "$ovs_base/ovs-dpctl.py" dump-flows natrelated4 \
++		| grep "drop" | grep "packets:0" >/dev/null || return 1
++
++	info "done..."
++	return 0
++}
++
+ # netlink_validation
+ # - Create a dp
+ # - check no warning with "old version" simulation
 -- 
-Shaoqin
+2.34.1
 
 
