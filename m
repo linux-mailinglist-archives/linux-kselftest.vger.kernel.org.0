@@ -1,115 +1,158 @@
-Return-Path: <linux-kselftest+bounces-3905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42F71844B65
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 00:00:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4175E844C2F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 00:13:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D5A01C20C27
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 23:00:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EADDD28493E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jan 2024 23:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97BB3A8FD;
-	Wed, 31 Jan 2024 22:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16A913EFE4;
+	Wed, 31 Jan 2024 23:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+jPDyWj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iYQ97gUz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6055C3A8E7;
-	Wed, 31 Jan 2024 22:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFB013E219
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 23:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706741996; cv=none; b=DUkir+jH5PhqDtNNwxplJv0EmyE99QXogiALSWbmGvhq+RZpl1B46csZRroM/jm28+xk/WW0Rrcn2U5pO2cdx7Q5ETcXxuY8RRHwK747j4YDhzfk4706RuDzdw7j0X44PYry3/BeMLgcPY2mZL+4nWd/I5vQ8XM7wLrOWc2o4v4=
+	t=1706742233; cv=none; b=WAS90vHfep4FkuwrahqqPxcM+umyfCNLd3F3IrdDj8rVexprCYShk9tcGXGR/WJgUtsC3PUVEDBwUcSG3NjvoXgwdlpRtfdbfvr5G4qmEdjdsfdrYFXxEzLdptmvxeGW7Vnju850+9ljfZpjM7O9WuKDKW5fYTvL7pWTsclwHik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706741996; c=relaxed/simple;
-	bh=zdzGQukzuFM99odXc1XHFwDNHwjEYQ2tT1RmuJLmutg=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=umGzoTOASmkTVaL9hLMtdTINI+Li/AoeOv/ZGcFsCLh/DI+G8cPUzKuxBzhrrH8iX5TXtu2e3107kfmPX6yGRjlLC/JzbtWd28neSCGh7wwWirM5IhC2IrMTh9l9T7Lo3Ah2pZz261NfAurtniEFHhEhRiCKEzv6EPnDZFsJPSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+jPDyWj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7BF5C433C7;
-	Wed, 31 Jan 2024 22:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706741995;
-	bh=zdzGQukzuFM99odXc1XHFwDNHwjEYQ2tT1RmuJLmutg=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=M+jPDyWjW3p2BFL4c7Lq/tJLbKE0eoQKC70P1AS5REFlY4kdxkNB5cTBbAFNDw1hI
-	 2jP/AbKdvUAxefuvOQh22+j7DgdGVzQ3I5QRhy0N9Upe1mX/GsYF0W6i+Dm2K8IfgK
-	 aaCTibLiwPJs/QYgWz4pNrt86vq2TzlHrW3LD7GcPXNqA4xfdMx+OxZJ6gsGzi6zOq
-	 cmGZ0fU6BVOtgwkZbi25gi+5Oow8v+mf8eSt9A4C6pMEL/aZOrLzK4IrofeZrybwYI
-	 wWu727yJvBE5SN5Rr+8ryTsDlTV0UA0rTEGgaRgBFH3pcLi4e0ZYUxqKCbcyxmDqcE
-	 ceTxausFkQgQg==
-Message-ID: <efe6a7886c3491cc9c225a903efa2b1e.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1706742233; c=relaxed/simple;
+	bh=r+gw0hlTKtdohBZj+zXKIzyuXhBHBMj2XAt/CW5yWgQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ArMiohcQ0DJ8XAoGUScIqHZnqoA+IBEtmSOrC6qgzGfOvof3PSRKnd9O0JuYZ7Yu72o5dMl6gX3oUyJvwv3zEWB4DbFuoQEbspppzB3PhrJN31IsnWmtbNmep8yR+4zvz9YGrRUUZnATSdB6xC+NLTIiFEnzpOLaXN6/kbs/aj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iYQ97gUz; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5eba564eb3fso6146057b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 15:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706742230; x=1707347030; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZwweSSUYQvO/z20yvIqcaNFaLAc1RqILCFOCkMXbPM=;
+        b=iYQ97gUzmWVVoNJtEuLbFJ4S5h8HpYVi1CxUgL2jom/QXujR1tOaXR8gTv9gHboxAR
+         +FuFGe0gP4YF672OsN7lKVxUI/2T/5+iW66Cghp6vtM1NUKqh0Nlp2QEkoaG/LVY5T7P
+         AZvb8pdjnyLugW27KRV2Ib5aeQH0rH+qEwjLl4V0pA4PbeIQ4C+6SPUUzBL90uzeQiuW
+         SFOkw18jDq5BHsH5qIQgbhsN3I/T+94bo3Y0Ff8pMvFNJ8tYq3nmkra04+XHVmzxk5NP
+         ZnXJNQylACQYwDfg7QqpS0Xhgy3EsRvlR6SH55HRTCOa8VtmjY62KWUJepxsnBV/EzLe
+         Fc1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706742230; x=1707347030;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZwweSSUYQvO/z20yvIqcaNFaLAc1RqILCFOCkMXbPM=;
+        b=Gwib5KJbBIVEMgGIGc0Wl56sKNh6Yg5k0ZIj9QIInuW3+wYHSd0mBQtz4BUjCTODEI
+         5zFcQCcsjjWZBMP7KOkATIoaDdceCfg4VHIhnibFDSI+pB6r/j22SD2PRuj23gHMlAts
+         b0LZdKdbPjuCojXLn3letUbywPMYI4A2NxQWpEHNEN+VSPVl4PIbd6odD/Nsr/KodOxy
+         zv5Hj26uJtBQP93jTRX9B+Sr9B6xA+GQdBKoMR3zNl91XTrtGyF28QTfiVvTGEtPxKB5
+         gfbVmeYHm1gzDKWp+QFyUnebONLJ4mS+jJYXQfeeCs7VtvWpYX8DyZdRvs7mahz7IWD5
+         e7Zg==
+X-Gm-Message-State: AOJu0YzEMrUogxzrpcn9sfwxLxPaJJ7NnwJ8IcAPeJQSVX7HC6LgwtaK
+	lDtrotNbrGTiwwW7uACLERmLz4p3zb1kz26db2Xv52k8vwBHLsMNc6UfXY9CQso96p3hL5mzphy
+	uqA==
+X-Google-Smtp-Source: AGHT+IFJbItnQs4Y8jmKkE5kxYlZxxDLejMwZjXJSJ/Pnb1uodzlMpEbl5+L7dgh/lCtAx5a7aAZSZtZzuc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:dd6:b0:5fc:43cb:cb1e with SMTP id
+ db22-20020a05690c0dd600b005fc43cbcb1emr691136ywb.10.1706742230591; Wed, 31
+ Jan 2024 15:03:50 -0800 (PST)
+Date: Wed, 31 Jan 2024 15:03:48 -0800
+In-Reply-To: <20231102155111.28821-3-guang.zeng@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240131205405.GA2249327-robh@kernel.org>
-References: <20240130004508.1700335-1-sboyd@kernel.org> <20240130004508.1700335-2-sboyd@kernel.org> <20240131205405.GA2249327-robh@kernel.org>
-Subject: Re: [PATCH v2 1/7] arm64: Unconditionally call unflatten_device_tree()
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, patches@lists.linux.dev, linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-To: Rob Herring <robh@kernel.org>
-Date: Wed, 31 Jan 2024 14:59:53 -0800
-User-Agent: alot/0.10
+Mime-Version: 1.0
+References: <20231102155111.28821-1-guang.zeng@intel.com> <20231102155111.28821-3-guang.zeng@intel.com>
+Message-ID: <ZbrR1BJROP4O9eGx@google.com>
+Subject: Re: [RFC PATCH v1 2/8] KVM: selftests: x86: Support guest running on
+ canonical linear-address organization
+From: Sean Christopherson <seanjc@google.com>
+To: Zeng Guang <guang.zeng@intel.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
 
-Quoting Rob Herring (2024-01-31 12:54:05)
-> On Mon, Jan 29, 2024 at 04:45:00PM -0800, Stephen Boyd wrote:
-> > Call this function unconditionally so that we can populate an empty DTB
-> > on platforms that don't boot with a firmware provided or builtin DTB.
-> > Override 'initial_boot_params' to NULL when ACPI is in use but the
-> > bootloader has loaded a DTB so that we don't allow both ACPI and DT to
-> > be used during boot. If there isn't a valid initial_boot_params dtb then
-> > unflatten_device_tree() returns early so this is fine.
-> >=20
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: <linux-arm-kernel@lists.infradead.org>
-> > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
-> >  arch/arm64/kernel/setup.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-> > index 417a8a86b2db..ffb1942724ae 100644
-> > --- a/arch/arm64/kernel/setup.c
-> > +++ b/arch/arm64/kernel/setup.c
-> > @@ -351,8 +351,11 @@ void __init __no_sanitize_address setup_arch(char =
-**cmdline_p)
-> >       /* Parse the ACPI tables for possible boot-time configuration */
-> >       acpi_boot_table_init();
-> > =20
-> > -     if (acpi_disabled)
-> > -             unflatten_device_tree();
-> > +     /* Don't use the FDT from boot if ACPI is in use */
-> > +     if (!acpi_disabled)
-> > +             initial_boot_params =3D NULL;
->=20
-> I still think this is a problem for kexec. See=20
-> of_kexec_alloc_and_setup_fdt(). You see it uses initial_boot_params. At=20
-> first glance it looks like it would just write out everything we need.=20
-> But for UEFI boot, I think we need all the chosen properties like=20
-> linux,uefi-mmap-start preserved from the current boot for the next=20
-> kernel we kexec.
+On Thu, Nov 02, 2023, Zeng Guang wrote:
+> Setup execution environment running on 64-bit linear addresses for
+> user and supervisor mode.
+> 
+> Define the linear address based on 48-bit canonical format in which
+> bits 63:47 of the address are identical. All addresses to system data
+> structure are shifted to supervisor-mode address space.
+> 
+> Extend page table mapping for supervisor mode to same guest physical
+> address. This allows guest in supervisor mode can run in the
+> corresponding canonical linear address space.
+> 
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> ---
+>  .../selftests/kvm/include/x86_64/processor.h  |  6 ++++
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  6 ++--
+>  .../selftests/kvm/lib/x86_64/processor.c      | 28 ++++++++++++-------
+>  3 files changed, 28 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> index 25bc61dac5fb..00f7337a520a 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> @@ -1256,4 +1256,10 @@ void virt_map_level(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+>  #define PFERR_GUEST_PAGE_MASK	BIT_ULL(PFERR_GUEST_PAGE_BIT)
+>  #define PFERR_IMPLICIT_ACCESS	BIT_ULL(PFERR_IMPLICIT_ACCESS_BIT)
+>  
+> +/*
+> + * X86 kernel linear address defines
+> + */
+> +#define KERNEL_LNA_OFFSET 0xffff800000000000
 
-Ok, got it.
+Please don't make up acronyms, I can more or less glean what LNA is from the
+context _here_, but in other usage I would truly have no idea.
 
->=20
-> I think you'll have to check acpi_disabled in unflatten_device_tree()=20
-> and unflatten the empty tree leaving initial_boot_params alone. That=20
-> means our FDT and unflattened tree will be different DTs, but I think=20
-> that's fine.
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 9f4b8c47edce..6f4295a13d00 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -227,6 +227,13 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
+>  void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
+>  {
+>  	__virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K);
+> +
+> +	/*
+> +	 * Map same paddr to kernel linear address space. Make execution
+> +	 * environment supporting running both in user and kernel mode.
+> +	 */
+> +	if (!(vaddr & BIT_ULL(63)))
+> +		__virt_pg_map(vm, (uint64_t)KERNEL_ADDR(vaddr), paddr, PG_LEVEL_4K);
 
-It's sort of scary given that 'initial_boot_params' is an exported
-global. Maybe that should be hidden away and accessed with a function
-instead so that this mismatch doesn't break something later on?
+I really don't like the idea of piling hacks on top of selftests' misguided
+infrastructure.  Letting tests control virtual addresses is all kinds of stupid.
+Except for ARM's ucall_arch_init(), I don't think there's a single user of
+virt_map() that _needs_ a specific address, e.g. most tests just identity map
+the GPA.
+
+So rather than fudge things by stuffing two mappings, which is wasteful for 99%
+of mappings and will likely be a maintenance nightmare, I think we should go
+straight to getting x86's kernel mappings setup correctly from time zero.
+
+From KUT experience, using USER mappings for kernel accesses is explosions waiting
+to happen due to SMAP and SMEP.  And expecting developers to remember to sprinkle
+KERNEL_ADDR() everywhere is not remotely maintainable.
+
+In other words, give virt_arch_pg_map() (or ideally, the common virt_map()) over
+picking the virtual address, and then plumb in information as to whether the
+allocation is USER vs. SUPERVISOR.
 
