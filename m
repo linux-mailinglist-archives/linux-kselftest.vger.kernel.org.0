@@ -1,111 +1,110 @@
-Return-Path: <linux-kselftest+bounces-3944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98A74845E5B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 18:20:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B52D2845E95
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 18:33:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 316471F276B3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 17:20:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E81F11C2623A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 17:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BA31649D8;
-	Thu,  1 Feb 2024 17:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901B35C026;
+	Thu,  1 Feb 2024 17:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Txv4arnq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nmpgKxQV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D86F1649A7;
-	Thu,  1 Feb 2024 17:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574EE8405C
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 17:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706808028; cv=none; b=si2INydRqWg4fW1NXetxKo/fVBIxxYmgfxj7C5zanuCM+X/m70p3QVM5wUzVO8rZcirSIfipcbzL0inBdStOAAWL02tDtQ0cvZOyPM+zY9EWV5RzovdNNqHeL5p6URR6hf+APFNqkt+3RS7MmYX/je4KLpMFtMfTCbn4W7PBLIg=
+	t=1706808766; cv=none; b=OJ4eVQZY6gD2E2WLB3WisMZ3x+hXxuzWVmm4wEtrR8lNTapgQNBGv+SBtzxvFP9+mu62N/g8jwZAc3GTQ0B1vbN1kkfj5qoWAwhRMdp6/str44iV/0bYJRAo558XjWByMa8VTW8jX1nV2EyrPS41VUbwjaQ/jrV8slmSs0C3N8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706808028; c=relaxed/simple;
-	bh=pxNxp2jInNaPMPU2mt5mwA5Yn1hERV9B5vHmU6y78cw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GNrzR+wjU+cBdIHJY2Tw1g1J/bNx8YRy7myeyWP1+tjs7gQRFQQJixA7OF7vaCRonI4/LuXkC4kgFpEPggCkK1sg3JFwDsWfi6H012Y2uSsJuXOsO4IbbOwpogxVAxxHb/kb6AaOJca+uF9xm7HFlXv8Axve+v7+mn0KH6CMBRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Txv4arnq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01FE3C43394;
-	Thu,  1 Feb 2024 17:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706808028;
-	bh=pxNxp2jInNaPMPU2mt5mwA5Yn1hERV9B5vHmU6y78cw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Txv4arnq5wa9wJ+pWoG2Dr0OS7TPVffhW1PLyUO0eNDFSgmDM14vZCJ2554f1g2lO
-	 iF+o53AhSB3TAkhVeNfffg7T4nRAKxnW8MhjFhs3NqHta2guik0wPr9hCsAJz7uKH2
-	 0VyBOx56/LRJSzNGUMOjw3+Erjx6dVMx4UGpl/hZ1DFjVvf6C0btl1etZUx+DBnSWi
-	 J5ejAcwWADKgVR8kyZ2u8nFuo9A4FkfpPW2D2NG3xRojuET0rAlTfGRnRKaxM7lvpH
-	 jQqPLW7YGWs8lnjyWqV3kqLxJ8chB0RO1nnflm0zZKnDEGJbKVEGelopWBQ75gRBjD
-	 iUDI963VPRrGw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DDEF8D8C978;
-	Thu,  1 Feb 2024 17:20:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1706808766; c=relaxed/simple;
+	bh=MYQeElrn6RP0xY9MrtM5r3jpd3C3Jxbd1CwNKrqS/qk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=UTR3fmUYH7ZJgc8oP0eO7JTX2FHxMZZKfWF25EO9skmHEBfVO353DvDDsnSGpXcid+x6kLeilnK/Wgkat+V8wNuHWuzgM1CPPvOamJpldhw/LCYdybh1W9kPfWoaakIXXdiSND4VrSg3XsEc/Ndq+5BxwiyqArhpyE7tkOIGnZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nmpgKxQV; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5cf962e1fcbso1204204a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Feb 2024 09:32:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706808763; x=1707413563; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UD3/+3gzKT8fI1Ep9NTewT3g/cKMHmpNqtb0XSkLImQ=;
+        b=nmpgKxQVvdoUqnFo/LTKfILhjMKZXfkEYE2niej15duz6hlc9dksQ6dU/l78O7MWNj
+         63KFlkvuf/QY1BNozo/Q6bLZm7rSBekZA4cQ/dTc5Uii51G5A6P00Gg4EGGg4iCPlL1l
+         2Wd1VnUqojZG+2nOF139BEge3bxBFX+hwCDmN/SIdAfKrT3wwcGj3MLznzex4lEmnHcX
+         CNechPbqLcMNO2TNRzILih5BpjrPYSYRcToGMTu5U8TAow1PhAFqOz2uQLzhwIY1G5Wa
+         pHqedtBYyOx22mFc5KOmfvN+inAaUtCfeh02f8n81r+wzif4OfUjcOks2PDtfb7t/MKr
+         NMKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706808763; x=1707413563;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UD3/+3gzKT8fI1Ep9NTewT3g/cKMHmpNqtb0XSkLImQ=;
+        b=Kb4FU5UohtgVNVgF3urZHhZ5VXK1qorDScQdQ6aAyv4dRlj7r/4G+E9UmA3Tezq0yR
+         8K1g7ayonQnFmqW06MtjM//X0T+D3GpVmI4oyYyG++sxofILcWY/UKcD9BNi2nC9Jzlc
+         CqBVqtjsiPE6ebmp9t4+mG+C8SCS0oIPpRxmOlgSJqC0v40cZX3KgnX2H995ZBPDasau
+         prfUzyypOArqESCst+BXAYjFETyRx2g21JnBsTvBJHnLnNgfBQscSOGQ8RjL/cJ+rVh3
+         ddPAVXRHWClWYXwEnSiFDa8gqF0N6woiNMB88Hsi7waLAzdZ5TUPYf8Q8ssTbzkvBPek
+         Lybw==
+X-Gm-Message-State: AOJu0YzcnuHumyHCCFka20MueRro1kDxOWPpUgEsI2DUKEGrZYgbPe4Q
+	pHu6rUGyXcsXpgHtf5ImhC+lfyr7HosQCG+fj8WKw79APS2AFrO9Rht7o5POhk4tpnWo5qiZaPo
+	LrQ==
+X-Google-Smtp-Source: AGHT+IEafkVK8au1j33821EYsvbAmBAx9/jzn80P/T05OUbLplyNFemMOeZYcdkVNujKPjTr+JBvyfZFE5k=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:6641:0:b0:5ce:474:352b with SMTP id
+ z1-20020a656641000000b005ce0474352bmr12944pgv.5.1706808763674; Thu, 01 Feb
+ 2024 09:32:43 -0800 (PST)
+Date: Thu, 1 Feb 2024 09:32:41 -0800
+In-Reply-To: <510f3534-b076-4d23-b4b8-361c1f872d57@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/9] mptcp: fixes for recent issues reported by CI's
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170680802790.24895.13487831241333435786.git-patchwork-notify@kernel.org>
-Date: Thu, 01 Feb 2024 17:20:27 +0000
-References: <20240131-upstream-net-20240131-mptcp-ci-issues-v1-0-4c1c11e571ff@kernel.org>
-In-Reply-To: <20240131-upstream-net-20240131-mptcp-ci-issues-v1-0-4c1c11e571ff@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang.tang@linux.dev,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org, geliang@kernel.org
+Mime-Version: 1.0
+References: <20231117052210.26396-1-shahuang@redhat.com> <ZbQVRX3V1P-ZE2Wf@google.com>
+ <510f3534-b076-4d23-b4b8-361c1f872d57@redhat.com>
+Message-ID: <ZbvVuciX3HENjxQi@google.com>
+Subject: Re: [PATCH v2] KVM: selftests: Fix the dirty_log_test semaphore imbalance
+From: Sean Christopherson <seanjc@google.com>
+To: Shaoqin Huang <shahuang@redhat.com>
+Cc: kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 31 Jan 2024 22:49:45 +0100 you wrote:
-> This series of 9 patches fixes issues mostly identified by CI's not
-> managed by the MPTCP maintainers. Thank you Linero (LKFT) and Netdev
-> maintainers (NIPA) for running our kunit and selftests tests!
+On Thu, Feb 01, 2024, Shaoqin Huang wrote:
+> > >   	/*
+> > >   	 * We reserve page table for 2 times of extra dirty mem which
+> > >   	 * will definitely cover the original (1G+) test range.  Here
+> > > @@ -825,6 +832,13 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> > >   		sync_global_to_guest(vm, iteration);
+> > >   	}
+> > > +	/*
+> > > +	 *
+> > > +	 * Before we set the host_quit, let the vcpu has time to run, to make
+> > > +	 * sure we consume the sem_vcpu_stop and the vcpu consume the
+> > > +	 * sem_vcpu_cont, to keep the semaphore balance.
+> > > +	 */
+> > > +	usleep(p->interval * 1000);
+> > 
+> > Please no.  "Wait for a while" is never a complete solution for fixing races.
+> > In rare cases, adding a delay might be the only sane workaround, but I doubt that's
+> > the case here.
 > 
-> For the first patch, it took a bit of time to identify the root cause.
-> Some MPTCP Join selftest subtests have been "flaky", mostly in slow
-> environments. It appears to be due to the use of a TCP-specific helper
-> on an MPTCP socket. A fix for kernels >= v5.15.
-> 
-> [...]
+> If that's the case. I guess I should keep the current solution. Except you
+> have any better solution, please let me know.
 
-Here is the summary with links:
-  - [net,1/9] mptcp: fix data re-injection from stale subflow
-    https://git.kernel.org/netdev/net/c/b6c620dc43cc
-  - [net,2/9] selftests: mptcp: add missing kconfig for NF Filter
-    https://git.kernel.org/netdev/net/c/3645c844902b
-  - [net,3/9] selftests: mptcp: add missing kconfig for NF Filter in v6
-    https://git.kernel.org/netdev/net/c/8c86fad2cecd
-  - [net,4/9] selftests: mptcp: add missing kconfig for NF Mangle
-    https://git.kernel.org/netdev/net/c/2d41f10fa497
-  - [net,5/9] selftests: mptcp: increase timeout to 30 min
-    https://git.kernel.org/netdev/net/c/4d4dfb2019d7
-  - [net,6/9] selftests: mptcp: decrease BW in simult flows
-    https://git.kernel.org/netdev/net/c/5e2f3c65af47
-  - [net,7/9] selftests: mptcp: allow changing subtests prefix
-    https://git.kernel.org/netdev/net/c/de46d138e773
-  - [net,8/9] selftests: mptcp: join: stop transfer when check is done (part 1)
-    https://git.kernel.org/netdev/net/c/31ee4ad86afd
-  - [net,9/9] selftests: mptcp: join: stop transfer when check is done (part 2)
-    https://git.kernel.org/netdev/net/c/04b57c9e096a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Unfortunately I don't have a better solution, and I don't have cycles to stare
+at this deeply to figure out what how to make the synchronization rock solid.
+Sorry :-/
 
