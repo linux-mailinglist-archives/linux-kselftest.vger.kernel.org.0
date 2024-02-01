@@ -1,167 +1,137 @@
-Return-Path: <linux-kselftest+bounces-3960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9834484648A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 00:37:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F27D1846492
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 00:43:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EF052850AA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 23:37:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30E7E1C22506
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 23:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1284C47F42;
-	Thu,  1 Feb 2024 23:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D9547F4A;
+	Thu,  1 Feb 2024 23:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="jKsS7RJf"
+	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="UuduZe5F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16373CF6B
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 23:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F4740BE9;
+	Thu,  1 Feb 2024 23:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706830638; cv=none; b=OZL6B51JSeVYRfinFAr6ujWm/bgFRDF/dSBmmtFkmyy7w+JgxflFSVcL+O0ITqIK96ocggceI0nKA7jXAGLvlFmlt969zx9PvnVh6oGSghomDZ+NgkpGO/9b22X9IHmw/cY8LiLQ7lMAaluGE6rx23qYuzN08JlGzVV8JCeGobY=
+	t=1706831004; cv=none; b=XSGiGb+8ySPhRp3R3YGLE/N0OmRk31VT6Y9TD+tiG06vOakvrlT0VAp1xJ9a64Jzaf3HLM3oSWQBn0QXFNLginDjQdGyogTyIIr86ncjdEXVtP500lJmMmzJiw4oKu5TSCxaymGa0ZeD/iAbE54GCsrHnIM0vUaNyqdqwfyLln4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706830638; c=relaxed/simple;
-	bh=72DVGZsPCwexZxLU2zcYfw3TYZY+hy7mlHmIPt0qEn4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kGFAPDdY/fDDqv1LazlvwEl2AGld/sOQlo7oI5Ac3SGmP83LbMxBgfBHQ0ZXVj/8pYHFI5t4yaBNRN/+hlf23veHwfopllsRxZfcXjuM76tF0k+75LKSSUNdFCppSaIKAzjQ8jbvSBPiekWD05GvkJjBVvZMAjx96+BgjrmpVVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=jKsS7RJf; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40fc654a718so756835e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Feb 2024 15:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1706830634; x=1707435434; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OzbcPdwB7/6WmKWK5IMLm0VrY4vYJq2nVK95Czw1I8U=;
-        b=jKsS7RJf92MdORx6jkINA0pOuDH96sV9qqJ7+Nl8R0IPCVr1x3wkKq96MEdikuVFZD
-         GWyMYn6mOiv10RGVQKZAzxhz+NuvS6B5AL3orNd+0EcCymq8mI2XXQHjfiYBTe8aLvrt
-         9yOVm3Zubm3VrX1byZ6ACJ9DuOruCWIXAU+MpzabYRasExMAx3OI6Hp3QWmMI5Fexw4P
-         uYKvaR0qG6lN3yBOSmJmlZs/DgCLMB0j2EVvuD32S3FNQkJMMEzTiAYm9Zd2a8eIDcV5
-         tl8s5OxTfXlA5vof/DWoKhdQZ39ncEBVVOqY1lOkBvnogO0eJ+XlrrDoQBEp7vQlorNd
-         y4Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706830634; x=1707435434;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OzbcPdwB7/6WmKWK5IMLm0VrY4vYJq2nVK95Czw1I8U=;
-        b=UGKwpH3w01m2l0umtTlcea7+4jiXrK+Jn7DZAZsN7CHDqHbw6r7b4GSftfaRTjXRDg
-         ftc/HS+rEH/ZhmIk7nXkzNN7LVgq7/yojF4Gs3ldoRgmPFG3qWG1/2L+J6eZzNBLa4FD
-         rnh0RjkZK96fYTcI38GCgSC89BLDaogA79Jd7X/Pkq1Tqe/KIY7G7tZv/2sNIfsSgYor
-         5WIenptJnZGNdF5ujipG8/dyw8hNszOVMjdORDrojN11R2VaMo40OJbvdzAeepfghLSK
-         ens75uE7Q2OiJdyFxCjsN8Xk1KEsdlCPonYOFC/0aj0iY/14f02x5TrT/2Lsw/KP+dCF
-         38iw==
-X-Gm-Message-State: AOJu0Yx4hwwznq9abhCc1FiTe/QBZFTGPQ5HkKywEGO0HA5moD3fOSm+
-	gK3ZgIiQp6+39bnqY798u3E8tyLKPUk5Ojx3E72xsZwaEXO4mDiN3weenDgwiQ==
-X-Google-Smtp-Source: AGHT+IEBgyqNdcx7X4WjzGqORG4raBezxBSjVm4nh7egvHo46furQbZLnJchD5Nv8rGb+PkiF1vPTw==
-X-Received: by 2002:a05:600c:4fd2:b0:40e:f693:94dc with SMTP id o18-20020a05600c4fd200b0040ef69394dcmr303299wmq.11.1706830634198;
-        Thu, 01 Feb 2024 15:37:14 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCX/4prkdBFWttbX70piivEYb9na7iVpUkyQ7exA66ZROlVNizRygGmPAtt9loGk78LM7B+Lc3o1RT3X2apq8dM7qXD5jeF+uT3P26Fyoh3R1ZGktqNeg6Pjq9XUb8lNftXiHxKypR70EspiKY1GIefZqFeCNYmLBsl+hxUUuqWOKmrpJPcK7LA256N8xgYaIEZqhzgVzEv0sUrDWPnI9JS54xtakziQM98TzdQmTT0+G0fzQ9BCsf4hxQAOXxA9O9G+y3RFBbxFtUkVYiA+m6MhAIUSLWFHUEPNfG33kV5dczA4sfx1t3qY4WxOVhYISufKmo1UgvP6jnubOwGsKuCEPzZO5ZY/ybO3qgIv
-Received: from [10.83.37.178] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05600c19d000b0040fc4fa15f4sm631571wmq.36.2024.02.01.15.37.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 15:37:13 -0800 (PST)
-Message-ID: <a1ac7a6e-4447-4476-8fb7-fb5f0d7ec979@arista.com>
-Date: Thu, 1 Feb 2024 23:37:06 +0000
+	s=arc-20240116; t=1706831004; c=relaxed/simple;
+	bh=E/EuFP/XXcsHH/ajGIWHXjQc4oFNk7hnv3UOw4l6RiM=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=TTz3KhCj1endBdzpmkH0IzbSBADmqpFZAMXTflZtvEmLKsI9/DQLDAChBmuSxajIGjI18T+T2KTpduI98RZlTFNSeXN9ScrCG95GAx731/tg1xfG0a0xyUdKO0J6KysGRZejpL44EPQOT9GP3se3hlnKCjoWWoqevllXytWxHhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=UuduZe5F; arc=none smtp.client-ip=199.185.137.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=E/EuFP/XXc
+	sHH/ajGIWHXjQc4oFNk7hnv3UOw4l6RiM=; h=date:references:in-reply-to:
+	subject:cc:to:from; d=openbsd.org; b=UuduZe5F+g7Sb4UNMNnMGju7lX3vLVV9T
+	SdhKcs9Z/5wsx6/8QjyATQ+zVRTEVWJdStFfTfsrBtP22IuF2hsOYAkbttWo1zYJaeNa1H
+	D6naShPls+8kar87xWt9d2fOkPnqBF9AQAfKZKSKOhcIkilznr1jlnH+w7fzS+LIl8dttt
+	ICJwHJZKyMe1dWiKrFy9s+/IUyd3XP9rmMF8omt2kROOv8mAhY0AF0p+Qk7RPRU0g5NO2n
+	ts2xcmrrw7aFcNqsRZqx/onC9hdZPIjly+rXOfiy2Tih5vNNAS5kJzBJMGFXUNwcM51f4O
+	rg13pwCVW7Q5S/Y4H7M5PTgjN7Cxw==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+	by cvs.openbsd.org (OpenSMTPD) with ESMTP id fb45d291;
+	Thu, 1 Feb 2024 16:43:17 -0700 (MST)
+From: "Theo de Raadt" <deraadt@openbsd.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+cc: Jeff Xu <jeffxu@chromium.org>,
+    "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+    Jonathan Corbet <corbet@lwn.net>, akpm@linux-foundation.org,
+    keescook@chromium.org, jannh@google.com, sroettger@google.com,
+    willy@infradead.org, gregkh@linuxfoundation.org,
+    usama.anjum@collabora.com, rdunlap@infradead.org, jeffxu@google.com,
+    jorgelo@chromium.org, groeck@chromium.org,
+    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+    linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
+    linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v8 0/4] Introduce mseal
+In-reply-to: <CAHk-=wjqozic6JuRimXD=RamnJmD6FoaQki7RtNYrezzx_OfOg@mail.gmail.com>
+References: <20240131175027.3287009-1-jeffxu@chromium.org> <20240131193411.opisg5yoyxkwoyil@revolver> <CABi2SkXOX4SRMs0y8FYccoj+XrEiPCJk2seqT+sgO7Na7NWwLg@mail.gmail.com> <20240201204512.ht3e33yj77kkxi4q@revolver> <CABi2SkWB2eV24LBJtgJ73zEwaAWuFhAwrfqx3Rs=tqnpcJ0qRw@mail.gmail.com> <58408.1706828083@cvs.openbsd.org> <CAHk-=wjqozic6JuRimXD=RamnJmD6FoaQki7RtNYrezzx_OfOg@mail.gmail.com>
+Comments: In-reply-to Linus Torvalds <torvalds@linux-foundation.org>
+   message dated "Thu, 01 Feb 2024 15:15:27 -0800."
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] selftests/net: A couple of typos fixes in
- key-management/rst tests
-Content-Language: en-US
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>,
- Mohammad Nassiri <mnassiri@ciena.com>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240130-tcp-ao-test-key-mgmt-v2-0-d190430a6c60@arista.com>
- <20240131163630.31309ee0@kernel.org>
- <e88d5133-94a9-42e7-af7f-3086a6a3da7c@arista.com>
- <20240201132153.4d68f45e@kernel.org>
- <44d893b4-10b0-4876-bbf7-f6a81940b300@arista.com>
-From: Dmitry Safonov <dima@arista.com>
-In-Reply-To: <44d893b4-10b0-4876-bbf7-f6a81940b300@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <25907.1706830997.1@cvs.openbsd.org>
+Date: Thu, 01 Feb 2024 16:43:17 -0700
+Message-ID: <99920.1706830997@cvs.openbsd.org>
 
-On 2/1/24 22:25, Dmitry Safonov wrote:
-> Hi Jakub,
-> 
-> On 2/1/24 21:21, Jakub Kicinski wrote:
->> On Thu, 1 Feb 2024 00:50:46 +0000 Dmitry Safonov wrote:
->>> Please, let me know if there will be other issues with tcp-ao tests :)
->>>
->>> Going to work on tracepoints and some other TCP-AO stuff for net-next.
->>
->> Since you're being nice and helpful I figured I'll try testing TCP-AO
->> with debug options enabled :) (kernel/configs/debug.config and
->> kernel/configs/x86_debug.config included),
-> 
-> Haha :)
-> 
->> that slows things down 
->> and causes a bit of flakiness in unsigned-md5-* tests:
->>
->> https://netdev.bots.linux.dev/flakes.html?br-cnt=75&tn-needle=tcp-ao
->>
->> This has links to outputs:
->> https://netdev.bots.linux.dev/contest.html?executor=vmksft-tcp-ao-dbg&pass=0
->>
->> If it's a timing thing - FWIW we started exporting
->> KSFT_MACHINE_SLOW=yes on the slow runners.
-> 
-> I think, I know what happens here:
-> 
-> # ok 8 AO server (AO_REQUIRED): AO client: counter TCPAOGood increased 4
-> => 6
-> # ok 9 AO server (AO_REQUIRED): unsigned client
-> # ok 10 AO server (AO_REQUIRED): unsigned client: counter TCPAORequired
-> increased 1 => 2
-> # not ok 11 AO server (AO_REQUIRED): unsigned client: Counter
-> netns_ao_good was not expected to increase 7 => 8
-> 
-> for each of tests the server listens at a new port, but re-uses the same
-> namespaces+veth. If the node/machine is quite slow, I guess a segment
-> might have been retransmitted and the test that initiated it had already
-> finished.
-> And as result, the per-namespace counters are incremented, which makes
-> the test fail (IOW, the test expects all segments in ns being dropped).
-> 
-> So, I should do one of the options:
-> 
-> 1. relax per-namespace checks (the per-socket and per-key counters are
->    checked)
-> 2. unshare(net) + veth setup for each test
-> 3. split the selftest on smaller ones (as they create new net-ns in
->    initialization)
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Actually, I think there may be an easier fix:
-
-4. Make sure that client close()s TCP-AO first, making it twsk.
-   And also make sure that net-ns counters read post server's close().
-
-Will do this, let's see if this fixes the flakiness on the netdev bot :)
-
-> I'd probably prefer (2), albeit it slows down that slow machine even
-> more, but I don't think creating 2 net-ns + veth pair per each test
-> would add a lot more overhead even on some rpi board. But let's see,
-> maybe I'll just go with (1) as that's really easy.
+> So yes, to my mind
 > 
-> I'll cook a patch this week.
+>     mprotect(addr, len, PROT_READ);
+>     mseal(addr, len, 0);
+> 
+> should basically give identical results to
+> 
+>     mprotect(addr, len, PROT_READ | PROT_SEAL);
+> 
+> and using PROT_SEAL at mmap() time is similarly the same obvious
+> notion of "map this, and then seal that mapping".
 
-Thanks,
-            Dmitry
+I think that isn't easy to do.  Let's expand it to show error checking.
+
+    if (mprotect(addr, len, PROT_READ) == -1)
+       react to the errno value
+    if (mseal(addr, len, 0) == -1)
+       react to the errno value
+
+and
+
+    if (mprotect(addr, len, PROT_READ | PROT_SEAL) == -1)
+       react to the errno value
+
+For current mprotect(), the errno values are mostly related to range
+issues with the parameters.
+
+After sealing a region, mprotect() also has the new errno EPERM.
+
+But what is the return value supposed to be from "PROT_READ | PROT_SEAL"
+over various sub-region types?
+
+Say I have a region 3 pages long.  One page is unmapped, one page is
+regular, and one page is sealed.  Re-arrange those 3 pages in all 6
+permutations.  Try them all.
+
+Does the returned errno change, based upon the order?
+Does it do part of the operation, or all of the operation?
+
+If the sealed page is first, the regular page is second, and the unmapped
+page is 3rd, does it return an error or return 0?  Does it change the
+permission on the 3rd page?  If it returns an error, has it changed any
+permissions?
+
+I don't think the diff follows the principle of
+
+if an error is returned --> we know nothing was changed.
+if success is returned --> we know all the requests were satisfied
+
+> The reason for having "mseal()" as a separate call at all from the
+> PROT_SEAL bit is that it does allow possible future expansion (while
+> PROT_SEAL is just a single bit, and it won't change semantics) but
+> also so that you can do whatever prep-work in stages if you want to,
+> and then just go "now we seal it all".
+
+
+
+
+How about you add basic mseal() that is maximum compatible with mimmutable(),
+and then we can all talk about whether PROT_SEAL makes sense once there
+are applications that demand it, and can prove they need it?
 
 
