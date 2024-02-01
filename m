@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-3932-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 090C7845785
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 13:25:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C7C28457D3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 13:32:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E1AA1C21DE6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 12:25:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F101EB2B41D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 12:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9070163AA6;
-	Thu,  1 Feb 2024 12:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB4DA15F311;
+	Thu,  1 Feb 2024 12:26:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="R/kJqq2e"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YBchkCDA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BCE163A8A;
-	Thu,  1 Feb 2024 12:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D904D779F0;
+	Thu,  1 Feb 2024 12:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706790239; cv=none; b=A7VW8lfXFGccdFvwJAtpZFM3lgRZeAaoTOPCpT0vFs8YZ2ndX0QlCvHIcZn7O+l82OtoQz+TV/zRhhAe7Z8uG0BlMn4erswNhHATsQ1w12oU13gyjWP0Sn59kL067MNPvJ0tmS+lhQYAsNYrxxSpnZYfdyq57EG709BdSQN06BU=
+	t=1706790380; cv=none; b=l0G8yWSqMYmxYAtP/ijVWu47y6cfudRKWfql3jJRRD1/yBUgqMMMOZrQyvJxF/SQLKvcG2D5urfu31qR3pW9ROU8UZz8d2+x49PIEqrVex4LsAh/fUBJfGQX7LW5gjLDU7U5Q8/8JKdCY1UkQ0qXjMbdozNWV9VYedKu5IlRtlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706790239; c=relaxed/simple;
-	bh=j8QKIz2LyfqG7kXLMqtzk7hMvrhGXzbOQETFhOd/EaI=;
+	s=arc-20240116; t=1706790380; c=relaxed/simple;
+	bh=xg5m8felV7XMNg/ecDkG5YxQXJFG4fqtcpiToAp0aE4=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=SmIbnBRD8ONNMAyM+UAW+iFlDPpHFZoP9lPSJT4pitfAvwTuegkuJATw5PgLXv3weDPjLNW/V3DBAT93Ez2z3HibvHRzCQPUWx/+AGBa4XbrM94BUuUNqbaJzgbUzCAiczdZi2PCqr3VicRD8+lZBNCO9Bk9cjuueNNFCKscR4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=R/kJqq2e; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=f72vUHO00Z9kfS3e3t/dtedosDRbPBdgCjTWvDJg+N2/6CoDEg3wHqcdbwZxujs2R1Jw4CFplA9Y6nmreiYcHMZ792ZdFafRMKkPjA0Gw/u+XHz6zaTktroyhf/xG8+mZAVg7XHITR/WUqAiJK4lSd5vLBf/p/NpHey8juCNIyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=YBchkCDA; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706790236;
-	bh=j8QKIz2LyfqG7kXLMqtzk7hMvrhGXzbOQETFhOd/EaI=;
+	s=mail; t=1706790376;
+	bh=xg5m8felV7XMNg/ecDkG5YxQXJFG4fqtcpiToAp0aE4=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=R/kJqq2eBKZjoZTcmiUwCtX+KsvoexBVNOsYpPxG/pVOWmPoFjYSMFTbSMsA1VRkM
-	 NcMWRdJkLZ12znvltyCDAc31jvuLlhmsQdJqCf1dpnWuEb2zUwL6/2JBsnB3mDu2V/
-	 bl1h9D+qNgcsdCQw4VGuUBZrwRhrKLPMhEVaJPXrubmM4XLbb6EQ8MhDiFQj69xeYZ
-	 WgYmEFXizgICcDWZ6a52qZ+MIkfBwy1mPOxaeUSZpgP9bWQFKEwhf8+iG4zR9kc06r
-	 +yRktM00Jeb2vplDjr1uJOAHPZu9HnQlhBGiJfRU6PAzTddQrhk5/ZNJ0NUDPZbiYI
-	 cJX7qaiINLpLA==
+	b=YBchkCDA2ADPFyOfIaAPy6VfbCxUA4woSvmMFqErTo/eGM/o30X1zghyQjFY0MyhC
+	 +N/s5HqRyxsxFa9WaUiFkMM0Cpq+4q/cJ42osL+jI3wYtAbDqZP3O4f8iaETpuvJcF
+	 7FgHlcoLM9zjnDrHj9HvP5WGkstsqsaRiTSCltqLKdMNuKXcfFseCdNd4w++c+YoHD
+	 cKPj6DLJSkAajiW7Q91EGgq5GX2xNLgjTkQvn46sdcYgHnk6MbSX9RV/Wq9tyczwK8
+	 o++yH6dXavwI/AGaM+llvlTbNveYyvTaCdvZIHaXY51EfrF3Scr1vzj0mJ55RSbUzz
+	 iiEPRBWeMU0jw==
 Received: from [100.66.47.90] (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BF129378047F;
-	Thu,  1 Feb 2024 12:23:53 +0000 (UTC)
-Message-ID: <8a340f1a-20b5-4792-9bca-b9ed2d95d384@collabora.com>
-Date: Thu, 1 Feb 2024 17:24:09 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 159F5378047F;
+	Thu,  1 Feb 2024 12:26:13 +0000 (UTC)
+Message-ID: <cbf00ee3-bb41-47b3-af03-8f26e313d0d5@collabora.com>
+Date: Thu, 1 Feb 2024 17:26:29 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,136 +60,109 @@ User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
  linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] selftests/mm: run_vmtests: remove sudo and conform
- to tap
+Subject: Re: [PATCH v3 5/5] selftests/mm: run_vmtests.sh: add missing tests
 Content-Language: en-US
 To: Ryan Roberts <ryan.roberts@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
 References: <20240125154608.720072-1-usama.anjum@collabora.com>
- <20240125154608.720072-3-usama.anjum@collabora.com>
- <f833c7f9-f59a-49d5-9fce-dc531c11509e@arm.com>
+ <20240125154608.720072-6-usama.anjum@collabora.com>
+ <ab7523db-f032-4f99-8090-785f126a3ae2@arm.com>
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <f833c7f9-f59a-49d5-9fce-dc531c11509e@arm.com>
+In-Reply-To: <ab7523db-f032-4f99-8090-785f126a3ae2@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2/1/24 5:04 PM, Ryan Roberts wrote:
+On 2/1/24 5:11 PM, Ryan Roberts wrote:
 > On 25/01/2024 15:46, Muhammad Usama Anjum wrote:
->> Remove sudo as some test running environments may not have sudo
->> available. Instead skip the test if root privileges aren't available in
->> the test.
+>> Add missing tests to run_vmtests.sh. The mm kselftests are run through
+>> run_vmtests.sh. If a test isn't present in this script, it'll not run
+>> with run_tests or `make -C tools/testing/selftests/mm run_tests`.
 >>
+>> Cc: Ryan Roberts <ryan.roberts@arm.com>
 >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 >> ---
 >> Changes since v1:
->> - Added this patch in v2
+>> - Copy the original scripts and their dependence script to install directory as well
 >>
->> We are allocating 2*RLIMIT_MEMLOCK.rlim_max memory and mmap() isn't
->> failing. This seems like true bug in the kernel. Even the root user
->> shouldn't be able to allocate more memory than allowed MEMLOCKed memory.
->> Any ideas?
+>> Changes since v2:
+>> - Add a comment
+>> - Move tests down in the file
+>> - Add "-d" option which poisons the pages and aren't being useable after
+>>   the test
 >> ---
->>  tools/testing/selftests/mm/on-fault-limit.c | 36 ++++++++++-----------
->>  tools/testing/selftests/mm/run_vmtests.sh   |  2 +-
->>  2 files changed, 18 insertions(+), 20 deletions(-)
+>>  tools/testing/selftests/mm/Makefile       | 5 +++++
+>>  tools/testing/selftests/mm/run_vmtests.sh | 8 ++++++++
+>>  2 files changed, 13 insertions(+)
 >>
->> diff --git a/tools/testing/selftests/mm/on-fault-limit.c b/tools/testing/selftests/mm/on-fault-limit.c
->> index b5888d613f34e..0ea98ffab3589 100644
->> --- a/tools/testing/selftests/mm/on-fault-limit.c
->> +++ b/tools/testing/selftests/mm/on-fault-limit.c
->> @@ -5,40 +5,38 @@
->>  #include <string.h>
->>  #include <sys/time.h>
->>  #include <sys/resource.h>
->> +#include "../kselftest.h"
->>  
->> -static int test_limit(void)
->> +static void test_limit(void)
->>  {
->> -	int ret = 1;
->>  	struct rlimit lims;
->>  	void *map;
->>  
->> -	if (getrlimit(RLIMIT_MEMLOCK, &lims)) {
->> -		perror("getrlimit");
->> -		return ret;
->> -	}
->> +	if (getrlimit(RLIMIT_MEMLOCK, &lims))
->> +		ksft_exit_fail_msg("getrlimit: %s\n", strerror(errno));
->>  
->> -	if (mlockall(MCL_ONFAULT | MCL_FUTURE)) {
->> -		perror("mlockall");
->> -		return ret;
->> -	}
->> +	if (mlockall(MCL_ONFAULT | MCL_FUTURE))
->> +		ksft_exit_fail_msg("mlockall: %s\n", strerror(errno));
->>  
->>  	map = mmap(NULL, 2 * lims.rlim_max, PROT_READ | PROT_WRITE,
->>  		   MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
+>> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+>> index 2453add65d12f..f3aec7be80730 100644
+>> --- a/tools/testing/selftests/mm/Makefile
+>> +++ b/tools/testing/selftests/mm/Makefile
+>> @@ -114,6 +114,11 @@ TEST_PROGS := run_vmtests.sh
+>>  TEST_FILES := test_vmalloc.sh
+>>  TEST_FILES += test_hmm.sh
+>>  TEST_FILES += va_high_addr_switch.sh
+>> +TEST_FILES += charge_reserved_hugetlb.sh
+>> +TEST_FILES += hugetlb_reparenting_test.sh
 >> +
->> +	ksft_test_result(map == MAP_FAILED, "Failed mmap\n");
->> +
->>  	if (map != MAP_FAILED)
->> -		printf("mmap should have failed, but didn't\n");
->> -	else {
->> -		ret = 0;
->>  		munmap(map, 2 * lims.rlim_max);
->> -	}
->> -
->>  	munlockall();
->> -	return ret;
->>  }
+>> +# required by charge_reserved_hugetlb.sh
+>> +TEST_FILES += write_hugetlb_memory.sh
 >>  
->>  int main(int argc, char **argv)
->>  {
->> -	int ret = 0;
->> +	ksft_print_header();
->> +	ksft_set_plan(1);
->> +
->> +	if (getuid())
->> +		ksft_test_result_skip("Require root privileges to run\n");
-I'd sent a patch to fix this behavior today. This test should run without
-root privileges.
-https://lore.kernel.org/all/20240201071307.592317-1-usama.anjum@collabora.com
-
->> +	else
->> +		test_limit();
+>>  include ../lib.mk
 >>  
->> -	ret += test_limit();
->> -	return ret;
->> +	ksft_finished();
->>  }
 >> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->> index 246d53a5d7f28..e373d592dbf5c 100755
+>> index e373d592dbf5c..a0f37e4438937 100755
 >> --- a/tools/testing/selftests/mm/run_vmtests.sh
 >> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->> @@ -291,7 +291,7 @@ echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+>> @@ -19,6 +19,7 @@ usage: ${BASH_SOURCE[0]:-$0} [ options ]
+>>    -t: specify specific categories to tests to run
+>>    -h: display this message
+>>    -n: disable TAP output
+>> +  -d: run destructive tests
+> 
+> You probably want to clarify the behaviour for -a (all). I guess providing -a
+> should NOT run destructive tests unless -d is also explicitly provided.
+> 
 >>  
->>  CATEGORY="compaction" run_test ./compaction_test
+>>  The default behavior is to run required tests only.  If -a is specified,
+>>  will run all tests.
+>> @@ -79,6 +80,7 @@ EOF
+>>  }
 >>  
->> -CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
->> +CATEGORY="mlock" run_test ./on-fault-limit
+>>  RUN_ALL=false
+>> +RUN_DESTRUCTIVE_TEST=false
 > 
-> I think changing this is going to give unintended results. run_vmtests.sh must
-> already be running as root. "sudo -u nobody" is deprivieging the test to run as
-> nobody. The rlimit is not enforced for root so this test must run unprivileged
-> to work. See man page for getrlimit():
+> Either call this RUN_DESTRUCTIVE (my preference) or at least make it plural
+> (RUN_DESTRUCTIVE_TESTS).
 > 
->   Since Linux 2.6.9, no limits are placed on the amount of memory that a
->   privileged process may lock, and this limit instead governs the amount of
->   memory that an unprivileged process may lock
+>>  TAP_PREFIX="# "
+>>  
+>>  while getopts "aht:n" OPT; do
+>> @@ -87,6 +89,7 @@ while getopts "aht:n" OPT; do
+>>  		"h") usage ;;
+>>  		"t") VM_SELFTEST_ITEMS=${OPTARG} ;;
+>>  		"n") TAP_PREFIX= ;;
+>> +		"a") RUN_DESTRUCTIVE_TEST=true ;;
 > 
-> So I think the correct fix is actually to install sudo on your CI.
-run_vmtests.sh is invoked without sudo with following:
-make -C tools/testing/selftests/mm run_tests
+> The help you added says the option is -d, but this is looking for -a, and
+> conflicting with the existing -a=all option.
+Sorry, that's a typo. I'll resolve your above comments with fix patch as well.
 
-Installing sudo in rootfs wouldn't be trivial enough on the CI side.
-Alternatively, we can check if sudo is present before executing this test
-to avoid error that sudo isn't found.
-
 > 
+>>  	esac
+>>  done
+>>  shift $((OPTIND -1))
+>> @@ -304,6 +307,11 @@ CATEGORY="process_mrelease" run_test ./mrelease_test
+>>  CATEGORY="mremap" run_test ./mremap_test
 >>  
->>  CATEGORY="mmap" run_test ./map_populate
+>>  CATEGORY="hugetlb" run_test ./thuge-gen
+>> +CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
+>> +CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
+>> +if $RUN_DESTRUCTIVE_TEST; then
+>> +CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
+>> +fi
+>>  
+>>  if [ $VADDR64 -ne 0 ]; then
 >>  
 > 
 > 
