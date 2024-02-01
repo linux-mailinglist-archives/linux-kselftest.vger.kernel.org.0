@@ -1,160 +1,158 @@
-Return-Path: <linux-kselftest+bounces-3954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0712F846360
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 23:25:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87CF584636B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 23:26:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2E711C20B3E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 22:25:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2818B24DB1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 22:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34083FE3D;
-	Thu,  1 Feb 2024 22:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20ADB405DE;
+	Thu,  1 Feb 2024 22:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="mQtvNz/2"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="jIWCv5KV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CFC40BE2;
-	Thu,  1 Feb 2024 22:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD2C3FE4C
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 22:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706826283; cv=none; b=n4rDELgtjXQkrXrtiQXOxssTgT2ZZDCIVnUczZWB2dYJlAcVFngxv3U3yHkXDOSY4aTi1l71KVXBQbot9Cq+JzvI1nUBokhsrD49nh74HgVoOv4m5oYcHxQAOUb1Xrw5EKzNvF4x5RsT6wmM2IJSnSJmxNYcDtYJdr94miVcLRo=
+	t=1706826356; cv=none; b=g2sDgsg6k+3QYEVurPztEl6p9K30LBArXxTMJ6MJdtttSTrdk7ddEm8r0hgbKb/stwu8/4gbevaEiSVd3LcAuR55PRL74nDHLGV4zyCpG7rHXRr6xxlR6L9aV+kh9i7owETJtKN4U35JGIyryNUdfQtQq7S+pyVwKjtdpLzY7S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706826283; c=relaxed/simple;
-	bh=V+pgcDkLptPWj1ZsXMjO/YpMP2pXDVV5rTLspffLxF0=;
-	h=From:To:Subject:In-reply-to:References:MIME-Version:Content-Type:
-	 Date:Message-ID; b=BBqLUnv2qEk+lxcqSYUo7A0QkvdUipaldpE6XHlFCAFDHA1r4hAfufZ9XGfhCBj1PM1uIBN9MYL/T+F5vlqx/N1r9kZ80PSRE6ezkC4oBEeQpJw6rC/7jUP3Rtnu3YNZl0avB06G8sCLiAmEn0FSlcyiPdJcG2JGRUJnffAEspM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=mQtvNz/2; arc=none smtp.client-ip=199.185.137.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=V+pgcDkLpt
-	PWj1ZsXMjO/YpMP2pXDVV5rTLspffLxF0=; h=date:references:in-reply-to:
-	subject:to:from; d=openbsd.org; b=mQtvNz/2l4bObNXPQCEXRYkfvH+3kuXrFbmQ
-	5ccm3cu6lDooMGrgLBn1n2RoQ/QYXvQOUNcLRqrZ1kWyTib3gOGK7YIOBFvIxj+aEJ2Can
-	NzFcAvwgTKE5s2p15GrjKIZSJ5E83Qw4JU2rm21yzOxjmlYmkAW7Vw82dIzpUc8IJ2Mn+N
-	zNbdkKOgBXPLJirZSmKXDwXvoKqt5rpDUHQQ7Q9PX8zVxzrTKL1QzXP4xl2DC0D5KuGUke
-	IwafprPJe305G7qvBX7SCXPSP2/jXehf8l2taZ6+A2C7tIOAj8YjRxhVXYXwUELwobIUL6
-	AbgXvaGSEL3HyNiF7p9jTivZtg==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 90ae0d7d;
-	Thu, 1 Feb 2024 15:24:40 -0700 (MST)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-    Jeff Xu <jeffxu@chromium.org>, Jonathan Corbet <corbet@lwn.net>,
-    akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
-    sroettger@google.com, willy@infradead.org,
-    gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
-    usama.anjum@collabora.com, rdunlap@infradead.org, jeffxu@google.com,
-    jorgelo@chromium.org, groeck@chromium.org,
-    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-    linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
-    linux-hardening@vger.kernel.org
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-                  Jeff Xu <jeffxu@chromium.org>,
-                  Jonathan Corbet <corbet@lwn.net>,
-                  akpm@linux-foundation.org, keescook@chromium.org,
-                  jannh@google.com, sroettger@google.com,
-                  willy@infradead.org, gregkh@linuxfoundation.org,
-                  torvalds@linux-foundation.org,
-                  usama.anjum@collabora.com, rdunlap@infradead.org,
-                  jeffxu@google.com, jorgelo@chromium.org,
-                  groeck@chromium.org, linux-kernel@vger.kernel.org,
-                  linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-                  pedro.falcato@gmail.com, dave.hansen@intel.com,
-                  linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v8 0/4] Introduce mseal
-In-reply-to: <20240201204512.ht3e33yj77kkxi4q@revolver>
-References: <20240131175027.3287009-1-jeffxu@chromium.org> <20240131193411.opisg5yoyxkwoyil@revolver> <CABi2SkXOX4SRMs0y8FYccoj+XrEiPCJk2seqT+sgO7Na7NWwLg@mail.gmail.com> <20240201204512.ht3e33yj77kkxi4q@revolver>
-Comments: In-reply-to "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-   message dated "Thu, 01 Feb 2024 15:45:12 -0500."
+	s=arc-20240116; t=1706826356; c=relaxed/simple;
+	bh=eWqkLADtb5bW5/KCLBfbk+adOyumfQDzQziJ/NBFwoc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lpqEr1d/iULRCdVYLpkuIPZiFWVsLqt1o8LxMpNMlhqDUwySbz2VtLhLUIYyxaJyhslyj6u91zv2H181VJ1lsYIawU1Na451g2Uv0xyQGMZzhhmRUu6i76SWcQZjWkoHR/Cs3pfnsLBFgBwptnMQH4+4oBBJC6ovSeHTyPpAwaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=jIWCv5KV; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e80046264so12685365e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Feb 2024 14:25:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1706826352; x=1707431152; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c5OGPe8fMGrZiGY/WsI9iHz2kC7stVcrU+hI6G07cdc=;
+        b=jIWCv5KVbes7Dkqg2yfTU5zPEMLJFEt6cIm1V1hUmd+WiFk9qefcSRlucE6mYuQErA
+         aq8XZCFz7mxeowi4v+YkYMy6g6chCjQZKG8nTkC/1t3NXhBNcYgvYUrclkGF0gbOGn8W
+         HWsQXnIe814CRxw0d8FY9ZLgvQJvQTx5u8tZIVKqg7/Q531Ijpsscy/Ib05lrknm1/n0
+         ZmfGAPflejNTBcvOyx5MtiBPknrYJpZew4HnMmvWoetTVRwbLDbdtklVRzPUMFCuErSl
+         KYn8JKyebl6zCLIJ5mOh+lE059JBV378ItOAnPXgGrXdPq0E30x6rzUkoFmBQdiNtyT9
+         Wckw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706826352; x=1707431152;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c5OGPe8fMGrZiGY/WsI9iHz2kC7stVcrU+hI6G07cdc=;
+        b=U3WApiOxjjgCNvO/Xv8m+v6AYRDGvrb1pWPanhXV2mcQFvlvDlVRA9MmrFeVeYBg2Y
+         DMi7b4pGg/zUm/EKWpBiPfNwopgzfs08AKGNOuWmpj531fEAPhOSXtouGMTcwfpOh7gM
+         flOaIOffOFCZlIAXHXRxMp6zfRjhOFlJg9/lWFwvlyyns7cH479H3bR5qOaj1Ul77fWt
+         TCoMw7uycGHhqp9/v353Y63zRQJ0ybLK0XjGmLgPuZtQHGuCz3sh+y2zXFnb8ou5i28m
+         eya0g37NICruQ9DSSlWQwYoilIntrOzW2/Z1rx3lVbbt1RlE9C8Ej1x8CTsT/TTRKRlc
+         0Csg==
+X-Gm-Message-State: AOJu0YyXbGdphTo5aUB4xcKgbVxhPp2uP4CnGsUDx0iRYBgp403S8CJ8
+	N5CBHsEy6NtTpb3puw0UIIGF1mdx9Exd1nqjiywN5bl54uhXYkAiXzLgXLRBHw==
+X-Google-Smtp-Source: AGHT+IGJlPHNdMAOXCykf/zcT0/0eH3nUS8ULVNPQ62sdg19QXz87bDGpHBBcSQ+FuJR7MoGSHoVtw==
+X-Received: by 2002:a05:600c:5013:b0:40e:ce9e:b543 with SMTP id n19-20020a05600c501300b0040ece9eb543mr248751wmr.41.1706826352441;
+        Thu, 01 Feb 2024 14:25:52 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXy2nimmidc/lYZx7u9YKm1nj46/fBI4e61H7l2395qPbs3tuoy2lL4ELsBGA4/o4wY7trYHkfLvvpzO/mAiDj1NDSpihDrusdKXVV5fV16aDBOydVQRlnaBlMpKQZLM8zIH39YheO/P7iCPw2HMZ+BKgWTfsOwUqOxXP1CyySXj8MyOyQsQBOhtOWt4FdtE5U5z7sS5n6bVYfXDZeMC/KoLQz4QtXSOdwk7zr/9GGNrPNAG1jNAyxcil/94qZgD3sJG7R52n7cauQuq10ac6qnLeEaOGcnMTpZWCh0/VKlLeU2wEzORYSlIsVnxqEtlgQfJ3P+Z3sR7N12v6/R1Mf/o7tYh6ZuK9WYz74/
+Received: from [10.83.37.178] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id p18-20020a5d4e12000000b0033afcb5b5d2sm456479wrt.80.2024.02.01.14.25.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Feb 2024 14:25:51 -0800 (PST)
+Message-ID: <44d893b4-10b0-4876-bbf7-f6a81940b300@arista.com>
+Date: Thu, 1 Feb 2024 22:25:45 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <85538.1706826280.1@cvs.openbsd.org>
-Date: Thu, 01 Feb 2024 15:24:40 -0700
-Message-ID: <60731.1706826280@cvs.openbsd.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] selftests/net: A couple of typos fixes in
+ key-management/rst tests
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>,
+ Mohammad Nassiri <mnassiri@ciena.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240130-tcp-ao-test-key-mgmt-v2-0-d190430a6c60@arista.com>
+ <20240131163630.31309ee0@kernel.org>
+ <e88d5133-94a9-42e7-af7f-3086a6a3da7c@arista.com>
+ <20240201132153.4d68f45e@kernel.org>
+From: Dmitry Safonov <dima@arista.com>
+In-Reply-To: <20240201132153.4d68f45e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-There is another problem with adding PROT_SEAL to the mprotect()
-call.
+Hi Jakub,
 
-What are the precise semantics?
+On 2/1/24 21:21, Jakub Kicinski wrote:
+> On Thu, 1 Feb 2024 00:50:46 +0000 Dmitry Safonov wrote:
+>> Please, let me know if there will be other issues with tcp-ao tests :)
+>>
+>> Going to work on tracepoints and some other TCP-AO stuff for net-next.
+> 
+> Since you're being nice and helpful I figured I'll try testing TCP-AO
+> with debug options enabled :) (kernel/configs/debug.config and
+> kernel/configs/x86_debug.config included),
 
-If one reviews how mprotect() behaves, it is quickly clear that
-it is very sloppy specification.  We spent quite a bit of effort
-making our manual page as clear as possible to the most it gaurantees,
-in the standard, and in all the various Unix:
+Haha :)
 
-     Not all implementations will guarantee protection on a page basis; the
-     granularity of protection changes may be as large as an entire region.
-     Nor will all implementations guarantee to give exactly the requested
-     permissions; more permissions may be granted than requested by prot.
-     However, if PROT_WRITE was not specified then the page will not be
-     writable.
+> that slows things down 
+> and causes a bit of flakiness in unsigned-md5-* tests:
+> 
+> https://netdev.bots.linux.dev/flakes.html?br-cnt=75&tn-needle=tcp-ao
+> 
+> This has links to outputs:
+> https://netdev.bots.linux.dev/contest.html?executor=vmksft-tcp-ao-dbg&pass=0
+> 
+> If it's a timing thing - FWIW we started exporting
+> KSFT_MACHINE_SLOW=yes on the slow runners.
 
-Anything else is different.
+I think, I know what happens here:
 
-That is the specification in case of PROT_READ, PROT_WRITE, and PROT_EXEC.
+# ok 8 AO server (AO_REQUIRED): AO client: counter TCPAOGood increased 4
+=> 6
+# ok 9 AO server (AO_REQUIRED): unsigned client
+# ok 10 AO server (AO_REQUIRED): unsigned client: counter TCPAORequired
+increased 1 => 2
+# not ok 11 AO server (AO_REQUIRED): unsigned client: Counter
+netns_ao_good was not expected to increase 7 => 8
 
-What happens if you add additional PROT_* flags?
+for each of tests the server listens at a new port, but re-uses the same
+namespaces+veth. If the node/machine is quite slow, I guess a segment
+might have been retransmitted and the test that initiated it had already
+finished.
+And as result, the per-namespace counters are incremented, which makes
+the test fail (IOW, the test expects all segments in ns being dropped).
 
-Does mprotect still behave just as sloppy (as specified)?
+So, I should do one of the options:
 
-Or it now return an error partway through an operation?
+1. relax per-namespace checks (the per-socket and per-key counters are
+   checked)
+2. unshare(net) + veth setup for each test
+3. split the selftest on smaller ones (as they create new net-ns in
+   initialization)
 
-When it returns the error, does it skip doing the work on the remaining
-region?
+I'd probably prefer (2), albeit it slows down that slow machine even
+more, but I don't think creating 2 net-ns + veth pair per each test
+would add a lot more overhead even on some rpi board. But let's see,
+maybe I'll just go with (1) as that's really easy.
 
-Or does it skip doing any protection operation at all? (That means the code
-has to do two passes over the region; first one checks if it may proceed,
-second pass performs the change.  I think I've reat PROT_SEAL was supposed
-to try to do things as one pass; is that actually possible without requiring
-a second pass in the kernel?
+I'll cook a patch this week.
 
-To wit, do these two sequences have _exactly_ the same behaviour in
-all cases that we can think of
-    - unmapped sub-regions
-    - sealed sub-regions
-    - and who knows what else mprotect() may encounter
-
-a)
-
-    mprotect(addr, len, PROT_READ);
-    mseal(addr, len, 0);
-
-b)
-
-    mprotect(addr, len, PROT_READ | PROT_SEAL);
-
-Are they the same, or are they different?
-
-Here's what I think: mprotect() behaves quite differently if you add
-the PROT_SEAL flag, but I can't quite tell precisely what happens because
-I don't understand the linux vm system enough.
-
-
-(As an outsider, I have glanced at the new PROT_MTE flag changes; that
-one seem to just "set a flag where possible", rather than performing
-an action which could result in an error, and seems to not have this
-problem).
-
-
-As an outsider, Linux development is really strange:
-
-Two sub-features are being pushed very hard, and the primary developer
-doesn't have code which uses either of them.  And once it goes in, it
-cannot be changed.
-
-It's very different from my world, where the absolutely minimal
-interface was written to apply to a whole operating system plus 10,000+
-applications, and then took months of testing before it was approved for
-inclusion.  And if it was subtly wrong, we would be able to change it.
+Thanks,
+             Dmitry
 
 
