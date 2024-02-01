@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-3949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E86AB846039
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 19:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A5A5846044
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 19:47:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A585B29BB1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 18:43:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD7B4B29C3C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 18:43:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A414984FB4;
-	Thu,  1 Feb 2024 18:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E02884FB1;
+	Thu,  1 Feb 2024 18:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T7fbi2L0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ge/S1Z9N"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFB284FD7
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 18:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14CF84FB4
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 18:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706812999; cv=none; b=Nn1wns9cFUzQZmrKMuJRtUOOmcIis1jDvWMfiBerSK0IhsaUO8SEo1BhnsWFh1hRCGpRnqsBp18vZ1bqvR1K1JgvevFqk8zg7BCSLS6O15zKaMlI13FiBCVCULYao2LiRLH0NvC5LMS+tRbv3TIRjC7Kb0eneDQ/dQj03cvb1HI=
+	t=1706812998; cv=none; b=sV3sxKyJIszIEQJ8fi+41BYJ6K5sbM6r6pntE9G+AqWGse4Msy38kx/jlv2kcTZiDjaZ1vXk/Ia59Bmo/PF1BfBUtEiSBL+n9vsYBNdtGiqfCtKTtWYkQv8nJvxjVIaQu4T5WClVXcu1tJJQSMirJYUxaaIQ9WKR+RhfeqTwtAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706812999; c=relaxed/simple;
-	bh=/U3++LNgHNq5LoSfa03kHjmpVY/55mZ0Wq4o9X3+CQg=;
+	s=arc-20240116; t=1706812998; c=relaxed/simple;
+	bh=+Zw2OOePxeW/RxY8iz4sE5b+Ic1/JlNERv9v1ctZxbQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KQyboNVOtzZNOfRHJ6nmC3mQVbbMhm9qT80/ehrUEdDbm5ckB+9ug9do71KW+ZLNZoOIs/cFO8crv11+Do/PyqWUSjAlBYTdziB83uLZnDqpPFY6eBdRwyMbThGHgodwLqPxXrDhjcohOimaSSmclIQrIPAv3gU6U2Vh3NlvdBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T7fbi2L0; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=XVvac5Tk1cOMfoq0eAlXg1AKqkH9ONnzQw36P/sc237xiBOigt6Jj3B2PPy8rYFJgX1io2irk/ZbgSzLelumpLp6t7QPWitbpzKRULyCPYYoMvlES23SCQ0UTQZwvG4VrZpBLSh+v2w7NYPENxzTtBYu4D+gGQoRGX7Efb54nlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ge/S1Z9N; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706812996;
+	s=mimecast20190719; t=1706812994;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MFXJQBZcC1NUjddVG97YNlr9vxCb4Zf6zNEjvTg+J5M=;
-	b=T7fbi2L0nMHxlVTh4gwCPmgX4Eu8mVkZfcp5UyhA0YHDVsB78PNN4TFssjlwsJdrgdRieA
-	VTHW2LZCDKPXktBsZDasn+ecBq61A7TFHpN6SJeGD5M1zoGcYYMZ4hn4Zf6uedQW77qJpA
-	/9Rs9Cg4dHfGbwYy7/LzdZ78wJdCh4Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-517-nWJ6iJ3sOnO9xAzAKGkahg-1; Thu, 01 Feb 2024 13:43:11 -0500
-X-MC-Unique: nWJ6iJ3sOnO9xAzAKGkahg-1
+	bh=VeuFY4PVeFzo6AK3paeQU9WqnXIlU4CEzy28HPrqsRI=;
+	b=Ge/S1Z9NajSsJ8nx++yEEUHq7CqBjHHzzLz3BkrOmywdfv8tkySr92nz7mSiuGo5d74NFk
+	RGSN9SRechm4wLFw8FU18nhbRRQUyCbJ9MUy4PvO+QZ5gVCiqWo5+np8ivVIjm9pMFv+FC
+	dFHneUJ45Iete7qlHF7cK6QqCJeIkjc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-591-po3JcRQeO9iAhTY-UHlIQw-1; Thu,
+ 01 Feb 2024 13:43:12 -0500
+X-MC-Unique: po3JcRQeO9iAhTY-UHlIQw-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 918DE1064C64;
-	Thu,  1 Feb 2024 18:43:09 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 957BF1C29EA1;
+	Thu,  1 Feb 2024 18:43:11 +0000 (UTC)
 Received: from gerbillo.redhat.com (unknown [10.45.224.214])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E2AF1111FA;
-	Thu,  1 Feb 2024 18:43:07 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DB0A8111F9;
+	Thu,  1 Feb 2024 18:43:09 +0000 (UTC)
 From: Paolo Abeni <pabeni@redhat.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -65,9 +65,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Florian Westphal <fw@strlen.de>,
 	David Ahern <dsahern@gmail.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 net 2/4] selftests: net: fix setup_ns usage in rtnetlink.sh
-Date: Thu,  1 Feb 2024 19:42:39 +0100
-Message-ID: <6e7c937c8ff73ca52a21a4a536a13a76ec0173a8.1706812005.git.pabeni@redhat.com>
+Subject: [PATCH v2 net 3/4] selftests: net: fix tcp listener handling in pmtu.sh
+Date: Thu,  1 Feb 2024 19:42:40 +0100
+Message-ID: <f8e8f6d44427d8c45e9f6a71ee1a321047452087.1706812005.git.pabeni@redhat.com>
 In-Reply-To: <cover.1706812005.git.pabeni@redhat.com>
 References: <cover.1706812005.git.pabeni@redhat.com>
 Precedence: bulk
@@ -79,50 +79,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-The setup_ns helper marks the testns global variable as
-readonly. Later attempts to set such variable are unsuccessful,
-causing a couple test failures.
+The pmtu.sh test uses a few TCP listener in a problematic way:
+It hard-codes a constant timeout to wait for the listener starting-up
+in background. That introduces unneeded latency and on very slow and
+busy host it can fail.
 
-Avoid completely the variable re-initialization and let the
-function access the global value.
+Additionally the test starts again the same listener in the same
+namespace on the same port, just after the previous connection
+completed. Fast host can attempt starting the new server before the
+old one really closed the socket.
 
-Fixes: ("selftests: rtnetlink: use setup_ns in bonding test")
+Address the issues using the wait_local_port_listen helper and
+explicitly waiting for the background listener process exit.
+
+Fixes: 136a1b434bbb ("selftests: net: test vxlan pmtu exceptions with tcp")
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 ---
- tools/testing/selftests/net/rtnetlink.sh | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/pmtu.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 4667d74579d1..874a2952aa8e 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -440,7 +440,6 @@ kci_test_encap_vxlan()
- 	local ret=0
- 	vxlan="test-vxlan0"
- 	vlan="test-vlan0"
--	testns="$1"
- 	run_cmd ip -netns "$testns" link add "$vxlan" type vxlan id 42 group 239.1.1.1 \
- 		dev "$devdummy" dstport 4789
- 	if [ $? -ne 0 ]; then
-@@ -485,7 +484,6 @@ kci_test_encap_fou()
- {
- 	local ret=0
- 	name="test-fou"
--	testns="$1"
- 	run_cmd_grep 'Usage: ip fou' ip fou help
- 	if [ $? -ne 0 ];then
- 		end_test "SKIP: fou: iproute2 too old"
-@@ -526,8 +524,8 @@ kci_test_encap()
- 	run_cmd ip -netns "$testns" link set lo up
- 	run_cmd ip -netns "$testns" link add name "$devdummy" type dummy
- 	run_cmd ip -netns "$testns" link set "$devdummy" up
--	run_cmd kci_test_encap_vxlan "$testns"
--	run_cmd kci_test_encap_fou "$testns"
-+	run_cmd kci_test_encap_vxlan
-+	run_cmd kci_test_encap_fou
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 3f118e3f1c66..f0febc19baae 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -199,6 +199,7 @@
+ #	Same as above but with IPv6
  
- 	ip netns del "$testns"
- 	return $ret
+ source lib.sh
++source net_helper.sh
+ 
+ PAUSE_ON_FAIL=no
+ VERBOSE=0
+@@ -1336,13 +1337,15 @@ test_pmtu_ipvX_over_bridged_vxlanY_or_geneveY_exception() {
+ 			TCPDST="TCP:[${dst}]:50000"
+ 		fi
+ 		${ns_b} socat -T 3 -u -6 TCP-LISTEN:50000 STDOUT > $tmpoutfile &
++		local socat_pid=$!
+ 
+-		sleep 1
++		wait_local_port_listen ${NS_B} 50000 tcp
+ 
+ 		dd if=/dev/zero status=none bs=1M count=1 | ${target} socat -T 3 -u STDIN $TCPDST,connect-timeout=3
+ 
+ 		size=$(du -sb $tmpoutfile)
+ 		size=${size%%/tmp/*}
++		wait ${socat_pid}
+ 
+ 		[ $size -ne 1048576 ] && err "File size $size mismatches exepcted value in locally bridged vxlan test" && return 1
+ 	done
 -- 
 2.43.0
 
