@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-3917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4087844FAC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 04:27:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8740A844FAF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 04:28:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8D11C24F29
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 03:27:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F0591C24F1B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 03:28:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872703B2AD;
-	Thu,  1 Feb 2024 03:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417A73C08E;
+	Thu,  1 Feb 2024 03:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NJlGVuuQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lsMZfNxn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3993A8E3;
-	Thu,  1 Feb 2024 03:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED57E3B18C;
+	Thu,  1 Feb 2024 03:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706758043; cv=none; b=Mljlj10a1MQ3IIh8aZKd8yBgLFHGCVGbSLr0chak085wYwiIXC4tMsff6U9MDGIvkVji419G4HI3HAT13HfIryiVlHoWf9LWeU9j94HLoUXyqUmV61rTFpD3jxJBJ4HIZiwv/gxfrej3E6rZ33cZm1UARFAYRJTkLmaK9BElKDI=
+	t=1706758046; cv=none; b=gM5PnzqvZTmik7dnJ8nUFSoW/uEY8I6PWlbdtOSVfQa4dQSNW9WTHlms3zoDFLZzxrOkKGapVan41y4G+7qzHP0NnrKng3/NIDDUCuR5cY1KAgMMsTMjsFLyDVdEehuKte+A1wqip9OLBorOFHpKb8ywxaMRZhB+O11scjWRcbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706758043; c=relaxed/simple;
-	bh=aTjkVj/ZHoE9XkKc3AYHVjvNxlRZrQwmqbrbwBElTkM=;
+	s=arc-20240116; t=1706758046; c=relaxed/simple;
+	bh=SleVqChczJMQNB2boi8n5e6NvqX3ckStjnVVeEsnqB0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lW8k5VI6/4edqQLx5uxr7cgsJAAMXPMoe+Lkd3txMWa4efzHoxRkWR7FgSCzejq6c00EN2r+kVk35qCwMBIQPPJ9mHwhgaezV3afR192v65nc1aha7KlBC0aO4XvHy6SSxZfzESReT+WWx1sKCjg6cB3F9IyQb8apNHexOAktp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NJlGVuuQ; arc=none smtp.client-ip=209.85.160.178
+	 MIME-Version; b=GWNtqRi6JZosdlRfpOBqFrFI0YlkyJ0jvb8BTcyh2xJaO1CGyYOk5Ru2KXE+ktOjhtpjDwSI+l17z7E3+hHtEIjGPCo9gAn/QYyp1BtROm5CaAu7JADE03G1k/WaKWzUF5Fye88JB+ajnshf5PNFf1+IhlgKAU3J4NTuDuOseZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lsMZfNxn; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-42a99cbb4bbso12515951cf.0;
-        Wed, 31 Jan 2024 19:27:21 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-783d4b3a00bso35896185a.3;
+        Wed, 31 Jan 2024 19:27:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1706758041; x=1707362841; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=leL/vEiB0VeH8ZIF97IARUVmsuNbNROoZaGIt1HbTGM=;
-        b=NJlGVuuQZIHh+6e6TErOcbsRO6ygggxl9zgmJVSSjicqnq2Y73IN7U4RJOXNeRZFt2
-         vA0Vn4PiSdZSqs8ltB2w1R7tR4Dl7cbT2FF83KJ+UNmC+dNUVny1srhN1jRwDTBd5QXo
-         dLvEGkvkVV4BlJQZ0XQwAPPJZqxhmO4D0LltyXqKBMscUNyrHvhShe49efmDjiVpzphe
-         0zbjl2FzHxI/2kMSxLr4ehJLmsyPo7/J9+bSndl7lRmZ+mRcxue03itcFyIMF09MM5LV
-         RkESOx8FNQ+wDMbZ92To081zeA4SXHm9N9oZ4Y9o23Mr89fnBi9Wy4ExG3Y2tRNgxoNI
-         ebxw==
+        bh=rTqBj0H08VxjpoFeh5ezYndc7+HSVccdU5yqVd6FGXw=;
+        b=lsMZfNxnU3DyZ0qa+sQcgHVt65mxjGI0htzzqP9s7p7UaYHh/7T17kOK39Mi+soR57
+         NVOJ8FzS39P6rTlAS8z4lcIrI9THUbogVFIg9K0ENjZSc4xMR8Nb5ijx+R0GjS5kYxMb
+         DMPbWtbE4yk3XQGtNC5koYhuUIuWUrrBzU2Plqf1l7HP0LrzjKe7w4v62Tegk9RToZLT
+         NjjFxPgYliGwYU63Jzt8KXSzfATm6QnJXYgz/8i4mKbFUt0i4mLJqBqhJ/IBzrD8vUl8
+         /Q9fOkVguGWyUmWLehPeq/HTgmVv4lasKxcgMWOsPiDvALuwdF6bqMuiLkemLU4enmyy
+         YbGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1706758041; x=1707362841;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=leL/vEiB0VeH8ZIF97IARUVmsuNbNROoZaGIt1HbTGM=;
-        b=k5zmCCwtk+wfeHbrAi7J2Wh9fk0uQDFitt/ngWDmaj5DvltMRnPQN7RM43G0r0gHgS
-         56oOJ3njF5TcFqD0ij86S4wRJromM9dHvKjFuIl2ts8946H/beR1iKMPpnisSJ+hZjum
-         /NcJJi2NPXn7WexWVNfBMmomw3BD8qByvw9K96MJlaFYM2FizZoI7Zb9wHsn66gJ7WIn
-         kbUm7oPKs30Se5qmRvWQuIDR+6z4JVZAEWAhwVqCfrFdrrMiUOdAcD647VI5oqLpv1WH
-         p3oNjBs1FfguGVjn6igDSQITtELXOOTZEvJU/iqt4qQT86WoppvIN3hHLxnW9eQXE8tJ
-         8sNg==
-X-Gm-Message-State: AOJu0YxTUVqvdM+UiDM7FZPHQPiEQ2ICZZCuLD/xjm9nbJwWuFY//jLl
-	pvrEwz+7Wl6/GL6RQjS4vSKRRJ1URkl3DX1vTOzADvgWCINsAuec
-X-Google-Smtp-Source: AGHT+IFqcvsUMZYFuYor0H/CUk+pPFiTZOgLITK4N4LX0rCJkB0og9Dc0BMcAnEw/g7377tApIxDQQ==
-X-Received: by 2002:ac8:4e91:0:b0:42a:8be3:7bf5 with SMTP id 17-20020ac84e91000000b0042a8be37bf5mr7486386qtp.9.1706758040803;
-        Wed, 31 Jan 2024 19:27:20 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUhQZ1N2tT05OGhr6lKJZ4MS4C5p6jdBy+kND1VAX4ngoMA+XrkdOs3Jg744crNHZzyvCprOvmjiuLtJzz3s8TbHfOILCF+L4ryeOSPQNu1G6rpAVnaTf5EwIk1236AKtJhY9dC5cAKJbkFeqzpU/XIe0SUvDzU7pGsQ6VHK6SWcSVXiGapUjqUPDr1AQ7m5yFVtOrXzWxAU6wW6GJDLOBsozLdNn7sOsPvRXI2WvFx8mYTD+AAqahUTV8tuAj/VA+zy0cKRWOt7vHwyvz+8xgfRQ5ZdbMFJxtZgajN7CPp/hlvE5+iuDy9xqx5rLrNZDIRDVEVi5j+zRX8ITtgcn8lbyXh5vY/HL90aQ3r/1lnDwTOzCt/
-Received: from localhost (fwdproxy-nao-008.fbsv.net. [2a03:2880:23ff:8::face:b00c])
-        by smtp.gmail.com with ESMTPSA id ge10-20020a05622a5c8a00b0042998676bc3sm5570137qtb.43.2024.01.31.19.27.20
+        bh=rTqBj0H08VxjpoFeh5ezYndc7+HSVccdU5yqVd6FGXw=;
+        b=evQLl67v42pF1HCHuf2WrB7Gt1e2r1JTQsfRgfOHoAsIMygcVhpu9HbKRskLIaArh7
+         NA5IRr8ETPqupcQsWhM/vT9YZuqA16cidSC5g4ftBZcq+Fkf/iqJmW3SQa+kPEaqaufG
+         s6RSKJA/PMqCQ1GobfXGZotbuOzg4lsAjbLMJ5XraKAwpL1lToFKb8tC1HME24ciCVQT
+         RK5aK35U43lkFVPxRtZpr+uK1UFkjQW8YIFa2DKJaAE4xONcMbTPfhZ0eV/kExfa3u0f
+         /f6dmvmb1MbTx2HlPJ53tUFsUPNLt3LRqQ/DqRGO2ZBfVUVWZyNst/PFPJpFfOPc5FB1
+         ktBg==
+X-Gm-Message-State: AOJu0YzgsuOv3hmmVnAZnTT6KymNgGWfebzzB548eQPpjBQh8UKZPm1z
+	l1991ift+CA+ef5RrIXFv+OlqGF/7a7xV4pKrv7mqeSnfjb6W+BN
+X-Google-Smtp-Source: AGHT+IHPWXSjkdUZuigp/9B7j6ivfpKy5HxAUMa6O9hLIMzhBIt/uWnFjXMQetpqhcvAu9PSMKwhVQ==
+X-Received: by 2002:a05:620a:4148:b0:785:46f0:615b with SMTP id k8-20020a05620a414800b0078546f0615bmr358625qko.2.1706758041672;
+        Wed, 31 Jan 2024 19:27:21 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUIv71tJwO29OMitKPFnpPOCXCL8BuVktI6doG1tJVc7/qR+y0O1AXR3wBOmsC4Qpffj7sUQ/KvOHDJ3cjhityaWK8c6DQta2mok58PQKzyNMRYi0NBxE+fudr705gyldiLvtVDxeVD4Y/YBHb0b/QTNJBIXuB6UgcZyUeKMza5ekf49cqVqrwZ+yFdNzpD4eR3WySWDx0k6eHPjVEjtMAYQMMFpHdujzSNJ24YQgSlib3EdrjukJE9XYj5tQUTBP7eM86wjlW/Eo9XAjgXgVqReu2zzRc0V4aBxOGW8RQSM8/9+pDlticWA+KTxQANd6ZrLRySCqgVqZR+0qhBBavYdTkV8LgIibWRilyUHyT/2lAZKZI/
+Received: from localhost (fwdproxy-nao-009.fbsv.net. [2a03:2880:23ff:9::face:b00c])
+        by smtp.gmail.com with ESMTPSA id v18-20020ae9e312000000b0078535190648sm1450417qkf.67.2024.01.31.19.27.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 19:27:20 -0800 (PST)
+        Wed, 31 Jan 2024 19:27:21 -0800 (PST)
 From: Nhat Pham <nphamcs@gmail.com>
 To: akpm@linux-foundation.org
 Cc: riel@surriel.com,
@@ -80,9 +80,9 @@ Cc: riel@surriel.com,
 	linux-kernel@vger.kernel.org,
 	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/3] selftests: fix the zswap invasive shrink test
-Date: Wed, 31 Jan 2024 19:27:17 -0800
-Message-Id: <20240201032718.1968208-3-nphamcs@gmail.com>
+Subject: [PATCH v2 3/3] selftests: add zswapin and no zswap tests
+Date: Wed, 31 Jan 2024 19:27:18 -0800
+Message-Id: <20240201032718.1968208-4-nphamcs@gmail.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240201032718.1968208-1-nphamcs@gmail.com>
 References: <20240201032718.1968208-1-nphamcs@gmail.com>
@@ -94,31 +94,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The zswap no invasive shrink selftest breaks because we rename the zswap
-writeback counter (see [1]). Fix the test.
+Add a selftest to cover the zswapin code path, allocating more memory
+than the cgroup limit to trigger swapout/zswapout, then reading the
+pages back in memory several times. This is inspired by a recently
+encountered kernel crash on the zswapin path in our internal kernel,
+which went undetected because of a lack of test coverage for this path.
 
-[1]: https://patchwork.kernel.org/project/linux-kselftest/patch/20231205193307.2432803-1-nphamcs@gmail.com/
+Add a selftest to verify that when memory.zswap.max = 0, no pages can go
+to the zswap pool for the cgroup.
 
-Fixes: a697dc2be925 ("selftests: cgroup: update per-memcg zswap writeback selftest")
+Suggested-by: Rik van Riel <riel@surriel.com>
+Suggested-by: Yosry Ahmed <yosryahmed@google.com>
 Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-Acked-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- tools/testing/selftests/cgroup/test_zswap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/cgroup/test_zswap.c | 97 +++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
 diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 47fdaa146443..32ce975b21d1 100644
+index 32ce975b21d1..14d1f18f1098 100644
 --- a/tools/testing/selftests/cgroup/test_zswap.c
 +++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -52,7 +52,7 @@ static int get_zswap_stored_pages(size_t *value)
- 
- static int get_cg_wb_count(const char *cg)
- {
--	return cg_read_key_long(cg, "memory.stat", "zswp_wb");
-+	return cg_read_key_long(cg, "memory.stat", "zswpwb");
+@@ -60,6 +60,27 @@ static long get_zswpout(const char *cgroup)
+ 	return cg_read_key_long(cgroup, "memory.stat", "zswpout ");
  }
  
- static long get_zswpout(const char *cgroup)
++static int allocate_bytes_and_read(const char *cgroup, void *arg)
++{
++	size_t size = (size_t)arg;
++	char *mem = (char *)malloc(size);
++	int ret = 0;
++
++	if (!mem)
++		return -1;
++	for (int i = 0; i < size; i += 4095)
++		mem[i] = 'a';
++
++	/* go through the allocated memory to (z)swap in and out pages */
++	for (int i = 0; i < size; i += 4095) {
++		if (mem[i] != 'a')
++			ret = -1;
++	}
++
++	free(mem);
++	return ret;
++}
++
+ static int allocate_bytes(const char *cgroup, void *arg)
+ {
+ 	size_t size = (size_t)arg;
+@@ -133,6 +154,80 @@ static int test_zswap_usage(const char *root)
+ 	return ret;
+ }
+ 
++/*
++ * Check that when memory.zswap.max = 0, no pages can go to the zswap pool for
++ * the cgroup.
++ */
++static int test_swapin_nozswap(const char *root)
++{
++	int ret = KSFT_FAIL;
++	char *test_group;
++	long zswpout;
++
++	/* Set up */
++	test_group = cg_name(root, "no_zswap_test");
++
++	if (!test_group)
++		goto out;
++	if (cg_create(test_group))
++		goto out;
++	if (cg_write(test_group, "memory.max", "8M"))
++		goto out;
++	/* Disable zswap */
++	if (cg_write(test_group, "memory.zswap.max", "0"))
++		goto out;
++
++	/* Allocate and read more than memory.max to trigger swapin */
++	if (cg_run(test_group, allocate_bytes_and_read, (void *)MB(32)))
++		goto out;
++
++	/* Verify that no zswap happened */
++	zswpout = get_zswpout(test_group);
++	if (zswpout < 0) {
++		ksft_print_msg("Failed to get zswpout\n");
++		goto out;
++	} else if (zswpout > 0) {
++		ksft_print_msg(
++			"Pages should not go to zswap when memory.zswap.max = 0\n");
++		goto out;
++	}
++	ret = KSFT_PASS;
++
++out:
++	cg_destroy(test_group);
++	free(test_group);
++	return ret;
++}
++
++/* Simple test to verify the (z)swapin code paths */
++static int test_zswapin_no_limit(const char *root)
++{
++	int ret = KSFT_FAIL;
++	char *test_group;
++
++	/* Set up */
++	test_group = cg_name(root, "zswapin_test");
++	if (!test_group)
++		goto out;
++	if (cg_create(test_group))
++		goto out;
++	if (cg_write(test_group, "memory.max", "8M"))
++		goto out;
++	if (cg_write(test_group, "memory.zswap.max", "max"))
++		goto out;
++
++	/* Allocate and read more than memory.max to trigger (z)swap in */
++	if (cg_run(test_group, allocate_bytes_and_read, (void *)MB(32)))
++		goto out;
++
++	ret = KSFT_PASS;
++
++out:
++	cg_destroy(test_group);
++	free(test_group);
++	return ret;
++}
++
+ /*
+  * When trying to store a memcg page in zswap, if the memcg hits its memory
+  * limit in zswap, writeback should affect only the zswapped pages of that
+@@ -309,6 +404,8 @@ struct zswap_test {
+ 	const char *name;
+ } tests[] = {
+ 	T(test_zswap_usage),
++	T(test_swapin_nozswap),
++	T(test_zswapin_no_limit),
+ 	T(test_no_kmem_bypass),
+ 	T(test_no_invasive_cgroup_shrink),
+ };
 -- 
 2.39.3
 
