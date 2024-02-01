@@ -1,101 +1,165 @@
-Return-Path: <linux-kselftest+bounces-3920-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3921-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 686A98450A5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 06:20:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C897C845133
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 07:06:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1927628F0C8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 05:20:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23C99B2963D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Feb 2024 06:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124413C487;
-	Thu,  1 Feb 2024 05:20:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1802E85C52;
+	Thu,  1 Feb 2024 06:06:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OImwbE51"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0LY85O9h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7DE3C478;
-	Thu,  1 Feb 2024 05:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4E282D7F
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 06:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706764826; cv=none; b=Rt5ecl4es8gZF8OwWIlT9Mb+qX3AkKx4uCSoIrHu+VV4rDVJfGAWTzRrRI9ycRnBp5dyY9uRZE6H+RRHKtWn6359sfGc1b66sryOkZ2fyoWYcPQJ8oW4dCMfVt3PX+9dBn/c0J6paoQJRv5QbLLJNzYs/seR3YSLD5Z9PFlmjNU=
+	t=1706767585; cv=none; b=WBOxlYZwXaRZR3n16texIAGFICryuAu19fZ+5xLZQq7nEsJoTymb6zkB+nax1fp+iboeknreV4ERrK5M9KD0ipZGwe0jLiRPv08nePwT6YGu8MwMw2yYj3xjn9k5rxYJ+RFruQkLXBrWv4qv00G9/C1oX8rZjfkK/RF+ZnKSwiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706764826; c=relaxed/simple;
-	bh=Xrl1S/KSzdhstY3QZ086GSIfQy2B8O1HOVrY5nbEFUM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=LsnZWwQ4syOpJWb7sRtPK3sBFhO90VN46FupD3I5VPymODocLg9VaKepYi9bei0tQP+nCxM3BNNjxDISwvnKbg8f/Q1aT8zNs1MuY1oDa7RfqJbsA63YXCuxFXdITaQ6Dgvb0wgv7VbISckbvs2S5OCa2NQO/UalCgTMzv1tv9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OImwbE51; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59DD1C43390;
-	Thu,  1 Feb 2024 05:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706764825;
-	bh=Xrl1S/KSzdhstY3QZ086GSIfQy2B8O1HOVrY5nbEFUM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=OImwbE51iPhWYXkBQveZKo9t6PTimzG4k6mz4P3BYeb7Saar5X0bnvXB/haN4iH7n
-	 l9rjnDeAgEejjocfeao1mK/30tZ6uSlebaW1+2S+gLHub6a/XTNXT4sumVD4lYD3Z4
-	 0nzNypgHAbvkLeuomXGiu3f94jETjgt1xnwwRQCKhPSnk12BCZ2CZVA3udwaLXOdt3
-	 fxfc8vkSieZqm/99hKOy70nWj0pHijHTm7PnRxQSuqpGwH9BssN7WsTvtRJnm7uQdF
-	 BZrjNVn4W3UVnvy+vjyQkqxaSkQJIosIxrMuv/QViEXocxXZhuQ0hRo86BKvJ7/gk8
-	 5HI4S1P02Svyg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3ECFFDC99E5;
-	Thu,  1 Feb 2024 05:20:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1706767585; c=relaxed/simple;
+	bh=0LRxdChxLmKEhnOYVLzmM5OXlQ0XC+cmLb43Z7+cynM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=hHKfv+qRFlyEHN4hBaD2yuXVBxbN/gLxH9hDONtHe/6c9Zh+JCXLiaENkExVknVIBJyQLSx0FhkpOgTXApvB49xW1AtO3xpHmfdgJoFYOgU78kOyxb24WLilf+IjehrwGT4pIUlTfs7vFND7rxuMWCVA2OoKnXGXW0wUL/+HKFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0LY85O9h; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6bad01539so838541276.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jan 2024 22:06:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706767581; x=1707372381; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+R+QwEvKVG52HCupcuvyMyVixKSfMEwsPllchfsZTgU=;
+        b=0LY85O9h72c4jUBvNZCjsSNl9tDmeiIwvLt7tNGNn6Z8suRSBZ01xM2oLDvhQrOIxO
+         e8/rexbGGV6qLd3Vk+tFrDNDsI4CWhUh5VLUhearaVAHK08bcNrNoyCbt3Ed9T4sNe6/
+         fIbaThBUjiCGgL3fAOYQmKe2qJhORoWCKH9Th6ZoYpeHi5BMydYfVwTlFICLeqgRKq11
+         bn83jNXwX4FOHfEhRIWKG3IsRIbKDL76AvohXQWVErVhphEYmrKp5yx7K4Gtxf5uYMrS
+         CX2GkKCQ6eEKHAYDIH5CTJxblIKi3S7qvFpAIPjTA3552Lhe9aYClLIfISAWQz/0Hu91
+         3dXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706767581; x=1707372381;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+R+QwEvKVG52HCupcuvyMyVixKSfMEwsPllchfsZTgU=;
+        b=To0ToWTbj8G2pp8Rha62rQiaUhzcWDD28zgVu1/jh4NFqiJY8/s/b61uXt71POF7Lc
+         0Mh3ckvC7N8QbprdviQE/Dka8XNoZGF2G2KnoJvb+CGasmMxTY1iXOAr0LzjlOTnW3RG
+         HriyKdWPuJmTgETtvdwWHf8kM2mhf2p0gj4VNmqLYtooNGEnsbipbpxNAVszS7bhx+29
+         9YDMwoUuo/YcucEgkOh8j7sPOFBrtoUE8aJXQ5hZrqmZAnbKmX1nu7aDkwApEMt7vRIe
+         jtVrilrAoHCc2CfcY6cGpQbGWlgdXJW4R7sFEeI5yxyToBYzHadkHFkfvRHXRe3eKy5j
+         i7aA==
+X-Gm-Message-State: AOJu0YwiwXeg4ujJegeCxrdLIGC2qWc8Nqcu4t8h3j59pK1KHx1zWlUe
+	KrWvkk+WhkMe8iEp7bb0AZ+EmCe4M6iuog8kybDt6fQuptd8v57/cuKIexAZ6AGMe7zg8/5+KPB
+	BCiDL+ofzBw==
+X-Google-Smtp-Source: AGHT+IH9ZcrmRVPK1BcEkoPLLW9uzYcuLK5XpwTitIVSUboPpipeCUTTfA1c8/oZ1Sjbi+UPYG3ZprHTGqrSQA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6902:1584:b0:dbe:387d:a8ef with SMTP
+ id k4-20020a056902158400b00dbe387da8efmr41769ybu.1.1706767581338; Wed, 31 Jan
+ 2024 22:06:21 -0800 (PST)
+Date: Thu,  1 Feb 2024 14:04:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/3] selftests: net: a few pmtu.sh fixes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170676482525.24744.1244628672807352889.git-patchwork-notify@kernel.org>
-Date: Thu, 01 Feb 2024 05:20:25 +0000
-References: <cover.1706635101.git.pabeni@redhat.com>
-In-Reply-To: <cover.1706635101.git.pabeni@redhat.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, shuah@kernel.org, dsahern@kernel.org, gnault@redhat.com,
- vadim.fedorenko@linux.dev, fw@strlen.de, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240201060437.861155-2-davidgow@google.com>
+Subject: [PATCH] kunit: device: Unregister the kunit_bus on shutdown
+From: David Gow <davidgow@google.com>
+To: Rae Moar <rmoar@google.com>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Gow <davidgow@google.com>, Matti Vaittinen <mazziesaccount@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Maxime Ripard <mripard@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, Borah@google.com, 
+	Chaitanya Kumar <chaitanya.kumar.borah@intel.com>, Saarinen@google.com, 
+	Jani <jani.saarinen@intel.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
+	intel-gfx@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+If KUnit is built as a module, and it's unloaded, the kunit_bus is not
+unregistered. This causes an error if it's then re-loaded later, as we
+try to re-register the bus.
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Unregister the bus and root_device on shutdown, if it looks valid.
 
-On Tue, 30 Jan 2024 18:47:15 +0100 you wrote:
-> This series try to address CI failures for the pmtu.sh tests. It
-> does _not_ attempt to enable all the currently skipped cases, to
-> avoid adding more entropy.
-> 
-> Tested with:
-> 
-> make -C tools/testing/selftests/ TARGETS=net install
-> vng --build  --config tools/testing/selftests/net/config
-> vng --run . --user root -- \
-> 	./tools/testing/selftests/kselftest_install/run_kselftest.sh \
-> 	-t net:pmtu.sh
-> 
-> [...]
+In addition, be more specific about the value of kunit_bus_device. It
+is:
+- a valid struct device* if the kunit_bus initialised correctly.
+- an ERR_PTR if it failed to initialise.
+- NULL before initialisation and after shutdown.
 
-Here is the summary with links:
-  - [net,1/3] selftests: net: add missing config for pmtu.sh tests
-    https://git.kernel.org/netdev/net/c/f7c25d8e17dd
-  - [net,2/3] selftests: net: fix available tunnels detection
-    https://git.kernel.org/netdev/net/c/e4e4b6d568d2
-  - [net,3/3] selftests: net: don't access /dev/stdout in pmtu.sh
-    https://git.kernel.org/netdev/net/c/bc0970d5ac1d
+Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-You are awesome, thank you!
+This will hopefully resolve some of the issues linked to from:
+https://lore.kernel.org/intel-gfx/DM4PR11MB614179CB9C387842D8E8BB40B97C2@DM4PR11MB6141.namprd11.prod.outlook.com/
+
+---
+ lib/kunit/device-impl.h |  2 ++
+ lib/kunit/device.c      | 14 ++++++++++++++
+ lib/kunit/test.c        |  3 +++
+ 3 files changed, 19 insertions(+)
+
+diff --git a/lib/kunit/device-impl.h b/lib/kunit/device-impl.h
+index 54bd55836405..5fcd48ff0f36 100644
+--- a/lib/kunit/device-impl.h
++++ b/lib/kunit/device-impl.h
+@@ -13,5 +13,7 @@
+ 
+ // For internal use only -- registers the kunit_bus.
+ int kunit_bus_init(void);
++// For internal use only -- unregisters the kunit_bus.
++void kunit_bus_shutdown(void);
+ 
+ #endif //_KUNIT_DEVICE_IMPL_H
+diff --git a/lib/kunit/device.c b/lib/kunit/device.c
+index 074c6dd2e36a..644a38a1f5b1 100644
+--- a/lib/kunit/device.c
++++ b/lib/kunit/device.c
+@@ -54,6 +54,20 @@ int kunit_bus_init(void)
+ 	return error;
+ }
+ 
++/* Unregister the 'kunit_bus' in case the KUnit module is unloaded. */
++void kunit_bus_shutdown(void)
++{
++	/* Make sure the bus exists before we unregister it. */
++	if (IS_ERR_OR_NULL(kunit_bus_device))
++		return;
++
++	bus_unregister(&kunit_bus_type);
++
++	root_device_unregister(kunit_bus_device);
++
++	kunit_bus_device = NULL;
++}
++
+ /* Release a 'fake' KUnit device. */
+ static void kunit_device_release(struct device *d)
+ {
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 31a5a992e646..1d1475578515 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -928,6 +928,9 @@ static void __exit kunit_exit(void)
+ #ifdef CONFIG_MODULES
+ 	unregister_module_notifier(&kunit_mod_nb);
+ #endif
++
++	kunit_bus_shutdown();
++
+ 	kunit_debugfs_cleanup();
+ }
+ module_exit(kunit_exit);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0.429.g432eaa2c6b-goog
 
 
