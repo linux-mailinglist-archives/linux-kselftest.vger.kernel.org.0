@@ -1,292 +1,148 @@
-Return-Path: <linux-kselftest+bounces-4030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8808476A8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 18:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5A1A84770A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 19:05:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D53E2B23A69
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 17:47:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6445FB2D494
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 17:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B21114C58C;
-	Fri,  2 Feb 2024 17:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2BB314533A;
+	Fri,  2 Feb 2024 17:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0NFuDAZG"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LtKFdmnu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8941114A4D9
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 17:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA1114AD30
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 17:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706895982; cv=none; b=drusgqych45XQCSIuiNOMqYuy0l92k8q8xlw1Zw8CEPHQLQvwFd/oFf8unTsxniJXcR1HfV8MUPrG0O3mYlYOYEHKeiRvRPNDN2jEQ+G97o+YhmuIl5oVJHOqyEOwKJL3aZEUdO5VwaVZF+fU5XqJwx4jindkkpFBNX+xM14kY8=
+	t=1706896747; cv=none; b=YogYhYNPPUUBvWrWaNCphJ/OnRYwKeAgaRGhccErfyv5dF+2iSBn6+UCIvwrYyVVRicpFy9T6bH0V8XisKlgQH/UFesSuU+v9LdU5UuISQMnuztNsVSY0gzGozz2Ynyte+1YDsaZIVuy1kmO0u1vfSOz/oBBgTQmgAqMdGc+C6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706895982; c=relaxed/simple;
-	bh=wbyUml4VzPHLwdgPIsVLZjqXLgyXVtdvOqZgsHvr69s=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MDrezRSJFmeeS3dnGq24SZAg6TPQu6jB2H58EM+FPtPkHYEd5r1e5HqaeRFwL2+U0Gnqij1eXgDG5JYtT6iLYxrgATwHNwFApUZfwUB8yop0XA1JUOl5SvzZRDX/G7VzaoeFC85T/mSA2maC//9vgwjG2JO/qd4tPYN/8oN039M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0NFuDAZG; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc657e9bdc4so3187106276.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Feb 2024 09:46:19 -0800 (PST)
+	s=arc-20240116; t=1706896747; c=relaxed/simple;
+	bh=b0UK3I6qBl5XLXZ/ULBInBz/ydG+gAjVS2eKkSAUwuc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eu53vZEb5fSGSRfjw0VAngVBcVJVudV/S9+FBooUKidJ7/VfCkJ9/CgCCfA4W5fbvaNFqRLTNFP6oTjhnRs+AdMrxzSr7PkDgQlBmbj3AIOE5Yqkb06YVpPbXe9YeTO7HnG0gDxO1+aBQx05WwluOwMvUN4tbj5m8eQ6lo7YL90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LtKFdmnu; arc=none smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6e117e0fee8so1253010a34.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Feb 2024 09:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706895978; x=1707500778; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YHpFLXNrvHNKh8cz0f89B1EFXTS6HjoV5QmargAn3T4=;
-        b=0NFuDAZGPAyy/VJGH1Dv+wBjPUbGw0rCNuIG0cZkhc95xj2+/RELxQEqNgt8t92BCc
-         ODsp4qwJMuTluqm2y+zzXhDXBngnwUgT+fyWyZdiR3a0Z4Yob7fhZIfRypKFSVYUZQDO
-         hYt92Qb7ReM6oWfJOyPvxD8Wm8LJ8wEkf1Z1x1qRSTFmBuH+OCINeDoyMF1WvnFoZlyJ
-         JEb9/fwTf6STF9PDVSkpnvfXIfNV9Ygdywoks5RevD48eT6K87TJSa/9h7kuLB43uDWn
-         LB4K7XmRuqhbu20KPuTJAyxJ24IYzxml0JA9Kf0pNJdG9Zo+jgYUNng08Q5E7EothQ94
-         CJRA==
+        d=chromium.org; s=google; t=1706896745; x=1707501545; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V3MyFHdGuJXKIHAocH1cP+k+k6xBW4irfqW7F3umGsY=;
+        b=LtKFdmnuA9zRYggzAzNUaUaUmyKVOrU3o7RbDHpumwWHWdIWt3HRxK05zC1yAXd5Ic
+         d0zcKrDc9vE0iPxnps/sWZLyewDKkhPCIJxhubQl3OmkdoxfE+xI0CB13/ZZIanxtW+k
+         Z6muAVLps3zZZncPOFwtUaVHPzeXiGn7dKyZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706895978; x=1707500778;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YHpFLXNrvHNKh8cz0f89B1EFXTS6HjoV5QmargAn3T4=;
-        b=WeOx+arBSa56hNx0edFWOlKLB8cvGjelnHvu4UoWMuKKvL9akgxCxk3Y4lzWObuSvX
-         H6ApfO5VCCrbEpHjLlvtgyLtVazC5GrfZ+Za0JPgn9E01utQIoXc97RGQWgsXftGRL7a
-         pzWpOnSE3VPCUt0jL0DI8J7CHufTYzGAXsFZ+yo3ND2CG2+42OOQhAcaHT6ZskNh6T1D
-         isbFLd8AKf+aEGZMaEgpqLgUh77GOnRJcU+QNt0o7W8HgQdD2vioQU5WeDE8ZmWc99Kq
-         INUj2SdpG2/yfQ/VARbXWyRrjjnK33+uLqs2ROFq0AMhETbdphtrKmbmLH4I7zq3Z2EK
-         /epw==
-X-Gm-Message-State: AOJu0YzGsjRiWR2VYXLTM7IssUYg8XBbEkXOYLdz7xiUF3bS3kv1jesS
-	UQ1IKNs30c4KC7UKg2+i9HEi+C2LyigHtvTwgGJqYVcPxjsPsX2CI8KXD6K46yHFZHgG0ZmIjMT
-	xlg==
-X-Google-Smtp-Source: AGHT+IFdKiwGSp4Z4DOEbhpt9+g9PeoUWimmoqa1d6bp/KHrS9gSglpHXV8BAfo+RK/WrgFtiPOmzPaTbo8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1681:b0:dc6:bd9f:b061 with SMTP id
- bx1-20020a056902168100b00dc6bd9fb061mr144705ybb.13.1706895978655; Fri, 02 Feb
- 2024 09:46:18 -0800 (PST)
-Date: Fri, 2 Feb 2024 09:46:17 -0800
-In-Reply-To: <20240202064332.9403-1-shahuang@redhat.com>
+        d=1e100.net; s=20230601; t=1706896745; x=1707501545;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V3MyFHdGuJXKIHAocH1cP+k+k6xBW4irfqW7F3umGsY=;
+        b=NXtCmY0RygSidhoxzxDLmfKFnnvJ+JYHfHOH+J+tgnJ6sCt9J+09cg7QGtq4lXg1jm
+         yjvfalZOXdUc7o8EcKMbKiq87lkXS9/OfYBaenLBuGMr/1Q+m6nkNLsvTN9ZN6YIn2ac
+         vbb32thWqwsUGXruhXBRMDFHpy3Wgj124O1tDhvcrvbI9eshrHDa0hTQlpWSkHRyTEyD
+         OkVhVYtu190BeVGt2SpKWDibbWyPOR/CH4F6Qtr+Yeex/y3Q7D6SG9IK45ep2haSCw3l
+         SH9/KhyBmkCvBas5tjwPrE/cIm+cnI5A6tKEn0x86idstdss5RSEELaBmkGuk1LKe2Rq
+         j5SA==
+X-Gm-Message-State: AOJu0YwPhyhsNY8f9VPquUCjkkE4jwzqp2r7r8VHUjFI5McUwOIYHEnc
+	uHsGkR247Domm2aNZ0qEOV+SOq0qReq2XuqXVn0FZrdzjfX3TL/S6AGCAzpuB7K+A3rcU6a83KM
+	dq44ATFwYuSPrUXzh6TOffLNeCg7DDi9uDvj2
+X-Google-Smtp-Source: AGHT+IGpU/xeyR4Cac3EmRCRvgJs1LUHcLu+M+2J4+z8SyoU1mY+7pncKYINef4x09GNaY4SUrFEJxNBeJFX0e+aASY=
+X-Received: by 2002:a05:6870:200b:b0:218:eff8:3161 with SMTP id
+ o11-20020a056870200b00b00218eff83161mr487923oab.39.1706896745307; Fri, 02 Feb
+ 2024 09:59:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240202064332.9403-1-shahuang@redhat.com>
-Message-ID: <Zb0qaZ7iT0_8Rp7-@google.com>
-Subject: Re: [PATCH v3] KVM: selftests: Fix the dirty_log_test semaphore imbalance
-From: Sean Christopherson <seanjc@google.com>
-To: Shaoqin Huang <shahuang@redhat.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20240131175027.3287009-1-jeffxu@chromium.org> <20240131193411.opisg5yoyxkwoyil@revolver>
+ <CABi2SkXOX4SRMs0y8FYccoj+XrEiPCJk2seqT+sgO7Na7NWwLg@mail.gmail.com>
+ <20240201204512.ht3e33yj77kkxi4q@revolver> <CABi2SkWB2eV24LBJtgJ73zEwaAWuFhAwrfqx3Rs=tqnpcJ0qRw@mail.gmail.com>
+ <58408.1706828083@cvs.openbsd.org> <CAHk-=wjqozic6JuRimXD=RamnJmD6FoaQki7RtNYrezzx_OfOg@mail.gmail.com>
+ <CALmYWFtqcixi3p3Ab44wENJr+n2k2SNaCJEofNm_awnNdJZnDQ@mail.gmail.com>
+ <8744.1706846710@cvs.openbsd.org> <CABi2SkWSt=UMFWe9n916ZH16wCzaipKXmEJ5VasQHMr1AxerxQ@mail.gmail.com>
+ <29248.1706850035@cvs.openbsd.org>
+In-Reply-To: <29248.1706850035@cvs.openbsd.org>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Fri, 2 Feb 2024 09:58:53 -0800
+Message-ID: <CABi2SkXPNPKgqheuFuQ9iZApQkJm8o6bypNn0B-QDz_W9b0JBQ@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] Introduce mseal
+To: Theo de Raadt <deraadt@openbsd.org>
+Cc: Jeff Xu <jeffxu@google.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Jonathan Corbet <corbet@lwn.net>, akpm@linux-foundation.org, 
+	keescook@chromium.org, jannh@google.com, sroettger@google.com, 
+	willy@infradead.org, gregkh@linuxfoundation.org, usama.anjum@collabora.com, 
+	rdunlap@infradead.org, jorgelo@chromium.org, groeck@chromium.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 02, 2024, Shaoqin Huang wrote:
-> ---
-> v2->v3:
->   - Rebase to v6.8-rc2.
->   - Use TEST_ASSERT().
+On Thu, Feb 1, 2024 at 9:00=E2=80=AFPM Theo de Raadt <deraadt@openbsd.org> =
+wrote:
+>
+> Jeff Xu <jeffxu@chromium.org> wrote:
+>
+> > Even without free.
+> > I personally do not like the heap getting sealed like that.
+> >
+> > Component A.
+> > p=3Dmalloc(4096);
+> > writing something to p.
+> >
+> > Component B:
+> > mprotect(p,4096, RO)
+> > mseal(p,4096)
+> >
+> > This will split the heap VMA, and prevent the heap from shrinking, if
+> > this is in a frequent code path, then it might hurt the process's
+> > memory usage.
+> >
+> > The existing code is more likely to use malloc than mmap(), so it is
+> > easier for dev to seal a piece of data belonging to another component.
+> > I hope this pattern is not wide-spreading.
+> >
+> > The ideal way will be just changing the library A to use mmap.
+>
+> I think you are lacking some test programs to see how it actually
+> behaves; the effect is worse than you think, and the impact is immediatel=
+y
+> visible to the programmer, and the lesson is clear:
+>
+>         you can only seal objects which you gaurantee never get recycled.
+>
+>         Pushing a sealed object back into reuse is a disasterous bug.
+>
+>         Noone should call this interface, unless they understand that.
+>
+> I'll say again, you don't have a test program for various allocators to
+> understand how it behaves.  The failure modes described in your docuemnts
+> are not correct.
+>
+I understand what you mean: I will add that part to the document:
+Try to recycle a sealed memory is disastrous, e.g.
+p=3Dmalloc(4096);
+mprotect(p,4096,RO)
+mseal(p,4096)
+free(p);
 
-Patch says otherwise.
+My point is:
+I think sealing an object from the heap is a bad pattern in general,
+even dev doesn't free it. That was one of the reasons for the sealable
+flag, I hope saying this doesn't be perceived as looking for excuses.
 
-> @@ -726,6 +728,11 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  		return;
->  	}
->  
-> +	sem_getvalue(&sem_vcpu_stop, &sem_val);
-> +	assert(sem_val == 0);
-> +	sem_getvalue(&sem_vcpu_cont, &sem_val);
-> +	assert(sem_val == 0);
-> +
->  	/*
->  	 * We reserve page table for 2 times of extra dirty mem which
->  	 * will definitely cover the original (1G+) test range.  Here
-> @@ -825,6 +832,13 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  		sync_global_to_guest(vm, iteration);
->  	}
->  
-> +	/*
-> +	 *
-> +	 * Before we set the host_quit, let the vcpu has time to run, to make
-> +	 * sure we consume the sem_vcpu_stop and the vcpu consume the
-> +	 * sem_vcpu_cont, to keep the semaphore balance.
-> +	 */
-> +	usleep(p->interval * 1000);
-
-Sorry, I wasn't as explicit as I should have been.  When I said I don't have a
-better solution, I did not mean to imply that I am ok with busy waiting as a
-hack-a-around.
-
-Against my better judgment, I spent half an hour slogging through this test to
-figure out what's going wrong.  IIUC, the problem is essentially that the test
-instructs the vCPU worker to continue _after_ the last iteration, and _then_ sets
-host_quit, which results in the vCPU running one extra (unvalidated) iteration.
-
-For the other modes, which stop if and only if vcpu_sync_stop_requested is set,
-the extra iteration is a non-issue.  But because the dirty ring variant stops
-after every exit (to purge the ring), it hangs without an extra "continue".
-
-So rather than blindly fire off an extra sem_vcpu_cont that may or may not be
-consumed, I believe the test can simply set host_quit _before_ the final "continue"
-so that the vCPU worker doesn't run an extra iteration.
-
-I ran the below with 1000 loops of "for (i = 0; i < LOG_MODE_NUM; i++)" and so
-no issues.  I didn't see the assert you hit, but without the fix, I did see this
-fire within a few loops (less than 5 I think)l
-
-	assert(host_log_mode == LOG_MODE_DIRTY_RING ||
-	       atomic_read(&vcpu_sync_stop_requested) == false);
-
-I'll post this as two patches: one to fix the bug, and a second to have the
-LOG_MODE_DIRTY_RING variant clear vcpu_sync_stop_requested so that the above
-assert() can be modified as below.
-
----
- tools/testing/selftests/kvm/dirty_log_test.c | 62 ++++++++++++--------
- 1 file changed, 37 insertions(+), 25 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-index babea97b31a4..1a93c4231e45 100644
---- a/tools/testing/selftests/kvm/dirty_log_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_test.c
-@@ -376,7 +376,10 @@ static void dirty_ring_collect_dirty_pages(struct kvm_vcpu *vcpu, int slot,
- 
- 	cleared = kvm_vm_reset_dirty_ring(vcpu->vm);
- 
--	/* Cleared pages should be the same as collected */
-+	/*
-+	 * Cleared pages should be the same as collected, as KVM is supposed to
-+	 * clear only the entries that have been harvested.
-+	 */
- 	TEST_ASSERT(cleared == count, "Reset dirty pages (%u) mismatch "
- 		    "with collected (%u)", cleared, count);
- 
-@@ -402,6 +405,15 @@ static void dirty_ring_after_vcpu_run(struct kvm_vcpu *vcpu, int ret, int err)
- 		/* Update the flag first before pause */
- 		WRITE_ONCE(dirty_ring_vcpu_ring_full,
- 			   run->exit_reason == KVM_EXIT_DIRTY_RING_FULL);
-+
-+		/*
-+		 * Unconditionally clear the stop request.  This dirty ring
-+		 * variant doesn't actually consume the request, because the
-+		 * vCPU worker stops after every exit to allow the main task
-+		 * to reap the dirty ring.  But the vCPU is still obviously
-+		 * stopped, i.e. has honored the request if one was made.
-+		 */
-+		atomic_set(&vcpu_sync_stop_requested, false);
- 		sem_post(&sem_vcpu_stop);
- 		pr_info("vcpu stops because %s...\n",
- 			dirty_ring_vcpu_ring_full ?
-@@ -415,12 +427,6 @@ static void dirty_ring_after_vcpu_run(struct kvm_vcpu *vcpu, int ret, int err)
- 	}
- }
- 
--static void dirty_ring_before_vcpu_join(void)
--{
--	/* Kick another round of vcpu just to make sure it will quit */
--	sem_post(&sem_vcpu_cont);
--}
--
- struct log_mode {
- 	const char *name;
- 	/* Return true if this mode is supported, otherwise false */
-@@ -433,7 +439,6 @@ struct log_mode {
- 				     uint32_t *ring_buf_idx);
- 	/* Hook to call when after each vcpu run */
- 	void (*after_vcpu_run)(struct kvm_vcpu *vcpu, int ret, int err);
--	void (*before_vcpu_join) (void);
- } log_modes[LOG_MODE_NUM] = {
- 	{
- 		.name = "dirty-log",
-@@ -452,7 +457,6 @@ struct log_mode {
- 		.supported = dirty_ring_supported,
- 		.create_vm_done = dirty_ring_create_vm_done,
- 		.collect_dirty_pages = dirty_ring_collect_dirty_pages,
--		.before_vcpu_join = dirty_ring_before_vcpu_join,
- 		.after_vcpu_run = dirty_ring_after_vcpu_run,
- 	},
- };
-@@ -513,14 +517,6 @@ static void log_mode_after_vcpu_run(struct kvm_vcpu *vcpu, int ret, int err)
- 		mode->after_vcpu_run(vcpu, ret, err);
- }
- 
--static void log_mode_before_vcpu_join(void)
--{
--	struct log_mode *mode = &log_modes[host_log_mode];
--
--	if (mode->before_vcpu_join)
--		mode->before_vcpu_join();
--}
--
- static void generate_random_array(uint64_t *guest_array, uint64_t size)
- {
- 	uint64_t i;
-@@ -719,6 +715,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	struct kvm_vm *vm;
- 	unsigned long *bmap;
- 	uint32_t ring_buf_idx = 0;
-+	int sem_val;
- 
- 	if (!log_mode_supported()) {
- 		print_skip("Log mode '%s' not supported",
-@@ -788,12 +785,22 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	/* Start the iterations */
- 	iteration = 1;
- 	sync_global_to_guest(vm, iteration);
--	host_quit = false;
-+	WRITE_ONCE(host_quit, false);
- 	host_dirty_count = 0;
- 	host_clear_count = 0;
- 	host_track_next_count = 0;
- 	WRITE_ONCE(dirty_ring_vcpu_ring_full, false);
- 
-+	/*
-+	 * Ensure the previous iteration didn't leave a dangling semaphore, i.e.
-+	 * that the main task and vCPU worker were synchronized and completed
-+	 * verification of all iterations.
-+	 */
-+	sem_getvalue(&sem_vcpu_stop, &sem_val);
-+	TEST_ASSERT_EQ(sem_val, 0);
-+	sem_getvalue(&sem_vcpu_cont, &sem_val);
-+	TEST_ASSERT_EQ(sem_val, 0);
-+
- 	pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);
- 
- 	while (iteration < p->iterations) {
-@@ -816,18 +823,23 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		 * the flush of the last page, and since we handle the last
- 		 * page specially verification will succeed anyway.
- 		 */
--		assert(host_log_mode == LOG_MODE_DIRTY_RING ||
--		       atomic_read(&vcpu_sync_stop_requested) == false);
-+		TEST_ASSERT_EQ(atomic_read(&vcpu_sync_stop_requested), false);
- 		vm_dirty_log_verify(mode, bmap);
-+
-+		/*
-+		 * Set host_quit before sem_vcpu_cont in the final iteration to
-+		 * ensure that the vCPU worker doesn't resume the guest.  As
-+		 * above, the dirty ring test may stop and wait even when not
-+		 * explicitly request to do so, i.e. would hang waiting for a
-+		 * "continue" if it's allowed to resume the guest.
-+		 */
-+		if (++iteration == p->iterations)
-+			WRITE_ONCE(host_quit, true);
-+
- 		sem_post(&sem_vcpu_cont);
--
--		iteration++;
- 		sync_global_to_guest(vm, iteration);
- 	}
- 
--	/* Tell the vcpu thread to quit */
--	host_quit = true;
--	log_mode_before_vcpu_join();
- 	pthread_join(vcpu_thread, NULL);
- 
- 	pr_info("Total bits checked: dirty (%"PRIu64"), clear (%"PRIu64"), "
-
-base-commit: 78651ed78b3496b6dbf1fb7d64d9d9736a23edc0
--- 
-
-
+>
 
