@@ -1,180 +1,126 @@
-Return-Path: <linux-kselftest+bounces-4016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08429846F03
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:34:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3E1384702F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 13:24:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B14FF1F24B2B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 11:34:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBB121C26FDF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 713B51420DF;
-	Fri,  2 Feb 2024 11:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="5jrbRNKk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72E114077D;
+	Fri,  2 Feb 2024 12:24:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1CE51420C6;
-	Fri,  2 Feb 2024 11:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.128.96.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706873517; cv=none; b=r95J/sbhsXKBlwl/6BAeMymoN6pfws92DNTZ5FeUZkg3rufwCwUGZ1eZ/7hTi1MndBvujlAAGgiGtMACeFTCRYQC0qMibMbFSI+HJ7+U4ucRYft1Np0PN/qPf31HUclMWoPX5ZZrYbOYgUhXzKQCnAE1GKxk3aP3FVeb/mFeSLo=
+	t=1706876651; cv=none; b=Y17LKBAM0Feokj9RhxoPkpKPlJH7om2hy16pBHjq8u/RDM4hr6Zn81qXbmgTNt8XSkaMtjK/h0XNlMi72fkJz7bq308/W6GN05OhkROpFTuoyndMU/DvZdnY0mFGLKJ6TYsRyvhns9ZessLLs4hz0nQfwVVhQgD2fTv08IXoNqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706873517; c=relaxed/simple;
-	bh=2kIkJOhTpv8Q3QiyGfqRKh0McTWdwjht00wQfRsByJM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CWpF+0YUL92HJjeFV3oYLyPWTr75Fr1HdZOhffWJWx0YL5J2cjLuw5pvCIsS5JaJbsY70GJUuJm1/23vUKYBG71crzKTXqBOzAw78rKrmTO0Fjr+5GtRRML8w3lfByB1DjLBJB81AFSqWC9nbvsMV1eWiySwECjPbtIYJDN7w8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=5jrbRNKk; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706873514;
-	bh=2kIkJOhTpv8Q3QiyGfqRKh0McTWdwjht00wQfRsByJM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=5jrbRNKk2culQ7Kp1jvUG6aqXkgZGNOc8qXtU/77rVinmrrbF6j5UzkcypE4v7SzV
-	 1sO8jFCGmlohyfABEMbYhlNulnL3KlfpqyHBfy8y1i/Zysv5SY2cws+zuUO7/7EH5n
-	 b2y3r6zBw0bwETOeTG23b0P5VWzHBbFVkVGy9K+INzWMymN+6GtiTyy02TbgBLQeSP
-	 uleeXDj31LR55nOzdR8Mn620o4NbUmjDKcMDn+Y4a9dbP5SDECDwTpSO8SYRdlJoPm
-	 eS/hqInMh9SclMZCxfJsspNL0xSJctOq5MgTF/S9RMtyVOTL8wSS2vZpuLE/04MbBD
-	 Q5sERtgWJq9Pw==
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A3C913782099;
-	Fri,  2 Feb 2024 11:31:52 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/12] selftests/mm: virtual_address_range: conform to TAP format output
-Date: Fri,  2 Feb 2024 16:31:19 +0500
-Message-ID: <20240202113119.2047740-13-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20240202113119.2047740-1-usama.anjum@collabora.com>
-References: <20240202113119.2047740-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1706876651; c=relaxed/simple;
+	bh=m8mtqnWI7hjKWBDfyKsbopyfLerJiS3T9hkaNbjWoX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=coYabtE/ct7GKowzm5coJ1YpnzTBbffXLX9+KJvFpV67MH+1uQvKaujwjUJRz/hQZnoZcZbzbPqwLWrEBGg1MyCs3uW77tWVLRBTVwjujyIEO9l8mxIpoNA3qFHT0PPvrRhDcaVzHAHYoouT6SFZAySe1+/DslsadYNpg+/w3ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=23.128.96.19
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Feb 2024 04:24:03 PST
+Received: from mail22.mail.schwarz (mail22.mail.schwarz [185.124.192.54])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC5E97;
+	Fri,  2 Feb 2024 04:24:03 -0800 (PST)
+X-SCHWARZ-TO: coreteam@netfilter.org, linux-kernel@vger.kernel.org, pabeni@redhat.com,
+ i.maximets@ovn.org, kadlec@netfilter.org, davem@davemloft.net,
+ netfilter-devel@vger.kernel.org, fw@strlen.de, netdev@vger.kernel.org,
+ edumazet@google.com, pablo@netfilter.org, linux-kselftest@vger.kernel.org,
+ horms@ovn.org, shuah@kernel.org
+X-SCHWARZ-ENVELOPEFROM: felix.huettner@mail.schwarz
+Received: from felix.runs.onstackit.cloud ([45.129.43.133])
+  by mail22.mail.schwarz with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 12:22:56 +0000
+Date: Fri, 2 Feb 2024 12:22:55 +0000
+From: Felix Huettner <felix.huettner@mail.schwarz>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Ilya Maximets <i.maximets@ovn.org>, linux-kernel@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+	edumazet@google.com, pabeni@redhat.com, shuah@kernel.org,
+	luca.czesla@mail.schwarz, max.lamprecht@mail.schwarz,
+	Simon Horman <horms@ovn.org>
+Subject: Re: [PATCH net-next v2] net: ctnetlink: support filtering by zone
+Message-ID: <Zbzen36ahZaiR+qp@felix.runs.onstackit.cloud>
+References: <ZWSCPKtDuYRG1XWt@kernel-bug-kernel-bug>
+ <ZYV6hgP35k6Bwk+H@calendula>
+ <2032238f-31ac-4106-8f22-522e76df5a12@ovn.org>
+ <ZbzOA1D1IGYX2oxS@calendula>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZbzOA1D1IGYX2oxS@calendula>
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
+On Fri, Feb 02, 2024 at 12:12:03PM +0100, Pablo Neira Ayuso wrote:
+> On Fri, Feb 02, 2024 at 12:04:35PM +0100, Ilya Maximets wrote:
+> > On 12/22/23 13:01, Pablo Neira Ayuso wrote:
+> > > On Mon, Nov 27, 2023 at 11:49:16AM +0000, Felix Huettner wrote:
+> > >> conntrack zones are heavily used by tools like openvswitch to run
+> > >> multiple virtual "routers" on a single machine. In this context each
+> > >> conntrack zone matches to a single router, thereby preventing
+> > >> overlapping IPs from becoming issues.
+> > >> In these systems it is common to operate on all conntrack entries of a
+> > >> given zone, e.g. to delete them when a router is deleted. Previously this
+> > >> required these tools to dump the full conntrack table and filter out the
+> > >> relevant entries in userspace potentially causing performance issues.
+> > >>
+> > >> To do this we reuse the existing CTA_ZONE attribute. This was previous
+> > >> parsed but not used during dump and flush requests. Now if CTA_ZONE is
+> > >> set we filter these operations based on the provided zone.
+> > >> However this means that users that previously passed CTA_ZONE will
+> > >> experience a difference in functionality.
+> > >>
+> > >> Alternatively CTA_FILTER could have been used for the same
+> > >> functionality. However it is not yet supported during flush requests and
+> > >> is only available when using AF_INET or AF_INET6.
+> > > 
+> > > For the record, this is applied to nf-next.
+> > 
+> > Hi, Felix and Pablo.
+> > 
+> > I was looking through the code and the following part is bothering me:
+> > 
+> >  diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
+> >  index fb0ae15e96df..4e9133f61251 100644
+> >  --- a/net/netfilter/nf_conntrack_netlink.c
+> >  +++ b/net/netfilter/nf_conntrack_netlink.c
+> >  @@ -1148,6 +1149,10 @@ static int ctnetlink_filter_match(struct nf_conn *ct, void *data)
+> >          if (filter->family && nf_ct_l3num(ct) != filter->family)
+> >                  goto ignore_entry;
+> >  
+> >  +       if (filter->zone.id != NF_CT_DEFAULT_ZONE_ID &&
+> >  +           !nf_ct_zone_equal_any(ct, &filter->zone))
+> >  +               goto ignore_entry;
+> >  +
+> >          if (filter->orig_flags) {
+> >                  tuple = nf_ct_tuple(ct, IP_CT_DIR_ORIGINAL);
+> >                  if (!ctnetlink_filter_match_tuple(&filter->orig, tuple,
+> > 
+> > If I'm reading that right, the default zone is always flushed, even if the
+> > user requested to flush a different zone.  I.e. the entry is never ignored
+> > for a default zone.  Is that correct or am I reading that wrong?
+> > 
+> > If my observation is correct, then I don't think this functionality can
+> > actually be used by applications as it does something unexpected.
+> 
+> This needs a fix, the NF_CT_DEFAULT_ZONE_ID is used as a marker to
+> indicate if the filtering by zone needs to happen or not.
+> 
+> I'd suggest to add a boolean flag that specifies that zone filtering
+> is set on.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- .../selftests/mm/virtual_address_range.c      | 44 +++++++++----------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+Hi Pablo and Ilya,
 
-diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-index bae0ceaf95b13..7bcf8d48256a6 100644
---- a/tools/testing/selftests/mm/virtual_address_range.c
-+++ b/tools/testing/selftests/mm/virtual_address_range.c
-@@ -12,6 +12,7 @@
- #include <errno.h>
- #include <sys/mman.h>
- #include <sys/time.h>
-+#include "../kselftest.h"
- 
- /*
-  * Maximum address range mapped with a single mmap()
-@@ -68,23 +69,15 @@ static char *hind_addr(void)
- 	return (char *) (1UL << bits);
- }
- 
--static int validate_addr(char *ptr, int high_addr)
-+static void validate_addr(char *ptr, int high_addr)
- {
- 	unsigned long addr = (unsigned long) ptr;
- 
--	if (high_addr) {
--		if (addr < HIGH_ADDR_MARK) {
--			printf("Bad address %lx\n", addr);
--			return 1;
--		}
--		return 0;
--	}
-+	if (high_addr && addr < HIGH_ADDR_MARK)
-+		ksft_exit_fail_msg("Bad address %lx\n", addr);
- 
--	if (addr > HIGH_ADDR_MARK) {
--		printf("Bad address %lx\n", addr);
--		return 1;
--	}
--	return 0;
-+	if (addr > HIGH_ADDR_MARK)
-+		ksft_exit_fail_msg("Bad address %lx\n", addr);
- }
- 
- static int validate_lower_address_hint(void)
-@@ -107,23 +100,29 @@ int main(int argc, char *argv[])
- 	char *hint;
- 	unsigned long i, lchunks, hchunks;
- 
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
- 	for (i = 0; i < NR_CHUNKS_LOW; i++) {
- 		ptr[i] = mmap(NULL, MAP_CHUNK_SIZE, PROT_READ | PROT_WRITE,
- 					MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
- 
- 		if (ptr[i] == MAP_FAILED) {
--			if (validate_lower_address_hint())
--				return 1;
-+			if (validate_lower_address_hint()) {
-+				ksft_test_result_skip("Memory constraint not fulfilled\n");
-+				ksft_finished();
-+			}
- 			break;
- 		}
- 
--		if (validate_addr(ptr[i], 0))
--			return 1;
-+		validate_addr(ptr[i], 0);
- 	}
- 	lchunks = i;
- 	hptr = (char **) calloc(NR_CHUNKS_HIGH, sizeof(char *));
--	if (hptr == NULL)
--		return 1;
-+	if (hptr == NULL) {
-+		ksft_test_result_skip("Memory constraint not fulfilled\n");
-+		ksft_finished();
-+	}
- 
- 	for (i = 0; i < NR_CHUNKS_HIGH; i++) {
- 		hint = hind_addr();
-@@ -133,8 +132,7 @@ int main(int argc, char *argv[])
- 		if (hptr[i] == MAP_FAILED)
- 			break;
- 
--		if (validate_addr(hptr[i], 1))
--			return 1;
-+		validate_addr(hptr[i], 1);
- 	}
- 	hchunks = i;
- 
-@@ -145,5 +143,7 @@ int main(int argc, char *argv[])
- 		munmap(hptr[i], MAP_CHUNK_SIZE);
- 
- 	free(hptr);
--	return 0;
-+
-+	ksft_test_result_pass("Test\n");
-+	ksft_finished();
- }
--- 
-2.42.0
+thanks for finding that.
+i will build a fix for that.
 
 
