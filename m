@@ -1,127 +1,97 @@
-Return-Path: <linux-kselftest+bounces-3963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D79F784650F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 01:26:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBB8A846542
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 02:06:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89D941F24CD5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 00:26:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DC8F288636
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 01:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD31382;
-	Fri,  2 Feb 2024 00:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2715D53A2;
+	Fri,  2 Feb 2024 01:06:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="VpaNj6/i"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="esiuD9iU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39914EC5;
-	Fri,  2 Feb 2024 00:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73F753A1;
+	Fri,  2 Feb 2024 01:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706833588; cv=none; b=tc6CnBIfoRN6W8cqfvHsINmO6kgjy5vUyU+ZD8u0ZIGQQO0M96SBYbPyViQsAHZl9tldDSvXqYdv7CMIrAA8RS5tiFGpxePI+V5IFcv8lKs3dmaLEluu6QmGYJM0qPbRaR6p1SIEAigDIxy5UgjF9v+KrtsTG3PhJED9xGB1GvM=
+	t=1706835965; cv=none; b=SrHntAGg4NUv1TsQVbXFfWU+WFYaOvABqca/IAhHb+2udVWjljag6sCzMx4DJ2+pw1kTPaZtIyuMtiJH9g+epTIKj64bKfbKzJoxqCO//Xuai7PgcXu/1/1cCAMK4d4Kzy5TDcM1B4BORVi9Fn579maVcEGjiI2gPuKuIfQcWOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706833588; c=relaxed/simple;
-	bh=b4nuzlN7OXSDkEKK1U2oo8Q0qvyu895tOHZwmXJZYZY=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=s6B0ltCoSGxCRrJm8/GcJch2tcLQHKUWcqgmUpY4H7tI70WTtILGSwq4s0lekpOrDTE32Iewlph795xiIMuL5vO5khrtPJgtGaFsEH4yOVX70qAiSmofIXrvlCMyRAF1itWcblgB/wwVkb+xsW2mvmO3N2Z7rWr269UmEb+ImAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=VpaNj6/i; arc=none smtp.client-ip=199.185.137.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=b4nuzlN7OX
-	SDkEKK1U2oo8Q0qvyu895tOHZwmXJZYZY=; h=date:references:in-reply-to:
-	subject:cc:to:from; d=openbsd.org; b=VpaNj6/iRziFx+GU2tpihBVG7l1JHFd8a
-	A7GD2CdvaEXIouZOIYmu0HkU7Yjro1oIcecAG+ryKntLWNqbB91QFrgRsVyh2DreI/KG0m
-	BZYC8k786h0blH7dnoSQRuOZEsAfQtUl8+laLj8lX6X7GqGJYhR62VVjydW6zOWbPtl4RC
-	wzPNQdbU6ZUjJ6BFlwKspHNooi8k7EbWpFCzTMNqPnkNqGmbj3mU3Gk8EMW9QiBH/F4Wcj
-	TvHiEjL8XJZm3ChSiB6KS0njSQG9uZqD4vdBDZOgwq69zsLHW6+ioFjQrr29Yrhpx8MJ/X
-	j4IjI2I3Ntjm2p8fN6H7i4JoipVtg==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 5744bf5f;
-	Thu, 1 Feb 2024 17:26:25 -0700 (MST)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-cc: Jeff Xu <jeffxu@chromium.org>,
-    "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-    Jonathan Corbet <corbet@lwn.net>, akpm@linux-foundation.org,
-    keescook@chromium.org, jannh@google.com, sroettger@google.com,
-    willy@infradead.org, gregkh@linuxfoundation.org,
-    usama.anjum@collabora.com, rdunlap@infradead.org, jeffxu@google.com,
-    jorgelo@chromium.org, groeck@chromium.org,
-    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-    linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
-    linux-hardening@vger.kernel.org
+	s=arc-20240116; t=1706835965; c=relaxed/simple;
+	bh=FCd8HoHZrcX63bQlMAlSTqIPH/4qdHcUl1FKM5j5vsA=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8Qbln+6a/z1mPYAH8dLl2zPXnc0H9btqasYeZFcreWlLjYFYq1vzSrufpg2L2JFVykN70YQdb9zNuWlwONTjpU+cpSPsKX5cEp01olS3iFz3Bmymsfj1DCeGjHF6UzC6nle1fitj20Q0cQfmaHpkFZs2uKI7NJ61sPHsg2kxA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=esiuD9iU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC09C433C7;
+	Fri,  2 Feb 2024 01:06:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706835964;
+	bh=FCd8HoHZrcX63bQlMAlSTqIPH/4qdHcUl1FKM5j5vsA=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=esiuD9iU7YeWm66qZS9sotr0oscjl9KHVUZ0JvRlbyJyTgwZ2DAHvReTGSJj8Exwk
+	 QsMvI06Zan9QzIH7ULW++Jl5sWbQROYd2EqWQtOwbm7OmDIp7qWO3e04fRioc4jaFG
+	 n2kFJpJUOY92viQr7+kBMQwQD7oBQXt6boqi7cEc=
+Date: Thu, 1 Feb 2024 17:06:03 -0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Jeff Xu <jeffxu@chromium.org>, Jonathan Corbet <corbet@lwn.net>,
+	akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
+	sroettger@google.com, willy@infradead.org,
+	torvalds@linux-foundation.org, usama.anjum@collabora.com,
+	rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
+	groeck@chromium.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	pedro.falcato@gmail.com, dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org
 Subject: Re: [PATCH v8 0/4] Introduce mseal
-In-reply-to: <CAHk-=wjqozic6JuRimXD=RamnJmD6FoaQki7RtNYrezzx_OfOg@mail.gmail.com>
-References: <20240131175027.3287009-1-jeffxu@chromium.org> <20240131193411.opisg5yoyxkwoyil@revolver> <CABi2SkXOX4SRMs0y8FYccoj+XrEiPCJk2seqT+sgO7Na7NWwLg@mail.gmail.com> <20240201204512.ht3e33yj77kkxi4q@revolver> <CABi2SkWB2eV24LBJtgJ73zEwaAWuFhAwrfqx3Rs=tqnpcJ0qRw@mail.gmail.com> <58408.1706828083@cvs.openbsd.org> <CAHk-=wjqozic6JuRimXD=RamnJmD6FoaQki7RtNYrezzx_OfOg@mail.gmail.com>
-Comments: In-reply-to Linus Torvalds <torvalds@linux-foundation.org>
-   message dated "Thu, 01 Feb 2024 15:15:27 -0800."
+Message-ID: <2024020137-hacking-tightwad-a485@gregkh>
+References: <20240131175027.3287009-1-jeffxu@chromium.org>
+ <20240131193411.opisg5yoyxkwoyil@revolver>
+ <CABi2SkXOX4SRMs0y8FYccoj+XrEiPCJk2seqT+sgO7Na7NWwLg@mail.gmail.com>
+ <20240201204512.ht3e33yj77kkxi4q@revolver>
+ <60731.1706826280@cvs.openbsd.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <31812.1706833585.1@cvs.openbsd.org>
-Date: Thu, 01 Feb 2024 17:26:25 -0700
-Message-ID: <7481.1706833585@cvs.openbsd.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60731.1706826280@cvs.openbsd.org>
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Thu, Feb 01, 2024 at 03:24:40PM -0700, Theo de Raadt wrote:
+> As an outsider, Linux development is really strange:
+> 
+> Two sub-features are being pushed very hard, and the primary developer
+> doesn't have code which uses either of them.  And once it goes in, it
+> cannot be changed.
+> 
+> It's very different from my world, where the absolutely minimal
+> interface was written to apply to a whole operating system plus 10,000+
+> applications, and then took months of testing before it was approved for
+> inclusion.  And if it was subtly wrong, we would be able to change it.
 
-> and using PROT_SEAL at mmap() time is similarly the same obvious
-> notion of "map this, and then seal that mapping".
+No, it's this "feature" submission that is strange to think that we
+don't need that.  We do need, and will require, an actual working
+userspace something to use it, otherwise as you say, there's no way to
+actually know if it works properly or not and we can't change it once we
+accept it.
 
-The usual way is:
+So along those lines, Jeff, do you have a pointer to the Chrome patches,
+or glibc patches, that use this new interface that proves that it
+actually works?  Those would be great to see to at least verify it's
+been tested in a real-world situation and actually works for your use
+case.
 
-    ptr = mmap(NULL, len PROT_READ|PROT_WRITE, ...)
+thanks,
 
-    initialize region between ptr, ptr+len
-
-    mprotect(ptr, len, PROT_READ)
-    mseal(ptr, len, 0);
-
-
-Our source tree contains one place where a locking happens very close
-to a mmap().
-
-It is the shared-library-linker 'hints file', this is a file that gets
-mapped PROT_READ and then we lock it.
-
-It feels like that could be one operation?  It can't be.
-
-        addr = (void *)mmap(0, hsize, PROT_READ, MAP_PRIVATE, hfd, 0);
-        if (_dl_mmap_error(addr))
-                goto bad_hints;
-
-        hheader = (struct hints_header *)addr;
-        if (HH_BADMAG(*hheader) || hheader->hh_ehints > hsize)
-                goto bad_hints;
-
-	/* couple more error checks */
-
-	mimmutable(addr, hsize);
-	close(hfd);
-	return (0);
-bad_hints:
-	munmap(addr, hsize);
-	...
-
-See the problem?  It unmaps it if the contents are broken.  So even that
-case cannot use something like "PROT_SEAL".
-
-These are not hypotheticals.  I'm grepping an entire Unix kernel and
-userland source tree, and I know what 100,000+ applications do.  I found
-piece of code that could almost use it, but upon inspection it can't,
-and it is obvious why: it is best idiom to allow a programmer to insert
-an inspection operation between two disctinct operations, and especially
-critical if the 2nd operation cannot be reversed.
-
-Noone needs PROT_SEAL as a shortcut operation in mmap() or mprotect().
-
-Throwing around ideas without proving their use in practice is very
-unscientific.
+greg k-h
 
