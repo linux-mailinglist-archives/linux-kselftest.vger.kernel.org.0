@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-4006-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4007-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBF28846EEE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:31:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 990E6846EF2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:32:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89FD228B452
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 11:31:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D53A1F257DC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 11:32:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 837B213E22B;
-	Fri,  2 Feb 2024 11:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4F913EFE4;
+	Fri,  2 Feb 2024 11:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Gctvpzd2"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3bmcXcIj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1357867F;
-	Fri,  2 Feb 2024 11:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1EE5FEF7;
+	Fri,  2 Feb 2024 11:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706873496; cv=none; b=G5CMt9UHGODuifiAmMs1VU5Ig2gU9bYHAbRpxCyz8FhBY8ZwMaLYzuZac74Pntiu/EhC9CRYwy7zktmzr3Dfd2ABZS+u/Eksl2g0BdyjMqrkXtktwbUJb+wfo91cwdDv8rPYgpqnJnUdo5L9+UX6bb6iLusSES3VkS9teuDS2RY=
+	t=1706873498; cv=none; b=gpAhJW+E2at1Wx7JwC+6zVp40eVvuULYzfkB4M6cEdZH61XTt9eFLHxgrM+4sDtNeBdnkbip3ftwI8a3K8nP+XgRxvkvqmejmF1tT6gyXEKhfuN5p5xWorJhOYSCfyxcsRL1bHqmqEL5XqoyLwcXroBP3En0mnRNt3RI5TzwXKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706873496; c=relaxed/simple;
-	bh=svTlCA3lz9tOssty2sVCUQ4b7cMa6+0k/VLIT1J7+9U=;
+	s=arc-20240116; t=1706873498; c=relaxed/simple;
+	bh=y0GUUHT+6utzfuC41fyJPiGU8siNhU+amnQRcBTcLQo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KeBja10Tj0WsajypWII3EKJzEjPnufKKgg3UeCj3bNacqglbfBF5woaU5jTRHvNQ/uLkd+EZGy77dj2sNUwhx2Qcr9i1VAQFFvWAMxt4wRlt7QsV74RUNyBByRamUaACI0IqSUs/wPnhru8ie0GdluGElJxAXfQkVPSqmSYCV9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Gctvpzd2; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=Yqzgy6GBRaxyB4c6s+z8oPxyaO5Bu/BzZIfWtN3Z5hPWv/5JcQrPMF0SgHiOUCHgHJYY7h2mXgM9JrjHkNDBz4GMpZ4W8Du9JUMNrjdHRbJ6srCKdEXwnX8OsvwSVYURHa+OuwYVZwaSirmlktWKpftSFS5AiZq44EiKC9rRIMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=3bmcXcIj; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706873493;
-	bh=svTlCA3lz9tOssty2sVCUQ4b7cMa6+0k/VLIT1J7+9U=;
+	s=mail; t=1706873495;
+	bh=y0GUUHT+6utzfuC41fyJPiGU8siNhU+amnQRcBTcLQo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Gctvpzd28VBgke2Z+BXwCBrBQu1jQVsCaUleRlbQUwB7fiWabKc4N7PesugLWQUtI
-	 1sq4+wP73NLDqs7qgWOjJl574RC2NLF3msWnLxVutqERk/OGVxInK8zIoyxNkLTdwD
-	 J5nstDTK2reP5hFbcQswwc8kV6J48STqelw5C8qKbMPDs/MHOFV+pQANANHRFx0cjS
-	 KsltlL/gJgemApo2KlWrmgBtNQ27M4sUjRaTEiCQLBDR0+EUTM5dnuqupm2SzyX9uD
-	 20YBeMErqW/GW9fKnZ4eXWqE2IckqYxZk01TUfuqCPwGH+lxL495V9Lp3K6jq2E7Wl
-	 XpkZoyR0bEiSg==
+	b=3bmcXcIj30VRmeCmmY+Ym86LbvMLxAmsZ1+9WkprrVt3iQzevJY56wjJIWdJqBXdj
+	 20wNXjG+lGd+mG2USfLDIr1VOhLsdnxXkAJ38OVsd6KMXNK20c36Afs6+L33edOobQ
+	 nzVnXBuVi60lDHc9VM0avrt1afmEzshkvl0htyC4cTzsQEYMF2IwSQqjBAsY32EEDN
+	 mEwE+U9lR0Ndq508JuKGGS4x0FV/4nXwlPAFU5s7pYU/LOO/tSuUmI6mzcc8mulNRy
+	 FYoEjZju5Nlf45G9RTR9Fo9Ckesjkg9pchTtJi0W8TpLpDf0F1ztxnJ7lxoDU4sBH7
+	 0w4i1eOJv+LCA==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CDA443782099;
-	Fri,  2 Feb 2024 11:31:31 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C238237811CF;
+	Fri,  2 Feb 2024 11:31:33 +0000 (UTC)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -56,9 +56,9 @@ Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/12] selftests/mm: map_hugetlb: conform test to TAP format output
-Date: Fri,  2 Feb 2024 16:31:09 +0500
-Message-ID: <20240202113119.2047740-3-usama.anjum@collabora.com>
+Subject: [PATCH v2 03/12] selftests/mm: map_populate: conform test to TAP format output
+Date: Fri,  2 Feb 2024 16:31:10 +0500
+Message-ID: <20240202113119.2047740-4-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20240202113119.2047740-1-usama.anjum@collabora.com>
 References: <20240202113119.2047740-1-usama.anjum@collabora.com>
@@ -72,110 +72,96 @@ Content-Transfer-Encoding: 8bit
 
 Conform the layout, informational and status messages to TAP. No
 functional change is intended other than the layout of output messages.
+Minor cleanups have also been included.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/map_hugetlb.c | 42 +++++++++++-------------
- 1 file changed, 20 insertions(+), 22 deletions(-)
+ tools/testing/selftests/mm/map_populate.c | 37 ++++++++++++++---------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
-index 86e8f2048a409..a1f005a90a4f0 100644
---- a/tools/testing/selftests/mm/map_hugetlb.c
-+++ b/tools/testing/selftests/mm/map_hugetlb.c
-@@ -16,6 +16,7 @@
- #include <sys/mman.h>
- #include <fcntl.h>
- #include "vm_util.h"
+diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
+index 7945d07548751..5c8a53869b1bd 100644
+--- a/tools/testing/selftests/mm/map_populate.c
++++ b/tools/testing/selftests/mm/map_populate.c
+@@ -16,19 +16,21 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
 +#include "../kselftest.h"
  
- #define LENGTH (256UL*1024*1024)
- #define PROTECTION (PROT_READ | PROT_WRITE)
-@@ -31,7 +32,7 @@
+ #define MMAP_SZ		4096
  
- static void check_bytes(char *addr)
- {
--	printf("First hex is %x\n", *((unsigned int *)addr));
-+	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
- }
+-#define BUG_ON(condition, description)					\
+-	do {								\
+-		if (condition) {					\
+-			fprintf(stderr, "[FAIL]\t%s:%d\t%s:%s\n", __func__, \
+-				__LINE__, (description), strerror(errno)); \
+-			exit(1);					\
+-		}							\
++#define BUG_ON(condition, description)						\
++	do {									\
++		if (condition)							\
++			ksft_exit_fail_msg("[FAIL]\t%s:%d\t%s:%s\n",		\
++					   __func__, __LINE__, (description),	\
++					   strerror(errno));			\
+ 	} while (0)
  
- static void write_bytes(char *addr, size_t length)
-@@ -42,23 +43,21 @@ static void write_bytes(char *addr, size_t length)
- 		*(addr + i) = (char)i;
- }
- 
--static int read_bytes(char *addr, size_t length)
-+static void read_bytes(char *addr, size_t length)
- {
- 	unsigned long i;
- 
- 	check_bytes(addr);
- 	for (i = 0; i < length; i++)
--		if (*(addr + i) != (char)i) {
--			printf("Mismatch at %lu\n", i);
--			return 1;
--		}
--	return 0;
-+		if (*(addr + i) != (char)i)
-+			ksft_exit_fail_msg("Mismatch at %lu\n", i);
+-static int parent_f(int sock, unsigned long *smap, int child)
++#define TESTS_IN_CHILD 2
 +
-+	ksft_test_result_pass("Read correct data\n");
++static void parent_f(int sock, unsigned long *smap, int child)
+ {
+ 	int status, ret;
+ 
+@@ -43,9 +45,10 @@ static int parent_f(int sock, unsigned long *smap, int child)
+ 	BUG_ON(ret <= 0, "write(sock)");
+ 
+ 	waitpid(child, &status, 0);
+-	BUG_ON(!WIFEXITED(status), "child in unexpected state");
+ 
+-	return WEXITSTATUS(status);
++	/* The ksft macros don't keep counters between processes */
++	ksft_cnt.ksft_pass = WEXITSTATUS(status);
++	ksft_cnt.ksft_fail = TESTS_IN_CHILD - WEXITSTATUS(status);
+ }
+ 
+ static int child_f(int sock, unsigned long *smap, int fd)
+@@ -64,10 +67,11 @@ static int child_f(int sock, unsigned long *smap, int fd)
+ 	ret = read(sock, &buf, sizeof(int));
+ 	BUG_ON(ret <= 0, "read(sock)");
+ 
+-	BUG_ON(*smap == 0x22222BAD, "MAP_POPULATE didn't COW private page");
+-	BUG_ON(*smap != 0xdeadbabe, "mapping was corrupted");
++	ksft_test_result(*smap != 0x22222BAD, "MAP_POPULATE COW private page\n");
++	ksft_test_result(*smap == 0xdeadbabe, "The mapping state\n");
+ 
+-	return 0;
++	/* The ksft macros don't keep counters between processes */
++	return ksft_cnt.ksft_pass;
  }
  
  int main(int argc, char **argv)
- {
- 	void *addr;
--	int ret;
- 	size_t hugepage_size;
- 	size_t length = LENGTH;
- 	int flags = FLAGS;
-@@ -69,6 +68,9 @@ int main(int argc, char **argv)
- 	if (hugepage_size > length)
- 		length = hugepage_size;
+@@ -76,6 +80,9 @@ int main(int argc, char **argv)
+ 	FILE *ftmp;
+ 	unsigned long *smap;
  
 +	ksft_print_header();
-+	ksft_set_plan(1);
++	ksft_set_plan(TESTS_IN_CHILD);
 +
- 	if (argc > 1)
- 		length = atol(argv[1]) << 20;
- 	if (argc > 2) {
-@@ -78,27 +80,23 @@ int main(int argc, char **argv)
+ 	ftmp = tmpfile();
+ 	BUG_ON(!ftmp, "tmpfile()");
+ 
+@@ -101,7 +108,9 @@ int main(int argc, char **argv)
+ 		ret = close(sock[0]);
+ 		BUG_ON(ret, "close()");
+ 
+-		return parent_f(sock[1], smap, child);
++		parent_f(sock[1], smap, child);
++
++		ksft_finished();
  	}
  
- 	if (shift)
--		printf("%u kB hugepages\n", 1 << (shift - 10));
-+		ksft_print_msg("%u kB hugepages\n", 1 << (shift - 10));
- 	else
--		printf("Default size hugepages\n");
--	printf("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
-+		ksft_print_msg("Default size hugepages\n");
-+	ksft_print_msg("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
- 
- 	addr = mmap(ADDR, length, PROTECTION, flags, -1, 0);
--	if (addr == MAP_FAILED) {
--		perror("mmap");
--		exit(1);
--	}
-+	if (addr == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
- 
--	printf("Returned address is %p\n", addr);
-+	ksft_print_msg("Returned address is %p\n", addr);
- 	check_bytes(addr);
- 	write_bytes(addr, length);
--	ret = read_bytes(addr, length);
-+	read_bytes(addr, length);
- 
- 	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
--	if (munmap(addr, length)) {
--		perror("munmap");
--		exit(1);
--	}
-+	if (munmap(addr, length))
-+		ksft_exit_fail_msg("munmap: %s\n", strerror(errno));
- 
--	return ret;
-+	ksft_finished();
- }
+ 	ret = close(sock[1]);
 -- 
 2.42.0
 
