@@ -1,257 +1,170 @@
-Return-Path: <linux-kselftest+bounces-3967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DC768465C9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 03:28:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 272B58465E6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 03:33:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E472F1F232F6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 02:28:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1E4A28A94D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 02:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A9CBA5D;
-	Fri,  2 Feb 2024 02:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D0B612FB1A;
+	Fri,  2 Feb 2024 02:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="BJzDeN4w"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="NsFwKzt3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5822BA2C
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 02:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720E9CA71
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 02:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706840893; cv=none; b=FySc4q+7KkXeaFW0aMMkCDeVrGGHmzjrPQ4UlY4V7NTUSeeVGrELpobQ2OYfkbktWRQ0Kv2lvQ+xuxeBUG9Xubo0YBJvJTyWTdnnZZPxECTnifec+dpEPpF1JK+wsADJLFel0zTgCQ85wL/cAvA9FI4T7WPO9k/wTScpIdrPJCo=
+	t=1706841058; cv=none; b=HtF2EVLMFU5kjQsmyUV2ieandbCHN55moKXGA3s/tCNu56nQFdfHCCEG2YB6n8wjKZeznyK+9aTsce/Kyae0yThLrLRGIxXRa0bnLm0dgDY9Oy4NgSnrXVq/OBR1Xw2JGeOryKqfngOCgN8iIXfG2h5H2pkdIRxhVaDeHnKc0O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706840893; c=relaxed/simple;
-	bh=rpDe5b+V/4D+ojZKAKLnU3kGC0FGFddkWQWVw2UB06A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Glri+wuAOFLq81W7PI9lbRMZkfNZsYh6OLYci6YLLX3owIoyTpXq6v+JG1TSmi1LdB22rHbZidEVXRQOTeDZxS+fGwpx77eHU8VwqpF+ce9WhOnUwEVtar4Gl9xh9jQuWSUeWmOGDb5iCQ/lUBfBc+qcYatcHq3ac80giAz48rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=BJzDeN4w; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e11cda9f6fso940945a34.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Feb 2024 18:28:09 -0800 (PST)
+	s=arc-20240116; t=1706841058; c=relaxed/simple;
+	bh=KpL5m4Y25ECKAWZYe1aKcE9e3nSH9gZtcs480pi8j/0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KsrjfFhTwb9d3OJS+DHg+kVWwL2XHPQGNz+h4rDfMBsq96MXvFKacNq1Cgg+zy2DK7j1l2cTdmgR1fxavKIIO0Gm5pxoByWpsFg1hCUl7705ewWdqw1f9qLb5zf3oXY4vThEtSM0CBaX5Qv1ii2j2ytrYt+k35nBKfkQWvSZICw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=NsFwKzt3; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40fb63c40c0so13998405e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Feb 2024 18:30:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706840889; x=1707445689; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nH6kvi7IzHM1HjT9d3ebo606kaCmtup5eOU1YOyCeeQ=;
-        b=BJzDeN4wHlZUpyJsHUvQuvMd93OWPeQhvpwM8dvkW2/Pu0WCqhedjZOoIwWkZesuL0
-         fmrbQEnLB2GY1EX9lfdRpQM/ZfrMDyzumGFjHheU3Hf8PnawGCM5/9gkgYGJLmrWIqlp
-         7KrTXNDMOmssAkXyDr7PPA9zMcndgrLjfxqLLxAx1lyaUnZzvjeoKsGc0dP9VykxiKl8
-         5Kf8fWr99v92MCWVRIeoyhM/hIWZSiHe8Uw81CVGhb2ZR2IGAnaMIddd/ziYPbBWu0ms
-         4iAhd3ZnredVIXW3FwJr4QDtx8gXCfBMKiPiKCeFK02ITbKlwhdIDoKic3nKSjDMEay6
-         RkMQ==
+        d=arista.com; s=google; t=1706841055; x=1707445855; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fQCgprpOyHEK0e/SRQUIuIzVOt3Yj59dY0F+3ICLlFA=;
+        b=NsFwKzt3xv/NuA3z+nr/1kapbnl3rjpf3Bum1Bdl2IROeokoly/89mxyzDlhcsavdQ
+         oODberjOQW6fmyKDt2c/SROUXMf2FfkDadsg795JOQJkbOAzCek36U2WLbbSl2OidOk7
+         wo5sRmWPtmrJlyFhucC/6yspSVtD4/nCzJVz5doe+68j8yZfGJBk3cDqWEYSfkT+32mK
+         BBQKO8rm/ECgMoN788xzHJxcJtR9Y7TNVl8H5whmyBStBxYvYWL3LDGWXcELR/ohqArc
+         G/yURMaN27uKDQkBdSJh3KaOjmtE4Vo26oitrfV7XHl68A13sD/a90y2cdQlSy1o6J7F
+         bk/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706840889; x=1707445689;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1706841055; x=1707445855;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nH6kvi7IzHM1HjT9d3ebo606kaCmtup5eOU1YOyCeeQ=;
-        b=JmtJhLXte3znGIeJkbqW3FF755OVRJUSYS6N9agGqG6F3TH+dPJGgahp2NQxZ8Z7JE
-         wdXPY+7CbUYy9WdP4T0/0P1BCQt+Rydx4605ZTXtIKihGQckEC/LB3+L7GLzH4BLAKiG
-         IKQX8mctaIkyg7eAr8P1rwUeTgj3pcpIZL1MEIcdyIz/epg6z8YrKQiwmIYojYOVt7FW
-         HrjEgExunNSYZg+3gYQ11ShNpQihVdUyuQur+CFG4dCGaPIC0g+WOIKzQ1JN7hVXirJ7
-         433DppkW/tuJjmWPO8RnqtW91SqR4N11k60JtbFmRYETozaD1gUKp28jmwM9Xom2LY/Q
-         y+lg==
-X-Gm-Message-State: AOJu0Yzx1lnX3gDZflL0l69ZmKEEfDM508mUQH7C9jn0pfSopLRnO6bS
-	DrxZQvoyxHU7NYZv716A3J/v7tajF/9cKGzBK5UKr8aDEE/Bnlz0S/xSVMi/KNo=
-X-Google-Smtp-Source: AGHT+IFp062ooy/IHYTf+Z1OQbUuwLGyLVscZ2fxBHLPNsW3kl1YytnGZuKwPGTv6LdCdXItOvcJDA==
-X-Received: by 2002:a05:6358:6f9e:b0:175:f9b8:89bf with SMTP id s30-20020a0563586f9e00b00175f9b889bfmr754264rwn.22.1706840888844;
-        Thu, 01 Feb 2024 18:28:08 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXzW8HfzfBFndPbvvprCc2R3w70/c3RF57w2kO5sNhkjXiUc1+iJh25RmbGSpHdo5iPTXeHAnAB7skw2x1KEoPntxLdqUFcfINGL9DWhTDZaEPfW02nxrhVVq93LOqGqNgq0r2qw1V7QZ4yQQb9qzK9vG4gCQm+HEhoLTBwLMa67+YJOLZ31OGsXEicpDP0DEqDcubfynAm/g8XPvNWtIf9b3BlmflK4EEeYcg2uN/vMC9b1V1V3JenxQ0f8Fdb7boDEqhfd/fOEWa8BjnidQ1VNbmJzh8ygiJqy/NzNF8GnnxzaQLPE/xjCNrGBSeDM8QyHJD2o/RIpcqCU7zdkZSx+UdVKZjT1sw6QR6wH8bkgpWrrk+HXWDd54eS+Qerhkl4EURj
-Received: from ghost ([12.44.203.122])
-        by smtp.gmail.com with ESMTPSA id f8-20020a63de08000000b005d8aef12380sm524464pgg.73.2024.02.01.18.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 18:28:08 -0800 (PST)
-Date: Thu, 1 Feb 2024 18:28:06 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Yangyu Chen <cyy@cyyself.name>
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] riscv: mm: Use hint address in mmap if available
-Message-ID: <ZbxTNjQPFKBatMq+@ghost>
-References: <20240130-use_mmap_hint_address-v3-0-8a655cfa8bcb@rivosinc.com>
- <20240130-use_mmap_hint_address-v3-1-8a655cfa8bcb@rivosinc.com>
- <tencent_83E0AB36A9A3032E5A4C4AC864A311DF9406@qq.com>
- <tencent_068B3B7AE01AC67885E4369AF14109CE6A0A@qq.com>
+        bh=fQCgprpOyHEK0e/SRQUIuIzVOt3Yj59dY0F+3ICLlFA=;
+        b=Etq6R+IIaSh5heJF2/sRjFcU05PaScMXTm0PQywab/MrBhOOkOjzUWVcK5AYhn2DZn
+         jvBpmKgusjMIu7akuuVx5QxcMuk1b7vIOQFleOjt20a/oc522FjJIEDO3T9Xo7Kj1oIy
+         XU+GI8xm8OJMxGX3geh7+MXj5v7hf4w6lvYM6a5F8xqfVqI+2P2OOPKN7bqrywoy4Vyu
+         iJ8oeKleWvEhRpZgJlSyHx4Z4FLjw32QA3ZBxfyl4UxsYRWOVdUVU6N/FFie3pJ6N01o
+         qjHcl4+EfZcVI8d+c1TYBu9UgydfDL8KJeBf/Dw/ZQcSUHqgoUxUUqSQFURqnl1SECGJ
+         Ns3A==
+X-Gm-Message-State: AOJu0Yw1X2OrmYHx75UeufDQDvARQu3EvfvtdQ1DyIQosPhpjyRnyfly
+	YphB6LXsGsvCfqIP3BiszxKW9Liy2DVP6z7PcRiSSYeRPYZ2Mt3/Xc4dTSQokw==
+X-Google-Smtp-Source: AGHT+IGU+GNRD1OLnjZW2xraXAipdX2qEh4m6QD8hspwdTG5tlbNntKBNpIfpaOO7GxNnbApF+8FZw==
+X-Received: by 2002:a5d:66cd:0:b0:33b:10ca:d190 with SMTP id k13-20020a5d66cd000000b0033b10cad190mr3331333wrw.24.1706841054408;
+        Thu, 01 Feb 2024 18:30:54 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWfUw5cmK7XCnawjH0IsiCOqFeJ/0vUC36eFm/aog4HwweheKPvb2eUx9wEsDMnVdBu3HcMnFprFTvj5Ao/kd/QLz/Z/gQk/mNCCMO1FwvRfb+tV+XMJV8RW/hseoTjrWN3PNp2avJGBhDN/ZmeXkcWU2YgQZ8v2OVYQxVVjAH4ts9cjmAtXr5iAiDyLv8CtxgiIYrc1pom5hpuXCm5XuBI8Rxi7Nbw2+7tk94o5jZnI++/Ww67wZQiletmfXpCFbU8zjCu3doswKNVZ/yCTqfu28GNeRC2HR+vnNqwRoyb+PuoGaTXGf3q+CRtAQFppt2FkICJuILPQj2DEQpkEi9ga4+PFdXO8xCvj93M
+Received: from [10.83.37.178] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id h10-20020adff18a000000b0033ae4df3cf4sm775276wro.40.2024.02.01.18.30.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Feb 2024 18:30:53 -0800 (PST)
+Message-ID: <6104436c-4c71-4427-a569-cf98174d0c20@arista.com>
+Date: Fri, 2 Feb 2024 02:30:52 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_068B3B7AE01AC67885E4369AF14109CE6A0A@qq.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] selftests/net: A couple of typos fixes in
+ key-management/rst tests
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>,
+ Mohammad Nassiri <mnassiri@ciena.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240130-tcp-ao-test-key-mgmt-v2-0-d190430a6c60@arista.com>
+ <20240131163630.31309ee0@kernel.org>
+ <e88d5133-94a9-42e7-af7f-3086a6a3da7c@arista.com>
+ <20240201132153.4d68f45e@kernel.org>
+ <44d893b4-10b0-4876-bbf7-f6a81940b300@arista.com>
+ <a1ac7a6e-4447-4476-8fb7-fb5f0d7ec979@arista.com>
+From: Dmitry Safonov <dima@arista.com>
+In-Reply-To: <a1ac7a6e-4447-4476-8fb7-fb5f0d7ec979@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 31, 2024 at 11:59:43PM +0800, Yangyu Chen wrote:
-> On Wed, 2024-01-31 at 22:41 +0800, Yangyu Chen wrote:
-> > On Tue, 2024-01-30 at 17:07 -0800, Charlie Jenkins wrote:
-> > > On riscv it is guaranteed that the address returned by mmap is less
-> > > than
-> > > the hint address. Allow mmap to return an address all the way up to
-> > > addr, if provided, rather than just up to the lower address space.
-> > > 
-> > > This provides a performance benefit as well, allowing mmap to exit
-> > > after
-> > > checking that the address is in range rather than searching for a
-> > > valid
-> > > address.
-> > > 
-> > > It is possible to provide an address that uses at most the same
-> > > number
-> > > of bits, however it is significantly more computationally expensive
-> > > to
-> > > provide that number rather than setting the max to be the hint
-> > > address.
-> > > There is the instruction clz/clzw in Zbb that returns the highest
-> > > set
-> > > bit
-> > > which could be used to performantly implement this, but it would
-> > > still
-> > > be slower than the current implementation. At worst case, half of
-> > > the
-> > > address would not be able to be allocated when a hint address is
-> > > provided.
-> > > 
-> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > > ---
-> > >  arch/riscv/include/asm/processor.h | 27 +++++++++++---------------
-> > > -
-> > >  1 file changed, 11 insertions(+), 16 deletions(-)
-> > > 
-> > > diff --git a/arch/riscv/include/asm/processor.h
-> > > b/arch/riscv/include/asm/processor.h
-> > > index f19f861cda54..8ece7a8f0e18 100644
-> > > --- a/arch/riscv/include/asm/processor.h
-> > > +++ b/arch/riscv/include/asm/processor.h
-> > > @@ -14,22 +14,16 @@
-> > >  
-> > >  #include <asm/ptrace.h>
-> > >  
-> > > -#ifdef CONFIG_64BIT
-> > > -#define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
-> > > -#define STACK_TOP_MAX		TASK_SIZE_64
-> > > -
-> > >  #define arch_get_mmap_end(addr, len, flags)			\
-> > >  ({								\
-> > >  	unsigned long
-> > > mmap_end;					\
-> > >  	typeof(addr) _addr = (addr);				\
-> > > -	if ((_addr) == 0 || (IS_ENABLED(CONFIG_COMPAT) &&
-> > > is_compat_task())) \
-> > > +	if ((_addr) == 0 ||					\
-> > > +	    (IS_ENABLED(CONFIG_COMPAT) && is_compat_task()) ||	\
-> > > +	    ((_addr + len) > BIT(VA_BITS -
-> > > 1)))			\
-> > >  		mmap_end = STACK_TOP_MAX;			\
-> > > -	else if ((_addr) >= VA_USER_SV57)			\
-> > > -		mmap_end = STACK_TOP_MAX;			\
-> > > -	else if ((((_addr) >= VA_USER_SV48)) && (VA_BITS >=
-> > > VA_BITS_SV48)) \
-> > > -		mmap_end = VA_USER_SV48;			\
-> > >  	else							\
-> > > -		mmap_end = VA_USER_SV39;			\
-> > > +		mmap_end = (_addr + len);			\
-> > >  	mmap_end;						\
-> > >  })
-> > >  
-> > > @@ -39,17 +33,18 @@
-> > >  	typeof(addr) _addr = (addr);				\
-> > >  	typeof(base) _base = (base);				\
-> > >  	unsigned long rnd_gap = DEFAULT_MAP_WINDOW - (_base);	\
-> > > -	if ((_addr) == 0 || (IS_ENABLED(CONFIG_COMPAT) &&
-> > > is_compat_task())) \
-> > > +	if ((_addr) == 0 ||					\
-> > > +	    (IS_ENABLED(CONFIG_COMPAT) && is_compat_task()) ||	\
-> > > +	    ((_addr + len) > BIT(VA_BITS -
-> > > 1)))			\
-> > >  		mmap_base = (_base);				\
-> > > -	else if (((_addr) >= VA_USER_SV57) && (VA_BITS >=
-> > > VA_BITS_SV57)) \
-> > > -		mmap_base = VA_USER_SV57 - rnd_gap;		\
-> > > -	else if ((((_addr) >= VA_USER_SV48)) && (VA_BITS >=
-> > > VA_BITS_SV48)) \
-> > > -		mmap_base = VA_USER_SV48 - rnd_gap;		\
-> > >  	else							\
-> > > -		mmap_base = VA_USER_SV39 - rnd_gap;		\
-> > > +		mmap_base = (_addr + len) - rnd_gap;		\
-> > >  	mmap_base;						\
-> > >  })
-> > >  
-> > > +#ifdef CONFIG_64BIT
-> > > +#define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
-> > > +#define STACK_TOP_MAX		TASK_SIZE_64
-> > >  #else
-> > >  #define DEFAULT_MAP_WINDOW	TASK_SIZE
-> > >  #define STACK_TOP_MAX		TASK_SIZE
-> > > 
-> > 
-> > I have carefully tested your patch on qemu with sv57. A bug that
-> > needs
-> > to be solved is that mmap with the same hint address without
-> > MAP_FIXED
-> > set will fail the second time.
-> > 
-> > Userspace code to reproduce the bug:
-> > 
-> > #include <sys/mman.h>
-> > #include <stdio.h>
-> > #include <stdint.h>
-> > 
-> > void test(char *addr) {
-> >     char *res = mmap(addr, 4096, PROT_READ | PROT_WRITE,
-> > MAP_ANONYMOUS
-> > > MAP_PRIVATE, -1, 0);
-> >     printf("hint %p got %p.\n", addr, res);
-> > }
-> > 
-> > int main (void) {
-> >     test(1<<30);
-> >     test(1<<30);
-> >     test(1<<30);
-> >     return 0;
-> > }
-> > 
-> > output:
-> > 
-> > hint 0x40000000 got 0x40000000.
-> > hint 0x40000000 got 0xffffffffffffffff.
-> > hint 0x40000000 got 0xffffffffffffffff.
-> > 
-> > output on x86:
-> > 
-> > hint 0x40000000 got 0x40000000.
-> > hint 0x40000000 got 0x7f9171363000.
-> > hint 0x40000000 got 0x7f9171362000.
-> > 
-> > It may need to implement a special arch_get_unmapped_area and
-> > arch_get_unmapped_area_topdown function.
-> > 
+On 2/1/24 23:37, Dmitry Safonov wrote:
+> On 2/1/24 22:25, Dmitry Safonov wrote:
+>> Hi Jakub,
+>>
+>> On 2/1/24 21:21, Jakub Kicinski wrote:
+>>> On Thu, 1 Feb 2024 00:50:46 +0000 Dmitry Safonov wrote:
+>>>> Please, let me know if there will be other issues with tcp-ao tests :)
+>>>>
+>>>> Going to work on tracepoints and some other TCP-AO stuff for net-next.
+>>>
+>>> Since you're being nice and helpful I figured I'll try testing TCP-AO
+>>> with debug options enabled :) (kernel/configs/debug.config and
+>>> kernel/configs/x86_debug.config included),
+>>
+>> Haha :)
+>>
+>>> that slows things down 
+>>> and causes a bit of flakiness in unsigned-md5-* tests:
+>>>
+>>> https://netdev.bots.linux.dev/flakes.html?br-cnt=75&tn-needle=tcp-ao
+>>>
+>>> This has links to outputs:
+>>> https://netdev.bots.linux.dev/contest.html?executor=vmksft-tcp-ao-dbg&pass=0
+>>>
+>>> If it's a timing thing - FWIW we started exporting
+>>> KSFT_MACHINE_SLOW=yes on the slow runners.
+>>
+>> I think, I know what happens here:
+>>
+>> # ok 8 AO server (AO_REQUIRED): AO client: counter TCPAOGood increased 4
+>> => 6
+>> # ok 9 AO server (AO_REQUIRED): unsigned client
+>> # ok 10 AO server (AO_REQUIRED): unsigned client: counter TCPAORequired
+>> increased 1 => 2
+>> # not ok 11 AO server (AO_REQUIRED): unsigned client: Counter
+>> netns_ao_good was not expected to increase 7 => 8
+>>
+>> for each of tests the server listens at a new port, but re-uses the same
+>> namespaces+veth. If the node/machine is quite slow, I guess a segment
+>> might have been retransmitted and the test that initiated it had already
+>> finished.
+>> And as result, the per-namespace counters are incremented, which makes
+>> the test fail (IOW, the test expects all segments in ns being dropped).
+>>
+>> So, I should do one of the options:
+>>
+>> 1. relax per-namespace checks (the per-socket and per-key counters are
+>>    checked)
+>> 2. unshare(net) + veth setup for each test
+>> 3. split the selftest on smaller ones (as they create new net-ns in
+>>    initialization)
 > 
-> This is because hint address < rnd_gap. I have tried to let mmap_base =
-> min((_addr + len), (base) + TASK_SIZE - DEFAULT_MAP_WINDOW). However it
-> does not work for bottom-up while ulimit -s is unlimited. You said this
-> behavior is expected from patch v2 review. However it brings a new
-> regression even on sv39 systems.
+> Actually, I think there may be an easier fix:
 > 
-> I still don't know the reason why use addr+len as the upper-bound. I
-> think solution like x86/arm64/powerpc provide two address space switch
-> based on whether hint address above the default map window is enough.
+> 4. Make sure that client close()s TCP-AO first, making it twsk.
+>    And also make sure that net-ns counters read post server's close().
 > 
+> Will do this, let's see if this fixes the flakiness on the netdev bot :)
 
-Yep this is expected. It is up to the maintainers to decide.
+FWIW, I ended up with this:
+https://lore.kernel.org/all/20240202-unsigned-md5-netns-counters-v1-1-8b90c37c0566@arista.com/
 
-- Charlie
+I reproduced the issue once, running unsigned-md5* in a loop, while in
+another terminal building linux-next with all cores.
+With the patch above, it survived 77 iterations of both ipv4/ipv6 tests
+so far. So, there is a chance it fixes the issue :)
+
+Thanks,
+           Dmitry
 
 
