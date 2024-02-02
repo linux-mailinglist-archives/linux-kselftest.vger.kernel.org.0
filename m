@@ -1,119 +1,108 @@
-Return-Path: <linux-kselftest+bounces-4003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D277846EB7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:12:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DBA5846EEA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:31:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6320284EBE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 11:12:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0BEC1C2259A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 11:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9131813BEA7;
-	Fri,  2 Feb 2024 11:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38ECF13DB9C;
+	Fri,  2 Feb 2024 11:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VdUv+YNe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [213.95.27.120])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2377995B;
-	Fri,  2 Feb 2024 11:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.27.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EC078B60;
+	Fri,  2 Feb 2024 11:31:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706872334; cv=none; b=g4jebpIDiTesX5rWO1Ceusr05bHP79DyYkzEt0O2SLsnfE4/4ue2oA3G4TRquBjLum/vgyGUm9I5eYgiJU5/US6T207qau/vmL2o4QnsuHlfV3uae8rKqj9Fw9y3dYAqYkh9POVECJQiuA0DsmkaI6Rp4gPw4EsKAMx0hYFoMYc=
+	t=1706873493; cv=none; b=MQwfPulybT7wRfyf+oZ905GNJyfs6wmlAwjC2cZ3r7N8+DQzSNYARvlxUGCO+7SeNYVLk07m5UJ3ssNhlsXrQ6GdQHKfN5+cojp8fLR0ziVTN6hQ9VNNWLOslhH3CDvB4+EqLySJvG3QravcZJD+ImAn0ZObiIM+yR/iG/Ml2nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706872334; c=relaxed/simple;
-	bh=DHXhgGTeA1+lWgExd1fQrxzIbyU8ibghu/opgphfpvw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=McXv43nvkVBBWLqjQ5K5q/VBUuVOCIeMVmCrqMlQGLsHNWbzHRgV6tQV+lBbKkfSkvgw+6aWBl4ORJCUqYgus9gQkOMNDpJALKkVvYs6zMNiIzUnjjjs0Y6DqhuGjT0wXBP0CiYIMmgcRypunOlp8dVbzza/BclpFEUk3SnBDzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=gnumonks.org; arc=none smtp.client-ip=213.95.27.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnumonks.org
-Received: from [78.30.41.52] (port=57718 helo=gnumonks.org)
-	by ganesha.gnumonks.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <pablo@gnumonks.org>)
-	id 1rVrSm-001lhN-5h; Fri, 02 Feb 2024 12:12:06 +0100
-Date: Fri, 2 Feb 2024 12:12:03 +0100
-From: Pablo Neira Ayuso <pablo@netfilter.org>
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: Felix Huettner <felix.huettner@mail.schwarz>,
-	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kadlec@netfilter.org, fw@strlen.de,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	shuah@kernel.org, luca.czesla@mail.schwarz,
-	max.lamprecht@mail.schwarz, Simon Horman <horms@ovn.org>
-Subject: Re: [PATCH net-next v2] net: ctnetlink: support filtering by zone
-Message-ID: <ZbzOA1D1IGYX2oxS@calendula>
-References: <ZWSCPKtDuYRG1XWt@kernel-bug-kernel-bug>
- <ZYV6hgP35k6Bwk+H@calendula>
- <2032238f-31ac-4106-8f22-522e76df5a12@ovn.org>
+	s=arc-20240116; t=1706873493; c=relaxed/simple;
+	bh=LZHUHalENQlIbS78UvjPzT4WqCgnFzeIBvpGA8It2G8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b8XPqxhGfVIq84mj1i4NCwBccxWq2EA96KaxybaNd0qY/MHDbVluoz5p2ypjcSHcSl6sgII1ijxDhnZjSnPF6kPOX1agnF60guKucbuvCbG46Evb2ebllDxxH/IJoSE+StoW6+MpT6Bnkemdc0kKa0NDyZ64YihwFUOHGfp6Qgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VdUv+YNe; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706873489;
+	bh=LZHUHalENQlIbS78UvjPzT4WqCgnFzeIBvpGA8It2G8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=VdUv+YNedFDnzk/G9FC/IMvlbLFt6rbkqapYqYgaeXp/zTnEECSoqgyxl+9gAeeRd
+	 b35EV8Uys4SODxhinRGmvHmurs/8dL5zMB9DF1aOCgRodZKsangJ/8Oe9YU7yfne/m
+	 fmiv11NkTx/yO5JRJWv4G4FGHsJp24L6AwmbBuyLUjPRYXKJm7PMvrjqRrwZwh13Ut
+	 yc5e9XcqbhECOSCRf2UdOHnet0DDClltUY9UWpJiNAWPxhMiMqyV1OGuzW1cEuvhm+
+	 6Hygh/ACe566l1c1CdIMaj1+rebvbY+xOgmhSPi79QeoXnMvGGcfmAguZjRIkj1BXR
+	 kdFhQVpljNeEQ==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DB4F137811CF;
+	Fri,  2 Feb 2024 11:31:27 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/12] conform tests to TAP format output
+Date: Fri,  2 Feb 2024 16:31:07 +0500
+Message-ID: <20240202113119.2047740-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2032238f-31ac-4106-8f22-522e76df5a12@ovn.org>
-X-Spam-Score: -1.8 (-)
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 02, 2024 at 12:04:35PM +0100, Ilya Maximets wrote:
-> On 12/22/23 13:01, Pablo Neira Ayuso wrote:
-> > On Mon, Nov 27, 2023 at 11:49:16AM +0000, Felix Huettner wrote:
-> >> conntrack zones are heavily used by tools like openvswitch to run
-> >> multiple virtual "routers" on a single machine. In this context each
-> >> conntrack zone matches to a single router, thereby preventing
-> >> overlapping IPs from becoming issues.
-> >> In these systems it is common to operate on all conntrack entries of a
-> >> given zone, e.g. to delete them when a router is deleted. Previously this
-> >> required these tools to dump the full conntrack table and filter out the
-> >> relevant entries in userspace potentially causing performance issues.
-> >>
-> >> To do this we reuse the existing CTA_ZONE attribute. This was previous
-> >> parsed but not used during dump and flush requests. Now if CTA_ZONE is
-> >> set we filter these operations based on the provided zone.
-> >> However this means that users that previously passed CTA_ZONE will
-> >> experience a difference in functionality.
-> >>
-> >> Alternatively CTA_FILTER could have been used for the same
-> >> functionality. However it is not yet supported during flush requests and
-> >> is only available when using AF_INET or AF_INET6.
-> > 
-> > For the record, this is applied to nf-next.
-> 
-> Hi, Felix and Pablo.
-> 
-> I was looking through the code and the following part is bothering me:
-> 
->  diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
->  index fb0ae15e96df..4e9133f61251 100644
->  --- a/net/netfilter/nf_conntrack_netlink.c
->  +++ b/net/netfilter/nf_conntrack_netlink.c
->  @@ -1148,6 +1149,10 @@ static int ctnetlink_filter_match(struct nf_conn *ct, void *data)
->          if (filter->family && nf_ct_l3num(ct) != filter->family)
->                  goto ignore_entry;
->  
->  +       if (filter->zone.id != NF_CT_DEFAULT_ZONE_ID &&
->  +           !nf_ct_zone_equal_any(ct, &filter->zone))
->  +               goto ignore_entry;
->  +
->          if (filter->orig_flags) {
->                  tuple = nf_ct_tuple(ct, IP_CT_DIR_ORIGINAL);
->                  if (!ctnetlink_filter_match_tuple(&filter->orig, tuple,
-> 
-> If I'm reading that right, the default zone is always flushed, even if the
-> user requested to flush a different zone.  I.e. the entry is never ignored
-> for a default zone.  Is that correct or am I reading that wrong?
-> 
-> If my observation is correct, then I don't think this functionality can
-> actually be used by applications as it does something unexpected.
+Changes since v1:
+- Rebased the series on top of next-20240202
 
-This needs a fix, the NF_CT_DEFAULT_ZONE_ID is used as a marker to
-indicate if the filtering by zone needs to happen or not.
+Muhammad Usama Anjum (12):
+  selftests/mm: map_fixed_noreplace: conform test to TAP format output
+  selftests/mm: map_hugetlb: conform test to TAP format output
+  selftests/mm: map_populate: conform test to TAP format output
+  selftests/mm: mlock-random-test: conform test to TAP format output
+  selftests/mm: mlock2-tests: conform test to TAP format output
+  selftests/mm: mrelease_test: conform test to TAP format output
+  selftests/mm: mremap_dontunmap: conform test to TAP format output
+  selftests/mm: split_huge_page_test: conform test to TAP format output
+  selftests/mm: thp_settings: conform to TAP format output
+  selftests/mm: thuge-gen: conform to TAP format output
+  selftests/mm: transhuge-stress: conform to TAP format output
+  selftests/mm: virtual_address_range: conform to TAP format output
 
-I'd suggest to add a boolean flag that specifies that zone filtering
-is set on.
+ tools/testing/selftests/mm/khugepaged.c       |   3 +-
+ .../selftests/mm/map_fixed_noreplace.c        |  96 ++----
+ tools/testing/selftests/mm/map_hugetlb.c      |  42 ++-
+ tools/testing/selftests/mm/map_populate.c     |  37 ++-
+ .../testing/selftests/mm/mlock-random-test.c  | 136 ++++-----
+ tools/testing/selftests/mm/mlock2-tests.c     | 282 +++++++-----------
+ tools/testing/selftests/mm/mlock2.h           |  11 +-
+ tools/testing/selftests/mm/mrelease_test.c    |  80 ++---
+ tools/testing/selftests/mm/mremap_dontunmap.c |  32 +-
+ .../selftests/mm/split_huge_page_test.c       | 161 +++++-----
+ tools/testing/selftests/mm/thp_settings.c     | 123 +++-----
+ tools/testing/selftests/mm/thp_settings.h     |   4 +-
+ tools/testing/selftests/mm/thuge-gen.c        | 147 ++++-----
+ tools/testing/selftests/mm/transhuge-stress.c |  36 ++-
+ .../selftests/mm/virtual_address_range.c      |  44 +--
+ tools/testing/selftests/mm/vm_util.c          |   6 +-
+ 16 files changed, 537 insertions(+), 703 deletions(-)
+
+-- 
+2.42.0
+
 
