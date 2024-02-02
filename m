@@ -1,170 +1,137 @@
-Return-Path: <linux-kselftest+bounces-3968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 272B58465E6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 03:33:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12083846615
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 03:57:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1E4A28A94D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 02:33:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCB7628AE2B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 02:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D0B612FB1A;
-	Fri,  2 Feb 2024 02:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EE2BBE7C;
+	Fri,  2 Feb 2024 02:57:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="NsFwKzt3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RtzBrCyg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720E9CA71
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 02:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A77C14E
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 02:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706841058; cv=none; b=HtF2EVLMFU5kjQsmyUV2ieandbCHN55moKXGA3s/tCNu56nQFdfHCCEG2YB6n8wjKZeznyK+9aTsce/Kyae0yThLrLRGIxXRa0bnLm0dgDY9Oy4NgSnrXVq/OBR1Xw2JGeOryKqfngOCgN8iIXfG2h5H2pkdIRxhVaDeHnKc0O8=
+	t=1706842631; cv=none; b=iRuvJ84XxtawN7Jpk6lOJTiufSNn1wrMkF9OKlEsSrXcelIgYRfP1LVLcM9CBQ0XdoKbj+W15IRWtSNMrQEn/cvQ13oKHDAmzEcg7RtVMFq60/lh08/3ghi/qm8oJd+FpOPwKTh5UBaj18rwkiYLqWOb9k26ZoSYK2tMwTJuWsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706841058; c=relaxed/simple;
-	bh=KpL5m4Y25ECKAWZYe1aKcE9e3nSH9gZtcs480pi8j/0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KsrjfFhTwb9d3OJS+DHg+kVWwL2XHPQGNz+h4rDfMBsq96MXvFKacNq1Cgg+zy2DK7j1l2cTdmgR1fxavKIIO0Gm5pxoByWpsFg1hCUl7705ewWdqw1f9qLb5zf3oXY4vThEtSM0CBaX5Qv1ii2j2ytrYt+k35nBKfkQWvSZICw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=NsFwKzt3; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40fb63c40c0so13998405e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Feb 2024 18:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1706841055; x=1707445855; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fQCgprpOyHEK0e/SRQUIuIzVOt3Yj59dY0F+3ICLlFA=;
-        b=NsFwKzt3xv/NuA3z+nr/1kapbnl3rjpf3Bum1Bdl2IROeokoly/89mxyzDlhcsavdQ
-         oODberjOQW6fmyKDt2c/SROUXMf2FfkDadsg795JOQJkbOAzCek36U2WLbbSl2OidOk7
-         wo5sRmWPtmrJlyFhucC/6yspSVtD4/nCzJVz5doe+68j8yZfGJBk3cDqWEYSfkT+32mK
-         BBQKO8rm/ECgMoN788xzHJxcJtR9Y7TNVl8H5whmyBStBxYvYWL3LDGWXcELR/ohqArc
-         G/yURMaN27uKDQkBdSJh3KaOjmtE4Vo26oitrfV7XHl68A13sD/a90y2cdQlSy1o6J7F
-         bk/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706841055; x=1707445855;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fQCgprpOyHEK0e/SRQUIuIzVOt3Yj59dY0F+3ICLlFA=;
-        b=Etq6R+IIaSh5heJF2/sRjFcU05PaScMXTm0PQywab/MrBhOOkOjzUWVcK5AYhn2DZn
-         jvBpmKgusjMIu7akuuVx5QxcMuk1b7vIOQFleOjt20a/oc522FjJIEDO3T9Xo7Kj1oIy
-         XU+GI8xm8OJMxGX3geh7+MXj5v7hf4w6lvYM6a5F8xqfVqI+2P2OOPKN7bqrywoy4Vyu
-         iJ8oeKleWvEhRpZgJlSyHx4Z4FLjw32QA3ZBxfyl4UxsYRWOVdUVU6N/FFie3pJ6N01o
-         qjHcl4+EfZcVI8d+c1TYBu9UgydfDL8KJeBf/Dw/ZQcSUHqgoUxUUqSQFURqnl1SECGJ
-         Ns3A==
-X-Gm-Message-State: AOJu0Yw1X2OrmYHx75UeufDQDvARQu3EvfvtdQ1DyIQosPhpjyRnyfly
-	YphB6LXsGsvCfqIP3BiszxKW9Liy2DVP6z7PcRiSSYeRPYZ2Mt3/Xc4dTSQokw==
-X-Google-Smtp-Source: AGHT+IGU+GNRD1OLnjZW2xraXAipdX2qEh4m6QD8hspwdTG5tlbNntKBNpIfpaOO7GxNnbApF+8FZw==
-X-Received: by 2002:a5d:66cd:0:b0:33b:10ca:d190 with SMTP id k13-20020a5d66cd000000b0033b10cad190mr3331333wrw.24.1706841054408;
-        Thu, 01 Feb 2024 18:30:54 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWfUw5cmK7XCnawjH0IsiCOqFeJ/0vUC36eFm/aog4HwweheKPvb2eUx9wEsDMnVdBu3HcMnFprFTvj5Ao/kd/QLz/Z/gQk/mNCCMO1FwvRfb+tV+XMJV8RW/hseoTjrWN3PNp2avJGBhDN/ZmeXkcWU2YgQZ8v2OVYQxVVjAH4ts9cjmAtXr5iAiDyLv8CtxgiIYrc1pom5hpuXCm5XuBI8Rxi7Nbw2+7tk94o5jZnI++/Ww67wZQiletmfXpCFbU8zjCu3doswKNVZ/yCTqfu28GNeRC2HR+vnNqwRoyb+PuoGaTXGf3q+CRtAQFppt2FkICJuILPQj2DEQpkEi9ga4+PFdXO8xCvj93M
-Received: from [10.83.37.178] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id h10-20020adff18a000000b0033ae4df3cf4sm775276wro.40.2024.02.01.18.30.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 18:30:53 -0800 (PST)
-Message-ID: <6104436c-4c71-4427-a569-cf98174d0c20@arista.com>
-Date: Fri, 2 Feb 2024 02:30:52 +0000
+	s=arc-20240116; t=1706842631; c=relaxed/simple;
+	bh=m9FZO3q9smB7cSYDW0f7Awe436TxHdLzwmgKLOV6UpY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=m0pC4b2esjfVPXAdzsPM5qjdWwXsM2VyzM/pqmXzYiVlKjwtuZbzz/RSHNFvy/gI5w0RaUlcIE52odvxbnbUiQh89qsDzkCMsIob/9MITKwQtp+IImdCqcJ8wyUPQy6jvgZkSsuPPYYI2btpa/UnuTczD85a43g79Ikg7DEQuhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RtzBrCyg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706842627;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=alz1bWzkdlVdcD3J1YSOwuXprTmyNWB0NW6vFsZRqwo=;
+	b=RtzBrCygpv9TkMbCRHGXXiH8zATHPyvmGojl862MHljwWomOmr4nGNisGEQ67lZPlutTZ7
+	2UkOgXFj7aYkQOdw+yQTHulrnkZ0lB22GPnLjDXC+GewbbJ+kJApd5O34QI8y+M2BjMOvN
+	6oNmrCWbpnGr/7+uOiwD+fADJEnykIU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-186-1EBHbB8BPyqnm_YXc-oHSA-1; Thu, 01 Feb 2024 21:57:03 -0500
+X-MC-Unique: 1EBHbB8BPyqnm_YXc-oHSA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D75883514A;
+	Fri,  2 Feb 2024 02:57:02 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 58548C15E61;
+	Fri,  2 Feb 2024 02:57:02 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Eric Auger <eauger@redhat.com>,
+	Shaoqin Huang <shahuang@redhat.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH v4 0/5] KVM: selftests: aarch64: Introduce pmu_event_filter_test
+Date: Thu,  1 Feb 2024 21:56:49 -0500
+Message-Id: <20240202025659.5065-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] selftests/net: A couple of typos fixes in
- key-management/rst tests
-Content-Language: en-US
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>,
- Mohammad Nassiri <mnassiri@ciena.com>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240130-tcp-ao-test-key-mgmt-v2-0-d190430a6c60@arista.com>
- <20240131163630.31309ee0@kernel.org>
- <e88d5133-94a9-42e7-af7f-3086a6a3da7c@arista.com>
- <20240201132153.4d68f45e@kernel.org>
- <44d893b4-10b0-4876-bbf7-f6a81940b300@arista.com>
- <a1ac7a6e-4447-4476-8fb7-fb5f0d7ec979@arista.com>
-From: Dmitry Safonov <dima@arista.com>
-In-Reply-To: <a1ac7a6e-4447-4476-8fb7-fb5f0d7ec979@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-On 2/1/24 23:37, Dmitry Safonov wrote:
-> On 2/1/24 22:25, Dmitry Safonov wrote:
->> Hi Jakub,
->>
->> On 2/1/24 21:21, Jakub Kicinski wrote:
->>> On Thu, 1 Feb 2024 00:50:46 +0000 Dmitry Safonov wrote:
->>>> Please, let me know if there will be other issues with tcp-ao tests :)
->>>>
->>>> Going to work on tracepoints and some other TCP-AO stuff for net-next.
->>>
->>> Since you're being nice and helpful I figured I'll try testing TCP-AO
->>> with debug options enabled :) (kernel/configs/debug.config and
->>> kernel/configs/x86_debug.config included),
->>
->> Haha :)
->>
->>> that slows things down 
->>> and causes a bit of flakiness in unsigned-md5-* tests:
->>>
->>> https://netdev.bots.linux.dev/flakes.html?br-cnt=75&tn-needle=tcp-ao
->>>
->>> This has links to outputs:
->>> https://netdev.bots.linux.dev/contest.html?executor=vmksft-tcp-ao-dbg&pass=0
->>>
->>> If it's a timing thing - FWIW we started exporting
->>> KSFT_MACHINE_SLOW=yes on the slow runners.
->>
->> I think, I know what happens here:
->>
->> # ok 8 AO server (AO_REQUIRED): AO client: counter TCPAOGood increased 4
->> => 6
->> # ok 9 AO server (AO_REQUIRED): unsigned client
->> # ok 10 AO server (AO_REQUIRED): unsigned client: counter TCPAORequired
->> increased 1 => 2
->> # not ok 11 AO server (AO_REQUIRED): unsigned client: Counter
->> netns_ao_good was not expected to increase 7 => 8
->>
->> for each of tests the server listens at a new port, but re-uses the same
->> namespaces+veth. If the node/machine is quite slow, I guess a segment
->> might have been retransmitted and the test that initiated it had already
->> finished.
->> And as result, the per-namespace counters are incremented, which makes
->> the test fail (IOW, the test expects all segments in ns being dropped).
->>
->> So, I should do one of the options:
->>
->> 1. relax per-namespace checks (the per-socket and per-key counters are
->>    checked)
->> 2. unshare(net) + veth setup for each test
->> 3. split the selftest on smaller ones (as they create new net-ns in
->>    initialization)
-> 
-> Actually, I think there may be an easier fix:
-> 
-> 4. Make sure that client close()s TCP-AO first, making it twsk.
->    And also make sure that net-ns counters read post server's close().
-> 
-> Will do this, let's see if this fixes the flakiness on the netdev bot :)
+The test is inspired by the pmu_event_filter_test which implemented by x86. On
+the arm64 platform, there is the same ability to set the pmu_event_filter
+through the KVM_ARM_VCPU_PMU_V3_FILTER attribute. So add the test for arm64.
 
-FWIW, I ended up with this:
-https://lore.kernel.org/all/20240202-unsigned-md5-netns-counters-v1-1-8b90c37c0566@arista.com/
+The series first move some pmu common code from vpmu_counter_access to
+lib/aarch64/vpmu.c and include/aarch64/vpmu.h, which can be used by
+pmu_event_filter_test. Then fix a bug related to the [enable|disable]_counter,
+and at last, implement the test itself.
 
-I reproduced the issue once, running unsigned-md5* in a loop, while in
-another terminal building linux-next with all cores.
-With the patch above, it survived 77 iterations of both ipv4/ipv6 tests
-so far. So, there is a chance it fixes the issue :)
+Changelog:
+----------
+v3->v4:
+  - Rebased to the v6.8-rc2.
 
-Thanks,
-           Dmitry
+v2->v3:
+  - Check the pmceid in guest code instead of pmu event count since different
+  hardware may have different event count result, check pmceid makes it stable
+  on different platform.                        [Eric]
+  - Some typo fixed and commit message improved.
+
+v1->v2:
+  - Improve the commit message.                 [Eric]
+  - Fix the bug in [enable|disable]_counter.    [Raghavendra & Marc]
+  - Add the check if kvm has attr KVM_ARM_VCPU_PMU_V3_FILTER.
+  - Add if host pmu support the test event throught pmceid0.
+  - Split the test_invalid_filter() to another patch. [Eric]
+
+v1: https://lore.kernel.org/all/20231123063750.2176250-1-shahuang@redhat.com/
+v2: https://lore.kernel.org/all/20231129072712.2667337-1-shahuang@redhat.com/
+v3: https://lore.kernel.org/all/20240116060129.55473-1-shahuang@redhat.com/
+
+Shaoqin Huang (5):
+  KVM: selftests: aarch64: Make the [create|destroy]_vpmu_vm() public
+  KVM: selftests: aarch64: Move pmu helper functions into vpmu.h
+  KVM: selftests: aarch64: Fix the buggy [enable|disable]_counter
+  KVM: selftests: aarch64: Introduce pmu_event_filter_test
+  KVM: selftests: aarch64: Add invalid filter test in
+    pmu_event_filter_test
+
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../kvm/aarch64/pmu_event_filter_test.c       | 255 ++++++++++++++++++
+ .../kvm/aarch64/vpmu_counter_access.c         | 217 ++-------------
+ .../selftests/kvm/include/aarch64/vpmu.h      | 134 +++++++++
+ .../testing/selftests/kvm/lib/aarch64/vpmu.c  |  74 +++++
+ 5 files changed, 489 insertions(+), 193 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+ create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
+ create mode 100644 tools/testing/selftests/kvm/lib/aarch64/vpmu.c
+
+
+base-commit: 41bccc98fb7931d63d03f326a746ac4d429c1dd3
+-- 
+2.40.1
 
 
