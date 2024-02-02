@@ -1,142 +1,151 @@
-Return-Path: <linux-kselftest+bounces-4047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C55E847B4C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 22:08:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2641847B64
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 22:15:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE9D61F2A1AA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 21:08:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A79951F273AF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 21:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3168B7CF3F;
-	Fri,  2 Feb 2024 21:02:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1446F81750;
+	Fri,  2 Feb 2024 21:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dc7xZzbI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K6X1dJBl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFB07D40F
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 21:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D38A80639
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 21:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706907773; cv=none; b=dxgApq0MmjiKb2XIF6xFVwJGUhFASX3kF1awueVnZ4QO+lVN/e2TkPVc6wtbWK67ZKyB4d9hMUoZDJGUebb9lLl/gTDxPcLfqTcHmnMFUWjBw3euJF4wkqWxlDm4Aqsp2KghIFYMYrVMQLuCwI13YRLJgCm+kh9+FTJ2qiaLlfQ=
+	t=1706908501; cv=none; b=n5nUk3xNpQJgKJAuN5HQWi8iif/yhCTHZcXoBHmyk1CDFq1VXfwH9DzYxKJkR3Iw7iSiqi8DMyQ+TiFHnAg+7GylwD4UmffZaOSFy1li1rH0l0srnTrkjQp9VoFxRalDtBu8UUztSjhQ6g8BXRnBAgjBnAuwCn2jKyuFI1tlvf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706907773; c=relaxed/simple;
-	bh=JWsKFngwH8votK+4WexIivHhiapSnu4LNbbiE0EB1kA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UdbcyeOt7rmZoMMEOKAZ80QYpEHQJtlRjrRzydUn/pD/tCBivox7LjnhgY+PQfEsQqbgegbfEpAh6aOg7tejjIle4TaZarM6ItPVp6vBrmHIq/rhTbNJuZ0WNqlzxcMk6bJRA3X/3BNeWMIixFdn+/ZdBM2dfvc8i3WGtqHukI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dc7xZzbI; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2183afd4103so523137fac.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Feb 2024 13:02:51 -0800 (PST)
+	s=arc-20240116; t=1706908501; c=relaxed/simple;
+	bh=WgxILiF//GwaDAUI2ya23z43c/S2iEAwu4PRQ9y0cAY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=bSZq9gNpstV5kCrGZRue5+kow6KfoXIWmFgjY0ZFUfYT0sCg55t5RMrA1R2C94fLCXUH50K61BpYZq0BEUnwOQGoGR5NFixhEfNV3dC6fECrsSaPWHv6qoo7v1/552ctFrVJW+Eu+DzCOlEmKYb8Mph80VM+5MeMGOwrAEwtw7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K6X1dJBl; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5d8bdadc79cso2859870a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Feb 2024 13:14:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706907770; x=1707512570; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kwv1t/9P2eD8k32faLH8OAi3mAtA+or2AT1hGZahOn0=;
-        b=dc7xZzbIakdzMj46W8qEEwJofmRaX9IjUk3EOCJgFKVIN0idJHzj7wa8U5p2G+eIqS
-         7HFVCZQYRYv5XiuT0+D7zgD8b6NvT+suRBSVZzkTuCYL0uIq42ePiGO1tfOF6h/6QMsT
-         eVSZREc9gjDwjF5QbkDIBXuajhrk7coc3S1Lw=
+        d=google.com; s=20230601; t=1706908499; x=1707513299; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uq7KIGo6ksoIAaNr+JZVlNnWKqprFhC+i/3sd4c5jr0=;
+        b=K6X1dJBlCwndi4LNdjcIvUvZvMSJvoaCh2MEKpE29D7l/Yiu1fsEN5ib5hTVc2lB0M
+         JZGePZQVrSv2Iz84jqpLry6B1pjZuH/P8x7ZUAnCQhdvjrcalyI57V+B3frJx5cnqzjJ
+         mwROXz0Z0IsvoOM+MpLvy0XAY5cy5a43ffsoWRh7lOj3HOFTiyn/6LqtulUv8Yk/oyCL
+         DQtOQEQk9XtdJLxIBDgySSkYc1/MbVlOL9yOluJsnlaicEiiTqHj1EukteVKOzv9FkvE
+         EKKN3MJWFqbny+sZglzt1vdFA5rOVb2t8wahkn1hYKzHdozaWw2OICcH1YR6lZgOh3Jb
+         +SzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706907770; x=1707512570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kwv1t/9P2eD8k32faLH8OAi3mAtA+or2AT1hGZahOn0=;
-        b=qNixic86Jpw7Lp4EzOHFnkQ+Z2kkODnnh6/uQ1s0op1XB9Np1USPUfpU4qMixhWuO1
-         U7zuhgvQVQliKJh3n7/8OEMhTZe3RBEEgTOXdfBnqL7ujOEYgwjiOJFbR1VtpBzEjw15
-         8OxRmKhFKsLW4m7+Ln97m1eFN4xs/iAs96a24HexqlhVZZrDt4/L5AUQyytTimY0HO2K
-         AL/4hcHOzJjEaUQLyeFlRx9mEI3Qh7HIKTwNLywsv7Uf51dj6d8qeYeXmBwyL6kHJQ0B
-         gnyKtHNR3n2gnYOcKK+Yr0T37zpOlSHwcAJSGNpZCNyzNJG4mJVXbtcy3mAtH8EYJ1Pw
-         WiRw==
-X-Gm-Message-State: AOJu0YzXpYsdfUOsmSzkfg8gWjwfQk++MYUeP6I+T1EbOQMj1zfyzOYA
-	e2T4MXXBns6WfkdwcjFGOhxOuKDrnYjApaaPC2QXGGBxgLh005ZmbC2AHDZVEIqQCegZjKRv44G
-	fGESz7YNgpDrTAkFZbA0eRAgY/E4kajXzOw5N
-X-Google-Smtp-Source: AGHT+IFLfI+QVnBGQBrrQmHn9pIjxz6rn+Ig0eY7W4cofKy0FCCei109/RonMNR87LrdLiyaoj1zg6HqjAXh4M4gOWE=
-X-Received: by 2002:a05:6871:8aa:b0:215:17f1:3aa with SMTP id
- r42-20020a05687108aa00b0021517f103aamr370639oaq.3.1706907770631; Fri, 02 Feb
- 2024 13:02:50 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706908499; x=1707513299;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uq7KIGo6ksoIAaNr+JZVlNnWKqprFhC+i/3sd4c5jr0=;
+        b=a8lkTPv+6md5WkWp0jlPcxqCJ2TNI+QEDob5lH1M3BUNNvbC12AfI9Xb2v92JvhHZq
+         igoDPnWWAJgjUE8Y6LnO55z2s+cnb6U3cq4oLUmF/BGfVby9ItxQESt8Siz5Eexti4wa
+         eL0vp7XaH8qolTH+luCJTyCMSarExECQqqBnDjMkK5fUCekAcUpi3+891wio2s5PE2MN
+         YVd7y5ZOfCWoUuWAG11Ec7vUkZUpDSBx7yIFGuvjy0b2AvhYkLcM+9gQ6o0otlercSoe
+         8ecunX6CyDTpXWnzuAKm4DOupUkPq5FBBvE9dMcXMaji3ajL2Vp9p9mSOwIeyP14rrMO
+         ACcw==
+X-Gm-Message-State: AOJu0YxJGqQcTlr3+XVZwm+ysnU8oh8YoLe9LVAMR5KfzsdFJkkWTidb
+	9dkVDjJb69I48zGScAC7V4ds4nlFu431lFxLu9hDYpx6KtjmK00u4wpt31MqN8pCHVgtEdh3BeE
+	viA==
+X-Google-Smtp-Source: AGHT+IFVLmLkVXVVvZGLfIWrnCvRLCG+jeP6MsCJO3IsM6/mFibOyj9YkN3wYbHEizc9kSQGUkDAu580T58=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a02:91a:b0:5db:edbd:a2e0 with SMTP id
+ ck26-20020a056a02091a00b005dbedbda2e0mr65596pgb.3.1706908498760; Fri, 02 Feb
+ 2024 13:14:58 -0800 (PST)
+Date: Fri, 2 Feb 2024 13:14:57 -0800
+In-Reply-To: <Zb0qaZ7iT0_8Rp7-@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240131175027.3287009-1-jeffxu@chromium.org> <20240131193411.opisg5yoyxkwoyil@revolver>
- <CABi2SkXOX4SRMs0y8FYccoj+XrEiPCJk2seqT+sgO7Na7NWwLg@mail.gmail.com>
- <20240201204512.ht3e33yj77kkxi4q@revolver> <CABi2SkWB2eV24LBJtgJ73zEwaAWuFhAwrfqx3Rs=tqnpcJ0qRw@mail.gmail.com>
- <58408.1706828083@cvs.openbsd.org> <CAHk-=wjqozic6JuRimXD=RamnJmD6FoaQki7RtNYrezzx_OfOg@mail.gmail.com>
- <66496.1706893543@cvs.openbsd.org>
-In-Reply-To: <66496.1706893543@cvs.openbsd.org>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Fri, 2 Feb 2024 13:02:38 -0800
-Message-ID: <CABi2SkUkFLpLaK3nivWz-wNUC=eqiR-uq9PG0YSdmaT94MUAuQ@mail.gmail.com>
-Subject: Re: [PATCH v8 0/4] Introduce mseal
-To: Theo de Raadt <deraadt@openbsd.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Jonathan Corbet <corbet@lwn.net>, akpm@linux-foundation.org, 
-	keescook@chromium.org, jannh@google.com, sroettger@google.com, 
-	willy@infradead.org, gregkh@linuxfoundation.org, usama.anjum@collabora.com, 
-	rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org, 
-	groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
-	dave.hansen@intel.com, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20240202064332.9403-1-shahuang@redhat.com> <Zb0qaZ7iT0_8Rp7-@google.com>
+Message-ID: <Zb1bUU4V6TYFZ972@google.com>
+Subject: Re: [PATCH v3] KVM: selftests: Fix the dirty_log_test semaphore imbalance
+From: Sean Christopherson <seanjc@google.com>
+To: Shaoqin Huang <shahuang@redhat.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Feb 2, 2024 at 9:05=E2=80=AFAM Theo de Raadt <deraadt@openbsd.org> =
-wrote:
->
-> Another interaction to consider is sigaltstack().
->
-> In OpenBSD, sigaltstack() forces MAP_STACK onto the specified
-> (pre-allocated) region, because on kernel-entry we require the "sp"
-> register to point to a MAP_STACK region (this severely damages ROP pivot
-> methods).  Linux does not have MAP_STACK enforcement (yet), but one day
-> someone may try to do that work.
->
-> This interacted poorly with mimmutable() because some applications
-> allocate the memory being provided poorly.  I won't get into the details
-> unless pushed, because what we found makes me upset.  Over the years,
-> we've upstreamed diffs to applications to resolve all the nasty
-> allocation patterns.  I think the software ecosystem is now mostly
-> clean.
->
-> I suggest someone in Linux look into whether sigaltstack() is a mseal()
-> bypass, perhaps somewhat similar to madvise MADV_FREE, and consider the
-> correct strategy.
->
+On Fri, Feb 02, 2024, Sean Christopherson wrote:
+> On Fri, Feb 02, 2024, Shaoqin Huang wrote:
+> > ---
+> > v2->v3:
+> >   - Rebase to v6.8-rc2.
+> >   - Use TEST_ASSERT().
+> 
+> Patch says otherwise.
+> 
+> > @@ -726,6 +728,11 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >  		return;
+> >  	}
+> >  
+> > +	sem_getvalue(&sem_vcpu_stop, &sem_val);
+> > +	assert(sem_val == 0);
+> > +	sem_getvalue(&sem_vcpu_cont, &sem_val);
+> > +	assert(sem_val == 0);
+> > +
+> >  	/*
+> >  	 * We reserve page table for 2 times of extra dirty mem which
+> >  	 * will definitely cover the original (1G+) test range.  Here
+> > @@ -825,6 +832,13 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >  		sync_global_to_guest(vm, iteration);
+> >  	}
+> >  
+> > +	/*
+> > +	 *
+> > +	 * Before we set the host_quit, let the vcpu has time to run, to make
+> > +	 * sure we consume the sem_vcpu_stop and the vcpu consume the
+> > +	 * sem_vcpu_cont, to keep the semaphore balance.
+> > +	 */
+> > +	usleep(p->interval * 1000);
+> 
+> Sorry, I wasn't as explicit as I should have been.  When I said I don't have a
+> better solution, I did not mean to imply that I am ok with busy waiting as a
+> hack-a-around.
+> 
+> Against my better judgment, I spent half an hour slogging through this test to
+> figure out what's going wrong.  IIUC, the problem is essentially that the test
+> instructs the vCPU worker to continue _after_ the last iteration, and _then_ sets
+> host_quit, which results in the vCPU running one extra (unvalidated) iteration.
+> 
+> For the other modes, which stop if and only if vcpu_sync_stop_requested is set,
+> the extra iteration is a non-issue.  But because the dirty ring variant stops
+> after every exit (to purge the ring), it hangs without an extra "continue".
+> 
+> So rather than blindly fire off an extra sem_vcpu_cont that may or may not be
+> consumed, I believe the test can simply set host_quit _before_ the final "continue"
+> so that the vCPU worker doesn't run an extra iteration.
+> 
+> I ran the below with 1000 loops of "for (i = 0; i < LOG_MODE_NUM; i++)" and so
+> no issues.  I didn't see the assert you hit, but without the fix, I did see this
+> fire within a few loops (less than 5 I think)l
+> 
+> 	assert(host_log_mode == LOG_MODE_DIRTY_RING ||
+> 	       atomic_read(&vcpu_sync_stop_requested) == false);
+> 
+> I'll post this as two patches: one to fix the bug, and a second to have the
+> LOG_MODE_DIRTY_RING variant clear vcpu_sync_stop_requested so that the above
+> assert() can be modified as below.
 
-Thanks for bringing this up. I will follow up on sigaltstack() in Linux.
-
-> This is our documented strategy:
->
->      On OpenBSD some additional restrictions prevent dangerous address sp=
-ace
->      modifications.  The proposed space at ss_sp is verified to be
->      contiguously mapped for read-write permissions (no execute) and inca=
-pable
->      of syscall entry (see msyscall(2)).  If those conditions are met, a =
-page-
->      aligned inner region will be freshly mapped (all zero) with MAP_STAC=
-K
->      (see mmap(2)), destroying the pre-existing data in the region.  Once=
- the
->      sigaltstack is disabled, the MAP_STACK attribute remains on the memo=
-ry,
->      so it is best to deallocate the memory via a method that results in
->      munmap(2).
->
-> OK, I better provide the details of what people were doing.
-> sigaltstacks() in .data, in .bss, using malloc(), on a buffer on the
-> stack, we even found one creating a sigaltstack inside a buffer on a
-> pthread stack.  We told everyone to use mmap() and munmap(), with MAP_STA=
-CK
-> if #ifdef MAP_STACK finds a definition.
->
+Scratch patch 2, I'm pretty sure the vCPU worker can race with the main task and
+clear vcpu_sync_stop_requested just before the main task sets it, which would
+result in a false positive.  I didn't see any failures, but I'm 99% certain the
+race exists.  I suspect there are some other warts in the test that would
+complicate attempts to clean things up, so for now I'l just post the fix for
+the imbalance bug.
 
