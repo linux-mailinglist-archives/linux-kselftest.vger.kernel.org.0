@@ -1,102 +1,120 @@
-Return-Path: <linux-kselftest+bounces-4052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 835B2847BCB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 22:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 620A3847BF6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 23:04:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C8B81F2AC8F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 21:50:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 162881F2565F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 22:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAC4839FE;
-	Fri,  2 Feb 2024 21:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA3483A1E;
+	Fri,  2 Feb 2024 22:03:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JN6Gmx9k"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="egDhDP92"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40670839F8
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 21:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B402383A0C
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 22:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706910649; cv=none; b=M8yRucO45QVMXDs+MmoYUzUNG9KHgHGz1ky1r14LKEu532uzTh5H4WLXn/IJzpamcZvzrpLDZE3a0u0muQFmW17HmkAKxDktWpPkYL/6kAUpZ34+kh7ws5HIwQHCQ6Rq99b3HYYdK6wz/Df2XAULNWSGm0SdTZE0CRh3M7aLBgI=
+	t=1706911434; cv=none; b=M7j06ZzQImlFRahcMnKhVnO4MNEZsiWZUOghEcQW3qfgv/qqaK4XoHgivnlyCAidGXRddU22QyRzfQVC8LgbISwKOnPUtIpKA5025fyHG1NT0LChgWiKMdCgbheqU0bedDVxCdCeIQoK4V+KIb6RfCHFe3Xex5lW8ybS62suJ9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706910649; c=relaxed/simple;
-	bh=VZbnTeSWw8U2MGSVh9v3Lwt3NwuQtFuNk5k6Qqx8jyw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EKWQbTtjTe9sub+HJ1r2762sgKff/L6wB8z8FYJHHj6rWN/hxtbOuDMm1vUPYaodMRApXLU79cgDOGyzjUKlh2BsYHP5vIvYTcb9TwSA2Y2V/FXs38TAaYLMFrMhwlai1KwLJ6/tKMfpd+JbCFVJG/Dygtztoo912xdbWU76mHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JN6Gmx9k; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <b7a0b41e-569d-4d70-957d-0bb8e3556b32@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1706910645;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R+DDcT4cQ+ZQNKsrJ8G/v4WyIDU0Jo5aM9bFB2AEJog=;
-	b=JN6Gmx9kZZt2cVs44M1gPVCj48aVYfbzkXs9/84xuss/aVnvDDLtRQUGIkFRSqo2feg4qf
-	AyQeuZt0SJBw2BlWNmtEb/i3ViP/TnccSFSfOu883L2KsfX3t47Bej0HZk4IgKsS3o6U2U
-	rRv5Lg99QsIb2LqVC+VH7tyYc+QjZXs=
-Date: Fri, 2 Feb 2024 13:50:35 -0800
+	s=arc-20240116; t=1706911434; c=relaxed/simple;
+	bh=mS6RlgWUtAgL4Hsb+bdLT8pfZr5Df9vOrkPpbDxrTGY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=KWUJo3znHtL0RNqYBzzhVJp2VN68j2q/gIEjvwxOGudnIWQObyz9pLErFVe4SuHiSNrJ+Z/oDK5HS7qHpGVxaH4SclWGhtQYYOS/Y6UrzBuakiXKvtJDaWI5uFt0BlhqKY/by1yE+Vz41pXrSAz7yAw8+TLvhjUvmy4iRlzPM6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=egDhDP92; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6df2b2d1aso2736258276.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Feb 2024 14:03:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706911432; x=1707516232; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fdyvAj2ceAkBq1V2vAT6+dViND/2+FyBMSAlIkBp4A=;
+        b=egDhDP92CkyEhLQMUUJQi9i54Ya2Ny+HXpOSHFmGZj/bBitBTRKQK6FTgQQOIeprBa
+         wVSkrmgIdjsK492V/2UgFf/EGiImq0/MC3/58OB9sVpOY64GOIHl0IEh7bvdHRZhIO7D
+         ZLM0DFATGFLGS1Y8i0q5rmb93QzjeTOckrxS2BCXyE2lIG+nDXQSVm4pLmhWyOaw4kGr
+         Dw8lks+mo55zrnYIcTQfHvm0Zc2+csjjjv8JOB8qDCPw3BE31luqS9LDsTJsz4+alIVK
+         cIjN5gdCwqps52HwV2+JSGNjrC9AFrWNlv18dg2sSBQ6rxmUfO+9b3CXfBYDeVOtPHD7
+         PCbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706911432; x=1707516232;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fdyvAj2ceAkBq1V2vAT6+dViND/2+FyBMSAlIkBp4A=;
+        b=q9UCTFf4GpC5aeU06hY4OR+EaECAkOt4qQvxjOaApdK0NLyma08kFlAWbl7fnW3jwG
+         WlAS3FVHjwX8CMQb/Er9CZO046vXlr3NZh2gxS0gmYNV0dLOByx3QjT88crS9EX5DLbM
+         mxLu9jJxtr+cxVw5uO36zCdLT1c6UcPeqpWpARfTe53RiDlLzmhm7aKTAGxQEu20MSrn
+         0W+x1WkZndZZIneuHhmARJzYeOkOcW7c6zyOKXY2c3lRvnhA6I3eob1HnBLgoXBO+IAT
+         HQPLNI/CfOE7EtQm/axZVIV2VJtB9iv2muBFasaEMBXOanfQy60lGv8UA4mMVhVUnyAS
+         Gr2g==
+X-Gm-Message-State: AOJu0YyeHysG9mXYmg3xK+2CG9+hayBMj4iCW4T6xMly42ZWjtwiIsfM
+	qTJnk0JXblOecoDd0XB4oDiCzMgUFiiLlvKxfMo7yPcg9JTLp04QiMP4m/XEq2YxceNT+aaplTP
+	UCA==
+X-Google-Smtp-Source: AGHT+IFpPBhkfQUEm966eS1GQX2rrTrFBtCY3uv3k+mXuiT5na9D0Sj1i0Fisqxp9eDGDSeUa0YKmeBQquo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:240f:b0:dc6:4bf5:5a74 with SMTP id
+ dr15-20020a056902240f00b00dc64bf55a74mr297595ybb.11.1706911431732; Fri, 02
+ Feb 2024 14:03:51 -0800 (PST)
+Date: Fri, 2 Feb 2024 14:03:49 -0800
+In-Reply-To: <b45ee6cf-fa51-49eb-93ba-a54f4469470e@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH] selftests/bpf: Use ARRAY_SIZE for array length
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc: eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- shuah@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
- andrii@kernel.org
-References: <20240202090652.11294-1-jiapeng.chong@linux.alibaba.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20240202090652.11294-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20240115125707.1183-1-paul@xen.org> <2b4d020c-08ba-46ac-b004-cd9cb7256bd9@xen.org>
+ <ZbMIu84Zi2_PF9o4@google.com> <b45ee6cf-fa51-49eb-93ba-a54f4469470e@xen.org>
+Message-ID: <Zb1mxTgzJRWLtofw@google.com>
+Subject: Re: [PATCH v12 00/20] KVM: xen: update shared_info and vcpu_info handling
+From: Sean Christopherson <seanjc@google.com>
+To: paul@xen.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 2/2/24 1:06 AM, Jiapeng Chong wrote:
-> Use of macro ARRAY_SIZE to calculate array size minimizes
-> the redundant code and improves code reusability.
+On Fri, Feb 02, 2024, Paul Durrant wrote:
+> On 26/01/2024 01:19, Sean Christopherson wrote:
+> > On Thu, Jan 25, 2024, Paul Durrant wrote:
+> > > On 15/01/2024 12:56, Paul Durrant wrote:
+> > > > From: Paul Durrant <pdurrant@amazon.com>
+> > > > 
+> > > > This series has one small fix to what was in v11 [1]:
+> > > > 
+> > > > * KVM: xen: re-initialize shared_info if guest (32/64-bit) mode is set
+> > > > 
+> > > > The v11 patch failed to set the return code of the ioctl if the mode
+> > > > was not actually changed, leading to a spurious failure.
+> > > > 
+> > > > This version of the series also contains a new bug-fix to the pfncache
+> > > > code from David Woodhouse.
+> > > > 
+> > > > [1] https://lore.kernel.org/kvm/20231219161109.1318-1-paul@xen.org/
+> > > > 
+> > > 
+> > > Ping?
+> > 
+> > Sorry, I have done basically zero upstream reviews over the last few weeks, for
+> > a variety of reasons.  Unless yet another thing pops up, I expect to dive into
+> > upstream reviews tomorrow and spend a good long while there.
 > 
-> ./tools/testing/selftests/bpf/progs/syscall.c:122:26-27: WARNING: Use ARRAY_SIZE.
+> Hi Sean,
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=8170
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->   tools/testing/selftests/bpf/progs/syscall.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
-> index 3d3cafdebe72..297a34f224c3 100644
-> --- a/tools/testing/selftests/bpf/progs/syscall.c
-> +++ b/tools/testing/selftests/bpf/progs/syscall.c
-> @@ -119,7 +119,7 @@ int load_prog(struct args *ctx)
->   	static __u64 value = 34;
->   	static union bpf_attr prog_load_attr = {
->   		.prog_type = BPF_PROG_TYPE_XDP,
-> -		.insn_cnt = sizeof(insns) / sizeof(insns[0]),
-> +		.insn_cnt = ARRAY_SIZE(insns)
+>   Have you had any time to take a look at this?
 
-This does not even compile: 
-https://github.com/kernel-patches/bpf/actions/runs/7761734279/job/21170796228
-
-The existing code here is fine.
-
->   	};
->   	int ret;
->   
-
+No, I was hoping to get to it today, but that isn't happening.  It's next in my
+queue after David Steven's "KVM: allow mapping non-refcounted pages" serie", so
+hopefully Monday or Tuesday will be the day.
 
