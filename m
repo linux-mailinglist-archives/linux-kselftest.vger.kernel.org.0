@@ -1,118 +1,174 @@
-Return-Path: <linux-kselftest+bounces-3965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBAAB8465BE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 03:21:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B6A88465C1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 03:25:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A63A828D9E6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 02:21:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFF3EB21CEC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 02:25:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 666AB8839;
-	Fri,  2 Feb 2024 02:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 513A653A1;
+	Fri,  2 Feb 2024 02:25:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUpbzJ21"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="frbL0wz1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6BEBA24;
-	Fri,  2 Feb 2024 02:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B3ABE59
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 02:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706840484; cv=none; b=SlzkFnNUmK8OaQ+qMAiKpwVHJpmtMTgU+/ElosTF2GTIk15pHT2lYsXK0dSpyQ0dg+bceujvwdQnSVWMOhYoAVZG01hM9cvnHoyTF9tsuFIjk23eV5MjVk1yXJrGaUmFp9NkaNsDEMw1Sccd9/NnYB9GrbdszDhFnj2m4Q+eqVU=
+	t=1706840712; cv=none; b=RiFWpaTYu3u/uOU1qRNDMZ3im3YRp64DywkTfG6RpU/CLnH6NzYlp5wD0RhGIVkhMmJMRRRmYUX+dKypCWfEOjOl/GLNmR4Lsed04pKsJqVO3Sge8gZyOxNaXllkdVotz07yLauZq/qlQiEY9OS+dJY6+yYxq169VQGnY4VymJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706840484; c=relaxed/simple;
-	bh=DdoXRzk+lKR3FazbKRtaW/yjrgzce0EILdYm+2tlAR8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W0qgMgrJvK23ompWlAM8Le4U25Gq3JrL5kTmuJejycrSUmOUZlaKfD3baoLL+0V61V7UKF6DpqqPWw6RdOqk58/231pJJQtGFMOuyQs4Ov7izx07o5mKwMq2JStZIHlcBW2FGaAjskufMfAhjkPF16NN1x0MJx4xAfj4P+o6qSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUpbzJ21; arc=none smtp.client-ip=209.85.166.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7beda2e6794so12224339f.1;
-        Thu, 01 Feb 2024 18:21:22 -0800 (PST)
+	s=arc-20240116; t=1706840712; c=relaxed/simple;
+	bh=9N2iU88+gARQNe6fozJMjFI5OkOXZkUyFALlpWKir8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i65sC8422FfelaE2IUBr9xEfEVeDb2UVbnK9k6il7DbAaO6D6AtHz6AvtJuJXKVtVhbM3Y51SgmsMZK4CjGRdh6zxA1NU4q6dkVbquvf/2jNpWSiw3UR+i7PTc1j83Iip3RH0vTe80KT4TGJmoJ7OJQXq+Ruk6fFtw6AuaDbhCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=frbL0wz1; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40fc549ab9bso2325435e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Feb 2024 18:25:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706840482; x=1707445282; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mCF/rEIk8KrA7PI0LjZREJr/uXjAEXA/eqE8UNUtZHQ=;
-        b=bUpbzJ214W1tJiZ+5tIFVatE/EFBlu3b6zDLr0DR//OKq+vQ2Wwrb3klYwLwrx06LU
-         2NyqVTK4raG8uSwIdVGyIr6dCbG3kIjjGZ8q9m6ymn7+Iz8QeeQT0E2Vlbcj+KBqI136
-         aISxDOtksMSFfMV+f3F/BZFwf3jKuL4l84Pw6mGrkaFv6Xixzopb1aGiFIcMiAqwdmnm
-         Cy8QVUAPcBJX4luGi2o9TxTFfXUa4uMeD8qs4r2aG+EPHZTAK0VOTnSwgyLjzfpttl9O
-         3ptoopURnHSSEwv623L23k0w62CbHby+sO2VetgipynAF3+4MVoSSCTn8cCjC358jIcP
-         dxtQ==
+        d=arista.com; s=google; t=1706840709; x=1707445509; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5+MYOUdkffZklmJiRyDcBSvfexdw+Ug/dwNFb912Mic=;
+        b=frbL0wz1UmxnOBA5ovKX05Ts7a3K0TlLlKRG2bDTohnp8LoLAnyt56C6UR9d+CH0Yc
+         FuJiapWXxscrm/qaCPYqWvhvTweU063XysN6at25XE6NmtxeRmm5K8ypX5mWUC3auhXt
+         dgzc9eq5HhlNkRwW3iJgHaXRlZvhjEPTfJKn3qf6v6GURY3/eRYzhcMlB40l+kHQ2uEU
+         k22Hg7Xpz/8bG7MvkS5UUpmZXpYhnJFM5p1zgiDXDKqjazCZDVRgBzkmJM25+HCcYxj8
+         28XrBWPNGxCUPSl5EtJGRLIYIi2ST8IThJuaa01tg/EvBrMq4sF6ND6oe6P4U4ZEkxqZ
+         9Ekw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706840482; x=1707445282;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mCF/rEIk8KrA7PI0LjZREJr/uXjAEXA/eqE8UNUtZHQ=;
-        b=J7Yw7uEb9U9s9dnHz6qwH2/OFgEb37UVHhelh4yTSE7hgfZO8GHJA/WuwBDgJrG4Xo
-         TRfq4p9a8neaSEgV2G7Qp/+hUU6/E3r/dc1jWw4u4P4L+Q+HCyei9HkDQI290Apty8CE
-         eG3jwAFcMAEEAfVlxsrQQCrOP7dCYr8Ph6eqPiFprLVMHVHmHV1m5WUV71RdDpon5wEE
-         uIs/aoeZdvV2KxQzLz2brx+kCdBiIUI+4nJDD6ep6O84cis8YSVdZXrgFWN4wlV8ldcJ
-         8Mr4noVye+xfqUkQWkRVrQWHWKHRWj0NC9aJtOGw94jXzCFd2KdgW6xkE7JQ3aroXi02
-         uxVw==
-X-Gm-Message-State: AOJu0YwS7drp0UtKA2UH15IhTftY7SIPwWmldzkMPQGxNWtO7zbFXa7g
-	++Fdjca91+huWlJlkFpxO9GvkvMJodgrNkPGP4e0La5O0qfNlHAM
-X-Google-Smtp-Source: AGHT+IHEmAORMd6S6PZh9WzCAsfNYaDaqJGdy0b1gumH93sXlykxSlBsSgetstaQxphrN1IzEibGwQ==
-X-Received: by 2002:a5e:df47:0:b0:7bf:9e23:99a3 with SMTP id g7-20020a5edf47000000b007bf9e2399a3mr685000ioq.2.1706840481849;
-        Thu, 01 Feb 2024 18:21:21 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUjJjJeDecBv9ijEaATRrQYjUJGvfUqn78QhfOMy/FFHOLBsSLJcpvFs2H3ldDffa2EWA1N/PwN41IM9fswaandc0TIGkAEmC49lEkvHD4VYz0UwcwFCu9gFXgtavxw2JO46Hr/43UIxa9DXpg4Hi7RRrn0Rusog1TRY0uu/1btV4NFLh/dnvEn+tLyvigsHoNN4Z/IPOe7TYbQXFVOcOkjOA6lqLJcvRTY3OFILJPDept+aGURNCjrTAcKFK7bmOQB
-Received: from ?IPV6:2601:282:1e82:2350:245c:6a9e:25c1:5469? ([2601:282:1e82:2350:245c:6a9e:25c1:5469])
-        by smtp.googlemail.com with ESMTPSA id l22-20020a5e8816000000b007baf1948186sm227403ioj.42.2024.02.01.18.21.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 18:21:21 -0800 (PST)
-Message-ID: <5e6edac1-1f52-4978-b483-974c3958daa0@gmail.com>
-Date: Thu, 1 Feb 2024 19:21:20 -0700
+        d=1e100.net; s=20230601; t=1706840709; x=1707445509;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5+MYOUdkffZklmJiRyDcBSvfexdw+Ug/dwNFb912Mic=;
+        b=LFqZOxD8Yz0eFt5bsRRoB8GWz06O7juU+OJAsREWpCANgUAMgnfimBZUiZ5DOtFEiW
+         ZI8YkNK2/gwE48g+G8cMryMrWBUW7bkntutvyHsKYD9MI0+WvdbK/Ynwh3l/wVOMBQHr
+         7CJ/cZ+hCP9kQjejU8dpKnSABt6dNp8gzQY+t/Ai5sWBdjaN4K5+xI0SIIQdn4m6fxN/
+         bsqADvyV2I0WqrR0AAD0iVBSDqBXG3WNQnCkHdfYXdPJHMQJwDbV6kdrDQbdQ4qUtJ9Q
+         8lNoxdBMD7dy5bU9Z3ZVLyYCbjFb3t4jo86O70qDug0KtcU6G/hfP6pi6dlpVE0NfDAt
+         LsAg==
+X-Gm-Message-State: AOJu0Yy11yUHNDgHbISMPjxhZiT6ubBTT/+fP9tico2XEpc1H9Jg0Z/4
+	dAo0MTYjjP7lIQiTVoE+883OSGZGeQcclBW/dtVIEBY4HUKN/ol9S21/ATgYhQ==
+X-Google-Smtp-Source: AGHT+IHKoqvqHwrBIymRLXaN8QWWHiRU1Hnh5rwpivU3OiIucqg0XN5yHdkFYRxlifcErpSpJBiHsA==
+X-Received: by 2002:a05:600c:1e09:b0:40e:e839:82d3 with SMTP id ay9-20020a05600c1e0900b0040ee83982d3mr558787wmb.20.1706840708752;
+        Thu, 01 Feb 2024 18:25:08 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVxrAidf68sKuOnQRo82PhZxVEETGD8gQt1wMzSdK5oZVhC3f7C4bCzGBZPilM1QM3clRcjoHMVeBfNy8z6CipHoaMrSIKBWu9MT3MjibepjVJZTx9N7qj6AIKxw5eW21ot8gfK1Ldw9uDRUN/fmuQzcNR+7HZMsRJztUONVQTZ0DZ33/idL/7sWEdICOhwKDn7pOv0Ai3dSgG2oQp1kCmtax51lFGdszk4WMAzBzDBk2Oke5mintYVzQ6fTaMDIeWo0wNpXY2/qg24Qnbra4bGeFFwNCOfQLI44y1fEFKU7aEdtwbuI/20aq2dyt8tw4b+6MgNEu/bEG5f8ccXOFhfIskTTSmo8V0NASEp
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b0040f22171921sm1201476wmq.3.2024.02.01.18.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Feb 2024 18:25:07 -0800 (PST)
+From: Dmitry Safonov <dima@arista.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Dmitry Safonov <dima@arista.com>,
+	Dmitry Safonov <0x7f454c46@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Mohammad Nassiri <mnassiri@ciena.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/net: Amend per-netns counter checks
+Date: Fri,  2 Feb 2024 02:24:59 +0000
+Message-ID: <20240202-unsigned-md5-netns-counters-v1-1-8b90c37c0566@arista.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 net 0/4] selftests: net: more fixes
-Content-Language: en-US
-To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>,
- Florian Westphal <fw@strlen.de>, linux-kselftest@vger.kernel.org
-References: <cover.1706812005.git.pabeni@redhat.com>
-From: David Ahern <dsahern@gmail.com>
-In-Reply-To: <cover.1706812005.git.pabeni@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.13-dev-b6b4b
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1706840700; l=2805; i=dima@arista.com; s=20231212; h=from:subject:message-id; bh=9N2iU88+gARQNe6fozJMjFI5OkOXZkUyFALlpWKir8s=; b=Puw0xgLo615QE2e5RmlZ8jpNiFzXn/gxginyxBI+5ARAFf3Yf/fwt1KlR7ELKNDr5xs5BwLnh Vt+269xSIvFDDBwXaQR/uQqRY+N8HWQp2YYJrQKGvZFm1ELDkbYIv2F
+X-Developer-Key: i=dima@arista.com; a=ed25519; pk=hXINUhX25b0D/zWBKvd6zkvH7W2rcwh/CH6cjEa3OTk=
+Content-Transfer-Encoding: 8bit
 
-On 2/1/24 11:42 AM, Paolo Abeni wrote:
-> Another small bunch of fixes, addressing issues outlined by the
-> netdev CI.
-> 
-> The first 2 patches are just rebased.
-> 
-> The following 2 are new fixes, for even more problems that surfaced
-> meanwhile.
-> 
-> Paolo Abeni (4):
->   selftests: net: cut more slack for gro fwd tests.
->   selftests: net: fix setup_ns usage in rtnetlink.sh
->   selftests: net: fix tcp listener handling in pmtu.sh
->   selftests: net: avoid just another constant wait
-> 
->  tools/testing/selftests/net/pmtu.sh           | 23 ++++++++++++++-----
->  tools/testing/selftests/net/rtnetlink.sh      |  6 ++---
->  tools/testing/selftests/net/udpgro_fwd.sh     | 14 +++++++++--
->  tools/testing/selftests/net/udpgso_bench_rx.c |  2 +-
->  4 files changed, 32 insertions(+), 13 deletions(-)
-> 
+Selftests here check not only that connect()/accept() for
+TCP-AO/TCP-MD5/non-signed-TCP combinations do/don't establish
+connections, but also counters: those are per-AO-key, per-socket and
+per-netns.
 
-For the set:
+The counters are checked on the server's side, as the server listener
+has TCP-AO/TCP-MD5/no keys for different peers. All tests run in
+the same namespaces with the same veth pair, created in test_init().
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+After close() in both client and server, the sides go through
+the regular FIN/ACK + FIN/ACK sequence, which goes in the background.
+If the selftest has already started a new testing scenario, read
+per-netns counters - it may fail in the end iff it doesn't expect
+the TCPAOGood per-netns counters go up during the test.
+
+Let's just kill both TCP-AO sides - that will avoid any asynchronous
+background TCP-AO segments going to either sides.
+
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Closes: https://lore.kernel.org/all/20240201132153.4d68f45e@kernel.org/T/#u
+Fixes: 6f0c472a6815 ("selftests/net: Add TCP-AO + TCP-MD5 + no sign listen socket tests")
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+---
+ tools/testing/selftests/net/tcp_ao/unsigned-md5.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
+index c5b568cd7d90..6b59a652159f 100644
+--- a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
++++ b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
+@@ -110,9 +110,9 @@ static void try_accept(const char *tst_name, unsigned int port,
+ 		test_tcp_ao_counters_cmp(tst_name, &ao_cnt1, &ao_cnt2, cnt_expected);
+ 
+ out:
+-	synchronize_threads(); /* close() */
++	synchronize_threads(); /* test_kill_sk() */
+ 	if (sk > 0)
+-		close(sk);
++		test_kill_sk(sk);
+ }
+ 
+ static void server_add_routes(void)
+@@ -302,10 +302,10 @@ static void try_connect(const char *tst_name, unsigned int port,
+ 		test_ok("%s: connected", tst_name);
+ 
+ out:
+-	synchronize_threads(); /* close() */
++	synchronize_threads(); /* test_kill_sk() */
+ 	/* _test_connect_socket() cleans up on failure */
+ 	if (ret > 0)
+-		close(sk);
++		test_kill_sk(sk);
+ }
+ 
+ #define PREINSTALL_MD5_FIRST	BIT(0)
+@@ -486,10 +486,10 @@ static void try_to_add(const char *tst_name, unsigned int port,
+ 	}
+ 
+ out:
+-	synchronize_threads(); /* close() */
++	synchronize_threads(); /* test_kill_sk() */
+ 	/* _test_connect_socket() cleans up on failure */
+ 	if (ret > 0)
+-		close(sk);
++		test_kill_sk(sk);
+ }
+ 
+ static void client_add_ip(union tcp_addr *client, const char *ip)
+
+---
+base-commit: 021533194476035883300d60fbb3136426ac8ea5
+change-id: 20240202-unsigned-md5-netns-counters-35134409362a
+
+Best regards,
+-- 
+Dmitry Safonov <dima@arista.com>
 
 
