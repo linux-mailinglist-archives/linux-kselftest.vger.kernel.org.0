@@ -1,110 +1,102 @@
-Return-Path: <linux-kselftest+bounces-4051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 807A2847B82
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 22:30:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 835B2847BCB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 22:50:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 323E92906F7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 21:30:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C8B81F2AC8F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 21:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD0A81751;
-	Fri,  2 Feb 2024 21:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAC4839FE;
+	Fri,  2 Feb 2024 21:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AwAyS874"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JN6Gmx9k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5F57C0B9;
-	Fri,  2 Feb 2024 21:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40670839F8
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Feb 2024 21:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706909429; cv=none; b=qPih27I7JBt9U+j4d++yVAJQWy1lJUjbCmusFuh84qC4St7Uj8fvcg0zeOkYwRsC09aSfwJZvHMBgR2RakGaFNbyRbkWxdn5CFGrWZTGF+XbEr33qGHR27KQJHvQQeZi9UrsHJ3uwgVSjEQV1wNb+ALhoGYdvpVuujgViQP4f5U=
+	t=1706910649; cv=none; b=M8yRucO45QVMXDs+MmoYUzUNG9KHgHGz1ky1r14LKEu532uzTh5H4WLXn/IJzpamcZvzrpLDZE3a0u0muQFmW17HmkAKxDktWpPkYL/6kAUpZ34+kh7ws5HIwQHCQ6Rq99b3HYYdK6wz/Df2XAULNWSGm0SdTZE0CRh3M7aLBgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706909429; c=relaxed/simple;
-	bh=v56A7tIQPuHlG+irb7rZnIZfGnhBn+AGY94HikYcQ2o=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=I9M/z9cPyWQdwBWZ/r0ZljTSJz7drPPhDRaXLA6/q6j6DBJaTQvuMeB+HzJhSf1eMK/3UJfaAQfbBVwGE5LRAiRi46I1v9CeTI9gzTIOkDD/2ULAQd9kKWAz7tTh3iVozgaaNMn5e35M890thjLdU1gQ9MyR32HfBpWgRDX3IC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AwAyS874; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 29586C43390;
-	Fri,  2 Feb 2024 21:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706909429;
-	bh=v56A7tIQPuHlG+irb7rZnIZfGnhBn+AGY94HikYcQ2o=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AwAyS874oIHV5p30xFYq1JV07Z6ZPK5FBkU0ZQtKFL0XmagipQokhxrw1/uWJqHRO
-	 UZB9sxaIdMotx8nyZBuazWpxb5O3H75fv41LAxN2PjMshs/FaMxX4UkiXwMvUjXedZ
-	 ANvwiSqyLrALh6eYQ6cQ9G5LjlV3nN/MLD2Fg/pKutU02QcQJsFZ1RjQ8cV1HxFspg
-	 0VyPGFS5HlnPHwPWohwABxOSksqrgGuQxaAHpLh8/1wdSNXJyMrirwVaZkhOQ+mYzY
-	 yGdSX/hD/0Fm3CC2nglrnEdFiLmH8ie1v7v1s/ymgObJNHfIfIegr3gciP+nP6px7h
-	 6b6z/kghHMl+A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0BDACC04E32;
-	Fri,  2 Feb 2024 21:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1706910649; c=relaxed/simple;
+	bh=VZbnTeSWw8U2MGSVh9v3Lwt3NwuQtFuNk5k6Qqx8jyw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EKWQbTtjTe9sub+HJ1r2762sgKff/L6wB8z8FYJHHj6rWN/hxtbOuDMm1vUPYaodMRApXLU79cgDOGyzjUKlh2BsYHP5vIvYTcb9TwSA2Y2V/FXs38TAaYLMFrMhwlai1KwLJ6/tKMfpd+JbCFVJG/Dygtztoo912xdbWU76mHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JN6Gmx9k; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <b7a0b41e-569d-4d70-957d-0bb8e3556b32@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1706910645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R+DDcT4cQ+ZQNKsrJ8G/v4WyIDU0Jo5aM9bFB2AEJog=;
+	b=JN6Gmx9kZZt2cVs44M1gPVCj48aVYfbzkXs9/84xuss/aVnvDDLtRQUGIkFRSqo2feg4qf
+	AyQeuZt0SJBw2BlWNmtEb/i3ViP/TnccSFSfOu883L2KsfX3t47Bej0HZk4IgKsS3o6U2U
+	rRv5Lg99QsIb2LqVC+VH7tyYc+QjZXs=
+Date: Fri, 2 Feb 2024 13:50:35 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/6] Improvements for tracking scalars in the BPF
- verifier
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170690942904.20598.1069790224577035855.git-patchwork-notify@kernel.org>
-Date: Fri, 02 Feb 2024 21:30:29 +0000
-References: <20240127175237.526726-1-maxtram95@gmail.com>
-In-Reply-To: <20240127175237.526726-1-maxtram95@gmail.com>
-To: Maxim Mikityanskiy <maxtram95@gmail.com>
-Cc: eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, shung-hsi.yu@suse.com, john.fastabend@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+Subject: Re: [PATCH] selftests/bpf: Use ARRAY_SIZE for array length
+To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc: eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
  kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com, shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
- hawk@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, maxim@isovalent.com
+ shuah@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
+ andrii@kernel.org
+References: <20240202090652.11294-1-jiapeng.chong@linux.alibaba.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20240202090652.11294-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Sat, 27 Jan 2024 19:52:31 +0200 you wrote:
-> From: Maxim Mikityanskiy <maxim@isovalent.com>
+On 2/2/24 1:06 AM, Jiapeng Chong wrote:
+> Use of macro ARRAY_SIZE to calculate array size minimizes
+> the redundant code and improves code reusability.
 > 
-> The goal of this series is to extend the verifier's capabilities of
-> tracking scalars when they are spilled to stack, especially when the
-> spill or fill is narrowing. It also contains a fix by Eduard for
-> infinite loop detection and a state pruning optimization by Eduard that
-> compensates for a verification complexity regression introduced by
-> tracking unbounded scalars. These improvements reduce the surface of
-> false rejections that I saw while working on Cilium codebase.
+> ./tools/testing/selftests/bpf/progs/syscall.c:122:26-27: WARNING: Use ARRAY_SIZE.
 > 
-> [...]
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=8170
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>   tools/testing/selftests/bpf/progs/syscall.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
+> index 3d3cafdebe72..297a34f224c3 100644
+> --- a/tools/testing/selftests/bpf/progs/syscall.c
+> +++ b/tools/testing/selftests/bpf/progs/syscall.c
+> @@ -119,7 +119,7 @@ int load_prog(struct args *ctx)
+>   	static __u64 value = 34;
+>   	static union bpf_attr prog_load_attr = {
+>   		.prog_type = BPF_PROG_TYPE_XDP,
+> -		.insn_cnt = sizeof(insns) / sizeof(insns[0]),
+> +		.insn_cnt = ARRAY_SIZE(insns)
 
-Here is the summary with links:
-  - [bpf-next,v3,1/6] bpf: Track spilled unbounded scalars
-    https://git.kernel.org/bpf/bpf-next/c/e67ddd9b1cff
-  - [bpf-next,v3,2/6] selftests/bpf: Test tracking spilled unbounded scalars
-    https://git.kernel.org/bpf/bpf-next/c/6be503cec6c9
-  - [bpf-next,v3,3/6] bpf: Preserve boundaries and track scalars on narrowing fill
-    https://git.kernel.org/bpf/bpf-next/c/c1e6148cb4f8
-  - [bpf-next,v3,4/6] selftests/bpf: Add test cases for narrowing fill
-    https://git.kernel.org/bpf/bpf-next/c/067313a85c6f
-  - [bpf-next,v3,5/6] bpf: handle scalar spill vs all MISC in stacksafe()
-    https://git.kernel.org/bpf/bpf-next/c/6efbde200bf3
-  - [bpf-next,v3,6/6] selftests/bpf: states pruning checks for scalar vs STACK_MISC
-    https://git.kernel.org/bpf/bpf-next/c/73a28d9d000e
+This does not even compile: 
+https://github.com/kernel-patches/bpf/actions/runs/7761734279/job/21170796228
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The existing code here is fine.
 
+>   	};
+>   	int ret;
+>   
 
 
