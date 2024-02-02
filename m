@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-4010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034A7846EF8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:32:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E6DD846EFA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 12:33:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 827EE1F22DC1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 11:32:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7C091F229AD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Feb 2024 11:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F8914076A;
-	Fri,  2 Feb 2024 11:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF50814078A;
+	Fri,  2 Feb 2024 11:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0lfqji+e"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XDgeClVE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D701581AA7;
-	Fri,  2 Feb 2024 11:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A1F140784;
+	Fri,  2 Feb 2024 11:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706873504; cv=none; b=W+SGW4VPionntShvzFdkhccPExNlo51ri0bi7d4Z0P7THpnW3hqhQ5h6EQvhntA2dxsVW7lOEEaxsob8TY2kjaMv/rlfXZQxJEtHeEDIV/QlaAmilEaUqpWdmRNIXLKiuMgIA3O0/a55OHBgcPwVNQBhhaoOLFA4UHbANjjUTFw=
+	t=1706873506; cv=none; b=eqRqLpaCyisjfETBUOp0PjYrhQjpx0kg+s9Up2Men1sMzj7B8dlpJWcZAnqnHEXXyJd4Kdd0ZMCeH33szLsTGCmb0I5kl+TqZ8OB8PhSCM4QQJhzh0Ydh8hwAl3JXNR0OJM6lIsWqmlakhOQJOv5BgydZJbWm9D72dJmomozMVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706873504; c=relaxed/simple;
-	bh=CPJegAn2jct8qTIbcEKKHIZ5byMY8HScpq2uBuAZ1YA=;
+	s=arc-20240116; t=1706873506; c=relaxed/simple;
+	bh=SKE8pMm9wj80+Eluj9OfOxnVYjWtsY8duRngXOEJh3c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i4FPc0WHbTXB2qSRzECKU+bcv6Fxy7TBmOmkztD3897yRIotEwLcg0IcR6GARB6Yd7ctljlay7WbyK10SmPo5viQ9fd2EwgIVRp153yKTuIxW+YDL59LX5niah6Tqzu2r47zlauCRJScZIIT74nsk1g5Bst0jydnKIAzUnwn4SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0lfqji+e; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=H5TwG5N8RD5zBzW7pKp6NzR9NHrfL156qCeDV0iveBYI8OWVKLglPJzAKp2Xtkp5YjFza3tZJwMZOQRTIqSNAyhGrFf7wC51Ch4gcsDRgmwgeClZJIBMhvHXhvdCxwlfE1+s4Amc3igwlFwD5GaTtYJ2YXpvM5mRWvRhGMAFjUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XDgeClVE; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706873501;
-	bh=CPJegAn2jct8qTIbcEKKHIZ5byMY8HScpq2uBuAZ1YA=;
+	s=mail; t=1706873503;
+	bh=SKE8pMm9wj80+Eluj9OfOxnVYjWtsY8duRngXOEJh3c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=0lfqji+eLlBS5e+wEw7FViQVc/F4HiU2UzSDgYsDCtUrLKYO4xfGq1b0zlJ7y6DQo
-	 936S7ZEbazYvahmRV/khY9mhLfY7436WPsk3goRckXKRe4/1OcvSLkxbUdAIvBpPKg
-	 ACArrnKoof3qb5Gum32J6lS8YBRDJVELyv93YNlBJxZkf7BP8phc0BkR/8A35/iiPt
-	 7pzulvjDSQruyOIJOIqJVqAW8hzDhWhZd5UTksWOdAxCm4sH2L5zkR695jneIhmytb
-	 Mu6MKAsSh7+deOUe2T/xy/a1z7bxHpSrih4Cr0BubJTB0ckHcLNZMfDre+0RY5bWqN
-	 WoWLsxJigKP4Q==
+	b=XDgeClVEVe8aFmyX6ZG0LNsjD6DIm4Co1wCBY44huyVlp8Z8IOoz7PHJG94tXpyrs
+	 ojEFVkVSg2Z8We2lMlYANwczm7K4D3D775Qorey38Xdd+i7LGcJK11xpFsC2CuL/PH
+	 3Uw7HERuRZ2Y0g5cC+w1iLRE0oYbmwyIgOBgcAGzLioPyO1uJzIqt/YnDo//B2jtWK
+	 lpBVV6iwTGzmZHilpC4eAxIzqyoBqT6E2uO9C3TKGwW7tFZgQOq4anua7SZYU5La0R
+	 WDhcXlAhtK34YdgQC9+ORwoCgn4XbfPJcGyGwX8jZwKVdpuMUTa2VHRlIAflCIuNFw
+	 p1E4k/bv/R07Q==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id AB6F137811CF;
-	Fri,  2 Feb 2024 11:31:39 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A4D383782098;
+	Fri,  2 Feb 2024 11:31:41 +0000 (UTC)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -56,9 +56,9 @@ Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 06/12] selftests/mm: mrelease_test: conform test to TAP format output
-Date: Fri,  2 Feb 2024 16:31:13 +0500
-Message-ID: <20240202113119.2047740-7-usama.anjum@collabora.com>
+Subject: [PATCH v2 07/12] selftests/mm: mremap_dontunmap: conform test to TAP format output
+Date: Fri,  2 Feb 2024 16:31:14 +0500
+Message-ID: <20240202113119.2047740-8-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20240202113119.2047740-1-usama.anjum@collabora.com>
 References: <20240202113119.2047740-1-usama.anjum@collabora.com>
@@ -75,177 +75,101 @@ functional change is intended other than the layout of output messages.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/mrelease_test.c | 80 +++++++++-------------
- 1 file changed, 33 insertions(+), 47 deletions(-)
+ tools/testing/selftests/mm/mremap_dontunmap.c | 32 ++++++++++++-------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/mrelease_test.c b/tools/testing/selftests/mm/mrelease_test.c
-index d822004a374e9..100370a7111df 100644
---- a/tools/testing/selftests/mm/mrelease_test.c
-+++ b/tools/testing/selftests/mm/mrelease_test.c
-@@ -26,19 +26,15 @@ static int alloc_noexit(unsigned long nr_pages, int pipefd)
- 
- 	buf = (char *)mmap(NULL, nr_pages * psize(), PROT_READ | PROT_WRITE,
- 			   MAP_PRIVATE | MAP_ANON, 0, 0);
--	if (buf == MAP_FAILED) {
--		perror("mmap failed, halting the test");
--		return KSFT_FAIL;
--	}
-+	if (buf == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed, halting the test: %s\n", strerror(errno));
- 
- 	for (i = 0; i < nr_pages; i++)
- 		*((unsigned long *)(buf + (i * psize()))) = i;
- 
- 	/* Signal the parent that the child is ready */
--	if (write(pipefd, "", 1) < 0) {
--		perror("write");
--		return KSFT_FAIL;
--	}
-+	if (write(pipefd, "", 1) < 0)
-+		ksft_exit_fail_msg("write: %s\n", strerror(errno));
- 
- 	/* Wait to be killed (when reparenting happens) */
- 	while (getppid() == ppid && timeout > 0) {
-@@ -54,23 +50,17 @@ static int alloc_noexit(unsigned long nr_pages, int pipefd)
- /* The process_mrelease calls in this test are expected to fail */
- static void run_negative_tests(int pidfd)
- {
--	int res;
- 	/* Test invalid flags. Expect to fail with EINVAL error code. */
- 	if (!syscall(__NR_process_mrelease, pidfd, (unsigned int)-1) ||
- 			errno != EINVAL) {
--		res = (errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
--		perror("process_mrelease with wrong flags");
--		exit(res);
-+		ksft_exit_fail_msg("process_mrelease with wrong flags: %s\n", strerror(errno));
- 	}
- 	/*
- 	 * Test reaping while process is alive with no pending SIGKILL.
- 	 * Expect to fail with EINVAL error code.
- 	 */
--	if (!syscall(__NR_process_mrelease, pidfd, 0) || errno != EINVAL) {
--		res = (errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
--		perror("process_mrelease on a live process");
--		exit(res);
--	}
-+	if (!syscall(__NR_process_mrelease, pidfd, 0) || errno != EINVAL)
-+		ksft_exit_fail_msg("process_mrelease on a live process: %s\n", strerror(errno));
+diff --git a/tools/testing/selftests/mm/mremap_dontunmap.c b/tools/testing/selftests/mm/mremap_dontunmap.c
+index a06e73ec85682..1d75084b9ca56 100644
+--- a/tools/testing/selftests/mm/mremap_dontunmap.c
++++ b/tools/testing/selftests/mm/mremap_dontunmap.c
+@@ -27,14 +27,14 @@ static void dump_maps(void)
+ 	system(cmd);
  }
  
- static int child_main(int pipefd[], size_t size)
-@@ -93,11 +83,18 @@ int main(void)
- 	char byte;
- 	int res;
+-#define BUG_ON(condition, description)					      \
+-	do {								      \
+-		if (condition) {					      \
+-			fprintf(stderr, "[FAIL]\t%s():%d\t%s:%s\n", __func__, \
+-				__LINE__, (description), strerror(errno));    \
+-			dump_maps();					  \
+-			exit(1);					      \
+-		} 							      \
++#define BUG_ON(condition, description)						\
++	do {									\
++		if (condition) {						\
++			dump_maps();						\
++			ksft_exit_fail_msg("[FAIL]\t%s:%d\t%s:%s\n",		\
++					   __func__, __LINE__, (description),	\
++					   strerror(errno));			\
++		}								\
+ 	} while (0)
  
+ // Try a simple operation for to "test" for kernel support this prevents
+@@ -122,6 +122,7 @@ static void mremap_dontunmap_simple()
+ 	       "unable to unmap destination mapping");
+ 	BUG_ON(munmap(source_mapping, num_pages * page_size) == -1,
+ 	       "unable to unmap source mapping");
++	ksft_test_result_pass("%s\n", __func__);
+ }
+ 
+ // This test validates that MREMAP_DONTUNMAP on a shared mapping works as expected.
+@@ -173,6 +174,7 @@ static void mremap_dontunmap_simple_shmem()
+ 	       "unable to unmap destination mapping");
+ 	BUG_ON(munmap(source_mapping, num_pages * page_size) == -1,
+ 	       "unable to unmap source mapping");
++	ksft_test_result_pass("%s\n", __func__);
+ }
+ 
+ // This test validates MREMAP_DONTUNMAP will move page tables to a specific
+@@ -219,6 +221,7 @@ static void mremap_dontunmap_simple_fixed()
+ 	       "unable to unmap destination mapping");
+ 	BUG_ON(munmap(source_mapping, num_pages * page_size) == -1,
+ 	       "unable to unmap source mapping");
++	ksft_test_result_pass("%s\n", __func__);
+ }
+ 
+ // This test validates that we can MREMAP_DONTUNMAP for a portion of an
+@@ -269,6 +272,7 @@ static void mremap_dontunmap_partial_mapping()
+ 	       "unable to unmap destination mapping");
+ 	BUG_ON(munmap(source_mapping, num_pages * page_size) == -1,
+ 	       "unable to unmap source mapping");
++	ksft_test_result_pass("%s\n", __func__);
+ }
+ 
+ // This test validates that we can remap over only a portion of a mapping.
+@@ -328,19 +332,24 @@ static void mremap_dontunmap_partial_mapping_overwrite(void)
+ 	       "unable to unmap destination mapping");
+ 	BUG_ON(munmap(source_mapping, 5 * page_size) == -1,
+ 	       "unable to unmap source mapping");
++	ksft_test_result_pass("%s\n", __func__);
+ }
+ 
+ int main(void)
+ {
 +	ksft_print_header();
-+	ksft_set_plan(1);
 +
- 	/* Test a wrong pidfd */
- 	if (!syscall(__NR_process_mrelease, -1, 0) || errno != EBADF) {
--		res = (errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
--		perror("process_mrelease with wrong pidfd");
--		exit(res);
-+		if (errno == ENOSYS) {
-+			ksft_test_result_skip("process_mrelease not implemented\n");
-+			ksft_finished();
-+		} else {
-+			ksft_exit_fail_msg("process_mrelease with wrong pidfd: %s",
-+					   strerror(errno));
-+		}
+ 	page_size = sysconf(_SC_PAGE_SIZE);
+ 
+ 	// test for kernel support for MREMAP_DONTUNMAP skipping the test if
+ 	// not.
+ 	if (kernel_support_for_mremap_dontunmap() != 0) {
+-		printf("No kernel support for MREMAP_DONTUNMAP\n");
+-		return KSFT_SKIP;
++		ksft_print_msg("No kernel support for MREMAP_DONTUNMAP\n");
++		ksft_finished();
  	}
  
- 	/* Start the test with 1MB child memory allocation */
-@@ -107,16 +104,14 @@ int main(void)
- 	 * Pipe for the child to signal when it's done allocating
- 	 * memory
- 	 */
--	if (pipe(pipefd)) {
--		perror("pipe");
--		exit(KSFT_FAIL);
--	}
-+	if (pipe(pipefd))
-+		ksft_exit_fail_msg("pipe: %s\n", strerror(errno));
++	ksft_set_plan(5);
 +
- 	pid = fork();
- 	if (pid < 0) {
--		perror("fork");
- 		close(pipefd[0]);
- 		close(pipefd[1]);
--		exit(KSFT_FAIL);
-+		ksft_exit_fail_msg("fork: %s\n", strerror(errno));
- 	}
+ 	// Keep a page sized buffer around for when we need it.
+ 	page_buffer =
+ 	    mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+@@ -356,6 +365,5 @@ int main(void)
+ 	BUG_ON(munmap(page_buffer, page_size) == -1,
+ 	       "unable to unmap page buffer");
  
- 	if (pid == 0) {
-@@ -134,28 +129,23 @@ int main(void)
- 	res = read(pipefd[0], &byte, 1);
- 	close(pipefd[0]);
- 	if (res < 0) {
--		perror("read");
- 		if (!kill(pid, SIGKILL))
- 			waitpid(pid, NULL, 0);
--		exit(KSFT_FAIL);
-+		ksft_exit_fail_msg("read: %s\n", strerror(errno));
- 	}
- 
- 	pidfd = syscall(__NR_pidfd_open, pid, 0);
- 	if (pidfd < 0) {
--		perror("pidfd_open");
- 		if (!kill(pid, SIGKILL))
- 			waitpid(pid, NULL, 0);
--		exit(KSFT_FAIL);
-+		ksft_exit_fail_msg("pidfd_open: %s\n", strerror(errno));
- 	}
- 
- 	/* Run negative tests which require a live child */
- 	run_negative_tests(pidfd);
- 
--	if (kill(pid, SIGKILL)) {
--		res = (errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
--		perror("kill");
--		exit(res);
--	}
-+	if (kill(pid, SIGKILL))
-+		ksft_exit_fail_msg("kill: %s\n", strerror(errno));
- 
- 	success = (syscall(__NR_process_mrelease, pidfd, 0) == 0);
- 	if (!success) {
-@@ -169,18 +159,15 @@ int main(void)
- 		if (errno == ESRCH) {
- 			retry = (size <= MAX_SIZE_MB);
- 		} else {
--			res = (errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
--			perror("process_mrelease");
- 			waitpid(pid, NULL, 0);
--			exit(res);
-+			ksft_exit_fail_msg("process_mrelease: %s\n", strerror(errno));
- 		}
- 	}
- 
- 	/* Cleanup to prevent zombies */
--	if (waitpid(pid, NULL, 0) < 0) {
--		perror("waitpid");
--		exit(KSFT_FAIL);
--	}
-+	if (waitpid(pid, NULL, 0) < 0)
-+		ksft_exit_fail_msg("waitpid: %s\n", strerror(errno));
-+
- 	close(pidfd);
- 
- 	if (!success) {
-@@ -188,11 +175,10 @@ int main(void)
- 			size *= 2;
- 			goto retry;
- 		}
--		printf("All process_mrelease attempts failed!\n");
--		exit(KSFT_FAIL);
-+		ksft_exit_fail_msg("All process_mrelease attempts failed!\n");
- 	}
- 
--	printf("Success reaping a child with %zuMB of memory allocations\n",
--	       size);
--	return KSFT_PASS;
-+	ksft_test_result_pass("Success reaping a child with %zuMB of memory allocations\n",
-+			      size);
+-	printf("OK\n");
+-	return 0;
 +	ksft_finished();
  }
 -- 
