@@ -1,340 +1,247 @@
-Return-Path: <linux-kselftest+bounces-4070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4071-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 545CD8480C0
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Feb 2024 05:13:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2577F8483C8
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Feb 2024 05:46:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A3DD28B223
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Feb 2024 04:13:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 495BC1C21672
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Feb 2024 04:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9107B18637;
-	Sat,  3 Feb 2024 04:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B2A101CE;
+	Sat,  3 Feb 2024 04:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TOmC2Efc"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="D4+og854";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="V0h65Kl5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA08F9D7
-	for <linux-kselftest@vger.kernel.org>; Sat,  3 Feb 2024 04:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706933434; cv=none; b=Qi18XgEuXqjuarM7HMf0JZPm3A4bpJFiNsGASWf6X8T0t1NqOGclyRorBkuomLJHR56TSniYJsnxG4ItdUdf0FBRqxXXVukEN47us7tEesymuUf5YX8ShaIW1kUBLQhhWR0l6849DrXe551L+rqMvRxDuUL1G8XyYQiO29eeWxc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706933434; c=relaxed/simple;
-	bh=d5CjbtPQ8VfUcPDpfRj/cgKZEAsQHvK8DOreEsPZBTM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sZFjYzMZtCeexzzsslIp+jLd2EJc14iX8iayTtZo+2/nqvpsxa/E/S4FGO/MKWzLkpebHZ3ecHpmM6CO4xjFa94dhMqlVGb3QgmSqXX+KGQT67zyfVqqS7QfDjK/ZX1POtdWM3Kal8K7SKOo+Rv6UNYZZndVQ3lMiEPj4p5Q9EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TOmC2Efc; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-55fff7a874fso3180a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Feb 2024 20:10:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3768B101C1;
+	Sat,  3 Feb 2024 04:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706935579; cv=fail; b=k+i+p4EKjVd03TOg9pTDjD54IE2lZsJXBvtzIr8aQNVkKIegVTicekUVD0ZAk8lkyfsOcbPg0j3/BCV80NaCarD0ol76OkEeXHUSiRLKa/bEbML3bH4OqGyd9O7yNUE/eywgtOzjNZOinU4wSPk0EkE66uc26/y7NYmc/yNK1CQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706935579; c=relaxed/simple;
+	bh=yIItZCfkTad/j9yl8C7KT2+hKXHGllLghcFoPjdpSs8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=mALvYJS9qIDngkaVzGSgIqL5QUY9guKklJo+e8g6OIZepYfjmynFw0XjVHkOEfy1SPD6voFhLGMAeCU004ayG3qbl6hlgHCD0lPzgPtbbuQFo7+SXhJkWMjPlJ3+Dc9sciWeADKXKdYbpOGrXild3tykRGqYbCBY9iU2KhJasrE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=Oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=D4+og854; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=V0h65Kl5; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=Oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4133wfkF030533;
+	Sat, 3 Feb 2024 04:45:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-11-20;
+ bh=7NSfMzI3jgCV0FeB1mU1IFb59JNDBEla8JRg+Iy6u1Q=;
+ b=D4+og854AwoQEKxeJld2RAYxEq4vDZ18q4lkl5bJCRd1C/01CnjPBxJTRIxzELow0Nmd
+ pjfLkfVhGmelg2++K3S2XRENgDfO/TXYozwI2NHp5P/vU2R7C7nnN3JvQvGxZDLH+oEs
+ EoQOxtuMzDvYYd5RY9JPOEDtuvS0IkYUUSH68uQ0ndEAYo3UKUQVKADRWaaBdYeLOfBA
+ Vug7diHI5mY0ihgTcIOsmV/+S5ro/ZKxKTbWWmfCaIVnCOFelTyvjtsZRJRU0N5BEOe1
+ eBgDuGqZT9Ay/M52LWcjWrYmQ3V/THvjgf0Dd+Bk58d3ZK0vTUc6gchQbyB2rz9/X6K/ lA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w1e1v015r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 03 Feb 2024 04:45:41 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4131XSMf039427;
+	Sat, 3 Feb 2024 04:45:41 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3w1bx346bg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 03 Feb 2024 04:45:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BEqZkqJyYNz7uesNb+lz+E6uppyEJR1oMiqjUl3PP5oJ7g1Hi+bCke9fJkoFgSOjMWqGuBTVk+1qAgeZVrwFEZ94/ZfVIKCQ3NSWKAKHkO9CoF04+OHquHrvXxe9fvdwRRJGvb0JS3Y++pmNhVDRLE43J724E1cKe8oUnJi3iL7Tjrk7n8881kcuv/T0GM5V9dfnPTue3ATJowZIoIZd7ddQn9yEZDYwLYMrxbpXherIO8W28a8+ih/ukVtpRW3I0EDxEjMRoA6fgNsNn9GaUy41FUUc+NZhMNxXlSnbyr0+Now0xZ8SXbvu+cXRCysizBwUjWJXcTEBrgHaextioQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7NSfMzI3jgCV0FeB1mU1IFb59JNDBEla8JRg+Iy6u1Q=;
+ b=cY+n972WDs4p/JgLRKLtSNynlFQj1IDaYyzTuoIzDZAhFvH1aIZWvivVzsupDo0i/2tVBGnhnlO184YohfB7Ip3XwoH09aDb9DRh+G5mHSMKDyCsLo3Habeu86/RSovyv9L2CSVosZnb8DiZ0BDQYZZXGec+gq7w4Em0Q7p5PKMp87dHALvMtNSwChULycxcyBYpvtlpYDJp11FUmwJ4wt3V+SF4mspLzseH+t4QNTLWwiD6mS9MCBi6Z9xFA/liKlTcp61fHKQmt7/lwgxxxCbkr0cR8w/Lz3PA/r4CMbT+z8zZ99WFU88ITXA1JV6WjVM7yYQfLeuU3hJ4bATPMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706933430; x=1707538230; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iw9cmO7yhdCfljr5IxNeXN409pIZg3FwxP5CB28+rgg=;
-        b=TOmC2EfcbrtfBRDUAlKXUS9fibX1QhGAttpthLNA4dCFw0X9bI7cqMxbGDEGhR1FNk
-         SiJTClFCQ/jQlIDivocCpwcVvLOy75SsXl6KCc44yYud0Rw7OLB618uMrcTs81gf4aKt
-         pX7aLJSlQB0+02P7spOba99mZzZ6X5RpD8LvntqqMIpuZHC3/T1kVjk2ZPYf0RBqhsm2
-         0cklCQcsxQVwV31nWPZdBlUFXMRasQvstX9uekl384eQJN/vw7BKrGvhOamddQ5X2gHK
-         sFVm3GUPbK68lhsTOsSxhCEqEl+nCqElSpRuZSpGnHit10hdk9+ASPeqf+KHR4E6XyeG
-         V2VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706933430; x=1707538230;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Iw9cmO7yhdCfljr5IxNeXN409pIZg3FwxP5CB28+rgg=;
-        b=Zx4IWOVUGBThKKm7Q4WGrnziIAnzcwbOGV3G5X9jC2R9ptOLEL2jA3RcjGhP7jZzNL
-         vaNjbJ9sXqO0gCNe+eZK0WsNVwG9N4gUn1p+MSr7nCH5qynjXZP3KMEn3+sXIllRJ5h/
-         S7ygPf5Qwn602O7CM1/Os86Z+dsqSdF/ee3a0wRP8t0xSzEYiTbjf980OboedSSM0TrJ
-         wV5E0b7Z0WFujS5BDl5iT9bhiY7qCHcjLJVI7tFzj9sZfOXvkWzrClfbjlZrFW3UgHvg
-         578xqPuVwTATIRKGgTpopUtVDDMoWPSpsmHJcTUeqB1To6WDIPpQGnNK1le1jOJ1wFaw
-         9+/A==
-X-Gm-Message-State: AOJu0YwRE8kTGTNuzDn7w8g3X/9e0D7bJTmNBiIlAn2duvP8krU9mm10
-	LBd/O++ON46iJRmPyIx4MTXAKe9ByHfRdGwiL5IoUUaJ4p3rloU9uiRESj5ypKqwE7Pz56sD87E
-	+gZHAVDDSEugbPGaBrXq+hCBffa1brEi+T97T
-X-Google-Smtp-Source: AGHT+IG5lHPH49Ul4a7Msn5xJyxeIzakvenV7mNOmK2iTsRmvusCSk+vNETjzCfLqnIO58J7ejlduAElZZDzykkqdTc=
-X-Received: by 2002:a50:9996:0:b0:55f:e704:85ce with SMTP id
- m22-20020a509996000000b0055fe70485cemr48388edb.3.1706933430442; Fri, 02 Feb
- 2024 20:10:30 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7NSfMzI3jgCV0FeB1mU1IFb59JNDBEla8JRg+Iy6u1Q=;
+ b=V0h65Kl5T7ocFRtknoKvTzOajvSrXIyii4+bcdvl1WgiAAfpg74rp1pIhI8u92EXA0ug7Q/qhULl3JaJqWtUx0gvmNacM6kypXAlHX7hyRDzhNK4VF+/WaS1V3nFNRYhErFI2hu+TpPZcUGtx5olqzUxdfpebKWcMqTln16E9WI=
+Received: from DS0PR10MB7933.namprd10.prod.outlook.com (2603:10b6:8:1b8::15)
+ by CH0PR10MB5353.namprd10.prod.outlook.com (2603:10b6:610:c7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.31; Sat, 3 Feb
+ 2024 04:45:37 +0000
+Received: from DS0PR10MB7933.namprd10.prod.outlook.com
+ ([fe80::20c8:7efa:f9a8:7606]) by DS0PR10MB7933.namprd10.prod.outlook.com
+ ([fe80::20c8:7efa:f9a8:7606%4]) with mapi id 15.20.7249.027; Sat, 3 Feb 2024
+ 04:45:36 +0000
+Date: Fri, 2 Feb 2024 23:45:34 -0500
+From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jeff Xu <jeffxu@chromium.org>, Jeff Xu <jeffxu@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, akpm@linux-foundation.org,
+        keescook@chromium.org, jannh@google.com, sroettger@google.com,
+        willy@infradead.org, gregkh@linuxfoundation.org,
+        usama.anjum@collabora.com, rdunlap@infradead.org, jorgelo@chromium.org,
+        groeck@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        pedro.falcato@gmail.com, dave.hansen@intel.com,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v8 0/4] Introduce mseal
+Message-ID: <20240203044534.wkyfkxdlnskxctsq@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jeff Xu <jeffxu@chromium.org>, Jeff Xu <jeffxu@google.com>,
+	Jonathan Corbet <corbet@lwn.net>, akpm@linux-foundation.org,
+	keescook@chromium.org, jannh@google.com, sroettger@google.com,
+	willy@infradead.org, gregkh@linuxfoundation.org,
+	usama.anjum@collabora.com, rdunlap@infradead.org,
+	jorgelo@chromium.org, groeck@chromium.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org
+References: <CABi2SkXOX4SRMs0y8FYccoj+XrEiPCJk2seqT+sgO7Na7NWwLg@mail.gmail.com>
+ <20240201204512.ht3e33yj77kkxi4q@revolver>
+ <CALmYWFupdK_wc6jaamjbrZf-PzHwJ_4=b69yCtAik_7uu3hZug@mail.gmail.com>
+ <20240202151345.kj4nhb5uog4aknsp@revolver>
+ <CABi2SkUSWLHM5KD=eK9bJrt3bBsEaB3gEpvJgr0LSTAE2G00Tg@mail.gmail.com>
+ <20240202192137.6lupguvhtdt72rbr@revolver>
+ <85714.1706902336@cvs.openbsd.org>
+ <CAHk-=wjNXcqDVxDBJW8hEVpHHAE0odJEf63+oigabtpU6GoCBg@mail.gmail.com>
+ <20240202211807.6sca4ppezma7cyev@revolver>
+ <CAHk-=whhmasHcmaS0MZkBe2NohjF7Wb3F3pdW4vqyaSbSzQ75g@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whhmasHcmaS0MZkBe2NohjF7Wb3F3pdW4vqyaSbSzQ75g@mail.gmail.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0365.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:fd::16) To DS0PR10MB7933.namprd10.prod.outlook.com
+ (2603:10b6:8:1b8::15)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240202195909.3458162-1-sboyd@kernel.org> <20240202195909.3458162-8-sboyd@kernel.org>
-In-Reply-To: <20240202195909.3458162-8-sboyd@kernel.org>
-From: David Gow <davidgow@google.com>
-Date: Sat, 3 Feb 2024 12:10:17 +0800
-Message-ID: <CABVgOS=A8BQ6HHpBKFqg-N10ckk2XYavaS-MPXvZ0wenrVm=1g@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] of: Add KUnit test to confirm DTB is loaded
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, linux-um@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, 
-	Frank Rowand <frowand.list@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000cd1a2e06107268db"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB7933:EE_|CH0PR10MB5353:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c735fd3-17ed-4882-a5d3-08dc2472f6ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	4yFAf1WTWoB7X1yk/kTqbMeVoBnIr4wwcKTyuxrOCt8Jl7IZM9mR2x+wLhT/oDeOXIohExqL8EDlAe3HTa2Cq1W1aRMURrkhdM4WZEMF+s67G0LsrR1I6Cv8KJoPMI0Pl6Mo+GpmktKVC9ReevMHHB9+vWvMRRVTWqRB/aAYusDgQ7rCu8Fc19GVoloeDfyJLA/OrqnsDvRVz121objCwHmwNI3n/JYN2ar503hQS+yR7yFJaHl5cf3RVE/X7pNXB+saFDyLZf63nqn46QoS9IXXt96P9BcCGcLe4w32JltChRqyh2QrDS0VyBxOvTeys2fneAYAVADr2zc9YjG25oEtGPC5TlV3Rny9z6TORXN8Eu2Tx6DD1slTx36oX2In0Qld9wPWP7iXr6B801JUa2ng0TWDuJDo3HdRHKcIhn1JQd0KtcThyKxCUE+iiSUgFq7vNGnMl1MKzJHCmxFu/WOdhOrnIpFf7nWkOuphJ9UuDbVOfQPn4aec3duDsQ/FrfIYttJ0IEmYLBqZeqQBKvE0set64xGA0LrXxO3M8aMr/e/SFa/OQmKpR11IAnxS
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7933.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(136003)(366004)(39860400002)(376002)(396003)(346002)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(33716001)(26005)(1076003)(41300700001)(9686003)(3716004)(54906003)(6916009)(316002)(478600001)(6506007)(6486002)(83380400001)(6512007)(38100700002)(66476007)(66556008)(7416002)(2906002)(5660300002)(86362001)(66946007)(4326008)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?a6ItjUFiTYGOadj/xC5US1sB2xHIzW9ajfmNINDBzJe7fdVZ1UUeEdHnWUUK?=
+ =?us-ascii?Q?ZHq/j965sSOLW17/0KKlMwG+elkn+YVmnDn3gw4Cz0N6c9I5zB1skQPb9ILc?=
+ =?us-ascii?Q?xjyO/JqqK3jDwIesELaYehUg9RULk/QzXYz8/vJTPZe2fn/pVc+TlEcg98yl?=
+ =?us-ascii?Q?A+2pbG9IKiXFZE343EaQaN8UBlaFK3YRK2mXwFoECvFUYMuJxkCrgvGStfc2?=
+ =?us-ascii?Q?Eyd6wzydHzhubiZ+bYrJxI+0fLjaCter/Kw9nuxJayL8zAnv3sp7gHrYXpWp?=
+ =?us-ascii?Q?GIKOg1K2hTAmv4v3PKnN9NirRtpC0rhRd81ovfWRVRWZtvYTDjuauiGAg03B?=
+ =?us-ascii?Q?wuT+WE8sPWNBuE0jzaKkFby+K+vTUjht0f1EUH7e1EoZI3EP+gKvXqjnKL+V?=
+ =?us-ascii?Q?VAHIS7MsmsTKqTrIacjSNvExAn6v+XdLcL+29iyENxYaiTQehKDlvmQsfEJA?=
+ =?us-ascii?Q?k/bIdeswC1RIHRPjSRDzVzC4aihT64duKxc/LGrFODUrKTBHOIamPcmgu5Iy?=
+ =?us-ascii?Q?e6g16HqiDcxtLX5nXeM8gzgALTvVV2B3E6J9yiPuWoPtsMHZGwJ6fdzV/KBU?=
+ =?us-ascii?Q?O/80BAPPs2cFr36Rs9VkKE6jQSwXygJAvtz34vT2K6uLsH2IzLqcx8ocAhQG?=
+ =?us-ascii?Q?mOPAnq4KbuwGqOHxklThYuLDXdtC7DJaR7i9DRoxrg8idvDJ+Tg6dNA5u43G?=
+ =?us-ascii?Q?PfcT6+IIvnUc2DzSrikx/VjDVTTC7pLW5MdX0QqVnsdZAY8LZxTlvOFlHsev?=
+ =?us-ascii?Q?FpDj2PJ7Jlu+Bgg+2f5YXp8NdEIIr8bX30IwE3VlkuSW+tkHWI2jrGxiEb2k?=
+ =?us-ascii?Q?/kStk+tWsrEAMAAwU6UeAJXLz1ZeP3va/kfbRiB711TldKl2xfmrEEbPV8qO?=
+ =?us-ascii?Q?JdpRCZnwguE00bdOc7W+qtLHsyVIuBlIa/SIgOhAnPOo+vfSR21sm7tqn+WS?=
+ =?us-ascii?Q?KvVYRPtw2leJRtzVq5ymbDYk9W5RhpXjEf0sZpfqoRXUnwOr7Owriq2jDk/F?=
+ =?us-ascii?Q?wRzoNehkx0beDjtqWoaObVJZ9dEDPpT9pwSZ+rEesr5aeYMUg/rzIHwKBz8m?=
+ =?us-ascii?Q?7aeu/6CaC96xjibhuXaLmVUqV+EVUVx0eIPv/3mpcSdwyJpMog+MQgC5DOLn?=
+ =?us-ascii?Q?eylqiO1BAQzPd+ifcLi94LhsmtZE16m2/1j3xjhPkoyIBtz3ycdjlAC0bqvG?=
+ =?us-ascii?Q?z7KjtqEDCK/E3B+9rI35nC7PmXWpc70M9oBKkIX2Iji2PPa7ZODdGMLMyNTp?=
+ =?us-ascii?Q?3V5yyFmEsjokaOsiRIWmbNymEtrG6Jh1ozXJffVxAr6iBtesZ7NVQyfvknXW?=
+ =?us-ascii?Q?8374vB2oHuBen1OGy6cTB1aA6VWggl9FYDk8rWcWN/jZbefRlzjTTIGAJ29y?=
+ =?us-ascii?Q?OTOC8JNBj3G/EToSUfqEgDNbttw4ycdq/L9wX5/lkUn+GWnbeXuXb8eTJvyr?=
+ =?us-ascii?Q?FKKS/agtPjocMbithhcBtSWb/E1lwuyOIZob3bTLMP7ExbvRbX/EJzWWTBPt?=
+ =?us-ascii?Q?pdWeWd+4crCYvn8zC79HBOhslECFncGXH27KAhE6V9S3eUy3OlF2UJQqpasl?=
+ =?us-ascii?Q?8fnLxv9McMYa9oJmegX6OZ4/9QPHYmqzLjsxkF6074fsWdrJSJ8tPpm/Xdie?=
+ =?us-ascii?Q?hg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	D6ZQg90c3dHgq4cc4/7DyDyMRtsLKjUP6//aPNB6r8Np55Y3P3jz+zwTBp7AFDihPpdSiWmUIRQl6uRGzGMDQG1400UNOjyxmY+h17fLhQedna3C4JcMlOdD9RLZB3dtQZw9x0xeY18E8qGeZo/F5FIEeRduOhbWegxmx9GAqAvl1mLAFwn+JVdWR7M+DpKYUmHUXxdZDiJGpx4kqpxzKnemnNES2wt8x2PcAGsBRZnB48LbWbnFAHreuVpS28hl4Ya22y98PEnPbommfMk05BbYHbxJ91OI1epJcWiibFvcAHzW15LNyiKmyhz511tlPLp8l1/uAD4O7tLiTt/reMBF7QmPskSyOzxoZLrPGs/ldeXpDjNWP+XNx7Tuc34VWgW+hl2t3SlpZsF1YTv9KDD1CkczuAIJZlylSck7nasxZ+qd3vhKo1x+ibtwztvkXX86H9/bqQ3c2K1j6xGL5ScAW6LYmqCwiG1XgbGQ+OQvV0AfOVfISDx/7OyF0pCjOZEmifa1NJn4Cqs+/2pO+CChuaKkwwWafr4yJmwVuXqPYkZ5wkNkAwWH+CpNPW/BV1CXvoIV5zWNEnLYFc14IJDh2l2Ss5qxfPCLyeWBLKs=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c735fd3-17ed-4882-a5d3-08dc2472f6ad
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7933.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2024 04:45:36.4941
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: G+RFoghRIOfrfxYit8MtDLiX+QtwsHtegVAp1XgIT/wAynur0nfkgiMaHTT+EUTacwUs7UMxgikxZA6MCqrmIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5353
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-02_16,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 phishscore=0
+ spamscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2402030029
+X-Proofpoint-GUID: 2hTPGDSUWySPRDaAHVpEpYfFxc-COSij
+X-Proofpoint-ORIG-GUID: 2hTPGDSUWySPRDaAHVpEpYfFxc-COSij
 
---000000000000cd1a2e06107268db
-Content-Type: text/plain; charset="UTF-8"
+* Linus Torvalds <torvalds@linux-foundation.org> [240202 18:36]:
+> On Fri, 2 Feb 2024 at 13:18, Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> >
+> > There will be a larger performance cost to checking up front without
+> > allowing the partial completion.
+> 
+> I suspect that for mseal(), the only half-way common case will be
+> sealing an area that is entirely contained within one vma.
 
-On Sat, 3 Feb 2024 at 03:59, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Add a KUnit test that confirms a DTB has been loaded, i.e. there is a
-> root node, and that the of_have_populated_dt() API works properly.
->
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: David Gow <davidgow@google.com>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
+Agreed.
 
-This looks pretty good to me test-wise, though it still fails on m68k.
-(Everything else I tried it on works, though I've definitely not tried
-_every_ architecture.)
+> 
+> So the cost will be the vma splitting (if it's not the whole vma), and
+> very unlikely to be any kind of "walk the vma's to check that they can
+> all be sealed" loop up-front.
 
-aarch64: PASSED
-i386: PASSED
-x86_64: PASSED
-x86_64 KASAN: PASSED
-powerpc64: PASSED
-UML: PASSED
-UML LLVM: PASSED
-m68k: FAILED
-> $ qemu-system-m68k -nodefaults -m 1024 -kernel .kunit-all-m68k/vmlinux -append 'kunit.enable=1 console=hvc0 kunit_shutdown=reboot' -no-reboot -nographic -serial stdio -machine virt
-> [11:55:05] ===================== dtb (2 subtests) =====================
-> [11:55:05] # dtb_root_node_found_by_path: EXPECTATION FAILED at drivers/of/of_test.c:18
-> [11:55:05] Expected np is not null, but is
-> [11:55:05] [FAILED] dtb_root_node_found_by_path
-> [11:55:05] # dtb_root_node_populates_of_root: EXPECTATION FAILED at drivers/of/of_test.c:28
-> [11:55:05] Expected of_root is not null, but is
-> [11:55:05] [FAILED] dtb_root_node_populates_of_root
-> [11:55:05]     # module: of_test
-> [11:55:05] # dtb: pass:0 fail:2 skip:0 total:2
-> [11:55:05] # Totals: pass:0 fail:2 skip:0 total:2
-> [11:55:05] ======================= [FAILED] dtb =======================
+That's the cost of calling mseal(), and I think that will be totally
+reasonable.
 
+I'm more concerned with the other calls that do affect more than one vma
+that will now have to ensure there is not an mseal'ed vma among the
+affected area.
 
-My only other question is about the test names: the mix of 'of' and
-'dtb' can be a bit confusing. As is, we have:
-kconfig name: OF_KUNIT_TEST
-module name: of_test
-suite name: dtb
-test names: all start with dtb_
+As you pointed out, we don't do atomic updates and so we have to add a
+loop at the beginning to check this new special case, which is what this
+patch set does today.  That means we're going to be looping through
+twice for any call that could fail if one is mseal'ed. This includes
+munmap() and mprotect().
 
-Given KUnit only really deals with the suite/test names directly, it's
-not trivial to see that 'dtb.dtb_*' is controlled by OF_KUNIT_TEST and
-in of_test if built as a module. (This is getting a bit easier now
-that we have the 'module' attribute in the output, but still.)
+The impact will vary based on how many vma's are handled. I'd like some
+numbers on this so we can see if it is a concern, which Jeff has agreed
+to provide in the future - Thank you, Jeff.
 
-Would 'of_dtb' work as a suite name if it's important to keep both
-'of' and 'dtb'?
+It also means we're modifying the behaviour of those calls so they could
+fail before anything changes (regardless of where the failure would
+occur), and we could still fail later when another aspect of a vma would
+cause a failure as we do today.  We are paying the price for a more
+atomic update, but we aren't trying very hard to be atomic with our
+updates - we don't have many (virtually no) vma checks before
+modifications start.
 
-In general, though, this test looks good to me. Particularly if m68k
-can be fixed.
+For instance, we could move the mprotect check for map_deny_write_exec()
+to the pre-update loop to make it more atomic in nature.  This one seems
+somewhat related to mseal, so it would be better if they were both
+checked atomic(ish) together.  Although, I wonder if the user visible
+changes would be acceptable and worth the risk.
 
-Reviewed-by: David Gow <davidgow@google.com>
+We will have two classes of updates to vma's: the more atomic view and
+the legacy view.  The question of what happens when the two mix, or
+where a specific check should go will get (more) confusing.
 
-Cheers,
--- David
-
->  drivers/of/.kunitconfig |  3 +++
->  drivers/of/Kconfig      |  9 ++++++++
->  drivers/of/Makefile     |  2 ++
->  drivers/of/of_test.c    | 48 +++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 62 insertions(+)
->  create mode 100644 drivers/of/.kunitconfig
->  create mode 100644 drivers/of/of_test.c
->
-> diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
-> new file mode 100644
-> index 000000000000..5a8fee11978c
-> --- /dev/null
-> +++ b/drivers/of/.kunitconfig
-> @@ -0,0 +1,3 @@
-> +CONFIG_KUNIT=y
-> +CONFIG_OF=y
-> +CONFIG_OF_KUNIT_TEST=y
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index 17733285b415..53d1b5dd89e8 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -37,6 +37,15 @@ config OF_UNITTEST
->
->           If unsure, say N here. This option is not safe to enable.
->
-> +config OF_KUNIT_TEST
-> +       tristate "Devicetree KUnit Test" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This option builds KUnit unit tests for device tree infrastructure.
-> +
-> +         If unsure, say N here, but this option is safe to enable.
-> +
->  config OF_ALL_DTBS
->         bool "Build all Device Tree Blobs"
->         depends on COMPILE_TEST
-> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> index df305348d1cb..251d33532148 100644
-> --- a/drivers/of/Makefile
-> +++ b/drivers/of/Makefile
-> @@ -19,4 +19,6 @@ obj-y += kexec.o
->  endif
->  endif
->
-> +obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
-> +
->  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-> diff --git a/drivers/of/of_test.c b/drivers/of/of_test.c
-> new file mode 100644
-> index 000000000000..71a767b42b43
-> --- /dev/null
-> +++ b/drivers/of/of_test.c
-> @@ -0,0 +1,48 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit tests for OF APIs
-> + */
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +
-> +#include <kunit/test.h>
-> +
-> +/*
-> + * Test that the root node "/" can be found by path.
-> + */
-> +static void dtb_root_node_found_by_path(struct kunit *test)
-> +{
-> +       struct device_node *np;
-> +
-> +       np = of_find_node_by_path("/");
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
-> +       of_node_put(np);
-> +}
-> +
-> +/*
-> + * Test that the 'of_root' global variable is always populated when DT code is
-> + * enabled.
-> + */
-> +static void dtb_root_node_populates_of_root(struct kunit *test)
-> +{
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_root);
-> +}
-> +
-> +static struct kunit_case dtb_test_cases[] = {
-> +       KUNIT_CASE(dtb_root_node_found_by_path),
-> +       KUNIT_CASE(dtb_root_node_populates_of_root),
-> +       {}
-> +};
-> +
-> +/*
-> + * Test suite to confirm a DTB is loaded.
-> + */
-> +static struct kunit_suite dtb_suite = {
-> +       .name = "dtb",
-> +       .test_cases = dtb_test_cases,
-> +};
-> +
-> +kunit_test_suites(
-> +       &dtb_suite,
-> +);
-> +MODULE_LICENSE("GPL");
-> --
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20240202195909.3458162-8-sboyd%40kernel.org.
-
---000000000000cd1a2e06107268db
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-7xDrOPfX3COqq162RFg/MFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
-BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
-Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
-FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
-YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
-AK0lDd6/eSh3qHmXaw1YUfIFy07B25BEcTvWgOdla99gF1O7sOsdYaTz/DFkZI5ghjgaPJCovgla
-mRMfNcxZCfoBtsB7mAS6iOYjuwFOZxi9cv6jhfiON6b89QWdMaPeDddg/F2Q0bxZ9Z2ZEBxyT34G
-wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
-5PHxFaT2a5Td/fj5yJ5hRSrqy/nj/hjT14w3/ZdX5uWg+cus6VjiiR/5qGSZRjHt8JoApD6t6/tg
-ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
-MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
-IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIKLjezo2IKSo5FfYtp1eRxpiN5V5i3G0d8t3y9vBvKLwMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDIwMzA0MTAzMFowaQYJKoZIhvcNAQkPMVww
-WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQARpAOB
-Mv548MzSDNmJQF0ICR6huDtIxOQ88M/tS4pn7mNjhw9h58kxbRFfnMaNPbzFEG2XtH0mmudcBVEe
-m7/cSSqkPlP6moi+Hd5MibjTPhNcoqw7s33g+1Fe+JfF6tFbMXxRYXMby/svxPHL8bfuad7UgKJS
-Uoef00mfw06s3WGVmpFqqeep51ZLJQ6KS4HN+SKCCneUN+JRdjQq71Zc8JpWvJGa3OFUSMO2B5Sr
-u4v7Fb296fdiPzbajB++zkDzol54YDvcdJRBd6zS5CyQHqp4mWUWRXJ6Hdys+xy1qLy4vckr/VY8
-AMCb3km9hOiEQXDh1NDV0qz+5/0f1q0h
---000000000000cd1a2e06107268db--
+Thanks,
+Liam
 
