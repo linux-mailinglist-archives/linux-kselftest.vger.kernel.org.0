@@ -1,57 +1,60 @@
-Return-Path: <linux-kselftest+bounces-4120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20F57848F6F
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 17:56:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD81A848F9C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 18:13:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE22E2837B9
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 16:56:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C29011F22446
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 17:13:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F66722F1C;
-	Sun,  4 Feb 2024 16:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A71B7241E5;
+	Sun,  4 Feb 2024 17:13:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmsIf0IJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IM9QI711"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7DE23750;
-	Sun,  4 Feb 2024 16:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79324249E4;
+	Sun,  4 Feb 2024 17:13:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707065782; cv=none; b=gsrYHTbc1S31hUxInycT0UB7Yl4fGUOGBGkYz5zg5vU2I9fKqeU46zBcIr4xwbcFm+zj7Zh+WYc/OYW1cxYyNtCquLiIudcw88DKw3H283bfWlqkhZ14MjcZDfMCuYKwX7LFPsXlWJ5Jf3lHNa/tjNE84BpL3BF8EA3QGWegLps=
+	t=1707066826; cv=none; b=k9XQlt6Fct+I2PLW7o770VScAxRSogZXir/NJBjXQjyyhMuv7HTxzUNFPxWHGhpxG/wJXB0pcEAA46us8K2h0v1H6YURQaCXu9WlPHwnQcL3GHsY3I+ER/PlxK0FknYBLudwgOErq3v6QgL9zz1DaWH01XG3mVN7bh6DPAXq/FY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707065782; c=relaxed/simple;
-	bh=cU/krCbsSrG89RxP8RzRLlCr9FLW61rqp9gLy7djBYg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a32P8HfWjLw/MtPAPcmpZl8aIjI+nGtiRekoix5Qb7hdAeRtC1hzFz6wRJutgAiaqflY4FBES544xlID+3IUxFcUJfY9mJNX4R6OBZPZJybsSfo0zFYhX4QqtmRYvmXtD4LeAYIpFy4a47I0aC5LRSFqcc5GV8fD46o+zG7UViY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmsIf0IJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26541C433C7;
-	Sun,  4 Feb 2024 16:56:21 +0000 (UTC)
+	s=arc-20240116; t=1707066826; c=relaxed/simple;
+	bh=ZQ2DMEHRwpKEUaPhTRDYc2Fgx4gCYeXdZWQ097yqZc4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CZRYZ0AWQOw64cyxXI75MC8DF2PdVxiuZ5diLiEsCk2IlVzC5bfKXa41P973VJEU0iLU143GHjWrinQdNLIutJmwdsytREBwPqT+JYcpSf+njNg44wehCSZBHmKjF5Ej2Ei/+Yx6ROkfMxbbJ6L7/MTSRpBXVWms1bODp/LFTAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IM9QI711; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A51C433F1;
+	Sun,  4 Feb 2024 17:13:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707065781;
-	bh=cU/krCbsSrG89RxP8RzRLlCr9FLW61rqp9gLy7djBYg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PmsIf0IJM9fO/oWqkJI4a+pUeU4c/wuz1jhUApaOoBUAxxDV85bZVKqU+XhutC9Hj
-	 fTpoBNVhY/06ObWTdJvXNZVyTS2vNUz6MiAdQawAP0ifpaErpzGs+7I72xnFmVRB71
-	 f/vnaJOgaECKR3aPBzI5wgYXAFq9oQXn38uTxk00t9YF26b9Na1bMA7g88DLfzN+PO
-	 nXLJ16zZTdvexncNdVvY4sWZ77sQPBmeEuATEftcBnVzxc9SycQbXTfFT03Z+dvVL5
-	 wb7Rh2Z3EDn0HC8/WgHWmxgIHC1JmjWvMUFbfq4SgstLDie9z7kot7P5kmp0/mHNeM
-	 m81OxSPhTCQPA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: cmsg_ipv6: repeat the exact packet
-Date: Sun,  4 Feb 2024 08:56:18 -0800
-Message-ID: <20240204165618.1489880-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=k20201202; t=1707066825;
+	bh=ZQ2DMEHRwpKEUaPhTRDYc2Fgx4gCYeXdZWQ097yqZc4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=IM9QI7116Jm3VyHq9VbDxUhz3Da4gWv3p0wDcI6KD1vIECBGAoMnN4R2DMij2mwUf
+	 rehukUSqXUMrCYJJBucWZsF7YxpTPEsoa8Kpgo/yqn039gCWFNljr8cx2ydxW3S3xt
+	 qSc9xB4PZ9XtUmSNmsoXcFRf1XITOP8XkJXZ9PXQGKThlEPP72Yc4s1bu6e4RGWnVk
+	 LxXvavBAjqF7TFW4+SVfvHIkl0opqxqYmsAO7sgLLVKOR0qBORsrsunFcaQqCdviua
+	 87kxELvAv8OfP6RQG7N6YopS+v7/QAg3re3yZpDJPDmeytXdy7BNLH/Zlsz+Gfw8tM
+	 DZ6bmZsyyLfKg==
+From: SeongJae Park <sj@kernel.org>
+To: Vincenzo Mezzela <vincenzo.mezzela@gmail.com>
+Cc: shuah@kernel.org,
+	sj@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	damon@lists.linux.dev
+Subject: Re: [PATCH] selftest: damon: fix minor typos in test logs
+Date: Sun,  4 Feb 2024 09:13:43 -0800
+Message-Id: <20240204171343.58820-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240204122523.14160-1-vincenzo.mezzela@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,50 +63,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-cmsg_ipv6 test requests tcpdump to capture 4 packets,
-and sends until tcpdump quits. Only the first packet
-is "real", however, and the rest are basic UDP packets.
-So if tcpdump doesn't start in time it will miss
-the real packet and only capture the UDP ones.
+Hello,
 
-This makes the test fail on slow machine (no KVM or with
-debug enabled) 100% of the time, while it passes in fast
-environments.
+On Sun,  4 Feb 2024 13:25:23 +0100 Vincenzo Mezzela <vincenzo.mezzela@gmail.com> wrote:
 
-Repeat the "real" / expected packet.
+> This patch resolves a spelling error in the test log, preventing potential
+> confusion.
+> 
+> It is submitted as part of my application to the "Linux Kernel
+> Bug Fixing Spring Unpaid 2024" mentorship program of the Linux
+> Foundation.
 
-Fixes: 9657ad09e1fa ("selftests: net: test IPV6_TCLASS")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/cmsg_ipv6.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thank you for fixing this :)
 
-diff --git a/tools/testing/selftests/net/cmsg_ipv6.sh b/tools/testing/selftests/net/cmsg_ipv6.sh
-index f30bd57d5e38..8bc23fb4c82b 100755
---- a/tools/testing/selftests/net/cmsg_ipv6.sh
-+++ b/tools/testing/selftests/net/cmsg_ipv6.sh
-@@ -89,7 +89,7 @@ for ovr in setsock cmsg both diff; do
- 	check_result $? 0 "TCLASS $prot $ovr - pass"
- 
- 	while [ -d /proc/$BG ]; do
--	    $NSEXE ./cmsg_sender -6 -p u $TGT6 1234
-+	    $NSEXE ./cmsg_sender -6 -p $p $m $((TOS2)) $TGT6 1234
- 	done
- 
- 	tcpdump -r $TMPF -v 2>&1 | grep "class $TOS2" >> /dev/null
-@@ -126,7 +126,7 @@ for ovr in setsock cmsg both diff; do
- 	check_result $? 0 "HOPLIMIT $prot $ovr - pass"
- 
- 	while [ -d /proc/$BG ]; do
--	    $NSEXE ./cmsg_sender -6 -p u $TGT6 1234
-+	    $NSEXE ./cmsg_sender -6 -p $p $m $LIM $TGT6 1234
- 	done
- 
- 	tcpdump -r $TMPF -v 2>&1 | grep "hlim $LIM[^0-9]" >> /dev/null
--- 
-2.43.0
+> 
+> Signed-off-by: Vincenzo Mezzela <vincenzo.mezzela@gmail.com>
 
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+Thanks,
+SJ
+
+[...]
 
