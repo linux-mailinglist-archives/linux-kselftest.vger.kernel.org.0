@@ -1,168 +1,129 @@
-Return-Path: <linux-kselftest+bounces-4116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F280848D43
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 12:57:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA6F8848D8C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 13:25:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B653A1F21CE7
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 11:57:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E21D283323
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 12:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6ABF2134F;
-	Sun,  4 Feb 2024 11:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8067F22085;
+	Sun,  4 Feb 2024 12:25:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZY/WEtGX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0cphIh9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DE82208E;
-	Sun,  4 Feb 2024 11:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D442232B;
+	Sun,  4 Feb 2024 12:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707047817; cv=none; b=fHiWY+7b7Zs3RikbUbtlAo13XXvfMXvXN4mr4DQxEQ/ezvfzQacm2U6420PLiV+rL9vxDVS2+41x6FprIBQGMHZx6RypxuxiVfKP81L/k9PJI/ZWoX15+YJqsJe/5LlNk9PJEJJv3Xh0f4yFUTp0xuIEhSKtXBD6d+H5K4PbnuM=
+	t=1707049537; cv=none; b=EyvpADD9WDz53XLMo3alsaD0XVbisuEjWqIlTvs1O6IGOJ0k7ENSGfdHPl4f/I4d+fjolOfHXB8L/p2A9dltc7MCVvRAIwWpzSwYShcwRI5QSeV7iK11QiE1XVHlaOTupiqJaqXy220JqNBt5cxevvsGYf4IAz2jXGlJjvCldZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707047817; c=relaxed/simple;
-	bh=4MfqGCuyTV/WsAyZLhKLgr6v3KIUjtNQFKaYShJa5D0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FNlJLv5n50kKawFOK7kyT90GGb2KKqwavivynQhPtFlcmR4wL7aR0Gy7quMBSh77wlFuHIVPcr3RsNVidqDin+dIvt6YNLmgKZqeFp0nvo/3IMdwR5xkJ5e/HRW0VaX3CHab9uCwecG4oLm6AkBoiIo68RW+g3yttKAY6ZSPLAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZY/WEtGX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE05C433C7;
-	Sun,  4 Feb 2024 11:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707047817;
-	bh=4MfqGCuyTV/WsAyZLhKLgr6v3KIUjtNQFKaYShJa5D0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZY/WEtGXriFjgcbMxABWAI4nFRroyGqI2w96wGZ9ydXf9+uL8mdZqzi+dGzo4Lf9A
-	 bQTQ7bhibCdYAIAU9P2v7NgeMdVO2JwRrFhz1EBhCZUkivhQ9ale4dK+SQyCpL9ltY
-	 vR1mZgXbXe+c3RC+Ef75Wj5FDvuvJPWzVIoPSwilsDgWUUgAw1PPqmbAFE2GJZaVjR
-	 PP958f8YXAXj91IZo569uUsbJsm+M2tLGiEKOfBTSY1pvkOSxezO/kp6V8/0P83l5H
-	 bue5JvBedmel6vfTkGxy4W5d7RMgyQqSAvKOxlpcl9IC1nTWZ+O5BlMlkpjEXbZ/bW
-	 gwK2DWtg278SA==
-Date: Sun, 4 Feb 2024 12:56:41 +0100
-From: Mike Rapoport <rppt@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Kees Cook <keescook@chromium.org>,
-	jannh@google.com, linux-kselftest@vger.kernel.org,
-	linux-api@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH RFT v3 1/5] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
-Message-ID: <Zb97eROjky1DIaiv@kernel.org>
-References: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
- <20231120-clone3-shadow-stack-v3-1-a7b8ed3e2acc@kernel.org>
+	s=arc-20240116; t=1707049537; c=relaxed/simple;
+	bh=RcWzXKFZ0BaF1VMpi8ZTE1UoIl+8mFXHKZEXuhP55DE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rbtPj1RJ1tc+PzLLZD2jS0wgA2NH2q50cOBUlOskkCtOOjt1BY8TaKKaQB4uRuy71pvNi2L6HuaVGoR9YN0mRLktwmxausyPmHBaEzPefwDcO6liav9BPVQQMAGXRO0A9NpdtR4JiA4UbmsTiZ54YQiXIlRTIrK3LVpJNhis4Z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0cphIh9; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5114b2b3b73so422626e87.0;
+        Sun, 04 Feb 2024 04:25:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707049534; x=1707654334; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BplI6VCWBZIVYNNfj0tYYl9gPuq2mTVb9lKtjAlMeVM=;
+        b=Q0cphIh94LLKKCZENBGXvFI47O9WkyTiLHc4e7OgCodESI8hHrgZKZlsR4nx8vz2ct
+         FQSRyi99cnDBObdbASmAbr31u2w4K8oTTKNf/e6q+AG9MliMRaerow7jFVjEkWLwUlpW
+         iioQpPkgms/BlrN4fvIxkxCeZNKlxdpSaQ8Mo4JgPi4XS0+Nx+9rziCfFCSu5Z/uCr8x
+         RyuS4Z0zJWKDPXzMFApBLG9FZGiiQRnnVtQ6grkrjsgq17zD/ekpTgfzzCx2X4am/v1u
+         7OrWzd5PxtMdTCfkXPpNpvxHyMMzICGvqOxFBTTItTTvh/x7/Qb35gZB2hGkVzAPfeil
+         VUVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707049534; x=1707654334;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BplI6VCWBZIVYNNfj0tYYl9gPuq2mTVb9lKtjAlMeVM=;
+        b=CCTuvJ53the/UXHnnMZpOo/laFuGil+LWaDeCxJ/V+eXoTrIZS2tp1RuJZqO79Yz+1
+         F52mJdWvLhEj5PuTSG2ZiWFgpE63CPyve3v/uiPZv924uBJoz6m0gj3Hn15bK7tWJbn8
+         P3CKpCCLv/g3fDWDH6R1jQlEoYM2jKldDjGIheNiH3i8E8gVTmdNGp3qzOODj7blTalU
+         WQcNSNl/QE0C2ln0YSXe9fU7pI++0NP0TPg94gWw7ljNG+hXliby/LWbAR5m0ADYYRVI
+         8c8/vethERsk0mO91vBf+k64epNEWH8NHjnD1TWbHSb5h27D+/rX2+BJH/ys0mytUbL/
+         n3UA==
+X-Gm-Message-State: AOJu0Yy41BSY3cyRlaf5HTI4kYCgYmeeNbeGwJHTm6RTRkVlZ4gwV61x
+	FXxVlmfubzQQa3+SxUth+16Oucvr6YM6mPWlnsJgEl8o9ozz+3T0
+X-Google-Smtp-Source: AGHT+IEbsoTWM9dyrlnPq9Z+H/Kf1Nac+Pw5gAyKzB+tp0r8pKXcXmVlSkwOvvuj3qF9fmh7Ke9RhQ==
+X-Received: by 2002:a05:6512:138f:b0:50e:7bc5:20d8 with SMTP id fc15-20020a056512138f00b0050e7bc520d8mr9529913lfb.4.1707049533433;
+        Sun, 04 Feb 2024 04:25:33 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCW3IYlv2/sOAGk5fWd07DfLb8K1AaQ4MBgBGJCkvJTBw8rhsRM+VdIc3aNXj3FUGhoe9cdNsiuf3oyRy1L8IrkUH5bEA14PoXLWLxjcrIRhW3Pq9/Awx/UYPp+4qS2qSce0V8EhNPKt3QxftOjgVLr6i5RniNIGARyBzQEw5rI9pEjq6whlcZu2oWhl2sEVJYE=
+Received: from sacco-Inspiron-5559.. (88-160-103-158.subs.proxad.net. [88.160.103.158])
+        by smtp.gmail.com with ESMTPSA id r13-20020ac24d0d000000b005114b8b2aabsm210243lfi.118.2024.02.04.04.25.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Feb 2024 04:25:32 -0800 (PST)
+From: Vincenzo Mezzela <vincenzo.mezzela@gmail.com>
+To: shuah@kernel.org,
+	sj@kernel.org
+Cc: Vincenzo Mezzela <vincenzo.mezzela@gmail.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftest: damon: fix minor typos in test logs
+Date: Sun,  4 Feb 2024 13:25:23 +0100
+Message-Id: <20240204122523.14160-1-vincenzo.mezzela@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231120-clone3-shadow-stack-v3-1-a7b8ed3e2acc@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 20, 2023 at 11:54:29PM +0000, Mark Brown wrote:
-> Since multiple architectures have support for shadow stacks and we need to
-> select support for this feature in several places in the generic code
-> provide a generic config option that the architectures can select.
-> 
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/x86/Kconfig   | 1 +
->  fs/proc/task_mmu.c | 2 +-
->  include/linux/mm.h | 2 +-
->  mm/Kconfig         | 6 ++++++
->  4 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 3762f41bb092..14b7703a9a2b 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1952,6 +1952,7 @@ config X86_USER_SHADOW_STACK
->  	depends on AS_WRUSS
->  	depends on X86_64
->  	select ARCH_USES_HIGH_VMA_FLAGS
-> +	select ARCH_HAS_USER_SHADOW_STACK
->  	select X86_CET
->  	help
->  	  Shadow stack protection is a hardware feature that detects function
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index ef2eb12906da..f0a904aeee8e 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -699,7 +699,7 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->  #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
->  		[ilog2(VM_UFFD_MINOR)]	= "ui",
->  #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
-> -#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
->  		[ilog2(VM_SHADOW_STACK)] = "ss",
->  #endif
->  	};
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 418d26608ece..10462f354614 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -341,7 +341,7 @@ extern unsigned int kobjsize(const void *objp);
->  #endif
->  #endif /* CONFIG_ARCH_HAS_PKEYS */
->  
-> -#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
->  /*
->   * VM_SHADOW_STACK should not be set with VM_SHARED because of lack of
->   * support core mm.
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index 89971a894b60..6713bb3b0b48 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -1270,6 +1270,12 @@ config LOCK_MM_AND_FIND_VMA
->  	bool
->  	depends on !STACK_GROWSUP
->  
-> +config ARCH_HAS_USER_SHADOW_STACK
-> +	bool
-> +	help
-> +	  The architecture has hardware support for userspace shadow call
-> +          stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
+This patch resolves a spelling error in the test log, preventing potential
+confusion.
 
-The whitespace looks suspicious, I think there should be a leading tab.
-Otherwise
+It is submitted as part of my application to the "Linux Kernel
+Bug Fixing Spring Unpaid 2024" mentorship program of the Linux
+Foundation.
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Signed-off-by: Vincenzo Mezzela <vincenzo.mezzela@gmail.com>
+---
+ .../selftests/damon/sysfs_update_schemes_tried_regions_hang.py  | 2 +-
+ .../damon/sysfs_update_schemes_tried_regions_wss_estimation.py  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +
->  source "mm/damon/Kconfig"
->  
->  endmenu
-> 
-> -- 
-> 2.30.2
-> 
-
+diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
+index 8c690ba1a573..28c887a0108f 100644
+--- a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
++++ b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
+@@ -20,7 +20,7 @@ def main():
+ 
+     err = kdamonds.start()
+     if err != None:
+-        print('kdmaond start failed: %s' % err)
++        print('kdamond start failed: %s' % err)
+         exit(1)
+ 
+     while proc.poll() == None:
+diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
+index cdbf19b442c9..90ad7409a7a6 100644
+--- a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
++++ b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
+@@ -23,7 +23,7 @@ def main():
+ 
+     err = kdamonds.start()
+     if err != None:
+-        print('kdmaond start failed: %s' % err)
++        print('kdamond start failed: %s' % err)
+         exit(1)
+ 
+     wss_collected = []
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+
 
