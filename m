@@ -1,205 +1,170 @@
-Return-Path: <linux-kselftest+bounces-4114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 301EE84883E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Feb 2024 19:46:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DACB848A38
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 02:33:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D5D31F23313
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Feb 2024 18:46:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 481FF2836C6
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Feb 2024 01:33:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54BB55FDB3;
-	Sat,  3 Feb 2024 18:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517CA80C;
+	Sun,  4 Feb 2024 01:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XINpu29U"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VoAxtBvh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1A85F561;
-	Sat,  3 Feb 2024 18:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C7C816;
+	Sun,  4 Feb 2024 01:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706985949; cv=none; b=W+vl9/d2F0dIN8HYxHPJNts8lWTa5fnHufwGQ3XcGq9JNi92MJFHLWzbAa0QbtGCk4JDYRapa2a8HaETYotcX+56RIX7hKQWtOwUmUtoKIku3XIUpzEpZ5yCA6AnnJl288zytfldr4OESndx66KoXqQWRXQFEKL88s3ZYKIwd1o=
+	t=1707010401; cv=none; b=XSjotE5OQbFcajiZJO607nHve3j0r4BtbBGB5dFY1YVZNiunPz1rIZy77m3xiXG4CdPGR93DiQPD0pjnvjGy1lbBOJUX7G7w6VRUoMUsJhH5ZKAUCC/H59MAFxyPTQd1b3bBvPsshu2fHXYGAijVNIsUmtbWsPGnC8cIeucCFbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706985949; c=relaxed/simple;
-	bh=QLmB+a7rMrDFXLv1SPoxkXPhzSnXnhs+odqRkVdXqM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s46g8JixVOhMePYuN/Uu3+YkMV6ID/jgUZouXv/In3lkhpg7B5a6zrDNpKgt4Tj2geCD509fCIDRjBjoZlWs3yR4YjV/L8BU9LFuTyRtv19w8D3q5wVqLdZs9HIy/4u6BWde58asVNsf4BAbqSDUjVzdyuutLWnD8z8y4JzX4cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XINpu29U; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-204f50f305cso2033081fac.3;
-        Sat, 03 Feb 2024 10:45:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706985938; x=1707590738; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y0N/TxnXN2qBHJ/dkfZVj0nsBZc+7pjCqkkafHOcTPY=;
-        b=XINpu29UxWjy09y+rCAxh2r+t2LPxjy3x9XN2MqmGFc0RIug/fXsdQ8pezTPDuUVHb
-         lgwfPBQeaedIOx7oK7u75/ytyxkKxALmiLFGDIhN8OhHJ4bhNE0tIWskvTqxQgGCQg4K
-         lOaTJYwQvfxxt9fmWTQuoqErvjng9hthjUEcvQZxnDKUy0V6STp4+KnMhwlgLgA5BpaL
-         yzxm2KOG93M07WrWV5P2894+57wOJZ/bhnTeGIudVr65at1wWqDiy4bFRPIO+q/2FETa
-         Hll3q6V2j4LD1mI1Qnpt9bS2tYS5fdiK4UHOqQfx8aupdESlJ5wW+2yDrQgWPtjsQNSR
-         LpXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706985938; x=1707590738;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y0N/TxnXN2qBHJ/dkfZVj0nsBZc+7pjCqkkafHOcTPY=;
-        b=opJN4U2rdtocW5uzA3YWe5dxlcW+fzOtrUb/gvknJPr0sQ8OvzGtMZ8mTSmK1eXpg6
-         fYMD2dBiapkH3QQBoiELwNSMV2hLg7q9EZlTWQLP96/bsKDWXOKk+Cm57QNNafnjdW4+
-         +qra3Y17p12x7Egr2XHIrBGKD9+3bEKmBSzh7oTcKY7JeupOm2+lcFSGiVK1mFxgKbZz
-         BZzUi9mjc73/Ch7MWe3uX9eD2GCXe2qDjM+kAZZTWeE+rufJ2deup3/pSDIBajbGOmcX
-         z+i/chuuAjGmAQMz193SlDRlC/aP78MJL+Ck08Dbj4ucfPo+C0n9M7w+4zr9XWaY84oZ
-         Mdsw==
-X-Gm-Message-State: AOJu0YxxAy0vA+sx5dAqDWmnZ/b/AiR+AGSaOT6wEabeEGepESR0LQkd
-	VPrGgacbeTVOJ9YP3X0I1r6F6treRD4v69yW75bgGZtMl/gsqShc
-X-Google-Smtp-Source: AGHT+IE6cTsFsYxec6Cc2Nv8r8Wv7UwdJ2OkD0GT9fp4iaKTaMhjHiWk6mQDIasAcDiqRAsVsbikAg==
-X-Received: by 2002:a05:6870:4149:b0:214:ff12:3dda with SMTP id r9-20020a056870414900b00214ff123ddamr3816197oad.2.1706985938425;
-        Sat, 03 Feb 2024 10:45:38 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUQOTzlsO8lgt6pTwZLPw4119LfUrIfiaPa1wTTfdoxvsVTK1OcV2Dhbg5b2iobZcoC99Y+nA1mfBlqm8ccNuDEZ9ovSOSxF3dHJJoFa8pVW2wvNSbjP7RHN1nQlbwYiR+ZGUGPHsYbVIKUu/kExr3+mBS2LyoL7EMCy0RKTBCwZmgSJAnm8YjNjZATBXumi5rZ1guYYVe6tbB3apJ1FiMecZeZOLFGPHLSIm9lMMnedLrSL5LR+ITrAlKqzgfOzWbsLuUM4d0ufoM4ZdW8uS+lgajFrBnb5Unl8KMrPo5f7fVRDTzb+mpkXuSEfXp+VxBl9aBdT1X4Pu6RO2Vb+J9irkfLOt6ydfNho4jZIfhH5e7RejlM3xop2REcBU+7Ep2QxW6BfVclBjRvfADINXaS9e2RfWdRXu9F1/Yl7W4aoQMsEnydZd5izTj9tgYTVMJznLUUlABQlG1XUF+lALvWG6wGjF/JBqJwIeKsgiHWrSlTkPAQMEc11zIv9TBj/SgdR+1IGkyuC42IrbIYBRA6Lh1HyFcyKl9okR8mk02mHyKzcQcLfR3w3JL3Ur9d5SVkncclHqL1PxkDpGPOs3dE++/rIX2sEot24DS//9lxdPUpALKMpt4xa0iv27eylxppX5U6yH5xrfrThO7kAWWBey3QFiyYH1/6c0o0YhJJldRm9x6QOyyQUBjy8xYN3sw+NkNgjLDcwTs+DRby93OBGQ==
-Received: from surya ([70.134.61.176])
-        by smtp.gmail.com with ESMTPSA id g37-20020a635665000000b005d748902a01sm3945514pgm.43.2024.02.03.10.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Feb 2024 10:45:37 -0800 (PST)
-Date: Sat, 3 Feb 2024 10:45:11 -0800
-From: Manu Bretelle <chantr4@gmail.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: vmalik@redhat.com, Daniel Xu <dxu@dxuuu.xyz>,
-	linux-trace-kernel@vger.kernel.org, coreteam@netfilter.org,
-	bpf@vger.kernel.org, linux-input@vger.kernel.org,
-	cgroups@vger.kernel.org, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	fsverity@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	netfilter-devel@vger.kernel.org, alexei.starovoitov@gmail.com,
-	quentin@isovalent.com, alan.maguire@oracle.com, memxor@gmail.com
-Subject: Re: [PATCH bpf-next v4 0/3] Annotate kfuncs in .BTF_ids section
-Message-ID: <Zb6Jt30bNcNhM6zR@surya>
-References: <cover.1706491398.git.dxu@dxuuu.xyz>
- <Zb12EZt0BAKOPBk/@surya>
- <Zb5QWCw3Tg26_MDa@krava>
+	s=arc-20240116; t=1707010401; c=relaxed/simple;
+	bh=Iw/fEuyQ7mi/lXa3d20ylxNcCWQhhKBXMwjanLwFV3s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oJQ2cbRnwSjch7IxI68Ndf2tzxlFBeEqkFLKAfu/V3gLnhnmk/uu/Bv0IuJTNtGPPpW/RuNMZTXYfNTrymWMTHpB9ho7UNzq6AY8tlzWsSrQbHAqNVxd1Eo/pveMOQWv/68yS+3luit/g1I7Y/yCSndeKkLYj0AUnZJOWrMElNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VoAxtBvh; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=g/e21LICe/FNUov3txLgNkHBc/RFMYIe48KaXgpnzOM=; b=VoAxtBvhL+JmLBoXdctdEbQwPd
+	IrbezwTR6Lj9IqpfmGjRi/81ae1JiGXyAgqoC1CuW7aUFFM7vKeRtBUIJSSpYYEhH2SUbR3gi3EGL
+	pkiWs6xYlDWMIuP7GjeYmNJ0AxPxUfVWkFJnnKYgnt4BZU5RYMy9CGiAg78GvAmBIQrrDc3JkptMy
+	OHDEJ1GBQ9Hs9TL1om3iaJOWoVzv+DgtxPDP256f+eeAIgz46JkI454jgGx7ZWNvnxVP1Mh/Zg0Xs
+	lLBsu8TZjh3wLl/mEafPGF8O8VxiVBwhn3fBAs4RmT7jtqDOEygHSGgeEHHOnxPfyu9c1OgB9M9zK
+	akSWs3Ng==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rWRNY-0000000HWm3-1uVM;
+	Sun, 04 Feb 2024 01:33:04 +0000
+Message-ID: <0371ffc5-f6c9-4352-89d5-0e98afa9ad7f@infradead.org>
+Date: Sat, 3 Feb 2024 17:33:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zb5QWCw3Tg26_MDa@krava>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFT v5 1/7] Documentation: userspace-api: Add shadow stack
+ API documentation
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>,
+ "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+ Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+ "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Daniel Bristot de Oliveira
+ <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>,
+ Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Kees Cook <keescook@chromium.org>,
+ jannh@google.com, linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+References: <20240203-clone3-shadow-stack-v5-0-322c69598e4b@kernel.org>
+ <20240203-clone3-shadow-stack-v5-1-322c69598e4b@kernel.org>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240203-clone3-shadow-stack-v5-1-322c69598e4b@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Feb 03, 2024 at 03:40:24PM +0100, Jiri Olsa wrote:
-> On Fri, Feb 02, 2024 at 03:09:05PM -0800, Manu Bretelle wrote:
-> > On Sun, Jan 28, 2024 at 06:24:05PM -0700, Daniel Xu wrote:
-> > > === Description ===
-> > > 
-> > > This is a bpf-treewide change that annotates all kfuncs as such inside
-> > > .BTF_ids. This annotation eventually allows us to automatically generate
-> > > kfunc prototypes from bpftool.
-> > > 
-> > > We store this metadata inside a yet-unused flags field inside struct
-> > > btf_id_set8 (thanks Kumar!). pahole will be taught where to look.
-> > > 
-> > > More details about the full chain of events are available in commit 3's
-> > > description.
-> > > 
-> > > The accompanying pahole and bpftool changes can be viewed
-> > > here on these "frozen" branches [0][1].
-> > > 
-> > > [0]: https://github.com/danobi/pahole/tree/kfunc_btf-v3-mailed
-> > > [1]: https://github.com/danobi/linux/tree/kfunc_bpftool-mailed
-> > 
-> > 
-> > I hit a similar issue to [0] on master
-> > 943b043aeecc ("selftests/bpf: Fix bench runner SIGSEGV")
-> >  when cross-compiling on x86_64 (LE) to s390x (BE).
-> > I do have CONFIG_DEBUG_INFO_BTF enable and the issue would not trigger if
-> > I disabled CONFIG_DEBUG_INFO_BTF (and with the fix mentioned in [0]).
-> > 
-> > What seems to happen is that `tools/resolve_btfids` is ran in the context of the
-> > host endianess and if I printk before the WARN_ON:
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index ef380e546952..a9ed7a1a4936 100644
-> >   --- a/kernel/bpf/btf.c
-> >   +++ b/kernel/bpf/btf.c
-> >   @@ -8128,6 +8128,7 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
-> >            * WARN() for initcall registrations that do not check errors.
-> >            */
-> >           if (!(kset->set->flags & BTF_SET8_KFUNCS)) {
-> >   +        printk("Flag 0x%08X, expected 0x%08X\n", kset->set->flags, BTF_SET8_KFUNCS);
-> >                   WARN_ON(!kset->owner);
-> >                   return -EINVAL;
-> >           }
-> > 
-> > the boot logs would show:
-> >   Flag 0x01000000, expected 0x00000001
-> > 
-> > The issue did not happen prior to
-> > 6f3189f38a3e ("bpf: treewide: Annotate BPF kfuncs in BTF")
-> > has only 0 was written before.
-> > 
-> > It seems [1] will be addressing cross-compilation, but it did not fix it as is
-> > by just applying on top of master, so probably some of the changes will also need
-> > to be ported to `tools/include/linux/btf_ids.h`?
+Hi,
+
+On 2/2/24 16:04, Mark Brown wrote:
+> There are a number of architectures with shadow stack features which we are
+> presenting to userspace with as consistent an API as we can (though there
+> are some architecture specifics). Especially given that there are some
+> important considerations for userspace code interacting directly with the
+> feature let's provide some documentation covering the common aspects.
 > 
-> the fix in [1] is fixing flags in set8's pairs, but not the global flags
-> 
-> it looks like Viktor's fix should now also swap that as well? like in the
-> change below on top of Viktor's changes (untested)
-> 
-> jirka
-> 
-> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index d01603ef6283..c44d57fec390 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -706,6 +706,8 @@ static int sets_patch(struct object *obj)
->  			 * correctly translate everything.
->  			 */
->  			if (need_bswap) {
-> +				set8->flags = bswap_32(set8->flags);
-> +
->  				for (i = 0; i < cnt; i++) {
->  					set8->pairs[i].flags =
->  						bswap_32(set8->pairs[i].flags);
+>  Documentation/userspace-api/index.rst        |  1 +
+>  Documentation/userspace-api/shadow_stack.rst | 41 ++++++++++++++++++++++++++++
+>  2 files changed, 42 insertions(+)
 > 
 
-That should work. Here are a few tests I ran:
 
-$ md5sum /tmp/kbuild-s390x/vmlinux.*
-eb658e51e089f3c5b2c8909a29dc9997  /tmp/kbuild-s390x/vmlinux.a
-# plain vmlinux before running resolv_btfids (all 0s)
-ea907cd46a1a73b8276b5f2a82af00ca  /tmp/kbuild-s390x/vmlinux.before_resolv
-# x86_64 resolv_btfids on master without Viktor's patch
-980a40c3a3ff563d1c2d1ebdd5071a23  /tmp/kbuild-s390x/vmlinux.resolv_native
-# x86_64 resolv_btfids on master with Viktor's patch
-b986d19e242719ebea41c578235da662  /tmp/kbuild-s390x/vmlinux.resolv_native_patch_viktor
-# x86_64 resolv_btfids on master with Viktor's patch and your suggested patch
-4edd8752ff01129945bd442689b1927b  /tmp/kbuild-s390x/vmlinux.resolv_native_patch_viktor_patched
-# s390x resolv_btfids run with qemu-s390x-static
-4edd8752ff01129945bd442689b1927b  /tmp/kbuild-s390x/vmlinux.resolv_s390x
+> diff --git a/Documentation/userspace-api/shadow_stack.rst b/Documentation/userspace-api/shadow_stack.rst
+> new file mode 100644
+> index 000000000000..c6e5ab795b60
+> --- /dev/null
+> +++ b/Documentation/userspace-api/shadow_stack.rst
+> @@ -0,0 +1,41 @@
+> +=============
+> +Shadow Stacks
+> +=============
+> +
+> +Introduction
+> +============
+> +
+> +Several architectures have features which provide backward edge
+> +control flow protection through a hardware maintained stack, only
+> +writeable by userspace through very limited operations.  This feature
+> +is referred to as shadow stacks on Linux, on x86 it is part of Intel
 
+                                   on Linux. On x86
 
-and some hexdiff of those binaries:
+> +Control Enforcement Technology (CET), on arm64 it is Guarded Control
+> +Stacks feature (FEAT_GCS) and for RISC-V it is the Zicfiss extension.> +It is expected that this feature will normally be managed by the
+> +system dynamic linker and libc in ways broadly transparent to
+> +application code, this document covers interfaces and considerations
 
+               code. This                                considerations.
 
-# difference between master's native build and s390x build.... has byte swapping for set8 and others
-diff -ruN <(xxd /tmp/kbuild-s390x/vmlinux.resolv_s390x) <(xxd /tmp/kbuild-s390x/vmlinux.resolv_native) > diff_s390x_native.diff
-https://gist.github.com/chantra/c3d58637a08a6f7340953dc155bb18cc
+> +
+> +
+> +Enabling
+> +========
+> +
+> +Shadow stacks default to disabled when a userspace process is
+> +executed, they can be enabled for the current thread with a syscall:
 
-# difference betwee Viktor's version and  s390x build.... squinting my eyes I only see the global set8 is missing
-diff -ruN <(xxd /tmp/kbuild-s390x/vmlinux.resolv_s390x) <(xxd /tmp/kbuild-s390x/vmlinux.resolv_native_patch_viktor) > diff_s390x_native_viktor.diff
-https://gist.github.com/chantra/61cfff02b456ae72d3c0161ce1897097
+   executed. They
 
-Have a good weekend all!
+> +
+> + - For x86 the ARCH_SHSTK_ENABLE arch_prctl()
+> +
+> +It is expected that this will normally be done by the dynamic linker.
+> +Any new threads created by a thread with shadow stacks enabled will
+> +themsleves have shadow stacks enabled.
 
-Manu
+   themselves
+
+> +
+> +
+> +Enablement considerations
+> +=========================
+> +
+> +- Returning from the function that enables shadow stacks without first
+> +  disabling them will cause a shadow stack exception.  This includes
+> +  any syscall wrapper or other library functions, the syscall will need
+
+                                          functions. The
+
+> +  to be inlined.
+> +- A lock feature allows userspace to prevent disabling of shadow stacks.
+> +- This that change the stack context like longjmp() or use of ucontext
+
+     Those
+?
+
+> +  changes on signal return will need support from libc.
+> 
+
+-- 
+#Randy
 
