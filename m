@@ -1,78 +1,79 @@
-Return-Path: <linux-kselftest+bounces-4128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69A4A84974D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 11:05:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B40784979F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 11:19:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CB2B1C20AF1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 10:05:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8609E1C2030B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 10:19:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747E4134BD;
-	Mon,  5 Feb 2024 10:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4BE14AA2;
+	Mon,  5 Feb 2024 10:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OWeUTA+s"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gplZNXO6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AB814A9D
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Feb 2024 10:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C480F168A9
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Feb 2024 10:19:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707127522; cv=none; b=eHv8o0blHEQkkDRSdoMsWo7VHVh5Ql+9MgqJS7LSsehDrPFbiLseUjp/83Mk4nXRsNABEsfqTpgQOmthqCEbFVfbnRVUgRjCzSK0TuZ6PTtwv5byxGFAYTxtoOC7UE0Jm9feKCStuYUag/VhSU0dDh+Js9g1Pi64v1tAT92FYlg=
+	t=1707128352; cv=none; b=iwCFmkw8aSNqrZs2hSLq8/IPM7TvHSGfcFtxv3bWXHoKrLRwzFvWQ90/UTn2VPjjeiFRIF8DV4e7WAkbZ6sR8IXlmArxWgjojSTVR3zxX87BElJgqN53DAhNyPNA0qUul+s0/xB8Y0k6+PBQBK4YfwFO2CpMQNkzYth4xxHzvzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707127522; c=relaxed/simple;
-	bh=FvTH7ce4HO+MqDVbYAWd4QDxi89r1l2keNPhU6hTSXw=;
+	s=arc-20240116; t=1707128352; c=relaxed/simple;
+	bh=g3cGRfrRQfifaAzqu+6P17jzpgCcdn4yyTQIo/WzczM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oGRAps3MKbF3Y7jBNH2/nQho+zbDjGQBnHXvD8LGLy10FVuVZPX3EVDAzGO7Kegn6gZOPAU3KNuJ9YqQszw24aa3Ljh2dOXk8YqBkizhHse5+TDON7Eu4Qub0lliN1ljKnufzduZu6BaW51yGqGjinFXUDVNpB4PtvhAVwioXhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OWeUTA+s; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lo/7LC075NKQstqwDpKdrx6/3y0LBQexGrHUHF4dwCas5xtIhe0cnQqH9lwrmZIpF5eYNSHMECFYnGHeJPpCOQ3sfVo6dgDzEvGG7hUHFNicT8QTBgjBlVpDS7gkkB+FwQAul7dUvBaO4xW2KInkyOeTN7OWQCj262gZGfkgoTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gplZNXO6; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707127520;
+	s=mimecast20190719; t=1707128348;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jI4PbEn5bcHDGLMbu+52VQdT8MjOytUlCwJj0kXdfq0=;
-	b=OWeUTA+slwMBVNLZKhxq7VU96lHv0+aiVGEPimDpfRxWBrPPt1wuDGPcWU/c1cWrOSG4EX
-	fQufQm/3Dj++8pEGnQfjlaKGQ/b97ZJZRgkNiB++iEq+yj0kYR0sjR+eW+2dZ3ER5Uhbg+
-	h3QuQ4F9UoUjh+7NS3DXfwIkTlIYh40=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=vZiCSDOMQx0r+Y6ZIinTjg4xtwQtHmbUiaCU/bhqSTk=;
+	b=gplZNXO633c5dClPuWP8rQ2M9Mpb/9VBZIoAzTYBnxmynVzYMp5DerxYXL2HxnkZ8FAJfM
+	bApBGwDjGkJC8V43IRArsr9GQxu4u/o9Mgam6ZvpVdjNH/b394bR2qxtG+ugBH5NVJF3AI
+	TE1n3+APFFFt63Yah4YeLvZ7GOuKxXo=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-zpsbcRdYNxq423sMnKBJOw-1; Mon, 05 Feb 2024 05:05:18 -0500
-X-MC-Unique: zpsbcRdYNxq423sMnKBJOw-1
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-59a5911a619so1143077eaf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Feb 2024 02:05:18 -0800 (PST)
+ us-mta-460-oDxWcleBPSGBOaiM6uYXWA-1; Mon, 05 Feb 2024 05:19:07 -0500
+X-MC-Unique: oDxWcleBPSGBOaiM6uYXWA-1
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-6dbd919aba8so1190965b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Feb 2024 02:19:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707127517; x=1707732317;
+        d=1e100.net; s=20230601; t=1707128346; x=1707733146;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jI4PbEn5bcHDGLMbu+52VQdT8MjOytUlCwJj0kXdfq0=;
-        b=fLQ6o5rzOfA6VUgbw+Z57yqq5BsDdkILO+VUKzqrjf0plK2Yv3VhQ+51W7cit5PVeo
-         oudM2lVBe60eAOqK2fbYkdbaGQRBP+wOV2ZXOt2EZyCG1Li5icycd2mOmecIfR4yYWcE
-         K/2xA2XJmqUQarMHu3dEsAt50Nnd/z6xARGFCKoSVB4NBqGhhEqnezo4sRlW9BDAi2oi
-         yuL0FEKaIwnw9yCAtVJdnlXcUQQfQTIJs6xmCCD2o4D0Uq0brNLUYy2uRF0pLVlhZH6T
-         2vrK/I0ErmQnIlVyEHEW9xWBh0/ruUDUxwTUTEt0HERzO1vAZyOB+tx+6l1IVd2k/kmb
-         bWmg==
-X-Gm-Message-State: AOJu0YxkPiDgH8pADa5GiZaRsXoGN4JkIC1Npe+m/NWQwMvdgyiKz6zr
-	x/8nAErjTQmUwAUwYosjmJ1VwUH8BjmYCZlNgskqk2YF209Vx83WZTUS/x2rOm8pC9yOuS4Gpil
-	a6+MCw9HD44MbOSPZavvPJDWR3xcue4sIwPEenW9fhpbjKbkt7QeqcAtOdetd4imc/Q==
-X-Received: by 2002:a05:6358:7f05:b0:178:8c44:aa8b with SMTP id p5-20020a0563587f0500b001788c44aa8bmr11609007rwn.3.1707127517662;
-        Mon, 05 Feb 2024 02:05:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFiFWsiQYdb+lDxJj9dP1Ofli+cct1oipaMqfiulBEkAd5tnxRnsurpAwy4aMkIYd4YQ/WWQQ==
-X-Received: by 2002:a05:6358:7f05:b0:178:8c44:aa8b with SMTP id p5-20020a0563587f0500b001788c44aa8bmr11608992rwn.3.1707127517378;
-        Mon, 05 Feb 2024 02:05:17 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWoh+GzuRpjT9/ChYsEcK+q66hd4k8A3L/hx8CrGu0JVnDMkwpxykxZvzLQm56gLNHyyW2QTFnYegJxMsbcIVEXxSfXKKkWFO2nSjmi1/GPommUPYVDwDhPiiERdZpNku0MKXfJPD+LZq3Huot7R9CzYHxOgBN/+jWfnVymDFMMLyV3b2ftw/Z9fst/RoIahjBqxzjK59flIllJIPhksB8/CkqDPhUVsg==
+        bh=vZiCSDOMQx0r+Y6ZIinTjg4xtwQtHmbUiaCU/bhqSTk=;
+        b=EOZw2aSUdSXhsCRRsyfygMGLap2qHQJj5uTASYPDdFnT9uLVAuI3hN9QzqWKRx7luX
+         DIqzFmnUZpncL9KXZ0sUwt3PIvOYzX7mh0KGpDovTxLNaueYhE322NtXfKaRfw/3qWle
+         R6qAz8/XFb3qlIgrurh8B0iUQAypAnAv/TEf6xRwi/lMAnaE3HabYZPOUgnPRIMh5Vu+
+         nEhAvM+doJOMKp/XFRO5HnXYIYQzYaCKTHrPsjz+59A9Dh+ktiBqxoMQqWJcroGX2E/t
+         NnJ4zgpkuKtvoe0PJazVeAs+xw5Z0Krb953v2W0fzUrXeX8PIxj1rIDIY/rmfXbz2a7w
+         CqeQ==
+X-Forwarded-Encrypted: i=0; AJvYcCVKrHr969bGFe5TL8xADsf1eh8QTMCSq/qrCLwMNnjgjQfD1TxxlO3Vs3O1DK0n0vVJ0LxvlCh0Yt3+PSJh4yqaNzUWYgI/g5mEihufqoKg
+X-Gm-Message-State: AOJu0Yz/025JYY9m/R4wJUzUMAIRAGOWMb6bVwwAoveq4+Q0EfgD8+/P
+	IJ5WgMLNTFEMlK5gYXzejQ9uowsVIgF95ZO7aZump0fVRBQK7KN4FhA2Mpu0x1Jl8AcsmeYVn6r
+	LB+3IWFAxnAucX3B+lS2kL54sxKqeX9xUBd6L9fnWwGn/f5SzdIlvOYWwYkAS/7m0DA==
+X-Received: by 2002:a05:6a00:1d0a:b0:6e0:289e:dff1 with SMTP id a10-20020a056a001d0a00b006e0289edff1mr5974089pfx.3.1707128346147;
+        Mon, 05 Feb 2024 02:19:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEZQKDRl8o/1iGPsIhVGprocCxPa5Iz8Kku4Tx6ex7yJJMOtqiMdEBAu3Ka9koR2yblb65raQ==
+X-Received: by 2002:a05:6a00:1d0a:b0:6e0:289e:dff1 with SMTP id a10-20020a056a001d0a00b006e0289edff1mr5974078pfx.3.1707128345807;
+        Mon, 05 Feb 2024 02:19:05 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWcOyW7mMT4wB0Jt5DexfvWge30XrJlhInrF+qP5V+8o0oxx0d7VYCrBOqMPA6WH87JS/grX1xKzzyu85Lfeai2+3Gso0RN5IKzCdXvG7crSX6WyfwNScbtmJat4fp8eIHrhcmR4T/zr1n+S+Q+GFSnSrVsoG132/o9wXxT3eyXMHuMeC18Jmfi5dTBEGFwBf9Kn+YciP/UoIfnkTTYoyx+pUbzBr8maQ==
 Received: from x1n ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa78449000000b006e050c8f22bsm230160pfn.207.2024.02.05.02.05.14
+        by smtp.gmail.com with ESMTPSA id n56-20020a056a000d7800b006e02f4bb4e4sm3753931pfv.18.2024.02.05.02.19.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 02:05:16 -0800 (PST)
-Date: Mon, 5 Feb 2024 18:05:02 +0800
+        Mon, 05 Feb 2024 02:19:05 -0800 (PST)
+Date: Mon, 5 Feb 2024 18:18:56 +0800
 From: Peter Xu <peterx@redhat.com>
 To: Shaoqin Huang <shahuang@redhat.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>,
@@ -81,8 +82,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3] KVM: selftests: Fix the dirty_log_test semaphore
  imbalance
-Message-ID: <ZcCyzrUhXSlhKyqC@x1n>
+Message-ID: <ZcC2EJEh9lGG-WyK@x1n>
 References: <20240202064332.9403-1-shahuang@redhat.com>
+ <ZcCyzrUhXSlhKyqC@x1n>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,20 +93,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240202064332.9403-1-shahuang@redhat.com>
+In-Reply-To: <ZcCyzrUhXSlhKyqC@x1n>
 
-Shaoqin, Sean,
+On Mon, Feb 05, 2024 at 06:05:02PM +0800, Peter Xu wrote:
+> Shaoqin, Sean,
+> 
+> Apologies for a late comment.  I'm trying to remember what I wrote..
+> 
+> On Fri, Feb 02, 2024 at 01:43:32AM -0500, Shaoqin Huang wrote:
+> > Why sem_vcpu_cont and sem_vcpu_stop can be non-zero value? It's because
+> > the dirty_ring_before_vcpu_join() execute the sem_post(&sem_vcpu_cont)
+> > at the end of each dirty-ring test. It can cause two cases:
+> 
+> As a possible alternative, would it work if we simply reset all the sems
+> for each run?  Then we don't care about the leftovers.  E.g. sem_destroy()
+> at the end of run_test(), then always init to 0 at entry.
 
-Apologies for a late comment.  I'm trying to remember what I wrote..
+One more thing when I was reading the code again: I had a feeling that I
+missed one call to vcpu_handle_sync_stop() for the dirty ring case:
 
-On Fri, Feb 02, 2024 at 01:43:32AM -0500, Shaoqin Huang wrote:
-> Why sem_vcpu_cont and sem_vcpu_stop can be non-zero value? It's because
-> the dirty_ring_before_vcpu_join() execute the sem_post(&sem_vcpu_cont)
-> at the end of each dirty-ring test. It can cause two cases:
+======
+@@ -395,8 +395,7 @@ static void dirty_ring_after_vcpu_run(struct kvm_vcpu *vcpu, int ret, int err)
+ 
+        /* A ucall-sync or ring-full event is allowed */
+        if (get_ucall(vcpu, NULL) == UCALL_SYNC) {
+-               /* We should allow this to continue */
+-               ;
++               vcpu_handle_sync_stop();
+        } else if (run->exit_reason == KVM_EXIT_DIRTY_RING_FULL ||
+                   (ret == -1 && err == EINTR)) {
+                /* Update the flag first before pause */
+======
 
-As a possible alternative, would it work if we simply reset all the sems
-for each run?  Then we don't care about the leftovers.  E.g. sem_destroy()
-at the end of run_test(), then always init to 0 at entry.
+Otherwise it'll be meaningless for run_test() to set
+vcpu_sync_stop_requested for the ring test, if the ring test never reads
+it..
+
+Without about change, the test will still work (and I assume that's why
+nobody noticed including myself..), but IIUC the vcpu can stop later,
+e.g. until the ring fulls, or there's some leftover SIGUSR1 around.
+
+With this change, the vcpu can stop earlier, as soon as the main thread
+requested a stop, which should be what the code wanted to do.
+
+Shaoqin, feel free to have a look there too if you're working on the test.
+
+Thanks,
 
 -- 
 Peter Xu
