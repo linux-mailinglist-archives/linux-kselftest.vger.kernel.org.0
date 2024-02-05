@@ -1,169 +1,192 @@
-Return-Path: <linux-kselftest+bounces-4143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 984D1849B78
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 14:12:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1466849B77
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 14:12:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37E85B21E61
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 13:10:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95A64281C4D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 13:12:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B59131CA86;
-	Mon,  5 Feb 2024 13:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191941CA88;
+	Mon,  5 Feb 2024 13:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U59F6zh9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b4MAs8um"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26981C6B2;
-	Mon,  5 Feb 2024 13:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C7328E02;
+	Mon,  5 Feb 2024 13:11:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707138642; cv=none; b=U5/aXwo5s3piWu8lG3SGCooFtPnrPTsIC0nZRVd1TD1eCGTH8z9wrMefothAikxsvJ1h5hNVPp2E3OPncczc/XarKA99HNiUs2pQVRjJwmT/QIHry5DNFxASixJDzgr1bcYWxLoRdSK3RaDAKi46FUjPP0eMeac2Z4UijLf685g=
+	t=1707138692; cv=none; b=kFJhWDcb+IAbyJROTuKxeVcSripBLVYQd2QMdoO3q58NbEMzwGpn01Znp1olq2GTjJQGIiHTjy1YL2BgRkKuEU9TpL8WSqTCqVVSMys+0kr8z6hZWRSPHgFOzikJzTMohYZK0AGzgQs73W6Cna+YjjtuSg9vabsVAuakO+wxwGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707138642; c=relaxed/simple;
-	bh=a7C8ciPQZp5QzEHWJtui24Jra/hcnLQehMJdzgp1ngY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CnD4stc16BkjPA4uHMcbN3RZAh7UYBtlvP0J5c6RXGlOzK0aXE5zdW5PKtO7Bx6CByNg+gDb0VshwTNRfb8wxWW581ZIESRJDzTtwo9djiD0tF/hHT9qU1FdeaUVeOVwt0yVJBj0IpZzlBXsIqujekPs0IYKTIC1Hh6w0JrYgxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U59F6zh9; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5101cd91017so5691637e87.2;
-        Mon, 05 Feb 2024 05:10:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707138639; x=1707743439; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l52wGRJpdNZd5ZMPG8emXQNk5j5Wmg7cRfJ4UIcR334=;
-        b=U59F6zh9rnAbKqQGinonryffgcH0D29aP4lQ23KcUDCHqGbiAQxyn6xRTOQPz1TRAh
-         cDVidr9ZW1rc9H4ap/Mjbgx+H/69m5FnJltz1N72RU+Ismac1rX1OoSzNoR5iKpOnj02
-         DD36XjwUHWpNGgepizcIv21l/HlC6qDm6+xCY3glE2m5yBKmtzybUP+JoGAJPlgMG6zC
-         EO4dpSQryCfJ9gc/3hBjI2V4T6LVXqo7DOla9gnag0IjehII0SGqdvpp3qxWPX7uqrDj
-         C3mdLKFjTsIr1EhB+MVBxGAbRdRVHC7DrsTZhHJqse9ii+dKerKcuCyrIz7hT5W29f4s
-         BpNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707138639; x=1707743439;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l52wGRJpdNZd5ZMPG8emXQNk5j5Wmg7cRfJ4UIcR334=;
-        b=H74/gGycFwyHiKEb6T5myk55ZyMAWxSdUAQo/W5hzcHFXf6cXX/NheQeF2yxZIvj3o
-         dxSTyccCzsovZk8FjxQU2AYZqco5mqqHhPeccBUlWLfjFEoNzgJ9+CA+hNmjTZPNbSu8
-         mUh0AhFr+XjAMom6HlAWfvRklRwUj/Nr+sVkykAiGG5wbkz9j5iDTLBVZ/cNO/DH3iNX
-         2pJMWQ4iB3laC1uRZFC64QGZMZk7KoOZrwh16dZYyyTBO7uHMda+yHBc1pGJa6SQqk99
-         +p9LfW5TLUzE4BAcVbK7r7AkxKBaCn/Bp00J+bpI6Gf+qqyv8m4fHYPriwZ1hi7YU4yy
-         B9lw==
-X-Gm-Message-State: AOJu0Yyv5cRWzdz3E8lOvouNgZ8hl9IOdXK3oCaStzpJR9dT0WxbRJ2g
-	2tX/JDOSbwlHfljpn7VqVPVx2+7SPUteEvqZKj7nPGQvEdFB7EHP+07ZuxThZCOeglLDG+2p1PE
-	tTbdsc7hAwL3HShK1hHYDqNVoP4k=
-X-Google-Smtp-Source: AGHT+IHcjgafryspZvflYvXmNwPr/1ZTRC4o5v0aRZqmLV0WFqjr47M7EyynLPGoweDD8l30req/4VrqIPpQvTK6l0U=
-X-Received: by 2002:a05:6512:1150:b0:511:4e0c:bc3f with SMTP id
- m16-20020a056512115000b005114e0cbc3fmr2466365lfg.51.1707138638651; Mon, 05
- Feb 2024 05:10:38 -0800 (PST)
+	s=arc-20240116; t=1707138692; c=relaxed/simple;
+	bh=yEqvEJTwkXLcXG/9CVVu/XT0O8e8UfNRkxY+ONUV4R4=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=E+Mk49nkysgcD/cHetHD4SL7rWEwIDlXi7f+x5B/Z4vj3FREirHnHDabpr5RlLaS3k4qyNdl6eFJ3B1+yXt7beXmnCORFOktNhHYgnpN1KWntFJ6Zm3pG1h4eRfeXNyWcpvA0gwVYjb2K9Vl7vyIdFsuWzEefNapWfO3Z7uSO+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b4MAs8um; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707138690; x=1738674690;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=yEqvEJTwkXLcXG/9CVVu/XT0O8e8UfNRkxY+ONUV4R4=;
+  b=b4MAs8umWE0pAAnXmoVUWZOAQauQ1W4XBSIYh0Nr1hLxXfSXXXP12Lwj
+   /YXRvbaxl+l8os1yoxE+MTIjRIwXIWaxIsoM1Y8VNdnamjjtgbzH9kfeB
+   bXzBazi1Mf57v79P/O8UDrenEDk2aloYpWRJC3Og7tFJ/B509d2RtXwUY
+   Z58lwWe0n7/kqgNKVNRoZBI9BN5aBYEVjt8TST3J0vAI6ICM5xZVZiC0r
+   AwfG5HNkHPppv2uQRW+qorrD7I7JW2xn4iaoomRNXh1hf5rGZZ/tjJDAz
+   10Nx9wp7tQOwB8YG4a8k2caI3DBrZP0R1XV9sTq+dN8l6JtAqhs+80ml3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="678000"
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="678000"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 05:11:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="1033039"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.35.237])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 05:11:27 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 5 Feb 2024 15:11:22 +0200 (EET)
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+cc: fenghua.yu@intel.com, Reinette Chatre <reinette.chatre@intel.com>, 
+    shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 5/5] selftests/resctrl: Add non-contiguous CBMs CAT
+ test
+In-Reply-To: <b341ecc8d1143932307708aff44ab90db3a91564.1707130307.git.maciej.wieczor-retman@intel.com>
+Message-ID: <81064977-28cd-10bf-6721-c5a0916dee85@linux.intel.com>
+References: <cover.1707130307.git.maciej.wieczor-retman@intel.com> <b341ecc8d1143932307708aff44ab90db3a91564.1707130307.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1705916069.git.haibo1.xu@intel.com>
-In-Reply-To: <cover.1705916069.git.haibo1.xu@intel.com>
-From: Haibo Xu <xiaobo55x@gmail.com>
-Date: Mon, 5 Feb 2024 21:10:26 +0800
-Message-ID: <CAJve8onDbX44Ph6a-FdO2+p7QOQLah-7OyF+yUc06wud+SvmQQ@mail.gmail.com>
-Subject: Re: [PATCH v5 00/12] RISCV: Add kvm Sstc timer selftests
-To: Haibo Xu <haibo1.xu@intel.com>
-Cc: ajones@ventanamicro.com, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, Guo Ren <guoren@kernel.org>, 
-	Conor Dooley <conor.dooley@microchip.com>, Mayuresh Chitale <mchitale@ventanamicro.com>, 
-	wchen <waylingii@gmail.com>, Greentime Hu <greentime.hu@sifive.com>, 
-	Jisheng Zhang <jszhang@kernel.org>, Samuel Holland <samuel@sholland.org>, 
-	Minda Chen <minda.chen@starfivetech.com>, Sean Christopherson <seanjc@google.com>, 
-	Peter Xu <peterx@redhat.com>, Like Xu <likexu@tencent.com>, 
-	Vipin Sharma <vipinsh@google.com>, Thomas Huth <thuth@redhat.com>, 
-	Aaron Lewis <aaronlewis@google.com>, 
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="8323328-2116838435-1707138682=:1027"
 
-Hi Marc,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Could you help review the first 3 patches in this series?
+--8323328-2116838435-1707138682=:1027
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Thanks,
-Haibo
+On Mon, 5 Feb 2024, Maciej Wieczor-Retman wrote:
 
-On Mon, Jan 22, 2024 at 5:45=E2=80=AFPM Haibo Xu <haibo1.xu@intel.com> wrot=
-e:
->
-> The RISC-V arch_timer selftests is used to validate Sstc timer
-> functionality in a guest, which sets up periodic timer interrupts
-> and check the basic interrupt status upon its receipt.
->
-> This KVM selftests was ported from aarch64 arch_timer and tested
-> with Linux v6.7-rc8 on a Qemu riscv64 virt machine.
->
+> Add tests for both L2 and L3 CAT to verify the return values
+> generated by writing non-contiguous CBMs don't contradict the
+> reported non-contiguous support information.
+>=20
+> Use a logical XOR to confirm return value of write_schemata() and
+> non-contiguous CBMs support information match.
+>=20
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 > ---
-> Changed since v4:
->   * Rebased to Linux 6.7-rc8
->   * Added new patch(2/12) to clean up the data type in struct test_args
->   * Re-ordered patch(11/11) in v4 to patch(3/12)
->   * Changed the timer_err_margin_us type from int to uint32_t
->
-> Haibo Xu (11):
->   KVM: arm64: selftests: Data type cleanup for arch_timer test
->   KVM: arm64: selftests: Enable tuning of error margin in arch_timer
->     test
->   KVM: arm64: selftests: Split arch_timer test code
->   KVM: selftests: Add CONFIG_64BIT definition for the build
->   tools: riscv: Add header file csr.h
->   tools: riscv: Add header file vdso/processor.h
->   KVM: riscv: selftests: Switch to use macro from csr.h
->   KVM: riscv: selftests: Add exception handling support
->   KVM: riscv: selftests: Add guest helper to get vcpu id
->   KVM: riscv: selftests: Change vcpu_has_ext to a common function
->   KVM: riscv: selftests: Add sstc timer test
->
-> Paolo Bonzini (1):
->   selftests/kvm: Fix issues with $(SPLIT_TESTS)
->
->  tools/arch/riscv/include/asm/csr.h            | 541 ++++++++++++++++++
->  tools/arch/riscv/include/asm/vdso/processor.h |  32 ++
->  tools/testing/selftests/kvm/Makefile          |  27 +-
->  .../selftests/kvm/aarch64/arch_timer.c        | 295 +---------
->  tools/testing/selftests/kvm/arch_timer.c      | 259 +++++++++
->  .../selftests/kvm/include/aarch64/processor.h |   4 -
->  .../selftests/kvm/include/kvm_util_base.h     |   9 +
->  .../selftests/kvm/include/riscv/arch_timer.h  |  71 +++
->  .../selftests/kvm/include/riscv/processor.h   |  65 ++-
->  .../testing/selftests/kvm/include/test_util.h |   2 +
->  .../selftests/kvm/include/timer_test.h        |  45 ++
->  .../selftests/kvm/lib/riscv/handlers.S        | 101 ++++
->  .../selftests/kvm/lib/riscv/processor.c       |  87 +++
->  .../testing/selftests/kvm/riscv/arch_timer.c  | 111 ++++
->  .../selftests/kvm/riscv/get-reg-list.c        |  11 +-
->  15 files changed, 1353 insertions(+), 307 deletions(-)
->  create mode 100644 tools/arch/riscv/include/asm/csr.h
->  create mode 100644 tools/arch/riscv/include/asm/vdso/processor.h
->  create mode 100644 tools/testing/selftests/kvm/arch_timer.c
->  create mode 100644 tools/testing/selftests/kvm/include/riscv/arch_timer.=
-h
->  create mode 100644 tools/testing/selftests/kvm/include/timer_test.h
->  create mode 100644 tools/testing/selftests/kvm/lib/riscv/handlers.S
->  create mode 100644 tools/testing/selftests/kvm/riscv/arch_timer.c
->
-> --
-> 2.34.1
->
+> Changelog v4:
+> - Return failure instead of error on check of cpuid against sparse_masks
+>   and on contiguous write_schemata fail. (Reinette)
+>=20
+> Changelog v3:
+> - Roll back __cpuid_count part. (Reinette)
+> - Update function name to read sparse_masks file.
+> - Roll back get_cache_level() changes.
+> - Add ksft_print_msg() to contiguous schemata write error handling
+>   (Reinette).
+>=20
+> Changelog v2:
+> - Redo the patch message. (Ilpo)
+> - Tidy up __cpuid_count calls. (Ilpo)
+> - Remove redundant AND in noncont_mask calculations (Ilpo)
+> - Fix bit_center offset.
+> - Add newline before function return. (Ilpo)
+> - Group non-contiguous tests with CAT tests. (Ilpo)
+> - Use a helper for reading sparse_masks file. (Ilpo)
+> - Make get_cache_level() available in other source files. (Ilpo)
+>=20
+>  tools/testing/selftests/resctrl/cat_test.c    | 81 +++++++++++++++++++
+>  tools/testing/selftests/resctrl/resctrl.h     |  2 +
+>  .../testing/selftests/resctrl/resctrl_tests.c |  2 +
+>  3 files changed, 85 insertions(+)
+>=20
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/s=
+elftests/resctrl/cat_test.c
+> index 39fc9303b8e8..20eb978e624b 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -294,6 +294,71 @@ static int cat_run_test(const struct resctrl_test *t=
+est, const struct user_param
+>  =09return ret;
+>  }
+> =20
+> +static int noncont_cat_run_test(const struct resctrl_test *test,
+> +=09=09=09=09const struct user_params *uparams)
+> +{
+> +=09unsigned long full_cache_mask, cont_mask, noncont_mask;
+> +=09unsigned int eax, ebx, ecx, edx, ret, sparse_masks;
+> +=09char schemata[64];
+> +=09int bit_center;
+> +
+> +=09/* Check to compare sparse_masks content to CPUID output. */
+> +=09ret =3D resource_info_unsigned_get(test->resource, "sparse_masks", &s=
+parse_masks);
+> +=09if (ret)
+> +=09=09return ret;
+> +
+> +=09if (!strcmp(test->resource, "L3"))
+> +=09=09__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+> +=09else if (!strcmp(test->resource, "L2"))
+> +=09=09__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
+> +=09else
+> +=09=09return -EINVAL;
+> +
+> +=09if (sparse_masks !=3D ((ecx >> 3) & 1)) {
+> +=09=09ksft_print_msg("CPUID output doesn't match 'sparse_masks' file con=
+tent!\n");
+> +=09=09return 1;
+> +=09}
+> +
+> +=09/* Write checks initialization. */
+> +=09ret =3D get_full_cbm(test->resource, &full_cache_mask);
+> +=09if (ret < 0)
+> +=09=09return ret;
+> +=09bit_center =3D count_bits(full_cache_mask) / 2;
+> +=09cont_mask =3D full_cache_mask >> bit_center;
+> +
+> +=09/* Contiguous mask write check. */
+> +=09snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
+> +=09ret =3D write_schemata("", schemata, uparams->cpu, test->resource);
+> +=09if (ret) {
+> +=09=09ksft_print_msg("Write of contiguous CBM failed\n");
+> +=09=09return 1;
+> +=09}
+> +
+> +=09/*
+> +=09 * Non-contiguous mask write check. CBM has a 0xf hole approximately =
+in the middle.
+> +=09 * Output is compared with support information to catch any edge case=
+ errors.
+> +=09 */
+> +=09noncont_mask =3D ~(0xf << (bit_center - 2)) & full_cache_mask;
+
+To be on the safe side, I think the types could be made to match here=20
+with 0xfUL to avoid sizeof(int) vs sizeof(unsigned long) related bit=20
+drops in the & (although it feel somewhat theoretical given the bitmask=20
+sizes we are currently seeing).
+
+Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+
+
+--=20
+ i.
+
+--8323328-2116838435-1707138682=:1027--
 
