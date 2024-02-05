@@ -1,136 +1,183 @@
-Return-Path: <linux-kselftest+bounces-4151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2A02849DA2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 16:01:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D271849E5C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 16:35:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BCCDB29373
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 15:01:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 786771C22031
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 15:35:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92BBE2C84F;
-	Mon,  5 Feb 2024 15:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B602D60B;
+	Mon,  5 Feb 2024 15:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CXv6nVK/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DvvLnxe0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20DC339BD
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Feb 2024 15:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B4B3CF63;
+	Mon,  5 Feb 2024 15:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707145256; cv=none; b=XBzEiIoT5rlgqOMu8zVNleOM4HJ+b8FSPyBbt8yxqWWc/Yr6JUz/UBNmLcXtMzvCW7nW2PB7ypjCJfVe92sVAKamMYwM2FPIzoU0ag0zBLHgmg9MXSnJogsX+MQMdC76vCF97njqEzAUcdQcEHDaYrfgcuLC/Z2Yq3JI8ME43kY=
+	t=1707147249; cv=none; b=q8nTOAYiCSASzKpB2goUAKuJ4eZ3nTBvfHifO7qdhxLwKa/rhKFtiSPIOWjsAmQBqRF2twfl13rAGGGB6kfZO1fmcZIYllufQ4wg2regc/QgfyYqw/VPExrbPnFgiGG7Km74ri7UlBsAc9jV/v1JmEgkkPi3rwsz6IoJxyBT8A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707145256; c=relaxed/simple;
-	bh=4x/pL/LexyK+4wqZZH/6gBXshFnDy2QZXDAbJnIwUqM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RW9YQRDwOL/TSFJmM4Luq/Lu9xzqbUWxUTaj+S9yyH2OGXuGxB5uH8DoNT4AZfY84M0cv7DFt8uDJUTa2TKwgaZFXKlT2wi9lcP6/otX8hHqzEwn0p5aMtjO91uf+oTzL/H0aUde3FNVszbnBna/xiVmeW+tid0gMpSJclqwlT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CXv6nVK/; arc=none smtp.client-ip=209.85.217.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-46d30f6789fso182654137.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Feb 2024 07:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707145254; x=1707750054; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SdJNeue2Wv0xiehiEald+OUh21W9eFlv7KMsoDs8oU8=;
-        b=CXv6nVK/NtQ0TRotQaF8GyMgdPby6UPMK7Y0wkjW56Lx1IpFExmMB4zm2fmO6d2R6B
-         8rCbxnjOsCrQffUh3EZKZh3hHyFUbMV/AvyiuVyhY/JKhEhTQQopu5JgGds2ZPkULBLv
-         Kxfz8GKvQx2SwMTEfPPjuqDft9/toFNQCSy/sBWdX+2+saRIyCtAWEfCN6eWUeIiudwD
-         KIRge7BNSL+AScZd1gh5ZCr/vgCLw8M3H38i+tSfX4KIugGt0h/tGMnlcgJFwqKPzHHO
-         kxhhb3ZdokFnoSUoJ1hSrAoQEWC1L530eaDADN9U1U9opeZv01BJQIPE9wytblQgoGyv
-         PZHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707145254; x=1707750054;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SdJNeue2Wv0xiehiEald+OUh21W9eFlv7KMsoDs8oU8=;
-        b=V3Fk4wbd2kc5UN1PB2GChtDIPO0j6JdN4KP95Zl5RuSjJ4bbg58tM7MHmeSmy4tviL
-         vWEbzO+HWxDXh6pn8t1hENyBa0KYeGPTqvt+Qq/OUGdHH+VDHkj4p6SqyO6XbfkM/Co7
-         IizyHGg7SinnvJnic6VwSdBP9Ww7DmjnLGGDsvhuSGVTDoRheimZaroBWNdIcGbIRpwI
-         OLggl7vDWQG4o2c+CwFsqeL6ntpqCx6+CUTiCZEapgkq2zqH6tuowOXDuP3OYVfIKq1+
-         d3hGKkXLHTNhoNtJtK+FHsMvj9Kev9znzGVrdmY9mPR3KX5m7OxzyRwDDrZ0HVTOXdZx
-         +Xgg==
-X-Gm-Message-State: AOJu0YwYdp8e34U4XM7OMxEzUu2aTcEbtpcnN6gSlUvzsEE3x8/foSoy
-	kBVnR++H3f1WF3IDpYIKwH5v0sk7lDQgBRmcrJTvDWiZIiy2o9Dl17c/ou3AR5nW29EcHy0bb/W
-	KaAqc5a5KY/UT+rsTTa/qC82BS0wTzuR4nbQc
-X-Google-Smtp-Source: AGHT+IGyGdxgsP9UcWiEJx0V/pq8uMBpCddwlbwcThZVJXxE7PBJjn7CzGAgysVY689BVIMKpe8Rx7vH/upebwniUjA=
-X-Received: by 2002:a67:cf8c:0:b0:46d:27ba:526b with SMTP id
- g12-20020a67cf8c000000b0046d27ba526bmr22209vsm.34.1707145252109; Mon, 05 Feb
- 2024 07:00:52 -0800 (PST)
+	s=arc-20240116; t=1707147249; c=relaxed/simple;
+	bh=SZ5lOaTcjPLax9RiPdWCg4niKcbES+E0uMPELi0RXuU=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qRslNkPnR8VIA6ZMJ2KwdpDZGSRoeAPE0IASsSnR8HmYZDPUdRVomxyiEXQLFN7m7B+mEzq1CUBXditCDceEAPaJJAp4kUWekMygG0FpmYnrp6lPJF2Q2lBHpI7oY+5o7bF+hvc8xmenPFpTcPygUW7ukzx8nSG6f1WtGLXQbiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DvvLnxe0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213CBC433F1;
+	Mon,  5 Feb 2024 15:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707147249;
+	bh=SZ5lOaTcjPLax9RiPdWCg4niKcbES+E0uMPELi0RXuU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DvvLnxe0P4S5yNRw5W2VY9jJ/E1A+shICsu1xDuV/gHmffvHBzURzsVRFJcvUJ8YE
+	 6QBN55llvCBZnj2N7RqNyqqi9c7wb9DYeG2+9zjkVok4Da3nmMRjNTPGl+52PDgjhM
+	 GsH1ZYh1DLMKySBZsxTWhaRwJPkUykxLG+W3eZkFdZ3mhXH9Sw0xcFypYfdPXfZBjP
+	 sHZCaIf8sr9Lx503zRsqr0kqLGI0h6JzFx1tMKuSAoy5MXNktLQyNPGD6r8QxxINLm
+	 5o0ggZ7xvpbbeoBwBLxqbCmkB97jAeDicbiBgGlpnPXzp92m19n0g6qQkAvnLQu4Iz
+	 PpsszaLe4tw5Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rX0z0-000Su2-Bp;
+	Mon, 05 Feb 2024 15:34:06 +0000
+Date: Mon, 05 Feb 2024 15:34:05 +0000
+Message-ID: <8634u76i36.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 13/38] KVM: arm64: Manage GCS registers for guests
+In-Reply-To: <825d2b35-fa10-43ad-b3b3-b29a77f3fed0@sirena.org.uk>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+	<20240203-arm64-gcs-v8-13-c9fec77673ef@kernel.org>
+	<868r3z6y6v.wl-maz@kernel.org>
+	<825d2b35-fa10-43ad-b3b3-b29a77f3fed0@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240131141858.1149719-1-elver@google.com> <b500bb70-aa3f-41d3-b058-2b634471ffef@linux.dev>
-In-Reply-To: <b500bb70-aa3f-41d3-b058-2b634471ffef@linux.dev>
-From: Marco Elver <elver@google.com>
-Date: Mon, 5 Feb 2024 16:00:15 +0100
-Message-ID: <CANpmjNPKACDwXMnZRw9=CAgWNaMWAyFZ2W7KY2s4ck0s_ue1ag@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Separate bpf_local_storage_lookup() fast and slow paths
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, keescook@chromium.org, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, 31 Jan 2024 at 20:52, Martin KaFai Lau <martin.lau@linux.dev> wrote=
-:
-[...]
-> > | num_maps: 1000
-> > |  local_storage cache sequential  get:
-> > |                              <before>                | <after>
-> > |   hits throughput:           0.357 =C2=B1 0.005 M ops/s   | 0.325 =C2=
-=B1 0.005 M ops/s        (-9.0%)
-> > |   hits latency:              2803.738 ns/op          | 3076.923 ns/op=
-               (+9.7%)
->
-> Is it understood why the slow down here? The same goes for the "num_maps:=
- 32"
-> case above but not as bad as here.
+On Mon, 05 Feb 2024 12:35:53 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> On Mon, Feb 05, 2024 at 09:46:16AM +0000, Marc Zyngier wrote:
+> > On Sat, 03 Feb 2024 12:25:39 +0000,
+> > Mark Brown <broonie@kernel.org> wrote:
+> 
+> > > +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> > > @@ -25,6 +25,8 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+> > >  {
+> > >  	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
+> > >  	ctxt_sys_reg(ctxt, TPIDRRO_EL0)	= read_sysreg(tpidrro_el0);
+> > > +	if (has_gcs())
+> > > +		ctxt_sys_reg(ctxt, GCSPR_EL0) = read_sysreg_s(SYS_GCSPR_EL0);
+> 
+> > We have had this discussion in the past. This must be based on the
+> > VM's configuration. Guarding the check with the host capability is a
+> > valuable optimisation, but that's nowhere near enough. See the series
+> > that I have posted on this very subject (you're on Cc), but you are
+> > welcome to invent your own mechanism in the meantime.
+> 
+> Right, which postdates the version you're replying to and isn't merged
+> yet - the current code was what you were asking for at the time.
 
-It turned out that there's a real slowdown due to the outlined
-slowpath. If I inline everything except for inserting the entry into
-the cache (cacheit_lockit codepath is still outlined), the results
-look much better even for the case where it always misses the cache.
+v1 and v2 predate it. And if the above is what I did ask, then I must
+have done a very poor job of explaining what was required. For which I
+apologise profusely.
 
-[...]
-> > diff --git a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c b/to=
-ols/testing/selftests/bpf/progs/cgrp_ls_recursion.c
-> > index a043d8fefdac..9895087a9235 100644
-> > --- a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
-> > +++ b/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
-> > @@ -21,7 +21,7 @@ struct {
-> >       __type(value, long);
-> >   } map_b SEC(".maps");
-> >
-> > -SEC("fentry/bpf_local_storage_lookup")
-> > +SEC("fentry/bpf_local_storage_lookup_slowpath")
->
-> The selftest is trying to catch recursion. The change here cannot test th=
-e same
-> thing because the slowpath will never be hit in the test_progs.  I don't =
-have a
-> better idea for now also.
+> I'm
+> expecting to update all these feature series to work with that once it
+> gets finalised and merged but it's not there yet, I do see I forgot to
+> put a note in v9 about that like I did for dpISA - sorry about that, I
+> was too focused on the clone3() rework when rebasing onto the new
+> kernel.
+> 
+> This particular series isn't going to get merged for a while yet anyway
+> due to the time it'll take for userspace testing, I'm expecting your
+> series to be in by the time it becomes an issue.
 
-Trying to prepare a v2, and for the test, the only option I see is to
-introduce a tracepoint ("bpf_local_storage_lookup"). If unused, should
-be a no-op due to static branch.
+Right. Then I'll ignore it for the foreseeable future.
 
-Or can you suggest different functions to hook to for the recursion test?
+> 
+> > > +	if (has_gcs()) {
+> > > +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSPR_EL1),	SYS_GCSPR);
+> > > +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSCR_EL1),	SYS_GCSCR);
+> > > +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSCRE0_EL1),
+> > > +			       SYS_GCSCRE0_EL1);
+> > > +	}
+> 
+> > For the benefit of the unsuspecting reviewers, and in the absence of a
+> > public specification (which the XML drop isn't), it would be good to
+> > have the commit message explaining the rationale of what gets saved
+> > when.
+> 
+> What are you looking for in terms of rationale here?  The KVM house
+> style is often very reliant on reader context so it would be good to
+> know what considerations you'd like to see explicitly addressed.
 
-Preferences?
+Nothing to do with style, everything to do with substance: if nothing
+in the host kernel makes any use of these registers, why are they
+eagerly saved/restored on nVHE/hVHE? I'm sure you have a reason for
+it, but it isn't that obvious. Because these two modes need all the
+help they can get in terms of overhead reduction.
+
+> These
+> registers shouldn't do anything when we aren't running the guest so
+> they're not terribly ordering sensitive, the EL2 ones will need a bit
+> more consideration in the face of nested virt.
+
+The EL2 registers should follow the exact same pattern, specially once
+you fix the VNCR bugs I pointed out.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
