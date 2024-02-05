@@ -1,198 +1,223 @@
-Return-Path: <linux-kselftest+bounces-4156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F30F84A013
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 17:58:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D1184A29B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 19:43:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0ED52280FD0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 16:58:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02AFD1F22032
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 18:43:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490803C097;
-	Mon,  5 Feb 2024 16:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EEC482CD;
+	Mon,  5 Feb 2024 18:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdAa96kD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LDCODIf9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1191B3EA9C;
-	Mon,  5 Feb 2024 16:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EB547794
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Feb 2024 18:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707152307; cv=none; b=JsrA9ydtCvLudb2n3F06VgTddG5RWE6HeESpLmtr/hcRvJihEPb/835Ao0wh1GRwe/iDrg2aEXHzScAGAQxqcKbEq+d8+5avgQ5zOrXUY734ljyrc6v/HewKt+2ry20O6Vf89+KLXeMrT6WJdDo6Rgd6JLTxSH3uUzTupon+UZU=
+	t=1707158590; cv=none; b=q8PRMjK6z/4uf44ErouNDPherTTkcrRRON1HWZHy2q6lhkTLYAAWr/cnoZow8C+AP3MsgnuPymAniCKdk+rUSWSmQMDEnved4FaORoYvdUShmq/MMfsQYu9beFTfWphKex+BuQRMg8Akfs8BiTXizBhuV8RTPgSphC5DbjUu3vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707152307; c=relaxed/simple;
-	bh=9FpafEGlyrNhPgZJkrgRLS7U6aCYTe6Poar4f0Fu86c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UNX2AZ2loPzImhL2BHBwDYF++BgtrPHACT87etOZ+8o3NWj4+bPKrc6VbR4GO2P3ME3pv2tt3Xr38bF69f5AYUQ3qteh+jTXBuqAZsjliJo8IDzS552nPk1kYsEECngwnrQrNrzielmarhz5eWNXSbHxduGkpB040xBesVJlBAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdAa96kD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42EE0C433C7;
-	Mon,  5 Feb 2024 16:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707152306;
-	bh=9FpafEGlyrNhPgZJkrgRLS7U6aCYTe6Poar4f0Fu86c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jdAa96kD60IeV9lxQp0ubdqOgUSHcdsjtge2WP6mvoDwpwOe+Rw7nwcU7ORKlVlgr
-	 8Z6UYcfu0rXRgY6H147qPvpixPmJkpZDmWrIwgKeNqmHE5Dyf5eNNmQ5bBvWaONUZO
-	 0/G6+v/VmTdZm/r0jhWTvEEg+oGSkpJiB3YYAtdV41ad/d4EyHHPk7vnDwmNhbZO9W
-	 xGQCvUQAyZvm+DIKz7D+cBrAtQbQgXkRRwM6jx1tMc0pifYl3BcJGyd0M/p6YJjmTK
-	 m/3/iDifHMb1SIEd4HlIJDGTt/kOZPRgXRKA/sGbloE3oJcO4SJAp50Cw6wGa0iRnt
-	 6WaVOdTjOW2yA==
-Date: Mon, 5 Feb 2024 16:58:20 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 13/38] KVM: arm64: Manage GCS registers for guests
-Message-ID: <ZcETrPAFFfgAy/PT@finisterre.sirena.org.uk>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <20240203-arm64-gcs-v8-13-c9fec77673ef@kernel.org>
- <868r3z6y6v.wl-maz@kernel.org>
- <825d2b35-fa10-43ad-b3b3-b29a77f3fed0@sirena.org.uk>
- <8634u76i36.wl-maz@kernel.org>
+	s=arc-20240116; t=1707158590; c=relaxed/simple;
+	bh=lxH2UkoXhtlULl/zvh0je1dal/ztpt8QeP0kl4G+Vbs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uRHCb2hKsf+ASNgT7U+vTUe6ufgVHfvjRvK4iCse93ceGHWb7HcI85O4f9hZtb5mZwey0+3JPLZ0mSvduWjAhbC8ZO7q6T7IhHEjLPbKpWzXcpBDKKkxhqx7lomtPdJRNCJlpPdVVS5FGIVf5uTUFwuJU0zl6bukQNdND7q0k6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LDCODIf9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707158586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LNq6oubwXmqe6ItjQ33y0Ud8zzbj1+GnKVYTNf0QWt4=;
+	b=LDCODIf9ltZ3tRdTQPs5OvjJ9JL43He9NN9YqsGnbJtT6u/qL5S3ZMpQ0HD79pWk4AbMSW
+	OJIZG+zxzO71W5CApXODc7rJ61/FGwjhpExp16DjTzBUH8aJmqcLEIWZoBgufcogbkxFii
+	oo/awuUIvYCHYJXvOPUT3QjGUufmV4A=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-504-Rr1gPELbN7aMNfHJl2BMNg-1; Mon, 05 Feb 2024 13:43:05 -0500
+X-MC-Unique: Rr1gPELbN7aMNfHJl2BMNg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a2f71c9f5d2so286744066b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Feb 2024 10:43:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707158584; x=1707763384;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LNq6oubwXmqe6ItjQ33y0Ud8zzbj1+GnKVYTNf0QWt4=;
+        b=r3c+Wv8x9TeIzLmuv/0DZKHxdeXGREzg/SDWBemgtk2amacMUbKCnfPgVhWDaT6lk+
+         1gSxM/k/Mf9Pm6g8FzgaQGXhsz2SxusvIJQ+qPQb+g7aN3NE4fdpg4oDw50W2KdBN5yQ
+         kiLA/iwzTsNLZclvYmZAOcBck3ihhgwKWQqXZqTCbSAbqUaAq9jV4LsywNjPL3sEFwtH
+         O03ILT40bTk4LcylZ7xjQqiKY0WvB6VzYO9oYPCFmrWyKtCixgwuRYebXJ8RoqojOkHv
+         ETpRPMVwQ+DIz25pBIBKEsGh2o2FYNyBBMOlxs3vY7S/+CgUhPPcHU5XT6QCBMgh5fGV
+         qlpQ==
+X-Gm-Message-State: AOJu0Yy6UPdF9fz+Xyob9Dqyetnmqp2gMPPLg47rmvTcok7kPcFltW5a
+	TnrFUWFI9d2yrFFqI3AomODN9cfy47QTU0dJcbcKnIjCso265Ie5CrcdskDZC9XeXFqlDe2ijhO
+	cA/ZQpZH7lmmL2/e1ftSNlMYHNM/BezClg2ymH/7O6KoqVthPNEPIK5opj1DSAcjx
+X-Received: by 2002:a17:906:c291:b0:a32:b376:489d with SMTP id r17-20020a170906c29100b00a32b376489dmr228563ejz.21.1707158584051;
+        Mon, 05 Feb 2024 10:43:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHBJJqi+E8gTHS8rAQpA+gl5qKoCPXD/0rXi7vARpqh0DWv7P2ivFSjS3co7lz7OUOuk2D9Nw==
+X-Received: by 2002:a17:906:c291:b0:a32:b376:489d with SMTP id r17-20020a170906c29100b00a32b376489dmr228552ejz.21.1707158583686;
+        Mon, 05 Feb 2024 10:43:03 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCW/539QzZ3CsCBd/dh6u4+Lu0RJ/lNp9RpJ+QdlVC2XRNNKX6VqeLJj50ZJA+N90OsJClBVsg5JNJx2ats/acge24t52SP1Khtr1Zb4g78xgsfghwaFLj1f6AJtfVo6O317uL1HzzNqXxmpy7ECqBJEptEIkKBxTFpYeMwuFd+BML/Xrojv2jMMXM9fitkLsKBmdYff02rTHIy1/9RYeW9KdA+vBiMMFajtXpJ9V3LInGlCjYjlUDdXOvBtO5I7hA45drv3aKenosx8u4UyB41Mz1PLz7aLENeuLx+D1O2uqJitQ5WY2/MWQsxC4hRsJLrtQSEiVEO//auoefGKYicIZXYmMBpZyobmMO+U5/AI7JRZNB4SrfhxFR3pafp6m1NPrmYlSeKc08AuIyTHk9ANC0tpyeniQJ3jCv+QnMgmLtM/kn+0P+/bRaYeDZ6d8IRlYLtr+o3sXelQ5sLfNPgIJKCnYmIVFOljcVjx7+ZUhFi0fAaUSSYmOH5KO46artcSjNhj82irK/HCSLEyg8UvWscGqbKXPwX22XgIsaFBiaZQJE98IoKW/FK5HPxvcKxRAW/5/iKxgZhKCM8KtX0dQCkHll57HIUiJSjrmPsVcn0ucLRS3jgg9lsPvnuDItmph5A4CJHwTnHeAe/8NIIZ8VBicJlP78Sc2dSEOj28GuudM2rMQLEK9T4bEzynKCV2zDJ0K6FcH+gAF302k7BBiiWiEivB
+Received: from [192.168.0.159] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id t26-20020a1709066bda00b00a353d1a19a9sm121768ejs.191.2024.02.05.10.43.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Feb 2024 10:43:03 -0800 (PST)
+Message-ID: <afb2fc66-abb4-4010-8120-ada7a6881f89@redhat.com>
+Date: Mon, 5 Feb 2024 19:43:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CPooLl9HGmOME8a3"
-Content-Disposition: inline
-In-Reply-To: <8634u76i36.wl-maz@kernel.org>
-X-Cookie: You might have mail.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 0/3] Annotate kfuncs in .BTF_ids section
+Content-Language: en-US
+To: Manu Bretelle <chantr4@gmail.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>, linux-trace-kernel@vger.kernel.org,
+ coreteam@netfilter.org, bpf@vger.kernel.org, linux-input@vger.kernel.org,
+ cgroups@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, fsverity@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ netfilter-devel@vger.kernel.org, alexei.starovoitov@gmail.com,
+ quentin@isovalent.com, alan.maguire@oracle.com, memxor@gmail.com
+References: <cover.1706491398.git.dxu@dxuuu.xyz> <Zb12EZt0BAKOPBk/@surya>
+ <Zb5QWCw3Tg26_MDa@krava> <Zb6Jt30bNcNhM6zR@surya>
+From: Viktor Malik <vmalik@redhat.com>
+In-Reply-To: <Zb6Jt30bNcNhM6zR@surya>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 2/3/24 19:45, Manu Bretelle wrote:
+> On Sat, Feb 03, 2024 at 03:40:24PM +0100, Jiri Olsa wrote:
+>> On Fri, Feb 02, 2024 at 03:09:05PM -0800, Manu Bretelle wrote:
+>>> On Sun, Jan 28, 2024 at 06:24:05PM -0700, Daniel Xu wrote:
+>>>> === Description ===
+>>>>
+>>>> This is a bpf-treewide change that annotates all kfuncs as such inside
+>>>> .BTF_ids. This annotation eventually allows us to automatically generate
+>>>> kfunc prototypes from bpftool.
+>>>>
+>>>> We store this metadata inside a yet-unused flags field inside struct
+>>>> btf_id_set8 (thanks Kumar!). pahole will be taught where to look.
+>>>>
+>>>> More details about the full chain of events are available in commit 3's
+>>>> description.
+>>>>
+>>>> The accompanying pahole and bpftool changes can be viewed
+>>>> here on these "frozen" branches [0][1].
+>>>>
+>>>> [0]: https://github.com/danobi/pahole/tree/kfunc_btf-v3-mailed
+>>>> [1]: https://github.com/danobi/linux/tree/kfunc_bpftool-mailed
+>>>
+>>>
+>>> I hit a similar issue to [0] on master
+>>> 943b043aeecc ("selftests/bpf: Fix bench runner SIGSEGV")
+>>>  when cross-compiling on x86_64 (LE) to s390x (BE).
+>>> I do have CONFIG_DEBUG_INFO_BTF enable and the issue would not trigger if
+>>> I disabled CONFIG_DEBUG_INFO_BTF (and with the fix mentioned in [0]).
+>>>
+>>> What seems to happen is that `tools/resolve_btfids` is ran in the context of the
+>>> host endianess and if I printk before the WARN_ON:
+>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>>> index ef380e546952..a9ed7a1a4936 100644
+>>>   --- a/kernel/bpf/btf.c
+>>>   +++ b/kernel/bpf/btf.c
+>>>   @@ -8128,6 +8128,7 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+>>>            * WARN() for initcall registrations that do not check errors.
+>>>            */
+>>>           if (!(kset->set->flags & BTF_SET8_KFUNCS)) {
+>>>   +        printk("Flag 0x%08X, expected 0x%08X\n", kset->set->flags, BTF_SET8_KFUNCS);
+>>>                   WARN_ON(!kset->owner);
+>>>                   return -EINVAL;
+>>>           }
+>>>
+>>> the boot logs would show:
+>>>   Flag 0x01000000, expected 0x00000001
+>>>
+>>> The issue did not happen prior to
+>>> 6f3189f38a3e ("bpf: treewide: Annotate BPF kfuncs in BTF")
+>>> has only 0 was written before.
+>>>
+>>> It seems [1] will be addressing cross-compilation, but it did not fix it as is
+>>> by just applying on top of master, so probably some of the changes will also need
+>>> to be ported to `tools/include/linux/btf_ids.h`?
+>>
+>> the fix in [1] is fixing flags in set8's pairs, but not the global flags
+>>
+>> it looks like Viktor's fix should now also swap that as well? like in the
+>> change below on top of Viktor's changes (untested)
+>>
+>> jirka
+>>
+>>
+>> ---
+>> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+>> index d01603ef6283..c44d57fec390 100644
+>> --- a/tools/bpf/resolve_btfids/main.c
+>> +++ b/tools/bpf/resolve_btfids/main.c
+>> @@ -706,6 +706,8 @@ static int sets_patch(struct object *obj)
+>>  			 * correctly translate everything.
+>>  			 */
+>>  			if (need_bswap) {
+>> +				set8->flags = bswap_32(set8->flags);
+>> +
+>>  				for (i = 0; i < cnt; i++) {
+>>  					set8->pairs[i].flags =
+>>  						bswap_32(set8->pairs[i].flags);
+>>
+> 
+> That should work. Here are a few tests I ran:
+> 
+> $ md5sum /tmp/kbuild-s390x/vmlinux.*
+> eb658e51e089f3c5b2c8909a29dc9997  /tmp/kbuild-s390x/vmlinux.a
+> # plain vmlinux before running resolv_btfids (all 0s)
+> ea907cd46a1a73b8276b5f2a82af00ca  /tmp/kbuild-s390x/vmlinux.before_resolv
+> # x86_64 resolv_btfids on master without Viktor's patch
+> 980a40c3a3ff563d1c2d1ebdd5071a23  /tmp/kbuild-s390x/vmlinux.resolv_native
+> # x86_64 resolv_btfids on master with Viktor's patch
+> b986d19e242719ebea41c578235da662  /tmp/kbuild-s390x/vmlinux.resolv_native_patch_viktor
+> # x86_64 resolv_btfids on master with Viktor's patch and your suggested patch
+> 4edd8752ff01129945bd442689b1927b  /tmp/kbuild-s390x/vmlinux.resolv_native_patch_viktor_patched
+> # s390x resolv_btfids run with qemu-s390x-static
+> 4edd8752ff01129945bd442689b1927b  /tmp/kbuild-s390x/vmlinux.resolv_s390x
+> 
+> 
+> and some hexdiff of those binaries:
+> 
+> 
+> # difference between master's native build and s390x build.... has byte swapping for set8 and others
+> diff -ruN <(xxd /tmp/kbuild-s390x/vmlinux.resolv_s390x) <(xxd /tmp/kbuild-s390x/vmlinux.resolv_native) > diff_s390x_native.diff
+> https://gist.github.com/chantra/c3d58637a08a6f7340953dc155bb18cc
+> 
+> # difference betwee Viktor's version and  s390x build.... squinting my eyes I only see the global set8 is missing
+> diff -ruN <(xxd /tmp/kbuild-s390x/vmlinux.resolv_s390x) <(xxd /tmp/kbuild-s390x/vmlinux.resolv_native_patch_viktor) > diff_s390x_native_viktor.diff
+> https://gist.github.com/chantra/61cfff02b456ae72d3c0161ce1897097
 
---CPooLl9HGmOME8a3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the testing Manu!
 
-On Mon, Feb 05, 2024 at 03:34:05PM +0000, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
-> > On Mon, Feb 05, 2024 at 09:46:16AM +0000, Marc Zyngier wrote:
+Jiri's suggested fix is now a part of [1].
 
-> > > We have had this discussion in the past. This must be based on the
-> > > VM's configuration. Guarding the check with the host capability is a
-> > > valuable optimisation, but that's nowhere near enough. See the series
-> > > that I have posted on this very subject (you're on Cc), but you are
-> > > welcome to invent your own mechanism in the meantime.
+Viktor
 
-> > Right, which postdates the version you're replying to and isn't merged
-> > yet - the current code was what you were asking for at the time.
+[1] https://lore.kernel.org/bpf/cover.1707157553.git.vmalik@redhat.com/
 
-> v1 and v2 predate it. And if the above is what I did ask, then I must
-> have done a very poor job of explaining what was required. For which I
-> apologise profusely.
+> 
+> Have a good weekend all!
+> 
+> Manu
+> 
 
-To be clear it's what was asked for prior to the switch to the
-forthcoming switch to the parsing idregs scheme, I haven't pulled in
-your idregs work yet since it's being rapidly iterated and this is an
-already large series with dependencies.
-
-> > I'm
-> > expecting to update all these feature series to work with that once it
-> > gets finalised and merged but it's not there yet, I do see I forgot to
-> > put a note in v9 about that like I did for dpISA - sorry about that, I
-> > was too focused on the clone3() rework when rebasing onto the new
-> > kernel.
-
-> > This particular series isn't going to get merged for a while yet anyway
-> > due to the time it'll take for userspace testing, I'm expecting your
-> > series to be in by the time it becomes an issue.
-
-> Right. Then I'll ignore it for the foreseeable future.
-
-Actually now I think about it would you be open to merging the guest
-context switching bit without the rest of the series (pending me fixing
-the issues you raise of course)?  If so I'll split that bit out in the
-hope that we can reduce the size of the series and CC list for the
-userspace support which I imagine would make people a bit happier.
-
-> > > > +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSCRE0_EL1),
-> > > > +			       SYS_GCSCRE0_EL1);
-> > > > +	}
-
-> > > For the benefit of the unsuspecting reviewers, and in the absence of a
-> > > public specification (which the XML drop isn't), it would be good to
-> > > have the commit message explaining the rationale of what gets saved
-> > > when.
-
-> > What are you looking for in terms of rationale here?  The KVM house
-> > style is often very reliant on reader context so it would be good to
-> > know what considerations you'd like to see explicitly addressed.
-
-> Nothing to do with style, everything to do with substance: if nothing
-
-The style I'm referring to there is the style for documentation.
-
-> in the host kernel makes any use of these registers, why are they
-> eagerly saved/restored on nVHE/hVHE? I'm sure you have a reason for
-> it, but it isn't that obvious. Because these two modes need all the
-> help they can get in terms of overhead reduction.
-
-Ah, I see - yes, they should probably be moved somewhere else.  Though
-I'm not clear why some of the other registers that we're saving and
-restoring in the same place are being done eagerly?  The userspace
-TPIDRs stand out for example, they're in taken care of in
-__sysreg_save_user_state() which is called in the same paths.  IIRC my
-thinking there was something along the lines of "this is where we save
-and restore everything else that's just a general system register, I
-should be consistent".
-
-Am I right in thinking kvm_arch_vcpu_load()/_put() would make sense?
-Everything in there currently looked like it was there more due to doing
-something more complex than simple register save/restore and we weren't
-worrying too much about what was going on with just the sysregs.
-
-> > These
-> > registers shouldn't do anything when we aren't running the guest so
-> > they're not terribly ordering sensitive, the EL2 ones will need a bit
-> > more consideration in the face of nested virt.
-
-> The EL2 registers should follow the exact same pattern, specially once
-> you fix the VNCR bugs I pointed out.
-
-Great, that's what I'd thought thanks - I hadn't checked yet.
-
---CPooLl9HGmOME8a3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXBE6sACgkQJNaLcl1U
-h9AxYAgAgiMyW4DrBuI2SbKKpBxTNqFWS6hwvL/pz27nGc2T9cgR2P2ODSG3A9Cv
-MJh2K7irI4JHl/jj/8GLJLH5IVMOVyVYPtTxauHvCVu+I6RM92hSfVey9I7clK40
-Lxhri2n3D8Tj89RvRi90LvEgM0pJKqGBYYpc+lZBuUVhpsHDx1rwBsuMmryxpbyX
-U9xvwhFc+lNUfrCUYIVp0VThb8QBJzBYs0SSVyM1ggHARaP+t64DzE+vrtI9h5QN
-CQo6qN+H0ojTvx9E0MGZhqBPtNnGOs3jafSq88emxX431D+3kZSJwY4npbfFNQd3
-Il677REj9RoCNO5cSTKMWWb27EzOxg==
-=xxbo
------END PGP SIGNATURE-----
-
---CPooLl9HGmOME8a3--
 
