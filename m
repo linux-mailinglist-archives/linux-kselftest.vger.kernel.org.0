@@ -1,118 +1,136 @@
-Return-Path: <linux-kselftest+bounces-4150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5410C849D67
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 15:52:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2A02849DA2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 16:01:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F96F28898F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 14:52:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BCCDB29373
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 15:01:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754C828DD5;
-	Mon,  5 Feb 2024 14:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92BBE2C84F;
+	Mon,  5 Feb 2024 15:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xYwF7tfL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CXv6nVK/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9244E2C68C
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Feb 2024 14:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20DC339BD
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Feb 2024 15:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707144764; cv=none; b=iGijPghZMzJ3sLKkzsMVGZzPVYj7ecaTs+AZZ2/2Ung3IMqaRo6LD5erdq4yHKL3WAFK6CTIxac+lSdQNsYySuhDfxzFZQg2gtwpHahck/H5zaW6Us3F1HLYHknJIpJUKfFsbaLPHxrPkvOI/FSxRkhFyi8nqCEMpCKqVq6yIgk=
+	t=1707145256; cv=none; b=XBzEiIoT5rlgqOMu8zVNleOM4HJ+b8FSPyBbt8yxqWWc/Yr6JUz/UBNmLcXtMzvCW7nW2PB7ypjCJfVe92sVAKamMYwM2FPIzoU0ag0zBLHgmg9MXSnJogsX+MQMdC76vCF97njqEzAUcdQcEHDaYrfgcuLC/Z2Yq3JI8ME43kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707144764; c=relaxed/simple;
-	bh=kdUOmRDXfFl0jnIDxBdauT+ue8GQmGp+3PNk2EP1TCE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ArM11qBfG6/IHKsXoizoRPSSTnxyouMUiyzkJw0RgHiKKU16lKlkzVWHGaTCct6FqTjJ9m3bsx1pdUqsl4aMAOf0Sg14codKrgtwmRzOMeVa7q4mB8yy5Blg7u8hd2J/t8JdthO8Cj4UKsTsO5xRHBHZOYjiFo31vy4OA/+qKFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xYwF7tfL; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5605c7b1f32so1377975a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Feb 2024 06:52:42 -0800 (PST)
+	s=arc-20240116; t=1707145256; c=relaxed/simple;
+	bh=4x/pL/LexyK+4wqZZH/6gBXshFnDy2QZXDAbJnIwUqM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RW9YQRDwOL/TSFJmM4Luq/Lu9xzqbUWxUTaj+S9yyH2OGXuGxB5uH8DoNT4AZfY84M0cv7DFt8uDJUTa2TKwgaZFXKlT2wi9lcP6/otX8hHqzEwn0p5aMtjO91uf+oTzL/H0aUde3FNVszbnBna/xiVmeW+tid0gMpSJclqwlT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CXv6nVK/; arc=none smtp.client-ip=209.85.217.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-46d30f6789fso182654137.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Feb 2024 07:00:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707144761; x=1707749561; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g+B1PQfcVc67wCAzKjMbkuU0YKimpNnbO8uCUJIhj5w=;
-        b=xYwF7tfLZewgC+mClXAtzvN7a8QE+WYjQ4//NCCo2luQr9W1TfXBvgkaeu5FBpk11T
-         c/YT9zT4zpZzX5Rh3ItY5vqnCcoR6ArQrq8OUyw2UTaYrHnZVf58JASQ/iK/BoMZAYD/
-         6Rue6QRwDm3Ctji7cec059l5s1prqjMWIlJxC0jYzRi+kj/cM2KpyIRQd34207YuCSMa
-         LgtkA8+IrzF3BBMIjkGT0CuLvFkFYmOSHuFBk1K7Bu1l/lrrK3Ahumsftu+wPDIDoz0c
-         8xSP2z+7BPAyO/T5scJ7boS9qsByJx74jxxErUph4qjEquHsHlooTJRnrFOR4VsklAz/
-         ow3A==
+        d=google.com; s=20230601; t=1707145254; x=1707750054; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SdJNeue2Wv0xiehiEald+OUh21W9eFlv7KMsoDs8oU8=;
+        b=CXv6nVK/NtQ0TRotQaF8GyMgdPby6UPMK7Y0wkjW56Lx1IpFExmMB4zm2fmO6d2R6B
+         8rCbxnjOsCrQffUh3EZKZh3hHyFUbMV/AvyiuVyhY/JKhEhTQQopu5JgGds2ZPkULBLv
+         Kxfz8GKvQx2SwMTEfPPjuqDft9/toFNQCSy/sBWdX+2+saRIyCtAWEfCN6eWUeIiudwD
+         KIRge7BNSL+AScZd1gh5ZCr/vgCLw8M3H38i+tSfX4KIugGt0h/tGMnlcgJFwqKPzHHO
+         kxhhb3ZdokFnoSUoJ1hSrAoQEWC1L530eaDADN9U1U9opeZv01BJQIPE9wytblQgoGyv
+         PZHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707144761; x=1707749561;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g+B1PQfcVc67wCAzKjMbkuU0YKimpNnbO8uCUJIhj5w=;
-        b=IBsHfcmeKmwHW+tAMKTGP24HQdM05PvqOqlLNKv8JxAqPz7oAdbuFY5ccOyanHEeHX
-         H5xtHVgf8fNCS9mol6B8KxfAFuE6mdqQnVpPR7NB+sRNoIFtwTratzV13CfSw1oUUdqx
-         tfQhIHXeoBidyTJDMjy3+zn5nKdBOcveHXlFI27rWj42IYWdllUgEQlcvvgCnoUrjNPE
-         eZoLG2wnO6rmxfTmFk0yHjhevV5qROzN9sbFkobCNy5pxxz3Ws/ejr4lvpC7ZGz33/5e
-         4yYz3P+dMQhFukcGdLxxrmo2tljxzjYwSVMi8rsa0Lbc08i+B5yibbeKKZagQx5+QMho
-         DQ4A==
-X-Gm-Message-State: AOJu0YwWmHlz/pgOaiCtMmz47Iky/id25YApTb4vG8Wjt2nk8un2VzTI
-	O+xviAvaQNJ3khKGQcAbwgPVc4CYhQzXUUBDNENrikEzOSdf3uuEfnDLZZkUu9g=
-X-Google-Smtp-Source: AGHT+IGG+Z4rp6MIk2RqL/xipEmA/8eU+tKGuvnFbLRs+W5ftWOW2kQ0uAQc5mvqzaC5TFZudNMhsg==
-X-Received: by 2002:aa7:df14:0:b0:55e:e9f3:4f63 with SMTP id c20-20020aa7df14000000b0055ee9f34f63mr5397435edy.3.1707144760808;
-        Mon, 05 Feb 2024 06:52:40 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXetjilpo/u+b9OWUhUddsYGepxvOzImn+KeO64qdnzYe7m1v2v9migu3ttmYYHK/pckPkqrERHQqUnzBY5T1/5j5BOsLHLyLcxE6FCtvOnuH2siRKTDrudh6LwVVrUSimPhdtB+6WEPdf98TrRy130u3b49UZAsxS/Z2bAyTn4v6+/1/qz2+0mB26Z5ln8hL8ifbL3Im98npQuQS+EaLrjbqiMHNBfhyNtRliMumlGIJQjPgEPsR7/u++dGOT2MTBdJoS4MX57BQk=
-Received: from ttritton.c.googlers.com.com (61.134.90.34.bc.googleusercontent.com. [34.90.134.61])
-        by smtp.gmail.com with ESMTPSA id h31-20020a0564020e9f00b00558a1937dddsm3821348eda.63.2024.02.05.06.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 06:52:40 -0800 (PST)
-From: Terry Tritton <terry.tritton@linaro.org>
-To: akpm@linux-foundation.org,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	peter.griffin@linaro.org,
-	bettyzhou@google.com,
-	Terry Tritton <terry.tritton@linaro.org>
-Subject: [PATCH] selftests/mm: uffd-unit-test check if huge page size is 0
-Date: Mon,  5 Feb 2024 14:50:56 +0000
-Message-ID: <20240205145055.3545806-2-terry.tritton@linaro.org>
-X-Mailer: git-send-email 2.43.0.594.gd9cf4e227d-goog
+        d=1e100.net; s=20230601; t=1707145254; x=1707750054;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SdJNeue2Wv0xiehiEald+OUh21W9eFlv7KMsoDs8oU8=;
+        b=V3Fk4wbd2kc5UN1PB2GChtDIPO0j6JdN4KP95Zl5RuSjJ4bbg58tM7MHmeSmy4tviL
+         vWEbzO+HWxDXh6pn8t1hENyBa0KYeGPTqvt+Qq/OUGdHH+VDHkj4p6SqyO6XbfkM/Co7
+         IizyHGg7SinnvJnic6VwSdBP9Ww7DmjnLGGDsvhuSGVTDoRheimZaroBWNdIcGbIRpwI
+         OLggl7vDWQG4o2c+CwFsqeL6ntpqCx6+CUTiCZEapgkq2zqH6tuowOXDuP3OYVfIKq1+
+         d3hGKkXLHTNhoNtJtK+FHsMvj9Kev9znzGVrdmY9mPR3KX5m7OxzyRwDDrZ0HVTOXdZx
+         +Xgg==
+X-Gm-Message-State: AOJu0YwYdp8e34U4XM7OMxEzUu2aTcEbtpcnN6gSlUvzsEE3x8/foSoy
+	kBVnR++H3f1WF3IDpYIKwH5v0sk7lDQgBRmcrJTvDWiZIiy2o9Dl17c/ou3AR5nW29EcHy0bb/W
+	KaAqc5a5KY/UT+rsTTa/qC82BS0wTzuR4nbQc
+X-Google-Smtp-Source: AGHT+IGyGdxgsP9UcWiEJx0V/pq8uMBpCddwlbwcThZVJXxE7PBJjn7CzGAgysVY689BVIMKpe8Rx7vH/upebwniUjA=
+X-Received: by 2002:a67:cf8c:0:b0:46d:27ba:526b with SMTP id
+ g12-20020a67cf8c000000b0046d27ba526bmr22209vsm.34.1707145252109; Mon, 05 Feb
+ 2024 07:00:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240131141858.1149719-1-elver@google.com> <b500bb70-aa3f-41d3-b058-2b634471ffef@linux.dev>
+In-Reply-To: <b500bb70-aa3f-41d3-b058-2b634471ffef@linux.dev>
+From: Marco Elver <elver@google.com>
+Date: Mon, 5 Feb 2024 16:00:15 +0100
+Message-ID: <CANpmjNPKACDwXMnZRw9=CAgWNaMWAyFZ2W7KY2s4ck0s_ue1ag@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Separate bpf_local_storage_lookup() fast and slow paths
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-If HUGETLBFS is not enabled then the default_huge_page_size function will
-return 0 and cause a divide by 0 error. Add a check to see if the huge page
-size is 0 and skip the hugetlb tests if it is.
+On Wed, 31 Jan 2024 at 20:52, Martin KaFai Lau <martin.lau@linux.dev> wrote=
+:
+[...]
+> > | num_maps: 1000
+> > |  local_storage cache sequential  get:
+> > |                              <before>                | <after>
+> > |   hits throughput:           0.357 =C2=B1 0.005 M ops/s   | 0.325 =C2=
+=B1 0.005 M ops/s        (-9.0%)
+> > |   hits latency:              2803.738 ns/op          | 3076.923 ns/op=
+               (+9.7%)
+>
+> Is it understood why the slow down here? The same goes for the "num_maps:=
+ 32"
+> case above but not as bad as here.
 
-Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
----
- tools/testing/selftests/mm/uffd-unit-tests.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+It turned out that there's a real slowdown due to the outlined
+slowpath. If I inline everything except for inserting the entry into
+the cache (cacheit_lockit codepath is still outlined), the results
+look much better even for the case where it always misses the cache.
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index cce90a10515a..2b9f8cc52639 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -1517,6 +1517,12 @@ int main(int argc, char *argv[])
- 				continue;
- 
- 			uffd_test_start("%s on %s", test->name, mem_type->name);
-+			if ((mem_type->mem_flag == MEM_HUGETLB ||
-+			    mem_type->mem_flag == MEM_HUGETLB_PRIVATE) &&
-+			    (default_huge_page_size() == 0)) {
-+				uffd_test_skip("huge page size is 0, feature missing?");
-+				continue;
-+			}
- 			if (!uffd_feature_supported(test)) {
- 				uffd_test_skip("feature missing");
- 				continue;
--- 
-2.43.0.594.gd9cf4e227d-goog
+[...]
+> > diff --git a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c b/to=
+ols/testing/selftests/bpf/progs/cgrp_ls_recursion.c
+> > index a043d8fefdac..9895087a9235 100644
+> > --- a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
+> > +++ b/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
+> > @@ -21,7 +21,7 @@ struct {
+> >       __type(value, long);
+> >   } map_b SEC(".maps");
+> >
+> > -SEC("fentry/bpf_local_storage_lookup")
+> > +SEC("fentry/bpf_local_storage_lookup_slowpath")
+>
+> The selftest is trying to catch recursion. The change here cannot test th=
+e same
+> thing because the slowpath will never be hit in the test_progs.  I don't =
+have a
+> better idea for now also.
 
+Trying to prepare a v2, and for the test, the only option I see is to
+introduce a tracepoint ("bpf_local_storage_lookup"). If unused, should
+be a no-op due to static branch.
+
+Or can you suggest different functions to hook to for the recursion test?
+
+Preferences?
 
