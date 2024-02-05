@@ -1,144 +1,309 @@
-Return-Path: <linux-kselftest+bounces-4124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5366A8493A7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 07:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 282768496E7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 10:46:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 788AB1C225B1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 06:04:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45DD51C25894
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 09:46:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463E3BA30;
-	Mon,  5 Feb 2024 06:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC5912E7D;
+	Mon,  5 Feb 2024 09:46:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="kei2qE6/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNRiIrQz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B8010A09;
-	Mon,  5 Feb 2024 06:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.83
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707113058; cv=fail; b=S3mKy2hEXp8agIBPj3xnse6KXnPL/SaaU/mkmwJuhN16OHBxz01w7fETqbCdi+XJt6nb6lc1qtMLndNRIvoYBj2ef/aWKWDrqpnkr5oN8SkMaXlRANSbkMojgmDXPOzMMazLuuKc6Kf8veUT/CL6Q0k+ZcRclhHnrRHR/dYfdSM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707113058; c=relaxed/simple;
-	bh=5bdAiRAk/l152HqTBwD2uoe7FkXNh1INEkyYl9QjsRU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mDE/cW4b15vKew3qnPGdVv+U6/PNuonU07TKTRLbX+d1+Z2ri2/7Nm2fz41tq2hGGOWF+UGO5daJEbJNX43Begtvu1jEPcG04+fBWdRZ/J1hjYRd7R/ZdS4jIeJJiOiYvb9o1ZJYaSH638PxzH+5NJbeSYcfaX4btC0WPjKYaOw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=kei2qE6/; arc=fail smtp.client-ip=40.107.237.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O4GAC7QkUJBTtRcf5bCRibqxTeUp4JB5RfT49vk1EPgKD8t8zZKXQC2VIF95NziuUmeR0m7Hg09vnmu+v04lNt9ntwcN3NvEW0kK+KtKYegF/NdXylP4Zv8rCa/p8L4U80wSUmmwRikMFkkWxp94vw4NgdzIRd2nVB2ZleTL5wqxvmTSEJMM4UNRNTOl1aU1wUjrR+Tpc+jEq3MtOZ2YjUk258w8Bw061y7jm8Fly1IRU+C9UnR+0BFWMRh6E42FpXzhCP/F52194/zBWyL8XhArH3p1IoFJuj592cfux7UOykVEvIkeM+6goheAYvlpCS1v8FItCR5gSfwq0R/YVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t8/TJOxeoX5B1QWRHui5UbGv+vdgRdbntv/9SDefCE0=;
- b=QpDsaKjAZMclU3aXUbfpNIgRXZF6fmg/saJddRsBRmIuc4DG7zQSF7chtYqkifZYlSLALmPZWGFImu5k5Dlv7Vt2G21onuSdhNAD/59MbzO8xAPfkIqiga7Xq4+Es51bzX3ipChQx974rAysKw2/+ZOyPtPtMGCriXNaYglVywrA+OCDUZWuEJK1mgW64J3iB53urK/+rYMHfkr/2OtuGzVUsZp+ckBJG9XOUSmbUznP9gmnwxpS2tSecXpX/5iG0C+gndsS1FY9CENS/t/WSFB0xOpSUz1qV2ACT0ccJdC5jiTeV87avOeK/enQ7/7mRP5oQm+p623OPw4jQCvJ/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t8/TJOxeoX5B1QWRHui5UbGv+vdgRdbntv/9SDefCE0=;
- b=kei2qE6/y4zujNZW59lKTqs5Z3Z0k78RSy02RN4KaXSTh1gAjpREnTYS4XBP4dgJ/9Pr4eZVp/fjJPD7+3mpw1KCCX7f/au3RD5CU4xLo76sIlmoicdDPNcyRlp90RkpopWAmB/SRPoiOg1VdiILm3TLteNUBlZIx0IWi/VJNfg=
-Received: from MN2PR13CA0019.namprd13.prod.outlook.com (2603:10b6:208:160::32)
- by MN2PR12MB4359.namprd12.prod.outlook.com (2603:10b6:208:265::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.14; Mon, 5 Feb
- 2024 06:04:14 +0000
-Received: from BL02EPF0001A0FC.namprd03.prod.outlook.com
- (2603:10b6:208:160:cafe::15) by MN2PR13CA0019.outlook.office365.com
- (2603:10b6:208:160::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.26 via Frontend
- Transport; Mon, 5 Feb 2024 06:04:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0001A0FC.mail.protection.outlook.com (10.167.242.103) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7249.19 via Frontend Transport; Mon, 5 Feb 2024 06:04:13 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 5 Feb
- 2024 00:04:07 -0600
-From: Meng Li <li.meng@amd.com>
-To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Borislav Petkov
-	<bpetkov@amd.com>, Huang Rui <ray.huang@amd.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
-	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
- Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
- Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
-	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, "Oleksandr
- Natalenko" <oleksandr@natalenko.name>, Meng Li <li.meng@amd.com>
-Subject: [PATCH] Fix the warning of amd-pstate.rst.
-Date: Mon, 5 Feb 2024 14:03:05 +0800
-Message-ID: <20240205060305.3594942-1-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A36512E5C;
+	Mon,  5 Feb 2024 09:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707126380; cv=none; b=a+6cQlGtdSaU+gRAaCYMSKhEPxv4SZZ67qdM47aFH77CIFWfgHi2y4/WTSZQESqUGMyR2w61W+gbn3P1uU4X9XbmqLsqF4uXDe7UwnJItf1BHyqNaPTTmuxUOKFtlOlqKB4ZLnH2haFDcpNts4YEIGMzes7CjyyJX1vM9TU6IxQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707126380; c=relaxed/simple;
+	bh=S97KO5vp8gvf1SplDj/NGWxNDyP6qbms4ZkJbU5yooM=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XEA2zJ8RREzSo45Awa4dWyhS/vRbhgp5miD3PZGVVC4BzVpK80uArNO5bdoqHfhMpPJQgR/huXlor/SYhM0gMQ2WFTN6Zzg6TxqMgVjKVMWXyGGVOwylD/Xbw27IHv0BzniSUH3G9xJbPji0oGnYWsfk3wHOrsx9vx2qYS1i9gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bNRiIrQz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA44C433C7;
+	Mon,  5 Feb 2024 09:46:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707126380;
+	bh=S97KO5vp8gvf1SplDj/NGWxNDyP6qbms4ZkJbU5yooM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=bNRiIrQzbsUHuNnGrTyP97HsR6a5ElJ8g/yOEAUSEgMLXjrD1wrompGhpSa784aDm
+	 BOJIFakdCbJ0oLGWnXmjvko1iKXoIYs+tkYLq1ozX11wzikPpCorAkMLycbrZOjvfE
+	 871aPrxCMtGwj9JCNpg8MCD/eVsBGYDb7chMM/moiMdAow6Dfks+AKxhryvwYjag+k
+	 gquq3s0gH9ZJRp9Qlr44GigOojab3TfuwWgk7mC8ZOhtow2GGRAOxoRh6V4RJCpfs6
+	 rCI57Q7MPII5wAtiDPmoNej4WLo/WmuWTqRu1K5rFDS7wdbrexH1SexDwC10KXdOIG
+	 MtJ2paw/8y1YQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rWvYO-000MhB-Iw;
+	Mon, 05 Feb 2024 09:46:16 +0000
+Date: Mon, 05 Feb 2024 09:46:16 +0000
+Message-ID: <868r3z6y6v.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 13/38] KVM: arm64: Manage GCS registers for guests
+In-Reply-To: <20240203-arm64-gcs-v8-13-c9fec77673ef@kernel.org>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+	<20240203-arm64-gcs-v8-13-c9fec77673ef@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FC:EE_|MN2PR12MB4359:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61b640e8-5d4c-405f-8206-08dc2610476e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	AFxNiy0LW1mFXxpkKr+hHM+0lryalU3nxP54abietZc4XXzblZhhHXif3p+M1UDIs89FmC3D4k5gdllA7+JR/3mgM8azi98SAIbIAcyrsOaScUPT43dcQPtRjzogui+3vLvZb083ekDwMLZkfLRL44EXUzJIByhFakr4Fz6BPXwwL+PEfCe5sS0sjVVLW0ZXGymEH6Y4QD9wFl3hmyzzUiYAOjpbPBhQmgoVKfoITqkWsOgzyx14ptBWvXr355m24PJyMzKLLKuf1wQUxKJZ1DKUBqzWLv5/P/WpY0AfYU6BtoEYa+I7sXURfrPZKartXm1tPd8Nj2o+PWSaGfux5+l/WTXgcyRNkshdhKvG+i411rn9Pcrmb40H4YRNhieHM/nfNGVyqz2TT7cJZBZJlt/Y2krIp4mq4h8e1oMYbOqyUBQ5JbTWu5vWEQ2JXvq17Ya0xa+T4hKkq3YA7yFm1bd+G0uQOByYqX1EmBNMQrTHqtZtxpLVTLVCZlU1Sacsmbjl5Us09UYXCtSkSNGPtNk6qloiw5j80PXQ1JjMzG6yBMTB6lyD9AX5lN2LRGLn3AvZkuLUoOu8UXRYrd//WUrFnz9jG1qjQ+yfjm+KWoEBKFyRl7dUrHBPtsLFCCU5D2t10AOzxlP5tc7tivxZBH4ezd+uA2l9FlEhjqc5JMC+Xu/WQjgUubUj0pmTmwfqB4R//V4+Lh0ijUmYRryM1eDPmgYPxm2EW08VUlYmoZVyYhkh1qEmI0ghCFaMpMq/rTK6GSVa4vJMkXwvkLBf+Q==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(39860400002)(376002)(396003)(136003)(230922051799003)(64100799003)(1800799012)(82310400011)(186009)(451199024)(36840700001)(46966006)(40470700004)(110136005)(316002)(6636002)(83380400001)(54906003)(81166007)(82740400003)(356005)(2616005)(26005)(70206006)(7696005)(4326008)(86362001)(2906002)(5660300002)(4744005)(7416002)(70586007)(478600001)(426003)(47076005)(16526019)(1076003)(336012)(8676002)(8936002)(36756003)(40480700001)(40460700003)(36860700001)(41300700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 06:04:13.9055
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61b640e8-5d4c-405f-8206-08dc2610476e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A0FC.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4359
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, keescook@chromium.org, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Title under line too short
+On Sat, 03 Feb 2024 12:25:39 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> GCS introduces a number of system registers for EL1 and EL0, on systems
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+and EL2.
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 0a3aa6b8ffd5..1e0d101b020a 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -381,7 +381,7 @@ driver receives a message with the highest performance change, it will
- update the core ranking and set the cpu's priority.
- 
- ``amd-pstate`` Preferred Core Switch
--=================================
-+=====================================
- Kernel Parameters
- -----------------
- 
+> with GCS we need to context switch them and expose them to VMMs to allow
+> guests to use GCS, as well as describe their fine grained traps to
+> nested virtualisation.  Traps are already disabled.
+
+The latter is not true with NV, since the guest is in control of the
+FGT registers.
+
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/kvm_host.h          | 12 ++++++++++++
+>  arch/arm64/kvm/emulate-nested.c            |  4 ++++
+>  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 17 +++++++++++++++++
+>  arch/arm64/kvm/sys_regs.c                  | 22 ++++++++++++++++++++++
+>  4 files changed, 55 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 21c57b812569..6c7ea7f9cd92 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -388,6 +388,12 @@ enum vcpu_sysreg {
+>  	GCR_EL1,	/* Tag Control Register */
+>  	TFSRE0_EL1,	/* Tag Fault Status Register (EL0) */
+>  
+> +	/* Guarded Control Stack registers */
+> +	GCSCRE0_EL1,	/* Guarded Control Stack Control (EL0) */
+> +	GCSCR_EL1,	/* Guarded Control Stack Control (EL1) */
+
+This is subjected to VNCR (0x8D0).
+
+> +	GCSPR_EL0,	/* Guarded Control Stack Pointer (EL0) */
+> +	GCSPR_EL1,	/* Guarded Control Stack Pointer (EL1) */
+
+So is this one (0x8C0). And how about the *_EL2 versions?
+
+> +
+>  	/* 32bit specific registers. */
+>  	DACR32_EL2,	/* Domain Access Control Register */
+>  	IFSR32_EL2,	/* Instruction Fault Status Register */
+> @@ -1221,6 +1227,12 @@ static inline bool __vcpu_has_feature(const struct kvm_arch *ka, int feature)
+>  
+>  #define vcpu_has_feature(v, f)	__vcpu_has_feature(&(v)->kvm->arch, (f))
+>  
+> +static inline bool has_gcs(void)
+> +{
+> +	return IS_ENABLED(CONFIG_ARM64_GCS) &&
+> +		cpus_have_final_cap(ARM64_HAS_GCS);
+> +}
+> +
+>  int kvm_trng_call(struct kvm_vcpu *vcpu);
+>  #ifdef CONFIG_KVM
+>  extern phys_addr_t hyp_mem_base;
+> diff --git a/arch/arm64/kvm/emulate-nested.c b/arch/arm64/kvm/emulate-nested.c
+> index 431fd429932d..24eb7eccbae4 100644
+> --- a/arch/arm64/kvm/emulate-nested.c
+> +++ b/arch/arm64/kvm/emulate-nested.c
+> @@ -1098,8 +1098,12 @@ static const struct encoding_to_trap_config encoding_to_fgt[] __initconst = {
+>  	SR_FGT(SYS_ESR_EL1, 		HFGxTR, ESR_EL1, 1),
+>  	SR_FGT(SYS_DCZID_EL0, 		HFGxTR, DCZID_EL0, 1),
+>  	SR_FGT(SYS_CTR_EL0, 		HFGxTR, CTR_EL0, 1),
+> +	SR_FGT(SYS_GCSPR_EL0,		HFGxTR, nGCS_EL0, 1),
+>  	SR_FGT(SYS_CSSELR_EL1, 		HFGxTR, CSSELR_EL1, 1),
+>  	SR_FGT(SYS_CPACR_EL1, 		HFGxTR, CPACR_EL1, 1),
+> +	SR_FGT(SYS_GCSCR_EL1,		HFGxTR, nGCS_EL1, 1),
+> +	SR_FGT(SYS_GCSPR_EL1,		HFGxTR, nGCS_EL1, 1),
+> +	SR_FGT(SYS_GCSCRE0_EL1,		HFGxTR, nGCS_EL0, 1),
+
+This is clearly wrong on all 4 counts (the n prefix gives it away...).
+
+>  	SR_FGT(SYS_CONTEXTIDR_EL1, 	HFGxTR, CONTEXTIDR_EL1, 1),
+>  	SR_FGT(SYS_CLIDR_EL1, 		HFGxTR, CLIDR_EL1, 1),
+>  	SR_FGT(SYS_CCSIDR_EL1, 		HFGxTR, CCSIDR_EL1, 1),
+> diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> index bb6b571ec627..ec34d4a90717 100644
+> --- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> @@ -25,6 +25,8 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+>  {
+>  	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
+>  	ctxt_sys_reg(ctxt, TPIDRRO_EL0)	= read_sysreg(tpidrro_el0);
+> +	if (has_gcs())
+> +		ctxt_sys_reg(ctxt, GCSPR_EL0) = read_sysreg_s(SYS_GCSPR_EL0);
+
+We have had this discussion in the past. This must be based on the
+VM's configuration. Guarding the check with the host capability is a
+valuable optimisation, but that's nowhere near enough. See the series
+that I have posted on this very subject (you're on Cc), but you are
+welcome to invent your own mechanism in the meantime.
+
+>  }
+>  
+>  static inline bool ctxt_has_mte(struct kvm_cpu_context *ctxt)
+> @@ -62,6 +64,12 @@ static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
+>  	ctxt_sys_reg(ctxt, PAR_EL1)	= read_sysreg_par();
+>  	ctxt_sys_reg(ctxt, TPIDR_EL1)	= read_sysreg(tpidr_el1);
+>  
+> +	if (has_gcs()) {
+> +		ctxt_sys_reg(ctxt, GCSPR_EL1)	= read_sysreg_el1(SYS_GCSPR);
+> +		ctxt_sys_reg(ctxt, GCSCR_EL1)	= read_sysreg_el1(SYS_GCSCR);
+> +		ctxt_sys_reg(ctxt, GCSCRE0_EL1)	= read_sysreg_s(SYS_GCSCRE0_EL1);
+> +	}
+> +
+
+Same thing.
+
+>  	if (ctxt_has_mte(ctxt)) {
+>  		ctxt_sys_reg(ctxt, TFSR_EL1) = read_sysreg_el1(SYS_TFSR);
+>  		ctxt_sys_reg(ctxt, TFSRE0_EL1) = read_sysreg_s(SYS_TFSRE0_EL1);
+> @@ -95,6 +103,8 @@ static inline void __sysreg_restore_user_state(struct kvm_cpu_context *ctxt)
+>  {
+>  	write_sysreg(ctxt_sys_reg(ctxt, TPIDR_EL0),	tpidr_el0);
+>  	write_sysreg(ctxt_sys_reg(ctxt, TPIDRRO_EL0),	tpidrro_el0);
+> +	if (has_gcs())
+> +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSPR_EL0), SYS_GCSPR_EL0);
+>  }
+>  
+>  static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt)
+> @@ -138,6 +148,13 @@ static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt)
+>  	write_sysreg(ctxt_sys_reg(ctxt, PAR_EL1),	par_el1);
+>  	write_sysreg(ctxt_sys_reg(ctxt, TPIDR_EL1),	tpidr_el1);
+>  
+> +	if (has_gcs()) {
+> +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSPR_EL1),	SYS_GCSPR);
+> +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSCR_EL1),	SYS_GCSCR);
+> +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSCRE0_EL1),
+> +			       SYS_GCSCRE0_EL1);
+> +	}
+> +
+
+For the benefit of the unsuspecting reviewers, and in the absence of a
+public specification (which the XML drop isn't), it would be good to
+have the commit message explaining the rationale of what gets saved
+when.
+
+>  	if (ctxt_has_mte(ctxt)) {
+>  		write_sysreg_el1(ctxt_sys_reg(ctxt, TFSR_EL1), SYS_TFSR);
+>  		write_sysreg_s(ctxt_sys_reg(ctxt, TFSRE0_EL1), SYS_TFSRE0_EL1);
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 30253bd19917..83ba767e75d2 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -2000,6 +2000,23 @@ static unsigned int mte_visibility(const struct kvm_vcpu *vcpu,
+>  	.visibility = mte_visibility,		\
+>  }
+>  
+> +static unsigned int gcs_visibility(const struct kvm_vcpu *vcpu,
+> +				   const struct sys_reg_desc *rd)
+> +{
+> +	if (has_gcs())
+> +		return 0;
+
+Yet another case of exposing potentially unwanted state, to the VMM
+this time.
+
+> +
+> +	return REG_HIDDEN;
+> +}
+> +
+> +#define GCS_REG(name) {				\
+> +	SYS_DESC(SYS_##name),			\
+> +	.access = undef_access,			\
+> +	.reset = reset_unknown,			\
+> +	.reg = name,				\
+> +	.visibility = gcs_visibility,		\
+> +}
+> +
+>  static unsigned int el2_visibility(const struct kvm_vcpu *vcpu,
+>  				   const struct sys_reg_desc *rd)
+>  {
+> @@ -2376,6 +2393,10 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	PTRAUTH_KEY(APDB),
+>  	PTRAUTH_KEY(APGA),
+>  
+> +	GCS_REG(GCSCR_EL1),
+> +	GCS_REG(GCSPR_EL1),
+> +	GCS_REG(GCSCRE0_EL1),
+> +
+>  	{ SYS_DESC(SYS_SPSR_EL1), access_spsr},
+>  	{ SYS_DESC(SYS_ELR_EL1), access_elr},
+>  
+> @@ -2462,6 +2483,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	{ SYS_DESC(SYS_SMIDR_EL1), undef_access },
+>  	{ SYS_DESC(SYS_CSSELR_EL1), access_csselr, reset_unknown, CSSELR_EL1 },
+>  	{ SYS_DESC(SYS_CTR_EL0), access_ctr },
+> +	GCS_REG(GCSPR_EL0),
+>  	{ SYS_DESC(SYS_SVCR), undef_access },
+>  
+>  	{ PMU_SYS_REG(PMCR_EL0), .access = access_pmcr, .reset = reset_pmcr,
+> 
+
+
+Thanks,
+
+	M.
+
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
 
