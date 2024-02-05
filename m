@@ -1,104 +1,112 @@
-Return-Path: <linux-kselftest+bounces-4127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FFF849748
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 11:04:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69A4A84974D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 11:05:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9013128FFE1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 10:04:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CB2B1C20AF1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 10:05:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64BD9134BA;
-	Mon,  5 Feb 2024 10:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747E4134BD;
+	Mon,  5 Feb 2024 10:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OWeUTA+s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.128.96.19
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AB814A9D
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Feb 2024 10:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707127450; cv=none; b=cHMn2GmyP9nBXxks4XWTBErvIwFvcodmOSNiNhjqsO7pB+6j/AvDZyRJmbXlc03GxH8COZ6PZU1NXRqluMof/Az/7TcChtRwmpua9SeWmktDnFodQOwvegdwnEsa6Hm17uH6y5lpKWdPTyOZEKVJZceByTotAPo3uKQcp7bghoc=
+	t=1707127522; cv=none; b=eHv8o0blHEQkkDRSdoMsWo7VHVh5Ql+9MgqJS7LSsehDrPFbiLseUjp/83Mk4nXRsNABEsfqTpgQOmthqCEbFVfbnRVUgRjCzSK0TuZ6PTtwv5byxGFAYTxtoOC7UE0Jm9feKCStuYUag/VhSU0dDh+Js9g1Pi64v1tAT92FYlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707127450; c=relaxed/simple;
-	bh=5gL+3MHfdNohSQskxHC9i2nTuWBLsbEx3SuLjHbIVfU=;
+	s=arc-20240116; t=1707127522; c=relaxed/simple;
+	bh=FvTH7ce4HO+MqDVbYAWd4QDxi89r1l2keNPhU6hTSXw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aFPON7DPbPPyNddwa+CIHrbbpsaZBu90FRE6SLH+GN8jTLZRe8EIaO0Z9NG/2bYoo22Cp8UjYDgrqZaXwTfwlztpKtJlG7aOMW2tYQsUzmP84syuxOtxkfhHABiqgAFpY+W18HbN7AUAiCXpgrEX9dd5ecqj7RjkOvl2SvhH17Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=23.128.96.19
-Received: from mail22.mail.schwarz (mail22.mail.schwarz [185.124.192.54])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ACF97;
-	Mon,  5 Feb 2024 02:04:05 -0800 (PST)
-X-SCHWARZ-TO: coreteam@netfilter.org, linux-kernel@vger.kernel.org, pabeni@redhat.com,
- i.maximets@ovn.org, kadlec@netfilter.org, davem@davemloft.net,
- netfilter-devel@vger.kernel.org, fw@strlen.de, netdev@vger.kernel.org,
- edumazet@google.com, pablo@netfilter.org, linux-kselftest@vger.kernel.org,
- horms@ovn.org, shuah@kernel.org
-X-SCHWARZ-ENVELOPEFROM: felix.huettner@mail.schwarz
-Received: from felix.runs.onstackit.cloud ([45.129.43.133])
-  by mail22.mail.schwarz with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 10:04:04 +0000
-Date: Mon, 5 Feb 2024 10:04:03 +0000
-From: Felix Huettner <felix.huettner@mail.schwarz>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Ilya Maximets <i.maximets@ovn.org>, linux-kernel@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
-	edumazet@google.com, pabeni@redhat.com, shuah@kernel.org,
-	luca.czesla@mail.schwarz, max.lamprecht@mail.schwarz,
-	Simon Horman <horms@ovn.org>
-Subject: Re: [PATCH net-next v2] net: ctnetlink: support filtering by zone
-Message-ID: <ZcCyk3/evNdYMJK0@felix.runs.onstackit.cloud>
-References: <ZWSCPKtDuYRG1XWt@kernel-bug-kernel-bug>
- <ZYV6hgP35k6Bwk+H@calendula>
- <2032238f-31ac-4106-8f22-522e76df5a12@ovn.org>
- <ZbzOA1D1IGYX2oxS@calendula>
- <Zbzen36ahZaiR+qp@felix.runs.onstackit.cloud>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oGRAps3MKbF3Y7jBNH2/nQho+zbDjGQBnHXvD8LGLy10FVuVZPX3EVDAzGO7Kegn6gZOPAU3KNuJ9YqQszw24aa3Ljh2dOXk8YqBkizhHse5+TDON7Eu4Qub0lliN1ljKnufzduZu6BaW51yGqGjinFXUDVNpB4PtvhAVwioXhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OWeUTA+s; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707127520;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jI4PbEn5bcHDGLMbu+52VQdT8MjOytUlCwJj0kXdfq0=;
+	b=OWeUTA+slwMBVNLZKhxq7VU96lHv0+aiVGEPimDpfRxWBrPPt1wuDGPcWU/c1cWrOSG4EX
+	fQufQm/3Dj++8pEGnQfjlaKGQ/b97ZJZRgkNiB++iEq+yj0kYR0sjR+eW+2dZ3ER5Uhbg+
+	h3QuQ4F9UoUjh+7NS3DXfwIkTlIYh40=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-664-zpsbcRdYNxq423sMnKBJOw-1; Mon, 05 Feb 2024 05:05:18 -0500
+X-MC-Unique: zpsbcRdYNxq423sMnKBJOw-1
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-59a5911a619so1143077eaf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Feb 2024 02:05:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707127517; x=1707732317;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jI4PbEn5bcHDGLMbu+52VQdT8MjOytUlCwJj0kXdfq0=;
+        b=fLQ6o5rzOfA6VUgbw+Z57yqq5BsDdkILO+VUKzqrjf0plK2Yv3VhQ+51W7cit5PVeo
+         oudM2lVBe60eAOqK2fbYkdbaGQRBP+wOV2ZXOt2EZyCG1Li5icycd2mOmecIfR4yYWcE
+         K/2xA2XJmqUQarMHu3dEsAt50Nnd/z6xARGFCKoSVB4NBqGhhEqnezo4sRlW9BDAi2oi
+         yuL0FEKaIwnw9yCAtVJdnlXcUQQfQTIJs6xmCCD2o4D0Uq0brNLUYy2uRF0pLVlhZH6T
+         2vrK/I0ErmQnIlVyEHEW9xWBh0/ruUDUxwTUTEt0HERzO1vAZyOB+tx+6l1IVd2k/kmb
+         bWmg==
+X-Gm-Message-State: AOJu0YxkPiDgH8pADa5GiZaRsXoGN4JkIC1Npe+m/NWQwMvdgyiKz6zr
+	x/8nAErjTQmUwAUwYosjmJ1VwUH8BjmYCZlNgskqk2YF209Vx83WZTUS/x2rOm8pC9yOuS4Gpil
+	a6+MCw9HD44MbOSPZavvPJDWR3xcue4sIwPEenW9fhpbjKbkt7QeqcAtOdetd4imc/Q==
+X-Received: by 2002:a05:6358:7f05:b0:178:8c44:aa8b with SMTP id p5-20020a0563587f0500b001788c44aa8bmr11609007rwn.3.1707127517662;
+        Mon, 05 Feb 2024 02:05:17 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFiFWsiQYdb+lDxJj9dP1Ofli+cct1oipaMqfiulBEkAd5tnxRnsurpAwy4aMkIYd4YQ/WWQQ==
+X-Received: by 2002:a05:6358:7f05:b0:178:8c44:aa8b with SMTP id p5-20020a0563587f0500b001788c44aa8bmr11608992rwn.3.1707127517378;
+        Mon, 05 Feb 2024 02:05:17 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWoh+GzuRpjT9/ChYsEcK+q66hd4k8A3L/hx8CrGu0JVnDMkwpxykxZvzLQm56gLNHyyW2QTFnYegJxMsbcIVEXxSfXKKkWFO2nSjmi1/GPommUPYVDwDhPiiERdZpNku0MKXfJPD+LZq3Huot7R9CzYHxOgBN/+jWfnVymDFMMLyV3b2ftw/Z9fst/RoIahjBqxzjK59flIllJIPhksB8/CkqDPhUVsg==
+Received: from x1n ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id r9-20020aa78449000000b006e050c8f22bsm230160pfn.207.2024.02.05.02.05.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Feb 2024 02:05:16 -0800 (PST)
+Date: Mon, 5 Feb 2024 18:05:02 +0800
+From: Peter Xu <peterx@redhat.com>
+To: Shaoqin Huang <shahuang@redhat.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] KVM: selftests: Fix the dirty_log_test semaphore
+ imbalance
+Message-ID: <ZcCyzrUhXSlhKyqC@x1n>
+References: <20240202064332.9403-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Zbzen36ahZaiR+qp@felix.runs.onstackit.cloud>
+In-Reply-To: <20240202064332.9403-1-shahuang@redhat.com>
 
-> > > 
-> > > Hi, Felix and Pablo.
-> > > 
-> > > I was looking through the code and the following part is bothering me:
-> > > 
-> > >  diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-> > >  index fb0ae15e96df..4e9133f61251 100644
-> > >  --- a/net/netfilter/nf_conntrack_netlink.c
-> > >  +++ b/net/netfilter/nf_conntrack_netlink.c
-> > >  @@ -1148,6 +1149,10 @@ static int ctnetlink_filter_match(struct nf_conn *ct, void *data)
-> > >          if (filter->family && nf_ct_l3num(ct) != filter->family)
-> > >                  goto ignore_entry;
-> > >  
-> > >  +       if (filter->zone.id != NF_CT_DEFAULT_ZONE_ID &&
-> > >  +           !nf_ct_zone_equal_any(ct, &filter->zone))
-> > >  +               goto ignore_entry;
-> > >  +
-> > >          if (filter->orig_flags) {
-> > >                  tuple = nf_ct_tuple(ct, IP_CT_DIR_ORIGINAL);
-> > >                  if (!ctnetlink_filter_match_tuple(&filter->orig, tuple,
-> > > 
-> > > If I'm reading that right, the default zone is always flushed, even if the
-> > > user requested to flush a different zone.  I.e. the entry is never ignored
-> > > for a default zone.  Is that correct or am I reading that wrong?
-> > > 
-> > > If my observation is correct, then I don't think this functionality can
-> > > actually be used by applications as it does something unexpected.
-> > 
-> > This needs a fix, the NF_CT_DEFAULT_ZONE_ID is used as a marker to
-> > indicate if the filtering by zone needs to happen or not.
-> > 
-> > I'd suggest to add a boolean flag that specifies that zone filtering
-> > is set on.
+Shaoqin, Sean,
 
-Hi everyone,
+Apologies for a late comment.  I'm trying to remember what I wrote..
 
-i build a patch along with tests for the mentioned issue. However the issue
-was rather that the filter would be skipped if we wanted to flush zone 0,
-which caused all zones to be flushed.
+On Fri, Feb 02, 2024 at 01:43:32AM -0500, Shaoqin Huang wrote:
+> Why sem_vcpu_cont and sem_vcpu_stop can be non-zero value? It's because
+> the dirty_ring_before_vcpu_join() execute the sem_post(&sem_vcpu_cont)
+> at the end of each dirty-ring test. It can cause two cases:
 
-The fix is available here: https://lore.kernel.org/netdev/ZcCxn9HDsB8DUPrI@felix.runs.onstackit.cloud/T/#u
+As a possible alternative, would it work if we simply reset all the sems
+for each run?  Then we don't care about the leftovers.  E.g. sem_destroy()
+at the end of run_test(), then always init to 0 at entry.
+
+-- 
+Peter Xu
+
 
