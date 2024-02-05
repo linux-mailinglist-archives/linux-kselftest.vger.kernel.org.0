@@ -1,72 +1,60 @@
-Return-Path: <linux-kselftest+bounces-4135-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66B1C8499CC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 13:15:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B41C849A36
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 13:30:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4BEA1F27AE7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 12:15:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 827FAB2496E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Feb 2024 12:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA691B7FC;
-	Mon,  5 Feb 2024 12:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38D61BDD8;
+	Mon,  5 Feb 2024 12:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FtwuUJzC"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="aRA7WQ8m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7115A1CF90;
-	Mon,  5 Feb 2024 12:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD821BC46;
+	Mon,  5 Feb 2024 12:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707134945; cv=none; b=Rv5otLtk6mraBspSEOTgwMZf2OWRpMwMa5nPMD3Th3wrVQsKf0evfXt+h7FRZNBxiN4WUr4YXhYTEXDhcTr7GTwlIKJGva8PHufcT/Ml8CCr8wIoUnjuCHVmRwG5ONNEddevI4RwSt7PvVh+y6y5+HEOfqnrVkG3Xg//ikHlEdc=
+	t=1707136175; cv=none; b=oYtgmkiEwGpQhCqs832NSTXfbVLTPhvXP0eVsmQG67l8UaD3Wh+Kh9Yq5IlIqwj3picew4IaTTFtVjbj7KPj4YRbS8tKGHuGaBUkBSAoNC4U1MCPcdQ8qLQc1ZJbY7vgIhKjCUyY+fsjyqgKlXet0jHQU7sYPYStbvuPHo3KLIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707134945; c=relaxed/simple;
-	bh=5E7/z2Mru2OC7j/RzNtJjVcVj7QA3NKSvWiDl8UWntI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PJgrfPLLK97DbGJtVQYcFxcIMOzD5JZ7//Lppl76S+J7kAjz5Oqm7Lc84qV+azCGMRsHGQ12ln2Jm5MPxgxpBMWhiACyegJvIBG8wtQtz3ESGdlD7UwClegISU9q3Kg+0oxynshAEIKUekQZk/tq7LY8AU3boqhGnuN3ZK0znQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FtwuUJzC; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707134944; x=1738670944;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5E7/z2Mru2OC7j/RzNtJjVcVj7QA3NKSvWiDl8UWntI=;
-  b=FtwuUJzCxKvod8sZHWSGYJ1K8kP3b9kR06wq0iWfd6Y65yDxGCmofHJR
-   kPRRllfS1/+fj7ug+XGvxc/ONro2H8zSBO96k+/WvISDBfABETWntTJdJ
-   /GZVBqTNJPU7utArdOJJ4iqI+yFTeYF6y4nY7KQGf2qMt0LVFQVZb4fc+
-   fLUAsRO6amumzC3QSejPgHpKx/RRfvlMmeicQHrv1w/Tg2+KQofXIcAX2
-   V7Y0WXqmZ1iQjzZFENersutFCt0gRDMc+6k/ROzimkIgkb4Nqi0wFr/B9
-   1Aw/KrmsRmcH1oYH/0D4dQnkrpVZHnpmR782hou20hnLm1iiUtNPifr2N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="4303572"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="4303572"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 04:09:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="5446025"
-Received: from snestero-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.21.196])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 04:09:00 -0800
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: fenghua.yu@intel.com,
-	reinette.chatre@intel.com,
-	shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1707136175; c=relaxed/simple;
+	bh=lBo2RrV5pMdT02xDg06b4tem5y69eHf5xWvN+5io1mU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A/c4bZCWw5GYonIoG+CSI4gYSgBHTycGVslRUCkvZeavSGbCngd68M7mc77M8THPoC9zNAeoZiF5y72qLdNvM00lv/5VWzsrJ9DffJu5kSBTp6QE1sURTVs5h8BmckagzlssrzbGunuLa+dIQL8SmMauB+JD1z5/pkUUZqsc7iA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=aRA7WQ8m; arc=none smtp.client-ip=115.124.30.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1707136163; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=nS7UhL6yQx/tw2vtmeDMl1ie3elC6cG5X3EMPLDAjNU=;
+	b=aRA7WQ8mHqRoxdAFs/4TCBXqW/g5Hblauc8aFZPrjRA36Hu+bzH2Jv133Ln0ddwjuX6C51g5XbkrB7JnNlWD6fDnDWvlnkIbOusiE1/wMLkJebhrF/AHiLX9z4swvU7iPBGGdeYyrwyBj9TnvaMYgabQxm1Ydc0/VtzMz7h6dM4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xiangzao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0W0AVhK2_1707136147;
+Received: from localhost.localdomain(mailfrom:xiangzao@linux.alibaba.com fp:SMTPD_---0W0AVhK2_1707136147)
+          by smtp.aliyun-inc.com;
+          Mon, 05 Feb 2024 20:29:23 +0800
+From: Yuanhe Shu <xiangzao@linux.alibaba.com>
+To: keescook@chromium.org,
+	tony.luck@intel.com,
+	gpiccoli@igalia.com,
+	shuah@kernel.org,
+	corbet@lwn.net
+Cc: xlpang@linux.alibaba.com,
 	linux-kernel@vger.kernel.org,
-	ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 5/5] selftests/resctrl: Add non-contiguous CBMs CAT test
-Date: Mon,  5 Feb 2024 13:08:46 +0100
-Message-ID: <b341ecc8d1143932307708aff44ab90db3a91564.1707130307.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1707130307.git.maciej.wieczor-retman@intel.com>
-References: <cover.1707130307.git.maciej.wieczor-retman@intel.com>
+	linux-doc@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yuanhe Shu <xiangzao@linux.alibaba.com>
+Subject: [PATCH v2 0/3] pstore: add multi-backend support
+Date: Mon,  5 Feb 2024 20:28:49 +0800
+Message-Id: <20240205122852.7069-1-xiangzao@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,163 +63,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add tests for both L2 and L3 CAT to verify the return values
-generated by writing non-contiguous CBMs don't contradict the
-reported non-contiguous support information.
+I have been steadily working but struggled to find a seamlessly
+integrated way to implement tty frontend until Guilherme inspired me
+that multi-backend and tty frontend are actually two separate entities.
+This submission presents the second iteration of my efforts, listing
+notable changes form the v1:
 
-Use a logical XOR to confirm return value of write_schemata() and
-non-contiguous CBMs support information match.
+1. pstore.backend no longer acts as "registered backend", but "backends
+eligible for registration".
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v4:
-- Return failure instead of error on check of cpuid against sparse_masks
-  and on contiguous write_schemata fail. (Reinette)
+2. drop subdir since it will break user space
 
-Changelog v3:
-- Roll back __cpuid_count part. (Reinette)
-- Update function name to read sparse_masks file.
-- Roll back get_cache_level() changes.
-- Add ksft_print_msg() to contiguous schemata write error handling
-  (Reinette).
+3. drop tty frontend since I haven't yet devised a satisfactory
+implementation strategy
 
-Changelog v2:
-- Redo the patch message. (Ilpo)
-- Tidy up __cpuid_count calls. (Ilpo)
-- Remove redundant AND in noncont_mask calculations (Ilpo)
-- Fix bit_center offset.
-- Add newline before function return. (Ilpo)
-- Group non-contiguous tests with CAT tests. (Ilpo)
-- Use a helper for reading sparse_masks file. (Ilpo)
-- Make get_cache_level() available in other source files. (Ilpo)
+A heartfelt thank you to Kees and Guilherme for your suggestions.
+I firmly believe that a tty frontend is crucial for kdump debugging,
+and I am still dedicating effort to develop one. Hope in the future I
+can accomplish it with deeper comprehension with tty driver :)
 
- tools/testing/selftests/resctrl/cat_test.c    | 81 +++++++++++++++++++
- tools/testing/selftests/resctrl/resctrl.h     |  2 +
- .../testing/selftests/resctrl/resctrl_tests.c |  2 +
- 3 files changed, 85 insertions(+)
+Yuanhe Shu (3):
+  pstore: add multi-backend support
+  Documentation: adjust pstore backend related document
+  tools/testing: adjust pstore backend related selftest
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 39fc9303b8e8..20eb978e624b 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -294,6 +294,71 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	return ret;
- }
- 
-+static int noncont_cat_run_test(const struct resctrl_test *test,
-+				const struct user_params *uparams)
-+{
-+	unsigned long full_cache_mask, cont_mask, noncont_mask;
-+	unsigned int eax, ebx, ecx, edx, ret, sparse_masks;
-+	char schemata[64];
-+	int bit_center;
-+
-+	/* Check to compare sparse_masks content to CPUID output. */
-+	ret = resource_info_unsigned_get(test->resource, "sparse_masks", &sparse_masks);
-+	if (ret)
-+		return ret;
-+
-+	if (!strcmp(test->resource, "L3"))
-+		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-+	else if (!strcmp(test->resource, "L2"))
-+		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-+	else
-+		return -EINVAL;
-+
-+	if (sparse_masks != ((ecx >> 3) & 1)) {
-+		ksft_print_msg("CPUID output doesn't match 'sparse_masks' file content!\n");
-+		return 1;
-+	}
-+
-+	/* Write checks initialization. */
-+	ret = get_full_cbm(test->resource, &full_cache_mask);
-+	if (ret < 0)
-+		return ret;
-+	bit_center = count_bits(full_cache_mask) / 2;
-+	cont_mask = full_cache_mask >> bit_center;
-+
-+	/* Contiguous mask write check. */
-+	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret) {
-+		ksft_print_msg("Write of contiguous CBM failed\n");
-+		return 1;
-+	}
-+
-+	/*
-+	 * Non-contiguous mask write check. CBM has a 0xf hole approximately in the middle.
-+	 * Output is compared with support information to catch any edge case errors.
-+	 */
-+	noncont_mask = ~(0xf << (bit_center - 2)) & full_cache_mask;
-+	snprintf(schemata, sizeof(schemata), "%lx", noncont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret && sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs supported but write of non-contiguous CBM failed\n");
-+	else if (ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported and write of non-contiguous CBM failed as expected\n");
-+	else if (!ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported but write of non-contiguous CBM succeeded\n");
-+
-+	return !ret == !sparse_masks;
-+}
-+
-+static bool noncont_cat_feature_check(const struct resctrl_test *test)
-+{
-+	if (!resctrl_resource_exists(test->resource))
-+		return false;
-+
-+	return resource_info_file_exists(test->resource, "sparse_masks");
-+}
-+
- struct resctrl_test l3_cat_test = {
- 	.name = "L3_CAT",
- 	.group = "CAT",
-@@ -301,3 +366,19 @@ struct resctrl_test l3_cat_test = {
- 	.feature_check = test_resource_feature_check,
- 	.run_test = cat_run_test,
- };
-+
-+struct resctrl_test l3_noncont_cat_test = {
-+	.name = "L3_NONCONT_CAT",
-+	.group = "CAT",
-+	.resource = "L3",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-+
-+struct resctrl_test l2_noncont_cat_test = {
-+	.name = "L2_NONCONT_CAT",
-+	.group = "CAT",
-+	.resource = "L2",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 2b9a3d0570c7..9e834496401c 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -209,5 +209,7 @@ extern struct resctrl_test mbm_test;
- extern struct resctrl_test mba_test;
- extern struct resctrl_test cmt_test;
- extern struct resctrl_test l3_cat_test;
-+extern struct resctrl_test l3_noncont_cat_test;
-+extern struct resctrl_test l2_noncont_cat_test;
- 
- #endif /* RESCTRL_H */
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 3044179ee6e9..f3dc1b9696e7 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -19,6 +19,8 @@ static struct resctrl_test *resctrl_tests[] = {
- 	&mba_test,
- 	&cmt_test,
- 	&l3_cat_test,
-+	&l3_noncont_cat_test,
-+	&l2_noncont_cat_test,
- };
- 
- static int detect_vendor(void)
+ Documentation/ABI/testing/pstore              |   8 +-
+ .../admin-guide/kernel-parameters.txt         |   4 +-
+ fs/pstore/ftrace.c                            |  29 ++-
+ fs/pstore/inode.c                             |  19 +-
+ fs/pstore/internal.h                          |   4 +-
+ fs/pstore/platform.c                          | 225 ++++++++++++------
+ fs/pstore/pmsg.c                              |  24 +-
+ include/linux/pstore.h                        |  29 +++
+ tools/testing/selftests/pstore/common_tests   |   8 +-
+ .../selftests/pstore/pstore_post_reboot_tests |  65 ++---
+ tools/testing/selftests/pstore/pstore_tests   |   2 +-
+ 11 files changed, 293 insertions(+), 124 deletions(-)
+
 -- 
-2.43.0
+2.39.3
 
 
