@@ -1,113 +1,141 @@
-Return-Path: <linux-kselftest+bounces-4197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4198-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D645B84BA08
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 16:46:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 724D984BA7B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 17:01:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D66B41C22119
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 15:46:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E7B0290716
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 16:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7722B1339B9;
-	Tue,  6 Feb 2024 15:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B38C13341F;
+	Tue,  6 Feb 2024 16:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ewj6278A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PV0B3eTO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB9013341C;
-	Tue,  6 Feb 2024 15:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C414134CE4;
+	Tue,  6 Feb 2024 16:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707234387; cv=none; b=a1DMVIV7+aa8cKsnHRXCMS8xJv8uX996ggkEhcJPsllCHPvnYN9IJAcqLc3tuYkp5CGWhlLUmpk97XbRKExYFJWeJDQ3dwcfquzeQNGvwYl1QVIjynP5hX2fmDJG+VhCu01kIP4nlq85jaQxC40q5KmNwqxmXQrAYW1ywVEngwY=
+	t=1707235293; cv=none; b=ckmQvChR15+fdLewK1QxLdz1hQEbjxBXaHrPn+1NLFbncAp0Be0oUxOxqvTiuzBhDZMVw88rREtuxk5BMF65NfBYrxMQh+3gibFE6o0Ff6nREbP+ahkZR5giFH4Rm/OUA+i4tKdm1+aL7X1CbBTWuhsP0rezI9LESdhoLdvKAL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707234387; c=relaxed/simple;
-	bh=Dd6I6nV8+ojF1BBf59OGW4C2lH8XSzYBSp+REHgzi8s=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=A5efStiXmRZSQsvU/9N5uK8YFO4W3/D59YOMrBlLTO8K1AW9wglEFz9D/WSZZ47imVjKNqtKaPYSzDcTIkPh7MYUo76JEvn7KSOpqi4pHns/tni3jPzB4qL+QRSIT9Pt35cDQo4W3cxRJ1BFogqrwwDMu4nZnFfOqkk23RUg8FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ewj6278A; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-78407987510so240162085a.3;
-        Tue, 06 Feb 2024 07:46:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707234384; x=1707839184; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nWmt02U4yzDr5xDrGMsZl8c2dz8hpS5VcwFUP5wXbgU=;
-        b=Ewj6278A+TVsNAfwLLNQiaVllyQJ7u33PUOP5mCD6T15Tfcn4LzItcqg1BhkF9d6f/
-         FgfsZVLEukyD2Zl4GdqmEuJL01gwyptQl0pQ1sl5eBvtrpaZ3eRRhhw3bixhs+B5Smw4
-         Ew6yxY6DMNvpfnCPhh7S1+4bKOWSYwGQllfc+7/G4sL0+3U2QBO5ggbT4YFWS2LUpi1t
-         llX90RK1SFG5itYxXS2qE8dHbEgi71DK1JZ36w341DW24Vd5nhRe2YuIcnxl3grKJZrI
-         qaE13xbQn2rWnesviIluLuAxU6K0iGobSormaSJVk+tH44cMljkkQ0VFJEk/BraFXHy3
-         1o8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707234384; x=1707839184;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nWmt02U4yzDr5xDrGMsZl8c2dz8hpS5VcwFUP5wXbgU=;
-        b=DVODwTBlDlvwVaOg8s5R4xHxHv/LsruaPDRa6Csc8pCVvqorvrFgKf9rmGGoLIKCfU
-         mx0ZRy4svpvNw8hfC5BIn6PxV1jMqRCiCQ4iFkT0HJoCNet5hjWywofMCSV472k5js4C
-         4T2IWaBBofC7RbWDRwRnC9/qOhhnnHopg4E4ACWYX/162hPH/UW51XqsAJ6VfQQOYyDy
-         7CGV6v1IKj0sbWyJbdzCDj8oKPkb4xY6qEFacUDSjNp3slKnPMO5x/qAlO0EpvnjX72O
-         MzbUpVDXsbUx6di/6f3/DU5/w4jlAX7LMnrawop/9U3zDTiuo/5ZYrgQo6uHheIRYKRQ
-         Bwlw==
-X-Gm-Message-State: AOJu0YyCe0x9OefHP3G3aPBpc93D9T6bsPN7Ko5tAYFvsfi040K7L588
-	9LLCcIh+nRLSs0mVlzceV1qy0bDvUR7H8id4huhjeVWx/LdsiSIN
-X-Google-Smtp-Source: AGHT+IH246cPOGvuKkLtkcDX5lL6hbbymI1b4EARN0qjgz+MNg0BgHLz6nfQ0wfR6Clfab9iieuNfg==
-X-Received: by 2002:a05:620a:381:b0:785:554e:e973 with SMTP id q1-20020a05620a038100b00785554ee973mr2974341qkm.65.1707234384613;
-        Tue, 06 Feb 2024 07:46:24 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXxNUmGzhF1yF5DZUI176mH1917UkFok7MFJ75PFlFuqWlY/HfK0vQrucD5MCr3JgmCgPFxFTatbyV49scKDOJHRDI729uhNnZoO4vTzaIu4s2+K9QALHh3SY6wO5vMrowT/6WX2WNnl9kIL1jrXrxK1IkOZdXb7WemKZT+V6niOpG1Bvp7CqfktbNSeNZn99apCNwj7jZA4qW4uQZ50xrgIlFa7QT0ZUZGNL/xxcb3rRuGnW+R3NZTAmmON56nrM5GKhaMqh+GGg0=
-Received: from localhost (131.65.194.35.bc.googleusercontent.com. [35.194.65.131])
-        by smtp.gmail.com with ESMTPSA id b9-20020a05620a270900b007858c6d3737sm774842qkp.102.2024.02.06.07.46.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Feb 2024 07:46:24 -0800 (PST)
-Date: Tue, 06 Feb 2024 10:46:23 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Willem de Bruijn <willemb@google.com>, 
- Coco Li <lixiaoyan@google.com>, 
- linux-kselftest@vger.kernel.org
-Message-ID: <65c2544fc9a91_b15142944e@willemb.c.googlers.com.notmuch>
-In-Reply-To: <117a20b1b09addb804b27167fafe1a47bfb2b18e.1707233152.git.pabeni@redhat.com>
-References: <117a20b1b09addb804b27167fafe1a47bfb2b18e.1707233152.git.pabeni@redhat.com>
-Subject: Re: [PATCH net] selftests: net: cope with slow env in gro.sh test
+	s=arc-20240116; t=1707235293; c=relaxed/simple;
+	bh=aRQxl0C0V0705HuiquTkhHHqPboA18NaqgotYv9rCA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h2mEI0WOsEOiPXPLgognY8Zh6RFkqDX+qNFVO+7CLVQ03VCs+rs2Ua3ll4yHAFFyOXsykoY3AVnsZvc+IfcmJ8MBV85E2sMqchT13eS+84NGZ5HJ6RWNnCGMjzoblEmyGCiUfKZifi63Kf3C7swE/LBFIgtBZsfQx9p83BqxR5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PV0B3eTO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E2BAC433F1;
+	Tue,  6 Feb 2024 16:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707235291;
+	bh=aRQxl0C0V0705HuiquTkhHHqPboA18NaqgotYv9rCA8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PV0B3eTOaNjzcvWs65Me6RDLhFj8YGByJ83V31ytWUnS8qhWSmRMRl0l5zr6Ky/HI
+	 V8VB3bU4h1IvUqAnjW+GixZAPSitutZKlnNNQsb3zhPpetctNotMxhcs+16kpERvcI
+	 QJlKVt1MUAwmmTLtRKPv+7kMaAaYKnrgHOiLqelYjBoBJh2c90qyMuKpsBQaLV4ixc
+	 x4u/dAvjHm8aNECN3GpgyoQDyFjLJi59680J1T/oC03fzuisXQvW2y2jFqQGwm715y
+	 2X7DJSP2x6Oz8DlvjQGm4xWPmxiPaAXHidpqbvV2Qg4SWxurgjdXViSVHc8zyfhu2V
+	 +S947qR7PCFqA==
+Date: Tue, 6 Feb 2024 16:01:28 +0000
+From: Mark Brown <broonie@kernel.org>
+To: debug@rivosinc.com
+Cc: rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
+	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
+	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
+	xiao.w.wang@intel.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, waylingii@gmail.com,
+	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
+	panqinglin2020@iscas.ac.cn, willy@infradead.org,
+	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
+	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
+	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
+	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 15/28] riscv/mm: Implement map_shadow_stack()
+ syscall
+Message-ID: <ZcJX2IJb0hOM5RF5@finisterre.sirena.org.uk>
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-16-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3ywwgCSX0zhXuCNZ"
+Content-Disposition: inline
+In-Reply-To: <20240125062739.1339782-16-debug@rivosinc.com>
+X-Cookie: You might have mail.
 
-Paolo Abeni wrote:
-> The gro self-tests sends the packets to be aggregated with
-> multiple write operations.
-> 
-> When running is slow environment, it's hard to guarantee that
-> the GRO engine will wait for the last packet in an intended
-> train.
-> 
-> The above causes almost deterministic failures in our CI for
-> the 'large' test-case.
-> 
-> Address the issue explicitly ignoring failures for such case
-> in slow environments (KSFT_MACHINE_SLOW==true).
-> 
-> Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+--3ywwgCSX0zhXuCNZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jan 24, 2024 at 10:21:40PM -0800, debug@rivosinc.com wrote:
+
+> As discussed extensively in the changelog for the addition of this
+> syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
+> existing mmap() and madvise() syscalls do not map entirely well onto the
+> security requirements for guarded control stacks since they lead to
+> windows where memory is allocated but not yet protected or stacks which
+> are not properly and safely initialised. Instead a new syscall
+> map_shadow_stack() has been defined which allocates and initialises a
+> shadow stack page.
+
+While I agree that this is very well written you probably want to update
+the references to guarded control stacks to whatever the RISC-V term is :P
+
+> --- a/include/uapi/asm-generic/mman.h
+> +++ b/include/uapi/asm-generic/mman.h
+> @@ -19,4 +19,5 @@
+>  #define MCL_FUTURE	2		/* lock all future mappings */
+>  #define MCL_ONFAULT	4		/* lock all pages that are faulted in */
+> =20
+> +#define SHADOW_STACK_SET_TOKEN (1ULL << 0)     /* Set up a restore token=
+ in the shadow stack */
+>  #endif /* __ASM_GENERIC_MMAN_H */
+
+For arm64 I also added a SHADOW_STACK_SET_MARKER for adding a top of
+stack marker, did you have any thoughts on that for RISC-V?  I think x86
+were considering adding it too, it'd be good if we could get things
+consistent.
+
+--3ywwgCSX0zhXuCNZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCV9cACgkQJNaLcl1U
+h9DovAf+LgWdOKedTbffoEJgm3iDVrzzlW/jko7UF4Sjg6Gv0ngCJGWQIzvYEk/w
+B/3v/8xatJ9n+VbKX606intt/LsnRYDNTB3OVDKogBCeRo6NPl26QjEqt8lQQtSa
+po1FZcEIfdjmxWOCphm0MYLR97sxtDs+07Y6SOdoEFyowqDP9y7VIHR4juOy0RyJ
+tpKpA1fORTVxP50RQT+V9GZ9zuV6FL2C5ULfahB+o6W6r/wmVlSWdsFkwdnayCKv
+9DqlaPDQoklRZRy6bgUPTHyc1b6suEgg2G6Om/Pzd7Z3snoiyeDBoqMgMWOhAa1r
+XYbr9H4oCPUEs0ONOGZmAcXzGu7kIQ==
+=mDMz
+-----END PGP SIGNATURE-----
+
+--3ywwgCSX0zhXuCNZ--
 
