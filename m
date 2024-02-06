@@ -1,96 +1,122 @@
-Return-Path: <linux-kselftest+bounces-4195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F120D84B806
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 15:35:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6663E84B990
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 16:29:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D0121F26CA4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 14:35:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14B7B292951
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 15:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E544C3D6;
-	Tue,  6 Feb 2024 14:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3F413399B;
+	Tue,  6 Feb 2024 15:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OmH2IHuv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fmLWp/3d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52451E869;
-	Tue,  6 Feb 2024 14:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E346C1332A1
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Feb 2024 15:27:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707230097; cv=none; b=BJVT+jRd0JNa7fSTKugLxvf1JvEZmsTiVrJ5Q06VXPT5iXMpb6/iL3Jvk77ls1vLvywO0Xs5MY/95WmkdkvsWdnDMPhL4g7JXrp/jE1KkWMCxC0Ffh4dbOcgLmoMfiBcjmks70JFqpD0FkCSmeJcY1MI1rbLC2KbqU8R3wX3hmk=
+	t=1707233272; cv=none; b=M0adRY+cMTS8Hd4xc1snp/o/4QylZSLRof1+USEI8K4Snzzg1TzFJAEZJ0dzi98WSmNkwS5eWEkZjfGgKntdyW8T4emc+oWkLDA+amlrZuNywD5oI/93lDw75Ef6+E5X2d3tqs2mbZRb6Qn2DANo9dCLYEdAytKlXaROfHSXUuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707230097; c=relaxed/simple;
-	bh=pGOJX9sGR/tZtTMlvuy5y7jlJSC9YMDndeZJL99ifbo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aFzXtLHX7JCiQdrxZolRb2eqnfY7lMq+NsVYXzuLB/x7UjJTAbp1EjxOKmOIglZvDZLY4qhxuMMypwlba2lp5HAzw+0lmCzRk68KKTIKwLJtD7K1tA2EsSz7eOWR/UZnC/UzTR0gaA4rx6xNhwGOAtd/7IItNJLKYswh/0GJyYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OmH2IHuv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7568C433F1;
-	Tue,  6 Feb 2024 14:34:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707230097;
-	bh=pGOJX9sGR/tZtTMlvuy5y7jlJSC9YMDndeZJL99ifbo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OmH2IHuv4WqwcROHd34tjmNiC8cYhdJqG2h2BMIGnyz8a/NAnYhEx8MjjT2bYnL7E
-	 7r0kBN5FBWezD5fHlwn/AMucQM/cHMdK31iK9spWwn3BghVvBH9GQXJion9gAJL5xM
-	 /9f5iTJ3Ycao+kF6Qlcqb5ZlTr6F8JkliiJwnRTyDILnSRZidOFpxAhRbxcSXK1IZs
-	 8lU14UxOSYU9B5pA8QsgfXD1wLKmlwjS9UGjFPMJjq1MBPjFxl+RYFWqPZhm8UUc4r
-	 WVXE7HQS5SaNRRqg3nsyh1BISUCqfmYOrBC+uGeMyh9rMRiZFcCSzPdeYwcKCIvxvk
-	 plHzzbyYcEEZQ==
-Date: Tue, 6 Feb 2024 14:34:54 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: kernel test robot <oliver.sang@intel.com>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/seccomp: Pin benchmark to single CPU
-Message-ID: <ZcJDjohKwXdWkABw@finisterre.sirena.org.uk>
-References: <20240206141234.it.656-kees@kernel.org>
+	s=arc-20240116; t=1707233272; c=relaxed/simple;
+	bh=9u1dMsiaosyRB4lzwc8Ed34DePp+0a7Z2kA4o0DY4Bk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D58V6eD/nxDQTi4Dem41lse6sYj5wA21exsrx6d+MrFKXBed3RvSk2gacNcMRsATlAKM2hBm7E2Z8lh4NgEjYZEoe4ni38i2JLmE99twS7IrATlCjW2IlD+PFDgLL/hS6Oo0eJOHzqi/vUIluCtLqbuZnWsiQt+GtTF5LWQDp1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fmLWp/3d; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707233268;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Fq9scFE4YcfgjmX5UvcXbGzet+l7McK0LQVifIhtSf0=;
+	b=fmLWp/3dPg3rPqhbQ6JtJRUfkV4lNcTs9Vqa0uVOCJKtmodP+9qNOg+5EEGFKQtNdhnTj8
+	kh3xpAtPmFqWVCIN6/a5HlEP4wcT3EyhvJ9Ujd6FRKT0eOkCkzQaLGQaLfAWtx+JhX4Ljv
+	77IF7G4D8VomezwKqagXMxsxFoy2x7g=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-609-H-uMpYSFOsya9Z7DSAkaPQ-1; Tue,
+ 06 Feb 2024 10:27:45 -0500
+X-MC-Unique: H-uMpYSFOsya9Z7DSAkaPQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F6CF3813BD1;
+	Tue,  6 Feb 2024 15:27:44 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.45.225.229])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 200282166B31;
+	Tue,  6 Feb 2024 15:27:42 +0000 (UTC)
+From: Paolo Abeni <pabeni@redhat.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Coco Li <lixiaoyan@google.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: net: cope with slow env in gro.sh test
+Date: Tue,  6 Feb 2024 16:27:40 +0100
+Message-ID: <117a20b1b09addb804b27167fafe1a47bfb2b18e.1707233152.git.pabeni@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QNlKs+3Im2pOVIx5"
-Content-Disposition: inline
-In-Reply-To: <20240206141234.it.656-kees@kernel.org>
-X-Cookie: You might have mail.
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
+The gro self-tests sends the packets to be aggregated with
+multiple write operations.
 
---QNlKs+3Im2pOVIx5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+When running is slow environment, it's hard to guarantee that
+the GRO engine will wait for the last packet in an intended
+train.
 
-On Tue, Feb 06, 2024 at 06:12:38AM -0800, Kees Cook wrote:
-> The seccomp benchmark test (for validating the benefit of bitmaps) can
-> be sensitive to scheduling speed, so pin the process to a single CPU,
-> which appears to significantly improve reliability, and loosen the
-> "close enough" checking to allow up to 10% variance instead of 1%.
+The above causes almost deterministic failures in our CI for
+the 'large' test-case.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Address the issue explicitly ignoring failures for such case
+in slow environments (KSFT_MACHINE_SLOW==true).
 
---QNlKs+3Im2pOVIx5
-Content-Type: application/pgp-signature; name="signature.asc"
+Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+---
+Note that the fixes tag is there mainly to justify targeting the net
+tree, and this is aiming at net to hopefully make the test more stable
+ASAP for both trees.
 
------BEGIN PGP SIGNATURE-----
+I experimented with a largish refactory replacing the multiple writes
+with a single GSO packet, but exhausted by time budget before reaching
+any good result.
+---
+ tools/testing/selftests/net/gro.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCQ40ACgkQJNaLcl1U
-h9CQ9gf/Wcm+g3m+XVIHObi/0gY3HZCpJsSH2qg9U7m820Z4DCwxxerfVrqhNoHP
-caJqE4h4dnm3B8SvMmEqdALSFlHVAzJCzBlhXPtSb1mrYEbJtYh/Di7v/nDL8DYJ
-ryemJdAWzXRpO4prNbNaRkiKS06nV982GTqF3TcITI9p+hY6sDSiFWaZtkeTo0Aj
-/gJAgU/k3Keji40F9dSICO/1Aik+fohcxEF35uC6tH47oi/6NgPaOvgG6bVrvduK
-ZI5Sq+5XfvwxymnNZjjefHaJNGdNnp4jwMZdW7ZKstkjH600xepBcMQZFPPgKzmZ
-ALc0QvDdfj0jhyHj5jOcdTo098BwYw==
-=evRD
------END PGP SIGNATURE-----
+diff --git a/tools/testing/selftests/net/gro.sh b/tools/testing/selftests/net/gro.sh
+index 19352f106c1d..114b5281a3f5 100755
+--- a/tools/testing/selftests/net/gro.sh
++++ b/tools/testing/selftests/net/gro.sh
+@@ -31,6 +31,10 @@ run_test() {
+       1>>log.txt
+     wait "${server_pid}"
+     exit_code=$?
++    if [ ${test} == "large" -a -n "${KSFT_MACHINE_SLOW}" ]; then
++        echo "Ignoring errors due to slow environment" 1>&2
++        exit_code=0
++    fi
+     if [[ "${exit_code}" -eq 0 ]]; then
+         break;
+     fi
+-- 
+2.43.0
 
---QNlKs+3Im2pOVIx5--
 
