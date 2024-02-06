@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-4184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5120984B14B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 10:30:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD5984B17D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 10:40:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84D381C21AED
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 09:30:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5676FB21E5E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 09:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06AD12DD8C;
-	Tue,  6 Feb 2024 09:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3732D12CDBE;
+	Tue,  6 Feb 2024 09:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MsUZZYpv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fxhcc8GA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94CC12DD87;
-	Tue,  6 Feb 2024 09:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C23012D148;
+	Tue,  6 Feb 2024 09:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707211826; cv=none; b=UldQgmNYVUSTiuVPdlgnnEL1klbeRgT0xW63PS8YKCT8tkBxGLLr/7Mv7fktYsclvBnYtd7afkSg1bNRMMgN3YIHNBcBLAYjjTuEfAlciKKeUNSCXHQCVHDf05Z1JdAY9glBTTelpiWnLH19yKzKIB0HfqzZsqa+1c8T/yVyMjY=
+	t=1707212428; cv=none; b=NdJE+HfxDh+qYKcHlPG/nTFhIhNazi9f1XTXFqGID9jtqjQM6czH0Kt3Ae1rYm1eqnXKSIOin8P0JgagPqYAd5aheGVINyK/d1DBGYHb6eqLPqfwM9OYukTlKE54z/Ny68HY4z3/yTPHQNV/Wo3q0TJ4mO3MdLchg9pel0e3/Hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707211826; c=relaxed/simple;
-	bh=qsvov4oq4ERupC1CRh3t9QcxaPjnTBWsvxcxhElCRyg=;
+	s=arc-20240116; t=1707212428; c=relaxed/simple;
+	bh=b5Q0bEGFlliOgO8ZPlU1DX/9fSkj/V0AMapQ6831k+8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=nserkPRvGEnOwtU0iTPDcjsMqzfJgb6qux+78aeP4efZ/MO64zpxX6OjGRzVPF/AFgdayPhjFra/TZT8cGU36LEVn3r4uRQ9pvO2Ys2UfF6npWt+X/WEw0zJJtHbHMMCOPEbHY6l7PL7a3IAJhL1sPjSaEjegr3jCNnU2aVy+VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MsUZZYpv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 46E83C433F1;
-	Tue,  6 Feb 2024 09:30:26 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=He2/eQ8USVIvU+N87COZsh5rVwv6WIcmNQHw/dt62883HVE7UZJUsUp4um2SFZo92lm+b5i6SPHQu9SrVfshKGorjSW8bnnEzjOZSBqIfbmDh1iaNO6V7sMEFEvqfqsR/gak8uCPgTQok8pos/wevLP1VkNElhZMwZpto/We2D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fxhcc8GA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 865D1C43394;
+	Tue,  6 Feb 2024 09:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707211826;
-	bh=qsvov4oq4ERupC1CRh3t9QcxaPjnTBWsvxcxhElCRyg=;
+	s=k20201202; t=1707212427;
+	bh=b5Q0bEGFlliOgO8ZPlU1DX/9fSkj/V0AMapQ6831k+8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=MsUZZYpvu/TXGdb+gJuDm13IMo1lofYjDxdrad1sw6QbmyKc/AqkVXdWjPPvs8Ahu
-	 wJvZj46gw8aeyN5ONkuyUUzGHrZWPn3VdjBj9vGkVXZrc7i3gxBgs2+tPNhDirnToC
-	 2OJGKNAtYE/fVhGDoBjpQ3ME6e8ngLEXq1Z0ZCxQ46mBD0OAE2SUadd7h6gNIVLYRy
-	 nkxwLOKrgGSxaDUXE6jQ6lul3Sqd2bJ5Tt5X4tuyr7xJPbmqCNBVYn1Iiye8A4IIdE
-	 y58fACncG+CKzPSQoP3WwfO3123tWUxfl2PBSAKWUrjqsrc7TVVxFc4MJcOzGPMDUS
-	 IYPxcVBcUm6MQ==
+	b=Fxhcc8GAAwMtDqDlpvW/wvOCt0kgP0Kl6DS7ncS9vJnXJ/8NIW/WZyvkLrcy0c25c
+	 EJSOXEk0Oas+0x/YvDINKldHlMO58doR6okuTCqzPCifsfx8pl4rytWP6PWkW8y5tr
+	 Dt3xIQrNLvWNxPovrHjxCYKwOKOuOOkbj6pEPNIMYHZzVU72W/Ea0R416olnvGLhjO
+	 OHgDzstf/ZccPRpqhnuczte8W3bZSx5RLCcNldQnd/uSZP791pSGJjO5RMdlQsT+f7
+	 dchzQhln0QiXPO1rzVhZw0coL1pa4GSTA0vB2OuRv3CLGEZCvXzERLKkTSPwDVPvUM
+	 u9LZuSWCaTDzQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 323FCE2F31F;
-	Tue,  6 Feb 2024 09:30:26 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6C8E7D8C97E;
+	Tue,  6 Feb 2024 09:40:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,39 +52,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests/net: ignore timing errors in so_txtime if
- KSFT_MACHINE_SLOW
+Subject: Re: [PATCH] selftests/net: Amend per-netns counter checks
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <170721182620.9128.9587375437123290639.git-patchwork-notify@kernel.org>
-Date: Tue, 06 Feb 2024 09:30:26 +0000
-References: <20240201162130.2278240-1-willemdebruijn.kernel@gmail.com>
-In-Reply-To: <20240201162130.2278240-1-willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- edumazet@google.com, pabeni@redhat.com, linux-kselftest@vger.kernel.org,
- willemb@google.com
+ <170721242744.16343.3381362430812280443.git-patchwork-notify@kernel.org>
+Date: Tue, 06 Feb 2024 09:40:27 +0000
+References: <20240202-unsigned-md5-netns-counters-v1-1-8b90c37c0566@arista.com>
+In-Reply-To: <20240202-unsigned-md5-netns-counters-v1-1-8b90c37c0566@arista.com>
+To: Dmitry Safonov <dima@arista.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, 0x7f454c46@gmail.com, horms@kernel.org,
+ mnassiri@ciena.com, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net.git (main)
 by Paolo Abeni <pabeni@redhat.com>:
 
-On Thu,  1 Feb 2024 11:21:19 -0500 you wrote:
-> From: Willem de Bruijn <willemb@google.com>
+On Fri,  2 Feb 2024 02:24:59 +0000 you wrote:
+> Selftests here check not only that connect()/accept() for
+> TCP-AO/TCP-MD5/non-signed-TCP combinations do/don't establish
+> connections, but also counters: those are per-AO-key, per-socket and
+> per-netns.
 > 
-> This test is time sensitive. It may fail on virtual machines and for
-> debug builds.
-> 
-> Continue to run in these environments to get code coverage. But
-> optionally suppress failure for timing errors (only). This is
-> controlled with environment variable KSFT_MACHINE_SLOW.
+> The counters are checked on the server's side, as the server listener
+> has TCP-AO/TCP-MD5/no keys for different peers. All tests run in
+> the same namespaces with the same veth pair, created in test_init().
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next] selftests/net: ignore timing errors in so_txtime if KSFT_MACHINE_SLOW
-    https://git.kernel.org/netdev/net-next/c/c41dfb0dfbec
+  - selftests/net: Amend per-netns counter checks
+    https://git.kernel.org/netdev/net/c/b083d24fcf57
 
 You are awesome, thank you!
 -- 
