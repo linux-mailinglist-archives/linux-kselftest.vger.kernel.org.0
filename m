@@ -1,359 +1,736 @@
-Return-Path: <linux-kselftest+bounces-4181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08EBA84AF9D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 09:07:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3C2F84B02E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 09:45:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 797B9B238F1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 08:07:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11E931C2460F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Feb 2024 08:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC3A12C53A;
-	Tue,  6 Feb 2024 08:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73AEA12BE8E;
+	Tue,  6 Feb 2024 08:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A/RJfAgU"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SdVmj/yV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4152012AAE6;
-	Tue,  6 Feb 2024 08:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE86B12B17D;
+	Tue,  6 Feb 2024 08:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707206763; cv=none; b=JrlRnBOCaxX8mt//nKOQpZ/Z3PfdiSuNWr+lO0vCsHlVl6Fj9NixHQ53BEIsJiR3t1O634CH7AMOUAhxctjPlli9j2NjFrydZPjAGIlrq132HaL2O/KsWTAEwWu5x6zaofyR0d/ikwRF8E1j0R3lY9kuMS+gP38XsZ52KDTUD6Q=
+	t=1707208915; cv=none; b=Jw1aoSQXeTET/5iPdfW7MPALeRrp9wYzccyzuBcuZIsKhgPb/B1ji4k0idlKe+/AQTOtxzsccrdN7zsfQl9lFRRa7QnjEqSz84iubrNQs61axwMhcEhB4zuqvD2cWrPNtxlRL/iteVtdSJF7lPRiZt02I8IB8j8DmJNWCWvwVOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707206763; c=relaxed/simple;
-	bh=hMsn2e6HC3U8c37TkO7z3XBRkBoETq2STVUQJ5qM61I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y5ep8ucuZO991RuLzNYYS2uSv7qUGQ6+Mf5o1rMo+Bkdq+NW4CfChP5+bczE18i6hjQwLpopqiWfKtVmVfX24yOFUSw9BMmx6Ec4Amzu1thn9zZey8ehqwockWN6V1aAZfNACfiT4e8/nNSRGx3tl+PjeK0MmV85nudqxQChZdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A/RJfAgU; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707206760; x=1738742760;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hMsn2e6HC3U8c37TkO7z3XBRkBoETq2STVUQJ5qM61I=;
-  b=A/RJfAgU0DfUCGvHZ40vHi7kRrRhemPy1mEx1LB3oX2YSuIWe03Xtq0s
-   oTX5sQgXWyFPX/EtQ3zWEUv/Pnhu9qAMf2dYfDrHWpagMlLaV+Ze26iM1
-   mQFfeh3qTrK0VNIrI6V8Ks+LRGphnIuoxHAGUyQTn9E3VLwBtaRBwcUew
-   0xuM65yqjV1PLwlhgX5mH1s01QhXKp3E4e4Y+wvrAU+7eRKf1KjRTciwC
-   Op8EDA184uHSSCKZMM6lh3Vfwq95+KP/7RJGlUVbkiqpQ63Iy+7pfikqp
-   uh7uSbgUDmTBSUjAT6Blm/dcWvQ6umMF4J4D06lu5TJh8C54DwJYYnKIW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="581995"
-X-IronPort-AV: E=Sophos;i="6.05,246,1701158400"; 
-   d="scan'208";a="581995"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 00:05:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,246,1701158400"; 
-   d="scan'208";a="5710575"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 06 Feb 2024 00:05:55 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXGSn-0001BE-0Q;
-	Tue, 06 Feb 2024 08:05:53 +0000
-Date: Tue, 6 Feb 2024 16:05:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yuanhe Shu <xiangzao@linux.alibaba.com>, keescook@chromium.org,
-	tony.luck@intel.com, gpiccoli@igalia.com, shuah@kernel.org,
-	corbet@lwn.net
-Cc: oe-kbuild-all@lists.linux.dev, xlpang@linux.alibaba.com,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Yuanhe Shu <xiangzao@linux.alibaba.com>,
-	Xingrui Yi <yixingrui@linux.alibaba.com>
-Subject: Re: [PATCH 1/3] pstore: add multi-backend support
-Message-ID: <202402061551.EkLBF7yD-lkp@intel.com>
-References: <20240205122852.7069-2-xiangzao@linux.alibaba.com>
+	s=arc-20240116; t=1707208915; c=relaxed/simple;
+	bh=f6pH1rkezKcbjAn9SSzVuWD0pdnJkQAVTdqLUP2oTSY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Fiw2OBPNzImBNcwNEnagQFBOu+tE6fwhGni4KzHGDxrW+BbQDmQHk2eBEk+Wt3TarFN0bLQJuST/+mleb39phJIUmE+uSWig1+D6DjZLq0sWHqvQXjPxHDfwpxRJdR5EwGe4cI5yBtJqtEG51kxKXtNkD5+p8TuK0D7I5LYAHCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SdVmj/yV; arc=none smtp.client-ip=115.124.30.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1707208908; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=MILmR4KcRx9dT5JEzJg0dd4UmKyGtTF/qO7G0QRXJ8Y=;
+	b=SdVmj/yVCasipJ9qkrC3Cspo92GJ3nTE121EzMJSUyt8sh0WkUfmCE8m4UrZf+M+y/jxIqF1HXB6XvNL8Es1qmiQeHZBUkx9mPVNyZkKYG2weTJG68X5toDBkWMGEzv/6kQsxhKi7ILWlcLRz8eDeUTNx20TUtazXYhxpgdNR1I=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xiangzao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0W0Cxwfj_1707208896;
+Received: from localhost.localdomain(mailfrom:xiangzao@linux.alibaba.com fp:SMTPD_---0W0Cxwfj_1707208896)
+          by smtp.aliyun-inc.com;
+          Tue, 06 Feb 2024 16:41:47 +0800
+From: Yuanhe Shu <xiangzao@linux.alibaba.com>
+To: lkp@intel.com
+Cc: corbet@lwn.net,
+	gpiccoli@igalia.com,
+	keescook@chromium.org,
+	linux-doc@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	oe-kbuild-all@lists.linux.dev,
+	shuah@kernel.org,
+	tony.luck@intel.com,
+	xiangzao@linux.alibaba.com,
+	xlpang@linux.alibaba.com,
+	yixingrui@linux.alibaba.com
+Subject: [PATCH 1/3] pstore: add multi-backend support
+Date: Tue,  6 Feb 2024 16:41:23 +0800
+Message-Id: <20240206084123.472995-1-xiangzao@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <202402061551.EkLBF7yD-lkp@intel.com>
+References: <202402061551.EkLBF7yD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240205122852.7069-2-xiangzao@linux.alibaba.com>
 
-Hi Yuanhe,
+Currently, pstore supports only one backend open at a time.
+Specifically, due to the global variable "psinfo", pstore only accepts
+the first registered backend. If a new backend wants to register later,
+pstore will simply reject it and return an error. This design forced us
+to close existing backend in order to use the new ones.
 
-kernel test robot noticed the following build errors:
+To enable pstore to support multiple backends, "psinfo" is replaced by
+"psinfo_list", a list that holds multiple "psinfo". If multiple backends
+are registered with the same frontend, the frontend is reused.
 
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on kees/for-next/kspp shuah-kselftest/next shuah-kselftest/fixes linus/master v6.8-rc3 next-20240205]
-[cannot apply to aegl/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+User can specify multiple backends that are allowed to be registered by
+module parameter "pstore.backend=" separated by commas or "all" to
+enable all available backends. If no pstore.backend was specified,
+pstore would accept the first registered backend which is the same as
+before.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yuanhe-Shu/pstore-add-multi-backend-support/20240205-203438
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-patch link:    https://lore.kernel.org/r/20240205122852.7069-2-xiangzao%40linux.alibaba.com
-patch subject: [PATCH 1/3] pstore: add multi-backend support
-config: csky-randconfig-r071-20240206 (https://download.01.org/0day-ci/archive/20240206/202402061551.EkLBF7yD-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240206/202402061551.EkLBF7yD-lkp@intel.com/reproduce)
+Signed-off-by: Xingrui Yi <yixingrui@linux.alibaba.com>
+Signed-off-by: Yuanhe Shu <xiangzao@linux.alibaba.com>
+---
+ fs/pstore/ftrace.c     |  31 +++++-
+ fs/pstore/inode.c      |  19 ++--
+ fs/pstore/internal.h   |   4 +-
+ fs/pstore/platform.c   | 225 ++++++++++++++++++++++++++++-------------
+ fs/pstore/pmsg.c       |  24 ++++-
+ include/linux/pstore.h |  29 ++++++
+ 6 files changed, 250 insertions(+), 82 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402061551.EkLBF7yD-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> fs/pstore/ftrace.c:30:47: warning: 'struct ftrace_info' declared inside parameter list will not be visible outside of this definition or declaration
-      30 |                                        struct ftrace_info *psinfo)
-         |                                               ^~~~~~~~~~~
-   fs/pstore/ftrace.c: In function 'pstore_do_ftrace':
->> fs/pstore/ftrace.c:39:24: error: initialization of 'struct pstore_info *' from incompatible pointer type 'struct ftrace_info *' [-Werror=incompatible-pointer-types]
-      39 |                 .psi = psinfo,
-         |                        ^~~~~~
-   fs/pstore/ftrace.c:39:24: note: (near initialization for 'record.psi')
->> fs/pstore/ftrace.c:55:15: error: invalid use of undefined type 'struct ftrace_info'
-      55 |         psinfo->write(&record);
-         |               ^~
-   fs/pstore/ftrace.c: In function 'pstore_ftrace_call':
->> fs/pstore/ftrace.c:71:61: error: passing argument 4 of 'pstore_do_ftrace' from incompatible pointer type [-Werror=incompatible-pointer-types]
-      71 |                         pstore_do_ftrace(ip, parent_ip, op, regs, entry->psi);
-         |                                                             ^~~~
-         |                                                             |
-         |                                                             struct pt_regs *
-   fs/pstore/ftrace.c:29:60: note: expected 'struct ftrace_regs *' but argument is of type 'struct pt_regs *'
-      29 |                                        struct ftrace_regs *fregs,
-         |                                        ~~~~~~~~~~~~~~~~~~~~^~~~~
-   fs/pstore/ftrace.c:71:72: error: passing argument 5 of 'pstore_do_ftrace' from incompatible pointer type [-Werror=incompatible-pointer-types]
-      71 |                         pstore_do_ftrace(ip, parent_ip, op, regs, entry->psi);
-         |                                                                   ~~~~~^~~~~
-         |                                                                        |
-         |                                                                        struct pstore_info *
-   fs/pstore/ftrace.c:30:60: note: expected 'struct ftrace_info *' but argument is of type 'struct pstore_info *'
-      30 |                                        struct ftrace_info *psinfo)
-         |                                        ~~~~~~~~~~~~~~~~~~~~^~~~~~
-   fs/pstore/ftrace.c: At top level:
->> fs/pstore/ftrace.c:76:19: error: initialization of 'void (*)(long unsigned int,  long unsigned int,  struct ftrace_ops *, struct ftrace_regs *)' from incompatible pointer type 'void (*)(long unsigned int,  long unsigned int,  struct ftrace_ops *, struct pt_regs *)' [-Werror=incompatible-pointer-types]
-      76 |         .func   = pstore_ftrace_call,
-         |                   ^~~~~~~~~~~~~~~~~~
-   fs/pstore/ftrace.c:76:19: note: (near initialization for 'pstore_ftrace_ops.func')
-   In file included from include/linux/dcache.h:8,
-                    from include/linux/fs.h:8,
-                    from include/linux/huge_mm.h:8,
-                    from include/linux/mm.h:1095,
-                    from include/linux/kallsyms.h:13,
-                    from include/linux/ftrace.h:13,
-                    from fs/pstore/ftrace.c:14:
-   fs/pstore/ftrace.c: In function 'pstore_register_ftrace':
->> fs/pstore/ftrace.c:150:33: error: 'entry' undeclared (first use in this function); did you mean 'dentry'?
-     150 |         list_for_each_entry_rcu(entry, &psback->list_entry, list)
-         |                                 ^~~~~
-   include/linux/rculist.h:391:14: note: in definition of macro 'list_for_each_entry_rcu'
-     391 |              pos = list_entry_rcu((head)->next, typeof(*pos), member);  \
-         |              ^~~
-   fs/pstore/ftrace.c:150:33: note: each undeclared identifier is reported only once for each function it appears in
-     150 |         list_for_each_entry_rcu(entry, &psback->list_entry, list)
-         |                                 ^~~~~
-   include/linux/rculist.h:391:14: note: in definition of macro 'list_for_each_entry_rcu'
-     391 |              pos = list_entry_rcu((head)->next, typeof(*pos), member);  \
-         |              ^~~
-   In file included from include/linux/container_of.h:5,
-                    from include/linux/kernel.h:22,
-                    from fs/pstore/ftrace.c:6:
-   include/linux/compiler_types.h:376:27: error: expression in static assertion is not an integer
-     376 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:20:9: note: in expansion of macro 'static_assert'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/rculist.h:307:9: note: in expansion of macro 'container_of'
-     307 |         container_of(READ_ONCE(ptr), type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/rculist.h:391:20: note: in expansion of macro 'list_entry_rcu'
-     391 |              pos = list_entry_rcu((head)->next, typeof(*pos), member);  \
-         |                    ^~~~~~~~~~~~~~
-   fs/pstore/ftrace.c:150:9: note: in expansion of macro 'list_for_each_entry_rcu'
-     150 |         list_for_each_entry_rcu(entry, &psback->list_entry, list)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:376:27: error: expression in static assertion is not an integer
-     376 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:20:9: note: in expansion of macro 'static_assert'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/rculist.h:307:9: note: in expansion of macro 'container_of'
-     307 |         container_of(READ_ONCE(ptr), type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/rculist.h:393:23: note: in expansion of macro 'list_entry_rcu'
-     393 |                 pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
-         |                       ^~~~~~~~~~~~~~
-   fs/pstore/ftrace.c:150:9: note: in expansion of macro 'list_for_each_entry_rcu'
-     150 |         list_for_each_entry_rcu(entry, &psback->list_entry, list)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +39 fs/pstore/ftrace.c
-
-fbccdeb8d77d68 Joel Fernandes          2016-10-20   25  
-7b968e55e3984c Yuanhe Shu              2024-02-05   26  static void notrace pstore_do_ftrace(unsigned long ip,
-ebacfd1ece3bfa Anton Vorontsov         2012-11-14   27  				       unsigned long parent_ip,
-ebacfd1ece3bfa Anton Vorontsov         2012-11-14   28  				       struct ftrace_ops *op,
-7b968e55e3984c Yuanhe Shu              2024-02-05   29  				       struct ftrace_regs *fregs,
-7b968e55e3984c Yuanhe Shu              2024-02-05  @30  				       struct ftrace_info *psinfo)
-060287b8c467bf Anton Vorontsov         2012-07-09   31  {
-6cdf941871ec9c Steven Rostedt (VMware  2020-11-05   32) 	int bit;
-65f8c95e46a182 Anton Vorontsov         2012-07-17   33  	unsigned long flags;
-060287b8c467bf Anton Vorontsov         2012-07-09   34  	struct pstore_ftrace_record rec = {};
-b10b471145f28c Kees Cook               2017-03-05   35  	struct pstore_record record = {
-b10b471145f28c Kees Cook               2017-03-05   36  		.type = PSTORE_TYPE_FTRACE,
-b10b471145f28c Kees Cook               2017-03-05   37  		.buf = (char *)&rec,
-b10b471145f28c Kees Cook               2017-03-05   38  		.size = sizeof(rec),
-b10b471145f28c Kees Cook               2017-03-05  @39  		.psi = psinfo,
-b10b471145f28c Kees Cook               2017-03-05   40  	};
-060287b8c467bf Anton Vorontsov         2012-07-09   41  
-060287b8c467bf Anton Vorontsov         2012-07-09   42  	if (unlikely(oops_in_progress))
-060287b8c467bf Anton Vorontsov         2012-07-09   43  		return;
-060287b8c467bf Anton Vorontsov         2012-07-09   44  
-773c16705058e9 Steven Rostedt (VMware  2020-11-05   45) 	bit = ftrace_test_recursion_trylock(ip, parent_ip);
-6cdf941871ec9c Steven Rostedt (VMware  2020-11-05   46) 	if (bit < 0)
-6cdf941871ec9c Steven Rostedt (VMware  2020-11-05   47) 		return;
-6cdf941871ec9c Steven Rostedt (VMware  2020-11-05   48) 
-65f8c95e46a182 Anton Vorontsov         2012-07-17   49  	local_irq_save(flags);
-65f8c95e46a182 Anton Vorontsov         2012-07-17   50  
-060287b8c467bf Anton Vorontsov         2012-07-09   51  	rec.ip = ip;
-060287b8c467bf Anton Vorontsov         2012-07-09   52  	rec.parent_ip = parent_ip;
-fbccdeb8d77d68 Joel Fernandes          2016-10-20   53  	pstore_ftrace_write_timestamp(&rec, pstore_ftrace_stamp++);
-060287b8c467bf Anton Vorontsov         2012-07-09   54  	pstore_ftrace_encode_cpu(&rec, raw_smp_processor_id());
-4c9ec219766a21 Kees Cook               2017-03-05  @55  	psinfo->write(&record);
-65f8c95e46a182 Anton Vorontsov         2012-07-17   56  
-65f8c95e46a182 Anton Vorontsov         2012-07-17   57  	local_irq_restore(flags);
-6cdf941871ec9c Steven Rostedt (VMware  2020-11-05   58) 	ftrace_test_recursion_unlock(bit);
-65f8c95e46a182 Anton Vorontsov         2012-07-17   59  }
-65f8c95e46a182 Anton Vorontsov         2012-07-17   60  
-7b968e55e3984c Yuanhe Shu              2024-02-05   61  static void notrace pstore_ftrace_call(unsigned long ip,
-7b968e55e3984c Yuanhe Shu              2024-02-05   62  				       unsigned long parent_ip,
-7b968e55e3984c Yuanhe Shu              2024-02-05   63  				       struct ftrace_ops *op,
-7b968e55e3984c Yuanhe Shu              2024-02-05   64  				       struct pt_regs *regs)
-7b968e55e3984c Yuanhe Shu              2024-02-05   65  {
-7b968e55e3984c Yuanhe Shu              2024-02-05   66  	struct pstore_info_list *entry;
-7b968e55e3984c Yuanhe Shu              2024-02-05   67  
-7b968e55e3984c Yuanhe Shu              2024-02-05   68  	rcu_read_lock();
-7b968e55e3984c Yuanhe Shu              2024-02-05   69  	list_for_each_entry_rcu(entry, &psback->list_entry, list)
-7b968e55e3984c Yuanhe Shu              2024-02-05   70  		if (entry->psi->flags & PSTORE_FLAGS_FTRACE)
-7b968e55e3984c Yuanhe Shu              2024-02-05  @71  			pstore_do_ftrace(ip, parent_ip, op, regs, entry->psi);
-7b968e55e3984c Yuanhe Shu              2024-02-05   72  	rcu_read_unlock();
-7b968e55e3984c Yuanhe Shu              2024-02-05   73  }
-7b968e55e3984c Yuanhe Shu              2024-02-05   74  
-65f8c95e46a182 Anton Vorontsov         2012-07-17   75  static struct ftrace_ops pstore_ftrace_ops __read_mostly = {
-65f8c95e46a182 Anton Vorontsov         2012-07-17  @76  	.func	= pstore_ftrace_call,
-65f8c95e46a182 Anton Vorontsov         2012-07-17   77  };
-65f8c95e46a182 Anton Vorontsov         2012-07-17   78  
-65f8c95e46a182 Anton Vorontsov         2012-07-17   79  static DEFINE_MUTEX(pstore_ftrace_lock);
-65f8c95e46a182 Anton Vorontsov         2012-07-17   80  static bool pstore_ftrace_enabled;
-65f8c95e46a182 Anton Vorontsov         2012-07-17   81  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10   82  static int pstore_set_ftrace_enabled(bool on)
-65f8c95e46a182 Anton Vorontsov         2012-07-17   83  {
-65f8c95e46a182 Anton Vorontsov         2012-07-17   84  	ssize_t ret;
-65f8c95e46a182 Anton Vorontsov         2012-07-17   85  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10   86  	if (on == pstore_ftrace_enabled)
-a5d05b07961a2d Uwe Kleine-König        2021-06-10   87  		return 0;
-65f8c95e46a182 Anton Vorontsov         2012-07-17   88  
-7a0032f50472c7 Joel Fernandes          2016-11-15   89  	if (on) {
-7a0032f50472c7 Joel Fernandes          2016-11-15   90  		ftrace_ops_set_global_filter(&pstore_ftrace_ops);
-65f8c95e46a182 Anton Vorontsov         2012-07-17   91  		ret = register_ftrace_function(&pstore_ftrace_ops);
-7a0032f50472c7 Joel Fernandes          2016-11-15   92  	} else {
-65f8c95e46a182 Anton Vorontsov         2012-07-17   93  		ret = unregister_ftrace_function(&pstore_ftrace_ops);
-7a0032f50472c7 Joel Fernandes          2016-11-15   94  	}
-7a0032f50472c7 Joel Fernandes          2016-11-15   95  
-65f8c95e46a182 Anton Vorontsov         2012-07-17   96  	if (ret) {
-65f8c95e46a182 Anton Vorontsov         2012-07-17   97  		pr_err("%s: unable to %sregister ftrace ops: %zd\n",
-65f8c95e46a182 Anton Vorontsov         2012-07-17   98  		       __func__, on ? "" : "un", ret);
-a5d05b07961a2d Uwe Kleine-König        2021-06-10   99  	} else {
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  100  		pstore_ftrace_enabled = on;
-65f8c95e46a182 Anton Vorontsov         2012-07-17  101  	}
-65f8c95e46a182 Anton Vorontsov         2012-07-17  102  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  103  	return ret;
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  104  }
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  105  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  106  static ssize_t pstore_ftrace_knob_write(struct file *f, const char __user *buf,
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  107  					size_t count, loff_t *ppos)
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  108  {
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  109  	u8 on;
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  110  	ssize_t ret;
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  111  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  112  	ret = kstrtou8_from_user(buf, count, 2, &on);
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  113  	if (ret)
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  114  		return ret;
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  115  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  116  	mutex_lock(&pstore_ftrace_lock);
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  117  	ret = pstore_set_ftrace_enabled(on);
-65f8c95e46a182 Anton Vorontsov         2012-07-17  118  	mutex_unlock(&pstore_ftrace_lock);
-65f8c95e46a182 Anton Vorontsov         2012-07-17  119  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  120  	if (ret == 0)
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  121  		ret = count;
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  122  
-65f8c95e46a182 Anton Vorontsov         2012-07-17  123  	return ret;
-65f8c95e46a182 Anton Vorontsov         2012-07-17  124  }
-65f8c95e46a182 Anton Vorontsov         2012-07-17  125  
-65f8c95e46a182 Anton Vorontsov         2012-07-17  126  static ssize_t pstore_ftrace_knob_read(struct file *f, char __user *buf,
-65f8c95e46a182 Anton Vorontsov         2012-07-17  127  				       size_t count, loff_t *ppos)
-65f8c95e46a182 Anton Vorontsov         2012-07-17  128  {
-65f8c95e46a182 Anton Vorontsov         2012-07-17  129  	char val[] = { '0' + pstore_ftrace_enabled, '\n' };
-65f8c95e46a182 Anton Vorontsov         2012-07-17  130  
-65f8c95e46a182 Anton Vorontsov         2012-07-17  131  	return simple_read_from_buffer(buf, count, ppos, val, sizeof(val));
-65f8c95e46a182 Anton Vorontsov         2012-07-17  132  }
-65f8c95e46a182 Anton Vorontsov         2012-07-17  133  
-65f8c95e46a182 Anton Vorontsov         2012-07-17  134  static const struct file_operations pstore_knob_fops = {
-65f8c95e46a182 Anton Vorontsov         2012-07-17  135  	.open	= simple_open,
-65f8c95e46a182 Anton Vorontsov         2012-07-17  136  	.read	= pstore_ftrace_knob_read,
-65f8c95e46a182 Anton Vorontsov         2012-07-17  137  	.write	= pstore_ftrace_knob_write,
-65f8c95e46a182 Anton Vorontsov         2012-07-17  138  };
-65f8c95e46a182 Anton Vorontsov         2012-07-17  139  
-ee1d267423a1f8 Geliang Tang            2015-10-20  140  static struct dentry *pstore_ftrace_dir;
-ee1d267423a1f8 Geliang Tang            2015-10-20  141  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  142  static bool record_ftrace;
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  143  module_param(record_ftrace, bool, 0400);
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  144  MODULE_PARM_DESC(record_ftrace,
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  145  		 "enable ftrace recording immediately (default: off)");
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  146  
-65f8c95e46a182 Anton Vorontsov         2012-07-17  147  void pstore_register_ftrace(void)
-65f8c95e46a182 Anton Vorontsov         2012-07-17  148  {
-7b968e55e3984c Yuanhe Shu              2024-02-05  149  	rcu_read_lock();
-7b968e55e3984c Yuanhe Shu              2024-02-05 @150  	list_for_each_entry_rcu(entry, &psback->list_entry, list)
-7b968e55e3984c Yuanhe Shu              2024-02-05  151  		if (entry->psi->flags & PSTORE_FLAGS_FTRACE)
-7b968e55e3984c Yuanhe Shu              2024-02-05  152  			if (!entry->psi->write) {
-7b968e55e3984c Yuanhe Shu              2024-02-05  153  				rcu_read_unlock();
-65f8c95e46a182 Anton Vorontsov         2012-07-17  154  				return;
-7b968e55e3984c Yuanhe Shu              2024-02-05  155  			}
-7b968e55e3984c Yuanhe Shu              2024-02-05  156  	rcu_read_unlock();
-65f8c95e46a182 Anton Vorontsov         2012-07-17  157  
-ee1d267423a1f8 Geliang Tang            2015-10-20  158  	pstore_ftrace_dir = debugfs_create_dir("pstore", NULL);
-65f8c95e46a182 Anton Vorontsov         2012-07-17  159  
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  160  	pstore_set_ftrace_enabled(record_ftrace);
-a5d05b07961a2d Uwe Kleine-König        2021-06-10  161  
-fa1af7583e8012 Greg Kroah-Hartman      2019-06-12  162  	debugfs_create_file("record_ftrace", 0600, pstore_ftrace_dir, NULL,
-fa1af7583e8012 Greg Kroah-Hartman      2019-06-12  163  			    &pstore_knob_fops);
-ee1d267423a1f8 Geliang Tang            2015-10-20  164  }
-ee1d267423a1f8 Geliang Tang            2015-10-20  165  
-
+diff --git a/fs/pstore/ftrace.c b/fs/pstore/ftrace.c
+index 776cae20af4e..1238d3946ca1 100644
+--- a/fs/pstore/ftrace.c
++++ b/fs/pstore/ftrace.c
+@@ -23,10 +23,11 @@
+ /* This doesn't need to be atomic: speed is chosen over correctness here. */
+ static u64 pstore_ftrace_stamp;
+ 
+-static void notrace pstore_ftrace_call(unsigned long ip,
++static void notrace pstore_do_ftrace(unsigned long ip,
+ 				       unsigned long parent_ip,
+ 				       struct ftrace_ops *op,
+-				       struct ftrace_regs *fregs)
++				       struct ftrace_regs *fregs,
++				       struct pstore_info *psinfo)
+ {
+ 	int bit;
+ 	unsigned long flags;
+@@ -57,6 +58,20 @@ static void notrace pstore_ftrace_call(unsigned long ip,
+ 	ftrace_test_recursion_unlock(bit);
+ }
+ 
++static void notrace pstore_ftrace_call(unsigned long ip,
++				       unsigned long parent_ip,
++				       struct ftrace_ops *op,
++				       struct ftrace_regs *regs)
++{
++	struct pstore_info_list *entry;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(entry, &psback->list_entry, list)
++		if (entry->psi->flags & PSTORE_FLAGS_FTRACE)
++			pstore_do_ftrace(ip, parent_ip, op, regs, entry->psi);
++	rcu_read_unlock();
++}
++
+ static struct ftrace_ops pstore_ftrace_ops __read_mostly = {
+ 	.func	= pstore_ftrace_call,
+ };
+@@ -131,8 +146,16 @@ MODULE_PARM_DESC(record_ftrace,
+ 
+ void pstore_register_ftrace(void)
+ {
+-	if (!psinfo->write)
+-		return;
++	struct pstore_info_list *entry;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(entry, &psback->list_entry, list)
++		if (entry->psi->flags & PSTORE_FLAGS_FTRACE)
++			if (!entry->psi->write) {
++				rcu_read_unlock();
++				return;
++			}
++	rcu_read_unlock();
+ 
+ 	pstore_ftrace_dir = debugfs_create_dir("pstore", NULL);
+ 
+diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
+index d0d9bfdad30c..bee71c7da995 100644
+--- a/fs/pstore/inode.c
++++ b/fs/pstore/inode.c
+@@ -285,7 +285,7 @@ static const struct super_operations pstore_ops = {
+ 	.show_options	= pstore_show_options,
+ };
+ 
+-static struct dentry *psinfo_lock_root(void)
++static struct dentry *psinfo_lock_root(struct pstore_info *psinfo)
+ {
+ 	struct dentry *root;
+ 
+@@ -309,7 +309,7 @@ int pstore_put_backend_records(struct pstore_info *psi)
+ 	struct dentry *root;
+ 	int rc = 0;
+ 
+-	root = psinfo_lock_root();
++	root = psinfo_lock_root(psi);
+ 	if (!root)
+ 		return 0;
+ 
+@@ -398,21 +398,22 @@ int pstore_mkfile(struct dentry *root, struct pstore_record *record)
+  * when we are re-scanning the backing store looking to add new
+  * error records.
+  */
+-void pstore_get_records(int quiet)
++void pstore_get_records(struct pstore_info *psi, int quiet)
+ {
+ 	struct dentry *root;
+ 
+-	root = psinfo_lock_root();
++	root = psinfo_lock_root(psi);
+ 	if (!root)
+ 		return;
+ 
+-	pstore_get_backend_records(psinfo, root, quiet);
++	pstore_get_backend_records(psi, root, quiet);
+ 	inode_unlock(d_inode(root));
+ }
+ 
+ static int pstore_fill_super(struct super_block *sb, void *data, int silent)
+ {
+ 	struct inode *inode;
++	struct pstore_info_list *entry;
+ 
+ 	sb->s_maxbytes		= MAX_LFS_FILESIZE;
+ 	sb->s_blocksize		= PAGE_SIZE;
+@@ -437,7 +438,13 @@ static int pstore_fill_super(struct super_block *sb, void *data, int silent)
+ 	scoped_guard(mutex, &pstore_sb_lock)
+ 		pstore_sb = sb;
+ 
+-	pstore_get_records(0);
++	if (!psback)
++		return 0;
++
++	mutex_lock(&psback_lock);
++	list_for_each_entry(entry, &psback->list_entry, list)
++		pstore_get_records(entry->psi, 0);
++	mutex_unlock(&psback_lock);
+ 
+ 	return 0;
+ }
+diff --git a/fs/pstore/internal.h b/fs/pstore/internal.h
+index 801d6c0b170c..4b1c7ba27052 100644
+--- a/fs/pstore/internal.h
++++ b/fs/pstore/internal.h
+@@ -33,10 +33,10 @@ static inline void pstore_register_pmsg(void) {}
+ static inline void pstore_unregister_pmsg(void) {}
+ #endif
+ 
+-extern struct pstore_info *psinfo;
++extern struct pstore_backends *psback;
+ 
+ extern void	pstore_set_kmsg_bytes(int);
+-extern void	pstore_get_records(int);
++extern void	pstore_get_records(struct pstore_info *psi, int quiet);
+ extern void	pstore_get_backend_records(struct pstore_info *psi,
+ 					   struct dentry *root, int quiet);
+ extern int	pstore_put_backend_records(struct pstore_info *psi);
+diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+index 03425928d2fb..432a41852a07 100644
+--- a/fs/pstore/platform.c
++++ b/fs/pstore/platform.c
+@@ -62,12 +62,12 @@ static void pstore_dowork(struct work_struct *);
+ static DECLARE_WORK(pstore_work, pstore_dowork);
+ 
+ /*
+- * psinfo_lock protects "psinfo" during calls to
++ * psback_lock protects "psback" during calls to
+  * pstore_register(), pstore_unregister(), and
+  * the filesystem mount/unmount routines.
+  */
+-static DEFINE_MUTEX(psinfo_lock);
+-struct pstore_info *psinfo;
++DEFINE_MUTEX(psback_lock);
++struct pstore_backends *psback;
+ 
+ static char *backend;
+ module_param(backend, charp, 0444);
+@@ -104,7 +104,7 @@ static void *compress_workspace;
+  */
+ #define DMESG_COMP_PERCENT	60
+ 
+-static char *big_oops_buf;
++static char *big_oops_buf[PSTORE_BACKEND_NUM];
+ static size_t max_compressed_size;
+ 
+ void pstore_set_kmsg_bytes(int bytes)
+@@ -201,7 +201,7 @@ static int pstore_compress(const void *in, void *out,
+ 	return zstream.total_out;
+ }
+ 
+-static void allocate_buf_for_compression(void)
++static void allocate_buf_for_compression(struct pstore_info *psinfo, int pos)
+ {
+ 	size_t compressed_size;
+ 	char *buf;
+@@ -241,21 +241,21 @@ static void allocate_buf_for_compression(void)
+ 	}
+ 
+ 	/* A non-NULL big_oops_buf indicates compression is available. */
+-	big_oops_buf = buf;
++	big_oops_buf[pos] = buf;
+ 	max_compressed_size = compressed_size;
+ 
+ 	pr_info("Using crash dump compression: %s\n", compress);
+ }
+ 
+-static void free_buf_for_compression(void)
++static void free_buf_for_compression(int pos)
+ {
+ 	if (IS_ENABLED(CONFIG_PSTORE_COMPRESS) && compress_workspace) {
+ 		vfree(compress_workspace);
+ 		compress_workspace = NULL;
+ 	}
+ 
+-	kvfree(big_oops_buf);
+-	big_oops_buf = NULL;
++	kvfree(big_oops_buf[pos]);
++	big_oops_buf[pos] = NULL;
+ 	max_compressed_size = 0;
+ }
+ 
+@@ -274,8 +274,9 @@ void pstore_record_init(struct pstore_record *record,
+  * callback from kmsg_dump. Save as much as we can (up to kmsg_bytes) from the
+  * end of the buffer.
+  */
+-static void pstore_dump(struct kmsg_dumper *dumper,
+-			enum kmsg_dump_reason reason)
++static void pstore_do_dump(struct kmsg_dumper *dumper,
++			enum kmsg_dump_reason reason,
++			struct pstore_info *psinfo, int pos)
+ {
+ 	struct kmsg_dump_iter iter;
+ 	unsigned long	total = 0;
+@@ -315,7 +316,7 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+ 		record.part = part;
+ 		record.buf = psinfo->buf;
+ 
+-		dst = big_oops_buf ?: psinfo->buf;
++		dst = big_oops_buf[pos] ?: psinfo->buf;
+ 		dst_size = max_compressed_size ?: psinfo->bufsize;
+ 
+ 		/* Write dump header. */
+@@ -328,7 +329,7 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+ 					  dst_size, &dump_size))
+ 			break;
+ 
+-		if (big_oops_buf) {
++		if (big_oops_buf[pos]) {
+ 			zipped_len = pstore_compress(dst, psinfo->buf,
+ 						header_size + dump_size,
+ 						psinfo->bufsize);
+@@ -372,6 +373,19 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+ 	}
+ }
+ 
++static void pstore_dump(struct kmsg_dumper *dumper,
++			enum kmsg_dump_reason reason)
++{
++	struct pstore_info_list *entry;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(entry, &psback->list_entry, list)
++		if (entry->psi->flags & PSTORE_FLAGS_DMESG)
++			pstore_do_dump(dumper, reason,
++				       entry->psi, entry->index);
++	rcu_read_unlock();
++}
++
+ static struct kmsg_dumper pstore_dumper = {
+ 	.dump = pstore_dump,
+ };
+@@ -390,13 +404,11 @@ static void pstore_unregister_kmsg(void)
+ }
+ 
+ #ifdef CONFIG_PSTORE_CONSOLE
+-static void pstore_console_write(struct console *con, const char *s, unsigned c)
++static void pstore_console_do_write(struct console *con, const char *s,
++				    unsigned c, struct pstore_info *psinfo)
+ {
+ 	struct pstore_record record;
+ 
+-	if (!c)
+-		return;
+-
+ 	pstore_record_init(&record, psinfo);
+ 	record.type = PSTORE_TYPE_CONSOLE;
+ 
+@@ -405,6 +417,21 @@ static void pstore_console_write(struct console *con, const char *s, unsigned c)
+ 	psinfo->write(&record);
+ }
+ 
++static void pstore_console_write(struct console *con, const char *s,
++				 unsigned int c)
++{
++	struct pstore_info_list *entry;
++
++	if (!c)
++		return;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(entry, &psback->list_entry, list)
++		if (entry->psi->flags & PSTORE_FLAGS_CONSOLE)
++			pstore_console_do_write(con, s, c, entry->psi);
++	rcu_read_unlock();
++}
++
+ static struct console pstore_console = {
+ 	.write	= pstore_console_write,
+ 	.index	= -1,
+@@ -413,7 +440,7 @@ static struct console pstore_console = {
+ static void pstore_register_console(void)
+ {
+ 	/* Show which backend is going to get console writes. */
+-	strscpy(pstore_console.name, psinfo->name,
++	strscpy(pstore_console.name, "pstore console",
+ 		sizeof(pstore_console.name));
+ 	/*
+ 	 * Always initialize flags here since prior unregister_console()
+@@ -464,12 +491,15 @@ static int pstore_write_user_compat(struct pstore_record *record,
+  */
+ int pstore_register(struct pstore_info *psi)
+ {
++	struct pstore_info_list *entry;
++	struct pstore_info_list *newpsi;
+ 	char *new_backend;
+ 
+-	if (backend && strcmp(backend, psi->name)) {
+-		pr_warn("backend '%s' already in use: ignoring '%s'\n",
+-			backend, psi->name);
+-		return -EBUSY;
++	/* backend has to be enabled for going on registering */
++	if (backend && !strstr(backend, psi->name) &&
++	    strcmp(backend, "all")) {
++		pr_warn("backend '%s' not enabled\n", psi->name);
++		return -EINVAL;
+ 	}
+ 
+ 	/* Sanity check flags. */
+@@ -486,79 +516,118 @@ int pstore_register(struct pstore_info *psi)
+ 		return -EINVAL;
+ 	}
+ 
+-	new_backend = kstrdup(psi->name, GFP_KERNEL);
+-	if (!new_backend)
+-		return -ENOMEM;
+-
+-	mutex_lock(&psinfo_lock);
+-	if (psinfo) {
+-		pr_warn("backend '%s' already loaded: ignoring '%s'\n",
+-			psinfo->name, psi->name);
+-		mutex_unlock(&psinfo_lock);
+-		kfree(new_backend);
+-		return -EBUSY;
++	mutex_lock(&psback_lock);
++
++	/*
++	 * If no backend specified, first come first served to
++	 * maintain backward compatibility
++	 */
++	if (!backend) {
++		pr_warn("no backend enabled, registering backend '%s'\n",
++			psi->name);
++		new_backend = kstrdup(psi->name, GFP_KERNEL);
++		if (!new_backend) {
++			mutex_unlock(&psback_lock);
++			return -ENOMEM;
++		}
++	}
++
++	if (psback) {
++		if (psback->flag == PSTORE_LIST_FULL) {
++			pr_warn("backend registration space is used up: "
++				"ignoring '%s'\n", psi->name);
++			mutex_unlock(&psback_lock);
++			return -EBUSY;
++		}
++		list_for_each_entry(entry, &psback->list_entry, list) {
++			if (strcmp(entry->psi->name, psi->name) == 0) {
++				pr_warn("backend '%s' already loaded\n",
++					psi->name);
++				mutex_unlock(&psback_lock);
++				return -EPERM;
++			}
++		}
++	} else {
++		psback = kzalloc(sizeof(*psback), GFP_KERNEL);
++		INIT_LIST_HEAD(&psback->list_entry);
+ 	}
+ 
+ 	if (!psi->write_user)
+ 		psi->write_user = pstore_write_user_compat;
+-	psinfo = psi;
+-	mutex_init(&psinfo->read_mutex);
+-	spin_lock_init(&psinfo->buf_lock);
++	newpsi = kzalloc(sizeof(*newpsi), GFP_KERNEL);
++	newpsi->psi = psi;
++	newpsi->index = ffz(psback->flag);
++	psback->flag |= (1 << newpsi->index);
++
++	mutex_init(&psi->read_mutex);
++	spin_lock_init(&psi->buf_lock);
++
++	if (psi->flags & PSTORE_FLAGS_DMESG &&
++	    !psback->front_cnt[PSTORE_TYPE_DMESG])
++		allocate_buf_for_compression(psi, newpsi->index);
+ 
+-	if (psi->flags & PSTORE_FLAGS_DMESG)
+-		allocate_buf_for_compression();
++	pstore_get_records(psi, 0);
+ 
+-	pstore_get_records(0);
++	list_add_rcu(&newpsi->list, &psback->list_entry);
+ 
+-	if (psi->flags & PSTORE_FLAGS_DMESG) {
+-		pstore_dumper.max_reason = psinfo->max_reason;
++	if (psi->flags & PSTORE_FLAGS_DMESG &&
++	    !psback->front_cnt[PSTORE_TYPE_DMESG]++) {
++		pstore_dumper.max_reason = psi->max_reason;
+ 		pstore_register_kmsg();
+ 	}
+-	if (psi->flags & PSTORE_FLAGS_CONSOLE)
++	if (psi->flags & PSTORE_FLAGS_CONSOLE
++	    && !psback->front_cnt[PSTORE_TYPE_CONSOLE]++)
+ 		pstore_register_console();
+-	if (psi->flags & PSTORE_FLAGS_FTRACE)
++	if (psi->flags & PSTORE_FLAGS_FTRACE &&
++	    !psback->front_cnt[PSTORE_TYPE_FTRACE]++)
+ 		pstore_register_ftrace();
+-	if (psi->flags & PSTORE_FLAGS_PMSG)
++	if (psi->flags & PSTORE_FLAGS_PMSG &&
++	    !psback->front_cnt[PSTORE_TYPE_PMSG]++)
+ 		pstore_register_pmsg();
+ 
+ 	/* Start watching for new records, if desired. */
+ 	pstore_timer_kick();
+ 
+ 	/*
+-	 * Update the module parameter backend, so it is visible
++	 * When module parameter backend is not specified,
++	 * update the module parameter backend, so it is visible
+ 	 * through /sys/module/pstore/parameters/backend
+ 	 */
+-	backend = new_backend;
++	if (!backend)
++		backend = new_backend;
+ 
+ 	pr_info("Registered %s as persistent store backend\n", psi->name);
+ 
+-	mutex_unlock(&psinfo_lock);
++	mutex_unlock(&psback_lock);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(pstore_register);
+ 
+ void pstore_unregister(struct pstore_info *psi)
+ {
++	struct pstore_info_list *entry;
+ 	/* It's okay to unregister nothing. */
+ 	if (!psi)
+ 		return;
+ 
+-	mutex_lock(&psinfo_lock);
+-
+-	/* Only one backend can be registered at a time. */
+-	if (WARN_ON(psi != psinfo)) {
+-		mutex_unlock(&psinfo_lock);
++	/* Can not unregister an unenabled backend*/
++	if (WARN_ON(!strstr(backend, psi->name) && strcmp(backend, "all")))
+ 		return;
+-	}
++
++	mutex_lock(&psback_lock);
+ 
+ 	/* Unregister all callbacks. */
+-	if (psi->flags & PSTORE_FLAGS_PMSG)
++	if (psi->flags & PSTORE_FLAGS_PMSG &&
++	    !--psback->front_cnt[PSTORE_TYPE_PMSG])
+ 		pstore_unregister_pmsg();
+-	if (psi->flags & PSTORE_FLAGS_FTRACE)
++	if (psi->flags & PSTORE_FLAGS_FTRACE &&
++	    !--psback->front_cnt[PSTORE_TYPE_FTRACE])
+ 		pstore_unregister_ftrace();
+-	if (psi->flags & PSTORE_FLAGS_CONSOLE)
++	if (psi->flags & PSTORE_FLAGS_CONSOLE &&
++	    !--psback->front_cnt[PSTORE_TYPE_CONSOLE])
+ 		pstore_unregister_console();
+-	if (psi->flags & PSTORE_FLAGS_DMESG)
++	if (psi->flags & PSTORE_FLAGS_DMESG &&
++	    !--psback->front_cnt[PSTORE_TYPE_DMESG])
+ 		pstore_unregister_kmsg();
+ 
+ 	/* Stop timer and make sure all work has finished. */
+@@ -568,19 +637,30 @@ void pstore_unregister(struct pstore_info *psi)
+ 	/* Remove all backend records from filesystem tree. */
+ 	pstore_put_backend_records(psi);
+ 
+-	free_buf_for_compression();
++	list_for_each_entry(entry, &psback->list_entry, list) {
++		if (entry->psi == psi) {
++			list_del_rcu(&entry->list);
++			psback->flag ^= 1 << entry->index;
++			synchronize_rcu();
++			free_buf_for_compression(entry->index);
++			kfree(entry);
++			break;
++		}
++	}
+ 
+-	psinfo = NULL;
+-	kfree(backend);
+-	backend = NULL;
++	if (psback->flag == PSOTRE_LIST_EMPTY) {
++		kfree(psback);
++		psback = NULL;
++	}
+ 
+ 	pr_info("Unregistered %s as persistent store backend\n", psi->name);
+-	mutex_unlock(&psinfo_lock);
++	mutex_unlock(&psback_lock);
+ }
+ EXPORT_SYMBOL_GPL(pstore_unregister);
+ 
+ static void decompress_record(struct pstore_record *record,
+-			      struct z_stream_s *zstream)
++			      struct z_stream_s *zstream,
++			      struct pstore_info *psinfo)
+ {
+ 	int ret;
+ 	int unzipped_len;
+@@ -697,7 +777,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
+ 			break;
+ 		}
+ 
+-		decompress_record(record, &zstream);
++		decompress_record(record, &zstream, psi);
+ 		rc = pstore_mkfile(root, record);
+ 		if (rc) {
+ 			/* pstore_mkfile() did not take record, so free it. */
+@@ -729,7 +809,12 @@ void pstore_get_backend_records(struct pstore_info *psi,
+ 
+ static void pstore_dowork(struct work_struct *work)
+ {
+-	pstore_get_records(1);
++	struct pstore_info_list *entry;
++
++	mutex_lock(&psback_lock);
++	list_for_each_entry(entry, &psback->list_entry, list)
++		pstore_get_records(entry->psi, 1);
++	mutex_unlock(&psback_lock);
+ }
+ 
+ static void pstore_timefunc(struct timer_list *unused)
+@@ -745,11 +830,15 @@ static void pstore_timefunc(struct timer_list *unused)
+ static int __init pstore_init(void)
+ {
+ 	int ret;
++	struct pstore_info_list *entry;
+ 
+ 	ret = pstore_init_fs();
+-	if (ret)
+-		free_buf_for_compression();
+-
++	if (ret) {
++		mutex_lock(&psback_lock);
++		list_for_each_entry(entry, &psback->list_entry, list)
++			free_buf_for_compression(entry->index);
++		mutex_unlock(&psback_lock);
++	}
+ 	return ret;
+ }
+ late_initcall(pstore_init);
+diff --git a/fs/pstore/pmsg.c b/fs/pstore/pmsg.c
+index 55f139afa327..9d5b8602e273 100644
+--- a/fs/pstore/pmsg.c
++++ b/fs/pstore/pmsg.c
+@@ -11,8 +11,9 @@
+ 
+ static DEFINE_MUTEX(pmsg_lock);
+ 
+-static ssize_t write_pmsg(struct file *file, const char __user *buf,
+-			  size_t count, loff_t *ppos)
++static ssize_t do_write_pmsg(struct file *file, const char __user *buf,
++			     size_t count, loff_t *ppos,
++			     struct pstore_info *psinfo)
+ {
+ 	struct pstore_record record;
+ 	int ret;
+@@ -34,6 +35,25 @@ static ssize_t write_pmsg(struct file *file, const char __user *buf,
+ 	return ret ? ret : count;
+ }
+ 
++static ssize_t write_pmsg(struct file *file, const char __user *buf,
++			  size_t count, loff_t *ppos)
++{
++	int ret, _ret;
++	struct pstore_info_list *entry;
++
++	mutex_lock(&psback_lock);
++	list_for_each_entry(entry, &psback->list_entry, list) {
++		if (entry->psi->flags & PSTORE_FLAGS_PMSG) {
++			_ret = do_write_pmsg(file, buf, count,
++					     ppos, entry->psi);
++			ret = ret > _ret ? ret : _ret;
++		}
++	}
++	mutex_unlock(&psback_lock);
++
++	return ret;
++}
++
+ static const struct file_operations pmsg_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.llseek		= noop_llseek,
+diff --git a/include/linux/pstore.h b/include/linux/pstore.h
+index 638507a3c8ff..0d2be20c8929 100644
+--- a/include/linux/pstore.h
++++ b/include/linux/pstore.h
+@@ -201,6 +201,35 @@ struct pstore_info {
+ 	int		(*erase)(struct pstore_record *record);
+ };
+ 
++/* Supported multibackends */
++#define PSTORE_MAX_BACKEND_LENGTH 100
++#define PSTORE_BACKEND_NUM 16
++
++#define PSTORE_LIST_FULL (BIT(PSTORE_BACKEND_NUM) - 1)
++#define PSOTRE_LIST_EMPTY 0
++
++extern struct mutex psback_lock;
++
++struct pstore_info_list {
++	struct pstore_info *psi;
++	struct list_head list;
++	int index;
++};
++
++/**
++ * struct pstore_backends - management of pstore backends
++ * @list_entry:	entry of pstore backend driver information list
++ * @front_cnt:	count of each enabled frontend
++ * @flag:	bitmap of enabled pstore backend
++ *
++ */
++
++struct pstore_backends {
++	struct list_head list_entry;
++	int front_cnt[PSTORE_TYPE_MAX];
++	u16 flag;
++};
++
+ /* Supported frontends */
+ #define PSTORE_FLAGS_DMESG	BIT(0)
+ #define PSTORE_FLAGS_CONSOLE	BIT(1)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.3
+
 
