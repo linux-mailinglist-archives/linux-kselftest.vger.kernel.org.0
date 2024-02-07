@@ -1,384 +1,124 @@
-Return-Path: <linux-kselftest+bounces-4223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEB3084C50D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 07:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A662B84C68E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 09:47:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C65E1F235B6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 06:38:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 509CB1F2791C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 08:47:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171F317BA3;
-	Wed,  7 Feb 2024 06:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E8D200DA;
+	Wed,  7 Feb 2024 08:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VzvwsCW0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mNnq3fMf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8EE1CD2D;
-	Wed,  7 Feb 2024 06:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C6A20B28;
+	Wed,  7 Feb 2024 08:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707287928; cv=none; b=s56/ftCAqdvAmU5oqEgmBHAAGHtzlIXdzeKmYKCJi47AT8FGeUz05B0obiz2tjyfrKrfIZMoRAIJy+l3v8fACbmJUPK0ndfuBkFgRd0MIOuhLMfRS7lhO/z8NbWYVSsd/k/D9MTj5EOjwZyv0POhTjnAnze0b3OK/cmAmjPOOMw=
+	t=1707295664; cv=none; b=SqagBq1mMwrkD/kkNHuCKsHiajdV+5m6QxXy/R4PrrBqtNfw2H1++RhIZFMa4435LTvvNsrJskj3jIsDFLgosmeNvmVkAmbkUJvNvJKDNtpUTX3ntIWSSaRgvy0oLk7FO29rIGE2aj6GWXWWIHPrfEg3oBuVk4fAOfR3Nnuh5TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707287928; c=relaxed/simple;
-	bh=5XH2+QhIIh6vtV8cZGfPe4lADyppCqTou0VjC/BHAxA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=S0J6wlnGX3xdQkINbuBdZecWL9/3xaGKK4chYOSB+bjcVYopYjjVYroHy9kPbMJGHGxy/qaLMsviNU5dAenoVnG2YGnCOD9t7S2helJRDSj/kq9FZl6a68pkaVB8KurBAKv9yxdRGho6/5NFw41G9nTrzFnXbMFCHdg/borOzV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VzvwsCW0; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707287926; x=1738823926;
-  h=date:from:to:cc:subject:message-id;
-  bh=5XH2+QhIIh6vtV8cZGfPe4lADyppCqTou0VjC/BHAxA=;
-  b=VzvwsCW0o6AxVDLl3cmC1Zh4dOgp/5ZM1c02bxr0d9SesmfFoLAd9s+o
-   Pdr62y2docpaiLdOJUwVQw0NBXkPuLILc/OFu/of6CDuPVOz6ziwuHwIY
-   dq/gXRrC8WvDiRhnFPK/M6HAOmaRQQqEJ0n6oXBnJJsVsOSpPSkHjdob3
-   XpYBNs/MbBHE5uasDy8OX1QKMPYsiiSpm/CsNiiFFj2Buu6OnlB8Lznsf
-   oR0tPfJ0baASa55kZW/vDUpzBT0DJ3C/f9nrjd4YpI0FN1RO1+3odZ8L2
-   ZgNKSSQkDnaAuQrX2v7v3nrqQ9GbZaZmz9yoY7g6U4VyJjb0kPBk6E07q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="23399320"
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="23399320"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 22:38:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="6015081"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 06 Feb 2024 22:38:42 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXbZu-0002Hc-2Y;
-	Wed, 07 Feb 2024 06:38:38 +0000
-Date: Wed, 07 Feb 2024 14:37:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Memory Management List <linux-mm@kvack.org>,
- ceph-devel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
- linux-bcachefs@vger.kernel.org, linux-cifs@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- nouveau@lists.freedesktop.org, ntfs3@lists.linux.dev,
- samba-technical@lists.samba.org
-Subject: [linux-next:master] BUILD REGRESSION
- ac139fc7db67968e5061715508b5fc4aa7c40c56
-Message-ID: <202402071439.AER2foE3-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1707295664; c=relaxed/simple;
+	bh=GNCOdcDDyq/1NLW7gyIwNzWiCnIN2b2fyZWE+y6K3Vk=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=QLT6ypU5aZ93Gji3E1v/Tt5z9rl3ClrC2D22VRlXOrlnYYKXOGDpW2OLbqdM2xI1D426EzELulbdIXjex2JUhJtFW1WTfII0Shj2JVrhX2ESzAt4ynUr315z5cwbz68kwoPwUx3Hc5yKB0UPVO9UHgZ2QlgjmmGGHwJb3x9tpck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mNnq3fMf; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a30f7c9574eso47622766b.0;
+        Wed, 07 Feb 2024 00:47:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707295660; x=1707900460; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fj4qPaMqnd9zvKedeyiEsUW9fSkzif8DNAdYYIQAxxY=;
+        b=mNnq3fMfqRQSq0ntsDrNHh7nWgUHRlm0XIFrZ1J49/NwRCFw3NzvKAKeh/IFcKK8Rc
+         Bsd//YHF2lL8rVma5Fffl69nGqj/+TE/1kYwmOnjFacoCPGg3nOYHd5U5VSwhFeHXw1e
+         hzjNAtyqVWWJqzaTDdxEafu+71gIZ0L+88UD6JqZXWk3f1a+pSnJlPyAfJxwPfYernqi
+         SvYLXwAhzcHPXh3Ia7MTogGDoiMPC/i58NwkGDIsRvPr/N9wl3GNuxO3IubOcb9jBowA
+         B70vL5Om8wLFSq57+LZaGOzy+o8UEDETPv3gH1luGxL5qfbotR2C7KymBJQNFThRKqg9
+         XDkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707295660; x=1707900460;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fj4qPaMqnd9zvKedeyiEsUW9fSkzif8DNAdYYIQAxxY=;
+        b=iFHqbUMi3gAOLqecaqvUB1cKCGfu7YDASNq5aq+NiT5IO1j7Hw1E+idOd5D41TrimM
+         Fd3hyX1a7XQgx9FKVERQpRkifxr91O1+e+rj6h2f+ErY+ohrLX+TpVeGTPyg27ip2mL3
+         pCb+tMeVuNhaKfNq9986XmhU8I02frF8YjJpmBOIpKRvIOLHojA8a4QODX/De+HfWbc3
+         ctnf8RRQcpA48M02LZxp/Carhk02N6diI4AWljlCdoXsgI/4CRsRB7Mm0WlWKCem5nOu
+         0UKGrVnjEJp0UpBsng1UjB+fh413AV+b7SLCfL3xsXq9rrCO5mtwQ3OrKdUewcNbxu2R
+         TaLQ==
+X-Gm-Message-State: AOJu0YxRTju8W6MzY5UcEfAKbxKhpYhKj3ieyAC2h8L8eR8Kbn7V5aRG
+	DQgY9DlHh1fwxA6/XB2nmOe6WfmjNiFORecT5jkyo02hVanm/JEB
+X-Google-Smtp-Source: AGHT+IF47eTBssASZHFBQHUPdVTL2sd8ymlIBQS3sFcE44/e0oqTP4d4WKnMkzyy/1zrot22kLO7yg==
+X-Received: by 2002:a17:906:18a2:b0:a38:4b66:4200 with SMTP id c2-20020a17090618a200b00a384b664200mr1702660ejf.57.1707295660122;
+        Wed, 07 Feb 2024 00:47:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXz+tbM5ryfemC1cx72pU+5wNDFh6HzwogLpRXC0HdVl5P+RkXzlB2okC+Bj5W40NV2hrKIh63klT1ZYWS3D8SffIEt1VfshC9egB3lFuiPFPtvx4Fh4MMvZpGynRuCbkMECy/CI217RumAlLel4Ms7bwHYSe6gM1WT6b4RUP5W3+4AN0Szfvaf0XBkrM5OdiQeoD9e074HyPgNgAFa6aayJLyqWl6Y/15+li9cLWO5I9yUhKwP9ig5fR57rfAaKpOsKIwuPrqS1ozhnnVbZHzaRPREjN2/PYwBGIIAFthCsT1tyuZ+Y4/R/Ga6S2Gtw9LhwARAjlxLV5YTfsya9CwAVoe+0tRNiYrhStXwToLsFMQ02i3eCdD4DnJ0Bj0WlhP+NNRRkA7hym5s5qAfNSXLNFw+Es6ZXOr51X51thFPKFVLAdE=
+Received: from [192.168.11.39] (54-240-197-227.amazon.com. [54.240.197.227])
+        by smtp.gmail.com with ESMTPSA id i26-20020a170906115a00b00a36c7a7b4f7sm503528eja.207.2024.02.07.00.47.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Feb 2024 00:47:39 -0800 (PST)
+From: Paul Durrant <xadimgnik@gmail.com>
+X-Google-Original-From: Paul Durrant <paul@xen.org>
+Message-ID: <6d66b3ce-2be6-4111-8f19-9234ee92b15a@xen.org>
+Date: Wed, 7 Feb 2024 08:47:32 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: paul@xen.org
+Subject: Re: [PATCH v12 04/20] KVM: pfncache: add a mark-dirty helper
+Content-Language: en-US
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240115125707.1183-1-paul@xen.org>
+ <20240115125707.1183-5-paul@xen.org> <ZcL3CdGHv5FQHBVD@google.com>
+Organization: Xen Project
+In-Reply-To: <ZcL3CdGHv5FQHBVD@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: ac139fc7db67968e5061715508b5fc4aa7c40c56  Add linux-next specific files for 20240206
+On 07/02/2024 03:20, Sean Christopherson wrote:
+> On Mon, Jan 15, 2024, Paul Durrant wrote:
+>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+>> index 7e7fd25b09b3..f3bb9e0a81fe 100644
+>> --- a/include/linux/kvm_host.h
+>> +++ b/include/linux/kvm_host.h
+>> @@ -1399,6 +1399,17 @@ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len);
+>>    */
+>>   void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc);
+>>   
+>> +/**
+>> + * kvm_gpc_mark_dirty - mark a cached page as dirty.
+>> + *
+>> + * @gpc:	   struct gfn_to_pfn_cache object.
+>> + */
+>> +static inline void kvm_gpc_mark_dirty(struct gfn_to_pfn_cache *gpc)
+> 
+> Any objection to kvm_gpc_mark_dirty_in_slot()?  I want to make it clear this only
+> marks the gfn dirty in the memslot, i.e. that it doesn't mark the underlying page
+> as dirty.
 
-Error/Warning reports:
+Ok, that sounds fair.
 
-https://lore.kernel.org/oe-kbuild-all/202402061900.rTuYDlo6-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202402062106.cfArbjsv-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202402062134.a6CqAt3s-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202402062139.MKznS4Qf-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202402062151.Kq60k2LK-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202402062210.3YyBVGF1-lkp@intel.com
-
-Error/Warning: (recently discovered and may have been fixed)
-
-arch/sh/boot/compressed/../../../../lib/xz/xz_dec_lzma2.c:648:(.text+0xaf0): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-arch/sh/boot/compressed/../../../../lib/zlib_inflate/inffast.c:132:(.text+0x738): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-arch/sh/boot/compressed/../../../../lib/zlib_inflate/inflate.c:57:(.text+0xbd0): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-arch/sh/boot/compressed/../../../../lib/zlib_inflate/inftrees.c:270:(.text+0x3dc): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-arch/xtensa/boot/lib/inflate.c:91:(.text+0x1a4): undefined reference to `__ubsan_handle_out_of_bounds'
-drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:1955: warning: Function parameter or struct member 'gsp' not described in 'nvkm_gsp_radix3_sg'
-fs/ceph/locks.c:379:27: warning: unused variable 'lock' [-Wunused-variable]
-make[2]: *** kselftest/livepatch/test_modules: No such file or directory.  Stop.
-powerpc-linux-ld: warning: orphan section `.bss..Lubsan_data202' from `fs/overlayfs/copy_up.o' being placed in section `.bss..Lubsan_data202'
-powerpc-linux-ld: warning: orphan section `.bss..Lubsan_data219' from `kernel/ptrace.o' being placed in section `.bss..Lubsan_data219'
-powerpc-linux-ld: warning: orphan section `.bss..Lubsan_data327' from `kernel/sched/core.o' being placed in section `.bss..Lubsan_data327'
-sh4-linux-ld: arch/sh/boot/compressed/../../../../lib/zlib_inflate/inffast.c:305:(.text+0xac4): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-sh4-linux-ld: arch/sh/boot/compressed/../../../../lib/zlib_inflate/inftrees.c:315:(.text+0x60c): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-sh4-linux-ld: arch/sh/boot/compressed/misc.o:(.debug_addr+0x388): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-sh4-linux-ld: misc.c:(.text+0x23d4): undefined reference to `__ubsan_handle_shift_out_of_bounds'
-xtensa-linux-ld: arch/xtensa/boot/lib/inflate.c:487:(.text+0x546): undefined reference to `__ubsan_handle_out_of_bounds'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arc-randconfig-r113-20240206
-|   `-- drivers-gpu-drm-bridge-imx-imx8mp-hdmi-pvi.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- arm-randconfig-r071-20240206
-|   `-- fs-ceph-locks.c:warning:unused-variable-lock
-|-- i386-buildonly-randconfig-003-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-randconfig-014-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-randconfig-016-20240206
-|   `-- include-kunit-test.h:warning:s-directive-argument-is-null
-|-- i386-randconfig-052-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- mips-allyesconfig
-|   |-- (.ref.text):relocation-truncated-to-fit:R_MIPS_26-against-start_secondary
-|   `-- (.text):relocation-truncated-to-fit:R_MIPS_26-against-kernel_entry
-|-- nios2-randconfig-001-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- parisc-defconfig
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-gsp-r535.c:warning:Function-parameter-or-struct-member-gsp-not-described-in-nvkm_gsp_radix3_sg
-|-- parisc-randconfig-001-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- powerpc-randconfig-r022-20230201
-|   |-- powerpc-linux-ld:warning:orphan-section-bss..Lubsan_data202-from-fs-overlayfs-copy_up.o-being-placed-in-section-.bss..Lubsan_data202
-|   |-- powerpc-linux-ld:warning:orphan-section-bss..Lubsan_data219-from-kernel-ptrace.o-being-placed-in-section-.bss..Lubsan_data219
-|   `-- powerpc-linux-ld:warning:orphan-section-bss..Lubsan_data327-from-kernel-sched-core.o-being-placed-in-section-.bss..Lubsan_data327
-|-- powerpc64-randconfig-003-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- sh-randconfig-r003-20220501
-|   |-- arch-sh-boot-compressed-..-..-..-..-lib-zlib_inflate-inffast.c:(.text):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|   |-- arch-sh-boot-compressed-..-..-..-..-lib-zlib_inflate-inflate.c:(.text):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|   |-- arch-sh-boot-compressed-..-..-..-..-lib-zlib_inflate-inftrees.c:(.text):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|   |-- sh4-linux-ld:arch-sh-boot-compressed-..-..-..-..-lib-zlib_inflate-inffast.c:(.text):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|   `-- sh4-linux-ld:arch-sh-boot-compressed-..-..-..-..-lib-zlib_inflate-inftrees.c:(.text):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|-- sh-randconfig-r015-20220607
-|   `-- sh4-linux-ld:misc.c:(.text):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|-- sh-randconfig-r023-20230502
-|   |-- arch-sh-boot-compressed-..-..-..-..-lib-xz-xz_dec_lzma2.c:(.text):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|   `-- sh4-linux-ld:arch-sh-boot-compressed-misc.o:(.debug_addr):undefined-reference-to-__ubsan_handle_shift_out_of_bounds
-|-- sparc64-randconfig-001-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- sparc64-randconfig-002-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- x86_64-randconfig-003-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- x86_64-randconfig-004-20240206
-|   `-- include-kunit-test.h:warning:s-directive-argument-is-null
-|-- x86_64-randconfig-161-20240206
-|   |-- fs-bcachefs-btree_locking.c-bch2_trans_relock()-warn:passing-zero-to-PTR_ERR
-|   |-- fs-bcachefs-buckets.c-bch2_trans_account_disk_usage_change()-error:we-previously-assumed-trans-disk_res-could-be-null-(see-line-)
-|   `-- mm-huge_memory.c-thpsize_create()-warn:Calling-kobject_put-get-with-state-initialized-unset-from-line:
-|-- x86_64-rhel-8.3-bpf
-|   `-- make:kselftest-livepatch-test_modules:No-such-file-or-directory.-Stop.
-`-- xtensa-randconfig-r022-20220710
-    |-- arch-xtensa-boot-lib-inflate.c:(.text):undefined-reference-to-__ubsan_handle_out_of_bounds
-    `-- xtensa-linux-ld:arch-xtensa-boot-lib-inflate.c:(.text):undefined-reference-to-__ubsan_handle_out_of_bounds
-clang_recent_errors
-|-- arm64-randconfig-002-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-buildonly-randconfig-002-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-buildonly-randconfig-004-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-randconfig-003-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-randconfig-004-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-randconfig-013-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- i386-randconfig-054-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- powerpc-randconfig-003-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- x86_64-randconfig-006-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- x86_64-randconfig-012-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-|-- x86_64-randconfig-014-20240206
-|   `-- fs-ntfs3-frecord.c:warning:unused-variable-i_size
-`-- x86_64-randconfig-122-20240206
-    |-- fs-quota-dquot.c:sparse:sparse:incompatible-types-in-comparison-expression-(different-address-spaces):
-    `-- fs-smb-client-file.c:sparse:sparse:symbol-cifs_req_ops-was-not-declared.-Should-it-be-static
-
-elapsed time: 1479m
-
-configs tested: 179
-configs skipped: 3
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240206   gcc  
-arc                   randconfig-002-20240206   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                        mvebu_v7_defconfig   clang
-arm                        neponset_defconfig   gcc  
-arm                   randconfig-001-20240206   clang
-arm                   randconfig-002-20240206   gcc  
-arm                   randconfig-003-20240206   gcc  
-arm                   randconfig-004-20240206   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240206   gcc  
-arm64                 randconfig-002-20240206   clang
-arm64                 randconfig-003-20240206   gcc  
-arm64                 randconfig-004-20240206   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240206   gcc  
-csky                  randconfig-002-20240206   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240206   clang
-hexagon               randconfig-002-20240206   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240206   clang
-i386         buildonly-randconfig-002-20240206   clang
-i386         buildonly-randconfig-003-20240206   gcc  
-i386         buildonly-randconfig-004-20240206   clang
-i386         buildonly-randconfig-005-20240206   gcc  
-i386         buildonly-randconfig-006-20240206   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240206   clang
-i386                  randconfig-002-20240206   clang
-i386                  randconfig-003-20240206   clang
-i386                  randconfig-004-20240206   clang
-i386                  randconfig-005-20240206   clang
-i386                  randconfig-006-20240206   clang
-i386                  randconfig-011-20240206   clang
-i386                  randconfig-012-20240206   gcc  
-i386                  randconfig-013-20240206   clang
-i386                  randconfig-014-20240206   gcc  
-i386                  randconfig-015-20240206   gcc  
-i386                  randconfig-016-20240206   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240206   gcc  
-loongarch             randconfig-002-20240206   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5249evb_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                            q40_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          malta_defconfig   gcc  
-mips                      maltasmvp_defconfig   gcc  
-mips                           mtx1_defconfig   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240206   gcc  
-nios2                 randconfig-002-20240206   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240206   gcc  
-parisc                randconfig-002-20240206   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                   currituck_defconfig   clang
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                   microwatt_defconfig   gcc  
-powerpc                      ppc64e_defconfig   gcc  
-powerpc               randconfig-001-20240206   clang
-powerpc               randconfig-002-20240206   gcc  
-powerpc               randconfig-003-20240206   clang
-powerpc                  storcenter_defconfig   gcc  
-powerpc64             randconfig-001-20240206   gcc  
-powerpc64             randconfig-002-20240206   clang
-powerpc64             randconfig-003-20240206   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240206   gcc  
-riscv                 randconfig-002-20240206   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240206   clang
-s390                  randconfig-002-20240206   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240206   gcc  
-sh                    randconfig-002-20240206   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240206   gcc  
-sparc64               randconfig-002-20240206   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                    randconfig-001-20240206   clang
-um                    randconfig-002-20240206   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240206   gcc  
-x86_64       buildonly-randconfig-002-20240206   clang
-x86_64       buildonly-randconfig-003-20240206   gcc  
-x86_64       buildonly-randconfig-004-20240206   gcc  
-x86_64       buildonly-randconfig-005-20240206   gcc  
-x86_64       buildonly-randconfig-006-20240206   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240206   clang
-x86_64                randconfig-002-20240206   clang
-x86_64                randconfig-003-20240206   gcc  
-x86_64                randconfig-004-20240206   gcc  
-x86_64                randconfig-005-20240206   gcc  
-x86_64                randconfig-006-20240206   clang
-x86_64                randconfig-011-20240206   gcc  
-x86_64                randconfig-012-20240206   clang
-x86_64                randconfig-013-20240206   gcc  
-x86_64                randconfig-014-20240206   clang
-x86_64                randconfig-015-20240206   gcc  
-x86_64                randconfig-016-20240206   clang
-x86_64                randconfig-071-20240206   gcc  
-x86_64                randconfig-072-20240206   gcc  
-x86_64                randconfig-073-20240206   gcc  
-x86_64                randconfig-074-20240206   gcc  
-x86_64                randconfig-075-20240206   clang
-x86_64                randconfig-076-20240206   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                           alldefconfig   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240206   gcc  
-xtensa                randconfig-002-20240206   gcc  
-xtensa                         virt_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+   Paul
 
