@@ -1,121 +1,97 @@
-Return-Path: <linux-kselftest+bounces-4246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A453284CFD0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 18:31:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B51584D0E4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 19:13:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF42D1C221BC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 17:31:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E7991F21F1C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 18:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775BA82C9B;
-	Wed,  7 Feb 2024 17:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8DB612838C;
+	Wed,  7 Feb 2024 18:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h6iLF73n"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZRmnYruK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5BB8289D
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Feb 2024 17:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1523883CA7
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Feb 2024 18:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707327083; cv=none; b=PcKEhhpQOP5TPKkZGW0Fs7wNesa7TaWA1MZMeyJM9sq46jE+y7PGLzl+2U2CjPLaZuarvngj6dvwYJ7SZ7VbtxWbXpl4RG1KnTrrDiTo3aAzf0Q/mwtJNLzlZy2XEz9FLC3ek1WSYktVEiqFh51i4f0grk7SgoYn3E1wtb9byOc=
+	t=1707329088; cv=none; b=qG1zt9KpmwhIwrui9Qoasoh34yLigBVFN6nMorjv1R9S9Gqdbm82ulE9GD8LmhyN1ouGp5lacwhIHaxJgfGLrtV6Jblex5ZMkDc4Je07PPcrbwv+soqc36LaNL02b67E99IM+y6ov+E7ZnIFKy389yHaWNL7o5oZ+zw7QYr9yTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707327083; c=relaxed/simple;
-	bh=gDfuUYVgKUW/r12EBAceePRcXBkBeDQFRcNeAuQSi/w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I3iRxSecn8icP2/EDyoWPb7uf+6cIQrQbCq7jONBVJTHArHqzmr6dLtmFnzimW0+61WpC3tT44NE6d+UTdjafOs0UlSDkUW/6YVcb3Wd93nYAKM63t7t+bGue1cO4dKOJPTIAtdC5Mn7xuyP1IqB4G9FB0MDp971AacusutJtkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h6iLF73n; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707327080;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SO8sv7/cO3G6RaqEjajadlzIMLSqMZLWmNNb2a1ypb0=;
-	b=h6iLF73nF3yhff7vD2peAIbJ0cG+wxTvFCMAMSh5ieZchKDizuq3RflYcvI1Hd6fDq3Pcb
-	O6jc6wyYbzd3kZj+YcyTsI5+hbmi0qZarocYFnBLIlv0Q7I0kxzQjbLbF33cYSUMTtiliY
-	hl64cXEA25hWp1T+dQBDjfLmtJBuxRA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-637-Mh36QTEUNgKcBkpPO_ZnWQ-1; Wed, 07 Feb 2024 12:31:15 -0500
-X-MC-Unique: Mh36QTEUNgKcBkpPO_ZnWQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9FBB787A38A;
-	Wed,  7 Feb 2024 17:31:14 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.45.224.200])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 632A82026D08;
-	Wed,  7 Feb 2024 17:31:13 +0000 (UTC)
-From: Paolo Abeni <pabeni@redhat.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: net: add more missing kernel config
-Date: Wed,  7 Feb 2024 18:31:10 +0100
-Message-ID: <38d3ca7f909736c1aef56e6244d67c82a9bba6ff.1707326987.git.pabeni@redhat.com>
+	s=arc-20240116; t=1707329088; c=relaxed/simple;
+	bh=MxlJu+J6TLx8yj+iNOuTo7euy0CLu6uztwIQApSEcdw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=buRhd8NPQFlrmIMylkbZeR9YIyZ0MwhSgVPuPDEYxxFsoAslQ+SPUQMH/kQW414lQBgoqAizlWkwN3dMvHHSY+/KMuF7vWWmRoZobs/CZE42V8uhD7wBhFQK/zsvPrNz/EJJgRR8nvBGV8yanerHzvx8hJFb+y844q/ocYml2sI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZRmnYruK; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-55f5d62d024so438a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Feb 2024 10:04:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707329084; x=1707933884; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MxlJu+J6TLx8yj+iNOuTo7euy0CLu6uztwIQApSEcdw=;
+        b=ZRmnYruKBuH/13Moea6Bi7TOWWw2+RIYKHX83n+CP0a1BtX8LtX1H3++iDshWmCHmf
+         sOPywdnCcDKSKnESQho54iOEpihxGvtvJPUa8hI5UcCDVv1wETlrVCNSxeCdlMge1JqN
+         mP7H/PS9ChFRJDQ86N+YgZi+Ves3pAkpcfBl/s76A5eO444zUO6icpengm9MwHuwR7H3
+         iKdI3p7ymYKMLRC+urrcmiRUDEG6eed00PPr1FIEhxE5FgJsvAOLRl++eCy4JA0TiQy1
+         FLOenSnxUanj3+zSOtI/0GKPe34hqcdacWdl7t9V/twmO+TjypxPM1Wpt7HqC+aEV+L+
+         YSdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707329084; x=1707933884;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MxlJu+J6TLx8yj+iNOuTo7euy0CLu6uztwIQApSEcdw=;
+        b=X35X037TkksW4lSWKgwwBSxnT4mikwS8ckI8VCbJsgmHUecswyVm5ZIu9mMABVcMm1
+         WwQo3o3EUd6kypNJbbLf316bkBnEXtsiyw2QbTiDAQCd+e06rzIo85qoRLNR1etU4VRN
+         Gy3IVV7GKvo0Q//4mf5N6UiAZkFA9bCgXS57zhxQASpuCtUDOpKTnZvYsk4WKJuMcfMP
+         QnIUvYiwmHYTkgMNBkO/IsooBij4A8yG/8Y6Is/fX7PE1cgrG476PHMoREScMhNf+Cdy
+         evcnqLp2tlryZDcie6i4WADbkr48XFtQ++uGhySPN05SlpIwdkwwx9e8Yxo12Sp9awiQ
+         TN2Q==
+X-Gm-Message-State: AOJu0Yz5p8HMDrnZdTDs0mQrn5+DaloIZVERfx1/N20hz66QCH7ng5lV
+	JSvBqgLE1jI8tCb9ofoevaQk/HkybMLY3BNTjbH9wI0QA5m5TCZXm4jI2qoQOOD3Nf1qSmTyZCz
+	WQDeTK578mQSEWH3lLr3OIn7RURqKo38XW/VV
+X-Google-Smtp-Source: AGHT+IGI0Nj8OAAEvuNW0mz5/CZNiXvVPMS0pCsSld6e6qLsiP5wS+LBjIVJBP6jozn13Ag77CnMg0Dgf+o6GhL9CpA=
+X-Received: by 2002:a50:9fa7:0:b0:560:f419:71ea with SMTP id
+ c36-20020a509fa7000000b00560f41971eamr51348edf.7.1707329084080; Wed, 07 Feb
+ 2024 10:04:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+References: <38d3ca7f909736c1aef56e6244d67c82a9bba6ff.1707326987.git.pabeni@redhat.com>
+In-Reply-To: <38d3ca7f909736c1aef56e6244d67c82a9bba6ff.1707326987.git.pabeni@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 7 Feb 2024 19:04:28 +0100
+Message-ID: <CANn89iLi7J0Hi28k9O6S3RnTt-opj2pNV6cEw3oyWUV_CiRPZQ@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: net: add more missing kernel config
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The reuseport_addr_any.sh is currently skipping DCCP tests and
-pmtu.sh is skipping all the FOU/GUE related cases: add the missing
-options.
+On Wed, Feb 7, 2024 at 6:31=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
+e:
+>
+> The reuseport_addr_any.sh is currently skipping DCCP tests and
+> pmtu.sh is skipping all the FOU/GUE related cases: add the missing
+> options.
+>
+> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> ---
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
-Note that this does not include the - still missing - OVS-related
-option and pmtu.sh is will keep skipping such cases. Such tests
-will still fail in the virtme environment even with the relevant
-kernel options enabled, as they have an hard to solve dependency
-on systemd/dbus.
-The longer term plan is to move such test cases in the openvswitch
-directory. One short term option to avoid skips in selftests results
-while retaining the potential code coverage would be making the ovs
-tests disabled by default but reachable via pmtu.sh command line
-arguments.
----
- tools/testing/selftests/net/config | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 3b749addd364..54d21e2911a9 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -13,6 +13,10 @@ CONFIG_IPV6=y
- CONFIG_IPV6_MULTIPLE_TABLES=y
- CONFIG_VETH=y
- CONFIG_NET_IPVTI=y
-+CONFIG_NET_FOU=y
-+CONFIG_NET_FOU_IP_TUNNELS=y
-+CONFIG_NET_IPIP=y
-+CONFIG_IPV6_SIT=y
- CONFIG_IPV6_VTI=y
- CONFIG_DUMMY=y
- CONFIG_BRIDGE_VLAN_FILTERING=y
-@@ -24,6 +28,7 @@ CONFIG_IFB=y
- CONFIG_INET_DIAG=y
- CONFIG_INET_ESP=y
- CONFIG_INET_ESP_OFFLOAD=y
-+CONFIG_IP_DCCP=m
- CONFIG_IP_GRE=m
- CONFIG_NETFILTER=y
- CONFIG_NETFILTER_ADVANCED=y
--- 
-2.43.0
-
+SGTM thanks.
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
