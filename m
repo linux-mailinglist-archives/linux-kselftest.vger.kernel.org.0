@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-4276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E30DC84D2FD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 21:31:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9A5384D300
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 21:31:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96DDD28E698
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 20:31:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28F7E1C24E87
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 20:31:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 163821EA6E;
-	Wed,  7 Feb 2024 20:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457E5127B46;
+	Wed,  7 Feb 2024 20:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lx8mnNCB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XdziAUn9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3B01DFCF;
-	Wed,  7 Feb 2024 20:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A31B76039;
+	Wed,  7 Feb 2024 20:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707337902; cv=none; b=Y5ptnmAGeCePnxTmXtRU8u8RyVkGEjksqNZlfqFICbHsfKxU9ik/PTMZZzRxzhDZ4POb3wsQ4F+Iq8BBWDklO6DbGvQMuGujjgr6yUnHq74vhYW67VoGZiqE87Ie7PubU6rNnP37Nchog1uYkVQYsnKDfWlPAGCzfrMcod/67M0=
+	t=1707337903; cv=none; b=dvfrwedygiv5+6KCTzhCxKmQ8xA0VYgLya953AQehl0DfIAc9AVzDArJLCVva6PHGwL9QxsQcq8hE48etBbo82gSCfVgyuOSiI3yfwiBnAnG/aM9qJre1mZOg/5Tw9viPcFMtlh4vCTQM4VTUjPxJFFpoNNd63GInZLKvphzSmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707337902; c=relaxed/simple;
-	bh=JQERS+AD7eJcXPmEIi+Gcjav4/4TJSgTRdHhSGiTeC0=;
+	s=arc-20240116; t=1707337903; c=relaxed/simple;
+	bh=SwdeOXExaKQGPJVJ2NaT/lednGj9CW7yt27zl0ck87s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=a48RB+kQZnQ9//V/P3YOPiUZX8bp9UlB4FP2BgHyWRkecDdXk6kDaSBt1Kh0RnHjH8Bw6j9KtvUN7iDDbFxTgfZu+XEpMn+wqu6KeWa9BdmJ/pP1+QcGuT7e33Bp49W8bCf8zCJsOvDQZvku7OfJO2tC655xKmqXh/I8zegAipo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lx8mnNCB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27297C43390;
+	 MIME-Version; b=ecfLvRA1TEPEQhSQSWbXbCecjgtRQ7W0AuPau8kYu3ox5XFJSQtB0Iv7z/aaG8S6ePyd+ZPi+u3B+VWZYRfHLxsHVhG8S25syQbBrWErKYJKcsIBCESnUPI1r0D5lr5+SS1MED4+jRtiQujQRxFCbA5JJ8HgRtv5aWj/aJbI8/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XdziAUn9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA011C433A6;
 	Wed,  7 Feb 2024 20:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707337901;
-	bh=JQERS+AD7eJcXPmEIi+Gcjav4/4TJSgTRdHhSGiTeC0=;
+	s=k20201202; t=1707337902;
+	bh=SwdeOXExaKQGPJVJ2NaT/lednGj9CW7yt27zl0ck87s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lx8mnNCB3FWWVgO2+jRkTgucZGTLeSzoBIZ/EFuBxNFxGuPQ0D8MFrtTw7iwrE1Na
-	 aFQEjvUUK4Yev4Dy6G++TsGO2kIx4pcqN7D3BLsUKIALU3zTZalx1xNnZcvJZPrvsF
-	 H8gT8OKhTA4A5tPW6EPXK+ZEpjk546ZmS104vhzh4148PSKRj4FOzL6qNZZDwX/Vyh
-	 kMtuD1aZQm/PWZwzbxHibyvmi6bSLIQiPQhoQniGkMI61KXBripkvkHUukfFQGYqvm
-	 AlXLfX0IgWrj5f4KRCZMdu1nEmvG5U82kPY3ZAZt+zPUu8QkR+FMe1jcOaIyNuRbYm
-	 +QowLnrkH/NMQ==
+	b=XdziAUn989qZYGouOke5VJZROLyvwJMYpwiWYmq66BUEXenv4+YEFtDUWAJ+A9e46
+	 4RcITM/aROpBnV+7byqwfQVSsuyZPtFLLVl+f8ctcCaXnoDBxj77Kj7brTuY7MxQzf
+	 6NO9ac8gHvUjq74gTlJ4q47izd+Hf6ebBXti6tL+WXPNCl37Qsm8WS036hCLnt6xHx
+	 4B0sBDrpLG1W2uOj69vF8f5540kveMiYpR8ER1drvalND7Cz/HlPbut0+TCVD/d7yH
+	 EAs7LM4X6EwP+4OXCl44FY2ZUcPhdn5aGcueatWZCkqpFk+6X66NXx0kXHlRCjKbgK
+	 O5Yym670dAtVA==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -49,9 +49,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/8] selftests/damon/_damon_sysfs: support DAMOS quota
-Date: Wed,  7 Feb 2024 12:31:27 -0800
-Message-Id: <20240207203134.69976-2-sj@kernel.org>
+Subject: [PATCH 2/8] selftests/damon/_damon_sysfs: support DAMOS stats
+Date: Wed,  7 Feb 2024 12:31:28 -0800
+Message-Id: <20240207203134.69976-3-sj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240207203134.69976-1-sj@kernel.org>
 References: <20240207203134.69976-1-sj@kernel.org>
@@ -64,82 +64,69 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Update the test-purpose DAMON sysfs control Python module to support
-DAMOS quota.
+DAMOS stats.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/_damon_sysfs.py | 42 +++++++++++++++----
- 1 file changed, 33 insertions(+), 9 deletions(-)
+ tools/testing/selftests/damon/_damon_sysfs.py | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-index e98cf4b6a4b7..b4f6e385c564 100644
+index b4f6e385c564..a75244451684 100644
 --- a/tools/testing/selftests/damon/_damon_sysfs.py
 +++ b/tools/testing/selftests/damon/_damon_sysfs.py
-@@ -70,18 +70,48 @@ class DamosAccessPattern:
+@@ -96,6 +96,20 @@ class DamosQuota:
          if err != None:
              return err
  
-+class DamosQuota:
-+    sz = None                   # size quota, in bytes
-+    ms = None                   # time quota
-+    reset_interval_ms = None    # quota reset interval
-+    scheme = None               # owner scheme
++class DamosStats:
++    nr_tried = None
++    sz_tried = None
++    nr_applied = None
++    sz_applied = None
++    qt_exceeds = None
 +
-+    def __init__(self, sz=0, ms=0, reset_interval_ms=0):
-+        self.sz = sz
-+        self.ms = ms
-+        self.reset_interval_ms = reset_interval_ms
-+
-+    def sysfs_dir(self):
-+        return os.path.join(self.scheme.sysfs_dir(), 'quotas')
-+
-+    def stage(self):
-+        err = write_file(os.path.join(self.sysfs_dir(), 'bytes'), self.sz)
-+        if err != None:
-+            return err
-+        err = write_file(os.path.join(self.sysfs_dir(), 'ms'), self.ms)
-+        if err != None:
-+            return err
-+        err = write_file(os.path.join(self.sysfs_dir(), 'reset_interval_ms'),
-+                         self.reset_interval_ms)
-+        if err != None:
-+            return err
++    def __init__(self, nr_tried, sz_tried, nr_applied, sz_applied, qt_exceeds):
++        self.nr_tried = nr_tried
++        self.sz_tried = sz_tried
++        self.nr_applied = nr_applied
++        self.sz_applied = sz_applied
++        self.qt_exceeds = qt_exceeds
 +
  class Damos:
      action = None
      access_pattern = None
--    # todo: Support quotas, watermarks, stats, tried_regions
-+    quota = None
-+    # todo: Support watermarks, stats, tried_regions
+@@ -104,6 +118,7 @@ class Damos:
      idx = None
      context = None
      tried_bytes = None
++    stats = None
  
--    def __init__(self, action='stat', access_pattern=DamosAccessPattern()):
-+    def __init__(self, action='stat', access_pattern=DamosAccessPattern(),
-+                 quota=DamosQuota()):
-         self.action = action
-         self.access_pattern = access_pattern
-         self.access_pattern.scheme = self
-+        self.quota = quota
-+        self.quota.scheme = self
+     def __init__(self, action='stat', access_pattern=DamosAccessPattern(),
+                  quota=DamosQuota()):
+@@ -322,6 +337,23 @@ class Kdamond:
+                     return err
+                 scheme.tried_bytes = int(content)
  
-     def sysfs_dir(self):
-         return os.path.join(
-@@ -94,13 +124,7 @@ class Damos:
-         err = self.access_pattern.stage()
-         if err != None:
-             return err
--
--        # disable quotas
--        err = write_file(os.path.join(self.sysfs_dir(), 'quotas', 'ms'), '0')
--        if err != None:
--            return err
--        err = write_file(
--                os.path.join(self.sysfs_dir(), 'quotas', 'bytes'), '0')
-+        err = self.quota.stage()
-         if err != None:
-             return err
++    def update_schemes_stats(self):
++        err = write_file(os.path.join(self.sysfs_dir(), 'state'),
++                'update_schemes_stats')
++        if err != None:
++            return err
++        for context in self.contexts:
++            for scheme in context.schemes:
++                stat_values = []
++                for stat in ['nr_tried', 'sz_tried', 'nr_applied',
++                             'sz_applied', 'qt_exceeds']:
++                    content, err = read_file(
++                            os.path.join(scheme.sysfs_dir(), 'stats', stat))
++                    if err != None:
++                        return err
++                    stat_values.append(int(content))
++                scheme.stats = DamosStats(*stat_values)
++
+ class Kdamonds:
+     kdamonds = []
  
 -- 
 2.39.2
