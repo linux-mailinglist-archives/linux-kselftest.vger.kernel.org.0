@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-4271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4268-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E2A384D0BB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 19:08:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3DEE84D0AF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 19:07:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5C021F26A74
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 18:08:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E75401C20B1E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 18:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B811384A4;
-	Wed,  7 Feb 2024 17:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DB9136668;
+	Wed,  7 Feb 2024 17:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gRavKVRV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hAQGWwPc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3DA135400;
-	Wed,  7 Feb 2024 17:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2259A13541B;
+	Wed,  7 Feb 2024 17:59:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707328767; cv=none; b=Ux9iTZfhROBcqiYqIYCr6nLbHPg1GDddBbqSPTiEQzNJf/d+wAgpwdtLk4EBGW30xeGwY0vYboEuL0XoTgVLMaeStY/TUIMp2u8VYaw0MtyBWAfb8a16glWKnb0Va7sgQjKNollBLTEuxlsWs2D6H1sBXqc0ESFF0/ADD6LoLsA=
+	t=1707328763; cv=none; b=DyHcAdKbVnFLldBVf+0MtoE1sGE4N8O/IaPCKeacKMGUusKK2qpewEmSYIFXTNECJbqUJuMLPnt8FH6FxURsidL54y6N3FIEConjL8pdYk35QGfVHjBfkIcIQs4NwELLt4LnUpsHSbdkr0Q80LHwa3dwWaK0YHuI5JWLmUjilu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707328767; c=relaxed/simple;
-	bh=8BZSbnRLnmeG5U3FhWc8N6oHSSHjwpiY4v6RG2oTEPU=;
+	s=arc-20240116; t=1707328763; c=relaxed/simple;
+	bh=gY2JzDeF5jrwJMCmaKGSaYZDR3/rk8mwy1w2IX+fWds=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tuq3na8c8z14G9q0/gEdrqPKEKX8CbidNTIbW26JkbcGy2qIxQfuYYii55B9p7FMiEUX0vpD3cWd6hxJFYDrup8ts/AbmiVa2DAmfnyCpF3HMZK5MNbHg1vOy4HQB7KZsNc6VnWkgmr8pvE0aFuvv6fYWoJ3oLGyddCzBW+0UOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gRavKVRV; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=rp2+JRlbNEEaTgj2PxYDudUrHFLcf43WF10aev62ndxWtZfjmsyYJ0cMSVqlMaiSdEalx131b92PpmvWBDUuynKpcDnLgvtd4DJt31RR6KUkfAtNZqUyaEg1CNRKeShJwaldoW/jN9bZ9m4XfCpFJeVLzwc2Db2Kp/PREXJZM2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hAQGWwPc; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,22 +36,22 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1707328762; x=1738864762;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8BZSbnRLnmeG5U3FhWc8N6oHSSHjwpiY4v6RG2oTEPU=;
-  b=gRavKVRVYLF5Y1IJIGGdYroeqglKfJBzP3K/c3JGbwQQyj17SoFPkybk
-   qRJZcopbgzT6Y/XRJfETHY4q7VsqVjT2IMUwldJfYU42ZrQlXfQB+AQ4N
-   oKVwyIumgAppac5cLjjxzH53BVFeth6X9ldafNR9uhQ95qg0GkdG2OmAi
-   FDrTEpeef/R7YKgnemkqefmhu8xdqnlc1OK6s3BjBfNSaY5ZCxzqu63ZT
-   qH5WY1a6UzPPcEpXt20VSpj/TXCxPd/EkYvmJaV/e3Lsdu32jT4uuiY4U
-   9JDfoKjAclZvo/3dzmVRyE2eyu0T/ft2OzZN8bwI3zOPbmCYtIBRyIsoS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="11622668"
+  bh=gY2JzDeF5jrwJMCmaKGSaYZDR3/rk8mwy1w2IX+fWds=;
+  b=hAQGWwPce/F3knbJgkrpM+1aBaOvcVsWOrHp24cc1F9iW2UNacHs3o5K
+   opVvsjAstIjkqh/cZuz+Aroz/4ES7DsAp78ZOcyIfI6ul9O5uFcJ6MGTN
+   jrzsrtIfU2moUTHpqBfEqQ4AN4X5KLOmIIGOakHdje37lv3I/fvEF8/5p
+   WQrz3bfs+mhXQzcRx1tbCN9oqRdSLhW41PlesapGxNK3irVn+oSEbD89l
+   ZjZ8coCqYq7/P/ircZaTWx40uFkPxEhCxc91EQCVqzQnH0dxuOq7PzjmX
+   kaYnd7YDwWoKdsME1EkApPYF11Tvh1EZvsJboupjIYmeP4tbtXl6yrugl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="11622679"
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="11622668"
+   d="scan'208";a="11622679"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
   by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 09:59:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="6020762"
+   d="scan'208";a="6020765"
 Received: from unknown (HELO fred..) ([172.25.112.68])
   by fmviesa004.fm.intel.com with ESMTP; 07 Feb 2024 09:58:59 -0800
 From: Xin Li <xin3.li@intel.com>
@@ -73,9 +73,9 @@ Cc: seanjc@google.com,
 	peterz@infradead.org,
 	ravi.v.shankar@intel.com,
 	xin@zytor.com
-Subject: [PATCH v2 21/25] KVM: nVMX: Add VMCS FRED states checking
-Date: Wed,  7 Feb 2024 09:26:41 -0800
-Message-ID: <20240207172646.3981-22-xin3.li@intel.com>
+Subject: [PATCH v2 22/25] KVM: x86: Allow FRED/LKGS/WRMSRNS to be exposed to guests
+Date: Wed,  7 Feb 2024 09:26:42 -0800
+Message-ID: <20240207172646.3981-23-xin3.li@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240207172646.3981-1-xin3.li@intel.com>
 References: <20240207172646.3981-1-xin3.li@intel.com>
@@ -87,154 +87,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add FRED related VMCS fields checkings.
+Allow FRED/LKGS/WRMSRNS to be exposed to guests, thus a guest OS could see
+these features when the guest is configured with FRED/LKGS/WRMSRNS in Qemu.
 
-As real hardware, nested VMX performs checks on various VMCS fields,
-including both controls and guest/host states.  With the introduction
-of VMX FRED, add FRED related VMCS fields checkings.
+A qemu patch is required to expose FRED/LKGS/WRMSRNS to KVM guests.
 
 Signed-off-by: Xin Li <xin3.li@intel.com>
 Tested-by: Shan Kang <shan.kang@intel.com>
 ---
- arch/x86/kvm/vmx/nested.c | 80 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 79 insertions(+), 1 deletion(-)
+ arch/x86/kvm/cpuid.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 04a9cdb0361f..ef0bd46eb0ce 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -2933,6 +2933,8 @@ static int nested_check_vm_entry_controls(struct kvm_vcpu *vcpu,
- 					  struct vmcs12 *vmcs12)
- {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
-+	bool fred_enabled = (vmcs12->vm_entry_controls & VM_ENTRY_IA32E_MODE) &&
-+			    (vmcs12->guest_cr4 & X86_CR4_FRED);
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index adba49afb5fe..afc1316d78ad 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -676,8 +676,8 @@ void kvm_set_cpu_caps(void)
  
- 	if (CC(!vmx_control_verify(vmcs12->vm_entry_controls,
- 				    vmx->nested.msrs.entry_ctls_low,
-@@ -2951,6 +2953,7 @@ static int nested_check_vm_entry_controls(struct kvm_vcpu *vcpu,
- 		u32 intr_type = intr_info & INTR_INFO_INTR_TYPE_MASK;
- 		bool has_error_code = intr_info & INTR_INFO_DELIVER_CODE_MASK;
- 		bool should_have_error_code;
-+		bool has_nested_exception = vmx->nested.msrs.basic & VMX_BASIC_NESTED_EXCEPTION;
- 		bool urg = nested_cpu_has2(vmcs12,
- 					   SECONDARY_EXEC_UNRESTRICTED_GUEST);
- 		bool prot_mode = !urg || vmcs12->guest_cr0 & X86_CR0_PE;
-@@ -2964,7 +2967,9 @@ static int nested_check_vm_entry_controls(struct kvm_vcpu *vcpu,
- 		/* VM-entry interruption-info field: vector */
- 		if (CC(intr_type == INTR_TYPE_NMI_INTR && vector != NMI_VECTOR) ||
- 		    CC(intr_type == INTR_TYPE_HARD_EXCEPTION && vector > 31) ||
--		    CC(intr_type == INTR_TYPE_OTHER_EVENT && vector != 0))
-+		    CC(intr_type == INTR_TYPE_OTHER_EVENT &&
-+		       ((!fred_enabled && vector > 0) ||
-+		        (fred_enabled && vector > 2))))
- 			return -EINVAL;
+ 	kvm_cpu_cap_mask(CPUID_7_1_EAX,
+ 		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) |
+-		F(FZRM) | F(FSRS) | F(FSRC) |
+-		F(AMX_FP16) | F(AVX_IFMA) | F(LAM)
++		F(FZRM) | F(FSRS) | F(FSRC) | F(FRED) | F(LKGS) |
++		F(WRMSRNS) | F(AMX_FP16) | F(AVX_IFMA) | F(LAM)
+ 	);
  
- 		/* VM-entry interruption-info field: deliver error code */
-@@ -2983,6 +2988,15 @@ static int nested_check_vm_entry_controls(struct kvm_vcpu *vcpu,
- 		if (CC(intr_info & INTR_INFO_RESVD_BITS_MASK))
- 			return -EINVAL;
- 
-+		/*
-+		 * When the CPU enumerates VMX nested-exception support, bit 13
-+		 * (set to indicate a nested exception) of the intr info field
-+		 * may have value 1. Otherwise bit 13 is reserved.
-+		 */
-+		if (CC(!has_nested_exception &&
-+		       (intr_info & INTR_INFO_NESTED_EXCEPTION_MASK)))
-+			return -EINVAL;
-+
- 		/* VM-entry instruction length */
- 		switch (intr_type) {
- 		case INTR_TYPE_SOFT_EXCEPTION:
-@@ -2992,6 +3006,12 @@ static int nested_check_vm_entry_controls(struct kvm_vcpu *vcpu,
- 			    CC(vmcs12->vm_entry_instruction_len == 0 &&
- 			    CC(!nested_cpu_has_zero_length_injection(vcpu))))
- 				return -EINVAL;
-+			break;
-+		case INTR_TYPE_OTHER_EVENT:
-+			if (fred_enabled && (vector == 1 || vector == 2))
-+				if (CC(vmcs12->vm_entry_instruction_len > 15))
-+					return -EINVAL;
-+			break;
- 		}
- 	}
- 
-@@ -3054,9 +3074,30 @@ static int nested_vmx_check_host_state(struct kvm_vcpu *vcpu,
- 	if (ia32e) {
- 		if (CC(!(vmcs12->host_cr4 & X86_CR4_PAE)))
- 			return -EINVAL;
-+		if (vmcs12->vm_exit_controls & VM_EXIT_ACTIVATE_SECONDARY_CONTROLS &&
-+		    vmcs12->secondary_vm_exit_controls & SECONDARY_VM_EXIT_LOAD_IA32_FRED) {
-+			/* Bit 11, bits 5:4, and bit 2 of the IA32_FRED_CONFIG must be zero */
-+			if (CC(vmcs12->host_ia32_fred_config &
-+			       (BIT_ULL(11) | GENMASK_ULL(5, 4) | BIT_ULL(2))) ||
-+			    CC(vmcs12->host_ia32_fred_rsp1 & GENMASK_ULL(5, 0)) ||
-+			    CC(vmcs12->host_ia32_fred_rsp2 & GENMASK_ULL(5, 0)) ||
-+			    CC(vmcs12->host_ia32_fred_rsp3 & GENMASK_ULL(5, 0)) ||
-+			    CC(vmcs12->host_ia32_fred_ssp1 & GENMASK_ULL(2, 0)) ||
-+			    CC(vmcs12->host_ia32_fred_ssp2 & GENMASK_ULL(2, 0)) ||
-+			    CC(vmcs12->host_ia32_fred_ssp3 & GENMASK_ULL(2, 0)) ||
-+			    CC(is_noncanonical_address(vmcs12->host_ia32_fred_config & PAGE_MASK, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->host_ia32_fred_rsp1, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->host_ia32_fred_rsp2, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->host_ia32_fred_rsp3, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->host_ia32_fred_ssp1, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->host_ia32_fred_ssp2, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->host_ia32_fred_ssp3, vcpu)))
-+				return -EINVAL;
-+		}
- 	} else {
- 		if (CC(vmcs12->vm_entry_controls & VM_ENTRY_IA32E_MODE) ||
- 		    CC(vmcs12->host_cr4 & X86_CR4_PCIDE) ||
-+		    CC(vmcs12->host_cr4 & X86_CR4_FRED) ||
- 		    CC((vmcs12->host_rip) >> 32))
- 			return -EINVAL;
- 	}
-@@ -3200,6 +3241,43 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
- 	     CC((vmcs12->guest_bndcfgs & MSR_IA32_BNDCFGS_RSVD))))
- 		return -EINVAL;
- 
-+	if (ia32e) {
-+		if (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_FRED) {
-+			/* Bit 11, bits 5:4, and bit 2 of the IA32_FRED_CONFIG must be zero */
-+			if (CC(vmcs12->guest_ia32_fred_config &
-+			       (BIT_ULL(11) | GENMASK_ULL(5, 4) | BIT_ULL(2))) ||
-+			    CC(vmcs12->guest_ia32_fred_rsp1 & GENMASK_ULL(5, 0)) ||
-+			    CC(vmcs12->guest_ia32_fred_rsp2 & GENMASK_ULL(5, 0)) ||
-+			    CC(vmcs12->guest_ia32_fred_rsp3 & GENMASK_ULL(5, 0)) ||
-+			    CC(vmcs12->guest_ia32_fred_ssp1 & GENMASK_ULL(2, 0)) ||
-+			    CC(vmcs12->guest_ia32_fred_ssp2 & GENMASK_ULL(2, 0)) ||
-+			    CC(vmcs12->guest_ia32_fred_ssp3 & GENMASK_ULL(2, 0)) ||
-+			    CC(is_noncanonical_address(vmcs12->guest_ia32_fred_config & PAGE_MASK, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->guest_ia32_fred_rsp1, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->guest_ia32_fred_rsp2, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->guest_ia32_fred_rsp3, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->guest_ia32_fred_ssp1, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->guest_ia32_fred_ssp2, vcpu)) ||
-+			    CC(is_noncanonical_address(vmcs12->guest_ia32_fred_ssp3, vcpu)))
-+				return -EINVAL;
-+		}
-+		if (vmcs12->guest_cr4 & X86_CR4_FRED) {
-+			unsigned int ss_dpl = VMX_AR_DPL(vmcs12->guest_ss_ar_bytes);
-+			if (CC(ss_dpl == 1 || ss_dpl == 2))
-+				return -EINVAL;
-+			if (ss_dpl == 0 &&
-+			    CC(!(vmcs12->guest_cs_ar_bytes & VMX_AR_L_MASK)))
-+				return -EINVAL;
-+			if (ss_dpl == 3 &&
-+			    (CC(vmcs12->guest_rflags & X86_EFLAGS_IOPL) ||
-+			     CC(vmcs12->guest_interruptibility_info & GUEST_INTR_STATE_STI)))
-+				return -EINVAL;
-+		}
-+	} else {
-+		if (CC(vmcs12->guest_cr4 & X86_CR4_FRED))
-+			return -EINVAL;
-+	}
-+
- 	if (nested_check_guest_non_reg_state(vmcs12))
- 		return -EINVAL;
- 
+ 	kvm_cpu_cap_init_kvm_defined(CPUID_7_1_EDX,
 -- 
 2.43.0
 
