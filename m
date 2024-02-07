@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-4278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38C4C84D301
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 21:32:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C08AB84D304
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 21:32:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BBEC1C24AD7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 20:32:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83849B2771B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 20:32:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75B5127B74;
-	Wed,  7 Feb 2024 20:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E66823B8;
+	Wed,  7 Feb 2024 20:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fi0iIujP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJJijCfm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF48127B6A;
-	Wed,  7 Feb 2024 20:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7903012881A;
+	Wed,  7 Feb 2024 20:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707337903; cv=none; b=ReMf41TxJt02g82c2JRvTso401EjwAhHDCMVEmqzBMv0pFNs/0pcIiVjTVRLUzySmPRr2IpQTtqX+y3SzQlGU0FGWmIPm7yd8D6UvBRRDmoTa+RGIl0iQYEYvTmN3n3o2+kfUa0xd4MYc30bbq/7+78CMaJ8fxFEgToz8UouPws=
+	t=1707337904; cv=none; b=ITU4Vo46XdOZgVOjjUCowmSgklietYGtXcOt01sLPG7/v2dPeR0cp9wfA/7Oq4cZ3OsqleZVpvOD3cRq+mXP/QuKueSF5mMDX2acYGlfPmLkBDgq8OVOWdQzYanHC022gJmpRUGYXS3i2j7KAazcFtZ/aGVJKpndxBEyTdz0ex0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707337903; c=relaxed/simple;
-	bh=9lLmi3bov7hQSKSz6Wm19r7FnAY+g94q4B/k/Jgsk9k=;
+	s=arc-20240116; t=1707337904; c=relaxed/simple;
+	bh=tz9uTb84Z42Yizp5Acw7rjIK4AMaxjqMzKQOqT/pm1M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZFGEBVLFnu2VjfV2vR7xw8Js9krah8gzCdvnU/21bDhhF6bgdNT7FZHAVAjSVrcmUXyFg/abJ8M+otrhYKH7U5DSgq+lrXUqIV7qIrrdNZQFFVFhjKrH5mnF/rQAwg08RpS6cdFhoZC+J7/cPuyw+MBG6YCq5l/0Z1UQ3TTiErU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fi0iIujP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F1EC43141;
-	Wed,  7 Feb 2024 20:31:42 +0000 (UTC)
+	 MIME-Version; b=N/7h+7c4CkVjmy8ecwRqas+Ush5ZWxiMb1lKWqmF+9/PUkOZ9CVkSqFbP2nGMqdniYJiokikrGLMB/WD5rhCsogl5tJ6E9u3NPkx/AqoNRNX8sN7jct0hmmxQQaAdGZaVssytySOhgmwKt4uAfM8w1RxaSl0t6pfuqWPqongbMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJJijCfm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A8FC43390;
+	Wed,  7 Feb 2024 20:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707337903;
-	bh=9lLmi3bov7hQSKSz6Wm19r7FnAY+g94q4B/k/Jgsk9k=;
+	s=k20201202; t=1707337904;
+	bh=tz9uTb84Z42Yizp5Acw7rjIK4AMaxjqMzKQOqT/pm1M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Fi0iIujPz1cj5u9k8DV6O6k6jYHVEQy6PRbsmappiAAOUQnYijCrUO8m+mPpuZQ/X
-	 /Qo1XhekVUHY0pnANoHsgiT0y8eK/BMSLC0y9cvyLOUdXjSE4Z5pGSRSMoGYHhyAim
-	 6ciDGu9LMatd++0cRpr5guC30UwMHR2ZkSRBnXrH+P2hqXseTOV9V0AYm4ptQ+1oR8
-	 WyrAKtkKkKNbHEftXNZBqMKYhKIrCO073GUohgJLzwsRXP5cFQ37mbbhO3MOD+Hjea
-	 vWnP8dF05TL/cauWKBUB90aZFB1nilt2afMb5jOh3Dw+y0IppRqhHOpKyNog663RqN
-	 X4qIwvmvgRO/A==
+	b=DJJijCfmw4GrlAMLBl2nP9yduJUcln0mxAT/q50sI+tVVLy2pIDCclwCxcNfCEWOG
+	 3uKNB+jqzsufuPDqf9L25wuWkXRB3clhwftLcRVBOtVOUEmEO9S8Q181dKzi37GUII
+	 aqtGfAyzwMiz0iE/qwfGcVHcQG99augNwfn8zblNS3xRUJtTnuyvWkcp3DDkMVQTLs
+	 2F6ltet+/rUSxJuNO9aQjEUVy5vntT50wmjVCQ5ejj5fIqXFLj17s8lHTiCjCMpop+
+	 bFWBaRWR7yfvnKot97njjwyosyXavwoeSgfyjAKNiOO1EH1z03lsyKV/Ew16tLZBML
+	 aePPCZfS9eubA==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -49,9 +49,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/8] selftests/damon/_damon_sysfs: support DAMOS apply interval
-Date: Wed,  7 Feb 2024 12:31:29 -0800
-Message-Id: <20240207203134.69976-4-sj@kernel.org>
+Subject: [PATCH 4/8] selftests/damon: add a test for DAMOS quota
+Date: Wed,  7 Feb 2024 12:31:30 -0800
+Message-Id: <20240207203134.69976-5-sj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240207203134.69976-1-sj@kernel.org>
 References: <20240207203134.69976-1-sj@kernel.org>
@@ -63,53 +63,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Update the test-purpose DAMON sysfs control Python module to support
-DAMOS apply interval.
+Add a selftest for verifying the DAMOS quota feature.  The test is very
+similar to sysfs_update_schemes_tried_regions_wss_estimation.py.  It
+starts an artificial workload of 20 MiB working set, run DAMON to find
+the working set size, but with 1 MiB/100 ms size quota.  Then, it
+collect the DAMON-found working set size every 100 ms and check if the
+quota was always applied as expected.  For the confirmation, the tests
+shows the stat-applied region size and the qt_exceeds stat.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/_damon_sysfs.py | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/testing/selftests/damon/Makefile       |  1 +
+ tools/testing/selftests/damon/damos_quota.py | 67 ++++++++++++++++++++
+ 2 files changed, 68 insertions(+)
+ create mode 100755 tools/testing/selftests/damon/damos_quota.py
 
-diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-index a75244451684..d23d7398a27a 100644
---- a/tools/testing/selftests/damon/_damon_sysfs.py
-+++ b/tools/testing/selftests/damon/_damon_sysfs.py
-@@ -114,6 +114,7 @@ class Damos:
-     action = None
-     access_pattern = None
-     quota = None
-+    apply_interval_us = None
-     # todo: Support watermarks, stats, tried_regions
-     idx = None
-     context = None
-@@ -121,12 +122,13 @@ class Damos:
-     stats = None
+diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
+index 8a1cc2bf1864..9c3783f1a39d 100644
+--- a/tools/testing/selftests/damon/Makefile
++++ b/tools/testing/selftests/damon/Makefile
+@@ -12,6 +12,7 @@ TEST_PROGS += debugfs_rm_non_contexts.sh
+ TEST_PROGS += sysfs.sh sysfs_update_removed_scheme_dir.sh
+ TEST_PROGS += sysfs_update_schemes_tried_regions_hang.py
+ TEST_PROGS += sysfs_update_schemes_tried_regions_wss_estimation.py
++TEST_PROGS += damos_quota.py
+ TEST_PROGS += reclaim.sh lru_sort.sh
  
-     def __init__(self, action='stat', access_pattern=DamosAccessPattern(),
--                 quota=DamosQuota()):
-+                 quota=DamosQuota(), apply_interval_us=0):
-         self.action = action
-         self.access_pattern = access_pattern
-         self.access_pattern.scheme = self
-         self.quota = quota
-         self.quota.scheme = self
-+        self.apply_interval_us = apply_interval_us
- 
-     def sysfs_dir(self):
-         return os.path.join(
-@@ -139,6 +141,11 @@ class Damos:
-         err = self.access_pattern.stage()
-         if err != None:
-             return err
-+        err = write_file(os.path.join(self.sysfs_dir(), 'apply_interval_us'),
-+                         '%d' % self.apply_interval_us)
-+        if err != None:
-+            return err
+ include ../lib.mk
+diff --git a/tools/testing/selftests/damon/damos_quota.py b/tools/testing/selftests/damon/damos_quota.py
+new file mode 100755
+index 000000000000..7d4c6bb2e3cd
+--- /dev/null
++++ b/tools/testing/selftests/damon/damos_quota.py
+@@ -0,0 +1,67 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-         err = self.quota.stage()
-         if err != None:
-             return err
++import subprocess
++import time
++
++import _damon_sysfs
++
++def main():
++    # access two 10 MiB memory regions, 2 second per each
++    sz_region = 10 * 1024 * 1024
++    proc = subprocess.Popen(['./access_memory', '2', '%d' % sz_region, '2000'])
++
++    # Set quota up to 1 MiB per 100 ms
++    sz_quota = 1024 * 1024 # 1 MiB
++    quota_reset_interval = 100 # 100 ms
++    kdamonds = _damon_sysfs.Kdamonds([_damon_sysfs.Kdamond(
++            contexts=[_damon_sysfs.DamonCtx(
++                ops='vaddr',
++                targets=[_damon_sysfs.DamonTarget(pid=proc.pid)],
++                schemes=[_damon_sysfs.Damos(
++                    access_pattern=_damon_sysfs.DamosAccessPattern(
++                        # >= 25% access rate, >= 200ms age
++                        nr_accesses=[5, 20], age=[2, 2**64 - 1]),
++                    quota=_damon_sysfs.DamosQuota(
++                        sz=sz_quota, reset_interval_ms=quota_reset_interval)
++                    )] # schemes
++                )] # contexts
++            )]) # kdamonds
++
++    err = kdamonds.start()
++    if err != None:
++        print('kdamond start failed: %s' % err)
++        exit(1)
++
++    wss_collected = []
++    nr_quota_exceeds = 0
++    while proc.poll() == None:
++        time.sleep(0.1)
++        err = kdamonds.kdamonds[0].update_schemes_tried_bytes()
++        if err != None:
++            print('tried bytes update failed: %s' % err)
++            exit(1)
++        err = kdamonds.kdamonds[0].update_schemes_stats()
++        if err != None:
++            print('stats update failed: %s' % err)
++            exit(1)
++
++        scheme = kdamonds.kdamonds[0].contexts[0].schemes[0]
++        wss_collected.append(scheme.tried_bytes)
++        nr_quota_exceeds = scheme.stats.qt_exceeds
++
++    wss_collected.sort()
++    for wss in wss_collected:
++        if wss > sz_quota:
++            print('quota is not kept: %s > %s' % (wss, sz_quota))
++            print('collected samples are as below')
++            print('\n'.join(['%d' % wss for wss in wss_collected]))
++            exit(1)
++
++    if nr_quota_exceeds < len(wss_collected):
++        print('quota is not always exceeded: %d > %d' %
++              (len(wss_collected), nr_quota_exceeds))
++        exit(1)
++
++if __name__ == '__main__':
++    main()
 -- 
 2.39.2
 
