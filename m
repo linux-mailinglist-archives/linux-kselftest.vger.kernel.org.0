@@ -1,466 +1,889 @@
-Return-Path: <linux-kselftest+bounces-4231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD1BB84CAB1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 13:27:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62FBC84CAD8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 13:49:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AD541C24AC2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 12:27:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC1841F25F8B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 12:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021165A0F9;
-	Wed,  7 Feb 2024 12:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A0776054;
+	Wed,  7 Feb 2024 12:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ryt2BNNu"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="P4yKmyca"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D2A59B75
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Feb 2024 12:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA79F59B70
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Feb 2024 12:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707308817; cv=none; b=Rw5iHMUs0gHd/E4tK+rpYALMw2JxkQlkJoEJ1pa+xmK64vzI2gFsi3nMkSqEQolbd7NxkgvSm29l2pKsbLbkK/aP1Yu0npSiDawFk0EBT9wQ1iCLlSKenYDsrjRB3BfHB2QxOZKJyZoRxSv3MaqlCVI8tyfpGuIHML8BoRRJPEk=
+	t=1707310137; cv=none; b=QSOJlt8nk5tbDBiElsSOvmdWxEzvxksSU4+LDeHk7nBISxOZJVxN9hDkuUSTSilIh8HujuD011nGmJ4/NU71VWmeimtK0gP9f1TGG5ggQ2+loqAaufwktapvFD6ulhfZFQ5xkj9Ov++Pm9brY+TA3roXhW+6rRPPVnHWfnoA/Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707308817; c=relaxed/simple;
-	bh=bAbtE/R1VLRuc1zvzV781Cxaz1OXnHszxJ7DxypjlkI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=PjJR+JWyjXHmCERFix8OCP8w3Jgq2uDhvs52o/bHPikv2iwbthuuMJA+IfSVYgfuJ2ZuYt/UWykDonCX25QeKZ3eLG8/3/VxXZ0RFdUmCEYsQgBlL3S6RU+1A6GcQFYoGO9DMzY0Rfo686nMiItzxNLwkZlHeVJ0YeaShXr2Lxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ryt2BNNu; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6047a047f4cso14756707b3.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Feb 2024 04:26:54 -0800 (PST)
+	s=arc-20240116; t=1707310137; c=relaxed/simple;
+	bh=OaTkpSwkJtYSB2Om1MTKXb8JfGsNiNtkpwL+RnuTIk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F/Kwp0Ft73WBZL6o8oHTAI9FCYXNh1GBbK/cJgbyqZcyEmckGX0PWfjs6Bi89DUew13AAxqoXB7T1Hn6pu18CY0YW1oR6Rd0X7EQAiDiCeRDnrrokoM/8Vq/BnyDknGgjQ9w9vyCrmufd9rhvpQUwJVSvmgw/sAah0QLKk9rCMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=P4yKmyca; arc=none smtp.client-ip=209.85.167.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3be61772d9aso264001b6e.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Feb 2024 04:48:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707308813; x=1707913613; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7lhwFwydnCtzXEmfnA4HgrH5hizOgbSGo5FgHQmbVgo=;
-        b=ryt2BNNur3PBGqaXTNcH/4RQ2vIdqwzEV+3QZzAQx4wrfTwoTvpIiCtsjzuhw74iwT
-         ktlcuN7davhJ1w1vcOUQJoiK2O6ElC2jjLJM9VcLxbbeUdsjXlddQIfq1+Y9nMUSiv4q
-         8le/6BYU1OpI8nS+JjOJO3UF3VaKClIgACrmAExelppp9BeHkxEpvaEGr/8beXLe+Qid
-         jR8zX3QovB8Ty9069INv8Bam++qR9ToSC02+FgfpgMdYAcRrxEgOXMP8fX2r1VeDWVC1
-         7HH9zfA48TjecxuaGkV/UsV9BxjqR6eHC04PCGo4JaoO3UU8sCCpdq8H4uAmdi8vsy7I
-         gD+g==
+        d=chromium.org; s=google; t=1707310133; x=1707914933; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=43snYnfqhVNhhL/nY5EeRoRcppA5AMWu4YFrgtB90kI=;
+        b=P4yKmycaZ+jwU4yDekKVtIdbh0L1VGL+BnDPNT/7uLps6MuoGGNuyO9XTFfrQo4N7u
+         mK92rgxZgzNNPTh2Lav6VTJvqlbGSsjfPR/HKhFi7Ikmtd0qjia8Xno91cPLRPD+ZSFl
+         l2qksesPF7V0JhAAtMw2UIZh8QBh+MpMZfUB8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707308813; x=1707913613;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7lhwFwydnCtzXEmfnA4HgrH5hizOgbSGo5FgHQmbVgo=;
-        b=ThAjdw6Z9yAFIRh7z5NCpVkAubTmRA/70uXy3M+AexxkaJJdJXoVVIah9UioGfVXtn
-         WakUpFECIQ4dXH8bkeZQzITSIvbT+tatAXj82lISePiM5GAp9bof9j3ing3S09175YwX
-         AN8WfiFkcKG6TCNXV7YmdL5D2Z0WPsoEou28DiOj93Dg1Ehqru00b0my3km+IJH6tts/
-         sCAwkbDiMxO4xg+uO8p7Ox6AnM1M6rxV1kmLZVpmqGovpt+hN0e7jOKd8FLmrk7uWMq/
-         85k9buNnC4m99l90ovRBu0yP/UPUA4rVEcLt4ThsXZWc30HH6iYWEcINS51KEMr+TTip
-         fRqQ==
-X-Gm-Message-State: AOJu0YyyckJYx6bHkeDkEHeND8vHTfokK4LzIN3fEjRQqvpmX9nZWwgc
-	1ChWS+uxxxnyNtSR7lKD/pYS3ZRmvyvWa7f06c5B3J1+bG8b79QQ7oQcGpLxd2yoT65YxeL2lw=
-	=
-X-Google-Smtp-Source: AGHT+IHYKEP4X4+yuJYKdL4J46pnhcfe+S/Csz0Hfde+EHgGhcIwHsJ0HbHcebolsrVACp3K9ZB0o5TYQg==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:4d69:c225:7956:ca4])
- (user=elver job=sendgmr) by 2002:a05:6902:2505:b0:dc6:c7ed:e72d with SMTP id
- dt5-20020a056902250500b00dc6c7ede72dmr1165892ybb.4.1707308813413; Wed, 07 Feb
- 2024 04:26:53 -0800 (PST)
-Date: Wed,  7 Feb 2024 13:26:17 +0100
+        d=1e100.net; s=20230601; t=1707310133; x=1707914933;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=43snYnfqhVNhhL/nY5EeRoRcppA5AMWu4YFrgtB90kI=;
+        b=vCTqTSAmz5MMbyG7eZldQAUnK8NeWWoRHl6p92dd3aj9HrMOPbEDD9MSHR20Y9aRqt
+         WZnm5tUC+XVVj8lVkH80fFS1RGo/OYEmagu+bXUPHQ2jndppy3t0ekoDuFx/lHF2MtJe
+         svEhBKP7E4ia/gx/MsXwFf4TEfZcDLt2h4nP+Yb4yB5fmz+Fh5ybVqBIjJYSOrdK6pGO
+         osoKY9nEa8ZmOufUXpeIFVU+e7z/t0r3s1PSk4xXC1caRSOUkTL1OEWQX4+nQu7vsVMq
+         9JI69jREt4YAQm3ZqBseni8VRss5Tj0Tqg5+hkPElLyIw1j0akvhuX2t9MtqIo2XbWor
+         HTmA==
+X-Gm-Message-State: AOJu0Yzj8LE/LItLtwkw4E19oKDRh4TKqDNCRDrXeCZeAjQC1s3SZyUQ
+	ie3uzWX7sUn8APb6+++6VbFkih5D8Ck4quw9kx9WMwKHtOVINRguA+1mpYWMzQ==
+X-Google-Smtp-Source: AGHT+IGjgsoBVI+OT+9EEoM5ssALa71vGXB1TOK1+PBn3bRGe/Vy0iMA0tZlcGHQWBbHkQy614d4tQ==
+X-Received: by 2002:a05:6358:89b:b0:176:493f:ad4d with SMTP id m27-20020a056358089b00b00176493fad4dmr2964223rwj.10.1707310132678;
+        Wed, 07 Feb 2024 04:48:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXWnl/OamO9Gb4PkP5VVfXqRCgq8bk2tV4Z+PuAlmKw4nqortLf/8nOzMay8K7uswxnMTdUif54u+rZEBrfreivonfDoG/DqTi6meciLe+6nZZ4MHt1djOJXL2n2Cd+yWQKkWdRklePzF6exOMoeMCL+77OEyXYYN5og2bnmdSVs/MoBIa0GkFxh/1NoXSpf8JFDYIj7VWq319qZJ973jjn1VplCzZRLevYmLvHzt6MRFB6t2BUfIzIdBRO9vCLmKviDzFCVImN3IflyGWPDjXm1T7ssNY7NEGweBWv3c3p7zRHtVwR5A804vD0yFgAEyKqUO8gyZe54TcC/lMFRC0lKbM1CjjV94J+ThPK+FFbKHpI+pTl4DI=
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id bx42-20020a056a02052a00b005c6e8fa9f24sm1291189pgb.49.2024.02.07.04.48.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Feb 2024 04:48:51 -0800 (PST)
+Date: Wed, 7 Feb 2024 04:48:51 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Yuanhe Shu <xiangzao@linux.alibaba.com>
+Cc: tony.luck@intel.com, gpiccoli@igalia.com, shuah@kernel.org,
+	corbet@lwn.net, xlpang@linux.alibaba.com,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Xingrui Yi <yixingrui@linux.alibaba.com>
+Subject: Re: [PATCH 1/3] pstore: add multi-backend support
+Message-ID: <202402070359.1FC38D60C@keescook>
+References: <20240207021921.206425-1-xiangzao@linux.alibaba.com>
+ <20240207021921.206425-2-xiangzao@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.43.0.594.gd9cf4e227d-goog
-Message-ID: <20240207122626.3508658-1-elver@google.com>
-Subject: [PATCH bpf-next v2] bpf: Allow compiler to inline most of bpf_local_storage_lookup()
-From: Marco Elver <elver@google.com>
-To: elver@google.com
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, Yafang Shao <laoar.shao@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240207021921.206425-2-xiangzao@linux.alibaba.com>
 
-In various performance profiles of kernels with BPF programs attached,
-bpf_local_storage_lookup() appears as a significant portion of CPU
-cycles spent. To enable the compiler generate more optimal code, turn
-bpf_local_storage_lookup() into a static inline function, where only the
-cache insertion code path is outlined
+On Wed, Feb 07, 2024 at 10:19:19AM +0800, Yuanhe Shu wrote:
+> Currently, pstore supports only one backend open at a time.
+> Specifically, due to the global variable "psinfo", pstore only accepts
+> the first registered backend. If a new backend wants to register later,
+> pstore will simply reject it and return an error. This design forced us
+> to close existing backend in order to use the new ones.
+> 
+> To enable pstore to support multiple backends, "psinfo" is replaced by
+> "psinfo_list", a list that holds multiple "psinfo". If multiple backends
+> are registered with the same frontend, the frontend is reused.
+> 
+> User can specify multiple backends that are allowed to be registered by
+> module parameter "pstore.backend=" separated by commas or "all" to
+> enable all available backends. If no pstore.backend was specified,
+> pstore would accept the first registered backend which is the same as
+> before.
+> 
+> Signed-off-by: Xingrui Yi <yixingrui@linux.alibaba.com>
+> Signed-off-by: Yuanhe Shu <xiangzao@linux.alibaba.com>
+> ---
+>  fs/pstore/ftrace.c     |  31 +++++-
+>  fs/pstore/inode.c      |  19 ++--
+>  fs/pstore/internal.h   |   4 +-
+>  fs/pstore/platform.c   | 225 ++++++++++++++++++++++++++++-------------
+>  fs/pstore/pmsg.c       |  24 ++++-
+>  include/linux/pstore.h |  29 ++++++
+>  6 files changed, 250 insertions(+), 82 deletions(-)
+> 
+> diff --git a/fs/pstore/ftrace.c b/fs/pstore/ftrace.c
+> index 776cae20af4e..49b9c8532dab 100644
+> --- a/fs/pstore/ftrace.c
+> +++ b/fs/pstore/ftrace.c
+> @@ -23,10 +23,11 @@
+>  /* This doesn't need to be atomic: speed is chosen over correctness here. */
+>  static u64 pstore_ftrace_stamp;
+>  
+> -static void notrace pstore_ftrace_call(unsigned long ip,
+> +static void notrace pstore_do_ftrace(unsigned long ip,
+>  				       unsigned long parent_ip,
+>  				       struct ftrace_ops *op,
+> -				       struct ftrace_regs *fregs)
+> +				       struct ftrace_regs *fregs,
+> +				       struct pstore_info *psinfo)
+>  {
+>  	int bit;
+>  	unsigned long flags;
+> @@ -57,6 +58,20 @@ static void notrace pstore_ftrace_call(unsigned long ip,
+>  	ftrace_test_recursion_unlock(bit);
+>  }
+>  
+> +static void notrace pstore_ftrace_call(unsigned long ip,
+> +				       unsigned long parent_ip,
+> +				       struct ftrace_ops *op,
+> +				       struct ftrace_regs *fregs)
+> +{
+> +	struct pstore_info_list *entry;
+> +
+> +	rcu_read_lock();
+> +	list_for_each_entry_rcu(entry, &psback->list_entry, list)
+> +		if (entry->psi->flags & PSTORE_FLAGS_FTRACE)
+> +			pstore_do_ftrace(ip, parent_ip, op, fregs, entry->psi);
+> +	rcu_read_unlock();
 
-Notably, outlining cache insertion helps avoid bloating callers by
-duplicating setting up calls to raw_spin_{lock,unlock}_irqsave() (on
-architectures which do not inline spin_lock/unlock, such as x86), which
-would cause the compiler produce worse code by deciding to outline
-otherwise inlinable functions. The call overhead is neutral, because we
-make 2 calls either way: either calling raw_spin_lock_irqsave() and
-raw_spin_unlock_irqsave(); or call __bpf_local_storage_insert_cache(),
-which calls raw_spin_lock_irqsave(), followed by a tail-call to
-raw_spin_unlock_irqsave() where the compiler can perform TCO and (in
-optimized uninstrumented builds) turns it into a plain jump. The call to
-__bpf_local_storage_insert_cache() can be elided entirely if
-cacheit_lockit is a false constant expression.
+Just to make sure I understand the purpose of the RCU here is to deal
+with having a backend get unregistered while something is walking this
+list? And to do so without holding the global psback_lock?
 
-Based on results from './benchs/run_bench_local_storage.sh' (21 trials,
-reboot between each trial; x86 defconfig + BPF, clang 16) this produces
-improvements in throughput and latency in the majority of cases, with an
-average (geomean) improvement of 8%:
+> +}
+> +
+>  static struct ftrace_ops pstore_ftrace_ops __read_mostly = {
+>  	.func	= pstore_ftrace_call,
+>  };
+> @@ -131,8 +146,16 @@ MODULE_PARM_DESC(record_ftrace,
+>  
+>  void pstore_register_ftrace(void)
+>  {
+> -	if (!psinfo->write)
+> -		return;
+> +	struct pstore_info_list *entry;
+> +
+> +	rcu_read_lock();
+> +	list_for_each_entry_rcu(entry, &psback->list_entry, list)
+> +		if (entry->psi->flags & PSTORE_FLAGS_FTRACE)
+> +			if (!entry->psi->write) {
+> +				rcu_read_unlock();
+> +				return;
+> +			}
+> +	rcu_read_unlock();
+>  
+>  	pstore_ftrace_dir = debugfs_create_dir("pstore", NULL);
+>  
+> diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
+> index d0d9bfdad30c..bee71c7da995 100644
+> --- a/fs/pstore/inode.c
+> +++ b/fs/pstore/inode.c
+> @@ -285,7 +285,7 @@ static const struct super_operations pstore_ops = {
+>  	.show_options	= pstore_show_options,
+>  };
+>  
+> -static struct dentry *psinfo_lock_root(void)
+> +static struct dentry *psinfo_lock_root(struct pstore_info *psinfo)
+>  {
+>  	struct dentry *root;
+>  
+> @@ -309,7 +309,7 @@ int pstore_put_backend_records(struct pstore_info *psi)
+>  	struct dentry *root;
+>  	int rc = 0;
+>  
+> -	root = psinfo_lock_root();
+> +	root = psinfo_lock_root(psi);
+>  	if (!root)
+>  		return 0;
+>  
+> @@ -398,21 +398,22 @@ int pstore_mkfile(struct dentry *root, struct pstore_record *record)
+>   * when we are re-scanning the backing store looking to add new
+>   * error records.
+>   */
+> -void pstore_get_records(int quiet)
+> +void pstore_get_records(struct pstore_info *psi, int quiet)
+>  {
+>  	struct dentry *root;
+>  
+> -	root = psinfo_lock_root();
+> +	root = psinfo_lock_root(psi);
+>  	if (!root)
+>  		return;
+>  
+> -	pstore_get_backend_records(psinfo, root, quiet);
+> +	pstore_get_backend_records(psi, root, quiet);
+>  	inode_unlock(d_inode(root));
+>  }
+>  
+>  static int pstore_fill_super(struct super_block *sb, void *data, int silent)
+>  {
+>  	struct inode *inode;
+> +	struct pstore_info_list *entry;
+>  
+>  	sb->s_maxbytes		= MAX_LFS_FILESIZE;
+>  	sb->s_blocksize		= PAGE_SIZE;
+> @@ -437,7 +438,13 @@ static int pstore_fill_super(struct super_block *sb, void *data, int silent)
+>  	scoped_guard(mutex, &pstore_sb_lock)
+>  		pstore_sb = sb;
+>  
+> -	pstore_get_records(0);
+> +	if (!psback)
+> +		return 0;
+> +
+> +	mutex_lock(&psback_lock);
+> +	list_for_each_entry(entry, &psback->list_entry, list)
+> +		pstore_get_records(entry->psi, 0);
+> +	mutex_unlock(&psback_lock);
+>  
+>  	return 0;
+>  }
+> diff --git a/fs/pstore/internal.h b/fs/pstore/internal.h
+> index 801d6c0b170c..4b1c7ba27052 100644
+> --- a/fs/pstore/internal.h
+> +++ b/fs/pstore/internal.h
+> @@ -33,10 +33,10 @@ static inline void pstore_register_pmsg(void) {}
+>  static inline void pstore_unregister_pmsg(void) {}
+>  #endif
+>  
+> -extern struct pstore_info *psinfo;
+> +extern struct pstore_backends *psback;
+>  
+>  extern void	pstore_set_kmsg_bytes(int);
+> -extern void	pstore_get_records(int);
+> +extern void	pstore_get_records(struct pstore_info *psi, int quiet);
+>  extern void	pstore_get_backend_records(struct pstore_info *psi,
+>  					   struct dentry *root, int quiet);
+>  extern int	pstore_put_backend_records(struct pstore_info *psi);
+> diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+> index 03425928d2fb..432a41852a07 100644
+> --- a/fs/pstore/platform.c
+> +++ b/fs/pstore/platform.c
+> @@ -62,12 +62,12 @@ static void pstore_dowork(struct work_struct *);
+>  static DECLARE_WORK(pstore_work, pstore_dowork);
+>  
+>  /*
+> - * psinfo_lock protects "psinfo" during calls to
+> + * psback_lock protects "psback" during calls to
+>   * pstore_register(), pstore_unregister(), and
+>   * the filesystem mount/unmount routines.
+>   */
+> -static DEFINE_MUTEX(psinfo_lock);
+> -struct pstore_info *psinfo;
+> +DEFINE_MUTEX(psback_lock);
+> +struct pstore_backends *psback;
+>  
+>  static char *backend;
+>  module_param(backend, charp, 0444);
+> @@ -104,7 +104,7 @@ static void *compress_workspace;
+>   */
+>  #define DMESG_COMP_PERCENT	60
+>  
+> -static char *big_oops_buf;
+> +static char *big_oops_buf[PSTORE_BACKEND_NUM];
 
-+---- Hashmap Control --------------------
-|
-| + num keys: 10
-| :                                         <before>             | <after>
-| +-+ hashmap (control) sequential get    +----------------------+----------------------
-|   +- hits throughput                    | 14.789 M ops/s       | 14.745 M ops/s (  ~  )
-|   +- hits latency                       | 67.679 ns/op         | 67.879 ns/op   (  ~  )
-|   +- important_hits throughput          | 14.789 M ops/s       | 14.745 M ops/s (  ~  )
-|
-| + num keys: 1000
-| :                                         <before>             | <after>
-| +-+ hashmap (control) sequential get    +----------------------+----------------------
-|   +- hits throughput                    | 12.233 M ops/s       | 12.170 M ops/s (  ~  )
-|   +- hits latency                       | 81.754 ns/op         | 82.185 ns/op   (  ~  )
-|   +- important_hits throughput          | 12.233 M ops/s       | 12.170 M ops/s (  ~  )
-|
-| + num keys: 10000
-| :                                         <before>             | <after>
-| +-+ hashmap (control) sequential get    +----------------------+----------------------
-|   +- hits throughput                    | 7.220 M ops/s        | 7.204 M ops/s  (  ~  )
-|   +- hits latency                       | 138.522 ns/op        | 138.842 ns/op  (  ~  )
-|   +- important_hits throughput          | 7.220 M ops/s        | 7.204 M ops/s  (  ~  )
-|
-| + num keys: 100000
-| :                                         <before>             | <after>
-| +-+ hashmap (control) sequential get    +----------------------+----------------------
-|   +- hits throughput                    | 5.061 M ops/s        | 5.165 M ops/s  (+2.1%)
-|   +- hits latency                       | 198.483 ns/op        | 194.270 ns/op  (-2.1%)
-|   +- important_hits throughput          | 5.061 M ops/s        | 5.165 M ops/s  (+2.1%)
-|
-| + num keys: 4194304
-| :                                         <before>             | <after>
-| +-+ hashmap (control) sequential get    +----------------------+----------------------
-|   +- hits throughput                    | 2.864 M ops/s        | 2.882 M ops/s  (  ~  )
-|   +- hits latency                       | 365.220 ns/op        | 361.418 ns/op  (-1.0%)
-|   +- important_hits throughput          | 2.864 M ops/s        | 2.882 M ops/s  (  ~  )
-|
-+---- Local Storage ----------------------
-|
-| + num_maps: 1
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 33.005 M ops/s       | 39.068 M ops/s (+18.4%)
-|   +- hits latency                       | 30.300 ns/op         | 25.598 ns/op   (-15.5%)
-|   +- important_hits throughput          | 33.005 M ops/s       | 39.068 M ops/s (+18.4%)
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 37.151 M ops/s       | 44.926 M ops/s (+20.9%)
-|   +- hits latency                       | 26.919 ns/op         | 22.259 ns/op   (-17.3%)
-|   +- important_hits throughput          | 37.151 M ops/s       | 44.926 M ops/s (+20.9%)
-|
-| + num_maps: 10
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 32.288 M ops/s       | 38.099 M ops/s (+18.0%)
-|   +- hits latency                       | 30.972 ns/op         | 26.248 ns/op   (-15.3%)
-|   +- important_hits throughput          | 3.229 M ops/s        | 3.810 M ops/s  (+18.0%)
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 34.473 M ops/s       | 41.145 M ops/s (+19.4%)
-|   +- hits latency                       | 29.010 ns/op         | 24.307 ns/op   (-16.2%)
-|   +- important_hits throughput          | 12.312 M ops/s       | 14.695 M ops/s (+19.4%)
-|
-| + num_maps: 16
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 32.524 M ops/s       | 38.341 M ops/s (+17.9%)
-|   +- hits latency                       | 30.748 ns/op         | 26.083 ns/op   (-15.2%)
-|   +- important_hits throughput          | 2.033 M ops/s        | 2.396 M ops/s  (+17.9%)
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 34.575 M ops/s       | 41.338 M ops/s (+19.6%)
-|   +- hits latency                       | 28.925 ns/op         | 24.193 ns/op   (-16.4%)
-|   +- important_hits throughput          | 11.001 M ops/s       | 13.153 M ops/s (+19.6%)
-|
-| + num_maps: 17
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 28.861 M ops/s       | 32.756 M ops/s (+13.5%)
-|   +- hits latency                       | 34.649 ns/op         | 30.530 ns/op   (-11.9%)
-|   +- important_hits throughput          | 1.700 M ops/s        | 1.929 M ops/s  (+13.5%)
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 31.529 M ops/s       | 36.110 M ops/s (+14.5%)
-|   +- hits latency                       | 31.719 ns/op         | 27.697 ns/op   (-12.7%)
-|   +- important_hits throughput          | 9.598 M ops/s        | 10.993 M ops/s (+14.5%)
-|
-| + num_maps: 24
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 18.602 M ops/s       | 19.937 M ops/s (+7.2%)
-|   +- hits latency                       | 53.767 ns/op         | 50.166 ns/op   (-6.7%)
-|   +- important_hits throughput          | 0.776 M ops/s        | 0.831 M ops/s  (+7.2%)
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 21.718 M ops/s       | 23.332 M ops/s (+7.4%)
-|   +- hits latency                       | 46.047 ns/op         | 42.865 ns/op   (-6.9%)
-|   +- important_hits throughput          | 6.110 M ops/s        | 6.564 M ops/s  (+7.4%)
-|
-| + num_maps: 32
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 14.118 M ops/s       | 14.626 M ops/s (+3.6%)
-|   +- hits latency                       | 70.856 ns/op         | 68.381 ns/op   (-3.5%)
-|   +- important_hits throughput          | 0.442 M ops/s        | 0.458 M ops/s  (+3.6%)
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 17.111 M ops/s       | 17.906 M ops/s (+4.6%)
-|   +- hits latency                       | 58.451 ns/op         | 55.865 ns/op   (-4.4%)
-|   +- important_hits throughput          | 4.776 M ops/s        | 4.998 M ops/s  (+4.6%)
-|
-| + num_maps: 100
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 5.281 M ops/s        | 5.528 M ops/s  (+4.7%)
-|   +- hits latency                       | 192.398 ns/op        | 183.059 ns/op  (-4.9%)
-|   +- important_hits throughput          | 0.053 M ops/s        | 0.055 M ops/s  (+4.9%)
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 6.265 M ops/s        | 6.498 M ops/s  (+3.7%)
-|   +- hits latency                       | 161.436 ns/op        | 152.877 ns/op  (-5.3%)
-|   +- important_hits throughput          | 1.636 M ops/s        | 1.697 M ops/s  (+3.7%)
-|
-| + num_maps: 1000
-| :                                         <before>             | <after>
-| +-+ local_storage cache sequential get  +----------------------+----------------------
-|   +- hits throughput                    | 0.355 M ops/s        | 0.354 M ops/s  (  ~  )
-|   +- hits latency                       | 2826.538 ns/op       | 2827.139 ns/op (  ~  )
-|   +- important_hits throughput          | 0.000 M ops/s        | 0.000 M ops/s  (  ~  )
-| :
-| :                                         <before>             | <after>
-| +-+ local_storage cache interleaved get +----------------------+----------------------
-|   +- hits throughput                    | 0.404 M ops/s        | 0.403 M ops/s  (  ~  )
-|   +- hits latency                       | 2481.190 ns/op       | 2487.555 ns/op (  ~  )
-|   +- important_hits throughput          | 0.102 M ops/s        | 0.101 M ops/s  (  ~  )
+I think big_oops_buf should live in the pstore_info_list struct, then
+no indexes are needed to be tracked.
 
-Signed-off-by: Marco Elver <elver@google.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
----
-v2:
-* Inline most of bpf_local_storage_lookup(), which produces greater
-  speedup and avoids regressing the cases with large map arrays.
-* Drop "likely()" hint, it didn't produce much benefit.
-* Re-run benchmark and collect 21 trials of results.
-* Remove the on_lookup tests, which no longer work because
-  e.g. bpf_task_storage_delete() no longer does calls to
-  bpf_local_storage_*() helpers.
----
- include/linux/bpf_local_storage.h             | 30 ++++++++++-
- kernel/bpf/bpf_local_storage.c                | 52 +++++--------------
- .../bpf/prog_tests/task_local_storage.c       |  6 ---
- .../selftests/bpf/progs/cgrp_ls_recursion.c   | 26 ----------
- .../selftests/bpf/progs/task_ls_recursion.c   | 17 ------
- 5 files changed, 41 insertions(+), 90 deletions(-)
+>  static size_t max_compressed_size;
+>  
+>  void pstore_set_kmsg_bytes(int bytes)
+> @@ -201,7 +201,7 @@ static int pstore_compress(const void *in, void *out,
+>  	return zstream.total_out;
+>  }
+>  
+> -static void allocate_buf_for_compression(void)
+> +static void allocate_buf_for_compression(struct pstore_info *psinfo, int pos)
+>  {
+>  	size_t compressed_size;
+>  	char *buf;
+> @@ -241,21 +241,21 @@ static void allocate_buf_for_compression(void)
+>  	}
+>  
+>  	/* A non-NULL big_oops_buf indicates compression is available. */
+> -	big_oops_buf = buf;
+> +	big_oops_buf[pos] = buf;
 
-diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-index 173ec7f43ed1..dcddb0aef7d8 100644
---- a/include/linux/bpf_local_storage.h
-+++ b/include/linux/bpf_local_storage.h
-@@ -129,10 +129,36 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
- 			    struct bpf_local_storage_cache *cache,
- 			    bool bpf_ma);
- 
--struct bpf_local_storage_data *
-+void __bpf_local_storage_insert_cache(struct bpf_local_storage *local_storage,
-+				      struct bpf_local_storage_map *smap,
-+				      struct bpf_local_storage_elem *selem);
-+/* If cacheit_lockit is false, this lookup function is lockless */
-+static inline struct bpf_local_storage_data *
- bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
- 			 struct bpf_local_storage_map *smap,
--			 bool cacheit_lockit);
-+			 bool cacheit_lockit)
-+{
-+	struct bpf_local_storage_data *sdata;
-+	struct bpf_local_storage_elem *selem;
-+
-+	/* Fast path (cache hit) */
-+	sdata = rcu_dereference_check(local_storage->cache[smap->cache_idx],
-+				      bpf_rcu_lock_held());
-+	if (sdata && rcu_access_pointer(sdata->smap) == smap)
-+		return sdata;
-+
-+	/* Slow path (cache miss) */
-+	hlist_for_each_entry_rcu(selem, &local_storage->list, snode,
-+				  rcu_read_lock_trace_held())
-+		if (rcu_access_pointer(SDATA(selem)->smap) == smap)
-+			break;
-+
-+	if (!selem)
-+		return NULL;
-+	if (cacheit_lockit)
-+		__bpf_local_storage_insert_cache(local_storage, smap, selem);
-+	return SDATA(selem);
-+}
- 
- void bpf_local_storage_destroy(struct bpf_local_storage *local_storage);
- 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 146824cc9689..bdea1a459153 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -414,47 +414,21 @@ void bpf_selem_unlink(struct bpf_local_storage_elem *selem, bool reuse_now)
- 	bpf_selem_unlink_storage(selem, reuse_now);
- }
- 
--/* If cacheit_lockit is false, this lookup function is lockless */
--struct bpf_local_storage_data *
--bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
--			 struct bpf_local_storage_map *smap,
--			 bool cacheit_lockit)
-+void __bpf_local_storage_insert_cache(struct bpf_local_storage *local_storage,
-+				      struct bpf_local_storage_map *smap,
-+				      struct bpf_local_storage_elem *selem)
- {
--	struct bpf_local_storage_data *sdata;
--	struct bpf_local_storage_elem *selem;
--
--	/* Fast path (cache hit) */
--	sdata = rcu_dereference_check(local_storage->cache[smap->cache_idx],
--				      bpf_rcu_lock_held());
--	if (sdata && rcu_access_pointer(sdata->smap) == smap)
--		return sdata;
--
--	/* Slow path (cache miss) */
--	hlist_for_each_entry_rcu(selem, &local_storage->list, snode,
--				  rcu_read_lock_trace_held())
--		if (rcu_access_pointer(SDATA(selem)->smap) == smap)
--			break;
--
--	if (!selem)
--		return NULL;
--
--	sdata = SDATA(selem);
--	if (cacheit_lockit) {
--		unsigned long flags;
--
--		/* spinlock is needed to avoid racing with the
--		 * parallel delete.  Otherwise, publishing an already
--		 * deleted sdata to the cache will become a use-after-free
--		 * problem in the next bpf_local_storage_lookup().
--		 */
--		raw_spin_lock_irqsave(&local_storage->lock, flags);
--		if (selem_linked_to_storage(selem))
--			rcu_assign_pointer(local_storage->cache[smap->cache_idx],
--					   sdata);
--		raw_spin_unlock_irqrestore(&local_storage->lock, flags);
--	}
-+	unsigned long flags;
- 
--	return sdata;
-+	/* spinlock is needed to avoid racing with the
-+	 * parallel delete.  Otherwise, publishing an already
-+	 * deleted sdata to the cache will become a use-after-free
-+	 * problem in the next bpf_local_storage_lookup().
-+	 */
-+	raw_spin_lock_irqsave(&local_storage->lock, flags);
-+	if (selem_linked_to_storage(selem))
-+		rcu_assign_pointer(local_storage->cache[smap->cache_idx], SDATA(selem));
-+	raw_spin_unlock_irqrestore(&local_storage->lock, flags);
- }
- 
- static int check_flags(const struct bpf_local_storage_data *old_sdata,
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-index ea8537c54413..c33c05161a9e 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-@@ -117,12 +117,6 @@ static void test_recursion(void)
- 	ASSERT_OK(err, "lookup map_b");
- 	ASSERT_EQ(value, 100, "map_b value");
- 
--	prog_fd = bpf_program__fd(skel->progs.on_lookup);
--	memset(&info, 0, sizeof(info));
--	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
--	ASSERT_OK(err, "get prog info");
--	ASSERT_GT(info.recursion_misses, 0, "on_lookup prog recursion");
--
- 	prog_fd = bpf_program__fd(skel->progs.on_update);
- 	memset(&info, 0, sizeof(info));
- 	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c b/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
-index 610c2427fd93..3500e4b69ebe 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
-+++ b/tools/testing/selftests/bpf/progs/cgrp_ls_recursion.c
-@@ -27,32 +27,6 @@ bool is_cgroup1 = 0;
- struct cgroup *bpf_task_get_cgroup1(struct task_struct *task, int hierarchy_id) __ksym;
- void bpf_cgroup_release(struct cgroup *cgrp) __ksym;
- 
--static void __on_lookup(struct cgroup *cgrp)
--{
--	bpf_cgrp_storage_delete(&map_a, cgrp);
--	bpf_cgrp_storage_delete(&map_b, cgrp);
--}
--
--SEC("fentry/bpf_local_storage_lookup")
--int BPF_PROG(on_lookup)
--{
--	struct task_struct *task = bpf_get_current_task_btf();
--	struct cgroup *cgrp;
--
--	if (is_cgroup1) {
--		cgrp = bpf_task_get_cgroup1(task, target_hid);
--		if (!cgrp)
--			return 0;
--
--		__on_lookup(cgrp);
--		bpf_cgroup_release(cgrp);
--		return 0;
--	}
--
--	__on_lookup(task->cgroups->dfl_cgrp);
--	return 0;
--}
--
- static void __on_update(struct cgroup *cgrp)
- {
- 	long *ptr;
-diff --git a/tools/testing/selftests/bpf/progs/task_ls_recursion.c b/tools/testing/selftests/bpf/progs/task_ls_recursion.c
-index 4542dc683b44..f1853c38aada 100644
---- a/tools/testing/selftests/bpf/progs/task_ls_recursion.c
-+++ b/tools/testing/selftests/bpf/progs/task_ls_recursion.c
-@@ -27,23 +27,6 @@ struct {
- 	__type(value, long);
- } map_b SEC(".maps");
- 
--SEC("fentry/bpf_local_storage_lookup")
--int BPF_PROG(on_lookup)
--{
--	struct task_struct *task = bpf_get_current_task_btf();
--
--	if (!test_pid || task->pid != test_pid)
--		return 0;
--
--	/* The bpf_task_storage_delete will call
--	 * bpf_local_storage_lookup.  The prog->active will
--	 * stop the recursion.
--	 */
--	bpf_task_storage_delete(&map_a, task);
--	bpf_task_storage_delete(&map_b, task);
--	return 0;
--}
--
- SEC("fentry/bpf_local_storage_update")
- int BPF_PROG(on_update)
- {
+e.g.:	entry->big_oops_buf = buf;
+
+>  	max_compressed_size = compressed_size;
+
+And should this be included as well, or are we just constantly setting
+this to the same value?
+
+>  
+>  	pr_info("Using crash dump compression: %s\n", compress);
+>  }
+>  
+> -static void free_buf_for_compression(void)
+> +static void free_buf_for_compression(int pos)
+
+Instead of "pos" this would take the ps_info.
+
+>  {
+>  	if (IS_ENABLED(CONFIG_PSTORE_COMPRESS) && compress_workspace) {
+>  		vfree(compress_workspace);
+>  		compress_workspace = NULL;
+>  	}
+>  
+> -	kvfree(big_oops_buf);
+> -	big_oops_buf = NULL;
+> +	kvfree(big_oops_buf[pos]);
+> +	big_oops_buf[pos] = NULL;
+>  	max_compressed_size = 0;
+>  }
+>  
+> @@ -274,8 +274,9 @@ void pstore_record_init(struct pstore_record *record,
+>   * callback from kmsg_dump. Save as much as we can (up to kmsg_bytes) from the
+>   * end of the buffer.
+>   */
+> -static void pstore_dump(struct kmsg_dumper *dumper,
+> -			enum kmsg_dump_reason reason)
+> +static void pstore_do_dump(struct kmsg_dumper *dumper,
+> +			enum kmsg_dump_reason reason,
+> +			struct pstore_info *psinfo, int pos)
+>  {
+>  	struct kmsg_dump_iter iter;
+>  	unsigned long	total = 0;
+> @@ -315,7 +316,7 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+>  		record.part = part;
+>  		record.buf = psinfo->buf;
+>  
+> -		dst = big_oops_buf ?: psinfo->buf;
+> +		dst = big_oops_buf[pos] ?: psinfo->buf;
+>  		dst_size = max_compressed_size ?: psinfo->bufsize;
+>  
+>  		/* Write dump header. */
+> @@ -328,7 +329,7 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+>  					  dst_size, &dump_size))
+>  			break;
+>  
+> -		if (big_oops_buf) {
+> +		if (big_oops_buf[pos]) {
+>  			zipped_len = pstore_compress(dst, psinfo->buf,
+>  						header_size + dump_size,
+>  						psinfo->bufsize);
+> @@ -372,6 +373,19 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+>  	}
+>  }
+>  
+> +static void pstore_dump(struct kmsg_dumper *dumper,
+> +			enum kmsg_dump_reason reason)
+> +{
+> +	struct pstore_info_list *entry;
+> +
+> +	rcu_read_lock();
+> +	list_for_each_entry_rcu(entry, &psback->list_entry, list)
+> +		if (entry->psi->flags & PSTORE_FLAGS_DMESG)
+> +			pstore_do_dump(dumper, reason,
+> +				       entry->psi, entry->index);
+
+Then no need for index here.
+
+> +	rcu_read_unlock();
+> +}
+> +
+>  static struct kmsg_dumper pstore_dumper = {
+>  	.dump = pstore_dump,
+>  };
+> @@ -390,13 +404,11 @@ static void pstore_unregister_kmsg(void)
+>  }
+>  
+>  #ifdef CONFIG_PSTORE_CONSOLE
+> -static void pstore_console_write(struct console *con, const char *s, unsigned c)
+> +static void pstore_console_do_write(struct console *con, const char *s,
+> +				    unsigned c, struct pstore_info *psinfo)
+>  {
+>  	struct pstore_record record;
+>  
+> -	if (!c)
+> -		return;
+> -
+>  	pstore_record_init(&record, psinfo);
+>  	record.type = PSTORE_TYPE_CONSOLE;
+>  
+> @@ -405,6 +417,21 @@ static void pstore_console_write(struct console *con, const char *s, unsigned c)
+>  	psinfo->write(&record);
+>  }
+>  
+> +static void pstore_console_write(struct console *con, const char *s,
+> +				 unsigned int c)
+> +{
+> +	struct pstore_info_list *entry;
+> +
+> +	if (!c)
+> +		return;
+> +
+> +	rcu_read_lock();
+> +	list_for_each_entry_rcu(entry, &psback->list_entry, list)
+> +		if (entry->psi->flags & PSTORE_FLAGS_CONSOLE)
+> +			pstore_console_do_write(con, s, c, entry->psi);
+> +	rcu_read_unlock();
+> +}
+> +
+>  static struct console pstore_console = {
+>  	.write	= pstore_console_write,
+>  	.index	= -1,
+> @@ -413,7 +440,7 @@ static struct console pstore_console = {
+>  static void pstore_register_console(void)
+>  {
+>  	/* Show which backend is going to get console writes. */
+> -	strscpy(pstore_console.name, psinfo->name,
+> +	strscpy(pstore_console.name, "pstore console",
+>  		sizeof(pstore_console.name));
+
+A nice-to-have for this might be to include all the backend names
+included, but that is probably overkill, so this is fine.
+
+>  	/*
+>  	 * Always initialize flags here since prior unregister_console()
+> @@ -464,12 +491,15 @@ static int pstore_write_user_compat(struct pstore_record *record,
+>   */
+>  int pstore_register(struct pstore_info *psi)
+>  {
+> +	struct pstore_info_list *entry;
+> +	struct pstore_info_list *newpsi;
+>  	char *new_backend;
+>  
+> -	if (backend && strcmp(backend, psi->name)) {
+> -		pr_warn("backend '%s' already in use: ignoring '%s'\n",
+> -			backend, psi->name);
+> -		return -EBUSY;
+> +	/* backend has to be enabled for going on registering */
+> +	if (backend && !strstr(backend, psi->name) &&
+
+I think I'd like a helper to do the "is this name in the list?", as that
+would be more robust. e.g. if we ever had a "ram" backend and a "cram"
+backend, and someone used "backend=cram", suddenly both "cram" and "ram"
+match in the code above.
+
+> +	    strcmp(backend, "all")) {
+
+style preference, can you make this strcmp be:
+
+	    strcmp(backend, "all") != 0
+
+it seems redundant, but it helps readers remember that "strcmp() == 0"
+is "matches".
+
+
+> +		pr_warn("backend '%s' not enabled\n", psi->name);
+
+nit, I think a more clear error might be something like:
+
+	"backend '%s' ignored: not present in pstore.backend=...\n"
+
+which gives people a little hint about what's wrong.
+
+> +		return -EINVAL;
+>  	}
+>  
+>  	/* Sanity check flags. */
+> @@ -486,79 +516,118 @@ int pstore_register(struct pstore_info *psi)
+>  		return -EINVAL;
+>  	}
+>  
+> -	new_backend = kstrdup(psi->name, GFP_KERNEL);
+> -	if (!new_backend)
+> -		return -ENOMEM;
+> -
+> -	mutex_lock(&psinfo_lock);
+> -	if (psinfo) {
+> -		pr_warn("backend '%s' already loaded: ignoring '%s'\n",
+> -			psinfo->name, psi->name);
+> -		mutex_unlock(&psinfo_lock);
+> -		kfree(new_backend);
+> -		return -EBUSY;
+> +	mutex_lock(&psback_lock);
+> +
+> +	/*
+> +	 * If no backend specified, first come first served to
+> +	 * maintain backward compatibility
+> +	 */
+> +	if (!backend) {
+> +		pr_warn("no backend enabled, registering backend '%s'\n",
+> +			psi->name);
+
+I'd move this to after the if below, so you can't get this message if it
+were going to just immediately fail. And a nit on language. I think this
+would be more clear:
+
+	"pstore.backend=... not specified; registering first available: '%s'\n"
+
+> +		new_backend = kstrdup(psi->name, GFP_KERNEL);
+> +		if (!new_backend) {
+> +			mutex_unlock(&psback_lock);
+> +			return -ENOMEM;
+> +		}
+> +	}
+> +
+> +	if (psback) {
+> +		if (psback->flag == PSTORE_LIST_FULL) {
+> +			pr_warn("backend registration space is used up: "
+> +				"ignoring '%s'\n", psi->name);
+> +			mutex_unlock(&psback_lock);
+> +			return -EBUSY;
+> +		}
+
+All of this flag/index stuff can go away with big_oops_buf moved.
+
+> +		list_for_each_entry(entry, &psback->list_entry, list) {
+> +			if (strcmp(entry->psi->name, psi->name) == 0) {
+> +				pr_warn("backend '%s' already loaded\n",
+> +					psi->name);
+
+	"backend '%s' already loaded; not loading it again\n"
+
+> +				mutex_unlock(&psback_lock);
+> +				return -EPERM;
+> +			}
+> +		}
+> +	} else {
+> +		psback = kzalloc(sizeof(*psback), GFP_KERNEL);
+> +		INIT_LIST_HEAD(&psback->list_entry);
+>  	}
+>  
+>  	if (!psi->write_user)
+>  		psi->write_user = pstore_write_user_compat;
+> -	psinfo = psi;
+> -	mutex_init(&psinfo->read_mutex);
+> -	spin_lock_init(&psinfo->buf_lock);
+> +	newpsi = kzalloc(sizeof(*newpsi), GFP_KERNEL);
+> +	newpsi->psi = psi;
+> +	newpsi->index = ffz(psback->flag);
+> +	psback->flag |= (1 << newpsi->index);
+> +
+> +	mutex_init(&psi->read_mutex);
+> +	spin_lock_init(&psi->buf_lock);
+> +
+> +	if (psi->flags & PSTORE_FLAGS_DMESG &&
+> +	    !psback->front_cnt[PSTORE_TYPE_DMESG])
+> +		allocate_buf_for_compression(psi, newpsi->index);
+
+Can't we just ignore the front_cnt? The only reason to have
+big_oops_buf is if the backend supports PSTORE_FLAGS_DMESG, yes?
+
+>  
+> -	if (psi->flags & PSTORE_FLAGS_DMESG)
+> -		allocate_buf_for_compression();
+> +	pstore_get_records(psi, 0);
+>  
+> -	pstore_get_records(0);
+> +	list_add_rcu(&newpsi->list, &psback->list_entry);
+>  
+> -	if (psi->flags & PSTORE_FLAGS_DMESG) {
+> -		pstore_dumper.max_reason = psinfo->max_reason;
+> +	if (psi->flags & PSTORE_FLAGS_DMESG &&
+> +	    !psback->front_cnt[PSTORE_TYPE_DMESG]++) {
+> +		pstore_dumper.max_reason = psi->max_reason;
+>  		pstore_register_kmsg();
+>  	}
+
+Hmm... does this mean we need multiple pstore_dump instances? (i.e. like
+big_oops_buf) The backend configures the max_reason, so we'll need to
+register multiple kmsg handlers to have different max_reasons. Right now
+this just means "last registered backend wins" which would be
+surprising.
+
+Let's add a pstore_dumper instance to pstore_info_list, along with
+big_oops_buf. All of these globals are really per-backend instances now.
+
+> -	if (psi->flags & PSTORE_FLAGS_CONSOLE)
+> +	if (psi->flags & PSTORE_FLAGS_CONSOLE
+> +	    && !psback->front_cnt[PSTORE_TYPE_CONSOLE]++)
+>  		pstore_register_console();
+> -	if (psi->flags & PSTORE_FLAGS_FTRACE)
+> +	if (psi->flags & PSTORE_FLAGS_FTRACE &&
+> +	    !psback->front_cnt[PSTORE_TYPE_FTRACE]++)
+>  		pstore_register_ftrace();
+> -	if (psi->flags & PSTORE_FLAGS_PMSG)
+> +	if (psi->flags & PSTORE_FLAGS_PMSG &&
+> +	    !psback->front_cnt[PSTORE_TYPE_PMSG]++)
+>  		pstore_register_pmsg();
+>  
+>  	/* Start watching for new records, if desired. */
+>  	pstore_timer_kick();
+>  
+>  	/*
+> -	 * Update the module parameter backend, so it is visible
+> +	 * When module parameter backend is not specified,
+> +	 * update the module parameter backend, so it is visible
+>  	 * through /sys/module/pstore/parameters/backend
+>  	 */
+> -	backend = new_backend;
+> +	if (!backend)
+> +		backend = new_backend;
+>  
+>  	pr_info("Registered %s as persistent store backend\n", psi->name);
+>  
+> -	mutex_unlock(&psinfo_lock);
+> +	mutex_unlock(&psback_lock);
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(pstore_register);
+>  
+>  void pstore_unregister(struct pstore_info *psi)
+>  {
+> +	struct pstore_info_list *entry;
+>  	/* It's okay to unregister nothing. */
+>  	if (!psi)
+>  		return;
+>  
+> -	mutex_lock(&psinfo_lock);
+> -
+> -	/* Only one backend can be registered at a time. */
+> -	if (WARN_ON(psi != psinfo)) {
+> -		mutex_unlock(&psinfo_lock);
+> +	/* Can not unregister an unenabled backend*/
+> +	if (WARN_ON(!strstr(backend, psi->name) && strcmp(backend, "all")))
+>  		return;
+> -	}
+> +
+> +	mutex_lock(&psback_lock);
+>  
+>  	/* Unregister all callbacks. */
+> -	if (psi->flags & PSTORE_FLAGS_PMSG)
+> +	if (psi->flags & PSTORE_FLAGS_PMSG &&
+> +	    !--psback->front_cnt[PSTORE_TYPE_PMSG])
+>  		pstore_unregister_pmsg();
+> -	if (psi->flags & PSTORE_FLAGS_FTRACE)
+> +	if (psi->flags & PSTORE_FLAGS_FTRACE &&
+> +	    !--psback->front_cnt[PSTORE_TYPE_FTRACE])
+>  		pstore_unregister_ftrace();
+> -	if (psi->flags & PSTORE_FLAGS_CONSOLE)
+> +	if (psi->flags & PSTORE_FLAGS_CONSOLE &&
+> +	    !--psback->front_cnt[PSTORE_TYPE_CONSOLE])
+>  		pstore_unregister_console();
+> -	if (psi->flags & PSTORE_FLAGS_DMESG)
+> +	if (psi->flags & PSTORE_FLAGS_DMESG &&
+> +	    !--psback->front_cnt[PSTORE_TYPE_DMESG])
+>  		pstore_unregister_kmsg();
+>  
+>  	/* Stop timer and make sure all work has finished. */
+> @@ -568,19 +637,30 @@ void pstore_unregister(struct pstore_info *psi)
+>  	/* Remove all backend records from filesystem tree. */
+>  	pstore_put_backend_records(psi);
+>  
+> -	free_buf_for_compression();
+> +	list_for_each_entry(entry, &psback->list_entry, list) {
+
+Since you're using list_del below, doesn't this above need to use the
+_safe version of the list walker?
+
+> +		if (entry->psi == psi) {
+> +			list_del_rcu(&entry->list);
+> +			psback->flag ^= 1 << entry->index;
+> +			synchronize_rcu();
+
+Do we want the synchronize here? I think it might be better to do the
+list removal first, and then outside of the psback_lock we can do it and
+finalize the cleanup.
+
+> +			free_buf_for_compression(entry->index);
+> +			kfree(entry);
+> +			break;
+> +		}
+> +	}
+>  
+> -	psinfo = NULL;
+> -	kfree(backend);
+> -	backend = NULL;
+> +	if (psback->flag == PSOTRE_LIST_EMPTY) {
+> +		kfree(psback);
+> +		psback = NULL;
+> +	}
+>  
+>  	pr_info("Unregistered %s as persistent store backend\n", psi->name);
+
+As this might help with debugging, can you move this pr_info to near the
+top of the function (and say "Unregistering '%s' ...") so any weird
+problems reported to dmesg will show up _after_ this report of intent.
+:)
+
+> -	mutex_unlock(&psinfo_lock);
+> +	mutex_unlock(&psback_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(pstore_unregister);
+>  
+>  static void decompress_record(struct pstore_record *record,
+> -			      struct z_stream_s *zstream)
+> +			      struct z_stream_s *zstream,
+> +			      struct pstore_info *psinfo)
+>  {
+>  	int ret;
+>  	int unzipped_len;
+> @@ -697,7 +777,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
+>  			break;
+>  		}
+>  
+> -		decompress_record(record, &zstream);
+> +		decompress_record(record, &zstream, psi);
+>  		rc = pstore_mkfile(root, record);
+>  		if (rc) {
+>  			/* pstore_mkfile() did not take record, so free it. */
+> @@ -729,7 +809,12 @@ void pstore_get_backend_records(struct pstore_info *psi,
+>  
+>  static void pstore_dowork(struct work_struct *work)
+>  {
+> -	pstore_get_records(1);
+> +	struct pstore_info_list *entry;
+> +
+> +	mutex_lock(&psback_lock);
+> +	list_for_each_entry(entry, &psback->list_entry, list)
+> +		pstore_get_records(entry->psi, 1);
+> +	mutex_unlock(&psback_lock);
+>  }
+>  
+>  static void pstore_timefunc(struct timer_list *unused)
+> @@ -745,11 +830,15 @@ static void pstore_timefunc(struct timer_list *unused)
+>  static int __init pstore_init(void)
+>  {
+>  	int ret;
+> +	struct pstore_info_list *entry;
+>  
+>  	ret = pstore_init_fs();
+> -	if (ret)
+> -		free_buf_for_compression();
+> -
+> +	if (ret) {
+> +		mutex_lock(&psback_lock);
+> +		list_for_each_entry(entry, &psback->list_entry, list)
+> +			free_buf_for_compression(entry->index);
+> +		mutex_unlock(&psback_lock);
+
+At init, we'll have no list, yes?
+
+> +	}
+>  	return ret;
+>  }
+>  late_initcall(pstore_init);
+> diff --git a/fs/pstore/pmsg.c b/fs/pstore/pmsg.c
+> index 55f139afa327..9d5b8602e273 100644
+> --- a/fs/pstore/pmsg.c
+> +++ b/fs/pstore/pmsg.c
+> @@ -11,8 +11,9 @@
+>  
+>  static DEFINE_MUTEX(pmsg_lock);
+>  
+> -static ssize_t write_pmsg(struct file *file, const char __user *buf,
+> -			  size_t count, loff_t *ppos)
+> +static ssize_t do_write_pmsg(struct file *file, const char __user *buf,
+> +			     size_t count, loff_t *ppos,
+> +			     struct pstore_info *psinfo)
+>  {
+>  	struct pstore_record record;
+>  	int ret;
+> @@ -34,6 +35,25 @@ static ssize_t write_pmsg(struct file *file, const char __user *buf,
+>  	return ret ? ret : count;
+>  }
+>  
+> +static ssize_t write_pmsg(struct file *file, const char __user *buf,
+> +			  size_t count, loff_t *ppos)
+> +{
+> +	int ret, _ret;
+> +	struct pstore_info_list *entry;
+> +
+> +	mutex_lock(&psback_lock);
+> +	list_for_each_entry(entry, &psback->list_entry, list) {
+> +		if (entry->psi->flags & PSTORE_FLAGS_PMSG) {
+> +			_ret = do_write_pmsg(file, buf, count,
+> +					     ppos, entry->psi);
+> +			ret = ret > _ret ? ret : _ret;
+
+I'm not sure this "ret" handling is correct. What's your goal with it?
+
+I think we need to report either the max seen _ret, or the first
+negative return value.
+
+(This reminds me of LSM stacking.)
+
+so:
+
+	ssize_t err = 0;
+	ssize_t written = 0;
+	ssize_t ret;
+
+	for each {
+		ret = do_write_pmsg();
+		if (!err && ret < 0)
+			err = ret;
+		written = max(ret, written);
+	}
+	...
+	return err ? err : written;
+
+So we'll return an error if we hit one, otherwise the longest scan of
+written bytes.
+
+This does run the risk of breaking backends that will split up writes,
+but I don't think that's a problem in reality yet.
+
+For example, if "count" was 100, and a backend wrote 10, pstore_write()
+will return 10, and userspace will turn around and try to write the next
+90 bytes. If we want to support it, we'll need to do the retry within
+the above code, but I think that's overkill currently. Maybe just leave
+a comment about it for now.
+
+> +		}
+> +	}
+> +	mutex_unlock(&psback_lock);
+> +
+> +	return ret;
+> +}
+> +
+>  static const struct file_operations pmsg_fops = {
+>  	.owner		= THIS_MODULE,
+>  	.llseek		= noop_llseek,
+> diff --git a/include/linux/pstore.h b/include/linux/pstore.h
+> index 638507a3c8ff..0d2be20c8929 100644
+> --- a/include/linux/pstore.h
+> +++ b/include/linux/pstore.h
+> @@ -201,6 +201,35 @@ struct pstore_info {
+>  	int		(*erase)(struct pstore_record *record);
+>  };
+>  
+> +/* Supported multibackends */
+> +#define PSTORE_MAX_BACKEND_LENGTH 100
+> +#define PSTORE_BACKEND_NUM 16
+> +
+> +#define PSTORE_LIST_FULL (BIT(PSTORE_BACKEND_NUM) - 1)
+> +#define PSOTRE_LIST_EMPTY 0
+> +
+> +extern struct mutex psback_lock;
+> +
+> +struct pstore_info_list {
+> +	struct pstore_info *psi;
+> +	struct list_head list;
+> +	int index;
+> +};
+> +
+> +/**
+> + * struct pstore_backends - management of pstore backends
+> + * @list_entry:	entry of pstore backend driver information list
+> + * @front_cnt:	count of each enabled frontend
+> + * @flag:	bitmap of enabled pstore backend
+> + *
+> + */
+> +
+> +struct pstore_backends {
+> +	struct list_head list_entry;
+> +	int front_cnt[PSTORE_TYPE_MAX];
+> +	u16 flag;
+> +};
+
+I think all of this can just live in pstore_info_list, yes?
+
+> +
+>  /* Supported frontends */
+>  #define PSTORE_FLAGS_DMESG	BIT(0)
+>  #define PSTORE_FLAGS_CONSOLE	BIT(1)
+> -- 
+> 2.39.3
+> 
+
+This is continuing to look good! Thanks for the work. :)
+
 -- 
-2.43.0.594.gd9cf4e227d-goog
-
+Kees Cook
 
