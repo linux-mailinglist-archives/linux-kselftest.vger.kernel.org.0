@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-4224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A662B84C68E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 09:47:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2839984C694
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 09:48:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 509CB1F2791C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 08:47:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 696EE1F27EEA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Feb 2024 08:48:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E8D200DA;
-	Wed,  7 Feb 2024 08:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2988B208BA;
+	Wed,  7 Feb 2024 08:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mNnq3fMf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4MIXknH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C6A20B28;
-	Wed,  7 Feb 2024 08:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1C0208B9;
+	Wed,  7 Feb 2024 08:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707295664; cv=none; b=SqagBq1mMwrkD/kkNHuCKsHiajdV+5m6QxXy/R4PrrBqtNfw2H1++RhIZFMa4435LTvvNsrJskj3jIsDFLgosmeNvmVkAmbkUJvNvJKDNtpUTX3ntIWSSaRgvy0oLk7FO29rIGE2aj6GWXWWIHPrfEg3oBuVk4fAOfR3Nnuh5TM=
+	t=1707295695; cv=none; b=EM2Pl9ouv2SiVXFghoDBYuh/HEQVdGUJF638T/XHr/Bed0DsnWT9CbKa1L13RQigiwhOxzaOdzQtouL02GO9GzuLEiN3gaHo+cPfV3RFSaauTW6R41vJp7Mi+UUEZiT5nkKxQn+feDwUSoeDzUlo/8vURLmB9jgqFIJ2WU0bD6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707295664; c=relaxed/simple;
-	bh=GNCOdcDDyq/1NLW7gyIwNzWiCnIN2b2fyZWE+y6K3Vk=;
+	s=arc-20240116; t=1707295695; c=relaxed/simple;
+	bh=dt8hzbTascoa4l4AGdRm3+8cLSOSYx3O1wN3E7heOjo=;
 	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=QLT6ypU5aZ93Gji3E1v/Tt5z9rl3ClrC2D22VRlXOrlnYYKXOGDpW2OLbqdM2xI1D426EzELulbdIXjex2JUhJtFW1WTfII0Shj2JVrhX2ESzAt4ynUr315z5cwbz68kwoPwUx3Hc5yKB0UPVO9UHgZ2QlgjmmGGHwJb3x9tpck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mNnq3fMf; arc=none smtp.client-ip=209.85.218.50
+	 In-Reply-To:Content-Type; b=DEeDC2of5YVDOSd/k3gvFYP8RVbRQTQYHnKVvI4gfO+5CvBl3yPQ8L5/PBXIguD81bymt06f7Uj8GkXmRt1OZJds8PKX/WCK1puvHiNeLgWVx/wjuVDSqpPNiUPiR4CeOyVjj9GS4bZ/ylWOTBF2/E5Rn8ZfA+PyI5oFW3Muu9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4MIXknH; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a30f7c9574eso47622766b.0;
-        Wed, 07 Feb 2024 00:47:42 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a372a3773a5so38959566b.3;
+        Wed, 07 Feb 2024 00:48:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707295660; x=1707900460; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707295692; x=1707900492; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:references:cc:to
          :content-language:subject:reply-to:user-agent:mime-version:date
          :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fj4qPaMqnd9zvKedeyiEsUW9fSkzif8DNAdYYIQAxxY=;
-        b=mNnq3fMfqRQSq0ntsDrNHh7nWgUHRlm0XIFrZ1J49/NwRCFw3NzvKAKeh/IFcKK8Rc
-         Bsd//YHF2lL8rVma5Fffl69nGqj/+TE/1kYwmOnjFacoCPGg3nOYHd5U5VSwhFeHXw1e
-         hzjNAtyqVWWJqzaTDdxEafu+71gIZ0L+88UD6JqZXWk3f1a+pSnJlPyAfJxwPfYernqi
-         SvYLXwAhzcHPXh3Ia7MTogGDoiMPC/i58NwkGDIsRvPr/N9wl3GNuxO3IubOcb9jBowA
-         B70vL5Om8wLFSq57+LZaGOzy+o8UEDETPv3gH1luGxL5qfbotR2C7KymBJQNFThRKqg9
-         XDkg==
+        bh=umVkVcQlllxg2jaOuf58sSKKw2cF+x9a/MWyBZj1VFY=;
+        b=A4MIXknHscOQhliW3agzNBOnFBEQdMVlzKLDHl5CJDarHTjiOr4Ev1O+THOvnQCZW9
+         IEMdJBjNS3mb99cUuBbVPPjSYjenkgLKhFAFoCv1BUd4fZ6MmjeZviScKZNyXETfYhJ9
+         x7X7/3oY9LfJTdGkK7E7vZXAr/30k+gBarf7+3x40daQiyGTxy9vgHG4MH4OEI2DVE8b
+         qkDVPE/zg3wrSACol8bvOJPKy2gJyvNZb1bvpCfmn7HpkYxYr5/qxnkegv7XnnUJrbai
+         Qy98JN4psC5YOYr8smcV+AOeFGY5Gw1yUFZ/C/T97ARmMRw9v0FYeh6hwktiCfp+njDp
+         ADeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707295660; x=1707900460;
+        d=1e100.net; s=20230601; t=1707295692; x=1707900492;
         h=content-transfer-encoding:in-reply-to:organization:references:cc:to
          :content-language:subject:reply-to:user-agent:mime-version:date
          :message-id:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Fj4qPaMqnd9zvKedeyiEsUW9fSkzif8DNAdYYIQAxxY=;
-        b=iFHqbUMi3gAOLqecaqvUB1cKCGfu7YDASNq5aq+NiT5IO1j7Hw1E+idOd5D41TrimM
-         Fd3hyX1a7XQgx9FKVERQpRkifxr91O1+e+rj6h2f+ErY+ohrLX+TpVeGTPyg27ip2mL3
-         pCb+tMeVuNhaKfNq9986XmhU8I02frF8YjJpmBOIpKRvIOLHojA8a4QODX/De+HfWbc3
-         ctnf8RRQcpA48M02LZxp/Carhk02N6diI4AWljlCdoXsgI/4CRsRB7Mm0WlWKCem5nOu
-         0UKGrVnjEJp0UpBsng1UjB+fh413AV+b7SLCfL3xsXq9rrCO5mtwQ3OrKdUewcNbxu2R
-         TaLQ==
-X-Gm-Message-State: AOJu0YxRTju8W6MzY5UcEfAKbxKhpYhKj3ieyAC2h8L8eR8Kbn7V5aRG
-	DQgY9DlHh1fwxA6/XB2nmOe6WfmjNiFORecT5jkyo02hVanm/JEB
-X-Google-Smtp-Source: AGHT+IF47eTBssASZHFBQHUPdVTL2sd8ymlIBQS3sFcE44/e0oqTP4d4WKnMkzyy/1zrot22kLO7yg==
-X-Received: by 2002:a17:906:18a2:b0:a38:4b66:4200 with SMTP id c2-20020a17090618a200b00a384b664200mr1702660ejf.57.1707295660122;
-        Wed, 07 Feb 2024 00:47:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXz+tbM5ryfemC1cx72pU+5wNDFh6HzwogLpRXC0HdVl5P+RkXzlB2okC+Bj5W40NV2hrKIh63klT1ZYWS3D8SffIEt1VfshC9egB3lFuiPFPtvx4Fh4MMvZpGynRuCbkMECy/CI217RumAlLel4Ms7bwHYSe6gM1WT6b4RUP5W3+4AN0Szfvaf0XBkrM5OdiQeoD9e074HyPgNgAFa6aayJLyqWl6Y/15+li9cLWO5I9yUhKwP9ig5fR57rfAaKpOsKIwuPrqS1ozhnnVbZHzaRPREjN2/PYwBGIIAFthCsT1tyuZ+Y4/R/Ga6S2Gtw9LhwARAjlxLV5YTfsya9CwAVoe+0tRNiYrhStXwToLsFMQ02i3eCdD4DnJ0Bj0WlhP+NNRRkA7hym5s5qAfNSXLNFw+Es6ZXOr51X51thFPKFVLAdE=
+        bh=umVkVcQlllxg2jaOuf58sSKKw2cF+x9a/MWyBZj1VFY=;
+        b=PHjp/C3ge0SjxEu5949z5zdXnmTh7AZ43hheN9+WuiejGUmw4q+GW+ZLR+xB5NUK+G
+         XNnMQWsrXqFITjBkgXCaad5uk8mH0swSg6JSqHexGJeqjxILFQ+Way4Bv7lh2WgzH1es
+         ZWRRfxVJAb/XyQR6YETtFNY/O1HAlmVH1qfwoRf9LB45Na+gfds+SQkIbcx3FRyy0mNn
+         yYHVhzgGR1R2WBxv5B392LqGmUvIbGZKx0qw1LKFP83u/JJQ9wsmNRvcoH4ngxWVhv4j
+         8LjNszRT3adHtN205UuY0m6c7XXF/LSzssAtjvq77CkOPWlLiu+02MYQbq3AvlRW+MnP
+         5iFQ==
+X-Gm-Message-State: AOJu0YzyFKL387tEhnEQwXAwEDXiZi1o+BgkrBdyqXQ5aNo7k3kr0/8n
+	mPKH/PtInXckpGBH4E4L2VePsyFkVGY3jXrLGtkKaDNNzdcY7BkV
+X-Google-Smtp-Source: AGHT+IGpUJ/0ACcl+neX6Ydjjpk6uS/ABCcNl7cu4cSkVrgLltpTwm0NKB4H4lPU0IaRRiBMne+Z3A==
+X-Received: by 2002:a17:906:318b:b0:a37:a3bf:4045 with SMTP id 11-20020a170906318b00b00a37a3bf4045mr3233509ejy.35.1707295691492;
+        Wed, 07 Feb 2024 00:48:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXeyWDdHdcxKWvxJYpmrL/bXiL5OHWoD6aoK8AJu7zCoIoy8TKnr5vPZ06R+G3/boLJ8wZF0FOn/QS83M7O83S0dNav9M+kuRMWlZlPmOYwDWg56cgNmWb4bxG4dIM06zMQ595V0/xr73ps1KaU/s8n8TNvTJzvGvIaz/LkivzOzhKLsGUEv6Mt2G4AixLLBOvsqsif03jJRolPC7eS7sJ8dSycxaYpr6zUTBu+xKa12AxwPeliH1zLacYzJSQbQhU5nDk8R0BLG7Wdhj1O7TwP28lBKc1sUnhrm/YP4Q5YcA4ful1F5un+EMnOs9DNnG4oI0tN737e1bIgnS3wzpgMBXn3r9JGmXh7fZuyjEhG3IFMDFG4lrHGdpBYcvnj3uboS7qWbFyc6+SrPkoqlHe22T9Nsc7Bh7pbVlBGtnDOgqk275g=
 Received: from [192.168.11.39] (54-240-197-227.amazon.com. [54.240.197.227])
-        by smtp.gmail.com with ESMTPSA id i26-20020a170906115a00b00a36c7a7b4f7sm503528eja.207.2024.02.07.00.47.38
+        by smtp.gmail.com with ESMTPSA id i26-20020a170906115a00b00a36c7a7b4f7sm503528eja.207.2024.02.07.00.48.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Feb 2024 00:47:39 -0800 (PST)
+        Wed, 07 Feb 2024 00:48:11 -0800 (PST)
 From: Paul Durrant <xadimgnik@gmail.com>
 X-Google-Original-From: Paul Durrant <paul@xen.org>
-Message-ID: <6d66b3ce-2be6-4111-8f19-9234ee92b15a@xen.org>
-Date: Wed, 7 Feb 2024 08:47:32 +0000
+Message-ID: <05edc239-0f9d-43e8-9e59-4cdb6d2bcbed@xen.org>
+Date: Wed, 7 Feb 2024 08:48:04 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,7 +80,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Reply-To: paul@xen.org
-Subject: Re: [PATCH v12 04/20] KVM: pfncache: add a mark-dirty helper
+Subject: Re: [PATCH v12 03/20] KVM: xen: mark guest pages dirty with the
+ pfncache lock held
 Content-Language: en-US
 To: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
@@ -91,34 +92,15 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
  kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20240115125707.1183-1-paul@xen.org>
- <20240115125707.1183-5-paul@xen.org> <ZcL3CdGHv5FQHBVD@google.com>
+ <20240115125707.1183-4-paul@xen.org> <ZcL2Y1gpRG8C1_8f@google.com>
 Organization: Xen Project
-In-Reply-To: <ZcL3CdGHv5FQHBVD@google.com>
+In-Reply-To: <ZcL2Y1gpRG8C1_8f@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 07/02/2024 03:20, Sean Christopherson wrote:
-> On Mon, Jan 15, 2024, Paul Durrant wrote:
->> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
->> index 7e7fd25b09b3..f3bb9e0a81fe 100644
->> --- a/include/linux/kvm_host.h
->> +++ b/include/linux/kvm_host.h
->> @@ -1399,6 +1399,17 @@ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len);
->>    */
->>   void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc);
->>   
->> +/**
->> + * kvm_gpc_mark_dirty - mark a cached page as dirty.
->> + *
->> + * @gpc:	   struct gfn_to_pfn_cache object.
->> + */
->> +static inline void kvm_gpc_mark_dirty(struct gfn_to_pfn_cache *gpc)
-> 
-> Any objection to kvm_gpc_mark_dirty_in_slot()?  I want to make it clear this only
-> marks the gfn dirty in the memslot, i.e. that it doesn't mark the underlying page
-> as dirty.
+On 07/02/2024 03:17, Sean Christopherson wrote:
+> KVM: x86/xen: for the scope please.  A few commits have "KVM: xen:", but "x86/xen"
+> is the overwhelming favorite.
 
-Ok, that sounds fair.
-
-   Paul
+If I have to re-post anyway then I can do that.
 
