@@ -1,272 +1,144 @@
-Return-Path: <linux-kselftest+bounces-4346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452D084E0AA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 13:32:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 402DE84E2F4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 15:17:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61AD11C2228D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 12:32:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC8AD29047A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 14:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A506A6E2DE;
-	Thu,  8 Feb 2024 12:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7903178B5E;
+	Thu,  8 Feb 2024 14:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uU2AyjAt"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cpIHrnvw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACF41B945;
-	Thu,  8 Feb 2024 12:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.83
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707395537; cv=fail; b=DTvCtIReTmFh/f1UQ9klyGC0q3MONR7cYugB4EXHRFEBApzGTxUiEbb5D+0Z0Cw87tNaqTRceJwlMH0t2GK6/ypoAuN6PtFsJJC8bLpzsiYarbB5UwqXH5p2XWk+G9Y+xjGy9HClYYU882FfrwVFwFicUrADpk5JTNVM0Y3rQ/I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707395537; c=relaxed/simple;
-	bh=KyR1J3QmVx5enCTDKPQsRut/TkcHzx65tX+ZwE377LM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=d62zndS172fRZFXdvictfFO/K6a3cI1ggO4Tlcj0JxbseVPGBYy9LIUZgZDOJQ5YZLs2WZ05AfSnsTdVnQJTL9l/LakneI51mzhRRSa2NofZI7/KG8P21g0EI+Eda1oYJK09Mz9EwEMggJBJXGGYKBrVoR3clf+VawFYgddt650=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uU2AyjAt; arc=fail smtp.client-ip=40.107.93.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cKpDwwgC1AqCL08fZmaOOT7uxZGsJFXfjEUmkbN69A3DUOFYPVmPsL1urtcW5mhOHdBA37JTO4M5GKmSB7sDjIIV4xY6W6EmbvvkM88JH2vqO3x8TdZFSKQmZ/TO14S6bqik4LXKslfxS83heLoqAzi+/p8Yd0i4ZxllX4Ku4SSOIaG2L19RhLwZ3yjJQeVmIKDmuWMliWM6k5UkxitzJj8CEuyxQiCSpLkCYGgwx9yU71Fc+FRVl/cPXG1to0sMzECaba2xDDqq6aYYvGR1CBJeSwJBcw/5dQKBqXr5T6hqwZfvVYoznVGlWFW8LVtnCpGYBurpVrLNAMRxsY9Eww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8j7b4+rUix8cDN83QUdJEmWxqZ8hzBVws3KcCZENryA=;
- b=YOnKlrvuUo6Ut8VojQzpYruS45bWen+QOxle+CQCUupqo3e/wnGZkqZfZsDWWHo9sdtJWPKXymhmxzStSBTzZyCcB3Un0wsE+F/oPAUthf8nAfV7A7YFeeXEfreNF+OpLxKyLEXgn49Ca2cclltRC1XJp53pj395Jk6sCoQTLDtldM9vnv95YxqURP0qzPeWJJG78jERUp5qKk2rFbtk8Wr1A12Q5iCWfXUL92+F4yyOgOJR2lcpJwfhOK9Ss98qK8ohER+GlTurRp/00M2XOSzwA9nsodAqS20cIk6ER7kgP2/lkHRQt6FHDxP2Yk6PoiEdtfGajc11IiwcC251+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8j7b4+rUix8cDN83QUdJEmWxqZ8hzBVws3KcCZENryA=;
- b=uU2AyjAtJ+8UK/zgDQ1S9BHmjLLaDmkgHSy7DmkbZzX6NdHBMCdeXF46hpaAwyx05QKMWxSPg81LUY4dwA0SxajB0OAPYOCTD8k4biURRQr/B5Ah0EXop3LKlmOewCU6w7QStK0kFL09dIOXab5fBK0ahXAO4NCfjiONV+VXAy20ofqJjv03LQ/PTgZtaMxLc+c6RZoqBUszQjYL+x4fCZK7tgvwXvbfNufXdxF7RqMMEP+me7TqZvIy0yOu/N/NmsXZkjbvnU2YN6KsTcPImrGYgnXtS8yeW9jU21x2yMKrjHKG7vVx3jm/poqoZFZDS3otbATYs1N638qUjU/KxQ==
-Received: from BN9PR03CA0682.namprd03.prod.outlook.com (2603:10b6:408:10e::27)
- by DS0PR12MB8788.namprd12.prod.outlook.com (2603:10b6:8:14f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.16; Thu, 8 Feb
- 2024 12:32:09 +0000
-Received: from BN1PEPF00004684.namprd03.prod.outlook.com
- (2603:10b6:408:10e:cafe::74) by BN9PR03CA0682.outlook.office365.com
- (2603:10b6:408:10e::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.37 via Frontend
- Transport; Thu, 8 Feb 2024 12:32:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN1PEPF00004684.mail.protection.outlook.com (10.167.243.90) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7249.19 via Frontend Transport; Thu, 8 Feb 2024 12:32:09 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 8 Feb 2024
- 04:31:53 -0800
-Received: from dev-r-vrt-155.mtr.labs.mlnx (10.126.230.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.12; Thu, 8 Feb 2024 04:31:50 -0800
-From: Ido Schimmel <idosch@nvidia.com>
-To: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<edumazet@google.com>, <razor@blackwall.org>, <shuah@kernel.org>,
-	<petrm@nvidia.com>, Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH net v2] selftests: net: Fix bridge backup port test flakiness
-Date: Thu, 8 Feb 2024 14:31:10 +0200
-Message-ID: <20240208123110.1063930-1-idosch@nvidia.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8079C7640C
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Feb 2024 14:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707401822; cv=none; b=qflcF/myyZO2nfm2A8VkWf5z2j/kfliQn9PkeK4bCNyxZ83OVTrkbhJNWJ4EYrAfRzCnu7rAeEXJ1d1UrFPLKfToEm1/lHx6AwhzTCVcCI5x+Kg7ZHztpEkTGsQzG5TZYvzM3SYYzOMzMVAWme5ve9fx0+LZnmGGd5pherDxDJE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707401822; c=relaxed/simple;
+	bh=ujj/RLFDfuqS7PIZP68+3l/KZkd1KHttxlgRuGySCOs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c8gzT6/CA4688WxrOzup+HvX2qJejkgKuh3/eA2xDe0ogJlTAd0D83Bu8+3SD9L62k55fZrDg9FJ3HL7ETl3ehruonSVtPNe05CGJieO0KsL4PThOLNSTmbyqn/T3obJ8sZ/bqnAR20+t4z/90XcLCDAK19cioK930h2IabJPaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cpIHrnvw; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dbed179f0faso691635276.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Feb 2024 06:17:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1707401819; x=1708006619; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5rHe4xV1s4X4NVlAmyq1Fqck0kWWWvVIv4qB+Ky5Oo4=;
+        b=cpIHrnvwduqrSfAbUDvwcTPVwb8rM5uk1zLq3xwzi1+jkLLXKNesv/zHRV50VOFZaB
+         mjlVz2xq0Xc8wRbbScpCr3Wh5pqRY9CZuD3kTn2yTGmzl+o8rE0z/xm05jjVGkOWGawM
+         Xxxv8E2Gc9w3bLvEcWitgQLLWHaZUaDvduZSg9GuLo7L3cKhJ5uJxf6emmisiriIiips
+         pdVU8EKnp07svFd9da5oSFwwvxUFKN4N4Lb4ISOGhVuRuy+FWj1WfqwXv6Nb3t+CYuAw
+         QNYIU7wJoFpclTxaQAF4DVT9S3X15ml/BEDGJMv/ATW8HrjwHnYfPjXqKrRyICCe0GOf
+         InRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707401819; x=1708006619;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5rHe4xV1s4X4NVlAmyq1Fqck0kWWWvVIv4qB+Ky5Oo4=;
+        b=QIY8X28Ea1eiskRSSCc7xiQp9kZ+k/flj/ixmX/+ArDi7AzIeDi8G3jhs99UqHUrrQ
+         U5+wgnSKiGDxIueDIdupzav6e3TqUv6vvXXpaqAEh84zPVKE/3L9zDSSUZTMsChzB77V
+         G18ySrowCh3tGtFaNPYMQKYUxJZEtksDMiO/504+kOOY0DfOW/gtkNa7JWs3IQRssIDJ
+         uq0Hp5J0okvh28IGo+283gaAB3NjGQBhfaFTUhKil4ZwlmgpkR6a8P1dzhlcV2Wfn1q3
+         jHsZ01DTI4G2k/QaaHCQ/l6sXei7jejX+NmcIRuHDlnjGmXvQX4Fxxnk8LmTd2/uXvAm
+         E7mw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYyoJp/OyaKSLY2Rl6s6JoUR++BqSAsk+N5ufffCmnlztXj1HZXEOkVtvNQa3HeoiAolupOvjyPAtPveelJEo8tT0J63WXURD2iBwWwCJy
+X-Gm-Message-State: AOJu0Yy7y3umb3nXhlFH+GgrHYjsCloygqTF2EXxR4k1JxXBwTGRddIk
+	LfSRW/Gt7FPtJ1oIwiQdKPsRqxJ11GayN2KYJiLZ6ggxMzvNlXg+apbUPICaZZtxnppE83j2fZL
+	bbkWIg4fWLqX3gDQloR2oaeRkHII9bDuVeOY4
+X-Google-Smtp-Source: AGHT+IF4KdKYv/i3KNL4LQkNiYFcff3UiechbnntE/n8lsxGtDCyAecpPgauuzlLRFB/79dZx13Kgoa30gmOFF58owY=
+X-Received: by 2002:a25:7483:0:b0:dc6:c2ec:ff4c with SMTP id
+ p125-20020a257483000000b00dc6c2ecff4cmr1925355ybc.6.1707401819151; Thu, 08
+ Feb 2024 06:16:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00004684:EE_|DS0PR12MB8788:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2dfcbc91-c482-479d-d8ed-08dc28a1f7fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Y+Luvzjw8uRGcLQBBKVfNm+VwkqpFhJBoWyNd80rb+ABy+4WCjvjz+N1Qm7W5iMqzD1fFyn2a+9d2tfSBVbuB2bBapeWREVxqiiOKARJmCHuvgnqZq6o5eYqwnnkylsh87r2wrpzdfVDxumkWuCL0JvRmsSTfYZ0Vp+sZ2s+F6H71CRlyTEAiI5BNZilxNKoTW0WB2J/+UIrSk4zScsg393dl3Y1JNc3ZtuvzxUoc8DAVsHILBBJJtfFOjuH+qv8lrqtxqzQTtyiZAOM6qmjn2zS4f3qsvq9bjxWJex20eadfIiVAoYuy3hY+LUqXdS0V30Run2BVEKaW95YU+rq3COcIxDicr7Zgafl6DhOmKQRBzLV/DJGusCHq5ZVE4t6AJtpN6FGNSN+l0H27LJ5DiNMhYzpFSppMzAwlbsfhAnGWgkUpEhYBX2zs6G5YdC+qpnvGw/0Bl/qlBRdulftBuC0pbQWMUeLy7496aWSIubM6+lVjtfPa4Nw5kZInAcurFlyrM8SVzQ1IWX+0RDgA2x85IoKelQmcdk3bBzJYbXBHXWLpFfnjwkNkNMKUiGSURNxt03QsH016qMjBh8xYnHKKMuFxzrylSRy2llgQeU=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(346002)(396003)(136003)(376002)(230922051799003)(451199024)(186009)(82310400011)(1800799012)(64100799003)(46966006)(36840700001)(40470700004)(86362001)(107886003)(5660300002)(426003)(478600001)(336012)(2616005)(26005)(41300700001)(356005)(8676002)(54906003)(2906002)(82740400003)(8936002)(4326008)(70206006)(70586007)(316002)(6666004)(7636003)(1076003)(110136005)(16526019)(83380400001)(36756003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2024 12:32:09.3256
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2dfcbc91-c482-479d-d8ed-08dc28a1f7fe
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00004684.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8788
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+ <d54ca249c3071522218c7ba7b4984bab@paul-moore.com> <dd8a979df500489c0d8595f9a3f89c801ce6f1c2.camel@huaweicloud.com>
+In-Reply-To: <dd8a979df500489c0d8595f9a3f89c801ce6f1c2.camel@huaweicloud.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 8 Feb 2024 09:16:48 -0500
+Message-ID: <CAHC9VhRu-_v19zWS0Pm0-4E-PWONcfR1-=Ekz9ObuOAgL0Y+sA@mail.gmail.com>
+Subject: Re: [PATCH v9 0/25] security: Move IMA and EVM to the LSM infrastructure
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
+	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
+	tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, dhowells@redhat.com, 
+	jarkko@kernel.org, stephen.smalley.work@gmail.com, eparis@parisplace.org, 
+	casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The test toggles the carrier of a bridge port in order to test the
-bridge backup port feature.
+On Thu, Feb 8, 2024 at 3:06=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Wed, 2024-02-07 at 22:18 -0500, Paul Moore wrote:
 
-Due to the linkwatch delayed work the carrier change is not always
-reflected fast enough to the bridge driver and packets are not forwarded
-as the test expects, resulting in failures [1].
+...
 
-Fix by busy waiting on the bridge port state until it changes to the
-desired state following the carrier change.
+> > I had some pretty minor comments but I think the only thing I saw that
+> > I think needs a change/addition is a comment in the Makefile regarding
+> > the IMA/EVM ordering; take a look and let me know what you think.
+>
+> Oh, I remember well, it is there but difficult to spot...
+>
+> --- a/security/integrity/Makefile
+> +++ b/security/integrity/Makefile
+> @@ -18,5 +18,6 @@ integrity-$(CONFIG_LOAD_IPL_KEYS) +=3D platform_certs/l=
+oad_ipl_s390.o
+>  integrity-$(CONFIG_LOAD_PPC_KEYS) +=3D platform_certs/efi_parser.o \
+>                                       platform_certs/load_powerpc.o \
+>                                       platform_certs/keyring_handler.o
+> +# The relative order of the 'ima' and 'evm' LSMs depends on the order be=
+low.
+>  obj-$(CONFIG_IMA)                      +=3D ima/
+>  obj-$(CONFIG_EVM)                      +=3D evm/
 
-[1]
- # Backup port
- # -----------
- [...]
- # TEST: swp1 carrier off                                              [ OK ]
- # TEST: No forwarding out of swp1                                     [FAIL]
- [  641.995910] br0: port 1(swp1) entered disabled state
- # TEST: No forwarding out of vx0                                      [ OK ]
+Great, thanks for that.  Not sure how I missed that ... ?
 
-Fixes: b408453053fb ("selftests: net: Add bridge backup port and backup nexthop ID test")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
----
+> > Once you add a Makefile commane and we sort out the IMA/EVM approval
+> > process I think we're good to get this into linux-next.  A while back
+> > Mimi and I had a chat offline and if I recall everything correctly she
+> > preferred that I take this patchset via the LSM tree.  I don't have a
+> > problem with that, and to be honest I would probably prefer
+> > that too, but I wanted to check with everyone that is still the case.
+> > Just in case, I've added my ACKs/reviews to this patchset in case this
+> > needs to be merged via the integrity tree.
+>
+> Ok, given that there is the comment in the Makefile, the last thing to
+> do from your side is to remove the vague comment in the file_release
+> patch.
+>
+> Other than that, I think Mimi wanted to give a last look. If that is
+> ok, then the patches should be ready for your repo and linux-next.
 
-Notes:
-    v2:
-    * Use busy waiting instead of 1 second sleep.
+If Mimi is okay with the patchset as-is, and both of you would prefer
+this to in via the LSM tree, don't worry about the file_release
+comment, I'll just remove that when merging.
 
- .../selftests/net/test_bridge_backup_port.sh  | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/tools/testing/selftests/net/test_bridge_backup_port.sh b/tools/testing/selftests/net/test_bridge_backup_port.sh
-index 70a7d87ba2d2..1b3f89e2b86e 100755
---- a/tools/testing/selftests/net/test_bridge_backup_port.sh
-+++ b/tools/testing/selftests/net/test_bridge_backup_port.sh
-@@ -124,6 +124,16 @@ tc_check_packets()
- 	[[ $pkts == $count ]]
- }
- 
-+bridge_link_check()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+	local state=$1; shift
-+
-+	bridge -n $ns -d -j link show dev $dev | \
-+		jq -e ".[][\"state\"] == \"$state\"" &> /dev/null
-+}
-+
- ################################################################################
- # Setup
- 
-@@ -259,6 +269,7 @@ backup_port()
- 	log_test $? 0 "No forwarding out of vx0"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	log_test $? 0 "swp1 carrier off"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -268,6 +279,7 @@ backup_port()
- 	log_test $? 0 "No forwarding out of vx0"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 forwarding
- 	log_test $? 0 "swp1 carrier on"
- 
- 	# Configure vx0 as the backup port of swp1 and check that packets are
-@@ -284,6 +296,7 @@ backup_port()
- 	log_test $? 0 "No forwarding out of vx0"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	log_test $? 0 "swp1 carrier off"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -293,6 +306,7 @@ backup_port()
- 	log_test $? 0 "Forwarding out of vx0"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 forwarding
- 	log_test $? 0 "swp1 carrier on"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -314,6 +328,7 @@ backup_port()
- 	log_test $? 0 "No forwarding out of vx0"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	log_test $? 0 "swp1 carrier off"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -369,6 +384,7 @@ backup_nhid()
- 	log_test $? 0 "No forwarding out of vx0"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	log_test $? 0 "swp1 carrier off"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -382,6 +398,7 @@ backup_nhid()
- 	log_test $? 0 "Forwarding using VXLAN FDB entry"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 forwarding
- 	log_test $? 0 "swp1 carrier on"
- 
- 	# Configure nexthop ID 10 as the backup nexthop ID of swp1 and check
-@@ -398,6 +415,7 @@ backup_nhid()
- 	log_test $? 0 "No forwarding out of vx0"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	log_test $? 0 "swp1 carrier off"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -411,6 +429,7 @@ backup_nhid()
- 	log_test $? 0 "No forwarding using VXLAN FDB entry"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 forwarding
- 	log_test $? 0 "swp1 carrier on"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -441,6 +460,7 @@ backup_nhid()
- 	log_test $? 0 "No forwarding using VXLAN FDB entry"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	log_test $? 0 "swp1 carrier off"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -497,6 +517,7 @@ backup_nhid_invalid()
- 	log_test $? 0 "Valid nexthop as backup nexthop"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	log_test $? 0 "swp1 carrier off"
- 
- 	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-@@ -604,7 +625,9 @@ backup_nhid_ping()
- 	run_cmd "bridge -n $sw2 link set dev swp1 backup_nhid 10"
- 
- 	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw1 swp1 disabled
- 	run_cmd "ip -n $sw2 link set dev swp1 carrier off"
-+	busywait $BUSYWAIT_TIMEOUT bridge_link_check $sw2 swp1 disabled
- 
- 	run_cmd "ip netns exec $sw1 ping -i 0.1 -c 10 -w $PING_TIMEOUT 192.0.2.66"
- 	log_test $? 0 "Ping with backup nexthop ID"
--- 
-2.43.0
-
+--=20
+paul-moore.com
 
