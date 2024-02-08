@@ -1,166 +1,140 @@
-Return-Path: <linux-kselftest+bounces-4316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D058B84DAF9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 09:06:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 498F984DB48
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 09:23:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E1EA1F2340D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 08:06:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BC861C25A7F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 08:23:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F00869E1F;
-	Thu,  8 Feb 2024 08:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FD06A32F;
+	Thu,  8 Feb 2024 08:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OmvzCBQ8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1700569E00;
-	Thu,  8 Feb 2024 08:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B286A325;
+	Thu,  8 Feb 2024 08:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707379582; cv=none; b=cjYZLj4kTYs4VdNSoShp7XqcaKzv0uX7qIhNPixldXSvlHZtJF7SI3nnPM7UOjXALHwCucZtFLOCOM63uWwXiZ2WNgMn0FIMRXbk4oL8exKB3lKbk2k81gEUrGXI/FEQdiOgwCZYFJHDGeOYYRRXdNLl0yc1cHY9HNl7O+l9W1g=
+	t=1707380592; cv=none; b=hlGpGg0Imfi4+IkMlrneKMqBCw3khEGOtXkDz3/5/yn4T2+iGbqiqENo7xapA79PY+Kxn3GSL17TzNXgsjaZ+sIMMgsdAo0Yg/CKFYV3wEHW5OF4mmKjB9v1cxN4UjBLoghC2VzA7fwKBF9/SzGP2Hn4YBI6yHMrqrkjDX6AEPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707379582; c=relaxed/simple;
-	bh=/zEYUb4yL29+qOwYug6IGb0qmLwNiMesnkRiO3l7WEE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qzpLo+dt2SJzSDf5lkyUu+2LfuulHqzH8Vq7eDBHH6NjDuap0SLXVbzLeKfDETWstDkwhx5JGoRJ0xSj5rQBbaDHFfO9IF4KzgtkRYEHvGjh583SvU+pkeHdMWZQd24DInM/KGwlyawv6h6OZTLabzQtcNJf7k4yArC9+tavq0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4TVq144pfPzB0Mbw;
-	Thu,  8 Feb 2024 15:51:04 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id D29E2140595;
-	Thu,  8 Feb 2024 16:06:13 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAXEBlli8RlWRYaAg--.2529S2;
-	Thu, 08 Feb 2024 09:06:13 +0100 (CET)
-Message-ID: <dd8a979df500489c0d8595f9a3f89c801ce6f1c2.camel@huaweicloud.com>
-Subject: Re: [PATCH v9 0/25] security: Move IMA and EVM to the LSM
- infrastructure
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>, viro@zeniv.linux.org.uk, 
- brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
- neilb@suse.de,  kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
- jmorris@namei.org,  serge@hallyn.com, zohar@linux.ibm.com,
- dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, dhowells@redhat.com,
- jarkko@kernel.org,  stephen.smalley.work@gmail.com, eparis@parisplace.org,
- casey@schaufler-ca.com,  shuah@kernel.org, mic@digikod.net
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, Roberto Sassu
-	 <roberto.sassu@huawei.com>
-Date: Thu, 08 Feb 2024 09:05:54 +0100
-In-Reply-To: <d54ca249c3071522218c7ba7b4984bab@paul-moore.com>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
-	 <d54ca249c3071522218c7ba7b4984bab@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1707380592; c=relaxed/simple;
+	bh=dw1iWzN0+Odaehn3lAl74xWZ5i8sPOjzK50me6Uozys=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=P9FrwFb+L811bFW+wL6FXC/qsCCNsr2a7ZshEkM4twQjqLXmELcKNP6gbI2CPT+9lFGDyEkEw00oaloMcqiezOFNlD5d8bAWFRzrL/BtpE8TPJvwL3jQTqCvqG2dgZ0zTv9Ff308qvCSHfy+XnAsXSovV5vYH9GqbGbCW8E4XIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OmvzCBQ8; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707380591; x=1738916591;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dw1iWzN0+Odaehn3lAl74xWZ5i8sPOjzK50me6Uozys=;
+  b=OmvzCBQ83RRQeRHZaQe3x2vAUzlyLTVfMs/gByFiFrMAvj6JO7u5+wdr
+   /7DiQ+DAm1L9Sa5jYIeGtxLG8gl1pSlZ2HQ5vQkT6J00S4QqFZgmmD1hy
+   +T/81i60ZAIHvVhvTAdjgcnWmN/ECmGmrnYoss3sMOjOdL+ynLKwrKkbE
+   QBe/g6r1Pj+ALrbfBV8VtlJHzwFpls7NpPtX8c3iuIYdKXFzfVKUl7Tcq
+   VP5mrg5Ei0FlxV9gggrz0kQXGA4AoO671K3xn4Zcr9PTe0qh2l+OvNO8o
+   uelUFi18FNwH09L+ne3EB2QVkrVGYn0LVd/CXAD7NZ1bSEE+FYJemEXSs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="5036295"
+X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
+   d="scan'208";a="5036295"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 00:23:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
+   d="scan'208";a="6252080"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orviesa003.jf.intel.com with ESMTP; 08 Feb 2024 00:23:09 -0800
+From: Yi Liu <yi.l.liu@intel.com>
+To: joro@8bytes.org,
+	jgg@nvidia.com,
+	kevin.tian@intel.com,
+	baolu.lu@linux.intel.com
+Cc: alex.williamson@redhat.com,
+	robin.murphy@arm.com,
+	eric.auger@redhat.com,
+	nicolinc@nvidia.com,
+	kvm@vger.kernel.org,
+	chao.p.peng@linux.intel.com,
+	yi.l.liu@intel.com,
+	yi.y.sun@linux.intel.com,
+	iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	zhenzhong.duan@intel.com,
+	joao.m.martins@oracle.com
+Subject: [PATCH rc 0/8] Add missing cache flush and dirty tracking set for nested parent domain
+Date: Thu,  8 Feb 2024 00:22:59 -0800
+Message-Id: <20240208082307.15759-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwAXEBlli8RlWRYaAg--.2529S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw17AFy8Jry7Kr13Cw1DGFg_yoW5ZrWrpF
-	Z5tayfCF4qqF1I93s7Ar47WrW0kw4kKFyUJFy5Xryvy3Z8GryxJrZ7KFWUZFWDWr4rXayI
-	qw17Kr9xZ3WkZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj5opbgADst
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2024-02-07 at 22:18 -0500, Paul Moore wrote:
-> On Jan 15, 2024 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> >=20
-> > IMA and EVM are not effectively LSMs, especially due to the fact that i=
-n
-> > the past they could not provide a security blob while there is another =
-LSM
-> > active.
-> >=20
-> > That changed in the recent years, the LSM stacking feature now makes it
-> > possible to stack together multiple LSMs, and allows them to provide a
-> > security blob for most kernel objects. While the LSM stacking feature h=
-as
-> > some limitations being worked out, it is already suitable to make IMA a=
-nd
-> > EVM as LSMs.
-> >=20
-> > The main purpose of this patch set is to remove IMA and EVM function ca=
-lls,
-> > hardcoded in the LSM infrastructure and other places in the kernel, and=
- to
-> > register them as LSM hook implementations, so that those functions are
-> > called by the LSM infrastructure like other regular LSMs.
->=20
-> Thanks Roberto, this is looking good.  I appreciate all the work you've
-> put into making this happen; when I first mentioned this idea I figured
-> it would be something that would happen much farther into the future, I
-> wasn't expecting to see you pick this up and put in the work to make it
-> happen - thank you.
+This series adds the missing cache flush and dirty track set for nested
+parent domain (it's s2_domain but used as parent) which has no insight
+into devices/DID's under the nested domain (a.k.a s1_domain). This
+results in missing cache flush per parent domain change and incomplete
+dirty tracking set on the parent domain. There was a discussion about
+this in the mailing list [1].
 
-Thanks! I also appreciate a lot your guidance and suggestions.
+This series adds a s1_domains list in the parent domain to track the nested
+domains. Hence, the driver can loop the nested domains and use the DIDs of
+the nested domain to flush iotlb. The driver can also loop the nested domains
+and nested domain's devices list to flush device iotlb and set the dirty
+tracking completely.
 
-> I had some pretty minor comments but I think the only thing I saw that
-> I think needs a change/addition is a comment in the Makefile regarding
-> the IMA/EVM ordering; take a look and let me know what you think.
+This series doesn't touch the pasid iotlb or the pasid devtlb as there is
+no support of attaching pasid to nested domain yet. It will be covered when
+that feature is enabled.
 
-Oh, I remember well, it is there but difficult to spot...
+The complete code can be found at[2], this has been tested with a hacky
+Qemu[3] to test the unmap on parent domain and dirty tracking set on parent
+domain. This just verifies the new path. So appreciated to see t-b with
+regression tests.
 
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -18,5 +18,6 @@ integrity-$(CONFIG_LOAD_IPL_KEYS) +=3D platform_certs/loa=
-d_ipl_s390.o
- integrity-$(CONFIG_LOAD_PPC_KEYS) +=3D platform_certs/efi_parser.o \
-                                      platform_certs/load_powerpc.o \
-                                      platform_certs/keyring_handler.o
-+# The relative order of the 'ima' and 'evm' LSMs depends on the order belo=
-w.
- obj-$(CONFIG_IMA)			+=3D ima/
- obj-$(CONFIG_EVM)			+=3D evm/
+This aims to the 6.8 rc#, so your special attention is welcomed.
 
-> There are also a few patches in the patchset that don't have an
-> ACK/review tag from Mimi, although now that you are co-maininting IMA/EVM
-> with Mimi I don't know if that matters.  If the two of you can let me
-> know how you want me to handle LSM patches that are IMA/EVM related I
-> would appreciate it (two ACKs, one or other, something else?).
+[1] https://lore.kernel.org/linux-iommu/92f8aaca-093d-4161-b8f2-5ab1680df769@intel.com/
+[2] https://github.com/yiliu1765/iommufd/tree/vtd_nesting_fixes
+[3] https://github.com/yiliu1765/qemu/tree/tmp/for-testing-unmap-and-dirty-set-on-parent
 
-Ok, we will come back to you about this.
+base commit: 547ab8fc4cb04a1a6b34377dd8fad34cd2c8a8e3
 
-> Once you add a Makefile commane and we sort out the IMA/EVM approval
-> process I think we're good to get this into linux-next.  A while back
-> Mimi and I had a chat offline and if I recall everything correctly she
-> preferred that I take this patchset via the LSM tree.  I don't have a
-> problem with that, and to be honest I would probably prefer
-> that too, but I wanted to check with everyone that is still the case.
-> Just in case, I've added my ACKs/reviews to this patchset in case this
-> needs to be merged via the integrity tree.
+Regards,
+	Yi Liu
 
-Ok, given that there is the comment in the Makefile, the last thing to
-do from your side is to remove the vague comment in the file_release
-patch.
+Yi Liu (8):
+  iommu/vt-d: Track nested domains in parent
+  iommu/vt-d: Add __iommu_flush_iotlb_psi()
+  iommu/vt-d: Add missing iotlb flush for parent domain
+  iommu/vt-d: Update iotlb in nested domain attach
+  iommu/vt-d: Add missing device iotlb flush for parent domain
+  iommu/vt-d: Remove @domain parameter from
+    intel_pasid_setup_dirty_tracking()
+  iommu/vt-d: Wrap the dirty tracking loop to be a helper
+  iommu/vt-d: Add missing dirty tracking set for parent domain
 
-Other than that, I think Mimi wanted to give a last look. If that is
-ok, then the patches should be ready for your repo and linux-next.
+ drivers/iommu/intel/iommu.c  | 213 ++++++++++++++++++++++++++---------
+ drivers/iommu/intel/iommu.h  |   7 ++
+ drivers/iommu/intel/nested.c |  12 ++
+ drivers/iommu/intel/pasid.c  |   3 +-
+ drivers/iommu/intel/pasid.h  |   1 -
+ 5 files changed, 182 insertions(+), 54 deletions(-)
 
-Thanks
-
-Roberto
+-- 
+2.34.1
 
 
