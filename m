@@ -1,169 +1,139 @@
-Return-Path: <linux-kselftest+bounces-4355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF7B84E575
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 17:52:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F8B584E58D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 17:54:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CEE5B26D6F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 16:52:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4571628C4D8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 16:54:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A21687F481;
-	Thu,  8 Feb 2024 16:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113F07EF1C;
+	Thu,  8 Feb 2024 16:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AxBJ0I4B"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SAjcfyUU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF07D81ABC;
-	Thu,  8 Feb 2024 16:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5647B3F7
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Feb 2024 16:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707411090; cv=none; b=DeDhzhkdbNK24hZmMw651lCwRdZyAcgdc2vFH+13T5vi0Yq8ShF5dE7RJt+fRcfqXBkZ6QH9a9MgCQLX/Jyl6RoWzDr1bhYxY4h0R0yWRdWFRa07XXrfBfqtnr8AO4EW2cuq7KD6jHJR6SuQtI6axlGTNMbo4d+xBoA4Ol7AnEs=
+	t=1707411295; cv=none; b=X7UsJ1IMurjE+Sn/+LsI8VZR4RCNsQsA99KDM5Ru5zNFQ/ZKrpwZ1tTxQ3B9fXeIzDfqk2rOP1rox/jhBYgMb9apNeorubHZ219D/WvtSs66HBBx3NYTEQZ9um3SyENy1MrJcIn1iuoxMWS9hlLjdrF6s8INuTtSsRqevRD+eK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707411090; c=relaxed/simple;
-	bh=xzC243P64BD4dxu+mYtwLuALx8x8SKQa6GlBkvYhvAY=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UqXeq/Gy3RgrhA+L3yMBL8Wz4UfSPj+SokVYQyMeiiMWLHlz9tLx6DGTc5K/2eJr4Ay+38mmouqnLkehr5qzA4ra/Sn9pVP2GiQyKLoLM7iux1tfDL1p9uBlb3Nxgx7SE8hHvmXCWnwcWea2fJJb2XhaS0bkZe3SsR7Q1Z9YEjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AxBJ0I4B; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-41008ab427fso651315e9.0;
-        Thu, 08 Feb 2024 08:51:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707411087; x=1708015887; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BKmRKXQ4Jb/UJrwbolAziRwHoP1CqWPr7lokSDT3Zv8=;
-        b=AxBJ0I4Bnv52AE55DZtgtZxJHwKo/GIRiGc8t1xnQyxVx3S3XQParJyOXx/5/1hv2b
-         S/emQJ46s0iAf/KpWVxCmd2mRDOOGv+2KUkH5J7TWU+lY663+oubSjODcxk02sJp2qV0
-         BaZMH5L2xG18WW5h9Q7PhtVT7Q9t9s06dY17kwBUQyjRVv1wq5NQmoKrAxgZI7W5tbyN
-         B3z0N24lnWtBFl1wTl/YxwM/n2HUZhx6hlrUEJuvelCRbZFDgIbkrHDVL5Y1cOnLYGFm
-         FXoCZyAGJ8Gn5TCXvEVd4LUGKI4zjTc4PkXH17ydoqGpaFk4+HQf7IiVwFlOOPeanAFa
-         oX2g==
+	s=arc-20240116; t=1707411295; c=relaxed/simple;
+	bh=pwkbxHr+wV4lRfBW8VEFVSI9oXUQQRqg9CKvI1QBSpQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fWEBeOpx44ufpuXm1uLlRtqZpdWLY90FkZ+J2MV9+/4X5HvjJhX1a5WoYHnFEo2E8/vllLGaIFHZqjI24PXG7M6nn3H/aCaEeW6siiGiifxTcTwvbg1nFtkkLSs8/PbPmrnGqacgCrelrlPoFKbPOhJwI56tNqZtLM49o0xOF6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SAjcfyUU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707411292;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Pr8Wnhn3ZiAH6NmrVrcRCnpAsccxFtE5CsyRB/2mlfg=;
+	b=SAjcfyUUPozddTDe63Az5bIPjxBpd7JgsOYGUkdJXOTyi2PPTLkzT1gXYVAtmUqpXRrRtR
+	uJyYWfgk1DKGlBVebcGKAvMULLmzoiCW+RJLcSi+tc+HxjN4wGLSYQsQPpnWXrJn8lZaS4
+	BnGP0uuROphtf3Q6Dpxs9xlpcG4iTp4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-487-RJQhP8NBOXm83u5pX1IwFg-1; Thu, 08 Feb 2024 11:54:50 -0500
+X-MC-Unique: RJQhP8NBOXm83u5pX1IwFg-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40e354aaf56so116675e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Feb 2024 08:54:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707411087; x=1708015887;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BKmRKXQ4Jb/UJrwbolAziRwHoP1CqWPr7lokSDT3Zv8=;
-        b=S7HPzEcnhNg2A8p0Si+5N0rVoo5HJWuLPQukbeDc3YDUx6mfeGgrB8XJcamDn73cHR
-         LhPgOzCbE4YLkGqxFmxptAMOXkLkdsr1pdluudBKzqfIdafD3uSG7mP/S6uIUxdJ45cL
-         UmZPrez1gu7dgQdDLUPSSPcL2WT40Ibxr36hAYapPxH7PLDLMz5dUXmkuk0WoNaw/T4J
-         sHteQLwjH0oGIdNES5qD9q32U5Vr9A6pjaGXSC8k78p+5Y+x67HIwXlL6v7LgxM4uTRs
-         s8QLvOeYmGHRzoYOnwA+VSgWfrFSoDONFdwhj6W+3gF1FLXpfKyRH26AuXrTevXWDrFM
-         5bHQ==
-X-Gm-Message-State: AOJu0YxiCvj0cENuzlczYdma9ZQn4qat0E0zvoauuVyOVZkF2l48kVXw
-	UJmkijSLbxUCZiY8vl9if9gPmm6pBW/S9mUrYinlU/TkpiQKT1cM
-X-Google-Smtp-Source: AGHT+IG98zrnkTg7fNviSPhs9dA5QQKDFf0R75aZSaa7TrzSaBD5iM3Z4iLKBGwnVTuNoUDV2ArfTA==
-X-Received: by 2002:a05:600c:1390:b0:40e:a569:3555 with SMTP id u16-20020a05600c139000b0040ea5693555mr7176214wmf.35.1707411086636;
-        Thu, 08 Feb 2024 08:51:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUJGeVnGM1lvv2MH7XIj5f2p/JxGIGtjAiHNgpy9kBet5NobTXGQKb1AyMzKpLypnfjDu2z/xOytq/bA3PTsVPLibIpy2/fyDpBXD56ZMBYTRhfcA2QFMblj68MYTjaxxPNPPWEXt8Zr8AppKd9iM2RPeCiu5mUh37nMJPRuii360LL3VYh5FmOCgJJIrcVmCNN1Nj7EHkJkUSeUbO+3SSYcCh2/SAO13fZQnQuw0v1wtAGXK79i0kbUBHtgeuaS9xz6FHIzipQI5nVfuNExrF0VQNRFUWK5OfMmW4ukVdepViLHCuha0TEp0AlPm06TmMjGntWiOtEU+xGMg3E4AnMy71lQSqJjgT1ZoqBjNA9hkBxGrGAvOiuN7dcFhvuBoae38d6MS2ds0+OtDbZo/AjpGGz8L7SJJ2ByFzpJSLM++X2vaw=
-Received: from [192.168.10.199] (54-240-197-239.amazon.com. [54.240.197.239])
-        by smtp.gmail.com with ESMTPSA id m33-20020a05600c3b2100b004100826da82sm2153919wms.21.2024.02.08.08.51.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Feb 2024 08:51:26 -0800 (PST)
-From: Paul Durrant <xadimgnik@gmail.com>
-X-Google-Original-From: Paul Durrant <paul@xen.org>
-Message-ID: <148d903c-fcc5-4a6a-aef1-c1e77e74d0fc@xen.org>
-Date: Thu, 8 Feb 2024 16:51:18 +0000
+        d=1e100.net; s=20230601; t=1707411290; x=1708016090;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pr8Wnhn3ZiAH6NmrVrcRCnpAsccxFtE5CsyRB/2mlfg=;
+        b=Yqau+GZ3bnrUX/rPghBurnTneSPRCfACwx5dKcRZySernkyB4LhQvrBH/aW3IiyyVw
+         e3Qusonn4ysniyFaHEiJ6QSFQpmcTsMTDntsHG0y3mHZV1n/EOUblTtfQp95CbtKdSwn
+         CCA3CliEt4JMNrJv5ltSGZPBp5nGmf7FF0BH91Bb3nCTUl0FSCfY5bKtcspfUTWINOIQ
+         nSrenA5rl2n9JNe9HjuJwVqA9lSCYxmVy46XpzBz1vkm42VGOGeYjZUHnw+AcZOnzUmI
+         jX8Rx3Tx+eReJSjIKRhj45/Cn8QX+RXOCYboIFd4MYMNzYY5AHFF75nocThMEqhVtzZc
+         rJew==
+X-Forwarded-Encrypted: i=1; AJvYcCUTjpaV7nyGhCBFdTyReKnaDYOyDwNSBEI0DlH4WEmctbXhMqGq1+5fTWm98QdGNApxm2ZVu6tAgDzzZrrmUKHzqUEH2TdNBjOZppOU6S4S
+X-Gm-Message-State: AOJu0Yw/p4j+xHMdrZt6XGK/jz+4mxLos/oA+9YtpNm4t9LfqdBvU3fd
+	vfbvQvVOdc/IqUXN+dfXFx18EDxqvXezvkZfmEPs8zvQ/0HKnMAeyQ/8xaW4IeszAXnp8AkPSKi
+	207cweyr/lx7ezQ4Gbsy6+J7lDPXKe4vkc2xWcXl2jvTN6+985Q5UhnyNOlGum1w6pg==
+X-Received: by 2002:a05:600c:1d07:b0:40f:b8d6:7586 with SMTP id l7-20020a05600c1d0700b0040fb8d67586mr7224173wms.2.1707411289746;
+        Thu, 08 Feb 2024 08:54:49 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE7G4BId/ssFGr0z17YcvgChcToBD0X3zqKy2KqnjflxHqQfJp+eHSF/JnZPVZmS9zVqQcAhw==
+X-Received: by 2002:a05:600c:1d07:b0:40f:b8d6:7586 with SMTP id l7-20020a05600c1d0700b0040fb8d67586mr7224156wms.2.1707411289388;
+        Thu, 08 Feb 2024 08:54:49 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWg6L0gcQvh44BJxxnlfzgJTke7NoJ8ytCozghTQaOUAHfdCrp45ZQmRtnQjkIPR6YfO7evVvpF/U9PB9vOuAq4UMg9u8XN/bGpKKn5zUpyQxV7tjhRKEejqdFNwkKoShgB8DmzEa4q9oMw/R/aKnAkmGoQxAzN2hCKm6EQNdYZonZ+SDEMzPXV4dPlGVI/osQKXEPxPoibdNRCQjrUW7foPBfx3fcFh+hI5cuZw4HokbWGlk57UpT0JeqZxbbApqPVYKXgg2g=
+Received: from gerbillo.redhat.com (146-241-238-112.dyn.eolo.it. [146.241.238.112])
+        by smtp.gmail.com with ESMTPSA id fm5-20020a05600c0c0500b00410141aa57csm2139986wmb.15.2024.02.08.08.54.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Feb 2024 08:54:48 -0800 (PST)
+Message-ID: <9d79627f676484590eac5f6b54758ab315f316fc.camel@redhat.com>
+Subject: Re: [PATCH net v2] selftests: net: Fix bridge backup port test
+ flakiness
+From: Paolo Abeni <pabeni@redhat.com>
+To: Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, edumazet@google.com, 
+	razor@blackwall.org, shuah@kernel.org, petrm@nvidia.com
+Date: Thu, 08 Feb 2024 17:54:47 +0100
+In-Reply-To: <20240208123110.1063930-1-idosch@nvidia.com>
+References: <20240208123110.1063930-1-idosch@nvidia.com>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: paul@xen.org
-Subject: Re: [PATCH v12 11/20] KVM: xen: allow shared_info to be mapped by
- fixed HVA
-Content-Language: en-US
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>,
- kvm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20240115125707.1183-1-paul@xen.org>
- <20240115125707.1183-12-paul@xen.org> <ZcMCogbbVKuTIXWJ@google.com>
- <92918ee8-3cc9-41c3-a284-5cd6648abc05@xen.org> <ZcUF-TNbykWvh3r7@google.com>
-Organization: Xen Project
-In-Reply-To: <ZcUF-TNbykWvh3r7@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 08/02/2024 16:48, Sean Christopherson wrote:
-> On Thu, Feb 08, 2024, Paul Durrant wrote:
->> On 07/02/2024 04:10, Sean Christopherson wrote:
->>> On Mon, Jan 15, 2024, Paul Durrant wrote:
->>>> @@ -638,20 +637,32 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
->>>>    		}
->>>>    		break;
->>>> -	case KVM_XEN_ATTR_TYPE_SHARED_INFO: {
->>>> +	case KVM_XEN_ATTR_TYPE_SHARED_INFO:
->>>> +	case KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA: {
->>>>    		int idx;
->>>>    		mutex_lock(&kvm->arch.xen.xen_lock);
->>>>    		idx = srcu_read_lock(&kvm->srcu);
->>>> -		if (data->u.shared_info.gfn == KVM_XEN_INVALID_GFN) {
->>>> -			kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
->>>> -			r = 0;
->>>> +		if (data->type == KVM_XEN_ATTR_TYPE_SHARED_INFO) {
->>>> +			if (data->u.shared_info.gfn == KVM_XEN_INVALID_GFN) {
->>>> +				kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
->>>> +				r = 0;
->>>> +			} else {
->>>> +				r = kvm_gpc_activate(&kvm->arch.xen.shinfo_cache,
->>>> +						     gfn_to_gpa(data->u.shared_info.gfn),
->>>> +						     PAGE_SIZE);
->>>> +			}
->>>>    		} else {
->>>> -			r = kvm_gpc_activate(&kvm->arch.xen.shinfo_cache,
->>>> -					     gfn_to_gpa(data->u.shared_info.gfn),
->>>> -					     PAGE_SIZE);
->>>> +			if (data->u.shared_info.hva == 0) {
->>>
->>> I know I said I don't care about the KVM Xen ABI, but I still think using '0' as
->>> "invalid" is ridiculous.
->>>
->>
->> With the benefit of some sleep, I'm wondering why 0 is a 'ridiculous'
->> invalid value for a *virtual* address? Surely it's essentially a numerical
->> cast of the canonically invalid NULL pointer?
-> 
-> It's legal to mmap() virtual address '0', albeit not by default:
-> 
->    config DEFAULT_MMAP_MIN_ADDR
-> 	int "Low address space to protect from user allocation"
-> 	depends on MMU
-> 	default 4096
-> 	help
-> 	  This is the portion of low virtual memory which should be protected
-> 	  from userspace allocation.  Keeping a user from writing to low pages
-> 	  can help reduce the impact of kernel NULL pointer bugs.
-> 
-> 	  For most ppc64 and x86 users with lots of address space
-> 	  a value of 65536 is reasonable and should cause no problems.
-> 	  On arm and other archs it should not be higher than 32768.
-> 	  Programs which use vm86 functionality or have some need to map
-> 	  this low address space will need CAP_SYS_RAWIO or disable this
-> 	  protection by setting the value to 0.
-> 
-> 	  This value can be changed after boot using the
-> 	  /proc/sys/vm/mmap_min_addr tunable.
-> 
-> 
-> Obviously it's equally ridiculous that userspace would ever mmap() '0' and pass
-> that as the shared_info, but given that this is x86-only, there are architecturally
-> illegal addresses that can be used, at least until Intel adds LA64 ;-)
+On Thu, 2024-02-08 at 14:31 +0200, Ido Schimmel wrote:
+> The test toggles the carrier of a bridge port in order to test the
+> bridge backup port feature.
+>=20
+> Due to the linkwatch delayed work the carrier change is not always
+> reflected fast enough to the bridge driver and packets are not forwarded
+> as the test expects, resulting in failures [1].
+>=20
+> Fix by busy waiting on the bridge port state until it changes to the
+> desired state following the carrier change.
+>=20
+> [1]
+>  # Backup port
+>  # -----------
+>  [...]
+>  # TEST: swp1 carrier off                                              [ =
+OK ]
+>  # TEST: No forwarding out of swp1                                     [F=
+AIL]
+>  [  641.995910] br0: port 1(swp1) entered disabled state
+>  # TEST: No forwarding out of vx0                                      [ =
+OK ]
+>=20
+> Fixes: b408453053fb ("selftests: net: Add bridge backup port and backup n=
+exthop ID test")
+> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+> Reviewed-by: Petr Machata <petrm@nvidia.com>
+> ---
+>=20
+> Notes:
+>     v2:
+>     * Use busy waiting instead of 1 second sleep.
 
-Ok. Thanks for the reference.
+Fine by be, thanks!
+
+Acked-by: Paolo Abeni <pabeni@redhat.com>
 
 
