@@ -1,144 +1,142 @@
-Return-Path: <linux-kselftest+bounces-4347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 402DE84E2F4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 15:17:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A284B84E439
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 16:46:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC8AD29047A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 14:17:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC06AB21159
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Feb 2024 15:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7903178B5E;
-	Thu,  8 Feb 2024 14:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6DA27CF0E;
+	Thu,  8 Feb 2024 15:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cpIHrnvw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FhtU+GRq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8079C7640C
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Feb 2024 14:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF977B3EA
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Feb 2024 15:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707401822; cv=none; b=qflcF/myyZO2nfm2A8VkWf5z2j/kfliQn9PkeK4bCNyxZ83OVTrkbhJNWJ4EYrAfRzCnu7rAeEXJ1d1UrFPLKfToEm1/lHx6AwhzTCVcCI5x+Kg7ZHztpEkTGsQzG5TZYvzM3SYYzOMzMVAWme5ve9fx0+LZnmGGd5pherDxDJE=
+	t=1707407152; cv=none; b=XU8Qu9x+yM2vxSD9VYDlDkGeByfSMh9rQLxvOoiXpqY46FBLEcaDpbHuyP9Nw8QCGgKy3s+epZ+v+04frYAsPQNRRf94ulzJ8QVkwz4zxHhZoX9mIYkinBOT8lsyvoUETU5Deby5y5Z/WP6he61UxXGlPvjkhtTpW/3HvRmUWMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707401822; c=relaxed/simple;
-	bh=ujj/RLFDfuqS7PIZP68+3l/KZkd1KHttxlgRuGySCOs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c8gzT6/CA4688WxrOzup+HvX2qJejkgKuh3/eA2xDe0ogJlTAd0D83Bu8+3SD9L62k55fZrDg9FJ3HL7ETl3ehruonSVtPNe05CGJieO0KsL4PThOLNSTmbyqn/T3obJ8sZ/bqnAR20+t4z/90XcLCDAK19cioK930h2IabJPaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cpIHrnvw; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dbed179f0faso691635276.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Feb 2024 06:17:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1707401819; x=1708006619; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5rHe4xV1s4X4NVlAmyq1Fqck0kWWWvVIv4qB+Ky5Oo4=;
-        b=cpIHrnvwduqrSfAbUDvwcTPVwb8rM5uk1zLq3xwzi1+jkLLXKNesv/zHRV50VOFZaB
-         mjlVz2xq0Xc8wRbbScpCr3Wh5pqRY9CZuD3kTn2yTGmzl+o8rE0z/xm05jjVGkOWGawM
-         Xxxv8E2Gc9w3bLvEcWitgQLLWHaZUaDvduZSg9GuLo7L3cKhJ5uJxf6emmisiriIiips
-         pdVU8EKnp07svFd9da5oSFwwvxUFKN4N4Lb4ISOGhVuRuy+FWj1WfqwXv6Nb3t+CYuAw
-         QNYIU7wJoFpclTxaQAF4DVT9S3X15ml/BEDGJMv/ATW8HrjwHnYfPjXqKrRyICCe0GOf
-         InRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707401819; x=1708006619;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5rHe4xV1s4X4NVlAmyq1Fqck0kWWWvVIv4qB+Ky5Oo4=;
-        b=QIY8X28Ea1eiskRSSCc7xiQp9kZ+k/flj/ixmX/+ArDi7AzIeDi8G3jhs99UqHUrrQ
-         U5+wgnSKiGDxIueDIdupzav6e3TqUv6vvXXpaqAEh84zPVKE/3L9zDSSUZTMsChzB77V
-         G18ySrowCh3tGtFaNPYMQKYUxJZEtksDMiO/504+kOOY0DfOW/gtkNa7JWs3IQRssIDJ
-         uq0Hp5J0okvh28IGo+283gaAB3NjGQBhfaFTUhKil4ZwlmgpkR6a8P1dzhlcV2Wfn1q3
-         jHsZ01DTI4G2k/QaaHCQ/l6sXei7jejX+NmcIRuHDlnjGmXvQX4Fxxnk8LmTd2/uXvAm
-         E7mw==
-X-Forwarded-Encrypted: i=1; AJvYcCUYyoJp/OyaKSLY2Rl6s6JoUR++BqSAsk+N5ufffCmnlztXj1HZXEOkVtvNQa3HeoiAolupOvjyPAtPveelJEo8tT0J63WXURD2iBwWwCJy
-X-Gm-Message-State: AOJu0Yy7y3umb3nXhlFH+GgrHYjsCloygqTF2EXxR4k1JxXBwTGRddIk
-	LfSRW/Gt7FPtJ1oIwiQdKPsRqxJ11GayN2KYJiLZ6ggxMzvNlXg+apbUPICaZZtxnppE83j2fZL
-	bbkWIg4fWLqX3gDQloR2oaeRkHII9bDuVeOY4
-X-Google-Smtp-Source: AGHT+IF4KdKYv/i3KNL4LQkNiYFcff3UiechbnntE/n8lsxGtDCyAecpPgauuzlLRFB/79dZx13Kgoa30gmOFF58owY=
-X-Received: by 2002:a25:7483:0:b0:dc6:c2ec:ff4c with SMTP id
- p125-20020a257483000000b00dc6c2ecff4cmr1925355ybc.6.1707401819151; Thu, 08
- Feb 2024 06:16:59 -0800 (PST)
+	s=arc-20240116; t=1707407152; c=relaxed/simple;
+	bh=+HJYZ8oqHC3FdNT1e4ehv7w01FCjmZKJPFhODlJSz5o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cc8gOr3KUh4FsATiaMLD4Yn4kzxk0cI8Qu5CrXT7+rR2VHA+Nipehw1iXKff6co7XtfZU6QrG3Jmmo0cO8gfc0TyLgPtSwfyOT5yox7Nhwu2704zL8nWUyOLZ9vIS7rEQXQ3+wPLkN/vbXbR8u/TQ89sbJIUJ76JAP41jwqhESQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FhtU+GRq; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707407149;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PkIkmm1xiMrNbNoPpK4ngd8OZ7yo/e1nfxvctzpMBYM=;
+	b=FhtU+GRq8HXNydI7p1V5CPlsyT99Vetz2KaWtPJCZm6X8DdrtSunPp+U23YzPdMD0do2NM
+	+ungf4UHNSY1WqUFsZvRbH1TW/+jctbG92JWRk/TT0F1vm2HPXHXRHfi5j5KEs0HZE8afN
+	EVy2lq0t9vod0ycmh2XdmPcxl8aAA+4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-223-rKduAvwiNq-EryYzdOdk5A-1; Thu, 08 Feb 2024 10:45:45 -0500
+X-MC-Unique: rKduAvwiNq-EryYzdOdk5A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B474885A588;
+	Thu,  8 Feb 2024 15:45:44 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.45.224.247])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 30D6D2166B31;
+	Thu,  8 Feb 2024 15:45:43 +0000 (UTC)
+From: Paolo Abeni <pabeni@redhat.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: net: wait for receiver startup in so_txtime.sh
+Date: Thu,  8 Feb 2024 16:45:34 +0100
+Message-ID: <53a7e56424756ef35434bc15a90b256bcf724651.1707407012.git.pabeni@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
- <d54ca249c3071522218c7ba7b4984bab@paul-moore.com> <dd8a979df500489c0d8595f9a3f89c801ce6f1c2.camel@huaweicloud.com>
-In-Reply-To: <dd8a979df500489c0d8595f9a3f89c801ce6f1c2.camel@huaweicloud.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 8 Feb 2024 09:16:48 -0500
-Message-ID: <CAHC9VhRu-_v19zWS0Pm0-4E-PWONcfR1-=Ekz9ObuOAgL0Y+sA@mail.gmail.com>
-Subject: Re: [PATCH v9 0/25] security: Move IMA and EVM to the LSM infrastructure
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
-	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
-	tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, dhowells@redhat.com, 
-	jarkko@kernel.org, stephen.smalley.work@gmail.com, eparis@parisplace.org, 
-	casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
-On Thu, Feb 8, 2024 at 3:06=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Wed, 2024-02-07 at 22:18 -0500, Paul Moore wrote:
+The mentioned test is failing in slow environments:
 
-...
+  # SO_TXTIME ipv4 clock monotonic
+  # ./so_txtime: recv: timeout: Resource temporarily unavailable
+  not ok 1 selftests: net: so_txtime.sh # exit=1
 
-> > I had some pretty minor comments but I think the only thing I saw that
-> > I think needs a change/addition is a comment in the Makefile regarding
-> > the IMA/EVM ordering; take a look and let me know what you think.
->
-> Oh, I remember well, it is there but difficult to spot...
->
-> --- a/security/integrity/Makefile
-> +++ b/security/integrity/Makefile
-> @@ -18,5 +18,6 @@ integrity-$(CONFIG_LOAD_IPL_KEYS) +=3D platform_certs/l=
-oad_ipl_s390.o
->  integrity-$(CONFIG_LOAD_PPC_KEYS) +=3D platform_certs/efi_parser.o \
->                                       platform_certs/load_powerpc.o \
->                                       platform_certs/keyring_handler.o
-> +# The relative order of the 'ima' and 'evm' LSMs depends on the order be=
-low.
->  obj-$(CONFIG_IMA)                      +=3D ima/
->  obj-$(CONFIG_EVM)                      +=3D evm/
+The receiver is started in background and the sender could end-up
+transmitting the packet before the receiver is ready, so that the
+later recv times out.
 
-Great, thanks for that.  Not sure how I missed that ... ?
+Address the issue explcitly waiting for the socket being bound to
+the relevant port.
 
-> > Once you add a Makefile commane and we sort out the IMA/EVM approval
-> > process I think we're good to get this into linux-next.  A while back
-> > Mimi and I had a chat offline and if I recall everything correctly she
-> > preferred that I take this patchset via the LSM tree.  I don't have a
-> > problem with that, and to be honest I would probably prefer
-> > that too, but I wanted to check with everyone that is still the case.
-> > Just in case, I've added my ACKs/reviews to this patchset in case this
-> > needs to be merged via the integrity tree.
->
-> Ok, given that there is the comment in the Makefile, the last thing to
-> do from your side is to remove the vague comment in the file_release
-> patch.
->
-> Other than that, I think Mimi wanted to give a last look. If that is
-> ok, then the patches should be ready for your repo and linux-next.
+Fixes: af5136f95045 ("selftests/net: SO_TXTIME with ETF and FQ")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+---
+Note that to really cope with slow env the mentioned self-tests also
+need net-next commit c41dfb0dfbec ("selftests/net: ignore timing
+errors in so_txtime if KSFT_MACHINE_SLOW"), so this could be applied to
+net-next, too
+---
+ tools/testing/selftests/net/so_txtime.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-If Mimi is okay with the patchset as-is, and both of you would prefer
-this to in via the LSM tree, don't worry about the file_release
-comment, I'll just remove that when merging.
+diff --git a/tools/testing/selftests/net/so_txtime.sh b/tools/testing/selftests/net/so_txtime.sh
+index 3f06f4d286a9..ade0e5755099 100755
+--- a/tools/testing/selftests/net/so_txtime.sh
++++ b/tools/testing/selftests/net/so_txtime.sh
+@@ -5,6 +5,8 @@
+ 
+ set -e
+ 
++source net_helper.sh
++
+ readonly DEV="veth0"
+ readonly BIN="./so_txtime"
+ 
+@@ -51,13 +53,16 @@ do_test() {
+ 	local readonly CLOCK="$2"
+ 	local readonly TXARGS="$3"
+ 	local readonly RXARGS="$4"
++	local PROTO
+ 
+ 	if [[ "${IP}" == "4" ]]; then
+ 		local readonly SADDR="${SADDR4}"
+ 		local readonly DADDR="${DADDR4}"
++		PROTO=udp
+ 	elif [[ "${IP}" == "6" ]]; then
+ 		local readonly SADDR="${SADDR6}"
+ 		local readonly DADDR="${DADDR6}"
++		PROTO=udp6
+ 	else
+ 		echo "Invalid IP version ${IP}"
+ 		exit 1
+@@ -65,6 +70,7 @@ do_test() {
+ 
+ 	local readonly START="$(date +%s%N --date="+ 0.1 seconds")"
+ 	ip netns exec "${NS2}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" -S "${SADDR}" -D "${DADDR}" "${RXARGS}" -r &
++	wait_local_port_listen "${NS2}" 8000 "${PROTO}"
+ 	ip netns exec "${NS1}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" -S "${SADDR}" -D "${DADDR}" "${TXARGS}"
+ 	wait "$!"
+ }
+-- 
+2.43.0
 
---=20
-paul-moore.com
 
