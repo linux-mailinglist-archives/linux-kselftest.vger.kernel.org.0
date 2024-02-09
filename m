@@ -1,96 +1,117 @@
-Return-Path: <linux-kselftest+bounces-4481-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4483-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE08584FE0D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 22:00:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34E3D85008D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Feb 2024 00:01:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F0422841C4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 21:00:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47A321C21B7C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 23:01:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DCDE15AF1;
-	Fri,  9 Feb 2024 21:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D620737149;
+	Fri,  9 Feb 2024 23:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LLDuZ9Xs"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OXm3sJna"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5476612B79;
-	Fri,  9 Feb 2024 21:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD119364AE;
+	Fri,  9 Feb 2024 23:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707512431; cv=none; b=X+BRQYbkcNtpJTTBjUvQ5OvhjoX4UzqV2FKhouY0OryNAPOR4aByOwTMEvSS5lt0/Wc6C5eNhULHZSK2PqUdZmsiHKsutFVwFEh7pCsdmz1Mfdl5+lL/uEKcZivFUKoxl5CIPmvgbaFnxNEzEqmPmAdJL8TQBEW05Xk6DTjEHhc=
+	t=1707519667; cv=none; b=nlvQOW3B+PScDSdCq9vHqu3nMxQW9YT6+X3dM/aSuBI9JeQ1L67JSCrrPRl2rGI31UIYLBVJ9GEhxz04Q9HMNupA1Dmy/8Kg6cy9yGN8kB45tNp95tT9eWldQg4uU9gpsm0dw8TowQoaQl/mTK8b9tMQDDadXZWowdKla129i2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707512431; c=relaxed/simple;
-	bh=SI2LJmBeBomZH+OUYEwj+ZAkonco7EuXhYvfIKHbf90=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=k46DdGdFXlk/SNIQkj5rPS7AazbH0UKtonkN1+g5Ys3NoHq5/7ZNMZTprqZqF33C8CgNa4Y5psA3FVDFdDB/XsAnlD/wYNewTY5oqMYwL3CVi0ZbCDzlNX5F12n7mp0JgO67CtOdKIItn/ihh5mB++cCHamaLfzR498FLs9GJPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LLDuZ9Xs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BF107C43601;
-	Fri,  9 Feb 2024 21:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707512430;
-	bh=SI2LJmBeBomZH+OUYEwj+ZAkonco7EuXhYvfIKHbf90=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LLDuZ9XsJqlr8oKREYKhgWOfaKLxGNq6rpEVZjyeTw1xiZi2Z2W+3SLJQ5NbEEudb
-	 Gl3Q370iTZvgmE+FbhPOBcFtESL3llqg/4RodOZWYg4xuVAeIYf67oh5YsgXBVN93U
-	 hImhFWzD0/8Kr1VgofBKV63Sk+GA1iOkkbZUYNWlQVoHe8f+S1R+wsArLBXfg+8HmR
-	 bzft5ya+KtJUGn6I/wx4NbkCcmxiACnd83U7PIrghWWe51n90VFvtj2H8vfr8yF/3d
-	 zYWQ6Yc1clcDXpf8Rb+hzY7y7PlcTLZeoN9j8qauTlb6Do+CRdrxovcI/9AChZ7QaL
-	 Z72bJKUpwuz0g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE03EC395F1;
-	Fri,  9 Feb 2024 21:00:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1707519667; c=relaxed/simple;
+	bh=f/s6qNu01ILKzMwDnVjntUiAteO3NPuo/Rty/dlQ9Ks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oLdxlF7FqNPiul8BD/xz20fnB9ef3xU3ky1ZeRvuxWOI/i2f/HUiengzF3DOMPrq3CKnJ3oGbuNxlMg9IAn5qnbOUV7YHDKOyRhU0nWIa5arwXO7lUHRWPsYmtsnnHC086+reZNDb9Y9vyKdhoXxQq3JGZg+IjXyFTE6R/Fvsos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OXm3sJna; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=gmacEVrfRMHpA0+533PB1RmxTePlSp6iAq0RpqSnWnI=; b=OXm3sJna4lSQPcZxFk6OnEORw7
+	xT+pdCOtmocB7lgsq4fifo8HXHZCM8MB77iHgPvVkyATuK93E6oOup88vp/vYGj24EmkolGCdMg+A
+	8V/G/i+lZ2Ei9z4IKebndbi3DfKbVEqxKJ3ndMQEA5N/VaZmh6D55toso81e4e0+5EJpbVpam2j39
+	u0jMvJAlwqS71Z8YXCp8TW8VfWLZmx/Rsm400tn2seunqlz3Xu2+3xgyuAemKuw9n/8qi+51o2VgK
+	0IKdoaxBYR8J3qJm1olZsBLRVJckwgsZ1vlGeTMnpTBT0aqGnl8Coytb/zwqGDHY8iqwfhISg79YB
+	DiQknORQ==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rYZrU-00000000q1k-1hGw;
+	Fri, 09 Feb 2024 23:00:48 +0000
+Message-ID: <e8378ba2-ccd1-48fe-973d-38986fc0716d@infradead.org>
+Date: Fri, 9 Feb 2024 15:00:44 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: net: include forwarding lib
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170751243070.9207.408296797179580703.git-patchwork-notify@kernel.org>
-Date: Fri, 09 Feb 2024 21:00:30 +0000
-References: <f7b1e9d468224cbc136d304362315499fe39848f.1707298927.git.pabeni@redhat.com>
-In-Reply-To: <f7b1e9d468224cbc136d304362315499fe39848f.1707298927.git.pabeni@redhat.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 02/13] security: Introduce the digest_cache LSM
+Content-Language: en-US
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, mic@digikod.net
+Cc: linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ linux-integrity@vger.kernel.org, wufan@linux.microsoft.com,
+ pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org,
+ pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com,
+ jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com,
+ petrtesarik@huaweicloud.com, Roberto Sassu <roberto.sassu@huawei.com>
+References: <20240209140917.846878-1-roberto.sassu@huaweicloud.com>
+ <20240209140917.846878-3-roberto.sassu@huaweicloud.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240209140917.846878-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
+Hi--
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+On 2/9/24 06:09, Roberto Sassu wrote:
+> diff --git a/security/digest_cache/Kconfig b/security/digest_cache/Kconfig
+> new file mode 100644
+> index 000000000000..0c47d5151f07
+> --- /dev/null
+> +++ b/security/digest_cache/Kconfig
+> @@ -0,0 +1,17 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +config SECURITY_DIGEST_CACHE
+> +	bool "Digest_cache LSM"
+> +	default n
+> +	help
+> +	   This option enables an LSM maintaining a cache of digests
+> +	   (e.g. of file content or metadata).
+> +
+> +	   This LSM can support other kernel components in making access
+> +	   control decisions.
+> +
 
-On Wed,  7 Feb 2024 10:42:45 +0100 you wrote:
-> The altnames test uses the forwarding/lib.sh and that dependency
-> currently causes failures when running the test after install:
-> 
->   make -C tools/testing/selftests/ TARGETS=net install
->   ./tools/testing/selftests/kselftest_install/run_kselftest.sh \
->       -t net:altnames.sh
->   # ...
->   # ./altnames.sh: line 8: ./forwarding/lib.sh: No such file or directory
->   # RTNETLINK answers: Operation not permitted
->   # ./altnames.sh: line 73: tests_run: command not found
->   # ./altnames.sh: line 65: pre_cleanup: command not found
-> 
-> [...]
+nit:  -ESTYLE.
+coding-style.rst says:
 
-Here is the summary with links:
-  - [net-next] selftests: net: include forwarding lib
-    https://git.kernel.org/netdev/net-next/c/876e32473d1d
+Lines under a ``config`` definition
+are indented with one tab, while help text is indented an additional two
+spaces.
 
-You are awesome, thank you!
+> +config DIGEST_LIST_DEFAULT_PATH
+> +	string
+> +	default "/etc/digest_lists"
+> +	help
+> +	   Default directory where digest_cache LSM expects to find digest
+> +	   lists.
+
+Same comment for patch 03/13.
+Same comment for patch 04/13.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+#Randy
 
