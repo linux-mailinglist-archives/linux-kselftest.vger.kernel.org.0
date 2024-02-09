@@ -1,73 +1,72 @@
-Return-Path: <linux-kselftest+bounces-4386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A70784F059
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 07:42:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A0C884F05C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 07:42:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C63E628CBE7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 06:42:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A461EB286D2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 06:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DAF1664AC;
-	Fri,  9 Feb 2024 06:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC73664CF;
+	Fri,  9 Feb 2024 06:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="KaUBIE9Z"
+	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="lWmyg9Wo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6F765BCF
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Feb 2024 06:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8200664B0
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Feb 2024 06:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707460867; cv=none; b=k/C1b2MHWoP9ZXt6wmtw+l9lMcg/gA3jhRSH3y7zhQZ2fhSKTdeudenvNkh3Hc/DHGh2iGHiicuTfGVtPgslvHCaWRANC3FRKSBHD7iolBflvbe62mg5e/8VNHqoub4jCLgXc1eyd+/uBKHjx9XofVVaC6ZV2yaLQztjb6DteM4=
+	t=1707460869; cv=none; b=QfG4TkwZUj4h4vbOR0V2OxtE45JkxVQ4IQ6ZJ1TVLtA/Is/DvsuQkAGNLcZ700xbDe07gcfFMWe3kCYPQMJUFD7Q9SfMyNle6ADg6wt4tCThiXYSU28yacWeQbZAoTrtlHaF9EJwdeTVpCIQcJnuns4sv4VFGezyATq/3RV+jOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707460867; c=relaxed/simple;
-	bh=6yt58djLr4K/j01BKAd/9T/omJcD7zSGCQ9LoJyod5E=;
+	s=arc-20240116; t=1707460869; c=relaxed/simple;
+	bh=0z8i23JotdZYCWzu9gU2r1/A2xmE1LIuItfOUsSYf1M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E6kkIlc9ntt+5jC9y0JGxX8XeUpvlhhwgX8FZcl2CF5KcQpGjTfUzPv0Ptqz67jEZnslOA3LYexo2IqHVtun0uPjyt6NisFqcV2jIUca51hp4q0nv9o7VhOICNPn9tfFavVBHM4SAjljsCm3JPryYMpz8lT6ExiQAZKr1E0TZHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vrull.eu; spf=pass smtp.mailfrom=vrull.eu; dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b=KaUBIE9Z; arc=none smtp.client-ip=209.85.218.50
+	 MIME-Version:Content-Type; b=MkuwlMXE0VKayehf0K2IHKk4TZwtuupMbhoTazaczsDSaIGFF3G4a+FkjEgBdBQrSSQ2rs/ZBiPep4i1WkreIKHpHFZU0LEz3+ykWIyy9824ECZaxkJAB5SnZoR89teu2QtfA4QXHp4m/BI/GRybCnPQ9eb2vm1H6T2YA5PgFjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vrull.eu; spf=pass smtp.mailfrom=vrull.eu; dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b=lWmyg9Wo; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vrull.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vrull.eu
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a3864258438so110914366b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Feb 2024 22:41:05 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a3be9edf370so30328866b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Feb 2024 22:41:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vrull.eu; s=google; t=1707460864; x=1708065664; darn=vger.kernel.org;
+        d=vrull.eu; s=google; t=1707460866; x=1708065666; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bqv1kMDueOeDBLAFFzoizkbUOaos7eIuqxmLJzXo0DE=;
-        b=KaUBIE9ZycXKC6w0BlYJpvU8IW9r9lg3foVfRuwpff1ZVB8lMYQ5/3iPVzmWA7TvCE
-         XXGqsFS1qx6kvOJh6POfDh0wQwfRN43FqQaET35DtSfsq9mZYVZmwWDT5vF7fcnM2KG5
-         tKRgOHyLemM/xAB7gWca/oDqoo3K8qpyo5f6breWDhsjiBJyYVmolLcq3gwXbT78WqSS
-         TqgQwwIhe+O5vfc5xIviAWOVCjfE2TBcmOfTrN8GKWkSJ2YoRV07apANoA/1jdN7Fc23
-         NWWdG+HI757tsvniT66AgRV81sfAiQi/blA2vx+6DX5fG5hQmYDdAcOeot/irCrVRAu2
-         NfQw==
+        bh=L/ygjtZTVjHU12+LM3KMSNgL31cpnfsr1+pYQSNIAAg=;
+        b=lWmyg9WoWXcsAgqfvPWUUnRpzf5J9jo9E6tcCxhSiOuwpUvR0Or8wDC2EFjck5xAcB
+         Kd4T1hSsEcGkmbppJ4r7wx2vumYwliOhoZA9uX7GpKZWuFoXcFEKP70KpISAnA2zI5O9
+         k5kiNEj1pSDafxuwQ5WWlmKiK5eqFLPtwC20btGhQ8RmWE+sBFxhnRJUUUrsjgiIz8EA
+         25A4DxVh7kDhZtKTq3ZrgCTVEcnIoqpJwnmh7G89VH6AmCuZ10AiH6hRwGqnbnROjG6k
+         3t6WkWZP2/WCtSxiiU8v40bfX/hXPxAmIcalX7NJA2ZoE0QjHWBOH1Mk5nCpRn+0bom9
+         YONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707460864; x=1708065664;
+        d=1e100.net; s=20230601; t=1707460866; x=1708065666;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bqv1kMDueOeDBLAFFzoizkbUOaos7eIuqxmLJzXo0DE=;
-        b=X19RewJLFdYmcCUO8pnvQcsK96LMK4lfmD0CK9acmzFyXxtMoahMOWfsc+GF3IgPdC
-         7juZW4D+MJWv3B7gX/2ILHTN3Pyqoq9xO+XChmN6/zlM0XZ68OK8FiBwBGKdS0g87oyl
-         c5dM6mTe5Tm3qI94po3fztvGyPY4EicjkwgYVSOESJ++32jPxsShAMMEkUC2SxhDCSMJ
-         MXZ3pSmFT1I6KV8KM1PuoRYp5x4oGpo/GWM3RtA0UmP6tHaIAkist30tlZ+EFv+cSSjZ
-         cjAnGeqBzlQxeJJM9wylTFY01oArrtk+acJu1Tk3GdY2JJBRrx4CHTa75XpdNtLIgtx+
-         xsSA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwBuNqQH/a6fvyBhZri+RZN98jDEyAw63IE8dgIk3YrFHjulOWojQ0xsEf/Gq9XpCbHwDenBFXCAbNPeA5zJNr6boGMDsElNz8NWVMKaFC
-X-Gm-Message-State: AOJu0Yznqim2NX4sXRxpt5Dm88eyTNxvCDlwqhwTTYcqAh3j3tIrkMud
-	3y1jJhOpLrk1Oo2hKw8iyqu35730/iYeogS/UHJ8CLTE6tDrlemx+pTkdsu7icw=
-X-Google-Smtp-Source: AGHT+IEqYoT9P4yGxxV/Ao8vom6ObPUGe8xNfmYsrj9mQrupH69Vmjj5Fc9hQWs8Ax3BJgQO4kgnZg==
-X-Received: by 2002:a17:906:5913:b0:a3b:e92b:2a41 with SMTP id h19-20020a170906591300b00a3be92b2a41mr102530ejq.13.1707460864179;
-        Thu, 08 Feb 2024 22:41:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVqA02Hms1GnUHhoCeUGdttK/loHEZjbx5QHKXwtPOxxttGYOksuXyK3muEb0xliNnRKF6szoFyOSFwsz9PcaJko6qKNjXTFB2fAnAyUpnMoVD+BQG/lDIsKGVkKuNnMy7wzKsP39NZoAmg06wjeoSHXyfFAN5cEbS/6EnYBTKMlzhMZrDk5pfPc0uIXGdiLw/6BaMIhcMFITP5pb19J+1RzF1urgzUtqlh9B3W/WQuGvzEkbSKup3S6Ti9kxG8XeGvyWsAft1kmMY1VJ6TJbTHHR1wRt2CPbV9ydGIIqh/nQ9xc08W/kJCzxUtTilHW2TunSFgIeJzQ3lp9ayfyWx2182k/ndXiSX8IaP8KBgE8qY5GSVV+bdIJ5yQSQN9sfvgp75UBDTSZI2KE/8h2zApaSfOvP1gqYu/l6w5sOHk5uXmxwNtsDKPg/gvNYpxPQv7s2Gux4RWuG/wgzzPenpKcbPz33H0ukQHd5hP61bQyFOi56bWkPzdKg5iSEHJwmX+hUwCtRf1aFZLCk8jDQBfrf6u7hMgQG4Fzd/mXKTkwTYwYGWEuSXv/GdHqagQcbufcOpMEPv8GUrFRZPXbb+AgJhrcf6yK9tzrRxobSk9dGB+n3QindAud8ArE7rKrG9g6aIUWMuYYYRNaST1o7FvBqxYWk3FP3yx7itHhzpZNOWGtzCqfkGtd8D6UmbZdt4aCSQKBYYs0yt3Y4BwVSmaxyAQ8wD7McQfbqmqIViPqNjTuTbrEnVlJxms4USHpISc/HAc/2iE4gnsIRzEnNdlnrvq5C/hROjT2FFt8cZ7PhawJvwaZWx3U3nXNWMQeSN47hTgcGZa24eiYOELFMolR5ikwa245mlzkn2LoKfrnA==
+        bh=L/ygjtZTVjHU12+LM3KMSNgL31cpnfsr1+pYQSNIAAg=;
+        b=nuD9EEEgslYjxCcIMm2cy8Z5OuunCJmDqPTatyVtjutvT6jcy1Bhipf1pGE6QnAa+X
+         bFnnZzep1jo//PlDyYVGVcVpoQlm3eRy6GILbWyraqL/BPYbPe22I/mlFaLBUipvkR2T
+         1FYZXcoQKzgj3TlG15QqPy786TAdo1t+PgarbNtJn7IHzUZH/TjH7GDnNlGoEPIa8vT6
+         mhAvQ0rHzJ1LEVM6I7xZUpAykvpD8JvBGNXq6stck0Hef006ehVqcY6Kt/3WRcLsRmOd
+         nsPtAy872q5FHzXro4zpBUB0JKKB23FhCv32RAE8biPzHr04+VKZCwwo9IMf9wOuqeTw
+         iN7w==
+X-Gm-Message-State: AOJu0YwCtM/b13JBmERflcE8ZEKF5V3j6f55M62DJ/eu2Pc6Te9hhpda
+	qoYiNpn8Nr2rMiSqZFMjxmynwokaGbIiX6bGqpWb3Z+RsjDoVV/YvJq1iBz6xMc=
+X-Google-Smtp-Source: AGHT+IEIwRiGBGnLEqNZprft3iYD6FyLivJVlJ5DvcYSMjlUi+u/u4Zmw+cdsozGJ8bDIbGbqO9viw==
+X-Received: by 2002:a17:907:363:b0:a3b:e115:7b69 with SMTP id rs3-20020a170907036300b00a3be1157b69mr404470ejb.69.1707460866164;
+        Thu, 08 Feb 2024 22:41:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWVssZFqFbfzrmw5N+m8jAa5zM7KTVmwqDhtj5haZxxQzg6uOIC2be48nkwLf0iu0niHguJ551L7u5EteLMF9srBcTAPbhPmlhN9lnjkUU2tTUIeTzif6I3w0++uwCEmChFy3wD+RbH1zBIgET/4eJv8GvYZpGHrClhravWVN/9G12TzOT6pSxV2Hf5e3nv7flcEKay3n/VtUfCFZG3bPN9ruH01WA4pLxi6TRTHdY1GWH33+HGoG4MpOKRjax3mVebVc09T8VWGX+znRRJccUOB6llHqPneJV3KtYH+dT4o/DHN4NIJfia2h3/sHl4L3kSb/tSovFkIYLWSDk7SfUqW4Chj3MUJXUmE0sf9MQYAdtfAN6/1fja+8Igov9hgoncDu7N6JrTf1HelAqwly0GYbt9mqEuV8OdU8VwuMxP9M/G6jFA4wa/KHnI64loSqYdktUMjvLgZ7rx2qlfJXN6Zd3aOJyvy7H5eCPyX4h6MwZ4bSZg8NP1kggYVgQlsNU1N6PAwAccqf+KBuVmusiVRDgI+H0kqOURQEVwFR6RGGBHW+HSr7CQwAxFTrLx054movAmNnanQ2a79ApvJwsN3r/dgbUoFqDGx06ftfb/L8PW2DBt5m8p9uCyAVppafDCV6fPkCjNoRaVSmiVJ3sH76fTIAlBb876kIN/CSV8gNL/Ffh4rtqvRfEz6leUCCjBpy0vXgkAx4sCA7iptzDDd8TasbVhCvk8WJkPDXMHVafgfSo/lKt24X5klr1yI0qYMQawiJ5TkcuJOiLbzBMsWBu8vz6ANKnF7FSpPfnOyRduMkg26SjeQOmb1c/q857B+B6Y2Rw1lUEIifHLy+pGHEaQaYYnqCNjq+3DZmZd6g==
 Received: from beast.fritz.box (62-178-148-172.cable.dynamic.surfer.at. [62.178.148.172])
-        by smtp.gmail.com with ESMTPSA id vb9-20020a170907d04900b00a370a76d3a0sm441180ejc.123.2024.02.08.22.41.02
+        by smtp.gmail.com with ESMTPSA id vb9-20020a170907d04900b00a370a76d3a0sm441180ejc.123.2024.02.08.22.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Feb 2024 22:41:03 -0800 (PST)
+        Thu, 08 Feb 2024 22:41:05 -0800 (PST)
 From: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@vrull.eu>
 To: linux-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
@@ -97,9 +96,9 @@ To: linux-riscv@lists.infradead.org,
 	Andrea Parri <parri.andrea@gmail.com>,
 	Hans Boehm <hboehm@google.com>
 Cc: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@vrull.eu>
-Subject: [RFC PATCH v2 5/6] RISC-V: Expose Ssdtso via hwprobe API
-Date: Fri,  9 Feb 2024 07:40:49 +0100
-Message-ID: <20240209064050.2746540-6-christoph.muellner@vrull.eu>
+Subject: [RFC PATCH v2 6/6] RISC-V: selftests: Add DTSO tests
+Date: Fri,  9 Feb 2024 07:40:50 +0100
+Message-ID: <20240209064050.2746540-7-christoph.muellner@vrull.eu>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240209064050.2746540-1-christoph.muellner@vrull.eu>
 References: <20240209064050.2746540-1-christoph.muellner@vrull.eu>
@@ -112,55 +111,146 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patch adds Ssdtso to the list of extensions which
-are announced to user-space using te hwprobe API.
+This patch tests the dynamic memory consistency model prctl() behaviour
+on RISC-V. It does not depend on CONFIG_RISCV_ISA_SSDTSO or the availability
+of Ssdtso, but will test other aspects if these are not given.
 
 Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
 ---
- Documentation/arch/riscv/hwprobe.rst  | 3 +++
- arch/riscv/include/uapi/asm/hwprobe.h | 1 +
- arch/riscv/kernel/sys_hwprobe.c       | 2 ++
- 3 files changed, 6 insertions(+)
+ tools/testing/selftests/riscv/Makefile        |  2 +-
+ tools/testing/selftests/riscv/dtso/.gitignore |  1 +
+ tools/testing/selftests/riscv/dtso/Makefile   | 11 +++
+ tools/testing/selftests/riscv/dtso/dtso.c     | 82 +++++++++++++++++++
+ 4 files changed, 95 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/riscv/dtso/.gitignore
+ create mode 100644 tools/testing/selftests/riscv/dtso/Makefile
+ create mode 100644 tools/testing/selftests/riscv/dtso/dtso.c
 
-diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
-index b2bcc9eed9aa..d881d56eba37 100644
---- a/Documentation/arch/riscv/hwprobe.rst
-+++ b/Documentation/arch/riscv/hwprobe.rst
-@@ -188,6 +188,9 @@ The following keys are defined:
-        manual starting from commit 95cf1f9 ("Add changes requested by Ved
-        during signoff")
+diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
+index 4a9ff515a3a0..1421c21841f9 100644
+--- a/tools/testing/selftests/riscv/Makefile
++++ b/tools/testing/selftests/riscv/Makefile
+@@ -5,7 +5,7 @@
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
  
-+  * :c:macro:`RISCV_HWPROBE_EXT_SSDTSO`: The Ssdtso extension is supported, as
-+       in version v1.0-draft3 of the corresponding extension.
+ ifneq (,$(filter $(ARCH),riscv))
+-RISCV_SUBTARGETS ?= hwprobe vector mm
++RISCV_SUBTARGETS ?= dtso hwprobe vector mm
+ else
+ RISCV_SUBTARGETS :=
+ endif
+diff --git a/tools/testing/selftests/riscv/dtso/.gitignore b/tools/testing/selftests/riscv/dtso/.gitignore
+new file mode 100644
+index 000000000000..217d01679115
+--- /dev/null
++++ b/tools/testing/selftests/riscv/dtso/.gitignore
+@@ -0,0 +1 @@
++dtso
+diff --git a/tools/testing/selftests/riscv/dtso/Makefile b/tools/testing/selftests/riscv/dtso/Makefile
+new file mode 100644
+index 000000000000..a1ffbdd3da85
+--- /dev/null
++++ b/tools/testing/selftests/riscv/dtso/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2023 VRULL
 +
- * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
-   information about the selected set of processors.
- 
-diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-index 9f2a8e3ff204..ee6e830abe4d 100644
---- a/arch/riscv/include/uapi/asm/hwprobe.h
-+++ b/arch/riscv/include/uapi/asm/hwprobe.h
-@@ -59,6 +59,7 @@ struct riscv_hwprobe {
- #define		RISCV_HWPROBE_EXT_ZTSO		(1ULL << 33)
- #define		RISCV_HWPROBE_EXT_ZACAS		(1ULL << 34)
- #define		RISCV_HWPROBE_EXT_ZICOND	(1ULL << 35)
-+#define		RISCV_HWPROBE_EXT_SSDTSO	(1ULL << 36)
- #define RISCV_HWPROBE_KEY_CPUPERF_0	5
- #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
- #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
-diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
-index a7c56b41efd2..9024061e9193 100644
---- a/arch/riscv/kernel/sys_hwprobe.c
-+++ b/arch/riscv/kernel/sys_hwprobe.c
-@@ -132,6 +132,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
- 			EXT_KEY(ZFHMIN);
- 			EXT_KEY(ZFA);
- 		}
++CFLAGS += -I$(top_srcdir)/tools/include
 +
-+		EXT_KEY(SSDTSO);
- #undef EXT_KEY
- 	}
- 
++TEST_GEN_PROGS := dtso
++
++include ../../lib.mk
++
++$(OUTPUT)/dtso: dtso.c ../hwprobe/sys_hwprobe.S
++	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+diff --git a/tools/testing/selftests/riscv/dtso/dtso.c b/tools/testing/selftests/riscv/dtso/dtso.c
+new file mode 100644
+index 000000000000..c8a7b25adefd
+--- /dev/null
++++ b/tools/testing/selftests/riscv/dtso/dtso.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* dtso - used for functional tests of memory consistency model switching
++ * at run-time.
++ *
++ * Copyright (c) 2023 Christoph Muellner <christoph.muellner@vrull.eu>
++ */
++
++#include <sys/prctl.h>
++#include <unistd.h>
++#include <errno.h>
++
++#include "../hwprobe/hwprobe.h"
++#include "../../kselftest_harness.h"
++
++/*
++ * We have the following cases:
++ * 1) DTSO support disabed in the kernel config:
++ *    - Ssdtso is not detected
++ *    - {G,S}ET_MEMORY_CONSISTENCY_MODEL fails with EINVAL
++ * 2) DTSO support enabled and Ssdtso not available:
++ *    - Ssdtso is not detected
++ *    - {G,S}ET_MEMORY_CONSISTENCY_MODEL works for WMO and fails for TSO with EINVAL:
++ * 3) DTSO support enabled and Ssdtso available
++ *    - Ssdtso is detected
++ *    - {G,S}ET_MEMORY_CONSISTENCY_MODEL works for WMO and TSO
++ */
++
++TEST(dtso)
++{
++	struct riscv_hwprobe pair;
++	int ret;
++	bool ssdtso_configured;
++	bool ssdtso_available;
++
++	ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
++	if (ret < 0) {
++		ASSERT_EQ(errno, EINVAL);
++		ssdtso_configured = false;
++	} else {
++		ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO ||
++			    ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
++		ssdtso_configured = true;
++	}
++
++	pair.key = RISCV_HWPROBE_KEY_IMA_EXT_0;
++	ret = riscv_hwprobe(&pair, 1, 0, NULL, 0);
++	ASSERT_GE(ret, 0);
++	ASSERT_EQ(pair.key, RISCV_HWPROBE_KEY_IMA_EXT_0);
++	ssdtso_available = !!(pair.value & RISCV_HWPROBE_EXT_SSDTSO);
++
++	if (ssdtso_configured) {
++		/* Read out current model. */
++		ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
++		ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO ||
++			    ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
++
++		if (ssdtso_available) {
++			/* Switch to TSO. */
++			ret = prctl(PR_SET_MEMORY_CONSISTENCY_MODEL,
++				    PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
++			ASSERT_EQ(ret, 0);
++			ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
++			ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
++
++			/* Try switching back to WMO (must fail). */
++			ret = prctl(PR_SET_MEMORY_CONSISTENCY_MODEL,
++				    PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO);
++			ASSERT_LT(ret, 0);
++			ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
++			ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
++		} else {
++			/* Set the same model, that's currently active. */
++			ret = prctl(PR_SET_MEMORY_CONSISTENCY_MODEL, ret);
++			ASSERT_EQ(ret, 0);
++		}
++	} else {
++		ASSERT_EQ(ssdtso_available, false);
++		ksft_test_result_skip("Ssdtso not configured\n");
++	}
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.43.0
 
