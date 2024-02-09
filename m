@@ -1,112 +1,143 @@
-Return-Path: <linux-kselftest+bounces-4408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9300784F398
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 11:39:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 795D684F3AE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 11:46:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FF20286C3B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 10:39:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29A3A1F2A1E2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 10:46:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9831EB51;
-	Fri,  9 Feb 2024 10:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="Y9k5no00"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6621A20311;
+	Fri,  9 Feb 2024 10:46:43 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8E81DA44
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Feb 2024 10:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1684B25618;
+	Fri,  9 Feb 2024 10:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707475155; cv=none; b=gxyHNY1CtffotXTAbIdzY54DEYa5Lt3hpqDtCB4f+xApOJNuj6UDTufa8D5Or1RmkaSxNFamZx0eGz46R2Vk+KZpi6JPJn+jE3h1kWBgYDwii64Sj+R0d2tRyFvvbEndZ4CsDkair09gSt3MixSDOaYBz+rrEsbtPf8UduVdrA0=
+	t=1707475603; cv=none; b=UGgeBToaZxlxG8rB1hU5oGPaHNpLlpg8qMzPR2Dzm5bSPBCq8TMI03DscHg4yilYPQFXKBllyxKUinIxKR08TpJqS47UxverQEmDB2NVZmzH/d+23NYumB0nmskfz8GpS7AXVveUWPj3pU9OQf56BCVnNuEE8yt2xUBHgvw1Ua0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707475155; c=relaxed/simple;
-	bh=f3LgH8ZgUOwkLE4+iCPUvTYipmbL9Vhij4R5Psmp2no=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h+rgDxgIpFZ0xKMfWZZ/T1Pc7J1715Ra6t50y89q0fvFVE/gBxXS3BLiwpVensBKB2oNm0OIPMpTJ2SuEq8CjJLympnznvLHUJbC5o60b8mLJEB0+mGry3gZR/AQolJ6/HwvdM6R5UZehxzoE9Wd/BXQBqIaM5i5d0nXkqmACfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=Y9k5no00; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a2f79e79f0cso110971766b.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Feb 2024 02:39:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1707475151; x=1708079951; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sqVTxyo1KD7O54qRAZAz9ywsVou+rYDkxiKGodO8a4g=;
-        b=Y9k5no00/mGfsyLvYdzTQPtyVSf/VhtmfGCHVCcFIaKSQmgJ7ABhGnQf+u6Mb7lkAs
-         KUwpIpQUxN+4aTN4apOMOmsEXumCOQRMUxx+tGVG6bpSqeKavD7+t8Y0Z7JvA0m6l7rp
-         uCDFUzMwrpUvcNuy32bDuKHzejIm0i+RKg1fgGbY2kofGY0LiagXjiRDY89bWVwzAPgT
-         Ww/rXOqXeKthFCm186c11804UuUdXhgnWbDrAbvAZefkZ6DtyVncAFYycV0aO1DfwjhN
-         MuhqoHUM8brUiM1dZ6u7ZhKimr5t3FS8OBOeUmCTZyXhqo567ZmXr12YGoBNlN4q5j2S
-         MzLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707475151; x=1708079951;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sqVTxyo1KD7O54qRAZAz9ywsVou+rYDkxiKGodO8a4g=;
-        b=Iyk6BJustq6JUddiHfEG1BZxQK9S228lkZh7Nf7CQUpXXk2hz0oxYPHAETNOgX1KYx
-         Imxvy07sCO1L1B6i3hr4M36EljoeLHPr+RmsLl5fU6hUBJqCjcvXf25RnxiuVmbJOKiM
-         kJBao3pUIKcAmIR7UId97sQBNYJnwoSGmU5RRkLO9KH2wbhGFuSVGBm2fI7NPq/TgRdc
-         9MUqPNoqrxpi7CSdHJen3RuBLvRquv1VnLGSRO9FeY9H+CiYYSjU/OLRAH285VZpo1xb
-         EkKwiXdNVCd7j/+EyOx8nz6ALWXGyAD8ONQHxOgPLrUb/03GktJC/I6qRWwzjss5d5oY
-         tsNw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCyAweR/eG0Pd2cvIsQCXI16t7XZu0nO97P+96BUHGLS9aGMzlgTFXGiqU3ttXPMzD57pe1XsKHQlQPjx0G7uZU8tmkuqo38k7RQq5Jid5
-X-Gm-Message-State: AOJu0YzqdoDotpVBNckNcsovII5Zw9swpKLLkNuJUoshFMaZYHSghQXH
-	KDuHSAJK4WCHO5KVPJfoNL13XQWiKhKNTMl0bm+n0ndgQCVR76/daN+kJrKsJmA=
-X-Google-Smtp-Source: AGHT+IEnjJblrcbbe1ReLw5pUJIloJnFk8qGeth0QS3qJc5Y5kRco8Nqf0/aOVyGWohAEYpBieTgOw==
-X-Received: by 2002:a17:906:ce26:b0:a37:fb7d:6f21 with SMTP id sd6-20020a170906ce2600b00a37fb7d6f21mr969798ejb.51.1707475151160;
-        Fri, 09 Feb 2024 02:39:11 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXDE0Qfqvw6FUruVAQFTyP3htBqsqB0Hl58T3TeFjVb6hJmTO5W4stBUzSjIIPkbcficDZIdpHcbNBr6OjxfZqLMwBpCp91hP5/4aU30lcyfYhT24c4QugauZsLHp0W0AnGe7RWoRALd8XIXwib/kKbsCLxLC+PFisXDi8ZT0VtY3qiqHQgQu/eFmn3PQvlLlMqqJLdRX2ssO2lipPLCnLK8zNT1tgsxGQCcoAGKAauFbFWRAcK752yiov4DGl4XMyl65Rgqb5bETg812kW9UwFFwBLAujqBUl+RA==
-Received: from [192.168.0.106] (176.111.176.127.kyiv.volia.net. [176.111.176.127])
-        by smtp.gmail.com with ESMTPSA id tl13-20020a170907c30d00b00a38378d11e7sm626760ejc.132.2024.02.09.02.39.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Feb 2024 02:39:10 -0800 (PST)
-Message-ID: <e27b3f91-051f-4fec-9b07-abf0615024bb@blackwall.org>
-Date: Fri, 9 Feb 2024 12:39:10 +0200
+	s=arc-20240116; t=1707475603; c=relaxed/simple;
+	bh=jOw1k4dV5z+KBAtTbBBTRdl9sL0hz8/ouWgae+bS6oo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GgJR5AQVFKm4FQbXJetV/Brdk+zFLkGm54auFU4e59IeA8YFb7G9o1lNWvmKBBMqP2GnzAc7kPb+uFY7APkfudcrnt3Q2Dqdh/hCZpfNfsAOt8Q/EbQCIBE5PBZX9ckZ/SlvR8b7A7LY3iKk57gMfQsW1Hkb7Er5TbD5xqcVSpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4TWVWf27KTzB043C;
+	Fri,  9 Feb 2024 18:31:26 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 7784A1406BE;
+	Fri,  9 Feb 2024 18:46:36 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwD37xh8AsZlACksAg--.15226S2;
+	Fri, 09 Feb 2024 11:46:35 +0100 (CET)
+Message-ID: <86ab971f45c2ff11dcbdeab78b4b050f07495f55.camel@huaweicloud.com>
+Subject: Re: [PATCH v9 12/25] security: Introduce file_post_open hook
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: viro@zeniv.linux.org.uk, chuck.lever@oracle.com, jlayton@kernel.org, 
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com, 
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ zohar@linux.ibm.com,  dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+ dhowells@redhat.com,  jarkko@kernel.org, stephen.smalley.work@gmail.com,
+ eparis@parisplace.org,  casey@schaufler-ca.com, shuah@kernel.org,
+ mic@digikod.net,  linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org,  linux-nfs@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  linux-integrity@vger.kernel.org,
+ keyrings@vger.kernel.org,  selinux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
+ Stefan Berger <stefanb@linux.ibm.com>
+Date: Fri, 09 Feb 2024 11:46:16 +0100
+In-Reply-To: <20240209-luftleer-jobangebote-6d6ab29b7191@brauner>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+	 <20240115181809.885385-13-roberto.sassu@huaweicloud.com>
+	 <20240209-luftleer-jobangebote-6d6ab29b7191@brauner>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 0/4] selftests: forwarding: Various fixes
-Content-Language: en-US
-To: Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- edumazet@google.com, shuah@kernel.org, petrm@nvidia.com, liuhangbin@gmail.com
-References: <20240208155529.1199729-1-idosch@nvidia.com>
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20240208155529.1199729-1-idosch@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:LxC2BwD37xh8AsZlACksAg--.15226S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr15Xr1UuryUJF47uw13CFg_yoW8ury8pa
+	y5G3Z8GFykGFy7CF93ZFZ8Za4F9392qFWUXrZ3X34UAF9FqrnI9F42krn5WFn8Kr1xKr1I
+	vw429r9xu34UArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAIBF1jj5o2JQAAs1
 
-On 2/8/24 17:55, Ido Schimmel wrote:
-> Fix various problems in the forwarding selftests so that they will pass
-> in the netdev CI instead of being ignored. See commit messages for
-> details.
-> 
-> Ido Schimmel (4):
->    selftests: forwarding: Fix layer 2 miss test flakiness
->    selftests: forwarding: Fix bridge MDB test flakiness
->    selftests: forwarding: Suppress grep warnings
->    selftests: forwarding: Fix bridge locked port test flakiness
-> 
->   .../selftests/net/forwarding/bridge_locked_port.sh |  4 ++--
->   .../testing/selftests/net/forwarding/bridge_mdb.sh | 14 +++++++++-----
->   .../selftests/net/forwarding/tc_flower_l2_miss.sh  |  8 ++++++--
->   3 files changed, 17 insertions(+), 9 deletions(-)
-> 
+On Fri, 2024-02-09 at 11:12 +0100, Christian Brauner wrote:
+> On Mon, Jan 15, 2024 at 07:17:56PM +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> >=20
+> > In preparation to move IMA and EVM to the LSM infrastructure, introduce=
+ the
+> > file_post_open hook. Also, export security_file_post_open() for NFS.
+> >=20
+> > Based on policy, IMA calculates the digest of the file content and
+> > extends the TPM with the digest, verifies the file's integrity based on
+> > the digest, and/or includes the file digest in the audit log.
+> >=20
+> > LSMs could similarly take action depending on the file content and the
+> > access mask requested with open().
+> >=20
+> > The new hook returns a value and can cause the open to be aborted.
+> >=20
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
+> >  fs/namei.c                    |  2 ++
+> >  fs/nfsd/vfs.c                 |  6 ++++++
+> >  include/linux/lsm_hook_defs.h |  1 +
+> >  include/linux/security.h      |  6 ++++++
+> >  security/security.c           | 17 +++++++++++++++++
+> >  5 files changed, 32 insertions(+)
+> >=20
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index 71c13b2990b4..fb93d3e13df6 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -3620,6 +3620,8 @@ static int do_open(struct nameidata *nd,
+> >  	error =3D may_open(idmap, &nd->path, acc_mode, open_flag);
+> >  	if (!error && !(file->f_mode & FMODE_OPENED))
+> >  		error =3D vfs_open(&nd->path, file);
+> > +	if (!error)
+> > +		error =3D security_file_post_open(file, op->acc_mode);
+>=20
+> What does it do for O_CREAT? IOW, we managed to create that thing and we
+> managed to open that thing. Can security_file_post_open() and
+> ima_file_check() fail afterwards even for newly created files?
 
-Nice, for the series:
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+$ strace touch test-file
+...
+openat(AT_FDCWD, "test-file", O_WRONLY|O_CREAT|O_NOCTTY|O_NONBLOCK, 0666) =
+=3D -1 EPERM (Operation not permitted)
+
+The open fails, but the file is there. I didn't see warnings/errors in
+the kernel log.
+
+Roberto
 
 
