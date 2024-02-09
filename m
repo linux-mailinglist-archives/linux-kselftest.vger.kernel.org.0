@@ -1,399 +1,191 @@
-Return-Path: <linux-kselftest+bounces-4457-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64DD384F9B4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 17:36:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4055B84F9F8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 17:49:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87CE31C20B02
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 16:36:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99C7AB21C61
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Feb 2024 16:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6257181AA5;
-	Fri,  9 Feb 2024 16:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6E27C0A9;
+	Fri,  9 Feb 2024 16:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pTKvZpHs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ehkFeSbN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F2C80BFA
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Feb 2024 16:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E817B3F3
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Feb 2024 16:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707496513; cv=none; b=P9oz+BuxkEQzMwsKpcGPAJ6PMFdSocIbbjJzC7bjZPEguWEwDTQGbQCI/4/goZe30qfCjr4E9RZKe5IiOw8PaaNhu/zuixzsoQ0uKm69wOSVEmsMoCdwGuNu97fMuVjY6eiJ4dBpPqPrRobMWq9RMKhyPinDVhCYiWZpv0F+qaA=
+	t=1707497135; cv=none; b=FOc2hLJjq1wy8yJ58yH73fQIiwKt78MswNv1FxlEUmQ9ZNUuY6tE+NId/XEFXq/3f7HezXfdIx6vFQNI2t2/fVs1Y4kr0hMKG6nEbkVd7RS6T/an3XPbb/KEKFMDPSXKsdg4Vb/jzwPfcZqyfwiUnOpGoxvXNRyJ3XxbpBwpJyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707496513; c=relaxed/simple;
-	bh=yF4snXCigsdD2V4iu9JXl93VeJuVdieGXDlgLcIwa4g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iNrjaosERN4z1EefiZ+7bwmjIG//4EOZbDqwUibjxGeHX5UCIqUOnpZJnEg+Qhi2+PlgLpj8iGkefp936hvBjo2uqcfyv7hmPJUSZbfyuXMOdS7fDth1jkGvg1fZQnbyZlFhdALKNpIKmNiyNhZGikBpIamgSahQB0TJPC0NfUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pTKvZpHs; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-604b44e1dc9so21919597b3.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Feb 2024 08:35:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707496510; x=1708101310; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gMbQC9Qrfc/CHbT/uyUQA9ufo0litTV7XPwdOdKcRAI=;
-        b=pTKvZpHsEcx0X1kiTj54vR/o94Zgp1Q3WwdrXEqK6CYRAJnMpchoHmvAnoFfpgdio/
-         tTDIQtHG+X87bYpgh7wsJ/Zvdkzsd4KtO+WmxZSUO+HN5vyyvUL0bmVkCbhRGUvhVvIR
-         fhRc95FpS2tNjm1fKhHvg11XAQUR/ONPJJuDUc7WEBayCAyfWyJX57B8Eng8PTX9HFK3
-         Ffgs9YFJ9788SrmEX08YdnN0ibsofACvNzSUxYI66AWwAJjXRkfvd2Fmyi9aRVg1NUUj
-         3f9OXPcpPbehl/PmLPBkobHqT5fksOHGa0pq2V9sk9J2VNJwk1uVIlSuejW+WZ6LtPFm
-         h7EQ==
+	s=arc-20240116; t=1707497135; c=relaxed/simple;
+	bh=fOr7xFvfM4rd/02JsZAgF/8VCH/+1220k69orXmDPo8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SNYYSyr3o3KjdRyyyVokGHOIlUY/bJ6qEG4HkMVsPRzfxzWxnyQKDzyClgtuqNdJEgauSdlFDFjpTMbOR5mHSBPRq9mWFbps3/YL8TuK44heqkvHiPey8dCt5avSpagihvsWPvb0LegIchSuCZKySIwJbyaJAkOTMk63JlXR3rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ehkFeSbN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707497133;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=y8IUz/WHM9+M3AF6O/llN6R76VK+QIIm7K5QCYPk/1Y=;
+	b=ehkFeSbNgxEfFcdWcxJEMq3Cw9lVMPLjwjH/HL4bQ+3IFmpTDoZULa6pkzOHHD2jcsTSg+
+	WRcpgCBrI+Zfa/UVe66wWjd4W4m7lbQyZ1Sai8duTOgj9gJ/VvrbUKRPEvpmpr0ooA1MY1
+	0d+8n23Az74oGsgSD3moKp5odiyvnGk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-364-Vq3MwSuxPra1Y0dFKcw5Rw-1; Fri, 09 Feb 2024 11:45:32 -0500
+X-MC-Unique: Vq3MwSuxPra1Y0dFKcw5Rw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3377bf95b77so94073f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Feb 2024 08:45:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707496510; x=1708101310;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gMbQC9Qrfc/CHbT/uyUQA9ufo0litTV7XPwdOdKcRAI=;
-        b=n2DzrWyOAPedfUH4xwBFghGyzmU2SGQSMHmfY+g57z2AyfqdjieE1tM2oc76ud9b57
-         4L6etwDj8UvzqxLjlk/uTM5IPOqmMQ6d33FrSlTkpCZEHAACN+nuictBPuNjr86a4JVc
-         WlRmF4kdzqCxOoyfI7RqRXHOYyIessWzbb4CdHE3PsVj4vc1iCh9uh5hu0otbJHJitco
-         bcSw84iXVLNJhNRik2OLLMpvHsdEhpH0SyW8hNzxaguFgSfJ/dJoIg1wqcezOMJmwAyB
-         VYSF3F4ifpGs4H8JLQ8vVMH+0mBPlYnlA2PyLxL6Aq2SxOOGJ0yIs9txgbdxH+Oucucu
-         HbQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNnrHHdGPvKKK7LqNySKVI8/JqTr4Ap08yfzOWmSvEzFH0B58Dil0DhSsmNXuNRMOrvsnicxr+6HyzqN6nQnmvX5S3z2xWfNqfESWzMxZ3
-X-Gm-Message-State: AOJu0Yw7OiTxVJB6AC091ilZtUxa8jnwHj4B8QVXnthUe2Egks1UIs0q
-	qdDgW1FYLoiVUp82Xo1QlZsMBcFs2YFLfXL7SGAZ3WVfyF+nzuKXkkHPpqQorRixd65omRiPp6g
-	LsQlbHs5QsXCEvna46w==
-X-Google-Smtp-Source: AGHT+IF96eh3thbWmXPsFEotE/nIuZhaMMePQq+bRya4JHK69BpL1vobDQ9qaVEC2kAu862eeFtyD7uV3tGcqPa5
-X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a25:c586:0:b0:dc6:a6e3:ca93 with SMTP
- id v128-20020a25c586000000b00dc6a6e3ca93mr46762ybe.10.1707496510734; Fri, 09
- Feb 2024 08:35:10 -0800 (PST)
-Date: Fri,  9 Feb 2024 16:34:48 +0000
-In-Reply-To: <20240209163448.944970-1-vdonnefort@google.com>
+        d=1e100.net; s=20230601; t=1707497131; x=1708101931;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y8IUz/WHM9+M3AF6O/llN6R76VK+QIIm7K5QCYPk/1Y=;
+        b=gCMx/YoKxj3A3v8ah/sP+yHvECObnIPpho4BRZfy0VJKT4u0qC521QsibOV3K03mz9
+         3Wu/xqKat62HdyU37x04DHvzOD0xAELtzzGuGCbRzJjHmCrxIFzVBTC3oCtDSSHwFKb9
+         W2l59iD6TsAeX8ihMIzEJBrPie5UBPn7HDnggwTbQVdqiHpBWQW8EyBC4S5hJz9rpmpf
+         hLZCy9kvrr9PfrnDQdGuCwImQBIm1ng+ROla8QoDe8Ipf4rXYAKO93boWJtyVKb2I2w6
+         gB18BYyNw0kqeVLSRNyijyeRkgjx5Du6LOG8YoKul/Tkfmas+B+a3P2GhM3n1wJM+EJo
+         uUZw==
+X-Forwarded-Encrypted: i=1; AJvYcCXghuH+8TsIeEM72IL9gzSjm8aWOgY8X24sflIteoewsj8FSa9V5wS9lVy5DGBrl6VGkRbhQaIg7SXhHEpGhNe9LOarlNnay1nWYoZEe6wK
+X-Gm-Message-State: AOJu0YxSibcKY5uBpMn/QhsO4W4PnZSgxCnT10oCXdc1GGe2MRkH4pIR
+	HzKG8nmKlKziaFlrEYdKQCPN701GbYa0Nkd796FX+oRcfdDYNuC9Gl9HleDaR7Z2USiQBo+cevp
+	MlInyV1snktgS+xxeEXNzFIfPV3Ok/k+swt4MC3K/1s/oB2ilFnuA9brLDSjmzU+uJQ==
+X-Received: by 2002:a05:6000:3cb:b0:33b:49da:5f27 with SMTP id b11-20020a05600003cb00b0033b49da5f27mr1832827wrg.1.1707497130730;
+        Fri, 09 Feb 2024 08:45:30 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEEvCJJlndPkjei3/7GOG8/YYBOrqkwvyHOuioq8DS51khP1dKywMY+YGkDvQK2oK2nI/HnSA==
+X-Received: by 2002:a05:6000:3cb:b0:33b:49da:5f27 with SMTP id b11-20020a05600003cb00b0033b49da5f27mr1832814wrg.1.1707497130393;
+        Fri, 09 Feb 2024 08:45:30 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUJmo3n564UEjJfDhs0TCLa5VkqFjuqGV/4K5bOmdklnoc0C7kKlv3gHLVEDT7FSzgvWdFt0C8j9ciO8OIAn0KJJNqbQcCvtc2T05N2G2qOKIQXEKNgkGMOElDrfeQ0oA4SZYFeOS9dlwdFf2J3XuRAMbKU3CtvoG3dZgxJCjE10MVtVDDDFo2Q3QILseSRAcH0JrbrzAhBUNOrTlOhCgStyClGe4O/wFmWkgntVRyzHvBSBsoWumYLSg==
+Received: from gerbillo.redhat.com (146-241-228-88.dyn.eolo.it. [146.241.228.88])
+        by smtp.gmail.com with ESMTPSA id bk14-20020a0560001d8e00b0033b11e91c0bsm2236407wrb.81.2024.02.09.08.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Feb 2024 08:45:29 -0800 (PST)
+Message-ID: <ee9d2e224d063dc66070b060f716219c976759cd.camel@redhat.com>
+Subject: Re: [PATCH net] selftests: net: wait for receiver startup in
+ so_txtime.sh
+From: Paolo Abeni <pabeni@redhat.com>
+To: Willem de Bruijn <willemb@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+ linux-kselftest@vger.kernel.org,  netdev@vger.kernel.org
+Date: Fri, 09 Feb 2024 17:45:28 +0100
+In-Reply-To: <5b768c89eb2992c22ca7016de9f90ff7d4eecd5f.camel@redhat.com>
+References: 
+	<53a7e56424756ef35434bc15a90b256bcf724651.1707407012.git.pabeni@redhat.com>
+	 <5b768c89eb2992c22ca7016de9f90ff7d4eecd5f.camel@redhat.com>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240209163448.944970-1-vdonnefort@google.com>
-X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
-Message-ID: <20240209163448.944970-7-vdonnefort@google.com>
-Subject: [PATCH v16 6/6] ring-buffer/selftest: Add ring-buffer mapping test
-From: Vincent Donnefort <vdonnefort@google.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Cc: mathieu.desnoyers@efficios.com, kernel-team@android.com, 
-	Vincent Donnefort <vdonnefort@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-This test maps a ring-buffer and validate the meta-page after reset and
-after emitting few events.
+On Fri, 2024-02-09 at 15:51 +0100, Paolo Abeni wrote:
+> On Thu, 2024-02-08 at 16:45 +0100, Paolo Abeni wrote:
+> > The mentioned test is failing in slow environments:
+> >=20
+> >   # SO_TXTIME ipv4 clock monotonic
+> >   # ./so_txtime: recv: timeout: Resource temporarily unavailable
+> >   not ok 1 selftests: net: so_txtime.sh # exit=3D1
+> >=20
+> > The receiver is started in background and the sender could end-up
+> > transmitting the packet before the receiver is ready, so that the
+> > later recv times out.
+> >=20
+> > Address the issue explcitly waiting for the socket being bound to
+> > the relevant port.
+> >=20
+> > Fixes: af5136f95045 ("selftests/net: SO_TXTIME with ETF and FQ")
+> > Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> > ---
+> > Note that to really cope with slow env the mentioned self-tests also
+> > need net-next commit c41dfb0dfbec ("selftests/net: ignore timing
+> > errors in so_txtime if KSFT_MACHINE_SLOW"), so this could be applied to
+> > net-next, too
+>=20
+> Oops... CI is saying the above is not enough...
+>=20
+> > @@ -65,6 +70,7 @@ do_test() {
+> > =20
+> >  	local readonly START=3D"$(date +%s%N --date=3D"+ 0.1 seconds")"
+> >  	ip netns exec "${NS2}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" =
+-S "${SADDR}" -D "${DADDR}" "${RXARGS}" -r &
+> > +	wait_local_port_listen "${NS2}" 8000 "${PROTO}"
+> >  	ip netns exec "${NS1}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" =
+-S "${SADDR}" -D "${DADDR}" "${TXARGS}"
+>=20
+> The binary explicitly waits up to $START time, and that conflicts with
+> the wait_local_port_listen, something different is needed. Apparently I
+> was just "lucky" during my local testing.
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+I experimented a few different solutions and so far the only option
+that gave some positive result is increasing start delay and the etf
+delta by an order of magnitude, see below.
 
-diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
-new file mode 100644
-index 000000000000..627c5fa6d1ab
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -Wl,-no-as-needed -Wall
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -D_GNU_SOURCE
-+
-+TEST_GEN_PROGS = map_test
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/ring-buffer/config b/tools/testing/selftests/ring-buffer/config
-new file mode 100644
-index 000000000000..d936f8f00e78
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/config
-@@ -0,0 +1,2 @@
-+CONFIG_FTRACE=y
-+CONFIG_TRACER_SNAPSHOT=y
-diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
-new file mode 100644
-index 000000000000..56c44b29d998
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/map_test.c
-@@ -0,0 +1,273 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Ring-buffer memory mapping tests
-+ *
-+ * Copyright (c) 2024 Vincent Donnefort <vdonnefort@google.com>
-+ */
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <linux/trace_mmap.h>
-+
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+
-+#include "../user_events/user_events_selftests.h" /* share tracefs setup */
-+#include "../kselftest_harness.h"
-+
-+#define TRACEFS_ROOT "/sys/kernel/tracing"
-+
-+static int __tracefs_write(const char *path, const char *value)
-+{
-+	int fd, ret;
-+
-+	fd = open(path, O_WRONLY | O_TRUNC);
-+	if (fd < 0)
-+		return fd;
-+
-+	ret = write(fd, value, strlen(value));
-+
-+	close(fd);
-+
-+	return ret == -1 ? -errno : 0;
-+}
-+
-+static int __tracefs_write_int(const char *path, int value)
-+{
-+	char *str;
-+	int ret;
-+
-+	if (asprintf(&str, "%d", value) < 0)
-+		return -1;
-+
-+	ret = __tracefs_write(path, str);
-+
-+	free(str);
-+
-+	return ret;
-+}
-+
-+#define tracefs_write_int(path, value) \
-+	ASSERT_EQ(__tracefs_write_int((path), (value)), 0)
-+
-+#define tracefs_write(path, value) \
-+	ASSERT_EQ(__tracefs_write((path), (value)), 0)
-+
-+static int tracefs_reset(void)
-+{
-+	if (__tracefs_write_int(TRACEFS_ROOT"/tracing_on", 0))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/trace", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/set_event", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/current_tracer", "nop"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+struct tracefs_cpu_map_desc {
-+	struct trace_buffer_meta	*meta;
-+	void				*data;
-+	int				cpu_fd;
-+};
-+
-+int tracefs_cpu_map(struct tracefs_cpu_map_desc *desc, int cpu)
-+{
-+	unsigned long meta_len, data_len;
-+	int page_size = getpagesize();
-+	char *cpu_path;
-+	void *map;
-+
-+	if (asprintf(&cpu_path,
-+		     TRACEFS_ROOT"/per_cpu/cpu%d/trace_pipe_raw",
-+		     cpu) < 0)
-+		return -ENOMEM;
-+
-+	desc->cpu_fd = open(cpu_path, O_RDONLY | O_NONBLOCK);
-+	free(cpu_path);
-+	if (desc->cpu_fd < 0)
-+		return -ENODEV;
-+
-+	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, desc->cpu_fd, 0);
-+	if (map == MAP_FAILED)
-+		return -errno;
-+
-+	desc->meta = (struct trace_buffer_meta *)map;
-+
-+	meta_len = desc->meta->meta_page_size;
-+	data_len = desc->meta->subbuf_size * desc->meta->nr_subbufs;
-+
-+	map = mmap(NULL, data_len, PROT_READ, MAP_SHARED, desc->cpu_fd, meta_len);
-+	if (map == MAP_FAILED) {
-+		munmap(desc->meta, desc->meta->meta_page_size);
-+		return -EINVAL;
-+	}
-+
-+	desc->data = map;
-+
-+	return 0;
-+}
-+
-+void tracefs_cpu_unmap(struct tracefs_cpu_map_desc *desc)
-+{
-+	munmap(desc->data, desc->meta->subbuf_size * desc->meta->nr_subbufs);
-+	munmap(desc->meta, desc->meta->meta_page_size);
-+	close(desc->cpu_fd);
-+}
-+
-+FIXTURE(map) {
-+	struct tracefs_cpu_map_desc	map_desc;
-+	bool				umount;
-+};
-+
-+FIXTURE_VARIANT(map) {
-+	int	subbuf_size;
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_4k) {
-+	.subbuf_size = 4,
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_8k) {
-+	.subbuf_size = 8,
-+};
-+
-+FIXTURE_SETUP(map)
-+{
-+	int cpu = sched_getcpu();
-+	cpu_set_t cpu_mask;
-+	bool fail, umount;
-+	char *message;
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+
-+	ASSERT_GE(cpu, 0);
-+
-+	ASSERT_EQ(tracefs_reset(), 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/buffer_subbuf_size_kb", variant->subbuf_size);
-+
-+	ASSERT_EQ(tracefs_cpu_map(&self->map_desc, cpu), 0);
-+
-+	/*
-+	 * Ensure generated events will be found on this very same ring-buffer.
-+	 */
-+	CPU_ZERO(&cpu_mask);
-+	CPU_SET(cpu, &cpu_mask);
-+	ASSERT_EQ(sched_setaffinity(0, sizeof(cpu_mask), &cpu_mask), 0);
-+}
-+
-+FIXTURE_TEARDOWN(map)
-+{
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+
-+	tracefs_cpu_unmap(&self->map_desc);
-+}
-+
-+TEST_F(map, meta_page_check)
-+{
-+	struct tracefs_cpu_map_desc *desc = &self->map_desc;
-+	int cnt = 0;
-+
-+	ASSERT_EQ(desc->meta->entries, 0);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 0);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+	ASSERT_EQ(desc->meta->reader.read, 0);
-+
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/tracing_on", 1);
-+	for (int i = 0; i < 16; i++)
-+		tracefs_write_int(TRACEFS_ROOT"/trace_marker", i);
-+again:
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+
-+	ASSERT_EQ(desc->meta->entries, 16);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 16);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 1);
-+
-+	if (!(cnt++))
-+		goto again;
-+}
-+
-+FIXTURE(snapshot) {
-+	bool	umount;
-+};
-+
-+FIXTURE_SETUP(snapshot)
-+{
-+	bool fail, umount;
-+	struct stat sb;
-+	char *message;
-+
-+	if (stat(TRACEFS_ROOT"/snapshot", &sb))
-+		SKIP(return, "Skipping: %s", "snapshot not available");
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+}
-+
-+FIXTURE_TEARDOWN(snapshot)
-+{
-+	__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+			"!snapshot");
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+}
-+
-+TEST_F(snapshot, excludes_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_GE(cpu, 0);
-+	tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+		      "snapshot");
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), -EBUSY);
-+}
-+
-+TEST_F(snapshot, excluded_by_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), 0);
-+
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+				  "snapshot"), -EBUSY);
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/snapshot",
-+				  "1"), -EBUSY);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.43.0.687.g38aa6559b0-goog
+But I'm pretty sure that even with that there will be sporadic failures
+in slow enough environments.
+
+When the host-induced jitter/delay is high enough, packets are dropped
+and there are functional failures. I'm wondering if we should skip this
+test entirely when KSFT_MACHINE_SLOW=3Dyes.
+
+Do you see any other options?
+
+Paolo
+
+---
+diff --git a/tools/testing/selftests/net/so_txtime.sh b/tools/testing/selft=
+ests/net/so_txtime.sh
+index 3f06f4d286a9..6445580f0a66 100755
+--- a/tools/testing/selftests/net/so_txtime.sh
++++ b/tools/testing/selftests/net/so_txtime.sh
+@@ -63,7 +63,9 @@ do_test() {
+ 		exit 1
+ 	fi
+=20
+-	local readonly START=3D"$(date +%s%N --date=3D"+ 0.1 seconds")"
++	local delta=3D0.1
++	[ -n "${KSFT_MACHINE_SLOW}" ] && delta=3D1
++	local readonly START=3D"$(date +%s%N --date=3D"+ ${delta} seconds")"
+ 	ip netns exec "${NS2}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" -S "=
+${SADDR}" -D "${DADDR}" "${RXARGS}" -r &
+ 	ip netns exec "${NS1}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" -S "=
+${SADDR}" -D "${DADDR}" "${TXARGS}"
+ 	wait "$!"
+@@ -76,7 +78,9 @@ do_test 6 mono a,10 a,10
+ do_test 4 mono a,10,b,20 a,10,b,20
+ do_test 6 mono a,20,b,10 b,20,a,20
+=20
+-if ip netns exec "${NS1}" tc qdisc replace dev "${DEV}" root etf clockid C=
+LOCK_TAI delta 400000; then
++delta=3D400000
++[ -n "${KSFT_MACHINE_SLOW}" ] && delta=3D$((delta*10))
++if ip netns exec "${NS1}" tc qdisc replace dev "${DEV}" root etf clockid C=
+LOCK_TAI delta "${delta}"; then
+ 	! do_test 4 tai a,-1 a,-1
+ 	! do_test 6 tai a,0 a,0
+ 	do_test 6 tai a,10 a,10
 
 
