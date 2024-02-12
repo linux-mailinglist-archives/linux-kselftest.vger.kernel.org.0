@@ -1,163 +1,153 @@
-Return-Path: <linux-kselftest+bounces-4518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4519-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5643851BE3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 18:46:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68A4D851BED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 18:47:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AEBE1F22A91
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 17:46:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24DD5B26FBC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 17:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCA43F8E6;
-	Mon, 12 Feb 2024 17:46:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E46F3FB28;
+	Mon, 12 Feb 2024 17:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="I8saTPKk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UHgbx6Bb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69313F9C4;
-	Mon, 12 Feb 2024 17:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3341C3F9CC
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 17:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707760000; cv=none; b=ZlMsyU8Utm85R7PDiRFzhjmp3p0lga/Tan7eAX6Je42vL5az9TgegqsoRP3Oqcb7J6bCeHY8wWbcbSuJ+9CYW+srwssoEhuktvZbFBrTB5OIRXVZe8lBi0QR9Yv2hUrtwphFafdQynAAXf7RkPbC5BPNA+pdE812mRHRj3R4jQI=
+	t=1707760002; cv=none; b=DwH7voReyBgjcdoLH5WUxEMmOIMQGILix8xy2vP6dDtgUWnJnK14Ov5IOrG6QE4yPZusg/qZKYB8R1kbDHuJ086p3E/ZXFKWRCnAeyZogl/GNKCZjT7orOSQgeNGxhpYCIDUFVfeSKcujQj9Otzui3jYXu8FXFoER9oRawvIq3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707760000; c=relaxed/simple;
-	bh=Evj4GUR5tO4ZMcMxOMLdh6qJeWH2YMVlAk2b5hg9Ixc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ocv/1owI5k6oijQFnx8NHpIFlw+Ie5dCLMsSerr/6C0gdfQGEs6zt8VUR6saVS9qF+LjHH032RKgcBWAyk3CLo5bTcDGkoDCpgsBj0ag35hlwus1sCLO1WTE+dAaJLbptouXXaXjqLBQnfWfHBQ+4hNonWjEIrItI2J1NTBE5kI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=I8saTPKk; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41CHg9xo007691;
-	Mon, 12 Feb 2024 17:46:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lZ01807Zva70exHEJYBQYFEyz4lvSw6VVNS2Z6/uJfA=;
- b=I8saTPKklZybxlhLByAYAGqAQrC8Z3j4x9/qPsKqaP1l1ncP0j1dktnhv4XhbssigG1a
- pfz7dk55ngg4S1eQwuGk7G5Gj5kM/zluAwsmO7C+X0atszWUoo1M6ovPtVqht4OKV3m7
- nj2ibA0U/3jC//mzGJQIKLPGVuL6BHJo2FvbxxCUI5uqcuHM6Ai+TlHwqNr/k3g/EVuE
- yX/Gk7YUT24pSoxplHTGd6iFzbULC58O428KOMyztFQiSasu817k6spKkAfB2/Fk/Lao
- vaGh1OecdLdyp0LXVBNIQXg/HEGrtv9tHJ9pEio5xCy46RD4q9z+wpjJKpjyyHiUBKMj Xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7qy3g3hq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 17:46:00 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41CHhnbt014351;
-	Mon, 12 Feb 2024 17:45:59 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7qy3g3gx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 17:45:59 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41CFfOL8032589;
-	Mon, 12 Feb 2024 17:45:58 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6kftaaft-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 17:45:58 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41CHjtwb46006540
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Feb 2024 17:45:57 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ABC1158043;
-	Mon, 12 Feb 2024 17:45:55 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D9FC458059;
-	Mon, 12 Feb 2024 17:45:47 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 12 Feb 2024 17:45:47 +0000 (GMT)
-Message-ID: <2d2a9e48-543a-4307-8de6-2e44b1ead7c5@linux.ibm.com>
-Date: Mon, 12 Feb 2024 12:45:47 -0500
+	s=arc-20240116; t=1707760002; c=relaxed/simple;
+	bh=CVNLoBTpg3SuaSY3T7L6dyU4fC9xnaUQyseVWU7yx70=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=UCo56D1ShFUk68iUKlfwaYzOLD8yV14eqM45dwzCXADbJoeobJ59QGqi2IXvpB3SQJrctU0+9ukHUVwgoZbQ+n5ROsRLHzAIPnBgBnLJ+7cLpKk1qjtO23T3X36zaDQPNAcI7BTbN9i6tcIJdI2Raz7HH1flHE4bT95kksolaOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UHgbx6Bb; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707759999;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CVNLoBTpg3SuaSY3T7L6dyU4fC9xnaUQyseVWU7yx70=;
+	b=UHgbx6BbnjbNYs+ohegzBhqpL6X+8W6y35iIfSpL92Y48XlaFO9oToLFsR/VYarVW9Xxo6
+	DGg41vERhWLQikOYt2fHPrHqEbVZD1eH+Mgf80fNcZtd4Ybx2DsYb0kRI4uxg75U97Hw/O
+	CcEEhEI1iMnokiAVYMxKbVmEkFMikVI=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-637-d0H8YAu4PAyjRC5-sdgTHQ-1; Mon, 12 Feb 2024 12:46:37 -0500
+X-MC-Unique: d0H8YAu4PAyjRC5-sdgTHQ-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2d101f2e09fso5990641fa.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 09:46:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707759996; x=1708364796;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CVNLoBTpg3SuaSY3T7L6dyU4fC9xnaUQyseVWU7yx70=;
+        b=MAX+oARBlpPMcX1fXeH8Nii1ATDJhZsh1L8BdiNwztdrwYVrYzG/XutP3ABVpRUZhX
+         BIxUJ+3CSVe3o/E8EiFeAdxNE7sIujZQqPAYJWEvbFR2EUpVBUBV/NBfIJ4dPV0sCLkZ
+         sZz/7Y8qjbJNW8ZfB7fJSsS1L7LeUSym9NbUAxGOnDLtgaQj/M0+cPmYI5Kfu/WdOscX
+         HDLJKFwhHYLFSezxxuItgCqjJohNxB6fK32HYfg4c8zk6CNumm84qp1Pxdbqtzow4ubb
+         nqAY3kenzcquaSJgppP17/ghDxtUZGS/KoUDrmi/A4bxPkJdx4VbLdZ5/2CiB62OZ6CJ
+         mazQ==
+X-Gm-Message-State: AOJu0YyYNVdStD0buKUJ82oPkHM87Frp7johs1Bg69WQYvYn/jQXMKw1
+	KIxQIbPsxoYbxS8PoVWs/lvgaLgWqpiorVmazRt5lavzAA6ftcbRaXU7uSmQR8skqXvhZT4LUAh
+	P7LmfqWvFKyn3i/BO+JAxIzjk+bXRTvMcm2GkwhgnjL+O1NlvYmKk2AyywbC//DgY1Q==
+X-Received: by 2002:a2e:96d7:0:b0:2d0:9f3f:7454 with SMTP id d23-20020a2e96d7000000b002d09f3f7454mr4537350ljj.23.1707759996101;
+        Mon, 12 Feb 2024 09:46:36 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEDLaOFvqDM4HNn1dbpMZ9TA7ctF0dgjgp2YSVWd/JfhR1n+VdcVyLbB+7+AP3nkXqAaDCXgQ==
+X-Received: by 2002:a2e:96d7:0:b0:2d0:9f3f:7454 with SMTP id d23-20020a2e96d7000000b002d09f3f7454mr4537328ljj.23.1707759995656;
+        Mon, 12 Feb 2024 09:46:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXTyxnX7RzEvixrd6bUAlXbwyVs3W0zBmUf9jJ39surd7MmbJS2lkLYS5l0/+iB2U+XYD4n3sYblzbkOXb6S+oYnDg3wUkn6ciQ/6eX/w2chonC7hWY1TigDO15pkD9rstm2hi6AWK+fJu6IS9NiUi73JpwUEHHs9G2o5rU7P4xGS5Pb6enIHJEKx9rTArFhitByK9sOZHFpBe50yt1tGYcw5JtDsLNzadXE9jKs5ea5qllU79y9M5RNOvms6yWqxp6+fya2BsRzEMouWNFLCq15EOIKIl/ACTcCEXn4BHLnKCkTtM+RNPN9xFcpjyKuN5TFWsXAJVm2VSkyE8gsXJb27j0GtVOydZvbUvgcxyUMctXLeEj1ForVbvJ5FFQZUSngYvjsMGTuoAhz4YG/99py0ffM1Lhm5jRmSvI1Qtp2bvps1iacY+2huSS8dmRtxGX5FLZ4xHJ1jnYLdKQF1FcCFSq8sN1UL30PmURAv3S6tkHNplmWgPGypF6xdivX5XFa8cbmeGXs3e2//wdfKBIxIjAGbtXsRHJRaOKRr+hTrFtQ/Sl1QnSu3eV9JRBMnts2My0ZZCqOmMfl26hyhJB9bzGNhzoPi6AkI2XlCjAwcA/0/vpfHCwn5wuDso=
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id fd9-20020a056402388900b005607f899175sm2968463edb.70.2024.02.12.09.46.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Feb 2024 09:46:35 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 0396C10F55AE; Mon, 12 Feb 2024 18:46:34 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <shuah@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next 0/9] allow HID-BPF to do device IOs
+In-Reply-To: <CAO-hwJLvEGNRXc8G2PR+AQ6kJg+k5YqSt3F7LCSc0zWnmFfe5g@mail.gmail.com>
+References: <20240209-hid-bpf-sleepable-v1-0-4cc895b5adbd@kernel.org>
+ <87bk8pve2z.fsf@toke.dk>
+ <CAO-hwJ+UeaBydN9deA8KBbgBiC_UCt6oXX-wGnNuSr8fhUrkXw@mail.gmail.com>
+ <875xyxva9u.fsf@toke.dk>
+ <CAO-hwJLvEGNRXc8G2PR+AQ6kJg+k5YqSt3F7LCSc0zWnmFfe5g@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Mon, 12 Feb 2024 18:46:34 +0100
+Message-ID: <87r0hhfudh.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 20/25] ima: Move to LSM infrastructure
-Content-Language: en-US
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
-        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
- <20240115181809.885385-21-roberto.sassu@huaweicloud.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240115181809.885385-21-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: e03QLpvnqItWgjHCd4tAECnyNVo4P7ye
-X-Proofpoint-GUID: KU-pDuq4N04-HLPzDOVsNKtZc_9jH1p0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-12_14,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=999 malwarescore=0
- impostorscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 clxscore=1015
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311290000 definitions=main-2402120135
+Content-Type: text/plain
 
+Benjamin Tissoires <benjamin.tissoires@redhat.com> writes:
 
+[...]
+>> IIUC, the bpf_timer callback is just a function (subprog) from the
+>> verifier PoV, so it is verified as whatever program type is creating the
+>> timer. So in other words, as long as you setup the timer from inside a
+>> tracing prog type, you should have access to all the same kfuncs, I
+>> think?
+>
+> Yep, you are correct. But as mentioned above, I am now in trouble with
+> the sleepable state:
+> - I need to call timer_start() from a non sleepable tracing function
+> (I'm in hard IRQ when dealing with a physical device)
+> - but then, ideally, the callback function needs to be tagged as a
+> sleepable one, so I can export my kfuncs which are doing kzalloc and
+> device IO as such.
+>
+> However, I can not really teach the BPF verifier to do so:
+> - it seems to check for the callback first when it is loaded, and
+> there is no SEC() equivalent for static functions
+> - libbpf doesn't have access to the callback as a prog as it has to be
+> a static function, and thus isn't exported as a full-blown prog.
+> - the verifier only checks for the callback when dealing with
+> BPF_FUNC_timer_set_callback, which doesn't have a "flag" argument
+> (though the validation of the callback has already been done while
+> checking it first, so we are already too late to change the sleppable
+> state of the callback)
+>
+> Right now, the only OK-ish version I have is declaring the kfunc as
+> non-sleepable, but checking that we are in a different context than
+> the IRQ of the initial event. This way, I am not crashing if this
+> function is called from the initial IRQ, but will still crash if used
+> outside of the hid context.
+>
+> This is not satisfactory, but I feel like it's going to be hard to
+> teach the verifier that the callback function is sleepable in that
+> case (maybe we could suffix the callback name, like we do for
+> arguments, but this is not very clean either).
 
-On 1/15/24 13:18, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Move hardcoded IMA function calls (not appraisal-specific functions) from
-> various places in the kernel to the LSM infrastructure, by introducing a
-> new LSM named 'ima' (at the end of the LSM list and always enabled like
-> 'integrity').
-> 
-> Having IMA before EVM in the Makefile is sufficient to preserve the
-> relative order of the new 'ima' LSM in respect to the upcoming 'evm' LSM,
-> and thus the order of IMA and EVM function calls as when they were
-> hardcoded.
-> 
-> Make moved functions as static (except ima_post_key_create_or_update(),
-> which is not in ima_main.c), and register them as implementation of the
-> respective hooks in the new function init_ima_lsm().
-> 
-> Select CONFIG_SECURITY_PATH, to ensure that the path-based LSM hook
-> path_post_mknod is always available and ima_post_path_mknod() is always
-> executed to mark files as new, as before the move.
-> 
-> A slight difference is that IMA and EVM functions registered for the
-> inode_post_setattr, inode_post_removexattr, path_post_mknod,
-> inode_post_create_tmpfile, inode_post_set_acl and inode_post_remove_acl
-> won't be executed for private inodes. Since those inodes are supposed to be
-> fs-internal, they should not be of interest of IMA or EVM. The S_PRIVATE
+The callback is only set once when the timer is first setup; I *think*
+it works to do the setup (bpf_timer_init() and bpf_timer_set_callback())
+in the context you need (from a sleepable prog), but do the arming
+(bpf_timer_start()) from a different program that is not itself sleepable?
 
-of interest 'to'
+-Toke
 
-> flag is used for anonymous inodes, hugetlbfs, reiserfs xattrs, XFS scrub
-> and kernel-internal tmpfs files.
-> 
-> Conditionally register ima_post_key_create_or_update() if
-> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is enabled. Also, conditionally register
-> ima_kernel_module_request() if CONFIG_INTEGRITY_ASYMMETRIC_KEYS is enabled.
-> 
-> Finally, add the LSM_ID_IMA case in lsm_list_modules_test.c.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Acked-by: Chuck Lever <chuck.lever@oracle.com>
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
