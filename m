@@ -1,96 +1,99 @@
-Return-Path: <linux-kselftest+bounces-4506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA30D8510B9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 11:25:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 014A98510A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 11:24:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4162CB2369D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 10:25:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AC8C1F2254A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 10:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E4518032;
-	Mon, 12 Feb 2024 10:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BD017C62;
+	Mon, 12 Feb 2024 10:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cc7Fe6py"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="lcKaCn4O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D0B18021;
-	Mon, 12 Feb 2024 10:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD7617C71
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 10:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707733498; cv=none; b=orIZu7m1MXhRxkXowefvFwzktv93BUvae04wmBVCf5g6oVSqjqXHfYDb1rxDIZ5U0gBGVqXnvqaKCI/zhAyfL2gXJBMvYtxKBbXrhArxs3mXkC/A0zCvDWmtVp/CqIeSO4mW8N8wEwlXj4Fsa/FCH8aBDJmrGKFfmE7d8Q8kZhU=
+	t=1707733438; cv=none; b=W3unPnJQhG8F/8ShWdpU3WW6voER6buwcYxzgKJSOdn0LkcNDlqimZLH7XbTJcx7x5Yop5VIxb+F4S9IbPibKzLDJqt5zhCmX4R6MRysiH2eUPqcUV4srJKip8ewtYUgszsGxt1javzbZEeYttIuSx8bUYsGLlNVM4hh8hykOz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707733498; c=relaxed/simple;
-	bh=KekI+KwhbIHhubJOTo0Ildr87NIL/dhgK0T8Lz4W8xI=;
+	s=arc-20240116; t=1707733438; c=relaxed/simple;
+	bh=TLWj/r7Pgt5h2SbwNEGy7ntlN2xmuVp2ucImosJuV3s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SlR7Ga3brSrG4YBwM3MIPCoruQc4a1HlFJYbXGV+6+fBCmNur5pzg/1s7naV58ITC8FjHRWtZB0CIONcelk5wNLqL9IQxgFhArV0V5nkwgJuhmCtRuuqMs+U4HcQRN1wJyDLfterT+7sfBvZqY7Bm0aJRsCbyaAUBauFIyYtQag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cc7Fe6py; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41CAI6Q5030654;
-	Mon, 12 Feb 2024 10:24:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=mfAlYz+L0iM5MqMdUyMXXYV8OjQg9weeyOJA047XLUY=;
- b=cc7Fe6pyZk0BSUq9fQdOX4AO5/vKfewgNY9QHZrbWH6rwKk0/Nvbo/a4U+DEKx3U+QWK
- vCffN1YgDR75Axty+31p4F5Y6wjZ18SrpRe/tGOmoOhKi3JvGb4UOggQTaC58bFzG3vf
- jvB4Le57SkPUdViooxyXXG8R86DPtrAV9tTqGzLwk4kjxS+sFR9txGLLfUaXNqZNhuIY
- Y7qJQuvkmRl45xfSzjY7HiX/ULuKa9UUkvlZJZ9dPOPQvO/GUfNnUobTObAcHVOL2aIK
- 6qoC0+aFD8DsE2rO2rug45RjTBdY3B7+g3mszAv6XXd76/hfqRhytppTEQdfWJaD+KB0 ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7het03a9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 10:24:46 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41CAIHMe031774;
-	Mon, 12 Feb 2024 10:24:45 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7het02gs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 10:24:43 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41C8OgWZ010060;
-	Mon, 12 Feb 2024 10:21:37 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6npkfkb4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 10:21:37 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41CALWVY4915754
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Feb 2024 10:21:34 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2DD9E2004F;
-	Mon, 12 Feb 2024 10:21:32 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8B1B62004B;
-	Mon, 12 Feb 2024 10:21:31 +0000 (GMT)
-Received: from osiris (unknown [9.171.5.16])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 12 Feb 2024 10:21:31 +0000 (GMT)
-Date: Mon, 12 Feb 2024 11:21:30 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Eric Farman <farman@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] KVM: s390: load guest access registers in MEM_OP
- ioctl
-Message-ID: <20240212102130.9156-A-hca@linux.ibm.com>
-References: <20240209204539.4150550-1-farman@linux.ibm.com>
- <20240209204539.4150550-2-farman@linux.ibm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=k26voz/Ef2yqizc2q2Uq6Sq71oi2GY75wZINl4AWtxLd1GDbpr7WBvXArjZKdLsxkNIg0p41Ug9krkWAjZNVEOm2EEgqRWxzhVbJwakyeecgdUzu8qB8jmetsiT3AczxFtLNHw2sgRLNJgWelsrai+nf5BEJwXWyA/95XhXO5YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=lcKaCn4O; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a3850ce741bso287430266b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 02:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1707733434; x=1708338234; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
+        b=lcKaCn4O8jWvmQj4JVY2b3Hu8aDVbmgdz2MSKl3Gjad+fU4f4dik8oxq9eDiS+drGl
+         IjnyN318J4XOb1A1odLv62vyT/9YQR+VKcjQf+iI5YfGKGVq5MN02f5JMRnUVROj+ci+
+         bgN6ua1ifcd/6Xn2Cq3+expZKP7zP+BLuY3vmbwELmnICmFKL/TIImS6Y1Hxv7f/z8Xm
+         ogdt9pzj4EtkGrvtpwPOUXbxRPoezbAyZUlCuRGBfevvUbQZ4SGChvBUsrPg+3HsQK0a
+         R9Wo59Amv+y1NlFIeZZZHE9ocdY6qyuHG9QFjEZGS1YHvVA9YuCliQYtyVExkaKTnP0I
+         JU0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707733434; x=1708338234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
+        b=Yd/PHGNRJsahtcmSTHWW0M1tUwSF+4eqyF0qakIF+QWrTwNK8D+vcT7G7zZuR56h+1
+         mzaWYW3hYxvQyy7pXdfSh28MCwWNiTOAncPtq+7XXP+BetGFOeVLBgjlrfJ3hc/qLpCy
+         /UyO43dJlBrGXdvnY02koJWzYHGjE4eeCyEnmAS1S5/fvRi011Zi/52ejwIew331wYWf
+         bcdvjbK4mpP5G7JsGDO6p42H/UqqHco6ffHZyPrBsdFZTSyMJlGowVwDU/G6/RfX+DNm
+         gPjpms2w29QuC4ysV6NjRyuI+i+YJFkxqupHSPZB4u15XeuY/emw78zKeJP0uU9kRPhw
+         PsnQ==
+X-Gm-Message-State: AOJu0YwGfxwoOdfgs7WWtqPCtZd5JWgbTQT3JgpDV6F47pvGP7YND6eg
+	sR0VqIGEpFpUYvxSzb2Ul43qDkYA9ihx7L1FWW/DcJGrW4LTrqiGA4dn9mAC9rk=
+X-Google-Smtp-Source: AGHT+IEIVVAUpTpqdBT16MY7gnKOm8Wgm8lU/UhtOte8u9qNN7LVPAHblq+h85cUkD6/Ed6GGvCddQ==
+X-Received: by 2002:a17:906:a88b:b0:a3c:cebc:9e0e with SMTP id ha11-20020a170906a88b00b00a3ccebc9e0emr567479ejb.66.1707733433939;
+        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUPAzE+xdeF9TrZSKLD2pHEr88oRydbkgxmrvinHSvSQxUcUIyGSd4eufO2JDcBJ7dp7k0omkE0TZm5KqaV2RSmopwEH9KJUBeAuNEnCQZp/Na3kZyhqGhtsPoWUFMQWLjH8g1/XK5jmvnK3onAoGGYAjWJYmG20MsKxc8Yn9hXfF2DIBZZzGU6LHBehpCvPsVjofyX2DVddSWuIv/g8ypG3DrQoeVz4cIaOtpF0w2aQFPxniQSHtJKifQoI36QcqUz+GTeRa25cUcHcaFSIQmeIhQc0JSMEzlS4c0IEEQuh4BCexsaE+Q2RkgtWWZhpOa/zFS9tiBq7NOlJoD7GObmq5y2nTJbzou3e8N/JqJSg+NdzdwTTJUpVKPs29VIz44lxoHm6/kZeP4Smk1W08JaOjCzXRt8PuEeZ/ZindEfAW3sw5G8/+7SeMUmw0s+pjY5aq6PL8Es9QTI+gFjyh5aBJdPU11Mw/b8r+ggEfN9EqNFco+lICueODov2KMWeF9NjaBVj7iuEimn1MzGt8h09gt++g3M+hv8cjkxyNnKs568+BR8yc2MOxQQfPS10utFK8+zFVEhGgYzQdUVImLwxe37lmPhh60wZlbX9IzH8qQrJ6pXMKqI7ua/HuD+egoIQG7OQAblqLWyAAYzgzeBywNTlp4Txdjmklview3xwwTap1D5fOGoJcX3j6hu48qZsuyeGsyC9nsBmohNR1DagrdFR+BQPMd8gUJY++R62GwIzRAH4E9fbyPamjyvb3f65wE2mOTSc9FZUoRQcF639WAouaosGVNVx1Lb+cyBEU6FitjgZXDhOSgLIEDineFX73GZcKSrIBtz4oK2eq7mAoQvQNaGVZKmYrzVDunSfj481sy1kH7T62OUcjxcEqkvFA6AoU8syAnrTA/2MrCiJ2cTSBnstrRgHXEzdtHuRyNWjIHVyXNF4EoXfIjpHWpKwC
+ eFJ5J+101mb/s4Q/1cmQ4Wz11QZhp5DbbKlvzcjLsFg2m3gpryp3twJqX5TrxCAcFt/wAV3BkzPRN88+roOQEXkWbekKlM46Y71IoxRtiUkdHJN5WqFsqlTyD5KyCw2GGJTw3SH6T/MmHAr+oOwvKSIc3aC0hV24YWulCM2OsuRuhclbmlzyt6Y2JJxxnVKaEqRxDeMNsLrGMeiDbuUhtua8pSpKm3dNm1G1WDslPC35cV5XDKSWmKAb1/M2wkuq5SETC7B1gv6XnzZnlR1wQSLix+8+kin8J6JO3gm3X+McNhBRLrxx2loxFJMo2c/xjh7wF3wDssyxKjHX5A+5fcuPqv50ODa5GDub27T0Uc32g162GnVdCC+VeowGyq11KgvugkpIVtk10/sJDfMFGpZuviKTl3msRZRr3qrlPR4dQveuCxGTOo6Oyav0FytnJtGp3LnLOhGFP3ew0jwPCoPc6cw6K+VeKW8qiwGLv/Zb8bgVl3bujL9JS6Qo/52tJiC0ZuLRKF0FHpPoBy/q+YQhTYHMl18uxLehORfxoVvopoQWyWBYfdFhJ6Zw4rz8Q3MZWMxMDQ3CncpPaKx2ctow9uTjN8qQgbOhE/nRr55TRTZYeL2J9umD0EbRUOAPfKrtRYeRcln+faWGY1RFXS0SkOu8ul3zt4sehJkmrrwdGMZP7KTM7JcjoVtmgaa5ny3FdpkRXFN6TbIN0bGzTgwdO8Q47IPyS1xFnDgY3d3inqjDrNKZ+ApxxPH0VXmkBGBMUz3yomR0ChsvRgC5CMHBStwF4uSxPqonHfDFzPjINLbSkuK5J1iq1mGTAGg/z4AFlUd/6W2ARQswjf42gEBah0qBZ/jxD0NzH+A1BvfORnnJDXSaxlJzogY3Yqw7ulEjTbff7wBfEAQd1+H23TSbMHcfcEg8bJq1L8w8lzRqmE3x5zY1gHR9uI3y8tKtTr166Quq7EosM5SUUfT9LoO3vcs6beCXmhNk7
+ vesJ1Ft9sE1alaQEh
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id cd6-20020a170906b34600b00a34c07816e3sm61419ejb.73.2024.02.12.02.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
+Date: Mon, 12 Feb 2024 11:23:52 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: debug@rivosinc.com
+Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com, 
+	kito.cheng@sifive.com, keescook@chromium.org, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com, 
+	corbet@lwn.net, aou@eecs.berkeley.edu, oleg@redhat.com, 
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com, shuah@kernel.org, 
+	brauner@kernel.org, guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com, 
+	xiao.w.wang@intel.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
+	waylingii@gmail.com, greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org, 
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com, 
+	panqinglin2020@iscas.ac.cn, willy@infradead.org, vincent.chen@sifive.com, 
+	andy.chiu@sifive.com, gerg@kernel.org, jeeheng.sia@starfivetech.com, 
+	mason.huo@starfivetech.com, ancientmodern4@gmail.com, mathis.salmen@matsal.de, 
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com, ruscur@russell.cc, 
+	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il, zhangqing@loongson.cn, 
+	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com, 
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com, 
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 01/28] riscv: abstract envcfg CSR
+Message-ID: <20240212-cf2c44241bfd5e942a4e3752@orel>
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-2-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -99,72 +102,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240209204539.4150550-2-farman@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RrKGKrwwk1y3haKGz8HgLtikp3uM8SIe
-X-Proofpoint-GUID: _d_wXRZHueDcCZqlAjpqAzJmBf5oqR2j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-12_07,2024-02-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0 spamscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=901
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402120078
+In-Reply-To: <20240125062739.1339782-2-debug@rivosinc.com>
 
-On Fri, Feb 09, 2024 at 09:45:38PM +0100, Eric Farman wrote:
-> The routine ar_translation() is called by get_vcpu_asce(), which is
-> called by both the instruction intercept path (where the access
-> registers had been loaded with the guest's values), and the MEM_OP
-> ioctl (which hadn't). This means that any ALET the guest expects to
-> be used would be ignored.
+On Wed, Jan 24, 2024 at 10:21:26PM -0800, debug@rivosinc.com wrote:
+> From: Deepak Gupta <debug@rivosinc.com>
 > 
-> Furthermore, the logic in ar_translation() will store the contents
-> of the access registers back to the KVM_RUN struct. This unexpected
-> change of AR values can lead to problems after invoking the MEM_OP,
-> for example an ALET Specification Exception.
+> This patch abstracts envcfg CSR in kernel (as is done for other homonyn
+> CSRs). CSR_ENVCFG is used as alias for CSR_SENVCFG or CSR_MENVCFG depending
+> on how kernel is compiled.
 > 
-> Fix this by swapping the host/guest access registers around the
-> MEM_OP ioctl, in the same way that the KVM_RUN ioctl does with
-> sync_regs()/store_regs(). The full register swap isn't needed here,
-> since only the access registers are used in this interface.
+> Additionally it changes CBZE enabling to start using CSR_ENVCFG instead of
+> CSR_SENVCFG.
 > 
-> Suggested-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->  arch/s390/kvm/kvm-s390.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  arch/riscv/include/asm/csr.h   | 2 ++
+>  arch/riscv/kernel/cpufeature.c | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index ea63ac769889..c2dfeea55dcf 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -5391,6 +5391,10 @@ static long kvm_s390_vcpu_mem_op(struct kvm_vcpu *vcpu,
->  			return -ENOMEM;
->  	}
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 306a19a5509c..b3400517b0a9 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -415,6 +415,7 @@
+>  # define CSR_STATUS	CSR_MSTATUS
+>  # define CSR_IE		CSR_MIE
+>  # define CSR_TVEC	CSR_MTVEC
+> +# define CSR_ENVCFG CSR_MENVCFG
+>  # define CSR_SCRATCH	CSR_MSCRATCH
+>  # define CSR_EPC	CSR_MEPC
+>  # define CSR_CAUSE	CSR_MCAUSE
+> @@ -439,6 +440,7 @@
+>  # define CSR_STATUS	CSR_SSTATUS
+>  # define CSR_IE		CSR_SIE
+>  # define CSR_TVEC	CSR_STVEC
+> +# define CSR_ENVCFG CSR_SENVCFG
+>  # define CSR_SCRATCH	CSR_SSCRATCH
+>  # define CSR_EPC	CSR_SEPC
+>  # define CSR_CAUSE	CSR_SCAUSE
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index b3785ffc1570..98623393fd1f 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -725,7 +725,7 @@ arch_initcall(check_unaligned_access_all_cpus);
+>  void riscv_user_isa_enable(void)
+>  {
+>  	if (riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICBOZ))
+> -		csr_set(CSR_SENVCFG, ENVCFG_CBZE);
+> +		csr_set(CSR_ENVCFG, ENVCFG_CBZE);
+>  }
 >  
-> +	/* Swap host/guest access registers in the event of a MEM_OP with AR specified */
-> +	save_access_regs(vcpu->arch.host_acrs);
-> +	restore_access_regs(vcpu->run->s.regs.acrs);
-> +
->  	acc_mode = mop->op == KVM_S390_MEMOP_LOGICAL_READ ? GACC_FETCH : GACC_STORE;
->  	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
->  		r = check_gva_range(vcpu, mop->gaddr, mop->ar, mop->size,
-> @@ -5420,6 +5424,8 @@ static long kvm_s390_vcpu_mem_op(struct kvm_vcpu *vcpu,
->  		kvm_s390_inject_prog_irq(vcpu, &vcpu->arch.pgm);
->  
->  out_free:
-> +	save_access_regs(vcpu->run->s.regs.acrs);
-> +	restore_access_regs(vcpu->arch.host_acrs);
+>  #ifdef CONFIG_RISCV_ALTERNATIVE
+> -- 
+> 2.43.0
+>
 
-I guess we will end up with more and more of such constructs until nobody
-knows when which register contents are loaded. I would higly prefer a TIF flag
-which indicates if the access registers contain the host or guest register
-contents, and actual users grab the required content from the correct location
-- or better: always take it from guest save area, and write to the guest save
-area if the to be invented TIF flag indicates that access registers contain
-guest registers...
-
-Or maybe a TIF flag with different semantics: "guest save area does not
-reflect current state - which is within registers".
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
