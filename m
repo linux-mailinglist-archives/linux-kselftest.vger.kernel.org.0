@@ -1,166 +1,111 @@
-Return-Path: <linux-kselftest+bounces-4526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 584AD851DB6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 20:14:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31452851DB0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 20:13:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AE5B1C218C6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 19:14:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D25D71F2161F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Feb 2024 19:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B693D4653C;
-	Mon, 12 Feb 2024 19:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7249946420;
+	Mon, 12 Feb 2024 19:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JU3sj7wi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVJxBcyW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BDF3EA78;
-	Mon, 12 Feb 2024 19:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A31A47A5D;
+	Mon, 12 Feb 2024 19:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707765233; cv=none; b=bnoftLAzaY+2X1WgKv4dsXB+TfjjknTpdbJpIIhbNpX4dBme+GfAYbItsqd4jUjkUxetBNQ1u/kAeLI2bZbyxEne/utg6whQsG4hZIVYHgGLPlNs+NjFvG1noPfbPXDehUZMN+q5ufSfj4thsBURkZmGwrh3tvOJpI8bQEXstnY=
+	t=1707765206; cv=none; b=qVgUoSkGoa7QAQ08JwuZ021N8FthEIBPGE+0c2+9jvaztyjVwsSDMEq0IeRKXtBRQYqbFk3La89NNGjbBDI9z+XYTiaulZhe5zDS3PvgNnd8LrECwm7JN7RtQdWpCN10Qt2piSXTukiyntXc9Nb9z+X6RpTo8sUlsu33k0CMFJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707765233; c=relaxed/simple;
-	bh=Zg4dI59X8fKukbLuWBgS80Z3J3/AqqKxoPMGlLwMCM4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m3IAYJ4hB+DAJACU22PSFaGvCFwwJptLbGJn8YvE3SJlYARDufK40+SW9oNnGv34cn0Y+QXzgSP8mSzdeIW7CVybj7PSidLrDlUJ3qAYl4QRH0KuTxGTjoDw2XNzoxeF3VcA1PNyBIpI3K0MB5OWMBtrbQ24JiNXjYk+/LrIKkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JU3sj7wi; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41CIvYkZ028573;
-	Mon, 12 Feb 2024 19:13:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=xRAtTXA0GYOC3hlcnkylDGI7YmiZlOBntAK8dL6+NIQ=;
- b=JU3sj7wi5sa3W3/c6ROS4fOw0SdEdRB57/eO2Br+dxuGpdK5Ozbtr1U+pD3nilnER6OF
- ys+xLlq+l/9Xz8On6ORJXNZH5E+RubgEydbi4lrH5Q/GLOo3ZA425tyDA8uHp2paNXO2
- F7IV0cv2HiDLlvMLPJAxpQClXgWGmuh8luwA0gEWjzmrlHcZYbY0sGw+TGmIhWKK3yKw
- 3VzKCztg50EGasmePeKpf+VPs9v42qEq5k6OwPRi99tDk3iuc/aorcvWjzozgxiegJ8d
- ufKmukVI4AoTmxmoOyTbLEUc1tIy3eWK7Zio37pm7nMO6qn3cowP8uhomS3zMzXaSvgZ Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7s2crg9v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 19:13:24 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41CJ09Js004446;
-	Mon, 12 Feb 2024 19:13:23 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7s2crg9e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 19:13:23 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41CIPK9G009904;
-	Mon, 12 Feb 2024 19:13:22 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6p62j08h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 19:13:22 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41CJDJKI19530190
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Feb 2024 19:13:21 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 850F75805F;
-	Mon, 12 Feb 2024 19:13:19 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 70F8758059;
-	Mon, 12 Feb 2024 19:13:17 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 12 Feb 2024 19:13:17 +0000 (GMT)
-Message-ID: <5ee562ed-e461-4e63-9219-827619c55b3e@linux.ibm.com>
-Date: Mon, 12 Feb 2024 14:13:17 -0500
+	s=arc-20240116; t=1707765206; c=relaxed/simple;
+	bh=lVcxz1blE5LkyB5fmTf0yVlJWy7lRWV3QJg/2l55jq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AITymmRmAb+huiUGETSzc5FROA4JT8OVbOrTaP2Jdv59N1cG9VXwx2XQj2MmF2MOk3leLPgH4IVqOzXLL8N7tvealpQ7q6QAthsy4J79VXSh4Sm9KwFonQN4DM5fQ9yUpYn/CDzpk0HtZQ4t2ku5UFTlAItEDOxLEIb89nloFKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVJxBcyW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 720D6C433C7;
+	Mon, 12 Feb 2024 19:13:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707765205;
+	bh=lVcxz1blE5LkyB5fmTf0yVlJWy7lRWV3QJg/2l55jq0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mVJxBcyWkPzcN+qZv3RfniWWGIxIMuPq7cihILT1zdcW3PpqQpuzEdZHJken6yMyf
+	 WAvjW6AvzVC/Co6VuJc360H0F+jOU4dobxIDBhHHRdK8myIQH0o+Noh6jug8t6imf2
+	 wzUqv2t02CDOVpFwfoKz/h+43IHzgh+ccr7S2Yw4lV13r4imNb4G6OvsMjGX10Yl6W
+	 RcJB2U4ED2FReuYFniuGnBBtdlP9YtKLEuasCecdh7rChvqi+bwPZ6R5wT6j6aOobN
+	 /Gva6vrnLumFDO0SGBhGNz8ANC4jplUx/cK2rMkXBVVP73Zku488B0NWM0o9oTiUFZ
+	 GhsLHp6DrGmTg==
+Date: Mon, 12 Feb 2024 19:13:21 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: Don't needlessly use sudo to obtain root
+ in run_vmtests.sh
+Message-ID: <75fa3e12-8b0d-407b-b11f-333be70d157e@sirena.org.uk>
+References: <20240209-kselftest-mm-check-deps-v1-1-19b09b151522@kernel.org>
+ <17c0b7a1-6ec2-4504-8287-f0fa111b9748@arm.com>
+ <ZcdthfAvzLQ9lzvd@finisterre.sirena.org.uk>
+ <9ff817f4-e999-4a95-b00d-6984a7ea6181@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 23/25] evm: Make it independent from 'integrity' LSM
-Content-Language: en-US
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
-        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
- <20240115181809.885385-24-roberto.sassu@huaweicloud.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240115181809.885385-24-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ji7sCJbvayq_fEExhtw88aZrsgxS19-n
-X-Proofpoint-ORIG-GUID: dWteap1k1f3oG6uA_Xu3h5dvHPWJsTNJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-12_16,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 clxscore=1015 priorityscore=1501 suspectscore=0
- impostorscore=0 bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=942
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402120147
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uZViTPliezr/CpYc"
+Content-Disposition: inline
+In-Reply-To: <9ff817f4-e999-4a95-b00d-6984a7ea6181@arm.com>
+X-Cookie: I'm not available for comment..
 
 
+--uZViTPliezr/CpYc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 1/15/24 13:18, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Define a new structure for EVM-specific metadata, called evm_iint_cache,
-> and embed it in the inode security blob. Introduce evm_iint_inode() to
-> retrieve metadata, and register evm_inode_alloc_security() for the
-> inode_alloc_security LSM hook, to initialize the structure (before
-> splitting metadata, this task was done by iint_init_always()).
-> 
-> Keep the non-NULL checks after calling evm_iint_inode() except in
-> evm_inode_alloc_security(), to take into account inodes for which
-> security_inode_alloc() was not called. When using shared metadata,
-> obtaining a NULL pointer from integrity_iint_find() meant that the file
-> wasn't in the IMA policy. Now, because IMA and EVM use disjoint metadata,
-> the EVM status has to be stored for every inode regardless of the IMA
-> policy.
-> 
-> Given that from now on EVM relies on its own metadata, remove the iint
-> parameter from evm_verifyxattr(). Also, directly retrieve the iint in
-> evm_verify_hmac(), called by both evm_verifyxattr() and
-> evm_verify_current_integrity(), since now there is no performance penalty
-> in retrieving EVM metadata (constant time).
-> 
-> Replicate the management of the IMA_NEW_FILE flag, by introducing
-> evm_post_path_mknod() and evm_file_release() to respectively set and clear
-> the newly introduced flag EVM_NEW_FILE, at the same time IMA does. Like for
-> IMA, select CONFIG_SECURITY_PATH when EVM is enabled, to ensure that files
-> are marked as new.
-> 
-> Unlike ima_post_path_mknod(), evm_post_path_mknod() cannot check if a file
-> must be appraised. Thus, it marks all affected files. Also, it does not
-> clear EVM_NEW_FILE depending on i_version, but that is not a problem
-> because IMA_NEW_FILE is always cleared when set in ima_check_last_writer().
-> 
-> Move the EVM-specific flag EVM_IMMUTABLE_DIGSIG to
-> security/integrity/evm/evm.h, since that definition is now unnecessary in
-> the common integrity layer.
-> 
-> Finally, switch to the LSM reservation mechanism for the EVM xattr, and
-> consequently decrement by one the number of xattrs to allocate in
-> security_inode_init_security().
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, Feb 12, 2024 at 08:32:58AM +0000, Ryan Roberts wrote:
+> On 10/02/2024 12:35, Mark Brown wrote:
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Ah, I was assuming that some of the suite ran usefully as non-root given
+> > that the only point of that sudo was to acquire root.  If the whole
+> > thing needs to be root then we should instead have a check for root at
+> > the top of run_vmtests.sh and just skip the whole thing if we aren't
+> > root, but then I'm unclear why it's invoking sudo in the first place.
+
+> I can't speak for how others use the suite, but there are a bunch of setup
+> operations in the script itself that require root (e.g. reserving huge pages).
+> Some of the tests will work without root, I'm sure, but I'm not sure its hugely
+> valuable. Personally, I'd vote for just doing a test for root at the top, as you
+> suggest.
+
+The hugetlb tests appear to be checking for root while running...  I'm
+not super fussed either way myself, I don't really use these tests
+myself except in a general "keeping an eye on CI" kind of way so I'd not
+object if people wanted to just go for just requiring root for the whole
+thing.
+
+--uZViTPliezr/CpYc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXKbdAACgkQJNaLcl1U
+h9C6wgf/RJIOLX4PFd2MsE1xuGjw2/lCoxf8qoDdaoqGpAAVWq86BvYjlgCaB9H4
+g6HK0IaPAvY0XWfuPV4ouY6OsbBE9DuvB7mwNbqG7pg7hKIdpod/fuev95pfWZbo
+SnYocqjGxxYZQwPE+YqWcnbMIvkcboD+8gcIy3yle013yXOkn3dHdndPDpnNzAK0
++Sa8Y8E+pUt4pBJjLIuklEmf9tOfHakk2zMZk0JbF55KQVxcI6hPcENxZ7AGCEOx
+cG8h/N3e/2luVdi7FqAKo7McRek9EQpIpg96YKBA+QX8xgjzEZ2komh6G9hBdvvL
+Xd2XSTk7BozvqzbobHD0PGrBro40CQ==
+=wlBc
+-----END PGP SIGNATURE-----
+
+--uZViTPliezr/CpYc--
 
