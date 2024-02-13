@@ -1,206 +1,154 @@
-Return-Path: <linux-kselftest+bounces-4598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5446853EB5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 23:31:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 188CE853F0C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 23:47:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D95A01C28AF9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 22:31:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 826F31F211F7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 22:47:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBB86217C;
-	Tue, 13 Feb 2024 22:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CDDC627EE;
+	Tue, 13 Feb 2024 22:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PdFdiQQH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HhQGk2fL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DE064F;
-	Tue, 13 Feb 2024 22:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707863469; cv=fail; b=c9KfpyE43XA0oLwTrRNSjXI+u33K18p7rFTwLlHh1yTvlON1zFIjouCDnt6gFG2JdnRpZD8KQKGjnfgRDZ7EDPaJchR5QE/IQqJRSu8T/H8m43iexYNdQZ5h1SAOLKzn/q2JEjQbW9Blyc9PiPUSgDQNWsWJLHraF/etoZsuczw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707863469; c=relaxed/simple;
-	bh=cEB9bSn7ipaDs2dQQ9H8ZavraOkM83RryC0qk3Up83M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aw1G0VQmEV1O0SZS7OWn2S5EUt5fHS/Rznfy8KUq8MQJs/rIr055e0IoAfLZdr6cpDiziO+gYAeZzgP+ikThGKsDOumaPlbiKsQreDS+4p+LAi7HwIipNskSvtgE+hAwBfmXF5I7wb4lOy2hbP2Ob96w+xn/4/jzqzlIM61mQgY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PdFdiQQH; arc=fail smtp.client-ip=40.107.237.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUqd/s1bdhrvwmc/Y/8zhj4EGo/a1idponEm0NTMyxm0jT2HZzYXWTzkc+4KL5NQxsQXFzYrwhx0UED7rq5a+kEKNpcgBC6gzeUPDsYxpAoayiQqSaIhe2no6Nk4m+Xjx8S4Cfjm34urHKZVpY47M5VHpvh44Hf4MWRd35vMz6+t6hl42Qz7o2BETZQEffSIQndef215BIVXU6sWjMDkcURBhEQPiXJbSbd0Nt4n7Fok3LSLtCAbZE5pOGgt5NlZpM/fI6K10jPlckkt2wRfF/xCn+nH4Htj5UdIGRLxfgHY9ovD+OU5mvnxdx7fJ1IWc4EjsChDAP4EQFY8t7rThg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cEB9bSn7ipaDs2dQQ9H8ZavraOkM83RryC0qk3Up83M=;
- b=Ed6LMuE5LF89BbYDOxbZrXzZxOdqQwc1atGWRmblryz5bhVGOjHaUU6uvsAud08hirtpO01LYylHw0oJC7JudmAE71TpOhmDhVZWnCNhAt97JX7Lbqzw6oaXQ5cXa0JHoHzoOUMgqog0AfmxVeBIFRkaVBe/zsyvNvqQ+YHpuYV1nioOcnBGy69X6X3ECQUh8HFQvIqycE3+0p8IgWP6hR466H3tWfE8101YMI2ffUozHvBr5Q+goPYEDGrIXWIGQz/xlM2SwjsGR430PXCzZ7pDk1kBfRKEKY49P2bwXRmnTiPevwvXZ/Ials0Jcc8y4Gy2sphHyoQ1yHsLmKghVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cEB9bSn7ipaDs2dQQ9H8ZavraOkM83RryC0qk3Up83M=;
- b=PdFdiQQHWeh7sDyHmecn745R3S/Ni4x8YW2yUuUKDjmK5lBm/SDCwkSzRO0EWvP7eFzN52kLRqzVVSvSKB4Jlg3h6tfkJBHYN5PAFn5S+PSCJn7eGImucX44MvhkDv6yn3zVRldWvYnJE5ig2q3ZsHokfvnE/YotA/vETlrVurrVxqI7U+dEG7vAPRpk4nqIz0NptWmYxpdGM4sfnOX2Bc8VXwE8VuHQLvGoODE0Neh9PW66D3cc1j5UZFnxPOpOfW5uGG7eQLYeCjQw2xpeV8ZDzPEe3D/t8tVnJNEvi3fHZMP+krbP6oux8MG3bz9yEwP9SRL4W0sVN5QjGekF1w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- PH7PR12MB5879.namprd12.prod.outlook.com (2603:10b6:510:1d7::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7292.25; Tue, 13 Feb 2024 22:31:04 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15%5]) with mapi id 15.20.7292.013; Tue, 13 Feb 2024
- 22:31:03 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>,
- linux-mm@kvack.org, "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
- Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
- "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>,
- =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Mcgrof Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] Split a folio to any lower order folios
-Date: Tue, 13 Feb 2024 17:31:00 -0500
-X-Mailer: MailMate (1.14r6018)
-Message-ID: <F4470D3A-DC2C-4A6A-B65C-1C94D732A60E@nvidia.com>
-In-Reply-To: <659e1abb-40d0-42ba-ba0a-8256d7eb1c5a@redhat.com>
-References: <20240213215520.1048625-1-zi.yan@sent.com>
- <659e1abb-40d0-42ba-ba0a-8256d7eb1c5a@redhat.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL0PR02CA0123.namprd02.prod.outlook.com
- (2603:10b6:208:35::28) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786E062A0F;
+	Tue, 13 Feb 2024 22:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707864418; cv=none; b=Jgd3bQwjd1ECNJ1qgIGD4wnSiJv3unZC0wTmnfUwqR88eTIJVxkdKjREcxkfeGGDopuc3lSpbeM9g5pPgBcABy8LpfmSpsuc7JA3dDy1RHNx24HAXTqVSGYlRWr5xnpWRapozkHWhR2HZscSv3aWT615eKh8Hyc4F2Opecug9MA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707864418; c=relaxed/simple;
+	bh=NWymtgigjzoqDAPLAUI5PGd5uNPIj+sUwjpbAWET0BQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OuMRA+CJMrvG0RmBn9HmZyCJScclrpTKotsOfeUCVnglwenSyIDw8Bn+y0tzauz7Oyri+C2K8ylM6TjRttYJQeBCIK7XjZ68uMZ0D9TsWl4sWDQH+tLDnI2wS7d7zZj8KJPaRa8RzURaQVO0uqVKj4JOpBwjOCq7kvkkZKEAWD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HhQGk2fL; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-51165a488baso6460482e87.2;
+        Tue, 13 Feb 2024 14:46:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707864414; x=1708469214; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwLLOmE70wcyVhCXpJbxp7NNDK3hurRDw/SPkFr+jms=;
+        b=HhQGk2fLzntY/mzsjdwPJJDqcPlt5sWf999yQm+WUV97xwBKJCwxz66Ryga2Nfs4Rb
+         XEI71gQP9ues8ANNiq5qy/g2iYvmH3fiD+O8QY0EUbwDPPhlljthG9hc8Cipw64BwbdG
+         zxy7CWjMvwKYkbKrcKx7E0wSJqThIy/X0RY2JMjDeEzG4CWk9vgn9SpZfrYMqZntFkrE
+         /stTsUykrVl24RkK7wbZ2dW/P/88g8uQMrCHTiq02zQJwIqia+btHfK27zMeYCf88roi
+         zsr1Zzt3V3VX96sY9eJvOu9Qu55hzZu/vccDnpct8HbUgJDZrWeS0BBb30erEmyJq/pM
+         MAqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707864414; x=1708469214;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UwLLOmE70wcyVhCXpJbxp7NNDK3hurRDw/SPkFr+jms=;
+        b=r9rPVWuIkbNqmAVC3LtpMHRSYapRtV/WsHZVFFQ6xfulM+r5dDEEz+L5NPdVBEMR9l
+         jx3jlkEk0XagPmz5XNtHspPS9pf7Y3K6llVPyY1juNWpEbR/3Na9wHSwMVxbKh/OvIoO
+         aPgg3DKt45NG7WWMCN/UEqoXei+WATq89fqnweUY7EJRwDx8ED5Pfaje1btZIM0+3FoK
+         fWK4quw0Hd3rQmZGNysHlBS7yCoFu7pf9scR9zjIQafwgGcvEG5hq5x2fdE6/hMqgF+D
+         RY6C0pZNm13MlOQujyNqN0223rK4fRX3JmYEFUc/2mrq6sQiGsM1vqoDZKoMaJ7HbWI9
+         6D/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWEKVLuIU4KKbyrTeG4RmP0Dm2zKPTnPh7DP5lQnrKnYDVAHP6yq2nZ5m9RNaERPcQrVEnOkiH2JMwlzNx1sdhg2vDsa5AxLNraqWwLjsRa
+X-Gm-Message-State: AOJu0Yw3a2ibfpoMXEnNaF7L4dpXTGK6m7m1GKF0Dxm17xEXusweO7GK
+	i0PYJ2aYTxkFn9QdWMMtR3dIFeS4Duf0mhxz4rEUqcO/6PxWtHkc
+X-Google-Smtp-Source: AGHT+IG34v6jyBe2Oeqqwtl6vRLDvIT1X6L8CHvZ0QnxH6uz5O0cifARegdiO3RFzJ/WOA+j5BnTEQ==
+X-Received: by 2002:a05:6512:142:b0:511:a2ed:f6c7 with SMTP id m2-20020a056512014200b00511a2edf6c7mr295611lfo.11.1707864413746;
+        Tue, 13 Feb 2024 14:46:53 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXZKxL7x8ulxvHQgonYO238frw0mrKRNeZOF+lQb2cE7g3pwPsg+qdOo5CqGX5y9kd5vKk/AfJUv4oLVciz9KJ5mvV1l32cqxFr2/yirqA6SEO2pgoCN5qJsw7uwmT7LcNbEC+MoU5PDte0GrYy7ukZ9ABIa8cDhvdywDnpXTbq2DVSVRXvYm7oPVWIUo8QYNxQi+jL/TAir057RbeiM/c8BvYwzCrhs3j1c+9oVAn2xVmvwQCWxBdzcZfs2wf/Qgcp72Ce
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-6ae3-bc23-bc27-2247.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:6ae3:bc23:bc27:2247])
+        by smtp.gmail.com with ESMTPSA id b17-20020a1709062b5100b00a3cd41b3c19sm1700077ejg.199.2024.02.13.14.46.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 14:46:53 -0800 (PST)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v3 0/4] selftests: add missing gitignore files and include
+ generated objects
+Date: Tue, 13 Feb 2024 23:46:49 +0100
+Message-Id: <20240213-selftest_gitignore-v3-0-1f812368702b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|PH7PR12MB5879:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8493b2a8-e25d-4f15-1a78-08dc2ce37681
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	FrGqSgo8+fdHk5yGN6ZQHtICgd3kTAUwjzfjb8ZcfQvOjeRSMw/lXjET1+c5O4w0pNLcuX2EyadATlt9YtJvTNNVvIdLPTMvnXmtGMUSZMCjEECo02M6kdUsnScIWMZmm7JLlG2hwI6Xn9bCCK7Sc3xPong/36tM0fM62oNp4eBj8iNnFOBZTsaR1kQALapItpXDKNIVO2yElahdS0vUBCf7hdpMQvZKWCM29ql2cl86fH03PwW9gXBqJhK5tnFpB35ArJcBSnE4rRe2z51PJQKoB/jeXmXt2ZuG2D9w45/mLXVk+lzSypWCmPjw0CD411uQ5wFkuzf3DPE+g+suxopw0/wGupegirafFGLhCFyY6VeSIR0+Wz8I5UZq+rHGovB54La3hlW454njkeHt7dd8K2ygKw4wHH2o9EQrjASoe3qQMBYwzBQnv7VKOVzzVrchKe8UWiqh2bhhdNwQgl7zHRx18pUWqhtVjOAHYABDFcv43uNK2esdnXXg7DZ3JmtQP40zfoIPe2xLCjw/89RIG36Lg1LRuJdhsT1Y3Ip56RpdPAODU+m4zf/NZinJ
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(396003)(376002)(136003)(39860400002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(2906002)(5660300002)(7416002)(235185007)(2616005)(26005)(41300700001)(4326008)(8936002)(6916009)(66946007)(6506007)(53546011)(66556008)(66476007)(8676002)(6486002)(83380400001)(6512007)(33656002)(478600001)(54906003)(316002)(86362001)(36756003)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?vsl03gJ+pL2Xh7Hdb/heTWcLxed4dq++Jh8KLuGcGgd5ZpKsPp2L4Oe1xEYH?=
- =?us-ascii?Q?RKUkBNwinnP/XtFCEZTLeSpJZTnaoDuj0aqfUHmMc0EoLw9mg/nzZe6zNUIq?=
- =?us-ascii?Q?y65o1453cNWOBF2voeY/AE5arF+WfYwC7qx4sL7FafAsEELDHEsGUacJLsOh?=
- =?us-ascii?Q?cz+GjhQr2beuoEySjpEWgU9VLhJMPVA0zW9nU4e8M52O9eHpYn1R/Ab/eLjH?=
- =?us-ascii?Q?RpLNvl8mAyS9v4N6F4RDIre7L2fpGj7t9rquOQIn7mVwLrASw5/+V4Alf/Lh?=
- =?us-ascii?Q?JTX4rPbHa6yWxQRa4mj9RUl86rBbMM4HKDxZh670MKVkc9bZ4RgOhGxOQiFM?=
- =?us-ascii?Q?GM2CpxbC/u2T0WbOXYGWVUxgRnyFmPTj9m5JHMDXF40d0ZP6mUtQQz+7XSkn?=
- =?us-ascii?Q?UylV1mmoQJn0aA8KMysa5CCq/3N7BWyMa38ZHD/mCGJMlyHXebgwv4aHCxOC?=
- =?us-ascii?Q?kRiFIoEl3epoX0KK6jP0j0hNmWYWtOe/wWxNkhqXfZsLg+/Oq02HMufRB+s7?=
- =?us-ascii?Q?awfXlNmVJ8mHiTsbP+qhOZexZLiV00O6fHi/A6Zvhr2C0dDQxekYrfsHNYJZ?=
- =?us-ascii?Q?k11l74dMM2nKdHwna+pywUYEbXalFdpsxHJMZZZxQ0rsSP6kGy9fBxUg1tMD?=
- =?us-ascii?Q?8dFptufYpCVt+I+qe8MhRVSLAHfZZBGzYa76Sh+fwDyXBdF55pY6BXvgOUSl?=
- =?us-ascii?Q?wbWh1l/+wsCvG3o25i6027qozxHaRLerCDA2QUNAGjuwgm3KbRyaaIx2TFyH?=
- =?us-ascii?Q?F5MmTbljUtoAI/rq3nBmKU/TmRV7ESjubLX9LdE70tOJSjzd8+H02W4QLF3H?=
- =?us-ascii?Q?6EREWpfMzGVKbU/1MeaDnybPDBsKYIgTFOZ0kdJRpEOiEALQIT2He4ctLenT?=
- =?us-ascii?Q?L/TZsrw0eZ8NGF+GVVrjSK6xO+cNVRLziAnKGNLYzyEUrqHmxEM30+tINhi4?=
- =?us-ascii?Q?GMBgJ1lGAvdqvnDX9W6yEGoYQqKt7AsldTDIrk6rAgWYTpcSgtrbxhERblxY?=
- =?us-ascii?Q?He2HMJOR4GF3c3TJMrPHboQV8acfFaFZZWXCAK0Uaz88OwrzhpJVrTVZ3hmp?=
- =?us-ascii?Q?P1gnFLUnNNLufX4X0zFLxZz3VH8yRAIzcHADOzYT2ZuKSjxrIXXu+gfg8f/4?=
- =?us-ascii?Q?52K3CaBb5BN7/SKhGiEAwy4RhUwFFSsz0UeVBPa3cAtXltlIpFyHCUxv9b9B?=
- =?us-ascii?Q?Iw58JKwzmD4/qQ5JEpFIioJ0+D24OV45Z0Dq+A5kObYzWEKfFwUq6xIFGutr?=
- =?us-ascii?Q?N+HVnYqhuUM3EKPfP7sUCnjK1X0RALRW5YIh+3FfOr328mUOjIOw9aPZl0dA?=
- =?us-ascii?Q?I2rLgpOv4g3l+ZSiz43iVDAUEjlxDH/CQAzYZv0pdFRPkwEp1uQixzFJVdVn?=
- =?us-ascii?Q?RnRPouApvn3xJbNudYPRyM8zvnISPcuV5dTooc7c1Tw+Lw5IUhgIdlHAVvUd?=
- =?us-ascii?Q?NRO2vM4047tUSXgnPvRov44LIqczwmp3z4+OJrNvJ3jdABP4llLQOzdSOQ1m?=
- =?us-ascii?Q?YxAbCVMdzJQEhtkIUKHIHh52BEICmUV1fDRgKtO0imHjViLiWWfgTnyssj5Z?=
- =?us-ascii?Q?+NfI8E42i3Azf0F011DZT2U6DIVc/G2sX8JN31Ox?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8493b2a8-e25d-4f15-1a78-08dc2ce37681
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2024 22:31:03.8212
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rZLe1NDUgfQfXW79CVvTeans8itLZuZjTWdFWMTiaPp14yNFBaVoY1ntHOI/GkzE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5879
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFnxy2UC/32Nyw6CMBBFf4V0bc20CKgr/8MY08cAk2Br2ko0h
+ H+3sNGFcXlucs+ZWMRAGNmxmFjAkSJ5l6HcFMz0ynXIyWZmEuQOBAgecWgTxnTtKFHnfEDeWCV
+ NBWVT18jyUauIXAflTJ+v7jEMebwHbOm5ls6XzD3F5MNrDY9iWf82RsGBo66FhoOyGqpTd1M0b
+ I2/sUU3yo9CCvlTIbOiqVqwWIESzf5bMc/zG1uUgXwMAQAA
+To: Shuah Khan <shuah@kernel.org>, SeongJae Park <sj@kernel.org>, 
+ Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ damon@lists.linux.dev, linux-mm@kvack.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.13-dev-0434a
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1707864411; l=2277;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=NWymtgigjzoqDAPLAUI5PGd5uNPIj+sUwjpbAWET0BQ=;
+ b=d8izg/JRL0bE8oGX7Jlnp2piKA2ZyEjgsR6a33ONDmqY85yGeoybOwVqNJNzkj4brsBHKAt4m
+ 4ZyFdCvpneaCAP3iEyp/Pt5mWGqZYZC67HTvSRntipNI+7e01FSk1iL
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 
---=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+This series aims to keep the git status clean after building the
+selftests by adding some missing .gitignore files and object inclusion
+in existing .gitignore files. This is one of the requirements listed in
+the selftests documentation for new tests, but it is not always followed
+as desired.
 
-On 13 Feb 2024, at 17:21, David Hildenbrand wrote:
+After adding these .gitignore files and including the generated objects,
+the working tree appears clean again.
 
-> On 13.02.24 22:55, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> Hi all,
->>
->> File folio supports any order and multi-size THP is upstreamed[1], so =
-both
->> file and anonymous folios can be >0 order. Currently, split_huge_page(=
-)
->> only splits a huge page to order-0 pages, but splitting to orders high=
-er than
->> 0 is going to better utilize large folios. In addition, Large Block
->> Sizes in XFS support would benefit from it[2]. This patchset adds supp=
-ort for
->> splitting a large folio to any lower order folios and uses it during f=
-ile
->> folio truncate operations.
->>
->> For Patch 6, Hugh did not like my approach to minimize the number of
->> folios for truncate[3]. I would like to get more feedback, especially
->> from FS people, on it to decide whether to keep it or not.
->
-> I'm curious, would it make sense to exclude the "more" controversial pa=
-rts (i.e., patch #6) for now, and focus on the XFS use case only?
+The new version includes a missing entry fot the .gitignore in damon,
+which was reported by Bernd Edlinger <bernd.edlinger@hotmail.de>, who
+also proposed a patch for it as well as for other missing .gitignore
+files covered by v1. Bernd has been added to the corresponding patch as
+the reporter. If a different tag is desired, I am fine with it.
 
-Sure. Patch 6 was there to make use of split_huge_page_to_list_to_order()=
-=2E
-Now we have multi-size THP and XFS use cases, it can be dropped.
+To: Shuah Khan <shuah@kernel.org>
+To: SeongJae Park <sj@kernel.org>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: damon@lists.linux.dev
+Cc: linux-mm@kvack.org
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
---
-Best Regards,
-Yan, Zi
+Changes in v3:
+- General: base on mm-unstable to avoid conflicts.
+- damon: add missing Closes tag.
+- Link to v2: https://lore.kernel.org/r/20240212-selftest_gitignore-v2-0-75f0de50a178@gmail.com
 
---=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
+Changes in v2:
+- Remove patch for netfilter (not relevant anymore).
+- Add patch for damon (missing binary in .gitignore).
+- Link to v1: https://lore.kernel.org/r/20240101-selftest_gitignore-v1-0-eb61b09adb05@gmail.com
 
------BEGIN PGP SIGNATURE-----
+---
+Javier Carrasco (4):
+      selftests: uevent: add missing gitignore
+      selftests: thermal: intel: power_floor: add missing gitignore
+      selftests: thermal: intel: workload_hint: add missing gitignore
+      selftests: damon: add access_memory to .gitignore
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXL7aUPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUeQwP/RMkvJ3oGo5mYQVh6hBkj0FlEK/gFyX8fcRt
-rFIYgrthGL0H3efj6259sLXczM4YRzvfZKyu2bAFLphQOwtgIa++Lez3lPMXRhbw
-8rz4ni/uDhYmeQyNR78piZ6Zruyl3iuIAR/zfTWzhZtcv4nTsTdpvaLyDkL4Jpay
-U7AnpJggZrRfkVmfXK9l40Y8rHqtFoRKFxzy8ZfYj/cNC+IDTxxXu08f1XoStunQ
-VQAbMC0ycxQchZFC19GV20HlyxmIKX3Oq6AYUt3q1WMHiZ0yh6FEMTs5HXh2oZHU
-UTWjAeK2txDkVhm+EJyrmjKYSHaPvIDME/nEVdSOBMUVtSoKB5xiEObsgGoCCdPw
-UKnFafcsU65DtYvFQB7lvQ8uUtl8DGTDY8U451q4Z+BHErne9Iy6yCGv+Xb0+Ws6
-JMrSlhfCyxnpSANDtvGUJOUOH+MUpKzScacl1M+M/0LBD8eXYfWVron9tVy57r4+
-9sc3IDq2hr/DsuFD65MfTFzyP9wj56CxrF1HXIVahO5Vb9eTACNM06Vo3Jk38AOX
-oA8z2PTdPytQMMmh/rQIoOv/lkQUOV+eYY0pi0Q86ui/gO+nyjJFUvTa5AfRqT3m
-kObA5KBQF9yaBllmOU32zGadXyYSQaO3gTksr/ENk55wFUGNd7VNuQl/cJBz8GjW
-wt3yFp4s
-=UQBV
------END PGP SIGNATURE-----
+ tools/testing/selftests/damon/.gitignore                       | 1 +
+ tools/testing/selftests/thermal/intel/power_floor/.gitignore   | 1 +
+ tools/testing/selftests/thermal/intel/workload_hint/.gitignore | 1 +
+ tools/testing/selftests/uevent/.gitignore                      | 1 +
+ 4 files changed, 4 insertions(+)
+---
+base-commit: 7e56cf9a7f108e8129d75cea0dabc9488fb4defa
+change-id: 20240101-selftest_gitignore-7da2c503766e
 
---=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=--
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
 
