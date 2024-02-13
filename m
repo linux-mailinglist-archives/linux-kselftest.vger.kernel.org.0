@@ -1,168 +1,112 @@
-Return-Path: <linux-kselftest+bounces-4549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2984C853078
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 13:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B648853089
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 13:31:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81B9E28194D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 12:27:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAA9528AB70
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 12:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF37C3D968;
-	Tue, 13 Feb 2024 12:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6210B3FB1F;
+	Tue, 13 Feb 2024 12:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b="l7WIuQDz"
+	dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b="CSuaviJj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E243A1D9
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 12:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D613BB3A;
+	Tue, 13 Feb 2024 12:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707827220; cv=none; b=HytFi8BF3G9d8Mb/jh/XIX2msyrM6GipmTtMLEbrcL8Y1ThI3hJuW0rpiYMNyWLram1xBLIr93fOZ5913cA87v9V0hdSo6GCRTNsHYoXI0y1PjngwHmT1vUrSqpjR3x1NZNEVG0jjhiZ97tMsmCNbvA7reYPeLF+iExHc1IcxgE=
+	t=1707827466; cv=none; b=t3WlcQshQG9R3QAqW4DwQOEGUAhjFWmV38n59ba1I4EaqEeoE2ViDY2T/wzACkR7xhHiVNN4rkRKiXJUtR4Pm6x0NUbOZurOEGWQCmPFrNJlzDmONS9qVJK3gk9y5FNFAmFojH9Fakm9WPz7G9NPZyHULVuzxdClUonQEGINZIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707827220; c=relaxed/simple;
-	bh=2bUi5ocU7hGIKKXsYhWjmW0y66Qa9iTEbHZUbBCfOHg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RSk/5iUMzXXkZtdt/0dwqwV+8A+v2iKST3LyqKUdiTf2E6lcmKsqPILaRtR+CQLUPOY0stReHWyzz6uqiGhBtQAFCh0EFgCYXwf2bJ9udPT52uLfQ+LyurK03RDnyDjZurUX3edcKFSRh+Rpuxq3hNO9swKvrSZ5AIG2yiEH8PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com; spf=none smtp.mailfrom=toblux.com; dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b=l7WIuQDz; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toblux.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d1094b549cso6101961fa.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 04:26:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toblux-com.20230601.gappssmtp.com; s=20230601; t=1707827217; x=1708432017; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AiPjHiM2hRS+OoUkP3LtwjwT4ETlSRpcnKvPYoLHR4I=;
-        b=l7WIuQDz5jQQCUfXtLRB6sf+V7xIt/qkHOpuiV3w1fbmcrL1+FBDjVV8ijwyWb7j1F
-         +ZKcglSCMewJBJSKOp4ljSkjiXfIP6zQGRT9wlye+9/Ts+4D8CvfoLGiHAqR+CLS8uyr
-         1QzCCMvGASIblpZNGeZEEd0XAn76JZ6FcWSZHasxOLG77/qUFoXm/SNjgNrP38jhofuN
-         oG6kR43NlJXR45nNwDdbfowQI/P6NIk2UxVy0DVYtirWEwuPFopLxKbZpy43lWYXMlxj
-         /guGSDC5fYr2ICeLZmL9I/rbwGA+wLqqJmgtJfTQqwtsICGcr7LKuR5lrttKgF6DHi/j
-         vEgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707827217; x=1708432017;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AiPjHiM2hRS+OoUkP3LtwjwT4ETlSRpcnKvPYoLHR4I=;
-        b=w4u+QIgypnuN/Fvw92Kksc5VNiVOiVFuFJYp5sbWUaGHRODnIcEFZh0DRQWm8TE3AC
-         4MUmu11VUbsfI1A14HLWsazBtTFz2FWUxD5AUiqQyoaa/AOf5L1PexGzP14vztfAlB3X
-         P0W+eyg7pXrvtn/eEaiwkTi8iOjom/Cels17qibBlbAWhsbOBKb1oACRRGXskhUwvHd3
-         aKdAapIoWOmtiFxkaCA/nG5ssL1qO3p5EBKgcC9ZsnfUa/uf8i6wjwukvvoObbcOd/wB
-         ge2chzfNtRblHGWhAyshe2rq3UPn1rF9GH3lUi6CbMwrsnsMOszN8iRPD5fprWhyzIKQ
-         9EKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVDVFle5+Afwk4Mk42bcLXnzBvTDYqyqOPm47zvi51Mlmy+TVNp1vCiNIqtn3pSe+e8gX5cwJ09C6mcoh9/S6R6tKQ9ZXusIpN1tkzTfBZv
-X-Gm-Message-State: AOJu0YyYmzMS0oF/YRI9noKNTCuhRqDGSnljT7VdAu0RIyWU2g+mbMDL
-	mtxUOhUNZFZf1rSW7wl8hXmGI+uApIUqBgaC58l74hEniBosi8lg+ezbuAJftXI=
-X-Google-Smtp-Source: AGHT+IEt67WUBHbKpCxVtemm/Vm7tBxAQm62HxQJ0X7AMI9PDt8IG937eE32+LLj0r6JPBOUwbI8pg==
-X-Received: by 2002:a2e:87cb:0:b0:2d0:dfa7:8a87 with SMTP id v11-20020a2e87cb000000b002d0dfa78a87mr6577428ljj.8.1707827216914;
-        Tue, 13 Feb 2024 04:26:56 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW3t52NRpuLVWSjP60f+B3gFgGqGMkEgJbn/JTKGOAbhNlQzBS9KzWwy+lM+Xk7C58NBXRTGq5Wqa0N9OBBX6X+qf3QDhqjLQ5jYSd4eQTd8ICqCpY0sREytYemlYT7QsVxCroAQEx6iOqGQbWTTgVbgnKxncJzY3/FYOhI50REQZw/pRJqBkjlrmORshYgUFUwQ50gbU72XgxcJ1l/
-Received: from fedora.fritz.box (aftr-82-135-80-242.dynamic.mnet-online.de. [82.135.80.242])
-        by smtp.gmail.com with ESMTPSA id jx6-20020a05600c578600b0040ffd94cd27sm11444420wmb.45.2024.02.13.04.26.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 04:26:56 -0800 (PST)
-From: Thorsten Blum <thorsten.blum@toblux.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Thorsten Blum <thorsten.blum@toblux.com>
-Subject: [PATCH] tools: selftests: Remove unnecessary semicolons
-Date: Tue, 13 Feb 2024 13:23:18 +0100
-Message-ID: <20240213122317.1883-2-thorsten.blum@toblux.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1707827466; c=relaxed/simple;
+	bh=HFtJQftRt81qsj3WKtpyVLXu2ijNvznvMiSPy4K+l70=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=owY+KZWUUZbk3bLZxpoaO3ZP7zB12XaEULV8EOPT7J7CjNM8lCHNkp/aG5SSinJaKEBiHtpk7g+sDWFJ+ldDigywxZKOUVwwKgBHcvGeQbs73BZ+9dtJLq02jNMCUfLPvDbWkBKyRQBDinuXnrhMiDkIg8HyBRF1ryn3JogAlZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pankajraghav.com; spf=pass smtp.mailfrom=pankajraghav.com; dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b=CSuaviJj; arc=none smtp.client-ip=80.241.56.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pankajraghav.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pankajraghav.com
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4TZ0zh3xD5z9sn6;
+	Tue, 13 Feb 2024 13:30:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pankajraghav.com;
+	s=MBO0001; t=1707827456;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DIg66RdJU9OwFIwtt981TU+bUHnJVsypvaGrWF5aizw=;
+	b=CSuaviJj+ifluOeWtUWWsQGTD3QjgppzGm9qLW8AykSBIRq6Dfao2ZGDO5Yl37FzE74c+v
+	FDz19HU4mjMDeXcn7Musbnf7H/WZC7q3Zsf26mYStBJoz8Ae90lLr25c0SuMrQaxCgEe2r
+	w3efZBlHdAUamsHtzqeCYkmg/Vf+QJdj1gSBuo4m5XN1XlPkb3nAhHpMCmWAOXKvi4+AgF
+	jXJIO9pnnrA/VeIwuYGSOARj/YFsGs6ODUwqy1TseNW3BhAORIQWILJUfZ8CpcZCTm2tK6
+	2o4pCdpqfbdbWtE/aVDtWC97iPMIjXayFEyu5bq8aqQtX6jh50neal+phvb/fg==
+Date: Tue, 13 Feb 2024 13:30:51 +0100
+From: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
+To: Zi Yan <ziy@nvidia.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Ryan Roberts <ryan.roberts@arm.com>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Zach O'Keefe <zokeefe@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, mcgrof@kernel.org, gost.dev@samsung.com
+Subject: Re: [PATCH v3 0/7] Split a folio to any lower order folios
+Message-ID: <qzbcjn4gcyxla4gwuj6smlnwknz2wvo5wrjctin6eengjfqjei@lzkxv3iy6bol>
+References: <20230403201839.4097845-1-zi.yan@sent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403201839.4097845-1-zi.yan@sent.com>
 
-Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
-semantic patch at scripts/coccinelle/misc/semicolon.cocci.
+Hi Zi yan,
 
-Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
----
- tools/testing/selftests/bpf/benchs/bench_local_storage_create.c | 2 +-
- tools/testing/selftests/kvm/access_tracking_perf_test.c         | 2 +-
- tools/testing/selftests/timers/nanosleep.c                      | 2 +-
- tools/testing/selftests/timers/nsleep-lat.c                     | 2 +-
- tools/testing/selftests/timers/set-timer-lat.c                  | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> Hi all,
+> 
+> File folio supports any order and people would like to support flexible orders
+> for anonymous folio[1] too. Currently, split_huge_page() only splits a huge
+> page to order-0 pages, but splitting to orders higher than 0 is also useful.
+> This patchset adds support for splitting a huge page to any lower order pages
+> and uses it during file folio truncate operations.
+> 
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c b/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c
-index b36de42ee4d9..e2ff8ea1cb79 100644
---- a/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c
-@@ -186,7 +186,7 @@ static void *task_producer(void *input)
- 
- 		for (i = 0; i < batch_sz; i++) {
- 			if (!pthd_results[i])
--				pthread_join(pthds[i], NULL);;
-+				pthread_join(pthds[i], NULL);
- 		}
- 	}
- 
-diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-index 3c7defd34f56..447e619cf856 100644
---- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-+++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@ -239,7 +239,7 @@ static void vcpu_thread_main(struct memstress_vcpu_args *vcpu_args)
- 		case ITERATION_MARK_IDLE:
- 			mark_vcpu_memory_idle(vm, vcpu_args);
- 			break;
--		};
-+		}
- 
- 		vcpu_last_completed_iteration[vcpu_idx] = current_iteration;
- 	}
-diff --git a/tools/testing/selftests/timers/nanosleep.c b/tools/testing/selftests/timers/nanosleep.c
-index df1d03516e7b..34e61507fa1f 100644
---- a/tools/testing/selftests/timers/nanosleep.c
-+++ b/tools/testing/selftests/timers/nanosleep.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
-diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
-index edb5acacf214..d839fa4e6e08 100644
---- a/tools/testing/selftests/timers/nsleep-lat.c
-+++ b/tools/testing/selftests/timers/nsleep-lat.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
-diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
-index 50da45437daa..d60bbcad487f 100644
---- a/tools/testing/selftests/timers/set-timer-lat.c
-+++ b/tools/testing/selftests/timers/set-timer-lat.c
-@@ -80,7 +80,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
--- 
-2.43.0
+I recently posted patches to enable block size > page size(Large Block
+Sizes) in XFS[1].
+The main idea of LBS is to have a notion of minimum order in the 
+page cache that corresponds to the filesystem block size.
 
+Ability to split a folio based on a given order is something that would
+definitely optimize the LBS implementation.
+
+The current implementation refuses to split a large folio if it has a
+minimum order set in the page cache [2]. What we would like to have instead
+is to split it based on the minimum order. The main use is of course being
+able to free some folios during partial truncate operation.
+
+Your patch was also suggested by willy during our LPC talk[3].
+
+I tried rebasing your patch and there were a lot of non-trivial conflicts.
+Is there any plans on sending a new version?
+
+
+[1] https://lore.kernel.org/linux-xfs/20240213093713.1753368-1-kernel@pankajraghav.com/
+[2] https://lore.kernel.org/linux-xfs/20240213093713.1753368-9-kernel@pankajraghav.com/
+[3] https://youtu.be/ar72r5Xf7x4?si=XDb-g7SSIgS-5TkP&t=1457
+
+--
+Pankaj
 
