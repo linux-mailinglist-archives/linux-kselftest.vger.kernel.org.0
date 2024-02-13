@@ -1,112 +1,119 @@
-Return-Path: <linux-kselftest+bounces-4550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B648853089
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 13:31:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93D89853110
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 13:59:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAA9528AB70
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 12:31:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F50F1F21A1E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 12:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6210B3FB1F;
-	Tue, 13 Feb 2024 12:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b="CSuaviJj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDFC64EB43;
+	Tue, 13 Feb 2024 12:59:13 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D613BB3A;
-	Tue, 13 Feb 2024 12:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A4D4E1D7;
+	Tue, 13 Feb 2024 12:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707827466; cv=none; b=t3WlcQshQG9R3QAqW4DwQOEGUAhjFWmV38n59ba1I4EaqEeoE2ViDY2T/wzACkR7xhHiVNN4rkRKiXJUtR4Pm6x0NUbOZurOEGWQCmPFrNJlzDmONS9qVJK3gk9y5FNFAmFojH9Fakm9WPz7G9NPZyHULVuzxdClUonQEGINZIk=
+	t=1707829153; cv=none; b=tLtKstzmfck0y7CB04LXKJOWfKiF3FiK5iGm1H0IKuik6Ag+dtciA3cD2YtKIyVb9vkqN5BDXgsOyaCnkuSFjWfbjQGdIeQva7ZwuuWhoBlOHUbDtdKj6EglOJHapBaIF0ALTvKPeAjJqpaURoKqTOcN0CN+HAeqi4KYMezhoHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707827466; c=relaxed/simple;
-	bh=HFtJQftRt81qsj3WKtpyVLXu2ijNvznvMiSPy4K+l70=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=owY+KZWUUZbk3bLZxpoaO3ZP7zB12XaEULV8EOPT7J7CjNM8lCHNkp/aG5SSinJaKEBiHtpk7g+sDWFJ+ldDigywxZKOUVwwKgBHcvGeQbs73BZ+9dtJLq02jNMCUfLPvDbWkBKyRQBDinuXnrhMiDkIg8HyBRF1ryn3JogAlZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pankajraghav.com; spf=pass smtp.mailfrom=pankajraghav.com; dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b=CSuaviJj; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pankajraghav.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pankajraghav.com
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4TZ0zh3xD5z9sn6;
-	Tue, 13 Feb 2024 13:30:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pankajraghav.com;
-	s=MBO0001; t=1707827456;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DIg66RdJU9OwFIwtt981TU+bUHnJVsypvaGrWF5aizw=;
-	b=CSuaviJj+ifluOeWtUWWsQGTD3QjgppzGm9qLW8AykSBIRq6Dfao2ZGDO5Yl37FzE74c+v
-	FDz19HU4mjMDeXcn7Musbnf7H/WZC7q3Zsf26mYStBJoz8Ae90lLr25c0SuMrQaxCgEe2r
-	w3efZBlHdAUamsHtzqeCYkmg/Vf+QJdj1gSBuo4m5XN1XlPkb3nAhHpMCmWAOXKvi4+AgF
-	jXJIO9pnnrA/VeIwuYGSOARj/YFsGs6ODUwqy1TseNW3BhAORIQWILJUfZ8CpcZCTm2tK6
-	2o4pCdpqfbdbWtE/aVDtWC97iPMIjXayFEyu5bq8aqQtX6jh50neal+phvb/fg==
-Date: Tue, 13 Feb 2024 13:30:51 +0100
-From: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Ryan Roberts <ryan.roberts@arm.com>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Zach O'Keefe <zokeefe@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, mcgrof@kernel.org, gost.dev@samsung.com
-Subject: Re: [PATCH v3 0/7] Split a folio to any lower order folios
-Message-ID: <qzbcjn4gcyxla4gwuj6smlnwknz2wvo5wrjctin6eengjfqjei@lzkxv3iy6bol>
-References: <20230403201839.4097845-1-zi.yan@sent.com>
+	s=arc-20240116; t=1707829153; c=relaxed/simple;
+	bh=RM51wWriDMRxA4AuvhOUrEAbEnWZNqSpiSOaePt63sc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=vBs5OPN1360osxLSegdEclHMHiAAQv4eAhR8byPhrJD98oJNlKVUwCYlwVNKUu5QikDeAjDxawdrMw2CQOXeBFlgCXPWP6BoY1c+a56BuZOf935QBmeBQF3l1kHgFxitqrr/9OrvrcPhCstMGfji91RxxHN5dfq/j6ZKhnyKKWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4TZ1Gc3VDyz9xvh1;
+	Tue, 13 Feb 2024 20:43:52 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 2A8F614065B;
+	Tue, 13 Feb 2024 20:59:01 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwB3sCSFZ8tliwppAg--.56469S2;
+	Tue, 13 Feb 2024 13:59:00 +0100 (CET)
+Message-ID: <05ad625b0f5a0e6c095abee5507801da255b36cd.camel@huaweicloud.com>
+Subject: Re: [PATCH v9 12/25] security: Introduce file_post_open hook
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
+ jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
+ tom@talpey.com, jmorris@namei.org, serge@hallyn.com,
+ dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, dhowells@redhat.com,
+ jarkko@kernel.org,  stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ casey@schaufler-ca.com,  shuah@kernel.org, mic@digikod.net,
+ linux-kernel@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
+ linux-nfs@vger.kernel.org,  linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org,  keyrings@vger.kernel.org,
+ selinux@vger.kernel.org,  linux-kselftest@vger.kernel.org, Roberto Sassu
+ <roberto.sassu@huawei.com>,  Stefan Berger <stefanb@linux.ibm.com>
+Date: Tue, 13 Feb 2024 13:58:43 +0100
+In-Reply-To: <CAHC9VhQ7DgPJtNTRCYneu_XnpRmuwfPCW+FqVuS=k6U5-F6pJw@mail.gmail.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+	 <20240115181809.885385-13-roberto.sassu@huaweicloud.com>
+	 <305cd1291a73d788c497fe8f78b574d771b8ba41.camel@linux.ibm.com>
+	 <CAHC9VhQ7DgPJtNTRCYneu_XnpRmuwfPCW+FqVuS=k6U5-F6pJw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403201839.4097845-1-zi.yan@sent.com>
+X-CM-TRANSID:GxC2BwB3sCSFZ8tliwppAg--.56469S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw47Ar17Ar1UCFWfuFyrtFb_yoW3ZrgEgr
+	yqvwn7Grs8Z3WrAanxAF1rAFWqg3W8Jr4rC395Xr1UZ3sxXay8WF4kJrnaqw4fGF40yFsI
+	93Z5WFyfAwnrXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+	AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
+	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
+	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+	k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
+	7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOlksDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj5pP-AABsQ
 
-Hi Zi yan,
+On Mon, 2024-02-12 at 16:16 -0500, Paul Moore wrote:
+> On Mon, Feb 12, 2024 at 4:06=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> =
+wrote:
+> >=20
+> > Hi Roberto,
+> >=20
+> >=20
+> > > diff --git a/security/security.c b/security/security.c
+> > > index d9d2636104db..f3d92bffd02f 100644
+> > > --- a/security/security.c
+> > > +++ b/security/security.c
+> > > @@ -2972,6 +2972,23 @@ int security_file_open(struct file *file)
+> > >       return fsnotify_perm(file, MAY_OPEN);  <=3D=3D=3D  Conflict
+> >=20
+> > Replace with "return fsnotify_open_perm(file);"
+> >=20
+> > >  }
+> > >=20
+> >=20
+> > The patch set doesn't apply cleaning to 6.8-rcX without this change.  U=
+nless
+> > there are other issues, I can make the change.
+>=20
+> I take it this means you want to pull this via the IMA/EVM tree?
 
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> Hi all,
-> 
-> File folio supports any order and people would like to support flexible orders
-> for anonymous folio[1] too. Currently, split_huge_page() only splits a huge
-> page to order-0 pages, but splitting to orders higher than 0 is also useful.
-> This patchset adds support for splitting a huge page to any lower order pages
-> and uses it during file folio truncate operations.
-> 
+Not sure about that, but I have enough changes to do to make a v10.
 
-I recently posted patches to enable block size > page size(Large Block
-Sizes) in XFS[1].
-The main idea of LBS is to have a notion of minimum order in the 
-page cache that corresponds to the filesystem block size.
-
-Ability to split a folio based on a given order is something that would
-definitely optimize the LBS implementation.
-
-The current implementation refuses to split a large folio if it has a
-minimum order set in the page cache [2]. What we would like to have instead
-is to split it based on the minimum order. The main use is of course being
-able to free some folios during partial truncate operation.
-
-Your patch was also suggested by willy during our LPC talk[3].
-
-I tried rebasing your patch and there were a lot of non-trivial conflicts.
-Is there any plans on sending a new version?
+Roberto
 
 
-[1] https://lore.kernel.org/linux-xfs/20240213093713.1753368-1-kernel@pankajraghav.com/
-[2] https://lore.kernel.org/linux-xfs/20240213093713.1753368-9-kernel@pankajraghav.com/
-[3] https://youtu.be/ar72r5Xf7x4?si=XDb-g7SSIgS-5TkP&t=1457
-
---
-Pankaj
 
