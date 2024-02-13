@@ -1,176 +1,206 @@
-Return-Path: <linux-kselftest+bounces-4597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23E00853E84
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 23:22:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5446853EB5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 23:31:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4842D1C210EF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 22:22:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D95A01C28AF9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 22:31:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4A56216B;
-	Tue, 13 Feb 2024 22:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBB86217C;
+	Tue, 13 Feb 2024 22:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B2K4trAV"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PdFdiQQH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463AC62158
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 22:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707862916; cv=none; b=PZnPlz4Y1WaddcB+JyW9zCnKDvXCJyLnQIOUf3Sf14Y4XdWW6wd/M5vNDxt5q66EjaDFM1iL8Q3FdNAFAnVIZ6QBZua9oMjb4huCvkS69nIElTgun3AKiDgWsi7/39/K50b5k8aHqyExYW7zcP2vLry31mxd7qdEwISwErayHX4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707862916; c=relaxed/simple;
-	bh=cIwjCMqi1AkYtCHb9iJc6puv/i36jok3H6ASbTJJd/4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GhGNk433xO30VjF2Y2RqyMQVQLQiACpS919QjxfdE47ClU/xyaFsQbV93EPl8PxR5XiJPOKsF24qowJNevj9UI0Ai7wrmPoaI/5ap3uH6r6BUd08rVNTGrgXn3mrnqWxclCmW9HrXJYTblG03iO/kNbi9c/L2HU0+C8KRVmn6OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B2K4trAV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707862914;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=lyp171DHUrojJFMT3bkx7Bt4ffX/0uqxL7T14u2Lvds=;
-	b=B2K4trAVGjJUKVxYMPppjMOkYxXI5Rdi+UQnWAMe0z9j6LKmHpVbxzX5Kcll3mwbpjgF4o
-	K4onm0YSn3TGTKjSUzTtAMHsGdoihVlg8+sGIIWVURlHxDy0+9XuNMcJu/b2MGb5WFyROH
-	HWAYALJ149HxMi+uLudrPOdMiWV+tvU=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-90-N83ttrG_Nr-V_D06I0zppA-1; Tue, 13 Feb 2024 17:21:52 -0500
-X-MC-Unique: N83ttrG_Nr-V_D06I0zppA-1
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2d0ac7b86a8so51038101fa.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 14:21:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707862910; x=1708467710;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lyp171DHUrojJFMT3bkx7Bt4ffX/0uqxL7T14u2Lvds=;
-        b=ZbQr48Go79eKl4/Cg8xodIcLkLiD+PVDVQzdRs4tt+kiR4uHIuLucnfk6CGBWbOXGB
-         VFYDlwzhnYlYj+I2eLX+cUSue/3bQxiI023iFUH6rhLSQSpeVB09DWSXPwBLQFioyZNN
-         EdXlqX0YJd2uht+cg6S0PbSOS4u172NXsYXSKQC0UumxqCjiAi8JBNfyp4zmCLD17phY
-         5JATUJUeoaC1tgyhjtJXyPeFp3aQFciGJcAt/96CgVHe55nAbfpjQL83UEV345T7A8uw
-         5zg06E13amMZMWSwO/Fjx3z7+U0wSvXNOpc5o45ixqFNPDwGnYNR2uezeuz5+hb//ENd
-         zqEw==
-X-Forwarded-Encrypted: i=1; AJvYcCURidpcSDLLQ1nUxeM0i25cBzWOqWWYG0B5DyLcdi/tARJqIEOhIWfujurs78iKRYAgyflgub0vnvQQa3r7XZdvgVLgVb1FEIaE1tTa/frT
-X-Gm-Message-State: AOJu0YxK0G0grydG8bw9oIozIWTKkRp87Ws0jeD+LBDDbbw0+LNskwAl
-	f+tsLEg3kZJVrLOhPt4Rh1cQNy5zgSOjjXSCRyQaZRVtBNJzFr0XC6/zGK0bbfgW55bXVMAepR/
-	pBAnjlLIJf9Jm7mnI5R5mYnECPNogOmsViKG/kXYKRauHMTPcDs+Bds5py01LB9y13g==
-X-Received: by 2002:a05:651c:204c:b0:2d0:bff6:132a with SMTP id t12-20020a05651c204c00b002d0bff6132amr544003ljo.35.1707862910658;
-        Tue, 13 Feb 2024 14:21:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEXcEWhP6R8z+wgGH2qQyNL+p6dJa+m1ttJZm5Thh399xbQdsSq/9lMj8nBk4Bq3bgZJZd8Yw==
-X-Received: by 2002:a05:651c:204c:b0:2d0:bff6:132a with SMTP id t12-20020a05651c204c00b002d0bff6132amr543981ljo.35.1707862910196;
-        Tue, 13 Feb 2024 14:21:50 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e? (p200300d82f3c3f007177eb0cd3d24b0e.dip0.t-ipconnect.de. [2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e])
-        by smtp.gmail.com with ESMTPSA id y5-20020a7bcd85000000b00410ab50f70fsm53748wmj.15.2024.02.13.14.21.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Feb 2024 14:21:49 -0800 (PST)
-Message-ID: <659e1abb-40d0-42ba-ba0a-8256d7eb1c5a@redhat.com>
-Date: Tue, 13 Feb 2024 23:21:48 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DE064F;
+	Tue, 13 Feb 2024 22:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.79
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707863469; cv=fail; b=c9KfpyE43XA0oLwTrRNSjXI+u33K18p7rFTwLlHh1yTvlON1zFIjouCDnt6gFG2JdnRpZD8KQKGjnfgRDZ7EDPaJchR5QE/IQqJRSu8T/H8m43iexYNdQZ5h1SAOLKzn/q2JEjQbW9Blyc9PiPUSgDQNWsWJLHraF/etoZsuczw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707863469; c=relaxed/simple;
+	bh=cEB9bSn7ipaDs2dQQ9H8ZavraOkM83RryC0qk3Up83M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aw1G0VQmEV1O0SZS7OWn2S5EUt5fHS/Rznfy8KUq8MQJs/rIr055e0IoAfLZdr6cpDiziO+gYAeZzgP+ikThGKsDOumaPlbiKsQreDS+4p+LAi7HwIipNskSvtgE+hAwBfmXF5I7wb4lOy2hbP2Ob96w+xn/4/jzqzlIM61mQgY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PdFdiQQH; arc=fail smtp.client-ip=40.107.237.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZUqd/s1bdhrvwmc/Y/8zhj4EGo/a1idponEm0NTMyxm0jT2HZzYXWTzkc+4KL5NQxsQXFzYrwhx0UED7rq5a+kEKNpcgBC6gzeUPDsYxpAoayiQqSaIhe2no6Nk4m+Xjx8S4Cfjm34urHKZVpY47M5VHpvh44Hf4MWRd35vMz6+t6hl42Qz7o2BETZQEffSIQndef215BIVXU6sWjMDkcURBhEQPiXJbSbd0Nt4n7Fok3LSLtCAbZE5pOGgt5NlZpM/fI6K10jPlckkt2wRfF/xCn+nH4Htj5UdIGRLxfgHY9ovD+OU5mvnxdx7fJ1IWc4EjsChDAP4EQFY8t7rThg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cEB9bSn7ipaDs2dQQ9H8ZavraOkM83RryC0qk3Up83M=;
+ b=Ed6LMuE5LF89BbYDOxbZrXzZxOdqQwc1atGWRmblryz5bhVGOjHaUU6uvsAud08hirtpO01LYylHw0oJC7JudmAE71TpOhmDhVZWnCNhAt97JX7Lbqzw6oaXQ5cXa0JHoHzoOUMgqog0AfmxVeBIFRkaVBe/zsyvNvqQ+YHpuYV1nioOcnBGy69X6X3ECQUh8HFQvIqycE3+0p8IgWP6hR466H3tWfE8101YMI2ffUozHvBr5Q+goPYEDGrIXWIGQz/xlM2SwjsGR430PXCzZ7pDk1kBfRKEKY49P2bwXRmnTiPevwvXZ/Ials0Jcc8y4Gy2sphHyoQ1yHsLmKghVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cEB9bSn7ipaDs2dQQ9H8ZavraOkM83RryC0qk3Up83M=;
+ b=PdFdiQQHWeh7sDyHmecn745R3S/Ni4x8YW2yUuUKDjmK5lBm/SDCwkSzRO0EWvP7eFzN52kLRqzVVSvSKB4Jlg3h6tfkJBHYN5PAFn5S+PSCJn7eGImucX44MvhkDv6yn3zVRldWvYnJE5ig2q3ZsHokfvnE/YotA/vETlrVurrVxqI7U+dEG7vAPRpk4nqIz0NptWmYxpdGM4sfnOX2Bc8VXwE8VuHQLvGoODE0Neh9PW66D3cc1j5UZFnxPOpOfW5uGG7eQLYeCjQw2xpeV8ZDzPEe3D/t8tVnJNEvi3fHZMP+krbP6oux8MG3bz9yEwP9SRL4W0sVN5QjGekF1w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ PH7PR12MB5879.namprd12.prod.outlook.com (2603:10b6:510:1d7::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7292.25; Tue, 13 Feb 2024 22:31:04 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::db3e:28df:adc1:9c15]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::db3e:28df:adc1:9c15%5]) with mapi id 15.20.7292.013; Tue, 13 Feb 2024
+ 22:31:03 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>,
+ linux-mm@kvack.org, "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
+ Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+ "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
+ Ryan Roberts <ryan.roberts@arm.com>,
+ =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
+ Mcgrof Chamberlain <mcgrof@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] Split a folio to any lower order folios
+Date: Tue, 13 Feb 2024 17:31:00 -0500
+X-Mailer: MailMate (1.14r6018)
+Message-ID: <F4470D3A-DC2C-4A6A-B65C-1C94D732A60E@nvidia.com>
+In-Reply-To: <659e1abb-40d0-42ba-ba0a-8256d7eb1c5a@redhat.com>
+References: <20240213215520.1048625-1-zi.yan@sent.com>
+ <659e1abb-40d0-42ba-ba0a-8256d7eb1c5a@redhat.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL0PR02CA0123.namprd02.prod.outlook.com
+ (2603:10b6:208:35::28) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/7] Split a folio to any lower order folios
-Content-Language: en-US
-To: Zi Yan <ziy@nvidia.com>, "Pankaj Raghav (Samsung)"
- <kernel@pankajraghav.com>, linux-mm@kvack.org
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>,
- Zach O'Keefe <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Mcgrof Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240213215520.1048625-1-zi.yan@sent.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240213215520.1048625-1-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|PH7PR12MB5879:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8493b2a8-e25d-4f15-1a78-08dc2ce37681
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	FrGqSgo8+fdHk5yGN6ZQHtICgd3kTAUwjzfjb8ZcfQvOjeRSMw/lXjET1+c5O4w0pNLcuX2EyadATlt9YtJvTNNVvIdLPTMvnXmtGMUSZMCjEECo02M6kdUsnScIWMZmm7JLlG2hwI6Xn9bCCK7Sc3xPong/36tM0fM62oNp4eBj8iNnFOBZTsaR1kQALapItpXDKNIVO2yElahdS0vUBCf7hdpMQvZKWCM29ql2cl86fH03PwW9gXBqJhK5tnFpB35ArJcBSnE4rRe2z51PJQKoB/jeXmXt2ZuG2D9w45/mLXVk+lzSypWCmPjw0CD411uQ5wFkuzf3DPE+g+suxopw0/wGupegirafFGLhCFyY6VeSIR0+Wz8I5UZq+rHGovB54La3hlW454njkeHt7dd8K2ygKw4wHH2o9EQrjASoe3qQMBYwzBQnv7VKOVzzVrchKe8UWiqh2bhhdNwQgl7zHRx18pUWqhtVjOAHYABDFcv43uNK2esdnXXg7DZ3JmtQP40zfoIPe2xLCjw/89RIG36Lg1LRuJdhsT1Y3Ip56RpdPAODU+m4zf/NZinJ
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(396003)(376002)(136003)(39860400002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(2906002)(5660300002)(7416002)(235185007)(2616005)(26005)(41300700001)(4326008)(8936002)(6916009)(66946007)(6506007)(53546011)(66556008)(66476007)(8676002)(6486002)(83380400001)(6512007)(33656002)(478600001)(54906003)(316002)(86362001)(36756003)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?vsl03gJ+pL2Xh7Hdb/heTWcLxed4dq++Jh8KLuGcGgd5ZpKsPp2L4Oe1xEYH?=
+ =?us-ascii?Q?RKUkBNwinnP/XtFCEZTLeSpJZTnaoDuj0aqfUHmMc0EoLw9mg/nzZe6zNUIq?=
+ =?us-ascii?Q?y65o1453cNWOBF2voeY/AE5arF+WfYwC7qx4sL7FafAsEELDHEsGUacJLsOh?=
+ =?us-ascii?Q?cz+GjhQr2beuoEySjpEWgU9VLhJMPVA0zW9nU4e8M52O9eHpYn1R/Ab/eLjH?=
+ =?us-ascii?Q?RpLNvl8mAyS9v4N6F4RDIre7L2fpGj7t9rquOQIn7mVwLrASw5/+V4Alf/Lh?=
+ =?us-ascii?Q?JTX4rPbHa6yWxQRa4mj9RUl86rBbMM4HKDxZh670MKVkc9bZ4RgOhGxOQiFM?=
+ =?us-ascii?Q?GM2CpxbC/u2T0WbOXYGWVUxgRnyFmPTj9m5JHMDXF40d0ZP6mUtQQz+7XSkn?=
+ =?us-ascii?Q?UylV1mmoQJn0aA8KMysa5CCq/3N7BWyMa38ZHD/mCGJMlyHXebgwv4aHCxOC?=
+ =?us-ascii?Q?kRiFIoEl3epoX0KK6jP0j0hNmWYWtOe/wWxNkhqXfZsLg+/Oq02HMufRB+s7?=
+ =?us-ascii?Q?awfXlNmVJ8mHiTsbP+qhOZexZLiV00O6fHi/A6Zvhr2C0dDQxekYrfsHNYJZ?=
+ =?us-ascii?Q?k11l74dMM2nKdHwna+pywUYEbXalFdpsxHJMZZZxQ0rsSP6kGy9fBxUg1tMD?=
+ =?us-ascii?Q?8dFptufYpCVt+I+qe8MhRVSLAHfZZBGzYa76Sh+fwDyXBdF55pY6BXvgOUSl?=
+ =?us-ascii?Q?wbWh1l/+wsCvG3o25i6027qozxHaRLerCDA2QUNAGjuwgm3KbRyaaIx2TFyH?=
+ =?us-ascii?Q?F5MmTbljUtoAI/rq3nBmKU/TmRV7ESjubLX9LdE70tOJSjzd8+H02W4QLF3H?=
+ =?us-ascii?Q?6EREWpfMzGVKbU/1MeaDnybPDBsKYIgTFOZ0kdJRpEOiEALQIT2He4ctLenT?=
+ =?us-ascii?Q?L/TZsrw0eZ8NGF+GVVrjSK6xO+cNVRLziAnKGNLYzyEUrqHmxEM30+tINhi4?=
+ =?us-ascii?Q?GMBgJ1lGAvdqvnDX9W6yEGoYQqKt7AsldTDIrk6rAgWYTpcSgtrbxhERblxY?=
+ =?us-ascii?Q?He2HMJOR4GF3c3TJMrPHboQV8acfFaFZZWXCAK0Uaz88OwrzhpJVrTVZ3hmp?=
+ =?us-ascii?Q?P1gnFLUnNNLufX4X0zFLxZz3VH8yRAIzcHADOzYT2ZuKSjxrIXXu+gfg8f/4?=
+ =?us-ascii?Q?52K3CaBb5BN7/SKhGiEAwy4RhUwFFSsz0UeVBPa3cAtXltlIpFyHCUxv9b9B?=
+ =?us-ascii?Q?Iw58JKwzmD4/qQ5JEpFIioJ0+D24OV45Z0Dq+A5kObYzWEKfFwUq6xIFGutr?=
+ =?us-ascii?Q?N+HVnYqhuUM3EKPfP7sUCnjK1X0RALRW5YIh+3FfOr328mUOjIOw9aPZl0dA?=
+ =?us-ascii?Q?I2rLgpOv4g3l+ZSiz43iVDAUEjlxDH/CQAzYZv0pdFRPkwEp1uQixzFJVdVn?=
+ =?us-ascii?Q?RnRPouApvn3xJbNudYPRyM8zvnISPcuV5dTooc7c1Tw+Lw5IUhgIdlHAVvUd?=
+ =?us-ascii?Q?NRO2vM4047tUSXgnPvRov44LIqczwmp3z4+OJrNvJ3jdABP4llLQOzdSOQ1m?=
+ =?us-ascii?Q?YxAbCVMdzJQEhtkIUKHIHh52BEICmUV1fDRgKtO0imHjViLiWWfgTnyssj5Z?=
+ =?us-ascii?Q?+NfI8E42i3Azf0F011DZT2U6DIVc/G2sX8JN31Ox?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8493b2a8-e25d-4f15-1a78-08dc2ce37681
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2024 22:31:03.8212
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rZLe1NDUgfQfXW79CVvTeans8itLZuZjTWdFWMTiaPp14yNFBaVoY1ntHOI/GkzE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5879
 
-On 13.02.24 22:55, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> Hi all,
-> 
-> File folio supports any order and multi-size THP is upstreamed[1], so both
-> file and anonymous folios can be >0 order. Currently, split_huge_page()
-> only splits a huge page to order-0 pages, but splitting to orders higher than
-> 0 is going to better utilize large folios. In addition, Large Block
-> Sizes in XFS support would benefit from it[2]. This patchset adds support for
-> splitting a large folio to any lower order folios and uses it during file
-> folio truncate operations.
-> 
-> For Patch 6, Hugh did not like my approach to minimize the number of
-> folios for truncate[3]. I would like to get more feedback, especially
-> from FS people, on it to decide whether to keep it or not.
+--=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I'm curious, would it make sense to exclude the "more" controversial 
-parts (i.e., patch #6) for now, and focus on the XFS use case only?
+On 13 Feb 2024, at 17:21, David Hildenbrand wrote:
 
--- 
-Cheers,
+> On 13.02.24 22:55, Zi Yan wrote:
+>> From: Zi Yan <ziy@nvidia.com>
+>>
+>> Hi all,
+>>
+>> File folio supports any order and multi-size THP is upstreamed[1], so =
+both
+>> file and anonymous folios can be >0 order. Currently, split_huge_page(=
+)
+>> only splits a huge page to order-0 pages, but splitting to orders high=
+er than
+>> 0 is going to better utilize large folios. In addition, Large Block
+>> Sizes in XFS support would benefit from it[2]. This patchset adds supp=
+ort for
+>> splitting a large folio to any lower order folios and uses it during f=
+ile
+>> folio truncate operations.
+>>
+>> For Patch 6, Hugh did not like my approach to minimize the number of
+>> folios for truncate[3]. I would like to get more feedback, especially
+>> from FS people, on it to decide whether to keep it or not.
+>
+> I'm curious, would it make sense to exclude the "more" controversial pa=
+rts (i.e., patch #6) for now, and focus on the XFS use case only?
 
-David / dhildenb
+Sure. Patch 6 was there to make use of split_huge_page_to_list_to_order()=
+=2E
+Now we have multi-size THP and XFS use cases, it can be dropped.
 
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXL7aUPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUeQwP/RMkvJ3oGo5mYQVh6hBkj0FlEK/gFyX8fcRt
+rFIYgrthGL0H3efj6259sLXczM4YRzvfZKyu2bAFLphQOwtgIa++Lez3lPMXRhbw
+8rz4ni/uDhYmeQyNR78piZ6Zruyl3iuIAR/zfTWzhZtcv4nTsTdpvaLyDkL4Jpay
+U7AnpJggZrRfkVmfXK9l40Y8rHqtFoRKFxzy8ZfYj/cNC+IDTxxXu08f1XoStunQ
+VQAbMC0ycxQchZFC19GV20HlyxmIKX3Oq6AYUt3q1WMHiZ0yh6FEMTs5HXh2oZHU
+UTWjAeK2txDkVhm+EJyrmjKYSHaPvIDME/nEVdSOBMUVtSoKB5xiEObsgGoCCdPw
+UKnFafcsU65DtYvFQB7lvQ8uUtl8DGTDY8U451q4Z+BHErne9Iy6yCGv+Xb0+Ws6
+JMrSlhfCyxnpSANDtvGUJOUOH+MUpKzScacl1M+M/0LBD8eXYfWVron9tVy57r4+
+9sc3IDq2hr/DsuFD65MfTFzyP9wj56CxrF1HXIVahO5Vb9eTACNM06Vo3Jk38AOX
+oA8z2PTdPytQMMmh/rQIoOv/lkQUOV+eYY0pi0Q86ui/gO+nyjJFUvTa5AfRqT3m
+kObA5KBQF9yaBllmOU32zGadXyYSQaO3gTksr/ENk55wFUGNd7VNuQl/cJBz8GjW
+wt3yFp4s
+=UQBV
+-----END PGP SIGNATURE-----
+
+--=_MailMate_13390F71-957B-4974-917E-22BA13AE02CE_=--
 
