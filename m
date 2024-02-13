@@ -1,337 +1,200 @@
-Return-Path: <linux-kselftest+bounces-4584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4585-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A2A3853D07
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 22:24:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23709853DBF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 22:57:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EA2C1C2697A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 21:24:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4887D1C22033
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 21:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16DE563106;
-	Tue, 13 Feb 2024 21:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DF0F626A2;
+	Tue, 13 Feb 2024 21:55:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3qw+DHL3"
+	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="mr1rlhoL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Fd2Djm86"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7286626AB
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 21:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D185661684;
+	Tue, 13 Feb 2024 21:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707858706; cv=none; b=i4ByHpSa0WTmosVJiPLCKnd1f2uPdvLm/epw/DhpbzXF7KXM0Rsn+8Z6TSEcTxOg0qteEx/FotPswaeIv6yN7x5tYc0XdQAPBZgXo2i9zHgokBU+iqP6RftM/WdoGB9mpOPVwrX5JXsZYhmAegFBZYvIGpbRGOjdItoTKlmzY1I=
+	t=1707861350; cv=none; b=S8DONL/Q/1It8vb7d/2NMqqcnVICGG++jY/Kv04US5M+1SIs8Ox75xnr6ezijebSTOxd3P/cLIPNP2YvHAnR9GH+JmEAwk/GudlV0ywGujUTJGJ8cBWWtZTVGendg6PCeSwq+f38ppA1bEd6kD3U3u1vRiyfl3+JAAX7ZWBevEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707858706; c=relaxed/simple;
-	bh=8PgonvMIbvrH9MSbhuItBe3sWcnPc7IU56AmceLpoEw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Dj7cekS2PGbsC0GN8COMMPAzvzK+1fXfB5goysKhk5HgO/+s0KtzPg31D+8e1RB9Yx1Vv9C8TSTCrJ2+sPY/Y/yudGA2NexFdgG0bHPyC86IggxOzUQT7MaSn3+bjpr3XxQZMGyCt2cnuPD3f4UjzOZKSyvJHdeqrry/AuNNFKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3qw+DHL3; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a3d01a9a9a2so122887966b.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 13:11:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707858701; x=1708463501; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zsOIUemMTVXHoEVROLysOcQX18quXE3mcOSmusaiTVU=;
-        b=3qw+DHL3WKlvdWe731UgqTCdG+qi223RsObe3z8CUbETTRm40/NN6mBjH9dyNhgr5g
-         s33N2CJFc+rqmBDXPEqp1KSyPW8W2LMKeGsrgtN8m9F4+AZBS1GiPhBk73x4Po73Ug1z
-         ghvS03vAElxM0Ms8sO62V0tRLtk/6tnozaNNfNNYN1NGGj+qvBdNh70xCj0EIvwg1LBI
-         o148syW51Ot0cGQdz0rlPhjYAmhNxxf4TbCdrHIvglxbE1M/2+B2q3GZuB6YP1S8lZjr
-         LkBH0EFmodTlsm4KnccJYrPjlq0NCH1D3nDjfCEfEQ/88RtrGhpZgh66F8SUReet9Eqi
-         P68A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707858701; x=1708463501;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zsOIUemMTVXHoEVROLysOcQX18quXE3mcOSmusaiTVU=;
-        b=vl2n5fzKW8V3UzqCVqiXOYMmlhcWHBTUh6lYb3MBG97zEXg2aPMzUdgL98JRnwdmCm
-         g/gQs6+NFh0dqLbP+0gP4mYxsWnY2mJbPXJIE+ClDp5SgRTDsNOV/zisMV+Zo4ZY9zMd
-         qu9U/+gEiXhYgVcTAN1+j4MfKGE4dJs+uV5GJWNFPBJSa2qiqAn8v4oFdQ5AJB1J7z7o
-         AazqIYUcEQod61pXnSrueovlsf42NgwKYD9JEG6CQUsY/7TP0BR9IgoFxM5vvoTdL1I1
-         BN2UTbxIUNrNYKI2ldOv8z7JEFstXsNlTyl/EnKQ1IvAuHVcVqZJ0Y+39atMn5fkVMKI
-         8KyA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtdzwlo4+jXIyx8Zx1LKnkIRUWp7Sw1AEWHYAjeBLS/Uvy6m4/Bc3WOx+eQd+M02s8n+snOzHLduQqMoC6X8vqCKN2ktqlCQwAkIy4KbAw
-X-Gm-Message-State: AOJu0YwY7bK5HyG5Xxhlsfa+pMMIiRxY3j0nmttaXPqjE6Hr2kz2Tzpy
-	ROAMMJholVrxy8VwjmzguBmVYUOgkZItU0t11vFjjfWJq89yG/PxmkljEntk0+VRufeXxmfUkpV
-	MkeXI+UBpbaic9fzqBU02JcjhXY+rAodHtepQ
-X-Google-Smtp-Source: AGHT+IExITBQize1fGZuvy7b+0mnYFOUMkpqQ+6ifMmjq7oa8jqrG3qPbdpWEJmCURVq8IK8JranwyOGOl5XdgYpzX0=
-X-Received: by 2002:a17:906:8410:b0:a3c:eb18:8a4d with SMTP id
- n16-20020a170906841000b00a3ceb188a4dmr349416ejx.62.1707858700745; Tue, 13 Feb
- 2024 13:11:40 -0800 (PST)
+	s=arc-20240116; t=1707861350; c=relaxed/simple;
+	bh=/GyMLqEaIzbvTZ7xam4FQ0e1scykPoZPxEo4U3yALw8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pEQ79YLG4b8CFG5TXRRKpOyaxIW/12L+rYD/xzloLPqe9EUeKU+VAtSZ+Yaz0XeTxRCz8uZTDvmrH2AHRd0VhDNvwZxL2N1aN3qoZ7WSpFRuP9GcJ0gsNyzrbszxYQHw/VCkFPReuIP01ErancH+CE8jJkdDnP4WSoaD63Ckgl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sent.com; spf=pass smtp.mailfrom=sent.com; dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b=mr1rlhoL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Fd2Djm86; arc=none smtp.client-ip=66.111.4.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sent.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 94E005C00B9;
+	Tue, 13 Feb 2024 16:55:46 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 13 Feb 2024 16:55:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:reply-to:subject:subject:to:to; s=fm3; t=1707861346; x=
+	1707947746; bh=rKsJORufnnGtyC9mo4arxw/2f9LvMA7u/22qfgccp3c=; b=m
+	r1rlhoLr2CPDTqsvidZUK1X1seSyDWNlCrtq5VdswnoSB7r4Dslk2NS5/Ex2154j
+	u4r0ppFXXbbylSIwiVpj1pRT9PExZzo9rIaoFf3G241fWxGuJZ3IY1uKfBpvgWpm
+	eY6O3NgMy0niZoaPwyB2lAFa/OCK0o3hEUGxF5IFQfbBRZXsFmgUeAUDN23/FHRt
+	2XKa6BuqUlXiZXJRJMw9MeQLVQ9rWoIParVMyzU1YjOXeNY18Q45l+Hh8bJUnqa5
+	3VUq3BuZ1YkX+H0dwDuJ+vQ+CONJlprI6FfXNXZKoux5Z6evZQU+Pp4Mkgvez/vZ
+	A/rxo3iq07cjOJzf8lsbQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:reply-to
+	:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1707861346; x=1707947746; bh=r
+	KsJORufnnGtyC9mo4arxw/2f9LvMA7u/22qfgccp3c=; b=Fd2Djm86eNZq4Z3Lw
+	MptTHyTJB/A++7ca2z3/dZltN6Su0fua9dJHFOXn5UTGA0s5zv6Dx8P9bDl5DuSZ
+	enKaCtT43/48VRr9lMbrKXiqDitLlytuhvBltIBLLankuEt/pWb9XFjkxiR3/GM8
+	KgL4O+LuJ+OPToSsVJctYyrFySFW0UeQwUkZOBbKXlMJqFBtM+psqcA7JkZtg2A8
+	Iafj/K0R+HeelFUsD6lOWLbC6B0EfVphE9aIBi0J/p33joIg1rFa0bYHEjMmHWFl
+	ZatMuVRFtsDz0UQnXB2HUvRsAyOSqbfKYo1mhC34Grf/YGgzwT8KhA57a5D7b9fS
+	Rzx/A==
+X-ME-Sender: <xms:YuXLZcawUI-DQBxk4O6fVj3k1_Im8S-srfKvn1f_ofMyXtMLMuGRYQ>
+    <xme:YuXLZXZEq3bt7Xod245ANSeKVZNWcL2WjOK19zZXqHifwlFveBE8WdehAI9gSImBx
+    xl1RA1bvvMuVw_BKw>
+X-ME-Received: <xmr:YuXLZW-Cls5PWOt1uJNR8cqeHIyKLuV0sJ5eYmzyAoQ9Ak7Agcj_h3UKfB3uD2ZRlkMbVA4W7cLATS-QJIy_3z1y0cjL9vhDXHxVW9vCv6mU_OBDhZxK330o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehgdduheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofhrgggtgfesthekredtredtjeenucfhrhhomhepkghiucgj
+    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepteduve
+    ehteehheeiteeihfejveejledtgfdvieeuiedutefftdevtdfhteevtdffnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
+X-ME-Proxy: <xmx:YuXLZWqvfPT-tt657zYvNbobjkSvgtn0jzCMkDb_2jiXnE0KiWuUrw>
+    <xmx:YuXLZXqwq_ysUqTFfVs0gQOA8XabcR40rPMxodHTdqKb8lLL4FY8hQ>
+    <xmx:YuXLZURcBtMsFWG4C6ohK8xc6qgp8sTDdP8TqANLc_u5wE13HMZiHA>
+    <xmx:YuXLZe8idbP8I4VCtDUTyw3u10YZbwkP9gBvtJSKgjk9yOLIxTwcPg>
+Feedback-ID: iccd040f4:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Feb 2024 16:55:45 -0500 (EST)
+From: Zi Yan <zi.yan@sent.com>
+To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
+	linux-mm@kvack.org
+Cc: Zi Yan <ziy@nvidia.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	David Hildenbrand <david@redhat.com>,
+	Yang Shi <shy828301@gmail.com>,
+	Yu Zhao <yuzhao@google.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	"Zach O'Keefe" <zokeefe@google.com>,
+	Hugh Dickins <hughd@google.com>,
+	Mcgrof Chamberlain <mcgrof@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 0/7] Split a folio to any lower order folios
+Date: Tue, 13 Feb 2024 16:55:13 -0500
+Message-ID: <20240213215520.1048625-1-zi.yan@sent.com>
+X-Mailer: git-send-email 2.43.0
+Reply-To: Zi Yan <ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231218024024.3516870-1-almasrymina@google.com>
- <20231218024024.3516870-8-almasrymina@google.com> <3374356e-5f4b-4a6f-bb19-8cb7c56103bc@gmail.com>
-In-Reply-To: <3374356e-5f4b-4a6f-bb19-8cb7c56103bc@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 13 Feb 2024 13:11:28 -0800
-Message-ID: <CAHS8izO2zARuMovrYU3kdwSXsQAM6+SajQjDT3ckSvVOfHwaCQ@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v5 07/14] page_pool: devmem support
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 13, 2024 at 5:28=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
->
-> On 12/18/23 02:40, Mina Almasry wrote:
-> > Convert netmem to be a union of struct page and struct netmem. Overload
-> > the LSB of struct netmem* to indicate that it's a net_iov, otherwise
-> > it's a page.
-> >
-> > Currently these entries in struct page are rented by the page_pool and
-> > used exclusively by the net stack:
-> >
-> > struct {
-> >       unsigned long pp_magic;
-> >       struct page_pool *pp;
-> >       unsigned long _pp_mapping_pad;
-> >       unsigned long dma_addr;
-> >       atomic_long_t pp_ref_count;
-> > };
-> >
-> > Mirror these (and only these) entries into struct net_iov and implement
-> > netmem helpers that can access these common fields regardless of
-> > whether the underlying type is page or net_iov.
-> > Implement checks for net_iov in netmem helpers which delegate to mm
-> > APIs, to ensure net_iov are never passed to the mm stack.
-> >
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >
-> > ---
-> >
-> > RFCv5:
-> > - Use netmem instead of page* with LSB set.
-> > - Use pp_ref_count for refcounting net_iov.
-> > - Removed many of the custom checks for netmem.
-> >
-> > v1:
-> > - Disable fragmentation support for iov properly.
-> > - fix napi_pp_put_page() path (Yunsheng).
-> > - Use pp_frag_count for devmem refcounting.
-> >
-> > ---
-> >   include/net/netmem.h            | 145 ++++++++++++++++++++++++++++++-=
--
-> >   include/net/page_pool/helpers.h |  25 +++---
-> >   net/core/page_pool.c            |  26 +++---
-> >   net/core/skbuff.c               |   9 +-
-> >   4 files changed, 164 insertions(+), 41 deletions(-)
-> >
-> > diff --git a/include/net/netmem.h b/include/net/netmem.h
-> > index 31f338f19da0..7557aecc0f78 100644
-> > --- a/include/net/netmem.h
-> > +++ b/include/net/netmem.h
-> > @@ -12,11 +12,47 @@
-> >
-> >   /* net_iov */
-> >
-> > +DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
-> > +
-> > +/*  We overload the LSB of the struct page pointer to indicate whether=
- it's
-> > + *  a page or net_iov.
-> > + */
-> > +#define NET_IOV 0x01UL
-> > +
-> >   struct net_iov {
-> > +     unsigned long __unused_padding;
-> > +     unsigned long pp_magic;
-> > +     struct page_pool *pp;
-> >       struct dmabuf_genpool_chunk_owner *owner;
-> >       unsigned long dma_addr;
-> > +     atomic_long_t pp_ref_count;
-> >   };
->
-> I wonder if it would be better to extract a common sub-struct
-> used in struct page, struct_group_tagged can help to avoid
-> touching old code:
->
-> struct page {
->         unsigned long flags;
->         union {
->                 ...
->                 struct_group_tagged(<struct_name>, ...,
->                         /**
->                          * @pp_magic: magic value to avoid recycling non
->                          * page_pool allocated pages.
->                          */
->                         unsigned long pp_magic;
->                         struct page_pool *pp;
->                         unsigned long _pp_mapping_pad;
->                         unsigned long dma_addr;
->                         atomic_long_t pp_ref_count;
->                 );
->         };
-> }
->
-> struct net_iov {
->         unsigned long pad;
->         struct <struct_name> p;
-> };
->
->
-> A bit of a churn with the padding and nesting net_iov but looks
-> sturdier. No duplication, and you can just check positions of the
-> structure instead of per-field NET_IOV_ASSERT_OFFSET, which you
-> have to not forget to update e.g. when adding a new field. Also,
+From: Zi Yan <ziy@nvidia.com>
 
-Yes, this is nicer. If possible I'll punt it to a minor cleanup as a
-follow up change. Logistically I think if this series need-not touch
-code outside of net/, that's better.
+Hi all,
 
-> with the change __netmem_clear_lsb can return a pointer to that
-> structure, casting struct net_iov when it's a page is a bit iffy.
->
-> And the next question would be whether it'd be a good idea to encode
-> iov vs page not by setting a bit but via one of the fields in the
-> structure, maybe pp_magic.
->
+File folio supports any order and multi-size THP is upstreamed[1], so both
+file and anonymous folios can be >0 order. Currently, split_huge_page()
+only splits a huge page to order-0 pages, but splitting to orders higher than
+0 is going to better utilize large folios. In addition, Large Block
+Sizes in XFS support would benefit from it[2]. This patchset adds support for
+splitting a large folio to any lower order folios and uses it during file
+folio truncate operations.
 
-I will push back against this, for 2 reasons:
+For Patch 6, Hugh did not like my approach to minimize the number of
+folios for truncate[3]. I would like to get more feedback, especially
+from FS people, on it to decide whether to keep it or not.
 
-1. I think pp_magic's first 2 bits (and maybe more) are used by mm
-code and thus I think extending usage of pp_magic in this series is a
-bit iffy and I would like to avoid it. I just don't want to touch the
-semantics of struct page if I don't have to.
-2. I think this will be a measurable perf regression. Currently we can
-tell if a pointer is a page or net_iov without dereferencing the
-pointer and dirtying the cache-line. This will cause us to possibly
-dereference the pointer in areas where we don't need to. I think I had
-an earlier version of this code that required a dereference to tell if
-a page was devmem and Eric pointed to me it was a perf regression.
+The patchset is on top of mm-everything-2024-02-13-01-26.
 
-I also don't see any upside of using pp_magic, other than making the
-code slightly more readable, maybe.
+Changelog 
+===
 
-> With that said I'm a bit concerned about the net_iov size. If each
-> represents 4096 bytes and you're registering 10MB, then you need
-> 30 pages worth of memory just for the iov array. Makes kvmalloc
-> a must even for relatively small sizes.
->
+Since v3
+---
+1. Excluded shmem folios and pagecache folios without FS support from
+splitting to any order (per Hugh Dickins).
+2. Allowed splitting anonymous large folio to any lower order since
+multi-size THP is upstreamed.
+3. Adapted selftests code to new framework.
 
-This I think is an age-old challenge with pages. 1.6% of the machine's
-memory is 'wasted' on every machine because a struct page needs to be
-allocated for each PAGE_SIZE region. We're running into the same issue
-here where if we want to refer to PAGE_SIZE regions of memory we need
-to allocate some reference to it. Note that net_iov can be relatively
-easily extended to support N order pages. Also note that in the devmem
-TCP use case it's not really an issue; the minor increase in mem
-utilization is more than offset by the saving in memory bw as compared
-to using host memory as a bounce buffer. All in all I vote this is
-something that can be tuned or improved in the future if someone finds
-the extra memory usage a hurdle to using devmem TCP or this net_iov
-infra.
+Since v2
+---
+1. Fixed an issue in __split_page_owner() introduced during my rebase
 
-> And the final bit, I don't believe the overlay is necessary in
-> this series. Optimisations are great, but this one is a bit more on
-> the controversial side. Unless I missed something and it does make
-> things easier, it might make sense to do it separately later.
->
+Since v1
+---
+1. Changed split_page_memcg() and split_page_owner() parameter to use order
+2. Used folio_test_pmd_mappable() in place of the equivalent code
 
-I completely agree, the overlay is not necessary. I implemented the
-overlay in response to Yunsheng's  strong requests for more 'unified'
-processing between page and devmem. This is the most unification I can
-do IMO without violating the requirements from Jason. I'm prepared to
-remove the overlay if it turns out controversial, but so far I haven't
-seen any complaints. Jason, please do take a look if you have not
-already.
+Details
+===
 
->
-> > +/* These fields in struct page are used by the page_pool and net stack=
-:
-> > + *
-> > + *   struct {
-> > + *           unsigned long pp_magic;
-> > + *           struct page_pool *pp;
-> > + *           unsigned long _pp_mapping_pad;
-> > + *           unsigned long dma_addr;
-> > + *           atomic_long_t pp_ref_count;
-> > + *   };
-> > + *
-> > + * We mirror the page_pool fields here so the page_pool can access the=
-se fields
-> > + * without worrying whether the underlying fields belong to a page or =
-net_iov.
-> > + *
-> > + * The non-net stack fields of struct page are private to the mm stack=
- and must
-> > + * never be mirrored to net_iov.
-> > + */
-> > +#define NET_IOV_ASSERT_OFFSET(pg, iov)             \
-> > +     static_assert(offsetof(struct page, pg) =3D=3D \
-> > +                   offsetof(struct net_iov, iov))
-> > +NET_IOV_ASSERT_OFFSET(pp_magic, pp_magic);
-> > +NET_IOV_ASSERT_OFFSET(pp, pp);
-> > +NET_IOV_ASSERT_OFFSET(dma_addr, dma_addr);
-> > +NET_IOV_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
-> > +#undef NET_IOV_ASSERT_OFFSET
-> > +
-> >   static inline struct dmabuf_genpool_chunk_owner *
-> >   net_iov_owner(const struct net_iov *niov)
-> >   {
-> > @@ -47,19 +83,25 @@ net_iov_binding(const struct net_iov *niov)
-> >   struct netmem {
-> >       union {
-> >               struct page page;
-> > -
-> > -             /* Stub to prevent compiler implicitly converting from pa=
-ge*
-> > -              * to netmem_t* and vice versa.
-> > -              *
-> > -              * Other memory type(s) net stack would like to support
-> > -              * can be added to this union.
-> > -              */
-> > -             void *addr;
-> > +             struct net_iov niov;
-> >       };
-> >   };
-> >
-> ...
->
-> --
-> Pavel Begunkov
+* Patch 1 changes split_page_memcg() to use order instead of nr_pages
+* Patch 2 changes split_page_owner() to use order instead of nr_pages
+* Patch 3 and 4 add new_order parameter split_page_memcg() and
+  split_page_owner() and prepare for upcoming changes.
+* Patch 5 adds split_huge_page_to_list_to_order() to split a huge page
+  to any lower order. The original split_huge_page_to_list() calls
+  split_huge_page_to_list_to_order() with new_order = 0.
+* Patch 6 uses split_huge_page_to_list_to_order() in large pagecache folio
+  truncation instead of split the large folio all the way down to order-0.
+* Patch 7 adds a test API to debugfs and test cases in
+  split_huge_page_test selftests.
 
+Comments and/or suggestions are welcome.
 
+[1] https://lore.kernel.org/all/20231207161211.2374093-1-ryan.roberts@arm.com/
+[2] https://lore.kernel.org/linux-mm/qzbcjn4gcyxla4gwuj6smlnwknz2wvo5wrjctin6eengjfqjei@lzkxv3iy6bol/
+[3] https://lore.kernel.org/linux-mm/9dd96da-efa2-5123-20d4-4992136ef3ad@google.com/
 
---
-Thanks,
-Mina
+Zi Yan (7):
+  mm/memcg: use order instead of nr in split_page_memcg()
+  mm/page_owner: use order instead of nr in split_page_owner()
+  mm: memcg: make memcg huge page split support any order split.
+  mm: page_owner: add support for splitting to any order in split
+    page_owner.
+  mm: thp: split huge page to any lower order pages (except order-1).
+  mm: truncate: split huge page cache page to a non-zero order if
+    possible.
+  mm: huge_memory: enable debugfs to split huge pages to any order.
+
+ include/linux/huge_mm.h                       |  21 +-
+ include/linux/memcontrol.h                    |   4 +-
+ include/linux/page_owner.h                    |  10 +-
+ mm/huge_memory.c                              | 149 +++++++++---
+ mm/memcontrol.c                               |  10 +-
+ mm/page_alloc.c                               |   8 +-
+ mm/page_owner.c                               |   8 +-
+ mm/truncate.c                                 |  21 +-
+ .../selftests/mm/split_huge_page_test.c       | 223 +++++++++++++++++-
+ 9 files changed, 382 insertions(+), 72 deletions(-)
+
+-- 
+2.43.0
+
 
