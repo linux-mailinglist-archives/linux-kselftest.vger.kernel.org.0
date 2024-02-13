@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-4572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7230D8539C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 19:20:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0224F8539C2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 19:20:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07408B21400
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC989B21750
 	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 18:20:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB63605BF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF820605C6;
 	Tue, 13 Feb 2024 18:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLY/AV9I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lneCGLnX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C2B5FBB3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97382605C2;
 	Tue, 13 Feb 2024 18:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707848428; cv=none; b=GOclrq52o41HCRKP025womeYB0axNFdm2nHH5nF5n+yFmqE7hJ+9xO9OtsMNdcufsi0wDFp49drEbk6eeA+iaUD/3NvOwa7pDwqdNH8wYr8R+jc6IhEO2mApwSjhzOa62gFzAoH8xHvfZg1nQSq1NLkRcG56zF+Il9g+2NE9EAo=
+	t=1707848428; cv=none; b=K+k5P5g2cHrwrre37Fpc/G6Q9Al9coYCP/oHIaFcfaLkHN8LHhzA9myB7UMiZ2cMWsbMUEFjdE7ibYXNQXiKwlYp8fO04kzKLRaguakUbAIoY2uZD7i9U3kqoDPQJ2UfxwySBM/+Do0F1I+rLmpGjI4BXHbPJIrCyQ4BibaaT+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1707848428; c=relaxed/simple;
-	bh=mePoQ3pSobk0RitQM7iyZCk3GHE+CYs0EY5WhOPY/Ww=;
+	bh=D7VWw6OUR63KfFGyZ4wX5dRIQR0q/yLmEzyd5gojiDo=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=NdpTUTtv4UxwFnYo2xl6UGB98HPvhiYuu4swL+2ov+7SHpzbOaRw4gdT1tCv06I1/BJLJyHB4hdo5U5gf/yXFMjxxFLE3BLT3RSmjHl401tl7am3a5bUnah1GtRJQG2JHOFA+yLajK+TTPLU7McTEaSPdQUeYcqXx0wKoXsDVaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLY/AV9I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 29444C43399;
+	 In-Reply-To:To:Cc; b=Uk34AA4DAVKLiPkbQSLHsW6YNefd0yAjjYM+IcgspXX5UkvcjcnKZuohM2SAQC7rFMgbRsSKGHqdhoB2MAXVjwLzGwuAYYL86WixcAqCQ8IVNZFuE/XQk2RXXO1JTBqI47rJ51Dh+pWbxjVgbi74zpdR1hZQJFO1EnRnFhadSuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lneCGLnX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FE77C43390;
 	Tue, 13 Feb 2024 18:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1707848428;
-	bh=mePoQ3pSobk0RitQM7iyZCk3GHE+CYs0EY5WhOPY/Ww=;
+	bh=D7VWw6OUR63KfFGyZ4wX5dRIQR0q/yLmEzyd5gojiDo=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BLY/AV9IMjZHzp0tlPm3pTUgP8tpz1WkNR4YKznekY2IO2WQRJdHAq4kMCN2rZmfD
-	 3M6+z9Q+z+dELRL0y0ic/bldX4nxIFqScbUAQwmWsE+Ijy+B5zScfrwStawbLpKqkC
-	 eNX4sVTqO1qMxc/l+UFircp2Xm7LZSLGyhrTQM3k0M4Za6ivf2LFVjmoTlIdm+OTNo
-	 mhMwvmB1pmsTl/XTz4qYPZOAFa5nhkVhe4dT04/DiW/NDePUGStyDvQ5mL7aj3yjdF
-	 NLQ8wcqYV5BqwE9D6zUcIsCRQYaoTiOCVxKpyODxDHvgB7zOh1t6J1a0r7ctcf0bqw
-	 qruUvRRhemeMA==
+	b=lneCGLnX7lv/8OQ519hDCaAoMVrozakbFNDiwwXVWFnH8YEbT+5aIzS5uvyDStbv1
+	 ++BACJ+MiKuvJTaeg7VKmGVOYctdGvALajHjXTN8h68PM1+eiXx22zsy7RWxWVgRYi
+	 ohenwcydvpMi6jBkKbzz69J0gtrN16ngW5EQcyF6OSOw4/g2E9znLthiDpEOQaEn84
+	 +Wzwr5wP87oqU6my727f6xS920Pf6Np3ygOX80F41KfO3WhpRDJeLxvAzbV3HnlFBK
+	 VwLGmXhTWb5592a2cReh52dUroNJr5Fh6YlczojcN0Ky5gUOfxRTOqe1/SCTuzFwK9
+	 49PvbzHkW3vSw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DE83D84BCD;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05B03D84BCF;
 	Tue, 13 Feb 2024 18:20:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -52,38 +52,36 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: net: cope with slow env in so_txtime.sh test
+Subject: Re: [PATCH v3 net] selftests: net: cope with slow env in gro.sh test
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <170784842805.32476.7805933357774588785.git-patchwork-notify@kernel.org>
+ <170784842801.32476.7295008627532134278.git-patchwork-notify@kernel.org>
 Date: Tue, 13 Feb 2024 18:20:28 +0000
-References: <2142d9ed4b5c5aa07dd1b455779625d91b175373.1707730902.git.pabeni@redhat.com>
-In-Reply-To: <2142d9ed4b5c5aa07dd1b455779625d91b175373.1707730902.git.pabeni@redhat.com>
+References: <97d3ba83f5a2bfeb36f6bc0fb76724eb3dafb608.1707729403.git.pabeni@redhat.com>
+In-Reply-To: <97d3ba83f5a2bfeb36f6bc0fb76724eb3dafb608.1707729403.git.pabeni@redhat.com>
 To: Paolo Abeni <pabeni@redhat.com>
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, shuah@kernel.org, vinicius.gomes@intel.com,
- willemb@google.com, linux-kselftest@vger.kernel.org
+ kuba@kernel.org, shuah@kernel.org, willemb@google.com, lixiaoyan@google.com,
+ linux-kselftest@vger.kernel.org
 
 Hello:
 
 This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 12 Feb 2024 10:43:31 +0100 you wrote:
-> The mentioned test is failing in slow environments:
+On Mon, 12 Feb 2024 10:39:41 +0100 you wrote:
+> The gro self-tests sends the packets to be aggregated with
+> multiple write operations.
 > 
->   # SO_TXTIME ipv4 clock monotonic
->   # ./so_txtime: recv: timeout: Resource temporarily unavailable
->   not ok 1 selftests: net: so_txtime.sh # exit=1
-> 
-> Tuning the tolerance in the test binary is error-prone and doomed
-> to failures is slow-enough environment.
+> When running is slow environment, it's hard to guarantee that
+> the GRO engine will wait for the last packet in an intended
+> train.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] selftests: net: cope with slow env in so_txtime.sh test
-    https://git.kernel.org/netdev/net/c/a7ee79b9c455
+  - [v3,net] selftests: net: cope with slow env in gro.sh test
+    https://git.kernel.org/netdev/net/c/e58779f47e5e
 
 You are awesome, thank you!
 -- 
