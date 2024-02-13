@@ -1,219 +1,337 @@
-Return-Path: <linux-kselftest+bounces-4583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E8D6853C7B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 21:54:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A2A3853D07
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 22:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E99BC288C4B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 20:54:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EA2C1C2697A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Feb 2024 21:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5A061665;
-	Tue, 13 Feb 2024 20:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16DE563106;
+	Tue, 13 Feb 2024 21:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdCmCYZS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3qw+DHL3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D95627E7;
-	Tue, 13 Feb 2024 20:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7286626AB
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 21:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707857575; cv=none; b=rrgk5Or6tdXhDWY5fHJdqFlVwHneD/wKP/N9JeREuHkdfTr1Sptkxn9JFitKTAAOrQr5xc61Z0FNxLVMxTk2M1+dMhjkwTYcUPV6tOFwi9mTA0LbyCuOHeTmvveycOLtgWT44XKmbnoJGTbcexwaabzaABA7al9/AQ9iNDOvgCE=
+	t=1707858706; cv=none; b=i4ByHpSa0WTmosVJiPLCKnd1f2uPdvLm/epw/DhpbzXF7KXM0Rsn+8Z6TSEcTxOg0qteEx/FotPswaeIv6yN7x5tYc0XdQAPBZgXo2i9zHgokBU+iqP6RftM/WdoGB9mpOPVwrX5JXsZYhmAegFBZYvIGpbRGOjdItoTKlmzY1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707857575; c=relaxed/simple;
-	bh=9PwvXRhAMugLtHuzOt+aDQ3KQbytSBWLZhzNRbCHAUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eBgWdGjSC1ARBJh+sAdOOo8FmjT4f8WP6jeZOAJRQGyukGmoFnNeLY2NegEUxhGUgvT4wiQwZ2voa8EkjD5tn1IPkoZIELaXOxhzaTieZQ94nLzZRr9hqUF7HNuGSegA3isBIJ9BEnakNHCE9ishgzRGRvIz0a39AQ9xbwmBfd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DdCmCYZS; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-296d24631c0so2805017a91.3;
-        Tue, 13 Feb 2024 12:52:53 -0800 (PST)
+	s=arc-20240116; t=1707858706; c=relaxed/simple;
+	bh=8PgonvMIbvrH9MSbhuItBe3sWcnPc7IU56AmceLpoEw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dj7cekS2PGbsC0GN8COMMPAzvzK+1fXfB5goysKhk5HgO/+s0KtzPg31D+8e1RB9Yx1Vv9C8TSTCrJ2+sPY/Y/yudGA2NexFdgG0bHPyC86IggxOzUQT7MaSn3+bjpr3XxQZMGyCt2cnuPD3f4UjzOZKSyvJHdeqrry/AuNNFKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3qw+DHL3; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a3d01a9a9a2so122887966b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 13:11:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707857573; x=1708462373; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6oMv83TSgQDRLR6Sio2134HLfx7oE5pFJJA1vfpzEPI=;
-        b=DdCmCYZScjzHzvNqnWEW1uWEgFmUWPunr7Nmm93TKnrVQVk9hOzq6y4y4aJ6acR5I+
-         Ninf9c0MIte7jcFSoUh7hByqzODVQ/UJIFycO5SepgfalXh9ZozlFUs1MUrGYjLH9Pii
-         PPjvltsoeKso8F4401//QfCE3pjNEwluhB5WaPilOQ2Tx21DalhSocu4QrKzqrw4SBDw
-         Phq053FWjfXpc30HeDDveMAiYkStxrZgaormU8BAy8geGPCDz4oEHhS1Sh61Hft6pt/Z
-         TsQ5bQX6IzkgHsNq1EXPvocBLOAP7GztFKp2s5GOZ6CeSHgsVrFBO0YNLf3ScoWkRA/H
-         a4jg==
+        d=google.com; s=20230601; t=1707858701; x=1708463501; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zsOIUemMTVXHoEVROLysOcQX18quXE3mcOSmusaiTVU=;
+        b=3qw+DHL3WKlvdWe731UgqTCdG+qi223RsObe3z8CUbETTRm40/NN6mBjH9dyNhgr5g
+         s33N2CJFc+rqmBDXPEqp1KSyPW8W2LMKeGsrgtN8m9F4+AZBS1GiPhBk73x4Po73Ug1z
+         ghvS03vAElxM0Ms8sO62V0tRLtk/6tnozaNNfNNYN1NGGj+qvBdNh70xCj0EIvwg1LBI
+         o148syW51Ot0cGQdz0rlPhjYAmhNxxf4TbCdrHIvglxbE1M/2+B2q3GZuB6YP1S8lZjr
+         LkBH0EFmodTlsm4KnccJYrPjlq0NCH1D3nDjfCEfEQ/88RtrGhpZgh66F8SUReet9Eqi
+         P68A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707857573; x=1708462373;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6oMv83TSgQDRLR6Sio2134HLfx7oE5pFJJA1vfpzEPI=;
-        b=b0/QTG/DCVB4uBiQxdOy/DlH33wSHr21Jiy8zA+kRfUwfjgH/BKzr46TNyFJ7gtalW
-         06GCHWvB0LpS2WU+Yrx+wOaDDUr53SJOLJqeOvILq6DXrzPsr+2zm7xMdod/oeWk8y0U
-         QKiFj+ehzJi/T6vg1JhfIqUaInnAZYPZ6/RCeIT64Gk3bDbFYcqRlaM6YhnFw+d12iIb
-         dyRBtZXfYlIDZJFq3r0As9cMeArcBWpTrUov1oUVpjUpEgGKV6XOKZ9PqkABDEcbUDPa
-         NfPptvuMw2jUtNsxAFeVTcnjiC+oOebU0ghrkBtRNtasiYF6+66QO2i62MXgWJeO4Rdd
-         AHmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUruUygb7Xvm4mRLOiLFhJ8rkuQSypTMZMOeAuJ2zOctKcEIBDvxHEqseK3nkbh6AD3axUm0qzt2puwJNwkiIgRGvEtjZ6KpIeAFFZYvO7AEkAKSplp/b7FGerl2T0ZNF3Ale3XozdGoYBnz9zIulbSIAhOGHKyb2wEJE8mSB9kvmf3gz+PWIBkZDEa5W7PKiDCsjgZ838YPS5pkPXMOmY0dTmGXfidkUhzPunqlQvOEB20XudsveFMPIQ=
-X-Gm-Message-State: AOJu0Ywe81isc/bleaz/LXQJm7YTFlrxBw8cpcBpCBMhG40O7Z/0Br9F
-	F9NXnQeSD8hwc8lD9yyaOKRF4rxq+Sz3K+TdrFIJQ3eLX4JvRMep
-X-Google-Smtp-Source: AGHT+IHE7IRAy6H5onujqJT/ftqmB93CgRKWtRpljbAkBkwOoObI6kOILuCJtaTXA2cYq7usG9E45w==
-X-Received: by 2002:a17:90a:eb0e:b0:297:2f49:7aa with SMTP id j14-20020a17090aeb0e00b002972f4907aamr581305pjz.43.1707857572667;
-        Tue, 13 Feb 2024 12:52:52 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXQX4P2q4KPM9M0RPcwWGMfbHa16M6MAKUtvc44DFjC0I+o5aUdqeRReIvnRyuJ2d89DmnqSA7k9VLwU8ANpllpxzKV9ULYoqGccwf6+8PMw7ys5HYrHk8kDM2WkSuFqCgbvrr31ZiQVNRXuHH1AWYu5GFloJ7WZYk/pTJJ6ZWrM7Rjl/mtWiU7eHynd64EuaZqpMQC/KKCPqsBeaqExdPg2qEStG3eO20xTOD1gS0mYbGjgNqAjc/WY20o2QZTraJTY/ooqb3Gddcu+xfEOCnvN8ycs/RcqVw+9kaPSIT4kTqAtWW/0LdqqpeN6azTxYPgwsF4wTZoS/RUZD4HCT4LLWXrmz5gzcLuNI4TSjTpqzbXUPkcoDn1/bHSaiX56JD4VpadM8hyDsyNNlBD8AVscR8FiR/M0dbsbrxu1CpXedBC/ZmKNYq83+/jy9UfbdewaSZS8K893TAevC+K47QKGe9zIskiGByd7NnKdm5xDW+fxZFFOK0jisUY0zc3uKXifkihsm0+k8qZzIymf8J35/BTzGbIWCDhADxaQwiVxIgYNItAdOPTcFTwavuYIeBri35Uus/ENPtNt0JnCF1x4E5t1KCa48J3mvrHnTJKZV7ztkS3GQLK7zy9vNl9aLeIN2J9ucS5jIbBqxRtXdzk7jxMdM0S9fzvSIZ8LvfUuMnn8Y0u6DC1MpBdkAFswGk=
-Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:500::6:7312])
-        by smtp.gmail.com with ESMTPSA id fa3-20020a17090af0c300b00296e2434e7esm2958426pjb.53.2024.02.13.12.52.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 12:52:52 -0800 (PST)
-Date: Tue, 13 Feb 2024 12:52:49 -0800
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Benjamin Tissoires <bentiss@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RFC bpf-next 0/9] allow HID-BPF to do device IOs
-Message-ID: <b2k6rlzu5vgpouedwjbsigoteo43nwfk6qeeb2pc7c3r4ejnm6@nml66ds6wbeo>
-References: <87bk8pve2z.fsf@toke.dk>
- <CAO-hwJ+UeaBydN9deA8KBbgBiC_UCt6oXX-wGnNuSr8fhUrkXw@mail.gmail.com>
- <875xyxva9u.fsf@toke.dk>
- <CAO-hwJLvEGNRXc8G2PR+AQ6kJg+k5YqSt3F7LCSc0zWnmFfe5g@mail.gmail.com>
- <87r0hhfudh.fsf@toke.dk>
- <CAO-hwJLxkt=THKBjxDA6KZsC5h52rCXZ-2RNKPCiYMHNjhQJNg@mail.gmail.com>
- <CAADnVQKt7zu2OY0xHCkTb=KSXO33Xj8H4vVYMqP51ZJ_Kj1sZA@mail.gmail.com>
- <zybv26nmqtmyghakbebwxanzgzsfm6brvi7qw3ljoh4dijbjki@ub7atnumzuhy>
- <CAP01T75Giw_5j0RXaaxX0rDzCcXXZgmHrw7QZ_Ayib8rHgunBQ@mail.gmail.com>
- <877cj8f8ht.fsf@toke.dk>
+        d=1e100.net; s=20230601; t=1707858701; x=1708463501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zsOIUemMTVXHoEVROLysOcQX18quXE3mcOSmusaiTVU=;
+        b=vl2n5fzKW8V3UzqCVqiXOYMmlhcWHBTUh6lYb3MBG97zEXg2aPMzUdgL98JRnwdmCm
+         g/gQs6+NFh0dqLbP+0gP4mYxsWnY2mJbPXJIE+ClDp5SgRTDsNOV/zisMV+Zo4ZY9zMd
+         qu9U/+gEiXhYgVcTAN1+j4MfKGE4dJs+uV5GJWNFPBJSa2qiqAn8v4oFdQ5AJB1J7z7o
+         AazqIYUcEQod61pXnSrueovlsf42NgwKYD9JEG6CQUsY/7TP0BR9IgoFxM5vvoTdL1I1
+         BN2UTbxIUNrNYKI2ldOv8z7JEFstXsNlTyl/EnKQ1IvAuHVcVqZJ0Y+39atMn5fkVMKI
+         8KyA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtdzwlo4+jXIyx8Zx1LKnkIRUWp7Sw1AEWHYAjeBLS/Uvy6m4/Bc3WOx+eQd+M02s8n+snOzHLduQqMoC6X8vqCKN2ktqlCQwAkIy4KbAw
+X-Gm-Message-State: AOJu0YwY7bK5HyG5Xxhlsfa+pMMIiRxY3j0nmttaXPqjE6Hr2kz2Tzpy
+	ROAMMJholVrxy8VwjmzguBmVYUOgkZItU0t11vFjjfWJq89yG/PxmkljEntk0+VRufeXxmfUkpV
+	MkeXI+UBpbaic9fzqBU02JcjhXY+rAodHtepQ
+X-Google-Smtp-Source: AGHT+IExITBQize1fGZuvy7b+0mnYFOUMkpqQ+6ifMmjq7oa8jqrG3qPbdpWEJmCURVq8IK8JranwyOGOl5XdgYpzX0=
+X-Received: by 2002:a17:906:8410:b0:a3c:eb18:8a4d with SMTP id
+ n16-20020a170906841000b00a3ceb188a4dmr349416ejx.62.1707858700745; Tue, 13 Feb
+ 2024 13:11:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <877cj8f8ht.fsf@toke.dk>
+References: <20231218024024.3516870-1-almasrymina@google.com>
+ <20231218024024.3516870-8-almasrymina@google.com> <3374356e-5f4b-4a6f-bb19-8cb7c56103bc@gmail.com>
+In-Reply-To: <3374356e-5f4b-4a6f-bb19-8cb7c56103bc@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 13 Feb 2024 13:11:28 -0800
+Message-ID: <CAHS8izO2zARuMovrYU3kdwSXsQAM6+SajQjDT3ckSvVOfHwaCQ@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v5 07/14] page_pool: devmem support
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 13, 2024 at 08:51:26PM +0100, Toke Høiland-Jørgensen wrote:
-> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
-> 
-> > On Tue, 13 Feb 2024 at 18:46, Benjamin Tissoires <bentiss@kernel.org> wrote:
-> >>
-> >> On Feb 12 2024, Alexei Starovoitov wrote:
-> >> > On Mon, Feb 12, 2024 at 10:21 AM Benjamin Tissoires
-> >> > <benjamin.tissoires@redhat.com> wrote:
-> >> > >
-> >> > > On Mon, Feb 12, 2024 at 6:46 PM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
-> >> > > >
-> >> > > > Benjamin Tissoires <benjamin.tissoires@redhat.com> writes:
-> >> > > >
-> >> [...]
-> >> > I agree that workqueue delegation fits into the bpf_timer concept and
-> >> > a lot of code can and should be shared.
-> >>
-> >> Thanks Alexei for the detailed answer. I've given it an attempt but still can not
-> >> figure it out entirely.
-> >>
-> >> > All the lessons(bugs) learned with bpf_timer don't need to be re-discovered :)
-> >> > Too bad, bpf_timer_set_callback() doesn't have a flag argument,
-> >> > so we need a new kfunc to set a sleepable callback.
-> >> > Maybe
-> >> > bpf_timer_set_sleepable_cb() ?
-> >>
-> >> OK. So I guess I should drop Toke's suggestion with the bpf_timer_ini() flag?
-> >>
-> >> > The verifier will set is_async_cb = true for it (like it does for regular cb-s).
-> >> > And since prog->aux->sleepable is kinda "global" we need another
-> >> > per subprog flag:
-> >> > bool is_sleepable: 1;
-> >>
-> >> done (in push_callback_call())
-> >>
-> >> >
-> >> > We can factor out a check "if (prog->aux->sleepable)" into a helper
-> >> > that will check that "global" flag and another env->cur_state->in_sleepable
-> >> > flag that will work similar to active_rcu_lock.
-> >>
-> >> done (I think), cf patch 2 below
-> >>
-> >> > Once the verifier starts processing subprog->is_sleepable
-> >> > it will set cur_state->in_sleepable = true;
-> >> > to make all subprogs called from that cb to be recognized as sleepable too.
-> >>
-> >> That's the point I don't know where to put the new code.
-> >>
+On Tue, Feb 13, 2024 at 5:28=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
+com> wrote:
+>
+> On 12/18/23 02:40, Mina Almasry wrote:
+> > Convert netmem to be a union of struct page and struct netmem. Overload
+> > the LSB of struct netmem* to indicate that it's a net_iov, otherwise
+> > it's a page.
 > >
-> > I think that would go in the already existing special case for
-> > push_async_cb where you get the verifier state of the async callback.
-> > You can make setting the boolean in that verifier state conditional on
-> > whether it's your kfunc/helper you're processing taking a sleepable
-> > callback.
+> > Currently these entries in struct page are rented by the page_pool and
+> > used exclusively by the net stack:
 > >
-> >> It seems the best place would be in do_check(), but I am under the impression
-> >> that the code of the callback is added at the end of the instruction list, meaning
-> >> that I do not know where it starts, and which subprog index it corresponds to.
-> >>
-> >> >
-> >> > A bit of a challenge is what to do with global subprogs,
-> >> > since they're verified lazily. They can be called from
-> >> > sleepable and non-sleepable contex. Should be solvable.
-> >>
-> >> I must confess this is way over me (and given that I didn't even managed to make
-> >> the "easy" case working, that might explain things a little :-P )
-> >>
+> > struct {
+> >       unsigned long pp_magic;
+> >       struct page_pool *pp;
+> >       unsigned long _pp_mapping_pad;
+> >       unsigned long dma_addr;
+> >       atomic_long_t pp_ref_count;
+> > };
 > >
-> > I think it will be solvable but made somewhat difficult by the fact
-> > that even if we mark subprog_info of some global_func A as
-> > in_sleepable, so that we explore it as sleepable during its
-> > verification, we might encounter later another global_func that calls
-> > a global func, already explored as non-sleepable, in sleepable
-> > context. In this case I think we need to redo the verification of that
-> > global func as sleepable once again. It could be that it is called
-> > from both non-sleepable and sleepable contexts, so both paths
-> > (in_sleepable = true, and in_sleepable = false) need to be explored,
-> > or we could reject such cases, but it might be a little restrictive.
+> > Mirror these (and only these) entries into struct net_iov and implement
+> > netmem helpers that can access these common fields regardless of
+> > whether the underlying type is page or net_iov.
+> > Implement checks for net_iov in netmem helpers which delegate to mm
+> > APIs, to ensure net_iov are never passed to the mm stack.
 > >
-> > Some common helper global func unrelated to caller context doing some
-> > auxiliary work, called from sleepable timer callback and normal main
-> > subprog might be an example where rejection will be prohibitive.
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
 > >
-> > An approach might be to explore main and global subprogs once as we do
-> > now, and then keep a list of global subprogs that need to be revisited
-> > as in_sleepable (due to being called from a sleepable context) and
-> > trigger do_check_common for them again, this might have to be repeated
-> > as the list grows on each iteration, but eventually we will have
-> > explored all of them as in_sleepable if need be, and the loop will
-> > end. Surely, this trades off logical simplicity of verifier code with
-> > redoing verification of global subprogs again.
+> > ---
 > >
-> > To add items to such a list, for each global subprog we encounter that
-> > needs to be analyzed as in_sleepable, we will also collect all its
-> > callee global subprogs by walking its instructions (a bit like
-> > check_max_stack_depth does).
-> 
-> Sorry if I'm being dense, but why is all this needed if it's already
-> possible to just define the timer callback from a program type that
-> allows sleeping, and then set the actual timeout from a different
-> program that is not sleepable? Isn't the set_sleepable_cb() kfunc just a
-> convenience then? Or did I misunderstand and it's not actually possible
-> to mix callback/timer arming from different program types?
+> > RFCv5:
+> > - Use netmem instead of page* with LSB set.
+> > - Use pp_ref_count for refcounting net_iov.
+> > - Removed many of the custom checks for netmem.
+> >
+> > v1:
+> > - Disable fragmentation support for iov properly.
+> > - fix napi_pp_put_page() path (Yunsheng).
+> > - Use pp_frag_count for devmem refcounting.
+> >
+> > ---
+> >   include/net/netmem.h            | 145 ++++++++++++++++++++++++++++++-=
+-
+> >   include/net/page_pool/helpers.h |  25 +++---
+> >   net/core/page_pool.c            |  26 +++---
+> >   net/core/skbuff.c               |   9 +-
+> >   4 files changed, 164 insertions(+), 41 deletions(-)
+> >
+> > diff --git a/include/net/netmem.h b/include/net/netmem.h
+> > index 31f338f19da0..7557aecc0f78 100644
+> > --- a/include/net/netmem.h
+> > +++ b/include/net/netmem.h
+> > @@ -12,11 +12,47 @@
+> >
+> >   /* net_iov */
+> >
+> > +DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
+> > +
+> > +/*  We overload the LSB of the struct page pointer to indicate whether=
+ it's
+> > + *  a page or net_iov.
+> > + */
+> > +#define NET_IOV 0x01UL
+> > +
+> >   struct net_iov {
+> > +     unsigned long __unused_padding;
+> > +     unsigned long pp_magic;
+> > +     struct page_pool *pp;
+> >       struct dmabuf_genpool_chunk_owner *owner;
+> >       unsigned long dma_addr;
+> > +     atomic_long_t pp_ref_count;
+> >   };
+>
+> I wonder if it would be better to extract a common sub-struct
+> used in struct page, struct_group_tagged can help to avoid
+> touching old code:
+>
+> struct page {
+>         unsigned long flags;
+>         union {
+>                 ...
+>                 struct_group_tagged(<struct_name>, ...,
+>                         /**
+>                          * @pp_magic: magic value to avoid recycling non
+>                          * page_pool allocated pages.
+>                          */
+>                         unsigned long pp_magic;
+>                         struct page_pool *pp;
+>                         unsigned long _pp_mapping_pad;
+>                         unsigned long dma_addr;
+>                         atomic_long_t pp_ref_count;
+>                 );
+>         };
+> }
+>
+> struct net_iov {
+>         unsigned long pad;
+>         struct <struct_name> p;
+> };
+>
+>
+> A bit of a churn with the padding and nesting net_iov but looks
+> sturdier. No duplication, and you can just check positions of the
+> structure instead of per-field NET_IOV_ASSERT_OFFSET, which you
+> have to not forget to update e.g. when adding a new field. Also,
 
-More than just convience.
-bpf_set_sleepable_cb() might need to be called from non-sleepable and
-there could be no way to hack it around with fake sleepable entry.
-bpf_timer_cancel() clears callback_fn.
-So if prog wants to bpf_timer_start() and later bpf_timer_cancel()
-it would need to bpf_set_sleepable_cb() every time before bpf_timer_start().
-And at that time it might be in non-sleepable ctx.
+Yes, this is nicer. If possible I'll punt it to a minor cleanup as a
+follow up change. Logistically I think if this series need-not touch
+code outside of net/, that's better.
+
+> with the change __netmem_clear_lsb can return a pointer to that
+> structure, casting struct net_iov when it's a page is a bit iffy.
+>
+> And the next question would be whether it'd be a good idea to encode
+> iov vs page not by setting a bit but via one of the fields in the
+> structure, maybe pp_magic.
+>
+
+I will push back against this, for 2 reasons:
+
+1. I think pp_magic's first 2 bits (and maybe more) are used by mm
+code and thus I think extending usage of pp_magic in this series is a
+bit iffy and I would like to avoid it. I just don't want to touch the
+semantics of struct page if I don't have to.
+2. I think this will be a measurable perf regression. Currently we can
+tell if a pointer is a page or net_iov without dereferencing the
+pointer and dirtying the cache-line. This will cause us to possibly
+dereference the pointer in areas where we don't need to. I think I had
+an earlier version of this code that required a dereference to tell if
+a page was devmem and Eric pointed to me it was a perf regression.
+
+I also don't see any upside of using pp_magic, other than making the
+code slightly more readable, maybe.
+
+> With that said I'm a bit concerned about the net_iov size. If each
+> represents 4096 bytes and you're registering 10MB, then you need
+> 30 pages worth of memory just for the iov array. Makes kvmalloc
+> a must even for relatively small sizes.
+>
+
+This I think is an age-old challenge with pages. 1.6% of the machine's
+memory is 'wasted' on every machine because a struct page needs to be
+allocated for each PAGE_SIZE region. We're running into the same issue
+here where if we want to refer to PAGE_SIZE regions of memory we need
+to allocate some reference to it. Note that net_iov can be relatively
+easily extended to support N order pages. Also note that in the devmem
+TCP use case it's not really an issue; the minor increase in mem
+utilization is more than offset by the saving in memory bw as compared
+to using host memory as a bounce buffer. All in all I vote this is
+something that can be tuned or improved in the future if someone finds
+the extra memory usage a hurdle to using devmem TCP or this net_iov
+infra.
+
+> And the final bit, I don't believe the overlay is necessary in
+> this series. Optimisations are great, but this one is a bit more on
+> the controversial side. Unless I missed something and it does make
+> things easier, it might make sense to do it separately later.
+>
+
+I completely agree, the overlay is not necessary. I implemented the
+overlay in response to Yunsheng's  strong requests for more 'unified'
+processing between page and devmem. This is the most unification I can
+do IMO without violating the requirements from Jason. I'm prepared to
+remove the overlay if it turns out controversial, but so far I haven't
+seen any complaints. Jason, please do take a look if you have not
+already.
+
+>
+> > +/* These fields in struct page are used by the page_pool and net stack=
+:
+> > + *
+> > + *   struct {
+> > + *           unsigned long pp_magic;
+> > + *           struct page_pool *pp;
+> > + *           unsigned long _pp_mapping_pad;
+> > + *           unsigned long dma_addr;
+> > + *           atomic_long_t pp_ref_count;
+> > + *   };
+> > + *
+> > + * We mirror the page_pool fields here so the page_pool can access the=
+se fields
+> > + * without worrying whether the underlying fields belong to a page or =
+net_iov.
+> > + *
+> > + * The non-net stack fields of struct page are private to the mm stack=
+ and must
+> > + * never be mirrored to net_iov.
+> > + */
+> > +#define NET_IOV_ASSERT_OFFSET(pg, iov)             \
+> > +     static_assert(offsetof(struct page, pg) =3D=3D \
+> > +                   offsetof(struct net_iov, iov))
+> > +NET_IOV_ASSERT_OFFSET(pp_magic, pp_magic);
+> > +NET_IOV_ASSERT_OFFSET(pp, pp);
+> > +NET_IOV_ASSERT_OFFSET(dma_addr, dma_addr);
+> > +NET_IOV_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
+> > +#undef NET_IOV_ASSERT_OFFSET
+> > +
+> >   static inline struct dmabuf_genpool_chunk_owner *
+> >   net_iov_owner(const struct net_iov *niov)
+> >   {
+> > @@ -47,19 +83,25 @@ net_iov_binding(const struct net_iov *niov)
+> >   struct netmem {
+> >       union {
+> >               struct page page;
+> > -
+> > -             /* Stub to prevent compiler implicitly converting from pa=
+ge*
+> > -              * to netmem_t* and vice versa.
+> > -              *
+> > -              * Other memory type(s) net stack would like to support
+> > -              * can be added to this union.
+> > -              */
+> > -             void *addr;
+> > +             struct net_iov niov;
+> >       };
+> >   };
+> >
+> ...
+>
+> --
+> Pavel Begunkov
+
+
+
+--
+Thanks,
+Mina
 
