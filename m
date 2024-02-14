@@ -1,177 +1,133 @@
-Return-Path: <linux-kselftest+bounces-4675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57B198553A7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 21:08:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDA98855491
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 22:16:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71F541C25296
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 20:08:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CAFB1C20E90
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 21:16:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0F013DB9D;
-	Wed, 14 Feb 2024 20:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 209E613EFEE;
+	Wed, 14 Feb 2024 21:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XO4ti+F8"
+	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="XNbIPGHb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from cyan.elm.relay.mailchannels.net (cyan.elm.relay.mailchannels.net [23.83.212.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4692613A888;
-	Wed, 14 Feb 2024 20:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707941289; cv=none; b=lK7rO3tuBI7LPpW2KD9dewlV0nI2AnsXyvixk5penrGsX/RpBYFAc4bu79UkwW+5PRZFrze/YmyO5bnWQnPYE3CtsBdsCOrGn10ktliBz2LNvHHo58Ouk3idDKxQtMTm9AAq504tF03BB/W7CbJ/Q+yz9ZJDIDbkuzkEbNc5Oo4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707941289; c=relaxed/simple;
-	bh=0c27WM48Hr69yQ4BRbSljfY+8max5aVHrUQMsvmvoT0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=rGXh9vzZ+mmwWZGkm30yg52gEsaQcN2MOdm5gRYvMIdxaKslP0BZQw507K2stJttasCJvxsGAQrGRECj1RgUwRfX+49JAoELWj51pe4/JuYCYQGglmNn9WTR/jZHmIoVCzd9zTBbuep2lySmnAl+6/sf281G10LWA2luIhM2VLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XO4ti+F8; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41EJvFTF004798;
-	Wed, 14 Feb 2024 20:07:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=mXHxoZ42mf/ESBqj6s5bnVAfG0vN7uRQxTDbGz8SwAo=;
- b=XO4ti+F8dvznCzwOMommY2wHzUPRF12PQUnYJO8wcMld4+xLiaDZrncmLdNb92rQ7TNe
- RQ+9rYnPchBKUFw5S9Fl7I38jgR7LO6LKwUUOB0dExBhkPLH6UbwCM16YyMy4XS2iK2r
- +0gh0WxTiNUirdOxbsuLbSFMGF0eadMRe4+BzFbNOEyWOpeZYWi0E0go6AeH/J1ElsT2
- sExdubjt5KshLHd61G8KyAJvOgkxAqxFZJV+1qsKFpJwgPGTcHLj9XBxFxl787CNPkXw
- AuT6Oi0YJiz5OVwSzTfJppPGbBIYD6oTQ2vUShlvwWT49EtCY3XXiM+cGR1oI6+ZznNS ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w944jranh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 20:07:32 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41EJvn2l007248;
-	Wed, 14 Feb 2024 20:07:32 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w944jramk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 20:07:31 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41EIYP1m004329;
-	Wed, 14 Feb 2024 20:07:30 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0gd5r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 20:07:30 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41EK7RHI19005960
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Feb 2024 20:07:29 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8504C5805A;
-	Wed, 14 Feb 2024 20:07:27 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EF2835805E;
-	Wed, 14 Feb 2024 20:07:25 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.101.207])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 Feb 2024 20:07:25 +0000 (GMT)
-Message-ID: <63afc94126521629bb7656b6e6783d6614ee898a.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 12/25] security: Introduce file_post_open hook
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>,
-        Roberto Sassu
-	 <roberto.sassu@huaweicloud.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com,
-        jlayton@kernel.org, neilb@suse.de, kolga@netapp.com,
-        Dai.Ngo@oracle.com, tom@talpey.com, jmorris@namei.org,
-        serge@hallyn.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com, shuah@kernel.org,
-        mic@digikod.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Roberto Sassu
- <roberto.sassu@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date: Wed, 14 Feb 2024 15:07:25 -0500
-In-Reply-To: <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
-	 <20240115181809.885385-13-roberto.sassu@huaweicloud.com>
-	 <305cd1291a73d788c497fe8f78b574d771b8ba41.camel@linux.ibm.com>
-	 <CAHC9VhQ7DgPJtNTRCYneu_XnpRmuwfPCW+FqVuS=k6U5-F6pJw@mail.gmail.com>
-	 <05ad625b0f5a0e6c095abee5507801da255b36cd.camel@huaweicloud.com>
-	 <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025D913DBBC;
+	Wed, 14 Feb 2024 21:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.212.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707945368; cv=pass; b=BYqH4MQU4w7iAbVTVnfgeg2I+QhJME2wsNUXc5izXfkcECgaAjYVfFom6DpW3T3Fk+uXgShfGGoXD2CC7a8AAYBFoRQ83Lt9qjmsTIYV4wWR8EyGM6sfsNiG+MYRFKQNRFo8Kb4/VRz7Ph93Zi3oswZ936Jl8xoLVmOQcqqbwCc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707945368; c=relaxed/simple;
+	bh=32ZT+v+5JzF5aL7sf+dzxCe3Q4deHg+ix3PfzWTz9OE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s3Xj+Hp6CpBKcndjcsJfdLheynrrnFaEqwjBbtFku7HbgGCa2HD3/ICc3+ZFM/j4x5JsCcf22DvQ3WzXxmhEVfpslaQhq13J5RHL7TmGYiyWf9f6aDlqYxrMtEqh7gKtiMkXQfnOfZ1tvzOoAC3ey16yCfGZ3Cy2Lzdjs26y3ec=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=XNbIPGHb; arc=pass smtp.client-ip=23.83.212.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 8D0BCC3875;
+	Wed, 14 Feb 2024 21:08:35 +0000 (UTC)
+Received: from pdx1-sub0-mail-a275.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 07003C38E5;
+	Wed, 14 Feb 2024 21:08:35 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1707944915; a=rsa-sha256;
+	cv=none;
+	b=qW9q/dyfJcvz1Dzzm828vunpkgVoSSDgdgfU13G9Mn/EYyJq++eAChtrcWWXUbkHsNzE/T
+	uq9t9J8YRSphbfTrL/fAoShJdZAyeUntCRPR17qXkdnqQg3igw+8uWvaYjs55eZZzMnh/p
+	ALMJGD+7evhDIkwfOFm2SIA5VlNUkyO3DlWZPpU5AA74o3yKg36mF0j6/gF2Bk8aeVIGVE
+	xodNr3kYwxVESTxXPBPuP/9sGWEi4s9LPWYytWapaaOxXL2/zY4Vc7EiQ2Z2aeE0R1Dmg7
+	fxOctX4AvVBAJfzggK3Butr3gJBd2r/rfju1a9OktFUCLwt1aQhFBCAs+Is2uA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1707944915;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=32ZT+v+5JzF5aL7sf+dzxCe3Q4deHg+ix3PfzWTz9OE=;
+	b=uVUz94c7ILK/FHJXkUSfxKuuZOkTvTg0V9UHXfoZgQ9yyC8BpVpfrz6yPgC6kD03eLmN7V
+	zREhYP88Aa2r7ZnzOpsXHYcXmuUeXfOhcrMnemFQ0m3jDCgOFX1KDcuKkBmIVLdae3sapW
+	2wwxt7YnO4qRsi11h3RermMwgCNxdqUKFd0dyuXiFjWgn/pqs+uFTnb72sQ5KilCGB8CW9
+	xMSfAsop4lVu7sH8CN1sn8KE567bzXuOLci66LAkOLyqTI5rynDrLVUw08pB17xDgZSutR
+	UbS779ITPxr7h+42xHszfgTX2MLV0nJ5Ed3FJuDAPdcA4nG2akNzQBUUWXjQjg==
+ARC-Authentication-Results: i=1;
+	rspamd-55b4bfd7cb-drw6l;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Print-Quick: 6b103d901e01a3c4_1707944915346_3956582227
+X-MC-Loop-Signature: 1707944915346:1267690406
+X-MC-Ingress-Time: 1707944915346
+Received: from pdx1-sub0-mail-a275.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.100.244.10 (trex/6.9.2);
+	Wed, 14 Feb 2024 21:08:35 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a275.dreamhost.com (Postfix) with ESMTPSA id 4TZrQV296mz6x;
+	Wed, 14 Feb 2024 13:08:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1707944914;
+	bh=32ZT+v+5JzF5aL7sf+dzxCe3Q4deHg+ix3PfzWTz9OE=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=XNbIPGHbbg9Cr61Sb16Rbn0gyAMav+UymMelNSIV36MOITM/fp9aKFtXnaDek5LJO
+	 oxvkIQ3D9AU606gK+EJvxjJ/HkW1D4btZn2EIxLCfC6+CLEU2osi4frVkH1XTQCM7L
+	 NsOnehRrihNI/GqSeIsNA8XSe9bXLN3fxvN1r9nQ+z14bj6+/1N8ttWGV8frQC9KsT
+	 ++XEg4vpubZvrl+EsbvX6nQph4YIjOyGOG7FKa/D4qvPD0JOSPTt1Bim3Xcn20jnEC
+	 xPsMnLRCzgWpYjmYwToKXXw0zhqa2vxE2osc14AMVfCnw8vBtG0n8S+Nq4DeT7M59o
+	 MH2n+0HDSzfVg==
+Date: Wed, 14 Feb 2024 13:08:31 -0800
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: Mark Brown <broonie@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	=?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@igalia.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: fuxex: Report a unique test name per run of
+ futex_requeue_pi
+Message-ID: <20240214210831.kzhrhqabot55llcd@offworld>
+References: <20240213-kselftest-futex-requeue-pi-unique-v1-1-fa160a4a7ade@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3pmfVPR_ZkYzTv8MNJbgBILvsfAhufy_
-X-Proofpoint-GUID: pUskxnPY1Bl82nL8IEpe0UmPvkoY0NWY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-14_12,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- spamscore=0 suspectscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402140157
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240213-kselftest-futex-requeue-pi-unique-v1-1-fa160a4a7ade@kernel.org>
+User-Agent: NeoMutt/20220429
 
-On Tue, 2024-02-13 at 10:33 -0500, Paul Moore wrote:
-> On Tue, Feb 13, 2024 at 7:59 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Mon, 2024-02-12 at 16:16 -0500, Paul Moore wrote:
-> > > On Mon, Feb 12, 2024 at 4:06 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > > Hi Roberto,
-> > > > 
-> > > > 
-> > > > > diff --git a/security/security.c b/security/security.c
-> > > > > index d9d2636104db..f3d92bffd02f 100644
-> > > > > --- a/security/security.c
-> > > > > +++ b/security/security.c
-> > > > > @@ -2972,6 +2972,23 @@ int security_file_open(struct file *file)
-> > > > >       return fsnotify_perm(file, MAY_OPEN);  <===  Conflict
-> > > > 
-> > > > Replace with "return fsnotify_open_perm(file);"
-> > > > 
-> > > > >  }
-> > > > > 
-> > > > 
-> > > > The patch set doesn't apply cleaning to 6.8-rcX without this
-> > > > change.  Unless
-> > > > there are other issues, I can make the change.
-> > > 
-> > > I take it this means you want to pull this via the IMA/EVM tree?
-> > 
-> > Not sure about that, but I have enough changes to do to make a v10.
+On Tue, 13 Feb 2024, Mark Brown wrote:
 
-@Roberto:  please add my "Reviewed-by" to the remaining patches.
+>The futex_requeue_pi test program is run a number of times with different
+>options to provide multiple test cases. Currently every time it runs it
+>reports the result with a consistent string, meaning that automated systems
+>parsing the TAP output from a test run have difficulty in distinguishing
+>which test is which.
+>
+>The parameters used for the test are already logged as part of the test
+>output, let's use the same format to roll them into the test name that we
+>use with KTAP so that automated systems can follow the results of the
+>individual cases that get run.
+>
+>Signed-off-by: Mark Brown <broonie@kernel.org>
 
-> 
-> Sorry, I should have been more clear, the point I was trying to
-> resolve was who was going to take this patchset (eventually).  There
-> are other patches destined for the LSM tree that touch the LSM hooks
-> in a way which will cause conflicts with this patchset, and if
-> you/Mimi are going to take this via the IMA/EVM tree - which is fine
-> with me - I need to take that into account when merging things in the
-> LSM tree during this cycle.  It's not a big deal either way, it would
-> just be nice to get an answer on that within the next week.
-
-Similarly there are other changes for IMA and EVM.  If you're willing to create
-a topic branch for just the v10 patch set that can be merged into your tree and
-into my tree, I'm fine with your upstreaming v10. (I'll wait to send my pull
-request after yours.)  Roberto will add my Ack's to the integrity, IMA, and EVM
-related patches.  However if you're not willing to create a topic branch, I'll
-upstream the v10 patch set.
-
-thanks,
-
-Mimi
-
+Acked-by: Davidlohr Bueso <dave@stgolabs.net>
 
