@@ -1,209 +1,121 @@
-Return-Path: <linux-kselftest+bounces-4625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E9C5854796
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 11:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0754585494E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 13:38:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 738191C20C31
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 10:55:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39DC31C2169A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 12:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0AA1865C;
-	Wed, 14 Feb 2024 10:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF434524D2;
+	Wed, 14 Feb 2024 12:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e0m+pqII"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="J5vCms/x"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606CC18AEE
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 10:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65706524C3
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 12:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707908123; cv=none; b=PukkOkmaDyv+4Kbot1kSaEzo95lu5pU8Zm6ILvj71ABAKKzkkztZbd36VfZ4XTcmy2IJBmvkgonHPhwmpoN7cd9et5tSZe37glawgdRQMXdoJzjU2ccQ+EKmnmhc7q9nLa2D4508nLjNh98Fss/auibiaURKpjadd7r0HbB67Fw=
+	t=1707914287; cv=none; b=GNff9rEjtkt9TuPexY3dKuRItBjndHvaQqhMYZCBtM6mXp0JtGTBZfwo/pxF/QTMd1JeB5Za6gMJUNUaI2U6SMgoXJdXb/lenkeQm422y4+mGx2cBzfcL18brHqs/fJ6Fbs8jR73OqsKFmnivUN2xjccjzezDreqbQSIa+uX8PY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707908123; c=relaxed/simple;
-	bh=SQvAiJwsbkRskNIjC2WkhKsfQA6FMsn5qKhNC19CoQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SbSvCuILvScErilCilpcKDM9gks3wspkcT42DbqNvFN0xz/qLPNhTDXy9TaFtJRcBR5GSSO8ONqgKf22oFkiWqTbbY4NrPKylwh1mT2X+4HHPGYVshcTpyfVgTxXeFpMJTdspQ/RBJE2hoNMbK49/RGO3SreDfyKGzc8nqkmXyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e0m+pqII; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707908120;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=FkG4rFYSar/COgr1ANQgOL3qRnWrGDmTgIrKAH1p2yk=;
-	b=e0m+pqIINhyQ7RiH60+7ZzRGrAfgF5FftOpjV4QHFqzVJX7I7x1CoC7OkKT8v8tB0yr8UT
-	N7SitwSrHvPHEmXRcFVm06DW+5pYAAh+oHQF00YXN8gwVGhV0e31JOy3W/xl74MWkptW2o
-	S4KBC9jeuEGpclBAT7Xguo97kq/VXsg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-271-qMd9PhbpN3aJc1CQS4b5DA-1; Wed, 14 Feb 2024 05:55:18 -0500
-X-MC-Unique: qMd9PhbpN3aJc1CQS4b5DA-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-33ce55b80e6so331114f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 02:55:18 -0800 (PST)
+	s=arc-20240116; t=1707914287; c=relaxed/simple;
+	bh=GHIKKRztgebLOU2yPqOocqGMjoQf8XX4AABKk8X4ihk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mtVSsek1Tkrwaxd+ykwar6w+nAtBFHvOXuW3ywtQlkVx8zv3pHoM6MFfEGyCBRKpJJi02KVqPUuwZ22nKhRat2lo1PevJ1DWGd7T4XnTSaJfWmMvN1IZCYTjYqLzn2+u1c8eMKrGIq1frosqmlXNruFm+EIFHJ4xokp28rBxgyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=J5vCms/x; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1d8da50bffaso24693295ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 04:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1707914285; x=1708519085; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iD3cuXtEG7eHzyqCNYQgPp1hH9CYhg6P7cRdMsq1rYY=;
+        b=J5vCms/xAZROytW1VcdyvEza5RWGo0+J9jQbdvTYYAIiq0BMVplIA/Rv+QdCd64KkU
+         1jh9Eb+K54X/lqFfptsizNOKVmlWqGBFoEMPj+oX0QTynNQwTzb701I1hvHMctZ5/bPV
+         3Ns97yMYOxneFic98wUsVDZ04QgqJyus1Ts9h7TN2gzSjxQSrX9qi+nOFSa8TqYiawKm
+         H2Cwu6u9Bwrid2LNpLE3df4KqUbl49LdEOdftIVVcV/PmwHK1OiToFjDjztx2wB4HIUI
+         f55i6z7XmP/+2h2qZUdcrmYl6A+mtBbiac6UM94LKZcF4HOzgguYPl9SWtaULt+thqEp
+         8FBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707908117; x=1708512917;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FkG4rFYSar/COgr1ANQgOL3qRnWrGDmTgIrKAH1p2yk=;
-        b=mDh+yOXJsEHHYJ516LujTUPLLABrGKnnvaT1qtniwG5X2U9wXeJH6NhEJou20mR5Eh
-         cayBOJpG11Ck1qdn5iSFdUpOa42BOBnPlwQaIHj20BIIQ2ehBmimnvJcq4z+kFb20I+1
-         RvkNDY1tcBPoCORjtxYNyq86DaOKH8QDmeMv37HlW6rDh/gYZyzKOHp723ikzGrjm6fP
-         u7vsmjLJcJIUO5g79X9VhTg9ucWKGPuAFHA45Ss4nw6XjpPPef1IjLNWfGXku4jVzBbd
-         DZHdTepxn2XLV7l3ORNPqTrt6ksI7ZVK752m2dWfmsw+F+8arZfBatt4WAJcXJ2yxrxn
-         t0Nw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBzg5uHrHvv8FmSv571vvE5/QIwl7j5eUIJQVaoysfDbau4LM8dOPY/KqVv/AdHyEDWCPR1VmKFOtIdHdkCyvPTvVBZeOhKV+ibpCWyXi6
-X-Gm-Message-State: AOJu0YzAXT8I3OnshmfolJzpG16nxBX0xKJCgc8ilXe639JN9bZvQsmc
-	aECbFd+eKK4kbzSF10bPI0dWaZt0Cxo8VU+muS2KXpzrS6RGtYrep8EamU04oIOsU68o839qt9b
-	Y+Ol+P++fxS6eTR9NwFUyWDnaSanb1gDRiUU/neMC8kinMsgD5G/fQpk1birXEK+7FA==
-X-Received: by 2002:adf:ce03:0:b0:33c:e339:23e4 with SMTP id p3-20020adfce03000000b0033ce33923e4mr1686951wrn.62.1707908117480;
-        Wed, 14 Feb 2024 02:55:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEXEpBq8Q8ZnFUw1naCQqfidxYnDmHpx6kSBfapsNJ6KX7OVMNFoSQImIEewE+QUkL0vkf4Pw==
-X-Received: by 2002:adf:ce03:0:b0:33c:e339:23e4 with SMTP id p3-20020adfce03000000b0033ce33923e4mr1686932wrn.62.1707908117063;
-        Wed, 14 Feb 2024 02:55:17 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXp1v9NVJsals5Gj2CSvlzzxVVSJcTBmCSHUiUmrRTKzI5WP59WpjFLd3TWoWkVgs5iv/D4Spi4dWnY4NatoHVyfqqHz3CfPAGVDmI8/1vFuIDz++uFYIdcAO8WaGQCOXLQ0f6P8g1YagKdRvMuxgdytQ/iwe5D37XAGdDkPFdztU8YC0pkxYSZjX9GEvlququsj7jNyn8hhfvwpNPwCuj6EJ9Qm0Y2TMbQdIYMavsiT0s5QU0Gmm5kfgqxcV9bdN4+Zwlp9b3ryg5p9BQfhco9msJbBO2Cf41vsT9j6KvbBkTr5HqsftUr+F4lQFOk9qr1yd7Im0MeRP09Vt0/OKIMnlOqpbEfCQRq5KDtDAK5vaMAIZ380HJC8suqeAI3M3pPsKYUMePUgvLHcjRy3+zi4vOLjhP6YN2HoAZi100NCA34W3T019QKaeuw+qUxhXZTXHncVnNhHuC2L7I4XfbziwKhxSESSFVs7GaNV8vjoUZXYFTUl2Sd2s7fHBdCr175mI7fqy5Q8v/MM56PF0XpppomxJmdu5b8+bAps603502iUJhhw1E=
-Received: from ?IPV6:2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e? (p200300d82f3c3f007177eb0cd3d24b0e.dip0.t-ipconnect.de. [2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e])
-        by smtp.gmail.com with ESMTPSA id w13-20020a5d404d000000b0033b4dae972asm11995459wrp.37.2024.02.14.02.55.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Feb 2024 02:55:16 -0800 (PST)
-Message-ID: <46f61262-e197-456c-97f1-d464ad5688c1@redhat.com>
-Date: Wed, 14 Feb 2024 11:55:15 +0100
+        d=1e100.net; s=20230601; t=1707914285; x=1708519085;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iD3cuXtEG7eHzyqCNYQgPp1hH9CYhg6P7cRdMsq1rYY=;
+        b=HwGCh84Uf0zVtflvk36aKb3w9D0YjahrtGcL3CEbm4jdBi3eYSd093Ti9ZCECqioIn
+         1sXZxi0kHtzFjP0OfcdVhckihM8ajvVN9XnnaqsOweBVekOmYY6RiQRJcUMeCSltK/UQ
+         m0dlLLFm+RzgYjrNLLmbDKimwoYhfT/LhB0vM5t7vNwRpEgclSDDed0LAANzi2/taLQG
+         emR6YO1nc71fcdqccc+AS7rqcECyQeiyonfSf4N1p68RcqL2CfB+y+sfS3vpbI0kqaba
+         CycHIgOWEczC9HdnWPkomVqyt4RRi8h8lP88Gwk6GuCJ7q/W8qPrSJf27qf4jX2n53yf
+         DJBw==
+X-Forwarded-Encrypted: i=1; AJvYcCWg0hrxJPoSyMWxfpT7wbDoEc4ORM2lHJh4locaBEALIwn8Y/gIDwHSD/uCUEB+Ua7JvaiTZqF5ZsHhZIFrIMy4H3f/zBhGCYeC5tY12luU
+X-Gm-Message-State: AOJu0Ywqjtm1nKtqp1+9/uvTNmV00ww+EbIryI2xOIYmrtvK72u6ahMe
+	7Fx2EFFPYPoU+7rh6b3Zpzc5TpszZ+rwGqKWe78L3u7XFwGUSd1PcVnbBRIViJ0=
+X-Google-Smtp-Source: AGHT+IFTw5RXXW6Nviw3HgBB2tAXtXFmyAmPUcr6f2y5ZPZmWt6NKLCHnP/2J5spjEjEEYGaO/fojg==
+X-Received: by 2002:a17:902:dad2:b0:1db:299e:2409 with SMTP id q18-20020a170902dad200b001db299e2409mr2740913plx.22.1707914285501;
+        Wed, 14 Feb 2024 04:38:05 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV5cE4cGphxkpfqoHCDjRDQGwH9kyBOGqRNO8ol/US87I9xoe50dsAFuGlj4hxA0+kAZf5pPJWDqNEkeC2RIj3Vvt2KJcYCbWMysCaqHa5OwJh7GiVKlFO37WlvSiT/srsA4NwiCgOfjMlt8HDufJOraEaEttR9Owkusc6QvBL2JhtrHkgZup/cXkyIGWGjprYtxQoHfxCezRAtyXJEGyTDSMeKJd4F4t3HuwNTiFJ6AvmIt3uO7rSFwiY12zIOneCAodd5/6Ti/S5czsPooP91jZHSND8cl0vaSaVU1cbyKG3jx7CSUoq1us3gpQAs+7CQlbXfZl+IfEk1ibVJBOLvwFWkfETK414IR/DrGdnOtUwQQS0kDztcTKFOZQg095iz1hX5LOowJ0Pu+F3y3NEoPxVUbesMl2OIALDao83ElpDxCX4HG6WVyvJp5w==
+Received: from anup-ubuntu-vm.localdomain ([171.76.87.178])
+        by smtp.gmail.com with ESMTPSA id o20-20020a170902e29400b001d9b749d281sm3041419plc.53.2024.02.14.04.38.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Feb 2024 04:38:05 -0800 (PST)
+From: Anup Patel <apatel@ventanamicro.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Atish Patra <atishp@atishpatra.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Anup Patel <anup@brainfault.org>,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH 0/5] KVM RISC-V report few more ISA extensions through ONE_REG
+Date: Wed, 14 Feb 2024 18:07:52 +0530
+Message-Id: <20240214123757.305347-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/7] Split a folio to any lower order folios
-Content-Language: en-US
-To: Ryan Roberts <ryan.roberts@arm.com>, Zi Yan <ziy@nvidia.com>
-Cc: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>, linux-mm@kvack.org,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Zach O'Keefe
- <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Mcgrof Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240213215520.1048625-1-zi.yan@sent.com>
- <659e1abb-40d0-42ba-ba0a-8256d7eb1c5a@redhat.com>
- <F4470D3A-DC2C-4A6A-B65C-1C94D732A60E@nvidia.com>
- <66d4b27f-85e4-458e-8d66-54f800c5c65f@arm.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <66d4b27f-85e4-458e-8d66-54f800c5c65f@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 14.02.24 11:50, Ryan Roberts wrote:
-> On 13/02/2024 22:31, Zi Yan wrote:
->> On 13 Feb 2024, at 17:21, David Hildenbrand wrote:
->>
->>> On 13.02.24 22:55, Zi Yan wrote:
->>>> From: Zi Yan <ziy@nvidia.com>
->>>>
->>>> Hi all,
->>>>
->>>> File folio supports any order and multi-size THP is upstreamed[1], so both
->>>> file and anonymous folios can be >0 order. Currently, split_huge_page()
->>>> only splits a huge page to order-0 pages, but splitting to orders higher than
->>>> 0 is going to better utilize large folios. In addition, Large Block
->>>> Sizes in XFS support would benefit from it[2]. This patchset adds support for
->>>> splitting a large folio to any lower order folios and uses it during file
->>>> folio truncate operations.
->>>>
->>>> For Patch 6, Hugh did not like my approach to minimize the number of
->>>> folios for truncate[3]. I would like to get more feedback, especially
->>>> from FS people, on it to decide whether to keep it or not.
->>>
->>> I'm curious, would it make sense to exclude the "more" controversial parts (i.e., patch #6) for now, and focus on the XFS use case only?
->>
->> Sure. Patch 6 was there to make use of split_huge_page_to_list_to_order().
->> Now we have multi-size THP and XFS use cases, it can be dropped.
-> 
-> What are your plans for how to determine when to split THP and to what order? I
-> don't see anything in this series that would split anon THP to non-zero order?
-> 
-> We have talked about using hints from user space in the past (e.g.  mremap,
-> munmap, madvise, etc). But chrome has a use case where it temporarily mprotects
-> a single (4K) page as part of garbage collection (IIRC). If you eagerly split on
-> that hint, you will have lost the benefits of the large folio when it later
-> mprotects back to the original setting.
+This series extends the KVM RISC-V ONE_REG interface to report few more
+ISA extensions namely: Ztso and Zacas. These extensions are already
+supported by the HWPROBE interface in Linux-6.8 kernel.
 
-Not only that, splitting will make some of these operations more 
-expensive, possibly with no actual benefit.
+To test these patches, use KVMTOOL from the riscv_more_exts_round2_v1
+branch at: https://github.com/avpatel/kvmtool.git
 
-> 
-> I guess David will suggest this would be a good use case for the khugepaged-lite
-> machanism we have been talking about. I dunno - it seems wasteful to split then
-> collapse again.
+These patches can also be found in the riscv_kvm_more_exts_round2_v1
+branch at: https://github.com/avpatel/linux.git
 
-I agree. mprotect() and even madvise(), ... might not be good candidates 
-for splitting. mremap() likely is, if the folio is mapped exclusively. 
-MADV_DONTNEED/munmap()/mlock() might be good candidates (again, if 
-mapped exclusively). This will need a lot of thought I'm afraid (as you 
-say, deferred splitting is another example).
+Anup Patel (5):
+  RISC-V: KVM: Forward SEED CSR access to user space
+  RISC-V: KVM: Allow Ztso extension for Guest/VM
+  KVM: riscv: selftests: Add Ztso extension to get-reg-list test
+  RISC-V: KVM: Allow Zacas extension for Guest/VM
+  KVM: riscv: selftests: Add Zacas extension to get-reg-list test
+
+ arch/riscv/include/uapi/asm/kvm.h                |  2 ++
+ arch/riscv/kvm/vcpu_insn.c                       | 13 +++++++++++++
+ arch/riscv/kvm/vcpu_onereg.c                     |  4 ++++
+ tools/testing/selftests/kvm/riscv/get-reg-list.c |  8 ++++++++
+ 4 files changed, 27 insertions(+)
 
 -- 
-Cheers,
-
-David / dhildenb
+2.34.1
 
 
