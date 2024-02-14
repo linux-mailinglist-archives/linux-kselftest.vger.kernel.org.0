@@ -1,293 +1,295 @@
-Return-Path: <linux-kselftest+bounces-4648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CE24854DF1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:19:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC6E6854DF6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:20:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 346202826BB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 16:19:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25EFEB2623E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 16:20:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E6025FF13;
-	Wed, 14 Feb 2024 16:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B6D5FF17;
+	Wed, 14 Feb 2024 16:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fx/DlMs/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Hb+Ua2jq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFC05FDD5;
-	Wed, 14 Feb 2024 16:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707927565; cv=fail; b=IrtUg7vE2nlaj264lUEiQqeKAhiWnSd+Xzsz4M6ijYs2E7ZX4GqPcMIvv0c0n0mHUydA24l0E3cqfPdnxjQP2BojhgwcvkYVgmztXc3d/x/AWh03EPLWcXxGjZTjKG7+C64X2vvAadgTc0F2x2OTVWpga56Q1cInC8Js7aL76AI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707927565; c=relaxed/simple;
-	bh=jVFfDsUGEuOMER3k3M9fUuYsIdDNL2Y+V0CElwPnSuk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZqewCRZDYPbKyrdAhNMGPWu4pvOwegxuma8MRywTWnl3wVC86b0UmRu3MIcm48nGSijEVptuVsnJBW0PHtLBq70r0dQnxHYfczJVSm2Xe9AaGeEfDw0A6R8rO66fQ+GJ2LicEsXsQqUCyUlcVWx0z+infHAAEMiH+g6+CrEg744=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fx/DlMs/; arc=fail smtp.client-ip=40.107.243.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eBIcyrIJfHx7x6VJ2BbGFfKkVosIcGHsADsaoB+aOYkg8W4QZlyFYS+iE4UVYtZSngwj9yc5v315mojajbuHTg3Scuj3e5Tm1LBd2m8SDZLbjcaAtTnCC0un2L/gfjEUQwIceyH4S9AF2Br+BP9itxbyNyoKztppK1VclYPK2sjoTmx/HgXl3au5M6eGWd3Gxrl7iJbTo3KpJgZM63POGwIXR6AIOBkq2neKpDy8D78xuxy9pB+DHP2M+SsK960CDDYvVmOO+mbFt5Oh4FGeAfKvFuzPiiUBuj3LG16Ao2efX4qC3xM1lvkyawYqNNZfzjAMVUkK7IyqaqVLtEFhnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MwM2RMgHDT351PRZBHPbEQUzKB14UFx04pBk69+9Szc=;
- b=Y3as0WEhtKZA2EgITzS7g9b+ZN8iqRwW14acRiIkHLNDgIGbHPi4j0z8xfJmIs2FCrRuuDS330/fpGFaNirVICSRIpciS+aFvd8wV4H0Zlcc6JcPYgSJslfMH7Q8cRB0bxlC03+QRBjcJQQ1lYW72A7lDPTcn1w3A3KuuwlIuk7e5YfWaJcIB6F1RxN9R8G3IqAeUtphVvl0wmdbCYr1sArwD43BeVxmXYHt9GBlZeuHZM15iltKc5rsV1Q2NEMyUjDps27U+d1n8K5T9IAZX0j1BAERkXKUqK72hKQKZ0fKuPYfxI22oD19LoLEZodqRMDZZkNoaa1piRUsSpCkyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MwM2RMgHDT351PRZBHPbEQUzKB14UFx04pBk69+9Szc=;
- b=fx/DlMs/DzE54d8p9MUYf12hkt1Gg8YhTbH2SPgpY5VT+V/8iw4OwzWXjo6el4L4xLqQhSSQInHI578O8pT7vnU3DbXc56YwOh+iwhqV13KpjzNzbIt1tBEw0HS+kB+1ZSCeng83RWTR2/XRN2SWq0JXlcbhMdD72Wn0QKKUYD7aupFNpi3Qu/LvooEP6HbZRcYdNfx6MwhLAO7blmIeJmGsEnPRWEktEvZB5I6eCIgVSKnFZqZurSfXImZtiSy6rc4IUDE2EgmLjXj/OE04iKQpZuX25xHDGuvmSuTh90gkENrXAt+RS4G68o4COqpC5tTouQap5v9rDceuSLM93A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- DM4PR12MB5181.namprd12.prod.outlook.com (2603:10b6:5:394::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7292.25; Wed, 14 Feb 2024 16:19:20 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15%5]) with mapi id 15.20.7316.012; Wed, 14 Feb 2024
- 16:19:20 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>,
- linux-mm@kvack.org, "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
- David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
- Yu Zhao <yuzhao@google.com>,
- "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
- =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Mcgrof Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 6/7] mm: truncate: split huge page cache page to a
- non-zero order if possible.
-Date: Wed, 14 Feb 2024 11:19:18 -0500
-X-Mailer: MailMate (1.14r6018)
-Message-ID: <1C274CBB-C809-442E-9575-858460C0F62D@nvidia.com>
-In-Reply-To: <cbb1d6a0-66dd-47d0-8733-f836fe050374@arm.com>
-References: <20240213215520.1048625-1-zi.yan@sent.com>
- <20240213215520.1048625-7-zi.yan@sent.com>
- <cbb1d6a0-66dd-47d0-8733-f836fe050374@arm.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_61BFBE49-0C64-490F-8FAA-24E0AA16EAC7_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL0PR03CA0003.namprd03.prod.outlook.com
- (2603:10b6:208:2d::16) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF655FF07
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 16:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707927619; cv=none; b=aM/k6yIbAMDsEpMHek/umO+03wKZcjYS8udGZdvEDCQcg8Rk7E/hHBEf+K+tqLNI6IfN7C94RoUF55T0gPjgcniOgjjBwe/+FPEwoFmdmlIEVIxjlJ0IV8eZ+vTSVVITgT3fDF7+Jz6M2S4f2aiVk7uQv1Cd8PM3P9OIwe7JlqA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707927619; c=relaxed/simple;
+	bh=0HcfJmmBqgnxEibVXmvtKiQfWDI/qjmiO3qS4+TsxxY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=atCcyJamqyffM7MzOEzwwvsa+wB5jmSWa1D6M+CbfulJ7T4AQ069wtRPiS99awOny0iF4n38XejqdcsuajknVt+dYvjhutlcd/E/IE1gG9BVeMANzp9PngBkwMqekOni3d8oc74CFDp2gjW6WWxI/LITuVU08fFLunyZ8QxCPZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Hb+Ua2jq; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5ce632b2adfso5399859a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 08:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707927617; x=1708532417; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fm0rEdFpfBw8yrd8ZCjG8lJI7FOozunf2bgbBsdJdm0=;
+        b=Hb+Ua2jq7CbJygC6codkBXNvS1oHVKlJW5tWam94GlvHyNLvyJYHO5Sz/JIySq7SzE
+         mAMywQxAe5T7l/K2vsvPHq2jA1WI6Mt7S0jqdKxf+10UtTwP4T/Xj64RE79Moh8Ptwgy
+         Th0IzgdFW4WGqKe8c39h7FzSe3ztIZqR0iNzL4vDdHbeZNDs4wX1PptBcob7WC/9If1/
+         t/BjKNUO0qqXjnupAhoV2dAEcJ64m0Cc/upo2p4HhCxaR8ipC1JdzFqRuVYzdYwt5+Fz
+         IB7I7iliqYufEd9VrbJ4rtc4ipr0m6XbSJYOrV6MZRwMSkATIHexopkx/n4IevzYwePF
+         ADHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707927617; x=1708532417;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fm0rEdFpfBw8yrd8ZCjG8lJI7FOozunf2bgbBsdJdm0=;
+        b=Wx7rNE7QHfsa1VK8Sqd+Lr5sxrva+PvAvLmyzyg4K0rf4E1Bww3ioH8DDQKEV2qEpL
+         rrWiOmk17VgMGEoB1qcJOIiTNguDF26V3BF9ZiUX2QiSdfY6XGMX9Zo2u1iCkOBoLsy+
+         phUBYXl4sp5Myb3M9QXeZOVll97IY1TPf1D0YrLOvBvU1FFLYHpeS4l0W2EOl7SLVf2J
+         csRKgytAv94g4ShOzs8opQvbKTldMhKVvPSSXTkemi2gxbsgGz8/VofC7RKXppRFRNmQ
+         sTJcM0GQjJRYtQ+1o2r1zF3V7DF2m+6TAZkaJKckgKKgpNP+a6C1AYwehafR0jqd2Fxx
+         3GvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVT2/9rXTrzBSo6CZDkH2ItQc0nvIKQNFwlQOez5k1gIg1OH4UZ6EQFj6+0+odttWAhOUs9Vt6siM940OVVy9WlKBr0rEcEkMANZQtzmbJk
+X-Gm-Message-State: AOJu0YwNvC6EZ1KEqdGeegObAmZqnrkjfpnUN9qzFmhtj6ft2IHK2Jbn
+	FUPjpnY+q5zfVsS6e6aJNgOxSf2QZJ6OypFBgz9pqb1S36+byVZRPAckJS3f4KepLiPmDMTkaof
+	VrQ==
+X-Google-Smtp-Source: AGHT+IHa4kkG/0f9ehySoOxGA7p25JnA0B81TqydyG2BEVARRtuNpfCLKC2Wn9Ns0F6pvUgaCDhVtXIwZ5A=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a02:996:b0:5ce:6c6:6973 with SMTP id
+ cl22-20020a056a02099600b005ce06c66973mr40244pgb.8.1707927616820; Wed, 14 Feb
+ 2024 08:20:16 -0800 (PST)
+Date: Wed, 14 Feb 2024 08:20:15 -0800
+In-Reply-To: <9c542f39-959e-4ab1-94a5-39e049a30743@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|DM4PR12MB5181:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1814d39b-145a-4d71-9562-08dc2d78b32f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	PTfuRE3ooUYO7ayHQhVxBSAo8tsQZG1mJb7QSHgxMXwkxwL4Y/oTs1bFtkdKl5I9jZVMdvhXjexfh4pRxEQow4FKFTG1sTPssQmsCGpTOsKJeFyH+Fmr5xmHage8dIsMuwsik0caVWUfa4OC3NJF2x31P4dL6XHtuNLMgbzgSLXAkfFO0pviyM3DFdo+gfFMyAzjyfQhmMbauHT6p3rjCcNBclaTmAtwLXqfJpKAPBfjaVzVPaQmeyl6bzvOHB8mDoDYvVgmijTPPOEWdFziL/Ey5LYLZyem5ikqWyQ9NQXt5mfkzhvnpVlkf+/zH7+H35Mm3PbmnTSvtf7M9o28RFncfGRlWJGd4dWYDaBzxJBNs6agHlt4uocA1EKRF4oUTGbw+ivW9DReUT9SZ5CuvBfKJJXunW6+nz+15K/T0TR9XPw+Lyr0fxi+41t/L+7GemAaxZYARmjrJteXaCIprrkD/GBRNPYjXM+JH8yO7sNwpYzs3dtOecvDU4z0EugiXZHTBPq+BH3WC6dPCnRHamGa2tf0VGM081wBi2SSVnom+ZTvfP3qyn4IlXTq8YqkPzHnZ/fLkBY1nsli5nB5mf4Cw4QC7Bhtzy49coudDeg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(366004)(396003)(376002)(39860400002)(230922051799003)(1800799012)(64100799003)(451199024)(186009)(966005)(6512007)(6486002)(478600001)(41300700001)(4326008)(7416002)(8676002)(8936002)(2906002)(5660300002)(235185007)(6506007)(66556008)(53546011)(316002)(66476007)(54906003)(66946007)(6916009)(83380400001)(2616005)(86362001)(26005)(38100700002)(33656002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?uyH1KNfomN6kmPf030lTA1cnjrfuhcc1VP0xxoQKuLnt9Le24MACgzDs3fN0?=
- =?us-ascii?Q?QBPYZLUG5gY2f8YjngAf5avJaRJne0riOd5Xz65FWBp+kGxk3MUqZJy3iEkq?=
- =?us-ascii?Q?YChHbOjKe3j8u7hoTGjuRrmrLoUCGT85pr2UO7eXTZjg+gOLrgiX/HGfL5wE?=
- =?us-ascii?Q?kusHMIz5zVfC4xG6sTrNCxOsnYWFQqLTvM5vpJzxXEB1sL0RaYX9s9sGDb37?=
- =?us-ascii?Q?cOPsFCneCJsk8XbnM3vjGBsmUU1OpzXSAmej20wL1k/FSSQevhGREUYOpAdJ?=
- =?us-ascii?Q?5b+ZxqSvvsqDC6kl5DRpr6A8B1MBEIs/IljDMsRmSZ9v1XBbyug7HrkRxAoV?=
- =?us-ascii?Q?A3gjCbMUVTKWXAl8VGGOC/xgtRzvChcNcVrtRfFZSvT0bY8NVLuYFwJOdniC?=
- =?us-ascii?Q?httX6r3aigC0RL6wyklWmlzqjjpyv0Bf5iOy4JTv8q6mDqRgr5WTAZUDKb2/?=
- =?us-ascii?Q?NGwaFpupInxwweAmjUVV1pR2Rx3dkvgJHlqwS2ZilqGZ2MJRjab1mzMZWNGK?=
- =?us-ascii?Q?2K5ej49W4BGxLxH2ju38QnRdPOa+yR3Cw8KBtgX82m+gZ7IrfuVt3BA/VwEl?=
- =?us-ascii?Q?kx1tz1Esw4SGNG1QOAG519wIoc6OwK6bRF5uf3LLfvqfy55QxPRfpnzn8GZz?=
- =?us-ascii?Q?T0O3DygO0Km6EkQFod2JEkbQOehWJx28+MF6tV0KYRgUnA3LW9UPUVzOjAX7?=
- =?us-ascii?Q?8hBE5eymJENCPWEDZ4pBRBl2yD5BpAQ8AGU7gVOUX/uNtZs6kodXBTnWM8O/?=
- =?us-ascii?Q?4Zf1SFpzEIuqDvhiPidxavbpNK1V5QSCwdlxkRGT/L873/sx0z/eukCrr47c?=
- =?us-ascii?Q?UOkCY5FwHzMva0o+X8Uyeu+eWbcWh8P+AL/T3BAK0pIrnq7XXJSue0nM7p7H?=
- =?us-ascii?Q?cG2hQCWJetczBY+C6VY9l+ZLWxLJ5rAvEZNiMR14z0ega2VQFDBeEE89ucWN?=
- =?us-ascii?Q?xLeg6kGCXz/gWsYPJuxd8uc944LVw1BDQy67qxMdKdHibon9lV55Wm2TrGFm?=
- =?us-ascii?Q?4LHuL4vKLIvPZIYnWg88wqQITqCuGTJGETIbrwg2bYoVxWN7LZAzoJrxuiau?=
- =?us-ascii?Q?9hJKy04ivtliTkmFL5NfA31I95bmzjfkA5+GU+m34cmCIg8klNm049fHOZbi?=
- =?us-ascii?Q?c1na16nTmXw7SY5ChS6tvxkyZYFkavmAwLzgpetolocstvhhRS/kx6NZCGjs?=
- =?us-ascii?Q?Xf3vhPd73/hC4IXZrtqfoApPXO4kw3XmcaacqCQmWFD/9b3JJweZIfCXNMgR?=
- =?us-ascii?Q?CvIWQmERNGdwwV6PobNog3XtU4bkujBNx9hDJHuhicHnCJ8QZffPc7Bep1N1?=
- =?us-ascii?Q?M6Ham7VtTAbHly0tadCR8jYtlmF511U6S+Ceq7DERrTztHM57DcaoUMjm8t8?=
- =?us-ascii?Q?EF8Nw15OPMI8Zsu3ExO/MjZprHVpQ8Az2gHGAYtBfWXqNfUv6o0XuUxLX1mL?=
- =?us-ascii?Q?Ho4w5CnzL1RxacKbXLSqGq26iBwgGmeSqhPdyOqdhbVL/DI/H414kOvEuI8o?=
- =?us-ascii?Q?u5D60RF1Ixz1rE8FpFo0wEL2H3hhq8rXDQzA0haBsu4z0DvaP3DLRjTvXgU1?=
- =?us-ascii?Q?7T2Ox0i3yykwv0Z/v760AHDr7kHoALMhWcjgdf5H?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1814d39b-145a-4d71-9562-08dc2d78b32f
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2024 16:19:20.6514
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8A2nrujJxa3yPj1JH6uelMW45H4Rh75eRLWgfK+Va2wlKtz04ii8Pi/Y3bR5DlJA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5181
+Mime-Version: 1.0
+References: <20240115125707.1183-1-paul@xen.org> <20240115125707.1183-9-paul@xen.org>
+ <ZcMBDP6H5PRo5C2d@google.com> <9c542f39-959e-4ab1-94a5-39e049a30743@xen.org>
+Message-ID: <ZczoP_pfb4E3i8OO@google.com>
+Subject: Re: [PATCH v12 08/20] KVM: pfncache: allow a cache to be activated
+ with a fixed (userspace) HVA
+From: Sean Christopherson <seanjc@google.com>
+To: paul@xen.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
 
---=_MailMate_61BFBE49-0C64-490F-8FAA-24E0AA16EAC7_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 14, 2024, Paul Durrant wrote:
+> On 07/02/2024 04:03, Sean Christopherson wrote:
+> > +s390 folks (question on kvm_is_error_gpa() for ya)
+> > But!  kvm_is_error_gpa() already exists, and it very, very sneakily does a memslot
+> > lookup and checks for a valid HVA.
+> > 
+> > s390 people, any objection to renaming kvm_is_error_gpa() to something like
+> > kvm_gpa_has_memslot() or kvm_gpa_is_in_memslot()?  s390 is the only code that
+> > uses the existing helper.
+> > 
+> > That would both to free up the name to pair with kvm_is_error_hva(), and would
+> > make it obvious what the helper does; I was quite surprised that "error" means
+> > "is covered by a valid memslot".
+> > 
+> 
+> Seemingly no response to this; I'll define a local helper rather than
+> re-working the open-coded tests to check against INVALID_GPA. This can then
+> be trivially replaced if need be.
 
-On 14 Feb 2024, at 5:43, Ryan Roberts wrote:
+How about we force a decision with a patch?  This should be easy enough to slot
+in, and I would be quite surprised if s390 is overly attached to kvm_is_error_gpa().
 
-> On 13/02/2024 21:55, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> To minimize the number of pages after a huge page truncation, we do no=
-t
->> need to split it all the way down to order-0. The huge page has at mos=
-t
->> three parts, the part before offset, the part to be truncated, the par=
-t
->> remaining at the end. Find the greatest common divisor of them to
->> calculate the new page order from it, so we can split the huge
->> page to this order and keep the remaining pages as large and as few as=
+From: Sean Christopherson <seanjc@google.com>
+Date: Wed, 14 Feb 2024 08:05:49 -0800
+Subject: [PATCH] KVM: s390: Refactor kvm_is_error_gpa() into
+ kvm_is_gpa_in_memslot()
 
->> possible.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
->>  mm/truncate.c | 21 +++++++++++++++++++--
->>  1 file changed, 19 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/truncate.c b/mm/truncate.c
->> index 725b150e47ac..49ddbbf7a617 100644
->> --- a/mm/truncate.c
->> +++ b/mm/truncate.c
->> @@ -21,6 +21,7 @@
->>  #include <linux/task_io_accounting_ops.h>
->>  #include <linux/shmem_fs.h>
->>  #include <linux/rmap.h>
->> +#include <linux/gcd.h>
->>  #include "internal.h"
->>
->>  /*
->> @@ -210,7 +211,8 @@ int truncate_inode_folio(struct address_space *map=
-ping, struct folio *folio)
->>  bool truncate_inode_partial_folio(struct folio *folio, loff_t start, =
-loff_t end)
->>  {
->>  	loff_t pos =3D folio_pos(folio);
->> -	unsigned int offset, length;
->> +	unsigned int offset, length, remaining;
->> +	unsigned int new_order =3D folio_order(folio);
->>
->>  	if (pos < start)
->>  		offset =3D start - pos;
->> @@ -221,6 +223,7 @@ bool truncate_inode_partial_folio(struct folio *fo=
-lio, loff_t start, loff_t end)
->>  		length =3D length - offset;
->>  	else
->>  		length =3D end + 1 - pos - offset;
->> +	remaining =3D folio_size(folio) - offset - length;
->>
->>  	folio_wait_writeback(folio);
->>  	if (length =3D=3D folio_size(folio)) {
->> @@ -235,11 +238,25 @@ bool truncate_inode_partial_folio(struct folio *=
-folio, loff_t start, loff_t end)
->>  	 */
->>  	folio_zero_range(folio, offset, length);
->>
->> +	/*
->> +	 * Use the greatest common divisor of offset, length, and remaining
->> +	 * as the smallest page size and compute the new order from it. So w=
-e
->> +	 * can truncate a subpage as large as possible. Round up gcd to
->> +	 * PAGE_SIZE, otherwise ilog2 can give -1 when gcd/PAGE_SIZE is 0.
->> +	 */
->> +	new_order =3D ilog2(round_up(gcd(gcd(offset, length), remaining),
->> +				   PAGE_SIZE) / PAGE_SIZE);
->
-> Given you have up to 2 regions remaining, isn't it possible that you wa=
-nt a
-> different order for both those regions (or even multiple orders within =
-the same
-> region)? I guess you just choose gcd for simplicity?
+Rename kvm_is_error_gpa() to kvm_is_gpa_in_memslot() and invert the
+polarity accordingly in order to (a) free up kvm_is_error_gpa() to match
+with kvm_is_error_{hva,page}(), and (b) to make it more obvious that the
+helper is doing a memslot lookup, i.e. not simply checking for INVALID_GPA.
 
-Right. You raise the same concern as Hugh[1]. I am minimizing the call of=
+No functional change intended.
 
-split_huge_page_to_list_to_order() and you and Hugh want to minimize the
-number of folios after the split. Yours will give better outcome after sp=
-lit,
-but requires either multiple calls or a more sophisticated implementation=
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/s390/kvm/diag.c     |  2 +-
+ arch/s390/kvm/gaccess.c  | 14 +++++++-------
+ arch/s390/kvm/kvm-s390.c |  4 ++--
+ arch/s390/kvm/priv.c     |  4 ++--
+ arch/s390/kvm/sigp.c     |  2 +-
+ include/linux/kvm_host.h |  4 ++--
+ 6 files changed, 15 insertions(+), 15 deletions(-)
 
-of page split[2]. We probably can revisit this once splitting to any orde=
-r
-gets wider use.
+diff --git a/arch/s390/kvm/diag.c b/arch/s390/kvm/diag.c
+index 3c65b8258ae6..2a32438e09ce 100644
+--- a/arch/s390/kvm/diag.c
++++ b/arch/s390/kvm/diag.c
+@@ -102,7 +102,7 @@ static int __diag_page_ref_service(struct kvm_vcpu *vcpu)
+ 		    parm.token_addr & 7 || parm.zarch != 0x8000000000000000ULL)
+ 			return kvm_s390_inject_program_int(vcpu, PGM_SPECIFICATION);
+ 
+-		if (kvm_is_error_gpa(vcpu->kvm, parm.token_addr))
++		if (!kvm_is_gpa_in_memslot(vcpu->kvm, parm.token_addr))
+ 			return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
+ 
+ 		vcpu->arch.pfault_token = parm.token_addr;
+diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+index 5bfcc50c1a68..415c99649e43 100644
+--- a/arch/s390/kvm/gaccess.c
++++ b/arch/s390/kvm/gaccess.c
+@@ -664,7 +664,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
+ 	case ASCE_TYPE_REGION1:	{
+ 		union region1_table_entry rfte;
+ 
+-		if (kvm_is_error_gpa(vcpu->kvm, ptr))
++		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
+ 			return PGM_ADDRESSING;
+ 		if (deref_table(vcpu->kvm, ptr, &rfte.val))
+ 			return -EFAULT;
+@@ -682,7 +682,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
+ 	case ASCE_TYPE_REGION2: {
+ 		union region2_table_entry rste;
+ 
+-		if (kvm_is_error_gpa(vcpu->kvm, ptr))
++		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
+ 			return PGM_ADDRESSING;
+ 		if (deref_table(vcpu->kvm, ptr, &rste.val))
+ 			return -EFAULT;
+@@ -700,7 +700,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
+ 	case ASCE_TYPE_REGION3: {
+ 		union region3_table_entry rtte;
+ 
+-		if (kvm_is_error_gpa(vcpu->kvm, ptr))
++		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
+ 			return PGM_ADDRESSING;
+ 		if (deref_table(vcpu->kvm, ptr, &rtte.val))
+ 			return -EFAULT;
+@@ -728,7 +728,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
+ 	case ASCE_TYPE_SEGMENT: {
+ 		union segment_table_entry ste;
+ 
+-		if (kvm_is_error_gpa(vcpu->kvm, ptr))
++		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
+ 			return PGM_ADDRESSING;
+ 		if (deref_table(vcpu->kvm, ptr, &ste.val))
+ 			return -EFAULT;
+@@ -748,7 +748,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
+ 		ptr = ste.fc0.pto * (PAGE_SIZE / 2) + vaddr.px * 8;
+ 	}
+ 	}
+-	if (kvm_is_error_gpa(vcpu->kvm, ptr))
++	if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
+ 		return PGM_ADDRESSING;
+ 	if (deref_table(vcpu->kvm, ptr, &pte.val))
+ 		return -EFAULT;
+@@ -770,7 +770,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
+ 		*prot = PROT_TYPE_IEP;
+ 		return PGM_PROTECTION;
+ 	}
+-	if (kvm_is_error_gpa(vcpu->kvm, raddr.addr))
++	if (!kvm_is_gpa_in_memslot(vcpu->kvm, raddr.addr))
+ 		return PGM_ADDRESSING;
+ 	*gpa = raddr.addr;
+ 	return 0;
+@@ -957,7 +957,7 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+ 				return rc;
+ 		} else {
+ 			gpa = kvm_s390_real_to_abs(vcpu, ga);
+-			if (kvm_is_error_gpa(vcpu->kvm, gpa)) {
++			if (!kvm_is_gpa_in_memslot(vcpu->kvm, gpa)) {
+ 				rc = PGM_ADDRESSING;
+ 				prot = PROT_NONE;
+ 			}
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index ea63ac769889..3e5a1d7aa81a 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -2878,7 +2878,7 @@ static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+ 
+ 	srcu_idx = srcu_read_lock(&kvm->srcu);
+ 
+-	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
++	if (!kvm_is_gpa_in_memslot(kvm, mop->gaddr)) {
+ 		r = PGM_ADDRESSING;
+ 		goto out_unlock;
+ 	}
+@@ -2940,7 +2940,7 @@ static int kvm_s390_vm_mem_op_cmpxchg(struct kvm *kvm, struct kvm_s390_mem_op *m
+ 
+ 	srcu_idx = srcu_read_lock(&kvm->srcu);
+ 
+-	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
++	if (!kvm_is_gpa_in_memslot(kvm, mop->gaddr)) {
+ 		r = PGM_ADDRESSING;
+ 		goto out_unlock;
+ 	}
+diff --git a/arch/s390/kvm/priv.c b/arch/s390/kvm/priv.c
+index f875a404a0a0..1be19cc9d73c 100644
+--- a/arch/s390/kvm/priv.c
++++ b/arch/s390/kvm/priv.c
+@@ -149,7 +149,7 @@ static int handle_set_prefix(struct kvm_vcpu *vcpu)
+ 	 * first page, since address is 8k aligned and memory pieces are always
+ 	 * at least 1MB aligned and have at least a size of 1MB.
+ 	 */
+-	if (kvm_is_error_gpa(vcpu->kvm, address))
++	if (!kvm_is_gpa_in_memslot(vcpu->kvm, address))
+ 		return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
+ 
+ 	kvm_s390_set_prefix(vcpu, address);
+@@ -464,7 +464,7 @@ static int handle_test_block(struct kvm_vcpu *vcpu)
+ 		return kvm_s390_inject_prog_irq(vcpu, &vcpu->arch.pgm);
+ 	addr = kvm_s390_real_to_abs(vcpu, addr);
+ 
+-	if (kvm_is_error_gpa(vcpu->kvm, addr))
++	if (!kvm_is_gpa_in_memslot(vcpu->kvm, addr))
+ 		return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
+ 	/*
+ 	 * We don't expect errors on modern systems, and do not care
+diff --git a/arch/s390/kvm/sigp.c b/arch/s390/kvm/sigp.c
+index d9696b530064..55c34cb35428 100644
+--- a/arch/s390/kvm/sigp.c
++++ b/arch/s390/kvm/sigp.c
+@@ -172,7 +172,7 @@ static int __sigp_set_prefix(struct kvm_vcpu *vcpu, struct kvm_vcpu *dst_vcpu,
+ 	 * first page, since address is 8k aligned and memory pieces are always
+ 	 * at least 1MB aligned and have at least a size of 1MB.
+ 	 */
+-	if (kvm_is_error_gpa(vcpu->kvm, irq.u.prefix.address)) {
++	if (!kvm_is_gpa_in_memslot(vcpu->kvm, irq.u.prefix.address)) {
+ 		*reg &= 0xffffffff00000000UL;
+ 		*reg |= SIGP_STATUS_INVALID_PARAMETER;
+ 		return SIGP_CC_STATUS_STORED;
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 7e7fd25b09b3..d175b64488ec 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1788,11 +1788,11 @@ static inline hpa_t pfn_to_hpa(kvm_pfn_t pfn)
+ 	return (hpa_t)pfn << PAGE_SHIFT;
+ }
+ 
+-static inline bool kvm_is_error_gpa(struct kvm *kvm, gpa_t gpa)
++static inline bool kvm_is_gpa_in_memslot(struct kvm *kvm, gpa_t gpa)
+ {
+ 	unsigned long hva = gfn_to_hva(kvm, gpa_to_gfn(gpa));
+ 
+-	return kvm_is_error_hva(hva);
++	return !kvm_is_error_hva(hva);
+ }
+ 
+ enum kvm_stat_kind {
 
->> +
->> +	/* order-1 THP not supported, downgrade to order-0 */
->> +	if (new_order =3D=3D 1)
->> +		new_order =3D 0;
->
-> I guess this would need to change if supporting order-1 file folios?
+base-commit: 687d8f4c3dea0758afd748968d91288220bbe7e3
+-- 
 
-Right.
-
->> +
->> +
->>  	if (folio_has_private(folio))
->>  		folio_invalidate(folio, offset, length);
->>  	if (!folio_test_large(folio))
->>  		return true;
->> -	if (split_folio(folio) =3D=3D 0)
->> +	if (split_huge_page_to_list_to_order(&folio->page, NULL, new_order) =
-=3D=3D 0)
->
-> I know you are discussing removing this patch, but since you created
-> split_folio_to_order() wouldn't that be better here?
-
-Sure. Will change the patch locally.
-
-[1] https://lore.kernel.org/linux-mm/9dd96da-efa2-5123-20d4-4992136ef3ad@=
-google.com/
-[2] https://lore.kernel.org/linux-mm/0AC0520E-1BD2-497E-A7ED-05394400BFC9=
-@nvidia.com/
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_61BFBE49-0C64-490F-8FAA-24E0AA16EAC7_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXM6AYPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU+4YP/0kcuWm88beYa88Ri/oQZ/05vk4uQRaM0NCX
-tIt4f7LWzye/ZfDK1/rjK2C8eT8Q4eDhP6dVJ1JccPZfg78RsAkwt/3Av72U/ShY
-meVf0zgMEjL39TZgA87DTt9tk3SW815Om+eHiu5GvfM+9hQULsuL9kBcVvfms84z
-N7mnhBUG8n0v9zAiNBMucG1oJDtLhC2rRWd0u7D+WcQheYIeY5t3rBKwAuTZUvlt
-mN3vC/pawbs630LPb+fieixGno9KFi6vFhYhexQPSIc2iyh4xzC1VubiIB627ZYP
-XJJrgdIFKyNoMdMIMBstn5bWL5Iy3Erj6tj3QZWyCbWa/ELWNWLgXyjG8JYiJtRY
-Bpq08LsbI8EsN9yc6608Hdf0aP0bsiIx7PJJHgGDE69XvvUW7jXthAF3Hrxn/REo
-ZBFAvcJP6STN2BJcUFTKvAeW3mAtJU50O/xcjKb7L5tF9oBZOVMzk0Dn6zVgeKHi
-BBSuAMyv/tfy24OIRVdcXU/zLWPQWsshSDd9boAPfawE5iRKleFjWdTMj1NXFh3u
-yqQvN5HzHbkXXW7klQDKo3cOvw/g7NVyoDCRx8q9wFxnrVG39Le7Lj7iIic8eGaE
-bgByG+IfE40F6R9uqmPJrnXXxJVGXU50VgqVfbejnENQ7lfFA5kLUDloZ8st9iKt
-0vwuFykP
-=pOsi
------END PGP SIGNATURE-----
-
---=_MailMate_61BFBE49-0C64-490F-8FAA-24E0AA16EAC7_=--
 
