@@ -1,294 +1,390 @@
-Return-Path: <linux-kselftest+bounces-4671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E688E8550A7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:45:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6087C855182
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 19:07:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C8F7B2C940
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:42:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17FC9296E2D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03BD085622;
-	Wed, 14 Feb 2024 17:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b="R0QCwz5D"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F1212BE9B;
+	Wed, 14 Feb 2024 18:00:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B75484FD7
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 17:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE0612BE95;
+	Wed, 14 Feb 2024 18:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707932484; cv=none; b=uUwFbfND12SI+jeWpAxPKA8Q/Mz9jloesSS2ttM4VKQLAy1VLGSMDL/1AY578IhPPuPgY94fh6P1HNqg2QkDbuR65npMJ9WUj8MobyxqaPYyGpvWKRwBQXI7ptGCEBiptoGibXvY9B5Ttj9RoEMac1lQ+TA/gKY/AgEQ5Xiwbww=
+	t=1707933605; cv=none; b=gpCbnpjWCSw1qRoIz/41O7h6Y/mCnIW7aNJrGEgEGZWXEJdfK7ybfWhw/bVIoTZOvq90YuacYotJ60fpAzp+XtcpbevhzsOHG6QQNCA7TsB44R+G5KcWMzPgMTDgOrwyL6loL2ALa/VNQ/f+ozRsksylyIex8AI0XStra8bOiuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707932484; c=relaxed/simple;
-	bh=nomzOqG8qtQlSxsBxKy5X1xMNj4S0dr5Ifd+oiSg+rg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fOP5UqDJsOS2wAqfb1EsvD4zgYK+tW56Cf/cBDlmkLSZPd4HgnOSOTb9VYRBJJZYorsUniAXlwTIuVo+Uw9Dvi/YMkP8c2378q0bwYmU5KD6ek+GM7JNpBcSCyKJT3vjMewy/+tZ30Ex8pjjBZwm79OCxIr4Uk88mHtxs+QCTSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylehuey.com; spf=pass smtp.mailfrom=kylehuey.com; dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b=R0QCwz5D; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylehuey.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylehuey.com
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e12d0af927so3654122a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 09:41:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google; t=1707932482; x=1708537282; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EjezFELGsG5yYdoO8o3jjgWXUKsZRmSJ3eM36KaKRP0=;
-        b=R0QCwz5DPYqkFzxtiGF6d2r89yTg+iapiIe5ujgDb5S47otsJJ3m8A2FgxcU9anVCp
-         WmPg5fow8UvZ6abaRs5Y8KImqQIvd4/OkhjOhMkq9e79J8OqwRpIa9/6HJ/cYpOWs0VE
-         oqMvCHidQm/tKJpUWumhYUW/c+XOOQ5MIVAbtg/eS8oD7bz+RIy/mBMdq6iGLSwyvnLw
-         jHVwkfxHeEt/pom/tg4LzKf7WwzOhaHiIFkEQ7sd4mI1ylgSlOd5dWKjy2dUrx/DSl67
-         a+8wFXYrgkOCavdO3PZ49HHheRCoLPEcQD+V8hoguxC3PualT4UbTdiH0kYuIXACl5M8
-         N1fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707932482; x=1708537282;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EjezFELGsG5yYdoO8o3jjgWXUKsZRmSJ3eM36KaKRP0=;
-        b=fqDQjgGzJAzINF93h1m2Gr9n6YMhXqHfXiIlYoKLGcJkcY7JK8xg2/0p7tzbdxplNY
-         jw5UwoQvcUTc7UAouL8BakvAENvzz6E2Lqq043zipK7RczgqUnaXWEDRXTWOC2JnktZC
-         CERjcHN4TShUycqVVbnDN3cCQN/WgVGTdoXJGPGG2gZ6ZSPH/svGML1UA2vCs5nR0xVb
-         WkOFYX0egJ8+Ap4QCbXj2fpeJ8KxsLrL/Qwt449NGVRjA5/sHRRyH4lfQgZ+M3C5PasA
-         JWZGeR5ISyx9uYEqUpyn3Won8zXwJyULDRKbcjiK2mqf2ZheUPfkXyisrk1SaR+7m64V
-         qe1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWxjBQ7aIcjPHt4zCn+U6/sq/32v2YNtIc4sauyNOxQRUIlcTN7YCUDUrzz4YNl0/JAAUPoH2hFP3tfgnkMJFPJrcLZBFlh+2dODz5T/5YR
-X-Gm-Message-State: AOJu0YzHjVA6/YJZF/ssTxKJEI8LevzWdUS5ZohG5sRKolg0x9scL3pG
-	vQ95CMLLDjV8gzaMJHf431dOjy3Tv15k+2VdmEkKhD/bOzbYIS9oK4KdCUw3Qw==
-X-Google-Smtp-Source: AGHT+IFmSEieag8tCyc8604BELPKwiIo404ZfsK6cYr9yraeW3R4mfErPRQxwNVYXWIs5kv7eyTTpg==
-X-Received: by 2002:a05:6358:2c8e:b0:179:1f8b:445a with SMTP id l14-20020a0563582c8e00b001791f8b445amr3924795rwm.22.1707932482324;
-        Wed, 14 Feb 2024 09:41:22 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVnlM9zlbKauAzR+O8NeswMzBEQYMRe6SdGtLXHn/uwjuvV8h43PMKUBzKLCUE9aRV2+93xF/DSRqB51At0GMA+YYik2LfhT0r9Crq/4gW8JMAfnKoXl4scVMznsiXU0/1wKWBYKMSpApTNbCQl+72tg53WTWtuvDLlNZMnhiixbI9K7nUjBu3NUO2hH5KVu1Ergerb+p6hz5EPrL4glSTALBkq4rD3JxhxEaYiGPGa+XOfpfTBK/F141MywGj5TP4JVWbBK3P7nMBSnRIeX5Zu9OM13Q0OVN1lyQs61JEaqINGJ0TVte78/1GyrKq/ux/4LwN5DK/6dtEHpR+0BFEgu7l37GcqU59IwJr75apKFuxAB7dhyB5P1vif6bwxWDXdchPiaJgz2NAESVqq5kpM4hVsQ/7S6X95tlVe/jdivNR7W/WVGNnFlnNd9chn1Q14NMYpxaJA2zrPDgaUOfYSX+Wtbewj7b/VZQTZXtYOyLgnFZxCF8BrGcYAB2XhyE+zR0+odhLPKdvyGiIR0akRS5XZtT6/SCgqOyYT+7Njy8bOn8gwKxB5xfjyGRB4HxQa7zuoaVB5UmCHGUg9RZsrin0QkZo/exrBSj2p5MDypJetWkFDdPASRG1lzWUXGJY2LCr5kjT5UoWDAIrs+uBhhCIB7BKObl9Yibc=
-Received: from zhadum.home.kylehuey.com (c-76-126-33-191.hsd1.ca.comcast.net. [76.126.33.191])
-        by smtp.gmail.com with ESMTPSA id p5-20020aa78605000000b006e0874cbaefsm9567604pfn.27.2024.02.14.09.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Feb 2024 09:41:21 -0800 (PST)
-From: Kyle Huey <me@kylehuey.com>
-X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
-To: Kyle Huey <khuey@kylehuey.com>,
-	linux-kernel@vger.kernel.org,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Marco Elver <elver@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Robert O'Callahan <robert@ocallahan.org>,
-	Song Liu <song@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RESEND PATCH v5 4/4] selftest/bpf: Test a perf bpf program that suppresses side effects.
-Date: Wed, 14 Feb 2024 09:39:35 -0800
-Message-Id: <20240214173950.18570-5-khuey@kylehuey.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240214173950.18570-1-khuey@kylehuey.com>
-References: <20240214173950.18570-1-khuey@kylehuey.com>
+	s=arc-20240116; t=1707933605; c=relaxed/simple;
+	bh=8o1OMKcaZWOUsbyykAfyHVNqcdPrR8vjw8GOz8EVjaI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=YcajP84aaMJXDwIORvSAb5M1ZwKRFXEbCGfy9jPS6a921ffAohNyYNlqUIpPs9cnifNVm0YhETPW4QX6Rb+DmMkgoHP3C9Karj6KUM3a16KH0vSCM1mpXbpoIkByYeaiQ88abQLKPPqFgP1Zr9xPec259Gj79KwyzdnDQGTgcSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E0031FB;
+	Wed, 14 Feb 2024 10:00:44 -0800 (PST)
+Received: from [10.57.64.120] (unknown [10.57.64.120])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F36F3F766;
+	Wed, 14 Feb 2024 10:00:02 -0800 (PST)
+Message-ID: <032098e3-38f7-4127-b420-b579a97ce47e@arm.com>
+Date: Wed, 14 Feb 2024 18:00:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/12] selftests/mm: thp_settings: conform to TAP
+ format output
+Content-Language: en-GB
+From: Ryan Roberts <ryan.roberts@arm.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Aishwarya TCV <Aishwarya.TCV@arm.com>
+References: <20240202113119.2047740-1-usama.anjum@collabora.com>
+ <20240202113119.2047740-10-usama.anjum@collabora.com>
+ <0c3182ae-885c-4156-980b-e35d825fe72e@arm.com>
+In-Reply-To: <0c3182ae-885c-4156-980b-e35d825fe72e@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The test sets a hardware breakpoint and uses a bpf program to suppress the
-side effects of a perf event sample, including I/O availability signals,
-SIGTRAPs, and decrementing the event counter limit, if the ip matches the
-expected value. Then the function with the breakpoint is executed multiple
-times to test that all effects behave as expected.
+On 14/02/2024 17:19, Ryan Roberts wrote:
+> On 02/02/2024 11:31, Muhammad Usama Anjum wrote:
+>> Conform the layout, informational and status messages to TAP. No
+>> functional change is intended other than the layout of output messages.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  tools/testing/selftests/mm/khugepaged.c   |   3 +-
+>>  tools/testing/selftests/mm/thp_settings.c | 123 ++++++++--------------
+>>  tools/testing/selftests/mm/thp_settings.h |   4 +-
+>>  3 files changed, 47 insertions(+), 83 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+>> index d51fdaee7dc6a..3f202da0867c5 100644
+>> --- a/tools/testing/selftests/mm/khugepaged.c
+>> +++ b/tools/testing/selftests/mm/khugepaged.c
+>> @@ -152,8 +152,7 @@ static void get_finfo(const char *dir)
+>>  		     major(path_stat.st_dev), minor(path_stat.st_dev)) >= sizeof(path))
+>>  		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>>  
+>> -	if (read_file(path, buf, sizeof(buf)) < 0)
+>> -		ksft_exit_fail_msg("read_file(read_num): %s\n", strerror(errno));
+>> +	read_file(path, buf, sizeof(buf));
+>>  
+>>  	if (strstr(buf, "DEVTYPE=disk")) {
+>>  		/* Found it */
+>> diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
+>> index a4163438108ec..273a95d025285 100644
+>> --- a/tools/testing/selftests/mm/thp_settings.c
+>> +++ b/tools/testing/selftests/mm/thp_settings.c
+>> @@ -5,7 +5,9 @@
+>>  #include <stdlib.h>
+>>  #include <string.h>
+>>  #include <unistd.h>
+>> +#include <errno.h>
+>>  
+>> +#include "../kselftest.h"
+>>  #include "thp_settings.h"
+>>  
+>>  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+>> @@ -42,58 +44,45 @@ static const char * const shmem_enabled_strings[] = {
+>>  	NULL
+>>  };
+>>  
+>> -int read_file(const char *path, char *buf, size_t buflen)
+>> +void read_file(const char *path, char *buf, size_t buflen)
+>>  {
+>>  	int fd;
+>>  	ssize_t numread;
+>>  
+>>  	fd = open(path, O_RDONLY);
+>>  	if (fd == -1)
+>> -		return 0;
+>> +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+> 
+> Hi,
+> 
+> This change has broken back compat. It's no longer possible to run cow and
+> khugepaged tests against older kernels.
+> 
+> This function, as well as others in this file are intended to return 0 to
+> indicate the file could not be accessed (e.g. doesn't exist or don't have
+> permission, etc). Then higher level code can decide how to handle that. For
+> example, thp_supported_orders() determines which THP orders are supported by the
+> system based on the existence of certain files in sysfs. Then cow decides which
+> test variants to run based on the supported orders. With your change, it all
+> goes bang on the first probe and the whole test suite gets failed without
+> running any tests.
+> 
+> I've no problem with improving the TAP output from tests, but this must only be
+> done at the test level, where it makes sense to do so. You can just call
+> ksft_exit_fail_msg() from deep within a utility function.
+> 
+> Please can we remove this from mm-unstable.
 
-Signed-off-by: Kyle Huey <khuey@kylehuey.com>
-Acked-by: Song Liu <song@kernel.org>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/perf_skip.c      | 137 ++++++++++++++++++
- .../selftests/bpf/progs/test_perf_skip.c      |  15 ++
- 2 files changed, 152 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
+Actually it is even worse than I first thought. With this change, the tests fail
+even when running against a matched kernel.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
-new file mode 100644
-index 000000000000..37d8618800e4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <test_progs.h>
-+#include "test_perf_skip.skel.h"
-+#include <linux/compiler.h>
-+#include <linux/hw_breakpoint.h>
-+#include <sys/mman.h>
-+
-+#ifndef TRAP_PERF
-+#define TRAP_PERF 6
-+#endif
-+
-+int sigio_count, sigtrap_count;
-+
-+static void handle_sigio(int sig __always_unused)
-+{
-+	++sigio_count;
-+}
-+
-+static void handle_sigtrap(int signum __always_unused,
-+			   siginfo_t *info,
-+			   void *ucontext __always_unused)
-+{
-+	ASSERT_EQ(info->si_code, TRAP_PERF, "si_code");
-+	++sigtrap_count;
-+}
-+
-+static noinline int test_function(void)
-+{
-+	asm volatile ("");
-+	return 0;
-+}
-+
-+void serial_test_perf_skip(void)
-+{
-+	struct sigaction action = {};
-+	struct sigaction previous_sigtrap;
-+	sighandler_t previous_sigio = SIG_ERR;
-+	struct test_perf_skip *skel = NULL;
-+	struct perf_event_attr attr = {};
-+	int perf_fd = -1;
-+	int err;
-+	struct f_owner_ex owner;
-+	struct bpf_link *prog_link = NULL;
-+
-+	action.sa_flags = SA_SIGINFO | SA_NODEFER;
-+	action.sa_sigaction = handle_sigtrap;
-+	sigemptyset(&action.sa_mask);
-+	if (!ASSERT_OK(sigaction(SIGTRAP, &action, &previous_sigtrap), "sigaction"))
-+		return;
-+
-+	previous_sigio = signal(SIGIO, handle_sigio);
-+	if (!ASSERT_NEQ(previous_sigio, SIG_ERR, "signal"))
-+		goto cleanup;
-+
-+	skel = test_perf_skip__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto cleanup;
-+
-+	attr.type = PERF_TYPE_BREAKPOINT;
-+	attr.size = sizeof(attr);
-+	attr.bp_type = HW_BREAKPOINT_X;
-+	attr.bp_addr = (uintptr_t)test_function;
-+	attr.bp_len = sizeof(long);
-+	attr.sample_period = 1;
-+	attr.sample_type = PERF_SAMPLE_IP;
-+	attr.pinned = 1;
-+	attr.exclude_kernel = 1;
-+	attr.exclude_hv = 1;
-+	attr.precise_ip = 3;
-+	attr.sigtrap = 1;
-+	attr.remove_on_exec = 1;
-+
-+	perf_fd = syscall(__NR_perf_event_open, &attr, 0, -1, -1, 0);
-+	if (perf_fd < 0 && (errno == ENOENT || errno == EOPNOTSUPP)) {
-+		printf("SKIP:no PERF_TYPE_BREAKPOINT/HW_BREAKPOINT_X\n");
-+		test__skip();
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(perf_fd < 0, "perf_event_open"))
-+		goto cleanup;
-+
-+	/* Configure the perf event to signal on sample. */
-+	err = fcntl(perf_fd, F_SETFL, O_ASYNC);
-+	if (!ASSERT_OK(err, "fcntl(F_SETFL, O_ASYNC)"))
-+		goto cleanup;
-+
-+	owner.type = F_OWNER_TID;
-+	owner.pid = syscall(__NR_gettid);
-+	err = fcntl(perf_fd, F_SETOWN_EX, &owner);
-+	if (!ASSERT_OK(err, "fcntl(F_SETOWN_EX)"))
-+		goto cleanup;
-+
-+	/* Allow at most one sample. A sample rejected by bpf should
-+	 * not count against this.
-+	 */
-+	err = ioctl(perf_fd, PERF_EVENT_IOC_REFRESH, 1);
-+	if (!ASSERT_OK(err, "ioctl(PERF_EVENT_IOC_REFRESH)"))
-+		goto cleanup;
-+
-+	prog_link = bpf_program__attach_perf_event(skel->progs.handler, perf_fd);
-+	if (!ASSERT_OK_PTR(prog_link, "bpf_program__attach_perf_event"))
-+		goto cleanup;
-+
-+	/* Configure the bpf program to suppress the sample. */
-+	skel->bss->ip = (uintptr_t)test_function;
-+	test_function();
-+
-+	ASSERT_EQ(sigio_count, 0, "sigio_count");
-+	ASSERT_EQ(sigtrap_count, 0, "sigtrap_count");
-+
-+	/* Configure the bpf program to allow the sample. */
-+	skel->bss->ip = 0;
-+	test_function();
-+
-+	ASSERT_EQ(sigio_count, 1, "sigio_count");
-+	ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-+
-+	/* Test that the sample above is the only one allowed (by perf, not
-+	 * by bpf)
-+	 */
-+	test_function();
-+
-+	ASSERT_EQ(sigio_count, 1, "sigio_count");
-+	ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-+
-+cleanup:
-+	bpf_link__destroy(prog_link);
-+	if (perf_fd >= 0)
-+		close(perf_fd);
-+	test_perf_skip__destroy(skel);
-+
-+	if (previous_sigio != SIG_ERR)
-+		signal(SIGIO, previous_sigio);
-+	sigaction(SIGTRAP, &previous_sigtrap, NULL);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_perf_skip.c b/tools/testing/selftests/bpf/progs/test_perf_skip.c
-new file mode 100644
-index 000000000000..7eb8b6de7a57
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_perf_skip.c
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+uintptr_t ip;
-+
-+SEC("perf_event")
-+int handler(struct bpf_perf_event_data *data)
-+{
-+	/* Skip events that have the correct ip. */
-+	return ip != PT_REGS_IP(&data->regs);
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
+thp_supported_orders() tries to probe every possible order and relies on the
+probe succeeding or failing to determine which orders are actually supported.
+The first order it tries is 0 (4K). That is not THP, so there is no
+hugepages-4K/enabled file for it. So it blows up immediately.
+
+So I don't think you even ran the tests locally after making the change?
+
+
+> 
+> Thanks,
+> Ryan
+> 
+> 
+>>  
+>>  	numread = read(fd, buf, buflen - 1);
+>>  	if (numread < 1) {
+>>  		close(fd);
+>> -		return 0;
+>> +		ksft_exit_fail_msg("No data read\n");
+>>  	}
+>>  
+>>  	buf[numread] = '\0';
+>>  	close(fd);
+>> -
+>> -	return (unsigned int) numread;
+>>  }
+>>  
+>> -int write_file(const char *path, const char *buf, size_t buflen)
+>> +void write_file(const char *path, const char *buf, size_t buflen)
+>>  {
+>>  	int fd;
+>>  	ssize_t numwritten;
+>>  
+>>  	fd = open(path, O_WRONLY);
+>> -	if (fd == -1) {
+>> -		printf("open(%s)\n", path);
+>> -		exit(EXIT_FAILURE);
+>> -		return 0;
+>> -	}
+>> +	if (fd == -1)
+>> +		ksft_exit_fail_msg("%s open failed\n", path);
+>>  
+>>  	numwritten = write(fd, buf, buflen - 1);
+>>  	close(fd);
+>> -	if (numwritten < 1) {
+>> -		printf("write(%s)\n", buf);
+>> -		exit(EXIT_FAILURE);
+>> -		return 0;
+>> -	}
+>> -
+>> -	return (unsigned int) numwritten;
+>> +	if (numwritten < 1)
+>> +		ksft_exit_fail_msg("write failed (%s)\n", buf);
+>>  }
+>>  
+>>  const unsigned long read_num(const char *path)
+>>  {
+>>  	char buf[21];
+>>  
+>> -	if (read_file(path, buf, sizeof(buf)) < 0) {
+>> -		perror("read_file()");
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	read_file(path, buf, sizeof(buf));
+>>  
+>>  	return strtoul(buf, NULL, 10);
+>>  }
+>> @@ -103,10 +92,7 @@ void write_num(const char *path, unsigned long num)
+>>  	char buf[21];
+>>  
+>>  	sprintf(buf, "%ld", num);
+>> -	if (!write_file(path, buf, strlen(buf) + 1)) {
+>> -		perror(path);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	write_file(path, buf, strlen(buf) + 1);
+>>  }
+>>  
+>>  int thp_read_string(const char *name, const char * const strings[])
+>> @@ -117,30 +103,22 @@ int thp_read_string(const char *name, const char * const strings[])
+>>  	int ret;
+>>  
+>>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+>> -	if (ret >= PATH_MAX) {
+>> -		printf("%s: Pathname is too long\n", __func__);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (ret >= PATH_MAX)
+>> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>>  
+>> -	if (!read_file(path, buf, sizeof(buf))) {
+>> -		perror(path);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	read_file(path, buf, sizeof(buf));
+>>  
+>>  	c = strchr(buf, '[');
+>> -	if (!c) {
+>> -		printf("%s: Parse failure\n", __func__);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (!c)
+>> +		ksft_exit_fail_msg("%s: Parse failure\n", __func__);
+>>  
+>>  	c++;
+>>  	memmove(buf, c, sizeof(buf) - (c - buf));
+>>  
+>>  	c = strchr(buf, ']');
+>> -	if (!c) {
+>> -		printf("%s: Parse failure\n", __func__);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (!c)
+>> +		ksft_exit_fail_msg("%s: Parse failure\n", __func__);
+>> +
+>>  	*c = '\0';
+>>  
+>>  	ret = 0;
+>> @@ -150,8 +128,8 @@ int thp_read_string(const char *name, const char * const strings[])
+>>  		ret++;
+>>  	}
+>>  
+>> -	printf("Failed to parse %s\n", name);
+>> -	exit(EXIT_FAILURE);
+>> +	ksft_exit_fail_msg("Failed to parse %s\n", name);
+>> +	return -1;
+>>  }
+>>  
+>>  void thp_write_string(const char *name, const char *val)
+>> @@ -160,15 +138,10 @@ void thp_write_string(const char *name, const char *val)
+>>  	int ret;
+>>  
+>>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+>> -	if (ret >= PATH_MAX) {
+>> -		printf("%s: Pathname is too long\n", __func__);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (ret >= PATH_MAX)
+>> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>>  
+>> -	if (!write_file(path, val, strlen(val) + 1)) {
+>> -		perror(path);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	write_file(path, val, strlen(val) + 1);
+>>  }
+>>  
+>>  const unsigned long thp_read_num(const char *name)
+>> @@ -177,10 +150,9 @@ const unsigned long thp_read_num(const char *name)
+>>  	int ret;
+>>  
+>>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+>> -	if (ret >= PATH_MAX) {
+>> -		printf("%s: Pathname is too long\n", __func__);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (ret >= PATH_MAX)
+>> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>> +
+>>  	return read_num(path);
+>>  }
+>>  
+>> @@ -190,10 +162,9 @@ void thp_write_num(const char *name, unsigned long num)
+>>  	int ret;
+>>  
+>>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+>> -	if (ret >= PATH_MAX) {
+>> -		printf("%s: Pathname is too long\n", __func__);
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (ret >= PATH_MAX)
+>> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>> +
+>>  	write_num(path, num);
+>>  }
+>>  
+>> @@ -275,29 +246,26 @@ void thp_write_settings(struct thp_settings *settings)
+>>  
+>>  struct thp_settings *thp_current_settings(void)
+>>  {
+>> -	if (!settings_index) {
+>> -		printf("Fail: No settings set");
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (!settings_index)
+>> +		ksft_exit_fail_msg("Fail: No settings set\n");
+>> +
+>>  	return settings_stack + settings_index - 1;
+>>  }
+>>  
+>>  void thp_push_settings(struct thp_settings *settings)
+>>  {
+>> -	if (settings_index >= MAX_SETTINGS_DEPTH) {
+>> -		printf("Fail: Settings stack exceeded");
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (settings_index >= MAX_SETTINGS_DEPTH)
+>> +		ksft_exit_fail_msg("Fail: Settings stack exceeded\n");
+>> +
+>>  	settings_stack[settings_index++] = *settings;
+>>  	thp_write_settings(thp_current_settings());
+>>  }
+>>  
+>>  void thp_pop_settings(void)
+>>  {
+>> -	if (settings_index <= 0) {
+>> -		printf("Fail: Settings stack empty");
+>> -		exit(EXIT_FAILURE);
+>> -	}
+>> +	if (settings_index <= 0)
+>> +		ksft_exit_fail_msg("Fail: Settings stack empty\n");
+>> +
+>>  	--settings_index;
+>>  	thp_write_settings(thp_current_settings());
+>>  }
+>> @@ -335,14 +303,11 @@ unsigned long thp_supported_orders(void)
+>>  	for (i = 0; i < NR_ORDERS; i++) {
+>>  		ret = snprintf(path, PATH_MAX, THP_SYSFS "hugepages-%ukB/enabled",
+>>  			(getpagesize() >> 10) << i);
+>> -		if (ret >= PATH_MAX) {
+>> -			printf("%s: Pathname is too long\n", __func__);
+>> -			exit(EXIT_FAILURE);
+>> -		}
+>> +		if (ret >= PATH_MAX)
+>> +			ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>>  
+>> -		ret = read_file(path, buf, sizeof(buf));
+>> -		if (ret)
+>> -			orders |= 1UL << i;
+>> +		read_file(path, buf, sizeof(buf));
+>> +		orders |= 1UL << i;
+>>  	}
+>>  
+>>  	return orders;
+>> diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
+>> index 71cbff05f4c7f..04a6a7bbd08f8 100644
+>> --- a/tools/testing/selftests/mm/thp_settings.h
+>> +++ b/tools/testing/selftests/mm/thp_settings.h
+>> @@ -56,8 +56,8 @@ struct thp_settings {
+>>  	struct hugepages_settings hugepages[NR_ORDERS];
+>>  };
+>>  
+>> -int read_file(const char *path, char *buf, size_t buflen);
+>> -int write_file(const char *path, const char *buf, size_t buflen);
+>> +void read_file(const char *path, char *buf, size_t buflen);
+>> +void write_file(const char *path, const char *buf, size_t buflen);
+>>  const unsigned long read_num(const char *path);
+>>  void write_num(const char *path, unsigned long num);
+>>  
+> 
 
 
