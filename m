@@ -1,194 +1,192 @@
-Return-Path: <linux-kselftest+bounces-4657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AF58854FBA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:18:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C5CF854FBE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:19:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2845FB2287F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:18:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C13CE1C21752
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F357C6E3;
-	Wed, 14 Feb 2024 17:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64B47D418;
+	Wed, 14 Feb 2024 17:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WR0s2TlI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hx0HSkx1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A91C6A002;
-	Wed, 14 Feb 2024 17:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707931104; cv=fail; b=BGeVZQ35yni5f+7ZueyPJbKljHLuMcSDPoLauNalRguQXPjjrHGPnT5wdl5NclVGLwL6fFcnazTR6RaAgqkhtz3ZgamQPJlRI7XFZUOII+Zxoaclav/nPZQMZNJAYUuxXMpVugkfKjA1ypo4MI9cKvXnMM4DDXJ/WYnQJv/xCro=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707931104; c=relaxed/simple;
-	bh=vTwWIgqX0u3Tlb+ntMcr+owtlROL0y2BruFh85U9l64=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mhLC07sC0EmL+hMkvDl+x4gDZSFIPdc08U/cK4e0jQjtIDgilwsSc5KDd0dlWJ/9a1bpkjnL+Iz/A9bREDSHejHuqCi1tfYZEl0e97EnO5X1rmeI4ufAbNh1XlaNj5VR4LhDJHspGO61UaW7wK0nbE79lHbQEBBy6ymAkTtofwE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WR0s2TlI; arc=fail smtp.client-ip=40.107.93.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZR1ZxB2ZNVCm3OU24OMo+yaRB+EhFu5UMLR87qv9+Z03//kFihQyoVwKo67ouPYj4ojHr09EB0gCdbwIeB73DFlula4e43Xy48A64CGxZkg92TyjUYG7ASBa0l/wSc24sSyvwpwXMTZVeELsoiBOI7FVpo9YpW6bmGhWXg8YJSxsDXNRLsDA/9ohvFaFeWEvFrRmSsCFqFUxwxQCjp3+Hx4lEXdu6TftuDu1T2FuK5gNwGgcjmw5oQWG8dDBKaaunLxumwy9/SyP7B3fqnWfwC9aBzEWJy6atGbSM0elMoJa4pxCEaBMrAP92wo3HgkTQ9HRkp2DSdeNd8cL/KYvjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vTwWIgqX0u3Tlb+ntMcr+owtlROL0y2BruFh85U9l64=;
- b=C9CiP9c/8ynSBArJPQB5NhjyX0w4wGjqR47LQ1Oo6oj92gggW3j9CKP2Y5SckUXi1c37QdWJW0BV5FVkbf01sfMxfFnd08r72l+HO8PEkJeOxK7a1LOIYVy1yw6/xaS7m0BLDznssp7BNr6QIsv9Jo6pfWhi/TP5zyWA8N55Ezl7HldRRIBW9m54D93iyqbCJKvaQaYWq7bqqVbGpDxB1nx2311gGsDPfuFoVgEUkd5B5P6l8hjFDND+FbOiBQ4l/0VTSp8r87htvARSb3XIsmXNPQG357qDpEdL5CcgEnbeLNJkobzx4pKs2Nj6Kig/sM7Cs2A8rR8kSizIzbdNIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vTwWIgqX0u3Tlb+ntMcr+owtlROL0y2BruFh85U9l64=;
- b=WR0s2TlIVokNDnTVBfwMNwvg8L0F52xt2ccHDLCiynokWEZ1UlCo4xvCCl146OuEB8dDzOQPQnYe3Pi77TgVjk2iwQwb1/VyG/7M48WsoWBppW5dfEjkp+yXqyQFRFXFIsYPyp9F3vLDFkZhoU9Yfd91J9P3Bg/kLkErNvpZPMVxxZNb5wHYLypUeBUNiF7KiRSXxg5610528HE/kOrDTd1pz0pxH+Co5xleYRkUl3kVnNdR35h+jIQemtk+aZCxQyriKl5toDNyN/x1lCPV4BQrqSzsqZ0a3XZnBy1RRodqA5F22ciFx+BlaVxAUoLmaViYHFdnQ6V5WULLC33mgg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- MN2PR12MB4357.namprd12.prod.outlook.com (2603:10b6:208:262::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.26; Wed, 14 Feb
- 2024 17:18:18 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15%5]) with mapi id 15.20.7316.012; Wed, 14 Feb 2024
- 17:18:17 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>
-Cc: Zi Yan <ziy@nvidia.com>,
- "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>, linux-mm@kvack.org,
- David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
- Yu Zhao <yuzhao@google.com>,
- "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>,
- =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Mcgrof Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] Split a folio to any lower order folios
-Date: Wed, 14 Feb 2024 12:18:14 -0500
-X-Mailer: MailMate (1.14r6018)
-Message-ID: <FC18B703-54B3-4BC4-B298-5057E8F26A70@nvidia.com>
-In-Reply-To: <20240213215520.1048625-1-zi.yan@sent.com>
-References: <20240213215520.1048625-1-zi.yan@sent.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1P221CA0029.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::25) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1126A002;
+	Wed, 14 Feb 2024 17:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707931140; cv=none; b=csKW+ARMcoAXc+oCedrNqXyhvQ7Ca2iy6jWHXGExPHG1s7o+qeZVe2NmepQ2c/fpJv0O5pxbfwpKWVLHmaxi7nKgsEDfcbCvkKO6cYtQxUPJ6li729CU05cUhuGhrP86P9S/C9mgrFFWXwsOiS+uSCsg5O3KEz7l+bsDnlc2RuA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707931140; c=relaxed/simple;
+	bh=l4jPudJnwEihlvPPrQPrGvmbzUPliLgvg6nSOC6YQe0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jROi+tTVeAd1zRaWhbBEJBxYv/btedw4zs9Z+z184UhiKxj5MxM1a9r+uKq3UxHbvGYAMMhj+qyA5BAEr+uY7bJHCD7LNLmFAw7nu1LpF2sYZ9r0XA979eNoKLDVVkyM6dSNmj69mexwp7Huk4Rl4kaH5NYNtHOUYHTdY5EeKvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hx0HSkx1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A79C433F1;
+	Wed, 14 Feb 2024 17:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707931140;
+	bh=l4jPudJnwEihlvPPrQPrGvmbzUPliLgvg6nSOC6YQe0=;
+	h=From:Subject:Date:To:Cc:From;
+	b=hx0HSkx1O1vfzja/tcyeZbnl6f8DBH6HsvtBo3ONzOetV9It+308217dhB44DWKtj
+	 185FjCFdmK4w50Q/Fodsi68L4Fzq2BbLu8VCWU/WBn5Wj62Qw9ytHq53Xa8s3BZS0I
+	 +NVewubwnkk+oH7tKIog+zZDjKF2k0lSfburOYaN4ClYy9K0umRFBp7WjCkbze9CXU
+	 L76vSRCcAVrO1RjrasfJd3lJdqtd+iIL/36BM4xsNB6KbYTqezPlesT6IV6YZpUN8z
+	 KJAeRmL6EN9ZeCFbkeIGFW86Jundzi80P3xleNLsmhR4lCaWaLrcODAwze5HYhzffX
+	 KhqgKoNs1do4w==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH RFC bpf-next v2 00/10] allow HID-BPF to do device IOs
+Date: Wed, 14 Feb 2024 18:18:29 +0100
+Message-Id: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|MN2PR12MB4357:EE_
-X-MS-Office365-Filtering-Correlation-Id: cfa63287-f87f-474e-8964-08dc2d80ef7f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	L0DHEA0SNCx/D1Ix+CUtkIOkmHw0lEyJSusZhk6hdnycfEFZ5cGK32jNDbtOdcfg4b1WjKJcxagC/R+cVfpqYa7tt+God0xGd1y03Z4tkxbP0tgGycDv8o9CpMA+Ty2pHSKLlrnfDmpV8Z8KzdSk/esxg7e7an4fNmYRqx/U0oizhNtsOnq9c03OYRizYACX2s5hiprsA3N+y1Qjo++n/HMQS5HJ/p8hDVRMVhqfj9VPDwNRaXkA0/wFEJ+0D3p0eWBeq0Fe6q/T19iBPFlmRRw4QJWMATUjO/zPlWEIK39ekIGeYigOUYTIt7Y9Epp8Fy4K2hqk6qn0ABzjsrlwyCGO4qw6h21NMORyZcWSlljwadGCkDnPEYJgIyiqWVtmdHbH+6QwVNe4c7r0g5sU0DZDHaoHgWw1qTdti4RoKIuqooAtrXY7M+TujBOlA/+FVgkir8zm2jCMMSulgZGb3okOOTBcQmyNcsTPxAceRGzB1s1WFU7Dg1GTDdCsg406BacVh2uQeq8poBYT4iy42HSqmIkc4v58pX/h2Q5OO9ggVJAa8VpVfrDytwfZt8Te
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(366004)(376002)(136003)(346002)(230922051799003)(186009)(64100799003)(1800799012)(451199024)(4326008)(235185007)(5660300002)(7416002)(66476007)(41300700001)(66556008)(8676002)(8936002)(66946007)(2906002)(86362001)(83380400001)(36756003)(2616005)(54906003)(316002)(6506007)(6666004)(478600001)(6486002)(38100700002)(6916009)(26005)(53546011)(6512007)(33656002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZC1urCTrBFJU09ZXDNUhGlnT5YkW/1EWmQQGaB8p0kSNq0oWp7UjpAszPO4f?=
- =?us-ascii?Q?BCC13b+ONfRj9lsWIBIMJ2B+zQneoscZb8Eg1KzO5GdLRJVUosnsVFsqdVok?=
- =?us-ascii?Q?wV7T+m2au29F1gHDIffQPFHsRKTBo9Ie0a8SWEzC+spndPzSaioFLjQRFFeM?=
- =?us-ascii?Q?rpKioSGHDspbmNZiJ085PYu4of23zrbc0sOpp2SV7QVD6vregy+9fGEJg770?=
- =?us-ascii?Q?0ViTfAuPHsYoPlZogSM8z7+sUQow2tMUnHRRVWsXzpG3iiHQhER3GyshZI6K?=
- =?us-ascii?Q?sZfQhlySnJELKHk9dYnlpcedNMWCctAwWzTXd+pm3Ej/CYD9PnIKiEQnNL8P?=
- =?us-ascii?Q?rzDZtWOH94xkacCXp4wgg0pCcQIzzBH9UMPwNtFxdv4aFlD+ZPEHPzyxn7Mi?=
- =?us-ascii?Q?0sw/pt1gofJZtY5H9KiUVUF3O9EF+9GNuC/4iWS9KL649gAo5XRxHtAaZDdO?=
- =?us-ascii?Q?nxMwCWb5p+RoXXdJuPYu5s07fPcxgUiAFdv23sNFw/Pt06a2C3uBj8XW5rhE?=
- =?us-ascii?Q?SzMWUVCKktNfuOBE8Ha5V/HzOSlAgSa7ObPit7ySJORpkYKN+Yi/aPppkNDc?=
- =?us-ascii?Q?YNLrCAGTL0TO3jsqYeHUWg5tqe0kFdiJQgaDlX0r2IQtMf2I2TfEXD4qIdXs?=
- =?us-ascii?Q?eTTyPi5b9DSeNH9f5/O3SakOZtfbElytYLF/BxT515snxlAuEq/UjgWgPqm+?=
- =?us-ascii?Q?ICVtLrNFDmM0CUQAM2uINJnkeDf1+E3OVxXidfGSSF/34R6nxw3aiGMIQOsO?=
- =?us-ascii?Q?kPmVCqYUtI91Y1jq0PlcZX0Aa7rbLCHJKESAoTrdT6fSiSgYwHX8YFF//Dtw?=
- =?us-ascii?Q?/v17WszNB9XJVBUtOiY+Xv7R8q/g6BHvbbBSRrvk4w10Ta5H+ezt8QBeW0oa?=
- =?us-ascii?Q?2vfwg3Id2Kq2xinj7NKhniDfommCHuv7kTpNT7uLZAOfiUK/a74TMqZrBG2P?=
- =?us-ascii?Q?n/zMvR5Q8bXg/X0MFcGjAWFEZTt0jgsMyXhGm8hkIk3nXJtMFvrCSVJEey98?=
- =?us-ascii?Q?5/8+4I7HeVs1vdq+i2hWvl7Ba3ZpZo/PYAdLiaBPlSMCSzJAydo/wjvUohTq?=
- =?us-ascii?Q?jQuSsPSz45IoT5TUfVn67+n75QW3/96MhGjHlPqcmRMhDizd4gon63IGxOW5?=
- =?us-ascii?Q?FbaWGQpcMCN7uI3z5w+fKS0ynWchbqWN6Rj0l/LQ9pDnGGcMv+zqt5uJNdcI?=
- =?us-ascii?Q?XJR6X8c8DmZXwz/NcXreOM+XJzpdZlYbXpwospW50q2IRz6cI/PnGdkYeXAn?=
- =?us-ascii?Q?DD3mNh2PV/qWSWBBvU0XbEn+v2LXW0NFN1pNqCMhWv5WBxaX35O1AtbKEw8s?=
- =?us-ascii?Q?pzsKNSUjcDvX4zunQcJEOHId98IOVuels9EHCMR1z+L25lLrTRuwXQPCBkl/?=
- =?us-ascii?Q?Qwec0ivFCiOqP9LtO8lH5JfjftYGkKsIp9laSKOmLArGR9fhCvlgzngq49MY?=
- =?us-ascii?Q?cvxQGv1PDBIurBgxDJykZ00Zuq5BSERY61PCept6eBW6IS+ZtuXfh/lHG5Ef?=
- =?us-ascii?Q?QGanVPjk15WSuwakyFIpays4Qkq3hH8q8DZrGxeH8rQ85CICSUothqux/gsc?=
- =?us-ascii?Q?XwOSqB8Ffe/0Rfn1N4AiveFr7/ZN3jiWM1vviXn5?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfa63287-f87f-474e-8964-08dc2d80ef7f
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2024 17:18:17.8087
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OS9DNlD2AY48z8fJZqvJ5z2/39D09IKlS9sh/sMaQtZD6Fy6B2UP+nLx8hy+jg8h
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4357
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOX1zGUC/22NzQqDMBCEX0X23C1J0FJ7Kgh9gF6Lh/ysulSiJ
+ CIW8d0bpccev2HmmxUiBaYIt2yFQDNHHnwCdcrAdtq3hOwSgxIqF0oU2LFDMzYYe6JRm57QCqk
+ uonGltDmk3Rio4eVwvuD5qPZsX3haJqgTdBynIXyOz1ketZ++/KOfJQrMrb2WhSm0M+7+puCpP
+ w+hhXrbti9T1WMxxAAAAA==
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1707931135; l=4831;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=l4jPudJnwEihlvPPrQPrGvmbzUPliLgvg6nSOC6YQe0=;
+ b=hDh4ILe9/u3jIkDCjyvSuvoJvM06QQCqlwjQWjY8/CM4pM6y+4TuGu4kVCvcawjJhIlrsZ1Ea
+ vihnZbrsM5AAHQJuhsj1rOE9w9lWKerP8iZ7fltXljCYW50rWrsGdZ8
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
---=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=
-Content-Type: text/plain
+[Still a RFC: there are a lot of FIXMEs in the code, and
+calling the sleepable timer cb actually crashes.]
+[Also using bpf-next as the base tree as there will be conflicting
+changes otherwise]
 
-Hi Pankaj,
+This is crashing, and I have a few questions in the code (look for all
+of the FIXMEs), so sending this now before I become insane :)
 
-On 13 Feb 2024, at 16:55, Zi Yan wrote:
+For reference, the use cases I have in mind:
 
-> From: Zi Yan <ziy@nvidia.com>
->
-> Hi all,
->
-> File folio supports any order and multi-size THP is upstreamed[1], so both
-> file and anonymous folios can be >0 order. Currently, split_huge_page()
-> only splits a huge page to order-0 pages, but splitting to orders higher than
-> 0 is going to better utilize large folios. In addition, Large Block
-> Sizes in XFS support would benefit from it[2]. This patchset adds support for
+---
 
-Just talked to Matthew about his order-1 pagecache folio, I am planning to
-grab that into this one, so that I can remove the restriction in my patches
-and you guys do not need to do that in your patchset. Let me know if it works
-for you.
+Basically, I need to be able to defer a HID-BPF program for the
+following reasons (from the aforementioned patch):
+1. defer an event:
+   Sometimes we receive an out of proximity event, but the device can not
+   be trusted enough, and we need to ensure that we won't receive another
+   one in the following n milliseconds. So we need to wait those n
+   milliseconds, and eventually re-inject that event in the stack.
 
---
-Best Regards,
-Yan, Zi
+2. inject new events in reaction to one given event:
+   We might want to transform one given event into several. This is the
+   case for macro keys where a single key press is supposed to send
+   a sequence of key presses. But this could also be used to patch a
+   faulty behavior, if a device forgets to send a release event.
 
---=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
+3. communicate with the device in reaction to one event:
+   We might want to communicate back to the device after a given event.
+   For example a device might send us an event saying that it came back
+   from sleeping state and needs to be re-initialized.
 
------BEGIN PGP SIGNATURE-----
+Currently we can achieve that by keeping a userspace program around,
+raise a bpf event, and let that userspace program inject the events and
+commands.
+However, we are just keeping that program alive as a daemon for just
+scheduling commands. There is no logic in it, so it doesn't really justify
+an actual userspace wakeup. So a kernel workqueue seems simpler to handle.
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXM9dYPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUNF0P+wep/G2wo0WtIT8T+bzvTktVREFzBlTRTWtE
-8PKuzfP9jAAR+RSKt0pnrPnpm1+nK0yjmGn7fZGCUDVomvyPD1PsHPDcXNhbw1oj
-4w0QWJiJMPC2X0s2FIvHQRe+9K3Ciuj1FkKGmlBiG7NuZdoqjT8s28JLvGZK8Fyp
-OodtQ46Yqg/vJwAXU/ZJI8Nv7yHJH2hTl5+FKPKiVTRBpdWKF+3srqrbuT2gvaoz
-w/Vu4MQklvOK+FinK8sxRc17TOj5JeB/WEGvReCBmBeYFpBln1vTIjzVMjXdCkX5
-JsdC56nyqbfeY5h11gTLMFMyEz1YxtZv75j6EaVOUBANavhgN9hfomwWFXOI2tlX
-itBqpi5mqkft+ZyXLHyjUWji8wXBNW7yk2eyi8pImQws4nfU4Lnn+fGV0/m9worn
-XmS8+BcYmElbWI67fNXa4CLXApBGUvsOnPczSLXo+gmR0o4IRBuBFZndCsl1/HFR
-0tJPAaJKwhLolunvJYcxPC2Z6BxhQsZ2WYb6rO4lBIT0ciJrwgXdPK8OmENMpP9h
-11JSH+uWTfFLWO9QW1iQDc9aCsZP90ipEmJwH3LGbvMJJpk1WcIlGYqb9uqoX9bA
-kDmoP+lAUOwfDS2zrtzo6jprFPs3jrq9MyboLVZH90v2jvEeMumqzJjm1ExnkTI2
-aw8dT2bt
-=V6JF
------END PGP SIGNATURE-----
+The other part I'm not sure is whether we can say that BPF maps of type
+queue/stack can be used in sleepable context.
+I don't see any warning when running the test programs, but that's probably
+not a guarantee I'm doing the things properly :)
 
---=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=--
+Cheers,
+Benjamin
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: KP Singh <kpsingh@kernel.org>
+To: Stanislav Fomichev <sdf@google.com>
+To: Hao Luo <haoluo@google.com>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Jiri Kosina <jikos@kernel.org>
+To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <shuah@kernel.org>
+Cc:  <bpf@vger.kernel.org>
+Cc:  <linux-kernel@vger.kernel.org>
+Cc:  <linux-input@vger.kernel.org>
+Cc:  <linux-doc@vger.kernel.org>
+Cc:  <linux-kselftest@vger.kernel.org>
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+
+---
+Changes in v2:
+- make use of bpf_timer (and dropped the custom HID handling)
+- implemented bpf_timer_set_sleepable_cb as a kfunc
+- still not implemented global subprogs
+- no sleepable bpf_timer selftests yet
+- Link to v1: https://lore.kernel.org/r/20240209-hid-bpf-sleepable-v1-0-4cc895b5adbd@kernel.org
+
+---
+Benjamin Tissoires (10):
+      bpf/verifier: introduce in_sleepable() helper
+      bpf/helpers: introduce sleepable timers
+      bpf/verifier: allow more maps in sleepable bpf programs
+      HID: bpf/dispatch: regroup kfuncs definitions
+      HID: bpf: export hid_hw_output_report as a BPF kfunc
+      selftests/hid: Add test for hid_bpf_hw_output_report
+      HID: bpf: allow to inject HID event from BPF
+      selftests/hid: add tests for hid_bpf_input_report
+      HID: bpf: allow to use bpf_timer_set_sleepable_cb() in tracing callbacks.
+      selftests/hid: add test for bpf_timer
+
+ Documentation/hid/hid-bpf.rst                      |   2 +-
+ drivers/hid/bpf/hid_bpf_dispatch.c                 | 232 ++++++++++++++-------
+ drivers/hid/hid-core.c                             |   2 +
+ include/linux/bpf_verifier.h                       |   2 +
+ include/linux/hid_bpf.h                            |   3 +
+ include/uapi/linux/bpf.h                           |  12 ++
+ kernel/bpf/helpers.c                               | 105 +++++++++-
+ kernel/bpf/verifier.c                              |  91 +++++++-
+ tools/testing/selftests/hid/hid_bpf.c              | 195 ++++++++++++++++-
+ tools/testing/selftests/hid/progs/hid.c            | 198 ++++++++++++++++++
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  |   8 +
+ 11 files changed, 756 insertions(+), 94 deletions(-)
+---
+base-commit: 4f7a05917237b006ceae760507b3d15305769ade
+change-id: 20240205-hid-bpf-sleepable-c01260fd91c4
+
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
+
 
