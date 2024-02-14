@@ -1,169 +1,239 @@
-Return-Path: <linux-kselftest+bounces-4610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4641C8540B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 01:07:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB3138541A7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 03:56:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F16F128275A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 00:07:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E26281C2196A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 02:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1CB18E;
-	Wed, 14 Feb 2024 00:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DF81612E;
+	Wed, 14 Feb 2024 02:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QwE61G5Q"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="O9p6Yb/J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2047.outbound.protection.outlook.com [40.107.95.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121C47F
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 00:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707869223; cv=none; b=lCS4T4w2zclLEvoHSY3nNsb37MLrQjXBJen4zqa+eFRZvKNzXms2xdCgg59G96NoN5ibCQ4Fq1E8z38E2vY3VmCla5zpVYlT3r5CoVA1SgkEgNweGLMz0n/jq58gbQPS4LTKSuQpElPZ1QD0ZKw6tEbEol7Z5gsAU9V006f038o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707869223; c=relaxed/simple;
-	bh=kRl2xvjnEqYqUWOmQ7ofjTzJ/cSkkaVkiE+7IUsfJIA=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=Y6wKMbyBoMueyD/+KfBJ7SfmDoa7qEuPjkAl5S3WITkS9TPLH+cCN5E2cW/IYnxfMqQtL0AVQVYK0CXKYu25SqpRGE4elBi6IDcDKwSY5yDtYxXhj2jt76V7YsHjJsz42ZNgPW3YmawEefeHTvYFM6almphiWj3HYzfCs37JNak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QwE61G5Q; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7c3d923f7cbso29479039f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 16:06:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1707869219; x=1708474019; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=GhnQu6FmXGPVZCi3UFjGPAyQfbh2TxR1NXwH/TlSM+w=;
-        b=QwE61G5QxGU6+NPISDK5K/zPcZoewOWpMO53VHQQhTvAeiRApupQZRirnDOMz4Mr7D
-         osl1qNBUquu6R7VqofaZUxuBAOZM+vsMGUPrlcPZpsXy+MOq+b4geSgiMsdhIzm4XdbJ
-         jGIt6QuSn8rJ/KaVXEsm2qa61KPBH6zymYsU8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707869219; x=1708474019;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GhnQu6FmXGPVZCi3UFjGPAyQfbh2TxR1NXwH/TlSM+w=;
-        b=dkc9bsiP3RqAFtd2sub4Zy+A1KjHKdsfDTvHRoGpTXZo+xU3EzB0bho8CB8rgT7yjW
-         xoII1c/ugBKsIkFSSNrNKoPEG8/1HLZmNE2feNhz4NMlnU8KW6J8mg7FEJQP5lqq9TJV
-         jbLNvgbxytSAeg6dLu6K6qKPqMMi/Pcz9PZTcCox7JRE+ijZR8hn4tYyUogkhWcj8ejY
-         Q8/8lNGXk4TeXQFGNrJDFvesZwt+tGVyuKD8lPyhDHjt5rkU28j6pErnVWikyIvd6XOo
-         LRViGaMsV5C8DQAIiIkMMlMxKYRM3pTa/MLbVeqcn5uZAFFpfySBrQemNYeMeGyScorV
-         qrgA==
-X-Forwarded-Encrypted: i=1; AJvYcCWyVuhLIqMEc9NDO43ilkoqUpKAMXBeV136AD6Ik7/9wcmeYxl5SMxWqH3jPnArabAorbxH/vcJNLU7aZjeDQ+qLO58XZ25LOcnM5esH0di
-X-Gm-Message-State: AOJu0YyxyIfTjiXQhlxNs+7i2pHJqs8xGGY3fUeesDYvQSPysGtuP4fr
-	uclkGD8fNpLOEyn/1BCYo99D3p0Zb6ozZM0K5iXdAVN4W6VrkozhhLVnIK3wAls=
-X-Google-Smtp-Source: AGHT+IHJKYRzo/PlZVd0iIErIR69DKw3o9VDIiU5d2kUn3AtE/swPSe1OtmTzjtH+2nxZIpUxXzPwQ==
-X-Received: by 2002:a6b:fe01:0:b0:7c4:8032:5724 with SMTP id x1-20020a6bfe01000000b007c480325724mr809467ioh.0.1707869219183;
-        Tue, 13 Feb 2024 16:06:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXA4aTCw0RK9urTQ3ld4zkHTrIyDI62ZmJAw8XHTRnc+Cf9qmTZe9wUE4VytcuFEsKt28Assj+UwSbhwoKX1NH6EefWt9fsDYDqnZ4KSda9xxk2H3KI3oRUb0M3+TL6c7q8urMVMQgGg0aD/HORoX4GxOTZO6AUfDk6Mfy5td1nOyRw9JWXlHTE7ozVe12yoCDqpHIn574Da3TVmICHwQKIYphqF13wLv3vMRQYtn3CnJyfoUrutyZn
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id u25-20020a02cbd9000000b0047129817ee3sm2209721jaq.141.2024.02.13.16.06.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Feb 2024 16:06:58 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------BEVlR5zmYlGmqCSr00K4AOwP"
-Message-ID: <876716d6-f865-42cb-94d0-67e9193a96f3@linuxfoundation.org>
-Date: Tue, 13 Feb 2024 17:06:58 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6211D6127;
+	Wed, 14 Feb 2024 02:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707879413; cv=fail; b=k6rMvW5nflHWzVc3sKOM/9ZMyOEUyv7l1HbffJb2u/Yh7ZGE7p8X8N6GYTGud32tV1NQ/A6EOJp68yfNbtpH347CYksXS6iysDO+zfcQWF1G0V9z+mIA20a891wRub6EfiXpPIiZ2Q5qUCegUvzVbGnHxHvov13D+i+LiWCmIk4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707879413; c=relaxed/simple;
+	bh=13fEx3uSVqarsFmbGHfbRLEvzEKEI7iLWC1MViINoWo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KOHXGpEt/LM3wEUVuKCfIT18yv8bZzbc1QdbJgRSrIUZZKdyE/oAJSVDJ1qYGN1NVOhaUrtiJ4a40DpPOkZVpoOnJIWUI67QYF0Uii0BQ1hLxwNwjBvkhRqNHflA69fKiX4TVfeF30IYXnlIz6VEaiRIrldCfSdJ60f1LQjcvsU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=O9p6Yb/J; arc=fail smtp.client-ip=40.107.95.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HNJFOjt2c49GNb1M54a/C6MXpDdXLya5CZSjAuyCctj/HD6RmCRPvnzCqCKJX2xGvDlo62VuFYhvpTNdgmZ6zzP41ii3Sk879k3hRbDNtEi923jpcHS37KrVgiA95vU4Xdi+IcM8/IwncsuT4Rdq72hnDWGjQ65+Zbuoa5jYf10yJhjRANgDQy12gypdMI9k2F2mQDVHn/2wud8euTrjo/N5BMX+BFo0+rjNVb+Xo/nfnUDpa8W93B+WDzbbBXFwzuZZTyE2WFatrU0YX9ztdlLUbJfuraTJkwc97SwMg8uGajbqCZ7Rgq0toWJRPFV4C8kV/jxv6gJaxC1ivS1G8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nEWoI5Tzn3wyg97ZVXeF7CU4aMHs06hl/7GKbHjdKxk=;
+ b=Ox4OaAZaWth1Kg8mPPEm9cPzhUf150sS8KudRp5XT4XPW5agLvDWwzb5IDCkT8gE9ShGU2sE6TnqtENr+/z9WOlFZM/0xERAJHuPZbGkfPbepqcxmvyE/DniE9g68hMboj7o8F4L97M1YTmmR3tnKNuOCCabVNhHdRyX+mv/WziD8CY46YHFmPWvBLObKEfS4YmDj8xXAA4GBqzDZkxhsyPXUltXypmCj3oBxm67ImOWhkA5/0CHx0N1G+3BVumoIvXkz3JaBlF6a4rWxlDNmtB5SLVy6zKiHieXyk4xVwQG9+98/UWl7KGQgN9Ta3XVMPkNShosfVm++RURnTYx2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nEWoI5Tzn3wyg97ZVXeF7CU4aMHs06hl/7GKbHjdKxk=;
+ b=O9p6Yb/Js2bZRl41Al7e5JTx8PFIbYD+cJGTNk7NZ/kCsshZE9nhgfHDlmW5JrAFQZmsOT2EAtncmcLFJ0hpVWxxlnJ1jj5V9kF39aITpsKYmbGxTFwZF/JfL3hnnJ+lf1zxHfMo/GHBk6y9ZVh1f20gQSCmjDuyBVL7QgaviMsTuK+VdVSj063NXuAXTv/lN64ergl+97rcHAUvqdd3lkyegRC21lTSGEK5f9nTm0+/6hY3kuly86VAu6F5I6EJi/Uqbuo+bBcz+V0740XQf1KAh/5f3dUYJOMm793XkA/8lTilmySOKFjKVM9CDfFvFOtFi24hLBDpjMoYzBGOdg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ CY8PR12MB7315.namprd12.prod.outlook.com (2603:10b6:930:51::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7292.12; Wed, 14 Feb 2024 02:56:48 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::db3e:28df:adc1:9c15]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::db3e:28df:adc1:9c15%5]) with mapi id 15.20.7292.013; Wed, 14 Feb 2024
+ 02:56:47 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>,
+ linux-mm@kvack.org, "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
+ David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
+ Yu Zhao <yuzhao@google.com>,
+ "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
+ Ryan Roberts <ryan.roberts@arm.com>,
+ =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 5/7] mm: thp: split huge page to any lower order pages
+ (except order-1).
+Date: Tue, 13 Feb 2024 21:56:45 -0500
+X-Mailer: MailMate (1.14r6018)
+Message-ID: <5CF2076E-E56F-4E79-AD95-F58111A623C7@nvidia.com>
+In-Reply-To: <0A9F291F-E6B3-48C0-A2B5-3C893F02AE1D@nvidia.com>
+References: <20240213215520.1048625-1-zi.yan@sent.com>
+ <20240213215520.1048625-6-zi.yan@sent.com>
+ <Zcvns2HCB61cwvgE@bombadil.infradead.org>
+ <698B47BD-5E5E-4B8F-A998-8692A4918A5D@nvidia.com>
+ <0A9F291F-E6B3-48C0-A2B5-3C893F02AE1D@nvidia.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_AEEA94DD-FD34-48DA-AA55-B24C5F506FC5_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL0PR03CA0018.namprd03.prod.outlook.com
+ (2603:10b6:208:2d::31) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Brendan Higgins <brendanhiggins@google.com>, David Gow
- <davidgow@google.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] KUnit fixes update for Linux 6.8-rc5
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|CY8PR12MB7315:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5386b68e-7915-4753-3dd1-08dc2d0895e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	gxDcKvDWWOWg+2BkjCWQ5mz3366mS4lri9qtOLOMRkX95D5FPY965Dt2GsNxUCDP9BB2ZSLZWIwKHa+pFvQIM8XEPHc2xFAgJlrbnFWpEdPFmaoqAK0qKMqXhgi0NvkRSw57C0+GVVKR6/A+u1rcR7QuIeaq9TIR+ipi+RhFvCfGpNDHTe1JQY0+WhjoNxa+4iEmjy2mgxkekw3FPxGPb94Qktloj1r97tiO8mvGrqfRRZgnS4U4jLZ3umJjO01PocayQMQA1/K2QZ+SpSlfhZ6HOHAiKi41Z+qX2z3XyXTM7PlE36WuWDrzX2X52K73Gwf3CGRxvfDb4Wzkfa4dgJpQvlW0//AvEye+r+mSpCtntlqlNNislWoTneP3SraP72GZ6l3+nnTFJsothWvaDpqOeNiyk6QNCqIYA04Kud2FQ+JY7lPdll3sDjCHytFVNd04QS2NYVurUvRysO/HAQx1an3OGLR2js2ibXHHYO6AWNeeseP8Fgwgx40hysuqBDjdL1K+S2bQbVn1Vz4htQvh4jXSZ7xuzHmUrp0hyG1T+KZ7eglNccA7sSXjXYXO
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(346002)(376002)(366004)(396003)(230922051799003)(186009)(1800799012)(451199024)(64100799003)(316002)(36756003)(235185007)(5660300002)(2906002)(38100700002)(33656002)(7416002)(86362001)(66946007)(6916009)(53546011)(26005)(6512007)(54906003)(4326008)(6506007)(2616005)(66476007)(8676002)(8936002)(83380400001)(66556008)(478600001)(6486002)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?KBHfPTQb3jcBYS5DRI3vY311D9/ULCxE6avPIvN5VyJgDqu/eAbPSDqF1DMY?=
+ =?us-ascii?Q?PHK5TnJctyFtQh3cQe3HCaZC9lF7lvdVaKRtT7qAamUUTb7qIHfLW7dWTMR3?=
+ =?us-ascii?Q?lNTJ4kOZU5PfwjcOfTyYhtf5ySdS0QgrnBXoDxIHAYEno+tNKIcrlagtyu0o?=
+ =?us-ascii?Q?AmiNFF7NwuTRRjMIx6DwYMA/IJeKPKchtfBi7Hb080SSRMXQBWOCQZmhl1Z4?=
+ =?us-ascii?Q?wtWmdGDFy5fX1RQPQzt5ZLCMJ3uVecV6UbNOybZV62e+4m4auXX8wXA0w/N4?=
+ =?us-ascii?Q?JHl+TIWZ0hLgJ1qfpVUGUmYv4nyf6gSUwThNrC2aR+WIunL8Mvbl3CeQF5W0?=
+ =?us-ascii?Q?iIyoc6G4on2tDKfb7EIkROTB3GXzGeNQh/G+P5foXha3CnxOOdjdZlpciBPX?=
+ =?us-ascii?Q?xgzJDEm0cuMUF9WeOxf5CF9eZP+g4CE4oyORPLUWhUosAbNIGHoerNeo7Gvq?=
+ =?us-ascii?Q?ETHACMy0dUmca+SWOy0HhAmh5+3kKpzyT7CLSFw8xSfuig4kqpKEjdyRBRC1?=
+ =?us-ascii?Q?rpKdbiimmrO9T7CBMth5RbnQv6EgSExC4v5eAi8S994SWf4oB5lx3xPkc0y0?=
+ =?us-ascii?Q?b5eoqRtfIRY1BRX0FoQKuVo2tq5bKLV1VnD2e7WxLuTNH3zuB2DdDNNdpCuE?=
+ =?us-ascii?Q?d3fChX/7PxPp5SYLnM54GOC91uFlQeS71wApqPca+xCPYVu2yytsbqKGibTo?=
+ =?us-ascii?Q?uIiwVeAuirbaM8lMKsJCVEjT73uaYXA7P4teGUEabDy7Hh4NDTvboqNFFvNa?=
+ =?us-ascii?Q?OOOSUeZtUWG1V1tnxkdXabm4tCNPwKy2jksADIUXyMDUMT4lVG6+7t7cPOMg?=
+ =?us-ascii?Q?zlZfYzI/R1gk88wag0BPAEJvucoNc0/G4S52kTPt5UxK00uhe8AIy+YY3TuK?=
+ =?us-ascii?Q?gLaCcTzyvZyF8a9Zof/0fyPL0gxmsCtOyeiZM4KBbabYTrzQjscCGRzBAmkM?=
+ =?us-ascii?Q?y6qUYekx7mez0uakMrc1iSdxQcaGW78Hg55DtSQq3B94HMuwMPyIoLEn3KqY?=
+ =?us-ascii?Q?cR/lEI37xzlTRoufZG7iLWqt22MXJcPr+tChK7gT907kvg7vQaxrgdCaHcaD?=
+ =?us-ascii?Q?ZB056QJVQgdpLGiDffNytzbhyRBu17f66AVY96N6k9A47l8UGlCYfcrzHBkz?=
+ =?us-ascii?Q?6vgb41FN/dYwgA8u8uzoZ4oZnDGnArVX/PGmSw/QqZe2rrF4umkMepFcstEq?=
+ =?us-ascii?Q?3isTjDLTrG0g7BoU9vGFbZf3qFfoxBeIrvB9XryGr8MPDa+t0Ye5JtWHxJf2?=
+ =?us-ascii?Q?R+An/jCVSl5rO0/jBWudyzoA65lwHBMNlhSNt+hxQiWpBTWdRozvHli6Tuoi?=
+ =?us-ascii?Q?0x1bBIavy5Vvdflx6PUmy7T4YqpzbVW0AZAtOnUPqYeRn/25bH3vtGys+isn?=
+ =?us-ascii?Q?zqZ/uBn7OR9OBDbv58S4K+TBNQ4w+FjsqJcDU8oOLZoRSquVGif/pp0W96sP?=
+ =?us-ascii?Q?YCMsAcKbx2oxfMTIAF5DmB/Q3xMH2jlICgYjqjnMc6Y851H6QcTVdu++7o9a?=
+ =?us-ascii?Q?1NgRcrF/94Cp+26kSxt/FAptvsXQ5c6kd67TAAoBixq8p+dxYXw4Gy06PAk0?=
+ =?us-ascii?Q?So/pU8g+nTinmOaOOLo=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5386b68e-7915-4753-3dd1-08dc2d0895e8
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2024 02:56:47.9015
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6k3ob/sqmiyvuK8ShnwUOLOwatuoEWldxO3CrFJ+4k86O85On+qlfYXI3J4aMBLd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7315
 
-This is a multi-part message in MIME format.
---------------BEVlR5zmYlGmqCSr00K4AOwP
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+--=_MailMate_AEEA94DD-FD34-48DA-AA55-B24C5F506FC5_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On 13 Feb 2024, at 17:19, Zi Yan wrote:
 
-Please pull the following KUnit fixes update for Linux 6.8-rc5.
+> On 13 Feb 2024, at 17:15, Zi Yan wrote:
+>
+>> On 13 Feb 2024, at 17:05, Luis Chamberlain wrote:
+>>
+>>> On Tue, Feb 13, 2024 at 04:55:18PM -0500, Zi Yan wrote:
+>>>> From: Zi Yan <ziy@nvidia.com>
+>>>> Order-1 folio is not supported because _deferred_list, which is used=
+ by
+>>>> partially mapped folios, is stored in subpage 2 and an order-1 folio=
+ only
+>>>> has subpage 0 and 1.
+>>>
+>>> The LBS patches has the patch from Matthew which enables and allowed =
+us
+>>> to successfully test order 1. So this restriction could be dropped if=
 
-This KUnit update for Linux 6.8-rc5 consists of one important fix
-to unregister kunit_bus when KUnit module is unloaded. Not doing
-so causes an error when KUnit module tries to re-register the bus
-when it gets reloaded.
+>>> that gets merged.
+>>
+>> OK. But it only applies to file-backed folios IIUC. Anonymous folios s=
+till
+>> cannot be split to order-1.
+>
+> Something like this would lift the restriction:
 
-diff is attached.
+Actually this, since folio_prep_large_rmappable() is changed by that patc=
+h:
 
-thanks,
--- Shuah
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 0564b007cbd1..05eeeafaa9dc 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2852,7 +2852,7 @@ static void __split_huge_page_tail(struct folio *fo=
+lio, int tail,
+        clear_compound_head(page_tail);
+        if (new_order) {
+                prep_compound_page(page_tail, new_order);
+-               folio_prep_large_rmappable(page_folio(page_tail));
++               new_folio =3D folio_prep_large_rmappable(new_folio);
+        }
 
-----------------------------------------------------------------
-The following changes since commit 1a9f2c776d1416c4ea6cb0d0b9917778c41a1a7d:
+        /* Finally unfreeze refcount. Additional reference from page cach=
+e. */
+@@ -3045,9 +3045,9 @@ int split_huge_page_to_list_to_order(struct page *p=
+age, struct list_head *list,
+        VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+        VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
 
-   Documentation: KUnit: Update the instructions on how to test static functions (2024-01-22 07:59:03 -0700)
+-       /* Cannot split THP to order-1 (no order-1 THPs) */
+-       if (new_order =3D=3D 1) {
+-               VM_WARN_ONCE(1, "Cannot split to order-1 folio");
++       /* Cannot split anonymous folios to order-1 (no order-1 anon foli=
+os) */
++       if (new_order =3D=3D 1 && folio_test_anon(folio)) {
++               VM_WARN_ONCE(1, "Cannot split to order-1 anonymous folio"=
+);
+                return -EINVAL;
+        }
 
-are available in the Git repository at:
+--
+Best Regards,
+Yan, Zi
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-6.8-rc5
+--=_MailMate_AEEA94DD-FD34-48DA-AA55-B24C5F506FC5_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
 
-for you to fetch changes up to 829388b725f8d266ccec32a2f446717d8693eaba:
+-----BEGIN PGP SIGNATURE-----
 
-   kunit: device: Unregister the kunit_bus on shutdown (2024-02-06 17:07:37 -0700)
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXMK+0PHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUzksP/0hfFTrmzRI3eqI/b5dhJlPMLyOfv1UKR5df
+lPjmyMIOlstWocpO5C01WPBoZfdPNhnb30oujWLx49z1+ioxHMB7EFR5kJmmkHOV
+N1/DDX1NmVT6b2RHYTU6siexERbImeSIf9hppWJ7jHM+nbC5nxr9yn3psbdQSd86
+TAVSg9+BwIaibwc6n5f8CxjnwdjP705mus6H12zL56A+T32N49N+NbNt9BSmi0RI
+lThX5zjP0/QOX8R70KjlCBajGPb0zpPbuWvQfDLG83H5GfsgPOKtFzB2p3s83BG8
+mO3/gGBZNDMOkhT1kf8Q2HU3Nveeo4kHICoduPwbIqy9vqW/OJ5xzOcKYCI7WjyS
+tE5w4TiSZUf8gQY5dmlktgoSgr2I2Uv9UEk2+d5G4OPRfVwSZK5spQSXmjd2OUDm
+3j+wTLPIjcUcG9PbKBHyhxfJor8piSK/LhVd98HmUCGv36/oDf5I0pEZn/AkgnOO
+qhIq4TpUzczhtJ5d6QiQT1GqbxAx3vWiO/jLXoRntOFmyt9zzAldsl+8wnHBrosL
+RyB33xYPgVH0ETHtf/Y+dzTQ48zD3Q5tAZR789ifh8bzxASU7Bprg4stTaWk7lOw
+tt4jlBJzxLW50LILpVFPK8QAL4611bykfp4GLVlEKdQ32FIynslTVwsjR8qWrVGz
+6U1fUp2/
+=RqS/
+-----END PGP SIGNATURE-----
 
-----------------------------------------------------------------
-linux_kselftest-kunit-fixes-6.8-rc5
-
-This KUnit update for Linux 6.8-rc5 consists of one important fix
-to unregister kunit_bus when KUnit module is unloaded. Not doing
-so causes an error when KUnit module tries to re-register the bus
-when it gets reloaded.
-
-----------------------------------------------------------------
-David Gow (1):
-       kunit: device: Unregister the kunit_bus on shutdown
-
-  lib/kunit/device-impl.h |  2 ++
-  lib/kunit/device.c      | 14 ++++++++++++++
-  lib/kunit/test.c        |  3 +++
-  3 files changed, 19 insertions(+)
-----------------------------------------------------------------
---------------BEVlR5zmYlGmqCSr00K4AOwP
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux_kselftest-kunit-fixes-6.8-rc5.diff"
-Content-Disposition: attachment;
- filename="linux_kselftest-kunit-fixes-6.8-rc5.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9kZXZpY2UtaW1wbC5oIGIvbGliL2t1bml0L2Rldmlj
-ZS1pbXBsLmgKaW5kZXggNTRiZDU1ODM2NDA1Li41ZmNkNDhmZjBmMzYgMTAwNjQ0Ci0tLSBh
-L2xpYi9rdW5pdC9kZXZpY2UtaW1wbC5oCisrKyBiL2xpYi9rdW5pdC9kZXZpY2UtaW1wbC5o
-CkBAIC0xMyw1ICsxMyw3IEBACiAKIC8vIEZvciBpbnRlcm5hbCB1c2Ugb25seSAtLSByZWdp
-c3RlcnMgdGhlIGt1bml0X2J1cy4KIGludCBrdW5pdF9idXNfaW5pdCh2b2lkKTsKKy8vIEZv
-ciBpbnRlcm5hbCB1c2Ugb25seSAtLSB1bnJlZ2lzdGVycyB0aGUga3VuaXRfYnVzLgordm9p
-ZCBrdW5pdF9idXNfc2h1dGRvd24odm9pZCk7CiAKICNlbmRpZiAvL19LVU5JVF9ERVZJQ0Vf
-SU1QTF9ICmRpZmYgLS1naXQgYS9saWIva3VuaXQvZGV2aWNlLmMgYi9saWIva3VuaXQvZGV2
-aWNlLmMKaW5kZXggMDc0YzZkZDJlMzZhLi42NDRhMzhhMWY1YjEgMTAwNjQ0Ci0tLSBhL2xp
-Yi9rdW5pdC9kZXZpY2UuYworKysgYi9saWIva3VuaXQvZGV2aWNlLmMKQEAgLTU0LDYgKzU0
-LDIwIEBAIGludCBrdW5pdF9idXNfaW5pdCh2b2lkKQogCXJldHVybiBlcnJvcjsKIH0KIAor
-LyogVW5yZWdpc3RlciB0aGUgJ2t1bml0X2J1cycgaW4gY2FzZSB0aGUgS1VuaXQgbW9kdWxl
-IGlzIHVubG9hZGVkLiAqLwordm9pZCBrdW5pdF9idXNfc2h1dGRvd24odm9pZCkKK3sKKwkv
-KiBNYWtlIHN1cmUgdGhlIGJ1cyBleGlzdHMgYmVmb3JlIHdlIHVucmVnaXN0ZXIgaXQuICov
-CisJaWYgKElTX0VSUl9PUl9OVUxMKGt1bml0X2J1c19kZXZpY2UpKQorCQlyZXR1cm47CisK
-KwlidXNfdW5yZWdpc3Rlcigma3VuaXRfYnVzX3R5cGUpOworCisJcm9vdF9kZXZpY2VfdW5y
-ZWdpc3RlcihrdW5pdF9idXNfZGV2aWNlKTsKKworCWt1bml0X2J1c19kZXZpY2UgPSBOVUxM
-OworfQorCiAvKiBSZWxlYXNlIGEgJ2Zha2UnIEtVbml0IGRldmljZS4gKi8KIHN0YXRpYyB2
-b2lkIGt1bml0X2RldmljZV9yZWxlYXNlKHN0cnVjdCBkZXZpY2UgKmQpCiB7CmRpZmYgLS1n
-aXQgYS9saWIva3VuaXQvdGVzdC5jIGIvbGliL2t1bml0L3Rlc3QuYwppbmRleCAzMWE1YTk5
-MmU2NDYuLjFkMTQ3NTU3ODUxNSAxMDA2NDQKLS0tIGEvbGliL2t1bml0L3Rlc3QuYworKysg
-Yi9saWIva3VuaXQvdGVzdC5jCkBAIC05MjgsNiArOTI4LDkgQEAgc3RhdGljIHZvaWQgX19l
-eGl0IGt1bml0X2V4aXQodm9pZCkKICNpZmRlZiBDT05GSUdfTU9EVUxFUwogCXVucmVnaXN0
-ZXJfbW9kdWxlX25vdGlmaWVyKCZrdW5pdF9tb2RfbmIpOwogI2VuZGlmCisKKwlrdW5pdF9i
-dXNfc2h1dGRvd24oKTsKKwogCWt1bml0X2RlYnVnZnNfY2xlYW51cCgpOwogfQogbW9kdWxl
-X2V4aXQoa3VuaXRfZXhpdCk7Cg==
-
---------------BEVlR5zmYlGmqCSr00K4AOwP--
+--=_MailMate_AEEA94DD-FD34-48DA-AA55-B24C5F506FC5_=--
 
