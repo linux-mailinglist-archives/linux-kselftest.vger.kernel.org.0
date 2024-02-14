@@ -1,120 +1,169 @@
-Return-Path: <linux-kselftest+bounces-4609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2638E8540A6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 01:05:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4641C8540B0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 01:07:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B88381F22758
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 00:05:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F16F128275A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 00:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893A3385;
-	Wed, 14 Feb 2024 00:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1CB18E;
+	Wed, 14 Feb 2024 00:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYiIOZdx"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QwE61G5Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D9FA932;
-	Wed, 14 Feb 2024 00:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121C47F
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 00:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707869022; cv=none; b=chIoWq0H5AdxNeVo03g5jSa9uDDGyaiDvQs7Sua/hu9AmA+A1Z7gRqHlBFEgapwD3tifz8Z61fyjP3N/cuT6mCxFMQiLiog6kxppZE9DgI9yp2LXlmFrfDI7YeLYpwWiCtoIW904k/D6MpVbcSKLm1xU3A5j2TX/9pmZvuxnv0s=
+	t=1707869223; cv=none; b=lCS4T4w2zclLEvoHSY3nNsb37MLrQjXBJen4zqa+eFRZvKNzXms2xdCgg59G96NoN5ibCQ4Fq1E8z38E2vY3VmCla5zpVYlT3r5CoVA1SgkEgNweGLMz0n/jq58gbQPS4LTKSuQpElPZ1QD0ZKw6tEbEol7Z5gsAU9V006f038o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707869022; c=relaxed/simple;
-	bh=79sVC2xwZcWf9em7+im8l8pxbyWTZViteqZQC3s1w5c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HdKlH4yFmTeih5kNz0df9vqCHQ5lBS7AIcS0AsWnCtnwPAtsCADUmLkRt5nNY+wW2OQvs/6eH6h8iQOXSaX2nFSVGjWPpXWLCdeAPmJQCm+5+OzFdSq8aY+A1aDqiDTp7FuVs3GOQZOSRXiXnClNeowVPv0ZkvtwjgWOsnN2jV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYiIOZdx; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5114c05806eso8068853e87.1;
-        Tue, 13 Feb 2024 16:03:40 -0800 (PST)
+	s=arc-20240116; t=1707869223; c=relaxed/simple;
+	bh=kRl2xvjnEqYqUWOmQ7ofjTzJ/cSkkaVkiE+7IUsfJIA=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=Y6wKMbyBoMueyD/+KfBJ7SfmDoa7qEuPjkAl5S3WITkS9TPLH+cCN5E2cW/IYnxfMqQtL0AVQVYK0CXKYu25SqpRGE4elBi6IDcDKwSY5yDtYxXhj2jt76V7YsHjJsz42ZNgPW3YmawEefeHTvYFM6almphiWj3HYzfCs37JNak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QwE61G5Q; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7c3d923f7cbso29479039f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Feb 2024 16:06:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707869018; x=1708473818; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JPG8iWh4xmglJXdCUV2hXb98YGfDYIZwCuRxjUIHlFc=;
-        b=GYiIOZdxndcm+Y2Q5giWWC6z9LXv0uxph9skjsNnrz8oD+9MStC8JyOCnXwPa2G3DB
-         pYg9ase5E7BDgIrUMLgG0/TjMGWBq8Vt8x6WzgYwUa/h8ANQ3cOHA8GoLffsulLx38sA
-         EkAaX5WkwVVh3wcNe8ljwpdiO9zwEOBfqvfLI+Tculnl4BQmrMHEO/atqD27dC/MIbXZ
-         ujUcVmZ8dBU3v8ULpuz0dNDFAx7RACmzouKi0sfjAOui0OfC/eHQb2h+MdzxGTKJc3nl
-         bhodQM/MrfXY7ZcPbHY5j/bsy8e+9anQWDEt+N453b2YT+Fl4a8IVe4cUm8U00SQvjM6
-         cRkw==
+        d=linuxfoundation.org; s=google; t=1707869219; x=1708474019; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GhnQu6FmXGPVZCi3UFjGPAyQfbh2TxR1NXwH/TlSM+w=;
+        b=QwE61G5QxGU6+NPISDK5K/zPcZoewOWpMO53VHQQhTvAeiRApupQZRirnDOMz4Mr7D
+         osl1qNBUquu6R7VqofaZUxuBAOZM+vsMGUPrlcPZpsXy+MOq+b4geSgiMsdhIzm4XdbJ
+         jGIt6QuSn8rJ/KaVXEsm2qa61KPBH6zymYsU8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707869018; x=1708473818;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JPG8iWh4xmglJXdCUV2hXb98YGfDYIZwCuRxjUIHlFc=;
-        b=k5bcTWb2o3TL3Ji+YkpV23DyO3akPU1xqg2I2/q82TKSjYVj/zuzuwNL0DFtByrCe9
-         EFqivdA8xFPS8E9nwW4TsLAn5AFXEa7uEw+MMlq/Advt6ZLsuTxJRjUFif4bvJnzWsqO
-         2NqUPCRFDyBfsM+qf9cjCjf4oCm0NELR5AAaKZpM2qvKpo2JB+QLXdL78t/7uJ3N/hvq
-         AFPFzdmZbAlGFi4vNFXRmqfc/GXIZA3ycFEGLIKDTwwX4APseVXLMhYwvgghP5LEe0Ih
-         COiXyWoZQOnpPBWTLur3SfY+diwicn1sz29JU0NCMxub+8t4p+S9OpadGcV+gzeNnEIF
-         wC+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXijFG+8058RoFLPXWz65tKV90bb3PLQnODg84hKvM1TGf9s4uDpXe4rp3dxIaRp5SxFwsQPZnb51lI8DddSY77VfOc19Ac2I0fuN7PTRvQ
-X-Gm-Message-State: AOJu0Yyl+Dk+oH8uI8qREFjPCPdl8il/MW5cuimK6iin7OSACw6d+lFA
-	HGgnB3PHbe1aOCLvO2OGZplvAnFc92/uWa+45b1dIPkERI7ljQ2TthEotoh0dc1kXQ==
-X-Google-Smtp-Source: AGHT+IET62gNEP1TryO/d84l1nhoAgvco1Q5Vupuj/VHXjdXg4J0vxT36LXpI5G2dRrT7m5fX8uUWA==
-X-Received: by 2002:a05:6512:3da7:b0:511:893f:11af with SMTP id k39-20020a0565123da700b00511893f11afmr899724lfv.38.1707869017963;
-        Tue, 13 Feb 2024 16:03:37 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVz1gJHO0Pro85TeecuMzEBKdPk4bSzrESmyT3oaBHYedzf1V+D7XyP2YR0odvYol2yY0ov64Gs3AHAftwVE2nWj8a9Y9qc9BZ0LXVbSIQl+uaaE6stTTe1vJkLCo56BVqTzgX2qfGQt/kp63HMpEkMShIaSFblPaz6RQU57Sg=
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-68a7-7041-4298-e66b.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:68a7:7041:4298:e66b])
-        by smtp.gmail.com with ESMTPSA id vo10-20020a170907a80a00b00a3cfd838f32sm1160901ejc.178.2024.02.13.16.03.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 16:03:37 -0800 (PST)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Wed, 14 Feb 2024 01:03:33 +0100
-Subject: [PATCH v4 3/3] selftests: thermal: intel: workload_hint: add
- missing gitignore
+        d=1e100.net; s=20230601; t=1707869219; x=1708474019;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GhnQu6FmXGPVZCi3UFjGPAyQfbh2TxR1NXwH/TlSM+w=;
+        b=dkc9bsiP3RqAFtd2sub4Zy+A1KjHKdsfDTvHRoGpTXZo+xU3EzB0bho8CB8rgT7yjW
+         xoII1c/ugBKsIkFSSNrNKoPEG8/1HLZmNE2feNhz4NMlnU8KW6J8mg7FEJQP5lqq9TJV
+         jbLNvgbxytSAeg6dLu6K6qKPqMMi/Pcz9PZTcCox7JRE+ijZR8hn4tYyUogkhWcj8ejY
+         Q8/8lNGXk4TeXQFGNrJDFvesZwt+tGVyuKD8lPyhDHjt5rkU28j6pErnVWikyIvd6XOo
+         LRViGaMsV5C8DQAIiIkMMlMxKYRM3pTa/MLbVeqcn5uZAFFpfySBrQemNYeMeGyScorV
+         qrgA==
+X-Forwarded-Encrypted: i=1; AJvYcCWyVuhLIqMEc9NDO43ilkoqUpKAMXBeV136AD6Ik7/9wcmeYxl5SMxWqH3jPnArabAorbxH/vcJNLU7aZjeDQ+qLO58XZ25LOcnM5esH0di
+X-Gm-Message-State: AOJu0YyxyIfTjiXQhlxNs+7i2pHJqs8xGGY3fUeesDYvQSPysGtuP4fr
+	uclkGD8fNpLOEyn/1BCYo99D3p0Zb6ozZM0K5iXdAVN4W6VrkozhhLVnIK3wAls=
+X-Google-Smtp-Source: AGHT+IHJKYRzo/PlZVd0iIErIR69DKw3o9VDIiU5d2kUn3AtE/swPSe1OtmTzjtH+2nxZIpUxXzPwQ==
+X-Received: by 2002:a6b:fe01:0:b0:7c4:8032:5724 with SMTP id x1-20020a6bfe01000000b007c480325724mr809467ioh.0.1707869219183;
+        Tue, 13 Feb 2024 16:06:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXA4aTCw0RK9urTQ3ld4zkHTrIyDI62ZmJAw8XHTRnc+Cf9qmTZe9wUE4VytcuFEsKt28Assj+UwSbhwoKX1NH6EefWt9fsDYDqnZ4KSda9xxk2H3KI3oRUb0M3+TL6c7q8urMVMQgGg0aD/HORoX4GxOTZO6AUfDk6Mfy5td1nOyRw9JWXlHTE7ozVe12yoCDqpHIn574Da3TVmICHwQKIYphqF13wLv3vMRQYtn3CnJyfoUrutyZn
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id u25-20020a02cbd9000000b0047129817ee3sm2209721jaq.141.2024.02.13.16.06.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Feb 2024 16:06:58 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------BEVlR5zmYlGmqCSr00K4AOwP"
+Message-ID: <876716d6-f865-42cb-94d0-67e9193a96f3@linuxfoundation.org>
+Date: Tue, 13 Feb 2024 17:06:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Brendan Higgins <brendanhiggins@google.com>, David Gow
+ <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] KUnit fixes update for Linux 6.8-rc5
+
+This is a multi-part message in MIME format.
+--------------BEVlR5zmYlGmqCSr00K4AOwP
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240214-selftest_gitignore-v4-3-857b39cef2fa@gmail.com>
-References: <20240214-selftest_gitignore-v4-0-857b39cef2fa@gmail.com>
-In-Reply-To: <20240214-selftest_gitignore-v4-0-857b39cef2fa@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, SeongJae Park <sj@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.13-dev-0434a
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1707869012; l=762;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=79sVC2xwZcWf9em7+im8l8pxbyWTZViteqZQC3s1w5c=;
- b=5SsMXg3tFDxHLWhLV1lbLNaBCmtK1ct7Uf1t5HahyCW144hMccM7X5o2Pv24Rsx23vx29bt+V
- Vyq85n9BVOXDEeuSn8INA67lvHvzhbV9uqntY6/Sk3rypPPdM6NeSvQ
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 
-The 'workload_hint_test' test generates an object with the same name,
-but there is no .gitignore file in the directory to add the object as
-stated in the selftest documentation.
+Hi Linus,
 
-Add the missing .gitignore file and include 'workload_hint_test'.
+Please pull the following KUnit fixes update for Linux 6.8-rc5.
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- tools/testing/selftests/thermal/intel/workload_hint/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+This KUnit update for Linux 6.8-rc5 consists of one important fix
+to unregister kunit_bus when KUnit module is unloaded. Not doing
+so causes an error when KUnit module tries to re-register the bus
+when it gets reloaded.
 
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/.gitignore b/tools/testing/selftests/thermal/intel/workload_hint/.gitignore
-new file mode 100644
-index 000000000000..d697b034a3a8
---- /dev/null
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/.gitignore
-@@ -0,0 +1 @@
-+workload_hint_test
+diff is attached.
 
--- 
-2.40.1
+thanks,
+-- Shuah
 
+----------------------------------------------------------------
+The following changes since commit 1a9f2c776d1416c4ea6cb0d0b9917778c41a1a7d:
+
+   Documentation: KUnit: Update the instructions on how to test static functions (2024-01-22 07:59:03 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-6.8-rc5
+
+for you to fetch changes up to 829388b725f8d266ccec32a2f446717d8693eaba:
+
+   kunit: device: Unregister the kunit_bus on shutdown (2024-02-06 17:07:37 -0700)
+
+----------------------------------------------------------------
+linux_kselftest-kunit-fixes-6.8-rc5
+
+This KUnit update for Linux 6.8-rc5 consists of one important fix
+to unregister kunit_bus when KUnit module is unloaded. Not doing
+so causes an error when KUnit module tries to re-register the bus
+when it gets reloaded.
+
+----------------------------------------------------------------
+David Gow (1):
+       kunit: device: Unregister the kunit_bus on shutdown
+
+  lib/kunit/device-impl.h |  2 ++
+  lib/kunit/device.c      | 14 ++++++++++++++
+  lib/kunit/test.c        |  3 +++
+  3 files changed, 19 insertions(+)
+----------------------------------------------------------------
+--------------BEVlR5zmYlGmqCSr00K4AOwP
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux_kselftest-kunit-fixes-6.8-rc5.diff"
+Content-Disposition: attachment;
+ filename="linux_kselftest-kunit-fixes-6.8-rc5.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9kZXZpY2UtaW1wbC5oIGIvbGliL2t1bml0L2Rldmlj
+ZS1pbXBsLmgKaW5kZXggNTRiZDU1ODM2NDA1Li41ZmNkNDhmZjBmMzYgMTAwNjQ0Ci0tLSBh
+L2xpYi9rdW5pdC9kZXZpY2UtaW1wbC5oCisrKyBiL2xpYi9rdW5pdC9kZXZpY2UtaW1wbC5o
+CkBAIC0xMyw1ICsxMyw3IEBACiAKIC8vIEZvciBpbnRlcm5hbCB1c2Ugb25seSAtLSByZWdp
+c3RlcnMgdGhlIGt1bml0X2J1cy4KIGludCBrdW5pdF9idXNfaW5pdCh2b2lkKTsKKy8vIEZv
+ciBpbnRlcm5hbCB1c2Ugb25seSAtLSB1bnJlZ2lzdGVycyB0aGUga3VuaXRfYnVzLgordm9p
+ZCBrdW5pdF9idXNfc2h1dGRvd24odm9pZCk7CiAKICNlbmRpZiAvL19LVU5JVF9ERVZJQ0Vf
+SU1QTF9ICmRpZmYgLS1naXQgYS9saWIva3VuaXQvZGV2aWNlLmMgYi9saWIva3VuaXQvZGV2
+aWNlLmMKaW5kZXggMDc0YzZkZDJlMzZhLi42NDRhMzhhMWY1YjEgMTAwNjQ0Ci0tLSBhL2xp
+Yi9rdW5pdC9kZXZpY2UuYworKysgYi9saWIva3VuaXQvZGV2aWNlLmMKQEAgLTU0LDYgKzU0
+LDIwIEBAIGludCBrdW5pdF9idXNfaW5pdCh2b2lkKQogCXJldHVybiBlcnJvcjsKIH0KIAor
+LyogVW5yZWdpc3RlciB0aGUgJ2t1bml0X2J1cycgaW4gY2FzZSB0aGUgS1VuaXQgbW9kdWxl
+IGlzIHVubG9hZGVkLiAqLwordm9pZCBrdW5pdF9idXNfc2h1dGRvd24odm9pZCkKK3sKKwkv
+KiBNYWtlIHN1cmUgdGhlIGJ1cyBleGlzdHMgYmVmb3JlIHdlIHVucmVnaXN0ZXIgaXQuICov
+CisJaWYgKElTX0VSUl9PUl9OVUxMKGt1bml0X2J1c19kZXZpY2UpKQorCQlyZXR1cm47CisK
+KwlidXNfdW5yZWdpc3Rlcigma3VuaXRfYnVzX3R5cGUpOworCisJcm9vdF9kZXZpY2VfdW5y
+ZWdpc3RlcihrdW5pdF9idXNfZGV2aWNlKTsKKworCWt1bml0X2J1c19kZXZpY2UgPSBOVUxM
+OworfQorCiAvKiBSZWxlYXNlIGEgJ2Zha2UnIEtVbml0IGRldmljZS4gKi8KIHN0YXRpYyB2
+b2lkIGt1bml0X2RldmljZV9yZWxlYXNlKHN0cnVjdCBkZXZpY2UgKmQpCiB7CmRpZmYgLS1n
+aXQgYS9saWIva3VuaXQvdGVzdC5jIGIvbGliL2t1bml0L3Rlc3QuYwppbmRleCAzMWE1YTk5
+MmU2NDYuLjFkMTQ3NTU3ODUxNSAxMDA2NDQKLS0tIGEvbGliL2t1bml0L3Rlc3QuYworKysg
+Yi9saWIva3VuaXQvdGVzdC5jCkBAIC05MjgsNiArOTI4LDkgQEAgc3RhdGljIHZvaWQgX19l
+eGl0IGt1bml0X2V4aXQodm9pZCkKICNpZmRlZiBDT05GSUdfTU9EVUxFUwogCXVucmVnaXN0
+ZXJfbW9kdWxlX25vdGlmaWVyKCZrdW5pdF9tb2RfbmIpOwogI2VuZGlmCisKKwlrdW5pdF9i
+dXNfc2h1dGRvd24oKTsKKwogCWt1bml0X2RlYnVnZnNfY2xlYW51cCgpOwogfQogbW9kdWxl
+X2V4aXQoa3VuaXRfZXhpdCk7Cg==
+
+--------------BEVlR5zmYlGmqCSr00K4AOwP--
 
