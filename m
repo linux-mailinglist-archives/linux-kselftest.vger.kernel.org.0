@@ -1,210 +1,194 @@
-Return-Path: <linux-kselftest+bounces-4656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A05DB854F89
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:12:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AF58854FBA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:18:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C51441C28EC9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:12:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2845FB2287F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:18:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3F363104;
-	Wed, 14 Feb 2024 17:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F357C6E3;
+	Wed, 14 Feb 2024 17:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uSBuA6CN"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WR0s2TlI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273726087D;
-	Wed, 14 Feb 2024 17:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707930661; cv=none; b=F2hrDwDkUewkKUDB4oYFur6ik3MG/73VsPGz5QMfItIZw8BQ2EOQoWad7J2PjR1wflukDN957KtJS1Q/JkP/LzfSz+kT9KYIZQqHPKopMIBR2hha523SIH4XZAf7a+0uhPtMBxnB990GegEzutmprpkJxcmQxnF94t5pdYtOMX8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707930661; c=relaxed/simple;
-	bh=A6NbyRZQhC46qPsrT0BBp6me28szmBiiUUjKG4u5PT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GIbKYlWp6IWUo5/wx1S+PqyZCFZTPgiNKjpnn4jriiqHctDBrXQQI1pOyKyZqoKW9ON7eLvhT61gy0kj7+85qhMGKbuuXDHBqiA83j0CbMSoqcw6j/fyAR4KbI8HgZp+Iqa4Ymll8GqJ7gd/8gD0yJqs5C6ECshRULzkrmsM27Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uSBuA6CN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2FB4C43601;
-	Wed, 14 Feb 2024 17:10:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707930659;
-	bh=A6NbyRZQhC46qPsrT0BBp6me28szmBiiUUjKG4u5PT4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uSBuA6CNHXE7KeWvUxHCv8XUEy7YyEQ9KOnw8syeKd65PeMoml6JLITOjmUgZL1h1
-	 1r/o39U9gpoI3eLY8Dy+Woi+y2ZESnI1lE0i+utAPjHGI2JOJfpUv4gUM+FnhHuFyA
-	 zTlD9IzT08eFSfjrV5UL97Niv7ZvXsoZ5Ui+8RwkDpYJGYK3Y0m9RafBu49bD0sw0t
-	 C6fuAet39YnNfFNzXtxtklDO2ougI34VJtKJQAOComG2377YMWV0j9zWwZ80adERtr
-	 BCGw8R1eM03m1UsEQL47IXzebdDou5lyWiZn3IX0XiOOsVpvyX40iQXi/fkUi1FIYE
-	 /UqfYUDMIBHYA==
-Date: Wed, 14 Feb 2024 18:10:51 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>, Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RFC bpf-next 0/9] allow HID-BPF to do device IOs
-Message-ID: <e6ipl34ajoprzskvjuvdnlw5ak4sjwplh75qqboi2v572byrbm@z4d5ntl27ojp>
-References: <20240209-hid-bpf-sleepable-v1-0-4cc895b5adbd@kernel.org>
- <87bk8pve2z.fsf@toke.dk>
- <CAO-hwJ+UeaBydN9deA8KBbgBiC_UCt6oXX-wGnNuSr8fhUrkXw@mail.gmail.com>
- <875xyxva9u.fsf@toke.dk>
- <CAO-hwJLvEGNRXc8G2PR+AQ6kJg+k5YqSt3F7LCSc0zWnmFfe5g@mail.gmail.com>
- <87r0hhfudh.fsf@toke.dk>
- <CAO-hwJLxkt=THKBjxDA6KZsC5h52rCXZ-2RNKPCiYMHNjhQJNg@mail.gmail.com>
- <CAADnVQKt7zu2OY0xHCkTb=KSXO33Xj8H4vVYMqP51ZJ_Kj1sZA@mail.gmail.com>
- <zybv26nmqtmyghakbebwxanzgzsfm6brvi7qw3ljoh4dijbjki@ub7atnumzuhy>
- <CAP01T75Giw_5j0RXaaxX0rDzCcXXZgmHrw7QZ_Ayib8rHgunBQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A91C6A002;
+	Wed, 14 Feb 2024 17:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707931104; cv=fail; b=BGeVZQ35yni5f+7ZueyPJbKljHLuMcSDPoLauNalRguQXPjjrHGPnT5wdl5NclVGLwL6fFcnazTR6RaAgqkhtz3ZgamQPJlRI7XFZUOII+Zxoaclav/nPZQMZNJAYUuxXMpVugkfKjA1ypo4MI9cKvXnMM4DDXJ/WYnQJv/xCro=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707931104; c=relaxed/simple;
+	bh=vTwWIgqX0u3Tlb+ntMcr+owtlROL0y2BruFh85U9l64=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mhLC07sC0EmL+hMkvDl+x4gDZSFIPdc08U/cK4e0jQjtIDgilwsSc5KDd0dlWJ/9a1bpkjnL+Iz/A9bREDSHejHuqCi1tfYZEl0e97EnO5X1rmeI4ufAbNh1XlaNj5VR4LhDJHspGO61UaW7wK0nbE79lHbQEBBy6ymAkTtofwE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WR0s2TlI; arc=fail smtp.client-ip=40.107.93.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZR1ZxB2ZNVCm3OU24OMo+yaRB+EhFu5UMLR87qv9+Z03//kFihQyoVwKo67ouPYj4ojHr09EB0gCdbwIeB73DFlula4e43Xy48A64CGxZkg92TyjUYG7ASBa0l/wSc24sSyvwpwXMTZVeELsoiBOI7FVpo9YpW6bmGhWXg8YJSxsDXNRLsDA/9ohvFaFeWEvFrRmSsCFqFUxwxQCjp3+Hx4lEXdu6TftuDu1T2FuK5gNwGgcjmw5oQWG8dDBKaaunLxumwy9/SyP7B3fqnWfwC9aBzEWJy6atGbSM0elMoJa4pxCEaBMrAP92wo3HgkTQ9HRkp2DSdeNd8cL/KYvjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vTwWIgqX0u3Tlb+ntMcr+owtlROL0y2BruFh85U9l64=;
+ b=C9CiP9c/8ynSBArJPQB5NhjyX0w4wGjqR47LQ1Oo6oj92gggW3j9CKP2Y5SckUXi1c37QdWJW0BV5FVkbf01sfMxfFnd08r72l+HO8PEkJeOxK7a1LOIYVy1yw6/xaS7m0BLDznssp7BNr6QIsv9Jo6pfWhi/TP5zyWA8N55Ezl7HldRRIBW9m54D93iyqbCJKvaQaYWq7bqqVbGpDxB1nx2311gGsDPfuFoVgEUkd5B5P6l8hjFDND+FbOiBQ4l/0VTSp8r87htvARSb3XIsmXNPQG357qDpEdL5CcgEnbeLNJkobzx4pKs2Nj6Kig/sM7Cs2A8rR8kSizIzbdNIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vTwWIgqX0u3Tlb+ntMcr+owtlROL0y2BruFh85U9l64=;
+ b=WR0s2TlIVokNDnTVBfwMNwvg8L0F52xt2ccHDLCiynokWEZ1UlCo4xvCCl146OuEB8dDzOQPQnYe3Pi77TgVjk2iwQwb1/VyG/7M48WsoWBppW5dfEjkp+yXqyQFRFXFIsYPyp9F3vLDFkZhoU9Yfd91J9P3Bg/kLkErNvpZPMVxxZNb5wHYLypUeBUNiF7KiRSXxg5610528HE/kOrDTd1pz0pxH+Co5xleYRkUl3kVnNdR35h+jIQemtk+aZCxQyriKl5toDNyN/x1lCPV4BQrqSzsqZ0a3XZnBy1RRodqA5F22ciFx+BlaVxAUoLmaViYHFdnQ6V5WULLC33mgg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ MN2PR12MB4357.namprd12.prod.outlook.com (2603:10b6:208:262::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.26; Wed, 14 Feb
+ 2024 17:18:18 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::db3e:28df:adc1:9c15]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::db3e:28df:adc1:9c15%5]) with mapi id 15.20.7316.012; Wed, 14 Feb 2024
+ 17:18:17 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>
+Cc: Zi Yan <ziy@nvidia.com>,
+ "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>, linux-mm@kvack.org,
+ David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
+ Yu Zhao <yuzhao@google.com>,
+ "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
+ Ryan Roberts <ryan.roberts@arm.com>,
+ =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
+ Mcgrof Chamberlain <mcgrof@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] Split a folio to any lower order folios
+Date: Wed, 14 Feb 2024 12:18:14 -0500
+X-Mailer: MailMate (1.14r6018)
+Message-ID: <FC18B703-54B3-4BC4-B298-5057E8F26A70@nvidia.com>
+In-Reply-To: <20240213215520.1048625-1-zi.yan@sent.com>
+References: <20240213215520.1048625-1-zi.yan@sent.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL1P221CA0029.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c5::25) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP01T75Giw_5j0RXaaxX0rDzCcXXZgmHrw7QZ_Ayib8rHgunBQ@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|MN2PR12MB4357:EE_
+X-MS-Office365-Filtering-Correlation-Id: cfa63287-f87f-474e-8964-08dc2d80ef7f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	L0DHEA0SNCx/D1Ix+CUtkIOkmHw0lEyJSusZhk6hdnycfEFZ5cGK32jNDbtOdcfg4b1WjKJcxagC/R+cVfpqYa7tt+God0xGd1y03Z4tkxbP0tgGycDv8o9CpMA+Ty2pHSKLlrnfDmpV8Z8KzdSk/esxg7e7an4fNmYRqx/U0oizhNtsOnq9c03OYRizYACX2s5hiprsA3N+y1Qjo++n/HMQS5HJ/p8hDVRMVhqfj9VPDwNRaXkA0/wFEJ+0D3p0eWBeq0Fe6q/T19iBPFlmRRw4QJWMATUjO/zPlWEIK39ekIGeYigOUYTIt7Y9Epp8Fy4K2hqk6qn0ABzjsrlwyCGO4qw6h21NMORyZcWSlljwadGCkDnPEYJgIyiqWVtmdHbH+6QwVNe4c7r0g5sU0DZDHaoHgWw1qTdti4RoKIuqooAtrXY7M+TujBOlA/+FVgkir8zm2jCMMSulgZGb3okOOTBcQmyNcsTPxAceRGzB1s1WFU7Dg1GTDdCsg406BacVh2uQeq8poBYT4iy42HSqmIkc4v58pX/h2Q5OO9ggVJAa8VpVfrDytwfZt8Te
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(366004)(376002)(136003)(346002)(230922051799003)(186009)(64100799003)(1800799012)(451199024)(4326008)(235185007)(5660300002)(7416002)(66476007)(41300700001)(66556008)(8676002)(8936002)(66946007)(2906002)(86362001)(83380400001)(36756003)(2616005)(54906003)(316002)(6506007)(6666004)(478600001)(6486002)(38100700002)(6916009)(26005)(53546011)(6512007)(33656002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ZC1urCTrBFJU09ZXDNUhGlnT5YkW/1EWmQQGaB8p0kSNq0oWp7UjpAszPO4f?=
+ =?us-ascii?Q?BCC13b+ONfRj9lsWIBIMJ2B+zQneoscZb8Eg1KzO5GdLRJVUosnsVFsqdVok?=
+ =?us-ascii?Q?wV7T+m2au29F1gHDIffQPFHsRKTBo9Ie0a8SWEzC+spndPzSaioFLjQRFFeM?=
+ =?us-ascii?Q?rpKioSGHDspbmNZiJ085PYu4of23zrbc0sOpp2SV7QVD6vregy+9fGEJg770?=
+ =?us-ascii?Q?0ViTfAuPHsYoPlZogSM8z7+sUQow2tMUnHRRVWsXzpG3iiHQhER3GyshZI6K?=
+ =?us-ascii?Q?sZfQhlySnJELKHk9dYnlpcedNMWCctAwWzTXd+pm3Ej/CYD9PnIKiEQnNL8P?=
+ =?us-ascii?Q?rzDZtWOH94xkacCXp4wgg0pCcQIzzBH9UMPwNtFxdv4aFlD+ZPEHPzyxn7Mi?=
+ =?us-ascii?Q?0sw/pt1gofJZtY5H9KiUVUF3O9EF+9GNuC/4iWS9KL649gAo5XRxHtAaZDdO?=
+ =?us-ascii?Q?nxMwCWb5p+RoXXdJuPYu5s07fPcxgUiAFdv23sNFw/Pt06a2C3uBj8XW5rhE?=
+ =?us-ascii?Q?SzMWUVCKktNfuOBE8Ha5V/HzOSlAgSa7ObPit7ySJORpkYKN+Yi/aPppkNDc?=
+ =?us-ascii?Q?YNLrCAGTL0TO3jsqYeHUWg5tqe0kFdiJQgaDlX0r2IQtMf2I2TfEXD4qIdXs?=
+ =?us-ascii?Q?eTTyPi5b9DSeNH9f5/O3SakOZtfbElytYLF/BxT515snxlAuEq/UjgWgPqm+?=
+ =?us-ascii?Q?ICVtLrNFDmM0CUQAM2uINJnkeDf1+E3OVxXidfGSSF/34R6nxw3aiGMIQOsO?=
+ =?us-ascii?Q?kPmVCqYUtI91Y1jq0PlcZX0Aa7rbLCHJKESAoTrdT6fSiSgYwHX8YFF//Dtw?=
+ =?us-ascii?Q?/v17WszNB9XJVBUtOiY+Xv7R8q/g6BHvbbBSRrvk4w10Ta5H+ezt8QBeW0oa?=
+ =?us-ascii?Q?2vfwg3Id2Kq2xinj7NKhniDfommCHuv7kTpNT7uLZAOfiUK/a74TMqZrBG2P?=
+ =?us-ascii?Q?n/zMvR5Q8bXg/X0MFcGjAWFEZTt0jgsMyXhGm8hkIk3nXJtMFvrCSVJEey98?=
+ =?us-ascii?Q?5/8+4I7HeVs1vdq+i2hWvl7Ba3ZpZo/PYAdLiaBPlSMCSzJAydo/wjvUohTq?=
+ =?us-ascii?Q?jQuSsPSz45IoT5TUfVn67+n75QW3/96MhGjHlPqcmRMhDizd4gon63IGxOW5?=
+ =?us-ascii?Q?FbaWGQpcMCN7uI3z5w+fKS0ynWchbqWN6Rj0l/LQ9pDnGGcMv+zqt5uJNdcI?=
+ =?us-ascii?Q?XJR6X8c8DmZXwz/NcXreOM+XJzpdZlYbXpwospW50q2IRz6cI/PnGdkYeXAn?=
+ =?us-ascii?Q?DD3mNh2PV/qWSWBBvU0XbEn+v2LXW0NFN1pNqCMhWv5WBxaX35O1AtbKEw8s?=
+ =?us-ascii?Q?pzsKNSUjcDvX4zunQcJEOHId98IOVuels9EHCMR1z+L25lLrTRuwXQPCBkl/?=
+ =?us-ascii?Q?Qwec0ivFCiOqP9LtO8lH5JfjftYGkKsIp9laSKOmLArGR9fhCvlgzngq49MY?=
+ =?us-ascii?Q?cvxQGv1PDBIurBgxDJykZ00Zuq5BSERY61PCept6eBW6IS+ZtuXfh/lHG5Ef?=
+ =?us-ascii?Q?QGanVPjk15WSuwakyFIpays4Qkq3hH8q8DZrGxeH8rQ85CICSUothqux/gsc?=
+ =?us-ascii?Q?XwOSqB8Ffe/0Rfn1N4AiveFr7/ZN3jiWM1vviXn5?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfa63287-f87f-474e-8964-08dc2d80ef7f
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2024 17:18:17.8087
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OS9DNlD2AY48z8fJZqvJ5z2/39D09IKlS9sh/sMaQtZD6Fy6B2UP+nLx8hy+jg8h
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4357
 
-On Feb 13 2024, Kumar Kartikeya Dwivedi wrote:
-> On Tue, 13 Feb 2024 at 18:46, Benjamin Tissoires <bentiss@kernel.org> wrote:
-> >
-> > On Feb 12 2024, Alexei Starovoitov wrote:
-> > > On Mon, Feb 12, 2024 at 10:21 AM Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > > > On Mon, Feb 12, 2024 at 6:46 PM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
-> > > > >
-> > > > > Benjamin Tissoires <benjamin.tissoires@redhat.com> writes:
-> > > > >
-> > [...]
-> > > I agree that workqueue delegation fits into the bpf_timer concept and
-> > > a lot of code can and should be shared.
-> >
-> > Thanks Alexei for the detailed answer. I've given it an attempt but still can not
-> > figure it out entirely.
-> >
-> > > All the lessons(bugs) learned with bpf_timer don't need to be re-discovered :)
-> > > Too bad, bpf_timer_set_callback() doesn't have a flag argument,
-> > > so we need a new kfunc to set a sleepable callback.
-> > > Maybe
-> > > bpf_timer_set_sleepable_cb() ?
-> >
-> > OK. So I guess I should drop Toke's suggestion with the bpf_timer_ini() flag?
-> >
-> > > The verifier will set is_async_cb = true for it (like it does for regular cb-s).
-> > > And since prog->aux->sleepable is kinda "global" we need another
-> > > per subprog flag:
-> > > bool is_sleepable: 1;
-> >
-> > done (in push_callback_call())
-> >
-> > >
-> > > We can factor out a check "if (prog->aux->sleepable)" into a helper
-> > > that will check that "global" flag and another env->cur_state->in_sleepable
-> > > flag that will work similar to active_rcu_lock.
-> >
-> > done (I think), cf patch 2 below
-> >
-> > > Once the verifier starts processing subprog->is_sleepable
-> > > it will set cur_state->in_sleepable = true;
-> > > to make all subprogs called from that cb to be recognized as sleepable too.
-> >
-> > That's the point I don't know where to put the new code.
-> >
-> 
-> I think that would go in the already existing special case for
-> push_async_cb where you get the verifier state of the async callback.
-> You can make setting the boolean in that verifier state conditional on
-> whether it's your kfunc/helper you're processing taking a sleepable
-> callback.
+--=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=
+Content-Type: text/plain
 
-Hehe, thanks a lot. Indeed, it was a simple fix. I tried to put this
-everywhere but here, and with your help got it working in 2 mins :)
+Hi Pankaj,
 
-> 
-> > It seems the best place would be in do_check(), but I am under the impression
-> > that the code of the callback is added at the end of the instruction list, meaning
-> > that I do not know where it starts, and which subprog index it corresponds to.
-> >
-> > >
-> > > A bit of a challenge is what to do with global subprogs,
-> > > since they're verified lazily. They can be called from
-> > > sleepable and non-sleepable contex. Should be solvable.
-> >
-> > I must confess this is way over me (and given that I didn't even managed to make
-> > the "easy" case working, that might explain things a little :-P )
-> >
-> 
-> I think it will be solvable but made somewhat difficult by the fact
-> that even if we mark subprog_info of some global_func A as
-> in_sleepable, so that we explore it as sleepable during its
-> verification, we might encounter later another global_func that calls
-> a global func, already explored as non-sleepable, in sleepable
-> context. In this case I think we need to redo the verification of that
-> global func as sleepable once again. It could be that it is called
-> from both non-sleepable and sleepable contexts, so both paths
-> (in_sleepable = true, and in_sleepable = false) need to be explored,
-> or we could reject such cases, but it might be a little restrictive.
-> 
-> Some common helper global func unrelated to caller context doing some
-> auxiliary work, called from sleepable timer callback and normal main
-> subprog might be an example where rejection will be prohibitive.
-> 
-> An approach might be to explore main and global subprogs once as we do
-> now, and then keep a list of global subprogs that need to be revisited
-> as in_sleepable (due to being called from a sleepable context) and
-> trigger do_check_common for them again, this might have to be repeated
-> as the list grows on each iteration, but eventually we will have
-> explored all of them as in_sleepable if need be, and the loop will
-> end. Surely, this trades off logical simplicity of verifier code with
-> redoing verification of global subprogs again.
-> 
-> To add items to such a list, for each global subprog we encounter that
-> needs to be analyzed as in_sleepable, we will also collect all its
-> callee global subprogs by walking its instructions (a bit like
-> check_max_stack_depth does).
+On 13 Feb 2024, at 16:55, Zi Yan wrote:
 
-FWIW, this (or Alexei's suggestion) is still not implemented in v2
+> From: Zi Yan <ziy@nvidia.com>
+>
+> Hi all,
+>
+> File folio supports any order and multi-size THP is upstreamed[1], so both
+> file and anonymous folios can be >0 order. Currently, split_huge_page()
+> only splits a huge page to order-0 pages, but splitting to orders higher than
+> 0 is going to better utilize large folios. In addition, Large Block
+> Sizes in XFS support would benefit from it[2]. This patchset adds support for
 
-> 
-> > >
-> > > Overall I think this feature is needed urgently,
-> > > so if you don't have cycles to work on this soon,
-> > > I can prioritize it right after bpf_arena work.
-> >
-> > I can try to spare a few cycles on it. Even if your instructions were on
-> > spot, I still can't make the subprogs recognized as sleepable.
-> >
-> > For reference, this is where I am (probably bogus, but seems to be
-> > working when timer_set_sleepable_cb() is called from a sleepable context
-> > as mentioned by Toke):
-> >
-> 
-> I just skimmed the patch but I think it's already 90% there. The only
-> other change I would suggest is switching from helper to kfunc, as
-> originally proposed by Alexei.
+Just talked to Matthew about his order-1 pagecache folio, I am planning to
+grab that into this one, so that I can remove the restriction in my patches
+and you guys do not need to do that in your patchset. Let me know if it works
+for you.
 
-the kfunc was a rabbit hole:
-- I needed to teach the verifier about BPF_TIMER in kfunc
-- I needed to teach the verifier about the kfunc itself
-- I'm failing at calling the callback :(
+--
+Best Regards,
+Yan, Zi
 
-Anyway, I'm about to send a second RFC so we can discuss on the code and
-see where my monkey patching capabilities are reaching their limits.
+--=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
 
-Cheers,
-Benjamin
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXM9dYPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUNF0P+wep/G2wo0WtIT8T+bzvTktVREFzBlTRTWtE
+8PKuzfP9jAAR+RSKt0pnrPnpm1+nK0yjmGn7fZGCUDVomvyPD1PsHPDcXNhbw1oj
+4w0QWJiJMPC2X0s2FIvHQRe+9K3Ciuj1FkKGmlBiG7NuZdoqjT8s28JLvGZK8Fyp
+OodtQ46Yqg/vJwAXU/ZJI8Nv7yHJH2hTl5+FKPKiVTRBpdWKF+3srqrbuT2gvaoz
+w/Vu4MQklvOK+FinK8sxRc17TOj5JeB/WEGvReCBmBeYFpBln1vTIjzVMjXdCkX5
+JsdC56nyqbfeY5h11gTLMFMyEz1YxtZv75j6EaVOUBANavhgN9hfomwWFXOI2tlX
+itBqpi5mqkft+ZyXLHyjUWji8wXBNW7yk2eyi8pImQws4nfU4Lnn+fGV0/m9worn
+XmS8+BcYmElbWI67fNXa4CLXApBGUvsOnPczSLXo+gmR0o4IRBuBFZndCsl1/HFR
+0tJPAaJKwhLolunvJYcxPC2Z6BxhQsZ2WYb6rO4lBIT0ciJrwgXdPK8OmENMpP9h
+11JSH+uWTfFLWO9QW1iQDc9aCsZP90ipEmJwH3LGbvMJJpk1WcIlGYqb9uqoX9bA
+kDmoP+lAUOwfDS2zrtzo6jprFPs3jrq9MyboLVZH90v2jvEeMumqzJjm1ExnkTI2
+aw8dT2bt
+=V6JF
+-----END PGP SIGNATURE-----
+
+--=_MailMate_F95AC849-4FD2-43E5-86E9-794D21F26302_=--
 
