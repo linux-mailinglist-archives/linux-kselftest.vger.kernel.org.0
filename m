@@ -1,337 +1,177 @@
-Return-Path: <linux-kselftest+bounces-4674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A94FE855371
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 20:47:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57B198553A7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 21:08:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0D6DB2563F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 19:47:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71F541C25296
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 20:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCED13DB9D;
-	Wed, 14 Feb 2024 19:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0F013DB9D;
+	Wed, 14 Feb 2024 20:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="TC4Vh5o2"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XO4ti+F8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5677D13DB83
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 19:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4692613A888;
+	Wed, 14 Feb 2024 20:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707940005; cv=none; b=ux9ssXYGBJ1TSo8XTalQa9Hxe/ZZf6G58yvrl6DM4yw0JjjcCUqbfilMTchQJwL6vz5jzPr0PWrMX/daxcRvxh5q7BtnLGL62q2qksqCUfiSlBfaLFoI3ePjPLIVXqJjqy10PLI7bQ30Ayncmleegi2eQsy42VZqTlJ3+N9r9a8=
+	t=1707941289; cv=none; b=lK7rO3tuBI7LPpW2KD9dewlV0nI2AnsXyvixk5penrGsX/RpBYFAc4bu79UkwW+5PRZFrze/YmyO5bnWQnPYE3CtsBdsCOrGn10ktliBz2LNvHHo58Ouk3idDKxQtMTm9AAq504tF03BB/W7CbJ/Q+yz9ZJDIDbkuzkEbNc5Oo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707940005; c=relaxed/simple;
-	bh=8JANgonbhxeKKW+uDQio029nIJhsiCtPP+8BxgNgaqA=;
-	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=YBNnXhIrhroy/4U+/UB1Osq7jjrZFXy3Gq6Mk1uVlTjBdCAFHm/hYNRzVdzQduvfv031o77fVv3/rU7mD4MrCcZwbkbU5LCynVYnY1HnJxxyJCtQcXQ1ANA8ajlSeJ3y5A3xUPX+u1OHd0thv7HKVZCkgskM+Y6oW/NrVxVnwyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=TC4Vh5o2; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-51182ece518so58236e87.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 11:46:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1707940001; x=1708544801; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=winRWyZ6BCVdhQy1fH4iOgSBQ13zKw7iL7yywIIe8RM=;
-        b=TC4Vh5o2ipdYYhiVIo0VFwbMCkrojjOgHEGWOyV5k2xl9uFraXrY6yRKkXyFHJduGA
-         seHjJelGx+0NJ1D0rH91Rs65BLALU8OBHEeyZs8oTDCgLre1vemJZunECl8qN+3WCFO7
-         KMPgs7yZ9gVw+OFYp1PHDNhACHTo5k4aMMs/Viuxb/kkGfkfvAgK3bNJiFaHMsqg6FtI
-         3Wt6izpSMxC2IvYDWQf9ynrKvg6aH7WMQGvKBkP0pUUifvWE3kKI12r1LiYR7RbvkuYO
-         UrCm/msYLXSBE2IUhIqGFRKRaAspBHmh+/pTx3+Qmif+puYmoy/bIPFY1m24utgw1mwk
-         Esjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707940001; x=1708544801;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=winRWyZ6BCVdhQy1fH4iOgSBQ13zKw7iL7yywIIe8RM=;
-        b=NSuaoOwwRvpDxG2Vs9zQnYfWTRXSfUEixBH59Wa8b3QnJurVSw4JCY8OysMGKKtx8C
-         bl7yArYAlluOvHbiaL5tAf+xnVNr1SJ3ydhpS8qC7WeJFXOcQTTQfTrwr3wFyxGW9vRo
-         hEGYfqOs06BUuvwv8dr6N5IqGjA2Ad35a6FqA5sxR5BVTdnkRBUkBQtof3DUOzCDqi2R
-         4e9MyvxtTaQCtpQAt5PURcXXpjN4n6M/AXwOc6L7W1OoPMkgVkxATsIzddLV4hVfpXUh
-         64HdrIkC/xXekIGuMxEUUFQtkopDb/+761Zm1RXDkEAW9kHh2/s6Y8fuhXEeLzyaAmMW
-         fBlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXWg6OxXRHm61jajzkaauw8W7hGRlvk85/wPNdi9gtrkniRELDl5xtH7x/0Dtz0aBj0jJMWAXhWf1S0JaUISDu9DKrccHAfJtQKqSmWY4Va
-X-Gm-Message-State: AOJu0YwcFb9prbz+AEzutW/L4bWIKx1T56RnjbJT1fTLK3wxvmyQWE+c
-	Rg6JScZvhh2A6nJPKBux8q8ccNO8sRlwQ8an/rGXz7nqkV1YAwqJkCacvXO1Gp4=
-X-Google-Smtp-Source: AGHT+IGWermj9iVugSzWhtIFX8NBulc1XSNjHnrLZ7WhZ7HXabcKCDnvgoLRTVngyqH/61APFx2j5w==
-X-Received: by 2002:ac2:4a9a:0:b0:511:850b:3665 with SMTP id l26-20020ac24a9a000000b00511850b3665mr2289521lfp.64.1707940001157;
-        Wed, 14 Feb 2024 11:46:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUoQpOe4pUjNikhk9lzdssveN4E5ukf1phZAwk7gzSwX3oNszJej4o+tpxLn4S4Uh3qs0yHNxeivHgLFAHvHVYtYL2cOyW3CVRdSasaiRFuskvr3IXoiW0K2M/pvnT/2jBZiaB7E363CHlqRMKXsc/MsvBl/sYSqnX2Gj2R4GQ=
-Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:1f2])
-        by smtp.gmail.com with ESMTPSA id vv3-20020a170907a68300b00a3d29f0afeasm1266079ejc.2.2024.02.14.11.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Feb 2024 11:46:40 -0800 (PST)
-References: <20240213154416.422739-1-kuba@kernel.org>
- <20240213154416.422739-4-kuba@kernel.org>
-User-agent: mu4e 1.6.10; emacs 29.2
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: shuah@kernel.org, keescook@chromium.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 3/4] selftests: kselftest_harness: support
- using xfail
-Date: Wed, 14 Feb 2024 20:40:59 +0100
-In-reply-to: <20240213154416.422739-4-kuba@kernel.org>
-Message-ID: <87o7ciltgh.fsf@cloudflare.com>
+	s=arc-20240116; t=1707941289; c=relaxed/simple;
+	bh=0c27WM48Hr69yQ4BRbSljfY+8max5aVHrUQMsvmvoT0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=rGXh9vzZ+mmwWZGkm30yg52gEsaQcN2MOdm5gRYvMIdxaKslP0BZQw507K2stJttasCJvxsGAQrGRECj1RgUwRfX+49JAoELWj51pe4/JuYCYQGglmNn9WTR/jZHmIoVCzd9zTBbuep2lySmnAl+6/sf281G10LWA2luIhM2VLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XO4ti+F8; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41EJvFTF004798;
+	Wed, 14 Feb 2024 20:07:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=mXHxoZ42mf/ESBqj6s5bnVAfG0vN7uRQxTDbGz8SwAo=;
+ b=XO4ti+F8dvznCzwOMommY2wHzUPRF12PQUnYJO8wcMld4+xLiaDZrncmLdNb92rQ7TNe
+ RQ+9rYnPchBKUFw5S9Fl7I38jgR7LO6LKwUUOB0dExBhkPLH6UbwCM16YyMy4XS2iK2r
+ +0gh0WxTiNUirdOxbsuLbSFMGF0eadMRe4+BzFbNOEyWOpeZYWi0E0go6AeH/J1ElsT2
+ sExdubjt5KshLHd61G8KyAJvOgkxAqxFZJV+1qsKFpJwgPGTcHLj9XBxFxl787CNPkXw
+ AuT6Oi0YJiz5OVwSzTfJppPGbBIYD6oTQ2vUShlvwWT49EtCY3XXiM+cGR1oI6+ZznNS ug== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w944jranh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 20:07:32 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41EJvn2l007248;
+	Wed, 14 Feb 2024 20:07:32 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w944jramk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 20:07:31 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41EIYP1m004329;
+	Wed, 14 Feb 2024 20:07:30 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0gd5r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 20:07:30 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41EK7RHI19005960
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 14 Feb 2024 20:07:29 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8504C5805A;
+	Wed, 14 Feb 2024 20:07:27 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EF2835805E;
+	Wed, 14 Feb 2024 20:07:25 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.101.207])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 14 Feb 2024 20:07:25 +0000 (GMT)
+Message-ID: <63afc94126521629bb7656b6e6783d6614ee898a.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 12/25] security: Introduce file_post_open hook
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>,
+        Roberto Sassu
+	 <roberto.sassu@huaweicloud.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com,
+        jlayton@kernel.org, neilb@suse.de, kolga@netapp.com,
+        Dai.Ngo@oracle.com, tom@talpey.com, jmorris@namei.org,
+        serge@hallyn.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com, shuah@kernel.org,
+        mic@digikod.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date: Wed, 14 Feb 2024 15:07:25 -0500
+In-Reply-To: <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+	 <20240115181809.885385-13-roberto.sassu@huaweicloud.com>
+	 <305cd1291a73d788c497fe8f78b574d771b8ba41.camel@linux.ibm.com>
+	 <CAHC9VhQ7DgPJtNTRCYneu_XnpRmuwfPCW+FqVuS=k6U5-F6pJw@mail.gmail.com>
+	 <05ad625b0f5a0e6c095abee5507801da255b36cd.camel@huaweicloud.com>
+	 <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3pmfVPR_ZkYzTv8MNJbgBILvsfAhufy_
+X-Proofpoint-GUID: pUskxnPY1Bl82nL8IEpe0UmPvkoY0NWY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-14_12,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ spamscore=0 suspectscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402140157
 
-On Tue, Feb 13, 2024 at 07:44 AM -08, Jakub Kicinski wrote:
-> Selftest summary includes XFAIL but there's no way to use
-> it from within the harness. Support it in a similar way to skip.
->
-> Currently tests report skip for things they expect to fail
-> e.g. when given combination of parameters is known to be unsupported.
-> This is confusing because in an ideal environment and fully featured
-> kernel no tests should be skipped.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  tools/testing/selftests/kselftest_harness.h | 37 +++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index 618b41eac749..561a817117f9 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -141,6 +141,33 @@
->  	statement; \
->  } while (0)
->  
-> +/**
-> + * XFAIL()
-> + *
-> + * @statement: statement to run after reporting XFAIL
-> + * @fmt: format string
-> + * @...: optional arguments
-> + *
-> + * .. code-block:: c
-> + *
-> + *     XFAIL(statement, fmt, ...);
-> + *
-> + * This forces a "pass" after reporting why something is expected to fail,
-> + * and runs "statement", which is usually "return" or "goto skip".
-> + */
-> +#define XFAIL(statement, fmt, ...) do { \
-> +	snprintf(_metadata->results->reason, \
-> +		 sizeof(_metadata->results->reason), fmt, ##__VA_ARGS__); \
-> +	if (TH_LOG_ENABLED) { \
-> +		fprintf(TH_LOG_STREAM, "#      XFAIL      %s\n", \
-> +			_metadata->results->reason); \
-> +	} \
-> +	_metadata->passed = 1; \
-> +	_metadata->xfail = 1; \
-> +	_metadata->trigger = 0; \
-> +	statement; \
-> +} while (0)
-> +
->  /**
->   * TEST() - Defines the test function and creates the registration
->   * stub
-> @@ -834,6 +861,7 @@ struct __test_metadata {
->  	int termsig;
->  	int passed;
->  	int skip;	/* did SKIP get used? */
-> +	int xfail;	/* did XFAIL get used? */
->  	int trigger; /* extra handler after the evaluation */
->  	int timeout;	/* seconds to wait for test timeout */
->  	bool timed_out;	/* did this test timeout instead of exiting? */
-> @@ -941,6 +969,9 @@ void __wait_for_test(struct __test_metadata *t)
->  			/* SKIP */
->  			t->passed = 1;
->  			t->skip = 1;
-> +		} else if (WEXITSTATUS(status) == KSFT_XFAIL) {
-> +			t->passed = 1;
-> +			t->xfail = 1;
->  		} else if (t->termsig != -1) {
->  			t->passed = 0;
->  			fprintf(TH_LOG_STREAM,
-> @@ -1112,6 +1143,7 @@ void __run_test(struct __fixture_metadata *f,
->  	/* reset test struct */
->  	t->passed = 1;
->  	t->skip = 0;
-> +	t->xfail = 0;
->  	t->trigger = 0;
->  	t->no_print = 0;
->  	memset(t->results->reason, 0, sizeof(t->results->reason));
-> @@ -1133,6 +1165,8 @@ void __run_test(struct __fixture_metadata *f,
->  		t->fn(t, variant);
->  		if (t->skip)
->  			_exit(KSFT_SKIP);
-> +		if (t->xfail)
-> +			_exit(KSFT_XFAIL);
->  		if (t->passed)
->  			_exit(KSFT_PASS);
->  		/* Something else happened. */
-> @@ -1146,6 +1180,9 @@ void __run_test(struct __fixture_metadata *f,
->  	if (t->skip)
->  		ksft_test_result_skip("%s\n", t->results->reason[0] ?
->  					t->results->reason : "unknown");
-> +	else if (t->xfail)
-> +		ksft_test_result_xfail("%s\n", t->results->reason[0] ?
-> +				       t->results->reason : "unknown");
->  	else
->  		ksft_test_result(t->passed, "%s%s%s.%s\n",
->  			f->name, variant->name[0] ? "." : "", variant->name, t->name);
+On Tue, 2024-02-13 at 10:33 -0500, Paul Moore wrote:
+> On Tue, Feb 13, 2024 at 7:59 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Mon, 2024-02-12 at 16:16 -0500, Paul Moore wrote:
+> > > On Mon, Feb 12, 2024 at 4:06 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > Hi Roberto,
+> > > > 
+> > > > 
+> > > > > diff --git a/security/security.c b/security/security.c
+> > > > > index d9d2636104db..f3d92bffd02f 100644
+> > > > > --- a/security/security.c
+> > > > > +++ b/security/security.c
+> > > > > @@ -2972,6 +2972,23 @@ int security_file_open(struct file *file)
+> > > > >       return fsnotify_perm(file, MAY_OPEN);  <===  Conflict
+> > > > 
+> > > > Replace with "return fsnotify_open_perm(file);"
+> > > > 
+> > > > >  }
+> > > > > 
+> > > > 
+> > > > The patch set doesn't apply cleaning to 6.8-rcX without this
+> > > > change.  Unless
+> > > > there are other issues, I can make the change.
+> > > 
+> > > I take it this means you want to pull this via the IMA/EVM tree?
+> > 
+> > Not sure about that, but I have enough changes to do to make a v10.
 
-On second thought, if I can suggest a follow up change so this:
+@Roberto:  please add my "Reviewed-by" to the remaining patches.
 
-ok 17 # XFAIL SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
+> 
+> Sorry, I should have been more clear, the point I was trying to
+> resolve was who was going to take this patchset (eventually).  There
+> are other patches destined for the LSM tree that touch the LSM hooks
+> in a way which will cause conflicts with this patchset, and if
+> you/Mimi are going to take this via the IMA/EVM tree - which is fine
+> with me - I need to take that into account when merging things in the
+> LSM tree during this cycle.  It's not a big deal either way, it would
+> just be nice to get an answer on that within the next week.
 
-... becomes this
+Similarly there are other changes for IMA and EVM.  If you're willing to create
+a topic branch for just the v10 patch set that can be merged into your tree and
+into my tree, I'm fine with your upstreaming v10. (I'll wait to send my pull
+request after yours.)  Roberto will add my Ack's to the integrity, IMA, and EVM
+related patches.  However if you're not willing to create a topic branch, I'll
+upstream the v10 patch set.
 
-ok 17 ip_local_port_range.ip4_stcp.late_bind # XFAIL SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
+thanks,
 
-You see, we parse test results if they are in TAP format. Lack of test
-name for xfail'ed and skip'ed tests makes it difficult to report in CI
-which subtest was it. Happy to contribute it, once this series gets
-applied.
+Mimi
 
-A quick 'n dirty change could look like below. Open to better ideas.
-
----8<---
-
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index a781e6311810..b73985df9cb9 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -211,7 +211,8 @@ static inline __printf(1, 2) void ksft_test_result_fail(const char *msg, ...)
- 		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
- 	} while (0)
- 
--static inline __printf(1, 2) void ksft_test_result_xfail(const char *msg, ...)
-+static inline __printf(2, 3) void ksft_test_result_xfail(const char *test_name,
-+							 const char *msg, ...)
- {
- 	int saved_errno = errno;
- 	va_list args;
-@@ -219,7 +220,7 @@ static inline __printf(1, 2) void ksft_test_result_xfail(const char *msg, ...)
- 	ksft_cnt.ksft_xfail++;
- 
- 	va_start(args, msg);
--	printf("ok %u # XFAIL ", ksft_test_num());
-+	printf("ok %u %s # XFAIL ", ksft_test_num(), test_name);
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 561a817117f9..2db647f98abc 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -56,6 +56,7 @@
- #include <asm/types.h>
- #include <ctype.h>
- #include <errno.h>
-+#include <limits.h>
- #include <stdbool.h>
- #include <stdint.h>
- #include <stdio.h>
-@@ -1140,6 +1141,8 @@ void __run_test(struct __fixture_metadata *f,
- 		struct __fixture_variant_metadata *variant,
- 		struct __test_metadata *t)
- {
-+	char test_name[LINE_MAX];
-+
- 	/* reset test struct */
- 	t->passed = 1;
- 	t->skip = 0;
-@@ -1149,8 +1152,9 @@ void __run_test(struct __fixture_metadata *f,
- 	memset(t->results->reason, 0, sizeof(t->results->reason));
- 	t->results->step = 1;
- 
--	ksft_print_msg(" RUN           %s%s%s.%s ...\n",
--	       f->name, variant->name[0] ? "." : "", variant->name, t->name);
-+	snprintf(test_name, sizeof(test_name), "%s%s%s.%s",
-+		 f->name, variant->name[0] ? "." : "", variant->name, t->name);
-+	ksft_print_msg(" RUN           %s ...\n", test_name);
- 
- 	/* Make sure output buffers are flushed before fork */
- 	fflush(stdout);
-@@ -1174,18 +1178,16 @@ void __run_test(struct __fixture_metadata *f,
- 	} else {
- 		__wait_for_test(t);
- 	}
--	ksft_print_msg("         %4s  %s%s%s.%s\n", t->passed ? "OK" : "FAIL",
--	       f->name, variant->name[0] ? "." : "", variant->name, t->name);
-+	ksft_print_msg("         %4s  %s\n", t->passed ? "OK" : "FAIL", test_name);
- 
- 	if (t->skip)
- 		ksft_test_result_skip("%s\n", t->results->reason[0] ?
- 					t->results->reason : "unknown");
- 	else if (t->xfail)
--		ksft_test_result_xfail("%s\n", t->results->reason[0] ?
-+		ksft_test_result_xfail(test_name, "%s\n", t->results->reason[0] ?
- 				       t->results->reason : "unknown");
- 	else
--		ksft_test_result(t->passed, "%s%s%s.%s\n",
--			f->name, variant->name[0] ? "." : "", variant->name, t->name);
-+		ksft_test_result(t->passed, "%s\n", test_name);
- }
- 
- static int test_harness_run(int argc, char **argv)
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 2f8b991f78cb..0abab3b32c88 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -575,8 +575,7 @@ static void run_mremap_test_case(struct test test_case, int *failures,
- 
- 	if (remap_time < 0) {
- 		if (test_case.expect_failure)
--			ksft_test_result_xfail("%s\n\tExpected mremap failure\n",
--					      test_case.name);
-+			ksft_test_result_xfail(test_case.name, "\n\tExpected mremap failure\n");
- 		else {
- 			ksft_test_result_fail("%s\n", test_case.name);
- 			*failures += 1;
-diff --git a/tools/testing/selftests/net/tcp_ao/key-management.c b/tools/testing/selftests/net/tcp_ao/key-management.c
-index 24e62120b792..928f067513da 100644
---- a/tools/testing/selftests/net/tcp_ao/key-management.c
-+++ b/tools/testing/selftests/net/tcp_ao/key-management.c
-@@ -123,8 +123,8 @@ static void try_delete_key(char *tst_name, int sk, uint8_t sndid, uint8_t rcvid,
- 		return;
- 	}
- 	if (err && fault(FIXME)) {
--		test_xfail("%s: failed to delete the key %u:%u %d",
--			   tst_name, sndid, rcvid, err);
-+		test_xfail(tst_name, "failed to delete the key %u:%u %d",
-+			   sndid, rcvid, err);
- 		return;
- 	}
- 	if (!err) {
-@@ -283,8 +283,7 @@ static void assert_no_current_rnext(const char *tst_msg, int sk)
- 
- 	errno = 0;
- 	if (ao_info.set_current || ao_info.set_rnext) {
--		test_xfail("%s: the socket has current/rnext keys: %d:%d",
--			   tst_msg,
-+		test_xfail(tst_msg, "the socket has current/rnext keys: %d:%d",
- 			   (ao_info.set_current) ? ao_info.current_key : -1,
- 			   (ao_info.set_rnext) ? ao_info.rnext : -1);
- 	} else {
-diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-index fbc7f6111815..0d6f33b51758 100644
---- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-+++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-@@ -59,8 +59,8 @@ static inline void __test_print(void (*fn)(const char *), const char *fmt, ...)
- 	__test_print(__test_ok, fmt "\n", ##__VA_ARGS__)
- #define test_skip(fmt, ...)						\
- 	__test_print(__test_skip, fmt "\n", ##__VA_ARGS__)
--#define test_xfail(fmt, ...)						\
--	__test_print(__test_xfail, fmt "\n", ##__VA_ARGS__)
-+#define test_xfail(test_name, fmt, ...)					\
-+	__test_print(__test_xfail, test_name, fmt "\n", ##__VA_ARGS__)
- 
- #define test_fail(fmt, ...)						\
- do {									\
 
