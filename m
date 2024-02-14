@@ -1,390 +1,144 @@
-Return-Path: <linux-kselftest+bounces-4672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6087C855182
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 19:07:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5685485530C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 20:16:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17FC9296E2D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:07:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9CF9B2C75B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 19:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F1212BE9B;
-	Wed, 14 Feb 2024 18:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446FE13B7B8;
+	Wed, 14 Feb 2024 19:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="Ur3hbKrq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE0612BE95;
-	Wed, 14 Feb 2024 18:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A1D13B7A9;
+	Wed, 14 Feb 2024 19:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707933605; cv=none; b=gpCbnpjWCSw1qRoIz/41O7h6Y/mCnIW7aNJrGEgEGZWXEJdfK7ybfWhw/bVIoTZOvq90YuacYotJ60fpAzp+XtcpbevhzsOHG6QQNCA7TsB44R+G5KcWMzPgMTDgOrwyL6loL2ALa/VNQ/f+ozRsksylyIex8AI0XStra8bOiuE=
+	t=1707938064; cv=none; b=G6VIL4UZwYz5f8jEPPBV7lXmDZ+N14s03Jra2raJ4942YXZd/YOJRgobfmPTA3EevkhZGUPt9iW9PtTNYA4dfmUNK7KOuid+SVsI9X2W+SIz88nbtSlICVbpQfeaScTtYuzRNN6z1Q2ubyHR2EnexG/qlu27N+3emJiQfL/fXag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707933605; c=relaxed/simple;
-	bh=8o1OMKcaZWOUsbyykAfyHVNqcdPrR8vjw8GOz8EVjaI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=YcajP84aaMJXDwIORvSAb5M1ZwKRFXEbCGfy9jPS6a921ffAohNyYNlqUIpPs9cnifNVm0YhETPW4QX6Rb+DmMkgoHP3C9Karj6KUM3a16KH0vSCM1mpXbpoIkByYeaiQ88abQLKPPqFgP1Zr9xPec259Gj79KwyzdnDQGTgcSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E0031FB;
-	Wed, 14 Feb 2024 10:00:44 -0800 (PST)
-Received: from [10.57.64.120] (unknown [10.57.64.120])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F36F3F766;
-	Wed, 14 Feb 2024 10:00:02 -0800 (PST)
-Message-ID: <032098e3-38f7-4127-b420-b579a97ce47e@arm.com>
-Date: Wed, 14 Feb 2024 18:00:00 +0000
+	s=arc-20240116; t=1707938064; c=relaxed/simple;
+	bh=14BaVx8cuHZCZSoRpr+rbi+jknLxUXS3sryXnLK+89s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ozlfDEHeDrY/QXA1sijOIP4r89xWtLkkHfljfK02VeXTk64GF82v603osT4GjC9pt/A0YNucvjb8m82b8RlktJE61hNJ0PHQV5m2nQh5urZWfmFvark+AF73jPf1Et5mdW+lMbhxDj0z/Yul5vW0ZtT2gB0Wrgr2IBimLLlAu4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=Ur3hbKrq; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e0a479a6cbso111044b3a.0;
+        Wed, 14 Feb 2024 11:14:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707938062; x=1708542862;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FS+0qaKLpt8lT9N1wmj76XGmLNXI3ICb4bQ8lj6EZNY=;
+        b=RY5iI7JKTJ8V8hFSymHXhC6XxG+xiNyonSf6maY1yna7t3aESISvpLa/A+5PIF//K5
+         lCiPc7HYvWaQd9jwYFRW/XFhNbBTCrUZW8eSNqxb9ZnWlskAQroh+JBEcMrsEE4NcRyJ
+         jUfUzc2j8C40CdUpLb0fU9eBL9cFBNsbqXqmO5QdstjyZPHss7IX3mseFxWnakrhuOVq
+         iAKlkkWtJwg/rSktwZEDCibagp4DwSVvYR2g2aL+4+dAqRBuOpybg3Or9bhGpAb6+Rws
+         AG47VPsIjYWIG5LH0xu03XOvuYHbw8uriuWum/35dkJvAlnodF47QbEQt8iSJgwbzfzU
+         XBWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUdzYMGNmMZ521f5fFpqSZYPI31uYXMlCNuEujo4sDnkJKucWf6JdKep+vURsthJVbnBesrodPWmfkPb+QnNsGTXAYPoJuFSXtDWmv
+X-Gm-Message-State: AOJu0YwtqXOBekxEI8uPa+vUGM+3Qz9GfgFNLgfRXTeHwBiv/7Yq50Nd
+	N7CRYq9wmseFUDZaCj60hOAixf+giFz4CaV0l274ay5wmhkek4BN
+X-Google-Smtp-Source: AGHT+IH7ooCb5KSY4SSuPAdacKRPF6aKGNWqgf5qrXG4aBKfAXSy0m6/IfY2awqb2YdOW3oGTwlFbg==
+X-Received: by 2002:a05:6a21:3944:b0:1a0:6f99:7287 with SMTP id ac4-20020a056a21394400b001a06f997287mr2361233pzc.61.1707938061788;
+        Wed, 14 Feb 2024 11:14:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWUYfyxipVjWSQOmW5NfLXJ5bSfqPo6q2e45scyrFzYp6KrCYccWgFGyIpz0U6J1dG4j/VqRNBk4tuL+IrTzUckOl70CneeZPLF4OkQI9JwRkrLdMfK9ukX9Cv6LrigRaEpr1PEibU5W5uFlrIFb43qDWEyPFplLer7KN04Y3q2hdujKmRaQaH+dLxUHYz6fEkmQGqE9PYbrgs=
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id t187-20020a6281c4000000b006d99f930607sm10420142pfd.140.2024.02.14.11.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Feb 2024 11:14:21 -0800 (PST)
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1707938060;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FS+0qaKLpt8lT9N1wmj76XGmLNXI3ICb4bQ8lj6EZNY=;
+	b=Ur3hbKrqW2rAbRCU2dKCACKHEY+DDvzxvdD23iuGSEY5eppKJo/ZcLYDJlzLe5yxWzCnSV
+	qbjUkGSJbGdFur338koYI/e7L9FDKGjsBjiAUlniCDCgUtTHQ/d59cl5PE1DWqiQAG0MxY
+	rYEgoJDgyfSwDYBvzT+j8fLu79nU34x9HN1uEC8r05801gxmemCLftUEYFOngWG8jZjz/N
+	FSrSkefbp5Pxr3iGjPXD4rBD99RX4y84msaoZuTeRMLNELg2oJCO/zEHwVRDv1jFUjxAlL
+	vpoOr87hd+LPPMP99HXYBIzEn0Mh0xGQGRouhV2TDq78fQW74BS1R4OEzqAZhQ==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+Date: Wed, 14 Feb 2024 16:15:00 -0300
+Subject: [PATCH] kunit: make kunit_bus_type const
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/12] selftests/mm: thp_settings: conform to TAP
- format output
-Content-Language: en-GB
-From: Ryan Roberts <ryan.roberts@arm.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: kernel@collabora.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Aishwarya TCV <Aishwarya.TCV@arm.com>
-References: <20240202113119.2047740-1-usama.anjum@collabora.com>
- <20240202113119.2047740-10-usama.anjum@collabora.com>
- <0c3182ae-885c-4156-980b-e35d825fe72e@arm.com>
-In-Reply-To: <0c3182ae-885c-4156-980b-e35d825fe72e@arm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240214-bus_cleanup-kunit-v1-1-1a38323eed73@marliere.net>
+X-B4-Tracking: v=1; b=H4sIADQRzWUC/x3MQQqAIBBA0avErBNGE4quEhGlUw2FhWYE0t2Tl
+ m/xf4JAnilAWyTwdHPgw2XIsgCzjm4hwTYbFCqNSmoxxTCYnUYXT7FFx5doNBpb1ROSRMjd6Wn
+ m5392/ft++PjoXGMAAAA=
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1126; i=ricardo@marliere.net;
+ h=from:subject:message-id; bh=14BaVx8cuHZCZSoRpr+rbi+jknLxUXS3sryXnLK+89s=;
+ b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBlzRE1VNxJ8zR76D76j3o1iSdYcKAZFek0I1i9g
+ kBNS2hyioWJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZc0RNQAKCRDJC4p8Y4ZY
+ phfeD/9Akfm8qZNJqn7s6OryAmRmpgQ+u0OjFB074u/3vxiwy8kZ6mJ7bXt8H6ntI7aWc5BOWMZ
+ ZG5iyJLHSCbk54saLS1+z24lajvslmUhewBBj1B3hYTeCN0WLv/zj9jbbu7papZbrFIv2ihyvIR
+ 4M9sS/tuY5WyDfhN6REEG2DekiVcy+LQfIlPil3xtEiJTQRGrt7W5Ulyyc2FKjKQpacytKCiC3i
+ nkd/UImp7YvF8nHwWbinXJB5EPz3MlPbSeq7j3e/6u9mU3Gty9p+UntvLN7X0QRmU+/DzJ6MqKV
+ ClnO16bswJ9HgFwrdxXZe+MEhpK1To0gYBmien06D8qYkQMwM9K8k/I7iSHQHl0EN5zVJDkCZ+Q
+ iasMt7BmyVIHFUaMi0212cBANa7WAV7PajaETLjhkeGF2jPWI1qTRwG0Z1AGNnT/YWDfVZT1PzO
+ fUwPRP9X1Za0Svt6qNv1Dqc8amsF6hkon7WbE7PZgEKIEqAvhJNB3TljrPXxwzEp3bQxg5G+RUw
+ iX0E7j1ghzZvKg8IAn+F2XrMuD4LHso1VC7hM39lhiC7E+8J9bOivZ3JTTRWWrWrEy2C4eTMioh
+ DQKXtyZu8MmCpLpn0yJVeR/MEyD6OcVUvOXLQ9GNUT8kasLi9r96aH2fiYb+j3DG2mnGQC5mhEZ
+ xBqxZSKPbRSdIfw==
+X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
+ fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
-On 14/02/2024 17:19, Ryan Roberts wrote:
-> On 02/02/2024 11:31, Muhammad Usama Anjum wrote:
->> Conform the layout, informational and status messages to TAP. No
->> functional change is intended other than the layout of output messages.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>  tools/testing/selftests/mm/khugepaged.c   |   3 +-
->>  tools/testing/selftests/mm/thp_settings.c | 123 ++++++++--------------
->>  tools/testing/selftests/mm/thp_settings.h |   4 +-
->>  3 files changed, 47 insertions(+), 83 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
->> index d51fdaee7dc6a..3f202da0867c5 100644
->> --- a/tools/testing/selftests/mm/khugepaged.c
->> +++ b/tools/testing/selftests/mm/khugepaged.c
->> @@ -152,8 +152,7 @@ static void get_finfo(const char *dir)
->>  		     major(path_stat.st_dev), minor(path_stat.st_dev)) >= sizeof(path))
->>  		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
->>  
->> -	if (read_file(path, buf, sizeof(buf)) < 0)
->> -		ksft_exit_fail_msg("read_file(read_num): %s\n", strerror(errno));
->> +	read_file(path, buf, sizeof(buf));
->>  
->>  	if (strstr(buf, "DEVTYPE=disk")) {
->>  		/* Found it */
->> diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
->> index a4163438108ec..273a95d025285 100644
->> --- a/tools/testing/selftests/mm/thp_settings.c
->> +++ b/tools/testing/selftests/mm/thp_settings.c
->> @@ -5,7 +5,9 @@
->>  #include <stdlib.h>
->>  #include <string.h>
->>  #include <unistd.h>
->> +#include <errno.h>
->>  
->> +#include "../kselftest.h"
->>  #include "thp_settings.h"
->>  
->>  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
->> @@ -42,58 +44,45 @@ static const char * const shmem_enabled_strings[] = {
->>  	NULL
->>  };
->>  
->> -int read_file(const char *path, char *buf, size_t buflen)
->> +void read_file(const char *path, char *buf, size_t buflen)
->>  {
->>  	int fd;
->>  	ssize_t numread;
->>  
->>  	fd = open(path, O_RDONLY);
->>  	if (fd == -1)
->> -		return 0;
->> +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-> 
-> Hi,
-> 
-> This change has broken back compat. It's no longer possible to run cow and
-> khugepaged tests against older kernels.
-> 
-> This function, as well as others in this file are intended to return 0 to
-> indicate the file could not be accessed (e.g. doesn't exist or don't have
-> permission, etc). Then higher level code can decide how to handle that. For
-> example, thp_supported_orders() determines which THP orders are supported by the
-> system based on the existence of certain files in sysfs. Then cow decides which
-> test variants to run based on the supported orders. With your change, it all
-> goes bang on the first probe and the whole test suite gets failed without
-> running any tests.
-> 
-> I've no problem with improving the TAP output from tests, but this must only be
-> done at the test level, where it makes sense to do so. You can just call
-> ksft_exit_fail_msg() from deep within a utility function.
-> 
-> Please can we remove this from mm-unstable.
+Since commit d492cc2573a0 ("driver core: device.h: make struct
+bus_type a const *"), the driver core can properly handle constant
+struct bus_type, move the kunit_bus_type variable to be a constant
+structure as well, placing it into read-only memory which can not be
+modified at runtime.
 
-Actually it is even worse than I first thought. With this change, the tests fail
-even when running against a matched kernel.
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+---
+ lib/kunit/device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thp_supported_orders() tries to probe every possible order and relies on the
-probe succeeding or failing to determine which orders are actually supported.
-The first order it tries is 0 (4K). That is not THP, so there is no
-hugepages-4K/enabled file for it. So it blows up immediately.
+diff --git a/lib/kunit/device.c b/lib/kunit/device.c
+index f5371287b375..d23b8fb166d8 100644
+--- a/lib/kunit/device.c
++++ b/lib/kunit/device.c
+@@ -35,7 +35,7 @@ struct kunit_device {
+ 
+ #define to_kunit_device(d) container_of_const(d, struct kunit_device, dev)
+ 
+-static struct bus_type kunit_bus_type = {
++static const struct bus_type kunit_bus_type = {
+ 	.name		= "kunit",
+ };
+ 
 
-So I don't think you even ran the tests locally after making the change?
+---
+base-commit: 76021a887a50892fd969cd42a5f3467f5696e50e
+change-id: 20240214-bus_cleanup-kunit-840cd37b0e10
 
-
-> 
-> Thanks,
-> Ryan
-> 
-> 
->>  
->>  	numread = read(fd, buf, buflen - 1);
->>  	if (numread < 1) {
->>  		close(fd);
->> -		return 0;
->> +		ksft_exit_fail_msg("No data read\n");
->>  	}
->>  
->>  	buf[numread] = '\0';
->>  	close(fd);
->> -
->> -	return (unsigned int) numread;
->>  }
->>  
->> -int write_file(const char *path, const char *buf, size_t buflen)
->> +void write_file(const char *path, const char *buf, size_t buflen)
->>  {
->>  	int fd;
->>  	ssize_t numwritten;
->>  
->>  	fd = open(path, O_WRONLY);
->> -	if (fd == -1) {
->> -		printf("open(%s)\n", path);
->> -		exit(EXIT_FAILURE);
->> -		return 0;
->> -	}
->> +	if (fd == -1)
->> +		ksft_exit_fail_msg("%s open failed\n", path);
->>  
->>  	numwritten = write(fd, buf, buflen - 1);
->>  	close(fd);
->> -	if (numwritten < 1) {
->> -		printf("write(%s)\n", buf);
->> -		exit(EXIT_FAILURE);
->> -		return 0;
->> -	}
->> -
->> -	return (unsigned int) numwritten;
->> +	if (numwritten < 1)
->> +		ksft_exit_fail_msg("write failed (%s)\n", buf);
->>  }
->>  
->>  const unsigned long read_num(const char *path)
->>  {
->>  	char buf[21];
->>  
->> -	if (read_file(path, buf, sizeof(buf)) < 0) {
->> -		perror("read_file()");
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	read_file(path, buf, sizeof(buf));
->>  
->>  	return strtoul(buf, NULL, 10);
->>  }
->> @@ -103,10 +92,7 @@ void write_num(const char *path, unsigned long num)
->>  	char buf[21];
->>  
->>  	sprintf(buf, "%ld", num);
->> -	if (!write_file(path, buf, strlen(buf) + 1)) {
->> -		perror(path);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	write_file(path, buf, strlen(buf) + 1);
->>  }
->>  
->>  int thp_read_string(const char *name, const char * const strings[])
->> @@ -117,30 +103,22 @@ int thp_read_string(const char *name, const char * const strings[])
->>  	int ret;
->>  
->>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
->> -	if (ret >= PATH_MAX) {
->> -		printf("%s: Pathname is too long\n", __func__);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (ret >= PATH_MAX)
->> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
->>  
->> -	if (!read_file(path, buf, sizeof(buf))) {
->> -		perror(path);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	read_file(path, buf, sizeof(buf));
->>  
->>  	c = strchr(buf, '[');
->> -	if (!c) {
->> -		printf("%s: Parse failure\n", __func__);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (!c)
->> +		ksft_exit_fail_msg("%s: Parse failure\n", __func__);
->>  
->>  	c++;
->>  	memmove(buf, c, sizeof(buf) - (c - buf));
->>  
->>  	c = strchr(buf, ']');
->> -	if (!c) {
->> -		printf("%s: Parse failure\n", __func__);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (!c)
->> +		ksft_exit_fail_msg("%s: Parse failure\n", __func__);
->> +
->>  	*c = '\0';
->>  
->>  	ret = 0;
->> @@ -150,8 +128,8 @@ int thp_read_string(const char *name, const char * const strings[])
->>  		ret++;
->>  	}
->>  
->> -	printf("Failed to parse %s\n", name);
->> -	exit(EXIT_FAILURE);
->> +	ksft_exit_fail_msg("Failed to parse %s\n", name);
->> +	return -1;
->>  }
->>  
->>  void thp_write_string(const char *name, const char *val)
->> @@ -160,15 +138,10 @@ void thp_write_string(const char *name, const char *val)
->>  	int ret;
->>  
->>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
->> -	if (ret >= PATH_MAX) {
->> -		printf("%s: Pathname is too long\n", __func__);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (ret >= PATH_MAX)
->> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
->>  
->> -	if (!write_file(path, val, strlen(val) + 1)) {
->> -		perror(path);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	write_file(path, val, strlen(val) + 1);
->>  }
->>  
->>  const unsigned long thp_read_num(const char *name)
->> @@ -177,10 +150,9 @@ const unsigned long thp_read_num(const char *name)
->>  	int ret;
->>  
->>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
->> -	if (ret >= PATH_MAX) {
->> -		printf("%s: Pathname is too long\n", __func__);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (ret >= PATH_MAX)
->> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
->> +
->>  	return read_num(path);
->>  }
->>  
->> @@ -190,10 +162,9 @@ void thp_write_num(const char *name, unsigned long num)
->>  	int ret;
->>  
->>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
->> -	if (ret >= PATH_MAX) {
->> -		printf("%s: Pathname is too long\n", __func__);
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (ret >= PATH_MAX)
->> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
->> +
->>  	write_num(path, num);
->>  }
->>  
->> @@ -275,29 +246,26 @@ void thp_write_settings(struct thp_settings *settings)
->>  
->>  struct thp_settings *thp_current_settings(void)
->>  {
->> -	if (!settings_index) {
->> -		printf("Fail: No settings set");
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (!settings_index)
->> +		ksft_exit_fail_msg("Fail: No settings set\n");
->> +
->>  	return settings_stack + settings_index - 1;
->>  }
->>  
->>  void thp_push_settings(struct thp_settings *settings)
->>  {
->> -	if (settings_index >= MAX_SETTINGS_DEPTH) {
->> -		printf("Fail: Settings stack exceeded");
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (settings_index >= MAX_SETTINGS_DEPTH)
->> +		ksft_exit_fail_msg("Fail: Settings stack exceeded\n");
->> +
->>  	settings_stack[settings_index++] = *settings;
->>  	thp_write_settings(thp_current_settings());
->>  }
->>  
->>  void thp_pop_settings(void)
->>  {
->> -	if (settings_index <= 0) {
->> -		printf("Fail: Settings stack empty");
->> -		exit(EXIT_FAILURE);
->> -	}
->> +	if (settings_index <= 0)
->> +		ksft_exit_fail_msg("Fail: Settings stack empty\n");
->> +
->>  	--settings_index;
->>  	thp_write_settings(thp_current_settings());
->>  }
->> @@ -335,14 +303,11 @@ unsigned long thp_supported_orders(void)
->>  	for (i = 0; i < NR_ORDERS; i++) {
->>  		ret = snprintf(path, PATH_MAX, THP_SYSFS "hugepages-%ukB/enabled",
->>  			(getpagesize() >> 10) << i);
->> -		if (ret >= PATH_MAX) {
->> -			printf("%s: Pathname is too long\n", __func__);
->> -			exit(EXIT_FAILURE);
->> -		}
->> +		if (ret >= PATH_MAX)
->> +			ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
->>  
->> -		ret = read_file(path, buf, sizeof(buf));
->> -		if (ret)
->> -			orders |= 1UL << i;
->> +		read_file(path, buf, sizeof(buf));
->> +		orders |= 1UL << i;
->>  	}
->>  
->>  	return orders;
->> diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
->> index 71cbff05f4c7f..04a6a7bbd08f8 100644
->> --- a/tools/testing/selftests/mm/thp_settings.h
->> +++ b/tools/testing/selftests/mm/thp_settings.h
->> @@ -56,8 +56,8 @@ struct thp_settings {
->>  	struct hugepages_settings hugepages[NR_ORDERS];
->>  };
->>  
->> -int read_file(const char *path, char *buf, size_t buflen);
->> -int write_file(const char *path, const char *buf, size_t buflen);
->> +void read_file(const char *path, char *buf, size_t buflen);
->> +void write_file(const char *path, const char *buf, size_t buflen);
->>  const unsigned long read_num(const char *path);
->>  void write_num(const char *path, unsigned long num);
->>  
-> 
+Best regards,
+-- 
+Ricardo B. Marliere <ricardo@marliere.net>
 
 
