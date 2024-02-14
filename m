@@ -1,241 +1,197 @@
-Return-Path: <linux-kselftest+bounces-4640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8023854C7F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 16:19:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3A5E854C8B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 16:21:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C6401F29BC7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 15:19:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B2C828DCFF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 15:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412CF5C602;
-	Wed, 14 Feb 2024 15:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E0AB5D47E;
+	Wed, 14 Feb 2024 15:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dejtT5md"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cedw4qI+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2089.outbound.protection.outlook.com [40.107.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0405A7B4;
-	Wed, 14 Feb 2024 15:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707923972; cv=fail; b=IcFoYhGBnLAq6n+wIJJA7YR+/nJ7I3SSWs0PzeIU9kolR2swMTtvMrqVOD0A3mDVTMjy7FocMbucJbpfNA5Tm1kX4ZuyjiMmEaKfJodZGHwrPgbrEXLo+b+jXvXAAHjm/OlKFUIqnHArcRC0xE2MssgMYfYBpngrPXKtu+2R5VM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707923972; c=relaxed/simple;
-	bh=Fsr0B/0GLLArSGtuF5yecwbRD0jbFgqWVkfEjq7uwMY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ovNR638svCqQohC9V5QGTzC3Pye1sg4xxTHD6iyMJYplfYLJ9wigHM7KuofA1/lRYEYLJ9KJEb2AmP6wdBO05DJ/IfpItXzV7/c9Um/SZ4r317AU9i2odtTZXSTzJXF1ujlEmppXVUeXf3sIKVjCzlNDTRxHw5/YEuWiGXgqLJw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dejtT5md; arc=fail smtp.client-ip=40.107.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kn5vLWy+OvOtMfupsfuoXJf9g+4RPMSqOiGsichYsdg5JGDvKA6LR+JAvY0VH5myjBQKOpLq1njvSPEtt8GQD5LwnzcBgf15VYNKuvFUVy3rfkLR3qaL3e/z3m+Dj9OMuvraQMLNdGSh57gPHNeBHpnZBz53LfOHYivNGcHfZkliGGFJwEZ/+sNBXtAHDoXGsiahXuTcjQR7GFP2NzORBaIxJiY8e2WBG3xfgESdWTi7cYPBxUIBEr0sfrKZ3qfeEg2k91GLIXQRgGXx87w7DrNJ1/dQfNSyBRShHCGsqzdzWX8vAsiK/xKindO4WzikGM+rOCsqU1Y5eskZom5LKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L8Ky7f64np0p1muXhNJIEgbsBYkJb/YrLTBP4EWVMn0=;
- b=Ca3vDbgUVmOWj1EkO9gS18Jbb4n7YfkRdYCRpsNk6AB3c58mB5SQGFxtbBYE8TwdZCxqh9PZBSDRKLGqRZ7bjCuPsxysZ+5lNh6MZRDa7hqA8UGwECNe0f4j0H1cKwueWTuJMG9Kav6dcD5v988OiJdHG3ep/FV+VqNTMFtar0ccYsdx1sJ47o1xHsrytFRJKezucrNKAETUgEq8sBTA+D3xZysaItZWzBhTTah4asKKq21FWaPDyvO6KU6zsuE1a1rZjKIhUn44ASw7kIEM3S4TmUL7Y3VRCQnV9FxO7TnN3JlzmPLl2chohB7e9J/B0kv0iqoGnJddtkF6hNHS5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L8Ky7f64np0p1muXhNJIEgbsBYkJb/YrLTBP4EWVMn0=;
- b=dejtT5mdKWSm0RMFLHhWsY5sAJvKqn6UMwf+pttflRvbJfcP/pNU0b3NipLwumu+cOVK5Npxzc+1IBW4WBapXiZ3Q96kgsXHDxl+OJvR1ly7OKtfbRTISCBBy9BkVYrdB57cei1/Vcjp6SDtJH0GbKpmuLZDrEqgcM+ROIwbDk0D/g8J6HZcavk5CAc3ZA/A5vHpz0fsIWvdh4QSMbgg/yvgcFamhipZACtg5o/56qZoJpSGnhSJ4WOAMuny1WGUIxHHOlHw1MxqipmUdcV2fw1Sc3z4HbZN67epPOZds0wa99rsZh0beP6kUTUQzn87wsL36dMAcdlqKzM39sUHmA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- SN7PR12MB7323.namprd12.prod.outlook.com (2603:10b6:806:29a::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7292.26; Wed, 14 Feb 2024 15:19:24 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::db3e:28df:adc1:9c15%5]) with mapi id 15.20.7316.012; Wed, 14 Feb 2024
- 15:19:24 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>,
- linux-mm@kvack.org, "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
- Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
- "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>,
- =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Mcgrof Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 1/7] mm/memcg: use order instead of nr in
- split_page_memcg()
-Date: Wed, 14 Feb 2024 10:19:21 -0500
-X-Mailer: MailMate (1.14r6018)
-Message-ID: <1110486E-73BE-44AE-A290-BC8AE1F06F8A@nvidia.com>
-In-Reply-To: <27691f5d-2218-4247-b688-cd16d46961c3@redhat.com>
-References: <20240213215520.1048625-1-zi.yan@sent.com>
- <20240213215520.1048625-2-zi.yan@sent.com>
- <27691f5d-2218-4247-b688-cd16d46961c3@redhat.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_6E9AA38E-7372-4581-94C5-3567A0306DC9_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR15CA0061.namprd15.prod.outlook.com
- (2603:10b6:208:237::30) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE221E862;
+	Wed, 14 Feb 2024 15:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707924084; cv=none; b=m6VdrxH37hFSvX1cD+C1zoF9zLF3FdEIUFxB++k3FMMSfFQbgd+ZGeW3gVMeSm3ARYMKTVaeHNexaU3aSgmwMTftDN+GpHywCTq2yDeCArQTI0zq2mkyZkT9TUCQQb960CHgtecY41WRYbKBKYLT8Kr0oaWkdKqhekAYnN+1mhQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707924084; c=relaxed/simple;
+	bh=hoHcVDk16XAJElysZKBwoYlEivbmMy1dE57Ck84C2fY=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=BFELBUCHcJ/vItHlyt55AedWcAhf/xLkovkDkI13rHV4alXh18srDaU38Yix0cEjQ/fh087KvIapuoXe/9S3yD14gTP06qPVQLkF+NaxQQBHu+m03uZkcNR88ZQm2eSm5uSah2iMkoCoa+Vdv1eG2wN+luJjf5Z2QpmYRwwGWv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cedw4qI+; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2d0a4e1789cso66529611fa.3;
+        Wed, 14 Feb 2024 07:21:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707924080; x=1708528880; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Pr15UxaRNNmkvqK+He+wlb2GgZLfbS3fJbzNeeMrFQ=;
+        b=cedw4qI+pTV6/2u6nNlddaxvBCwMndE1abicqsDpqwgDkcNJvPMeXckqG6wS2U/Fmb
+         QxyAy+tYAfwNq6NqqYWb6j/x1es52tcJ1lknv2RWHF/BdlJ22Y1Y0CNg8BywuKmARtg3
+         juVGU/t/bduVg6Ul4vRNwu4PbJnjgyMMsWQtAK8BQm+IQ9xVzUpOvjmy6zeQ31dX2Yl0
+         pSonwhSnU4Qmj67oB9oWf57WX85R3KG+zBDm7xXuC3fVkNfSKxHxHgLdH8MXbK0nbVvy
+         /FnLIkxjlK947XLfB5NrgOYam1b6tz277yv9NOFi9H0ilPAoNaQnTyNrp255HQ27cKJ0
+         alBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707924080; x=1708528880;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Pr15UxaRNNmkvqK+He+wlb2GgZLfbS3fJbzNeeMrFQ=;
+        b=HBImv+qgFty8oRwiy/Myk+HybFl144jejQfaqwrVEST4CUhGmgXquCy+onfZ7sacNu
+         KgWyH8bJQtVCS5iK6TSrrDK2PigavI4I7eHQHbZKu87omgrMuz+h+/1T/V6BN9PVjDi5
+         Daoc8jWA32PZFqYbQrDD2d2GttIDlua3NIS7kVUBwdSBWH8M0RffSvph0VcosS8/+e5f
+         tm674TCHZOPV+SeqE3CAC3brsoRvJSDpjZAkOOFB5I8H5fkaZj6RXxgp4acx4oIolSFp
+         A57YZLlOP0LRgfEVnqBCxK9OtaqAWGHGQHJVl/zwmZEHHUog/j+aRtMrAzEQ3lAezwFT
+         tm5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXW2UyVt2is1EWvPlTbJeU9JTrWWLI14xdCVBLibJG9iC9kusjO2exC0UStPbervngam97zYPSDBSTe2jf/9mVHzvZtDXlcrocDqcWl8WVgzqq/XxJYXPy7nd/izbqGqigdSN1aSvSpLsokhDfhcNKGJrI8dwkjzt/a1xIjXKlajlOKjawY9wejYFsZncBX0rZhyJcVQqpXRQYSvRH0
+X-Gm-Message-State: AOJu0YxBhOUOGIX9nDAiAx69/M7m0VIac6fJfCk34DkhAOCeqyJtMl1C
+	Ruc1l+akn6kfMCjVYGmsPZj733nsiFnWBNPrn2CQyzdcANBG757W
+X-Google-Smtp-Source: AGHT+IGyFvg5S9HPImDh5w5FpK3WH8gvrbyC8vFLmQHTmP4kfMQigz825zz60Doo7wJpkiWUKGEexg==
+X-Received: by 2002:a2e:8e2f:0:b0:2d0:de6f:c697 with SMTP id r15-20020a2e8e2f000000b002d0de6fc697mr1935294ljk.13.1707924080107;
+        Wed, 14 Feb 2024 07:21:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXYkWebjCqp/wgBMia5PRqUrydyGf0lABVvAFxLoYzDh2jHWoGMdGQPUx/hgj5ZoaURRwfe6Bnf2mXKW6VGoxFmwkGX4UyM39Tgiv3q/Rlwt9QyIX/IqJrB5i5hpCPCgnNlnX3Mu76l7E/02LH2Ldiu5lid9/QC019gSdpZ/39RwEWVD4oAZ0rLcuEVpMD/DVAy1LQvB1qfoL0sAPhprVzIxL8ybnPlP2Z7XNxpgz/nbDw387JFIV7tVElLB+BvAZlYPqwRpQcSQ0o9YaybYu1LYiN4wQ4gNFRT8MLPIWkBvx4BIXkzMmPhDUOIwP9QXDXhkiVG2Ct9QCwM6BHjAKx+R2+Wd3nF9GtHHt2ylF0LFDTjOsX+NgD+FbIHFgdrHCfOcU79Rcg9vJJjagYB0P0+X8GHfgwlY68kBAI7NaT7WUQRX23O0izOo/hvZKdreLG6rOyvT2AEij6CM8ahfMbn7MTnnpR0Rzq3YN3N6NCexJ7Ma9DLj5ojuSaWn7mv/x5hRV0hgQamerAsV6XnYYKz0XNlsJadLiIsidYD8VRzsQ==
+Received: from [192.168.11.205] (54-240-197-236.amazon.com. [54.240.197.236])
+        by smtp.gmail.com with ESMTPSA id a4-20020a05600c2d4400b00411d3a414c6sm2165101wmg.47.2024.02.14.07.21.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Feb 2024 07:21:19 -0800 (PST)
+From: Paul Durrant <xadimgnik@gmail.com>
+X-Google-Original-From: Paul Durrant <paul@xen.org>
+Message-ID: <9c542f39-959e-4ab1-94a5-39e049a30743@xen.org>
+Date: Wed, 14 Feb 2024 15:21:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|SN7PR12MB7323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f50121a-1c9d-4915-b584-08dc2d705399
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	WPn4y/uFnZRRhd2UE2y96n2Hc+ibvBIof9h9av0z7wv654fg9VBNsAJpfP32vD3xEBlOtsBrR0rI0JpIM+McvtvSIzhtKUvspZwSodwSJ1jQw9hk3Nrvqv7dbmk/90ui29k1CnVeQ94p3Rp9uAeQXLH2AG7unzX35tesmC4EfPgmpW4ovIQMteR5q71ux3eF1xn8Om5s2gEiUUkK/WaLFvxB7QRryNsmJf7ajFcflobC84jcVx6UkNQS7Qltvqo/XXcDNNyQ6imtuILed7ToDy4KJy8tpybCkzZDkKVtdxccWY/2NTEI1OIGw6WRU5IxAE59JQvY3A1EFq4drWCwt8akbAS4NuCpI99lCyL2ndSvc3tuHQAq2k0CyCo15rklnqjgaXP994UjtV0CqG1phu484u5o+MoA+yrSbkG6v+s0ZrVoe0e/byx65tsKbPiviay6LbE0xbY2RyPu/CSswTD36FnpOKRnuJQtrITPdch3Hvx7U4aJSBVdBPZ0Q9xrkVQbvaA9OXxNXvVx1XNNU0miX+v7HY4sGPyNNHnmrC6T9fx9J3YkA6Ql/T6oLU47
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(366004)(376002)(346002)(136003)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(7416002)(235185007)(2906002)(5660300002)(36756003)(41300700001)(2616005)(26005)(53546011)(33656002)(478600001)(38100700002)(6512007)(83380400001)(6506007)(66946007)(6486002)(86362001)(66556008)(66476007)(8676002)(6916009)(8936002)(4326008)(54906003)(6666004)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zLK4FmpHNvrrS0eXvOsBJl8AF6XM5T4/+TCr1bmRl3+oaZIaN35gbNxa30be?=
- =?us-ascii?Q?gw1uAthZtz9F2uCCMqOu61ZHBweB8BJmlug/YfCcUrtRDqRPDoJcjD4I0q/O?=
- =?us-ascii?Q?vpmJLoUKxogVcuvL8o2kgkPiv3NiQidgkQfMTbPJ/KCLpstSfkkzkU3ipVd8?=
- =?us-ascii?Q?BhzJ7g1AA8W+i5InLBqEK79M+uPmKQP/I4LEJE2nyGTfU/4jUwUENrS4wvSA?=
- =?us-ascii?Q?lYLzkWuft0qDo2Zz2S2fOQMwcVjGc5vBFdNVFahk/jgomkNVC53J3uLDT7Rs?=
- =?us-ascii?Q?/6VRn3HiC6Eddj+IsgvXX9gzUE9A+FHrayV+NybeA7fTpxKFd6Tt4bXqFkmt?=
- =?us-ascii?Q?+gEV1bfnbJuPn0MbeGX+YIBnWWgsPOQSw0Krzjwu1Wdwj5Pu4NsmCUjcON+u?=
- =?us-ascii?Q?aiKbf1LJv2lTeqwM55wmdSm8ARXYJTTXOk15ogx0i3LpeKQV+/osx6hey/NT?=
- =?us-ascii?Q?UEOOIGGCPQ2L1SirW39n/wpTnjMW8lhs2eTI11xWDKafzJHpzNT7ontDk7ef?=
- =?us-ascii?Q?to8Xztf5/wCWmiaB8hVJs3R7JPJ3MCUDv/e8bh9pZtPTM2gWrdgMWkSNbiJs?=
- =?us-ascii?Q?a6bsjBAunFXEckfMGwr0hnmmbhWBbx1IAHpvA/4ES0H3P+tVl27dyfG5UXCf?=
- =?us-ascii?Q?+bG4B2Im872/M6kTC9L9sUQpdNmSZXIxNkxG9BjVBCtTn8Kbdd6vDvmjdEcs?=
- =?us-ascii?Q?bPvoOAKnchn/WonhZtL7e/fDjIkkHAyTaHFTWzd79l+Hce6Pt1jW7V8VqxPc?=
- =?us-ascii?Q?9HIoxCSDoTnEqUxC13R/bLTk+9Ej/mLoLzMkOdGBbaY3hiG2lrzvd0DtmUGX?=
- =?us-ascii?Q?jx8yKbug5sNf1zMQSD+2orzr6TRz1nNjmLx0QHAIFqvG9MN+s/1+mGf4tJCz?=
- =?us-ascii?Q?+6NXZacbzJYjwE1aq6Uf4uVn633vbKcZT5Q5hCxRf0dcIErmaf5wVVwJ1osH?=
- =?us-ascii?Q?3bQfCN/Ja2F5p2AEBDFtlw5fVYA5gZQoXJLxSLnzz8hHIVuMUcUFhNZfOUxJ?=
- =?us-ascii?Q?9m1bVw5ZxbwlyAJyC6ZtHLwcBZGVn/rSeOHiw8YnispZJRKBHfeUmh4HnwID?=
- =?us-ascii?Q?zW8ZT/kfoDlgdLhceA9Xi5JZw2MebaYBUPjMZJC8bkSxXUgvfnLu8qigYgi/?=
- =?us-ascii?Q?r3SyYK/sHGwXLG/+OmjlWq5UeMOkXFrU7MiHqlXzOTXV/XM6G9LBTeBMbHnL?=
- =?us-ascii?Q?a9h0HPWSWHhg2j+r0GNjZGnQOYQ+eXPTBGxvyiMeJFX9FmRb8VpANR1s1kTW?=
- =?us-ascii?Q?g/+DCrpJbx61R6XQVBl9Sf/EIFwImG3QNzzcGSeTrS1rJGT1BlnQwiJ7h4aN?=
- =?us-ascii?Q?Dyi/JZVRANT64A+IOR3yj2PiZ5HoKp10HwIXpCd1RG3WTk5aYZzYD/woSwxC?=
- =?us-ascii?Q?SR8FM5itAYpqYBHuV24iDICKVnqLTeU17uf+amGsQEvxZxn/GrIBzHr9h+ku?=
- =?us-ascii?Q?VmEEjWL6d3Q88GoZrzx0NUKOqgpsU7jMtRMapBuAJicO98BrqXmRC4Y7I2tM?=
- =?us-ascii?Q?1BOYfUxHxefk6EPRvScQPxhJt98axP/5UI9oXk/fl78Pal6hdNWnCfE1x9Qi?=
- =?us-ascii?Q?kpbUc/k2bxC9xXA2Pbc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f50121a-1c9d-4915-b584-08dc2d705399
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2024 15:19:24.4366
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KGQG8jRqjMMFRXgMyg2HsQ5AyhP3lAeq+R+PJfy/AJQgfUu+V3FW7G2CdGa3aa3/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7323
+User-Agent: Mozilla Thunderbird
+Reply-To: paul@xen.org
+Subject: Re: [PATCH v12 08/20] KVM: pfncache: allow a cache to be activated
+ with a fixed (userspace) HVA
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ David Hildenbrand <david@redhat.com>
+References: <20240115125707.1183-1-paul@xen.org>
+ <20240115125707.1183-9-paul@xen.org> <ZcMBDP6H5PRo5C2d@google.com>
+Content-Language: en-US
+Organization: Xen Project
+In-Reply-To: <ZcMBDP6H5PRo5C2d@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---=_MailMate_6E9AA38E-7372-4581-94C5-3567A0306DC9_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-On 14 Feb 2024, at 4:12, David Hildenbrand wrote:
-
-> On 13.02.24 22:55, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> We do not have non power of two pages, using nr is error prone if nr
->> is not power-of-two. Use page order instead.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
->>   include/linux/memcontrol.h | 4 ++--
->>   mm/huge_memory.c           | 3 ++-
->>   mm/memcontrol.c            | 3 ++-
->>   mm/page_alloc.c            | 4 ++--
->>   4 files changed, 8 insertions(+), 6 deletions(-)
->>
->> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
->> index 4e4caeaea404..173bbb53c1ec 100644
->> --- a/include/linux/memcontrol.h
->> +++ b/include/linux/memcontrol.h
->> @@ -1163,7 +1163,7 @@ static inline void memcg_memory_event_mm(struct =
-mm_struct *mm,
->>   	rcu_read_unlock();
->>   }
->>  -void split_page_memcg(struct page *head, unsigned int nr);
->> +void split_page_memcg(struct page *head, int order);
->>    unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int o=
-rder,
->>   						gfp_t gfp_mask,
->> @@ -1621,7 +1621,7 @@ void count_memcg_event_mm(struct mm_struct *mm, =
-enum vm_event_item idx)
+On 07/02/2024 04:03, Sean Christopherson wrote:
+> +s390 folks (question on kvm_is_error_gpa() for ya)
+> 
+> On Mon, Jan 15, 2024, Paul Durrant wrote:
+>> @@ -1398,7 +1414,9 @@ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc);
+>>   static inline void kvm_gpc_mark_dirty(struct gfn_to_pfn_cache *gpc)
 >>   {
+>>   	lockdep_assert_held(&gpc->lock);
+>> -	mark_page_dirty_in_slot(gpc->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
+>> +
+>> +	if (gpc->gpa != KVM_XEN_INVALID_GPA)
+> 
+> KVM_XEN_INVALID_GPA absolutely doesn't belong in common code.  Not to mention
+> that it will break when Paolo (rightly) moves it to an x86 header.
+> 
+> https://lore.kernel.org/all/20240131233056.10845-3-pbonzini@redhat.com
+> 
+>> +		mark_page_dirty_in_slot(gpc->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
 >>   }
->>  -static inline void split_page_memcg(struct page *head, unsigned int =
-nr)
->> +static inline void split_page_memcg(struct page *head, int order)
+>>   
+>>   void kvm_sigset_activate(struct kvm_vcpu *vcpu);
+>> diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
+>> index 97eec8ee3449..ae822bff812f 100644
+>> --- a/virt/kvm/pfncache.c
+>> +++ b/virt/kvm/pfncache.c
+>> @@ -48,7 +48,10 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
+>>   	if (!gpc->active)
+>>   		return false;
+>>   
+>> -	if (gpc->generation != slots->generation || kvm_is_error_hva(gpc->uhva))
+>> +	if (gpc->gpa != KVM_XEN_INVALID_GPA && gpc->generation != slots->generation)
+> 
+> This needs a comment.  I know what it's doing, but it wasn't obvious at first
+> glance, and it definitely won't be intuitive for readers that aren't intimately
+> familiar with memslots.
+> 
+>> +		return false;
+>> +
+>> +	if (kvm_is_error_hva(gpc->uhva))
+>>   		return false;
+>>   
+>>   	if (offset_in_page(gpc->uhva) + len > PAGE_SIZE)
+>> @@ -209,11 +212,13 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
+>>   	return -EFAULT;
+>>   }
+>>   
+>> -static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+>> +static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
+>>   			     unsigned long len)
 >>   {
->>   }
->>  diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index 016e20bd813e..0cd5fba0923c 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -2877,9 +2877,10 @@ static void __split_huge_page(struct page *page=
-, struct list_head *list,
->>   	unsigned long offset =3D 0;
->>   	unsigned int nr =3D thp_nr_pages(head);
->>   	int i, nr_dropped =3D 0;
->> +	int order =3D folio_order(folio);
->
-> You could calculate "nr" from "order" here, removing the usage of thp_n=
-r_pages().
+>>   	struct kvm_memslots *slots = kvm_memslots(gpc->kvm);
+>> -	unsigned long page_offset = offset_in_page(gpa);
+>> +	unsigned long page_offset = (gpa != KVM_XEN_INVALID_GPA) ?
+>> +		offset_in_page(gpa) :
+>> +		offset_in_page(uhva);
+> 
+> This formatting is funky.  I also think it would be worth adding a helper to pair
+> with kvm_is_error_hva().
+> 
+> But!  kvm_is_error_gpa() already exists, and it very, very sneakily does a memslot
+> lookup and checks for a valid HVA.
+> 
+> s390 people, any objection to renaming kvm_is_error_gpa() to something like
+> kvm_gpa_has_memslot() or kvm_gpa_is_in_memslot()?  s390 is the only code that
+> uses the existing helper.
+> 
+> That would both to free up the name to pair with kvm_is_error_hva(), and would
+> make it obvious what the helper does; I was quite surprised that "error" means
+> "is covered by a valid memslot".
+> 
+
+Seemingly no response to this; I'll define a local helper rather than 
+re-working the open-coded tests to check against INVALID_GPA. This can 
+then be trivially replaced if need be.
+
+> Back to this code, then we can have a slightly cleaner:
+> 
+> 	unsigned long page_offset = kvm_is_error_gpa(gpa) ? offset_in_page(gpa) :
+> 							    offset_in_page(uhva);
+> 
+> 
+> And I think it's worth asserting that exactly _one_ of GPA or HVA is valid, e.g.
+> to ensure KVM doesn't end up with botched offsets, and to make it a bit more
+> clear what's going on.
+> 
+> 
+> 	if (WARN_ON_ONCE(kvm_is_error_gpa(gpa) == kvm_is_error_hva(uhva))
+> 		return -EINVAL;
 
 Sure.
 
->
->>    	/* complete memcg works before add pages to LRU */
->> -	split_page_memcg(head, nr);
->> +	split_page_memcg(head, order);
->>    	if (folio_test_anon(folio) && folio_test_swapcache(folio)) {
->
-> Acked-by: David Hildenbrand <david@redhat.com>
-
-Thanks.
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_6E9AA38E-7372-4581-94C5-3567A0306DC9_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXM2fkPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUe44P/37IDa1WsWVe9kc3Jon2KS5bBVOe4MWaDCz2
-oc/psM4afd3t+UgGcdm6RTqA4b8UJC8+9fKmACHNt+orzXl0lpfpZxwmCgIe0lmj
-wCB5vnPbOf8l5p+eg8kyIwwEw8EeitH1dUx3Wp3RS+Q5PPT7gJ5oPctGeHwObbMI
-pnie4tDVNTsKVPc7/WZikGfqc/cTqyAPbGMsgUo7OPEsY5viXxTphFs2BPYocTTY
-rgARFkXO3g2uF75CHlGXwNqJF3xGkLNXQB6AUqh21Kain5pCrDL1Y2nsUfljvgGw
-WX5JR1NBmRY6UFOetvnR3+YMqBUqO8r3nnKgFM03RNZaY/4v7bKwiDlKBmvyiNeZ
-22t+hgRUpUauUoCTv+rTAsIUVag5QLinnBL8sfMk5YtZF8+d9Ww4KtjRq1ZwDSG7
-bXftHc3VYx0ScTGC45Xg9gqZC09ELraQHfSQPcv2s9+VWW5p6C1iZn6sLwkLcmS7
-A/9BkXPtxk/V2sXFWkQss/o6m2qFFAGifrHI5B5kp/OMW8zD6EO3yjBzl3tHL0ye
-M/9b3SQ5l6yPryz3CoKkVETDeKvvpLkclOSqf2kZpykD//ImwXUSxQj2Ca9LSgPj
-xdQ7cyAUSn2sUbwxOKj9uxSNr4rkzE/4o2+OoAA1hfCIRWJacBiDXFGjRsV8iXVs
-8gkI17RI
-=+scf
------END PGP SIGNATURE-----
-
---=_MailMate_6E9AA38E-7372-4581-94C5-3567A0306DC9_=--
 
