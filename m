@@ -1,295 +1,295 @@
-Return-Path: <linux-kselftest+bounces-4649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4650-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC6E6854DF6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:20:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67C82854E0A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:23:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25EFEB2623E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 16:20:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E73821F221A8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 16:23:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B6D5FF17;
-	Wed, 14 Feb 2024 16:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Hb+Ua2jq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED6660DC8;
+	Wed, 14 Feb 2024 16:22:54 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF655FF07
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 16:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A32E60B97;
+	Wed, 14 Feb 2024 16:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707927619; cv=none; b=aM/k6yIbAMDsEpMHek/umO+03wKZcjYS8udGZdvEDCQcg8Rk7E/hHBEf+K+tqLNI6IfN7C94RoUF55T0gPjgcniOgjjBwe/+FPEwoFmdmlIEVIxjlJ0IV8eZ+vTSVVITgT3fDF7+Jz6M2S4f2aiVk7uQv1Cd8PM3P9OIwe7JlqA=
+	t=1707927774; cv=none; b=WyntgX+auHcZYBMx0jItzkcyzM0QuUpvi0bp71WRR4VAMIh2dlctc1bLbnYwYdTLSL6YJZ5B8KRDT24AjvBNguecdqBmINC7K/pQ3rc1iqHWdaOwxkTiYTasU1W7k5Fz6zYk6HQURiEw9HsyxOEmPwZwCnJX3jWjDRGcgv1DjIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707927619; c=relaxed/simple;
-	bh=0HcfJmmBqgnxEibVXmvtKiQfWDI/qjmiO3qS4+TsxxY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=atCcyJamqyffM7MzOEzwwvsa+wB5jmSWa1D6M+CbfulJ7T4AQ069wtRPiS99awOny0iF4n38XejqdcsuajknVt+dYvjhutlcd/E/IE1gG9BVeMANzp9PngBkwMqekOni3d8oc74CFDp2gjW6WWxI/LITuVU08fFLunyZ8QxCPZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Hb+Ua2jq; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5ce632b2adfso5399859a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 08:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707927617; x=1708532417; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fm0rEdFpfBw8yrd8ZCjG8lJI7FOozunf2bgbBsdJdm0=;
-        b=Hb+Ua2jq7CbJygC6codkBXNvS1oHVKlJW5tWam94GlvHyNLvyJYHO5Sz/JIySq7SzE
-         mAMywQxAe5T7l/K2vsvPHq2jA1WI6Mt7S0jqdKxf+10UtTwP4T/Xj64RE79Moh8Ptwgy
-         Th0IzgdFW4WGqKe8c39h7FzSe3ztIZqR0iNzL4vDdHbeZNDs4wX1PptBcob7WC/9If1/
-         t/BjKNUO0qqXjnupAhoV2dAEcJ64m0Cc/upo2p4HhCxaR8ipC1JdzFqRuVYzdYwt5+Fz
-         IB7I7iliqYufEd9VrbJ4rtc4ipr0m6XbSJYOrV6MZRwMSkATIHexopkx/n4IevzYwePF
-         ADHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707927617; x=1708532417;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fm0rEdFpfBw8yrd8ZCjG8lJI7FOozunf2bgbBsdJdm0=;
-        b=Wx7rNE7QHfsa1VK8Sqd+Lr5sxrva+PvAvLmyzyg4K0rf4E1Bww3ioH8DDQKEV2qEpL
-         rrWiOmk17VgMGEoB1qcJOIiTNguDF26V3BF9ZiUX2QiSdfY6XGMX9Zo2u1iCkOBoLsy+
-         phUBYXl4sp5Myb3M9QXeZOVll97IY1TPf1D0YrLOvBvU1FFLYHpeS4l0W2EOl7SLVf2J
-         csRKgytAv94g4ShOzs8opQvbKTldMhKVvPSSXTkemi2gxbsgGz8/VofC7RKXppRFRNmQ
-         sTJcM0GQjJRYtQ+1o2r1zF3V7DF2m+6TAZkaJKckgKKgpNP+a6C1AYwehafR0jqd2Fxx
-         3GvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVT2/9rXTrzBSo6CZDkH2ItQc0nvIKQNFwlQOez5k1gIg1OH4UZ6EQFj6+0+odttWAhOUs9Vt6siM940OVVy9WlKBr0rEcEkMANZQtzmbJk
-X-Gm-Message-State: AOJu0YwNvC6EZ1KEqdGeegObAmZqnrkjfpnUN9qzFmhtj6ft2IHK2Jbn
-	FUPjpnY+q5zfVsS6e6aJNgOxSf2QZJ6OypFBgz9pqb1S36+byVZRPAckJS3f4KepLiPmDMTkaof
-	VrQ==
-X-Google-Smtp-Source: AGHT+IHa4kkG/0f9ehySoOxGA7p25JnA0B81TqydyG2BEVARRtuNpfCLKC2Wn9Ns0F6pvUgaCDhVtXIwZ5A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a02:996:b0:5ce:6c6:6973 with SMTP id
- cl22-20020a056a02099600b005ce06c66973mr40244pgb.8.1707927616820; Wed, 14 Feb
- 2024 08:20:16 -0800 (PST)
-Date: Wed, 14 Feb 2024 08:20:15 -0800
-In-Reply-To: <9c542f39-959e-4ab1-94a5-39e049a30743@xen.org>
+	s=arc-20240116; t=1707927774; c=relaxed/simple;
+	bh=tPeIGdk9ABSJ2vtL7S2gwGOmRk4EEkM+iWIHuT7Lkzs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PS962roqco3C//5W7sgHSFzpMt6QFc2M2ish3+DQoyvZ0V3lHwes+zHov4gZI1WT3+emNPdXypsVublt87nXslAMpJY5d3ILULujTVu8t2vhaOLELf4rvB8qiMnkn1WLHRn9LXsRGEUFBrva/k+M54/HNzt7FwvdGN4rMa//r2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC6721FB;
+	Wed, 14 Feb 2024 08:23:31 -0800 (PST)
+Received: from [10.57.64.120] (unknown [10.57.64.120])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 32A5B3F762;
+	Wed, 14 Feb 2024 08:22:48 -0800 (PST)
+Message-ID: <6c986b83-e00d-46fe-8c88-374f8e6bd0fa@arm.com>
+Date: Wed, 14 Feb 2024 16:22:46 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240115125707.1183-1-paul@xen.org> <20240115125707.1183-9-paul@xen.org>
- <ZcMBDP6H5PRo5C2d@google.com> <9c542f39-959e-4ab1-94a5-39e049a30743@xen.org>
-Message-ID: <ZczoP_pfb4E3i8OO@google.com>
-Subject: Re: [PATCH v12 08/20] KVM: pfncache: allow a cache to be activated
- with a fixed (userspace) HVA
-From: Sean Christopherson <seanjc@google.com>
-To: paul@xen.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>, 
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/7] mm: thp: split huge page to any lower order pages
+ (except order-1).
+Content-Language: en-GB
+To: Zi Yan <ziy@nvidia.com>
+Cc: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>, linux-mm@kvack.org,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
+ Yu Zhao <yuzhao@google.com>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Zach O'Keefe
+ <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
+ Mcgrof Chamberlain <mcgrof@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240213215520.1048625-1-zi.yan@sent.com>
+ <20240213215520.1048625-6-zi.yan@sent.com>
+ <de66b9fb-ee84-473f-a69a-2ac8554f6000@arm.com>
+ <6859C8DA-5B7F-458E-895C-763BA782F4B9@nvidia.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <6859C8DA-5B7F-458E-895C-763BA782F4B9@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 14, 2024, Paul Durrant wrote:
-> On 07/02/2024 04:03, Sean Christopherson wrote:
-> > +s390 folks (question on kvm_is_error_gpa() for ya)
-> > But!  kvm_is_error_gpa() already exists, and it very, very sneakily does a memslot
-> > lookup and checks for a valid HVA.
-> > 
-> > s390 people, any objection to renaming kvm_is_error_gpa() to something like
-> > kvm_gpa_has_memslot() or kvm_gpa_is_in_memslot()?  s390 is the only code that
-> > uses the existing helper.
-> > 
-> > That would both to free up the name to pair with kvm_is_error_hva(), and would
-> > make it obvious what the helper does; I was quite surprised that "error" means
-> > "is covered by a valid memslot".
-> > 
+On 14/02/2024 16:11, Zi Yan wrote:
+> On 14 Feb 2024, at 5:38, Ryan Roberts wrote:
 > 
-> Seemingly no response to this; I'll define a local helper rather than
-> re-working the open-coded tests to check against INVALID_GPA. This can then
-> be trivially replaced if need be.
+>> On 13/02/2024 21:55, Zi Yan wrote:
+>>> From: Zi Yan <ziy@nvidia.com>
+>>>
+>>> To split a THP to any lower order (except order-1) pages, we need to
+>>> reform THPs on subpages at given order and add page refcount based on the
+>>> new page order. Also we need to reinitialize page_deferred_list after
+>>> removing the page from the split_queue, otherwise a subsequent split will
+>>> see list corruption when checking the page_deferred_list again.
+>>>
+>>> It has many uses, like minimizing the number of pages after
+>>> truncating a huge pagecache page. For anonymous THPs, we can only split
+>>> them to order-0 like before until we add support for any size anonymous
+>>> THPs.
+>>
+>> multi-size THP is now upstream. Not sure if this comment still makes sense.
+> Will change it to reflect the fact that multi-size THP is already upstream.
+> 
+>> Still its not completely clear to me how you would integrate this new machinery
+>> and decide what non-zero order to split anon THP to?
+> 
+> Originally, it was developed along with my 1GB THP support. So it was intended
+> to split order-18 to order-9. But for now, like you and David said in the cover
+> letter email thread, we might not want to use it for anonymous large folios
+> until we find a necessary use case.
+> 
+>>>
+>>> Order-1 folio is not supported because _deferred_list, which is used by
+>>> partially mapped folios, is stored in subpage 2 and an order-1 folio only
+>>> has subpage 0 and 1.
+>>>
+>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>>> ---
+>>>  include/linux/huge_mm.h |  21 +++++---
+>>>  mm/huge_memory.c        | 114 +++++++++++++++++++++++++++++++---------
+>>>  2 files changed, 101 insertions(+), 34 deletions(-)
+>>>
+>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+>>> index 5adb86af35fc..de0c89105076 100644
+>>> --- a/include/linux/huge_mm.h
+>>> +++ b/include/linux/huge_mm.h
+>>> @@ -265,10 +265,11 @@ unsigned long thp_get_unmapped_area(struct file *filp, unsigned long addr,
+>>>
+>>>  void folio_prep_large_rmappable(struct folio *folio);
+>>>  bool can_split_folio(struct folio *folio, int *pextra_pins);
+>>> -int split_huge_page_to_list(struct page *page, struct list_head *list);
+>>> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+>>> +		unsigned int new_order);
+>>>  static inline int split_huge_page(struct page *page)
+>>>  {
+>>> -	return split_huge_page_to_list(page, NULL);
+>>> +	return split_huge_page_to_list_to_order(page, NULL, 0);
+>>>  }
+>>>  void deferred_split_folio(struct folio *folio);
+>>>
+>>> @@ -422,7 +423,8 @@ can_split_folio(struct folio *folio, int *pextra_pins)
+>>>  	return false;
+>>>  }
+>>>  static inline int
+>>> -split_huge_page_to_list(struct page *page, struct list_head *list)
+>>> +split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+>>> +		unsigned int new_order)
+>>>  {
+>>>  	return 0;
+>>>  }
+>>> @@ -519,17 +521,20 @@ static inline bool thp_migration_supported(void)
+>>>  }
+>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>>>
+>>> -static inline int split_folio_to_list(struct folio *folio,
+>>> -		struct list_head *list)
+>>> +static inline int split_folio_to_list_to_order(struct folio *folio,
+>>> +		struct list_head *list, int new_order)
+>>>  {
+>>> -	return split_huge_page_to_list(&folio->page, list);
+>>> +	return split_huge_page_to_list_to_order(&folio->page, list, new_order);
+>>>  }
+>>>
+>>> -static inline int split_folio(struct folio *folio)
+>>> +static inline int split_folio_to_order(struct folio *folio, int new_order)
+>>>  {
+>>> -	return split_folio_to_list(folio, NULL);
+>>> +	return split_folio_to_list_to_order(folio, NULL, new_order);
+>>>  }
+>>>
+>>> +#define split_folio_to_list(f, l) split_folio_to_list_to_order(f, l, 0)
+>>> +#define split_folio(f) split_folio_to_order(f, 0)
+>>> +
+>>>  /*
+>>>   * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+>>>   * limitations in the implementation like arm64 MTE can override this to
+>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>>> index ad7133c97428..d0e555a8ea98 100644
+>>> --- a/mm/huge_memory.c
+>>> +++ b/mm/huge_memory.c
+>>> @@ -2718,11 +2718,14 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
+>>>
+>>>  static void unmap_folio(struct folio *folio)
+>>>  {
+>>> -	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
+>>> -		TTU_SYNC | TTU_BATCH_FLUSH;
+>>> +	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SYNC |
+>>> +		TTU_BATCH_FLUSH;
+>>>
+>>>  	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>>>
+>>> +	if (folio_test_pmd_mappable(folio))
+>>> +		ttu_flags |= TTU_SPLIT_HUGE_PMD;
+>>
+>> Should we split this change out? I think it makes sense independent of this series?
+>>
+> 
+> Sure. Since multi-size THP is upstream, this avoid unnecessary code path if
+> the THP is not PMD-mapped.
+> 
+>>> +
+>>>  	/*
+>>>  	 * Anon pages need migration entries to preserve them, but file
+>>>  	 * pages can simply be left unmapped, then faulted back on demand.
+>>> @@ -2756,7 +2759,6 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>>>  		struct lruvec *lruvec, struct list_head *list)
+>>>  {
+>>>  	VM_BUG_ON_PAGE(!PageHead(head), head);
+>>> -	VM_BUG_ON_PAGE(PageCompound(tail), head);
+>>>  	VM_BUG_ON_PAGE(PageLRU(tail), head);
+>>>  	lockdep_assert_held(&lruvec->lru_lock);
+>>>
+>>> @@ -2777,7 +2779,8 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>>>  }
+>>>
+>>>  static void __split_huge_page_tail(struct folio *folio, int tail,
+>>> -		struct lruvec *lruvec, struct list_head *list)
+>>> +		struct lruvec *lruvec, struct list_head *list,
+>>> +		unsigned int new_order)
+>>>  {
+>>>  	struct page *head = &folio->page;
+>>>  	struct page *page_tail = head + tail;
+>>> @@ -2847,10 +2850,15 @@ static void __split_huge_page_tail(struct folio *folio, int tail,
+>>>  	 * which needs correct compound_head().
+>>>  	 */
+>>>  	clear_compound_head(page_tail);
+>>> +	if (new_order) {
+>>> +		prep_compound_page(page_tail, new_order);
+>>> +		folio_prep_large_rmappable(page_folio(page_tail));
+>>> +	}
+>>>
+>>>  	/* Finally unfreeze refcount. Additional reference from page cache. */
+>>> -	page_ref_unfreeze(page_tail, 1 + (!folio_test_anon(folio) ||
+>>> -					  folio_test_swapcache(folio)));
+>>> +	page_ref_unfreeze(page_tail,
+>>> +		1 + ((!folio_test_anon(folio) || folio_test_swapcache(folio)) ?
+>>> +			     folio_nr_pages(page_folio(page_tail)) : 0));
+>>>
+>>>  	if (folio_test_young(folio))
+>>>  		folio_set_young(new_folio);
+>>> @@ -2868,7 +2876,7 @@ static void __split_huge_page_tail(struct folio *folio, int tail,
+>>>  }
+>>>
+>>>  static void __split_huge_page(struct page *page, struct list_head *list,
+>>> -		pgoff_t end)
+>>> +		pgoff_t end, unsigned int new_order)
+>>>  {
+>>>  	struct folio *folio = page_folio(page);
+>>>  	struct page *head = &folio->page;
+>>> @@ -2877,10 +2885,11 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>>>  	unsigned long offset = 0;
+>>>  	unsigned int nr = thp_nr_pages(head);
+>>>  	int i, nr_dropped = 0;
+>>> +	unsigned int new_nr = 1 << new_order;
+>>>  	int order = folio_order(folio);
+>>>
+>>>  	/* complete memcg works before add pages to LRU */
+>>> -	split_page_memcg(head, order, 0);
+>>> +	split_page_memcg(head, order, new_order);
+>>>
+>>>  	if (folio_test_anon(folio) && folio_test_swapcache(folio)) {
+>>>  		offset = swp_offset(folio->swap);
+>>> @@ -2893,8 +2902,8 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>>>
+>>>  	ClearPageHasHWPoisoned(head);
+>>>
+>>> -	for (i = nr - 1; i >= 1; i--) {
+>>> -		__split_huge_page_tail(folio, i, lruvec, list);
+>>> +	for (i = nr - new_nr; i >= new_nr; i -= new_nr) {
+>>> +		__split_huge_page_tail(folio, i, lruvec, list, new_order);
+>>>  		/* Some pages can be beyond EOF: drop them from page cache */
+>>>  		if (head[i].index >= end) {
+>>>  			struct folio *tail = page_folio(head + i);
+>>> @@ -2910,29 +2919,41 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>>>  			__xa_store(&head->mapping->i_pages, head[i].index,
+>>>  					head + i, 0);
+>>>  		} else if (swap_cache) {
+>>> +			/*
+>>> +			 * split anonymous THPs (including swapped out ones) to
+>>> +			 * non-zero order not supported
+>>> +			 */
+>>> +			VM_WARN_ONCE(new_order,
+>>> +				"Split swap-cached anon folio to non-0 order not supported");
+>>
+>> Why isn't it supported? Even if it's not supported, is this level the right
+>> place to enforce these kinds of policy decisions? I wonder if we should be
+>> leaving that to the higher level to decide?
+> 
+> Is the swap-out small-size THP without splitting merged? This needs that patchset.
 
-How about we force a decision with a patch?  This should be easy enough to slot
-in, and I would be quite surprised if s390 is overly attached to kvm_is_error_gpa().
+No not yet. I have to respin it. Its on my todo list.
 
-From: Sean Christopherson <seanjc@google.com>
-Date: Wed, 14 Feb 2024 08:05:49 -0800
-Subject: [PATCH] KVM: s390: Refactor kvm_is_error_gpa() into
- kvm_is_gpa_in_memslot()
+I'm not sure I understand the dependency though?
 
-Rename kvm_is_error_gpa() to kvm_is_gpa_in_memslot() and invert the
-polarity accordingly in order to (a) free up kvm_is_error_gpa() to match
-with kvm_is_error_{hva,page}(), and (b) to make it more obvious that the
-helper is doing a memslot lookup, i.e. not simply checking for INVALID_GPA.
-
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/s390/kvm/diag.c     |  2 +-
- arch/s390/kvm/gaccess.c  | 14 +++++++-------
- arch/s390/kvm/kvm-s390.c |  4 ++--
- arch/s390/kvm/priv.c     |  4 ++--
- arch/s390/kvm/sigp.c     |  2 +-
- include/linux/kvm_host.h |  4 ++--
- 6 files changed, 15 insertions(+), 15 deletions(-)
-
-diff --git a/arch/s390/kvm/diag.c b/arch/s390/kvm/diag.c
-index 3c65b8258ae6..2a32438e09ce 100644
---- a/arch/s390/kvm/diag.c
-+++ b/arch/s390/kvm/diag.c
-@@ -102,7 +102,7 @@ static int __diag_page_ref_service(struct kvm_vcpu *vcpu)
- 		    parm.token_addr & 7 || parm.zarch != 0x8000000000000000ULL)
- 			return kvm_s390_inject_program_int(vcpu, PGM_SPECIFICATION);
- 
--		if (kvm_is_error_gpa(vcpu->kvm, parm.token_addr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, parm.token_addr))
- 			return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
- 
- 		vcpu->arch.pfault_token = parm.token_addr;
-diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-index 5bfcc50c1a68..415c99649e43 100644
---- a/arch/s390/kvm/gaccess.c
-+++ b/arch/s390/kvm/gaccess.c
-@@ -664,7 +664,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_REGION1:	{
- 		union region1_table_entry rfte;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &rfte.val))
- 			return -EFAULT;
-@@ -682,7 +682,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_REGION2: {
- 		union region2_table_entry rste;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &rste.val))
- 			return -EFAULT;
-@@ -700,7 +700,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_REGION3: {
- 		union region3_table_entry rtte;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &rtte.val))
- 			return -EFAULT;
-@@ -728,7 +728,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_SEGMENT: {
- 		union segment_table_entry ste;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &ste.val))
- 			return -EFAULT;
-@@ -748,7 +748,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 		ptr = ste.fc0.pto * (PAGE_SIZE / 2) + vaddr.px * 8;
- 	}
- 	}
--	if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 		return PGM_ADDRESSING;
- 	if (deref_table(vcpu->kvm, ptr, &pte.val))
- 		return -EFAULT;
-@@ -770,7 +770,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 		*prot = PROT_TYPE_IEP;
- 		return PGM_PROTECTION;
- 	}
--	if (kvm_is_error_gpa(vcpu->kvm, raddr.addr))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, raddr.addr))
- 		return PGM_ADDRESSING;
- 	*gpa = raddr.addr;
- 	return 0;
-@@ -957,7 +957,7 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
- 				return rc;
- 		} else {
- 			gpa = kvm_s390_real_to_abs(vcpu, ga);
--			if (kvm_is_error_gpa(vcpu->kvm, gpa)) {
-+			if (!kvm_is_gpa_in_memslot(vcpu->kvm, gpa)) {
- 				rc = PGM_ADDRESSING;
- 				prot = PROT_NONE;
- 			}
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index ea63ac769889..3e5a1d7aa81a 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -2878,7 +2878,7 @@ static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
- 
- 	srcu_idx = srcu_read_lock(&kvm->srcu);
- 
--	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
-+	if (!kvm_is_gpa_in_memslot(kvm, mop->gaddr)) {
- 		r = PGM_ADDRESSING;
- 		goto out_unlock;
- 	}
-@@ -2940,7 +2940,7 @@ static int kvm_s390_vm_mem_op_cmpxchg(struct kvm *kvm, struct kvm_s390_mem_op *m
- 
- 	srcu_idx = srcu_read_lock(&kvm->srcu);
- 
--	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
-+	if (!kvm_is_gpa_in_memslot(kvm, mop->gaddr)) {
- 		r = PGM_ADDRESSING;
- 		goto out_unlock;
- 	}
-diff --git a/arch/s390/kvm/priv.c b/arch/s390/kvm/priv.c
-index f875a404a0a0..1be19cc9d73c 100644
---- a/arch/s390/kvm/priv.c
-+++ b/arch/s390/kvm/priv.c
-@@ -149,7 +149,7 @@ static int handle_set_prefix(struct kvm_vcpu *vcpu)
- 	 * first page, since address is 8k aligned and memory pieces are always
- 	 * at least 1MB aligned and have at least a size of 1MB.
- 	 */
--	if (kvm_is_error_gpa(vcpu->kvm, address))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, address))
- 		return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
- 
- 	kvm_s390_set_prefix(vcpu, address);
-@@ -464,7 +464,7 @@ static int handle_test_block(struct kvm_vcpu *vcpu)
- 		return kvm_s390_inject_prog_irq(vcpu, &vcpu->arch.pgm);
- 	addr = kvm_s390_real_to_abs(vcpu, addr);
- 
--	if (kvm_is_error_gpa(vcpu->kvm, addr))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, addr))
- 		return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
- 	/*
- 	 * We don't expect errors on modern systems, and do not care
-diff --git a/arch/s390/kvm/sigp.c b/arch/s390/kvm/sigp.c
-index d9696b530064..55c34cb35428 100644
---- a/arch/s390/kvm/sigp.c
-+++ b/arch/s390/kvm/sigp.c
-@@ -172,7 +172,7 @@ static int __sigp_set_prefix(struct kvm_vcpu *vcpu, struct kvm_vcpu *dst_vcpu,
- 	 * first page, since address is 8k aligned and memory pieces are always
- 	 * at least 1MB aligned and have at least a size of 1MB.
- 	 */
--	if (kvm_is_error_gpa(vcpu->kvm, irq.u.prefix.address)) {
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, irq.u.prefix.address)) {
- 		*reg &= 0xffffffff00000000UL;
- 		*reg |= SIGP_STATUS_INVALID_PARAMETER;
- 		return SIGP_CC_STATUS_STORED;
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 7e7fd25b09b3..d175b64488ec 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1788,11 +1788,11 @@ static inline hpa_t pfn_to_hpa(kvm_pfn_t pfn)
- 	return (hpa_t)pfn << PAGE_SHIFT;
- }
- 
--static inline bool kvm_is_error_gpa(struct kvm *kvm, gpa_t gpa)
-+static inline bool kvm_is_gpa_in_memslot(struct kvm *kvm, gpa_t gpa)
- {
- 	unsigned long hva = gfn_to_hva(kvm, gpa_to_gfn(gpa));
- 
--	return kvm_is_error_hva(hva);
-+	return !kvm_is_error_hva(hva);
- }
- 
- enum kvm_stat_kind {
-
-base-commit: 687d8f4c3dea0758afd748968d91288220bbe7e3
--- 
+> You are right that a warning here is not appropriate. I will fail the splitting
+> if the folio is swapcached and going to be split into >0 order.
+> 
+>>>  			__xa_store(&swap_cache->i_pages, offset + i,
+>>>  					head + i, 0);
+>>>  		}
+>>>  	}
+>>>
+> 
+> 
+> --
+> Best Regards,
+> Yan, Zi
 
 
