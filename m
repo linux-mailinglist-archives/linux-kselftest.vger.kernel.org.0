@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-4658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C5CF854FBE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:19:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85C6D854FC7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 18:19:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C13CE1C21752
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:19:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 415F428551B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Feb 2024 17:19:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64B47D418;
-	Wed, 14 Feb 2024 17:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309BA84A37;
+	Wed, 14 Feb 2024 17:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hx0HSkx1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QC12kdg4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1126A002;
-	Wed, 14 Feb 2024 17:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005358405C;
+	Wed, 14 Feb 2024 17:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707931140; cv=none; b=csKW+ARMcoAXc+oCedrNqXyhvQ7Ca2iy6jWHXGExPHG1s7o+qeZVe2NmepQ2c/fpJv0O5pxbfwpKWVLHmaxi7nKgsEDfcbCvkKO6cYtQxUPJ6li729CU05cUhuGhrP86P9S/C9mgrFFWXwsOiS+uSCsg5O3KEz7l+bsDnlc2RuA=
+	t=1707931145; cv=none; b=dSRUj3zt1xxvCCiKewZ6coO/IaLts2iB7nzKY4VEcZCnIesYWaFF5G781+g0Fyb3JknyprhVHpRAfoROSQtDYZ/S7yS8Snp6/4pBH0D8ccd1o4tnmaW2d54d3X8LFFIGv2kKJDFUPAPqWGy+C/c6kedXaeqwcbvLaVDUraL665Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707931140; c=relaxed/simple;
-	bh=l4jPudJnwEihlvPPrQPrGvmbzUPliLgvg6nSOC6YQe0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jROi+tTVeAd1zRaWhbBEJBxYv/btedw4zs9Z+z184UhiKxj5MxM1a9r+uKq3UxHbvGYAMMhj+qyA5BAEr+uY7bJHCD7LNLmFAw7nu1LpF2sYZ9r0XA979eNoKLDVVkyM6dSNmj69mexwp7Huk4Rl4kaH5NYNtHOUYHTdY5EeKvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hx0HSkx1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A79C433F1;
-	Wed, 14 Feb 2024 17:18:55 +0000 (UTC)
+	s=arc-20240116; t=1707931145; c=relaxed/simple;
+	bh=ZuS+7v5Dfl5IafHw0MgYCYKa9AW++myTFw0GViRRpYM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=AO2OJJ+ZogPCs4yRP6c+vyzwdUcu6l1w4wKITYa9+GqlF1sbiw8HZx12wP6mdAiMAkXsOe6/Z07QZipNTFNuJw8eLTmFpC6xiLoYl9EMlrMmyPtoe7denNng0pVNIG2Ws8YV2TxdBSymiLNSPvYErUAG6BZHT5ocr+MjmXAXXKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QC12kdg4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74061C43601;
+	Wed, 14 Feb 2024 17:19:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707931140;
-	bh=l4jPudJnwEihlvPPrQPrGvmbzUPliLgvg6nSOC6YQe0=;
-	h=From:Subject:Date:To:Cc:From;
-	b=hx0HSkx1O1vfzja/tcyeZbnl6f8DBH6HsvtBo3ONzOetV9It+308217dhB44DWKtj
-	 185FjCFdmK4w50Q/Fodsi68L4Fzq2BbLu8VCWU/WBn5Wj62Qw9ytHq53Xa8s3BZS0I
-	 +NVewubwnkk+oH7tKIog+zZDjKF2k0lSfburOYaN4ClYy9K0umRFBp7WjCkbze9CXU
-	 L76vSRCcAVrO1RjrasfJd3lJdqtd+iIL/36BM4xsNB6KbYTqezPlesT6IV6YZpUN8z
-	 KJAeRmL6EN9ZeCFbkeIGFW86Jundzi80P3xleNLsmhR4lCaWaLrcODAwze5HYhzffX
-	 KhqgKoNs1do4w==
+	s=k20201202; t=1707931144;
+	bh=ZuS+7v5Dfl5IafHw0MgYCYKa9AW++myTFw0GViRRpYM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=QC12kdg4Aib5AcPh49e2/LK8jJLkgUAruYKDOwNQaopd+pga/EDbxFgh3ojIhfczu
+	 HXg6GquX+hye+mvEnKHqn1lMPHgJUrbdk7h3TSO3+RVznexX/Wwj7SuYd2FKyGeFLM
+	 sRgVVFHhveH5Tr2z1J//ugH1iSil5213Fyh16blTxF0YnL1yjNTganARWQjG2HPPmq
+	 xklI4xCwY80G7dw1cjP2FWdDRIPKtbiZ0zmRFhtQrUJgNcCKbn8H95/F7TDXil2YDf
+	 p98Qxk3Oe4tF1Mju5PRRQr192/xJ6xEO0M+LjhkLpxJ9uNcYEGx93PaJtXQvMq1Veq
+	 SXQqZxyh5u7+A==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Subject: [PATCH RFC bpf-next v2 00/10] allow HID-BPF to do device IOs
-Date: Wed, 14 Feb 2024 18:18:29 +0100
-Message-Id: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
+Date: Wed, 14 Feb 2024 18:18:30 +0100
+Subject: [PATCH RFC bpf-next v2 01/10] bpf/verifier: introduce
+ in_sleepable() helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,10 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOX1zGUC/22NzQqDMBCEX0X23C1J0FJ7Kgh9gF6Lh/ysulSiJ
- CIW8d0bpccev2HmmxUiBaYIt2yFQDNHHnwCdcrAdtq3hOwSgxIqF0oU2LFDMzYYe6JRm57QCqk
- uonGltDmk3Rio4eVwvuD5qPZsX3haJqgTdBynIXyOz1ketZ++/KOfJQrMrb2WhSm0M+7+puCpP
- w+hhXrbti9T1WMxxAAAAA==
+Message-Id: <20240214-hid-bpf-sleepable-v2-1-5756b054724d@kernel.org>
+References: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
+In-Reply-To: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
  John Fastabend <john.fastabend@gmail.com>, 
@@ -71,122 +71,108 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1707931135; l=4831;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1707931135; l=3259;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=l4jPudJnwEihlvPPrQPrGvmbzUPliLgvg6nSOC6YQe0=;
- b=hDh4ILe9/u3jIkDCjyvSuvoJvM06QQCqlwjQWjY8/CM4pM6y+4TuGu4kVCvcawjJhIlrsZ1Ea
- vihnZbrsM5AAHQJuhsj1rOE9w9lWKerP8iZ7fltXljCYW50rWrsGdZ8
+ bh=ZuS+7v5Dfl5IafHw0MgYCYKa9AW++myTFw0GViRRpYM=;
+ b=37Ow3DoMrOPm0yj/WYnsJcZ0R+oyH5zub8WYF+eRcYwPZ/8PMJA2pgnCX/cG5KdlJnzEDvfZi
+ cd3R+/0JvARDrWnnyoK+ZqKtuRsCmOHN5BmrAb/Ol6jjgL5wMgD7s2q
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-[Still a RFC: there are a lot of FIXMEs in the code, and
-calling the sleepable timer cb actually crashes.]
-[Also using bpf-next as the base tree as there will be conflicting
-changes otherwise]
+No code change, but it'll allow to have only one place to change
+everything when we add in_sleepable in cur_state.
 
-This is crashing, and I have a few questions in the code (look for all
-of the FIXMEs), so sending this now before I become insane :)
-
-For reference, the use cases I have in mind:
-
----
-
-Basically, I need to be able to defer a HID-BPF program for the
-following reasons (from the aforementioned patch):
-1. defer an event:
-   Sometimes we receive an out of proximity event, but the device can not
-   be trusted enough, and we need to ensure that we won't receive another
-   one in the following n milliseconds. So we need to wait those n
-   milliseconds, and eventually re-inject that event in the stack.
-
-2. inject new events in reaction to one given event:
-   We might want to transform one given event into several. This is the
-   case for macro keys where a single key press is supposed to send
-   a sequence of key presses. But this could also be used to patch a
-   faulty behavior, if a device forgets to send a release event.
-
-3. communicate with the device in reaction to one event:
-   We might want to communicate back to the device after a given event.
-   For example a device might send us an event saying that it came back
-   from sleeping state and needs to be re-initialized.
-
-Currently we can achieve that by keeping a userspace program around,
-raise a bpf event, and let that userspace program inject the events and
-commands.
-However, we are just keeping that program alive as a daemon for just
-scheduling commands. There is no logic in it, so it doesn't really justify
-an actual userspace wakeup. So a kernel workqueue seems simpler to handle.
-
-The other part I'm not sure is whether we can say that BPF maps of type
-queue/stack can be used in sleepable context.
-I don't see any warning when running the test programs, but that's probably
-not a guarantee I'm doing the things properly :)
-
-Cheers,
-Benjamin
-
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: KP Singh <kpsingh@kernel.org>
-To: Stanislav Fomichev <sdf@google.com>
-To: Hao Luo <haoluo@google.com>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>
-To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To: Jonathan Corbet <corbet@lwn.net>
-To: Shuah Khan <shuah@kernel.org>
-Cc:  <bpf@vger.kernel.org>
-Cc:  <linux-kernel@vger.kernel.org>
-Cc:  <linux-input@vger.kernel.org>
-Cc:  <linux-doc@vger.kernel.org>
-Cc:  <linux-kselftest@vger.kernel.org>
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
 ---
-Changes in v2:
-- make use of bpf_timer (and dropped the custom HID handling)
-- implemented bpf_timer_set_sleepable_cb as a kfunc
-- still not implemented global subprogs
-- no sleepable bpf_timer selftests yet
-- Link to v1: https://lore.kernel.org/r/20240209-hid-bpf-sleepable-v1-0-4cc895b5adbd@kernel.org
 
+changes in v2 (compared to the one attaches to v1 0/9):
+- dropped the cur_state flag, so it can be put first
 ---
-Benjamin Tissoires (10):
-      bpf/verifier: introduce in_sleepable() helper
-      bpf/helpers: introduce sleepable timers
-      bpf/verifier: allow more maps in sleepable bpf programs
-      HID: bpf/dispatch: regroup kfuncs definitions
-      HID: bpf: export hid_hw_output_report as a BPF kfunc
-      selftests/hid: Add test for hid_bpf_hw_output_report
-      HID: bpf: allow to inject HID event from BPF
-      selftests/hid: add tests for hid_bpf_input_report
-      HID: bpf: allow to use bpf_timer_set_sleepable_cb() in tracing callbacks.
-      selftests/hid: add test for bpf_timer
+ kernel/bpf/verifier.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
- Documentation/hid/hid-bpf.rst                      |   2 +-
- drivers/hid/bpf/hid_bpf_dispatch.c                 | 232 ++++++++++++++-------
- drivers/hid/hid-core.c                             |   2 +
- include/linux/bpf_verifier.h                       |   2 +
- include/linux/hid_bpf.h                            |   3 +
- include/uapi/linux/bpf.h                           |  12 ++
- kernel/bpf/helpers.c                               | 105 +++++++++-
- kernel/bpf/verifier.c                              |  91 +++++++-
- tools/testing/selftests/hid/hid_bpf.c              | 195 ++++++++++++++++-
- tools/testing/selftests/hid/progs/hid.c            | 198 ++++++++++++++++++
- .../testing/selftests/hid/progs/hid_bpf_helpers.h  |   8 +
- 11 files changed, 756 insertions(+), 94 deletions(-)
----
-base-commit: 4f7a05917237b006ceae760507b3d15305769ade
-change-id: 20240205-hid-bpf-sleepable-c01260fd91c4
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 64fa188d00ad..7831adba9abf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5255,6 +5255,11 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
+ 	return -EINVAL;
+ }
+ 
++static bool in_sleepable(struct bpf_verifier_env *env)
++{
++	return env->prog->aux->sleepable;
++}
++
+ /* The non-sleepable programs and sleepable programs with explicit bpf_rcu_read_lock()
+  * can dereference RCU protected pointers and result is PTR_TRUSTED.
+  */
+@@ -5262,7 +5267,7 @@ static bool in_rcu_cs(struct bpf_verifier_env *env)
+ {
+ 	return env->cur_state->active_rcu_lock ||
+ 	       env->cur_state->active_lock.ptr ||
+-	       !env->prog->aux->sleepable;
++	       !in_sleepable(env);
+ }
+ 
+ /* Once GCC supports btf_type_tag the following mechanism will be replaced with tag check */
+@@ -10149,7 +10154,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!env->prog->aux->sleepable && fn->might_sleep) {
++	if (!in_sleepable(env) && fn->might_sleep) {
+ 		verbose(env, "helper call might sleep in a non-sleepable prog\n");
+ 		return -EINVAL;
+ 	}
+@@ -10179,7 +10184,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 			return -EINVAL;
+ 		}
+ 
+-		if (env->prog->aux->sleepable && is_storage_get_function(func_id))
++		if (in_sleepable(env) && is_storage_get_function(func_id))
+ 			env->insn_aux_data[insn_idx].storage_get_func_atomic = true;
+ 	}
+ 
+@@ -11538,7 +11543,7 @@ static bool check_css_task_iter_allowlist(struct bpf_verifier_env *env)
+ 			return true;
+ 		fallthrough;
+ 	default:
+-		return env->prog->aux->sleepable;
++		return in_sleepable(env);
+ 	}
+ }
+ 
+@@ -12059,7 +12064,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	}
+ 
+ 	sleepable = is_kfunc_sleepable(&meta);
+-	if (sleepable && !env->prog->aux->sleepable) {
++	if (sleepable && !in_sleepable(env)) {
+ 		verbose(env, "program must be sleepable to call sleepable kfunc %s\n", func_name);
+ 		return -EACCES;
+ 	}
+@@ -18197,7 +18202,7 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 				return -E2BIG;
+ 			}
+ 
+-			if (env->prog->aux->sleepable)
++			if (in_sleepable(env))
+ 				atomic64_inc(&map->sleepable_refcnt);
+ 			/* hold the map. If the program is rejected by verifier,
+ 			 * the map will be released by release_maps() or it
+@@ -19673,7 +19678,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		if (is_storage_get_function(insn->imm)) {
+-			if (!env->prog->aux->sleepable ||
++			if (!in_sleepable(env) ||
+ 			    env->insn_aux_data[i + delta].storage_get_func_atomic)
+ 				insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__force __s32)GFP_ATOMIC);
+ 			else
 
-Best regards,
 -- 
-Benjamin Tissoires <bentiss@kernel.org>
+2.43.0
 
 
