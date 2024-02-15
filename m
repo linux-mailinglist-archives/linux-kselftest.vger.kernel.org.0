@@ -1,197 +1,407 @@
-Return-Path: <linux-kselftest+bounces-4725-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB8E0855E1D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 10:30:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A819A855F37
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 11:32:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CDAC1F21800
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 09:30:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED5328AEEE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 10:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3183117592;
-	Thu, 15 Feb 2024 09:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7F384FAE;
+	Thu, 15 Feb 2024 10:31:54 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6951755E;
-	Thu, 15 Feb 2024 09:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9839B82D76;
+	Thu, 15 Feb 2024 10:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707989419; cv=none; b=C71ZOkP/GuMLST6U06Kf2MYGpbx2BfJTbMPfswHf3GyeIjFxSmH68e//Y+7m3fMAeE0jhtCp9TvFeJNhKtJIWScrP4/bdtOfzV93h3m2QiaDfr5wK5PrKxhsVigI8wkGJ3/FxJtvxUfSCsr8zaqJ/5UgfPi29VNCWvVwHiu0CUY=
+	t=1707993114; cv=none; b=IAd5kKeBW775FAEh5NkHK7gr6ZqXF9zED0UoRVOjgkBxfeXdlLqJ9gzjDiQkWC43T0RlRBSXc/5dcgt3OsP5jiP4gybHwf61KeL3YyYl4BwBhmruCxBzERmk/5CT75Ule4ATK1PN8ELorCBtev8Qhee0wtRGE9xnl+aQ9iE1xow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707989419; c=relaxed/simple;
-	bh=Ik1XoRnguygiVaidD4Z1D3ctYb5//n0o9fEn7++ICzI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=utx8hq4QG7oQV7fNWSaT/ZWmBkYSyY6RrxsntwoHQqK13q2uOyA+v8jznLHCJF9re7JhI9Bjysk8x5+aYwaotMZb4xG/8Un4dcdDBwh9lKdC9Osi2jo7vN5Mhr6mlJlWmb8yqyHiXkS9dpri5QOTYOGRRmNJ1sv7VVq4iyXKEng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+	s=arc-20240116; t=1707993114; c=relaxed/simple;
+	bh=/ln2zMNXOUZAOkiWQeqk0smurSG+3MY89Qci/22wJbA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GosaPMnd6JpwgRsohpW2mGUuQ6SM5lBd2D+H2X7Snwkhh7z2v9TfSbarw1zt2PfuP0xZ7udU2wdoRmy2qubFtMjVHV9XKHodyCICe3n37oMF5vdCG07H95UOCQvBA00FaMjO9AI2uImrZui85jh1HG6LsJgxRtfDKwmsCmoXWEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Tb8XZ6KKxz9y4yW;
-	Thu, 15 Feb 2024 17:14:54 +0800 (CST)
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Tb9qB65Jbz9xw3c;
+	Thu, 15 Feb 2024 18:12:38 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id E5DA41408C5;
-	Thu, 15 Feb 2024 17:30:11 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwDnICWT2c1lIr+GAg--.1387S2;
-	Thu, 15 Feb 2024 10:30:11 +0100 (CET)
-Message-ID: <fefdfdf75163992ecba6292cfd6ad0e8321ee74a.camel@huaweicloud.com>
-Subject: Re: [PATCH v9 19/25] integrity: Move
- integrity_kernel_module_request() to IMA
+	by mail.maildlp.com (Postfix) with ESMTP id 6831514058E;
+	Thu, 15 Feb 2024 18:31:47 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwAXUCQD6M1lUHGHAg--.4426S2;
+	Thu, 15 Feb 2024 11:31:46 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Stefan Berger <stefanb@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
-	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
-	tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, dhowells@redhat.com, 
-	jarkko@kernel.org, stephen.smalley.work@gmail.com, eparis@parisplace.org, 
-	casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, Roberto Sassu
-	 <roberto.sassu@huawei.com>
-Date: Thu, 15 Feb 2024 10:29:52 +0100
-In-Reply-To: <1d8f8990-43e2-4afc-835e-629c7328d497@linux.ibm.com>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
-	 <20240115181809.885385-20-roberto.sassu@huaweicloud.com>
-	 <fd6ddc3d-e5d3-4b9c-b00b-ac2b1f22d653@linux.ibm.com>
-	 <CAHC9VhTY=X7z5SRQZzFe25FGB2E3FBBkuZ_YYA1+ETyr7pv=tA@mail.gmail.com>
-	 <7940b9d0-3133-4b08-b397-ad9ee34e3b34@linux.ibm.com>
-	 <b95967cd1aa2a4e751a8be3d23f72b7e1db0e4b6.camel@huaweicloud.com>
-	 <1d8f8990-43e2-4afc-835e-629c7328d497@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+To: viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	chuck.lever@oracle.com,
+	jlayton@kernel.org,
+	neilb@suse.de,
+	kolga@netapp.com,
+	Dai.Ngo@oracle.com,
+	tom@talpey.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	dhowells@redhat.com,
+	jarkko@kernel.org,
+	stephen.smalley.work@gmail.com,
+	omosnace@redhat.com,
+	casey@schaufler-ca.com,
+	shuah@kernel.org,
+	mic@digikod.net
+Cc: linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	selinux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v10 00/25] security: Move IMA and EVM to the LSM infrastructure
+Date: Thu, 15 Feb 2024 11:30:48 +0100
+Message-Id: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwDnICWT2c1lIr+GAg--.1387S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur4xJFyfZw1ftw4UZw1xAFb_yoWrGr1kpF
-	W8ta95CFWUXrn8C3W8tw1xurW3K3yxGrsrWrn8JryfCrn09rnFvr42yF43uFyfCr48Jr10
-	gws7t34Iv3s8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj5Ze2QAAso
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwAXUCQD6M1lUHGHAg--.4426S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfGw48tF1DGFyUArWxurykKrg_yoW8Gw45Jo
+	WI9397XFn8tF13AayF9F1xCFWxuaySgrWfAr1Fvw45G3ZFqr1UW34fWa15XFW5Xr4fWwnr
+	G3srAas0qFWUt3Wfn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYn7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+	7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k2
+	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
+	IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+	AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+	x4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj5ZfSgACs4
 
-On Tue, 2024-02-13 at 11:31 -0500, Stefan Berger wrote:
->=20
-> On 2/13/24 03:57, Roberto Sassu wrote:
-> > On Mon, 2024-02-12 at 15:28 -0500, Stefan Berger wrote:
-> > >=20
-> > > On 2/12/24 12:56, Paul Moore wrote:
-> > > > On Mon, Feb 12, 2024 at 12:48=E2=80=AFPM Stefan Berger <stefanb@lin=
-ux.ibm.com> wrote:
-> > > > > On 1/15/24 13:18, Roberto Sassu wrote:
-> > > >=20
-> > > > ...
-> > > >=20
-> > > > > > +/**
-> > > > > > + * ima_kernel_module_request - Prevent crypto-pkcs1pad(rsa,*) =
-requests
-> > > > > > + * @kmod_name: kernel module name
-> > > > > > + *
-> > > > > > + * We have situation, when public_key_verify_signature() in ca=
-se of RSA > + * algorithm use alg_name to store internal information in ord=
-er to
-> > > > > > + * construct an algorithm on the fly, but crypto_larval_lookup=
-() will try
-> > > > > > + * to use alg_name in order to load kernel module with same na=
-me.
-> > > > > > + * Since we don't have any real "crypto-pkcs1pad(rsa,*)" kerne=
-l modules,
-> > > > > > + * we are safe to fail such module request from crypto_larval_=
-lookup().
-> > > > > > + *
-> > > > > > + * In this way we prevent modprobe execution during digsig ver=
-ification
-> > > > > > + * and avoid possible deadlock if modprobe and/or it's depende=
-ncies
-> > > > > > + * also signed with digsig.
-> > > > >=20
-> > > > > This text needs to some reformulation at some point..
-> > > >=20
-> > > > There is no time like the present.  If you have a suggestion I woul=
-d
-> > > > love to hear it and I'm sure Roberto would too.
-> > > >=20
-> > >=20
-> > > My interpretation of the issue after possibly lossy decoding of the
-> > > above sentences:
-> > >=20
-> > > Avoid a deadlock by rejecting a virtual kernel module with the name
-> > > "crypto-pkcs1pad(rsa,*)". This module may be requested by
-> > > crypto_larval_lookup() while trying to verify an RSA signature in
-> > > public_key_verify_signature(). Since the loading of the RSA module ma=
-y
-> > > itself cause the request for an RSA signature verification it will
-> > > otherwise lead to a deadlock.
-> >=20
-> > I can be even more precise I guess (I actually reproduced it). >
-> > Avoid a verification loop where verifying the signature of the modprobe
-> > binary requires executing modprobe itself. Since the modprobe iint-
-> > > mutex is already held when the signature verification is performed, a
-> > deadlock occurs as soon as modprobe is executed within the critical
-> > region, since the same lock cannot be taken again.
->=20
-> When ecdsa is used for signing files it could get stuck as well and=20
-> would need this patch:
->=20
-> diff --git a/security/integrity/ima/ima_main.c=20
-> b/security/integrity/ima/ima_main.c
-> index 45f1a102c599..2e71dc977d43 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -1110,7 +1110,9 @@ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
->    */
->   static int ima_kernel_module_request(char *kmod_name)
->   {
-> -       if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) =3D=3D 0)
-> +       if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) =3D=3D 0 ||
-> +           strncmp(kmod_name, "crypto-ecdsa-nist-p", 19) =3D=3D 0 ||
-> +           strcmp(kmod_name, "cryptomgr") =3D=3D 0)
->                  return -EINVAL;
->=20
->          return 0;
->=20
-> Rejecting cryptomgr seems necessary in the ecdsa case though I am not=20
-> sure what the side effects of rejecting it all the time could be.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Thanks. Ok, let's find a proper way once IMA/EVM are moved to the LSM
-infrastructure.
+IMA and EVM are not effectively LSMs, especially due to the fact that in
+the past they could not provide a security blob while there is another LSM
+active.
 
-Roberto
+That changed in the recent years, the LSM stacking feature now makes it
+possible to stack together multiple LSMs, and allows them to provide a
+security blob for most kernel objects. While the LSM stacking feature has
+some limitations being worked out, it is already suitable to make IMA and
+EVM as LSMs.
 
->     Stefan
->=20
-> >=20
-> > This happens when public_key_verify_signature(), in case of RSA
-> > algorithm, use alg_name to store internal information in order to
-> > construct an algorithm on the fly, but crypto_larval_lookup() will try
-> > to use alg_name in order to load a kernel module with same name.
-> >=20
-> > Since we don't have any real "crypto-pkcs1pad(rsa,*)" kernel modules,
-> > we are safe to fail such module request from crypto_larval_lookup(),
-> > and avoid the verification loop.
-> >=20
-> > Roberto
-> >=20
-> >=20
+The main purpose of this patch set is to remove IMA and EVM function calls,
+hardcoded in the LSM infrastructure and other places in the kernel, and to
+register them as LSM hook implementations, so that those functions are
+called by the LSM infrastructure like other regular LSMs.
+
+This patch set introduces two new LSMs 'ima' and 'evm', so that functions
+can be registered to their respective LSM, and removes the 'integrity' LSM.
+integrity_kernel_module_request() was moved to IMA, since deadlock could
+occur only there. integrity_inode_free() was replaced with ima_inode_free()
+(EVM does not need to free memory).
+
+In order to make 'ima' and 'evm' independent LSMs, it was necessary to
+split integrity metadata used by both IMA and EVM, and to let them manage
+their own. The special case of the IMA_NEW_FILE flag, managed by IMA and
+used by EVM, was handled by introducing a new flag in EVM, EVM_NEW_FILE,
+managed by two additional LSM hooks, evm_post_path_mknod() and
+evm_file_release(), equivalent to their counterparts ima_post_path_mknod()
+and ima_file_free().
+
+In addition to splitting metadata, it was decided to embed the
+evm_iint_inode structure into the inode security blob, since it is small
+and because anyway it cannot rely on IMA anymore allocating it (since it
+uses a different structure).
+
+On the other hand, to avoid memory pressure concerns, only a pointer to the
+ima_iint_cache structure is stored in the inode security blob, and the
+structure is allocated on demand, like before.
+
+Another follow-up change was removing the iint parameter from
+evm_verifyxattr(), that IMA used to pass integrity metadata to EVM. After
+splitting metadata, and aligning EVM_NEW_FILE with IMA_NEW_FILE, this
+parameter was not necessary anymore.
+
+The last part was to ensure that the order of IMA and EVM functions is
+respected after they become LSMs. Since the order of lsm_info structures in
+the .lsm_info.init section depends on the order object files containing
+those structures are passed to the linker of the kernel image, and since
+IMA is before EVM in the Makefile, that is sufficient to assert that IMA
+functions are executed before EVM ones.
+
+The patch set is organized as follows.
+
+Patches 1-9 make IMA and EVM functions suitable to be registered to the LSM
+infrastructure, by aligning function parameters.
+
+Patches 10-18 add new LSM hooks in the same places where IMA and EVM
+functions are called, if there is no LSM hook already.
+
+Patch 19 moves integrity_kernel_module_request() to IMA, as a prerequisite
+for removing the 'integrity' LSM.
+
+Patches 20-22 introduce the new standalone LSMs 'ima' and 'evm', and move
+hardcoded calls to IMA, EVM and integrity functions to those LSMs.
+
+Patches 23-24 remove the dependency on the 'integrity' LSM by splitting
+integrity metadata, so that the 'ima' and 'evm' LSMs can use their own.
+They also duplicate iint_lockdep_annotate() in ima_main.c, since the mutex
+field was moved from integrity_iint_cache to ima_iint_cache.
+
+Patch 25 finally removes the 'integrity' LSM, since 'ima' and 'evm' are now
+self-contained and independent. 
+
+The patch set applies on top of lsm/next, commit 97280fa1ed94 ("Automated
+merge of 'dev' into 'next'").
+
+Changelog:
+
+v9:
+ - Add new Reviewed-by/Acked-by
+ - Rewrite documentation of ima_kernel_module_request() (suggested by
+   Stefan)
+ - Move evm_inode_post_setxattr() registration after evm_inode_setxattr()
+   (suggested by Stefan)
+
+v8:
+ - Restore dynamic allocation of IMA integrity metadata, and store only the
+   pointer in the inode security blob
+ - Select SECURITY_PATH both in IMA and EVM
+ - Rename evm_file_free() to evm_file_release()
+ - Unconditionally register evm_post_path_mknod()
+ - Introduce the new ima_iint.c file for the management of IMA integrity
+   metadata
+ - Introduce ima_inode_set_iint()/ima_inode_get_iint() in ima.h to
+   respectively store/retrieve the IMA integrity metadata pointer
+ - Replace ima_iint_inode() with ima_inode_get() and ima_iint_find(), with
+   same behavior of integrity_inode_get() and integrity_iint_find()
+ - Initialize the ima_iint_cache in ima_iintcache_init() and call it from
+   init_ima_lsm()
+ - Move integrity_kernel_module_request() to IMA in a separate patch
+   (suggested by Mimi)
+ - Compile ima_kernel_module_request() if CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+   is enabled
+ - Remove ima_inode_alloc_security() and ima_inode_free_security(), since
+   the IMA integrity metadata is not fully embedded in the inode security
+   blob
+ - Fixed the missed initialization of ima_iint_cache in
+   process_measurement() and __ima_inode_hash()
+ - Add a sentence in 'evm: Move to LSM infrastructure' to mention about
+   moving evm_inode_remove_acl(), evm_inode_post_remove_acl() and
+   evm_inode_post_set_acl() to evm_main.c
+ - Add a sentence in 'ima: Move IMA-Appraisal to LSM infrastructure' to
+   mention about moving ima_inode_remove_acl() to ima_appraise.c
+
+v7:
+ - Use return instead of goto in __vfs_removexattr_locked() (suggested by
+   Casey)
+ - Clarify in security/integrity/Makefile that the order of 'ima' and 'evm'
+   LSMs depends on the order in which IMA and EVM are compiled
+ - Move integrity_iint_cache flags to ima.h and evm.h in security/ and
+   duplicate IMA_NEW_FILE to EVM_NEW_FILE
+ - Rename evm_inode_get_iint() to evm_iint_inode() and ima_inode_get_iint()
+   to ima_iint_inode(), check if inode->i_security is NULL, and just return
+   the pointer from the inode security blob
+ - Restore the non-NULL checks after ima_iint_inode() and evm_iint_inode()
+   (suggested by Casey)
+ - Introduce evm_file_free() to clear EVM_NEW_FILE
+ - Remove comment about LSM_ORDER_LAST not guaranteeing the order of 'ima'
+   and 'evm' LSMs
+ - Lock iint->mutex before reading IMA_COLLECTED flag in __ima_inode_hash()
+   and restored ima_policy_flag check
+ - Remove patch about the hardcoded ordering of 'ima' and 'evm' LSMs in
+   security.c
+ - Add missing ima_inode_free_security() to free iint->ima_hash
+ - Add the cases for LSM_ID_IMA and LSM_ID_EVM in lsm_list_modules_test.c
+ - Mention about the change in IMA and EVM post functions for private
+   inodes
+
+v6:
+ - See v7
+
+v5:
+ - Rename security_file_pre_free() to security_file_release() and the LSM
+   hook file_pre_free_security to file_release (suggested by Paul)
+ - Move integrity_kernel_module_request() to ima_main.c (renamed to
+   ima_kernel_module_request())
+ - Split the integrity_iint_cache structure into ima_iint_cache and
+   evm_iint_cache, so that IMA and EVM can use disjoint metadata and
+   reserve space with the LSM infrastructure
+ - Reserve space for the entire ima_iint_cache and evm_iint_cache
+   structures, not just the pointer (suggested by Paul)
+ - Introduce ima_inode_get_iint() and evm_inode_get_iint() to retrieve
+   respectively the ima_iint_cache and evm_iint_cache structure from the
+   security blob
+ - Remove the various non-NULL checks for the ima_iint_cache and
+   evm_iint_cache structures, since the LSM infrastructure ensure that they
+   always exist
+ - Remove the iint parameter from evm_verifyxattr() since IMA and EVM
+   use disjoint integrity metaddata
+ - Introduce the evm_post_path_mknod() to set the IMA_NEW_FILE flag
+ - Register the inode_alloc_security LSM hook in IMA and EVM to
+   initialize the respective integrity metadata structures
+ - Remove the 'integrity' LSM completely and instead make 'ima' and 'evm'
+   proper standalone LSMs
+ - Add the inode parameter to ima_get_verity_digest(), since the inode
+   field is not present in ima_iint_cache
+ - Move iint_lockdep_annotate() to ima_main.c (renamed to
+   ima_iint_lockdep_annotate())
+ - Remove ima_get_lsm_id() and evm_get_lsm_id(), since IMA and EVM directly
+   register the needed LSM hooks
+ - Enforce 'ima' and 'evm' LSM ordering at LSM infrastructure level
+
+v4:
+ - Improve short and long description of
+   security_inode_post_create_tmpfile(), security_inode_post_set_acl(),
+   security_inode_post_remove_acl() and security_file_post_open()
+   (suggested by Mimi)
+ - Improve commit message of 'ima: Move to LSM infrastructure' (suggested
+   by Mimi)
+
+v3:
+ - Drop 'ima: Align ima_post_path_mknod() definition with LSM
+   infrastructure' and 'ima: Align ima_post_create_tmpfile() definition
+   with LSM infrastructure', define the new LSM hooks with the same
+   IMA parameters instead (suggested by Mimi)
+ - Do IS_PRIVATE() check in security_path_post_mknod() and
+   security_inode_post_create_tmpfile() on the new inode rather than the
+   parent directory (in the post method it is available)
+ - Don't export ima_file_check() (suggested by Stefan)
+ - Remove redundant check of file mode in ima_post_path_mknod() (suggested
+   by Mimi)
+ - Mention that ima_post_path_mknod() is now conditionally invoked when
+   CONFIG_SECURITY_PATH=y (suggested by Mimi)
+ - Mention when a LSM hook will be introduced in the IMA/EVM alignment
+   patches (suggested by Mimi)
+ - Simplify the commit messages when introducing a new LSM hook
+ - Still keep the 'extern' in the function declaration, until the
+   declaration is removed (suggested by Mimi)
+ - Improve documentation of security_file_pre_free()
+ - Register 'ima' and 'evm' as standalone LSMs (suggested by Paul)
+ - Initialize the 'ima' and 'evm' LSMs from 'integrity', to keep the
+   original ordering of IMA and EVM functions as when they were hardcoded
+ - Return the IMA and EVM LSM IDs to 'integrity' for registration of the
+   integrity-specific hooks
+ - Reserve an xattr slot from the 'evm' LSM instead of 'integrity'
+ - Pass the LSM ID to init_ima_appraise_lsm()
+
+v2:
+ - Add description for newly introduced LSM hooks (suggested by Casey)
+ - Clarify in the description of security_file_pre_free() that actions can
+   be performed while the file is still open
+
+v1:
+ - Drop 'evm: Complete description of evm_inode_setattr()', 'fs: Fix
+   description of vfs_tmpfile()' and 'security: Introduce LSM_ORDER_LAST',
+   they were sent separately (suggested by Christian Brauner)
+ - Replace dentry with file descriptor parameter for
+   security_inode_post_create_tmpfile()
+ - Introduce mode_stripped and pass it as mode argument to
+   security_path_mknod() and security_path_post_mknod()
+ - Use goto in do_mknodat() and __vfs_removexattr_locked() (suggested by
+   Mimi)
+ - Replace __lsm_ro_after_init with __ro_after_init
+ - Modify short description of security_inode_post_create_tmpfile() and
+   security_inode_post_set_acl() (suggested by Stefan)
+ - Move security_inode_post_setattr() just after security_inode_setattr()
+   (suggested by Mimi)
+ - Modify short description of security_key_post_create_or_update()
+   (suggested by Mimi)
+ - Add back exported functions ima_file_check() and
+   evm_inode_init_security() respectively to ima.h and evm.h (reported by
+   kernel robot)
+ - Remove extern from prototype declarations and fix style issues
+ - Remove unnecessary include of linux/lsm_hooks.h in ima_main.c and
+   ima_appraise.c
+
+Roberto Sassu (25):
+  ima: Align ima_inode_post_setattr() definition with LSM infrastructure
+  ima: Align ima_file_mprotect() definition with LSM infrastructure
+  ima: Align ima_inode_setxattr() definition with LSM infrastructure
+  ima: Align ima_inode_removexattr() definition with LSM infrastructure
+  ima: Align ima_post_read_file() definition with LSM infrastructure
+  evm: Align evm_inode_post_setattr() definition with LSM infrastructure
+  evm: Align evm_inode_setxattr() definition with LSM infrastructure
+  evm: Align evm_inode_post_setxattr() definition with LSM
+    infrastructure
+  security: Align inode_setattr hook definition with EVM
+  security: Introduce inode_post_setattr hook
+  security: Introduce inode_post_removexattr hook
+  security: Introduce file_post_open hook
+  security: Introduce file_release hook
+  security: Introduce path_post_mknod hook
+  security: Introduce inode_post_create_tmpfile hook
+  security: Introduce inode_post_set_acl hook
+  security: Introduce inode_post_remove_acl hook
+  security: Introduce key_post_create_or_update hook
+  integrity: Move integrity_kernel_module_request() to IMA
+  ima: Move to LSM infrastructure
+  ima: Move IMA-Appraisal to LSM infrastructure
+  evm: Move to LSM infrastructure
+  evm: Make it independent from 'integrity' LSM
+  ima: Make it independent from 'integrity' LSM
+  integrity: Remove LSM
+
+ fs/attr.c                                     |   5 +-
+ fs/file_table.c                               |   3 +-
+ fs/namei.c                                    |  12 +-
+ fs/nfsd/vfs.c                                 |   3 +-
+ fs/open.c                                     |   1 -
+ fs/posix_acl.c                                |   5 +-
+ fs/xattr.c                                    |   9 +-
+ include/linux/evm.h                           | 117 +-------
+ include/linux/ima.h                           | 142 ----------
+ include/linux/integrity.h                     |  27 --
+ include/linux/lsm_hook_defs.h                 |  20 +-
+ include/linux/security.h                      |  59 ++++
+ include/uapi/linux/lsm.h                      |   2 +
+ security/integrity/Makefile                   |   1 +
+ security/integrity/digsig_asymmetric.c        |  23 --
+ security/integrity/evm/Kconfig                |   1 +
+ security/integrity/evm/evm.h                  |  19 ++
+ security/integrity/evm/evm_crypto.c           |   4 +-
+ security/integrity/evm/evm_main.c             | 195 ++++++++++---
+ security/integrity/iint.c                     | 197 +------------
+ security/integrity/ima/Kconfig                |   1 +
+ security/integrity/ima/Makefile               |   2 +-
+ security/integrity/ima/ima.h                  | 148 ++++++++--
+ security/integrity/ima/ima_api.c              |  23 +-
+ security/integrity/ima/ima_appraise.c         |  66 +++--
+ security/integrity/ima/ima_iint.c             | 142 ++++++++++
+ security/integrity/ima/ima_init.c             |   2 +-
+ security/integrity/ima/ima_main.c             | 148 +++++++---
+ security/integrity/ima/ima_policy.c           |   2 +-
+ security/integrity/integrity.h                |  80 +-----
+ security/keys/key.c                           |  10 +-
+ security/security.c                           | 263 +++++++++++-------
+ security/selinux/hooks.c                      |   3 +-
+ security/smack/smack_lsm.c                    |   4 +-
+ .../selftests/lsm/lsm_list_modules_test.c     |   6 +
+ 35 files changed, 906 insertions(+), 839 deletions(-)
+ create mode 100644 security/integrity/ima/ima_iint.c
+
+-- 
+2.34.1
 
 
