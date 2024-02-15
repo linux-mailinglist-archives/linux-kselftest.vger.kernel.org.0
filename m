@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-4764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C35D8567C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 16:33:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E6E28567CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 16:33:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5A171F2B234
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 15:33:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46110283FDA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 15:33:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63847135A55;
-	Thu, 15 Feb 2024 15:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9658133993;
+	Thu, 15 Feb 2024 15:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="cSpmbqk4"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="XfG+wQCD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A889B13540A;
-	Thu, 15 Feb 2024 15:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A451132478;
+	Thu, 15 Feb 2024 15:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.130.215.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708011046; cv=none; b=L1s1pdmBQLMIzegKLFvodQqj8CXMl3QoHbm6r5O7p+esWkOgyK645qx4EtyZC/978R6uuv+N/xg8hInOkIaPtl1Cg6yCDcujjBBYm3bkV/hK3MG7pQabY+y2v35Jx5/D3vm9ubDRHOpNuMT95adUvWz65inuXIiaUXnrwG99p0g=
+	t=1708011053; cv=none; b=i26Fv7GtMRXtnnzNp1eUl0vo1gnRIpuEfcAl5y0bgBwqSoN/sp9YO68b7Frpf7ESMOJTyeGA7Cqcm9qU17E7QiSayIQT3OSaFleO0qy/qCkFLrncOcreRNhy0HxM+KBRXy1ebTTwd9dOtBLhFpGzaXU8upRkHv+a6CS1Bu3dLXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708011046; c=relaxed/simple;
-	bh=STCYp8hlp+MiB5Ynx/ErSBf64wQDmWMFRv1LIlw8HCs=;
+	s=arc-20240116; t=1708011053; c=relaxed/simple;
+	bh=b0E/zOycocm6Yr7BxMZaBkE498Ra5SmJqkm/mI5IhO4=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HviJGmoNyhXUbftRQC8HoX/u/3LPm57udp+/37eaIDtY7iYXwOaCs8wLqchqT+sIr45oSVfReIFjEYAN9ZpLFHLJAfeyb2ouPOdG52sfLkJsWrZAJikDE454XFYcWJU1ZTcmE4T8MlmO/8WDXmM44gXzxNN5QZGYoSFX67v8kWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org; spf=pass smtp.mailfrom=xen.org; dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b=cSpmbqk4; arc=none smtp.client-ip=104.130.215.37
+	 MIME-Version; b=UdOGWUAdEG36XZafsHdXxaEPEVUbGT3FWF+ksoBvGkxlFgIhY9QQxXyJRCYPgx7/nZRpMoRiAC49pYb9XgOXn/steCQalgZmJ3Rm2w/lLq0+GnxmE+L4kbMzBVNoyoPAGdzLpzqIIgJPTt4kxMbqr7zYbvdRomTOSLKSE0GC8Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org; spf=pass smtp.mailfrom=xen.org; dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b=XfG+wQCD; arc=none smtp.client-ip=104.130.215.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=vidRqY/husiNAcsXLmx8RKhnEHcdfKPAREQpb1Abk68=; b=cSpmbqk4igwIM8oZ2HgWyMpq43
-	urm7g0oevw99lhaMdmHBiEbdyS4CxrFeu9mM4H6zNgEl9vE/rEoK0zDfF1i77IlBV5QQvEMaqObvg
-	adxZbMUr9DIs9reVafS6B37T5+6BwXX998NDHzpJPB3bkq80FaFDBg8c+4YubGWOaFSw=;
+	bh=p6NNZuK1RvdNGHYjSL7HNP2fH297L2tC12ZYacWjRj4=; b=XfG+wQCDKa6hHYYDCxJ7Nc0BWP
+	sg2NEHdSnaRun8+V2R7rqcKRnA9bn36TBGzn0BB9d+O59EQENPYGDnV5j7EzSPKwJNjhSJgqszFQH
+	Rhogth/veO7q4XwVpy7Tk3JgWAqrj9pPVe4nIDXXnIxuQPiIuBsFq9Bg9x+j0ZO4JIY4=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1radh0-0001GG-NC; Thu, 15 Feb 2024 15:30:30 +0000
+	id 1radh3-0001H4-WF; Thu, 15 Feb 2024 15:30:34 +0000
 Received: from 54-240-197-226.amazon.com ([54.240.197.226] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1radh0-00089r-EY; Thu, 15 Feb 2024 15:30:30 +0000
+	id 1radh3-00089r-Nb; Thu, 15 Feb 2024 15:30:33 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -72,9 +72,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v13 08/21] KVM: s390: Refactor kvm_is_error_gpa() into kvm_is_gpa_in_memslot()
-Date: Thu, 15 Feb 2024 15:29:03 +0000
-Message-Id: <20240215152916.1158-9-paul@xen.org>
+Subject: [PATCH v13 09/21] KVM: pfncache: allow a cache to be activated with a fixed (userspace) HVA
+Date: Thu, 15 Feb 2024 15:29:04 +0000
+Message-Id: <20240215152916.1158-10-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240215152916.1158-1-paul@xen.org>
 References: <20240215152916.1158-1-paul@xen.org>
@@ -86,195 +86,236 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Sean Christopherson <seanjc@google.com>
+From: Paul Durrant <pdurrant@amazon.com>
 
-Rename kvm_is_error_gpa() to kvm_is_gpa_in_memslot() and invert the
-polarity accordingly in order to (a) free up kvm_is_error_gpa() to match
-with kvm_is_error_{hva,page}(), and (b) to make it more obvious that the
-helper is doing a memslot lookup, i.e. not simply checking for INVALID_GPA.
+Some pfncache pages may actually be overlays on guest memory that have a
+fixed HVA within the VMM. It's pointless to invalidate such cached
+mappings if the overlay is moved so allow a cache to be activated directly
+with the HVA to cater for such cases. A subsequent patch will make use
+of this facility.
 
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Janosch Frank <frankja@linux.ibm.com>
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: linux-s390@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Cc: David Woodhouse <dwmw2@infradead.org>
 
 v13:
- - New in this version.
----
- arch/s390/kvm/diag.c     |  2 +-
- arch/s390/kvm/gaccess.c  | 14 +++++++-------
- arch/s390/kvm/kvm-s390.c |  4 ++--
- arch/s390/kvm/priv.c     |  4 ++--
- arch/s390/kvm/sigp.c     |  2 +-
- include/linux/kvm_host.h |  4 ++--
- 6 files changed, 15 insertions(+), 15 deletions(-)
+ - Define kvm_is_error_gpa() to check GPA validity.
+ - Add an either/or address check to __kvm_gpc_refresh() as requested.
+ - Make sure memslot is NULL if the cache is activated with an HVA.
 
-diff --git a/arch/s390/kvm/diag.c b/arch/s390/kvm/diag.c
-index 3c65b8258ae6..2a32438e09ce 100644
---- a/arch/s390/kvm/diag.c
-+++ b/arch/s390/kvm/diag.c
-@@ -102,7 +102,7 @@ static int __diag_page_ref_service(struct kvm_vcpu *vcpu)
- 		    parm.token_addr & 7 || parm.zarch != 0x8000000000000000ULL)
- 			return kvm_s390_inject_program_int(vcpu, PGM_SPECIFICATION);
- 
--		if (kvm_is_error_gpa(vcpu->kvm, parm.token_addr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, parm.token_addr))
- 			return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
- 
- 		vcpu->arch.pfault_token = parm.token_addr;
-diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-index 5bfcc50c1a68..415c99649e43 100644
---- a/arch/s390/kvm/gaccess.c
-+++ b/arch/s390/kvm/gaccess.c
-@@ -664,7 +664,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_REGION1:	{
- 		union region1_table_entry rfte;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &rfte.val))
- 			return -EFAULT;
-@@ -682,7 +682,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_REGION2: {
- 		union region2_table_entry rste;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &rste.val))
- 			return -EFAULT;
-@@ -700,7 +700,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_REGION3: {
- 		union region3_table_entry rtte;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &rtte.val))
- 			return -EFAULT;
-@@ -728,7 +728,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 	case ASCE_TYPE_SEGMENT: {
- 		union segment_table_entry ste;
- 
--		if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+		if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 			return PGM_ADDRESSING;
- 		if (deref_table(vcpu->kvm, ptr, &ste.val))
- 			return -EFAULT;
-@@ -748,7 +748,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 		ptr = ste.fc0.pto * (PAGE_SIZE / 2) + vaddr.px * 8;
- 	}
- 	}
--	if (kvm_is_error_gpa(vcpu->kvm, ptr))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, ptr))
- 		return PGM_ADDRESSING;
- 	if (deref_table(vcpu->kvm, ptr, &pte.val))
- 		return -EFAULT;
-@@ -770,7 +770,7 @@ static unsigned long guest_translate(struct kvm_vcpu *vcpu, unsigned long gva,
- 		*prot = PROT_TYPE_IEP;
- 		return PGM_PROTECTION;
- 	}
--	if (kvm_is_error_gpa(vcpu->kvm, raddr.addr))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, raddr.addr))
- 		return PGM_ADDRESSING;
- 	*gpa = raddr.addr;
- 	return 0;
-@@ -957,7 +957,7 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
- 				return rc;
- 		} else {
- 			gpa = kvm_s390_real_to_abs(vcpu, ga);
--			if (kvm_is_error_gpa(vcpu->kvm, gpa)) {
-+			if (!kvm_is_gpa_in_memslot(vcpu->kvm, gpa)) {
- 				rc = PGM_ADDRESSING;
- 				prot = PROT_NONE;
- 			}
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index ea63ac769889..3e5a1d7aa81a 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -2878,7 +2878,7 @@ static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
- 
- 	srcu_idx = srcu_read_lock(&kvm->srcu);
- 
--	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
-+	if (!kvm_is_gpa_in_memslot(kvm, mop->gaddr)) {
- 		r = PGM_ADDRESSING;
- 		goto out_unlock;
- 	}
-@@ -2940,7 +2940,7 @@ static int kvm_s390_vm_mem_op_cmpxchg(struct kvm *kvm, struct kvm_s390_mem_op *m
- 
- 	srcu_idx = srcu_read_lock(&kvm->srcu);
- 
--	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
-+	if (!kvm_is_gpa_in_memslot(kvm, mop->gaddr)) {
- 		r = PGM_ADDRESSING;
- 		goto out_unlock;
- 	}
-diff --git a/arch/s390/kvm/priv.c b/arch/s390/kvm/priv.c
-index 621a17fd1a1b..0ece9c581ebf 100644
---- a/arch/s390/kvm/priv.c
-+++ b/arch/s390/kvm/priv.c
-@@ -149,7 +149,7 @@ static int handle_set_prefix(struct kvm_vcpu *vcpu)
- 	 * first page, since address is 8k aligned and memory pieces are always
- 	 * at least 1MB aligned and have at least a size of 1MB.
- 	 */
--	if (kvm_is_error_gpa(vcpu->kvm, address))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, address))
- 		return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
- 
- 	kvm_s390_set_prefix(vcpu, address);
-@@ -464,7 +464,7 @@ static int handle_test_block(struct kvm_vcpu *vcpu)
- 		return kvm_s390_inject_prog_irq(vcpu, &vcpu->arch.pgm);
- 	addr = kvm_s390_real_to_abs(vcpu, addr);
- 
--	if (kvm_is_error_gpa(vcpu->kvm, addr))
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, addr))
- 		return kvm_s390_inject_program_int(vcpu, PGM_ADDRESSING);
- 	/*
- 	 * We don't expect errors on modern systems, and do not care
-diff --git a/arch/s390/kvm/sigp.c b/arch/s390/kvm/sigp.c
-index d9696b530064..55c34cb35428 100644
---- a/arch/s390/kvm/sigp.c
-+++ b/arch/s390/kvm/sigp.c
-@@ -172,7 +172,7 @@ static int __sigp_set_prefix(struct kvm_vcpu *vcpu, struct kvm_vcpu *dst_vcpu,
- 	 * first page, since address is 8k aligned and memory pieces are always
- 	 * at least 1MB aligned and have at least a size of 1MB.
- 	 */
--	if (kvm_is_error_gpa(vcpu->kvm, irq.u.prefix.address)) {
-+	if (!kvm_is_gpa_in_memslot(vcpu->kvm, irq.u.prefix.address)) {
- 		*reg &= 0xffffffff00000000UL;
- 		*reg |= SIGP_STATUS_INVALID_PARAMETER;
- 		return SIGP_CC_STATUS_STORED;
+v11:
+ - Fixed kvm_gpc_check() to ignore memslot generation if the cache is not
+   activated with a GPA. (This breakage occured during the re-work for v8).
+
+v9:
+ - Pass both GPA and HVA into __kvm_gpc_refresh() rather than overloading
+   the address paraneter and using a bool flag to indicated what it is.
+
+v8:
+ - Re-worked to avoid messing with struct gfn_to_pfn_cache.
+---
+ include/linux/kvm_host.h | 21 +++++++++
+ virt/kvm/pfncache.c      | 94 +++++++++++++++++++++++++++++-----------
+ 2 files changed, 89 insertions(+), 26 deletions(-)
+
 diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index da20b7018cc8..41ee515b304e 100644
+index 41ee515b304e..043cc824d55a 100644
 --- a/include/linux/kvm_host.h
 +++ b/include/linux/kvm_host.h
-@@ -1791,11 +1791,11 @@ static inline hpa_t pfn_to_hpa(kvm_pfn_t pfn)
- 	return (hpa_t)pfn << PAGE_SHIFT;
+@@ -148,6 +148,11 @@ static inline bool kvm_is_error_hva(unsigned long addr)
+ 
+ #endif
+ 
++static inline bool kvm_is_error_gpa(gpa_t gpa)
++{
++	return gpa == INVALID_GPA;
++}
++
+ #define KVM_ERR_PTR_BAD_PAGE	(ERR_PTR(-ENOENT))
+ 
+ static inline bool is_error_page(struct page *page)
+@@ -1343,6 +1348,22 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm);
+  */
+ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len);
+ 
++/**
++ * kvm_gpc_activate_hva - prepare a cached kernel mapping and HPA for a given HVA.
++ *
++ * @gpc:          struct gfn_to_pfn_cache object.
++ * @hva:          userspace virtual address to map.
++ * @len:          sanity check; the range being access must fit a single page.
++ *
++ * @return:       0 for success.
++ *                -EINVAL for a mapping which would cross a page boundary.
++ *                -EFAULT for an untranslatable guest physical address.
++ *
++ * The semantics of this function are the same as those of kvm_gpc_activate(). It
++ * merely bypasses a layer of address translation.
++ */
++int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long hva, unsigned long len);
++
+ /**
+  * kvm_gpc_check - check validity of a gfn_to_pfn_cache.
+  *
+diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
+index 97eec8ee3449..4e64d349b2f7 100644
+--- a/virt/kvm/pfncache.c
++++ b/virt/kvm/pfncache.c
+@@ -48,7 +48,14 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
+ 	if (!gpc->active)
+ 		return false;
+ 
+-	if (gpc->generation != slots->generation || kvm_is_error_hva(gpc->uhva))
++	/*
++	 * If the page was cached from a memslot, make sure the memslots have
++	 * not been re-configured.
++	 */
++	if (!kvm_is_error_gpa(gpc->gpa) && gpc->generation != slots->generation)
++		return false;
++
++	if (kvm_is_error_hva(gpc->uhva))
+ 		return false;
+ 
+ 	if (offset_in_page(gpc->uhva) + len > PAGE_SIZE)
+@@ -209,11 +216,11 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
+ 	return -EFAULT;
  }
  
--static inline bool kvm_is_error_gpa(struct kvm *kvm, gpa_t gpa)
-+static inline bool kvm_is_gpa_in_memslot(struct kvm *kvm, gpa_t gpa)
+-static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
++static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
+ 			     unsigned long len)
  {
- 	unsigned long hva = gfn_to_hva(kvm, gpa_to_gfn(gpa));
+-	struct kvm_memslots *slots = kvm_memslots(gpc->kvm);
+-	unsigned long page_offset = offset_in_page(gpa);
++	unsigned long page_offset = kvm_is_error_gpa(gpa) ?
++		offset_in_page(uhva) : offset_in_page(gpa);
+ 	bool unmap_old = false;
+ 	unsigned long old_uhva;
+ 	kvm_pfn_t old_pfn;
+@@ -221,6 +228,10 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+ 	void *old_khva;
+ 	int ret;
  
--	return kvm_is_error_hva(hva);
-+	return !kvm_is_error_hva(hva);
++	/* Either gpa or uhva must be valid, but not both */
++	if (WARN_ON_ONCE(kvm_is_error_gpa(gpa) == kvm_is_error_hva(uhva)))
++		return -EINVAL;
++
+ 	/*
+ 	 * If must fit within a single page. The 'len' argument is
+ 	 * only to enforce that.
+@@ -246,29 +257,39 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+ 	old_khva = (void *)PAGE_ALIGN_DOWN((uintptr_t)gpc->khva);
+ 	old_uhva = PAGE_ALIGN_DOWN(gpc->uhva);
+ 
+-	/* Refresh the userspace HVA if necessary */
+-	if (gpc->gpa != gpa || gpc->generation != slots->generation ||
+-	    kvm_is_error_hva(gpc->uhva)) {
+-		gfn_t gfn = gpa_to_gfn(gpa);
+-
+-		gpc->gpa = gpa;
+-		gpc->generation = slots->generation;
+-		gpc->memslot = __gfn_to_memslot(slots, gfn);
+-		gpc->uhva = gfn_to_hva_memslot(gpc->memslot, gfn);
++	if (kvm_is_error_gpa(gpa)) {
++		gpc->gpa = INVALID_GPA;
++		gpc->memslot = NULL;
++		gpc->uhva = PAGE_ALIGN_DOWN(uhva);
+ 
+-		if (kvm_is_error_hva(gpc->uhva)) {
+-			ret = -EFAULT;
+-			goto out;
+-		}
+-
+-		/*
+-		 * Even if the GPA and/or the memslot generation changed, the
+-		 * HVA may still be the same.
+-		 */
+ 		if (gpc->uhva != old_uhva)
+ 			hva_change = true;
+ 	} else {
+-		gpc->uhva = old_uhva;
++		struct kvm_memslots *slots = kvm_memslots(gpc->kvm);
++
++		if (gpc->gpa != gpa || gpc->generation != slots->generation ||
++		    kvm_is_error_hva(gpc->uhva)) {
++			gfn_t gfn = gpa_to_gfn(gpa);
++
++			gpc->gpa = gpa;
++			gpc->generation = slots->generation;
++			gpc->memslot = __gfn_to_memslot(slots, gfn);
++			gpc->uhva = gfn_to_hva_memslot(gpc->memslot, gfn);
++
++			if (kvm_is_error_hva(gpc->uhva)) {
++				ret = -EFAULT;
++				goto out;
++			}
++
++			/*
++			 * Even if the GPA and/or the memslot generation changed, the
++			 * HVA may still be the same.
++			 */
++			if (gpc->uhva != old_uhva)
++				hva_change = true;
++		} else {
++			gpc->uhva = old_uhva;
++		}
+ 	}
+ 
+ 	/* Note: the offset must be correct before calling hva_to_pfn_retry() */
+@@ -319,7 +340,16 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+ 
+ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len)
+ {
+-	return __kvm_gpc_refresh(gpc, gpc->gpa, len);
++	unsigned long uhva = gpc->uhva;
++
++	/*
++	 * If the GPA is valid then invalidate the HVA, otherwise
++	 * __kvm_gpc_refresh() will fail its strict either/or address check.
++	 */
++	if (!kvm_is_error_gpa(gpc->gpa))
++		uhva = KVM_HVA_ERR_BAD;
++
++	return __kvm_gpc_refresh(gpc, gpc->gpa, uhva, len);
  }
  
- enum kvm_stat_kind {
+ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
+@@ -329,10 +359,12 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
+ 
+ 	gpc->kvm = kvm;
+ 	gpc->pfn = KVM_PFN_ERR_FAULT;
++	gpc->gpa = INVALID_GPA;
+ 	gpc->uhva = KVM_HVA_ERR_BAD;
+ }
+ 
+-int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
++static int __kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
++			      unsigned long len)
+ {
+ 	struct kvm *kvm = gpc->kvm;
+ 
+@@ -353,7 +385,17 @@ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
+ 		gpc->active = true;
+ 		write_unlock_irq(&gpc->lock);
+ 	}
+-	return __kvm_gpc_refresh(gpc, gpa, len);
++	return __kvm_gpc_refresh(gpc, gpa, uhva, len);
++}
++
++int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
++{
++	return __kvm_gpc_activate(gpc, gpa, KVM_HVA_ERR_BAD, len);
++}
++
++int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long uhva, unsigned long len)
++{
++	return __kvm_gpc_activate(gpc, INVALID_GPA, uhva, len);
+ }
+ 
+ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc)
 -- 
 2.39.2
 
