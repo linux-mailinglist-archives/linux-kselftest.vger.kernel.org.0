@@ -1,82 +1,76 @@
-Return-Path: <linux-kselftest+bounces-4745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1861F8560F5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 12:09:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA5B785626A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 13:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4124DB36116
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 10:48:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 325751F2164E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 12:02:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8288112EBE4;
-	Thu, 15 Feb 2024 10:37:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E058C12B175;
+	Thu, 15 Feb 2024 12:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="zK2Kc5Jf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0931350EB;
-	Thu, 15 Feb 2024 10:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05357219E0;
+	Thu, 15 Feb 2024 12:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707993453; cv=none; b=R2rgFljw3NUefMl9+YrdNqM0bcYm8tbfXG6G4Q/tOt/TBUhIaIBex8K7xz/2fk7L0e4u3D8qK1K0d8I8EDIJDpv/u8GgT7EL9l2BRftZqafCYSmxXZwN04BTtMkijJgFATNYQ7kVo0e7bZD2eMDXzuuNT1rLGr37QUG7ICeY7ts=
+	t=1707998547; cv=none; b=owHb0aM9GUXRSNIi4W9+4iZz6Yec9a21WL1BO7gVJcbKNJ9BytR14XN0EVTptb97eBVL6hYNVQgwx2rXnZHAHky5Cs61OdfLtrIe1aTw/+suNYDaoKIOsrXgNOYCxIjjiXVLNLxiWlrv+CQrU2eoZCc4I9WtoZkbTGMRdxVrO70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707993453; c=relaxed/simple;
-	bh=6pDNjirN0csgffvdwyGCh7PvsfoDg+SXCp+EeNhVQTk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kfRLOWWhJ0mcRWQr8JJ5BnP1TMhFJIQOIcbreB0U1gdzlsaW1MBW9gUzyfmb8wRkL1eIpjb/b4MtsfaYfYI5AIBKxU7Rn57h16ankaWiX31NCt8GRPjCXParGhRdK66DAROXCDK+RQXqWP3VaLmHaDygpWPUIQQ+2npDeenOOss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Tb9xl2bGXz9v7Z2;
-	Thu, 15 Feb 2024 18:18:19 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 086C61405A2;
-	Thu, 15 Feb 2024 18:37:18 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwA3LxjQ6M1l4QeNAg--.58293S11;
-	Thu, 15 Feb 2024 11:37:17 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	chuck.lever@oracle.com,
-	jlayton@kernel.org,
-	neilb@suse.de,
-	kolga@netapp.com,
-	Dai.Ngo@oracle.com,
-	tom@talpey.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	dhowells@redhat.com,
-	jarkko@kernel.org,
-	stephen.smalley.work@gmail.com,
-	omosnace@redhat.com,
-	casey@schaufler-ca.com,
-	shuah@kernel.org,
-	mic@digikod.net
-Cc: linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v10 19/25] integrity: Move integrity_kernel_module_request() to IMA
-Date: Thu, 15 Feb 2024 11:31:07 +0100
-Message-Id: <20240215103113.2369171-20-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
-References: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1707998547; c=relaxed/simple;
+	bh=C1yoGhOuFqXhiUyUou0BMV7c6tIj5s7JmMbgvjVR7jQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BX1hy0mXXkdzCNECMCE7xaN/nUU35IxsKHmkvae4v46RI5TIVM36ek+FVqSDBUbDh3Us1fsrPff7j7s+J3IfTFBaN7nf8IewlQR2Qc37JSNsEEQm45k7oePIUYh4cUZmX0R1s+VG+9flOGJvu3tflHEG6UD1NYmxsUCXDfhM70k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=zK2Kc5Jf; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1707998542;
+	bh=C1yoGhOuFqXhiUyUou0BMV7c6tIj5s7JmMbgvjVR7jQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=zK2Kc5JfLBU+NLuGLInn85iRJ4Ru0l5lREe+4N2i/GPdiJmUIdodM9oVsBm7t/AmF
+	 ZpId8bOcH4FCXP/7vn3HFpe9OPJ3PbQ4OuNgZku9BKJbvXHIPfDiScAHKZeFk7yk4n
+	 p56QilzqUWmF4+BphMXSJ/GO/v/k7dHQN2j6B19MW7v5hZD4MjG2RHJxt6iM3kn2cE
+	 9VQBZ5w1Y56kF7B8OHqK3rkOlMdGAiRf8XkZdG4F2+jV3YzZlzSiWZSfclJtFjOZ7h
+	 itVb8G0YnCERrCEwg5Pk+qJQ527wGYJz6DC4oEMHecOSLaBKiuPhwRyzIDcYGZ74dT
+	 5hRYFho/iLj8A==
+Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 59BE537820AD;
+	Thu, 15 Feb 2024 12:02:16 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: kernel@collabora.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Move test_dev_cgroup to prog_tests
+Date: Thu, 15 Feb 2024 17:01:42 +0500
+Message-ID: <20240215120233.308986-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,191 +78,198 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwA3LxjQ6M1l4QeNAg--.58293S11
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar13WF1xZr45Kr1UuF43Awb_yoWxXw17pa
-	95KFW5Jry8Zr97CaykAF1xCa45K3yfGrW3WrsxCr1fCFn0vr4qvr47JF13Xry3WrWrJF4F
-	grs2qr13Cw1qy37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42
-	IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWlIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0xZFpf9x07UdfHUUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5pfaAAAsX
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Move test_dev_cgroup to prog_tests to be able to run it with test_progs.
+Replace dev_cgroup.bpf.o with skel header file, dev_cgroup.skel.h and
+load program from it accourdingly.
 
-In preparation for removing the 'integrity' LSM, move
-integrity_kernel_module_request() to IMA, and rename it to
-ima_kernel_module_request(). Rewrite the function documentation, to explain
-better what the problem is.
+  ./test_progs -t test_dev_cgroup
+  mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+  64+0 records in
+  64+0 records out
+  32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
+  dd: failed to open '/dev/full': Operation not permitted
+  dd: failed to open '/dev/random': Operation not permitted
+  #365     test_dev_cgroup:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
-Compile it conditionally if CONFIG_INTEGRITY_ASYMMETRIC_KEYS is enabled,
-and call it from security.c (removed afterwards with the move of IMA to the
-LSM infrastructure).
-
-Adding this hook cannot be avoided, since IMA has no control on the flags
-passed to crypto_alloc_sig() in public_key_verify_signature(), and thus
-cannot pass CRYPTO_NOLOAD, which solved the problem for EVM hashing with
-commit e2861fa71641 ("evm: Don't deadlock if a crypto algorithm is
-unavailable").
-
-EVM alone does not need to implement this hook, first because there is no
-mutex to deadlock, and second because even if it had it, there should be a
-recursive call. However, since verification from EVM can be initiated only
-by setting inode metadata, deadlock would occur if modprobe would do the
-same while loading a kernel module (which is unlikely).
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Acked-by: Paul Moore <paul@paul-moore.com>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- include/linux/ima.h                    | 10 ++++++++
- include/linux/integrity.h              | 13 ----------
- security/integrity/digsig_asymmetric.c | 23 ------------------
- security/integrity/ima/ima_main.c      | 33 ++++++++++++++++++++++++++
- security/security.c                    |  2 +-
- 5 files changed, 44 insertions(+), 37 deletions(-)
+While converting from skeleton APIs, I didn't found direct alternative
+of bpf_prog_attach(fd, cgroup_fd, BPF_CGROUP_DEVICE). So I've kept
+using the bpf_prog_attach() in this patch.
+---
+ .../bpf/prog_tests/test_dev_cgroup.c          | 67 +++++++++++++++
+ tools/testing/selftests/bpf/test_dev_cgroup.c | 85 -------------------
+ 2 files changed, 67 insertions(+), 85 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_dev_cgroup.c
+ delete mode 100644 tools/testing/selftests/bpf/test_dev_cgroup.c
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 31ef6c3c3207..0f9af283cbc8 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -256,4 +256,14 @@ static inline bool ima_appraise_signature(enum kernel_read_file_id func)
- 	return false;
- }
- #endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
-+
-+#if defined(CONFIG_IMA) && defined(CONFIG_INTEGRITY_ASYMMETRIC_KEYS)
-+extern int ima_kernel_module_request(char *kmod_name);
-+#else
-+static inline int ima_kernel_module_request(char *kmod_name)
-+{
-+	return 0;
-+}
-+
-+#endif
- #endif /* _LINUX_IMA_H */
-diff --git a/include/linux/integrity.h b/include/linux/integrity.h
-index 2ea0f2f65ab6..ef0f63ef5ebc 100644
---- a/include/linux/integrity.h
-+++ b/include/linux/integrity.h
-@@ -42,17 +42,4 @@ static inline void integrity_load_keys(void)
- }
- #endif /* CONFIG_INTEGRITY */
- 
--#ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
--
--extern int integrity_kernel_module_request(char *kmod_name);
--
--#else
--
--static inline int integrity_kernel_module_request(char *kmod_name)
--{
--	return 0;
--}
--
--#endif /* CONFIG_INTEGRITY_ASYMMETRIC_KEYS */
--
- #endif /* _LINUX_INTEGRITY_H */
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index 895f4b9ce8c6..de603cf42ac7 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -132,26 +132,3 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- 	pr_debug("%s() = %d\n", __func__, ret);
- 	return ret;
- }
--
--/**
-- * integrity_kernel_module_request - prevent crypto-pkcs1pad(rsa,*) requests
-- * @kmod_name: kernel module name
-- *
-- * We have situation, when public_key_verify_signature() in case of RSA
-- * algorithm use alg_name to store internal information in order to
-- * construct an algorithm on the fly, but crypto_larval_lookup() will try
-- * to use alg_name in order to load kernel module with same name.
-- * Since we don't have any real "crypto-pkcs1pad(rsa,*)" kernel modules,
-- * we are safe to fail such module request from crypto_larval_lookup().
-- *
-- * In this way we prevent modprobe execution during digsig verification
-- * and avoid possible deadlock if modprobe and/or it's dependencies
-- * also signed with digsig.
-- */
--int integrity_kernel_module_request(char *kmod_name)
--{
--	if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) == 0)
--		return -EINVAL;
--
--	return 0;
--}
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 02021ee467d3..3891b83efdb3 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -1091,6 +1091,39 @@ int ima_measure_critical_data(const char *event_label,
- }
- EXPORT_SYMBOL_GPL(ima_measure_critical_data);
- 
-+#ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
-+
-+/**
-+ * ima_kernel_module_request - Prevent crypto-pkcs1pad(rsa,*) requests
-+ * @kmod_name: kernel module name
-+ *
-+ * Avoid a verification loop where verifying the signature of the modprobe
-+ * binary requires executing modprobe itself. Since the modprobe iint->mutex
-+ * is already held when the signature verification is performed, a deadlock
-+ * occurs as soon as modprobe is executed within the critical region, since
-+ * the same lock cannot be taken again.
-+ *
-+ * This happens when public_key_verify_signature(), in case of RSA algorithm,
-+ * use alg_name to store internal information in order to construct an
-+ * algorithm on the fly, but crypto_larval_lookup() will try to use alg_name
-+ * in order to load a kernel module with same name.
-+ *
-+ * Since we don't have any real "crypto-pkcs1pad(rsa,*)" kernel modules,
-+ * we are safe to fail such module request from crypto_larval_lookup(), and
-+ * avoid the verification loop.
-+ *
-+ * Return: Zero if it is safe to load the kernel module, -EINVAL otherwise.
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_dev_cgroup.c b/tools/testing/selftests/bpf/prog_tests/test_dev_cgroup.c
+new file mode 100644
+index 0000000000000..ee37ce52dec9f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_dev_cgroup.c
+@@ -0,0 +1,67 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2017 Facebook
 + */
-+int ima_kernel_module_request(char *kmod_name)
++
++#include <test_progs.h>
++#include <time.h>
++#include "cgroup_helpers.h"
++#include "dev_cgroup.skel.h"
++
++#define TEST_CGROUP "/test-bpf-based-device-cgroup/"
++
++void test_test_dev_cgroup(void)
 +{
-+	if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) == 0)
-+		return -EINVAL;
++	int cgroup_fd, err, duration = 0;
++	struct dev_cgroup *skel;
++	__u32 prog_cnt;
 +
-+	return 0;
++	skel = dev_cgroup__open_and_load();
++	if (CHECK(!skel, "skel_open_and_load", "failed\n"))
++		goto cleanup;
++
++	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
++	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "failed: %d\n", cgroup_fd))
++		goto cleanup;
++
++	err = bpf_prog_attach(bpf_program__fd(skel->progs.bpf_prog1), cgroup_fd,
++			      BPF_CGROUP_DEVICE, 0);
++	if (CHECK(err, "bpf_attach", "failed: %d\n", err))
++		goto cleanup;
++
++	err = bpf_prog_query(cgroup_fd, BPF_CGROUP_DEVICE, 0, NULL, NULL, &prog_cnt);
++	if (CHECK(err || prog_cnt != 1, "bpf_query", "failed: %d %d\n", err, prog_cnt))
++		goto cleanup;
++
++	/* All operations with /dev/zero and /dev/urandom are allowed,
++	 * everything else is forbidden.
++	 */
++	CHECK(system("rm -f /tmp/test_dev_cgroup_null"), "rm",
++	      "unexpected rm on _null\n");
++	CHECK(!system("mknod /tmp/test_dev_cgroup_null c 1 3"),
++	      "mknod", "unexpected mknod on _null\n");
++	CHECK(system("rm -f /tmp/test_dev_cgroup_null"), "rm",
++	      "unexpected rm on _null\n");
++
++	/* /dev/zero is whitelisted */
++	CHECK(system("rm -f /tmp/test_dev_cgroup_zero"), "rm",
++	      "unexpected rm on _zero\n");
++	CHECK(system("mknod /tmp/test_dev_cgroup_zero c 1 5"),
++	      "mknod", "unexpected mknod on _zero\n");
++	CHECK(system("rm -f /tmp/test_dev_cgroup_zero"), "rm",
++	      "unexpected rm on _zero\n");
++
++	CHECK(system("dd if=/dev/urandom of=/dev/zero count=64"), "dd",
++	      "unexpected dd on /dev/zero\n");
++
++	/* src is allowed, target is forbidden */
++	CHECK(!system("dd if=/dev/urandom of=/dev/full count=64"), "dd",
++	      "unexpected dd on /dev/full\n");
++
++	/* src is forbidden, target is allowed */
++	CHECK(!system("dd if=/dev/random of=/dev/zero count=64"), "dd",
++	      "unexpected dd on /dev/zero\n");
++
++cleanup:
++	cleanup_cgroup_environment();
++	dev_cgroup__destroy(skel);
 +}
-+
-+#endif /* CONFIG_INTEGRITY_ASYMMETRIC_KEYS */
-+
- static int __init init_ima(void)
- {
- 	int error;
-diff --git a/security/security.c b/security/security.c
-index f8d9ebeb4c31..48dc3db4c834 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -3250,7 +3250,7 @@ int security_kernel_module_request(char *kmod_name)
- 	ret = call_int_hook(kernel_module_request, 0, kmod_name);
- 	if (ret)
- 		return ret;
--	return integrity_kernel_module_request(kmod_name);
-+	return ima_kernel_module_request(kmod_name);
- }
- 
- /**
+diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
+deleted file mode 100644
+index adeaf63cb6fa3..0000000000000
+--- a/tools/testing/selftests/bpf/test_dev_cgroup.c
++++ /dev/null
+@@ -1,85 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* Copyright (c) 2017 Facebook
+- */
+-
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <errno.h>
+-#include <assert.h>
+-#include <sys/time.h>
+-
+-#include <linux/bpf.h>
+-#include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+-
+-#include "cgroup_helpers.h"
+-#include "testing_helpers.h"
+-
+-#define DEV_CGROUP_PROG "./dev_cgroup.bpf.o"
+-
+-#define TEST_CGROUP "/test-bpf-based-device-cgroup/"
+-
+-int main(int argc, char **argv)
+-{
+-	struct bpf_object *obj;
+-	int error = EXIT_FAILURE;
+-	int prog_fd, cgroup_fd;
+-	__u32 prog_cnt;
+-
+-	/* Use libbpf 1.0 API mode */
+-	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+-
+-	if (bpf_prog_test_load(DEV_CGROUP_PROG, BPF_PROG_TYPE_CGROUP_DEVICE,
+-			  &obj, &prog_fd)) {
+-		printf("Failed to load DEV_CGROUP program\n");
+-		goto out;
+-	}
+-
+-	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
+-	if (cgroup_fd < 0) {
+-		printf("Failed to create test cgroup\n");
+-		goto out;
+-	}
+-
+-	/* Attach bpf program */
+-	if (bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_DEVICE, 0)) {
+-		printf("Failed to attach DEV_CGROUP program");
+-		goto err;
+-	}
+-
+-	if (bpf_prog_query(cgroup_fd, BPF_CGROUP_DEVICE, 0, NULL, NULL,
+-			   &prog_cnt)) {
+-		printf("Failed to query attached programs");
+-		goto err;
+-	}
+-
+-	/* All operations with /dev/zero and and /dev/urandom are allowed,
+-	 * everything else is forbidden.
+-	 */
+-	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+-	assert(system("mknod /tmp/test_dev_cgroup_null c 1 3"));
+-	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+-
+-	/* /dev/zero is whitelisted */
+-	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+-	assert(system("mknod /tmp/test_dev_cgroup_zero c 1 5") == 0);
+-	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+-
+-	assert(system("dd if=/dev/urandom of=/dev/zero count=64") == 0);
+-
+-	/* src is allowed, target is forbidden */
+-	assert(system("dd if=/dev/urandom of=/dev/full count=64"));
+-
+-	/* src is forbidden, target is allowed */
+-	assert(system("dd if=/dev/random of=/dev/zero count=64"));
+-
+-	error = 0;
+-	printf("test_dev_cgroup:PASS\n");
+-
+-err:
+-	cleanup_cgroup_environment();
+-
+-out:
+-	return error;
+-}
 -- 
-2.34.1
+2.42.0
 
 
