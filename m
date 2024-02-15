@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-4799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB752856C7A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 19:27:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7200856C7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 19:27:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC1EC1C21DED
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 18:27:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA7121C21CDC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 18:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA66913AA53;
-	Thu, 15 Feb 2024 18:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7F013B2A4;
+	Thu, 15 Feb 2024 18:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rCTe4gVp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcfqZGyZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60E213AA4B;
-	Thu, 15 Feb 2024 18:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978B113B29D;
+	Thu, 15 Feb 2024 18:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708021554; cv=none; b=HaFZxdRYkjF3VmwyGoxMXsc1KTS777qFf3JSlEh/cM+9m5Djb1ZhTXCdikAWHTAN7deNLWHMJ8UvrGi8nNsgPGn+mEIoht4cZmu6ix1960H3MBjv0yW4Bi5L8lSsSDGG70cnFRQVINJBrIsTJvbzwMkOBPVW6AnaMBpLdB7gpoE=
+	t=1708021557; cv=none; b=Ao/haotF1lERtWwdybP4gCPrRVmvmWNrn4gGZgwQjXYWMjav64b2j7sF6356dZRbKcmPG6UDgueHfA9gIMublanHKZBK6wqiYqv+TafzrpmrHTx4gxFafTYoBkkunMghZ+vMJeSD8B+rTLZeLom5MyVJmyTxDJe178OxzPKF/ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708021554; c=relaxed/simple;
-	bh=oQx74ogq8XEWhaDeCHKcAvhTLzjLFWuQ3CeAwMCbB/M=;
+	s=arc-20240116; t=1708021557; c=relaxed/simple;
+	bh=g7fXBxyk3jJrnTY6KxuB+UW8rqnCEuU0+GG9X+ksv04=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sG1S54HCd+G795QWw7bTDf4yUo/FDu/PL/GCZ5JB39e1tEq/C6jzT9+Xaf3O1RS5GgL1+o6Y/hZREKfhSaufcDyfzr8i8R/YXH/l/buabKPR3kSWBtMc7FeXBX9B15MewObbVWlCi7/iThSqBhob4SVI1lDFfZHW5yxfqpmoZ20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rCTe4gVp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E495C433F1;
-	Thu, 15 Feb 2024 18:25:51 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=fjJVczpLRiA3R6MU6vpnCbKj3GHI6JQx27srChSNot/PAsjlHGC/DAWJf9bd+lj5T1blurl5dXIJPMNEqfz+oYv2uR/qrXwhIcuZPlv34AQoRmdEIFLffBEb508dcGWEmUn2FqVqVBAr2v3YtJ1zSUXc7BmQq1//uU26pGfUg7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcfqZGyZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A979C43394;
+	Thu, 15 Feb 2024 18:25:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708021554;
-	bh=oQx74ogq8XEWhaDeCHKcAvhTLzjLFWuQ3CeAwMCbB/M=;
+	s=k20201202; t=1708021557;
+	bh=g7fXBxyk3jJrnTY6KxuB+UW8rqnCEuU0+GG9X+ksv04=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=rCTe4gVp3CgS+5NYJZPr8ydUw7L3eNImhP1pM3nXsljdmr7vQTt5G13VGoUxkJOZG
-	 GpE9m4KEb/6rFifYRfV5YnV6zqzFRYM6tYEpvkB08CV1iLkMf3lt9n21UO8I5yRWaj
-	 DFY7cvTDmfqh25od7keu8vgT/8nfXa5eVLv112XPZFf9kZnoOzYsz/nJySITFxt3hx
-	 AqfKossX4NslglEexcO0dExXsBEIB0xJ2cHYPeyUjOjfwyZTBwE85X7X0ylkbm+vt1
-	 SnNCbpMDMuApQWMT/iyohC3AbD+7waZPDqEL3ItlmO4JENvN8apNqbW7uGgY0lzFy1
-	 68dCT1yp9qlmw==
+	b=jcfqZGyZLvtbM1PJwk7WBqIsm3ltcaTJcRD9X+ZRjAchR1bBA6AMfS11ZWNm3ydOb
+	 fkjgAIkybNWaQSUmiGYmrHySXBukhS4PTI1HQTU/V2HQQgnpCZM8HWySwxrYGSMZvb
+	 wocAhSvZCuyOIu0E7DeVKXbbECubkJpV+RGlZaxgNEKj1JIgjOrLtr/JEwpK0g5lCy
+	 W8WUSyvZea5HF1sNy1JJlIEkLLpsclL3SRiKhB3qhpbmWiydIAZzEe4b3KtYf5X9cO
+	 Cf61JeFKX3AvyktyvLx+n5yDnoGcG3DVH9iyugX8lbEMB0lfT3Wq9SftBNyRmQ79eR
+	 SUDHRGFbkyy5A==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 15 Feb 2024 19:25:32 +0100
-Subject: [PATCH net 05/13] mptcp: fix data races on remote_id
+Date: Thu, 15 Feb 2024 19:25:33 +0100
+Subject: [PATCH net 06/13] mptcp: fix duplicate subflow creation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240215-upstream-net-20240215-misc-fixes-v1-5-8c01a55d8f6a@kernel.org>
+Message-Id: <20240215-upstream-net-20240215-misc-fixes-v1-6-8c01a55d8f6a@kernel.org>
 References: <20240215-upstream-net-20240215-misc-fixes-v1-0-8c01a55d8f6a@kernel.org>
 In-Reply-To: <20240215-upstream-net-20240215-misc-fixes-v1-0-8c01a55d8f6a@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,104 +64,113 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3453; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=Phzggd1e3xH9VcpIMW2JwQ4VlATGqfBwFCcy2ByLV7k=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlzlcc5DkIVpcVyJl8wBeZ/NcTkynzax2nJW0c/
- DoLIIyEekGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZc5XHAAKCRD2t4JPQmmg
- c82OD/4xprG1PGn0dVQ5wAZz0Pt56+fB/JkibVoLaGb448l91a7iJJCAs0BW3CxGW2KdxjbSKLZ
- geqGcWFges6Hv3MpOr/Iklulh10dsdWBKf9pYTt5fj8miEgtV9VJcJBb8TP0ec2wzlXv745vZim
- dcK+cxLtxVa8ulu5tJULQkdVehYPTDdNU1a+u4ujKgot4sIPDSn1Twk3QSbYxRyOv1JqTZ4Clla
- Y3GDLj+WPAT38Qx9Ayapb6l0Y9j6pX3+qR7bAgyXyK75m0cjP00UOH9+C7ekmwRdZqVOzDcAJC5
- ArKPNcrVjXKaYNsj6jDQeYnKJ5S+sSI320PwzQCUuXMYmmLqmI4MJkX+AhNWXSj8CWKEpDkit6B
- pj6doKqX1/iFLhxfI42twmMNGOGLANGjLyXl8S0kr2uKEF/p8/5wOZejEHyHfFdl04m+rWU9kda
- WA2qjDdq+VlGGNhJ4xpxZ8AP4OykPEzR6lLf4oYgNrUMrwLlPbb2EeSkwD//MKn/hymcxG9t8lE
- xZ+i5hhdZKYASKtNtuHJzyWYcYWar3/UBnNEo89Z9RrkJbH3vSXIfw2tzxG0+sAF2fDpCr8Z/o7
- MbKNpN7EVQSMTsInf7sc/tPir4tCYtwABMCeI01//JD9tmATYW23r1vH4zsraaEBs6XSrIYYBL5
- LSJubHk7NEqp4zA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3034; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=ws82kCFP+tNaGXtybdfXTs45hTTSHMXbFSuBqCwGyG0=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlzlcdS6rUmaz1x4lw/43gIP3ya597R0wIip/bn
+ 86sZXUJotKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZc5XHQAKCRD2t4JPQmmg
+ c03UD/9T+Ps9qSZ36F+qV9NwB9r5qhdozBVeEKhPgZ+2oJlhCAqHVNQlOH/PnJOH/VSvyTckQaP
+ kFSJEDM4ErR4sa6fxUnDq+gNtCxW/k+H75zmjxO6ScjNGvxUp32XZJVkYMux8GfnORkdjrIEU3r
+ HS3wh0dPxyMoy7ceGchQzbN8AxufkuMQx0Vu65pLPUzKMP9oSHtYjv1Kutq2OLboYiHPSPTV7y6
+ fQfgS4NVi6NOIVumJ62VLMM+lcDIThpGwfdiADDp2mj/Ru0yun9sD9wnOCnTKFACPTqc3RTbREw
+ 0KmUI7TmPwkHXLGf5fhMMJsTyoyF07aFIYh+m7USOnWDnoLkZQVmGw6AE/qeidsnBk0Sj9tagX4
+ 8m0Hqjg9oqXyjItTrxaQhrHXXrO1lom0BgEaIIHZ6FpcwCdMWQmma0KElMj2rJ78WGAnYbLnjQl
+ jCjXBi75aCBg8MDtLtwOouf8Y5ZxAOLtMm5h3OC/k+MwJW0cDlrkovWA/zrM3fHDZvUyIgacbuF
+ Rg6j62h17iswnIUQY2zXZw6L902ZWJoXi2QY/PKWLWO6WSIC+9SvJpYU7c798m/QqYsx2rcAvh0
+ mIZgrRa/xgq20qZF758p+utxUKlJ6hZjnpD1l6XhCcmaQ0onoJb+ONFmbqNnlEkyCEcRoLLRhcC
+ XRDbmqITwPjwFYQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Paolo Abeni <pabeni@redhat.com>
 
-Similar to the previous patch, address the data race on
-remote_id, adding the suitable ONCE annotations.
+Fullmesh endpoints could end-up unexpectedly generating duplicate
+subflows - same local and remote addresses - when multiple incoming
+ADD_ADDR are processed before the PM creates the subflow for the local
+endpoints.
 
-Fixes: bedee0b56113 ("mptcp: address lookup improvements")
+Address the issue explicitly checking for duplicates at subflow
+creation time.
+
+To avoid a quadratic computational complexity, track the unavailable
+remote address ids in a temporary bitmap and initialize such bitmap
+with the remote ids of all the existing subflows matching the local
+address currently processed.
+
+The above allows additionally replacing the existing code checking
+for duplicate entry in the current set with a simple bit test
+operation.
+
+Fixes: 2843ff6f36db ("mptcp: remote addresses fullmesh")
 Cc: stable@vger.kernel.org
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/435
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm_netlink.c | 8 ++++----
- net/mptcp/subflow.c    | 6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ net/mptcp/pm_netlink.c | 33 ++++++++++++++++++---------------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
 
 diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 912e25077437..ed6983af1ab2 100644
+index ed6983af1ab2..58d17d9604e7 100644
 --- a/net/mptcp/pm_netlink.c
 +++ b/net/mptcp/pm_netlink.c
-@@ -443,7 +443,7 @@ static unsigned int fill_remote_addresses_vec(struct mptcp_sock *msk,
+@@ -396,19 +396,6 @@ void mptcp_pm_free_anno_list(struct mptcp_sock *msk)
+ 	}
+ }
+ 
+-static bool lookup_address_in_vec(const struct mptcp_addr_info *addrs, unsigned int nr,
+-				  const struct mptcp_addr_info *addr)
+-{
+-	int i;
+-
+-	for (i = 0; i < nr; i++) {
+-		if (addrs[i].id == addr->id)
+-			return true;
+-	}
+-
+-	return false;
+-}
+-
+ /* Fill all the remote addresses into the array addrs[],
+  * and return the array size.
+  */
+@@ -440,6 +427,16 @@ static unsigned int fill_remote_addresses_vec(struct mptcp_sock *msk,
+ 		msk->pm.subflows++;
+ 		addrs[i++] = remote;
+ 	} else {
++		DECLARE_BITMAP(unavail_id, MPTCP_PM_MAX_ADDR_ID + 1);
++
++		/* Forbid creation of new subflows matching existing
++		 * ones, possibly already created by incoming ADD_ADDR
++		 */
++		bitmap_zero(unavail_id, MPTCP_PM_MAX_ADDR_ID + 1);
++		mptcp_for_each_subflow(msk, subflow)
++			if (READ_ONCE(subflow->local_id) == local->id)
++				__set_bit(subflow->remote_id, unavail_id);
++
  		mptcp_for_each_subflow(msk, subflow) {
  			ssk = mptcp_subflow_tcp_sock(subflow);
  			remote_address((struct sock_common *)ssk, &addrs[i]);
--			addrs[i].id = subflow->remote_id;
-+			addrs[i].id = READ_ONCE(subflow->remote_id);
+@@ -447,11 +444,17 @@ static unsigned int fill_remote_addresses_vec(struct mptcp_sock *msk,
  			if (deny_id0 && !addrs[i].id)
  				continue;
  
-@@ -799,18 +799,18 @@ static void mptcp_pm_nl_rm_addr_or_subflow(struct mptcp_sock *msk,
- 
- 		mptcp_for_each_subflow_safe(msk, subflow, tmp) {
- 			struct sock *ssk = mptcp_subflow_tcp_sock(subflow);
-+			u8 remote_id = READ_ONCE(subflow->remote_id);
- 			int how = RCV_SHUTDOWN | SEND_SHUTDOWN;
- 			u8 id = subflow_get_local_id(subflow);
- 
--			if (rm_type == MPTCP_MIB_RMADDR && subflow->remote_id != rm_id)
-+			if (rm_type == MPTCP_MIB_RMADDR && remote_id != rm_id)
- 				continue;
- 			if (rm_type == MPTCP_MIB_RMSUBFLOW && !mptcp_local_id_match(msk, id, rm_id))
++			if (test_bit(addrs[i].id, unavail_id))
++				continue;
++
+ 			if (!mptcp_pm_addr_families_match(sk, local, &addrs[i]))
  				continue;
  
- 			pr_debug(" -> %s rm_list_ids[%d]=%u local_id=%u remote_id=%u mpc_id=%u",
- 				 rm_type == MPTCP_MIB_RMADDR ? "address" : "subflow",
--				 i, rm_id, id, subflow->remote_id,
--				 msk->mpc_endpoint_id);
-+				 i, rm_id, id, remote_id, msk->mpc_endpoint_id);
- 			spin_unlock_bh(&msk->pm.lock);
- 			mptcp_subflow_shutdown(sk, ssk, how);
- 
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index 015184bbf06c..71ba86246ff8 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -535,7 +535,7 @@ static void subflow_finish_connect(struct sock *sk, const struct sk_buff *skb)
- 		subflow->backup = mp_opt.backup;
- 		subflow->thmac = mp_opt.thmac;
- 		subflow->remote_nonce = mp_opt.nonce;
--		subflow->remote_id = mp_opt.join_id;
-+		WRITE_ONCE(subflow->remote_id, mp_opt.join_id);
- 		pr_debug("subflow=%p, thmac=%llu, remote_nonce=%u backup=%d",
- 			 subflow, subflow->thmac, subflow->remote_nonce,
- 			 subflow->backup);
-@@ -1567,7 +1567,7 @@ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_addr_info *loc,
- 	pr_debug("msk=%p remote_token=%u local_id=%d remote_id=%d", msk,
- 		 remote_token, local_id, remote_id);
- 	subflow->remote_token = remote_token;
--	subflow->remote_id = remote_id;
-+	WRITE_ONCE(subflow->remote_id, remote_id);
- 	subflow->request_join = 1;
- 	subflow->request_bkup = !!(flags & MPTCP_PM_ADDR_FLAG_BACKUP);
- 	subflow->subflow_id = msk->subflow_id++;
-@@ -1974,7 +1974,7 @@ static void subflow_ulp_clone(const struct request_sock *req,
- 		new_ctx->fully_established = 1;
- 		new_ctx->remote_key_valid = 1;
- 		new_ctx->backup = subflow_req->backup;
--		new_ctx->remote_id = subflow_req->remote_id;
-+		WRITE_ONCE(new_ctx->remote_id, subflow_req->remote_id);
- 		new_ctx->token = subflow_req->token;
- 		new_ctx->thmac = subflow_req->thmac;
- 
+-			if (!lookup_address_in_vec(addrs, i, &addrs[i]) &&
+-			    msk->pm.subflows < subflows_max) {
++			if (msk->pm.subflows < subflows_max) {
++				/* forbid creating multiple address towards
++				 * this id
++				 */
++				__set_bit(addrs[i].id, unavail_id);
+ 				msk->pm.subflows++;
+ 				i++;
+ 			}
 
 -- 
 2.43.0
