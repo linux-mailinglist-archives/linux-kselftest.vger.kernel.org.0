@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-4772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4775-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C527B85683B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 16:45:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 246E3856848
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 16:46:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DA1B285624
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 15:45:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48D1E1C23583
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 15:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70C95134CCB;
-	Thu, 15 Feb 2024 15:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA0DE1353E9;
+	Thu, 15 Feb 2024 15:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="W0Xh2IpS"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="PKyFH96e"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A371E1339A3;
-	Thu, 15 Feb 2024 15:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3E8134745;
+	Thu, 15 Feb 2024 15:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.130.215.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708011875; cv=none; b=h+ACL5m69HkmuzSJklakPCCrpmlBRAwE7FGSr+emVKso81tLmybTGwY5NOgK29l+LfE3268upG8AzbQgduDg5nMnRvGLPOWdlyxzl4hRtBZvazq/vZ2XQChN9dimhKf8B1ZjwQ1fbmEw2zlKXzHBP+68yy/ol5WhQxDV9V6zfRY=
+	t=1708011876; cv=none; b=JD2b2bojw5Jyf9A5LBHdjmY6HTbAoyPadkGHqOaAK1RCmeD9E0PyiB+VDebYVWZR9G0pS4OO1V0rYJ6U/E+ItXYL0qRaMXBJ1z/qsx1fSaAnai9IzxR6H681nZUxJiUlhRGgtU1dBPPodaCe5+VpFbZpqrHyyk0w5/EIbi4+Cgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708011875; c=relaxed/simple;
-	bh=Iczx8uGS2pMyj32Isdver4gpjd/cFUuEvTlQrjXhYQY=;
+	s=arc-20240116; t=1708011876; c=relaxed/simple;
+	bh=vD0tK+73URbDnBXkj88m52MT44LmjoIEES/dfYqUt+k=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=raeH3/8ijctjRgmdg7H4vh3xZ2pASoVmUMTjKeVBgM1fZ+rLc+N3k6yO+18MjSDob3RHaos8kRVzwjMr2ZgIYVA09fQMWpMYC3HXL13sRdeTTIYezQaHJbvO975A21+HXaZx/kl+yJAJDa6HhqrmYTesXo6h5+RhlGG01rhDn7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org; spf=pass smtp.mailfrom=xen.org; dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b=W0Xh2IpS; arc=none smtp.client-ip=104.130.215.37
+	 MIME-Version; b=libeWYlxeCClNMmGFqVwFRuITGCr7VNXdn+ygHczpv8oI0dVUIexAyaaHuYZQBgUfZ616ZmFrFLoAgEgBei5HqN947n1PNPeO4kXoUhoSMI10GIsm6cXBDo9vWiqHsdFYQ7MxFLcngcoacqDtuoYQ+HOcptvM0jZo1VIDNNTQec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org; spf=pass smtp.mailfrom=xen.org; dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b=PKyFH96e; arc=none smtp.client-ip=104.130.215.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=hxa3aMnIMpALzs/BKRBU3KgvSe4qAfUuhmqmYo4D2xE=; b=W0Xh2IpSD3cg7v7JGK4EqOEKRQ
-	ZMUFy8cJV5euvEeXqI4CufAZmhF5H9Pn4ADhyeJUJKNLIrnC4pguiIniOZHBjWIqYRf1iynsOq0TF
-	RckocucBwFdIl2b8bZ4dVccZfNF0p5rAy/S+uATEakbDix3oPozl9IE9U537MHV0cnbE=;
+	bh=tu7qwya2jtZUkrGPS+XN5zC966KqDMkYx6RM2c1jNNc=; b=PKyFH96eF/msDV4UydBnvnU65q
+	q7/PuS+babK9499TsL2cxQ/CmKOo9mBDnN1YPI2rwLlUPZr0dtcoCjvGwskfFSkBwcnj2MZrg7tcC
+	kmgLHL7N2e3jk8xQUndEVm7Vzj6iKT8gT9QvRyanlj5fIP1zKG9z2bEWJ8BYug6Qly/s=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1raduL-0001WG-LB; Thu, 15 Feb 2024 15:44:17 +0000
+	id 1raduM-0001WY-Ah; Thu, 15 Feb 2024 15:44:18 +0000
 Received: from 54-240-197-226.amazon.com ([54.240.197.226] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1radhG-00089r-RI; Thu, 15 Feb 2024 15:30:47 +0000
+	id 1radhK-00089r-41; Thu, 15 Feb 2024 15:30:50 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -72,9 +72,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v13 13/21] KVM: x86/xen: allow vcpu_info to be mapped by fixed HVA
-Date: Thu, 15 Feb 2024 15:29:08 +0000
-Message-Id: <20240215152916.1158-14-paul@xen.org>
+Subject: [PATCH v13 14/21] KVM: selftests: map Xen's shared_info page using HVA rather than GFN
+Date: Thu, 15 Feb 2024 15:29:09 +0000
+Message-Id: <20240215152916.1158-15-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240215152916.1158-1-paul@xen.org>
 References: <20240215152916.1158-1-paul@xen.org>
@@ -88,166 +88,125 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-If the guest does not explicitly set the GPA of vcpu_info structure in
-memory then, for guests with 32 vCPUs or fewer, the vcpu_info embedded
-in the shared_info page may be used. As described in a previous commit,
-the shared_info page is an overlay at a fixed HVA within the VMM, so in
-this case it also more optimal to activate the vcpu_info cache with a
-fixed HVA to avoid unnecessary invalidation if the guest memory layout
-is modified.
+Using the HVA of the shared_info page is more efficient, so if the
+capability (KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA) is present use that method
+to do the mapping.
+
+NOTE: Have the juggle_shinfo_state() thread map and unmap using both
+      GFN and HVA, to make sure the older mechanism is not broken.
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
-Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
+Cc: David Woodhouse <dwmw2@infradead.org>
 
 v13:
  - Patch title change.
 
-v8:
- - Re-base.
+v3:
+ - Re-work the juggle_shinfo_state() thread.
 
-v5:
+v2:
  - New in this version.
 ---
- Documentation/virt/kvm/api.rst | 26 +++++++++++++++++++++-----
- arch/x86/kvm/xen.c             | 34 ++++++++++++++++++++++++++++------
- include/uapi/linux/kvm.h       |  3 +++
- 3 files changed, 52 insertions(+), 11 deletions(-)
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    | 44 +++++++++++++++----
+ 1 file changed, 35 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 3372be85b335..bd93cafd3e4e 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5523,11 +5523,12 @@ KVM_XEN_ATTR_TYPE_SHARED_INFO
-   Sets the guest physical frame number at which the Xen shared_info
-   page resides. Note that although Xen places vcpu_info for the first
-   32 vCPUs in the shared_info page, KVM does not automatically do so
--  and instead requires that KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO be used
--  explicitly even when the vcpu_info for a given vCPU resides at the
--  "default" location in the shared_info page. This is because KVM may
--  not be aware of the Xen CPU id which is used as the index into the
--  vcpu_info[] array, so may know the correct default location.
-+  and instead requires that KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO or
-+  KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA be used explicitly even when
-+  the vcpu_info for a given vCPU resides at the "default" location
-+  in the shared_info page. This is because KVM may not be aware of
-+  the Xen CPU id which is used as the index into the vcpu_info[]
-+  array, so may know the correct default location.
+diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+index 9ec9ab60b63e..a61500ff0822 100644
+--- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+@@ -389,6 +389,7 @@ static int cmp_timespec(struct timespec *a, struct timespec *b)
+ 		return 0;
+ }
  
-   Note that the shared_info page may be constantly written to by KVM;
-   it contains the event channel bitmap used to deliver interrupts to
-@@ -5649,6 +5650,21 @@ KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO
-   on dirty logging. Setting the gpa to KVM_XEN_INVALID_GPA will disable
-   the vcpu_info.
++static struct shared_info *shinfo;
+ static struct vcpu_info *vinfo;
+ static struct kvm_vcpu *vcpu;
  
-+KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA
-+  If the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA flag is also set in the
-+  Xen capabilities, then this attribute may be used to set the
-+  userspace address of the vcpu_info for a given vCPU. It should
-+  only be used when the vcpu_info resides at the "default" location
-+  in the shared_info page. In this case it is safe to assume the
-+  userspace address will not change, because the shared_info page is
-+  an overlay on guest memory and remains at a fixed host address
-+  regardless of where it is mapped in guest physical address space
-+  and hence unnecessary invalidation of an internal cache may be
-+  avoided if the guest memory layout is modified.
-+  If the vcpu_info does not reside at the "default" location then
-+  it is not guaranteed to remain at the same host address and
-+  hence the aforementioned cache invalidation is required.
+@@ -404,20 +405,38 @@ static void *juggle_shinfo_state(void *arg)
+ {
+ 	struct kvm_vm *vm = (struct kvm_vm *)arg;
+ 
+-	struct kvm_xen_hvm_attr cache_activate = {
++	struct kvm_xen_hvm_attr cache_activate_gfn = {
+ 		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
+ 		.u.shared_info.gfn = SHINFO_REGION_GPA / PAGE_SIZE
+ 	};
+ 
+-	struct kvm_xen_hvm_attr cache_deactivate = {
++	struct kvm_xen_hvm_attr cache_deactivate_gfn = {
+ 		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
+ 		.u.shared_info.gfn = KVM_XEN_INVALID_GFN
+ 	};
+ 
++	struct kvm_xen_hvm_attr cache_activate_hva = {
++		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA,
++		.u.shared_info.hva = (unsigned long)shinfo
++	};
 +
- KVM_XEN_VCPU_ATTR_TYPE_VCPU_TIME_INFO
-   Sets the guest physical address of an additional pvclock structure
-   for a given vCPU. This is typically used for guest vsyscall support.
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 6fb268e424fa..4e79cc68e0a9 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -784,20 +784,33 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 
- 	switch (data->type) {
- 	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO:
-+	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA:
- 		/* No compat necessary here. */
- 		BUILD_BUG_ON(sizeof(struct vcpu_info) !=
- 			     sizeof(struct compat_vcpu_info));
- 		BUILD_BUG_ON(offsetof(struct vcpu_info, time) !=
- 			     offsetof(struct compat_vcpu_info, time));
- 
--		if (data->u.gpa == KVM_XEN_INVALID_GPA) {
--			kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
--			r = 0;
--			break;
-+		if (data->type == KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO) {
-+			if (data->u.gpa == KVM_XEN_INVALID_GPA) {
-+				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
-+				r = 0;
-+				break;
-+			}
++	struct kvm_xen_hvm_attr cache_deactivate_hva = {
++		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
++		.u.shared_info.hva = 0
++	};
 +
-+			r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
-+					     data->u.gpa, sizeof(struct vcpu_info));
-+		} else {
-+			if (data->u.hva == 0) {
-+				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
-+				r = 0;
-+				break;
-+			}
++	int xen_caps = kvm_check_cap(KVM_CAP_XEN_HVM);
 +
-+			r = kvm_gpc_activate_hva(&vcpu->arch.xen.vcpu_info_cache,
-+						 data->u.hva, sizeof(struct vcpu_info));
- 		}
- 
--		r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
--				     data->u.gpa, sizeof(struct vcpu_info));
- 		if (!r)
- 			kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
- 
-@@ -1026,6 +1039,15 @@ int kvm_xen_vcpu_get_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 		r = 0;
- 		break;
- 
-+	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA:
-+		if (vcpu->arch.xen.vcpu_info_cache.active &&
-+		    vcpu->arch.xen.vcpu_info_cache.gpa == KVM_XEN_INVALID_GPA)
-+			data->u.hva = vcpu->arch.xen.vcpu_info_cache.uhva;
-+		else
-+			data->u.hva = 0;
-+		r = 0;
-+		break;
+ 	for (;;) {
+-		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_activate);
+-		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_deactivate);
++		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_activate_gfn);
+ 		pthread_testcancel();
++		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_deactivate_gfn);
 +
- 	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_TIME_INFO:
- 		if (vcpu->arch.xen.vcpu_time_info_cache.active)
- 			data->u.gpa = vcpu->arch.xen.vcpu_time_info_cache.gpa;
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index ac5caba313d1..d2665319db6e 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1809,6 +1809,7 @@ struct kvm_xen_vcpu_attr {
- 	union {
- 		__u64 gpa;
- #define KVM_XEN_INVALID_GPA ((__u64)-1)
-+		__u64 hva;
- 		__u64 pad[8];
- 		struct {
- 			__u64 state;
-@@ -1839,6 +1840,8 @@ struct kvm_xen_vcpu_attr {
- #define KVM_XEN_VCPU_ATTR_TYPE_VCPU_ID		0x6
- #define KVM_XEN_VCPU_ATTR_TYPE_TIMER		0x7
- #define KVM_XEN_VCPU_ATTR_TYPE_UPCALL_VECTOR	0x8
-+/* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA */
-+#define KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA	0x9
++		if (xen_caps & KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA) {
++			__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_activate_hva);
++			pthread_testcancel();
++			__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_deactivate_hva);
++		}
+ 	}
  
- /* Secure Encrypted Virtualization command */
- enum sev_cmd_id {
+ 	return NULL;
+@@ -442,6 +461,7 @@ int main(int argc, char *argv[])
+ 	bool do_runstate_flag = !!(xen_caps & KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG);
+ 	bool do_eventfd_tests = !!(xen_caps & KVM_XEN_HVM_CONFIG_EVTCHN_2LEVEL);
+ 	bool do_evtchn_tests = do_eventfd_tests && !!(xen_caps & KVM_XEN_HVM_CONFIG_EVTCHN_SEND);
++	bool has_shinfo_hva = !!(xen_caps & KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA);
+ 
+ 	clock_gettime(CLOCK_REALTIME, &min_ts);
+ 
+@@ -452,7 +472,7 @@ int main(int argc, char *argv[])
+ 				    SHINFO_REGION_GPA, SHINFO_REGION_SLOT, 3, 0);
+ 	virt_map(vm, SHINFO_REGION_GVA, SHINFO_REGION_GPA, 3);
+ 
+-	struct shared_info *shinfo = addr_gpa2hva(vm, SHINFO_VADDR);
++	shinfo = addr_gpa2hva(vm, SHINFO_VADDR);
+ 
+ 	int zero_fd = open("/dev/zero", O_RDONLY);
+ 	TEST_ASSERT(zero_fd != -1, "Failed to open /dev/zero");
+@@ -488,10 +508,16 @@ int main(int argc, char *argv[])
+ 			    "Failed to read back RUNSTATE_UPDATE_FLAG attr");
+ 	}
+ 
+-	struct kvm_xen_hvm_attr ha = {
+-		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
+-		.u.shared_info.gfn = SHINFO_REGION_GPA / PAGE_SIZE,
+-	};
++	struct kvm_xen_hvm_attr ha = {};
++
++	if (has_shinfo_hva) {
++		ha.type = KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA;
++		ha.u.shared_info.hva = (unsigned long)shinfo;
++	} else {
++		ha.type = KVM_XEN_ATTR_TYPE_SHARED_INFO;
++		ha.u.shared_info.gfn = SHINFO_ADDR / PAGE_SIZE;
++	}
++
+ 	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &ha);
+ 
+ 	/*
 -- 
 2.39.2
 
