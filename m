@@ -1,50 +1,51 @@
-Return-Path: <linux-kselftest+bounces-4767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7835985681E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 16:41:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FB498567B3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 16:32:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34E0D28747D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 15:41:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BF82283DCF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 15:32:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E3C91339A5;
-	Thu, 15 Feb 2024 15:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF05133419;
+	Thu, 15 Feb 2024 15:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="Hu3vy5io"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="uN7n7u9Q"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C7C133988;
-	Thu, 15 Feb 2024 15:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F8B1350C1;
+	Thu, 15 Feb 2024 15:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.130.215.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708011676; cv=none; b=ADzyb7LylTiGlYzIpAuPP9H558EkV0R9WqPQOtm3rR9jsyS4XnrVi5CjQWMZbJS6q2YQBOJwdUjDhlRP0/bsc+bRG32mpX+pyYYSz6ZLABsJK+E5evohjOTwauFmRC13VOzhVerrq1Vmh9BTbdMZcXcwNrgm3LFW5NLEVnRzgt0=
+	t=1708011040; cv=none; b=LjgyUqcgIEq5oPiaXEgz/pl0zrQoO5fnoX2ibChTVr4gVLtQYL8MUOG1fuUv2hK8kcSyqxEDDl3iuOp0Vz3jyFB+UsRPXkvg5GuUYyBNKq+HWkPrvjjehgUSc7luflChnfSmOORRxf4bl/N71xJgvmejumOqb2K52/OT+sDhBws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708011676; c=relaxed/simple;
-	bh=BPxOajaOUpZ8zqhwZLHWGPlmk25NyFlciVy4aXnDiuE=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=Y/RsTmFK1y8mA59h+UrO3NpWUkucGJJJXDk3XNL+ZvSCr4Rl5IzXuleofiiOmpQRhPJxtZ94x7Y7ikE9BLrSc0PSVPvvmKL+knjGySkCGzQH2dDAIXJwqCsDQ/+OB7aMRgBAEeF2E4utSQVrCmPkpHTeK+Dolan1ALVqxf1LZYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org; spf=pass smtp.mailfrom=xen.org; dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b=Hu3vy5io; arc=none smtp.client-ip=104.130.215.37
+	s=arc-20240116; t=1708011040; c=relaxed/simple;
+	bh=R8mjm6bTMdSdKqKArLsYNQPe2oXTn04HDiw3MW+30do=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VgyNRQnmDeUX2cAY8PnjMYHlDgVgryiSQXPuxQVvXwordZPOMEVKhyUMVvoSHBG/VaFt5pSNUYt8ud+xCCuPJl+9e4l47oyMxmAZX8naLmTUDcWLR/FNZ1jXHtl4P5XkCecbYKd5fYoEaJIcBe5sWlF+Ot3ruNCixFbsS9C2pbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org; spf=pass smtp.mailfrom=xen.org; dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b=uN7n7u9Q; arc=none smtp.client-ip=104.130.215.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
-	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-	Subject:To:From; bh=TEpTKi5UZCiDihe14d8Icy5BIjVsO8aW29qRo71K668=; b=Hu3vy5ioZ
-	A2o4SB5Ah6zJp7nMx/Qnx/ooYOEoOrdDLeqBIr//u6kyvxrovmIZ/lxMajKOKn+4Pt8/buEe73GBb
-	pqrpMAjM5hYBKdZ+NZI01N1vFsy5vT0M98ud51iJV6Kw0k37LsUfGJd++yOKfOCj1FBdi1fZMtZ8P
-	efGMNk7I=;
+	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
+	In-Reply-To:Message-Id:Date:Subject:To:From;
+	bh=DVmkuHvAJAn35Oz9caMUxenePj8iuuNulYJyd17+sk4=; b=uN7n7u9QS1Sm1pOOOlhRLCrfcV
+	g/qevuY49oxJ5QtFWbF4Wnu8gLqzuDqXrdUCqK6TOjJXAuT46wWIG5zTi+Pfc2UQKl4DZzftLPpvt
+	/igCmUawwEcNjKWix9bVW5A68/uYt+ZiBXnqPbeuHUpExhAotK3N35oSeEXgKGDNeuLU=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1radgB-0001B5-T7; Thu, 15 Feb 2024 15:29:39 +0000
+	id 1radgd-0001Dx-R7; Thu, 15 Feb 2024 15:30:07 +0000
 Received: from 54-240-197-226.amazon.com ([54.240.197.226] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1radgB-00089r-DW; Thu, 15 Feb 2024 15:29:39 +0000
+	id 1radgd-00089r-Fl; Thu, 15 Feb 2024 15:30:07 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -71,10 +72,12 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v13 00/21] KVM: xen: update shared_info and vcpu_info handling
-Date: Thu, 15 Feb 2024 15:28:55 +0000
-Message-Id: <20240215152916.1158-1-paul@xen.org>
+Subject: [PATCH v13 01/21] KVM: pfncache: Add a map helper function
+Date: Thu, 15 Feb 2024 15:28:56 +0000
+Message-Id: <20240215152916.1158-2-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240215152916.1158-1-paul@xen.org>
+References: <20240215152916.1158-1-paul@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,90 +88,117 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-This series contains a new patch from Sean added since v12 [1]:
+There is a pfncache unmap helper but mapping is open-coded. Arguably this
+is fine because mapping is done in only one place, hva_to_pfn_retry(), but
+adding the helper does make that function more readable.
 
-* KVM: s390: Refactor kvm_is_error_gpa() into kvm_is_gpa_in_memslot()
+No functional change intended.
 
-This frees up the function name kvm_is_error_gpa() such that it can then be
-re-defined in:
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
 
-* KVM: pfncache: allow a cache to be activated with a fixed (userspace) HVA
+v8:
+ - Re-work commit comment.
+ - Fix CONFIG_HAS_IOMEM=n build.
+---
+ virt/kvm/pfncache.c | 47 ++++++++++++++++++++++++++++-----------------
+ 1 file changed, 29 insertions(+), 18 deletions(-)
 
-to be used for a simple GPA validation helper function. The patch also now
-contains an either/or address check for GPA versus HVA in
-__kvm_gpc_refresh().
-
-In:
-
-* KVM: pfncache: add a mark-dirty helper
-
-The function name has been changed from kvm_gpc_mark_dirty() to
-kvm_gpc_mark_dirty_in_slot().
-
-In:
-
-* KVM: x86/xen: allow shared_info to be mapped by fixed HVA
-
-missing HVA validation checks have been added and the 'hva == 0' test
-has been changed to '!hva'. The KVM_XEN_ATTR_TYPE_SHARED_INFO and
-KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA cases are still largely handled as one
-though as separation leads to duplicate calls to
-kvm_xen_shared_info_init() which looks messy.
-
-Also, patches with a 'xen' prefix have now been modified to have a
-'x86/xen' prefix and patches with a 'selftests / xen' prefix have been
-modified to have simply a 'selftests' prefix.
-
-[1] https://lore.kernel.org/kvm/20240115125707.1183-1-paul@xen.org/
-
-David Woodhouse (1):
-  KVM: pfncache: rework __kvm_gpc_refresh() to fix locking issues
-
-Paul Durrant (19):
-  KVM: pfncache: Add a map helper function
-  KVM: pfncache: remove unnecessary exports
-  KVM: x86/xen: mark guest pages dirty with the pfncache lock held
-  KVM: pfncache: add a mark-dirty helper
-  KVM: pfncache: remove KVM_GUEST_USES_PFN usage
-  KVM: pfncache: stop open-coding offset_in_page()
-  KVM: pfncache: include page offset in uhva and use it consistently
-  KVM: pfncache: allow a cache to be activated with a fixed (userspace)
-    HVA
-  KVM: x86/xen: separate initialization of shared_info cache and content
-  KVM: x86/xen: re-initialize shared_info if guest (32/64-bit) mode is
-    set
-  KVM: x86/xen: allow shared_info to be mapped by fixed HVA
-  KVM: x86/xen: allow vcpu_info to be mapped by fixed HVA
-  KVM: selftests: map Xen's shared_info page using HVA rather than GFN
-  KVM: selftests: re-map Xen's vcpu_info using HVA rather than GPA
-  KVM: x86/xen: advertize the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA
-    capability
-  KVM: x86/xen: split up kvm_xen_set_evtchn_fast()
-  KVM: x86/xen: don't block on pfncache locks in
-    kvm_xen_set_evtchn_fast()
-  KVM: pfncache: check the need for invalidation under read lock first
-  KVM: x86/xen: allow vcpu_info content to be 'safely' copied
-
-Sean Christopherson (1):
-  KVM: s390: Refactor kvm_is_error_gpa() into kvm_is_gpa_in_memslot()
-
- Documentation/virt/kvm/api.rst                |  53 ++-
- arch/s390/kvm/diag.c                          |   2 +-
- arch/s390/kvm/gaccess.c                       |  14 +-
- arch/s390/kvm/kvm-s390.c                      |   4 +-
- arch/s390/kvm/priv.c                          |   4 +-
- arch/s390/kvm/sigp.c                          |   2 +-
- arch/x86/kvm/x86.c                            |   7 +-
- arch/x86/kvm/xen.c                            | 361 +++++++++++------
- include/linux/kvm_host.h                      |  49 ++-
- include/linux/kvm_types.h                     |   8 -
- include/uapi/linux/kvm.h                      |   9 +-
- .../selftests/kvm/x86_64/xen_shinfo_test.c    |  59 ++-
- virt/kvm/pfncache.c                           | 382 ++++++++++--------
- 13 files changed, 591 insertions(+), 363 deletions(-)
-
-
-base-commit: 7455665a3521aa7b56245c0a2810f748adc5fdd4
+diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
+index 2d6aba677830..10842f1eeeae 100644
+--- a/virt/kvm/pfncache.c
++++ b/virt/kvm/pfncache.c
+@@ -96,17 +96,32 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
+ }
+ EXPORT_SYMBOL_GPL(kvm_gpc_check);
+ 
+-static void gpc_unmap_khva(kvm_pfn_t pfn, void *khva)
++static void *gpc_map(kvm_pfn_t pfn)
+ {
+-	/* Unmap the old pfn/page if it was mapped before. */
+-	if (!is_error_noslot_pfn(pfn) && khva) {
+-		if (pfn_valid(pfn))
+-			kunmap(pfn_to_page(pfn));
++	if (pfn_valid(pfn))
++		return kmap(pfn_to_page(pfn));
++
+ #ifdef CONFIG_HAS_IOMEM
+-		else
+-			memunmap(khva);
++	return memremap(pfn_to_hpa(pfn), PAGE_SIZE, MEMREMAP_WB);
++#else
++	return NULL;
+ #endif
++}
++
++static void gpc_unmap(kvm_pfn_t pfn, void *khva)
++{
++	/* Unmap the old pfn/page if it was mapped before. */
++	if (is_error_noslot_pfn(pfn) || !khva)
++		return;
++
++	if (pfn_valid(pfn)) {
++		kunmap(pfn_to_page(pfn));
++		return;
+ 	}
++
++#ifdef CONFIG_HAS_IOMEM
++	memunmap(khva);
++#endif
+ }
+ 
+ static inline bool mmu_notifier_retry_cache(struct kvm *kvm, unsigned long mmu_seq)
+@@ -175,7 +190,7 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
+ 			 * the existing mapping and didn't create a new one.
+ 			 */
+ 			if (new_khva != old_khva)
+-				gpc_unmap_khva(new_pfn, new_khva);
++				gpc_unmap(new_pfn, new_khva);
+ 
+ 			kvm_release_pfn_clean(new_pfn);
+ 
+@@ -193,15 +208,11 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
+ 		 * too must be done outside of gpc->lock!
+ 		 */
+ 		if (gpc->usage & KVM_HOST_USES_PFN) {
+-			if (new_pfn == gpc->pfn) {
++			if (new_pfn == gpc->pfn)
+ 				new_khva = old_khva;
+-			} else if (pfn_valid(new_pfn)) {
+-				new_khva = kmap(pfn_to_page(new_pfn));
+-#ifdef CONFIG_HAS_IOMEM
+-			} else {
+-				new_khva = memremap(pfn_to_hpa(new_pfn), PAGE_SIZE, MEMREMAP_WB);
+-#endif
+-			}
++			else
++				new_khva = gpc_map(new_pfn);
++
+ 			if (!new_khva) {
+ 				kvm_release_pfn_clean(new_pfn);
+ 				goto out_error;
+@@ -326,7 +337,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+ 	mutex_unlock(&gpc->refresh_lock);
+ 
+ 	if (unmap_old)
+-		gpc_unmap_khva(old_pfn, old_khva);
++		gpc_unmap(old_pfn, old_khva);
+ 
+ 	return ret;
+ }
+@@ -412,7 +423,7 @@ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc)
+ 		list_del(&gpc->list);
+ 		spin_unlock(&kvm->gpc_lock);
+ 
+-		gpc_unmap_khva(old_pfn, old_khva);
++		gpc_unmap(old_pfn, old_khva);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(kvm_gpc_deactivate);
 -- 
 2.39.2
 
