@@ -1,155 +1,135 @@
-Return-Path: <linux-kselftest+bounces-4714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9265885585C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 01:40:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D8C685589D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 02:13:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4728B287A12
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 00:40:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 366B3286105
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 01:13:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A764C818;
-	Thu, 15 Feb 2024 00:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6229EEDE;
+	Thu, 15 Feb 2024 01:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="INrSyyJ+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNf3knmj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20097623
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Feb 2024 00:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A51EC7;
+	Thu, 15 Feb 2024 01:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707957624; cv=none; b=CCMSHEV68BuYVrgt18bcfQHXXnb3vM09XK7JECoZjr4+//dtnzpuH8JiauWtlZVzQ/ZRIH1I4ky8VM2tfMEOm86HUhoErIRXbkDN+eDmiDYcM2SNT+iOxSIphtqcquGQ8CtGfp3Zbi5K9onrDYDmR4pIHJS3bmBkGx/KZRH2N+Q=
+	t=1707959592; cv=none; b=ieX2NCRR0EJrZ2j0mGABCLczXo8iqfqjBVwVK2UZq+3rPSgAg3CRAzxcz3BZNM3RfwswgyGmzElmbXesbM/Ma0qksh3w1egjvpva7XUKUz96HUlCCH48OqmYtQbsY0upoyXwvdFPYl2KSVyrdPECVQzfSDArrP/36NsTZ+gb+t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707957624; c=relaxed/simple;
-	bh=Q9IeUpIJA0j86M2DqhKzbwQToSPMVb/PtqeD7PQAZ2M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oauWCzmsFq8k47m6tOV3cgZhdthEIcwhKjnf05jcL4vj6UvmBFeEZRoH+3fTnP9nxlwVVaoYLI6VVWHX+3ZOrIJ5IRl8YKwKFMr+gi3AsKl4nqDP/AsAICXvZyl2bfTkioudsUtmy53uy45QhD8xEjUDLungt0BP0r02eZ4IeW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=INrSyyJ+; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1d918008b99so2542405ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Feb 2024 16:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707957622; x=1708562422; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uwcMgjPyVlBAmwoFyTwsrTj2qvQr3k5FygwJVgzdCmc=;
-        b=INrSyyJ+Me3VRIS3L9VaRFTK/RR9l+ukft3dwQJ7XxvrQBijOWEoOkkxHQySMWXJ92
-         VeHTWNPnL4it+1sO63S5GzrLDsx3b2kzahrlR3NJUEkzn0UCEOU6siaEzuMiebdu3p1U
-         IFcD+345Pqq8CUfr1APBHndeo17Xce6xJajPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707957622; x=1708562422;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uwcMgjPyVlBAmwoFyTwsrTj2qvQr3k5FygwJVgzdCmc=;
-        b=vYgRFjqSGu71jcmlEnMRXDaz9YNWiqup6jXnY9CmEg1SkdZceRg32cLGIo/vhlQ7LQ
-         JFiioCIV/IgSku6r3F4hv1wOy2me0y3R3TDDUjCNfuXNn4sRKotKxRLxMuous/iFzoTY
-         Ro09YYz4BQqcf/IvmGm5koal1bZAokbU06W5DrU1I74DJpmFbujwI1u7cJ3KGHxsMxqg
-         H1tF00EWKwdLqaoSlFkrDp9RScU2wFGEysE3PiSuByFVwM3ZDKOtAPqCcuXUytLj/6jC
-         bxwM4gFzcwtrqQ8nOf5LcFSMpdt+RJIlNMQhgB32uPXyWKDjMbBBd/h1Zd3qtl8Wlokv
-         s1Wg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNBu8aRKEWvZCKp1kuZ8RwRKlxNCMPUj3uCmK9WBtyXhKFCIZsL+TK1Lcuow7NFpDCRF4f3LogcBzSjnk9hiWyDfEhm3kR2xnpQ+tTEEwD
-X-Gm-Message-State: AOJu0Yyx7bx2rtj74pHEhZatjDQUn7K098R8eBH8VmSbWtFdMp/Hc0je
-	JWcc56sc8CY5I3XfuSDPStl94nPX2JE+madclRHR41vfDyxiIFhMQ3gXZvw/VA==
-X-Google-Smtp-Source: AGHT+IHf+svFTUBLyHlRK2LgJNWl8mGOFquGWqMmr86+ocvziB2WifvIOl6dECgfNhbPclIKpKALEA==
-X-Received: by 2002:a17:902:c105:b0:1db:68cc:61fb with SMTP id 5-20020a170902c10500b001db68cc61fbmr283463pli.35.1707957622498;
-        Wed, 14 Feb 2024 16:40:22 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b001db55b5d68bsm51299pln.69.2024.02.14.16.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Feb 2024 16:40:21 -0800 (PST)
-Date: Wed, 14 Feb 2024 16:40:21 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 3/4] selftests: kselftest_harness: support using
- xfail
-Message-ID: <202402141639.B84F9F9607@keescook>
-References: <20240213154416.422739-1-kuba@kernel.org>
- <20240213154416.422739-4-kuba@kernel.org>
- <87o7ciltgh.fsf@cloudflare.com>
- <87jzn6lnou.fsf@cloudflare.com>
- <20240214162514.60347ac2@kernel.org>
+	s=arc-20240116; t=1707959592; c=relaxed/simple;
+	bh=6Fvew3KxJaGM3fb9agCmZ550noF0y3Fp5qAHW2xmNbQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=HN0NYQos4VjgLqVpPMBzRGK9wM5IPWrWKoIj2t0XaTdWZxknsQULo2RoA/cy/yDmLnKvTsLRR//xb9QRkvwY5VVAF/fsxLPUCdGWXwE1QOOqzDG2wSZVLOeMaKQwdsMN4JLOpD04j1e+jRABm+6HYkdOOHqNNKPVeZwMDs9xvH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNf3knmj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E064BC433C7;
+	Thu, 15 Feb 2024 01:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707959591;
+	bh=6Fvew3KxJaGM3fb9agCmZ550noF0y3Fp5qAHW2xmNbQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JNf3knmjmXHHW5aEVNENEk9TJV42ADi/aBcOQ7Z3lhxz0YkeNiWFpMSD9G9XN9/F9
+	 mc1iCppHJu6Mwi/Q9s3ycCA9OQU7u1fd76fuOr1V6pbygOOgenqEkSZso/EW93c4SD
+	 UdItBxK1TXZwQaTw0Y5XUh6GrwSCqsCL/xbqVNAo4XR6fUyaW3NfKl0eHNorUKzGJf
+	 8WB3xEk5g2Ai/couhGhgBcDftmmhiGcbFXdbgbQ30WwmlG+40KDB20ntrywcPn6wvb
+	 lTTGo2f3DU9q97OKbVKNk7RywDDTkRlhDuUNbMHcZbS9qcbkvl/Y1UwLr5Aa1pc5te
+	 /25WV/0f3LNNQ==
+From: SeongJae Park <sj@kernel.org>
+To: shuah@kernel.org
+Cc: "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com>,
+	SeongJae Park <sj@kernel.org>,
+	keescook@chromium.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Vijaikumar_Kanagarajan@mentor.com,
+	brauner@kernel.org,
+	jlayton@kernel.org,
+	jack@suse.cz
+Subject: Re: [PATCH] selftests/mqueue: Set timeout to 100 seconds
+Date: Wed, 14 Feb 2024 17:13:09 -0800
+Message-Id: <20240215011309.73168-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240209174243.74220-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214162514.60347ac2@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 14, 2024 at 04:25:14PM -0800, Jakub Kicinski wrote:
-> On Wed, 14 Feb 2024 22:46:46 +0100 Jakub Sitnicki wrote:
-> > > On second thought, if I can suggest a follow up change so this:
-> > >
-> > > ok 17 # XFAIL SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
-> > >
-> > > ... becomes this
-> > >
-> > > ok 17 ip_local_port_range.ip4_stcp.late_bind # XFAIL SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
-> > >
-> > > You see, we parse test results if they are in TAP format. Lack of test
-> > > name for xfail'ed and skip'ed tests makes it difficult to report in CI
-> > > which subtest was it. Happy to contribute it, once this series gets
-> > > applied.  
-> > 
-> > Should have said "harder", not "difficult". That was an overstatement.
-> > 
-> > Test name can be extracted from diagnostic lines preceeding the status.
-> > 
-> > #  RUN           ip_local_port_range.ip4_stcp.late_bind ...
-> > #      XFAIL      SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
-> > #            OK  ip_local_port_range.ip4_stcp.late_bind
-> > ok 17 ip_local_port_range.ip4_stcp.late_bind # XFAIL SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
-> > 
-> > It just makes the TAP parser easier if the test name is included on the
-> > status line. That would be the motivation here. Let me know what you
-> > think.
-> 
-> Good catch, I just copied what we do for skip and completely missed
-> this. As you said we'd report:
-> 
-> ok 17 # XFAIL SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
-> 
-> and I think that's sort of closer to valid TAP than to valid KTAP
-> which always mentions test/test_case_name:
-> 
-> https://docs.kernel.org/dev-tools/ktap.html
-> 
-> We currently do the same thing for SKIP, e.g.:
-> 
-> #  RUN           ip_local_port_range.ip4_stcp.late_bind ...
-> #      SKIP      SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
-> #            OK  ip_local_port_range.ip4_stcp.late_bind
-> ok 17 # SKIP SCTP doesn't support IP_BIND_ADDRESS_NO_PORT
-> 
-> I'm not sure if we can realistically do surgery on the existing print
-> helpers to add the test_name, because:
-> 
-> $ git grep 'ksft_test_result_*' | wc -l
-> 915
-> 
-> That'd be a cruel patch to send.
-> 
-> But I do agree that adding the test_name to the prototype is a good
-> move, to avoid others making the same mistake. Should we introduce
-> a new set of helpers which take the extra arg and call them
-> ksft_test_report_*() instead of ksft_test_result_*() ?
-> 
-> Maybe we're overthinking and a local fix in the harness is enough.
-> 
-> Kees, WDYT?
+A gentle reminder.
 
-Yeah, let's separate this fix-up from the addition of the XFAIL logic.
 
--- 
-Kees Cook
+Thanks,
+SJ
+
+On Fri, 9 Feb 2024 09:42:43 -0800 SeongJae Park <sj@kernel.org> wrote:
+
+> On Fri, 9 Feb 2024 10:30:38 +0000 "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com> wrote:
+> 
+> > On 08/02/2024 21:29, SeongJae Park wrote:
+> > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > 
+> > > 
+> > > 
+> > > While mq_perf_tests runs with the default kselftest timeout limit, which
+> > > is 45 seconds, the test takes about 60 seconds to complete on i3.metal
+> > > AWS instances.  Hence, the test always times out.  Increase the timeout
+> > > to 100 seconds.
+> > > 
+> > > Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
+> > > Cc: <stable@vger.kernel.org> # 5.4.x
+> > > Signed-off-by: SeongJae Park <sj@kernel.org>
+> > > ---
+> > >   tools/testing/selftests/mqueue/setting | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > >   create mode 100644 tools/testing/selftests/mqueue/setting
+> > > 
+> > > diff --git a/tools/testing/selftests/mqueue/setting b/tools/testing/selftests/mqueue/setting
+> > > new file mode 100644
+> > > index 000000000000..54dc12287839
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/mqueue/setting
+> > > @@ -0,0 +1 @@
+> > > +timeout=100
+> > > --
+> > > 2.39.2
+> > > 
+> > >
+> > 
+> > Added Vijai Kumar to CC
+> > 
+> > This looks similar to [PATCH] kselftest: mqueue: increase timeout 
+> > https://lore.kernel.org/lkml/20220622085911.2292509-1-Vijaikumar_Kanagarajan@mentor.com/T/#r12820aede6bba015b70ae33323e29ae27d5b69c7 
+> > which was increasing the timeout to 180 however it's not clear why this 
+> > hasn't been merged yet.
+> 
+> Thank you.  I don't care who's patch would be picked, but hope any of those be
+> merged.  For more eyes, I'm Cc-ing contacts from
+> `./scripts/get_maintainer.pl ipc/mqueue.c` output.
+> 
+> > I have seen the same issue on v5.15.y so it's 
+> > very likely that we will need to apply this on all LTS branches not just 
+> > 5.4 as mentioned in Cc: <stable@vger.kernel.org> # 5.4.x
+> 
+> Yes, that's the intent of the Fixes: and Cc: <stable@vger.kernel.org> lines.  I
+> hope the lines to be added to Vijai's patch if it is picked instead of this.
+> 
+> 
+> Thanks,
+> SJ
+> 
+> > 
+> > Hazem
+> >
 
