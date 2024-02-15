@@ -1,141 +1,144 @@
-Return-Path: <linux-kselftest+bounces-4789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C46B856B32
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 18:38:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAE10856C2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 19:13:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7EAE285C74
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 17:38:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CCBA1F23F10
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Feb 2024 18:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C96D1138481;
-	Thu, 15 Feb 2024 17:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9037A1386C5;
+	Thu, 15 Feb 2024 18:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eQO52yak"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="EwiE0K2O";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="EwiE0K2O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F80137C5D
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Feb 2024 17:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944131386AA;
+	Thu, 15 Feb 2024 18:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708018691; cv=none; b=c7hItQ6m4fkXfTwiohBhXuZ3ffBY7kRWn8PKARWqFSuNdHpejcgBqtYLU/XjKI4UtzYSbvRL0vfug6JWfs8xrJ4nh8AgBe4gBNI7VwkdYrErrvWaZ2l1zY7RMpwvRN9Rfw2/zf0+EJvNZYSqEKmHKpvnL892ERwfqgkd94T1oaw=
+	t=1708020763; cv=none; b=ev8f1PbIG2DS+w2UnKEeCK8+WT/ZEiFCCDViasSlqA1+7nujqYGFWSh7iFv6S9jWP6z0Mj69xMgo0wq1H9qWv2quuEvMp66uhJPHBU4HW/27Bf80N/vN/BkTMX7j2BtjAYHDJBIFA/34wXymSq9ygEnCmVjOdpSM/kfec1wuGHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708018691; c=relaxed/simple;
-	bh=CmA2yNqbhHxRJP/sPUsviXqi+eveftIcv605DlHS1OE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EhIf6nKay0WTmZwPXykjrkgciqS5VJQjSvCYNxCzd/Z7alROXZHSDRS9CbRlyTUg1jsddqPGNi5XsAJZU+93zOD7K4rmoj3cJOP5hkNuEJUWQUk0T0qk3cMhJ2FBy0UTQo/6N3VyldzqNFFt4QWDB3xRI/PwORZ5BtZdGjnAvVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eQO52yak; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e09143c7bdso768250b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Feb 2024 09:38:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708018689; x=1708623489; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WKujQBQrVUJjXR80iuACMbDhu6cNiLpIU8q///YY7rg=;
-        b=eQO52yakXn32UfP3BdzLziWgogY/qQw7FaSCkE5iIrnX8qgGech6NCf46WztkBTJvq
-         BRkqKGGRJt8MkR3n+k6HR6I6Jrbhaz2uCUoqPJW+IAQjdgiPaGw1+rak0J7p3YBfBhbe
-         MXc60dUUqvc2NwnRBgQlKoRJK9gmUr2oTSDoo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708018689; x=1708623489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WKujQBQrVUJjXR80iuACMbDhu6cNiLpIU8q///YY7rg=;
-        b=UlAHUzRLUgByEFNwwWzXbyOc4J4we0Tfv+Y7SdMCHs+0KvZSwMuSnbibcm3kMXh/kd
-         r0f1bEW9RAuoZZl0UiopeppkOfnkoymElbvYZFFH6tQSNZYyGn5g5T4e6MYYVHWdBCUy
-         FZepiHEJ3pYprT1o0BX6XAY0dxYvQpObRBWDzoHnyWiV+u0WLVqwrBRYRlJfsv9ifnju
-         gYAYba+beR15mi9BFk5Bgs2CWvFV+vFjatguGnXPUnfAdOYHeYEVMHInG/ELG65Dgh1U
-         yOqvQDOUHU93OmkSJZ3CzNk8wxLQXFZMWSc4vuPIzg2jHJNX7L9zVo0hdlJOgUWwtfuH
-         tK8A==
-X-Forwarded-Encrypted: i=1; AJvYcCV9Aq/mcboDyGyVCXWu98I4xynnSSoyqY/SQe+NApQF/zmJipKMLQPebIbmtao1EGwQu/QHPnLKS00iduDfwqOxGRBYTtXpFuM3Chhv1Ed7
-X-Gm-Message-State: AOJu0YzBr7RqqApkLD57NPkW1NgZNeLTGSW98opLg1WTT+xTilGW57JM
-	iXdOoO8Wotg2wCQ4TVZBT+KYXF7kcnEak1Ndf7yawj/UHiIrc33MGSLqoX6hcg==
-X-Google-Smtp-Source: AGHT+IEmUMsadd1ltbUlWE409OqLhKhvGNE10Bn2f8xDtB+k6aT9AM3aTWrJUCSsRXb5eYsZq3jeBA==
-X-Received: by 2002:a05:6a20:d90c:b0:1a0:841a:64c3 with SMTP id jd12-20020a056a20d90c00b001a0841a64c3mr928295pzb.39.1708018689482;
-        Thu, 15 Feb 2024 09:38:09 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e4-20020aa79804000000b006e02da39dbcsm1665651pfl.10.2024.02.15.09.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Feb 2024 09:38:09 -0800 (PST)
-Date: Thu, 15 Feb 2024 09:38:08 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Rae Moar <rmoar@google.com>
-Cc: frowand.list@gmail.com, davidgow@google.com, Tim.Bird@sony.com,
-	shuah@kernel.org, brendanhiggins@google.com, dlatypov@google.com,
-	tytso@google.com, gustavo.padovan@collabora.com,
-	ricardo.canuelo@collabora.com, corbet@lwn.net,
-	kernelci@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [KTAP V2 PATCH v3] ktap_v2: add test metadata
-Message-ID: <202402150937.3CAD9E69D5@keescook>
-References: <20240215171859.1907668-1-rmoar@google.com>
+	s=arc-20240116; t=1708020763; c=relaxed/simple;
+	bh=kTwshfoQak1CLS1xr5RDYhHCXHVCaUTqaWSSjq1FYO8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=H43CatjdH+cVZ8dGUWib4oxdr4e8s3kEGuledBuNYaBDM4n48lgHj1XxVMi13/FVwDg2rUIU7lt2L/n1lpVBTak7GPU7GsCt7eIChncBaTXQOeTlOyN3NDLhzKcxLNwYJi1XA4Nhe2FDOZqVhtP2DH5Ct5va9spKuz6mAA9VhGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=EwiE0K2O; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=EwiE0K2O; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6CC5A21F3D;
+	Thu, 15 Feb 2024 18:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1708020758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=j7vlg+mXthjoDP5TGpttL/27seM8QE8FtozgAP/kMH8=;
+	b=EwiE0K2Ow2LZeS7eXltqaLEj9SMPGfxJrNe2JVnWgYyvTo01hEuTbNT2lQZwvjA+eKchPB
+	la7mFQmQgCaTCJNelaLArsRt4UXxkPnqKZDn1CzJFcES5idTDpyjNUra0XkVjZf5aLPMkK
+	6SiDSaNw68slicU+EgqTYjlsPOt3gyE=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1708020758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=j7vlg+mXthjoDP5TGpttL/27seM8QE8FtozgAP/kMH8=;
+	b=EwiE0K2Ow2LZeS7eXltqaLEj9SMPGfxJrNe2JVnWgYyvTo01hEuTbNT2lQZwvjA+eKchPB
+	la7mFQmQgCaTCJNelaLArsRt4UXxkPnqKZDn1CzJFcES5idTDpyjNUra0XkVjZf5aLPMkK
+	6SiDSaNw68slicU+EgqTYjlsPOt3gyE=
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id D40171346A;
+	Thu, 15 Feb 2024 18:12:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id bCyZJhVUzmXsVwAAn2gu4w
+	(envelope-from <mpdesouza@suse.com>); Thu, 15 Feb 2024 18:12:37 +0000
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: [PATCH 0/3] Improvements to livepatch kselftests on top of
+ kselftest-next
+Date: Thu, 15 Feb 2024 15:12:19 -0300
+Message-Id: <20240215-lp-selftests-fixes-v1-0-89f4a6f5cddc@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215171859.1907668-1-rmoar@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAANUzmUC/x3LQQqAIBBA0avIrBtQM4KuEi2yxhoQEyciiO6et
+ Hx8/gNChUlgUA8Uulj4SBWmUbDsc9oIea0Gq63T1nQYMwrFcJKcgoFvEuxX52ffLro3FuqYC/2
+ hfuP0vh9mpdCEZAAAAA==
+To: Shuah Khan <shuah@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ live-patching@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708020755; l=902;
+ i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
+ bh=kTwshfoQak1CLS1xr5RDYhHCXHVCaUTqaWSSjq1FYO8=;
+ b=x//lwpiP6AjTZUOwc38wQtKsdeWY8fqUEr6j1Ojeo9McMSm2fUgZ4BNJuwJlBY+M03wUDk9Hs
+ HnlE82J0mdSBx2V3acBHxucz8S1SQ4UQreah5zg+uJ5vDLuuDdyXfis
+X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
+ pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -1.30
+X-Spamd-Result: default: False [-1.30 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 MIME_GOOD(-0.10)[text/plain];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_SEVEN(0.00)[10];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[]
+X-Spam-Flag: NO
 
-On Thu, Feb 15, 2024 at 05:18:59PM +0000, Rae Moar wrote:
-> Add specification for test metadata to the KTAP v2 spec.
-> 
-> KTAP v1 only specifies the output format of very basic test information:
-> test result and test name. Any additional test information either gets
-> added to general diagnostic data or is not included in the output at all.
-> 
-> The purpose of KTAP metadata is to create a framework to include and
-> easily identify additional important test information in KTAP.
-> 
-> KTAP metadata could include any test information that is pertinent for
-> user interaction before or after the running of the test. For example,
-> the test file path or the test speed.
-> 
-> Since this includes a large variety of information, this specification
-> will recognize notable types of KTAP metadata to ensure consistent format
-> across test frameworks. See the full list of types in the specification.
-> 
-> Example of KTAP Metadata:
-> 
->  KTAP version 2
->  #:ktap_test: main
->  #:ktap_arch: uml
->  1..1
->      KTAP version 2
->      #:ktap_test: suite_1
->      #:ktap_subsystem: example
->      #:ktap_test_file: lib/test.c
->      1..2
->      ok 1 test_1
->      #:ktap_test: test_2
->      #:ktap_speed: very_slow
->      # test_2 has begun
->      #:custom_is_flaky: true
->      ok 2 test_2
->  # suite_1 has passed
->  ok 1 suite_1
-> 
-> The changes to the KTAP specification outline the format, location, and
-> different types of metadata.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> Signed-off-by: Rae Moar <rmoar@google.com>
+The changes doesn't change the current functionality. The changes on
+lib.mk are both for simplification and also clarification, like in the
+case of not handling TEST_GEN_MODS_DIR directly.
 
-Thanks for the updates!
+These changes apply on top of the current kselftest-next branch. Please
+review!
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+---
+Marcos Paulo de Souza (3):
+      selftests: lib.mk: Do not process TEST_GEN_MODS_DIR
+      selftests: lib.mk: Simplify TEST_GEN_MODS_DIR handling
+      selftests: livepatch: Add initial .gitignore
 
-We'll need to update the test runners to adjust their outputs...
+ tools/testing/selftests/lib.mk               | 19 +++++++------------
+ tools/testing/selftests/livepatch/.gitignore |  1 +
+ 2 files changed, 8 insertions(+), 12 deletions(-)
+---
+base-commit: 345e8abe4c355bc24bab3f4a5634122e55be8665
+change-id: 20240215-lp-selftests-fixes-7d4bab3c0712
 
+Best regards,
 -- 
-Kees Cook
+Marcos Paulo de Souza <mpdesouza@suse.com>
+
 
