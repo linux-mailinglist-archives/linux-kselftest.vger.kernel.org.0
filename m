@@ -1,151 +1,88 @@
-Return-Path: <linux-kselftest+bounces-4885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E200858933
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 23:51:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC20B858A4C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 00:50:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7B131C221AC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 22:51:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99533B2313A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 23:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256021468ED;
-	Fri, 16 Feb 2024 22:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 300B8148FF3;
+	Fri, 16 Feb 2024 23:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jsEPWQX+"
+	dkim=pass (2048-bit key) header.d=uliege.be header.i=@uliege.be header.b="0eZbR2l9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from serv108.segi.ulg.ac.be (serv108.segi.ulg.ac.be [139.165.32.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9224117BC4;
-	Fri, 16 Feb 2024 22:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3361A1487F5;
+	Fri, 16 Feb 2024 23:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.165.32.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708123901; cv=none; b=aqN70wNqJgP6fvbSsAjVsQfbJl92aKlZr5ro8Lio6Jqa2PYRP61RKUDmske42+uTXfpI6xOM0VascupceMuCb3aB7dzPEscBDA3zHwJFQJJndh5Qm/slE1C6DVE1Av5Xs/tuQNUneviuhqm2aKmytSX31Oiwxw2z8GkC0/YBO2s=
+	t=1708127414; cv=none; b=WQF9AAwwag4lrTuGipWjR7y7X5t9P2BSY0IHKMC1Hj9Q7FwlGsdOV857hEZn7cpCOzkATVI6z8EtizigtXFgAGAlPlNMpcDu8XVlf2Vs90Zkg/LOMfcQp6VbWHwTlBdeQaMvjcbVGBRJqRFJAarOqEhNX/jOWQXKaBmhKTAiJw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708123901; c=relaxed/simple;
-	bh=hOmzS5SJMxt/Y5VNiAfAYsPCia8dfM+pw8DUfVZOG/A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fQCGtRIswKaTPflwyRzVgimQm5Ye0+aFK3BWpj7lRwtK7oqbbOtsz+CmwYWw3bNV1o8jphSkD2zygnp27JviTV9k56igOLHXyYpMkFJOFLh4Uh1mWg9yLodZjiazGG0Owojpbj8nS+tj5Vfshnzseov4WZ7ILH3BoWfnSIqoyWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jsEPWQX+; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d911c2103aso17671735ad.0;
-        Fri, 16 Feb 2024 14:51:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708123899; x=1708728699; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFfXHdvN/5mUfAanVfariAJApfAz/jLdm9t29L3ltRk=;
-        b=jsEPWQX+1zG/3l+hdyqsgZtnzG6s4hc4+w3OWqqj83q1Su3yQ3nn2ZOhhf5+0clyk4
-         MXnHZ0uzfQLO8BkNUJC5kscGxM5CphdMxjqsAChinClb0OpoPm0J7Ka4OlOr4q8kPAZZ
-         VxR8Yfj+kQjzVyd4NfgG4unvEwJwxPVBi7FNR9pfQQP4bwiv3UvJAmy6E/KvoXaFFg5t
-         Q1zVrlxBskcI1wK6sIsqQ+zlHMXKyMcaTgO8ztKQZnGxNJp3/HWi5/ZFJWc4/85RwK38
-         V9i3W3P+ytFtyDJNACmDcQi3PZr2Z04L9/wKC2iF5iLM7+jt8m4m7f2Mr0xg2SeeGTiy
-         kqJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708123899; x=1708728699;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fFfXHdvN/5mUfAanVfariAJApfAz/jLdm9t29L3ltRk=;
-        b=IUXhWqeRBAWhBFumu1XjbfBsv9S8S0cRxm6lS27kVjAez7MnI7Hh3WNGP0BVgzUtI6
-         EOUzjrxuI6F88DNg9IydOWLNWBHwUCc7Cclre9esFOxaqjqXs9wZwwQQiG8pNLC3hLLV
-         gY5sjMzjAgOjWYJ3rxh3AsfE7WFz3xpCvetCe8vS8JiXitKI0l+3jfTNl8eIcxVqcT09
-         gkSpsnLurAvQxaIhd3U12Mz7AG1Lyu7/zxbFQAjnU+Z00O2ItQey75pDAN4ZBJGHbSBa
-         eqlgItS1Ga4MJOZYUW9wCW/IiqrAoaUPk6qLXAeP9snL1OaVmCQiJdsVx/KeYDL1B3Jv
-         Lr1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVV4wikSIAxyLU2xMCl5ln52sHT8Eqz4yqnxC7zTwub2UL3JNDUYNPZ+6SpCBF7rj53ZtA3dXbFXYjDdtAxeNC4Q+VUWcSAejn1yLTsKcAvV4BgNkLa0Dxmv5Va0hSFT9x8RY+V0rvMQWDnyeLd
-X-Gm-Message-State: AOJu0Yy7NynWHKfDcj5hSzaf93giElJOm9fI9nIRjUzKlOat1f0CGCL6
-	czrIz5MeQaokOnqtyW9kFgnMWf/mIb1AxAysKN2x6uI7Rr5H7yX6
-X-Google-Smtp-Source: AGHT+IHeAkmfXPrbWoFN5dC/QoVyRZxnAGSBvRQsSqGZPXxRNVKgHNClKRWIqa3PNVjwIgKGo3jvdA==
-X-Received: by 2002:a17:902:bd0a:b0:1d9:4ebd:b94d with SMTP id p10-20020a170902bd0a00b001d94ebdb94dmr6267345pls.55.1708123898663;
-        Fri, 16 Feb 2024 14:51:38 -0800 (PST)
-Received: from shresth-aspirea71576g.abesec.ac.in ([139.5.197.147])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170902ee8200b001dbaa8c97e8sm348573pld.225.2024.02.16.14.51.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 14:51:38 -0800 (PST)
-From: Shresth Prasad <shresthprasad7@gmail.com>
-To: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org
-Cc: live-patching@vger.kernel.org,
+	s=arc-20240116; t=1708127414; c=relaxed/simple;
+	bh=ewZyQaeiMirI+9fW2Ek8NXDSlbSYf5H+Yv+QmoDrGVA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lUo0tdePO4fj0AFBSawIT18eIYYagCo6/FO02qTNQvjF5e5QBxC6/r2aTrLldDUgVcYcbcCAPDEGwk3GOEeMPtn0yHrtUKNBJo/vcMdSf9w7j2sCt5JeUOFg9huJsvtKCG5ijsLrNM4C5nIbxJZ+PrzbPg0K88yx/AUO4OQv308=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uliege.be; spf=pass smtp.mailfrom=uliege.be; dkim=pass (2048-bit key) header.d=uliege.be header.i=@uliege.be header.b=0eZbR2l9; arc=none smtp.client-ip=139.165.32.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uliege.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uliege.be
+Received: from localhost.localdomain (125.179-65-87.adsl-dyn.isp.belgacom.be [87.65.179.125])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by serv108.segi.ulg.ac.be (Postfix) with ESMTPSA id 43599200C998;
+	Sat, 17 Feb 2024 00:44:26 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 serv108.segi.ulg.ac.be 43599200C998
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uliege.be;
+	s=ulg20190529; t=1708127066;
+	bh=eMLDY0oEAFPsqXefhCsGRO69q/q7s/Eh/mdW8pbZR8I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=0eZbR2l9PWwUhOewGVUR/GNLWrN2fHH4+t91iqHSaBXrtdQPDh48EnaG5Edw6oGdg
+	 ucQUNgVJscZpz9G2cLUzV+IEAkIYc2UUekVw+xAZtXO9iZpbjvGsT70sdLF6NVFMHG
+	 wWkAf4Nme/5phCp8Acsl+wi/o+ps+4ycqtZ8u46A2w4KaE+tCiOU2kQIg99I0OUR6a
+	 q24/8FFYJRj7NEvQLYmK9s2UXXJhRUwOSBo7sPVHxSq7sut2UftqWL2+rsJTZDEf93
+	 EKpwiBNVudy42bv+8srIV/yJepZTNbbq2IPg1lfsFrDV6HqmwoIwA9n1OfMsUAbUhH
+	 t6O6fhjhadtng==
+From: Justin Iurman <justin.iurman@uliege.be>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	skhan@linuxfoundation.org,
-	Shresth Prasad <shresthprasad7@gmail.com>
-Subject: [PATCH]     Fix implicit cast warning in test_klp_state.c
-Date: Sat, 17 Feb 2024 04:21:26 +0530
-Message-ID: <20240216225126.454999-1-shresthprasad7@gmail.com>
-X-Mailer: git-send-email 2.43.1
+	justin.iurman@uliege.be
+Subject: [PATCH net 0/2] ioam6: fix write to cloned skb's
+Date: Sat, 17 Feb 2024 00:43:54 +0100
+Message-Id: <20240216234356.32243-1-justin.iurman@uliege.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-    The function `klp_get_state` returns an `int` value, but the variable
-    `loglevel_state` is of type `struct klp_state *` and thus does an
-    implicit cast. Explicitly casting these values fixes:
+Make sure the IOAM data insertion is not applied on cloned skb's. As a
+consequence, ioam selftests needed a refactoring.
 
-            - warning: assignment to ‘struct klp_state *’ from ‘int’
-	    makes pointer from integer without a cast [-Wint-conversion]
+Justin Iurman (2):
+  ioam6: fix write to cloned skb in ipv6_hop_ioam()
+  selftests: ioam6: refactoring to align with the fix
 
-    on lines 38, 55, 68 and 80 of test_klp_state.c
+ net/ipv6/exthdrs.c                         |   8 ++
+ tools/testing/selftests/net/ioam6.sh       |  38 ++++----
+ tools/testing/selftests/net/ioam6_parser.c | 101 +++++++++++----------
+ 3 files changed, 81 insertions(+), 66 deletions(-)
 
-Signed-off-by: Shresth Prasad <shresthprasad7@gmail.com>
----
- .../selftests/livepatch/test_modules/test_klp_state.c     | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-index 57a4253acb01..ae6b1ca15fc0 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-@@ -35,7 +35,7 @@ static int allocate_loglevel_state(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
- 	if (!loglevel_state)
- 		return -EINVAL;
- 
-@@ -52,7 +52,7 @@ static void fix_console_loglevel(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
- 	if (!loglevel_state)
- 		return;
- 
-@@ -65,7 +65,7 @@ static void restore_console_loglevel(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
- 	if (!loglevel_state)
- 		return;
- 
-@@ -77,7 +77,7 @@ static void free_loglevel_state(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
- 	if (!loglevel_state)
- 		return;
- 
+base-commit: 166c2c8a6a4dc2e4ceba9e10cfe81c3e469e3210
 -- 
-2.43.1
+2.34.1
 
 
