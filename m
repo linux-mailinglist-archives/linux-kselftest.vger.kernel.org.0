@@ -1,194 +1,149 @@
-Return-Path: <linux-kselftest+bounces-4838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26827857778
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 09:21:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CE618577B9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 09:35:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4ABFF1C20C02
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 08:21:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF2661C21102
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 08:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4CD1A5BA;
-	Fri, 16 Feb 2024 08:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AECEF9DB;
+	Fri, 16 Feb 2024 08:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hhi5FVbw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EbsifAry"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349681B94A;
-	Fri, 16 Feb 2024 08:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C22DDD5;
+	Fri, 16 Feb 2024 08:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708071197; cv=none; b=Amo2pjih51gsyV+JiQKiklmfrfruJGQt5i6CaAbQf8iiqL9KPbl+h3qQXfxB2CAdvwTb4aBRFpAY5OkxaQX14YYf8ILV9l1yRse221yRoqjYvqZilfP7q6YjfxfnDuwIP+xPQkgt3yC5eK9nQxHVyharHileLm+bQ5U96OkQJTE=
+	t=1708072498; cv=none; b=ENcbhHgHaJZcTlRrzXRY5raRdvWdzRxeb9edtsYQli7TtsYI0g1PjvCyEDe+VEmmN9DasaTE14jcU6czO6VWFrWSHnkfWzb8+hcrtzd6VuvcoGiUvkS6h6WJimJA19weNHSY1SOOT6om3hmPNIohOin6l7V2lKX/rV4QUfrW7m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708071197; c=relaxed/simple;
-	bh=2yAzUFrshahCJDeF/Txc7JdTyHzEPst4ox4Ao1JajmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ROD6BN9KPPb9VpUB1M7IyBIJC+6uR57uiwD3FIMS5cxSu/HBunSWah6gOTk/AaNqGFT8I5oJxTbCgtED+lUmf6raNXdS+QA5Onc/2rKcaQySvffccb/Y5vB61Ee8MaCJC/eEDEqOGMf6qkdLOBXkhpDji7d+tHeVCc7d+YEddnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hhi5FVbw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30CDEC433F1;
-	Fri, 16 Feb 2024 08:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708071196;
-	bh=2yAzUFrshahCJDeF/Txc7JdTyHzEPst4ox4Ao1JajmU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hhi5FVbwJBQGJrQ5LdUmS8j/Le4dlaV8h1U5wH5BlNyGQrrM2XqyMxRnsnAKFbMZx
-	 SFQaP2/aGi379Z5SHpZ7wDWSp5e8G7tgjc9AzIziwGmtse4q48U46iFQcjxylokg1P
-	 K/KhkeBJZ0tIrTsozcIJ3KwcSyKyhvNudlZ1i40K93iF9DdiWTEHMtM1Ctlw8Rn0FL
-	 87TYT0ZzNruWA3tPglsbxs14kOOquqHn11S8ZJYb+kCD+bHh6l0sKaOq/r8DsSVhnE
-	 pjRSDqix+iI+/rl9GYYLZNkr/LrWhcipZI7K9C8xWWE9FHcnzdDXIKPhtSPxTBM90q
-	 HQKdGiuY7w7pQ==
-Date: Fri, 16 Feb 2024 09:13:03 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH RFC bpf-next v2 02/10] bpf/helpers: introduce sleepable
- timers
-Message-ID: <r3yhu4h23tdg2dqj7eq3lhevsigvvb3qkge3icxmaqpgkayvoi@gxfxstkr2pxl>
-References: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
- <20240214-hid-bpf-sleepable-v2-2-5756b054724d@kernel.org>
- <a72147f5-2b7d-4267-9881-6a645c575838@linux.dev>
+	s=arc-20240116; t=1708072498; c=relaxed/simple;
+	bh=ILlaegy9SDQmaYKD343zPre4A4jZoHFtFcKDAzoPNHg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gKupvkIWzj8/a0C5A6pz4QtU+EQ4xBqDIcQVAvSgpzai0MuLZuejsqPicelQJhlKcWxWEde/vPoBSn07L8TKEQIfOny3ZDQJ+BV+GoXNoQPUNAPA5gSrYBlM9fpC5pmPdJkpLQ4MQsnRBvLQNdcVjVFdLcSZ2bR9/MyKPR8evoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EbsifAry; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708072496; x=1739608496;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ILlaegy9SDQmaYKD343zPre4A4jZoHFtFcKDAzoPNHg=;
+  b=EbsifAry8pQl8dixEv318VEhh2gpFQ5NXxzsObRJ2uvX2NN6xRNPTfd/
+   CPeocG3jr2RSAv0NXjN59bKkDULjqqF6doyfMHTfxVjMQvCAeCfNf6RX6
+   kC0uhqNplqq9DaD59M+4mTW7guNNnpgfXbxIiDcQljy8q5ZzKHQT8NaOm
+   MPIffRKVsQ3mCgbhKc88SWDSz2Xz/aYJ6YrHwUBnhKi+CprBT02QS7ax6
+   OTMxEckrPrpt9DwJ6SyJcm/F3lO66pnCOABkucKOZFKEQZZ5/UBMjHK4Q
+   t0A1HgKmVHKF1NEdjHZse0RxXM8NsR0Ivytlr0M1cYX4iNISwaCqB9DWS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="6024113"
+X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
+   d="scan'208";a="6024113"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:34:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
+   d="scan'208";a="8427121"
+Received: from zprzybys-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.138])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:34:53 -0800
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: reinette.chatre@intel.com,
+	shuah@kernel.org,
+	fenghua.yu@intel.com
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v6 0/5] selftests/resctrl: Add non-contiguous CBMs in Intel CAT selftest
+Date: Fri, 16 Feb 2024 09:34:31 +0100
+Message-ID: <cover.1708072203.git.maciej.wieczor-retman@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a72147f5-2b7d-4267-9881-6a645c575838@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Feb 15 2024, Martin KaFai Lau wrote:
-> On 2/14/24 9:18 AM, Benjamin Tissoires wrote:
-> > +static void bpf_timer_work_cb(struct work_struct *work)
-> > +{
-> > +	struct bpf_hrtimer *t = container_of(work, struct bpf_hrtimer, work);
-> > +	struct bpf_map *map = t->map;
-> > +	void *value = t->value;
-> > +	bpf_callback_t callback_fn;
-> > +	void *key;
-> > +	u32 idx;
-> > +
-> > +	BTF_TYPE_EMIT(struct bpf_timer);
-> > +
-> > +	rcu_read_lock();
-> > +	callback_fn = rcu_dereference(t->sleepable_cb_fn);
-> > +	rcu_read_unlock();
-> 
-> I took a very brief look at patch 2. One thing that may worth to ask here,
-> the rcu_read_unlock() seems to be done too early. It is protecting the
-> t->sleepable_cb_fn (?), so should it be done after finished using the
-> callback_fn?
+Non-contiguous CBM support for Intel CAT has been merged into the kernel
+with Commit 0e3cd31f6e90 ("x86/resctrl: Enable non-contiguous CBMs in
+Intel CAT") but there is no selftest that would validate if this feature
+works correctly. The selftest needs to verify if writing non-contiguous
+CBMs to the schemata file behaves as expected in comparison to the
+information about non-contiguous CBMs support.
 
-Probably :)
+The patch series is based on a rework of resctrl selftests that's
+currently in review [1]. The patch also implements a similar
+functionality presented in the bash script included in the cover letter
+of the original non-contiguous CBMs in Intel CAT series [3].
 
-TBH, everytime I work with RCUs I spent countless hours trying to
-re-understand everything, and in this case I'm currently in the "let's
-make it work" process than fixing concurrency issues.
-I still gave it a shot in case it solves my issue, but no, I still have
-the crash.
+Changelog v6:
+- Add Reinette's reviewed-by tag to patch 2/5.
+- Fix ret type in noncont test.
+- Add a check for bit_center value in noncont test.
+- Add resource pointer check in resctrl_mon_feature_exists.
+- Fix patch 4 leaking into patch 3 by mistake.
 
-But given that callback_fn might sleep, isn't it an issue to keep the
-RCU_reader lock so long? (we don't seem to call synchronize_rcu() so it
-might be fine, but I'd like the confirmation from someone else).
+Changelog v5:
+- Add a few reviewed-by tags.
+- Make some minor text changes in patch messages and comments.
+- Redo resctrl_mon_feature_exists() to be more generic and fix some of
+  my errors in refactoring feature checking.
 
-> 
-> A high level design question. The intention of the new
-> bpf_timer_set_sleepable_cb() kfunc is actually to delay work to a workqueue.
-> It is useful to delay work from the bpf_timer_cb and it may also useful to
-> delay work from other bpf running context (e.g. the networking hooks like
-> "tc"). The bpf_timer_set_sleepable_cb() seems to be unnecessary forcing
-> delay-work must be done in a bpf_timer_cb.
+Changelog v4:
+- Changes to error failure return values in non-contiguous test.
+- Some minor text refactoring without functional changes.
 
-Basically I'm just a monkey here. I've been told that I should use
-bpf_timer[0]. But my implementation is not finished, as Alexei mentioned
-that we should bypass hrtimer if I'm not wrong [1].
+Changelog v3:
+- Rebase onto v4 of Ilpo's series [1].
+- Split old patch 3/4 into two parts. One doing refactoring and one
+  adding a new function.
+- Some changes to all the patches after Reinette's review.
 
-> 
-> Have you thought about if it is possible to create a more generic kfunc like
-> bpf_schedule_work() to delay work to a workqueue ?
-> 
+Changelog v2:
+- Rebase onto v4 of Ilpo's series [2].
+- Add two patches that prepare helpers for the new test.
+- Move Ilpo's patch that adds test grouping to this series.
+- Apply Ilpo's suggestion to the patch that adds a new test.
 
-AFAIU if we were to have a separate bpf_schedule_work(), we still need
-all of the infra of bpf_timer, because we need to keep the programs
-around in the same way bpf_timer does. So basically, bpf_timer will not
-only be about hrtimers, but anything that need to run an async callback.
+[1] https://lore.kernel.org/all/20231215150515.36983-1-ilpo.jarvinen@linux.intel.com/
+[2] https://lore.kernel.org/all/20231211121826.14392-1-ilpo.jarvinen@linux.intel.com/
+[3] https://lore.kernel.org/all/cover.1696934091.git.maciej.wieczor-retman@intel.com/
 
-I submitted this RFC v2 not for the "this is ready", but mostly because
-there is a crash and I can't see where it comes from, and I suspect this
-is from a piece I do not understand (translation from the BPF langage
-into actual elf assembly).
+Older versions of this series:
+[v1] https://lore.kernel.org/all/20231109112847.432687-1-maciej.wieczor-retman@intel.com/
+[v2] https://lore.kernel.org/all/cover.1702392177.git.maciej.wieczor-retman@intel.com/
+[v3] https://lore.kernel.org/all/cover.1706180726.git.maciej.wieczor-retman@intel.com/
+[v4] https://lore.kernel.org/all/cover.1707130307.git.maciej.wieczor-retman@intel.com/
+[v5] https://lore.kernel.org/all/cover.1707487039.git.maciej.wieczor-retman@intel.com/
 
+Ilpo Järvinen (1):
+  selftests/resctrl: Add test groups and name L3 CAT test L3_CAT
 
-Cheers,
-Benjamin
+Maciej Wieczor-Retman (4):
+  selftests/resctrl: Add a helper for the non-contiguous test
+  selftests/resctrl: Split validate_resctrl_feature_request()
+  selftests/resctrl: Add resource_info_file_exists()
+  selftests/resctrl: Add non-contiguous CBMs CAT test
 
-[0] https://lore.kernel.org/bpf/ztou4yyrsdfmmhdwgu2f2noartpqklhvtbw7vj2ptk54eqohvb@qci7bcnbd56q/T/#mc9cab17138b13c83299f0836ca0b2dde0643ea4b
-[1] https://lore.kernel.org/bpf/ztou4yyrsdfmmhdwgu2f2noartpqklhvtbw7vj2ptk54eqohvb@qci7bcnbd56q/T/#mf59824ad625992b980afbc4f27c83e76245815e7
+ tools/testing/selftests/resctrl/cat_test.c    | 92 +++++++++++++++++-
+ tools/testing/selftests/resctrl/cmt_test.c    |  2 +-
+ tools/testing/selftests/resctrl/mba_test.c    |  2 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  6 +-
+ tools/testing/selftests/resctrl/resctrl.h     | 10 +-
+ .../testing/selftests/resctrl/resctrl_tests.c | 18 +++-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 96 ++++++++++++++++---
+ 7 files changed, 203 insertions(+), 23 deletions(-)
 
-> 
-> 
-> > +	if (!callback_fn)
-> > +		return;
-> > +
-> > +	/* FIXME: do we need any locking? */
-> > +	if (map->map_type == BPF_MAP_TYPE_ARRAY) {
-> > +		struct bpf_array *array = container_of(map, struct bpf_array, map);
-> > +
-> > +		/* compute the key */
-> > +		idx = ((char *)value - array->value) / array->elem_size;
-> > +		key = &idx;
-> > +	} else { /* hash or lru */
-> > +		key = value - round_up(map->key_size, 8);
-> > +	}
-> > +
-> > +	/* FIXME: this crashes the system with
-> > +	 * BUG: kernel NULL pointer dereference, address: 000000000000000b
-> > +	 */
-> > +	/* callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0); */
-> > +	/* The verifier checked that return value is zero. */
-> > +}
-> > +
-> 
-> [ ... ]
-> 
-> > +/* FIXME: use kernel doc style */
-> > +/* Description
-> > + *	Configure the timer to call *callback_fn* static function in a
-> > + *	sleepable context.
-> > + * Return
-> > + *	0 on success.
-> > + *	**-EINVAL** if *timer* was not initialized with bpf_timer_init() earlier.
-> > + *	**-EPERM** if *timer* is in a map that doesn't have any user references.
-> > + *	The user space should either hold a file descriptor to a map with timers
-> > + *	or pin such map in bpffs. When map is unpinned or file descriptor is
-> > + *	closed all timers in the map will be cancelled and freed.
-> > + */
-> > +__bpf_kfunc int bpf_timer_set_sleepable_cb(struct bpf_timer_kern *timer,
-> > +					   int (callback_fn)(void *map, int *key, struct bpf_timer *timer))
-> > +{
-> > +	struct bpf_throw_ctx ctx = {};
-> > +
-> > +	/* FIXME: definietely not sure this is OK */
-> > +	arch_bpf_stack_walk(bpf_stack_walker, &ctx);
-> > +	WARN_ON_ONCE(!ctx.aux);
-> > +
-> > +	if (!ctx.aux)
-> > +		return -EINVAL;
-> > +
-> > +	return __bpf_timer_set_callback(timer, (void *)callback_fn, ctx.aux, true);
-> > +}
-> > +
-> 
+-- 
+2.43.0
+
 
