@@ -1,60 +1,59 @@
-Return-Path: <linux-kselftest+bounces-4843-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 974E78577C4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 09:36:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B2338577C6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 09:37:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 309B8B20BC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 08:36:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F45A1C21102
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 08:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3BA15E97;
-	Fri, 16 Feb 2024 08:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8080D17C76;
+	Fri, 16 Feb 2024 08:36:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MIrubDwB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AlKu/K9R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8731B94D;
-	Fri, 16 Feb 2024 08:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C44E1B95D;
+	Fri, 16 Feb 2024 08:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708072554; cv=none; b=LFgSjRgAhts54wEQ9emmjnVAywT1o6FlNX2DlvIJbU4d1RmCEl0s7JvJrwhbWiojTMQAAns9KSVDIpA30xJtYvNoadkhejQ10t/Q0C9aB6socEbeRrolnKmipuEXZXmJsCRkSKh91T52fn7c3jRZBtdXsGYsmXXQaXR8M5NyZUM=
+	t=1708072567; cv=none; b=Vd+RxgcjWBFC/xMaI7o2wwH+yWmtkevoDAmbOr82Jjo3b/5sg6JI5xzN7WmFP/xTRy/WiH81uFtlKiy4YpRC8O5iL7TJtHxjAOsCq2DUHWKODUBcknCGXKtwTyyZoeYf0heZq/GBuK1iimVno7idcBhGyANPgo8aVfPFDZKWKgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708072554; c=relaxed/simple;
-	bh=W0vo/v6Uk1nQ4rBgma0PVflw0bD5UeCWw/hfYrDFu/Y=;
+	s=arc-20240116; t=1708072567; c=relaxed/simple;
+	bh=nqKgBCODw1Bb8mDKIw1PVJb65tpUTI+7WSaoC2AXT4I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FERr9oGQ382n88JLvrV9OTaiNn2M02GTwniZ91HS/nOR5QC0Lww+PJjiqZv8SRRYvC+M/QovOetCtDXc+83DmBcxIxFh7aZmp8EHDdYtw34UpqKgkHy1VlydgH5bKE8tBs+Rhv0YyFB8gd9/V5i0KmnvFNx5R92bS7VLdbOsMfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MIrubDwB; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version; b=Ea2r6MB/MeXPdtLQ3PZv0sC5awC3jAFXNiPtoz7tpFMtjEMWog84/fCx2BOr9FESDDskYrf7DPzU6ky+Njkt5gNX3BXvLOIORYjWlSfOL7GAK8+BBDq8Y1FUk3BMZ8vB7M17/i8KFjeyu11LROb8M6FZ14S+eh0moIKBPBC3X3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AlKu/K9R; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708072553; x=1739608553;
+  t=1708072565; x=1739608565;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=W0vo/v6Uk1nQ4rBgma0PVflw0bD5UeCWw/hfYrDFu/Y=;
-  b=MIrubDwBF38oIbSoyPtcOTIoFFyJTn3SLwtdf2yRvGLfX3d8s500q91x
-   Vw+7xXTw5ZGcHfKcDmt7OV7MWDnBY1HZeqZZTw50RsPB02jO8CG6XjILP
-   hGFLb4BG+Uc7XTs0nPLvfjuqM7B3aIaOxsCc+Sv79khWjwWelLblVrVq0
-   9p82s+xc7O6zrdbj2Ax9HNu62ghQdpN952oreovl5l+V+npmVBcAnPwgp
-   js5SjziztzKen4OE94Do5WGEmbmNFE7zszLz5kRBukYFMTZT7GewbhyMJ
-   YT2Ot1rSyZZsh2yvtiXNK4E8UaUUqDCz3Yb6kCm8ECozca0zkzhYxQT4V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="24659570"
+  bh=nqKgBCODw1Bb8mDKIw1PVJb65tpUTI+7WSaoC2AXT4I=;
+  b=AlKu/K9Rs/x/WS1E5RmhgtUYnYMNZ4F/z8LyHPFXgouaWif9KZdv6kX1
+   uFrd1UjbEu/3JJXx3QuwGB3/TJkb9AhnavBhb3jBdbuA8QMifKpQSlN3b
+   XxzU8cOwQjPLuhtO5tNepq94U/s2HT8CyoiyWz3cf51d2i0aSvdGNwATN
+   WOhgK7m16mLxHlhmrLGLfhx/4mjcSw4iAw0vb7yImIfyAUK5Nw8e5zAB9
+   krEV4LuS/E+MCydokaT1ctGH9iCFgRDbzJ9FqYKvk3PGwt1X89rb0P6VB
+   eFZt10SeEtI0AkhLCMLALaJmou7uZRhD1orv6pNrIkb+FaQCe4Va6HbQG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="2067421"
 X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
-   d="scan'208";a="24659570"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:35:52 -0800
+   d="scan'208";a="2067421"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:36:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="912327335"
 X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
-   d="scan'208";a="912327335"
+   d="scan'208";a="3801546"
 Received: from zprzybys-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.138])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:35:48 -0800
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:36:02 -0800
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: reinette.chatre@intel.com,
 	shuah@kernel.org,
@@ -62,9 +61,9 @@ To: reinette.chatre@intel.com,
 Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v6 4/5] selftests/resctrl: Add resource_info_file_exists()
-Date: Fri, 16 Feb 2024 09:35:41 +0100
-Message-ID: <c32b59c8826216a0841d8499038fcc2e965927be.1708072203.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v6 5/5] selftests/resctrl: Add non-contiguous CBMs CAT test
+Date: Fri, 16 Feb 2024 09:35:52 +0100
+Message-ID: <ce175d1ec6ed158cf37c08dc1ec6a87038ad2d9b.1708072203.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1708072203.git.maciej.wieczor-retman@intel.com>
 References: <cover.1708072203.git.maciej.wieczor-retman@intel.com>
@@ -74,92 +73,182 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Feature checking done by resctrl_mon_feature_exists() covers features
-represented by the feature name presence inside the 'mon_features' file
-in /sys/fs/resctrl/info/L3_MON directory. There exists a different way
-to represent feature support and that is by the presence of 0 or 1 in a
-single file in the info/resource directory. In this case the filename
-represents what feature support is being indicated.
+Add tests for both L2 and L3 CAT to verify the return values
+generated by writing non-contiguous CBMs don't contradict the
+reported non-contiguous support information.
 
-Add a generic function to check file presence in the
-/sys/fs/resctrl/info/<RESOURCE> directory.
+Use a logical XOR to confirm return value of write_schemata() and
+non-contiguous CBMs support information match.
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changelog v6:
-- Re-add function header to this patch.
+- Change ret to int type for proper error returns. (Reinette)
+- Add a check for bit_center variable to verify the CBM width isn't too
+  small. Also add a comment to explain the check. (Reinette)
 
 Changelog v5:
-- feature -> file. (Reinette)
-- Redo return description and path in the comment. (Reinette)
+- Add Reinette's reviewed-by tag.
+- Make 0xf UL in case the CBMs get bigger in the future. (Ilpo)
 
 Changelog v4:
-- Remove unnecessary new lines.
-- Change 'feature' -> 'file' to keep things generic. (Reinette)
-- Add Ilpo's reviewed-by tag.
+- Return failure instead of error on check of cpuid against sparse_masks
+  and on contiguous write_schemata fail. (Reinette)
 
 Changelog v3:
-- Split off the new function into this patch. (Reinette)
+- Roll back __cpuid_count part. (Reinette)
+- Update function name to read sparse_masks file.
+- Roll back get_cache_level() changes.
+- Add ksft_print_msg() to contiguous schemata write error handling
+  (Reinette).
 
 Changelog v2:
-- Add this patch.
+- Redo the patch message. (Ilpo)
+- Tidy up __cpuid_count calls. (Ilpo)
+- Remove redundant AND in noncont_mask calculations (Ilpo)
+- Fix bit_center offset.
+- Add newline before function return. (Ilpo)
+- Group non-contiguous tests with CAT tests. (Ilpo)
+- Use a helper for reading sparse_masks file. (Ilpo)
+- Make get_cache_level() available in other source files. (Ilpo)
 
- tools/testing/selftests/resctrl/resctrl.h   |  1 +
- tools/testing/selftests/resctrl/resctrlfs.c | 25 +++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ tools/testing/selftests/resctrl/cat_test.c    | 89 +++++++++++++++++++
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  2 +
+ 3 files changed, 93 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 6d99ed44ec60..f434a6543b4f 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -138,6 +138,7 @@ int umount_resctrlfs(void);
- int validate_bw_report_request(char *bw_report);
- bool resctrl_resource_exists(const char *resource);
- bool resctrl_mon_feature_exists(const char *resource, const char *feature);
-+bool resource_info_file_exists(const char *resource, const char *file);
- bool test_resource_feature_check(const struct resctrl_test *test);
- char *fgrep(FILE *inf, const char *str);
- int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 1273e55c4a9d..1cade75176eb 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -764,6 +764,31 @@ bool resctrl_mon_feature_exists(const char *resource, const char *feature)
- 	return !!res;
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 39fc9303b8e8..4cb991be8e31 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -294,6 +294,79 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+ 	return ret;
  }
  
-+/*
-+ * resource_info_file_exists - Check if a file is present inside
-+ * /sys/fs/resctrl/info/@resource.
-+ * @resource:	Required resource (Eg: MB, L3, L2, etc.)
-+ * @file:	Required file.
-+ *
-+ * Return: True if the /sys/fs/resctrl/info/@resource/@file exists, else false.
-+ */
-+bool resource_info_file_exists(const char *resource, const char *file)
++static int noncont_cat_run_test(const struct resctrl_test *test,
++				const struct user_params *uparams)
 +{
-+	char res_path[PATH_MAX];
-+	struct stat statbuf;
++	unsigned long full_cache_mask, cont_mask, noncont_mask;
++	unsigned int eax, ebx, ecx, edx, sparse_masks;
++	int bit_center, ret;
++	char schemata[64];
 +
-+	if (!file || !resource)
-+		return false;
++	/* Check to compare sparse_masks content to CPUID output. */
++	ret = resource_info_unsigned_get(test->resource, "sparse_masks", &sparse_masks);
++	if (ret)
++		return ret;
 +
-+	snprintf(res_path, sizeof(res_path), "%s/%s/%s", INFO_PATH, resource,
-+		 file);
++	if (!strcmp(test->resource, "L3"))
++		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
++	else if (!strcmp(test->resource, "L2"))
++		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
++	else
++		return -EINVAL;
 +
-+	if (stat(res_path, &statbuf))
-+		return false;
++	if (sparse_masks != ((ecx >> 3) & 1)) {
++		ksft_print_msg("CPUID output doesn't match 'sparse_masks' file content!\n");
++		return 1;
++	}
 +
-+	return true;
++	/* Write checks initialization. */
++	ret = get_full_cbm(test->resource, &full_cache_mask);
++	if (ret < 0)
++		return ret;
++	bit_center = count_bits(full_cache_mask) / 2;
++
++	/*
++	 * The bit_center needs to be at least 3 to properly calculate the CBM
++	 * hole in the noncont_mask. If it's smaller return an error since the
++	 * cache mask is too short and that shouldn't happen.
++	 */
++	if (bit_center < 3)
++		return -EINVAL;
++	cont_mask = full_cache_mask >> bit_center;
++
++	/* Contiguous mask write check. */
++	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret) {
++		ksft_print_msg("Write of contiguous CBM failed\n");
++		return 1;
++	}
++
++	/*
++	 * Non-contiguous mask write check. CBM has a 0xf hole approximately in the middle.
++	 * Output is compared with support information to catch any edge case errors.
++	 */
++	noncont_mask = ~(0xfUL << (bit_center - 2)) & full_cache_mask;
++	snprintf(schemata, sizeof(schemata), "%lx", noncont_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret && sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs supported but write of non-contiguous CBM failed\n");
++	else if (ret && !sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs not supported and write of non-contiguous CBM failed as expected\n");
++	else if (!ret && !sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs not supported but write of non-contiguous CBM succeeded\n");
++
++	return !ret == !sparse_masks;
 +}
 +
- bool test_resource_feature_check(const struct resctrl_test *test)
- {
- 	return resctrl_resource_exists(test->resource);
++static bool noncont_cat_feature_check(const struct resctrl_test *test)
++{
++	if (!resctrl_resource_exists(test->resource))
++		return false;
++
++	return resource_info_file_exists(test->resource, "sparse_masks");
++}
++
+ struct resctrl_test l3_cat_test = {
+ 	.name = "L3_CAT",
+ 	.group = "CAT",
+@@ -301,3 +374,19 @@ struct resctrl_test l3_cat_test = {
+ 	.feature_check = test_resource_feature_check,
+ 	.run_test = cat_run_test,
+ };
++
++struct resctrl_test l3_noncont_cat_test = {
++	.name = "L3_NONCONT_CAT",
++	.group = "CAT",
++	.resource = "L3",
++	.feature_check = noncont_cat_feature_check,
++	.run_test = noncont_cat_run_test,
++};
++
++struct resctrl_test l2_noncont_cat_test = {
++	.name = "L2_NONCONT_CAT",
++	.group = "CAT",
++	.resource = "L2",
++	.feature_check = noncont_cat_feature_check,
++	.run_test = noncont_cat_run_test,
++};
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index f434a6543b4f..2051bd135e0d 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -209,5 +209,7 @@ extern struct resctrl_test mbm_test;
+ extern struct resctrl_test mba_test;
+ extern struct resctrl_test cmt_test;
+ extern struct resctrl_test l3_cat_test;
++extern struct resctrl_test l3_noncont_cat_test;
++extern struct resctrl_test l2_noncont_cat_test;
+ 
+ #endif /* RESCTRL_H */
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 3044179ee6e9..f3dc1b9696e7 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -19,6 +19,8 @@ static struct resctrl_test *resctrl_tests[] = {
+ 	&mba_test,
+ 	&cmt_test,
+ 	&l3_cat_test,
++	&l3_noncont_cat_test,
++	&l2_noncont_cat_test,
+ };
+ 
+ static int detect_vendor(void)
 -- 
 2.43.0
 
