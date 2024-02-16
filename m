@@ -1,126 +1,137 @@
-Return-Path: <linux-kselftest+bounces-4847-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E2E88579E0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 11:05:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8C258579E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 11:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A688F1C209EF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 10:05:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 245261C217AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 10:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5A81BC4B;
-	Fri, 16 Feb 2024 10:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2091C2AF;
+	Fri, 16 Feb 2024 10:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TowStlj9"
+	dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b="u7RYAcMw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98A71C282
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Feb 2024 10:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA021BF3F;
+	Fri, 16 Feb 2024 10:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708077947; cv=none; b=JjB2Cenu7CGe8LyPDcajPxXn2ClRtg0DtPTMD8+VreiUF9/UY2qlZkzzQoD03aaqmkGrR7chTUJ1/yTvRETL6ZtJxqEE9n+NZ/ENZGvPbETH5Dy453nDNtiRA4YQO/M+tHyAyUckhhLpIb4nemwLSnWiUOUUfVTJUjDwNbzrQS4=
+	t=1708077997; cv=none; b=SfGO3BeLNUDq7Qv0gVuVAqvinC9c+eu9KJM/XTv3lsK1//uDRRSPaNAvTJ1qWlD00zt0b4POJLZ68HyQUNz04yj/1nta4kA48HoW4qVuEEuuKHjEeLJLF8EkoIBbrrZUv6ltBdc0zIC+nLm7WGpnInac0A3zb3aKq5pn7zMXCkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708077947; c=relaxed/simple;
-	bh=2OfrWvDY1AJyIDPSebrdawxRKqS9Bsc98oNPwj7uwcE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VLO7joP17skIW/WRMmJuD1N82tDraHWR5WRtfg9jY5qAxCwNaX7nBI4s9x5eYJPUAbv8Q6FXp88RzS/sIrdOMfVsN6LuB5ch6t5sPsj6YEAtuDSk4WVr1CSpWtX2TvwagnRllFIXt6qc9dFO3T/37MCCMlZPwWKiZvbzLg7GPW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TowStlj9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68090C433F1;
-	Fri, 16 Feb 2024 10:05:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708077947;
-	bh=2OfrWvDY1AJyIDPSebrdawxRKqS9Bsc98oNPwj7uwcE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=TowStlj9RRE9YneGcJa7BgpLwqfN5D0oerI1vuuSMXGDV6thM8Dr+r7srSZA8JEj4
-	 7VUSStPf14fr/VMGPu3DnMo1zSWe+KyqBBAJHTbS+XEAf5y22AtkmuGcgkPF8T3zhF
-	 xYXUgy548kiPbcR78IhnUZnnEHrcuTv+JReN5Q7AlMgD4ka8ZRWhbPL1Sw55d52TNm
-	 uYk9DrMlK/I0ww22yfTF4yabsTj1JBLRVpz1ZHs6vqrcydl8vESvCsYiTJtPBmt0U3
-	 1gXUzzx57Bz0jWdnRAyqiMVbvFJ8PVMg/OrKatPXgDJ6IBR1Te5GbXug5M1wkSLwDK
-	 aIN5qmm/0jsXA==
-From: Naveen N Rao <naveen@kernel.org>
-To: <linux-kselftest@vger.kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH RESEND] selftests/ftrace: Add test to exercize function tracer across cpu hotplug
-Date: Fri, 16 Feb 2024 15:26:26 +0530
-Message-ID: <20240216095626.1234309-1-naveen@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1708077997; c=relaxed/simple;
+	bh=qalaB5YcsuNePVX7yX2RMrC8XWaEwwf8H40aPA0BNDE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rvbLhRL55r0rI2uAPoaa8DEvocoOnFg75iy83z2iUD9lsMmPYYo0FT2FLnoZe+3m3DcV7qUSaFpxDh/syqehqeh+9cuDVc9GzBUtcWddkw1VW3RurSEYLreMpkWd2ys9M5fSNBJ/7aOXS+VGNDP7UoRxItWCNmhJHNaBCp2ltE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pankajraghav.com; spf=pass smtp.mailfrom=pankajraghav.com; dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b=u7RYAcMw; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pankajraghav.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pankajraghav.com
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4TbndZ0N6tz9snk;
+	Fri, 16 Feb 2024 11:06:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pankajraghav.com;
+	s=MBO0001; t=1708077986;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qQCyd4+RAcgA/+yjcYQaov3P2x0z6l0myi/TdMlnugk=;
+	b=u7RYAcMwMqlhw5zr5alamnS4sLimwlabotnFFKAHV8A+2O03mKdQq4oIOC3ETVYPrh86Vn
+	2hA0XKH/bp0takB2EwV1l1+5w3scKiB6LQHdSRMpvgo2xrtBUcprCKYYEGyELVqFJ/Gkmi
+	pAhNUBVorXF18ltMbFmUEYHkVMPYLSHEuIFICGYm9udRgqjmDUSZ0pKxzXPONsny67XcMh
+	TfMI3GWVSMS60ODyuS/mrdbD6I17s1VJFcuApk0fSpB4IK+VwczFuY/PzjOMcP/Ih+AnMp
+	HAnj71mnz4vp5IxANH6iKU+ItyJydsjxkMLT0exQ+fPHouHPDmslbm6uWjDmpQ==
+Date: Fri, 16 Feb 2024 11:06:20 +0100
+From: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
+To: Zi Yan <ziy@nvidia.com>
+Cc: linux-mm@kvack.org, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Ryan Roberts <ryan.roberts@arm.com>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Zach O'Keefe <zokeefe@google.com>, Hugh Dickins <hughd@google.com>, 
+	Mcgrof Chamberlain <mcgrof@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, gost.dev@samsung.com
+Subject: Re: [PATCH v4 0/7] Split a folio to any lower order folios
+Message-ID: <dvamjmlss62p5pf4das7nu5q35ftf4jlk3viwzyyvzasv4qjns@h3omqs7ecstd>
+References: <20240213215520.1048625-1-zi.yan@sent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240213215520.1048625-1-zi.yan@sent.com>
+X-Rspamd-Queue-Id: 4TbndZ0N6tz9snk
 
-Add a test to exercize cpu hotplug with the function tracer active to
-ensure that sensitive functions in idle path are excluded from being
-traced. This helps catch issues such as the one fixed by commit
-4b3338aaa74d ("powerpc/ftrace: Fix stack teardown in ftrace_no_trace").
+Hi Zi Yan,
 
-Signed-off-by: Naveen N Rao <naveen@kernel.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- .../ftrace/test.d/ftrace/func_hotplug.tc      | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_hotplug.tc
+On Tue, Feb 13, 2024 at 04:55:13PM -0500, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> Hi all,
+> 
+> File folio supports any order and multi-size THP is upstreamed[1], so both
+> file and anonymous folios can be >0 order. Currently, split_huge_page()
+> only splits a huge page to order-0 pages, but splitting to orders higher than
+> 0 is going to better utilize large folios. In addition, Large Block
+> Sizes in XFS support would benefit from it[2]. This patchset adds support for
+> splitting a large folio to any lower order folios and uses it during file
+> folio truncate operations.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_hotplug.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_hotplug.tc
-new file mode 100644
-index 000000000000..ccfbfde3d942
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_hotplug.tc
-@@ -0,0 +1,42 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# description: ftrace - function trace across cpu hotplug
-+# requires: function:tracer
-+
-+if ! which nproc ; then
-+  nproc() {
-+    ls -d /sys/devices/system/cpu/cpu[0-9]* | wc -l
-+  }
-+fi
-+
-+NP=`nproc`
-+
-+if [ $NP -eq 1 ] ;then
-+  echo "We cannot test cpu hotplug in UP environment"
-+  exit_unresolved
-+fi
-+
-+# Find online cpu
-+for i in /sys/devices/system/cpu/cpu[1-9]*; do
-+	if [ -f $i/online ] && [ "$(cat $i/online)" = "1" ]; then
-+		cpu=$i
-+		break
-+	fi
-+done
-+
-+if [ -z "$cpu" ]; then
-+	echo "We cannot test cpu hotplug with a single cpu online"
-+	exit_unresolved
-+fi
-+
-+echo 0 > tracing_on
-+echo > trace
-+
-+: "Set $(basename $cpu) offline/online with function tracer enabled"
-+echo function > current_tracer
-+echo 1 > tracing_on
-+(echo 0 > $cpu/online)
-+(echo "forked"; sleep 1)
-+(echo 1 > $cpu/online)
-+echo 0 > tracing_on
-+echo nop > current_tracer
+I added your patches on top of my patches, but removed patch 6 and I
+added this instead:
 
-base-commit: 130a83879954a9fed35cf4474d223b4fcfd479fa
--- 
-2.43.0
+diff --git a/mm/truncate.c b/mm/truncate.c
+index 725b150e47ac..dd07e2e327a8 100644
+--- a/mm/truncate.c
++++ b/mm/truncate.c
+@@ -239,7 +239,8 @@ bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
+                folio_invalidate(folio, offset, length);
+        if (!folio_test_large(folio))
+                return true;
+-       if (split_folio(folio) == 0)
++       if (split_folio_to_order(folio,
++                                mapping_min_folio_order(folio->mapping)) == 0)
+                return true;
+        if (folio_test_dirty(folio))
+                return false;
 
+I ran genric/476 fstest[1] with SOAK_DURATION set to 360 seconds. This
+test uses fstress to do a lot of writes, truncate operations, etc. I ran
+this on XFS with **64k block size on a 4k page size system**.
+
+I recorded the vm event for split page and this was the result I got:
+
+Before your patches:
+root@debian:~/xfstests# cat /proc/vmstat  | grep split
+thp_split_page 0
+thp_split_page_failed 5819
+
+After your patches:
+root@debian:~/xfstests# cat /proc/vmstat  | grep split
+thp_split_page 5846
+thp_split_page_failed 20
+
+Your patch series definitely helps with splitting the folios while still
+maintaining the min_folio_order that LBS requires.
+
+We are still discussing how to quantify this benefit in terms of some
+metric with this support. If you have some ideas here, let me know.
+
+I will run the whole xfstests tonight to check for any regressions.
+
+--
+Pankaj
+
+[1] https://github.com/kdave/xfstests/blob/master/tests/generic/476
 
