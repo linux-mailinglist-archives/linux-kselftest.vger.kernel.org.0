@@ -1,98 +1,103 @@
-Return-Path: <linux-kselftest+bounces-4869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92CF4858280
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 17:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E005585829C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 17:33:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BF6CB224DE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 16:32:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D09FBB20D2B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 16:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84BD212D76D;
-	Fri, 16 Feb 2024 16:32:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509CD12FB0F;
+	Fri, 16 Feb 2024 16:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C3w0mEqj"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ow00rFF+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA5A7E0F4
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Feb 2024 16:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C96E219ED;
+	Fri, 16 Feb 2024 16:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708101121; cv=none; b=t8VzFg2ieEcz1kMFoBhe1Vv3BJmzxJWyU0pRhWVt6TXxH0w2riaOFw57wdpEfHS2M7kmHhWXWi2g4egq2mfEgVjbJ74Z8xRDICqef7ZDGTOpapD+bb6r+JOnWfC/9BSAR+2BNbNnn9tAuHjB5wWdz58F2cx0ZeS+AvclpP2zYto=
+	t=1708101219; cv=none; b=V9JCxYvOTOb6vPsxq6VnX2Ya6DUKtB2ut+vqRTVS5K5WymqGakhA9lnsDg5BX8C5V5LGYGPfrcPEj6W6ZU1ZKbalLGAsYt1snF+gNyqisiYgKbqbSuUdANq4i5xpxAeQUeXy9eQmAf0nyFu/sgonFoe9W788KvquNjE/paHzXCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708101121; c=relaxed/simple;
-	bh=tgliddJGPihHusljN5dVrwBc4BeaA+TNm1BcAV5Glh8=;
+	s=arc-20240116; t=1708101219; c=relaxed/simple;
+	bh=08O4BtOm/c/lk0WJ8UE2M87B74vE2KvoWp59wRYMA14=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NBXIlk4cvDh5wjhozjXRSBVaDDW/ftOw723lXY5B7ykKLsp1AZYfQnWcyv6Knyr3u4aIeA1KdIzWSeffyUGi3w9EojYKak8aPo87k3UI7dq5D9H3JJsbT0EOswwfGfOdekPQk1qPuhGzeGMSxqev/8DouExEGSyQK3HZ3cjzSAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C3w0mEqj; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708101118;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=+NV3H4SWLwy/p9YzJRRYUfX5NB0C57ei7kPnLlc5nEg=;
-	b=C3w0mEqje3jIv8kqzmJGaywp2g8R5iS4T+5q5MPurGWfOWLyv5WcyluRsWY/53uDg9meqE
-	et/j8yg41DytvLu1dtL5xU9yyXJDpYWd7P1+4K82e9uTjUeA/+qLN8cp+75+T/ZI84/nKi
-	y7xgocFAjcdQWIBc7WYPbm17ZbIWDPQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-527-Lb4Nw90WNuevV_BZSwRKOQ-1; Fri, 16 Feb 2024 11:31:57 -0500
-X-MC-Unique: Lb4Nw90WNuevV_BZSwRKOQ-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3377bf95b77so138175f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Feb 2024 08:31:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708101115; x=1708705915;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+NV3H4SWLwy/p9YzJRRYUfX5NB0C57ei7kPnLlc5nEg=;
-        b=LdFjr9G1KU6EEOVcFj0dWB/LfnQwuen847Y/VE0aA3caJqnuglrTxkNmGzSsv/q7AX
-         xEbt1M84ZVw6+oyRaVhVC5XOqv3D2Eel9nituCHUZ1Pg3ZEzgBeJFqVGyQtsvvcefNMi
-         M6U2bwBpUSKvRHg5tTCNUOLwvddtXNhzpVRE4qMt9J+oPXuIthdATEKnxwMo2opSeSDa
-         DtT2gJ9E72MGAaXLG/FpMd6TLZ+26ycwJXdIkFbF1kApLrKxC7BYZjRzkVUhR1449w8K
-         /cWCVPcpdEF+WroO2S8iASp7fx+PPYgxRLmNhHH7vUXo9ojVwJwuQKjTw/ipv5+JfBBw
-         GFIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWIsLcrCSherjsST5sKpLWiI1jT0CmqaSTC8e1lGGZpq0d9k/Ix2Gx625NmxIHB4lYsiIcyhTrWBwJxM9Woy3tQGBgCnGy9cinCbSnO5ySd
-X-Gm-Message-State: AOJu0YyCkuoIEGBa2M4ZX1+4zzxtadLpAga/pwZ2omBruxn6o3ovpFhf
-	Of5LrURm9AIpZiq6DCF0NRhlQbx3l0kROIAEDbduBgp5mb3hOG5J037Ubvbc7x+KwzBcI5se0oq
-	r7mZO/H7kMxUf1gFyo1O3+z34f2f3JHdqiWVDjqXoG0eYUBdmf+SH9N6oxmIpicnz1Z+hSr2nlw
-	==
-X-Received: by 2002:a05:6000:70e:b0:33d:2270:8bfc with SMTP id bs14-20020a056000070e00b0033d22708bfcmr1019112wrb.3.1708101115764;
-        Fri, 16 Feb 2024 08:31:55 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHMBnoS4SrCuiWsNLBt2N8SpsfwDWgdSoAB6ZLpBJQ2CwBVDl4jFo/szcpQw45ssbmA5tFTPQ==
-X-Received: by 2002:a05:6000:70e:b0:33d:2270:8bfc with SMTP id bs14-20020a056000070e00b0033d22708bfcmr1019095wrb.3.1708101115421;
-        Fri, 16 Feb 2024 08:31:55 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-239-108.dyn.eolo.it. [146.241.239.108])
-        by smtp.gmail.com with ESMTPSA id bn12-20020a056000060c00b0033cda80f54dsm2836773wrb.83.2024.02.16.08.31.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 08:31:54 -0800 (PST)
-Message-ID: <7f51a2e2bfe1e3ee15f12f655e6d7ab5d9d73b5a.camel@redhat.com>
-Subject: Re: [RFC 4/7] selftests: openvswitch: delete previously allocated
- netns
-From: Paolo Abeni <pabeni@redhat.com>
-To: Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>, Pravin B Shelar
- <pshelar@ovn.org>, dev@openvswitch.org,  Ilya Maximets
- <i.maximets@ovn.org>, Simon Horman <horms@ovn.org>, Eelco Chaudron
- <echaudro@redhat.com>,  Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Date: Fri, 16 Feb 2024 17:31:53 +0100
-In-Reply-To: <20240216152846.1850120-5-aconole@redhat.com>
-References: <20240216152846.1850120-1-aconole@redhat.com>
-	 <20240216152846.1850120-5-aconole@redhat.com>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=mQINBGISiDUBEAC5uMdJicjm3ZlWQJG4u2EU1EhWUSx8IZLUTmEE8zmjPJFSYDcjtfGcbzLPb63BvX7FADmTOkO7gwtDgm501XnQaZgBUnCOUT8qv5MkKsFH20h1XJyqjPeGM55YFAXc+a4WD0YyO5M0+KhDeRLoildeRna1ey944VlZ6Inf67zMYw9vfE5XozBtytFIrRyGEWkQwkjaYhr1cGM8ia24QQVQid3P7SPkR78kJmrT32sGk+TdR4YnZzBvVaojX4AroZrrAQVdOLQWR+w4w1mONfJvahNdjq73tKv51nIpu4SAC1Zmnm3x4u9r22mbMDr0uWqDqwhsvkanYmn4umDKc1ZkBnDIbbumd40x9CKgG6ogVlLYeJa9WyfVMOHDF6f0wRjFjxVoPO6p/ZDkuEa67KCpJnXNYipLJ3MYhdKWBZw0xc3LKiKc+nMfQlo76T/qHMDfRMaMhk+L8gWc3ZlRQFG0/Pd1pdQEiRuvfM5DUXDo/YOZLV0NfRFU9SmtIPhbdm9cV8Hf8mUwubihiJB/9zPvVq8xfiVbdT0sPzBtxW0fXwrbFxYAOFvT0UC2MjlIsukjmXOUJtdZqBE3v3Jf7VnjNVj9P58+MOx9iYo8jl3fNd7biyQWdPDfYk9ncK8km4skfZQIoUVqrWqGDJjHO1W9CQLAxkfOeHrmG29PK9tHIwARAQABtB9QYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+iQJSBBMBCAA8FiEEg1AjqC77wbdLX2LbKSR5jcyPE6QFAmISiDUCGwMFCwkIBwIDIgIBBhUKCQgLAgQWAgMBAh4HAheAAAoJECkkeY3MjxOkJSYQAJcc6MTsuFxYdYZkeWjW//zbD3ApRHzpNlHLVSuJqHr9/aDS+tyszgS8jj9MiqALzgq4iZbg
- 7ZxN9ZsDL38qVIuFkSpgMZCiUHdxBC11J8nbBSLlpnc924UAyr5XrGA99 6Wl5I4Km3128GY6iAkH54pZpOmpoUyBjcxbJWHstzmvyiXrjA2sMzYjt3Xkqp0cJfIEekOi75wnNPofEEJg28XPcFrpkMUFFvB4Aqrdc2yyR8Y36rbw18sIX3dJdomIP3dL7LoJi9mfUKOnr86Z0xltgcLPGYoCiUZMlXyWgB2IPmmcMP2jLJrusICjZxLYJJLofEjznAJSUEwB/3rlvFrSYvkKkVmfnfro5XEr5nStVTECxfy7RTtltwih85LlZEHP8eJWMUDj3P4Q9CWNgz2pWr1t68QuPHWaA+PrXyasDlcRpRXHZCOcvsKhAaCOG8TzCrutOZ5NxdfXTe3f1jVIEab7lNgr+7HiNVS+UPRzmvBc73DAyToKQBn9kC4jh9HoWyYTepjdcxnio0crmara+/HEyRZDQeOzSexf85I4dwxcdPKXv0fmLtxrN57Ae82bHuRlfeTuDG3x3vl/Bjx4O7Lb+oN2BLTmgpYq7V1WJPUwikZg8M+nvDNcsOoWGbU417PbHHn3N7yS0lLGoCCWyrK1OY0QM4EVsL3TjOfUtCNQYW9sbyBBYmVuaSA8cGFvbG8uYWJlbmlAZ21haWwuY29tPokCUgQTAQgAPBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEoitAhsDBQsJCAcCAyICAQYVCgkICwIEFgIDAQIeBwIXgAAKCRApJHmNzI8TpBzHD/45pUctaCnhee1vkQnmStAYvHmwrWwIEH1lzDMDCpJQHTUQOOJWDAZOFnE/67bxSS81Wie0OKW2jvg1ylmpBA0gPpnzIExQmfP72cQ1TBoeVColVT6Io35BINn+ymM7c0Bn8RvngSEpr3jBtqvvWXjvtnJ5/HbOVQCg62NC6ewosoKJPWpGXMJ9SKsVIOUHsmoWK60spzeiJoSmAwm3zTJQnM5kRh2q
- iWjoCy8L35zPqR5TV+f5WR5hTVCqmLHSgm1jxwKhPg9L+GfuE4d0SWd84y GeOB3sSxlhWsuTj1K6K3MO9srD9hr0puqjO9sAizd0BJP8ucf/AACfrgmzIqZXCfVS7jJ/M+0ic+j1Si3yY8wYPEi3dvbVC0zsoGj9n1R7B7L9c3g1pZ4L9ui428vnPiMnDN3jh9OsdaXeWLvSvTylYvw9q0DEXVQTv4/OkcoMrfEkfbXbtZ3PRlAiddSZA5BDEkkm6P9KA2YAuooi1OD9d4MW8LFAeEicvHG+TPO6jtKTacdXDRe611EfRwTjBs19HmabSUfFcumL6BlVyceIoSqXFe5jOfGpbBevTZtg4kTSHqymGb6ra6sKs+/9aJiONs5NXY7iacZ55qG3Ib1cpQTps9bQILnqpwL2VTaH9TPGWwMY3Nc2VEc08zsLrXnA/yZKqZ1YzSY9MGXWYLkCDQRiEog1ARAAyXMKL+x1lDvLZVQjSUIVlaWswc0nV5y2EzBdbdZZCP3ysGC+s+n7xtq0o1wOvSvaG9h5q7sYZs+AKbuUbeZPu0bPWKoO02i00yVoSgWnEqDbyNeiSW+vI+VdiXITV83lG6pS+pAoTZlRROkpb5xo0gQ5ZeYok8MrkEmJbsPjdoKUJDBFTwrRnaDOfb+Qx1D22PlAZpdKiNtwbNZWiwEQFm6mHkIVSTUe2zSemoqYX4QQRvbmuMyPIbwbdNWlItukjHsffuPivLF/XsI1gDV67S1cVnQbBgrpFDxN62USwewXkNl+ndwa+15wgJFyq4Sd+RSMTPDzDQPFovyDfA/jxN2SK1Lizam6o+LBmvhIxwZOfdYH8bdYCoSpqcKLJVG3qVcTwbhGJr3kpRcBRz39Ml6iZhJyI3pEoX3bJTlR5Pr1Kjpx13qGydSMos94CIYWAKhegI06aTdvvuiigBwjngo/Rk5S+iEGR5KmTqGyp27o6YxZy6D4NIc6PKUzhIUxfvuHNvfu
- sD2W1U7eyLdm/jCgticGDsRtweytsgCSYfbz0gdgUuL3EBYN3JLbAU+UZpy v/fyD4cHDWaizNy/KmOI6FFjvVh4LRCpGTGDVPHsQXaqvzUybaMb7HSfmBBzZqqfVbq9n5FqPjAgD2lJ0rkzb9XnVXHgr6bmMRlaTlBMAEQEAAYkCNgQYAQgAIBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEog1AhsMAAoJECkkeY3MjxOkY1YQAKdGjHyIdOWSjM8DPLdGJaPgJdugHZowaoyCxffilMGXqc8axBtmYjUIoXurpl+f+a7S0tQhXjGUt09zKlNXxGcebL5TEPFqgJTHN/77ayLslMTtZVYHE2FiIxkvW48yDjZUlefmphGpfpoXe4nRBNto1mMB9Pb9vR47EjNBZCtWWbwJTIEUwHP2Z5fV9nMx9Zw2BhwrfnODnzI8xRWVqk7/5R+FJvl7s3nY4F+svKGD9QHYmxfd8Gx42PZc/qkeCjUORaOf1fsYyChTtJI4iNm6iWbD9HK5LTMzwl0n0lL7CEsBsCJ97i2swm1DQiY1ZJ95G2Nz5PjNRSiymIw9/neTvUT8VJJhzRl3Nb/EmO/qeahfiG7zTpqSn2dEl+AwbcwQrbAhTPzuHIcoLZYV0xDWzAibUnn7pSrQKja+b8kHD9WF+m7dPlRVY7soqEYXylyCOXr5516upH8vVBmqweCIxXSWqPAhQq8d3hB/Ww2A0H0PBTN1REVw8pRLNApEA7C2nX6RW0XmA53PIQvAP0EAakWsqHoKZ5WdpeOcH9iVlUQhRgemQSkhfNaP9LqR1XKujlTuUTpoyT3xwAzkmSxN1nABoutHEO/N87fpIbpbZaIdinF7b9srwUvDOKsywfs5HMiUZhLKoZzCcU/AEFjQsPTATACGsWf3JYPnWxL9
+	 Content-Type:MIME-Version; b=KxrzkKTN3FnaBdqFZyFa6140ZDN5UeKT4GCxLLbJM11wi2oW2+xn5o9MrJNLV8Xe7KllZwg4z+7EYpf+sKNJ2Yc+uGnLgkxbfXwmi7sz8UUfKLEAtXfO99UVTSiMvqbbp0E4k1NonUeVwYEW4rUf9OSLLMED35EQ2lzesX/vM3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ow00rFF+; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41GGVNML010695;
+	Fri, 16 Feb 2024 16:33:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=nsDqoaA0uxmTN3/1MudUVyi5KmjfJMAEwxra8oJHAtc=;
+ b=ow00rFF+vtDsgIwmgMnGYsu3MNUPlGnwtycrmSYFywgxzoDgiYC1IvHeyi70YGil6/zG
+ cOIcP4eBlNYLyL38OWuC9/T6GumbFaSE3ch9Vu5+3VKnKbypJTyAb28WGsVbxX2H5m/Y
+ btw6YobSsv4qkJ2r/hRieFSA5N1n8Ett19qFzDq2PSPVQuD4N8yTjInFjCxBPfPWJKqk
+ iRXMIXxBSWD1xYlFC1zR6V+pqVnDw+TUMeM79+VTVdD1INYh6sTygTxOs0EpdgwH3vEx
+ fSRaUkDhZAvb+SaEZk5W0tk7Hww8kCXE8FyNaSpcxSj1XPXNXJWjCwNQLG62AFUbGHK5 LQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wa9wu203q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 16:33:34 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41GGWoqh015692;
+	Fri, 16 Feb 2024 16:33:33 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wa9wu2036-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 16:33:33 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41GFSoNu024908;
+	Fri, 16 Feb 2024 16:33:32 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mfpvdf7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 16:33:32 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41GGXTV541681434
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 16 Feb 2024 16:33:31 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2F04358052;
+	Fri, 16 Feb 2024 16:33:29 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9E56D58056;
+	Fri, 16 Feb 2024 16:33:27 +0000 (GMT)
+Received: from li-479af74c-31f9-11b2-a85c-e4ddee11713b.ibm.com (unknown [9.61.34.148])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 16 Feb 2024 16:33:27 +0000 (GMT)
+Message-ID: <e1364fe5a3e1ec09d343db29dbbdbafb35aef3f5.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 1/2] KVM: s390: load guest access registers in MEM_OP
+ ioctl
+From: Eric Farman <farman@linux.ibm.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank
+ <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David
+ Hildenbrand <david@redhat.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle
+ <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan
+ <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Date: Fri, 16 Feb 2024 11:33:27 -0500
+In-Reply-To: <20240216094012.8060-A-hca@linux.ibm.com>
+References: <20240215205344.2562020-1-farman@linux.ibm.com>
+	 <20240215205344.2562020-2-farman@linux.ibm.com>
+	 <20240216094012.8060-A-hca@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
@@ -102,59 +107,91 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -thmYTw3y7ZcH3RKZVd1mkrDgjPE6ZfH
+X-Proofpoint-GUID: RL74pB2MxeeSysUrcnJEYhRN0jNJyhsB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-16_16,2024-02-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 clxscore=1015 mlxscore=0 spamscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402160132
 
-On Fri, 2024-02-16 at 10:28 -0500, Aaron Conole wrote:
-> Many openvswitch test cases reused netns and interface names.  This works
-> fine as long as the test case cleans up gracefully.  However, if there is
-> some kind of ungraceful termination (such as an external signal) the netn=
-s
-> or interfaces can be left lingering. =C2=A0
-
-It looks the openvswitch.sh test script is already trying quite hard to
-delete the allocated resources on ungraceful termination via "trap...".
-
-That is usually enough for other self-tests, could you please detail
-when it fails here?
-
-> This happens when the selftest
-> timeout gets exceeded, while running under very slow debugging conditions=
-.
-
-'timeout' should send SIG_TERM, and the script already handle that
-gracefully?
-
-> The solution here is to cleanup the netns on executing the next test.
-
-I suggest avoiding this, it could end up killing innocent alias netns.
-
-You could consider using the 'setup_ns' helper from the
-tools/testing/selftests/net/lib.sh library to always generate unique
-netns names.
-
-> Signed-off-by: Aaron Conole <aconole@redhat.com>
-> ---
->  tools/testing/selftests/net/openvswitch/openvswitch.sh | 4 ++++
->  1 file changed, 4 insertions(+)
+On Fri, 2024-02-16 at 10:40 +0100, Heiko Carstens wrote:
+> On Thu, Feb 15, 2024 at 09:53:43PM +0100, Eric Farman wrote:
+> > The routine ar_translation() can be reached by both the instruction
+> > intercept path (where the access registers had been loaded with the
+> > guest register contents), and the MEM_OP ioctls (which hadn't).
+> > This latter case means that any ALET the guest expects to be used
+> > would be ignored.
+> >=20
+> > Fix this by swapping the host/guest access registers around the
+> > MEM_OP ioctl, in the same way that the KVM_RUN ioctl does with
+> > sync_regs()/store_regs(). The full register swap isn't needed here,
+> > since only the access registers are used in this interface.
+> >=20
+> > Introduce a boolean in the kvm_vcpu_arch struct to indicate the
+> > guest ARs have been loaded into the registers. This permits a
+> > warning to be emitted if entering this path without a proper
+> > register setup.
+> >=20
+> > Suggested-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > Signed-off-by: Eric Farman <farman@linux.ibm.com>
+> > ---
+> > =C2=A0arch/s390/include/asm/kvm_host.h |=C2=A0 1 +
+> > =C2=A0arch/s390/kvm/gaccess.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 |=C2=A0 2 ++
+> > =C2=A0arch/s390/kvm/kvm-s390.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 11 +++++++++++
+> > =C2=A03 files changed, 14 insertions(+)
+> ...
+> > diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+> > index 5bfcc50c1a68..33587bb4c9e8 100644
+> > --- a/arch/s390/kvm/gaccess.c
+> > +++ b/arch/s390/kvm/gaccess.c
+> > @@ -391,6 +391,8 @@ static int ar_translation(struct kvm_vcpu
+> > *vcpu, union asce *asce, u8 ar,
+> > =C2=A0	if (ar >=3D NUM_ACRS)
+> > =C2=A0		return -EINVAL;
+> > =C2=A0
+> > +	WARN_ON_ONCE(!vcpu->arch.acrs_loaded);
+> > +
+> > =C2=A0	save_access_regs(vcpu->run->s.regs.acrs);
 >=20
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/too=
-ls/testing/selftests/net/openvswitch/openvswitch.sh
-> index 678a72ad47c1..8dc315585710 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> @@ -115,6 +115,10 @@ ovs_netns_spawn_daemon() {
-> =20
->  ovs_add_netns_and_veths () {
->  	info "Adding netns attached: sbx:$1 dp:$2 {$3, $4, $5}"
-> +	ntns_e=3D`ip netns list | grep $3`
-> +	[ "$ntns_e" !=3D "" ] && ip netns del "$3"
-> +	if4_e=3D`ip link show $4 2>/dev/null`
+> Why not simply:
+>=20
+> 	if (vcpu->arch.acrs_loaded)
+> 		save_access_regs(vcpu->run->s.regs.acrs);
+>=20
+> ?
+>=20
+> This will always work, and the WARN_ON_ONCE() would not be needed.
+> Besides
+> that: _if_ the WARN_ON_ONCE() would trigger, damage would have
+> happened
+> already: host registers would have been made visible to the guest.
+>=20
+> Or did I miss anything?
 
-Minor unrelated note: $() is preferable to `` for sub-shells, as it's
-more friendly to nesting, string expansing, quotes, etc.
+You're right that the suggestion to skip the save_access_regs() call in
+this way would get the ALET out of the guest correctly, but the actual
+CPU AR hadn't yet been loaded with the guest contents. Thus, the data
+copy would be done with the host access register rather than the
+guest's, which is why I needed to add those two extra hunks to do an AR
+swap around the MEM_OP interface. Without that, the selftest in patch 2
+continues to fail.
 
+If the WARN triggers, damage will be done if the ARs get copied back to
+the vcpu->run space (I don't believe any damage has occurred at the
+time of the WARN). That's what's happening today and I'd like to
+address, but there's no indication of what's happened. Perhaps I need
+to combine the two ideas? Do the WARN, but remove the
+save_access_regs() call since it gets done again once the registers are
+swapped back. Or keep it, and dig out the RFC code that stores the
+current ARs into a temporary variable instead?
 
-Cheers,
-
-Paolo
-
+Thanks,
+Eric
 
