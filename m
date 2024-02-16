@@ -1,255 +1,183 @@
-Return-Path: <linux-kselftest+bounces-4844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4845-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2338577C6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 09:37:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E70A6857908
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 10:40:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F45A1C21102
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 08:37:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B908A281ABB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 09:40:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8080D17C76;
-	Fri, 16 Feb 2024 08:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87BD1BC43;
+	Fri, 16 Feb 2024 09:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AlKu/K9R"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pCBAnhKi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C44E1B95D;
-	Fri, 16 Feb 2024 08:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7CE1BC2F;
+	Fri, 16 Feb 2024 09:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708072567; cv=none; b=Vd+RxgcjWBFC/xMaI7o2wwH+yWmtkevoDAmbOr82Jjo3b/5sg6JI5xzN7WmFP/xTRy/WiH81uFtlKiy4YpRC8O5iL7TJtHxjAOsCq2DUHWKODUBcknCGXKtwTyyZoeYf0heZq/GBuK1iimVno7idcBhGyANPgo8aVfPFDZKWKgs=
+	t=1708076426; cv=none; b=QTRvBKyyVEkPBiZYtBMcIaGzlNROX5IZC6XtvnjCrqKWgYaVEYUkyw12r3PhRjGLtourc0HWknerlG4r9p8dNRPJbU0o9bx1B04zjuZQHdf/Vx9R6HPMQPpiO0mx/yszXpyNO+97GwJgt4rL/29vmuk3bhfnu28lK9ohyPB3Kjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708072567; c=relaxed/simple;
-	bh=nqKgBCODw1Bb8mDKIw1PVJb65tpUTI+7WSaoC2AXT4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ea2r6MB/MeXPdtLQ3PZv0sC5awC3jAFXNiPtoz7tpFMtjEMWog84/fCx2BOr9FESDDskYrf7DPzU6ky+Njkt5gNX3BXvLOIORYjWlSfOL7GAK8+BBDq8Y1FUk3BMZ8vB7M17/i8KFjeyu11LROb8M6FZ14S+eh0moIKBPBC3X3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AlKu/K9R; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708072565; x=1739608565;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nqKgBCODw1Bb8mDKIw1PVJb65tpUTI+7WSaoC2AXT4I=;
-  b=AlKu/K9Rs/x/WS1E5RmhgtUYnYMNZ4F/z8LyHPFXgouaWif9KZdv6kX1
-   uFrd1UjbEu/3JJXx3QuwGB3/TJkb9AhnavBhb3jBdbuA8QMifKpQSlN3b
-   XxzU8cOwQjPLuhtO5tNepq94U/s2HT8CyoiyWz3cf51d2i0aSvdGNwATN
-   WOhgK7m16mLxHlhmrLGLfhx/4mjcSw4iAw0vb7yImIfyAUK5Nw8e5zAB9
-   krEV4LuS/E+MCydokaT1ctGH9iCFgRDbzJ9FqYKvk3PGwt1X89rb0P6VB
-   eFZt10SeEtI0AkhLCMLALaJmou7uZRhD1orv6pNrIkb+FaQCe4Va6HbQG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="2067421"
-X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
-   d="scan'208";a="2067421"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:36:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
-   d="scan'208";a="3801546"
-Received: from zprzybys-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.138])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 00:36:02 -0800
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: reinette.chatre@intel.com,
-	shuah@kernel.org,
-	fenghua.yu@intel.com
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v6 5/5] selftests/resctrl: Add non-contiguous CBMs CAT test
-Date: Fri, 16 Feb 2024 09:35:52 +0100
-Message-ID: <ce175d1ec6ed158cf37c08dc1ec6a87038ad2d9b.1708072203.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1708072203.git.maciej.wieczor-retman@intel.com>
-References: <cover.1708072203.git.maciej.wieczor-retman@intel.com>
+	s=arc-20240116; t=1708076426; c=relaxed/simple;
+	bh=+M0Bh5dPDC946tqsYFBb4OZufZG3vd4AaXIDY/lNsVY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Eb1p/cAiEm+Y4usLBQLCvUyDXnWCCLqdIP0BtfsaY9NUsjxqAWx1wgxGjTRhlrrOf8GfWvAZN7MCZF0Ag51PY6t7cgSt8TlIh52wbVj129GE1SZTQ4LO2sUqBNzTsMZIPsnIEg4CE1tUgagUeqP2Cvwiq/E7t0eebyxibijV0TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pCBAnhKi; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41G9QA9G012536;
+	Fri, 16 Feb 2024 09:40:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=zAsLtGFpP4IyOLvJE3BieRpoV7Loz6/31vxdx3CjAAQ=;
+ b=pCBAnhKijy6NxDkQYGJWBv/Rza+9Ng2zqF0qzLevQsblY+fBh8YpZXSQpiOEKwwmWL3g
+ yAT0ZldwGWPhQQlaa6WPLmPQVtwoEZupuwqPOjf8pY5+i2R/6mcLM6Nbekp7fpimYfgM
+ RyQMWbdrV/y866tmop1G3rLp9/IN3THbEgyXwo3UgAE7PHTelxWxV+3kqfilekEOyvnz
+ ywS1I4kjfrHpjsENdBJpIfFt49YWZl1VTgwkKgLOvsIuibmGSEYY0v3G5BV9ljpc1ArD
+ mbyWFAkYClspPqQgTHEaqC2NLtkPN2tKiaRmOG1eWvYTZ6S3d3g4jtGxFJbNU4h7femg RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wa3psj63d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 09:40:22 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41G9RAXk016214;
+	Fri, 16 Feb 2024 09:40:21 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wa3psj62j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 09:40:21 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41G8I538010063;
+	Fri, 16 Feb 2024 09:40:20 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6npma314-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 09:40:20 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41G9eF6J44434118
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 16 Feb 2024 09:40:17 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 12AB920065;
+	Fri, 16 Feb 2024 09:40:15 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5E9E72006A;
+	Fri, 16 Feb 2024 09:40:14 +0000 (GMT)
+Received: from osiris (unknown [9.171.20.191])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 16 Feb 2024 09:40:14 +0000 (GMT)
+Date: Fri, 16 Feb 2024 10:40:12 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Eric Farman <farman@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] KVM: s390: load guest access registers in MEM_OP
+ ioctl
+Message-ID: <20240216094012.8060-A-hca@linux.ibm.com>
+References: <20240215205344.2562020-1-farman@linux.ibm.com>
+ <20240215205344.2562020-2-farman@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240215205344.2562020-2-farman@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7mL4wp-HJVito2_avf529Zzhyb9JZwKt
+X-Proofpoint-GUID: 0NudZyVlVGKn1sKqlABqljk_nBesHxs0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-16_08,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 clxscore=1015 mlxscore=0 adultscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=856 bulkscore=0 malwarescore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402160077
 
-Add tests for both L2 and L3 CAT to verify the return values
-generated by writing non-contiguous CBMs don't contradict the
-reported non-contiguous support information.
+On Thu, Feb 15, 2024 at 09:53:43PM +0100, Eric Farman wrote:
+> The routine ar_translation() can be reached by both the instruction
+> intercept path (where the access registers had been loaded with the
+> guest register contents), and the MEM_OP ioctls (which hadn't).
+> This latter case means that any ALET the guest expects to be used
+> would be ignored.
+> 
+> Fix this by swapping the host/guest access registers around the
+> MEM_OP ioctl, in the same way that the KVM_RUN ioctl does with
+> sync_regs()/store_regs(). The full register swap isn't needed here,
+> since only the access registers are used in this interface.
+> 
+> Introduce a boolean in the kvm_vcpu_arch struct to indicate the
+> guest ARs have been loaded into the registers. This permits a
+> warning to be emitted if entering this path without a proper
+> register setup.
+> 
+> Suggested-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+> ---
+>  arch/s390/include/asm/kvm_host.h |  1 +
+>  arch/s390/kvm/gaccess.c          |  2 ++
+>  arch/s390/kvm/kvm-s390.c         | 11 +++++++++++
+>  3 files changed, 14 insertions(+)
+...
+> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+> index 5bfcc50c1a68..33587bb4c9e8 100644
+> --- a/arch/s390/kvm/gaccess.c
+> +++ b/arch/s390/kvm/gaccess.c
+> @@ -391,6 +391,8 @@ static int ar_translation(struct kvm_vcpu *vcpu, union asce *asce, u8 ar,
+>  	if (ar >= NUM_ACRS)
+>  		return -EINVAL;
+>  
+> +	WARN_ON_ONCE(!vcpu->arch.acrs_loaded);
+> +
+>  	save_access_regs(vcpu->run->s.regs.acrs);
 
-Use a logical XOR to confirm return value of write_schemata() and
-non-contiguous CBMs support information match.
+Why not simply:
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Changelog v6:
-- Change ret to int type for proper error returns. (Reinette)
-- Add a check for bit_center variable to verify the CBM width isn't too
-  small. Also add a comment to explain the check. (Reinette)
+	if (vcpu->arch.acrs_loaded)
+		save_access_regs(vcpu->run->s.regs.acrs);
 
-Changelog v5:
-- Add Reinette's reviewed-by tag.
-- Make 0xf UL in case the CBMs get bigger in the future. (Ilpo)
+?
 
-Changelog v4:
-- Return failure instead of error on check of cpuid against sparse_masks
-  and on contiguous write_schemata fail. (Reinette)
+This will always work, and the WARN_ON_ONCE() would not be needed. Besides
+that: _if_ the WARN_ON_ONCE() would trigger, damage would have happened
+already: host registers would have been made visible to the guest.
 
-Changelog v3:
-- Roll back __cpuid_count part. (Reinette)
-- Update function name to read sparse_masks file.
-- Roll back get_cache_level() changes.
-- Add ksft_print_msg() to contiguous schemata write error handling
-  (Reinette).
+Or did I miss anything?
 
-Changelog v2:
-- Redo the patch message. (Ilpo)
-- Tidy up __cpuid_count calls. (Ilpo)
-- Remove redundant AND in noncont_mask calculations (Ilpo)
-- Fix bit_center offset.
-- Add newline before function return. (Ilpo)
-- Group non-contiguous tests with CAT tests. (Ilpo)
-- Use a helper for reading sparse_masks file. (Ilpo)
-- Make get_cache_level() available in other source files. (Ilpo)
+> +	/* Swap host/guest access registers */
+> +	save_access_regs(vcpu->arch.host_acrs);
+> +	restore_access_regs(vcpu->run->s.regs.acrs);
+> +	vcpu->arch.acrs_loaded = true;
+> +
+>  	acc_mode = mop->op == KVM_S390_MEMOP_LOGICAL_READ ? GACC_FETCH : GACC_STORE;
+>  	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
+>  		r = check_gva_range(vcpu, mop->gaddr, mop->ar, mop->size,
+> @@ -5420,6 +5428,9 @@ static long kvm_s390_vcpu_mem_op(struct kvm_vcpu *vcpu,
+>  		kvm_s390_inject_prog_irq(vcpu, &vcpu->arch.pgm);
+>  
+>  out_free:
+> +	save_access_regs(vcpu->run->s.regs.acrs);
+> +	restore_access_regs(vcpu->arch.host_acrs);
+> +	vcpu->arch.acrs_loaded = false;
 
- tools/testing/selftests/resctrl/cat_test.c    | 89 +++++++++++++++++++
- tools/testing/selftests/resctrl/resctrl.h     |  2 +
- .../testing/selftests/resctrl/resctrl_tests.c |  2 +
- 3 files changed, 93 insertions(+)
-
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 39fc9303b8e8..4cb991be8e31 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -294,6 +294,79 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	return ret;
- }
- 
-+static int noncont_cat_run_test(const struct resctrl_test *test,
-+				const struct user_params *uparams)
-+{
-+	unsigned long full_cache_mask, cont_mask, noncont_mask;
-+	unsigned int eax, ebx, ecx, edx, sparse_masks;
-+	int bit_center, ret;
-+	char schemata[64];
-+
-+	/* Check to compare sparse_masks content to CPUID output. */
-+	ret = resource_info_unsigned_get(test->resource, "sparse_masks", &sparse_masks);
-+	if (ret)
-+		return ret;
-+
-+	if (!strcmp(test->resource, "L3"))
-+		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-+	else if (!strcmp(test->resource, "L2"))
-+		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-+	else
-+		return -EINVAL;
-+
-+	if (sparse_masks != ((ecx >> 3) & 1)) {
-+		ksft_print_msg("CPUID output doesn't match 'sparse_masks' file content!\n");
-+		return 1;
-+	}
-+
-+	/* Write checks initialization. */
-+	ret = get_full_cbm(test->resource, &full_cache_mask);
-+	if (ret < 0)
-+		return ret;
-+	bit_center = count_bits(full_cache_mask) / 2;
-+
-+	/*
-+	 * The bit_center needs to be at least 3 to properly calculate the CBM
-+	 * hole in the noncont_mask. If it's smaller return an error since the
-+	 * cache mask is too short and that shouldn't happen.
-+	 */
-+	if (bit_center < 3)
-+		return -EINVAL;
-+	cont_mask = full_cache_mask >> bit_center;
-+
-+	/* Contiguous mask write check. */
-+	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret) {
-+		ksft_print_msg("Write of contiguous CBM failed\n");
-+		return 1;
-+	}
-+
-+	/*
-+	 * Non-contiguous mask write check. CBM has a 0xf hole approximately in the middle.
-+	 * Output is compared with support information to catch any edge case errors.
-+	 */
-+	noncont_mask = ~(0xfUL << (bit_center - 2)) & full_cache_mask;
-+	snprintf(schemata, sizeof(schemata), "%lx", noncont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret && sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs supported but write of non-contiguous CBM failed\n");
-+	else if (ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported and write of non-contiguous CBM failed as expected\n");
-+	else if (!ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported but write of non-contiguous CBM succeeded\n");
-+
-+	return !ret == !sparse_masks;
-+}
-+
-+static bool noncont_cat_feature_check(const struct resctrl_test *test)
-+{
-+	if (!resctrl_resource_exists(test->resource))
-+		return false;
-+
-+	return resource_info_file_exists(test->resource, "sparse_masks");
-+}
-+
- struct resctrl_test l3_cat_test = {
- 	.name = "L3_CAT",
- 	.group = "CAT",
-@@ -301,3 +374,19 @@ struct resctrl_test l3_cat_test = {
- 	.feature_check = test_resource_feature_check,
- 	.run_test = cat_run_test,
- };
-+
-+struct resctrl_test l3_noncont_cat_test = {
-+	.name = "L3_NONCONT_CAT",
-+	.group = "CAT",
-+	.resource = "L3",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-+
-+struct resctrl_test l2_noncont_cat_test = {
-+	.name = "L2_NONCONT_CAT",
-+	.group = "CAT",
-+	.resource = "L2",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index f434a6543b4f..2051bd135e0d 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -209,5 +209,7 @@ extern struct resctrl_test mbm_test;
- extern struct resctrl_test mba_test;
- extern struct resctrl_test cmt_test;
- extern struct resctrl_test l3_cat_test;
-+extern struct resctrl_test l3_noncont_cat_test;
-+extern struct resctrl_test l2_noncont_cat_test;
- 
- #endif /* RESCTRL_H */
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 3044179ee6e9..f3dc1b9696e7 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -19,6 +19,8 @@ static struct resctrl_test *resctrl_tests[] = {
- 	&mba_test,
- 	&cmt_test,
- 	&l3_cat_test,
-+	&l3_noncont_cat_test,
-+	&l2_noncont_cat_test,
- };
- 
- static int detect_vendor(void)
--- 
-2.43.0
-
+... these two hunks wouldn't be required if the code above would be changed
+like I proposed.
 
