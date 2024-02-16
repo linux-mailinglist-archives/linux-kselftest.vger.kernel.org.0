@@ -1,118 +1,161 @@
-Return-Path: <linux-kselftest+bounces-4835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E8F685755F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 05:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D2BD857612
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 07:36:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6B741F2301A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 04:43:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C42A71F22447
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Feb 2024 06:36:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA8411C85;
-	Fri, 16 Feb 2024 04:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4797614281;
+	Fri, 16 Feb 2024 06:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="QBYbynhN"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tBnKIN5q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C822610949
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Feb 2024 04:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3321E11C85
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Feb 2024 06:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708058620; cv=none; b=MjlOzfQCIB0sv/pyoPw2CQQQ21WN6fJb3Ht70IsCNGHsnpdTfq/OTofhPsfVXWXe6aXf0OQfESgpsIAttB6z0R0f0qsX62x4gy2gnWK1y4Ma60aAEsk3klOR9OaaRoKAt3qXFOItRpUJqh0h18WY4oXpkqeJw0vHsYTTv7Z6K28=
+	t=1708065391; cv=none; b=NIXi29bhxK2HBNb0SlMMxPb+4utWSn8NWtGpFydB2ZIfagtgqx9dwdPMCn0p6n7IGCuKmxfLbpimrChETncTfM+k+bO6vAWAgjNsn57RI4qlwr3WHwFIfr4rUDzt0XDy1xbYHudiHw9O036GZjqBtWkTqVZkwOI9l2ZUH940TaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708058620; c=relaxed/simple;
-	bh=waeuX8RtjIW86KprZNCOqRp/iiUFgtT5YVoezffu7hk=;
-	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=MtkhLd6iZ374okYUBp9zk0y2wRUJcqeST+3Ny03KU3pxpu34UCOpdilT6qEAqKS2dZT1zI6YFv5nvi/Lm1H+scPlpN+HAz48zL44r99jSg6258EwQo+XJfNfh2T6ibwsqQrXausz2N+QHGzu/+LjPWIVVM4o1vkhSX1yJZHKAzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=QBYbynhN; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-686b389b5d6so8157466d6.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Feb 2024 20:43:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1708058617; x=1708663417; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hzH2XjdwcrudKK0By8Y9Nwkfc0y204g7SCh9Xtz36uI=;
-        b=QBYbynhNm8tm4vtdLyIvMt4Z2Zw06EGImgeGy0UxZw8I8v3PH1UoZU15fXXsza7pr3
-         0DiSaO4AgoLH864p9y6EK/IUAzWOkbDxO1zpB0L6ZlRLiTFvRe3/ZAGMR4NT3r2KSvUT
-         DuUYIK3JZ6eYl3E6XGDdycU8Mvi8ClRnqREG/QRHmW/PtTw91XI3RmZPnajFuGUcTFlZ
-         /Z9ogEJgRdSq8/YY1IA/W+QhWM890BLLr1IUSou+ADEvV+tq4Cc8fW600rXRkiRlhQv4
-         uDXs6dgWvdheOELMLWtwzXTmzysYMq5aQT9or6Aq/Ap74n22SX8wBxDlI5DpsM8/4Faq
-         b5Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708058617; x=1708663417;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hzH2XjdwcrudKK0By8Y9Nwkfc0y204g7SCh9Xtz36uI=;
-        b=Vyxlnz/Hu1ghHFBq7udRouheShfcjbP8e41TsFU4T3cG1evqA9esl/R9viMpQmmoEs
-         1DRjF4Uopfik9FGIW1kEDcsw6qvsGGWmDwu62NBrIGPtOP6UxI8Z9n8b+fezW5QMb4wj
-         f8e5OFc+o8uwsHJ0EMsopnYuv8+k7M227ofIjU2l+Dn7RZ+0OeJVuzxaW4eiAPT3Lnd1
-         JsgZc94ZMrbOY0FFa/QzX32JIg6lYgOwQQsMopVEgKKTgGeaQ4VWopdN3cjQeL0EzIIO
-         taEYNYTHpSdvsQXngkkBiRGILufrl0NYv/6zIwr3HE4KQ6CPw2L/m2b/Jbb/ULq1UFTT
-         s7sA==
-X-Forwarded-Encrypted: i=1; AJvYcCX2gkuXUJyLeuItj5gRSilhyOJPEGQ2/jhWuWbqi/w5L3Xeik06Eh4lRuML+TsSLfTR5v4yi8X807GzFV8qQnKAYsYMqQ2ITaN4pFkrSgut
-X-Gm-Message-State: AOJu0YynVI62PI3AOSVllCGClWyV52l8wsE5i2aqd5knzhnUVEAbuaXj
-	blGVD00rBa8kJ4FwjarOSHgWPeyK2AO8miipTTi24SIeHr9M+RlMuLp721lmzA==
-X-Google-Smtp-Source: AGHT+IH4Re2re96Bj4x8lZKg32bzmDSpm8k6SPGJJSdEF1RKaSe7UJnZBT4cDAJ/C8/g+lnnFGrBLg==
-X-Received: by 2002:a05:6214:23ce:b0:68d:129e:f5c1 with SMTP id hr14-20020a05621423ce00b0068d129ef5c1mr4407697qvb.45.1708058617658;
-        Thu, 15 Feb 2024 20:43:37 -0800 (PST)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id og8-20020a056214428800b0068c4b445991sm1367791qvb.67.2024.02.15.20.43.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Feb 2024 20:43:37 -0800 (PST)
-Date: Thu, 15 Feb 2024 23:43:36 -0500
-Message-ID: <2cdfefc8661d0a82c28250fc22a93a47@paul-moore.com>
+	s=arc-20240116; t=1708065391; c=relaxed/simple;
+	bh=8c1US9OauGX6MoQAcSIvGGnaJf+45MAgZiqviPZZqa0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IteYWb4m9FY5f9CE6aHntkWb1+PqGGZYTh2CnfH6HsF6jZ0mW3bW5XRh8r6yYwPnUpib27Lu063gAl73zaGYh1DcJDN+p5xrUr6MzIFFQxYG5rvNgz6bhhsQwRmD3uI99ExRZcf8MK8cPrW+KB1OWTwN3HpqaZyrx3uIQlafGTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tBnKIN5q; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <a72147f5-2b7d-4267-9881-6a645c575838@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1708065387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Sbr4QPVSTcHUa+AezXbiMdDvlOjSGnMLEs0dFzkc8tc=;
+	b=tBnKIN5qT9O82LzS5wQNyKs9/9Jb+2Nc3qdyyuiBtmOVizx2dqWVe5a8J1MYRI23lPllFO
+	j/SZsfaf+P6X/lHOIi+2MCjlLrur4E4RLAT/YArdbMOhYy0W/dVa7NmBcz64oHTYxea4q9
+	/yoOzUZ8yBH9dlUy1WcGM+fUCpQtCk8=
+Date: Thu, 15 Feb 2024 22:36:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=utf-8 
-Content-Disposition: inline 
-Content-Transfer-Encoding: 8bit
-From: Paul Moore <paul@paul-moore.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v10 0/25] security: Move IMA and EVM to the LSM
- infrastructure
-References: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
+MIME-Version: 1.0
+Subject: Re: [PATCH RFC bpf-next v2 02/10] bpf/helpers: introduce sleepable
+ timers
+Content-Language: en-US
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+References: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
+ <20240214-hid-bpf-sleepable-v2-2-5756b054724d@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20240214-hid-bpf-sleepable-v2-2-5756b054724d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Feb 15, 2024 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> 
-> IMA and EVM are not effectively LSMs, especially due to the fact that in
-> the past they could not provide a security blob while there is another LSM
-> active.
-> 
-> That changed in the recent years, the LSM stacking feature now makes it
-> possible to stack together multiple LSMs, and allows them to provide a
-> security blob for most kernel objects. While the LSM stacking feature has
-> some limitations being worked out, it is already suitable to make IMA and
-> EVM as LSMs.
-> 
-> The main purpose of this patch set is to remove IMA and EVM function calls,
-> hardcoded in the LSM infrastructure and other places in the kernel, and to
-> register them as LSM hook implementations, so that those functions are
-> called by the LSM infrastructure like other regular LSMs.
+On 2/14/24 9:18 AM, Benjamin Tissoires wrote:
+> +static void bpf_timer_work_cb(struct work_struct *work)
+> +{
+> +	struct bpf_hrtimer *t = container_of(work, struct bpf_hrtimer, work);
+> +	struct bpf_map *map = t->map;
+> +	void *value = t->value;
+> +	bpf_callback_t callback_fn;
+> +	void *key;
+> +	u32 idx;
+> +
+> +	BTF_TYPE_EMIT(struct bpf_timer);
+> +
+> +	rcu_read_lock();
+> +	callback_fn = rcu_dereference(t->sleepable_cb_fn);
+> +	rcu_read_unlock();
 
-As discussed earlier, I've just merged this into the lsm/dev tree; a big
-thank you to Roberto for working on this and to all helped along the way
-with reviews, testing, etc.  I've wanted to see IMA/EVM integrated as
-proper LSMs for a while and I'm very happy to finally see it happening.
+I took a very brief look at patch 2. One thing that may worth to ask here, the 
+rcu_read_unlock() seems to be done too early. It is protecting the 
+t->sleepable_cb_fn (?), so should it be done after finished using the callback_fn?
 
-Mimi, Roberto, I'm going to hold off on merging anything into the lsm/dev
-tree for a few days in case you decide you would prefer to take these
-patches yourselves.  If I don't hear anything from the two of you, I'll
-plan to send these to Linus during the next merge window.
+A high level design question. The intention of the new 
+bpf_timer_set_sleepable_cb() kfunc is actually to delay work to a workqueue. It 
+is useful to delay work from the bpf_timer_cb and it may also useful to delay 
+work from other bpf running context (e.g. the networking hooks like "tc"). The 
+bpf_timer_set_sleepable_cb() seems to be unnecessary forcing delay-work must be 
+done in a bpf_timer_cb.
 
---
-paul-moore.com
+Have you thought about if it is possible to create a more generic kfunc like 
+bpf_schedule_work() to delay work to a workqueue ?
+
+
+
+> +	if (!callback_fn)
+> +		return;
+> +
+> +	/* FIXME: do we need any locking? */
+> +	if (map->map_type == BPF_MAP_TYPE_ARRAY) {
+> +		struct bpf_array *array = container_of(map, struct bpf_array, map);
+> +
+> +		/* compute the key */
+> +		idx = ((char *)value - array->value) / array->elem_size;
+> +		key = &idx;
+> +	} else { /* hash or lru */
+> +		key = value - round_up(map->key_size, 8);
+> +	}
+> +
+> +	/* FIXME: this crashes the system with
+> +	 * BUG: kernel NULL pointer dereference, address: 000000000000000b
+> +	 */
+> +	/* callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0); */
+> +	/* The verifier checked that return value is zero. */
+> +}
+> +
+
+[ ... ]
+
+> +/* FIXME: use kernel doc style */
+> +/* Description
+> + *	Configure the timer to call *callback_fn* static function in a
+> + *	sleepable context.
+> + * Return
+> + *	0 on success.
+> + *	**-EINVAL** if *timer* was not initialized with bpf_timer_init() earlier.
+> + *	**-EPERM** if *timer* is in a map that doesn't have any user references.
+> + *	The user space should either hold a file descriptor to a map with timers
+> + *	or pin such map in bpffs. When map is unpinned or file descriptor is
+> + *	closed all timers in the map will be cancelled and freed.
+> + */
+> +__bpf_kfunc int bpf_timer_set_sleepable_cb(struct bpf_timer_kern *timer,
+> +					   int (callback_fn)(void *map, int *key, struct bpf_timer *timer))
+> +{
+> +	struct bpf_throw_ctx ctx = {};
+> +
+> +	/* FIXME: definietely not sure this is OK */
+> +	arch_bpf_stack_walk(bpf_stack_walker, &ctx);
+> +	WARN_ON_ONCE(!ctx.aux);
+> +
+> +	if (!ctx.aux)
+> +		return -EINVAL;
+> +
+> +	return __bpf_timer_set_callback(timer, (void *)callback_fn, ctx.aux, true);
+> +}
+> +
+
 
