@@ -1,197 +1,168 @@
-Return-Path: <linux-kselftest+bounces-4902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4838858C9B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 02:10:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90707858CB8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 02:26:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 669581F22010
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 01:10:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 530F62843D4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 01:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDED2219FC;
-	Sat, 17 Feb 2024 01:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4894C171A4;
+	Sat, 17 Feb 2024 01:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EAOa4fi4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RpZe7huA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07DC21112;
-	Sat, 17 Feb 2024 01:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCED11CB8;
+	Sat, 17 Feb 2024 01:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708131963; cv=none; b=uIsQBiCmGM3StojGfCjgMquuorQ82bKQr0lVz1qxjzG/adnq/vZP9n4Hr34epCfwoo4JVz1TccCWg95TJ9upTS8+0GimjvQiBF4zVPWqjRmHWCmpP16eghHO4S63eeSZsFT1XNqabuFlomwsMK0h3oFrlvKO4SsYCyS3txKBneg=
+	t=1708133183; cv=none; b=AIsy8jSevIwT5xbv9ujzVByDc9DMoDUWwXpPDI547mdXRhtq+HviYqKLpRd1OzGqbh/w9XxVmp0uHXmtMgV86PP+X39iN3bquPfKEKdfWlg5XT3A4tyqgu7J7B3uSM7Y8J0geANM9Bdqik5WlEUaf32kV3NtwhrniG0DGqK80Lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708131963; c=relaxed/simple;
-	bh=J3WMalAjgz0rnHbmeT8QD4FpP4dD0hu4Yj+NzkEppQE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UoYrz9lO0oishzan+DgenCRJe2Xzc/3NpM1q4L+THlZXVmhNRSwZIkIi1tP0bBXZaa/5/hpUjvSZr6Ba3R8FG0j6z5Sr6OtfJxz7LqcwSAv9uPvIBA6SZz/uuT+Z39n344FcsoqvawWxbpslx9lOYbhmFAGoxUq0AzXsq7X7yRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EAOa4fi4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE8DC433A6;
-	Sat, 17 Feb 2024 01:06:02 +0000 (UTC)
+	s=arc-20240116; t=1708133183; c=relaxed/simple;
+	bh=+pv+WMhZMZkPDX16J6zCOkciLAEZjmNgH9DrP3Q4HHA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A2dvaPXAZK5tfsP5hJf9Jr2hB6lhdjXdQsYQKM+CfE5e26mGy6fkjIHH8gWZznbWXIgx+mcexUypNKOmEAnxYW1ePh5ao7f+SgrnqbNye6GT8NluToNvYILbQz+k2PSnFsXhfh7u2zMY23PUJe6E3ACCaVVeYOWezbvUgr/PXe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RpZe7huA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F15C433C7;
+	Sat, 17 Feb 2024 01:26:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708131963;
-	bh=J3WMalAjgz0rnHbmeT8QD4FpP4dD0hu4Yj+NzkEppQE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EAOa4fi46Q5W6L0e8l/qgg64ROvD783Ms6lXCLYZpxVg35KK7iz4ZOPqJG55vnPGq
-	 3UeRnJKaA3I3cKg6k8nOeUWz9METclLEOdD2v/vwKpzE0krhoMDcnzcf32fLp60VJM
-	 TsuqeU8cRg0jhmjmGbtWhR66ChQwQ7qIhwKmEc6mNkXVzW0mVxPXvpIFCOvDJP4Ug0
-	 5GQ1D1ccdPvjJlEHgSowFvSe0mQgCZKbefm6SWMC5Ip+4IplYU/9M+WdLtT1NdVNNg
-	 COT3rSgSj0bQbQPCU6igti603mJcNcGUWeyv11PFrXku2BBWdb9jKivpvYiB0ZyZVU
-	 Kkj8/nueN6ZGw==
-From: Stephen Boyd <sboyd@kernel.org>
-To: Rob Herring <robh+dt@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	linux-um@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Frank Rowand <frowand.list@gmail.com>,
-	David Gow <davidgow@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>
-Subject: [PATCH v4 7/7] of: Add KUnit test to confirm DTB is loaded
-Date: Fri, 16 Feb 2024 17:05:56 -0800
-Message-ID: <20240217010557.2381548-8-sboyd@kernel.org>
-X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-In-Reply-To: <20240217010557.2381548-1-sboyd@kernel.org>
-References: <20240217010557.2381548-1-sboyd@kernel.org>
+	s=k20201202; t=1708133182;
+	bh=+pv+WMhZMZkPDX16J6zCOkciLAEZjmNgH9DrP3Q4HHA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RpZe7huA2cnAD7B9rcYku9ooMz9vx+LrZLjyHoEOvEG4lv9aoh8Vxjc9X719KFtgX
+	 yCLRRkypDlXhd0PSlloKxH7IPJp5z60iWIXCZiNRSnc+ItFOVhn5jPVO1sHSE6sd1p
+	 nqJZyJXlPESr/bEBFWS1OoLGtMbW+AxBS6MsW/AK8nXDR4fQhJm2ZyS//pnYagEg5M
+	 jADndLeQVW5jFFiD/h254T3Tz4idqCb7TM9+pW+U3PkS1nftffvsgl87MnILp5t6EX
+	 RsKlEAYSS1ihtJefnN3MdIn8huUsXQH0xIvM3gwgkNSYoSdikaPhAX4WxsEs/zsqYS
+	 Tyqrlqb6Kl1lA==
+Date: Fri, 16 Feb 2024 17:26:21 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: jakub@cloudflare.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org
+Subject: Re: [RFC 0/7] selftests: kselftest_harness: use common result
+ printing helper
+Message-ID: <20240216172621.44df880b@kernel.org>
+In-Reply-To: <20240216163304.2ab0ff7a@kernel.org>
+References: <20240216004122.2004689-1-kuba@kernel.org>
+	<202402161328.02EE71595A@keescook>
+	<20240216163119.7cc38231@kernel.org>
+	<20240216163304.2ab0ff7a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add a KUnit test that confirms a DTB has been loaded, i.e. there is a
-root node, and that the of_have_populated_dt() API works properly. We
-skip the test when CONFIG_OF_EARLY_FLATREE=n because in that case we
-know architecture code hasn't called unflatten_(and_copy_)?device_tree()
-which would populate some sort of root node.
+On Fri, 16 Feb 2024 16:33:04 -0800 Jakub Kicinski wrote:
+> On Fri, 16 Feb 2024 16:31:19 -0800 Jakub Kicinski wrote:
+> > Let's see if I can code this up in 30 min. While I do that can you 
+> > ELI5 what XPASS is for?! We'll never going to use it, right?  
+> 
+> Oh, it's UNexpected pass. Okay. So if we have a case on a list of
+> expected failures and it passes we should throw xpass.
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/of/.kunitconfig |  3 +++
- drivers/of/Kconfig      |  9 +++++++
- drivers/of/Makefile     |  2 ++
- drivers/of/of_test.c    | 57 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 71 insertions(+)
- create mode 100644 drivers/of/.kunitconfig
- create mode 100644 drivers/of/of_test.c
+I got distracted from this distraction :S
+Is this along the lines of what you had in mind?
+Both my series need to be rejigged to change the paradigm 
+but as a PoC on top of them:
 
-diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
-new file mode 100644
-index 000000000000..5a8fee11978c
---- /dev/null
-+++ b/drivers/of/.kunitconfig
-@@ -0,0 +1,3 @@
-+CONFIG_KUNIT=y
-+CONFIG_OF=y
-+CONFIG_OF_KUNIT_TEST=y
-diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-index d738fbad9c36..dd726c7056bf 100644
---- a/drivers/of/Kconfig
-+++ b/drivers/of/Kconfig
-@@ -36,6 +36,15 @@ config OF_UNITTEST
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 202f599c1462..399a200a1160 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -826,6 +826,27 @@ struct __fixture_metadata {
+ 	.prev = &_fixture_global,
+ };
  
- 	  If unsure, say N here. This option is not safe to enable.
- 
-+config OF_KUNIT_TEST
-+	tristate "Devicetree KUnit Test" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option builds KUnit unit tests for device tree infrastructure.
-+
-+	  If unsure, say N here, but this option is safe to enable.
-+
- config OF_ALL_DTBS
- 	bool "Build all Device Tree Blobs"
- 	depends on COMPILE_TEST
-diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-index df305348d1cb..251d33532148 100644
---- a/drivers/of/Makefile
-+++ b/drivers/of/Makefile
-@@ -19,4 +19,6 @@ obj-y	+= kexec.o
- endif
- endif
- 
-+obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
-+
- obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-diff --git a/drivers/of/of_test.c b/drivers/of/of_test.c
-new file mode 100644
-index 000000000000..a9301d293f01
---- /dev/null
-+++ b/drivers/of/of_test.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit tests for OF APIs
-+ */
-+#include <linux/module.h>
-+#include <linux/of.h>
-+
-+#include <kunit/test.h>
-+
-+/*
-+ * Test that the root node "/" can be found by path.
-+ */
-+static void of_dtb_root_node_found_by_path(struct kunit *test)
-+{
-+	struct device_node *np;
-+
-+	np = of_find_node_by_path("/");
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
-+	of_node_put(np);
-+}
-+
-+/*
-+ * Test that the 'of_root' global variable is always populated when DT code is
-+ * enabled. Remove this test once of_root is removed from global access.
-+ */
-+static void of_dtb_root_node_populates_of_root(struct kunit *test)
-+{
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_root);
-+}
-+
-+static struct kunit_case of_dtb_test_cases[] = {
-+	KUNIT_CASE(of_dtb_root_node_found_by_path),
-+	KUNIT_CASE(of_dtb_root_node_populates_of_root),
-+	{}
++struct __test_xfail {
++	struct __fixture_metadata *fixture;
++	struct __fixture_variant_metadata *variant;
++	struct __test_metadata *test;
++	struct __test_xfail *prev, *next;
 +};
 +
-+static int of_dtb_test_init(struct kunit *test)
-+{
-+	if (!IS_ENABLED(CONFIG_OF_EARLY_FLATTREE))
-+		kunit_skip(test, "requires CONFIG_OF_EARLY_FLATTREE");
++#define XFAIL_ADD(fixture_name, variant_name, test_name)    \
++	\
++	static struct __test_xfail \
++		_##fixture_name##_##variant_name##_##test_name##_xfail = \
++		{ .fixture = &_##fixture_name##_fixture_object, \
++		  .variant = &_##fixture_name##_##variant_name##_object, \
++		  .test = &_##fixture_name##_##test_name##_object,	\
++		  };\
++	static void __attribute__((constructor))		\
++		_register_##fixture_name##_##variant_name##_##test_name##_xfail(void) \
++	{ \
++		__register_xfail(&_##fixture_name##_##variant_name##_##test_name##_xfail);	\
++	}
 +
-+	return 0;
+ static struct __fixture_metadata *__fixture_list = &_fixture_global;
+ static int __constructor_order;
+ 
+@@ -840,6 +861,7 @@ static inline void __register_fixture(struct __fixture_metadata *f)
+ struct __fixture_variant_metadata {
+ 	const char *name;
+ 	const void *data;
++	struct __test_xfail *xfails;
+ 	struct __fixture_variant_metadata *prev, *next;
+ };
+ 
+@@ -890,6 +912,11 @@ static inline void __register_test(struct __test_metadata *t)
+ 	__LIST_APPEND(t->fixture->tests, t);
+ }
+ 
++static inline void __register_xfail(struct __test_xfail *xf)
++{
++	__LIST_APPEND(xf->variant->xfails, xf);
 +}
 +
-+/*
-+ * Test suite to confirm a DTB is loaded.
-+ */
-+static struct kunit_suite of_dtb_suite = {
-+	.name = "of_dtb",
-+	.test_cases = of_dtb_test_cases,
-+	.init = of_dtb_test_init,
-+};
+ static inline int __bail(int for_realz, struct __test_metadata *t)
+ {
+ 	/* if this is ASSERT, return immediately. */
+@@ -1139,6 +1166,7 @@ void __run_test(struct __fixture_metadata *f,
+ 		struct __fixture_variant_metadata *variant,
+ 		struct __test_metadata *t)
+ {
++	struct __test_xfail *xfail;
+ 	char test_name[LINE_MAX];
+ 	const char *diagnostic;
+ 
+@@ -1172,6 +1200,14 @@ void __run_test(struct __fixture_metadata *f,
+ 	ksft_print_msg("         %4s  %s\n",
+ 		       __test_passed(t) ? "OK" : "FAIL", test_name);
+ 
++	/* Check if we're expecting this test to fail */
++	for (xfail = variant->xfails; xfail; xfail = xfail->next)
++		if (xfail->test == t)
++			break;
++	if (xfail)
++		t->exit_code = __test_passed(t) ? KSFT_XPASS : KSFT_XFAIL;
 +
-+kunit_test_suites(
-+	&of_dtb_suite,
-+);
-+MODULE_LICENSE("GPL");
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
-
++
+ 	if (t->results->reason[0])
+ 		diagnostic = t->results->reason;
+ 	else if (t->exit_code == KSFT_PASS || t->exit_code == KSFT_FAIL)
+diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools/testing/selftests/net/ip_local_port_range.c
+index d4f789f524e5..242ff7de1b12 100644
+--- a/tools/testing/selftests/net/ip_local_port_range.c
++++ b/tools/testing/selftests/net/ip_local_port_range.c
+@@ -414,6 +414,9 @@ TEST_F(ip_local_port_range, late_bind)
+ 	ASSERT_TRUE(!err) TH_LOG("close failed");
+ }
+ 
++XFAIL_ADD(ip_local_port_range, ip4_stcp, late_bind);
++XFAIL_ADD(ip_local_port_range, ip6_stcp, late_bind);
++
+ TEST_F(ip_local_port_range, get_port_range)
+ {
+ 	__u16 lo, hi;
 
