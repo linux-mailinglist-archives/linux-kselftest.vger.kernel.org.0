@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-4899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74B44858C91
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 02:09:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 057E7858C95
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 02:09:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15A231F21F16
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 01:09:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5EA3283A62
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 01:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0536208BE;
-	Sat, 17 Feb 2024 01:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383AC200C4;
+	Sat, 17 Feb 2024 01:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OLeOAuh9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mLu/fetq"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE0C2032C;
-	Sat, 17 Feb 2024 01:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A5620DC4;
+	Sat, 17 Feb 2024 01:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708131961; cv=none; b=mvrC1NehippbRrF7VFHsY/a/fyhWPCC3SZUo6SdshYr0rBqMYrF2bwHL7iLFWoETjZRnZkIbegDD1QMdIv38O17udZRhI4sDVR7uky43FdAtGAcMuWuZ9nLfwgo3tK91o7GQLxyBF/aRS8KPB4pT2omKshqsa02aI1K4RlA8wCs=
+	t=1708131963; cv=none; b=dOLlFoESSts2UCMHKLQiZhmY22N4DHzqqcwsIJE4ZTnpQ7NMhLzpWmIuh0LyYXidL5QAKicPrtxiOSZa1zZbEH69wZPnEGejkUfK2rBiGSZqTujCf2cr7WnVrcdalLb5pBSXA+3u7EescOIMHODRy8COY2Ye+D8Yl47HTFj7S+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708131961; c=relaxed/simple;
-	bh=cR6lBuTsNe2p1GQlv5k9m41XDe+JPSu/qcoX4YFfeKQ=;
+	s=arc-20240116; t=1708131963; c=relaxed/simple;
+	bh=1HWmL/t+ml480s8rBnTxQKeWVgi/0Mqu3CbJKyMEIU4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QIef8BijBt+j81klcq42PA4IhK1boAlOiAXb1kwVFvtnORPO9KCj01mMVHFSUGvnaS6xJKfW2gq0MX7hQeMgfp3zCtz18NzQoTFqvQtPV07yLr3YxbfV8pQyCFie1QNRLK/afpK/IgFVSbYpc0Wt/L5b+PghWUOw8GnGk6ibWCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OLeOAuh9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5C5C433C7;
-	Sat, 17 Feb 2024 01:06:00 +0000 (UTC)
+	 MIME-Version; b=W+y5L5PyH+VYeBMySDzAvoDfhvcv/XurRPybcTHWByhSoTEFIJAI3R8QZ3+SQyLBBtqEZQC/QlbKVOt5wECkAFUmLqFZXbCnZAvV3FklFDFzwROa1f80xj6v8GsHYBPMNWNr5JaSbn3vvE+ea0zDZeRWv27vdxIYyrYwxzIEE80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mLu/fetq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68291C433B1;
+	Sat, 17 Feb 2024 01:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708131961;
-	bh=cR6lBuTsNe2p1GQlv5k9m41XDe+JPSu/qcoX4YFfeKQ=;
+	s=k20201202; t=1708131962;
+	bh=1HWmL/t+ml480s8rBnTxQKeWVgi/0Mqu3CbJKyMEIU4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OLeOAuh9JcnWjMkP28AX6Wosr7CaT8IJDTe++OAPlHmV45oUdqI2baYVKvuONQLRM
-	 REHahxweGolZgJoq4cIcJM609d280RUEZ6QOylnu7b84K0JrmRW4grtFnLrDKr7DHm
-	 od2AR/PNbdj2WdEHoiw6v8AipspdwQHYwREzjurg2ModO/udqB4MN4PvqStRsntvhO
-	 wln6USBTGOZIWd5lhk/LBgFW7h/6nkbg9ak53wpgvk1GtkpGxA34gf8jlkqNrtppj+
-	 JGioc/KE+Kekqcl6YX6Z2urk1MRDsmJJzTSr56lOvTWTsRk1loY1rrmLedb/9jx56h
-	 wnp6VBWh8/MAQ==
+	b=mLu/fetqM+cb3tFtOHS4DOL5HzdsL62p8HCA7st+6zWovNRgJDBAgQnu6PXC1+c9G
+	 HFZmLUhjJAsUY3SYQrxRX0DJ51MCTu7WUqyLaRDBYT0p7U3hhqasKo3LofYMLnFUmS
+	 wyRODHMZMXZEjB75NprcfvwHNV/GncU03JL5Uh+3ni6KVVnTXs0sqEPcJRHZZ5VUhZ
+	 KDwZy/JMZPFcz3N3YG14+nEDcPwAloywz+fsCh01BgyNBj0GdXEtQLT9hc25xBrUQB
+	 JooWdwLPYjQZABiqq2n0BCu5ZwpDE4wcww/s7bAxn5H8dLXJcIiin859FkSNqXFBMd
+	 ex/bdl98FQEGg==
 From: Stephen Boyd <sboyd@kernel.org>
 To: Rob Herring <robh+dt@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
@@ -51,16 +51,12 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Frank Rowand <frowand.list@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Saurabh Sengar <ssengar@linux.microsoft.com>
-Subject: [PATCH v4 4/7] x86/of: Unconditionally call unflatten_and_copy_device_tree()
-Date: Fri, 16 Feb 2024 17:05:53 -0800
-Message-ID: <20240217010557.2381548-5-sboyd@kernel.org>
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH v4 5/7] arm64: Unconditionally call unflatten_device_tree()
+Date: Fri, 16 Feb 2024 17:05:54 -0800
+Message-ID: <20240217010557.2381548-6-sboyd@kernel.org>
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
 In-Reply-To: <20240217010557.2381548-1-sboyd@kernel.org>
 References: <20240217010557.2381548-1-sboyd@kernel.org>
@@ -74,63 +70,37 @@ Content-Transfer-Encoding: 8bit
 
 Call this function unconditionally so that we can populate an empty DTB
 on platforms that don't boot with a firmware provided or builtin DTB.
-There's no harm in calling unflatten_device_tree() unconditionally here.
-If there isn't a non-NULL 'initial_boot_params' pointer then
-unflatten_device_tree() returns early.
+When ACPI is in use, unflatten_device_tree() ignores the
+'initial_boot_params' pointer so the live DT on those systems won't be
+whatever that's pointing to. Similarly, when kexec copies the DT data
+the previous kernel to the new one on ACPI systems,
+of_kexec_alloc_and_setup_fdt() will ignore the live DT (the empty root
+one) and copy the 'initial_boot_params' data.
 
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: <x86@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Tested-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: <linux-arm-kernel@lists.infradead.org>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- arch/x86/kernel/devicetree.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ arch/arm64/kernel/setup.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index afd09924094e..650752d112a6 100644
---- a/arch/x86/kernel/devicetree.c
-+++ b/arch/x86/kernel/devicetree.c
-@@ -283,22 +283,24 @@ void __init x86_flattree_get_config(void)
- 	u32 size, map_len;
- 	void *dt;
+diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+index 42c690bb2d60..0d210720d47d 100644
+--- a/arch/arm64/kernel/setup.c
++++ b/arch/arm64/kernel/setup.c
+@@ -351,8 +351,7 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+ 	/* Parse the ACPI tables for possible boot-time configuration */
+ 	acpi_boot_table_init();
  
--	if (!initial_dtb)
--		return;
-+	if (initial_dtb) {
-+		map_len = max(PAGE_SIZE - (initial_dtb & ~PAGE_MASK), (u64)128);
+-	if (acpi_disabled)
+-		unflatten_device_tree();
++	unflatten_device_tree();
  
--	map_len = max(PAGE_SIZE - (initial_dtb & ~PAGE_MASK), (u64)128);
-+		dt = early_memremap(initial_dtb, map_len);
-+		size = fdt_totalsize(dt);
-+		if (map_len < size) {
-+			early_memunmap(dt, map_len);
-+			dt = early_memremap(initial_dtb, size);
-+			map_len = size;
-+		}
- 
--	dt = early_memremap(initial_dtb, map_len);
--	size = fdt_totalsize(dt);
--	if (map_len < size) {
--		early_memunmap(dt, map_len);
--		dt = early_memremap(initial_dtb, size);
--		map_len = size;
-+		early_init_dt_verify(dt);
- 	}
- 
--	early_init_dt_verify(dt);
- 	unflatten_and_copy_device_tree();
--	early_memunmap(dt, map_len);
-+
-+	if (initial_dtb)
-+		early_memunmap(dt, map_len);
- }
- #endif
+ 	bootmem_init();
  
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
