@@ -1,53 +1,59 @@
-Return-Path: <linux-kselftest+bounces-4908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D26F858D70
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 07:08:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 882D5858DD5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 09:02:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BF91283BD2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 06:08:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17D93B20F04
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Feb 2024 08:02:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 360D61CA9F;
-	Sat, 17 Feb 2024 06:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DC761CD1E;
+	Sat, 17 Feb 2024 08:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="gfBvQkxs"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yGwTrS+4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5472C149DE0;
-	Sat, 17 Feb 2024 06:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BF21CD17;
+	Sat, 17 Feb 2024 08:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708150127; cv=none; b=NjT2u+RUAuomquCe8UaYKd+9RfuQxoCnHLsk1kjdKr8iOavGJDUHjSUDvqOqg4zbZvCTmyVBzs+fzw172kj1iE2epwc2skyHUN8REi2JVaywkI+DEhulCZzmvRQMzSJAhHD1xGVzBPdbHLoHEnAiEz0fdSyj61yxYp6jgs5T4qI=
+	t=1708156917; cv=none; b=kXEiwOBz4Ezumyh7ewo094ooCLvKLAwo/6zdj8/HEbV8oBmc6+0nCxPVVHbMRidZsz/jlvYkFfL07IB6oPqp5sbFQNQ1Sk4ttVnHg8qROTEgIjsRIZiwbIPz0L0QDT40wDTTb/MbvElbPWq16BVnDWM180mWRhGe5/BX+H420gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708150127; c=relaxed/simple;
-	bh=JJk+VcCM1E2a2uLJVejf1CeHDGP1bTGEGRIKuBC9RMc=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hbtNyMIyYIqbJIQQnzDBAeMkj4AQ6lx8KqAAhFs9plQkik10iZ9blKOEKsyQYyasfWw8FmMezESsrR1K/wBkji5P4Y3fghQoD+jMjmX6+qnvrCKCoZCKs9cjL7O6fJnjABp0h+gWDzKO02lBhYP0lV3ugVAL6CZHSyA5s1hZvaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=gfBvQkxs; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-	id C4E4E207FD41; Fri, 16 Feb 2024 22:08:43 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C4E4E207FD41
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1708150123;
-	bh=NveygydDoL1I2tmP3079U8gSOyukDLicRi2/sGv+Fsk=;
-	h=Date:From:To:Subject:From;
-	b=gfBvQkxsgvrgxvx8ei0YKYLbPX0oTpuG0burQvCToL5cZSLkV07frfUcXgTQgv1oF
-	 MNIa9jyUEvhxrey7hcAan+vv1VahEWdFY3d8aw5t4gA2lB4B9YgTW/Y9AjnjZyb67J
-	 g3GPUMUBsWzrORMWhXrsbLTxrE3is3npS94RZbFs=
-Date: Fri, 16 Feb 2024 22:08:43 -0800
-From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To: Frank Rowand <frowand.list@gmail.com>, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev, robh+dt@kernel.org,
-	linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/7] of: Create of_root if no dtb provided by firmware
-Message-ID: <20240217060843.GA16460@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	s=arc-20240116; t=1708156917; c=relaxed/simple;
+	bh=SRXyCMay6d+7i35hw5/TogppVGxQdPA5nDzwp/LcC7k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c9hmm5grwppH1wHQ6LjQaYsafhKvGz0jh2ibLrUEnep3RuwRx+v1TI15dF7Uto4ee1QSKJEWF2v3X6uo6imlTnb4h8O7M7xAkeNbZH+OXqEYcuVr0I2nUlJG8R0RhXCHbVgCj0dMCeewB4eXlI2aOYOrWXN067PqbB80xxtDQlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yGwTrS+4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C337FC433C7;
+	Sat, 17 Feb 2024 08:01:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708156916;
+	bh=SRXyCMay6d+7i35hw5/TogppVGxQdPA5nDzwp/LcC7k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yGwTrS+4zIt/K5bthZ4z/bBKZNyv2lv6fvDWY/u6kvjgW+W6t+9LNhbLei6SKO6Fr
+	 wp2VLzJnxU9i5yXVMWPXOa+uV8sVFu8KMZ/0ABSwtM5Zk3jpAMePNcBP809iRM6eJ2
+	 kNBQDqfLffoAQfq7KqJjvTgvtQluOWtskxszXCKU=
+Date: Sat, 17 Feb 2024 09:01:53 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: Elizabeth Figura <zfigura@codeweavers.com>,
+	Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Arkadiusz Hiler <ahiler@codeweavers.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/31] NT synchronization primitive driver
+Message-ID: <2024021756-bakeshop-wolf-f975@gregkh>
+References: <5ae668e3-e275-40b0-af3c-6a459e3a0b87@p183>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,219 +62,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <5ae668e3-e275-40b0-af3c-6a459e3a0b87@p183>
 
-On Fri, Feb 16, 2024 at 05:05:51PM -0800, Frank Rowand wrote:
-> When enabling CONFIG_OF on a platform where 'of_root' is not populated
-> by firmware, we end up without a root node. In order to apply overlays
-> and create subnodes of the root node, we need one. Create this root node
-> by unflattening an empty builtin dtb.
+On Fri, Feb 16, 2024 at 07:31:12PM +0300, Alexey Dobriyan wrote:
+> > drivers/misc/ntsync.c                         | 1146 ++++++++++++++
 > 
-> If firmware provides a flattened device tree (FDT) then the FDT is
-> unflattened via setup_arch(). Otherwise, the call to
-> unflatten(_and_copy)?_device_tree() will create an empty root node.
+> Assuming this doesn't go into futex(2) or some other existing code...
 > 
-> We make of_have_populated_dt() return true only if the DTB was loaded by
-> firmware so that existing callers don't change behavior after this
-> patch. The call in the of platform code is removed because it prevents
-> overlays from creating platform devices when the empty root node is
-> used.
-> 
-> [sboyd@kernel.org: Update of_have_populated_dt() to treat this empty dtb
-> as not populated. Drop setup_of() initcall]
-> 
-> Signed-off-by: Frank Rowand <frowand.list@gmail.com>
-> Link: https://lore.kernel.org/r/20230317053415.2254616-2-frowand.list@gmail.com
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  drivers/of/Kconfig        |  5 ++---
->  drivers/of/Makefile       |  2 +-
->  drivers/of/empty_root.dts |  6 ++++++
->  drivers/of/fdt.c          | 32 +++++++++++++++++++++++++++++++-
->  drivers/of/platform.c     |  3 ---
->  include/linux/of.h        | 25 +++++++++++++++----------
->  6 files changed, 55 insertions(+), 18 deletions(-)
->  create mode 100644 drivers/of/empty_root.dts
-> 
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index da9826accb1b..d738fbad9c36 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -14,9 +14,8 @@ if OF
->  
->  config OF_UNITTEST
->  	bool "Device Tree runtime unit tests"
-> -	depends on !SPARC
-> +	depends on OF_EARLY_FLATTREE
->  	select IRQ_DOMAIN
-> -	select OF_EARLY_FLATTREE
->  	select OF_RESOLVE
->  	help
->  	  This option builds in test cases for the device tree infrastructure
-> @@ -54,7 +53,7 @@ config OF_FLATTREE
->  	select CRC32
->  
->  config OF_EARLY_FLATTREE
-> -	bool
-> +	def_bool OF && !(SPARC || ALPHA || HEXAGON || M68K || PARISC || S390)
->  	select DMA_DECLARE_COHERENT if HAS_DMA && HAS_IOMEM
->  	select OF_FLATTREE
->  
-> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> index eff624854575..df305348d1cb 100644
-> --- a/drivers/of/Makefile
-> +++ b/drivers/of/Makefile
-> @@ -2,7 +2,7 @@
->  obj-y = base.o cpu.o device.o module.o platform.o property.o
->  obj-$(CONFIG_OF_KOBJ) += kobj.o
->  obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
-> -obj-$(CONFIG_OF_FLATTREE) += fdt.o
-> +obj-$(CONFIG_OF_FLATTREE) += fdt.o empty_root.dtb.o
->  obj-$(CONFIG_OF_EARLY_FLATTREE) += fdt_address.o
->  obj-$(CONFIG_OF_PROMTREE) += pdt.o
->  obj-$(CONFIG_OF_ADDRESS)  += address.o
-> diff --git a/drivers/of/empty_root.dts b/drivers/of/empty_root.dts
-> new file mode 100644
-> index 000000000000..cf9e97a60f48
-> --- /dev/null
-> +++ b/drivers/of/empty_root.dts
-> @@ -0,0 +1,6 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/dts-v1/;
-> +
-> +/ {
-> +
-> +};
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index dfeba8b8ce94..e5a385285149 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -8,6 +8,7 @@
->  
->  #define pr_fmt(fmt)	"OF: fdt: " fmt
->  
-> +#include <linux/acpi.h>
->  #include <linux/crash_dump.h>
->  #include <linux/crc32.h>
->  #include <linux/kernel.h>
-> @@ -32,6 +33,13 @@
->  
->  #include "of_private.h"
->  
-> +/*
-> + * __dtb_empty_root_begin[] and __dtb_empty_root_end[] magically created by
-> + * cmd_dt_S_dtb in scripts/Makefile.lib
-> + */
-> +extern uint8_t __dtb_empty_root_begin[];
-> +extern uint8_t __dtb_empty_root_end[];
-> +
->  /*
->   * of_fdt_limit_memory - limit the number of regions in the /memory node
->   * @limit: maximum entries
-> @@ -1343,7 +1351,29 @@ static void *__init copy_device_tree(void *fdt)
->   */
->  void __init unflatten_device_tree(void)
->  {
-> -	__unflatten_device_tree(initial_boot_params, NULL, &of_root,
-> +	void *fdt = initial_boot_params;
-> +
-> +	/* Don't use the bootloader provided DTB if ACPI is enabled */
-> +	if (!acpi_disabled)
-> +		fdt = NULL;
-> +
-> +	/*
-> +	 * Populate an empty root node when ACPI is enabled or bootloader
-> +	 * doesn't provide one.
-> +	 */
-> +	if (!fdt) {
-> +		fdt = (void *) __dtb_empty_root_begin;
-> +		/* fdt_totalsize() will be used for copy size */
-> +		if (fdt_totalsize(fdt) >
-> +		    __dtb_empty_root_end - __dtb_empty_root_begin) {
-> +			pr_err("invalid size in dtb_empty_root\n");
-> +			return;
-> +		}
-> +		of_fdt_crc32 = crc32_be(~0, fdt, fdt_totalsize(fdt));
-> +		fdt = copy_device_tree(fdt);
-> +	}
-> +
-> +	__unflatten_device_tree(fdt, NULL, &of_root,
->  				early_init_dt_alloc_memory_arch, false);
->  
->  	/* Get pointer to "/chosen" and "/aliases" nodes for use everywhere */
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index b7708a06dc78..39c0ceee3e95 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -510,9 +510,6 @@ static int __init of_platform_default_populate_init(void)
->  
->  	device_links_supplier_sync_state_pause();
->  
-> -	if (!of_have_populated_dt())
-> -		return -ENODEV;
-> -
->  	if (IS_ENABLED(CONFIG_PPC)) {
->  		struct device_node *boot_display = NULL;
->  		struct platform_device *dev;
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index 331e05918f11..168357486260 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -180,11 +180,6 @@ static inline bool is_of_node(const struct fwnode_handle *fwnode)
->  			&__of_fwnode_handle_node->fwnode : NULL;	\
->  	})
->  
-> -static inline bool of_have_populated_dt(void)
-> -{
-> -	return of_root != NULL;
-> -}
-> -
->  static inline bool of_node_is_root(const struct device_node *node)
->  {
->  	return node && (node->parent == NULL);
-> @@ -557,11 +552,6 @@ static inline struct device_node *of_find_node_with_property(
->  
->  #define of_fwnode_handle(node) NULL
->  
-> -static inline bool of_have_populated_dt(void)
-> -{
-> -	return false;
-> -}
-> -
->  static inline struct device_node *of_get_compatible_child(const struct device_node *parent,
->  					const char *compatible)
->  {
-> @@ -1645,6 +1635,21 @@ static inline bool of_device_is_system_power_controller(const struct device_node
->  	return of_property_read_bool(np, "system-power-controller");
->  }
->  
-> +/**
-> + * of_have_populated_dt() - Has DT been populated by bootloader
-> + *
-> + * Return: True if a DTB has been populated by the bootloader and it isn't the
-> + * empty builtin one. False otherwise.
-> + */
-> +static inline bool of_have_populated_dt(void)
-> +{
-> +#ifdef CONFIG_OF
-> +	return of_property_present(of_root, "compatible");
+> Can you start putting all of this into top-level "windows" directory?
+> I suspect there will be more Windows stuff in the future.
 
-This adds the strict check for compatible which makes compatible
-to be mandatory for root nodes. So far, DeviceTree without compatible
-property in root nodes can work. Do we want to make this documented
-somewhere ?
+There will?  Like what?
 
-- Saurabh
+> So those who don't care about Windows can turn off just one config option
+> (CONFIG_WINDOWS) and be done with it.
 
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
->  /*
->   * Overlay support
->   */
-> -- 
-> 2.34.1
+This should all be configured under one option anyway, so I don't see
+the need.
+
+> Name it "Linux Subsystem for Windows" for 146% better memes.
+
+Fun with marketing!  :)
+
+greg k-h
 
