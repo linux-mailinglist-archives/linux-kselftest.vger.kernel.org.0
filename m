@@ -1,496 +1,161 @@
-Return-Path: <linux-kselftest+bounces-4984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8751C85AFD0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 00:41:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EA3785AFE8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 00:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABE3A1C22567
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 23:41:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C81D282E27
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 23:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FC55677D;
-	Mon, 19 Feb 2024 23:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7675677D;
+	Mon, 19 Feb 2024 23:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bDjK1He+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRtigiwa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DD85674F
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 23:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA07E5478B;
+	Mon, 19 Feb 2024 23:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708386093; cv=none; b=p3n3eu/9DXXj1yoS7WbX5En4wEsF204novCgZg1fxB738dgJRNqi1ELEgyof1ETvi/fHskXo7SeokGIPJUQbqa2FYdGtW95iuA1PFSYRh4qw/s7FMAa8F/kASKUQj67Jn6p45tg6fes7JNhZzsOTvSJ+rLi3K1l51077PZfpUYg=
+	t=1708386872; cv=none; b=mFXoXSolDPDRvUUUkJrmUhGbMeh7wKdFwGtzatDdcUPMLDzqsVc+gfWZUIdhNhmw25sV265MlO1P5A4/PozYGxmTAPrObEoJf154+ap/ellNtoVAKiKw4cv7PIeOQn7yo5QN4PzkXjuPfEh7OVA5XHtIOPgzLCrI03NKsx0m6DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708386093; c=relaxed/simple;
-	bh=CgLaPcrJ8UuZe99Nzs2aIaX8FJubBiNyxJ8PhVcKrRg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=szGKAr6uFnjXIcLJD3wqaT1/Ozir+Ge3Mn+OaML45JV2HPTeoarD86adBsGvSq3JBfyWCICEGFOQHW8zMDURCxuQJNQ0gRtBpATS/NDsh8rzEvq0GIkv+X/d3OCsF93NmjGb8kY8Y6+OLk4z6pet7aRFdhEvTd1sTgA3BSvFias=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bDjK1He+; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d918008b99so39771445ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 15:41:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708386091; x=1708990891; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Rg+sHDVqNfA4kI4Nj60RArjG0KvQeKNF7H5zDOdEbI=;
-        b=bDjK1He+KO88fRq0Mid8V33aWi7vOCPepyXIb15wSPKnICL6OpDzoRk4PHFXEl734O
-         mZY+w/estbASSgnDPU04WgmNY2UxfX8eL6iZKjOBj+IRHNHO1SXHgwboagZc5yb6e6xj
-         DvpDTo7MDK4pyykwKaJc5c5+pbx14V9h8s2Oo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708386091; x=1708990891;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Rg+sHDVqNfA4kI4Nj60RArjG0KvQeKNF7H5zDOdEbI=;
-        b=vqhh+q2uYFdkmwWtsyN2Z4IFlDhfSY/6ki6nhR+gu50LX46TyLVVqXBHQ+wJxV94ak
-         P8h7wXhMmbw7K2oowIi+yy4WkhoyyxuRIErZvsXz+SiEAIyN0sE52Ry/oqrNARGfY02d
-         Xt+8z2YgFJd1fI5CbvWPqwrY+aA/C8FKDGRZsyKe/13tXrByWXVoe7t+tmvu6rRma1S4
-         cZ9WqrHubG746fTfHHJdqDIXLZevQ4mFNBIJoGFjYyD8BpwRQ3J50hczttpE98kNa2yS
-         eklrOUnI7AQnuqmwP00Yxhxi24l8gIw3E51pII1yOR5ZlA7D/zQkJnApKaK9st0DBee3
-         ThJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUtFcu4X46OgAX8RUGYJPpBJQHulEY+HJE35bBzaG7IW9n2K0Ir3m0Fu2AcfjAUw0TEbnbeVqSY7EBLKvXb5Arv5H0BtALID2kfMV76YwF6
-X-Gm-Message-State: AOJu0YyOSZq5GKR8CDqN/nLMLjg7wn+P6m80odtxZ+ZpOvCETjloQsOU
-	qjlJ18nDm77wIY8RwRMQPz7RxneUC4RkY1Y2vchaZjEEZzhUQGe908UEK71ozw==
-X-Google-Smtp-Source: AGHT+IG29y4RAikXI7aD3pJIVsLER3vVWeoNlnW5QiT2orL4eZUUzDNo+r8jdpDoyghFqbHmNLtzsA==
-X-Received: by 2002:a17:90b:3847:b0:299:8265:c79f with SMTP id nl7-20020a17090b384700b002998265c79fmr2952947pjb.46.1708386090683;
-        Mon, 19 Feb 2024 15:41:30 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y3-20020a17090a8b0300b0029942a73eaesm5932876pjn.9.2024.02.19.15.41.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Feb 2024 15:41:30 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Kees Cook <keescook@chromium.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Haowen Bai <baihaowen@meizu.com>,
-	bpf@vger.kernel.org,
+	s=arc-20240116; t=1708386872; c=relaxed/simple;
+	bh=QeDHhaJqxzviod2zL7H9Evl4rD2LSxF3WcsodiKIcWs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=WKvJHf/LL9fPaa3mTN9qUDd3ASYxFJ8jsRRR44AnFf8jJXmSU7mw9IKaP36/XaEDh8X8flOkH+W4Vi+/lnAM/i6DgItPScxaqkHvJ4WfWtgD3oL7hrWMV0RuZHptIyg4fStIWSD44yrAzyDxugwTe6Bc6LMho5yadRd+8FPeYls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRtigiwa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63129C433C7;
+	Mon, 19 Feb 2024 23:54:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708386872;
+	bh=QeDHhaJqxzviod2zL7H9Evl4rD2LSxF3WcsodiKIcWs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fRtigiwaCwGFdaQcibAEmCQkQnntlgLSz5ACEFdQskrM+XOuwO6dsXIPtw4OKsdzp
+	 biB1sBj2hFBNraQhapP+OTQF0VP0S50aXTlmdszB69+t+4L6EqRpd4L5hw2wUXPUtx
+	 75hZANqklyyNYzqObWSCCi4Y/F1+Vqbo+hV3ueKfifDEymUxj2x6SxzLmUJUmdt566
+	 GHGwUJaHPCQl5Zhs5enV00GQTOTiGRPbDPcqcR8Ninhmb2HVZPLz9dTQ5EU6oRc9k7
+	 UYjhSDcxVMfw7S8a3wwL+oju1wObBiyma4KxwArOKREXOMb5o3K9voqALknNYReLsf
+	 bCuX6r4g0+S4A==
+From: SeongJae Park <sj@kernel.org>
+To: "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Joanne Koong <joannelkoong@gmail.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Kui-Feng Lee <kuifeng@meta.com>,
-	Anton Protopopov <aspsk@isovalent.com>,
 	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v3] bpf: Replace bpf_lpm_trie_key 0-length array with flexible array
-Date: Mon, 19 Feb 2024 15:41:28 -0800
-Message-Id: <20240219234121.make.373-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	stable@vger.kernel.org,
+	Vijaikumar_Kanagarajan@mentor.com,
+	brauner@kernel.org,
+	jlayton@kernel.org,
+	jack@suse.cz
+Subject: Re: [PATCH] selftests/mqueue: Set timeout to 100 seconds
+Date: Mon, 19 Feb 2024 15:54:30 -0800
+Message-Id: <20240219235430.161792-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <ee8b746b-aee9-43d8-949b-62017fe0bca0@amazon.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=15498; i=keescook@chromium.org;
- h=from:subject:message-id; bh=CgLaPcrJ8UuZe99Nzs2aIaX8FJubBiNyxJ8PhVcKrRg=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBl0+cnVLiiscNcGtW0kAJ8XWS4mrotWqvh8nkqf
- 3SJCfr0e0eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZdPnJwAKCRCJcvTf3G3A
- JtG0D/9Ff+bMKTxinX38h/9HJOMX109fkG9aQu+AB0L6YKRnc4Aappjx0Fzc8BPZi59huXUITMj
- FQ91R/UjMWGlfAPIaXn5IUpnIP61WDKORd+ChI/SHT+KfIgnDmwlwM8CIk/VasOlOVmlUWU4lAb
- 4aykezGfvom5Y5likHMWMgQ/xO1CTgO9NnJ2BoDO8iL3mVNR/gM4vxN5F0edLXFNvCD9vx9TCxZ
- R9RyieFQooMOKk4soLAnB30BqK50/mX0fO4mwPGE1PpqDbzd8g7uQcsROfuFlw3B7U6RRHckzWN
- 81K34dv0VERKeUXNej9N3wPvUS3OOmotEVMEBLGDAGqfucR9zUTaETR1LPRrZ5BGQT3UlfuFof8
- m0vyeX1TmZEadsB7QcVaf3gAr7qlNQeiHmHAqy+/17q/xoep9voduRtDLYeV6EREDpo2uV49aqz
- du917pAXMTSjoW1yFDs2Ibrg4wJJx/rzVOZIYg/xAsHAe9cYvlygUIzg4jhM4W3gBf/3YDYJ/Xm
- VAufXJnk7skz2x1Km9Uir9Ou+VdWtRvC4vwETp802dx4976mO1Wv8EWvfYg+m4/dzf5uo8PYYuh
- W1AYaJTioTyF2Q7rWj0y3jtpj9wWuuQ2oIiMPzB/CIMSiK4fkXJ9udPtRVfLqDY364tVYHqUL8q
- x2GEcD VJ201hXEg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-flexible array. Found with GCC 13:
+On Mon, 19 Feb 2024 14:01:06 +0000 "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com> wrote:
 
-../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-  207 |                                        *(__be16 *)&key->data[i]);
-      |                                                   ^~~~~~~~~~~~~
-../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-  102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-      |                                                      ^
-../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-   97 | #define be16_to_cpu __be16_to_cpu
-      |                     ^~~~~~~~~~~~~
-../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-  206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-^
-      |                            ^~~~~~~~~~~
-In file included from ../include/linux/bpf.h:7:
-../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-   82 |         __u8    data[0];        /* Arbitrary size */
-      |                 ^~~~
+> On 17/02/2024 00:31, SeongJae Park wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > 
+> > 
+> > 
+> > On Fri, 16 Feb 2024 16:01:20 -0800 Kees Cook <keescook@chromium.org> wrote:
+> > 
+> >> On Wed, Feb 14, 2024 at 05:13:09PM -0800, SeongJae Park wrote:
+> >>> A gentle reminder.
+> >>>
+> >>>
+> >>> Thanks,
+> >>> SJ
+> >>>
+> >>> On Fri, 9 Feb 2024 09:42:43 -0800 SeongJae Park <sj@kernel.org> wrote:
+> >>>
+> >>>> On Fri, 9 Feb 2024 10:30:38 +0000 "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com> wrote:
+> >>>>
+> >>>>> On 08/02/2024 21:29, SeongJae Park wrote:
+> >>>>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>> While mq_perf_tests runs with the default kselftest timeout limit, which
+> >>>>>> is 45 seconds, the test takes about 60 seconds to complete on i3.metal
+> >>>>>> AWS instances.  Hence, the test always times out.  Increase the timeout
+> >>>>>> to 100 seconds.
+> >>>>>>
+> >>>>>> Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
+> >>>>>> Cc: <stable@vger.kernel.org> # 5.4.x
+> >>>>>> Signed-off-by: SeongJae Park <sj@kernel.org>
+> >>>>>> ---
+> >>>>>>    tools/testing/selftests/mqueue/setting | 1 +
+> >>>>>>    1 file changed, 1 insertion(+)
+> >>>>>>    create mode 100644 tools/testing/selftests/mqueue/setting
+> >>>>>>
+> >>>>>> diff --git a/tools/testing/selftests/mqueue/setting b/tools/testing/selftests/mqueue/setting
+> >>>>>> new file mode 100644
+> >>>>>> index 000000000000..54dc12287839
+> >>>>>> --- /dev/null
+> >>>>>> +++ b/tools/testing/selftests/mqueue/setting
+> >>>>>> @@ -0,0 +1 @@
+> >>>>>> +timeout=100
+> >>>>>> --
+> >>>>>> 2.39.2
+> >>>>>>
+> >>>>>>
+> >>>>>
+> >>>>> Added Vijai Kumar to CC
+> >>>>>
+> >>>>> This looks similar to [PATCH] kselftest: mqueue: increase timeout
+> >>>>> https://lore.kernel.org/lkml/20220622085911.2292509-1-Vijaikumar_Kanagarajan@mentor.com/T/#r12820aede6bba015b70ae33323e29ae27d5b69c7
+> >>>>> which was increasing the timeout to 180 however it's not clear why this
+> >>>>> hasn't been merged yet.
+> >>
+> >> Should it be 100 or 180?
+> Both options may work, I am more inclined to have this as 180 seconds by 
+> giving more time for the test to finish, this can be reduced later to 
+> 100 or something else if we start hearing complains about the new timeout.
 
-And found at run-time under CONFIG_FORTIFY_SOURCE:
+Thank you for the opinion.  I will send v2 with 180 seconds timeout.
 
-  UBSAN: array-index-out-of-bounds in kernel/bpf/lpm_trie.c:218:49
-  index 0 is out of range for type '__u8 [*]'
 
-Changing struct bpf_lpm_trie_key is difficult since has been used by
-userspace. For example, in Cilium:
+Thanks,
+SJ
 
-	struct egress_gw_policy_key {
-	        struct bpf_lpm_trie_key lpm_key;
-	        __u32 saddr;
-	        __u32 daddr;
-	};
-
-While direct references to the "data" member haven't been found, there
-are static initializers what include the final member. For example,
-the "{}" here:
-
-        struct egress_gw_policy_key in_key = {
-                .lpm_key = { 32 + 24, {} },
-                .saddr   = CLIENT_IP,
-                .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
-        };
-
-To avoid the build time and run time warnings seen with a 0-sized
-trailing array for struct bpf_lpm_trie_key, introduce a new struct
-that correctly uses a flexible array for the trailing bytes,
-struct bpf_lpm_trie_key_u8. As part of this, include the "header"
-portion (which is just the "prefixlen" member), so it can be used
-by anything building a bpf_lpr_trie_key that has trailing members that
-aren't a u8 flexible array (like the self-test[1]), which is named
-struct bpf_lpm_trie_key_hdr.
-
-Adjust the kernel code to use struct bpf_lpm_trie_key_u8 through-out,
-and for the selftest to use struct bpf_lpm_trie_key_hdr. Add a comment
-to the UAPI header directing folks to the two new options.
-
-Link: https://lore.kernel.org/all/202206281009.4332AA33@keescook/ [1]
-Reported-by: Mark Rutland <mark.rutland@arm.com>
-Closes: https://paste.debian.net/hidden/ca500597/
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v3- create a new pair of structs -- leave old struct alone
-v2- https://lore.kernel.org/lkml/20240216235536.it.234-kees@kernel.org/
-v1- https://lore.kernel.org/lkml/20230204183241.never.481-kees@kernel.org/
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- Documentation/bpf/map_lpm_trie.rst            |  2 +-
- include/uapi/linux/bpf.h                      | 14 ++++++++++++-
- kernel/bpf/lpm_trie.c                         | 20 +++++++++----------
- samples/bpf/map_perf_test_user.c              |  2 +-
- samples/bpf/xdp_router_ipv4_user.c            |  2 +-
- tools/include/uapi/linux/bpf.h                | 14 ++++++++++++-
- .../selftests/bpf/progs/map_ptr_kern.c        |  2 +-
- tools/testing/selftests/bpf/test_lpm_map.c    | 18 ++++++++---------
- 8 files changed, 49 insertions(+), 25 deletions(-)
-
-diff --git a/Documentation/bpf/map_lpm_trie.rst b/Documentation/bpf/map_lpm_trie.rst
-index 74d64a30f500..f9cd579496c9 100644
---- a/Documentation/bpf/map_lpm_trie.rst
-+++ b/Documentation/bpf/map_lpm_trie.rst
-@@ -17,7 +17,7 @@ significant byte.
- 
- LPM tries may be created with a maximum prefix length that is a multiple
- of 8, in the range from 8 to 2048. The key used for lookup and update
--operations is a ``struct bpf_lpm_trie_key``, extended by
-+operations is a ``struct bpf_lpm_trie_key_u8``, extended by
- ``max_prefixlen/8`` bytes.
- 
- - For IPv4 addresses the data length is 4 bytes
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 754e68ca8744..c5a46d12076e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -77,12 +77,24 @@ struct bpf_insn {
- 	__s32	imm;		/* signed immediate constant */
- };
- 
--/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-+/* Deprecated: use struct bpf_lpm_trie_key_u8 (when the "data" member is needed for
-+ * byte access) or struct bpf_lpm_trie_key_hdr (when using an alternative type for
-+ * the trailing flexible array member) instead.
-+ */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
- 	__u8	data[0];	/* Arbitrary size */
- };
- 
-+/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry, with trailing byte array. */
-+struct bpf_lpm_trie_key_u8 {
-+	__struct_group(bpf_lpm_trie_key_hdr, hdr, /* no attrs */,
-+		/* up to 32 for AF_INET, 128 for AF_INET6 */
-+		__u32	prefixlen;
-+	);
-+	__u8	data[];		/* Arbitrary size */
-+};
-+
- struct bpf_cgroup_storage_key {
- 	__u64	cgroup_inode_id;	/* cgroup inode id */
- 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index b32be680da6c..050fe1ebf0f7 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -164,13 +164,13 @@ static inline int extract_bit(const u8 *data, size_t index)
-  */
- static size_t longest_prefix_match(const struct lpm_trie *trie,
- 				   const struct lpm_trie_node *node,
--				   const struct bpf_lpm_trie_key *key)
-+				   const struct bpf_lpm_trie_key_u8 *key)
- {
- 	u32 limit = min(node->prefixlen, key->prefixlen);
- 	u32 prefixlen = 0, i = 0;
- 
- 	BUILD_BUG_ON(offsetof(struct lpm_trie_node, data) % sizeof(u32));
--	BUILD_BUG_ON(offsetof(struct bpf_lpm_trie_key, data) % sizeof(u32));
-+	BUILD_BUG_ON(offsetof(struct bpf_lpm_trie_key_u8, data) % sizeof(u32));
- 
- #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && defined(CONFIG_64BIT)
- 
-@@ -229,7 +229,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- {
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	struct lpm_trie_node *node, *found = NULL;
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 
- 	if (key->prefixlen > trie->max_prefixlen)
- 		return NULL;
-@@ -309,7 +309,7 @@ static long trie_update_elem(struct bpf_map *map,
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	struct lpm_trie_node *node, *im_node = NULL, *new_node = NULL;
- 	struct lpm_trie_node __rcu **slot;
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 	unsigned long irq_flags;
- 	unsigned int next_bit;
- 	size_t matchlen = 0;
-@@ -437,7 +437,7 @@ static long trie_update_elem(struct bpf_map *map,
- static long trie_delete_elem(struct bpf_map *map, void *_key)
- {
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 	struct lpm_trie_node __rcu **trim, **trim2;
- 	struct lpm_trie_node *node, *parent;
- 	unsigned long irq_flags;
-@@ -536,7 +536,7 @@ static long trie_delete_elem(struct bpf_map *map, void *_key)
- 				 sizeof(struct lpm_trie_node))
- #define LPM_VAL_SIZE_MIN	1
- 
--#define LPM_KEY_SIZE(X)		(sizeof(struct bpf_lpm_trie_key) + (X))
-+#define LPM_KEY_SIZE(X)		(sizeof(struct bpf_lpm_trie_key_u8) + (X))
- #define LPM_KEY_SIZE_MAX	LPM_KEY_SIZE(LPM_DATA_SIZE_MAX)
- #define LPM_KEY_SIZE_MIN	LPM_KEY_SIZE(LPM_DATA_SIZE_MIN)
- 
-@@ -565,7 +565,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
- 	/* copy mandatory map attributes */
- 	bpf_map_init_from_attr(&trie->map, attr);
- 	trie->data_size = attr->key_size -
--			  offsetof(struct bpf_lpm_trie_key, data);
-+			  offsetof(struct bpf_lpm_trie_key_u8, data);
- 	trie->max_prefixlen = trie->data_size * 8;
- 
- 	spin_lock_init(&trie->lock);
-@@ -616,7 +616,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
- {
- 	struct lpm_trie_node *node, *next_node = NULL, *parent, *search_root;
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
--	struct bpf_lpm_trie_key *key = _key, *next_key = _next_key;
-+	struct bpf_lpm_trie_key_u8 *key = _key, *next_key = _next_key;
- 	struct lpm_trie_node **node_stack = NULL;
- 	int err = 0, stack_ptr = -1;
- 	unsigned int next_bit;
-@@ -703,7 +703,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
- 	}
- do_copy:
- 	next_key->prefixlen = next_node->prefixlen;
--	memcpy((void *)next_key + offsetof(struct bpf_lpm_trie_key, data),
-+	memcpy((void *)next_key + offsetof(struct bpf_lpm_trie_key_u8, data),
- 	       next_node->data, trie->data_size);
- free_stack:
- 	kfree(node_stack);
-@@ -715,7 +715,7 @@ static int trie_check_btf(const struct bpf_map *map,
- 			  const struct btf_type *key_type,
- 			  const struct btf_type *value_type)
- {
--	/* Keys must have struct bpf_lpm_trie_key embedded. */
-+	/* Keys must have struct bpf_lpm_trie_key_u8 embedded. */
- 	return BTF_INFO_KIND(key_type->info) != BTF_KIND_STRUCT ?
- 	       -EINVAL : 0;
- }
-diff --git a/samples/bpf/map_perf_test_user.c b/samples/bpf/map_perf_test_user.c
-index d2fbcf963cdf..07ff471ed6ae 100644
---- a/samples/bpf/map_perf_test_user.c
-+++ b/samples/bpf/map_perf_test_user.c
-@@ -370,7 +370,7 @@ static void run_perf_test(int tasks)
- 
- static void fill_lpm_trie(void)
- {
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	unsigned long value = 0;
- 	unsigned int i;
- 	int r;
-diff --git a/samples/bpf/xdp_router_ipv4_user.c b/samples/bpf/xdp_router_ipv4_user.c
-index 9d41db09c480..266fdd0b025d 100644
---- a/samples/bpf/xdp_router_ipv4_user.c
-+++ b/samples/bpf/xdp_router_ipv4_user.c
-@@ -91,7 +91,7 @@ static int recv_msg(struct sockaddr_nl sock_addr, int sock)
- static void read_route(struct nlmsghdr *nh, int nll)
- {
- 	char dsts[24], gws[24], ifs[16], dsts_len[24], metrics[24];
--	struct bpf_lpm_trie_key *prefix_key;
-+	struct bpf_lpm_trie_key_u8 *prefix_key;
- 	struct rtattr *rt_attr;
- 	struct rtmsg *rt_msg;
- 	int rtm_family;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 7f24d898efbb..c55244bf1a20 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -77,12 +77,24 @@ struct bpf_insn {
- 	__s32	imm;		/* signed immediate constant */
- };
- 
--/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-+/* Deprecated: use struct bpf_lpm_trie_key_u8 (when the "data" member is needed for
-+ * byte access) or struct bpf_lpm_trie_key_hdr (when using an alternative type for
-+ * the trailing flexible array member) instead.
-+ */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
- 	__u8	data[0];	/* Arbitrary size */
- };
- 
-+/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry, with trailing byte array. */
-+struct bpf_lpm_trie_key_u8 {
-+	__struct_group(bpf_lpm_trie_key_hdr, hdr, /* no attrs */,
-+		/* up to 32 for AF_INET, 128 for AF_INET6 */
-+		__u32	prefixlen;
-+	);
-+	__u8	data[];		/* Arbitrary size */
-+};
-+
- struct bpf_cgroup_storage_key {
- 	__u64	cgroup_inode_id;	/* cgroup inode id */
- 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index 3325da17ec81..efaf622c28dd 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -316,7 +316,7 @@ struct lpm_trie {
- } __attribute__((preserve_access_index));
- 
- struct lpm_key {
--	struct bpf_lpm_trie_key trie_key;
-+	struct bpf_lpm_trie_key_hdr trie_key;
- 	__u32 data;
- };
- 
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
-index c028d621c744..d98c72dc563e 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/test_lpm_map.c
-@@ -211,7 +211,7 @@ static void test_lpm_map(int keysize)
- 	volatile size_t n_matches, n_matches_after_delete;
- 	size_t i, j, n_nodes, n_lookups;
- 	struct tlpm_node *t, *list = NULL;
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	uint8_t *data, *value;
- 	int r, map;
- 
-@@ -331,8 +331,8 @@ static void test_lpm_map(int keysize)
- static void test_lpm_ipaddr(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key_ipv4;
--	struct bpf_lpm_trie_key *key_ipv6;
-+	struct bpf_lpm_trie_key_u8 *key_ipv4;
-+	struct bpf_lpm_trie_key_u8 *key_ipv6;
- 	size_t key_size_ipv4;
- 	size_t key_size_ipv6;
- 	int map_fd_ipv4;
-@@ -423,7 +423,7 @@ static void test_lpm_ipaddr(void)
- static void test_lpm_delete(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	size_t key_size;
- 	int map_fd;
- 	__u64 value;
-@@ -532,7 +532,7 @@ static void test_lpm_delete(void)
- static void test_lpm_get_next_key(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key_p, *next_key_p;
-+	struct bpf_lpm_trie_key_u8 *key_p, *next_key_p;
- 	size_t key_size;
- 	__u32 value = 0;
- 	int map_fd;
-@@ -693,9 +693,9 @@ static void *lpm_test_command(void *arg)
- {
- 	int i, j, ret, iter, key_size;
- 	struct lpm_mt_test_info *info = arg;
--	struct bpf_lpm_trie_key *key_p;
-+	struct bpf_lpm_trie_key_u8 *key_p;
- 
--	key_size = sizeof(struct bpf_lpm_trie_key) + sizeof(__u32);
-+	key_size = sizeof(*key_p) + sizeof(__u32);
- 	key_p = alloca(key_size);
- 	for (iter = 0; iter < info->iter; iter++)
- 		for (i = 0; i < MAX_TEST_KEYS; i++) {
-@@ -717,7 +717,7 @@ static void *lpm_test_command(void *arg)
- 				ret = bpf_map_lookup_elem(info->map_fd, key_p, &value);
- 				assert(ret == 0 || errno == ENOENT);
- 			} else {
--				struct bpf_lpm_trie_key *next_key_p = alloca(key_size);
-+				struct bpf_lpm_trie_key_u8 *next_key_p = alloca(key_size);
- 				ret = bpf_map_get_next_key(info->map_fd, key_p, next_key_p);
- 				assert(ret == 0 || errno == ENOENT || errno == ENOMEM);
- 			}
-@@ -752,7 +752,7 @@ static void test_lpm_multi_thread(void)
- 
- 	/* create a trie */
- 	value_size = sizeof(__u32);
--	key_size = sizeof(struct bpf_lpm_trie_key) + value_size;
-+	key_size = sizeof(struct bpf_lpm_trie_key_hdr) + value_size;
- 	map_fd = bpf_map_create(BPF_MAP_TYPE_LPM_TRIE, NULL, key_size, value_size, 100, &opts);
- 
- 	/* create 4 threads to test update, delete, lookup and get_next_key */
--- 
-2.34.1
-
+> 
+> Hazem
+> > 
+> > As mentioned on the previous mail[1], either values are good to me :)
+> > 
+> > [1] https://lore.kernel.org/r/20240215011309.73168-1-sj@kernel.org
+> > 
+> >> Either way:
+> >>
+> >> Reviewed-by: Kees Cook <keescook@chromium.org>
+> > 
+> > Thank you!
+> > 
+> > 
+> > Thanks,
+> > SJ
+> > 
+> >>
+> >> --
+> >> Kees Cook
+> >>
+> 
+> 
 
