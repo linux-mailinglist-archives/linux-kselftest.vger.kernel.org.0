@@ -1,165 +1,197 @@
-Return-Path: <linux-kselftest+bounces-4930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D285285A53D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 15:01:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CEEE85A59B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 15:16:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 111671C21584
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 14:01:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 822211C21AED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 14:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F1036AFF;
-	Mon, 19 Feb 2024 14:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9C2374D9;
+	Mon, 19 Feb 2024 14:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Jcr4shji"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="omZdShmf";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="omZdShmf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699FF36136;
-	Mon, 19 Feb 2024 14:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5054437155;
+	Mon, 19 Feb 2024 14:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708351275; cv=none; b=DtkRQV/7VbWjqa1pbyBBTm9ug3d2iWoI7vRRdg588ys8yF1zRyEEfMVr7/z2qZINPXgd8fGQZ3GIJ5jCz+2fxJgqFQunGwVGrwccKjAIfCnCuik5lBcBeZOgYTqNXBnfCOkmlzX9Cgxsabjt8U3TwQjKjOVmJfGhiO4wJ0++MCA=
+	t=1708352174; cv=none; b=HoFolU7A4Q7OZsAHeKFJmDng2GawqVbVkC2RW7ctTSR6XNgLyFUxCrPMijHKb1XX9W32GzN5sIg0WPjdQNBBtV3Qhhe092lFX+NT3EH9unlBCvv3F0mz9x9aDB1A3Ht2p1AMemkt4hHobXQ2ctaDQ3wDpNghbOi1OPfPAVL/xFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708351275; c=relaxed/simple;
-	bh=ikzcV1URla2GgnY93GwPS2bZ/HFf3YKKWO17DlHhvWg=;
-	h=Subject:Message-ID:Date:MIME-Version:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Dsca40eu3gZhArzZEy1UWyFEr1Z+N19C6VA+rKu+HWEBmdR7wOuI1kPsDI3kpwtGQw8z3mM3xp9fv3/QrUSRj2J2spIsTRxusHJ+YEb2O19ev1og9zie6u1HsLewBz3jqWqmsfqQSbNuVuwMlz3LZYPLzticiSeDn1YFW2Mp2KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Jcr4shji; arc=none smtp.client-ip=52.119.213.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1708351274; x=1739887274;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=W7gVIamMoMUxGHZcPfOMCqRDKpC788b33nadGhFmXO8=;
-  b=Jcr4shjiy6STwx3+Y74P3FZ78VW6hSiz98kFe9s6f5D7O8VIqhN944n4
-   i9FOxc2I8khzf4e6EU6nm18Igrszai1QWoSO1IlMIYmO4kIAQiOYh7bRh
-   fM2T00HeOj4yAi/P8nmbPa7SotPw+ATfGTZkfQGsMnqQKIEyZruPF2IlJ
-   o=;
-X-IronPort-AV: E=Sophos;i="6.06,170,1705363200"; 
-   d="scan'208";a="638842739"
-Subject: Re: [PATCH] selftests/mqueue: Set timeout to 100 seconds
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2024 14:01:11 +0000
-Received: from EX19MTAEUA001.ant.amazon.com [10.0.17.79:5692]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.35.15:2525] with esmtp (Farcaster)
- id c94ac43a-ba01-480a-b5f1-b87cfce8f244; Mon, 19 Feb 2024 14:01:09 +0000 (UTC)
-X-Farcaster-Flow-ID: c94ac43a-ba01-480a-b5f1-b87cfce8f244
-Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUA001.ant.amazon.com (10.252.50.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 19 Feb 2024 14:01:08 +0000
-Received: from [192.168.11.164] (10.106.83.24) by
- EX19D018EUA004.ant.amazon.com (10.252.50.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 19 Feb 2024 14:01:08 +0000
-Message-ID: <ee8b746b-aee9-43d8-949b-62017fe0bca0@amazon.com>
-Date: Mon, 19 Feb 2024 14:01:06 +0000
+	s=arc-20240116; t=1708352174; c=relaxed/simple;
+	bh=9/YVrENp5xo6smDoABPBOIy/2FWLNBFj5gykPLh6BAo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=K9PmpVohfxel3sZZJOoj3FbHDG3cLatq7GvLplTCbTfH6FPI7aNnE0e1bv5jx117PbuLbRu5JHjZUayEfQRnhHfGaMVJIfT2cMy/LEC/K96X7HgNs0QF46XHTyrWemgqRuX5+h9oNWcvWO3kQujketaDZNmYfVP+eNBY2othwWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=omZdShmf; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=omZdShmf; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 3A66B1F800;
+	Mon, 19 Feb 2024 14:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1708352170; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RGi2qxr4MOWI0h/oxoHKd3Sk73dK3PGq7ebzjeQ1VJk=;
+	b=omZdShmfA+3Rc+7JR/eARuSL3Qn6Se6zyJIvOgveHB8j+Dt5Qbgw+MaYSAROjzCe9Zekwy
+	5jxK6ORrFOPk6CihITapc4gUKHY2re4OijPGDnqb3zghEJqbjvf8qfXrGKn78qD9SB5U26
+	WzXs0UQeNK0Qtbbg5/xAP05Q476XqLI=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1708352170; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RGi2qxr4MOWI0h/oxoHKd3Sk73dK3PGq7ebzjeQ1VJk=;
+	b=omZdShmfA+3Rc+7JR/eARuSL3Qn6Se6zyJIvOgveHB8j+Dt5Qbgw+MaYSAROjzCe9Zekwy
+	5jxK6ORrFOPk6CihITapc4gUKHY2re4OijPGDnqb3zghEJqbjvf8qfXrGKn78qD9SB5U26
+	WzXs0UQeNK0Qtbbg5/xAP05Q476XqLI=
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 7DAA613585;
+	Mon, 19 Feb 2024 14:16:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id 1hEUEali02X9EAAAn2gu4w
+	(envelope-from <mpdesouza@suse.com>); Mon, 19 Feb 2024 14:16:09 +0000
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Shresth Prasad <shresthprasad7@gmail.com>
+Cc: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org,
+	live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH]     Fix implicit cast warning in test_klp_state.c
+Date: Mon, 19 Feb 2024 11:16:03 -0300
+Message-ID: <20240219141606.6711-1-mpdesouza@suse.com>
+X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20240216225126.454999-1-shresthprasad7@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: SeongJae Park <sj@kernel.org>, Kees Cook <keescook@chromium.org>
-CC: <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-	<Vijaikumar_Kanagarajan@mentor.com>, <brauner@kernel.org>,
-	<jlayton@kernel.org>, <jack@suse.cz>
-References: <20240217003142.86297-1-sj@kernel.org>
-From: "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com>
-In-Reply-To: <20240217003142.86297-1-sj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D001EUB003.ant.amazon.com (10.252.51.38) To
- EX19D018EUA004.ant.amazon.com (10.252.50.85)
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=omZdShmf
+X-Spamd-Result: default: False [4.66 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 R_MISSING_CHARSET(2.50)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 DKIM_TRACE(0.00)[suse.com:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_TWELVE(0.00)[12];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim];
+	 FREEMAIL_TO(0.00)[gmail.com];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.03)[56.20%]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Score: 4.66
+X-Rspamd-Queue-Id: 3A66B1F800
+X-Spam-Level: ****
+X-Spam-Flag: NO
+X-Spamd-Bar: ++++
 
-On 17/02/2024 00:31, SeongJae Park wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> 
-> 
-> 
-> On Fri, 16 Feb 2024 16:01:20 -0800 Kees Cook <keescook@chromium.org> wrote:
-> 
->> On Wed, Feb 14, 2024 at 05:13:09PM -0800, SeongJae Park wrote:
->>> A gentle reminder.
->>>
->>>
->>> Thanks,
->>> SJ
->>>
->>> On Fri, 9 Feb 2024 09:42:43 -0800 SeongJae Park <sj@kernel.org> wrote:
->>>
->>>> On Fri, 9 Feb 2024 10:30:38 +0000 "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com> wrote:
->>>>
->>>>> On 08/02/2024 21:29, SeongJae Park wrote:
->>>>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->>>>>>
->>>>>>
->>>>>>
->>>>>> While mq_perf_tests runs with the default kselftest timeout limit, which
->>>>>> is 45 seconds, the test takes about 60 seconds to complete on i3.metal
->>>>>> AWS instances.  Hence, the test always times out.  Increase the timeout
->>>>>> to 100 seconds.
->>>>>>
->>>>>> Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
->>>>>> Cc: <stable@vger.kernel.org> # 5.4.x
->>>>>> Signed-off-by: SeongJae Park <sj@kernel.org>
->>>>>> ---
->>>>>>    tools/testing/selftests/mqueue/setting | 1 +
->>>>>>    1 file changed, 1 insertion(+)
->>>>>>    create mode 100644 tools/testing/selftests/mqueue/setting
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/mqueue/setting b/tools/testing/selftests/mqueue/setting
->>>>>> new file mode 100644
->>>>>> index 000000000000..54dc12287839
->>>>>> --- /dev/null
->>>>>> +++ b/tools/testing/selftests/mqueue/setting
->>>>>> @@ -0,0 +1 @@
->>>>>> +timeout=100
->>>>>> --
->>>>>> 2.39.2
->>>>>>
->>>>>>
->>>>>
->>>>> Added Vijai Kumar to CC
->>>>>
->>>>> This looks similar to [PATCH] kselftest: mqueue: increase timeout
->>>>> https://lore.kernel.org/lkml/20220622085911.2292509-1-Vijaikumar_Kanagarajan@mentor.com/T/#r12820aede6bba015b70ae33323e29ae27d5b69c7
->>>>> which was increasing the timeout to 180 however it's not clear why this
->>>>> hasn't been merged yet.
->>
->> Should it be 100 or 180?
-Both options may work, I am more inclined to have this as 180 seconds by 
-giving more time for the test to finish, this can be reduced later to 
-100 or something else if we start hearing complains about the new timeout.
+On Sat, 17 Feb 2024 04:21:26 +0530 Shresth Prasad <shresthprasad7@gmail.com> wrote:
 
-Hazem
+>     The function `klp_get_state` returns an `int` value, but the variable
+>     `loglevel_state` is of type `struct klp_state *` and thus does an
+>     implicit cast. Explicitly casting these values fixes:
 > 
-> As mentioned on the previous mail[1], either values are good to me :)
+>             - warning: assignment to \u2018struct klp_state *\u2019 from \u2018int\u2019
+> 	    makes pointer from integer without a cast [-Wint-conversion]
 > 
-> [1] https://lore.kernel.org/r/20240215011309.73168-1-sj@kernel.org
-> 
->> Either way:
->>
->> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-> Thank you!
-> 
-> 
-> Thanks,
-> SJ
-> 
->>
->> --
->> Kees Cook
->>
+>     on lines 38, 55, 68 and 80 of test_klp_state.c
 
+I was unable to find where you saw the klp_get_state returning int. I tried
+searching at the current master of live-patching repo[1], on linux-next. Can
+you point where do you saw it? For me, klp_get_state return a pointer to klp_state.
+
+Thanks,
+  Marcos
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git/tree/kernel/livepatch/state.c
+
+> 
+> Signed-off-by: Shresth Prasad <shresthprasad7@gmail.com>
+> ---
+>  .../selftests/livepatch/test_modules/test_klp_state.c     | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
+> index 57a4253acb01..ae6b1ca15fc0 100644
+> --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
+> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
+> @@ -35,7 +35,7 @@ static int allocate_loglevel_state(void)
+>  {
+>  	struct klp_state *loglevel_state;
+>  
+> -	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+> +	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+>  	if (!loglevel_state)
+>  		return -EINVAL;
+>  
+> @@ -52,7 +52,7 @@ static void fix_console_loglevel(void)
+>  {
+>  	struct klp_state *loglevel_state;
+>  
+> -	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+> +	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+>  	if (!loglevel_state)
+>  		return;
+>  
+> @@ -65,7 +65,7 @@ static void restore_console_loglevel(void)
+>  {
+>  	struct klp_state *loglevel_state;
+>  
+> -	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+> +	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+>  	if (!loglevel_state)
+>  		return;
+>  
+> @@ -77,7 +77,7 @@ static void free_loglevel_state(void)
+>  {
+>  	struct klp_state *loglevel_state;
+>  
+> -	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+> +	loglevel_state = (struct klp_state *)klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
+>  	if (!loglevel_state)
+>  		return;
+>  
+> -- 
+> 2.43.1
 
