@@ -1,177 +1,184 @@
-Return-Path: <linux-kselftest+bounces-4939-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D345785ABB8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 20:02:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7064285AC64
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 20:51:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B1E61F22BD5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 19:02:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26FF22852B9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 19:51:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3144878D;
-	Mon, 19 Feb 2024 19:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45FA56755;
+	Mon, 19 Feb 2024 19:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="V2ozuC5w"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BsRtgLJs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03004482F8;
-	Mon, 19 Feb 2024 19:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24FD5644E
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 19:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708369341; cv=none; b=PtqBMu5l4xmSTktS6BrTblMnYdGz4qt7MBHgWy0/Ceq+paveDYfUh0TCaoQxzyPMbopBYBiKjkly4A94geno2PYGeEEEYwH3s9iXWSNLYyQeOKCpYMwgdTmBB3KTXavFNh/AVlXluQj3rPFTl+qqPVYhJ4CmTEuap37CnEpBafA=
+	t=1708372120; cv=none; b=fvilNia+vE57Ux/hZmwvs0cxT2KpiI7JL0cZodeT7dPogr4y8snrEwkJXMC0ewbbdET0cVgbEQEWwyniNMwrD+NpijTIU6ndnFSNni9wq9Qn/EZCtqp1jAG2fvNdKFoDEcyrglhs9luKl3ItQ764GbJH3Ac+eOxEhtT6wASkPWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708369341; c=relaxed/simple;
-	bh=8uwAxkMAA6MNFUqB6ZfPPfcwy23Ru+f/+1DQ3k3LdEQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qyRwMPWREqL4gxlb4i2hGeAbdaWjZDPFdWjWWfdQ9tDKn0tWLtYcBpavm3ZB1pyiEmxvvP0qKkCX1lescOryUAfktHOLWsWyBO1SJpZNxd2qzSLHsDgqUT/JCyM1hNiLyNrtvnB4IEei6shRrMJ/X4nCF9rDq2rMGdHpZjmiXLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=V2ozuC5w; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=OswHFruBK+/42s5rUgGTBUDrZT8BKSSXWo8vUY+w8EE=; b=V2ozuC5whirZjX5c3zIZcKzXOy
-	ochgpA2PZNhXbxdMP7TdNWqORglH4mwKiegmekbtii4Net8AcfYh93PrccpamdE55szcbfIbrTTtV
-	Pm0oTIbBwAbQSiwtYlzKW49z/0QKzXYy+UYC0esfGQWx7/TXCaasq1cFhgYTfUCGPG3FK2PREsghX
-	Ngeb52VM/5Q/rUnGN7uZemohAFeS2FG4OaLqU7CCIUqfttD6Kf0IlbTlpwVTr+ZGUF2k0ztMTBSev
-	hrsOJYIwei+UEu5clcO9CNPbBnunIpm+glQuk8I5Th5gJo9SvB4o0GCzkwDf8UPaw1lm6dOkgN6zo
-	L/jb1B4Q==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
-	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1rc8tz-002yXh-36;
-	Mon, 19 Feb 2024 13:02:08 -0600
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, wine-devel@winehq.org,
- =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
- Wolfram Sang <wsa@kernel.org>, Arkadiusz Hiler <ahiler@codeweavers.com>,
- Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 02/31] ntsync: Introduce NTSYNC_IOC_CREATE_SEM.
-Date: Mon, 19 Feb 2024 13:02:07 -0600
-Message-ID: <3547727.iIbC2pHGDl@camazotz>
-In-Reply-To: <2024021707-sloppy-hurt-df0c@gregkh>
-References:
- <20240214233645.9273-1-zfigura@codeweavers.com>
- <13452408.uLZWGnKmhe@camazotz> <2024021707-sloppy-hurt-df0c@gregkh>
+	s=arc-20240116; t=1708372120; c=relaxed/simple;
+	bh=mTwnrWFRVkMmk/C370Z2PfPl2ZzMt3ZnRg8rjXdj5M8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sH7rofAwYaUiUVEmovBBy2QVtCiPO5dxivttvdUH//wVT04H3/axNJ0f0lo8jSaESc8nsFheFeDHsAArPpFgrV4HQn5ng+sHtze1S2GSf6EgWaEe5nyXJDtKhnqnP5678aAsL1jk4hjt9wKoXp6GwwB6v8nWrqnSAVHXLpQh2Eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BsRtgLJs; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so3479139a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 11:48:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708372118; x=1708976918; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DOFMy5aAASBYxwEuY26DwtWuV8GmVWpkF2wskH7Kuzg=;
+        b=BsRtgLJsQMCLQ16wev0X7ok0toZRzp0KMmRlhfMFBLuARhuBWGzIl1ddg0B+jTFuxw
+         bX3pq1/yM9RamwfpYN0PVgdPZ5W3X9xlsiGPQq+t6dM9+Y120t+uk2oRPHPq6ZzQA8lY
+         JskCbXmzlBznsWKd0WPivfLmfJ0+Gtj7FMo7w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708372118; x=1708976918;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DOFMy5aAASBYxwEuY26DwtWuV8GmVWpkF2wskH7Kuzg=;
+        b=kiQVjJA1ERFYiy08fZugZjwq6M18fUsZxDI9uFZefdw9E63zfXVYQmJqx6xG1fAasW
+         F9uKxg0H9gEtb4rxqv2Cvdx6xS2eIhPAwnyNzUoRhI0/HLuJU1uHjNfSXQ6pCk1L22wK
+         M/wUx+jltB/XBpBkxqXgRhRIHyX+UNHiMYyD7f+FQ/CWF8TCso8xiSQftRSo94IhXiM3
+         HYcjT0TW7hpLUyCmLL7zY0CprEMRrGpAqPK8GcvGcBkxLGYPSQws+s3h+pWKDhKy3iHK
+         fZTGES/39ABDZw+8wQoVLdt1G2YIuNW2NlK/4BLltSnIhHAZURi8SDmYWvHVzw6H5BUh
+         9Jig==
+X-Forwarded-Encrypted: i=1; AJvYcCUbk5YgbJ8rEnZvk9noF7a/sqYeUHE1feGMT2aR34rjg7K6w9oUVIisgYPHcLfMZiUhZTql52ioR9j4Biili7jDNU7OSyxWlj/Sj8PI+SFB
+X-Gm-Message-State: AOJu0Yyk7AMaZqsyeng6GwgNv8efiWNjEvqTyzXIdh2iBMN9lUskySH9
+	jfGBNq/G05yR63Qg1chU4TUd8TXZoFZPgTyE836piEQBOqqPsf9mRNJjcx4hsg==
+X-Google-Smtp-Source: AGHT+IGPuriO6pO2eohejQtmG+dYzeSLnoSt3wKlrVseB6ozhIMP/LdUZ29p1wXTlJey7+1f6pPqsA==
+X-Received: by 2002:a17:903:298b:b0:1db:be69:d02d with SMTP id lm11-20020a170903298b00b001dbbe69d02dmr11902487plb.32.1708372118058;
+        Mon, 19 Feb 2024 11:48:38 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a16-20020a170902b59000b001d8dd636705sm4716588pls.190.2024.02.19.11.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Feb 2024 11:48:37 -0800 (PST)
+Date: Mon, 19 Feb 2024 11:48:37 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+Message-ID: <202402191144.C4DB9B7AA@keescook>
+References: <20240216235536.it.234-kees@kernel.org>
+ <e58d035c-fb74-4d29-94d5-6c22542e7513@embeddedor.com>
+ <202402161902.FCFFEC322@keescook>
+ <a74a7255-5dbd-060e-fe2f-ac3563f466fb@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a74a7255-5dbd-060e-fe2f-ac3563f466fb@iogearbox.net>
 
-On Saturday, 17 February 2024 02:03:15 CST Greg Kroah-Hartman wrote:
-> On Thu, Feb 15, 2024 at 01:22:01PM -0600, Elizabeth Figura wrote:
-> > On Thursday, 15 February 2024 01:28:32 CST Greg Kroah-Hartman wrote:
-> > > On Wed, Feb 14, 2024 at 05:36:38PM -0600, Elizabeth Figura wrote:
-> > > > This corresponds to the NT syscall NtCreateSemaphore().
+On Mon, Feb 19, 2024 at 06:48:41PM +0100, Daniel Borkmann wrote:
+> On 2/17/24 4:03 AM, Kees Cook wrote:
+> > On Fri, Feb 16, 2024 at 06:27:08PM -0600, Gustavo A. R. Silva wrote:
+> > > On 2/16/24 17:55, Kees Cook wrote:
+> > > > Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+> > > > flexible array. Found with GCC 13:
 > > > > 
-> > > > Semaphores are one of three types of object to be implemented in this driver,
-> > > > the others being mutexes and events.
+> > > > ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+> > > >     207 |                                        *(__be16 *)&key->data[i]);
+> > > >         |                                                   ^~~~~~~~~~~~~
+> > > > ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+> > > >     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+> > > >         |                                                      ^
+> > > > ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+> > > >      97 | #define be16_to_cpu __be16_to_cpu
+> > > >         |                     ^~~~~~~~~~~~~
+> > > > ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+> > > >     206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+> > > > ^
+> > > >         |                            ^~~~~~~~~~~
+> > > > In file included from ../include/linux/bpf.h:7:
+> > > > ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+> > > >      82 |         __u8    data[0];        /* Arbitrary size */
+> > > >         |                 ^~~~
 > > > > 
-> > > > An NT semaphore contains a 32-bit counter, and is signaled and can be acquired
-> > > > when the counter is nonzero. The counter has a maximum value which is specified
-> > > > at creation time. The initial value of the semaphore is also specified at
-> > > > creation time. There are no restrictions on the maximum and initial value.
+> > > > And found at run-time under CONFIG_FORTIFY_SOURCE:
 > > > > 
-> > > > Each object is exposed as an file, to which any number of fds may be opened.
-> > > > When all fds are closed, the object is deleted.
+> > > >     UBSAN: array-index-out-of-bounds in kernel/bpf/lpm_trie.c:218:49
+> > > >     index 0 is out of range for type '__u8 [*]'
 > > > > 
-> > > > Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
-> > > > ---
-> > > >  .../userspace-api/ioctl/ioctl-number.rst      |   2 +
-> > > >  drivers/misc/ntsync.c                         | 120 ++++++++++++++++++
-> > > >  include/uapi/linux/ntsync.h                   |  21 +++
-> > > >  3 files changed, 143 insertions(+)
-> > > >  create mode 100644 include/uapi/linux/ntsync.h
+> > > > This includes fixing the selftest which was incorrectly using a
+> > > > variable length struct as a header, identified earlier[1]. Avoid this
+> > > > by just explicitly including the prefixlen member instead of struct
+> > > > bpf_lpm_trie_key.
 > > > > 
-> > > > diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > > > index 457e16f06e04..2f5c6994f042 100644
-> > > > --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > > > +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > > > @@ -173,6 +173,8 @@ Code  Seq#    Include File                                           Comments
-> > > >  'M'   00-0F  drivers/video/fsl-diu-fb.h                              conflict!
-> > > >  'N'   00-1F  drivers/usb/scanner.h
-> > > >  'N'   40-7F  drivers/block/nvme.c
-> > > > +'N'   80-8F  uapi/linux/ntsync.h                                     NT synchronization primitives
-> > > > +                                                                     <mailto:wine-devel@winehq.org>
-> > > >  'O'   00-06  mtd/ubi-user.h                                          UBI
-> > > >  'P'   all    linux/soundcard.h                                       conflict!
-> > > >  'P'   60-6F  sound/sscape_ioctl.h                                    conflict!
-> > > > diff --git a/drivers/misc/ntsync.c b/drivers/misc/ntsync.c
-> > > > index e4969ef90722..3ad86d98b82d 100644
-> > > > --- a/drivers/misc/ntsync.c
-> > > > +++ b/drivers/misc/ntsync.c
-> > > > @@ -5,26 +5,146 @@
-> > > >   * Copyright (C) 2024 Elizabeth Figura
-> > > >   */
-> > > >  
-> > > > +#include <linux/anon_inodes.h>
-> > > > +#include <linux/file.h>
-> > > >  #include <linux/fs.h>
-> > > >  #include <linux/miscdevice.h>
-> > > >  #include <linux/module.h>
-> > > > +#include <linux/slab.h>
-> > > > +#include <uapi/linux/ntsync.h>
-> > > >  
-> > > >  #define NTSYNC_NAME	"ntsync"
-> > > >  
-> > > > +enum ntsync_type {
-> > > > +	NTSYNC_TYPE_SEM,
-> > > > +};
-> > > > +
-> > > > +struct ntsync_obj {
-> > > > +	enum ntsync_type type;
-> > > > +
-> > > > +	union {
-> > > > +		struct {
-> > > > +			__u32 count;
-> > > > +			__u32 max;
-> > > > +		} sem;
-> > > > +	} u;
-> > > > +
-> > > > +	struct file *file;
-> > > > +	struct ntsync_device *dev;
-> > > > +};
-> > > > +
-> > > > +struct ntsync_device {
-> > > > +	struct file *file;
-> > > > +};
+> > > > Note that it is not possible to simply remove the "data" member, as it
+> > > > is referenced by userspace
+> > > > 
+> > > > cilium:
+> > > >           struct egress_gw_policy_key in_key = {
+> > > >                   .lpm_key = { 32 + 24, {} },
+> > > >                   .saddr   = CLIENT_IP,
+> > > >                   .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
+> > > >           };
+> > > > 
+> > > > systemd:
+> > > > 	ipv6_map_fd = bpf_map_new(
+> > > > 			BPF_MAP_TYPE_LPM_TRIE,
+> > > > 			offsetof(struct bpf_lpm_trie_key, data) + sizeof(uint32_t)*4,
+> > > > 			sizeof(uint64_t),
+> > > > 			...
+> > > > 
+> > > > The only risk to UAPI would be if sizeof() were used directly on the
+> > > > data member, which it does not seem to be. It is only used as a static
+> > > > initializer destination and to find its location via offsetof().
+> > > > 
+> > > > Link: https://lore.kernel.org/all/202206281009.4332AA33@keescook/ [1]
+> > > > Reported-by: Mark Rutland <mark.rutland@arm.com>
+> > > > Closes: https://paste.debian.net/hidden/ca500597/
 > > > 
-> > > No reference counting is needed for your ntsync_device?  Or are you
-> > > relying on the reference counting of struct file here?
-> > > 
-> > > You pass around pointers to this structure, and save it off into other
-> > > structures, how do you know it is "safe" to do so?
+> > > mmh... this URL expires: 2024-05-15
 > > 
-> > Yes, this relies on the reference counting of struct file. The sync
-> > objects (semaphore etc.) grab a reference when they're created, via
-> > get_file(), and release it when they're destroyed. This reference is
-> > taken from within ioctls on the ntsync_device, so the file must be
-> > valid when we grab a reference. Maybe I'm missing something, though?
+> > Yup, but that's why I included the run-time splat above too. :)
 > 
-> If the reference count is driven by struct file, that's fine, and great,
-> otherwise you end up with two different reference counts and keeping
-> them in sync is impossible.
-> 
-> But as it wasn't obvious, a comment somewhere here would be helpful for
-> reviewing and figuring out how this all works in 4 years when someone
-> has to touch it again.
+> I don't quite follow, this basically undoes 3024d95a4c52 ("bpf: Partially revert
+> flexible-array member replacement") again with the small change that this 'fixes'
+> up the BPF selftest to not embed struct bpf_lpm_trie_key.
+>
+> Outside of BPF selftests though aren't we readding the same error that we fixed
+> earlier for BPF programs in the wild which embed struct bpf_lpm_trie_key into their
+> key structure?
 
-Ah, makes sense. I'll add comments to be clearer about the refcounting
-relationships, thanks.
+Oops, yes, sorry. I see how that cilium does include it in the same
+fashion. I will adjust this patch again. Thanks for double-checking!
 
---Zeb
+struct egress_gw_policy_key {
+        struct bpf_lpm_trie_key lpm_key;
+        __u32 saddr;
+        __u32 daddr;
+};
 
-
+-- 
+Kees Cook
 
