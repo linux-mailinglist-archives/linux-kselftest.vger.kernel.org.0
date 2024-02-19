@@ -1,191 +1,164 @@
-Return-Path: <linux-kselftest+bounces-4935-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4936-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3C6685AA1A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 18:35:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7497485AA51
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 18:49:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D90F1C213D1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 17:35:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 992BD1C2196E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 17:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5BFF45961;
-	Mon, 19 Feb 2024 17:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C6C4654B;
+	Mon, 19 Feb 2024 17:49:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qnZR8Mf9"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hCcq1zsL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79414594C
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 17:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DB3446BD;
+	Mon, 19 Feb 2024 17:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708364148; cv=none; b=fU4uleMzktBAN93G6yF8DMt8gzsv1xpRJTii1h894aBoGrSkQZsyRskp2xTCGYnjpgLyYk/+1XgXsFxS7WY+nSRMSCZot14gJkTO9qJw17sayNSRxIELG1qwWv2m80q/cC1tD1EzYf6KZjeK+7wPxuTBs/Wk05qYwoeoLEewNdM=
+	t=1708364957; cv=none; b=lUHduLGDKIKwmUm7dGoVvF7EiBjZApEM5XZaEMldQOspBDc7DKYWPBIYnmxW1h9PWMrlQ21G8iNnIBiftnrMUJt4asAQYK0sk8PgNxl3Z3aunvfxHKMs3RiSBdKyGFICac3XyrvswWMgNVcvLh08hd1W8IlfUEMemTm+F5tq8E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708364148; c=relaxed/simple;
-	bh=wJCpYntqq8nCglIkq88Zs9qTSRweYslEK0KjbQBa4Bg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UZWYJJ5SRuMudEx7V8fcQph2R3pKuJuIeey4+YBiTC2G7UJSGgiq3ddXGi52FoDNrErB7xFpTUNdz6hbp6flk0aW8+ZFmh+0qYTtdoMcu4VLjv8VQoHOcRg1Swm+jHmXH053h9gJkzmE6jWx/ezFT8d9xFxGrDWSw3oLcNlZakw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qnZR8Mf9; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-563dd5bd382so17971a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 09:35:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708364145; x=1708968945; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bpH+GG/JxRVKqFjHr33MFZWda+dSzZgj8Xxgn4JwPS8=;
-        b=qnZR8Mf9OXg9M88jTqacpGR0VokQ4cl6dxm4BrwfAqkIhovRA2gUuTEyZfLnhAEcFR
-         Mo9djPgblUq9mIGUmbSlFtdv61274wgtpdJo05I4wr109y9ULgiAGKw1GPFDscQ/38zk
-         YDJ9hkomHCkHZ9UMUWaCflYoPokfEpf/uw5+so3Jo4nbDk9YS8Uq4Ovzq2Bp2q3DGJOt
-         8E0azaZNDmTnNKhnMUTpG5osWaTJ0OT9q2jtAn+1o/OxJ63OsK6Vhgi54Wua6AZPXNWO
-         ABxCAfNG1ylw8P6sg6xGDNEeQqNm+Su0XA7/FuQ2lOuUtRynVGVJlqxFtcYP67f2bIVQ
-         FhgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708364145; x=1708968945;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bpH+GG/JxRVKqFjHr33MFZWda+dSzZgj8Xxgn4JwPS8=;
-        b=LXWBoCPftmAs5KPTEn8ra1hlDYeQ+OPwMIS87lKAG/gqIvsALhDw1b2Ab7ngVrSCGe
-         KkRq1DLjHTlHWujV8bAXO2HTXr7+Km5yabjTy6OFYpEYC01Poq/tnsyg/usw7x0N0jgt
-         nVZdOal5odL/Xs/anIsPx35hHN4HmByyxhf6jsUBaX0bLjjJnHG1nYtlrZPBV3xpKVJ2
-         sT4TqzTz13g9B02RxvBEKKtoCgc98crEhALBWcHOVoYolV7fyrmq/uYarODDc5RYOqjB
-         08qlSN+T8uujzoPDdoqvF56nZaroH7N0HMMVDEkeIyff2gPHAAvnFMmGyubroh/KJTS4
-         /IsA==
-X-Forwarded-Encrypted: i=1; AJvYcCVLXvO6tmAw2mXkRym6A41qoVJshlqsXRJObN4pQw97uEn99/a8xvcBrgRE36X4M2QAnw2wcpcN92piEUtziKW4AFlQOXx1fPuRePnPJ54D
-X-Gm-Message-State: AOJu0YzUqE51ylGTsodqyJOh4CXYlkQBVJK0QgqadBy+BAX4zv9xLotV
-	pQPsLJUiaIyFzfbT5Xio/27BaEJi8ShKkTTHsaDNg7K+iZbVIU2ajOOPGgSh1B3pGnWshAKTNpT
-	j69RIF/VrKmTfBxA7sdzom2ct8aodbH9IrNeo
-X-Google-Smtp-Source: AGHT+IE99wN/PQYfiDNakz6zkMQR7kOEOngXX0T7gN2tvc5IjeQakHE9Z1BsxKNQN8jOzpCri2PXj7rsMGF+tGMHWj0=
-X-Received: by 2002:a50:a697:0:b0:563:ff57:b7e8 with SMTP id
- e23-20020a50a697000000b00563ff57b7e8mr322644edc.1.1708364145075; Mon, 19 Feb
- 2024 09:35:45 -0800 (PST)
+	s=arc-20240116; t=1708364957; c=relaxed/simple;
+	bh=T+ilHvIJo7mvktPqiHHlT/wupzYq6gaObcSmlVAN4N0=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=XiB3rKINNdPFQvybxd83KfJbbFT1lEmU6mZoo2ZEtGWZ9spGY7/1lXJGqzI9zmUfpXK/eXyArI87INfaMpmHRvVCb9zqu2fsrQUR9fZYzNGIFdL+LqiJOCya4R/5+TDYEqT49G6lPnkNEHEBNCVEmbiN4xGh0fc8Z7bNGstVJXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hCcq1zsL; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=KdPVSdquWfVokbMo6HkoK9vt0kJIUA8fT46lxDlLy60=; b=hCcq1zsLglJyIz4/JHN8EDbD0A
+	yPDMggzeimuwzZcupYzSYSXn1YbU+0Q8fNaajk1LTP7DkFAY3dfynDWxNAsQWHCXd6+9n5mcfzDiT
+	fDFhSNS33ZLdOCu07FGc55yt81ths3F372V1PzANHFOHBeiBjUnpdGSjiUYcTN49XvBMk0m2Pfp4i
+	L6+HbF+ewX652/MoQsAXpq8dCaBxt01sq3zYiuvjaJNAno6hccTOrVI2FlKEXU4po3oDXKEBLarA9
+	KxZGpubFkOzx3OeihnB5lOP7b/DZo9Uw19G6llHDvf0J/d7ekBiiFqvLR9POkBfTTZY/MpVy6G5I/
+	2j6zjh7w==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rc7ky-000GeN-1B; Mon, 19 Feb 2024 18:48:44 +0100
+Received: from [178.197.249.53] (helo=linux.home)
+	by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rc7kw-000XAK-Of; Mon, 19 Feb 2024 18:48:42 +0100
+Subject: Re: [PATCH v2] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+To: Kees Cook <keescook@chromium.org>,
+ "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Yonghong Song <yonghong.song@linux.dev>,
+ Anton Protopopov <aspsk@isovalent.com>, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20240216235536.it.234-kees@kernel.org>
+ <e58d035c-fb74-4d29-94d5-6c22542e7513@embeddedor.com>
+ <202402161902.FCFFEC322@keescook>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <a74a7255-5dbd-060e-fe2f-ac3563f466fb@iogearbox.net>
+Date: Mon, 19 Feb 2024 18:48:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240215-upstream-net-20240215-misc-fixes-v1-0-8c01a55d8f6a@kernel.org>
- <20240215-upstream-net-20240215-misc-fixes-v1-3-8c01a55d8f6a@kernel.org> <CANn89iJ=Oecw6OZDwmSYc9HJKQ_G32uN11L+oUcMu+TOD5Xiaw@mail.gmail.com>
-In-Reply-To: <CANn89iJ=Oecw6OZDwmSYc9HJKQ_G32uN11L+oUcMu+TOD5Xiaw@mail.gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Mon, 19 Feb 2024 18:35:31 +0100
-Message-ID: <CANn89iJDypRXX-8S-UdqWgw73eOgt0+D74qUCLDkb0cRpFFXkg@mail.gmail.com>
-Subject: Re: [PATCH net 03/13] mptcp: fix lockless access in subflow ULP diag
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Davide Caratti <dcaratti@redhat.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	stable@vger.kernel.org, Boris Pismenny <borisp@nvidia.com>, 
-	John Fastabend <john.fastabend@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <202402161902.FCFFEC322@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27190/Mon Feb 19 10:24:27 2024)
 
-On Mon, Feb 19, 2024 at 6:21=E2=80=AFPM Eric Dumazet <edumazet@google.com> =
-wrote:
->
-> On Thu, Feb 15, 2024 at 7:25=E2=80=AFPM Matthieu Baerts (NGI0)
-> <matttbe@kernel.org> wrote:
-> >
-> > From: Paolo Abeni <pabeni@redhat.com>
-> >
-> > Since the introduction of the subflow ULP diag interface, the
-> > dump callback accessed all the subflow data with lockless.
-> >
-> > We need either to annotate all the read and write operation accordingly=
-,
-> > or acquire the subflow socket lock. Let's do latter, even if slower, to
-> > avoid a diffstat havoc.
-> >
-> > Fixes: 5147dfb50832 ("mptcp: allow dumping subflow context to userspace=
-")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> > Reviewed-by: Mat Martineau <martineau@kernel.org>
-> > Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> > ---
-> > Notes:
-> >   - This patch modifies the existing ULP API. No better solutions have
-> >     been found for -net, and there is some similar prior art, see
-> >     commit 0df48c26d841 ("tcp: add tcpi_bytes_acked to tcp_info").
-> >
-> >     Please also note that TLS ULP Diag has likely the same issue.
-> > To: Boris Pismenny <borisp@nvidia.com>
-> > To: John Fastabend <john.fastabend@gmail.com>
-> > ---
-> >  include/net/tcp.h  | 2 +-
-> >  net/mptcp/diag.c   | 6 +++++-
-> >  net/tls/tls_main.c | 2 +-
-> >  3 files changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > index dd78a1181031..f6eba9652d01 100644
-> > --- a/include/net/tcp.h
-> > +++ b/include/net/tcp.h
-> > @@ -2506,7 +2506,7 @@ struct tcp_ulp_ops {
-> >         /* cleanup ulp */
-> >         void (*release)(struct sock *sk);
-> >         /* diagnostic */
-> > -       int (*get_info)(const struct sock *sk, struct sk_buff *skb);
-> > +       int (*get_info)(struct sock *sk, struct sk_buff *skb);
-> >         size_t (*get_info_size)(const struct sock *sk);
-> >         /* clone ulp */
-> >         void (*clone)(const struct request_sock *req, struct sock *news=
-k,
-> > diff --git a/net/mptcp/diag.c b/net/mptcp/diag.c
-> > index a536586742f2..e57c5f47f035 100644
-> > --- a/net/mptcp/diag.c
-> > +++ b/net/mptcp/diag.c
-> > @@ -13,17 +13,19 @@
-> >  #include <uapi/linux/mptcp.h>
-> >  #include "protocol.h"
-> >
-> > -static int subflow_get_info(const struct sock *sk, struct sk_buff *skb=
-)
-> > +static int subflow_get_info(struct sock *sk, struct sk_buff *skb)
-> >  {
-> >         struct mptcp_subflow_context *sf;
-> >         struct nlattr *start;
-> >         u32 flags =3D 0;
-> > +       bool slow;
-> >         int err;
-> >
-> >         start =3D nla_nest_start_noflag(skb, INET_ULP_INFO_MPTCP);
-> >         if (!start)
-> >                 return -EMSGSIZE;
-> >
-> > +       slow =3D lock_sock_fast(sk);
-> >         rcu_read_lock();
->
-> I am afraid lockdep is not happy with this change.
->
-> Paolo, we probably need the READ_ONCE() annotations after all.
+On 2/17/24 4:03 AM, Kees Cook wrote:
+> On Fri, Feb 16, 2024 at 06:27:08PM -0600, Gustavo A. R. Silva wrote:
+>> On 2/16/24 17:55, Kees Cook wrote:
+>>> Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+>>> flexible array. Found with GCC 13:
+>>>
+>>> ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+>>>     207 |                                        *(__be16 *)&key->data[i]);
+>>>         |                                                   ^~~~~~~~~~~~~
+>>> ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+>>>     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>>>         |                                                      ^
+>>> ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+>>>      97 | #define be16_to_cpu __be16_to_cpu
+>>>         |                     ^~~~~~~~~~~~~
+>>> ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+>>>     206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+>>> ^
+>>>         |                            ^~~~~~~~~~~
+>>> In file included from ../include/linux/bpf.h:7:
+>>> ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+>>>      82 |         __u8    data[0];        /* Arbitrary size */
+>>>         |                 ^~~~
+>>>
+>>> And found at run-time under CONFIG_FORTIFY_SOURCE:
+>>>
+>>>     UBSAN: array-index-out-of-bounds in kernel/bpf/lpm_trie.c:218:49
+>>>     index 0 is out of range for type '__u8 [*]'
+>>>
+>>> This includes fixing the selftest which was incorrectly using a
+>>> variable length struct as a header, identified earlier[1]. Avoid this
+>>> by just explicitly including the prefixlen member instead of struct
+>>> bpf_lpm_trie_key.
+>>>
+>>> Note that it is not possible to simply remove the "data" member, as it
+>>> is referenced by userspace
+>>>
+>>> cilium:
+>>>           struct egress_gw_policy_key in_key = {
+>>>                   .lpm_key = { 32 + 24, {} },
+>>>                   .saddr   = CLIENT_IP,
+>>>                   .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
+>>>           };
+>>>
+>>> systemd:
+>>> 	ipv6_map_fd = bpf_map_new(
+>>> 			BPF_MAP_TYPE_LPM_TRIE,
+>>> 			offsetof(struct bpf_lpm_trie_key, data) + sizeof(uint32_t)*4,
+>>> 			sizeof(uint64_t),
+>>> 			...
+>>>
+>>> The only risk to UAPI would be if sizeof() were used directly on the
+>>> data member, which it does not seem to be. It is only used as a static
+>>> initializer destination and to find its location via offsetof().
+>>>
+>>> Link: https://lore.kernel.org/all/202206281009.4332AA33@keescook/ [1]
+>>> Reported-by: Mark Rutland <mark.rutland@arm.com>
+>>> Closes: https://paste.debian.net/hidden/ca500597/
+>>
+>> mmh... this URL expires: 2024-05-15
+> 
+> Yup, but that's why I included the run-time splat above too. :)
 
-Or perhaps something like the following would be enough.
+I don't quite follow, this basically undoes 3024d95a4c52 ("bpf: Partially revert
+flexible-array member replacement") again with the small change that this 'fixes'
+up the BPF selftest to not embed struct bpf_lpm_trie_key.
 
-diff --git a/net/mptcp/diag.c b/net/mptcp/diag.c
-index 6ff6f14674aa2941bc04c680bacd9f79fc65060d..7017dd60659dc7133318c1c82e3=
-f429bea3a5d57
-100644
---- a/net/mptcp/diag.c
-+++ b/net/mptcp/diag.c
-@@ -21,6 +21,9 @@ static int subflow_get_info(struct sock *sk, struct
-sk_buff *skb)
-        bool slow;
-        int err;
+Outside of BPF selftests though aren't we readding the same error that we fixed
+earlier for BPF programs in the wild which embed struct bpf_lpm_trie_key into their
+key structure?
 
-+       if (inet_sk_state_load(sk) =3D=3D TCP_LISTEN)
-+               return 0;
-+
-        start =3D nla_nest_start_noflag(skb, INET_ULP_INFO_MPTCP);
-        if (!start)
-                return -EMSGSIZE;
+Thanks,
+Daniel
 
