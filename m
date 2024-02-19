@@ -1,187 +1,496 @@
-Return-Path: <linux-kselftest+bounces-4983-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-4984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD71085AFCE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 00:39:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8751C85AFD0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 00:41:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60DF828237A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 23:39:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABE3A1C22567
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Feb 2024 23:41:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615035676F;
-	Mon, 19 Feb 2024 23:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FC55677D;
+	Mon, 19 Feb 2024 23:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cK4XapuW"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bDjK1He+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B6D5674F
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 23:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DD85674F
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 23:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708385995; cv=none; b=YgtjujY5GxzHv25p0kB9LBdeOpF6xEGLVoHFk6xuGE2g/NFh8N7j2LSkAMfJd8A7FxK4vns5gHpKulmP7jop4lDAQqM5P4e1IgvjzN2g8WOVfetfz5deGEjX7AO6gw55t46Cip1DNEYB7+5Fzh8z41Lcb3uIIGiw0GjzdSbjplg=
+	t=1708386093; cv=none; b=p3n3eu/9DXXj1yoS7WbX5En4wEsF204novCgZg1fxB738dgJRNqi1ELEgyof1ETvi/fHskXo7SeokGIPJUQbqa2FYdGtW95iuA1PFSYRh4qw/s7FMAa8F/kASKUQj67Jn6p45tg6fes7JNhZzsOTvSJ+rLi3K1l51077PZfpUYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708385995; c=relaxed/simple;
-	bh=VQvxVeLqT2WDwTqBKAKOIA3LXj3WThsoiM4SWUsVBuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p3D/d/nYlJfYz6cWD05BKodZRqP5DE0UxGa/fT+/Vdgw1azzWcoo7BmNyuk7mTqybbiPbDOYxWT5qnNnsgU9Az9f8cqXyT/QHcQLWp6NjtomDIkTYs/vqdS8bqrISYW8n95yjat+WXPjTVW1fISOiNF3xaggoG/NTl/9TaBf+qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cK4XapuW; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-563dd5bd382so20774a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 15:39:53 -0800 (PST)
+	s=arc-20240116; t=1708386093; c=relaxed/simple;
+	bh=CgLaPcrJ8UuZe99Nzs2aIaX8FJubBiNyxJ8PhVcKrRg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=szGKAr6uFnjXIcLJD3wqaT1/Ozir+Ge3Mn+OaML45JV2HPTeoarD86adBsGvSq3JBfyWCICEGFOQHW8zMDURCxuQJNQ0gRtBpATS/NDsh8rzEvq0GIkv+X/d3OCsF93NmjGb8kY8Y6+OLk4z6pet7aRFdhEvTd1sTgA3BSvFias=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bDjK1He+; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d918008b99so39771445ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 15:41:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708385992; x=1708990792; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VQvxVeLqT2WDwTqBKAKOIA3LXj3WThsoiM4SWUsVBuo=;
-        b=cK4XapuW1z1LENhtzE4dJBuDS5sUG1LSyt5p8LLBSBxL7dnn6+F2P4EiOHsQUAZkOM
-         0HtsM3CMA+S2gx8zf+i92ItkBEbAX7NzGzlDKgg7vhvxGgFcJI/2lIkS62CFe2FW445E
-         Mo2+nuO+9IoFGTFuu+wU3H4xgrUoXCektTLNldmC5wlayzxzMBnUIGKaSiHC7D9Pw1dQ
-         5SNwBbHSWi2Wfk8iixPDTBrWyQae+PCxi/tUlJVoablRRIu+mhL0Dv6Gqdj8oFgf7BFO
-         unjQSC3VIMV5jQGpbaAPFEP9ee9mwYKqNwud+/bo/i9Ub3dWFCOD7gGhI7SK4R5xSPsU
-         eFJw==
+        d=chromium.org; s=google; t=1708386091; x=1708990891; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Rg+sHDVqNfA4kI4Nj60RArjG0KvQeKNF7H5zDOdEbI=;
+        b=bDjK1He+KO88fRq0Mid8V33aWi7vOCPepyXIb15wSPKnICL6OpDzoRk4PHFXEl734O
+         mZY+w/estbASSgnDPU04WgmNY2UxfX8eL6iZKjOBj+IRHNHO1SXHgwboagZc5yb6e6xj
+         DvpDTo7MDK4pyykwKaJc5c5+pbx14V9h8s2Oo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708385992; x=1708990792;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1708386091; x=1708990891;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VQvxVeLqT2WDwTqBKAKOIA3LXj3WThsoiM4SWUsVBuo=;
-        b=tGhbsGRkpEJYBN/z6+HCT/tqsWE3k6lO6rwJbcxFa1hznfKjYoiUGr+5SMHOSdFJ7b
-         bOT4sC/tsP4nZQPZHjwpqTYVP+CSFA2cHCjqhkq/BoNEmc3BvTGj60+jySXDR3OoM+rC
-         w3zn/NWF49pDH/mdohuRrcJYT/58F00rJdODAqEyVFwP/kKvorsmeEST0RJ3Mw8o2zOv
-         fXtaDDD/acoG4iaHkExivJ78GxYSoNfoJP0DJHPBxGnR30+hIA2GYywhCj9jmbH9Ix22
-         KjBU3DYaIUC49k6Zv1nU8Cm9WYdYUq/qBMio3esBJklmvvh9p9+CzbvIz7EiIBUybZQb
-         g8gw==
-X-Forwarded-Encrypted: i=1; AJvYcCVjKVZ2jT/NLEIkl7acpMPtpPslSXxMqAVsq/HA1AobsA110kjzNXpDlEemrGGJBdrNVsShtGF9YuZL7dgHoHuE+5eKw30fvLs7WcJNNl4h
-X-Gm-Message-State: AOJu0Yzkv2ylMbYKB2OnOOMSednmMNOuyJ5PjIQJQmlaMqv1ienPOlkK
-	mJ5Kv5TKPPlq6jmSn2Q9ThEH+6wHWTyCD3uCWtyfaB/nPXSDuYY0PfbQ/PGzXPUwxdivT0RZ6Iu
-	NRkqOCxptcIRR/JwvXQwYrcj1ymDuuKAj4bQZ
-X-Google-Smtp-Source: AGHT+IFI9ErYFSTuX/iUh2FUDqVFuu4qOOZGA8jVsVKQ6ZfJMAt0wQuav3WLQqFEG2eVM+DCyyqKrGmbs2GWs8UDmBY=
-X-Received: by 2002:a50:a697:0:b0:563:ff57:b7e8 with SMTP id
- e23-20020a50a697000000b00563ff57b7e8mr352162edc.1.1708385991590; Mon, 19 Feb
- 2024 15:39:51 -0800 (PST)
+        bh=3Rg+sHDVqNfA4kI4Nj60RArjG0KvQeKNF7H5zDOdEbI=;
+        b=vqhh+q2uYFdkmwWtsyN2Z4IFlDhfSY/6ki6nhR+gu50LX46TyLVVqXBHQ+wJxV94ak
+         P8h7wXhMmbw7K2oowIi+yy4WkhoyyxuRIErZvsXz+SiEAIyN0sE52Ry/oqrNARGfY02d
+         Xt+8z2YgFJd1fI5CbvWPqwrY+aA/C8FKDGRZsyKe/13tXrByWXVoe7t+tmvu6rRma1S4
+         cZ9WqrHubG746fTfHHJdqDIXLZevQ4mFNBIJoGFjYyD8BpwRQ3J50hczttpE98kNa2yS
+         eklrOUnI7AQnuqmwP00Yxhxi24l8gIw3E51pII1yOR5ZlA7D/zQkJnApKaK9st0DBee3
+         ThJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtFcu4X46OgAX8RUGYJPpBJQHulEY+HJE35bBzaG7IW9n2K0Ir3m0Fu2AcfjAUw0TEbnbeVqSY7EBLKvXb5Arv5H0BtALID2kfMV76YwF6
+X-Gm-Message-State: AOJu0YyOSZq5GKR8CDqN/nLMLjg7wn+P6m80odtxZ+ZpOvCETjloQsOU
+	qjlJ18nDm77wIY8RwRMQPz7RxneUC4RkY1Y2vchaZjEEZzhUQGe908UEK71ozw==
+X-Google-Smtp-Source: AGHT+IG29y4RAikXI7aD3pJIVsLER3vVWeoNlnW5QiT2orL4eZUUzDNo+r8jdpDoyghFqbHmNLtzsA==
+X-Received: by 2002:a17:90b:3847:b0:299:8265:c79f with SMTP id nl7-20020a17090b384700b002998265c79fmr2952947pjb.46.1708386090683;
+        Mon, 19 Feb 2024 15:41:30 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y3-20020a17090a8b0300b0029942a73eaesm5932876pjn.9.2024.02.19.15.41.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Feb 2024 15:41:30 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Kees Cook <keescook@chromium.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Haowen Bai <baihaowen@meizu.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Kui-Feng Lee <kuifeng@meta.com>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v3] bpf: Replace bpf_lpm_trie_key 0-length array with flexible array
+Date: Mon, 19 Feb 2024 15:41:28 -0800
+Message-Id: <20240219234121.make.373-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240214-bus_cleanup-kunit-v1-1-1a38323eed73@marliere.net>
-In-Reply-To: <20240214-bus_cleanup-kunit-v1-1-1a38323eed73@marliere.net>
-From: David Gow <davidgow@google.com>
-Date: Tue, 20 Feb 2024 07:39:38 +0800
-Message-ID: <CABVgOSm+nrvWsAaT-ttRiAw4rHp+HUfw77t0q29cxdweUjVZ4g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: make kunit_bus_type const
-To: "Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000031ea950611c49c7a"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15498; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=CgLaPcrJ8UuZe99Nzs2aIaX8FJubBiNyxJ8PhVcKrRg=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBl0+cnVLiiscNcGtW0kAJ8XWS4mrotWqvh8nkqf
+ 3SJCfr0e0eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZdPnJwAKCRCJcvTf3G3A
+ JtG0D/9Ff+bMKTxinX38h/9HJOMX109fkG9aQu+AB0L6YKRnc4Aappjx0Fzc8BPZi59huXUITMj
+ FQ91R/UjMWGlfAPIaXn5IUpnIP61WDKORd+ChI/SHT+KfIgnDmwlwM8CIk/VasOlOVmlUWU4lAb
+ 4aykezGfvom5Y5likHMWMgQ/xO1CTgO9NnJ2BoDO8iL3mVNR/gM4vxN5F0edLXFNvCD9vx9TCxZ
+ R9RyieFQooMOKk4soLAnB30BqK50/mX0fO4mwPGE1PpqDbzd8g7uQcsROfuFlw3B7U6RRHckzWN
+ 81K34dv0VERKeUXNej9N3wPvUS3OOmotEVMEBLGDAGqfucR9zUTaETR1LPRrZ5BGQT3UlfuFof8
+ m0vyeX1TmZEadsB7QcVaf3gAr7qlNQeiHmHAqy+/17q/xoep9voduRtDLYeV6EREDpo2uV49aqz
+ du917pAXMTSjoW1yFDs2Ibrg4wJJx/rzVOZIYg/xAsHAe9cYvlygUIzg4jhM4W3gBf/3YDYJ/Xm
+ VAufXJnk7skz2x1Km9Uir9Ou+VdWtRvC4vwETp802dx4976mO1Wv8EWvfYg+m4/dzf5uo8PYYuh
+ W1AYaJTioTyF2Q7rWj0y3jtpj9wWuuQ2oIiMPzB/CIMSiK4fkXJ9udPtRVfLqDY364tVYHqUL8q
+ x2GEcD VJ201hXEg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
---00000000000031ea950611c49c7a
-Content-Type: text/plain; charset="UTF-8"
+Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+flexible array. Found with GCC 13:
 
-On Thu, 15 Feb 2024 at 03:14, Ricardo B. Marliere <ricardo@marliere.net> wrote:
->
-> Since commit d492cc2573a0 ("driver core: device.h: make struct
-> bus_type a const *"), the driver core can properly handle constant
-> struct bus_type, move the kunit_bus_type variable to be a constant
-> structure as well, placing it into read-only memory which can not be
-> modified at runtime.
->
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
-> ---
+../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+  207 |                                        *(__be16 *)&key->data[i]);
+      |                                                   ^~~~~~~~~~~~~
+../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+  102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+      |                                                      ^
+../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+   97 | #define be16_to_cpu __be16_to_cpu
+      |                     ^~~~~~~~~~~~~
+../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+  206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+^
+      |                            ^~~~~~~~~~~
+In file included from ../include/linux/bpf.h:7:
+../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+   82 |         __u8    data[0];        /* Arbitrary size */
+      |                 ^~~~
 
-Looks good here: thanks very much.
+And found at run-time under CONFIG_FORTIFY_SOURCE:
 
-Reviewed-by: David Gow <davidgow@google.com>
+  UBSAN: array-index-out-of-bounds in kernel/bpf/lpm_trie.c:218:49
+  index 0 is out of range for type '__u8 [*]'
 
-Cheers,
--- David
+Changing struct bpf_lpm_trie_key is difficult since has been used by
+userspace. For example, in Cilium:
 
---00000000000031ea950611c49c7a
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+	struct egress_gw_policy_key {
+	        struct bpf_lpm_trie_key lpm_key;
+	        __u32 saddr;
+	        __u32 daddr;
+	};
 
-MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-7xDrOPfX3COqq162RFg/MFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
-BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
-Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
-FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
-YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
-AK0lDd6/eSh3qHmXaw1YUfIFy07B25BEcTvWgOdla99gF1O7sOsdYaTz/DFkZI5ghjgaPJCovgla
-mRMfNcxZCfoBtsB7mAS6iOYjuwFOZxi9cv6jhfiON6b89QWdMaPeDddg/F2Q0bxZ9Z2ZEBxyT34G
-wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
-5PHxFaT2a5Td/fj5yJ5hRSrqy/nj/hjT14w3/ZdX5uWg+cus6VjiiR/5qGSZRjHt8JoApD6t6/tg
-ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
-MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
-IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIK2l2CPN4toNUWvpU6EFEH6O9zWgIPre48CTL2ulu1eOMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDIxOTIzMzk1MlowaQYJKoZIhvcNAQkPMVww
-WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCl1C4P
-W/HS4et3rru7W6UJA9LIkZW/B/cxFWxIxrXcEWWDn2/vrsA3rRqXkp8UDEP19VkY2MdecAcmr02G
-WL/fnZwXV5xbN30O699UVuLRV9i2/zkewucskTwtGTg0+CCwzvNzGdKPpKSUKUHT5KBJZExPPQX/
-KhXQiBwzs5Vkn33O6KX40mqQislCaaCqPF1rLh7ZOZJQbSCn171mxUTakfVGl89ud2dSTaF0GN+w
-crn+53bLq56l1yyrBHzSISOP/HxZjaxTSheZnvwz0P+/WXAPZKDgMamm5ypcRUNaI5wYpkEFL5/S
-3fL0jpU7lJGxxigc5HSo2oTglObNR4DA
---00000000000031ea950611c49c7a--
+While direct references to the "data" member haven't been found, there
+are static initializers what include the final member. For example,
+the "{}" here:
+
+        struct egress_gw_policy_key in_key = {
+                .lpm_key = { 32 + 24, {} },
+                .saddr   = CLIENT_IP,
+                .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
+        };
+
+To avoid the build time and run time warnings seen with a 0-sized
+trailing array for struct bpf_lpm_trie_key, introduce a new struct
+that correctly uses a flexible array for the trailing bytes,
+struct bpf_lpm_trie_key_u8. As part of this, include the "header"
+portion (which is just the "prefixlen" member), so it can be used
+by anything building a bpf_lpr_trie_key that has trailing members that
+aren't a u8 flexible array (like the self-test[1]), which is named
+struct bpf_lpm_trie_key_hdr.
+
+Adjust the kernel code to use struct bpf_lpm_trie_key_u8 through-out,
+and for the selftest to use struct bpf_lpm_trie_key_hdr. Add a comment
+to the UAPI header directing folks to the two new options.
+
+Link: https://lore.kernel.org/all/202206281009.4332AA33@keescook/ [1]
+Reported-by: Mark Rutland <mark.rutland@arm.com>
+Closes: https://paste.debian.net/hidden/ca500597/
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v3- create a new pair of structs -- leave old struct alone
+v2- https://lore.kernel.org/lkml/20240216235536.it.234-kees@kernel.org/
+v1- https://lore.kernel.org/lkml/20230204183241.never.481-kees@kernel.org/
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mykola Lysenko <mykolal@fb.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Haowen Bai <baihaowen@meizu.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+---
+ Documentation/bpf/map_lpm_trie.rst            |  2 +-
+ include/uapi/linux/bpf.h                      | 14 ++++++++++++-
+ kernel/bpf/lpm_trie.c                         | 20 +++++++++----------
+ samples/bpf/map_perf_test_user.c              |  2 +-
+ samples/bpf/xdp_router_ipv4_user.c            |  2 +-
+ tools/include/uapi/linux/bpf.h                | 14 ++++++++++++-
+ .../selftests/bpf/progs/map_ptr_kern.c        |  2 +-
+ tools/testing/selftests/bpf/test_lpm_map.c    | 18 ++++++++---------
+ 8 files changed, 49 insertions(+), 25 deletions(-)
+
+diff --git a/Documentation/bpf/map_lpm_trie.rst b/Documentation/bpf/map_lpm_trie.rst
+index 74d64a30f500..f9cd579496c9 100644
+--- a/Documentation/bpf/map_lpm_trie.rst
++++ b/Documentation/bpf/map_lpm_trie.rst
+@@ -17,7 +17,7 @@ significant byte.
+ 
+ LPM tries may be created with a maximum prefix length that is a multiple
+ of 8, in the range from 8 to 2048. The key used for lookup and update
+-operations is a ``struct bpf_lpm_trie_key``, extended by
++operations is a ``struct bpf_lpm_trie_key_u8``, extended by
+ ``max_prefixlen/8`` bytes.
+ 
+ - For IPv4 addresses the data length is 4 bytes
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 754e68ca8744..c5a46d12076e 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -77,12 +77,24 @@ struct bpf_insn {
+ 	__s32	imm;		/* signed immediate constant */
+ };
+ 
+-/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
++/* Deprecated: use struct bpf_lpm_trie_key_u8 (when the "data" member is needed for
++ * byte access) or struct bpf_lpm_trie_key_hdr (when using an alternative type for
++ * the trailing flexible array member) instead.
++ */
+ struct bpf_lpm_trie_key {
+ 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
+ 	__u8	data[0];	/* Arbitrary size */
+ };
+ 
++/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry, with trailing byte array. */
++struct bpf_lpm_trie_key_u8 {
++	__struct_group(bpf_lpm_trie_key_hdr, hdr, /* no attrs */,
++		/* up to 32 for AF_INET, 128 for AF_INET6 */
++		__u32	prefixlen;
++	);
++	__u8	data[];		/* Arbitrary size */
++};
++
+ struct bpf_cgroup_storage_key {
+ 	__u64	cgroup_inode_id;	/* cgroup inode id */
+ 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index b32be680da6c..050fe1ebf0f7 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -164,13 +164,13 @@ static inline int extract_bit(const u8 *data, size_t index)
+  */
+ static size_t longest_prefix_match(const struct lpm_trie *trie,
+ 				   const struct lpm_trie_node *node,
+-				   const struct bpf_lpm_trie_key *key)
++				   const struct bpf_lpm_trie_key_u8 *key)
+ {
+ 	u32 limit = min(node->prefixlen, key->prefixlen);
+ 	u32 prefixlen = 0, i = 0;
+ 
+ 	BUILD_BUG_ON(offsetof(struct lpm_trie_node, data) % sizeof(u32));
+-	BUILD_BUG_ON(offsetof(struct bpf_lpm_trie_key, data) % sizeof(u32));
++	BUILD_BUG_ON(offsetof(struct bpf_lpm_trie_key_u8, data) % sizeof(u32));
+ 
+ #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && defined(CONFIG_64BIT)
+ 
+@@ -229,7 +229,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+ {
+ 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
+ 	struct lpm_trie_node *node, *found = NULL;
+-	struct bpf_lpm_trie_key *key = _key;
++	struct bpf_lpm_trie_key_u8 *key = _key;
+ 
+ 	if (key->prefixlen > trie->max_prefixlen)
+ 		return NULL;
+@@ -309,7 +309,7 @@ static long trie_update_elem(struct bpf_map *map,
+ 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
+ 	struct lpm_trie_node *node, *im_node = NULL, *new_node = NULL;
+ 	struct lpm_trie_node __rcu **slot;
+-	struct bpf_lpm_trie_key *key = _key;
++	struct bpf_lpm_trie_key_u8 *key = _key;
+ 	unsigned long irq_flags;
+ 	unsigned int next_bit;
+ 	size_t matchlen = 0;
+@@ -437,7 +437,7 @@ static long trie_update_elem(struct bpf_map *map,
+ static long trie_delete_elem(struct bpf_map *map, void *_key)
+ {
+ 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
+-	struct bpf_lpm_trie_key *key = _key;
++	struct bpf_lpm_trie_key_u8 *key = _key;
+ 	struct lpm_trie_node __rcu **trim, **trim2;
+ 	struct lpm_trie_node *node, *parent;
+ 	unsigned long irq_flags;
+@@ -536,7 +536,7 @@ static long trie_delete_elem(struct bpf_map *map, void *_key)
+ 				 sizeof(struct lpm_trie_node))
+ #define LPM_VAL_SIZE_MIN	1
+ 
+-#define LPM_KEY_SIZE(X)		(sizeof(struct bpf_lpm_trie_key) + (X))
++#define LPM_KEY_SIZE(X)		(sizeof(struct bpf_lpm_trie_key_u8) + (X))
+ #define LPM_KEY_SIZE_MAX	LPM_KEY_SIZE(LPM_DATA_SIZE_MAX)
+ #define LPM_KEY_SIZE_MIN	LPM_KEY_SIZE(LPM_DATA_SIZE_MIN)
+ 
+@@ -565,7 +565,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
+ 	/* copy mandatory map attributes */
+ 	bpf_map_init_from_attr(&trie->map, attr);
+ 	trie->data_size = attr->key_size -
+-			  offsetof(struct bpf_lpm_trie_key, data);
++			  offsetof(struct bpf_lpm_trie_key_u8, data);
+ 	trie->max_prefixlen = trie->data_size * 8;
+ 
+ 	spin_lock_init(&trie->lock);
+@@ -616,7 +616,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
+ {
+ 	struct lpm_trie_node *node, *next_node = NULL, *parent, *search_root;
+ 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
+-	struct bpf_lpm_trie_key *key = _key, *next_key = _next_key;
++	struct bpf_lpm_trie_key_u8 *key = _key, *next_key = _next_key;
+ 	struct lpm_trie_node **node_stack = NULL;
+ 	int err = 0, stack_ptr = -1;
+ 	unsigned int next_bit;
+@@ -703,7 +703,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
+ 	}
+ do_copy:
+ 	next_key->prefixlen = next_node->prefixlen;
+-	memcpy((void *)next_key + offsetof(struct bpf_lpm_trie_key, data),
++	memcpy((void *)next_key + offsetof(struct bpf_lpm_trie_key_u8, data),
+ 	       next_node->data, trie->data_size);
+ free_stack:
+ 	kfree(node_stack);
+@@ -715,7 +715,7 @@ static int trie_check_btf(const struct bpf_map *map,
+ 			  const struct btf_type *key_type,
+ 			  const struct btf_type *value_type)
+ {
+-	/* Keys must have struct bpf_lpm_trie_key embedded. */
++	/* Keys must have struct bpf_lpm_trie_key_u8 embedded. */
+ 	return BTF_INFO_KIND(key_type->info) != BTF_KIND_STRUCT ?
+ 	       -EINVAL : 0;
+ }
+diff --git a/samples/bpf/map_perf_test_user.c b/samples/bpf/map_perf_test_user.c
+index d2fbcf963cdf..07ff471ed6ae 100644
+--- a/samples/bpf/map_perf_test_user.c
++++ b/samples/bpf/map_perf_test_user.c
+@@ -370,7 +370,7 @@ static void run_perf_test(int tasks)
+ 
+ static void fill_lpm_trie(void)
+ {
+-	struct bpf_lpm_trie_key *key;
++	struct bpf_lpm_trie_key_u8 *key;
+ 	unsigned long value = 0;
+ 	unsigned int i;
+ 	int r;
+diff --git a/samples/bpf/xdp_router_ipv4_user.c b/samples/bpf/xdp_router_ipv4_user.c
+index 9d41db09c480..266fdd0b025d 100644
+--- a/samples/bpf/xdp_router_ipv4_user.c
++++ b/samples/bpf/xdp_router_ipv4_user.c
+@@ -91,7 +91,7 @@ static int recv_msg(struct sockaddr_nl sock_addr, int sock)
+ static void read_route(struct nlmsghdr *nh, int nll)
+ {
+ 	char dsts[24], gws[24], ifs[16], dsts_len[24], metrics[24];
+-	struct bpf_lpm_trie_key *prefix_key;
++	struct bpf_lpm_trie_key_u8 *prefix_key;
+ 	struct rtattr *rt_attr;
+ 	struct rtmsg *rt_msg;
+ 	int rtm_family;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7f24d898efbb..c55244bf1a20 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -77,12 +77,24 @@ struct bpf_insn {
+ 	__s32	imm;		/* signed immediate constant */
+ };
+ 
+-/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
++/* Deprecated: use struct bpf_lpm_trie_key_u8 (when the "data" member is needed for
++ * byte access) or struct bpf_lpm_trie_key_hdr (when using an alternative type for
++ * the trailing flexible array member) instead.
++ */
+ struct bpf_lpm_trie_key {
+ 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
+ 	__u8	data[0];	/* Arbitrary size */
+ };
+ 
++/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry, with trailing byte array. */
++struct bpf_lpm_trie_key_u8 {
++	__struct_group(bpf_lpm_trie_key_hdr, hdr, /* no attrs */,
++		/* up to 32 for AF_INET, 128 for AF_INET6 */
++		__u32	prefixlen;
++	);
++	__u8	data[];		/* Arbitrary size */
++};
++
+ struct bpf_cgroup_storage_key {
+ 	__u64	cgroup_inode_id;	/* cgroup inode id */
+ 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+index 3325da17ec81..efaf622c28dd 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -316,7 +316,7 @@ struct lpm_trie {
+ } __attribute__((preserve_access_index));
+ 
+ struct lpm_key {
+-	struct bpf_lpm_trie_key trie_key;
++	struct bpf_lpm_trie_key_hdr trie_key;
+ 	__u32 data;
+ };
+ 
+diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
+index c028d621c744..d98c72dc563e 100644
+--- a/tools/testing/selftests/bpf/test_lpm_map.c
++++ b/tools/testing/selftests/bpf/test_lpm_map.c
+@@ -211,7 +211,7 @@ static void test_lpm_map(int keysize)
+ 	volatile size_t n_matches, n_matches_after_delete;
+ 	size_t i, j, n_nodes, n_lookups;
+ 	struct tlpm_node *t, *list = NULL;
+-	struct bpf_lpm_trie_key *key;
++	struct bpf_lpm_trie_key_u8 *key;
+ 	uint8_t *data, *value;
+ 	int r, map;
+ 
+@@ -331,8 +331,8 @@ static void test_lpm_map(int keysize)
+ static void test_lpm_ipaddr(void)
+ {
+ 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
+-	struct bpf_lpm_trie_key *key_ipv4;
+-	struct bpf_lpm_trie_key *key_ipv6;
++	struct bpf_lpm_trie_key_u8 *key_ipv4;
++	struct bpf_lpm_trie_key_u8 *key_ipv6;
+ 	size_t key_size_ipv4;
+ 	size_t key_size_ipv6;
+ 	int map_fd_ipv4;
+@@ -423,7 +423,7 @@ static void test_lpm_ipaddr(void)
+ static void test_lpm_delete(void)
+ {
+ 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
+-	struct bpf_lpm_trie_key *key;
++	struct bpf_lpm_trie_key_u8 *key;
+ 	size_t key_size;
+ 	int map_fd;
+ 	__u64 value;
+@@ -532,7 +532,7 @@ static void test_lpm_delete(void)
+ static void test_lpm_get_next_key(void)
+ {
+ 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
+-	struct bpf_lpm_trie_key *key_p, *next_key_p;
++	struct bpf_lpm_trie_key_u8 *key_p, *next_key_p;
+ 	size_t key_size;
+ 	__u32 value = 0;
+ 	int map_fd;
+@@ -693,9 +693,9 @@ static void *lpm_test_command(void *arg)
+ {
+ 	int i, j, ret, iter, key_size;
+ 	struct lpm_mt_test_info *info = arg;
+-	struct bpf_lpm_trie_key *key_p;
++	struct bpf_lpm_trie_key_u8 *key_p;
+ 
+-	key_size = sizeof(struct bpf_lpm_trie_key) + sizeof(__u32);
++	key_size = sizeof(*key_p) + sizeof(__u32);
+ 	key_p = alloca(key_size);
+ 	for (iter = 0; iter < info->iter; iter++)
+ 		for (i = 0; i < MAX_TEST_KEYS; i++) {
+@@ -717,7 +717,7 @@ static void *lpm_test_command(void *arg)
+ 				ret = bpf_map_lookup_elem(info->map_fd, key_p, &value);
+ 				assert(ret == 0 || errno == ENOENT);
+ 			} else {
+-				struct bpf_lpm_trie_key *next_key_p = alloca(key_size);
++				struct bpf_lpm_trie_key_u8 *next_key_p = alloca(key_size);
+ 				ret = bpf_map_get_next_key(info->map_fd, key_p, next_key_p);
+ 				assert(ret == 0 || errno == ENOENT || errno == ENOMEM);
+ 			}
+@@ -752,7 +752,7 @@ static void test_lpm_multi_thread(void)
+ 
+ 	/* create a trie */
+ 	value_size = sizeof(__u32);
+-	key_size = sizeof(struct bpf_lpm_trie_key) + value_size;
++	key_size = sizeof(struct bpf_lpm_trie_key_hdr) + value_size;
+ 	map_fd = bpf_map_create(BPF_MAP_TYPE_LPM_TRIE, NULL, key_size, value_size, 100, &opts);
+ 
+ 	/* create 4 threads to test update, delete, lookup and get_next_key */
+-- 
+2.34.1
+
 
