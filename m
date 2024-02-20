@@ -1,175 +1,155 @@
-Return-Path: <linux-kselftest+bounces-5045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D035485C1FD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:06:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28B3F85C204
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:07:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84589B225FD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 17:06:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5A07281B26
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 17:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC259762EF;
-	Tue, 20 Feb 2024 17:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9174F76C72;
+	Tue, 20 Feb 2024 17:07:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="3cauF/ap"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lAI/MB9o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9D91C2E
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 17:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92F176911;
+	Tue, 20 Feb 2024 17:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708448758; cv=none; b=lvAND6VE6RIbAoZkAZK932oMCnVwUBAd+B2IRA+NAJ0SYdiJV1ssgWGuGWY47ltdfkML5zgmm8ITZD0UgbMWiABg71mvV1F76HrW5dcHhq4lhUkvIyqX8nBKaPXH9p7icp79wB3yi3pf07+t1KtsF4aeg7NrrI1SAE/UUpPBJMU=
+	t=1708448843; cv=none; b=QVQPY2D654ddAIxtcnN5BHq2OaAPAqK6bSACsEcif4ID/de3P8GJqEzX7WLjuP25w6U9icL+Eh1Ulbv2sRnQWXowMYPgRJSeQui3xN0l11LlL9ZKzxOiN7wKYdDkMFXKk4ye2/dgJsKuMulRsGD8Rg3BR3Uo2jYOebNZgYdQHn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708448758; c=relaxed/simple;
-	bh=IEevpCTRyr6Yrk83FEtRQRLmg8WxSefSxCtZseJG5zk=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=dKxLiTL5TDxSeYVrF0EOHOMwTMsxpW0bo0n7pVZGSTIq8wmjRGYk/KUnO4N4DK8jUN9if7XZt3rAJaOU1+31irvwzVO2IvaQu0gShWDPCZwvOeNoBFq/R8joJsyfEBNmBqqWBGUZeSqvL5y6lYawG1rfLS4BgZwnheCuN1pWBE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=3cauF/ap; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dc09556599so14223195ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 09:05:57 -0800 (PST)
+	s=arc-20240116; t=1708448843; c=relaxed/simple;
+	bh=mtYh4pPl8nUvoS1cpHihY1SAedbSQ4SPzAugmWQRuzg=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Y9tKtrsX/ngBqg2MyKGA5LjNzCCY1VRsJE0ImIUWu1g9u+j94OdLqEUQitNKFf73JnSGMgYx9GS8mpftAmGAOlv8nGzW0C84lcGdRk6hgrXYJYJAhJMGKFLLb19SBNOYIlYyovHsU1wZQtlmHYiqQrgPxy7vQIXb7+zvlsYkJ9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lAI/MB9o; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4127109686fso3954715e9.2;
+        Tue, 20 Feb 2024 09:07:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708448756; x=1709053556; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mHsO/b1g6OunzqG9dXwoedaKziPjW4pTQ3nMjpgFTg4=;
-        b=3cauF/apO/mpbtvKK16QGrbeWsjhkB7GrTuJzDWDFbZyhl5ZeMdvHD5dwFh0c6Qflf
-         HbTmH0h3n8fTe8cGGHSxymCNmf93dGRZMZMPbNZZuGY5IDKpTD240v/PcKLnNH+bVF4B
-         bbiyGl4Qvl/REx/diTZ+S34FCWZeRJcP3RaaI7YKeHRi/sGfI7z6FhLoja0B5Qt/s0/M
-         8mya3gd4pVpVyvHag/tqd1dxPblIk2ogmEIWLnQgmM+2eUa+5uu8FzFIRw3tKZHDdnQW
-         dzoJBcsP9Hn8Iy6e4PLPA7x+uftytzqjUsUzdyBFfW9qfV2CitQei3Re3J1ZtTUFVFZg
-         Bv1A==
+        d=gmail.com; s=20230601; t=1708448840; x=1709053640; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bS6mzlS2FvG30g8kCU8KyMPeOwgxgcQl7tVtSUw6YUE=;
+        b=lAI/MB9oFbzyaNZfoz840sx0CMM+mGzBvK2b4ln1Kge5yPZFBIpP1VhXIMjjkj5uNC
+         psYZuPFBvfwISobjsRTN5bRv2T8Q0EdRlT/YL7F9WT1uU+nsAKDLkoIyrHbDkzp6iW8t
+         Gx1B5I9MqU6bHy32svhJ/WpZGVlbTipSXdZWysjNKWFplkOvID1ULrNV1KuG17xFdcm1
+         00Oka3gVCTwKqysWHTLrHVcE/7Iv/hBcdu+cqjoc3aDmUjUVRnoJdGauABsIQLw50BiM
+         XRiYd+FmDrG9OHKvc4B8rOPut2GYuHpsPHj2MD1dTKD4sq5hSET/4QlCs/68MBqLEgyi
+         +tCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708448756; x=1709053556;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mHsO/b1g6OunzqG9dXwoedaKziPjW4pTQ3nMjpgFTg4=;
-        b=BR1w7fKQ3ceTyfjHaUwHe/db/BeqgzPgx394hpPOW8pj2RDtKcitRQiehf4VpgYlSa
-         6zFHfB0BBRM8J2rdEjkNjrx0YkT8bjIuAcejbvZqSOQp8M8nbnuU8CKGVbfAnur5qsY5
-         XTBuO0bxGDpmEJUuBCvub0wT67BaFnVVDXvZpBbOUrbkMAoO5D0ilbSqe09rsaFuR1f6
-         bClQDjhZGwObWqaBLSMRJ8+JS7SjKZr1uSKrqApxsMv8LEF9M0lnuvjVAn/KSOm9z6t2
-         +YKbycn0M9hK+my1GdmbY2ixPMCSNJg4d6vscUKC/pNzC0C6v5RMVOtkdNjKrZlo6ioc
-         vi4w==
-X-Forwarded-Encrypted: i=1; AJvYcCU9xzdnt3Wbgrhz9YqDgOtv2rsTvuiMS2YSCADDzP4B785+LlCC+pXxnM1r26PZpvsFK8uqXihZoldssJxvJBzdTaZ3ZaFraYX3pPvW++Cn
-X-Gm-Message-State: AOJu0YyKRoB1jz/zCcrRBVpuBPNUcmXa/VbYH60mif7rjzuuFJhaMhKB
-	u8iBq4vc1DEdr1736W+9oGeVY9US4muxIefNRTkTrFmS5ENrxhfTQsxqNT1TH2xEf+hUx8RrNzX
-	Uadg=
-X-Google-Smtp-Source: AGHT+IFJAyuIgEJhl6Eou2q6gr4KvaHcFJ7pVm19vz+CSggg6dFwW0nZZT5Urc4yAI3AX2PLTDofIg==
-X-Received: by 2002:a17:902:ecc7:b0:1dc:15db:bcca with SMTP id a7-20020a170902ecc700b001dc15dbbccamr2819697plh.55.1708448756473;
-        Tue, 20 Feb 2024 09:05:56 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id o16-20020a17090323d000b001d9edac54b1sm6551366plh.171.2024.02.20.09.05.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 09:05:56 -0800 (PST)
-Message-ID: <65d4dbf4.170a0220.6f23b.3f69@mx.google.com>
-Date: Tue, 20 Feb 2024 09:05:56 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1708448840; x=1709053640;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bS6mzlS2FvG30g8kCU8KyMPeOwgxgcQl7tVtSUw6YUE=;
+        b=Ls2mFvTLZTSzKWqfZHsXXNN/4lthFSDbZ55S+lxCuXzdYHJyFZcX5YphIHpwCd6m5y
+         NdDqALDIWnmhLEYhYTyXN7NCCitmAKDak7znOh3QR/DwMdaNTDDoHuaSWPebZAR6dmEi
+         Oe6rZ9SHI/gxubn992Go3jnxmcLq2eF/60bDYzQqxirc4H+Zi1RQVEjF4HArMUbS4l9h
+         AtJnEbKuIDGsT5SxaNaELPddBVWPnViE2kl/JSTDNIa9N61GYUR9xgF2LQYAZ+1Qsfz7
+         Rmwuxjcto8FnNngTYIrWM00d6Y16OlV0KHo68xEArn5DAvG7pUSua7DndSzcUMYIPZSs
+         E4dA==
+X-Forwarded-Encrypted: i=1; AJvYcCXRo17lhE6TcalT23u+VRU6rPP0Fdnh3HpZs2WRzD7zwrqzyKji8fdz9gpUIElbHNZqHs8tpczVlm2NaZp8iy944sscg6+MZ1MHLBysxFch/A732Q5/qw1BECaukZcAUrBKGEOc4+kLRtbheSY6p8PoHycPPBMUDc52vIIqhF7QNqNDq9XZyPS4kxu23b/QxrdwxuQWSmAYU+VYWzpkvMRcqkVkmjVjVX0lk3P0R6KwBHg3/Y1NBfi+qg==
+X-Gm-Message-State: AOJu0Yw0/jww1HVDaa96CwiGtPtcQ/dQkCIXvH+3a4ePzF5mRuElCuuI
+	vuMis8O8cXD2iXuCkXrY/WPq4zInCou5KGFAw6gNLYIUVzVvprJ7
+X-Google-Smtp-Source: AGHT+IGKDgeb1b4/RZMqZUijqCwIZaYIC4U3t4wwvNhBDBJASOb+1pT/1HGi9975hFGHmqQ0PDn8dQ==
+X-Received: by 2002:a05:600c:1c93:b0:412:6dd4:1001 with SMTP id k19-20020a05600c1c9300b004126dd41001mr2072917wms.16.1708448839929;
+        Tue, 20 Feb 2024 09:07:19 -0800 (PST)
+Received: from [192.168.10.18] (54-240-197-233.amazon.com. [54.240.197.233])
+        by smtp.gmail.com with ESMTPSA id o20-20020a05600c4fd400b00412590eee7csm12231744wmq.10.2024.02.20.09.07.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Feb 2024 09:07:19 -0800 (PST)
+From: Paul Durrant <xadimgnik@gmail.com>
+X-Google-Original-From: Paul Durrant <paul@xen.org>
+Message-ID: <bd028731-bc98-4735-a7f9-9b4ef9c00668@xen.org>
+Date: Tue, 20 Feb 2024 17:07:17 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.8-rc1-33-gf17d8a87ecb55
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 3 builds: 2 failed, 1 passed, 2 errors,
- 3 warnings (v6.8-rc1-33-gf17d8a87ecb55)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla Thunderbird
+Reply-To: paul@xen.org
+Subject: Re: [PATCH v13 00/21] KVM: xen: update shared_info and vcpu_info
+ handling
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ David Hildenbrand <david@redhat.com>, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240215152916.1158-1-paul@xen.org>
+ <170838297541.2281798.7838961694439257911.b4-ty@google.com>
+ <05973da0-f68c-4c84-8806-bdba92f2ed6e@xen.org> <ZdTQCuWor4ipxW6E@google.com>
+Content-Language: en-US
+Organization: Xen Project
+In-Reply-To: <ZdTQCuWor4ipxW6E@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-kselftest/next build: 3 builds: 2 failed, 1 passed, 2 errors, 3 warnings (v=
-6.8-rc1-33-gf17d8a87ecb55)
+On 20/02/2024 16:15, Sean Christopherson wrote:
+> On Tue, Feb 20, 2024, Paul Durrant wrote:
+>> On 20/02/2024 15:55, Sean Christopherson wrote:
+>>> On Thu, 15 Feb 2024 15:28:55 +0000, Paul Durrant wrote:
+>>>> From: Paul Durrant <pdurrant@amazon.com>
+>>>>
+>>>> This series contains a new patch from Sean added since v12 [1]:
+>>>>
+>>>> * KVM: s390: Refactor kvm_is_error_gpa() into kvm_is_gpa_in_memslot()
+>>>>
+>>>> This frees up the function name kvm_is_error_gpa() such that it can then be
+>>>> re-defined in:
+>>>>
+>>>> [...]
+>>>
+>>> *sigh*
+>>>
+>>> I forgot to hit "send" on this yesterday.  But lucky for me, that worked out in
+>>> my favor as I needed to rebase on top of kvm/kvm-uapi to avoid pointless conflicts
+>>> in the uapi headeres.
+>>>
+>>> So....
+>>>
+>>> Applied to kvm-x86 xen, minus 18 and 19 (trylock stuff) and 21 (locking cleanup
+>>> that we're doing elsewhere).
+>>>
+>>
+>> Looks like you meant 17 & 18?
+> 
+> Doh, yes.
+> 
+>>> Paul and David, please take (another) look at the end result to make sure you don't
+>>> object to any of my tweaks and that I didn't botch anything.
+>>>
+>>
+>> What was the issue with 17? It was reasonable clean-up and I'd like to keep
+>> it even without 18 being applied (and I totally understand your reasons for
+>> that).
+> 
+> I omitted it purely to avoid creating an unnecessary dependency for the trylock
+> patch.  That way the trylock patch (or whatever it morphs into) can be applied on
+> any branch (along with the cleanup), i.e. doesn't need to be taken through kvm-x86/xen.
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.8-rc1-33-gf17d8a87ecb55/
-
-Tree: kselftest
-Branch: next
-Git Describe: v6.8-rc1-33-gf17d8a87ecb55
-Git Commit: f17d8a87ecb557bc6c9770751c3f0aaf10edbb98
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 3 unique architectures
-
-Build Failures Detected:
-
-i386:
-    i386_defconfig+kselftest: (gcc-10) FAIL
-
-x86_64:
-    x86_64_defconfig+kselftest: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arm:
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-
-i386:
-    i386_defconfig+kselftest (gcc-10): 1 error, 1 warning
-
-x86_64:
-    x86_64_defconfig+kselftest (gcc-10): 1 error, 1 warning
-
-Errors summary:
-
-    2    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_me=
-mcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings summary:
-
-    2    cc1: all warnings being treated as errors
-    1    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_=
-memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
- 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----
-For more info write to <info@kernelci.org>
+Ok, personally I don't see the dependency being an issue. I suspect it 
+will be a while before we decide what to do about the locking issue... 
+particularly since David is out this week, as he says.
 
