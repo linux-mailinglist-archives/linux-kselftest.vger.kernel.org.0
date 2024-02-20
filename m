@@ -1,163 +1,157 @@
-Return-Path: <linux-kselftest+bounces-5029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3350985BD4E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 14:37:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB11585BD76
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 14:45:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57D451C22479
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 13:37:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59FAC2850EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 13:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836876A33A;
-	Tue, 20 Feb 2024 13:37:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F77D6A33F;
+	Tue, 20 Feb 2024 13:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rZQBB1S0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A30U9cD9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C2F6A335;
-	Tue, 20 Feb 2024 13:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C7E5B1E6;
+	Tue, 20 Feb 2024 13:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708436253; cv=none; b=mwXymtKDx/+9pxbVCKx24OW4yUD6QiyZ4fS9f6zu0yr/nm54RfNPU6ApB+tmra6xj0z97hz1q43fWfB+E7DLFVqXqrTHwcOYZra55vFNRi+uHkh8EmqbEsibokQYi7E/952ODOzzLpTrGy2mxS/mdg5U4rW1KMob4CmtvVIkrf0=
+	t=1708436753; cv=none; b=M3smIV9rvokQVDvf6lOIKxtDMalQrVBM000e+oc8PSuVLZbJsO+LShMs3ApPnKDB9V+0fT9WTsNBLgshI419FaZZGPR+R9ycK7ekBGNvEd/Hfri9mhy4tbJccZWEUdbs7Ti9Et9MU8j/b5V5v4CGh61Eih831Tz1y5G8YIVNpe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708436253; c=relaxed/simple;
-	bh=smIPqtG20UMCd/zXPcU2zt6z+XyycqU9Y03epv6a7ZE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ou0rm5jh4UcFqcVPoiE2nRMoC2IlX+H2oc4nj6vuZ6gAso6DXI5KubfKqdNaqMSN8NPcH+W6NL88Rr+ea3AEsrutKg+rKozPw611tfkPK4htTXXfvslRs1adQmGLn7M61fdZwWtVh0qFjQ6m9L9j3wwkqAfdiVjotGJkhvWu1Ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rZQBB1S0; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41KDUfOQ016907;
-	Tue, 20 Feb 2024 13:37:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=2ZLbRiDGUwBJ70GdCzIY25odvEPvGmovSt4o+8xvzrc=;
- b=rZQBB1S020oBPldIlL7vHb0vrX2Ie2jGkF+xS4wwy8fSBmyjdJF1XZ0GuVV90pPiErPv
- OR/tndpuYDYghIR2qCNy5jrVfBVSOfHv4K/+HJPxBDdxgWBTLpb+H76cP749jRejxKaO
- sZH1u0a+dQ49JliaBKj3hS2fc+FHgsdrXICWPBg/EmGL2Ii9qKiAeDZdWUMVkJKZ8Wsu
- jOIuHThvETHGJMsCV2rQ/i9tf4da1XsEztLqtVPQHjKiBGlP1qIJmE/BH7sYMijN4lwf
- eXVCPlwCwcJeTPwA6w74iTNYl3z+cb6VpkW0VAfXxyphzZm7hnJDoVuPttpYdv23rtz7 pA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcvwh88pw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 13:37:23 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41KDZIXu003512;
-	Tue, 20 Feb 2024 13:37:22 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcvwh88p5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 13:37:22 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41KBtut7017307;
-	Tue, 20 Feb 2024 13:37:21 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb8mm87fv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 13:37:21 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41KDbFpv41353490
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 20 Feb 2024 13:37:17 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 876E02004D;
-	Tue, 20 Feb 2024 13:37:15 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DA84920040;
-	Tue, 20 Feb 2024 13:37:14 +0000 (GMT)
-Received: from li-978a334c-2cba-11b2-a85c-a0743a31b510.ibm.com (unknown [9.171.28.134])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 20 Feb 2024 13:37:14 +0000 (GMT)
-Message-ID: <0dfca89958c532d1a76232fceca9856d80d42d10.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 1/2] KVM: s390: fix access register usage in ioctls
-From: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-To: Eric Farman <farman@linux.ibm.com>,
-        Christian Borntraeger
- <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio
- Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle
- <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan
- <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Date: Tue, 20 Feb 2024 14:37:14 +0100
-In-Reply-To: <20240216213616.3819805-2-farman@linux.ibm.com>
-References: <20240216213616.3819805-1-farman@linux.ibm.com>
-	 <20240216213616.3819805-2-farman@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	s=arc-20240116; t=1708436753; c=relaxed/simple;
+	bh=0L+oqvPLfVCK7Ieg6wTiU99ZpvE789Oat2RVeiUpHzs=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=JM5AQK2iefORirx5Tiy+WDFgC9Eo0Q0QOjx9HcHtxL2mIYpysQZsNsvETCAHNqMBsd7eGLcDg8wuv1m1DGiI9LVFz+7ZJ5zxRyKpFtIN+S/6KO9s3eyEJOOYu5UgbhyToWgm0GuBGzhb1oFbgmb/bbY5ampIVmLYn9H8oOxrIFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A30U9cD9; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708436752; x=1739972752;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=0L+oqvPLfVCK7Ieg6wTiU99ZpvE789Oat2RVeiUpHzs=;
+  b=A30U9cD9Zu8Wxg0FdAk+1paS2Pkg/SS9mxPn4NgDrbJ/ic1lrkBShgYQ
+   hILBwz4qwlJlBYSZHWuNiq9BGAYGxUUe9IRWzTqwYKbCwYLQ62PWy326w
+   0al3gXJy0biHzuN8FpSRkiz+2IqhWwhT64/XHd6vnesQ2i89kCvQp9r3+
+   xjNjr8Er5MPArzyDaF5clYkYEZ5k4hHphk4WDFrOcgU0PK9bmaMYcK6Fo
+   c0FCvYxToBzjWmixz5uLxVsIMA47woTxghAryinXpf32/pghX1OII84pk
+   ZJ/UF+8BqxRYSdKftqh3eQNupiPsG1kNeIqBeu3MUty0G28BLD6+9UUNx
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="13095751"
+X-IronPort-AV: E=Sophos;i="6.06,172,1705392000"; 
+   d="scan'208";a="13095751"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 05:45:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,172,1705392000"; 
+   d="scan'208";a="5016328"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.94.249.21])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 05:45:28 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 20 Feb 2024 15:45:23 +0200 (EET)
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+cc: Fenghua Yu <fenghua.yu@intel.com>, 
+    Reinette Chatre <reinette.chatre@intel.com>, Shuah Khan <shuah@kernel.org>, 
+    LKML <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] selftests/resctrl: Simplify cleanup in ctrl-c
+ handler
+In-Reply-To: <8c4fcfb6b4e38a0f0e400be88ecf1af0d20e12e7.1708434017.git.maciej.wieczor-retman@intel.com>
+Message-ID: <5f251bcd-a343-bb6e-a947-7605dc59f9ea@linux.intel.com>
+References: <cover.1708434017.git.maciej.wieczor-retman@intel.com> <8c4fcfb6b4e38a0f0e400be88ecf1af0d20e12e7.1708434017.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: g5WTvC2pAo2-QTnFwCzx1017JTzrdz-J
-X-Proofpoint-GUID: H5hTo1b9QMbb0xuEr5qDSXT-e--ZdQpx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 adultscore=0 bulkscore=0 spamscore=0 suspectscore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402200098
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, 2024-02-16 at 22:36 +0100, Eric Farman wrote:
-> The routine ar_translation() can be reached by both the instruction
-> intercept path (where the access registers had been loaded with the
-> guest register contents), and the MEM_OP ioctls (which hadn't).
-> Since this routine saves the current registers to vcpu->run,
-> this routine erroneously saves host registers into the guest space.
->=20
-> Introduce a boolean in the kvm_vcpu_arch struct to indicate whether
-> the registers contain guest contents. If they do (the instruction
-> intercept path), the save can be performed and the AR translation
-> is done just as it is today. If they don't (the MEM_OP path), the
-> AR can be read from vcpu->run without stashing the current contents.
->=20
-> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+On Tue, 20 Feb 2024, Maciej Wieczor-Retman wrote:
 
-Reviewed-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-
+> Ctrl-c handler isn't aware of what test is currently running. Because of
+> that it executes all cleanups even if they aren't necessary. Since the
+> ctrl-c handler uses the sigaction system no parameters can be passed
+> to it as function arguments.
+> 
+> Add a global variable to make ctrl-c handler aware of the currently run
+> test and only execute the correct cleanup callback.
+> 
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 > ---
->  arch/s390/include/asm/kvm_host.h | 1 +
->  arch/s390/kvm/gaccess.c          | 3 ++-
->  arch/s390/kvm/kvm-s390.c         | 3 +++
->  3 files changed, 6 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm=
-_host.h
-> index 52664105a473..c86215eb4ca7 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -765,6 +765,7 @@ struct kvm_vcpu_arch {
->  	__u64 cputm_start;
->  	bool gs_enabled;
->  	bool skey_enabled;
-> +	bool acrs_loaded;
+>  tools/testing/selftests/resctrl/resctrl.h     |  2 ++
+>  .../testing/selftests/resctrl/resctrl_tests.c | 20 +++++++++----------
+>  tools/testing/selftests/resctrl/resctrl_val.c |  2 +-
+>  3 files changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> index 0f49df4961ea..79b45cbeb628 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -128,6 +128,8 @@ extern pid_t bm_pid, ppid;
+>  
+>  extern char llc_occup_path[1024];
+>  
+> +extern struct resctrl_test current_test;
 
-Not sure how descriptive that name is.
-Maybe add a comment.
+Why this is not just a pointer?
 
->  	struct kvm_s390_pv_vcpu pv;
->  	union diag318_info diag318_info;
->  };
+> +
+>  int get_vendor(void);
+>  bool check_resctrlfs_support(void);
+>  int filter_dmesg(void);
+> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> index 75fc49ba3efb..b17f7401892c 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> @@ -14,6 +14,12 @@
+>  static volatile int sink_target;
+>  volatile int *value_sink = &sink_target;
+>  
+> +/*
+> + * Set during test preparation for the cleanup function pointer used in
+> + * ctrl-c sa_sigaction
+> + */
+> +struct resctrl_test current_test;
+> +
+>  static struct resctrl_test *resctrl_tests[] = {
+>  	&mbm_test,
+>  	&mba_test,
+> @@ -75,18 +81,12 @@ static void cmd_help(void)
+>  	printf("\t-h: help\n");
+>  }
+>  
+> -void tests_cleanup(void)
+> -{
+> -	mbm_test_cleanup();
+> -	mba_test_cleanup();
+> -	cmt_test_cleanup();
+> -	cat_test_cleanup();
+> -}
 
-[...]
+This should be removed from resctrl.h too.
+
+> -
+> -static int test_prepare(void)
+> +static int test_prepare(const struct resctrl_test *test)
+>  {
+>  	int res;
+>  
+> +	current_test = *test;
+
+I'd prefer to keep this internal to signal handling functions so that 
+either the struct resctrl_test or just the cleanup handler is passed 
+to signal_handler_register().
+
+It'd also allow current_test (or the cleanup function ptr) to be static.
+
+-- 
+ i.
 
 
