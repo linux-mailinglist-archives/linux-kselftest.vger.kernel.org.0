@@ -1,144 +1,262 @@
-Return-Path: <linux-kselftest+bounces-5004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A74085B393
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 08:04:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 618E385B3DD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 08:23:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D2521C218FE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 07:04:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16B15283FB3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 07:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA8C5A4E0;
-	Tue, 20 Feb 2024 07:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1DF5A4CE;
+	Tue, 20 Feb 2024 07:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GtDfhOPD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gSwCnKk+"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="c4PngH8T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2275A4CE;
-	Tue, 20 Feb 2024 07:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.24
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708412544; cv=none; b=TZqkiG1kgVoU9V4/ifolN5qrUe1up4cra6p4QPCCi9Q1taHr0caNZ6zKhRtLBoGEVq1w6TZxzjjwLxKfAkeWOZ2QG0ekYgjd2JC4kghOs30pKCtV5iDaCjY2zT6paD69+SuK5JcYutNEf4OoxFZX82NiIqy0fpkFf2bNWRJcZCQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708412544; c=relaxed/simple;
-	bh=CGtGsFU2wXDy0isZRRb/KkEss2u7yvyia8mRoaJgn9M=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=mLSQ5lEfWMyBZeD2jenHfDM7vdo1whKmNsywm5KQnPH2JaBt0mIBIwN2ru+GnPnEOia7f158cGsnq3dnhNk8s5dka0mZClgLf2dYZbF45kz3yvdcUQFV3zePqQQwvNN46kSbh4R9quI5SrbNgPiX/Ku1yv/q1csP802A8LRpQd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GtDfhOPD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gSwCnKk+; arc=none smtp.client-ip=64.147.123.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 63B3F3200035;
-	Tue, 20 Feb 2024 02:02:20 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 20 Feb 2024 02:02:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1708412539; x=1708498939; bh=mbO/zaQXvf
-	9m5LFtRthBDAWNdbFRPWSTknyOW7f6+rE=; b=GtDfhOPD6uD6H0sAelQ0ZtNx0/
-	NRlgJrzEmUmJCCkqZ194HFHqwEd/CELc5UGj+Tg5+5PO7VK5ixGcdABOPCHDJYAN
-	77f/cqTaGV3W0t/8BioPGkOP1E5Qkvn8uzW1csJAePyaq9FEzT5Dc/4AbFwik39m
-	7lgmvfhnDvYNEGR3zV7XvK6/4+iS5SJsRRtTJbytokoI7synhmim6yy1EykFOg+a
-	nkI03WRzGJDc3nDhkQ333t+aLEMTM6//bhgESNsmZYFfr9O+Yh5OY6tsxqBwcxXP
-	G+PpDTZAFDiBYVrDW5hnd84dLiVe/TTWyeilwsnbZTlAP8mQVZ0p2r4E73eg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1708412539; x=1708498939; bh=mbO/zaQXvf9m5LFtRthBDAWNdbFR
-	PWSTknyOW7f6+rE=; b=gSwCnKk+gBcaLaHDSiSJIw6GSXpisMD4GR/Yu6hpEl6k
-	HkMdYKrkkxtyBLK0rDY6JBtDp8oPLg89fLVG4lZA+6nEUUXScqU+CF7cSIGMDdEj
-	wRQtyHA0ndB5uCukNgV0463rARFFwlwQtZ7gMTfbnZ8iAL7nx/FJqY0XPic9SwR2
-	60KsF//vVH3oRGkzhZM0Js+/NL80t96taprp/uuLdhpRN35uWOyNVA5RckWw7fUy
-	g5pdAY3dNjWCRq+c/O3L/VXxObGeZg2tMMyo+EMhD//+fSq2vBpN7clH/cVXxB1s
-	yC65LBtOhMOSG0tlm5IobUETiqFtDQlHmP5QwFuSFw==
-X-ME-Sender: <xms:e07UZYBm2hAHCJXsZzNHYoM9w_MqFrjQeYAAE3f-399uYwTeXJn9ng>
-    <xme:e07UZajACisGNQ92u2SHlsHMFHYqwH6lj3Of1f8R6re0jpa1E0CGmRUGL2WbGnw9h
-    8uE-n4tkmH0M2XRi3U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdelgddutddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:e07UZblP6z4GUSL-aC_vKHC6wX4ABG6e8bUzBxO0EWnRsN_yJ-pxaw>
-    <xmx:e07UZeyTQGWHfj_t69Iu2lnA-jvGG0F9hIIzb8OjCnG21dlM9fWMlA>
-    <xmx:e07UZdTHOGMBgWVpilHMFgaMrsqKonYDKq_j9UPavaZ2vPfXvdU3Ug>
-    <xmx:e07UZTCp_m36J6zr-xHOlLigMehtSQIiqAs_dknUnbrxVoSIyV-t1w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A0B7EB6008D; Tue, 20 Feb 2024 02:02:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-153-g7e3bb84806-fm-20240215.007-g7e3bb848
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10105A781;
+	Tue, 20 Feb 2024 07:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708413793; cv=fail; b=eZAsTLFcfw5fmRO0SWTF6wiOSKRROuS5O8VU9o/gv2vLNow4q35FEviUZq0DH1gavgcQeROuri2HNMekWWkzU1RsnUcV6mWM0mFs4tT+Y7bAm5Xz/+smwyCmttA2XRbyhC7Ps6GgarUGMaE8rHlFyKvsr05BiMjVsRcMO8eK8Wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708413793; c=relaxed/simple;
+	bh=kadGgJtVhLaCj25u4P41WccEyOFrecEaPui9wSEzivI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=HldGrXyUfp4EBVPLtqziV346uRWwdtZe/kK3TEvqis89HWhdKHfOmdfzgij+btEaw6zJDTUImpn4OqgpuH0tg8+HnxVjpsIPiazBByTYGFFExWxZltoyOwJpC7JRgMFAM3tSzlkyR2RMXo/R4lW9eq4TDH9rhSceX3WDFHVvU2w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=c4PngH8T; arc=fail smtp.client-ip=40.107.93.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HjOHyUgIJPjS6VCE1kgzdeUcItMa+ypfSrvFr/2ezox32eePlkqIbVDH0mizJRi+XFh3jFFRpUFDZvJBL7/K64pNdfsTEgIFzDH35Y6zD7Y4YcC9eYNnLXnnZyGs3x5x95kBYxgS+idz/ToqdD0zGF4CC7P+aNKhzFO//KvK2kfB2slo/5o/k8TorAMWQV+sNFIC77AB5H0uKBAhxi8UAvlMZ7Tzkcy7C24s+4WtrccE1d4RPcq3T6AllHoynYYHQZ+6UgOYzxv2SFkYXWdkJg+DzKPS0v9iqQJ70pPdC91AVHTWU3OayGNBVi+lWwcDjzJZF3u3/4EWhTn9vVYWWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U98VeIF5LkYwlQVGLh1sNZtj/ozVgnb76RfPpJFbczg=;
+ b=Uv5JHwrByPtpCdomQzbxZ99A77s7qHCaY1QsHrY/9EVE95k4CIgS5oAJtvSW8byO6t9MSAdBuQr1EdY5b+8N6xOZjvYoi4BPioGI6ntYqBGndbP2Lmjp0FAMEID0DJ8MY3uVYpBsPbVo12joIDQtKZosOGh4A/+PUcv/0vsMP6vBOH6L2TUOh0nULTXVJwqxNVg36cFY8N0XlRzT1mcuIQTpYxByzCM8tNZOixEkq0UJEnDkExfXpxHb85NxtI7ynHwmoHB4mjxEX02bgj7aLcn57zWWNLXKHsnEg2pEBCBsSQeZmydnwCDF4c8T6wPlGFVKoRyAkWCO2+mqrGOtsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U98VeIF5LkYwlQVGLh1sNZtj/ozVgnb76RfPpJFbczg=;
+ b=c4PngH8TEUK9BuSwMlpkQvlx7Grcv1pzmPNhtwz8MZbs3z+16GoOztTS/O10a95jY1Kvq4T7m9wuJuLyVTGSqxZ2JcQPQrmj3o8AXw76osnZXSplytsSWkDWXzH1oeDVXCLQLML3EIRN7zHorwS4FSjOx2aUNHEpz1w9/npIdWU=
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
+ PH8PR12MB6722.namprd12.prod.outlook.com (2603:10b6:510:1cd::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.19; Tue, 20 Feb
+ 2024 07:23:09 +0000
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::1b3:8ca1:e95b:22e5]) by DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::1b3:8ca1:e95b:22e5%6]) with mapi id 15.20.7292.022; Tue, 20 Feb 2024
+ 07:23:09 +0000
+From: "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+To: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>, "rafael@kernel.org"
+	<rafael@kernel.org>
+CC: "Yuan, Perry" <Perry.Yuan@amd.com>, "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+	"Deucher, Alexander" <Alexander.Deucher@amd.com>, "bp@alien8.de"
+	<bp@alien8.de>, "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Limonciello, Mario"
+	<Mario.Limonciello@amd.com>, "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+	"oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+	"rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, "Huang, Ray"
+	<Ray.Huang@amd.com>, "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"viresh.kumar@linaro.org" <viresh.kumar@linaro.org>, "x86@kernel.org"
+	<x86@kernel.org>
+Subject: RE: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
+ some CPUs
+Thread-Topic: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
+ some CPUs
+Thread-Index: AQHaYoWn0TWdRH4q1EizfAdgioooG7ES1hWg
+Date: Tue, 20 Feb 2024 07:23:09 +0000
+Message-ID:
+ <DM4PR12MB63518FB49F94A8445D32780AF7502@DM4PR12MB6351.namprd12.prod.outlook.com>
+References:
+ <CAJZ5v0hRk3tME7yeC+1r0RM4-oPPrnSu2=JCsOshBbJp_Nq2Hg@mail.gmail.com>
+ <20240218161435.38312-1-lucasleeeeeeeee@gmail.com>
+ <20240218161435.38312-2-lucasleeeeeeeee@gmail.com>
+In-Reply-To: <20240218161435.38312-2-lucasleeeeeeeee@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=8fdc9162-ecd9-4e7d-9570-7dc9c919dcee;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-02-20T07:22:30Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|PH8PR12MB6722:EE_
+x-ms-office365-filtering-correlation-id: 57c22e72-c87a-42b7-aeb0-08dc31e4ca09
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 56d2scx72z5zsmDTev9Q2dCvDNaPGh+ADPEY7Ft6MRJfrQ/76x19CIrsEv/Spz8akSzoPGifXWZMEKbYtdEhPX8TSFaAcci4H7TMA7zhisKZMYQnutUnotRJZMho33zrsLN1TWd5UiUYGCMMSbEdHU5tEN1vA0jMERUtkRjsl9TmusaK4lrqZPVvwu4cNHvJDcl0kyu6P8VyLocS8/XfThpAciGNsyu9EOqlc1HQ70gTtJK8EHjip+idmRPN6JbuXf3zNRzK4EP+HNFRGQveIKJ54uAxA82KJ8PglKFu8TrjaS0AsCbNgG38aMZ1Xt2EJ7Ov7rdjY1411wrXtvFctfJ59GHjs6lF7uhAMkU+CLnwXh3kFqV8fNjMO6Selq+JVcnLzoyjy821nugpywTPZe+B+Y+aL0ORx4AXLZ+X1W34pQ0Nt+v4VoL7mEyheOqPYErtKf3GtlzlsFS5Z0/wjKOV3fz3OrrWerk5ZCmHIzcnraSeP5A1kOh7PklTJSs9ZMHU87riHTOKnwIVujauBCz2wCF6Qw4yG7WoJwFpv5hkyZP2Agb7RzKRw7f9mQKCVj45fLYwZKVgDy+11GeoySlkBzsi2mHeJIIk57WeWuq6xlpLxcwbvXpwpFX0qWBZ
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(230273577357003)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?IRVxHL8YIQdK3xGSFYWUSbPa9nHX/UXZv2wx4MvBggDx7Cm+pBse/R3iuSHv?=
+ =?us-ascii?Q?2OXldHT2+mHCtaoPr1Fsxw3dDZFpb3uaR8V1EHWmbL3+XPh7mkuglylDsgvm?=
+ =?us-ascii?Q?42uwb5aEP9rr95gPn+1JvPUatAuuT3bflUDXxE5KMFxGVUlTQ5k+toc7FOS8?=
+ =?us-ascii?Q?B//X4U3A4QYLs5Chf0/4KP8bBMRYICiATShtcjbL8oRMlGHObfW1h4RF5N1k?=
+ =?us-ascii?Q?cXXzIXVw4yVqSjjVsFwLi2s47LDgglsh4GNvsn4oZ3ZLkfQbr3GOBulQiFLH?=
+ =?us-ascii?Q?MrDmXRF+S4j2ZvkacsaXeaEo17pnhJOoxhphD5eP0hrBAvho1SgshdWPmHC9?=
+ =?us-ascii?Q?vZOG3VWKBsPpDcjrdPN/o2zE9J89RfZ9lotGb8uvnp7WmQeNueNjbgARwQee?=
+ =?us-ascii?Q?1skrm97oLpM5OdfhnloP6TUQ6QcQRIt9UQaLd2oiKGr052S6U6ipFx/oo+xD?=
+ =?us-ascii?Q?k6VCbNOVhZtlBtzOi96eOatAJZSpGrMNAe0vNiZZt2l29Id/+e9QhIyiw5DI?=
+ =?us-ascii?Q?iDe1u3bTDwegepEDkK8F2Wo/OHz4reDnHXcXww0UOnI/oNi6UiGFsJ8oNdd2?=
+ =?us-ascii?Q?OMGwBojxpBIoqPCBL+9ip9fdFfeJLjLTgrCp+iYG175ZdGtL0TUZfHdA1WMC?=
+ =?us-ascii?Q?FT41NolloTwn48Z4vLwY/WgMQ0H+yJKTQB0oOGHTarkqLuednIgVHCOQq80/?=
+ =?us-ascii?Q?WsQGD3+LcjRfr5pop9ukK2cS4bMTi4NAnN3xAbh/Qz9zwHcC4mN/MK8ol9uw?=
+ =?us-ascii?Q?I9WtaG8+W5r6boE4J0lfE/kubZxW+jUwytwyClc2y6IokgaMXiRIJNyXwtdk?=
+ =?us-ascii?Q?gOE3qSb7Jt5V0de7tROl6+E1NKs/a014mFlwPVBeVi+rletj8p167KLKorRB?=
+ =?us-ascii?Q?+n8Im9ECg6OPvStsC/BhAW50okEVLEKxluQt+HuYUCtObDa60hjy9XtTorz7?=
+ =?us-ascii?Q?FyfNBOw8WSZ/CTIVxkWUHW6mflzwk1hXiRmY18Ta607BimBq0Lwm9huuoOOG?=
+ =?us-ascii?Q?eM9J85LbCOGCjECLqHZLCyWLxy3ca3faONvv3YQ068KYQoSJee62nIAaT3In?=
+ =?us-ascii?Q?LC2+TTofQhUnKYMELIK5gvTWMiiDnROzPe1ZJ9yOlg3s04MprYPp8l9t15Ri?=
+ =?us-ascii?Q?qdZ+AeTsYK9JKzwzBodp/ahJXBDiWOuG8jZJvb2aKmMhoNzsa+mSVy7Jvf7d?=
+ =?us-ascii?Q?WA9NPdUpTnHPv+t3nYiYCUqB0e4VJtQqAb5b7KMPIliUyRCJ7c3vCEK4GUtu?=
+ =?us-ascii?Q?iAEwD809uyeHneVq2IGpMqnh+p6bggAhPYsCX/AlmsIT7/UTR3YBRNKbBA92?=
+ =?us-ascii?Q?31DLU5eof6x/FyGeFfcuDno3xDY+ddKrK/dCmEPXbIkleEvSPwatf79Gt9wB?=
+ =?us-ascii?Q?KdSOtorNe3C8/F7i4HHirBemIIjKO4nh4tDFdTUHcJoGwvBTBhB2xi9SD+KK?=
+ =?us-ascii?Q?emCbJdnRDla2D2i3f8A2Yn4jnLzgEc3lVQcM9udlU3IDYq7gUDtHT7ZRKBqm?=
+ =?us-ascii?Q?NO9GGI/A3tC1++4cOwbt18lLiu2BuClM57u7w0qWQUoSvpIU5JYH7PD2wPyD?=
+ =?us-ascii?Q?4Cx1M/NNPGdV7Ev46NU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <830b0788-35e6-4cbd-b195-254d434ba0cd@app.fastmail.com>
-In-Reply-To: <20240219223833.95710-18-zfigura@codeweavers.com>
-References: <20240219223833.95710-1-zfigura@codeweavers.com>
- <20240219223833.95710-18-zfigura@codeweavers.com>
-Date: Tue, 20 Feb 2024 08:01:59 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Elizabeth Figura" <zfigura@codeweavers.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Jonathan Corbet" <corbet@lwn.net>, shuah <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- wine-devel@winehq.org,
- =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
- "Wolfram Sang" <wsa@kernel.org>, "Arkadiusz Hiler" <ahiler@codeweavers.com>,
- "Peter Zijlstra" <peterz@infradead.org>, "Andy Lutomirski" <luto@kernel.org>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "Randy Dunlap" <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 17/31] ntsync: Allow waits to use the REALTIME clock.
-Content-Type: text/plain
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57c22e72-c87a-42b7-aeb0-08dc31e4ca09
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2024 07:23:09.1235
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Tx7R6sZw1X+lnNjSCwz08LQiLf6rZLSOoPGZJ5oNBaj2lFog0VPSwWv5CPYFFCqu1Y6nZsVa+gUC3r/JfLH+1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6722
 
-On Mon, Feb 19, 2024, at 23:38, Elizabeth Figura wrote:
-> NtWaitForMultipleObjects() can receive a timeout in two forms, relative or
-> absolute. Relative timeouts are unaffected by changes to the system time and do
-> not count down while the system suspends; for absolute timeouts the opposite is
-> true.
+[AMD Official Use Only - General]
+
+Hi Lucas:
+
+> -----Original Message-----
+> From: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
+> Sent: Monday, February 19, 2024 12:11 AM
+> To: rafael@kernel.org
+> Cc: Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian
+> <Xiaojian.Du@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; bp@alien8.de; Sharma, Deepak
+> <Deepak.Sharma@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>;
+> linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> kselftest@vger.kernel.org; linux-pm@vger.kernel.org; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Fontenot, Nathan
+> <Nathan.Fontenot@amd.com>; oleksandr@natalenko.name;
+> rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>; Huang,
+> Shimmer <Shimmer.Huang@amd.com>; skhan@linuxfoundation.org;
+> viresh.kumar@linaro.org; x86@kernel.org; Lucas Lee Jing Yi
+> <lucasleeeeeeeee@gmail.com>
+> Subject: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
+> some CPUs
 >
-> In order to make the interface and implementation simpler, the ntsync driver
-> only deals in absolute timeouts. However, we need to be able to emulate both
-> behaviours apropos suspension and time adjustment, which is achieved by allowing
-> either the MONOTONIC or REALTIME clock to be used.
+> Caution: This message originated from an External Source. Use proper
+> caution when opening attachments, clicking links, or responding.
 >
-> Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
-
-I understand that there is no practical problem in building
-up the API one patch at a time in the initial merge, but
-it still feels wrong to have an incompatible ABI change in
-the middle of the series:
-
-> @@ -35,6 +37,8 @@ struct ntsync_wait_args {
->  	__u32 owner;
->  	__u32 index;
->  	__u32 alert;
-> +	__u32 flags;
-> +	__u32 pad;
->  };
-
-If this was patch to get merged at any later point, you'd have
-to support both the shorter and the longer structure layout
-with their distinct ioctl command codes.
-
-If you do a v3 series, maybe just merge this patch into the
-one that introduces the struct ntsync_wait_args. Overall,
-you could probably have fewer but larger patches anyway
-without harming the review process, but other than this
-one that is not a problem.
-
-       Arnd
+>
+> On a Ryzen 7840HS the highest_perf value is 196, not 166 as AMD assumed.
+> This leads to the advertised max clock speed to only be 4.35ghz instead o=
+f
+> 5.14ghz , leading to a large degradation in performance.
+>
+> Fix the broken assumption and revert back to the old logic for getting
+> highest_perf.
+>
+> TEST:
+> Geekbench 6 Before Patch:
+> Single Core:    2325 (-22%)!
+> Multi Core:     11335 (-10%)
+>
+> Geekbench 6 AFTER Patch:
+> Single Core:    2635
+> Multi Core:     12487
+>
+> Signed-off-by: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 22 ++++++++++------------
+>  1 file changed, 10 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 08e112444c27..54df68773620 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -50,7 +50,6 @@
+>
+>  #define AMD_PSTATE_TRANSITION_LATENCY  20000
+>  #define AMD_PSTATE_TRANSITION_DELAY    1000
+> -#define AMD_PSTATE_PREFCORE_THRESHOLD  166
+>
+>  /*
+>   * TODO: We need more time to fine tune processors with shared memory
+> solution @@ -299,15 +298,12 @@ static int pstate_init_perf(struct
+> amd_cpudata *cpudata)
+>                                      &cap1);
+>         if (ret)
+>                 return ret;
+> -
+> -       /* For platforms that do not support the preferred core feature, =
+the
+> -        * highest_pef may be configured with 166 or 255, to avoid max
+> frequency
+> -        * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1)
+> value as
+> -        * the default max perf.
+> +
+> +       /* Some CPUs have different highest_perf from others, it is safer
+> +        * to read it than to assume some erroneous value, leading to
+> performance issues.
+>          */
+> -       if (cpudata->hw_prefcore)
+> -               highest_perf =3D AMD_PSTATE_PREFCORE_THRESHOLD;
+> -       else
+> +       highest_perf =3D amd_get_highest_perf();
+> +       if(highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
+>                 highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
+>
+>         WRITE_ONCE(cpudata->highest_perf, highest_perf); @@ -329,9 +325,1=
+1
+> @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
+>         if (ret)
+>                 return ret;
+>
+> -       if (cpudata->hw_prefcore)
+> -               highest_perf =3D AMD_PSTATE_PREFCORE_THRESHOLD;
+> -       else
+> +       /* Some CPUs have different highest_perf from others, it is safer
+> +        * to read it than to assume some erroneous value, leading to
+> performance issues.
+> +        */
+> +       highest_perf =3D amd_get_highest_perf();
+> +       if(highest_perf > cppc_perf.highest_perf)
+>                 highest_perf =3D cppc_perf.highest_perf;
+>
+>         WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> --
+> 2.43.2
+[Meng, Li (Jassmine)]
+Reviewed-by: Li Meng < li.meng@amd.com>
 
