@@ -1,101 +1,133 @@
-Return-Path: <linux-kselftest+bounces-5050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C0A485C33C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:02:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5157385C347
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:04:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4C621F24A48
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:02:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46D32288B0E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA6D7765F;
-	Tue, 20 Feb 2024 18:02:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8345C77655;
+	Tue, 20 Feb 2024 18:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CuIoyNJB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3/CJn6nK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C9D76905
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 18:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09FC76C83
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 18:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708452155; cv=none; b=YJv3Ph/Ak0Kdbk4XiDvJF6fLEj/QkTfeD0cG5V52l8UambME7AxTd1ABopNa5vSn93P8aF3Dh2VVgieszB5WZ7bxb6RpLOspVLKjpYVZh21oCBBX4LrBy1oFWCpoHlw9j3yCI7jPnXS7/YK66AhV2TVGsOa08HEVsvPapn623T4=
+	t=1708452236; cv=none; b=YnTLiqj3cYWhkHsDbvcDAbwW9Bt5SE3scnE6sbkMd0KtrqY3JZPXTGMlfXlgsTrsp2ltz2RYHTLz6xP3LIHHVpfWBigwA22bYjSNz+wa6YtoeeN9vgWC+b/oFgh1T1xAxqXeLbVQIRcSBm29vxjMji1f68leUW8PrCc8+vPHVx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708452155; c=relaxed/simple;
-	bh=nLGu6Nb4bFkyvkAMslpI2+BlJqsZtI8Bze9aXNjf0Jk=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=b8Wes5S0bB/J5Is16o3CEr3EJ9xYDHIfTe3uMmAc8pROyJdDKmPt35j7CEd7Ah3xicEsmTuN6X3MngsI9/elEd2a9g0c9nUcneCsFldp6rHyT/9ct++iRd5nV1ZKJ6vYFA2YPIt7QyyBKMub3JwwMgDm01TVQoXJaYjALTulCZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CuIoyNJB; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708452153;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5YeqcILnxuh5l/4eD2MtYHXrzYLLCUoaxf6bJ3mGyrU=;
-	b=CuIoyNJBiOgpjyrEGsRJPHTx6G+3yXagEsmM0R8u4pgn/zfZJehQcdCsG4xh+sk28SY1ZF
-	XAPXFcq+8Del5CQmN5vqnHaZIq1GFRPRm3ggXU53MhhWh5fVN2SHJGDcdUQWkamX5XjPxD
-	0FbHN76CtV9/NlYlK8P7SFlB4a+c/zQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-v2jcEkRlOfC-8UJMu6IJyQ-1; Tue, 20 Feb 2024 13:02:28 -0500
-X-MC-Unique: v2jcEkRlOfC-8UJMu6IJyQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0DBE1871A85;
-	Tue, 20 Feb 2024 18:02:28 +0000 (UTC)
-Received: from RHTPC1VM0NT (dhcp-17-72.bos.redhat.com [10.18.17.72])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 79953400D784;
-	Tue, 20 Feb 2024 18:02:27 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Paolo Abeni <pabeni@redhat.com>,  Pravin B
- Shelar <pshelar@ovn.org>,  dev@openvswitch.org,  Ilya Maximets
- <i.maximets@ovn.org>,  Simon Horman <horms@ovn.org>,  Eelco Chaudron
- <echaudro@redhat.com>,  Shuah Khan <shuah@kernel.org>,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [RFC 0/7] selftests: openvswitch: cleanups for running as
- selftests
-References: <20240216152846.1850120-1-aconole@redhat.com>
-	<20240219122855.1f1ad0ac@kernel.org>
-Date: Tue, 20 Feb 2024 13:02:27 -0500
-In-Reply-To: <20240219122855.1f1ad0ac@kernel.org> (Jakub Kicinski's message of
-	"Mon, 19 Feb 2024 12:28:55 -0800")
-Message-ID: <f7th6i3dnf0.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.3 (gnu/linux)
+	s=arc-20240116; t=1708452236; c=relaxed/simple;
+	bh=0fnZGcPGFETnd66ZUdGDszP02JN9rYSHEhGIDwY6l4w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RbATFxVz+dszDmZNO5GuXx16cvdyjE6rqEscCV0qdTPqKHoIK84rn3rtpyeDqQ9dBwihM4sbkzdKJNhPOrX9dgzeah5/uXr92MlNeqRbeTrv+PgrK3jB8vU3/T8/fGc+C2FqBhYR8y2+g9rO9gd+e9Z9myqZYSpE3TYvyVNlgLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3/CJn6nK; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-564d311513bso966a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 10:03:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708452233; x=1709057033; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0fnZGcPGFETnd66ZUdGDszP02JN9rYSHEhGIDwY6l4w=;
+        b=3/CJn6nKud0v2xAGVIYe5baXdR2Ueut4CiNC7Eq+CdK/HTCgeWAhLJNQ9YSZrlihSw
+         +mM3X2+RxFG+U4oAPjuPiS8R0LbRn6S4Y8pCTLoqNs7S5v1u7fpkNzSYMtWBn/X9D1PF
+         FnxQ3r+ZvdTz2GVJYmvYaB24ijfnD89BV1rH82z0BuzXUvEPhJxWIoC4u3Yt5T72aeTe
+         qYIGjYNb8ft5j8LPUvtGqVSAJRSZ2X4VPIe73KRHWHjFKBrKXoWc1FKcuzTcVIt9dF8r
+         tL8WYVdqLYYP2Hu+0UL2PZbpsVD3fz/jm2ijVeqMBAnyticRSKwJvQYWyGe0lHn/KMg3
+         Ak7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708452233; x=1709057033;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0fnZGcPGFETnd66ZUdGDszP02JN9rYSHEhGIDwY6l4w=;
+        b=gvHp2ROkDfVzswKXHAX3Tg6EiTE3GBbpR73CEkgeKxDA70GNYYzT+OJlLAJCYZmjgw
+         TwT58aXETkTWnx58YviIhC24Ai5h2lvXdy0n7mP1DkDNMlgw3IxaArA4bpa//68e/9R7
+         byN5Uo3qG6FzFEdq3zf7wAyRzHjW6dP+uj68eo0TTSQDtXAwiXngIHnCXIl7fK9n/i4z
+         z4NHbzpLGkV3uYnWiKrTJshml+6HhqkhPyUhPPUrLR2WxvxuE/csmqJm/pN+UH6Q4PGz
+         90KIxb84wvWv3ABK3uo6/BPZSocFufIiBZIncsF4PA3/IExL7jo9lkeSfTfx0JQA/Ao3
+         Q+3A==
+X-Forwarded-Encrypted: i=1; AJvYcCXwiY5SsSVBtH0nS2kYckxiqa06SYJqeFWjwtz2zeN0s77fw0YdMYUByVjIaCbYAcWoKTiupd13KqQeEGVls2302xRrGUnCSesxQezxuZq2
+X-Gm-Message-State: AOJu0Yxhctpy1xz9e4dA9g38I9wsIii9ZmwnNBgaUnPDIbqzNc7ecoE3
+	U8LhSa3X9EaDed+8VYXKWIr1IR7K20DeD+1Ey1Hn3uJ/LYz3msSSd4+OGCzW6ecYMtbR+Vd68zs
+	gZj9IEP9I9oIm39hG8bCz/kR5KGicP9hoaqh8
+X-Google-Smtp-Source: AGHT+IHw5T91YrU9Maq/ZbuDhD+cF96pVCL0Q7L/zZJ2yh3VVoEnWRHnH3fhRfCS0slaDzwuX66xPIpbpON2ixt2PFU=
+X-Received: by 2002:a50:8d12:0:b0:563:f48f:a5bc with SMTP id
+ s18-20020a508d12000000b00563f48fa5bcmr441060eds.5.1708452233017; Tue, 20 Feb
+ 2024 10:03:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+References: <20240215-upstream-net-20240215-misc-fixes-v1-0-8c01a55d8f6a@kernel.org>
+ <20240215-upstream-net-20240215-misc-fixes-v1-3-8c01a55d8f6a@kernel.org>
+ <CANn89iJ=Oecw6OZDwmSYc9HJKQ_G32uN11L+oUcMu+TOD5Xiaw@mail.gmail.com>
+ <CANn89iJDypRXX-8S-UdqWgw73eOgt0+D74qUCLDkb0cRpFFXkg@mail.gmail.com>
+ <278c26d6f4042dc6dadb9742afe11b7fa610f0b2.camel@redhat.com>
+ <CANn89iK72hE16sQcGPUFG6Am_V-77PNJOYHgeAA6M+SD5UO13A@mail.gmail.com> <28a1a98c757e4a15b7eecdeae563a17fa5cb45cf.camel@redhat.com>
+In-Reply-To: <28a1a98c757e4a15b7eecdeae563a17fa5cb45cf.camel@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 20 Feb 2024 19:03:41 +0100
+Message-ID: <CANn89iKn1U14L1u2w3VwenRt0S4QnXJhiA5PvMF0s41d8nS6Tw@mail.gmail.com>
+Subject: Re: [PATCH net 03/13] mptcp: fix lockless access in subflow ULP diag
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, mptcp@lists.linux.dev, 
+	Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Davide Caratti <dcaratti@redhat.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	stable@vger.kernel.org, Boris Pismenny <borisp@nvidia.com>, 
+	John Fastabend <john.fastabend@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Jakub Kicinski <kuba@kernel.org> writes:
-
-> On Fri, 16 Feb 2024 10:28:39 -0500 Aaron Conole wrote:
->> The series is a host of cleanups to the openvswitch selftest suite
->> which should be ready to run under the netdev selftest runners using
->> vng.  For now, the testing has been done with RW directories, but
->> additional testing will be done to try and keep it all as RO to be
->> more friendly.
+On Tue, Feb 20, 2024 at 6:33=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
+te:
 >
-> Would it be an option to make the output go into a dir in /tmp/ 
-> instead of in place, in the tree?
+> On Mon, 2024-02-19 at 19:33 +0100, Eric Dumazet wrote:
+> > On Mon, Feb 19, 2024 at 7:04=E2=80=AFPM Paolo Abeni <pabeni@redhat.com>=
+ wrote:
+> > > Thanks for the head-up. This later option looks preferable, to avoid
+> > > quit a bit of noise with _ONCE annotation. Is there a syzkaller splat=
+ I
+> > > could look at? if it landed on the ML, I missed it.
+> > >
+> >
+> > Not landed yet, here is the splat :
+> >
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> > WARNING: possible circular locking dependency detected
+> > 6.8.0-rc4-syzkaller-00212-g40b9385dd8e6 #0 Not tainted
+> > ------------------------------------------------------
+> > syz-executor.2/24141 is trying to acquire lock:
+> > ffff888045870130 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at:
+> > tcp_diag_put_ulp net/ipv4/tcp_diag.c:100 [inline]
+> > ffff888045870130 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at:
+> > tcp_diag_get_aux+0x738/0x830 net/ipv4/tcp_diag.c:137
+> >
+> > but task is already holding lock:
+> > ffffc9000135e488 (&h->lhash2[i].lock){+.+.}-{2:2}, at: spin_lock
+> > include/linux/spinlock.h:351 [inline]
+> > ffffc9000135e488 (&h->lhash2[i].lock){+.+.}-{2:2}, at:
+> > inet_diag_dump_icsk+0x39f/0x1f80 net/ipv4/inet_diag.c:1038
 >
->   mktemp -p /tmp/ -d ovs-test.XXXXXXXXX
+> [Sorry for the latency]. Yes it looks like that checking the listener
+> status will work. I can test and send the formal patch - with the due
+> credits! - or do you prefer otherwise?
 
-That's probably the best approach.  I'll switch to it.
-
-> or such?
-
+Sure, please send the formal patch, thank you.
 
