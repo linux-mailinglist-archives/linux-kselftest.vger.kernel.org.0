@@ -1,222 +1,169 @@
-Return-Path: <linux-kselftest+bounces-5025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5026-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C78785BCF4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 14:15:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7FB685BD04
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 14:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EADDF283BE1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 13:15:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C6151F23F76
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 13:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12EB86A039;
-	Tue, 20 Feb 2024 13:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5726A03C;
+	Tue, 20 Feb 2024 13:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q+dVKl8L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQcHV52X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527C26A030;
-	Tue, 20 Feb 2024 13:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708434920; cv=none; b=FFR0ieS/foREuzcct4evMW4AC/Oqd0sYCWlOfcWjsUJ0xX5f7hi3wArkc3v+tFVQvPH1LKxPvtaHZlLDJTaAwCiKCmVEYqgfsqNT1xD4KtCql+mEE5ZwUU2hsc68XtL2ovYGmTWmx1J8NGBa4cbQ/rB8ztTKAtruMsEz09Mrisk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708434920; c=relaxed/simple;
-	bh=is7X7bYYLaNl4Xd9u1Jgp8nNiOY1JjyfGPu5LdGB1Mo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sDsvQNXe+ra/ItAjyXVvMpaWS2ejvo8RMa9lt9Jiy6h9S6N9jMSZUbQKTTKoWA7wcgbxiaZrJBIaFWOvJtHuPrDu6xdrV8nbc1o+IUug/14S6w0cUEamJrPqBdB8XsqHQO6neDE403R63CCXmhem50u6rhWQy+CE83o0DymllSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q+dVKl8L; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8A369DE4;
+	Tue, 20 Feb 2024 13:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708435133; cv=fail; b=J5CADtxE4B1TekPeu1FTzvpQ/G164hseOVbpY1SaD+oqm/KcWheCEFng6dkK1llKViB5hEkFZvOcasax8agTjqrUJpEzGhOpeld00eyzMRVQ5z3lncZdoNjvG3Kc8yIaeqXFPd5kFpT7X2k5Bf/fimRlR52gBzyLK9aksfeaUkA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708435133; c=relaxed/simple;
+	bh=YJO4EdfAu9mE/9ZWuTfJlpns+CROReL3HUDUDXJ/LBg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ucCLApRO/Zgv/aq93RDlWoXeSXySCES7waTvRzweodctqteHxplCyZ9agXXJzsJCwP0BrzUx0hHsDmqbITC+i74heU7ZIjii0eUvlmPmDCzq7G0nbPqyDoSFWeJ7ghqRfF2c4ERl3MmOjQsUPu/e/woNnX/JLK1IXo3Btwx9on0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQcHV52X; arc=fail smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708434918; x=1739970918;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=is7X7bYYLaNl4Xd9u1Jgp8nNiOY1JjyfGPu5LdGB1Mo=;
-  b=Q+dVKl8L7XCWwcFZOlcjdjQTaoGVbAzrqNXLejJjvHDP6ZGAi3GmJ9u2
-   kGxOGxYT/k1E1po26qoAiedd9C2D85cqJd84gXgxUtRYzslX1cYSZlGsm
-   2+7h9py4R/lshgFbnpw4hCmUEPhqjMDsxAwySHHcui+BplSx4cxQJqeyJ
-   T8iSLEPVHdvkYluOnMW2ot1KR9Ab+DLfVPwKfNDdv/zOdhCLhC67Z68PB
-   2Kl9WJIXAU8LOiiKcdA7yF0ERUzAmiJYzR9DrHOEpf4GL6KwysctpaTIP
-   4ZP2WZ84qjZWc9IK/+sjjFrtfoC38UFijZKQKsvdNMZaKX0MfRLiDDdRP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="2660634"
+  t=1708435132; x=1739971132;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=YJO4EdfAu9mE/9ZWuTfJlpns+CROReL3HUDUDXJ/LBg=;
+  b=cQcHV52XIOrgY5Ok/CIj9eprl4uzgNedHiI6BAEVOia6wm/Kle7FMBOp
+   vdv/sVyDnLf8M1XnM74ZNKGVWXTAUph2m4BKy7U4Dc6dLdt+X4iCA4tu3
+   tkzLakljcnbQabw+FqefgBvO7qjN6eNFZ4FGzmLeVLEQz6eZIEflzV7oo
+   j4UPFlFhxJUCwr1PQfS4/0hcxaaxyhatZCsXwyuHUodUhpXlzk5K5gs23
+   4Vhj1ouUP51O1RFBAX7kwWUpaidMmkfPpKcHOaUU0bYvuCDEFIs7HYyUe
+   KC/sIUVVEmljh30F+DPSORL43/QZ8F5KImp05uOzKGcxFq9VgttCAGOIv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="2669201"
 X-IronPort-AV: E=Sophos;i="6.06,172,1705392000"; 
-   d="scan'208";a="2660634"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 05:15:18 -0800
+   d="scan'208";a="2669201"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 05:18:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,172,1705392000"; 
-   d="scan'208";a="5131033"
-Received: from jmuniak-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.4.63])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 05:15:15 -0800
+   d="scan'208";a="35539598"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orviesa002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 20 Feb 2024 05:18:36 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 20 Feb 2024 05:18:35 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 20 Feb 2024 05:18:35 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.41) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 20 Feb 2024 05:18:34 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zal4OYOPp0RMYc8dW5tDpvF3LaUAb6vdyg+RIHvrP52Zvn0mFzJ2Ln1Kl+g4O7Gkx1HILBP7kJj8/mGIzaOv4KC/p8SzwFJkEvimBloCGtGXNCgiRb7fRQu/3QmdkeObfFd+zfgaoBE0+Vdnu1jdt4SBREtl+G9RgRmHcZnRt+Q2fe5Lqj44xKKHuDwJxkow5fogzUT648iYEKRRlpNkD8BKYPUFyWpYDEGdcIAoGoZyqIKyDC8WXU6WYrIVIJ9Iv23vAVBk6l/Hb9WKsIcpkKeAbHL9T6fwW5YhFMylcqhAyZ+QvED1QpgkcSoseoozPpeaDKyJAqgL1T4cx4i8rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yQovFeAOwifinlCkRKT92k+dxorBt/VCJ4F94vH9OcI=;
+ b=P7CJxa3Z5sq3MF+s6JzefQGClWwgxvyWKHHknTCSg0NEXhR9PSznTg1L3559IDlljazAFBfMx7E843iVwnc17CDHt8TNz5H26GwnnsziR2H+sGc2Lv07abAttRP2iDVuc7+d+8uqKz70nfTaAyHmoaGgn9lk2HunCLnNCvo5zx0EuEOQ0nTrMrzdYubvDqGbKCIJNvbdTsThzpEjxgxy0Ka6sopzCtQ9gwfNP6Y7cdD166+oyvxg+YX+114Zrc8OVvkc0OP3r+J8OBStlfh89B/cnXCdeb/75px42E//lMbzk19ITyjpb4L1NxjlVEBDCbkBtNzezZ4JQ+Arj8+nbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by PH0PR11MB5925.namprd11.prod.outlook.com (2603:10b6:510:143::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.28; Tue, 20 Feb
+ 2024 13:18:27 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::b2fa:6a11:bef7:179f]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::b2fa:6a11:bef7:179f%4]) with mapi id 15.20.7292.033; Tue, 20 Feb 2024
+ 13:18:27 +0000
+Date: Tue, 20 Feb 2024 14:18:17 +0100
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: ilpo.jarvinen@linux.intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/3] selftests/resctrl: Move cleanups out of individual tests
-Date: Tue, 20 Feb 2024 14:14:34 +0100
-Message-ID: <63b9763211c2954f0ef517a817b3bf0c482df8cd.1708434017.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <cover.1708434017.git.maciej.wieczor-retman@intel.com>
+To: <shuah@kernel.org>, <reinette.chatre@intel.com>, <fenghua.yu@intel.com>
+CC: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH 0/3] selftests/resctrl: Simplify test cleanup functions
+Message-ID: <uagazywgvbp6h6at4t4dqszltvzm5bb2oprkblrvczl4xzs6fn@ndg7hufelfdp>
 References: <cover.1708434017.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1708434017.git.maciej.wieczor-retman@intel.com>
+X-ClientProxiedBy: WA0P291CA0023.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1::10) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|PH0PR11MB5925:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1599570c-3fae-4e51-c9eb-08dc32166c4e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FvNwg03TOJffx8vlTYXoU8vIgd3KIRiuvWKR/MT50D0OTc2oO9U6KUYLil+i+DbrSj0LD8NHz7t2k5HceXH8fVEGgKcvB+XlMYFHyxh2R+6E5ZVI1urRGGONLHTeQmrpEnIEii4ylBTJs3QfdK6FtKarXism0sk9vA5SO4R3V9iEHnzhm+qQoyje5hHiWBNDO+jRLnMs9rADSjTK2KbogRcvYa2lGlQ9rsNkZ2z3XFJgFCdqaseAbmqLmEAFWcrDuNTiXc6aZeuw++KUQCoKKYGfUjAv0voHMqnloeBjou5ntywEl3py39XaWB2KVBo8F/R4P+qAc019fSeufN7Vg8w/OMTBzuBLCt5EmaaR71CRMxA+OEjJEJhaxKLYuidErXPFBkT8vA8a8AtepZDVs3IO4eG1l4R9+MS9jKlajkB7zThCU5aFfYfaeTOMSeFtAaTB4wQfwBZeWKiKB/oUjD0h1n24WoG3KQJkv4BPoLiams6cU5xOXhd8/d5VVzJZxHsvoho67PZKYBZ0IfL/Kg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?GpWhiYWsYNJ2TMbtCf/Y2tEtS5iFy0AIJC75lr8/+eRTMJ78tBLATVao/N?=
+ =?iso-8859-1?Q?AIO+GY7wPnyN1AvoWLo4FJbiXJdBo5m1oICcTlbNUhAP2xMQ3lUtfETDDz?=
+ =?iso-8859-1?Q?075R0iME8SHLrPpoI0OdekYM9Jm359Mcja8aPJGa7Tc5wPpuve9mlWiIjV?=
+ =?iso-8859-1?Q?fQcwmDfYV9i+mSi5Bd11/oMSm/rfshvhA31tJAklKs/HFvMyrAMlCQcLp9?=
+ =?iso-8859-1?Q?IfjJFVItIGw6Kjn7wxR9xT2X1dKJMDx4vjaZO9njxPFDbc7hI0gm60zPNm?=
+ =?iso-8859-1?Q?Dcg0wm9px4w5tVjnTV9atFGDM2N6juphmAVcNlsMXc/MipNWh5TdwvR0fp?=
+ =?iso-8859-1?Q?tD1t01tEZ8pMhKmP2ujchFCip+3K4fCQzPRBIyfMj2dYCvPzKphx0IgHFZ?=
+ =?iso-8859-1?Q?eZdI+VnH66IcnhL6aJVf03/ImO2qgI9tyo3LRHERZdcACc1JJ1L9EFqb94?=
+ =?iso-8859-1?Q?fh5c6Yn0BJFpcOMlAbZJXN6OWU1TzZVSBveFherYc2K/M3cs+ka+wZagOr?=
+ =?iso-8859-1?Q?RUAgelXcSTG0ak3aTHGkA3oWjTJsEPbP77e6GdffUOM+q8enTldlFKeCmJ?=
+ =?iso-8859-1?Q?ZuWepntUj59CX2qXu1DUxyu6k2LSH1fxKUu5AJeAg7QEP7zCZKWkzeWDo/?=
+ =?iso-8859-1?Q?Mih1TU973pY2+C56d3NoTiKYF3qR2Gl3jnbcfH9fDIHZNZ34qcWDvc0SuL?=
+ =?iso-8859-1?Q?UxJv2hPaD0eRio7yz7KlLfcgB60nN8kkt99XaarUssIkjoypXD1PMbYDP1?=
+ =?iso-8859-1?Q?0zl0SuJUBELcXFglJEUoxOPUbfBCzCYwnSjUQEMnQvKLRn0Zyl64XeDaRo?=
+ =?iso-8859-1?Q?ZGGhzVC1Eoq8s8MDTb9VLaY9yiAJITFI1u/q+Vr5ynRXqcmcNt8/lxuuC2?=
+ =?iso-8859-1?Q?diS9VpYhwWs8AX70RRIBk9jPPc/Ia36ZbmZC6y1VJaIJBaqsRxlD6BGXoD?=
+ =?iso-8859-1?Q?iextENYs1vrKGoKCrP65AFXkf+y4e9kQCQRtsqnPMOxvrGEC27A8wHs0zb?=
+ =?iso-8859-1?Q?3wAnTNJfkg6mS8LEHurDO75T4O3IvzbUGlBDq3iu4sJXblYlYm72O7ZnR0?=
+ =?iso-8859-1?Q?3eabU6ZoefVIY0v3gDGH5JO6wDd0t+j/5W+v0DX/BmeclTj+MN+mhQ9KjB?=
+ =?iso-8859-1?Q?p5ImlbABoHDVCRCelRmwY67TnOKf+y8iA8It9Infa69qwLCaz0Vnr+3ixy?=
+ =?iso-8859-1?Q?NdH3M0NUWQp77rZ/Z7lif/UTgGt0sRgyOTUz3k7tTDvFYqtI894+vvWudR?=
+ =?iso-8859-1?Q?icWgEcB4w/J+AFFAu1II/7ZCldWlzE80ol5Rwl37DsvxgGPcGoSdj7dSLa?=
+ =?iso-8859-1?Q?mtdC/L40YwxSPPsx6+vF+yizrVlTe7Q6IK6fI7S5vyvYEBFmthdnm/t5li?=
+ =?iso-8859-1?Q?yHsQAY/DzhYOZiJq8JThNMzDdYX+I/Enbr+lXD6v+Qs8QhjhPO5v0XG/tn?=
+ =?iso-8859-1?Q?bNB/SnAZZMf/nBBdGi5xbr2IyCTSMC+il//2QBEzvjS0iZbe7FTlEJ+O1B?=
+ =?iso-8859-1?Q?4/gDLSIsBuEGAtTVx7LBYuDODMkIGsvI8W5qxvT17urvYdjbM0JgtbuGnf?=
+ =?iso-8859-1?Q?fCxrjWD2ZMZaluOg4vUgphBiKiJ0Ojt2jl+JS24sECZWeMNKAlRlr60KQo?=
+ =?iso-8859-1?Q?Gt1ZdyAluBtt7nIynrS7qWr/JuytNExlJTgMfyCTaPVZFG6XSgi5PNXzjE?=
+ =?iso-8859-1?Q?xLkYhN1TxsrHncTZAJc=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1599570c-3fae-4e51-c9eb-08dc32166c4e
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2024 13:18:27.0274
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4QpyFnvyFXkoADP5OYpMKjZsd1O2SAmkuT8gXRNNDEhg+PDS6UJKQQa18XOTN+RdxF7SQx5Zy6xeElVSG7LUjJ6c2YA50cg5/39MSoFNmMo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5925
+X-OriginatorOrg: intel.com
 
-Every test calls its cleanup function at the end of it's test function.
-After the cleanup function pointer is added to the test framework this
-can be simplified to executing the callback function at the end of the
-generic test running function.
+I forgot to add to the cover letter that this series applies cleanly on both
+kselftests/next and on top of my other series [1] currently in review.
 
-Make test cleanup functions static and call them from the end of
-run_single_test() from the resctrl_test's cleanup function pointer.
+[1] https://lore.kernel.org/all/cover.1708072203.git.maciej.wieczor-retman@intel.com/
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
- tools/testing/selftests/resctrl/cat_test.c      | 4 +---
- tools/testing/selftests/resctrl/cmt_test.c      | 3 +--
- tools/testing/selftests/resctrl/mba_test.c      | 4 +---
- tools/testing/selftests/resctrl/mbm_test.c      | 4 +---
- tools/testing/selftests/resctrl/resctrl.h       | 4 ----
- tools/testing/selftests/resctrl/resctrl_tests.c | 2 ++
- 6 files changed, 6 insertions(+), 15 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 2d2f69d3e5b7..ad5ebce65c07 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -128,7 +128,7 @@ static int check_results(struct resctrl_val_param *param, const char *cache_type
- 	return fail;
- }
- 
--void cat_test_cleanup(void)
-+static void cat_test_cleanup(void)
- {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -289,8 +289,6 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	ret = check_results(&param, test->resource,
- 			    cache_total_size, full_cache_mask, start_mask);
- out:
--	cat_test_cleanup();
--
- 	return ret;
- }
- 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 32ddee87e43d..c477f3c9635f 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -91,7 +91,7 @@ static int check_results(struct resctrl_val_param *param, size_t span, int no_of
- 				 MAX_DIFF, MAX_DIFF_PERCENT, runs - 1, true);
- }
- 
--void cmt_test_cleanup(void)
-+static void cmt_test_cleanup(void)
- {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -161,7 +161,6 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
- out:
--	cmt_test_cleanup();
- 	free(span_str);
- 
- 	return ret;
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 7cc4067ce930..e4cd484941ec 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -137,7 +137,7 @@ static int check_results(void)
- 	return show_mba_info(bw_imc, bw_resc);
- }
- 
--void mba_test_cleanup(void)
-+static void mba_test_cleanup(void)
- {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -163,8 +163,6 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 	ret = check_results();
- 
- out:
--	mba_test_cleanup();
--
- 	return ret;
- }
- 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 071e2d3808a7..405edd7df816 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -105,7 +105,7 @@ static int mbm_setup(const struct resctrl_test *test,
- 	return ret;
- }
- 
--void mbm_test_cleanup(void)
-+static void mbm_test_cleanup(void)
- {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -133,8 +133,6 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
- out:
--	mbm_test_cleanup();
--
- 	return ret;
- }
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 79b45cbeb628..c2a74e11a65e 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -156,8 +156,6 @@ int resctrl_val(const struct resctrl_test *test,
- 		const char * const *benchmark_cmd,
- 		struct resctrl_val_param *param);
- void tests_cleanup(void);
--void mbm_test_cleanup(void);
--void mba_test_cleanup(void);
- unsigned long create_bit_mask(unsigned int start, unsigned int len);
- unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
- int get_full_cbm(const char *cache_type, unsigned long *mask);
-@@ -166,9 +164,7 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int signal_handler_register(void);
- void signal_handler_unregister(void);
--void cat_test_cleanup(void);
- unsigned int count_bits(unsigned long n);
--void cmt_test_cleanup(void);
- 
- void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
- void perf_event_initialize_read_format(struct perf_event_read *pe_read);
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index b17f7401892c..e01937e798ee 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -142,6 +142,8 @@ static void run_single_test(const struct resctrl_test *test, const struct user_p
- 	}
- 
- 	ret = test->run_test(test, uparams);
-+	if (test->cleanup)
-+		test->cleanup();
- 	ksft_test_result(!ret, "%s: test\n", test->name);
- 
- cleanup:
 -- 
-2.43.2
-
+Kind regards
+Maciej Wieczór-Retman
 
