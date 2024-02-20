@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-5060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1F9385C497
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 20:23:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F6A285C49A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 20:23:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67046B25596
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:23:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F08211F243FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875BD14A4F2;
-	Tue, 20 Feb 2024 19:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DCA614C596;
+	Tue, 20 Feb 2024 19:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kSf2H14R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q90ixN/f"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582BA14A4EA;
-	Tue, 20 Feb 2024 19:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1223F135A4D;
+	Tue, 20 Feb 2024 19:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708456967; cv=none; b=WMtASy8T+SEOYTKg3l58XU0qCpGsRCmWpftlNbB5AB1/h1Gj2UXNATvS7fNfTHqlSGQeCaw+UY049TgwHK5sbVg3Q5M3HpqphfA+gAERay1uebYqpmbPKIkM1r1BBU2cxcafL3kluALEXTAzNclCQzu8Rl6MiW9ObQL8SZGzrvE=
+	t=1708456968; cv=none; b=IgsVLWtL0EyJBoR4xWjha3Tm7vXbbklAdlzpCPmaaq/X21fKRo81pauzIxgIuq+fHhTTehwLZPXW0WH3u8m7vJGUae4fy+4C6rwEZ3fXKLjtQWMzhWd5nMQ/yEabot2VDZCnMjj6YT4KpxrEhW9XZIeUKgExBlii37wRkQe2FDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708456967; c=relaxed/simple;
-	bh=QFefN2pMJk3wF8CJAX8FXQUW7G2GGo/zUOy3/fKo+Jk=;
+	s=arc-20240116; t=1708456968; c=relaxed/simple;
+	bh=y1jR1SPhv1Na8mdweF3oZSOv0tk/hgB4rcZ8s6PB+T4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uo7Rf5YReXukZC3kz+UfcD28orZ+sMbmrmDuIasdKUI5syU/Mth0bKPJ/nsT02DjppJv4SJc6jFGV8VU+W94kFBp4BYVHkCaWo2HV4ba8TIKEjG/28r5bgq65WBQCDliR2aCBH/WvBWJ4nA65/PRCZioDMfNjVMmzNIMrgclvXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kSf2H14R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63FF2C433F1;
-	Tue, 20 Feb 2024 19:22:46 +0000 (UTC)
+	 MIME-Version; b=AqwqXQ4RhtaYtvVR494wx5m83U6/Mi4dNPeSupegnrtTZbg0AEgOuwFERtjm+VoqgpiSExLqnt2mxGpS3iZaPMykbOjAEFA4z5/f3rkLu3aflBxY7fwbhhTagUc3n/FdtfyKUcI0mGCONlQTfpabycaUQ6ywnAbNK8Zw7besOTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q90ixN/f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B11DC43394;
+	Tue, 20 Feb 2024 19:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708456966;
-	bh=QFefN2pMJk3wF8CJAX8FXQUW7G2GGo/zUOy3/fKo+Jk=;
+	s=k20201202; t=1708456967;
+	bh=y1jR1SPhv1Na8mdweF3oZSOv0tk/hgB4rcZ8s6PB+T4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kSf2H14R17b9wRAMRCwaQoK+jbbx2y3e+w5Tbf9VJWWb01idSvCdAmZhRrVcNjNVP
-	 53XUW4IwJajjIVl+Br3A2gD0lDYB7UkDvloq31KYtO+qC4W192NjM0N58eOBpcXLLu
-	 GkPCW1ahPTAcMsu1Dm9JChB9GfJL2r3O2Z5RJ1ak03jaCQW/1rVed7MvjYW/+8f9Xn
-	 J4Rgj6mm3tWdXG1gc58dsZujxzgqxIr5mWnysBjwStQH34MK6Xr7M6ZafOzH/si971
-	 RT1gpFcQ4tjPOpFBgXFyF1oTjPAAzkNVp9oYVC7586gIa3YNvVGk+8uxlijXo0s65V
-	 n16xlKAX/LeCg==
+	b=Q90ixN/ftQd5E433nAU54KmV61A34UqBg+LV+Itk6jz2YGj5L4GDZSyMCbuNO4Xkd
+	 nw41HW+hVfYjJZHkm28GH/PI8Qst6z4xfoaMBDoZGFucZiKwZW7gwcWWkAnpgiImX+
+	 +CsNU4du5h8k7IeHKP+3eDrOER5XZiruRy87q2ZOgprVA8AN9mxACIdAR4PH8MV5Xq
+	 J3OBn8tm4nv7FMU8uzSPFI/mVQ6QjShFo03ST880rCH1l2x3ax/21L3ohzzdzrnI+2
+	 5BHia/i6VTN3zb74Ro1dwwmBc5wv+jRNJnuKKQpDzhFbgnkfUuIlRbWHjibJKj/Cif
+	 fImUkwBTHE77w==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: netdev@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
 	luto@amacapital.net,
 	wad@chromium.org
-Subject: [PATCH net-next v3 01/11] selftests: kselftest_harness: pass step via shared memory
-Date: Tue, 20 Feb 2024 11:22:25 -0800
-Message-ID: <20240220192235.2953484-2-kuba@kernel.org>
+Subject: [PATCH net-next v3 02/11] selftests: kselftest_harness: use KSFT_* exit codes
+Date: Tue, 20 Feb 2024 11:22:26 -0800
+Message-ID: <20240220192235.2953484-3-kuba@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240220192235.2953484-1-kuba@kernel.org>
 References: <20240220192235.2953484-1-kuba@kernel.org>
@@ -69,139 +69,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 0ef67a888375 ("selftests/harness: Report skip reason")
-added shared memory to communicate between harness and test.
-Use that instead of exit codes to send the failing step back
-to the harness. The exit codes are limited and because of
-the step passing we can't use the full range of KSFT_* exit
-codes.
+Now that we no longer need low exit codes to communicate
+assertion steps - use normal KSFT exit codes.
 
 Acked-by: Kees Cook <keescook@chromium.org>
 Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-CC: mic@digikod.net
+CC: keescook@chromium.org
 CC: luto@amacapital.net
 CC: wad@chromium.org
 CC: shuah@kernel.org
+CC: mic@digikod.net
 CC: linux-kselftest@vger.kernel.org
 CC: linux-security-module@vger.kernel.org
 ---
- tools/testing/selftests/kselftest_harness.h | 21 ++++++++++-----------
- tools/testing/selftests/landlock/common.h   |  5 ++---
- 2 files changed, 12 insertions(+), 14 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 13 ++++++-------
+ tools/testing/selftests/landlock/common.h   | 10 +++++-----
+ 2 files changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index e05ac8261046..98bdedf9a53a 100644
+index 98bdedf9a53a..618b41eac749 100644
 --- a/tools/testing/selftests/kselftest_harness.h
 +++ b/tools/testing/selftests/kselftest_harness.h
-@@ -101,8 +101,8 @@
-  * ASSERT_* number for which the test failed.  This behavior can be enabled by
-  * writing `_metadata->no_print = true;` before the check sequence that is
-  * unable to print.  When an error occur, instead of printing an error message
-- * and calling `abort(3)`, the test process call `_exit(2)` with the assert
-- * number as argument, which is then printed by the parent process.
-+ * and calling `abort(3)`, the test process call `_exit(2)` and pass the error
-+ * to be printed to the parent process via shared memory.
-  */
- #define TH_LOG(fmt, ...) do { \
- 	if (TH_LOG_ENABLED) \
-@@ -695,9 +695,8 @@
- 			__bail(_assert, _metadata))
- 
- #define __INC_STEP(_metadata) \
--	/* Keep "step" below 255 (which is used for "SKIP" reporting). */	\
--	if (_metadata->passed && _metadata->step < 253) \
--		_metadata->step++;
-+	if (_metadata->passed) \
-+		_metadata->results->step++;
- 
- #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
- 
-@@ -784,6 +783,7 @@
- 
- struct __test_results {
- 	char reason[1024];	/* Reason for test result */
-+	unsigned int step;	/* Test step reached without failure */
- };
- 
- struct __test_metadata;
-@@ -837,7 +837,6 @@ struct __test_metadata {
- 	int trigger; /* extra handler after the evaluation */
- 	int timeout;	/* seconds to wait for test timeout */
- 	bool timed_out;	/* did this test timeout instead of exiting? */
--	__u8 step;
- 	bool no_print; /* manual trigger when TH_LOG_STREAM is not available */
- 	bool aborted;	/* stopped test due to failed ASSERT */
- 	bool setup_completed; /* did setup finish? */
-@@ -875,7 +874,7 @@ static inline void __test_check_assert(struct __test_metadata *t)
+@@ -874,7 +874,7 @@ static inline void __test_check_assert(struct __test_metadata *t)
  {
  	if (t->aborted) {
  		if (t->no_print)
--			_exit(t->step);
-+			_exit(1);
+-			_exit(1);
++			_exit(KSFT_FAIL);
  		abort();
  	}
  }
-@@ -960,7 +959,7 @@ void __wait_for_test(struct __test_metadata *t)
- 				fprintf(TH_LOG_STREAM,
- 					"# %s: Test failed at step #%d\n",
- 					t->name,
--					WEXITSTATUS(status));
-+					t->results->step);
- 			}
- 		}
- 	} else if (WIFSIGNALED(status)) {
-@@ -1114,9 +1113,9 @@ void __run_test(struct __fixture_metadata *f,
- 	t->passed = 1;
- 	t->skip = 0;
- 	t->trigger = 0;
--	t->step = 1;
- 	t->no_print = 0;
- 	memset(t->results->reason, 0, sizeof(t->results->reason));
-+	t->results->step = 1;
- 
- 	ksft_print_msg(" RUN           %s%s%s.%s ...\n",
- 	       f->name, variant->name[0] ? "." : "", variant->name, t->name);
-@@ -1137,8 +1136,8 @@ void __run_test(struct __fixture_metadata *f,
- 		/* Pass is exit 0 */
+@@ -937,7 +937,7 @@ void __wait_for_test(struct __test_metadata *t)
+ 		fprintf(TH_LOG_STREAM,
+ 			"# %s: Test terminated by timeout\n", t->name);
+ 	} else if (WIFEXITED(status)) {
+-		if (WEXITSTATUS(status) == 255) {
++		if (WEXITSTATUS(status) == KSFT_SKIP) {
+ 			/* SKIP */
+ 			t->passed = 1;
+ 			t->skip = 1;
+@@ -950,7 +950,7 @@ void __wait_for_test(struct __test_metadata *t)
+ 		} else {
+ 			switch (WEXITSTATUS(status)) {
+ 			/* Success */
+-			case 0:
++			case KSFT_PASS:
+ 				t->passed = 1;
+ 				break;
+ 			/* Other failure, assume step report. */
+@@ -1132,12 +1132,11 @@ void __run_test(struct __fixture_metadata *f,
+ 		setpgrp();
+ 		t->fn(t, variant);
+ 		if (t->skip)
+-			_exit(255);
+-		/* Pass is exit 0 */
++			_exit(KSFT_SKIP);
  		if (t->passed)
- 			_exit(0);
--		/* Something else happened, report the step. */
--		_exit(t->step);
-+		/* Something else happened. */
-+		_exit(1);
+-			_exit(0);
++			_exit(KSFT_PASS);
+ 		/* Something else happened. */
+-		_exit(1);
++		_exit(KSFT_FAIL);
  	} else {
  		__wait_for_test(t);
  	}
 diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
-index e64bbdf0e86e..c15e22abdca6 100644
+index c15e22abdca6..f5b40399a538 100644
 --- a/tools/testing/selftests/landlock/common.h
 +++ b/tools/testing/selftests/landlock/common.h
-@@ -50,13 +50,13 @@
- 				_exit(255); \
+@@ -47,10 +47,10 @@
+ 			_metadata->no_print = 1; \
+ 			fixture_name##_##test_name##_child(_metadata, self, variant); \
+ 			if (_metadata->skip) \
+-				_exit(255); \
++				_exit(KSFT_SKIP); \
  			if (_metadata->passed) \
- 				_exit(0); \
--			_exit(_metadata->step); \
-+			_exit(1); \
+-				_exit(0); \
+-			_exit(1); \
++				_exit(KSFT_PASS); \
++			_exit(KSFT_FAIL); \
  		} \
  		if (child != waitpid(child, &status, 0)) \
  			abort(); \
- 		if (WIFSIGNALED(status) || !WIFEXITED(status)) { \
- 			_metadata->passed = 0; \
--			_metadata->step = 1; \
-+			_metadata->results->step = 1; \
+@@ -60,10 +60,10 @@
  			return; \
  		} \
  		switch (WEXITSTATUS(status)) { \
-@@ -69,7 +69,6 @@
+-		case 0: \
++		case KSFT_PASS: \
+ 			_metadata->passed = 1; \
  			break; \
- 		default: \
- 			_metadata->passed = 0; \
--			_metadata->step = WEXITSTATUS(status); \
+-		case 255: \
++		case KSFT_SKIP: \
+ 			_metadata->passed = 1; \
+ 			_metadata->skip = 1; \
  			break; \
- 		} \
- 	} \
 -- 
 2.43.0
 
