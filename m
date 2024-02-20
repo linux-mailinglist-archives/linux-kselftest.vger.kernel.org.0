@@ -1,184 +1,119 @@
-Return-Path: <linux-kselftest+bounces-5078-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45CB485C76A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 22:12:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C63E85CA11
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 22:41:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C2B4B20CFE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 21:12:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D88D9283789
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 21:41:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D480151CF9;
-	Tue, 20 Feb 2024 21:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B560152DE8;
+	Tue, 20 Feb 2024 21:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aawLrD9c"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eM4rQqMx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAE5151CCC;
-	Tue, 20 Feb 2024 21:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D849151CCD
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 21:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708463546; cv=none; b=GrvwBAJW5KbN9pPViZjDA44bs2UieLCKP/YOIvjz1+nPj6Q7TKKETfESATj0rMLf2MA6cipS/TtwbT3gzYCm2aLimB8ufqoEKhytpokNyIfI6CQK90l8eNFurkHOgdxCkPZZNn8Le0jgCnWbpXga0M0J6ntKpY5mEs2+ajr1AYU=
+	t=1708465308; cv=none; b=NsEIZwg0g86dyQy+XaMm8jt5WB2J4jQms5IGcOqp4rF3nmVLFVz8pw/nN/ycFddB6QNHc86VaHumNKgxTHa8qSkiMrREZ8TesH6MqkDAg1GlNKTfCPcxtP/D+NsFm6hLjz6Htwi+iC9QQtGOsDWlPOx8pLCStA1nRcncvv35wm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708463546; c=relaxed/simple;
-	bh=LXYj0J0AFG/thvSRyTGZUqOv+JIVwAw2S89O6yugFpw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XeStAaQy2XxV9VtG/tqgefZNJz/T+KXeK5SxF1eL8u/3bP5ZWQPoRzgEWyI1hmI7KDui2FsxJtaalSe1s292JqEgKWqUqsNe1Ff+tfqCiS3um3QHBoRCiJHPxeANGy1qT1R9Cs5DdxuXezAUQhaec3M4OgyAt/N/oYsojqyNeIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aawLrD9c; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41KL05Uj021714;
-	Tue, 20 Feb 2024 21:12:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=MJti5ASp33c3Q7C41cU4AJuOGo4cc1MZ0nh6NBIOpF0=;
- b=aawLrD9cSMPz55x5uMAFjKfx3BXap64w1rpS5aikQSiLAnD9RqFghgY8pdlEP67D94uV
- H/bhO5tkWxbunMYryZG8+O/IJs5irnQnSGHnlkYmFfQtbA/oQ0cns8cWG+vjkvJ0e1e9
- wLGgb58/9CkIJh973t2BdUmMvAz2Pe07Q3v4AKSAyiaxR2nrV2Tdt3m1eispip5uVFQh
- unGdtsk3SkS9FH9+zME2Yu88Ia9Kmrln/BF6arqaeqgAhi6CvD4tcC3Hj1fGC2Aw4Y2i
- rMuhWTl56r2jl/14B//Gtmaxz7qEToeefV66XzLVgn4jysOYLlQmPnrFnfV+eKEoI8c3 Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wd0jjmj88-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 21:12:21 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41KKqE18000348;
-	Tue, 20 Feb 2024 21:12:20 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wd0jjmj7p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 21:12:20 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41KInwIB003596;
-	Tue, 20 Feb 2024 21:12:19 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74tk687-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 21:12:19 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41KLCDOw12845580
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 20 Feb 2024 21:12:15 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A1D002005A;
-	Tue, 20 Feb 2024 21:12:13 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8BD592004E;
-	Tue, 20 Feb 2024 21:12:13 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 20 Feb 2024 21:12:13 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 4958)
-	id 3DA82E030D; Tue, 20 Feb 2024 22:12:13 +0100 (CET)
-From: Eric Farman <farman@linux.ibm.com>
-To: Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Eric Farman <farman@linux.ibm.com>,
-        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-Subject: [PATCH v4 2/2] KVM: s390: selftests: memop: add a simple AR test
-Date: Tue, 20 Feb 2024 22:12:11 +0100
-Message-Id: <20240220211211.3102609-3-farman@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240220211211.3102609-1-farman@linux.ibm.com>
-References: <20240220211211.3102609-1-farman@linux.ibm.com>
+	s=arc-20240116; t=1708465308; c=relaxed/simple;
+	bh=8bsrRQott2AAO2XTms6OJqVRQ6zu+Yw6P1VbD+KUbfY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eXd73Ic558FXHOLh3SG60nbEqmQuGyyFSAM1w7U9tIDN5UxGdnlpiG4JmuLWc7cPSKCEpBI9rXZQnH3LQzP+oywYcvFhnLlPsShP+kcbeDUaMIH0fTeEPjmf/MRM4e3kA/eKl2J2YnpZ1U0hP7kF/als4F1rv6cLmPIzF9RgWJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eM4rQqMx; arc=none smtp.client-ip=209.85.166.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-363acc3bbd8so5514185ab.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 13:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1708465304; x=1709070104; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SpaIw2fjwUqR+/df90gYdTgydOk/VBRkOcyZe3oxMgk=;
+        b=eM4rQqMxtvaEC77napcjSs1KAf16jjvfolwA1xEerjUoXttAXcMdNkzRoAYnxWZZ1h
+         gu6oM+ooy3hVaTdCuNK9MwDB7TkOkWLBIU2tcCXqkau8LUIo9gCg2B2BOVu9TQyTKlrJ
+         pVTlnwQmKSAZZekAoxm80YKv7d7eICmOGHV5s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708465304; x=1709070104;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SpaIw2fjwUqR+/df90gYdTgydOk/VBRkOcyZe3oxMgk=;
+        b=mpN9OjXvoT4Q/oJuyUpQzbwxs15n9iM28ORm6JL9+Qfx/cQ69yAhn5vVe5B+58Mh2Q
+         tUGzyD/zbscezCBD2dhWVFTCOef5WJ5+pOWNwe/mWEJyIBUXmQmjweZfNwNq+WC6wfdF
+         jMMSuP/AC1mxeGKRQfnWdBB7mVlL4035kNwOuXSElX3bUlORqANOVR02f1buVqu1xY8f
+         0RcMrw1cZ+MXXN75pBjTQgS2l6N5Yt0u/uNAcaO4I9bs7iNYd6MUbhxSUbTZXGtliua2
+         txZDfxWPxfIsHQcuubaQNnsSnDmLx5wDY7o9Z+0SCe58CX9cKRM3gHIGiM4/mrLgVlD8
+         R8YA==
+X-Forwarded-Encrypted: i=1; AJvYcCXk6VcvRgctx+fKphvekiIKs8wD/O7Cbaax46x9kHUctz/Ej/THHnPYqv50TE4gZisasUJxwS7c66Xmu04iHm12yKf890vtzES8OrPXKy40
+X-Gm-Message-State: AOJu0YxUlfvoN14Wuuv4RVI4OT3yf2Wn+lM0+cMM+druUtoHygDYFoTO
+	Vb9DYPZUdlZ/jz1rQow4P7vfsGI+JuIuwXAZ5AM3VTn2pC45gyFF8bq0j9aG4cU=
+X-Google-Smtp-Source: AGHT+IHnc22DIp5TX5eD2xKuhbupC8r+DyPT6CPAZ7gXqMeOVrzQneSYbNs53WdHZjevbLUwpq3wrg==
+X-Received: by 2002:a5d:8948:0:b0:7c7:28dc:da21 with SMTP id b8-20020a5d8948000000b007c728dcda21mr11515603iot.1.1708465304445;
+        Tue, 20 Feb 2024 13:41:44 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id k24-20020a023358000000b004743a0b8b8csm486095jak.153.2024.02.20.13.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Feb 2024 13:41:44 -0800 (PST)
+Message-ID: <5c173f2c-5c5e-4fdb-898a-1eb8531e336d@linuxfoundation.org>
+Date: Tue, 20 Feb 2024 14:41:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qDBH5e9QIAEbi7qL7pdi-AVQE9x6AdL5
-X-Proofpoint-ORIG-GUID: neSjePMvyE0hKALCj2NdCxMyrgUlW5ve
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 malwarescore=0
- clxscore=1015 bulkscore=0 mlxlogscore=999 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402200151
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftest/ftrace: fix typo in ftracetest script
+Content-Language: en-US
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Kousik Sanagavarapu <five231003@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240129162841.57979-1-five231003@gmail.com>
+ <20240131235236.749931e31721c892b7591118@kernel.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240131235236.749931e31721c892b7591118@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-There is a selftest that checks for an (expected) error when an
-invalid AR is specified, but not one that exercises the AR path.
+On 1/31/24 07:52, Masami Hiramatsu (Google) wrote:
+> Hi,
+> 
+> On Mon, 29 Jan 2024 21:58:07 +0530
+> Kousik Sanagavarapu <five231003@gmail.com> wrote:
+> 
+>> Fix a typo in ftracetest script which is run when running the kselftests
+>> for ftrace.
+>>
+>> s/faii/fail
+>>
+> 
+> Thanks, this looks obvious typo.
+> 
+>> Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Fixes: dbcf76390eb9 ("selftests/ftrace: Improve integration with kselftest runner")
+> 
+> 
+> Shuah, can you pick this to your branch?
+> 
 
-Add a simple test that mirrors the vanilla write/read test while
-providing an AR. An AR that contains zero will direct the CPU to
-use the primary address space normally used anyway. AR[1] is
-selected for this test because the host AR[1] is usually non-zero,
-and KVM needs to correctly swap those values.
+Applied to linux-kselftest next for Linux 6.9
 
-Reviewed-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Signed-off-by: Eric Farman <farman@linux.ibm.com>
----
- tools/testing/selftests/kvm/s390x/memop.c | 31 +++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index bb3ca9a5d731..b6da8f71ea19 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -375,6 +375,32 @@ static void test_copy(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_copy_access_register(void)
-+{
-+	struct test_default t = test_default_init(guest_copy);
-+
-+	HOST_SYNC(t.vcpu, STAGE_INITED);
-+
-+	prepare_mem12();
-+	t.run->psw_mask &= ~(3UL << (63 - 17));
-+	t.run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
-+
-+	/*
-+	 * Primary address space gets used if an access register
-+	 * contains zero. The host makes use of AR[1] so is a good
-+	 * candidate to ensure the guest AR (of zero) is used.
-+	 */
-+	CHECK_N_DO(MOP, t.vcpu, LOGICAL, WRITE, mem1, t.size,
-+		   GADDR_V(mem1), AR(1));
-+	HOST_SYNC(t.vcpu, STAGE_COPIED);
-+
-+	CHECK_N_DO(MOP, t.vcpu, LOGICAL, READ, mem2, t.size,
-+		   GADDR_V(mem2), AR(1));
-+	ASSERT_MEM_EQ(mem1, mem2, t.size);
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
- static void set_storage_key_range(void *addr, size_t len, uint8_t key)
- {
- 	uintptr_t _addr, abs, i;
-@@ -1101,6 +1127,11 @@ int main(int argc, char *argv[])
- 			.test = test_copy_key_fetch_prot_override,
- 			.requirements_met = extension_cap > 0,
- 		},
-+		{
-+			.name = "copy with access register mode",
-+			.test = test_copy_access_register,
-+			.requirements_met = true,
-+		},
- 		{
- 			.name = "error checks with key",
- 			.test = test_errors_key,
--- 
-2.40.1
+thanks,
+-- Shuah
 
 
