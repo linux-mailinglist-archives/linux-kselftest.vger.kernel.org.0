@@ -1,115 +1,206 @@
-Return-Path: <linux-kselftest+bounces-5090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EDB885CC3D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 00:48:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 448CA85CC48
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 00:54:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3530B23133
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 23:48:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8C3D1F23C9F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 23:54:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26771154C17;
-	Tue, 20 Feb 2024 23:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZfoSCKhd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10A4154C1E;
+	Tue, 20 Feb 2024 23:54:02 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BD440BFD
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 23:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCB2154430
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 23:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708472908; cv=none; b=Y6UwNWi3kslofx9s/G3ScAmfngnYlzi2WlTLg+49dw06kMT3gKppiAva3aSZWrNdudy31vT8Ibs1AZP1/vCliKO2ZmpenmBiERbQGEkzJieog8LoYGV4oz/B3NE/htzM13uio7VVPnknFeNBr+yZm4cXi7AmepbBC+NtxfOx1MY=
+	t=1708473242; cv=none; b=TYpHy6gFoYAnM/ZkEoudxBdvzUk78Bv0iDtq7gObVvsKs/7EzOwgf2+qqohjovmL54BIrsZvMfvCLKVB8xdyC02F2ylThMJeUXorOxT3/g9MOoeP3NaBt6tyFxuXvKhHUok9d4nwUNna9EIBER7wzyXoyIs9maVI/M3x84txutM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708472908; c=relaxed/simple;
-	bh=fuZAkR5PdVfbhinQGJnIwa3pfKCNONLXu9eWT6fsxgA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZrF7KIdq8XKwerD+93HTqu2bofZNTtWrbmEXJigXAFnoPZEFKMrX/SMs8ZMQGYi6GXBLRJ/R6z5QfOQYXcvf5I9Vsrnm/kSqOs3JeSXC8ougyHluOkfl1MfILOa0PjH0OAQxvtlmKWmm2o+SfsPtlGOyv2OmecedgnxGn7HA7es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZfoSCKhd; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7c3d923f7cbso57505839f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 15:48:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1708472904; x=1709077704; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fzGo2UXBP96YP7eP8g0RXTRce65881jHCZhTyNQV5lI=;
-        b=ZfoSCKhdfxb7beLGm7UbomGOtsQrlgU9jJHWs0K8YA8ohO4+AMq8Jvte0wPpeBQnzL
-         wJGyp/0/iZ5ZGhIVyIL0UACc3bqNmT/OiBnl9EHn7UgXbtz7i90lOaY5Y+vI3xAEbHPn
-         z5d3PM983/0DvZxR+Dh0akM5vGiMs1yi8cecQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708472904; x=1709077704;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fzGo2UXBP96YP7eP8g0RXTRce65881jHCZhTyNQV5lI=;
-        b=gflV1W3GDS95ELr+cONdKtTGi+QNP+PMmmiKJygNeHk6URo/32ustPa4U+3EYvggUe
-         JwvYgmWCqrCwaWKBhhU/DWmfEDZ7yUeID+6EA8F4PlSzxucorEP4GF+san/ptzylejG+
-         WrWaCOhkCVZOGdUopMeEtwCGUlj8AkHVJ8POZrswXyi4+Ih853lkGr4Z4VSKxJxqo6Gr
-         7Il+6xIWI3IvLF3YWIJGJUnab24ETPIIMqQ+4YeqTu9GqqDgHvRihONymzkvxqBr72nG
-         tEytoTVJHLx6396GwkKn1Z1DqadwKjs+duTpqBhaOtsAArVcfdknKx1Erv0pFGk322q9
-         vEJg==
-X-Forwarded-Encrypted: i=1; AJvYcCWoRlDAe1UVURjYKgPc40fgAn94nIFTRKfdqLZeloYVfKwjBvv1hiHUgYH2HOZERJtZgsixoPwR2CJo4LJo/mCUDrKHepCReLQ20Iwss2/B
-X-Gm-Message-State: AOJu0YxbQjCD5Tsoqbiiqx/18IXWW9Y4+V10cklxp9pAZ5rTlSouqJWr
-	fDPOMwudDLcMluN8WqHHy3VbXPcuZsnhIwl4tomnrFbavyLkegP3FPxSiv+9NGc=
-X-Google-Smtp-Source: AGHT+IG1/1YsYMnsXtLZYferRX3hzBw3i766CbakualEEmFaQUQJ5dVX7b3CtPz35h5oGrEX7elUdA==
-X-Received: by 2002:a05:6e02:1d96:b0:365:2bd4:2f74 with SMTP id h22-20020a056e021d9600b003652bd42f74mr7351422ila.0.1708472904537;
-        Tue, 20 Feb 2024 15:48:24 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id j11-20020a056e020eeb00b00364f14861ffsm3036971ilk.76.2024.02.20.15.48.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 15:48:24 -0800 (PST)
-Message-ID: <6e31af22-b1b5-43d6-85ee-6818dc8e8eac@linuxfoundation.org>
-Date: Tue, 20 Feb 2024 16:48:23 -0700
+	s=arc-20240116; t=1708473242; c=relaxed/simple;
+	bh=pv9M6nCH7P1FRo4VitsRtyecMjGHuwFYfQImuvaTZJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jKJnAii64QxIOnENUVF71hc799xm0daaum7+JsEpRI/hCAEMjZDrpTPv0pjdVzX7Pm33eJOPV6EMZA2qrjj9XbMINJIegxSo08jaRfWmYDKx4CFIJEEQvRCy2UF4HD0j05HRKQn9HjnXtWa1zVmIfLHHbMM/9bwp8jUjkdoVBko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=libc.org; arc=none smtp.client-ip=104.156.224.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=libc.org
+Date: Tue, 20 Feb 2024 18:54:16 -0500
+From: "dalias@libc.org" <dalias@libc.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"broonie@kernel.org" <broonie@kernel.org>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"sorear@fastmail.com" <sorear@fastmail.com>
+Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
+ in userspace
+Message-ID: <20240220235415.GP4163@brightrain.aerifal.cx>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
+ <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
+ <20240220185714.GO4163@brightrain.aerifal.cx>
+ <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools: selftests: Remove unnecessary semicolons
-Content-Language: en-US
-To: Thorsten Blum <thorsten.blum@toblux.com>, Shuah Khan <shuah@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240213122317.1883-2-thorsten.blum@toblux.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240213122317.1883-2-thorsten.blum@toblux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On 2/13/24 05:23, Thorsten Blum wrote:
-> Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
-> semantic patch at scripts/coccinelle/misc/semicolon.cocci.
+On Tue, Feb 20, 2024 at 11:30:22PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2024-02-20 at 13:57 -0500, Rich Felker wrote:
+> > On Tue, Feb 20, 2024 at 06:41:05PM +0000, Edgecombe, Rick P wrote:
+> > > Hmm, could the shadow stack underflow onto the real stack then? Not
+> > > sure how bad that is. INCSSP (incrementing the SSP register on x86)
+> > > loops are not rare so it seems like something that could happen.
+> > 
+> > Shadow stack underflow should fault on attempt to access
+> > non-shadow-stack memory as shadow-stack, no?
 > 
-> Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
-> ---
->   tools/testing/selftests/bpf/benchs/bench_local_storage_create.c | 2 +-
->   tools/testing/selftests/kvm/access_tracking_perf_test.c         | 2 +-
->   tools/testing/selftests/timers/nanosleep.c                      | 2 +-
->   tools/testing/selftests/timers/nsleep-lat.c                     | 2 +-
->   tools/testing/selftests/timers/set-timer-lat.c                  | 2 +-
->   5 files changed, 5 insertions(+), 5 deletions(-)
+> Maybe I'm misunderstanding. I thought the proposal included allowing
+> shadow stack access to convert normal address ranges to shadow stack,
+> and normal writes to convert shadow stack to normal.
+
+As I understood the original discussion of the proposal on IRC, it was
+only one-way (from shadow to normal). Unless I'm missing something,
+making it one-way is necessary to catch situations where the shadow
+stack would become compromised.
+
+> > > Shadow stacks currently have automatic guard gaps to try to prevent
+> > > one
+> > > thread from overflowing onto another thread's shadow stack. This
+> > > would
+> > > somewhat opens that up, as the stack guard gaps are usually
+> > > maintained
+> > > by userspace for new threads. It would have to be thought through
+> > > if
+> > > these could still be enforced with checking at additional spots.
+> > 
+> > I would think the existing guard pages would already do that if a
+> > thread's shadow stack is contiguous with its own data stack.
 > 
+> The difference is that the kernel provides the guard gaps, where this
+> would rely on userspace to do it. It is not a showstopper either.
+> 
+> I think my biggest question on this is how does it change the
+> capability for two threads to share a shadow stack. It might require
+> some special rules around the syscall that writes restore tokens. So
+> I'm not sure. It probably needs a POC.
 
-Thank you for finding the problems and fixing them.
+Why would they be sharing a shadow stack?
 
-Please split these up and generate separate patches.
-Run getmaintainers.pl to get the right people to send the
-patch.
+> > From the musl side, I have always looked at the entirely of shadow
+> > stack stuff with very heavy skepticism, and anything that breaks
+> > existing interface contracts, introduced places where apps can get
+> > auto-killed because a late resource allocation fails, or requires
+> > applications to code around the existence of something that should be
+> > an implementation detail, is a non-starter. To even consider shadow
+> > stack support, it must truely be fully non-breaking.
+> 
+> The manual assembly stack switching and JIT code in the apps needs to
+> be updated. I don't think there is a way around it.
 
-Taking all these changes in one single patch will result in
-conflicts between the trees and more importantly if changes
-to one file have to reverted for some reason, it makes it
-easier have separate patches.
+Indeed, I'm not talking about programs with JIT/manual stack-switching
+asm, just anything using existing APIs for control of stack --
+pthread_setstack, makecontext, sigaltstack, etc.
 
-thanks,
--- Shuah
+> I agree though that the late allocation failures are not great. Mark is
+> working on clone3 support which should allow moving the shadow stack
+> allocation to happen in userspace with the normal stack. Even for riscv
+> though, doesn't it need to update a new register in stack switching?
+
+If clone is called with signals masked, it's probably not necessary
+for the kernel to set the shadow stack register as part of clone3.
+
+> BTW, x86 shadow stack has a mode where the shadow stack is writable
+> with a special instruction (WRSS). It enables the SSP to be set
+> arbitrarily by writing restore tokens. We discussed this as an option
+> to make the existing longjmp() and signal stuff work more transparently
+> for glibc.
+> 
+> > 
+> > > > _Without_ doing this, sigaltstack cannot be used to recover from
+> > > > stack
+> > > > overflows if the shadow stack limit is reached first, and
+> > > > makecontext
+> > > > cannot be supported without memory leaks and unreportable error
+> > > > conditions.
+> > > 
+> > > FWIW, I think the makecontext() shadow stack leaking is a bad idea.
+> > > I
+> > > would prefer the existing makecontext() interface just didn't
+> > > support
+> > > shadow stack, rather than the leaking solution glibc does today.
+> > 
+> > AIUI the proposal by Stefan makes it non-leaking because it's just
+> > using normal memory that reverts to normal usage on any
+> > non-shadow-stack access.
+> > 
+> 
+> Right, but does it break any existing apps anyway (because of small
+> ucontext stack sizes)?
+> 
+> BTW, when I talk about "not supporting" I don't mean the app should
+> crash. I mean it should instead run normally, just without shadow stack
+> enabled. Not sure if that was clear. Since shadow stack is not
+> essential for an application to function, it is only security hardening
+> on top.
+> 
+> Although determining if an application supports shadow stack has turned
+> out to be difficult in practice. Handling dlopen() is especially hard.
+
+One reasonable thing to do, that might be preferable to overengineered
+solutions, is to disable shadow-stack process-wide if an interface
+incompatible with it is used (sigaltstack, pthread_create with an
+attribute setup using pthread_attr_setstack, makecontext, etc.), as
+well as if an incompatible library is is dlopened. This is much more
+acceptable than continuing to run with shadow stacks managed sloppily
+by the kernel and async killing the process on OOM, and is probably
+*more compatible* with apps than changing the minimum stack size
+requirements out from under them.
+
+The place where it's really needed to be able to allocate the shadow
+stack synchronously under userspace control, in order to harden normal
+applications that aren't doing funny things, is in pthread_create
+without a caller-provided stack.
+
+Rich
 
