@@ -1,152 +1,337 @@
-Return-Path: <linux-kselftest+bounces-5052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EB7185C34B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:04:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 693BC85C38D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:22:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0D02288B28
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:04:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F8171C20F81
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:22:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35BA377652;
-	Tue, 20 Feb 2024 18:04:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2105977F05;
+	Tue, 20 Feb 2024 18:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="iOuwZnAS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nTFNeHJ6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9530678693
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 18:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523457602F;
+	Tue, 20 Feb 2024 18:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708452243; cv=none; b=Jf9TV8u5d0PZZoOyy7L5a8c4MaXsG2a6YLTZNQvSg+PgbGJpK08WgAT6prhJlUHrKc9LSS/19WPgsoB2sI0bmzPLDIL81y9wLLxNZ77XgBnHzPS+yYZvSJY9m5ABqLQzHn+uQrvlxV26d/DG+28M4AipQ5V48CqUvbxPpE9OWdc=
+	t=1708453369; cv=none; b=tBty0hl0oFbnQbuwIIuan27TfocGsFrZJbJA2hK/UunHHYxa+/TaRTTB6ETaB9dcKmnc5pxY0XxSqQ4zXpezIOSQ112yO5Y21A7EYWbkI0VqvdYIwGXkjXlxAEpa3ojkPs0+Za7QNv2tSJDPLoGc2uRateMnDLtj3eOr8kXXpG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708452243; c=relaxed/simple;
-	bh=PX9sdLVf1rXPBzISoCdjtNQ4khXj7aBsRRAyc8FkIIQ=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=Wu77LKWGrassQGfuU3PCTPLJAUwiBX2ELQOuHJ2fWR36+XUaMLzeKvYEhMch+Ptt0MNKN4Am6FEFWhMNegTnSneun+MI36oJtyektmWZQFCM6BZg5pctJlwC9fRi9rHTERSsK3XEKl/T6crqXv4yhih9e3EZOLJdUIWYlc/dkt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=iOuwZnAS; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1dc13fb0133so10133285ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 10:04:01 -0800 (PST)
+	s=arc-20240116; t=1708453369; c=relaxed/simple;
+	bh=nrraAn1ImFh12pbCZwj0ehz+rG9+j8C2qP5Uh/7PhU4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=finNNNi6UQ79sS+t84Gja1QPjWSqjaBQkJfox9wONxv89vJYRjUMc4OQtzMHcJAyWdrOzEVDd9MWacm712F08D4TUA5+EfBBkJ/cm2GDS23ymugnR7S6+GWU2qoB7ALVd5i/cr4pnbZUPWBhrPmeL9fAsvwrsRksAIA/GUK/xsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nTFNeHJ6; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6079d44b02bso36103787b3.3;
+        Tue, 20 Feb 2024 10:22:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708452241; x=1709057041; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=w90P/QZLbiCy/jsC52hGRsfMg2uWyfTwVkXaUF96An8=;
-        b=iOuwZnAS2UhZEpIwJT+WF0A1ZCs5YBRO+eIpAg3+gjl5NaionWfIG/9e4jmFR/3rLu
-         PbfwAi9t1mu6ZX+jBGEO0M9SXWOztpwDLdESdZzN0By6VxlNmBJkx/7il8lbywQl0hOA
-         ZH6fvCVz4ekQ8ULEMhmmCbHQl9NpX+2VBctd1jHPeKk+JtaPpavNbjXdPCVeK1mcixNB
-         BUg1KvZRW4XdT21dz0MHehGjGGuHm3hTc+QB4DFt5yRPunxF95AeLcRZbtf8e3Tvm6o6
-         MeCW1AWxhLUnwMT445EuI8i9EYE6vzHfJGOrHgZXDH36F00RsqHsOYHn9oGCXWst7clj
-         Xjhg==
+        d=gmail.com; s=20230601; t=1708453365; x=1709058165; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i4VgqaiLD1cCwXLefBGo8SjydfX7ZBrzgDeYTA69eJQ=;
+        b=nTFNeHJ6+R678AS7tR7a9n25yqTKSDn0NsYTM2QLJKeYON+g0QDsKrqXUDZmFOA32G
+         xhZbp4eXOJQRxO6gz0TPizk3AVp94OVMG3U0AqlbBr+tGE6VBKeZKTKsZmc6PeFNAznM
+         /XQXxLJp8+p4eQOt/gj/XDYimptupxyI0rJoZk/WjCn/gpavBFkMm7QDiDOMzOinCO+w
+         onb0B1nNMp6sPJy2WQkZJzY8/9AX0KZQOQ5MvBPyUn5oClzbLloT5+4/hMgUDtzAjK3m
+         7WHgF8pNqrXPviKFyxBFOWkGLwdvSzuUcSqfnVj3PUljaY8xEcamyZfBaUkCYX+N68s3
+         EY3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708452241; x=1709057041;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w90P/QZLbiCy/jsC52hGRsfMg2uWyfTwVkXaUF96An8=;
-        b=tPZOYoCE20WmeOR6EpfwIIkPUYk+NGRk1M+KvigSrvGR9cZB5Ub0Ve9rAyj50lCdCW
-         GcO4M4IZPqkfif3HUPjBkvwM5HauvNmNgeEsGeIJ8JYZf/VC2fJu77mzijeuaoLvP4ZJ
-         4OZs86e5HXMtqYWTPtslPangrD2lrRLIJlyhWHoVrH0Jv1TfC2cIj/YlA+8SwOcmhvC9
-         Fg+vzGS+uAkDvi0GObN/CZEDku5Bq0T7I4iCguoSI/nBCLayCeW4nS46F90lFmgP+mdJ
-         79G2pMDXWiALpFe00CTz+zyvhgi2+7yh97wupLOQSor6M4LF6OJtPBi7icN6cZ53XXTL
-         knMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUVYwHZlloelPh+dRl7r7ZSWUtcBPzcvdUR6bEPXWE7eLlzjfs4PLeehZOnooOSPJJT9xekvIjuT1hKtC1A4Gc4sVc/MA7lL7bgJI+c22g7
-X-Gm-Message-State: AOJu0YwvbMLdPf3asAIcASfPc4Z7iIp9SR8+XDxaDaze9PN96YfyG1Mq
-	4ZU1kU1/8bzJYlwMVjajp2wcZB7NKnz3pRMSWXq+DyOvMjGlTh2nPs28acegKbebmi+j869N3/p
-	LX4U=
-X-Google-Smtp-Source: AGHT+IFnQZBGzZn08PSEg/i/J6i4A8+yCVxKD4OkPzyuG2vnXpjWzF0mCHIT86njNJlDJxBrPW6GKA==
-X-Received: by 2002:a17:903:98d:b0:1db:faa6:d4a9 with SMTP id mb13-20020a170903098d00b001dbfaa6d4a9mr7197752plb.69.1708452240489;
-        Tue, 20 Feb 2024 10:04:00 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id h22-20020a170902ac9600b001db5eb52911sm6547174plr.89.2024.02.20.10.03.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 10:04:00 -0800 (PST)
-Message-ID: <65d4e990.170a0220.5aee2.3fc2@mx.google.com>
-Date: Tue, 20 Feb 2024 10:04:00 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1708453365; x=1709058165;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i4VgqaiLD1cCwXLefBGo8SjydfX7ZBrzgDeYTA69eJQ=;
+        b=SyvPWPNUhCmEnigNe3icZz2Bo+vT99Ya3KjWGqENvFzoEjd06KHRj6eOEEfWaBCEcd
+         isY9Q4jK40ouWu4lJrjxSx2POGp6Er1AvWdqJktff8gHpbLQc55Fvo61GeGn+6vZKRYy
+         lS51SzJgVA25rOWrYHxOd4bGA/p2WhrgOnsORWZb4qqt9MzJW4FrvplznuLObZecZm7K
+         sC+lrlVe0FsG64R6EapASIUalMFCAXDM8AAcDFJ3Ri2J7O6zDcguCf+sHeBmj+ZYV6Rk
+         YUxY1mthRMfecAItPhJpzTZGsifS8l4dlhQvioeLiD9rW7aBewkMEDwXJh02d/o8xeaD
+         FGmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWgqNMIOSIbaWS0s5pqDtIjHs2uyZB7VK/VMzR+wmSS8VXz2ZZtho4flHWpzLDZpkhZbxe/ppNOQoQDtcoN1QHpdztu/eY2Ff7CNvm00vmDPqHoCeqF09HlsVqWbGM0q0tO6GfAu2crVml928VeIYtP4NGA8i2ZGwYGgJbsbEm2IraD
+X-Gm-Message-State: AOJu0YxsDap+/QdZd595RxdNdO2xEdDdBpegNPGxSUjcBNBRyRCP+EXN
+	1IVXmqwcX0dx254VMZlrSeOviHrOV8xtI6QpKGOfyKSL7e8lS880
+X-Google-Smtp-Source: AGHT+IEZTdx2DLd0midbgxnfGt6WCbioJI8bdhOlpDyoqlqQ3M0d7Lmk0qHQUjGZKKZPC9wPSvVeSQ==
+X-Received: by 2002:a81:ae13:0:b0:604:7b9e:f622 with SMTP id m19-20020a81ae13000000b006047b9ef622mr12385166ywh.30.1708453365121;
+        Tue, 20 Feb 2024 10:22:45 -0800 (PST)
+Received: from ?IPV6:2600:1700:6cf8:1240:bb79:f43d:510d:5ec7? ([2600:1700:6cf8:1240:bb79:f43d:510d:5ec7])
+        by smtp.gmail.com with ESMTPSA id c2-20020a0df302000000b006046bd562a5sm2218036ywf.128.2024.02.20.10.22.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Feb 2024 10:22:44 -0800 (PST)
+Message-ID: <81431b5d-0e0f-485a-a3ce-af8e63169552@gmail.com>
+Date: Tue, 20 Feb 2024 10:22:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.8-rc1-33-gf17d8a87ecb55
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-lkdtm: 2 runs,
- 1 regressions (v6.8-rc1-33-gf17d8a87ecb55)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
-
-kselftest/next kselftest-lkdtm: 2 runs, 1 regressions (v6.8-rc1-33-gf17d8a8=
-7ecb55)
-
-Regressions Summary
--------------------
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
--rc1-33-gf17d8a87ecb55/plan/kselftest-lkdtm/
-
-  Test:     kselftest-lkdtm
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.8-rc1-33-gf17d8a87ecb55
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      f17d8a87ecb557bc6c9770751c3f0aaf10edbb98 =
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/5] bpf: tracing: add support to record and
+ check the accessed args
+Content-Language: en-US
+To: Menglong Dong <dongmenglong.8@bytedance.com>, andrii@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+ thinker.li@gmail.com, zhoufeng.zf@bytedance.com, davemarchevsky@fb.com,
+ dxu@dxuuu.xyz, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org
+References: <20240220035105.34626-1-dongmenglong.8@bytedance.com>
+ <20240220035105.34626-2-dongmenglong.8@bytedance.com>
+From: Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <20240220035105.34626-2-dongmenglong.8@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
 
-Test Regressions
----------------- =
+On 2/19/24 19:51, Menglong Dong wrote:
+> In this commit, we add the 'accessed_args' field to struct bpf_prog_aux,
+> which is used to record the accessed index of the function args in
+> btf_ctx_access().
+> 
+> Meanwhile, we add the function btf_check_func_part_match() to compare the
+> accessed function args of two function prototype. This function will be
+> used in the following commit.
+> 
+> Signed-off-by: Menglong Dong <dongmenglong.8@bytedance.com>
+> ---
+>   include/linux/bpf.h |   4 ++
+>   kernel/bpf/btf.c    | 121 ++++++++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 125 insertions(+)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index c7aa99b44dbd..0225b8dbdd9d 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1464,6 +1464,7 @@ struct bpf_prog_aux {
+>   	const struct btf_type *attach_func_proto;
+>   	/* function name for valid attach_btf_id */
+>   	const char *attach_func_name;
+> +	u64 accessed_args;
+>   	struct bpf_prog **func;
+>   	void *jit_data; /* JIT specific data. arch dependent */
+>   	struct bpf_jit_poke_descriptor *poke_tab;
+> @@ -2566,6 +2567,9 @@ struct bpf_reg_state;
+>   int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog);
+>   int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *prog,
+>   			 struct btf *btf, const struct btf_type *t);
+> +int btf_check_func_part_match(struct btf *btf1, const struct btf_type *t1,
+> +			      struct btf *btf2, const struct btf_type *t2,
+> +			      u64 func_args);
+>   const char *btf_find_decl_tag_value(const struct btf *btf, const struct btf_type *pt,
+>   				    int comp_idx, const char *tag_key);
+>   int btf_find_next_decl_tag(const struct btf *btf, const struct btf_type *pt,
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 6ff0bd1a91d5..3a6931402fe4 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6203,6 +6203,9 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+>   		/* skip first 'void *__data' argument in btf_trace_##name typedef */
+>   		args++;
+>   		nr_args--;
+> +		prog->aux->accessed_args |= (1 << (arg + 1));
+> +	} else {
+> +		prog->aux->accessed_args |= (1 << arg);
+>   	}
+>   
+>   	if (arg > nr_args) {
+> @@ -7010,6 +7013,124 @@ int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *pr
+>   	return btf_check_func_type_match(log, btf1, t1, btf2, t2);
+>   }
+>   
+> +static u32 get_ctx_arg_total_size(struct btf *btf, const struct btf_type *t)
+> +{
+> +	const struct btf_param *args;
+> +	u32 size = 0, nr_args;
+> +	int i;
+> +
+> +	nr_args = btf_type_vlen(t);
+> +	args = (const struct btf_param *)(t + 1);
+> +	for (i = 0; i < nr_args; i++) {
+> +		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+> +		size += btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
+> +	}
+> +
+> +	return size;
+> +}
+> +
+> +static int get_ctx_arg_idx_aligned(struct btf *btf, const struct btf_type *t,
+> +				   int off)
+> +{
+> +	const struct btf_param *args;
+> +	u32 offset = 0, nr_args;
+> +	int i;
+> +
+> +	nr_args = btf_type_vlen(t);
+> +	args = (const struct btf_param *)(t + 1);
+> +	for (i = 0; i < nr_args; i++) {
+> +		if (offset == off)
+> +			return i;
+> +
+> +		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+> +		offset += btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
+> +		if (offset > off)
+> +			return -1;
+> +	}
+> +	return -1;
+> +}
 
+This one is very similar to get_ctx_arg_idx().
+How about to refactor get_ctx_arg_idx() and share the code
+between get_ctx_arg_idx() and get_ctx_arg_idx_aligned().
 
+For example,
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
+-static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type 
+*func_proto,
+-                          int off)
++static u32 _get_ctx_arg_idx(struct btf *btf, const struct btf_type 
+*func_proto,
++                          int off, u32 *arg_off)
+  {
+         const struct btf_param *args;
+         const struct btf_type *t;
+         u32 offset = 0, nr_args;
+         int i;
 
+         if (!func_proto)
+                 return off / 8;
 
-  Details:     https://kernelci.org/test/plan/id/65d4e2122470917dbb637012
+         nr_args = btf_type_vlen(func_proto);
+         args = (const struct btf_param *)(func_proto + 1);
+         for (i = 0; i < nr_args; i++) {
++               if (arg_off)
++                       *arg_off = offset;
+                 t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+                 offset += btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
+                 if (off < offset)
+                         return i;
+         }
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-33-gf1=
-7d8a87ecb55/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
--lkdtm-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-33-gf1=
-7d8a87ecb55/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
--lkdtm-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20240129.0/armhf/initrd.cpio.gz =
++       if (arg_off)
++               *arg_off = offset;
+         t = btf_type_skip_modifiers(btf, func_proto->type, NULL);
+         offset += btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
+         if (off < offset)
+                 return nr_args;
 
+         return nr_args + 1;
+  }
 
++static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type 
+*func_proto,
++                          int off)
++{
++       return _get_ctx_arg_idx(btf, func_proto, off, NULL);
++}
++
++static u32 get_ctx_arg_idx_aligned(struct btf *btf,
++                                  const struct btf_type *func_proto,
++                                  int off)
++{
++       u32 arg_off;
++       u32 arg_idx = _get_ctx_arg_idx(btf, func_proto, off, &arg_off);
++       return arg_off == off ? arg_idx : -1;
++}
++
 
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/65d4e212247091=
-7dbb637013
-        failing since 447 days (last pass: v6.1-rc1-23-g00dd59519141, first=
- fail: v6.1-rc1-23-g8008d88e6d16) =
-
- =20
+> +
+> +/* This function is similar to btf_check_func_type_match(), except that it
+> + * only compare some function args of the function prototype t1 and t2.
+> + */
+> +int btf_check_func_part_match(struct btf *btf1, const struct btf_type *func1,
+> +			      struct btf *btf2, const struct btf_type *func2,
+> +			      u64 func_args)
+> +{
+> +	const struct btf_param *args1, *args2;
+> +	u32 nargs1, i, offset = 0;
+> +	const char *s1, *s2;
+> +
+> +	if (!btf_type_is_func_proto(func1) || !btf_type_is_func_proto(func2))
+> +		return -EINVAL;
+> +
+> +	args1 = (const struct btf_param *)(func1 + 1);
+> +	args2 = (const struct btf_param *)(func2 + 1);
+> +	nargs1 = btf_type_vlen(func1);
+> +
+> +	for (i = 0; i <= nargs1; i++) {
+> +		const struct btf_type *t1, *t2;
+> +
+> +		if (!(func_args & (1 << i)))
+> +			goto next;
+> +
+> +		if (i < nargs1) {
+> +			int t2_index;
+> +
+> +			/* get the index of the arg corresponding to args1[i]
+> +			 * by the offset.
+> +			 */
+> +			t2_index = get_ctx_arg_idx_aligned(btf2, func2,
+> +							   offset);
+> +			if (t2_index < 0)
+> +				return -EINVAL;
+> +
+> +			t1 = btf_type_skip_modifiers(btf1, args1[i].type, NULL);
+> +			t2 = btf_type_skip_modifiers(btf2, args2[t2_index].type,
+> +						     NULL);
+> +		} else {
+> +			/* i == nargs1, this is the index of return value of t1 */
+> +			if (get_ctx_arg_total_size(btf1, func1) !=
+> +			    get_ctx_arg_total_size(btf2, func2))
+> +				return -EINVAL;
+> +
+> +			/* check the return type of t1 and t2 */
+> +			t1 = btf_type_skip_modifiers(btf1, func1->type, NULL);
+> +			t2 = btf_type_skip_modifiers(btf2, func2->type, NULL);
+> +		}
+> +
+> +		if (t1->info != t2->info ||
+> +		    (btf_type_has_size(t1) && t1->size != t2->size))
+> +			return -EINVAL;
+> +		if (btf_type_is_int(t1) || btf_is_any_enum(t1))
+> +			goto next;
+> +
+> +		if (btf_type_is_struct(t1))
+> +			goto on_struct;
+> +
+> +		if (!btf_type_is_ptr(t1))
+> +			return -EINVAL;
+> +
+> +		t1 = btf_type_skip_modifiers(btf1, t1->type, NULL);
+> +		t2 = btf_type_skip_modifiers(btf2, t2->type, NULL);
+> +		if (!btf_type_is_struct(t1) || !btf_type_is_struct(t2))
+> +			return -EINVAL;
+> +
+> +on_struct:
+> +		s1 = btf_name_by_offset(btf1, t1->name_off);
+> +		s2 = btf_name_by_offset(btf2, t2->name_off);
+> +		if (strcmp(s1, s2))
+> +			return -EINVAL;
+> +next:
+> +		if (i < nargs1) {
+> +			t1 = btf_type_skip_modifiers(btf1, args1[i].type, NULL);
+> +			offset += btf_type_is_ptr(t1) ? 8 : roundup(t1->size, 8);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static bool btf_is_dynptr_ptr(const struct btf *btf, const struct btf_type *t)
+>   {
+>   	const char *name;
 
