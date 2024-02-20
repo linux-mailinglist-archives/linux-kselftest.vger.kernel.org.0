@@ -1,209 +1,144 @@
-Return-Path: <linux-kselftest+bounces-5003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7282085B297
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 07:06:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A74085B393
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 08:04:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3B1D1F21984
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 06:06:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D2521C218FE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 07:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62D357320;
-	Tue, 20 Feb 2024 06:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA8C5A4E0;
+	Tue, 20 Feb 2024 07:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lrgKxhGv"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GtDfhOPD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gSwCnKk+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2863156B7A;
-	Tue, 20 Feb 2024 06:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2275A4CE;
+	Tue, 20 Feb 2024 07:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708409190; cv=none; b=LvVNbgo0Jn6sc9bHMV9WzI9HfgHFNaezzSmpX4YEabopmuLpZhvddqcajum+772SAfeSqOIeoegGHzZsC/2QvCwnGcOZAOK8olnrZU2nfCKI9xrYZBoI8Ewb3OzIVTisiuKcKDFMSz5KzKp/WWnzBsqc9Z7eeY4SzEBegpPg7Dc=
+	t=1708412544; cv=none; b=TZqkiG1kgVoU9V4/ifolN5qrUe1up4cra6p4QPCCi9Q1taHr0caNZ6zKhRtLBoGEVq1w6TZxzjjwLxKfAkeWOZ2QG0ekYgjd2JC4kghOs30pKCtV5iDaCjY2zT6paD69+SuK5JcYutNEf4OoxFZX82NiIqy0fpkFf2bNWRJcZCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708409190; c=relaxed/simple;
-	bh=HRoyqvQLVi4WFKr3tIWp53Z+bTcdYuSeReEJyct0SC0=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=q1B67mY+MreD9h4sxl+QrQIdqbgmdehzh6olEOye4lluR2gwR5djM4ZlDh0G/DLX552O562H+fuhFKtRodx0CQ2pajoTM6mdPyN/jKb/NAcGL8LDm4zDWUM/4mKYOo8J2MeQBImaKP5SWDVrXFkp9Z4G6o+KjYrx00lHvmllmPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lrgKxhGv; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-59883168a83so2269238eaf.2;
-        Mon, 19 Feb 2024 22:06:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708409188; x=1709013988; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tuPNDUsn2g63ljCiGs3HN8gRhcuFMB/bOTt6lSEB+pM=;
-        b=lrgKxhGv1+3tZpOxup6gqZ+IzXmsPDE/YYBj7s9fr11RRaxmAzEr/Rum3Z/Vfykoue
-         ZlF1EfS9aMbLXZfpTfkgPUlp6str4WgVAmoozp1BxXRnVKKZ7FBwu4yeRfPhOfG1bkDZ
-         WBQtIX4FFntPkfABrTf2TJUoKXBM0/xWs5SE3ocWlfUHwx1fQBe6EqJgzKPFcqrG9IHh
-         HbmZ8RpWU9BybrIZlb9DujDuSBY3r8hDKl4ySts2Z3sIaVwV6Uz6oVV2CwYHfTCfGthf
-         olpEz+7s94qNERGOP2lOgKRFZC9MbRuV0O3161hdozVtRGbhjq3V+CWOCxJ7yEviPjqx
-         vX+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708409188; x=1709013988;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tuPNDUsn2g63ljCiGs3HN8gRhcuFMB/bOTt6lSEB+pM=;
-        b=VVcjBi+mTw0U3pHTnF1dNj8TpYBi3dfJYluchBfMg0ncUPXiZsRZCL5Sizm2Cm+7s1
-         k2NptQ0wc9fzojSwQM8BXRWtZSR4xn0QhZVUZin0d5laJiTQ9DesqbtQwS5HSju/R+QG
-         anJl8uZUiXY/Cl+W7NMGk7v11WCKFFMgtD9j4Ad0V9eII/w+1PBE7oB67pwidsrxxBhw
-         FKCeSOOJMQ7WLSYJU+ICVIijvbNSZNH/5bu6bO/SD+5vsVHy9Qm5jgmgTtEUiaNEY7j/
-         HLOmXcc8abnB/l2YeDcGwc3gz073iVwTqV/LWtcqxtub6LSjCQQO4n060meKSvEB0vg8
-         MQ2g==
-X-Forwarded-Encrypted: i=1; AJvYcCUmxKwPnEBVbqccwI0Sb+IIecN4BnQIMgV8ux4afejUiz+SyN4dMxFzGIg8w14v1h5iN/qFvmsL14C+odJdxEm7S4d+gcHzZ41REkSc6KwHW5hsUDAL1X40BLBf0epwDidZLV9tDNeGCgT0XOiPxtaGJd+Vlwd5VyPwcqMDpyWHIhc1lFkD88ZgSxjOSA==
-X-Gm-Message-State: AOJu0Yz64N3esMuYB70ahYUZsr2Dd+5uxoxquez5iy7tSQtjMN5IL1c5
-	UR7aQd1Gp3WPMqKJW67nfai29BMm+yj0VbMICrG3tdbe/Mm6Njv8
-X-Google-Smtp-Source: AGHT+IH8VKVuo4wYWX+6PI1EIdanUEV2FcuwXJEzsfnMA0obmXxjMtO28LrKmVjUkqOCMnzm2CCRXQ==
-X-Received: by 2002:a05:6358:63a7:b0:175:4f0f:bbb6 with SMTP id k39-20020a05635863a700b001754f0fbbb6mr10300972rwh.25.1708409187955;
-        Mon, 19 Feb 2024 22:06:27 -0800 (PST)
-Received: from smtpclient.apple ([47.89.225.180])
-        by smtp.gmail.com with ESMTPSA id s42-20020a056a0017aa00b006e4736817c7sm1587115pfg.64.2024.02.19.22.06.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Feb 2024 22:06:27 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1708412544; c=relaxed/simple;
+	bh=CGtGsFU2wXDy0isZRRb/KkEss2u7yvyia8mRoaJgn9M=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=mLSQ5lEfWMyBZeD2jenHfDM7vdo1whKmNsywm5KQnPH2JaBt0mIBIwN2ru+GnPnEOia7f158cGsnq3dnhNk8s5dka0mZClgLf2dYZbF45kz3yvdcUQFV3zePqQQwvNN46kSbh4R9quI5SrbNgPiX/Ku1yv/q1csP802A8LRpQd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GtDfhOPD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gSwCnKk+; arc=none smtp.client-ip=64.147.123.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 63B3F3200035;
+	Tue, 20 Feb 2024 02:02:20 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 20 Feb 2024 02:02:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1708412539; x=1708498939; bh=mbO/zaQXvf
+	9m5LFtRthBDAWNdbFRPWSTknyOW7f6+rE=; b=GtDfhOPD6uD6H0sAelQ0ZtNx0/
+	NRlgJrzEmUmJCCkqZ194HFHqwEd/CELc5UGj+Tg5+5PO7VK5ixGcdABOPCHDJYAN
+	77f/cqTaGV3W0t/8BioPGkOP1E5Qkvn8uzW1csJAePyaq9FEzT5Dc/4AbFwik39m
+	7lgmvfhnDvYNEGR3zV7XvK6/4+iS5SJsRRtTJbytokoI7synhmim6yy1EykFOg+a
+	nkI03WRzGJDc3nDhkQ333t+aLEMTM6//bhgESNsmZYFfr9O+Yh5OY6tsxqBwcxXP
+	G+PpDTZAFDiBYVrDW5hnd84dLiVe/TTWyeilwsnbZTlAP8mQVZ0p2r4E73eg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1708412539; x=1708498939; bh=mbO/zaQXvf9m5LFtRthBDAWNdbFR
+	PWSTknyOW7f6+rE=; b=gSwCnKk+gBcaLaHDSiSJIw6GSXpisMD4GR/Yu6hpEl6k
+	HkMdYKrkkxtyBLK0rDY6JBtDp8oPLg89fLVG4lZA+6nEUUXScqU+CF7cSIGMDdEj
+	wRQtyHA0ndB5uCukNgV0463rARFFwlwQtZ7gMTfbnZ8iAL7nx/FJqY0XPic9SwR2
+	60KsF//vVH3oRGkzhZM0Js+/NL80t96taprp/uuLdhpRN35uWOyNVA5RckWw7fUy
+	g5pdAY3dNjWCRq+c/O3L/VXxObGeZg2tMMyo+EMhD//+fSq2vBpN7clH/cVXxB1s
+	yC65LBtOhMOSG0tlm5IobUETiqFtDQlHmP5QwFuSFw==
+X-ME-Sender: <xms:e07UZYBm2hAHCJXsZzNHYoM9w_MqFrjQeYAAE3f-399uYwTeXJn9ng>
+    <xme:e07UZajACisGNQ92u2SHlsHMFHYqwH6lj3Of1f8R6re0jpa1E0CGmRUGL2WbGnw9h
+    8uE-n4tkmH0M2XRi3U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdelgddutddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:e07UZblP6z4GUSL-aC_vKHC6wX4ABG6e8bUzBxO0EWnRsN_yJ-pxaw>
+    <xmx:e07UZeyTQGWHfj_t69Iu2lnA-jvGG0F9hIIzb8OjCnG21dlM9fWMlA>
+    <xmx:e07UZdTHOGMBgWVpilHMFgaMrsqKonYDKq_j9UPavaZ2vPfXvdU3Ug>
+    <xmx:e07UZTCp_m36J6zr-xHOlLigMehtSQIiqAs_dknUnbrxVoSIyV-t1w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id A0B7EB6008D; Tue, 20 Feb 2024 02:02:19 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-153-g7e3bb84806-fm-20240215.007-g7e3bb848
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH]     Fix implicit cast warning in test_klp_state.c
-From: zhang warden <zhangwarden@gmail.com>
-In-Reply-To: <20240219141606.6711-1-mpdesouza@suse.com>
-Date: Tue, 20 Feb 2024 14:06:10 +0800
-Cc: Shresth Prasad <shresthprasad7@gmail.com>,
- jpoimboe@kernel.org,
- jikos@kernel.org,
- mbenes@suse.cz,
- pmladek@suse.com,
- joe.lawrence@redhat.com,
- shuah@kernel.org,
- live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org,
- skhan@linuxfoundation.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <FD18B42B-6B73-4B55-A9B2-272414531C26@gmail.com>
-References: <20240219141606.6711-1-mpdesouza@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-X-Mailer: Apple Mail (2.3731.500.231)
+MIME-Version: 1.0
+Message-Id: <830b0788-35e6-4cbd-b195-254d434ba0cd@app.fastmail.com>
+In-Reply-To: <20240219223833.95710-18-zfigura@codeweavers.com>
+References: <20240219223833.95710-1-zfigura@codeweavers.com>
+ <20240219223833.95710-18-zfigura@codeweavers.com>
+Date: Tue, 20 Feb 2024 08:01:59 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Elizabeth Figura" <zfigura@codeweavers.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Jonathan Corbet" <corbet@lwn.net>, shuah <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ wine-devel@winehq.org,
+ =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+ "Wolfram Sang" <wsa@kernel.org>, "Arkadiusz Hiler" <ahiler@codeweavers.com>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Andy Lutomirski" <luto@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "Randy Dunlap" <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 17/31] ntsync: Allow waits to use the REALTIME clock.
+Content-Type: text/plain
 
-Well, the repo location I use is =
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git.
-It seem klp_get_state return struct klp_state.
-The definition of this function in my repo as follows:
+On Mon, Feb 19, 2024, at 23:38, Elizabeth Figura wrote:
+> NtWaitForMultipleObjects() can receive a timeout in two forms, relative or
+> absolute. Relative timeouts are unaffected by changes to the system time and do
+> not count down while the system suspends; for absolute timeouts the opposite is
+> true.
+>
+> In order to make the interface and implementation simpler, the ntsync driver
+> only deals in absolute timeouts. However, we need to be able to emulate both
+> behaviours apropos suspension and time adjustment, which is achieved by allowing
+> either the MONOTONIC or REALTIME clock to be used.
+>
+> Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 
-struct klp_state *klp_get_state(struct klp_patch *patch, unsigned long =
-id)=20
-{
-    struct klp_state *state;
+I understand that there is no practical problem in building
+up the API one patch at a time in the initial merge, but
+it still feels wrong to have an incompatible ABI change in
+the middle of the series:
 
-    klp_for_each_state(patch, state) {
-        if (state->id =3D=3D id)=20
-            return state;
-    }  =20
+> @@ -35,6 +37,8 @@ struct ntsync_wait_args {
+>  	__u32 owner;
+>  	__u32 index;
+>  	__u32 alert;
+> +	__u32 flags;
+> +	__u32 pad;
+>  };
 
-    return NULL;
-}
-EXPORT_SYMBOL_GPL(klp_get_state);
+If this was patch to get merged at any later point, you'd have
+to support both the shorter and the longer structure layout
+with their distinct ioctl command codes.
 
-Are you sure there is really a need for forced conversion?
+If you do a v3 series, maybe just merge this patch into the
+one that introduces the struct ntsync_wait_args. Overall,
+you could probably have fewer but larger patches anyway
+without harming the review process, but other than this
+one that is not a problem.
 
-> 2024=E5=B9=B42=E6=9C=8819=E6=97=A5 22:16=EF=BC=8CMarcos Paulo de Souza =
-<mpdesouza@suse.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Sat, 17 Feb 2024 04:21:26 +0530 Shresth Prasad =
-<shresthprasad7@gmail.com> wrote:
->=20
->>    The function `klp_get_state` returns an `int` value, but the =
-variable
->>    `loglevel_state` is of type `struct klp_state *` and thus does an
->>    implicit cast. Explicitly casting these values fixes:
->>=20
->>            - warning: assignment to \u2018struct klp_state *\u2019 =
-from \u2018int\u2019
->>    makes pointer from integer without a cast [-Wint-conversion]
->>=20
->>    on lines 38, 55, 68 and 80 of test_klp_state.c
->=20
-> I was unable to find where you saw the klp_get_state returning int. I =
-tried
-> searching at the current master of live-patching repo[1], on =
-linux-next. Can
-> you point where do you saw it? For me, klp_get_state return a pointer =
-to klp_state.
->=20
-> Thanks,
->  Marcos
->=20
-> [1]: =
-https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.=
-git/tree/kernel/livepatch/state.c
->=20
->>=20
->> Signed-off-by: Shresth Prasad <shresthprasad7@gmail.com>
->> ---
->> .../selftests/livepatch/test_modules/test_klp_state.c     | 8 =
-++++----
->> 1 file changed, 4 insertions(+), 4 deletions(-)
->>=20
->> diff --git =
-a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c =
-b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
->> index 57a4253acb01..ae6b1ca15fc0 100644
->> --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
->> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
->> @@ -35,7 +35,7 @@ static int allocate_loglevel_state(void)
->> {
->> struct klp_state *loglevel_state;
->>=20
->> - loglevel_state =3D klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
->> + loglevel_state =3D (struct klp_state *)klp_get_state(&patch, =
-CONSOLE_LOGLEVEL_STATE);
->> if (!loglevel_state)
->> return -EINVAL;
->>=20
->> @@ -52,7 +52,7 @@ static void fix_console_loglevel(void)
->> {
->> struct klp_state *loglevel_state;
->>=20
->> - loglevel_state =3D klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
->> + loglevel_state =3D (struct klp_state *)klp_get_state(&patch, =
-CONSOLE_LOGLEVEL_STATE);
->> if (!loglevel_state)
->> return;
->>=20
->> @@ -65,7 +65,7 @@ static void restore_console_loglevel(void)
->> {
->> struct klp_state *loglevel_state;
->>=20
->> - loglevel_state =3D klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
->> + loglevel_state =3D (struct klp_state *)klp_get_state(&patch, =
-CONSOLE_LOGLEVEL_STATE);
->> if (!loglevel_state)
->> return;
->>=20
->> @@ -77,7 +77,7 @@ static void free_loglevel_state(void)
->> {
->> struct klp_state *loglevel_state;
->>=20
->> - loglevel_state =3D klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
->> + loglevel_state =3D (struct klp_state *)klp_get_state(&patch, =
-CONSOLE_LOGLEVEL_STATE);
->> if (!loglevel_state)
->> return;
->>=20
->> --=20
->> 2.43.1
->=20
-
+       Arnd
 
