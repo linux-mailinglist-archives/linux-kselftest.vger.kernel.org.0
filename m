@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-5028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13C9B85BD3E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 14:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3350985BD4E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 14:37:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 332F41C21296
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 13:35:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57D451C22479
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 13:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5ED6A331;
-	Tue, 20 Feb 2024 13:34:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836876A33A;
+	Tue, 20 Feb 2024 13:37:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nyIAckuz"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rZQBB1S0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268416A330;
-	Tue, 20 Feb 2024 13:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C2F6A335;
+	Tue, 20 Feb 2024 13:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708436099; cv=none; b=gOAVmVfhpDrdAWqipLVXvjzYENgF2Quq3vK79TxVCgpOmxoJ9QXDvxJj4OuRvoz2/2k1wjM0eLK97RdwwMK36YNeDTpsqTJSmb0LLyIcsjoVHbQwDGgTvhY57fnSRJ7K4KyguHJRCB5Rb4T1q8TDz2M8AhaloNl6pbyJLqhiWlQ=
+	t=1708436253; cv=none; b=mwXymtKDx/+9pxbVCKx24OW4yUD6QiyZ4fS9f6zu0yr/nm54RfNPU6ApB+tmra6xj0z97hz1q43fWfB+E7DLFVqXqrTHwcOYZra55vFNRi+uHkh8EmqbEsibokQYi7E/952ODOzzLpTrGy2mxS/mdg5U4rW1KMob4CmtvVIkrf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708436099; c=relaxed/simple;
-	bh=s33Wk6+5bN8DuFeX/OYawEEVewmpIJsyEU/lFdKVqa4=;
+	s=arc-20240116; t=1708436253; c=relaxed/simple;
+	bh=smIPqtG20UMCd/zXPcU2zt6z+XyycqU9Y03epv6a7ZE=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=I93kjaEriKDUAzwxucX1PAEZxDcJGLruhy7OpI3jtCKO/MFBX77EbdQjr3IP9cg/hGUoUPfJYo5s/qC+xCzYa+4ZIKXHP7sFao83vPWB54rOJBX5rEhK6lQiMLKrFHTa0s/ghDWjXIRuBZFEVDpyhSA3RsjLhVheAUp7sbpWNtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nyIAckuz; arc=none smtp.client-ip=148.163.158.5
+	 Content-Type:MIME-Version; b=ou0rm5jh4UcFqcVPoiE2nRMoC2IlX+H2oc4nj6vuZ6gAso6DXI5KubfKqdNaqMSN8NPcH+W6NL88Rr+ea3AEsrutKg+rKozPw611tfkPK4htTXXfvslRs1adQmGLn7M61fdZwWtVh0qFjQ6m9L9j3wwkqAfdiVjotGJkhvWu1Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rZQBB1S0; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41KCicT3026931;
-	Tue, 20 Feb 2024 13:34:48 GMT
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41KDUfOQ016907;
+	Tue, 20 Feb 2024 13:37:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  content-transfer-encoding : mime-version; s=pp1;
- bh=B8lLttoACaBGlu7Jo9nikgkeMCNCXiH/JeUZSRVDr0c=;
- b=nyIAckuzTugO1tM7eBQKnFx0pK0djnCuA9YlLcrbrIlTQwWz/f6t7mD5ZkcKqpW4nrBr
- GsoHKMzwra++rIvB55XYM+2v2rBXFCa6ioyI83OZeuazNAC8lKQVai85RrkhhWppRUkz
- nJiy8fonMQptBxppTSfASKCvMRmh5HQM4gnFvtxvkV3tihNIW33cft0Pg3RSHGDs1b1s
- /CDI2kHBsS6bxkhuRpBX77cYbQA3+WqXA7zyLDGgL7hzI+Tbqu2PyeHhLSR1ucolRKKc
- guflBWrFxQ/manvXohWfzpqWdeOszzLQD2lzTAvcrDxqACW9R11/LT/ivR6zRN1FNppH ZA== 
+ bh=2ZLbRiDGUwBJ70GdCzIY25odvEPvGmovSt4o+8xvzrc=;
+ b=rZQBB1S020oBPldIlL7vHb0vrX2Ie2jGkF+xS4wwy8fSBmyjdJF1XZ0GuVV90pPiErPv
+ OR/tndpuYDYghIR2qCNy5jrVfBVSOfHv4K/+HJPxBDdxgWBTLpb+H76cP749jRejxKaO
+ sZH1u0a+dQ49JliaBKj3hS2fc+FHgsdrXICWPBg/EmGL2Ii9qKiAeDZdWUMVkJKZ8Wsu
+ jOIuHThvETHGJMsCV2rQ/i9tf4da1XsEztLqtVPQHjKiBGlP1qIJmE/BH7sYMijN4lwf
+ eXVCPlwCwcJeTPwA6w74iTNYl3z+cb6VpkW0VAfXxyphzZm7hnJDoVuPttpYdv23rtz7 pA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcv6fhqwn-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcvwh88pw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 13:34:47 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41KDW3tQ016286;
-	Tue, 20 Feb 2024 13:34:47 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcv6fhqwf-1
+	Tue, 20 Feb 2024 13:37:23 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41KDZIXu003512;
+	Tue, 20 Feb 2024 13:37:22 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcvwh88p5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 13:34:47 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41KD7Qvm031117;
-	Tue, 20 Feb 2024 13:34:46 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb9bkqy53-1
+	Tue, 20 Feb 2024 13:37:22 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41KBtut7017307;
+	Tue, 20 Feb 2024 13:37:21 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb8mm87fv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 13:34:46 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41KDYfef65929570
+	Tue, 20 Feb 2024 13:37:21 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41KDbFpv41353490
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 20 Feb 2024 13:34:43 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EB18020063;
-	Tue, 20 Feb 2024 13:34:40 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4551E2004B;
-	Tue, 20 Feb 2024 13:34:40 +0000 (GMT)
+	Tue, 20 Feb 2024 13:37:17 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 876E02004D;
+	Tue, 20 Feb 2024 13:37:15 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DA84920040;
+	Tue, 20 Feb 2024 13:37:14 +0000 (GMT)
 Received: from li-978a334c-2cba-11b2-a85c-a0743a31b510.ibm.com (unknown [9.171.28.134])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 20 Feb 2024 13:34:40 +0000 (GMT)
-Message-ID: <43ab557a097f2e64b0869861866569e6ac372972.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 2/2] KVM: s390: selftests: memop: add a simple AR test
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 20 Feb 2024 13:37:14 +0000 (GMT)
+Message-ID: <0dfca89958c532d1a76232fceca9856d80d42d10.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/2] KVM: s390: fix access register usage in ioctls
 From: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
 To: Eric Farman <farman@linux.ibm.com>,
         Christian Borntraeger
@@ -92,10 +92,10 @@ Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
  <shuah@kernel.org>,
         kvm@vger.kernel.org, linux-s390@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Date: Tue, 20 Feb 2024 14:34:40 +0100
-In-Reply-To: <20240215205344.2562020-3-farman@linux.ibm.com>
-References: <20240215205344.2562020-1-farman@linux.ibm.com>
-	 <20240215205344.2562020-3-farman@linux.ibm.com>
+Date: Tue, 20 Feb 2024 14:37:14 +0100
+In-Reply-To: <20240216213616.3819805-2-farman@linux.ibm.com>
+References: <20240216213616.3819805-1-farman@linux.ibm.com>
+	 <20240216213616.3819805-2-farman@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
@@ -106,92 +106,58 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: K6rTS800l5PHxjmqnrJLAEiBzA0b8WRD
-X-Proofpoint-ORIG-GUID: 2a0hFO4FaaD3bFdcFdwJx1ENQzo_IQr_
+X-Proofpoint-ORIG-GUID: g5WTvC2pAo2-QTnFwCzx1017JTzrdz-J
+X-Proofpoint-GUID: H5hTo1b9QMbb0xuEr5qDSXT-e--ZdQpx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 clxscore=1011
- priorityscore=1501 malwarescore=0 spamscore=0 adultscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402200097
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 adultscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402200098
 
-On Thu, 2024-02-15 at 21:53 +0100, Eric Farman wrote:
-> There is a selftest that checks for an (expected) error when an
-> invalid AR is specified, but not one that exercises the AR path.
+On Fri, 2024-02-16 at 22:36 +0100, Eric Farman wrote:
+> The routine ar_translation() can be reached by both the instruction
+> intercept path (where the access registers had been loaded with the
+> guest register contents), and the MEM_OP ioctls (which hadn't).
+> Since this routine saves the current registers to vcpu->run,
+> this routine erroneously saves host registers into the guest space.
 >=20
-> Add a simple test that mirrors the vanilla write/read test while
-> providing an AR. An AR that contains zero will direct the CPU to
-> use the primary address space normally used anyway. AR[1] is
-> selected for this test because the host AR[1] is usually non-zero,
-> and KVM needs to correctly swap those values.
+> Introduce a boolean in the kvm_vcpu_arch struct to indicate whether
+> the registers contain guest contents. If they do (the instruction
+> intercept path), the save can be performed and the AR translation
+> is done just as it is today. If they don't (the MEM_OP path), the
+> AR can be read from vcpu->run without stashing the current contents.
 >=20
 > Signed-off-by: Eric Farman <farman@linux.ibm.com>
 
 Reviewed-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
 
 > ---
->  tools/testing/selftests/kvm/s390x/memop.c | 28 +++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
+>  arch/s390/include/asm/kvm_host.h | 1 +
+>  arch/s390/kvm/gaccess.c          | 3 ++-
+>  arch/s390/kvm/kvm-s390.c         | 3 +++
+>  3 files changed, 6 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/se=
-lftests/kvm/s390x/memop.c
-> index bb3ca9a5d731..be20c26ee545 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -375,6 +375,29 @@ static void test_copy(void)
->  	kvm_vm_free(t.kvm_vm);
->  }
->=20
-> +static void test_copy_access_register(void)
-> +{
-> +	struct test_default t =3D test_default_init(guest_copy);
-> +
-> +	HOST_SYNC(t.vcpu, STAGE_INITED);
-> +
-> +	prepare_mem12();
-> +	t.run->psw_mask &=3D ~(3UL << (63 - 17));
-> +	t.run->psw_mask |=3D 1UL << (63 - 17);  /* Enable AR mode */
-> +
+> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm=
+_host.h
+> index 52664105a473..c86215eb4ca7 100644
+> --- a/arch/s390/include/asm/kvm_host.h
+> +++ b/arch/s390/include/asm/kvm_host.h
+> @@ -765,6 +765,7 @@ struct kvm_vcpu_arch {
+>  	__u64 cputm_start;
+>  	bool gs_enabled;
+>  	bool skey_enabled;
+> +	bool acrs_loaded;
 
-I feel like part of the commit message should be a comment here
+Not sure how descriptive that name is.
+Maybe add a comment.
 
-/*
- * Guest AR[1] should be zero, in which case the primary address space is u=
-sed.
- * The host makes use of AR[1], its value must not be used for the memop.
- */
-> +	CHECK_N_DO(MOP, t.vcpu, LOGICAL, WRITE, mem1, t.size,
-> +		   GADDR_V(mem1), AR(1));
-> +	HOST_SYNC(t.vcpu, STAGE_COPIED);
-> +
-> +	CHECK_N_DO(MOP, t.vcpu, LOGICAL, READ, mem2, t.size,
-> +		   GADDR_V(mem2), AR(1));
-> +	ASSERT_MEM_EQ(mem1, mem2, t.size);
-> +
-> +	t.run->psw_mask &=3D ~(3UL << (63 - 17));   /* Disable AR mode */
+>  	struct kvm_s390_pv_vcpu pv;
+>  	union diag318_info diag318_info;
+>  };
 
-Any reason for this? It's not necessary since the vm is going to be destroy=
-ed.
-> +
-> +	kvm_vm_free(t.kvm_vm);
-> +}
-> +
->  static void set_storage_key_range(void *addr, size_t len, uint8_t key)
->  {
->  	uintptr_t _addr, abs, i;
-> @@ -1101,6 +1124,11 @@ int main(int argc, char *argv[])
->  			.test =3D test_copy_key_fetch_prot_override,
->  			.requirements_met =3D extension_cap > 0,
->  		},
-> +		{
-> +			.name =3D "copy with access register mode",
-> +			.test =3D test_copy_access_register,
-> +			.requirements_met =3D true,
-> +		},
->  		{
->  			.name =3D "error checks with key",
->  			.test =3D test_errors_key,
+[...]
 
 
