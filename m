@@ -1,217 +1,146 @@
-Return-Path: <linux-kselftest+bounces-5048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D37EA85C25F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:19:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8AC685C2BE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:33:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3BA5B21C8D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 17:19:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D97D1F21B16
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 17:33:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3B277643;
-	Tue, 20 Feb 2024 17:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A55A7764B;
+	Tue, 20 Feb 2024 17:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfS+TvPW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iQ/4wivE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A5676C74;
-	Tue, 20 Feb 2024 17:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFFD77647
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 17:33:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708449526; cv=none; b=VB0lFvML8LxjVQ6GwinjKalcX8Cs6c0vT5yHW7zQQP5UjHip2B7ZNdw1Pt6FkNyDYzbiLFwNwVGkhVyUdyNXSJP4Za4Ml4r6svpB4zYxkq+UxVfmeGoybQYL7h1gCW2fTzEcg5qFGbKMdxG4TIGClX59F7HrONtRm9UVPlyVeFM=
+	t=1708450408; cv=none; b=mLs4ezxytKhYNYgBuZxo++bJApYVegA493NFBsXvcnyH6ZWux++Qmkv6uHj0Hg8It2PN9gqjJ3PwZJSV+FjgzmlcEUqnjq2uVmuaJZ1zTvipRadm10ZtlO3d+FlnQyROdjmxSeJTbFvrMO9QAUl2XkpcPE5LkSseB17l/nUOjjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708449526; c=relaxed/simple;
-	bh=oAmeEfyjXLv4RIi34kUBYqESf31shoVCzi2Fy9DSnI4=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GCreF22M9Dn/Y6IobZ0O2ME27VTjgfIC3YWcZntZXmZq8v+jxmA6hYhcUof+ykfWZGPWHYcoeXKBrUGYr3T6PE0HCeNSmvZ+IWJyJA+eihdytrrO9OUmprHA6Fyjy8rvgPFxQo5CAKX6yrT7xMixiQGkLw3zei3KgTmd9AuW+Bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfS+TvPW; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-563f675be29so5187232a12.0;
-        Tue, 20 Feb 2024 09:18:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708449523; x=1709054323; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2jsimXL4CWxMWFytJ0GOuQvmJcBH3su7G6flKHH6vaI=;
-        b=jfS+TvPWBy3pdZtVyDITo+zcyrHS6v33pfXYDJYx75YloyvjB4a3Jjg9QAKjgwqCpS
-         n1OI6oHneNmzEti6tNxlUuczg5gxoQYMuCfALN9cq//r8k8sNetGVyaKTEvVDoZQctQw
-         QBUBzpn4y5nCGG3b34bd9vyONdVH+Xmg8ILgnt7E9vGD2mHToS9yGgWgulwhJ2OUJLl5
-         X0BrR1hrj1d+FvxW8e3GEPmp5AE+ef3q7t49G14Jmv71ha+TZlSizdg7F2ramz/PZkVw
-         /7t8aFaISl7iO1J1Ton95YtFE0ThAUkW08F+/ogigA3NZj2Zstd+asyRvysOZ5ywHxvU
-         bo+Q==
+	s=arc-20240116; t=1708450408; c=relaxed/simple;
+	bh=ApaYUklv/cRMXANEx9oSoxNWrMLZy0a0uiWwVrNfunA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Y/3cbFQVupRKmkEzfss+dLFIILSTDVwcbXCjJhokYPfCuvZkRUYUG4UxV1mBwNAouhnL0qWcf0EQ4WhVcNyDbT8srjN9vH6p3niilCzDyhnuC38pYdD0t/6N4Wcw8dqokWIozRSZSqwiHefIngWKXZ5FTi0g8+ysmcbT546SiOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iQ/4wivE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708450405;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=ApaYUklv/cRMXANEx9oSoxNWrMLZy0a0uiWwVrNfunA=;
+	b=iQ/4wivEO9K+eKxgscWo9Q+EWGTvCqTU0vPmbbMJauUYUZq+woeu5qrR3nVqb98Yc8EK9r
+	ixTxyy5EqB5e4/ny2fEqpnoL+ncdfdYNaQ9oNDOnQuOp7371KTWSZQc+VEKZs6Kw8u1yvV
+	4a3+7CuZt36F6mprKx5tW5p/cGAjwPk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-136-bZ9DzQ6wPX2DV90H9pciJw-1; Tue, 20 Feb 2024 12:33:24 -0500
+X-MC-Unique: bZ9DzQ6wPX2DV90H9pciJw-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-33d4961412bso414907f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 09:33:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708449523; x=1709054323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2jsimXL4CWxMWFytJ0GOuQvmJcBH3su7G6flKHH6vaI=;
-        b=aJHS9XNXWOHSun9wT8zipPdwntoCriV7AN/mw7kilfsf+B+VB4QsKg/9CI+M9OWlHU
-         7LaugUFjzNyRd9BohOUGp28JupMpmuKo9Bu9WKiUri7lQMLbsYXU5otZTKUzuoWlPpgQ
-         H8l6geIW96IXKBAnXyPh3wBdzxwvz7907q0mMKQwqitEDd8JtSCcyKC9qo7pbhJD6PP5
-         zJdZO9NYlggxbshfYVC2sxK4su14en7SVewIV5vCaY7xQODul2CT2h1yWPgeXNPR/mm1
-         OdqRpjdw9LxaqLZd6kqJei7MYkpDG+m579TnzCO+/918fb7ECNl/npFwigpNkrMaaItJ
-         XIhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVElQFiQqZHZIjUIW3wlxbDMrj1czJzjXQApybWV9Q6BwcskBj84VbCHTMYoNHTxzsrVWid5M/rZDQpLQQ3IwuQS73AKCtTOKq3l8jX71+waE+vewvOypikVIenes+1AkbJVlo4tfhqvilngqSJOUyJCBdijmvStJh4Gv1z+zGq/n8H
-X-Gm-Message-State: AOJu0YxIQNg3xWeG8K6jRj28/IziOZ0ctJss2740TC1CjoToQQj7lnh1
-	jJdfffuZ+jMYzG+WrmNjQHsNesitg1VMjQGvu3y39bTMwzRNb1Wv
-X-Google-Smtp-Source: AGHT+IHc0pN9KHkKeb7luanourVgNNVzQPzVIAPQ4poYAK/bHeBaBBTbjvPtzX2mIiyI/iKaLuo4xQ==
-X-Received: by 2002:aa7:db49:0:b0:564:a76b:aa55 with SMTP id n9-20020aa7db49000000b00564a76baa55mr2426459edt.12.1708449523138;
-        Tue, 20 Feb 2024 09:18:43 -0800 (PST)
-Received: from krava ([83.240.60.70])
-        by smtp.gmail.com with ESMTPSA id ew14-20020a056402538e00b005602346c3f5sm3823732edb.79.2024.02.20.09.18.42
+        d=1e100.net; s=20230601; t=1708450403; x=1709055203;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ApaYUklv/cRMXANEx9oSoxNWrMLZy0a0uiWwVrNfunA=;
+        b=nyygRKvARBU0pYkcTcn8gbjxXlYSnlFyQzloHhCAdbjPV7BYKq+BSTz9EtqzuCBF98
+         /U1olBeK3uAqbkfLl7aKMo4Jpr3SHzlLutiM7/YHzzomX0KttRwq3iEjKaCq0ETqatlM
+         19jpAi5RnonpymTFf2KicPNc6OXzWuUDoFkoAuJAM15qFG7qJonrAGFYG1Y2NSsLAeHV
+         4lYEU4AeJoDvw4ufA5G/z1b0HlpGCPn0VlETr9ZvLFiY4+H1KSXKwz7odiJFdXl66XTR
+         jHYf/SBuVxpIo6i7P4gms4pTbvgpyJMgyteC/DMiiVhqVeaIRvyrgiCz063YWcsGovZ3
+         PDMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6OkcCHgT1PHSXNbcZWYg/nrlVRXU/0jn7LlBiRyq49pyhlROsbkXdqZPgcLOB97l8eJwz24exFOqQ22ppwAa1QLvqvWbsGfpyd+IWiRBI
+X-Gm-Message-State: AOJu0YzoUsthsbmylra0shtGfzo5zti7Vah9YhrIcTGVeXbCQuoFGheE
+	n7B55eBVZgcp9tU5Fohzs7kesZ3uoVXKaDBQO1I73Imp4IqdszctxpKE3TjX7wkRG39T9dncg6V
+	RmwtVFIr1+72V7/VJ2X/npcqIPHOZ+jzQT/Aq1o5XJQOpCut8kaJqEW0HcAsbp6ODdQ==
+X-Received: by 2002:a05:600c:198f:b0:412:6d76:1733 with SMTP id t15-20020a05600c198f00b004126d761733mr1972641wmq.3.1708450403040;
+        Tue, 20 Feb 2024 09:33:23 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFq6YjQBx+SQJaXKVH7RtA5LtCzCx8M+hNieW/E8vqJziZ6ksCuwQX7/vLbccTUtQ/ixvDF8g==
+X-Received: by 2002:a05:600c:198f:b0:412:6d76:1733 with SMTP id t15-20020a05600c198f00b004126d761733mr1972630wmq.3.1708450402690;
+        Tue, 20 Feb 2024 09:33:22 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-230-79.dyn.eolo.it. [146.241.230.79])
+        by smtp.gmail.com with ESMTPSA id z19-20020a7bc7d3000000b00411e1574f7fsm15140883wmk.44.2024.02.20.09.33.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 09:18:42 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 20 Feb 2024 18:18:40 +0100
-To: Menglong Dong <dongmenglong.8@bytedance.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	mykolal@fb.com, shuah@kernel.org, mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com, thinker.li@gmail.com,
-	zhoufeng.zf@bytedance.com, davemarchevsky@fb.com, dxu@dxuuu.xyz,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH bpf-next 1/5] bpf: tracing: add support to record and
- check the accessed args
-Message-ID: <ZdTe8LteoqR43d4q@krava>
-References: <20240220035105.34626-1-dongmenglong.8@bytedance.com>
- <20240220035105.34626-2-dongmenglong.8@bytedance.com>
+        Tue, 20 Feb 2024 09:33:22 -0800 (PST)
+Message-ID: <28a1a98c757e4a15b7eecdeae563a17fa5cb45cf.camel@redhat.com>
+Subject: Re: [PATCH net 03/13] mptcp: fix lockless access in subflow ULP diag
+From: Paolo Abeni <pabeni@redhat.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, mptcp@lists.linux.dev, 
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,
+ Davide Caratti <dcaratti@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org, Boris Pismenny
+ <borisp@nvidia.com>, John Fastabend <john.fastabend@gmail.com>
+Date: Tue, 20 Feb 2024 18:33:20 +0100
+In-Reply-To: <CANn89iK72hE16sQcGPUFG6Am_V-77PNJOYHgeAA6M+SD5UO13A@mail.gmail.com>
+References: 
+	<20240215-upstream-net-20240215-misc-fixes-v1-0-8c01a55d8f6a@kernel.org>
+	 <20240215-upstream-net-20240215-misc-fixes-v1-3-8c01a55d8f6a@kernel.org>
+	 <CANn89iJ=Oecw6OZDwmSYc9HJKQ_G32uN11L+oUcMu+TOD5Xiaw@mail.gmail.com>
+	 <CANn89iJDypRXX-8S-UdqWgw73eOgt0+D74qUCLDkb0cRpFFXkg@mail.gmail.com>
+	 <278c26d6f4042dc6dadb9742afe11b7fa610f0b2.camel@redhat.com>
+	 <CANn89iK72hE16sQcGPUFG6Am_V-77PNJOYHgeAA6M+SD5UO13A@mail.gmail.com>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=mQINBGISiDUBEAC5uMdJicjm3ZlWQJG4u2EU1EhWUSx8IZLUTmEE8zmjPJFSYDcjtfGcbzLPb63BvX7FADmTOkO7gwtDgm501XnQaZgBUnCOUT8qv5MkKsFH20h1XJyqjPeGM55YFAXc+a4WD0YyO5M0+KhDeRLoildeRna1ey944VlZ6Inf67zMYw9vfE5XozBtytFIrRyGEWkQwkjaYhr1cGM8ia24QQVQid3P7SPkR78kJmrT32sGk+TdR4YnZzBvVaojX4AroZrrAQVdOLQWR+w4w1mONfJvahNdjq73tKv51nIpu4SAC1Zmnm3x4u9r22mbMDr0uWqDqwhsvkanYmn4umDKc1ZkBnDIbbumd40x9CKgG6ogVlLYeJa9WyfVMOHDF6f0wRjFjxVoPO6p/ZDkuEa67KCpJnXNYipLJ3MYhdKWBZw0xc3LKiKc+nMfQlo76T/qHMDfRMaMhk+L8gWc3ZlRQFG0/Pd1pdQEiRuvfM5DUXDo/YOZLV0NfRFU9SmtIPhbdm9cV8Hf8mUwubihiJB/9zPvVq8xfiVbdT0sPzBtxW0fXwrbFxYAOFvT0UC2MjlIsukjmXOUJtdZqBE3v3Jf7VnjNVj9P58+MOx9iYo8jl3fNd7biyQWdPDfYk9ncK8km4skfZQIoUVqrWqGDJjHO1W9CQLAxkfOeHrmG29PK9tHIwARAQABtB9QYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+iQJSBBMBCAA8FiEEg1AjqC77wbdLX2LbKSR5jcyPE6QFAmISiDUCGwMFCwkIBwIDIgIBBhUKCQgLAgQWAgMBAh4HAheAAAoJECkkeY3MjxOkJSYQAJcc6MTsuFxYdYZkeWjW//zbD3ApRHzpNlHLVSuJqHr9/aDS+tyszgS8jj9MiqALzgq4iZbg
+ 7ZxN9ZsDL38qVIuFkSpgMZCiUHdxBC11J8nbBSLlpnc924UAyr5XrGA99 6Wl5I4Km3128GY6iAkH54pZpOmpoUyBjcxbJWHstzmvyiXrjA2sMzYjt3Xkqp0cJfIEekOi75wnNPofEEJg28XPcFrpkMUFFvB4Aqrdc2yyR8Y36rbw18sIX3dJdomIP3dL7LoJi9mfUKOnr86Z0xltgcLPGYoCiUZMlXyWgB2IPmmcMP2jLJrusICjZxLYJJLofEjznAJSUEwB/3rlvFrSYvkKkVmfnfro5XEr5nStVTECxfy7RTtltwih85LlZEHP8eJWMUDj3P4Q9CWNgz2pWr1t68QuPHWaA+PrXyasDlcRpRXHZCOcvsKhAaCOG8TzCrutOZ5NxdfXTe3f1jVIEab7lNgr+7HiNVS+UPRzmvBc73DAyToKQBn9kC4jh9HoWyYTepjdcxnio0crmara+/HEyRZDQeOzSexf85I4dwxcdPKXv0fmLtxrN57Ae82bHuRlfeTuDG3x3vl/Bjx4O7Lb+oN2BLTmgpYq7V1WJPUwikZg8M+nvDNcsOoWGbU417PbHHn3N7yS0lLGoCCWyrK1OY0QM4EVsL3TjOfUtCNQYW9sbyBBYmVuaSA8cGFvbG8uYWJlbmlAZ21haWwuY29tPokCUgQTAQgAPBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEoitAhsDBQsJCAcCAyICAQYVCgkICwIEFgIDAQIeBwIXgAAKCRApJHmNzI8TpBzHD/45pUctaCnhee1vkQnmStAYvHmwrWwIEH1lzDMDCpJQHTUQOOJWDAZOFnE/67bxSS81Wie0OKW2jvg1ylmpBA0gPpnzIExQmfP72cQ1TBoeVColVT6Io35BINn+ymM7c0Bn8RvngSEpr3jBtqvvWXjvtnJ5/HbOVQCg62NC6ewosoKJPWpGXMJ9SKsVIOUHsmoWK60spzeiJoSmAwm3zTJQnM5kRh2q
+ iWjoCy8L35zPqR5TV+f5WR5hTVCqmLHSgm1jxwKhPg9L+GfuE4d0SWd84y GeOB3sSxlhWsuTj1K6K3MO9srD9hr0puqjO9sAizd0BJP8ucf/AACfrgmzIqZXCfVS7jJ/M+0ic+j1Si3yY8wYPEi3dvbVC0zsoGj9n1R7B7L9c3g1pZ4L9ui428vnPiMnDN3jh9OsdaXeWLvSvTylYvw9q0DEXVQTv4/OkcoMrfEkfbXbtZ3PRlAiddSZA5BDEkkm6P9KA2YAuooi1OD9d4MW8LFAeEicvHG+TPO6jtKTacdXDRe611EfRwTjBs19HmabSUfFcumL6BlVyceIoSqXFe5jOfGpbBevTZtg4kTSHqymGb6ra6sKs+/9aJiONs5NXY7iacZ55qG3Ib1cpQTps9bQILnqpwL2VTaH9TPGWwMY3Nc2VEc08zsLrXnA/yZKqZ1YzSY9MGXWYLkCDQRiEog1ARAAyXMKL+x1lDvLZVQjSUIVlaWswc0nV5y2EzBdbdZZCP3ysGC+s+n7xtq0o1wOvSvaG9h5q7sYZs+AKbuUbeZPu0bPWKoO02i00yVoSgWnEqDbyNeiSW+vI+VdiXITV83lG6pS+pAoTZlRROkpb5xo0gQ5ZeYok8MrkEmJbsPjdoKUJDBFTwrRnaDOfb+Qx1D22PlAZpdKiNtwbNZWiwEQFm6mHkIVSTUe2zSemoqYX4QQRvbmuMyPIbwbdNWlItukjHsffuPivLF/XsI1gDV67S1cVnQbBgrpFDxN62USwewXkNl+ndwa+15wgJFyq4Sd+RSMTPDzDQPFovyDfA/jxN2SK1Lizam6o+LBmvhIxwZOfdYH8bdYCoSpqcKLJVG3qVcTwbhGJr3kpRcBRz39Ml6iZhJyI3pEoX3bJTlR5Pr1Kjpx13qGydSMos94CIYWAKhegI06aTdvvuiigBwjngo/Rk5S+iEGR5KmTqGyp27o6YxZy6D4NIc6PKUzhIUxfvuHNvfu
+ sD2W1U7eyLdm/jCgticGDsRtweytsgCSYfbz0gdgUuL3EBYN3JLbAU+UZpy v/fyD4cHDWaizNy/KmOI6FFjvVh4LRCpGTGDVPHsQXaqvzUybaMb7HSfmBBzZqqfVbq9n5FqPjAgD2lJ0rkzb9XnVXHgr6bmMRlaTlBMAEQEAAYkCNgQYAQgAIBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEog1AhsMAAoJECkkeY3MjxOkY1YQAKdGjHyIdOWSjM8DPLdGJaPgJdugHZowaoyCxffilMGXqc8axBtmYjUIoXurpl+f+a7S0tQhXjGUt09zKlNXxGcebL5TEPFqgJTHN/77ayLslMTtZVYHE2FiIxkvW48yDjZUlefmphGpfpoXe4nRBNto1mMB9Pb9vR47EjNBZCtWWbwJTIEUwHP2Z5fV9nMx9Zw2BhwrfnODnzI8xRWVqk7/5R+FJvl7s3nY4F+svKGD9QHYmxfd8Gx42PZc/qkeCjUORaOf1fsYyChTtJI4iNm6iWbD9HK5LTMzwl0n0lL7CEsBsCJ97i2swm1DQiY1ZJ95G2Nz5PjNRSiymIw9/neTvUT8VJJhzRl3Nb/EmO/qeahfiG7zTpqSn2dEl+AwbcwQrbAhTPzuHIcoLZYV0xDWzAibUnn7pSrQKja+b8kHD9WF+m7dPlRVY7soqEYXylyCOXr5516upH8vVBmqweCIxXSWqPAhQq8d3hB/Ww2A0H0PBTN1REVw8pRLNApEA7C2nX6RW0XmA53PIQvAP0EAakWsqHoKZ5WdpeOcH9iVlUQhRgemQSkhfNaP9LqR1XKujlTuUTpoyT3xwAzkmSxN1nABoutHEO/N87fpIbpbZaIdinF7b9srwUvDOKsywfs5HMiUZhLKoZzCcU/AEFjQsPTATACGsWf3JYPnWxL9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240220035105.34626-2-dongmenglong.8@bytedance.com>
 
-On Tue, Feb 20, 2024 at 11:51:01AM +0800, Menglong Dong wrote:
+On Mon, 2024-02-19 at 19:33 +0100, Eric Dumazet wrote:
+> On Mon, Feb 19, 2024 at 7:04=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> w=
+rote:
+> > Thanks for the head-up. This later option looks preferable, to avoid
+> > quit a bit of noise with _ONCE annotation. Is there a syzkaller splat I
+> > could look at? if it landed on the ML, I missed it.
+> >=20
+>=20
+> Not landed yet, here is the splat :
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> WARNING: possible circular locking dependency detected
+> 6.8.0-rc4-syzkaller-00212-g40b9385dd8e6 #0 Not tainted
+> ------------------------------------------------------
+> syz-executor.2/24141 is trying to acquire lock:
+> ffff888045870130 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at:
+> tcp_diag_put_ulp net/ipv4/tcp_diag.c:100 [inline]
+> ffff888045870130 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at:
+> tcp_diag_get_aux+0x738/0x830 net/ipv4/tcp_diag.c:137
+>=20
+> but task is already holding lock:
+> ffffc9000135e488 (&h->lhash2[i].lock){+.+.}-{2:2}, at: spin_lock
+> include/linux/spinlock.h:351 [inline]
+> ffffc9000135e488 (&h->lhash2[i].lock){+.+.}-{2:2}, at:
+> inet_diag_dump_icsk+0x39f/0x1f80 net/ipv4/inet_diag.c:1038
 
-SNIP
+[Sorry for the latency]. Yes it looks like that checking the listener
+status will work. I can test and send the formal patch - with the due
+credits! - or do you prefer otherwise?
 
-> +static int get_ctx_arg_idx_aligned(struct btf *btf, const struct btf_type *t,
-> +				   int off)
-> +{
-> +	const struct btf_param *args;
-> +	u32 offset = 0, nr_args;
-> +	int i;
-> +
-> +	nr_args = btf_type_vlen(t);
-> +	args = (const struct btf_param *)(t + 1);
-> +	for (i = 0; i < nr_args; i++) {
-> +		if (offset == off)
-> +			return i;
-> +
-> +		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
-> +		offset += btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
-> +		if (offset > off)
-> +			return -1;
-> +	}
-> +	return -1;
-> +}
-> +
-> +/* This function is similar to btf_check_func_type_match(), except that it
-> + * only compare some function args of the function prototype t1 and t2.
-> + */
+Thanks!
 
-could we reuse btf_check_func_type_match instead? perhaps just
-adding extra argument with arguments bitmap to it?
+Paolo
 
-jirka
-
-> +int btf_check_func_part_match(struct btf *btf1, const struct btf_type *func1,
-> +			      struct btf *btf2, const struct btf_type *func2,
-> +			      u64 func_args)
-> +{
-> +	const struct btf_param *args1, *args2;
-> +	u32 nargs1, i, offset = 0;
-> +	const char *s1, *s2;
-> +
-> +	if (!btf_type_is_func_proto(func1) || !btf_type_is_func_proto(func2))
-> +		return -EINVAL;
-> +
-> +	args1 = (const struct btf_param *)(func1 + 1);
-> +	args2 = (const struct btf_param *)(func2 + 1);
-> +	nargs1 = btf_type_vlen(func1);
-> +
-> +	for (i = 0; i <= nargs1; i++) {
-> +		const struct btf_type *t1, *t2;
-> +
-> +		if (!(func_args & (1 << i)))
-> +			goto next;
-> +
-> +		if (i < nargs1) {
-> +			int t2_index;
-> +
-> +			/* get the index of the arg corresponding to args1[i]
-> +			 * by the offset.
-> +			 */
-> +			t2_index = get_ctx_arg_idx_aligned(btf2, func2,
-> +							   offset);
-> +			if (t2_index < 0)
-> +				return -EINVAL;
-> +
-> +			t1 = btf_type_skip_modifiers(btf1, args1[i].type, NULL);
-> +			t2 = btf_type_skip_modifiers(btf2, args2[t2_index].type,
-> +						     NULL);
-> +		} else {
-> +			/* i == nargs1, this is the index of return value of t1 */
-> +			if (get_ctx_arg_total_size(btf1, func1) !=
-> +			    get_ctx_arg_total_size(btf2, func2))
-> +				return -EINVAL;
-> +
-> +			/* check the return type of t1 and t2 */
-> +			t1 = btf_type_skip_modifiers(btf1, func1->type, NULL);
-> +			t2 = btf_type_skip_modifiers(btf2, func2->type, NULL);
-> +		}
-> +
-> +		if (t1->info != t2->info ||
-> +		    (btf_type_has_size(t1) && t1->size != t2->size))
-> +			return -EINVAL;
-> +		if (btf_type_is_int(t1) || btf_is_any_enum(t1))
-> +			goto next;
-> +
-> +		if (btf_type_is_struct(t1))
-> +			goto on_struct;
-> +
-> +		if (!btf_type_is_ptr(t1))
-> +			return -EINVAL;
-> +
-> +		t1 = btf_type_skip_modifiers(btf1, t1->type, NULL);
-> +		t2 = btf_type_skip_modifiers(btf2, t2->type, NULL);
-> +		if (!btf_type_is_struct(t1) || !btf_type_is_struct(t2))
-> +			return -EINVAL;
-> +
-> +on_struct:
-> +		s1 = btf_name_by_offset(btf1, t1->name_off);
-> +		s2 = btf_name_by_offset(btf2, t2->name_off);
-> +		if (strcmp(s1, s2))
-> +			return -EINVAL;
-> +next:
-> +		if (i < nargs1) {
-> +			t1 = btf_type_skip_modifiers(btf1, args1[i].type, NULL);
-> +			offset += btf_type_is_ptr(t1) ? 8 : roundup(t1->size, 8);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static bool btf_is_dynptr_ptr(const struct btf *btf, const struct btf_type *t)
->  {
->  	const char *name;
-> -- 
-> 2.39.2
-> 
 
