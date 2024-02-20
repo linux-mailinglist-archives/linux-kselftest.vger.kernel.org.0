@@ -1,186 +1,141 @@
-Return-Path: <linux-kselftest+bounces-5071-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5353C85C594
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 21:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48C5285C59A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 21:16:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 215C0B21B78
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 20:14:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD4F9B21812
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 20:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BC914A4F2;
-	Tue, 20 Feb 2024 20:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA12768F1;
+	Tue, 20 Feb 2024 20:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="livCMehg"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="b0Aox2C3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B5D612D7;
-	Tue, 20 Feb 2024 20:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386CB14A0BE
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 20:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708460080; cv=none; b=V+RgeqmbZOdw5GIABJWkdQAT8pyA+gWeDxYdPgX6dqFN3xVNz7DdLgjevFYUn8oxwuq1Adn3smUa/vKejyu+P/w4OnKW35qw71iSqgNFIvMmX4/RQeKuVKfUosNbnFfTJLCokaBg44Yw/waceA5UzZwkzzafCphzXhcV+lm9gtg=
+	t=1708460184; cv=none; b=qsy2VkIH70Ns3Bo9vU3QSTfA/BYZhhYqd+QUP10K3AbuZ8xftu5zAoFoUkgacHimZe+iQYA7KEUK9P/FXXAOAuTftfC4c3DRdS01utRU5OFx2fhx705BfUJ8v0F6XAvs9bkNpbqyQtTBkJkFsJKx6Sx5kJgtF9pcQa0q2vClqkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708460080; c=relaxed/simple;
-	bh=PhnmgydTViRe3a3Z0MeKX2O9Z2j/9jkmyt+EI/YkIDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ID6zwQuReBnMNNu0dPh6ZWExaNgbYRR0qg100OFq0tY3iAJED/4xvjW5ccAX7cnJUtjq0YCpCL8ztMWclYjVYsZwXA57DNNHpqXga9x+/co98Y97y2z22ymrSXdCY/TbjtBSP8MEITvap+5ubwoTZz1V8yUvCtnRaU64WzWuHpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=livCMehg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0852DC433C7;
-	Tue, 20 Feb 2024 20:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708460079;
-	bh=PhnmgydTViRe3a3Z0MeKX2O9Z2j/9jkmyt+EI/YkIDg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=livCMehgZsyylqxmsXVj6i8xUdU6xpehFod2AwCiN5tpwFKJ1EI6uVpnpUk1SD1pP
-	 GAOlkj14vHO/qPvkX0d2id7JAYJfmORLe28tPRQkxNkQE6Rd+nls0vM8PGBKwrFQaU
-	 Z6Hn1f36OwFyKU9OKK+mfymo53Iz1gvB0Pk8YA6mTWUndRC5NI4pVkVYdWAFBH06HP
-	 wpOkoK5yJIv0PkCR2AWd/nyXrwJz1hOuoOPB1/Rw7cDtv6Mla+4AxXh12qp+hhLjEp
-	 yd71FoqwR1k2BDtT0dWYNV11Xg/QhMr2farOiz7zqwo8yti2+//d2OrlM8Ac/4z8v3
-	 SQyYG8IyDqVJw==
-Date: Tue, 20 Feb 2024 20:14:30 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "corbet@lwn.net" <corbet@lwn.net>, "ardb@kernel.org" <ardb@kernel.org>,
-	"maz@kernel.org" <maz@kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"arnd@arndb.de" <arnd@arndb.de>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"sorear@fastmail.com" <sorear@fastmail.com>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"musl@lists.openwall.com" <musl@lists.openwall.com>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS in userspace
-Message-ID: <527e2b4d-5d2b-4993-a30a-834e77a23a40@sirena.org.uk>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
- <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
+	s=arc-20240116; t=1708460184; c=relaxed/simple;
+	bh=Bn1Gdz/wdbcEWBGG2cIMSmnLhdSFWbRTBNhZ7jo0UNM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G5W/TxQ9PgP6hfQOKi8SaP2wdcLL/QQVB/Zw+Xa97DRYSP9FI7nYdZNWtR11yOuZa9XG6ezhJrKdIiL9KIr4gtBKXeTVLvNE2K0+yZU0ZyuJLfqSFCRgkNOil4GrB3ghgI+XBGwvQGI+saBQtpoLYYx9Jn+0B3V6V/VczmZhyms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=b0Aox2C3; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a3e72ec566aso356164466b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 12:16:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1708460180; x=1709064980; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SASJvZiK5JLGZlQtlEOJrENESAKzYR2wqRZox3lXmic=;
+        b=b0Aox2C3UNhk2JPypHY7D+FbqHQtKDrLRqjx6zf3wfqZM0z2/Ynmn2eaK0CRCIAkmS
+         KmWrECceXEdBj8ZsWSr9DX+7LaKn0BB35SmX+F5RuNjscYQMgpyvKlKQSSL6za8+3w3K
+         N1y65Cug8gKq90Jeg+YwL+dvprVNHHV/croxI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708460180; x=1709064980;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SASJvZiK5JLGZlQtlEOJrENESAKzYR2wqRZox3lXmic=;
+        b=FqpNvPqcnCE50mYwK3ydtQl3fVVlXjAqKlFhZWCdzu808rMUBYlpODXrYsFi+NwpWr
+         kll2SBH3ABtqlW43D1bSO1U3UPLG1dlqlzfGjzIt7qN0yWOTznDAPOZr67g8jHePKHRx
+         mBDH/sL9/t2T+ZZ7wmtJq+PSO1k03bGSk3yluoimlJ31iXu2ah1LiqjDVQ8VA3XZspK9
+         UuMqDdz9bEoojRDbDX7AMZmt/BrDozFfmLVgTVWhm4EfkbZFAuG3M3+5H80e6TKxxyV0
+         Fx/7K+TOW3IKcsV/4+04tqWwLwySUro5RU7DfGCZz3sRrwL7P4tuQH6uHEAp8d9y765D
+         xcPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVSAUzzDi7VPp0ig74gVONbeYSCgruGmt5XSJiXsCx1Aj/Ja3E+Px3F7J6X8wsqfmCGezaTUeydA+UguhUoikbuphWhV4edrMJGx3Hms+P5
+X-Gm-Message-State: AOJu0YzZ62t1EMPFOkDonJppPu9eQ+hfT2GitheAH5oK37Z3P8t9qwLI
+	Ky5FijjyjmmEvsxDACdiDeJN2kcZG3Tlxx5BkhBH3StjQ0K4N60I+jV12gV2SrcMJfQlFjzLJEV
+	/fJYzxQ==
+X-Google-Smtp-Source: AGHT+IEhHrCTFf+tu0o4dZv2+vDA7GetG8JMUVVgtGJ4a56Jwfw8dk6sG9FYJVNWfHfB7Ikb3g3geQ==
+X-Received: by 2002:a17:906:29db:b0:a3f:10e8:ae2b with SMTP id y27-20020a17090629db00b00a3f10e8ae2bmr1503722eje.54.1708460180281;
+        Tue, 20 Feb 2024 12:16:20 -0800 (PST)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id fw14-20020a170906c94e00b00a3f04112c0csm799590ejb.221.2024.02.20.12.16.19
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Feb 2024 12:16:19 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-563c595f968so7133004a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 12:16:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWEbsDcBiGnOhocPE+KNhzql7J6aDWC/CDTuAJIinso1ferbEiMYnPAKZGsr5An03woOzenncOfg4RJc06+SEEqp92J8llIGgU3XdcdOUgN
+X-Received: by 2002:a05:6402:1850:b0:561:f6db:2fd6 with SMTP id
+ v16-20020a056402185000b00561f6db2fd6mr9678466edy.42.1708460178802; Tue, 20
+ Feb 2024 12:16:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="LFlVuq7xn7hg1UEJ"
-Content-Disposition: inline
-In-Reply-To: <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
-X-Cookie: E = MC ** 2 +- 3db
+References: <CAHk-=wi8vZD7EXZfob-yhfDERyfzWxzMOzG9FsOuaKU-v6+PHA@mail.gmail.com>
+ <538327ff-8d34-41d5-a9ae-1a334744f5ae@roeck-us.net> <CAHk-=wj6xj_cGmsQK7g=hSfRZZNo-njC+u_1v3dE8fPZtjCBOg@mail.gmail.com>
+In-Reply-To: <CAHk-=wj6xj_cGmsQK7g=hSfRZZNo-njC+u_1v3dE8fPZtjCBOg@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 20 Feb 2024 12:16:01 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgJMOquDO5f8ShH1f4rzZwzApNVCw643m5-Yj+BfsFstA@mail.gmail.com>
+Message-ID: <CAHk-=wgJMOquDO5f8ShH1f4rzZwzApNVCw643m5-Yj+BfsFstA@mail.gmail.com>
+Subject: Re: Linux 6.8-rc5
+To: Guenter Roeck <linux@roeck-us.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	David Gow <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Rae Moar <rmoar@google.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Matthew Auld <matthew.auld@intel.com>, 
+	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	kselftest list <linux-kselftest@vger.kernel.org>, 
+	KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 
+On Tue, 20 Feb 2024 at 11:57, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> It turns out that that commit is buggy for another reason, but it's
+> hidden by the fact that apparently KUNIT_ASSERT_FALSE_MSG() doesn't
+> check the format string.
 
---LFlVuq7xn7hg1UEJ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The fix for that is this:
 
-On Tue, Feb 20, 2024 at 06:41:05PM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2024-02-20 at 11:36 -0500, Stefan O'Rear wrote:
+  --- a/include/kunit/test.h
+  +++ b/include/kunit/test.h
+  @@ -579,7 +579,7 @@ void __printf(2, 3) kunit_log_append(struct
+string_stream *log, const char *fmt,
 
-> > 2. Shadow stack faults on non-shadow stack pages, if flexible shadow
-> > stack
-> > =A0=A0 handling is in effect, cause the affected page to become a shadow
-> > stack
-> > =A0=A0 page.=A0 When this happens, the page filled with invalid address
-> > tokens.
+   void __noreturn __kunit_abort(struct kunit *test);
 
-> Hmm, could the shadow stack underflow onto the real stack then? Not
-> sure how bad that is. INCSSP (incrementing the SSP register on x86)
-> loops are not rare so it seems like something that could happen.
+  -void __kunit_do_failed_assertion(struct kunit *test,
+  +void __printf(6,7) __kunit_do_failed_assertion(struct kunit *test,
+                                 const struct kunit_loc *loc,
+                                 enum kunit_assert_type type,
+                                 const struct kunit_assert *assert,
 
-Yes, they'd trash any pages of normal stack they touch as they do so but
-otherwise seems similar to overflow.
+but that causes a *lot* of noise (not just in drm_buddy_test.c), so
+I'm not going to apply that fix as-is. Clearly there's a lot of
+incorrect format parameters that have never been checked.
 
-> The situation (for arm and riscv too I think?) is that some
-> applications will just not work automatically due to custom stack
-> switching implementations. (user level threading libraries, JITs, etc).
-> So=A0I think it should be ok to ask for apps to change to enable shadow
-> stack and we should avoid doing anything too awkward in pursuit of
-> getting it to work completely transparently.
+Instead adding Shuah and the KUnit people to the participants, and
+hoping that they will fix this up and we can get the format fixes for
+KUnit in the 6.9 timeframe.
 
-Yes, on arm64 anything that rewrites or is otherwise clever with the
-stack is going to have to understand that the GCS exists on arm64 and do
-matching rewrites/updates for the GCS.  This includes anything that
-switches stacks, it will need to use GCS specific instructions to change
-the current shadow stack pointer.
+Side note: when I apply the above patch, the suggestions gcc spews out
+look invalid. Gcc seems to suggest turning a a format string of '%d"
+to "%ld" for a size_t variable. That's wrong. It should be "%zu".
 
-> > MAP_SHARED; I consider this sufficiently perverse application
-> > behavior that
-> > it is not necessary to ensure exclusive use of the underlying pages
-> > while
-> > a shadow stack pte exists.=A0 (Applications that use MAP_SHARED for
-> > stacks
-> > do not get the full benefit of the shadow stack but they keep
-> > POSIX.1-2004
-> > conformance, applications that allocate stacks exclusively in
-> > MAP_PRIVATE
-> > memory lose no security.)
+A 'size_t' can in fact be 'unsigned int' on some platforms (not just
+in theory), so %ld is really incorrect not just from a sign
+perspective.
 
-> On x86 we don't support MAP_SHARED shadow stacks. There is a whole
-> snarl around the dirty bit in the PTE. I'm not sure it's impossible but
-> it was gladly avoided. There is also a benefit in avoiding having them
-> get mapped as writable in a different context.
+Anyway, I guess I will commit the immediate drm_buddy_test.c fix to
+get rid of the build issue, but the KUnit message format string issue
+will have to be a "let's get this fixed up _later_" issue.
 
-Similarly for arm64, I think we can physically do it IIRC but between
-having to map via map_shadow_stack() for security reasons and it just
-generally not seeming like a clever idea the implementation shouldn't
-actually let you get a MAP_SHARED GCS it's not something that's been
-considered.
-
-> > I am substantially less familiar with GCS and SHSTK than with
-> > Zicfiss.
-> > It is likely that a syscall or other mechanism is needed to
-> > initialize the
-> > shadow stack in flexible memory for makecontext.
-
-> The ucontext stacks (and alt shadow stacks is the plan) need to have a
-> "restore token". So, yea, you would probably need some syscall to
-> "convert" the normal stack memory into shadow stack with a restore
-> token.
-
-Similar considerations for GCS, we need tokens and we don't want
-userspace to be able to write by itself in the normal case.
-
---LFlVuq7xn7hg1UEJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXVCCUACgkQJNaLcl1U
-h9CH3gf+IJkDKy0uUAtsKGOEXiHDZs6dgXAT43RbQM/ofajONSRA7nEWsZHy7IWP
-Tcz0hVz2/ellXMMRHdtDCKYxE3ugSuE8UQSOLGt2B3R1TDmgkXPW8GWOtV/eIUYS
-rJEPCtPF35R3ezGjIYnLBQvSoFNjD4TNyygIvjh6d3Wc8m+aXtiC/whvINTuzOVv
-SnYa3aFliCl153Ck0/3GzAiFCbGFUY3qVhKBwbk6MLITlRf9mF5bLp8e5Zzf49yj
-9qGcHcDETmpcxDVRJ7oAzh8gqQqein8FOyFDkREnT59O7DdNNTx8m/K29UOnBuLF
-z/qP3IZSjbKlJ3d/XfSVG0mTnYnohw==
-=e50G
------END PGP SIGNATURE-----
-
---LFlVuq7xn7hg1UEJ--
+              Linus
 
