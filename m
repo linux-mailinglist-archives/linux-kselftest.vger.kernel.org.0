@@ -1,156 +1,170 @@
-Return-Path: <linux-kselftest+bounces-5039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9844885C04E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 16:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2555885C068
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 16:55:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8D591C22280
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 15:48:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A3B51C2207C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 15:55:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924E3762DC;
-	Tue, 20 Feb 2024 15:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7CC762FB;
+	Tue, 20 Feb 2024 15:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DHZ1HoQ9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p2EhsI2l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB5F76059;
-	Tue, 20 Feb 2024 15:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117796A8A9
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 15:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708444098; cv=none; b=ZkyMcUme2WlGTcgCJprP7p1sfcPKvkgXj2tGVJ4pXHRsiPTsbt5W56fXKU9hg+5I3+r6JGspfwa67l7LHYBLKhwJqKpHX3EDHLoZvwKjp0ydo0j0P6TbUtNvv8CYKliiwe3k1vMFL4RCOgJDt2gnkY7E+Uo0nbbfjr05+3K0edA=
+	t=1708444546; cv=none; b=E2FZfldQkdjPeOXP5XdlFoeFJPUIiTbJo2AZgkkGvdtvKzyfj3iLPtS3zLjj5g/rU2K/8IIjTcmY71+wm1VH98sPeAwsSvO7E6IPgtpv/gJCIbo9EZQVb7g5l9nZyazE/J93fNXZXyfs3fQFyaOoxI7KzUl83yDDffgiNOwfZ98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708444098; c=relaxed/simple;
-	bh=HP4NP4eq0ZPuLynmaASBI2C6x3KxBUppr5si9FrlRqc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tqqR+3I2mrq32vB5OvnHWAOs8XhjW+gT1388MEvE0Pw46ATqGyhHTcJRH2z02fkgc1o9CAzffeREG7ZmFcYk+CVbg/XNhtMIW5JrpYrqjyUSsOGv8OoiIwS9fE28+sSb+0ZM7pawB2fTtanUjWOuqYTjKI2opi5le09BPlXAOO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DHZ1HoQ9; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41KFNbff010219;
-	Tue, 20 Feb 2024 15:48:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=HP4NP4eq0ZPuLynmaASBI2C6x3KxBUppr5si9FrlRqc=;
- b=DHZ1HoQ94mgi1Zg4E/UUxmtr7lXyuNC4uxgyBUVnV16BPGYL2KO3glK//qK2gpw/Hwkt
- kiyTlFr4Xjf49jHiEYsUxAp0VPSnvQyUSxzVbB3fNsMMzMZAsMpUV7S+hOo1/yQqk3dY
- 3re2SLRoYmTKC+DhQwvVx0Qcp6vStV9p5h3iH+XVgGn1X9JrqI639BiA4A4hgPZ2Y2Op
- pafBZ4F36ePKUwpEFfZd84j1nVpETbtjLiaj6KPo5aArhuZTZvVlKSD9cfB4jvQnr7dS
- js0/U/Cv49Q07vk7A2E5q5pwrz61hLoCzyM+7sSEBcYYLOJiXOamUCfa7mgsP010wucB 7w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcw6suvde-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 15:48:14 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41KDiI8j014800;
-	Tue, 20 Feb 2024 15:48:14 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wcw6suvch-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 15:48:13 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41KDIW6R003611;
-	Tue, 20 Feb 2024 15:48:13 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74thc42-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 15:48:13 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41KFm9v933685780
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 20 Feb 2024 15:48:11 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2EC8758067;
-	Tue, 20 Feb 2024 15:48:09 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 37EBD58072;
-	Tue, 20 Feb 2024 15:48:08 +0000 (GMT)
-Received: from li-479af74c-31f9-11b2-a85c-e4ddee11713b.ibm.com (unknown [9.61.63.241])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 20 Feb 2024 15:48:08 +0000 (GMT)
-Message-ID: <d441ff9b178cceb22cf4f4422a15a0f3cdd61bfa.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 1/2] KVM: s390: fix access register usage in ioctls
-From: Eric Farman <farman@linux.ibm.com>
-To: Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger
-	 <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand
-	 <david@redhat.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle
- <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan
- <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Date: Tue, 20 Feb 2024 10:48:07 -0500
-In-Reply-To: <c64a7f44-2407-472d-8197-995b38ae2214@linux.ibm.com>
-References: <20240216213616.3819805-1-farman@linux.ibm.com>
-	 <20240216213616.3819805-2-farman@linux.ibm.com>
-	 <1d9fef3d-b793-43fc-a3f9-4ff087bc899f@linux.ibm.com>
-	 <c64a7f44-2407-472d-8197-995b38ae2214@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	s=arc-20240116; t=1708444546; c=relaxed/simple;
+	bh=Kz0GA9Y94W0SFhelWwox2nUv5tXBxEbev4X5jMa+djk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Content-Type; b=dWHl9KTzRTzVW55eZ5yR0w3Sawj7gCmBjm3U3omHN2N2khFiX4+N8O/D97CwGnJW8v3i/ph+yYFr+FgUkYCWk2BeB9MWx4uIChlivEvGu914cdOXJJPVVvGuTPG9cuCmgmdQSu09YUD35xDZrS4TKWuZKeIjjVkBu7VRVP1JdWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p2EhsI2l; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60770007e52so59536407b3.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 07:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708444543; x=1709049343; darn=vger.kernel.org;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nkZ1YNi4HdlEBdTOsrosj2I/p2QRJpg3Qe1Xk4lNWF0=;
+        b=p2EhsI2lVDdB7akSjITmV+58d9qTKwuMEdrSp3830ZiHSdU0mDJR+gTOMen74z130I
+         R3iz4/oR8riFKKW7Eqeu06w77IeKsZC0d+W5tJD1PJSNQCl0+cP+uhMDc/w7DRefN2ne
+         aQW3r8DfSGG1ZLO4NutXsF0wdIdY0QvVSRJWyjf6Go4P4gZRQH01amUDHTVfmMJhd/BW
+         rhi1bD9k+EYoXy6/LTbqW8I2LRS0DmlN6E00DuLWi/9v5DVOLfA/XHBECVhYvZfGAs0Q
+         0Q4jtgtN6XONO37Tlus7+J4PnzB2v7eUspOwU3r12hMZZJ0HR4dyzziUpyxEM9D1R7bN
+         4NJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708444543; x=1709049343;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nkZ1YNi4HdlEBdTOsrosj2I/p2QRJpg3Qe1Xk4lNWF0=;
+        b=wrxT13w6nQCgaQ6xRy+Kb5M5rcXgqvx6YRJaro1QzCeYkqo4PWO5bD6dlriCvYocTe
+         IhZ+bwoJDj+qiSUjm+v4tiFv3uieRWPWzKIxnO5UZWgrWMVZdJu0caYipWl1Fcnrtqs+
+         uOd2Abgw2hP8ns3pfF5+rPt8cD+oN/Tn0bqkNcV+phmuilj9rqvPVC8NT9iwT3bId2He
+         YzW08ve1KFeTIqD/5w1OHgTaC1nXE5pElxtjT6hLedEn4YdR9S04W4lYyCgb7dOEE16W
+         Rj2yQzo1I+0H70T7aaXVAOLZD2HZFwlIDfLgDVBrh0HL382fR90LmUoUK+TfyC3iEgBj
+         jZ/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVUrigmYKvU5yx3pAlflMY56qlupzeEmrAov3VFW7fvYXMBg578VWfRv6ACMGCgdqb5qhymnfAIEU3/W9lnvhbEF/WM1igoyEVE3d3ZOtQC
+X-Gm-Message-State: AOJu0YxuRO0dEIvniNaoCBX3ybeaCrEVtNifyEZoOeHHnprewY1DHAIF
+	8JDOwlawww/BbhdIeSCagylBJgRajH97+Yq2PaK2heOVSPQi0Q5/HET+pxWWSjR9hHcVyEPrPCO
+	IUA==
+X-Google-Smtp-Source: AGHT+IF1JkxDWJLA5wtljU6ntRBClVsQ/F9GLWL8bomcPlRftmO9ep/YZ1ByFg2cif0LNqgTe/Rychu4wWM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ee0a:0:b0:608:66be:2f71 with SMTP id
+ l10-20020a81ee0a000000b0060866be2f71mr302250ywm.9.1708444543193; Tue, 20 Feb
+ 2024 07:55:43 -0800 (PST)
+Date: Tue, 20 Feb 2024 07:55:13 -0800
+In-Reply-To: <20240215152916.1158-1-paul@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: DK4GoXQD3U3LLr0YRVAkEdTf1GGm6zRf
-X-Proofpoint-ORIG-GUID: z0hJ-MnAOKi0BFYXuK0Dj26OCBHceL1H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxscore=0 impostorscore=0 clxscore=1015 bulkscore=0
- adultscore=0 suspectscore=0 mlxlogscore=829 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402200113
+Mime-Version: 1.0
+References: <20240215152916.1158-1-paul@xen.org>
+X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
+Message-ID: <170838297541.2281798.7838961694439257911.b4-ty@google.com>
+Subject: Re: [PATCH v13 00/21] KVM: xen: update shared_info and vcpu_info handling
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	David Hildenbrand <david@redhat.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Paul Durrant <paul@xen.org>
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, 2024-02-20 at 15:19 +0100, Janosch Frank wrote:
-> On 2/20/24 15:15, Christian Borntraeger wrote:
-> >=20
-> >=20
-> > Am 16.02.24 um 22:36 schrieb Eric Farman:
-> > > The routine ar_translation() can be reached by both the
-> > > instruction
-> > > intercept path (where the access registers had been loaded with
-> > > the
-> > > guest register contents), and the MEM_OP ioctls (which hadn't).
-> > > Since this routine saves the current registers to vcpu->run,
-> > > this routine erroneously saves host registers into the guest
-> > > space.
-> > >=20
-> > > Introduce a boolean in the kvm_vcpu_arch struct to indicate
-> > > whether
-> > > the registers contain guest contents. If they do (the instruction
-> > > intercept path), the save can be performed and the AR translation
-> > > is done just as it is today. If they don't (the MEM_OP path), the
-> > > AR can be read from vcpu->run without stashing the current
-> > > contents.
-> > >=20
-> > > Signed-off-by: Eric Farman <farman@linux.ibm.com>
-> >=20
->=20
-> Just spoke with Christian since that's a mixed signal.
->=20
-> To move this over the s390 tree:
-> > Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
->=20
-> For the Patch in general:
-> > Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
->=20
+On Thu, 15 Feb 2024 15:28:55 +0000, Paul Durrant wrote:
+> From: Paul Durrant <pdurrant@amazon.com>
+> 
+> This series contains a new patch from Sean added since v12 [1]:
+> 
+> * KVM: s390: Refactor kvm_is_error_gpa() into kvm_is_gpa_in_memslot()
+> 
+> This frees up the function name kvm_is_error_gpa() such that it can then be
+> re-defined in:
+> 
+> [...]
 
-Shall I send a v4 with the tags, and comments Nina suggested, then?
+*sigh*
+
+I forgot to hit "send" on this yesterday.  But lucky for me, that worked out in
+my favor as I needed to rebase on top of kvm/kvm-uapi to avoid pointless conflicts
+in the uapi headeres.
+
+So....
+
+Applied to kvm-x86 xen, minus 18 and 19 (trylock stuff) and 21 (locking cleanup
+that we're doing elsewhere).
+
+Paul and David, please take (another) look at the end result to make sure you don't
+object to any of my tweaks and that I didn't botch anything.
+
+s390 folks, I'm applying/pushing now to get it into -next asap, but I'll make
+sure to get acks/reviews on patch 08/21 before I do anything else with this
+branch/series.
+
+Thanks!
+
+[01/21] KVM: pfncache: Add a map helper function
+        https://github.com/kvm-x86/linux/commit/f39b80e3ff12
+[02/21] KVM: pfncache: remove unnecessary exports
+        https://github.com/kvm-x86/linux/commit/41496fffc0e1
+[03/21] KVM: x86/xen: mark guest pages dirty with the pfncache lock held
+        https://github.com/kvm-x86/linux/commit/4438355ec6e1
+[04/21] KVM: pfncache: add a mark-dirty helper
+        https://github.com/kvm-x86/linux/commit/78b74638eb6d
+[05/21] KVM: pfncache: remove KVM_GUEST_USES_PFN usage
+        https://github.com/kvm-x86/linux/commit/a4bff3df5147
+[06/21] KVM: pfncache: stop open-coding offset_in_page()
+        https://github.com/kvm-x86/linux/commit/53e63e953e14
+[07/21] KVM: pfncache: include page offset in uhva and use it consistently
+        https://github.com/kvm-x86/linux/commit/406c10962a4c
+[08/21] KVM: s390: Refactor kvm_is_error_gpa() into kvm_is_gpa_in_memslot()
+        https://github.com/kvm-x86/linux/commit/9e7325acb3dc
+[09/21] KVM: pfncache: allow a cache to be activated with a fixed (userspace) HVA
+        https://github.com/kvm-x86/linux/commit/721f5b0dda78
+[10/21] KVM: x86/xen: separate initialization of shared_info cache and content
+        https://github.com/kvm-x86/linux/commit/c01c55a34f28
+[11/21] KVM: x86/xen: re-initialize shared_info if guest (32/64-bit) mode is set
+        https://github.com/kvm-x86/linux/commit/21b99e4d6db6
+[12/21] KVM: x86/xen: allow shared_info to be mapped by fixed HVA
+        https://github.com/kvm-x86/linux/commit/10dcbfc46724
+[13/21] KVM: x86/xen: allow vcpu_info to be mapped by fixed HVA
+        https://github.com/kvm-x86/linux/commit/16877dd45f98
+[14/21] KVM: selftests: map Xen's shared_info page using HVA rather than GFN
+        https://github.com/kvm-x86/linux/commit/95c27ed8619b
+[15/21] KVM: selftests: re-map Xen's vcpu_info using HVA rather than GPA
+        https://github.com/kvm-x86/linux/commit/5359bf19a3f0
+[16/21] KVM: x86/xen: advertize the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA capability
+        https://github.com/kvm-x86/linux/commit/49668ce7e1ae
+[17/21] KVM: x86/xen: split up kvm_xen_set_evtchn_fast()
+        (not applied)
+[18/21] KVM: x86/xen: don't block on pfncache locks in kvm_xen_set_evtchn_fast()
+        (not applied)
+[19/21] KVM: pfncache: check the need for invalidation under read lock first
+        https://github.com/kvm-x86/linux/commit/21dadfcd665e
+[20/21] KVM: x86/xen: allow vcpu_info content to be 'safely' copied
+        https://github.com/kvm-x86/linux/commit/dadeabc3b6fa
+[21/21] KVM: pfncache: rework __kvm_gpc_refresh() to fix locking issues
+        (not applied)
+
+--
+https://github.com/kvm-x86/linux/tree/next
 
