@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-5047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5190F85C257
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:18:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D37EA85C25F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 18:19:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8B69285A18
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 17:18:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3BA5B21C8D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 17:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0797F76C69;
-	Tue, 20 Feb 2024 17:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3B277643;
+	Tue, 20 Feb 2024 17:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMBYgHSj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfS+TvPW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD3B76909;
-	Tue, 20 Feb 2024 17:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A5676C74;
+	Tue, 20 Feb 2024 17:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708449516; cv=none; b=u/iKt7o5Z0EDvm8s/0Xgwm1cvV/ZTH56O+ydaOOjIOpkfq/KwdGix0Cn1iPeyqp9lh6BEEYgpADiNlisDNfuPrFUzMw5Z95fypmlwnTnvKI97mAqCEQzYDSxvjEFIvaBbU/AT+8OT09DVkoQk3hPBY7UgNsij3QJOaWZ2gnIYIM=
+	t=1708449526; cv=none; b=VB0lFvML8LxjVQ6GwinjKalcX8Cs6c0vT5yHW7zQQP5UjHip2B7ZNdw1Pt6FkNyDYzbiLFwNwVGkhVyUdyNXSJP4Za4Ml4r6svpB4zYxkq+UxVfmeGoybQYL7h1gCW2fTzEcg5qFGbKMdxG4TIGClX59F7HrONtRm9UVPlyVeFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708449516; c=relaxed/simple;
-	bh=BVzlnbEPLER7R7THzPc5B1uYCCS6jDIuLa1IqpQ5PA4=;
+	s=arc-20240116; t=1708449526; c=relaxed/simple;
+	bh=oAmeEfyjXLv4RIi34kUBYqESf31shoVCzi2Fy9DSnI4=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U7NYU/Q6z9aUMWl3VfYNpSdue4dUhfHBLLm/qhq6k95KdnNAWlJ4sARifNQLBChbKzvqPjDk4ZboBQZNdahMr+rq4t1v4qnvGJxdD5LL6zZe7cc4632L1KWvshDwoSR4NFkxWzQW4OOJr5I4IJiOIOBR2G3VISUY9CrA1RhdtDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMBYgHSj; arc=none smtp.client-ip=209.85.218.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=GCreF22M9Dn/Y6IobZ0O2ME27VTjgfIC3YWcZntZXmZq8v+jxmA6hYhcUof+ykfWZGPWHYcoeXKBrUGYr3T6PE0HCeNSmvZ+IWJyJA+eihdytrrO9OUmprHA6Fyjy8rvgPFxQo5CAKX6yrT7xMixiQGkLw3zei3KgTmd9AuW+Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfS+TvPW; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so795176266b.0;
-        Tue, 20 Feb 2024 09:18:34 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-563f675be29so5187232a12.0;
+        Tue, 20 Feb 2024 09:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708449513; x=1709054313; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1708449523; x=1709054323; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmxS6iktBtidz6yGIwqms+MtYfTcC8Gwrx4Li+2LctM=;
-        b=XMBYgHSjW1pXnuRJWXWJV9+GNB7SdT2yBsoYWBSrB4HImFCTfOdSP1FdRaKQlbebDE
-         M96vPMUp8YpJ8tcUtpxkDI9jpy5JXYTGyIHvaMxDapK1QDga1I42gwIVWCMphT2mknWG
-         Gl/HPEB0CMAnjc98DAfRKkYxh1G1QPBnvLqwF60DiAzSE7Bn5FbpAxOCaTeQaaJ82XxN
-         mLFeARqbn/1As36meb8b2EMQE6Go+yvL0rj63gCjORgu5ZniaVoZ2+sbh1G1WLzGafzm
-         LZi06c//T6t8Gjr9A0KH7hAxsYEtbMagoC/dsIqpQlsK+yHSKSj6JPFf6q6NXfpPyYGZ
-         HVFg==
+        bh=2jsimXL4CWxMWFytJ0GOuQvmJcBH3su7G6flKHH6vaI=;
+        b=jfS+TvPWBy3pdZtVyDITo+zcyrHS6v33pfXYDJYx75YloyvjB4a3Jjg9QAKjgwqCpS
+         n1OI6oHneNmzEti6tNxlUuczg5gxoQYMuCfALN9cq//r8k8sNetGVyaKTEvVDoZQctQw
+         QBUBzpn4y5nCGG3b34bd9vyONdVH+Xmg8ILgnt7E9vGD2mHToS9yGgWgulwhJ2OUJLl5
+         X0BrR1hrj1d+FvxW8e3GEPmp5AE+ef3q7t49G14Jmv71ha+TZlSizdg7F2ramz/PZkVw
+         /7t8aFaISl7iO1J1Ton95YtFE0ThAUkW08F+/ogigA3NZj2Zstd+asyRvysOZ5ywHxvU
+         bo+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708449513; x=1709054313;
+        d=1e100.net; s=20230601; t=1708449523; x=1709054323;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dmxS6iktBtidz6yGIwqms+MtYfTcC8Gwrx4Li+2LctM=;
-        b=MeRb4rcmwFOLF+LSneN6G4UJfmFNurqyyplWhkX2Ju57/fIUOBzHl4lG8DldzA105q
-         W2XUBHylE9S8SmnCJDdte+ec07diWOAuclJRXEu1FsgLKE7LYlg410ugokOSQucW02Iv
-         ZeNcjCIdrifH2lNY/9aw1WGleMFfnWIFGelHUg78dgmWIh1d2B/DzsoWf/3Zr9Za+d34
-         cLg630T+msJqpg0oTgkmkSv2v6tDfBPWIkPyCNFiB32WMFGHx4oa1ei85FPT/1/lKbpE
-         +Zft95CeeWcjGmRdbzBPXLWnA4Q2J53WQ9DXqfM/LlUqEJuE0Mr+PilkwvK+Q80ZFoRX
-         zEdw==
-X-Forwarded-Encrypted: i=1; AJvYcCWp02saBdXsfs6WGeW2OGx8I0elj41wdi3S6m1WAk3ApcefFVyDW6gFnqNi8AIjoKY2RJpk5DmPKPT4XN9xEBdYVule3FHP6ByoZduYF1BCbIdKKUaEYvrD/qAkDzi0UpnRPrlhXZk8ZpG3BfDeKq5jEd8u/a8xJmvWebA/ge1ZCjNH
-X-Gm-Message-State: AOJu0YxZgd5X4GTYoWeV3lPa5sDpOUGdTDqXNKRyD/vyTXZLsM2BMg7B
-	P+3wQPPigaTeAbhjwvup4I8rJnjn3M7cQKRnaLlJGkmfzacjbhkq
-X-Google-Smtp-Source: AGHT+IFcO8MiaoD6Cte2ItgLhV+w9LAMsoeBHZyEn5ZrO/x7ZBnibRjWEqOEGIuYMtJYCpOsxEMCFg==
-X-Received: by 2002:a17:906:28d1:b0:a3e:c77a:8100 with SMTP id p17-20020a17090628d100b00a3ec77a8100mr4485554ejd.17.1708449513035;
-        Tue, 20 Feb 2024 09:18:33 -0800 (PST)
+        bh=2jsimXL4CWxMWFytJ0GOuQvmJcBH3su7G6flKHH6vaI=;
+        b=aJHS9XNXWOHSun9wT8zipPdwntoCriV7AN/mw7kilfsf+B+VB4QsKg/9CI+M9OWlHU
+         7LaugUFjzNyRd9BohOUGp28JupMpmuKo9Bu9WKiUri7lQMLbsYXU5otZTKUzuoWlPpgQ
+         H8l6geIW96IXKBAnXyPh3wBdzxwvz7907q0mMKQwqitEDd8JtSCcyKC9qo7pbhJD6PP5
+         zJdZO9NYlggxbshfYVC2sxK4su14en7SVewIV5vCaY7xQODul2CT2h1yWPgeXNPR/mm1
+         OdqRpjdw9LxaqLZd6kqJei7MYkpDG+m579TnzCO+/918fb7ECNl/npFwigpNkrMaaItJ
+         XIhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVElQFiQqZHZIjUIW3wlxbDMrj1czJzjXQApybWV9Q6BwcskBj84VbCHTMYoNHTxzsrVWid5M/rZDQpLQQ3IwuQS73AKCtTOKq3l8jX71+waE+vewvOypikVIenes+1AkbJVlo4tfhqvilngqSJOUyJCBdijmvStJh4Gv1z+zGq/n8H
+X-Gm-Message-State: AOJu0YxIQNg3xWeG8K6jRj28/IziOZ0ctJss2740TC1CjoToQQj7lnh1
+	jJdfffuZ+jMYzG+WrmNjQHsNesitg1VMjQGvu3y39bTMwzRNb1Wv
+X-Google-Smtp-Source: AGHT+IHc0pN9KHkKeb7luanourVgNNVzQPzVIAPQ4poYAK/bHeBaBBTbjvPtzX2mIiyI/iKaLuo4xQ==
+X-Received: by 2002:aa7:db49:0:b0:564:a76b:aa55 with SMTP id n9-20020aa7db49000000b00564a76baa55mr2426459edt.12.1708449523138;
+        Tue, 20 Feb 2024 09:18:43 -0800 (PST)
 Received: from krava ([83.240.60.70])
-        by smtp.gmail.com with ESMTPSA id g1-20020a170906c18100b00a3e278c4a3fsm3668349ejz.53.2024.02.20.09.18.31
+        by smtp.gmail.com with ESMTPSA id ew14-20020a056402538e00b005602346c3f5sm3823732edb.79.2024.02.20.09.18.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 09:18:32 -0800 (PST)
+        Tue, 20 Feb 2024 09:18:42 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 20 Feb 2024 18:18:30 +0100
+Date: Tue, 20 Feb 2024 18:18:40 +0100
 To: Menglong Dong <dongmenglong.8@bytedance.com>
 Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
 	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
@@ -81,11 +81,11 @@ Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
 	linux-kselftest@vger.kernel.org,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH bpf-next 2/5] bpf: tracing: support to attach program to
- multi hooks
-Message-ID: <ZdTe5pyV16y4wYzv@krava>
+Subject: Re: [PATCH bpf-next 1/5] bpf: tracing: add support to record and
+ check the accessed args
+Message-ID: <ZdTe8LteoqR43d4q@krava>
 References: <20240220035105.34626-1-dongmenglong.8@bytedance.com>
- <20240220035105.34626-3-dongmenglong.8@bytedance.com>
+ <20240220035105.34626-2-dongmenglong.8@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,188 +94,123 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240220035105.34626-3-dongmenglong.8@bytedance.com>
+In-Reply-To: <20240220035105.34626-2-dongmenglong.8@bytedance.com>
 
-On Tue, Feb 20, 2024 at 11:51:02AM +0800, Menglong Dong wrote:
+On Tue, Feb 20, 2024 at 11:51:01AM +0800, Menglong Dong wrote:
 
 SNIP
 
-> @@ -3228,7 +3260,9 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  	struct bpf_link_primer link_primer;
->  	struct bpf_prog *tgt_prog = NULL;
->  	struct bpf_trampoline *tr = NULL;
-> +	struct btf *attach_btf = NULL;
->  	struct bpf_tracing_link *link;
-> +	struct module *mod = NULL;
->  	u64 key = 0;
->  	int err;
->  
-> @@ -3258,31 +3292,50 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  		goto out_put_prog;
->  	}
->  
-> -	if (!!tgt_prog_fd != !!btf_id) {
-> -		err = -EINVAL;
-> -		goto out_put_prog;
-> -	}
-> -
->  	if (tgt_prog_fd) {
-> -		/*
-> -		 * For now we only allow new targets for BPF_PROG_TYPE_EXT. If this
-> -		 * part would be changed to implement the same for
-> -		 * BPF_PROG_TYPE_TRACING, do not forget to update the way how
-> -		 * attach_tracing_prog flag is set.
-> -		 */
-> -		if (prog->type != BPF_PROG_TYPE_EXT) {
-> +		if (!btf_id) {
->  			err = -EINVAL;
->  			goto out_put_prog;
->  		}
-> -
->  		tgt_prog = bpf_prog_get(tgt_prog_fd);
->  		if (IS_ERR(tgt_prog)) {
-> -			err = PTR_ERR(tgt_prog);
->  			tgt_prog = NULL;
-> -			goto out_put_prog;
-> +			/* tgt_prog_fd is the fd of the kernel module BTF */
-> +			attach_btf = btf_get_by_fd(tgt_prog_fd);
+> +static int get_ctx_arg_idx_aligned(struct btf *btf, const struct btf_type *t,
+> +				   int off)
+> +{
+> +	const struct btf_param *args;
+> +	u32 offset = 0, nr_args;
+> +	int i;
+> +
+> +	nr_args = btf_type_vlen(t);
+> +	args = (const struct btf_param *)(t + 1);
+> +	for (i = 0; i < nr_args; i++) {
+> +		if (offset == off)
+> +			return i;
+> +
+> +		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+> +		offset += btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
+> +		if (offset > off)
+> +			return -1;
+> +	}
+> +	return -1;
+> +}
+> +
+> +/* This function is similar to btf_check_func_type_match(), except that it
+> + * only compare some function args of the function prototype t1 and t2.
+> + */
 
-I think we should pass the btf_fd through attr, like add
-link_create.tracing_btf_fd instead, this seems confusing
-
-> +			if (IS_ERR(attach_btf)) {
-> +				attach_btf = NULL;
-> +				err = -EINVAL;
-> +				goto out_put_prog;
-> +			}
-> +			if (!btf_is_kernel(attach_btf)) {
-> +				btf_put(attach_btf);
-> +				err = -EOPNOTSUPP;
-> +				goto out_put_prog;
-> +			}
-> +		} else if (prog->type == BPF_PROG_TYPE_TRACING &&
-> +			   tgt_prog->type == BPF_PROG_TYPE_TRACING) {
-> +			prog->aux->attach_tracing_prog = true;
->  		}
-
-could you please add comment on why this check is in here?
-
-> -
-> -		key = bpf_trampoline_compute_key(tgt_prog, NULL, btf_id);
-> +		key = bpf_trampoline_compute_key(tgt_prog, attach_btf,
-> +						 btf_id);
-> +	} else if (btf_id) {
-> +		attach_btf = bpf_get_btf_vmlinux();
-> +		if (IS_ERR(attach_btf)) {
-> +			attach_btf = NULL;
-> +			err = PTR_ERR(attach_btf);
-> +			goto out_unlock;
-> +		}
-> +		if (!attach_btf) {
-> +			err = -EINVAL;
-> +			goto out_unlock;
-> +		}
-> +		btf_get(attach_btf);
-> +		key = bpf_trampoline_compute_key(NULL, attach_btf, btf_id);
-> +	} else {
-> +		attach_btf = prog->aux->attach_btf;
-> +		/* get the reference of the btf for bpf link */
-> +		if (attach_btf)
-> +			btf_get(attach_btf);
->  	}
->  
->  	link = kzalloc(sizeof(*link), GFP_USER);
-> @@ -3319,7 +3372,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  	 *   are NULL, then program was already attached and user did not provide
->  	 *   tgt_prog_fd so we have no way to find out or create trampoline
->  	 */
-> -	if (!prog->aux->dst_trampoline && !tgt_prog) {
-> +	if (!prog->aux->dst_trampoline && !tgt_prog && !btf_id) {
->  		/*
->  		 * Allow re-attach for TRACING and LSM programs. If it's
->  		 * currently linked, bpf_trampoline_link_prog will fail.
-> @@ -3346,17 +3399,27 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  		 * different from the destination specified at load time, we
->  		 * need a new trampoline and a check for compatibility
->  		 */
-> +		struct btf *origin_btf = prog->aux->attach_btf;
->  		struct bpf_attach_target_info tgt_info = {};
->  
-> +		/* use the new attach_btf to check the target */
-> +		prog->aux->attach_btf = attach_btf;
->  		err = bpf_check_attach_target(NULL, prog, tgt_prog, btf_id,
->  					      &tgt_info);
-> +		prog->aux->attach_btf = origin_btf;
-
-could we pass the attach_btf as argument then?
+could we reuse btf_check_func_type_match instead? perhaps just
+adding extra argument with arguments bitmap to it?
 
 jirka
 
->  		if (err)
->  			goto out_unlock;
->  
-> -		if (tgt_info.tgt_mod) {
-> -			module_put(prog->aux->mod);
-> -			prog->aux->mod = tgt_info.tgt_mod;
-> -		}
-> +		mod = tgt_info.tgt_mod;
-> +		/* the new target and the previous target are in the same
-> +		 * module, release the reference once.
-> +		 */
-> +		if (mod && mod == prog->aux->mod)
-> +			module_put(mod);
-> +		err = bpf_tracing_check_multi(prog, tgt_prog, attach_btf,
-> +					      tgt_info.tgt_type);
-> +		if (err)
-> +			goto out_unlock;
->  
->  		tr = bpf_trampoline_get(key, &tgt_info);
->  		if (!tr) {
-> @@ -3373,6 +3436,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  		 */
->  		tr = prog->aux->dst_trampoline;
->  		tgt_prog = prog->aux->dst_prog;
-> +		mod = prog->aux->mod;
->  	}
->  
->  	err = bpf_link_prime(&link->link.link, &link_primer);
-> @@ -3388,6 +3452,8 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  
->  	link->tgt_prog = tgt_prog;
->  	link->trampoline = tr;
-> +	link->attach_btf = attach_btf;
-> +	link->mod = mod;
->  
->  	/* Always clear the trampoline and target prog from prog->aux to make
->  	 * sure the original attach destination is not kept alive after a
-> @@ -3400,20 +3466,27 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  	if (prog->aux->dst_trampoline && tr != prog->aux->dst_trampoline)
->  		/* we allocated a new trampoline, so free the old one */
->  		bpf_trampoline_put(prog->aux->dst_trampoline);
-> +	if (prog->aux->mod && mod != prog->aux->mod)
-> +		/* the mod in prog is not used anywhere, move it to link */
-> +		module_put(prog->aux->mod);
->  
->  	prog->aux->dst_prog = NULL;
->  	prog->aux->dst_trampoline = NULL;
-> +	prog->aux->mod = NULL;
->  	mutex_unlock(&prog->aux->dst_mutex);
->  
->  	return bpf_link_settle(&link_primer);
->  out_unlock:
->  	if (tr && tr != prog->aux->dst_trampoline)
->  		bpf_trampoline_put(tr);
-> +	if (mod && mod != prog->aux->mod)
-> +		module_put(mod);
->  	mutex_unlock(&prog->aux->dst_mutex);
->  	kfree(link);
->  out_put_prog:
->  	if (tgt_prog_fd && tgt_prog)
->  		bpf_prog_put(tgt_prog);
-> +	btf_put(attach_btf);
->  	return err;
->  }
->  
+> +int btf_check_func_part_match(struct btf *btf1, const struct btf_type *func1,
+> +			      struct btf *btf2, const struct btf_type *func2,
+> +			      u64 func_args)
+> +{
+> +	const struct btf_param *args1, *args2;
+> +	u32 nargs1, i, offset = 0;
+> +	const char *s1, *s2;
+> +
+> +	if (!btf_type_is_func_proto(func1) || !btf_type_is_func_proto(func2))
+> +		return -EINVAL;
+> +
+> +	args1 = (const struct btf_param *)(func1 + 1);
+> +	args2 = (const struct btf_param *)(func2 + 1);
+> +	nargs1 = btf_type_vlen(func1);
+> +
+> +	for (i = 0; i <= nargs1; i++) {
+> +		const struct btf_type *t1, *t2;
+> +
+> +		if (!(func_args & (1 << i)))
+> +			goto next;
+> +
+> +		if (i < nargs1) {
+> +			int t2_index;
+> +
+> +			/* get the index of the arg corresponding to args1[i]
+> +			 * by the offset.
+> +			 */
+> +			t2_index = get_ctx_arg_idx_aligned(btf2, func2,
+> +							   offset);
+> +			if (t2_index < 0)
+> +				return -EINVAL;
+> +
+> +			t1 = btf_type_skip_modifiers(btf1, args1[i].type, NULL);
+> +			t2 = btf_type_skip_modifiers(btf2, args2[t2_index].type,
+> +						     NULL);
+> +		} else {
+> +			/* i == nargs1, this is the index of return value of t1 */
+> +			if (get_ctx_arg_total_size(btf1, func1) !=
+> +			    get_ctx_arg_total_size(btf2, func2))
+> +				return -EINVAL;
+> +
+> +			/* check the return type of t1 and t2 */
+> +			t1 = btf_type_skip_modifiers(btf1, func1->type, NULL);
+> +			t2 = btf_type_skip_modifiers(btf2, func2->type, NULL);
+> +		}
+> +
+> +		if (t1->info != t2->info ||
+> +		    (btf_type_has_size(t1) && t1->size != t2->size))
+> +			return -EINVAL;
+> +		if (btf_type_is_int(t1) || btf_is_any_enum(t1))
+> +			goto next;
+> +
+> +		if (btf_type_is_struct(t1))
+> +			goto on_struct;
+> +
+> +		if (!btf_type_is_ptr(t1))
+> +			return -EINVAL;
+> +
+> +		t1 = btf_type_skip_modifiers(btf1, t1->type, NULL);
+> +		t2 = btf_type_skip_modifiers(btf2, t2->type, NULL);
+> +		if (!btf_type_is_struct(t1) || !btf_type_is_struct(t2))
+> +			return -EINVAL;
+> +
+> +on_struct:
+> +		s1 = btf_name_by_offset(btf1, t1->name_off);
+> +		s2 = btf_name_by_offset(btf2, t2->name_off);
+> +		if (strcmp(s1, s2))
+> +			return -EINVAL;
+> +next:
+> +		if (i < nargs1) {
+> +			t1 = btf_type_skip_modifiers(btf1, args1[i].type, NULL);
+> +			offset += btf_type_is_ptr(t1) ? 8 : roundup(t1->size, 8);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static bool btf_is_dynptr_ptr(const struct btf *btf, const struct btf_type *t)
+>  {
+>  	const char *name;
 > -- 
 > 2.39.2
 > 
