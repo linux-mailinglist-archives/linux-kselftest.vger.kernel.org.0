@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-5061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6A285C49A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 20:23:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 389E985C49F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 20:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F08211F243FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:23:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA9051F244C5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Feb 2024 19:23:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DCA614C596;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26E314C5AB;
 	Tue, 20 Feb 2024 19:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q90ixN/f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYfzcEMD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1223F135A4D;
-	Tue, 20 Feb 2024 19:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4EF014A4E2;
+	Tue, 20 Feb 2024 19:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708456968; cv=none; b=IgsVLWtL0EyJBoR4xWjha3Tm7vXbbklAdlzpCPmaaq/X21fKRo81pauzIxgIuq+fHhTTehwLZPXW0WH3u8m7vJGUae4fy+4C6rwEZ3fXKLjtQWMzhWd5nMQ/yEabot2VDZCnMjj6YT4KpxrEhW9XZIeUKgExBlii37wRkQe2FDc=
+	t=1708456968; cv=none; b=KD2ELl8PHHPx0J+WciF9FQb3qJgBD3v2XTuFslcCnhFmIUr0HooejL5ubDip61hWTuBbqBv9zLjF9pBd6Xp7peMQwFM9lK11xkPkh16Gz1zN0D6g1SHun0l/+U+XUZ7Muq+coA0uwH/CdO7qyS1GMy8o2ZEEJMWMoXsdNfjiHso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708456968; c=relaxed/simple;
-	bh=y1jR1SPhv1Na8mdweF3oZSOv0tk/hgB4rcZ8s6PB+T4=;
+	bh=i7OQ0CBPUvcZuB1M/xw7S8wpiJMS1dvOsrgRmQy3mEw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AqwqXQ4RhtaYtvVR494wx5m83U6/Mi4dNPeSupegnrtTZbg0AEgOuwFERtjm+VoqgpiSExLqnt2mxGpS3iZaPMykbOjAEFA4z5/f3rkLu3aflBxY7fwbhhTagUc3n/FdtfyKUcI0mGCONlQTfpabycaUQ6ywnAbNK8Zw7besOTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q90ixN/f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B11DC43394;
+	 MIME-Version; b=TehmCCE+8Vqw92y7I0s7j+XZzcK/GUPFuBC04x9V3iBmnBZ0dlgym3tddORzb7azNB6QJUcaFIR4BTpK7Kamvrhk0JHujpJcCaxV9hOeyB2NlxKGK15IVz8mrEp89yTDguPON/ta6k1Z6nyzvyH4lXRk/oTUjRLOALtBh5D9mOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYfzcEMD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A88ACC43390;
 	Tue, 20 Feb 2024 19:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708456967;
-	bh=y1jR1SPhv1Na8mdweF3oZSOv0tk/hgB4rcZ8s6PB+T4=;
+	s=k20201202; t=1708456968;
+	bh=i7OQ0CBPUvcZuB1M/xw7S8wpiJMS1dvOsrgRmQy3mEw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q90ixN/ftQd5E433nAU54KmV61A34UqBg+LV+Itk6jz2YGj5L4GDZSyMCbuNO4Xkd
-	 nw41HW+hVfYjJZHkm28GH/PI8Qst6z4xfoaMBDoZGFucZiKwZW7gwcWWkAnpgiImX+
-	 +CsNU4du5h8k7IeHKP+3eDrOER5XZiruRy87q2ZOgprVA8AN9mxACIdAR4PH8MV5Xq
-	 J3OBn8tm4nv7FMU8uzSPFI/mVQ6QjShFo03ST880rCH1l2x3ax/21L3ohzzdzrnI+2
-	 5BHia/i6VTN3zb74Ro1dwwmBc5wv+jRNJnuKKQpDzhFbgnkfUuIlRbWHjibJKj/Cif
-	 fImUkwBTHE77w==
+	b=XYfzcEMDSxpyolsXWnaoC/5SujI3JSi38UCTNU5oQRkSW3yEEe/x5uoW9lpvadSAN
+	 mnnFwC+uQwDPQuyNV+FcdLMZqyEli6BVFXfSFud8Tdy1TjVAaFxgmysKkUj6xRKDhR
+	 7LAHYhD+ULh7CMcQFjQK+PkBBXDLsvm69TVf0n+V7wZGbr+SOkfuxu7pQCd7I2il03
+	 NVAZ9dbdp0eUZMQGyBkyctd5bF65dkBQc6PjERuN8avXCGoPKS7jIM/Q4JaT8JK8e2
+	 c6N301DF6Sv62OJvBhf0XEzZu3IAi95O2qjuVyla/WOCgML40ZaekDXfcLgPcEwoS6
+	 mYlQ+HX7YpZ5A==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -52,12 +52,10 @@ Cc: netdev@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	keescook@chromium.org,
 	jakub@cloudflare.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	luto@amacapital.net,
-	wad@chromium.org
-Subject: [PATCH net-next v3 02/11] selftests: kselftest_harness: use KSFT_* exit codes
-Date: Tue, 20 Feb 2024 11:22:26 -0800
-Message-ID: <20240220192235.2953484-3-kuba@kernel.org>
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next v3 03/11] selftests: kselftest_harness: generate test name once
+Date: Tue, 20 Feb 2024 11:22:27 -0800
+Message-ID: <20240220192235.2953484-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240220192235.2953484-1-kuba@kernel.org>
 References: <20240220192235.2953484-1-kuba@kernel.org>
@@ -69,103 +67,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that we no longer need low exit codes to communicate
-assertion steps - use normal KSFT exit codes.
+Since we added variant support generating full test case
+name takes 4 string arguments. We're about to need it
+in another two places. Stop the duplication and print
+once into a temporary buffer.
 
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
 Acked-by: Kees Cook <keescook@chromium.org>
-Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-CC: keescook@chromium.org
-CC: luto@amacapital.net
-CC: wad@chromium.org
-CC: shuah@kernel.org
-CC: mic@digikod.net
-CC: linux-kselftest@vger.kernel.org
-CC: linux-security-module@vger.kernel.org
----
- tools/testing/selftests/kselftest_harness.h | 13 ++++++-------
- tools/testing/selftests/landlock/common.h   | 10 +++++-----
- 2 files changed, 11 insertions(+), 12 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 98bdedf9a53a..618b41eac749 100644
+index 618b41eac749..8fc24a728240 100644
 --- a/tools/testing/selftests/kselftest_harness.h
 +++ b/tools/testing/selftests/kselftest_harness.h
-@@ -874,7 +874,7 @@ static inline void __test_check_assert(struct __test_metadata *t)
+@@ -56,6 +56,7 @@
+ #include <asm/types.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <limits.h>
+ #include <stdbool.h>
+ #include <stdint.h>
+ #include <stdio.h>
+@@ -1109,6 +1110,8 @@ void __run_test(struct __fixture_metadata *f,
+ 		struct __fixture_variant_metadata *variant,
+ 		struct __test_metadata *t)
  {
- 	if (t->aborted) {
- 		if (t->no_print)
--			_exit(1);
-+			_exit(KSFT_FAIL);
- 		abort();
- 	}
- }
-@@ -937,7 +937,7 @@ void __wait_for_test(struct __test_metadata *t)
- 		fprintf(TH_LOG_STREAM,
- 			"# %s: Test terminated by timeout\n", t->name);
- 	} else if (WIFEXITED(status)) {
--		if (WEXITSTATUS(status) == 255) {
-+		if (WEXITSTATUS(status) == KSFT_SKIP) {
- 			/* SKIP */
- 			t->passed = 1;
- 			t->skip = 1;
-@@ -950,7 +950,7 @@ void __wait_for_test(struct __test_metadata *t)
- 		} else {
- 			switch (WEXITSTATUS(status)) {
- 			/* Success */
--			case 0:
-+			case KSFT_PASS:
- 				t->passed = 1;
- 				break;
- 			/* Other failure, assume step report. */
-@@ -1132,12 +1132,11 @@ void __run_test(struct __fixture_metadata *f,
- 		setpgrp();
- 		t->fn(t, variant);
- 		if (t->skip)
--			_exit(255);
--		/* Pass is exit 0 */
-+			_exit(KSFT_SKIP);
- 		if (t->passed)
--			_exit(0);
-+			_exit(KSFT_PASS);
- 		/* Something else happened. */
--		_exit(1);
-+		_exit(KSFT_FAIL);
++	char test_name[LINE_MAX];
++
+ 	/* reset test struct */
+ 	t->passed = 1;
+ 	t->skip = 0;
+@@ -1117,8 +1120,10 @@ void __run_test(struct __fixture_metadata *f,
+ 	memset(t->results->reason, 0, sizeof(t->results->reason));
+ 	t->results->step = 1;
+ 
+-	ksft_print_msg(" RUN           %s%s%s.%s ...\n",
+-	       f->name, variant->name[0] ? "." : "", variant->name, t->name);
++	snprintf(test_name, sizeof(test_name), "%s%s%s.%s",
++		 f->name, variant->name[0] ? "." : "", variant->name, t->name);
++
++	ksft_print_msg(" RUN           %s ...\n", test_name);
+ 
+ 	/* Make sure output buffers are flushed before fork */
+ 	fflush(stdout);
+@@ -1140,15 +1145,14 @@ void __run_test(struct __fixture_metadata *f,
  	} else {
  		__wait_for_test(t);
  	}
-diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
-index c15e22abdca6..f5b40399a538 100644
---- a/tools/testing/selftests/landlock/common.h
-+++ b/tools/testing/selftests/landlock/common.h
-@@ -47,10 +47,10 @@
- 			_metadata->no_print = 1; \
- 			fixture_name##_##test_name##_child(_metadata, self, variant); \
- 			if (_metadata->skip) \
--				_exit(255); \
-+				_exit(KSFT_SKIP); \
- 			if (_metadata->passed) \
--				_exit(0); \
--			_exit(1); \
-+				_exit(KSFT_PASS); \
-+			_exit(KSFT_FAIL); \
- 		} \
- 		if (child != waitpid(child, &status, 0)) \
- 			abort(); \
-@@ -60,10 +60,10 @@
- 			return; \
- 		} \
- 		switch (WEXITSTATUS(status)) { \
--		case 0: \
-+		case KSFT_PASS: \
- 			_metadata->passed = 1; \
- 			break; \
--		case 255: \
-+		case KSFT_SKIP: \
- 			_metadata->passed = 1; \
- 			_metadata->skip = 1; \
- 			break; \
+-	ksft_print_msg("         %4s  %s%s%s.%s\n", t->passed ? "OK" : "FAIL",
+-	       f->name, variant->name[0] ? "." : "", variant->name, t->name);
++	ksft_print_msg("         %4s  %s\n",
++		       t->passed ? "OK" : "FAIL", test_name);
+ 
+ 	if (t->skip)
+ 		ksft_test_result_skip("%s\n", t->results->reason[0] ?
+ 					t->results->reason : "unknown");
+ 	else
+-		ksft_test_result(t->passed, "%s%s%s.%s\n",
+-			f->name, variant->name[0] ? "." : "", variant->name, t->name);
++		ksft_test_result(t->passed, "%s\n", test_name);
+ }
+ 
+ static int test_harness_run(int argc, char **argv)
 -- 
 2.43.0
 
