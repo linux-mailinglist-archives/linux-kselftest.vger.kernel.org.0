@@ -1,133 +1,385 @@
-Return-Path: <linux-kselftest+bounces-5177-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47A6085DD9F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 15:07:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C78385DDAE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 15:09:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B28DC1F22AFC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 14:07:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43EF52847C7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 14:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AEA7F48C;
-	Wed, 21 Feb 2024 14:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="quTqlShH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB53380027;
+	Wed, 21 Feb 2024 14:06:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6BA7E581;
-	Wed, 21 Feb 2024 14:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBBE7D3F3;
+	Wed, 21 Feb 2024 14:06:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708524383; cv=none; b=EaJ4BbdR6SWurSyTPYnQr8bwVTw02cs64FW+EQIs+O5Q6AV2U/oQAdw+8Pw+IkbzrU5/+MwEXg4HPmwIHvTSB2HWg6gAwDPjjuLFbY6PU06cA597mfjCZX4zlNBUOTMqInfyxGVb6E5vBt/fiMetD/kyZzLwc/mb4tp0tL7aGPA=
+	t=1708524401; cv=none; b=t0xUnN79cBzvdB11S9WinyHc3WmombAxq/adslMkE3fGbwe5nvYnIrSExh8ODui1yb3n4VtmrCIy809vMuLUp3pA8BYlAtcqh9qFiz3cAhwlVPkceib6oAX3OS2zPYUph3+kwJSlWY2UTnw1PU8Tb+PAo9n+tp5keLDbVagABD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708524383; c=relaxed/simple;
-	bh=SpL2kvMci3BCJiem1BIyIcsSR8wgzqXdO4GroPnsjP4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CnejATfNpLeLnU9pyExQtycJBP0eIuFeLTIkoT/hNg0Jsi2PMdwwt0LoETBB+NHzMrm0yBJNEB6Rsl2IWpwDD8EwmbILYYqWjaS8ewC/X7PsTeHegki4n+toGSNSiSSP+UWqn8PnDy3srb1tKzxWmXhIMSQnOWl1uEkK6QGZ6Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=quTqlShH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55D1C43330;
-	Wed, 21 Feb 2024 14:06:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708524382;
-	bh=SpL2kvMci3BCJiem1BIyIcsSR8wgzqXdO4GroPnsjP4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=quTqlShH4LWCaBTZCyQx62hLzRwZVLko6t4suir8Ot2AOcWbSVtaZdamqaM7w58fp
-	 DdbftVoCHsUCAtZrueBfz94C0QKag0ucP4UlPGWV03xB+JkTeRxT7Kq9hgc7NcsZXc
-	 jdVQs71Al076uLZgmoSahZ0U4RfJj5YkVku8IV4GGdbBtx+pGpMdhZ8eAyp0Z+GWNI
-	 ltQ8vrqQsV3IadYmjrgumJm2YIKXXDGjK7zP6SVgH1PoRvtuNWCUadyNVbSvnC7IKo
-	 CWUmyo8zmuq8zIcdMAr4cQxUEbW3qmbUZIszTl3aXJCaXPVHDRD5aTkpo7iJrjg6vx
-	 SyGzgnFgXWrrA==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d23fab7708so25586461fa.0;
-        Wed, 21 Feb 2024 06:06:22 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUgxI1aIhFiISdHKbOPv3LI+Ybb2MLVhOUAESW0tO5Mw3qDNmpV/j/MQLG+Ck5lReXFhjnR7vLp/s63VZ2iYYrpbbyQYYxPGnojwTqUJPfOvKbnvRKyTh+B3c2fYYlCrIObWSI8wLVNwzpqPRzQnHIB55XF50JuDi2wYNL5Phm0c8u6f2BCTMlVCw==
-X-Gm-Message-State: AOJu0YyGalt5axyKBgbkFRl7BVdfw5b1GzEplwn1bN0pFbqj5pBrChHM
-	/wExKJ1Ar0QoxOG1PBNpqRbpU7h/lyB5Bu87RLernlPxJSpOnM0gYZojrS3gWaKzlX6enMmuHBE
-	67qgqFr7AC6P0UYpcInceKNBOxQ==
-X-Google-Smtp-Source: AGHT+IHOSOSP7ipJG1AW58Fmxdj1uchlXs5YgDpmVhr8XeqjnmnNtuMuC8wFe5RgRdG+Eir4Pr5TzJCIR/BeGaQpP5A=
-X-Received: by 2002:a05:651c:220b:b0:2d2:42d7:7d88 with SMTP id
- y11-20020a05651c220b00b002d242d77d88mr3092656ljq.22.1708524380920; Wed, 21
- Feb 2024 06:06:20 -0800 (PST)
+	s=arc-20240116; t=1708524401; c=relaxed/simple;
+	bh=lf2OKRMJyqx7yFcRlYxYt7G+h6usMcRbUObfSCTx7Vg=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=VqKm7j+APIGzf92K2DWVZQ5FhaF9LS6o1UtP+XfPwAcb8b5BoPenzLDpUPhzBs6csmt6rIMfS+kYPVVt3u3/TAgE8zINOg8bDr9Y6ChAJJ+sy/yzbod8IFoUy18A0yG/EmyZd1feQeVTt6TBNGq4H8aAOUcdpJFhsnv/Qc4fqek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A669C433A6;
+	Wed, 21 Feb 2024 14:06:41 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.97)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1rcnGv-00000002iCL-3AZi;
+	Wed, 21 Feb 2024 09:08:29 -0500
+Message-ID: <20240221140829.616866594@goodmis.org>
+User-Agent: quilt/0.67
+Date: Wed, 21 Feb 2024 09:08:07 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ linux-kselftest@vger.kernel.org,
+ Vincent Donnefort <vdonnefort@google.com>
+Subject: [for-next][PATCH 11/11] ring-buffer/selftest: Add ring-buffer mapping test
+References: <20240221140756.797572998@goodmis.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240217060843.GA16460@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20240217060843.GA16460@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Wed, 21 Feb 2024 07:06:08 -0700
-X-Gmail-Original-Message-ID: <CAL_Jsq+Feu9NnzTNx=XU5vgHhibGAQXvkuTeWbpu8gJ3rVrzcw@mail.gmail.com>
-Message-ID: <CAL_Jsq+Feu9NnzTNx=XU5vgHhibGAQXvkuTeWbpu8gJ3rVrzcw@mail.gmail.com>
-Subject: Re: [PATCH 2/7] of: Create of_root if no dtb provided by firmware
-To: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-Cc: Frank Rowand <frowand.list@gmail.com>, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, linux-um@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-On Fri, Feb 16, 2024 at 11:08=E2=80=AFPM Saurabh Singh Sengar
-<ssengar@linux.microsoft.com> wrote:
->
-> On Fri, Feb 16, 2024 at 05:05:51PM -0800, Frank Rowand wrote:
-> > When enabling CONFIG_OF on a platform where 'of_root' is not populated
-> > by firmware, we end up without a root node. In order to apply overlays
-> > and create subnodes of the root node, we need one. Create this root nod=
-e
-> > by unflattening an empty builtin dtb.
-> >
-> > If firmware provides a flattened device tree (FDT) then the FDT is
-> > unflattened via setup_arch(). Otherwise, the call to
-> > unflatten(_and_copy)?_device_tree() will create an empty root node.
-> >
-> > We make of_have_populated_dt() return true only if the DTB was loaded b=
-y
-> > firmware so that existing callers don't change behavior after this
-> > patch. The call in the of platform code is removed because it prevents
-> > overlays from creating platform devices when the empty root node is
-> > used.
-> >
-> > [sboyd@kernel.org: Update of_have_populated_dt() to treat this empty dt=
-b
-> > as not populated. Drop setup_of() initcall]
-> >
-> > Signed-off-by: Frank Rowand <frowand.list@gmail.com>
-> > Link: https://lore.kernel.org/r/20230317053415.2254616-2-frowand.list@g=
-mail.com
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
+From: Vincent Donnefort <vdonnefort@google.com>
+
+This test maps a ring-buffer and validate the meta-page after reset and
+after emitting few events.
+
+Link: https://lore.kernel.org/linux-trace-kernel/20240220202310.2489614-7-vdonnefort@google.com
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ tools/testing/selftests/ring-buffer/Makefile  |   8 +
+ tools/testing/selftests/ring-buffer/config    |   2 +
+ .../testing/selftests/ring-buffer/map_test.c  | 273 ++++++++++++++++++
+ 3 files changed, 283 insertions(+)
+ create mode 100644 tools/testing/selftests/ring-buffer/Makefile
+ create mode 100644 tools/testing/selftests/ring-buffer/config
+ create mode 100644 tools/testing/selftests/ring-buffer/map_test.c
+
+diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
+new file mode 100644
+index 000000000000..627c5fa6d1ab
+--- /dev/null
++++ b/tools/testing/selftests/ring-buffer/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++CFLAGS += -Wl,-no-as-needed -Wall
++CFLAGS += $(KHDR_INCLUDES)
++CFLAGS += -D_GNU_SOURCE
++
++TEST_GEN_PROGS = map_test
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/ring-buffer/config b/tools/testing/selftests/ring-buffer/config
+new file mode 100644
+index 000000000000..d936f8f00e78
+--- /dev/null
++++ b/tools/testing/selftests/ring-buffer/config
+@@ -0,0 +1,2 @@
++CONFIG_FTRACE=y
++CONFIG_TRACER_SNAPSHOT=y
+diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
+new file mode 100644
+index 000000000000..56c44b29d998
+--- /dev/null
++++ b/tools/testing/selftests/ring-buffer/map_test.c
+@@ -0,0 +1,273 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Ring-buffer memory mapping tests
++ *
++ * Copyright (c) 2024 Vincent Donnefort <vdonnefort@google.com>
++ */
++#include <fcntl.h>
++#include <sched.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++
++#include <linux/trace_mmap.h>
++
++#include <sys/mman.h>
++#include <sys/ioctl.h>
++
++#include "../user_events/user_events_selftests.h" /* share tracefs setup */
++#include "../kselftest_harness.h"
++
++#define TRACEFS_ROOT "/sys/kernel/tracing"
++
++static int __tracefs_write(const char *path, const char *value)
++{
++	int fd, ret;
++
++	fd = open(path, O_WRONLY | O_TRUNC);
++	if (fd < 0)
++		return fd;
++
++	ret = write(fd, value, strlen(value));
++
++	close(fd);
++
++	return ret == -1 ? -errno : 0;
++}
++
++static int __tracefs_write_int(const char *path, int value)
++{
++	char *str;
++	int ret;
++
++	if (asprintf(&str, "%d", value) < 0)
++		return -1;
++
++	ret = __tracefs_write(path, str);
++
++	free(str);
++
++	return ret;
++}
++
++#define tracefs_write_int(path, value) \
++	ASSERT_EQ(__tracefs_write_int((path), (value)), 0)
++
++#define tracefs_write(path, value) \
++	ASSERT_EQ(__tracefs_write((path), (value)), 0)
++
++static int tracefs_reset(void)
++{
++	if (__tracefs_write_int(TRACEFS_ROOT"/tracing_on", 0))
++		return -1;
++	if (__tracefs_write(TRACEFS_ROOT"/trace", ""))
++		return -1;
++	if (__tracefs_write(TRACEFS_ROOT"/set_event", ""))
++		return -1;
++	if (__tracefs_write(TRACEFS_ROOT"/current_tracer", "nop"))
++		return -1;
++
++	return 0;
++}
++
++struct tracefs_cpu_map_desc {
++	struct trace_buffer_meta	*meta;
++	void				*data;
++	int				cpu_fd;
++};
++
++int tracefs_cpu_map(struct tracefs_cpu_map_desc *desc, int cpu)
++{
++	unsigned long meta_len, data_len;
++	int page_size = getpagesize();
++	char *cpu_path;
++	void *map;
++
++	if (asprintf(&cpu_path,
++		     TRACEFS_ROOT"/per_cpu/cpu%d/trace_pipe_raw",
++		     cpu) < 0)
++		return -ENOMEM;
++
++	desc->cpu_fd = open(cpu_path, O_RDONLY | O_NONBLOCK);
++	free(cpu_path);
++	if (desc->cpu_fd < 0)
++		return -ENODEV;
++
++	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, desc->cpu_fd, 0);
++	if (map == MAP_FAILED)
++		return -errno;
++
++	desc->meta = (struct trace_buffer_meta *)map;
++
++	meta_len = desc->meta->meta_page_size;
++	data_len = desc->meta->subbuf_size * desc->meta->nr_subbufs;
++
++	map = mmap(NULL, data_len, PROT_READ, MAP_SHARED, desc->cpu_fd, meta_len);
++	if (map == MAP_FAILED) {
++		munmap(desc->meta, desc->meta->meta_page_size);
++		return -EINVAL;
++	}
++
++	desc->data = map;
++
++	return 0;
++}
++
++void tracefs_cpu_unmap(struct tracefs_cpu_map_desc *desc)
++{
++	munmap(desc->data, desc->meta->subbuf_size * desc->meta->nr_subbufs);
++	munmap(desc->meta, desc->meta->meta_page_size);
++	close(desc->cpu_fd);
++}
++
++FIXTURE(map) {
++	struct tracefs_cpu_map_desc	map_desc;
++	bool				umount;
++};
++
++FIXTURE_VARIANT(map) {
++	int	subbuf_size;
++};
++
++FIXTURE_VARIANT_ADD(map, subbuf_size_4k) {
++	.subbuf_size = 4,
++};
++
++FIXTURE_VARIANT_ADD(map, subbuf_size_8k) {
++	.subbuf_size = 8,
++};
++
++FIXTURE_SETUP(map)
++{
++	int cpu = sched_getcpu();
++	cpu_set_t cpu_mask;
++	bool fail, umount;
++	char *message;
++
++	if (!tracefs_enabled(&message, &fail, &umount)) {
++		if (fail) {
++			TH_LOG("Tracefs setup failed: %s", message);
++			ASSERT_FALSE(fail);
++		}
++		SKIP(return, "Skipping: %s", message);
++	}
++
++	self->umount = umount;
++
++	ASSERT_GE(cpu, 0);
++
++	ASSERT_EQ(tracefs_reset(), 0);
++
++	tracefs_write_int(TRACEFS_ROOT"/buffer_subbuf_size_kb", variant->subbuf_size);
++
++	ASSERT_EQ(tracefs_cpu_map(&self->map_desc, cpu), 0);
++
++	/*
++	 * Ensure generated events will be found on this very same ring-buffer.
++	 */
++	CPU_ZERO(&cpu_mask);
++	CPU_SET(cpu, &cpu_mask);
++	ASSERT_EQ(sched_setaffinity(0, sizeof(cpu_mask), &cpu_mask), 0);
++}
++
++FIXTURE_TEARDOWN(map)
++{
++	tracefs_reset();
++
++	if (self->umount)
++		tracefs_unmount();
++
++	tracefs_cpu_unmap(&self->map_desc);
++}
++
++TEST_F(map, meta_page_check)
++{
++	struct tracefs_cpu_map_desc *desc = &self->map_desc;
++	int cnt = 0;
++
++	ASSERT_EQ(desc->meta->entries, 0);
++	ASSERT_EQ(desc->meta->overrun, 0);
++	ASSERT_EQ(desc->meta->read, 0);
++
++	ASSERT_EQ(desc->meta->reader.id, 0);
++	ASSERT_EQ(desc->meta->reader.read, 0);
++
++	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
++	ASSERT_EQ(desc->meta->reader.id, 0);
++
++	tracefs_write_int(TRACEFS_ROOT"/tracing_on", 1);
++	for (int i = 0; i < 16; i++)
++		tracefs_write_int(TRACEFS_ROOT"/trace_marker", i);
++again:
++	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
++
++	ASSERT_EQ(desc->meta->entries, 16);
++	ASSERT_EQ(desc->meta->overrun, 0);
++	ASSERT_EQ(desc->meta->read, 16);
++
++	ASSERT_EQ(desc->meta->reader.id, 1);
++
++	if (!(cnt++))
++		goto again;
++}
++
++FIXTURE(snapshot) {
++	bool	umount;
++};
++
++FIXTURE_SETUP(snapshot)
++{
++	bool fail, umount;
++	struct stat sb;
++	char *message;
++
++	if (stat(TRACEFS_ROOT"/snapshot", &sb))
++		SKIP(return, "Skipping: %s", "snapshot not available");
++
++	if (!tracefs_enabled(&message, &fail, &umount)) {
++		if (fail) {
++			TH_LOG("Tracefs setup failed: %s", message);
++			ASSERT_FALSE(fail);
++		}
++		SKIP(return, "Skipping: %s", message);
++	}
++
++	self->umount = umount;
++}
++
++FIXTURE_TEARDOWN(snapshot)
++{
++	__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
++			"!snapshot");
++	tracefs_reset();
++
++	if (self->umount)
++		tracefs_unmount();
++}
++
++TEST_F(snapshot, excludes_map)
++{
++	struct tracefs_cpu_map_desc map_desc;
++	int cpu = sched_getcpu();
++
++	ASSERT_GE(cpu, 0);
++	tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
++		      "snapshot");
++	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), -EBUSY);
++}
++
++TEST_F(snapshot, excluded_by_map)
++{
++	struct tracefs_cpu_map_desc map_desc;
++	int cpu = sched_getcpu();
++
++	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), 0);
++
++	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
++				  "snapshot"), -EBUSY);
++	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/snapshot",
++				  "1"), -EBUSY);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.43.0
 
 
-> > @@ -1645,6 +1635,21 @@ static inline bool of_device_is_system_power_con=
-troller(const struct device_node
-> >       return of_property_read_bool(np, "system-power-controller");
-> >  }
-> >
-> > +/**
-> > + * of_have_populated_dt() - Has DT been populated by bootloader
-> > + *
-> > + * Return: True if a DTB has been populated by the bootloader and it i=
-sn't the
-> > + * empty builtin one. False otherwise.
-> > + */
-> > +static inline bool of_have_populated_dt(void)
-> > +{
-> > +#ifdef CONFIG_OF
-> > +     return of_property_present(of_root, "compatible");
->
-> This adds the strict check for compatible which makes compatible
-> to be mandatory for root nodes. So far, DeviceTree without compatible
-> property in root nodes can work. Do we want to make this documented
-> somewhere ?
-
-It already is in the DT spec and schemas.
-
-Rob
 
