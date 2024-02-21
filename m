@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-5184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F9ED85E305
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 17:25:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C25BB85E310
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 17:26:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 110941F2597A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 16:25:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EE89287587
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 16:26:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B15823D9;
-	Wed, 21 Feb 2024 16:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7B58289A;
+	Wed, 21 Feb 2024 16:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYcRtqq0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzgkSWxx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7F181731;
-	Wed, 21 Feb 2024 16:25:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AB38175F;
+	Wed, 21 Feb 2024 16:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708532729; cv=none; b=kXNjRZV9UnFldf5vEVqUg5mxZHww7si2xBv0qub3WW2W37TzCpxZA4M5aZCYsUJ7Ic9LPEjk0chheEm0i+GJ0N0iraPiVpIS//Gch55iZeK7kHTjWYqp2Lm+WAg/9MJ7HIQX+TREbU4Kd6tcS7pMSB4iSb64yLzsQIzn+ehLyCw=
+	t=1708532733; cv=none; b=FE3tUlZHFnFFkkTYddBpnSmZpoXdKNp8RB6t+1Bn/AkPmqpfPptW19VfaKpHA0IX9ngHVOp7MIwapL+U5nO8ZoNIQcB6g2qmY7nC4BCZbPWN9CRAdn+ZSmopAV5nBqJDiUsHmq1M/vNSIIyJK2wPmUo9J5PWzn5h00nQxtU95Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708532729; c=relaxed/simple;
-	bh=R3G29V1nYqPfReSpGBjXHcB6eUKOdQPJgoZsK67W94g=;
+	s=arc-20240116; t=1708532733; c=relaxed/simple;
+	bh=Mms2ysexNAwTlu0ixVh3mQvJfR7XVQbK1/6OpHHyNTk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gMG3r/gfXoh1Wb/j555WRckKzEguhTU4NpKkhdIO3JVDIAciF586RYDbZKrUn9CxqvRCREr7l+MKFiOmpQ9nEWUhF7mUO94E6Jb/UzgZBy3KUvu6sQxyCCyZCcK35ZIxQfexT6tmcFe0rsVVe3P4sg8LpaK0gP6haQk8Ie41AiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYcRtqq0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7080CC433B2;
-	Wed, 21 Feb 2024 16:25:24 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=QmUlzTYsvtNRf2T2e0GPVJVUWv0CqVf1jPqGYqe1oSEABMFpN6TsnGFUkIoLJ30yg1Lgrc6s2fIHB79n+HWwQ1yVWl/LnxpNm9KherVyhFJ5NydeIsQub+Ih7uGhCETxdUzjXd+m0JivRimMxTN8Rj2mu4rhtBbFWyNNmP/N2M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BzgkSWxx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AE3C43399;
+	Wed, 21 Feb 2024 16:25:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708532728;
-	bh=R3G29V1nYqPfReSpGBjXHcB6eUKOdQPJgoZsK67W94g=;
+	s=k20201202; t=1708532732;
+	bh=Mms2ysexNAwTlu0ixVh3mQvJfR7XVQbK1/6OpHHyNTk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=nYcRtqq0BYleLMWVme4nWxcvJm//247pjMWOUnYH8ciU/DCq/xWp9PU1gmDacqs6N
-	 vg6+GFYqpPyR3fKPLyU5KzPuzlB6gMrkfvmyZS7fswB52lucDTMBh8dGt1ZwniUtbl
-	 RriSFP9Ru2NKl4gSiMPQSRSixwhXs6y+HxX5ZuueaLlj3EXO6i++mFHkjF0xB3BWZI
-	 IvK5GkwjKWms4gdC3nz5uKoM1wBmNz8ngPdxQrQqTilwOnmLO6tpZreVlUmv1Ppeik
-	 qzI23UglSDKXsXIyHCcL5F6hXHfVoYy+OTT42qX/Y/avQD/uNCW/ILNUiHG0b42RZC
-	 1gwrofyKYw0fA==
+	b=BzgkSWxxL1yVpA3AP40UL1iNJt7dhFRqcnWwkIr9MhcBPn87wDNPRJnBCO/sMFhuO
+	 B6DsLTtCrQvFeP2jMEm94SzdbUK6wIM9gu1zajvLf2RkqYsFIAgWwWzGrn7BvwABer
+	 hhELTbOnO72g9IDIM8LRdYl+ojzy/l4B7Up77tcxToMoKVxAFmZCv3V1Tf8QdRjWF8
+	 Ptc+V8oI0gAnaaWlOL5dr2tuPABx+Sf9U1vYxhRNKCHYmUS8FurcVf1aV2TU8Wbs36
+	 x8BV/kfrthAlqGX0OqI5BIFSZ8ilAk5VqLniB0nW6DKV9meDGnDUZVcZnksdc9r+66
+	 RHUoEN+lQKB/g==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 21 Feb 2024 17:25:17 +0100
-Subject: [PATCH RFC bpf-next v3 01/16] bpf/verifier: allow more maps in
- sleepable bpf programs
+Date: Wed, 21 Feb 2024 17:25:18 +0100
+Subject: [PATCH RFC bpf-next v3 02/16] bpf/verifier: introduce
+ in_sleepable() helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240221-hid-bpf-sleepable-v3-1-1fb378ca6301@kernel.org>
+Message-Id: <20240221-hid-bpf-sleepable-v3-2-1fb378ca6301@kernel.org>
 References: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org>
 In-Reply-To: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -71,21 +71,16 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708532719; l=1061;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708532719; l=3279;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=R3G29V1nYqPfReSpGBjXHcB6eUKOdQPJgoZsK67W94g=;
- b=Sj7ipK1o5q96wXkl7PmldN0CmFbJdrMyNtyHoJiZuX1EPDYejRzCG4iBxZ+OSDYpD5UptXfDe
- Y71xE1UhYqMC9qmgMnDcBIxYAtpJT7wWm68sYByi26265cLilYCfRIg
+ bh=Mms2ysexNAwTlu0ixVh3mQvJfR7XVQbK1/6OpHHyNTk=;
+ b=ubFCIPswBRFz/abxhmIcawSwTVPZa0JGnBDjJfGIMEOXWj8HHjtDgLFSPl40V+M9vub1naeZk
+ 2KcPMrYv1mfB+/yBHNtNvw7/HK9cipJeTmWu+mfNNkZwmPmF3NuzTNN
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-These 2 maps types are required for HID-BPF when a user wants to do
-IO with a device from a sleepable tracing point.
-
-Allowing BPF_MAP_TYPE_QUEUE (and therefore BPF_MAP_TYPE_STACK) allows
-for a BPF program to prepare from an IRQ the list of HID commands to send
-back to the device and then these commands can be retrieved from the
-sleepable trace point.
+No code change, but it'll allow to have only one place to change
+everything when we add in_sleepable in cur_state.
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
@@ -93,25 +88,91 @@ Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
 no changes in v3
 
-changes in v2:
-- dropped BPF_MAP_TYPE_PROG_ARRAY from the list
+changes in v2 (compared to the one attaches to v1 0/9):
+- dropped the cur_state flag, so it can be put first
 ---
- kernel/bpf/verifier.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/bpf/verifier.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 011d54a1dc53..88e9d2e4c29f 100644
+index 88e9d2e4c29f..7a4b19bea2ac 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -18022,6 +18022,8 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 		case BPF_MAP_TYPE_SK_STORAGE:
- 		case BPF_MAP_TYPE_TASK_STORAGE:
- 		case BPF_MAP_TYPE_CGRP_STORAGE:
-+		case BPF_MAP_TYPE_QUEUE:
-+		case BPF_MAP_TYPE_STACK:
- 			break;
- 		default:
- 			verbose(env,
+@@ -5255,6 +5255,11 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
+ 	return -EINVAL;
+ }
+ 
++static bool in_sleepable(struct bpf_verifier_env *env)
++{
++	return env->prog->aux->sleepable;
++}
++
+ /* The non-sleepable programs and sleepable programs with explicit bpf_rcu_read_lock()
+  * can dereference RCU protected pointers and result is PTR_TRUSTED.
+  */
+@@ -5262,7 +5267,7 @@ static bool in_rcu_cs(struct bpf_verifier_env *env)
+ {
+ 	return env->cur_state->active_rcu_lock ||
+ 	       env->cur_state->active_lock.ptr ||
+-	       !env->prog->aux->sleepable;
++	       !in_sleepable(env);
+ }
+ 
+ /* Once GCC supports btf_type_tag the following mechanism will be replaced with tag check */
+@@ -10164,7 +10169,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!env->prog->aux->sleepable && fn->might_sleep) {
++	if (!in_sleepable(env) && fn->might_sleep) {
+ 		verbose(env, "helper call might sleep in a non-sleepable prog\n");
+ 		return -EINVAL;
+ 	}
+@@ -10194,7 +10199,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 			return -EINVAL;
+ 		}
+ 
+-		if (env->prog->aux->sleepable && is_storage_get_function(func_id))
++		if (in_sleepable(env) && is_storage_get_function(func_id))
+ 			env->insn_aux_data[insn_idx].storage_get_func_atomic = true;
+ 	}
+ 
+@@ -11535,7 +11540,7 @@ static bool check_css_task_iter_allowlist(struct bpf_verifier_env *env)
+ 			return true;
+ 		fallthrough;
+ 	default:
+-		return env->prog->aux->sleepable;
++		return in_sleepable(env);
+ 	}
+ }
+ 
+@@ -12056,7 +12061,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	}
+ 
+ 	sleepable = is_kfunc_sleepable(&meta);
+-	if (sleepable && !env->prog->aux->sleepable) {
++	if (sleepable && !in_sleepable(env)) {
+ 		verbose(env, "program must be sleepable to call sleepable kfunc %s\n", func_name);
+ 		return -EACCES;
+ 	}
+@@ -18193,7 +18198,7 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 				return -E2BIG;
+ 			}
+ 
+-			if (env->prog->aux->sleepable)
++			if (in_sleepable(env))
+ 				atomic64_inc(&map->sleepable_refcnt);
+ 			/* hold the map. If the program is rejected by verifier,
+ 			 * the map will be released by release_maps() or it
+@@ -19669,7 +19674,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		if (is_storage_get_function(insn->imm)) {
+-			if (!env->prog->aux->sleepable ||
++			if (!in_sleepable(env) ||
+ 			    env->insn_aux_data[i + delta].storage_get_func_atomic)
+ 				insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__force __s32)GFP_ATOMIC);
+ 			else
 
 -- 
 2.43.0
