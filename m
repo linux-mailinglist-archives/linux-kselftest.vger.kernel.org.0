@@ -1,385 +1,143 @@
-Return-Path: <linux-kselftest+bounces-5178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C78385DDAE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 15:09:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C87185E024
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 15:44:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43EF52847C7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 14:09:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67E3EB28BEE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 14:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB53380027;
-	Wed, 21 Feb 2024 14:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559E6811EC;
+	Wed, 21 Feb 2024 14:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8+RZbwo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBBE7D3F3;
-	Wed, 21 Feb 2024 14:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF3680034;
+	Wed, 21 Feb 2024 14:41:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708524401; cv=none; b=t0xUnN79cBzvdB11S9WinyHc3WmombAxq/adslMkE3fGbwe5nvYnIrSExh8ODui1yb3n4VtmrCIy809vMuLUp3pA8BYlAtcqh9qFiz3cAhwlVPkceib6oAX3OS2zPYUph3+kwJSlWY2UTnw1PU8Tb+PAo9n+tp5keLDbVagABD8=
+	t=1708526512; cv=none; b=dY3pPgB+/z7EsMnmpMwGxzCLtwae9TbPA4KEcN5dl6HVBCo+7FxApM0UlRGYs1iO3KwBIzaApeQHs/w4jJkOzF+gu4AXD63mnWOyb6O0rqRMXIByHTgAeCWjrQg1N/jfqMe82GCPeK8TERokoY/wXwfRtgNKywzEzzJKHYuCURQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708524401; c=relaxed/simple;
-	bh=lf2OKRMJyqx7yFcRlYxYt7G+h6usMcRbUObfSCTx7Vg=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=VqKm7j+APIGzf92K2DWVZQ5FhaF9LS6o1UtP+XfPwAcb8b5BoPenzLDpUPhzBs6csmt6rIMfS+kYPVVt3u3/TAgE8zINOg8bDr9Y6ChAJJ+sy/yzbod8IFoUy18A0yG/EmyZd1feQeVTt6TBNGq4H8aAOUcdpJFhsnv/Qc4fqek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A669C433A6;
-	Wed, 21 Feb 2024 14:06:41 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.97)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1rcnGv-00000002iCL-3AZi;
-	Wed, 21 Feb 2024 09:08:29 -0500
-Message-ID: <20240221140829.616866594@goodmis.org>
-User-Agent: quilt/0.67
-Date: Wed, 21 Feb 2024 09:08:07 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org,
- Vincent Donnefort <vdonnefort@google.com>
-Subject: [for-next][PATCH 11/11] ring-buffer/selftest: Add ring-buffer mapping test
-References: <20240221140756.797572998@goodmis.org>
+	s=arc-20240116; t=1708526512; c=relaxed/simple;
+	bh=EQF9KL1RT2lVZ7Xc3+VDawL+ZjdCN9kZA1uWFox451E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CwFJATLZ9UOAOaG06vy5K50+b/ufCDDTerQnJz6zTtlwvEh0SUhq80kr606vyd5btwR6fYDzxZnvslxun7gLXQ33Z1Zo4a/tlsqTIZGQUojv1xer9wytu+6Oal56BSV6QZnYON8pVftiaNbMqdDfe0FxdoHiUotDb/5PU4N+Fvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8+RZbwo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C7BC433F1;
+	Wed, 21 Feb 2024 14:41:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708526512;
+	bh=EQF9KL1RT2lVZ7Xc3+VDawL+ZjdCN9kZA1uWFox451E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e8+RZbwoP4Gmf1Fbtkw60VHjWvXsG0ifLyAM2J+S0e7vmCPRk9y5sCyHy4p12Rb9E
+	 cMVnoPIVPirHjku5qiYdhSPL5zu+SjA8jtz0L3xSEUKkkefFVItIs/hOZTvpCULHi6
+	 wx3i47h8pwWbn7any3FjPK+E2iAzqVQmo7uQslQmDJ2Eg1A7ZzXEt7apYuPs3IHt8I
+	 RLKaEGmprNupovU/75faSMd55zokPKnzOblfoy+fPJNaIcqfufnyn0JmDFyBdo9e06
+	 ughyEFdoXQ0VAyuUeBTnu6rhpO2bn6uOWOIN3TF2VU6vAdDGCvLy62RPy75pi4RH+O
+	 g4CnldFCnleQg==
+Date: Wed, 21 Feb 2024 15:41:49 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>, 
+	Erhard Furtner <erhard_f@mailbox.org>, Linux DRI Development <dri-devel@lists.freedesktop.org>, 
+	Huang Rui <ray.huang@amd.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, Karolina Stolarek <karolina.stolarek@intel.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Zi Yan <ziy@nvidia.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Memory Management List <linux-mm@kvack.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
+Subject: Re: Running ttm_device_test leads to list_add corruption. prev->next
+ should be next (ffffffffc05cd428), but was 6b6b6b6b6b6b6b6b.
+ (prev=ffffa0b1a5c034f0) (kernel 6.7.5)
+Message-ID: <uddqboamqcnxwvnud5gmkkm4igvxj67xc2zw52iex5ahljtlb4@2e7ydoplg6rt>
+References: <20240219230116.77b8ad68@yea>
+ <ZdRtDOhQGQUm5X4d@archie.me>
+ <9cdf0baa-f544-4fa8-bee3-568b790527cc@amd.com>
+ <4xggxtkk44m3xcfucbougtuhr66s2pc7tilpnju7xnyw45facb@odsrpqp57kiz>
+ <535f9089-b988-45ac-b3f3-a7d593861723@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-
-From: Vincent Donnefort <vdonnefort@google.com>
-
-This test maps a ring-buffer and validate the meta-page after reset and
-after emitting few events.
-
-Link: https://lore.kernel.org/linux-trace-kernel/20240220202310.2489614-7-vdonnefort@google.com
-
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- tools/testing/selftests/ring-buffer/Makefile  |   8 +
- tools/testing/selftests/ring-buffer/config    |   2 +
- .../testing/selftests/ring-buffer/map_test.c  | 273 ++++++++++++++++++
- 3 files changed, 283 insertions(+)
- create mode 100644 tools/testing/selftests/ring-buffer/Makefile
- create mode 100644 tools/testing/selftests/ring-buffer/config
- create mode 100644 tools/testing/selftests/ring-buffer/map_test.c
-
-diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
-new file mode 100644
-index 000000000000..627c5fa6d1ab
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -Wl,-no-as-needed -Wall
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -D_GNU_SOURCE
-+
-+TEST_GEN_PROGS = map_test
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/ring-buffer/config b/tools/testing/selftests/ring-buffer/config
-new file mode 100644
-index 000000000000..d936f8f00e78
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/config
-@@ -0,0 +1,2 @@
-+CONFIG_FTRACE=y
-+CONFIG_TRACER_SNAPSHOT=y
-diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
-new file mode 100644
-index 000000000000..56c44b29d998
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/map_test.c
-@@ -0,0 +1,273 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Ring-buffer memory mapping tests
-+ *
-+ * Copyright (c) 2024 Vincent Donnefort <vdonnefort@google.com>
-+ */
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <linux/trace_mmap.h>
-+
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+
-+#include "../user_events/user_events_selftests.h" /* share tracefs setup */
-+#include "../kselftest_harness.h"
-+
-+#define TRACEFS_ROOT "/sys/kernel/tracing"
-+
-+static int __tracefs_write(const char *path, const char *value)
-+{
-+	int fd, ret;
-+
-+	fd = open(path, O_WRONLY | O_TRUNC);
-+	if (fd < 0)
-+		return fd;
-+
-+	ret = write(fd, value, strlen(value));
-+
-+	close(fd);
-+
-+	return ret == -1 ? -errno : 0;
-+}
-+
-+static int __tracefs_write_int(const char *path, int value)
-+{
-+	char *str;
-+	int ret;
-+
-+	if (asprintf(&str, "%d", value) < 0)
-+		return -1;
-+
-+	ret = __tracefs_write(path, str);
-+
-+	free(str);
-+
-+	return ret;
-+}
-+
-+#define tracefs_write_int(path, value) \
-+	ASSERT_EQ(__tracefs_write_int((path), (value)), 0)
-+
-+#define tracefs_write(path, value) \
-+	ASSERT_EQ(__tracefs_write((path), (value)), 0)
-+
-+static int tracefs_reset(void)
-+{
-+	if (__tracefs_write_int(TRACEFS_ROOT"/tracing_on", 0))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/trace", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/set_event", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/current_tracer", "nop"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+struct tracefs_cpu_map_desc {
-+	struct trace_buffer_meta	*meta;
-+	void				*data;
-+	int				cpu_fd;
-+};
-+
-+int tracefs_cpu_map(struct tracefs_cpu_map_desc *desc, int cpu)
-+{
-+	unsigned long meta_len, data_len;
-+	int page_size = getpagesize();
-+	char *cpu_path;
-+	void *map;
-+
-+	if (asprintf(&cpu_path,
-+		     TRACEFS_ROOT"/per_cpu/cpu%d/trace_pipe_raw",
-+		     cpu) < 0)
-+		return -ENOMEM;
-+
-+	desc->cpu_fd = open(cpu_path, O_RDONLY | O_NONBLOCK);
-+	free(cpu_path);
-+	if (desc->cpu_fd < 0)
-+		return -ENODEV;
-+
-+	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, desc->cpu_fd, 0);
-+	if (map == MAP_FAILED)
-+		return -errno;
-+
-+	desc->meta = (struct trace_buffer_meta *)map;
-+
-+	meta_len = desc->meta->meta_page_size;
-+	data_len = desc->meta->subbuf_size * desc->meta->nr_subbufs;
-+
-+	map = mmap(NULL, data_len, PROT_READ, MAP_SHARED, desc->cpu_fd, meta_len);
-+	if (map == MAP_FAILED) {
-+		munmap(desc->meta, desc->meta->meta_page_size);
-+		return -EINVAL;
-+	}
-+
-+	desc->data = map;
-+
-+	return 0;
-+}
-+
-+void tracefs_cpu_unmap(struct tracefs_cpu_map_desc *desc)
-+{
-+	munmap(desc->data, desc->meta->subbuf_size * desc->meta->nr_subbufs);
-+	munmap(desc->meta, desc->meta->meta_page_size);
-+	close(desc->cpu_fd);
-+}
-+
-+FIXTURE(map) {
-+	struct tracefs_cpu_map_desc	map_desc;
-+	bool				umount;
-+};
-+
-+FIXTURE_VARIANT(map) {
-+	int	subbuf_size;
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_4k) {
-+	.subbuf_size = 4,
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_8k) {
-+	.subbuf_size = 8,
-+};
-+
-+FIXTURE_SETUP(map)
-+{
-+	int cpu = sched_getcpu();
-+	cpu_set_t cpu_mask;
-+	bool fail, umount;
-+	char *message;
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+
-+	ASSERT_GE(cpu, 0);
-+
-+	ASSERT_EQ(tracefs_reset(), 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/buffer_subbuf_size_kb", variant->subbuf_size);
-+
-+	ASSERT_EQ(tracefs_cpu_map(&self->map_desc, cpu), 0);
-+
-+	/*
-+	 * Ensure generated events will be found on this very same ring-buffer.
-+	 */
-+	CPU_ZERO(&cpu_mask);
-+	CPU_SET(cpu, &cpu_mask);
-+	ASSERT_EQ(sched_setaffinity(0, sizeof(cpu_mask), &cpu_mask), 0);
-+}
-+
-+FIXTURE_TEARDOWN(map)
-+{
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+
-+	tracefs_cpu_unmap(&self->map_desc);
-+}
-+
-+TEST_F(map, meta_page_check)
-+{
-+	struct tracefs_cpu_map_desc *desc = &self->map_desc;
-+	int cnt = 0;
-+
-+	ASSERT_EQ(desc->meta->entries, 0);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 0);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+	ASSERT_EQ(desc->meta->reader.read, 0);
-+
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/tracing_on", 1);
-+	for (int i = 0; i < 16; i++)
-+		tracefs_write_int(TRACEFS_ROOT"/trace_marker", i);
-+again:
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+
-+	ASSERT_EQ(desc->meta->entries, 16);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 16);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 1);
-+
-+	if (!(cnt++))
-+		goto again;
-+}
-+
-+FIXTURE(snapshot) {
-+	bool	umount;
-+};
-+
-+FIXTURE_SETUP(snapshot)
-+{
-+	bool fail, umount;
-+	struct stat sb;
-+	char *message;
-+
-+	if (stat(TRACEFS_ROOT"/snapshot", &sb))
-+		SKIP(return, "Skipping: %s", "snapshot not available");
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+}
-+
-+FIXTURE_TEARDOWN(snapshot)
-+{
-+	__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+			"!snapshot");
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+}
-+
-+TEST_F(snapshot, excludes_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_GE(cpu, 0);
-+	tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+		      "snapshot");
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), -EBUSY);
-+}
-+
-+TEST_F(snapshot, excluded_by_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), 0);
-+
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+				  "snapshot"), -EBUSY);
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/snapshot",
-+				  "1"), -EBUSY);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.43.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="54nvwbweshimitzn"
+Content-Disposition: inline
+In-Reply-To: <535f9089-b988-45ac-b3f3-a7d593861723@amd.com>
 
 
+--54nvwbweshimitzn
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Christian,
+
+On Tue, Feb 20, 2024 at 04:03:57PM +0100, Christian K=F6nig wrote:
+> Am 20.02.24 um 15:56 schrieb Maxime Ripard:
+> > On Tue, Feb 20, 2024 at 02:28:53PM +0100, Christian K=F6nig wrote:
+> > > [SNIP]
+> > > This kunit test is not meant to be run on real hardware, but rather j=
+ust as
+> > > stand a long kunit tests within user mode linux. I was assuming that =
+it
+> > > doesn't even compiles on bare metal.
+> > >=20
+> > > We should probably either double check the kconfig options to prevent
+> > > compiling it or modify the test so that it can run on real hardware a=
+s well.
+> > I think any cross-compiled kunit run will be impossible to differentiate
+> > from running on real hardware. We should just make it work there.
+>=20
+> The problem is what the unit test basically does is registering and
+> destroying a dummy device to see if initializing and tear down of the glo=
+bal
+> pools work correctly.
+>=20
+> If you run on real hardware and have a real device
+
+I assume you mean a real DRM device backed by TTM here, right?
+
+> additionally to the dummy device the reference count of the global
+> pool never goes down to zero and so it is never torn down.
+>=20
+> So running this test just doesn't make any sense in that environment.
+> Any idea how to work around that?
+
+I've added David, Brendan and Rae in Cc.
+
+To sum up the problem, your tests are relying on the mock device created
+to run a kunit test to be the sole DRM device in the system. But if you
+compile a kernel with the kunit tests enabled and boot that on a real
+hardware, then that assumption might not be true anymore and things
+break apart. Is that a fair description?
+
+If so, maybe we could detect if it's running under qemu or UML (if
+that's something we can do in the first place), and then extend
+kunit_attributes to only run that test if it's in a simulated
+environment.
+
+Maxime
+
+--54nvwbweshimitzn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZdYLrAAKCRDj7w1vZxhR
+xdN5AP0a2qM2svXKCp42Du8M5ceOwqA0Ro4VNIqTjfP71wm84wEAqBc0BtfBVIUp
+WX9cTT9QW23f/XVrxJCgQkZF0UJvlg8=
+=cUKm
+-----END PGP SIGNATURE-----
+
+--54nvwbweshimitzn--
 
