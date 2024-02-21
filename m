@@ -1,147 +1,132 @@
-Return-Path: <linux-kselftest+bounces-5158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04C7485D753
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 12:43:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3B1885D797
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 13:03:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88447B22113
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 11:43:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BE481F22CD5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 12:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1D5941740;
-	Wed, 21 Feb 2024 11:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B284D10A;
+	Wed, 21 Feb 2024 12:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="c6fEb7CJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="goPm5zzH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E7E4122C;
-	Wed, 21 Feb 2024 11:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D638482DD
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 12:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708515825; cv=none; b=VLTnQqW72n8YeUaBqcA1bXIexbsNOy9poMeVocdjbBHcyxfpcK2K7b460gNXwVUY4mEbXGmX700fZJUumffjnJ8el1wLyhf0LqzVe0u/lfmzbMEDny2nPTMLjNs9f/TFNaPnDRL9U1NgBAkzB6Svoce3kb4uwlKefxjfCn2FSXA=
+	t=1708517013; cv=none; b=AfUVDZLTpPCtArcDuXGTay04iKHxlqIoPTobu/3G5ZnHRL4+UIV7F7/H/lkmZ++FEOt+BPASfvCZzu5Wf6T6cVkVjZM+lB9dGj+snGlI7CzHCg7X2yNpFStSokTIvLXjfaWSpk7UTLhPTOANoR989dviiQWiOVfavjgeCdJiyiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708515825; c=relaxed/simple;
-	bh=IRRpfo0N2xcpSAdFSoJMt3sPGsOjRi/HyC7JiD918Sw=;
+	s=arc-20240116; t=1708517013; c=relaxed/simple;
+	bh=9QYzwrc0486wKCVBNA9kzltE6OKvRCjNeixUMKzjdCA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uHMJE3dn0SDmpy3GlmOMMWnFknZyj9UlQPf4u8DK8nKU89GIoSh9AXqIA59TGX1GwtlhisGsJi7UaDU91Ix3M1I8+hOKJFhUZ4qF14c6LDEA1/bCXTzzFMBvxfda65gBbKofsXxbCvGuMg+YWX4NU93vgRyMWjnT9/4NtAyTILs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=c6fEb7CJ; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41L9rmFQ016405;
-	Wed, 21 Feb 2024 11:43:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=IRRpfo0N2xcpSAdFSoJMt3sPGsOjRi/HyC7JiD918Sw=;
- b=c6fEb7CJda0YMRN+wjtGagvkXv1nu4pE3gXXj09cV2bQiDQ9Tjo5SsSerlVgZUoAZrNN
- czmhKrc7ZaX2YTcnnkUUobB4zMtwF4VZOvksEhj2ZLDu5ZE3C6aE3O/uaY3UrkZkB+H1
- ZFB/xa74tyYpNrfNI8LiuuU+h+jGYJtD8C78QfHtUi80Y463bTr5ur4/Pf6dzUFKAwcu
- jTph9JDQe0GJyk1PZkOsndFGq7f/NeZshRShftL+b/rugG4iGTjmScs0Uru329RtdXT7
- s25eI07DwLsI5CvJ+Mcij2v/wR6lvvwI4tZDRK08FUEO5HdhW1/Kfi7DcF3JBg8AQUng nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wddp24jgc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 11:43:41 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41LBRLKd028277;
-	Wed, 21 Feb 2024 11:43:41 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wddp24jg5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 11:43:41 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41LAKJGo031138;
-	Wed, 21 Feb 2024 11:43:40 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb9bkxcbr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 11:43:40 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41LBhaJw18416160
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 Feb 2024 11:43:38 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9223158057;
-	Wed, 21 Feb 2024 11:43:36 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9DD885805D;
-	Wed, 21 Feb 2024 11:43:35 +0000 (GMT)
-Received: from li-479af74c-31f9-11b2-a85c-e4ddee11713b.ibm.com (unknown [9.61.38.214])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 21 Feb 2024 11:43:35 +0000 (GMT)
-Message-ID: <8c170301bf02a3889ca3c3f79ac48ee961217f41.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 0/2] KVM: s390: Fix AR parameter in ioctl
-From: Eric Farman <farman@linux.ibm.com>
-To: Heiko Carstens <hca@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda
- <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vasily
- Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Date: Wed, 21 Feb 2024 06:43:35 -0500
-In-Reply-To: <20240221112600.7561-B-hca@linux.ibm.com>
-References: <20240220211211.3102609-1-farman@linux.ibm.com>
-	 <bbe1db67-386b-4738-83d5-6e02cd3c9d58@linux.ibm.com>
-	 <20240221112600.7561-B-hca@linux.ibm.com>
+	 Content-Type:MIME-Version; b=FR2jsTzrvmy0tN1HLFMfAzYMhxDnGt+aDq89BHuq/+TPa+095Z4vyncttAiiLkwSICDmp1lr5k7OEB1mkyFgOjiroAZWIjDbJh8TEkrhIl4xmbeGVU/tCNAyMYdr7RKoZpEUPHDOfl8PRj3QIv/ipYLZsy+2kcqTkgpKBBIwQYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=goPm5zzH; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708517011;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=7Geb+XZVHvAWeEiO9S27iDrccBjAUX9P3SeMqmrHMMI=;
+	b=goPm5zzHPEm72lll+rGwaxT2msoBaP3hCxklR4MXpsZiQ090JUjQykvQ4OqxYwTaXlRLcY
+	Cv0iD+3Z8JvxQclwKPRX8msE6zwQjvsqpybs7VQjxRHaQilmkR42lm53/9C5coqdULMNA+
+	uW6ugsSmKxvxpRrPoUxDS9qIuIZBG6k=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-554-weos8jp7PKSxgiYghFzqpw-1; Wed, 21 Feb 2024 07:03:30 -0500
+X-MC-Unique: weos8jp7PKSxgiYghFzqpw-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-33d3757a367so224723f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 04:03:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708517008; x=1709121808;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Geb+XZVHvAWeEiO9S27iDrccBjAUX9P3SeMqmrHMMI=;
+        b=u/YsOSvXLLeC1YFL6xOC9h25DvK5s7OK9qUcE72I9LSNQyx6knEHne2QTh1KfnUvf5
+         2JSdgJPilVJCrzqgRzcr6w/FoVCLaSTdiwFJWS42qigjlQg6I2/FT5WUjssqXCDSxQMT
+         fkzhDXlNdgQIUc49ks4Q1MikJS0kYd8/HVWHPGIiHMybjj6jndL0oKzGu/aKDyYstKia
+         G7mgcjAPW1qRtcA2IrE/cVErmZZzBPNU8PRMDxr0tmEzXPzP34XqpQEyCpjn2KK0VQu3
+         k8i4TSJBGEou4Q6EMJZKpwO0sP70SC9o53ZMsptbJWBINNmmGa0hAAakvL7Je2XzBlH5
+         kGdg==
+X-Forwarded-Encrypted: i=1; AJvYcCXTOVijzmju9eEVbGZcP/Fs2hLWBwXZdqQhA5/3RTalMoS3UdMu5sVs2wio+IZ9yCh9Q4lT0S8sZ7Zsz68kioldiBw/0ONhe0Un2BwW06Vt
+X-Gm-Message-State: AOJu0YwZJlMmyYq5RgZH98DtckLlGFuAPIuM6NNrZUb+g4qb1LQEPL2j
+	DSS/bC0Cp01CFzh2nXSmURw2MEkesdrWYmoZgHtHUpGJAshV9r4MhdZuG7YyfLbrr3vUu3jhaBW
+	8aDqJIU8fcgAKC0Dd+PcoJPS5EyNTLA3ffR4iPYkAR3jYplQ9fKjhaXRvK9WP3oVGAA==
+X-Received: by 2002:a05:6000:1f09:b0:33b:88a0:a1e9 with SMTP id bv9-20020a0560001f0900b0033b88a0a1e9mr9700674wrb.4.1708517008690;
+        Wed, 21 Feb 2024 04:03:28 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE8tshSUyaeTgOwlMVlca+hvTKde6ukfXZH9kkw9Irbg8Wjb4ct5W4RFE1ffJtfMmIcgUQZag==
+X-Received: by 2002:a05:6000:1f09:b0:33b:88a0:a1e9 with SMTP id bv9-20020a0560001f0900b0033b88a0a1e9mr9700635wrb.4.1708517008312;
+        Wed, 21 Feb 2024 04:03:28 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-230-226.dyn.eolo.it. [146.241.230.226])
+        by smtp.gmail.com with ESMTPSA id ck10-20020a5d5e8a000000b0033d4deb2356sm10572869wrb.56.2024.02.21.04.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 04:03:27 -0800 (PST)
+Message-ID: <e0ce5ab05a0fc956ccde61686d7c6c90026e3909.camel@redhat.com>
+Subject: Re: [PATCH net-next v3 00/11] selftests: kselftest_harness: support
+ using xfail
+From: Paolo Abeni <pabeni@redhat.com>
+To: shuah@kernel.org
+Cc: netdev@vger.kernel.org, edumazet@google.com, 
+	linux-kselftest@vger.kernel.org, mic@digikod.net, 
+	linux-security-module@vger.kernel.org, keescook@chromium.org, 
+	jakub@cloudflare.com, Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Date: Wed, 21 Feb 2024 13:03:26 +0100
+In-Reply-To: <20240220192235.2953484-1-kuba@kernel.org>
+References: <20240220192235.2953484-1-kuba@kernel.org>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uUqJcSllguAw-9crn87dQxGwdDbMDYH3
-X-Proofpoint-ORIG-GUID: KyexTtdirze4GxtVktYqdD_j4t7ecKiG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0
- bulkscore=0 mlxscore=0 mlxlogscore=955 lowpriorityscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402210090
 
-On Wed, 2024-02-21 at 12:26 +0100, Heiko Carstens wrote:
-> On Wed, Feb 21, 2024 at 08:49:58AM +0100, Janosch Frank wrote:
-> > On 2/20/24 22:12, Eric Farman wrote:
-> > > Hi Janosch,
-> > >=20
-> > > Here is a new (final?) version for the AR/MEM_OP issue I'm
-> > > attempting to
-> > > address. Hopefully they can be picked up to whatever tree makes
-> > > sense.
-> > >=20
-> >=20
-> > I've got good and bad news for you :)
-> >=20
-> > You need to re-base this patch set on Heiko's feature branch once
-> > my kvm fpu
-> > patch is on there since the current version runs into conflicts
-> > with Heiko's
-> > fpu rework. We'll contact you once that's the case. The patch made
-> > it onto
-> > devel yesterday evening and I assumed you'd wait a bit until
-> > sending a new
-> > version but I was mistaken.
+On Tue, 2024-02-20 at 11:22 -0800, Jakub Kicinski wrote:
+> When running selftests for our subsystem in our CI we'd like all
+> tests to pass. Currently some tests use SKIP for cases they
+> expect to fail, because the kselftest_harness limits the return
+> codes to pass/fail/skip.
 >=20
-> I resolved the trivial merge conflict - no need to resend anything.
+> Clean up and support the use of the full range of ksft exit codes
+> under kselftest_harness.
 >=20
-> Series applied, thanks!
+> Merge plan is to put it on top of -rc4 and merge into net-next.
+> That way others should be able to pull the patches without
+> any networking changes.
+>=20
+> v2: https://lore.kernel.org/all/20240216002619.1999225-1-kuba@kernel.org/
+>  - fix alignment
+> follow up RFC: https://lore.kernel.org/all/20240216004122.2004689-1-kuba@=
+kernel.org/
+> v1: https://lore.kernel.org/all/20240213154416.422739-1-kuba@kernel.org/
 
-Ah, sorry about that, I didn't notice the other fpu stuff go through.
-Thank you, Heiko!
+@Shuah: it's not clear to me if you prefer to take this series via the
+kselftests tree or we can take it via the net-next tree. Could you
+please advise?
+
+thanks!
+
+Paolo
+
+p.s. if this was already clarified in the past, I'm sorry: I lost track
+of it.
+
 
