@@ -1,224 +1,257 @@
-Return-Path: <linux-kselftest+bounces-5131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3077085CF4B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 05:31:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2161585CFA9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 06:31:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FBCDB239C8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 04:31:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56DBAB212AF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 05:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB7539AFC;
-	Wed, 21 Feb 2024 04:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 355CA39AFE;
+	Wed, 21 Feb 2024 05:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HVkWLzTa"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HArRftZA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9557539AE1;
-	Wed, 21 Feb 2024 04:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708489857; cv=fail; b=E+oviznnptLB9OScwjGh0dO8OPhKcYckCSAzgKK6OEdzOmrsvl5eAQUQWh3IkPuH16p3qeSF1l9tzujYT1KXS7IjnGi7/mDgm5u8izsp+VLz0i6eWmiMJdZgA06jV/KXVDE3ZUNhf+fNgVMvDMNwXomtkpwAJBa19Kc/5msKX90=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708489857; c=relaxed/simple;
-	bh=/haKh5XkLk63Ews24pAIl9uKjQoYPq3dFaKmxCA+hvk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ff5d6483pZLZWLtCZCqetT1O2UHMPy3GDwWBIwbfI9pk/LXx+RvRns1MTloi6ENGI1GuunlzVL8MGbd2B06b8dtZrXRP3C7jnEIBfWE4Lgvq58uwAaGk6FfqTWVViEb9ZVw3v2LZ1H+mgxNoY2NgWBaJFvlfb3Ls2zKdg7/xDzY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HVkWLzTa; arc=fail smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708489857; x=1740025857;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=/haKh5XkLk63Ews24pAIl9uKjQoYPq3dFaKmxCA+hvk=;
-  b=HVkWLzTa6mniOvN8Qzenn7mduS6voAXgUBeyLxahLLu04b4bgNSJPVHp
-   w6yktPWDzsjCh8Hje/7jK38UG3UtnC+5dFfBjuNzf46Nos6qFnp49XORz
-   uOR4Z5tESiqQgPnk4QsmYB6HfLsFNVqJWhU5HTo7WatEzH4mU7FzHy66J
-   OjoPzn8ZPZ7m/qoOq9Giekpnc0aRNJQif2I05jyvN+upo4EzeK3LyoUdF
-   hqDfbXtiJRibv2WoQ93Ts/m+tt/EwdrmYjyxBtZSAw7OO73QEue0eHVWk
-   nB4wYOQ3R73uDuEQinw9mlaky/2GB9OXuXz49eKu/CfWwQexEAXFm+7D4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="25094056"
-X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
-   d="scan'208";a="25094056"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 20:30:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
-   d="scan'208";a="4979723"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 20 Feb 2024 20:30:52 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 20 Feb 2024 20:30:52 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Tue, 20 Feb 2024 20:30:52 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 20 Feb 2024 20:30:51 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i7FzGxDjbYMEfiVOUtr9MIXNjyOkq+jLo4KdPCvDvD9xHJemKldV4E8+cV6IhTEMpTL6wRKA66OZG+5obwORpJa5IzVY/3cmOpzHSmgbVMC6Gk2+DDeN8QFcuMr+TS2Xs7o3uo9lB/VWfE2gff13h5FQDNl7PrWq6JJu1YwdpIoF5ALOGmnmYmAhirvluQrNix9GZfztZY69Sp2C6/D18KRYOPgCxpVrqw4djr33f/49luq2oHKyiDqpb252Z4cJ3Ic2e6FkhswgzO4Rhx1fvioCL3f0iEyaAYeme8IQM3Vss/bcxxwHoprkD7b2JhUHpTOs4kz0TYgZTOsEEJd+kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/haKh5XkLk63Ews24pAIl9uKjQoYPq3dFaKmxCA+hvk=;
- b=RdJvRPQnOqRm6bdip3rne6Rg6CfPO7/gmREZIIkzukf27+pTUCJJNsFEFPFljJrj7pC2MpTIfeE0cSnvKYSM0pyiOTMCpaCPX68IFGtp5IwERP9CRt2A6nMObctIF/sxjYoF2nyBimlBJefhkO1NJQiD3pID3ye1a8E39DVRAGSW8ASWcIAGyW+onjstv8RYc4b/BtpsyaXAnl5jf3kw8it9sZo8Zt9bPv+fTWpS3C8cXxsmMdNwt4gqIsgJl9Ya2MmvDGfe/gPo6tKhnZaMplmyT6cGVSE+BdL1J0Dsu1uZrykkLn9aanumlpRDR7iBaKLSk9JCTBk+cFeb7IdRqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by PH0PR11MB4838.namprd11.prod.outlook.com (2603:10b6:510:40::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.39; Wed, 21 Feb
- 2024 04:30:49 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::5d40:83fd:94ac:d409]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::5d40:83fd:94ac:d409%7]) with mapi id 15.20.7316.018; Wed, 21 Feb 2024
- 04:30:49 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "sorear@fastmail.com" <sorear@fastmail.com>, "dalias@libc.org"
-	<dalias@libc.org>
-CC: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "Szabolcs.Nagy@arm.com"
-	<Szabolcs.Nagy@arm.com>, "musl@lists.openwall.com" <musl@lists.openwall.com>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, "corbet@lwn.net"
-	<corbet@lwn.net>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "catalin.marinas@arm.com"
-	<catalin.marinas@arm.com>, "broonie@kernel.org" <broonie@kernel.org>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, "palmer@dabbelt.com"
-	<palmer@dabbelt.com>, "debug@rivosinc.com" <debug@rivosinc.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "shuah@kernel.org"
-	<shuah@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org"
-	<maz@kernel.org>, "oleg@redhat.com" <oleg@redhat.com>, "fweimer@redhat.com"
-	<fweimer@redhat.com>, "keescook@chromium.org" <keescook@chromium.org>,
-	"james.morse@arm.com" <james.morse@arm.com>, "ebiederm@xmission.com"
-	<ebiederm@xmission.com>, "will@kernel.org" <will@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>, "hjl.tools@gmail.com"
-	<hjl.tools@gmail.com>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "paul.walmsley@sifive.com"
-	<paul.walmsley@sifive.com>, "ardb@kernel.org" <ardb@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-mm@kvack.org"
-	<linux-mm@kvack.org>, "thiago.bauermann@linaro.org"
-	<thiago.bauermann@linaro.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>
-Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS in
- userspace
-Thread-Topic: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
- in userspace
-Thread-Index: AQHaVpxQxL7eT1mQek6VcjPJOSVEZ7ETiLSAgAAiyYCAAASHgIAATE8AgAAIRQCAAEurAA==
-Date: Wed, 21 Feb 2024 04:30:49 +0000
-Message-ID: <8d28fce4b0d1fc2c757621d9a0f82a5c2db8e78c.camel@intel.com>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
-	 <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
-	 <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
-	 <20240220185714.GO4163@brightrain.aerifal.cx>
-	 <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
-	 <063acc75-ea1d-4dd3-aecb-e5c8884005db@app.fastmail.com>
-In-Reply-To: <063acc75-ea1d-4dd3-aecb-e5c8884005db@app.fastmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.44.4-0ubuntu2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|PH0PR11MB4838:EE_
-x-ms-office365-filtering-correlation-id: 2b021f81-719d-4d4a-063e-08dc3295e166
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cDOAaRa2C0t1/o+h+zWC6vjHsgpB+fwl/j7dgci1pbXd/sDntgohehLESE9eXT7GdwrvgPPbyZVRaNPP9ZBhluKBXidwqpMNlBS72IwVrb950GYSN7go/RTmRQzozMrRCHZ6uGPtVsJGamSliCF97wcSX1r+PRIMuA3sOmYrMp2+gPShkgdnhLAmBKR0Jqv+7HrkWdO/h/YWwoM8LXM0t8Ef/IR9ksYHVl0oWvR3S+gugyh/qehfG+PqDOgrZSIg3c+bHeNVb10cG65X16XtdoOoFxJ2Ha8TUP8YO4bTZBPZcpHjzeRVFdVgZNMK59fhjmsC3TQksBTLuiyRorLzcjFZtaioW+bORlLOwVhfqnYHI9NSlMusyN14dvlGFxnYdOx5dOeWYPPYwF3BvRRj7Ono9/PyQpDEV/1iLqVC/uZwtg3IcEolhT9bg/hmeoFOCRaNSM2ENEQx84HaxgJEQ2o37JtkCV9AxCWpRIfa2qqHDCnEiD4AD/8mv3mXWRDx4ZUA+barzLE5QFsfhqwjhB8w/t3wV5lejcEtFHIy2S+7wMUBAZxbnccFprIq3DyDDSOG08aPmD6LcPE+dSfhJQ0CXWGjdMigBVyNI+irOruUNK2WM4xWvyf7ZsZeQgzO
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eXR2dG5aZzEyR250a3pJM0dOOHZoQzZwakEvbUZ6M3NNSFVFelBUai9hZytr?=
- =?utf-8?B?QnRYa1ZQWE9MbkJXekpvWU1EbTJxaVJna2w3ZmlmMWlZcEtkL2Raemc5aTlV?=
- =?utf-8?B?TzdjRlNyL2VLVEV2TzFBdzcyRDVid0VwNlE4OW5MM25obHNZUmFjZ2RyeHdm?=
- =?utf-8?B?aFg5R3B5UWRDcElvT1Flb3lCV3A4VlQ5bHZFdXZhRmFPb1BNREt1MHRUUnZH?=
- =?utf-8?B?NVM5Qyt5cXVscWkwWFBVV3hCbExFbXhEV2JWNWt1dkVGNmpwYUZyT09lZXgr?=
- =?utf-8?B?cDhqNHZ6WHpyNjZ0KzRYTTZYWjNLWWdrZ3M1NXpXK0twelB4dW9UMzFmbzVR?=
- =?utf-8?B?cG1pZHdUQVVKZFFxd1ZoSnoyTFFGRGZHVndEeWhySkVtbzJYYlFvSWt0LzVx?=
- =?utf-8?B?M1ZlbFNjYk5KSThIOFUyMmYzUG1WaHdKYThtWXByWEtGSEhlNzgwWkdFOHVj?=
- =?utf-8?B?ZGo0VjlUb0c3cThIald0c1R3TWxtT3NpMldsSEY4YTF5RGpWb3A3dXpQSG0x?=
- =?utf-8?B?bGNNWW5jdy9MZ1dvN1BjeEZlU1VpcVhhamFiOTNoVWNRQ01XRldaUHhzZW1D?=
- =?utf-8?B?Q2F4M0xwVVZKMGdYdjY5K2ZoYlU1SmFIK0JTcTlKUFNXS1NQK25oVkpoaFR2?=
- =?utf-8?B?VTFUZ09MRThUTmtTakgvc1kvREoveGZlQ01QVE5vRVNsSWRTVWRmRDk5NEgy?=
- =?utf-8?B?N095S050Q3d5dm4zU1I2Z3ptZVczYmhObzBXaEcxbW1Xd3hFTEkrYzBybXkv?=
- =?utf-8?B?L29tS3NTdytxaGdnOHA5bnBkVklhQVJzblZSU0k3RytNWlVGbjNOQ3JMZVdI?=
- =?utf-8?B?bWd0ZDRqQzhHREFVbWxHNmJtTDZQK1RXWFJjaGdnY1JHWlNTN0NGWkVyYWZI?=
- =?utf-8?B?Zmg5d3YrOGdrVUI1SjBvV3ovNmkreXdNYnRMMEZsTUt2NUFxUW1RRDBCSW9Z?=
- =?utf-8?B?Q0t6TG9veE9ROCszeS96cnpxaG1uY0J5MEMyQWtva083MU16RW5jL0NqZzdw?=
- =?utf-8?B?dWUwNVhuWVh2eTRkNVUxM2lSOGNHL09rS1lmUGVsaXdrY0k4VUh4QVE5U0tQ?=
- =?utf-8?B?QjVmOTgrZWVPRjFnU2FyallMcC81U24xZldZL21aSEN2K0NBMDdyZy9BREQ0?=
- =?utf-8?B?ZG5GMFdMa054T2szZFBhaG9RSEV0ZFpaYUFWSDN1TlBaVVN2K1lpc2JYaHdk?=
- =?utf-8?B?NVJkVU5KOXdUSUJKV3dLN0lCZUczbkJpL0lPQmZqWDFlak11V0VTVTV6OXBH?=
- =?utf-8?B?aW1IRm4vckNveXJnaFFmNmtFT21WQUZoZ3hhR3F3S1ZjeUR5QXBHd3lBY3RJ?=
- =?utf-8?B?VXJYTzJJaDFmZGZKZ0tPaWY5K2Z2YllaazFtaUExQWhyZlRRUjFvT2RIR29Q?=
- =?utf-8?B?ZHhPVGZQVjFyV2tjVkpRbFBHQTdpZ3g2NHFZbUR3Njl0TER2eVRpWC8zMml0?=
- =?utf-8?B?Mm1zTHUxSTZaajNaWFBzUGVLbVdNWGxlWndRd2V0ZXJmc2ErYVEvNDgrSnR5?=
- =?utf-8?B?dmxsZjdJak5lakh6dlhleGpyNnM1ai8wV3BlUStZc0xheCtOcHA5K21vbkNa?=
- =?utf-8?B?QVNkb1hOTnlNTG1qajYxNnhuNVk3dzllTTVDOG16d2NnM2U5VHZ1MldMblE1?=
- =?utf-8?B?MWdORlBxc2xUaDhEZi9lTzRPTVJ2ZWJ0anpid0d3VTJScU9Lelc0V3dKb3lu?=
- =?utf-8?B?SVdYdEJISlZWeGRBVmYyVjlUOEJXS3dHSFJqU0h5UlhFaU14Q2FxQjR4VGI3?=
- =?utf-8?B?ZDE3d3NuQ0MycEYwZUUrcGVkRzcwVW5GbVhaUm9nM050U0t3TTg3UjZCbzBw?=
- =?utf-8?B?YXpQYXZ2SjRYYldQUUdqdTMvTy9LTXdsckl5RS9Lb2FESXo4aEtmdSs1aVNh?=
- =?utf-8?B?bEx2aWwyRmhFcm5LTW5ZMklmOHMvb01ObVhjVFpzZ0c3b0RzZ0FwZTZvNlFV?=
- =?utf-8?B?Sy94Qy8yUmd4cTRvM2RGYUltYWZQWTZIaGxILysrQ2I5a1pRZzRKVnZTOEdJ?=
- =?utf-8?B?WVhiNkZwWklESk9aODM2ZFZXZmZrL3JFT0Nlak1KWXVRdEtPQ2Fra212Mzln?=
- =?utf-8?B?dDRrQzhSK0xxVE9tOUhNMUhDcUxoOXNKWCtZVEtLUjJLNW5ha1JUU3pIdWNK?=
- =?utf-8?B?SjVMaDJicDJIeVUxNXpjSmFsMEV5bzR2K3ZaNjBWa2diSzhOdWo5M2dZSEgv?=
- =?utf-8?Q?Wv6+6q+hl7VuEk1a67LH4eI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F73A1482C2DCA54DBF0A9C909029FCBD@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB4639AF1
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 05:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708493477; cv=none; b=cUsGEGrK8cGbRGQf+xe9PnErrhdj1az1M1w8O1chQcv4tHywsQ3II7BgBMj593A+Nw7VuSqG8aX8t2KfyMVBhM3dz7vXp5hnVSIDvQFDLGV8Q8yTpHhW/IVz06vaMtW1C0sX46kaONp58qMrYlnNfjCSNk0tCYXyCREvng+tFqI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708493477; c=relaxed/simple;
+	bh=4kNUkPSsZ6NwsVXrjkUeOW8afEalspPvKs5WE0LwN4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=DG6pYDGJqV5g/8ZM3ply9EZeHysry+PBHawAPp/jgxPpfO2zba1TkRi3f7tQ+yaTF9eVPCIvUNT1LneiXP4BGBNpe1PASQYnjm68RI7hW6NvCdXcjk7xqe7j0HuDZS9LrhYOj2oXUbBGmVT8GdDkpOF5fee5apXI0FwQ08ohOB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HArRftZA; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a3566c0309fso732605066b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 21:31:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708493473; x=1709098273; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ee8UGbAfInlRw0mmY32iabqom41XT4N0g5e35WXpWiI=;
+        b=HArRftZAYJ8B3wxTmNgb1/Orax37uyijt/C68U4lmJFxHfL72EcJveWuGQf9qsYGEh
+         VJqbvZ1PQtcVtp97h17qteUjsOUqKjGwJXhECjXVKtMskUcErJmcVeNJh0xUsdrgrFo0
+         UBKgsQXyOpRZDISgFr0mgLT47hxrGWxpE4AbLmcSkm8oAEQ5W+Ass+UgyIGhIPrUgHpX
+         Ok/eElGpKQ+qlK0qAXZlIki3kgeXMssZHpc63EeLvriCfgxa2+xYSF+W5WiUScJhzrLQ
+         O7WAWqstsFO5//3lSV/dQJFYFyWOa9G+FBd+0dnrDOmXPtDKr8XjsYmc21Aa1Mwy+myH
+         /IXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708493473; x=1709098273;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ee8UGbAfInlRw0mmY32iabqom41XT4N0g5e35WXpWiI=;
+        b=GcMK6InhxeRxzVDvTEkvMvN6YSV17Vdvh6oiax28vgB8nexd/RcP4sEBD4PMW05wXD
+         xt3+FT0M7DwUd5pk5py3Wt/GNtc+KHiJKx7LPjySg+ZuVIPlDa9QYBWkehm8FDEQv6xz
+         qXwNmuYO3jOIyu3zWs8/F8TGEFP8XdtsVEBDzNP/TYGcFbBNt/62qxrN2DNSlfwUkfm5
+         cWLejpx+SscsHTXzhByQiruim/2pfIrCAlKxSO1LHT2797yBafUQIj1vlIiTLarnzrC0
+         JeRP94mRAqJiVoc5uCBfzB1+tVyXMqa6Z7Rdq+QOpYnYBp/Zsk6o5GKF3WdJqfB++a2/
+         ZsUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVj9We/DHACqygPiIduXHPsBbYyCa+JbYqbo7vbzQfiHIhxYtBHhX2f9hdmGBX84pe+3ewRlnlMPmST/SdTuNOD9AljhHeq/njHKhOsQaHZ
+X-Gm-Message-State: AOJu0YywqXjxwsbbLkI8upzwiBOaCdFl4MMtpheqxBDltcKRCpn+VS7i
+	ruVdL4FNdfpVm40XonGEd81FF3Dg8RWK2sr5jxVps5MnkD9ulDM9VBlfDgx6ZZ0=
+X-Google-Smtp-Source: AGHT+IEq1eFtTNdd/bmaa3GnlDQllZezHXuoSDlWDXRfmFI1MDpUwA5PpLIhedjCVEADYrw9jNbQjg==
+X-Received: by 2002:a17:906:b18e:b0:a3e:8972:4404 with SMTP id w14-20020a170906b18e00b00a3e89724404mr4985261ejy.9.1708493473094;
+        Tue, 20 Feb 2024 21:31:13 -0800 (PST)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id ov28-20020a170906fc1c00b00a3cf9b832eesm4587301ejb.40.2024.02.20.21.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 21:31:12 -0800 (PST)
+Date: Wed, 21 Feb 2024 08:31:08 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Menglong Dong <dongmenglong.8@bytedance.com>,
+	andrii@kernel.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+	daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+	thinker.li@gmail.com, dongmenglong.8@bytedance.com,
+	zhoufeng.zf@bytedance.com, davemarchevsky@fb.com, dxu@dxuuu.xyz,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH bpf-next 2/5] bpf: tracing: support to attach program to
+ multi hooks
+Message-ID: <d0607bff-b589-4548-98e1-a94d227b4e93@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b021f81-719d-4d4a-063e-08dc3295e166
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Feb 2024 04:30:49.2634
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zXiPL1z2q4+rwNjcM434V4Pw3uG/lVvJYAY2+eyhkjeFa0b0GtLRB2rl1A+n9h+jSS9fcZB/MTWo33C6lE+S+rczK52NaCiWYV+FaUHgQPs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4838
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240220035105.34626-3-dongmenglong.8@bytedance.com>
 
-T24gVHVlLCAyMDI0LTAyLTIwIGF0IDE4OjU5IC0wNTAwLCBTdGVmYW4gTydSZWFyIHdyb3RlOg0K
-PiANCj4gSWRlYWxseSBmb3IgcmlzY3Ygb25seSB3cml0ZXMgd291bGQgY2F1c2UgY29udmVyc2lv
-biwgYW4gaW5jc3NwDQo+IHVuZGVyZmxvdw0KPiB3aGljaCBwZXJmb3JtcyBzaGFkb3cgc3RhY2sg
-cmVhZHMgd291bGQgYmUgYWJsZSB0byBmYXVsdCBlYXJseS4NCg0KV2h5IGNhbid0IG1ha2Vjb250
-ZXh0KCkganVzdCBjbG9iYmVyIHBhcnQgb2YgdGhlIGxvdyBhZGRyZXNzIHNpZGUgb2YNCnRoZSBw
-YXNzZWQgaW4gc3RhY2sgd2l0aCBhIHNoYWRvdyBzdGFjayBtYXBwaW5nPyBMaWtlIHNheSBpdCBq
-dXN0DQptdW5tYXAoKSdzIHBhcnQgb2YgdGhlIHBhc3NlZCBzdGFjaywgYW5kIG1hcF9zaGFkb3df
-c3RhY2soKSBpbiBpdCdzDQpwbGFjZS4NCg0KVGhlbiB5b3UgY291bGQgc3RpbGwgaGF2ZSB0aGUg
-c2hhZG93IHN0YWNrLT5ub3JtYWwgY29udmVyc2lvbiBwcm9jZXNzDQp0cmlnZ2VyZWQgYnkgbm9y
-bWFsIHdyaXRlcy4gSUlVQyB0aGUgY29uY2VybiB0aGVyZSBpcyB0byBtYWtlIHN1cmUgdGhlDQpj
-YWxsZXIgY2FuIHJldXNlIGl0IGFzIG5vcm1hbCBtZW1vcnkgd2hlbiBpdCBpcyBkb25lIHdpdGgg
-dGhlDQp1Y29udGV4dC9zaWdhbHRzdGFjayBzdHVmZj8gU28gdGhlIG5vcm1hbC0+c2hhZG93IHN0
-YWNrIHBhcnQgY291bGQgYmUNCmV4cGxpY2l0Lg0KDQpCdXQgdGhlIG1vcmUgSSB0aGluayBhYm91
-dCB0aGlzLCB0aGUgbW9yZSBJIHRoaW5rIGl0IGlzIGEgaGFjaywgYW5kIGENCnByb3BlciBmaXgg
-aXMgdG8gdXNlIG5ldyBpbnRlcmZhY2VzLiBJdCBhbHNvIHdvdWxkIGJlIGRpZmZpY3VsdCB0bw0K
-c2VsbCwgaWYgdGhlIGZhdWx0aW5nIGNvbnZlcnNpb24gc3R1ZmYgaXMgaW4gYW55IHdheSBjb21w
-bGV4Lg0KDQo=
+Hi Menglong,
+
+kernel test robot noticed the following build warnings:
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/bpf-tracing-add-support-to-record-and-check-the-accessed-args/20240220-115317
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20240220035105.34626-3-dongmenglong.8%40bytedance.com
+patch subject: [PATCH bpf-next 2/5] bpf: tracing: support to attach program to multi hooks
+config: m68k-randconfig-r071-20240220 (https://download.01.org/0day-ci/archive/20240221/202402210534.siGKEfus-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202402210534.siGKEfus-lkp@intel.com/
+
+smatch warnings:
+kernel/bpf/syscall.c:3325 bpf_tracing_prog_attach() warn: passing zero to 'PTR_ERR'
+kernel/bpf/syscall.c:3485 bpf_tracing_prog_attach() error: uninitialized symbol 'link'.
+
+vim +/PTR_ERR +3325 kernel/bpf/syscall.c
+
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3255  static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3256  				   int tgt_prog_fd,
+2fcc82411e74e5 Kui-Feng Lee           2022-05-10  3257  				   u32 btf_id,
+2fcc82411e74e5 Kui-Feng Lee           2022-05-10  3258  				   u64 bpf_cookie)
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3259  {
+a3b80e1078943d Andrii Nakryiko        2020-04-28  3260  	struct bpf_link_primer link_primer;
+3aac1ead5eb6b7 Toke Høiland-Jørgensen 2020-09-29  3261  	struct bpf_prog *tgt_prog = NULL;
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3262  	struct bpf_trampoline *tr = NULL;
+5f80eb32851d7a Menglong Dong          2024-02-20  3263  	struct btf *attach_btf = NULL;
+70ed506c3bbcfa Andrii Nakryiko        2020-03-02  3264  	struct bpf_tracing_link *link;
+5f80eb32851d7a Menglong Dong          2024-02-20  3265  	struct module *mod = NULL;
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3266  	u64 key = 0;
+a3b80e1078943d Andrii Nakryiko        2020-04-28  3267  	int err;
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3268  
+9e4e01dfd3254c KP Singh               2020-03-29  3269  	switch (prog->type) {
+9e4e01dfd3254c KP Singh               2020-03-29  3270  	case BPF_PROG_TYPE_TRACING:
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3271  		if (prog->expected_attach_type != BPF_TRACE_FENTRY &&
+be8704ff07d237 Alexei Starovoitov     2020-01-20  3272  		    prog->expected_attach_type != BPF_TRACE_FEXIT &&
+9e4e01dfd3254c KP Singh               2020-03-29  3273  		    prog->expected_attach_type != BPF_MODIFY_RETURN) {
+9e4e01dfd3254c KP Singh               2020-03-29  3274  			err = -EINVAL;
+9e4e01dfd3254c KP Singh               2020-03-29  3275  			goto out_put_prog;
+9e4e01dfd3254c KP Singh               2020-03-29  3276  		}
+9e4e01dfd3254c KP Singh               2020-03-29  3277  		break;
+9e4e01dfd3254c KP Singh               2020-03-29  3278  	case BPF_PROG_TYPE_EXT:
+9e4e01dfd3254c KP Singh               2020-03-29  3279  		if (prog->expected_attach_type != 0) {
+9e4e01dfd3254c KP Singh               2020-03-29  3280  			err = -EINVAL;
+9e4e01dfd3254c KP Singh               2020-03-29  3281  			goto out_put_prog;
+9e4e01dfd3254c KP Singh               2020-03-29  3282  		}
+9e4e01dfd3254c KP Singh               2020-03-29  3283  		break;
+9e4e01dfd3254c KP Singh               2020-03-29  3284  	case BPF_PROG_TYPE_LSM:
+9e4e01dfd3254c KP Singh               2020-03-29  3285  		if (prog->expected_attach_type != BPF_LSM_MAC) {
+9e4e01dfd3254c KP Singh               2020-03-29  3286  			err = -EINVAL;
+9e4e01dfd3254c KP Singh               2020-03-29  3287  			goto out_put_prog;
+9e4e01dfd3254c KP Singh               2020-03-29  3288  		}
+9e4e01dfd3254c KP Singh               2020-03-29  3289  		break;
+9e4e01dfd3254c KP Singh               2020-03-29  3290  	default:
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3291  		err = -EINVAL;
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3292  		goto out_put_prog;
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3293  	}
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3294  
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3295  	if (tgt_prog_fd) {
+5f80eb32851d7a Menglong Dong          2024-02-20  3296  		if (!btf_id) {
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3297  			err = -EINVAL;
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3298  			goto out_put_prog;
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3299  		}
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3300  		tgt_prog = bpf_prog_get(tgt_prog_fd);
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3301  		if (IS_ERR(tgt_prog)) {
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3302  			tgt_prog = NULL;
+5f80eb32851d7a Menglong Dong          2024-02-20  3303  			/* tgt_prog_fd is the fd of the kernel module BTF */
+5f80eb32851d7a Menglong Dong          2024-02-20  3304  			attach_btf = btf_get_by_fd(tgt_prog_fd);
+5f80eb32851d7a Menglong Dong          2024-02-20  3305  			if (IS_ERR(attach_btf)) {
+5f80eb32851d7a Menglong Dong          2024-02-20  3306  				attach_btf = NULL;
+5f80eb32851d7a Menglong Dong          2024-02-20  3307  				err = -EINVAL;
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3308  				goto out_put_prog;
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3309  			}
+5f80eb32851d7a Menglong Dong          2024-02-20  3310  			if (!btf_is_kernel(attach_btf)) {
+5f80eb32851d7a Menglong Dong          2024-02-20  3311  				btf_put(attach_btf);
+5f80eb32851d7a Menglong Dong          2024-02-20  3312  				err = -EOPNOTSUPP;
+5f80eb32851d7a Menglong Dong          2024-02-20  3313  				goto out_put_prog;
+5f80eb32851d7a Menglong Dong          2024-02-20  3314  			}
+5f80eb32851d7a Menglong Dong          2024-02-20  3315  		} else if (prog->type == BPF_PROG_TYPE_TRACING &&
+5f80eb32851d7a Menglong Dong          2024-02-20  3316  			   tgt_prog->type == BPF_PROG_TYPE_TRACING) {
+5f80eb32851d7a Menglong Dong          2024-02-20  3317  			prog->aux->attach_tracing_prog = true;
+5f80eb32851d7a Menglong Dong          2024-02-20  3318  		}
+5f80eb32851d7a Menglong Dong          2024-02-20  3319  		key = bpf_trampoline_compute_key(tgt_prog, attach_btf,
+5f80eb32851d7a Menglong Dong          2024-02-20  3320  						 btf_id);
+5f80eb32851d7a Menglong Dong          2024-02-20  3321  	} else if (btf_id) {
+5f80eb32851d7a Menglong Dong          2024-02-20  3322  		attach_btf = bpf_get_btf_vmlinux();
+5f80eb32851d7a Menglong Dong          2024-02-20  3323  		if (IS_ERR(attach_btf)) {
+5f80eb32851d7a Menglong Dong          2024-02-20  3324  			attach_btf = NULL;
+                                                                                ^^^^^^^^^^^^^^^^^^
+This needs to be done after the "err = " assignment on the next line.
+
+5f80eb32851d7a Menglong Dong          2024-02-20 @3325  			err = PTR_ERR(attach_btf);
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Here.
+
+5f80eb32851d7a Menglong Dong          2024-02-20  3326  			goto out_unlock;
+5f80eb32851d7a Menglong Dong          2024-02-20  3327  		}
+5f80eb32851d7a Menglong Dong          2024-02-20  3328  		if (!attach_btf) {
+5f80eb32851d7a Menglong Dong          2024-02-20  3329  			err = -EINVAL;
+5f80eb32851d7a Menglong Dong          2024-02-20  3330  			goto out_unlock;
+
+"link" is not initialized on this goto path so it leads to an
+uninitialized variable warning.
+
+5f80eb32851d7a Menglong Dong          2024-02-20  3331  		}
+5f80eb32851d7a Menglong Dong          2024-02-20  3332  		btf_get(attach_btf);
+5f80eb32851d7a Menglong Dong          2024-02-20  3333  		key = bpf_trampoline_compute_key(NULL, attach_btf, btf_id);
+5f80eb32851d7a Menglong Dong          2024-02-20  3334  	} else {
+5f80eb32851d7a Menglong Dong          2024-02-20  3335  		attach_btf = prog->aux->attach_btf;
+5f80eb32851d7a Menglong Dong          2024-02-20  3336  		/* get the reference of the btf for bpf link */
+5f80eb32851d7a Menglong Dong          2024-02-20  3337  		if (attach_btf)
+5f80eb32851d7a Menglong Dong          2024-02-20  3338  			btf_get(attach_btf);
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3339  	}
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3340  
+70ed506c3bbcfa Andrii Nakryiko        2020-03-02  3341  	link = kzalloc(sizeof(*link), GFP_USER);
+70ed506c3bbcfa Andrii Nakryiko        2020-03-02  3342  	if (!link) {
+70ed506c3bbcfa Andrii Nakryiko        2020-03-02  3343  		err = -ENOMEM;
+70ed506c3bbcfa Andrii Nakryiko        2020-03-02  3344  		goto out_put_prog;
+70ed506c3bbcfa Andrii Nakryiko        2020-03-02  3345  	}
+f7e0beaf39d386 Kui-Feng Lee           2022-05-10  3346  	bpf_link_init(&link->link.link, BPF_LINK_TYPE_TRACING,
+f2e10bff16a0fd Andrii Nakryiko        2020-04-28  3347  		      &bpf_tracing_link_lops, prog);
+f2e10bff16a0fd Andrii Nakryiko        2020-04-28  3348  	link->attach_type = prog->expected_attach_type;
+2fcc82411e74e5 Kui-Feng Lee           2022-05-10  3349  	link->link.cookie = bpf_cookie;
+70ed506c3bbcfa Andrii Nakryiko        2020-03-02  3350  
+
+[ snip ]
+
+3aac1ead5eb6b7 Toke Høiland-Jørgensen 2020-09-29  3474  	prog->aux->dst_trampoline = NULL;
+5f80eb32851d7a Menglong Dong          2024-02-20  3475  	prog->aux->mod = NULL;
+3aac1ead5eb6b7 Toke Høiland-Jørgensen 2020-09-29  3476  	mutex_unlock(&prog->aux->dst_mutex);
+3aac1ead5eb6b7 Toke Høiland-Jørgensen 2020-09-29  3477  
+a3b80e1078943d Andrii Nakryiko        2020-04-28  3478  	return bpf_link_settle(&link_primer);
+3aac1ead5eb6b7 Toke Høiland-Jørgensen 2020-09-29  3479  out_unlock:
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3480  	if (tr && tr != prog->aux->dst_trampoline)
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3481  		bpf_trampoline_put(tr);
+5f80eb32851d7a Menglong Dong          2024-02-20  3482  	if (mod && mod != prog->aux->mod)
+5f80eb32851d7a Menglong Dong          2024-02-20  3483  		module_put(mod);
+3aac1ead5eb6b7 Toke Høiland-Jørgensen 2020-09-29  3484  	mutex_unlock(&prog->aux->dst_mutex);
+3aac1ead5eb6b7 Toke Høiland-Jørgensen 2020-09-29 @3485  	kfree(link);
+                                                                      ^^^^
+
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3486  out_put_prog:
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3487  	if (tgt_prog_fd && tgt_prog)
+4a1e7c0c63e02d Toke Høiland-Jørgensen 2020-09-29  3488  		bpf_prog_put(tgt_prog);
+5f80eb32851d7a Menglong Dong          2024-02-20  3489  	btf_put(attach_btf);
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3490  	return err;
+fec56f5890d93f Alexei Starovoitov     2019-11-14  3491  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
 
