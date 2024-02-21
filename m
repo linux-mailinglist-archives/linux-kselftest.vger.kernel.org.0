@@ -1,95 +1,142 @@
-Return-Path: <linux-kselftest+bounces-5242-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5239-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFBA585E9B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 22:12:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F73585E9A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 22:12:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BD2E1C23BFF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 21:12:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19E941C21E50
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 21:12:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961EC1292D1;
-	Wed, 21 Feb 2024 21:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C9EB1272A1;
+	Wed, 21 Feb 2024 21:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJV8EzuQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ItdJFygh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62472128826;
-	Wed, 21 Feb 2024 21:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506ED126F05
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 21:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708549928; cv=none; b=WjnWPiVAkEBovAAK0p0JlQDUEQOg1UdPnQHw9yyj5zev+k4sxyhhLTpS8jjl2xk5p00UX3n6uYYui94hZ5WvzijPyzQNCt0rqPMbkOw8Yl0nutc7DFK4PMvtlxC2CG6MssHaCSeRPeLJoQG1uDDGx6WlGOzlLYpibhQH87xZmsg=
+	t=1708549924; cv=none; b=UNLZDaDd8n3lTRB1nMC1/G9ZznzH+v/HYwpA5W29+HUKAor9Nx0thB9xJyH9bWWESvyVEHZz5OH4ub/EA5N6E/zszFi7mZS8C8HTPgbHQdHLb2Is3NkZGXcG/oVOj5EDLJ26VMVqB2WpQsS0KLIQ0Z31xqBNvflcobWu4K5P6VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708549928; c=relaxed/simple;
-	bh=9BlBPgb/1NguIw/UJ8/Mo4WKvkfkqSFsJN+5E6ZcO44=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nSeEcR13INJqVdEMx92oUbfc656od8WUsQl+jKDEYJvl+Y5D8xdwrMrQESfaWSN3xpb2rEDDGweRoQIRrt2B3MrYb07xH4JeWC3Cq77B0Y03iXyoHNwhvYu+bQza356t9Ltwl/L8D+34u8+8szli/I8nFXWUZoAgW47N1QplaNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJV8EzuQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D0CC43390;
-	Wed, 21 Feb 2024 21:12:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708549927;
-	bh=9BlBPgb/1NguIw/UJ8/Mo4WKvkfkqSFsJN+5E6ZcO44=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BJV8EzuQkcwQ0vqZ++PLUCIAcDW1cjYIPy0NBUhk330uJw3WU1BxY8SiPSfs0dhEM
-	 g6nW+RnYhKk3v1H1xkH+IU5xtq4+PUdks3mSUFKh0xLpDZPg6rsJIZiaoyBIc8CwIX
-	 8X4JKWbE6ZP8Qm7lfLU+/FE3A/iG8u+AGQbHcw7xQhw4Grvi34wqHWxQeWiWkTbsX1
-	 ct+uKKIe7wk9b+y5Jzt8rmVJOCWT/63YqZC3HgLO8Oqt7eXZIotEStmstZvRyPOizC
-	 26a5KWqsDj1YYRnZnG7ekVus4cjxGkDzxXw01570jMgHve4bCBFqNSAoEc52bS4fNt
-	 WAd6fCsvfJJcw==
-From: SeongJae Park <sj@kernel.org>
-To: akpm@linux-foundation.org
-Cc: vincenzo.mezzela@gmail.com,
-	javier.carrasco.cruz@gmail.com,
-	bernd.edlinger@hotmail.de,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	SeongJae Park <sj@kernel.org>
-Subject: [PATCH 2/2] selftests: damon: add access_memory to .gitignore
-Date: Wed, 21 Feb 2024 13:11:48 -0800
-Message-Id: <20240221211148.46522-3-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240221211148.46522-1-sj@kernel.org>
-References: <20240221211148.46522-1-sj@kernel.org>
+	s=arc-20240116; t=1708549924; c=relaxed/simple;
+	bh=eCAZYluSAU2RBM3yi8viKMCds9GjEA+ZqgAym0tc/HU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a7cn5vj3vxVU8/c3u93E5FAP+HdR6faQ+G8iNNWe9cWAk1sVkg5NcXK5q0zRcwwMPkbfaSGofsx2pp5yBNf9XxcNdzZ7rdXnIzsB76pU133f0olvd0dImIhCPpdpk8W/qyRUMulmdjW601nWuAe36G9OTXtrsQR2YigYlzWYvfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ItdJFygh; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7c3d923f7cbso69827639f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 13:12:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1708549921; x=1709154721; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jmnwSrST3rdrwZH7tVh8fU2y439F+I4SPNnc2rPJRm4=;
+        b=ItdJFygh+FybiLD/BTfbC2qLS6bc8gnbUww0rf5LlXeVXHCIZYu4JznYcBpUr2BO9s
+         BA435dNt2I6i2nkbg5BtB0NqSCMevpFA2C25Nu133+CzuvltRTmAGN2lvnp7BPR3viBm
+         O3iquGYhKF3KUngR7XUbo/V7VzBTGaIJqKaHY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708549921; x=1709154721;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jmnwSrST3rdrwZH7tVh8fU2y439F+I4SPNnc2rPJRm4=;
+        b=e9BOuN4OK/K5plmvvshny3l5R8/Du62gtaNJtRcG/9iBJc3g4iNM5ju4zjsVWOQODb
+         prjVtTZvIQ98qeK5/HRAp29GAQthYGayhJeVkqb0GkP+DGLv3ixMADMLwVFw6E3s0FuN
+         Au4WVENT8YKKhi0MDRmVpgpHh7Q96rhQYlD35LWKWpP7QeeMBr/J/A5yGtZCmOHBlvj4
+         PoC67Y3xYQ5BAz9cbCoGiYBYf1p8PdRt9G5Wf+iawICbSSUwSSa9kS2KemzlFnIlYNsS
+         A8ygjxLP3h33GNIZjmqpnlc3uQy+ZTeD9o3utdhZf95KggXcxO979RjtmcIU5SzkN6dU
+         MjIw==
+X-Forwarded-Encrypted: i=1; AJvYcCW+gQWmrn0DfFog7ARvsUvNAMthQy3dH/RKhmP38MgMsJUX6iHSyVUSJEo3ZJu0CCcYNJW2VH4wt9d4l4A5k6oUz2CGA4Z1t76kGJNV+A5Y
+X-Gm-Message-State: AOJu0YyfW2HzUh6uCecJqE719pXPWEJLS99xyH0710tvaadolAbWy1dX
+	rY4kF0nGnPcxnVXLZJmtoyrvuqBEiX4uCbq0+Q9Fv/OuCAHe6uzpxlGV6eh/nU4=
+X-Google-Smtp-Source: AGHT+IEKAg+nZ32ayi2M4M5a60R13l5jKMcKbJmjVQV6UGaoe7QNiELpd3CjkGf9tzTBuiDTkMd6Kg==
+X-Received: by 2002:a05:6602:2545:b0:7c4:c985:145a with SMTP id cg5-20020a056602254500b007c4c985145amr478044iob.2.1708549921301;
+        Wed, 21 Feb 2024 13:12:01 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ay23-20020a056638411700b0047437765adcsm1200095jab.81.2024.02.21.13.12.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Feb 2024 13:12:00 -0800 (PST)
+Message-ID: <d984977f-b7ad-44b9-82dd-27aeb2fad592@linuxfoundation.org>
+Date: Wed, 21 Feb 2024 14:12:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] selftests: lib.mk: Do not process TEST_GEN_MODS_DIR
+Content-Language: en-US
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: kernel test robot <lkp@intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240221122624.30549-1-mpdesouza@suse.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240221122624.30549-1-mpdesouza@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+On 2/21/24 05:26, Marcos Paulo de Souza wrote:
+> On Tue, 20 Feb 2024 17:19:54 -0700 Shuah Khan <skhan@linuxfoundation.org> wrote:
+> 
+>> On 2/19/24 06:53, Marcos Paulo de Souza wrote:
+>>> On Mon, 19 Feb 2024 09:15:15 -0300 Marcos Paulo de Souza <mpdesouza@suse.com> wrote:
+>>>
+>>>> On Mon, 19 Feb 2024 14:35:16 +0800 kernel test robot <lkp@intel.com> wrote:
+>>>>
+>>>>> Hi Marcos,
+>>>>>
+>>>>> kernel test robot noticed the following build errors:
+>>>>>
+>>>>> [auto build test ERROR on 345e8abe4c355bc24bab3f4a5634122e55be8665]
+>>>>>
+>>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Paulo-de-Souza/selftests-lib-mk-Do-not-process-TEST_GEN_MODS_DIR/20240216-021601
+>>>>> base:   345e8abe4c355bc24bab3f4a5634122e55be8665
+>>>>> patch link:    https://lore.kernel.org/r/20240215-lp-selftests-fixes-v1-1-89f4a6f5cddc%40suse.com
+>>>>> patch subject: [PATCH 1/3] selftests: lib.mk: Do not process TEST_GEN_MODS_DIR
+>>>>> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+>>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240219/202402191417.XULH88Ct-lkp@intel.com/reproduce)
+>>>>>
+>>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>>>> the same patch/commit), kindly add following tags
+>>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202402191417.XULH88Ct-lkp@intel.com/
+>>>>>
+>>>>> All errors (new ones prefixed by >>):
+>>>>>
+>>>>>>> make[3]: *** /lib/modules/5.9.0-2-amd64/build: No such file or directory.  Stop.
+>>>>
+>>>> We should ask the kernel test robot machine owners to install kernel-devel
+>>>> package in order to have this fixed.
+>>>
+>>> Or maybe ask them to change the reproducer to specify KDIR to the git tree,
+>>> instead of /lib/modules/?
+>>>
+>>
+>> This would be a regression to automated test rings. Do you have any other
+>> solutions?
+> 
+> I would say that we could skip the these tests if kernel-devel package is not
+> installed. Would it be acceptable? At least we would avoid such issues like this
+> in the future as well.
+> 
 
-This binary is missing in the .gitignore and stays as an untracked file.
+We have to check and skip build. Something we could do in the livepatch
+Makefile. Can you send patch for this - I will oull this in for next
+so we don't break test rings.
 
-Link: https://lore.kernel.org/r/20240214-damon_selftest_gitignore-v1-1-f517d0f9f783@gmail.com
-Reported-by: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Closes: https://lore.kernel.org/all/AS8P193MB1285C963658008F1B2702AF7E4792@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM/
-Reviewed-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Singed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/damon/.gitignore b/tools/testing/selftests/damon/.gitignore
-index d861701f0327..e65ef9d9cedc 100644
---- a/tools/testing/selftests/damon/.gitignore
-+++ b/tools/testing/selftests/damon/.gitignore
-@@ -2,3 +2,4 @@
- huge_count_read_write
- debugfs_target_ids_read_before_terminate_race
- debugfs_target_ids_pid_leak
-+access_memory
--- 
-2.39.2
-
+thanks,
+-- Shuah
 
