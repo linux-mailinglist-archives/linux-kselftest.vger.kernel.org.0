@@ -1,142 +1,225 @@
-Return-Path: <linux-kselftest+bounces-5148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5D2985D3A7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 10:32:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB28585D3D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 10:40:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 569D31F20EEC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 09:32:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE02C1C2134A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 09:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CAB944C8B;
-	Wed, 21 Feb 2024 09:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB06F3D3A7;
+	Wed, 21 Feb 2024 09:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZtDnRb1H"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="eS52OM6o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17E047A63
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 09:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398263D0B9
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 09:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708507724; cv=none; b=jTy7reQphdzzNU2nXlVfY1WuqKC/IOxz2XwvaSX5m2MoThM95b/u3HxsBw1IHgovtnRtibS7K7T31C+zQT9Ny66QbV/RwHCwgst8vQgupJ/X0MJrCRdwG3hGDaSGng3Ueqxj39+kMpPmbZ04m4iCYGH8CToi/8jZFZjm9AykFtA=
+	t=1708508421; cv=none; b=Dsew0yAgz/ZTL/CFtXROHajXwSIW/dInPPiXvrnETzTDS21u6JfS/vN4irdYstgRFjhMgp03vcCXOOdrXXghCEn70G3XEztNlC6LRoZ85K6gS3+cR98eZdVtFqM1YWDwi87ik8X5wiu1IV7uaUxk04yxa+2zXakhkLtOqOSDr+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708507724; c=relaxed/simple;
-	bh=MALY8PY87om1B5rM9PQyZB962vp0AzyA5B9YGRQAQS4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=J/h+Ycg3VP+tYL3JtGuob9jXioQK6FsVUuuGKnRLuEWiP7oIwqMCFRsW2f/ncrqILXT12etve5xqIxUwcDnpEz1cFUpM4jhNb38OOp1Syt+jOvHCyIZHv+9PZNuE5bzdcjkFbPJ6vCYNDLqoCVE+H2j1Ho8LRFoVUvh6sYObJ5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZtDnRb1H; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b26eef6cso9488911276.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 01:28:42 -0800 (PST)
+	s=arc-20240116; t=1708508421; c=relaxed/simple;
+	bh=4tBdjaqVHlOJtK4rLYTUaACWjBhsusTGGV+egjrVDaE=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=jIqc/lDrA7EDODRNEk1uMr81Ah3LWYyV5YM3DINQ+l38FN/gbQEgL9+FRN0Jj5y9GiMr72b7HKXN3aG0kvFKso4Bsu3b1WcJ8xwU+vN1WUgDTNNYIYbxV+qV9OkUxRUV/1O+yqHIFbTDVEQz/ZYKp4eEic1FmllfY4uHDF/uXp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=eS52OM6o; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3c15b7b367aso49791b6e.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 01:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708507722; x=1709112522; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtSX1a4twDclpP0XCHq3xRlg28EKI7v3CFBboD2ALTI=;
-        b=ZtDnRb1HzJUvAH/0oR/bwjouHiGv5Hx12Z2jxcyrZDvjJX98lm29rJnvTIR3l4ObQM
-         Ov3OCZO5XOKws6sxRzWJDcWAvUjveniIONlT2qOQU27aN9W5ygjKa9/Dbdy5zxc1xQrN
-         IxNG2r44hsCgnlpuc8kXITwp6cnQeAetTruqquLTRkOSJPERNBjayKovt+WYmuZfmu/N
-         XDYPli2ynlc65GjfIyiP0X/AUvLqv3K3gKJiGwul6r8aRt8FUtd322nyYEHLGyQ2O2FR
-         XoBITuavIT1fSwdX+FNatnoLoYVjFKExpvElpj+OXcfSasXJJVlEAbboVA+Ys4hQDguq
-         qTtA==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708508419; x=1709113219; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=dS5frKrU0LBhFT99f3WNfR88VVqbVKxEwIqU6sae9xA=;
+        b=eS52OM6oUSqJxPQWKGzSp8iQ2i4tBUXsuD/GtHkcbnbq/KoX1fK12iKd7g89A6bZG2
+         FQ/onFLr4kzS9SqHHBtd+3SJtHUJL3wVOOIhZZt5IOCoYllu4nvu8X82a7hYcZQtimcU
+         qg6uAjDWGkmiQ7tLK8RCTexT0e+v5UjZ+FlnADseNCEO6GdXly/ZaZTpzCB2se4XEzOM
+         66YDWDTSzd4bv8smN873dPkarLNaYYWMse/XjGGxYCSXgkndmUmc9jNdfAOo1PPdpJak
+         zaPkOPJQjnpUEURXrAU19QaFxdhn/MMeBzyKKdLZ9c/K0wqolgNtOXVdCU2H49SPuYnN
+         pUOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708507722; x=1709112522;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtSX1a4twDclpP0XCHq3xRlg28EKI7v3CFBboD2ALTI=;
-        b=Ltj/0fxZWE2VWEoOidXAMwwaZpxmoInWMGZsUVvmmtAzo3OVAI6RgkK0lUIdE1KJ2Q
-         dc2PG4NHd94UVEed0ifI0KxLaKnljelwi2CotEGcL1diUwoFQZ5RbIlKrslngzl3opho
-         7n3BXQXfhrbvYUmTBXqUafbPD+t5Xg75MWj83lFyYf6rZMU1eUXmoSZ61FCHxhRRZ4ye
-         hvFiBtdKiCeRRkXlc4+gPf4LrFZxRVc1O9GSfMklTUfnboXNlJizMGIx8X3F05nkJyoP
-         J1mrpAdZAAbvJAAlfq+aDVmUSb39F/gcW7Vavv66yqbOwHyYJT3/bRh36HvR4pC9Ctxn
-         Afcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmXwV3YC4hgqAg0cDpEjJPkbrEZs9KosQZOOm7AiWMW17Ou663WYf5jZndl9AzoMX2VWwvhSD2IpfYWDSH0E83UwGUrTaccPaNe0ajC2Kf
-X-Gm-Message-State: AOJu0YwSmeNvXFrQE+IKDua22Nj4HUr28upr5MorJdxTboyUB/qbY1ad
-	z02jchvJ/+srpcRnuiR/mjM3g0XKuAeeAT0zxnLw/sv6V6OOl60WKdQ26U1ZwJhTQ+gUlDLrgk0
-	RvzeDd0TnUA==
-X-Google-Smtp-Source: AGHT+IE+u4BHsnTY4zBV9uwlLnSALfH2VACViqUl+6ZdsI4Ll1wRpv0qUeWfBww+/YNGvG/0sUR+LBCAIAUp6Q==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:4ce:b0:dc7:865b:22c6 with SMTP
- id v14-20020a05690204ce00b00dc7865b22c6mr618682ybs.8.1708507721736; Wed, 21
- Feb 2024 01:28:41 -0800 (PST)
-Date: Wed, 21 Feb 2024 17:27:22 +0800
-In-Reply-To: <20240221092728.1281499-1-davidgow@google.com>
+        d=1e100.net; s=20230601; t=1708508419; x=1709113219;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dS5frKrU0LBhFT99f3WNfR88VVqbVKxEwIqU6sae9xA=;
+        b=GKst+5CyFFOaJgMMWxulK6qJWbyBfV4Hz153Rfg0kaRENASspKQPj6y1pYyTxicdh0
+         hkDCmBw2aBIY62JJYZIJ9w9QboV+aSxQR6V0oHonQManvW80EeRkGzsMuskSXxsd+YVA
+         stsatie6hCIkpDf9duqXZDIH2RvimJOPzpSq/NcTRqNiylUMRSysOscnk5J51oWMvR1Z
+         mSLJdMlFRlem8+pi1cakvEFm6IKzOEtDP1Hmk1Cy6zF4qKPtqPNpM1/WvJbjviP7EIuz
+         +HaqAn6C3lcpVELosu8pn3vmird76OOYuQ1rU+hwKTVZqgs9nXudiyTP3ccKRJ+2DNjy
+         KRWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMFbkidfda9wRBymGA9s+aWwHdpL7/0Z6s2QZWnUQ/wkxCg076+KC5mIgmT7IWm7ug4+2IDrx64Nw6HxUI1dEKgT0K3wwYOqsMDUmp1LzR
+X-Gm-Message-State: AOJu0YzNX2hvbuBbRuAhl6jbTBmEoImqwUiEZFk05BaOTTZrUd2Qx27Y
+	4rDnnqyGHRdDb6z3EBOb7m9F1cEsqCtKmefAZaO0+Zrz9XGpZPoB1kT7IeCZs+c=
+X-Google-Smtp-Source: AGHT+IHLpWvCUi8mfbYjKwPpMv7+Lvo4sicmmi7X4MPXYDB5y/famIb5BcAZsffsGhTB0NQt1a1Jjg==
+X-Received: by 2002:a05:6808:1146:b0:3c1:377a:48f8 with SMTP id u6-20020a056808114600b003c1377a48f8mr19526954oiu.2.1708508418653;
+        Wed, 21 Feb 2024 01:40:18 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 8-20020a630c48000000b005dc36761ad1sm8120009pgm.33.2024.02.21.01.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 01:40:18 -0800 (PST)
+Message-ID: <65d5c502.630a0220.4e520.8b03@mx.google.com>
+Date: Wed, 21 Feb 2024 01:40:18 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240221092728.1281499-1-davidgow@google.com>
-X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221092728.1281499-10-davidgow@google.com>
-Subject: [PATCH 9/9] kunit: Annotate _MSG assertion variants with gnu printf specifiers
-From: David Gow <davidgow@google.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Rae Moar <rmoar@google.com>, 
-	Matthew Auld <matthew.auld@intel.com>, 
-	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Kees Cook <keescook@chromium.org>, 
-	"=?UTF-8?q?Ma=C3=ADra=20Canal?=" <mcanal@igalia.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Willem de Bruijn <willemb@google.com>, 
-	Florian Westphal <fw@strlen.de>, Cassio Neri <cassio.neri@gmail.com>, 
-	Javier Martinez Canillas <javierm@redhat.com>, Arthur Grillo <arthur.grillo@usp.br>
-Cc: David Gow <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Daniel Latypov <dlatypov@google.com>, Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>, 
-	Maxime Ripard <mripard@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	intel-xe@lists.freedesktop.org, linux-rtc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-hardening@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v6.8-rc1-48-g6f1a214d446b2
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-cpufreq: 5 runs,
+ 3 regressions (v6.8-rc1-48-g6f1a214d446b2)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-KUnit's assertion macros have variants which accept a printf format
-string, to allow tests to specify a more detailed message on failure.
-These (and the related KUNIT_FAIL() macro) ultimately wrap the
-__kunit_do_failed_assertion() function, which accepted a printf format
-specifier, but did not have the __printf attribute, so gcc couldn't warn
-on incorrect agruments.
+kselftest/next kselftest-cpufreq: 5 runs, 3 regressions (v6.8-rc1-48-g6f1a2=
+14d446b2)
 
-It turns out there were quite a few tests with such incorrect arguments.
+Regressions Summary
+-------------------
 
-Add the __printf() specifier now that we've fixed these errors, to
-prevent them from recurring.
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: David Gow <davidgow@google.com>
----
- include/kunit/test.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index fcb4a4940ace..61637ef32302 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -579,12 +579,12 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
- 
- void __noreturn __kunit_abort(struct kunit *test);
- 
--void __kunit_do_failed_assertion(struct kunit *test,
--			       const struct kunit_loc *loc,
--			       enum kunit_assert_type type,
--			       const struct kunit_assert *assert,
--			       assert_format_t assert_format,
--			       const char *fmt, ...);
-+void __printf(6, 7) __kunit_do_failed_assertion(struct kunit *test,
-+						const struct kunit_loc *loc,
-+						enum kunit_assert_type type,
-+						const struct kunit_assert *assert,
-+						assert_format_t assert_format,
-+						const char *fmt, ...);
- 
- #define _KUNIT_FAILED(test, assert_type, assert_class, assert_format, INITIALIZER, fmt, ...) do { \
- 	static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;	       \
--- 
-2.44.0.rc0.258.g7320e95886-goog
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
+
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
+-rc1-48-g6f1a214d446b2/plan/kselftest-cpufreq/
+
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.8-rc1-48-g6f1a214d446b2
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      6f1a214d446b2f2f9c8c4b96755a8f0316ba4436 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65d5b99b494bf67f81637012
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+meson-gxl-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+meson-gxl-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/65d5b99b494b=
+f67f81637013
+        failing since 488 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1-1-gde3ee3f63400a) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65d5bd7484e582dd51637038
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-a64-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-a64-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/65d5bd7484e5=
+82dd51637039
+        failing since 480 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1-8-g94fea664ae4ee) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65d5bdb0450a5e8aca63702c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-h5-libretech-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-h5-libretech-all-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/65d5bdb0450a=
+5e8aca63702d
+        failing since 475 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1-13-g67c0b2b52916) =
+
+ =20
 
