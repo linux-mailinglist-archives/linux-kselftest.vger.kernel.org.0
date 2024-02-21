@@ -1,93 +1,89 @@
-Return-Path: <linux-kselftest+bounces-5121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2768A85CE4E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 03:49:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9A5185CE59
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 03:52:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2F5A1F22A03
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 02:49:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 062F91C21986
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 02:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D19C282EE;
-	Wed, 21 Feb 2024 02:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73271282F7;
+	Wed, 21 Feb 2024 02:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kbOUNgYO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="de2Uzn9F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022DE46A4;
-	Wed, 21 Feb 2024 02:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53692F36;
+	Wed, 21 Feb 2024 02:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708483791; cv=none; b=Gf3AQ8qDu/tDtF8jp4HDlDeWmnzdTFU5tv5+/ixdxajL+Gi0oFpOR+KthSUq+yBo2bt/qmM9JTSoTawK9yF+MvK4X0QO8AA+9XY1nZgrsG7uCSZcyBhZaRNRNibhkDLaI8o4BsfF8qU+ef+wXKpp6rHQZF9lyheSVmlYmOGCwiA=
+	t=1708483922; cv=none; b=nEGSBE/cbRHCXporb0GKMQR1mUF8MUBt6y2m21Y7OZIGvFv0pFleMjJBx57FSBAQwBnREFZp0es7EJ7mD4zYXLy7hpof19Li98RviiJRtXqkNBGwYRqXQaaKsSbzdYYi9xh6I9QhxlRPLVcLeTQxaiDXbbe+2TsbHYXGscq2J80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708483791; c=relaxed/simple;
-	bh=0YzZT7AtbEwGuMMGVGesQNVHt+oEog5zyqr5o4Zt9Ho=;
+	s=arc-20240116; t=1708483922; c=relaxed/simple;
+	bh=M9LyLUnYSF7X179XZ54TkHDA6KFvwvPJ7sm2M1C37Dg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BBIlea5RbTFbYYLs9zXWTrBFl4IXk1DBJChp1CjXG2/RzJ2NUSA+pP7LAWRwLx6jSQaWKjVR+eCVFvPNw5vpJKSWg++5pmrAQGVVdkcGqEZUUWrUBQmLkw5nnYb2tKE5BuD6QKOKA3ogK3BFY/7tl72XSEy+MfYkt65FRROHL1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kbOUNgYO; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ci5Hg0PYGLSXJZCRqK3+LIH2Nd9z2GreJOawiD5XEWLmrv8S84UDcSpN5Cjafp8nTX7aQ0svs4++IGNemE8yTqb7AI/rS4md5XNQUJqIBCEtgyCLY05w9Z3nn9i1zPOfNToL0whiLMq9YyKiHcwIe5BRDaVckTV9t0griv2Gcu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=de2Uzn9F; arc=none smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d932f6ccfaso50963765ad.1;
-        Tue, 20 Feb 2024 18:49:49 -0800 (PST)
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3c02b993a5aso3742293b6e.1;
+        Tue, 20 Feb 2024 18:52:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708483789; x=1709088589; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1708483920; x=1709088720; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9pAyzYBVOxuKmn5DITDD4392qCfsQwduisHaKiAl1r0=;
-        b=kbOUNgYO4FYVFsIlbbIwiCACHrAKvq67lO7iZMFehwKzmw063yVUk55XH/tbIrih1Y
-         sDWqMvGMzFj1j90DBcTPWFI1oibrwBrFsW+vq2unHn+lX6SRh9tbn1DGvn0lD0P++73m
-         wZeszZsy41PKqCyEvDJTDGGfvCRJE6bUE0+IL7eybs/WO4EJNP4S0dZyr0tLvuD/z1u/
-         m5lvmKwzgnlATE58nKLgXqbmdRjOQ8T4P77F3ujyUL5tGRAi1ElfVWzM10NtrpeJH2mn
-         4H6O4Q2lPgwKHvLrL0vopNpZjwNDc3PkVuSIIEXUQ8r40eLCTZCpc1slA373LzQuHABS
-         LMEA==
+        bh=5cCcoJFfJlagmSzWB96IS3kVZKplb56dGjkjAGigbOY=;
+        b=de2Uzn9FHdeqzhpXGQIx0OrlAcm0/BkFqSN2IEuapIDmov3HtJwFEmmKBGtU+PF/AH
+         TC19lYLSMn90B2kzM1mz23Nh85qrcvo4RvxQnSZRhpXzWYj4f1/0iKKkCPprGDhRrMsc
+         8a0S4pc2irWdDs9LMGjFlaeOwbfoeZjoP72e7ZMP3gxp6IUNPyh4xben0CsRHQkfQ1fE
+         Lc4nY61lpDojgzlpZuogpWLpN9JeExNB9uJa4JWH6kxW/x1bPwyZB5pBp5s9aPqfKnHM
+         dmO4E3JL7w1HPg1n3nVqrV8bywMldeHyx5Npcrore3yA4EXiWArmGx0EzYTNmIphXL27
+         PUjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708483789; x=1709088589;
+        d=1e100.net; s=20230601; t=1708483920; x=1709088720;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9pAyzYBVOxuKmn5DITDD4392qCfsQwduisHaKiAl1r0=;
-        b=ehFmfz7uG5roagIClQ1iZwj0Vk69+I0BkTpT/aY+yantu+flqXpL5uxoM4tQJoIlpv
-         nE2uLC95M+e6wyRQ192WUfrTK4lZEFkpBMYAeUzXxb2DF0YVCQZrZTkcf1GkgRWqK2FH
-         rXK1ENDsNI/QcDaOGahx+XmmzGomFNbtjzNa6ojP/iU1ZVhdweM9VpAdAGSbPGwrNoC6
-         IGRAulL7xYWeXR4Tjgfaf/QNacoloajHT3V/M0M3FVreWAEa8zrY88kVrTwhPJAjYanG
-         zSF+fBaVB2XBAzTcybUOMmrmHlxK+ZU2qbS4JUIhHAOpXuoB5f9iaP6U+1jZv508TeYV
-         9XOA==
-X-Forwarded-Encrypted: i=1; AJvYcCXqJ5UYVeFqC3hi8i1yAmSThuP5DlB+RnhR2nfL6dWAVvzoD7Wqvzkn+t9vBMOoc9uRzzrphlxe86EY81U7cDXLzuQvYMg6M6ofsSq2l9cUKBis1OaddOt4ez5OZcxR1DnUVYP20l2T4D35ipgSwKDemuyCivl4vArMpiZK2zyTo3INegKc7CVsA8B7vHs7om2aatfPDY7pSjtEknWH2wzr/crMH+7gFoD3uh5YGeMs5O/cseGNU7yrlsE=
-X-Gm-Message-State: AOJu0Yzl1PLxuqR+EvmELKqZnBDg+jMK85/uagNheWLznWxx203QuO+V
-	k544I/HUNhtxAjCQyEIFBpCH6lwvxf9Al3zqzbjp3uNs3nW5WGRw
-X-Google-Smtp-Source: AGHT+IGpD6WpkCgaR7lYoHcPIeliL0+6EyMXy2eFgCQmG/Odbul0rh0nTvlpvUfl9z5wmC4riV6UVw==
-X-Received: by 2002:a17:902:6847:b0:1db:9fef:b996 with SMTP id f7-20020a170902684700b001db9fefb996mr13328524pln.33.1708483789202;
-        Tue, 20 Feb 2024 18:49:49 -0800 (PST)
+        bh=5cCcoJFfJlagmSzWB96IS3kVZKplb56dGjkjAGigbOY=;
+        b=r69QsT/9Qo4VHL95zFpd5WJlf2Ca7b0gLwMrGloXYH++esvrYW/Acke7kNz/Ch7upl
+         OFIAecf13IguC0CnfNXtc/0Nv9oLVCaw2sh56aPg0qHarnyALRfKtYo9oYf+R5BXXX1Q
+         qU0Zg9sacoQUG1Hl9fSPOGPZMzmI2ZImLs+cxBGCOAGxTF6oCQ/AASVnISXLZKg5Jq6O
+         aLcRzMomYHPHFMIgPimMFAUj9He6FGUjbtD2frtX4MTxQVvhie2nsAMsQTIBXCRfSBfc
+         NIKXj4No41tytbuPUL1O3Jx30RxcE6fvitpq2KD776rIAmqnZ8yywD/7cr1Pwt6WOz8I
+         76Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCUhHRLL2Hz5zkOrfVHgLZ3+uY97Os5iOWnY197HdE8scCu3vwzSo3hgj21bUkTpi+D+LJb5dPGKyNN5RZy/GLElyItJ5cGG6RH1fC3q12/vFK2FC4eSoq7Hy6ztKNoaaDqZz27vQEfum6PYmuCrq6NUNK2tnPwXJHjL8CjMG/fjcoG51YcQFywLXOkCtfM9LSEzbmCrV7S+zOqKNimsf1erfzl3VBRWDAgoGJg2fBwrgycb+CJl5lhnzyQ=
+X-Gm-Message-State: AOJu0YzJfch1GoUSniZ6OPHUziANPwfptn1Qm2cF6bxUcenSBSJ+b+tT
+	cT82yT4mQu4vnga6Ob80/stXHyBCoETA/WX6l0UV/THoCViS0Tio
+X-Google-Smtp-Source: AGHT+IE7orEkJIiIoLoo9uUilOiSIrkDIWd9YJNRBvQsEKS+qFHHzkz+CxBRMkhvQvzm4V/UGCkKOA==
+X-Received: by 2002:a05:6808:4498:b0:3c1:4526:7533 with SMTP id eq24-20020a056808449800b003c145267533mr17061192oib.14.1708483919989;
+        Tue, 20 Feb 2024 18:51:59 -0800 (PST)
 Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::4:b11c])
-        by smtp.gmail.com with ESMTPSA id kq13-20020a170903284d00b001db5c8202a4sm7005042plb.59.2024.02.20.18.49.46
+        by smtp.gmail.com with ESMTPSA id r11-20020a056a00216b00b006e4766d31bcsm2786546pff.184.2024.02.20.18.51.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 18:49:48 -0800 (PST)
-Date: Tue, 20 Feb 2024 18:49:44 -0800
+        Tue, 20 Feb 2024 18:51:59 -0800 (PST)
+Date: Tue, 20 Feb 2024 18:51:56 -0800
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH RFC bpf-next v2 02/10] bpf/helpers: introduce sleepable
- timers
-Message-ID: <rgjy2bzsugnm7eyye25sx4b4os3lenfpzncdy5x4jog7qqkycb@6z4ybeniikvc>
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next v2 03/10] bpf/verifier: allow more maps in
+ sleepable bpf programs
+Message-ID: <ezfl6x3wxdnjhv7e5hyatneprtqvapbu7xckdejxmcdb6qejaj@5wn67k7rmtxz>
 References: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
- <20240214-hid-bpf-sleepable-v2-2-5756b054724d@kernel.org>
- <a72147f5-2b7d-4267-9881-6a645c575838@linux.dev>
- <r3yhu4h23tdg2dqj7eq3lhevsigvvb3qkge3icxmaqpgkayvoi@gxfxstkr2pxl>
- <87eddccx1q.fsf@toke.dk>
- <fckhc367l6eha2gpftixhzjdsmo2jts5p6ir6ukx2q5xndsbhf@btzjwvuamcv4>
+ <20240214-hid-bpf-sleepable-v2-3-5756b054724d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,31 +92,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fckhc367l6eha2gpftixhzjdsmo2jts5p6ir6ukx2q5xndsbhf@btzjwvuamcv4>
+In-Reply-To: <20240214-hid-bpf-sleepable-v2-3-5756b054724d@kernel.org>
 
-On Fri, Feb 16, 2024 at 03:58:20PM +0100, Benjamin Tissoires wrote:
+On Wed, Feb 14, 2024 at 06:18:32PM +0100, Benjamin Tissoires wrote:
+> These 2 maps types are required for HID-BPF when a user wants to do
+> IO with a device from a sleepable tracing point.
 > 
-> So (and this also answers your second email today) I'm thinking at:
-> - have multiple flags to control the timer (with dedicated timer_cb
->   kernel functions):
->   - BPF_F_TIMER_HRTIMER (default)
->   - BPF_F_TIMER_WORKER (no timer, just workqueue)
+> Allowing BPF_MAP_TYPE_QUEUE (and therefore BPF_MAP_TYPE_STACK) allows
+> for a BPF program to prepare from an IRQ the list of HID commands to send
+> back to the device and then these commands can be retrieved from the
+> sleepable trace point.
+> 
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> 
+> ---
+> 
+> changes in v2:
+> - dropped BPF_MAP_TYPE_PROG_ARRAY from the list
+> ---
+>  kernel/bpf/verifier.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 67da3f7bddb5..cb1266566b69 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -18094,6 +18094,8 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+>  		case BPF_MAP_TYPE_SK_STORAGE:
+>  		case BPF_MAP_TYPE_TASK_STORAGE:
+>  		case BPF_MAP_TYPE_CGRP_STORAGE:
+> +		case BPF_MAP_TYPE_QUEUE:
+> +		case BPF_MAP_TYPE_STACK:
+>  			break;
 
-These two make sense, but
-
->   - BPF_F_TIMER_DELAYED_WORKER (hrtimer + workqueue, or actual
->     delayed_work, but that's re-implementing stuffs)
-
-This one doesn't.
-Unlike hrtimer the workqueue is non deterministic.
-Requesting a callback after a specific delay only to be randomized
-by the workqueue is a confusing UX to give to bpf progs.
-If bpf author really want to do something like that they can implement
-such anti-feature manually with two bpf_timers.
-
-Later we'll add a selector for WQ. At that time we'd need to decide
-whether to use a dedicated kthread or any of system_*_wq or WQ_BH.
-For now I'd only expose 'sleepable' as a guarantee in bpf api.
-Hence BPF_F_TIMER_SLEEPABLE is the only extra bit in flags for bpf_timer_start().
-Not sure whether it's needed in bpf_timer_init() too.
+Maybe resend this one and patch 1 without RFC, so we can start landing them?
 
