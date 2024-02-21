@@ -1,221 +1,142 @@
-Return-Path: <linux-kselftest+bounces-5233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53C4E85E90A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 21:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E18085E920
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 21:37:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74A661C22C0F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 20:29:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F8DC1C20AE4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 20:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEFA786AE2;
-	Wed, 21 Feb 2024 20:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F46D3B298;
+	Wed, 21 Feb 2024 20:37:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="O67kK4WF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HOJLHGKK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D6883CDF
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 20:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AF44A1D
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 20:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708547360; cv=none; b=bY55FJztnQIeFee+PIeNwkgf/FH+ecxl3Zs79V2bJ+nrvu2Z3rn4/iI4h3mmIPOGcMch5+GgMR2yhSZKBmHusStHspiRADBw4sofALfD5NNZ1d14igVDq0Y/HXow3zfBCAwwFBE3LUIWjyDsZa61HeAxOci2qZuwmtu+/UK0XkU=
+	t=1708547844; cv=none; b=eaGMYMUPiVECS96OefivzBRCfZA3+6eYuFk5TCUH90IjGrz8gOGV2cxuGKTsaZDP8Y6XFaMHgMU0rpQx/7lXK/tkS25NRt5xIXEK6+n6NL+eoxS32tgf+wudRK+aDMLPzsXkPeZ548c8wr8gmIAYJlTDv+IvWjzYV+GqyrtKoJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708547360; c=relaxed/simple;
-	bh=KgITQNa+cv8Wh8c0n2C2fUy/aaeCcLti0CzXRzvryps=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qjdq7rYdBLVzGAkc3mqUsy3LkWJIY8Hp4K54n9xJv64KiLVS2CPAiXcGvZdySzbm8EiFY94IjydSlcOz9Pd+F+LEjxebkSHvi9DAVgKYrPxnECUHTnbUQtwuxyZ96L443mys5Jfbr7Ts6rVAHDnm6MyPtRIn0iekoJBqN0FkHSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=O67kK4WF; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-299372abcfeso136166a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 12:29:17 -0800 (PST)
+	s=arc-20240116; t=1708547844; c=relaxed/simple;
+	bh=GFhPlma8ElxwHflsLYpQTVGFiMO4B/Q3z9xrY8lb7y0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b+yraxUMHfmQTbCDuGzIOCRivWbKuyTY8icZ2QQf6TzZR4G6ZRy+WLRk26KkVoIA7m8q0Ga2EUtU+lxHlbNtFiblSwQHzOx3eNPN94xI886w5a/ggrm5TsFta7BBwAwjksecls/888f+ghZtW1i5gpEx3tWZ9FxuywuaTn+ps+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HOJLHGKK; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-42e2507c6e1so61901cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 12:37:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1708547357; x=1709152157; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTCGMEew0Fipe902SlrRK/D4WW/nSfSfZfwf/W230pM=;
-        b=O67kK4WFweUsPmYxrCTIK1TmK4E4xT4/zZZVo7Qb3ZTUjOucEE9Wxp+Y9+VgqVZTNd
-         Dz74+3IctO6TEKAhsxP+oVEoKQwNL1cFbrf77m6WjN+U3EpWBuBFe2J6yHcLuJhhWIiB
-         gVJeB/x1xY8I0tm8zFNIYVtpOH179Cki3k7ZYJELLL2Nvu4pOv0D3p6SX4rII0x3bxho
-         Fz+kFkmQmILbv5WOBZOBtX3F1JHm4+zOohvZcZgPs3OMXEoHg9beEMn+5+holdLhaC8t
-         wgrz3hAwbJ93WIPgbersrhJj1FQm72AEgTO/89Qdc8A/t5bNF+NrqXJtAWW+/9PVfZCo
-         ytAg==
+        d=google.com; s=20230601; t=1708547842; x=1709152642; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8iAiTEgCppjIE3t1disnBeWTtqYJCr/gkvmRX972lsA=;
+        b=HOJLHGKKrcNVm9zHUUvf7EqnDqKAk5QM+rTcL4NCiVRYjsxUhivIg5hRT/LQTS3z0w
+         tN+59qnO5jXS7h3bwo0QLneyaJDPSsQ/R0H1VMsMnsjqzwXqZvhyZarJBIBft1W6CvoH
+         B5UzCPI6pE2zPQG3P+0MIJhBBel75TYzMORBwlsYVRVBFEYIERbWD4IPOgazb1cfKa9k
+         41VriWt5nFgbMQlIOmUdnmfsiQo+nFmu5r6uKzQMadcTua5363qY17NlspO+cw9q1ylW
+         rKPQliip/GGG9rK8WU3FjqvnPJLOyGZ7VgzNb2Fw9+bC6gI4uJTzG5ujcwLOiXUil9JF
+         z71Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708547357; x=1709152157;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTCGMEew0Fipe902SlrRK/D4WW/nSfSfZfwf/W230pM=;
-        b=XTzFIUIprzX73aSLUwXjcY1QCfNgVmYqS8giEL5RBgcT0/CM8LT5p3REkkAI0Z691A
-         c9kLSYzfG2A4zDVLc7FPtIAuTcawFfHoA5G/Q3OIz7ewEYeTbU5uQjnkaEQVS6QYAieP
-         9M+pqUB8WXvPUfeR8R6FaGmr1Zaw1e2WQoERjyMeDXvouy3gX6WoJu2zqIcoHiPKhWfp
-         No50adNUkIhMHFv0tPfMf6fxlmNoPLCU23TZq/Qqg7SHONssfEgfnRdOuSgUIOMG/XMU
-         gCmyG3f+DSKZdkCBzgi4U50kjkxV9Aucd8MxM2XUrHc4TNTovMgJRpjI0vCcUfgCN1Tb
-         WM0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXJUrd9zTGYKoooKSln9W7xpQ+WyWOb4XzGRz+fJxv67picFGttgl+OcV8omm3I5onUN+gnd+fAuO0TPcueWKeFQxJ68FVcCqx2G76ZYxQy
-X-Gm-Message-State: AOJu0Yx9MJQ3wjlcqi3Gjg46/NKzXqRyzSlFLFLt8AJOxG09d42UxV+F
-	0bVnTJu/5iBAqqv50UEGzMACxQz4XJbwsYDjyyH5BNl64WWsWeLmrzzhhTt3N9A=
-X-Google-Smtp-Source: AGHT+IEv0rIXEEFymfbI7hv6WvIwIaG4wxAzbyU2mSU6ZNYe3WU2p1qg0ejBWvWUS0oTykMJfq8rng==
-X-Received: by 2002:a17:90b:3007:b0:299:8e05:4d7b with SMTP id hg7-20020a17090b300700b002998e054d7bmr783238pjb.4.1708547357279;
-        Wed, 21 Feb 2024 12:29:17 -0800 (PST)
-Received: from [172.16.0.69] (c-67-188-2-18.hsd1.ca.comcast.net. [67.188.2.18])
-        by smtp.gmail.com with ESMTPSA id pd18-20020a17090b1dd200b0029696f7f443sm2303021pjb.50.2024.02.21.12.29.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Feb 2024 12:29:16 -0800 (PST)
-Message-ID: <b5673bce-09e7-4531-a074-e252aa9e38e8@rivosinc.com>
-Date: Wed, 21 Feb 2024 12:29:13 -0800
+        d=1e100.net; s=20230601; t=1708547842; x=1709152642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8iAiTEgCppjIE3t1disnBeWTtqYJCr/gkvmRX972lsA=;
+        b=ArTVdjTysymF5nMAul+aerrerHR1sFBz4TybJjUGUJ54eoDYDTPpRCp72QwQwIAOef
+         4cxuFSxZBM2VQ0PU+pdWsC2zJNpsuSDgatyRObm/DN5wQwpQvGbQFFUEqNKzTRMkFL+b
+         uJtfY6mClZffaIp8gF/VGH2/zeoyJrjGH3cmxCfqyXxptMWBRGBujIwFfyihTNZrncsi
+         aRV3aAJ3nYe8ID8ahvdBVPmQ4i8CgfjCxk6PxbOt82gK6or2PpxUCKjxJt4d2D3JB/gg
+         EBsnOn1/phzShyM/EazkpL53SJtyODMeD4jo1eEJ/PCZiefRKI0HIJnPZvqn9djTjC5Y
+         M6+g==
+X-Forwarded-Encrypted: i=1; AJvYcCU7BqsldK6RnpSNgIZiW4jwnLgbOtaGkxLUlyLBmALyEOyndeqvelCwRfZybvcUCCzy6TbfjznHQcOTdsrmiG9oppczOcYrwusOI92VcpPo
+X-Gm-Message-State: AOJu0YxkFMGXGJyZLRqoIndXd5usUky6CQzYM9innWiYFwSqir2qHLS5
+	plcCEI0fhmVJt3jtSREs8eGevhrPDz3csRTgb2pVv9vrjAidhh8bamaWHpL71S8bUoVEUMNQm+1
+	Ni5pkfUJc1mUFCAn3zBp7xvBvXSBPdfD5NR6UBA/aWxiGn+m2aw==
+X-Google-Smtp-Source: AGHT+IHkUH8682wBjX2MlXCiKDKRKTZ78A7IDkSZwKh62FAeHimOB2zWqCHjoUmuvZXD72aiFX0+O0WGwp10g7NziwQ=
+X-Received: by 2002:ac8:4907:0:b0:42e:660:eb8d with SMTP id
+ e7-20020ac84907000000b0042e0660eb8dmr285459qtq.5.1708547393077; Wed, 21 Feb
+ 2024 12:29:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 11/12] KVM: riscv: selftests: Change vcpu_has_ext to a
- common function
-Content-Language: en-US
-To: Haibo Xu <xiaobo55x@gmail.com>, Anup Patel <anup@brainfault.org>
-Cc: Atish Patra <atishp@atishpatra.org>, Haibo Xu <haibo1.xu@intel.com>,
- ajones@ventanamicro.com, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
- James Morse <james.morse@arm.com>, Suzuki K Poulose
- <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
- Guo Ren <guoren@kernel.org>, Mayuresh Chitale <mchitale@ventanamicro.com>,
- Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
- Conor Dooley <conor.dooley@microchip.com>,
- Samuel Holland <samuel@sholland.org>,
- Minda Chen <minda.chen@starfivetech.com>, Jisheng Zhang
- <jszhang@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Peter Xu <peterx@redhat.com>, Like Xu <likexu@tencent.com>,
- Vipin Sharma <vipinsh@google.com>, Thomas Huth <thuth@redhat.com>,
- Aaron Lewis <aaronlewis@google.com>,
- Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- kvm-riscv@lists.infradead.org
-References: <cover.1705916069.git.haibo1.xu@intel.com>
- <68856b86a93a4188558e5d0ebac0dd6aac8e404c.1705916069.git.haibo1.xu@intel.com>
- <CAOnJCULwRTSnrQkR2o1P53R=tJ3TAxX+y+XRBesW6OFEzgFv2g@mail.gmail.com>
- <CAJve8om2oOLg5-wKX7m7cBTgzwqiMcb35x=nDi1edY8evXjyMw@mail.gmail.com>
- <2c96c61a-2685-4cee-9cef-963ed833bf92@rivosinc.com>
- <CAJve8omCZxsiP1jF0n5SBh0_U6q7Exj5A1ACFahWpdBoxohaMA@mail.gmail.com>
-From: Atish Patra <atishp@rivosinc.com>
-In-Reply-To: <CAJve8omCZxsiP1jF0n5SBh0_U6q7Exj5A1ACFahWpdBoxohaMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240221092728.1281499-1-davidgow@google.com> <20240221092728.1281499-2-davidgow@google.com>
+In-Reply-To: <20240221092728.1281499-2-davidgow@google.com>
+From: Daniel Latypov <dlatypov@google.com>
+Date: Wed, 21 Feb 2024 12:29:38 -0800
+Message-ID: <CAGS_qxpyNVqigHB+kS-1xqzR4BAOQXoMSNS+d5khkLYrkpmOgA@mail.gmail.com>
+Subject: Re: [PATCH 1/9] kunit: test: Log the correct filter string in executor_test
+To: David Gow <davidgow@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Rae Moar <rmoar@google.com>, 
+	Matthew Auld <matthew.auld@intel.com>, 
+	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Kees Cook <keescook@chromium.org>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Matthew Brost <matthew.brost@intel.com>, 
+	Willem de Bruijn <willemb@google.com>, Florian Westphal <fw@strlen.de>, Cassio Neri <cassio.neri@gmail.com>, 
+	Javier Martinez Canillas <javierm@redhat.com>, Arthur Grillo <arthur.grillo@usp.br>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Stephen Boyd <sboyd@kernel.org>, 
+	David Airlie <airlied@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, intel-xe@lists.freedesktop.org, 
+	linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-hardening@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/21/24 05:08, Haibo Xu wrote:
-> On Wed, Feb 21, 2024 at 4:37 PM Atish Patra <atishp@rivosinc.com> wrote:
->>
->> On 2/20/24 18:13, Haibo Xu wrote:
->>> On Wed, Feb 21, 2024 at 7:03 AM Atish Patra <atishp@atishpatra.org> wrote:
->>>>
->>>> On Mon, Jan 22, 2024 at 1:48 AM Haibo Xu <haibo1.xu@intel.com> wrote:
->>>>>
->>>>> Move vcpu_has_ext to the processor.c and rename it to __vcpu_has_ext
->>>>> so that other test cases can use it for vCPU extension check.
->>>>>
->>>>> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
->>>>> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->>>>> ---
->>>>>    tools/testing/selftests/kvm/include/riscv/processor.h |  2 ++
->>>>>    tools/testing/selftests/kvm/lib/riscv/processor.c     | 10 ++++++++++
->>>>>    tools/testing/selftests/kvm/riscv/get-reg-list.c      | 11 +----------
->>>>>    3 files changed, 13 insertions(+), 10 deletions(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
->>>>> index b68b1b731a34..bd27e1c67579 100644
->>>>> --- a/tools/testing/selftests/kvm/include/riscv/processor.h
->>>>> +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
->>>>> @@ -42,6 +42,8 @@ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t idx,
->>>>>    #define RISCV_ISA_EXT_REG(idx) __kvm_reg_id(KVM_REG_RISCV_ISA_EXT, \
->>>>>                                                idx, KVM_REG_SIZE_ULONG)
->>>>>
->>>>> +bool __vcpu_has_ext(struct kvm_vcpu *vcpu, int ext);
->>>>> +
->>>>>    struct ex_regs {
->>>>>           unsigned long ra;
->>>>>           unsigned long sp;
->>>>> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
->>>>> index 39a1e9902dec..dad73ce18164 100644
->>>>> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
->>>>> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
->>>>> @@ -15,6 +15,16 @@
->>>>>
->>>>>    static vm_vaddr_t exception_handlers;
->>>>>
->>>>> +bool __vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
->>>>> +{
->>>>> +       unsigned long value = 0;
->>>>> +       int ret;
->>>>> +
->>>>> +       ret = __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
->>>>> +
->>>>> +       return !ret && !!value;
->>>>> +}
->>>>> +
->>>>
->>>> Not sure what was the base patch on which this was rebased. The actual
->>>> commit in the queue branch looks different.
->>>>
->>>
->>> This patch set was based on 6.7-rc8.
->>>
->>>> https://github.com/kvm-riscv/linux/commit/5563517cc2012e3326411b360c9924d3f2706c8d
->>>>
->>>> Both seem to have the same bug though the tests fail now and require
->>>> the following fix.
->>>> The ext id should be uint64_t and we need to pass ext directly so that
->>>> SBI extension tests can also pass.
->>>>
->>>
->>> It's weird that 6.7-rc8 has already included Andrew's change on the ISA ext reg,
->>> but this patch was not generated against his change.
->>>
->>> commit bdf6aa328f137e184b0fce607fd585354c3742f1
->>> Author: Andrew Jones <ajones@ventanamicro.com>
->>> Date:   Wed Dec 13 18:09:58 2023 +0100
->>>
->>>       RISC-V: KVM: selftests: Treat SBI ext regs like ISA ext regs
->>>
->>> Anyway, your changes were right. Please go ahead to include them when merging.
->>>
->>
->> I am not sure what happened. Probably, a merge conflict issue.
->>
->> I just realized I forgot to copy paste another fix in arch timer
->>
->> +++ b/tools/testing/selftests/kvm/riscv/arch_timer.c
->> @@ -85,7 +85,7 @@ struct kvm_vm *test_vm_create(void)
->>           int nr_vcpus = test_args.nr_vcpus;
->>
->>           vm = vm_create_with_vcpus(nr_vcpus, guest_code, vcpus);
->> -       __TEST_REQUIRE(__vcpu_has_ext(vcpus[0], KVM_RISCV_ISA_EXT_SSTC),
->> +       __TEST_REQUIRE(__vcpu_has_ext(vcpus[0],
->> RISCV_ISA_EXT_REG(KVM_RISCV_ISA_EXT_SSTC)),
->>
-> 
-> Right Fix!
-> Please let me know if I need to rebase this patch series on your tree
-> and resent it.
-> 
+On Wed, Feb 21, 2024 at 1:28=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
+>
+> KUnit's executor_test logs the filter string in KUNIT_ASSERT_EQ_MSG(),
+> but passed a random character from the filter, rather than the whole
+> string.
 
-That's Anup's call.
+Note: it's worse than that, afaict.
 
-> Thanks,
-> Haibo
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+It's printing from a random bit of memory.
+I was curious about this, so I found under UML, the string I got was
+always "efault)" if I make it fail for j=3D0.
 
+>
+> This was found by annotating KUNIT_ASSERT_EQ_MSG() to let gcc validate
+> the format string.
+>
+> Fixes: 76066f93f1df ("kunit: add tests for filtering attributes")
+> Signed-off-by: David Gow <davidgow@google.com>
+
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+
+> ---
+>  lib/kunit/executor_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> index 22d4ee86dbed..3f7f967e3688 100644
+> --- a/lib/kunit/executor_test.c
+> +++ b/lib/kunit/executor_test.c
+> @@ -129,7 +129,7 @@ static void parse_filter_attr_test(struct kunit *test=
+)
+>                         GFP_KERNEL);
+>         for (j =3D 0; j < filter_count; j++) {
+>                 parsed_filters[j] =3D kunit_next_attr_filter(&filter, &er=
+r);
+> -               KUNIT_ASSERT_EQ_MSG(test, err, 0, "failed to parse filter=
+ '%s'", filters[j]);
+> +               KUNIT_ASSERT_EQ_MSG(test, err, 0, "failed to parse filter=
+ from '%s'", filters);
+
+note: if there is a v2, it might be nice to include `j` in the message.
 
