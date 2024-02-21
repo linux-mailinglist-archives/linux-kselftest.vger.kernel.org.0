@@ -1,174 +1,91 @@
-Return-Path: <linux-kselftest+bounces-5218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 848EA85E60B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 19:32:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12A2585E619
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 19:33:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A669E1C210C0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 18:32:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 442A81C20DAF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 18:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA26981AB2;
-	Wed, 21 Feb 2024 18:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C377E8564D;
+	Wed, 21 Feb 2024 18:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H40tZsSH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nE6kKvoh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9299A3C068;
-	Wed, 21 Feb 2024 18:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD1042A8B;
+	Wed, 21 Feb 2024 18:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708540350; cv=none; b=LZqybXkjD+104g3RnB6QTELKU0iQN/ePqk9kSvCyhk/B6lKZMpphQZvaVLKjBkswq9TviTQhwxQN7FYLaajCDRzJgI61iw0YG38AEcrbVMkhI4THcNGUkX2rQ/gQLSe/jPf8VF8sM0KyHJ27XZKlvniP9zypmOa0UBD1+EBFfeU=
+	t=1708540411; cv=none; b=ocliRpG1n1gpfJMuOQYRh59rNe48gm5M4lsrXsETySYkGRa7mwi68fVYMp07v4+qOhB+CvYs9V4BE2ghWDs8sF2EjY27wU0gBTpfGnFWU7L8zAtZmgTveHi2GDgeD0CnzQ6gHhqRKT8tMMDvaVi+EQH/jZR8sC0eYJvw5YgrXa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708540350; c=relaxed/simple;
-	bh=2gbTzpi4a1N3obFiGlpwydsY4IO9OTAD9wjD4yTOHtU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=reh+Nck48pMPe7KXPwwFeLleWx6VIlDjJCJDZuR+MaYpXWZZOQvB6V2MbW0GNPT3TrCyJHjD2EHfV7QYKtlGjWEZUP9Iieyggw65ujFGKzzEa92YuUlut78hJy3qkCD6n9ZzfibWoeBO8ONJd58K/1jwETO1BTC9fHR6HHtbl+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H40tZsSH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 761A0C433C7;
-	Wed, 21 Feb 2024 18:32:23 +0000 (UTC)
+	s=arc-20240116; t=1708540411; c=relaxed/simple;
+	bh=WcDm4KjAgiSTUngwOyHdp1cM2Jf76T40wkx+rKaqIoo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Uf3xsukoIvCS0MZmhQAU4u46CL8Dtx7lVbTSYNCgES6PKutPnzYwTy1VII1pCbrPHoMoyuFQlODIzya15woo1AvBBSsQMVRfTuiNBt37XGtCcmRqhTeABV+63NVPbFQDxrb9E9IK1k1fIRFtnFg+TdlKN9Nrlnc8vWm6Pc9WEyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nE6kKvoh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA67C433C7;
+	Wed, 21 Feb 2024 18:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708540350;
-	bh=2gbTzpi4a1N3obFiGlpwydsY4IO9OTAD9wjD4yTOHtU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H40tZsSHO3GGXtYAAc+MX1H9hfXkqwzWeiS1DXzFw/AxJv57LXIcw9mhK5Su5mCC9
-	 i7wBl/5lZkXR64n/gvb9Qu6kwvmY4KSzCfoDfdOA/0HOVJOyFi99fo5AUrZzfMf21M
-	 H5ZfGf4y6MVG3cjBzbpNByDEsfiX1Nhpk3W13pSfKx1vxCizFYAPrtIdE1dQdlHFoa
-	 M62tazglgeiMA/9SJ7abPRLFww+GYA8BdkndbbknsJBZotawG1kAYGbU/63Fwwwo5S
-	 qZIBiA4tp0C5/RmatwR1pY7XKkdWRv+L3TpkPOGgYU7whHYd38xXjaXnKyLaZVOEPA
-	 F+OljWdJ5xjYA==
-Date: Wed, 21 Feb 2024 18:32:20 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "dalias@libc.org" <dalias@libc.org>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"musl@lists.openwall.com" <musl@lists.openwall.com>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"ardb@kernel.org" <ardb@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"sorear@fastmail.com" <sorear@fastmail.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
- in userspace
-Message-ID: <b41e39d1-29f9-4958-9728-6781e72230f8@sirena.org.uk>
-References: <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
- <20240220185714.GO4163@brightrain.aerifal.cx>
- <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
- <20240220235415.GP4163@brightrain.aerifal.cx>
- <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
- <20240221012736.GQ4163@brightrain.aerifal.cx>
- <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
- <20240221145800.GR4163@brightrain.aerifal.cx>
- <4a3809e8-61b2-4341-a868-292ba6e64e8a@sirena.org.uk>
- <20240221175717.GS4163@brightrain.aerifal.cx>
+	s=k20201202; t=1708540411;
+	bh=WcDm4KjAgiSTUngwOyHdp1cM2Jf76T40wkx+rKaqIoo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=nE6kKvohCppY47gE5CVCjMpcKWUJS9f+ojW2TtLPKi9hzhUH0Rr2d7u/+14qgz7yI
+	 Q0Cvor7x1Ktk4X63j4bAAyGpW4oNZWDuSMl+xHMXD6YvqfTICp3hIY9MsPqLxCmnH4
+	 J+I8EqUg7NxEwSv8x4hIfBqFuVQy86QYA2l/hlBgq4NvBo1plmvsgg7D6o4T5A+iEU
+	 apfLRqpeYsmf6RY1D0TIFMrFMFvQVcvR+V+TOb3s462OzO5APQlQuFrIY5Ho8OWJB6
+	 pUkSqoSY+UgxOQqFejfasmmxmDjfI/84IqA2GXC3y7eY0W28iT5SFhSgx0SwK/fr4z
+	 zUIflmAtX/Sfg==
+Date: Wed, 21 Feb 2024 10:33:30 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Boris Pismenny <borisp@nvidia.com>, John
+ Fastabend <john.fastabend@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Vakul Garg
+ <vakul.garg@nxp.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 3/5] tls: don't skip over different type records
+ from the rx_list
+Message-ID: <20240221103330.2ae35871@kernel.org>
+In-Reply-To: <ZdYBzKcmIorAO47N@hog>
+References: <cover.1708007371.git.sd@queasysnail.net>
+	<f00c0c0afa080c60f016df1471158c1caf983c34.1708007371.git.sd@queasysnail.net>
+	<20240219120703.219ad3b2@kernel.org>
+	<ZdPgAjFobWzrg_qY@hog>
+	<20240220175053.16324f4d@kernel.org>
+	<ZdYBzKcmIorAO47N@hog>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aNn12J2DOa91OM79"
-Content-Disposition: inline
-In-Reply-To: <20240221175717.GS4163@brightrain.aerifal.cx>
-X-Cookie: The second best policy is dishonesty.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Wed, 21 Feb 2024 14:59:40 +0100 Sabrina Dubroca wrote:
+> It's not exactly enough, since tls_record_content_type will return 0
+> on a content type mismatch. We'll have to translate that into an
+> "error". 
 
---aNn12J2DOa91OM79
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ugh, that's unpleasant.
 
-On Wed, Feb 21, 2024 at 12:57:19PM -0500, dalias@libc.org wrote:
-> On Wed, Feb 21, 2024 at 05:36:12PM +0000, Mark Brown wrote:
+> I think it would be a bit nicer to set err=1 and then check
+> err != 0 in tls_sw_recvmsg (we can document that in a comment above
+> process_rx_list) rather than making up a fake errno. See diff [1].
+> 
+> Or we could swap the 0/1 returns from tls_record_content_type and
+> switch the err <= 0 tests to err != 0 after the existing calls, then
+> process_rx_list doesn't have a weird special case [2].
+> 
+> What do you think?
 
-> > This feels like it's getting complicated and I fear it may be an uphill
-> > struggle to get such code merged, at least for arm64.  My instinct is
-> > that it's going to be much more robust and generally tractable to let
-> > things run to some suitable synchronisation point and then disable
-> > there, but if we're going to do that then userspace can hopefully
-> > arrange to do the disabling itself through the standard disable
-> > interface anyway.  Presumably it'll want to notice things being disabled
-> > at some point anyway?  TBH that's been how all the prior proposals for
-> > process wide disable I've seen were done.
-
-> If it's possible to disable per-thread rather than per-process, some
-> things are easier. Disabling on account of using alt stacks only needs
-
-Both x86 and arm64 currently track shadow stack enablement per thread,
-not per process, so it's not just possible to do per thread it's the
-only thing we're currently implementing.  I think the same is true for
-RISC-V but I didn't look as closely at that yet.
-
-> to be done on the threads using those stacks. However, for dlopen
-> purposes you need a way to disable shadow stack for the whole process.
-> Initially this is only needed for the thread that called dlopen, but
-> it needs to have propagated to any thread that synchronizes with
-> completion of the call to dlopen by the time that synchronization
-> occurs, and since that synchronization can happen in lots of different
-> ways that are purely userspace (thanks to futexes being userspace in
-> the uncontended case), I don't see any way to make it work without
-> extremely invasive, high-cost checks.
-
-Yeah, it's not particularly nice - any whole process disable is going to
-have some nasty cases I think.  Rick's message about covered AFAIR the
-discussion, there were also some proposals for more limited userspaces I
-think.
-
-> If folks on the kernel side are not going to be amenable to doing the
-> things that are easy for the kernel to make it work without breaking
-> compatibility with existing interfaces, but that are impossible or
-> near-impossible for userspace to do, this seems like a dead-end. And I
-> suspect an operation to "disable shadow stack, but without making
-> threads still in SS-critical sections crash" is going to be
-> necessary..
-
-Could you be more specific as to the easy things that you're referencing
-here?
-
---aNn12J2DOa91OM79
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXWQbMACgkQJNaLcl1U
-h9DFYgf/eUQGsS5iljaIOTVjUeRJr5sdmobctbHRbzZDrRfndMq/8GGcuj4IwRdx
-QH2JWncI0dBc3SdIsUCDuiT5M80YdW0MbbyF0WnodznOGFFOmAdShPrpJOYpq0PJ
-uxQlFwIl/RPfqC9VKTRflsuttBL5yWgTCWiM0qX0TSs8CSSzLHZJZGy0EB0BLJUj
-aWIcOnrEMi/h7VJY3PdqDd048xQMlVz9u3igr9rRr0yInyVXgkBu5W+9ORlWZ9Tc
-CDbo/yL8Wjz0PdEVRaoPUQqpVVfY01V/Ka3X3aX1b3VJBEkvcOCjncbp4epk3z9e
-ZahyLth4XwKs8PXzuwjgpHYnESAYJg==
-=//LR
------END PGP SIGNATURE-----
-
---aNn12J2DOa91OM79--
+I missed the error = 1 case, sorry. No strong preference, then.
+Checking for error = 1 will be as special as the new rx_more
+flag. Should I apply this version as is, then?
 
