@@ -1,137 +1,189 @@
-Return-Path: <linux-kselftest+bounces-5247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D579585EB81
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 23:01:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2C1385EB8B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 23:04:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C0A21F26325
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 22:01:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85AF6283FAC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 22:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D741128392;
-	Wed, 21 Feb 2024 22:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CDAB127B6C;
+	Wed, 21 Feb 2024 22:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bpj48WmF"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="FAUHLE6r";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="PfJ+v0k+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5435A83A1F
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 22:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BEDE3A29E;
+	Wed, 21 Feb 2024 22:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708552874; cv=none; b=LoWe3CoBgzQb6jhdq8b7dZFVugpwxwGlhU3nSOFKULMnJqhqTF1r//YpvHEzyo15KAdJh7MZyA5H6H8EeMh0RiXSziyaGHpMKOkU+I2UWolqDCAoygaFyHF882L86PaTC9gVFGxj+MeOYQxaHKeWRhqoJV+g9m7J2yk1F8ynsfk=
+	t=1708553054; cv=none; b=lKtNeHhhlCZhZiKnQf37T1jkAg/ErktjEzn2ojCaEQ14GB3fJUvxPmThyVp98LEbGBjF3SENUCBCY3GyXmXKcOgBpD6MHk1QzL3QF3kesUKmNThNpfuXKgn04gEsTJLJ4B/AtzMF/1VY/WCnOIqSKQiF5o7sYaP82fWH7l31sUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708552874; c=relaxed/simple;
-	bh=wqGWw9nOiid78rmVoNJpLAKogw9OxxtIINANjebVuns=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L9iK25DnO/OIZ8iSuvsef6QP4QrQe/jab1XeE4mFCgVTJIw3DmyWF1zckgAgTowHt2oMij9Ijgxy3aW+gr5QDcFPOQR9WVcOPPAdAmclQwQUOf35jQ6sZGsnfXicKd9w4htDpsNMQOp2mE0MKnfa1Skuu5RkX2k7/Y4gRnfFMjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bpj48WmF; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1dbd32cff0bso35464345ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 14:01:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708552871; x=1709157671; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+6LHH2NPUzYokJHyaMeg6P0BHjKGeB4TbkarefmniY=;
-        b=bpj48WmFS/Iv/Pl0hg7lOS8zJgnv0NSStFCNmbJ6KEpuG46kTUN/691glGTo/3Ussp
-         p+NO4+VI9TFFxK1I1IpwAumuQPpNmQosA0O5VcsIoRgOfll/Zs90O7tq42+7asod3qYo
-         QfauMBovnb/+K04a39tMMdP5sPWShkQq8NrPA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708552871; x=1709157671;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k+6LHH2NPUzYokJHyaMeg6P0BHjKGeB4TbkarefmniY=;
-        b=h8wX/t6nNa+YtbLV9TUWktVfod0Kpr4PMTpa2LlT9QggRXp4mHr3LRJrqgmmA1J7xw
-         TzB+SPXcQRD0P/189ABpeCBU7zoVDsldMVIlASR7rmjxma/Vpcp/kawPcWC1muifLZtX
-         bf4RmsUje9DTbfjK028LdHH0v9OX6JuKpfxflccPCjfG+Evb6TrXtPBCI/cUFsguUjU/
-         9PEQdHLitQYQlCJDDSdVn261Y/v7oyz0oxw50PoM6j+FzRFUqYhYpUiJCD6DT2q/6Yzv
-         dQj5jZisKSnldLDaWNRPUfYUbbIPfHBZ2USCzOKjxvP9ms0iz37fW7LBtpmEBpswXl8N
-         18BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMMMzxyMpIFiLYj11LasvHF3B/JaDjpSvDaeVC/Vrn6F1fablGL5KbDiR1uFkzBebzFeFqcAYRdowjLIFnZgrMuC1ohIo2cAq9Z31X5y+j
-X-Gm-Message-State: AOJu0Yx35G2kxJHMLppbGKKCo9+rlV84SWiFqsVqkGYDPbRN8016pIbt
-	Bh7D6weml02GU08dDU6Td9YOSkAs1dRsDd+7hoL+npfEtbr4iLUfgn8eQTUE1Q==
-X-Google-Smtp-Source: AGHT+IEf5eKUQSWm+opFfaiF5eBQJmg0AXhYyA+h2y9jNbW7sOQuiyq0AM8mKQQVx25bJ6R/7Y4UCw==
-X-Received: by 2002:a17:902:f70f:b0:1dc:4b04:13d4 with SMTP id h15-20020a170902f70f00b001dc4b0413d4mr60269plo.8.1708552870628;
-        Wed, 21 Feb 2024 14:01:10 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k4-20020a170902e90400b001dbba4c8289sm8533989pld.202.2024.02.21.14.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 14:01:10 -0800 (PST)
-Date: Wed, 21 Feb 2024 14:01:09 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+	s=arc-20240116; t=1708553054; c=relaxed/simple;
+	bh=DX/hfTQ59mOZk+bqqEkZgspTbXbnTOWP2nnPDbttQME=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=j7FddzjG5laGrsbI59LWi0b35yHsyNwHutB0vofdqIQd8OGvZ+SnvGn/KHEQ6RV5fw/DLDBmyQ7/Di5lrCHbs9wPwNz53HdQyTS8e+fJw2gcyUtFOba9A6FAeiOXl/qUhjQWY3CsoF0+8AkSgF9/nz127qtCeTxbKMBX3/fGOmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=FAUHLE6r; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=PfJ+v0k+; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 401602214B;
+	Wed, 21 Feb 2024 22:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1708553050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qqibcnmZ+ilefTS5bxj6gFmDa81Sre7doLxhI25auX8=;
+	b=FAUHLE6rHSN4xDFQ1N7/tlM24tVQYiP/eV0MZTYyW7SAV3ASeW4295m/gEsSMzjhjIkQU+
+	ORhPOECw2P4brazHhKK5eau4KaAqVWEbqOc7GwNiel4gkuxEgQbctnESKt47PkwsbHQlNE
+	Du4dskF2RM1I3jxES/U/UdqXtVgY3xE=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1708553048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qqibcnmZ+ilefTS5bxj6gFmDa81Sre7doLxhI25auX8=;
+	b=PfJ+v0k+mZ4juyWl65MY6mKxlq96j9LrJVuRh1pWyCO7U5NGTQtAM24MabRyYgKfFAx/wT
+	iTG2sf0OcXIw/3IZ1KXCKQmZDwmKd1kaJw6GPg2NfKhPyqLAQNBF/sbfjykMOrY/U66ATF
+	XETL/LQfVW5ropjZB9IP2h3i3gFHznM=
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id B885913A25;
+	Wed, 21 Feb 2024 22:04:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id mZfSHldz1mU6JwAAn2gu4w
+	(envelope-from <mpdesouza@suse.com>); Wed, 21 Feb 2024 22:04:07 +0000
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Marcos Paulo de Souza <mpdesouza@suse.com>,
+	kernel test robot <lkp@intel.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	oe-kbuild-all@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Joanne Koong <joannelkoong@gmail.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>,
-	Anton Protopopov <aspsk@isovalent.com>,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4] bpf: Replace bpf_lpm_trie_key 0-length array with
- flexible array
-Message-ID: <202402211347.2AF2EC4621@keescook>
-References: <20240220185421.it.949-kees@kernel.org>
- <da75b2bf-0d14-6ed5-91c2-dfeba9ad55c4@iogearbox.net>
+	linux-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH 1/3] selftests: lib.mk: Do not process TEST_GEN_MODS_DIR
+Date: Wed, 21 Feb 2024 19:04:03 -0300
+Message-ID: <20240221220404.11585-1-mpdesouza@suse.com>
+X-Mailer: git-send-email 2.42.1
+In-Reply-To: <d984977f-b7ad-44b9-82dd-27aeb2fad592@linuxfoundation.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da75b2bf-0d14-6ed5-91c2-dfeba9ad55c4@iogearbox.net>
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=PfJ+v0k+
+X-Spamd-Result: default: False [1.69 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 R_MISSING_CHARSET(2.50)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 DKIM_TRACE(0.00)[suse.com:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_TWELVE(0.00)[12];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,linuxfoundation.org:email,suse.com:dkim,suse.com:email,intel.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Score: 1.69
+X-Rspamd-Queue-Id: 401602214B
+X-Spam-Level: *
+X-Spam-Flag: NO
+X-Spamd-Bar: +
 
-On Wed, Feb 21, 2024 at 05:39:55PM +0100, Daniel Borkmann wrote:
-> The build in BPF CI is still broken, did you try to build selftests?
+On Wed, 21 Feb 2024 14:12:00 -0700 Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-Okay, I give up. How is a mortal supposed to build these?
+> On 2/21/24 05:26, Marcos Paulo de Souza wrote:
+> > On Tue, 20 Feb 2024 17:19:54 -0700 Shuah Khan <skhan@linuxfoundation.org> wrote:
+> > 
+> >> On 2/19/24 06:53, Marcos Paulo de Souza wrote:
+> >>> On Mon, 19 Feb 2024 09:15:15 -0300 Marcos Paulo de Souza <mpdesouza@suse.com> wrote:
+> >>>
+> >>>> On Mon, 19 Feb 2024 14:35:16 +0800 kernel test robot <lkp@intel.com> wrote:
+> >>>>
+> >>>>> Hi Marcos,
+> >>>>>
+> >>>>> kernel test robot noticed the following build errors:
+> >>>>>
+> >>>>> [auto build test ERROR on 345e8abe4c355bc24bab3f4a5634122e55be8665]
+> >>>>>
+> >>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Paulo-de-Souza/selftests-lib-mk-Do-not-process-TEST_GEN_MODS_DIR/20240216-021601
+> >>>>> base:   345e8abe4c355bc24bab3f4a5634122e55be8665
+> >>>>> patch link:    https://lore.kernel.org/r/20240215-lp-selftests-fixes-v1-1-89f4a6f5cddc%40suse.com
+> >>>>> patch subject: [PATCH 1/3] selftests: lib.mk: Do not process TEST_GEN_MODS_DIR
+> >>>>> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> >>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240219/202402191417.XULH88Ct-lkp@intel.com/reproduce)
+> >>>>>
+> >>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> >>>>> the same patch/commit), kindly add following tags
+> >>>>> | Reported-by: kernel test robot <lkp@intel.com>
+> >>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202402191417.XULH88Ct-lkp@intel.com/
+> >>>>>
+> >>>>> All errors (new ones prefixed by >>):
+> >>>>>
+> >>>>>>> make[3]: *** /lib/modules/5.9.0-2-amd64/build: No such file or directory.  Stop.
+> >>>>
+> >>>> We should ask the kernel test robot machine owners to install kernel-devel
+> >>>> package in order to have this fixed.
+> >>>
+> >>> Or maybe ask them to change the reproducer to specify KDIR to the git tree,
+> >>> instead of /lib/modules/?
+> >>>
+> >>
+> >> This would be a regression to automated test rings. Do you have any other
+> >> solutions?
+> > 
+> > I would say that we could skip the these tests if kernel-devel package is not
+> > installed. Would it be acceptable? At least we would avoid such issues like this
+> > in the future as well.
+> > 
+> 
+> We have to check and skip build. Something we could do in the livepatch
+> Makefile. Can you send patch for this - I will oull this in for next
+> so we don't break test rings.
 
-If I try to follow what I see in
-https://github.com/libbpf/ci/blob/main/build-selftests/build_selftests.sh
-I just get more and more kinds of errors:
+I added a new patch in the same patchset that would cover this, skipping the
+build and test if kernel-devel is not installed. The patchset was sent earlier
+today. Please check if the new patch fixes things on the build robot.
 
-In file included from progs/cb_refs.c:5:
-progs/../bpf_testmod/bpf_testmod_kfunc.h:29:8: error: redefinition of 'prog_test_pass1'
-   29 | struct prog_test_pass1 {
-      |        ^
-/srv/code/tools/testing/selftests/bpf/tools/include/vmlinux.h:106850:8: note: previous definition is
- here
- 106850 | struct prog_test_pass1 {
-        |        ^
+Thanks in advance,
+  Marcos
 
-Messing around with deleting vmlinux.h seems to get me further, but later:
-
-/srv/code/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c: In function 'bpf_testmod_ops_is_valid_access':
-/srv/code/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:535:16: error: implicit declaration of function 'bpf_tracing_btf_ctx_access' [-Werror=implicit-function-declaration]
-  535 |         return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-and then I'm stuck. It looks like the build isn't actually using
-KBUILD_OUTPUT for finding includes. If I try to add -I flags to the
-Makefile I just drown in new errors.
-
--- 
-Kees Cook
+> 
+> thanks,
+> -- Shuah
 
