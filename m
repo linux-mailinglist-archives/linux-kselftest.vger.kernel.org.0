@@ -1,102 +1,103 @@
-Return-Path: <linux-kselftest+bounces-5250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5251-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDC585EBCF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 23:30:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12F7485ED1A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 00:38:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70902283B2D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 22:30:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCB771F23609
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 23:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9908E12AADC;
-	Wed, 21 Feb 2024 22:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F5981752;
+	Wed, 21 Feb 2024 23:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwMQgj3u"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UisHyCZh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDB345C10;
-	Wed, 21 Feb 2024 22:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8845B12AAE2;
+	Wed, 21 Feb 2024 23:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708554629; cv=none; b=sEs+tE1BJuGKobY2Y4N8Vx3vtgDcOViMViRCQ6wbjMkvoccn04c5hV4HiQzDu1iiJaUa4zu2zcx+i8ov8uds6sXGxNgiGtKssVlnf/Q2Dd+/ts1lanehrJ713jxqVNrpbALWDWnt32ORJL0HW02m8fqkkgH2DO0NPuMsuc//yqk=
+	t=1708558725; cv=none; b=BqI+hXBFqXFa2wtn3ZvDZY3lXbA+3ccDepO7qu+nGrRRjd4P4Vdjo5XmsLaQeCC/7CRZuRDa7FKaSixVc9Y85rFZXK8LnGmqZ6csgqM+b2w2doncRh05sulnQlISzWbgMm1DHMrb+9waJ1Q/G1TBta38IeKVafxA67r+98HtXRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708554629; c=relaxed/simple;
-	bh=UGvpYdwhKfNdL4uFNxnChzkqEIgJJ4MA7/7ZqJJmEcU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aNv4sAvx92dw75ogWQUxSOCn9XjJyyQyVNMathsxdtpSt7qtufRO66C6ZLGxDfCxAJYV11cL87B6eh9qEgQkJC6pLb5Xj2VjGzW4ZiyRW0I0Nge9nf89C2FIcTsTPIuLC5dPvmSOzyVTsSl43nNeJbOZGDdvBQ3/ElnQ8gsrkH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwMQgj3u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CB06C43399;
-	Wed, 21 Feb 2024 22:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708554629;
-	bh=UGvpYdwhKfNdL4uFNxnChzkqEIgJJ4MA7/7ZqJJmEcU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=XwMQgj3ugaoZiaZ+qc/o+3eo932wc6zvFjg0lOlX5fuL7cnZe8mHvc7rSWSwrKvu8
-	 KdbM9OodmU/IlkvNnnB7vNaFciA1/BFplgtA2Iy8bgyq9Nx0/+seKLVAN8rEuloqbh
-	 QvzD8DTRnw5r2w7xJFQXkuZ72sJAYT+ycPjyyEhVx461X+F0MTWlVwb2JkQFIpb1rx
-	 PtDbk0FqhqGJH+hWCV9y0N8ccpYeqR43EkeKXEtI26lwEqi/gPgQOCTI9CVxPo3Hhy
-	 zKU08jw+OYxJKm08Uk1covjJPS71NQJlopE0kUse/+MnjePlgEq+YJY/CMsSv4LlJY
-	 QgCPIywCMfApw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 11C91D84BC0;
-	Wed, 21 Feb 2024 22:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1708558725; c=relaxed/simple;
+	bh=mqzDBgvnARQZuU+Pb8bmtT89hBXtM0GOCDpsxtpoHm8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XO50AnSLx1ei8qvUGnitkx/X7n+91KL06QzvgTd0MpbVwHTO46WWVuolDxIiDspF8L4TchUEs4P3UhQcUlxkmD1z5H1e3vfQF3gmupSw/bwnyCyWA0JRZC+QIjQzvI0Vo/Eo2x8mM20u2pUIiVS70P+o5qgW1XqoGXkLspXHoUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UisHyCZh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 19FF4C43394;
+	Wed, 21 Feb 2024 23:38:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1708558725; bh=mqzDBgvnARQZuU+Pb8bmtT89hBXtM0GOCDpsxtpoHm8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=UisHyCZh/EXw2iELZKEcraUL7Tm+nULt5XUFc2XICjcsZo8FzvAbfHY0cK4mAbs8T
+	 YVDOJpWa4quk4gMspTX7CZIda7f1a8XY2c5QFlC8utBRU8Py5ZvbRssnd3KfU7z085
+	 fUCMwKidEhzK62niy59XAKjmcbsfI3A891QD5Ac4=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 077E1C48BF6;
+	Wed, 21 Feb 2024 23:38:45 +0000 (UTC)
+From: Itaru Kitayama <itaru.kitayama@linux.dev>
+Date: Thu, 22 Feb 2024 08:38:37 +0900
+Subject: [PATCH] Build guest_memfd_test also on arm64.
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/5] tls: fixes for record type handling with PEEK
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170855462906.28356.14505768197240352814.git-patchwork-notify@kernel.org>
-Date: Wed, 21 Feb 2024 22:30:29 +0000
-References: <cover.1708007371.git.sd@queasysnail.net>
-In-Reply-To: <cover.1708007371.git.sd@queasysnail.net>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, borisp@nvidia.com, john.fastabend@gmail.com,
- kuba@kernel.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- shuah@kernel.org, vakul.garg@nxp.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240222-memfd-v1-1-7d39680286f1@linux.dev>
+X-B4-Tracking: v=1; b=H4sIAHyJ1mUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDIyMj3dzU3LQUXXMjC9M0S1Mzk2TDVCWg2oKi1LTMCrA50bG1tQD+NlG
+ VVwAAAA==
+To: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Itaru Kitayama <itaru.kitayama@fujitsu.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708558724; l=1061;
+ i=itaru.kitayama@linux.dev; s=20231030; h=from:subject:message-id;
+ bh=lA7PzCZQ2lseoAA2i+RxO+8QEPr2soICHGzThVxFsV4=;
+ b=5n1duozIxzxnBCXUW296kFTXX6lgv5V+XSAWRZRDLr6XvGcTjdyoHjOFdcVTWctswvlhZ8LNu
+ L084E6chHO/Dr2DVGeC4UFBmQ/xSZcvmsNde3tZ3UnwmBdJOh/g0p/q
+X-Developer-Key: i=itaru.kitayama@linux.dev; a=ed25519;
+ pk=4yYhz2CbKL7F2qR5IzP7QvqM9B6c+dfWJRHWez+rMDw=
+X-Endpoint-Received:
+ by B4 Relay for itaru.kitayama@linux.dev/20231030 with auth_id=92
 
-Hello:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 15 Feb 2024 17:17:28 +0100 you wrote:
-> There are multiple bugs in tls_sw_recvmsg's handling of record types
-> when MSG_PEEK flag is used, which can lead to incorrectly merging two
-> records:
->  - consecutive non-DATA records shouldn't be merged, even if they're
->    the same type (partly handled by the test at the end of the main
->    loop)
->  - records of the same type (even DATA) shouldn't be merged if one
->    record of a different type comes in between
-> 
-> [...]
+---
+on arm64 KVM_CAP_GUEST_MEMDF capability is not enabled, but
+guest_memfd_test can build on arm64, let's build it on arm64 as well.
 
-Here is the summary with links:
-  - [net,1/5] tls: break out of main loop when PEEK gets a non-data record
-    https://git.kernel.org/netdev/net/c/10f41d0710fc
-  - [net,2/5] tls: stop recv() if initial process_rx_list gave us non-DATA
-    https://git.kernel.org/netdev/net/c/fdfbaec5923d
-  - [net,3/5] tls: don't skip over different type records from the rx_list
-    https://git.kernel.org/netdev/net/c/ec823bf3a479
-  - [net,4/5] selftests: tls: add test for merging of same-type control messages
-    https://git.kernel.org/netdev/net/c/7b2a4c2a623a
-  - [net,5/5] selftests: tls: add test for peeking past a record of a different type
-    https://git.kernel.org/netdev/net/c/2bf6172632e1
+Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+---
+ tools/testing/selftests/kvm/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 492e937fab00..8a4f8afb81ca 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -158,6 +158,7 @@ TEST_GEN_PROGS_aarch64 += access_tracking_perf_test
+ TEST_GEN_PROGS_aarch64 += demand_paging_test
+ TEST_GEN_PROGS_aarch64 += dirty_log_test
+ TEST_GEN_PROGS_aarch64 += dirty_log_perf_test
++TEST_GEN_PROGS_aarch64 += guest_memfd_test
+ TEST_GEN_PROGS_aarch64 += guest_print_test
+ TEST_GEN_PROGS_aarch64 += get-reg-list
+ TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+
+---
+base-commit: 39133352cbed6626956d38ed72012f49b0421e7b
+change-id: 20240222-memfd-7285f9564c1e
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Itaru Kitayama <itaru.kitayama@linux.dev>
 
 
