@@ -1,221 +1,123 @@
-Return-Path: <linux-kselftest+bounces-5200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9370785E385
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 17:40:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E00685E3B6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 17:49:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AADBC1C21BC1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 16:40:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF77C1C21FF6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 16:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3858A82D9F;
-	Wed, 21 Feb 2024 16:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7FC839F4;
+	Wed, 21 Feb 2024 16:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="nxtdSMGu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QwQQdrq/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8636E1C20;
-	Wed, 21 Feb 2024 16:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1A482D8D;
+	Wed, 21 Feb 2024 16:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708533631; cv=none; b=RNCWtSRif23ZoZTN/nzgxHWUVMF2SC7dCdohrXb7SXUuwdilFhb9cRepdaGgF1k2wHw4vy2IIRGBHIMXO6F0iZov1S61WasAo4sawDAUMr0RG5ZoLhlo0u88GpeUr5R19VW+3oRSEueP0VHQLn3lqmBuNjaMIdZdRROIlCegLh4=
+	t=1708534154; cv=none; b=VUmgBHzQURccrHId71eG6znzXwFfVWK10a68DKI4zzSZ0ZXThndXxq0Su0O93KBk8Lid4eS4ZTX61bBfZeoCDHL4ge04Affj/G8b+dOQWCAIqhP7ETzOB/3GOh5O86QfiDas6WdZtpYzSco6qCSzUXUQUnliy4sIe3lUo020gYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708533631; c=relaxed/simple;
-	bh=45I0J5biXwYLiUaf/PmqF1jvW/5x55RLPKwzjIKpH4I=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=cv1d4b7OiKxi8I++gZCzaLjaVyNnVOiHssqAUoJZSw8KH0AqrrY4AX+rpZvd+WMvVOspuyottxqI8e8lLaOwdnFFyhFsHtcMqQe0Nn0wBM94lFZ4sKnqt0d7YNK4bdDzNVjjkwb3F2m4TSQtpUwoZyHyXMY6fevY5zccHkuR/b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=nxtdSMGu; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=iE/w7zcXxXdaU9PL76g2DzI65P5Qvx6HEpMubn6cjls=; b=nxtdSMGuBsIvBlcGsFV4q/QyMF
-	TgOVPrStsVJMCkxFJBEqMlQSHAzM+REezZFM0xOLRHPRXVSajD7AuVxjN89Gx8zV8VfQaROCuWJ9A
-	hsKvkN0wOOFwEAN6pFc8y73S6NAYPyvKNlCWQfSndtOWsQDCCadb/MAydty5bhz/Zq3BFJxoh0CIR
-	a2Ne48t1iTcE2roNaY1NWfiRbYJf8DdWNP79eI3L97P88sN1qdZL9NnF8z2INf8oE+Saj3QB2dpB0
-	ENlP8JXP2KoHERxkPQL1sRIBscnF0jK0so1z2Qi3PdIX6N417a9CoXAIjTLRVkK9YA2p0bewcxPbd
-	9aLoNtDA==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rcpdW-0007PB-Iw; Wed, 21 Feb 2024 17:39:58 +0100
-Received: from [178.197.249.13] (helo=linux.home)
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rcpdU-0005ll-2a;
-	Wed, 21 Feb 2024 17:39:56 +0100
-Subject: Re: [PATCH v4] bpf: Replace bpf_lpm_trie_key 0-length array with
- flexible array
-To: Kees Cook <keescook@chromium.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
- "Gustavo A . R . Silva" <gustavoars@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Yonghong Song <yonghong.song@linux.dev>,
- Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Joanne Koong <joannelkoong@gmail.com>, Yafang Shao <laoar.shao@gmail.com>,
- Kui-Feng Lee <kuifeng@meta.com>, Anton Protopopov <aspsk@isovalent.com>,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- netdev@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20240220185421.it.949-kees@kernel.org>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <da75b2bf-0d14-6ed5-91c2-dfeba9ad55c4@iogearbox.net>
-Date: Wed, 21 Feb 2024 17:39:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	s=arc-20240116; t=1708534154; c=relaxed/simple;
+	bh=ove3upP5O826eOpG4Bg29PjtxXHxXZjXEOc9l+LtHwo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h9SR6skVzVVdqV5zm0UGTqyWerVSWbgVt+2c78MQo5iJ8CKmFPhMEBBqBj/owxM4Edl+fCZsEXqxMBAjoa2r+3sr0FYIeSYWiDAJVvXdosiGwAZPDKcHMSn7ZQY2HfoUkV/3nbbuWTUeXdhWCHiou/B5Fkd2NhjERh+aLVPOQKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QwQQdrq/; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a3122b70439so856684766b.3;
+        Wed, 21 Feb 2024 08:49:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708534151; x=1709138951; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/6HoAU7BqEYQlQGt88qfMyMbLkXax2QO39kfYNiHW0=;
+        b=QwQQdrq/vVITNW78P8xYwZOdGiHgWln1KvHMOybZ23xzF8R3EtCNwaxSGmZtcL3VMc
+         oeewQJ32byonNMnnH26LOkXIiySwMwtwp9O8FyAx/ER/LZVL4DC0uYnGN+wJ2MF2/YZi
+         5AR/oFjl/v331N55/en98ZgMShypjfNqZlMWUU7szuSLK490Z6EcgqahRfBn0M0LgjGf
+         j/F1GmLevgakMra06ptN/4Xr2ahvpCw7S31eovzI+jC3TU7yoaxZ3AiY7Cge3cOhD6Iu
+         7i+HXjaFqBRyv2gdVzFDsOmlMU4anPwFg2TeNHD3rCUJW0/eo5Co7IdKLOxT2vtSE3id
+         HEhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708534151; x=1709138951;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o/6HoAU7BqEYQlQGt88qfMyMbLkXax2QO39kfYNiHW0=;
+        b=GJ6qo3+TISsvxXJxGC6UacmkjypTpByGW2CHqYiFzXM2+YuZ5XvkAtEaxGu5Iufv3m
+         g63vU39+LPJro1UcGiSTuN+bfQPbPGNL4R2KVRgWsqLxQspzMMRMPb1Uh/vR/XzUXf0s
+         RLhKKMFY7mruDSpRSpp5EcTWBHMpZibLKsYShuAARw6ZJfoyz/Q8uaKaVEpOwmFEa+le
+         40bZJnUUrpQwlfoCbORq/kDPLJ26NlXDMMvl1tnkXzdu8/0zwv0c5uopynuwDAsZ7Jdj
+         Rh8Du2P1XbGx5AK6kXl3SyUwVSglTX74AbYORNDZHPgCWYUmkyCH/rrR2BAtRKdtbDHa
+         1QbA==
+X-Forwarded-Encrypted: i=1; AJvYcCVxDNi5Fj4pAYMmoyh9+LHRmT1o4JYv9ihyfYbWQ2phMbyuEQ0ZYY1texnGOkOUVez3s8GBC6Ctt1sQuqAdMQZ7FiwuJP8kuIoqNtM+wYEfvtBizdEeVxp03g355ni+azrzKGfxmQQd4NhqKY+pRqTMZVPAKDgcp0ewbvnCkN0DnCtF2VVGmkKvCrkR2cEa0W70CQ5OtsxE9pbmOKNoxeG9M1th
+X-Gm-Message-State: AOJu0YxAdaCCcrFMzLfxVC1F9ujKDkaTIWaMkpd1VNlIrvxep4KrkQb4
+	aOKXV0Uw+BXXEBnurnY4M06IAGcrKOe16n7zsiQewrJM6VNbveg=
+X-Google-Smtp-Source: AGHT+IE57bcXeYkZJP98HXfK2Uv1QXGkv8qaONWD32LAi4oHSbopeSaffA0n85T1hOOupFw1aaMi8Q==
+X-Received: by 2002:a17:906:349b:b0:a3e:b5a3:acf6 with SMTP id g27-20020a170906349b00b00a3eb5a3acf6mr5647977ejb.4.1708534151368;
+        Wed, 21 Feb 2024 08:49:11 -0800 (PST)
+Received: from p183 ([46.53.251.190])
+        by smtp.gmail.com with ESMTPSA id h23-20020a170906591700b00a3ef17464b1sm1863338ejq.9.2024.02.21.08.49.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 08:49:10 -0800 (PST)
+Date: Wed, 21 Feb 2024 19:49:08 +0300
+From: Alexey Dobriyan <adobriyan@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Elizabeth Figura <zfigura@codeweavers.com>,
+	Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	=?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Arkadiusz Hiler <ahiler@codeweavers.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/31] NT synchronization primitive driver
+Message-ID: <a2f8ee20-2a2b-44bb-8db2-6d2c353d6a6c@p183>
+References: <5ae668e3-e275-40b0-af3c-6a459e3a0b87@p183>
+ <2024021756-bakeshop-wolf-f975@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240220185421.it.949-kees@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27192/Wed Feb 21 10:23:23 2024)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2024021756-bakeshop-wolf-f975@gregkh>
 
-On 2/20/24 7:54 PM, Kees Cook wrote:
-> Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-> flexible array. Found with GCC 13:
+On Sat, Feb 17, 2024 at 09:01:53AM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Feb 16, 2024 at 07:31:12PM +0300, Alexey Dobriyan wrote:
+> > > drivers/misc/ntsync.c                         | 1146 ++++++++++++++
+> > 
+> > Assuming this doesn't go into futex(2) or some other existing code...
+> > 
+> > Can you start putting all of this into top-level "windows" directory?
+> > I suspect there will be more Windows stuff in the future.
 > 
-> ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
->    207 |                                        *(__be16 *)&key->data[i]);
->        |                                                   ^~~~~~~~~~~~~
-> ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
->    102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->        |                                                      ^
-> ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
->     97 | #define be16_to_cpu __be16_to_cpu
->        |                     ^~~~~~~~~~~~~
-> ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
->    206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-> ^
->        |                            ^~~~~~~~~~~
-> In file included from ../include/linux/bpf.h:7:
-> ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
->     82 |         __u8    data[0];        /* Arbitrary size */
->        |                 ^~~~
-> 
-> And found at run-time under CONFIG_FORTIFY_SOURCE:
-> 
->    UBSAN: array-index-out-of-bounds in kernel/bpf/lpm_trie.c:218:49
->    index 0 is out of range for type '__u8 [*]'
-> 
-> Changing struct bpf_lpm_trie_key is difficult since has been used by
-> userspace. For example, in Cilium:
-> 
-> 	struct egress_gw_policy_key {
-> 	        struct bpf_lpm_trie_key lpm_key;
-> 	        __u32 saddr;
-> 	        __u32 daddr;
-> 	};
-> 
-> While direct references to the "data" member haven't been found, there
-> are static initializers what include the final member. For example,
-> the "{}" here:
-> 
->          struct egress_gw_policy_key in_key = {
->                  .lpm_key = { 32 + 24, {} },
->                  .saddr   = CLIENT_IP,
->                  .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
->          };
-> 
-> To avoid the build time and run time warnings seen with a 0-sized
-> trailing array for struct bpf_lpm_trie_key, introduce a new struct
-> that correctly uses a flexible array for the trailing bytes,
-> struct bpf_lpm_trie_key_u8. As part of this, include the "header"
-> portion (which is just the "prefixlen" member), so it can be used
-> by anything building a bpf_lpr_trie_key that has trailing members that
-> aren't a u8 flexible array (like the self-test[1]), which is named
-> struct bpf_lpm_trie_key_hdr.
-> 
-> Adjust the kernel code to use struct bpf_lpm_trie_key_u8 through-out,
-> and for the selftest to use struct bpf_lpm_trie_key_hdr. Add a comment
-> to the UAPI header directing folks to the two new options.
-> 
-> Link: https://lore.kernel.org/all/202206281009.4332AA33@keescook/ [1]
-> Reported-by: Mark Rutland <mark.rutland@arm.com>
-> Closes: https://paste.debian.net/hidden/ca500597/
-> Acked-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-[...]
+> There will?  Like what?
 
-The build in BPF CI is still broken, did you try to build selftests?
+I don't know, native PE loader is probably a must for running Excel natively.
 
-   https://github.com/kernel-patches/bpf/actions/runs/7978647641
+> > So those who don't care about Windows can turn off just one config option
+> > (CONFIG_WINDOWS) and be done with it.
+> 
+> This should all be configured under one option anyway, so I don't see
+> the need.
 
-   [...]
-     GEN-SKEL [test_progs] linked_funcs.skel.h
-     LINK-BPF [test_progs] test_usdt.bpf.o
-     GEN-SKEL [test_progs-no_alu32] profiler1.skel.h
-     GEN-SKEL [test_progs] test_usdt.skel.h
-   In file included from /tmp/work/bpf/bpf/tools/include/uapi/linux/bpf.h:11,
-                    from test_cpp.cpp:4:
-   /tmp/work/bpf/bpf/tools/include/uapi/linux/bpf.h:92:17: error: ‘struct bpf_lpm_trie_key_u8::<unnamed union>::bpf_lpm_trie_key_hdr’ invalid; an anonymous union may only have public non-static data members [-fpermissive]
-      92 |  __struct_group(bpf_lpm_trie_key_hdr, hdr, /* no attrs */,
-         |                 ^~~~~~~~~~~~~~~~~~~~
-   /tmp/work/bpf/bpf/tools/include/uapi/linux/stddef.h:29:10: note: in definition of macro ‘__struct_group’
-      29 |   struct TAG { MEMBERS } ATTRS NAME; \
-         |          ^~~
-     BINARY   bench
-   make: *** [Makefile:703: /tmp/work/bpf/bpf/tools/testing/selftests/bpf/test_cpp] Error 1
-   make: *** Waiting for unfinished jobs....
-   make: Leaving directory '/tmp/work/bpf/bpf/tools/testing/selftests/bpf'
-   Error: Process completed with exit code 2.
+It is handy to have 1 obvious place to nuke some features completely.
+Especially for polarising ones like Windows support.
 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 754e68ca8744..31e9bdd4641e 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -8,6 +8,7 @@
->   #ifndef _UAPI__LINUX_BPF_H__
->   #define _UAPI__LINUX_BPF_H__
->   
-> +#include <linux/stddef.h>
->   #include <linux/types.h>
->   #include <linux/bpf_common.h>
->   
-> @@ -77,12 +78,24 @@ struct bpf_insn {
->   	__s32	imm;		/* signed immediate constant */
->   };
->   
-> -/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-> +/* Deprecated: use struct bpf_lpm_trie_key_u8 (when the "data" member is needed for
-> + * byte access) or struct bpf_lpm_trie_key_hdr (when using an alternative type for
-> + * the trailing flexible array member) instead.
-> + */
->   struct bpf_lpm_trie_key {
->   	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
->   	__u8	data[0];	/* Arbitrary size */
->   };
->   
-> +/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry, with trailing byte array. */
-> +struct bpf_lpm_trie_key_u8 {
-> +	__struct_group(bpf_lpm_trie_key_hdr, hdr, /* no attrs */,
-> +		/* up to 32 for AF_INET, 128 for AF_INET6 */
-> +		__u32	prefixlen;
-> +	);
-> +	__u8	data[];		/* Arbitrary size */
-> +};
-> +
->   struct bpf_cgroup_storage_key {
->   	__u64	cgroup_inode_id;	/* cgroup inode id */
->   	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
+> > Name it "Linux Subsystem for Windows" for 146% better memes.
+> 
+> Fun with marketing!  :)
+
+If they can "Subsystem for Linux", we can too.
 
