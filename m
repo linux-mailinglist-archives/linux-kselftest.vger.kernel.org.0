@@ -1,136 +1,126 @@
-Return-Path: <linux-kselftest+bounces-5120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A456885CE40
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 03:46:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2768A85CE4E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 03:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E8A9285B98
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 02:46:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2F5A1F22A03
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 02:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4630928371;
-	Wed, 21 Feb 2024 02:46:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D19C282EE;
+	Wed, 21 Feb 2024 02:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="eY+mcvmr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kbOUNgYO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D512574F
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 02:45:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022DE46A4;
+	Wed, 21 Feb 2024 02:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708483561; cv=none; b=pV3xY2N0+pWifA4UDr3OIFjjSjSjGIaTmDF1hoy3p6UrmjEP4qIQ6KLEo/Y7gRoKHRbUQ5uWSkvjsssMkq88mPry3WxD2M7Nhja/aefsfHio119lIlZf0zy7ueJCDTUh8AKM7+bgqTOmcndBBHqX3vKxcY8IHYmo6U7V8b88EAg=
+	t=1708483791; cv=none; b=Gf3AQ8qDu/tDtF8jp4HDlDeWmnzdTFU5tv5+/ixdxajL+Gi0oFpOR+KthSUq+yBo2bt/qmM9JTSoTawK9yF+MvK4X0QO8AA+9XY1nZgrsG7uCSZcyBhZaRNRNibhkDLaI8o4BsfF8qU+ef+wXKpp6rHQZF9lyheSVmlYmOGCwiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708483561; c=relaxed/simple;
-	bh=ve1P36IQxgQSH5e/j0CQ97PbRHxGM/0Cwkl/MH1SMuI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F77s3kJLoBqL7EnwhF3FoTiEX7Xj+bEa2rU6TQAI5MXaOJI4N0YJKi7dUQ0OnFesMgt05yRhBKb+YVC+ZMIjXev1YufxwfIEyMGyfLjBpstAOZEemklLo6Sj6nBoSnJ2UVMrO1KCwhXxVSXI9v2VwJBrcGgEhC4xRiteIOV0HVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=eY+mcvmr; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d934c8f8f7so58201225ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 18:45:59 -0800 (PST)
+	s=arc-20240116; t=1708483791; c=relaxed/simple;
+	bh=0YzZT7AtbEwGuMMGVGesQNVHt+oEog5zyqr5o4Zt9Ho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BBIlea5RbTFbYYLs9zXWTrBFl4IXk1DBJChp1CjXG2/RzJ2NUSA+pP7LAWRwLx6jSQaWKjVR+eCVFvPNw5vpJKSWg++5pmrAQGVVdkcGqEZUUWrUBQmLkw5nnYb2tKE5BuD6QKOKA3ogK3BFY/7tl72XSEy+MfYkt65FRROHL1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kbOUNgYO; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d932f6ccfaso50963765ad.1;
+        Tue, 20 Feb 2024 18:49:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1708483559; x=1709088359; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ve1P36IQxgQSH5e/j0CQ97PbRHxGM/0Cwkl/MH1SMuI=;
-        b=eY+mcvmrLFndy3vMd8abbvvdkULPrS9j/rbHuiS6BpOmmsCTwnlklWp6M+wxwAdgeN
-         UfoXCNMgSyr5wD1t0VfJ/nMZvzlUdWEoo3e9O6+/v4f32pq7c8hJZ6LYGE17SdTBXkEj
-         dRg70wiXqBwr4B3w77PZLgPkW8N0tWg6vRSrytbCzsL1e4enAjTMxJbQ5Eg2QIMEARVQ
-         Da5+Iyty92uH2Np1ZUyWQ2X2NhtHK8SN9oDQHOLc+TRCKfj5qtrmTgMBaoJUlPpqV2zB
-         RB7capCvii6EPMsLb5g+m23QkBLccOm+NdTIDL2hXEna+MSiUfRgQ+HsXk/0IgJ80vla
-         rRYw==
+        d=gmail.com; s=20230601; t=1708483789; x=1709088589; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9pAyzYBVOxuKmn5DITDD4392qCfsQwduisHaKiAl1r0=;
+        b=kbOUNgYO4FYVFsIlbbIwiCACHrAKvq67lO7iZMFehwKzmw063yVUk55XH/tbIrih1Y
+         sDWqMvGMzFj1j90DBcTPWFI1oibrwBrFsW+vq2unHn+lX6SRh9tbn1DGvn0lD0P++73m
+         wZeszZsy41PKqCyEvDJTDGGfvCRJE6bUE0+IL7eybs/WO4EJNP4S0dZyr0tLvuD/z1u/
+         m5lvmKwzgnlATE58nKLgXqbmdRjOQ8T4P77F3ujyUL5tGRAi1ElfVWzM10NtrpeJH2mn
+         4H6O4Q2lPgwKHvLrL0vopNpZjwNDc3PkVuSIIEXUQ8r40eLCTZCpc1slA373LzQuHABS
+         LMEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708483559; x=1709088359;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ve1P36IQxgQSH5e/j0CQ97PbRHxGM/0Cwkl/MH1SMuI=;
-        b=rdduTL5TpaAHI82l1NSg4tvB90XMSCoacDScSqhWzYUD3hSbLXCcBkkiJ7Dr1+Ct1u
-         gFy5CMY/+a3YZgMEae4ZF8abSyk+N+cJZLA5T2ZmFPT89jwJU2HfeMHc0X9WN2C6YmR7
-         ntLuT0GCQXr2nWlRZ/Gzl7uVhtZKesChSJ08/NXIp7OGxXPwmDsUkvVh6WeGdj75Xl+7
-         dnmQ5nCd3LYZD83/8qWN1GmnKvVeXNgZp/SygGVPnMIo/5JAeGtkuBJgkemLeIdUXvjQ
-         zZtCZCWuneUM/wt3hRqpvUunnygV6pNMqCvhrU6qBcUVmGtpqj6coz3LvwM0C/V4Ko4B
-         rNwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWT7SsHyV3/HoZgv1uXv1E3lt02a5vUwboFxSAi0cQdsVsYKCUsNPjDyV0Tmt9W0nItjF5NzZlAR5HGSvnoYaxbJ3MFj35zwsUuZIVcJCZg
-X-Gm-Message-State: AOJu0YyeS2Px6wTSEZCDiPZKHoNCsOv7c8vZtx+Qg0rESpRRoUWPiytX
-	Yofvm+Vjtx8vqUucElqENYGEZMe28Ymw+wHTMeKMe78PNox0+SkmdAWJ2QWA7cV2WEqN1fILgOh
-	tcbWTPyIbk9gfG2vVUtaFrAVxi2Sr2RXQ4628RA==
-X-Google-Smtp-Source: AGHT+IGashesbOHbcyrknzxfVk2lf4tXLZJ5jdamBO+1t79MQQSOI9DHPUj6TjyB6Xz8pKhd36pDvEFEfQoRdh2c6sc=
-X-Received: by 2002:a17:90b:1281:b0:299:6848:28c1 with SMTP id
- fw1-20020a17090b128100b00299684828c1mr7815650pjb.26.1708483558766; Tue, 20
- Feb 2024 18:45:58 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708483789; x=1709088589;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9pAyzYBVOxuKmn5DITDD4392qCfsQwduisHaKiAl1r0=;
+        b=ehFmfz7uG5roagIClQ1iZwj0Vk69+I0BkTpT/aY+yantu+flqXpL5uxoM4tQJoIlpv
+         nE2uLC95M+e6wyRQ192WUfrTK4lZEFkpBMYAeUzXxb2DF0YVCQZrZTkcf1GkgRWqK2FH
+         rXK1ENDsNI/QcDaOGahx+XmmzGomFNbtjzNa6ojP/iU1ZVhdweM9VpAdAGSbPGwrNoC6
+         IGRAulL7xYWeXR4Tjgfaf/QNacoloajHT3V/M0M3FVreWAEa8zrY88kVrTwhPJAjYanG
+         zSF+fBaVB2XBAzTcybUOMmrmHlxK+ZU2qbS4JUIhHAOpXuoB5f9iaP6U+1jZv508TeYV
+         9XOA==
+X-Forwarded-Encrypted: i=1; AJvYcCXqJ5UYVeFqC3hi8i1yAmSThuP5DlB+RnhR2nfL6dWAVvzoD7Wqvzkn+t9vBMOoc9uRzzrphlxe86EY81U7cDXLzuQvYMg6M6ofsSq2l9cUKBis1OaddOt4ez5OZcxR1DnUVYP20l2T4D35ipgSwKDemuyCivl4vArMpiZK2zyTo3INegKc7CVsA8B7vHs7om2aatfPDY7pSjtEknWH2wzr/crMH+7gFoD3uh5YGeMs5O/cseGNU7yrlsE=
+X-Gm-Message-State: AOJu0Yzl1PLxuqR+EvmELKqZnBDg+jMK85/uagNheWLznWxx203QuO+V
+	k544I/HUNhtxAjCQyEIFBpCH6lwvxf9Al3zqzbjp3uNs3nW5WGRw
+X-Google-Smtp-Source: AGHT+IGpD6WpkCgaR7lYoHcPIeliL0+6EyMXy2eFgCQmG/Odbul0rh0nTvlpvUfl9z5wmC4riV6UVw==
+X-Received: by 2002:a17:902:6847:b0:1db:9fef:b996 with SMTP id f7-20020a170902684700b001db9fefb996mr13328524pln.33.1708483789202;
+        Tue, 20 Feb 2024 18:49:49 -0800 (PST)
+Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::4:b11c])
+        by smtp.gmail.com with ESMTPSA id kq13-20020a170903284d00b001db5c8202a4sm7005042plb.59.2024.02.20.18.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 18:49:48 -0800 (PST)
+Date: Tue, 20 Feb 2024 18:49:44 -0800
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH RFC bpf-next v2 02/10] bpf/helpers: introduce sleepable
+ timers
+Message-ID: <rgjy2bzsugnm7eyye25sx4b4os3lenfpzncdy5x4jog7qqkycb@6z4ybeniikvc>
+References: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
+ <20240214-hid-bpf-sleepable-v2-2-5756b054724d@kernel.org>
+ <a72147f5-2b7d-4267-9881-6a645c575838@linux.dev>
+ <r3yhu4h23tdg2dqj7eq3lhevsigvvb3qkge3icxmaqpgkayvoi@gxfxstkr2pxl>
+ <87eddccx1q.fsf@toke.dk>
+ <fckhc367l6eha2gpftixhzjdsmo2jts5p6ir6ukx2q5xndsbhf@btzjwvuamcv4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240220035105.34626-1-dongmenglong.8@bytedance.com>
- <CAADnVQ+E4ygZV6dcs8wj5FdFz9bfrQ=61235uiRoxe9RqQvR9Q@mail.gmail.com> <CALz3k9g__P+UdO2vLPrR5Y4sQonQJjOnGPNmhmxtRfhLKoV7Rg@mail.gmail.com>
-In-Reply-To: <CALz3k9g__P+UdO2vLPrR5Y4sQonQJjOnGPNmhmxtRfhLKoV7Rg@mail.gmail.com>
-From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Date: Wed, 21 Feb 2024 10:45:47 +0800
-Message-ID: <CALz3k9h8CoAP8+ZmNvNGeXL9D_Q83Ovrubz9zHECr6C0TXuoVg@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next 0/5] bpf: make tracing program
- support multi-attach
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, mcoquelin.stm32@gmail.com, 
-	alexandre.torgue@foss.st.com, Kui-Feng Lee <thinker.li@gmail.com>, 
-	Feng Zhou <zhoufeng.zf@bytedance.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
-	Daniel Xu <dxu@dxuuu.xyz>, LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fckhc367l6eha2gpftixhzjdsmo2jts5p6ir6ukx2q5xndsbhf@btzjwvuamcv4>
 
-On Wed, Feb 21, 2024 at 10:35=E2=80=AFAM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongm=
-englong.8@bytedance.com> wrote:
->
-> Hello,
->
-> On Wed, Feb 21, 2024 at 9:24=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Feb 19, 2024 at 7:51=E2=80=AFPM Menglong Dong
-> > <dongmenglong.8@bytedance.com> wrote:
-> > >
-> > > For now, the BPF program of type BPF_PROG_TYPE_TRACING is not allowed=
- to
-> > > be attached to multiple hooks, and we have to create a BPF program fo=
-r
-> > > each kernel function, for which we want to trace, even through all th=
-e
-> > > program have the same (or similar) logic. This can consume extra memo=
-ry,
-> > > and make the program loading slow if we have plenty of kernel functio=
-n to
-> > > trace.
-> >
-> > Should this be combined with multi link ?
-> > (As was recently done for kprobe_multi and uprobe_multi).
-> > Loading fentry prog once and attaching it through many bpf_links
-> > to multiple places is a nice addition,
-> > but we should probably add a multi link right away too.
->
-> I was planning to implement the multi link for tracing after this
-> series in another series. I can do it together with this series
-> if you prefer.
->
+On Fri, Feb 16, 2024 at 03:58:20PM +0100, Benjamin Tissoires wrote:
+> 
+> So (and this also answers your second email today) I'm thinking at:
+> - have multiple flags to control the timer (with dedicated timer_cb
+>   kernel functions):
+>   - BPF_F_TIMER_HRTIMER (default)
+>   - BPF_F_TIMER_WORKER (no timer, just workqueue)
 
-Should I introduce the multi link for tracing first, then this series?
-(Furthermore, this series seems not necessary.)
+These two make sense, but
 
-> Thanks!
-> Menglong Dong
+>   - BPF_F_TIMER_DELAYED_WORKER (hrtimer + workqueue, or actual
+>     delayed_work, but that's re-implementing stuffs)
+
+This one doesn't.
+Unlike hrtimer the workqueue is non deterministic.
+Requesting a callback after a specific delay only to be randomized
+by the workqueue is a confusing UX to give to bpf progs.
+If bpf author really want to do something like that they can implement
+such anti-feature manually with two bpf_timers.
+
+Later we'll add a selector for WQ. At that time we'd need to decide
+whether to use a dedicated kthread or any of system_*_wq or WQ_BH.
+For now I'd only expose 'sleepable' as a guarantee in bpf api.
+Hence BPF_F_TIMER_SLEEPABLE is the only extra bit in flags for bpf_timer_start().
+Not sure whether it's needed in bpf_timer_init() too.
 
