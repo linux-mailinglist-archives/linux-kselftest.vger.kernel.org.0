@@ -1,142 +1,103 @@
-Return-Path: <linux-kselftest+bounces-5102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5103-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CB2185CCE2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 01:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D98F485CCF2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 01:49:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7FF01C21DAD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 00:44:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16B681C21DB6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 00:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D290187F;
-	Wed, 21 Feb 2024 00:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C11C1841;
+	Wed, 21 Feb 2024 00:49:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EO1AKxM9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PEo0tGgy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F0217D2;
-	Wed, 21 Feb 2024 00:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846CA1FDD
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 00:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708476293; cv=none; b=rLYu+ukfo5jA5KyJgvV4+4ZVmxTMNgD3m9OF854cldBrkXlVbTbdVQW2HkyIsZrgIXbB9+a6IHy0N432IRMtCeKxQZHAbxvV4oTYX5YBZc3sZrIZwwjunJbAmAsgE5PYDnVSLYT+nKkS0MQS3kxdwuM76xGJ3WC3vNi6hylmk2s=
+	t=1708476568; cv=none; b=hEa9O1aPgtFPJCtfI9MwXUnDxcB4FzCjThY1mgVK3KsBCR6dJAa2Pfv/VLGvBxCIEeakC1/tbT4l29S/hO6WxqnOjsP0G2FExJwlpstpeXHVIEKN/HmeCo2T73NfHwWzdca5fRxscgh13agBtpxqsKZPZl3JZOyDfHuD+Vz+oa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708476293; c=relaxed/simple;
-	bh=RgYHLlEs8Obx/1+1Ex9Dia48d76DvmFNDuLMAR9oXbs=;
+	s=arc-20240116; t=1708476568; c=relaxed/simple;
+	bh=cIRuw18MgK3s3QPYG5bF8HaUdZMx7uHI+euu6IBW8e4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q8QCQiikidltPOET8y3Lh/KyvGv+l38zGWeXrV3B/NlZJDSR8u7+bWKpfhqNatbkaU8CZvR6yIGOSMo4FWwNMLAXD6arwEKkCb5iS/GWkZFDIR3K7erWCvjHebPaWtKLP/Exz1N89ckeS3n3uXPbq+0ZHosQ14YlkAk3ff6ffLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EO1AKxM9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C393C433F1;
-	Wed, 21 Feb 2024 00:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708476293;
-	bh=RgYHLlEs8Obx/1+1Ex9Dia48d76DvmFNDuLMAR9oXbs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EO1AKxM9atAW5ijESg1UGQbijOEntefJ4W7hvVziFA0UrM4OUrijGVaBzcLEs6wYr
-	 OjSIBHChIOgwKca7pXNbM5Cobz19+3leTFG2K/9EVjkOotzvVw0v6ez05ByOvLbcwV
-	 +CEf8bXXKN6XhhDI0KQZwE7hmlaMqLtNtNfWohmrOO5PLVL5FNBfFfrfun8qdbWle6
-	 BBkj3Iud3EUQQytsOc+psDxTBNOG28HZowRKkkW/VLD4pWv0zXFVJLZNdlQZAg0FeB
-	 on/Je8QMYpg2sD3Y5jNv2RyOVaFeGMIIzBve14j+nne6Gk0zkfJUvj0vvAw6pPQKrV
-	 0fcsjUUDb1b7Q==
-Date: Wed, 21 Feb 2024 00:44:43 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "dalias@libc.org" <dalias@libc.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"musl@lists.openwall.com" <musl@lists.openwall.com>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"ardb@kernel.org" <ardb@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"sorear@fastmail.com" <sorear@fastmail.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
- in userspace
-Message-ID: <cffc9c7e-ba1c-4894-a455-8b2d687182cd@sirena.org.uk>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
- <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
- <20240220185714.GO4163@brightrain.aerifal.cx>
- <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
- <20240220235415.GP4163@brightrain.aerifal.cx>
- <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dCO5U6TVZIyeJHgltLvttyUTXBEmSBTtLIYOpRijLPuaWL00xO3CnsOFMJFnMXh63ox7zqiBa7FfxYaf7/htR+a2d+l7817wjUbHwD6tyPfeqfTbDxLUAucatYWf6jHrSko9bv5uCJBzCwcHSewXH6kGVeR17jit3c39qzVS6JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PEo0tGgy; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1dc139ed11fso10422005ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Feb 2024 16:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708476567; x=1709081367; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l6iZPQkJ9eVozTwMvVtiCWD1JWn1A/ViHwX542hh6CA=;
+        b=PEo0tGgy8iKWLybFGwoJXcTltbGU1p3TqNEKJWGiLDhDlDgH9lkOtyG1WDia8JuaWn
+         wYyDFYqOJHMABYWB2qmfvsNovoNoZ2Mk1kBNMcWffnb2WUtIwSZwMUbOsjBw3tThctWW
+         ibYukAqdeBTArIYb9VgX8sEf/vXlZnbxss/G0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708476567; x=1709081367;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l6iZPQkJ9eVozTwMvVtiCWD1JWn1A/ViHwX542hh6CA=;
+        b=Ns+CskhZw/043POPzT0DycMIm39l4CyMjUL2sT9EFR+GOlQlhUq6Tbk0Qms6D0v4gK
+         JzbPMtSa7C+h8zUjuG9vaOdX9Hre+52W8AG2GwTjhOnIVH5jO0beXhtqrtG9apFpHz+b
+         s1o/E+miIANOXZUPWD+hxVUR3DhwRDI1pXMQP2VTIubCkgkzgD9ZdXVLkeOjxcgNrfnL
+         hwzK8eRWbYZii5Jro7M1ry4bKDEAfjo5WrcV6Vf1r3dAsoHdsq0Z2Z4BNHQJ9e1PYfSj
+         UKIfjlo7ApSFi8v3lIO2Au306lqbKwroXlV074ypdwhxZmcIPTlemV0Xkp5jGC2ZQiYS
+         KDdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFGLoY26RdJmNpwlPiNNunFGo1CXTJKYYXvoBWC19Qt9oQI5TfMjg6oG/HauoSVlSPRDmQuWZc9lVT29G2n7Ak/nHKIYXtL3ycbRIcoYlk
+X-Gm-Message-State: AOJu0YxVp36KCU5G2l6Bcs/PpLGwsoEhURKA9LsPZkFLtxW6c09UU9U/
+	s57lwLu3WeQsyh9PBoz9K6Zzq2pybuWFsf3JjQw0XXQEq05efauGuwLqzLxTTFJS3BLVeT+9zGE
+	=
+X-Google-Smtp-Source: AGHT+IGrH8eYOJ+QTDt/PHAS3tq4N8QvcVgEEHaffSlr+I8HL+Yj6EPAOIVXls/P99vM+K5FbSBvRA==
+X-Received: by 2002:a17:903:183:b0:1dc:2ee5:3f3a with SMTP id z3-20020a170903018300b001dc2ee53f3amr608581plg.0.1708476566981;
+        Tue, 20 Feb 2024 16:49:26 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s2-20020a632c02000000b005dc98d9114bsm7242084pgs.43.2024.02.20.16.49.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 16:49:26 -0800 (PST)
+Date: Tue, 20 Feb 2024 16:49:25 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, mic@digikod.net,
+	linux-security-module@vger.kernel.org, jakub@cloudflare.com
+Subject: Re: [PATCH net-next v3 05/11] selftests: kselftest_harness: use exit
+ code to store skip
+Message-ID: <202402201649.C83025144D@keescook>
+References: <20240220192235.2953484-1-kuba@kernel.org>
+ <20240220192235.2953484-6-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zmCyS0Odp0mOsqor"
-Content-Disposition: inline
-In-Reply-To: <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
-X-Cookie: E = MC ** 2 +- 3db
-
-
---zmCyS0Odp0mOsqor
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240220192235.2953484-6-kuba@kernel.org>
 
-On Wed, Feb 21, 2024 at 12:35:48AM +0000, Edgecombe, Rick P wrote:
+On Tue, Feb 20, 2024 at 11:22:29AM -0800, Jakub Kicinski wrote:
+> We always use skip in combination with exit_code being 0
+> (KSFT_PASS). This are basic KSFT / KTAP semantics.
+> Store the right KSFT_* code in exit_code directly.
+> 
+> This makes it easier to support tests reporting other
+> extended KSFT_* codes like XFAIL / XPASS.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-> doing. But those threads might be using shadow stack instructions
-> (INCSSP, RSTORSSP, etc). These are a collection of instructions that
-> allow limited control of the SSP. When shadow stack gets disabled,
-> these suddenly turn into #UD generating instructions. So any other
-> threads executing those instructions when shadow stack got disabled
-> would be in for a nasty surprise.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> Glibc's permissive mode (that disables shadow stack when dlopen()ing a
-> DSO that doesn't support shadow stack) is quite limited because of
-> this. There was a POC for working around it, but I'll stop there for
-> now, to not spam you with the details. I'm not sure of arm and risc-v
-> details on this specific corner, but for x86.
-
-We have the same issue with disabling GCS causing GCS instructions to
-become undefined.
-
---zmCyS0Odp0mOsqor
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXVR3oACgkQJNaLcl1U
-h9BO9Qf/bgPI/9ROkHiV6cP5ag9FVPBuoU4y8o043FWrLxXipYjgLbjIps3r7NYd
-VLNWiX+sScsGrwtujlkAC3JYU0QAro+3+MY0cp+MjZopgqrEpOHlREM+dZO4FSB+
-BH4GTQgpADdgkbaukCb71Yd8D8HkPkpjvvsEGO6Kv2Bq4kMF6w2sd5O/llI+5BPN
-0v1hps6/0VWFICJibmb4hRIRPMjb91mxGQRdpF8OTCgHa0w4UXaTHLttIE3iqCd4
-nyeOZPkoIxUv3fYTVZjAqm6emWXXodOaOQrOtjTM1shBFck2DtY+hJJopNkuwE2j
-qeuz0TLv83oNLhiCiSUgT5gKjQrvdA==
-=VhGm
------END PGP SIGNATURE-----
-
---zmCyS0Odp0mOsqor--
+-- 
+Kees Cook
 
