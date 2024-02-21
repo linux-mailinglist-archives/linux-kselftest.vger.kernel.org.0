@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-5152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 531CC85D3D9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 10:40:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0597C85D3D8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 10:40:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7728B22347
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3691C1C2221E
 	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 09:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A3A3D3B7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13FE3D3B8;
 	Wed, 21 Feb 2024 09:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="t4GIUPjz"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="vjcYg2ym"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AEF73D38E
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 09:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556DF3D0DB
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 09:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708508422; cv=none; b=UqujkqTIzNJbyw0akLdfmrUxI+A7KebDqr7eRgNPHTw7QbVDHrJ0rmhk9ka/+OS33w69ePzKnfSXVLDRabdI2+REbtC28hWdW+vDeISuW9EiRonAvT1O8yLPJ/1Shde6fi3e1n2Yylfu61Bew6n510ilLlfWkCtmz0zXuViJnBo=
+	t=1708508423; cv=none; b=uQjMW8PSos+CPsYDdiAsPtwYBtYlt192PPv64NVl5Xx/NSccX7nYnVdx47+/w7jNOCbMLrRiTgVWajFuVOBU9Ucmi9+Qe8zDS7fMqILseotqx93q201DVa2ig/4DKE1e0gAncwiR/gVKGDC3mW40Ag3cq0uSpln8oegjbs6udTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708508422; c=relaxed/simple;
-	bh=HFkHHS+GAdWbBYN1pEhSvDeRxfbJuW8Pm88zkolC+L4=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=T3yPbE0C7CMNpbzMcouZ6S+CgWWdz4ujbIsE6N5JLKHsN3namBdo1R5rkw2hkUguw9PwsIjRBaTTdsx8TBrOG/Xdaba5OZsNPLBJg3NLTXw6nG8kDSSoa6MSCyZVSzEV9jxvDZoouFKsNo9Xezmfwbi3BCmzgz9VOCnnFG9fsq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=t4GIUPjz; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1708508423; c=relaxed/simple;
+	bh=OlBkC+ZgXcKloOM9CO5Sx3urbFq7uJTBiakKawlyrHQ=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=tY+iViY/HK3cMfA7YmAyzImT+bDGJ129cUwlleuyRXez36akBcNmOeTehmt0SJiyu5KmMIGPHL2GKP/NEN+rpddpoxSCeBfW6MSwYXQJ2ujFOJaP9HRVQVAFPWuhpb7uzM5kHjEZarNsdgS/uDIMIrF7FOKH3lg0Is8p0w9t/W0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=vjcYg2ym; arc=none smtp.client-ip=209.85.161.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d94323d547so48097315ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 01:40:21 -0800 (PST)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5a01ba2f815so61665eaf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 01:40:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708508421; x=1709113221; darn=vger.kernel.org;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=btPsSgYd3U39qbx9agK1iDVctNn1snM5vuQ/Okd8fYI=;
-        b=t4GIUPjz+Vu8u0K7khMA9wcJA8oPuRK16BXhzT/3uIwr86QFOpuiFu+iEecw5L48yV
-         I5+hxp5V/Pi5PrRv4ek6/hqkint3XtUziLHrNiiyrTtt+fKDhH+J2+Ab9DmVPzehb4Ff
-         lshxtrzZ0Gkk+Cq/4wF93joJODFopu8E1SG2TBVFsvMF9QoPj/bsa2eCiuqVZn3Btu1O
-         iJUmhHIfOoEv/8sRgFnsPqIkq0qIRVPfV/5YUy6bxTwHyFAXqUaNAXF0nEAqi7PWqcp/
-         hu1UiF72NWMSZ/ZUx2jQQdveAC6mEIqe0P97NKWNs5+9iHwmQVAvbKerSZM+2gGJpdDF
-         V2MA==
+        bh=IKa1XpWEqj/Sfxe1YntD5RxN0L/YBh+T/OxLM64lJbE=;
+        b=vjcYg2ymOoWm5ApwLINTED8v8tj+Fviy/lbNaZxQw2xQF4MXmnEAU8hEk5stHVx2GA
+         xjiLYMAJrMxT3CR2lIuPu1E50jG0uEJXo5PpVdDdOhHQfFN993xla8PkxSVTEHdmX3s/
+         jJTRZZUSylLnUhXim/vdnDawtkHaFpo5YTxKJwBSGkmsEvU6y0Uws9zHf0EqF210TR3b
+         /qL4dslzgsK59X/dosxRkqGEmV2e6HZAhFGWzvMja+h8xW/ihu4x1uKTbsBEXaP5FvFX
+         NxoppQqmctyEXje7d9akXrMxlUo4shbCUZEtiMG+U+mOCzM/xhoiOUk4Jrm0Gq/Zq6ep
+         6KhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1708508421; x=1709113221;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=btPsSgYd3U39qbx9agK1iDVctNn1snM5vuQ/Okd8fYI=;
-        b=IUvUMQlgZawApfCk3u48oJiLTshLRQ13Fih3LN+Q8qP1iWmhqqfEmzQHfgGUERJyB1
-         KqfBeHlox/dEd7PDRw6bElyzfvqqpytviDoad7FvUhi7dprEneGns6aJymYOC22IsDUj
-         cCZ6o1aF41m/Rm29XE/GiTFz75NChdadltbnnsZzMMT6ek6SmuaurmNQ/0seRBuVX7Cz
-         mNLukH1wTpqe6yi0We+/P2oAYNpd8J1s+6l6vsbWtQRPm/pX0R33tIFyXYpOVZ8BeNfL
-         rBa/Y/jbTp1zG8y28y4rRk9Jl8MuW00cLcT/cOHtHqIId161m+WO4Tt1FZnFeh6c3yMj
-         VOIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVi+u5Ko3W+QpnIJrNDIHSI1LNdiDNQLT3YNOVDJMt6qnSA1M1k5V2T41FSPb2uAD6qa5UEPAWVL0pvKAi6nytmJrr1SBQIJUVp7qB8NfDp
-X-Gm-Message-State: AOJu0YzrtVKFS8BgrgMu9Us5ADNk+vfFyjwJKpnlHegME/ywVuIUVwjq
-	5e75L4EOkjSz3ldHfxNJAEX4YroLmo47CU4JeoY5ssoiX/CknzAyIcslJFccJGg=
-X-Google-Smtp-Source: AGHT+IGd8hBR588eQeLe0Gg8nFJKupwxhCUbsHRlPgHe7VyFyE7A2lNlKO951Ti7vsEa53AACJYjpg==
-X-Received: by 2002:a17:902:8348:b0:1d9:4e4c:23d2 with SMTP id z8-20020a170902834800b001d94e4c23d2mr14843177pln.44.1708508420926;
-        Wed, 21 Feb 2024 01:40:20 -0800 (PST)
+        bh=IKa1XpWEqj/Sfxe1YntD5RxN0L/YBh+T/OxLM64lJbE=;
+        b=whYS+bmML8R0Hhz9L8/nXkVQl4uSt16HsKXYCcMLTVx6cuoyN+8agr1wSKbKDLvNki
+         L7Oerngxs05r1UGy6EwSCFjMBI1bLF2mR7yyEBSjJ8GKw0f1KssaofmDhOePUij3P0nH
+         EtvWB4XoqMOoSFycmI+6O5o8VxKzyAPPwtaSW6fqFUsn+uYCOIvLhH2FaeXWkKP9EE1g
+         YYuU4xIjXQuyNc/zYqN9RMYQr2L60YK8cbyVx9ZWJXKYDANWoWhO/OztdtPyeAJbRbO5
+         +xELlCiqNyxdLQ6PpHEcb0rJz0FaiRjXIHYvZ5n6hLF460s7lYbZzrFCqGiNI2Y70Sw2
+         k2IA==
+X-Forwarded-Encrypted: i=1; AJvYcCVF8O9enYXi5FSlN+66rfa1BxqtPLxNrN+orkIFIxAoM5QEmfjPYGBMNBlNyZj97ajO2brf2UV+ujDYtWhlc/naNYCP8akRGTE9Wn4gBi/B
+X-Gm-Message-State: AOJu0Yy/jjWwDrIHzfR9B2SbprGE8JTvh2Kb9+9JQ6otjCdD+0R+PXjo
+	kt5qbVMgHp97A4a3Yo5nxAmqEIZ4tnQNlhlBcfycipQXWOeCsgZFkKynHIW+XC8=
+X-Google-Smtp-Source: AGHT+IE5XQRYaZ1/YY3EolA1/rIjwTHjMgJymqp3J++HuWFddD+m2pBTMa5wBVGVUgyi+sIi+BdCjw==
+X-Received: by 2002:a05:6358:571a:b0:178:b97c:f087 with SMTP id a26-20020a056358571a00b00178b97cf087mr19627995rwf.15.1708508421343;
+        Wed, 21 Feb 2024 01:40:21 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id o16-20020a17090323d000b001dbac604e4dsm7749115plh.146.2024.02.21.01.40.18
+        by smtp.gmail.com with ESMTPSA id k5-20020a635605000000b005dc85821c80sm7908029pgb.12.2024.02.21.01.40.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 21 Feb 2024 01:40:19 -0800 (PST)
-Message-ID: <65d5c503.170a0220.6f30e.7a52@mx.google.com>
+Message-ID: <65d5c503.630a0220.8d6b2.8800@mx.google.com>
 Date: Wed, 21 Feb 2024 01:40:19 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -79,30 +79,30 @@ X-Kernelci-Tree: kselftest
 X-Kernelci-Branch: next
 X-Kernelci-Kernel: v6.8-rc1-48-g6f1a214d446b2
 X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-seccomp: 2 runs,
+Subject: kselftest/next kselftest-lkdtm: 2 runs,
  1 regressions (v6.8-rc1-48-g6f1a214d446b2)
 To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
  shuah@kernel.org
 From: "kernelci.org bot" <bot@kernelci.org>
 
-kselftest/next kselftest-seccomp: 2 runs, 1 regressions (v6.8-rc1-48-g6f1a2=
-14d446b2)
+kselftest/next kselftest-lkdtm: 2 runs, 1 regressions (v6.8-rc1-48-g6f1a214=
+d446b2)
 
 Regressions Summary
 -------------------
 
-platform                     | arch  | lab         | compiler | defconfig  =
-         | regressions
------------------------------+-------+-------------+----------+------------=
----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
-selftest | 1          =
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
 
 
   Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
--rc1-48-g6f1a214d446b2/plan/kselftest-seccomp/
+-rc1-48-g6f1a214d446b2/plan/kselftest-lkdtm/
 
-  Test:     kselftest-seccomp
+  Test:     kselftest-lkdtm
   Tree:     kselftest
   Branch:   next
   Describe: v6.8-rc1-48-g6f1a214d446b2
@@ -117,35 +117,35 @@ Test Regressions
 
 
 
-platform                     | arch  | lab         | compiler | defconfig  =
-         | regressions
------------------------------+-------+-------------+----------+------------=
----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
-selftest | 1          =
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/65d5b9d6c5327f8f17637012
+  Details:     https://kernelci.org/test/plan/id/65d5b6cab08d32e621637085
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
   Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
-1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.txt
+1a214d446b2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
+-lkdtm-imx6q-sabrelite.txt
   HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
-1a214d446b2/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.html
+1a214d446b2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
+-lkdtm-imx6q-sabrelite.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20240129.0/arm64/initrd.cpio.gz =
+elftest/20240129.0/armhf/initrd.cpio.gz =
 
 
 
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/65d5b9d6c532=
-7f8f17637013
-        failing since 488 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1-1-gde3ee3f63400a) =
+  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/65d5b6cab08d32=
+e621637086
+        failing since 447 days (last pass: v6.1-rc1-23-g00dd59519141, first=
+ fail: v6.1-rc1-23-g8008d88e6d16) =
 
  =20
 
