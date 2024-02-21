@@ -1,234 +1,214 @@
-Return-Path: <linux-kselftest+bounces-5245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7BBD85EB08
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 22:37:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 842B485EB24
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 22:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AFB81F277C1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 21:37:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 119F91F291FC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 21:39:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8660C12BF0B;
-	Wed, 21 Feb 2024 21:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B4512A16B;
+	Wed, 21 Feb 2024 21:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D0FOyXkc"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LNhDoZGR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13D712BEBB
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 21:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A41B128830
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 21:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708550998; cv=none; b=JRHnhaLsXHtU/A55QPu/II8+KZ4xL5r2qOtxgAW5T8/y32jDYjj1N/lMrTC90XJVuvkL5b+yhcskJurDwlrT/Hh/szHPLotKcQK8MJg/hg+2hh5XC3dcEgFWN0W8rLuNjcsi39cWked2o4tEhrwTGvNmZADdgj8p3S8iW4LBi10=
+	t=1708551524; cv=none; b=kImEmKJVoClZzF5RRPO9tFIKwdWzz0yGbSUovyF2ebX7CQ3DI4vfTG1Rwv5wgu0gNCLdQi1ubKxdhjDC43KWbkg+TrVBqdnW9tYb/DKpxrKNVWwNL2cqtUObe7Dm+7HjqHPxMoxlcVUl8kv6xx2T6pgtApMOYH/IXcCYper0HLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708550998; c=relaxed/simple;
-	bh=jhbT5Cr5KxXONXs4T6cwnDbtOKqKVBRtP9a65KT+oaM=;
+	s=arc-20240116; t=1708551524; c=relaxed/simple;
+	bh=tdC/CiuVWPHSufrgRHTfCGIP/BXt+NRLyAohkR1KzmM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YzedvxynxA2q992kFTScLjF9QfO838B/4lw7h2PqggjiT6Gz8GR4tB1wpUzphb0bErKrxIsc71Ho42NazzybmI8ukJfsIy33ZmMnUobXyXq0IAffNZBhszVMTu3NoQkoKQE5FXIDlR6W3s2wygVbTN2krKfooJMkaL3wipOGThc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D0FOyXkc; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7c77cff6ee8so14278839f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 13:29:56 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=eJHUWKXoF69fpiIhAuqyYRqzc+InaijmNhKy7rKvM55PPKkTfFhYoKwNliX7n6viZLCHZMJKq9xWOv0AZEhR5YmpUsSQX1MwMCqKeIrhPmpE2Xcu5aZTcxAB/vkJPwAtAhZyrRhSY3/X6WG6wDPPilrnluSDhDPLuuRVvHNRYUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LNhDoZGR; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e43ee3f6fbso4194071b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 13:38:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708550996; x=1709155796; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fHJzWSZbaUVkrjgtkdycbYKuoIbcz4QqReZXQuIUTd8=;
-        b=D0FOyXkcN99A8U2pypJobo/iI1rVmSj6DKFobDqrZr7YyzHGpvKpwcRQGEIDw6EbPC
-         +T4++/maF4JeYetwSfFO1/M/uhMW1BA3g7/eQWpodAJUFczLM1SgEa/ggFfvp+ENwyEU
-         0UvCXNhbjPVfWedQ2lVqe+3tPm0k0dQq/2hEQJZlmUS9fOuiy9CKIKwPDyU0Bxi7qK4/
-         INhd6nuqer6EPWnAx+EQrbhjntKaiU84ERlIbiNO3i1oV7jrKMNXvYOznFFw1IAURQig
-         UVDg6rHDUUQfu57sr5rpsWUSd0oP3nArNmCYR/OK43USKT7O5o2cfmCLOM4gtI4sGOJ7
-         XrfA==
+        d=chromium.org; s=google; t=1708551521; x=1709156321; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UQex++ttS4RzCrpq+AKJPUO9eah2DR726vpHNT3YCIg=;
+        b=LNhDoZGRhp2bqQOiJ1qjqrA970ZBKux361+V7tI+5aENf+JiyIYxOvdBaFVR9h+3q2
+         72iEdCibq48fBJwOeWpyJArrnwMXfg5ilHXZmRgkQCipKC/b6Qq0A60XAOswRFlzDELW
+         C6DCRbL8VGc1seF8EQHY+PwqXmAgx+GyrtFe4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708550996; x=1709155796;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fHJzWSZbaUVkrjgtkdycbYKuoIbcz4QqReZXQuIUTd8=;
-        b=CNe4mD1sQrs3vSAJEyN3/KRR+JaEbg/G5An1QRmiOZKhLFZFdRe7Vf7nDj1bolNLDl
-         uDF8Pah9Ba1ysywXgps9yDLSAcKpJjzSFuSXyv75ZJj+o0R2SRJpzLArTXazxtqc8ex3
-         rLN534uG4ZX+Q3p7gyF+8WA1t4Te+HllrpoZ3lDNhOFvrZEJBYE2kbQw0dKHRWEs5UvK
-         XjfBgsacQh+iQOnKrYAQpdlY7yHwdbhOkpeI02bo7KsnKFPDkgRjRTROOmZdos7HM1xH
-         b0g5MVjy2l5YsMkrGMCr4f5n0TBs9EaTwioH1tG38LMzrkgKfd2KozX16QSUHVSesopu
-         I3TA==
-X-Forwarded-Encrypted: i=1; AJvYcCWv1QetGqm0+OXvtqH/iRxvKltBUKmy5xMASG78Ep9eK/oycEldfD3v0jvdDUhmLxPiSNK2LLICVEROcsXaUNPQzMuqHsIQBYab6r2jJHgn
-X-Gm-Message-State: AOJu0YyLO+/1NoZ0NudtXNrpi9HDyDdvkn/Ylstv8QSTyepaWuXn7rVh
-	kV4Y0QCq3t6MQEDtHXT/wxNi47UdBENsdExW9A5DsgVl1TN+s5+SUMOq9gy3xg==
-X-Google-Smtp-Source: AGHT+IH3xGOF+O0PatOjKRFVOXKn3+X8AKF5AtBxottFnw4acxjqjkkOFdnbYMdTb0txcBwNyBSoFw==
-X-Received: by 2002:a05:6602:3fd1:b0:7c7:397c:6690 with SMTP id fc17-20020a0566023fd100b007c7397c6690mr17957645iob.17.1708550995732;
-        Wed, 21 Feb 2024 13:29:55 -0800 (PST)
-Received: from google.com (161.74.123.34.bc.googleusercontent.com. [34.123.74.161])
-        by smtp.gmail.com with ESMTPSA id h21-20020a02c735000000b004742bbf11c0sm1712244jao.120.2024.02.21.13.29.54
+        d=1e100.net; s=20230601; t=1708551521; x=1709156321;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQex++ttS4RzCrpq+AKJPUO9eah2DR726vpHNT3YCIg=;
+        b=qc/y/6c5wRbF8qvSIbUnDqf+TghbXdOR8TB7649ECO42M0F5Y7+VxpSPz1gtR9TmKP
+         sqNg/mDOqpxIj6ic3gf7g+ou3Z1YBoBi3mAMvdCBCzW1nm0g7GbI9nttV2wzBkPn2Z6A
+         n3H3bRUn13hNuEnsOeCLxf9bJ5PpwwF9YtdVKOA3WvJMrZeUIOEh1l2HJESF6AMYhzpV
+         Nu7KsxyMGTzJQssuSgvsk3rBY8MfM1OU9HDvYBJ8wQDEapsl3VEpDi2ZM1ks1yzzp3yN
+         JySndQW9P7gSz2O77dUx3m6WgMZp7LlM/DgsIFjsN48BgwA7nBSEKrWMJNLIaKp67XpX
+         /UmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1NgKmBuUrQTJbSIY7TRpLvC9pZ4O7cgOQpajiq+z6KVO83EZZYveIVD54BliO4tROl4EtWWG9dq3pfakAyL1fCioPAKaDcpZH+AWIe2Cl
+X-Gm-Message-State: AOJu0YxrTqT7CE5RIHZMGVOcBgCqvAFdXprG7JEtDe9Bv7cZby6eC19T
+	N4T+b/Qscydx3NuVXs9Q+ua0njRL0/EuGoJ9iHw0EA9a7SctF5TDCfMDz1ZX7w==
+X-Google-Smtp-Source: AGHT+IHDh/MRb5Op0VGAH3i2K/wXYQriert54RdfL+L6lC7CA/epD+rsZx/gHYIBfDp8bfXy2Py4ow==
+X-Received: by 2002:a05:6a21:1014:b0:1a0:c46f:62be with SMTP id nk20-20020a056a21101400b001a0c46f62bemr3014569pzb.38.1708551521543;
+        Wed, 21 Feb 2024 13:38:41 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y5-20020a056a00180500b006e45daf9e89sm7123140pfa.131.2024.02.21.13.38.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 13:29:54 -0800 (PST)
-Date: Wed, 21 Feb 2024 21:29:52 +0000
-From: Justin Stitt <justinstitt@google.com>
-To: David Gow <davidgow@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rae Moar <rmoar@google.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Kees Cook <keescook@chromium.org>,
-	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Cassio Neri <cassio.neri@gmail.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Arthur Grillo <arthur.grillo@usp.br>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Daniel Latypov <dlatypov@google.com>,
-	Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	intel-xe@lists.freedesktop.org, linux-rtc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 7/9] drm: tests: Fix invalid printf format specifiers in
- KUnit tests
-Message-ID: <20240221212952.bqw4rdz2i2yf3now@google.com>
-References: <20240221092728.1281499-1-davidgow@google.com>
- <20240221092728.1281499-8-davidgow@google.com>
+        Wed, 21 Feb 2024 13:38:40 -0800 (PST)
+Date: Wed, 21 Feb 2024 13:38:40 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	netdev@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+Message-ID: <202402211317.4D3DEDCA2@keescook>
+References: <20240220185421.it.949-kees@kernel.org>
+ <da75b2bf-0d14-6ed5-91c2-dfeba9ad55c4@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240221092728.1281499-8-davidgow@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <da75b2bf-0d14-6ed5-91c2-dfeba9ad55c4@iogearbox.net>
 
-Hi,
+On Wed, Feb 21, 2024 at 05:39:55PM +0100, Daniel Borkmann wrote:
+> On 2/20/24 7:54 PM, Kees Cook wrote:
+> > Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+> > flexible array. Found with GCC 13:
+> > 
+> > ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+> >    207 |                                        *(__be16 *)&key->data[i]);
+> >        |                                                   ^~~~~~~~~~~~~
+> > ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+> >    102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+> >        |                                                      ^
+> > ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+> >     97 | #define be16_to_cpu __be16_to_cpu
+> >        |                     ^~~~~~~~~~~~~
+> > ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+> >    206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+> > ^
+> >        |                            ^~~~~~~~~~~
+> > In file included from ../include/linux/bpf.h:7:
+> > ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+> >     82 |         __u8    data[0];        /* Arbitrary size */
+> >        |                 ^~~~
+> > 
+> > And found at run-time under CONFIG_FORTIFY_SOURCE:
+> > 
+> >    UBSAN: array-index-out-of-bounds in kernel/bpf/lpm_trie.c:218:49
+> >    index 0 is out of range for type '__u8 [*]'
+> > 
+> > Changing struct bpf_lpm_trie_key is difficult since has been used by
+> > userspace. For example, in Cilium:
+> > 
+> > 	struct egress_gw_policy_key {
+> > 	        struct bpf_lpm_trie_key lpm_key;
+> > 	        __u32 saddr;
+> > 	        __u32 daddr;
+> > 	};
+> > 
+> > While direct references to the "data" member haven't been found, there
+> > are static initializers what include the final member. For example,
+> > the "{}" here:
+> > 
+> >          struct egress_gw_policy_key in_key = {
+> >                  .lpm_key = { 32 + 24, {} },
+> >                  .saddr   = CLIENT_IP,
+> >                  .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
+> >          };
+> > 
+> > To avoid the build time and run time warnings seen with a 0-sized
+> > trailing array for struct bpf_lpm_trie_key, introduce a new struct
+> > that correctly uses a flexible array for the trailing bytes,
+> > struct bpf_lpm_trie_key_u8. As part of this, include the "header"
+> > portion (which is just the "prefixlen" member), so it can be used
+> > by anything building a bpf_lpr_trie_key that has trailing members that
+> > aren't a u8 flexible array (like the self-test[1]), which is named
+> > struct bpf_lpm_trie_key_hdr.
+> > 
+> > Adjust the kernel code to use struct bpf_lpm_trie_key_u8 through-out,
+> > and for the selftest to use struct bpf_lpm_trie_key_hdr. Add a comment
+> > to the UAPI header directing folks to the two new options.
+> > 
+> > Link: https://lore.kernel.org/all/202206281009.4332AA33@keescook/ [1]
+> > Reported-by: Mark Rutland <mark.rutland@arm.com>
+> > Closes: https://paste.debian.net/hidden/ca500597/
+> > Acked-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> [...]
+> 
+> The build in BPF CI is still broken, did you try to build selftests?
 
-On Wed, Feb 21, 2024 at 05:27:20PM +0800, David Gow wrote:
-> The drm_buddy_test's alloc_contiguous test used a u64 for the page size,
-> which was then updated to be an 'unsigned long' to avoid 64-bit
-> multiplication division helpers.
->
-> However, the variable is logged by some KUNIT_ASSERT_EQ_MSG() using the
-> '%d' or '%llu' format specifiers, the former of which is always wrong,
-> and the latter is no longer correct now that ps is no longer a u64. Fix
-> these to all use '%lu'.
->
-> Also, drm_mm_test calls KUNIT_FAIL() with an empty string as the
-> message. gcc warns if a printf format string is empty (apparently), so
+I did! I didn't have this error. :(
 
-clang does too; under -Wformat-zero-length
+>   https://github.com/kernel-patches/bpf/actions/runs/7978647641
 
-> give these some more detailed error messages, which should be more
-> useful anyway.
->
-> Fixes: a64056bb5a32 ("drm/tests/drm_buddy: add alloc_contiguous test")
-> Fixes: fca7526b7d89 ("drm/tests/drm_buddy: fix build failure on 32-bit targets")
-> Fixes: fc8d29e298cf ("drm: selftest: convert drm_mm selftest to KUnit")
-> Signed-off-by: David Gow <davidgow@google.com>
+Thanks for the pointer. It took a bit of digging, but I found this:
+https://github.com/libbpf/ci/blob/main/build-selftests/build_selftests.sh
+which is much more involved than just "make -C tools/testing/selftests/bpf"
 
-Reviewed-by: Justin Stitt <justinstitt@google.com>
-> ---
->  drivers/gpu/drm/tests/drm_buddy_test.c | 14 +++++++-------
->  drivers/gpu/drm/tests/drm_mm_test.c    |  6 +++---
->  2 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-> index 8a464f7f4c61..3dbfa3078449 100644
-> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
-> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-> @@ -55,30 +55,30 @@ static void drm_test_buddy_alloc_contiguous(struct kunit *test)
->  		KUNIT_ASSERT_FALSE_MSG(test,
->  				       drm_buddy_alloc_blocks(&mm, 0, mm_size,
->  							      ps, ps, list, 0),
-> -				       "buddy_alloc hit an error size=%d\n",
-> +				       "buddy_alloc hit an error size=%lu\n",
->  				       ps);
->  	} while (++i < n_pages);
->
->  	KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, 0, mm_size,
->  							   3 * ps, ps, &allocated,
->  							   DRM_BUDDY_CONTIGUOUS_ALLOCATION),
-> -			       "buddy_alloc didn't error size=%d\n", 3 * ps);
-> +			       "buddy_alloc didn't error size=%lu\n", 3 * ps);
->
->  	drm_buddy_free_list(&mm, &middle);
->  	KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, 0, mm_size,
->  							   3 * ps, ps, &allocated,
->  							   DRM_BUDDY_CONTIGUOUS_ALLOCATION),
-> -			       "buddy_alloc didn't error size=%llu\n", 3 * ps);
-> +			       "buddy_alloc didn't error size=%lu\n", 3 * ps);
->  	KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, 0, mm_size,
->  							   2 * ps, ps, &allocated,
->  							   DRM_BUDDY_CONTIGUOUS_ALLOCATION),
-> -			       "buddy_alloc didn't error size=%llu\n", 2 * ps);
-> +			       "buddy_alloc didn't error size=%lu\n", 2 * ps);
->
->  	drm_buddy_free_list(&mm, &right);
->  	KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, 0, mm_size,
->  							   3 * ps, ps, &allocated,
->  							   DRM_BUDDY_CONTIGUOUS_ALLOCATION),
-> -			       "buddy_alloc didn't error size=%llu\n", 3 * ps);
-> +			       "buddy_alloc didn't error size=%lu\n", 3 * ps);
->  	/*
->  	 * At this point we should have enough contiguous space for 2 blocks,
->  	 * however they are never buddies (since we freed middle and right) so
-> @@ -87,13 +87,13 @@ static void drm_test_buddy_alloc_contiguous(struct kunit *test)
->  	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, 0, mm_size,
->  							    2 * ps, ps, &allocated,
->  							    DRM_BUDDY_CONTIGUOUS_ALLOCATION),
-> -			       "buddy_alloc hit an error size=%d\n", 2 * ps);
-> +			       "buddy_alloc hit an error size=%lu\n", 2 * ps);
->
->  	drm_buddy_free_list(&mm, &left);
->  	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, 0, mm_size,
->  							    3 * ps, ps, &allocated,
->  							    DRM_BUDDY_CONTIGUOUS_ALLOCATION),
-> -			       "buddy_alloc hit an error size=%d\n", 3 * ps);
-> +			       "buddy_alloc hit an error size=%lu\n", 3 * ps);
->
->  	total = 0;
->  	list_for_each_entry(block, &allocated, link)
-> diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
-> index 1eb0c304f960..f37c0d765865 100644
-> --- a/drivers/gpu/drm/tests/drm_mm_test.c
-> +++ b/drivers/gpu/drm/tests/drm_mm_test.c
-> @@ -157,7 +157,7 @@ static void drm_test_mm_init(struct kunit *test)
->
->  	/* After creation, it should all be one massive hole */
->  	if (!assert_one_hole(test, &mm, 0, size)) {
-> -		KUNIT_FAIL(test, "");
-> +		KUNIT_FAIL(test, "mm not one hole on creation");
->  		goto out;
->  	}
->
-> @@ -171,14 +171,14 @@ static void drm_test_mm_init(struct kunit *test)
->
->  	/* After filling the range entirely, there should be no holes */
->  	if (!assert_no_holes(test, &mm)) {
-> -		KUNIT_FAIL(test, "");
-> +		KUNIT_FAIL(test, "mm has holes when filled");
->  		goto out;
->  	}
->
->  	/* And then after emptying it again, the massive hole should be back */
->  	drm_mm_remove_node(&tmp);
->  	if (!assert_one_hole(test, &mm, 0, size)) {
-> -		KUNIT_FAIL(test, "");
-> +		KUNIT_FAIL(test, "mm does not have single hole after emptying");
->  		goto out;
->  	}
->
-> --
-> 2.44.0.rc0.258.g7320e95886-goog
->
+> 
+>   [...]
+>     GEN-SKEL [test_progs] linked_funcs.skel.h
+>     LINK-BPF [test_progs] test_usdt.bpf.o
+>     GEN-SKEL [test_progs-no_alu32] profiler1.skel.h
+>     GEN-SKEL [test_progs] test_usdt.skel.h
+>   In file included from /tmp/work/bpf/bpf/tools/include/uapi/linux/bpf.h:11,
+>                    from test_cpp.cpp:4:
+>   /tmp/work/bpf/bpf/tools/include/uapi/linux/bpf.h:92:17: error: ‘struct bpf_lpm_trie_key_u8::<unnamed union>::bpf_lpm_trie_key_hdr’ invalid; an anonymous union may only have public non-static data members [-fpermissive]
+>      92 |  __struct_group(bpf_lpm_trie_key_hdr, hdr, /* no attrs */,
+>         |                 ^~~~~~~~~~~~~~~~~~~~
+>   /tmp/work/bpf/bpf/tools/include/uapi/linux/stddef.h:29:10: note: in definition of macro ‘__struct_group’
+>      29 |   struct TAG { MEMBERS } ATTRS NAME; \
+>         |          ^~~
 
-Thanks
-Justin
+I'll see if I can figure out where this is coming from. This sounds like
+something is being built with an unexpectedly strict option. (The above
+report seems weird -- this isn't coming from -fpermissive, and is
+actually an _error_ not a warning, which is the opposite of what
+-fpermissive is supposed to do.) Also the mention of "public" is scary
+here... that implies a C++ compiler is involved? Maybe that's why my
+builds didn't catch this?
+
+>   make: *** [Makefile:703: /tmp/work/bpf/bpf/tools/testing/selftests/bpf/test_cpp] Error 1
+
+Ah yes, cpp. Fun. I will try to reproduce this failure.
+
+-- 
+Kees Cook
 
