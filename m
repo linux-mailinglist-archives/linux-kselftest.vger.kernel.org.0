@@ -1,143 +1,142 @@
-Return-Path: <linux-kselftest+bounces-5179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C87185E024
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 15:44:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 753BB85E05E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 15:57:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67E3EB28BEE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 14:43:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31959286534
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 14:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559E6811EC;
-	Wed, 21 Feb 2024 14:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8+RZbwo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F867FBBD;
+	Wed, 21 Feb 2024 14:57:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF3680034;
-	Wed, 21 Feb 2024 14:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474147FBB3
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 14:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708526512; cv=none; b=dY3pPgB+/z7EsMnmpMwGxzCLtwae9TbPA4KEcN5dl6HVBCo+7FxApM0UlRGYs1iO3KwBIzaApeQHs/w4jJkOzF+gu4AXD63mnWOyb6O0rqRMXIByHTgAeCWjrQg1N/jfqMe82GCPeK8TERokoY/wXwfRtgNKywzEzzJKHYuCURQ=
+	t=1708527468; cv=none; b=YHchI7S8BAn5vQwILdL+Trd3dUcN71OSrMlT4E9EAJGmkGonzDvNd6ovOTy4CApO46Nv+5TRkSSU+6PDRd+dogCjdphWKobvrimdQXAUnXWTWaARnZBCuh8S7hMzF9MPKJmZogo2t8Z1poPdyEXLQFLqd+RIpAbQ5WhUlzgYMKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708526512; c=relaxed/simple;
-	bh=EQF9KL1RT2lVZ7Xc3+VDawL+ZjdCN9kZA1uWFox451E=;
+	s=arc-20240116; t=1708527468; c=relaxed/simple;
+	bh=VXm+kZmxMVHqvGGNho4lRaBPvFnNMXrsUkhaZtCVkdg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CwFJATLZ9UOAOaG06vy5K50+b/ufCDDTerQnJz6zTtlwvEh0SUhq80kr606vyd5btwR6fYDzxZnvslxun7gLXQ33Z1Zo4a/tlsqTIZGQUojv1xer9wytu+6Oal56BSV6QZnYON8pVftiaNbMqdDfe0FxdoHiUotDb/5PU4N+Fvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8+RZbwo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C7BC433F1;
-	Wed, 21 Feb 2024 14:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708526512;
-	bh=EQF9KL1RT2lVZ7Xc3+VDawL+ZjdCN9kZA1uWFox451E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e8+RZbwoP4Gmf1Fbtkw60VHjWvXsG0ifLyAM2J+S0e7vmCPRk9y5sCyHy4p12Rb9E
-	 cMVnoPIVPirHjku5qiYdhSPL5zu+SjA8jtz0L3xSEUKkkefFVItIs/hOZTvpCULHi6
-	 wx3i47h8pwWbn7any3FjPK+E2iAzqVQmo7uQslQmDJ2Eg1A7ZzXEt7apYuPs3IHt8I
-	 RLKaEGmprNupovU/75faSMd55zokPKnzOblfoy+fPJNaIcqfufnyn0JmDFyBdo9e06
-	 ughyEFdoXQ0VAyuUeBTnu6rhpO2bn6uOWOIN3TF2VU6vAdDGCvLy62RPy75pi4RH+O
-	 g4CnldFCnleQg==
-Date: Wed, 21 Feb 2024 15:41:49 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Erhard Furtner <erhard_f@mailbox.org>, Linux DRI Development <dri-devel@lists.freedesktop.org>, 
-	Huang Rui <ray.huang@amd.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Karolina Stolarek <karolina.stolarek@intel.com>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Zi Yan <ziy@nvidia.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com
-Subject: Re: Running ttm_device_test leads to list_add corruption. prev->next
- should be next (ffffffffc05cd428), but was 6b6b6b6b6b6b6b6b.
- (prev=ffffa0b1a5c034f0) (kernel 6.7.5)
-Message-ID: <uddqboamqcnxwvnud5gmkkm4igvxj67xc2zw52iex5ahljtlb4@2e7ydoplg6rt>
-References: <20240219230116.77b8ad68@yea>
- <ZdRtDOhQGQUm5X4d@archie.me>
- <9cdf0baa-f544-4fa8-bee3-568b790527cc@amd.com>
- <4xggxtkk44m3xcfucbougtuhr66s2pc7tilpnju7xnyw45facb@odsrpqp57kiz>
- <535f9089-b988-45ac-b3f3-a7d593861723@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=di+Ph33/9JeP4ALbeKH/nteq+3JqDV4ThjtqH9emARidu3obJZKnTZ6LQ/AfmrvZbXi99bmQ14l+B9jpfL0t9wBVDY03RS2xEjZPv7E0ulhBrMDklvjf1iGBCamM/ZPbKnCK198k9kNEnqB3LS3eOFxGk6/DK17wTzGBt5aEWRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=libc.org; arc=none smtp.client-ip=104.156.224.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=libc.org
+Date: Wed, 21 Feb 2024 09:58:01 -0500
+From: "dalias@libc.org" <dalias@libc.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"sorear@fastmail.com" <sorear@fastmail.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
+ in userspace
+Message-ID: <20240221145800.GR4163@brightrain.aerifal.cx>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
+ <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
+ <20240220185714.GO4163@brightrain.aerifal.cx>
+ <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
+ <20240220235415.GP4163@brightrain.aerifal.cx>
+ <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
+ <20240221012736.GQ4163@brightrain.aerifal.cx>
+ <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="54nvwbweshimitzn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <535f9089-b988-45ac-b3f3-a7d593861723@amd.com>
+In-Reply-To: <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
+On Wed, Feb 21, 2024 at 01:53:10PM +0000, Mark Brown wrote:
+> On Tue, Feb 20, 2024 at 08:27:37PM -0500, dalias@libc.org wrote:
+> > On Wed, Feb 21, 2024 at 12:35:48AM +0000, Edgecombe, Rick P wrote:
+> 
+> > > (INCSSP, RSTORSSP, etc). These are a collection of instructions that
+> > > allow limited control of the SSP. When shadow stack gets disabled,
+> > > these suddenly turn into #UD generating instructions. So any other
+> > > threads executing those instructions when shadow stack got disabled
+> > > would be in for a nasty surprise.
+> 
+> > This is the kernel's problem if that's happening. It should be
+> > trapping these and returning immediately like a NOP if shadow stack
+> > has been disabled, not generating SIGILL.
+> 
+> I'm not sure that's going to work out well, all it takes is some code
+> that's looking at the shadow stack and expecting something to happen as
+> a result of the instructions it's executing and we run into trouble.  A
+> lot of things won't notice and will just happily carry on but I expect
+> there are going to be things that care.  We also end up with an
+> additional state for threads that have had shadow stacks transparently
+> disabled, that's managable but still.
 
---54nvwbweshimitzn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I said NOP but there's no reason it strictly needs to be a NOP. It
+could instead do something reasonable to convey the state of racing
+with shadow stack being disabled.
 
-Hi Christian,
+> 
+> > > > The place where it's really needed to be able to allocate the shadow
+> > > > stack synchronously under userspace control, in order to harden
+> > > > normal
+> > > > applications that aren't doing funny things, is in pthread_create
+> > > > without a caller-provided stack.
+> 
+> > > Yea most apps don't do anything too tricky. Mostly shadow stack "just
+> > > works". But it's no excuse to just crash for the others.
+> 
+> > One thing to note here is that, to enable this, we're going to need
+> > some way to detect "new enough kernel that shadow stack semantics are
+> > all right". If there are kernels that have shadow stack support but
+> > with problems that make it unsafe to use (this sounds like the case),
+> > we can't turn it on without a way to avoid trying to use it on those.
+> 
+> If we have this automatic conversion of pages to shadow stack then we
+> should have an API for enabling it, userspace should be able to use the
+> presence of that API to determine if the feature is there.
 
-On Tue, Feb 20, 2024 at 04:03:57PM +0100, Christian K=F6nig wrote:
-> Am 20.02.24 um 15:56 schrieb Maxime Ripard:
-> > On Tue, Feb 20, 2024 at 02:28:53PM +0100, Christian K=F6nig wrote:
-> > > [SNIP]
-> > > This kunit test is not meant to be run on real hardware, but rather j=
-ust as
-> > > stand a long kunit tests within user mode linux. I was assuming that =
-it
-> > > doesn't even compiles on bare metal.
-> > >=20
-> > > We should probably either double check the kconfig options to prevent
-> > > compiling it or modify the test so that it can run on real hardware a=
-s well.
-> > I think any cross-compiled kunit run will be impossible to differentiate
-> > from running on real hardware. We should just make it work there.
->=20
-> The problem is what the unit test basically does is registering and
-> destroying a dummy device to see if initializing and tear down of the glo=
-bal
-> pools work correctly.
->=20
-> If you run on real hardware and have a real device
+Yes, or if a new prctl is needed to make disabling safe (see above)
+that could probably be used.
 
-I assume you mean a real DRM device backed by TTM here, right?
-
-> additionally to the dummy device the reference count of the global
-> pool never goes down to zero and so it is never torn down.
->=20
-> So running this test just doesn't make any sense in that environment.
-> Any idea how to work around that?
-
-I've added David, Brendan and Rae in Cc.
-
-To sum up the problem, your tests are relying on the mock device created
-to run a kunit test to be the sole DRM device in the system. But if you
-compile a kernel with the kunit tests enabled and boot that on a real
-hardware, then that assumption might not be true anymore and things
-break apart. Is that a fair description?
-
-If so, maybe we could detect if it's running under qemu or UML (if
-that's something we can do in the first place), and then extend
-kunit_attributes to only run that test if it's in a simulated
-environment.
-
-Maxime
-
---54nvwbweshimitzn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZdYLrAAKCRDj7w1vZxhR
-xdN5AP0a2qM2svXKCp42Du8M5ceOwqA0Ro4VNIqTjfP71wm84wEAqBc0BtfBVIUp
-WX9cTT9QW23f/XVrxJCgQkZF0UJvlg8=
-=cUKm
------END PGP SIGNATURE-----
-
---54nvwbweshimitzn--
+Rich
 
