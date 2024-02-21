@@ -1,251 +1,226 @@
-Return-Path: <linux-kselftest+bounces-5110-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5111-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 543EC85CD74
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 02:27:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2FA685CD85
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 02:43:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7CB11F239F5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 01:27:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77DE8284F2C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 01:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1299920E6;
-	Wed, 21 Feb 2024 01:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080C74428;
+	Wed, 21 Feb 2024 01:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hPpRDcD1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC5B17D5
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 01:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F394A17D5;
+	Wed, 21 Feb 2024 01:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708478844; cv=none; b=HB1qH4TMD8e+P1BiFg7d7LiNYCvUea8XRKzSTkVZ2T859ZD/ma5SrRVlo6r99t4xpZRRQHhPobZMcY55jCKi0amfVs+48w50QRhw2jsGVqfpLQvCRMIRORob5PISqtSMRyBzRe22AHgQfTCABaYd8cBngiPZtRJjE9TzfeCDQm0=
+	t=1708479805; cv=none; b=NnYofGxbx/ETwpIl3SsG/ni785oZ0qGVI8rr44J/p7bND2riZrkbUXFnAh8zPAwnG7WiSiZ7Ydd/keIYPF1sYJJIUY+gjmrzEJ6YPxrUxrNl8Flgp7Ck946rLqX8HZy9astiVXuEIDoDPavdxXsVW+aBQUMhF1WLI/Or4TRLXLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708478844; c=relaxed/simple;
-	bh=pJwSeYFj2jRtte9Mv3vmD/7PvwCI3TccoqOgPr5VrYI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u5s13mMLlyGoQP8GX8ghmNlfGOT5Vd2ueBHc/JMbPHfLz4lCwxhZPWwZKMg7bjO2RWKP8+9v8UjerPwDuYmZbY6+0wLzdDDNz/xJsgoaQODPdJA3JzGmWfo4iqCH01O8UF3fhXlWCD9VO6JPUG1gvxV3K2LO3KYyOMkfOn4Afkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=libc.org; arc=none smtp.client-ip=104.156.224.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=libc.org
-Date: Tue, 20 Feb 2024 20:27:37 -0500
-From: "dalias@libc.org" <dalias@libc.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"musl@lists.openwall.com" <musl@lists.openwall.com>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"ardb@kernel.org" <ardb@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"sorear@fastmail.com" <sorear@fastmail.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
- in userspace
-Message-ID: <20240221012736.GQ4163@brightrain.aerifal.cx>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
- <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
- <20240220185714.GO4163@brightrain.aerifal.cx>
- <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
- <20240220235415.GP4163@brightrain.aerifal.cx>
- <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
+	s=arc-20240116; t=1708479805; c=relaxed/simple;
+	bh=lGGbcLxDjtl1FUL44Pi8sUhy6VBubv51KjZsxs/qefo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dEjlHETdldk1RC7inbmNmJxXuuW6kRd0LhzkMg4M7Wfwk72JAgH8Dzani5UYJRQKydH8B7xL5k8YXVrOiEG+Zt71o+NfLvIC3gcHeg4rx77ajUeGmdhUwURpyilIWpRfClvGo5pC/hotXo1ZdNL9/1J2LWx6U68OX6pbjzzuzTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hPpRDcD1; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708479804; x=1740015804;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lGGbcLxDjtl1FUL44Pi8sUhy6VBubv51KjZsxs/qefo=;
+  b=hPpRDcD1mVRpezugAJWihKJotYCLyKPcHJJ2EvqMobD0O+8MOXGaHSQ8
+   68EeONrY0Bd1AhmMGNKjX3snqDctMTCPmPmaVNJGrSs8W27wdyUOMU8za
+   nyiTmTyp7ZV6Q2Rlg+W+PPJQcMSNnuoAAbwEzYv3Xr6w+oxsnEG0WkIbl
+   QGE40B80DMCm/MrYP/GVaMayHEhwgXxjphzoxzqsy0o2Uv25sJ0KF7G8+
+   MXHndlpxjOCkuA+wPUO56EqC9jQsovLBBj5JE+NnqfErGhDjT7iRb84e7
+   BjYGBLQNqVAzHxGlUz1nk0dcLNFnhAJqFl6tlFpODxSkXmpdwJkWGsVBj
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="13179402"
+X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
+   d="scan'208";a="13179402"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 17:43:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
+   d="scan'208";a="36004407"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.18.46]) ([10.93.18.46])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 17:43:19 -0800
+Message-ID: <516247d2-7ba8-4b3e-8325-8c6dd89b929e@linux.intel.com>
+Date: Wed, 21 Feb 2024 09:43:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 01/29] KVM: selftests: Add function to allow
+ one-to-one GVA to GPA mappings
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
+ Erdem Aktas <erdemaktas@google.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Ryan Afranji
+ <afranji@google.com>, Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
+ Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-2-sagis@google.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20231212204647.2170650-2-sagis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 21, 2024 at 12:35:48AM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2024-02-20 at 18:54 -0500, dalias@libc.org wrote:
-> > On Tue, Feb 20, 2024 at 11:30:22PM +0000, Edgecombe, Rick P wrote:
-> > > On Tue, 2024-02-20 at 13:57 -0500, Rich Felker wrote:
-> > > > On Tue, Feb 20, 2024 at 06:41:05PM +0000, Edgecombe, Rick P
-> > > > > Shadow stacks currently have automatic guard gaps to try to
-> > > > > prevent
-> > > > > one
-> > > > > thread from overflowing onto another thread's shadow stack.
-> > > > > This
-> > > > > would
-> > > > > somewhat opens that up, as the stack guard gaps are usually
-> > > > > maintained
-> > > > > by userspace for new threads. It would have to be thought
-> > > > > through
-> > > > > if
-> > > > > these could still be enforced with checking at additional
-> > > > > spots.
-> > > > 
-> > > > I would think the existing guard pages would already do that if a
-> > > > thread's shadow stack is contiguous with its own data stack.
-> > > 
-> > > The difference is that the kernel provides the guard gaps, where
-> > > this
-> > > would rely on userspace to do it. It is not a showstopper either.
-> > > 
-> > > I think my biggest question on this is how does it change the
-> > > capability for two threads to share a shadow stack. It might
-> > > require
-> > > some special rules around the syscall that writes restore tokens.
-> > > So
-> > > I'm not sure. It probably needs a POC.
-> > 
-> > Why would they be sharing a shadow stack?
-> 
-> The guard gap was introduced originally based on a suggestion that
-> overflowing a shadow stack onto an adjacent shadow stack could cause
-> corruption that could be used by an attacker to work around the
-> protection. There wasn't any concrete demonstrated attacks or
-> suggestion that all the protection was moot.
 
-OK, so not sharing, just happening to be adjacent.
 
-I was thinking from a standpoint of allocating them as part of the
-same range as the main stack, just with different protections, where
-that would never happen; you'd always have intervening non-shadowstack
-pages. But when they're kernel-allocated, yes, they need their own
-guard pages.
+On 12/13/2023 4:46 AM, Sagi Shahar wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+>
+> One-to-one GVA to GPA mappings can be used in the guest to set up boot
+> sequences during which paging is enabled, hence requiring a transition
+> from using physical to virtual addresses in consecutive instructions.
+>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ryan Afranji <afranji@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> ---
+>   .../selftests/kvm/include/kvm_util_base.h     |  2 +
+>   tools/testing/selftests/kvm/lib/kvm_util.c    | 63 ++++++++++++++++---
+>   2 files changed, 55 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 1426e88ebdc7..c2e5c5f25dfc 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -564,6 +564,8 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+>   vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+>   			    enum kvm_mem_region_type type);
+>   vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+> +vm_vaddr_t vm_vaddr_alloc_1to1(struct kvm_vm *vm, size_t sz,
+> +			       vm_vaddr_t vaddr_min, uint32_t data_memslot);
+>   vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
+>   vm_vaddr_t __vm_vaddr_alloc_page(struct kvm_vm *vm,
+>   				 enum kvm_mem_region_type type);
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index febc63d7a46b..4f1ae0f1eef0 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1388,17 +1388,37 @@ vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+>   	return pgidx_start * vm->page_size;
+>   }
+>   
+> +/*
+> + * VM Virtual Address Allocate Shared/Encrypted
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   sz - Size in bytes
+> + *   vaddr_min - Minimum starting virtual address
+> + *   paddr_min - Minimum starting physical address
+> + *   data_memslot - memslot number to allocate in
+> + *   encrypt - Whether the region should be handled as encrypted
+> + *
+> + * Output Args: None
+> + *
+> + * Return:
+> + *   Starting guest virtual address
+> + *
+> + * Allocates at least sz bytes within the virtual address space of the vm
+> + * given by vm.  The allocated bytes are mapped to a virtual address >=
+> + * the address given by vaddr_min.  Note that each allocation uses a
+> + * a unique set of pages, with the minimum real allocation being at least
+> + * a page.
+> + */
+>   static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
+> -				     vm_vaddr_t vaddr_min,
+> -				     enum kvm_mem_region_type type,
+> -				     bool encrypt)
+> +				     vm_vaddr_t vaddr_min, vm_paddr_t paddr_min,
+> +				     uint32_t data_memslot, bool encrypt)
+>   {
+>   	uint64_t pages = (sz >> vm->page_shift) + ((sz % vm->page_size) != 0);
+>   
+>   	virt_pgd_alloc(vm);
+> -	vm_paddr_t paddr = _vm_phy_pages_alloc(vm, pages,
+> -					      KVM_UTIL_MIN_PFN * vm->page_size,
+> -					      vm->memslots[type], encrypt);
+> +	vm_paddr_t paddr = _vm_phy_pages_alloc(vm, pages, paddr_min,
+> +					       data_memslot, encrypt);
+>   
+>   	/*
+>   	 * Find an unused range of virtual page addresses of at least
+> @@ -1408,8 +1428,7 @@ static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
+>   
+>   	/* Map the virtual pages. */
+>   	for (vm_vaddr_t vaddr = vaddr_start; pages > 0;
+> -		pages--, vaddr += vm->page_size, paddr += vm->page_size) {
+> -
+> +	     pages--, vaddr += vm->page_size, paddr += vm->page_size) {
+>   		virt_pg_map(vm, vaddr, paddr);
+>   
+>   		sparsebit_set(vm->vpages_mapped, vaddr >> vm->page_shift);
+> @@ -1421,12 +1440,16 @@ static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
+>   vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+>   			    enum kvm_mem_region_type type)
+>   {
+> -	return ____vm_vaddr_alloc(vm, sz, vaddr_min, type, vm->protected);
+> +	return ____vm_vaddr_alloc(vm, sz, vaddr_min,
+> +				  KVM_UTIL_MIN_PFN * vm->page_size,
+> +				  vm->memslots[type], vm->protected);
+>   }
+>   
+>   vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
+>   {
+> -	return ____vm_vaddr_alloc(vm, sz, vaddr_min, MEM_REGION_TEST_DATA, false);
+> +	return ____vm_vaddr_alloc(vm, sz, vaddr_min,
+> +				  KVM_UTIL_MIN_PFN * vm->page_size,
+> +				  vm->memslots[MEM_REGION_TEST_DATA], false);
+>   }
+>   
+>   /*
+> @@ -1453,6 +1476,26 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
+>   	return __vm_vaddr_alloc(vm, sz, vaddr_min, MEM_REGION_TEST_DATA);
+>   }
+>   
+> +/**
+> + * Allocate memory in @vm of size @sz in memslot with id @data_memslot,
+> + * beginning with the desired address of @vaddr_min.
+> + *
+> + * If there isn't enough memory at @vaddr_min, find the next possible address
+> + * that can meet the requested size in the given memslot.
+> + *
+> + * Return the address where the memory is allocated.
+> + */
+> +vm_vaddr_t vm_vaddr_alloc_1to1(struct kvm_vm *vm, size_t sz,
+> +			       vm_vaddr_t vaddr_min, uint32_t data_memslot)
+> +{
+> +	vm_vaddr_t gva = ____vm_vaddr_alloc(vm, sz, vaddr_min,
+> +					    (vm_paddr_t)vaddr_min, data_memslot,
+> +					    vm->protected);
+> +	TEST_ASSERT_EQ(gva, addr_gva2gpa(vm, gva));
 
-> But when we talk about capabilities for converting memory to shadow
-> stack with simple memory accesses, and syscalls that can write restore
-> token to shadow stacks, it's not immediately clear to me that it
-> wouldn't open up something like that. Like if two restore tokens were
-> written to a shadow stack, or two shadow stacks were adjacent with
-> normal memory between them that later got converted to shadow stack.
-> Those sorts of scenarios, but I won't lean on those specific examples.
-> Sorry for being hand wavy. It's just where I'm at, at this point.
+How can this be guaranteed?
+For ____vm_vaddr_alloc(), generically there is no enforcement about the
+identity of virtual and physical address.
 
-I don't think it's safe to have automatic conversions back and forth,
-only for normal accesses to convert shadowstack to normal memory (in
-which case, any subsequent attempt to operate on it as shadow stack
-indicates a critical bug and should be trapped to terminate the
-process).
+> +
+> +	return gva;
+> +}
+> +
+>   /*
+>    * VM Virtual Address Allocate Pages
+>    *
 
-> > > > From the musl side, I have always looked at the entirely of
-> > > > shadow
-> > > > stack stuff with very heavy skepticism, and anything that breaks
-> > > > existing interface contracts, introduced places where apps can
-> > > > get
-> > > > auto-killed because a late resource allocation fails, or requires
-> > > > applications to code around the existence of something that
-> > > > should be
-> > > > an implementation detail, is a non-starter. To even consider
-> > > > shadow
-> > > > stack support, it must truely be fully non-breaking.
-> > > 
-> > > The manual assembly stack switching and JIT code in the apps needs
-> > > to
-> > > be updated. I don't think there is a way around it.
-> > 
-> > Indeed, I'm not talking about programs with JIT/manual stack-
-> > switching
-> > asm, just anything using existing APIs for control of stack --
-> > pthread_setstack, makecontext, sigaltstack, etc.
-> 
-> Then I think WRSS might fit your requirements better than what glibc
-> did. It was considered a reduced security mode that made libc's job
-> much easier and had better compatibility, but the last discussion was
-> to try to do it without WRSS.
-
-Where can I read more about this? Some searches I tried didn't turn up
-much useful information.
-
-> > > I agree though that the late allocation failures are not great.
-> > > Mark is
-> > > working on clone3 support which should allow moving the shadow
-> > > stack
-> > > allocation to happen in userspace with the normal stack. Even for
-> > > riscv
-> > > though, doesn't it need to update a new register in stack
-> > > switching?
-> > 
-> > If clone is called with signals masked, it's probably not necessary
-> > for the kernel to set the shadow stack register as part of clone3.
-> 
-> So you would want a mode of clone3 that basically leaves the shadow
-> stack bits alone? Mark was driving that effort, but it doesn't seem
-> horrible to me on first impression. If it would open up the possibility
-> of musl support.
-
-Well I'm not sure. That's what we're trying to figure out. But I don't
-think modifying it is a hard requirement, since it can be modified
-from userspace if needed as long as signals are masked.
-
-> > One reasonable thing to do, that might be preferable to
-> > overengineered
-> > solutions, is to disable shadow-stack process-wide if an interface
-> > incompatible with it is used (sigaltstack, pthread_create with an
-> > attribute setup using pthread_attr_setstack, makecontext, etc.), as
-> > well as if an incompatible library is is dlopened.
-> 
-> I think it would be an interesting approach to determining
-> compatibility. On x86 there has been cases of binaries getting
-> mismarked as supporting shadow stack. So an automated way of filtering
-> some of those out would be very useful I think. I guess the dynamic
-> linker could determine this based on some list of functions?
-
-I didn't follow this whole mess, but from our side (musl) it does not
-seem relevant. There are no legacy binaries wrongly marked because we
-have never supported shadow stacks so far.
-
-> The dlopen() bit gets complicated though. You need to disable shadow
-> stack for all threads, which presumably the kernel could be coaxed into
-> doing. But those threads might be using shadow stack instructions
-> (INCSSP, RSTORSSP, etc). These are a collection of instructions that
-> allow limited control of the SSP. When shadow stack gets disabled,
-> these suddenly turn into #UD generating instructions. So any other
-> threads executing those instructions when shadow stack got disabled
-> would be in for a nasty surprise.
-
-This is the kernel's problem if that's happening. It should be
-trapping these and returning immediately like a NOP if shadow stack
-has been disabled, not generating SIGILL.
-
-> > The place where it's really needed to be able to allocate the shadow
-> > stack synchronously under userspace control, in order to harden
-> > normal
-> > applications that aren't doing funny things, is in pthread_create
-> > without a caller-provided stack.
-> 
-> Yea most apps don't do anything too tricky. Mostly shadow stack "just
-> works". But it's no excuse to just crash for the others.
-
-One thing to note here is that, to enable this, we're going to need
-some way to detect "new enough kernel that shadow stack semantics are
-all right". If there are kernels that have shadow stack support but
-with problems that make it unsafe to use (this sounds like the case),
-we can't turn it on without a way to avoid trying to use it on those.
-
-Rich
 
