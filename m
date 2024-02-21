@@ -1,145 +1,190 @@
-Return-Path: <linux-kselftest+bounces-5216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C46785E5F7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 19:28:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC4E285E602
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 19:30:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0974B2288F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 18:28:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CB851F291A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Feb 2024 18:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74ECE85276;
-	Wed, 21 Feb 2024 18:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Im7AT0YG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1818563E;
+	Wed, 21 Feb 2024 18:30:42 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7547285295
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 18:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534E242A8B
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 18:30:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708540024; cv=none; b=JGZm0alcM9Wq1TnVZo0FTE+Ovv8pWc2MZCtTk4NTr9NSMxvRXdi9nkh4yzup4EWB+vP4vMJw02Z//I2bvqfZou36DJZ/ke1wgsN9Jv87xfbCd0/mlj8qtYRkDl35kDZGcQXSNqvT7mYnpwXqShDazBJr1UGQMsk/XibfHF0dMVk=
+	t=1708540242; cv=none; b=I+803l7H/uZMhws/L3AqFXI503Z26ufgWXulBjUkWv6fRWodUv7yen8tobO9Ud0WrlYpl8U0UHKgxm7PCVyhZJwo8elgZd7cYrtJm9aAG/1q8aLPSo9Fru6ULcrv92DBdIYDIdsdSB5JiiqH3xSmV/ePgoT+8J1k1WLC7r5Z3dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708540024; c=relaxed/simple;
-	bh=6VC1qcHGtWcfwYOSabJJ8ZSmJ/99a6jDL4crh0KLPVk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=BumUO46USAwg8sdrFk9sR2HLCWN/UegicIQU8iKSr4i1lvYj7EKPwwEBwXbNxKt8mEu5Pkhva6n75eZpsDaQMwo4Xv28uCtnFNBs7KELCjDbaFxxDkUx4bYjHsBP+MPy3124H3czpkuxFVMk1TNPuz8lLMzf8ATXD87kynUcUaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Im7AT0YG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708540021;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oEojIl750TYVuyYtzldN9G7sEW6mfeIF1z8MGEw+SFo=;
-	b=Im7AT0YGBHxZk5o0w/ZWYkxkljVOjgwyidwxR2FydygDfFekdGJ9/BpSDp2VQCU2w8gzvq
-	ZeEVno5f2583h1KTUrGKBzjI/cYLyiNvV83mCeX2sUgTYDdPwX2BafBmNm9eeUWDrF33hd
-	n8mGUCysHq+HyXxQhZXUL3vAaaMviiw=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-620-DQEm3-9cNPasujumK5T1ng-1; Wed, 21 Feb 2024 13:27:00 -0500
-X-MC-Unique: DQEm3-9cNPasujumK5T1ng-1
-Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-4cc41f459afso1005272e0c.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 10:26:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708540019; x=1709144819;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oEojIl750TYVuyYtzldN9G7sEW6mfeIF1z8MGEw+SFo=;
-        b=o8VIrtS45M8bgmzr9YmsdNtnshkrpfytXa8SUmjcM6DtP/R/EuONVHXx/qr+U2dHeb
-         9rm/1GZLGXrCgMt72+Hq0T9oRApGz0kkmhAH0oaViQWRFAdUrjefOXq61sveQQdrh0C6
-         6Coi+Q8uBJynRjd+MLmlYbJaP1hKRjWVobs9M+skwmTBG9nnqP8P2xgXbXHCUXwE4SYS
-         mQlfe3df8mmYPGBaOqKt4RDvwRQkudea+SZkn9kA1Z2ke1PuegHQWT3PfNaKLE8EYeCY
-         hPeRPiyffk1IT3bO6Udkuo2qCuRvGzc4nFWWmE2i7pG4D78dxA7it3EsfUKJXinbJJPy
-         C+5A==
-X-Forwarded-Encrypted: i=1; AJvYcCWuSsKiKhVGcxbJ9hxcQEis5J/eEubzeNupR5U2PAygCoQoPXRUEfELaXH0NZzDHrnMh5cfKFvllLGQIo/htDmSZ+uTKPDTRssYmY6HRJGG
-X-Gm-Message-State: AOJu0YyKG4C/e25tkQaotgQ3PKu071qd1M17Ug5IV0BPEBA9oI4yR4Ff
-	dAAUDhTiIxghcBpnDPpCqZC/x/9X9Ffq/ci7BSvDr1hfhicoJW7KMqp5hSSOz38U4uQvzpXMNI4
-	WrM3TCCkNPPvGa1+dCbEJH0TERuKDh6wmMpDx+KX+OgJuNJ6YoNEHPbRsmgq/1l7GEA==
-X-Received: by 2002:a05:6122:4f05:b0:4d1:34a1:c887 with SMTP id gh5-20020a0561224f0500b004d134a1c887mr3318945vkb.9.1708540019327;
-        Wed, 21 Feb 2024 10:26:59 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFVeAkg3MpsRAS/vobA8hq7pIispK+lnPkq/9Wp7nPrxR6fPAfqKmvjqwfiX/cWcrVq6/8GSQ==
-X-Received: by 2002:a05:6122:4f05:b0:4d1:34a1:c887 with SMTP id gh5-20020a0561224f0500b004d134a1c887mr3318929vkb.9.1708540018987;
-        Wed, 21 Feb 2024 10:26:58 -0800 (PST)
-Received: from [192.168.1.35] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id ny13-20020a056214398d00b006862b537412sm5803551qvb.123.2024.02.21.10.26.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Feb 2024 10:26:58 -0800 (PST)
-Message-ID: <88672d5a-1b12-a6f2-bf7b-8670eeddc711@redhat.com>
-Date: Wed, 21 Feb 2024 13:26:57 -0500
+	s=arc-20240116; t=1708540242; c=relaxed/simple;
+	bh=IQ9Hdi1C0K5tEBHBjujZgoxD3cUlRqBGyMd80ICd2vI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ScifNbx9nBpRBvtCXsTZCS+5QW1D+saboyXiuOvxxXvA1/V3ykUuIV5GJkrBaHueE5vi2EsvkfW8NHYI4rcAP0zR0RYp8o6dYlP9KsLHo8hIXGMTmhAEes3sCY5IP6p71YC977b+5+VPI2kD9/Ju+sP+vGRH+TU035K3fCVjVNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=libc.org; arc=none smtp.client-ip=104.156.224.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=libc.org
+Date: Wed, 21 Feb 2024 13:30:55 -0500
+From: "dalias@libc.org" <dalias@libc.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "broonie@kernel.org" <broonie@kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"sorear@fastmail.com" <sorear@fastmail.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
+ in userspace
+Message-ID: <20240221183055.GT4163@brightrain.aerifal.cx>
+References: <20240220185714.GO4163@brightrain.aerifal.cx>
+ <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
+ <20240220235415.GP4163@brightrain.aerifal.cx>
+ <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
+ <20240221012736.GQ4163@brightrain.aerifal.cx>
+ <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
+ <20240221145800.GR4163@brightrain.aerifal.cx>
+ <4a3809e8-61b2-4341-a868-292ba6e64e8a@sirena.org.uk>
+ <20240221175717.GS4163@brightrain.aerifal.cx>
+ <f4a54297767eb098d903404cbe8860d655d79bed.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-US
-To: Nicolai Stange <nstange@suse.de>,
- Shresth Prasad <shresthprasad7@gmail.com>
-Cc: zhangwarden@gmail.com, jikos@kernel.org, jpoimboe@kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- live-patching@vger.kernel.org, mbenes@suse.cz, mpdesouza@suse.com,
- pmladek@suse.com, shuah@kernel.org, skhan@linuxfoundation.org
-References: <ff1078b2-447d-4ae7-8287-d0affd23588d@gmail.com>
- <22981.124022107441100115@us-mta-655.us.mimecast.lan>
-From: Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH] Fix implicit cast warning in test_klp_state.c
-In-Reply-To: <22981.124022107441100115@us-mta-655.us.mimecast.lan>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f4a54297767eb098d903404cbe8860d655d79bed.camel@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On 2/21/24 07:44, Nicolai Stange wrote:
-> Shresth Prasad <shresthprasad7@gmail.com> writes:
+On Wed, Feb 21, 2024 at 06:12:30PM +0000, Edgecombe, Rick P wrote:
+> On Wed, 2024-02-21 at 12:57 -0500, dalias@libc.org wrote:
+> > > This feels like it's getting complicated and I fear it may be an
+> > > uphill
+> > > struggle to get such code merged, at least for arm64.  My instinct
+> > > is
+> > > that it's going to be much more robust and generally tractable to
+> > > let
+> > > things run to some suitable synchronisation point and then disable
+> > > there, but if we're going to do that then userspace can hopefully
+> > > arrange to do the disabling itself through the standard disable
+> > > interface anyway.  Presumably it'll want to notice things being
+> > > disabled
+> > > at some point anyway?  TBH that's been how all the prior proposals
+> > > for
+> > > process wide disable I've seen were done.
+> > 
+> > If it's possible to disable per-thread rather than per-process, some
+> > things are easier. Disabling on account of using alt stacks only
+> > needs
+> > to be done on the threads using those stacks. However, for dlopen
+> > purposes you need a way to disable shadow stack for the whole
+> > process.
+> > Initially this is only needed for the thread that called dlopen, but
+> > it needs to have propagated to any thread that synchronizes with
+> > completion of the call to dlopen by the time that synchronization
+> > occurs, and since that synchronization can happen in lots of
+> > different
+> > ways that are purely userspace (thanks to futexes being userspace in
+> > the uncontended case), I don't see any way to make it work without
+> > extremely invasive, high-cost checks.
 > 
->> I checked the source code and yes I am on the latest Linux next repo.
->>
->> Here's the warning:
->> /home/shresthp/dev/linux_work/linux_next/tools/testing/selftests/livepatch/test_modules/test_klp_state.c:38:24: warning: assignment to ‘struct klp_state *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
->>    38 |         loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
->>       |                        ^
+> For glibc's use, we talked about a couple of options.
+> 1. A mode to start suppressing the #UD's from the shadow stack
+> instructions
+> 2. A mode to start suppressing #CPs (the exception that happens when
+> the shadow stack doesn't match). So the shadow stack instructions
+> continue to operate normally, but if the shadow stack gets mismatched
+> due to lack of support, the ret is emulated. It probably is safer (but
+> still not perfect), but the performance penalty of emulating every RET
+> after things get screwed up would be a significant down side. There
+> also needs to be clean handling of shadow stack #PFs.
+> 3. Per-thread locking that is used around all shadow stack operations
+> that could be sensitive to disabling. This could be maybe exposed to
+> apps in case they want to use shadow stack instructions manually. Then
+> during dlopen() it waits until it can cleanly disable shadow stack for
+> each thread. In each critical sections there are checks for whether
+> shadow stack is still enabled.
 > 
+> 3 is the cleanest and safest I think, and it was thought it might not
+> need kernel help, due to a scheme Florian had to direct signals to
+> specific threads. It's my preference at this point.
+
+The operations where the shadow stack has to be processed need to be
+executable from async-signal context, so this imposes a requirement to
+block all signals around the lock. This makes all longjmps a heavy,
+multi-syscall operation rather than O(1) userspace operation. I do not
+think this is an acceptable implementation, especially when there are
+clearly superior alternatives without that cost or invasiveness.
+
+> 1 and 2 are POCed here, if you are interested:
+> https://github.com/rpedgeco/linux/commits/shstk_suppress_rfc/
+
+I'm not clear why 2 (suppression of #CP) is desirable at all. If
+shadow stack is being disabled, it should just be disabled, with
+minimal fault handling to paper over any racing operations at the
+moment it's disabled. Leaving it on with extreme slowness to make it
+not actually do anything does not seem useful.
+
+Is there some way folks have in mind to use option 2 to lazily disable
+shadow stack once the first SS-incompatible code is executed, when
+execution is then known not to be in the middle of a SS-critical
+section, instead of doing it right away? I don't see how this could
+work, since the SS-incompatible code could be running from a signal
+handler that interrupted an SS-critical section.
+
+> > If folks on the kernel side are not going to be amenable to doing the
+> > things that are easy for the kernel to make it work without breaking
+> > compatibility with existing interfaces, but that are impossible or
+> > near-impossible for userspace to do, this seems like a dead-end. And
+> > I
+> > suspect an operation to "disable shadow stack, but without making
+> > threads still in SS-critical sections crash" is going to be
+> > necessary..
 > 
-> Is the declaration of klp_get_state() visible at that point, i.e. is
-> there perhaps any warning about missing declarations above that?
-> 
-> Otherwise C rules would default to assume an 'int' return type.
-> 
+> I think we have to work through all the alternative before we can
+> accuse the kernel of not being amenable. Is there something that you
+> would like to see out of this conversation that is not happening?
 
-This is an interesting clue.  I thought I might be able to reproduce the
-build error by modifying include/livepatch.h and running `make -j15 -C
-tools/testing/selftests/livepatch` ... but that seemed to work fine on
-my system.  I even removed the entire include/ subdir from my tree and
-it still built the test module.  Huh?
+No, I was just interpreting "uphill battle". I really do not want to
+engage in an uphill battle for the sake of making it practical to
+support something that was never my goal to begin with. If I'm
+misreading this, or if others are willing to put the effort into that
+"battle", I'd be happy to be mistaken about "not amenable".
 
-Then I moved /lib/modules/$(uname -r)/build out of the way and saw that
-the compilation failed.  Ah hah -- that's right, it's using the system
-build tree.  That version of livepatch.h may have a missing or
-completely different definition of klp_get_state().
-
-How does this sequence work for you, Shresth:
-
-  # Verify that kernel livepatching is turned on
-  $ grep LIVEPATCH .config
-  CONFIG_HAVE_LIVEPATCH=y
-  CONFIG_LIVEPATCH=y
-
-  # Build linux-next kernel tree and then the livepatch selftests,
-  # pointing KDIR to this tree
-  $ make -j$(nproc) vmlinux && \
-    make -j$(nproc) KDIR=$(pwd) -C tools/testing/selftests/livepatch
-
--- 
-Joe
-
+Rich
 
