@@ -1,82 +1,83 @@
-Return-Path: <linux-kselftest+bounces-5306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFD818603ED
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 21:47:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D3AE860408
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 21:53:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 661B528D07B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 20:47:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60BE81C2428B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 20:53:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6977A71740;
-	Thu, 22 Feb 2024 20:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0140571749;
+	Thu, 22 Feb 2024 20:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cg0ONMBG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EL6N70+n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A77E5491B;
-	Thu, 22 Feb 2024 20:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5A66E5E3;
+	Thu, 22 Feb 2024 20:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708634872; cv=none; b=G4Fv4BO0P6xS7Pfw5e3/RB98VJA/e2WUlRGruB33K6eztI3XGU3VDEaUrNEwah/y0Ip0+uKzqADRZ1k4Do/noWUDPJuPYv/Ld4bNVMotcQ8qvVrKRXgZahQVpROlBEHrOvjJb943FgdYBwkuldn0vVwK1/CoRnemMwkOZlRvhAk=
+	t=1708635209; cv=none; b=iIitNdBDc+xe99SnOWhXkHCm67LeEXqbh7CvWxJbusdeVbGqmsrtRwv7KPz5fQo0amD07xyJ7f7pJY8j+9ahyvKFpGossMYmFUIGKwyQhJ9U5Hwbb2wZvLSDWNbahnipWbLH2XlFkxhL7vTmjGYjPON0D/F5I2YAQ3ANT85DeFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708634872; c=relaxed/simple;
-	bh=aErF6fin/ExLDACGLGlOq3WdwJAaaAK8dflArbKNBWI=;
+	s=arc-20240116; t=1708635209; c=relaxed/simple;
+	bh=eyjeZcCLCTi4jrpIdDE5O7VkZlZmsd4qxF0wsl8QrJY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lwdl4u/38s6hOUdBAOez6rRKwKPCeLJtX80u8EyHfngIDAxw6zFHU+CwJcnT81fS/A4NZ2baqYlkqi4Coa7nLxr5ULlasfarQfOku9uI9IXKRaYH83xe0QjdvP53jpMRKTles/ZQDHpHanKO0PSHpHyWX/x/6lz7ATfhB9GpNqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cg0ONMBG; arc=none smtp.client-ip=209.85.221.52
+	 To:Cc:Content-Type; b=r09LLDk3PrPRT089+1iCgyCzyiDCjIg/PiFkmjw/Aj9h4vXCe2DnTLiZXD8SS9hjq3/Z+SUPonasRDkjM+VpAy2qw62LILXxpIul1iVeQgv/TeZG20Pk0IUIxTL62m+UbNwr9CEW7M7yERPwkVtbyZtcp6QN+P4A7yDjfJGG2ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EL6N70+n; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33adec41b55so105619f8f.0;
-        Thu, 22 Feb 2024 12:47:50 -0800 (PST)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33d28468666so117103f8f.0;
+        Thu, 22 Feb 2024 12:53:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708634869; x=1709239669; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1708635206; x=1709240006; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D1ILuSYGWtcZrcYDaMPeYmzwiuIoj4bshKlioR0+zNs=;
-        b=cg0ONMBGy0GcmPxweN3Ex6Tij18W0EfRDqGbheOd0uKF0sfpEC8f5Bl1oIehQx7BxK
-         dgH+GnDUVJXDQR1/6dcatT7Xr2WpMXg2388//XnZgPG9hFh3KwsmwYrffvFUfovo76Ee
-         A9fZ8dNN/mzLoRkDwm4hFeL4uSyX9Q8uelccZL1Nw3wbChMYa5KQt6UGLIRpaihe2cEE
-         P8PBDXftqBqur8z4l5cezW0th7JkDzTcywFhsiMR41ipJY3XiuczNhUNEuTQKSgC1ToQ
-         t0PdjBAyM53I3rs8pQBf+A5iOcYjJs3tvkUyWGNh/uY6j0WzGKe9qfV1uztnGJUsYBJS
-         fTWg==
+        bh=JceZ3Vo9jkBaqN7Hbzl8yHHaM89HOhD751Rid2kTckg=;
+        b=EL6N70+no0FDaVNKw0/qENHnLiyyuAfGqo/GX+coolbRN3moL1/vhX2gr6Ka+6igOY
+         3jhR5vNVQfnSOQWKDVJDgEMMHIAm+0w1JjUVmMqrSKkUWysC/y1n0iKLSLlMA1v7YY1j
+         w/1imxNMv5bi1rvXzt6Uz4q2shF4wN87gmaw20jpk8Whzllyy2j0uk0k2FiqK9Sh77WV
+         SuaeItKKy1AuBJf+dU1p4Q095h6wW5lj0PZoYXQ+tQBMJq/16h2AOq8n1VDLoWWhgcA9
+         g6+4VfG2GkDbl1XOyVX5uJ1YpEZip58m3Sej70XSo7G+oVvFJH8DHn+4BYXHgc9oqjoe
+         mHsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708634869; x=1709239669;
+        d=1e100.net; s=20230601; t=1708635206; x=1709240006;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D1ILuSYGWtcZrcYDaMPeYmzwiuIoj4bshKlioR0+zNs=;
-        b=lhiJdIJrHv+hVEpPyrYv65v3ZYp5cFjQyKt8jkCIov2bM081R7x6moFHeFHczkzUWD
-         +tZA4M6VOxSFQfeUkuL9Q8HSjyi7hvCjICqmPrkKtHWwwue0V3yU+81EBZpQRj+W8q04
-         62OJNNpqpBidI0hQznmN4i1CkYm2WYSIZVsoVw9njJhrKKlPqAOc8oUbnUBjz8z0ZFMH
-         Uzt47KKCZnWT7A/7+yyD3sQP5I52yCn5PZl3WM1nUAVuOeEm0jWxS8mKqZk0rWpTm5VX
-         vs6BIsDfWCj3/CrmwzFSCoszWZJU4fIOKlwQBGMWNUcJp0peXTqmfPgDncxJRwUO4ATN
-         qzrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmaeijJzqnW7WDF8DyOqV11ccD6FyMLrNoRkx/kf4ue0SLuiR/fzmYo4pMCTr7jiDmuLYVWEcA9+dctgRHSN7aJTUYcyM88l5TUTJl7fWbmKcd3OpjJYyqaPYnCHQTJinVfZTdHdtcuZ0H+ZFhyIMpBVWA0uVLGF2xryv8Qbt4CvgmBZBb0jWpXLeSHRLKe9OrV+CAxcpVRkmLazbXlXXQEyGxKJ4qfT/P4dOFI7XknzcnObjAImitz9k=
-X-Gm-Message-State: AOJu0YwBmtaBSyYzAg332QdBaCrAC3pjoqRnERJ1L0Y9rHRZenPCynwp
-	ROvQ13qAnZtwq3FsNq1SZKuoahMl4l4w7Nc7rRbtpR+IjNNCZ+k+KtrAQyEwwtMxEZq+hgxgFQr
-	kx/U1Xzc+UucR6tVzvvTOlqQmOHc=
-X-Google-Smtp-Source: AGHT+IEKR3AJiHLSCutZrsofKd8gyElVibjB6tMVQvKDAdvXuWb7cdSzQfC6AtrCwpLc4z9uXof99rbbN67j1a20mi0=
-X-Received: by 2002:adf:face:0:b0:33d:3abc:8a4a with SMTP id
- a14-20020adfface000000b0033d3abc8a4amr163040wrs.62.1708634868547; Thu, 22 Feb
- 2024 12:47:48 -0800 (PST)
+        bh=JceZ3Vo9jkBaqN7Hbzl8yHHaM89HOhD751Rid2kTckg=;
+        b=CFTyVlpwuVu5wo2k/4SxqXfvOKAvksM+FQRVWox2D59IsxWVqWvJMZfdQM5rIHH92m
+         JUYDwQQlGxtjLQdQkLmVlBdI2VvjiIQZEF4tBqSYj5vIP1Uc+7sF5QZmbURqZWu6Re2C
+         lhC69zP3NSoCU+Ui/L7y9OayeW4z23IuCCmNPc+OGWlqYR3v5wLw8hAtfgH2qcbXNDnm
+         gEFq7V7VD/ij/l5n0zOYasIy7SEvoDTVJ686/gyyz4lzOz1yY8Nj2fKBUjafNCGpwsE+
+         /AOuht++Rb3RHFLIeVwrqzbtkJpQz24VV/pJVH/ynbUWW7L0jYf6IpqHVxz71MHZIzL4
+         Uy7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUp5wbywhCtYBg+uXe45xThensWhGkLVcM+KzX14T0HPZ/iAaBpPEvDFl2IIJlEnP4bDFdHhX3VWO/Ye6gCYBl37XPdH8wCgcID00Pr5GB387hvgbXpJmM995RI276q2JmIT5Co0GwWl+rXmICBXlr97yPQX/4dGOcmWoKPxretfwBGuxlBmOAykQVz/twhwpaRGmgmQPLkNhSUQ1WFLesGp+hAdUzbZdSTskMeBJk2WgLBgh82nHMXaew=
+X-Gm-Message-State: AOJu0Yx6DeE10+UC8u2V+jCO8JLUKq2r18X/t9qtZKhndyAxkfeUNaJs
+	CdoZkfxaJVyHler3v6UDkbsSxlnrlsEDLPhVLtwZQFLBhy7bLGHOnjLTf+Y+VHYvh04+Zr6PxHc
+	4QLEXRpuiR0NrW8OPlvcpQq7cRB0=
+X-Google-Smtp-Source: AGHT+IGQXXSZAMioHJFxzZ3gh0Hr4+cQqIJfOhMlIaWn+NbO9UO7H6CsfSYUHm489vRzTeoH9KgIH7yb2O+eyZOdVec=
+X-Received: by 2002:a5d:6346:0:b0:33d:3a0e:9168 with SMTP id
+ b6-20020a5d6346000000b0033d3a0e9168mr177429wrw.3.1708635206226; Thu, 22 Feb
+ 2024 12:53:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org> <20240221-hid-bpf-sleepable-v3-4-1fb378ca6301@kernel.org>
-In-Reply-To: <20240221-hid-bpf-sleepable-v3-4-1fb378ca6301@kernel.org>
+References: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org> <20240221-hid-bpf-sleepable-v3-6-1fb378ca6301@kernel.org>
+In-Reply-To: <20240221-hid-bpf-sleepable-v3-6-1fb378ca6301@kernel.org>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 22 Feb 2024 12:47:37 -0800
-Message-ID: <CAADnVQJ=a2BnOwcs5uNqnyHfbS=gv=X4Z8eaGU-Tx1o8LwyJdQ@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v3 04/16] bpf/helpers: introduce sleepable bpf_timers
+Date: Thu, 22 Feb 2024 12:53:15 -0800
+Message-ID: <CAADnVQK_2qhcZD0Wtd=8Bb8NVwBCg5Q+j8bF0HY8Hm91ACNrNA@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v3 06/16] bpf/helpers: introduce
+ bpf_timer_set_sleepable_cb() kfunc
 To: Benjamin Tissoires <bentiss@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -94,95 +95,122 @@ Content-Transfer-Encoding: quoted-printable
 
 On Wed, Feb 21, 2024 at 8:25=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
 org> wrote:
+>
+> In this patch, bpf_timer_set_sleepable_cb() is functionally equivalent
+> to bpf_timer_set_callback(), to the exception that it enforces
+> the timer to be started with BPF_F_TIMER_SLEEPABLE.
+>
+> But given that bpf_timer_set_callback() is a helper when
+> bpf_timer_set_sleepable_cb() is a kfunc, we need to teach the verifier
+> about its attached callback.
+> Marking that callback as sleepable will be done in a separate patch
+>
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+>
+> ---
+>
+> new in v3 (split from v2 02/10)
+> ---
+>  kernel/bpf/helpers.c  | 48 +++++++++++++++++++++++++++++++++++++++++++++=
++--
+>  kernel/bpf/verifier.c | 31 +++++++++++++++++++++++++++++--
+>  2 files changed, 75 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index f9add0abe40a..2c6dc3d0ffff 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1108,6 +1108,7 @@ struct bpf_hrtimer {
+>         void __rcu *callback_fn;
+>         void *value;
+>         struct semaphore sleepable_lock;
+> +       bool is_sleepable;
+>  };
+>
 >  /* the actual struct hidden inside uapi struct bpf_timer */
-> @@ -1113,6 +1120,55 @@ struct bpf_timer_kern {
->         struct bpf_spin_lock lock;
->  } __attribute__((aligned(8)));
+> @@ -1270,8 +1271,8 @@ static const struct bpf_func_proto bpf_timer_init_p=
+roto =3D {
+>         .arg3_type      =3D ARG_ANYTHING,
+>  };
 >
-> +static u32 __bpf_timer_compute_key(struct bpf_hrtimer *timer)
+> -BPF_CALL_3(bpf_timer_set_callback, struct bpf_timer_kern *, timer, void =
+*, callback_fn,
+> -          struct bpf_prog_aux *, aux)
+> +static int __bpf_timer_set_callback(struct bpf_timer_kern *timer, void *=
+callback_fn,
+> +                                   struct bpf_prog_aux *aux, bool is_sle=
+epable)
+>  {
+>         struct bpf_prog *prev, *prog =3D aux->prog;
+>         struct bpf_hrtimer *t;
+> @@ -1311,12 +1312,19 @@ BPF_CALL_3(bpf_timer_set_callback, struct bpf_tim=
+er_kern *, timer, void *, callb
+>                 t->prog =3D prog;
+>         }
+>         rcu_assign_pointer(t->callback_fn, callback_fn);
+> +       t->is_sleepable =3D is_sleepable;
+>         up(&t->sleepable_lock);
+>  out:
+>         __bpf_spin_unlock_irqrestore(&timer->lock);
+>         return ret;
+>  }
+>
+> +BPF_CALL_3(bpf_timer_set_callback, struct bpf_timer_kern *, timer, void =
+*, callback_fn,
+> +          struct bpf_prog_aux *, aux)
 > +{
-> +       struct bpf_map *map =3D timer->map;
-> +       void *value =3D timer->value;
-> +
-> +       if (map->map_type =3D=3D BPF_MAP_TYPE_ARRAY) {
-> +               struct bpf_array *array =3D container_of(map, struct bpf_=
-array, map);
-> +
-> +               /* compute the key */
-> +               return ((char *)value - array->value) / array->elem_size;
-> +       }
-> +
-> +       /* hash or lru */
-> +       return *(u32 *)(value - round_up(map->key_size, 8));
+> +       return __bpf_timer_set_callback(timer, callback_fn, aux, false);
 > +}
 > +
-> +static void bpf_timer_work_cb(struct work_struct *work)
-> +{
-> +       struct bpf_hrtimer *t =3D container_of(work, struct bpf_hrtimer, =
-work);
-> +       struct bpf_map *map =3D t->map;
-> +       void *value =3D t->value;
-> +       bpf_callback_t callback_fn;
-> +       u32 key;
-> +
-> +       BTF_TYPE_EMIT(struct bpf_timer);
-> +
-> +       down(&t->sleepable_lock);
-> +
-> +       callback_fn =3D READ_ONCE(t->callback_fn);
-> +       if (!callback_fn) {
-> +               up(&t->sleepable_lock);
-> +               return;
+>  static const struct bpf_func_proto bpf_timer_set_callback_proto =3D {
+>         .func           =3D bpf_timer_set_callback,
+>         .gpl_only       =3D true,
+> @@ -1342,6 +1350,11 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern =
+*, timer, u64, nsecs, u64, fla
+>                 goto out;
+>         }
+>
+> +       if (t->is_sleepable && !(flags & BPF_F_TIMER_SLEEPABLE)) {
+> +               ret =3D -EINVAL;
+> +               goto out;
 > +       }
 > +
-> +       key =3D __bpf_timer_compute_key(t);
-> +
-> +
-> +       callback_fn((u64)(long)map, (u64)(long)&key, (u64)(long)value, 0,=
- 0);
-> +       /* The verifier checked that return value is zero. */
-> +
-> +       bpf_prog_put(t->prog);
-> +}
-> +
->  static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
->
->  static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
-> @@ -1121,8 +1177,7 @@ static enum hrtimer_restart bpf_timer_cb(struct hrt=
-imer *hrtimer)
->         struct bpf_map *map =3D t->map;
->         void *value =3D t->value;
->         bpf_callback_t callback_fn;
-> -       void *key;
-> -       u32 idx;
-> +       u32 key;
->
->         BTF_TYPE_EMIT(struct bpf_timer);
->         callback_fn =3D rcu_dereference_check(t->callback_fn, rcu_read_lo=
-ck_bh_held());
-> @@ -1136,17 +1191,9 @@ static enum hrtimer_restart bpf_timer_cb(struct hr=
-timer *hrtimer)
->          * bpf_map_delete_elem() on the same timer.
->          */
->         this_cpu_write(hrtimer_running, t);
-> -       if (map->map_type =3D=3D BPF_MAP_TYPE_ARRAY) {
-> -               struct bpf_array *array =3D container_of(map, struct bpf_=
-array, map);
-> -
-> -               /* compute the key */
-> -               idx =3D ((char *)value - array->value) / array->elem_size=
+>         if (flags & BPF_F_TIMER_ABS)
+>                 mode =3D HRTIMER_MODE_ABS_SOFT;
+>         else
+> @@ -2606,6 +2619,36 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+>         WARN(1, "A call to BPF exception callback should never return\n")=
 ;
-> -               key =3D &idx;
-> -       } else { /* hash or lru */
-> -               key =3D value - round_up(map->key_size, 8);
-> -       }
-> +       key =3D __bpf_timer_compute_key(t);
+>  }
+>
+> +/**
+> + * bpf_timer_set_sleepable_cb() - Configure the timer to call %callback_=
+fn
+> + * static function in a sleepable context.
+> + * @timer: The bpf_timer that needs to be configured
+> + * @callback_fn: a static bpf function
+> + *
+> + * @returns %0 on success. %-EINVAL if %timer was not initialized with
+> + * bpf_timer_init() earlier. %-EPERM if %timer is in a map that doesn't
+> + * have any user references.
+> + * The user space should either hold a file descriptor to a map with tim=
+ers
+> + * or pin such map in bpffs. When map is unpinned or file descriptor is
+> + * closed all timers in the map will be cancelled and freed.
+> + *
+> + * This kfunc is equivalent to %bpf_timer_set_callback except that it te=
+lls
+> + * the verifier that the target callback is run in a sleepable context.
+> + */
+> +__bpf_kfunc int bpf_timer_set_sleepable_cb(struct bpf_timer_kern *timer,
+> +                                          int (callback_fn)(void *map, i=
+nt *key, struct bpf_timer *timer))
+> +{
+> +       struct bpf_throw_ctx ctx =3D {};
+> +
+> +       arch_bpf_stack_walk(bpf_stack_walker, &ctx);
+> +       WARN_ON_ONCE(!ctx.aux);
 
-Please don't mix such "cleanup" with main changes.
-It's buggy for a hash map.
-Instead of passing a pointer to the real key into bpf prog
-you're reading the first 4 bytes from the key. Copying it into a temp var
-and passing an address to that.
-It would have been very painful to debug such a bug if it slipped through,
-since bpf prog would sort-of work for 4-byte keys.
+Sorry. Why such complexity?
+Please see how do_misc_fixups() handles BPF_FUNC_timer_set_callback.
 
