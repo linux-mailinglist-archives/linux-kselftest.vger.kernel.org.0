@@ -1,120 +1,137 @@
-Return-Path: <linux-kselftest+bounces-5287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 807CC85F917
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 14:02:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63E3485F9DE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 14:33:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2106FB2610B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 13:02:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 198C32890EB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 13:33:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C8E12EBCC;
-	Thu, 22 Feb 2024 13:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EEF7131E5C;
+	Thu, 22 Feb 2024 13:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="kG6nU4Z7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3e5etia"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64083D97D
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 13:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBDC1426D;
+	Thu, 22 Feb 2024 13:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708606967; cv=none; b=ZcXHo2rs8fqSJ/S84m6LQL+vwP15J7JV8qm9tRHNiXaEnONKW4IOYWOixoim5n7A+uUmyTisW6R1YgCKAnbOCevKadU5cwS7Wlz9DxP/4cymMOoXdK4Jc0FopPAkbY7o/I+cCy5jDaGzjsslQUxAHoLjv23sw2W5x7NFBVzVwQo=
+	t=1708608808; cv=none; b=WrCxZ2m+e1Oheswy85AVXDcoCa9ylQx2e8m0TQ+1y2e915WOnJdpqdFSfP+K9OB+tD2k+QPePMLtJ7Pc1m6rbKDF1jveSTqx/BNj1BvyOXQNV9W+NMi0C8XSxpfXjEB3eVTLRj0nu2SFmKaMcEIDkZT5lV3g0WSbnezDnAlKmRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708606967; c=relaxed/simple;
-	bh=mLihlxLtwpBjewJipEa6FRB39ptkzFSdsuzkpNHKxJI=;
+	s=arc-20240116; t=1708608808; c=relaxed/simple;
+	bh=ek76lcOHd6638oPTS6Co2oHesqGce0rC+wixg+GWnxQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PkTobcmmSIq2X67Wwb47U8hNa78ilewYnJtuaPTxFUeDgb3+laMziI2QwWPit22nHM/2MxGkLTZMxIMrTD6n8JnscxV4JdUialJwGmw8/BEz37M3FaTXkSrvp4ybCgp+7RK7xgt/Se3zi5BH0TNpRrWdyvHP/343GK9p8iD6OoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=kG6nU4Z7; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-68f51c5f9baso29351766d6.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 05:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1708606962; x=1709211762; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5AaVii71/VY2wZ+q8F0jNvSLMQ/WesHh9hxpdt+FDPE=;
-        b=kG6nU4Z7+Q6FCz463hLsA756uwb15cy542whL12gyDB4rgN8f7anLjDdi0ntm7SzK2
-         r3dNrCWKpP6gRFDjSxaLeg7sx4x9EgLzKV44m/Wt7KIsjfHTWHFiseYP4FJwgTcaxyGZ
-         ojwQiCz8i8FW4fzcczIPtm//dbX3YhF9aG1DdNrYtQZ2TtPx57SVauEdvwoGxygS+SLT
-         AmZWVQPDM+lNNB2g+0dkBqGNv4CCegMayaSA6Nul2jc7KJrLoQaHHOFfgYDfDtfXIhvQ
-         DK+3sak3puL+6TN1AnOhnBC8JoQLVPgGESNhhm6Dmwta2W699g/kBYDnnN8mqbIkPuhf
-         gKQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708606962; x=1709211762;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5AaVii71/VY2wZ+q8F0jNvSLMQ/WesHh9hxpdt+FDPE=;
-        b=gjSmMqQJZtCO/Tmb6NnQK7HIOfuVrSInq5zts057GXVzOjvXpsEeu0/IG3uzLa3AP9
-         nOtIbo9bXGbKpYZZfE4RIF4mHQyxuu1HA5wSGZvGXNrpS9MeuN1oiRfqokoE+PsDdMpV
-         RD9nPFn4EtVP5cYM0tkvmHhKXwjd9lZ6+s4Q3PJL42gSXYcPNdzhr6nIIyf/r2vYT/vI
-         opQcW5OldtO3vilTFHQyQl0oXNLp3gbU+BCPxKwIidG1p9AgtmWLFtgtkCMpgDOgJOgm
-         p1x0vP9VJna5GdU3/jR5kih7Bm9aQ82Mlpva79oaG3AuQ7sVZKyuyxMf3fZ84FDEhVb5
-         9qpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVOu7Kp0v48Z7uYWraLODt9UGRcW8vLelmqQe8ERWXuAF6CFw2S6UNfQk2wzgvypr9/3oQd7es5pJA1Malef15erKCBAtuqEqQMs2MvKv1Q
-X-Gm-Message-State: AOJu0YyoPsfk3h5m7cYJFHJFHs/XyiVqTGMRemW7TpJJOfPIJJcZD1Io
-	19d3HLxJwrtEn3CMSp58ubyQt0U6h58XLTaJNaCJyLGhsBlRdfw0yJCgmTr4Jhc=
-X-Google-Smtp-Source: AGHT+IGAK7E+kzRE8+YA/j2lb1I8Y61tiNcJdozr2Qvcpk6aaDKEVgEQPQJ+SEeGp2gh8IK9zaw/sg==
-X-Received: by 2002:a0c:da82:0:b0:68f:2c72:a76a with SMTP id z2-20020a0cda82000000b0068f2c72a76amr22568368qvj.3.1708606962586;
-        Thu, 22 Feb 2024 05:02:42 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
-        by smtp.gmail.com with ESMTPSA id qm18-20020a056214569200b0068c88a31f1bsm1309293qvb.89.2024.02.22.05.02.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Feb 2024 05:02:42 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1rd8im-00G85D-DJ;
-	Thu, 22 Feb 2024 09:02:40 -0400
-Date: Thu, 22 Feb 2024 09:02:40 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Kevin Tian <kevin.tian@intel.com>, Shuah Khan <shuah@kernel.org>,
-	Yi Liu <yi.l.liu@intel.com>, Nicolin Chen <nicolinc@nvidia.com>,
-	kernel@collabora.com, iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/iommu: fix the config fragment
-Message-ID: <20240222130240.GA3220539@ziepe.ca>
-References: <20240222074934.71380-1-usama.anjum@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BjBc5O2NaDRcOqSMC6WvHzlLA67qmzprXc20Xtp47tUhg8dLCxRQ0Aeveqasng8aAeh+Rupaq95zuVU6MCdJMiLaxpZ1f+xMkXHOQoyNh3MmklQo8BilLaUpP8Ojf7/y1bEvRKhUwXpiL0bg6MIlG8QTcuNRS/2v1BlJEW2bbYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3e5etia; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62395C433F1;
+	Thu, 22 Feb 2024 13:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708608807;
+	bh=ek76lcOHd6638oPTS6Co2oHesqGce0rC+wixg+GWnxQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a3e5etiaCTIf6mj5LJfPayGGRPCkqpzgVIw1FeLdsLBfQNoMAL/qYtEtGJibhp3oU
+	 XvqjYzMm14iBcabQH9ixoP1adKlIOXGttkEhHZ12Rn+NE7gvkO0FpJV0Zyj8nQwHej
+	 MjS2muDzwVxCuK7DRdg1nW1guor/t1KJ5KFDRVtVQGCSbEzRP9ZExfSI7/m4gQY7lu
+	 IH2ENW1K8nf3rbsVt1oRT1ORFvOCs/E01MBBu4hQdhIY6WX6HFJELx88n+Vg8H2giH
+	 DQ7AfczuUA1Y5ZtqJLYSw5zzQXVd8T4Ihv2M8i5skO8VC6v+6w6nuxJvbPeOJJ9KVr
+	 TwOSG7d+bkkgA==
+Date: Thu, 22 Feb 2024 13:33:10 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
+	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
+	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
+	xiao.w.wang@intel.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, waylingii@gmail.com,
+	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
+	panqinglin2020@iscas.ac.cn, willy@infradead.org,
+	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
+	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
+	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
+	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 15/28] riscv/mm: Implement map_shadow_stack()
+ syscall
+Message-ID: <6ad3e87a-25ab-4938-8d81-c5c609619586@sirena.org.uk>
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-16-debug@rivosinc.com>
+ <ZcJX2IJb0hOM5RF5@finisterre.sirena.org.uk>
+ <ZdaZj0pqaVJiNOUg@debug.ba.rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LxmbY0AjUg4WDPUw"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240222074934.71380-1-usama.anjum@collabora.com>
+In-Reply-To: <ZdaZj0pqaVJiNOUg@debug.ba.rivosinc.com>
+X-Cookie: I have accepted Provolone into my life!
 
-On Thu, Feb 22, 2024 at 12:49:33PM +0500, Muhammad Usama Anjum wrote:
-> The config fragment doesn't follow the correct format to enable those
-> config options which make the config options getting missed while
-> merging with other configs.
-> 
-> ➜ merge_config.sh -m .config tools/testing/selftests/iommu/config
-> Using .config as base
-> Merging tools/testing/selftests/iommu/config
-> ➜ make olddefconfig
-> .config:5295:warning: unexpected data: CONFIG_IOMMUFD
-> .config:5296:warning: unexpected data: CONFIG_IOMMUFD_TEST
-> 
-> While at it, add CONFIG_FAULT_INJECTION as well which is needed for
-> CONFIG_IOMMUFD_TEST. If CONFIG_FAULT_INJECTION isn't present in base
-> config (such as x86 defconfig), CONFIG_IOMMUFD_TEST doesn't get enabled.
-> 
-> Fixes: 57f0988706fe ("iommufd: Add a selftest")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/iommu/config | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Appled, thanks
+--LxmbY0AjUg4WDPUw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Jason
+On Wed, Feb 21, 2024 at 04:47:11PM -0800, Deepak Gupta wrote:
+> On Tue, Feb 06, 2024 at 04:01:28PM +0000, Mark Brown wrote:
+
+> > > +#define SHADOW_STACK_SET_TOKEN (1ULL << 0)     /* Set up a restore token in the shadow stack */
+
+> > For arm64 I also added a SHADOW_STACK_SET_MARKER for adding a top of
+> > stack marker, did you have any thoughts on that for RISC-V?  I think x86
+> > were considering adding it too, it'd be good if we could get things
+> > consistent.
+
+> Please correct me on this. A token at the top which can't be consumed to restore
+> but *just* purely as marker, right?
+
+Yes, for arm64 we just leave a zero word (which can't be a valid token)
+above the stack switch token, that does mean you can't exactly tell that
+the top of stack marker is there unless there's also a stack switch
+token below it.
+
+> It's a good design basic with not a lot of cost.
+
+> I think risc-v should be able to converge on that.
+
+Great.
+
+--LxmbY0AjUg4WDPUw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXXTRUACgkQJNaLcl1U
+h9ChLQf/TR/+XFN8k0dkmk90JLlGHu3WaTQM0wqbCtUC2FExSxw4JGFIeRSKnUum
+10loLkMwAaklC1on36bhQcqVQ+qMOoVN0k9k+YJpi4iXFDo6LH95Z4Qwq37xUQOg
+EI+FqbA6BiCGk1OVOHibZO51nBBmQuwO4c/MYT24AYyoR2/uk6OPE+G1Mm7K4/M6
+zukeMbRS4LPn++luduEqROdMpJNdEBjeSELUQL8AjyUFemzG6ZlpojuJAvVNbVsN
+COBlGD75skhCaSfor7bhAv3iKrr+htaWDZ3zwkPMjlufoZjwYBUb+h3A7eE2G2YF
+wLkwHJN21WNLbqxqHXvjCFibtxling==
+=mXRS
+-----END PGP SIGNATURE-----
+
+--LxmbY0AjUg4WDPUw--
 
