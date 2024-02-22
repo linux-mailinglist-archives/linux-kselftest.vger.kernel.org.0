@@ -1,178 +1,137 @@
-Return-Path: <linux-kselftest+bounces-5252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C49385EE2B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 01:40:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4919385EE3C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 01:43:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5198E2826D2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 00:40:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02183284EB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 00:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540AE290E;
-	Thu, 22 Feb 2024 00:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC89B290E;
+	Thu, 22 Feb 2024 00:43:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="MrLKmCi4"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="1WFKZv0p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF05101EC
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 00:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5513C12B7F
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 00:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708562404; cv=none; b=ZOBpVWCzbWrLQYgC5elt/SXWZt/J1jaBdN2lu4Gkio/cMhe3VQrPcsCq9xEM3ezVLNVAcevv7SMIoyTPXgfAy8uOlhsp3ACS6sFgAx8/FJy/nxb2Cl4oSqB6F909G5TTUJ5AdkMBhKu41ZcdGQM2PEh8053D7R3xtn85Btyypq4=
+	t=1708562586; cv=none; b=WmlmTgq0/WkgGoBEQvTDiSloy4MJ6xAv31qIVI1zuUwhkuNGmo2ZiX91kZGhbrtxXErePL5sjETnSqFI+1qvtcN/wiySKPIRbMc9vNDvMV9s8mviyRAm9VcvOM2rs/z4UVbokOO3iIDqHUYx7YmaRhFaoJ5eh9brZ0NNUIVpyfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708562404; c=relaxed/simple;
-	bh=3cPh5EYVwGWaYgvsr8YLKJcb0/yJUuFAluKjFfz/1Eo=;
+	s=arc-20240116; t=1708562586; c=relaxed/simple;
+	bh=70s578QhfI8VfYwqTA58Ok69jNRS8MFE5JRxsyKVwPk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LzqcNphyzatFEPNe3epaoKGZztUYlBpNOpT2QGpTW2QBtG/8AFWcXjH9RbCnpVwTuLzEvf2yUPIxQoHqVXAvg1fm7/vKzZx9rI96pZrXtb+/xHsGGh7C5OITO8ArsNjHvJPk9JSiu00+q3xGBCPldYBcR5/DTgBH57ZHsUcCtOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=MrLKmCi4; arc=none smtp.client-ip=209.85.215.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=kLEkc9qV0BzSrjanzZGp9xVYwF4HSJxWckfEz//r2S8LFbXDIADZsGJH0xg772I3n+ZFYitjESKreUeEa2clg1XyNPqynr2Kdbov1O+NSAzGeBOOatYu6ow0Si1IYoD+im31nCrPvKgVbixuTytgJjOXRjZOaSUBA0DzKPpLYEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=1WFKZv0p; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5d3912c9a83so5509674a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 16:40:02 -0800 (PST)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-53fa455cd94so5088155a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 16:43:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1708562402; x=1709167202; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3cPh5EYVwGWaYgvsr8YLKJcb0/yJUuFAluKjFfz/1Eo=;
-        b=MrLKmCi4BmAp5eYeFcOMeqQGDgSbpL/pOSxuO1z6vKvVfM50hQsEDkjCohesjLgRI6
-         3kl3r3Ttn9qadyDk/JdASepgleKakrM3Y95GBF2XS65GgoOgUKl9bozx+++np/XIb+6x
-         K0pdbQYqoAMXv3n/kiUyBE0PEp6uDDgFTBfBsC+JjQYwVwXr8siNlaaRPkEcR65iK7SX
-         wRQeTrhLhUu/VWeqr3+69+C8bGmTY8pYE8sGcn5WRPYaesKwGR76tD92974RkPUORtuE
-         5hx+A7kojYNgklKk9wO8i5IB2o/FwIJpCb3rDPCsXntXuGGoF1qCCczDdvmZQFQ8m9VO
-         FU/w==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1708562584; x=1709167384; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CR24aAbNKMU+aX5oJp3mmjRiDv2V+IvxS0ZLhqmyJiA=;
+        b=1WFKZv0pAJBZfWvLdsKJB6k92Da4ZkbHRhMmH6TNJ3nFMgzqUzSvKPNmtWBdrWlO4y
+         TltR+v3HZ8wcnoCcHckct0296eRkpvkrEFZw8XbUmMbnT/qvwkonqAh3LvWQ5Q3+8o4l
+         sslqqSQTeiaxJxmXlhUWfgMdsgsy443CCK8sin/7EZNx7tjlGzz2Nv2Sy+5HIXN3yuC7
+         ULVMK0KOb+TABB8I+oCuzeteXl9fDgWXwPw//jwgewZLEkC4/12DQfN7sfFILPAnfwZd
+         eXeaXULuroei2yw5d0tPIHywO+liURlP0wX5GaT7ERWe3ZD+2Fto0itXynUtSWargjyB
+         dFuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708562402; x=1709167202;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3cPh5EYVwGWaYgvsr8YLKJcb0/yJUuFAluKjFfz/1Eo=;
-        b=QwvurETY18wIn7e+vd3HsoHXmA9qAJqTmcVM33ajGxk6RGWtXxKUGDvyfZC7+EpEXi
-         F6Kb9LVLlzuUVo0L1N4DsTf63eaNGxVx1SAfVKiCKx2Ck5kMrAm6ijwg71CVVkVv0vRj
-         w7rVXZ+5XfrDdwJ9CMmehvKeMQvL3L6gIY697/M843EOaL5eag4e82d1CHYhUjUKsnKN
-         szrFklffrahCJC5dfOjvU5tOhgbxDRo0W/kJ64LkQ1Kzq1iCDmBfDDtTUB/LDALio+pi
-         iXlTgjjLU+A4nW2ESw1Fjmdp31gJt8uJ0aIK/ikyS55Pl4MLVfQFA9V3t8Yg06xm8Pi7
-         h7vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWyLEXpyUThI/vlYo8jvOdRRKje2bUmmDNZdb8CzQbCGj2vhBgy5Xo/dCDdd3Bjw5Sk4x47pLQuc5q9a9idZC/S/myfeaOsaji3VcY0JmzI
-X-Gm-Message-State: AOJu0Yy5xOKT/FZeO9WURKsDu2BQOyTlBqmtyQjMeuB1yVCWrwi/5Fqe
-	C7f5hgTIbHWfwv40M0rLv6TalhPW0EOdMJLPWvxlW9Fkn+sfFP7aRlgpEvIdbXk=
-X-Google-Smtp-Source: AGHT+IGotfMmm5x9Xi19DeFfmbyjknJKTAh4y49q6+Q/YPgYYL/De9ObYQYYyxWmR72uNSf6FbQ1Zw==
-X-Received: by 2002:a17:90a:72c6:b0:299:4fa7:71e5 with SMTP id l6-20020a17090a72c600b002994fa771e5mr11324761pjk.8.1708562402076;
-        Wed, 21 Feb 2024 16:40:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708562584; x=1709167384;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CR24aAbNKMU+aX5oJp3mmjRiDv2V+IvxS0ZLhqmyJiA=;
+        b=msZE2PQt2JI2HAxdnWzhGOP1MoCngLew/HmYdRb+xr49woro1YmI3myIsV4nZZTlkg
+         nK06VQzO3dq9wVJBNNXUUxvyFcpN5aTlhJo47DsiGu/kFdaUFe6FHBH+EgGMMMCqXgZP
+         Oe/fGGHWUmvo1zj27LXIdgTnauy8g9x+zGasEMeNHV2RDGLRWbWwK1KHSpL+kSLJT3L0
+         +IPlfIDa7PR3lEL8r/The+V4mfiWIsRMNWW3bM3+6vRE37pFrBcrFJvHBpfnOuhbNYXU
+         6bC8/I5Z7ymhM30mSW2n3d0sMGwD2fAbsXLRAYtYL3KTayx9bSvQaNHnOseTC48kqryX
+         xkGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU44Tp0AQTNC5QeNuRkqK6mG1Gc8IuiZWletZM9bMK9gphBUxsuxGuI1E2+Op/1WMILm9qOlpI/xNOGf+MfXWjTdoMiF6qXSWgpHMe5L1j8
+X-Gm-Message-State: AOJu0YwrVF6T8E7V3gpPJ5sTxFE1lLxv9p39ffbp5FOJ1m5eeljfhPKB
+	5VCgeSZww1sRH4az/vvvFuEhaOmWdoMqoRqcgK3Jl0w7RWE0lryE0OeNN8QfCiE=
+X-Google-Smtp-Source: AGHT+IED8Qc8cv5em+hY8R0laXHeLyNpZm08160QFNjQ7Gn8Te5H8kX7oc01tG3ELGqs1k3ZjWLKiQ==
+X-Received: by 2002:a17:90b:606:b0:299:99f4:5911 with SMTP id gb6-20020a17090b060600b0029999f45911mr9465260pjb.29.1708562584637;
+        Wed, 21 Feb 2024 16:43:04 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id qc17-20020a17090b289100b002993743e4a7sm2480570pjb.20.2024.02.21.16.39.58
+        by smtp.gmail.com with ESMTPSA id bx12-20020a17090af48c00b0029a4089fbf0sm390177pjb.16.2024.02.21.16.43.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 16:40:01 -0800 (PST)
-Date: Wed, 21 Feb 2024 16:39:57 -0800
+        Wed, 21 Feb 2024 16:43:04 -0800 (PST)
+Date: Wed, 21 Feb 2024 16:42:59 -0800
 From: Deepak Gupta <debug@rivosinc.com>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
-	"bjorn@rivosinc.com" <bjorn@rivosinc.com>,
-	"conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"kito.cheng@sifive.com" <kito.cheng@sifive.com>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"alex@ghiti.fr" <alex@ghiti.fr>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"alexghiti@rivosinc.com" <alexghiti@rivosinc.com>,
-	"atishp@atishpatra.org" <atishp@atishpatra.org>,
-	"cleger@rivosinc.com" <cleger@rivosinc.com>,
-	"josh@joshtriplett.org" <josh@joshtriplett.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"gerg@kernel.org" <gerg@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"bhe@redhat.com" <bhe@redhat.com>,
-	"charlie@rivosinc.com" <charlie@rivosinc.com>,
-	"david@redhat.com" <david@redhat.com>,
-	"samitolvanen@google.com" <samitolvanen@google.com>,
-	"heiko@sntech.de" <heiko@sntech.de>,
-	"panqinglin2020@iscas.ac.cn" <panqinglin2020@iscas.ac.cn>,
-	"mchitale@ventanamicro.com" <mchitale@ventanamicro.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"revest@chromium.org" <revest@chromium.org>,
-	"mason.huo@starfivetech.com" <mason.huo@starfivetech.com>,
-	"ojeda@kernel.org" <ojeda@kernel.org>,
-	"baruch@tkos.co.il" <baruch@tkos.co.il>,
-	"waylingii@gmail.com" <waylingii@gmail.com>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"ancientmodern4@gmail.com" <ancientmodern4@gmail.com>,
-	"mathis.salmen@matsal.de" <mathis.salmen@matsal.de>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"shr@devkernel.io" <shr@devkernel.io>,
-	"andy.chiu@sifive.com" <andy.chiu@sifive.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"vincent.chen@sifive.com" <vincent.chen@sifive.com>,
-	"greentime.hu@sifive.com" <greentime.hu@sifive.com>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"zhangqing@loongson.cn" <zhangqing@loongson.cn>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"Wang, Xiao W" <xiao.w.wang@intel.com>,
-	"cuiyunhui@bytedance.com" <cuiyunhui@bytedance.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"ruscur@russell.cc" <ruscur@russell.cc>,
-	"shikemeng@huaweicloud.com" <shikemeng@huaweicloud.com>,
-	"jszhang@kernel.org" <jszhang@kernel.org>,
-	"jeeheng.sia@starfivetech.com" <jeeheng.sia@starfivetech.com>,
-	"alx@kernel.org" <alx@kernel.org>,
-	"guoren@kernel.org" <guoren@kernel.org>,
-	"omosnace@redhat.com" <omosnace@redhat.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"evan@rivosinc.com" <evan@rivosinc.com>,
-	"bgray@linux.ibm.com" <bgray@linux.ibm.com>,
-	"apatel@ventanamicro.com" <apatel@ventanamicro.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 11/28] riscv: Implementing "PROT_SHADOWSTACK" on
- riscv
-Message-ID: <ZdaX3ckwaKO7YB2Y@debug.ba.rivosinc.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
+	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
+	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
+	xiao.w.wang@intel.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, waylingii@gmail.com,
+	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
+	panqinglin2020@iscas.ac.cn, willy@infradead.org,
+	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
+	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
+	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
+	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 18/28] prctl: arch-agnostic prtcl for indirect
+ branch tracking
+Message-ID: <ZdaYk8XERnOtiR3P@debug.ba.rivosinc.com>
 References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-12-debug@rivosinc.com>
- <2914cf78e47010e195d963857b37807e8446e3be.camel@intel.com>
+ <20240125062739.1339782-19-debug@rivosinc.com>
+ <ZcJas4tZNzOJv6hW@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2914cf78e47010e195d963857b37807e8446e3be.camel@intel.com>
+In-Reply-To: <ZcJas4tZNzOJv6hW@finisterre.sirena.org.uk>
 
-On Fri, Feb 09, 2024 at 08:44:35PM +0000, Edgecombe, Rick P wrote:
->On Wed, 2024-01-24 at 22:21 -0800, debug@rivosinc.com wrote:
->> +       /*
->> +        * PROT_SHADOWSTACK is a kernel only protection flag on risc-
->> v.
->> +        * mmap doesn't expect PROT_SHADOWSTACK to be set by user
->> space.
->> +        * User space can rely on `map_shadow_stack` syscall to
->> create
->> +        * shadow stack pages.
->> +        */
->> +       if (unlikely(prot & PROT_SHADOWSTACK))
->> +               return -EINVAL;
+On Tue, Feb 06, 2024 at 04:13:39PM +0000, Mark Brown wrote:
+>On Wed, Jan 24, 2024 at 10:21:43PM -0800, debug@rivosinc.com wrote:
 >
->Are you sure you need PROT_SHADOWSTACK? Since you are passing
->VM_SHADOW_STACK into do_mmap() directly.
+>> To allow userspace to enable this feature for itself, following prtcls are
+>> defined:
+>>  - PR_GET_INDIR_BR_LP_STATUS: Gets current configured status for indirect branch
+>>    tracking.
+>>  - PR_SET_INDIR_BR_LP_STATUS: Sets a configuration for indirect branch tracking
+>>    Following status options are allowed
+>>            - PR_INDIR_BR_LP_ENABLE: Enables indirect branch tracking on user
+>>              thread.
+>>            - PR_INDIR_BR_LP_DISABLE; Disables indirect branch tracking on user
+>>              thread.
+>>  - PR_LOCK_INDIR_BR_LP_STATUS: Locks configured status for indirect branch
+>>    tracking for user thread.
+>
+>FWIW the arm64 BTI feature is enabled per page of executable memory
+>rather than in CPU state so it'd be hard for us to adopt this interface.
+>I don't think that's a blocker, just noting it.
 
-Sorry for (very) late response.
-In this patch series since VM_SHADOW_STACK was an alias to VM_WRITE.
-And that's why I needed PROT_SHADOWSTACK to disambiguate.
+Got it, makes sense.
 
-I am updating my patches and going with ARCH_5 bit (and thus only 64bit support).
-So x86, aarch64 and risc-v will be using same bit position.
 
 
