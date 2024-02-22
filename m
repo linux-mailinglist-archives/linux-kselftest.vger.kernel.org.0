@@ -1,164 +1,153 @@
-Return-Path: <linux-kselftest+bounces-5280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5281-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1E1B85F6DF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 12:30:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41C6F85F775
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 12:50:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 977EA28322F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 11:30:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C17411F2653E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 11:50:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EA045BFE;
-	Thu, 22 Feb 2024 11:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FCF47A7A;
+	Thu, 22 Feb 2024 11:50:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QZxnhPgI"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LNHlvWpD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A4E4596E;
-	Thu, 22 Feb 2024 11:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7601747A48
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 11:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708601423; cv=none; b=q0Wg+lIrid4bzb57c+9iRSBLdFLCJgK4CsjOsbIQhmJOtZUYCHgihqjshOADoHMJPC+r4wvu+yXUfh/Qqr2Atdmxa9BbXsIvzVtNJEqsnCAbasB46JN7kBbmgxNHIGjGNGW7yxUcWBdndM/cPWP9zXslDX7oJeIwDfWRqFDWGbg=
+	t=1708602621; cv=none; b=GTgT23L/JJ0WuZUid59YsnjJA5XjnCqVBIAGG/ehI7WXXcF9pZhl/315rus9BudMGV6jZ+3y9xbzbletjz134gTJcnEyMTYyBAonPkKIWIhjae76CqdiXcy538c1i9JEcvb4U1Rl9p7ESr9cTCL0mEjFiW5E8kDzhzAPPiEYvls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708601423; c=relaxed/simple;
-	bh=njxph6cxDRMjmK8PfLlG9X0Dovd5CLwlQOVCp6ZnYZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h6uMXSqpo94tTfGt0rNGMsph3UUrUAIKw9DbnuspJ6HVquldYcNB7/GKIN09wUD5gFv//BFZU/ncqIpIAcGoV38+ljdJ5qta8wexaqsBQy2/FIJBzR6DXqWm6VJXzt+K15jQILaq7U3W6WzcTSpPTQdqB0nrW4aZ3ZnvNa9zlQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QZxnhPgI; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41MBRt1S015387;
-	Thu, 22 Feb 2024 11:30:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=YKyWnxlhzjZajUJTQyAlBlA2kQqHZg8cZo5gXNQH4Xw=;
- b=QZxnhPgIBk2tTCq/DuY7TpvBwsDqrOM6PI1k0sQcN5a7TmqRcx1HL+0nGBAyMRCChkFH
- kgQgF8WKdFD6KqWuK0ORW+wfgZ7J/ih6GgrUuHHhCuOhjtiosJhfE9+M85r/MoOud44Z
- MD9NOeWP2rv0QbPT6G3CffubuGX+VeseoswrH5Ol0MRvYo7HFVDQae2pdYTeiAnFsA+c
- /xvwlx4htpbg980CRdNq+UHvewVHIINKc+KW8LWQOcCzWv3uf5hVTKh87caIW4vSgbVk
- 0vvzQoYL+ZRl5OZq+bISMEthIzX442Mffh9z07OLokHJzVpOB/tOqZVEzX3ddLu5Vueu Hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3we5dvr2se-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 11:30:16 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41MBTCSj020769;
-	Thu, 22 Feb 2024 11:30:16 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3we5dvr2rv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 11:30:16 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41MAqSsV003615;
-	Thu, 22 Feb 2024 11:30:15 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74tx1xu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 11:30:15 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41MBU9LG25625338
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Feb 2024 11:30:11 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C30A92004B;
-	Thu, 22 Feb 2024 11:30:09 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7AB4420040;
-	Thu, 22 Feb 2024 11:30:09 +0000 (GMT)
-Received: from [9.152.224.253] (unknown [9.152.224.253])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 22 Feb 2024 11:30:09 +0000 (GMT)
-Message-ID: <0b3b5f02-9492-4569-b2a0-190b95b43c31@linux.ibm.com>
-Date: Thu, 22 Feb 2024 12:30:09 +0100
+	s=arc-20240116; t=1708602621; c=relaxed/simple;
+	bh=ma9DfQIGiAa5vr3ks75PfINXo2TPrC0w7A/88yi8pA8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pZy9eE3hwXdSJ9dnHmudMlEr1d1EGrBNH4zToJ3evoVFBoitXWB/U93Iz1EzHXAEQTX++3YksmFo6LOHDJMeq4P/ekKK3xIwKlT7ThGrSgWUXcrgn7aMe35UWKPZiqpHFdOh3Qt75ka0aaFOTIsJS9qm3d8JLajrbAY8hmB0mPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LNHlvWpD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708602617;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ldC5iLR/TjfHxpr5I8kE+2L9PTCMZ2jj1k9txMQpdfM=;
+	b=LNHlvWpDPvqy6mIpfwQBe7iBjXqd28ML5ZmGBOpEMRu1nPlpHyWxgNMk6N4czt4mPdsSNw
+	EkNAUkQeAsQWv+W58bVedLlLGDy8CWVecJCD/r19DIyPYLNKVp7pOJHqgDh2NCRfiiGFCg
+	XRwa7yM8XhJhwk95PwaQFQbgc+ynhvA=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-152-1HAB9ppbOV-yHgPN4NIK2w-1; Thu, 22 Feb 2024 06:50:16 -0500
+X-MC-Unique: 1HAB9ppbOV-yHgPN4NIK2w-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a3bdd99a243so79434366b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 03:50:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708602614; x=1709207414;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ldC5iLR/TjfHxpr5I8kE+2L9PTCMZ2jj1k9txMQpdfM=;
+        b=N4gMkyhTmkKMQOsxVltKp0pz2o5J9LC9VgvhGIasCzZA96PF5cuEmiLzG7pNzrz1wp
+         dq/hXejyRCc3YDuW1bVSh2iOcht81hFQpNWGbven8dI/xTYU740dvza5n1i8AJKAyP7a
+         vKu5Xj1bylJi/JYgrHKPhqSwOjm7xFA8MhqXgyJ0Q9EHehs7EYBXh3RB4id4sQz5iblv
+         BzT47BbJYQWhkGtbf/hL2xTcnWXH0VRSv6Ni2LpXfMfen794V0J7tPuZ70yDaIkIsWiK
+         /L1gjvSyrcccyLwwB4hIH8SnXXeaAXAksLLFXgOs2FZ2MXaY5WBWmsCgPL0p/Rh3Eqc1
+         m4NA==
+X-Forwarded-Encrypted: i=1; AJvYcCUevH4WVZM/AxPl/fqJJ6MBbLeJVZKyimiCTnutM0dttB+YqG7YQOJJBDogfFrOzGi1J2nER5Gsagr966KBTCqDWE0zGWCbk4mNhvSdtlRI
+X-Gm-Message-State: AOJu0Yz6WlA60iNwyLpTwURhmCulk9CNNj7d1aE/WpAR2Y1olTmBan9a
+	XUTrK7/Nkohk14M/qKc4tkM5J/I2EpmmOZg4No2Gvy9e3V8YhmVmIUTkQn5MHFMcvGDTrOJh481
+	Veo1j/W7u6lNtN8+oojrnZPQJ2PRozSkvu/7KQUzxGNJ9KEjBfgmBmzP5WszbarA12Q==
+X-Received: by 2002:a17:906:393:b0:a3f:4ca8:f93e with SMTP id b19-20020a170906039300b00a3f4ca8f93emr2003795eja.24.1708602614231;
+        Thu, 22 Feb 2024 03:50:14 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHFqkM/gRLrevRcPSWpe7we5hg0Pbu6lFDxiRpmiSyGCXmYKdK+uwM9zZOtenBwAxZkzrXVHw==
+X-Received: by 2002:a17:906:393:b0:a3f:4ca8:f93e with SMTP id b19-20020a170906039300b00a3f4ca8f93emr2003757eja.24.1708602613833;
+        Thu, 22 Feb 2024 03:50:13 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id h10-20020a170906398a00b00a3f99497456sm259912eje.90.2024.02.22.03.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 03:50:13 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 63345112DEFE; Thu, 22 Feb 2024 12:50:12 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH RFC bpf-next v3 04/16] bpf/helpers: introduce sleepable
+ bpf_timers
+In-Reply-To: <20240221-hid-bpf-sleepable-v3-4-1fb378ca6301@kernel.org>
+References: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org>
+ <20240221-hid-bpf-sleepable-v3-4-1fb378ca6301@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 22 Feb 2024 12:50:12 +0100
+Message-ID: <87le7chg5n.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] KVM: s390: selftest: memop: Fix undefined behavior
-Content-Language: en-US
-To: Nina Schoetterl-Glausch <nsg@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: David Hildenbrand <david@redhat.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20240111094805.363047-1-nsg@linux.ibm.com>
-From: Janosch Frank <frankja@linux.ibm.com>
-Autocrypt: addr=frankja@linux.ibm.com; keydata=
- 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
-In-Reply-To: <20240111094805.363047-1-nsg@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uDCH6ydyqme9QsRZyZxLRwKuJidOalJZ
-X-Proofpoint-ORIG-GUID: EUZB2xcVd5Se3lTeye-fa0Exbp3518uq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-22_09,2024-02-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=929 spamscore=0
- clxscore=1011 mlxscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 phishscore=0 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402220091
+Content-Type: text/plain
 
-On 1/11/24 10:48, Nina Schoetterl-Glausch wrote:
-> If an integer's type has x bits, shifting the integer left by x or more
-> is undefined behavior.
-> This can happen in the rotate function when attempting to do a rotation
-> of the whole value by 0.
-> 
-> Fixes: 0dd714bfd200 ("KVM: s390: selftest: memop: Add cmpxchg tests")
-> Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+Benjamin Tissoires <bentiss@kernel.org> writes:
 
+> @@ -1245,6 +1294,7 @@ BPF_CALL_3(bpf_timer_set_callback, struct bpf_timer_kern *, timer, void *, callb
+>  		ret = -EPERM;
+>  		goto out;
+>  	}
+> +	down(&t->sleepable_lock);
+>  	prev = t->prog;
+>  	if (prev != prog) {
+>  		/* Bump prog refcnt once. Every bpf_timer_set_callback()
+> @@ -1261,6 +1311,7 @@ BPF_CALL_3(bpf_timer_set_callback, struct bpf_timer_kern *, timer, void *, callb
+>  		t->prog = prog;
+>  	}
+>  	rcu_assign_pointer(t->callback_fn, callback_fn);
+> +	up(&t->sleepable_lock);
+>  out:
+>  	__bpf_spin_unlock_irqrestore(&timer->lock);
+>  	return ret;
+> @@ -1282,7 +1333,7 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
+>  
+>  	if (in_nmi())
+>  		return -EOPNOTSUPP;
+> -	if (flags & ~(BPF_F_TIMER_ABS | BPF_F_TIMER_CPU_PIN))
+> +	if (flags & ~(BPF_F_TIMER_ABS | BPF_F_TIMER_CPU_PIN | BPF_F_TIMER_SLEEPABLE))
+>  		return -EINVAL;
+>  	__bpf_spin_lock_irqsave(&timer->lock);
+>  	t = timer->timer;
+> @@ -1299,7 +1350,10 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
+>  	if (flags & BPF_F_TIMER_CPU_PIN)
+>  		mode |= HRTIMER_MODE_PINNED;
+>  
+> -	hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+> +	if (flags & BPF_F_TIMER_SLEEPABLE)
+> +		schedule_work(&t->work);
+> +	else
+> +		hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+>  out:
+>  	__bpf_spin_unlock_irqrestore(&timer->lock);
+>  	return ret;
 
-Acked-by: Janosch Frank <frankja@linux.ibm.com>
+I think it's a little weird to just ignore the timeout parameter when
+called with the sleepable flag. But I guess it can work at least as a
+first pass; however, in that case we should enforce that the caller
+passes in a timeout of 0, so that if we do add support for a timeout for
+sleepable timers in the future, callers will be able to detect this.
+
+-Toke
+
 
