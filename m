@@ -1,91 +1,92 @@
-Return-Path: <linux-kselftest+bounces-5259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5260-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA53485EEDB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 03:05:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5722885F06F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 05:31:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E2C62830FA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 02:05:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E32851F229A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 04:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A9371400A;
-	Thu, 22 Feb 2024 02:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A4715BB;
+	Thu, 22 Feb 2024 04:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="EFMyLwKr";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="EFMyLwKr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E0JoAUak"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D27125D7;
-	Thu, 22 Feb 2024 02:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8166A382;
+	Thu, 22 Feb 2024 04:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708567511; cv=none; b=NU5RWU0xzKp4jubk0e1uf3mrhD4vSM2W1KpCRlYl7BMxMCMzRWu8HeH8d/viuYeneh/avggBc39HJ6MafzIxPIOxYYouuY7yc7+WW6hkZ6B2VjhWUkNtl5GO2opxCqvYK00EDFMHZdjTw/hnPJAE8g2yI8sBs7R95UH+rcqRw78=
+	t=1708576297; cv=none; b=ajzOzz1z407IVGV0Da7zPGRZeN80IAR53DGDmhjNWNgaWvakOos7AAJYhO4qw/rftndJOxr5l86Mg4WXyOx7aZtU0JizREfL1tTare/hS9XwAMOZ2E5VjUSG2qJUalQULcj/dGZpctJYMphabA0q72XwFxuoRD7dfTZCZeXnXmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708567511; c=relaxed/simple;
-	bh=3m2O0gxqVD4leeDPk3EpgqVSoMqn/AGGWB8HA13FHP4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IbF0vFT741xxhXxbP+BnFF0xZE0v2QU2wROhLJ4x6iqcLVEGhj7N2G/QaxKlregqsrERv7o2wVafjhMKEnkEW8HBY9X+ao5xfxuaB54sa6Rt011Gz/iGyhj/1JF2Utalks602F+axjQSL5dv79fCJsuUrehgPw7L/Sb17cv9Gpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=EFMyLwKr; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=EFMyLwKr; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A99EC21FEF;
-	Thu, 22 Feb 2024 02:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708567499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yt2nTJyCo2DcsFR2s8JybA6/3TKUrIMwu//hSiSPmVk=;
-	b=EFMyLwKrIv2T/TF+cLB4CGTgD/P/SAUnitjVyiw/hHJqjncyIlIe/EPUxTnreAIAyUk1vx
-	7h6ebhwTHigc5XL7GqVaOvd2q8Zwr4L6emwPkiSJjvaRrE24kKkRUySbhjsc7yUqRwUP3M
-	hNmxbIUlr1pJ8aCQG1nCwyiQP+EUhvw=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708567499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yt2nTJyCo2DcsFR2s8JybA6/3TKUrIMwu//hSiSPmVk=;
-	b=EFMyLwKrIv2T/TF+cLB4CGTgD/P/SAUnitjVyiw/hHJqjncyIlIe/EPUxTnreAIAyUk1vx
-	7h6ebhwTHigc5XL7GqVaOvd2q8Zwr4L6emwPkiSJjvaRrE24kKkRUySbhjsc7yUqRwUP3M
-	hNmxbIUlr1pJ8aCQG1nCwyiQP+EUhvw=
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 35F12134AF;
-	Thu, 22 Feb 2024 02:04:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id W7QtOsqr1mXTUAAAn2gu4w
-	(envelope-from <mpdesouza@suse.com>); Thu, 22 Feb 2024 02:04:58 +0000
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Yujie Liu <yujie.liu@intel.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	kernel test robot <lkp@intel.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	oe-kbuild-all@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1708576297; c=relaxed/simple;
+	bh=TcxyxtMCbWKsSZiCUDElieO84b/6DAH0dX5gHM8ttJw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PpBzJiJEZOjgjx6R0OCXzBIOeRZI/PNtQhSKAEEpvBjxmyX+QBieDP+ncDOSunybBE6B+UKfAuu7yLQ9r4IfWGazD831flFus84oqVdjcabLI1PX4Gt2b0bG15h5gw3BpbWDgSf14I0rV9Y4ivHuouKJzMPhULcLf1sydfLawKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E0JoAUak; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dc1ff3ba1aso20445315ad.3;
+        Wed, 21 Feb 2024 20:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708576296; x=1709181096; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1qe6sezPW9Q3wTsxfWJprqeu8KJLsVxqYQYWx727S4g=;
+        b=E0JoAUakPUxqeHintqW/EHQWOLTDkdIDdcf3iCScb5k4OAGX9d/ZPRIRcs+1+OBnqs
+         UrgaspMrfPt407lz+mLhI8O9pZm1yyOLqm3exAs9ZTRrhGZP4eRSMfwKo5EZxVATH362
+         /QmGXj36IZP/MqPqwtCcqB8OSQqQHbs+fkJB/M6xmvNm0H+uIZ+71NLJoig+esj+Ig1F
+         bI30fkTeAe94Yu4QcxRcnWSEnHq+jNDfwGttpVzWEuiV7lO94yJ6hLp5Uy9eJn9BX06A
+         2IhMUXcH5mZXNe0MGjq6U5wngBs0bpXbtRIMAG5gKt1xixcvm32/Id7hY0gzk8IdCtdf
+         O9sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708576296; x=1709181096;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1qe6sezPW9Q3wTsxfWJprqeu8KJLsVxqYQYWx727S4g=;
+        b=wu/RgrQ1BqLTXbSVUXcD0ybt1rXApm9TJrPGBc09rbpCTumRO3REG6Q8iyC/F+XxXg
+         zKKXe15fx9D7q+8rj6nhbRzbkiYRoF3biiEyYRvEPEBv1lGYfxEhBMovRW9XITXA6Gsm
+         08B/hvh3Oo0u1qBmoSsdVyw439MHJM2O1LVOmmNEe8/c+aJ8mQ9nZ9Z0nEhgQGgMEKw7
+         BxcI86ky6fvJ6/PMyM90McN+bD0Dy/fmT1TsanFQt5naiDosJ4OzY0y/47Rrg+VcdnJl
+         tNczc3SY7mjn3c3c9GyHr0JJb+Su0EA0XMDxw07OvstF2JudNPe5lvbIIrUzgdt8NOId
+         3etg==
+X-Forwarded-Encrypted: i=1; AJvYcCX1PcegUacOu2G4U/DVB3i5oLAmm5MecVfupYB0mcxm08F/DQJhUqeeY5IxM+Wayxx/sid/bP53+/RwiBe/drYpECPP32DaKV0Z64pIQfB20xmaAn5PDevXpJeqA3/KXbgVdk6lRFaANaYO7QqQioOklMrIUfJHroqi6yl8hlN+mvq12WCV0g==
+X-Gm-Message-State: AOJu0YxEnOouD8+PkXaND97RRm70cMP/IEeXp376VCCC/8cmGq8eWhUq
+	zO+9eSIQHWEe7rdu8Tgzcxf1poh+Yig2G98VK9AWNdSHKwMw/KG/
+X-Google-Smtp-Source: AGHT+IFvwhrdrl0JmcZYiX3fu1qeJSYVF8Ug338hF3xvhP1lnZXSpsbvYZMu3w6zkcy1H5hqE3qsWw==
+X-Received: by 2002:a17:902:6b82:b0:1d9:edf5:c858 with SMTP id p2-20020a1709026b8200b001d9edf5c858mr17146757plk.52.1708576295686;
+        Wed, 21 Feb 2024 20:31:35 -0800 (PST)
+Received: from localhost ([113.22.93.93])
+        by smtp.gmail.com with ESMTPSA id s4-20020a17090330c400b001db9cb62f7bsm8947356plc.153.2024.02.21.20.31.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 20:31:35 -0800 (PST)
+From: Nhat Pham <nphamcs@gmail.com>
+To: akpm@linux-foundation.org
+Cc: riel@surriel.com,
+	shuah@kernel.org,
+	hannes@cmpxchg.org,
+	yosryahmed@google.com,
+	tj@kernel.org,
+	lizefan.x@bytedance.com,
+	roman.gushchin@linux.dev,
+	linux-mm@kvack.org,
+	kernel-team@meta.com,
 	linux-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org
-Subject: Re: [PATCH 1/3] selftests: lib.mk: Do not process TEST_GEN_MODS_DIR
-Date: Wed, 21 Feb 2024 23:04:55 -0300
-Message-ID: <20240222020456.28532-1-mpdesouza@suse.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <ZdajMy061zaqq8fP@yujie-X299>
-References: 
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 3/3] selftests: add zswapin and no zswap tests (fix)
+Date: Wed, 21 Feb 2024 20:31:32 -0800
+Message-Id: <20240222043132.616320-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20240205225608.3083251-4-nphamcs@gmail.com>
+References: <20240205225608.3083251-4-nphamcs@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,116 +94,69 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=EFMyLwKr
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-1.51 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.com:+];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-3.00)[100.00%];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	 FROM_HAS_DN(0.00)[];
-	 DWL_DNSWL_MED(-2.00)[suse.com:dkim];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 RCPT_COUNT_TWELVE(0.00)[13];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.com:dkim,suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from]
-X-Spam-Score: -1.51
-X-Rspamd-Queue-Id: A99EC21FEF
-X-Spam-Flag: NO
 
-On Thu, 22 Feb 2024 09:28:19 +0800 Yujie Liu <yujie.liu@intel.com> wrote:
+Remove redundant "set up" comment and add check to ensure enough data is
+swapped out (in swapin test) and zswapped-in.
 
-> On Wed, Feb 21, 2024 at 07:04:03PM -0300, Marcos Paulo de Souza wrote:
-> > On Wed, 21 Feb 2024 14:12:00 -0700 Shuah Khan <skhan@linuxfoundation.org> wrote:
-> > 
-> > > On 2/21/24 05:26, Marcos Paulo de Souza wrote:
-> > > > On Tue, 20 Feb 2024 17:19:54 -0700 Shuah Khan <skhan@linuxfoundation.org> wrote:
-> > > > 
-> > > >> On 2/19/24 06:53, Marcos Paulo de Souza wrote:
-> > > >>> On Mon, 19 Feb 2024 09:15:15 -0300 Marcos Paulo de Souza <mpdesouza@suse.com> wrote:
-> > > >>>
-> > > >>>> On Mon, 19 Feb 2024 14:35:16 +0800 kernel test robot <lkp@intel.com> wrote:
-> > > >>>>
-> > > >>>>> Hi Marcos,
-> > > >>>>>
-> > > >>>>> kernel test robot noticed the following build errors:
-> > > >>>>>
-> > > >>>>> [auto build test ERROR on 345e8abe4c355bc24bab3f4a5634122e55be8665]
-> > > >>>>>
-> > > >>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Paulo-de-Souza/selftests-lib-mk-Do-not-process-TEST_GEN_MODS_DIR/20240216-021601
-> > > >>>>> base:   345e8abe4c355bc24bab3f4a5634122e55be8665
-> > > >>>>> patch link:    https://lore.kernel.org/r/20240215-lp-selftests-fixes-v1-1-89f4a6f5cddc%40suse.com
-> > > >>>>> patch subject: [PATCH 1/3] selftests: lib.mk: Do not process TEST_GEN_MODS_DIR
-> > > >>>>> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> > > >>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240219/202402191417.XULH88Ct-lkp@intel.com/reproduce)
-> > > >>>>>
-> > > >>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > >>>>> the same patch/commit), kindly add following tags
-> > > >>>>> | Reported-by: kernel test robot <lkp@intel.com>
-> > > >>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202402191417.XULH88Ct-lkp@intel.com/
-> > > >>>>>
-> > > >>>>> All errors (new ones prefixed by >>):
-> > > >>>>>
-> > > >>>>>>> make[3]: *** /lib/modules/5.9.0-2-amd64/build: No such file or directory.  Stop.
-> > > >>>>
-> > > >>>> We should ask the kernel test robot machine owners to install kernel-devel
-> > > >>>> package in order to have this fixed.
-> > > >>>
-> > > >>> Or maybe ask them to change the reproducer to specify KDIR to the git tree,
-> > > >>> instead of /lib/modules/?
-> > > >>>
-> > > >>
-> > > >> This would be a regression to automated test rings. Do you have any other
-> > > >> solutions?
-> > > > 
-> > > > I would say that we could skip the these tests if kernel-devel package is not
-> > > > installed. Would it be acceptable? At least we would avoid such issues like this
-> > > > in the future as well.
-> > > > 
-> > > 
-> > > We have to check and skip build. Something we could do in the livepatch
-> > > Makefile. Can you send patch for this - I will oull this in for next
-> > > so we don't break test rings.
-> > 
-> > I added a new patch in the same patchset that would cover this, skipping the
-> > build and test if kernel-devel is not installed. The patchset was sent earlier
-> > today. Please check if the new patch fixes things on the build robot.
-> 
-> Hi Shuah, Hi Marcos,
-> 
-> Sorry for this wrong report. The files are organized in a different way
-> in the bot and cause this issue. We have fixed the bot to explicitly
-> set KDIR to the correct path before building the selftests. The patch
-> [1] can also work well in bot's environment.
-> 
-> [1] https://lore.kernel.org/all/20240221-lp-selftests-fixes-v2-2-a19be1e029a7@suse.com/
+Suggested-by: Yosry Ahmed <yosryahmed@google.com>
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ tools/testing/selftests/cgroup/test_zswap.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-Hi Yujie, thanks for letting us know that the bot had different settings. Either
-way the patch you mentioned should help to reduce noise in the future on
-bot's that doesn't have kernel-devel installed.
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index c263610a4a60..f0e488ed90d8 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -71,7 +71,7 @@ static int allocate_and_read_bytes(const char *cgroup, void *arg)
+ 	for (int i = 0; i < size; i += 4095)
+ 		mem[i] = 'a';
 
-Again, thanks a lot for fixing the issue!
-  Marcos
+-	/* go through the allocated memory to (z)swap in and out pages */
++	/* Go through the allocated memory to (z)swap in and out pages */
+ 	for (int i = 0; i < size; i += 4095) {
+ 		if (mem[i] != 'a')
+ 			ret = -1;
+@@ -184,8 +184,8 @@ static int test_swapin_nozswap(const char *root)
+ 		goto out;
+ 	}
 
-> 
-> Best Regards,
-> Yujie
+-	if (swap_peak == 0) {
+-		ksft_print_msg("pages should be swapped out\n");
++	if (swap_peak < MB(24)) {
++		ksft_print_msg("at least 24MB of memory should be swapped out\n");
+ 		goto out;
+ 	}
+
+@@ -215,7 +215,6 @@ static int test_zswapin(const char *root)
+ 	char *test_group;
+ 	long zswpin;
+
+-	/* Set up */
+ 	test_group = cg_name(root, "zswapin_test");
+ 	if (!test_group)
+ 		goto out;
+@@ -236,8 +235,8 @@ static int test_zswapin(const char *root)
+ 		goto out;
+ 	}
+
+-	if (zswpin == 0) {
+-		ksft_print_msg("zswpin should not be 0\n");
++	if (zswpin < MB(24) / PAGE_SIZE) {
++		ksft_print_msg("at least 24MB should be brought back from zswap\n");
+ 		goto out;
+ 	}
+
+@@ -260,7 +259,6 @@ static int test_no_invasive_cgroup_shrink(const char *root)
+ 	size_t control_allocation_size = MB(10);
+ 	char *control_allocation, *wb_group = NULL, *control_group = NULL;
+
+-	/* Set up */
+ 	wb_group = setup_test_group_1M(root, "per_memcg_wb_test1");
+ 	if (!wb_group)
+ 		return KSFT_FAIL;
+
+base-commit: 9d193b36872d153e02e80c26203de4ee15127b58
+--
+2.40.1
 
