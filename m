@@ -1,144 +1,114 @@
-Return-Path: <linux-kselftest+bounces-5301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5302-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BB986002C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 18:57:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9BFB8601EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 19:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0ABED28C610
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 17:57:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 077EC1C26587
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 18:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8116D157E66;
-	Thu, 22 Feb 2024 17:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 871546E5EE;
+	Thu, 22 Feb 2024 18:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="C/GZKSCx"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jZnn94kL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E24156960
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 17:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74B46E5E3
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 18:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708624643; cv=none; b=YfQc/ybM/qbL061Td7kWiWBr4fE2U6ccADRvaaedxpcEMQsZCh62AryyisF285jjs8SFXCSXs1i/TIc75oTGo699RLhVR8yG8SkbwOvx7jmOU+dSsVk+OWl57eNRrvyXxhHl+ZV33Av9D/YkdwNHKHKBSt3sMI6mJBZDAiYxO+E=
+	t=1708627627; cv=none; b=OGrPo+LD+R2sft2nRWJDMKM7NNukU7XfECqJBCWPyvAvzUjNjR5JEfe/dr8agXWwdYBUl4dP3y9k5DQw7FUktq8A7kaXrIKN75GAN4h8gBAqMFHoLKX6Lr95NfRuH7DSylYD9rt0akk2bp/OZJIAPN/FqsdWTY/q4d3xLQ1QNUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708624643; c=relaxed/simple;
-	bh=hlPKjlQSc0kMs/W05kmcLVH3IEjiTit6toh7GkaAPKU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AMoSAfXBKBuARnz+b0EuSPMb9MX9a0hK5H3DFSugsh2dWwa5+yYRrnwuBYaTfBC6PmIqX5pf9KXt2NRHU4mqe9zpIVZKhU6Ze8UBjWix/4VWpaXf+Vv0fgNMnP4vxnQAtCc/83Yoj4lM+VofbnJiCn7WqQjaGR2Lf40bjlCa/rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=C/GZKSCx; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-512e4f53dbfso17643e87.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 09:57:21 -0800 (PST)
+	s=arc-20240116; t=1708627627; c=relaxed/simple;
+	bh=NwoZ/s/YB6zInacwyEad3YhKFkgtInk+ILfXRdyVvto=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lDIHlzLh2k0COtwKvozwR7MhfLC9AXjOtSzT2YXvdppYcnj6yD4YuLxA3cEZPAQSy6s4M2OhvW5EiMM/4cuknc+2lgxPs6zFV6bwo4idcOplwKhqz+uJfD/eT65n0zrC9SAAc0ijBDmkGYou9BHMIhQxi6FsxqmjxLBSL26D3dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=jZnn94kL; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6e4560664b5so1934525b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 10:47:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1708624639; x=1709229439; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2n36AeyXiuh8a+bUOx1L+r2cwQosoX8vn/3R6qLfBBs=;
-        b=C/GZKSCx9krnzW/91GYSpXCFzd4lSh/fVce4znbLwfR8AxIHeSj99gMXHqiEgt+MYl
-         zhUlkyyYyhXJ47/KDPwISDkS/uDO9DYrfAXEN7Yefz03EBkVymKB3ugTh4dKQ2oIbS8P
-         BRSLPUJqVNlkHCSOQDeDKklgoNgB2P8ZbIQD0=
+        d=chromium.org; s=google; t=1708627625; x=1709232425; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4vpO/kuwhEAbu5lyhpp3cdM+wCLzEUK+hlVl6YVNB0=;
+        b=jZnn94kLXyYka+9eXc6AizHVEys8TFY2OiJFG7PIg2WwOoOPGz/WnjIUBC7K1XuDyA
+         N9WXbD4i43+FAb+UXraPUYghcAZtBZ9c/hsS++vfJPdXD4DWX6Tn2LFckfPHMQVQ39OA
+         b5jXaD5DSRAvbP8DPkBMeXcy0mMxLq472fvQY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708624639; x=1709229439;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2n36AeyXiuh8a+bUOx1L+r2cwQosoX8vn/3R6qLfBBs=;
-        b=RWZF6SHHwnEH3+V3P7brRrqDMc6wwRffaysMlgIa1rhxvpsxonWtRiKnCANNgjJaRc
-         t2enh8Z6Gm3E0+wRa6neMnMsqi6XZQIJK1MxCgn9vbeKYJN4a1+tKJ+o2vZ9vrjZoSls
-         +JD/RKsH5vhp586kTxTJoXm7AZ2AiyXvuu+Vq5G8dKdUIFk31YWgTa8E99/Ge45D0FKt
-         OZxON+RGIubrwhmkqJyGLQNr5xjQgH0luGDNgpwWYwBybCyXXQg2CbLRvqb39UGrd85h
-         enzDeLjJUTo82CC1aP5iShRcNbLwqzRJqELqNgG/6Mg29F/+tz35RadKWUSCqxv/VYuu
-         tPEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVp1lnsnEyKQNJUBWCa0YqrD1UHORHEXHiZKShd8DHbPxVAAEDILf63+a04GKlHXZxy9XJQnSP+Z/K7Eb0dWtk9VTJAqi0hlJHPNnt/VKgM
-X-Gm-Message-State: AOJu0YxSefOpd9LBvSJfEo9lI33yuFkLlq8O5IOTucF5jhQWI6V/9DxV
-	NNSSc8lHXCvETg0davAjHXFw9NUseZ630P10UvYMOCAbd4dEiTCXQML0ikn9eAGmERAHASkfzqV
-	vfQbyDw==
-X-Google-Smtp-Source: AGHT+IEPK/T2/s3HRWzQKCnhcFIIo82kymJNB7rd61mNvNh53gmon65taodTz7LbSrKFtLwHQnbnxg==
-X-Received: by 2002:a05:6512:3f29:b0:512:ca34:664a with SMTP id y41-20020a0565123f2900b00512ca34664amr6511773lfa.32.1708624639477;
-        Thu, 22 Feb 2024 09:57:19 -0800 (PST)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id w25-20020a0565120b1900b00512daf246f3sm374114lfu.269.2024.02.22.09.57.18
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 09:57:18 -0800 (PST)
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-512c2e8c6cfso56230e87.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 09:57:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXqRgMCHtZJ3tDMacVyrw73kW+9D5aGnDkLVWdRqJdpWFMCOXKi8n91Nf1inH1cq+naHQJfCHBbiAZ5u/Zn5Ev+JzCIydjo7OxkGe8i0ur4
-X-Received: by 2002:a05:6512:3089:b0:512:acf1:6970 with SMTP id
- z9-20020a056512308900b00512acf16970mr11555378lfd.35.1708624617484; Thu, 22
- Feb 2024 09:56:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708627625; x=1709232425;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4vpO/kuwhEAbu5lyhpp3cdM+wCLzEUK+hlVl6YVNB0=;
+        b=kAvPuayQ93IRIsLJZZ7KRhPfRDt68tltXZPqKomoc01vIt5O0uRsR1YHLSChABTyF/
+         rB/qNlzgJSNlx+M75vFHJIvcCY8mAFcdb8iJ2gQOy+7tFq1FhH+SLHCk5Ky39l0XDdsl
+         Jc4pwyLiqdBHv3CD5+k5MSkAPj27lr6AbYpqq4cgmUkrWWTPJSCOmBPv0cZbqsiJ/UUg
+         Hiz1xz41jR+PYzNznKM6boYzixcJnOr+nFfZJoBZ3s3OiFaic4rf9hDgZWGlKjo0YRLA
+         l9P70F5V+5bJ5PMjNou9uxIMhgHfvDXqcOwrCtnx5nqec51pIibXeS3sEq8ZCmLrwYql
+         lN7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUFfxmTMuGqlSldc45DhuQHnUkN2Lb5ec7hKNCmF94XeOw6Kha1rGwKEln5mhjZCBNS82Q/4uyKBg86HV92l+OJDDfUfwE2cNrNP+N0BpYn
+X-Gm-Message-State: AOJu0YwypNsdY6yT7gT7vng4PLBhGnclw+2unRs1HyXKW2SYpFVM8Ze0
+	c3WVgqUZ7xOUURyUGY0zbt526FRBQMKZUnvfw1TtvrGg1vtdNykXVtxCn7wHvg==
+X-Google-Smtp-Source: AGHT+IHgy3WwdGAsnQPmK2m2JDsitnCNDlW/VOsDIP4yBtdVhbhIse0VsuYogkkxJuuqsoNLgdNNGw==
+X-Received: by 2002:a05:6a00:6c95:b0:6e4:6a3f:f065 with SMTP id jc21-20020a056a006c9500b006e46a3ff065mr12647864pfb.10.1708627625231;
+        Thu, 22 Feb 2024 10:47:05 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s12-20020aa7828c000000b006e0651ec05csm11280323pfm.43.2024.02.22.10.47.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 10:47:04 -0800 (PST)
+Date: Thu, 22 Feb 2024 10:47:04 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	netdev@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v6] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+Message-ID: <202402221046.020C94D@keescook>
+References: <20240222155612.it.533-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221092728.1281499-1-davidgow@google.com> <20240221092728.1281499-3-davidgow@google.com>
- <20240221201008.ez5tu7xvkedtln3o@google.com> <CABVgOSn+VxTb5TOmZd82HN04j_ZG9J2G-AoJmdxWG8QDh9xGxg@mail.gmail.com>
- <CAGS_qxoW0v0eM646zLu=SWL1O5UUp5k08SZsQO51gCDx_LnhcQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxoW0v0eM646zLu=SWL1O5UUp5k08SZsQO51gCDx_LnhcQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 22 Feb 2024 09:56:40 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiODww51Kz-TTWn0ka5T8oMtt0AfbO9t0U3iJqfLZO+8w@mail.gmail.com>
-Message-ID: <CAHk-=wiODww51Kz-TTWn0ka5T8oMtt0AfbO9t0U3iJqfLZO+8w@mail.gmail.com>
-Subject: Re: [PATCH 2/9] lib/cmdline: Fix an invalid format specifier in an
- assertion msg
-To: Daniel Latypov <dlatypov@google.com>
-Cc: David Gow <davidgow@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Rae Moar <rmoar@google.com>, Matthew Auld <matthew.auld@intel.com>, 
-	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Kees Cook <keescook@chromium.org>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Matthew Brost <matthew.brost@intel.com>, 
-	Willem de Bruijn <willemb@google.com>, Florian Westphal <fw@strlen.de>, Cassio Neri <cassio.neri@gmail.com>, 
-	Javier Martinez Canillas <javierm@redhat.com>, Arthur Grillo <arthur.grillo@usp.br>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Stephen Boyd <sboyd@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-hardening@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240222155612.it.533-kees@kernel.org>
 
-On Thu, 22 Feb 2024 at 09:36, Daniel Latypov <dlatypov@google.com> wrote:
->
-> Copying the line for context, it's about `p-r` where
->   p = memchr_inv(&r[1], 0, sizeof(r) - sizeof(r[0]));
-> `p-r` should never be negative unless something has gone horribly
-> horribly wrong.
+On Thu, Feb 22, 2024 at 07:56:15AM -0800, Kees Cook wrote:
+> Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+> flexible array. Found with GCC 13:
 
-Sure it would - if 'p' is NULL.
+Yay! This finally passes all of CI:
+https://patchwork.kernel.org/project/netdevbpf/patch/20240222155612.it.533-kees@kernel.org/
 
-Of course, then a negative value wouldn't be helpful either, and in
-this case that's what the EXPECT_PTR_EQ checking is testing in the
-first place, so it's a non-issue.
-
-IOW, in practice clearly the sign should simply not matter here.
-
-I do think that the default case for pointer differences should be
-that they are signed, because they *can* be.
-
-Just because of that "default case", unless there's some actual reason
-to use '%tu', I think '%td' should be seen as the normal case to use.
-
-That said, just as a quick aside: be careful with pointer differences
-in the kernel.
-
-For this particular case, when we're talking about just 'char *', it's
-not a big deal, but we've had code where people didn't think about
-what it means to do a pointer difference in C, and how it can be often
-unnecessarily expensive due to the implied "divide by the size of the
-pointed object".
-
-Sometimes it's actually worth writing the code in ways that avoids
-pointer differences entirely (which might involve passing around
-indexes instead of pointers).
-
-                 Linus
+-- 
+Kees Cook
 
