@@ -1,153 +1,120 @@
-Return-Path: <linux-kselftest+bounces-5254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B10D885EE43
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 01:47:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B6E285EE47
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 01:48:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A9171F22C9D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 00:47:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36677283187
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 00:48:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43ACA101F1;
-	Thu, 22 Feb 2024 00:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CA710A0A;
+	Thu, 22 Feb 2024 00:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="pRb17MbG"
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="clEL9H+/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019F228EF
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 00:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAC928EF;
+	Thu, 22 Feb 2024 00:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708562839; cv=none; b=Oj5UhdykwVT+3nnDr6A3x/FZpB1dGgAFOQvZ+1hBWq6G35YdeVfbqA40vnTHlLfwwfAXf3M7YS4Q4FL6zivSHCluMRWI+VACjyFy8Q0mlJlczqqH5OM+B6XlS0FFvvQbMWEywL214rLLUJrKwFFw7uZlm57zY89r7kBCfvNHtzA=
+	t=1708562895; cv=none; b=YegFKcwefqMCInzdhM99QFk465yu/QcgFB5X3VbAzIYKiyOl5q8w59bFlZaMgrgmo+Ri7x6M25pnuaWk2+Slw7J3JKmbHwH8ZDewdPnab+kUomA8ciLnBwrVVc68tFPwj64V9yWg2B4hBYNCCDTbrErBYNMWccmp4vJOKfIlbNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708562839; c=relaxed/simple;
-	bh=TPRDg52o/XUAEJGbQcaz27E13NquY89Tp4mylzmLm5g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g6a4g0CAcfOJxky285u9sSk9xoBrhTiMb9h4v1Z7sgrrpnwKAtr9zwQPAbProtkkJWJsmNmFsOHqqHZXLX1lrc55JLgc0Wsm+SDDipHSyA5s5uSc9e6yWldLGtVrffopeh1QVP8W2vOX3cuflv7dDiZR8k9QmkXDshtYXotAQgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=pRb17MbG; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3c031c24fbeso857428b6e.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 16:47:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1708562836; x=1709167636; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PxnB8hIBaJHKU9GMJod5TzavYw729HDn9dbYWz/K8DM=;
-        b=pRb17MbGCSgF084iq8gn+zcwxWgWZ7DZdI4X3SQ4AQePL32QfkTF3m/ziJYnQP1k1S
-         2pMHI23BvPUIhmY0m6OkAntfXbw3EfAeUoV7KRsemjn3mXuov2AUF18H4uEs8A/atUSu
-         cWNiwZoec7ZLBovAlsoMNZBRLGZZrrA0gd5CCE2WCT59gHi+190Gw527w92Mg07nGNQz
-         b+aRR9ZXjcf75FYFJ8QUOhfvW/kN4lsfidpabsdKasHSFv7cW6SLjzDKcs8rJjgMEzdC
-         Mzb/E9HeHazoNloEL8LElBrxh1NYpZ/mG7h3Jr74W4qoEcZCXa1P0por5A6xtMniQdWf
-         2xBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708562836; x=1709167636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PxnB8hIBaJHKU9GMJod5TzavYw729HDn9dbYWz/K8DM=;
-        b=BqplS7++mLP//fcgnnVJoC/XpVyo/PMEnIyN6d150jAG1w3XMrsS/WCp6Uelan0py+
-         uv5i/SEoOhSFyWz4EE67+ntvJ49MxdQqQHAGq6h9KF32yJhysU0twFfJMGIirlgMw7Ta
-         srh1jT4mkyVDKcG1yKQPLu/Ul1reeTeH5QI+HR/RrEG0zJe4gtZvdQv0eQo9+kCOH22g
-         jeTD8E8+ePrKQ+9ENNPquqofg3KUEzWrbJZvWAuS/AQ+6SAihKHUdcSpAdywZXlgHItE
-         uHMwroLvckQMRtMttN4H87+514JZ/3xhF3CS/Tyg0cC4AvwgvSOPHNujtxQDr6ikIMdK
-         NZYA==
-X-Forwarded-Encrypted: i=1; AJvYcCVvVQ/rVcnDADDq2vfrHeOpUmtylivbcIU6R0crEmSY8tpWqSct6ORPejNVr9Y1qz6PUHGUx/QL+aoPsOS3wbZx3F4TaTUP+oheDPRwImYD
-X-Gm-Message-State: AOJu0YytKvqo4M2xo5b8uIDzhpL/Djh11aZL0flb5UVunYo1AqTuJ97Z
-	p0BooVk1IoNe23v2Vtj3qjU4QcdBSWKFtvw3KoMbP9WO7hZtQshFjCzLG5173es=
-X-Google-Smtp-Source: AGHT+IFSLTMc3hCuIYilhHI07UG+3jHSb+dOia9uI0EVHy8hIHGEMNdRSjhvd4xYo+3moab7FJoglQ==
-X-Received: by 2002:a05:6808:170f:b0:3c1:5440:d2c5 with SMTP id bc15-20020a056808170f00b003c15440d2c5mr11757138oib.38.1708562836074;
-        Wed, 21 Feb 2024 16:47:16 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056a000b0a00b006dddf2ed8f0sm9533333pfu.154.2024.02.21.16.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 16:47:15 -0800 (PST)
-Date: Wed, 21 Feb 2024 16:47:11 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com,
-	kito.cheng@sifive.com, keescook@chromium.org,
-	ajones@ventanamicro.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
-	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
-	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
-	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
-	xiao.w.wang@intel.com, apatel@ventanamicro.com,
-	mchitale@ventanamicro.com, waylingii@gmail.com,
-	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
-	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
-	panqinglin2020@iscas.ac.cn, willy@infradead.org,
-	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
-	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
-	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
-	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
-	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
-	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
-	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 15/28] riscv/mm: Implement map_shadow_stack()
- syscall
-Message-ID: <ZdaZj0pqaVJiNOUg@debug.ba.rivosinc.com>
-References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-16-debug@rivosinc.com>
- <ZcJX2IJb0hOM5RF5@finisterre.sirena.org.uk>
+	s=arc-20240116; t=1708562895; c=relaxed/simple;
+	bh=XI8ydxcy9WrRVyKDmwdrI04D8A6JcSoF6++PWlX5+V8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H55ZHgaE77Sh23qHufGc+SooUPlbyo+h6f4gFEavN8+yQXZNEai05yGMcBCW632BG0iIycuu7T2R22t8BVkYk4ct5YVvYoLNLz9dFyCMEFFzYYohp5gGl1IBVxgFBAI9jf5XdtwnhunRjiY8y+dwOVBBKjCErVER6F2P+1hp82A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=clEL9H+/; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
+	bh=mT+tca9auPHS8Y/lU5QKQsbY2Tk2BeA5WfwDxORVpa4=; b=clEL9H+/ScDXJiqQr9ZrGcrVn7
+	IrktAY3+15JIHSY6qq0TCcBxLVSbw5w3P53J0jCIw/R9HsN58oHIEPhYK2lmGri5A4LF0jcSVi3R4
+	s7vCEInKo5tT6zl+hcHgaIn5L7H/b/KyDuUvDoZNY2siIpTVfs9Lk1YbIo3DeMmlf6WEr/gnNx+eq
+	Z+5sapTuPABKRk0THMuL6e1H4p+5DQFnXNiJSB1vJtjOy1fsMXmW+Ks5hxcRfSrib8hcaS/eFcRti
+	bnRVCiPgz0/yOXqFCOUJ53JYo0QFhOMLmxw6V1i1fYze3Xy/3pF7j2WR6iyZZzkyg9xB5TTugFL/G
+	rOPOsjnQ==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
+	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1rcxFq-0055i2-09;
+	Wed, 21 Feb 2024 18:48:02 -0600
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jonathan Corbet <corbet@lwn.net>, shuah <shuah@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ wine-devel@winehq.org,
+ =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+ Wolfram Sang <wsa@kernel.org>, Arkadiusz Hiler <ahiler@codeweavers.com>,
+ Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 17/31] ntsync: Allow waits to use the REALTIME clock.
+Date: Wed, 21 Feb 2024 18:48:01 -0600
+Message-ID: <3275980.aeNJFYEL58@camazotz>
+In-Reply-To: <830b0788-35e6-4cbd-b195-254d434ba0cd@app.fastmail.com>
+References:
+ <20240219223833.95710-1-zfigura@codeweavers.com>
+ <20240219223833.95710-18-zfigura@codeweavers.com>
+ <830b0788-35e6-4cbd-b195-254d434ba0cd@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZcJX2IJb0hOM5RF5@finisterre.sirena.org.uk>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Feb 06, 2024 at 04:01:28PM +0000, Mark Brown wrote:
->On Wed, Jan 24, 2024 at 10:21:40PM -0800, debug@rivosinc.com wrote:
->
->> As discussed extensively in the changelog for the addition of this
->> syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
->> existing mmap() and madvise() syscalls do not map entirely well onto the
->> security requirements for guarded control stacks since they lead to
->> windows where memory is allocated but not yet protected or stacks which
->> are not properly and safely initialised. Instead a new syscall
->> map_shadow_stack() has been defined which allocates and initialises a
->> shadow stack page.
->
->While I agree that this is very well written you probably want to update
->the references to guarded control stacks to whatever the RISC-V term is :P
+On Tuesday, 20 February 2024 01:01:59 CST Arnd Bergmann wrote:
+> On Mon, Feb 19, 2024, at 23:38, Elizabeth Figura wrote:
+> > NtWaitForMultipleObjects() can receive a timeout in two forms, relative or
+> > absolute. Relative timeouts are unaffected by changes to the system time and do
+> > not count down while the system suspends; for absolute timeouts the opposite is
+> > true.
+> >
+> > In order to make the interface and implementation simpler, the ntsync driver
+> > only deals in absolute timeouts. However, we need to be able to emulate both
+> > behaviours apropos suspension and time adjustment, which is achieved by allowing
+> > either the MONOTONIC or REALTIME clock to be used.
+> >
+> > Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
+> 
+> I understand that there is no practical problem in building
+> up the API one patch at a time in the initial merge, but
+> it still feels wrong to have an incompatible ABI change in
+> the middle of the series:
+> 
+> > @@ -35,6 +37,8 @@ struct ntsync_wait_args {
+> >  	__u32 owner;
+> >  	__u32 index;
+> >  	__u32 alert;
+> > +	__u32 flags;
+> > +	__u32 pad;
+> >  };
+> 
+> If this was patch to get merged at any later point, you'd have
+> to support both the shorter and the longer structure layout
+> with their distinct ioctl command codes.
+> 
+> If you do a v3 series, maybe just merge this patch into the
+> one that introduces the struct ntsync_wait_args. Overall,
+> you could probably have fewer but larger patches anyway
+> without harming the review process, but other than this
+> one that is not a problem.
 
-Noted. I'll do that in next patchset.
+Oops, yes, that does feel wrong now that you point it out.
 
->
->> --- a/include/uapi/asm-generic/mman.h
->> +++ b/include/uapi/asm-generic/mman.h
->> @@ -19,4 +19,5 @@
->>  #define MCL_FUTURE	2		/* lock all future mappings */
->>  #define MCL_ONFAULT	4		/* lock all pages that are faulted in */
->>
->> +#define SHADOW_STACK_SET_TOKEN (1ULL << 0)     /* Set up a restore token in the shadow stack */
->>  #endif /* __ASM_GENERIC_MMAN_H */
->
->For arm64 I also added a SHADOW_STACK_SET_MARKER for adding a top of
->stack marker, did you have any thoughts on that for RISC-V?  I think x86
->were considering adding it too, it'd be good if we could get things
->consistent.
+I'll squash this in v3, assuming there's a need for one.
 
-Please correct me on this. A token at the top which can't be consumed to restore
-but *just* purely as marker, right?
-It's a good design basic with not a lot of cost.
-
-I think risc-v should be able to converge on that.
+--Zeb
 
 
 
