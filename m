@@ -1,133 +1,120 @@
-Return-Path: <linux-kselftest+bounces-5286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B53FB85F7D8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 13:15:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 807CC85F917
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 14:02:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 636CB2887C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 12:15:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2106FB2610B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 13:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5A9C60B87;
-	Thu, 22 Feb 2024 12:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C8E12EBCC;
+	Thu, 22 Feb 2024 13:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Pf5Ugc6O"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="kG6nU4Z7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB095FB91;
-	Thu, 22 Feb 2024 12:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64083D97D
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 13:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708604118; cv=none; b=fFEHtHJqNPfWgbCdyvCAqQav9dB0fc3fvum8XS5om4eq107bTaQ3amlQ8jt0W8KQBJ6OSjHQQb4xMwpxSfjFS8/Zyd/wvzTL1EfeMncJNJuo4TGK2tXJWl54B4NsB3scbPLJoVZxnzKZT69WUC71B3y/5fMp3VkfJMsjIrF1ijA=
+	t=1708606967; cv=none; b=ZcXHo2rs8fqSJ/S84m6LQL+vwP15J7JV8qm9tRHNiXaEnONKW4IOYWOixoim5n7A+uUmyTisW6R1YgCKAnbOCevKadU5cwS7Wlz9DxP/4cymMOoXdK4Jc0FopPAkbY7o/I+cCy5jDaGzjsslQUxAHoLjv23sw2W5x7NFBVzVwQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708604118; c=relaxed/simple;
-	bh=aR0/iErweFnO6qcJO//a4sOh+50XSNo1DNj3Tma421I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vFDeHYVzYDResBGTWYigC/zpH9MgEx676DaH+VcoLmbNR94so3I+WnBoaJX8JHVaYPfHO19D33DTUP2eyFuAWqTF3BPYeqEmm3ZA/nNyb7u9eapY5QtIersxPeXD1byq6xyWn5uSohoP3Gpt6lU5cFDiD2a3T5WdGLYuWJfuJXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Pf5Ugc6O; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1708604107; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=gbYCQh1oK43/frtg3H58A79hC36/GOmubLPeJsENmSk=;
-	b=Pf5Ugc6ORAETVoZYrBhQmOdJMn1E47i4SLMys9FkBqFnghME1IEEFcFa59qB/oNb32KTW6ihgSNQtugXZXz6Y1wl5qYhP611yQ+xryUO8SW1JsCHTVgypkiSmkj/PO6HyJw3qaosD/JKY68oRANMGY6SHBvjDcACuKANK0c7Xxo=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xiangzao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0W10zohM_1708604097;
-Received: from 30.178.67.169(mailfrom:xiangzao@linux.alibaba.com fp:SMTPD_---0W10zohM_1708604097)
-          by smtp.aliyun-inc.com;
-          Thu, 22 Feb 2024 20:15:06 +0800
-Message-ID: <7420f9b5-2283-419f-8c6b-705f8b0c53f6@linux.alibaba.com>
-Date: Thu, 22 Feb 2024 20:14:56 +0800
+	s=arc-20240116; t=1708606967; c=relaxed/simple;
+	bh=mLihlxLtwpBjewJipEa6FRB39ptkzFSdsuzkpNHKxJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PkTobcmmSIq2X67Wwb47U8hNa78ilewYnJtuaPTxFUeDgb3+laMziI2QwWPit22nHM/2MxGkLTZMxIMrTD6n8JnscxV4JdUialJwGmw8/BEz37M3FaTXkSrvp4ybCgp+7RK7xgt/Se3zi5BH0TNpRrWdyvHP/343GK9p8iD6OoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=kG6nU4Z7; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-68f51c5f9baso29351766d6.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 05:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1708606962; x=1709211762; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5AaVii71/VY2wZ+q8F0jNvSLMQ/WesHh9hxpdt+FDPE=;
+        b=kG6nU4Z7+Q6FCz463hLsA756uwb15cy542whL12gyDB4rgN8f7anLjDdi0ntm7SzK2
+         r3dNrCWKpP6gRFDjSxaLeg7sx4x9EgLzKV44m/Wt7KIsjfHTWHFiseYP4FJwgTcaxyGZ
+         ojwQiCz8i8FW4fzcczIPtm//dbX3YhF9aG1DdNrYtQZ2TtPx57SVauEdvwoGxygS+SLT
+         AmZWVQPDM+lNNB2g+0dkBqGNv4CCegMayaSA6Nul2jc7KJrLoQaHHOFfgYDfDtfXIhvQ
+         DK+3sak3puL+6TN1AnOhnBC8JoQLVPgGESNhhm6Dmwta2W699g/kBYDnnN8mqbIkPuhf
+         gKQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708606962; x=1709211762;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5AaVii71/VY2wZ+q8F0jNvSLMQ/WesHh9hxpdt+FDPE=;
+        b=gjSmMqQJZtCO/Tmb6NnQK7HIOfuVrSInq5zts057GXVzOjvXpsEeu0/IG3uzLa3AP9
+         nOtIbo9bXGbKpYZZfE4RIF4mHQyxuu1HA5wSGZvGXNrpS9MeuN1oiRfqokoE+PsDdMpV
+         RD9nPFn4EtVP5cYM0tkvmHhKXwjd9lZ6+s4Q3PJL42gSXYcPNdzhr6nIIyf/r2vYT/vI
+         opQcW5OldtO3vilTFHQyQl0oXNLp3gbU+BCPxKwIidG1p9AgtmWLFtgtkCMpgDOgJOgm
+         p1x0vP9VJna5GdU3/jR5kih7Bm9aQ82Mlpva79oaG3AuQ7sVZKyuyxMf3fZ84FDEhVb5
+         9qpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVOu7Kp0v48Z7uYWraLODt9UGRcW8vLelmqQe8ERWXuAF6CFw2S6UNfQk2wzgvypr9/3oQd7es5pJA1Malef15erKCBAtuqEqQMs2MvKv1Q
+X-Gm-Message-State: AOJu0YyoPsfk3h5m7cYJFHJFHs/XyiVqTGMRemW7TpJJOfPIJJcZD1Io
+	19d3HLxJwrtEn3CMSp58ubyQt0U6h58XLTaJNaCJyLGhsBlRdfw0yJCgmTr4Jhc=
+X-Google-Smtp-Source: AGHT+IGAK7E+kzRE8+YA/j2lb1I8Y61tiNcJdozr2Qvcpk6aaDKEVgEQPQJ+SEeGp2gh8IK9zaw/sg==
+X-Received: by 2002:a0c:da82:0:b0:68f:2c72:a76a with SMTP id z2-20020a0cda82000000b0068f2c72a76amr22568368qvj.3.1708606962586;
+        Thu, 22 Feb 2024 05:02:42 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
+        by smtp.gmail.com with ESMTPSA id qm18-20020a056214569200b0068c88a31f1bsm1309293qvb.89.2024.02.22.05.02.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 05:02:42 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1rd8im-00G85D-DJ;
+	Thu, 22 Feb 2024 09:02:40 -0400
+Date: Thu, 22 Feb 2024 09:02:40 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Kevin Tian <kevin.tian@intel.com>, Shuah Khan <shuah@kernel.org>,
+	Yi Liu <yi.l.liu@intel.com>, Nicolin Chen <nicolinc@nvidia.com>,
+	kernel@collabora.com, iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/iommu: fix the config fragment
+Message-ID: <20240222130240.GA3220539@ziepe.ca>
+References: <20240222074934.71380-1-usama.anjum@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/ftrace: Limit length in subsystem-enable tests
-To: Steven Rostedt <rostedt@goodmis.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240205131233.13686-1-xiangzao@linux.alibaba.com>
- <20240205082120.4144fb6f@rorschach.local.home>
-From: Yuanhe Shu <xiangzao@linux.alibaba.com>
-In-Reply-To: <20240205082120.4144fb6f@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240222074934.71380-1-usama.anjum@collabora.com>
 
+On Thu, Feb 22, 2024 at 12:49:33PM +0500, Muhammad Usama Anjum wrote:
+> The config fragment doesn't follow the correct format to enable those
+> config options which make the config options getting missed while
+> merging with other configs.
+> 
+> ➜ merge_config.sh -m .config tools/testing/selftests/iommu/config
+> Using .config as base
+> Merging tools/testing/selftests/iommu/config
+> ➜ make olddefconfig
+> .config:5295:warning: unexpected data: CONFIG_IOMMUFD
+> .config:5296:warning: unexpected data: CONFIG_IOMMUFD_TEST
+> 
+> While at it, add CONFIG_FAULT_INJECTION as well which is needed for
+> CONFIG_IOMMUFD_TEST. If CONFIG_FAULT_INJECTION isn't present in base
+> config (such as x86 defconfig), CONFIG_IOMMUFD_TEST doesn't get enabled.
+> 
+> Fixes: 57f0988706fe ("iommufd: Add a selftest")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/iommu/config | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
+Appled, thanks
 
-On 2024/2/5 21:21, Steven Rostedt wrote:
-> On Mon,  5 Feb 2024 21:12:33 +0800
-> Yuanhe Shu <xiangzao@linux.alibaba.com> wrote:
-> 
->> While sched* events being traced and sched* events continuously happen,
->> "[xx] event tracing - enable/disable with subsystem level files" would
->> never stop as it cat an endless output.
->> Select the first 100 lines of output would be enough to judge whether
->> there are more than 3 types of sched events.
-> 
-> It's not that it never stops but on some slower systems it does seem to
-> take forever.
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@org>
-> 
-> Shuah,
-> 
-> Can you take this through your tree?
-> 
-> Thanks,
-> 
-> -- Steve
-> 
-
-Thanks for your ack but I found that I missed the 2nd and 3rd 'trace' 
-after 'head -n 100' in code. Should I resend a new patch to fix this and 
-meanwhile modify commit messages according to Steve's words?
-
-> 
->>
->> Signed-off-by: Yuanhe Shu <xiangzao@linux.alibaba.com>
->> ---
->>   .../selftests/ftrace/test.d/event/subsystem-enable.tc       | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
->> index b1ede6249866..74c1114603a7 100644
->> --- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
->> +++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
->> @@ -18,7 +18,7 @@ echo 'sched:*' > set_event
->>   
->>   yield
->>   
->> -count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
->> +count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
->>   if [ $count -lt 3 ]; then
->>       fail "at least fork, exec and exit events should be recorded"
->>   fi
->> @@ -29,7 +29,7 @@ echo 1 > events/sched/enable
->>   
->>   yield
->>   
->> -count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
->> +count=`head -n 100 | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
->>   if [ $count -lt 3 ]; then
->>       fail "at least fork, exec and exit events should be recorded"
->>   fi
->> @@ -40,7 +40,7 @@ echo 0 > events/sched/enable
->>   
->>   yield
->>   
->> -count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
->> +count=`head -n 100 | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
->>   if [ $count -ne 0 ]; then
->>       fail "any of scheduler events should not be recorded"
->>   fi
+Jason
 
