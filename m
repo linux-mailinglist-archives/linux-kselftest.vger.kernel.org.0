@@ -1,59 +1,57 @@
-Return-Path: <linux-kselftest+bounces-5297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53E5885FE15
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 17:29:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2239C85FE2B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 17:37:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1024828647D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 16:29:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EAD90B28172
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Feb 2024 16:37:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E6F151CDC;
-	Thu, 22 Feb 2024 16:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902CD153BCC;
+	Thu, 22 Feb 2024 16:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ojW/Q3wB"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="gRGphZ9G"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FED1474BA;
-	Thu, 22 Feb 2024 16:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE184151CDD;
+	Thu, 22 Feb 2024 16:36:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708619388; cv=none; b=FcvF/eRZzHfu8STjg9C4+RBJLfPdZ6IpKh5bNYMmoeHtQahnRI0JE3wBD7B3Az9bLU5Yh3nlFkHeVy/XXpbBdlGXTYfl04HZ29uKc/Tg9nkisNB5OuUJMNdqWai5Qd/eDEmAFi0ZHG7afJZiYVC8yZLb5bhKIBvWCBhaTZggx8o=
+	t=1708619803; cv=none; b=dETay726pe1uq9kQQkPMbSp/INUlg+9ELqq0z5eOd4FUREYyUzB21tgU4LDtT2CAPlw5iANciLZAroI8XdN0quNFLA13Aq/8Arf7/coEtxzcTya5H8FtiosOYqPz17Rw1056gZ7sS7QpWd24lgpY0KoJWZykp/cG2gL9pgofXYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708619388; c=relaxed/simple;
-	bh=XDPa4zEJuUAt2gJOYf0ufxuZ/t7zjS1SdbdV9RQRBKE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eEQ3zKDj98+eL0oVJQIgUW4v3a6lv46+7TjKFUNHuXW4Ei1LOr8v+pZ4m/vGqDNnJeyC8z4D3H+K9xIId+XNQ33o2tW0WoPCG5Air7SqE7bfNXzTorzgWlvsHEaqu+EnLstLje6Nc/sq2kTg45BuwyHa9amihLk2oSrRIb6qOy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ojW/Q3wB; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1708619803; c=relaxed/simple;
+	bh=1UjyE28xVYI4EPvfvdDQIEpLwLLL42qBXGYY3SOdliM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Hll5StwC8Jr/9ZnorPhKJGx12+a0YW3ZkzE+8d1oI/ApJUsqaZSQtr6IVDOEZgpSkiQMgdb8eqXH95ksa7L3iL1wMSzPgnOryydXzDlh4ZDFFVLhd7oBjFqbUSu/VYj4EWhEIFiULlMW5mDlUVfd2xFJ7AApg+TbMVYfOqaQfWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=gRGphZ9G; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1708619384;
-	bh=XDPa4zEJuUAt2gJOYf0ufxuZ/t7zjS1SdbdV9RQRBKE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ojW/Q3wBZe+6AcTn4kNEFGzh4qGJp2fuVg0gVnJ+IlLotYBuHjvjLp4Cyjjr1JYX1
-	 FIrFhOAeHTwuync8gLKW7pCiD79kishmeAKpWKUzLITp1DR1du6FhNrgWp433OQRbt
-	 bshAIZiTvix2xDJE/3N62w4jvLuzcOCMOEWHa7xrrUdHMgo6S/34fkt6LoH1uarZon
-	 TiAT5pT2o/UI5hOp+N//O2NwdZ6Tw2NScPSRpg/anSeTE9lLqQEHRiyXcvMRbU+qyD
-	 JZEO1Puq3gnohoMpSoZO5lvooRHHPaNfe5E0COJCqrMnFKQc/wFIhp7dGlSDAGn/2y
-	 FeWsJCdH26/wQ==
+	s=mail; t=1708619800;
+	bh=1UjyE28xVYI4EPvfvdDQIEpLwLLL42qBXGYY3SOdliM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gRGphZ9Gv82qIuJeIVAWd7mhU5nCZUDNi28DE9l9qacer9gApCpoEM0wWyaGk9iTD
+	 TBvcELjGR29JD2k4xVzgfZ4yd0puugYxdJTCwwTeaharrXxad6WR3zmN/6auz3wGyT
+	 /hF6KT4XC19vI2BsdFPeZBJzcAIo/gLZVDcS2RtNraapGxB2sz8PC6stne1P05tQXC
+	 keap0+aewbVcR4n/lvHfrnuECqst/AO2FE7E8lMs+9gSjz0zEPM71YocDsGYeUhN5o
+	 Iu9gPhYSLSKI7DWUjdGDGA+FfzqElqRx/D0Z1s3LDy2+QZEuwXnadIsHD2SgnoPiFB
+	 b1+ApZdT7k4sQ==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 21A9937820D7;
-	Thu, 22 Feb 2024 16:29:43 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A232F3782082;
+	Thu, 22 Feb 2024 16:36:38 +0000 (UTC)
 From: Laura Nao <laura.nao@collabora.com>
-To: ojeda@kernel.org,
+To: kernel@valentinobst.de
+Cc: a.hindborg@samsung.com,
 	alex.gaynor@gmail.com,
-	wedsonaf@gmail.com,
-	shuah@kernel.org
-Cc: usama.anjum@collabora.com,
-	a.hindborg@samsung.com,
 	aliceryhl@google.com,
 	benno.lossin@proton.me,
 	bjorn3_gh@protonmail.com,
@@ -63,13 +61,18 @@ Cc: usama.anjum@collabora.com,
 	laura.nao@collabora.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
+	ojeda@kernel.org,
 	rust-for-linux@vger.kernel.org,
-	kernel@valentinobst.de,
-	Sergio Gonzalez Collado <sergio.collado@gmail.com>
-Subject: [PATCH v3] kselftest: Add basic test for probing the rust sample modules
-Date: Thu, 22 Feb 2024 17:29:13 +0100
-Message-Id: <20240222162913.498197-1-laura.nao@collabora.com>
+	sergio.collado@gmail.com,
+	shuah@kernel.org,
+	usama.anjum@collabora.com,
+	wedsonaf@gmail.com
+Subject: Re: [PATCH v2] kselftest: Add basic test for probing the rust sample modules
+Date: Thu, 22 Feb 2024 17:37:02 +0100
+Message-Id: <20240222163702.499686-1-laura.nao@collabora.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240222155338.26836-1-kernel@valentinobst.de>
+References: <20240222155338.26836-1-kernel@valentinobst.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,103 +81,23 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add new basic kselftest that checks if the available rust sample modules
-can be added and removed correctly.
+On 2/22/24 16:53, Valentin Obst wrote:
+> 
+> Aren't those constants now defined in `ktap_helpers.sh` as well, i.e.,
+> could those be removed here?
+> 
+>      - Best Valentin
+> 
 
-Signed-off-by: Laura Nao <laura.nao@collabora.com>
-Reviewed-by: Sergio Gonzalez Collado <sergio.collado@gmail.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Changes in v3:
-- Removed useless KSFT_PASS, KSFT_FAIL, KSFT_SKIP constants
-- Used ktap_finished to print the results summary and handle the return code
-Changes in v2:
-- Added missing SPDX line
-- Edited test_probe_samples.sh script to use the common KTAP helpers file
----
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/rust/Makefile         |  4 +++
- .../selftests/rust/test_probe_samples.sh      | 34 +++++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 tools/testing/selftests/rust/Makefile
- create mode 100755 tools/testing/selftests/rust/test_probe_samples.sh
+Definitely, I forgot to remove them. Thanks for the heads up!
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c1a18af3593a..5f62904c80bd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19207,6 +19207,7 @@ F:	Documentation/rust/
- F:	rust/
- F:	samples/rust/
- F:	scripts/*rust*
-+F:	tools/testing/selftests/rust/
- K:	\b(?i:rust)\b
- 
- RXRPC SOCKETS (AF_RXRPC)
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index f7255969b695..e1504833654d 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -80,6 +80,7 @@ TARGETS += riscv
- TARGETS += rlimits
- TARGETS += rseq
- TARGETS += rtc
-+TARGETS += rust
- TARGETS += seccomp
- TARGETS += sgx
- TARGETS += sigaltstack
-diff --git a/tools/testing/selftests/rust/Makefile b/tools/testing/selftests/rust/Makefile
-new file mode 100644
-index 000000000000..fce1584d3bc0
---- /dev/null
-+++ b/tools/testing/selftests/rust/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_PROGS += test_probe_samples.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/rust/test_probe_samples.sh b/tools/testing/selftests/rust/test_probe_samples.sh
-new file mode 100755
-index 000000000000..389d180f14a5
---- /dev/null
-+++ b/tools/testing/selftests/rust/test_probe_samples.sh
-@@ -0,0 +1,34 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2023 Collabora Ltd
-+#
-+# This script tests whether the rust sample modules can
-+# be added and removed correctly.
-+#
-+
-+DIR="$(dirname "$(readlink -f "$0")")"
-+
-+source "${DIR}"/../kselftest/ktap_helpers.sh
-+
-+rust_sample_modules=("rust_minimal" "rust_print")
-+
-+ktap_print_header
-+
-+ktap_set_plan "${#rust_sample_modules[@]}"
-+
-+for sample in "${rust_sample_modules[@]}"; do
-+    if ! /sbin/modprobe -n -q "$sample"; then
-+        ktap_test_skip "module $sample is not found in /lib/modules/$(uname -r)"
-+        continue
-+    fi
-+
-+    if /sbin/modprobe -q "$sample"; then
-+        /sbin/modprobe -q -r "$sample"
-+        ktap_test_pass "$sample"
-+    else
-+        ktap_test_fail "$sample"
-+    fi
-+done
-+
-+ktap_finished
--- 
-2.30.2
+I also noticed there's a ktap_finished function now available that
+prints the results summary and handles the return code, so the test
+script can be simplified further.
 
+v3 includes these changes: https://lore.kernel.org/linux-kselftest/20240222162913.498197-1-laura.nao@collabora.com/T/#u
+
+Best
+
+Laura
 
