@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-5337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA6C4861072
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 12:33:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30761861076
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 12:34:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6344E1F23CDB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 11:33:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6265C1C23630
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 11:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC51476C83;
-	Fri, 23 Feb 2024 11:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB9B76C83;
+	Fri, 23 Feb 2024 11:34:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aufE4WBh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DDaZpxGk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A899767C7D;
-	Fri, 23 Feb 2024 11:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFD9241F9;
+	Fri, 23 Feb 2024 11:34:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708688012; cv=none; b=lzrJ8swXyqhKy6wPOiv9gaApXUZ5m3TZ5xIu1ixj1Odwdt0A0a7Lwzdv92K9+3Pi5GlcAdx0Eo920lLNZPSDKc4U8K37koQQz8PX1sNUDmejVILAywVHSh/Y98Yzjf8CBoWBkNXcE/LC+vEQu/goK48IP7tpP0Ngtk/BpyHZQCQ=
+	t=1708688046; cv=none; b=q4v4xdzyVg7V3LfNTXIlOStn7hWIPxqFVrmF5QqpCLNJwFc1lICGvzoaUfDb+fFz3N0Wxen8t8lgleqAg6tCOPa1724sEDO9QasXFo5NPUexCLv4q/eelLy0Z1Sta3kBNH8Qhf5Dsupf6krpkrd6hWLbKhjFVjisHrOw6dogvB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708688012; c=relaxed/simple;
-	bh=DeskMZXMo1BHkhunM8FKpUi8Q19ZTNc3ArIJp1xOFd8=;
+	s=arc-20240116; t=1708688046; c=relaxed/simple;
+	bh=DiGctqgCKkLw/ZlxbVMfN/FK6a0lA5WiDsdNN455/9Q=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cWfTb7hRydyzNxAq6RR1G/Zv6bZFDwE5He8VDf3ktcXhzOexa/P1l+qic9hZiXnfkVOXWhBvYjUyddiY7zWbC/32dxGMVYiZwl0DRQhoGd7AQ0SFMev92rP7ZDoBaHoptWkLFt1n08WAca7b7NevsEHUe2PpiiHu6V9xC1+Kops=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aufE4WBh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9678C433C7;
-	Fri, 23 Feb 2024 11:33:31 +0000 (UTC)
+	 MIME-Version:Content-Type; b=O2P0lcReGDXO9bJSH+MM8YAkIjrVYFKsNiMcHcCFiOCXW1qjvKFhQVY5uHDDgC1qTA2ZieARV7uKdMCwDvlqb1UB00alNtgurqj0/aumqV10F81XV71n62lgZnSmi+ClU6M/aBMkWsvi2dBDCqHtgbFuXleS8YWoY63p+xD+cmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DDaZpxGk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F9BC433C7;
+	Fri, 23 Feb 2024 11:34:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708688011;
-	bh=DeskMZXMo1BHkhunM8FKpUi8Q19ZTNc3ArIJp1xOFd8=;
+	s=k20201202; t=1708688046;
+	bh=DiGctqgCKkLw/ZlxbVMfN/FK6a0lA5WiDsdNN455/9Q=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aufE4WBhKJvZ/R/CqHJp8Yck6eEk24phlJikoE5txPu0aTVmViLyy+usvfOs2zhxh
-	 B8ywTiS2xEjOjrAZf7CNyv3zoNcZ6DEK9tt1G1LyfLk0aUfepGn6ixGawQlWmOqiv6
-	 ILaCZzG2bnSUON/j5XVr57XLOsQGgJNQ3Rrz55YqynaG0Za/GgTynbG1/m+H0OlcP1
-	 dYQ22KKpmAux4Tvf+L+kbn8kvPlUfszEUcK+9IU+aftiitwa4K3PykCBUWtb8STZas
-	 d27N7aLIudxbVurXRvjh8GT7BsyCOFc60MoQuitWZPYzplWsEcgFrLxqzf35X5kvxP
-	 vldNXgxjkZHcA==
+	b=DDaZpxGkIrQRkiIQ/px4Nc3Jmf+b4OB6qyp8wvQYO9aF8ME09FaXvGuHCna47cMjd
+	 60wUuvAve82AGputYiyPZgqy+Ym7gFyc2fDgPXohDZOB7v0qNDjStq2j/WT0EWEvKm
+	 mcUQDdJ20y9hsq6MMm/fR2tkoftWrMhf0v4ARLtpj4wChfEpkgP486za+Ovz39W2vG
+	 jThe7EMtqS2FWcn1SJb/1WDg7N3eDzlh7EhqgQotjIufKHtBpR7emOnAJapszSx84v
+	 +cKv8mkIGhTK1LTWEpGTjiazyRuEN5YLr+cK/d/pdLThqlzgOh/TNRkCTnaR0sYRwP
+	 M/elKjGCgphaw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1rdTo1-0064Ef-VC;
-	Fri, 23 Feb 2024 11:33:30 +0000
-Date: Fri, 23 Feb 2024 11:33:29 +0000
-Message-ID: <86o7c72z5i.wl-maz@kernel.org>
+	id 1rdToa-0064G3-9S;
+	Fri, 23 Feb 2024 11:34:04 +0000
+Date: Fri, 23 Feb 2024 11:34:03 +0000
+Message-ID: <86msrr2z4k.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -64,10 +64,10 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	kvmarm@lists.linux.dev,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 11/14] KVM: arm64: Add newly allocated ID registers to register descriptions
-In-Reply-To: <20240122-arm64-2023-dpisa-v4-11-776e094861df@kernel.org>
+Subject: Re: [PATCH v4 02/14] arm64/fpsimd: Enable host kernel access to FPMR
+In-Reply-To: <20240122-arm64-2023-dpisa-v4-2-776e094861df@kernel.org>
 References: <20240122-arm64-2023-dpisa-v4-0-776e094861df@kernel.org>
-	<20240122-arm64-2023-dpisa-v4-11-776e094861df@kernel.org>
+	<20240122-arm64-2023-dpisa-v4-2-776e094861df@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -83,54 +83,35 @@ X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org,
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Mon, 22 Jan 2024 16:28:14 +0000,
+On Mon, 22 Jan 2024 16:28:05 +0000,
 Mark Brown <broonie@kernel.org> wrote:
 > 
-> The 2023 architecture extensions have allocated some new ID registers, add
-> them to the KVM system register descriptions so that they are visible to
-> guests.
+> FEAT_FPMR provides a new generally accessible architectural register FPMR.
+> This is only accessible to EL0 and EL1 when HCRX_EL2.EnFPM is set to 1,
+> do this when the host is running. The guest part will be done along with
+> context switching the new register and exposing it via guest management.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  arch/arm64/kvm/sys_regs.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  arch/arm64/include/asm/kvm_arm.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 30253bd19917..38503b1cd2eb 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -2292,12 +2292,12 @@ static const struct sys_reg_desc sys_reg_descs[] = {
->  		   ID_AA64PFR0_EL1_AdvSIMD |
->  		   ID_AA64PFR0_EL1_FP), },
->  	ID_SANITISED(ID_AA64PFR1_EL1),
-> -	ID_UNALLOCATED(4,2),
-> +	ID_SANITISED(ID_AA64PFR2_EL1),
-
-So you now expose all sort of MTE things to the guest?
-
->  	ID_UNALLOCATED(4,3),
->  	ID_WRITABLE(ID_AA64ZFR0_EL1, ~ID_AA64ZFR0_EL1_RES0),
->  	ID_HIDDEN(ID_AA64SMFR0_EL1),
->  	ID_UNALLOCATED(4,6),
-> -	ID_UNALLOCATED(4,7),
-> +	ID_SANITISED(ID_AA64FPFR0_EL1),
+> diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
+> index 3c6f8ba1e479..7f45ce9170bb 100644
+> --- a/arch/arm64/include/asm/kvm_arm.h
+> +++ b/arch/arm64/include/asm/kvm_arm.h
+> @@ -105,7 +105,7 @@
+>  #define HCRX_GUEST_FLAGS \
+>  	(HCRX_EL2_SMPME | HCRX_EL2_TCR2En | \
+>  	 (cpus_have_final_cap(ARM64_HAS_MOPS) ? (HCRX_EL2_MSCEn | HCRX_EL2_MCE2) : 0))
+> -#define HCRX_HOST_FLAGS (HCRX_EL2_MSCEn | HCRX_EL2_TCR2En)
+> +#define HCRX_HOST_FLAGS (HCRX_EL2_MSCEn | HCRX_EL2_TCR2En | HCRX_EL2_EnFPM)
 >  
->  	/* CRm=5 */
->  	{ SYS_DESC(SYS_ID_AA64DFR0_EL1),
-> @@ -2324,7 +2324,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
->  	ID_WRITABLE(ID_AA64ISAR2_EL1, ~(ID_AA64ISAR2_EL1_RES0 |
->  					ID_AA64ISAR2_EL1_APA3 |
->  					ID_AA64ISAR2_EL1_GPA3)),
-> -	ID_UNALLOCATED(6,3),
-> +	ID_WRITABLE(ID_AA64ISAR3_EL1, ~ID_AA64ISAR3_EL1_RES0),
-
-How about the non dpISA stuff that is advertised in the same register,
-and for which no support exists?
-
->  	ID_UNALLOCATED(6,4),
->  	ID_UNALLOCATED(6,5),
->  	ID_UNALLOCATED(6,6),
+>  /* TCR_EL2 Registers bits */
+>  #define TCR_EL2_DS		(1UL << 32)
 > 
+
+Acked-by: Marc Zyngier <maz@kernel.org>
 
 	M.
 
