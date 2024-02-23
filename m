@@ -1,225 +1,155 @@
-Return-Path: <linux-kselftest+bounces-5346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02361861735
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 17:12:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E783A86175C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 17:14:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACDF628CCCD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 16:12:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41D28B24FFC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 16:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8253C84A33;
-	Fri, 23 Feb 2024 16:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30C0126F3B;
+	Fri, 23 Feb 2024 16:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qgf7q8FY";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qgf7q8FY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yc4/2YyG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9F1823CD;
-	Fri, 23 Feb 2024 16:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCFE84A33;
+	Fri, 23 Feb 2024 16:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708704773; cv=none; b=QIaZgeDwkh+DbRP9lBQ37DF1onePI1U/KbMx4yludhno7nD714o2KETgCGaeqkZwbfTBsmr26L1rrPiSLu5p2RaBWToyKswXyy3Goa2GnKzCBC+1DawRc1LGX/3PQ2gZb1bLxXGgDu2gPr0UC7Lw2Rj9cKYuHiuGThbbhmg8prE=
+	t=1708704879; cv=none; b=hA69EWozCAMQ0OEEymYDjAkGVSOrdt5OYlVWGHr4tYzLdQnrPUlB1bzAkyyazW1b70G+tLHpvSoNXOMFXpt4afiUTo5SYsZL44JzBw39+bdOOm3i8ar3sUu0pPtthJ24ZGshQXsHAzRrdNwdrnNtzdybsFjUDcw0VM3vrMV8RW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708704773; c=relaxed/simple;
-	bh=4qSytJe4tnMwAepg4Nvdm4SEC8+SCPH7B63BsPHxymM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g5GZzOmHTZ7jji/tj0WyWDFBZcfrTc8/17BblOWKc374YnfHR3xqhSZcxoM5zr80Da5mGlwi5RcSVP4LwOSi9ptL2uGAlkC3Yv1ntnY/THnsRQf1s+WK4aAiokUEjK+IrxK6YCxBXYezxeBG/ruUKpoj2XLVWT8td9Py/L4YRSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qgf7q8FY; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qgf7q8FY; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C417321FDC;
-	Fri, 23 Feb 2024 16:12:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708704767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qOYP9cXOBNVQsH28eDZ3pDkkW+B28cpy8dhMl1BYBD8=;
-	b=qgf7q8FYvNegQU6eeqrndjhOQVKfYnJDYyw8pO70seAGXTXAeOuNwZAY7nOHSAPF9ZhtXs
-	EQndG+274hMzE4v3hkKWjfvFcLXHyWppG+jTl+dCAWUzaIKEmCA9JAUM6ltfOkJl7qUvbf
-	EoKYL7+Vjc6qRFpEyGu15idIuRQx3rw=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708704767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qOYP9cXOBNVQsH28eDZ3pDkkW+B28cpy8dhMl1BYBD8=;
-	b=qgf7q8FYvNegQU6eeqrndjhOQVKfYnJDYyw8pO70seAGXTXAeOuNwZAY7nOHSAPF9ZhtXs
-	EQndG+274hMzE4v3hkKWjfvFcLXHyWppG+jTl+dCAWUzaIKEmCA9JAUM6ltfOkJl7qUvbf
-	EoKYL7+Vjc6qRFpEyGu15idIuRQx3rw=
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 46BE813419;
-	Fri, 23 Feb 2024 16:12:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id 2TVgBP/D2GWvGwAAn2gu4w
-	(envelope-from <mpdesouza@suse.com>); Fri, 23 Feb 2024 16:12:47 +0000
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Yujie Liu <yujie.liu@intel.com>
-Cc: Marcos Paulo de Souza <mpdesouza@suse.com>,
-	kernel test robot <lkp@intel.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	oe-kbuild-all@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org
-Subject: Re: [PATCH 2/3] selftests: lib.mk: Simplify TEST_GEN_MODS_DIR handling
-Date: Fri, 23 Feb 2024 13:12:43 -0300
-Message-ID: <20240223161244.17709-1-mpdesouza@suse.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <ZdgTkKSSme5Evgwq@yujie-X299>
-References: 
+	s=arc-20240116; t=1708704879; c=relaxed/simple;
+	bh=7DVxqDB8uewp//XF8YJru8VTzsz0mpG0zYO9Y23VmHM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=l9m5agouUkW/yBkV0owJriOKAtYR3yp6An+7ZmHAIwPzh4EuG9JSGcM3cArOuh9dqUlMfB5KQgWFSco0cL5/+8oQQN7ia2Yfn9Up5z5nDGZoqtJi2ZcLtf5EWGoMzZmWeCWStXEFlFjMTPQaSlfacDbPZtxFbl29GEcDIOdWyDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yc4/2YyG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE1A2C433C7;
+	Fri, 23 Feb 2024 16:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708704878;
+	bh=7DVxqDB8uewp//XF8YJru8VTzsz0mpG0zYO9Y23VmHM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Yc4/2YyGTes8mFZtIggimGKzLlEXLqjvHSMpcbSBatdiuG4c2YEJ3aDonblQB/tPG
+	 B7mUxSEoSpPGT+uZ+XyGA+uoLDEMBCniuK5va2Ta9zSa54EFz+c30cR8mEG493k/BZ
+	 kAmjyWjDMo9WFVbX/EqqczKw2mcCxqOAfvzgwOqghR6sauQT/DcvFj3Ft55PlVFxaz
+	 X0CDZlKNYt2kjmYEHahdknCsVRYU/T0OXBAmzwIaJRHnkAvItdOvWHOToZnn5WDYhP
+	 zOPEG3C9uW2fxV+rrpLHmOGA+lFsN/gjilGaBWJDWLnkjh9vnHS1pn+t4EjmhZMfWs
+	 BQJf4jzfA+4nw==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 00/10] mptcp: more misc. fixes for v6.8
+Date: Fri, 23 Feb 2024 17:14:10 +0100
+Message-Id: <20240223-upstream-net-20240223-misc-fixes-v1-0-162e87e48497@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: 0.70
-X-Spamd-Result: default: False [0.70 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCPT_COUNT_TWELVE(0.00)[13];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%]
-X-Spam-Flag: NO
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFPE2GUC/z2MMQqAMAxFryKZDdRWHLyKONQaNYNVGhWheHeDg
+ +P7n/cyCCUmgbbIkOhi4S0qVGUBYfFxJuRRGayxtbHW4bnLkcivGOnAf11ZAk58k2DVOBPGZnC
+ D8aCZPdF3aKUDlaB/nhffgTyddwAAAA==
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Florian Westphal <fw@strlen.de>, 
+ Kishen Maloor <kishen.maloor@intel.com>, Shuah Khan <shuah@kernel.org>, 
+ Peter Krystad <peter.krystad@linux.intel.com>, 
+ Christoph Paasch <cpaasch@apple.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Geliang Tang <tanggeliang@kylinos.cn>, stable@vger.kernel.org, 
+ Davide Caratti <dcaratti@redhat.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2895; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=7DVxqDB8uewp//XF8YJru8VTzsz0mpG0zYO9Y23VmHM=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl2MRqF4nBD0UH9ACvTixOZlO/DUTXXCQBGWQyY
+ zBQPYkgRgCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZdjEagAKCRD2t4JPQmmg
+ c/WGEADEIi/qT4lghTbjp7V4HEaaMYXbFsTmGI6otb9GH5BFgxWceGSwQ4kca4H23jujCGBoRbp
+ KBasrw5HPIyX47T7LyUWKyOJa9yR882cwOokEb5SY1ALZ81whj8K9cYqHu9Ocgjczb1aWN3EtQR
+ 4+gjUo5evxyRt7Y+n4lYK6Je1Gjs2FAUY89qO8U0hPZmQ0PJZegFY/+n9NdOQobvelGobCQREaU
+ y27FPgyf3a+ERCN8dUpaEJdAbD1LTeq10cVT2s3UAWWjqQQY0vw1MEiPRb1+pU1WVwxOPBYPBmh
+ XawR+hbiK/9P68nDK3nmi5HONDiuSwkUXb3S/eWm4l9XJpPvdinh3v/OKKrQj+sn8c/sbqYtJWk
+ OS0HO/8P192AGG24TiEupWa2wqrnGNUAfbbAL2E73LrdMUGNIu7k//oeCjvRaPPPVOljyrAqcHZ
+ vdMTxeH5WJzVO5GfdvmHrDnEciJSyRQOmGdFT/D5GZTw70+fXWhf99FfCOFWgMyiqeni0pHBOG0
+ TIUBOsNaurxXWrY45QheJsSo2gvVjC80dw1i0v39cpveJl4aDdNC9C3DBz02DMnCDf5RuZzRReh
+ jMlZBUwPE4QMl59SWJy9Mm1gM3/K1eFgJqF0YWV+B2+/HjleZKQGfL+LK2dAd1JBJAYNe7UkfK5
+ TkcsrHqqOQ/WWFw==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Fri, 23 Feb 2024 11:40:00 +0800 Yujie Liu <yujie.liu@intel.com> wrote:
+This series includes 6 types of fixes:
 
-> On Wed, Feb 21, 2024 at 09:29:47AM -0300, Marcos Paulo de Souza wrote:
-> > On Mon, 19 Feb 2024 15:16:51 +0800 kernel test robot <lkp@intel.com> wrote:
-> > 
-> > > Hi Marcos,
-> > > 
-> > > kernel test robot noticed the following build warnings:
-> > > 
-> > > [auto build test WARNING on 345e8abe4c355bc24bab3f4a5634122e55be8665]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Paulo-de-Souza/selftests-lib-mk-Do-not-process-TEST_GEN_MODS_DIR/20240216-021601
-> > > base:   345e8abe4c355bc24bab3f4a5634122e55be8665
-> > > patch link:    https://lore.kernel.org/r/20240215-lp-selftests-fixes-v1-2-89f4a6f5cddc%40suse.com
-> > > patch subject: [PATCH 2/3] selftests: lib.mk: Simplify TEST_GEN_MODS_DIR handling
-> > > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240219/202402191502.dALlSRz0-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202402191502.dALlSRz0-lkp@intel.com/
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > > >> Makefile:11: warning: overriding recipe for target 'all'
-> > > >> ../lib.mk:62: warning: ignoring old recipe for target 'all'
-> > 
-> > I couldn't reproduce this one locally. Shuah, have you seen this issue in your
-> > setup? I followed the steps to reproduce this issue (it's the same sequence
-> > already reported in earlier patches...)
-> 
-> Hi Marcos,
-> 
-> This seems to be a warning when compiling futex selftest.
-> 
-> linux/tools/testing/selftests/futex$ make
-> Makefile:11: warning: overriding recipe for target 'all'
-> ../lib.mk:62: warning: ignoring old recipe for target 'all'
-> 
-> There is no such warning if this patch is not applied. Looks like it is
-> due to the "all" target is defined in lib.mk but overridden in futex
-> Makefile? Could you please help take a look?
+- Patch 1 fixes v4 mapped in v6 addresses support for the userspace PM,
+  when asking to delete a subflow. It was done everywhere else, but not
+  there. Patch 2 validates the modification, thanks to a subtest in
+  mptcp_join.sh. These patches can be backported up to v5.19.
 
-I believe that I understood what's going on:
+- Patch 3 is a small fix for a recent bug-fix patch, just to avoid
+  printing an irrelevant warning (pr_warn()) once. It can be backported
+  up to v5.6, alongside the bug-fix that has been introduced in the
+  v6.8-rc5.
 
-Before this patch, the 'all' from lib.mk target didn't have a "recipe" only
-dependencies. The TARGET_GEN_MODS_DIR variable was used while resolving the
-dependencies from it.
+- Patches 4 to 6 are fixes for bugs found by Paolo while working on
+  TCP_NOTSENT_LOWAT support for MPTCP. These fixes can improve the
+  performances in some cases. Patches can be backported up to v5.6,
+  v5.11 and v6.7 respectively.
 
-The proposed patch simplified the process by removing the gen_mods_dir target,
-and checked TARGET_GEN_MODS_DIR variable as a recipe.
+- Patch 7 makes sure 'ss -M' is available when starting MPTCP Join
+  selftest as it is required for some subtests since v5.18.
 
-Per my local tests, we can have two targets with the same name on two different
-Makefiles (one that includes in the other in case), as long as only one of them
-have a recipe (commands to execute). The dependencies of the target
-on the included file would will be checked and executed either way.
+- Patch 8 fixes a possible double-free on socket dismantle. The issue
+  always existed, but was unnoticed because it was not causing any
+  problem so far. This fix can be backported up to v5.6.
 
-But, if both targets have commands to execute, make will say the target was
-overridden. In both cases, only the target from the file that includes the other
-will execute. I believe this matches the current expectation of the futex
-selftests, as they jump on into "functional" directory and execute the tests
-there. That makefile also includes lib.mk...
+- Patch 9 is a fix for a very recent patch causing lockdep warnings in
+  subflow diag. The patch causing the regression -- which fixes another
+  issue present since v5.7 -- should be part of the future v6.8-rc6.
+  Patch 10 validates the modification, thanks to a new subtest in
+  diag.sh.
 
-It seems that planned to include more directories since they introduced the
-selftests, but never did:
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Davide Caratti (1):
+      mptcp: fix double-free on socket dismantle
 
+Geliang Tang (3):
+      mptcp: map v4 address to v6 when destroying subflow
+      selftests: mptcp: rm subflow with v4/v4mapped addr
+      selftests: mptcp: join: add ss mptcp support check
 
-  commit 2aa8470f02a9b9e6a410d1264fe6c8fa6c402eff
-  Author: Darren Hart <dvhart@linux.intel.com>
-  Date:   Tue May 12 21:07:52 2015 -0700
+Matthieu Baerts (NGI0) (1):
+      mptcp: avoid printing warning once on client side
 
-      selftests: Add futex functional tests
+Paolo Abeni (5):
+      mptcp: push at DSS boundaries
+      mptcp: fix snd_wnd initialization for passive socket
+      mptcp: fix potential wake-up event loss
+      mptcp: fix possible deadlock in subflow diag
+      selftests: mptcp: explicitly trigger the listener diag code-path
 
-      The futextest testsuite [1] provides functional, stress, and
-      performance tests for the various futex op codes. Those tests will be of
-      more use to futex developers if they are included with the kernel
-      source.
+ net/mptcp/diag.c                                |  3 ++
+ net/mptcp/options.c                             |  2 +-
+ net/mptcp/pm_userspace.c                        | 10 +++++
+ net/mptcp/protocol.c                            | 52 ++++++++++++++++++++++++-
+ net/mptcp/protocol.h                            | 21 +++++-----
+ tools/testing/selftests/net/mptcp/diag.sh       | 30 +++++++++++++-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 33 ++++++++++------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh  |  4 +-
+ 8 files changed, 128 insertions(+), 27 deletions(-)
+---
+base-commit: b0b1210bc150fbd741b4b9fce8a24541306b40fc
+change-id: 20240223-upstream-net-20240223-misc-fixes-1630cd6b3b0a
 
-      Copy the core infrastructure and the functional tests into selftests,
-      but adapt them for inclusion in the kernel:
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-      - Update the Makefile to include the run_tests target, remove reference
-        to the performance and stress tests from the contributed sources.
-      - Replace my dead IBM email address with my current Intel email address.
-      - Remove the warrantee and write-to paragraphs from the license blurbs.
-      - Remove the NAME section as the filename is easily determined. ;-)
-      - Make the whitespace usage consistent in a couple of places.
-      - Cleanup various CodingStyle violations.
-
-      A future effort will explore moving the performance and stress tests
-      into the kernel.
-
-      1. http://git.kernel.org/cgit/linux/kernel/git/dvhart/futextest.git
-
-Either way, if my change adds a new warning, I think that we can drop that patch
-and move on. OTOH, I believe that futex selftests could be simplified in order
-to remove this awkward setup to run their tests.
-
-> 
-> Thanks,
-> Yujie
 
