@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-5347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E783A86175C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 17:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D979861760
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 17:15:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41D28B24FFC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 16:14:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E3A8B25764
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 16:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30C0126F3B;
-	Fri, 23 Feb 2024 16:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD9E91272C4;
+	Fri, 23 Feb 2024 16:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yc4/2YyG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lpKeJBT6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCFE84A33;
-	Fri, 23 Feb 2024 16:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FF18526D;
+	Fri, 23 Feb 2024 16:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708704879; cv=none; b=hA69EWozCAMQ0OEEymYDjAkGVSOrdt5OYlVWGHr4tYzLdQnrPUlB1bzAkyyazW1b70G+tLHpvSoNXOMFXpt4afiUTo5SYsZL44JzBw39+bdOOm3i8ar3sUu0pPtthJ24ZGshQXsHAzRrdNwdrnNtzdybsFjUDcw0VM3vrMV8RW0=
+	t=1708704883; cv=none; b=SoWQ12fW1JvW/KWYLtfN1xXVTFFJ8QUXs3gLUEQHfbsjrQXgj/AUhavcIOj0dOlR+Gz7A9vAehvBjHT+56P1EIeycKAbkyJ4gPiu/VDdx6nio7FXy0ALJ5A/057wqxfoHmSEv9yZyZiCw/VnalTyg9luNhGg/Qb3zRLbx954h+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708704879; c=relaxed/simple;
-	bh=7DVxqDB8uewp//XF8YJru8VTzsz0mpG0zYO9Y23VmHM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=l9m5agouUkW/yBkV0owJriOKAtYR3yp6An+7ZmHAIwPzh4EuG9JSGcM3cArOuh9dqUlMfB5KQgWFSco0cL5/+8oQQN7ia2Yfn9Up5z5nDGZoqtJi2ZcLtf5EWGoMzZmWeCWStXEFlFjMTPQaSlfacDbPZtxFbl29GEcDIOdWyDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yc4/2YyG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE1A2C433C7;
-	Fri, 23 Feb 2024 16:14:34 +0000 (UTC)
+	s=arc-20240116; t=1708704883; c=relaxed/simple;
+	bh=qISUZKplFPWYmLkdmI1gLlKsQvehUGqkZjUJuQ2PWWc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=qmuZECMDvROUniagG/prmT6jdeqlFsGDVgWLLo6XLGsBhtCTJKQsr7T0GlyvzSGnVlgZUQeAjcLzA1i4CNVaDdCJ+6LD5uxm8eMJzrFuW4pgFjBBS1DiQoG8NlrujJ65g45md+5GXPtsaFXm6YpNLtBpDZYLnPeKdFOf9WE4vl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lpKeJBT6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18BC4C43390;
+	Fri, 23 Feb 2024 16:14:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708704878;
-	bh=7DVxqDB8uewp//XF8YJru8VTzsz0mpG0zYO9Y23VmHM=;
-	h=From:Subject:Date:To:Cc:From;
-	b=Yc4/2YyGTes8mFZtIggimGKzLlEXLqjvHSMpcbSBatdiuG4c2YEJ3aDonblQB/tPG
-	 B7mUxSEoSpPGT+uZ+XyGA+uoLDEMBCniuK5va2Ta9zSa54EFz+c30cR8mEG493k/BZ
-	 kAmjyWjDMo9WFVbX/EqqczKw2mcCxqOAfvzgwOqghR6sauQT/DcvFj3Ft55PlVFxaz
-	 X0CDZlKNYt2kjmYEHahdknCsVRYU/T0OXBAmzwIaJRHnkAvItdOvWHOToZnn5WDYhP
-	 zOPEG3C9uW2fxV+rrpLHmOGA+lFsN/gjilGaBWJDWLnkjh9vnHS1pn+t4EjmhZMfWs
-	 BQJf4jzfA+4nw==
+	s=k20201202; t=1708704882;
+	bh=qISUZKplFPWYmLkdmI1gLlKsQvehUGqkZjUJuQ2PWWc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=lpKeJBT6k+vV5p9rMNOt9vObKqfXrazOQ431ipCowoLrfa7CVukqhilijvPWQG2xi
+	 jsg829/alLeqOm+3DN512ZTZKc5Krw8z3M6oZi2FooZrsYI96xOcqMaVwP9bAz3q0E
+	 XK/7MD5maKStTI6NYdA3QNuYWubUzrq8M0ghuLs7ah10bncZ2jSPEjdvwjVj5kAV5S
+	 PjMOEDj3ZfJXvcEnGEqV7da4mCF/wCQfICi1jgqNZcCDhclANSZ69HIqUzRWWnShTt
+	 AUHm2elH5ys0JycPnWbjxBQSIciq9qGtT/wpP1JjwH7noLfsCZUe0/btayU+H2Dgae
+	 EYMS2xyrJ74CQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net 00/10] mptcp: more misc. fixes for v6.8
-Date: Fri, 23 Feb 2024 17:14:10 +0100
-Message-Id: <20240223-upstream-net-20240223-misc-fixes-v1-0-162e87e48497@kernel.org>
+Date: Fri, 23 Feb 2024 17:14:11 +0100
+Subject: [PATCH net 01/10] mptcp: map v4 address to v6 when destroying
+ subflow
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,9 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFPE2GUC/z2MMQqAMAxFryKZDdRWHLyKONQaNYNVGhWheHeDg
- +P7n/cyCCUmgbbIkOhi4S0qVGUBYfFxJuRRGayxtbHW4bnLkcivGOnAf11ZAk58k2DVOBPGZnC
- D8aCZPdF3aKUDlaB/nhffgTyddwAAAA==
+Message-Id: <20240223-upstream-net-20240223-misc-fixes-v1-1-162e87e48497@kernel.org>
+References: <20240223-upstream-net-20240223-misc-fixes-v1-0-162e87e48497@kernel.org>
+In-Reply-To: <20240223-upstream-net-20240223-misc-fixes-v1-0-162e87e48497@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -65,91 +66,74 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>, stable@vger.kernel.org, 
- Davide Caratti <dcaratti@redhat.com>
+ Geliang Tang <tanggeliang@kylinos.cn>, stable@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2895; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=7DVxqDB8uewp//XF8YJru8VTzsz0mpG0zYO9Y23VmHM=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl2MRqF4nBD0UH9ACvTixOZlO/DUTXXCQBGWQyY
- zBQPYkgRgCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZdjEagAKCRD2t4JPQmmg
- c/WGEADEIi/qT4lghTbjp7V4HEaaMYXbFsTmGI6otb9GH5BFgxWceGSwQ4kca4H23jujCGBoRbp
- KBasrw5HPIyX47T7LyUWKyOJa9yR882cwOokEb5SY1ALZ81whj8K9cYqHu9Ocgjczb1aWN3EtQR
- 4+gjUo5evxyRt7Y+n4lYK6Je1Gjs2FAUY89qO8U0hPZmQ0PJZegFY/+n9NdOQobvelGobCQREaU
- y27FPgyf3a+ERCN8dUpaEJdAbD1LTeq10cVT2s3UAWWjqQQY0vw1MEiPRb1+pU1WVwxOPBYPBmh
- XawR+hbiK/9P68nDK3nmi5HONDiuSwkUXb3S/eWm4l9XJpPvdinh3v/OKKrQj+sn8c/sbqYtJWk
- OS0HO/8P192AGG24TiEupWa2wqrnGNUAfbbAL2E73LrdMUGNIu7k//oeCjvRaPPPVOljyrAqcHZ
- vdMTxeH5WJzVO5GfdvmHrDnEciJSyRQOmGdFT/D5GZTw70+fXWhf99FfCOFWgMyiqeni0pHBOG0
- TIUBOsNaurxXWrY45QheJsSo2gvVjC80dw1i0v39cpveJl4aDdNC9C3DBz02DMnCDf5RuZzRReh
- jMlZBUwPE4QMl59SWJy9Mm1gM3/K1eFgJqF0YWV+B2+/HjleZKQGfL+LK2dAd1JBJAYNe7UkfK5
- TkcsrHqqOQ/WWFw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1870; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=R+BQBUEWiM2ym//t1ZB6xXS8N8caCdeWbnoDwiPCfe4=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl2MRqwKTdW3PskIYPe7YlyeUTOtATAmZlVGcwi
+ 6E30zx0XAmJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZdjEagAKCRD2t4JPQmmg
+ c+uED/9eaB4gK4ZdGVN/ncv+ZTHQGFKZc8N5XfdpyCBQ7NySR9oJDseOFt0HeXKHsP209jWimRf
+ awMCdYlcq/LHrQEWj7VtM7FoTxN5ddBcncCUoocl8y2xdnlx4I8wnw4Qyj7dcEZAZaov4CIZPwh
+ ufGDCMQ2Oxelnq6Q/04157J4I+pNLLw7Pcs29qG5LLvRgy9HoE/eMS1EiFT4tMxOYkIeaValWwx
+ L05c4WmSzqvbv5djX0YS3oSjCzSyV2bKvE0AglN74c+2SwOWh8TDvpkRmdOfEhTcjYvTjA87UR1
+ hmfHBVdNxNq9gEXzO+lSPu2H6ZWSzHSOGyhzJOZVkRvzyt2nTXOrA2VLY5bSIj8fp3euwLHieV2
+ 1QEumN/7GjmjfxoT3L7rCCAWK9TTD10H+e1Tc8fo+ilAU2igODZ2oJ+P2ypi5sX+Du/JqgcJLeC
+ rA6LeKFMDDS1vKm540vUESZ5R17q+3+TPDG5FufdSiBcMVhgBctFpTaM+iLhNpyOjfqQuZlrCOy
+ dy21Hsc/8kRzgUlbANDYv181i+GAMR+8a5SuP5dFrcFi4OoSCeXA2rRiPBmyxIqcW1G6WtRxYmb
+ 0Zk5skwre+t3qr0Bb3wD/okVf06rybE1Vxc0JmnA9WBUWlstnUZLMGzZBmaZhOCZ+dkhQzNOFdP
+ KMvH74pTCriQOjg==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-This series includes 6 types of fixes:
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-- Patch 1 fixes v4 mapped in v6 addresses support for the userspace PM,
-  when asking to delete a subflow. It was done everywhere else, but not
-  there. Patch 2 validates the modification, thanks to a subtest in
-  mptcp_join.sh. These patches can be backported up to v5.19.
+Address family of server side mismatches with that of client side, like
+in "userspace pm add & remove address" test:
 
-- Patch 3 is a small fix for a recent bug-fix patch, just to avoid
-  printing an irrelevant warning (pr_warn()) once. It can be backported
-  up to v5.6, alongside the bug-fix that has been introduced in the
-  v6.8-rc5.
+    userspace_pm_add_addr $ns1 10.0.2.1 10
+    userspace_pm_rm_sf $ns1 "::ffff:10.0.2.1" $SUB_ESTABLISHED
 
-- Patches 4 to 6 are fixes for bugs found by Paolo while working on
-  TCP_NOTSENT_LOWAT support for MPTCP. These fixes can improve the
-  performances in some cases. Patches can be backported up to v5.6,
-  v5.11 and v6.7 respectively.
+That's because on the server side, the family is set to AF_INET6 and the
+v4 address is mapped in a v6 one.
 
-- Patch 7 makes sure 'ss -M' is available when starting MPTCP Join
-  selftest as it is required for some subtests since v5.18.
+This patch fixes this issue. In mptcp_pm_nl_subflow_destroy_doit(), before
+checking local address family with remote address family, map an IPv4
+address to an IPv6 address if the pair is a v4-mapped address.
 
-- Patch 8 fixes a possible double-free on socket dismantle. The issue
-  always existed, but was unnoticed because it was not causing any
-  problem so far. This fix can be backported up to v5.6.
-
-- Patch 9 is a fix for a very recent patch causing lockdep warnings in
-  subflow diag. The patch causing the regression -- which fixes another
-  issue present since v5.7 -- should be part of the future v6.8-rc6.
-  Patch 10 validates the modification, thanks to a new subtest in
-  diag.sh.
-
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/387
+Fixes: 702c2f646d42 ("mptcp: netlink: allow userspace-driven subflow establishment")
+Cc: stable@vger.kernel.org
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Reviewed-by: Mat Martineau <martineau@kernel.org>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Davide Caratti (1):
-      mptcp: fix double-free on socket dismantle
+ net/mptcp/pm_userspace.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Geliang Tang (3):
-      mptcp: map v4 address to v6 when destroying subflow
-      selftests: mptcp: rm subflow with v4/v4mapped addr
-      selftests: mptcp: join: add ss mptcp support check
+diff --git a/net/mptcp/pm_userspace.c b/net/mptcp/pm_userspace.c
+index d396a5973429..bc97cc30f013 100644
+--- a/net/mptcp/pm_userspace.c
++++ b/net/mptcp/pm_userspace.c
+@@ -495,6 +495,16 @@ int mptcp_pm_nl_subflow_destroy_doit(struct sk_buff *skb, struct genl_info *info
+ 		goto destroy_err;
+ 	}
+ 
++#if IS_ENABLED(CONFIG_MPTCP_IPV6)
++	if (addr_l.family == AF_INET && ipv6_addr_v4mapped(&addr_r.addr6)) {
++		ipv6_addr_set_v4mapped(addr_l.addr.s_addr, &addr_l.addr6);
++		addr_l.family = AF_INET6;
++	}
++	if (addr_r.family == AF_INET && ipv6_addr_v4mapped(&addr_l.addr6)) {
++		ipv6_addr_set_v4mapped(addr_r.addr.s_addr, &addr_r.addr6);
++		addr_r.family = AF_INET6;
++	}
++#endif
+ 	if (addr_l.family != addr_r.family) {
+ 		GENL_SET_ERR_MSG(info, "address families do not match");
+ 		err = -EINVAL;
 
-Matthieu Baerts (NGI0) (1):
-      mptcp: avoid printing warning once on client side
-
-Paolo Abeni (5):
-      mptcp: push at DSS boundaries
-      mptcp: fix snd_wnd initialization for passive socket
-      mptcp: fix potential wake-up event loss
-      mptcp: fix possible deadlock in subflow diag
-      selftests: mptcp: explicitly trigger the listener diag code-path
-
- net/mptcp/diag.c                                |  3 ++
- net/mptcp/options.c                             |  2 +-
- net/mptcp/pm_userspace.c                        | 10 +++++
- net/mptcp/protocol.c                            | 52 ++++++++++++++++++++++++-
- net/mptcp/protocol.h                            | 21 +++++-----
- tools/testing/selftests/net/mptcp/diag.sh       | 30 +++++++++++++-
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 33 ++++++++++------
- tools/testing/selftests/net/mptcp/mptcp_lib.sh  |  4 +-
- 8 files changed, 128 insertions(+), 27 deletions(-)
----
-base-commit: b0b1210bc150fbd741b4b9fce8a24541306b40fc
-change-id: 20240223-upstream-net-20240223-misc-fixes-1630cd6b3b0a
-
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.43.0
 
 
