@@ -1,129 +1,104 @@
-Return-Path: <linux-kselftest+bounces-5330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB8A4860D5A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 09:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19BC5860F1F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 11:23:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D9DA1F259A0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 08:58:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2B601F25961
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 10:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E56561AAD2;
-	Fri, 23 Feb 2024 08:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 254A85CDC9;
+	Fri, 23 Feb 2024 10:23:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HuQgjong"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hbubaLcQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438EA199B9
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Feb 2024 08:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B705C8FC;
+	Fri, 23 Feb 2024 10:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708678689; cv=none; b=Y1CHXlKqJKteVwKZ/UEdkMynyi+lKDhSyboQjR0AijV98p5sMBehv6ME7fDVHBpCv35hKnJuFfj/qcvV8LK+qtQXL05cCGEhv9aDmhFkcacNonEnyP9WH61dc71173jvVDIt/Yp5anpje/zacCwZWLc8fqgPEL1GqRE/9gyIPPw=
+	t=1708683832; cv=none; b=lrOcMasv8xiWth/l8KfrBMt4XgAq2bPvZlMpDq4WRMiH3B6s/Q7DYTa1eJ53UzCpPznIxtCsHeVgDcyJsC8o5IIj0T3Mp2PNwNRg/JPymEE48dBBZibLh7UmpxnyxrW2cbjWL6mgtSxB+jRDtJxPvpHnro6Lb2zKdRmGmJJQSOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708678689; c=relaxed/simple;
-	bh=YZbhuAtP+26wSLICWdq/lyQWSLDnxV62jHh0sN94jd4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qphgOqRZC9yMqQrtmH75aYamLvlCnq7Hctea4R0XWsngQBq8JBuzymQwrWaktHN4v9qnHUu9LUr7++YOwKVCpvEgytffoP2Yuiz8ec/qpBI/EhVnVDZKMnZ0Bh0Drw6HquPyXf+AOWGC8bivs6F38Q22VbLUoUOB4LHSEx8c1fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HuQgjong; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708678686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iLQwWfoTn0xaoRpTFSAvxI7eKjXdmQ16vLaj1rspCoQ=;
-	b=HuQgjong9EkSKPxnRAI95X8K2ZeKbKXU1VLL+aDA7YuZwlfoZQN6Kzjv5BYhGaqq20OmqT
-	WrKYPef8fz+mhXj/wb/EzWIDlVcjTKoqss3pN6RtlwzWTjniDsrKWcaGIcCMc4CFLbhByi
-	ahXNaaUiaMYc92XQcDAXrfMZ7OLLkx8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-139-h_gZs6c9PX2WSRtdQQbxrw-1; Fri, 23 Feb 2024 03:58:04 -0500
-X-MC-Unique: h_gZs6c9PX2WSRtdQQbxrw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-412829eab17so3220825e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Feb 2024 00:58:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708678683; x=1709283483;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iLQwWfoTn0xaoRpTFSAvxI7eKjXdmQ16vLaj1rspCoQ=;
-        b=YSTgGxIU76Nq5P9Jls8XccVQ2s4Ak1um2qSOGaVgNZcJx3NIZ+hx4RIxo+ndBlJ091
-         7/ks2UnaxyludNr71ksPwu/ZONQC59Hn+bFGpjMr+5s99G31E1V5+vjDVDpzljQ8j8iA
-         FhogliurYjcr7vCa7OsRd3XhCAcZrBeAS/aRnkfVbElcdVL2lS0B9gsfS7U53+wIsG7L
-         Mfinwvz31oU1m3vwB/OJ1wdzh/HmfA6LPXZFONj3jWC8k11SsJwUTJbDSz1FIfof4qNe
-         TkqP/f4u9HuPn3h60C6n7vgcRTTlnHMtMlya+dQyU42PKXwP9ecljpmBmb278HkYxFf4
-         Yg/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUOfvRthttCsIKuEMzriq1KouoWSZ5YvV53Mii/1HhOALwPWpw6gOqqXiu6SzC73TDU0ZxtvVLei+kzxKje7S/ZGrUddt7EH/ILPNXnY5Dt
-X-Gm-Message-State: AOJu0Ywe5X+U/lVLoNNjz80ChCXySalhQShN0OVdBo3FD6D7OGdedQAM
-	/0m4d6xeiSYPHCJ1tCuYJbN/WuqRmZbjTzOvsJCjOOoUs8mK6WRU4hgWkREwbo+B3g7EerHFU5x
-	3I1EQfkZz6uoUNA2ZWJRUXHvw7BAHAGoVb0IZp+7LNfNErHBTxicDpsIT3mEVeQM68MI5iscv4S
-	P2icYj0fPX2iT6p5TEFKEDInTLoI1EfxI1RbFJA74l
-X-Received: by 2002:adf:eac3:0:b0:33d:71e5:f556 with SMTP id o3-20020adfeac3000000b0033d71e5f556mr1020419wrn.27.1708678683410;
-        Fri, 23 Feb 2024 00:58:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE+mrCKzWAaGkT/K53qU2Sd9UG7Fu614wcbzGC+OYclult0+HHvvNnkxisAg/4y0NnQxxIN8re7HwpceFAujt8=
-X-Received: by 2002:adf:eac3:0:b0:33d:71e5:f556 with SMTP id
- o3-20020adfeac3000000b0033d71e5f556mr1020407wrn.27.1708678683094; Fri, 23 Feb
- 2024 00:58:03 -0800 (PST)
+	s=arc-20240116; t=1708683832; c=relaxed/simple;
+	bh=POfdF2ZcozXmc94NwYnJXw5bpLHLF02/HCONX/hP5F0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=onZCautQVr1puDV9zTA+lVj3gi6v0TZMrg/KKF6zMIVkR94Epl0ICYe9Z9J6gH9Zwq9zLaFKiDNkU4/8/ct5t0djBuBhVFWaW5MMzzrR7fy1uU3R8f9aHgOwZ2gBNUJoIPUDIVL9ZqsX/sNYhVHUPgeAYg7JIQJdaiYRRlcv3Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hbubaLcQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD81C43390;
+	Fri, 23 Feb 2024 10:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708683831;
+	bh=POfdF2ZcozXmc94NwYnJXw5bpLHLF02/HCONX/hP5F0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hbubaLcQoaLHfcbIAVPWfexu6j5RRj/AGj/NMVXOc/9b0VdmsSZOcrzf7L6EeL8M0
+	 6HkSzwrO1awO6Lc72BAtPx2c7mvsqGYRp+l9ILMHDvNVkEH9+jTf78oycSXiotHnNz
+	 We2l0WXMP9CJWjNAP+Qn0JiOxpl8FPQkfwUVpVexEn1UVGkxUZNqmmBMS+fA1MSzK+
+	 d22/rT0z8/5f2Cc3TSxCjMjQDdtonOZAOtaDUWZ04DLlq/eDvwflAGBeI/EhXhvhV/
+	 tnxOpVp+CqZU0GSmAW0hWWada3Te5lm0y2nBTbC171yGJIA/YW01mIrCeLW2KEDNvO
+	 K393QH8TJpxig==
+Date: Fri, 23 Feb 2024 10:23:45 +0000
+From: Will Deacon <will@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev, linux-um@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org,
+	Frank Rowand <frowand.list@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v4 5/7] arm64: Unconditionally call
+ unflatten_device_tree()
+Message-ID: <20240223102345.GA10274@willie-the-truck>
+References: <20240217010557.2381548-1-sboyd@kernel.org>
+ <20240217010557.2381548-6-sboyd@kernel.org>
+ <20240223000317.GA3835346-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240222-memfd-v1-1-7d39680286f1@linux.dev>
-In-Reply-To: <20240222-memfd-v1-1-7d39680286f1@linux.dev>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Date: Fri, 23 Feb 2024 09:57:50 +0100
-Message-ID: <CABgObfakz1KQ==Cvrxr5wS36Lq8mvF9uJtW3AWVe9m-b+0OKYA@mail.gmail.com>
-Subject: Re: [PATCH] Build guest_memfd_test also on arm64.
-To: Itaru Kitayama <itaru.kitayama@linux.dev>
-Cc: Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240223000317.GA3835346-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Feb 22, 2024 at 12:44=E2=80=AFAM Itaru Kitayama
-<itaru.kitayama@linux.dev> wrote:
-> on arm64 KVM_CAP_GUEST_MEMDF capability is not enabled, but
-> guest_memfd_test can build on arm64, let's build it on arm64 as well.
+On Thu, Feb 22, 2024 at 05:03:17PM -0700, Rob Herring wrote:
+> On Fri, Feb 16, 2024 at 05:05:54PM -0800, Stephen Boyd wrote:
+> > Call this function unconditionally so that we can populate an empty DTB
+> > on platforms that don't boot with a firmware provided or builtin DTB.
+> > When ACPI is in use, unflatten_device_tree() ignores the
+> > 'initial_boot_params' pointer so the live DT on those systems won't be
+> > whatever that's pointing to. Similarly, when kexec copies the DT data
+> > the previous kernel to the new one on ACPI systems,
+> > of_kexec_alloc_and_setup_fdt() will ignore the live DT (the empty root
+> > one) and copy the 'initial_boot_params' data.
+> > 
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Frank Rowand <frowand.list@gmail.com>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: <linux-arm-kernel@lists.infradead.org>
+> > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> > ---
+> >  arch/arm64/kernel/setup.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> Catalin, Will, Can I get an ack on this so I can take the series via the 
+> DT tree.
 
-The test will be skipped, so there's no point in compiling it.
+Mark had strong pretty strong objections to this in version one:
 
-Paolo
+https://lore.kernel.org/all/ZaZtbU9hre3YhZam@FVFF77S0Q05N/
 
-> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-> ---
->  tools/testing/selftests/kvm/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftes=
-ts/kvm/Makefile
-> index 492e937fab00..8a4f8afb81ca 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -158,6 +158,7 @@ TEST_GEN_PROGS_aarch64 +=3D access_tracking_perf_test
->  TEST_GEN_PROGS_aarch64 +=3D demand_paging_test
->  TEST_GEN_PROGS_aarch64 +=3D dirty_log_test
->  TEST_GEN_PROGS_aarch64 +=3D dirty_log_perf_test
-> +TEST_GEN_PROGS_aarch64 +=3D guest_memfd_test
->  TEST_GEN_PROGS_aarch64 +=3D guest_print_test
->  TEST_GEN_PROGS_aarch64 +=3D get-reg-list
->  TEST_GEN_PROGS_aarch64 +=3D kvm_create_max_vcpus
->
-> ---
-> base-commit: 39133352cbed6626956d38ed72012f49b0421e7b
-> change-id: 20240222-memfd-7285f9564c1e
->
-> Best regards,
-> --
-> Itaru Kitayama <itaru.kitayama@linux.dev>
->
+and this patch looks the same now as it did then. Did something else
+change?
 
+Will
 
