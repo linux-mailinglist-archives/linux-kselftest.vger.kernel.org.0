@@ -1,117 +1,174 @@
-Return-Path: <linux-kselftest+bounces-5378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5379-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EE3E861D73
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 21:20:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1F12861E28
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 21:52:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6D831C24426
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 20:20:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4B3A1C22570
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 20:52:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FB714D432;
-	Fri, 23 Feb 2024 20:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B056146E76;
+	Fri, 23 Feb 2024 20:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oxHxISt9"
+	dkim=pass (2048-bit key) header.d=tum.de header.i=@tum.de header.b="glkraDI2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from postout1.mail.lrz.de (postout1.mail.lrz.de [129.187.255.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813A7149392;
-	Fri, 23 Feb 2024 20:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F7D143C7B;
+	Fri, 23 Feb 2024 20:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.187.255.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708719571; cv=none; b=W7Uo8X3V6dbRo7O29QOh9Osfm4yrcGP7XixctPHZiZkVe3/+dZdNPhk/krA6iBxYXImxx0oksNLXyGTe7imF4EtjFmqcxGeiyR4A9aVkLDHeN6ydMm7fIU14pF3IwExjCOaFdD1LIQd2kQjd1a07WUueeOX45CgIzLUTUoIEFdU=
+	t=1708721542; cv=none; b=pNEfkIqIy5AVVdXmnzBFpU6guQuGndSZ3gjT7k0r22munQpyB4DLIsyOBgxXH572sRibhsyCHcP0uPKkG8hrgAePwcQ1dFy//gGiNhxtEkQL5mDODwkVG5VdzPWa8Zl+sbsdiEoCIk4cb3i3bV0bTEQ5wDUqZ3oZvDhRyWdhxVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708719571; c=relaxed/simple;
-	bh=FwvYtTGfOF4NuvGGUI168jKEh9/uz8oP6Cgx5tzsEu4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jq7K6ZXRavbPEzFlobcZJiGwAN2h4XUft3K8c5lMdh1mti0tg3hi6KAFtGyHoWUnOxDev6f8aUbhVhtazNXce5D5E9bXK+HeSlKPChPdeVu1PHE+14HXb6pF6D5K0gs5nGNDHtRXsSqpekJJQEBM8aFI8uhBg0ixMxiRF5GYvcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oxHxISt9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8B1C43390;
-	Fri, 23 Feb 2024 20:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708719567;
-	bh=FwvYtTGfOF4NuvGGUI168jKEh9/uz8oP6Cgx5tzsEu4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=oxHxISt9+nPVcr3U99R+uDYJC90r0TKLIjZsBOWmFM0aJABvqFYO8xMYZ11VYVoA3
-	 5jVP2wgbjFB2xnJU5E63UQAu9AGoEq23JEplKoEtM4i7onlmL+1sSHp8rA7hOvisWd
-	 9HwissidoxIUwP+qQBGspUPHVQ2VZQTWJO9N+3gTZSvjBxYf5ID+2Sh4mlwgHXD1bX
-	 2kMfRSN9jwIO0/stP12obSwx+6EQWDoH1wx4Xv3wRAymY+xDHy1TkA6vLjl+8tF0+t
-	 IeBXy7OFhyPxtU/bRG3VA/cgyTRZ6tLKLJJI52iOoqCHYIT3EwenwJ8sUtlJk3Bg8O
-	 wXcC15VjPiNmg==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 23 Feb 2024 21:18:00 +0100
-Subject: [PATCH net-next 8/8] selftests: mptcp: diag: change timeout_poll
- to 30
+	s=arc-20240116; t=1708721542; c=relaxed/simple;
+	bh=X2Ai3VLTUPX8J6sGlUtCyH2/JCyRJ5egDX0GMxQeImg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n5PXtQstjn1bhsn1rKCIARQbnkDqxVD0xHrCZlGLt3+E3435F1gLKrkU0UlhdoYQS6keqZKzBlV3y1ZW8p6iAJHMJ6NPtEySzlbPaKz34/3GEA+8Nt+cXHT5cWxwqBHiBiFdzBxXKmPLZ9JSddvmpTXBz/i5y9PjNjnmzpYjjp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tum.de; spf=pass smtp.mailfrom=tum.de; dkim=pass (2048-bit key) header.d=tum.de header.i=@tum.de header.b=glkraDI2; arc=none smtp.client-ip=129.187.255.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tum.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tum.de
+Received: from lxmhs51.srv.lrz.de (localhost [127.0.0.1])
+	by postout1.mail.lrz.de (Postfix) with ESMTP id 4ThMdX2XzVzyd5;
+	Fri, 23 Feb 2024 21:52:16 +0100 (CET)
+Authentication-Results: postout.lrz.de (amavisd-new); dkim=pass (2048-bit key)
+	reason="pass (just generated, assumed good)" header.d=tum.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tum.de; h=
+	in-reply-to:content-transfer-encoding:content-disposition
+	:content-type:content-type:mime-version:references:message-id
+	:subject:subject:from:from:date:date:received:received; s=
+	tu-postout21; t=1708721535; bh=X2Ai3VLTUPX8J6sGlUtCyH2/JCyRJ5egD
+	X0GMxQeImg=; b=glkraDI20d/PkHdSOMkhZ1Cyo8fyNgApNhHI2dm47TQoQz/gk
+	Ks5P9govjSJ072vBXE7fKiieMHy/zZcm7Aa2w2Xh2hxCerB8DV5qisPanmUVwqWl
+	CVxpw1yujNrr5H+8H9by40mkIXUHE/UB2RtudZnwsAoqOfvXAqcyyboC0kJkYZfq
+	eVm1pzgMspeyK+OrVYIpmQl4eQQ55I/SFJF+Ug2ZUai9qTSpG8zuJjfJ08mmISEJ
+	zjUE1Gbz4wyBgMQZRWF1jS8/7reaw0leCW35OTYsuRdPne4NW+wKExp656QZihXL
+	UzEgvI0T/ksqhnihwa7Ozr1fZGjeRTJ4lJ55Q==
+X-Virus-Scanned: by amavisd-new at lrz.de in lxmhs51.srv.lrz.de
+X-Spam-Flag: NO
+X-Spam-Score: -2.881
+X-Spam-Level:
+Received: from postout1.mail.lrz.de ([127.0.0.1])
+	by lxmhs51.srv.lrz.de (lxmhs51.srv.lrz.de [127.0.0.1]) (amavisd-new, port 20024)
+	with LMTP id jD_XKX9Z62Rv; Fri, 23 Feb 2024 21:52:15 +0100 (CET)
+Received: from pine (unknown [IPv6:2001:a61:2510:5501:544b:4b32:4119:3827])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by postout1.mail.lrz.de (Postfix) with ESMTPSA id 4ThMdW0lTtzyd7;
+	Fri, 23 Feb 2024 21:52:15 +0100 (CET)
+Date: Fri, 23 Feb 2024 21:52:09 +0100
+From: Paul =?utf-8?Q?Heidekr=C3=BCger?= <paul.heidekrueger@tum.de>
+To: David Gow <davidgow@google.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
+	Mark Brown <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <linux-kselftest@vger.kernel.org>, 
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <kunit-dev@googlegroups.com>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC] kunit: tool: add 'mte=on' qemu arg on arm64
+Message-ID: <v4sojpea3scs4rnigix5gu5dh2xqbzoxk3nlh3yuvktv2xeql4@4cyrbuf4sopq>
+References: <20240214124131.990872-1-paul.heidekrueger@tum.de>
+ <CABVgOS=n0rCS6ecAAh7BKkZbQQJu7ZHNrMJhkFGDqDG_n-U9bQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240223-upstream-net-next-20240223-misc-improvements-v1-8-b6c8a10396bd@kernel.org>
-References: <20240223-upstream-net-next-20240223-misc-improvements-v1-0-b6c8a10396bd@kernel.org>
-In-Reply-To: <20240223-upstream-net-next-20240223-misc-improvements-v1-0-b6c8a10396bd@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1053; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=ldlT+YlgwNS1TOVTH5ihpsJJVG5JuNAuK5gNgkDMv/4=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl2P2q/16gTXBNVCrsIQuAheU23oKyVW2BEFE2+
- m4sUhGHGvGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZdj9qgAKCRD2t4JPQmmg
- c1yFD/9zMyKUhNJCjKZH5FziaSaNxSGl/y01VMLaWVTFKs1VoY3Olwfqj9b0oBKWdJRm3C/3V1n
- b1ACvfpLqPw0PyWZcTotGpZqDaM4idaAfH332C3AQ+dso+SpsR1HiJciG0LWcu31R1dbFrYkgZn
- VluB3ntCvST6AUjTYmaOIr3E4Xg4iEhN8cP+DYg68YdP8qWpE945Ou7MBxJBUO/lSU5jNcMkM1Z
- aUtQyCyokMmFLOI3FsDHmsufHEf8w2XI7uQMkI1YJG8avQQU378J9+DgqCmxFJawTv7IZfXd4/+
- ztH7PunSnYn+IMHXcjGGYkk8SaA1U0dyvWK1SJl97YpGlw5mZJgpGcoEBB6cZwC8eD0OwktL9EH
- h5dJ14uCg09MUb7nDx7VgZeKNINJAm1wDNq4+Z+MRF45mmepljAIskoWkCloLAdjEhd9sYMaWa+
- QSYcBcfO0Bt39I1o+X8jqLdw0t1gE/iu70zz9Gdkc4aH7In7GA9gRskrNL1REAcmNwXbj0cEBjY
- nXx48R9Df/HIOgHet9CoTLCnb0cnfI5B/2wWCHSbO2+FZVjTJaq/Lql4lv1riEl9ZIFCE79ClEg
- 2Q2jUojOVNKqwL1gTu90F/mabT5MCs4nTUzrqedW1XcLQu+PFPjxp5/QzEcBAlDacfLD+pLfIGG
- XEQ5a5bGzWooQZw==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABVgOS=n0rCS6ecAAh7BKkZbQQJu7ZHNrMJhkFGDqDG_n-U9bQ@mail.gmail.com>
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On 20.02.2024 08:46, David Gow wrote:
+> On Wed, 14 Feb 2024 at 20:41, Paul Heidekrüger <paul.heidekrueger@tum.de> wrote:
+> >
+> > Hi!
+> >
+> > I was running some KASan tests with kunit.py recently and noticed that
+> > when KASan is run in hw tags mode, we manually have to add the required
+> > `mte=on` option to kunit_tool's qemu invocation, as the tests will
+> > otherwise crash.
+> >
+> > To make life easier, I was looking into ways for kunit.py to recognise
+> > when MTE support was required and set the option automatically.
+> >
+> > All solutions I could come up with for having kunit_tool conditionally
+> > pass `mte=on` to qemu, either entailed duplicate code or required
+> > parsing of kernel's config file again. I was working under the
+> > assumption that only after configuring the kernel we would know whether
+> > the 'mte=on' option was necessary, as CONFIG_ARM64_MTE is not visible
+> > before.
+> >
+> > Only afterwads did I realise that the qemu arm64 config that kunit_tool
+> > falls back on, uses the `virt` machine, which supports MTE in any case.
+> > So, could it be as easy as just adding the `mte=on` option to
+> > kunit_tool's arm64 config? Would this be a welcome addition?
+> >
+> > What do you think?
+> >
+> > Many thanks,
+> > Paul
+> >
+> > Signed-off-by: Paul Heidekrüger <paul.heidekrueger@tum.de>
+> > ---
+> 
+> I think this is fine. I'd be a little bit concerned if this were only
+> supported in newer qemu versions, but it seems to go back to 6.2, so
+> should be okay. I think it's better to just enable it unconditionally
+> by default rather than trying to parse the config.
+> 
+> The KASAN tests seemed to work fine with HW tags in my testing here. I
+> do wonder if there's a way to make the tests skip themselves if MTE
+> isn't available: is there a way of doing a runtime check for this?
 
-Even if it is set to 100ms from the beginning with commit
-df62f2ec3df6 ("selftests/mptcp: add diag interface tests"), there is
-no reason not to have it to 30ms like all the other tests. "diag.sh" is
-not supposed to be slower than the other ones.
+Huh, interesting. Even though "mte=on" isn't set on your side?
 
-To maintain consistency with other scripts, this patch changes it to 30.
+I get the following output without the MTE patch.
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/mptcp/diag.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+	➜   ./tools/testing/kunit/kunit.py run --kunitconfig=mm/kasan/.kunitconfig --arch=arm64
+	[14:08:11] Configuring KUnit Kernel ...
+	[14:08:11] Building KUnit Kernel ...
+	Populating config with:
+	$ make ARCH=arm64 O=.kunit olddefconfig
+	Building with:
+	$ make ARCH=arm64 O=.kunit --jobs=8
+	[14:08:23] Starting KUnit Kernel (1/1)...
+	[14:08:23] ============================================================
+	Running tests with:
+	$ qemu-system-aarch64 -nodefaults -m 1024 -kernel .kunit/arch/arm64/boot/Image.gz -append 'kunit.enable=1 console=ttyAMA0 kunit_shutdown=reboot' -no-reboot -nographic -serial stdio -machine virt -cpu max,pauth-impdef=on
+	[14:08:23] kasan: test: Can't run KASAN tests with KASAN disabled
+	[14:08:23]     # kasan:     # failed to initialize (-1)
+	[14:08:23] [FAILED] kasan
+	[14:08:23] ============================================================
+	[14:08:23] Testing complete. Ran 1 tests: failed: 1
+	[14:08:24] Elapsed time: 12.374s total, 0.001s configuring, 11.937s building, 0.382s running
 
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index 0a58ebb8b04c..8573326d326a 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -8,7 +8,7 @@ rndh=$(printf %x $sec)-$(mktemp -u XXXXXX)
- ns="ns1-$rndh"
- ksft_skip=4
- test_cnt=1
--timeout_poll=100
-+timeout_poll=30
- timeout_test=$((timeout_poll * 2 + 1))
- ret=0
- 
+Where the mentioned .kunitconfig has the following options set for KASan.
 
--- 
-2.43.0
+	CONFIG_KUNIT=y
+	CONFIG_KUNIT_ALL_TESTS=n
+
+	CONFIG_FTRACE=y
+	CONFIG_STACK_TRACER=y 
+
+	CONFIG_KASAN=y
+	CONFIG_KASAN_HW_TAGS=y
+	CONFIG_KASAN_KUNIT_TEST=y
+
+With the MTE patch from my previous email, everything works just fine.
+
+Based on that, do you have a guess why it's working for you and why it isn't for 
+me?
+
+> Regardless, this is:
+> Reviewed-by: David Gow <davidgow@google.com>
+
+Thanks! I'll be sending a non-RFC patch shortly.
+
+Many thanks,
+Paul
 
 
