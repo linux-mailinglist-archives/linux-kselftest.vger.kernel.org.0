@@ -1,116 +1,183 @@
-Return-Path: <linux-kselftest+bounces-5326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56869860890
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 02:56:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 901518608CE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 03:25:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CDC91C22F29
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 01:56:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6668B22EDE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 02:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C2CB65F;
-	Fri, 23 Feb 2024 01:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27424B664;
+	Fri, 23 Feb 2024 02:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pvk0VgYH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MW/Wwdxp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21CE68F51;
-	Fri, 23 Feb 2024 01:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669B6BA5F
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Feb 2024 02:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708653386; cv=none; b=crV3iK1PrGJDJHX247yYSSFSrgukWe0wCkP3HAigIlsb3K9XhqbMkpxKdIbk5XZ5OSIAys/isN2ZtzbpbfhF2Nj0fpeIfwu1EP6dLUk6/nMXoIk/D3QjHgyXZYxIJvyiiCUac/6rm+X9Ic2Gkzm89IqheI8vfTyVsdQFzClDWiY=
+	t=1708655105; cv=none; b=Rn9XWOE/vMY7+I33kSRBm8cxj8XxzfBrqhLTO0Pg9uvOpjJduPzPZOrviRjsrGDeSKHaDqtBcCqvo3c/dlXjzvZxejxY6Ui/7yOWaU3IHjUFGJU5aXm0/Zx78VpAizIa/RhhRpJ5XofB5ArYDgRoyIhWMS/NDyxWkc0exoRWtjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708653386; c=relaxed/simple;
-	bh=OoAGUEey0v/HudJdEpxNwVcwRPbIB72SbkNiVuKIKN8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=isznrCzLLq8vZh0tFs0/nobVdCufPNxOHAt0GM2C54+W9zp3Q0DxOzwprCXWFG4+SWi4noAcRUl2ZNkb+CMZ5W1PqMx1XStuLiFpVE+R+xX8s3OFBL3oI6sDfLxuWTzTbu00NHFItyykL47+wBqJQIrlszXIqaLA1fS+jl/AG34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pvk0VgYH; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33aeb088324so227504f8f.2;
-        Thu, 22 Feb 2024 17:56:24 -0800 (PST)
+	s=arc-20240116; t=1708655105; c=relaxed/simple;
+	bh=PzfE8dvOzIfSG/xSCddRDMvBcZR0ITDteEVsQNyILMw=;
+	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
+	 MIME-Version:Content-Type; b=MY7du6zyjvgxcEL1lqSMI2WmIoryQqnuDD0PPBlPcNiJkjahpdFgDW9gKgtZBZhBGazCaUNX86vgsyoaE2EEuQeGaYkbRecbK4QvmTEWQRs+mQxY+8prSz5APr4qc23kC3rnZCOZN3gMieIOMpfoFAQXt9LnWwJvrzEyHF8S2S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MW/Wwdxp; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e4841ce028so218509b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 18:25:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708653383; x=1709258183; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1708655103; x=1709259903; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iUdZVH+IyHyUk6BumjJJBqY/HP0jfnVa+1NxERJx/L0=;
-        b=Pvk0VgYHTVFgO9OThv+zKEzYAnNEwietvfxXgVbzU8peYq3emgBVe15SLBljktXnD6
-         3RXafnK4Ba081FzVq2NzxRd0N2aW+RRsRLQVngnA37DYGgfK3S5y+ufUquOTrd/4GvVi
-         dGk1oHnYYSu30oGhtQWoq/301kXyLsXlpYgS881FxwQc1WOJ2TaG8UHv+7pKy2rIiwJ6
-         XJxLBz6PGlrzhBgIX5aQossMey3a+X7jyZDOZjbScrY3/to1vLY8IgPexOjsYVexGpJ9
-         yUq0D1jnct6bfRvSI+Pt0ypbtU+4N/j1pv5rc4Wgmp4CfibNoU6ccWtpk0D2GyBAEfuy
-         iOaw==
+        bh=yvpsMbjqPU4UR9+5wWiHmUmCTwM1PMtLjxdFJ8jAgDo=;
+        b=MW/WwdxppZuCISdh5ukjVaVojPDfa8y2RJ9EMgTLHGmO75iCpbGn9eOMQOynBMj9Yk
+         +nHcnfM5AoyhqCq8WDWBF5mYyQ0l7RJIrKd+6dDMBx0DDyXNTnle9GNGeIET6VjoE5r+
+         ip+H99r3aucGAz50ztmNfyQ6n4RtZAMRKA8AJkeYUTnm2NsUVAgzm4MZlK5R04fc/yA6
+         mR/8Zc3FooUqY6XgJzf03hNheaOYJpKWtbd14YbhoPMPVwRXBw4vQ8lOV5UNbE7B1eb9
+         k7952iFSIPy9KB5OkO3aIAibOpIHFUe7YW0kQRG/JdPHJ+3ulfMCIxWWwr8sK0NQvXtW
+         thmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708653383; x=1709258183;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iUdZVH+IyHyUk6BumjJJBqY/HP0jfnVa+1NxERJx/L0=;
-        b=fgfpLqfDV2gdMyjMta92ICanAScWamzIcIaKrJdL/kVX93M56QsHh5C7IOJrQfoTvY
-         KBs+jFA+irYgyGMLLamFfChHI9ynRg01+S0K1frFwdqN16PbF4fNvvZkjAEaaSEdvr1G
-         8/+5K+7qr7q3OXQfQstPK5VmgXCHPYlMjdNtXGC5oNUzVcKCWVLYpIr63ETEB2G1gobV
-         Ubg6xNcallC2CWpJPIatExNpXlCc2H+ovPXJJxZtpV5QZwpNKbnX8HG6kHEsaYbhFRb6
-         owkZz3KzXN4n+gNF/xKNsUpfP2rDLJ7Jh0lZXVCqWq2FQOvSw+P8YfZHsyEsA/4PrjVr
-         5CHg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+BM7Xpkz02dPA6F/vtJZthxyJqAgvlXovQbgViieaGCuWUyMDJUOCwARf9Ij5TPU0mkT0y2txrpDot/yAeJOo7gfNFlQCGIrOxPPUavzDE9f1mymqOVBGPss29aO0zknSKix937TeGWHTUaPnMbrfch69HnbnTW8yJaxgzzNy6Ka1kX5JxPv+MlisDrexybxI23C3DtE+72um7Kliy65aZMc5ABzHdv2j+6QKwj2/y+uFRCRjpns+uIA=
-X-Gm-Message-State: AOJu0YxmYls0X8aIQ/+Fek5pk3dolTytqTSm/6MVZJuYRmwWiCo9sTav
-	x35mHEkyZHywAo9OEokChUOh/kMKcIIGnlgGSC0wElv2aNSZOaukFjG+NgiB0n5rtJuFMRItX93
-	PHExWR2HryYLlx/y7mFlzeUGq91o=
-X-Google-Smtp-Source: AGHT+IFlc+/w+KFBh9cRNousvmemixbQ/ubY3s+vrEGwhWDPVvFJozbC/Ssd1y4TZYFcnorm7nZRvrvy4dWEj2CtOCA=
-X-Received: by 2002:a5d:5045:0:b0:33d:26b1:c460 with SMTP id
- h5-20020a5d5045000000b0033d26b1c460mr432252wrt.39.1708653383258; Thu, 22 Feb
- 2024 17:56:23 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708655103; x=1709259903;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yvpsMbjqPU4UR9+5wWiHmUmCTwM1PMtLjxdFJ8jAgDo=;
+        b=px/PQWyCra+loMO2jpvZ4JKVfskJh0dlUOogD0y99o33unWslvrCmW93wZWSVx1ejY
+         ydTUsTRgHAI65OJMON2PS8t+cZ0QEJYjsGreigWIdPL/ouNTOIf6ISncTk5N6bohBXws
+         mOSezsVp/CQD/G95n9jAWVlKF/hHJDxepvF409D6cXhTio41A5Ne3nqiVNDitkmYX9Vu
+         4cbZBlPy1eaK1+H56fz/gc0eF0sZzk6JfzRNthJJUZalOxjkMla3/tVoyexjYwK2taQZ
+         0UNg1XtEfVFuWAkscaBz+gPhBWps3OtXP+c/e98FTRKZabHNIuhnSc3sr228qX0xNZQl
+         6jnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVONeLY6XTr3VmY+ZBQcX07fl4SOMj51bXUeHD/48NXg77vnQXOtTvefOQ/59F6fVQKjucnsukxQsYR83jm4Lpn17tCt03gDFebKSCekWzM
+X-Gm-Message-State: AOJu0Yw+SIrQg6FSDvxnQdD6BDkonCJNdupF0IJyO4RvNpzXotP5lO8T
+	ZCYV/sbPwiNogOqATyGURk7gYAqeeizQPf1zC+BPlZ/LT/uRbUTF/i2uGDGDW8zhy681dTtZkOJ
+	k8SU=
+X-Google-Smtp-Source: AGHT+IGXzUvLuIBqAH6IpfTDaGkH8Ve8NCjMdXcR7MwfrFmhzj20/am5IT7QTj11UMAitUQcB9a5gw==
+X-Received: by 2002:a05:6a20:e607:b0:19e:a353:81b0 with SMTP id my7-20020a056a20e60700b0019ea35381b0mr734946pzb.11.1708655102714;
+        Thu, 22 Feb 2024 18:25:02 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:902e:6d00:6c11:e63b])
+        by smtp.gmail.com with ESMTPSA id mf8-20020a170902fc8800b001d9fc6cb5f2sm10645873plb.203.2024.02.22.18.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 18:25:02 -0800 (PST)
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <20240203-arm64-gcs-v8-33-c9fec77673ef@kernel.org>
+ <87sf1n7uea.fsf@linaro.org>
+ <9b899b4e-7410-4c3b-967b-7794dac742e4@sirena.org.uk>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 33/38] kselftest/arm64: Add a GCS test program built
+ with the system libc
+In-reply-to: <9b899b4e-7410-4c3b-967b-7794dac742e4@sirena.org.uk>
+Date: Thu, 22 Feb 2024 23:24:59 -0300
+Message-ID: <87ttlzsyro.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org> <20240221-hid-bpf-sleepable-v3-2-1fb378ca6301@kernel.org>
-In-Reply-To: <20240221-hid-bpf-sleepable-v3-2-1fb378ca6301@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 22 Feb 2024 17:56:11 -0800
-Message-ID: <CAADnVQKotZ0ki6p4DAydj=XE9hU6pPc+FdqU_WQ99NBK-qSe+A@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v3 02/16] bpf/verifier: introduce
- in_sleepable() helper
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 21, 2024 at 8:25=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
-org> wrote:
-> @@ -18193,7 +18198,7 @@ static int resolve_pseudo_ldimm64(struct bpf_veri=
-fier_env *env)
->                                 return -E2BIG;
->                         }
+
+Mark Brown <broonie@kernel.org> writes:
+
+> On Mon, Feb 19, 2024 at 11:15:57PM -0300, Thiago Jung Bauermann wrote:
 >
-> -                       if (env->prog->aux->sleepable)
-> +                       if (in_sleepable(env))
->                                 atomic64_inc(&map->sleepable_refcnt);
+>> The only issue as can be seen above is that the can_call_function test
+>> is failing. The child is getting a GCS Segmentation fault when returning
+>> from fork().
+>
+>> I tried debugging it with GDB, but I don't see what's wrong since the
+>> address in LR matches the first entry in GCSPR. Here is the
+>> debug session:
+>
+> I believe based on prior discussions that you're running this using
+> shrinkwrap - can you confirm exactly how please, including things like
+> which firmware configuration you're using?  I'm using current git with
+>
+>   shrinkwrap run \
+>         --rtvar KERNEL=3Darch/arm64/boot/Image \
+>         --rtvar ROOTFS=3D${ROOTFS} \
+>         --rtvar CMDLINE=3D"${CMDLINE}" \
+>         --overlay=3Darch/v9.4.yaml ns-edk2.yaml
+>
+> and a locally built yocto and everything seems perfectly happy.
 
-this one doesn't look correct.
-The verifier didn't start its main loop when resolve_pseudo_ldimm64()
-is called.
-It also loses symmetry with other sleepable_refcnt operations
-in syscall.c and core.c
+Yes, this is how I'm running it:
 
-I reverted this hunk and applied patches 1,2,3
-with minor edits, like removing unnecessary parens in patch 3,
-and patch subject rewords.
+  CMDLINE=3D"Image dtb=3Dfdt.dtb console=3DttyAMA0 earlycon=3Dpl011,0x1c090=
+000 root=3D/dev/vda2 ip=3Ddhcp maxcpus=3D1"
+
+  shrinkwrap run \
+      --rtvar=3DKERNEL=3DImage-gcs-v8-v6.7-rc4-14743-ga551a7d7af93 \
+      --rtvar=3DROOTFS=3D$HOME/VMs/ubuntu-aarch64.img \
+      --rtvar=3DCMDLINE=3D"$CMDLINE" \
+      ns-edk2.yaml
+
+I ran the following to set up the FVP VM:
+
+$ shrinkwrap build --overlay=3Darch/v9.4.yaml ns-edk2.yaml
+
+My rootfs is Ubuntu 22.04.3. In case it's useful, my kernel config is
+here:
+
+https://people.linaro.org/~thiago.bauermann/gcs/config-v6.8.0-rc2
+
+I tried removing "maxcpus=3D1" from the kernel command line, but it made
+no difference.
+
+I also tried resetting my Shrinkwrap setup and starting from scratch,
+but it also made no difference: I just pulled from the current main
+branch and removed Shrinkwrap's build and package directories, and also
+removed all Docker images and the one container I had.
+
+Here are some firmware versions from early boot:
+
+  NOTICE:  Booting Trusted Firmware
+  NOTICE:  BL1: v2.10.0   (release):v2.10.0
+  NOTICE:  BL1: Built : 00:07:29, Feb 23 2024
+     =E2=8B=AE
+  NOTICE:  BL2: v2.10.0   (release):v2.10.0
+  NOTICE:  BL2: Built : 00:07:29, Feb 23 2024
+     =E2=8B=AE
+  NOTICE:  BL31: v2.10.0  (release):v2.10.0
+  NOTICE:  BL31: Built : 00:07:29, Feb 23 2024
+     =E2=8B=AE
+  [  edk2 ] UEFI firmware (version  built at 00:06:55 on Feb 23 2024)
+  Press ESCAPE for boot options ...........UEFI Interactive Shell v2.2
+  EDK II
+  UEFI v2.70 (EDK II, 0x00010000)
+
+It looks like our main differences are the kernel config and the distro.
+
+--=20
+Thiago
 
