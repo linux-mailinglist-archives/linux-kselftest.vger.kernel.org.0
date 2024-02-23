@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-5376-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CD97861D6B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 21:20:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87CDF861D6E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 21:20:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C8361C2320E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 20:20:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2034E1F24DE6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 20:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735E914CAAF;
-	Fri, 23 Feb 2024 20:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4E414CAB3;
+	Fri, 23 Feb 2024 20:19:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+8CQiAr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rN2ojuFv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2411482E7;
-	Fri, 23 Feb 2024 20:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE18146E67;
+	Fri, 23 Feb 2024 20:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708719562; cv=none; b=Kpd9dthbLnVbr+s7FL3GPAnvVAP8U9Jfkc18DlXQ5M+o1CGAWV0JfwpbHECCQyTyA4qEHpSY9D3krdTX2Li0XuV9IbaRLiW4npJfALmvsUSaqxdY76Osy2fCFp/7wbwuUnkahYWXJIF9sjzWnm3jBy7RzZZOAkSEH7k3ssjCDtc=
+	t=1708719564; cv=none; b=CrqbmlSdPbrBq7HGHmKLqLInO78gPPOvtgFGyuXhTGuBgrlnHT1/GLUR9DXgkMUskOohLKZnUFOIa9j1uH40oTBKOWIzwjOW79OTbRv8Bo5HjEkp3t519NevdvOFv0KmsBqech4AZvVsGcq34PUVcKyrZeKIaVQYUxU46L97qik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708719562; c=relaxed/simple;
-	bh=ex5Mx41Huuyac9Z1t6Hplat3p104iUTSd3x7QbmwmXw=;
+	s=arc-20240116; t=1708719564; c=relaxed/simple;
+	bh=ukSJGjxu+ue1SOHBDHfmlxv7527kiTH7F4ql4XDr00c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kFbQ2F00yUKJBvzbgZnL0CCJcZ+oD13CWTXUMUJDJhLrMrvkQID6KsFR40NVNnb6XV4WtWuKIDVi/SzmvxH3coq9LLmRYzGYNPUCSln0YsP9vidBJ2uv3mSBTw3oMrC5pDRzRUzWsa94Wq4GstAq65xHtiTvpS+hNpnNcxMIMyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+8CQiAr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7DFDC433A6;
-	Fri, 23 Feb 2024 20:19:15 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=auzYV+HKVcINDGAKZX4jUu0mOl1m60pK+irSBjX1lnTEWGFfOgUsIaPE03L3d9D21J6oNsBhLinGDp+idc4gsNXYhb6sH4pMmTeq6m3NSS2zAI0zMkE5G6FBVBYJlkMTMF2mbV8r9LesCpIOW+19krKpmh9JPkan9xjtDWJa/3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rN2ojuFv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8286C43399;
+	Fri, 23 Feb 2024 20:19:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708719559;
-	bh=ex5Mx41Huuyac9Z1t6Hplat3p104iUTSd3x7QbmwmXw=;
+	s=k20201202; t=1708719563;
+	bh=ukSJGjxu+ue1SOHBDHfmlxv7527kiTH7F4ql4XDr00c=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=g+8CQiArye+DO1altSNKA2pHE6/CVJ8dBcJ8uERLs1l1aQMa9TQnrC9oBxTdeGTxn
-	 kZfF+JWFwJuCF6SY39MMojutzhl9+wMO6kOQLwnhzSf9So1F2626akwca1SDdVepsY
-	 Lc6+6bfAH4uA2hVTveowTdADnqf9qmKlKVK5Z0SzhH53069c8uPILYGjTC2reJWu4w
-	 Okd74OQwxz1L6zCzfhNNPHhAn6D7IULbVlw3NGu9SFDib6TbQW3GtlQqyU6OlLZknU
-	 SrS9i6fhtliFBW4KOGpYr+8AJHOifJbBrxA4ZB4Ym8EZmEHCvpku2tNHRTTm6QgOqB
-	 s57YCIQEqgZ4g==
+	b=rN2ojuFv0oyQzoZrLloiVhjjVW7mrKYyGs20DBvUKJpmHEi3lRvah7wxoLCyPrX2X
+	 jP78+SB1aQ9GuY0U5ltgL9GEfb13F6mBu2Aibwb6DOoZnYcQwepfDOcGW+FaK9OkSM
+	 knP43mIIDYsHeJdh/Ax53hQaRkbipXNAMqUhMqocr4YlF5bxN1PXmuPYVl72Cequuh
+	 PzOhYdEghtt265IhbT50lUGW8K661aS9NUYAEd1pqLHgQ/PO4Rc1Y8SUTxpCVXJgRg
+	 mOxc+V/86snBfZvzhuH3uEX16KZjzWU5zB6rKHIcRbiG6XLYLTnMiCXuoCcTRwrmlz
+	 tHPLHPtKSteMw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 23 Feb 2024 21:17:58 +0100
-Subject: [PATCH net-next 6/8] selftests: mptcp: simult flows: define
- missing vars
+Date: Fri, 23 Feb 2024 21:17:59 +0100
+Subject: [PATCH net-next 7/8] selftests: mptcp: join: change
+ capture/checksum as bool
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240223-upstream-net-next-20240223-misc-improvements-v1-6-b6c8a10396bd@kernel.org>
+Message-Id: <20240223-upstream-net-next-20240223-misc-improvements-v1-7-b6c8a10396bd@kernel.org>
 References: <20240223-upstream-net-next-20240223-misc-improvements-v1-0-b6c8a10396bd@kernel.org>
 In-Reply-To: <20240223-upstream-net-next-20240223-misc-improvements-v1-0-b6c8a10396bd@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,55 +64,121 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <tanggeliang@kylinos.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=989; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=2oYftnUEdCOqYjlwEKhBo9GZ+yt54Ro8QzaHPbeEHDw=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl2P2qhModMrd0L3Jfk2V/fsVAoLJ/rWnDu47Ga
- z1TigPE3v6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZdj9qgAKCRD2t4JPQmmg
- czExD/9nDo2PBkCGwWlY2ZMJ+4FQUqW27Yzuav0MeJiUw8BtHFmrcpP/mrvl8FJKbWGf4G34SO/
- 577+eLbnMhpGGFHLTdjVlRqIhHA3uxMCxqMCA8IksyexEI4VuFYyzIyQbkAqBJr6rbc5Bmi3ox0
- lbFpgWzikW4A2cFVPfn051YtpNl/MI13hnnGIXWcoyNw5VnvQDOYDBAp6BYBXNBzpYNnspuJWAT
- VBp+7ebPfcKnnVacVKiKFHLOcgLox8tM4g7IDZUewIwz2ngyYAYJ9dzm/staAAam5QQVjSfyhjM
- 6rLVDqewwQEVwweOfhpzQENcGIaEP48cLqfIhXoECNi1Yd8+lRIOGkmRph/haXm2mm0FXpcQFh9
- +Ge3pDEW6UIFuVOYe2dBFFqTp8dV1vDvcR7CwI8bUkO0rgaeViIhexmwc4rkFbajwExZrV4zi0o
- WDOOko0jChKgFbSdGWNiTuQ18MWBaoQiKnzQvgtUUo5PQWeQjx20XnmE9nDl9DEbn5Ri3KmT881
- 2+Fmdq9kM5QmGaN504qA3L0HbbKoeRyZs6ekOh3OhhhHGInZY4155WS1UapNu4OlsZ5vu+oeTu+
- 0XuVgFoNDaPhD0UWTKQSMC9xluGPo/na4KPjMvHkezs4uSfPRfQCrYrJRTkwf2dlOGr735gZPfD
- nz+mFUU26vA7M4w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2685; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=QAwNFzDN+MJTxQHIwpBmAUpR/yt5FrvMyfSOP6mUHgI=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl2P2qKA6ebgNQ99j+L4S74IFVKs1uktyoR1Cj6
+ XeSLiF4xD+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZdj9qgAKCRD2t4JPQmmg
+ c7wvEACeZtD25TbQuGVn8mbHzk+UtSKtpAeKEACWF60jZNCOipC/EBQ0W4njcHMiaBg7XMx8RmQ
+ LqxtGTnUJsEVBZWTi0BrCT3xgcnhpvG49eSpJtjcpWWVlebZLuRCDU+GZwq+4HN1j39WWe/4p/d
+ tsoHbwQ0bcFQHdgPVjUEZQ2w8ZnPAQkJXbEL54f+RAe0CmNbNAh1KwK9PT7v47SuhJYBoXpvib/
+ 3F6r2vh/EWYU3g7BZk+jgLrLhpt9Z54JZ34f/HRlL0WCH51+7+70dAgWwsKb3x09tG0WVX7Y/fa
+ eXCWtmha7mpdKLWDBW0pRTUqLWqX1QzgEdTHJ71sD+FPfK7kXPHl4EhPE/Ded2wXKdgoqBLrFst
+ WH2vmO+AjTf0WOBs7DPnAS6eFufGekpWuzGeffdTFoYtd10afM3dCPN57aDyPk7/O3TXwFRZ3WL
+ I1iqcCu53jSW1z7WHxmPhg/ROY0MhuAnsveTRFEHV7Tt6uAevFum8pKF1nbR4bz1kvilSlIFGfv
+ bwLC8IsWqgzyCUkGkawPGvKcgaODbNc3D1/mLnxvRMFB9VKPrCGmz6tN5oHs14hMRQnlfR26Ljb
+ 97qzKAxFKDmPcgMwli18qUr8zKgnPYGzufWIQWRvC8kfnacsHKZZVUwU3S3yGVtC1gIdprs1xiT
+ 0boa+s0q0rx34XA==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The variables 'large', 'small', 'sout', 'cout', 'capout' and 'size' are
-used in multiple functions, so they should be clearly defined as global
-variables at the top of the file.
-
-This patch redefines them at the beginning of simult_flows.sh.
+To maintain consistency with other scripts, this patch changes vars
+'capture' and 'checksum' as bool vars in mptcp_join.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/simult_flows.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
-index 8f9ddb3ad4fe..ed0165c15a24 100755
---- a/tools/testing/selftests/net/mptcp/simult_flows.sh
-+++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
-@@ -16,6 +16,12 @@ test_cnt=1
- ret=0
- bail=0
- slack=50
-+large=""
-+small=""
-+sout=""
-+cout=""
-+capout=""
-+size=0
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index c07386e21e0a..3f198743cb03 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -29,11 +29,11 @@ iptables="iptables"
+ ip6tables="ip6tables"
+ timeout_poll=30
+ timeout_test=$((timeout_poll * 2 + 1))
+-capture=0
+-checksum=0
++capture=false
++checksum=false
+ ip_mptcp=0
+ check_invert=0
+-validate_checksum=0
++validate_checksum=false
+ init=0
+ evts_ns1=""
+ evts_ns2=""
+@@ -100,7 +100,7 @@ init_partial()
+ 		ip netns exec $netns sysctl -q net.mptcp.pm_type=0 2>/dev/null || true
+ 		ip netns exec $netns sysctl -q net.ipv4.conf.all.rp_filter=0
+ 		ip netns exec $netns sysctl -q net.ipv4.conf.default.rp_filter=0
+-		if [ $checksum -eq 1 ]; then
++		if $checksum; then
+ 			ip netns exec $netns sysctl -q net.mptcp.checksum_enabled=1
+ 		fi
+ 	done
+@@ -380,7 +380,7 @@ reset_with_checksum()
+ 	ip netns exec $ns1 sysctl -q net.mptcp.checksum_enabled=$ns1_enable
+ 	ip netns exec $ns2 sysctl -q net.mptcp.checksum_enabled=$ns2_enable
  
- usage() {
- 	echo "Usage: $0 [ -b ] [ -c ] [ -d ]"
+-	validate_checksum=1
++	validate_checksum=true
+ }
+ 
+ reset_with_allow_join_id0()
+@@ -413,7 +413,7 @@ reset_with_allow_join_id0()
+ setup_fail_rules()
+ {
+ 	check_invert=1
+-	validate_checksum=1
++	validate_checksum=true
+ 	local i="$1"
+ 	local ip="${2:-4}"
+ 	local tables
+@@ -1017,7 +1017,7 @@ do_transfer()
+ 	:> "$sout"
+ 	:> "$capout"
+ 
+-	if [ $capture -eq 1 ]; then
++	if $capture; then
+ 		local capuser
+ 		if [ -z $SUDO_USER ] ; then
+ 			capuser=""
+@@ -1119,7 +1119,7 @@ do_transfer()
+ 	wait $spid
+ 	local rets=$?
+ 
+-	if [ $capture -eq 1 ]; then
++	if $capture; then
+ 	    sleep 1
+ 	    kill $cappid
+ 	fi
+@@ -1507,7 +1507,7 @@ chk_join_nr()
+ 	else
+ 		print_ok
+ 	fi
+-	if [ $validate_checksum -eq 1 ]; then
++	if $validate_checksum; then
+ 		chk_csum_nr $csum_ns1 $csum_ns2
+ 		chk_fail_nr $fail_nr $fail_nr
+ 		chk_rst_nr $rst_nr $rst_nr
+@@ -3664,10 +3664,10 @@ while getopts "${all_tests_args}cCih" opt; do
+ 			tests+=("${all_tests[${opt}]}")
+ 			;;
+ 		c)
+-			capture=1
++			capture=true
+ 			;;
+ 		C)
+-			checksum=1
++			checksum=true
+ 			;;
+ 		i)
+ 			ip_mptcp=1
 
 -- 
 2.43.0
