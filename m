@@ -1,135 +1,280 @@
-Return-Path: <linux-kselftest+bounces-5334-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56991860FE2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 11:56:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D0BD861021
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 12:07:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 869EE1C23B2F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 10:56:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF83D1F22A98
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Feb 2024 11:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4400D65189;
-	Fri, 23 Feb 2024 10:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6444B627FC;
+	Fri, 23 Feb 2024 11:07:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SwfxTpZs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YAY3CJ5b"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0032222067;
-	Fri, 23 Feb 2024 10:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3329E250E2;
+	Fri, 23 Feb 2024 11:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708685784; cv=none; b=bJPZxb9QCER6yP9tcGnGuTHAmFTtwIcrbWYY4ZuoUCu+sdMzTHSgY55IRr8o3fGqKZmLOCBWOBLby+g1FMKlrkILVvQNuppK51HdlvLGpqSf3+vfH4GlsEF2Ak5szq/cUX7HNUBHxQOIhFDPXA+OVchVQ0WVd7CYpXvK+9M8O8c=
+	t=1708686426; cv=none; b=pM5etq6Sr8d3aw3iB/rcpv0d7BWoecKFWS34gKsp5WEzt/fclxqMrY6PqOJyWFyrSePKlO8JSB57qdA+/lK0xwwr7yTT/h5e4Er9StCI4Jza/aAxZPqzV1jOpeZyUkaH85EBEozqQsswi8nK1cGlfhhLYrhYvDd+s4OhedzMk6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708685784; c=relaxed/simple;
-	bh=qjHLMyWxOQ5rvNVAwfaXdYMBjVnIvVxnsqMTBeaB3j0=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=YOFiDapB0TYohRBD70e3QxDo/8tdAcGHbhhsKiWsHTrtLI7MEpEFYZ1PqzUXF0YtgdNXqNwopD/fekoQ5ttf96pel4B/8RUYJIKBx6MsHYpGbIi7m0A6XZL2GwSP1cehO3gjq24OiJ/9/2ASpqmPKrhBWxpPsj9XgDxsXnDrkmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SwfxTpZs; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708685782; x=1740221782;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=qjHLMyWxOQ5rvNVAwfaXdYMBjVnIvVxnsqMTBeaB3j0=;
-  b=SwfxTpZsp1uVf1JsUfajt/VeLRz4YDC6YBnIrkjsqE7e9P1sn6CO2uxA
-   HEwWQZ6dmbT1QytrvPGapph9hTeQjxheMe0611s/9IKS6hroVzdvAgUpG
-   jmdEtGiUWX6gELWq3tf7esFVQUrdzdw55UD00k9ceg6OSPWdRNmk+i1A1
-   o/K/oBy3F4hLFpSdHsluUQGTgkpouF6EbO3Tk/CyM5AlJUo9T1pP1KcQ8
-   twarWsl77P/XrBlVVGatoYaHsUPbyDImkjNEwn6O7pKGovg38E4HYbOzd
-   vuPEEYZACgnHpzWK2QRX6Ohw3M8mxHhVZcof8L5JACOyHa3zfS5orlUdH
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="13558218"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="13558218"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 02:56:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="6350307"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.49.107])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 02:56:19 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 23 Feb 2024 12:56:04 +0200 (EET)
-To: Babu Moger <babu.moger@amd.com>
-cc: fenghua.yu@intel.com, Reinette Chatre <reinette.chatre@intel.com>, 
-    shuah@kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-kselftest@vger.kernel.org, 
-    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
-    peternewman@google.com, eranian@google.com
-Subject: Re: [PATCH 4/4] selftests/resctrl: Skip the tests if iMC/UMC counters
- are unavailable
-In-Reply-To: <f5c74072d96b57b10a66c01381139de453187327.1708637563.git.babu.moger@amd.com>
-Message-ID: <a13f6e21-9929-a16d-bda1-533eaed8f875@linux.intel.com>
-References: <cover.1708637563.git.babu.moger@amd.com> <f5c74072d96b57b10a66c01381139de453187327.1708637563.git.babu.moger@amd.com>
+	s=arc-20240116; t=1708686426; c=relaxed/simple;
+	bh=Zlm5d+QOs/dktmMB+z0HKv98GRZBJLPrBX3i8rbARso=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KJq7sIcMdK5z9iasMvSnOTUGp5JL97zTHk2q2/+eDoENelNAdXNFiVdIHRCHko5Ac9oBYQgmj9z79T+fQQsRZKPgutN685QXm1Ph+ztuHyW7aKXzzkCWGcwaKryvzgoTc1Ne/OXqbHWgRFhClWZcihtbBUdieczeqMqh4RPlywg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YAY3CJ5b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801FEC433F1;
+	Fri, 23 Feb 2024 11:07:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708686425;
+	bh=Zlm5d+QOs/dktmMB+z0HKv98GRZBJLPrBX3i8rbARso=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YAY3CJ5bB/KTy3+uDviC3rtHYpB5iZfKlvwFkPvcAsCbAFqyHYEYXThiV5Q5CMHhU
+	 j5a/GSSWxeub66LHvHTcWC1N3NXCWGn20UypDl00hL9UgnGxrInbr2ZidAuHyeXeqw
+	 xNAIC7vv+mTbC2hJfCSPozSvRc8xsz+XBtiFHtfBemd0JweUDx4bd9K2ICMO+ej5Mm
+	 HrLtBXBI/SnCHRRpmQAS8LrnLY+D7Mkl6kav5DgOjqhO8Gnt4Cb/39B49kgjdGrTD5
+	 RZPw6nxk2uPRXpZd7t8Hmui1cIq3Hpf5kVfj9qHwZr5TLhQ7QeB1lOYg2KY9kGFN+p
+	 uf98LxxIE3b2w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rdTOQ-0063wt-P7;
+	Fri, 23 Feb 2024 11:07:03 +0000
+Date: Fri, 23 Feb 2024 11:07:02 +0000
+Message-ID: <86r0h330dl.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Dave Martin <dave.martin@arm.com>,
+	kvmarm@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 03/14] arm64/fpsimd: Support FEAT_FPMR
+In-Reply-To: <20240122-arm64-2023-dpisa-v4-3-776e094861df@kernel.org>
+References: <20240122-arm64-2023-dpisa-v4-0-776e094861df@kernel.org>
+	<20240122-arm64-2023-dpisa-v4-3-776e094861df@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, dave.martin@arm.com, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 22 Feb 2024, Babu Moger wrote:
-
-> Older systems do not support UMC (Unified Memory Controller) perf counters.
-> Skip the tests if the system does not support UMC counters.
+On Mon, 22 Jan 2024 16:28:06 +0000,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
+> FEAT_FPMR defines a new EL0 accessible register FPMR use to configure the
+> FP8 related features added to the architecture at the same time. Detect
+> support for this register and context switch it for EL0 when present.
+> 
+> Due to the sharing of responsibility for saving floating point state
+> between the host kernel and KVM FP8 support is not yet implemented in KVM
+> and a stub similar to that used for SVCR is provided for FPMR in order to
+> avoid bisection issues. To make it easier to share host state with the
+> hypervisor we store FPMR as a hardened usercopy field in uw (along with
+> some padding).
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  tools/testing/selftests/resctrl/resctrl.h       |  1 +
->  tools/testing/selftests/resctrl/resctrl_tests.c | 10 ++++++++++
->  tools/testing/selftests/resctrl/resctrl_val.c   |  4 ++--
->  3 files changed, 13 insertions(+), 2 deletions(-)
+>  arch/arm64/include/asm/cpufeature.h |  5 +++++
+>  arch/arm64/include/asm/fpsimd.h     |  2 ++
+>  arch/arm64/include/asm/kvm_host.h   |  1 +
+>  arch/arm64/include/asm/processor.h  |  4 ++++
+>  arch/arm64/kernel/cpufeature.c      |  9 +++++++++
+>  arch/arm64/kernel/fpsimd.c          | 13 +++++++++++++
+>  arch/arm64/kvm/fpsimd.c             |  1 +
+>  arch/arm64/tools/cpucaps            |  1 +
+>  8 files changed, 36 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index a33f414f6019..5c2556af0649 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -116,5 +116,6 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
->  		    size_t cache_span, unsigned long max_diff,
->  		    unsigned long max_diff_percent, unsigned long num_of_runs,
->  		    bool platform, bool cmt);
-> +int get_number_of_mem_ctrls(void);
+> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+> index 21c824edf8ce..34fcdbc65d7d 100644
+> --- a/arch/arm64/include/asm/cpufeature.h
+> +++ b/arch/arm64/include/asm/cpufeature.h
+> @@ -768,6 +768,11 @@ static __always_inline bool system_supports_tpidr2(void)
+>  	return system_supports_sme();
+>  }
 >  
->  #endif /* RESCTRL_H */
-> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> index 231233b8d354..5423882529ec 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -98,6 +98,11 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
->  
->  	ksft_print_msg("Starting MBM BW change ...\n");
->  
-> +	if (get_number_of_mem_ctrls() < 0) {
-> +		ksft_test_result_skip("Unable find iMC/UMC counters!\n");
-> +		return;
-> +	}
+> +static __always_inline bool system_supports_fpmr(void)
+> +{
+> +	return alternative_has_cap_unlikely(ARM64_HAS_FPMR);
+> +}
 > +
->  	if (test_prepare()) {
->  		ksft_exit_fail_msg("Abnormal failure when preparing for the test\n");
->  		return;
-> @@ -124,6 +129,11 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+>  static __always_inline bool system_supports_cnp(void)
+>  {
+>  	return alternative_has_cap_unlikely(ARM64_HAS_CNP);
+> diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+> index 50e5f25d3024..6cf72b0d2c04 100644
+> --- a/arch/arm64/include/asm/fpsimd.h
+> +++ b/arch/arm64/include/asm/fpsimd.h
+> @@ -89,6 +89,7 @@ struct cpu_fp_state {
+>  	void *sve_state;
+>  	void *sme_state;
+>  	u64 *svcr;
+> +	unsigned long *fpmr;
+>  	unsigned int sve_vl;
+>  	unsigned int sme_vl;
+>  	enum fp_type *fp_type;
+> @@ -154,6 +155,7 @@ extern void cpu_enable_sve(const struct arm64_cpu_capabilities *__unused);
+>  extern void cpu_enable_sme(const struct arm64_cpu_capabilities *__unused);
+>  extern void cpu_enable_sme2(const struct arm64_cpu_capabilities *__unused);
+>  extern void cpu_enable_fa64(const struct arm64_cpu_capabilities *__unused);
+> +extern void cpu_enable_fpmr(const struct arm64_cpu_capabilities *__unused);
 >  
->  	ksft_print_msg("Starting MBA Schemata change ...\n");
+>  extern u64 read_smcr_features(void);
 >  
-> +	if (get_number_of_mem_ctrls() < 0) {
-> +		ksft_test_result_skip("Unable find iMC/UMC counters!\n");
-> +		return;
-> +	}
-> +
->  	if (test_prepare()) {
->  		ksft_exit_fail_msg("Abnormal failure when preparing for the test\n");
->  		return;
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 21c57b812569..7993694a54af 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -543,6 +543,7 @@ struct kvm_vcpu_arch {
+>  	enum fp_type fp_type;
+>  	unsigned int sve_max_vl;
+>  	u64 svcr;
+> +	unsigned long fpmr;
 
-This also needs rebasing and adaptation to the generic test framework.
+As this directly represents a register, I'd rather you use a type that
+represents the size of that register unambiguously (u64).
+
+>  
+>  	/* Stage 2 paging state used by the hardware on next switch */
+>  	struct kvm_s2_mmu *hw_mmu;
+> diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+> index 5b0a04810b23..b453c66d3fae 100644
+> --- a/arch/arm64/include/asm/processor.h
+> +++ b/arch/arm64/include/asm/processor.h
+> @@ -155,6 +155,8 @@ struct thread_struct {
+>  	struct {
+>  		unsigned long	tp_value;	/* TLS register */
+>  		unsigned long	tp2_value;
+> +		unsigned long	fpmr;
+> +		unsigned long	pad;
+>  		struct user_fpsimd_state fpsimd_state;
+>  	} uw;
+>  
+> @@ -253,6 +255,8 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+>  	BUILD_BUG_ON(sizeof_field(struct thread_struct, uw) !=
+>  		     sizeof_field(struct thread_struct, uw.tp_value) +
+>  		     sizeof_field(struct thread_struct, uw.tp2_value) +
+> +		     sizeof_field(struct thread_struct, uw.fpmr) +
+> +		     sizeof_field(struct thread_struct, uw.pad) +
+>  		     sizeof_field(struct thread_struct, uw.fpsimd_state));
+>  
+>  	*offset = offsetof(struct thread_struct, uw);
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index eae59ec0f4b0..0263565f617a 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -272,6 +272,7 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr1[] = {
+>  };
+>  
+>  static const struct arm64_ftr_bits ftr_id_aa64pfr2[] = {
+> +	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR2_EL1_FPMR_SHIFT, 4, 0),
+>  	ARM64_FTR_END,
+>  };
+>  
+> @@ -2767,6 +2768,14 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+>  		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+>  		.matches = has_lpa2,
+>  	},
+> +	{
+> +		.desc = "FPMR",
+> +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+> +		.capability = ARM64_HAS_FPMR,
+> +		.matches = has_cpuid_feature,
+> +		.cpu_enable = cpu_enable_fpmr,
+> +		ARM64_CPUID_FIELDS(ID_AA64PFR2_EL1, FPMR, IMP)
+> +	},
+>  	{},
+>  };
+>  
+> diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+> index a5dc6f764195..8e24b5e5e192 100644
+> --- a/arch/arm64/kernel/fpsimd.c
+> +++ b/arch/arm64/kernel/fpsimd.c
+> @@ -359,6 +359,9 @@ static void task_fpsimd_load(void)
+>  	WARN_ON(preemptible());
+>  	WARN_ON(test_thread_flag(TIF_KERNEL_FPSTATE));
+>  
+> +	if (system_supports_fpmr())
+> +		write_sysreg_s(current->thread.uw.fpmr, SYS_FPMR);
+> +
+>  	if (system_supports_sve() || system_supports_sme()) {
+>  		switch (current->thread.fp_type) {
+>  		case FP_STATE_FPSIMD:
+> @@ -446,6 +449,9 @@ static void fpsimd_save_user_state(void)
+>  	if (test_thread_flag(TIF_FOREIGN_FPSTATE))
+>  		return;
+>  
+> +	if (system_supports_fpmr())
+> +		*(last->fpmr) = read_sysreg_s(SYS_FPMR);
+> +
+>  	/*
+>  	 * If a task is in a syscall the ABI allows us to only
+>  	 * preserve the state shared with FPSIMD so don't bother
+> @@ -688,6 +694,12 @@ static void sve_to_fpsimd(struct task_struct *task)
+>  	}
+>  }
+>  
+> +void cpu_enable_fpmr(const struct arm64_cpu_capabilities *__always_unused p)
+> +{
+> +	write_sysreg_s(read_sysreg_s(SYS_SCTLR_EL1) | SCTLR_EL1_EnFPM_MASK,
+> +		       SYS_SCTLR_EL1);
+> +}
+> +
+>  #ifdef CONFIG_ARM64_SVE
+>  /*
+>   * Call __sve_free() directly only if you know task can't be scheduled
+> @@ -1680,6 +1692,7 @@ static void fpsimd_bind_task_to_cpu(void)
+>  	last->sve_vl = task_get_sve_vl(current);
+>  	last->sme_vl = task_get_sme_vl(current);
+>  	last->svcr = &current->thread.svcr;
+> +	last->fpmr = &current->thread.uw.fpmr;
+>  	last->fp_type = &current->thread.fp_type;
+>  	last->to_save = FP_STATE_CURRENT;
+>  	current->thread.fpsimd_cpu = smp_processor_id();
+> diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
+> index 8c1d0d4853df..e3e611e30e91 100644
+> --- a/arch/arm64/kvm/fpsimd.c
+> +++ b/arch/arm64/kvm/fpsimd.c
+> @@ -153,6 +153,7 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
+>  		fp_state.sve_vl = vcpu->arch.sve_max_vl;
+>  		fp_state.sme_state = NULL;
+>  		fp_state.svcr = &vcpu->arch.svcr;
+> +		fp_state.fpmr = &vcpu->arch.fpmr;
+>  		fp_state.fp_type = &vcpu->arch.fp_type;
+
+Given the number of fields you keep track of, it would make a lot more
+sense if these FP-related fields were in their own little structure
+and tracked by a single pointer (I don't think there is a case where
+we track them independently).
+
+Thanks,
+
+	M.
 
 -- 
- i.
-
+Without deviation from the norm, progress is not possible.
 
