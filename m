@@ -1,73 +1,72 @@
-Return-Path: <linux-kselftest+bounces-5395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 139348622AB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 06:01:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CDFC8622D0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 06:59:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D310DB22595
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 05:01:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E20DA284FE1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 05:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6BBB13AD9;
-	Sat, 24 Feb 2024 05:01:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390BB1755E;
+	Sat, 24 Feb 2024 05:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="F+9mdV5i"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="uIofp+T4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C704414
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Feb 2024 05:01:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BA0171D4
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Feb 2024 05:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708750865; cv=none; b=K8Bed0sFi7RL5cqX63dDgV64M5jqVk0gH3aY078zJqOjMofrFaxbBWGu4s5UV3ObJqonyz0ybFsLcIST5uMSxj4JNRcZjVGwdTl0F/6BNfm06PsNOoaU2Fvka6O4GjMmB7tjRA1WyUukZiD/6meiOdO0ts1MInt/1398YV4HPkQ=
+	t=1708754389; cv=none; b=TRw2P9f9okuyAkVsPlVwAWlrXM4WT91tv/sg2ckHyV2PhH2tND4rEPmQ7HnkmyQXKUK6sL1yOPqzPvZg0hn4xfU7L8hfQWrIb0Xn0LoI/s6/J/Y0xfyUAJXbFyHj1eAC7HimSzsu+R3qJmMuIYdVwSkUgP4DdCm+JIeKScWDsV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708750865; c=relaxed/simple;
-	bh=/onWvyCTZI8InHeEKXHP0t11tM03YN3TaDFc5nO95vE=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=aDNpeo7M4aEai9IY/TkqZ98208Zg+WqisYSWDEye99ud2taHEdsyoaFJws6XoihnaHaBENptWS+5KD+qbCFy6heWKTozKXmQPV5v0ohevcEgLK4+wVBXW9IjYQmAfAeBhQy5T3TieJfdbP4KuxsvFAkAk54agLObOeAE61hTLMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=F+9mdV5i; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1708754389; c=relaxed/simple;
+	bh=ALjHCiIfQO7Gp+WoS1O1TrDhjew54k5REEPodqmfEog=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=BRdEDaSicuYHuB2klyT6Ll0zLRZQ0eavEX8ToMA39z7Tze4vpcIqNtLgIX6PJIkCQMuaK6riw2cX6UE4DBYfU40eTQhOZULZcB1IFoWlB/fIQYDFZx4LWprIziNdV4S2ED3akTqNdRe6s8ShJ3dit6Yfaa8StN7vRXrvcs+QqLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=uIofp+T4; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dc0e5b223eso12869115ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Feb 2024 21:01:03 -0800 (PST)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-21fa872dce3so641590fac.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Feb 2024 21:59:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708750863; x=1709355663; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708754386; x=1709359186; darn=vger.kernel.org;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQcQzYxTaIsgGN4sKlW7z2g4IHZzX6Wkl0hJofuwt8c=;
-        b=F+9mdV5ijh811//TNnytVpsb/Op5ZnnKeLFgdzgh/pcL8DDRHLc6lR2efkyN6LENZh
-         rqoCtaOEKjTA5Kl/KiW7caLsCbwRF8uZSo5tVmcJ0X8dbJVH+ZzkiDndx9IojKQzp0cz
-         8dkTv4q8LVM2PMRqZtrkdA7fsQK4f5AZjdMcx95FBuZyHOdNRI3xcHaJW0pEBKGUhqD2
-         5TJUng+Sx6ZHmLI9IndPzSo/lJ3O329Sd1H3dfrHCuOFPCji/nmoZ+FOV9Q+MRksl0JF
-         1O0STM44em7Zg5hR+zVNBIF7nApv7rPo3B8ccgflvqqJEW7+6kMoGEUPTwwf3WzbbyD9
-         IgJA==
+        bh=jPxCbdStOR8qv6mHdhdvXt77spki8NKYjMTSGBfDcr0=;
+        b=uIofp+T4QxKh5WBdrlapR1lBXRY3j9kLca6uo5mT7mZ0fmfPSFuLxyOLUn2h0VD36C
+         XAk6X5i30hCK+97uk8chwNkFXyFNy+MBh5ziU6RpNrKYCO+vJzpwE8a9A8Xa0/RpJ2A5
+         jKhrpKJ27tqdW1wVJ96Nz4LQPSycbE0ebf/Zx4b0YgXPNQO3wQc24/TaVFiykBLIP1mm
+         G4j/zFc4+H74npEcuM1zy0IPHW1NBVsyhdejlF6zITQ7Db7XdDsPr9vEDw6lC3ob5qlR
+         2Law09mhKLHgbWqb4X5hz/54CLPUgeCOwKc2IwL2UdVzYn1G84mMhV+d6xjJRsKLfQ0V
+         4lCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708750863; x=1709355663;
+        d=1e100.net; s=20230601; t=1708754386; x=1709359186;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BQcQzYxTaIsgGN4sKlW7z2g4IHZzX6Wkl0hJofuwt8c=;
-        b=Z/kouV77BL8LqGMKeQdcANtVdDQ+aALMGN6WIgIwPoJ3uS3ujEiTJvzDHQZ8ykijzd
-         7Wg24CubOT5UD1AzvCTCbqiX5PlLWSNXMVc2csias7rztcbqW+oRpzDlR2hJXiYsUKAE
-         FB17M0dsZuJfLS8TcloFRj8mPsgj33c0uHMmljQrOxPLf83wv1SVOo08KanJ9DKIamdv
-         bV9f7SBlzp3hSj8e40aJxHiRzZqaL26wM/jC4iPOfX/mCSjvtAXepkSwJeSCm+G/rcn1
-         bYz5Z9iMPf9ZhooSIGZJCXs3aF0WvfK/B8qpJIRPnO6ZSKcl0epkiLbrL+yhvbJacQiP
-         DNgg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4bqaryTcNJd4TxqmJ2EAakPNzbz4pw/oJBjed1eCm3InNcVyK9ueYlPwlnNcM/nKPBTfHNuPJ48A3WoXkVVmE4/gHdFYpzM5ODO5qOTyF
-X-Gm-Message-State: AOJu0YxlefEXyaOvgp8N6puBD/yRCGOpic4+J5kxsztf7Q8AnVQiYZ0D
-	JJlovRPh6Jp4a4EUwUsR55NPBnF6dnMlQi1L41HNLnfNzAjeIVs5DQzYOZYf3AiNL+ETS1xdXII
-	XHXw=
-X-Google-Smtp-Source: AGHT+IE7laPxuQlqq+OULtCErAYKbVdPT1cquJ/IXJUB3IczVEjnJh29mK0HPIfD0T39rgv7KASXjg==
-X-Received: by 2002:a17:902:f645:b0:1db:d66e:cd15 with SMTP id m5-20020a170902f64500b001dbd66ecd15mr2333486plg.59.1708750862668;
-        Fri, 23 Feb 2024 21:01:02 -0800 (PST)
+        bh=jPxCbdStOR8qv6mHdhdvXt77spki8NKYjMTSGBfDcr0=;
+        b=iR543qfszIM1wdXRsAKY1XUgYwORt6rfXWkn3TsOzixNrhCFIkD98j4jL4lOTe6UsQ
+         rFZZfX1j+TfNFNTRq6abkZIyaiSAmvOr9wwIm4XgO/+uoG6+l7Ni4nuVMEHdSB/5X9dD
+         AWB41V+sOBywmmMorzdGwZ57QpbPK8ecMmDhUH+jWP8aaKxktBcTPuNmC3h6pgU9wpwV
+         sNuGTOapPUPwRyz2ZBzmIGIJv+aCQ4nT4xbAneE8tz/dcYenOS1iTFYqbso75nAwBIQK
+         HPg4bwrLO7ESxqQMF1EBFMhvCK9xew5jlXTyCyNxOoya9SGINBgn+m6gq6SDnEeBthSb
+         9+2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWHasYyifI5u7SeWzcaEbex/7IMe6Z8c/xo5Pt5hnfBTAEUf2MVhFYRvOr+c1vNQ+GDEGjqeApRY4NXJNq0nSwFykcdOpU9Bp7GUzL09StA
+X-Gm-Message-State: AOJu0Yybh7y+L1EclHpmkwlDgC4jXRUFLBZCUxxvHiLdwiMItXo7U7Iw
+	xuPEoCKa5PasjBJOypWUh4b2tcGyaK+4S23xt0lRXuAOmqlOkCMc2G2Vv678gHo=
+X-Google-Smtp-Source: AGHT+IE79BrQlVv7JTAI2g8pYY28qZgBoMP0b7t5nLIzdjWHNpp2hH9lQyguRZS/2wcKf0DtE4U27g==
+X-Received: by 2002:a05:6358:7e54:b0:17b:6171:ada8 with SMTP id p20-20020a0563587e5400b0017b6171ada8mr1692873rwm.15.1708754386562;
+        Fri, 23 Feb 2024 21:59:46 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id kv3-20020a17090328c300b001dba739d15bsm253202plb.76.2024.02.23.21.01.01
+        by smtp.gmail.com with ESMTPSA id q21-20020a635055000000b005cfc1015befsm344917pgl.89.2024.02.23.21.59.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Feb 2024 21:01:02 -0800 (PST)
-Message-ID: <65d9780e.170a0220.8a4db.0c2c@mx.google.com>
-Date: Fri, 23 Feb 2024 21:01:02 -0800 (PST)
+        Fri, 23 Feb 2024 21:59:44 -0800 (PST)
+Message-ID: <65d985d0.630a0220.b72a.0e47@mx.google.com>
+Date: Fri, 23 Feb 2024 21:59:44 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -79,131 +78,148 @@ Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: kselftest
 X-Kernelci-Branch: next
 X-Kernelci-Kernel: v6.8-rc1-53-gae638551ab64a
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 5 builds: 2 failed, 3 passed, 2 errors,
- 6 warnings (v6.8-rc1-53-gae638551ab64a)
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-cpufreq: 5 runs,
+ 3 regressions (v6.8-rc1-53-gae638551ab64a)
 To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
  shuah@kernel.org
 From: "kernelci.org bot" <bot@kernelci.org>
 
-kselftest/next build: 5 builds: 2 failed, 3 passed, 2 errors, 6 warnings (v=
-6.8-rc1-53-gae638551ab64a)
+kselftest/next kselftest-cpufreq: 5 runs, 3 regressions (v6.8-rc1-53-gae638=
+551ab64a)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.8-rc1-53-gae638551ab64a/
+Regressions Summary
+-------------------
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.8-rc1-53-gae638551ab64a
-Git Commit: ae638551ab64a216364a63c4ee5061f82702fde2
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-Build Failures Detected:
+sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-i386:
-    i386_defconfig+kselftest: (gcc-10) FAIL
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-x86_64:
-    x86_64_defconfig+kselftest: (gcc-10) FAIL
 
-Errors and Warnings Detected:
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
+-rc1-53-gae638551ab64a/plan/kselftest-cpufreq/
 
-arm64:
-    defconfig+kselftest (gcc-10): 1 warning
-    defconfig+kselftest+arm64-chromebook (gcc-10): 1 warning
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.8-rc1-53-gae638551ab64a
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      ae638551ab64a216364a63c4ee5061f82702fde2 =
 
-arm:
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
 
-i386:
-    i386_defconfig+kselftest (gcc-10): 1 error, 1 warning
 
-x86_64:
-    x86_64_defconfig+kselftest (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+kselftest (clang-16): 1 warning
+Test Regressions
+---------------- =
 
-Errors summary:
 
-    2    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_me=
-mcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
 
-Warnings summary:
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-    2    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_=
-memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    cc1: all warnings being treated as errors
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x14cfd6
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+  Details:     https://kernelci.org/test/plan/id/65d97834d30971079363702a
 
-Detailed per-defconfig build reports:
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
+638551ab64a/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+meson-gxl-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
+638551ab64a/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+meson-gxl-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/arm64/initrd.cpio.gz =
 
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
 
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
 
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 1 warning, 0 section mismatches
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/65d97834d309=
+71079363702b
+        failing since 491 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1-1-gde3ee3f63400a) =
 
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+ =
 
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
- 0 section mismatches
 
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
 
-Warnings:
-    cc1: all warnings being treated as errors
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
 
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+  Details:     https://kernelci.org/test/plan/id/65d979a0055546e10f637012
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
+638551ab64a/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-a64-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
+638551ab64a/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-a64-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/arm64/initrd.cpio.gz =
 
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
 
-Warnings:
-    cc1: all warnings being treated as errors
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/65d979a00555=
+46e10f637013
+        failing since 482 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1-8-g94fea664ae4ee) =
 
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x14cfd6
+ =
 
----
-For more info write to <info@kernelci.org>
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65d976dac8b1d2c64b637023
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
+638551ab64a/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-h5-libretech-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
+638551ab64a/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq-=
+sun50i-h5-libretech-all-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/65d976dac8b1=
+d2c64b637024
+        failing since 478 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1-13-g67c0b2b52916) =
+
+ =20
 
