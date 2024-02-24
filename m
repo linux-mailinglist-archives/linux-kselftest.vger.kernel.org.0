@@ -1,178 +1,167 @@
-Return-Path: <linux-kselftest+bounces-5400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 681C48622D1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 06:59:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 784E5862391
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 10:04:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A0631C21F16
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 05:59:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB29E282D78
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Feb 2024 09:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DA717575;
-	Sat, 24 Feb 2024 05:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77BE8182DB;
+	Sat, 24 Feb 2024 09:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="3Ic0WssL"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="Y548vkAX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0066A168BA
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Feb 2024 05:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E13171CD
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Feb 2024 09:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708754390; cv=none; b=k3npGIQlW9gVnT+UiNCOM7FTDh/JJgDSVvSx/JnI1FJaal/IMpi6KNc43g11ZIb3aB0Jdl03Dt19E1T70ezvF5lwp/ngw03gp3QPfwpu6mMdn/5OROSk1IE/UoaUjQIBPvsC5K9ue1HkZnJxeLZA2VwP544H/ONy2I+ZSIoMxQE=
+	t=1708765486; cv=none; b=uHv3+v+aUOCimOEaPufkwCY4+O31VGYOsyvTYqp2vgQN3FzSSL0jBPbKii3Colx9uGOpxjE17G5xxZo4mXBy64BRnvgMhk0XPqmvc+Ye6RM0n7NCA1Hd+hgK0ER+/aCf+WLkOExAcGtKgXbBq9Wsxyrl4YawNqsC380UHFZloP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708754390; c=relaxed/simple;
-	bh=ACIcBESlZJta1faa8/1EEHP769teX8WjnGd0fO+pZi0=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=MX8nTE1NuXLUyZWg1MbGELAQazKDOK9Eq5+ibKO4/T6+/m49PLMJXlF8Dvb/1Rj8e7O/NesxnUZdkCiXx6S+Mf94U0oIKB2n7EMftLxcgPwam0+fBW9qm/r4PsrErwafZpRNnMG4ag+NuznldI5PMPro5m5H1DPzgz/1Y/7DulU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=3Ic0WssL; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5a0521b1b89so593602eaf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Feb 2024 21:59:48 -0800 (PST)
+	s=arc-20240116; t=1708765486; c=relaxed/simple;
+	bh=2bvz0RaABemvB2mAnUI+y9KXZ+nJBiW2+3XKY5GafdE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ajregrXzLOoE6bmPhokuDvo5Wa8VB8S2Ykl/b1nu6uQA1Q/52icaUUwiS5p9zzqXGK0oCF4n4LiiQfrdZEMoZZoD+Jw7LSfKY8ypuihnwuyj8ySPBOYaN8vs97d4UxUeD65FTmW+0XDVcn/ywUGwaeUHVFBB54nr5FxrBkCsiZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=Y548vkAX; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-41296e2c2faso7634665e9.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Feb 2024 01:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708754388; x=1709359188; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDdzk7jRAlO7EUORZcY1eXMpVquICcYS2UvVVzbb7lI=;
-        b=3Ic0WssLM2YvCxkrkq/ZL9OlPggpGJoTvOYZJykApN0TpmDeUH4osLapUwwby2cBdI
-         5xbkzeFbeQM3ITlSujykMRySF3leLx7pV6niIQsK1yWDviF1OjW5C7PHPXN8ahZzZjQp
-         69Ar8voKgG2jJadUmD42c+RwtNMn9vdELtNuR7erFi1YYOBrWiqaovvDEzFOOKOXAYjy
-         XydFZt7WBQ0jcsMffWk5oy1onCciVumJRSgVQw9VLMNqhc4jK1nDbfoNoqkKuwYCQ3+W
-         1EWkF8mRypW6VL60LzldtJggek2Vf5/HauQ2YbR0CrZaUCFX2suqO+Dx/N0S1faQAP3o
-         Z1Hw==
+        d=arista.com; s=google; t=1708765482; x=1709370282; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9oap1u4maFj8x6QB6Yv5BBkUdae4vegOH6+ONA60ss=;
+        b=Y548vkAXhubs8Z/ze6bQEzkKASCNo93gyEsT+0s9GIxzq/KL1q9hMtmWnHCPzXIP28
+         kqQ+u3RMfxCkJXsOF9zF87r+VDTCSz+K56ZxMS3IunmHfct0Aa1npsrWdDFi1TCZbHC2
+         /KIJHrohkamm9HdpalxaX5NwdG+Y7nrhwcMxtaJRseYm99++aX34Lo75QNYa4qaWyJRH
+         j1bkoYHUWYxT6R2rpBhWhue1jAf02CP4Q2O448rP0dCwuHMIv3aVJDeQOvhphJOgDMVZ
+         wRhmGGgYfEV/ICw9Q0rFEjhQdeEXG7D01IFTENx++zW42bWU+95s4S3JUG0PSqc2AeQg
+         hlzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708754388; x=1709359188;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1708765482; x=1709370282;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FDdzk7jRAlO7EUORZcY1eXMpVquICcYS2UvVVzbb7lI=;
-        b=to8kqSUAQAeu6E/YZ+v/7d7BMzydJtqcPlJzCoLfboAkplOaLMtOUPfEclrASYzSxh
-         KxCgK/maeut1W+62saWftg6LnzlIeRY1cWevpIk8O/hBR1X8Vt3KU8dtX7siMoGmImrE
-         GSkVTOZVlIrLlvcXfMXG0jpnU6HVQnw+IkGuKG7rcf9GkZ6opPbCfgFXQbnkEDjHBY/M
-         Gls/snPpgRKVKckfXV09rI7h4Thw1BjJXaPlya7LaZD6DJ0JMeNvkJEAYMxAsVVQNBh7
-         Zke/55y6UPC+LMdp1NC+DzHrAq2+hkn6p40luFbBrznsQvphUR1ORb9mOLH8QXyedRRL
-         gcgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUqdyUqnfk27yyWuemUsVvVKyxXruadxIir5LKJqBb0rXXg/5hNkki1mZV4WgWweD5qZtWJ7ReFkZM50+40lFXNZ+835SFuJXpzsVVbk3cY
-X-Gm-Message-State: AOJu0YzmJg1IdKCqnWahTZoJZbdfIciZZ4GPP34Ym8ROy9i28aQTp2uW
-	9wHOtq+YS7ujOv3kx+XIfICRWBL8/QC+W0l0kOwI3MveonPkvif3224LCzpEs5M=
-X-Google-Smtp-Source: AGHT+IFn6GaW1xXI1dXOiewiF2y2NY5yPmQw/uy9/BLQnukLrW4sHfWxYEIMBmVFFMR8e1c6Fj5pgA==
-X-Received: by 2002:a05:6358:6210:b0:17b:5662:f3dc with SMTP id a16-20020a056358621000b0017b5662f3dcmr2351939rwh.7.1708754387899;
-        Fri, 23 Feb 2024 21:59:47 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id e17-20020a635451000000b005dc8c301b9dsm435311pgm.2.2024.02.23.21.59.43
+        bh=Y9oap1u4maFj8x6QB6Yv5BBkUdae4vegOH6+ONA60ss=;
+        b=E74NckyD2PFKYjtQ+uu7xwIZA8VP5GfTRfLGvFb0+DcmR9w9sbGrayvYchKoyYVJHf
+         u5aVM2chUXmrCKzrM91WtUCDOrkm1zvPdPYH8nAIbN0Y3Hr0oe2GItABVHEqXExIPx9T
+         9+KprxIb5G9eAsN7USDiGttfS4Ep1cvau7mjkUxTNd7qYd1FRhU1UCrUAB7M6sN7jR/q
+         6XZoGTJxY1P20G6jQB517xxYk3ViSMR6Qh4uES0jQnfUCVhNlfYAdSFJwAzgh/cFMMgf
+         NXP5yMqJsdNPxtGni2wv4LHcN+zkV4CJEYvU0rYgVs44NxTwwlATd7OeVOHXg5P8mnMO
+         gWng==
+X-Forwarded-Encrypted: i=1; AJvYcCVmw+Ec2H8cEmImD2nwR/XtNB38TnjV/2qjZ1XKQ0eAuxwyLCCOfEzVLAxN+80vBaM95GbSFT2tvND9Qj8iF/FwK0Ka25yjmq2BGM5crzjf
+X-Gm-Message-State: AOJu0Ywu1ObWVWwSDQCd7meZMdkpmvfp/w8XrWSSxwQGoMYG+R/Y0p/6
+	ldY19AT0TioxTWIOW+oe5V9/NMx4neYbuhfE63WYLPwcb6Uw7Z/jnpBEVRvo1w==
+X-Google-Smtp-Source: AGHT+IEcyO8NJxp+wsPVPxwvDnVNJrMpXXH3Qo40PN1JaIPl7oWt3xo4EP5Ts6f9gNiSH8Hq5NdeBw==
+X-Received: by 2002:a05:600c:5023:b0:411:eb73:243b with SMTP id n35-20020a05600c502300b00411eb73243bmr1255421wmr.5.1708765482074;
+        Sat, 24 Feb 2024 01:04:42 -0800 (PST)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id m6-20020a7bce06000000b00410bca333b7sm5320593wmc.27.2024.02.24.01.04.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Feb 2024 21:59:44 -0800 (PST)
-Message-ID: <65d985d0.630a0220.5f483.15a6@mx.google.com>
-Date: Fri, 23 Feb 2024 21:59:44 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 24 Feb 2024 01:04:41 -0800 (PST)
+From: Dmitry Safonov <dima@arista.com>
+To: Eric Dumazet <edumazet@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Dmitry Safonov <dima@arista.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Dmitry Safonov <0x7f454c46@gmail.com>
+Subject: [PATCH net-next 00/10] net/tcp: TCP-AO and TCP-MD5 tracepoints
+Date: Sat, 24 Feb 2024 09:04:08 +0000
+Message-ID: <20240224-tcp-ao-tracepoints-v1-0-15f31b7f30a7@arista.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.13-dev-b6b4b
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708765347; l=2977;
+ i=dima@arista.com; s=20231212; h=from:subject:message-id;
+ bh=lLZCReK3ZzYvXtLqDF+R0iwQ1yaEauus+KvH0+vWic8=;
+ b=NugEbW75fCKkDgfn3+AcpEDu+0iEc0KVHGPrv1p3Os/iJMBhc+JXO8gFuW0FLA47yz2UET5GM
+ WFA4lYfgHGlAbGlH144UecbPi9h9XBX2QkDHrzHPXMwxBJOvBO8pKkn
+X-Developer-Key: i=dima@arista.com; a=ed25519;
+ pk=hXINUhX25b0D/zWBKvd6zkvH7W2rcwh/CH6cjEa3OTk=
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.8-rc1-53-gae638551ab64a
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-livepatch: 1 runs,
- 1 regressions (v6.8-rc1-53-gae638551ab64a)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.8-rc1-53-gae6=
-38551ab64a)
-
-Regressions Summary
--------------------
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
--rc1-53-gae638551ab64a/plan/kselftest-livepatch/
-
-  Test:     kselftest-livepatch
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.8-rc1-53-gae638551ab64a
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      ae638551ab64a216364a63c4ee5061f82702fde2 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65d97ac95e7438716b637012
-
-  Results:     1 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
-638551ab64a/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
--livepatch-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae=
-638551ab64a/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
--livepatch-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20240129.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case=
-/id/65d97ac95e7438716b637014
-        failing since 9 days (last pass: v6.8-rc1, first fail: v6.8-rc1-32-=
-g345e8abe4c355)
-
-    2024-02-24T05:18:03.496498  / # =
-
-
-    2024-02-24T05:18:03.506371  =
-
-
-    2024-02-24T05:18:08.651646  / # export NFS_ROOTFS=3D'/var/lib/lava/disp=
-atcher/tmp/12846770/extract-nfsrootfs-_kckc7kq'
-
-    2024-02-24T05:18:08.665764  export NFS_ROOTFS=3D'/var/lib/lava/dispatch=
-er/tmp/12846770/extract-nfsrootfs-_kckc7kq'
-
-    2024-02-24T05:18:10.892206  / # export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-02-24T05:18:10.903149  export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-02-24T05:18:11.021855  / # #
-
-    2024-02-24T05:18:11.030274  #
-
-    2024-02-24T05:18:11.147792  / # export SHELL=3D/bin/bash
-
-    2024-02-24T05:18:11.158106  export SHELL=3D/bin/bash
- =
-
-    ... (121 line(s) more)  =
-
- =20
+I tried to split it a bit, maybe I could even go further and split by=0D
+TRACE_EVENT_CLASS() changes, but not sure if it adds any value.=0D
+But at least all preparation patches are separate.=0D
+=0D
+I wasn't sure if I should just remove tcp_hash_fail() as I did in this=0D
+version, or rather put it under CONFIG_TCP_..., making it disabled by=0D
+default and with a warning of deprecated, scheduled for removal.=0D
+Maybe this won't cause any problems for anybody and I'm just too=0D
+cautious of breaking others.=0D
+=0D
+Anyways, version 1, thanks for any reviews!=0D
+=0D
+Signed-off-by: Dmitry Safonov <dima@arista.com>=0D
+---=0D
+Dmitry Safonov (10):=0D
+      net/tcp: Use static_branch_tcp_{md5,ao} to drop ifdefs=0D
+      net/tcp: Add a helper tcp_ao_hdr_maclen()=0D
+      net/tcp: Move tcp_inbound_hash() from headers=0D
+      net/tcp: Add tcp-md5 and tcp-ao tracepoints=0D
+      net/tcp: Remove tcp_hash_fail()=0D
+      selftests/net: Clean-up double assignment=0D
+      selftests/net: Provide test_snprintf() helper=0D
+      selftests/net: Be consistnat in kconfig checks=0D
+      selftests/net: Don't forget to close nsfd after switch_save_ns()=0D
+      selftest/net: Add trace events matching to tcp_ao=0D
+=0D
+ include/net/tcp.h                                  |  79 +-=0D
+ include/net/tcp_ao.h                               |  42 +-=0D
+ include/trace/events/tcp.h                         | 317 ++++++++=0D
+ net/ipv4/tcp.c                                     |  86 ++-=0D
+ net/ipv4/tcp_ao.c                                  |  24 +-=0D
+ net/ipv4/tcp_input.c                               |   8 +-=0D
+ net/ipv4/tcp_ipv4.c                                |   8 +-=0D
+ net/ipv4/tcp_output.c                              |   2 +=0D
+ tools/testing/selftests/net/tcp_ao/Makefile        |   2 +-=0D
+ tools/testing/selftests/net/tcp_ao/bench-lookups.c |   2 +-=0D
+ tools/testing/selftests/net/tcp_ao/connect-deny.c  |  18 +-=0D
+ tools/testing/selftests/net/tcp_ao/connect.c       |   2 +-=0D
+ tools/testing/selftests/net/tcp_ao/icmps-discard.c |   2 +-=0D
+ .../testing/selftests/net/tcp_ao/key-management.c  |  18 +-=0D
+ tools/testing/selftests/net/tcp_ao/lib/aolib.h     | 150 +++-=0D
+ tools/testing/selftests/net/tcp_ao/lib/ftrace.c    | 846 +++++++++++++++++=
+++++=0D
+ tools/testing/selftests/net/tcp_ao/lib/kconfig.c   |  31 +-=0D
+ tools/testing/selftests/net/tcp_ao/lib/setup.c     |  15 +-=0D
+ tools/testing/selftests/net/tcp_ao/lib/sock.c      |   1 -=0D
+ tools/testing/selftests/net/tcp_ao/lib/utils.c     |  26 +=0D
+ tools/testing/selftests/net/tcp_ao/restore.c       |  18 +-=0D
+ tools/testing/selftests/net/tcp_ao/rst.c           |   2 +-=0D
+ tools/testing/selftests/net/tcp_ao/self-connect.c  |  19 +-=0D
+ tools/testing/selftests/net/tcp_ao/seq-ext.c       |  10 +-=0D
+ .../selftests/net/tcp_ao/setsockopt-closed.c       |   2 +-=0D
+ tools/testing/selftests/net/tcp_ao/unsigned-md5.c  |  28 +-=0D
+ 26 files changed, 1576 insertions(+), 182 deletions(-)=0D
+---=0D
+base-commit: d662c5b3ce6dbed9d0991bc83001bbcc4a9bc2f8=0D
+change-id: 20240224-tcp-ao-tracepoints-0ea8ba11467a=0D
+=0D
+Best regards,=0D
+-- =0D
+Dmitry Safonov <dima@arista.com>=0D
+=0D
 
