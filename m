@@ -1,111 +1,129 @@
-Return-Path: <linux-kselftest+bounces-5416-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5417-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D73086688C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 04:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C4728668F7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 05:01:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20C451C21370
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 03:19:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E17F1C233BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 04:01:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8810411737;
-	Mon, 26 Feb 2024 03:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8DB19BBA;
+	Mon, 26 Feb 2024 03:57:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bq3sJS9V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ynq5945f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA95DF4D;
-	Mon, 26 Feb 2024 03:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFC11B7E3;
+	Mon, 26 Feb 2024 03:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708917537; cv=none; b=VJhbp/j2ND0TLn7imVEMHmxEq7E1kzw+lheRQFO9lQdQCUnLfI/C0XPkHWep+PIoMdDLbMbyyxe3qCSjIGMZ78ib3YWr9vc/2IzYHfXQK/ih59o+aNq3C8wSTE/PyOPh0z+l1MaCeVGaACLh/bkDVicApqCgtY190gQL7klNh1Q=
+	t=1708919878; cv=none; b=hwPaNzACZTnd663q+jIbZepmjRA6osRIcMKBzv9EoTisp4iNqaxOS7WX9uF/kwXj+9BLpJSVpmnpJ3wPnmAnN4ZMVqDvNwyxdwwLvW532xhlTz/IRLu02CGWCDt/mwpQeZcdPnljPF1vi1WSVk9OCqR94He3+2W5KZyTbvAK6FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708917537; c=relaxed/simple;
-	bh=MXL6VcPZBWyMQPrfjTrEpeHJCu9JL55Z5etYKoyrgX8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HJ+aeKup25ccyUetDkt7LRm+RWOCMWnrnHwAqT/fZvDoI0UIknjf+7NpZCg6vHOEIo6yqM8u4QvIewz5VDYztVc5ueEZ55kNAeEmLXbjXO8Qe0ZSIdPW8ZXu4zvaw0aLa0bkez3gef2/X6sH4hJ2Frd+h3SPDMg4l3HStg/YDSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bq3sJS9V; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1708917531; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=mLCk/YbBkqEYhn5Q5sMxmBvYHKM1K5bF4wYuOkh2FwE=;
-	b=bq3sJS9ViK35UmFygOAgZqjsPFxl24/tn+mM3IZPLecktO654M8Zb+VPZLqbp9T8Ii+f6CsW/buReGZO37N9xeqYeQ5di6ddYzDb4dTdL5qcrJXsg+76NoK4XfTYA5qZR+5O5tNRpy4JUOPXeopu2d9mFfJhPyb9kdFR5jfuDFk=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xiangzao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0W1ACl3C_1708917520;
-Received: from localhost.localdomain(mailfrom:xiangzao@linux.alibaba.com fp:SMTPD_---0W1ACl3C_1708917520)
-          by smtp.aliyun-inc.com;
-          Mon, 26 Feb 2024 11:18:50 +0800
-From: Yuanhe Shu <xiangzao@linux.alibaba.com>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	shuah@kernel.org
+	s=arc-20240116; t=1708919878; c=relaxed/simple;
+	bh=6eV/0foyMhUCesPp4RUIfzVdUPTf/g2H7EDQ8aK/UiE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WHD+RRuwZzg3rZMfFmW32rFkeio2pZE1Bw0Q2oKNoRedek0NLP0vl1/wCjQJSqfaIszNaf2GfeFzrPC3h9CI036ZvLSjlZaLEEcLHlYBa04FXhRzb6TZ5K/r9U69fXv9nXsKWqRngOFIZ5+LbUZDJihBU8THUd4g6MgYZBjEh7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ynq5945f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD4FC433C7;
+	Mon, 26 Feb 2024 03:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708919878;
+	bh=6eV/0foyMhUCesPp4RUIfzVdUPTf/g2H7EDQ8aK/UiE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Ynq5945f9Uj1pO+1l/G/qFbWR1EvKH6IbKRxedbgP32P/t1GzHI7ghH1y7slQ3xri
+	 6u+7NYV8bF9RqPNxErTFQoXS6IjcJO4iMBFfRUolghRQoxcC19OE1RZsMni1JzlhDP
+	 K7B4smpOv8wJSbsiorRH60apN3rck2o+KFH9CsckA8lg9S9oAh25q1n886AqSztetP
+	 IP+yssUSnoS/E2mC+NBGgirFBBaATSxCsOa+qoK/gqBfBFZ+lHP9u8MLSB5hMmaxlX
+	 kY0ByORlK6EY3tV4anD8fDiXE/w2SJyEXmxvcE1XOMpAIJzjAA6R4wmZexuLfduvtu
+	 /j4kysTdW2NNg==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Jiri Olsa <jolsa@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	xiangzao@linux.alibaba.com,
-	stable@vger.kernel.org
-Subject: [PATCH v2] selftests/ftrace: Limit length in subsystem-enable tests
-Date: Mon, 26 Feb 2024 11:18:16 +0800
-Message-Id: <20240226031816.88715-1-xiangzao@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.3
+	mhiramat@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/7] tracing/probes: Support function parameter access from return probe
+Date: Mon, 26 Feb 2024 12:57:53 +0900
+Message-Id: <170891987362.609861.6767830614537418260.stgit@devnote2>
+X-Mailer: git-send-email 2.34.1
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-While sched* events being traced and sched* events continuously happen,
-"[xx] event tracing - enable/disable with subsystem level files" would
-not stop as on some slower systems it seems to take forever.
-Select the first 100 lines of output would be enough to judge whether
-there are more than 3 types of sched events.
+Hi,
 
-Fixes: 815b18ea66d6 ("ftracetest: Add basic event tracing test cases")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yuanhe Shu <xiangzao@linux.alibaba.com>
+Here is version 2 series of patches to support accessing function entry data
+from function *return* probes (including kretprobe and fprobe-exit event).
+
+In this version, I added another cleanup [4/7], updated README[5/7], added
+testcases[6/7] and updated document[7/7].
+
+This allows us to access the results of some functions, which returns the
+error code and its results are passed via function parameter, such as an
+structure-initialization function.
+
+For example, vfs_open() will link the file structure to the inode and update
+mode. Thus we can trace that changes.
+
+ # echo 'f vfs_open mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events
+ # echo 'f vfs_open%return mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events 
+ # echo 1 > events/fprobes/enable 
+ # cat trace
+              sh-131     [006] ...1.  1945.714346: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x2 inode=0x0
+              sh-131     [006] ...1.  1945.714358: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4d801e inode=0xffff888008470168
+             cat-143     [007] ...1.  1945.717949: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
+             cat-143     [007] ...1.  1945.717956: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4a801d inode=0xffff888005f78d28
+             cat-143     [007] ...1.  1945.720616: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
+             cat-143     [007] ...1.  1945.728263: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0xa800d inode=0xffff888004ada8d8
+
+So as you can see those fields are initialized at exit.
+
+This series is based on v6.8-rc5 kernel or you can checkout from
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/entry-data
+
+Thank you,
+
 ---
- .../selftests/ftrace/test.d/event/subsystem-enable.tc       | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
-index b1ede6249866..b7c8f29c09a9 100644
---- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
-@@ -18,7 +18,7 @@ echo 'sched:*' > set_event
- 
- yield
- 
--count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
-+count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
- if [ $count -lt 3 ]; then
-     fail "at least fork, exec and exit events should be recorded"
- fi
-@@ -29,7 +29,7 @@ echo 1 > events/sched/enable
- 
- yield
- 
--count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
-+count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
- if [ $count -lt 3 ]; then
-     fail "at least fork, exec and exit events should be recorded"
- fi
-@@ -40,7 +40,7 @@ echo 0 > events/sched/enable
- 
- yield
- 
--count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
-+count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
- if [ $count -ne 0 ]; then
-     fail "any of scheduler events should not be recorded"
- fi
--- 
-2.39.3
+Masami Hiramatsu (Google) (7):
+      tracing/fprobe-event: cleanup: Fix a wrong comment in fprobe event
+      tracing/probes: Cleanup probe argument parser
+      tracing/probes: cleanup: Set trace_probe::nr_args at trace_probe_init
+      tracing: Remove redundant #else block for BTF args from README
+      tracing/probes: Support $argN in return probe (kprobe and fprobe)
+      selftests/ftrace: Add test cases for entry args at function exit
+      Documentation: tracing: Add entry argument access at function exit
 
+
+ Documentation/trace/fprobetrace.rst                |    7 
+ Documentation/trace/kprobetrace.rst                |    7 
+ kernel/trace/trace.c                               |    5 
+ kernel/trace/trace_eprobe.c                        |    8 
+ kernel/trace/trace_fprobe.c                        |   59 ++-
+ kernel/trace/trace_kprobe.c                        |   58 ++-
+ kernel/trace/trace_probe.c                         |  417 ++++++++++++++------
+ kernel/trace/trace_probe.h                         |   30 +
+ kernel/trace/trace_probe_tmpl.h                    |   10 
+ kernel/trace/trace_uprobe.c                        |   14 -
+ .../ftrace/test.d/dynevent/fprobe_entry_arg.tc     |   18 +
+ .../ftrace/test.d/kprobe/kretprobe_entry_arg.tc    |   18 +
+ 12 files changed, 483 insertions(+), 168 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_entry_arg.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_entry_arg.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
