@@ -1,137 +1,177 @@
-Return-Path: <linux-kselftest+bounces-5450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BC938681DF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 21:21:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41A5086820C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 21:43:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F2CF1F23871
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 20:21:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0AB828EB2F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 20:43:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE49F130E48;
-	Mon, 26 Feb 2024 20:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE7C4130AF0;
+	Mon, 26 Feb 2024 20:43:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="KJUhhXGf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFTKedXe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [83.166.143.175])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE84130AE4
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Feb 2024 20:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EADF1E878;
+	Mon, 26 Feb 2024 20:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708978889; cv=none; b=pqWt784+9IzBwk2W66ZbYA/BMHefkSmrEZY0v7P4MujPzlAiL00uncznBuyDtg//8qMRnNlwz2l4HA1vG540eYUJwPpgqlmVp9yT1hvLv3BUdOD8YiwXcSuXhSsgtLx4+QZd7A79liDclcUNLr1Y37DIrlr2Nh8ud5VAVewuhlQ=
+	t=1708980197; cv=none; b=CdfJjekNh+rxCs5edzht5nSzVfvsckvfGn+9F/KPSSHVqC974eXmrvhzkxPtlJxJO5BEiR/VG1QrQ+ExaRz9TCp4YYUyibqoQwh0/5uKRsO3Vyv0TTTpKAXdP6GPTNBMxi+38POFhCy74pvO1WjhIJTHhhfNpKxzjrUn/s3VXl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708978889; c=relaxed/simple;
-	bh=V+U8mYk2PqPb7oIAg3nmSJcwO6wdq7wethQJpUrnYu8=;
+	s=arc-20240116; t=1708980197; c=relaxed/simple;
+	bh=MdpXJHvPFyl1RGvBDZHlVxvMYdSYQEzmwqbyhU9uefI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gYMbFiMx0mD0i7JlAH0gk+dQIlgIrtSadFAZgD/GKJH2IFTHS+790FNtM/6X4pod5LLB8L3V+QinWg6cCR9G6Bay9bNaqF3xmIHmddWzJk8nQZ+6eQU+g62hp6sD3++nhs5gnuo9IQK0jzrCp/A5+wa//NqTN70m473yUWfcUO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=KJUhhXGf; arc=none smtp.client-ip=83.166.143.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TkBpN1hWzz1BN;
-	Mon, 26 Feb 2024 21:21:16 +0100 (CET)
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4TkBpM2YKfzNmm;
-	Mon, 26 Feb 2024 21:21:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1708978876;
-	bh=V+U8mYk2PqPb7oIAg3nmSJcwO6wdq7wethQJpUrnYu8=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=pllEUbQcNu5kfDFWYcoVSQG1kpnvMoibO3vFQbt3U2B92MjShMut4M4osFBxhVqbiW74QuLGPSTEkGpIe/M7YWmkFuDUtdeotifXzW2BErR2SZ/6dejajnwqMpKbJ1rGEl90amxZxWL6yWT2uIsOGXu+RU0XSLcCnrLLjjfQJuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFTKedXe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DBD2C433F1;
+	Mon, 26 Feb 2024 20:43:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708980197;
+	bh=MdpXJHvPFyl1RGvBDZHlVxvMYdSYQEzmwqbyhU9uefI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KJUhhXGffQjx/Gy/vSu3BvRt5p6/m8qt0oVPUu0MiyipgKJ0hAYnuWpdQEYzPRq8z
-	 cz+Ds0eGefPzBwWXJyxxXfR+RvvLwgUbsLCKZtgDF8xd23cUIkqM/e3CtssPnYFbLs
-	 RORbAwEpx2+UG/bVEZIZStVfNGkJkOLwb1hZIzok=
-Date: Mon, 26 Feb 2024 21:21:06 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Kees Cook <keescook@chromium.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	davem@davemloft.net, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Will Drewry <wad@chromium.org>, edumazet@google.com, jakub@cloudflare.com, pabeni@redhat.com, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/harness: Merge TEST_F_FORK() into TEST_F()
-Message-ID: <20240226.NooJ5ahBip8A@digikod.net>
-References: <20240223160259.22c61d1e@kernel.org>
- <20240226162335.3532920-1-mic@digikod.net>
- <20240226162335.3532920-3-mic@digikod.net>
- <202402261102.3BE03F08DF@keescook>
+	b=mFTKedXeGids3PFaNjc8pIdSTCfpY1rxt/VGX52eFORSwm45uc6U8Oly1UDpo09jC
+	 wTbTQrcU68F418dMHqJgghcgJeLiGFJyM6Uyvyc4+kOs3rzNrEal2u4J9dZPH87xjA
+	 679uJKZDD04T90Tn2sYH5JMv4RGiSa0d+OEUlICSJ89mBVtWQvvHuij2mPHyqpc4yQ
+	 u1LQQM9X/HNRt23aBUqs/qQw/INSsjexkrkXS5jf6JAE7nmOWP5qiczWIN1T4CdAMm
+	 3wzvIOMJo53sB3obX1HRSqbkiD7nbspgIgYdPSbxgsIiI5DJnfBK3SN9F/3kcogWp+
+	 tvsvsWXuRs7qw==
+Date: Mon, 26 Feb 2024 20:41:42 +0000
+From: Simon Horman <horms@kernel.org>
+To: Dmitry Safonov <dima@arista.com>
+Cc: Eric Dumazet <edumazet@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Dmitry Safonov <0x7f454c46@gmail.com>
+Subject: Re: [PATCH net-next 03/10] net/tcp: Move tcp_inbound_hash() from
+ headers
+Message-ID: <20240226204142.GJ13129@kernel.org>
+References: <20240224-tcp-ao-tracepoints-v1-0-15f31b7f30a7@arista.com>
+ <20240224-tcp-ao-tracepoints-v1-3-15f31b7f30a7@arista.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202402261102.3BE03F08DF@keescook>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20240224-tcp-ao-tracepoints-v1-3-15f31b7f30a7@arista.com>
 
-On Mon, Feb 26, 2024 at 11:04:12AM -0800, Kees Cook wrote:
-> On Mon, Feb 26, 2024 at 05:23:35PM +0100, Mickaël Salaün wrote:
-> > Remplace Landlock-specific TEST_F_FORK() with an improved TEST_F() which
-> > brings four related changes:
-> > 
-> > Run TEST_F()'s tests in a grandchild process to make it possible to
-> > drop privileges and delegate teardown to the parent.
-> > 
-> > Compared to TEST_F_FORK(), simplify handling of the test grandchild
-> > process thanks to vfork(2), and makes it generic (e.g. no explicit
-> > conversion between exit code and _metadata).
-> > 
-> > Compared to TEST_F_FORK(), run teardown even when tests failed with an
-> > assert thanks to commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN
-> > for ASSERT failures").
-> > 
-> > Simplify the test harness code by removing the no_print and step fields
-> > which are not used.  I added this feature just after I made
-> > kselftest_harness.h more broadly available but this step counter
-> > remained even though it wasn't needed after all. See commit 369130b63178
-> > ("selftests: Enhance kselftest_harness.h to print which assert failed").
+On Sat, Feb 24, 2024 at 09:04:11AM +0000, Dmitry Safonov wrote:
+> Two reasons:
+> 1. It's grown up enough
+> 2. In order to not do header spaghetti by including
+>    <trace/events/tcp.h>, which is necessary for TCP tracepoints.
 > 
-> I'm personally fine dropping the step counter. (I do wonder if that
-> removal should be split from the grandchild launching.)
+> Signed-off-by: Dmitry Safonov <dima@arista.com>
 
-I thought about that but it was not worth it to add more lines to
-review.
+...
 
-> 
-> > Replace spaces with tabs in one line of __TEST_F_IMPL().
-> > 
-> > Cc: Günther Noack <gnoack@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: Will Drewry <wad@chromium.org>
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> 
-> One typo below, but otherwise seems good to me:
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-> 
-> > [...]
-> >  			_metadata->setup_completed = true; \
-> > -			fixture_name##_##test_name(_metadata, &self, variant->data); \
-> > +			/* Use the same _metadata. */ \
-> > +			child = vfork(); \
-> > +			if (child == 0) { \
-> > +				fixture_name##_##test_name(_metadata, &self, variant->data); \
-> > +				_exit(0); \
-> > +			} \
-> > +			if (child < 0) { \
-> > +				ksft_print_msg("ERROR SPAWNING TEST GANDCHILD\n"); \
-> 
-> typo: GAND -> GRAND
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index c82dc42f57c6..5fd61ae6bcc9 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -4485,6 +4485,78 @@ EXPORT_SYMBOL(tcp_inbound_md5_hash);
+>  
+>  #endif
+>  
+> +/* Called with rcu_read_lock() */
+> +enum skb_drop_reason
+> +tcp_inbound_hash(struct sock *sk, const struct request_sock *req,
+> +		 const struct sk_buff *skb,
+> +		 const void *saddr, const void *daddr,
+> +		 int family, int dif, int sdif)
+> +{
+> +	const struct tcphdr *th = tcp_hdr(skb);
+> +	const struct tcp_ao_hdr *aoh;
+> +	const __u8 *md5_location;
+> +	int l3index;
+> +
+> +	/* Invalid option or two times meet any of auth options */
+> +	if (tcp_parse_auth_options(th, &md5_location, &aoh)) {
+> +		tcp_hash_fail("TCP segment has incorrect auth options set",
+> +			      family, skb, "");
+> +		return SKB_DROP_REASON_TCP_AUTH_HDR;
+> +	}
+> +
+> +	if (req) {
+> +		if (tcp_rsk_used_ao(req) != !!aoh) {
+> +			u8 keyid, rnext, maclen;
+> +
+> +			if (aoh) {
+> +				keyid = aoh->keyid;
+> +				rnext = aoh->rnext_keyid;
+> +				maclen = tcp_ao_hdr_maclen(aoh);
+> +			} else {
+> +				keyid = rnext = maclen = 0;
+> +			}
 
-Good catch!
+Hi Dmitry,
 
-Jakub, please fix this with the next combined+rebased series. Thanks!
+it looks like keyid is set but otherwise unused.
 
+Flagged by W=1 builds with gcc-13 and clang-17.
+
+> +
+> +			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAOBAD);
+> +			tcp_hash_fail("TCP connection can't start/end using TCP-AO",
+> +				      family, skb, "%s",
+> +				      !aoh ? "missing AO" : "AO signed");
+> +			return SKB_DROP_REASON_TCP_AOFAILURE;
+> +		}
+> +	}
+> +
+> +	/* sdif set, means packet ingressed via a device
+> +	 * in an L3 domain and dif is set to the l3mdev
+> +	 */
+> +	l3index = sdif ? dif : 0;
+> +
+> +	/* Fast path: unsigned segments */
+> +	if (likely(!md5_location && !aoh)) {
+> +		/* Drop if there's TCP-MD5 or TCP-AO key with any rcvid/sndid
+> +		 * for the remote peer. On TCP-AO established connection
+> +		 * the last key is impossible to remove, so there's
+> +		 * always at least one current_key.
+> +		 */
+> +		if (tcp_ao_required(sk, saddr, family, l3index, true)) {
+> +			tcp_hash_fail("AO hash is required, but not found",
+> +					family, skb, "L3 index %d", l3index);
+> +			return SKB_DROP_REASON_TCP_AONOTFOUND;
+> +		}
+> +		if (unlikely(tcp_md5_do_lookup(sk, l3index, saddr, family))) {
+> +			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5NOTFOUND);
+> +			tcp_hash_fail("MD5 Hash not found",
+> +				      family, skb, "L3 index %d", l3index);
+> +			return SKB_DROP_REASON_TCP_MD5NOTFOUND;
+> +		}
+> +		return SKB_NOT_DROPPED_YET;
+> +	}
+> +
+> +	if (aoh)
+> +		return tcp_inbound_ao_hash(sk, skb, family, req, l3index, aoh);
+> +
+> +	return tcp_inbound_md5_hash(sk, skb, saddr, daddr, family,
+> +				    l3index, md5_location);
+> +}
+> +
+>  void tcp_done(struct sock *sk)
+>  {
+>  	struct request_sock *req;
 > 
 > -- 
-> Kees Cook
+> 2.43.0
+> 
 > 
 
