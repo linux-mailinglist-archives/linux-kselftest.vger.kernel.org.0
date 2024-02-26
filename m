@@ -1,421 +1,124 @@
-Return-Path: <linux-kselftest+bounces-5460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBCFF868244
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 21:58:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D69CD8684C3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 00:52:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B71C1C2307A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 20:58:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CDD6287832
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Feb 2024 23:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C585133988;
-	Mon, 26 Feb 2024 20:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5713135A61;
+	Mon, 26 Feb 2024 23:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="OhmXJsbj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HkcqTlDi"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="B6X5dYA3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C1D133282;
-	Mon, 26 Feb 2024 20:56:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D81135A45
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Feb 2024 23:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708980979; cv=none; b=M/1sCxn5BpDIo2dm6ltmG+K1AUN+ccOVBcjkNXWFmsXzRH1ZgVnSB44/9YaCIXhmc2wpD/bhyVE5ipu391vv4IYM31MIql+MCJa+2mVgbMRwojbu4kknOjuvOCMtMdON/cEEaVry6uTm5YlTPyFHGTnYOsxdl8+5ylxGvdn9VrY=
+	t=1708991522; cv=none; b=M8CwkdDTAueXK/MYfDY5vA+l+afBo/2fol+NLXAgD7ltf5OPo7GcbvAFqKwR7i5pnXXjWykdwatAWrVjBGeyni/72Zqb3HUhnIbeOwg/aCMMRBDErEDnrA0W2nzkW6aH8ngwDwseSUVNw4uS+2hjhNt3lQPZ7v+kipIDZqYAG7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708980979; c=relaxed/simple;
-	bh=vgsm4k7rgVedH8rRB2J8JRli9rUrF9iO5L/lbj+auXA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q9HNsnAa1n8lVGFt+jnf0rNWvSzwboN8hz8Oguo3ZMAi9WyBBNYkw+OPuh5IsUCAotje4b+6BVMgiVhoEKSQRdkJMloLvVrsXSq7LE6eDXxgU2RWyr6Mu5EUAU/dNafUz8eXb+JPWX0xOHTgt0s84KKvb7+M/elt35oRDTccsfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sent.com; spf=pass smtp.mailfrom=sent.com; dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b=OhmXJsbj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HkcqTlDi; arc=none smtp.client-ip=66.111.4.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sent.com
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailout.nyi.internal (Postfix) with ESMTP id 3F4E95C00A8;
-	Mon, 26 Feb 2024 15:56:16 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 26 Feb 2024 15:56:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm1; t=
-	1708980976; x=1709067376; bh=eBpC8nLmV3t+tILOOyF9MHkmmffIcEidaEQ
-	0IucvPX4=; b=OhmXJsbjvWBU33DO8vx9Sxyp+wXJmzSpaj6+LDBZDG49O+6ffyx
-	ZSUltZ/7nhkEFqVsCc3a2BUJ4ZoVi67suV+jcrt7L2a41KVnXgGz7u5C2OQ4vK7Q
-	qe5mbw7Dyw200uoLqf7Y25BxkdETjX2nq02CXm4lZAplslb24g51eTMqbeA1CC0j
-	JE5a5N7H2DfGnr/RAYJJKK13TFEmJ+gq91rNp8+BSLK9z/0fwejQT7dLIWMMKkFA
-	9cIxCDfrLy93emdUnHrFQdAslKi55y1LFDxW3rqJjzeiJY6ZHYZX2EqCL80oxiim
-	9LB/ULPPKQBWQm0HacSUH3o3KmmnjeUpoiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1708980976; x=1709067376; bh=eBpC8nLmV3t+tILOOyF9MHkmmffIcEidaEQ
-	0IucvPX4=; b=HkcqTlDiLWonV5rP8T2a91tyNh3gzcRKAFCXLT+izkUiGmAM2tV
-	EqGPzyq9qIzXV+qS6IOEglz7RnR9WR0gQ+/KQDzJjaLsW2j4MS2zASpXMwSEtkeE
-	/8IPpT7yvoXVSdApLjEfvcMxPf2UTtOX04hE40u5hQntCFfKyfCsyZmmoUrsP2gC
-	1RSn1NOuSDsx9lVkwKOeusqYV2xuixW1d+E8Q1YSZQULNpCZYWHCxKKwFicO2vyo
-	FllPcUGrYbTwUOhkLuvDr0qN88nRM6skelfHLgdoJ30SY7ohg5V9/inmL0zv/t1S
-	4yDU6cQaB100xO5B1Ub2UmNrWOYZKr6DWPA==
-X-ME-Sender: <xms:8PrcZUewksT6eqyNS7elE5kUUAdWRXCzH7xywK_SUrKPBFpWhXhfuw>
-    <xme:8PrcZWP0PtiwmnaNZPNfqnU4sK89rmYhENbAdpP0l-VvsRLlSSOVD_L891SBu0V0a
-    k1Zr0vDRgVCsydgaA>
-X-ME-Received: <xmr:8PrcZVhYA7-ppK29uG0CMfFDb8Pr9eZUOkg-YBX32OWLsOnVuiWVGx9oHIsf6yt0DO_bU6b-NhN1xybPwTADkczzElSsU1IFQctxYkkMwEL8l6vQ33SJbaRl>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgedvgddugedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhhrgggtgfesthekredtredtjeenucfhrhhomhepkghi
-    ucgjrghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepje
-    ekteekffelleekudfftdefvddtjeejuedtuedtteegjefgvedtfedujeekieevnecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnse
-    hsvghnthdrtghomh
-X-ME-Proxy: <xmx:8PrcZZ8Zz1vu__5NAipN1mDTs2mPn97R70iKk57iJrL9QBOADG3Rrw>
-    <xmx:8PrcZQuHCuWFZk2iGprfnIAy680TzAsWjXWlE9985OgeHx3ETMxz9A>
-    <xmx:8PrcZQH-2YM2DCXXdhSEqh-17IkCN-5JfAydAN3IWi6jnwi3Lc8U8A>
-    <xmx:8PrcZQReVwXQhAcM5XrHHkWf5VD9k509qekqHlS1UK_SkDXzdy70tg>
-Feedback-ID: iccd040f4:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Feb 2024 15:56:15 -0500 (EST)
-From: Zi Yan <zi.yan@sent.com>
-To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
-	linux-mm@kvack.org
-Cc: Zi Yan <ziy@nvidia.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	Yang Shi <shy828301@gmail.com>,
-	Yu Zhao <yuzhao@google.com>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	"Zach O'Keefe" <zokeefe@google.com>,
-	Hugh Dickins <hughd@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 8/8] mm: huge_memory: enable debugfs to split huge pages to any order.
-Date: Mon, 26 Feb 2024 15:55:34 -0500
-Message-ID: <20240226205534.1603748-9-zi.yan@sent.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240226205534.1603748-1-zi.yan@sent.com>
-References: <20240226205534.1603748-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+	s=arc-20240116; t=1708991522; c=relaxed/simple;
+	bh=8lUSqlHGMqI8I1r1rpRBEXkwRpZ7oqe4M8MCNf1etHA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HdwFaAn5sET2UmSuwGSGTdyBQwtnI4DIZS1WzHLkH8yGWg9M87h3z1+X2eYzHtDnHiwnKUJRnQ7zaaaPcBoNX0piKA8ubDLhZYXek9foBEE0+ShI0beaub26MaMMPA5Egovf2aokp8iJESbwzjrsqwYmG3Z7vDcnTpRxXO0Y238=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=B6X5dYA3; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1dcafff3c50so8608075ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Feb 2024 15:52:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1708991520; x=1709596320; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vyh7mdFRyjlmJV4fW69ox7tTTJCxGb5XPOBSz1bCTds=;
+        b=B6X5dYA3THgOp6st2c8F6tAXMRD1omasU5NmLQgv59huRvDdk544qAzWwMS1+dkokV
+         Z2aMZgwNAjX5NbwbNDjudPSys5kedeAn67NLAm8AUCM0jrckZ0l+qbSYUvrUy7EgkDc1
+         TOKRoMdkJnZ1nULU19ChI3FxdQ1yCIvUUIjc9Sf9zqvpPqeKueHG6Msr1BgA/TDROXK+
+         FpHCdJ4F8Fx36Zghr07QNGX+lIWpX4s2DX60dJ6guEdzK0K4MOXFdjTEn5Z6SMjGKwKE
+         qtyQGv0gfJTnxbKY2JsIWQEu9aOSaYfXP5mcPPCh0JL2M0ddPbNtTS8wPMyZnqeGaCaU
+         Hj7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708991520; x=1709596320;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vyh7mdFRyjlmJV4fW69ox7tTTJCxGb5XPOBSz1bCTds=;
+        b=VLrHId1b6eRRP9gL6VpyM3E4R0LVhFmfVDoDnkyM/vkk0xZGWjMIVFvaTuk9TJovQP
+         6GUQoC9mrt2IgMSFxvEmBqSM6/4ab1DexHaQ7NKioVLmlKJMqswgPIXBz+v3ml+QU6kc
+         pd667ReXbkofqp0CBMeqRh4XaDiMics70Ch0OqrRqe1P61r4WwYF5tmZwjZFKEli1PoP
+         I9N2gCa72zMxYZxWVzhEf6iTl9RlTtR0tiL4YzmxkA+n8vnjJ//A38imakyFoXS9jAKx
+         Tz6iCKeoGVkjIkSIWlz2n/yZ1MCTF1KBfe8oUMkC1PXrONSf6nziLe4vqaD/u6Xor0fc
+         n0YQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWMtqA8xCmXVmv2gB/XlJt5iKofAFZ3s7y+P+RLqClDS4xWADEq5tbxwoVuBC2tYwv9Wvl0vX9M+omJ0l1XNVfRzrv5VND4PUYrBW2T8K4f
+X-Gm-Message-State: AOJu0YxYt0j6oxUKQ53RBmheadCyg9JAPTZ4f0lx/w0oiACqpahERMfc
+	30Bm6cHVv3Rp8iKVvxcl8qa0Dx27wuJNO3IWBLsjhOukqEUzeuCCLCsBBjy/IVDSymxyBTcOYpW
+	c7gC00xf2yH3l+mxkDBhV2ujnP5MZZQy9cHqA
+X-Google-Smtp-Source: AGHT+IGcY9ko42XXIFbh54WiWMk6NMI+6vNUAaXKGgq93/tZ3zK1OHEtzgeAGptztw3FB17mOtXCnI7Z0xkxwMG3Vu8=
+X-Received: by 2002:a17:902:ebc6:b0:1dc:83b3:99a6 with SMTP id
+ p6-20020a170902ebc600b001dc83b399a6mr9032283plg.41.1708991520569; Mon, 26 Feb
+ 2024 15:52:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20240224-tcp-ao-tracepoints-v1-0-15f31b7f30a7@arista.com>
+ <20240224-tcp-ao-tracepoints-v1-3-15f31b7f30a7@arista.com> <20240226204142.GJ13129@kernel.org>
+In-Reply-To: <20240226204142.GJ13129@kernel.org>
+From: Dmitry Safonov <dima@arista.com>
+Date: Mon, 26 Feb 2024 23:51:49 +0000
+Message-ID: <CAGrbwDTDfkwf40cTkXh6QgQwPpsAVVLWENYH=_eko5tHCKC5VQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 03/10] net/tcp: Move tcp_inbound_hash() from headers
+To: Simon Horman <horms@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Dmitry Safonov <0x7f454c46@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Zi Yan <ziy@nvidia.com>
+On Mon, Feb 26, 2024 at 8:43=E2=80=AFPM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> On Sat, Feb 24, 2024 at 09:04:11AM +0000, Dmitry Safonov wrote:
+[..]
+> > +     if (req) {
+> > +             if (tcp_rsk_used_ao(req) !=3D !!aoh) {
+> > +                     u8 keyid, rnext, maclen;
+> > +
+> > +                     if (aoh) {
+> > +                             keyid =3D aoh->keyid;
+> > +                             rnext =3D aoh->rnext_keyid;
+> > +                             maclen =3D tcp_ao_hdr_maclen(aoh);
+> > +                     } else {
+> > +                             keyid =3D rnext =3D maclen =3D 0;
+> > +                     }
+>
+> Hi Dmitry,
+>
+> it looks like keyid is set but otherwise unused.
+>
+> Flagged by W=3D1 builds with gcc-13 and clang-17.
 
-It is used to test split_huge_page_to_list_to_order for pagecache THPs.
-Also add test cases for split_huge_page_to_list_to_order via both
-debugfs.
+Hi Simon,
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- mm/huge_memory.c                              |  34 ++++--
- .../selftests/mm/split_huge_page_test.c       | 115 +++++++++++++++++-
- 2 files changed, 131 insertions(+), 18 deletions(-)
+Yeah, I think I didn't notice it when I was splitting the WIP patch.
+It should be in the very next patch that uses them:
++                       trace_tcp_ao_handshake_failure(sk, skb, keyid,
+rnext, maclen);
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 8b47a96a28f9..50d146eb248f 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -3422,7 +3422,7 @@ static inline bool vma_not_suitable_for_thp_split(struct vm_area_struct *vma)
- }
- 
- static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
--				unsigned long vaddr_end)
-+				unsigned long vaddr_end, unsigned int new_order)
- {
- 	int ret = 0;
- 	struct task_struct *task;
-@@ -3486,13 +3486,19 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 			goto next;
- 
- 		total++;
--		if (!can_split_folio(folio, NULL))
-+		/*
-+		 * For folios with private, split_huge_page_to_list_to_order()
-+		 * will try to drop it before split and then check if the folio
-+		 * can be split or not. So skip the check here.
-+		 */
-+		if (!folio_test_private(folio) &&
-+		    !can_split_folio(folio, NULL))
- 			goto next;
- 
- 		if (!folio_trylock(folio))
- 			goto next;
- 
--		if (!split_folio(folio))
-+		if (!split_folio_to_order(folio, new_order))
- 			split++;
- 
- 		folio_unlock(folio);
-@@ -3510,7 +3516,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- }
- 
- static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
--				pgoff_t off_end)
-+				pgoff_t off_end, unsigned int new_order)
- {
- 	struct filename *file;
- 	struct file *candidate;
-@@ -3549,7 +3555,7 @@ static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
- 		if (!folio_trylock(folio))
- 			goto next;
- 
--		if (!split_folio(folio))
-+		if (!split_folio_to_order(folio, new_order))
- 			split++;
- 
- 		folio_unlock(folio);
-@@ -3574,10 +3580,14 @@ static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
- {
- 	static DEFINE_MUTEX(split_debug_mutex);
- 	ssize_t ret;
--	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
-+	/*
-+	 * hold pid, start_vaddr, end_vaddr, new_order or
-+	 * file_path, off_start, off_end, new_order
-+	 */
- 	char input_buf[MAX_INPUT_BUF_SZ];
- 	int pid;
- 	unsigned long vaddr_start, vaddr_end;
-+	unsigned int new_order = 0;
- 
- 	ret = mutex_lock_interruptible(&split_debug_mutex);
- 	if (ret)
-@@ -3606,29 +3616,29 @@ static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
- 			goto out;
- 		}
- 
--		ret = sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
--		if (ret != 2) {
-+		ret = sscanf(buf, "0x%lx,0x%lx,%d", &off_start, &off_end, &new_order);
-+		if (ret != 2 && ret != 3) {
- 			ret = -EINVAL;
- 			goto out;
- 		}
--		ret = split_huge_pages_in_file(file_path, off_start, off_end);
-+		ret = split_huge_pages_in_file(file_path, off_start, off_end, new_order);
- 		if (!ret)
- 			ret = input_len;
- 
- 		goto out;
- 	}
- 
--	ret = sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_end);
-+	ret = sscanf(input_buf, "%d,0x%lx,0x%lx,%d", &pid, &vaddr_start, &vaddr_end, &new_order);
- 	if (ret == 1 && pid == 1) {
- 		split_huge_pages_all();
- 		ret = strlen(input_buf);
- 		goto out;
--	} else if (ret != 3) {
-+	} else if (ret != 3 && ret != 4) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
- 
--	ret = split_huge_pages_pid(pid, vaddr_start, vaddr_end);
-+	ret = split_huge_pages_pid(pid, vaddr_start, vaddr_end, new_order);
- 	if (!ret)
- 		ret = strlen(input_buf);
- out:
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index 7b698a848bab..cf09fdc9ef22 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -16,6 +16,7 @@
- #include <sys/mount.h>
- #include <malloc.h>
- #include <stdbool.h>
-+#include <time.h>
- #include "vm_util.h"
- #include "../kselftest.h"
- 
-@@ -24,10 +25,12 @@ unsigned int pageshift;
- uint64_t pmd_pagesize;
- 
- #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
-+#define SMAP_PATH "/proc/self/smaps"
-+#define THP_FS_PATH "/mnt/thp_fs"
- #define INPUT_MAX 80
- 
--#define PID_FMT "%d,0x%lx,0x%lx"
--#define PATH_FMT "%s,0x%lx,0x%lx"
-+#define PID_FMT "%d,0x%lx,0x%lx,%d"
-+#define PATH_FMT "%s,0x%lx,0x%lx,%d"
- 
- #define PFN_MASK     ((1UL<<55)-1)
- #define KPF_THP      (1UL<<22)
-@@ -102,7 +105,7 @@ void split_pmd_thp(void)
- 
- 	/* split all THPs */
- 	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
--		(uint64_t)one_page + len);
-+		(uint64_t)one_page + len, 0);
- 
- 	for (i = 0; i < len; i++)
- 		if (one_page[i] != (char)i)
-@@ -177,7 +180,7 @@ void split_pte_mapped_thp(void)
- 
- 	/* split all remapped THPs */
- 	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
--		      (uint64_t)pte_mapped + pagesize * 4);
-+		      (uint64_t)pte_mapped + pagesize * 4, 0);
- 
- 	/* smap does not show THPs after mremap, use kpageflags instead */
- 	thp_size = 0;
-@@ -237,7 +240,7 @@ void split_file_backed_thp(void)
- 	}
- 
- 	/* split the file-backed THP */
--	write_debugfs(PATH_FMT, testfile, pgoff_start, pgoff_end);
-+	write_debugfs(PATH_FMT, testfile, pgoff_start, pgoff_end, 0);
- 
- 	status = unlink(testfile);
- 	if (status) {
-@@ -265,8 +268,101 @@ void split_file_backed_thp(void)
- 	ksft_exit_fail_msg("Error occurred\n");
- }
- 
-+void create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd, char **addr)
-+{
-+	size_t i;
-+	int dummy;
-+
-+	srand(time(NULL));
-+
-+	*fd = open(testfile, O_CREAT | O_RDWR, 0664);
-+	if (*fd == -1)
-+		ksft_exit_fail_msg("Failed to create a file at "THP_FS_PATH);
-+
-+	for (i = 0; i < fd_size; i++) {
-+		unsigned char byte = (unsigned char)i;
-+
-+		write(*fd, &byte, sizeof(byte));
-+	}
-+	close(*fd);
-+	sync();
-+	*fd = open("/proc/sys/vm/drop_caches", O_WRONLY);
-+	if (*fd == -1) {
-+		ksft_perror("open drop_caches");
-+		goto err_out_unlink;
-+	}
-+	if (write(*fd, "3", 1) != 1) {
-+		ksft_perror("write to drop_caches");
-+		goto err_out_unlink;
-+	}
-+	close(*fd);
-+
-+	*fd = open(testfile, O_RDWR);
-+	if (*fd == -1) {
-+		ksft_perror("Failed to open a file at "THP_FS_PATH);
-+		goto err_out_unlink;
-+	}
-+
-+	*addr = mmap(NULL, fd_size, PROT_READ|PROT_WRITE, MAP_SHARED, *fd, 0);
-+	if (*addr == (char *)-1) {
-+		ksft_perror("cannot mmap");
-+		goto err_out_close;
-+	}
-+	madvise(*addr, fd_size, MADV_HUGEPAGE);
-+
-+	for (size_t i = 0; i < fd_size; i++)
-+		dummy += *(*addr + i);
-+
-+	if (!check_huge_file(*addr, fd_size / pmd_pagesize, pmd_pagesize)) {
-+		ksft_print_msg("No large pagecache folio generated, please mount a filesystem supporting large folio at "THP_FS_PATH"\n");
-+		goto err_out_close;
-+	}
-+	return;
-+err_out_close:
-+	close(*fd);
-+err_out_unlink:
-+	unlink(testfile);
-+	ksft_exit_fail_msg("Failed to create large pagecache folios\n");
-+}
-+
-+void split_thp_in_pagecache_to_order(size_t fd_size, int order)
-+{
-+	int fd;
-+	char *addr;
-+	size_t i;
-+	const char testfile[] = THP_FS_PATH "/test";
-+	int err = 0;
-+
-+	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
-+
-+	write_debugfs(PID_FMT, getpid(), (uint64_t)addr, (uint64_t)addr + fd_size, order);
-+
-+	for (i = 0; i < fd_size; i++)
-+		if (*(addr + i) != (char)i) {
-+			ksft_print_msg("%lu byte corrupted in the file\n", i);
-+			err = EXIT_FAILURE;
-+			goto out;
-+		}
-+
-+	if (!check_huge_file(addr, 0, pmd_pagesize)) {
-+		ksft_print_msg("Still FilePmdMapped not split\n");
-+		err = EXIT_FAILURE;
-+		goto out;
-+	}
-+
-+out:
-+	close(fd);
-+	unlink(testfile);
-+	if (err)
-+		ksft_exit_fail_msg("Split PMD-mapped pagecache folio to order %d failed\n", order);
-+	ksft_test_result_pass("Split PMD-mapped pagecache folio to order %d passed\n", order);
-+}
-+
- int main(int argc, char **argv)
- {
-+	int i;
-+	size_t fd_size;
-+
- 	ksft_print_header();
- 
- 	if (geteuid() != 0) {
-@@ -274,7 +370,7 @@ int main(int argc, char **argv)
- 		ksft_finished();
- 	}
- 
--	ksft_set_plan(3);
-+	ksft_set_plan(3+9);
- 
- 	pagesize = getpagesize();
- 	pageshift = ffs(pagesize) - 1;
-@@ -282,9 +378,16 @@ int main(int argc, char **argv)
- 	if (!pmd_pagesize)
- 		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
- 
-+	fd_size = 2 * pmd_pagesize;
-+
- 	split_pmd_thp();
- 	split_pte_mapped_thp();
- 	split_file_backed_thp();
- 
-+	for (i = 8; i >= 0; i--)
-+		split_thp_in_pagecache_to_order(fd_size, i);
-+
- 	ksft_finished();
-+
-+	return 0;
- }
--- 
-2.43.0
-
+Thanks for the report, going to fix in v2,
+             Dmitry
 
