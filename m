@@ -1,126 +1,229 @@
-Return-Path: <linux-kselftest+bounces-5496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 963A3869FE4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 20:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E3F0286A05F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 20:41:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B0DD291AC2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 19:09:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 990FD288CB2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 19:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC85E5102E;
-	Tue, 27 Feb 2024 19:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA7A524D4;
+	Tue, 27 Feb 2024 19:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vDcLqfa0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hOZ8xGJZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519B250A68
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 19:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD56376
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 19:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709060938; cv=none; b=AIo9+AauLmH8t5ocV3zpBl6Vy/EvuTWh4S+3K/ITEOgJVc/sZuksgYM6Ni5IaV9hn6C2AGjBqEIqZg72gc3Ry6AvdJu4I6pmP38MNdvtE0uJIAJksAFYs0U7gFSHn0Z3eZ8BPgNCZXz6D04Qn6ZL2cCLI82/0TbgeNfr60htOio=
+	t=1709062879; cv=none; b=pkdZvINx6CCbudtqbq9X/Ro2577NaZb4qVhNi2LshBwSIL/sbT5V/4TXPUSmxVf47Awf54DKW5coMF9BrGi2ESTVcx0A+0+ZksfsKLFd4XvcFPy3RRqXVkNmxedpGojSL8+RgA7NBBOQ78B0pyYjuHquQazzwbtnZPyp7C+9bFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709060938; c=relaxed/simple;
-	bh=73wabGAltLGPlrbwx5dEuZuw5LGsvnG/XNxCGcyGdEc=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gna6m68UAgcL4+xBrmPviIMde78BGAVijrbtj7VdwOm/w1154yjMAUEypc2sgImFSUrDwgQ3/RpTeIISEaRWVeBjkVCw1OUQZQPsAAj4VKF3ukOWzce1iWn0I40l+CWq38q0Q3Aj+NyhgsJgCsNInlYA9utX/4Z/s6i29bB7t5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vDcLqfa0; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e48eef8be5so3286103b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 11:08:57 -0800 (PST)
+	s=arc-20240116; t=1709062879; c=relaxed/simple;
+	bh=zbekMlrn7vcZ2XA2kYLqU8YdKEnzZ3RU12A9vKAe1qM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p5fXLGJPwwmCpLsUw54pjGhJRXh2dRGfyVy5ZFOtLYrVXtYDS0zEOmpVXKAOxVDSLZK+EVqRdZNdLIf0uCP9PYH73/ZRvkm6OXnFAdOnUYPu5H/Sz4KY9Y27SubQL0MxOzhTOYlsVyyY44X8NIfyLkSQ81CneWI/mYrXdGxHTmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hOZ8xGJZ; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-428405a0205so51541cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 11:41:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709060937; x=1709665737; darn=vger.kernel.org;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=aDa40DJKClW8mXYqnyP7bggV377JTuxgqEkMOwvAuyk=;
-        b=vDcLqfa0WUK0hRIAR49yMaDbMLLePg7UCxDiuzjeWczGsuWY8N8AFq7OL4j3Dec4RU
-         TCsGv5yrh1SCpqIn8mc7J4RRByf0t16mtu6V+D+2w+efHZDtWmkVUNa5fe7vXwKHfc/y
-         UPNAeN3wbr2QKxeb4BvC/hBchLASSdQ6/e5mYT1xUmlxdGdTYvcWKmKN4Ju+ce9plyvc
-         vIckt3dacJzm5mERoyqN53mbATQzwkMBqFUqcH8qOfSnBU1HIBOgsXZSosnRHfa4vuV+
-         +aroAjl/6R0kjN1Y+xFMm/BlycpghfEGPPIFFb3Juhj+uLYF4JIfWHKlm8McPqZ7gJzx
-         q8JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709060937; x=1709665737;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1709062877; x=1709667677; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aDa40DJKClW8mXYqnyP7bggV377JTuxgqEkMOwvAuyk=;
-        b=CTCH4OBiPkno+D3ShnVKd8Z6KHosbrxiI8hVQy/ZRfWUDqgKOoKJVHefS6DjpexJms
-         DpBg8mZadejBBsY8N3AQvo+DTDnINm0emyRy69gFm134+A4o8TfoEk+0HS51/FNJy/62
-         OpZUi6/gbu0E+0ig/5PRRrEIQ3mA7JzJeL8SnVO+XIKlBnSUpXoY+WbGRel6ad7ME4Kx
-         BPz0q7mcUklXk9gyj4b4a3osqCKgBPlNl9zwMvA08aYVR4Ix3mbcUWojzZK+g8l0/SYm
-         aCHMWU7odBto6rRgzZpmP2nEmOkbYllhENWGgITCZHqcjTAuw/Aas00O/eHu97xEYzyp
-         FmXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWRRsM09x+Ax9680t//Xg8qGB9eQp/bqoomF6AYzgTDYAm5WBlMtrBV6Qx3igjh0m1ykmxpfYnxb/sJ7C2cZZOB4VsB411t2XkFf0Xm1nGM
-X-Gm-Message-State: AOJu0YwdCUB5BVL/A2hlOl7sstkQWVmwjAn8iG8He4/UB6xBIFcIfrsz
-	z+x8qyLqSfz0rFOXB454GKUOoeaYOgiDF84UYGQ2vYGHY8mpDcde9P0nBkWeebc=
-X-Google-Smtp-Source: AGHT+IGtXhFFwEJ+AgMWI6EdwH6IahppDs+nYPC080WdpMAQ57X/AOuTkrytFfwmna6ljKJ3aYPMfQ==
-X-Received: by 2002:a62:aa0c:0:b0:6e5:54a6:5a9c with SMTP id e12-20020a62aa0c000000b006e554a65a9cmr1287142pff.17.1709060936644;
-        Tue, 27 Feb 2024 11:08:56 -0800 (PST)
-Received: from localhost ([2804:14d:7e39:8470:d617:f08f:e330:49c1])
-        by smtp.gmail.com with ESMTPSA id u3-20020a62d443000000b006e24991dd5bsm6713883pfl.98.2024.02.27.11.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Feb 2024 11:08:56 -0800 (PST)
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <20240203-arm64-gcs-v8-33-c9fec77673ef@kernel.org>
- <87sf1n7uea.fsf@linaro.org>
- <9b899b4e-7410-4c3b-967b-7794dac742e4@sirena.org.uk>
- <87ttlzsyro.fsf@linaro.org>
- <4adb0c7e-34a1-4c50-b011-6e31ef8813a7@sirena.org.uk>
-User-agent: mu4e 1.10.8; emacs 29.1
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
- <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
- Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
- Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
- Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
- <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
- <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
- Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 33/38] kselftest/arm64: Add a GCS test program built
- with the system libc
-In-reply-to: <4adb0c7e-34a1-4c50-b011-6e31ef8813a7@sirena.org.uk>
-Date: Tue, 27 Feb 2024 16:08:53 -0300
-Message-ID: <87plwh912y.fsf@linaro.org>
+        bh=4kmy0Y9ggXPQX3ZKJXTwDEXzgywyH4ISUr8AQOAMPX0=;
+        b=hOZ8xGJZIf2pQyWCxLS8GWaZOX9gkNTQVIq/5b2Y4UhMp8V6YRHNTangeooNNtnLwQ
+         nPueZ/re0XyaojSqYlU8NhdR8+58Pa5cm3OpHwGwj7/P9toXmTvs/tYmooXQtBxdT7BZ
+         kSIBbjI2jM9quTzPimguy5JyUX/q42yqYMhLnJRT/sElK74sQpcCzKmaO4KqIbPIHyNa
+         NGcEu8m5QZUcGGvYdprnG2F+W/9TuDB4lkMTvgUYMTxNoa8CJxSBd3VE8whPiLsA1oEy
+         NYk8KIc1+FfN1e1ERn/9F5I0qZfKixeNu3DByz6gtFgelT0QXYslyNB0DAwgKAls43Ro
+         UYQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709062877; x=1709667677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4kmy0Y9ggXPQX3ZKJXTwDEXzgywyH4ISUr8AQOAMPX0=;
+        b=B8aFcx+FTdzQZEhnKsGlT6uJDB8ot0TIPPx4Yp33/ppvrB6yt45OVjf7RFNn3ZKr33
+         B7hOHzIdanvMPvXTryopDKbXp/b6Ct7g2B9O2xCjvC1ywJEaBmfIm5n9JPgGkS6KmFrq
+         S9+H8LPsGw3yXtrNMtdDbRKq1LPdmDahk1pxBs+jwQMKtO+t1TqreHHX7LcHEmKELT/Y
+         WPK8h7LIzFnPrQCYQZnaxOIR5CP/cY2km5fsH/+7XzniS0mKeYnu9u6+Fy9ONHYTwngr
+         10Xt2MT46I1Jg3tPc2/7JX+44MiKuumv5KbDlUMl6CO/YYwJpzgyr5XXaqdNyU6gzZkC
+         USpA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8gm4eUW+YJ+qGuDZ6GNUhdp+3XUJrv8S6v/knJdmeKxe8O9WuK2oJxhPR7nUXgOoMeE0z9gZuUHOGjXSfyMhBFErjO2jNO5R9nyp3I5SU
+X-Gm-Message-State: AOJu0Ywwg8gtLfHyJ7R5OR/dTqF97IgD9DjAc4zwPgpXrmrUgaZaaGf8
+	g3qPfq5OnftLdcueXX4zY80gPzLTGYZiLhmSFV3X9OIgmG9nLEpp0/T6QkcjDWmXGec5dWS+iKe
+	Ij4QitEESAzLtCbkxPJD08rW+D13GTYF94GSd
+X-Google-Smtp-Source: AGHT+IG7+ANsowzp3aWo73JCwNd8g0AmTtzpnG9zTdwCzKeHLM+IZv7SMU7lKTBBWEII2yLupK5gzTpOUK4mJ3aKW1o=
+X-Received: by 2002:a05:622a:d:b0:42e:a2a0:959c with SMTP id
+ x13-20020a05622a000d00b0042ea2a0959cmr223695qtw.14.1709062877135; Tue, 27 Feb
+ 2024 11:41:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20240222221814.3572215-1-rmoar@google.com> <CAGS_qxqQ09wUppF9s1BgNoj5T2yo8+Yd0RLRBisj5th7Yw97eQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxqQ09wUppF9s1BgNoj5T2yo8+Yd0RLRBisj5th7Yw97eQ@mail.gmail.com>
+From: Rae Moar <rmoar@google.com>
+Date: Tue, 27 Feb 2024 14:41:05 -0500
+Message-ID: <CA+GJov5hCde3JAuwdZayzQ0HUkexbtgAVFrXbDeqpufV6OdC3g@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: add parsing of all files in directory
+To: Daniel Latypov <dlatypov@google.com>
+Cc: shuah@kernel.org, davidgow@google.com, brendan.higgins@linux.dev, 
+	kevko@google.com, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-Mark Brown <broonie@kernel.org> writes:
-
-> [[PGP Signed Part:Undecided]]
-> On Thu, Feb 22, 2024 at 11:24:59PM -0300, Thiago Jung Bauermann wrote:
->> Mark Brown <broonie@kernel.org> writes:
+On Thu, Feb 22, 2024 at 6:37=E2=80=AFPM Daniel Latypov <dlatypov@google.com=
+> wrote:
 >
->> My rootfs is Ubuntu 22.04.3. In case it's useful, my kernel config is
->> here:
+> On Thu, Feb 22, 2024 at 2:18=E2=80=AFPM Rae Moar <rmoar@google.com> wrote=
+:
+> >
+> > Add ability to parse all files within a directory. Additionally add the
+> > ability to parse all results in the KUnit debugfs repository.
 >
->> https://people.linaro.org/~thiago.bauermann/gcs/config-v6.8.0-rc2
+> Nice, I'd been hoping for this.
+> It's enough to pull me back in for a bit :)
 >
-> Does using defconfig make a difference for you?
+> <snip>
+>
+> >  tools/testing/kunit/kunit.py | 45 ++++++++++++++++++++++++++----------
+> >  1 file changed, 33 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.p=
+y
+> > index bc74088c458a..827e6dac40ae 100755
+> > --- a/tools/testing/kunit/kunit.py
+> > +++ b/tools/testing/kunit/kunit.py
+> > @@ -511,19 +511,40 @@ def exec_handler(cli_args: argparse.Namespace) ->=
+ None:
+> >
+> >
+> >  def parse_handler(cli_args: argparse.Namespace) -> None:
+> > -       if cli_args.file is None:
+> > +       parsed_files =3D []
+>
+> optional: can we annotate the type?
+>   parsed_files =3D []  # type: List[str]
 
-No, I still get the same result with the defconfig.
+Hi Daniel!
 
--- 
-Thiago
+Yes, happy to make this change for the next version.
+
+>
+> > +       total_test =3D kunit_parser.Test()
+> > +       total_test.status =3D kunit_parser.TestStatus.SUCCESS
+> > +       if cli_args.file_path is None:
+> >                 sys.stdin.reconfigure(errors=3D'backslashreplace')  # t=
+ype: ignore
+> >                 kunit_output =3D sys.stdin  # type: Iterable[str]
+>
+> This branch no longer does anything, since we only parse what's in
+> `parsed_files`
+>
+> E.g. if you try
+> $ kunit.py parse $FILENAME
+> it'll work whereas
+> $ kunit.py parse < $FILENAME
+> will do nothing
+>
+> We'll need to rework the control flow somehow
+
+Ahh I see. Thanks for bringing this to my attention! I will change
+this for the next version.
+
+>
+> > -       else:
+> > -               with open(cli_args.file, 'r', errors=3D'backslashreplac=
+e') as f:
+> > +       elif cli_args.file_path =3D=3D "debugfs":
+> > +               for (root, _, files) in os.walk("/sys/kernel/debug/kuni=
+t"):
+> > +                       for file in files:
+> > +                               if file =3D=3D "results":
+> > +                                       parsed_files.append(os.path.joi=
+n(root, file))
+> > +       elif os.path.isdir(cli_args.file_path):
+> > +               for (root, _, files) in os.walk(cli_args.file_path):
+> > +                       for file in files:
+> > +                               parsed_files.append(os.path.join(root, =
+file))
+>
+> just a note here, we could make this a bit terser via
+>   parsed_files.extend(os.path.join(root, f) for f in files)
+>
+> and the debugfs branch could be rendered as
+>   parsed_files.extend(os.path.join(root, f) for f in files if f =3D=3D "r=
+esults")
+>
+
+Will do.
+
+> > +       elif os.path.isfile(cli_args.file_path):
+> > +               parsed_files.append(cli_args.file_path)
+>
+> nit: should there be an `else` here that prints a warning?
+>
+> Example that would trigger this case and silently do nothing
+> $ mkfifo /tmp/example_fifo
+> $ ./tools/testing/kunit/kunit.py parse /tmp/example_fifo
+> <no output>
+>
+
+Yep you are definitely right I will add one here.
+
+>
+> <snip>
+>
+> > @@ -569,8 +590,8 @@ def main(argv: Sequence[str]) -> None:
+> >                                             help=3D'Parses KUnit result=
+s from a file, '
+> >                                             'and parses formatted resul=
+ts.')
+> >         add_parse_opts(parse_parser)
+> > -       parse_parser.add_argument('file',
+> > -                                 help=3D'Specifies the file to read re=
+sults from.',
+> > +       parse_parser.add_argument('file_path',
+> > +                                 help=3D'Specifies the file path to re=
+ad results from.',
+>
+> Should this mention that the make `debugfs` string works?
+>
+> >                                   type=3Dstr, nargs=3D'?', metavar=3D'i=
+nput_file')
+>
+> Tangent: would it be useful to allow the user to pass in multiple
+> files now and set this to nargs=3D'*'?
+>
+> E.g.
+> $ kunit.py parse /my/dir/some_prefix*
+>
+> It would also let people implement their own version of the debugfs logic=
+ via
+> $ find /other/debugfs/dir -name 'results' | xargs kunit.py parse
+>
+> That could be useful if the user has recursively copied off the
+> debugfs from a test machine and wants to inspect it elsewhere, for
+> example.
+>
+
+Oh this is an interesting idea. I will play around with it!
+
+Thanks for looking this patch over!
+-Rae
+
+> Thanks,
+> Daniel
 
