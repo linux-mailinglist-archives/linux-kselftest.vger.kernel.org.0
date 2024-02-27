@@ -1,170 +1,161 @@
-Return-Path: <linux-kselftest+bounces-5477-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5478-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4B998689FE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 08:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96EB5868F71
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 12:52:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99BD12897AE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 07:40:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E9952819DC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 11:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6D055E5D;
-	Tue, 27 Feb 2024 07:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62BA913959F;
+	Tue, 27 Feb 2024 11:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2+s3DIBQ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="S5MM2CxO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92F454F95;
-	Tue, 27 Feb 2024 07:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709019600; cv=fail; b=YlCO/RZ2WeFlcq2fcZXqYxxrYYSPAT3PwdIfR1bwqFDzod29NFW8QHi2TPszeIPsOkjpodDbl8COynPvDyJFWeFTX5QQoTvIBAOFoJTfbXzloaNDvwbLSShVa/n22ny4zkzdUIh8H7jBywskYLFrV34WNo1E53/CLPQ8nUuVF58=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709019600; c=relaxed/simple;
-	bh=Yz3G3Ts7bvjNPaenbCkoZodvCZN9SQ9omF0RnlMrY2U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iMHAz2y30bGeWr7yk8hoMPoipNUwqMWJ/HPccePVVx5VEoNdBzgpGICPJzhsnbxGjD3FLYhtHn5hcG4sLK8i0ZCEbTJaaH2hArZq1gf6nJxm29olk3DKtery5A+J28c55kK1r7CclgfOv91IQBg5SZ3QvmfXlP8oaCT52TlTLBE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2+s3DIBQ; arc=fail smtp.client-ip=40.107.243.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JJmYZ8fo7sn4CghnoKF2FcuYy14f7VhCW8PoSKJNLtIsmFkolP2JbDQSzzD2PIrwxa5tCPZWjqV+gb+LnLEzP/XFwsd/6gItGPbuPmkQGeGxQkFSBTUi+e2qhPdJtSRLc+nvgcJ+n6DedN7IjMKlSEvBDmFxZo81jDn9w+tfBP1GVCbJJu9zUhYA03/NV7GjI365csfDNKW6LoiJa/7ZqzLv0yR9q3sKWQn9hZ9nD72hSaGXFSVZoiXhga2jUQ58DnFITlMMIxfO7BHiMYN9+VkECnk780nkNcW+CHtszJJUxpc3KLZqknbYV9XqNV4hYk8rPgvO8uyw1NwRmZkpAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DltwduLNgEfdqdfL67TzkuGukkI/LSD+thPg1GrHSP8=;
- b=H7LPKHCI75EbjXPh9z79l+WsBlxI2LQtcjtYDMmjJheq474i0xSLiZQAerHHWzXyPwv81lvhlUxawe0+28UVquazZCLDR1dEng7UWRx4iGN9DrwxulhQkL9oV5ECNbku+gus3lQt89hAtWnZDTreVYX4ob/b6UghV6pY902agcYYMiDwyeqDPlivVoMW9CY/H63LxtybkoqCv6s/KQ2SqFx/Om38qMr4pXJzDOozXm/TZwj/re57/NdbhZ0fX6VkddKse0vwxSXucHhvLffU1ONY9FDwqv4NUkbARCQzolWkrZjQc+RZBNh1Jcowq0amSsam3tFhYm140XgJgOmzOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DltwduLNgEfdqdfL67TzkuGukkI/LSD+thPg1GrHSP8=;
- b=2+s3DIBQk+DABrPUGsT+r+a+QYNnpUUMjkT1UkA2hqJQmP7WijIIVydnQC/2upTPaGp1Arig+rLLIHpAGcRqz9NoMkI6wmCwRC2lpPvLHBxcciyQRd/NnFI2IXiO0ViyZmqtDT+IwT93WmAWhr3JG765TBPz2P0wA6tzLwMzRKQ=
-Received: from CY5PR19CA0104.namprd19.prod.outlook.com (2603:10b6:930:83::21)
- by SA3PR12MB9159.namprd12.prod.outlook.com (2603:10b6:806:3a0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Tue, 27 Feb
- 2024 07:39:55 +0000
-Received: from CY4PEPF0000EE37.namprd05.prod.outlook.com
- (2603:10b6:930:83:cafe::be) by CY5PR19CA0104.outlook.office365.com
- (2603:10b6:930:83::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.50 via Frontend
- Transport; Tue, 27 Feb 2024 07:39:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EE37.mail.protection.outlook.com (10.167.242.43) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7292.25 via Frontend Transport; Tue, 27 Feb 2024 07:39:55 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 27 Feb
- 2024 01:39:49 -0600
-From: Meng Li <li.meng@amd.com>
-To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui
-	<ray.huang@amd.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
-	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
- Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
- Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
-	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, Meng Li
-	<li.meng@amd.com>
-Subject: [PATCH] cpufreq: amd-pstate: adjust min/max limit perf
-Date: Tue, 27 Feb 2024 15:39:24 +0800
-Message-ID: <20240227073924.3573398-1-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999E8139599;
+	Tue, 27 Feb 2024 11:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709034742; cv=none; b=ZPYaK8OI0fvrVHTIJmE4rN1wlYpNs6V569nI2KikIpi7oSZyTezLvItTTmZ2V933t4UIF2rf1ulWZYoPM2Wt9+KGPCpRPvWIOdvxSV8Y2Q0NL033RJefbEdKbFDA2NaLaCg56VhTpKKRED1qSKVIUZbx5dwxqA1ds2fPZu7WYdA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709034742; c=relaxed/simple;
+	bh=xw4zyQzl0Id0Z4DHabmeCkCQhjD5cr61ZeGQvk54bLA=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=tHjo3LVszqqFsi6C26vbpH9eZQWj/ho1KtCsbHvv9tRuEsNaeUpdN1VhpyLCo9ck9muHVOq8llR4yowmLxcFEDzSaJOmxZ4nhA0cyNFX2QZA5savIhS0JKzJ5njrGRvomkfjUfZwmM4b4I8ZMCmyu06T9FcEP3t/0GUYVxi0iis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=S5MM2CxO; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1709034738;
+	bh=xw4zyQzl0Id0Z4DHabmeCkCQhjD5cr61ZeGQvk54bLA=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=S5MM2CxOPJlCO9VYWip/zkvw290O8fZYOtUAN3zytS8iuXi7zEkUCbwlrpZ0KXRtN
+	 /mkrxA3ipEUu2+e5WpPnBbMYLwLmOKgDdAXJD3QyMjIXshmxIxyVtE4v2bpQiMv75E
+	 kj3+N7fgCmvv9MLpZ+Trn8GloZ855D2Fj81n068/L+93DYP6ejSfuOPK7B4z2OqGwC
+	 LI7xYViNITfpias8bLTOygjrvABY203QuPVsisgO/jbu3jCXWbSwZYjaLpLFPb34v/
+	 LF4nP2nB8NI0v7vOcaAYAkWB1fOvXQrmTbluAhHLex2bqxv89e0h5+7x1WCPP1Md9q
+	 K1gzSYaH39y6g==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A0DD037809D1;
+	Tue, 27 Feb 2024 11:52:16 +0000 (UTC)
+Message-ID: <8bd3174c-008b-48c3-9695-41ea07ea2f4b@collabora.com>
+Date: Tue, 27 Feb 2024 16:52:38 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/dmabuf-heap: conform test to TAP format
+ output
+Content-Language: en-US
+To: "T.J. Mercier" <tjmercier@google.com>
+References: <20240226080003.4094089-1-usama.anjum@collabora.com>
+ <CABdmKX2YSrvHx3U-q1irvmEf=dDtqTtB38dERKx+4muu77zbfQ@mail.gmail.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABdmKX2YSrvHx3U-q1irvmEf=dDtqTtB38dERKx+4muu77zbfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE37:EE_|SA3PR12MB9159:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b4e8e8c-fd83-49d2-9c12-08dc37674a85
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ADOHcWBtVy8+awhDpXNDG51PAeLRdhpWKCmDI1I11sDsEjdHDD18hfAj+UvOJxrElVjn+vkuRCnRNUhskKusg5n81opgG43P6cQb18epEmy+Xy0Phepg4i8CYoXVmnIKkc7fLEMeNA8dNYUEG4sLHdf4XuBMGHBlnwYZu13TXH8wWKJXdrK8ok8/crwL/bT8Qzkk/kg9GO1weOz+DMnyqMOstNSNEEc8mlYKTBdrawKdHW8RQNHDFyVWolpx7omkfA7vLDfJV8lfBwUlBTpE6hoj24WkMWjolfdMy0a5AtY4XsBCqTor+0IYe4DBHhUbUNXH6nOjc7RuHxFw80uA8YOKljG2E957Ub2VCnLTYF11XkbJ3zeLp+XfS5ZFb9Il5quRpT3oEA7ECfDuVVEcjtJto2Uk9w2NusJzoYVKGSO6JrgXaU38jSr9NEoYX3KTaj1P13aIdoRSEgvdEp/wh9xLGRfvPAifK+YzBrd2n+7NdXQ/mc0VLjOnEKLvjSTF7VJBDft4CEabwMY+3IH20bbBOH+v+sqTT4RQ5abWDYTeHJr82rwG1dlhT2w0S7UGWE3aWtHi3wO4iEoAyYL/HEioTulFqYJ/YI3AtLbRHRaH0/J0IrlB1F5qtOyHbHhnwjNz8L0IeYuaZYJLjvwG0SomWuHQ6U77Os40xoyNRDtMEMJAsdIsVnORHqXEaxz9Zros5J5d+P3jQLLw+iiM58CyyDWuiTcb+eOSX1mbMX/YKJ3wRrpJGcTl8d3OBGoG
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 07:39:55.0103
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b4e8e8c-fd83-49d2-9c12-08dc37674a85
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE37.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9159
 
-The min/max limit perf values calculated based on frequency
-may exceed the reasonable range of perf(highest perf, lowest perf).
-
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index aa5e57e27d2b..2015c9fcc3c9 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -484,12 +484,19 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
- 
- static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
- {
--	u32 max_limit_perf, min_limit_perf;
-+	u32 max_limit_perf, min_limit_perf, lowest_perf;
- 	struct amd_cpudata *cpudata = policy->driver_data;
- 
- 	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
- 	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
- 
-+	lowest_perf = READ_ONCE(cpudata->lowest_perf);
-+	if (min_limit_perf < lowest_perf)
-+		min_limit_perf = lowest_perf;
-+
-+	if (max_limit_perf < min_limit_perf)
-+		max_limit_perf = min_limit_perf;
-+
- 	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
- 	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
- 	WRITE_ONCE(cpudata->max_limit_freq, policy->max);
-@@ -1387,6 +1394,12 @@ static void amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
- 	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
- 	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
- 
-+	if (min_limit_perf < min_perf)
-+		min_limit_perf = min_perf;
-+
-+	if (max_limit_perf < min_limit_perf)
-+		max_limit_perf = min_limit_perf;
-+
- 	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
- 	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
- 
--- 
-2.34.1
+On 2/27/24 6:52 AM, T.J. Mercier wrote:
+> On Sun, Feb 25, 2024 at 11:59 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Conform the layout, informational and status messages to TAP. No
+>> functional change is intended other than the layout of output messages.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  .../selftests/dmabuf-heaps/dmabuf-heap.c      | 194 +++++++-----------
+>>  1 file changed, 77 insertions(+), 117 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+>> index 890a8236a8ba7..6e538e346cb8f 100644
+>> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+>> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+>> @@ -15,6 +15,7 @@
+>>  #include <linux/dma-buf.h>
+>>  #include <linux/dma-heap.h>
+>>  #include <drm/drm.h>
+>> +#include "../kselftest.h"
+>>
+>>  #define DEVPATH "/dev/dma_heap"
+>>
+>> @@ -90,14 +91,13 @@ static int dmabuf_heap_open(char *name)
+>>         char buf[256];
+>>
+>>         ret = snprintf(buf, 256, "%s/%s", DEVPATH, name);
+>> -       if (ret < 0) {
+>> -               printf("snprintf failed!\n");
+>> -               return ret;
+>> -       }
+>> +       if (ret < 0)
+>> +               ksft_exit_fail_msg("snprintf failed!\n");
+>>
+>>         fd = open(buf, O_RDWR);
+>>         if (fd < 0)
+>> -               printf("open %s failed!\n", buf);
+>> +               ksft_exit_fail_msg("open %s failed: %s\n", buf, strerror(errno));
+>> +
+>>         return fd;
+>>  }
+>>
+>> @@ -140,7 +140,7 @@ static int dmabuf_sync(int fd, int start_stop)
+>>
+>>  #define ONE_MEG (1024 * 1024)
+>>
+>> -static int test_alloc_and_import(char *heap_name)
+>> +static void test_alloc_and_import(char *heap_name)
+>>  {
+>>         int heap_fd = -1, dmabuf_fd = -1, importer_fd = -1;
+>>         uint32_t handle = 0;
+>> @@ -148,16 +148,12 @@ static int test_alloc_and_import(char *heap_name)
+>>         int ret;
+>>
+>>         heap_fd = dmabuf_heap_open(heap_name);
+>> -       if (heap_fd < 0)
+>> -               return -1;
+>>
+>> -       printf("  Testing allocation and importing:  ");
+>> +       ksft_print_msg("Testing allocation and importing:\n");
+>>         ret = dmabuf_heap_alloc(heap_fd, ONE_MEG, 0, &dmabuf_fd);
+>> -       if (ret) {
+>> -               printf("FAIL (Allocation Failed!)\n");
+>> -               ret = -1;
+>> -               goto out;
+>> -       }
+>> +       if (ret)
+>> +               ksft_exit_fail_msg("FAIL (Allocation Failed!)\n");
+>> +
+>>         /* mmap and write a simple pattern */
+>>         p = mmap(NULL,
+>>                  ONE_MEG,
+>> @@ -166,7 +162,7 @@ static int test_alloc_and_import(char *heap_name)
+>>                  dmabuf_fd,
+>>                  0);
+>>         if (p == MAP_FAILED) {
+>> -               printf("FAIL (mmap() failed)\n");
+>> +               ksft_print_msg("FAIL (mmap() failed)\n");
+>>                 ret = -1;
+>>                 goto out;
+>>         }
+> 
+> I think you should just ksft_exit_fail_msg these too and get rid of
+> out / not bother with manual cleanup if we're going to exit anyway.
+Not sure how I missed this. I'll send a v2.
 
 
