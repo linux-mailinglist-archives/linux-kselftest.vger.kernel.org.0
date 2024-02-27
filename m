@@ -1,246 +1,544 @@
-Return-Path: <linux-kselftest+bounces-5491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0718869D20
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 18:05:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E0C0869D57
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 18:18:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BB4A283F8D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 17:05:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4EC1EB22461
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 17:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CDEC48CFD;
-	Tue, 27 Feb 2024 17:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39053481BD;
+	Tue, 27 Feb 2024 17:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FNVvmOpK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2pA3SkDZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2088.outbound.protection.outlook.com [40.107.244.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85094B5C1;
-	Tue, 27 Feb 2024 17:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.88
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709053516; cv=fail; b=XM+lip6AxS86M1+h5eCfQ1M6F+uMzNyTp5hutL1/vH+1VXThIvDG4OomNmhMXOMa28lYxQYWDJy8H2RWmi8CaJJEqWSgtHu0mdkO4ayYMl00x29bbHk655aDm4a78pK2VsF7QG1++6EAjTjmGVXMErgPii/fZYqWR8gAs++YS+0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709053516; c=relaxed/simple;
-	bh=Kjk5XM6qXcZf8Vm3tlTp3z0S6tlYqOLOwMBRKsIu/sw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P/M1kiqpubjldGHw1vQn6RzC7B7Res5ZTP35vW2fKDDq21FjYASlPdbFeDFn9K8k8C0YUSRWcMVYriTolkZZV14H74pk8Zi7IcZg9AeMWuKf8aFw5XFNXzfAF++pabfosmOiBZ7GBdK+W5wMkEgCpUHMGZEIp980s83Q5Gn6Mm0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FNVvmOpK; arc=fail smtp.client-ip=40.107.244.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IDF3T7H+xzMrPFRX3YZ/UciiHD2PvRV8siTvL8ac58TQazTMthjQtOHoD0Z5XJwMYtrlWJumZ9InfncaxhwnZSiHXm3DvovRH9UBZn/APFd5tlcAjNMNq3O4Dld44OBPOPnr/isD2j6gcmjCUr+JuB9efuuC303VEFOBWGkltIQrPlrS5pTzHbFrudrJKbPAe7UhCfLokvxyxLUNGSLCdVfdvCOz93X+gI0UZWlNrxizvDL/tCz8EOuN8hLDT9UkNLEGILl7yH3NBHT13CEvd+mDDP+EoI0yH1X6fBhsUBmex1DdbyB8Zzb4oar2od5jA1zwHhYKscYgzkf7wFCzIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eDXYwIThW91mZXiMv8KT3L8lprQjH+VwGO/ZxccKEj0=;
- b=cZMQYkOiPLAl2RopdhFr28UPUyFFdKRiKKOoKNpdcGwV/a516FqfiTo81daQt87WHbul9TxNh4KdLXc6aQMRSWpHB4AQfvlMd3cvQc/qyhcIPSfx7FhjkqSP6zHN+Xz0BztLRF9IDiy5t1GHDxaalIjjRKspbIxcO5A1SQDY+q1f6KcWrJy30dHwTCJniMtMysF0YSedQRcpSP+PofqYTH2TbIjcQV9gKrtYEU2LrZArJIUFt7MULCXpYJA2hkFTIDdFq5sHJqmLsRVFYrFWiL6PX2DB6n72LjGBySXihfq+tpv5SEjrT0TmNgngMpuRZgS6L9HrtizckOT+7oV/1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eDXYwIThW91mZXiMv8KT3L8lprQjH+VwGO/ZxccKEj0=;
- b=FNVvmOpKPKtLK9YJ49ViT4XMYzIE+633q4CGRpzIuY7Pp0DlzowSOI4ScadOvGgu6XQ9qNvCn5Lgy2UVMCrZOX5DO97mw98+1GKje+Uci+v2tWkYvOUZKJpFio8HEUswsKNioIHGiCDDiElaJI6U04QMPfXg+MCH9nIZ2ATsdw7/6jiulDPJFMWA6OurBvYIGn+tlMhr7VSxgJf9Xjjo7sufgOFe5L5J4oc41NA571YHKLjt1jPNzGSk9R4hBjlt0B706WACxK8KveEShIhcs8I9PMU75VvGM8HbxzE/OmrstzYZkw18oCD0J0BvEBBgwotxOVAt3BJG+pSnKikbAQ==
-Received: from CY5PR15CA0236.namprd15.prod.outlook.com (2603:10b6:930:66::8)
- by PH7PR12MB6467.namprd12.prod.outlook.com (2603:10b6:510:1f5::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.34; Tue, 27 Feb
- 2024 17:05:11 +0000
-Received: from CY4PEPF0000EE32.namprd05.prod.outlook.com
- (2603:10b6:930:66:cafe::9d) by CY5PR15CA0236.outlook.office365.com
- (2603:10b6:930:66::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.49 via Frontend
- Transport; Tue, 27 Feb 2024 17:05:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000EE32.mail.protection.outlook.com (10.167.242.38) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7292.25 via Frontend Transport; Tue, 27 Feb 2024 17:05:10 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 27 Feb
- 2024 09:04:52 -0800
-Received: from dev-r-vrt-155.mtr.labs.mlnx (10.126.230.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.12; Tue, 27 Feb 2024 09:04:49 -0800
-From: Ido Schimmel <idosch@nvidia.com>
-To: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<edumazet@google.com>, <shuah@kernel.org>, <yujie.liu@intel.com>, "Ido
- Schimmel" <idosch@nvidia.com>
-Subject: [PATCH net-next] selftests: vxlan_mdb: Avoid duplicate test names
-Date: Tue, 27 Feb 2024 19:04:18 +0200
-Message-ID: <20240227170418.491442-1-idosch@nvidia.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A6D3D541
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 17:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709054319; cv=none; b=S5CmHfvz3lmJBCvoHf8d6xPR/WPPqvaI2m6dG/chv767lKcur4wPipN9hzY4/jI7UOIwRqufP2KmjPMit6Aj4NF4nUuIcEc52UmWsF9DAkiWcA+v9FTtDYUvMHU2wQcsktU21sZu1yx7/6fXkqFDRDR8tKtb/V22yCkBJ+hcxMI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709054319; c=relaxed/simple;
+	bh=PuJh2k+2XBy+9ywLlgT3RGhYAwDWvIuvGUeh2znSNhY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dH4qoe02yuCBlMd1XdrTfV94Sgq7VSaZyovd6Al3swL/6m3OcioO4BB5OpCj+Fo7ftQVyTm0ZxncxfxouiDw6zlQJ/D7hBpIvo9BILOfA621w9LOMhpvlfKEMG+Y1UoWrf4kOtN6pdJ19ov1BvMZsZe3jUaGEKutdfl2zSTJH/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2pA3SkDZ; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-607c5679842so45738557b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 09:18:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709054316; x=1709659116; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sDqOypY7dHmvPy9CDl/jYuR4VjvmuPiR4oKLpqN8T+A=;
+        b=2pA3SkDZw7KZpmSpURnX0WAdpxbEvjYI936fBUzHE9fzNpD/G1OeAFwG4BlNHu0MBO
+         LNN3cc+f6LcJcY+a5kzVm4orDAjJ1SlU3yGYKN+sXVy8uqUOnLmZ/K+xHH+BFqYhYfGD
+         reZsIUNFmn4NmazbG0H9jDvKwjlAd9pMnLS+7CoXSqr8ndCgYOFniXqXBRgskYzq8ljx
+         3CLF5LGJuFD3EdAuFKfNyfvY8GC9FDa1wdsCIPIKPC+SOUbeik9Uxe7jiGu7VPJjnf4K
+         x/5aH6Oh15cnMFPLSs/lOELqotnHAw8nqK+LmZ1KhbxvW0K/kO1ukmpt0rl5rc+Dbvj6
+         02PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709054316; x=1709659116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sDqOypY7dHmvPy9CDl/jYuR4VjvmuPiR4oKLpqN8T+A=;
+        b=QgKfGzlFJmAe44YC43mQMlMt4K0uhMUmQjKkxAocQyObD6mHuN2CE21pJ13X6j2eWg
+         vFG3rTUMrvuubtjoJxUYlZzRh3RUZlKjrj+9/pi3r6DB7UNr7IFDf9EazAnh5ubx52CY
+         z25h63Q3iJocNJYd4VZfPk4u+ofWo95+4HEcFuV2YYBZtKeUD2Y6aOCeccYmuGv3k+Y/
+         ZJAKdtsgfPQnrQk2VdKxKralMEsSv6dL4nTplAy/hkSOMFXhKvRmGUwMf9ASOQYMX6JD
+         KNDYGl6li+ND5rbeDAZ872MXq5AvpyGSJ4Tly9Q9ogdRv5gIU0GfSwjsoDiAt00dpRjA
+         IAcw==
+X-Forwarded-Encrypted: i=1; AJvYcCV9nxg5WmEg0G7qposicctrWvVFFNQtp5I6nxRFoZxdjYrDi7ktMA0/+zNqL6O8QOboHsDnQp/XmIfiUMdH7XwxeRXZnELzQRmpZnFSAMJs
+X-Gm-Message-State: AOJu0Yzh7Ri1BHbrT9QTyRomjoQIi520mgluT7QaI6NWH9x0/Jy6OJM0
+	3zX+MPwbjTPM97971r0AHQbQz2yBdbTE3eA42/QSZBOo78Nj0/SLe7VIx0DlZ627bMkDBpV6lML
+	1W6PeBhSpODXRvwhAu3VWyEuc8xqdxZwKAyuz
+X-Google-Smtp-Source: AGHT+IFHSB9ogsaTh5yLcJM87EoJGE6/1clrKsgUSeDiGCkQLyBT4UGt8Ht/4iS1hAewfkzRBc7+jRMpHyeXgR4Iopg=
+X-Received: by 2002:a0d:e80f:0:b0:604:2c8:e49f with SMTP id
+ r15-20020a0de80f000000b0060402c8e49fmr2668530ywe.50.1709054315790; Tue, 27
+ Feb 2024 09:18:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE32:EE_|PH7PR12MB6467:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50d14507-882d-4bf3-9482-08dc37b641db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	LxGFZPKc5lB2wqHZMWnyImMEPBAQ2j4I+iBPhVNZQmRp5IJhW9P8qw6U/bdbRYOxNzaR8yX1mtqdM0qfpaE/GsgPvp8Vj8PkzdbxX3DE5JktWMvSmaya4FnlqNldq78XMmqrL9VjNmCjAQ96/+3Wrbb+ReXGKkcY99gV7Ob60XKuKnuuzZIzBfh9S1q01PcTBOqOqAkuSgSCkNqtowdQ7ExrUt1ukZDnu64r9942L+3bh32tHYosIv5TS/L46ksKSJydLZiI0kriD8juv1OclLp6FMNA2EuN0lq+W0bUAaBGFSsF6Ofgcu6akAsup4NuRTAmLWWH7l2FQVNPG/wW1qwhBq9FIycZ6lKYWK2RwPt+NO8S80Twc5IZcmQvE50hzw4szmy7zQhsLwwb5qpQbI520FF1OqHPcZ+hqIylf0ENiO72NOcF9tcYr5p+osK9YyO/hicy4tGWGTNqF285wYeLiZ/i6Yi5/ZRyfOxdoKUOjDLxGPShahH+AbdO76yM6oP3w1EgWtm0tLEwvRl5FZqWKZijoaARU/7zEpEQolhkVeo6+zBnRIyI5ADvscabQ5unSVKrBjVm7bFhAz7LjMS4/8/vd1bpvQz+LTM5bz4Bekfgk9I6CYeXAL1zFI16ExlsciaO/YuYhI7SZCkDWeUfCnHD9L10YAO6Vh5kWSLqU7LjUkVgDckxEJkafk564M7u6Y2jEXus0hG0HJ2E07WmWYZR39lXWHhbH/5lNi0GOQsSEk2TmZRQX5Ct8J7W
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 17:05:10.6846
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50d14507-882d-4bf3-9482-08dc37b641db
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE32.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6467
+References: <20240227121920.1905095-1-usama.anjum@collabora.com>
+In-Reply-To: <20240227121920.1905095-1-usama.anjum@collabora.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Tue, 27 Feb 2024 09:18:24 -0800
+Message-ID: <CABdmKX3_+G20TB5HJLLLMQQ1-i9g=RV1QU_A00Knd08pyiJWgw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] selftests/dmabuf-heap: conform test to TAP format output
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Shuah Khan <shuah@kernel.org>, kernel@collabora.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Rename some test cases to avoid overlapping test names which is
-problematic for the kernel test robot. No changes in the test's logic.
+On Tue, Feb 27, 2024 at 4:21=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Conform the layout, informational and status messages to TAP. No
+> functional change is intended other than the layout of output messages.
+>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes since v1:
+> - Update some more error handling code
+> ---
+>  .../selftests/dmabuf-heaps/dmabuf-heap.c      | 217 +++++++-----------
+>  1 file changed, 81 insertions(+), 136 deletions(-)
+>
+> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/t=
+esting/selftests/dmabuf-heaps/dmabuf-heap.c
+> index 890a8236a8ba7..41a8485cad5d0 100644
+> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/dma-buf.h>
+>  #include <linux/dma-heap.h>
+>  #include <drm/drm.h>
+> +#include "../kselftest.h"
+>
+>  #define DEVPATH "/dev/dma_heap"
+>
+> @@ -90,14 +91,13 @@ static int dmabuf_heap_open(char *name)
+>         char buf[256];
+>
+>         ret =3D snprintf(buf, 256, "%s/%s", DEVPATH, name);
+> -       if (ret < 0) {
+> -               printf("snprintf failed!\n");
+> -               return ret;
+> -       }
+> +       if (ret < 0)
+> +               ksft_exit_fail_msg("snprintf failed!\n");
+>
+>         fd =3D open(buf, O_RDWR);
+>         if (fd < 0)
+> -               printf("open %s failed!\n", buf);
+> +               ksft_exit_fail_msg("open %s failed: %s\n", buf, strerror(=
+errno));
+> +
+>         return fd;
+>  }
+>
+> @@ -140,7 +140,7 @@ static int dmabuf_sync(int fd, int start_stop)
+>
+>  #define ONE_MEG (1024 * 1024)
+>
+> -static int test_alloc_and_import(char *heap_name)
+> +static void test_alloc_and_import(char *heap_name)
+>  {
+>         int heap_fd =3D -1, dmabuf_fd =3D -1, importer_fd =3D -1;
+>         uint32_t handle =3D 0;
+> @@ -148,16 +148,12 @@ static int test_alloc_and_import(char *heap_name)
+>         int ret;
+>
+>         heap_fd =3D dmabuf_heap_open(heap_name);
+> -       if (heap_fd < 0)
+> -               return -1;
+>
+> -       printf("  Testing allocation and importing:  ");
+> +       ksft_print_msg("Testing allocation and importing:\n");
+>         ret =3D dmabuf_heap_alloc(heap_fd, ONE_MEG, 0, &dmabuf_fd);
+> -       if (ret) {
+> -               printf("FAIL (Allocation Failed!)\n");
+> -               ret =3D -1;
+> -               goto out;
+> -       }
+> +       if (ret)
+> +               ksft_exit_fail_msg("FAIL (Allocation Failed!)\n");
+> +
+>         /* mmap and write a simple pattern */
+>         p =3D mmap(NULL,
+>                  ONE_MEG,
+> @@ -165,11 +161,8 @@ static int test_alloc_and_import(char *heap_name)
+>                  MAP_SHARED,
+>                  dmabuf_fd,
+>                  0);
+> -       if (p =3D=3D MAP_FAILED) {
+> -               printf("FAIL (mmap() failed)\n");
+> -               ret =3D -1;
+> -               goto out;
+> -       }
+> +       if (p =3D=3D MAP_FAILED)
+> +               ksft_exit_fail_msg("FAIL (mmap() failed)\n");
+>
+>         dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
+>         memset(p, 1, ONE_MEG / 2);
+> @@ -179,31 +172,28 @@ static int test_alloc_and_import(char *heap_name)
+>         importer_fd =3D open_vgem();
+>         if (importer_fd < 0) {
+>                 ret =3D importer_fd;
+> -               printf("(Could not open vgem - skipping):  ");
+> +               ksft_test_result_skip("Could not open vgem\n");
+>         } else {
+>                 ret =3D import_vgem_fd(importer_fd, dmabuf_fd, &handle);
+> -               if (ret < 0) {
+> -                       printf("FAIL (Failed to import buffer)\n");
+> -                       goto out;
+> -               }
+> +               ksft_test_result(ret >=3D 0, "Import buffer\n");
+>         }
+>
+>         ret =3D dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
+>         if (ret < 0) {
+> -               printf("FAIL (DMA_BUF_SYNC_START failed!)\n");
+> +               ksft_print_msg("FAIL (DMA_BUF_SYNC_START failed!)\n");
+>                 goto out;
+>         }
+>
+>         memset(p, 0xff, ONE_MEG);
+>         ret =3D dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_END);
+>         if (ret < 0) {
+> -               printf("FAIL (DMA_BUF_SYNC_END failed!)\n");
+> +               ksft_print_msg("FAIL (DMA_BUF_SYNC_END failed!)\n");
+>                 goto out;
+>         }
+>
+>         close_handle(importer_fd, handle);
+> -       ret =3D 0;
+> -       printf(" OK\n");
+> +       ksft_test_result_pass("%s\n", __func__);
+> +       return;
+>  out:
+>         if (p)
+>                 munmap(p, ONE_MEG);
+> @@ -214,35 +204,30 @@ static int test_alloc_and_import(char *heap_name)
+>         if (heap_fd >=3D 0)
+>                 close(heap_fd);
+>
+> -       return ret;
+> +       ksft_test_result_fail("%s\n", __func__);
+>  }
+>
+> -static int test_alloc_zeroed(char *heap_name, size_t size)
+> +static void test_alloc_zeroed(char *heap_name, size_t size)
+>  {
+>         int heap_fd =3D -1, dmabuf_fd[32];
+>         int i, j, ret;
+>         void *p =3D NULL;
+>         char *c;
+>
+> -       printf("  Testing alloced %ldk buffers are zeroed:  ", size / 102=
+4);
+> +       ksft_print_msg("Testing alloced %ldk buffers are zeroed:\n", size=
+ / 1024);
+>         heap_fd =3D dmabuf_heap_open(heap_name);
+> -       if (heap_fd < 0)
+> -               return -1;
+>
+>         /* Allocate and fill a bunch of buffers */
+>         for (i =3D 0; i < 32; i++) {
+>                 ret =3D dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]=
+);
+> -               if (ret < 0) {
+> -                       printf("FAIL (Allocation (%i) failed)\n", i);
+> -                       goto out;
+> -               }
+> +               if (ret)
+> +                       ksft_exit_fail_msg("FAIL (Allocation (%i) failed)=
+\n", i);
+> +
+>                 /* mmap and fill with simple pattern */
+>                 p =3D mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED=
+, dmabuf_fd[i], 0);
+> -               if (p =3D=3D MAP_FAILED) {
+> -                       printf("FAIL (mmap() failed!)\n");
+> -                       ret =3D -1;
+> -                       goto out;
+> -               }
+> +               if (p =3D=3D MAP_FAILED)
+> +                       ksft_exit_fail_msg("FAIL (mmap() failed!)\n");
 
-Suggested-by: Yujie Liu <yujie.liu@intel.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
----
-Yujie Liu, please verify this works for you.
----
- tools/testing/selftests/net/test_vxlan_mdb.sh | 36 +++++++++----------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+So based on the previous ksft_exit_fail_msg calls I thought your
+intention was to exit the program and never run subsequent tests when
+errors occurred. That's what led to my initial comment about switching
+to ksft_exit_fail_msg from ksft_print_msg here, and I expected to see
+only ksft_exit_fail_msg for error cases afterwards. But you're still
+mixing ksft_exit_fail_msg and (ksft_print_msg +
+ksft_test_result{_pass,_fail,_skip}) so we've got a mix of behaviors
+where some errors lead to complete program exits and different errors
+lead to skipped/failed tests followed by further progress.
 
-diff --git a/tools/testing/selftests/net/test_vxlan_mdb.sh b/tools/testing/selftests/net/test_vxlan_mdb.sh
-index 84a05a9e46d8..74ff9fb2a6f0 100755
---- a/tools/testing/selftests/net/test_vxlan_mdb.sh
-+++ b/tools/testing/selftests/net/test_vxlan_mdb.sh
-@@ -1014,10 +1014,10 @@ flush()
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 port vx0"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010"
--	log_test $? 254 "Flush by port"
-+	log_test $? 254 "Flush by port - matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 port veth0"
--	log_test $? 255 "Flush by wrong port"
-+	log_test $? 255 "Flush by port - non-matching"
- 
- 	# Check that when flushing by source VNI only entries programmed with
- 	# the specified source VNI are flushed and the rest are not.
-@@ -1030,9 +1030,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 src_vni 10010"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010"
--	log_test $? 254 "Flush by specified source VNI"
-+	log_test $? 254 "Flush by source VNI - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10011"
--	log_test $? 0 "Flush by unspecified source VNI"
-+	log_test $? 0 "Flush by source VNI - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
-@@ -1058,9 +1058,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 proto bgp"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep \"proto bgp\""
--	log_test $? 1 "Flush by specified routing protocol"
-+	log_test $? 1 "Flush by routing protocol - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep \"proto zebra\""
--	log_test $? 0 "Flush by unspecified routing protocol"
-+	log_test $? 0 "Flush by routing protocol - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
-@@ -1075,9 +1075,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 dst 198.51.100.2"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 198.51.100.2"
--	log_test $? 1 "Flush by specified destination IP - IPv4"
-+	log_test $? 1 "Flush by IPv4 destination IP - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 198.51.100.1"
--	log_test $? 0 "Flush by unspecified destination IP - IPv4"
-+	log_test $? 0 "Flush by IPv4 destination IP - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
-@@ -1089,9 +1089,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 dst 2001:db8:1000::2"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 2001:db8:1000::2"
--	log_test $? 1 "Flush by specified destination IP - IPv6"
-+	log_test $? 1 "Flush by IPv6 destination IP - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 2001:db8:1000::1"
--	log_test $? 0 "Flush by unspecified destination IP - IPv6"
-+	log_test $? 0 "Flush by IPv6 destination IP - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
-@@ -1104,9 +1104,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 dst_port 11111"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep \"dst_port 11111\""
--	log_test $? 1 "Flush by specified UDP destination port"
-+	log_test $? 1 "Flush by UDP destination port - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep \"dst_port 22222\""
--	log_test $? 0 "Flush by unspecified UDP destination port"
-+	log_test $? 0 "Flush by UDP destination port - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
-@@ -1121,9 +1121,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 dst_port 4789"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 198.51.100.1"
--	log_test $? 1 "Flush by device's UDP destination port"
-+	log_test $? 1 "Flush by device's UDP destination port - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 198.51.100.2"
--	log_test $? 0 "Flush by unspecified UDP destination port"
-+	log_test $? 0 "Flush by device's UDP destination port - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
-@@ -1136,9 +1136,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 vni 20010"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep \" vni 20010\""
--	log_test $? 1 "Flush by specified destination VNI"
-+	log_test $? 1 "Flush by destination VNI - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep \" vni 20011\""
--	log_test $? 0 "Flush by unspecified destination VNI"
-+	log_test $? 0 "Flush by destination VNI - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
-@@ -1153,9 +1153,9 @@ flush()
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0 vni 10010"
- 
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 198.51.100.1"
--	log_test $? 1 "Flush by destination VNI equal to source VNI"
-+	log_test $? 1 "Flush by destination VNI equal to source VNI - matching"
- 	run_cmd "bridge -n $ns1_v4 -d -s mdb get dev vx0 grp 239.1.1.1 src_vni 10010 | grep 198.51.100.2"
--	log_test $? 0 "Flush by unspecified destination VNI"
-+	log_test $? 0 "Flush by destination VNI equal to source VNI - non-matching"
- 
- 	run_cmd "bridge -n $ns1_v4 mdb flush dev vx0"
- 
--- 
-2.43.0
+It seems most useful and predictable to me to have all tests run even
+after encountering an error for a single test, which we don't get when
+ksft_exit_fail_msg is called from the individual tests. I was fine
+with switching all error handling to ksft_exit_fail_msg to eliminate
+cleanup code and reduce maintenance, but I think we should be
+consistent with the behavior for dealing with errors which this
+doesn't currently have. So let's either always call ksft_exit_fail_msg
+for errors, or never call it (my preference).
 
+Slight tangent:
+For this specific MAP_FAILED error, I don't actually think it should
+be considered a test failure because the mmap operation is optional
+for dma-buf: https://docs.kernel.org/driver-api/dma-buf.html#c.dma_buf_ops.
+It would be pretty unusual to get a buffer like that, and skipping
+instead of failing when that happens would differ from the original
+behavior of the test so that could go in another patch, but I wanted
+to point this out.
+
+> +
+>                 dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
+>                 memset(p, 0xff, size);
+>                 dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
+> @@ -255,23 +240,19 @@ static int test_alloc_zeroed(char *heap_name, size_=
+t size)
+>         /* Allocate and validate all buffers are zeroed */
+>         for (i =3D 0; i < 32; i++) {
+>                 ret =3D dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]=
+);
+> -               if (ret < 0) {
+> -                       printf("FAIL (Allocation (%i) failed)\n", i);
+> -                       goto out;
+> -               }
+> +               if (ret < 0)
+> +                       ksft_exit_fail_msg("FAIL (Allocation (%i) failed)=
+\n", i);
+>
+>                 /* mmap and validate everything is zero */
+>                 p =3D mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED=
+, dmabuf_fd[i], 0);
+> -               if (p =3D=3D MAP_FAILED) {
+> -                       printf("FAIL (mmap() failed!)\n");
+> -                       ret =3D -1;
+> -                       goto out;
+> -               }
+> +               if (p =3D=3D MAP_FAILED)
+> +                       ksft_exit_fail_msg("FAIL (mmap() failed!)\n");
+> +
+>                 dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
+>                 c =3D (char *)p;
+>                 for (j =3D 0; j < size; j++) {
+>                         if (c[j] !=3D 0) {
+> -                               printf("FAIL (Allocated buffer not zeroed=
+ @ %i)\n", j);
+> +                               ksft_print_msg("FAIL (Allocated buffer no=
+t zeroed @ %i)\n", j);
+>                                 break;
+>                         }
+>                 }
+> @@ -283,16 +264,8 @@ static int test_alloc_zeroed(char *heap_name, size_t=
+ size)
+>                 close(dmabuf_fd[i]);
+>
+>         close(heap_fd);
+> -       printf("OK\n");
+> -       return 0;
+> -
+> -out:
+> -       while (i > 0) {
+> -               close(dmabuf_fd[i]);
+> -               i--;
+> -       }
+> -       close(heap_fd);
+> -       return ret;
+> +       ksft_test_result_pass("%s\n", __func__);
+
+Don't we need ksft_test_result based on whether we ever see a non-zero
+value so that we get ksft_cnt.ksft_fail++ for the failure case?
+Otherwise we could have all non-zero values and the test would still
+pass with a bunch of "FAIL (Allocated buffer not zeroed"
+ksft_print_msg.
+
+> +       return;
+>  }
+>
+>  /* Test the ioctl version compatibility w/ a smaller structure then expe=
+cted */
+> @@ -360,126 +333,98 @@ static int dmabuf_heap_alloc_newer(int fd, size_t =
+len, unsigned int flags,
+>         return ret;
+>  }
+>
+> -static int test_alloc_compat(char *heap_name)
+> +static void test_alloc_compat(char *heap_name)
+>  {
+> -       int heap_fd =3D -1, dmabuf_fd =3D -1;
+> -       int ret;
+> +       int ret, heap_fd =3D -1, dmabuf_fd =3D -1;
+>
+>         heap_fd =3D dmabuf_heap_open(heap_name);
+> -       if (heap_fd < 0)
+> -               return -1;
+>
+> -       printf("  Testing (theoretical)older alloc compat:  ");
+> +       ksft_print_msg("Testing (theoretical) older alloc compat:\n");
+>         ret =3D dmabuf_heap_alloc_older(heap_fd, ONE_MEG, 0, &dmabuf_fd);
+> -       if (ret) {
+> -               printf("FAIL (Older compat allocation failed!)\n");
+> -               ret =3D -1;
+> -               goto out;
+> -       }
+> -       close(dmabuf_fd);
+> -       printf("OK\n");
+> +       if (dmabuf_fd >=3D 0)
+> +               close(dmabuf_fd);
+> +       ksft_test_result(!ret, "dmabuf_heap_alloc_older\n");
+>
+> -       printf("  Testing (theoretical)newer alloc compat:  ");
+> +       ksft_print_msg("Testing (theoretical) newer alloc compat:\n");
+>         ret =3D dmabuf_heap_alloc_newer(heap_fd, ONE_MEG, 0, &dmabuf_fd);
+> -       if (ret) {
+> -               printf("FAIL (Newer compat allocation failed!)\n");
+> -               ret =3D -1;
+> -               goto out;
+> -       }
+> -       printf("OK\n");
+> -out:
+>         if (dmabuf_fd >=3D 0)
+>                 close(dmabuf_fd);
+> -       if (heap_fd >=3D 0)
+> -               close(heap_fd);
+> +       ksft_test_result(!ret, "dmabuf_heap_alloc_newer\n");
+>
+> -       return ret;
+> +       close(heap_fd);
+>  }
+>
+> -static int test_alloc_errors(char *heap_name)
+> +static void test_alloc_errors(char *heap_name)
+>  {
+>         int heap_fd =3D -1, dmabuf_fd =3D -1;
+>         int ret;
+>
+>         heap_fd =3D dmabuf_heap_open(heap_name);
+> -       if (heap_fd < 0)
+> -               return -1;
+>
+> -       printf("  Testing expected error cases:  ");
+> +       ksft_print_msg("Testing expected error cases:\n");
+>         ret =3D dmabuf_heap_alloc(0, ONE_MEG, 0x111111, &dmabuf_fd);
+> -       if (!ret) {
+> -               printf("FAIL (Did not see expected error (invalid fd)!)\n=
+");
+> -               ret =3D -1;
+> -               goto out;
+> -       }
+> +       ksft_test_result(ret, "Error expected on invalid fd\n");
+>
+>         ret =3D dmabuf_heap_alloc(heap_fd, ONE_MEG, 0x111111, &dmabuf_fd)=
+;
+> -       if (!ret) {
+> -               printf("FAIL (Did not see expected error (invalid heap fl=
+ags)!)\n");
+> -               ret =3D -1;
+> -               goto out;
+> -       }
+> +       ksft_test_result(ret, "Error expected on invalid heap flags\n");
+>
+>         ret =3D dmabuf_heap_alloc_fdflags(heap_fd, ONE_MEG,
+>                                         ~(O_RDWR | O_CLOEXEC), 0, &dmabuf=
+_fd);
+> -       if (!ret) {
+> -               printf("FAIL (Did not see expected error (invalid fd flag=
+s)!)\n");
+> -               ret =3D -1;
+> -               goto out;
+> -       }
+> +       ksft_test_result(ret, "Error expected on invalid heap flags\n");
+>
+> -       printf("OK\n");
+> -       ret =3D 0;
+> -out:
+>         if (dmabuf_fd >=3D 0)
+>                 close(dmabuf_fd);
+>         if (heap_fd >=3D 0)
+>                 close(heap_fd);
+> +}
+>
+> -       return ret;
+> +static int numer_of_heaps(void)
+> +{
+> +       DIR *d =3D opendir(DEVPATH);
+> +       struct dirent *dir;
+> +       int heaps =3D 0;
+> +
+> +       while ((dir =3D readdir(d))) {
+> +               if (!strncmp(dir->d_name, ".", 2))
+> +                       continue;
+> +               if (!strncmp(dir->d_name, "..", 3))
+> +                       continue;
+> +               heaps++;
+> +       }
+> +
+> +       return heaps;
+>  }
+>
+>  int main(void)
+>  {
+> -       DIR *d;
+>         struct dirent *dir;
+> -       int ret =3D -1;
+> +       DIR *d;
+> +
+> +       ksft_print_header();
+>
+>         d =3D opendir(DEVPATH);
+>         if (!d) {
+> -               printf("No %s directory?\n", DEVPATH);
+> -               return -1;
+> +               ksft_print_msg("No %s directory?\n", DEVPATH);
+> +               return KSFT_SKIP;
+>         }
+>
+> -       while ((dir =3D readdir(d)) !=3D NULL) {
+> +       ksft_set_plan(9 * numer_of_heaps());
+> +
+> +       while ((dir =3D readdir(d))) {
+>                 if (!strncmp(dir->d_name, ".", 2))
+>                         continue;
+>                 if (!strncmp(dir->d_name, "..", 3))
+>                         continue;
+>
+> -               printf("Testing heap: %s\n", dir->d_name);
+> -               printf("=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D\n");
+> -               ret =3D test_alloc_and_import(dir->d_name);
+> -               if (ret)
+> -                       break;
+> -
+> -               ret =3D test_alloc_zeroed(dir->d_name, 4 * 1024);
+> -               if (ret)
+> -                       break;
+> -
+> -               ret =3D test_alloc_zeroed(dir->d_name, ONE_MEG);
+> -               if (ret)
+> -                       break;
+> -
+> -               ret =3D test_alloc_compat(dir->d_name);
+> -               if (ret)
+> -                       break;
+> -
+> -               ret =3D test_alloc_errors(dir->d_name);
+> -               if (ret)
+> -                       break;
+> +               ksft_print_msg("Testing heap: %s\n", dir->d_name);
+> +               ksft_print_msg("=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D\n");
+> +               test_alloc_and_import(dir->d_name);
+> +               test_alloc_zeroed(dir->d_name, 4 * 1024);
+> +               test_alloc_zeroed(dir->d_name, ONE_MEG);
+> +               test_alloc_compat(dir->d_name);
+> +               test_alloc_errors(dir->d_name);
+>         }
+>         closedir(d);
+>
+> -       return ret;
+> +       ksft_finished();
+>  }
+> --
+> 2.42.0
+>
+>
 
