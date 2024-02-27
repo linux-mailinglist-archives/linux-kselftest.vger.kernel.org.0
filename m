@@ -1,71 +1,62 @@
-Return-Path: <linux-kselftest+bounces-5502-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FCB786A1AE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 22:30:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ED1986A22C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 23:10:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 435CB1C23F5A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 21:30:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 149F4282C13
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 22:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1EFE152DED;
-	Tue, 27 Feb 2024 21:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C19E150981;
+	Tue, 27 Feb 2024 22:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MViJut8W"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NvhWH8Ug"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF43D14F99C
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 21:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDE714F992
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 22:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709069287; cv=none; b=iOwLKPfG+k8MntjijIVuCjnRKcFYCymKSuExYQxdSLZDatN+e6EbcJMkF2Ig9hUSNPehyQa3k6tPh9v0IuqcQTNwbrXjs+qHyDaRqa7WBx2UbKqcs/uZyfpHAZEuUNYzHsIQ+khQ/0Cuhf+EtU4VrnhWMpRYLG+PPONlU2664Mk=
+	t=1709071833; cv=none; b=Nw+ntez0OesU4rXP9rda+3NSBr67mCwLq9NVdfR/9HelCZ8CGOxhWVW66CqoyqLxVj8S55Zlz6mmMRgkHNPRmUN7Bc0YYd/T4igqj5FRIV6HG5Nmaj2sf1P2Ry/+ojz+sSJz8TckPzizq8XY/t6YDK9PK5nmAvdmADWwjtU73Dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709069287; c=relaxed/simple;
-	bh=ldVgS1aR0z42eyCtxT/QNicwlMS2zhb2zcTkrKdh6Qw=;
+	s=arc-20240116; t=1709071833; c=relaxed/simple;
+	bh=l5Gn3Y2wTP33SecTGWSjFrwoXtHJc9JO2z8Yw3ZZdFY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K1MLzyW0XxJqaanZJor+Tdv3yn+RR5xaAmlhyUj2vE+AX3tkedaB5/wVOFFd+twVoM3khA+px31atyIZ98U/+dBmeiJ4HD7u5U3cq0WAiFxaFjKysNU2gTySdB2VTGx/YooWLGTcMAUVATscjHkFMsuAifx8PgDD9hDqWT/Qh8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MViJut8W; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-365b5050622so331055ab.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 13:28:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1709069285; x=1709674085; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B6cYCiTKgel5L8zLDPQBA3bSl0Hw58QwImvNAKCqvVA=;
-        b=MViJut8W/ornDe2lYZvhFAcoW4XTLadRYSGrAzk1xMFpQJqWdiZi05CrOjSZGRKd7/
-         Itl0S4wwERn3857Miz9Q8TVq0jCa21hao69+bRPOkBYe/eXOGISt/c2MwqIA0ZBkohrX
-         bJtnaVQa69nYcmQHAvtc5Azgw3014HN+7mfCU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709069285; x=1709674085;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B6cYCiTKgel5L8zLDPQBA3bSl0Hw58QwImvNAKCqvVA=;
-        b=bbbzF8phd7BBH4bTRC7c8RPoI2m8BpPCvmC+ZgMM27GRd1ArgA5YZIyd/0/mN6fLla
-         gpM1d5HzhUyVKqxpT7OFIL3HDrF2SH1LyYpfL/ZEoLPFCwBerrJ25MlMHmZi9A0z+ryJ
-         V9SbURfYrmJ2RSZQNr4CtB3H4UQcMC7je6r7OA0CGdG/qtxJBNz2o6xEMfUPo3x1hwJc
-         A2VC+shC+CRqlaNmztTYwOgMy/Dtao2Mtb0kXte4XBoVT0/KlS7QHYzND+SoWUm5Y4gB
-         P3QyRLKue4n4gXT10rVkeqqrZRItWw7nS3gWJdfW6BD13qiRxWnTeLpfgn53RH+RnEhx
-         lCiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjQ5tDLm2+iLFJAD/O82zyMg+33nECJoLvMqKZIqk4qj1aQUvTQjjLN8QN7Cs8FDh0DCVB0lRa5GGmQeTqDSLM7JkJiwW7bi1iEA0WsLXP
-X-Gm-Message-State: AOJu0YxQ/UNXNQTG5YPyeD2UViL5A5jNWmgllbKNCsDmeGGMSIi5XaIe
-	zTy1yKw3udtCjLiPaf946siBRnojQBS/dvMQLgQ9ze0q0c9/KUIS98X9vi2/N8w=
-X-Google-Smtp-Source: AGHT+IHiPn6i00reN7SlNcYrxsFiS4rLTfePpGy1sBB48MvWIB3eHpdkyqm4V+OCSNxz+D31bA113g==
-X-Received: by 2002:a6b:7a4a:0:b0:7c7:9c4b:90e6 with SMTP id k10-20020a6b7a4a000000b007c79c4b90e6mr10237659iop.1.1709069285100;
-        Tue, 27 Feb 2024 13:28:05 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id x20-20020a056638249400b004747c4f663dsm1661363jat.0.2024.02.27.13.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 13:28:03 -0800 (PST)
-Message-ID: <a4b957de-90d1-4779-b6a5-c6a9c1b005cc@linuxfoundation.org>
-Date: Tue, 27 Feb 2024 14:28:02 -0700
+	 In-Reply-To:Content-Type; b=G50Y1q6f0HdQCZddvH1tYK933DSs419H3aWxQk9Es24xlFphtorSDIkkT7LgV0EgxGfW9G2+97fUmSPvdPEJ8366NFwmUgNIQpKn02T4nUMJhhKMxcLbqo8kdlXh6edC89B1QL1sJlkXGdZrNecgxRXFNCMs232pw9zHKKJcRdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NvhWH8Ug; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709071830;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1FlDDPvmPPqYNYU0IMKtke8zEsxFWk9OvTWFnzQYyYs=;
+	b=NvhWH8UgNvHCscgcLq9S5793SckFICqjIJHVJ6qUFmLhNL32HbPTBxNq7nzl600JHDVqAW
+	vm4DVR026SwDqdGzyd3IgCd4BvNJwEqX85riw2xYryjI85dhqy417bTFyy0v7f2U/8ttB7
+	/6kFoYt0Zob1O2rKq5H5A7RmZ6kOrvE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-101-D3jpE1qkOsqHDdyRZa-3Vw-1; Tue, 27 Feb 2024 17:10:26 -0500
+X-MC-Unique: D3jpE1qkOsqHDdyRZa-3Vw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6F401024D05;
+	Tue, 27 Feb 2024 22:10:25 +0000 (UTC)
+Received: from [10.22.17.72] (unknown [10.22.17.72])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 734B7492BE2;
+	Tue, 27 Feb 2024 22:10:23 +0000 (UTC)
+Message-ID: <d1af171a-49e5-4dcb-987c-c41cf166bac1@redhat.com>
+Date: Tue, 27 Feb 2024 17:10:22 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,109 +64,262 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH] selftests/overlayfs: fix compilation error in
- overlayfs
+Subject: Re: [BUG] selftests: cgroup: KMEMLEAK in cgroup/test_cpuset_prs.sh
 Content-Language: en-US
-To: Andrei Vagin <avagin@google.com>
-Cc: Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
- linux-pm@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>,
- Deepak Sharma <deepak.sharma@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
- Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>,
- linux-kernel@vger.kernel.org,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240227074204.3573450-1-li.meng@amd.com>
- <2aaa2a61-f753-4434-8c92-886fc4bb9aef@linuxfoundation.org>
- <CAEWA0a6D1YQtCuW1FswyGXXWNTrmyerNS3zzcqBPpyQ-GtOopA@mail.gmail.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAEWA0a6D1YQtCuW1FswyGXXWNTrmyerNS3zzcqBPpyQ-GtOopA@mail.gmail.com>
+To: Mirsad Todorovac <mirsad.todorovac@alu.hr>, linux-kernel@vger.kernel.org
+Cc: Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ linux-fsdevel@vger.kernel.org
+References: <14915689-27a3-4cd8-80d2-9c30d0c768b6@alu.unizg.hr>
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <14915689-27a3-4cd8-80d2-9c30d0c768b6@alu.unizg.hr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-On 2/27/24 14:20, Andrei Vagin wrote:
-> On Tue, Feb 27, 2024 at 8:41 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 2/27/24 00:42, Meng Li wrote:
->>> make -C tools/testing/selftests, compiling dev_in_maps fail.
->>> In file included from dev_in_maps.c:10:
->>> /usr/include/x86_64-linux-gnu/sys/mount.h:35:3: error: expected identifier before numeric constant
->>>      35 |   MS_RDONLY = 1,                /* Mount read-only.  */
->>>         |   ^~~~~~~~~
->>>
->>> That sys/mount.h has to be included before linux/mount.h.
->>>
->>> Signed-off-by: Meng Li <li.meng@amd.com>
->>> ---
->>>    tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>
->> I don't see this problem when I build it on my system when
->> I run:
->>
->> make -C tools/testing/selftests
->> or
->> make -C tools/testing/selftests/filesystems/overlayfs
->>
->> Are you running this after doing headers_install?
-> 
-> It depends on libc headers. It can work with one libc and doesn't work
-> with another one. I have seen many times when linux headers conflicted
-> with libc headers. The only reliable way to avoid this sort of issues is
-> to include just one linux or libc header.
-> 
-> In this case, we can do something like this:
-> 
-> diff --git a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> index e19ab0e85709..f1ba82e52192 100644
-> --- a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> +++ b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> @@ -10,7 +10,6 @@
->   #include <linux/mount.h>
->   #include <sys/syscall.h>
->   #include <sys/stat.h>
-> -#include <sys/mount.h>
->   #include <sys/mman.h>
->   #include <sched.h>
->   #include <fcntl.h>
-> @@ -40,6 +39,14 @@ static int sys_move_mount(int from_dfd, const char
-> *from_pathname,
->          return syscall(__NR_move_mount, from_dfd, from_pathname,
-> to_dfd, to_pathname, flags);
->   }
-> 
-> +static int sys_mount(const char *source, const char *target,
-> +                    const char *filesystemtype, unsigned long mountflags,
-> +                    const void *data)
-> +{
-> +       return syscall(__NR_mount, source, target, filesystemtype,
-> mountflags, data);
-> +}
-> +
-> +
->   static long get_file_dev_and_inode(void *addr, struct statx *stx)
->   {
->          char buf[4096];
-> @@ -167,7 +174,7 @@ int main(int argc, char **argv)
->                  return 1;
->          }
-> 
-> -       if (mount(NULL, "/", NULL, MS_SLAVE | MS_REC, NULL) == -1) {
-> +       if (sys_mount(NULL, "/", NULL, MS_SLAVE | MS_REC, NULL) == -1) {
->                  pr_perror("mount");
->                  return 1;
->          }
-> 
+On 2/27/24 14:50, Mirsad Todorovac wrote:
+> Hi, everybody,
+>
+> In the latest vanilla torvalds tree kernel v6.8-rc6-11-g45ec2f5f6ed3 
+> on an Ubuntu 23.10 system, there
+> KMEMLEAK detected a couple of memory leaks:
+>
+> Visually it appears like the same leak repeated six times, but I 
+> reckoned it might be of importance to
+> review them all.
+>
+> It happened on two boxes, and both have AMD Ryzen processors 7 and 9.
+>
+> Please find attached the build .config
+>
+> Best regards,
+> Mirsad Todorovac
 
+Yes, you are right. There is a memory leak under certain condition. Will 
+post a patch to fix it.
 
-This is definitely better solution to this problem than reordering
-the includes only find another problem down the road.
+Thanks,
+Longman
 
-thanks,
--- Shuah
+>
+> # cat /sys/kernel/debug/kmemleak [stack decoded]
+> unreferenced object 0xffff8d49bd92a720 (size 8):
+> comm "test_cpuset_prs", pid 9213, jiffies 4294953562
+> hex dump (first 8 bytes):
+> 00 00 00 00 00 00 00 00                          ........
+> backtrace (crc 0):
+> kmemleak_alloc 
+> (/home/marvin/linux/kernel/linux_torvalds/mm/kmemleak.c:1045)
+> __kmalloc_node 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/kmemleak.h:42 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3817 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3860 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3980 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3988)
+> alloc_cpumask_var_node 
+> (/home/marvin/linux/kernel/linux_torvalds/lib/cpumask.c:71)
+> cpuset_write_resmask 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:643 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:2601 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:3630)
+> cgroup_file_write 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cgroup.c:4092)
+> kernfs_fop_write_iter 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/kernfs/file.c:334)
+> vfs_write 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/fs.h:2087 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:497 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:590)
+> ksys_write (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:643)
+> __x64_sys_write 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:652)
+> do_syscall_64 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:52 
+> /home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:83)
+> entry_SYSCALL_64_after_hwframe 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/entry_64.S:129)
+> unreferenced object 0xffff8d49bd92a488 (size 8):
+> comm "test_cpuset_prs", pid 9213, jiffies 4294953562
+> hex dump (first 8 bytes):
+> 00 00 00 00 00 00 00 00                          ........
+> backtrace (crc 0):
+> kmemleak_alloc 
+> (/home/marvin/linux/kernel/linux_torvalds/mm/kmemleak.c:1045)
+> __kmalloc_node 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/kmemleak.h:42 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3817 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3860 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3980 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3988)
+> alloc_cpumask_var_node 
+> (/home/marvin/linux/kernel/linux_torvalds/lib/cpumask.c:71)
+> cpuset_write_resmask 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:646 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:2601 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:3630)
+> cgroup_file_write 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cgroup.c:4092)
+> kernfs_fop_write_iter 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/kernfs/file.c:334)
+> vfs_write 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/fs.h:2087 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:497 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:590)
+> ksys_write (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:643)
+> __x64_sys_write 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:652)
+> do_syscall_64 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:52 
+> /home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:83)
+> entry_SYSCALL_64_after_hwframe 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/entry_64.S:129)
+> unreferenced object 0xffff8d49bd92a890 (size 8):
+> comm "test_cpuset_prs", pid 9213, jiffies 4294953562
+> hex dump (first 8 bytes):
+> 00 00 00 00 00 00 00 00                          ........
+> backtrace (crc 0):
+> kmemleak_alloc 
+> (/home/marvin/linux/kernel/linux_torvalds/mm/kmemleak.c:1045)
+> __kmalloc_node 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/kmemleak.h:42 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3817 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3860 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3980 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3988)
+> alloc_cpumask_var_node 
+> (/home/marvin/linux/kernel/linux_torvalds/lib/cpumask.c:71)
+> cpuset_write_resmask 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:649 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:2601 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:3630)
+> cgroup_file_write 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cgroup.c:4092)
+> kernfs_fop_write_iter 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/kernfs/file.c:334)
+> vfs_write 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/fs.h:2087 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:497 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:590)
+> ksys_write (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:643)
+> __x64_sys_write 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:652)
+> do_syscall_64 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:52 
+> /home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:83)
+> entry_SYSCALL_64_after_hwframe 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/entry_64.S:129)
+> unreferenced object 0xffff8d48c12f3720 (size 8):
+> comm "test_cpuset_prs", pid 28081, jiffies 4295018483
+> hex dump (first 8 bytes):
+> 00 00 00 00 00 00 00 00                          ........
+> backtrace (crc 0):
+> kmemleak_alloc 
+> (/home/marvin/linux/kernel/linux_torvalds/mm/kmemleak.c:1045)
+> __kmalloc_node 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/kmemleak.h:42 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3817 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3860 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3980 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3988)
+> alloc_cpumask_var_node 
+> (/home/marvin/linux/kernel/linux_torvalds/lib/cpumask.c:71)
+> cpuset_write_resmask 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:643 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:2601 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:3630)
+> cgroup_file_write 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cgroup.c:4092)
+> kernfs_fop_write_iter 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/kernfs/file.c:334)
+> vfs_write 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/fs.h:2087 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:497 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:590)
+> ksys_write (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:643)
+> __x64_sys_write 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:652)
+> do_syscall_64 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:52 
+> /home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:83)
+> entry_SYSCALL_64_after_hwframe 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/entry_64.S:129)
+> unreferenced object 0xffff8d48c12f3180 (size 8):
+> comm "test_cpuset_prs", pid 28081, jiffies 4295018483
+> hex dump (first 8 bytes):
+> 00 00 00 00 00 00 00 00                          ........
+> backtrace (crc 0):
+> kmemleak_alloc 
+> (/home/marvin/linux/kernel/linux_torvalds/mm/kmemleak.c:1045)
+> __kmalloc_node 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/kmemleak.h:42 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3817 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3860 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3980 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3988)
+> alloc_cpumask_var_node 
+> (/home/marvin/linux/kernel/linux_torvalds/lib/cpumask.c:71)
+> cpuset_write_resmask 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:646 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:2601 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:3630)
+> cgroup_file_write 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cgroup.c:4092)
+> kernfs_fop_write_iter 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/kernfs/file.c:334)
+> vfs_write 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/fs.h:2087 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:497 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:590)
+> ksys_write (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:643)
+> __x64_sys_write 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:652)
+> do_syscall_64 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:52 
+> /home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:83)
+> entry_SYSCALL_64_after_hwframe 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/entry_64.S:129)
+> unreferenced object 0xffff8d48c12f3188 (size 8):
+> comm "test_cpuset_prs", pid 28081, jiffies 4295018483
+> hex dump (first 8 bytes):
+> 00 00 00 00 00 00 00 00                          ........
+> backtrace (crc 0):
+> kmemleak_alloc 
+> (/home/marvin/linux/kernel/linux_torvalds/mm/kmemleak.c:1045)
+> __kmalloc_node 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/kmemleak.h:42 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3817 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3860 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3980 
+> /home/marvin/linux/kernel/linux_torvalds/mm/slub.c:3988)
+> alloc_cpumask_var_node 
+> (/home/marvin/linux/kernel/linux_torvalds/lib/cpumask.c:71)
+> cpuset_write_resmask 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:649 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:2601 
+> /home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cpuset.c:3630)
+> cgroup_file_write 
+> (/home/marvin/linux/kernel/linux_torvalds/kernel/cgroup/cgroup.c:4092)
+> kernfs_fop_write_iter 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/kernfs/file.c:334)
+> vfs_write 
+> (/home/marvin/linux/kernel/linux_torvalds/./include/linux/fs.h:2087 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:497 
+> /home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:590)
+> ksys_write (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:643)
+> __x64_sys_write 
+> (/home/marvin/linux/kernel/linux_torvalds/fs/read_write.c:652)
+> do_syscall_64 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:52 
+> /home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/common.c:83)
+> entry_SYSCALL_64_after_hwframe 
+> (/home/marvin/linux/kernel/linux_torvalds/arch/x86/entry/entry_64.S:129)
+>
+>
+>
+>
 
 
