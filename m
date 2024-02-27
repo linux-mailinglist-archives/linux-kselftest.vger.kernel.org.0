@@ -1,124 +1,113 @@
-Return-Path: <linux-kselftest+bounces-5466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E028686DF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 03:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7606986878A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 04:10:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2812A2900B2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 02:23:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31B87284942
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 03:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6E654BDF;
-	Tue, 27 Feb 2024 02:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590FE1CA8A;
+	Tue, 27 Feb 2024 03:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IzwC5LgQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BWIAYWL/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CE454900
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 02:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225B018B09;
+	Tue, 27 Feb 2024 03:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709000518; cv=none; b=uhyS7qmC+Y+jWo3N1Qn4y9PgVaZOBpaHCIpOvBVAG+2DL7+/5KqA4130pCBtxV08lKUvQNbYe9d8ht3qliEyF4l6dDP3faEUCBMHItlp9qPWScSrj1qZfzOX8yHjGONN5fR43kD6q/XXGOkGTUT5xmUYul7IIEqw0dGQD6LPP8s=
+	t=1709003429; cv=none; b=at2XYRHlc2PDY0v3z8gaGmiX3sc4BYIS8kBSgoQWbuEc67eslD8ty7+YWpTl9x87q4dOXOgyRdCM8dsEZXHMS/+s4Nz84QWBNGDYEZnL0FMMRzn/zBbvnqc/S2dLplPIITJF2KJrx14ulsslfPK24QDeXT7oTkOekSGAYdQk0ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709000518; c=relaxed/simple;
-	bh=SP3wECQuNsGizvBDLcQeElF0hhZLPHhC3anTjy4uCjs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rSkR7Qu8KP9jWB1dKgHVt80HerAwh3WO4qzv4K9iTIuOf69ZLsVdsLBLSgzwNeDztnYG6IYqnC6wPyqog+mpPkTm8+qqiT8mnsw8UIJsjLoEdy27/i4cQDfSHnSIMyCyO3BpyS9R4ZIiYeIyq0TqvX62o7rcYQHL2vyB3vJuJ5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IzwC5LgQ; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60770007e52so60144597b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Feb 2024 18:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709000515; x=1709605315; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gD/GJ68X0cVQGr5FjGXj7WBsDK+In0culAJ288XBYzk=;
-        b=IzwC5LgQTEaLnY8mA9DN+WrSuS9nT+RJnDbNcQ7JeVTwIKnzzQG3xthKYAWQv85AZr
-         wsvElYD70g09r9mszAQ3aD7QlggVoBvwZEUcDInU2HFPjFneCBZqwdNCyPgWM0v3/3Vl
-         ESs484eOh4pfSBsvpN90oE0eth8LHDVs//fp9LFXsrI+EVqFhN8ptaJfGYYgZlwdBk4M
-         8FMoYF8gmprX93JkSgCufwHKxI252tfqZinv7TDE4IRs3hgldEnzYV78Ikeiwy4sRXXQ
-         zkMbZbCc/Tzm85/uwSdPlTqv9QQLqCyptaf9Q6ZaiiXtSbe18q3DmV/d6qUCelx89/iK
-         Uo6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709000515; x=1709605315;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gD/GJ68X0cVQGr5FjGXj7WBsDK+In0culAJ288XBYzk=;
-        b=AnxJpDEyWt2BawARurFKA0++WrGRfVHuMJXPNoZKK+mKRLJ43Qnh0boKvl88BRylOM
-         WTPr6smpMxGXWV+0qckUrYGLiJeZVZ7ZKMetTWftvgvaz4icNF32oLSXgXyTX4PgmyOG
-         dEuh6WHiLXUJowxF1P7Jg/srr3ePGZiPyn9LmsEAF0GMU9/Ha7krplIGM+DpwMLwA+Nn
-         120+z47sHHdspSslm5L3syPDvH7xhM7qBO8apM1qydql3HtCIYSg6HamuwMYXOW/4zha
-         vRa94JFp9BZlnk8RRC24wkmmhjfrLa/Iou0YkXJ3wDt8nllK89ybbqLn5jdPyMmxbhN2
-         ytEA==
-X-Gm-Message-State: AOJu0YzOON3bu7yRvST8S0WaE55avX+V8VXCE8GSWzOU9ImJZ0CaNeG0
-	29CQjGKhN1BMuAjOVVUtbShIIRNuyBPbEkpytuHWCBukbrYSC76InAdOnl5uh21g+nQkGD0Fqf3
-	NzQ==
-X-Google-Smtp-Source: AGHT+IGySX71rsoZHQXEKCFWAzA8N1hjTbbEs4eGPFYiN/yqiIDehY1AvBVxznlEWhqTc915C808bTjpV/Q=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:84:b0:609:1fd9:f76 with SMTP id
- be4-20020a05690c008400b006091fd90f76mr201794ywb.0.1709000515502; Mon, 26 Feb
- 2024 18:21:55 -0800 (PST)
-Date: Mon, 26 Feb 2024 18:21:12 -0800
-In-Reply-To: <20240208204844.119326-1-thuth@redhat.com>
+	s=arc-20240116; t=1709003429; c=relaxed/simple;
+	bh=px+FzP8nHYq7W65Fl++IrzC/G4rPXKu6PG/CBccJBeE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=SBic70/OTNoTJ8LwlDBLvL+LyoKd+xUawglCl6V8GlUFPOOCAC+skIszRm7DP8Ej4muGEsP7mEUf1596tRrbJBuACDE3J3GVuEFbOdE8C6sgD73VxO/glet6S4qD6BB7AXCFFGABPqXqvwxIakBPbhkDa5be8klxau7YHLq3zyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BWIAYWL/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3866C43390;
+	Tue, 27 Feb 2024 03:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709003428;
+	bh=px+FzP8nHYq7W65Fl++IrzC/G4rPXKu6PG/CBccJBeE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=BWIAYWL/zqHVMNL1ygzCyT6lKrBpz+Lxi8Tf5I5nvYRdK10Ak0DIOtZIDrwZJHynD
+	 QS+XzVVTtjxAraQTvsh6Jl2KP9OP8qSCIoo+mm8szah5m9z1B7yjy92dSg9JEJZyoL
+	 daZJgcU8sHq1qkSnhgi5MJ0Tdzv0Mwk6SPZyjaB4BsEVz/rIemtjda0Ps7OBH4InbK
+	 sdSvaEaY6J9SH3L1kl7L5vPngeHcpIBTxyQuMffpOqQ4jZt24ls8kOE24TjCNrm1EE
+	 CO7Paqxc2PFMxPrOJTYqFVaLWepHr87UAEFTn+Zkyl22qs4S7XAE8DkizbtE2vSk92
+	 tIxI/CeZvrx8A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 96D48D88FB0;
+	Tue, 27 Feb 2024 03:10:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240208204844.119326-1-thuth@redhat.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <170900036555.3692027.1057525433723685864.b4-ty@google.com>
-Subject: Re: [PATCH v3 0/8] Use TAP in some more x86 KVM selftests
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, Thomas Huth <thuth@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Andrew Jones <ajones@ventanamicro.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 00/10] mptcp: more misc. fixes for v6.8
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170900342860.19917.16044337565928875958.git-patchwork-notify@kernel.org>
+Date: Tue, 27 Feb 2024 03:10:28 +0000
+References: <20240223-upstream-net-20240223-misc-fixes-v1-0-162e87e48497@kernel.org>
+In-Reply-To: <20240223-upstream-net-20240223-misc-fixes-v1-0-162e87e48497@kernel.org>
+To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ fw@strlen.de, kishen.maloor@intel.com, shuah@kernel.org,
+ peter.krystad@linux.intel.com, cpaasch@apple.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ tanggeliang@kylinos.cn, stable@vger.kernel.org, dcaratti@redhat.com
 
-On Thu, 08 Feb 2024 21:48:36 +0100, Thomas Huth wrote:
-> Basic idea of this series is now to use the kselftest_harness.h
-> framework to get TAP output in the tests, so that it is easier
-> for the user to see what is going on, and e.g. to be able to
-> detect whether a certain test is part of the test binary or not
-> (which is useful when tests get extended in the course of time).
+Hello:
+
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 23 Feb 2024 17:14:10 +0100 you wrote:
+> This series includes 6 types of fixes:
 > 
-> Since most tests also need a vcpu, we introduce our own macros
-> to define such tests, so we don't have to repeat this code all
-> over the place.
+> - Patch 1 fixes v4 mapped in v6 addresses support for the userspace PM,
+>   when asking to delete a subflow. It was done everywhere else, but not
+>   there. Patch 2 validates the modification, thanks to a subtest in
+>   mptcp_join.sh. These patches can be backported up to v5.19.
 > 
 > [...]
 
-OMG, you didn't tell me this allows sub-tests to run after a failed test!
-That alone is worth the conversion :-)
+Here is the summary with links:
+  - [net,01/10] mptcp: map v4 address to v6 when destroying subflow
+    https://git.kernel.org/netdev/net/c/535d620ea5ff
+  - [net,02/10] selftests: mptcp: rm subflow with v4/v4mapped addr
+    https://git.kernel.org/netdev/net/c/7092dbee2328
+  - [net,03/10] mptcp: avoid printing warning once on client side
+    https://git.kernel.org/netdev/net/c/5b49c41ac8f2
+  - [net,04/10] mptcp: push at DSS boundaries
+    https://git.kernel.org/netdev/net/c/b9cd26f640a3
+  - [net,05/10] mptcp: fix snd_wnd initialization for passive socket
+    https://git.kernel.org/netdev/net/c/adf1bb78dab5
+  - [net,06/10] mptcp: fix potential wake-up event loss
+    https://git.kernel.org/netdev/net/c/b111d8fbd2cb
+  - [net,07/10] selftests: mptcp: join: add ss mptcp support check
+    https://git.kernel.org/netdev/net/c/9480f388a2ef
+  - [net,08/10] mptcp: fix double-free on socket dismantle
+    https://git.kernel.org/netdev/net/c/10048689def7
+  - [net,09/10] mptcp: fix possible deadlock in subflow diag
+    https://git.kernel.org/netdev/net/c/d6a9608af9a7
+  - [net,10/10] selftests: mptcp: explicitly trigger the listener diag code-path
+    https://git.kernel.org/netdev/net/c/b4b51d36bbaa
 
-There's definitely a few enhancements we'll want to make, but this is more than
-good enough as a starting point.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Applied to kvm-x86 selftests, thanks!
 
-[1/8] KVM: selftests: x86: sync_regs_test: Use vcpu_run() where appropriate
-      https://github.com/kvm-x86/linux/commit/e10086285659
-[2/8] KVM: selftests: x86: sync_regs_test: Get regs structure before modifying it
-      https://github.com/kvm-x86/linux/commit/221d65449453
-[3/8] KVM: selftests: Move setting a vCPU's entry point to a dedicated API
-      https://github.com/kvm-x86/linux/commit/8ef192609f14
-[4/8] KVM: selftests: Add a macro to define a test with one vcpu
-      https://github.com/kvm-x86/linux/commit/992178c7219c
-[5/8] KVM: selftests: x86: Use TAP interface in the sync_regs test
-      https://github.com/kvm-x86/linux/commit/04941eb15439
-[6/8] KVM: selftests: x86: Use TAP interface in the fix_hypercall test
-      https://github.com/kvm-x86/linux/commit/69fb12492005
-[7/8] KVM: selftests: x86: Use TAP interface in the vmx_pmu_caps test
-      https://github.com/kvm-x86/linux/commit/200f604dfd07
-[8/8] KVM: selftests: x86: Use TAP interface in the userspace_msr_exit test
-      https://github.com/kvm-x86/linux/commit/8fd14fc541c7
-
---
-https://github.com/kvm-x86/linux/tree/next
 
