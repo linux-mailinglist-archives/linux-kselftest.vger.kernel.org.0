@@ -1,107 +1,114 @@
-Return-Path: <linux-kselftest+bounces-5482-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5483-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45A2B8690E3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 13:49:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B85B869819
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 15:29:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F4016286E63
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 12:49:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAA99293888
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 14:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC9513A892;
-	Tue, 27 Feb 2024 12:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BFAB146015;
+	Tue, 27 Feb 2024 14:27:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WVin+zwF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtouzCBP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885291EB25;
-	Tue, 27 Feb 2024 12:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCEF4146008;
+	Tue, 27 Feb 2024 14:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709038158; cv=none; b=kmeIERU9l5nZdSAIKoJnbZJYt6oVBPJX53dwq6T5H9tT2H4JT3pEhIXZRFNNMW9vuTWvhQVf05e/53fe/fBQW0ibFMltgBGcUyV1zfmkw9Dm61wKQchZqHMCioLS9Aj5Sd0SZujR6TSgGKAKMVwEwSXMS7szCEkEVOcsBm0aZA8=
+	t=1709044070; cv=none; b=UD5KF89Q9M+Ad2RaSyD1QCWDXNgrW3D3dSg7VsCtgp9HMMtY/ZsFF9yoFw0NlDPwzXD9T++lUvawypa5nn0naO50GGKTG2QJNuGtihu5gLr2fQc/DAxrqut12Smgb3n8yottfL8bCCsS/Rl6UWlBWxzNngZPBhZVzwuSV7/9SXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709038158; c=relaxed/simple;
-	bh=oTWwoTX0hrUSfcNocfpLt3JaDWHEII50tRTkLPscP7Y=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=SBnLfI/VhHoBkwdVtSWzsX93hEf5Pjkr8fEkIR0Hnq/5UP9lB3RoWJDe2hEftAwQHFCKNc6csQBofkYiwyQu46rfV2LbO3T3NHzdpmiAVUvEG3APErc1dJvDjwTb4vmlYXTJZ870JShyQDs1FfNXuyJMulw8IDD8518BolP8J7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WVin+zwF; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709038156; x=1740574156;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=oTWwoTX0hrUSfcNocfpLt3JaDWHEII50tRTkLPscP7Y=;
-  b=WVin+zwFzNlFnApqpIDrX73fxjFNTPcP5Ctj84APDBtHFRV76tc3Kc9Y
-   nJsTUcWyfOFXp/I6PLxa+OkaNbXIfuwFx/CIX9/uHw7CtE3DwGcluLMQu
-   Z1iE0gYKoI1Oa+7yYGntM7g5Z9fEfryN/VRXdnBq+ISwGdqLf2hG6H/IP
-   a2VW/ENP6R67yQ4++5B3mY7jUOksw7hDZ/rFNy6fU4c6iwWu8MY1DzGEp
-   Jm70QM8AfIGT6c5HnaLazO+IiX8Rpmk9Rb3ZCF779suuK8P3HZZDX57UM
-   HUBHO8cb4043aF5sHh9xuL4TfBWrYQtoOsAjltQlfzIM9StlVWtcVOFA8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="14815031"
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="14815031"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 04:49:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="7379971"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.34.61])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 04:49:14 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 27 Feb 2024 14:49:10 +0200 (EET)
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-cc: Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com, 
-    shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 0/3] selftests/resctrl: Simplify test cleanup
- functions
-In-Reply-To: <cover.1709018050.git.maciej.wieczor-retman@intel.com>
-Message-ID: <7b86f718-abfb-aa8f-5d4b-ebf5dd7b3e62@linux.intel.com>
-References: <cover.1709018050.git.maciej.wieczor-retman@intel.com>
+	s=arc-20240116; t=1709044070; c=relaxed/simple;
+	bh=vJ/n9mcTPOlux9gF800dhfBrTx6jxXg61HNCrSy8pyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=amPdFoIGgaHLvSNKUn3oSGG6BUNv3Q4l+PekbEQyjGtFTIrsZYMswvy7Ar5W933tGy9aQTePZb0M+bfSy+UvvoP/ZUIee3LXU3NSTjhNYlUsjRLtaVGPyinou5F4CIkJkEwOq6CQ6I2bUT/dfoHN4EP4dNWFcNO6Fyvq59fxEpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtouzCBP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF3EC433F1;
+	Tue, 27 Feb 2024 14:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709044070;
+	bh=vJ/n9mcTPOlux9gF800dhfBrTx6jxXg61HNCrSy8pyc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KtouzCBPEQ+Mnmh0hwnvSoMh31ymfs8np+NhfXaydpOPNJ3HZ8uSyFm0QiUm8WQjp
+	 V75YuTQUyun/ztJ/a+7b+TYSE2j7BnM2I72IzINHQBB3ZYWnA8yIFJEsO9wcbP5pYz
+	 q8hHbV9VH8xksKLBm+LtnWUgXMv3GMYqqfcn4UUPkCoCZGSqF6baai4Kf1rcT0mLW9
+	 KOpqPlw0W3M+TP95P+DDT54nPwIQh4hOlpwOHii2XpjqWf6lw5nExc/6aD9WqgMlaG
+	 Wg6vW/xinP1ASs1vLgD1RYmsZMcnzaybixRMRWYTYD2a9qaPaybTcRV571NcaXrtB2
+	 4K3cnzASZbNYw==
+Date: Tue, 27 Feb 2024 15:27:42 +0100
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next v3 04/16] bpf/helpers: introduce sleepable
+ bpf_timers
+Message-ID: <3jtqytxfqymfx2fenqby2x3zzra63tj7jrxrmunqsk6l7dqyip@jt7kdhxeb4np>
+References: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org>
+ <20240221-hid-bpf-sleepable-v3-4-1fb378ca6301@kernel.org>
+ <818e43447651af1a659993897c14d05fec5038e4.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-157701625-1709038150=:1099"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <818e43447651af1a659993897c14d05fec5038e4.camel@gmail.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Feb 23 2024, Eduard Zingerman wrote:
+> On Wed, 2024-02-21 at 17:25 +0100, Benjamin Tissoires wrote:
+> 
+> [...]
+> 
+> > @@ -1282,7 +1333,7 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
+> >  
+> >  	if (in_nmi())
+> >  		return -EOPNOTSUPP;
+> > -	if (flags & ~(BPF_F_TIMER_ABS | BPF_F_TIMER_CPU_PIN))
+> > +	if (flags & ~(BPF_F_TIMER_ABS | BPF_F_TIMER_CPU_PIN | BPF_F_TIMER_SLEEPABLE))
+> >  		return -EINVAL;
+> >  	__bpf_spin_lock_irqsave(&timer->lock);
+> >  	t = timer->timer;
+> > @@ -1299,7 +1350,10 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
+> >  	if (flags & BPF_F_TIMER_CPU_PIN)
+> >  		mode |= HRTIMER_MODE_PINNED;
+> >  
+> > -	hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+> > +	if (flags & BPF_F_TIMER_SLEEPABLE)
+> > +		schedule_work(&t->work);
+> > +	else
+> > +		hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+> 
+> It looks like nsecs is simply ignored for sleepable timers.
+> Should this be hrtimer_start() that waits nsecs and schedules work,
+> or schedule_delayed_work()? (but it takes delay in jiffies, which is
+> probably too coarse). Sorry if I miss something.
 
---8323328-157701625-1709038150=:1099
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Yeah, I agree it's confusing, but as mentioned by Toke in his reply, we
+should return -EINVAL if a timer value is provided (for now).
 
-On Tue, 27 Feb 2024, Maciej Wieczor-Retman wrote:
+Alexei mentioned[0] that he didn't want to mix delays in hrtimers with
+workqueue as they are non deterministic. So AFAIU, I should add the only
+guarantee we can provide: a sleepable context, and proper delays in
+sleepable contexts will be added once we have a better workqueue
+selection available.
 
-> Cleaning up after tests is implemented separately for individual tests
-> and called at the end of each test execution. Since these functions are
-> very similar and a more generalized test framework was introduced a
-> function pointer in the resctrl_test struct can be used to reduce the
-> amount of function calls.
->=20
-> These functions are also all called in the ctrl-c handler because the
-> handler isn't aware which test is currently running. Since the handler
-> is implemented with a sigaction no function parameters can be passed
-> there but information about what test is currently running can be passed
-> with a global variable.
->=20
-> Series applies cleanly on top of kselftests/next.
+Cheers,
+Benjamin
 
-Thanks. For the entire series:
-
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
---=20
- i.
-
---8323328-157701625-1709038150=:1099--
+[0] https://lore.kernel.org/bpf/CAO-hwJKz+eRA+BFLANTrEqz2jQAOANTE3c7eqNJ6wDqJR7jMiQ@mail.gmail.com/T/#md15e431cbcddec9fcaddf1c305234523ed26f7ce
 
