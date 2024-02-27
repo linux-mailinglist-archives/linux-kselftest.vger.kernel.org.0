@@ -1,72 +1,90 @@
-Return-Path: <linux-kselftest+bounces-5476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5477-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DF0D8689C8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 08:22:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4B998689FE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 08:40:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1D2F1C21DD1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 07:22:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99BD12897AE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Feb 2024 07:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B9055789;
-	Tue, 27 Feb 2024 07:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6D055E5D;
+	Tue, 27 Feb 2024 07:40:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YyeNCJE3"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2+s3DIBQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BED954BDA;
-	Tue, 27 Feb 2024 07:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709018534; cv=none; b=pvhZ71aa9sOFCB6DgJAnXFFVF6fnkAWD9Qfkhmtdo3sxW71lcRzwwbvUJxD+ox/5ZEx67pmwVeuYmqh2+irOfMS0J16fCMUteLPEfLkRhgpcpPx76t5ViVfJjWhv1QS5tWV9vS6F5g3OPL3R7pDc8T3TyDcVallB9Tzr0K9Cs08=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709018534; c=relaxed/simple;
-	bh=viarXyJsBylIM8v5zIxRYRLRIJ/5CzGbczuuN/R7kj0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yf7HKJZ3EWEiQw3WHbbpAjUzSIRADs9nFi11QkbGLJz9fHIcmfCfLbh7fPMggEC22ZDNFhrKWqm6hTKS/Yebz37soImBnqO0wcOez2UglSoqDSlQ67erAV891HP88LZqzXmIsQ2uU5XEBK3k/uuXEkr/iSO6QmUR/MX0492kw0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YyeNCJE3; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709018533; x=1740554533;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=viarXyJsBylIM8v5zIxRYRLRIJ/5CzGbczuuN/R7kj0=;
-  b=YyeNCJE3DlA/xCCQSefq7GKAZ6sW0tPmaMCSGdtJUD8ZTKoHwLJmL+1h
-   gke8GV+bb1JyH8L/uruQ9y9yRU9FdHr1TM5FR+Qtqqo0kTXc7/AfsdCy9
-   WSyoE/z+iy7JqjELhvkKMN2c/C5ai4YOGAjp2PH9EQfiQGRtVwL9AhyhG
-   0J3LiX96vfr8AaBY17mWSHGjwI/M1Dt98Arg+qrOp07CXoU+4kWutp7xJ
-   i1ajHW9Pn2RQv0/ZA0STWDy6A1pcLUS19dqbrmAgQ6KeGl+zQJ9xirNKu
-   88G1vi5oqzo4IQxV4bwLAEL1eEkf2PK1IdpRrv/gfspRepOVWzpBZkb3Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="3508454"
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="3508454"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 23:22:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="6910327"
-Received: from lzaleski-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.4.236])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 23:22:09 -0800
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: ilpo.jarvinen@linux.intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 3/3] selftests/resctrl: Move cleanups out of individual tests
-Date: Tue, 27 Feb 2024 08:21:43 +0100
-Message-ID: <e596cf36058d88f147fd8fcbf399c8eebf25bcd5.1709018050.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <cover.1709018050.git.maciej.wieczor-retman@intel.com>
-References: <cover.1709018050.git.maciej.wieczor-retman@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92F454F95;
+	Tue, 27 Feb 2024 07:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709019600; cv=fail; b=YlCO/RZ2WeFlcq2fcZXqYxxrYYSPAT3PwdIfR1bwqFDzod29NFW8QHi2TPszeIPsOkjpodDbl8COynPvDyJFWeFTX5QQoTvIBAOFoJTfbXzloaNDvwbLSShVa/n22ny4zkzdUIh8H7jBywskYLFrV34WNo1E53/CLPQ8nUuVF58=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709019600; c=relaxed/simple;
+	bh=Yz3G3Ts7bvjNPaenbCkoZodvCZN9SQ9omF0RnlMrY2U=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iMHAz2y30bGeWr7yk8hoMPoipNUwqMWJ/HPccePVVx5VEoNdBzgpGICPJzhsnbxGjD3FLYhtHn5hcG4sLK8i0ZCEbTJaaH2hArZq1gf6nJxm29olk3DKtery5A+J28c55kK1r7CclgfOv91IQBg5SZ3QvmfXlP8oaCT52TlTLBE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2+s3DIBQ; arc=fail smtp.client-ip=40.107.243.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JJmYZ8fo7sn4CghnoKF2FcuYy14f7VhCW8PoSKJNLtIsmFkolP2JbDQSzzD2PIrwxa5tCPZWjqV+gb+LnLEzP/XFwsd/6gItGPbuPmkQGeGxQkFSBTUi+e2qhPdJtSRLc+nvgcJ+n6DedN7IjMKlSEvBDmFxZo81jDn9w+tfBP1GVCbJJu9zUhYA03/NV7GjI365csfDNKW6LoiJa/7ZqzLv0yR9q3sKWQn9hZ9nD72hSaGXFSVZoiXhga2jUQ58DnFITlMMIxfO7BHiMYN9+VkECnk780nkNcW+CHtszJJUxpc3KLZqknbYV9XqNV4hYk8rPgvO8uyw1NwRmZkpAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DltwduLNgEfdqdfL67TzkuGukkI/LSD+thPg1GrHSP8=;
+ b=H7LPKHCI75EbjXPh9z79l+WsBlxI2LQtcjtYDMmjJheq474i0xSLiZQAerHHWzXyPwv81lvhlUxawe0+28UVquazZCLDR1dEng7UWRx4iGN9DrwxulhQkL9oV5ECNbku+gus3lQt89hAtWnZDTreVYX4ob/b6UghV6pY902agcYYMiDwyeqDPlivVoMW9CY/H63LxtybkoqCv6s/KQ2SqFx/Om38qMr4pXJzDOozXm/TZwj/re57/NdbhZ0fX6VkddKse0vwxSXucHhvLffU1ONY9FDwqv4NUkbARCQzolWkrZjQc+RZBNh1Jcowq0amSsam3tFhYm140XgJgOmzOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DltwduLNgEfdqdfL67TzkuGukkI/LSD+thPg1GrHSP8=;
+ b=2+s3DIBQk+DABrPUGsT+r+a+QYNnpUUMjkT1UkA2hqJQmP7WijIIVydnQC/2upTPaGp1Arig+rLLIHpAGcRqz9NoMkI6wmCwRC2lpPvLHBxcciyQRd/NnFI2IXiO0ViyZmqtDT+IwT93WmAWhr3JG765TBPz2P0wA6tzLwMzRKQ=
+Received: from CY5PR19CA0104.namprd19.prod.outlook.com (2603:10b6:930:83::21)
+ by SA3PR12MB9159.namprd12.prod.outlook.com (2603:10b6:806:3a0::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Tue, 27 Feb
+ 2024 07:39:55 +0000
+Received: from CY4PEPF0000EE37.namprd05.prod.outlook.com
+ (2603:10b6:930:83:cafe::be) by CY5PR19CA0104.outlook.office365.com
+ (2603:10b6:930:83::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.50 via Frontend
+ Transport; Tue, 27 Feb 2024 07:39:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EE37.mail.protection.outlook.com (10.167.242.43) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7292.25 via Frontend Transport; Tue, 27 Feb 2024 07:39:55 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 27 Feb
+ 2024 01:39:49 -0600
+From: Meng Li <li.meng@amd.com>
+To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui
+	<ray.huang@amd.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
+	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
+ Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
+ Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, Meng Li
+	<li.meng@amd.com>
+Subject: [PATCH] cpufreq: amd-pstate: adjust min/max limit perf
+Date: Tue, 27 Feb 2024 15:39:24 +0800
+Message-ID: <20240227073924.3573398-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,192 +92,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE37:EE_|SA3PR12MB9159:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b4e8e8c-fd83-49d2-9c12-08dc37674a85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	ADOHcWBtVy8+awhDpXNDG51PAeLRdhpWKCmDI1I11sDsEjdHDD18hfAj+UvOJxrElVjn+vkuRCnRNUhskKusg5n81opgG43P6cQb18epEmy+Xy0Phepg4i8CYoXVmnIKkc7fLEMeNA8dNYUEG4sLHdf4XuBMGHBlnwYZu13TXH8wWKJXdrK8ok8/crwL/bT8Qzkk/kg9GO1weOz+DMnyqMOstNSNEEc8mlYKTBdrawKdHW8RQNHDFyVWolpx7omkfA7vLDfJV8lfBwUlBTpE6hoj24WkMWjolfdMy0a5AtY4XsBCqTor+0IYe4DBHhUbUNXH6nOjc7RuHxFw80uA8YOKljG2E957Ub2VCnLTYF11XkbJ3zeLp+XfS5ZFb9Il5quRpT3oEA7ECfDuVVEcjtJto2Uk9w2NusJzoYVKGSO6JrgXaU38jSr9NEoYX3KTaj1P13aIdoRSEgvdEp/wh9xLGRfvPAifK+YzBrd2n+7NdXQ/mc0VLjOnEKLvjSTF7VJBDft4CEabwMY+3IH20bbBOH+v+sqTT4RQ5abWDYTeHJr82rwG1dlhT2w0S7UGWE3aWtHi3wO4iEoAyYL/HEioTulFqYJ/YI3AtLbRHRaH0/J0IrlB1F5qtOyHbHhnwjNz8L0IeYuaZYJLjvwG0SomWuHQ6U77Os40xoyNRDtMEMJAsdIsVnORHqXEaxz9Zros5J5d+P3jQLLw+iiM58CyyDWuiTcb+eOSX1mbMX/YKJ3wRrpJGcTl8d3OBGoG
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(36860700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 07:39:55.0103
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b4e8e8c-fd83-49d2-9c12-08dc37674a85
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE37.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9159
 
-Every test calls its cleanup function at the end of it's test function.
-After the cleanup function pointer is added to the test framework this
-can be simplified to executing the callback function at the end of the
-generic test running function.
+The min/max limit perf values calculated based on frequency
+may exceed the reasonable range of perf(highest perf, lowest perf).
 
-Make test cleanup functions static and call them from the end of
-run_single_test() from the resctrl_test's cleanup function pointer.
-
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Meng Li <li.meng@amd.com>
 ---
-Changelog v5:
-- Rebased onto kselftests/next.
-- Add Reinette's reviewed-by tag.
+ drivers/cpufreq/amd-pstate.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-Changelog v4:
-- Move cleanup call to test_cleanup(). (Reinette)
-
-Changelog v2:
-- Change most goto out paths into return ret. (Ilpo)
-
- tools/testing/selftests/resctrl/cat_test.c      | 7 ++-----
- tools/testing/selftests/resctrl/cmt_test.c      | 3 +--
- tools/testing/selftests/resctrl/mba_test.c      | 7 ++-----
- tools/testing/selftests/resctrl/mbm_test.c      | 7 ++-----
- tools/testing/selftests/resctrl/resctrl.h       | 4 ----
- tools/testing/selftests/resctrl/resctrl_tests.c | 6 ++++--
- 6 files changed, 11 insertions(+), 23 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 8fa4348ab461..c7686fb6641a 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -128,7 +128,7 @@ static int check_results(struct resctrl_val_param *param, const char *cache_type
- 	return fail;
- }
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index aa5e57e27d2b..2015c9fcc3c9 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -484,12 +484,19 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
  
--void cat_test_cleanup(void)
-+static void cat_test_cleanup(void)
+ static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
  {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -284,13 +284,10 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+-	u32 max_limit_perf, min_limit_perf;
++	u32 max_limit_perf, min_limit_perf, lowest_perf;
+ 	struct amd_cpudata *cpudata = policy->driver_data;
  
- 	ret = cat_test(test, uparams, &param, span, start_mask);
- 	if (ret)
--		goto out;
-+		return ret;
+ 	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
+ 	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
  
- 	ret = check_results(&param, test->resource,
- 			    cache_total_size, full_cache_mask, start_mask);
--out:
--	cat_test_cleanup();
--
- 	return ret;
- }
++	lowest_perf = READ_ONCE(cpudata->lowest_perf);
++	if (min_limit_perf < lowest_perf)
++		min_limit_perf = lowest_perf;
++
++	if (max_limit_perf < min_limit_perf)
++		max_limit_perf = min_limit_perf;
++
+ 	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
+ 	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
+ 	WRITE_ONCE(cpudata->max_limit_freq, policy->max);
+@@ -1387,6 +1394,12 @@ static void amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+ 	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
+ 	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
  
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index a01ccf86e6ce..a44e6fcd37b7 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -91,7 +91,7 @@ static int check_results(struct resctrl_val_param *param, size_t span, int no_of
- 				 MAX_DIFF, MAX_DIFF_PERCENT, runs - 1, true);
- }
++	if (min_limit_perf < min_perf)
++		min_limit_perf = min_perf;
++
++	if (max_limit_perf < min_limit_perf)
++		max_limit_perf = min_limit_perf;
++
+ 	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
+ 	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
  
--void cmt_test_cleanup(void)
-+static void cmt_test_cleanup(void)
- {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -161,7 +161,6 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
- out:
--	cmt_test_cleanup();
- 	free(span_str);
- 
- 	return ret;
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 189fbe20dc7b..5d6af9e8afed 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -137,7 +137,7 @@ static int check_results(void)
- 	return show_mba_info(bw_imc, bw_resc);
- }
- 
--void mba_test_cleanup(void)
-+static void mba_test_cleanup(void)
- {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -158,13 +158,10 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 
- 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
--		goto out;
-+		return ret;
- 
- 	ret = check_results();
- 
--out:
--	mba_test_cleanup();
--
- 	return ret;
- }
- 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 73d6a8b989f5..3059ccc51a5a 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -105,7 +105,7 @@ static int mbm_setup(const struct resctrl_test *test,
- 	return ret;
- }
- 
--void mbm_test_cleanup(void)
-+static void mbm_test_cleanup(void)
- {
- 	remove(RESULT_FILE_NAME);
- }
-@@ -126,15 +126,12 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 
- 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
--		goto out;
-+		return ret;
- 
- 	ret = check_results(DEFAULT_SPAN);
- 	if (ret && (get_vendor() == ARCH_INTEL))
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
--out:
--	mbm_test_cleanup();
--
- 	return ret;
- }
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index bc486f92aceb..00d51fa7531c 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -158,8 +158,6 @@ int resctrl_val(const struct resctrl_test *test,
- 		const struct user_params *uparams,
- 		const char * const *benchmark_cmd,
- 		struct resctrl_val_param *param);
--void mbm_test_cleanup(void);
--void mba_test_cleanup(void);
- unsigned long create_bit_mask(unsigned int start, unsigned int len);
- unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
- int get_full_cbm(const char *cache_type, unsigned long *mask);
-@@ -169,9 +167,7 @@ int resource_info_unsigned_get(const char *resource, const char *filename, unsig
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int signal_handler_register(const struct resctrl_test *test);
- void signal_handler_unregister(void);
--void cat_test_cleanup(void);
- unsigned int count_bits(unsigned long n);
--void cmt_test_cleanup(void);
- 
- void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
- void perf_event_initialize_read_format(struct perf_event_read *pe_read);
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 0590daec2f44..348d17cb2a84 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -100,8 +100,10 @@ static int test_prepare(const struct resctrl_test *test)
- 	return 0;
- }
- 
--static void test_cleanup(void)
-+static void test_cleanup(const struct resctrl_test *test)
- {
-+	if (test->cleanup)
-+		test->cleanup();
- 	umount_resctrlfs();
- 	signal_handler_unregister();
- }
-@@ -143,7 +145,7 @@ static void run_single_test(const struct resctrl_test *test, const struct user_p
- 	ksft_test_result(!ret, "%s: test\n", test->name);
- 
- cleanup:
--	test_cleanup();
-+	test_cleanup(test);
- }
- 
- static void init_user_params(struct user_params *uparams)
 -- 
-2.43.2
+2.34.1
 
 
