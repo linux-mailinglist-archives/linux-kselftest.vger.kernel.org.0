@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-5507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5508-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3428E86A434
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 01:04:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B515E86A445
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 01:09:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43ACFB2A80B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 00:03:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 424531F27436
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 00:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56297163;
-	Wed, 28 Feb 2024 00:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812D3363;
+	Wed, 28 Feb 2024 00:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="faslrYAr"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iLeIWnjq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C2123C2
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 00:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F9815C9
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 00:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709078516; cv=none; b=HlHuGWkZAhNxCbLD0iwBoOeWly+HLNX4PuNHzbSxLDgm2iyJaIklK2+sV5lKsCQOPfJ2M4dL56hwkataie41u/KNBjleYRFLiFwBjjT9IMtEA9fI0ezURe38UwBBnd0JOyL39Qmcw7Pn3LUbyphnUuplhbCThOP7sHfSF4G4H1k=
+	t=1709078938; cv=none; b=K7feia5CuH+UwAskd/vpFTDRG6+c4cbPMpIghpWFcppwBK9qDlzBY/j2SWVX4XSlVIRQkpvYNA9Zi4hpB1PTiVvtvBWPLhdR8aIcnrQe9RKeLolkmd3AOjmYmONEmAO25sC7caXv3gRkwa2D1s/MbOiqIhTL55BaXL0WkrUxYBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709078516; c=relaxed/simple;
-	bh=rJMJ2JMyWN+ZP1wfxJ61M7N5IzMgg95FlXOlFyiqAPY=;
+	s=arc-20240116; t=1709078938; c=relaxed/simple;
+	bh=nTsK9p1jokxVeO3Fo4MQIH5ecfakK/v2VWS6ZWRauNM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kuFiL7zpHp7IYMgl5JaMtmhdESBrvYRx0heJkSA6SkIBU9yWpXEWwx4YRM3g8rFiL/X9kuNVGCQdXOTsaGr3aD/oDmwbl+3pWEtrY2vOAsirYR6EwmUdoj9yG4GRMa0VkGUEiG14UNwANmkzqXMx3ec5M8hERZPgh3w1J7JETKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=faslrYAr; arc=none smtp.client-ip=209.85.166.177
+	 In-Reply-To:Content-Type; b=E4RmXhDz0bUy8yN68Kv/ZMzjOo9gzmfEqJ8+jqenDFbcAT9eIsVmRjYF90lwXZQSrZ6PrChybHrMUlpzs86Q26GbgwTH38R0XFR7MtAHEWhKNHsGYJCFxFda87n2lZKJHKEmYMhGb6SAdNurQBgR7yMJhkOLI4BR3SMcbr8OF+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iLeIWnjq; arc=none smtp.client-ip=209.85.166.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-365b413549eso948155ab.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 16:01:53 -0800 (PST)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3651ee59db4so1120165ab.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Feb 2024 16:08:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1709078512; x=1709683312; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1709078936; x=1709683736; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vrK0eALq3CiAPH0N0ru8YW+DX4foq/ClBC0Geu6EPXo=;
-        b=faslrYArGMUqphsHkdlrHW/26xGTlMIR+96BZYXQhsldVZryx8KimdmxYD1Uoqs3eu
-         Ny1xe1jgzny6QGwgH6ppwp1DGdyYGaZsb8iRKJh5KerpZUFCIsdCMrVq/n73IjpOEmB8
-         7M+V/fDIthXhle7+Bwyuxnqh+Z7XI5zJ7NMIo=
+        bh=Cq739qr1rsr2NonXQJuyDZ18sirm7FbjHPegYfq2M0w=;
+        b=iLeIWnjqSGm0LFXCaE04SK1RaEvsmz8Lcto/E1KGOxArhel2d5MtJS+LT/QApErkpY
+         y0Rhe/lzfD102AudZok9CuUBfbb/59geJnUM3uQ8hTtBSwqSDWxjZcQaz5Sq8Z5qGmnf
+         ir7pY94wwLzKBWYOrcf4jSIHsLmeCcRlFiiko=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709078512; x=1709683312;
+        d=1e100.net; s=20230601; t=1709078936; x=1709683736;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vrK0eALq3CiAPH0N0ru8YW+DX4foq/ClBC0Geu6EPXo=;
-        b=i0QL5NwAeTtxwo2ftxOmNXShBto8gyfWW3jxpubihYBbffvFgXiM4LciEAqg1nH0mv
-         9BvrWahigVTDJLQ0TisvmgW+RANreULo68KIrsh5NohiOviiOKO56IS9MG6Q4qybhGy7
-         zhlRnSU3rDTiqI0c1nCrXcSjV+DL8nB75ff34Bg7vlTpUpTqp6evhwMRlHbgvrQpNe64
-         JvIrrsG2ivQBVrf5/j5iNOQ/467FxgQS0dBiNrO62PwtszTwU+VqxUFhx8YPTHi71+IA
-         aEEOh87DreccKW7iF/j2a6E077/2Bef3J+F96EstAeyejI6MvbCrhyOgpbk6N8KRZVb3
-         awqA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJiJugvoZ2t3Z91bMTLpVhYDzAJBkwjkj2AnVdX0nukxHZ6kLuL0Kficj9zxC6l276Eh9R2ljQRXjt9/FIg08ICZ2HZwMJ6U+RYUOKFhEi
-X-Gm-Message-State: AOJu0YwKQ+QoniLhWhLF33lQHewv8kI0jn5tqmpae8wQ1/+N/V/sLwPX
-	4/Ew3s+a/CaDnQAB/wEa3DtiHw2bYZR9OEn43eX5sHqU/ZxvyyvgdTQoJ7Ee98o=
-X-Google-Smtp-Source: AGHT+IEyFi+EbG1qEGArV61BbwDxrrUz63Oh268SNQYaoJn57jboMklRNZBRwVEQ0zclSCq1pIQTXg==
-X-Received: by 2002:a6b:7e08:0:b0:7c7:f5ce:5d9b with SMTP id i8-20020a6b7e08000000b007c7f5ce5d9bmr797781iom.1.1709078512072;
-        Tue, 27 Feb 2024 16:01:52 -0800 (PST)
+        bh=Cq739qr1rsr2NonXQJuyDZ18sirm7FbjHPegYfq2M0w=;
+        b=YaoYtnQ05xYXilsmUMsAdpayndDB8CqPe95AGaFw8WaYBBMEVsSc4LPzTOUnyvrd2S
+         TTEu9ECeN7WWaAaOR6sX64bubhapVkvNMHjN0AKvjP3O09BQ3Fdu3O7YjUQ3cIZcsIEB
+         fbiXKo5O6ctCfWzJtOWfwoIhDVPPwOc8JvmGmiZ3MF+RGaiVXiEp0TbIAsoKw7RtH+pZ
+         pnt25JReUGF9OMiXKB9s4SabLvVmev3OXZiFMpDydSSyfeUlh4H9sa3GNMXTjfbfbODf
+         cUxNKRpUz+m20PEh/jfr1Fsw7w2aKdg+8J+ZbvvmixduLsMYCX5XzcCerQlRBD3z6cj5
+         dx2A==
+X-Forwarded-Encrypted: i=1; AJvYcCVG8MqDx/G/w76lNVcLvRfmEcdhDQg4QAsm3HN3TdclCTpNHWgB8qxnTf+YzO0me3P/Xiy1JhFGcgex9QJrvyglKXPYQO3X56eZlEzf/s7Q
+X-Gm-Message-State: AOJu0YyYPTaQ61KCkfWnlR79Qk330RW+05luZR+YhLOkwrxWJ1erPDR1
+	W7DQN0c97Jv8YVOGTA9EQvWtvlFCSjs5XS99bxKwnDJJkJ+RgkiuvOlJtHgxS5I=
+X-Google-Smtp-Source: AGHT+IHhurMRim1oZpaRa/EmwIjRlUocpRTaLd+78t+2y/ZxHBYDwHmgfe1pto6RyieYWCbjx43vvw==
+X-Received: by 2002:a05:6e02:1d98:b0:365:2f19:e58e with SMTP id h24-20020a056e021d9800b003652f19e58emr11475957ila.3.1709078935853;
+        Tue, 27 Feb 2024 16:08:55 -0800 (PST)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id s9-20020a6bdc09000000b007c76a2d6a98sm1947667ioc.53.2024.02.27.16.01.51
+        by smtp.gmail.com with ESMTPSA id x14-20020a056e020f0e00b00364b66eb5e3sm2427560ilj.24.2024.02.27.16.08.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 16:01:51 -0800 (PST)
-Message-ID: <5df7d5b1-1387-41f5-a9e9-29c9aefa448e@linuxfoundation.org>
-Date: Tue, 27 Feb 2024 17:01:50 -0700
+        Tue, 27 Feb 2024 16:08:55 -0800 (PST)
+Message-ID: <987a671f-bacf-4c44-a48d-97ab74397628@linuxfoundation.org>
+Date: Tue, 27 Feb 2024 17:08:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,111 +73,94 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] kselftest: Add basic test for probing the rust sample
- modules
+Subject: Re: [PATCH v6 0/5] selftests/resctrl: Add non-contiguous CBMs in
+ Intel CAT selftest
 Content-Language: en-US
-To: Laura Nao <laura.nao@collabora.com>, ojeda@kernel.org,
- alex.gaynor@gmail.com, wedsonaf@gmail.com, shuah@kernel.org
-Cc: usama.anjum@collabora.com, a.hindborg@samsung.com, aliceryhl@google.com,
- benno.lossin@proton.me, bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
- gary@garyguo.net, kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
- kernel@valentinobst.de, Sergio Gonzalez Collado <sergio.collado@gmail.com>,
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org,
+ fenghua.yu@intel.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240226101646.291337-1-laura.nao@collabora.com>
+References: <cover.1708072203.git.maciej.wieczor-retman@intel.com>
+ <f8886683-4f24-47ce-a0c6-ef28466bfec9@intel.com>
+ <685828ed-06d2-4a2c-9911-05145e55ea1a@linuxfoundation.org>
+ <48dab897-162d-4075-baa9-f5391a23d31d@intel.com>
+ <a8f1f104-c5c1-400c-873e-99b01cde1d88@linuxfoundation.org>
+ <beuizmgezzcnd3f74nsmigfn7n5emj43pxaqtyki7bjgj4nqn5@ldpqu65vaunu>
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240226101646.291337-1-laura.nao@collabora.com>
+In-Reply-To: <beuizmgezzcnd3f74nsmigfn7n5emj43pxaqtyki7bjgj4nqn5@ldpqu65vaunu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Laura,
-
-On 2/26/24 03:16, Laura Nao wrote:
-> Add new basic kselftest that checks if the available rust sample modules
-> can be added and removed correctly.
+On 2/26/24 02:28, Maciej Wieczor-Retman wrote:
+> Hi Shuah,
 > 
-> Signed-off-by: Laura Nao <laura.nao@collabora.com>
-> Reviewed-by: Sergio Gonzalez Collado <sergio.collado@gmail.com>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> Depends on:
-> - https://lore.kernel.org/all/20240102141528.169947-1-laura.nao@collabora.com/T/#u
-> - https://lore.kernel.org/all/20240131-ktap-sh-helpers-extend-v1-0-98ffb468712c@collabora.com/
-> Changes in v4:
-> - Added config file
-> Changes in v3:
-> - Removed useless KSFT_PASS, KSFT_FAIL, KSFT_SKIP constants
-> - Used ktap_finished to print the results summary and handle the return code
-> Changes in v2:
-> - Added missing SPDX line
-> - Edited test_probe_samples.sh script to use the common KTAP helpers file
-> ---
->   MAINTAINERS                                   |  1 +
->   tools/testing/selftests/Makefile              |  1 +
->   tools/testing/selftests/rust/Makefile         |  4 +++
->   tools/testing/selftests/rust/config           |  5 +++
->   .../selftests/rust/test_probe_samples.sh      | 34 +++++++++++++++++++
->   5 files changed, 45 insertions(+)
->   create mode 100644 tools/testing/selftests/rust/Makefile
->   create mode 100644 tools/testing/selftests/rust/config
->   create mode 100755 tools/testing/selftests/rust/test_probe_samples.sh
+> On 2024-02-23 at 15:37:11 -0700, Shuah Khan wrote:
+>>
+>> Hi Reinette,
+>>
+>> Okay ran a quick test. Why does this test leave "/sys/fs/resctrl"
+>> mounted when it exits. Can we fix this to unmount before the test
+>> exits?
+> 
+> I also wasn't able to reproduce this unmounting issue:
+> - with unmounted resctrl before test:
+> 
+> 	[/root]# ls /sys/fs/resctrl/
+> 	[/root]#
+> 	[/root]# ./resctrl_tests -t L3_NONCONT_CAT
+> 	TAP version 13
+> 	# Pass: Check kernel supports resctrl filesystem
+> 	# Pass: Check resctrl mountpoint "/sys/fs/resctrl" exists
+> 	# resctrl filesystem not mounted
+> 	# dmesg: [   12.502941] resctrl: L3 allocation detected
+> 	# dmesg: [   12.507134] resctrl: MB allocation detected
+> 	# dmesg: [   12.511315] resctrl: L3 monitoring detected
+> 	1..1
+> 	# Starting L3_NONCONT_CAT test ...
+> 	# Mounting resctrl to "/sys/fs/resctrl"
+> 	# Write schema "L3:1=3f" to resctrl FS
+> 	# Write schema "L3:1=f0f" to resctrl FS # write() failed : Invalid argument
+> 	# Non-contiguous CBMs not supported and write of non-contiguous CBM failed as expected
+> 	ok 1 L3_NONCONT_CAT: test
+> 	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 	[/root]# ls /sys/fs/resctrl/
+> 	[/root]#
+> 
+> And with mounted before test:
+> 
+> 	[/root]# ls /sys/fs/resctrl/
+> 	[/root]#
+> 	[/root]# mount -t resctrl resctrl /sys/fs/resctrl
+> 	[/root]# ls /sys/fs/resctrl/
+> 	cpus  cpus_list  info  mode  mon_data  mon_groups  schemata  size  tasks
+> 	[/root]# ./resctrl_tests -t L3_NONCONT_CAT
+> 	TAP version 13
+> 	# Pass: Check kernel supports resctrl filesystem
+> 	# Pass: Check resctrl mountpoint "/sys/fs/resctrl" exists
+> 	# resctrl filesystem is mounted
+> 	# dmesg: [   12.502941] resctrl: L3 allocation detected
+> 	# dmesg: [   12.507134] resctrl: MB allocation detected
+> 	# dmesg: [   12.511315] resctrl: L3 monitoring detected
+> 	1..1
+> 	# Starting L3_NONCONT_CAT test ...
+> 	# Mounting resctrl to "/sys/fs/resctrl"
+> 	# Write schema "L3:1=3f" to resctrl FS
+> 	# Write schema "L3:1=f0f" to resctrl FS # write() failed : Invalid argument
+> 	# Non-contiguous CBMs not supported and write of non-contiguous CBM failed as expected
+> 	ok 1 L3_NONCONT_CAT: test
+> 	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 	[/root]# ls /sys/fs/resctrl/
+> 	[/root]#
+> 
+> Looking at the code there is an unmounting function called after each test (at
+> the end of run_single_test() inside of test_cleanup()). The non-contiguous test
+> also doesn't write any data into a temp file so no additional cleanup is
+> necessary.
 > 
 
-I ran test again and I still see the same. I would like to
-see the script to handle error conditions.
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
->
-> +
-> +DIR="$(dirname "$(readlink -f "$0")")"
-> +
-> +source "${DIR}"/../kselftest/ktap_helpers.sh
-
-It tries to source and keeps going. Why can't we test for
-the file to exist and skip gracefully without printing
-the following messages.
-
-  ./test_probe_samples.sh: line 12: /linux/linux_6.8/tools/testing/selftests/rust/../kselftest/ktap_helpers.sh: No such file or director
-# ./test_probe_samples.sh: line 16: ktap_print_header: command not found
-# ./test_probe_samples.sh: line 18: ktap_set_plan: command not found
-# ./test_probe_samples.sh: line 22: ktap_test_skip: command not found
-# ./test_probe_samples.sh: line 22: ktap_test_skip: command not found
-# ./test_probe_samples.sh: line 34: ktap_finished: command not found
-
-
-
-not ok 1 selftests: rust: test_probe_samples.sh # exit=127
-
-
-> +
-> +rust_sample_modules=("rust_minimal" "rust_print")
-> +
-> +ktap_print_header
-> +
-> +ktap_set_plan "${#rust_sample_modules[@]}"
-> +
-> +for sample in "${rust_sample_modules[@]}"; do
-> +    if ! /sbin/modprobe -n -q "$sample"; then
-> +        ktap_test_skip "module $sample is not found in /lib/modules/$(uname -r)"
-> +        continue
-
-Why are we continuing here? Isn't this skip condition?
-
-> +    fi
-> +
-> +    if /sbin/modprobe -q "$sample"; then
-> +        /sbin/modprobe -q -r "$sample"
-> +        ktap_test_pass "$sample"
-> +    else
-> +        ktap_test_fail "$sample"
-> +    fi
-> +done
-> +
-> +ktap_finished
-
-
-I would like to see the test exit with skip code when RUST isn't
-enabled. Please refer to existing tests that do this properly.
+Looks fine. Thanks for the clarification.
 
 thanks,
 -- Shuah
