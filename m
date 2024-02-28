@@ -1,822 +1,348 @@
-Return-Path: <linux-kselftest+bounces-5543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71D4086B499
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 17:19:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D40686B4B4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 17:23:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 955531C2181F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 16:19:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1226828A0AE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 16:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12236EEF3;
-	Wed, 28 Feb 2024 16:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2134B6EF02;
+	Wed, 28 Feb 2024 16:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iqiwin78"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BI8l3DOs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C0A6EEE4;
-	Wed, 28 Feb 2024 16:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8456EF00;
+	Wed, 28 Feb 2024 16:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709137154; cv=none; b=OWWSaLSd8fGYGA38NTLR18VvHQQOz7YzFG4rmnyDpxlQPgC6YUshj8jzx4R8lMC+n16171vfRGzudrPsEioG4BYil6JTshS01XIjQvdYFiW76BIEwoQsdHfgqkEeUG7y5yexamF7tQIN7X2XPmJDTI5Vidk3/KV7RgVQcMw4MRo=
+	t=1709137422; cv=none; b=DOEpK28npcpLzVOcBO9kUqBf6sYcHxuZsMggFI3PLa1/jLEHDkTpL3ZhyO1B7BE6ogejmtbKzsgl4mH6TWfcGMum77wfXwiLJ28RTiMEZ8DSyqkEJqgLQa8D9mA8a2n/URo4Ogfdc26q5v+vtiLebzcGw6FbDzd5lzzo+tE4ijo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709137154; c=relaxed/simple;
-	bh=msSXQwaH7e82H4fvXfd/lpxDubPXrBKV0aQP5stW9fA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aAdm6xt/cdWi9m80gTyON6bi2HM8+c/e/bSkWsoSSpkHx2Ksir7KRpSyq5qjTioZGcvLlViRvPrL9DvjNX22oRUOKbjEjI1j4uBMfHwfzKWpVskqS0i9riID3kAaXBe1eUHatB7y8U4egTmcltoze/erBjr/tpcVMQf5/IHxBZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iqiwin78; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709137153; x=1740673153;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=msSXQwaH7e82H4fvXfd/lpxDubPXrBKV0aQP5stW9fA=;
-  b=iqiwin78EdC33rbJSsp7yRPS4FrgM2t52OSOoYvdGV2jWHMBaxUsELy0
-   9bTDB0colSs+P/m+w9yWzZKJ4srSENi71rfxmCRw+zIhtPUKzDiVDN2Sx
-   iDn+sAkt33sg68ZCBmdjRL47KhYw4jO2Yk14pGtNrMx3IWDASwpT2wSp9
-   /epfmGUvJJJA/mxzQWQ37HTCYGjLeLihUlcbcrbWJgwAGwyjKatGT0JLh
-   StxgG5NAw2RgruqUs64opECxUowUIrJjJldooL6OoMIdRnZBODcCK+3DH
-   0II2vV6FDfEknV5orqKQdU2+Ki0FJldm570ykn7qQXwBihU1EJIbeEduN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="3710380"
-X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
-   d="scan'208";a="3710380"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 08:19:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
-   d="scan'208";a="7534859"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.125.242.247]) ([10.125.242.247])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 08:19:07 -0800
-Message-ID: <3945531c-b5c7-46ce-a32f-7248bfc7061e@linux.intel.com>
-Date: Thu, 29 Feb 2024 00:19:04 +0800
+	s=arc-20240116; t=1709137422; c=relaxed/simple;
+	bh=I+SyE4CU6A7PIpz7/UkE5GuyQ0cPlhCjBT+6s7mK1bY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rK/RC4q2/7i6g54x+rAewBR3WGlYcj2aNcMpdLO+6A7u+xYQfC1aLO9BDQac322Ti/Yzu7IuwcLIE0Oilglqz4FHz+Gw5sC4tYiY8Fc9pIPP42ZHLOKhT4h1rQz7ENXtRXzDS8JH1JuPkcgBq0fGEQYO5k3XmcL95j/OTkZgzDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BI8l3DOs; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-55a8fd60af0so7941058a12.1;
+        Wed, 28 Feb 2024 08:23:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709137418; x=1709742218; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4WI2cHpZvkH+gwexC3pLa1GObaZXrIV7psuo7LfYA9k=;
+        b=BI8l3DOsTRYtY22BcT/SXP6R4d9LBOf8vRWbiDZMK3Qwj7fjPqFWWxWfg6/MY4O8m6
+         Lw9Gxum5HGaH4+qcvQHAbTirAKwV4P5mDceRU7MZPAyDJEiZ18JdTMoX9AkTWrZKm6tE
+         weXT77J3jGbVfOMCaK/XlsVB6NRHowO2+5PVdWitFE3HoAwoqyPoW6n9Wp74umoNkDhi
+         jcCPZkQvPkGoyARsINcwR2ULvic7Z1Dbb1DAvEgtPky4t0A+NERchpplVbcZqcjIsN5R
+         78P1Ue0JLxOqYayOzqfRCGTvgWbcizX4vr1R889sPTyTM9d3TIBIKrrT6V4AXp0gSfQv
+         6+tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709137418; x=1709742218;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4WI2cHpZvkH+gwexC3pLa1GObaZXrIV7psuo7LfYA9k=;
+        b=GVl5asS0fsCfTOT0dGS/6adKAbdPwS0h7v6oXn7thGpcXq3rdRBy3sqHipMy82onWm
+         UwnTy9RzhAqe+R/wHpOlR52q1wzRb3GekdyiJOMagi5/c/TiBixAzRbgXBV2Vy0IJaiU
+         TzgheggmmHlrTYi4io6nEk6NeE6ZD9lR3dZUm7+FysQ8HOSMhBGVrKeyIFPadnbKGvYn
+         HtOiTBIv367sAGL8VeT366GqZLciTEQ2gjTtDc58KyJsd2KkvkI4kcDgXJnixfBlLfdT
+         jQpGJgylMvc+Kq8n1qopce8R5EK8roYgyR4YOZZBGuLp/ub1gJAZMN3cHy95x4y4gQgX
+         WCww==
+X-Forwarded-Encrypted: i=1; AJvYcCWVBqbPs8wVlZo+L2tYVM766ERuGI42YhUswp51LkcHIAOMiXPsdsmE4nS3ehs8aAD+bwBhljHidMQib302lMWdaD4EfXR0/6+dbTpIxBKdBb1q5G+xyFc929GqAe9dwwwBA2udUr90pXd8A/SCtNnxW0OlzDjnDniH25k6Ts40vSKkLsi3wbr/p4AS91a6VRENni3Q5cX4u474w8rQdPv4wX9OyZ6z7NRM2xNX
+X-Gm-Message-State: AOJu0Yz2+i/YQl8SBSBmwBVijVFwELYJ0Z8KIQPUE0P0gCA63SL8PiYs
+	WaomJ6hSqpG3UZ6qrB5yQJICsh+NOBVVpRqyNev95xn+mQGYjTJb37dDdolf
+X-Google-Smtp-Source: AGHT+IGoxvDSGHxp4le7rPS6WHhdpKno1hOWM02YP/6S4v0Xs2xhWMEUy+OEfagbuc6PsujyWMll1Q==
+X-Received: by 2002:a05:6402:3456:b0:565:7116:d533 with SMTP id l22-20020a056402345600b005657116d533mr9512238edc.6.1709137417592;
+        Wed, 28 Feb 2024 08:23:37 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id p2-20020a50c942000000b005657eefa8e9sm1918592edh.4.2024.02.28.08.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Feb 2024 08:23:37 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 28 Feb 2024 17:23:34 +0100
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] tracing/probes: Support function parameter access
+ from return probe
+Message-ID: <Zd9eBn2FTQzYyg7L@krava>
+References: <170891987362.609861.6767830614537418260.stgit@devnote2>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 05/29] KVM: selftests: Add helper functions to
- create TDX VMs
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
- Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
- Chao Peng <chao.p.peng@linux.intel.com>,
- Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
- Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
-References: <20231212204647.2170650-1-sagis@google.com>
- <20231212204647.2170650-6-sagis@google.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20231212204647.2170650-6-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <170891987362.609861.6767830614537418260.stgit@devnote2>
+
+On Mon, Feb 26, 2024 at 12:57:53PM +0900, Masami Hiramatsu (Google) wrote:
+> Hi,
+> 
+> Here is version 2 series of patches to support accessing function entry data
+> from function *return* probes (including kretprobe and fprobe-exit event).
+> 
+> In this version, I added another cleanup [4/7], updated README[5/7], added
+> testcases[6/7] and updated document[7/7].
+> 
+> This allows us to access the results of some functions, which returns the
+> error code and its results are passed via function parameter, such as an
+> structure-initialization function.
+> 
+> For example, vfs_open() will link the file structure to the inode and update
+> mode. Thus we can trace that changes.
+> 
+>  # echo 'f vfs_open mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events
+>  # echo 'f vfs_open%return mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events 
+>  # echo 1 > events/fprobes/enable 
+>  # cat trace
+>               sh-131     [006] ...1.  1945.714346: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x2 inode=0x0
+>               sh-131     [006] ...1.  1945.714358: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4d801e inode=0xffff888008470168
+>              cat-143     [007] ...1.  1945.717949: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
+>              cat-143     [007] ...1.  1945.717956: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4a801d inode=0xffff888005f78d28
+>              cat-143     [007] ...1.  1945.720616: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
+>              cat-143     [007] ...1.  1945.728263: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0xa800d inode=0xffff888004ada8d8
+
+hi,
+I hit a crash while playing with this, by runnning:
+
+  # echo 'f vfs_read%return $arg*' >> dynamic_events
+  # echo 1 > events/fprobes/enable 
+
+jirka
 
 
-
-On 12/13/2023 4:46 AM, Sagi Shahar wrote:
-> From: Erdem Aktas <erdemaktas@google.com>
->
-> TDX requires additional IOCTLs to initialize VM and vCPUs to add
-> private memory and to finalize the VM memory. Also additional utility
-> functions are provided to manipulate a TD, similar to those that
-> manipulate a VM in the current selftest framework.
->
-> A TD's initial register state cannot be manipulated directly by
-> setting the VM's memory, hence boot code is provided at the TD's reset
-> vector. This boot code takes boot parameters loaded in the TD's memory
-> and sets up the TD for the selftest.
->
-> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
-> Signed-off-by: Ryan Afranji <afranji@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
->   tools/testing/selftests/kvm/Makefile          |   2 +
->   .../kvm/include/x86_64/tdx/td_boot.h          |  82 ++++
->   .../kvm/include/x86_64/tdx/td_boot_asm.h      |  16 +
->   .../kvm/include/x86_64/tdx/tdx_util.h         |  16 +
->   .../selftests/kvm/lib/x86_64/tdx/td_boot.S    | 101 ++++
->   .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   | 434 ++++++++++++++++++
->   6 files changed, 651 insertions(+)
->   create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h
->   create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h
->   create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
->   create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
->   create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
->
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index b11ac221aba4..a35150ab855f 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -50,6 +50,8 @@ LIBKVM_x86_64 += lib/x86_64/svm.c
->   LIBKVM_x86_64 += lib/x86_64/ucall.c
->   LIBKVM_x86_64 += lib/x86_64/vmx.c
->   LIBKVM_x86_64 += lib/x86_64/sev.c
-> +LIBKVM_x86_64 += lib/x86_64/tdx/tdx_util.c
-> +LIBKVM_x86_64 += lib/x86_64/tdx/td_boot.S
->   
->   LIBKVM_aarch64 += lib/aarch64/gic.c
->   LIBKVM_aarch64 += lib/aarch64/gic_v3.c
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h
-> new file mode 100644
-> index 000000000000..148057e569d6
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h
-> @@ -0,0 +1,82 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef SELFTEST_TDX_TD_BOOT_H
-> +#define SELFTEST_TDX_TD_BOOT_H
-> +
-> +#include <stdint.h>
-> +#include "tdx/td_boot_asm.h"
-> +
-> +/*
-> + * Layout for boot section (not to scale)
-> + *
-> + *                                  GPA
-> + * ┌─────────────────────────────┬──0x1_0000_0000 (4GB)
-> + * │   Boot code trampoline      │
-> + * ├─────────────────────────────┼──0x0_ffff_fff0: Reset vector (16B below 4GB)
-> + * │   Boot code                 │
-> + * ├─────────────────────────────┼──td_boot will be copied here, so that the
-> + * │                             │  jmp to td_boot is exactly at the reset vector
-> + * │   Empty space               │
-> + * │                             │
-> + * ├─────────────────────────────┤
-> + * │                             │
-> + * │                             │
-> + * │   Boot parameters           │
-> + * │                             │
-> + * │                             │
-> + * └─────────────────────────────┴──0x0_ffff_0000: TD_BOOT_PARAMETERS_GPA
-> + */
-> +#define FOUR_GIGABYTES_GPA (4ULL << 30)
-> +
-> +/**
-> + * The exact memory layout for LGDT or LIDT instructions.
-> + */
-> +struct __packed td_boot_parameters_dtr {
-> +	uint16_t limit;
-> +	uint32_t base;
-> +};
-> +
-> +/**
-> + * The exact layout in memory required for a ljmp, including the selector for
-> + * changing code segment.
-> + */
-> +struct __packed td_boot_parameters_ljmp_target {
-> +	uint32_t eip_gva;
-> +	uint16_t code64_sel;
-> +};
-> +
-> +/**
-> + * Allows each vCPU to be initialized with different eip and esp.
-> + */
-> +struct __packed td_per_vcpu_parameters {
-> +	uint32_t esp_gva;
-> +	struct td_boot_parameters_ljmp_target ljmp_target;
-> +};
-> +
-> +/**
-> + * Boot parameters for the TD.
-> + *
-> + * Unlike a regular VM, we can't ask KVM to set registers such as esp, eip, etc
-> + * before boot, so to run selftests, these registers' values have to be
-> + * initialized by the TD.
-> + *
-> + * This struct is loaded in TD private memory at TD_BOOT_PARAMETERS_GPA.
-> + *
-> + * The TD boot code will read off parameters from this struct and set up the
-> + * vcpu for executing selftests.
-> + */
-> +struct __packed td_boot_parameters {
-> +	uint32_t cr0;
-> +	uint32_t cr3;
-> +	uint32_t cr4;
-> +	struct td_boot_parameters_dtr gdtr;
-> +	struct td_boot_parameters_dtr idtr;
-> +	struct td_per_vcpu_parameters per_vcpu[];
-> +};
-> +
-> +extern void td_boot(void);
-> +extern void reset_vector(void);
-> +extern void td_boot_code_end(void);
-> +
-> +#define TD_BOOT_CODE_SIZE (td_boot_code_end - td_boot)
-> +
-> +#endif /* SELFTEST_TDX_TD_BOOT_H */
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h
-> new file mode 100644
-> index 000000000000..0a07104f7deb
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef SELFTEST_TDX_TD_BOOT_ASM_H
-> +#define SELFTEST_TDX_TD_BOOT_ASM_H
-> +
-> +/*
-> + * GPA where TD boot parameters wil lbe loaded.
-> + *
-> + * TD_BOOT_PARAMETERS_GPA is arbitrarily chosen to
-> + *
-> + * + be within the 4GB address space
-> + * + provide enough contiguous memory for the struct td_boot_parameters such
-> + *   that there is one struct td_per_vcpu_parameters for KVM_MAX_VCPUS
-> + */
-> +#define TD_BOOT_PARAMETERS_GPA 0xffff0000
-> +
-> +#endif  // SELFTEST_TDX_TD_BOOT_ASM_H
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
-> new file mode 100644
-> index 000000000000..274b245f200b
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef SELFTESTS_TDX_KVM_UTIL_H
-> +#define SELFTESTS_TDX_KVM_UTIL_H
-> +
-> +#include <stdint.h>
-> +
-> +#include "kvm_util_base.h"
-> +
-> +struct kvm_vcpu *td_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id, void *guest_code);
-> +
-> +struct kvm_vm *td_create(void);
-> +void td_initialize(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
-> +		   uint64_t attributes);
-> +void td_finalize(struct kvm_vm *vm);
-> +
-> +#endif // SELFTESTS_TDX_KVM_UTIL_H
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S b/tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
-> new file mode 100644
-> index 000000000000..800e09264d4e
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
-> @@ -0,0 +1,101 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#include "tdx/td_boot_asm.h"
-> +
-> +/* Offsets for reading struct td_boot_parameters */
-> +#define TD_BOOT_PARAMETERS_CR0         0
-> +#define TD_BOOT_PARAMETERS_CR3         4
-> +#define TD_BOOT_PARAMETERS_CR4         8
-> +#define TD_BOOT_PARAMETERS_GDT         12
-> +#define TD_BOOT_PARAMETERS_IDT         18
-> +#define TD_BOOT_PARAMETERS_PER_VCPU    24
-> +
-> +/* Offsets for reading struct td_per_vcpu_parameters */
-> +#define TD_PER_VCPU_PARAMETERS_ESP_GVA     0
-> +#define TD_PER_VCPU_PARAMETERS_LJMP_TARGET 4
-> +
-> +#define SIZEOF_TD_PER_VCPU_PARAMETERS      10
-> +
-> +.code32
-> +
-> +.globl td_boot
-> +td_boot:
-> +	/* In this procedure, edi is used as a temporary register */
-> +	cli
-> +
-> +	/* Paging is off */
-> +
-> +	movl $TD_BOOT_PARAMETERS_GPA, %ebx
-> +
-> +	/*
-> +	 * Find the address of struct td_per_vcpu_parameters for this
-> +	 * vCPU based on esi (TDX spec: initialized with vcpu id). Put
-> +	 * struct address into register for indirect addressing
-> +	 */
-> +	movl $SIZEOF_TD_PER_VCPU_PARAMETERS, %eax
-> +	mul %esi
-> +	leal TD_BOOT_PARAMETERS_PER_VCPU(%ebx), %edi
-> +	addl %edi, %eax
-> +
-> +	/* Setup stack */
-> +	movl TD_PER_VCPU_PARAMETERS_ESP_GVA(%eax), %esp
-> +
-> +	/* Setup GDT */
-> +	leal TD_BOOT_PARAMETERS_GDT(%ebx), %edi
-> +	lgdt (%edi)
-> +
-> +	/* Setup IDT */
-> +	leal TD_BOOT_PARAMETERS_IDT(%ebx), %edi
-> +	lidt (%edi)
-> +
-> +	/*
-> +	 * Set up control registers (There are no instructions to
-> +	 * mov from memory to control registers, hence we need to use ebx
-> +	 * as a scratch register)
-> +	 */
-> +	movl TD_BOOT_PARAMETERS_CR4(%ebx), %edi
-> +	movl %edi, %cr4
-> +	movl TD_BOOT_PARAMETERS_CR3(%ebx), %edi
-> +	movl %edi, %cr3
-> +	movl TD_BOOT_PARAMETERS_CR0(%ebx), %edi
-> +	movl %edi, %cr0
-> +
-> +	/* Paging is on after setting the most significant bit on cr0 */
-> +
-> +	/*
-> +	 * Jump to selftest guest code. Far jumps read <segment
-> +	 * selector:new eip> from <addr+4:addr>. This location has
-> +	 * already been set up in boot parameters, and we can read boot
-> +	 * parameters because boot code and boot parameters are loaded so
-> +	 * that GVA and GPA are mapped 1:1.
-> +	 */
-> +	ljmp *TD_PER_VCPU_PARAMETERS_LJMP_TARGET(%eax)
-> +
-> +.globl reset_vector
-> +reset_vector:
-> +	jmp td_boot
-> +	/*
-> +	 * Pad reset_vector to its full size of 16 bytes so that this
-> +	 * can be loaded with the end of reset_vector aligned to GPA=4G
-> +	 */
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +	int3
-> +
-> +/* Leave marker so size of td_boot code can be computed */
-> +.globl td_boot_code_end
-> +td_boot_code_end:
-> +
-> +/* Disable executable stack */
-> +.section .note.GNU-stack,"",%progbits
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> new file mode 100644
-> index 000000000000..9b69c733ce01
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> @@ -0,0 +1,434 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#define _GNU_SOURCE
-> +#include <asm/kvm.h>
-> +#include <asm/kvm_host.h>
-> +#include <errno.h>
-> +#include <linux/kvm.h>
-> +#include <stdint.h>
-> +#include <sys/ioctl.h>
-> +
-> +#include "kvm_util.h"
-> +#include "test_util.h"
-> +#include "tdx/td_boot.h"
-> +#include "kvm_util_base.h"
-> +#include "processor.h"
-> +
-> +/*
-> + * TDX ioctls
-> + */
-> +
-> +static char *tdx_cmd_str[] = {
-> +	"KVM_TDX_CAPABILITIES",
-> +	"KVM_TDX_INIT_VM",
-> +	"KVM_TDX_INIT_VCPU",
-> +	"KVM_TDX_INIT_MEM_REGION",
-> +	"KVM_TDX_FINALIZE_VM"
-> +};
-> +#define TDX_MAX_CMD_STR (ARRAY_SIZE(tdx_cmd_str))
-> +
-> +static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
-> +{
-> +	struct kvm_tdx_cmd tdx_cmd;
-> +	int r;
-> +
-> +	TEST_ASSERT(ioctl_no < TDX_MAX_CMD_STR, "Unknown TDX CMD : %d\n",
-> +		    ioctl_no);
-> +
-> +	memset(&tdx_cmd, 0x0, sizeof(tdx_cmd));
-> +	tdx_cmd.id = ioctl_no;
-> +	tdx_cmd.flags = flags;
-> +	tdx_cmd.data = (uint64_t)data;
-> +
-> +	r = ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
-> +	TEST_ASSERT(r == 0, "%s failed: %d  %d", tdx_cmd_str[ioctl_no], r,
-> +		    errno);
-> +}
-> +
-> +#define XFEATURE_MASK_CET (XFEATURE_MASK_CET_USER | XFEATURE_MASK_CET_KERNEL)
-> +
-> +static void tdx_apply_cpuid_restrictions(struct kvm_cpuid2 *cpuid_data)
-> +{
-> +	for (int i = 0; i < cpuid_data->nent; i++) {
-> +		struct kvm_cpuid_entry2 *e = &cpuid_data->entries[i];
-> +
-> +		if (e->function == 0xd && e->index == 0) {
-> +			/*
-> +			 * TDX module requires both XTILE_{CFG, DATA} to be set.
-> +			 * Both bits are required for AMX to be functional.
-> +			 */
-> +			if ((e->eax & XFEATURE_MASK_XTILE) !=
-> +			    XFEATURE_MASK_XTILE) {
-> +				e->eax &= ~XFEATURE_MASK_XTILE;
-> +			}
-> +		}
-> +		if (e->function == 0xd && e->index == 1) {
-> +			/*
-> +			 * TDX doesn't support LBR yet.
-> +			 * Disable bits from the XCR0 register.
-> +			 */
-> +			e->ecx &= ~XFEATURE_MASK_LBR;
-> +			/*
-> +			 * TDX modules requires both CET_{U, S} to be set even
-> +			 * if only one is supported.
-> +			 */
-> +			if (e->ecx & XFEATURE_MASK_CET)
-> +				e->ecx |= XFEATURE_MASK_CET;
-> +		}
-> +	}
-> +}
-> +
-> +static void tdx_td_init(struct kvm_vm *vm, uint64_t attributes)
-> +{
-> +	const struct kvm_cpuid2 *cpuid;
-> +	struct kvm_tdx_init_vm *init_vm;
-> +
-> +	cpuid = kvm_get_supported_cpuid();
-> +
-> +	init_vm = malloc(sizeof(*init_vm) +
-> +			 sizeof(init_vm->cpuid.entries[0]) * cpuid->nent);
-> +
-> +	memset(init_vm, 0, sizeof(*init_vm));
-> +	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
-> +
-> +	init_vm->attributes = attributes;
-> +
-> +	tdx_apply_cpuid_restrictions(&init_vm->cpuid);
-> +
-> +	tdx_ioctl(vm->fd, KVM_TDX_INIT_VM, 0, init_vm);
-> +}
-> +
-> +static void tdx_td_vcpu_init(struct kvm_vcpu *vcpu)
-> +{
-> +	const struct kvm_cpuid2 *cpuid = kvm_get_supported_cpuid();
-> +
-> +	vcpu_init_cpuid(vcpu, cpuid);
-> +	tdx_ioctl(vcpu->fd, KVM_TDX_INIT_VCPU, 0, NULL);
-> +}
-> +
-> +static void tdx_init_mem_region(struct kvm_vm *vm, void *source_pages,
-> +				uint64_t gpa, uint64_t size)
-> +{
-> +	struct kvm_tdx_init_mem_region mem_region = {
-> +		.source_addr = (uint64_t)source_pages,
-> +		.gpa = gpa,
-> +		.nr_pages = size / PAGE_SIZE,
-> +	};
-> +	uint32_t metadata = KVM_TDX_MEASURE_MEMORY_REGION;
-> +
-> +	TEST_ASSERT((mem_region.nr_pages > 0) &&
-> +			    ((mem_region.nr_pages * PAGE_SIZE) == size),
-> +		    "Cannot add partial pages to the guest memory.\n");
-> +	TEST_ASSERT(((uint64_t)source_pages & (PAGE_SIZE - 1)) == 0,
-> +		    "Source memory buffer is not page aligned\n");
-> +	tdx_ioctl(vm->fd, KVM_TDX_INIT_MEM_REGION, metadata, &mem_region);
-> +}
-> +
-> +static void tdx_td_finalizemr(struct kvm_vm *vm)
-> +{
-> +	tdx_ioctl(vm->fd, KVM_TDX_FINALIZE_VM, 0, NULL);
-> +}
-> +
-> +/*
-> + * TD creation/setup/finalization
-> + */
-> +
-> +static void tdx_enable_capabilities(struct kvm_vm *vm)
-> +{
-> +	int rc;
-> +
-> +	rc = kvm_check_cap(KVM_CAP_X2APIC_API);
-> +	TEST_ASSERT(rc, "TDX: KVM_CAP_X2APIC_API is not supported!");
-> +	rc = kvm_check_cap(KVM_CAP_SPLIT_IRQCHIP);
-> +	TEST_ASSERT(rc, "TDX: KVM_CAP_SPLIT_IRQCHIP is not supported!");
-> +
-> +	vm_enable_cap(vm, KVM_CAP_X2APIC_API,
-> +		      KVM_X2APIC_API_USE_32BIT_IDS |
-> +			      KVM_X2APIC_API_DISABLE_BROADCAST_QUIRK);
-> +	vm_enable_cap(vm, KVM_CAP_SPLIT_IRQCHIP, 24);
-> +}
-> +
-> +static void tdx_configure_memory_encryption(struct kvm_vm *vm)
-> +{
-> +	/* Configure shared/enCrypted bit for this VM according to TDX spec */
-> +	vm->arch.s_bit = 1ULL << (vm->pa_bits - 1);
-> +	vm->arch.c_bit = 0;
-> +	/* Set gpa_protected_mask so that tagging/untagging of GPAs works */
-> +	vm->gpa_protected_mask = vm->arch.s_bit;
-> +	/* This VM is protected (has memory encryption) */
-> +	vm->protected = true;
-> +}
-> +
-> +static void tdx_apply_cr4_restrictions(struct kvm_sregs *sregs)
-> +{
-> +	/* TDX spec 11.6.2: CR4 bit MCE is fixed to 1 */
-> +	sregs->cr4 |= X86_CR4_MCE;
-> +
-> +	/* Set this because UEFI also sets this up, to handle XMM exceptions */
-> +	sregs->cr4 |= X86_CR4_OSXMMEXCPT;
-> +
-> +	/* TDX spec 11.6.2: CR4 bit VMXE and SMXE are fixed to 0 */
-> +	sregs->cr4 &= ~(X86_CR4_VMXE | X86_CR4_SMXE);
-> +}
-> +
-> +static void load_td_boot_code(struct kvm_vm *vm)
-> +{
-> +	void *boot_code_hva = addr_gpa2hva(vm, FOUR_GIGABYTES_GPA - TD_BOOT_CODE_SIZE);
-> +
-> +	TEST_ASSERT(td_boot_code_end - reset_vector == 16,
-> +		"The reset vector must be 16 bytes in size.");
-> +	memcpy(boot_code_hva, td_boot, TD_BOOT_CODE_SIZE);
-> +}
-> +
-> +static void load_td_per_vcpu_parameters(struct td_boot_parameters *params,
-> +					struct kvm_sregs *sregs,
-> +					struct kvm_vcpu *vcpu,
-> +					void *guest_code)
-> +{
-> +	/* Store vcpu_index to match what the TDX module would store internally */
-> +	static uint32_t vcpu_index;
-> +
-> +	struct td_per_vcpu_parameters *vcpu_params = &params->per_vcpu[vcpu_index];
-> +
-> +	TEST_ASSERT(vcpu->initial_stack_addr != 0,
-> +		"initial stack address should not be 0");
-> +	TEST_ASSERT(vcpu->initial_stack_addr <= 0xffffffff,
-> +		"initial stack address must fit in 32 bits");
-> +	TEST_ASSERT((uint64_t)guest_code <= 0xffffffff,
-> +		"guest_code must fit in 32 bits");
-> +	TEST_ASSERT(sregs->cs.selector != 0, "cs.selector should not be 0");
-> +
-> +	vcpu_params->esp_gva = (uint32_t)(uint64_t)vcpu->initial_stack_addr;
-> +	vcpu_params->ljmp_target.eip_gva = (uint32_t)(uint64_t)guest_code;
-> +	vcpu_params->ljmp_target.code64_sel = sregs->cs.selector;
-> +
-> +	vcpu_index++;
-> +}
-> +
-> +static void load_td_common_parameters(struct td_boot_parameters *params,
-> +				struct kvm_sregs *sregs)
-> +{
-> +	/* Set parameters! */
-> +	params->cr0 = sregs->cr0;
-> +	params->cr3 = sregs->cr3;
-> +	params->cr4 = sregs->cr4;
-> +	params->gdtr.limit = sregs->gdt.limit;
-> +	params->gdtr.base = sregs->gdt.base;
-> +	params->idtr.limit = sregs->idt.limit;
-> +	params->idtr.base = sregs->idt.base;
-> +
-> +	TEST_ASSERT(params->cr0 != 0, "cr0 should not be 0");
-> +	TEST_ASSERT(params->cr3 != 0, "cr3 should not be 0");
-> +	TEST_ASSERT(params->cr4 != 0, "cr4 should not be 0");
-> +	TEST_ASSERT(params->gdtr.base != 0, "gdt base address should not be 0");
-
-Do we also need to check idtr.base?
-
-
-> +}
-> +
-> +static void load_td_boot_parameters(struct td_boot_parameters *params,
-> +				struct kvm_vcpu *vcpu, void *guest_code)
-> +{
-> +	struct kvm_sregs sregs;
-> +
-> +	/* Assemble parameters in sregs */
-> +	memset(&sregs, 0, sizeof(struct kvm_sregs));
-> +	vcpu_setup_mode_sregs(vcpu->vm, &sregs);
-> +	tdx_apply_cr4_restrictions(&sregs);
-> +	kvm_setup_idt(vcpu->vm, &sregs.idt);
-> +
-> +	if (!params->cr0)
-> +		load_td_common_parameters(params, &sregs);
-> +
-> +	load_td_per_vcpu_parameters(params, &sregs, vcpu, guest_code);
-> +}
-> +
-> +/**
-> + * Adds a vCPU to a TD (Trusted Domain) with minimum defaults. It will not set
-> + * up any general purpose registers as they will be initialized by the TDX. In
-> + * TDX, vCPUs RIP is set to 0xFFFFFFF0. See Intel TDX EAS Section "Initial State
-> + * of Guest GPRs" for more information on vCPUs initial register values when
-> + * entering the TD first time.
-> + *
-> + * Input Args:
-> + *   vm - Virtual Machine
-> + *   vcpuid - The id of the VCPU to add to the VM.
-> + */
-> +struct kvm_vcpu *td_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id, void *guest_code)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	/*
-> +	 * TD setup will not use the value of rip set in vm_vcpu_add anyway, so
-> +	 * NULL can be used for guest_code.
-> +	 */
-> +	vcpu = vm_vcpu_add(vm, vcpu_id, NULL);
-> +
-> +	tdx_td_vcpu_init(vcpu);
-> +
-> +	load_td_boot_parameters(addr_gpa2hva(vm, TD_BOOT_PARAMETERS_GPA),
-> +				vcpu, guest_code);
-> +
-> +	return vcpu;
-> +}
-> +
-> +/**
-> + * Iterate over set ranges within sparsebit @s. In each iteration,
-> + * @range_begin and @range_end will take the beginning and end of the set range,
-> + * which are of type sparsebit_idx_t.
-> + *
-> + * For example, if the range [3, 7] (inclusive) is set, within the iteration,
-> + * @range_begin will take the value 3 and @range_end will take the value 7.
-> + *
-> + * Ensure that there is at least one bit set before using this macro with
-> + * sparsebit_any_set(), because sparsebit_first_set() will abort if none are
-> + * set.
-> + */
-> +#define sparsebit_for_each_set_range(s, range_begin, range_end)		\
-> +	for (range_begin = sparsebit_first_set(s),			\
-> +		     range_end = sparsebit_next_clear(s, range_begin) - 1; \
-> +	     range_begin && range_end;					\
-> +	     range_begin = sparsebit_next_set(s, range_end),		\
-> +		     range_end = sparsebit_next_clear(s, range_begin) - 1)
-> +/*
-> + * sparsebit_next_clear() can return 0 if [x, 2**64-1] are all set, and the -1
-> + * would then cause an underflow back to 2**64 - 1. This is expected and
-> + * correct.
-> + *
-> + * If the last range in the sparsebit is [x, y] and we try to iterate,
-> + * sparsebit_next_set() will return 0, and sparsebit_next_clear() will try and
-> + * find the first range, but that's correct because the condition expression
-> + * would cause us to quit the loop.
-> + */
-
-Since both sev and tdx need sparsebit_for_each_set_range(),
-can it be moved to a header file to avoid code duplication?
-
-
-> +
-> +static void load_td_memory_region(struct kvm_vm *vm,
-> +				  struct userspace_mem_region *region)
-> +{
-> +	const struct sparsebit *pages = region->protected_phy_pages;
-> +	const uint64_t hva_base = region->region.userspace_addr;
-> +	const vm_paddr_t gpa_base = region->region.guest_phys_addr;
-> +	const sparsebit_idx_t lowest_page_in_region = gpa_base >>
-> +						      vm->page_shift;
-> +
-> +	sparsebit_idx_t i;
-> +	sparsebit_idx_t j;
-> +
-> +	if (!sparsebit_any_set(pages))
-> +		return;
-> +
-> +	sparsebit_for_each_set_range(pages, i, j) {
-> +		const uint64_t size_to_load = (j - i + 1) * vm->page_size;
-> +		const uint64_t offset =
-> +			(i - lowest_page_in_region) * vm->page_size;
-> +		const uint64_t hva = hva_base + offset;
-> +		const uint64_t gpa = gpa_base + offset;
-> +		void *source_addr;
-> +
-> +		/*
-> +		 * KVM_TDX_INIT_MEM_REGION ioctl cannot encrypt memory in place,
-> +		 * hence we have to make a copy if there's only one backing
-> +		 * memory source
-> +		 */
-> +		source_addr = mmap(NULL, size_to_load, PROT_READ | PROT_WRITE,
-> +				   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-> +		TEST_ASSERT(
-> +			source_addr,
-> +			"Could not allocate memory for loading memory region");
-> +
-> +		memcpy(source_addr, (void *)hva, size_to_load);
-> +
-> +		tdx_init_mem_region(vm, source_addr, gpa, size_to_load);
-> +
-> +		munmap(source_addr, size_to_load);
-> +	}
-> +}
-> +
-> +static void load_td_private_memory(struct kvm_vm *vm)
-> +{
-> +	int ctr;
-> +	struct userspace_mem_region *region;
-> +
-> +	hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
-> +		load_td_memory_region(vm, region);
-> +	}
-> +}
-> +
-> +struct kvm_vm *td_create(void)
-> +{
-> +	struct vm_shape shape;
-> +
-> +	shape.mode = VM_MODE_DEFAULT;
-> +	shape.type = KVM_X86_TDX_VM;
-> +	return ____vm_create(shape);
-> +}
-> +
-> +static void td_setup_boot_code(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type)
-> +{
-> +	vm_vaddr_t addr;
-> +	size_t boot_code_allocation = round_up(TD_BOOT_CODE_SIZE, PAGE_SIZE);
-> +	vm_paddr_t boot_code_base_gpa = FOUR_GIGABYTES_GPA - boot_code_allocation;
-> +	size_t npages = DIV_ROUND_UP(boot_code_allocation, PAGE_SIZE);
-> +
-> +	vm_userspace_mem_region_add(vm, src_type, boot_code_base_gpa, 1, npages,
-> +				    KVM_MEM_PRIVATE);
-> +	addr = vm_vaddr_alloc_1to1(vm, boot_code_allocation, boot_code_base_gpa, 1);
-> +	TEST_ASSERT_EQ(addr, boot_code_base_gpa);
-> +
-> +	load_td_boot_code(vm);
-> +}
-> +
-> +static size_t td_boot_parameters_size(void)
-> +{
-> +	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
-> +	size_t total_per_vcpu_parameters_size =
-> +		max_vcpus * sizeof(struct td_per_vcpu_parameters);
-> +
-> +	return sizeof(struct td_boot_parameters) + total_per_vcpu_parameters_size;
-> +}
-> +
-> +static void td_setup_boot_parameters(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type)
-> +{
-> +	vm_vaddr_t addr;
-> +	size_t boot_params_size = td_boot_parameters_size();
-> +	int npages = DIV_ROUND_UP(boot_params_size, PAGE_SIZE);
-> +	size_t total_size = npages * PAGE_SIZE;
-> +
-> +	vm_userspace_mem_region_add(vm, src_type, TD_BOOT_PARAMETERS_GPA, 2,
-> +				    npages, KVM_MEM_PRIVATE);
-> +	addr = vm_vaddr_alloc_1to1(vm, total_size, TD_BOOT_PARAMETERS_GPA, 2);
-> +	TEST_ASSERT_EQ(addr, TD_BOOT_PARAMETERS_GPA);
-> +}
-> +
-> +void td_initialize(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
-> +		   uint64_t attributes)
-> +{
-> +	uint64_t nr_pages_required;
-> +
-> +	tdx_enable_capabilities(vm);
-> +
-> +	tdx_configure_memory_encryption(vm);
-> +
-> +	tdx_td_init(vm, attributes);
-> +
-> +	nr_pages_required = vm_nr_pages_required(VM_MODE_DEFAULT, 1, 0);
-> +
-> +	/*
-> +	 * Add memory (add 0th memslot) for TD. This will be used to setup the
-> +	 * CPU (provide stack space for the CPU) and to load the elf file.
-> +	 */
-> +	vm_userspace_mem_region_add(vm, src_type, 0, 0, nr_pages_required,
-> +				    KVM_MEM_PRIVATE);
-> +
-> +	kvm_vm_elf_load(vm, program_invocation_name);
-> +
-> +	vm_init_descriptor_tables(vm);
-> +
-> +	td_setup_boot_code(vm, src_type);
-> +	td_setup_boot_parameters(vm, src_type);
-> +}
-> +
-> +void td_finalize(struct kvm_vm *vm)
-> +{
-> +	sync_exception_handlers_to_guest(vm);
-> +
-> +	load_td_private_memory(vm);
-> +
-> +	tdx_td_finalizemr(vm);
-> +}
-
+---
+[   86.805519][  T712] general protection fault, probably for non-canonical address 0xef01a20a8bd21200: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+[   86.807259][  T712] CPU: 0 PID: 712 Comm: cat Not tainted 6.8.0-rc5+ #432 b8184d32457f2dd20b7178757a1fce97b3f847e2
+[   86.808417][  T712] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-1.fc38 04/01/2014
+[   86.809294][  T712] RIP: 0010:rethook_trampoline_handler+0x8e/0x200
+[   86.809930][  T712] Code: 5e 20 00 48 8b a8 c8 2a 00 00 48 85 ed 75 2f e9 8b 00 00 00 4d 85 ed 74 17 48 8b 45 08 48 8d 7d f0 4c 89 f9 4c 89 e2 48 8b 30 <41> ff d5 0f 1f 00 48 39 dd 74 6a 48 8b 6d 00 48 85 ed 74 61 4c 39
+[   86.811727][  T712] RSP: 0018:ffffc90001e0bdf8 EFLAGS: 00010286
+[   86.812316][  T712] RAX: ffffc90001e0bef0 RBX: ffff8881775999a0 RCX: ffffc90001e0be40
+[   86.813106][  T712] RDX: ffffffff81545129 RSI: 0000000000000000 RDI: ffff888177599990
+[   86.813881][  T712] RBP: ffff8881775999a0 R08: 0000000000000000 R09: ffff88810246af00
+[   86.814626][  T712] R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff81545129
+[   86.815357][  T712] R13: ef01a20a8bd21200 R14: ffffc90001e0bee8 R15: ffffc90001e0be40
+[   86.816114][  T712] FS:  00007f22d7c1f740(0000) GS:ffff88846ce00000(0000) knlGS:0000000000000000
+[   86.816885][  T712] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.817455][  T712] CR2: 00007f22d7b9c000 CR3: 0000000176918001 CR4: 0000000000770ef0
+[   86.818221][  T712] PKRU: 55555554
+[   86.818579][  T712] Call Trace:
+[   86.818900][  T712]  <TASK>
+[   86.819194][  T712]  ? die_addr+0x32/0x80
+[   86.819583][  T712]  ? exc_general_protection+0x276/0x4d0
+[   86.820079][  T712]  ? asm_exc_general_protection+0x22/0x30
+[   86.820600][  T712]  ? ksys_read+0x69/0xf0
+[   86.821022][  T712]  ? ksys_read+0x69/0xf0
+[   86.821422][  T712]  ? rethook_trampoline_handler+0x8e/0x200
+[   86.821984][  T712]  ? rethook_trampoline_handler+0x91/0x200
+[   86.822539][  T712]  arch_rethook_trampoline_callback+0x36/0x50
+[   86.823097][  T712]  arch_rethook_trampoline+0x2c/0x60
+[   86.823584][  T712]  ? ksys_read+0x69/0xf0
+[   86.823962][  T712]  osnoise_arch_unregister+0x210/0x210
+[   86.824463][  T712]  do_syscall_64+0x87/0x1b0
+[   86.824910][  T712]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
+[   86.825418][  T712] RIP: 0033:0x7f22d7d230b1
+[   86.825859][  T712] Code: d5 fe ff ff 55 48 8d 3d 25 47 0a 00 48 89 e5 e8 b5 18 02 00 0f 1f 44 00 00 f3 0f 1e fa 80 3d 2d b5 0d 00 00 74 13 31 c0 0f 05 <48> 3d 00 f0 ff ff 77 4f c3 66 0f 1f 44 00 00 55 48 89 e5 48 83 ec
+[   86.827635][  T712] RSP: 002b:00007fffdaaef668 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[   86.828355][  T712] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007f22d7d230b1
+[   86.829017][  T712] RDX: 0000000000020000 RSI: 00007f22d7b9c000 RDI: 0000000000000003
+[   86.829710][  T712] RBP: 00007fffdaaef690 R08: 00000000ffffffff R09: 0000000000000000
+[   86.831165][  T712] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000020000
+[   86.831910][  T712] R13: 00007f22d7b9c000 R14: 0000000000000003 R15: 0000000000000000
+[   86.832691][  T712]  </TASK>
+[   86.833016][  T712] Modules linked in: intel_rapl_msr intel_rapl_common crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel kvm_intel rapl iTCO_wdt iTCO_vendor_support i2c_i801 i2c_smbus lpc_ich drm loop drm_panel_orientation_quirks zram
+[   86.835078][  T634] general protection fault, probably for non-canonical address 0x440038d965baf00: 0000 [#2] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+[   86.835196][  T712] ---[ end trace 0000000000000000 ]---
+[   86.835943][  T634] CPU: 3 PID: 634 Comm: sshd Tainted: G      D            6.8.0-rc5+ #432 b8184d32457f2dd20b7178757a1fce97b3f847e2
+[   86.835946][  T634] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-1.fc38 04/01/2014
+[   86.835947][  T634] RIP: 0010:rethook_trampoline_handler+0x8e/0x200
+[   86.835952][  T634] Code: 5e 20 00 48 8b a8 c8 2a 00 00 48 85 ed 75 2f e9 8b 00 00 00 4d 85 ed 74 17 48 8b 45 08 48 8d 7d f0 4c 89 f9 4c 89 e2 48 8b 30 <41> ff d5 0f 1f 00 48 39 dd 74 6a 48 8b 6d 00 48 85 ed 74 61 4c 39
+[   86.836363][  T712] RIP: 0010:rethook_trampoline_handler+0x8e/0x200
+[   86.837090][  T634] RSP: 0018:ffffc90001d3bdf8 EFLAGS: 00010206
+[   86.837776][  T712] Code: 5e 20 00 48 8b a8 c8 2a 00 00 48 85 ed 75 2f e9 8b 00 00 00 4d 85 ed 74 17 48 8b 45 08 48 8d 7d f0 4c 89 f9 4c 89 e2 48 8b 30 <41> ff d5 0f 1f 00 48 39 dd 74 6a 48 8b 6d 00 48 85 ed 74 61 4c 39
+[   86.838205][  T634] 
+[   86.839488][  T712] RSP: 0018:ffffc90001e0bdf8 EFLAGS: 00010286
+[   86.839890][  T634] RAX: ffffc90001d3bef0 RBX: ffff888176cbbaa0 RCX: ffffc90001d3be40
+[   86.840239][  T712] 
+[   86.840240][  T712] RAX: ffffc90001e0bef0 RBX: ffff8881775999a0 RCX: ffffc90001e0be40
+[   86.841309][  T634] RDX: ffffffff81545129 RSI: 0000000000000000 RDI: ffff888176cbba90
+[   86.841311][  T634] RBP: ffff888176cbbaa0 R08: 0000000000000001 R09: 0000000000000000
+[   86.841312][  T634] R10: 0000000000000001 R11: 0000000000000001 R12: ffffffff81545129
+[   86.841313][  T634] R13: 0440038d965baf00 R14: ffffc90001d3bee8 R15: ffffc90001d3be40
+[   86.841314][  T634] FS:  00007f1ddf838940(0000) GS:ffff88846da00000(0000) knlGS:0000000000000000
+[   86.841316][  T634] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.841477][  T712] RDX: ffffffff81545129 RSI: 0000000000000000 RDI: ffff888177599990
+[   86.841800][  T634] CR2: 0000559fb5f9f000 CR3: 0000000176e2e004 CR4: 0000000000770ef0
+[   86.842308][  T712] RBP: ffff8881775999a0 R08: 0000000000000000 R09: ffff88810246af00
+[   86.842456][  T634] PKRU: 55555554
+[   86.842458][  T634] Call Trace:
+[   86.842459][  T634]  <TASK>
+[   86.842462][  T634]  ? die_addr+0x32/0x80
+[   86.842978][  T712] R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff81545129
+[   86.843508][  T634]  ? exc_general_protection+0x276/0x4d0
+[   86.843516][  T634]  ? asm_exc_general_protection+0x22/0x30
+[   86.844002][  T712] R13: ef01a20a8bd21200 R14: ffffc90001e0bee8 R15: ffffc90001e0be40
+[   86.844004][  T712] FS:  00007f22d7c1f740(0000) GS:ffff88846ce00000(0000) knlGS:0000000000000000
+[   86.844503][  T634]  ? ksys_read+0x69/0xf0
+[   86.844507][  T634]  ? ksys_read+0x69/0xf0
+[   86.844510][  T634]  ? rethook_trampoline_handler+0x8e/0x200
+[   86.845033][  T712] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.845677][  T634]  ? rethook_trampoline_handler+0x91/0x200
+[   86.845680][  T634]  arch_rethook_trampoline_callback+0x36/0x50
+[   86.845684][  T634]  arch_rethook_trampoline+0x2c/0x60
+[   86.846111][  T712] CR2: 00007f22d7b9c000 CR3: 0000000176918001 CR4: 0000000000770ef0
+[   86.846674][  T634]  ? ksys_read+0x69/0xf0
+[   86.846679][  T634]  osnoise_arch_unregister+0x210/0x210
+[   86.847213][  T712] PKRU: 55555554
+[   86.847648][  T634]  do_syscall_64+0x87/0x1b0
+[   86.847653][  T634]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
+[   86.847868][  T712] note: cat[712] exited with preempt_count 1
+[   86.848096][  T634] RIP: 0033:0x7f1ddfc4a0b1
+[   86.869351][  T634] Code: d5 fe ff ff 55 48 8d 3d 25 47 0a 00 48 89 e5 e8 b5 18 02 00 0f 1f 44 00 00 f3 0f 1e fa 80 3d 2d b5 0d 00 00 74 13 31 c0 0f 05 <48> 3d 00 f0 ff ff 77 4f c3 66 0f 1f 44 00 00 55 48 89 e5 48 83 ec
+[   86.871186][  T634] RSP: 002b:00007fffdd061ae8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[   86.871995][  T634] RAX: ffffffffffffffda RBX: 0000000000008000 RCX: 00007f1ddfc4a0b1
+[   86.872785][  T634] RDX: 0000000000008000 RSI: 000055bbb41e37b0 RDI: 000000000000000c
+[   86.873553][  T634] RBP: 00007fffdd061b50 R08: 0000000000000000 R09: 0000000000000000
+[   86.874320][  T634] R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000000
+[   86.874960][  T634] R13: 0000000000000000 R14: 000055bbb4172840 R15: 000000000000000c
+[   86.875670][  T634]  </TASK>
+[   86.875964][  T634] Modules linked in: intel_rapl_msr intel_rapl_common crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel kvm_intel rapl iTCO_wdt iTCO_vendor_support i2c_i801 i2c_smbus lpc_ich drm loop drm_panel_orientation_quirks zram
+[   86.877814][  T634] ---[ end trace 0000000000000000 ]---
+[   86.877991][  T450] kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
+[   86.878210][  T634] RIP: 0010:rethook_trampoline_handler+0x8e/0x200
+[   86.878217][  T634] Code: 5e 20 00 48 8b a8 c8 2a 00 00 48 85 ed 75 2f e9 8b 00 00 00 4d 85 ed 74 17 48 8b 45 08 48 8d 7d f0 4c 89 f9 4c 89 e2 48 8b 30 <41> ff d5 0f 1f 00 48 39 dd 74 6a 48 8b 6d 00 48 85 ed 74 61 4c 39
+[   86.878219][  T634] RSP: 0018:ffffc90001e0bdf8 EFLAGS: 00010286
+[   86.878221][  T634] RAX: ffffc90001e0bef0 RBX: ffff8881775999a0 RCX: ffffc90001e0be40
+[   86.878222][  T634] RDX: ffffffff81545129 RSI: 0000000000000000 RDI: ffff888177599990
+[   86.878224][  T634] RBP: ffff8881775999a0 R08: 0000000000000000 R09: ffff88810246af00
+[   86.878225][  T634] R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff81545129
+[   86.878226][  T634] R13: ef01a20a8bd21200 R14: ffffc90001e0bee8 R15: ffffc90001e0be40
+[   86.878227][  T634] FS:  00007f1ddf838940(0000) GS:ffff88846da00000(0000) knlGS:0000000000000000
+[   86.878228][  T634] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.878230][  T634] CR2: 0000559fb5f9f000 CR3: 0000000176e2e004 CR4: 0000000000770ef0
+[   86.878233][  T634] PKRU: 55555554
+[   86.878235][  T634] note: sshd[634] exited with preempt_count 1
+[   86.888492][  T450] BUG: unable to handle page fault for address: ffffc90001cdff58
+[   86.889266][  T450] #PF: supervisor instruction fetch in kernel mode
+[   86.889914][  T450] #PF: error_code(0x0011) - permissions violation
+[   86.891248][  T450] PGD 100000067 P4D 100000067 PUD 102a49067 PMD 10b3ee067 PTE 8000000109295163
+[   86.892032][  T450] Oops: 0011 [#3] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+[   86.892560][  T450] CPU: 1 PID: 450 Comm: systemd-journal Tainted: G      D            6.8.0-rc5+ #432 b8184d32457f2dd20b7178757a1fce97b3f847e2
+[   86.893758][  T450] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-1.fc38 04/01/2014
+[   86.894542][  T450] RIP: 0010:0xffffc90001cdff58
+[   86.894964][  T450] Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 e6 00 60 82 ff ff ff ff <00> 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   86.896519][  T450] RSP: 0018:ffffc90000b13df0 EFLAGS: 00010282
+[   86.897004][  T450] RAX: ffffc90001cdfef0 RBX: ffff88817759a8a0 RCX: ffffc90000b13e40
+[   86.897672][  T450] RDX: ffffffff81545129 RSI: ffffffffffffffff RDI: ffff88817759a890
+[   86.898341][  T450] RBP: ffff88817759a8a0 R08: 0000000000000001 R09: ffff888102b2c470
+[   86.899143][  T450] R10: ffffc90000b13e58 R11: ffffffff83976548 R12: ffffffff81545129
+[   86.899871][  T450] R13: ffffc90001cdff58 R14: ffffc90000b13ee8 R15: ffffc90000b13e40
+[   86.900547][  T450] FS:  00007f20a7635940(0000) GS:ffff88846d200000(0000) knlGS:0000000000000000
+[   86.901259][  T450] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.901773][  T450] CR2: ffffc90001cdff58 CR3: 0000000176a7a003 CR4: 0000000000770ef0
+[   86.902411][  T450] PKRU: 55555554
+[   86.902722][  T450] Call Trace:
+[   86.903009][  T450]  <TASK>
+[   86.903271][  T450]  ? __die+0x1f/0x70
+[   86.903613][  T450]  ? page_fault_oops+0x176/0x4d0
+[   86.904126][  T450]  ? exc_page_fault+0x16c/0x250
+[   86.904614][  T450]  ? asm_exc_page_fault+0x22/0x30
+[   86.905140][  T450]  ? ksys_read+0x69/0xf0
+[   86.905615][  T450]  ? ksys_read+0x69/0xf0
+[   86.906053][  T450]  ? rethook_trampoline_handler+0x91/0x200
+[   86.906643][  T450]  ? arch_rethook_trampoline_callback+0x36/0x50
+[   86.907271][  T450]  ? arch_rethook_trampoline+0x2c/0x60
+[   86.907845][  T450]  ? ksys_read+0x69/0xf0
+[   86.908300][  T450]  ? osnoise_arch_unregister+0x210/0x210
+[   86.908781][  T450]  ? do_syscall_64+0x87/0x1b0
+[   86.909186][  T450]  ? entry_SYSCALL_64_after_hwframe+0x6e/0x76
+[   86.909681][  T450]  </TASK>
+[   86.909959][  T450] Modules linked in: intel_rapl_msr intel_rapl_common crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel kvm_intel rapl iTCO_wdt iTCO_vendor_support i2c_i801 i2c_smbus lpc_ich drm loop drm_panel_orientation_quirks zram
+[   86.911681][  T450] CR2: ffffc90001cdff58
+[   86.912108][  T450] ---[ end trace 0000000000000000 ]---
+[   86.912674][  T450] RIP: 0010:rethook_trampoline_handler+0x8e/0x200
+[   86.913232][  T450] Code: 5e 20 00 48 8b a8 c8 2a 00 00 48 85 ed 75 2f e9 8b 00 00 00 4d 85 ed 74 17 48 8b 45 08 48 8d 7d f0 4c 89 f9 4c 89 e2 48 8b 30 <41> ff d5 0f 1f 00 48 39 dd 74 6a 48 8b 6d 00 48 85 ed 74 61 4c 39
+[   86.914702][  T450] RSP: 0018:ffffc90001e0bdf8 EFLAGS: 00010286
+[   86.915196][  T450] RAX: ffffc90001e0bef0 RBX: ffff8881775999a0 RCX: ffffc90001e0be40
+[   86.915853][  T450] RDX: ffffffff81545129 RSI: 0000000000000000 RDI: ffff888177599990
+[   86.916644][  T450] RBP: ffff8881775999a0 R08: 0000000000000000 R09: ffff88810246af00
+[   86.917449][  T450] R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff81545129
+[   86.918238][  T450] R13: ef01a20a8bd21200 R14: ffffc90001e0bee8 R15: ffffc90001e0be40
+[   86.919043][  T450] FS:  00007f20a7635940(0000) GS:ffff88846d200000(0000) knlGS:0000000000000000
+[   86.919906][  T450] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.921265][  T450] CR2: ffffc90001cdff58 CR3: 0000000176a7a003 CR4: 0000000000770ef0
+[   86.921972][  T450] PKRU: 55555554
+[   86.922365][  T450] note: systemd-journal[450] exited with irqs disabled
+[   86.923076][  T450] note: systemd-journal[450] exited with preempt_count 1
+[   86.927597][   T47] audit: type=1106 audit(1709132147.391:266): pid=619 uid=0 auid=1000 ses=1 subj=system_u:system_r:sshd_t:s0-s0:c0.c1023 msg='op=PAM:session_close grantors=pam_selinux,pam_loginuid,pam_selinux,pam_namespace,pam_keyinit,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog acct="jolsa" exe="/usr/sbin/sshd" hostname=192.168.122.1 addr=192.168.122.1 terminal=ssh res=success'
+[   86.928777][  T450] systemd-journal (450) used greatest stack depth: 11424 bytes left
+[   86.929578][    T1] general protection fault, probably for non-canonical address 0xd4f06e07d9d64800: 0000 [#4] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+[   86.929582][    T1] CPU: 2 PID: 1 Comm: systemd Tainted: G      D            6.8.0-rc5+ #432 b8184d32457f2dd20b7178757a1fce97b3f847e2
+[   86.929584][    T1] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-1.fc38 04/01/2014
+[   86.929586][    T1] RIP: 0010:rethook_trampoline_handler+0x8e/0x200
+[   86.929591][    T1] Code: 5e 20 00 48 8b a8 c8 2a 00 00 48 85 ed 75 2f e9 8b 00 00 00 4d 85 ed 74 17 48 8b 45 08 48 8d 7d f0 4c 89 f9 4c 89 e2 48 8b 30 <41> ff d5 0f 1f 00 48 39 dd 74 6a 48 8b 6d 00 48 85 ed 74 61 4c 39
+[   86.929592][    T1] RSP: 0018:ffffc90000013df8 EFLAGS: 00010286
+[   86.929594][    T1] RAX: ffffc90000013ef0 RBX: ffff888177598aa0 RCX: ffffc90000013e40
+[   86.929595][    T1] RDX: ffffffff81545129 RSI: 0000000000000010 RDI: ffff888177598a90
+[   86.929596][    T1] RBP: ffff888177598aa0 R08: 0000000000000010 R09: ffff888175005750
+[   86.929597][    T1] R10: 0000000000000000 R11: ffffc90000013dd8 R12: ffffffff81545129
+[   86.929598][    T1] R13: d4f06e07d9d64800 R14: ffffc90000013ee8 R15: ffffc90000013e40
+[   86.929599][    T1] FS:  00007f0ec5012940(0000) GS:ffff88846d600000(0000) knlGS:0000000000000000
+[   86.929600][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.929601][    T1] CR2: 00005595e83bf5b0 CR3: 000000010805e001 CR4: 0000000000770ef0
+[   86.929604][    T1] PKRU: 55555554
+[   86.929605][    T1] Call Trace:
+[   86.929606][    T1]  <TASK>
+[   86.929606][    T1]  ? die_addr+0x32/0x80
+[   86.929610][    T1]  ? exc_general_protection+0x276/0x4d0
+[   86.929616][    T1]  ? asm_exc_general_protection+0x22/0x30
+[   86.929621][    T1]  ? ksys_read+0x69/0xf0
+[   86.929624][    T1]  ? ksys_read+0x69/0xf0
+[   86.929627][    T1]  ? rethook_trampoline_handler+0x8e/0x200
+[   86.929629][    T1]  ? rethook_trampoline_handler+0x91/0x200
+[   86.929631][    T1]  arch_rethook_trampoline_callback+0x36/0x50
+[   86.929635][    T1]  arch_rethook_trampoline+0x2c/0x60
+[   86.929639][    T1]  ? ksys_read+0x69/0xf0
+[   86.929640][    T1]  osnoise_arch_unregister+0x210/0x210
+[   86.929643][    T1]  do_syscall_64+0x87/0x1b0
+[   86.929645][    T1]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
+[   86.929647][    T1] RIP: 0033:0x7f0ec49230ea
+[   86.929653][    T1] Code: 55 48 89 e5 48 83 ec 20 48 89 55 e8 48 89 75 f0 89 7d f8 e8 e8 79 f8 ff 48 8b 55 e8 48 8b 75 f0 41 89 c0 8b 7d f8 31 c0 0f 05 <48> 3d 00 f0 ff ff 77 2e 44 89 c7 48 89 45 f8 e8 42 7a f8 ff 48 8b
+[   86.929655][    T1] RSP: 002b:00007ffead1dc7a0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[   86.929656][    T1] RAX: ffffffffffffffda RBX: 00005625bff4efe0 RCX: 00007f0ec49230ea
+[   86.929657][    T1] RDX: 0000000000000400 RSI: 00005625bfeda010 RDI: 0000000000000019
+[   86.929658][    T1] RBP: 00007ffead1dc7c0 R08: 0000000000000000 R09: 0000000000000001
+[   86.929659][    T1] R10: 0000000000001000 R11: 0000000000000246 R12: 00007f0ec49f3660
+[   86.929659][    T1] R13: 00007f0ec50127d0 R14: 0000000000000a68 R15: 00007f0ec49f2d60
+[   86.929663][    T1]  </TASK>
+[   86.929663][    T1] Modules linked in: intel_rapl_msr intel_rapl_common crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel kvm_intel rapl iTCO_wdt iTCO_vendor_support i2c_i801 i2c_smbus lpc_ich drm loop drm_panel_orientation_quirks zram
+[   86.929676][    T1] ---[ end trace 0000000000000000 ]---
+[   86.929677][    T1] RIP: 0010:rethook_trampoline_handler+0x8e/0x200
+[   86.929679][    T1] Code: 5e 20 00 48 8b a8 c8 2a 00 00 48 85 ed 75 2f e9 8b 00 00 00 4d 85 ed 74 17 48 8b 45 08 48 8d 7d f0 4c 89 f9 4c 89 e2 48 8b 30 <41> ff d5 0f 1f 00 48 39 dd 74 6a 48 8b 6d 00 48 85 ed 74 61 4c 39
+[   86.929680][    T1] RSP: 0018:ffffc90001e0bdf8 EFLAGS: 00010286
+[   86.929681][    T1] RAX: ffffc90001e0bef0 RBX: ffff8881775999a0 RCX: ffffc90001e0be40
+[   86.929682][    T1] RDX: ffffffff81545129 RSI: 0000000000000000 RDI: ffff888177599990
+[   86.929683][    T1] RBP: ffff8881775999a0 R08: 0000000000000000 R09: ffff88810246af00
+[   86.929684][    T1] R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff81545129
+[   86.929685][    T1] R13: ef01a20a8bd21200 R14: ffffc90001e0bee8 R15: ffffc90001e0be40
+[   86.929686][    T1] FS:  00007f0ec5012940(0000) GS:ffff88846d600000(0000) knlGS:0000000000000000
+[   86.929687][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   86.929688][    T1] CR2: 00005595e83bf5b0 CR3: 000000010805e001 CR4: 0000000000770ef0
+[   86.929688][    T1] PKRU: 55555554
+[   86.929689][    T1] note: systemd[1] exited with preempt_count 1
+[   86.929692][    T1] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[   86.929992][    T1] Kernel Offset: disabled
 
