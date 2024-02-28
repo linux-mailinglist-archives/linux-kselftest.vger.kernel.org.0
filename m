@@ -1,151 +1,146 @@
-Return-Path: <linux-kselftest+bounces-5521-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8486186AB5A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 10:34:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEA8186AC00
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 11:15:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10CBB1F2532C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 09:34:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3124A1F229A8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 10:15:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8644732C92;
-	Wed, 28 Feb 2024 09:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="TFno7vEA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 823123BB4F;
+	Wed, 28 Feb 2024 10:15:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15AC36AFF
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 09:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79893AC1E;
+	Wed, 28 Feb 2024 10:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709112772; cv=none; b=X/7JGCMjLY3yBT9DqhfzTfLxzT7Ibs18CZQI38pINYtqXXUzgb+Oo0NyqsxOubCuRHm66watAeIXMUtAlTLKhryy60R6DaObLlh5FHL67HlfdWPWYryOFjKclqE17xaPkKGzDYiaCGqQ6kAMn0WHITn5nogYJnSOqO27UAQbt4o=
+	t=1709115348; cv=none; b=MQ4s5lHwiWBuuk5CSSqfRBcz3QK/fUHG4OUdVOMRjTLztsuDqHX3xR6Z2UFBhZYE18ry8/Q15e1cTQAI7NSqBkqsKPEpf7CtOX/3LITo0a1YTVS+thWHDDosolYdxtanQsKVO98sqBD8hB8+Gp4Bbcbi7DJ4EB6YabYyRml8+iE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709112772; c=relaxed/simple;
-	bh=uFslmsiSq1HBTE5LNPd44uZu/F0twT8BTQkMgaIxbMQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mzSgX58fTsv3VjqQpHCutOaYTPlNJO9aUxBfwwJU2ohL4Yzi8b8a6Fr02c6vwai593UhUi7fIHDoUsv8Uq3O8Cpp7y2MpbLVUwMhsQXGZHfnm/U4z9GznkZLYmtsMyasC3CSzsui8vG/LTLxZMVtA5YmzgGO8+0XNT9mK2SLuIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=TFno7vEA; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33d6f1f17e5so3562898f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 01:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1709112768; x=1709717568; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mQNKJ78MfZyuiu4j+k295fZB+jgGmMFXgbaeQC8Zu04=;
-        b=TFno7vEAtJvk8A1beRQwOvIZw3g/vzS8dk6zRjuy336HMS4eFvMMasQGb3bHpFZ+d9
-         xzmRK/vLGm1lF86v1HAm0L7DioQbgSJKN7JEbS2AMj+eZGvo6NNOzEDpyah4lSzl9xzJ
-         AYLV+Bmnj8I+Yn76qIgwQdsCL/iHrBrpP13cGK/GGMscP8JgtalnRHulvoW6R0K4/Bfz
-         E5k195u0KWrxOrwJLNOzjqCio/SaEumX5jSlPG5+Ur74FogDy/178a6ei5dy/Ck4555f
-         zLByFZF3soq+ophlRxY5yvvEEHCqyq/de/3rpbIUOWiUHw3kcZ5xbkaQ0EpdfwheQj8P
-         UtCg==
+	s=arc-20240116; t=1709115348; c=relaxed/simple;
+	bh=JXWi3QJrd65veDhHNrOB2GuMIcSXUkgzzrY8SPVTSXs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CsYDGpMplLpX4I4MNORyVkqu03viAtjMeRq3d84rJOeD2Hj2hKccmNt9RLIiyUGvvpLW3kun16wTafXfJ0xT+DV1P1j/pinTQPjXgn4fk2kAZr8R4Q/NTXrKt/m0+BDoXncMrAMvwve6+gujAdBN4DkBaCYEui2JcGHxcrL8aWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-608959cfcbfso56258327b3.3;
+        Wed, 28 Feb 2024 02:15:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709112768; x=1709717568;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQNKJ78MfZyuiu4j+k295fZB+jgGmMFXgbaeQC8Zu04=;
-        b=TPJrrAnRTj7DhxCwDy+IlRvwvJ9xA+88T7YumceUxRPRHkkjAFzp6dyiM3EEckrUlB
-         mNC5BE3Uhf0TsXlJnYpMRByIk7EipRP08HRkqd4/cx2AcR73KihIGTUgi5/NI7iZlfD4
-         RxomNmdYvF0NzwmgqgD0yzDJUzPpJFVNJEW3+p9Hd4fGqq1kyraM1Hl+ajwoxJkvtXC0
-         mJCTqz3LFlHZ31KEuOgPBv5a7YhYZ755ThJ5Ti3gm0hUKgvg2ru5Rc579z4I/DQ+Ii6g
-         H0u0iTt3CwRBKNm1EMXxPYTRVHrc5xpgnvWvy9UWmQtPDXg75aRoD49+FIC0x+XE6Xi/
-         2iMg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyUY32mHUNwc6mRsIDzUb4rF10a/YKrpyLzo4w2t3FQbsdzwquY+numIl+Po0+/Q9N9RknOqYLrRmgwP6z5o9uE91s8FpeATvB4X2ZvEF8
-X-Gm-Message-State: AOJu0Yxw+BJyaY93/VdkBtviuLJiU139orHgbB6hVzjrHu7Ok9l5Ey1Y
-	LFpximVv2dzkIeAzlcGu4Xb1O6wF391NERRu39GDUsJK1zV00As2gKwzzmrFsxUIuDZe1H7oC9T
-	C
-X-Google-Smtp-Source: AGHT+IEWEqNQ9d2tqbJP6sC861PImJRIY/oH0R9V9AxQfO/Gs6YqWMFo4jl9jdQrcYf5WDRE4XxY0A==
-X-Received: by 2002:a5d:4046:0:b0:33d:8cc0:4827 with SMTP id w6-20020a5d4046000000b0033d8cc04827mr8411713wrp.45.1709112767852;
-        Wed, 28 Feb 2024 01:32:47 -0800 (PST)
-Received: from localhost ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id az14-20020adfe18e000000b0033d2541b3e1sm14587268wrb.72.2024.02.28.01.32.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Feb 2024 01:32:47 -0800 (PST)
-Date: Wed, 28 Feb 2024 10:32:44 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: prabhav kumar <pvkumar5749404@gmail.com>
-Cc: shuah@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	petrm@nvidia.com, idosch@nvidia.com
-Subject: Re: [PATCH net-next] selftests: net: Correct couple of spelling
- mistakes
-Message-ID: <Zd79vEsSp7wlJWQy@nanopsycho>
-References: <20240227175513.8703-1-pvkumar5749404@gmail.com>
- <Zd7lqr8Cz4XrNoI8@nanopsycho>
- <CAH8oh8U1KLxY95DQW9duU30VC5hdQd1YKs+8USuuz0k4JWtBSQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1709115345; x=1709720145;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5sisHDeqoo8my2vybw8Rh8HLkZ37ptybG5ZlPOOTIA0=;
+        b=SrOlw4kGc5GQlPwaJXDodMxm6MkdNXmmY4+N23VAT/OmMZ62qbdi7zlvhUPa75rbou
+         YUsK3jYogXC8yGW95lpl+G3U3D9Px4D2XKG90tO2tQRxBwjuILNiOK9bVkTVXL3t0yW7
+         S0G8fAamnI5iWtadD/+BqrMKbNGg1Gf5spzJwp2csdfFJ0eV/0cSFVYrYNBDLBP2Djeu
+         M/fsUrIwz7j0jwLEv41X+6ZYGELWQ67WVvro1rj2wzdB0s1rt57O/siKXIecEF8JfNbQ
+         6hcade1TKJPtTBb+13i0gP12LArGRSFP1FhT4FRfDDosXL04sAwseQUiDveXo9UwnXg0
+         Jm/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXprdae49aozTqwgdJSXNAU152dREgA45PI32+YLYX54d6BTVRBIYJUnYLxnrK0hlQEufqn6rsImtInbCaymoHFekCiE6caXZMQtY7HqY9J6NYsWPQvKx5okn5KJsRKm1IFibQ4UparT04B//xRT2Ysw+5LyQyaydHtg9Ka63pzWnxoZpDu5GAsLtEw
+X-Gm-Message-State: AOJu0YyHt014n3WDzYQNivndWnovI670lUxw8sDWrJvP2n6cltzHml+h
+	n5uwThK4k02hRGVqfesiPFRav7EFfIj0Zzrt+bNXZLEBf60yOMdv6tq1N1SUABcUzA==
+X-Google-Smtp-Source: AGHT+IFwIykTXE9M7RomK7vpBNurVSTHX9Dk/OfhtigZLyyIrG4fW7NF3RWMMFuS3syFCCed9fnY3g==
+X-Received: by 2002:a0d:e24b:0:b0:609:3a3b:1728 with SMTP id l72-20020a0de24b000000b006093a3b1728mr1718801ywe.26.1709115345512;
+        Wed, 28 Feb 2024 02:15:45 -0800 (PST)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id be19-20020a05690c009300b00608d9a50b59sm2079531ywb.28.2024.02.28.02.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Feb 2024 02:15:45 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-608959cfcbfso56258107b3.3;
+        Wed, 28 Feb 2024 02:15:45 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCViBXXGabQVKAhXLQSZXSGZPloGXYNDDNfKbMvpLqdxH952diQZsSlkE2cXKBosBtGgTJ1LUzkYwh3wQc7//t4JGcVVUHLKKh+UP52KomlL3FEEbMe5eNbHKlSwTtyhdMrZVPViJ7greejeIkFGfdXQPHu33JpKrfui+T5dyPvyEs9ohmhwyJAEs4sY
+X-Received: by 2002:a05:6902:1a47:b0:dcd:ad52:6927 with SMTP id
+ cy7-20020a0569021a4700b00dcdad526927mr2537761ybb.11.1709115345066; Wed, 28
+ Feb 2024 02:15:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAH8oh8U1KLxY95DQW9duU30VC5hdQd1YKs+8USuuz0k4JWtBSQ@mail.gmail.com>
+References: <7ae930a7-3b10-4470-94ee-89cb650b3349@csgroup.eu>
+ <e11fea7a-e99e-4539-a489-0aa145ee65f0@roeck-us.net> <ZdzPgSCTntY7JD5i@shell.armlinux.org.uk>
+ <ZdzZ5tk459bgUrgz@ghost> <ZdzhRntTHApp0doV@shell.armlinux.org.uk>
+ <b13b8847977d4cfa99b6a0c9a0fcbbcf@AcuMS.aculab.com> <Zd0b8SDT8hrG/0yW@ghost>
+ <cdd09f7a-83b2-41ba-a32c-9886dd79c43e@roeck-us.net> <9b4ce664-3ddb-4789-9d5d-8824f9089c48@csgroup.eu>
+ <Zd25XWTkDPuIjpF8@shell.armlinux.org.uk> <Zd58jvN3PjQSe+yt@ghost>
+ <c0449c0a-33bc-49c4-97e3-56a79a6ce93e@csgroup.eu> <02bb92c3-a14c-4a77-a3b0-a7c857d1d60d@roeck-us.net>
+In-Reply-To: <02bb92c3-a14c-4a77-a3b0-a7c857d1d60d@roeck-us.net>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 28 Feb 2024 11:15:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW-sUYr8_y6av9Dbtz6JJAxBUsiTGZcK2QYEHo0x1z44w@mail.gmail.com>
+Message-ID: <CAMuHMdW-sUYr8_y6av9Dbtz6JJAxBUsiTGZcK2QYEHo0x1z44w@mail.gmail.com>
+Subject: Re: [PATCH v10] lib: checksum: Use aligned accesses for ip_fast_csum
+ and csum_ipv6_magic tests
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, Charlie Jenkins <charlie@rivosinc.com>, 
+	"Russell King (Oracle)" <linux@armlinux.org.uk>, David Laight <David.Laight@aculab.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Helge Deller <deller@gmx.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Parisc List <linux-parisc@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Prabhav, I'm not sure what you are trying to do, but you have to
-re-submit the patch, preferably using git-send-email or another email
-client you use.
+CC testing
 
+On Wed, Feb 28, 2024 at 8:59=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+> On 2/27/24 23:25, Christophe Leroy wrote:
+> [ ... ]
+> >>
+> >> This test case is supposed to be as true to the "general case" as
+> >> possible, so I have aligned the data along 14 + NET_IP_ALIGN. On ARM
+> >> this will be a 16-byte boundary since NET_IP_ALIGN is 2. A driver that
+> >> does not follow this may not be appropriately tested by this test case=
+,
+> >> but anyone is welcome to submit additional test cases that address thi=
+s
+> >> additional alignment concern.
+> >
+> > But then this test case is becoming less and less true to the "general
+> > case" with this patch, whereas your initial implementation was almost
+> > perfect as it was covering most cases, a lot more than what we get with
+> > that patch applied.
+> >
+> NP with me if that is where people want to go. I'll simply disable checks=
+um
+> tests on all architectures which don't support unaligned accesses (so far
+> it looks like that is only arm with thumb instructions, and possibly nios=
+2).
+> I personally find that less desirable and would have preferred a second
+> configurable set of tests for unaligned accesses, but I have no problem
+> with it.
 
-Wed, Feb 28, 2024 at 09:42:01AM CET, pvkumar5749404@gmail.com wrote:
->On Wed, Feb 28, 2024 at 1:20 PM Jiri Pirko <jiri@resnulli.us> wrote:
->>
->> Please fix the patch subject to include appropriate prefixes and
->> rephrase a bit like this:
->>
->> Subject: [PATCH net-next] selftests: net: Correct couple of spelling mistakes
->>
->> pw-bot: cr
->>
->>
->> Tue, Feb 27, 2024 at 06:55:13PM CET, pvkumar5749404@gmail.com wrote:
->> >Changes :
->> >       - "excercise" is corrected to "exercise" in drivers/net/mlxsw/spectrum-2/tc_flower.sh
->> >       - "mutliple" is corrected to "multiple" in drivers/net/netdevsim/ethtool-fec.sh
->> >
->> >Signed-off-by: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
->> >---
->> > .../testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.sh | 2 +-
->> > tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh    | 2 +-
->> > 2 files changed, 2 insertions(+), 2 deletions(-)
->> >
->> >diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.sh
->> >index 616d3581419c..31252bc8775e 100755
->> >--- a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.sh
->> >+++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.sh
->> >@@ -869,7 +869,7 @@ bloom_simple_test()
->> > bloom_complex_test()
->> > {
->> >       # Bloom filter index computation is affected from region ID, eRP
->> >-      # ID and from the region key size. In order to excercise those parts
->> >+      # ID and from the region key size. In order to exercise those parts
->> >       # of the Bloom filter code, use a series of regions, each with a
->> >       # different key size and send packet that should hit all of them.
->> >       local index
->> >diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh
->> >index 7d7829f57550..6c52ce1b0450 100755
->> >--- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh
->> >+++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh
->> >@@ -49,7 +49,7 @@ for o in llrs rs; do
->> > Active FEC encoding: ${o^^}"
->> > done
->> >
->> >-# Test mutliple bits
->> >+# Test multiple bits
->> > $ETHTOOL --set-fec $NSIM_NETDEV encoding rs llrs
->> > check $?
->> > s=$($ETHTOOL --show-fec $NSIM_NETDEV | tail -2)
->> >--
->> >2.34.1
->> >
->> >
+IMHO the tests should validate the expected functionality.  If a test
+fails, either functionality is missing or behaves wrong, or the test
+is wrong.
+
+What is the point of writing tests for a core functionality like network
+checksumming that do not match the expected functionality?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
