@@ -1,280 +1,209 @@
-Return-Path: <linux-kselftest+bounces-5524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0089986AC38
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 11:31:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94B5286AC6F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 12:01:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23D3D1C2245A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 10:31:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3001B225C7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 11:01:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8B7745F2;
-	Wed, 28 Feb 2024 10:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95AE012C520;
+	Wed, 28 Feb 2024 11:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RDUIKRk6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D2+SL82W"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC6B745E7
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 10:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DE95A0E9
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 11:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709116318; cv=none; b=Tr/Z/APW4WKTqncQtkOv7CN26H+5Tc7j8HfoK3JhlMThAuUTq/Qj5MUyGTP3GyzAr43K+Z8GgToJKOzVlR/rg1C2baIUgpO8o3j9w4msahVzUbBqBwxwwZ1ERPeE6WORe4BF4SI6gZzALLgWTJtzFuTE/0srdINCoSvknffuVn0=
+	t=1709118101; cv=none; b=PWtE7YCQlddpw2AP/ZDmjpATWASeJhAazRLick4YWEiJUBlx72FaVaBBGqid+iJrX4JAxJ04E7F6NV2geJVrl23gXyUQBtKHkngKLscTHOpDn4uVPJM4fy2DLfaARZKISCKlcIJloUyf1sQxlZzlJgy/sPzQXcevq2kHHvKs8qM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709116318; c=relaxed/simple;
-	bh=QtMVd8MfOkwZVeJr+7bvKB+Jv/uBDmSwr8adt/Z3VcI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZAxdHfva/Q+rbfx4/c+ZaGf7DJ7fkjLdKtwfw6SIB9nBzYfO2ygIzZnywERpX5Wgd9Zl3asI8NNYMx/SU1bdEodPahuwpQwIDUOzh6bQL0wkyuGiWOotg0c7LfYJMnmp85u91CGhn55Hfr4WeF39pRkcS+PRSbonpTQnAPKwo2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RDUIKRk6; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1709118101; c=relaxed/simple;
+	bh=8OgkdCAnRjKaw3j4wSYcHFa/xxgMjTCLQm7+X/e43Tc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dBYAkZ33PN4nIpDKDhjVpEpdqKr23qRT7u+8J1TdvYoT9o98RwnS9Qg2I7UQfCQap70ZYU4Uea4eREefeCT+wBDwkc5xPn3KQi5T/SuS7ybFvJLmW0VYa/1209nbxcd09hIVyy4j/0oYVViAQTzj2yFvh10N46BAKE9PpTHjRLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D2+SL82W; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709116315;
+	s=mimecast20190719; t=1709118098;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=R5nPJc5wHy0mfNIo9LccGmQA1ipGTS8wbRwCe+Rx9QU=;
-	b=RDUIKRk625lLwS6sTxrTJYTkwCrz+RPHxWyEQGVeNL8CPm2fdd7e19u8rJt1V0UXmWllkJ
-	W1ZgdX+gqUymZxpolv4KSKaDHNT13uEpJ7Eor1DZDCtStv4XiB1G3agA3XZmbcxQKdzaP6
-	edWKm1hkSzgD/lOCfEqZzzk+J0BuJuk=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	 in-reply-to:in-reply-to:references:references;
+	bh=KHUgioFTWud+yVu8FFp4Z9cGICZSxHxVkQZdXkVKoZc=;
+	b=D2+SL82WvSHLJ1dVq1XVDX1hBr7rGoggsxClyk1BmcHnrW/8WiRA6T9Hml3PukRuvMKbjT
+	Tqqc7NKU2o4i3/reYgLquOOGYgeXxrR0WHAPTSUynvJKcVo/WUrpDevYrH8hJ0XJINw3bi
+	r2MVrnObelOXG8fc7rRX2HNxHfrsbUA=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-437-FCqRnzCZOoyWa1Sunx1ftA-1; Wed, 28 Feb 2024 05:31:54 -0500
-X-MC-Unique: FCqRnzCZOoyWa1Sunx1ftA-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-5131bf5d21bso394367e87.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 02:31:54 -0800 (PST)
+ us-mta-453-6mMDWChoPpuTXFBXI0Gg4w-1; Wed, 28 Feb 2024 06:01:37 -0500
+X-MC-Unique: 6mMDWChoPpuTXFBXI0Gg4w-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a43e43fffc2so44861666b.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 03:01:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709116313; x=1709721113;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R5nPJc5wHy0mfNIo9LccGmQA1ipGTS8wbRwCe+Rx9QU=;
-        b=masut7P64XE1ZhR1+22G3rRD+MpzyzpB/02cDXpDPgYaJjLvhVxufJxeej/mjCpJCF
-         fKjWisOFOQGbzD81krLTQ+yOeU7kVECR7bqH6t4+qEdMUisnTUpy6pa8KCwBoph8d/f7
-         So6L9Wz7nN/LAETMjJUxawRpakynEBXpOMsxXQA1MyBIwDNMEM1ThjmZwBHzHvjNzvKe
-         RFe9RQXTmqECC68+7Dwj2Xzx7k4RPkHLH89K9dAlvl5PFWQcu/Uh90hFIpSQlp4G0+E0
-         ceuBUPu0uMu3mKN5y9/CA0RKnC35xlC/WhPVNGfFPFfZy3BdFkDJnms9pcdkFRSBfsOH
-         yhvg==
-X-Forwarded-Encrypted: i=1; AJvYcCXr8a5yFmlFQZyDTq9H4v+wojUJAi12FaAno8qYaUXL/DArW7lmYj8RjguyxlP0tXagkDQiQQnCfQLKgI3JXcc3PpDIcYIqn4Ghb4Ge3KI4
-X-Gm-Message-State: AOJu0YxOH7PhkDZoy6qCbpzR0UlOgHKJbBIMG3phEVVgZjlGIQpVKs9j
-	424xKPAdCkxDYWNl4hTXdfmItw6t2NTjJyEKRChVYEZOckCdwAU0F7/aZNGf6QVCFN8d+YK1LdW
-	aLkpFYDQOUqbCl7FdQ7z3VDZDKP77uYQ4R8IWwOK4IwMgapTJVPyofYCaM0iV0HYwBQ==
-X-Received: by 2002:a05:6512:3d1a:b0:513:43e:e22d with SMTP id d26-20020a0565123d1a00b00513043ee22dmr3680424lfv.35.1709116312658;
-        Wed, 28 Feb 2024 02:31:52 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHpBIBpKUIbkIBZPc7584Yu6aT6pSQlO3j6evLahsMP+rbCQLK7Dm8x3AdXIreKPYKZSuhbcA==
-X-Received: by 2002:a05:6512:3d1a:b0:513:43e:e22d with SMTP id d26-20020a0565123d1a00b00513043ee22dmr3680399lfv.35.1709116311831;
-        Wed, 28 Feb 2024 02:31:51 -0800 (PST)
-Received: from [10.32.64.237] (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id c2-20020a5d4142000000b0033cf453f2bbsm14023061wrq.35.2024.02.28.02.31.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Feb 2024 02:31:51 -0800 (PST)
-Message-ID: <75fb8bf8-f9bc-410d-8c22-f69cbf2080a9@redhat.com>
-Date: Wed, 28 Feb 2024 11:31:50 +0100
+        d=1e100.net; s=20230601; t=1709118096; x=1709722896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KHUgioFTWud+yVu8FFp4Z9cGICZSxHxVkQZdXkVKoZc=;
+        b=w6noRDfRFIDg3QERQBQe3xFb48CPqrsSGo+64qLV/qkyNkFlRJnbC6yQen+D5dbjYd
+         VaKXzsEDoV8NzWp3X5m5krexkDp1a7YSmBTXpAQYNOPs5iDmhqeCrSoqzC57S0NYHkcL
+         nDykwhxIXLBB5DssRgoBoPPT2S6gPobG6mZ2Qyp2T5DQQpP7BflYDY3AeH/AH8r2Kvjc
+         ry8tjrF+fj6uO4LcOkoQEOkXOd5w3Ff8zCFX/lfaG2935c7cVk55WbXaIEGPaS0hchyj
+         Nv/4mlpU+zEp1Gpf99Z5pvNXnIZ+zaakNDo72rClnMEUP0269NHdf7DzFlhgTEFjx59s
+         oA2g==
+X-Forwarded-Encrypted: i=1; AJvYcCW/1hwa0CAO36D06sTmmoInqFFWzxKnJPSHcsIPRU3eBYZZEAOnCtqtQm0efC0SArtJuscQKBDgAlY9BRpvten84eW9f+qPlQaMzLtCkrmf
+X-Gm-Message-State: AOJu0YzUjE8jMdV3EjZtlqA1kobq++FqJYzwGUjksxM+XmVUp3pq3jh8
+	zz66m+ZZ65s7SKRMvqRLFslJ7yy1DynyEumbHU+781P8QqIQL2l0qrG0S1oHGOu0bIB3KWhd0IB
+	b3qdqOpNEvEBW4vERwh/m7BVwG5+qwh0ZR0Frfwe0DHhcZHMs7UgJc9/qywNsOaC+gugurhO5A6
+	31IcSKJAGbQpURZBIXOWO35RHenlYDTOG5e25jBa1+
+X-Received: by 2002:a17:906:1450:b0:a3f:c6a6:3b79 with SMTP id q16-20020a170906145000b00a3fc6a63b79mr8267008ejc.6.1709118095858;
+        Wed, 28 Feb 2024 03:01:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFAWI5m4fiH4ALLfFYlhSHwy5bFWy63vFpnGQNng4cv4hRI1z/LUykHqlS5EudRuxJtWXmdgW+znCdtAHZdRn8=
+X-Received: by 2002:a17:906:1450:b0:a3f:c6a6:3b79 with SMTP id
+ q16-20020a170906145000b00a3fc6a63b79mr8266966ejc.6.1709118095447; Wed, 28 Feb
+ 2024 03:01:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 6/8] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Content-Language: en-US
-To: Zi Yan <ziy@nvidia.com>, "Pankaj Raghav (Samsung)"
- <kernel@pankajraghav.com>, linux-mm@kvack.org
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>,
- Zach O'Keefe <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240226205534.1603748-1-zi.yan@sent.com>
- <20240226205534.1603748-7-zi.yan@sent.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240226205534.1603748-7-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org>
+ <20240221-hid-bpf-sleepable-v3-8-1fb378ca6301@kernel.org> <55177311ccdc24a74811d4a291ee1880044a5227.camel@gmail.com>
+ <pocfd5n6lxriqg7r6usyhrlprgslclxs44jqoq63lw734fjl2g@5kv4hjaux2fp>
+ <9a35a53a1887fb664fd540ec7e272cb3ea63f799.camel@gmail.com>
+ <CAO-hwJ+TGiLrc4De7htvKaSsMfQnZahK-zONAMNgUMYHEQb-7g@mail.gmail.com> <CAADnVQKrKzrvzu9NmcaDYGFYicqN--R5J6r--_J58gB0jic_NA@mail.gmail.com>
+In-Reply-To: <CAADnVQKrKzrvzu9NmcaDYGFYicqN--R5J6r--_J58gB0jic_NA@mail.gmail.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date: Wed, 28 Feb 2024 12:01:23 +0100
+Message-ID: <CAO-hwJL_WAsOOJ5oScvNBbXwK=g3R_5S=PqUmNi5C156pcwgzQ@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v3 08/16] bpf/verifier: do_misc_fixups for is_bpf_timer_set_sleepable_cb_kfunc
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Benjamin Tissoires <bentiss@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 26.02.24 21:55, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> It adds a new_order parameter to set new page order in page owner.
-> It prepares for upcoming changes to support split huge page to any
-> lower order.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->   include/linux/page_owner.h | 13 ++++++++-----
->   mm/huge_memory.c           |  2 +-
->   mm/page_alloc.c            |  4 ++--
->   mm/page_owner.c            |  7 +++----
->   4 files changed, 14 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
-> index 2b39c8e19d98..debdc25f08b9 100644
-> --- a/include/linux/page_owner.h
-> +++ b/include/linux/page_owner.h
-> @@ -11,7 +11,8 @@ extern struct page_ext_operations page_owner_ops;
->   extern void __reset_page_owner(struct page *page, unsigned short order);
->   extern void __set_page_owner(struct page *page,
->   			unsigned short order, gfp_t gfp_mask);
-> -extern void __split_page_owner(struct page *page, int order);
-> +extern void __split_page_owner(struct page *page, int old_order,
-> +			int new_order);
->   extern void __folio_copy_owner(struct folio *newfolio, struct folio *old);
->   extern void __set_page_owner_migrate_reason(struct page *page, int reason);
->   extern void __dump_page_owner(const struct page *page);
-> @@ -31,10 +32,11 @@ static inline void set_page_owner(struct page *page,
->   		__set_page_owner(page, order, gfp_mask);
->   }
->   
-> -static inline void split_page_owner(struct page *page, int order)
-> +static inline void split_page_owner(struct page *page, int old_order,
-> +			int new_order)
->   {
->   	if (static_branch_unlikely(&page_owner_inited))
-> -		__split_page_owner(page, order);
-> +		__split_page_owner(page, old_order, new_order);
->   }
->   static inline void folio_copy_owner(struct folio *newfolio, struct folio *old)
->   {
-> @@ -56,10 +58,11 @@ static inline void reset_page_owner(struct page *page, unsigned short order)
->   {
->   }
->   static inline void set_page_owner(struct page *page,
-> -			unsigned int order, gfp_t gfp_mask)
-> +			unsigned short order, gfp_t gfp_mask)
->   {
->   }
-> -static inline void split_page_owner(struct page *page, int order)
-> +static inline void split_page_owner(struct page *page, int old_order,
-> +			int new_order)
->   {
->   }
->   static inline void folio_copy_owner(struct folio *newfolio, struct folio *folio)
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 5d4b7c17b9bc..b2df788c11fa 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2933,7 +2933,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->   	unlock_page_lruvec(lruvec);
->   	/* Caller disabled irqs, so they are still disabled here */
->   
-> -	split_page_owner(head, order);
-> +	split_page_owner(head, order, 0);
->   
->   	/* See comment in __split_huge_page_tail() */
->   	if (PageAnon(head)) {
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index c31a468fe317..cc41341c08f4 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -2652,7 +2652,7 @@ void split_page(struct page *page, unsigned int order)
->   
->   	for (i = 1; i < (1 << order); i++)
->   		set_page_refcounted(page + i);
-> -	split_page_owner(page, order);
-> +	split_page_owner(page, order, 0);
->   	split_page_memcg(page, order, 0);
->   }
->   EXPORT_SYMBOL_GPL(split_page);
-> @@ -4839,7 +4839,7 @@ static void *make_alloc_exact(unsigned long addr, unsigned int order,
->   		struct page *page = virt_to_page((void *)addr);
->   		struct page *last = page + nr;
->   
-> -		split_page_owner(page, order);
-> +		split_page_owner(page, order, 0);
->   		split_page_memcg(page, order, 0);
->   		while (page < --last)
->   			set_page_refcounted(last);
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index b678f7a6e702..033e349f6479 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -306,19 +306,18 @@ void __set_page_owner_migrate_reason(struct page *page, int reason)
->   	page_ext_put(page_ext);
->   }
->   
-> -void __split_page_owner(struct page *page, int order)
-> +void __split_page_owner(struct page *page, int old_order, int new_order)
->   {
->   	int i;
->   	struct page_ext *page_ext = page_ext_get(page);
->   	struct page_owner *page_owner;
-> -	unsigned int nr = 1 << order;
->   
->   	if (unlikely(!page_ext))
->   		return;
->   
-> -	for (i = 0; i < nr; i++) {
-> +	for (i = 0; i < (1 << old_order); i++) {
->   		page_owner = get_page_owner(page_ext);
-> -		page_owner->order = 0;
-> +		page_owner->order = new_order;
->   		page_ext = page_ext_next(page_ext);
->   	}
->   	page_ext_put(page_ext);
+On Wed, Feb 28, 2024 at 2:49=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Feb 27, 2024 at 8:51=E2=80=AFAM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > On Tue, Feb 27, 2024 at 5:36=E2=80=AFPM Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
+> > >
+> > > On Tue, 2024-02-27 at 17:18 +0100, Benjamin Tissoires wrote:
+> > > [...]
+> > >
+> > > > Hmm, I must still be missing a piece of the puzzle:
+> > > > if I declare bpf_timer_set_sleepable_cb() to take a third "aux"
+> > > > argument, given that it is declared as kfunc, I also must declare i=
+t in
+> > > > my bpf program, or I get the following:
+> > > >
+> > > > # libbpf: extern (func ksym) 'bpf_timer_set_sleepable_cb': func_pro=
+to [264] incompatible with vmlinux [18151]
+> > > >
+> > > > And if I declare it, then I don't know what to pass, given that thi=
+s is
+> > > > purely added by the verifier:
+> > > >
+> > > > 43: (85) call bpf_timer_set_sleepable_cb#18152
+> > > > arg#2 pointer type STRUCT bpf_prog_aux must point to scalar, or str=
+uct with scalar
+> > >
+> > > Right, something has to be done about number of arguments and we don'=
+t
+> > > have a convenient mechanism for this afaik.
+> > >
+> > > The simplest way would be to have two kfuncs:
+> > > - one with 2 arguments, used form bpf program;
+> > > - another with 3 arguments, used at runtime;
+> > > - replace former by latter during rewrite.
+> >
+> > It's hacky but seems interesting enough to be tested :)
+>
+> Too hacky imo :)
+>
+> Let's follow the existing pattern.
+> See:
+> __bpf_kfunc void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
+>
+> __ign suffix tells the verifier to ignore it.
+>
+> Then we do:
+> #define bpf_obj_new(type) \
+>   ((type *)bpf_obj_new_impl(bpf_core_type_id_local(type), NULL))
+>
+> and later the verifier replaces arg2 with the correct pointer.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+\o/ Thanks, it works :)
 
--- 
+>
+> > We also could use the suffix (like __uninit, __k, etc...), but it
+> > might introduce more headaches than the 2 kfuncs you are proposing.
+>
+> Only one kfunc pls. Let's not make it more complex than necessary.
+>
+> We cannot easily add a suffix to tell libbpf to ignore that arg,
+> since bpf_core_types_are_compat() compares types and there are
+> no argument names in the types.
+> So it will be a significant surgery for libbpf to find the arg name
+> in vmlinux BTF and strcmp the suffix.
+
+Yeah, I guessed so. Having a single #define is fine, especially given
+that there are already a lot of them for the same purpose.
+
+>
+> >
+> > >
+> > > Could you please provide more details on what exactly it complains ab=
+out?
+> > >
+> >
+> > Well, there is a simple reason: that code is never reached because, in
+> > that function, there is a `if (insn->src_reg =3D=3D
+> > BPF_PSEUDO_KFUNC_CALL)` above that unconditionally terminates with a
+> > `continue`. So basically this part of the code is never hit.
+> >
+> > I'll include that new third argument and the dual kfunc call in
+> > fixup_kfunc_call() and report if it works from here.
+>
+> Something is wrong. fixup_kfunc_call() can rewrite args with whatever
+> it wants.
+> Are you sure you've added bpf_timer_set_sleepable_cb to special_kfunc_lis=
+t ?
+>
+
+Yeah, but as I mentioned, I wasn't hacking at the correct place. I was
+not doing the changes in the fixup_kfunc_call() but in the helper
+processing, so that path was not hit.
+
+But with your instructions it works.
+
+I have a couple of changes to do and the selftests to add and the
+series will be ready.
+
 Cheers,
-
-David / dhildenb
+Benjamin
 
 
