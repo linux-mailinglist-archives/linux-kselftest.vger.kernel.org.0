@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-5523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98CFF86AC33
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 11:30:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0089986AC38
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 11:31:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BADE21C24F41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 10:30:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23D3D1C2245A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 10:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E48262152;
-	Wed, 28 Feb 2024 10:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8B7745F2;
+	Wed, 28 Feb 2024 10:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="itDSc0H9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RDUIKRk6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B37861696
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 10:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC6B745E7
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 10:31:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709116248; cv=none; b=cbGwVmpSohqe/VTuMp5Ij0zDupHijUwBEzOLZmh/LLyZBWXLT3+scgu/9VfeBp4hVkS7/syqYxATcivKu6ru1ozQnaS7oVJlnRV21UiK0EJ2G7M0BwuWbVsM+ZDZQG8Gpi3nf9BLciQ1KnEzY+qM2+lUSgGxHnzq83Yd5oKH1rQ=
+	t=1709116318; cv=none; b=Tr/Z/APW4WKTqncQtkOv7CN26H+5Tc7j8HfoK3JhlMThAuUTq/Qj5MUyGTP3GyzAr43K+Z8GgToJKOzVlR/rg1C2baIUgpO8o3j9w4msahVzUbBqBwxwwZ1ERPeE6WORe4BF4SI6gZzALLgWTJtzFuTE/0srdINCoSvknffuVn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709116248; c=relaxed/simple;
-	bh=zqeGvIqPrjm/7glxleVaoyA+ZT8/NJX16mspwlJkRn8=;
+	s=arc-20240116; t=1709116318; c=relaxed/simple;
+	bh=QtMVd8MfOkwZVeJr+7bvKB+Jv/uBDmSwr8adt/Z3VcI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qLdIixn9rCfy6iG0K5ZMMDoz//OwpB9aQ41agXbjHK1a1e57ZZCgvv9tua6tY+hZ6nrUgVj8ba/2kwlpw7qSdkRjhZwSEzg9GVn828rrPiVX2+lXJEe5E82XW/mwiQOxfQvNpx6HPN1yviryIrdbvbHpUBYYgIfBoZgebA8bCAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=itDSc0H9; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=ZAxdHfva/Q+rbfx4/c+ZaGf7DJ7fkjLdKtwfw6SIB9nBzYfO2ygIzZnywERpX5Wgd9Zl3asI8NNYMx/SU1bdEodPahuwpQwIDUOzh6bQL0wkyuGiWOotg0c7LfYJMnmp85u91CGhn55Hfr4WeF39pRkcS+PRSbonpTQnAPKwo2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RDUIKRk6; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709116245;
+	s=mimecast20190719; t=1709116315;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=jdbkSk0LjVq2u7NIA4ONGJrWqYHxBGfhrpQIAAn5klQ=;
-	b=itDSc0H9FejrufNu611JfQu3PAWOp++Demun20RW+0eDOhmyjE8r/3oggVUN6dZS/Rw6+Q
-	D6oXC+Dcg2sCZtrQ4P8zTzvIHOcMaLU4tMxchwWMrNBSf37geccyf0A5cQ/qYx8pS2/TK/
-	1m6h/SN6WvTUoyqWFH5xMq8MAW/xtSo=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=R5nPJc5wHy0mfNIo9LccGmQA1ipGTS8wbRwCe+Rx9QU=;
+	b=RDUIKRk625lLwS6sTxrTJYTkwCrz+RPHxWyEQGVeNL8CPm2fdd7e19u8rJt1V0UXmWllkJ
+	W1ZgdX+gqUymZxpolv4KSKaDHNT13uEpJ7Eor1DZDCtStv4XiB1G3agA3XZmbcxQKdzaP6
+	edWKm1hkSzgD/lOCfEqZzzk+J0BuJuk=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-367-j1cUHsZCPxW3uZSUxuzjzg-1; Wed, 28 Feb 2024 05:30:43 -0500
-X-MC-Unique: j1cUHsZCPxW3uZSUxuzjzg-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-33d256ca4c8so3559845f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 02:30:43 -0800 (PST)
+ us-mta-437-FCqRnzCZOoyWa1Sunx1ftA-1; Wed, 28 Feb 2024 05:31:54 -0500
+X-MC-Unique: FCqRnzCZOoyWa1Sunx1ftA-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-5131bf5d21bso394367e87.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 02:31:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709116242; x=1709721042;
+        d=1e100.net; s=20230601; t=1709116313; x=1709721113;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :references:cc:to:content-language:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jdbkSk0LjVq2u7NIA4ONGJrWqYHxBGfhrpQIAAn5klQ=;
-        b=nPx6xzw6XPLw72JnKog6kwMzcOtBcS2uWFjOSTBIii9O8sdGyGprKGGU5XsAqgSvVi
-         ASlMjeMYJ5uaHvsGOSRx9cQD3e2OHHfF/Ay03n5wEzxd6KMrm1oPtf2vUoT7cyYOhxs1
-         KU7inyTladxhK3PEpD3XsIO8S3iXWlQyOCnovRYMMZ/qdMyZJmG9fQORXcRk4mW73Wg/
-         Osy4q2pFHNA74rZWlohZ8fCcblJj2A3w6fkZgL3DrQTiWB0nH7Kk9MELo4BpxedDYzHp
-         MMcp98Bul2T248JbIIEJu6EdDPkosR+pRmvdxoaNPv7Njzzky6Y47vGZAuTq6xpMCpnl
-         xXOg==
-X-Forwarded-Encrypted: i=1; AJvYcCXng+4kG/Rptui/LSktVKDjA8smEYQIF3qLrJsb6BkO7NJxFHh72qzNzhlMuMHFmRKQ/Rkrm4gBBGGNqxYTMR3aMDaiMEWZ+b/7wc4/1M+2
-X-Gm-Message-State: AOJu0YyhVRVaS/RgaJ9utPEKdtUiioqZ/k5/gRfFye1vKevk7uF18LT2
-	6r30i17vMQrHasezkqPA2eFlAJ5fcfEu5d41Y5CbgA7iYbwSLy78BqMmHdc5ScRHI1Qm1UNk6g/
-	LxUrQ+eMumlC+ZIzoIvfiA9v0UODEV+y/USOsA8q3pDZcmC2x46YLpUzpiW/bId2Mfg==
-X-Received: by 2002:a5d:6d85:0:b0:33d:da6e:b7db with SMTP id l5-20020a5d6d85000000b0033dda6eb7dbmr6532084wrs.62.1709116242553;
-        Wed, 28 Feb 2024 02:30:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEc2EAWuWyfnxVEgc8Ht7N8N6Ye/ajb25XECbyU6LWrKiciqqDbMVixvLU8CVyV9UAyeB6Wrg==
-X-Received: by 2002:a5d:6d85:0:b0:33d:da6e:b7db with SMTP id l5-20020a5d6d85000000b0033dda6eb7dbmr6532043wrs.62.1709116242084;
-        Wed, 28 Feb 2024 02:30:42 -0800 (PST)
+        bh=R5nPJc5wHy0mfNIo9LccGmQA1ipGTS8wbRwCe+Rx9QU=;
+        b=masut7P64XE1ZhR1+22G3rRD+MpzyzpB/02cDXpDPgYaJjLvhVxufJxeej/mjCpJCF
+         fKjWisOFOQGbzD81krLTQ+yOeU7kVECR7bqH6t4+qEdMUisnTUpy6pa8KCwBoph8d/f7
+         So6L9Wz7nN/LAETMjJUxawRpakynEBXpOMsxXQA1MyBIwDNMEM1ThjmZwBHzHvjNzvKe
+         RFe9RQXTmqECC68+7Dwj2Xzx7k4RPkHLH89K9dAlvl5PFWQcu/Uh90hFIpSQlp4G0+E0
+         ceuBUPu0uMu3mKN5y9/CA0RKnC35xlC/WhPVNGfFPFfZy3BdFkDJnms9pcdkFRSBfsOH
+         yhvg==
+X-Forwarded-Encrypted: i=1; AJvYcCXr8a5yFmlFQZyDTq9H4v+wojUJAi12FaAno8qYaUXL/DArW7lmYj8RjguyxlP0tXagkDQiQQnCfQLKgI3JXcc3PpDIcYIqn4Ghb4Ge3KI4
+X-Gm-Message-State: AOJu0YxOH7PhkDZoy6qCbpzR0UlOgHKJbBIMG3phEVVgZjlGIQpVKs9j
+	424xKPAdCkxDYWNl4hTXdfmItw6t2NTjJyEKRChVYEZOckCdwAU0F7/aZNGf6QVCFN8d+YK1LdW
+	aLkpFYDQOUqbCl7FdQ7z3VDZDKP77uYQ4R8IWwOK4IwMgapTJVPyofYCaM0iV0HYwBQ==
+X-Received: by 2002:a05:6512:3d1a:b0:513:43e:e22d with SMTP id d26-20020a0565123d1a00b00513043ee22dmr3680424lfv.35.1709116312658;
+        Wed, 28 Feb 2024 02:31:52 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHpBIBpKUIbkIBZPc7584Yu6aT6pSQlO3j6evLahsMP+rbCQLK7Dm8x3AdXIreKPYKZSuhbcA==
+X-Received: by 2002:a05:6512:3d1a:b0:513:43e:e22d with SMTP id d26-20020a0565123d1a00b00513043ee22dmr3680399lfv.35.1709116311831;
+        Wed, 28 Feb 2024 02:31:51 -0800 (PST)
 Received: from [10.32.64.237] (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id c2-20020a5d4142000000b0033cf453f2bbsm14023061wrq.35.2024.02.28.02.30.40
+        by smtp.gmail.com with ESMTPSA id c2-20020a5d4142000000b0033cf453f2bbsm14023061wrq.35.2024.02.28.02.31.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Feb 2024 02:30:41 -0800 (PST)
-Message-ID: <99334898-0f5d-4ba1-af38-a510fae473a5@redhat.com>
-Date: Wed, 28 Feb 2024 11:30:40 +0100
+        Wed, 28 Feb 2024 02:31:51 -0800 (PST)
+Message-ID: <75fb8bf8-f9bc-410d-8c22-f69cbf2080a9@redhat.com>
+Date: Wed, 28 Feb 2024 11:31:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/8] mm/huge_memory: only split PMD mapping when
- necessary in unmap_folio()
+Subject: Re: [PATCH v5 6/8] mm: page_owner: add support for splitting to any
+ order in split page_owner.
 Content-Language: en-US
 To: Zi Yan <ziy@nvidia.com>, "Pankaj Raghav (Samsung)"
  <kernel@pankajraghav.com>, linux-mm@kvack.org
@@ -99,7 +99,7 @@ Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
  cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20240226205534.1603748-1-zi.yan@sent.com>
- <20240226205534.1603748-2-zi.yan@sent.com>
+ <20240226205534.1603748-7-zi.yan@sent.com>
 From: David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -146,45 +146,131 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240226205534.1603748-2-zi.yan@sent.com>
+In-Reply-To: <20240226205534.1603748-7-zi.yan@sent.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 26.02.24 21:55, Zi Yan wrote:
 > From: Zi Yan <ziy@nvidia.com>
 > 
-> As multi-size THP support is added, not all THPs are PMD-mapped, thus
-> during a huge page split, there is no need to always split PMD mapping
-> in unmap_folio(). Make it conditional.
+> It adds a new_order parameter to set new page order in page owner.
+> It prepares for upcoming changes to support split huge page to any
+> lower order.
 > 
 > Signed-off-by: Zi Yan <ziy@nvidia.com>
 > ---
->   mm/huge_memory.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
+>   include/linux/page_owner.h | 13 ++++++++-----
+>   mm/huge_memory.c           |  2 +-
+>   mm/page_alloc.c            |  4 ++--
+>   mm/page_owner.c            |  7 +++----
+>   4 files changed, 14 insertions(+), 12 deletions(-)
 > 
+> diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
+> index 2b39c8e19d98..debdc25f08b9 100644
+> --- a/include/linux/page_owner.h
+> +++ b/include/linux/page_owner.h
+> @@ -11,7 +11,8 @@ extern struct page_ext_operations page_owner_ops;
+>   extern void __reset_page_owner(struct page *page, unsigned short order);
+>   extern void __set_page_owner(struct page *page,
+>   			unsigned short order, gfp_t gfp_mask);
+> -extern void __split_page_owner(struct page *page, int order);
+> +extern void __split_page_owner(struct page *page, int old_order,
+> +			int new_order);
+>   extern void __folio_copy_owner(struct folio *newfolio, struct folio *old);
+>   extern void __set_page_owner_migrate_reason(struct page *page, int reason);
+>   extern void __dump_page_owner(const struct page *page);
+> @@ -31,10 +32,11 @@ static inline void set_page_owner(struct page *page,
+>   		__set_page_owner(page, order, gfp_mask);
+>   }
+>   
+> -static inline void split_page_owner(struct page *page, int order)
+> +static inline void split_page_owner(struct page *page, int old_order,
+> +			int new_order)
+>   {
+>   	if (static_branch_unlikely(&page_owner_inited))
+> -		__split_page_owner(page, order);
+> +		__split_page_owner(page, old_order, new_order);
+>   }
+>   static inline void folio_copy_owner(struct folio *newfolio, struct folio *old)
+>   {
+> @@ -56,10 +58,11 @@ static inline void reset_page_owner(struct page *page, unsigned short order)
+>   {
+>   }
+>   static inline void set_page_owner(struct page *page,
+> -			unsigned int order, gfp_t gfp_mask)
+> +			unsigned short order, gfp_t gfp_mask)
+>   {
+>   }
+> -static inline void split_page_owner(struct page *page, int order)
+> +static inline void split_page_owner(struct page *page, int old_order,
+> +			int new_order)
+>   {
+>   }
+>   static inline void folio_copy_owner(struct folio *newfolio, struct folio *folio)
 > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 28341a5067fb..b20e535e874c 100644
+> index 5d4b7c17b9bc..b2df788c11fa 100644
 > --- a/mm/huge_memory.c
 > +++ b/mm/huge_memory.c
-> @@ -2727,11 +2727,14 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
+> @@ -2933,7 +2933,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>   	unlock_page_lruvec(lruvec);
+>   	/* Caller disabled irqs, so they are still disabled here */
 >   
->   static void unmap_folio(struct folio *folio)
+> -	split_page_owner(head, order);
+> +	split_page_owner(head, order, 0);
+>   
+>   	/* See comment in __split_huge_page_tail() */
+>   	if (PageAnon(head)) {
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index c31a468fe317..cc41341c08f4 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -2652,7 +2652,7 @@ void split_page(struct page *page, unsigned int order)
+>   
+>   	for (i = 1; i < (1 << order); i++)
+>   		set_page_refcounted(page + i);
+> -	split_page_owner(page, order);
+> +	split_page_owner(page, order, 0);
+>   	split_page_memcg(page, order, 0);
+>   }
+>   EXPORT_SYMBOL_GPL(split_page);
+> @@ -4839,7 +4839,7 @@ static void *make_alloc_exact(unsigned long addr, unsigned int order,
+>   		struct page *page = virt_to_page((void *)addr);
+>   		struct page *last = page + nr;
+>   
+> -		split_page_owner(page, order);
+> +		split_page_owner(page, order, 0);
+>   		split_page_memcg(page, order, 0);
+>   		while (page < --last)
+>   			set_page_refcounted(last);
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index b678f7a6e702..033e349f6479 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -306,19 +306,18 @@ void __set_page_owner_migrate_reason(struct page *page, int reason)
+>   	page_ext_put(page_ext);
+>   }
+>   
+> -void __split_page_owner(struct page *page, int order)
+> +void __split_page_owner(struct page *page, int old_order, int new_order)
 >   {
-> -	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
-> -		TTU_SYNC | TTU_BATCH_FLUSH;
-> +	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SYNC |
-> +		TTU_BATCH_FLUSH;
+>   	int i;
+>   	struct page_ext *page_ext = page_ext_get(page);
+>   	struct page_owner *page_owner;
+> -	unsigned int nr = 1 << order;
 >   
->   	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>   	if (unlikely(!page_ext))
+>   		return;
 >   
-> +	if (folio_test_pmd_mappable(folio))
-> +		ttu_flags |= TTU_SPLIT_HUGE_PMD;
-> +
->   	/*
->   	 * Anon pages need migration entries to preserve them, but file
->   	 * pages can simply be left unmapped, then faulted back on demand.
+> -	for (i = 0; i < nr; i++) {
+> +	for (i = 0; i < (1 << old_order); i++) {
+>   		page_owner = get_page_owner(page_ext);
+> -		page_owner->order = 0;
+> +		page_owner->order = new_order;
+>   		page_ext = page_ext_next(page_ext);
+>   	}
+>   	page_ext_put(page_ext);
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Cheers,
