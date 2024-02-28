@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-5560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CA9B86BB1B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 23:56:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAF9786BB1D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 23:56:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F9911C21A74
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 22:56:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A6401F27819
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 22:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D2A72909;
-	Wed, 28 Feb 2024 22:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABE773509;
+	Wed, 28 Feb 2024 22:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XE2QzdTG"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ztcfiq/n"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4864671EA1;
-	Wed, 28 Feb 2024 22:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF2A72936;
+	Wed, 28 Feb 2024 22:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709160950; cv=none; b=qhOM0aDfpUuyayDLfHt7oGLjF86DTfC3nYsjNqh/XRcHzPW5YoG/wXtU2J8jhUMMFZMKYbbvx1ioKhpl2PUw74Wb/trVyCOPELq9yfvok6yuU3jKZ65nHawngjcyDpI0nkA1U4Qcyah9DwZyYSYZtayMa90EcO1K7dpOGNqd6rU=
+	t=1709160956; cv=none; b=Z9smRS3czlI8WfEDXsfbCJfymKvS8I7OsQDFndqqK945frEanLVp3hedM0FpefNhnXBOLAWKag2ZLWJq53aSG2UakTX/j4av8IFqBU4/L+7ZlYQrfkPw8uWCKR1vAOhxd6rwCtcRwWJALZd1YyVK1Dc5a7M9n2nofb66BsxypoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709160950; c=relaxed/simple;
-	bh=hHHXqInms8Ik0LQiKPyZlJZuiftwiFOtRHazgtBxh2E=;
+	s=arc-20240116; t=1709160956; c=relaxed/simple;
+	bh=FpJMfFLb7RI2hPRJguM7WRGYTcIgvbeDtXM2KpoFr80=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ty8ahXsRCF2vMvLnU8SJmF4St9K06fKBCDM0uyR8Qc0cGY6xH+O8bFQudva1PitByzSC1h9e9ZDBbUsxXSI8YdmRFGQOazpRRsfDOrP9zVGXkIylF8ICLJ/gqpeHDYu8MgdA+m2x+JLmTf7R4dno57ZDIK5J79cA244q7zKiGrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XE2QzdTG; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=DYQiZkOeyHbZZIoNcjVS0Pgzd+cTfuctLlJjlqBiEarxq7yfflZPcuST7BeAeCbgL+M+DWe7SDoNrFRO51OGcDdjFoI04rYkEK18ExjgidhxkTSkRdqhuuNB5IFzk4cOzzUFJgkpyH8Zm1VkSkU6M7nK9V94FWrPziqH651ZASw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ztcfiq/n; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709160945;
-	bh=hHHXqInms8Ik0LQiKPyZlJZuiftwiFOtRHazgtBxh2E=;
+	s=mail; t=1709160952;
+	bh=FpJMfFLb7RI2hPRJguM7WRGYTcIgvbeDtXM2KpoFr80=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=XE2QzdTGqOcKDieGZNMT30fi5vx6rxmmFmVX6gIP9TE87v2tQthAMl/7eXUxyDPKh
-	 LS3vmj68a3vRiRJL676QGTsFVzl/Sj/FPgEIWJ871bUDn0aXkrR3CtLz5+mZ3/TapY
-	 hdI6n9GxIiUJ93nkTPWtDVebtT8sabQikhN7CEk2G8JyYpnzIqieUHJL+h/p3Gwag9
-	 jd5rk22q87Og6MemggVBmMbh1n9xCPPHC4bEIGqvrqfkiPY+xP1YruVTLdNw6JqnaU
-	 n6GemkU1JZnPIwRszBvi4pzahVrHbRF97exc9cMsuIO+gGB54RWcTOBI+EIldykEA7
-	 OGYKNUyRNr4pA==
+	b=Ztcfiq/nY1NQv8uHl+Nm6NOaAU4iFZw6qLJwYRkGCXs6nTJWfJBvHFlvetKSafJ09
+	 ebOeERquONkTdEeUtTjYNzSJQkoaNOf13AIZJtt9NV9Y+ATL1X2n+GYnXFMZYDUeZW
+	 6b1UtbV4ElY195NJlnZa5B8yJkcw+1AXHfUVeBjcpFMkXzvhMYhPAR8soEE2FYX/w6
+	 SmemBGCQw/cyaNr+HzTAGCgZUCkuyzc2tGIXAtOWzfHj5t8xCytd4L589nis4hK6yR
+	 jH+a/6pnCGmn40ioAcO41MFIIFZ44cOR+2fYl2HhQPmykNKe6/FV9EjS2+LUKAgKb2
+	 FaP0QyADyzXMw==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: koike)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E311D37820D9;
-	Wed, 28 Feb 2024 22:55:38 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 332C137820DD;
+	Wed, 28 Feb 2024 22:55:45 +0000 (UTC)
 From: Helen Koike <helen.koike@collabora.com>
 To: linuxtv-ci@linuxtv.org,
 	dave.pigott@collabora.com,
@@ -72,9 +72,9 @@ To: linuxtv-ci@linuxtv.org,
 	kernel@collabora.com,
 	torvalds@linuxfoundation.org,
 	gregkh@linuxfoundation.org
-Subject: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel Testing
-Date: Wed, 28 Feb 2024 19:55:25 -0300
-Message-Id: <20240228225527.1052240-2-helen.koike@collabora.com>
+Subject: [PATCH 2/3] kci-gitlab: Add documentation
+Date: Wed, 28 Feb 2024 19:55:26 -0300
+Message-Id: <20240228225527.1052240-3-helen.koike@collabora.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240228225527.1052240-1-helen.koike@collabora.com>
 References: <20240228225527.1052240-1-helen.koike@collabora.com>
@@ -86,896 +86,457 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch introduces a `.gitlab-ci` file along with a `ci/` folder,
-defininga basic test pipeline triggered by code pushes to a GitLab-CI
-instance. This initial version includes static checks (checkpatch and
-smatch for now) and build tests across various architectures and
-configurations. It leverages an integrated cache for efficient build
-times and introduces a flexible 'scenarios' mechanism for
-subsystem-specific extensions.
+Add documentation of kci-gitlab.
 
-[ci: add prerequisites to run check-patch on MRs]
-Co-developed-by: Tales Aparecida <tales.aparecida@redhat.com>
-Signed-off-by: Tales Aparecida <tales.aparecida@redhat.com>
 Signed-off-by: Helen Koike <helen.koike@collabora.com>
-
 ---
+ Documentation/ci/gitlab-ci/gitlab-ci.rst | 404 +++++++++++++++++++++++
+ Documentation/index.rst                  |   7 +
+ MAINTAINERS                              |   1 +
+ 3 files changed, 412 insertions(+)
+ create mode 100644 Documentation/ci/gitlab-ci/gitlab-ci.rst
 
-Hey all,
-
-You can check the validation of this patchset on:
-        https://gitlab.collabora.com/koike/linux/-/pipelines/87035
-
-I would appreciate your feedback on this work, what do you think?
-
-If you would rate from 0 to 5, where:
-
-[ ] 0. I don't think this is useful at all, and I doubt it will ever be. It doesn't seem worthwhile.
-[ ] 1. I don't find it useful in its current form.
-[ ] 2. It might be useful to others, but not for me.
-[ ] 3. It has potential, but it's not yet something I can incorporate into my workflow.
-[ ] 4. This is useful, but it needs some adjustments before I can include it in my workflow.
-[ ] 5. This is really useful! I'm eager to start using it right away. Why didn't you send this earlier? :)
-
-Which rating would you select?
-
----
- .gitlab-ci.yml                                |   2 +
- MAINTAINERS                                   |   8 ++
- ci/gitlab-ci/bootstrap-gitlab-runner.sh       |  55 +++++++++
- ci/gitlab-ci/ci-scripts/build-docs.sh         |  35 ++++++
- ci/gitlab-ci/ci-scripts/build-kernel.sh       |  35 ++++++
- ci/gitlab-ci/ci-scripts/ici-functions.sh      | 104 ++++++++++++++++++
- ci/gitlab-ci/ci-scripts/install-smatch.sh     |  13 +++
- .../ci-scripts/parse_commit_message.sh        |  27 +++++
- ci/gitlab-ci/ci-scripts/run-checkpatch.sh     |  20 ++++
- ci/gitlab-ci/ci-scripts/run-smatch.sh         |  45 ++++++++
- ci/gitlab-ci/docker-compose.yaml              |  18 +++
- ci/gitlab-ci/linux.code-workspace             |  11 ++
- ci/gitlab-ci/yml/build.yml                    |  43 ++++++++
- ci/gitlab-ci/yml/cache.yml                    |  26 +++++
- ci/gitlab-ci/yml/container.yml                |  36 ++++++
- ci/gitlab-ci/yml/gitlab-ci.yml                |  71 ++++++++++++
- ci/gitlab-ci/yml/kernel-combinations.yml      |  18 +++
- ci/gitlab-ci/yml/scenarios.yml                |  12 ++
- ci/gitlab-ci/yml/scenarios/file-systems.yml   |  21 ++++
- ci/gitlab-ci/yml/scenarios/media.yml          |  21 ++++
- ci/gitlab-ci/yml/scenarios/network.yml        |  21 ++++
- ci/gitlab-ci/yml/static-checks.yml            |  21 ++++
- 22 files changed, 663 insertions(+)
- create mode 100644 .gitlab-ci.yml
- create mode 100755 ci/gitlab-ci/bootstrap-gitlab-runner.sh
- create mode 100755 ci/gitlab-ci/ci-scripts/build-docs.sh
- create mode 100755 ci/gitlab-ci/ci-scripts/build-kernel.sh
- create mode 100644 ci/gitlab-ci/ci-scripts/ici-functions.sh
- create mode 100755 ci/gitlab-ci/ci-scripts/install-smatch.sh
- create mode 100755 ci/gitlab-ci/ci-scripts/parse_commit_message.sh
- create mode 100755 ci/gitlab-ci/ci-scripts/run-checkpatch.sh
- create mode 100755 ci/gitlab-ci/ci-scripts/run-smatch.sh
- create mode 100644 ci/gitlab-ci/docker-compose.yaml
- create mode 100644 ci/gitlab-ci/linux.code-workspace
- create mode 100644 ci/gitlab-ci/yml/build.yml
- create mode 100644 ci/gitlab-ci/yml/cache.yml
- create mode 100644 ci/gitlab-ci/yml/container.yml
- create mode 100644 ci/gitlab-ci/yml/gitlab-ci.yml
- create mode 100644 ci/gitlab-ci/yml/kernel-combinations.yml
- create mode 100644 ci/gitlab-ci/yml/scenarios.yml
- create mode 100644 ci/gitlab-ci/yml/scenarios/file-systems.yml
- create mode 100644 ci/gitlab-ci/yml/scenarios/media.yml
- create mode 100644 ci/gitlab-ci/yml/scenarios/network.yml
- create mode 100644 ci/gitlab-ci/yml/static-checks.yml
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+diff --git a/Documentation/ci/gitlab-ci/gitlab-ci.rst b/Documentation/ci/gitlab-ci/gitlab-ci.rst
 new file mode 100644
-index 0000000000000..fac523bb86866
+index 0000000000000..4f7ef03cca95c
 --- /dev/null
-+++ b/.gitlab-ci.yml
-@@ -0,0 +1,2 @@
++++ b/Documentation/ci/gitlab-ci/gitlab-ci.rst
+@@ -0,0 +1,404 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
++=========================================
++Automated Testing with GitLab CI/CD
++=========================================
++
++This documentation outlines the GitLab CI/CD workflow for the Linux Kernel. The
++workflow is designed to simplify testing for developers, allowing tests to be
++run on any branch at any time, without the need for specific infrastructure.
++Tests are automatically triggered on each `git push`, with results displayed in
++the GitLab UI.
++
++.. image:: images/the-pipeline.png
++   :alt: GitLab-CI pipeline for kernel testing
++   :align: center
++
++Customizations and extensions of the pipeline are possible through the
++scenarios. Scenarios can override existing jobs, change configurations, or
++define new jobs and stages. See :ref:`extending-the-ci` section.
++
++.. note:: If you are unfamiliar with GitLab CI/CD basic concepts, please check
++   the `official documentation <https://docs.gitlab.com/ee/ci/>`_.
++
++.. only:: subproject and html
++
++   Indices
++   =======
++
++   * :ref:`genindex`
++
++Setup
++-----
++
++The GitLab CI pipeline is configured for **"out-of-the-box"** use. Pushing code to a
++GitLab repository automatically triggers the pipeline.
++
++    .. code-block:: bash
++
++      # Download the Linux kernel source code
++      git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
++      # Create a repository on GitLab and add it as a remote
++      git remote add gitlab https://gitlab.yourinstance.com/your-username/your-repo.git
++      # Push the code to GitLab
++      git push gitlab
++
++.. image:: images/pipelines-on-push.png
++   :alt: Pipeline triggered on push
++   :align: center
++
++Troubleshooting
++---------------
++
++If the pipeline doesn't trigger automatically, check the following:
++
++1. **Enable CI/CD in Project Settings:**
++
++   - Go to `Settings > General > Visibility, project features, permissions`.
++   - Under `Repository`, ensure the `CI/CD` toggle is enabled.
++
++2. **Enable Container Registry:**
++
++   - Still in `Settings`, find the `Container Registry` section.
++   - Enable the `Container Registry` toggle.
++
++3. **CI Minutes and Resources:**
++
++   - If you've exhausted CI minutes or other resources on the Free Tier,
++     consider setting up a local GitLab runner (see below).
++
++Setting Up a Local GitLab Runner
++--------------------------------
++
++You can use your own machine as a runner, instead of the shared runners provided
++by your GitLab instance.
++
++1. **Generate a GitLab Runner Token:**
++
++   - Navigate to `Settings > CI/CD > Runners`.
++   - Expand the `Runners` section and click on "New project runner".
++   - Choose "Run untagged jobs" and click "Create runner".
++   - Copy the provided token.
++
++.. image:: images/new-project-runner.png
++   :alt: New project runner button
++   :align: center
++
++2. **Launch the Runner:**
++
++   - Ensure Docker is installed and your user is added to the Docker group:
++
++    .. code-block:: bash
++
++        sudo usermod -aG docker <your-user>
++
++   - Log in again to apply the changes.
++   - Set up the runner:
++
++    .. code-block:: bash
++
++     export GITLAB_RUNNER_TOKEN=<your_token>
++     export GITLAB_URL=https://gitlab.yourinstance.com  # Use this for instances other than gitlab.com
++     cd ci/gitlab-ci
++     ./bootstrap-gitlab-runner.sh
++
++
++Current Pipeline Jobs
++---------------------
++
++stage: container
++^^^^^^^^^^^^^^^^
++
++**job: debian/x86_64_build**
++
++This job prepares the container used by subsequent jobs. It starts from a base
++Debian image, installing necessary tools for building the kernel and running
++tests. The resulting image is pushed to the project registry and cached. If the
++image already exists in the registry, it won't be rebuilt.
++
++To force a rebuild, update the `FDO_DISTRIBUTION_TAG` variable in the
++`container.yml` file.
++
++stage: static-checks
++^^^^^^^^^^^^^^^^^^^^
++
++**job: checkpatch**
++
++Runs the `checkpatch.pl` script on the last `$ICI_PATCH_SERIES_SIZE` commits.
++This variable is determined by:
++
++- `ICI_PATCH_SERIES_SIZE=` The number of differing patches between target and
++  source branches for merge requests; Or
++- `ICI_PATCH_SERIES_SIZE=$KCI_PATCH_SERIES_SIZE` if `KCI_PATCH_SERIES_SIZE` is
++  set (see :ref:`how-to-set-variables` below).
++
++Defaults to 1 and raises a GitLab warning if unable to identify the number of
++commits.
++
++**job: smatch**
++
++Checks `.c` files in the last `$ICI_PATCH_SERIES_SIZE` commits. Spawns a
++"sub-job" for each architecture and configuration in `kernel-combinations.yml`.
++If a smatch database exists (see `job: smatch-db-generate` below), it reuses it.
++
++stage: build
++^^^^^^^^^^^^
++
++**job: build-kernel**
++
++Compiles the kernel. Spawns a "sub-job" for each architecture and configuration
++in `kernel-combinations.yml`. Uses `ccache` to speed up builds, with its
++database shared inside the runner or across runners if configured with S3.
++
++Raises a GitLab warning if "warning" is found in the build log.
++
++.. image:: images/job-matrix.png
++   :alt: Matrix of jobs under build-kernel
++   :align: center
++
++**job: build-docs**
++
++Builds documentation. Spawns a "sub-job" for each documentation type. Not run
++automatically; requires manual triggering.
++
++stage: cache
++^^^^^^^^^^^^
++
++**job: smatch-db-generate**
++
++Generates a smatch database for use by the `smatch` job. Not run automatically;
++requires manual triggering.
++
++.. _extending-the-ci:
++
++Extending the CI - Test Scenarios (KCI_SCENARIO)
++------------------------------------------------
++
++The pipeline offers flexibility and adaptability through the use of scenarios,
++enhancing the CI/CD process with broad customization options. Key capabilities
 +include:
-+  - ci/gitlab-ci/yml/gitlab-ci.yml
++
++- **Overriding Existing Jobs:** Tailor existing jobs to meet specific needs or
++  conditions.
++
++- **Changing Configurations:** Dynamically adapt job settings to suit various
++  environments or subsystem requirements.
++
++- **Defining New Jobs and Stages:** Introduce new jobs and stages for additional
++  tests, build processes, or deployment strategies.
++
++These features are particularly useful when a subsystem has distinct
++requirements. For instance, to enable testing different configurations for a
++specific architecture, running static checks with varied arguments, or
++installing specialized tools to conduct targeted tests.
++
++Writing a test scenario
++^^^^^^^^^^^^^^^^^^^^^^^
++
++The GitLab CI pipeline configuration allows for the inclusion of additional
++`.yml` files based on the `KCI_SCENARIO` variable. For example, setting
++`KCI_SCENARIO` to `media` includes `media.yml` from the `scenarios/` folder.
++
++To illustrate, building a specific architecture with a custom config can be
++achieved by overriding the `.kernel-combinations` hidden job in the
++`scenarios/my-scenario.yml` file:
++
++.. code-block:: yaml
++
++    .kernel-combinations:
++        parallel:
++            matrix:
++            - KCI_KERNEL_ARCH: "arm64"
++              KCI_DEFCONFIG: "my/custom/config1"
++              KCI_KCONFIGS_ENABLE: "CONFIG1 CONFIG2 CONFIG3"
++
++            - KCI_KERNEL_ARCH: "arm64"
++              KCI_DEFCONFIG: "my/custom/config2"
++              KCI_KCONFIGS_ENABLE: "CONFIG4 CONFIG5"
++
++This modifies builds and static checks for `arm64` with different
++configurations.
++
++To select this scenario, trigger the pipeline with KCI_SCENARIO=my-scenario. See
++:ref:`how-to-set-variables` below.
++
++Variables
++---------
++
++GitLab CI/CD supports various variables to modify pipeline behavior or for use
++in jobs.
++
++- **CI_ Prefix:** Standard GitLab CI/CD variables (see GitLab documentation).
++- **KCI_ Prefix:** Custom variables defined for kernel CI.
++- **ICI_ Prefix:** Internal variables used between scripts (not for external
++  use).
++
++.. _how-to-set-variables:
++
++How to Set Variables
++--------------------
++
++Variables can be set in several ways:
++
++- **Project Settings:** Under `CI/CD > Variables`.
++- **Pipeline UI:** When triggering a pipeline manually.
++- **Command Line:** When triggering a pipeline manually (see
++  :ref:`triggering-pipelines-from-command-line` below).
++- **YML Files:** Using the `variables` keyword.
++- **Commit Message:** For runtime variables only (see
++  :ref:`setting-variables-in-the-commit-message` below).
++
++.. image:: images/variables.png
++   :alt: Manual creation of pipeline
++   :align: center
++
++Variables Precedence
++--------------------
++
++- **Commit Message Variables:** Highest precedence if evaluated at runtime.
++- **Pipeline Variables:** Next in precedence.
++- **Project Variables:** Follow pipeline variables.
++- **YML File Variables:** Considered after the above levels.
++
++.. _setting-variables-in-the-commit-message:
++
++Setting Variables in the Commit Message
++---------------------------------------
++
++Runtime variables can be set in the commit message. Patterns like
++`KCI_VARIABLE=value` are extracted and exported to the job. To avoid including
++variables in the git history, add them after three dashes (`---`) in the commit
++message, as `git am` ignores text after this line.
++
++Example:
++
++.. code-block::
++
++    Title of my awesome commit
++
++    This is the commit message description of my awesome patch
++    ---
++    KCI_PATCH_SERIES_SIZE=4
++
++Description of Each Variable
++----------------------------
++
++**KCI_KERNEL_ARCH**
++    Defines the architecture to be used in the build-kernel and static checks
++    jobs. Usually set in the `.kernel-combinations` hidden job.
++
++**KCI_DEFCONFIG**
++    Defines the config file to be used in the build-kernel and static checks
++    jobs. Usually set in the `.kernel-combinations` hidden job.
++
++**KCI_KCONFIGS_{ENABLE,DISABLE,MODULE}**
++    Defines the extra configs to be enabled, disabled or set as a module, used
++    in the build-kernel and static checks jobs. Usually set in the
++    `.kernel-combinations` hidden job.
++
++**KCI_SCENARIO**
++    Used to select which extra scenario file to include in the pipeline. See
++    :ref:`extending-the-ci` section above. Usually set by the user at project or
++    pipeline level.
++
++**KCI_CHECKPATCH_OPTIONS**
++    Used in `checkpatch.pl "$KCI_CHECKPATCH_OPTIONS"` (see checkpatch
++    documentation). It is commonly used with the --ignore flag to suppress
++    specific warnings generated by checkpatch.pl. It can also be defined in the
++    commit message, since it is evaluated in run time.
++
++**KCI_PATCH_SERIES_SIZE**
++    Used to define the size of the patch series, see `job: checkpatch` section
++    above. It is evaluated in run time, and can be set in the commit message.
++
++.. _triggering-pipelines-from-command-line:
++
++Triggering Pipelines from Command Line
++--------------------------------------
++
++Pipelines can be triggered from the command line with custom variables using the
++`GitLab CLI tool <https://docs.gitlab.com/ee/editor_extensions/gitlab_cli>`_.
++
++Example:
++
++.. code-block:: bash
++
++    glab auth login
++    glab ci run -b gitlab-draft -R https://gitlab.collabora.com/koike/linux/ --variables-env KCI_PATCH_SERIES_SIZE:4
++
++
++Debugging and Replicating Jobs Locally
++--------------------------------------
++
++When a job fails in GitLab CI/CD, it's handy to replicate the issue in the
++same environment used by the GitLab CI/CD runner. This allows for interactive
++execution of each step and the use of debugging tools to pinpoint the failure's
++root cause.
++
++Rather than repeatedly modifying scripts and running the entire pipeline for
++debugging, you can download the specific Docker image used by the job and run it
++locally.
++
++To do this, first inspect the failed job in GitLab CI/CD. Look for a message
++indicating the Docker image used, typically in this format:
++
++   Pulling docker image registry.gitlab.collabora.com/koike/linux/debian/bookworm-slim:2024-02-6-ci-test-1
++
++You can then use this image to run the job locally. For example:
++
++.. code-block:: bash
++
++   IMAGE=registry.gitlab.collabora.com/koike/linux/debian/bookworm-slim:2024-02-6-ci-test-1
++   docker pull $IMAGE
++   docker run --rm -v `pwd`:/linux -w /linux $IMAGE bash
++
++
++Suggestions
++-----------
++
++Send Pipeline Links with Your Patch
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++When submitting patches or merge requests, it's highly beneficial to include
++links to the related GitLab CI pipelines. This practice enhances the review
++process in several ways:
++
++1. **Immediate Visibility:** Reviewers can immediately see the results of
++   automated tests, making it easier to assess the patch's impact.
++
++2. **Increased Confidence:** Successful pipeline runs increase confidence in the
++   changes, demonstrating that they pass existing tests.
++
++3. **Efficient Troubleshooting:** If there are issues, pipeline links allow both
++   authors and reviewers to quickly access logs and test results, facilitating
++   faster troubleshooting and iteration.
++
++4. **Transparency:** Providing pipeline links promotes transparency in the
++   development process, making it clear how changes have been verified.
++
++To include a pipeline link in your patch or merge request, simply copy the URL
++of the pipeline from your GitLab project's CI/CD pipeline page and paste it into
++your commit description after three dashes (`---`) or as a reply to your email
++patch.
++
++Always Green Pipeline
++^^^^^^^^^^^^^^^^^^^^^
++
++Maintaining an "always green" pipeline refers to the practice of ensuring that
++the main branch's pipeline is always in a passing state. This approach has
++several advantages:
++
++1. **Reliable Main Branch:** A green pipeline indicates a stable and reliable
++   main branch, which is crucial for continuous integration practices.
++
++2. **Immediate Feedback:** Developers receive immediate feedback on their
++   changes. If a merge causes the pipeline to fail, it's a clear signal that the
++   change introduced an issue.
++
++3. **Faster Iteration:** An always green pipeline facilitates faster development
++   and iteration, as developers can confidently build on top of the latest main
++   branch without worrying about hidden failures.
++
++4. **Culture of Responsibility:** It fosters a culture of responsibility, where
++   developers are encouraged to fix broken builds promptly and avoid merging
++   changes that could disrupt the pipeline.
+\ No newline at end of file
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index 36e61783437c1..cc96548ea8ef0 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -101,6 +101,13 @@ Architecture-specific documentation
+ 
+    arch/index
+ 
++CI: Automated testing documentation
++===================================
++
++.. toctree::
++   :maxdepth: 2
++
++   ci/gitlab-ci/gitlab-ci
+ 
+ Other documentation
+ ===================
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 716b2e22598c8..aa0f65791c2ee 100644
+index aa0f65791c2ee..5627300397e23 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -4998,6 +4998,14 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
- F:	drivers/media/cec/i2c/ch7322.c
+@@ -5004,6 +5004,7 @@ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ T:	git https://gitlab.collabora.com/koike/linux.git
+ F:	.gitlab-ci.yml
++F:	Documentation/ci/
+ F:	ci/
  
-+CI AUTOMATED TESTING
-+M:	Helen Koike <helen.koike@collabora.com>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+T:	git https://gitlab.collabora.com/koike/linux.git
-+F:	.gitlab-ci.yml
-+F:	ci/
-+
  CIRRUS LOGIC AUDIO CODEC DRIVERS
- M:	James Schulman <james.schulman@cirrus.com>
- M:	David Rhodes <david.rhodes@cirrus.com>
-diff --git a/ci/gitlab-ci/bootstrap-gitlab-runner.sh b/ci/gitlab-ci/bootstrap-gitlab-runner.sh
-new file mode 100755
-index 0000000000000..73238960d0880
---- /dev/null
-+++ b/ci/gitlab-ci/bootstrap-gitlab-runner.sh
-@@ -0,0 +1,55 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -eo pipefail
-+
-+# Define variables
-+CONFIG_VOLUME="/srv/gitlab-runner/config" # Path to your GitLab Runner config
-+
-+# Check if RUNNER_REGISTRATION_TOKEN is set
-+if [ -z "${RUNNER_REGISTRATION_TOKEN}" ]; then
-+    echo "Error: RUNNER_REGISTRATION_TOKEN is not set."
-+    echo "Please set the RUNNER_REGISTRATION_TOKEN environment variable and try again."
-+    exit 1
-+fi
-+
-+# Check if GITLAB_URL is set
-+if [ -z "${GITLAB_URL}" ]; then
-+    GITLAB_URL="https://gitlab.com/"
-+    echo "Info: GITLAB_URL is not set. Using the default $GITLAB_URL"
-+    echo "Please set the RUNNER_REGISTRATION_TOKEN environment variable and try again."
-+fi
-+
-+# Check if docker-compose is installed
-+if ! command -v docker-compose &> /dev/null
-+then
-+    echo "docker-compose could not be found. Please install it first."
-+    exit 1
-+fi
-+
-+# Start the GitLab Runner using Docker Compose
-+echo "Starting GitLab Runner..."
-+docker-compose up -d
-+
-+# Wait for a few seconds to ensure the service is up
-+sleep 5
-+
-+# Register the GitLab Runner
-+echo "Registering GitLab Runner..."
-+docker run --rm -v ${CONFIG_VOLUME}:/etc/gitlab-runner gitlab/gitlab-runner register \
-+  --non-interactive \
-+  --url ${GITLAB_URL} \
-+  --token ${RUNNER_REGISTRATION_TOKEN} \
-+  --executor docker \
-+  --docker-image "alpine:latest" \
-+  --description "Docker Runner" \
-+  --docker-privileged
-+
-+echo ""
-+echo "INFO: To configure the number of concurrent jobs, edit the value of"
-+echo "INFO: concurrent in ${CONFIG_VOLUME}/config.toml, than restart the GitLab"
-+echo "INFO: Runner using docker-compose restart"
-+echo ""
-+echo "GitLab Runner setup complete."
-diff --git a/ci/gitlab-ci/ci-scripts/build-docs.sh b/ci/gitlab-ci/ci-scripts/build-docs.sh
-new file mode 100755
-index 0000000000000..2053cb8794acf
---- /dev/null
-+++ b/ci/gitlab-ci/ci-scripts/build-docs.sh
-@@ -0,0 +1,35 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -exo pipefail
-+
-+source ci/gitlab-ci/ci-scripts/ici-functions.sh
-+
-+ici_get_patch_series_size
-+
-+# Get the list of modified files in the last $ICI_PATCH_SERIES_SIZE commits
-+MODIFIED_DOC_FILES=$(git diff HEAD~$ICI_PATCH_SERIES_SIZE --name-only -- Documentation/)
-+
-+make -j$(nproc) "$ICI_DOC_TYPE" 2>&1 | tee output.txt
-+
-+mkdir -p "${CI_PROJECT_DIR}/artifacts"
-+mv Documentation/output "${CI_PROJECT_DIR}/artifacts/Documentation-output"
-+
-+# Check if any of the MODIFIED_DOC_FILES generated a warning
-+# NOTE: the alternative solution was to touch the modified files and run make
-+# again, but too much warnings still appears
-+for file in $MODIFIED_DOC_FILES; do
-+    if grep -qi "warning" output.txt && grep -q "$file" output.txt; then
-+        echo "Warning found in $file"
-+        exit 101
-+    fi
-+done
-+
-+if [ -n "$ICI_UNABLE_TO_DETECT_PATCH_SERIES_SIZE" ]; then
-+    # If the patch series size was not detected, exit with a warning
-+    echo -n "The patch series size was not detected, we probably didn't check the"
-+    echo " whole series. Exiting with a warning."
-+    exit 101
-+fi
-diff --git a/ci/gitlab-ci/ci-scripts/build-kernel.sh b/ci/gitlab-ci/ci-scripts/build-kernel.sh
-new file mode 100755
-index 0000000000000..361826368a573
---- /dev/null
-+++ b/ci/gitlab-ci/ci-scripts/build-kernel.sh
-@@ -0,0 +1,35 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -exo pipefail
-+
-+source ci/gitlab-ci/ci-scripts/ici-functions.sh
-+
-+ici_prepare_build
-+
-+pushd build
-+
-+# compile the entire kernel
-+make CF=-D__CHECK_ENDIAN__ -C "$ICI_KERNEL_DIR" O=$(pwd) -j$(nproc) 2>&1 | tee output.txt
-+
-+export INSTALL_PATH="${CI_PROJECT_DIR}/artifacts/"
-+INSTALL_PATH+="kernel-install-${KCI_KERNEL_ARCH}-${KCI_DEFCONFIG}_config"
-+mkdir -p "$INSTALL_PATH"
-+
-+# install the kernel image to artifacts/kernel-install
-+make -C "$ICI_KERNEL_DIR" O=$(pwd) install INSTALL_PATH="$INSTALL_PATH"
-+
-+# install kernel modules to artifacts/kernel-install
-+make -C "$ICI_KERNEL_DIR" O=$(pwd) modules_install INSTALL_MOD_PATH="$INSTALL_PATH"
-+
-+# export config as artifact
-+cp .config "${CI_PROJECT_DIR}/artifacts/${KCI_KERNEL_ARCH}-${KCI_DEFCONFIG}_config"
-+
-+# if the compilation has warnings, exit with the warning code
-+if grep -iq "warning" output.txt; then
-+    exit 101
-+fi
-+
-+popd
-diff --git a/ci/gitlab-ci/ci-scripts/ici-functions.sh b/ci/gitlab-ci/ci-scripts/ici-functions.sh
-new file mode 100644
-index 0000000000000..df133b4d00103
---- /dev/null
-+++ b/ci/gitlab-ci/ci-scripts/ici-functions.sh
-@@ -0,0 +1,104 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -exo pipefail
-+
-+# internal CI bash functions
-+
-+# convention:
-+# KCI_<VARIABLE_NAME> for variables defined by the user (outside of this script)
-+# ICI_<VARIABLE_NAME> for variables defined internally for usage between scripts
-+# CI_<VARIABLE_NAME> for variables defined by GitLab CI
-+
-+
-+ici_prepare_build() {
-+    BUILD_DIR="${1:-build}"
-+
-+    echo ""
-+    echo "Architecture: $KCI_KERNEL_ARCH"
-+    echo "Defconfig: $KCI_DEFCONFIG"
-+    echo ""
-+
-+    # Get the current directory if KCI_KERNEL_DIR is not set
-+    ICI_KERNEL_DIR="${KCI_KERNEL_DIR:-$(pwd)}"
-+
-+    cd "$ICI_KERNEL_DIR" || { echo "Kernel directory not found"; exit 1; }
-+
-+    # Clean up stale rebases that GitLab might not have removed when reusing a checkout dir
-+    rm -rf .git/rebase-apply
-+
-+    if [[ "$KCI_KERNEL_ARCH" = "arm64" ]]; then
-+        GCC_ARCH="aarch64-linux-gnu"
-+    elif [[ "$KCI_KERNEL_ARCH" = "arm" ]]; then
-+        GCC_ARCH="arm-linux-gnueabihf"
-+    else
-+        GCC_ARCH="x86_64-linux-gnu"
-+    fi
-+
-+    # do not set ARCH and CROSS_COMPILE if KCI_KERNEL_ARCH is not set, useful for local run
-+    if [ -n "$KCI_KERNEL_ARCH" ]; then
-+        export ARCH=${KCI_KERNEL_ARCH}
-+        export CROSS_COMPILE="${GCC_ARCH}-"
-+    fi
-+
-+    mkdir -p "$BUILD_DIR"
-+
-+    pushd "$BUILD_DIR" || { echo "Failed to create $BUILD_DIR directory"; exit 1; }
-+
-+    # generate defconfig
-+    make -C "$ICI_KERNEL_DIR" O=$(pwd) $(basename ${KCI_DEFCONFIG-"defconfig"})
-+
-+    # add extra configs from variable KCI_KCONFIGS_{ENABLE,DISABLE,MODULE}
-+    for opt in $KCI_KCONFIGS_ENABLE; do
-+        ../scripts/config --file .config --enable CONFIG_$opt
-+    done
-+    for opt in $KCI_KCONFIGS_DISABLE; do
-+        ../scripts/config --file .config --disable CONFIG_$opt
-+    done
-+    for opt in $KCI_KCONFIGS_MODULE; do
-+        ../scripts/config --file .config --module CONFIG_$opt
-+    done
-+
-+    if [ -n "$KCI_KCONFIGS_DISABLE" ] || [ -n "$KCI_KCONFIGS_ENABLE" ] ||
-+       [ -n "$KCI_KCONFIGS_MODULE" ]; then
-+        # execude olddefconfig only if we changed the default config, otherwise,
-+        # let it raise warnings if any
-+        make -C "$ICI_KERNEL_DIR" O=$(pwd) olddefconfig
-+    fi
-+
-+    popd
-+}
-+
-+ici_get_patch_series_size()
-+{
-+    local CLONE_DEPTH
-+    CLONE_DEPTH=$(git rev-list --count HEAD)
-+    echo "The depth of the clone is $CLONE_DEPTH"
-+
-+    # If this is in the context of a merge request, calculate the patch series
-+    # size comparing to the target branch
-+    if [ -n "$CI_MERGE_REQUEST_IID" ]; then
-+        git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --depth $CLONE_DEPTH
-+        BASE_COMMIT="origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-+        ICI_PATCH_SERIES_SIZE=$(git rev-list --count ${BASE_COMMIT}.."$CI_COMMIT_SHA")
-+
-+    # if KCI_PATCH_SERIES_SIZE is set, use it
-+    elif [ -n "$KCI_PATCH_SERIES_SIZE" ]; then
-+        ICI_PATCH_SERIES_SIZE="$KCI_PATCH_SERIES_SIZE"
-+    else
-+        ICI_PATCH_SERIES_SIZE=1
-+        echo "WARNING: unable to detect the patch series size, using the default value of 1."
-+        # shellcheck disable=SC2034
-+        ICI_UNABLE_TO_DETECT_PATCH_SERIES_SIZE=true
-+    fi
-+
-+    # Check if the clone depth is smaller than or equal to KCI_PATCH_SERIES_SIZE,
-+    # otherwise the checkpatch.pl hangs
-+    if [ "$ICI_PATCH_SERIES_SIZE" -ge "$CLONE_DEPTH" ]; then
-+        echo -n "ERROR: the depth of the clone is $CLONE_DEPTH, smaller than or equal to the patch"
-+        echo " series size. Update your GitLab configuration to increase the size of the clone."
-+        return 1
-+    fi
-+}
-diff --git a/ci/gitlab-ci/ci-scripts/install-smatch.sh b/ci/gitlab-ci/ci-scripts/install-smatch.sh
-new file mode 100755
-index 0000000000000..cae16a0e90fa8
---- /dev/null
-+++ b/ci/gitlab-ci/ci-scripts/install-smatch.sh
-@@ -0,0 +1,13 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -exo pipefail
-+
-+pushd /
-+git clone --depth 1 https://repo.or.cz/smatch.git
-+pushd smatch
-+make
-+popd
-+popd
-diff --git a/ci/gitlab-ci/ci-scripts/parse_commit_message.sh b/ci/gitlab-ci/ci-scripts/parse_commit_message.sh
-new file mode 100755
-index 0000000000000..c9792c64ad51e
---- /dev/null
-+++ b/ci/gitlab-ci/ci-scripts/parse_commit_message.sh
-@@ -0,0 +1,27 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -exo pipefail
-+
-+# Get the last commit message
-+commit_message=$(git log -1 --pretty=%B)
-+
-+pattern='(KCI_[A-Za-z_]+)=("[^"]*"|[^ ]+)'
-+
-+while read -r line; do
-+    if [[ $line =~ $pattern ]]; then
-+        variable_name="${BASH_REMATCH[1]}"
-+        variable_value="${BASH_REMATCH[2]}"
-+
-+        # Remove quotes if present
-+        variable_value="${variable_value%\"}"
-+        variable_value="${variable_value#\"}"
-+
-+        # Export the variable
-+        export "$variable_name=$variable_value"
-+
-+        echo "Exported $variable_name=$variable_value"
-+    fi
-+done <<< "$commit_message"
-diff --git a/ci/gitlab-ci/ci-scripts/run-checkpatch.sh b/ci/gitlab-ci/ci-scripts/run-checkpatch.sh
-new file mode 100755
-index 0000000000000..98585ec18be2b
---- /dev/null
-+++ b/ci/gitlab-ci/ci-scripts/run-checkpatch.sh
-@@ -0,0 +1,20 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -exo pipefail
-+
-+source ci/gitlab-ci/ci-scripts/ici-functions.sh
-+
-+ici_get_patch_series_size
-+
-+# shellcheck disable=SC2086
-+scripts/checkpatch.pl $KCI_CHECKPATCH_OPTIONS --git HEAD-"$ICI_PATCH_SERIES_SIZE"
-+
-+if [ -n "$ICI_UNABLE_TO_DETECT_PATCH_SERIES_SIZE" ]; then
-+    # If the patch series size was not detected, exit with a warning
-+    echo -n "The patch series size was not detected, we probably didn't check the whole series."
-+    echo " Exiting with a warning."
-+    exit 101
-+fi
-diff --git a/ci/gitlab-ci/ci-scripts/run-smatch.sh b/ci/gitlab-ci/ci-scripts/run-smatch.sh
-new file mode 100755
-index 0000000000000..ec054df9ef179
---- /dev/null
-+++ b/ci/gitlab-ci/ci-scripts/run-smatch.sh
-@@ -0,0 +1,45 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+set -exo pipefail
-+
-+source ci/gitlab-ci/ci-scripts/ici-functions.sh
-+
-+ls -l
-+pwd
-+
-+# generate config file
-+ici_prepare_build
-+
-+ici_get_patch_series_size
-+
-+cp build/.config .
-+
-+# Get a list of modified .c files in the last ICI_PATCH_SERIES_SIZE commits
-+MODIFIED_C_FILES=$(git diff --name-only HEAD~$ICI_PATCH_SERIES_SIZE HEAD | grep '\.c$' || true)
-+
-+# Check if any .c files were modified
-+if [ -z "$MODIFIED_C_FILES" ]; then
-+    echo "No .c files were modified in the last $ICI_PATCH_SERIES_SIZE commits."
-+else
-+    echo "Running kchecker on modified .c files..."
-+    mkdir -p "$CI_PROJECT_DIR"/artifacts
-+fi
-+
-+# Run kchecker on each modified .c file
-+for file in $MODIFIED_C_FILES; do
-+    if [ -f "$file" ]; then
-+        /smatch/smatch_scripts/kchecker "$file" | tee "$CI_PROJECT_DIR"/artifacts/smatch_warns.txt
-+    else
-+        echo "File not found: $file"
-+    fi
-+done
-+
-+if [ -n "$ICI_UNABLE_TO_DETECT_PATCH_SERIES_SIZE" ]; then
-+    # If the patch series size was not detected, exit with a warning
-+    echo -n "The patch series size was not detected, we probably didn't check the whole series."
-+    echo " Exiting with a warning."
-+    exit 101
-+fi
-diff --git a/ci/gitlab-ci/docker-compose.yaml b/ci/gitlab-ci/docker-compose.yaml
-new file mode 100644
-index 0000000000000..7edf8055ca375
---- /dev/null
-+++ b/ci/gitlab-ci/docker-compose.yaml
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+version: '3.8'
-+
-+services:
-+  gitlab-runner:
-+    image: gitlab/gitlab-runner:latest
-+    container_name: gitlab-runner
-+    restart: always
-+    privileged: true
-+    volumes:
-+      - /srv/gitlab-runner/config:/etc/gitlab-runner
-+      - /var/run/docker.sock:/var/run/docker.sock
-+
-+# To register the GitLab Runner, run the following command:
-+# docker run --rm -it -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register --url https://gitlab.com --token YOUR_REGISTRATION_TOKEN
-diff --git a/ci/gitlab-ci/linux.code-workspace b/ci/gitlab-ci/linux.code-workspace
-new file mode 100644
-index 0000000000000..dd76698e38c2c
---- /dev/null
-+++ b/ci/gitlab-ci/linux.code-workspace
-@@ -0,0 +1,11 @@
-+{
-+	"folders": [
-+		{
-+			"path": "../../../.."
-+		},
-+		{
-+			"path": "../../../../../mesa"
-+		}
-+	],
-+	"settings": {}
-+}
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/build.yml b/ci/gitlab-ci/yml/build.yml
-new file mode 100644
-index 0000000000000..f81410c293f35
---- /dev/null
-+++ b/ci/gitlab-ci/yml/build.yml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+.build:
-+  extends: .use-debian/x86_64_build
-+  stage: build
-+
-+build-kernel:
-+  extends:
-+    - .build
-+    - .kernel-combinations
-+  variables:
-+    # ccache in gitlab-runner to speed up builds
-+    CCACHE_BASEDIR: $CI_PROJECT_DIR
-+    CCACHE_DIR: $CI_PROJECT_DIR/ccache
-+    CCACHE_COMPILERCHECK: content
-+  cache:
-+    - key: ccache-$CI_JOB_NAME
-+      paths:
-+        - $CCACHE_DIR
-+  before_script:
-+    - export PATH="/usr/lib/ccache:$PATH"
-+    - ccache --zero-stats || true
-+    - ccache --show-stats || true
-+  after_script:
-+    - ccache --show-stats
-+  script:
-+    - ./ci/gitlab-ci/ci-scripts/build-kernel.sh
-+
-+build-docs:
-+  extends:
-+    - .build
-+  parallel:
-+    matrix:
-+      - ICI_DOC_TYPE: "htmldocs"
-+      # TODO: re-add pdfdocs once build errors are fixed
-+      # - ICI_DOC_TYPE: "pdfdocs"
-+      - ICI_DOC_TYPE: "latexdocs"
-+      - ICI_DOC_TYPE: "epubdocs"
-+  script:
-+    - ./ci/gitlab-ci/ci-scripts/build-docs.sh
-+  when: manual
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/cache.yml b/ci/gitlab-ci/yml/cache.yml
-new file mode 100644
-index 0000000000000..efe4fc69b11ca
---- /dev/null
-+++ b/ci/gitlab-ci/yml/cache.yml
-@@ -0,0 +1,26 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+# Smatch db is saved to a cached folder, so it can be used by other jobs and pipelines.
-+# It is set to manual so it can be run when needed
-+
-+.use-cache-smatch-db:
-+  cache:
-+    # TODO: check if this cache shouldn't be per architecture
-+    - key: smatch-db
-+      paths:
-+        - /smatch/smatch_data
-+
-+smatch-db-generate:
-+  stage: cache
-+  extends:
-+    - .kernel-combinations
-+    - .use-debian/x86_64_build
-+    - .use-cache-smatch-db
-+  script:
-+    - source ci/gitlab-ci/ci-scripts/ici-functions.sh
-+    - ici_prepare_build
-+    - cp build/.config .
-+    - /smatch/smatch_scripts/build_kernel_data.sh
-+  when: manual
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/container.yml b/ci/gitlab-ci/yml/container.yml
-new file mode 100644
-index 0000000000000..eecca95caca0e
---- /dev/null
-+++ b/ci/gitlab-ci/yml/container.yml
-@@ -0,0 +1,36 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+.prep-debian/x86_64_build:
-+  variables:
-+    FDO_DISTRIBUTION_VERSION: bookworm-slim
-+    FDO_DISTRIBUTION_TAG: "2024-02-28-ci-test-1"
-+
-+
-+debian/x86_64_build:
-+  extends:
-+    - ".fdo.container-build@debian"
-+    - ".prep-debian/x86_64_build"
-+  variables:
-+    FDO_DISTRIBUTION_PACKAGES: >
-+      make bc flex bison pahole mount build-essential
-+      libcairo-dev libdw-dev libjson-c-dev libkmod2
-+      libkmod-dev libpciaccess-dev libproc2-dev libudev-dev
-+      libunwind-dev python3-docutils bc python3-ply
-+      libssl-dev ccache
-+      gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-+      gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf
-+      perl git kmod python3-git python3-yaml python3-dulwich
-+      sqlite3 libsqlite3-dev libdbd-sqlite3-perl libssl-dev libtry-tiny-perl
-+      python3-sphinx imagemagick graphviz dvipng python3-venv fonts-noto-cjk
-+      latexmk librsvg2-bin texlive-lang-chinese texlive-xetex
-+    FDO_DISTRIBUTION_EXEC: ./ci/gitlab-ci/ci-scripts/install-smatch.sh
-+  stage: container
-+
-+
-+.use-debian/x86_64_build:
-+  extends:
-+    - ".fdo.distribution-image@debian"
-+    - ".prep-debian/x86_64_build"
-+  needs: [debian/x86_64_build]
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/gitlab-ci.yml b/ci/gitlab-ci/yml/gitlab-ci.yml
-new file mode 100644
-index 0000000000000..57b9c02904713
---- /dev/null
-+++ b/ci/gitlab-ci/yml/gitlab-ci.yml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+workflow:
-+  name: $PIPELINE_NAME
-+  rules:
-+    # when triggered as a multi-project pipeline for an MR
-+    - if: $CI_PIPELINE_SOURCE == 'pipeline' && $PARENT_MERGE_REQUEST_IID != null && $PARENT_MERGE_REQUEST_IID != ""
-+      variables:
-+        PIPELINE_NAME: 'Downstream pipeline for $PARENT_PROJECT_PATH!$PARENT_MERGE_REQUEST_IID'
-+    # when triggered as a multi-project pipeline
-+    - if: $CI_PIPELINE_SOURCE == 'pipeline'
-+      variables:
-+        PIPELINE_NAME: 'Downstream pipeline for $PARENT_PROJECT_PATH'
-+    # when triggered via a schedule
-+    - if: $CI_PIPELINE_SOURCE == 'schedule'
-+      variables:
-+        PIPELINE_NAME: 'Scheduled pipeline for $ONLY_JOB_NAME'
-+    # for merge requests
-+    - if: $CI_MERGE_REQUEST_ID
-+    # when triggered via the REST api
-+    - if: $CI_PIPELINE_SOURCE == 'api'
-+    # for the tip of the default branch
-+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-+    # when triggered via a trigger token
-+    - if: $CI_PIPELINE_SOURCE == 'trigger'
-+    # when triggered from a button press in the web interface
-+    - if: $CI_PIPELINE_SOURCE == 'web'
-+    # for branch tips without open MRs, ignoring special branches
-+    - if: $CI_PIPELINE_SOURCE == 'push' && $CI_OPEN_MERGE_REQUESTS == null
-+    # when forced via '-o ci.variable="FORCE_CI=true"' during pushing
-+    - if: $FORCE_CI == 'true'
-+
-+variables:
-+  FDO_UPSTREAM_REPO: helen.fornazier/linux   # The repo where to look for cached images
-+    # ccache builds in gitlab-runner to speed up builds
-+  SMATCH_DB_DIR: /smatch/smatch_data
-+  # exit code of bash script on `script` will be the exit code of the job
-+  FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
-+
-+default:
-+  artifacts:
-+    paths:
-+      - artifacts/
-+    when: always
-+
-+include:
-+  - remote: 'https://gitlab.freedesktop.org/freedesktop/ci-templates/-/raw/16bc29078de5e0a067ff84a1a199a3760d3b3811/templates/ci-fairy.yml'
-+  - remote: 'https://gitlab.freedesktop.org/freedesktop/ci-templates/-/raw/16bc29078de5e0a067ff84a1a199a3760d3b3811/templates/debian.yml'
-+
-+  - ci/gitlab-ci/yml/kernel-combinations.yml
-+  - ci/gitlab-ci/yml/container.yml
-+  - ci/gitlab-ci/yml/cache.yml
-+  - ci/gitlab-ci/yml/build.yml
-+  - ci/gitlab-ci/yml/static-checks.yml
-+  - ci/gitlab-ci/yml/scenarios.yml
-+
-+before_script:
-+  - source ci/gitlab-ci/ci-scripts/parse_commit_message.sh
-+
-+.use-debian/x86_64_build:
-+  allow_failure:
-+    # Code to exit with a warning
-+    exit_codes: 101
-+
-+stages:
-+  - container
-+  - static-checks
-+  - build
-+  - cache
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/kernel-combinations.yml b/ci/gitlab-ci/yml/kernel-combinations.yml
-new file mode 100644
-index 0000000000000..87f08579ffd62
---- /dev/null
-+++ b/ci/gitlab-ci/yml/kernel-combinations.yml
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+.kernel-combinations:
-+  parallel:
-+    matrix:
-+      - KCI_KERNEL_ARCH: "x86_64"
-+        KCI_DEFCONFIG: "x86_64_defconfig"
-+        KCI_KCONFIGS_ENABLE: "PROVE_LOCKING DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT CONFIG_DEBUG_SECTION_MISMATCH"
-+
-+      - KCI_KERNEL_ARCH: "arm64"
-+        KCI_DEFCONFIG: "defconfig"
-+        KCI_KCONFIGS_ENABLE: "PROVE_LOCKING DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT CONFIG_DEBUG_SECTION_MISMATCH"
-+
-+      - KCI_KERNEL_ARCH: "arm"
-+        KCI_DEFCONFIG: "multi_v7_defconfig"
-+        KCI_KCONFIGS_ENABLE: "PROVE_LOCKING DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT CONFIG_DEBUG_SECTION_MISMATCH"
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/scenarios.yml b/ci/gitlab-ci/yml/scenarios.yml
-new file mode 100644
-index 0000000000000..11598c3b6f2a9
---- /dev/null
-+++ b/ci/gitlab-ci/yml/scenarios.yml
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+# Extend the CI by including a test scenario here. The scenario will be
-+# activated if KCI_SCENARIO is set to the scenario name. KCI_SCENARIO can be
-+# defined in the gitlab-ci.yml file, or through GitLab UI.
-+
-+include:
-+  - local: 'ci/gitlab-ci/yml/scenarios/$KCI_SCENARIO.yml'
-+    rules:
-+      - if: '$KCI_SCENARIO'
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/scenarios/file-systems.yml b/ci/gitlab-ci/yml/scenarios/file-systems.yml
-new file mode 100644
-index 0000000000000..66456600a9dd3
---- /dev/null
-+++ b/ci/gitlab-ci/yml/scenarios/file-systems.yml
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+# Write here specific configurations and extensions for the given scenario
-+
-+# Example - overwrite kernel combinations in the pipeline
-+# .kernel-combinations:
-+#   parallel:
-+#     matrix:
-+#       - KCI_KERNEL_ARCH: "x86_64"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-+#
-+#       - KCI_KERNEL_ARCH: "arm64"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-+#
-+#       - KCI_KERNEL_ARCH: "arm"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/scenarios/media.yml b/ci/gitlab-ci/yml/scenarios/media.yml
-new file mode 100644
-index 0000000000000..66456600a9dd3
---- /dev/null
-+++ b/ci/gitlab-ci/yml/scenarios/media.yml
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+# Write here specific configurations and extensions for the given scenario
-+
-+# Example - overwrite kernel combinations in the pipeline
-+# .kernel-combinations:
-+#   parallel:
-+#     matrix:
-+#       - KCI_KERNEL_ARCH: "x86_64"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-+#
-+#       - KCI_KERNEL_ARCH: "arm64"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-+#
-+#       - KCI_KERNEL_ARCH: "arm"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/scenarios/network.yml b/ci/gitlab-ci/yml/scenarios/network.yml
-new file mode 100644
-index 0000000000000..66456600a9dd3
---- /dev/null
-+++ b/ci/gitlab-ci/yml/scenarios/network.yml
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+# Write here specific configurations and extensions for the given scenario
-+
-+# Example - overwrite kernel combinations in the pipeline
-+# .kernel-combinations:
-+#   parallel:
-+#     matrix:
-+#       - KCI_KERNEL_ARCH: "x86_64"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-+#
-+#       - KCI_KERNEL_ARCH: "arm64"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-+#
-+#       - KCI_KERNEL_ARCH: "arm"
-+#         KCI_DEFCONFIG: "path/to/my/config/file_config"
-+#         KCI_ENABLE_KCONFIGS: "CONFIG1 CONFIG2 CONFIG3 ..."
-\ No newline at end of file
-diff --git a/ci/gitlab-ci/yml/static-checks.yml b/ci/gitlab-ci/yml/static-checks.yml
-new file mode 100644
-index 0000000000000..a99a1ea910f40
---- /dev/null
-+++ b/ci/gitlab-ci/yml/static-checks.yml
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Copyright (C) 2024 Collabora, Helen Koike <helen.koike@collabora.com>
-+
-+.static-checks:
-+  stage: static-checks
-+  extends:
-+    - .use-debian/x86_64_build
-+
-+checkpatch:
-+  extends: .static-checks
-+  script:
-+    - ci/gitlab-ci/ci-scripts/run-checkpatch.sh
-+
-+smatch:
-+  extends:
-+    - .static-checks
-+    - .kernel-combinations
-+    - .use-cache-smatch-db
-+  script:
-+    - ci/gitlab-ci/ci-scripts/run-smatch.sh
-\ No newline at end of file
 -- 
 2.40.1
 
