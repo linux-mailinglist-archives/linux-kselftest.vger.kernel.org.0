@@ -1,98 +1,166 @@
-Return-Path: <linux-kselftest+bounces-5529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AF5C86AEEF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 13:16:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 507D186AF44
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 13:37:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBBBAB23DF7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 12:16:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8FC21F2682E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 12:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39E03BBD6;
-	Wed, 28 Feb 2024 12:16:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1EC145351;
+	Wed, 28 Feb 2024 12:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="QHS61vcU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWb17mhK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E67E3BBC5
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 12:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F0C73515;
+	Wed, 28 Feb 2024 12:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709122606; cv=none; b=UFLQYnzlrsQmzg+/pyIMltlGqLDmZRhuIQUXJ9Xl5oCC8csgR2m13lI8TdJHtFM9+cUzS5FPBMxSKMVBkUolvNpq7CVPksQORZa/PSXm7jBQT/rqD9gJQmbhx8cKV8HPCAn5KTy0jo+iVx78LXzKewoQkyUN0zr7ugu01xCnB4A=
+	t=1709123837; cv=none; b=tnMyjkA4YkPHC1H9debBhwxn37JPh2CqBOapOZdXpOCLfSlDrsjO1jX6cleq6SVffcq2GzhhU4FtMtwWEEUE+UUTVzzd0hj0hdNcZHinmzTOQVhaikgHo1tvc/VCYArRmjoPwFYEMSYyYsXoi55VFt9rH4weA0oZyipzREuqjrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709122606; c=relaxed/simple;
-	bh=ldvpcSU35Jz8322hCmCPRQeBN5Om3WvOv278ShMhodA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mhu0F2lTUrIjYk47Ej1Vdu+qiOJzQlL2CkIlzz4EG1q3mIyk2F7rnV+NE1svNUVsumej7zMJ1gq3Y3ytajBJ5GSilzovzBLW1QBt8CFpqRmmvf7tPGad6EPWRGPZhRUW9BfpslDrCl/4Uck9jBz+CgFKha1ade36Zcd4USZejIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=QHS61vcU; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5640fef9fa6so6999605a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 04:16:43 -0800 (PST)
+	s=arc-20240116; t=1709123837; c=relaxed/simple;
+	bh=OiCrhkAImdpoKzsF7o8mkmuy5/VGiIrPcYWm0Rn/A1A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NCriiYDbLvjky63nA37+7hGNLBbbPg7crDyDGO0Jw8I5hsLb/DgAmdAeLsTYD8meQsOe5GaYDMf27tj/IL8IjctE+1Wt60huzIoeaNoL2ELiESnGvlXppCedYjko8hUuTukzVwwsoGyqF3h2PNusUqYgRQboxFVb4evtWPCITGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FWb17mhK; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-565b434f90aso4980784a12.3;
+        Wed, 28 Feb 2024 04:37:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1709122602; x=1709727402; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z1M9Nkh3R0yrVqMl2adPOdhz/1QaFUKB8Zn96BDk2Qc=;
-        b=QHS61vcUkC8hfyvP6v0Sq/ZIz2ET0IuZgWvTZ2rSB/iahiViBGhYrfYudweAek6+vw
-         QWdsvTka4JKvlLQZZzok2mIApKElamkpZdtOJbkTcZNyptJl0SFejMtOCmiHvCAPab9/
-         AcW1EIP7F1Hrj5Cces/gs0JykGXoqP1Mnw7wihye/b9wUOhVtFmh8UK2TcKsDVcI9L9A
-         VmeWW3WdVixDqZ2LBUFqkRp16AGvECtm9I8Mppg+l+KEz9YsIsw5Exbq1GeCAsuq0gGc
-         DLBdxqqTar5wYjzo+9jTFpzY0ZwbhQ19gd+aEIDTvlHHTiZCaeM8Z+Wk5vxghuwd8bgQ
-         E+YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709122602; x=1709727402;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1709123834; x=1709728634; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z1M9Nkh3R0yrVqMl2adPOdhz/1QaFUKB8Zn96BDk2Qc=;
-        b=vPL/s5N0wedwHlm2qkV5OCML6ytCFSNZer/Kt/xhll6T8z/Y40HjUjPYt4GEv7B2uf
-         OdajYSItiYlGdUE28yrDA8JTUISO7iH1Sfis2/ie0R9nvZ69PfDDCd7lCGYSWtfXZngq
-         HSiHyVZOr3S3t44yIcTDpE4enwZiYTx2fEgb7wB1neeqDiI0jftclk++0pQfEUD5KZyq
-         iuEDI5bL9uO4lT/dxawzmrA/etlcj9v8N6tKoD6wHqR0EPoyCHpayLX6JnO7+awHCTyo
-         lbP0POMbWbiRl00fVBfVlov5D/7HaFr4u5V25PsolOyB0WfyG/YU4J36m1PLVMoC3a9p
-         cu/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWL22Vu3E05HmNplPKGlOPPINcX8X+yrSMBnp6XGr1q0tOZrKGxBZm0G3jI/sVwR0hYDp5t2ki8jl6UQHuidcDkIpmQnULsl06y2CsQETtK
-X-Gm-Message-State: AOJu0YxQ6iDy4Z1s8Jdsn70l8NcPzHyLJU0N+v9Oym0n/kZnD33hRAzm
-	PcXdh1TZtpxAM0mAUTsd06Y/vZM3d7j9o4zCw7jVMwlc5GMhxfrr5uq/bBQ3z9/Jv432MErVPly
-	b
-X-Google-Smtp-Source: AGHT+IFe1CsGF2APUDiVY14PUctNwIaAU5Ml4MK3iHilwHYud1qRv7qvb0fStxtDtgtYfeA8cfHqyw==
-X-Received: by 2002:a17:906:796:b0:a3f:5c5c:33ac with SMTP id l22-20020a170906079600b00a3f5c5c33acmr9860351ejc.62.1709122601794;
-        Wed, 28 Feb 2024 04:16:41 -0800 (PST)
-Received: from localhost ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id e14-20020a170906374e00b00a431488d8efsm1773598ejc.160.2024.02.28.04.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Feb 2024 04:16:41 -0800 (PST)
-Date: Wed, 28 Feb 2024 13:16:38 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
-Cc: shuah@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	petrm@nvidia.com, idosch@nvidia.com
-Subject: Re: [PATCH net-next] selftests: net: Correct couple of spelling
- mistakes
-Message-ID: <Zd8kJgaOdJwe6BzC@nanopsycho>
-References: <20240228082416.416882-1-pvkumar5749404@gmail.com>
+        bh=JudlYv7kq9yuUXRQ/PvG4bnskD9Dxwze5xbPVzN+2ng=;
+        b=FWb17mhKZQNgPPNRPNCZOrIanbIj+q42DbPmuqYMF2v1EGowjqJW7QDuYC/M3tj3fy
+         G4kDoBNRSGhxIzbquKxg0S3ALjtfdwdklJB6JitRoaqJAGmdxtqMEngpmwxVhpHohpK5
+         gYWnzjJaZKGB66yMpm+1KLAZJsdSRELGel2yWumShwX4wsuSGEo0F0sj8z+DwbVm7grm
+         rNMcnN1U2U1U0H7a4FzWWoazV22bew/IGy4zEEJ5UA5Yhz/tyRr8gITgvPJLt3b3pWJL
+         QgXbEBsFK7jOh9ygR+9PHCVMphMZXL2DQHDZf218B62/3mYPO1aMjAM7e7i9L8A+sQGm
+         +Dwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709123834; x=1709728634;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JudlYv7kq9yuUXRQ/PvG4bnskD9Dxwze5xbPVzN+2ng=;
+        b=hehhtwhB0wBN3epNIMbk4PRujwIxVllVG2aNtYV2JUnYVkzQETYrtJO9BAHAPJyXbA
+         6jpVcW2AC5IYEQUnknF9GQiz6Ccz5ArcfoDDRg4v7l1y51Cq2WWIinni/WbRpb19HAzx
+         4ZybptSoFtLRq0tVd1cvRK2yf7eAlYCLn4aC8gVadFw3YGWlEr7LWFDZfdd7repRntmC
+         BtaY5fBhSS0eOpHb93XoLi1HV1uAPyJ+53EsPGXeviIaPxKDWxt9QJPDnLYzjs9wrbV+
+         DCPPWIuMr9rZWg/3PmW8cfbUb7VgGkibkFVVWvALYuqPUQkaXtiSwQbW1s95VBgmkF2T
+         J7PA==
+X-Forwarded-Encrypted: i=1; AJvYcCWYbXrw9pIFXQCLUxDpZZnKkjJCWrOSxPqqAXYp6H76uZbl1OSBQ76ifrVsYAQlhP0P+X4p33yOIovIseXZ1TIoU1SA1pSsSqUsHc9p6G8o0VNEvui/Xji2skmXWGdvFxJdUtmyn33laHoPqcfwctnFy04g0NDEqIsoouWgVWCVa+0AlvaW
+X-Gm-Message-State: AOJu0YyVXyUPgy6osRxtGXj4/P/QPDSzefFoOSC42LhlJiKkvGCIN1/W
+	vaITrDgRDioxQ46TwfWRpx+NOp4RMcx7Dt7ItmTvsYdh/Q71VDu0T5hp4t6CWU1uWMtRYIzbSWe
+	Y2lU+DBegBXdZyv5I8sQ9QrFVSdw/5Efa
+X-Google-Smtp-Source: AGHT+IE96ZWkre7JVXpJhyMlgo+IHpI1hOKcxl71SkWQaICp/+hmUTxPfiwoqMZshS5hFp43nVH0QUrSoFDjJIgAIdk=
+X-Received: by 2002:a05:6402:3126:b0:566:4e7a:fa2b with SMTP id
+ dd6-20020a056402312600b005664e7afa2bmr2110728edb.36.1709123833969; Wed, 28
+ Feb 2024 04:37:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240228082416.416882-1-pvkumar5749404@gmail.com>
+References: <20240227175513.8703-1-pvkumar5749404@gmail.com>
+ <Zd7lqr8Cz4XrNoI8@nanopsycho> <CAH8oh8U1KLxY95DQW9duU30VC5hdQd1YKs+8USuuz0k4JWtBSQ@mail.gmail.com>
+ <Zd79vEsSp7wlJWQy@nanopsycho>
+In-Reply-To: <Zd79vEsSp7wlJWQy@nanopsycho>
+From: prabhav kumar <pvkumar5749404@gmail.com>
+Date: Wed, 28 Feb 2024 18:07:02 +0530
+Message-ID: <CAH8oh8W9hzWV-fajb-1OoR8dZEbqhrCGL=3bcDRhaDObbacDDA@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests: net: Correct couple of spelling mistakes
+To: Jiri Pirko <jiri@resnulli.us>
+Cc: shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, petrm@nvidia.com, idosch@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Wed, Feb 28, 2024 at 09:24:16AM CET, pvkumar5749404@gmail.com wrote:
->Changes :
->	- "excercise" is corrected to "exercise" in drivers/net/mlxsw/spectrum-2/tc_flower.sh
->	- "mutliple" is corrected to "multiple" in drivers/net/netdevsim/ethtool-fec.sh
+On Wed, Feb 28, 2024 at 3:02=E2=80=AFPM Jiri Pirko <jiri@resnulli.us> wrote=
+:
 >
->Signed-off-by: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
-
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+> Prabhav, I'm not sure what you are trying to do, but you have to
+> re-submit the patch, preferably using git-send-email or another email
+> client you use.
+>> Sorry for that.
+>> Re-Submitted the patch.
+>
+>
+> Wed, Feb 28, 2024 at 09:42:01AM CET, pvkumar5749404@gmail.com wrote:
+> >On Wed, Feb 28, 2024 at 1:20=E2=80=AFPM Jiri Pirko <jiri@resnulli.us> wr=
+ote:
+> >>
+> >> Please fix the patch subject to include appropriate prefixes and
+> >> rephrase a bit like this:
+> >>
+> >> Subject: [PATCH net-next] selftests: net: Correct couple of spelling m=
+istakes
+> >>
+> >> pw-bot: cr
+> >>
+> >>
+> >> Tue, Feb 27, 2024 at 06:55:13PM CET, pvkumar5749404@gmail.com wrote:
+> >> >Changes :
+> >> >       - "excercise" is corrected to "exercise" in drivers/net/mlxsw/=
+spectrum-2/tc_flower.sh
+> >> >       - "mutliple" is corrected to "multiple" in drivers/net/netdevs=
+im/ethtool-fec.sh
+> >> >
+> >> >Signed-off-by: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
+> >> >---
+> >> > .../testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.sh | 2 =
++-
+> >> > tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh    | 2 =
++-
+> >> > 2 files changed, 2 insertions(+), 2 deletions(-)
+> >> >
+> >> >diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_=
+flower.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.=
+sh
+> >> >index 616d3581419c..31252bc8775e 100755
+> >> >--- a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.=
+sh
+> >> >+++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/tc_flower.=
+sh
+> >> >@@ -869,7 +869,7 @@ bloom_simple_test()
+> >> > bloom_complex_test()
+> >> > {
+> >> >       # Bloom filter index computation is affected from region ID, e=
+RP
+> >> >-      # ID and from the region key size. In order to excercise those=
+ parts
+> >> >+      # ID and from the region key size. In order to exercise those =
+parts
+> >> >       # of the Bloom filter code, use a series of regions, each with=
+ a
+> >> >       # different key size and send packet that should hit all of th=
+em.
+> >> >       local index
+> >> >diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-fe=
+c.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh
+> >> >index 7d7829f57550..6c52ce1b0450 100755
+> >> >--- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh
+> >> >+++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-fec.sh
+> >> >@@ -49,7 +49,7 @@ for o in llrs rs; do
+> >> > Active FEC encoding: ${o^^}"
+> >> > done
+> >> >
+> >> >-# Test mutliple bits
+> >> >+# Test multiple bits
+> >> > $ETHTOOL --set-fec $NSIM_NETDEV encoding rs llrs
+> >> > check $?
+> >> > s=3D$($ETHTOOL --show-fec $NSIM_NETDEV | tail -2)
+> >> >--
+> >> >2.34.1
+> >> >
+> >> >
 
