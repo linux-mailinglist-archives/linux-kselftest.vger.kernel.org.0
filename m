@@ -1,229 +1,822 @@
-Return-Path: <linux-kselftest+bounces-5542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B46B186B3C3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 16:52:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71D4086B499
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 17:19:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6633C282DB5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 15:52:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 955531C2181F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 16:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 127CE15CD6C;
-	Wed, 28 Feb 2024 15:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12236EEF3;
+	Wed, 28 Feb 2024 16:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fyFwtB47"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iqiwin78"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745BB1534F4;
-	Wed, 28 Feb 2024 15:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709135551; cv=fail; b=fexFiVVc1beEv7w16IL305LkMljlxdf35rcqQG+rXT5CEFrYaakDXKqzVGAoXpUKz4UomT1RLdbilJw3602IsE3CT6f+7bl5sE1gurutZgQP5emhTaB9tNrR6sYSKjLIZUAPepsaJOu58bZ9WCg5XdRKVDqk2635TkGANLwbewk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709135551; c=relaxed/simple;
-	bh=QMcyef4uzRymrn9HY5VhLOXlOujKIOKTmueAxlxGqLs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JJ4tcx9swLY6J9B+ZolbnM9nTInZOTDrb5VPxPuC81Y68fN1YPlpeFb71RS0nmrdr1Q0beUhzHHLAUZqYR0qkWnFRduzxUZYVmn68NhjzZ94lV6PUZz43i4m3Uce8XKdKOZXVGYPANAVHBKOHHzz58NQCPLC8Yv9mXs3HCXffek=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fyFwtB47; arc=fail smtp.client-ip=40.107.93.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G25XPciq7KaNBsUSemzv7yLV7gkL7DM5FVum9JVoRMrJKlhBzxSJKm9ihKMU6y+b8Pfp5h7M7bbpYOjqEZ05+P5ZhKKIaKWtv0IfqrkCDbgJ73is7ZQ6+ljLEHlO7SJV3FH6/UiOk2WBYM2s8tfP3wIX2keG04Ev52eCkAFFFAAJ94vcedz0Q3O26CUU97xwK6o0QzjqujTlB++aNm4oZbZoK0UaSyGd/JIqtS4FUnsay6N0o+ZW4yKai/V3SyDhLivX/+I4xnASO36mWqnki0iPgO+enNnW9kRe32HC76rbKDH4yUKKSQQ61XiTuDRq5/0RsM3hXHleQlJswg5lhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jSJsoVBNUaInQsBXeCa4FKT4UO1vF9eti3guIgy6Eek=;
- b=kRSnEkEh2jsfA9bOeu9Afg3vNQU4XY8u3WxY85VcPn6zHPR2Go3BXxZgDeaXXfAjf1VOmIF0H96NQ3Eq26yRLm2wO4rtkcyxDy//kcqXv1gwoa/6YRDxBHAMmol/LNVsRV2TEJAVyRaIfU4N+CyenY7sy+d9atQO76XiZazrPGhynhnY2x/RgO+1SU1Kgymr6TB2t3srZUPHTM+p+ll7qOSWw/CqBBZ/AJrQLFSUNHyBrnrCYYWdVmFvRY/+ttZ6+VQ8QXyT9iKDB3RwzawxQCsCShbJ7QTdZGGXkEACG2fDmXclVnJpDEVVUPwhUO8QQMS+LqVRP/MvY+DfCCwXUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jSJsoVBNUaInQsBXeCa4FKT4UO1vF9eti3guIgy6Eek=;
- b=fyFwtB47RnXHQ1TTBf9cvK6VsvqxCeA/QdJN3kTP42BDB2fqF55pWqhOqszq7Hr2PNiUXCJEhOeVn2WLzb3PhTOk11p/ftVhtWyDFJurwqdA7wZhh1flE4PnZpxjz8cP9nPyDx/1JwuYzJGfQMeGo0S7A/K3LHj9zJL+K8k24Lw36W/duNKZKGkieqX/hZJDlQrabb2kgdAQHjFrKvWhP+/DL0Oa0w/HvMH4p4VQn8CD8vf7gtqQfpuL+kgdALwhtjdKezoWvsXSPp6mzAuesvaGEmkpB/h1KJP1nZqiss3VptqM1zAK6gMQgmb4ZIJJU80ziRAs9eK+v4WOIhcGcQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- CY8PR12MB7633.namprd12.prod.outlook.com (2603:10b6:930:9c::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7316.36; Wed, 28 Feb 2024 15:52:26 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::dc5c:2cf1:d5f5:9753]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::dc5c:2cf1:d5f5:9753%6]) with mapi id 15.20.7316.037; Wed, 28 Feb 2024
- 15:52:26 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>,
- Zi Yan <ziy@nvidia.com>, "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
- linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
- Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
- "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>,
- =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 7/8] mm: thp: split huge page to any lower order pages
-Date: Wed, 28 Feb 2024 10:52:23 -0500
-X-Mailer: MailMate (1.14r6018)
-Message-ID: <494F48CD-1F0F-4CAD-884E-6D48F40AF990@nvidia.com>
-In-Reply-To: <20240226205534.1603748-8-zi.yan@sent.com>
-References: <20240226205534.1603748-1-zi.yan@sent.com>
- <20240226205534.1603748-8-zi.yan@sent.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_1C869A39-717A-4300-8A5B-C326B287ECEA_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR20CA0019.namprd20.prod.outlook.com
- (2603:10b6:208:e8::32) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C0A6EEE4;
+	Wed, 28 Feb 2024 16:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709137154; cv=none; b=OWWSaLSd8fGYGA38NTLR18VvHQQOz7YzFG4rmnyDpxlQPgC6YUshj8jzx4R8lMC+n16171vfRGzudrPsEioG4BYil6JTshS01XIjQvdYFiW76BIEwoQsdHfgqkEeUG7y5yexamF7tQIN7X2XPmJDTI5Vidk3/KV7RgVQcMw4MRo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709137154; c=relaxed/simple;
+	bh=msSXQwaH7e82H4fvXfd/lpxDubPXrBKV0aQP5stW9fA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aAdm6xt/cdWi9m80gTyON6bi2HM8+c/e/bSkWsoSSpkHx2Ksir7KRpSyq5qjTioZGcvLlViRvPrL9DvjNX22oRUOKbjEjI1j4uBMfHwfzKWpVskqS0i9riID3kAaXBe1eUHatB7y8U4egTmcltoze/erBjr/tpcVMQf5/IHxBZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iqiwin78; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709137153; x=1740673153;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=msSXQwaH7e82H4fvXfd/lpxDubPXrBKV0aQP5stW9fA=;
+  b=iqiwin78EdC33rbJSsp7yRPS4FrgM2t52OSOoYvdGV2jWHMBaxUsELy0
+   9bTDB0colSs+P/m+w9yWzZKJ4srSENi71rfxmCRw+zIhtPUKzDiVDN2Sx
+   iDn+sAkt33sg68ZCBmdjRL47KhYw4jO2Yk14pGtNrMx3IWDASwpT2wSp9
+   /epfmGUvJJJA/mxzQWQ37HTCYGjLeLihUlcbcrbWJgwAGwyjKatGT0JLh
+   StxgG5NAw2RgruqUs64opECxUowUIrJjJldooL6OoMIdRnZBODcCK+3DH
+   0II2vV6FDfEknV5orqKQdU2+Ki0FJldm570ykn7qQXwBihU1EJIbeEduN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="3710380"
+X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
+   d="scan'208";a="3710380"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 08:19:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
+   d="scan'208";a="7534859"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.125.242.247]) ([10.125.242.247])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 08:19:07 -0800
+Message-ID: <3945531c-b5c7-46ce-a32f-7248bfc7061e@linux.intel.com>
+Date: Thu, 29 Feb 2024 00:19:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|CY8PR12MB7633:EE_
-X-MS-Office365-Filtering-Correlation-Id: d4803cf3-9d8c-463a-3806-08dc387542a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	gJN/w3MDSz+evcn8SMpmF1BcGl+0tJIqQTx05HPVrte1nrM4BT2AS31smN+eWeHhDam8hQm40HJOS33B3sQwhknKcj3ybfYuvulzv696CQml56Rxv7zo7DR6ypwiuJt960Fp4ejYmGFtkBnEkJcWZSKGzM4St82DT+mMbN39RpUgE7kNJCGvf1cz1rSrkshgirkWVaDrrmTwhemq4c1+c8FsyNHFBRuPowoU48mZyaMvfyQ4Df2ouoDj4ewqVRY59RQrIPkGGd4iJ8SuAaMCdZUjVT8Y59vzj8Wc+0zyE1lhwkD0T+1adMTAuZb5v5qw5iTcKHGQ6zThdGvrErXMQ8ylM/xjZyrxfDxXcfUCHvhEHfQa/AtU2S5rdAuVwg62iY4SEt1nQI4JathGiHZXiIUB56KHuMz46FiWNr0uUGU2LbIjdyZ+ONhKb6ozTobNcx3S/sqhAw7V+TwSCVTf67eFVVp4IkL7jZ1vDy7AiHLr0EApFz9+kh0NK0xwe124jEI1P+sXHZ2Zwc1/PJBaBzDoKz+UzQhdrA83gIfGq9QiAvqVKHPZX0yHepL878lI/5ESSsBuShZq/FR11NWfMVk/SpVp7sprhAIfcOc6UEgT7sOB4aoZxAdSiunoA26K8RGkdZSNGEc7+pPkCj8y/N5mOW8Mn+8rNyOUFNFUKu8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?f9i1SrKHIHYDldB0mK0xoocDUFl9GiekH2xIx4yrnvhx/Vf/P5u0DIBj8Z9p?=
- =?us-ascii?Q?qTsLDwSuTyNTnioKQ85SyQ+oWQTEoLjY1AIUNQXeDauy4mjZCBqtAjAYRvBX?=
- =?us-ascii?Q?jP4hhGnRyl1cWTLstlNtkzuYoYtCvWEABSwutwfEuw6hyCiHYO1WvloWHxP5?=
- =?us-ascii?Q?aoVdzmLL9YHgKny+jMgCiXqJWD04/6slCoUN0BBt+rrKjkXZRqyOjWBQPm/B?=
- =?us-ascii?Q?CaJGLJzPQWN17Ss9e/Il+uPoBOjXjRMAupnhFDAvaR2i/A5RJoN6H/gYJow3?=
- =?us-ascii?Q?gZAlH8Uq6utggCPk54mxXl8wV74YlGJdhFd9UeOeZiNLmZghoQg1ko+/D1Q6?=
- =?us-ascii?Q?eKKTkLUFq66P1VXuG33qEC4YP5zLmriu51RBK/PK8Ymz43ptcBm0YVauMBdc?=
- =?us-ascii?Q?wqHneG5VopCJVW4FtngSbj965ZKjgi32lPHUojyNM/GoqN3ZypCflThhVEwe?=
- =?us-ascii?Q?xx1dIDfbSKLLtTu/Htzx8qAY0jBEEDFfLOInQzOr7xjT8wHRZO/Icg7IgO0d?=
- =?us-ascii?Q?5Iu66WgBG2OXPXdTlYwTlOM/pS6twwd0m1IWuqlPFinPhDRDsfXw+cifx/mi?=
- =?us-ascii?Q?n6ezQbv0t0qqmkmJwjbjh0W35N/Ur+6CDobRC7dJAjaCKxgLRoLo5RS/0qqf?=
- =?us-ascii?Q?o9dCmQraOikAfd9KeyV4Pn0EOcFYT2w20COR5+9u88+EuB/+qCl/gfXLKn9f?=
- =?us-ascii?Q?QNz2cTQon1wXxFB04Qpcd+OrMaEh+v44WPssKDb4BfcSDp3TYPjjHDJ8tqXi?=
- =?us-ascii?Q?YTncmHl6BwLd8GN2B/+IbpeUNC0InYKjpHc/6hXWPpiVz2nM0yF2dHVCIEaL?=
- =?us-ascii?Q?2iW3aXaOjavkrtUYDVcDMCvUdbgx+WGh2hxoihwNmwCsR30oERB53hqBqnC8?=
- =?us-ascii?Q?XnGkh6KiiIT1NOSLVSZECuT1crgCLC7hC9Osw48zzL3I0WgCqO9ugTfmQorv?=
- =?us-ascii?Q?CJUX3dUVr7Var9KF79ezMABLi6OiZ1rGr07rhP0fH6y8vueluaK7vqzWubcW?=
- =?us-ascii?Q?AJGi5pWOgJPsVxKgcf+Ry3b+PkVlc/ndjSAUVAd92S2yzTA2bmlV0hVQUM0F?=
- =?us-ascii?Q?DJA/I/optE074MHMGBUjHy149HlfZ3/wOxIDbx+fq6GW6FcAkW0MOmBCA9VZ?=
- =?us-ascii?Q?r760qQov2BQIz+nXq9nEfznEfA53HlyiHF2OTMvF+a2FzOmVlDsudjT7Rca1?=
- =?us-ascii?Q?Xx+C39GO8x1SOuSGKnuDtHxyiE1aueDr0VHDgEe4CXTcu07oQBFXvUicCbBj?=
- =?us-ascii?Q?/q3gLWqVSfd0VMCYkg8PI+odpNDwzhQN8pfyenlW09ZDR5W4FkjJv8PCn4wC?=
- =?us-ascii?Q?ODL7J5tkUztxACl3KO+k0fNzZeNM90yNU+FSzghcN/MqwfLJrlG4fY2QV9Mh?=
- =?us-ascii?Q?UIm4jGhOwVwwcRa538gCT6rbwgL6X9Fw2hfKm+tXRaOMActLXseEqHRWeK1P?=
- =?us-ascii?Q?XIn+zFJXCHw5CZbTbf/wqVypx0vKMJoBWRGYH5xRtADKHeYoU8ybtZXFcm+s?=
- =?us-ascii?Q?r+S5AZs8mGY7jy5pU/7AxfF6GGIWTD5nTIQXBJgjtlV5TWC6rPg/tloFXux/?=
- =?us-ascii?Q?fK1HUvWyjjGtQKPDS6rfkNN+A8P1qIv/1p9hd+AM?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4803cf3-9d8c-463a-3806-08dc387542a9
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2024 15:52:26.1764
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pUkPz9FVJv+kdUJh9RNF+IgfM1Ec5gYzHVwEz5PwfsI0O6DcoNvzAYO4v2e7SlO4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7633
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 05/29] KVM: selftests: Add helper functions to
+ create TDX VMs
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
+ Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
+ Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-6-sagis@google.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20231212204647.2170650-6-sagis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---=_MailMate_1C869A39-717A-4300-8A5B-C326B287ECEA_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
-Hi Andrew,
 
-On 26 Feb 2024, at 15:55, Zi Yan wrote:
-
-> From: Zi Yan <ziy@nvidia.com>
+On 12/13/2023 4:46 AM, Sagi Shahar wrote:
+> From: Erdem Aktas <erdemaktas@google.com>
 >
-> To split a THP to any lower order pages, we need to reform THPs on
-> subpages at given order and add page refcount based on the new page
-> order. Also we need to reinitialize page_deferred_list after removing
-> the page from the split_queue, otherwise a subsequent split will
-> see list corruption when checking the page_deferred_list again.
+> TDX requires additional IOCTLs to initialize VM and vCPUs to add
+> private memory and to finalize the VM memory. Also additional utility
+> functions are provided to manipulate a TD, similar to those that
+> manipulate a VM in the current selftest framework.
 >
-> Note: Anonymous order-1 folio is not supported because _deferred_list,
-> which is used by partially mapped folios, is stored in subpage 2 and an=
-
-> order-1 folio only has subpage 0 and 1. File-backed order-1 folios are
-> fine, since they do not use _deferred_list.
+> A TD's initial register state cannot be manipulated directly by
+> setting the VM's memory, hence boot code is provided at the TD's reset
+> vector. This boot code takes boot parameters loaded in the TD's memory
+> and sets up the TD for the selftest.
 >
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+> Signed-off-by: Ryan Afranji <afranji@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 > ---
->  include/linux/huge_mm.h |  21 +++++---
->  mm/huge_memory.c        | 110 +++++++++++++++++++++++++++++++---------=
-
->  2 files changed, 99 insertions(+), 32 deletions(-)
+>   tools/testing/selftests/kvm/Makefile          |   2 +
+>   .../kvm/include/x86_64/tdx/td_boot.h          |  82 ++++
+>   .../kvm/include/x86_64/tdx/td_boot_asm.h      |  16 +
+>   .../kvm/include/x86_64/tdx/tdx_util.h         |  16 +
+>   .../selftests/kvm/lib/x86_64/tdx/td_boot.S    | 101 ++++
+>   .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   | 434 ++++++++++++++++++
+>   6 files changed, 651 insertions(+)
+>   create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h
+>   create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h
+>   create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
+>   create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
+>   create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
 >
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index b11ac221aba4..a35150ab855f 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -50,6 +50,8 @@ LIBKVM_x86_64 += lib/x86_64/svm.c
+>   LIBKVM_x86_64 += lib/x86_64/ucall.c
+>   LIBKVM_x86_64 += lib/x86_64/vmx.c
+>   LIBKVM_x86_64 += lib/x86_64/sev.c
+> +LIBKVM_x86_64 += lib/x86_64/tdx/tdx_util.c
+> +LIBKVM_x86_64 += lib/x86_64/tdx/td_boot.S
+>   
+>   LIBKVM_aarch64 += lib/aarch64/gic.c
+>   LIBKVM_aarch64 += lib/aarch64/gic_v3.c
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h
+> new file mode 100644
+> index 000000000000..148057e569d6
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.h
+> @@ -0,0 +1,82 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTEST_TDX_TD_BOOT_H
+> +#define SELFTEST_TDX_TD_BOOT_H
+> +
+> +#include <stdint.h>
+> +#include "tdx/td_boot_asm.h"
+> +
+> +/*
+> + * Layout for boot section (not to scale)
+> + *
+> + *                                  GPA
+> + * ┌─────────────────────────────┬──0x1_0000_0000 (4GB)
+> + * │   Boot code trampoline      │
+> + * ├─────────────────────────────┼──0x0_ffff_fff0: Reset vector (16B below 4GB)
+> + * │   Boot code                 │
+> + * ├─────────────────────────────┼──td_boot will be copied here, so that the
+> + * │                             │  jmp to td_boot is exactly at the reset vector
+> + * │   Empty space               │
+> + * │                             │
+> + * ├─────────────────────────────┤
+> + * │                             │
+> + * │                             │
+> + * │   Boot parameters           │
+> + * │                             │
+> + * │                             │
+> + * └─────────────────────────────┴──0x0_ffff_0000: TD_BOOT_PARAMETERS_GPA
+> + */
+> +#define FOUR_GIGABYTES_GPA (4ULL << 30)
+> +
+> +/**
+> + * The exact memory layout for LGDT or LIDT instructions.
+> + */
+> +struct __packed td_boot_parameters_dtr {
+> +	uint16_t limit;
+> +	uint32_t base;
+> +};
+> +
+> +/**
+> + * The exact layout in memory required for a ljmp, including the selector for
+> + * changing code segment.
+> + */
+> +struct __packed td_boot_parameters_ljmp_target {
+> +	uint32_t eip_gva;
+> +	uint16_t code64_sel;
+> +};
+> +
+> +/**
+> + * Allows each vCPU to be initialized with different eip and esp.
+> + */
+> +struct __packed td_per_vcpu_parameters {
+> +	uint32_t esp_gva;
+> +	struct td_boot_parameters_ljmp_target ljmp_target;
+> +};
+> +
+> +/**
+> + * Boot parameters for the TD.
+> + *
+> + * Unlike a regular VM, we can't ask KVM to set registers such as esp, eip, etc
+> + * before boot, so to run selftests, these registers' values have to be
+> + * initialized by the TD.
+> + *
+> + * This struct is loaded in TD private memory at TD_BOOT_PARAMETERS_GPA.
+> + *
+> + * The TD boot code will read off parameters from this struct and set up the
+> + * vcpu for executing selftests.
+> + */
+> +struct __packed td_boot_parameters {
+> +	uint32_t cr0;
+> +	uint32_t cr3;
+> +	uint32_t cr4;
+> +	struct td_boot_parameters_dtr gdtr;
+> +	struct td_boot_parameters_dtr idtr;
+> +	struct td_per_vcpu_parameters per_vcpu[];
+> +};
+> +
+> +extern void td_boot(void);
+> +extern void reset_vector(void);
+> +extern void td_boot_code_end(void);
+> +
+> +#define TD_BOOT_CODE_SIZE (td_boot_code_end - td_boot)
+> +
+> +#endif /* SELFTEST_TDX_TD_BOOT_H */
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h
+> new file mode 100644
+> index 000000000000..0a07104f7deb
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_asm.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTEST_TDX_TD_BOOT_ASM_H
+> +#define SELFTEST_TDX_TD_BOOT_ASM_H
+> +
+> +/*
+> + * GPA where TD boot parameters wil lbe loaded.
+> + *
+> + * TD_BOOT_PARAMETERS_GPA is arbitrarily chosen to
+> + *
+> + * + be within the 4GB address space
+> + * + provide enough contiguous memory for the struct td_boot_parameters such
+> + *   that there is one struct td_per_vcpu_parameters for KVM_MAX_VCPUS
+> + */
+> +#define TD_BOOT_PARAMETERS_GPA 0xffff0000
+> +
+> +#endif  // SELFTEST_TDX_TD_BOOT_ASM_H
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
+> new file mode 100644
+> index 000000000000..274b245f200b
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTESTS_TDX_KVM_UTIL_H
+> +#define SELFTESTS_TDX_KVM_UTIL_H
+> +
+> +#include <stdint.h>
+> +
+> +#include "kvm_util_base.h"
+> +
+> +struct kvm_vcpu *td_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id, void *guest_code);
+> +
+> +struct kvm_vm *td_create(void);
+> +void td_initialize(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+> +		   uint64_t attributes);
+> +void td_finalize(struct kvm_vm *vm);
+> +
+> +#endif // SELFTESTS_TDX_KVM_UTIL_H
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S b/tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
+> new file mode 100644
+> index 000000000000..800e09264d4e
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
+> @@ -0,0 +1,101 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#include "tdx/td_boot_asm.h"
+> +
+> +/* Offsets for reading struct td_boot_parameters */
+> +#define TD_BOOT_PARAMETERS_CR0         0
+> +#define TD_BOOT_PARAMETERS_CR3         4
+> +#define TD_BOOT_PARAMETERS_CR4         8
+> +#define TD_BOOT_PARAMETERS_GDT         12
+> +#define TD_BOOT_PARAMETERS_IDT         18
+> +#define TD_BOOT_PARAMETERS_PER_VCPU    24
+> +
+> +/* Offsets for reading struct td_per_vcpu_parameters */
+> +#define TD_PER_VCPU_PARAMETERS_ESP_GVA     0
+> +#define TD_PER_VCPU_PARAMETERS_LJMP_TARGET 4
+> +
+> +#define SIZEOF_TD_PER_VCPU_PARAMETERS      10
+> +
+> +.code32
+> +
+> +.globl td_boot
+> +td_boot:
+> +	/* In this procedure, edi is used as a temporary register */
+> +	cli
+> +
+> +	/* Paging is off */
+> +
+> +	movl $TD_BOOT_PARAMETERS_GPA, %ebx
+> +
+> +	/*
+> +	 * Find the address of struct td_per_vcpu_parameters for this
+> +	 * vCPU based on esi (TDX spec: initialized with vcpu id). Put
+> +	 * struct address into register for indirect addressing
+> +	 */
+> +	movl $SIZEOF_TD_PER_VCPU_PARAMETERS, %eax
+> +	mul %esi
+> +	leal TD_BOOT_PARAMETERS_PER_VCPU(%ebx), %edi
+> +	addl %edi, %eax
+> +
+> +	/* Setup stack */
+> +	movl TD_PER_VCPU_PARAMETERS_ESP_GVA(%eax), %esp
+> +
+> +	/* Setup GDT */
+> +	leal TD_BOOT_PARAMETERS_GDT(%ebx), %edi
+> +	lgdt (%edi)
+> +
+> +	/* Setup IDT */
+> +	leal TD_BOOT_PARAMETERS_IDT(%ebx), %edi
+> +	lidt (%edi)
+> +
+> +	/*
+> +	 * Set up control registers (There are no instructions to
+> +	 * mov from memory to control registers, hence we need to use ebx
+> +	 * as a scratch register)
+> +	 */
+> +	movl TD_BOOT_PARAMETERS_CR4(%ebx), %edi
+> +	movl %edi, %cr4
+> +	movl TD_BOOT_PARAMETERS_CR3(%ebx), %edi
+> +	movl %edi, %cr3
+> +	movl TD_BOOT_PARAMETERS_CR0(%ebx), %edi
+> +	movl %edi, %cr0
+> +
+> +	/* Paging is on after setting the most significant bit on cr0 */
+> +
+> +	/*
+> +	 * Jump to selftest guest code. Far jumps read <segment
+> +	 * selector:new eip> from <addr+4:addr>. This location has
+> +	 * already been set up in boot parameters, and we can read boot
+> +	 * parameters because boot code and boot parameters are loaded so
+> +	 * that GVA and GPA are mapped 1:1.
+> +	 */
+> +	ljmp *TD_PER_VCPU_PARAMETERS_LJMP_TARGET(%eax)
+> +
+> +.globl reset_vector
+> +reset_vector:
+> +	jmp td_boot
+> +	/*
+> +	 * Pad reset_vector to its full size of 16 bytes so that this
+> +	 * can be loaded with the end of reset_vector aligned to GPA=4G
+> +	 */
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +	int3
+> +
+> +/* Leave marker so size of td_boot code can be computed */
+> +.globl td_boot_code_end
+> +td_boot_code_end:
+> +
+> +/* Disable executable stack */
+> +.section .note.GNU-stack,"",%progbits
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
+> new file mode 100644
+> index 000000000000..9b69c733ce01
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
+> @@ -0,0 +1,434 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#define _GNU_SOURCE
+> +#include <asm/kvm.h>
+> +#include <asm/kvm_host.h>
+> +#include <errno.h>
+> +#include <linux/kvm.h>
+> +#include <stdint.h>
+> +#include <sys/ioctl.h>
+> +
+> +#include "kvm_util.h"
+> +#include "test_util.h"
+> +#include "tdx/td_boot.h"
+> +#include "kvm_util_base.h"
+> +#include "processor.h"
+> +
+> +/*
+> + * TDX ioctls
+> + */
+> +
+> +static char *tdx_cmd_str[] = {
+> +	"KVM_TDX_CAPABILITIES",
+> +	"KVM_TDX_INIT_VM",
+> +	"KVM_TDX_INIT_VCPU",
+> +	"KVM_TDX_INIT_MEM_REGION",
+> +	"KVM_TDX_FINALIZE_VM"
+> +};
+> +#define TDX_MAX_CMD_STR (ARRAY_SIZE(tdx_cmd_str))
+> +
+> +static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
+> +{
+> +	struct kvm_tdx_cmd tdx_cmd;
+> +	int r;
+> +
+> +	TEST_ASSERT(ioctl_no < TDX_MAX_CMD_STR, "Unknown TDX CMD : %d\n",
+> +		    ioctl_no);
+> +
+> +	memset(&tdx_cmd, 0x0, sizeof(tdx_cmd));
+> +	tdx_cmd.id = ioctl_no;
+> +	tdx_cmd.flags = flags;
+> +	tdx_cmd.data = (uint64_t)data;
+> +
+> +	r = ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
+> +	TEST_ASSERT(r == 0, "%s failed: %d  %d", tdx_cmd_str[ioctl_no], r,
+> +		    errno);
+> +}
+> +
+> +#define XFEATURE_MASK_CET (XFEATURE_MASK_CET_USER | XFEATURE_MASK_CET_KERNEL)
+> +
+> +static void tdx_apply_cpuid_restrictions(struct kvm_cpuid2 *cpuid_data)
+> +{
+> +	for (int i = 0; i < cpuid_data->nent; i++) {
+> +		struct kvm_cpuid_entry2 *e = &cpuid_data->entries[i];
+> +
+> +		if (e->function == 0xd && e->index == 0) {
+> +			/*
+> +			 * TDX module requires both XTILE_{CFG, DATA} to be set.
+> +			 * Both bits are required for AMX to be functional.
+> +			 */
+> +			if ((e->eax & XFEATURE_MASK_XTILE) !=
+> +			    XFEATURE_MASK_XTILE) {
+> +				e->eax &= ~XFEATURE_MASK_XTILE;
+> +			}
+> +		}
+> +		if (e->function == 0xd && e->index == 1) {
+> +			/*
+> +			 * TDX doesn't support LBR yet.
+> +			 * Disable bits from the XCR0 register.
+> +			 */
+> +			e->ecx &= ~XFEATURE_MASK_LBR;
+> +			/*
+> +			 * TDX modules requires both CET_{U, S} to be set even
+> +			 * if only one is supported.
+> +			 */
+> +			if (e->ecx & XFEATURE_MASK_CET)
+> +				e->ecx |= XFEATURE_MASK_CET;
+> +		}
+> +	}
+> +}
+> +
+> +static void tdx_td_init(struct kvm_vm *vm, uint64_t attributes)
+> +{
+> +	const struct kvm_cpuid2 *cpuid;
+> +	struct kvm_tdx_init_vm *init_vm;
+> +
+> +	cpuid = kvm_get_supported_cpuid();
+> +
+> +	init_vm = malloc(sizeof(*init_vm) +
+> +			 sizeof(init_vm->cpuid.entries[0]) * cpuid->nent);
+> +
+> +	memset(init_vm, 0, sizeof(*init_vm));
+> +	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
+> +
+> +	init_vm->attributes = attributes;
+> +
+> +	tdx_apply_cpuid_restrictions(&init_vm->cpuid);
+> +
+> +	tdx_ioctl(vm->fd, KVM_TDX_INIT_VM, 0, init_vm);
+> +}
+> +
+> +static void tdx_td_vcpu_init(struct kvm_vcpu *vcpu)
+> +{
+> +	const struct kvm_cpuid2 *cpuid = kvm_get_supported_cpuid();
+> +
+> +	vcpu_init_cpuid(vcpu, cpuid);
+> +	tdx_ioctl(vcpu->fd, KVM_TDX_INIT_VCPU, 0, NULL);
+> +}
+> +
+> +static void tdx_init_mem_region(struct kvm_vm *vm, void *source_pages,
+> +				uint64_t gpa, uint64_t size)
+> +{
+> +	struct kvm_tdx_init_mem_region mem_region = {
+> +		.source_addr = (uint64_t)source_pages,
+> +		.gpa = gpa,
+> +		.nr_pages = size / PAGE_SIZE,
+> +	};
+> +	uint32_t metadata = KVM_TDX_MEASURE_MEMORY_REGION;
+> +
+> +	TEST_ASSERT((mem_region.nr_pages > 0) &&
+> +			    ((mem_region.nr_pages * PAGE_SIZE) == size),
+> +		    "Cannot add partial pages to the guest memory.\n");
+> +	TEST_ASSERT(((uint64_t)source_pages & (PAGE_SIZE - 1)) == 0,
+> +		    "Source memory buffer is not page aligned\n");
+> +	tdx_ioctl(vm->fd, KVM_TDX_INIT_MEM_REGION, metadata, &mem_region);
+> +}
+> +
+> +static void tdx_td_finalizemr(struct kvm_vm *vm)
+> +{
+> +	tdx_ioctl(vm->fd, KVM_TDX_FINALIZE_VM, 0, NULL);
+> +}
+> +
+> +/*
+> + * TD creation/setup/finalization
+> + */
+> +
+> +static void tdx_enable_capabilities(struct kvm_vm *vm)
+> +{
+> +	int rc;
+> +
+> +	rc = kvm_check_cap(KVM_CAP_X2APIC_API);
+> +	TEST_ASSERT(rc, "TDX: KVM_CAP_X2APIC_API is not supported!");
+> +	rc = kvm_check_cap(KVM_CAP_SPLIT_IRQCHIP);
+> +	TEST_ASSERT(rc, "TDX: KVM_CAP_SPLIT_IRQCHIP is not supported!");
+> +
+> +	vm_enable_cap(vm, KVM_CAP_X2APIC_API,
+> +		      KVM_X2APIC_API_USE_32BIT_IDS |
+> +			      KVM_X2APIC_API_DISABLE_BROADCAST_QUIRK);
+> +	vm_enable_cap(vm, KVM_CAP_SPLIT_IRQCHIP, 24);
+> +}
+> +
+> +static void tdx_configure_memory_encryption(struct kvm_vm *vm)
+> +{
+> +	/* Configure shared/enCrypted bit for this VM according to TDX spec */
+> +	vm->arch.s_bit = 1ULL << (vm->pa_bits - 1);
+> +	vm->arch.c_bit = 0;
+> +	/* Set gpa_protected_mask so that tagging/untagging of GPAs works */
+> +	vm->gpa_protected_mask = vm->arch.s_bit;
+> +	/* This VM is protected (has memory encryption) */
+> +	vm->protected = true;
+> +}
+> +
+> +static void tdx_apply_cr4_restrictions(struct kvm_sregs *sregs)
+> +{
+> +	/* TDX spec 11.6.2: CR4 bit MCE is fixed to 1 */
+> +	sregs->cr4 |= X86_CR4_MCE;
+> +
+> +	/* Set this because UEFI also sets this up, to handle XMM exceptions */
+> +	sregs->cr4 |= X86_CR4_OSXMMEXCPT;
+> +
+> +	/* TDX spec 11.6.2: CR4 bit VMXE and SMXE are fixed to 0 */
+> +	sregs->cr4 &= ~(X86_CR4_VMXE | X86_CR4_SMXE);
+> +}
+> +
+> +static void load_td_boot_code(struct kvm_vm *vm)
+> +{
+> +	void *boot_code_hva = addr_gpa2hva(vm, FOUR_GIGABYTES_GPA - TD_BOOT_CODE_SIZE);
+> +
+> +	TEST_ASSERT(td_boot_code_end - reset_vector == 16,
+> +		"The reset vector must be 16 bytes in size.");
+> +	memcpy(boot_code_hva, td_boot, TD_BOOT_CODE_SIZE);
+> +}
+> +
+> +static void load_td_per_vcpu_parameters(struct td_boot_parameters *params,
+> +					struct kvm_sregs *sregs,
+> +					struct kvm_vcpu *vcpu,
+> +					void *guest_code)
+> +{
+> +	/* Store vcpu_index to match what the TDX module would store internally */
+> +	static uint32_t vcpu_index;
+> +
+> +	struct td_per_vcpu_parameters *vcpu_params = &params->per_vcpu[vcpu_index];
+> +
+> +	TEST_ASSERT(vcpu->initial_stack_addr != 0,
+> +		"initial stack address should not be 0");
+> +	TEST_ASSERT(vcpu->initial_stack_addr <= 0xffffffff,
+> +		"initial stack address must fit in 32 bits");
+> +	TEST_ASSERT((uint64_t)guest_code <= 0xffffffff,
+> +		"guest_code must fit in 32 bits");
+> +	TEST_ASSERT(sregs->cs.selector != 0, "cs.selector should not be 0");
+> +
+> +	vcpu_params->esp_gva = (uint32_t)(uint64_t)vcpu->initial_stack_addr;
+> +	vcpu_params->ljmp_target.eip_gva = (uint32_t)(uint64_t)guest_code;
+> +	vcpu_params->ljmp_target.code64_sel = sregs->cs.selector;
+> +
+> +	vcpu_index++;
+> +}
+> +
+> +static void load_td_common_parameters(struct td_boot_parameters *params,
+> +				struct kvm_sregs *sregs)
+> +{
+> +	/* Set parameters! */
+> +	params->cr0 = sregs->cr0;
+> +	params->cr3 = sregs->cr3;
+> +	params->cr4 = sregs->cr4;
+> +	params->gdtr.limit = sregs->gdt.limit;
+> +	params->gdtr.base = sregs->gdt.base;
+> +	params->idtr.limit = sregs->idt.limit;
+> +	params->idtr.base = sregs->idt.base;
+> +
+> +	TEST_ASSERT(params->cr0 != 0, "cr0 should not be 0");
+> +	TEST_ASSERT(params->cr3 != 0, "cr3 should not be 0");
+> +	TEST_ASSERT(params->cr4 != 0, "cr4 should not be 0");
+> +	TEST_ASSERT(params->gdtr.base != 0, "gdt base address should not be 0");
 
-Can you fold the fixup below into this patch (per discussion with Ryan at=
- [1])? Thanks.
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 50d146eb248f..fd745bcc97ff 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -3059,11 +3059,8 @@ int split_huge_page_to_list_to_order(struct page *=
-page, struct list_head *list,
-
-        if (new_order) {
-                /* Only swapping a whole PMD-mapped folio is supported */=
-
--               if (folio_test_swapcache(folio)) {
--                       VM_WARN_ONCE(1,
--                               "Cannot split swap-cached folio to non-0 =
-order");
-+               if (folio_test_swapcache(folio))
-                        return -EINVAL;
--               }
-                /* Split shmem folio to non-zero order not supported */
-                if (shmem_mapping(folio->mapping)) {
-                        VM_WARN_ONCE(1,
+Do we also need to check idtr.base?
 
 
-[1] https://lore.kernel.org/linux-mm/408df79a-130e-43cd-a21a-9b3a2ddef617=
-@arm.com/
+> +}
+> +
+> +static void load_td_boot_parameters(struct td_boot_parameters *params,
+> +				struct kvm_vcpu *vcpu, void *guest_code)
+> +{
+> +	struct kvm_sregs sregs;
+> +
+> +	/* Assemble parameters in sregs */
+> +	memset(&sregs, 0, sizeof(struct kvm_sregs));
+> +	vcpu_setup_mode_sregs(vcpu->vm, &sregs);
+> +	tdx_apply_cr4_restrictions(&sregs);
+> +	kvm_setup_idt(vcpu->vm, &sregs.idt);
+> +
+> +	if (!params->cr0)
+> +		load_td_common_parameters(params, &sregs);
+> +
+> +	load_td_per_vcpu_parameters(params, &sregs, vcpu, guest_code);
+> +}
+> +
+> +/**
+> + * Adds a vCPU to a TD (Trusted Domain) with minimum defaults. It will not set
+> + * up any general purpose registers as they will be initialized by the TDX. In
+> + * TDX, vCPUs RIP is set to 0xFFFFFFF0. See Intel TDX EAS Section "Initial State
+> + * of Guest GPRs" for more information on vCPUs initial register values when
+> + * entering the TD first time.
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - The id of the VCPU to add to the VM.
+> + */
+> +struct kvm_vcpu *td_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id, void *guest_code)
+> +{
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	/*
+> +	 * TD setup will not use the value of rip set in vm_vcpu_add anyway, so
+> +	 * NULL can be used for guest_code.
+> +	 */
+> +	vcpu = vm_vcpu_add(vm, vcpu_id, NULL);
+> +
+> +	tdx_td_vcpu_init(vcpu);
+> +
+> +	load_td_boot_parameters(addr_gpa2hva(vm, TD_BOOT_PARAMETERS_GPA),
+> +				vcpu, guest_code);
+> +
+> +	return vcpu;
+> +}
+> +
+> +/**
+> + * Iterate over set ranges within sparsebit @s. In each iteration,
+> + * @range_begin and @range_end will take the beginning and end of the set range,
+> + * which are of type sparsebit_idx_t.
+> + *
+> + * For example, if the range [3, 7] (inclusive) is set, within the iteration,
+> + * @range_begin will take the value 3 and @range_end will take the value 7.
+> + *
+> + * Ensure that there is at least one bit set before using this macro with
+> + * sparsebit_any_set(), because sparsebit_first_set() will abort if none are
+> + * set.
+> + */
+> +#define sparsebit_for_each_set_range(s, range_begin, range_end)		\
+> +	for (range_begin = sparsebit_first_set(s),			\
+> +		     range_end = sparsebit_next_clear(s, range_begin) - 1; \
+> +	     range_begin && range_end;					\
+> +	     range_begin = sparsebit_next_set(s, range_end),		\
+> +		     range_end = sparsebit_next_clear(s, range_begin) - 1)
+> +/*
+> + * sparsebit_next_clear() can return 0 if [x, 2**64-1] are all set, and the -1
+> + * would then cause an underflow back to 2**64 - 1. This is expected and
+> + * correct.
+> + *
+> + * If the last range in the sparsebit is [x, y] and we try to iterate,
+> + * sparsebit_next_set() will return 0, and sparsebit_next_clear() will try and
+> + * find the first range, but that's correct because the condition expression
+> + * would cause us to quit the loop.
+> + */
 
---
-Best Regards,
-Yan, Zi
+Since both sev and tdx need sparsebit_for_each_set_range(),
+can it be moved to a header file to avoid code duplication?
 
---=_MailMate_1C869A39-717A-4300-8A5B-C326B287ECEA_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
 
------BEGIN PGP SIGNATURE-----
+> +
+> +static void load_td_memory_region(struct kvm_vm *vm,
+> +				  struct userspace_mem_region *region)
+> +{
+> +	const struct sparsebit *pages = region->protected_phy_pages;
+> +	const uint64_t hva_base = region->region.userspace_addr;
+> +	const vm_paddr_t gpa_base = region->region.guest_phys_addr;
+> +	const sparsebit_idx_t lowest_page_in_region = gpa_base >>
+> +						      vm->page_shift;
+> +
+> +	sparsebit_idx_t i;
+> +	sparsebit_idx_t j;
+> +
+> +	if (!sparsebit_any_set(pages))
+> +		return;
+> +
+> +	sparsebit_for_each_set_range(pages, i, j) {
+> +		const uint64_t size_to_load = (j - i + 1) * vm->page_size;
+> +		const uint64_t offset =
+> +			(i - lowest_page_in_region) * vm->page_size;
+> +		const uint64_t hva = hva_base + offset;
+> +		const uint64_t gpa = gpa_base + offset;
+> +		void *source_addr;
+> +
+> +		/*
+> +		 * KVM_TDX_INIT_MEM_REGION ioctl cannot encrypt memory in place,
+> +		 * hence we have to make a copy if there's only one backing
+> +		 * memory source
+> +		 */
+> +		source_addr = mmap(NULL, size_to_load, PROT_READ | PROT_WRITE,
+> +				   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+> +		TEST_ASSERT(
+> +			source_addr,
+> +			"Could not allocate memory for loading memory region");
+> +
+> +		memcpy(source_addr, (void *)hva, size_to_load);
+> +
+> +		tdx_init_mem_region(vm, source_addr, gpa, size_to_load);
+> +
+> +		munmap(source_addr, size_to_load);
+> +	}
+> +}
+> +
+> +static void load_td_private_memory(struct kvm_vm *vm)
+> +{
+> +	int ctr;
+> +	struct userspace_mem_region *region;
+> +
+> +	hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
+> +		load_td_memory_region(vm, region);
+> +	}
+> +}
+> +
+> +struct kvm_vm *td_create(void)
+> +{
+> +	struct vm_shape shape;
+> +
+> +	shape.mode = VM_MODE_DEFAULT;
+> +	shape.type = KVM_X86_TDX_VM;
+> +	return ____vm_create(shape);
+> +}
+> +
+> +static void td_setup_boot_code(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type)
+> +{
+> +	vm_vaddr_t addr;
+> +	size_t boot_code_allocation = round_up(TD_BOOT_CODE_SIZE, PAGE_SIZE);
+> +	vm_paddr_t boot_code_base_gpa = FOUR_GIGABYTES_GPA - boot_code_allocation;
+> +	size_t npages = DIV_ROUND_UP(boot_code_allocation, PAGE_SIZE);
+> +
+> +	vm_userspace_mem_region_add(vm, src_type, boot_code_base_gpa, 1, npages,
+> +				    KVM_MEM_PRIVATE);
+> +	addr = vm_vaddr_alloc_1to1(vm, boot_code_allocation, boot_code_base_gpa, 1);
+> +	TEST_ASSERT_EQ(addr, boot_code_base_gpa);
+> +
+> +	load_td_boot_code(vm);
+> +}
+> +
+> +static size_t td_boot_parameters_size(void)
+> +{
+> +	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
+> +	size_t total_per_vcpu_parameters_size =
+> +		max_vcpus * sizeof(struct td_per_vcpu_parameters);
+> +
+> +	return sizeof(struct td_boot_parameters) + total_per_vcpu_parameters_size;
+> +}
+> +
+> +static void td_setup_boot_parameters(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type)
+> +{
+> +	vm_vaddr_t addr;
+> +	size_t boot_params_size = td_boot_parameters_size();
+> +	int npages = DIV_ROUND_UP(boot_params_size, PAGE_SIZE);
+> +	size_t total_size = npages * PAGE_SIZE;
+> +
+> +	vm_userspace_mem_region_add(vm, src_type, TD_BOOT_PARAMETERS_GPA, 2,
+> +				    npages, KVM_MEM_PRIVATE);
+> +	addr = vm_vaddr_alloc_1to1(vm, total_size, TD_BOOT_PARAMETERS_GPA, 2);
+> +	TEST_ASSERT_EQ(addr, TD_BOOT_PARAMETERS_GPA);
+> +}
+> +
+> +void td_initialize(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+> +		   uint64_t attributes)
+> +{
+> +	uint64_t nr_pages_required;
+> +
+> +	tdx_enable_capabilities(vm);
+> +
+> +	tdx_configure_memory_encryption(vm);
+> +
+> +	tdx_td_init(vm, attributes);
+> +
+> +	nr_pages_required = vm_nr_pages_required(VM_MODE_DEFAULT, 1, 0);
+> +
+> +	/*
+> +	 * Add memory (add 0th memslot) for TD. This will be used to setup the
+> +	 * CPU (provide stack space for the CPU) and to load the elf file.
+> +	 */
+> +	vm_userspace_mem_region_add(vm, src_type, 0, 0, nr_pages_required,
+> +				    KVM_MEM_PRIVATE);
+> +
+> +	kvm_vm_elf_load(vm, program_invocation_name);
+> +
+> +	vm_init_descriptor_tables(vm);
+> +
+> +	td_setup_boot_code(vm, src_type);
+> +	td_setup_boot_parameters(vm, src_type);
+> +}
+> +
+> +void td_finalize(struct kvm_vm *vm)
+> +{
+> +	sync_exception_handlers_to_guest(vm);
+> +
+> +	load_td_private_memory(vm);
+> +
+> +	tdx_td_finalizemr(vm);
+> +}
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXfVrcPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU2ZIP/3L/ivLb/gcscAIQhykmqcYazMK4321Wn2e/
-F4CcvHflMGGdGpIFGkIFdgPEfYT8Z+9ieLjyn9d+2qEmTK6Tc9YvUsgiDktoUbrE
-X3hlYCGVgMpZwIByrfpYzsnCioVREm1PkSuLKBAD+B7bz/C9sw+1YTCN0Ky8JxuA
-eLEFOgpSUYbnb7+M1pvanE1v+CDXcCm/ct4Bj0AjAvxOXJxDN8v01cFVRz2HcR1C
-EodKz7pOqGHSBK0qDdJeM1f7Qiq6fCiX8GI2t8y9W5neoFWKBBApng3sWOLqWCSQ
-duH15WotDrt6vR7JoV+lcqfaUhzVs7AzrI5gGH4ERCo3WDcFWBSebgvZPUAaQGX9
-dWzb+VP91Wgg4IQCON/5Pm8/IDulMSN9yhzJhgMqL924H4BwTxAY5GMkQS2Yso7a
-JAYqqFhKqeAmzY0WqTZPx1fMG0zrUVEEcL0Y7KqsbegxaUu6zWlitPejcCwc1c6C
-OS+92Fxeg8pthLWqqp5CXN4rklMMCXruxvH1BQLNDFf4pL82HH0S8FCXZDH/wip2
-uE+1B5MFQHiAsxMAetNdPSE2WfX2vB/zzl7hHszfuJGPB1PfBkkvDoHLcTqystqn
-b/YqMn1iC1QPqgNSI4OjRFXq9r3naPJspv5Z6Wh/isu4d8zPQL/O7y+psweZGGV8
-WBmN5XO3
-=Rcu8
------END PGP SIGNATURE-----
-
---=_MailMate_1C869A39-717A-4300-8A5B-C326B287ECEA_=--
 
