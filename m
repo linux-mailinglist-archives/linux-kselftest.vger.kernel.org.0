@@ -1,84 +1,80 @@
-Return-Path: <linux-kselftest+bounces-5533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5534-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F39B86AFE9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 14:07:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A98A886AFF3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 14:09:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C00CC1C209B5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 13:07:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 905371C2519A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 13:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12DA814A081;
-	Wed, 28 Feb 2024 13:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA0D14A4C9;
+	Wed, 28 Feb 2024 13:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="OUXK/3LT"
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="xHRF6XNQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BADB149DE2
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 13:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4612D1487DB
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 13:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709125669; cv=none; b=u+R2RiTzZBLuoKE169vULSqXe2ZNtHtHiBKWehpkYDod0GBIhmclPsC0F4WTCO2aODeqFUu4xV0803ytDOCjj/SvsgIZbK420Llj+gnUqBaeLtY1fyCCPgoPfN0guckqHy9PY4yj4MJV/nXa7jj+345sdaN25ikoPPFKi6GTcs4=
+	t=1709125778; cv=none; b=nG+pKXrHkPLa0S40m+dGfXZ/2eamJsoj7hMOafwL2U+Vfeh4Py0JtG60dFXHA2CvPJbtjT/uF4NOix5Wn7DNK+LRyNOPeGAi5/uypXw+uDC0XiHhdH2WW+c+aTj86S+zTTuEl91mJNPiToK7uTU4kee0KWOG5vgY8id5U7SymeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709125669; c=relaxed/simple;
-	bh=lnm+0EEdegAjRqKT4byJnEVNNkPFSOBtM19dPMn2Bzg=;
+	s=arc-20240116; t=1709125778; c=relaxed/simple;
+	bh=2Ft3bJiWKb5wT6iuIPDRn0E5KDZP5tR5xY4D5h4a9ZE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KRLLfoInQDkG9XwhSNLiMlkEEu6KBQhWLD1FN42k8NyMnqquWDXuY+3mk6E2jtVaa+qvQU276GFUstazHH5Ky80P6izWmtKKRZ8/8sLS+m6mQyjJPHBrDxZBd3IA6CPWAAkDplEdKtKWAt8faMTCv1ukqHxN0c3pv/1moG8wY1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=OUXK/3LT; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-56657bcd555so1329551a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 05:07:46 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ho+8JjRvKknYndy2fV27KSganGbT6xU6drZaghPeyGbUvGHwkU1/APB5CLeBAQzNL57JttWbSKD0vE0l/gBPSCsoPSJbicmCgrp2pgFexKR4H9OqxaVJqik9MjUdZd2skUldccuHrMucGOi2wU5Ogf48qYE0psojvF5pYWY9Jbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=xHRF6XNQ; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2d28464c554so52783551fa.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 05:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1709125665; x=1709730465; darn=vger.kernel.org;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1709125774; x=1709730574; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyEO6boa+xJ/OQch4N2V/Css5OUzCe/Ii8yKVOFLc2o=;
-        b=OUXK/3LTKhbdyQbLtfnVmMJZLzIY+m3Awboab9MSNs5NwpVENWUCqKXR+YpAfeDIgk
-         znNiBjpkcKsSK5LWX+bvgJ1sd8RocSIlluyWk8gSfiZ16zAQ89bG91MAYC58owfoFUQI
-         ECwYS0HSgqStYFKkAUPUmpiqAdwvspBQIoJiOoxVZmVSYUKdzT4lDoGPOuvLaPQW6cdE
-         yHR8zt03CS5+3Bdxbm9DP0LDz834recZ5LsuYd3ij1vZQHMpImPcOeUL1/AFkxvJNhw3
-         uNs1OGcuhIAhXsfNtuTTqWr328g2mtut8gOXQaqRpjGr6CY3q1Wv9Jz6UAUWZMVBz3Hs
-         hGVg==
+        bh=2Ft3bJiWKb5wT6iuIPDRn0E5KDZP5tR5xY4D5h4a9ZE=;
+        b=xHRF6XNQAxY19zdHQdOUBCXhFqvg9nw0+LncpnZg/0WCV1tFKM2DxOf4CiqN0P15Aw
+         bF0OlGn6NEd/eq0BmVJqfnCNKsMS6V2uTTYGp/mPPzK4lTlol24rUygt9M5lsn/OqZ1f
+         hbRRklnzvqTyxX9oQGpjEY0/EfSee5cS8UHfRy9+tvpjeqgrMLzTDtVMe7ywPA7axsVG
+         fivU9MKwltu8QhEUujK5P7fdWLynqYJAIE5Ovn9OSiTBVZrjVRRUGk9ey1990QeJmkTx
+         gkKa+Zsk6KzmZMDLgmSFBAfHqOrPEfFHRlf9z6JOHuRoqymNhujXFiucULye1pVzTqY3
+         RmXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709125665; x=1709730465;
+        d=1e100.net; s=20230601; t=1709125774; x=1709730574;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uyEO6boa+xJ/OQch4N2V/Css5OUzCe/Ii8yKVOFLc2o=;
-        b=utT6gTcv4cluR+YvJl+THt17y2baZez9kM9B791PMPqxORbKZ9HzglNSoV7NWKYOe8
-         /bZByWvgIZ2g9A5uOxU5nt5fl7TKDbd4TnEdFOtbvOHGr1ntCG0ze/teo67btlFVt7XV
-         FyTNYWbOGc7lKvwm+67nLURfRjo1mIQOmajgnHYvu3xU9r/07ZTK78kpqrE+tkO8sua4
-         e74AzPCAwHlGLXzuqynZUgmHsyLKdBXSQhM6uxzfLUEZxiklo8SAlhf7wJnLvqnwZWCl
-         WozRv/3WIRkPpDdNr1KSA6331EpvTB+SksPc/wbS/ma7gd0c2ScR6Nk+PdSOyDQm5fZT
-         PIrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDSgSksfctkymExNJtok5KZ1W0ZSO/ayDhR81P+ra1yKo+1XO2nAICmgS13wWmN6zE/5Tdt1yNjsd51ozYWGdW0xRu/xA0c7JrRvdls14m
-X-Gm-Message-State: AOJu0YweZyLj+7z2tibyuw0toPzXHWqcC2Nl0yWHnh5bRFkVqJl8HaZd
-	3G+EPcslMDEAf/S/F2c/WT2QAU/sW64VcZpny9DQezRZnuG/OawtVd7PjYJEk8Q=
-X-Google-Smtp-Source: AGHT+IHz6Q/4cwrnVSPpcLF88omhchUxt+jZb2vdilR4dpr1cIS/m3RQ1nQ+HOnDHiBkqjyTNNA/5Q==
-X-Received: by 2002:a17:906:5651:b0:a43:164c:cb3a with SMTP id v17-20020a170906565100b00a43164ccb3amr6249584ejr.53.1709125665459;
-        Wed, 28 Feb 2024 05:07:45 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id ts7-20020a170907c5c700b00a43f4722eaesm705990ejc.103.2024.02.28.05.07.44
+        bh=2Ft3bJiWKb5wT6iuIPDRn0E5KDZP5tR5xY4D5h4a9ZE=;
+        b=o9lCWV7sg5mMuMe5CAEjwtq+RpxabE8CgaivmXIf/biUnqjLlGggOEwybmo5l2bRvP
+         uJ1eh4KMq3ND5p1QdDOP/DMder8/8T1tHyLEYDG/lfXtrgyg8FY1Xphn+83W4BZmbcK7
+         h3Xpo2fRzQNIo7gynpJ18pHG3uZutL/hdrY4Q9j408X3i/eG7qDOrH3QD6edFpyhqKu9
+         9pA4vkn139c2VI0QFmksyfIFueO+1+twg4Vy+65IqTX8JiWUV12OviuDYsTc/xbLl3oM
+         xH2zx0kZVSP0guZxF2/L5MhFquE9/HS0ToWgzMgxAG0jCO4GzCHiVQnwjDtvPiJyFBRE
+         BrFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1EOnbLSbAIObHO2rjjCHhHheUrlpOiwSy8WqSnARNSvl3evTyk0S4jMEQ45LUiN+6WN7q07GZZfq3ZNvG01cSDT06FobMzydwgBaiT99Z
+X-Gm-Message-State: AOJu0Yz96LpxNxc2FGCpzE1caBcYLELYMsw4xCO0mxy0rdMlxt0d9RbN
+	/9G5Q0KU0EyonDWKYqGIV7etlneVbBao6l5ODkbMM6bCFijy/VUaYqRiluU9s/I=
+X-Google-Smtp-Source: AGHT+IEXjIeaqkm6aDYE/p8eQaQhxLsM4l93SBBtG4gumRuwRAuP9F46ubbWmhhXEYGUD/OSV2vyhw==
+X-Received: by 2002:a2e:860d:0:b0:2d2:9b00:2289 with SMTP id a13-20020a2e860d000000b002d29b002289mr3237613lji.29.1709125774294;
+        Wed, 28 Feb 2024 05:09:34 -0800 (PST)
+Received: from localhost ([193.47.165.251])
+        by smtp.gmail.com with ESMTPSA id m21-20020a05600c4f5500b00412b0ef22basm2091407wmq.10.2024.02.28.05.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Feb 2024 05:07:45 -0800 (PST)
-Date: Wed, 28 Feb 2024 14:07:44 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, 
-	Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/5] KVM: riscv: selftests: Add Ztso extension to
- get-reg-list test
-Message-ID: <20240228-8e0f8611d2f45f71c04ead57@orel>
-References: <20240214123757.305347-1-apatel@ventanamicro.com>
- <20240214123757.305347-4-apatel@ventanamicro.com>
+        Wed, 28 Feb 2024 05:09:33 -0800 (PST)
+Date: Wed, 28 Feb 2024 14:09:30 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
+Cc: shuah@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	petrm@nvidia.com, idosch@nvidia.com
+Subject: Re: [PATCH net-next] Correct couple of spelling mistakes
+Message-ID: <Zd8wirexgBacmsv1@nanopsycho>
+References: <20240228115707.420200-1-pvkumar5749404@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,56 +83,11 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240214123757.305347-4-apatel@ventanamicro.com>
+In-Reply-To: <20240228115707.420200-1-pvkumar5749404@gmail.com>
 
-On Wed, Feb 14, 2024 at 06:07:55PM +0530, Anup Patel wrote:
-> The KVM RISC-V allows Ztso extension for Guest/VM so let us
-> add this extension to get-reg-list test.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  tools/testing/selftests/kvm/riscv/get-reg-list.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> index 9d9c50b68207..5429453561d7 100644
-> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> @@ -73,6 +73,7 @@ bool filter_reg(__u64 reg)
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZKSED:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZKSH:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZKT:
-> +	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZTSO:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZVBB:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZVBC:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZVFH:
-> @@ -436,6 +437,7 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
->  		KVM_ISA_EXT_ARR(ZKSED),
->  		KVM_ISA_EXT_ARR(ZKSH),
->  		KVM_ISA_EXT_ARR(ZKT),
-> +		KVM_ISA_EXT_ARR(ZTSO),
->  		KVM_ISA_EXT_ARR(ZVBB),
->  		KVM_ISA_EXT_ARR(ZVBC),
->  		KVM_ISA_EXT_ARR(ZVFH),
-> @@ -957,6 +959,7 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zkr, ZKR);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zksed, ZKSED);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zksh, ZKSH);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zkt, ZKT);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(ztso, ZTSO);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zvbb, ZVBB);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zvbc, ZVBC);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zvfh, ZVFH);
-> @@ -1010,6 +1013,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
->  	&config_zksed,
->  	&config_zksh,
->  	&config_zkt,
-> +	&config_ztso,
->  	&config_zvbb,
->  	&config_zvbc,
->  	&config_zvfh,
-> -- 
-> 2.34.1
->
+You sent this already here:
+https://lore.kernel.org/all/20240228082416.416882-1-pvkumar5749404@gmail.com/
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+I don't understand why you send this again. Could you slow down a bit
+please?
 
