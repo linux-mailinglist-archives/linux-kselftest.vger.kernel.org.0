@@ -1,142 +1,193 @@
-Return-Path: <linux-kselftest+bounces-5537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28FA386B001
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 14:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8627086AFFE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 14:10:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEA3D1F24B08
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 13:10:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0742E1F21623
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Feb 2024 13:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B81B14D426;
-	Wed, 28 Feb 2024 13:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D36E14D452;
+	Wed, 28 Feb 2024 13:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="SfoL4P+F"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XYBUPHep"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687F314CAD1
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 13:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4D414A4C9;
+	Wed, 28 Feb 2024 13:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709125832; cv=none; b=cGSRK8b8M2jekulVradf6XsFoWo47RmKGaD0wjLnkQFL2GmJpr5YwS2VTCahDFZsjzP5Y0A0bpS5yWEBnB5lhJRWXFh0Vm0VUh4fxPb/vHLP4c1xjNnjOGHMpdE7b1KLG3yZmiRSOclrRoZcrFMO5AsTgnFde/mQGvVi3I+ZwLY=
+	t=1709125824; cv=none; b=W0Zx55j6CLsoAR0dFbXwJ7jl4+hNhSwfThwIfjsq3Kfrt2YBqHbavXHgfZCuNhiztkxhoUo+y5cenDZQ2z0l+h52YtJoGXwTJXn01YRi5HQPVU7LSYEulKOpCaq4VsAQUre4CQpH9Ltp1koHoRHOz2moTJf/bMITf93QUwvU5MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709125832; c=relaxed/simple;
-	bh=y+XQ8TER6IUelZZXjUiPLMXBHKScWmB2tiHBXkIHb4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I2tu+DqRuhuhYIvVoBnbDXj7sfTQeyRvblG/p4EcKOzO8D3mQIuz02hM2babvzXQfsWtFh2u47VbxRT8wCf2AII5XayLG7s0SCHQmSBGrl8sLunvo7i6x7dFxmjnAXMdSiB+BGb/91UfgR0Th6XSKpcHn7dbJVYs+9H79Qirn9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=SfoL4P+F; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a26fa294e56so915672566b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Feb 2024 05:10:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1709125829; x=1709730629; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q2NAebkb74PRN2BzyJL1cyLz7aGeJCOrEFsttYow7lE=;
-        b=SfoL4P+FPplg00DH4rhlv5mX5o+wIbNBKxndiTNqLidRcd2Qlfu+5dJntU5/XK94vT
-         YUqsMv57EpW5+Wbt0A+jbFJHWgf/pzxKQ2IV2PZKtD4VCPGBeeatQpNmicVapDUKGwTO
-         P56rfwNo0tuB5bYhiCtLy4xB7Hm0z85DLLXvQyIsuubAh5S82i/PE7obdGmLLuyEhQmO
-         286Ehtno8UPieS6dpKQXsvVBd4W5lJKQ/L5W6T0prMUrW70LoINRdfgOn5XQZC+1iIGh
-         J7y73HRAfdW96p6XtWnG6yUr0HScGKnJQapPqQRU9IHNRgh5msnfNvSAY4gMJpBVeghn
-         mOrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709125829; x=1709730629;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q2NAebkb74PRN2BzyJL1cyLz7aGeJCOrEFsttYow7lE=;
-        b=hh3ydqlirT4E93qO+NeJEP9yJZO0PJgfmtNLttp2saCkwIrV3ewN/wZHNpk4hH+wm8
-         B7mx1Za92UUXVmatZdAD5h/fZLLDrsjYGYemY0qq2yxi7EufcNl9ytq3ME0yIDx+5HrD
-         KK+66T++JAJTytjPJRtHHRCjCzXTV4IJ7h3cwpfwv1H8tc6mjt70V53lDQnmrCzhZS6q
-         0no8WRtWmFdA4WdxEKZjzXI4IwIPFojmlECvTwK6UVX85i8nthlXhvUgcRgmVwI0TGBQ
-         69Y4wH8ufPL4SbScXXdBoOKWxy8v7CyjCr1rle97IeFaqMjq72gCyoIVHAIyQDioG6le
-         q1hw==
-X-Forwarded-Encrypted: i=1; AJvYcCXke/Pj4E+MavlR0+X0AkbOiFyRGdkEpOakft/n/3pFUDgjdEsInb189DkyVDShtvlKV/Lhpo333KZXlSWRk1/sKLfmH61LIHiR2UUy/Mrl
-X-Gm-Message-State: AOJu0YxDu2PdZyWCUxSjXTDkBEqv/CYA6Ikejw4tr+E9K6gn3yUMmstT
-	wXEp0hQGbLtdsJZv/HQdMkJI66VNlY+oh5WZznqBzyobu13Pr/Fl9kzfW69tw90=
-X-Google-Smtp-Source: AGHT+IF5HIjUzKDomFUnEg6DOvdb72PcuesnipX63O5viuhCdygq+/+gijCmgtIJP5epcZJ7ZF3eDQ==
-X-Received: by 2002:a17:906:c305:b0:a44:21c4:91b3 with SMTP id s5-20020a170906c30500b00a4421c491b3mr105263ejz.44.1709125828798;
-        Wed, 28 Feb 2024 05:10:28 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id i25-20020a1709063c5900b00a3f596aaf9dsm1851570ejg.26.2024.02.28.05.10.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Feb 2024 05:10:28 -0800 (PST)
-Date: Wed, 28 Feb 2024 14:10:27 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, 
-	Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 5/5] KVM: riscv: selftests: Add Zacas extension to
- get-reg-list test
-Message-ID: <20240228-8f3f6703b3c14ceaf169da3b@orel>
-References: <20240214123757.305347-1-apatel@ventanamicro.com>
- <20240214123757.305347-6-apatel@ventanamicro.com>
+	s=arc-20240116; t=1709125824; c=relaxed/simple;
+	bh=KK4eUV2BkPuaHFWcsp8DbzSeNW1LjGIibof8skYkCrk=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Hh+iQCCGrrBzU87ZNmfgMNK9CQYzJ/AGrZw8aqxXDObWkDLdm/fd2BMg8Cdm3EX49W0Ba6I3VG3ZqLW+2YCr814h1EpyRdive8KQsKVxseSiiIY4Wl2Yj5HiUgKEffORobrslYX0g9h/+jcYnbqlfme0d7RjLL3EvB8BREi7r7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XYBUPHep; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1709125819;
+	bh=KK4eUV2BkPuaHFWcsp8DbzSeNW1LjGIibof8skYkCrk=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=XYBUPHepFB/FbuXIlOwXGmJFQBd2NtJRtbpn5gJNKX2wbYpzJgyGY7F7OoKKbCTNf
+	 AYyHM+vds/M+jc6Z4jd4DnHIMxl4p9IIeDO9Ay/VJmrYBQgq2x1cPt6rTPN3ri1fiL
+	 9wN3gnN6i37PANI6HilgOrS2rNplaRR9InQt85+tglY3xxwJhrkqDFItP+9Z4WyO8c
+	 mFQtsi2i/W8FXsURb5h0/49sZa6GoRbNwosTS8Dh2M76hqL+n550Ff14beJQlp6Ash
+	 Jt9eVc/d00f9QKQIlDJXNktDGmtQ2GiUFAeF7YQ3y1gEXg2EBhxk4KrmhiddslFlwQ
+	 PYJTvHT73EqhQ==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A35D937820D4;
+	Wed, 28 Feb 2024 13:10:09 +0000 (UTC)
+Message-ID: <765ac086-621e-40b9-bbdf-bc1fbbdebf06@collabora.com>
+Date: Wed, 28 Feb 2024 18:10:32 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214123757.305347-6-apatel@ventanamicro.com>
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Move test_dev_cgroup to
+ prog_tests
+Content-Language: en-US
+To: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>
+References: <20240221092248.1945364-1-usama.anjum@collabora.com>
+ <a0fb8d9a-ae4d-4fc0-a921-efaa180e1bd7@collabora.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <a0fb8d9a-ae4d-4fc0-a921-efaa180e1bd7@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 14, 2024 at 06:07:57PM +0530, Anup Patel wrote:
-> The KVM RISC-V allows Zacas extension for Guest/VM so let us
-> add this extension to get-reg-list test.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  tools/testing/selftests/kvm/riscv/get-reg-list.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> index 5429453561d7..d334c4c9765f 100644
-> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> @@ -47,6 +47,7 @@ bool filter_reg(__u64 reg)
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVINVAL:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVNAPOT:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVPBMT:
-> +	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZACAS:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZBA:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZBB:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZBC:
-> @@ -411,6 +412,7 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
->  		KVM_ISA_EXT_ARR(SVINVAL),
->  		KVM_ISA_EXT_ARR(SVNAPOT),
->  		KVM_ISA_EXT_ARR(SVPBMT),
-> +		KVM_ISA_EXT_ARR(ZACAS),
->  		KVM_ISA_EXT_ARR(ZBA),
->  		KVM_ISA_EXT_ARR(ZBB),
->  		KVM_ISA_EXT_ARR(ZBC),
-> @@ -933,6 +935,7 @@ KVM_ISA_EXT_SIMPLE_CONFIG(sstc, SSTC);
->  KVM_ISA_EXT_SIMPLE_CONFIG(svinval, SVINVAL);
->  KVM_ISA_EXT_SIMPLE_CONFIG(svnapot, SVNAPOT);
->  KVM_ISA_EXT_SIMPLE_CONFIG(svpbmt, SVPBMT);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zacas, ZACAS);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zba, ZBA);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbb, ZBB);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbc, ZBC);
-> @@ -987,6 +990,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
->  	&config_svinval,
->  	&config_svnapot,
->  	&config_svpbmt,
-> +	&config_zacas,
->  	&config_zba,
->  	&config_zbb,
->  	&config_zbc,
-> -- 
-> 2.34.1
->
+On 2/21/24 7:06 PM, Muhammad Usama Anjum wrote:
+> On 2/21/24 2:22 PM, Muhammad Usama Anjum wrote:
+>> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
+>> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
+>> dev_cgroup.skel.h and load program from it accourdingly.
+>>
+>>   ./test_progs -t test_dev_cgroup
+>>   mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>>   64+0 records in
+>>   64+0 records out
+>>   32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
+>>   dd: failed to open '/dev/full': Operation not permitted
+>>   dd: failed to open '/dev/random': Operation not permitted
+>>   #365     test_dev_cgroup:OK
+>>   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
+>> next. It is passing on both. Not sure why it was failed on BPFCI.
+>> Test run with vmtest.h:
+>> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh ./test_progs -t dev_cgroup
+>> ./test_progs -t dev_cgroup
+>> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>> 64+0 records in
+>> 64+0 records out
+>> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
+>> dd: failed to open '/dev/full': Operation not permitted
+>> dd: failed to open '/dev/random': Operation not permitted
+>>  #69      dev_cgroup:OK
+>> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> Locally this test passes, but fails on BPFCI:
+> https://github.com/kernel-patches/bpf/actions/runs/7986809998/job/21808178301#step:5:9744
+The test run results with vmtest.sh and BPFCI are conflicting. What should
+we do to debug the problem now? Any ideas are welcome.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+I've tried to debug on my end. Not sure why it fails on the BPF CI.
+
+> 
+>>
+>> Changes since v1:
+>> - Rename file from test_dev_cgroup.c to dev_cgroup.c
+>> - Use ASSERT_* in-place of CHECK
+>> ---
+>>  .../selftests/bpf/prog_tests/dev_cgroup.c     | 58 +++++++++++++
+>>  tools/testing/selftests/bpf/test_dev_cgroup.c | 85 -------------------
+>>  2 files changed, 58 insertions(+), 85 deletions(-)
+>>  create mode 100644 tools/testing/selftests/bpf/prog_tests/dev_cgroup.c
+>>  delete mode 100644 tools/testing/selftests/bpf/test_dev_cgroup.c
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/dev_cgroup.c b/tools/testing/selftests/bpf/prog_tests/dev_cgroup.c
+>> new file mode 100644
+>> index 0000000000000..980b015a116ff
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/dev_cgroup.c
+>> @@ -0,0 +1,58 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/* Copyright (c) 2017 Facebook
+>> + */
+>> +
+>> +#include <test_progs.h>
+>> +#include <time.h>
+>> +#include "cgroup_helpers.h"
+>> +#include "dev_cgroup.skel.h"
+>> +
+>> +#define TEST_CGROUP "/test-bpf-based-device-cgroup/"
+>> +
+>> +void test_dev_cgroup(void)
+>> +{
+>> +	struct dev_cgroup *skel;
+>> +	int cgroup_fd, err;
+>> +	__u32 prog_cnt;
+>> +
+>> +	skel = dev_cgroup__open_and_load();
+>> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+>> +		goto cleanup;
+>> +
+>> +	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
+>> +	if (!ASSERT_GT(cgroup_fd, 0, "cgroup_setup_and_join"))
+>> +		goto cleanup;
+>> +
+>> +	err = bpf_prog_attach(bpf_program__fd(skel->progs.bpf_prog1), cgroup_fd,
+>> +			      BPF_CGROUP_DEVICE, 0);
+>> +	if (!ASSERT_EQ(err, 0, "bpf_attach"))
+>> +		goto cleanup;
+>> +
+>> +	err = bpf_prog_query(cgroup_fd, BPF_CGROUP_DEVICE, 0, NULL, NULL, &prog_cnt);
+>> +	if (!ASSERT_EQ(err, 0, "bpf_query") || (!ASSERT_EQ(prog_cnt, 1, "bpf_query")))
+>> +		goto cleanup;
+>> +
+>> +	/* All operations with /dev/zero and /dev/urandom are allowed,
+>> +	 * everything else is forbidden.
+>> +	 */
+>> +	ASSERT_EQ(system("rm -f /tmp/test_dev_cgroup_null"), 0, "rm");
+>> +	ASSERT_NEQ(system("mknod /tmp/test_dev_cgroup_null c 1 3"), 0, "mknod");
+>> +	ASSERT_EQ(system("rm -f /tmp/test_dev_cgroup_null"), 0, "rm");
+>> +
+>> +	/* /dev/zero is whitelisted */
+>> +	ASSERT_EQ(system("rm -f /tmp/test_dev_cgroup_zero"), 0, "rm");
+>> +	ASSERT_EQ(system("mknod /tmp/test_dev_cgroup_zero c 1 5"), 0, "mknod");
+> Access to major number 1 and minor number 5 is allowed. The return code of
+> 0 is expected, but on CI we are getting 256 which indicates error. mknod
+> help page mentions the same:
+> 
+>> An exit status of zero indicates success, and a nonzero value indicates
+> failure.
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
 
