@@ -1,46 +1,45 @@
-Return-Path: <linux-kselftest+bounces-5652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4EF186CE48
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 17:09:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD59C86CE5C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 17:11:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 557861F22209
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 16:09:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D28041C21CEC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 16:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D199159DEA;
-	Thu, 29 Feb 2024 15:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC1915C78B;
+	Thu, 29 Feb 2024 15:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bIDVxzl4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UI0pXjMu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5097F159DE4;
-	Thu, 29 Feb 2024 15:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A27154C04;
+	Thu, 29 Feb 2024 15:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709221877; cv=none; b=K1D2KmF0fuWi81vKjUz4ppDCVZ+sJfPmA8Rlg9pcvvAOrOk40hJpN326OEMvKQybJ14DBzT5ZXJ7/o5ZwUhmRbVsE7TzSz0lBiiCMm7STazRQ//BZ/2PxtA+Akr7SQ2NCum9RUevp9ovIJ3HKwH8uMckOJ8FeHaql/xUNAuVxYE=
+	t=1709221889; cv=none; b=Mr7QLvSuL/k1nqtfsbyLEdz2AVJm3jbXkNzVasWpa2ZjYGZWXPPXq2dB+0/sa1P2HIVvXj9RN9pvABaWDcHIlKd8IHa8V0qgjXPWyjVfHlpj3XTXZ4qk0ELr6CG30QjkXcezDmT+xpq9ldYnvcoBY4/QefkmI/9nasIzgLxEIUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709221877; c=relaxed/simple;
-	bh=Yo+IjX1HMF7yDU/yvovsGvcfnMLDjmAxJteTj1nN9MI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U+2cNYkYCo7K4d6/h3zsvr0pt6HRlmN2wQkr/SuzUfI4Kh6ir6K6RbwkuQmEOBBYsNzq2mjimiQwLMNoaOQZwZnAo0eaFoRwVGDTt9W+uv/sV7gFi2qRz5fPsf3mL3xwWki4kzqLS8kWeZcSH4dgN6ngV4NNCH9jD/n2BAp+bvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bIDVxzl4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7302C43390;
-	Thu, 29 Feb 2024 15:51:15 +0000 (UTC)
+	s=arc-20240116; t=1709221889; c=relaxed/simple;
+	bh=GFFbQlzh6HC4SDDh95NsXiORtcwm6elGZF0AA+G9MdQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S9/tddTZ82eppyrDeeMhoK4idbxCqwe2YDtrK2LA1FyBjWJ979D7L86pComo3lKFIzXz9/aoW0qtB9g9PYGjb6p3le+4ZJH/Gok0d1W3DP4WXIgon89wTEGAwWqUgTplIv1z9c7uBxxyKjdp1TBRBbB9481lUGGHhvSJo45JxgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UI0pXjMu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1432C43394;
+	Thu, 29 Feb 2024 15:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709221877;
-	bh=Yo+IjX1HMF7yDU/yvovsGvcfnMLDjmAxJteTj1nN9MI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bIDVxzl4ZwaUxKL1dxSj47TuR7uWQnZ7KELoiFMSZ2FVtVY4j8HwSrmINdlIPN9LH
-	 l6qBf3HfW4io4xpYXuJZL389u9k2+99Kx1SOjBDgO8NsJRADW634mzEohs7lXYP0vZ
-	 RVngztUzCq7SiHLQNM5DnfwepC4D5CwpiMlWW2U2CRCpACyVU3gyb2oLxAxzyVsHul
-	 ZXrxBzdM8aeWIrlEf1oNkhMf2ki1EvjWC249koiIgvkcQQ4EEy0YC0z7BHwK63nMDW
-	 IDMhm0plKuLwPAjKHhNNvgjgD3MAUy5XD5xqIoRvlhVcy7Xu9rAbCXfmzMSRbimmoL
-	 BKinU6AW9HeVA==
+	s=k20201202; t=1709221889;
+	bh=GFFbQlzh6HC4SDDh95NsXiORtcwm6elGZF0AA+G9MdQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UI0pXjMuYJrggUHoJQ6a81sleIwYavVgZwF/5W1mIYQUrQErNNl29edWcfoJweFam
+	 PeHnzQis+cTmplxB3xc4qWYdrviu5GeESWOfVB+XQI5DrGRtiVmDKR5VkWtdpFSjYI
+	 dcBuOtIDNbHDO5fQ45T94lzKHWTk+t0Q+flCQS9jA458UjK40MDzrCYLdJek8QCd7n
+	 6tEhSRAz+zym4FVX7zbiQet3cVzcVQEdJqsmGqlDoqCR2xxaskOA/WtRt4crt7wuHE
+	 IqacyrFhyVj+GxMcmh9JPZjKhneVvLe74OnsO3CMb62eI+AH7D/qeg1pRV39kc9Dzl
+	 IEvgNPmZ0Jt+w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +52,10 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	shuah@kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 2/7] selftests: tls: use exact comparison in recv_partial
-Date: Thu, 29 Feb 2024 10:51:06 -0500
-Message-ID: <20240229155112.2851155-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/5] selftests: tls: use exact comparison in recv_partial
+Date: Thu, 29 Feb 2024 10:51:23 -0500
+Message-ID: <20240229155127.2851327-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240229155112.2851155-1-sashal@kernel.org>
-References: <20240229155112.2851155-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.210
+X-stable-base: Linux 5.4.269
 Content-Transfer-Encoding: 8bit
 
 From: Jakub Kicinski <kuba@kernel.org>
@@ -86,10 +83,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 44a25a9f1f722..956ee3c01dd1a 100644
+index 837206dbe5d6e..81bb3cc6704f8 100644
 --- a/tools/testing/selftests/net/tls.c
 +++ b/tools/testing/selftests/net/tls.c
-@@ -653,12 +653,12 @@ TEST_F(tls, recv_partial)
+@@ -580,12 +580,12 @@ TEST_F(tls, recv_partial)
  
  	memset(recv_mem, 0, sizeof(recv_mem));
  	EXPECT_EQ(send(self->fd, test_str, send_len, 0), send_len);
