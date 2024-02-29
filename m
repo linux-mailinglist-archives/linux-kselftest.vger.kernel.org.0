@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-5643-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5644-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBAAE86CB0C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 15:12:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D0B186CB43
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 15:18:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C53128417D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 14:12:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9060E1C209F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 14:18:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA1B12C53A;
-	Thu, 29 Feb 2024 14:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AAD145B3C;
+	Thu, 29 Feb 2024 14:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KgwNgBlL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="egIENjQO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FD312AACE;
-	Thu, 29 Feb 2024 14:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE54A1420C9;
+	Thu, 29 Feb 2024 14:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709215969; cv=none; b=cVYHi3SMWyqnbzO03oWwOOa76GGOrT9DsvmvAjGpEoFMXeJeXmiooR5zA7NAkZcQbwqrWvKKmww3jBOA+UMmoS5NkVsaFdwoxqO+ZxTF0ZDZfQEWdsr6dSXcPre2WVl5L9SgY4wlXn4K2PUzc7gPO0aiDwesMbNl9kscMcuy5hI=
+	t=1709216183; cv=none; b=CGG0gfp8qHmLm+CpOBaf33ow055jfi6Rcmxxe0A1Esaj+szQ4pmDy/Urf0mX5dVab36f8EnYTLnyv/t+/d12XttZNZus3YmBh6PYUj9o9cZWhXZ53DaEelfs5scvmV7l+m1IQWdSt2g+lHDdVEPsOhGJTYEeP23XAMKka8PSwco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709215969; c=relaxed/simple;
-	bh=01GBL4pM/RBuNtNrLzRrSJYob8hE0WMJGlmHyUb0aZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y+XL0NR0Pt2b/Z8xVFJBKts6gBt8mxFHoPCa63fYJXQcyoIXjHU59krZX54VNQuv9HBTpsNt28/0TQgt4xsJaPzl8HpoKEvL3mQ/pIxOnelCuUtj99wFS5a2vXhGQ83bXHE0/hU6QSH0ZqpkV/LfVBdTgBx9eZ2q5cw1Ioer0XE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KgwNgBlL; arc=none smtp.client-ip=209.85.161.48
+	s=arc-20240116; t=1709216183; c=relaxed/simple;
+	bh=PUK02Cucbp8QURrkbJDRBmCMb/j7fNSM0Xn8Y5zhIkc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=RIb39mnyI32lzgBHMNFw1x5VdoMENSsZ2JqotEIMjK76xvcwXD4+MM9rqLR9BSGB9bKM3vyWMo8mLQhV1A2IcvMFBvk16yUXmjiG9Me/IleRMPEB07fEiZlOogfSFK12+M2NysCWc1zneGkp15RwohmgkjyGx+7EXw/Na/HTyMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=egIENjQO; arc=none smtp.client-ip=209.85.219.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a0deaf21efso503416eaf.0;
-        Thu, 29 Feb 2024 06:12:47 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-68009cb4669so3329676d6.1;
+        Thu, 29 Feb 2024 06:16:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709215967; x=1709820767; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1709216180; x=1709820980; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/6cP9W2AgQHJN8YU3o1XUoIxNAqqR6eg938KJPNmEGw=;
-        b=KgwNgBlLjopGold37CewkR6it1uExRFi4kUfUUucePSmFELpkfENqglJC/1zkUJydU
-         t4w/S+8PX/06XyTBe9/3idVwvZc+BNud921JqNO3CFwYOh7G0faglj/lQ711pmB3E/+G
-         AdzDv9ONRQEeJfrkmzh3sodiIOWxNzCsTmq/LJBDmfDJmrTj20v5Qr7gNJLVV9QZqXt0
-         epXntZ0DWve1DLlDh1zchDqv8fvOSE/Sd813Wmvf9Xx3IggnS4o+t9+nFpdSzrpLBSPB
-         UnhogjSX2EYO2BnIQvJAxYuhsQ/0lCplkRnmuzmiZqMSS+OSdD/YIRxosDl9MQhkVQIP
-         htWQ==
+        bh=/W/wZXm/lm7nezS3iJK5hhPJV5z7bm8xrMOjN7sfA2c=;
+        b=egIENjQOzhmY5vkoALNg3x+1lOZMiTSDwlaZUAHurP2erzDGExOaRhgUPwFT9Z/Qyy
+         1mzsNlBlHHxJeh+eZwPwAdTBDoqYpRh8COppJrez/Fg/EoIyQLDD9lR2zf5J1n0xRcxR
+         +mpbE+9axTBe5mZg/LwDkMtK4K/cekcvFQQLFY8VRXcVq4schNiJpoO4ZKTbLh/GPsj8
+         srDGr9IIOzRAWYtPg6lTY3UiuZYifpL7AoessODFR7nFtmxsOW6dlRsKqk6TVi9HZlIk
+         UmcCssg71Kf3H2DiiLIzkS4rhWaJbYjHxlcugjBmvSk/ipRXCKubEHw46JbH5aPBrP7/
+         i80A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709215967; x=1709820767;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1709216180; x=1709820980;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/6cP9W2AgQHJN8YU3o1XUoIxNAqqR6eg938KJPNmEGw=;
-        b=Yb1AZjtwdLDqkI/ZpmpmOg4xWOIAzFrsLPq6OY4IOXc+491l0FMCnIUbdUagHpIb0C
-         g3ZnwNTdl03EPAl7Ttg+9YekM/nJUplZ6KsLuH234O6M1HXxHoXzPT4M/KXXC2dOrpFj
-         xuWcUQd+FOt3twq8o6U+KvKB7mKt1LtPSuwnIA9t5B+KkMf/anAF9Kkk7Mq4Dt5SQXEc
-         77yeCcJmwx5gP0TuF8qmc6L9h6tU+ndENns4XX+55WS59aR29m1WhnxqcTF+H6N0aJYX
-         TwMICaLHWtBjq4Lr1MVk0Mz4Bo++lSzVTQpYHjXcRsD6PBe43s4X6ScVdykFvRxTD2iU
-         1tMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQElKVS+ZytkrQW040uxSqVVFpxiZJgsJ5Uavz1/XGeM3IqBkgNAtQnZzT87MeOXBC7vRy8eGmeovZVLYe2xqNdda/g/TQ5rb0WI7n4qcOn7Dd5BiMMA5uI1cgY40OTJNv6fjTBKFKYmOrsblRCjNvseL6HXYpewl0I1hzwdLoaZ6XpFp7Hakg
-X-Gm-Message-State: AOJu0YyJAOq7DfPGrMjBIgkYVpwE027E75RTRKOcqS9LO8ZHJw5LsFOv
-	jolFKWi/YWMZ7kuJnQEYEaDIkmN+Y20AcGU3hGEYdPGnMdPWEts6
-X-Google-Smtp-Source: AGHT+IGoMVeonTVGpUMbSC6NyXoI8L+u+UnR4N1COBsmWbb1vlDZFi37tyMwzHjqwQeUiotKpDL52A==
-X-Received: by 2002:a05:6358:428e:b0:17b:9e19:4fb9 with SMTP id s14-20020a056358428e00b0017b9e194fb9mr3273356rwc.22.1709215966734;
-        Thu, 29 Feb 2024 06:12:46 -0800 (PST)
+        bh=/W/wZXm/lm7nezS3iJK5hhPJV5z7bm8xrMOjN7sfA2c=;
+        b=O1GGIa6KdL4Yc0jsCn3ePZ2WtPeLgMS8VG+EOaMV+0TVVV5dBg50sURU8hh3a+9Nmx
+         O8PGqxqnHVdvYLKsTV+ztvIL7RpG8XrruKq1+14mf/xxCOcQ06W6/TOJsMcMbPPcIsRh
+         mYBqqj3my7LbTP4aJntMv8SPCymoG+Gvh2u1HhZIjCcLNZNpxexH3f8TkFFxyrCas6uP
+         EwGchR9MhLfqS8LnUMv4V1Yl7kd+1WTuh0DUhetXhOjd68vHGEEFDnIZSt5/R223SBKo
+         AHXBLtkRcSLINjDw/Nf7VQnxoqDi9vMCY1hsupbt+crzYRbt8tLUT27v6DKYgR+4+705
+         Jylw==
+X-Forwarded-Encrypted: i=1; AJvYcCXJoXntIPWbWEdUxoPqh6dgCaNjCbwZ2YZL7NPkVKIhREjbq6nv1Xe5J+079uZSUE5jdCQM6zWwghNdNEl9OdTEVWLE8dJnYHu0KME2GoNJcfoxNl7UkOjmCWFe1tkdxNkEAvT9pYGxP/k3gJ64u2KvL+eKqDF3Iv5EqHqYPiXECMi2Zh2USi5p
+X-Gm-Message-State: AOJu0YzNK7lB9we21DJexcdQn5QXOMvqHatFVKxsFXYxlzBH4DFbXMIV
+	l5N3seE6ug5/Fsmks4OHRyUdVJUYw/Gt+ufRr6/+OjuqIYD5IuNj
+X-Google-Smtp-Source: AGHT+IHs1YnZ0esHs1BMxISmBCDSRJY5ZhDnZqGmDP5+mD/g+W2yrpWgUSNeF5GUTRda4q1JIaSsQQ==
+X-Received: by 2002:a0c:e80e:0:b0:68f:3058:a0 with SMTP id y14-20020a0ce80e000000b0068f305800a0mr2481153qvn.41.1709216180406;
+        Thu, 29 Feb 2024 06:16:20 -0800 (PST)
 Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05620a13f400b00788033be0f6sm136142qkl.58.2024.02.29.06.12.42
+        by smtp.gmail.com with ESMTPSA id ng8-20020a0562143bc800b0068fa4534070sm770363qvb.83.2024.02.29.06.16.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 06:12:46 -0800 (PST)
-Message-ID: <f9a3d871-dd51-453b-b510-d076ecf0fabd@gmail.com>
-Date: Thu, 29 Feb 2024 16:12:41 +0200
+        Thu, 29 Feb 2024 06:16:20 -0800 (PST)
+Message-ID: <a5726043-1906-44ba-a6ee-a725a2776269@gmail.com>
+Date: Thu, 29 Feb 2024 16:16:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,75 +78,87 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel
  Testing
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Guillaume Tucker <gtucker@gtucker.io>
-Cc: Mark Brown <broonie@kernel.org>, Helen Koike <helen.koike@collabora.com>,
- linuxtv-ci@linuxtv.org, dave.pigott@collabora.com, mripard@kernel.org,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com,
- pawiecz@collabora.com, tales.aparecida@gmail.com, workflows@vger.kernel.org,
+Content-Language: en-US
+To: Guillaume Tucker <gtucker@gtucker.io>,
+ Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org,
+ dave.pigott@collabora.com, mripard@kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+ gustavo.padovan@collabora.com, pawiecz@collabora.com,
+ tales.aparecida@gmail.com, workflows@vger.kernel.org,
  kernelci@lists.linux.dev, skhan@linuxfoundation.org,
  kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com,
  cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com,
  ricardo.canuelo@collabora.com, kernel@collabora.com,
  torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
 References: <20240228225527.1052240-1-helen.koike@collabora.com>
- <20240228230725.GF1659@pendragon.ideasonboard.com>
- <0a5bf7d1-0a7e-4071-877a-a3d312d80084@gmail.com>
- <20240229093402.GA30889@pendragon.ideasonboard.com>
- <655f89fa-6ccb-4b54-adcd-69024b4a1e28@gmail.com>
- <20240229111919.GF30889@pendragon.ideasonboard.com>
- <a4fc23e1-5689-4f86-beb7-5b63a0d13359@sirena.org.uk>
- <b3fb89aa-56b4-4b3c-88f6-c6320bf5c489@gtucker.io>
- <20240229122040.GG30889@pendragon.ideasonboard.com>
- <20240229122503.GH30889@pendragon.ideasonboard.com>
-Content-Language: en-US
+ <d99d026e-ed32-4432-bab3-db75296e67d8@gtucker.io>
 From: Nikolai Kondrashov <spbnick@gmail.com>
-In-Reply-To: <20240229122503.GH30889@pendragon.ideasonboard.com>
+In-Reply-To: <d99d026e-ed32-4432-bab3-db75296e67d8@gtucker.io>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/29/24 2:25 PM, Laurent Pinchart wrote:
-> On Thu, Feb 29, 2024 at 02:20:41PM +0200, Laurent Pinchart wrote:
->> On Thu, Feb 29, 2024 at 12:53:38PM +0100, Guillaume Tucker wrote:
->>> On 29/02/2024 12:41, Mark Brown wrote:
->>>> On Thu, Feb 29, 2024 at 01:19:19PM +0200, Laurent Pinchart wrote:
->>>>> On Thu, Feb 29, 2024 at 01:10:16PM +0200, Nikolai Kondrashov wrote:
->>>>
->>>>>> Of course. You're also welcome to join the #kernelci channel on libera.chat.
->>>>
->>>>> Isn't that a bit pointless if it's no the main IM channel ?
->>>>
->>>> It *was* the original channel and still gets some usage (mostly started
->>>> by me admittedly since I've never joined slack for a bunch of reasons
->>>> that make it hassle), IIRC the Slack was started because there were some
->>>> interns who had trouble figuring out IRC and intermittent connectivity
->>>> but people seem to have migrated.
->>>
->>> In fact it was initially created for the members of the Linux
->>> Foundation project only, which is why registration is moderated
->>> for emails that don't have a domain linked to a member (BTW not
->>> any Google account will just work e.g. @gmail.com is moderated,
->>> only @google.com for Google employees isn't).
->>>
->>> And yes IRC is the "least common denominator" chat platform.
->>> Maybe having a bridge between the main Slack channel and IRC
->>> would help.
->>
->> If the gitlab CI pipeline proposal wants to be considered for inclusion
->> in the kernel, I think it needs to switch to a free software solution
->> for its *main* communication channels.
+On 2/29/24 2:20 PM, Guillaume Tucker wrote:
+> Hello,
 > 
-> And to clarify, I didn't meant the kernel CI project, but only the
-> gitlab CI pipeline for the Linux kernel project. I don't know how
-> tightly integrated the two projects are though.
+> On 28/02/2024 23:55, Helen Koike wrote:
+>> Dear Kernel Community,
+>>
+>> This patch introduces a `.gitlab-ci` file along with a `ci/` folder, defining a
+>> basic test pipeline triggered by code pushes to a GitLab-CI instance. This
+>> initial version includes static checks (checkpatch and smatch for now) and build
+>> tests across various architectures and configurations. It leverages an
+>> integrated cache for efficient build times and introduces a flexible 'scenarios'
+>> mechanism for subsystem-specific extensions.
+> 
+> This sounds like a nice starting point to me as an additional way
+> to run tests upstream.  I have one particular question as I see a
+> pattern through the rest of the email, please see below.
+> 
+> [...]
+> 
+>> 4. **Collaborative Testing Environment:** The kernel community is already
+>> engaged in numerous testing efforts, including various GitLab-CI pipelines such
+>> as DRM-CI, which I maintain, along with other solutions like KernelCI and
+>> BPF-CI. This proposal is designed to further stimulate contributions to the
+>> evolving testing landscape. Our goal is to establish a comprehensive suite of
+>> common tools and files.
+> 
+> [...]
+> 
+>> **Leveraging External Test Labs:**
+>> We can extend our testing to external labs, similar to what DRM-CI currently
+>> does. This includes:
+>> - Lava labs
+>> - Bare metal labs
+>> - Using KernelCI-provided labs
+>>
+>> **Other integrations**
+>> - Submit results to KCIDB
+> 
+> [...]
+> 
+>> **Join Our Slack Channel:**
+>> We have a Slack channel, #gitlab-ci, on the KernelCI Slack instance https://kernelci.slack.com/ .
+>> Feel free to join and contribute to the conversation. The KernelCI team has
+>> weekly calls where we also discuss the GitLab-CI pipeline.
+>>
+>> **Acknowledgments:**
+>> A special thanks to Nikolai Kondrashov, Tales da Aparecida - both from Red Hat -
+>> and KernelCI community for their valuable feedback and support in this proposal.
+> 
+> Where does this fit on the KernelCI roadmap?
+> 
+> I see it mentioned a few times but it's not entirely clear
+> whether this initiative is an independent one or in some way
+> linked to KernelCI.  Say, are you planning to use the kci tool,
+> new API, compiler toolchains, user-space and Docker images etc?
+> Or, are KernelCI plans evolving to follow this move?
 
-They're not tightly integrated so far. However, we're exploring the idea of 
-letting GitLab CI submit jobs to KernelCI and get results as a part of the 
-pipeline.
-
-Helen already joined the #kernelci channel, and we will maintain a presence 
-there for the GitLab CI project.
+I would say this is an important part of KernelCI the project, considering its 
+aim to improve testing and CI in the kernel. It's not a part of KernelCI the 
+service as it is right now, although I would say it would be good to have 
+ability to submit KernelCI jobs from GitLab CI and pull results in the same 
+pipeline, as we discussed earlier.
 
 Nick
 
