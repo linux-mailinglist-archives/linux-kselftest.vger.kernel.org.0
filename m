@@ -1,186 +1,121 @@
-Return-Path: <linux-kselftest+bounces-5612-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3163286C4A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 10:14:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92FFF86C4AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 10:14:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5541E1C226BF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:14:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C8E91F22535
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E12A358107;
-	Thu, 29 Feb 2024 09:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YURPlVFS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CFC85810B;
+	Thu, 29 Feb 2024 09:14:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FAF57894;
-	Thu, 29 Feb 2024 09:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD3E58203;
+	Thu, 29 Feb 2024 09:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709198042; cv=none; b=dXN5CIRzFVUmBD+Eunv+tj7ztTZHHCL6LW/dUFseeiSy8fQCVwZvboZ/xz2VEn4VFmwWU4CH0gycTAh2Hl1k7vARMHMvnKveQ8ygDeEGEawHigDXG8ka/+VhNLejrf66kDcJnc1W6sABEXeOVfj7VjK/m0+N6hahJMaGkTlZbPg=
+	t=1709198052; cv=none; b=WIdxVVdn9CvPr+8QhGd7kItz/R3tBeJuaqAjM7YoZHkrFQRIlm+yCV/G5Gs0rCFrBU0JSls+JrIEOPOXrY95M4nZQgp0k5LVN3pWbVBx1l/yAZCBobbq7cjxj0o/kBu8Hid6NHrzcVHRoetnKza8JrNCtSzHCv5RVelf1etPr9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709198042; c=relaxed/simple;
-	bh=XzBYBRZonO3qAmE6Yr/R3lWoRxWnzo3XwlapB2YkqcM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=emE0bPIOCsooghMGEEtL1Kgub1Tb7lwt7D4NeAb6fdS8kkpjvNAPA56YxuaVQX1xDe4bkR2iaOgw4pwCwOx7p6oPVnvBUpLr7fHh49zwzhpUKDmaGOSh4HujgV9C8eG/VBwenue0HACvY9WVINQ8NldCaceM8y97SsSDF3kcq58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YURPlVFS; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7c48e13e0d7so30763039f.1;
-        Thu, 29 Feb 2024 01:14:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709198040; x=1709802840; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=2wj+Qt+CclRDmPbSU7W2tEkkChut/lDG1Rj9C81Tl3c=;
-        b=YURPlVFSx+/Gwxn6IqTsmOFPocyDc3yaz7BqNN7K/dTp/jYtIffN0UdrFmfMYWPqG4
-         BqdGD8KF6GcHWbGdagybmEhOySa7ACroYo64WlTbW4tEsF+VcD1yu5lNqAfgSQNNElw1
-         LSvmuL9ALxb6d+bb+iESrc/C+jIMvLcRSFiYw9XtV+Tcgkvw2Q7hmov98R9PLE5jtcop
-         ahEH5n8JpurP6FNAVOUHN/nvFZ1b5n2nUP1e28DxBUJVXyal72UsQHRujz/JmcGjb5X9
-         i628uNjErW7c5wYTm9geUDbP1xYRvFqVm/mnfratgnSxc7flpNCENYaRB5da2EiPCq0n
-         qzlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709198040; x=1709802840;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2wj+Qt+CclRDmPbSU7W2tEkkChut/lDG1Rj9C81Tl3c=;
-        b=OHN8TaQxycBUrGPCfXtc/3fh8UUgjYEZtXUfbxRMDH1HtbmH5YEnZVEveUmigcp7Ss
-         TP+mCZwxZcSmmDIfgjNDJxTfijgaKVuvBgtJiloK5gbY18X7bPhw13n4OGcSxao1NDm5
-         U1RSgMfPbNaYeAhGNcRQB9MIfY3Iv8BWmitnMUyCdlDtSss7XDnLQlLd0ROdV5Xwudfo
-         5BAbz7FEGZrT2+DGWw8t1yD7qtCggiDB6t3dIuSRea/kUb4SGGi4G5RrdM8366t5jqxI
-         19OJfP9v4Z6U7EDBTq7SHkJE28aKvKaJYydlmUsG2hiyJXISlQrNUxHMuQAgLjNrlIqG
-         OuVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVE1ZWb5l7yNpdg+ohanukCtCT5Nf13mIeHXl11hZJ8fAEHEFJzXVqIaTkKSFbhvQ8zGOGXWpWBYbIiCXeXfYF70L362qOdXfcWj7+TG3dyC86KTn7CAOf8Ln6A848m2LY9d5NQbDe8bTJnjDo64WBq+zUbKF2RdcddhaekvyCXyGdvWRGC
-X-Gm-Message-State: AOJu0YzucaCSoPsiTHfxdH9p7fDQ3XjVgVpo2ajH613R9JzC75aEh2SJ
-	B8qERDZmIp4SEx04999I49IRVpp8HwToAxgjShAWgZctppvqwDGp
-X-Google-Smtp-Source: AGHT+IFCJFuaySZLdHwnAAcpQqle/JCPkzmdlshfwOWY1M0GxDlQ69lymxn38aCI2qUnRvs0s4Pa4A==
-X-Received: by 2002:a6b:c997:0:b0:7c7:fe27:643b with SMTP id z145-20020a6bc997000000b007c7fe27643bmr1726331iof.1.1709198040016;
-        Thu, 29 Feb 2024 01:14:00 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s10-20020a5e980a000000b007c7e67c5942sm212645ioj.39.2024.02.29.01.13.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 01:13:59 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2b4ff7f9-2610-4c33-a4e9-a1fa30891edb@roeck-us.net>
-Date: Thu, 29 Feb 2024 01:13:56 -0800
+	s=arc-20240116; t=1709198052; c=relaxed/simple;
+	bh=fqVpiCKJyUf3+AVsKJYKVVJUv4ltfTVEWfbUmU3zcVI=;
+	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=RAPq3C22U/6uhcdOCssxdG+pp+wszSMrugEYviNP5yJYIxFuj/MRHviHqtkDQ4GXFjhf09jGUE5+KymqPNC4CvqHJQvsrvi6dBO0VMVcHVD7BN5576hfKtDqUxhpdE2Vl5joM4NPhClZaEIsaruBlfG9scTyY61oazYjl4bI1Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8DxdfHYSuBlxNMSAA--.47994S3;
+	Thu, 29 Feb 2024 17:14:00 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXs3VSuBlb5JKAA--.63412S3;
+	Thu, 29 Feb 2024 17:13:58 +0800 (CST)
+Subject: Re: [PATCH v3 0/2] selftests/vDSO: Fix errors on LoongArch
+To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>
+References: <20231213012300.5640-1-yangtiezhu@loongson.cn>
+ <d73d107d-9e04-4250-f467-f6ff7eb92103@loongson.cn>
+ <e64b3529-fb62-3ddf-bde3-b3188f386bc0@loongson.cn>
+Cc: linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <57438b7e-4188-428b-2456-10cfc10f35f9@loongson.cn>
+Date: Thu, 29 Feb 2024 17:13:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: lock warnings in dev_addr_lists test
-To: David Gow <davidgow@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Brendan Higgins <brendanhiggins@google.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <48c4d3db-66d5-4a9a-ab9e-9036db7222dc@roeck-us.net>
- <CABVgOSnpOzOr3VuKZc3okhJqf1yvsEe56YPdWn15Ag_RDEZi8Q@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CABVgOSnpOzOr3VuKZc3okhJqf1yvsEe56YPdWn15Ag_RDEZi8Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <e64b3529-fb62-3ddf-bde3-b3188f386bc0@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:AQAAf8BxXs3VSuBlb5JKAA--.63412S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Cw13CrW3Kw48uw43Gw1kXrc_yoW8Jw4UpF
+	WfWayakF4rCrW0yas7K3srXFyavw1fC3WUu3y5Ja97Arn0vF1rtr4xG3y8Ga9xZrWxuw1Y
+	yr1IqFna9a4UArgCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDU
+	UUU
 
-On 2/29/24 00:10, David Gow wrote:
-> On Thu, 29 Feb 2024 at 03:45, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> Hi,
->>
->> when running the dev_addr_lists unit test with lock debugging enabled,
->> I always get the following lockdep warning.
->>
->> [    7.031327] ====================================
->> [    7.031393] WARNING: kunit_try_catch/1886 still has locks held!
->> [    7.031478] 6.8.0-rc6-00053-g0fec7343edb5-dirty #1 Tainted: G        W        N
->> [    7.031728] ------------------------------------
->> [    7.031816] 1 lock held by kunit_try_catch/1886:
->> [    7.031896]  #0: ffffffff8ed35008 (rtnl_mutex){+.+.}-{3:3}, at: dev_addr_test_init+0x6a/0x100
->>
->> Instrumentation shows that dev_addr_test_exit() is called, but only
->> after the warning fires.
->>
->> Is this a problem with kunit tests or a problem with this specific test ?
-> 
-> A bit of both, I think. KUnit test cleanup is not guaranteed to run in
-> the same thread as the test, so that definitely is triggering lockdep
-> warnings.
-> 
-> On the other hand, we really should make this particular case work in
-> KUnit. Ideally test cleanup will happen on the test thread first, and
-> only fall back to another test if the test thread otherwise aborted.
-> 
-> So, this is probably something we won't be able to fix if the test
-> fails, but it definitely shouldn't be happening here where it passes.
-> I'll look into fixing that.
-> 
+Hi Shuah and Andrew,
 
-Here is a different warning, from the same test:
+On 01/29/2024 04:27 PM, Tiezhu Yang wrote:
+>
+>
+> On 12/27/2023 03:55 PM, Tiezhu Yang wrote:
+>> + Andrew Morton <akpm@linux-foundation.org>
+>> + Mark Brown <broonie@kernel.org>
+>>
+>> On 12/13/2023 09:22 AM, Tiezhu Yang wrote:
+>>> v3: Rebase on the next branch of linux-kselftest.git,
+>>>     modify the patch title and update the commit message
+>>>
+>>> v2: Rebase on 6.5-rc1 and update the commit message
+>>>
+>>> Tiezhu Yang (2):
+>>>   selftests/vDSO: Fix building errors on LoongArch
+>>>   selftests/vDSO: Fix runtime errors on LoongArch
+>>>
+>>>  tools/testing/selftests/vDSO/vdso_config.h    |  6 ++++-
+>>>  .../testing/selftests/vDSO/vdso_test_getcpu.c | 16 +++++-------
+>>>  .../selftests/vDSO/vdso_test_gettimeofday.c   | 26 +++++--------------
+>>>  3 files changed, 18 insertions(+), 30 deletions(-)
+>>>
+>>
+>> Hi Shuah, Andrew and Mark,
+>>
+>> The patches still seem to apply cleanly.
+>> Could you please review and merge them for the upcoming merge window?
+>>
+>> https://lore.kernel.org/lkml/20231213012300.5640-1-yangtiezhu@loongson.cn/
+>>
+>
+> Ping, any comments?
 
-[   10.622270] =====================================
-[   10.622346] WARNING: bad unlock balance detected!
-[   10.622481] 6.8.0-rc6 #1 Tainted: G                 N
-[   10.622624] -------------------------------------
-[   10.622698] kunit_try_catch/1354 is trying to release lock (rtnl_mutex) at:
-[   10.623123] [<ffffd7c5cbdb75cc>] __rtnl_unlock+0x3c/0x84
-[   10.623538] but there are no more locks to release!
+This series has received Reviewed-by and Tested-by for two months,
+since the merge window is coming soon, should it take through
+shuah/linux-kselftest.git or akpm/mm.git?
 
-That seems to be kind of the opposite problem. I noticed this only
-once in my tests, so it is much rarer than the other warning.
-
-Guenter
+Thanks,
+Tiezhu
 
 
