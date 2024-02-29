@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-5617-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5618-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC5B086C4EA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 10:23:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1FD186C511
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 10:27:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 597CE1F22417
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:23:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68341B2404C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983ED59B77;
-	Thu, 29 Feb 2024 09:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EAE5CDF6;
+	Thu, 29 Feb 2024 09:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AlHri6tL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hzS66Bce"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A9359B71;
-	Thu, 29 Feb 2024 09:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F2F5CDF2;
+	Thu, 29 Feb 2024 09:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709198608; cv=none; b=ddwcrNHwq/sl0FXTKssPTd+Z4+aTHJjayrHbpnZ368P/jT+zGO+4DIVSZhA/1GJG2Ob1fg88ZG0NgSsbJu80NbjXFTY2j+kF2tNrw+8sx9wu57tauILOPerenQMiy3gFpUTzYaje4NbBsqWtyudaGjnEJmPN+ZlAwEI1yqyjSH0=
+	t=1709198817; cv=none; b=Ykl2QKkBjIRr6KVU1xz+cqkHVR/TMTvOuYAdEJUOh5dtx59J1dWaiX9Gtvgj3neiy6qfALdt4ro1wCpsFIFRhwNEfqYdy5CydV3fylFmlKPq32nt2tlIdJ9I6wwR5Md0xkOAyTs9Gzn3tJHYN0l+v5BrTyg6B+KgCTb9ng0/ulU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709198608; c=relaxed/simple;
-	bh=Y1VF961paWGjYTepm54lGjEBp1wEbEGeWrtYpW1U5Tc=;
+	s=arc-20240116; t=1709198817; c=relaxed/simple;
+	bh=H3DVOzLmQ6k1aiZNO64pehrcmvGMoPGpzkMsjPLddA4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AtRZcHe5JFxRe0Q9mMX4g/VN2uqaOFhPUSfr7BH1+7GhQlApprBJEZ+Vgs0KxdH7fdak7IwVs2fLxMbmxuoPYIuThLEvZtQfTHUfwPColv645QSSqKjVfftpAbWW/GIEYBjf4ovwXD930En9c5YKeH86nREp1+vOPs6eTp7CXn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AlHri6tL; arc=none smtp.client-ip=209.85.167.47
+	 In-Reply-To:Content-Type; b=N2souOSP5Cu47RWKX4XLthk1JYRLt3t3mrpOG+WfEd/5Olt4R9bh4W2eyP6OweQTY7GkUw2OiafAoRObRqrNm7kR8GdZDl3c0jQtI3SOWH/o8g6sDZmwEFADY4thRq4Tt/43j429l8n+g+YMzu61Jqs9iUMoTqXS3oDpOJgQY6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hzS66Bce; arc=none smtp.client-ip=209.85.208.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-512bd533be0so722709e87.0;
-        Thu, 29 Feb 2024 01:23:26 -0800 (PST)
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d2533089f6so7735861fa.1;
+        Thu, 29 Feb 2024 01:26:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709198605; x=1709803405; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709198813; x=1709803613; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=N07RhVVTSDQOyo4eDr4hHwQOWKc0jlT5jQWzrwVgOx4=;
-        b=AlHri6tL+p+KMvMDOV07W/RELblZUakyMAoNzcjF/tdLk+R44ySamD0O8SDP+W+gwg
-         in+smscr7IN3f8VkY3490PxgFPiV1N9CqOXaqnaKDcfS8W+2pn1+z7fs8Ss5wpPLg0tN
-         0odJt4BBkCcMiVU20nRhxj5PbZhudhqwDvMVmLIqcRGKvM89J+vvFXjlq1YLxiK05kHp
-         zQx0SFGFw9UvN+B78lOK4yoSO4if5f4Hjz8YBbaX/jkmVatlm2l4ryhQJGt9OxRE2ik6
-         joX+MN5ZeVwbO20o1qDRNBPEnLdX8JiSgRlZzA+ucFGKS8kI73iPSRMWArmuxLy+dSCl
-         NeYw==
+        bh=MUGoQKrYI+CUGIzYiMWNWVHuIqGWUhSm1DPKxOOJHWY=;
+        b=hzS66Bcej3pnr7hurc58cBly9l2tkNw3YfXX+a9j3mP6nSJUkYJc7lWJHBlEUb29L/
+         YD85meJiikcsC5T5zD413B3mZ9AZoz70PDB73CkumUOAqa6dkHNkizlB73lWabV9kiAa
+         AN7hf+QKrByOlI5jS0PA1oezdp1c3+JgqjFptYtW+jPYRomGl2uJ5mc8TDd6FScGQIaU
+         zJwTQ4nSDx570AiixFK2WKdy2g6tee0IqeGRr7KjFUEzNJ+RAdtNY7+ZthCb+nPSvtTV
+         7B03inZtfgIJjOFAg2PBlZtEA6kmFY8KBmFOlFnXjQ5qp+m64wEBojvJuVCW6U78hD4P
+         dy+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709198605; x=1709803405;
+        d=1e100.net; s=20230601; t=1709198813; x=1709803613;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N07RhVVTSDQOyo4eDr4hHwQOWKc0jlT5jQWzrwVgOx4=;
-        b=DqKggTmxQZoWqUeDqbopnWdgdRwweQuS5mf06/bEY1WmVkufrTqzIYHgLtg4OVQmji
-         +aFDrDINufb2x5RtFbYSx4u45Ge4SvcLvv1ENfF5NKyExIyElAdVNEKL/ADjDVrFRINU
-         gC/wetYCLPEMMVTFYsVJX/N4MB9kpsM1SjgPEO/6A6nBMJtNDfdcU4b0MYm+2j25ATtG
-         GPfI4Ykx7rmyUQPaMtZGhwi+sL+uMMP+P9VVe8GIckgbr9onQXwuYFPZGEmQysofAB3o
-         1UmuckB0yEYaJrpKQquFMf9J5xMnfu8+Jl9MCjJWdydcKfruOib3yLdrnwbtnJiO50Pu
-         j9Sg==
-X-Forwarded-Encrypted: i=1; AJvYcCXSLZ+IDsjw2kmbVwjINZmAU4VjH0kDLAQYysN3e7XTVvCsw13sVl/VH6Fa9qM8ebobPpgXLVTrszt06uvP61vjpDBKm1kSAtbbFsgCu3/H/hpwAV00Xeww2FJlapbDW9MpY8b/ICTiIFxS+z/G0JFRLO8D61s+XPpkJ1kQpq+agiYHdcKfLH23
-X-Gm-Message-State: AOJu0YzR4b0pYGWUOv0JIJ3J92LUPPyQa7rbb1ZoVv5ASUMWMAQJuFpE
-	WpH24yfWxJBGTOXI3SuK8a7nvNLpt4WbZPeMNBZCvDsT6YS1SVNT
-X-Google-Smtp-Source: AGHT+IH0NneLS2naHPyQSuK2V6PBB0Kthv4bW9sQwfbLO1EV2s0XyuAxODvSdoZ8N7aM5gfpHsgNCA==
-X-Received: by 2002:a05:6512:2147:b0:513:2016:47d5 with SMTP id s7-20020a056512214700b00513201647d5mr927401lfr.56.1709198604426;
-        Thu, 29 Feb 2024 01:23:24 -0800 (PST)
+        bh=MUGoQKrYI+CUGIzYiMWNWVHuIqGWUhSm1DPKxOOJHWY=;
+        b=Y1qaoexznz2GcMX6rXKmQdFTdpheo7cuO6Q1lY2tWajjUxyNGq/qWiL6EtmW+K8UuJ
+         kgUkbnBInOk4gfpB2GVA7uQjyq45i1wsG/8A/P21qN1sUxEXy+SYREOaPryHG2KXMLdW
+         /S4ovxZ4LDtcFsA5dPRphSuzczMU2OKRvSBn05j8mp9rxBwzEccHsaPStaRRU9Zskmet
+         WwgzfEHbTvaP8H6gwKSHgx0xFAMxY79jWgW/StOLE3RD+0s8hneiVRZjkkNY8HxtxM9L
+         f+OotPbgIAl4QBdM024sd0uMEhEhFan0WWeesM3o0xzP7+1u18sko6cpaHg3xPP1QCSh
+         7SKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZGoZRfz+coJkoVGGzyhzItGHm32QMu5AzxBnXjRkd8N3PRkRffojsbYA648eIsRl3H/STQnJ1arNlSwjeEg+xObvk38ZFHKoShxlaxBNaMwFjLUM34Lb+sp436henOnui+oga6HQfP23HndlMN8vVx3YuAZJaipDjT/dZc7AzerdJerPl8nGi
+X-Gm-Message-State: AOJu0YyHlJFCr5ZqWcb699gs5c9AxYaYdu30iLFZPq285vs54U/xeXO/
+	Lq+xc3u9BZQ65XKGdECK9qaW++U12FyxlgDb2Ux5B5d8FMW8HO2H
+X-Google-Smtp-Source: AGHT+IEQQGvEUUUJJE0Q32Q1dWpicjPYOMb4ktp8tTjoWEWQsJczQ+GYRu123pV36LqzQ6iLRlTmxA==
+X-Received: by 2002:a2e:9496:0:b0:2d2:e704:77a8 with SMTP id c22-20020a2e9496000000b002d2e70477a8mr987605ljh.3.1709198813316;
+        Thu, 29 Feb 2024 01:26:53 -0800 (PST)
 Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
-        by smtp.gmail.com with ESMTPSA id 9-20020ac25f49000000b00513246fe458sm181985lfz.266.2024.02.29.01.23.23
+        by smtp.gmail.com with ESMTPSA id v2-20020a2e9902000000b002d0f905ddf9sm151234lji.18.2024.02.29.01.26.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 01:23:24 -0800 (PST)
-Message-ID: <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com>
-Date: Thu, 29 Feb 2024 11:23:22 +0200
+        Thu, 29 Feb 2024 01:26:53 -0800 (PST)
+Message-ID: <0a5bf7d1-0a7e-4071-877a-a3d312d80084@gmail.com>
+Date: Thu, 29 Feb 2024 11:26:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,12 +76,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel
+Subject: Re: [PATCH 0/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel
  Testing
 Content-Language: en-US
-To: Maxime Ripard <mripard@kernel.org>,
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
  Helen Koike <helen.koike@collabora.com>
-Cc: linuxtv-ci@linuxtv.org, dave.pigott@collabora.com,
+Cc: linuxtv-ci@linuxtv.org, dave.pigott@collabora.com, mripard@kernel.org,
  linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
  linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com,
  pawiecz@collabora.com, tales.aparecida@gmail.com, workflows@vger.kernel.org,
@@ -91,51 +91,30 @@ Cc: linuxtv-ci@linuxtv.org, dave.pigott@collabora.com,
  ricardo.canuelo@collabora.com, kernel@collabora.com,
  torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
 References: <20240228225527.1052240-1-helen.koike@collabora.com>
- <20240228225527.1052240-2-helen.koike@collabora.com>
- <20240229-dancing-laughing-groundhog-d85161@houat>
+ <20240228230725.GF1659@pendragon.ideasonboard.com>
 From: Nikolai Kondrashov <spbnick@gmail.com>
-In-Reply-To: <20240229-dancing-laughing-groundhog-d85161@houat>
+In-Reply-To: <20240228230725.GF1659@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi everyone,
+On 2/29/24 01:07, Laurent Pinchart wrote:
+> On Wed, Feb 28, 2024 at 07:55:24PM -0300, Helen Koike wrote:
+>> **Join Our Slack Channel:**
+>> We have a Slack channel, #gitlab-ci, on the KernelCI Slack instance https://kernelci.slack.com/ .
+>> Feel free to join and contribute to the conversation. The KernelCI team has
+>> weekly calls where we also discuss the GitLab-CI pipeline.
+> 
+> Could we communicate using free software please ? Furthermore, it's not
+> possible to create an account on that slack instance unless you have an
+> e-mail address affiliated with a small number of companies
+> (https://kernelci.slack.com/signup#/domain-signup). That's a big no-go
+> for me.
 
-On 2/29/24 11:02, Maxime Ripard wrote:
-> On Wed, Feb 28, 2024 at 07:55:25PM -0300, Helen Koike wrote:
->> Which rating would you select?
-> 
-> 4.5 :)
-> 
-> One thing I'm wondering here is how we're going to cope with the
-> different requirements each user / framework has.
-> 
-> Like, Linus probably want to have a different set of CI before merging a
-> PR than (say) linux-next does, or stable, or before doing an actual
-> release.
-> 
-> Similarly, DRM probably has a different set of requirements than
-> drm-misc, drm-amd or nouveau.
-> 
-> I don't see how the current architecture could accomodate for that. I
-> know that Gitlab allows to store issues template in a separate repo,
-> maybe we could ask them to provide a feature where the actions would be
-> separate from the main repo? That way, any gitlab project could provide
-> its own set of tests, without conflicting with each others (and we could
-> still share them if we wanted to)
-> 
-> I know some of use had good relationship with Gitlab, so maybe it would
-> be worth asking?
+Yes, it's not ideal that we use closed-source software for communication, but 
+FWIW I'd be happy to invite you there. Perhaps if you try logging in e.g. with 
+a Google account, I'd be able to see and approve your attempt too.
 
-GitLab already supports getting the CI YAML from other repos. You can change 
-that in the repo settings.
-
-However, I think a better approach would be *not* to add the .gitlab-ci.yaml 
-file in the root of the source tree, but instead change the very same repo 
-setting to point to a particular entry YAML, *inside* the repo (somewhere 
-under "ci" directory) instead.
-
-This way all the different subtrees can have completely different setup, but 
-some could still use Helen's work and employ the "scenarios" she implemented.
+Otherwise, our video meetings are generally open to everyone and run in Jitsi.
 
 Nick
 
