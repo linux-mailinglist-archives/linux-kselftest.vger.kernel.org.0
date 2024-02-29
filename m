@@ -1,326 +1,89 @@
-Return-Path: <linux-kselftest+bounces-5662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE41386D0DB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 18:38:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7285F86D2E7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 20:13:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D76B6B2612E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 17:37:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A86BF1C21927
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 19:13:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CBB7757E6;
-	Thu, 29 Feb 2024 17:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qBmR69wi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6181E1350C9;
+	Thu, 29 Feb 2024 19:13:15 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8976CC16
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Feb 2024 17:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE888134436;
+	Thu, 29 Feb 2024 19:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709228245; cv=none; b=GBXjHJ2g+Piyyx4ZxjDktty0xy3eA9ivgXavNM6tsWANMnwyusgoY91fSZM38qe/yf7PQOFgMG950RIOkLtrqwkLmKKqeTqUY+WxeqyfoGIoqGAv7COHpP0v9kwfuhJoU6hsBh/2gz7rWzJV/30YA4kKXOiaJLq0Lme2VUE6PCo=
+	t=1709233995; cv=none; b=XUmY95We0CIyco+M3wUnh7wszFxWXitWmK5m0fCGlPWnUZ43+o3pcq2yBvxpRvXi/Drh3JnftDTjdi+8gRFHakQSA1NkDIdq14LjnUe5/QAnIsPMHXDEEDJhRstmYvWT73UlgBWzrzWOgmmsxmsLPmnKNT0SY3dp2PsVmSbBwDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709228245; c=relaxed/simple;
-	bh=6JoRL5mO7fLMulB/6t3qO6B3yI0tCBFSDVEtturgX6Q=;
+	s=arc-20240116; t=1709233995; c=relaxed/simple;
+	bh=68Mvbb3k7QKn33UXowNqEyn3+hdJ3GOVrggv3kvEHxA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Akd9nh5u0Exn3Jq021Idtw2E1lQbsa0SukxFZihN6CpL41A0R6HazJ2Nk8DhkPFnxHTjuYdauVqwuOhyD/TBZ/h3URPdyJqjie7Uj7GZYJaQSv/exBzomsYK20Px/FTGQJxitf0d+tlcSM3mxAggLx+9stYajwZgHBzl//OijF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qBmR69wi; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dcc7cdb3a98so1252243276.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Feb 2024 09:37:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709228241; x=1709833041; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DEdtN4KatB5c+IeKPAjIpl5oCocbt9zgSK7rRSBe8Gw=;
-        b=qBmR69wiyGtIEr0VaALytDeKuJysFErTN5nqPjsMMXNJBQxoxWOiuXsKZzXKjzIvso
-         CP4G8N6xyRPwYdv0lSPYMgqD8IGw7CGl9678yEHAdI/0zMzrsGCIDBxRS6Oz+3K3JZHY
-         WVKvkp9xzR0KqBDzdglqdzpzv2ns29AK+fjKWlWodH25NE4GFgJId/bJY+iEEaCfCvPy
-         HRp81fYvD00vCZg/yMKpiFvd2/cGTnYZR2usDAiB4Uvimk2GhBDp5IKwoRNYc5pbReEN
-         ck82GDqxhFQ9tecx6MQIl7mlToi/3U5ns04wXG4tFj68pas0QdeYVkb7DeITKczUwGOM
-         3sdw==
+	 To:Cc:Content-Type; b=HxxK06VBQnwwVggGPz2uUSkUChRxhlPPplJdal84d4fLHwnaa7v1fkxa/xb4cn4189hIeAlDyP1pfZo5QmPy5kRNAEOleiKzkrBWW4xBQwqDpASlgh98vrZ82NxI1MSU+gJFYl2Su3R+dC3oKDTaX+hBDmh/D7Q1SqjGB41BXpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a0c7c87dc6so12061eaf.1;
+        Thu, 29 Feb 2024 11:13:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709228241; x=1709833041;
+        d=1e100.net; s=20230601; t=1709233993; x=1709838793;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DEdtN4KatB5c+IeKPAjIpl5oCocbt9zgSK7rRSBe8Gw=;
-        b=v6mbr9fv7zyW05fd/eRMhsXYG4fKiYIeXFEKDv3yylIbyAFY6T5uv6H6/Zn2+QjrGB
-         /UyAwd4/JbSAPV69gbo2P08IfxGfg8uXG3qzrFd11iq+hrxgnCeZjN/HhbOZywjmrmqB
-         oSisRkZCfrRR6lVJ33S+CZhJQeVVZJUlAhyoZqWc5l0staVwlPoHAO0/FND7+LtGSHUN
-         P4o5wBKzzlaQZtvEsCgcL+JEY7AH7d2uehIsjp+xWLRlqlB8bEvjtcoC9hc4rcHsK9oq
-         6asBkr5wzApZc3pVvT4z1+/ee4iKa5zZ6D2IKsmMwAi6rUEHdSF6ZeD3NJbXZc8PGq1g
-         mLhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVWuQMOHmMIA7fvwMuBA5KZ267mo1apVb5eJSQZXi0yKM4RItsZbkEIEq5HEMdKOdvB0W/GASisqahmCoxCIYyRJwVAO6ZGpplnxbz9kI78
-X-Gm-Message-State: AOJu0Yz1rhM1uMVooDuaromlbp6PKraSkIu/0Mc3J2ywJ+uoNEowMfp1
-	hbDdKylkRtg6QS1WCjlTBrPczjDoafIpBTzPVCe0AASgESgp50x8n1+jR0eAqFoFasjJS8HrPeZ
-	nhGawlHCYspkGQ1EJqsgum+k0QtsItYDXuLwcIbwJX7fpRkDYig==
-X-Google-Smtp-Source: AGHT+IHvznw17zgRVPYSvuwcu1wSWN+3jALJte08neK70FS20mv6r2nPkp9Hco5l+WYagOeC6BiV3jQY1CYulIXuymI=
-X-Received: by 2002:a25:d8cb:0:b0:dc6:d7de:5b29 with SMTP id
- p194-20020a25d8cb000000b00dc6d7de5b29mr3325117ybg.10.1709228241207; Thu, 29
- Feb 2024 09:37:21 -0800 (PST)
+        bh=68Mvbb3k7QKn33UXowNqEyn3+hdJ3GOVrggv3kvEHxA=;
+        b=sgTUr2Ti4J/P7cXkwRXVnJCnWuaZXMqRtOSLW/cXdpO01d6dnppq7a5mXzYJmoX1c+
+         xwKC0dFfkex/Cc7M1gUCfqarDwnPjsbLwb19msxUk6C5e4XzWOKJGvqEUcJcHYDw38Zf
+         zs+EzKoOW5BYzCwSc48bSNdvOnTko9l5tdiwndWvm9jq15ja/69QCscMbGRCSuBYpANO
+         mcT7yIrGKjNuSEUhkyrsHH79yd48ouDhZvca4/DkIZ8R28u0L/bJEtgOG3UweioKszwH
+         pNrrSxpCCcvSbQ1GMbpxHhmqHSckMHCMFjmhb0lgFctapgidqQdEx5e/mWu3CcFWhqA0
+         iLYg==
+X-Forwarded-Encrypted: i=1; AJvYcCX4RqQXk7RI2rExytGz8rEww5ecvs92xuhOCT8WoU0ph0EFUO+YHjfmg2XsgjauUb5a46UEuGy9NGYFTyIyph47Sf5qW+lh5xzifRqhw5vBk9Y7iJNCduz9O15ClC85gxKSmfpmNNHi+x8p/EjXlo2bumxZY0ArbHV6W4U7l/gEWB3msZne2noI28URDt6FYdNM0sv08oVgdnQaZWFrqh3nQUml
+X-Gm-Message-State: AOJu0YzkkpLvz26ATR9Px2FO3x0UBpFAvFKOjg09PHD8Cnjqu9n3RPgO
+	TV4e+MlTafzi5K8i/LWxx9++brv9sxzcqI/RU33jkkXEVbkdNP1LTc1omn6Ksx6COBX4dAQHJ3n
+	jBklMuRY9my9n4j8ql3M2HKCwn2c=
+X-Google-Smtp-Source: AGHT+IFzdeSRC0oF4uYm+ATN7F6IC2O/WKB17N/8gWXOt1JzeF+PGQ+XImDO55nGGMnGakXbb12L7seyAmOMa7GGSHY=
+X-Received: by 2002:a05:6820:352:b0:5a0:6ef3:ed8e with SMTP id
+ m18-20020a056820035200b005a06ef3ed8emr3028823ooe.1.1709233993024; Thu, 29 Feb
+ 2024 11:13:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240229092035.1325113-1-usama.anjum@collabora.com>
-In-Reply-To: <20240229092035.1325113-1-usama.anjum@collabora.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Thu, 29 Feb 2024 09:37:09 -0800
-Message-ID: <CABdmKX2r=9+dK71qrp4iU8Dkmt=CF1oWWZFmi9Ny+0iphBoynw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] selftests/dmabuf-heap: conform test to TAP format output
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>, kernel@collabora.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20240227073924.3573398-1-li.meng@amd.com> <f1964180-458f-4c22-90f6-bda2aee5dbf8@amd.com>
+In-Reply-To: <f1964180-458f-4c22-90f6-bda2aee5dbf8@amd.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 29 Feb 2024 20:13:01 +0100
+Message-ID: <CAJZ5v0hHS2YSuQnXbyHOqErEaz1BPbxO5pWPa4PY6fKQch1VNg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: amd-pstate: adjust min/max limit perf
+To: Mario Limonciello <mario.limonciello@amd.com>, Meng Li <li.meng@amd.com>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>, 
+	Deepak Sharma <deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Shimmer Huang <shimmer.huang@amd.com>, Perry Yuan <Perry.Yuan@amd.com>, 
+	Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Borislav Petkov <bp@alien8.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 29, 2024 at 1:21=E2=80=AFAM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+On Tue, Feb 27, 2024 at 4:36=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> Conform the layout, informational and status messages to TAP. No
-> functional change is intended other than the layout of output messages.
->
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> Changes since v2:
-> - Minor improvements in test_alloc_zeroed() results
->
-> Changes since v1:
-> - Update some more error handling code
-> ---
->  .../selftests/dmabuf-heaps/dmabuf-heap.c      | 234 +++++++-----------
->  1 file changed, 88 insertions(+), 146 deletions(-)
->
-> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/t=
-esting/selftests/dmabuf-heaps/dmabuf-heap.c
-> index 890a8236a8ba7..bdc157ba542fd 100644
-> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> @@ -15,6 +15,7 @@
->  #include <linux/dma-buf.h>
->  #include <linux/dma-heap.h>
->  #include <drm/drm.h>
-> +#include "../kselftest.h"
->
->  #define DEVPATH "/dev/dma_heap"
->
-> @@ -90,14 +91,13 @@ static int dmabuf_heap_open(char *name)
->         char buf[256];
->
->         ret =3D snprintf(buf, 256, "%s/%s", DEVPATH, name);
-> -       if (ret < 0) {
-> -               printf("snprintf failed!\n");
-> -               return ret;
-> -       }
-> +       if (ret < 0)
-> +               ksft_exit_fail_msg("snprintf failed!\n");
->
->         fd =3D open(buf, O_RDWR);
->         if (fd < 0)
-> -               printf("open %s failed!\n", buf);
-> +               ksft_exit_fail_msg("open %s failed: %s\n", buf, strerror(=
-errno));
-> +
->         return fd;
->  }
->
-> @@ -140,7 +140,7 @@ static int dmabuf_sync(int fd, int start_stop)
->
->  #define ONE_MEG (1024 * 1024)
->
-> -static int test_alloc_and_import(char *heap_name)
-> +static void test_alloc_and_import(char *heap_name)
->  {
->         int heap_fd =3D -1, dmabuf_fd =3D -1, importer_fd =3D -1;
->         uint32_t handle =3D 0;
-> @@ -148,16 +148,12 @@ static int test_alloc_and_import(char *heap_name)
->         int ret;
->
->         heap_fd =3D dmabuf_heap_open(heap_name);
-> -       if (heap_fd < 0)
-> -               return -1;
->
-> -       printf("  Testing allocation and importing:  ");
-> +       ksft_print_msg("Testing allocation and importing:\n");
->         ret =3D dmabuf_heap_alloc(heap_fd, ONE_MEG, 0, &dmabuf_fd);
-> -       if (ret) {
-> -               printf("FAIL (Allocation Failed!)\n");
-> -               ret =3D -1;
-> -               goto out;
-> -       }
-> +       if (ret)
-> +               ksft_exit_fail_msg("FAIL (Allocation Failed!)\n");
-> +
->         /* mmap and write a simple pattern */
->         p =3D mmap(NULL,
->                  ONE_MEG,
-> @@ -165,11 +161,8 @@ static int test_alloc_and_import(char *heap_name)
->                  MAP_SHARED,
->                  dmabuf_fd,
->                  0);
-> -       if (p =3D=3D MAP_FAILED) {
-> -               printf("FAIL (mmap() failed)\n");
-> -               ret =3D -1;
-> -               goto out;
-> -       }
-> +       if (p =3D=3D MAP_FAILED)
-> +               ksft_exit_fail_msg("FAIL (mmap() failed)\n");
->
->         dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
->         memset(p, 1, ONE_MEG / 2);
-> @@ -179,70 +172,58 @@ static int test_alloc_and_import(char *heap_name)
->         importer_fd =3D open_vgem();
->         if (importer_fd < 0) {
->                 ret =3D importer_fd;
-> -               printf("(Could not open vgem - skipping):  ");
-> +               ksft_test_result_skip("Could not open vgem\n");
->         } else {
->                 ret =3D import_vgem_fd(importer_fd, dmabuf_fd, &handle);
-> -               if (ret < 0) {
-> -                       printf("FAIL (Failed to import buffer)\n");
-> -                       goto out;
-> -               }
-> +               ksft_test_result(ret >=3D 0, "Import buffer\n");
->         }
->
->         ret =3D dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
->         if (ret < 0) {
-> -               printf("FAIL (DMA_BUF_SYNC_START failed!)\n");
-> +               ksft_print_msg("FAIL (DMA_BUF_SYNC_START failed!)\n");
->                 goto out;
->         }
->
->         memset(p, 0xff, ONE_MEG);
->         ret =3D dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_END);
->         if (ret < 0) {
-> -               printf("FAIL (DMA_BUF_SYNC_END failed!)\n");
-> +               ksft_print_msg("FAIL (DMA_BUF_SYNC_END failed!)\n");
->                 goto out;
->         }
->
->         close_handle(importer_fd, handle);
-> -       ret =3D 0;
-> -       printf(" OK\n");
-> +       ksft_test_result_pass("%s\n", __func__);
-> +       return;
->  out:
-> -       if (p)
-> -               munmap(p, ONE_MEG);
-> -       if (importer_fd >=3D 0)
-> -               close(importer_fd);
-> -       if (dmabuf_fd >=3D 0)
-> -               close(dmabuf_fd);
-> -       if (heap_fd >=3D 0)
-> -               close(heap_fd);
-> +       munmap(p, ONE_MEG);
-> +       close(importer_fd);
-> +       close(dmabuf_fd);
-> +       close(heap_fd);
->
-> -       return ret;
-> +       ksft_test_result_fail("%s\n", __func__);
->  }
->
-> -static int test_alloc_zeroed(char *heap_name, size_t size)
-> +static void test_alloc_zeroed(char *heap_name, size_t size)
->  {
->         int heap_fd =3D -1, dmabuf_fd[32];
->         int i, j, ret;
->         void *p =3D NULL;
->         char *c;
->
-> -       printf("  Testing alloced %ldk buffers are zeroed:  ", size / 102=
-4);
-> +       ksft_print_msg("Testing alloced %ldk buffers are zeroed:\n", size=
- / 1024);
->         heap_fd =3D dmabuf_heap_open(heap_name);
-> -       if (heap_fd < 0)
-> -               return -1;
->
->         /* Allocate and fill a bunch of buffers */
->         for (i =3D 0; i < 32; i++) {
->                 ret =3D dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]=
-);
-> -               if (ret < 0) {
-> -                       printf("FAIL (Allocation (%i) failed)\n", i);
-> -                       goto out;
-> -               }
-> +               if (ret)
-> +                       ksft_exit_fail_msg("FAIL (Allocation (%i) failed)=
-\n", i);
-> +
->                 /* mmap and fill with simple pattern */
->                 p =3D mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED=
-, dmabuf_fd[i], 0);
-> -               if (p =3D=3D MAP_FAILED) {
-> -                       printf("FAIL (mmap() failed!)\n");
-> -                       ret =3D -1;
-> -                       goto out;
-> -               }
-> +               if (p =3D=3D MAP_FAILED)
-> +                       ksft_exit_fail_msg("FAIL (mmap() failed!)\n");
-> +
->                 dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
->                 memset(p, 0xff, size);
->                 dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
-> @@ -251,48 +232,38 @@ static int test_alloc_zeroed(char *heap_name, size_=
-t size)
->         /* close them all */
->         for (i =3D 0; i < 32; i++)
->                 close(dmabuf_fd[i]);
-> +       ksft_test_result_pass("Allocate and fill a bunch of buffers\n");
->
->         /* Allocate and validate all buffers are zeroed */
->         for (i =3D 0; i < 32; i++) {
->                 ret =3D dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]=
-);
-> -               if (ret < 0) {
-> -                       printf("FAIL (Allocation (%i) failed)\n", i);
-> -                       goto out;
-> -               }
-> +               if (ret < 0)
-> +                       ksft_exit_fail_msg("FAIL (Allocation (%i) failed)=
-\n", i);
->
->                 /* mmap and validate everything is zero */
->                 p =3D mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED=
-, dmabuf_fd[i], 0);
-> -               if (p =3D=3D MAP_FAILED) {
-> -                       printf("FAIL (mmap() failed!)\n");
-> -                       ret =3D -1;
-> -                       goto out;
-> -               }
-> +               if (p =3D=3D MAP_FAILED)
-> +                       ksft_exit_fail_msg("FAIL (mmap() failed!)\n");
-> +
->                 dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
->                 c =3D (char *)p;
->                 for (j =3D 0; j < size; j++) {
->                         if (c[j] !=3D 0) {
-> -                               printf("FAIL (Allocated buffer not zeroed=
- @ %i)\n", j);
-> +                               ksft_print_msg("FAIL (Allocated buffer no=
-t zeroed @ %i)\n", j);
->                                 break;
->                         }
->                 }
->                 dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
->                 munmap(p, size);
->         }
-> +
-> +       ksft_test_result(i =3D=3D 32, "Allocate and validate all buffers =
-are zeroed\n");
+> On 2/27/2024 01:39, Meng Li wrote:
+> > The min/max limit perf values calculated based on frequency
+> > may exceed the reasonable range of perf(highest perf, lowest perf).
+> >
+> > Signed-off-by: Meng Li <li.meng@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-This part is still incorrect since we will always get i =3D=3D 32 as long
-as the buffer can be allocated and mapped, regardless of the content
-of the buffer which this test is supposed to be checking.
+Applied as 6.9 material, thanks!
 
