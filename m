@@ -1,116 +1,141 @@
-Return-Path: <linux-kselftest+bounces-5608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A9CD86C3F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:44:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D32786C437
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:52:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACCF91C22489
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 08:44:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3789A28A0C8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 08:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F135481CE;
-	Thu, 29 Feb 2024 08:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A57456451;
+	Thu, 29 Feb 2024 08:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z34O1fiM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qNexrZMo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C538537E9;
-	Thu, 29 Feb 2024 08:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC63454FA9;
+	Thu, 29 Feb 2024 08:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709196208; cv=none; b=HGBQB884wecxYFqJUB3u/J6Zm8dj/JaN/YTyb1Kq+vtr1bvYB+TKOT57a87XB8GOWVRPN8RWEvge4ijlVTiQRTswnEDj7/9px9pwySWFVboZhFagAHm2cnqzQM5+VOjIDaxz9iAzfJJPOSCMTNFFz1BwIq5Kbpv4UfWX8X/2abo=
+	t=1709196742; cv=none; b=owYsw1+F8bm6j8izg+D/Z/Q+BBESBQqwbGqxvyuQuSvBTKdmJwCH3zuNiXuEq0mYPUR+bCt2r/CTZqKi9p/X1fXq1kZUudTDiLhpADk5WZW7hp8UNxwL1O6PTlkYhsKpSt44kg7G3dznyKkJPgbFPe2a5KBd5YqmohQdTdlS0Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709196208; c=relaxed/simple;
-	bh=OtJFUbFzli0ao9Kk04l+WlQKFdrjGXqosC1GcMlUSc8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j+9NSbqtKf34ZCe4+QCpRsZ+TLlsHEgTmR1AalZAo3Ljwy0j6DpERBS9dyrliHBA8fSzVoQVmNxZi2GjZW0c4rsOez36a/Nmkk7pLW3ilH3VHbBj0srBlgh8yMWoKbQYOlrtO39wS+b4MBc2cOho6Nm43h8YVFDRp2F6VAeU110=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z34O1fiM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D39AC43390;
-	Thu, 29 Feb 2024 08:43:27 +0000 (UTC)
+	s=arc-20240116; t=1709196742; c=relaxed/simple;
+	bh=h+PuR60VQc/pChn5sYT/Cgrh7xTZzneJkEBH+LhG32A=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=GAmtraSvhxoHkBrhSjAYxnwntz32AqE5EaydNcKkoo6G2cQM22S3CTEwX5I9/Sg3EWBjD3xR+WOunWktUrkG4ukOjIrUBya2Ms5+DwypwUjajYUOl+Lqi/JD/LxT6SfsDJd4R51ST9XdcWH/xl7C9v5TzlVnQZmR5NbwIwvYS8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qNexrZMo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD97AC43394;
+	Thu, 29 Feb 2024 08:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709196207;
-	bh=OtJFUbFzli0ao9Kk04l+WlQKFdrjGXqosC1GcMlUSc8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z34O1fiMdBDeainA1ZPjTfVLielaOBKLFzX80CW3c98pKgURmEjTwJcXGsOqiJ0Ia
-	 ZwmkHPVHgPYH9oMMqExQdZYthC0nFc5SVVDwn7Uz689/6Fs4J5TA5kom9TGKWGv4UM
-	 vVlUAwe7W0KNMMU18vYMLOViKVsKAjuFzlj43qvt8EN2qxWNC8PZ8RbbyW7I4x3JTi
-	 8PNYG4kPaOXvSqWLsmuQU00wkUA0cyTxDrvfCX2SB7KBkYkHVQVhVckkTmf/D3Bk3m
-	 pM5EwmORJVumtGEpriYqslBnnsSDYb/04nHzojvoSRNLCcSJsBKdW07GUWZTvuUjVC
-	 WKrO2LBS3O2yg==
-Date: Thu, 29 Feb 2024 09:43:25 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org, 
-	dave.pigott@collabora.com, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com, pawiecz@collabora.com, 
-	spbnick@gmail.com, tales.aparecida@gmail.com, workflows@vger.kernel.org, 
-	kernelci@lists.linux.dev, skhan@linuxfoundation.org, kunit-dev@googlegroups.com, 
-	nfraprado@collabora.com, davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr, 
-	laura.nao@collabora.com, ricardo.canuelo@collabora.com, kernel@collabora.com, 
-	torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
-Subject: Re: [PATCH 0/3] kci-gitlab: Introducing GitLab-CI Pipeline for
- Kernel Testing
-Message-ID: <20240229-rampant-blue-llama-c4ee7d@houat>
-References: <20240228225527.1052240-1-helen.koike@collabora.com>
- <20240228230725.GF1659@pendragon.ideasonboard.com>
+	s=k20201202; t=1709196741;
+	bh=h+PuR60VQc/pChn5sYT/Cgrh7xTZzneJkEBH+LhG32A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qNexrZMoKDoA+1DL96h/s746iYZhicncl4TcZHi5yY/4ffvbifGSPwHxX9FfBhebE
+	 mbNHdhPCjXkAyKyemDbgdBGGlDMkah6Zdkah5W17aWF1UMAbje+8vWgFVQ0KArY0nk
+	 Oxfb9RyLZTkEPZ0ck80RicUdHVvVxgPZOxKMWwstb/CA7VNVbmuA3+yLRxUDMAnUS4
+	 w5gpw3dWvpfzet0SzyPlBLkQ415JXPCARdytJ8aAdJiAnZr8kUjv/qtlQPoUS/rTxR
+	 tU3prhQJQ0CmLrPm3emcsK9rHRm6AFJtgMlLqh9/qsoF03SiO94geK78G+9d/WptWI
+	 cFaVzYODZ3dJQ==
+Date: Thu, 29 Feb 2024 17:52:16 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] tracing/probes: Support function parameter
+ access from return probe
+Message-Id: <20240229175216.96bb2e16b510f81e3802ef23@kernel.org>
+In-Reply-To: <20240229161320.978190f42dcc1a521c192e7d@kernel.org>
+References: <170891987362.609861.6767830614537418260.stgit@devnote2>
+	<Zd9eBn2FTQzYyg7L@krava>
+	<20240229145139.a215085c44add62302463312@kernel.org>
+	<20240229153855.6fe3fb454cf56eebc6ea9953@kernel.org>
+	<20240229161320.978190f42dcc1a521c192e7d@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eu5m6zbxesqv7xj2"
-Content-Disposition: inline
-In-Reply-To: <20240228230725.GF1659@pendragon.ideasonboard.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Thu, 29 Feb 2024 16:13:20 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
---eu5m6zbxesqv7xj2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Thu, 29 Feb 2024 15:38:55 +0900
+> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> 
+> > Hmm, this seems arch_rethook_trampoline caused the issue.
+> > 
+> > And curiously, it depends on the number of stored data.
+> > 
+> > OK:
+> > /sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3' >> dynamic_events 
+> > /sys/kernel/tracing # echo 1 > events/fprobes/enable 
+> > 
+> > NG:
+> > /sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3 $arg4' >> dynamic_events 
+> > /sys/kernel/tracing # echo 1 > events/fprobes/enable 
+> > 
+> > I also confirmed that on 'vfs_write' caused the same result. 3 arguments(24 bytes) is OK,
+> > but 4 arguments (32bytes) is NG.
+> 
+> And this may be the fprobe bug. kretprobe events doesn't show this issue.
+> 
+> OK:
+> /sys/kernel/tracing # echo 'r vfs_read $arg*' >> kprobe_events 
+> /sys/kernel/tracing # echo 1 > events/kprobes/enable 
+> 
+> But this is strange because both uses same rethook...
 
-On Thu, Feb 29, 2024 at 01:07:25AM +0200, Laurent Pinchart wrote:
-> > Chat Discussions
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >=20
-> > For those interested in further discussions:
-> >=20
-> > **Join Our Slack Channel:**
-> > We have a Slack channel, #gitlab-ci, on the KernelCI Slack instance htt=
-ps://kernelci.slack.com/ .
-> > Feel free to join and contribute to the conversation. The KernelCI team=
- has
-> > weekly calls where we also discuss the GitLab-CI pipeline.
->=20
-> Could we communicate using free software please ? Furthermore, it's not
-> possible to create an account on that slack instance unless you have an
-> e-mail address affiliated with a small number of companies
-> (https://kernelci.slack.com/signup#/domain-signup). That's a big no-go
-> for me.
+Lol, I haven't allocate the entry data size when initialize rethook.
+That's a bug.
+Please try below.
 
-Yeah, and that list looks super restrictive and arbitrary. Like,
-microsoft is there but kernel.org isn't?
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 6cd2a4e3afb8..9ff018245840 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -189,9 +189,6 @@ static int fprobe_init_rethook(struct fprobe *fp, int num)
+ {
+ 	int size;
+ 
+-	if (num <= 0)
+-		return -EINVAL;
+-
+ 	if (!fp->exit_handler) {
+ 		fp->rethook = NULL;
+ 		return 0;
+@@ -199,15 +196,16 @@ static int fprobe_init_rethook(struct fprobe *fp, int num)
+ 
+ 	/* Initialize rethook if needed */
+ 	if (fp->nr_maxactive)
+-		size = fp->nr_maxactive;
++		num = fp->nr_maxactive;
+ 	else
+-		size = num * num_possible_cpus() * 2;
+-	if (size <= 0)
++		num *= num_possible_cpus() * 2;
++	if (num <= 0)
+ 		return -EINVAL;
+ 
++	size = sizeof(struct fprobe_rethook_node) + fp->entry_data_size;
++
+ 	/* Initialize rethook */
+-	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler,
+-				sizeof(struct fprobe_rethook_node), size);
++	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler, size, num);
+ 	if (IS_ERR(fp->rethook))
+ 		return PTR_ERR(fp->rethook);
+ 
 
-I'm sure there's a reason, but we should at the very least open it to
-everyone.
-
-Maxime
-
---eu5m6zbxesqv7xj2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZeBDrAAKCRDj7w1vZxhR
-xT7gAP4oRjk5cvZCFl9XtJxHv+2sUJDNxvUgOUs8Px07O0eymQEAgtIrH290cK2V
-mFnAbb5kwrTnyNl2XQDimzTR0qN31Q4=
-=Cc5W
------END PGP SIGNATURE-----
-
---eu5m6zbxesqv7xj2--
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
