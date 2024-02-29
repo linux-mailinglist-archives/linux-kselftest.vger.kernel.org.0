@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-5667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D02786D419
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 21:22:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2079786D449
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 21:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FEAB1C20D60
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 20:22:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C841D289F5D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 20:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADAC513F42C;
-	Thu, 29 Feb 2024 20:22:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE101428EA;
+	Thu, 29 Feb 2024 20:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GxHDIHcl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fwJQeXTg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9BE2E410;
-	Thu, 29 Feb 2024 20:22:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925321428E9;
+	Thu, 29 Feb 2024 20:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709238154; cv=none; b=mRkEYglSUPqrs74IvIsPi+Sx+qia0gf/6S7fm6vgholFV7IBcIqmjeBJjct3abHdtKXdKucnEsURwrJwo/EAkw68D0OK81f8yn8YrbPKAkFj0PX6mLTVOxSjEY9vLiPpraNNMZlUdAnTpwR8tgadCRK3sLQ4Zh5mY7b3jwQfj0k=
+	t=1709238866; cv=none; b=i9b7zWHolHnJKw+K0LPCPIiL/55BQh2SFadqGmHtXoiD70L8rv4Eleqt3elyAb/hj3W2TPY1S0hvIuC44ytgck7Tm/H+jAFhHJiCqK5HNbAZBzMaxkASzYbC5XbVtAKV26NG10qwDGk1d/M/7UiAJ++LiFFJjx1vDalB1mNJQ00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709238154; c=relaxed/simple;
-	bh=y4yZzfmObu3if3o5OVkpvSi1I0Su6j5M4Vm897qE7H8=;
+	s=arc-20240116; t=1709238866; c=relaxed/simple;
+	bh=/qMOZjK4wOU66llXQWpikqHl04X9ZcNrBvWKO/NBqYs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZX/Le4WXBvYN61BgmD77hVQB+yqiFE64ErcbVbIGq/5SwIW/OQVlCuj5NM2NOiM5i4T5vSjFxW+WKonM7b1UBn0YNXGKjdHC8R2oP6j12Ar9vPzmhHnvtrjTkoiTNRB2HYgjlj4MlviCOYAvzqON0mbm9P9hh+zXEmHkoDesoBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GxHDIHcl; arc=none smtp.client-ip=209.85.166.46
+	 In-Reply-To:Content-Type; b=krO0HSXrsTHccqADX407yIVaXwnkE/bCL7D5yWSZFx49+ayKe6pMnosXs0N0PPDcMPilsVyJ3NdjkI+T8xMZ+r+299OjGkQ5uP40NDFU92xue2Tf9NdJb4h7IQyFebkg/6LslG3WH5GvxJqTALr0eLpJs8KIytCSVmx9FCOrWgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fwJQeXTg; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7c7770fd687so72336339f.3;
-        Thu, 29 Feb 2024 12:22:32 -0800 (PST)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7beda6a274bso56162039f.2;
+        Thu, 29 Feb 2024 12:34:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709238152; x=1709842952; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709238863; x=1709843663; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=DiQEUxWPorvEFhlZl/UzCLiVJ40S44pM/WUqOSrDV2I=;
-        b=GxHDIHcl72HnfkuFDFEy5gK7vKxDgHArDrF3bFOVy16QYo+d07qs3kKWXK1QUvQ99L
-         S5vqX1Ob5p1p0dUOIEJ4tNSFu52ZY8Skh4ronhkKzVKIdDc71s4pM/PSgwxWnNWzPcpk
-         J35s999WlQWNFj4D6oa6gPiau9/GfNibPjaL3/0fMUIwwD31yh74j3mu6rTtZyE3lHu/
-         l5pwG99o5NGtFO7DM1IxioJDQ9GGLXbN+wxD+9iP7ylUTZNj6Ss2rznYvUPR16UpEZL6
-         k7y0L8YlR5EAF5ILUXx4oLkjJJv0ei+JP+/ktUnoLEbw02n8J+EUd72/OajxuZtmLiTF
-         2WRA==
+        bh=uWyCbx/KnUHajBSclYbeo2RRj4QEB1MMvqG8/oUha1A=;
+        b=fwJQeXTg/ThrAr1XoDCl0JKncohRKtEBiy6fEngFlueulvd4bBTSudnOnziiifLcpe
+         L18k8f3kfpUWapD8Z/Grd+beC8H+fnTAySeZQMbIs7NPQqV43eXVBFeGn3e1JKHdZx+B
+         YdB/VMT/asvQUCi42wwrS22okJ3PxQBiDDRK3wJ+pBVd0qnojQ8ciDHycKY4yBL0b5te
+         fOVLG7v2Xwy3ZIRmKG2PQhLmjA9fEZHcE1ndEhvEg7AA53eUdebaoEA5bgedZ/SbBbVy
+         45q5+oJfr1cwbuOhgZroEv3hCOkGREvBY7GJjh27yj4oocANev6fP+YoK3aFHumz0KIQ
+         i1SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709238152; x=1709842952;
+        d=1e100.net; s=20230601; t=1709238863; x=1709843663;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DiQEUxWPorvEFhlZl/UzCLiVJ40S44pM/WUqOSrDV2I=;
-        b=FLs472FGLNF68990GyOu80XN/0fPMHuZnZ7ToYYGGv0focddekA1WpKioq4UhKInLM
-         abrM5PSr39ACx3r/HzTxino8oWdCYb2lMW1WeUGql1BqAMfxtGTKV/DRI0cQfXst2x/N
-         EOvYWeU+vY8GH1n0oH21dcFHBIafpBAeQSoxjkF+srtVi+0+hzYzL54+4DRxxRTB/3ZO
-         xROPvBJrHdLo3uAt0Fyi4fLSibrcdgIvNLvfU9bqzQD7JgS+0CngdkokWsDNOasPXN8m
-         OcM707u32VYnI56FDqd0DDBPcWjRQWTuI8PoqOGI1Jb2GQz7URQC1sDXxCiBUa0sGy/E
-         wyOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkMZw1HidzBT4r3UdcKY64FBuQuJqcot1F/iGu8AOcpZTbAytBQXqvX9+RSBI2lkcGRCHtVeM/YO5y8THliDFd9VNSZ7hdaHMb8bbciZfH6qwxrtP6V003ixjNSLUm89Q7cSLc1Y2zJYDwUGCpppy5kpXCCerOL2S7z8sl5GcuvEuNoxuuyaQHPwq/
-X-Gm-Message-State: AOJu0YwyEzcF55gnW1dv6F1dfm/AoTIi0HLmqRv1a09uht1OGpRSzJvd
-	yKYEUHXUvJ1w5iS2cfKD3SMk40y1wTJyWsz9Did4tyym6/bA2LeE
-X-Google-Smtp-Source: AGHT+IEYHL0HoEr8EMQXwGkytuWtT6PcVOkjYRqPrG7RLwGReCeAW3Om2cnYSzjMZHFDguscX5bpWg==
-X-Received: by 2002:a6b:3e45:0:b0:7c8:af2:7a8a with SMTP id l66-20020a6b3e45000000b007c80af27a8amr37321ioa.20.1709238152184;
-        Thu, 29 Feb 2024 12:22:32 -0800 (PST)
+        bh=uWyCbx/KnUHajBSclYbeo2RRj4QEB1MMvqG8/oUha1A=;
+        b=ZGpICdHLb83nG2g0/MRz658nzZBqFxm2y2kbWk4Qz1+rNCNq9gPtReEOsthu0HQCj/
+         SuQokAe1kvLcETJXtUOhpxSVqgJMl9IZ0z73CNJqm2OnbG/IkEzCdpflDZ9vYJQ7RKv0
+         Qfs3qHutKeXRZMc8wXRYSboQF+/7Rw2ubgtYqARCz2DjDPlS62874MW5/jhyOvnx7vTg
+         yukRJ7UUy2v+nr0F4K0P+RyghduhjVJTFa21NBNTqZkUhPmOozcp+CQOcEbWLDtBqjgw
+         oCobcI/Qqwi3KsKsjv+FRkcog+sdyEIOuAyiVVbydW9KvFn2D7LO+9mVb10Au0J+625F
+         iJAA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPNanlLunQ0cQs9AwYANwsqGQf7D7MOPM4/rxsJ9UFINGdY8S84oyQx8coimDbM9SbAeAhRRwhS0nevaZNLtjN+RzXq0k8wOe87gGdMj97Pc+UvKZBGiYoxmD7ekdHtli/7QrrEFm46UPKZI/s2PSaQE/kGFqqS5Uuu0Hghzl6SI5eJAIB
+X-Gm-Message-State: AOJu0YyFClFbC656RUYW9ZcazTrCaHNtQpBFpwq0ol52mmYVEs3k5Ujx
+	/CeoSDsAQx3H1kZiwtIIX0ZCLpxj8f06lygtu3nYQ4JlqUzx7k7y
+X-Google-Smtp-Source: AGHT+IEiAApsVihXRSxIc8hc0cSvprBrtWT8BW9l2wSnEkIraPiFiEUorC/zL7B+dTpU6MDQy1A/xw==
+X-Received: by 2002:a05:6602:3fc5:b0:7c7:f06c:eeff with SMTP id fc5-20020a0566023fc500b007c7f06ceeffmr81949iob.16.1709238862775;
+        Thu, 29 Feb 2024 12:34:22 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fo1-20020a056638648100b0047462f8adfdsm471249jab.138.2024.02.29.12.22.30
+        by smtp.gmail.com with ESMTPSA id bp11-20020a056638440b00b004744c109a60sm463991jab.122.2024.02.29.12.34.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 12:22:31 -0800 (PST)
+        Thu, 29 Feb 2024 12:34:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <015563c8-8075-4a7e-bf33-74333aaca648@roeck-us.net>
-Date: Thu, 29 Feb 2024 12:22:29 -0800
+Message-ID: <228845bb-1a90-42eb-b2d7-47007734535e@roeck-us.net>
+Date: Thu, 29 Feb 2024 12:34:20 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,30 +78,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10] lib: checksum: Use aligned accesses for ip_fast_csum
- and csum_ipv6_magic tests
+Subject: Re: lock warnings in dev_addr_lists test
 Content-Language: en-US
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Russell King (Oracle)" <linux@armlinux.org.uk>,
- David Laight <David.Laight@aculab.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Andrew Morton <akpm@linux-foundation.org>, Helge Deller <deller@gmx.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Parisc List <linux-parisc@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Palmer Dabbelt <palmer@rivosinc.com>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- KUnit Development <kunit-dev@googlegroups.com>
-References: <b13b8847977d4cfa99b6a0c9a0fcbbcf@AcuMS.aculab.com>
- <Zd0b8SDT8hrG/0yW@ghost> <cdd09f7a-83b2-41ba-a32c-9886dd79c43e@roeck-us.net>
- <9b4ce664-3ddb-4789-9d5d-8824f9089c48@csgroup.eu>
- <Zd25XWTkDPuIjpF8@shell.armlinux.org.uk> <Zd58jvN3PjQSe+yt@ghost>
- <c0449c0a-33bc-49c4-97e3-56a79a6ce93e@csgroup.eu>
- <02bb92c3-a14c-4a77-a3b0-a7c857d1d60d@roeck-us.net>
- <CAMuHMdW-sUYr8_y6av9Dbtz6JJAxBUsiTGZcK2QYEHo0x1z44w@mail.gmail.com>
- <e9112858-76b8-4b91-88b1-b5694cda3350@roeck-us.net> <ZeDdOH0zBY8qKrVH@ghost>
+To: David Gow <davidgow@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Brendan Higgins <brendanhiggins@google.com>,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <48c4d3db-66d5-4a9a-ab9e-9036db7222dc@roeck-us.net>
+ <CABVgOSnpOzOr3VuKZc3okhJqf1yvsEe56YPdWn15Ag_RDEZi8Q@mail.gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -146,31 +131,55 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZeDdOH0zBY8qKrVH@ghost>
+In-Reply-To: <CABVgOSnpOzOr3VuKZc3okhJqf1yvsEe56YPdWn15Ag_RDEZi8Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/29/24 11:38, Charlie Jenkins wrote:
-[ ... ]
->> Tough one. I can't enable CONFIG_NET_TEST on nios2, parisc, and arm with THUMB
->> enabled due to crashes or hangs in gso tests. I accept that. Downside is that I
->> have to disable CONFIG_NET_TEST on those architectures/platforms entirely,
->> meaning a whole class of tests are missing for those architectures. I would
->> prefer to have a configuration option such as CONFIG_NET_GSO_TEST to let me
->> disable the problematic tests for the affected platforms so I can run all
->> the other network unit tests. Yes, obviously something is wrong either with
->> the affected tests or with the implementation of the tested functionality
->> on the affected systems, but that could be handled separately if a separate
->> configuration option existed, and new regressions in other tests on the affected
->> architectures could be identified as they happen.
+On 2/29/24 00:10, David Gow wrote:
+> On Thu, 29 Feb 2024 at 03:45, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Hi,
+>>
+>> when running the dev_addr_lists unit test with lock debugging enabled,
+>> I always get the following lockdep warning.
+>>
+>> [    7.031327] ====================================
+>> [    7.031393] WARNING: kunit_try_catch/1886 still has locks held!
+>> [    7.031478] 6.8.0-rc6-00053-g0fec7343edb5-dirty #1 Tainted: G        W        N
+>> [    7.031728] ------------------------------------
+>> [    7.031816] 1 lock held by kunit_try_catch/1886:
+>> [    7.031896]  #0: ffffffff8ed35008 (rtnl_mutex){+.+.}-{3:3}, at: dev_addr_test_init+0x6a/0x100
+>>
+>> Instrumentation shows that dev_addr_test_exit() is called, but only
+>> after the warning fires.
+>>
+>> Is this a problem with kunit tests or a problem with this specific test ?
 > 
-> I think I got confused here, is this an issue with the tests included in
-> this patch or is it unrelated?
+> A bit of both, I think. KUnit test cleanup is not guaranteed to run in
+> the same thread as the test, so that definitely is triggering lockdep
+> warnings.
+> 
+> On the other hand, we really should make this particular case work in
+> KUnit. Ideally test cleanup will happen on the test thread first, and
+> only fall back to another test if the test thread otherwise aborted.
+> 
+> So, this is probably something we won't be able to fix if the test
+> fails, but it definitely shouldn't be happening here where it passes.
+> I'll look into fixing that.
 > 
 
-Unrelated. It was intended to be an example of another set of tests which
-suffer from a similar problem (crash on certain architectures if enabled).
-Sorry for the confusion.
+Other tests seem to have similar problems with locking:
+
+[   25.762445]         # Subtest: drm_vc4_test_pv_muxing
+[   25.845857] [drm] Initialized vc4 0.0.0 20140616 for drm_vc4_test_pv_muxing.drm-kunit-mock-device on minor 0
+[   25.859603]
+[   25.859867] ====================================
+[   25.860085] WARNING: kunit_try_catch/1729 still has locks held!
+[   25.860354] 6.8.0-rc6-00066-g1c8c39f56e47-dirty #1 Tainted: G        W        N
+[   25.860675] ------------------------------------
+[   25.860918] 2 locks held by kunit_try_catch/1729:
+[   25.865468]  #0: ffff17e04945d850 (crtc_ww_class_acquire){+.+.}-{0:0}, at: drm_kunit_helper_acquire_ctx_alloc+0x44/0xd4
+[   25.866383]  #1: ffff17e047042518 (crtc_ww_class_mutex){+.+.}-{3:3}, at: modeset_lock.part.0+0x134/0x1d0
 
 Guenter
 
