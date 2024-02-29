@@ -1,160 +1,98 @@
-Return-Path: <linux-kselftest+bounces-5602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A263E86C184
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 07:58:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40DE986C1A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 08:13:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B713287494
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 06:58:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB0D91F24586
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 07:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A1A4643B;
-	Thu, 29 Feb 2024 06:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498FE44C63;
+	Thu, 29 Feb 2024 07:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B+RE3Q3c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUGlU738"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01F23E46B
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Feb 2024 06:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14855446B8;
+	Thu, 29 Feb 2024 07:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709189884; cv=none; b=AvrcG3YaeGBlzffmXGvg+Y6IpsdRCS7CWPWqawx+YHPh0dQKiQuiPw+BdCaNRqEC4mtRfbjryN73TPZpyTMiyjVfic/FltEukfbfTwWBjfxuv6qpPBP36nukd4CGsQirBWvxpvJNOY2M10B25yMBFbC8qJPKsAFv37tKp+1dmqQ=
+	t=1709190805; cv=none; b=p6lmd6WfsVkv8V8EhFuiCZd4qyXAR9UR4exEcOJIS9OrB55CBMVN0Zd1KbczT3HszLEhG+os1jT604Q/naEdnncUtK6DZVVPkad5jsTjHyLFe+4ll5abluIfQXC/hfHYiTZza8l/OkKQAe0pVhqcEWuXE6phoR7pSPgtWxahpTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709189884; c=relaxed/simple;
-	bh=HYHSTfpelvyYDR1wzWgIV1iFpf6tLCCOfsvel0KTnk0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SCP5VRCqGbQWIAm4oQiYg2GfQsM5fgd6KiYhW/61Y/t0RH0Zw/oe9llrLt1zRHa/ViK/lejLLR+OlIwhm81rJKD46PO3diKYa6fTTOFt64Hdw4t/9tHyTLRReGRGfho1t2NXFFucp0aTs2E2MdexAfduzhWVf5hhfMe9mJw7Jsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B+RE3Q3c; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709189881;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O548D4ZJM+qQxwtnpg5UXQkiY5ZV60J3DSbyn2ZI5lc=;
-	b=B+RE3Q3c7noegWs6jOnza5VlmkwasGcdVQ4VRKF75lUFsxSOJDswsqbU7ZEt6ozp4+V/6V
-	5QBS1nGKo7gnPZ8Mc3CGdCa2WAtd054cEM+3kD98oGYbHDvPKdMqpgsVp2CfuXlVDDWe39
-	4aWVHlMNKY7fupjimwBhlgJrOeXXozk=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-204-BzgnBlw4MCWclqiFPnc2kw-1; Thu,
- 29 Feb 2024 01:57:58 -0500
-X-MC-Unique: BzgnBlw4MCWclqiFPnc2kw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6F90E3813F32;
-	Thu, 29 Feb 2024 06:57:57 +0000 (UTC)
-Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 64D0048B;
-	Thu, 29 Feb 2024 06:57:57 +0000 (UTC)
-From: Shaoqin Huang <shahuang@redhat.com>
-To: Oliver Upton <oliver.upton@linux.dev>,
-	Marc Zyngier <maz@kernel.org>,
-	kvmarm@lists.linux.dev
-Cc: Eric Auger <eauger@redhat.com>,
-	Shaoqin Huang <shahuang@redhat.com>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] KVM: selftests: aarch64: Add invalid filter test in pmu_event_filter_test
-Date: Thu, 29 Feb 2024 01:56:21 -0500
-Message-Id: <20240229065625.114207-4-shahuang@redhat.com>
-In-Reply-To: <20240229065625.114207-1-shahuang@redhat.com>
-References: <20240229065625.114207-1-shahuang@redhat.com>
+	s=arc-20240116; t=1709190805; c=relaxed/simple;
+	bh=sTFRZabajf/krYk3PM4o4UwGsA4jCPH/kYX/YIBaFFQ=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=rrou+qyt/mZB5i6rY5HjB2GFYmu6UMU3/LcpUhAgwEd4c9Zu4+zUl8aykqOr0l00V2QjOaY1o5AISgPbM5x+zONjMpQMkG6puRABdnaUn6RCS1g77m8sWIoVMsmshvVR9GH24SpsNrEPe0V7V3VsvjdV2CwDpeazsjhwQbiiw2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUGlU738; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98225C433F1;
+	Thu, 29 Feb 2024 07:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709190804;
+	bh=sTFRZabajf/krYk3PM4o4UwGsA4jCPH/kYX/YIBaFFQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OUGlU738hUpRVx01d84rqAhOzR10pyvcWXzBPl3tO/bB0Ve/kdCrehO4Nvx7CNknc
+	 zrpXNjLeKSA8R10DDUlU9Euuer0LPnly3RInbJbxAd3H7CTMDjQUXxjB6PzSbM64UQ
+	 94U86xoToN7HwCt8P917HtYwhQdXb1ENvc6Dj5pdtv/I0KC2QZfhVqYj8HyVtbBHtI
+	 L40MwM5UeB/+WMvCHr3E7OZ7koK23UXGBLX/alScaAmG5kFCKjKboruwtYlov6xQOa
+	 diSK0jIl+0u04MeA5uel3UHKZA8Cz6573rDBfoiZcAj0nZlS/+zZKnm1jFzoJffcKA
+	 tw+pk4LjuB1yg==
+Date: Thu, 29 Feb 2024 16:13:20 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] tracing/probes: Support function parameter
+ access from return probe
+Message-Id: <20240229161320.978190f42dcc1a521c192e7d@kernel.org>
+In-Reply-To: <20240229153855.6fe3fb454cf56eebc6ea9953@kernel.org>
+References: <170891987362.609861.6767830614537418260.stgit@devnote2>
+	<Zd9eBn2FTQzYyg7L@krava>
+	<20240229145139.a215085c44add62302463312@kernel.org>
+	<20240229153855.6fe3fb454cf56eebc6ea9953@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add the invalid filter test which sets the filter beyond the event
-space and sets the invalid action to double check if the
-KVM_ARM_VCPU_PMU_V3_FILTER will return the expected error.
+On Thu, 29 Feb 2024 15:38:55 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
----
- .../kvm/aarch64/pmu_event_filter_test.c       | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
+> Hmm, this seems arch_rethook_trampoline caused the issue.
+> 
+> And curiously, it depends on the number of stored data.
+> 
+> OK:
+> /sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3' >> dynamic_events 
+> /sys/kernel/tracing # echo 1 > events/fprobes/enable 
+> 
+> NG:
+> /sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3 $arg4' >> dynamic_events 
+> /sys/kernel/tracing # echo 1 > events/fprobes/enable 
+> 
+> I also confirmed that on 'vfs_write' caused the same result. 3 arguments(24 bytes) is OK,
+> but 4 arguments (32bytes) is NG.
 
-diff --git a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
-index 2dd8ea418f47..86714345ee97 100644
---- a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
-+++ b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
-@@ -8,6 +8,7 @@
-  * This test checks if the guest only see the limited pmu event that userspace
-  * sets, if the guest can use those events which user allow, and if the guest
-  * can't use those events which user deny.
-+ * It also checks that setting invalid filter ranges return the expected error.
-  * This test runs only when KVM_CAP_ARM_PMU_V3, KVM_ARM_VCPU_PMU_V3_FILTER
-  * is supported on the host.
-  */
-@@ -262,6 +263,41 @@ static void run_tests(void)
- 		run_test(t);
- }
- 
-+static void test_invalid_filter(void)
-+{
-+	struct kvm_pmu_event_filter invalid;
-+	int ret;
-+
-+	pr_info("Test: test_invalid_filter\n");
-+
-+	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-+
-+	vpmu_vm.vm = vm_create(1);
-+	vpmu_vm.vcpu = vm_vcpu_add_with_vpmu(vpmu_vm.vm, 0, guest_code);
-+	vpmu_vm.gic_fd = vgic_v3_setup(vpmu_vm.vm, 1, 64,
-+					GICD_BASE_GPA, GICR_BASE_GPA);
-+	__TEST_REQUIRE(vpmu_vm.gic_fd >= 0,
-+		       "Failed to create vgic-v3, skipping");
-+
-+	/* The max event number is (1 << 16), set a range largeer than it. */
-+	invalid = __DEFINE_FILTER(BIT(15), BIT(15) + 1, 0);
-+	ret = __kvm_device_attr_set(vpmu_vm.vcpu->fd, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				    KVM_ARM_VCPU_PMU_V3_FILTER, &invalid);
-+	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter range "
-+		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
-+		    ret, errno);
-+
-+	/* Set the Invalid action. */
-+	invalid = __DEFINE_FILTER(0, 1, 3);
-+	ret = __kvm_device_attr_set(vpmu_vm.vcpu->fd, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				    KVM_ARM_VCPU_PMU_V3_FILTER, &invalid);
-+	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter action "
-+		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
-+		    ret, errno);
-+
-+	destroy_vpmu_vm();
-+}
-+
- static bool kvm_pmu_support_events(void)
- {
- 	create_vpmu_vm(guest_get_pmceid);
-@@ -284,4 +320,6 @@ int main(void)
- 	TEST_REQUIRE(kvm_pmu_support_events());
- 
- 	run_tests();
-+
-+	test_invalid_filter();
- }
+And this may be the fprobe bug. kretprobe events doesn't show this issue.
+
+OK:
+/sys/kernel/tracing # echo 'r vfs_read $arg*' >> kprobe_events 
+/sys/kernel/tracing # echo 1 > events/kprobes/enable 
+
+But this is strange because both uses same rethook...
+
+Thank you,
+
 -- 
-2.40.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
