@@ -1,85 +1,74 @@
-Return-Path: <linux-kselftest+bounces-5656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F30E486CEDC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 17:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0987F86CF33
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 17:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 211291C22549
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 16:23:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D3241C235D9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 16:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0685816065D;
-	Thu, 29 Feb 2024 16:15:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771486CC13;
+	Thu, 29 Feb 2024 16:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="np8gxXQ/"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Q14FqFwO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C00160648;
-	Thu, 29 Feb 2024 16:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E3F6CBE0;
+	Thu, 29 Feb 2024 16:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709223357; cv=none; b=V3brKlmhPewXpYUtZaZ9IUQdQJNCqNIo6jHsj9480e3kai4+CtSYg0NY8fpIiFSxfejVo9TGzPpVbFmCvdvQIo3LaVZ8BRJMzpyPTJN9w7U5gdPvxb1qaWkH3alKSoScTE4zsoiZJv9f9FpyC46DOBe+L6SttzZGscNGs9PdUDg=
+	t=1709224138; cv=none; b=RlgEzoPp+HymUrW2RLArSw1cIFH9NrXWkKrWacZIn1157k0RpUUoscb3roUjsfIEN8CnbgVlwhSKDilbscOsNIBnqcIjis05xNcNj8EZ0asgcJMGFu9DZRiM5JedBb+dhnu852HNY76khrC74HfJvun/7Bj4g0ohGnMlqPGQRxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709223357; c=relaxed/simple;
-	bh=UpVGGJLkVxk/JHWyNG/+nRTE1UZyw5IEdWGeltmxxe4=;
+	s=arc-20240116; t=1709224138; c=relaxed/simple;
+	bh=z4pcMkbx7CwYtTLR1xVSD2jGRP8EoN4FBh8txazgN9A=;
 	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ap9Qef248g0Vuk3iG+o0LXLKCAFH1H8buWlB9eCzIogpu+QX+83NH30H0CI1/BUFTKqyAqtcDi+LeENsKlCStGdPVUrAXNnPyEXyDGKuRdLZBLdPFMCv9tHSSyBlNKBu2xcur5v+11Gpd6C+S08P+eoQLk4WvoTnyeWvyqm5Rwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=np8gxXQ/; arc=none smtp.client-ip=46.235.227.194
+	 Content-Type:MIME-Version; b=Yk8q9AvQFOuB1esStVtnxxiAbNRAJO0Lil2m8r8FT9CAlg2fRrQ9+bKc1dG78FWod6jA/kKEmM1XWRNFEVvAAoBpuN1c4pE1xPbR54pFkpMR8/156j57BTE2ApuKfjKdf/J/LB4tFx3BJDN5W/hxEU0A/Q+Os1ZE7XUJ9fUKEPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Q14FqFwO; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709223354;
-	bh=UpVGGJLkVxk/JHWyNG/+nRTE1UZyw5IEdWGeltmxxe4=;
+	s=mail; t=1709224134;
+	bh=z4pcMkbx7CwYtTLR1xVSD2jGRP8EoN4FBh8txazgN9A=;
 	h=Subject:From:To:Date:In-Reply-To:References:From;
-	b=np8gxXQ/vROfwRZ9gCBey2vgqhlJumul0Odq0Y+0GjFWziC4W+ENCmNE6rkalTIZL
-	 WIjTrY49PEJXBXhxW2mONjHao955mN2B8Sf2Stdc0RN/5ib2otB8dHl9z/6qHo5NjG
-	 xdFdKU0ed55iLmoddHQqX25i5sEI3xT8MbP47rh5Pre2jq61+wUeGM1+G+DsrIDT/A
-	 tUuZBM4XANenFT6auHER2jbNysgG0Uq5UZ2ZIsmGinE7MLsybkmKBafAmmLGaPHyDP
-	 4hbx1Q1+QGemuq9Zw3sP/r8i2YFIRFq+5wj2IlC7RqpViGTBoptb4Pv5UWM0VBzc8E
-	 63/5MTXvBLE4w==
+	b=Q14FqFwOkU3VixMurYxnw1yk1ZbMV9inkY4T1bEtUk4/XS5dyG+R94vFtllvI/t1b
+	 BLOtyXu7swxRNfucTD11pVsSgdE0emaKDk+nNA+iRUqy11TXgGKLTE0dbr4QtYhiAW
+	 3R3NW0akW34+qswicx0By/kpbDHalnrt0hcUHs1fQf08vDKcmYxD0p4odjklxshMID
+	 bek9QpSuvYFpYd2ms1DWsCyijWVcDNkR+DROy3guaDoYd21B1zBqeAE/1j+qZu0tTL
+	 nVulcl3OdM19BKtZutlAs+shYJGgpfIoXjlhEB9AgDh2FFQa2kdoq7wtco/LS2xlHT
+	 dlzl/nirPPcnA==
 Received: from nicolas-tpx395.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nicolas)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 78AE637810EF;
-	Thu, 29 Feb 2024 16:15:50 +0000 (UTC)
-Message-ID: <3c308cfe3e029ab841ab71f2e159a50a9b3fbf92.camel@collabora.com>
-Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 92CC13782066;
+	Thu, 29 Feb 2024 16:28:51 +0000 (UTC)
+Message-ID: <51fa8932e57010620e9a9e16a1979f4883e95a7d.camel@collabora.com>
+Subject: Re: [PATCH 0/3] kci-gitlab: Introducing GitLab-CI Pipeline for
  Kernel Testing
 From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: "Bird, Tim" <Tim.Bird@sony.com>, Helen Koike
- <helen.koike@collabora.com>,  "linuxtv-ci@linuxtv.org"
- <linuxtv-ci@linuxtv.org>, "dave.pigott@collabora.com"
- <dave.pigott@collabora.com>, "mripard@kernel.org" <mripard@kernel.org>, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- "pawiecz@collabora.com" <pawiecz@collabora.com>,  "spbnick@gmail.com"
- <spbnick@gmail.com>, "tales.aparecida@gmail.com"
- <tales.aparecida@gmail.com>,  "workflows@vger.kernel.org"
- <workflows@vger.kernel.org>, "kernelci@lists.linux.dev"
- <kernelci@lists.linux.dev>, "skhan@linuxfoundation.org"
- <skhan@linuxfoundation.org>, "kunit-dev@googlegroups.com"
- <kunit-dev@googlegroups.com>, "nfraprado@collabora.com"
- <nfraprado@collabora.com>, "davidgow@google.com" <davidgow@google.com>, 
- "cocci@inria.fr" <cocci@inria.fr>, "Julia.Lawall@inria.fr"
- <Julia.Lawall@inria.fr>,  "laura.nao@collabora.com"
- <laura.nao@collabora.com>, "ricardo.canuelo@collabora.com"
- <ricardo.canuelo@collabora.com>, "kernel@collabora.com"
- <kernel@collabora.com>,  "torvalds@linuxfoundation.org"
- <torvalds@linuxfoundation.org>, "gregkh@linuxfoundation.org"
- <gregkh@linuxfoundation.org>
-Date: Thu, 29 Feb 2024 11:15:46 -0500
-In-Reply-To: <SA3PR13MB63726E6742A05C401D484147FD5F2@SA3PR13MB6372.namprd13.prod.outlook.com>
+To: Nikolai Kondrashov <spbnick@gmail.com>, Guillaume Tucker
+ <gtucker@gtucker.io>, Helen Koike <helen.koike@collabora.com>, 
+ linuxtv-ci@linuxtv.org, dave.pigott@collabora.com, mripard@kernel.org, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com, 
+ pawiecz@collabora.com, tales.aparecida@gmail.com,
+ workflows@vger.kernel.org,  kernelci@lists.linux.dev,
+ skhan@linuxfoundation.org, kunit-dev@googlegroups.com, 
+ nfraprado@collabora.com, davidgow@google.com, cocci@inria.fr, 
+ Julia.Lawall@inria.fr, laura.nao@collabora.com,
+ ricardo.canuelo@collabora.com,  kernel@collabora.com,
+ torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
+Date: Thu, 29 Feb 2024 11:28:48 -0500
+In-Reply-To: <a5726043-1906-44ba-a6ee-a725a2776269@gmail.com>
 References: <20240228225527.1052240-1-helen.koike@collabora.com>
-	 <20240228225527.1052240-2-helen.koike@collabora.com>
-	 <SA3PR13MB63726E6742A05C401D484147FD5F2@SA3PR13MB6372.namprd13.prod.outlook.com>
+	 <d99d026e-ed32-4432-bab3-db75296e67d8@gtucker.io>
+	 <a5726043-1906-44ba-a6ee-a725a2776269@gmail.com>
 Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
  keydata=mQGiBEUQN0MRBACQYceNSezSdMjx7sx6gwKkMghrrODgl3B0eXBTgNp6c431IfOOEsdvkoOh1kwoYcQgbg4MXw6beOltysX4e8fFWsiRkc2nvvRW9ir9kHDm49MkBLqaDjTqOkYKNMiurFW+gozpr/lUW15QqT6v68RYe0zRdtwGZqeLzX2LVuukGwCg4AISzswrrYHNV7vQLcbaUhPgIl0D+gILYT9TJgAEK4YHW+bFRcY+cgUFoLQqQayECMlctKoLOE69nIYOc/hDr9uih1wxrQ/yL0NJvQCohSPyoyLF9b2EuIGhQVp05XP7FzlTxhYvGO/DtO08ec85+bTfVBMV6eeY4MS3ZU+1z7ObD7Pf29YjyTehN2Dan6w1g2rBk5MoA/9nDocSlk4pbFpsYSFmVHsDiAOFje3+iY4ftVDKunKYWMhwRVBjAREOByBagmRau0cLEcElpf4hX5f978GoxSGIsiKoDAlXX+ICDOWC1/EXhEEmBR1gL0QJgiVviNyLfGJlZWnPjw6xhhmtHYWTDxBOP5peztyc2PqeKsLsLWzAr7RDTmljb2xhcyBEdWZyZXNuZSAoQi4gU2MuIEluZm9ybWF0aXF1ZSkgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPohgBBMRAgAgBQJFlCyOAhsDBgsJCAcDAgQVAggDBBYCAwECHgECF4AACgkQcVMCLawGqBwhLQCgzYlrLBj6KIAZ4gmsfjXD6ZtddT8AoIeGDicVq5WvMHNWign6ApQcZUihtElOaWNvbGFzIER1ZnJlc25lIChCLiBTYy4gSW5mb3JtYXRpcXVlKSA8bmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY28udWs+iGIEExECACIFAkuzca8CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFTAi2sBqgcQX8An2By6LDEeMxi4B9hUbpvRnzaaeNqA
 	J9Rox8rfqHZnSErw9bCHiBwvwJZ77QxTmljb2xhcyBEdWZyZXNuZSA8bmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY29tPohiBBMRAgAiBQJNzZzPAhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRBxUwItrAaoHLlxAKCYAGf4JL7DYDLs/188CPMGuwLypwCfWKc9DorA9f5pyYlD5pQo6SgSoiC0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPohiBBMRAgAiBQJVwNwgAhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRBxUwItrAaoHCZ4AJ0QwU6/G4c7h9CkMBT9ZxGLX4KSnQCgq0P7CX7hv/M7HeyfMFZe8t3vAEW0RE5pY29sYXMgRHVmcmVzbmUgKEIuIFNjLiBJbmZvcm1hdGlxdWUpIDxuaWNvbGFzZEBibHVlc3RyZWFrdGVjaC5jb20+iGAEExECACAFAkZjGzoCGwMGCwkIBwMCBBUCCAMEFgIDAQIeAQIXgAAKCRBxUwItrAaoHBl7AJ0d2lrzshMmJaik/EaDEakzEwqgxQCg0JVZMZm9gRfEou1FvinuZxwf/mu0R05pY29sYXMgRHVmcmVzbmUgKEIgU2MuIEluZm9ybWF0aXF1ZSkgPG5pY29sYXMuZHVmcmVzbmVAdXNoZXJicm9va2UuY2E+iGAEExECACAFAkUQN0MCGwMGCwkIBwMCBBUCCAMEFgIDAQIeAQIXgAAKCRBxUwItrAaoHPTnAJ0WGgJJVspoctAvEcI00mtp5WAFGgCgr+E7ItOqZEHAs+xabBgknYZIFPW5Ag0ERRA3UhAIAJ0rxl2HsVg/nSOAUt7U/T/W+RKzVAlD9orCB0pRVvyWNxSr8MHcHmWCxykLuB34ouM4GuDVRKfGnqLzJRBfjs7Ax9K2FI3Odund9xpviLCt1jFC0K
@@ -94,96 +83,117 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Hi Tim,
+Hi,
 
-just replying below to one of your comment which I happen to be involved in=
-, but
-I'll let others reply for the more specific comments.
-
-Le jeudi 29 f=C3=A9vrier 2024 =C3=A0 02:44 +0000, Bird, Tim a =C3=A9crit=C2=
-=A0:
-> > -----Original Message-----
-> > From: Helen Koike <helen.koike@collabora.com>
+Le jeudi 29 f=C3=A9vrier 2024 =C3=A0 16:16 +0200, Nikolai Kondrashov a =C3=
+=A9crit=C2=A0:
+> On 2/29/24 2:20 PM, Guillaume Tucker wrote:
+> > Hello,
 > >=20
-> ....
->=20
-> > Hey all,
+> > On 28/02/2024 23:55, Helen Koike wrote:
+> > > Dear Kernel Community,
+> > >=20
+> > > This patch introduces a `.gitlab-ci` file along with a `ci/` folder, =
+defining a
+> > > basic test pipeline triggered by code pushes to a GitLab-CI instance.=
+ This
+> > > initial version includes static checks (checkpatch and smatch for now=
+) and build
+> > > tests across various architectures and configurations. It leverages a=
+n
+> > > integrated cache for efficient build times and introduces a flexible =
+'scenarios'
+> > > mechanism for subsystem-specific extensions.
 > >=20
-> > You can check the validation of this patchset on:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0https://gitlab.collabor=
-a.com/koike/linux/-/pipelines/87035
+> > This sounds like a nice starting point to me as an additional way
+> > to run tests upstream.  I have one particular question as I see a
+> > pattern through the rest of the email, please see below.
 > >=20
-> > I would appreciate your feedback on this work, what do you think?
+> > [...]
 > >=20
-> > If you would rate from 0 to 5, where:
-> >=20
-> > [ ] 0. I don't think this is useful at all, and I doubt it will ever be=
-. It doesn't seem worthwhile.
-> > [ ] 1. I don't find it useful in its current form.
-> > [ ] 2. It might be useful to others, but not for me.
-> > [ ] 3. It has potential, but it's not yet something I can incorporate i=
-nto my workflow.
-> > [ ] 4. This is useful, but it needs some adjustments before I can inclu=
-de it in my workflow.
-> > [ ] 5. This is really useful! I'm eager to start using it right away. W=
-hy didn't you send this earlier? :)
-> >=20
-> > Which rating would you select?
->=20
-> For me, this is a "5".  I don't currently use gitlab, but I might install=
- it just to test this out.
->=20
-> It looks like there are a large number of YAML files which define the int=
-egration between the
-> test scripts and gitlab.  Also, there are a number of shell scripts to pe=
-rform some of the setup
-> and tests.  Do you have any idea how difficult it would be to use the she=
-ll scripts outside of
-> the CI system (e.g. manually)?  That is, are there dependencies between t=
-he CI system
-> and the shell scripts?
-
-You are effectively the second person I'm aware to provide similar feedback=
-. We
-agreed to conduct an effort to remove the gitlab specifics from the script.
-Avoid using gitlab CI shell environment in favour of command line arguments=
-.
-Also ensure scripts have a "-h" option. This should ease local reproduction=
+> > > 4. **Collaborative Testing Environment:** The kernel community is alr=
+eady
+> > > engaged in numerous testing efforts, including various GitLab-CI pipe=
+lines such
+> > > as DRM-CI, which I maintain, along with other solutions like KernelCI=
  and
-allow for other CI integration. After all, the Linux kernel is a large comm=
-unity
-and gitlab is just one option for managing CI. It is a big system, so we ra=
-rely
-"just install it" ourself. DRM and Linux Media community are using the
-Freedesktop instance, sharing resources and cost within that instance. In L=
-inux
-Media we are developing out of tree scripts with similar purpose, but we al=
-so
-believe a common set of tool, directly in the kernel tree would be a better=
- long
-term solution.
-
+> > > BPF-CI. This proposal is designed to further stimulate contributions =
+to the
+> > > evolving testing landscape. Our goal is to establish a comprehensive =
+suite of
+> > > common tools and files.
+> >=20
+> > [...]
+> >=20
+> > > **Leveraging External Test Labs:**
+> > > We can extend our testing to external labs, similar to what DRM-CI cu=
+rrently
+> > > does. This includes:
+> > > - Lava labs
+> > > - Bare metal labs
+> > > - Using KernelCI-provided labs
+> > >=20
+> > > **Other integrations**
+> > > - Submit results to KCIDB
+> >=20
+> > [...]
+> >=20
+> > > **Join Our Slack Channel:**
+> > > We have a Slack channel, #gitlab-ci, on the KernelCI Slack instance h=
+ttps://kernelci.slack.com/ .
+> > > Feel free to join and contribute to the conversation. The KernelCI te=
+am has
+> > > weekly calls where we also discuss the GitLab-CI pipeline.
+> > >=20
+> > > **Acknowledgments:**
+> > > A special thanks to Nikolai Kondrashov, Tales da Aparecida - both fro=
+m Red Hat -
+> > > and KernelCI community for their valuable feedback and support in thi=
+s proposal.
+> >=20
+> > Where does this fit on the KernelCI roadmap?
+> >=20
+> > I see it mentioned a few times but it's not entirely clear
+> > whether this initiative is an independent one or in some way
+> > linked to KernelCI.  Say, are you planning to use the kci tool,
+> > new API, compiler toolchains, user-space and Docker images etc?
+> > Or, are KernelCI plans evolving to follow this move?
 >=20
-> I think the convention, of putting this kind of stuff under a "ci" direct=
-ory, makes sense.
-> And it appears that the sub-dir structure allows for other CI systems to =
-add their
-> own config and files also.
+> I would say this is an important part of KernelCI the project, considerin=
+g its=20
+> aim to improve testing and CI in the kernel. It's not a part of KernelCI =
+the=20
+> service as it is right now, although I would say it would be good to have=
+=20
+> ability to submit KernelCI jobs from GitLab CI and pull results in the sa=
+me=20
+> pipeline, as we discussed earlier.
 
-CI scripts have the particularity of being very granular, which is very unl=
-ike
-what a human user would prefer. But when CI fails, you really want to know =
-which
-small step failed, which can sometimes be hidden by more en-globing scripts=
-. We
-also care a lot about parallelism, since we have hundreds of runners availa=
-ble
-to execute these tests.
+I'd like to add that both CI have a different purpose in the Linux project.=
+ This
+CI work is a pre-merge verification. Everyone needs to run checkpatch and
+smatch, this is automating it (and will catch those that forgot or ran it
+incorrectly). But it can go further by effectively testing specific patches=
+ on
+real hardware (with pretty narrow filters). It will help catch submission i=
+ssues
+earlier, and reduce kernelCI regression rate. As a side effect, kernelCI in=
+fra
+will endup catching the "integration" issues, which are the issue as a resu=
+lt of
+simultenous changes in different trees. They are also often more complex an=
+d
+benefit from the bisection capabilities.
 
-Short answer, I also like that this is under a CI directory, its makes ensu=
-re
-the purpose and intention of this work is clear.
+kernelCI tests are also a lot more intensive, they usually covers everythin=
+g,
+but they bundle multiple changes per run. The pre-merge tests will be reduc=
+ed to
+what seems meaningful for the changes. Its important to understand that pre=
+-
+merge CI have a time cost, and we need to make sure CI time does not exceed=
+ the
+merge window period.
 
-regards,
 Nicolas
 
