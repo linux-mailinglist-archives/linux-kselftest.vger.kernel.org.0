@@ -1,181 +1,141 @@
-Return-Path: <linux-kselftest+bounces-5598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FAF086C0E2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 07:40:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9F3F86C17F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 07:58:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADC4C1F23982
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 06:40:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 942B5287487
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 06:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCEA844C8C;
-	Thu, 29 Feb 2024 06:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E574444C8C;
+	Thu, 29 Feb 2024 06:58:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sa5uX/5L"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Si1n1yTs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2EF50A78;
-	Thu, 29 Feb 2024 06:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE134437C
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Feb 2024 06:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709188740; cv=none; b=FtLY9H4B1TLdOumwLBdXvnL+J/YNhgDTluDCzBFWoA329M1sZhnkfsDzHIHSgl2xfow4b8BwlwttqhHo4sIZ20wt9vVWc64QIBAsD+kfsUJXYBE0olD0P/Q/02giIT7Uy/RlDUqnvkEJI6TJ8CLgLiHpsy4ybBVEhL+JtGaPLJc=
+	t=1709189882; cv=none; b=TBujzB8sA1zTbzgrRBF3QOopY6W3cgVkMqEoqnLv4RYEaAoCkRGYEHPUh0Y4R1rmsOnZvH0SLdAspLdCPlGPk9dtQe6SepirqW+8+I7MThdIEz8eGLjW6nqX+or/ecQBZLchr71R7eWGVWOOEOKc9JIu9GOx6KDRB0+Va3pQg9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709188740; c=relaxed/simple;
-	bh=cfh98lsnK1WA24iz8Eoegn/HEuWd+0TrFqTV/dJ6qbA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=JtqQ85uiA52x9XWSIk3/XJPZhMxIPwToC6R07FEO1StAlbFguiBfatwe4spOXMW15XReoDw2cTbneGTPnJiFrn/ZRu2MrJIz3hL04WgLUACZZVWKGP0C6UikVoy1Djwn3beSUCzcWOHamxW26E4d3Ci0PIKDwtFuNqSKM+vbu9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sa5uX/5L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D02C433F1;
-	Thu, 29 Feb 2024 06:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709188740;
-	bh=cfh98lsnK1WA24iz8Eoegn/HEuWd+0TrFqTV/dJ6qbA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Sa5uX/5L0fo+9Xu4rwU36fBtU3OqtGH71/qOtqqJ6XyZrV71FtwYXIHJ8WUSJqdDj
-	 gd/pZAU0+epjdcjKLR771mYZbVUrf5BzsPE5wBu2b5Y29N14X/PcS7yphvWyFuu+JQ
-	 zyJdsqLIHXyQSx2PFZHdTBdK2SfghMc3+08UFJAS9+SSADAsL3jnoeHssoyscRNynZ
-	 4wii49o7xSJSDrx0NHv2wTVyNMXOQO23MnazuB6SaZjRnugWDEuU6sBXWA/tEuD+VB
-	 x6Bx88vlC1dTVpSgQ5JOY8NKlNcCXlx83iE4UtTayWE113TLVezg8gvh+i4KBGjQx0
-	 aI8rfRWHDiTdg==
-Date: Thu, 29 Feb 2024 15:38:55 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] tracing/probes: Support function parameter
- access from return probe
-Message-Id: <20240229153855.6fe3fb454cf56eebc6ea9953@kernel.org>
-In-Reply-To: <20240229145139.a215085c44add62302463312@kernel.org>
-References: <170891987362.609861.6767830614537418260.stgit@devnote2>
-	<Zd9eBn2FTQzYyg7L@krava>
-	<20240229145139.a215085c44add62302463312@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1709189882; c=relaxed/simple;
+	bh=YJig5ebYDQY5wtAFytmqoCfXqJMvgCsZZ5rmGbjcLVQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CJUAwnNWlu+/zNjms8yuHG3gvMcDDEcAuqc6DH5x+IkNAk9hBoVXb/uP+ivZJG01Dd1rZnM8ibXa5CxzuI0aGkh+docG1B1nUsvHuf64C+Mu9Kk2OCuZ27kOaPHTJo5b1mZnGbbeJqoIhJZqCKRsxQjnT0MLwaEMqDg1mzVA9JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Si1n1yTs; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709189877;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7nd7E2+HpEQtuS8MhHXByc9SOCzXfhgdn+43wVJB1Iw=;
+	b=Si1n1yTsy3A0bZ8p8F3//yR2ondkDAWp7OTTzbm6UTsE/aQV0Qz8l9feiS+oVv6mPJg3Cf
+	Mm6IF/mYGSEPbAT3Qk2yBOs+tJTrMTS7PqkQpqXpSdef7eiv33wvpk+lHhpjGn7wqegttW
+	9lB7uTUTFldJ0+i+fA+M6GSsyiJ9ojQ=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-244-yPUgX7eQNzW3MNiR-31mPw-1; Thu,
+ 29 Feb 2024 01:57:54 -0500
+X-MC-Unique: yPUgX7eQNzW3MNiR-31mPw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99A283C11A05;
+	Thu, 29 Feb 2024 06:57:53 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 37F83F63EA;
+	Thu, 29 Feb 2024 06:57:53 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Eric Auger <eauger@redhat.com>,
+	Shaoqin Huang <shahuang@redhat.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH v5 0/3] KVM: selftests: aarch64: Introduce pmu_event_filter_test
+Date: Thu, 29 Feb 2024 01:56:18 -0500
+Message-Id: <20240229065625.114207-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On Thu, 29 Feb 2024 14:51:39 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+The test is inspired by the pmu_event_filter_test which implemented by x86. On
+the arm64 platform, there is the same ability to set the pmu_event_filter
+through the KVM_ARM_VCPU_PMU_V3_FILTER attribute. So add the test for arm64.
 
-> On Wed, 28 Feb 2024 17:23:34 +0100
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > On Mon, Feb 26, 2024 at 12:57:53PM +0900, Masami Hiramatsu (Google) wrote:
-> > > Hi,
-> > > 
-> > > Here is version 2 series of patches to support accessing function entry data
-> > > from function *return* probes (including kretprobe and fprobe-exit event).
-> > > 
-> > > In this version, I added another cleanup [4/7], updated README[5/7], added
-> > > testcases[6/7] and updated document[7/7].
-> > > 
-> > > This allows us to access the results of some functions, which returns the
-> > > error code and its results are passed via function parameter, such as an
-> > > structure-initialization function.
-> > > 
-> > > For example, vfs_open() will link the file structure to the inode and update
-> > > mode. Thus we can trace that changes.
-> > > 
-> > >  # echo 'f vfs_open mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events
-> > >  # echo 'f vfs_open%return mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events 
-> > >  # echo 1 > events/fprobes/enable 
-> > >  # cat trace
-> > >               sh-131     [006] ...1.  1945.714346: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x2 inode=0x0
-> > >               sh-131     [006] ...1.  1945.714358: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4d801e inode=0xffff888008470168
-> > >              cat-143     [007] ...1.  1945.717949: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
-> > >              cat-143     [007] ...1.  1945.717956: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4a801d inode=0xffff888005f78d28
-> > >              cat-143     [007] ...1.  1945.720616: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
-> > >              cat-143     [007] ...1.  1945.728263: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0xa800d inode=0xffff888004ada8d8
-> > 
-> > hi,
-> > I hit a crash while playing with this, by runnning:
-> > 
-> >   # echo 'f vfs_read%return $arg*' >> dynamic_events
-> >   # echo 1 > events/fprobes/enable 
-> 
-> Thanks for reporting! But I can not reproduce it.
-> Can you share your kconfig?
+The series first create the helper function which can be used
+for the vpmu related tests. Then, it implement the test.
 
-No problem, I could reproduce it.
+Changelog:
+----------
+v4->v5:
+  - Rebased to v6.8-rc6.
+  - Refactor the helper function, make it fine-grained and easy to be used.
+  - Namimg improvements.
+  - Use the kvm_device_attr_set() helper.
+  - Make the test descriptor array readable and clean.
+  - Delete the patch which moves the pmu related helper to vpmu.h.
+  - Remove the kvm_supports_pmu_event_filter() function since nobody will run
+  this on a old kernel.
 
-/sys/kernel/tracing # echo 'f vfs_read%return $arg* $retval' >> dynamic_events 
-/sys/kernel/tracing # echo 1 > events/fprobes/enable 
-/sys/kernel/tracing # 
-/sys/kernel/tracing # [   67.709725] general protection fault, maybe for address 0xffffc9000047bef8: 0000 [#1] PREEMPT SMP PTI
-[   67.714672] CPU: 5 PID: 132 Comm: sh Tainted: G                 N 6.8.0-rc5-00007-gd5e41e4cee7e #149
-[   67.716491] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-[   67.718036] RIP: 0010:__x86_indirect_thunk_r13+0xa/0x20
-[   67.719087] Code: e8 01 00 00 00 cc 4c 89 24 24 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00 e8 01 00 00 00 cc 4c 89 2c 24 <c3> cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00
-[   67.722314] RSP: 0018:ffffc9000047bdf0 EFLAGS: 00010286
-[   67.723251] RAX: ffffc9000047bef8 RBX: ffff8880073258e0 RCX: ffffc9000047be48
-[   67.724704] RDX: ffffffff813aba09 RSI: 0000000000000000 RDI: ffff8880073258d0
-[   67.725840] RBP: ffff8880073258e0 R08: 0000000000000000 R09: ffff888005053648
-[   67.727017] R10: ffff888008452388 R11: 0000000000000001 R12: ffffffff813aba09
-[   67.728107] R13: 9c73d7ba3660c600 R14: ffffc9000047bef0 R15: ffffc9000047be48
-[   67.729630] FS:  000000000115d8c0(0000) GS:ffff88807d940000(0000) knlGS:0000000000000000
-[   67.731231] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   67.732285] CR2: 00000000005a2319 CR3: 0000000005ad6000 CR4: 00000000000006b0
-[   67.733502] Call Trace:
-[   67.734013]  <TASK>
-[   67.734504]  ? die_addr+0x37/0x90
-[   67.735307]  ? exc_general_protection+0x1ac/0x3f0
-[   67.736158]  ? asm_exc_general_protection+0x26/0x30
-[   67.736984]  ? ksys_read+0x69/0xf0
-[   67.737559]  ? ksys_read+0x69/0xf0
-[   67.738142]  ? __x86_indirect_thunk_r13+0xa/0x20
-[   67.739160]  ? rethook_trampoline_handler+0x95/0x200
-[   67.739919]  ? arch_rethook_trampoline_callback+0x3a/0x50
-[   67.740665]  ? arch_rethook_trampoline+0x2c/0x60
-[   67.741362]  ? ksys_read+0x69/0xf0
-[   67.741980]  ? trace_clock_x86_tsc+0x20/0x20
-[   67.742662]  ? do_syscall_64+0xcc/0x1e0
-[   67.743289]  ? entry_SYSCALL_64_after_hwframe+0x6f/0x77
-[   67.744620]  </TASK>
-[   67.745044] Modules linked in:
-[   67.745559] ---[ end trace 0000000000000000 ]---
-[   67.746221] RIP: 0010:__x86_indirect_thunk_r13+0xa/0x20
-[   67.746927] Code: e8 01 00 00 00 cc 4c 89 24 24 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00 e8 01 00 00 00 cc 4c 89 2c 24 <c3> cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00
-[   67.749176] RSP: 0018:ffffc9000047bdf0 EFLAGS: 00010286
-[   67.749835] RAX: ffffc9000047bef8 RBX: ffff8880073258e0 RCX: ffffc9000047be48
-[   67.750687] RDX: ffffffff813aba09 RSI: 0000000000000000 RDI: ffff8880073258d0
-[   67.751880] RBP: ffff8880073258e0 R08: 0000000000000000 R09: ffff888005053648
-[   67.752810] R10: ffff888008452388 R11: 0000000000000001 R12: ffffffff813aba09
-[   67.753721] R13: 9c73d7ba3660c600 R14: ffffc9000047bef0 R15: ffffc9000047be48
-[   67.754554] FS:  000000000115d8c0(0000) GS:ffff88807d940000(0000) knlGS:0000000000000000
-[   67.755568] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   67.756278] CR2: 00000000005a2319 CR3: 0000000005ad6000 CR4: 00000000000006b0
-[   67.757089] Kernel panic - not syncing: Fatal exception
-[   67.757917] Kernel Offset: disabled
-[   67.758404] ---[ end Kernel panic - not syncing: Fatal exception ]---
+v3->v4:
+  - Rebased to the v6.8-rc2.
 
-Hmm, this seems arch_rethook_trampoline caused the issue.
+v2->v3:
+  - Check the pmceid in guest code instead of pmu event count since different
+  hardware may have different event count result, check pmceid makes it stable
+  on different platform.                        [Eric]
+  - Some typo fixed and commit message improved.
 
-And curiously, it depends on the number of stored data.
+v1->v2:
+  - Improve the commit message.                 [Eric]
+  - Fix the bug in [enable|disable]_counter.    [Raghavendra & Marc]
+  - Add the check if kvm has attr KVM_ARM_VCPU_PMU_V3_FILTER.
+  - Add if host pmu support the test event throught pmceid0.
+  - Split the test_invalid_filter() to another patch. [Eric]
 
-OK:
-/sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3' >> dynamic_events 
-/sys/kernel/tracing # echo 1 > events/fprobes/enable 
+v1: https://lore.kernel.org/all/20231123063750.2176250-1-shahuang@redhat.com/
+v2: https://lore.kernel.org/all/20231129072712.2667337-1-shahuang@redhat.com/
+v3: https://lore.kernel.org/all/20240116060129.55473-1-shahuang@redhat.com/
+v4: https://lore.kernel.org/all/20240202025659.5065-1-shahuang@redhat.com/
 
-NG:
-/sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3 $arg4' >> dynamic_events 
-/sys/kernel/tracing # echo 1 > events/fprobes/enable 
+Shaoqin Huang (3):
+  KVM: selftests: aarch64: Add helper function for the vpmu vcpu
+    creation
+  KVM: selftests: aarch64: Introduce pmu_event_filter_test
+  KVM: selftests: aarch64: Add invalid filter test in
+    pmu_event_filter_test
 
-I also confirmed that on 'vfs_write' caused the same result. 3 arguments(24 bytes) is OK,
-but 4 arguments (32bytes) is NG.
-
-Thank you,
-
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../kvm/aarch64/pmu_event_filter_test.c       | 325 ++++++++++++++++++
+ .../kvm/aarch64/vpmu_counter_access.c         |  33 +-
+ .../selftests/kvm/include/aarch64/vpmu.h      |  29 ++
+ 4 files changed, 362 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+ create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.40.1
+
 
