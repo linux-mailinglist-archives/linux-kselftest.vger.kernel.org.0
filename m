@@ -1,214 +1,116 @@
-Return-Path: <linux-kselftest+bounces-5607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1003986C37D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:31:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A9CD86C3F7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 09:44:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 724BFB218AC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 08:31:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACCF91C22489
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Feb 2024 08:44:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94D3524A19;
-	Thu, 29 Feb 2024 08:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F135481CE;
+	Thu, 29 Feb 2024 08:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K9dYnj1p"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z34O1fiM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9090B1DDFF;
-	Thu, 29 Feb 2024 08:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C538537E9;
+	Thu, 29 Feb 2024 08:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709195472; cv=none; b=erCxV3RZq4m2QiafAe1/2N9l1VXOZiGuig5buetIP3sNv3+abJ0ras93zbbh8FxT5tDNfsxSUq7+9AeVKJSbL2KGHXBubind+m2lAwbvFgUpsqfsA4U98y5tRc+/rCZVpvK+Tg4hgbHj3YBm6S/Elo8nh0Fy5PSGlBwr/K9hWuI=
+	t=1709196208; cv=none; b=HGBQB884wecxYFqJUB3u/J6Zm8dj/JaN/YTyb1Kq+vtr1bvYB+TKOT57a87XB8GOWVRPN8RWEvge4ijlVTiQRTswnEDj7/9px9pwySWFVboZhFagAHm2cnqzQM5+VOjIDaxz9iAzfJJPOSCMTNFFz1BwIq5Kbpv4UfWX8X/2abo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709195472; c=relaxed/simple;
-	bh=OWd4fYTux+hAijsOgcO4XFq2Ff+muAy39DNVb8ggNhg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KZxSW7jiqJHzvfWSC+XO1iPVw708TavTxH4s1iy0DOCIUlLlSP1AM6p9hJA2XjyXpDG58oYvNDWJ2PNGKj/MV0Anw0eUuMQhqybMbVZCp89fl7pCdbIb1y/LygRfDca5O4u/PezjQ3p0A0ohZTEtSEQaKWQOvOX6DUl4ACrlXsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K9dYnj1p; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709195471; x=1740731471;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OWd4fYTux+hAijsOgcO4XFq2Ff+muAy39DNVb8ggNhg=;
-  b=K9dYnj1pLZ9QhlESdstErgjsph0SH5PzJP61nRYTQAALPGLAnO1t0gNe
-   amQd6FLL/unD2183F5DnLFcrozs11EmlCKFxfUn7uAWlwx9o1z2xlG2gH
-   rdumqEPNvNtTBRvVPc3Vawpb8lFtvUMRH/MNbEF1asOj7itfKfgUY3iKS
-   v45acpxES9GMo8/IkXSFaizY5c7J2IFxlLC7vwMexdvq3vFSuU8msg0B0
-   yQsk1K17AjgM7RnqYILqUASDazRV1snIRxRY5Xjs7lCwYZhEEZNSbpgHW
-   1gQzJT6s/TiHQdlRzlIzsSxsS4TYZU5CDFtqi4thYY+1J0QbJtuc/adXD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="4231409"
-X-IronPort-AV: E=Sophos;i="6.06,192,1705392000"; 
-   d="scan'208";a="4231409"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 00:31:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,192,1705392000"; 
-   d="scan'208";a="30923916"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.225.159]) ([10.124.225.159])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 00:31:04 -0800
-Message-ID: <9ceaf8d8-383a-4989-b58e-727d70ed525b@linux.intel.com>
-Date: Thu, 29 Feb 2024 16:31:01 +0800
+	s=arc-20240116; t=1709196208; c=relaxed/simple;
+	bh=OtJFUbFzli0ao9Kk04l+WlQKFdrjGXqosC1GcMlUSc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j+9NSbqtKf34ZCe4+QCpRsZ+TLlsHEgTmR1AalZAo3Ljwy0j6DpERBS9dyrliHBA8fSzVoQVmNxZi2GjZW0c4rsOez36a/Nmkk7pLW3ilH3VHbBj0srBlgh8yMWoKbQYOlrtO39wS+b4MBc2cOho6Nm43h8YVFDRp2F6VAeU110=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z34O1fiM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D39AC43390;
+	Thu, 29 Feb 2024 08:43:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709196207;
+	bh=OtJFUbFzli0ao9Kk04l+WlQKFdrjGXqosC1GcMlUSc8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z34O1fiMdBDeainA1ZPjTfVLielaOBKLFzX80CW3c98pKgURmEjTwJcXGsOqiJ0Ia
+	 ZwmkHPVHgPYH9oMMqExQdZYthC0nFc5SVVDwn7Uz689/6Fs4J5TA5kom9TGKWGv4UM
+	 vVlUAwe7W0KNMMU18vYMLOViKVsKAjuFzlj43qvt8EN2qxWNC8PZ8RbbyW7I4x3JTi
+	 8PNYG4kPaOXvSqWLsmuQU00wkUA0cyTxDrvfCX2SB7KBkYkHVQVhVckkTmf/D3Bk3m
+	 pM5EwmORJVumtGEpriYqslBnnsSDYb/04nHzojvoSRNLCcSJsBKdW07GUWZTvuUjVC
+	 WKrO2LBS3O2yg==
+Date: Thu, 29 Feb 2024 09:43:25 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org, 
+	dave.pigott@collabora.com, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com, pawiecz@collabora.com, 
+	spbnick@gmail.com, tales.aparecida@gmail.com, workflows@vger.kernel.org, 
+	kernelci@lists.linux.dev, skhan@linuxfoundation.org, kunit-dev@googlegroups.com, 
+	nfraprado@collabora.com, davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr, 
+	laura.nao@collabora.com, ricardo.canuelo@collabora.com, kernel@collabora.com, 
+	torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH 0/3] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+Message-ID: <20240229-rampant-blue-llama-c4ee7d@houat>
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <20240228230725.GF1659@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 06/29] KVM: selftests: TDX: Use
- KVM_TDX_CAPABILITIES to validate TDs' attribute configuration
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
- Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
- Chao Peng <chao.p.peng@linux.intel.com>,
- Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
- Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
-References: <20231212204647.2170650-1-sagis@google.com>
- <20231212204647.2170650-7-sagis@google.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20231212204647.2170650-7-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eu5m6zbxesqv7xj2"
+Content-Disposition: inline
+In-Reply-To: <20240228230725.GF1659@pendragon.ideasonboard.com>
 
 
+--eu5m6zbxesqv7xj2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/13/2023 4:46 AM, Sagi Shahar wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
->
-> This also exercises the KVM_TDX_CAPABILITIES ioctl.
->
-> Suggested-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ryan Afranji <afranji@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> ---
->   .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   | 69 ++++++++++++++++++-
->   1 file changed, 66 insertions(+), 3 deletions(-)
+On Thu, Feb 29, 2024 at 01:07:25AM +0200, Laurent Pinchart wrote:
+> > Chat Discussions
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >=20
+> > For those interested in further discussions:
+> >=20
+> > **Join Our Slack Channel:**
+> > We have a Slack channel, #gitlab-ci, on the KernelCI Slack instance htt=
+ps://kernelci.slack.com/ .
+> > Feel free to join and contribute to the conversation. The KernelCI team=
+ has
+> > weekly calls where we also discuss the GitLab-CI pipeline.
+>=20
+> Could we communicate using free software please ? Furthermore, it's not
+> possible to create an account on that slack instance unless you have an
+> e-mail address affiliated with a small number of companies
+> (https://kernelci.slack.com/signup#/domain-signup). That's a big no-go
+> for me.
 
-Nit: Can also dump 'supported_gpaw' in tdx_read_capabilities().
+Yeah, and that list looks super restrictive and arbitrary. Like,
+microsoft is there but kernel.org isn't?
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+I'm sure there's a reason, but we should at the very least open it to
+everyone.
 
->
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> index 9b69c733ce01..6b995c3f6153 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> @@ -27,10 +27,9 @@ static char *tdx_cmd_str[] = {
->   };
->   #define TDX_MAX_CMD_STR (ARRAY_SIZE(tdx_cmd_str))
->   
-> -static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
-> +static int _tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
->   {
->   	struct kvm_tdx_cmd tdx_cmd;
-> -	int r;
->   
->   	TEST_ASSERT(ioctl_no < TDX_MAX_CMD_STR, "Unknown TDX CMD : %d\n",
->   		    ioctl_no);
-> @@ -40,11 +39,58 @@ static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
->   	tdx_cmd.flags = flags;
->   	tdx_cmd.data = (uint64_t)data;
->   
-> -	r = ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
-> +	return ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
-> +}
-> +
-> +static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
-> +{
-> +	int r;
-> +
-> +	r = _tdx_ioctl(fd, ioctl_no, flags, data);
->   	TEST_ASSERT(r == 0, "%s failed: %d  %d", tdx_cmd_str[ioctl_no], r,
->   		    errno);
->   }
->   
-> +static struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
-> +{
-> +	int i;
-> +	int rc = -1;
-> +	int nr_cpuid_configs = 4;
-> +	struct kvm_tdx_capabilities *tdx_cap = NULL;
-> +
-> +	do {
-> +		nr_cpuid_configs *= 2;
-> +
-> +		tdx_cap = realloc(
-> +			tdx_cap, sizeof(*tdx_cap) +
-> +			nr_cpuid_configs * sizeof(*tdx_cap->cpuid_configs));
-> +		TEST_ASSERT(tdx_cap != NULL,
-> +			    "Could not allocate memory for tdx capability nr_cpuid_configs %d\n",
-> +			    nr_cpuid_configs);
-> +
-> +		tdx_cap->nr_cpuid_configs = nr_cpuid_configs;
-> +		rc = _tdx_ioctl(vm->fd, KVM_TDX_CAPABILITIES, 0, tdx_cap);
-> +	} while (rc < 0 && errno == E2BIG);
-> +
-> +	TEST_ASSERT(rc == 0, "KVM_TDX_CAPABILITIES failed: %d %d",
-> +		    rc, errno);
-> +
-> +	pr_debug("tdx_cap: attrs: fixed0 0x%016llx fixed1 0x%016llx\n"
-> +		 "tdx_cap: xfam fixed0 0x%016llx fixed1 0x%016llx\n",
-> +		 tdx_cap->attrs_fixed0, tdx_cap->attrs_fixed1,
-> +		 tdx_cap->xfam_fixed0, tdx_cap->xfam_fixed1);
-> +
-> +	for (i = 0; i < tdx_cap->nr_cpuid_configs; i++) {
-> +		const struct kvm_tdx_cpuid_config *config =
-> +			&tdx_cap->cpuid_configs[i];
-> +		pr_debug("cpuid config[%d]: leaf 0x%x sub_leaf 0x%x eax 0x%08x ebx 0x%08x ecx 0x%08x edx 0x%08x\n",
-> +			 i, config->leaf, config->sub_leaf,
-> +			 config->eax, config->ebx, config->ecx, config->edx);
-> +	}
-> +
-> +	return tdx_cap;
-> +}
-> +
->   #define XFEATURE_MASK_CET (XFEATURE_MASK_CET_USER | XFEATURE_MASK_CET_KERNEL)
->   
->   static void tdx_apply_cpuid_restrictions(struct kvm_cpuid2 *cpuid_data)
-> @@ -78,6 +124,21 @@ static void tdx_apply_cpuid_restrictions(struct kvm_cpuid2 *cpuid_data)
->   	}
->   }
->   
-> +static void tdx_check_attributes(struct kvm_vm *vm, uint64_t attributes)
-> +{
-> +	struct kvm_tdx_capabilities *tdx_cap;
-> +
-> +	tdx_cap = tdx_read_capabilities(vm);
-> +
-> +	/* TDX spec: any bits 0 in attrs_fixed0 must be 0 in attributes */
-> +	TEST_ASSERT_EQ(attributes & ~tdx_cap->attrs_fixed0, 0);
-> +
-> +	/* TDX spec: any bits 1 in attrs_fixed1 must be 1 in attributes */
-> +	TEST_ASSERT_EQ(attributes & tdx_cap->attrs_fixed1, tdx_cap->attrs_fixed1);
-> +
-> +	free(tdx_cap);
-> +}
-> +
->   static void tdx_td_init(struct kvm_vm *vm, uint64_t attributes)
->   {
->   	const struct kvm_cpuid2 *cpuid;
-> @@ -91,6 +152,8 @@ static void tdx_td_init(struct kvm_vm *vm, uint64_t attributes)
->   	memset(init_vm, 0, sizeof(*init_vm));
->   	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
->   
-> +	tdx_check_attributes(vm, attributes);
-> +
->   	init_vm->attributes = attributes;
->   
->   	tdx_apply_cpuid_restrictions(&init_vm->cpuid);
+Maxime
 
+--eu5m6zbxesqv7xj2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZeBDrAAKCRDj7w1vZxhR
+xT7gAP4oRjk5cvZCFl9XtJxHv+2sUJDNxvUgOUs8Px07O0eymQEAgtIrH290cK2V
+mFnAbb5kwrTnyNl2XQDimzTR0qN31Q4=
+=Cc5W
+-----END PGP SIGNATURE-----
+
+--eu5m6zbxesqv7xj2--
 
