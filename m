@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-5745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FD0586E6E6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 18:12:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 403D986E6EA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 18:12:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10E7F2864A8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 17:12:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A7AE1C22A48
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 17:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77E2522C;
-	Fri,  1 Mar 2024 17:11:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACFE81119F;
+	Fri,  1 Mar 2024 17:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhV9oKat"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B5o9F9wY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BF8C2C7;
-	Fri,  1 Mar 2024 17:11:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F10F1171C;
+	Fri,  1 Mar 2024 17:11:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709313102; cv=none; b=FNGAgqgC3nKRnam8WAIpZ3p6YBAa/XA0cdflrJyv41zfwrywBX0SjoJQOXiZQPcKUnN7f7yNO1/pez3QI4LaP26b9jeG1p9Nc6jae7/EBG/sFH5NIv0Ml7mAZDciznLRzkR1oe96MKBPgQjrP0i5e80GqG73aoxEfwIf2ivT7l8=
+	t=1709313106; cv=none; b=pKyVTcyz4PkbhuMjEJkf6T/CNz9eLsD2AqJlWZMvNSptX0VQJv0HEKjhJ4RRSC1pvJBSyljIFOuPyRfeoLkITjYlpZiAMMQp48DFRY74zQ5CnFm7/MrPBvO+P0m+aKRw3XvPgq2YOIWgaXA1wZ4XYrAGNUVhWN/h+Sdwcfcjx8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709313102; c=relaxed/simple;
-	bh=gGZFgk/rb3EH2O4u8lfqG1pgZeJCOjyIG6p682FNkGY=;
+	s=arc-20240116; t=1709313106; c=relaxed/simple;
+	bh=TYMbucVCGX52xP3B1SjEwNL2B5fZQZEvkiPYO/LBu7A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=r/eMuy3qfkWMTRaBOTyRwrwGL4qmF+IGB5LExNfvesmYWSNW+KLvLFPXuhHAfEbiH4tnUirG2+WUkd/u8meS2nrNsc9RoJ5v4/TCSI+xuGDl44DenJ7UvDEWxV1Yd8tgFmHrkorTNPKwYT75xGuC7bfbpvcM49a1nIDVm4QdaDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhV9oKat; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 732DDC43330;
-	Fri,  1 Mar 2024 17:11:39 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=FH0ioAwd4TBXm/Fzb/o58nfOPjIBgfdoL93VRoaIL8jtDyYCptYEfZH+p1NJyUlEyLlbt9hAddNLZRreK+pcLRlmMMGh9z7M3ZZmhdD/7HWOyxj85JMVmn2VyulgUtZrmU0W4Gb01FZuasjwAamkkTE3F9tq4fZRDficr4ukXH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B5o9F9wY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3596C433C7;
+	Fri,  1 Mar 2024 17:11:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709313102;
-	bh=gGZFgk/rb3EH2O4u8lfqG1pgZeJCOjyIG6p682FNkGY=;
+	s=k20201202; t=1709313105;
+	bh=TYMbucVCGX52xP3B1SjEwNL2B5fZQZEvkiPYO/LBu7A=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=UhV9oKatb+x3ccw5zp4vQEMKMnNfXTZfuOVZXXqzp2743MSoXYr3HFHsLY3bJ6ugk
-	 9iz/DtsYjb66Uwm4KjCQntLHblyil3dqlvKrfwb1tlp75IlcqYtG7TrNA4sdOILfzy
-	 yjjiBCiutKhhmN5HqllAUOb0Nlh77Ff4BhzBnlCr99xoxCCz74FtZbYRyNmG1/gIjt
-	 //H+ormzVfM41Z72dwUlHyBphFkukQiFAW/srYqGVt1oJvGatgzcIKCdIECTlSYWai
-	 xFCbIlvqkCIs16brx6+mBUZKAF4qXAvSK+W2CdijMEOByOY3rK/NDrIYHJZ2FeeKGY
-	 TnIfwqnjcJFCw==
+	b=B5o9F9wY5gXIPN70vGN2/n2dnlYQs2R2vV3E8tqYWv20i3CygoDyiJU7P845iA7YY
+	 Qz7YiZzJG6inUKnHcY//EFgB/7EG4B4+j8AGvqa2am4adW47H5EvatXVdcuDsSS5iE
+	 HzHGuf6OGDK+3w1Lg8bB+XMkWttWMRwRZ7y4YO2IRz9ERbDPGBpQ5IU2dmIIR4MAyv
+	 +lTxqEK3uGn+sGgnUh/E165Ox5fMQ4ZLwSXmod+8pzAMhrRdmWw59R7GkLRmy97EKk
+	 4QwIc+IyphhziYCInMJt6mVgSPw07dHfbhQzbcL+IzcG3SFmKa4iciQvs0shPREXO9
+	 dRfKh30qmfqNg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 01 Mar 2024 18:11:22 +0100
-Subject: [PATCH net 1/2] selftests: mptcp: diag: return KSFT_FAIL not
- test_cnt
+Date: Fri, 01 Mar 2024 18:11:23 +0100
+Subject: [PATCH net 2/2] selftests: mptcp: diag: avoid extra waiting
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240301-upstream-net-20240301-selftests-mptcp-diag-exit-timeout-v1-1-07cb2fa15c06@kernel.org>
+Message-Id: <20240301-upstream-net-20240301-selftests-mptcp-diag-exit-timeout-v1-2-07cb2fa15c06@kernel.org>
 References: <20240301-upstream-net-20240301-selftests-mptcp-diag-exit-timeout-v1-0-07cb2fa15c06@kernel.org>
 In-Reply-To: <20240301-upstream-net-20240301-selftests-mptcp-diag-exit-timeout-v1-0-07cb2fa15c06@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -62,71 +61,86 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
  Simon Horman <horms@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>, stable@vger.kernel.org
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1625; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=WbTTSM8dAo+T+IZMAz1wLRiGpMeBimBuli1/EMr2Roo=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl4gxHM1HZCWFibarJ6yqVSuE472timi0TYr5Kn
- QXCZzjsvCOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeIMRwAKCRD2t4JPQmmg
- c3YsEADUXwVLCERIRWmy1crU3vJJugecncwe029ZZr7ZB3dp2JJ24A6V+Exf//JY1Xijke7S8ev
- SxewLG9ASycDeNoCV7WWPSzFuXefgZm/fgjRBHFuA7dV4HBblCw3dR1/2DY2A3ajlUrJIVhLlNq
- W6NjRnIjA4zAIngH3vkDMKzJM03i979orRwh+MBRAxz8KttK6LX/437wlU4vdpnn8DVA/axk9F0
- +PKAYpBlsV04mzJXvbsbHgKfAl61SWJq1FfaNJJJ02GNdLjSQr4KOgPsQa+7HFAJMMTQy3sNFXZ
- XSBM9OlRAwuHQyVjNgGnIZEb1mgAPdZUZuIZb4BaW/Qalza334agQ/JHk8QAJ3ytZc3eNkDT86K
- KvTSL5VoDyUM2MWomRMVVKXSIRZ6gmIinO4Has6+9RzOo9UQPjkiMKQGgwrLDSEFqRCMIh2F9pK
- iSBm7ZKLt1StWfsYbQqJQrDeuds4WHOacgOUch7AHrxe1Mwx9IVeAOcnx0wCEVYoTXfr78HPXw9
- GFkKK41Ib2Mr4CdPboFYOsBSiXtgWI/PMRwBwNTw0kLzBkwGnwPnmTclhRetySyb1hJ8UBgZdWO
- N/Sl5xVx1ATzkNqaNwQUzHYgryuSin/pgj2U2KcCfMayl7B+WpU54JF/eTefy9jC1ilye9StCMo
- 6jK5ySXMlu/gWnQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2709; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=TYMbucVCGX52xP3B1SjEwNL2B5fZQZEvkiPYO/LBu7A=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl4gxHXCjU1Jl6jisj/C6HFQNF9VEy9OpMzve5F
+ TK0RwpGdDSJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeIMRwAKCRD2t4JPQmmg
+ c8BoD/9of/bA/QyJ/2rwrFsnFNyRrPjWwFrZQKVct6zYWSd0yExoa5R98j7+C2O7PDv7SE/GZXy
+ tPxPeY5q9SoWo5UIE4Mb6bzwYsOHi1d8tSeEcofwOWIgNrNm0KeU+sTrd27Mb5GzkEb/YG6Fh4o
+ ZAMEKB2ZyRVQoRMDOKH/YJuDtgUNL112cpKMN9jJNK5qEj1ZcJg2VkvOpbahRzkiYSHj0heU1E7
+ VifrYE6AnmBdIcM4DWW3+OVSiQt6vzSg8rzvDDKnhJnbuPSlca/uwG7015Tm1cFaO5oMrkUQBGo
+ iss9MCHm8vxhIqQKcc+eySBloubvD/bVK/dP0Oyk65NnDzQTIvMgvRah0fmqM/43ONhlLNv9Mvh
+ dsv+41HY52lUmo2x1yaE9LJSy9GZC0jypbFinV3fdU3w7PsIqB0UhEf1wWBFi+4E56S13CHeF8F
+ 9VPWUIdd1sD6SroL/xYSXRlhRlJnepvgCf3SBZ2g3v1s+Uu2JM3FYOP5Sl8V+paBemehPQG/m86
+ 6Hh8066Zc5Bc+ZNlLYMOA80WXZcYcKT8bcPmG0vHdyzHweQXs6+0cLpM9E1KgKZ9imkZU1RVBvw
+ e2FMpYDFN1ycBlkkduOgBTTr5qlhSVO7Aqm9E5UE5b7Vluw3cmHi/i20p+nDZQwGuU9SkSCb1HO
+ ZFW3HlW068ufy+g==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+When creating a lot of listener sockets, it is enough to wait only for
+the last one, like we are doing before in diag.sh for other subtests.
 
-The test counter 'test_cnt' should not be returned in diag.sh, e.g. what
-if only the 4th test fail? Will do 'exit 4' which is 'exit ${KSFT_SKIP}',
-the whole test will be marked as skipped instead of 'failed'!
+If we do a check for each listener sockets, each time listing all
+available sockets, it can take a very long time in very slow
+environments, at the point we can reach some timeout.
 
-So we should do ret=${KSFT_FAIL} instead.
+When using the debug kconfig, the waiting time switches from more than
+8 sec to 0.1 sec on my side. In slow/busy environments, and with a poll
+timeout set to 30 ms, the waiting time could go up to ~100 sec because
+the listener socket would timeout and stop, while the script would still
+be checking one by one if all sockets are ready. The result is that
+after having waited for everything to be ready, all sockets have been
+stopped due to a timeout, and it is too late for the script to check how
+many there were.
 
-Fixes: df62f2ec3df6 ("selftests/mptcp: add diag interface tests")
-Cc: stable@vger.kernel.org
-Fixes: 42fb6cddec3b ("selftests: mptcp: more stable diag tests")
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+While at it, also removed ss options we don't need: we only need the
+filtering options, to count how many listener sockets have been created.
+We don't need to ask ss to display internal TCP information, and the
+memory if the output is dropped by the 'wc -l' command anyway.
+
+Fixes: b4b51d36bbaa ("selftests: mptcp: explicitly trigger the listener diag code-path")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Closes: https://lore.kernel.org/r/20240301063754.2ecefecf@kernel.org
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/diag.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Notes:
+ - The 'Fixes' commit was will be in the future 6.8-rc6, but not marked
+   to be backported. Because of that, the stable ML has not been added
+   in Cc.
+---
+ tools/testing/selftests/net/mptcp/diag.sh | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index f300f4e1eb59..18d37d4695c1 100755
+index 18d37d4695c1..75fc95675e2d 100755
 --- a/tools/testing/selftests/net/mptcp/diag.sh
 +++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -69,7 +69,7 @@ __chk_nr()
- 		else
- 			echo "[ fail ] expected $expected found $nr"
- 			mptcp_lib_result_fail "${msg}"
--			ret=$test_cnt
-+			ret=${KSFT_FAIL}
- 		fi
- 	else
- 		echo "[  ok  ]"
-@@ -124,11 +124,11 @@ wait_msk_nr()
- 	if [ $i -ge $timeout ]; then
- 		echo "[ fail ] timeout while expecting $expected max $max last $nr"
- 		mptcp_lib_result_fail "${msg} # timeout"
--		ret=$test_cnt
-+		ret=${KSFT_FAIL}
- 	elif [ $nr != $expected ]; then
- 		echo "[ fail ] expected $expected found $nr"
- 		mptcp_lib_result_fail "${msg} # unexpected result"
--		ret=$test_cnt
-+		ret=${KSFT_FAIL}
- 	else
- 		echo "[  ok  ]"
- 		mptcp_lib_result_pass "${msg}"
+@@ -96,8 +96,8 @@ chk_listener_nr()
+ 	local expected=$1
+ 	local msg="$2"
+ 
+-	__chk_nr "ss -inmlHMON $ns | wc -l" "$expected" "$msg - mptcp" 0
+-	__chk_nr "ss -inmlHtON $ns | wc -l" "$expected" "$msg - subflows"
++	__chk_nr "ss -nlHMON $ns | wc -l" "$expected" "$msg - mptcp" 0
++	__chk_nr "ss -nlHtON $ns | wc -l" "$expected" "$msg - subflows"
+ }
+ 
+ wait_msk_nr()
+@@ -304,10 +304,7 @@ for I in $(seq 1 $NR_SERVERS); do
+ 	ip netns exec $ns ./mptcp_connect -p $((I + 20001)) \
+ 		-t ${timeout_poll} -l 0.0.0.0 >/dev/null 2>&1 &
+ done
+-
+-for I in $(seq 1 $NR_SERVERS); do
+-	mptcp_lib_wait_local_port_listen $ns $((I + 20001))
+-done
++mptcp_lib_wait_local_port_listen $ns $((NR_SERVERS + 20001))
+ 
+ chk_listener_nr $NR_SERVERS "many listener sockets"
+ 
 
 -- 
 2.43.0
