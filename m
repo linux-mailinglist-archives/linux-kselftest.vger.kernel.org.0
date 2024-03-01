@@ -1,158 +1,166 @@
-Return-Path: <linux-kselftest+bounces-5708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F4C786DF6F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 11:42:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 543DF86DFFD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 12:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 259981F23413
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 10:42:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C07741F21B70
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 11:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C9C6BB54;
-	Fri,  1 Mar 2024 10:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9179C6BFD6;
+	Fri,  1 Mar 2024 11:14:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="S7B+XxgQ"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ojxr+zuC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9574969E0B
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Mar 2024 10:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B232F6BFC9
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Mar 2024 11:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709289725; cv=none; b=otDUNg8ZsHkuo1rheqXMmQFhaRzo/4IZryxjhT2BD2irep7fJp78PFQQiS2Qyyaf0qt5rhV1nKZ5DCRdKivQxzoSmtsPSzXPMKNLVTpxTouZvxnM1yqzrd5fAtao+N+/PL77CFsO93NaxuA3qj2I1ICodclOD/G1IojpLMTh0bg=
+	t=1709291654; cv=none; b=uySwHrf1/CzGZvXytRtnC6hZyK8jkx8OmGfoWL6QhtpvlFwqlnL+Ml+q5QvGAYIJ/9fB56Ei7Iymf0pDo2xwJfIq6kQaOgALewbbyco280ZHYVHisu0FBnhxQp4cCu7SUtaRxHWbcQDRNqOHL5YsMBWU3l7Ddohim2TtrnNIkPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709289725; c=relaxed/simple;
-	bh=MyzEAkBZuIpR892vDJgDwyTBmBXyBAiXWmQvk35TtYY=;
-	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=jkpsUuY2XKNv+nyq53scVorP1u+2b9e3E21SgInB+TaZXL2B4/EfiwxPGiCQrAJB4uKJLptLCKOzAq1mqx9wXMgsyl6Ds4zoUvtqTZHwdLLLV5B+xK7z/4K14U7UciWyrrdZ2zXe4MfRuBJKxj7bUAWstvpZO9vE/UJVyICVBSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=S7B+XxgQ; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-565d1656c12so3438238a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Mar 2024 02:42:02 -0800 (PST)
+	s=arc-20240116; t=1709291654; c=relaxed/simple;
+	bh=zkbtf2XhdXqJAJc2oYBIfqC9jUyxnkqSO9tew8V0bg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=unog0ZAeeeDbhhPGiTZz5y/0RDDzI4MvrxJARCnf/kHVMovCn9fbzaDusq1fpznrappUAoEIZN8hlDV8brGTzrvYGUVZeQvHkTRJ9X+Cp5QxMw7s60efUf95GgxOTiw8klXiJHXXHIkxW/KuQhOE2s+9aosnDwGtV3aIla2M18Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ojxr+zuC; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-512fb30dbc9so1793666e87.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Mar 2024 03:14:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1709289721; x=1709894521; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3FUsAED/lmxCoWoKnQG3JtYsXIKOmckCJxzG1hZ6f9c=;
-        b=S7B+XxgQr4MJMxukZ+TsmEkO0cEaU26VkSsgs6gy7pfebgwfScrzlT/13uHPYF1W6A
-         Jmdgqgc5/1SzAdN20oSUPA2MeaRytnrjezOfODG/orN/dLJ3Q4vHDEC6TlpeXDZECdYu
-         BqZArM7R4VVQZhhW4ylSSJqrGseGMImPgO4Ek3XAFTuRWNU8MkiWamVzAyRgFwisRmLy
-         U5h5bioHIzjrphuXjX9DjK3yhGQl+z7Uf/hI6gVaRQl3Tk/9o+esnWPmT55OsSrq/28x
-         Mm6Ws01btgOOes5LlRE9S17APyLrO04FwB9I0hmjPgWxEq3eeS3Ty5aTLmMQW7j7GnO0
-         iYZQ==
+        d=ventanamicro.com; s=google; t=1709291651; x=1709896451; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jXt56DDN1trQQI8RIOoz0OKV0RNEBNHuWLr8xaraJVQ=;
+        b=ojxr+zuC/PpK426wnS6w13kYyIzL9mBC8UehHmts6Yk/0Z9Qw8Cstg9MvvOL9+Lvte
+         lHCuR63R26xspRTGe2jEJiy4suoIIdhHSPJ/34rjXLIU2tKl/p3+WS4UM8BmvqTPYl55
+         QkhFiLiOJHmYnFv3YKsrLvOLWlD+ds4EBnQ2Cuk+00DpEUVZqpRyN7jZ6H1E85n5Fbr/
+         L38Es5opuNC6cPXWNcxrmRPEWXZ+HB/nH3OLJvm/dto6FeuqSpiCeXqf6tcga/f3R+IV
+         rNETlhe409XcbtV1NkVXIPL5XcqutRt2Tw97zmhL+KI+UiZH5bVzvzd5k/4Rm8ZrHZfz
+         Zdwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709289721; x=1709894521;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3FUsAED/lmxCoWoKnQG3JtYsXIKOmckCJxzG1hZ6f9c=;
-        b=NryFl3voFTnRCRgyYaIxYl0bLk7da9loEvEldyH0cV7gyefbD3hdDjyph3JBQUYmt+
-         rcu3r3ZwQv+0e+qW+AocRs2HGuVeqOYeILWOQtel3S1DOJAn784AkVuU+7wLpoDY5Egm
-         xI5K0uecctRd4DbLVkCFwR4Mrk22wXc9AdNukcx88zV66f/LP5qkw4pEBhHgxec0aW1M
-         XLKcuQRs0e65JpkEBU8dXL6A71yKo1C4Ru0ooMkdAIDhv606mVeF5TaPnxeJ+mQxl+tI
-         JS/3XoojULdXfJPsrJqCYjMfwiBfFNsd0WapP8sVIOt773tCagaPKhXaLe2MIJ7XSiSG
-         ZcuA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIHIMgOkpNgJMnNy1RkvQPygJ24drGPmnbrZe+cLa8swCXjsWNukBs/rQXRbP2AWIYSG1kxXtCY7Kt98kLfG5FRBaDGxKJqok8oO+SlsYk
-X-Gm-Message-State: AOJu0YyDyhDytNVPhFDV6kXjffy9MCsUgGwcQgXNl8eac+rMQJjxpfUb
-	YpBqPS8tznj6kSwkuwTFETo+JwrGUiLoVvvF7BnxigBVTgOvqkRJSp6IfbbCsd4=
-X-Google-Smtp-Source: AGHT+IFsNGzvNzeIMp+c2vln39bwQZyElm675FddMfJSSFuv8gtyc69SUsSkQMp66ZVqG55y2w4wkw==
-X-Received: by 2002:a05:6402:28af:b0:566:6c13:82fd with SMTP id eg47-20020a05640228af00b005666c1382fdmr884994edb.21.1709289720923;
-        Fri, 01 Mar 2024 02:42:00 -0800 (PST)
-Received: from cloudflare.com (79.184.121.65.ipv4.supernova.orange.pl. [79.184.121.65])
-        by smtp.gmail.com with ESMTPSA id w20-20020a50fa94000000b005668c6837ecsm1421669edr.32.2024.03.01.02.41.59
+        d=1e100.net; s=20230601; t=1709291651; x=1709896451;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jXt56DDN1trQQI8RIOoz0OKV0RNEBNHuWLr8xaraJVQ=;
+        b=hClDqs1LIzlWRj5taaIBxMIXTf9FZf1INEmC98ndt3MzenyzHufAxLNNorBOD38zXf
+         344Vf8qhEEjLTG3xKGHCBvofYSxySkCVA4qrDnNoRGx5mGWI2nburKc1fJJJ6vyTGciv
+         nn8Lliv56/4MLims92kajPL252ScJspgjOLiTKY2LswZf6d98aneBctpyLTaPtPhFvEz
+         UL9DhYPRpUXYWN2+kJmWC+Emp02VKxJfSzUH8SuCf+zedq+U1zR2ZEcT+tmLWlaFa9I1
+         cVsUKIUAeOnEnNWXCNR0mWjBLEMzItuwnduVmqB/0VLbbwM+kfocsvQHXbVIkUdTG4HV
+         eCvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXyM0OKHqhaEdIV3Pz10kMzM56caO5nGDdJn/lNMXdR+A8f4MY7Dbx1KfpUNhOhLoEzmShNwpIjdwJkwylYCb1ZsRQPGeTQ9DB8Xqd806F
+X-Gm-Message-State: AOJu0YzIEKoeqZtJk/PPW9eIkS/hZwttadRxVaN2vVoDtnOnoiqzFq5s
+	0/6pC9dQ/oIGXaZtTHp5WNRzgR5MfliMi0mkf7jbLphQwHBCoJFz0u93yHf3eMk=
+X-Google-Smtp-Source: AGHT+IEMU3X0u8IVUbmn5Hd0kEbruFTDCYQR+XS7mqKnTdFj2a5iVEk93dn2ijW3fSXhfMFxgwHqFQ==
+X-Received: by 2002:a05:6512:2388:b0:512:be8e:79da with SMTP id c8-20020a056512238800b00512be8e79damr1364981lfv.8.1709291650643;
+        Fri, 01 Mar 2024 03:14:10 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id q16-20020a5d6590000000b0033d56aa4f45sm4292371wru.112.2024.03.01.03.14.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 02:42:00 -0800 (PST)
-References: <20240229005920.2407409-1-kuba@kernel.org>
- <20240229005920.2407409-13-kuba@kernel.org>
- <871q8vm2wj.fsf@cloudflare.com>
- <CADvbK_e+JCeM9cn0Qd7JG5UdSO_-s8w5r0v40E485JevkbH4XQ@mail.gmail.com>
-User-agent: mu4e 1.6.10; emacs 29.2
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Xin Long <lucien.xin@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
- netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, mic@digikod.net,
- linux-security-module@vger.kernel.org, keescook@chromium.org, Marcelo
- Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: Re: [PATCH v4 12/12] selftests: ip_local_port_range: use XFAIL
- instead of SKIP
-Date: Fri, 01 Mar 2024 11:40:45 +0100
-In-reply-to: <CADvbK_e+JCeM9cn0Qd7JG5UdSO_-s8w5r0v40E485JevkbH4XQ@mail.gmail.com>
-Message-ID: <87wmqmkzd4.fsf@cloudflare.com>
+        Fri, 01 Mar 2024 03:14:10 -0800 (PST)
+Date: Fri, 1 Mar 2024 12:14:09 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>, 
+	Palmer Dabbelt <palmer@rivosinc.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Atish Patra <atishp@atishpatra.org>, 
+	Conor Dooley <conor.dooley@microchip.com>, Guo Ren <guoren@kernel.org>, Icenowy Zheng <uwu@icenowy.me>, 
+	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4 04/15] RISC-V: Add SBI PMU snapshot definitions
+Message-ID: <20240301-1a1aa2a2c04640c34749cb5f@orel>
+References: <20240229010130.1380926-1-atishp@rivosinc.com>
+ <20240229010130.1380926-5-atishp@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240229010130.1380926-5-atishp@rivosinc.com>
 
-On Thu, Feb 29, 2024 at 06:25 PM -05, Xin Long wrote:
-> On Thu, Feb 29, 2024 at 3:27=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.=
-com> wrote:
->>
->> On Wed, Feb 28, 2024 at 04:59 PM -08, Jakub Kicinski wrote:
->> > SCTP does not support IP_LOCAL_PORT_RANGE and we know it,
->> > so use XFAIL instead of SKIP.
->> >
->> > Reviewed-by: Kees Cook <keescook@chromium.org>
->> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->> > ---
->> >  tools/testing/selftests/net/ip_local_port_range.c | 6 +++---
->> >  1 file changed, 3 insertions(+), 3 deletions(-)
->> >
->> > diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools=
-/testing/selftests/net/ip_local_port_range.c
->> > index 6ebd58869a63..193b82745fd8 100644
->> > --- a/tools/testing/selftests/net/ip_local_port_range.c
->> > +++ b/tools/testing/selftests/net/ip_local_port_range.c
->> > @@ -365,9 +365,6 @@ TEST_F(ip_local_port_range, late_bind)
->> >       __u32 range;
->> >       __u16 port;
->> >
->> > -     if (variant->so_protocol =3D=3D IPPROTO_SCTP)
->> > -             SKIP(return, "SCTP doesn't support IP_BIND_ADDRESS_NO_PO=
-RT");
->> > -
->> >       fd =3D socket(variant->so_domain, variant->so_type, 0);
->> >       ASSERT_GE(fd, 0) TH_LOG("socket failed");
->> >
->> > @@ -414,6 +411,9 @@ TEST_F(ip_local_port_range, late_bind)
->> >       ASSERT_TRUE(!err) TH_LOG("close failed");
->> >  }
->> >
->> > +XFAIL_ADD(ip_local_port_range, ip4_stcp, late_bind);
->> > +XFAIL_ADD(ip_local_port_range, ip6_stcp, late_bind);
->> > +
->> >  TEST_F(ip_local_port_range, get_port_range)
->> >  {
->> >       __u16 lo, hi;
->>
->> [wrt our earlier discussion off-list]
->>
->> You were right, this test succeeds if I delete SKIP for SCTP.
->> Turns out IP_LOCAL_PORT_RANGE works for SCTP out of the box after all.
->>
->> What I didn't notice earlier is that sctp_setsockopt() delegates to
->> ip_setsockopt() when level !=3D SOL_SCTP.
->>
->> CC'ing Marcelo & Xin, to confirm that this isn't a problem.
-> Yes, SCTP supports ip_local_port_range by calling
-> inet_sk_get_local_port_range() in sctp_get_port(), similar to TCP/UDP.
+On Wed, Feb 28, 2024 at 05:01:19PM -0800, Atish Patra wrote:
+> SBI PMU Snapshot function optimizes the number of traps to
+> higher privilege mode by leveraging a shared memory between the S/VS-mode
+> and the M/HS mode. Add the definitions for that extension and new error
+> codes.
+> 
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/sbi.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> index ef8311dafb91..dfa830f7d54b 100644
+> --- a/arch/riscv/include/asm/sbi.h
+> +++ b/arch/riscv/include/asm/sbi.h
+> @@ -132,6 +132,7 @@ enum sbi_ext_pmu_fid {
+>  	SBI_EXT_PMU_COUNTER_STOP,
+>  	SBI_EXT_PMU_COUNTER_FW_READ,
+>  	SBI_EXT_PMU_COUNTER_FW_READ_HI,
+> +	SBI_EXT_PMU_SNAPSHOT_SET_SHMEM,
+>  };
+>  
+>  union sbi_pmu_ctr_info {
+> @@ -148,6 +149,13 @@ union sbi_pmu_ctr_info {
+>  	};
+>  };
+>  
+> +/* Data structure to contain the pmu snapshot data */
+> +struct riscv_pmu_snapshot_data {
+> +	u64 ctr_overflow_mask;
+> +	u64 ctr_values[64];
+> +	u64 reserved[447];
+> +};
+> +
+>  #define RISCV_PMU_RAW_EVENT_MASK GENMASK_ULL(47, 0)
+>  #define RISCV_PMU_RAW_EVENT_IDX 0x20000
+>  
+> @@ -244,9 +252,11 @@ enum sbi_pmu_ctr_type {
+>  
+>  /* Flags defined for counter start function */
+>  #define SBI_PMU_START_FLAG_SET_INIT_VALUE (1 << 0)
 
-Well, that's embarassing.
+A patch before this which changes all flags to use BIT() instead of shifts
+would be good, since otherwise the new flags are inconsistent.
 
-I see that I've updated sctp stack to use inet_sk_get_local_port_range()
-in 91d0b78c5177 ("inet: Add IP_LOCAL_PORT_RANGE socket option").
+> +#define SBI_PMU_START_FLAG_INIT_FROM_SNAPSHOT BIT(1)
 
-Thanks for confirming, Xin.
+This is named SBI_PMU_START_FLAG_INIT_SNAPSHOT in the spec.
 
-It's clearly an overside on my side. That SKIP in tests should have
-never been there. I will send a fixup.
+>  
+>  /* Flags defined for counter stop function */
+>  #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
+> +#define SBI_PMU_STOP_FLAG_TAKE_SNAPSHOT BIT(1)
+>  
+>  enum sbi_ext_dbcn_fid {
+>  	SBI_EXT_DBCN_CONSOLE_WRITE = 0,
+> @@ -285,6 +295,7 @@ struct sbi_sta_struct {
+>  #define SBI_ERR_ALREADY_AVAILABLE -6
+>  #define SBI_ERR_ALREADY_STARTED -7
+>  #define SBI_ERR_ALREADY_STOPPED -8
+> +#define SBI_ERR_NO_SHMEM	-9
+>  
+>  extern unsigned long sbi_spec_version;
+>  struct sbiret {
+> -- 
+> 2.34.1
+>
+
+Thanks,
+drew
 
