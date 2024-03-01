@@ -1,166 +1,390 @@
-Return-Path: <linux-kselftest+bounces-5709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 543DF86DFFD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 12:15:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E41386E0C8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 13:00:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C07741F21B70
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 11:15:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B29A1C20A32
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 12:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9179C6BFD6;
-	Fri,  1 Mar 2024 11:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9E06D1C1;
+	Fri,  1 Mar 2024 12:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ojxr+zuC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hhIW4khV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B232F6BFC9
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Mar 2024 11:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7426D1A7;
+	Fri,  1 Mar 2024 12:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709291654; cv=none; b=uySwHrf1/CzGZvXytRtnC6hZyK8jkx8OmGfoWL6QhtpvlFwqlnL+Ml+q5QvGAYIJ/9fB56Ei7Iymf0pDo2xwJfIq6kQaOgALewbbyco280ZHYVHisu0FBnhxQp4cCu7SUtaRxHWbcQDRNqOHL5YsMBWU3l7Ddohim2TtrnNIkPI=
+	t=1709294437; cv=none; b=S5/pYk6edYO6HmH5GH6/sjgHs8N/oKWiUGl9SEdZIGmaYL02CMHlmYtT6dQiEdPKCCpbiqYfqioovnY0dAbLvJhDLnIEi17VeLBT1OJymRbVz0NOYL2idum8NvFVJpFMBal5kAaSkl11oOSrMSlxdafw4Rftf12+xpWCVxutpCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709291654; c=relaxed/simple;
-	bh=zkbtf2XhdXqJAJc2oYBIfqC9jUyxnkqSO9tew8V0bg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=unog0ZAeeeDbhhPGiTZz5y/0RDDzI4MvrxJARCnf/kHVMovCn9fbzaDusq1fpznrappUAoEIZN8hlDV8brGTzrvYGUVZeQvHkTRJ9X+Cp5QxMw7s60efUf95GgxOTiw8klXiJHXXHIkxW/KuQhOE2s+9aosnDwGtV3aIla2M18Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ojxr+zuC; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-512fb30dbc9so1793666e87.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Mar 2024 03:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1709291651; x=1709896451; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jXt56DDN1trQQI8RIOoz0OKV0RNEBNHuWLr8xaraJVQ=;
-        b=ojxr+zuC/PpK426wnS6w13kYyIzL9mBC8UehHmts6Yk/0Z9Qw8Cstg9MvvOL9+Lvte
-         lHCuR63R26xspRTGe2jEJiy4suoIIdhHSPJ/34rjXLIU2tKl/p3+WS4UM8BmvqTPYl55
-         QkhFiLiOJHmYnFv3YKsrLvOLWlD+ds4EBnQ2Cuk+00DpEUVZqpRyN7jZ6H1E85n5Fbr/
-         L38Es5opuNC6cPXWNcxrmRPEWXZ+HB/nH3OLJvm/dto6FeuqSpiCeXqf6tcga/f3R+IV
-         rNETlhe409XcbtV1NkVXIPL5XcqutRt2Tw97zmhL+KI+UiZH5bVzvzd5k/4Rm8ZrHZfz
-         Zdwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709291651; x=1709896451;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jXt56DDN1trQQI8RIOoz0OKV0RNEBNHuWLr8xaraJVQ=;
-        b=hClDqs1LIzlWRj5taaIBxMIXTf9FZf1INEmC98ndt3MzenyzHufAxLNNorBOD38zXf
-         344Vf8qhEEjLTG3xKGHCBvofYSxySkCVA4qrDnNoRGx5mGWI2nburKc1fJJJ6vyTGciv
-         nn8Lliv56/4MLims92kajPL252ScJspgjOLiTKY2LswZf6d98aneBctpyLTaPtPhFvEz
-         UL9DhYPRpUXYWN2+kJmWC+Emp02VKxJfSzUH8SuCf+zedq+U1zR2ZEcT+tmLWlaFa9I1
-         cVsUKIUAeOnEnNWXCNR0mWjBLEMzItuwnduVmqB/0VLbbwM+kfocsvQHXbVIkUdTG4HV
-         eCvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXyM0OKHqhaEdIV3Pz10kMzM56caO5nGDdJn/lNMXdR+A8f4MY7Dbx1KfpUNhOhLoEzmShNwpIjdwJkwylYCb1ZsRQPGeTQ9DB8Xqd806F
-X-Gm-Message-State: AOJu0YzIEKoeqZtJk/PPW9eIkS/hZwttadRxVaN2vVoDtnOnoiqzFq5s
-	0/6pC9dQ/oIGXaZtTHp5WNRzgR5MfliMi0mkf7jbLphQwHBCoJFz0u93yHf3eMk=
-X-Google-Smtp-Source: AGHT+IEMU3X0u8IVUbmn5Hd0kEbruFTDCYQR+XS7mqKnTdFj2a5iVEk93dn2ijW3fSXhfMFxgwHqFQ==
-X-Received: by 2002:a05:6512:2388:b0:512:be8e:79da with SMTP id c8-20020a056512238800b00512be8e79damr1364981lfv.8.1709291650643;
-        Fri, 01 Mar 2024 03:14:10 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id q16-20020a5d6590000000b0033d56aa4f45sm4292371wru.112.2024.03.01.03.14.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 03:14:10 -0800 (PST)
-Date: Fri, 1 Mar 2024 12:14:09 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Atish Patra <atishp@rivosinc.com>
-Cc: linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>, 
-	Palmer Dabbelt <palmer@rivosinc.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Atish Patra <atishp@atishpatra.org>, 
-	Conor Dooley <conor.dooley@microchip.com>, Guo Ren <guoren@kernel.org>, Icenowy Zheng <uwu@icenowy.me>, 
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v4 04/15] RISC-V: Add SBI PMU snapshot definitions
-Message-ID: <20240301-1a1aa2a2c04640c34749cb5f@orel>
-References: <20240229010130.1380926-1-atishp@rivosinc.com>
- <20240229010130.1380926-5-atishp@rivosinc.com>
+	s=arc-20240116; t=1709294437; c=relaxed/simple;
+	bh=Bpm6hOspaqm5Ql7XCmGjGb3G6kC5f6KchwepD3KMdv4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OezbkTYQce03b0eCu461Mzrnu4XfhTZWncPhaM3UiVip19acVnKiahjj0teAJH1prrzTvUQEsVPyptenDf2z3iUe7G6SrbfKcL3cXtIapbtU4wKZFq/6BOwNdEozNG0Xq3GOpPdPGhQWds5V4Yd0ytumVkzJvs0XFiEhuTAu65Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hhIW4khV; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709294435; x=1740830435;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Bpm6hOspaqm5Ql7XCmGjGb3G6kC5f6KchwepD3KMdv4=;
+  b=hhIW4khVoxPhNhkTybHLGQgwMV9SScSZEVhU+Xj4/J87KUrl6vg5JdMK
+   /pzeSHsX5XmPVYXjWDPq7UG1uv9aZCuU6eQX/1a+v1mL/q+ex+myJfyju
+   j8E6DXGu8mOTui3U/rzcxQluxbpuVtIOYyFs7Mx620+raBvuuQ38V1SjI
+   +L1oo6wbPfsKPnemVZcaTsvwPX4ck3ImS203RSxoNt1icXKvzl3SoHQGD
+   W9HJthAqVUcohXqbR+UjQPuHMhCLpKBWlTRzsnhXsDKQdD4Y4FfLOTj63
+   mjDcbqEvilPtU5x/e9JErsu8zXGrnH4Y/0hsrH7P5UYBuDYUOM7Yzj+7T
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="6780642"
+X-IronPort-AV: E=Sophos;i="6.06,196,1705392000"; 
+   d="scan'208";a="6780642"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 04:00:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,196,1705392000"; 
+   d="scan'208";a="12863458"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.125.242.247]) ([10.125.242.247])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 04:00:22 -0800
+Message-ID: <d4d8831c-0b11-4219-b00e-37e6f0781fe1@linux.intel.com>
+Date: Fri, 1 Mar 2024 20:00:19 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240229010130.1380926-5-atishp@rivosinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 15/29] KVM: selftests: TDX: Add TDX MSR read/write
+ tests
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
+ Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
+ Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-16-sagis@google.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20231212204647.2170650-16-sagis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 28, 2024 at 05:01:19PM -0800, Atish Patra wrote:
-> SBI PMU Snapshot function optimizes the number of traps to
-> higher privilege mode by leveraging a shared memory between the S/VS-mode
-> and the M/HS mode. Add the definitions for that extension and new error
-> codes.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+
+
+On 12/13/2023 4:46 AM, Sagi Shahar wrote:
+> The test verifies reads and writes for MSR registers with different access
+> level.
+>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ryan Afranji <afranji@google.com>
 > ---
->  arch/riscv/include/asm/sbi.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index ef8311dafb91..dfa830f7d54b 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -132,6 +132,7 @@ enum sbi_ext_pmu_fid {
->  	SBI_EXT_PMU_COUNTER_STOP,
->  	SBI_EXT_PMU_COUNTER_FW_READ,
->  	SBI_EXT_PMU_COUNTER_FW_READ_HI,
-> +	SBI_EXT_PMU_SNAPSHOT_SET_SHMEM,
->  };
->  
->  union sbi_pmu_ctr_info {
-> @@ -148,6 +149,13 @@ union sbi_pmu_ctr_info {
->  	};
->  };
->  
-> +/* Data structure to contain the pmu snapshot data */
-> +struct riscv_pmu_snapshot_data {
-> +	u64 ctr_overflow_mask;
-> +	u64 ctr_values[64];
-> +	u64 reserved[447];
+>   .../selftests/kvm/include/x86_64/tdx/tdx.h    |   5 +
+>   .../selftests/kvm/lib/x86_64/tdx/tdx.c        |  27 +++
+>   .../selftests/kvm/x86_64/tdx_vm_tests.c       | 209 ++++++++++++++++++
+>   3 files changed, 241 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> index 63788012bf94..85ba6aab79a7 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> @@ -9,11 +9,16 @@
+>   #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+>   
+>   #define TDG_VP_VMCALL_INSTRUCTION_IO 30
+> +#define TDG_VP_VMCALL_INSTRUCTION_RDMSR 31
+> +#define TDG_VP_VMCALL_INSTRUCTION_WRMSR 32
+> +
+>   void handle_userspace_tdg_vp_vmcall_exit(struct kvm_vcpu *vcpu);
+>   uint64_t tdg_vp_vmcall_instruction_io(uint64_t port, uint64_t size,
+>   				      uint64_t write, uint64_t *data);
+>   void tdg_vp_vmcall_report_fatal_error(uint64_t error_code, uint64_t data_gpa);
+>   uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t *r11, uint64_t *r12,
+>   					uint64_t *r13, uint64_t *r14);
+> +uint64_t tdg_vp_vmcall_instruction_rdmsr(uint64_t index, uint64_t *ret_value);
+> +uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t value);
+>   
+>   #endif // SELFTEST_TDX_TDX_H
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> index e5a9e13c62e2..88ea6f2a6469 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> @@ -87,3 +87,30 @@ uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t *r11, uint64_t *r12,
+>   
+>   	return ret;
+>   }
+> +
+> +uint64_t tdg_vp_vmcall_instruction_rdmsr(uint64_t index, uint64_t *ret_value)
+> +{
+> +	uint64_t ret;
+> +	struct tdx_hypercall_args args = {
+> +		.r11 = TDG_VP_VMCALL_INSTRUCTION_RDMSR,
+> +		.r12 = index,
+> +	};
+> +
+> +	ret = __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
+> +
+> +	if (ret_value)
+> +		*ret_value = args.r11;
+> +
+> +	return ret;
+> +}
+> +
+> +uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t value)
+> +{
+> +	struct tdx_hypercall_args args = {
+> +		.r11 = TDG_VP_VMCALL_INSTRUCTION_WRMSR,
+> +		.r12 = index,
+> +		.r13 = value,
+> +	};
+> +
+> +	return __tdx_hypercall(&args, 0);
+> +}
+> diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> index 699cba36e9ce..5db3701cc6d9 100644
+> --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> @@ -515,6 +515,213 @@ void verify_guest_reads(void)
+>   	printf("\t ... PASSED\n");
+>   }
+>   
+> +/*
+> + * Define a filter which denies all MSR access except the following:
+> + * MSR_X2APIC_APIC_ICR: Allow read/write access (allowed by default)
+
+The default filtering behavior of tdx_msr_test_filter is
+KVM_MSR_FILTER_DEFAULT_DENY, and MSR_X2APIC_APIC_ICR is not covered
+by any specific range, shouldn't MSR_X2APIC_APIC_ICR be denied by default?
+
+> + * MSR_IA32_MISC_ENABLE: Allow read access
+> + * MSR_IA32_POWER_CTL: Allow write access
+> + */
+> +#define MSR_X2APIC_APIC_ICR 0x830
+> +static u64 tdx_msr_test_allow_bits = 0xFFFFFFFFFFFFFFFF;
+> +struct kvm_msr_filter tdx_msr_test_filter = {
+> +	.flags = KVM_MSR_FILTER_DEFAULT_DENY,
+> +	.ranges = {
+> +		{
+> +			.flags = KVM_MSR_FILTER_READ,
+> +			.nmsrs = 1,
+> +			.base = MSR_IA32_MISC_ENABLE,
+> +			.bitmap = (uint8_t *)&tdx_msr_test_allow_bits,
+> +		}, {
+> +			.flags = KVM_MSR_FILTER_WRITE,
+> +			.nmsrs = 1,
+> +			.base = MSR_IA32_POWER_CTL,
+> +			.bitmap = (uint8_t *)&tdx_msr_test_allow_bits,
+> +		},
+> +	},
 > +};
 > +
->  #define RISCV_PMU_RAW_EVENT_MASK GENMASK_ULL(47, 0)
->  #define RISCV_PMU_RAW_EVENT_IDX 0x20000
->  
-> @@ -244,9 +252,11 @@ enum sbi_pmu_ctr_type {
->  
->  /* Flags defined for counter start function */
->  #define SBI_PMU_START_FLAG_SET_INIT_VALUE (1 << 0)
+> +/*
+> + * Verifies MSR read functionality.
+> + */
+> +void guest_msr_read(void)
+> +{
+> +	uint64_t data;
+> +	uint64_t ret;
+> +
+> +	ret = tdg_vp_vmcall_instruction_rdmsr(MSR_X2APIC_APIC_ICR, &data);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	ret = tdx_test_report_64bit_to_user_space(data);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	ret = tdg_vp_vmcall_instruction_rdmsr(MSR_IA32_MISC_ENABLE, &data);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	ret = tdx_test_report_64bit_to_user_space(data);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	/* We expect this call to fail since MSR_IA32_POWER_CTL is write only */
+> +	ret = tdg_vp_vmcall_instruction_rdmsr(MSR_IA32_POWER_CTL, &data);
+> +	if (ret) {
+> +		ret = tdx_test_report_64bit_to_user_space(ret);
+> +		if (ret)
+> +			tdx_test_fatal(ret);
+> +	} else {
+> +		tdx_test_fatal(-99);
+> +	}
+> +
+> +	tdx_test_success();
+> +}
+> +
+> +void verify_guest_msr_reads(void)
+> +{
+> +	struct kvm_vm *vm;
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	uint64_t data;
+> +	int ret;
+> +
+> +	vm = td_create();
+> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+> +
+> +	/*
+> +	 * Set explicit MSR filter map to control access to the MSR registers
+> +	 * used in the test.
+> +	 */
+> +	printf("\t ... Setting test MSR filter\n");
+> +	ret = kvm_check_cap(KVM_CAP_X86_USER_SPACE_MSR);
+> +	TEST_ASSERT(ret, "KVM_CAP_X86_USER_SPACE_MSR is unavailable");
+> +	vm_enable_cap(vm, KVM_CAP_X86_USER_SPACE_MSR, KVM_MSR_EXIT_REASON_FILTER);
+> +
+> +	ret = kvm_check_cap(KVM_CAP_X86_MSR_FILTER);
+> +	TEST_ASSERT(ret, "KVM_CAP_X86_MSR_FILTER is unavailable");
+> +
+> +	ret = ioctl(vm->fd, KVM_X86_SET_MSR_FILTER, &tdx_msr_test_filter);
+> +	TEST_ASSERT(ret == 0,
+> +		    "KVM_X86_SET_MSR_FILTER failed, ret: %i errno: %i (%s)",
+> +		    ret, errno, strerror(errno));
+> +
+> +	vcpu = td_vcpu_add(vm, 0, guest_msr_read);
+> +	td_finalize(vm);
+> +
+> +	printf("Verifying guest msr reads:\n");
+> +
+> +	printf("\t ... Setting test MSR values\n");
+> +	/* Write arbitrary to the MSRs. */
+> +	vcpu_set_msr(vcpu, MSR_X2APIC_APIC_ICR, 4);
+> +	vcpu_set_msr(vcpu, MSR_IA32_MISC_ENABLE, 5);
+> +	vcpu_set_msr(vcpu, MSR_IA32_POWER_CTL, 6);
+> +
+> +	printf("\t ... Running guest\n");
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	data = tdx_test_read_64bit_report_from_guest(vcpu);
+> +	TEST_ASSERT_EQ(data, 4);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	data = tdx_test_read_64bit_report_from_guest(vcpu);
+> +	TEST_ASSERT_EQ(data, 5);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	data = tdx_test_read_64bit_report_from_guest(vcpu);
+> +	TEST_ASSERT_EQ(data, TDG_VP_VMCALL_INVALID_OPERAND);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_ASSERT_SUCCESS(vcpu);
+> +
+> +	kvm_vm_free(vm);
+> +	printf("\t ... PASSED\n");
+> +}
+> +
+> +/*
+> + * Verifies MSR write functionality.
+> + */
+> +void guest_msr_write(void)
+> +{
+> +	uint64_t ret;
+> +
+> +	ret = tdg_vp_vmcall_instruction_wrmsr(MSR_X2APIC_APIC_ICR, 4);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	/* We expect this call to fail since MSR_IA32_MISC_ENABLE is read only */
+> +	ret = tdg_vp_vmcall_instruction_wrmsr(MSR_IA32_MISC_ENABLE, 5);
+> +	if (ret) {
+> +		ret = tdx_test_report_64bit_to_user_space(ret);
+> +		if (ret)
+> +			tdx_test_fatal(ret);
+> +	} else {
+> +		tdx_test_fatal(-99);
+> +	}
+> +
+> +
+> +	ret = tdg_vp_vmcall_instruction_wrmsr(MSR_IA32_POWER_CTL, 6);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	tdx_test_success();
+> +}
+> +
+> +void verify_guest_msr_writes(void)
+> +{
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +
+> +	uint64_t data;
+> +	int ret;
+> +
+> +	vm = td_create();
+> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+> +
+> +	/*
+> +	 * Set explicit MSR filter map to control access to the MSR registers
+> +	 * used in the test.
+> +	 */
+> +	printf("\t ... Setting test MSR filter\n");
+> +	ret = kvm_check_cap(KVM_CAP_X86_USER_SPACE_MSR);
+> +	TEST_ASSERT(ret, "KVM_CAP_X86_USER_SPACE_MSR is unavailable");
+> +	vm_enable_cap(vm, KVM_CAP_X86_USER_SPACE_MSR, KVM_MSR_EXIT_REASON_FILTER);
+> +
+> +	ret = kvm_check_cap(KVM_CAP_X86_MSR_FILTER);
+> +	TEST_ASSERT(ret, "KVM_CAP_X86_MSR_FILTER is unavailable");
+> +
+> +	ret = ioctl(vm->fd, KVM_X86_SET_MSR_FILTER, &tdx_msr_test_filter);
+> +	TEST_ASSERT(ret == 0,
+> +		    "KVM_X86_SET_MSR_FILTER failed, ret: %i errno: %i (%s)",
+> +		    ret, errno, strerror(errno));
+> +
+> +	vcpu = td_vcpu_add(vm, 0, guest_msr_write);
+> +	td_finalize(vm);
+> +
+> +	printf("Verifying guest msr writes:\n");
+> +
+> +	printf("\t ... Running guest\n");
+> +	/* Only the write to MSR_IA32_MISC_ENABLE should trigger an exit */
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	data = tdx_test_read_64bit_report_from_guest(vcpu);
+> +	TEST_ASSERT_EQ(data, TDG_VP_VMCALL_INVALID_OPERAND);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_ASSERT_SUCCESS(vcpu);
+> +
+> +	printf("\t ... Verifying MSR values writen by guest\n");
+> +
+> +	TEST_ASSERT_EQ(vcpu_get_msr(vcpu, MSR_X2APIC_APIC_ICR), 4);
+> +	TEST_ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_MISC_ENABLE), 0x1800);
+> +	TEST_ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_POWER_CTL), 6);
+> +
+> +	kvm_vm_free(vm);
+> +	printf("\t ... PASSED\n");
+> +}
+> +
+> +
+>   int main(int argc, char **argv)
+>   {
+>   	setbuf(stdout, NULL);
+> @@ -531,6 +738,8 @@ int main(int argc, char **argv)
+>   	run_in_new_process(&verify_get_td_vmcall_info);
+>   	run_in_new_process(&verify_guest_writes);
+>   	run_in_new_process(&verify_guest_reads);
+> +	run_in_new_process(&verify_guest_msr_writes);
+> +	run_in_new_process(&verify_guest_msr_reads);
+>   
+>   	return 0;
+>   }
 
-A patch before this which changes all flags to use BIT() instead of shifts
-would be good, since otherwise the new flags are inconsistent.
-
-> +#define SBI_PMU_START_FLAG_INIT_FROM_SNAPSHOT BIT(1)
-
-This is named SBI_PMU_START_FLAG_INIT_SNAPSHOT in the spec.
-
->  
->  /* Flags defined for counter stop function */
->  #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
-> +#define SBI_PMU_STOP_FLAG_TAKE_SNAPSHOT BIT(1)
->  
->  enum sbi_ext_dbcn_fid {
->  	SBI_EXT_DBCN_CONSOLE_WRITE = 0,
-> @@ -285,6 +295,7 @@ struct sbi_sta_struct {
->  #define SBI_ERR_ALREADY_AVAILABLE -6
->  #define SBI_ERR_ALREADY_STARTED -7
->  #define SBI_ERR_ALREADY_STOPPED -8
-> +#define SBI_ERR_NO_SHMEM	-9
->  
->  extern unsigned long sbi_spec_version;
->  struct sbiret {
-> -- 
-> 2.34.1
->
-
-Thanks,
-drew
 
