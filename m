@@ -1,176 +1,152 @@
-Return-Path: <linux-kselftest+bounces-5734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9694186E3E2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 16:03:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C95086E40C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 16:10:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3607FB2203B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 15:03:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 004B21C2189C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 15:10:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B31F63A8F8;
-	Fri,  1 Mar 2024 15:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6C441C6E;
+	Fri,  1 Mar 2024 15:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZdvvhqT5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLnL8Z7g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29831C33;
-	Fri,  1 Mar 2024 15:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C33F3A8CD;
+	Fri,  1 Mar 2024 15:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709305376; cv=none; b=KzW+lEUHFUG4m4UIzyB0ktAVdEp+D9VYsiNfzRB5XmGhTk8QVqw3IzeYACfXy00Vw80IgIa23DorY43cYfR2Zk1AwAkwdcAYHzNJBw7dtO9/BAF/+RGiR5b6SBXk4KdGPcveFY2IAfgWmT9avW5EKluyDz64RgZ7F117Loq2hzQ=
+	t=1709305826; cv=none; b=S7JfKODTr6CavD2WG/kl0qmSC75XLEGA2lJMCbT7JLgBnfOifSH+/Nej/S3OiWzKXI+qzJiNjzq3VoFH9Nb6VMCYIYL+W26SdaWtezbUd6N5gPQSTeB4AtrgzpbaC+97lkw6/XJsHB+0eXodaAJ2JHD2NXHkBwhRs1PC1bUxREs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709305376; c=relaxed/simple;
-	bh=iAO65WgB4KgPDeH34KBkH8XenXcHBUEjtlarWO4AjMM=;
+	s=arc-20240116; t=1709305826; c=relaxed/simple;
+	bh=+G4AW/6yXtQOUgRz2hVRiWkp+8osvIQwdjKysTmxqSs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XhrwVRAwvAUqcSP+oNlKI4T9o7n5g0lV094a6v3wW2Jra5iIz3nDHd3+pHP02codJFeWBVjhlaumgseFNX8gtzVQK0aaAkv73zSnjO4yjpP4sZy9VeTwMc3ZoTTh4GVhC/NTqDT5twF32Qiv+E5P9DZHgkH5qXpyl/3oetwlhi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZdvvhqT5; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-412ce4f62f8so603285e9.0;
-        Fri, 01 Mar 2024 07:02:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709305373; x=1709910173; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TXEv9EP2Y22NukxIhiLYf8BGk4fGYg5i0JkzdzS8yhk=;
-        b=ZdvvhqT5IVMBmY7/xDACy3t1BuLoFJ1g70OTFL0x4LUqM6C27ur7UmvP+p3OdFt4HT
-         aEsjGMVgRqasME05qCODpS67hYhgr8mvJttLFpk3eS2D86hD25FdbqDocO2Jv8DCnVeT
-         lkuOYlClL4CHJASwT7zqMpfvvF5AZW1Qx5v4wcUoBbpiI5maN8IuwpBJMTV3TaadahWb
-         qTte9cz7KDmBPoGqoNLdKnyyyfnmOG2Ruf7quSreQysM3Jrm+j+/90V2F58d11IKw+kx
-         SEQNfCIH2VN4iGRRKoPhQXKs54NhKj2wKEPLvptZUfv7cWPapyrRVLiEpv6vFO0mdBod
-         cZ9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709305373; x=1709910173;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TXEv9EP2Y22NukxIhiLYf8BGk4fGYg5i0JkzdzS8yhk=;
-        b=CyAl3QxKXfvuo4/kwv60XR0e3mwGAetw5AXaWazJ6tOmOeUiF95rcxltXBP1nkEH/w
-         l1nQLKiNxwqcpQpzvQU6lu2uYT51v9/hOrf18NFzMUWVQrWQAOFOvfT+XaI7YPGRt2xn
-         3yWmNl1yT/g8vG4rB01cjtY1GgfZDh55Az3qvv5Crl9SNFHS18/UGErl6QCVfWtFqGnT
-         RyxKftEBIspMMiWYtVuGZOAr58TmWiQm9vRDQDp5AGb5g4+24D2kA4/3IZp4lcfb9OGn
-         xzT6Ev+vvYs+htZJs9Jn0QVhppXlXoW1FZwq4AAU7XWVbgQIO96Acwwc7seGXrS9CNjf
-         I0Jg==
-X-Forwarded-Encrypted: i=1; AJvYcCWGovptbQm27XOJ6lnYsZCs857h69P+IHmtIi/s8sz0K6EK3VPeWZLd/KErwWk5ERYLNBmA2XpQepvjaoBWVVwLPufIf6t+3gt533U6shgI/ZBBUvpNAqDHi21NncTX7a1x+WM82ic9rEZWV5ZVuULHJx+1UErfBW9nSdG3pDcDszNYXbJZ
-X-Gm-Message-State: AOJu0YzqXiP5Y/UzDUTRAZ442dzgjZjg2q0NwGFMYCS7gDL9DmHWe4Si
-	YY/DAMcdx2u2s/fDU4OjfpSxk+20cEQAFIVgYTzO4/qxKtqcGOs+
-X-Google-Smtp-Source: AGHT+IHC2s7wvqmklz0Axg33a4MUM1hHFtWw1cVqjlcY2Fbt7Oa9Hzilb0sussISrfWRUAlvPCnNXw==
-X-Received: by 2002:a05:600c:190a:b0:412:c9e6:fcfd with SMTP id j10-20020a05600c190a00b00412c9e6fcfdmr1116333wmq.23.1709305372934;
-        Fri, 01 Mar 2024 07:02:52 -0800 (PST)
-Received: from debian ([146.70.204.204])
-        by smtp.gmail.com with ESMTPSA id 14-20020a5d47ae000000b0033cf80ad6f5sm4911569wrb.60.2024.03.01.07.02.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Mar 2024 07:02:52 -0800 (PST)
-Message-ID: <e803766b-6a3d-4eab-8335-d415518392e0@gmail.com>
-Date: Fri, 1 Mar 2024 16:02:26 +0100
+	 In-Reply-To:Content-Type; b=IIrloJ9Boz1n/tA5HtKpquGgXYJJkfHFC6Sb0CIK1P3ogAKk/MkL5AmlGD0avSIWnMDnw+Vjs/kX3fpusL9U81LAp6d+LJhKgvitA6i+cpzppIc/6FxWejqcYMfErm9Of9zTEWFbexwJGhKHAB+MxL0YZFH4LZ/kYQT9doTYLmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLnL8Z7g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE850C433F1;
+	Fri,  1 Mar 2024 15:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709305826;
+	bh=+G4AW/6yXtQOUgRz2hVRiWkp+8osvIQwdjKysTmxqSs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iLnL8Z7gevW+mpwmIK+qXYOTMlVi5ZTI/gf1i69nJ1WIgY88IzXMFFbAr0a64B3Bi
+	 t+un5Ga1Zgb0NRYgfGiti2dLcTNiI7+lf6dO2gj2yqXUN5IsSnvi9V1FwUvTcu6Vfj
+	 AlyvT8Bk8J/xJ21A/XVLB4FuWZdDuxPGy3C7RKFOHpGXQGXiNSnP/2xoyVnyz+bapK
+	 7vNBQEYguDA2QmKQNnzgwRw5lLAoeJSQVX2IxWULVzLkJQ6RqlG5ND7ixO7NJJ/vAI
+	 13QuxcB0TPhV2YigmYaZAzXantyBxJoqphl4DqrKi0FFQ7aU0b5qP+rrTGXIZkdsz6
+	 V1Rff0ihrLArg==
+Message-ID: <09046dcc-a388-4703-83bb-9fa0c36af861@kernel.org>
+Date: Fri, 1 Mar 2024 16:10:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next 1/3] net: gro: set {inner_,}network_header in
- receive phase
-To: Eric Dumazet <edumazet@google.com>
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- dsahern@kernel.org, shuah@kernel.org, liujian56@huawei.com,
- horms@kernel.org, aleksander.lobakin@intel.com, linyunsheng@huawei.com,
- therbert@google.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 10/10] selftests: mptcp: explicitly trigger the
+ listener diag code-path
+Content-Language: en-GB, fr-BE
+To: Jakub Kicinski <kuba@kernel.org>, Mat Martineau <martineau@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: mptcp@lists.linux.dev, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Florian Westphal <fw@strlen.de>, Kishen Maloor <kishen.maloor@intel.com>,
+ Shuah Khan <shuah@kernel.org>, Peter Krystad
+ <peter.krystad@linux.intel.com>, Christoph Paasch <cpaasch@apple.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-References: <e1d22505-c5f8-4c02-a997-64248480338b@gmail.com>
- <446695cb-50b8-4187-bf11-63aedb6e9aed@gmail.com>
- <CANn89iJxCT0Bcmqjdd1kp4VCf5i3Me7yATsZXO7SkYTPQ9BOAA@mail.gmail.com>
- <a10b6d19-232c-4b6d-bd71-eb3451675f64@gmail.com>
- <CANn89iK8rDOc14HMGMq=sw0zECcg88Mb=67044r_OA=mSh=xtQ@mail.gmail.com>
-From: Richard Gobert <richardbgobert@gmail.com>
-In-Reply-To: <CANn89iK8rDOc14HMGMq=sw0zECcg88Mb=67044r_OA=mSh=xtQ@mail.gmail.com>
+References: <20240223-upstream-net-20240223-misc-fixes-v1-0-162e87e48497@kernel.org>
+ <20240223-upstream-net-20240223-misc-fixes-v1-10-162e87e48497@kernel.org>
+ <20240301063754.2ecefecf@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20240301063754.2ecefecf@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+Hi Jakub,
 
+On 01/03/2024 15:37, Jakub Kicinski wrote:
+> On Fri, 23 Feb 2024 17:14:20 +0100 Matthieu Baerts (NGI0) wrote:
+>> From: Paolo Abeni <pabeni@redhat.com>
+>>
+>> The mptcp diag interface already experienced a few locking bugs
+>> that lockdep and appropriate coverage have detected in advance.
+>>
+>> Let's add a test-case triggering the relevant code path, to prevent
+>> similar issues in the future.
+>>
+>> Be careful to cope with very slow environments.
+>>
+>> Note that we don't need an explicit timeout on the mptcp_connect
+>> subprocess to cope with eventual bug/hang-up as the final cleanup
+>> terminating the child processes will take care of that.
+> 
+> Hi!
+> 
+> There's a failure in CI under debug after merging net and net-next 
+> in diag.sh. Maybe because of the patch which lowered timeout?
+> https://lore.kernel.org/all/20240223-upstream-net-next-20240223-misc-improvements-v1-8-b6c8a10396bd@kernel.org/
 
-Eric Dumazet wrote:
-> On Thu, Feb 29, 2024 at 2:22 PM Richard Gobert <richardbgobert@gmail.com> wrote:
->>
->>
->>
->> Eric Dumazet wrote:
->>>
->>> My intuition is that this patch has a high cost for normal GRO processing.
->>> SW-GRO is already a bottleneck on ARM cores in smart NICS.
->>>
->>> I would suggest instead using parameters to give both the nhoff and thoff values
->>> this would avoid many conditionals in the fast path.
->>>
->>> ->
->>>
->>> INDIRECT_CALLABLE_SCOPE int udp6_gro_complete(struct sk_buff *skb, int
->>> nhoff, int thoff)
->>> {
->>>  const struct ipv6hdr *ipv6h = (const struct ipv6hdr *)(skb->data + nhoff);
->>>  struct udphdr *uh = (struct udphdr *)(skb->data + thoff);
->>> ...
->>> }
->>>
->>> INDIRECT_CALLABLE_SCOPE int tcp6_gro_complete(struct sk_buff *skb, int
->>> nhoff, int thoff)
->>> {
->>>        const struct ipv6hdr *iph =  (const struct ipv6hdr *)(skb->data + nhoff);
->>>        struct tcphdr *th = (struct tcphdr *)(skb->data + thoff);
->>>
->>> Why storing in skb fields things that really could be propagated more
->>> efficiently as function parameters ?
->>
->> Hi Eric,
->> Thanks for the review!
->>
->> I agree, the conditionals could be a problem and are actually not needed.
->> The third commit in this patch series introduces an optimisation for
->> ipv6/ipv4 using the correct {inner_}network_header. We can remove the
->> conditionals; I thought about multiple ways to do so. First, remove the
->> conditional in skb_gro_network_offset:
->>
->>     static inline int skb_gro_network_offset(const struct sk_buff *skb)
->>     {
->>         const u32 mask = NAPI_GRO_CB(skb)->encap_mark - 1;
->>         return (skb_network_offset(skb) & mask) | (skb_inner_network_offset(skb) & ~mask);
->>     }
-> 
-> I was trying to say that we do not need all these helpers, storing
-> state in NAPI_GRO_CB(skb),
-> dirtying cache lines...
-> 
-> Ideally, the skb network/transport/... headers could be set at the
-> last stage, in gro_complete(big_gro_skb),
-> instead of doing this for each segment.
-> 
-> All the gro_receive() could be much faster by using additional
-> parameters (nhoff, thoff)
-> 
-> skb_gro_offset() could be replaced by the current offset (nhoff or
-> other name), passed as a parameter.
-> 
-> Here is a WIP for gro_complete() step, this looks large but this is
-> only adding a 2nd 'offset' parameter
-> 
-> Prior offset (typically network offset), called p_off
-> Old argument nhoff, (renamed thoff if that makes sense), pointing to
-> the current offset.
-> 
+Thank you for this message!
 
-You're right, it seemed to me like a broad change but it is mainly
-cosmetic. I'll finish your version and submit it to fix the bug.
+I didn't have this error on my side, even without '-d SLUB_DEBUG_ON' we
+do on top of the debug kconfig, but I see I can reproduce it on slower
+environments. Indeed, it looks like it can be caused by that
+modification. I will send a fix ASAP!
 
-I still believe that setting inner_network_header is a valuable change.
-For example, although skb_gro_network_offset is used - setting it in
-encapsulation protocol functions (such as ipip_gro_receive) allow us to
-remove conditionals from {ipv6,inet}_gro_receive gro_list loop and remove
-flush_id from napi_gro_cb as written in the 3rd commit.
-What are your thoughts about it as a separate patch?
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
