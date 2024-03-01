@@ -1,116 +1,158 @@
-Return-Path: <linux-kselftest+bounces-5707-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F33486DF6A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 11:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4C786DF6F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 11:42:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4FBB1F2721C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 10:41:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 259981F23413
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 10:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 643C86CDBD;
-	Fri,  1 Mar 2024 10:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C9C6BB54;
+	Fri,  1 Mar 2024 10:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0e3PIiw"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="S7B+XxgQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C526BFA8;
-	Fri,  1 Mar 2024 10:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9574969E0B
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Mar 2024 10:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709289631; cv=none; b=PsMRBvv7bnu5gIqw8cXMs8erjfid8cKtHUttXlDioXLUzqkI26/YaY6G8syqE2hYWCDPRWCTNgsOKBnoI7vgTKldjl7jNMUwot7vrJTxdlnyvdzrfeLW7azWlnr9rI2IwtTU5v97ecbP4VtZnqlEfN//ZEQNW17B8B4HMnSsP50=
+	t=1709289725; cv=none; b=otDUNg8ZsHkuo1rheqXMmQFhaRzo/4IZryxjhT2BD2irep7fJp78PFQQiS2Qyyaf0qt5rhV1nKZ5DCRdKivQxzoSmtsPSzXPMKNLVTpxTouZvxnM1yqzrd5fAtao+N+/PL77CFsO93NaxuA3qj2I1ICodclOD/G1IojpLMTh0bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709289631; c=relaxed/simple;
-	bh=gZi/AY9atkfoxOiyqbo/g6lCZx2va4Vho5HFwtw0GZU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bNpTDPsLniNYQLRyGpDd88Fs9XpVJlleLLFhyp+n3o4pkga+lDDNtSibBWjfZZZmA+yU77vDoidFN9qpMY5MbV2+INi7cOycmAT2w8tJbDrha17+s9GF0vy3XLs0XJszu5QckFQtAzxe3GiA6ykbBoulqY1SZJ5/ozVzeNdTDAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0e3PIiw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C2C16C43390;
-	Fri,  1 Mar 2024 10:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709289630;
-	bh=gZi/AY9atkfoxOiyqbo/g6lCZx2va4Vho5HFwtw0GZU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=h0e3PIiwkZI76XuXlESEIooGZbnbBheN+uz7Q4yoDcbpGANT6u4uV7+xhmBxNj8O1
-	 JvzLds8mU9ox2pCgVkB4FAPU/NB8Pke+VR3Y+we915NBhV/wgBRZZRNWpGFY7oe2q7
-	 v7Lp0ZxpU+uK4/S1O5NnauUikzXcI5oFNPxAR/V/z1YRfG1CdXLR71qZQHx8MntBrF
-	 Ly2lvwPs6yk7k6xYgTEPHPXjaZFVTT3eSbZxhoThurKXN06n1rj12unVpqRVtg8D7J
-	 hZ04uNbdLUY1LqJJUQ/oG4th9bPkyNhPUBdKdVFb1MTcVMle0J3KCWDRQgoW/CojEs
-	 Whlk51x+tZVbw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AB10BC595C4;
-	Fri,  1 Mar 2024 10:40:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1709289725; c=relaxed/simple;
+	bh=MyzEAkBZuIpR892vDJgDwyTBmBXyBAiXWmQvk35TtYY=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=jkpsUuY2XKNv+nyq53scVorP1u+2b9e3E21SgInB+TaZXL2B4/EfiwxPGiCQrAJB4uKJLptLCKOzAq1mqx9wXMgsyl6Ds4zoUvtqTZHwdLLLV5B+xK7z/4K14U7UciWyrrdZ2zXe4MfRuBJKxj7bUAWstvpZO9vE/UJVyICVBSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=S7B+XxgQ; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-565d1656c12so3438238a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Mar 2024 02:42:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1709289721; x=1709894521; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3FUsAED/lmxCoWoKnQG3JtYsXIKOmckCJxzG1hZ6f9c=;
+        b=S7B+XxgQr4MJMxukZ+TsmEkO0cEaU26VkSsgs6gy7pfebgwfScrzlT/13uHPYF1W6A
+         Jmdgqgc5/1SzAdN20oSUPA2MeaRytnrjezOfODG/orN/dLJ3Q4vHDEC6TlpeXDZECdYu
+         BqZArM7R4VVQZhhW4ylSSJqrGseGMImPgO4Ek3XAFTuRWNU8MkiWamVzAyRgFwisRmLy
+         U5h5bioHIzjrphuXjX9DjK3yhGQl+z7Uf/hI6gVaRQl3Tk/9o+esnWPmT55OsSrq/28x
+         Mm6Ws01btgOOes5LlRE9S17APyLrO04FwB9I0hmjPgWxEq3eeS3Ty5aTLmMQW7j7GnO0
+         iYZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709289721; x=1709894521;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3FUsAED/lmxCoWoKnQG3JtYsXIKOmckCJxzG1hZ6f9c=;
+        b=NryFl3voFTnRCRgyYaIxYl0bLk7da9loEvEldyH0cV7gyefbD3hdDjyph3JBQUYmt+
+         rcu3r3ZwQv+0e+qW+AocRs2HGuVeqOYeILWOQtel3S1DOJAn784AkVuU+7wLpoDY5Egm
+         xI5K0uecctRd4DbLVkCFwR4Mrk22wXc9AdNukcx88zV66f/LP5qkw4pEBhHgxec0aW1M
+         XLKcuQRs0e65JpkEBU8dXL6A71yKo1C4Ru0ooMkdAIDhv606mVeF5TaPnxeJ+mQxl+tI
+         JS/3XoojULdXfJPsrJqCYjMfwiBfFNsd0WapP8sVIOt773tCagaPKhXaLe2MIJ7XSiSG
+         ZcuA==
+X-Forwarded-Encrypted: i=1; AJvYcCXIHIMgOkpNgJMnNy1RkvQPygJ24drGPmnbrZe+cLa8swCXjsWNukBs/rQXRbP2AWIYSG1kxXtCY7Kt98kLfG5FRBaDGxKJqok8oO+SlsYk
+X-Gm-Message-State: AOJu0YyDyhDytNVPhFDV6kXjffy9MCsUgGwcQgXNl8eac+rMQJjxpfUb
+	YpBqPS8tznj6kSwkuwTFETo+JwrGUiLoVvvF7BnxigBVTgOvqkRJSp6IfbbCsd4=
+X-Google-Smtp-Source: AGHT+IFsNGzvNzeIMp+c2vln39bwQZyElm675FddMfJSSFuv8gtyc69SUsSkQMp66ZVqG55y2w4wkw==
+X-Received: by 2002:a05:6402:28af:b0:566:6c13:82fd with SMTP id eg47-20020a05640228af00b005666c1382fdmr884994edb.21.1709289720923;
+        Fri, 01 Mar 2024 02:42:00 -0800 (PST)
+Received: from cloudflare.com (79.184.121.65.ipv4.supernova.orange.pl. [79.184.121.65])
+        by smtp.gmail.com with ESMTPSA id w20-20020a50fa94000000b005668c6837ecsm1421669edr.32.2024.03.01.02.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Mar 2024 02:42:00 -0800 (PST)
+References: <20240229005920.2407409-1-kuba@kernel.org>
+ <20240229005920.2407409-13-kuba@kernel.org>
+ <871q8vm2wj.fsf@cloudflare.com>
+ <CADvbK_e+JCeM9cn0Qd7JG5UdSO_-s8w5r0v40E485JevkbH4XQ@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 29.2
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Xin Long <lucien.xin@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+ netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, mic@digikod.net,
+ linux-security-module@vger.kernel.org, keescook@chromium.org, Marcelo
+ Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: Re: [PATCH v4 12/12] selftests: ip_local_port_range: use XFAIL
+ instead of SKIP
+Date: Fri, 01 Mar 2024 11:40:45 +0100
+In-reply-to: <CADvbK_e+JCeM9cn0Qd7JG5UdSO_-s8w5r0v40E485JevkbH4XQ@mail.gmail.com>
+Message-ID: <87wmqmkzd4.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 00/12] selftests: kselftest_harness: support using xfail
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170928963069.1389.8505815378862616818.git-patchwork-notify@kernel.org>
-Date: Fri, 01 Mar 2024 10:40:30 +0000
-References: <20240229005920.2407409-1-kuba@kernel.org>
-In-Reply-To: <20240229005920.2407409-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- mic@digikod.net, linux-security-module@vger.kernel.org,
- keescook@chromium.org, jakub@cloudflare.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Thu, Feb 29, 2024 at 06:25 PM -05, Xin Long wrote:
+> On Thu, Feb 29, 2024 at 3:27=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.=
+com> wrote:
+>>
+>> On Wed, Feb 28, 2024 at 04:59 PM -08, Jakub Kicinski wrote:
+>> > SCTP does not support IP_LOCAL_PORT_RANGE and we know it,
+>> > so use XFAIL instead of SKIP.
+>> >
+>> > Reviewed-by: Kees Cook <keescook@chromium.org>
+>> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> > ---
+>> >  tools/testing/selftests/net/ip_local_port_range.c | 6 +++---
+>> >  1 file changed, 3 insertions(+), 3 deletions(-)
+>> >
+>> > diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools=
+/testing/selftests/net/ip_local_port_range.c
+>> > index 6ebd58869a63..193b82745fd8 100644
+>> > --- a/tools/testing/selftests/net/ip_local_port_range.c
+>> > +++ b/tools/testing/selftests/net/ip_local_port_range.c
+>> > @@ -365,9 +365,6 @@ TEST_F(ip_local_port_range, late_bind)
+>> >       __u32 range;
+>> >       __u16 port;
+>> >
+>> > -     if (variant->so_protocol =3D=3D IPPROTO_SCTP)
+>> > -             SKIP(return, "SCTP doesn't support IP_BIND_ADDRESS_NO_PO=
+RT");
+>> > -
+>> >       fd =3D socket(variant->so_domain, variant->so_type, 0);
+>> >       ASSERT_GE(fd, 0) TH_LOG("socket failed");
+>> >
+>> > @@ -414,6 +411,9 @@ TEST_F(ip_local_port_range, late_bind)
+>> >       ASSERT_TRUE(!err) TH_LOG("close failed");
+>> >  }
+>> >
+>> > +XFAIL_ADD(ip_local_port_range, ip4_stcp, late_bind);
+>> > +XFAIL_ADD(ip_local_port_range, ip6_stcp, late_bind);
+>> > +
+>> >  TEST_F(ip_local_port_range, get_port_range)
+>> >  {
+>> >       __u16 lo, hi;
+>>
+>> [wrt our earlier discussion off-list]
+>>
+>> You were right, this test succeeds if I delete SKIP for SCTP.
+>> Turns out IP_LOCAL_PORT_RANGE works for SCTP out of the box after all.
+>>
+>> What I didn't notice earlier is that sctp_setsockopt() delegates to
+>> ip_setsockopt() when level !=3D SOL_SCTP.
+>>
+>> CC'ing Marcelo & Xin, to confirm that this isn't a problem.
+> Yes, SCTP supports ip_local_port_range by calling
+> inet_sk_get_local_port_range() in sctp_get_port(), similar to TCP/UDP.
 
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+Well, that's embarassing.
 
-On Wed, 28 Feb 2024 16:59:07 -0800 you wrote:
-> Hi!
-> 
-> When running selftests for our subsystem in our CI we'd like all
-> tests to pass. Currently some tests use SKIP for cases they
-> expect to fail, because the kselftest_harness limits the return
-> codes to pass/fail/skip. XFAIL which would be a great match
-> here cannot be used.
-> 
-> [...]
+I see that I've updated sctp stack to use inet_sk_get_local_port_range()
+in 91d0b78c5177 ("inet: Add IP_LOCAL_PORT_RANGE socket option").
 
-Here is the summary with links:
-  - [v4,01/12] selftests/landlock: Redefine TEST_F() as TEST_F_FORK()
-    https://git.kernel.org/netdev/net-next/c/e74048650eaf
-  - [v4,02/12] selftests/harness: Merge TEST_F_FORK() into TEST_F()
-    https://git.kernel.org/netdev/net-next/c/0710a1a73fb4
-  - [v4,03/12] selftests: kselftest_harness: use KSFT_* exit codes
-    https://git.kernel.org/netdev/net-next/c/a724707976b0
-  - [v4,04/12] selftests: kselftest_harness: generate test name once
-    https://git.kernel.org/netdev/net-next/c/38c957f07038
-  - [v4,05/12] selftests: kselftest_harness: save full exit code in metadata
-    https://git.kernel.org/netdev/net-next/c/69fe8ec4f673
-  - [v4,06/12] selftests: kselftest_harness: use exit code to store skip
-    https://git.kernel.org/netdev/net-next/c/796a344fa431
-  - [v4,07/12] selftests: kselftest: add ksft_test_result_code(), handling all exit codes
-    https://git.kernel.org/netdev/net-next/c/fa1a53d83674
-  - [v4,08/12] selftests: kselftest_harness: print test name for SKIP
-    https://git.kernel.org/netdev/net-next/c/732e2035280b
-  - [v4,09/12] selftests: kselftest_harness: separate diagnostic message with # in ksft_test_result_code()
-    https://git.kernel.org/netdev/net-next/c/42ab727eb95f
-  - [v4,10/12] selftests: kselftest_harness: let PASS / FAIL provide diagnostic
-    https://git.kernel.org/netdev/net-next/c/378193eff339
-  - [v4,11/12] selftests: kselftest_harness: support using xfail
-    https://git.kernel.org/netdev/net-next/c/2709473c9386
-  - [v4,12/12] selftests: ip_local_port_range: use XFAIL instead of SKIP
-    https://git.kernel.org/netdev/net-next/c/c05bf0e93312
+Thanks for confirming, Xin.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It's clearly an overside on my side. That SKIP in tests should have
+never been there. I will send a fixup.
 
