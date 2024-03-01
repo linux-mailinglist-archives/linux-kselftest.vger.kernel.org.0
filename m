@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-5729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B815C86E33F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 15:24:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFFC386E34D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 15:27:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E2D91F22C98
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 14:24:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E5E0B2216C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 14:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900946F076;
-	Fri,  1 Mar 2024 14:24:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11966F086;
+	Fri,  1 Mar 2024 14:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTHxOMSp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F5tAPOpJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC5E6EB7C;
-	Fri,  1 Mar 2024 14:24:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924DB6EB6A;
+	Fri,  1 Mar 2024 14:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709303054; cv=none; b=RiVLBp1Fps0j+5cv8HrmLouxmQzC/TPNNqBmSid1CrqxdqbMoewuvLpM11JsTAii8gcjjd5FkChGnceiFzwP2ij7l5LlleJW4MIP8SNXyuMnM46mkDNWDv6GV4H3r3E5lsPVp5H/JjdGwIjHmwBcqnEPaRBW6CkmlqQa0V9L2mc=
+	t=1709303250; cv=none; b=RaQdwGiaRiZOG0KisOMjTx9oTKq/BuJsT+78vFXhDeusmpnCosFJz8pUFRjYX7vPQGuMay6GamIWsy+Ol8U+tKQI1ZkDl4G/JujDgsDLF4/mB/D53izjj+uDLpCxhH4kbU7wLFRcdYOhdRtveOgFkFcXqTR50OGoqnOMyUM9+MA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709303054; c=relaxed/simple;
-	bh=2ShIAu9aZ8JgsAuFdkiNPsP5fHzU5NJRTwCaSw/PEp0=;
+	s=arc-20240116; t=1709303250; c=relaxed/simple;
+	bh=sc89POi212PZePf8zzE7T9FFfzy+HFO2YO3kSU1uARI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h3DKAjSJ3yDZVXtiGugjZyAijfoU2wpE/EZvibeW85oRS+gyZ3olDjDV8eHyKoBQNzQByWREOGffTmOCoJvjZlkg96w9TeDJVKbLSDMd4m9PmFQACANfHc68n0c7b4rbio0muZTdt5lmK7QXmN0rgGmsBU7Q7mR+ezglOy4vmt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTHxOMSp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCFBBC433C7;
-	Fri,  1 Mar 2024 14:24:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=muAz4c2nu+g3pP35yOK1ovrxFkzb40tt2SxIKG4h/tgvKnrTHgJ3E52HmgrcEd67o380xq4GbyoP1SMZED/QeIThet/ooBkX7XqPqfE5d9i7mPuWBUb2zin5OJ9C4e459Cac8F3zoW4yAls6+KbKhbC3JWBhpAcTsLSEr41boWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F5tAPOpJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A58C433F1;
+	Fri,  1 Mar 2024 14:27:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709303053;
-	bh=2ShIAu9aZ8JgsAuFdkiNPsP5fHzU5NJRTwCaSw/PEp0=;
+	s=k20201202; t=1709303250;
+	bh=sc89POi212PZePf8zzE7T9FFfzy+HFO2YO3kSU1uARI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lTHxOMSpiF+wkW+P6AxOX8LcZVGY5xt9HSew5vdtPX298f6u1KTW9UAX8Zdi5ujqn
-	 jMkg2q62mA9uD3nPuXAwF4Cz8WC9amMkRLiIcZwt6EbeDJrM5SPvIWLrYRbTL+8XW4
-	 mCGwIUPcbLtGtQsrUoL+W2y/BCF/EXQMPGnrR7djmTCe9pM05kknyBLPbau1jjuWLm
-	 +L/dbMZq7BB07HwR2GL4cSXEh44Jk5uDcM68aq+AEL49ImAL9zlA0Yf8opz2gkH1GO
-	 zguDs/3YOp1LWWuAur7ghZyfo8yZt319eCGjw1qztsfXoxcNYq7K3ssOIsquoBLXkF
-	 aGRq48op4cx+g==
-Date: Fri, 1 Mar 2024 14:24:05 +0000
+	b=F5tAPOpJm1jBDvbI7aixTRJtVuNlC7TpO+r+jnig6hOk+Om6cenqjJq9Hq2EIHkv1
+	 cOvjS2jQ3U5Ba7ZqekNxUeLR5X+mJsviETbR4uyhxyWiwRTHsqRIVJAwVnQRmSZ8gT
+	 hGMyOuf6GWzGvK9ZllFk/obpMBVoNY5dr7/FO2OWfvH33gshcOTbz789fTPu81Hg8t
+	 WvgaT3SooanyV9tp9ZjX7OhwneN0wyXcBOu4gNYabeUbCKxuyYcBYxfe8cRp5EWQvX
+	 OcBygi9jeVPFjovIJ7GXQcxEvtfy/sDGgkwduQKf8BW9yZGFZzfvs9EcJu4WhWYqX7
+	 yQE7QQH56Sk5g==
+Date: Fri, 1 Mar 2024 14:27:23 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Ryan Roberts <ryan.roberts@arm.com>
 Cc: Zi Yan <ziy@nvidia.com>, Aishwarya TCV <aishwarya.tcv@arm.com>,
@@ -59,13 +59,15 @@ Cc: Zi Yan <ziy@nvidia.com>, Aishwarya TCV <aishwarya.tcv@arm.com>,
 	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v5 8/8] mm: huge_memory: enable debugfs to split huge
  pages to any order.
-Message-ID: <888bedc2-9677-4958-8dd7-71fbbd66b08d@sirena.org.uk>
+Message-ID: <dda99ee0-87a2-482d-bf28-bd5e5a97b46e@sirena.org.uk>
 References: <20240226205534.1603748-1-zi.yan@sent.com>
  <20240226205534.1603748-9-zi.yan@sent.com>
  <082e48c8-71b7-4937-a5da-7a37b4be16ba@arm.com>
  <0dab0c69-2eac-4e65-9efe-e0b037499abc@arm.com>
  <08703C70-DD6E-446A-9ABC-BC2C8E33B8CD@nvidia.com>
  <f7a3d07d-290b-46d6-884e-fa288901c3c6@arm.com>
+ <3D5A5D18-0A20-4BB3-B667-0CB5799BA665@nvidia.com>
+ <6003865f-2c85-4dd4-9803-6204f9018f50@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,65 +75,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d2H4DSXjCnO3MNwX"
+	protocol="application/pgp-signature"; boundary="aDClwSPU2dBmedls"
 Content-Disposition: inline
-In-Reply-To: <f7a3d07d-290b-46d6-884e-fa288901c3c6@arm.com>
+In-Reply-To: <6003865f-2c85-4dd4-9803-6204f9018f50@arm.com>
 X-Cookie: Schizophrenia beats being alone.
 
 
---d2H4DSXjCnO3MNwX
+--aDClwSPU2dBmedls
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 01, 2024 at 01:09:04PM +0000, Ryan Roberts wrote:
-> On 01/03/2024 12:52, Zi Yan wrote:
+On Fri, Mar 01, 2024 at 02:18:16PM +0000, Ryan Roberts wrote:
 
-> > I can do that. But is this a new requirement that self tests have to be=
- finish
-> > in CI/CD environment? Can you provide a guideline for it?=20
+> Although I agree it might be a tall order create and mount an XFS fs in
+> run_vmtests.sh. Perhaps it might be good enough to add an optional param =
+to the
+> test to pass a path when running the test manually, and if that's not pro=
+vided,
+> just try to create a temp file in the current dir and skip if its not the=
+ right
+> sort of fs?
 
-> I'm not sure what's written down, but certainly anyone should be able to =
-run the
-> selftests with as little knowledge as possible, and they should only fail=
- if
-> they detect a real problem. By convention a test should be skipped if the
+Yeah, if it needs to be a specific kind of on disk filesystem then that
+needs a lot more integration with CI systems (a lot of them run entirely
+=66rom nfsroot by default!).  Being able to specify the location via an
+environment variable would also be good, it could fall back to the
+current directory if one isn't set up.
 
-It does get mentioned in talks and things but TBH I think it's just
-generally a good practice thing.
-
-> > Since I always assume
-> > selftests are just ran by human who can set up environment.=20
-
-> I believe kernelci have been running mm skeftests on x86 for a long time.=
- We
-> have started running them against arm64 on our CI for the last couple of =
-months
-> and it had found a number of real issues in the kernel in -next, so this =
-is
-> helping find and fix things early. So there is definitely benefit to keep=
-ing
-> these tests clean and robust.
-
-They're also being routinely run on at least some platforms by LKFT
-(though from a quick check it seems not with the magic command line
-options to set up secretmem and huge pages) and CKI, possibly also some
-of the other CI systems I'm less aware of.
-
---d2H4DSXjCnO3MNwX
+--aDClwSPU2dBmedls
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXh5QQACgkQJNaLcl1U
-h9CxkAf/adE7KBi4x/8BcY4JyrlGWzoh04qkP32+a1ogYNL/OSoAT8tziWVGRHB3
-iV/4b1y1dcwrcAHsYMg4WTebJsa7BkOEleKQeZpQrjJLWM50FDngX4uTm5nzuQQT
-RIiD7Pp8pjJIV+uC1BiQrVUGOoJwepIBOu1fta6NslqtaIXFDnH2m1d0Uj/fsitN
-1yNfRkDHFQTPdcNWUIUskJLFrjhF5gqNyLNwN4+QnJwJWTfhgfOOCtrZTo8Uj7KD
-xtA/wImC0/lxwNcIm98Dn8EFFk14Ap/9/WcAekG1mL0rF+WN0ZKnaU4MiW9HHJkO
-/cpR3XdfvBIka+CwGDUQoH0uJCG4Gw==
-=xf+x
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXh5coACgkQJNaLcl1U
+h9Cthgf/exhZvamNaMdDUbiaQJt1suzTxtR0iwMIkyoGG+QcsGZHPhG2OGAVrqfK
+T+xYRWrqxRQWqc+NZqTGq08iAoFkQZCKv6VUn2jlxL7o8PNPLkYRA69XyYXCYnwN
+UzQU2I9lSef/UbFmAIv/BaceerTOO3XD7GfGPn1H852j7jA4t9VlRO2jPbfG++7I
+0j4cl9L2Xvhun+JDcykwIwazFQpBQxZShf2rPKfxZz3cg/UozNjpTSIUAoNZdKUP
+YSFL0/fzXxsRdri8Ud3P3xWsSxPNrVWAxMUgkzCL4uqerD+kikdiAGgpq4QsmMF3
+cHoBcF80Yg+Ft1V0ZSk4f15ZgvxbYw==
+=UD/W
 -----END PGP SIGNATURE-----
 
---d2H4DSXjCnO3MNwX--
+--aDClwSPU2dBmedls--
 
