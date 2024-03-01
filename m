@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-5756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5757-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70AE286E831
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 19:21:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9496C86E833
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 19:21:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D88A41F22B1A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 18:21:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 396652887EB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 18:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24DF5282F9;
-	Fri,  1 Mar 2024 18:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362013D3A8;
+	Fri,  1 Mar 2024 18:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZLSdb+N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FsrWLWuy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94733D0AD;
-	Fri,  1 Mar 2024 18:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064E23B785;
+	Fri,  1 Mar 2024 18:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709317131; cv=none; b=sReflvjk6uT/OEyvPzRFMnJ9G1TNnSESSrzNqKZ1+/f1RLvTuId2cWf2sOO1RATQQpTVrpuOJC2GlGWP41GLfiXNoS9pLl0ePc0ZoEiPzWORV9elsyJtMzAo1Qrep7udk89xenCwyo9qocre784JrkiNKgWvqpNlXcaD1opqQbk=
+	t=1709317134; cv=none; b=qRUvFKzXvapsfbTTHm2fkP0fQW/IZf6kY0kG1nTUtwVs5hs6mKb/xxkY9mmVfDMFTi48S2tEWGkR4c8+T00Add/06nppMCri2ZY1oNdFVDGRhTieIRxKCrmn+mgA4UfTO5szcaCob8UBqdJku7pZCktaHQFCmYe3tY0/nGdb/0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709317131; c=relaxed/simple;
-	bh=7lG7R/s1q6fLAI6wvapbUgxQWeobDoOOk1BJNjVurX4=;
+	s=arc-20240116; t=1709317134; c=relaxed/simple;
+	bh=2ulEk82mzCDQTc9Q4xsVEYZBuHiCFEEMnXuV8zumajs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Or917CM5yaIUWzt/08qHK+xktdyL2+Wcywd7eWnTAsKvHvSITmg7JJKh4IYV+exDJ5VG8lAfJhQzIbXsnOzCMtovs3N70EmQz9gLpJ2d+NmsxEaUOA077E70KIEzp+e/HfnQrBfQy02wGWro/9rVLsdVY8zZ/Jx9AuFLxDnvTH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZLSdb+N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6549C433C7;
-	Fri,  1 Mar 2024 18:18:47 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=ARUhVQHdXX/GYGntMWvxpWUjXS79zqbfZnRYgiPIrG1p1xm4ZTGolLsWu15BnsETP0aX+Dq/Df6kH9BDh3nORgA/T1okkpieHu1kTb2Vq3IOiBjHrf/5k+yMFj/yrskVSDkV5SUFv4Fh+jHH+npjsxI5gaJhXSg2nuTUSuywimk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FsrWLWuy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAAE1C433B2;
+	Fri,  1 Mar 2024 18:18:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709317130;
-	bh=7lG7R/s1q6fLAI6wvapbUgxQWeobDoOOk1BJNjVurX4=;
+	s=k20201202; t=1709317133;
+	bh=2ulEk82mzCDQTc9Q4xsVEYZBuHiCFEEMnXuV8zumajs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZZLSdb+N5NXpJTaYIYXiX+5H/FwcVSGg7KIN7oClImmg/uIhgKsqdLpJQGB3P1kvy
-	 GW55w7Mm40vzu8sQu4oh9U8VZznVZwRS0iNfGvqnYC/OWJWW0JO1xNUQdYVuvVfL7l
-	 Uwzu8nlaDD7VMAdi55J7+NAyCBPhEtGoNQl8QftP758ufSa3kteXTCMbqQ5jHxabAb
-	 oLgXtVZQwmiS3qTgCGluX1UV3WuLps0Xxg2FMpFq69D1CBFakCFsHBxiIRdxdCc0tr
-	 swdofAUxMAkGfq2r2dGaJy5lO38SHv/uPj0tk9PvAsjzPJUKcdpugk5pC+dzdFsb3z
-	 ovHIzGB57YyNg==
+	b=FsrWLWuy1cuhgV57G20jSlnzmFnHHmMhHumQtZjkwGU9rPnyZ76ggu10m6kzzXvbC
+	 ShLKiFqfhxvfcQsBU0EoLYngKTlQMP0XfTKec5BVa0yHK6/HWX1LneMcy4x82b9rjQ
+	 adhAl4k9TngUFpYc+Y2dWxdNpTgFlWvRAztIoecidmd+/1CyNS3OoHP8EKlA3ROLNv
+	 pouvrJj/XCBEbT/FRiSZdAqzoXi/8jizTYi7lxoS4fG2AnczXrKBV1ikN59S8zxdLP
+	 Q34BVlC+c1GtZSz2lMKV1fHG77MCiS/H7SIfvYwU7Ci2mUYLlMrxWN3z8SiJpFoUBk
+	 gk2hrpfFy+93g==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 01 Mar 2024 19:18:30 +0100
-Subject: [PATCH net-next 06/15] mptcp: check userspace pm flags
+Date: Fri, 01 Mar 2024 19:18:31 +0100
+Subject: [PATCH net-next 07/15] selftests: mptcp: add userspace pm subflow
+ flag
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240301-upstream-net-next-20240301-mptcp-userspace-pm-dump-addr-v1-6-dc30a420b3a0@kernel.org>
+Message-Id: <20240301-upstream-net-next-20240301-mptcp-userspace-pm-dump-addr-v1-7-dc30a420b3a0@kernel.org>
 References: <20240301-upstream-net-next-20240301-mptcp-userspace-pm-dump-addr-v1-0-dc30a420b3a0@kernel.org>
 In-Reply-To: <20240301-upstream-net-next-20240301-mptcp-userspace-pm-dump-addr-v1-0-dc30a420b3a0@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,102 +64,61 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2877; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=nB2jr+h3crYGyM6lGO9/xWsi/9FVXdNk/IEW2/03A4s=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl4hv0aHCCdqzGFyKJ5B1lx+aiAndXV/nIkk7cf
- gU5gKvfPY+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeIb9AAKCRD2t4JPQmmg
- c/+xEADKUM0XrA6HwxFUnHiadXTzhVe8dW1u6ZBaWr4JMv7xPmJjZaP/RgATUAhPGYwrHWL/V4b
- LzYo4RGTjBHrwI0x+GgCgo+4CTCYDbbJt3M2bdfiSE+R7aILQZNfvGgPeXs1oyZfSCQFksx5Mqx
- TZ/B0tt7T9qsrdDQgc6AbghbmhotHY+i0/EV1lfFTRGlIiCE7xv5BQOu/gcNerMYtNz2JXvNBrK
- pQNWsTyxI2vSzcYuyT9rD7Lv3KN8waoTFh/3cbYH/86BpKekO5WMyf714T2nhUW6k/Dl/RmlDSo
- 7Y1gKUgJ08VttoK2ssbNc1GB3lyb3CBod1bkv7NrskKZoF9AlGt4IFPPGiUDtXez0+9CWVqft+8
- c1pbaQfs2QQ2PstgzAn1Zn7aEVOH/RFo6raICKYhiH2u/6GogCzcwxwkyPHIsvKkT4zfgjzw0kV
- /A20TZlKSkpklyDvSPiXbSD0fW42ntSzYLBN3zPuiLlybL9Diz1J/LXOPEnUNq7MDgmbIIWe+dz
- tGZ/C/HrQgH1oGV9y6B4vwBM8RgmqhYKa2p8awI6muJnBV1u4ZGEKCw9uJPc8pq+H4/QtoiLm2e
- 2ZUX7A7DW9Phh0G0JKZKaOfLguGpkQKET0K3ronhYTxP5Mgb+aLokcgqRPaX7+VzEuEQ5x9AxMg
- z/Wc3YCbqsOvimw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1420; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=hiJ4UAaexdDdOkDMA90vHJxSvQ7TaHeYuKTyQ9X/yhQ=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl4hv0hsDs/1Pa/GzXfDIT9DqD+yjEj9kpfYLNs
+ 1i6ujkWj5uJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeIb9AAKCRD2t4JPQmmg
+ c7AoEACJ8g1KYDvlpmYv1fWLTanHLx/uzyfz4MCfgZ2ecgZT1TxBEucPB2HA3z0I9AAMb+yzbvY
+ y5lz9tc+OG2BszlB1Os7kqvKuOS5j2oIX0cB9/fIfyewK0BC5dPmw5Dxx8nhKTIP+XJE1hUCHJq
+ Jwe2cDcE+XzESyrHwIohfMiQDmFVDXEYRsbors/VLpP22aC7vjJL9GK7CO6q56E8CK3tMdKtEZI
+ m5i+OxEx90+Omq1roKrFu6SO/0ERKK2cZ6qJbT4n/LP+X1rYXYcbuXVc9sa+NsUOhhVnOVB4mJt
+ QdanLxiu03TGJgirap/YLc+qQ6t+wXydNOQBZJoCUdgUWqSjYxg0i3BpZ/BrPjJvirkI8MfSyin
+ +SF1W9fnFgkocAFHKTW7z9sPc/BnvPs+1M0EE1NwaQsg7nzqCpeAdgdkM40LGSUeZP/mPESPSQ8
+ MUCu3p2M5XWXA/4CY4nc0IX1ofLaXBYJ4GhOuYAerKTChp9vfXetlGQX0rF87IA6eHGUh/tP30v
+ AjVX1UOs4EjisrUMoRk2xLqMnt4HibFIWg/btKys0soDSU0lTT7LSKV6nhAJm/WD96n6C8P/P8+
+ DDNb9Pb8bhv6WzJj3mDgjF99ynvncffqpsTUGkjVuaVulxCrvdsE0sTQEx+nSa5eagomAEGvzmB
+ 1qrZ3N3QZTe8mNQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Just like MPTCP_PM_ADDR_FLAG_SIGNAL flag is checked in userspace PM
-announce mptcp_pm_nl_announce_doit(), PM flags should be checked in
-mptcp_pm_nl_subflow_create_doit() too.
-
-If MPTCP_PM_ADDR_FLAG_SUBFLOW flag is not set, there's no flags field
-in the output of dump_addr. This looks a bit strange:
-
-        id 10 flags  10.0.3.2
-
-This patch uses mptcp_pm_parse_entry() instead of mptcp_pm_parse_addr()
-to get the PM flags of the entry and check it. MPTCP_PM_ADDR_FLAG_SIGNAL
-flag shouldn't be set here, and if MPTCP_PM_ADDR_FLAG_SUBFLOW flag is
-missing from the netlink attribute, always set this flag.
+This patch adds the address flag MPTCP_PM_ADDR_FLAG_SUBFLOW in csf() in
+pm_nl_ctl.c when subflow is created by a userspace PM.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm_userspace.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/net/mptcp/pm_userspace.c b/net/mptcp/pm_userspace.c
-index d6b7be3afbe5..3bd13e94b568 100644
---- a/net/mptcp/pm_userspace.c
-+++ b/net/mptcp/pm_userspace.c
-@@ -334,7 +334,6 @@ int mptcp_pm_nl_subflow_create_doit(struct sk_buff *skb, struct genl_info *info)
- 	struct nlattr *laddr = info->attrs[MPTCP_PM_ATTR_ADDR];
- 	struct mptcp_pm_addr_entry local = { 0 };
- 	struct mptcp_addr_info addr_r;
--	struct mptcp_addr_info addr_l;
- 	struct mptcp_sock *msk;
- 	int err = -EINVAL;
- 	struct sock *sk;
-@@ -360,25 +359,31 @@ int mptcp_pm_nl_subflow_create_doit(struct sk_buff *skb, struct genl_info *info)
- 		goto create_err;
- 	}
+diff --git a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+index 49369c4a5f26..e97856323ec3 100644
+--- a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
++++ b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+@@ -453,6 +453,7 @@ int csf(int fd, int pm_family, int argc, char *argv[])
+ 	char data[NLMSG_ALIGN(sizeof(struct nlmsghdr)) +
+ 		  NLMSG_ALIGN(sizeof(struct genlmsghdr)) +
+ 		  1024];
++	u_int32_t flags = MPTCP_PM_ADDR_FLAG_SUBFLOW;
+ 	const char *params[5];
+ 	struct nlmsghdr *nh;
+ 	struct rtattr *addr;
+@@ -558,6 +559,13 @@ int csf(int fd, int pm_family, int argc, char *argv[])
+ 			off += NLMSG_ALIGN(rta->rta_len);
+ 		}
  
--	err = mptcp_pm_parse_addr(laddr, info, &addr_l);
-+	err = mptcp_pm_parse_entry(laddr, info, true, &local);
- 	if (err < 0) {
- 		NL_SET_ERR_MSG_ATTR(info->extack, laddr, "error parsing local addr");
- 		goto create_err;
- 	}
- 
-+	if (local.flags & MPTCP_PM_ADDR_FLAG_SIGNAL) {
-+		GENL_SET_ERR_MSG(info, "invalid addr flags");
-+		err = -EINVAL;
-+		goto create_err;
-+	}
-+	local.flags |= MPTCP_PM_ADDR_FLAG_SUBFLOW;
++		/* addr flags */
++		rta = (void *)(data + off);
++		rta->rta_type = MPTCP_PM_ADDR_ATTR_FLAGS;
++		rta->rta_len = RTA_LENGTH(4);
++		memcpy(RTA_DATA(rta), &flags, 4);
++		off += NLMSG_ALIGN(rta->rta_len);
 +
- 	err = mptcp_pm_parse_addr(raddr, info, &addr_r);
- 	if (err < 0) {
- 		NL_SET_ERR_MSG_ATTR(info->extack, raddr, "error parsing remote addr");
- 		goto create_err;
+ 		addr->rta_len = off - addr_start;
  	}
- 
--	if (!mptcp_pm_addr_families_match(sk, &addr_l, &addr_r)) {
-+	if (!mptcp_pm_addr_families_match(sk, &local.addr, &addr_r)) {
- 		GENL_SET_ERR_MSG(info, "families mismatch");
- 		err = -EINVAL;
- 		goto create_err;
- 	}
- 
--	local.addr = addr_l;
- 	err = mptcp_userspace_pm_append_new_local_addr(msk, &local, false);
- 	if (err < 0) {
- 		GENL_SET_ERR_MSG(info, "did not match address and id");
-@@ -387,7 +392,7 @@ int mptcp_pm_nl_subflow_create_doit(struct sk_buff *skb, struct genl_info *info)
- 
- 	lock_sock(sk);
- 
--	err = __mptcp_subflow_connect(sk, &addr_l, &addr_r);
-+	err = __mptcp_subflow_connect(sk, &local.addr, &addr_r);
- 
- 	release_sock(sk);
  
 
 -- 
