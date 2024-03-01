@@ -1,194 +1,116 @@
-Return-Path: <linux-kselftest+bounces-5706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5707-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60FB886DF42
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 11:33:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F33486DF6A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 11:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18AB0281BFE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 10:33:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4FBB1F2721C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 10:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D48712E3EF;
-	Fri,  1 Mar 2024 10:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 643C86CDBD;
+	Fri,  1 Mar 2024 10:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0e3PIiw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8591A16FF46;
-	Fri,  1 Mar 2024 10:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C526BFA8;
+	Fri,  1 Mar 2024 10:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709289204; cv=none; b=imRvrQ5wxR/so9CMHnFTjWYwjD9EgsqSD2xO2NSi1RAszji97RIdz7HLpZWvrEPnCGJAPEmBoxcKqCIlz6ksofTHUrpR3yuIAgj7GKutxqglmwiKMT+I3vgWD5o/ZiC2kSRvq7XmNIbDgi0ifJt31jlhUiHE6ijv6EPg7EcVkC0=
+	t=1709289631; cv=none; b=PsMRBvv7bnu5gIqw8cXMs8erjfid8cKtHUttXlDioXLUzqkI26/YaY6G8syqE2hYWCDPRWCTNgsOKBnoI7vgTKldjl7jNMUwot7vrJTxdlnyvdzrfeLW7azWlnr9rI2IwtTU5v97ecbP4VtZnqlEfN//ZEQNW17B8B4HMnSsP50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709289204; c=relaxed/simple;
-	bh=a2wuRInQciYYxxwZuwKfjA61yAzbXv9+g7w9fnkduvQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Plaj9dHBKnGpUzYUebsL93Rlcz5XxViIfCS7iQL+/liffCjzzU96zEUFkUeUeofft0p9aJ+QQi6Z4AAZDWWyjZJRR7FjWsExSFdRbPs1YTSqN4iAwDn2yYACUHCQuIIKGU4M+dYx0GfxuOwBKRd2eFMineaISQaJrFketHWVd3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B15831FB;
-	Fri,  1 Mar 2024 02:33:59 -0800 (PST)
-Received: from [10.57.68.58] (unknown [10.57.68.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D9713F762;
-	Fri,  1 Mar 2024 02:33:17 -0800 (PST)
-Message-ID: <0dab0c69-2eac-4e65-9efe-e0b037499abc@arm.com>
-Date: Fri, 1 Mar 2024 10:33:15 +0000
+	s=arc-20240116; t=1709289631; c=relaxed/simple;
+	bh=gZi/AY9atkfoxOiyqbo/g6lCZx2va4Vho5HFwtw0GZU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=bNpTDPsLniNYQLRyGpDd88Fs9XpVJlleLLFhyp+n3o4pkga+lDDNtSibBWjfZZZmA+yU77vDoidFN9qpMY5MbV2+INi7cOycmAT2w8tJbDrha17+s9GF0vy3XLs0XJszu5QckFQtAzxe3GiA6ykbBoulqY1SZJ5/ozVzeNdTDAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0e3PIiw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C2C16C43390;
+	Fri,  1 Mar 2024 10:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709289630;
+	bh=gZi/AY9atkfoxOiyqbo/g6lCZx2va4Vho5HFwtw0GZU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=h0e3PIiwkZI76XuXlESEIooGZbnbBheN+uz7Q4yoDcbpGANT6u4uV7+xhmBxNj8O1
+	 JvzLds8mU9ox2pCgVkB4FAPU/NB8Pke+VR3Y+we915NBhV/wgBRZZRNWpGFY7oe2q7
+	 v7Lp0ZxpU+uK4/S1O5NnauUikzXcI5oFNPxAR/V/z1YRfG1CdXLR71qZQHx8MntBrF
+	 Ly2lvwPs6yk7k6xYgTEPHPXjaZFVTT3eSbZxhoThurKXN06n1rj12unVpqRVtg8D7J
+	 hZ04uNbdLUY1LqJJUQ/oG4th9bPkyNhPUBdKdVFb1MTcVMle0J3KCWDRQgoW/CojEs
+	 Whlk51x+tZVbw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AB10BC595C4;
+	Fri,  1 Mar 2024 10:40:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 8/8] mm: huge_memory: enable debugfs to split huge
- pages to any order.
-Content-Language: en-GB
-To: Aishwarya TCV <aishwarya.tcv@arm.com>, Zi Yan <ziy@nvidia.com>,
- "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>, linux-mm@kvack.org
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
- Yu Zhao <yuzhao@google.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Zach O'Keefe
- <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <20240226205534.1603748-1-zi.yan@sent.com>
- <20240226205534.1603748-9-zi.yan@sent.com>
- <082e48c8-71b7-4937-a5da-7a37b4be16ba@arm.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <082e48c8-71b7-4937-a5da-7a37b4be16ba@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 00/12] selftests: kselftest_harness: support using xfail
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170928963069.1389.8505815378862616818.git-patchwork-notify@kernel.org>
+Date: Fri, 01 Mar 2024 10:40:30 +0000
+References: <20240229005920.2407409-1-kuba@kernel.org>
+In-Reply-To: <20240229005920.2407409-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ mic@digikod.net, linux-security-module@vger.kernel.org,
+ keescook@chromium.org, jakub@cloudflare.com
 
-On 01/03/2024 09:51, Aishwarya TCV wrote:
-> 
-> 
-> On 26/02/2024 20:55, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> It is used to test split_huge_page_to_list_to_order for pagecache THPs.
->> Also add test cases for split_huge_page_to_list_to_order via both
->> debugfs.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
->>  mm/huge_memory.c                              |  34 ++++--
->>  .../selftests/mm/split_huge_page_test.c       | 115 +++++++++++++++++-
->>  2 files changed, 131 insertions(+), 18 deletions(-)
->>
-> 
-> Hi Zi,
-> 
-> When booting the kernel against next-master(20240228)with Arm64 on
-> Marvell Thunder X2 (TX2), the kselftest-mm test 'split_huge_page_test'
-> is failing in our CI (with rootfs over NFS). I can send the full logs if
-> required.
+Hello:
 
-Just to add, I took a quick eyeball and I think there a couple of potential issues:
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-  - In create_pagecache_thp_and_fd() you do *fd = open(testfile, O_CREAT ...);
-    where testfile is /mnt/thp_fs/testfile. So if /mnt/thp_fs doesn't exist,
-    then the open will fail I think? I'm pretty sure that's what's happening on
-    our CI. Suggest the test needs to setup this dir itself. Is thp_fs a mounted
-    fs or just a dir? If the latter can you just mktemp()?
+On Wed, 28 Feb 2024 16:59:07 -0800 you wrote:
+> Hi!
+> 
+> When running selftests for our subsystem in our CI we'd like all
+> tests to pass. Currently some tests use SKIP for cases they
+> expect to fail, because the kselftest_harness limits the return
+> codes to pass/fail/skip. XFAIL which would be a great match
+> here cannot be used.
+> 
+> [...]
 
-  - Later in create_pagecache_thp_and_fd() you fail the test if you don't have a
-    filesystem that supports large folios. Can we turn that into a skip? That
-    would reduce noise on the CI.
+Here is the summary with links:
+  - [v4,01/12] selftests/landlock: Redefine TEST_F() as TEST_F_FORK()
+    https://git.kernel.org/netdev/net-next/c/e74048650eaf
+  - [v4,02/12] selftests/harness: Merge TEST_F_FORK() into TEST_F()
+    https://git.kernel.org/netdev/net-next/c/0710a1a73fb4
+  - [v4,03/12] selftests: kselftest_harness: use KSFT_* exit codes
+    https://git.kernel.org/netdev/net-next/c/a724707976b0
+  - [v4,04/12] selftests: kselftest_harness: generate test name once
+    https://git.kernel.org/netdev/net-next/c/38c957f07038
+  - [v4,05/12] selftests: kselftest_harness: save full exit code in metadata
+    https://git.kernel.org/netdev/net-next/c/69fe8ec4f673
+  - [v4,06/12] selftests: kselftest_harness: use exit code to store skip
+    https://git.kernel.org/netdev/net-next/c/796a344fa431
+  - [v4,07/12] selftests: kselftest: add ksft_test_result_code(), handling all exit codes
+    https://git.kernel.org/netdev/net-next/c/fa1a53d83674
+  - [v4,08/12] selftests: kselftest_harness: print test name for SKIP
+    https://git.kernel.org/netdev/net-next/c/732e2035280b
+  - [v4,09/12] selftests: kselftest_harness: separate diagnostic message with # in ksft_test_result_code()
+    https://git.kernel.org/netdev/net-next/c/42ab727eb95f
+  - [v4,10/12] selftests: kselftest_harness: let PASS / FAIL provide diagnostic
+    https://git.kernel.org/netdev/net-next/c/378193eff339
+  - [v4,11/12] selftests: kselftest_harness: support using xfail
+    https://git.kernel.org/netdev/net-next/c/2709473c9386
+  - [v4,12/12] selftests: ip_local_port_range: use XFAIL instead of SKIP
+    https://git.kernel.org/netdev/net-next/c/c05bf0e93312
 
-Thanks,
-Ryan
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> 
-> A bisect (full log below) identified this patch as introducing the
-> failure. Bisected it on the tag "next-20240228" at repo
-> "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git".
-> 
-> This works fine on  Linux version 6.8.0-rc6
-> 
-> 
-> Sample log from failure against run on TX2:
-> ------
-> 07:17:34.056125  # # ------------------------------
-> 07:17:34.056543  # # running ./split_huge_page_test
-> 07:17:34.056839  # # ------------------------------
-> 07:17:34.057114  # # TAP version 13
-> 07:17:34.058564  # # 1..12
-> 07:17:34.156822  # # ok 1 Split huge pages successful
-> 07:17:34.214074  # # ok 2 Split PTE-mapped huge pages successful
-> 07:17:34.215630  # # # Please enable pr_debug in
-> split_huge_pages_in_file() for more info.
-> 07:17:34.225503  # # # Please check dmesg for more information
-> 07:17:34.225862  # # ok 3 File-backed THP split test done
-> 07:17:34.236944  # # Bail out! Failed to create a file at /mnt/thp_fs#
-> Planned tests != run tests (12 != 3)
-> 07:17:34.237307  # # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 07:17:34.237620  # # [FAIL]
-> 07:17:34.246430  # not ok 51 split_huge_page_test # exit=1
-> 
-> 
-> Bisect log:
-> ------
-> git bisect start
-> # good: [d206a76d7d2726f3b096037f2079ce0bd3ba329b] Linux 6.8-rc6
-> git bisect good d206a76d7d2726f3b096037f2079ce0bd3ba329b
-> # bad: [20af1ca418d2c0b11bc2a1fe8c0c88f67bcc2a7e] Add linux-next
-> specific files for 20240228
-> git bisect bad 20af1ca418d2c0b11bc2a1fe8c0c88f67bcc2a7e
-> # bad: [1322f1801e59dddce10591d602d246c1bf49990c] Merge branch 'main' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-> git bisect bad 1322f1801e59dddce10591d602d246c1bf49990c
-> # bad: [a82f70041487790b7b09fe4bb45436e1b57021d3] Merge branch 'dev' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
-> git bisect bad a82f70041487790b7b09fe4bb45436e1b57021d3
-> # bad: [ce90480b9352ba2bebe8946dad9223e3f24c6e9a] Merge branch
-> 'for-next' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
-> git bisect bad ce90480b9352ba2bebe8946dad9223e3f24c6e9a
-> # bad: [5daac92ed3881fd0c656478a301a4e1d124100ee] Merge branch
-> 'mm-everything' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> git bisect bad 5daac92ed3881fd0c656478a301a4e1d124100ee
-> # good: [acc2643d9e988c63dd4629a9af380ad9ac69c54a] Merge branch
-> 'mm-stable' into mm-unstable
-> git bisect good acc2643d9e988c63dd4629a9af380ad9ac69c54a
-> # good: [0294de8fe7d7c1a7eddc979cbf4c1886406e36b7] Merge branch 'fixes'
-> of git://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git
-> git bisect good 0294de8fe7d7c1a7eddc979cbf4c1886406e36b7
-> # good: [83e0c8f0e777a1ef0977b2f8189101765703b32d] Merge branch
-> 'mm-nonmm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> git bisect good 83e0c8f0e777a1ef0977b2f8189101765703b32d
-> # good: [a739cbe236e0dd3b6ff26a01fa1d31c73d4fac93] mm: memcg: make memcg
-> huge page split support any order split
-> git bisect good a739cbe236e0dd3b6ff26a01fa1d31c73d4fac93
-> # bad: [efb520aa333b2f11daaaaa13f4a598b5ae4ae823] mm: allow non-hugetlb
-> large folios to be batch processed
-> git bisect bad efb520aa333b2f11daaaaa13f4a598b5ae4ae823
-> # bad: [2258bdebb55e3ad3d30fd3849ddb955ff36825de] mm/zsmalloc: don't
-> hold locks of all pages when free_zspage()
-> git bisect bad 2258bdebb55e3ad3d30fd3849ddb955ff36825de
-> # bad: [7fc0be45acf2878cbacc4dba56923c34c3fd8b1e] mm: remove
-> total_mapcount()
-> git bisect bad 7fc0be45acf2878cbacc4dba56923c34c3fd8b1e
-> # good: [d55fac55da2f87ad5a99178e107df09770bbc411] mm: thp: split huge
-> page to any lower order pages
-> git bisect good d55fac55da2f87ad5a99178e107df09770bbc411
-> # bad: [4050d591c1aaf9336c08511fa5984827186e9ad1] mm/memfd: refactor
-> memfd_tag_pins() and memfd_wait_for_pins()
-> git bisect bad 4050d591c1aaf9336c08511fa5984827186e9ad1
-> # bad: [c0ba89c29ef559c95273feb481b049f622c43c17] mm: huge_memory:
-> enable debugfs to split huge pages to any order
-> git bisect bad c0ba89c29ef559c95273feb481b049f622c43c17
-> # first bad commit: [c0ba89c29ef559c95273feb481b049f622c43c17] mm:
-> huge_memory: enable debugfs to split huge pages to any order
-> 
-> 
-> Thanks,
-> Aishwarya
 
 
