@@ -1,40 +1,74 @@
-Return-Path: <linux-kselftest+bounces-5726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41CD886E32C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 15:18:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2790286E335
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 15:21:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C589B1F21BBD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 14:18:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDF63283D5D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 14:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768C36D1A3;
-	Fri,  1 Mar 2024 14:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59156F066;
+	Fri,  1 Mar 2024 14:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OarTwtzf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911556E5EB;
-	Fri,  1 Mar 2024 14:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6436EF0B;
+	Fri,  1 Mar 2024 14:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709302706; cv=none; b=AnPEKidOdivE2UyCwQbzItp3OGx29Swtyet99USNH12wpGwVU5ZJtWPhA71snrwFP75z2rjZs7jF3bDIPeck2LP5IbY//4WaZd6B3dj+DBuCpaHvmi19T/D6WEikAuAVBCEE+sJyhN/1DR/MFQrYJAbuba/wJa9CL6vvOPk9yEY=
+	t=1709302881; cv=none; b=QDJexqvSbDCiWQn5JHEFw2iSG7ryppcMGGSRU5iwfJynyJwDNIWK03fiosBdijMb2k8XXMQe40rWYZM61W3yJHXNKQ7oqM3G5IZHbsns2R402nvOfZgvPD9MOcEKb7XtefBeyRhYicoEMrfQv1tq4kvCbfbTE44F1alJ1dxfLqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709302706; c=relaxed/simple;
-	bh=ZvI1YlA3ee12MtJInccXFGBcSOZydNmVXpUF4JrT+9o=;
+	s=arc-20240116; t=1709302881; c=relaxed/simple;
+	bh=udLEyhFlle918jMDpugSYsT1ztgbuuWE8/UQvqTOgvU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bJlaf6b+ZlQGJrHZsJJzeKGFHa7MGTSskI5+KD8SSnohNezE2LMOVrCnJ5Lid3zL/DPfNu2sE8W8FfOhS1Kaz8Z5TKhfEJq8l9lYPHdHR9mRfoZvek+ppsOtL5bq/y1Y2mHyyPEhiiK9/KEda+50CBTBJwPILKq6uK6GE/+SVi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBC7A1FB;
-	Fri,  1 Mar 2024 06:19:00 -0800 (PST)
-Received: from [10.57.68.58] (unknown [10.57.68.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C29753F73F;
-	Fri,  1 Mar 2024 06:18:18 -0800 (PST)
-Message-ID: <6003865f-2c85-4dd4-9803-6204f9018f50@arm.com>
-Date: Fri, 1 Mar 2024 14:18:16 +0000
+	 In-Reply-To:Content-Type; b=AcqnpAtYGWNqM38FdQ8fAje+R9jiDuIzpp8PwGi0q68Lnea34gyB1N/UcnWCv8SnoimAPVoItcOdZSQKrfuDqnDOAjM4o6cx6WsBwESOMs+1MnfQYj/ES5318MT64Xg7xhwTQJ9BwR/Khp4xu9pmLjGg+nlMdwx/bck9HrhUQI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OarTwtzf; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-68fb71fc886so8780966d6.3;
+        Fri, 01 Mar 2024 06:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709302879; x=1709907679; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DoAmmdskcDEXNaQow37B4LW3k1Xhhw94dVezbr43csY=;
+        b=OarTwtzfzXszR6upx0uojY90zspHsAxHYVZI0sfEMIU3Og2z0s4pWbQUFLEs43TPCR
+         Jk8QTCDsfxOir9I93NSOTtTqY1c3VKpSeKI0qh7Q9iyEFGLe/R8qj5HK1/EAH7BiIl5o
+         Qx9MTLU45FxvXN38w0KAodO8GrR5PzGI9zYsGHRNU3ChlABd00Zj4Q1rRpjyI6hSjTyE
+         4RE0pk0aRlGYelx1NsB04y5wVa7CVwmKoxz2iYy9Iw6QaW5qJGuNt/fhxg+FpVSPkXCO
+         Wcr5Dp2mR0mmpakf1MauhKtQsf9qvLBwiAPXjB29dh051+1neZD1yd1PAUbRoYXSt+xn
+         LrlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709302879; x=1709907679;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DoAmmdskcDEXNaQow37B4LW3k1Xhhw94dVezbr43csY=;
+        b=xGJ4VVaA9091+bxWC+eY2ggbQ3W+FwU2MhQBJiMR9nZO6Z/gvm58AHgD5cpQDpZbrC
+         UXuGFlNV3NRAwQKiI37bZ7ddTZo8oyn61bBM0pexr5O1kXbTpT6bNqDbAYgJsXUXY+Xr
+         FE7DBjUNFcavqFJQP0RsXW4fD6KJkDi70+RYwc624f4PZeQjM9V5F6SWGwi1NJMlsdlb
+         N3MQKEzDxiESeUP9LN2HCUbIZ1mIT9aTS81GhM6LD3Ea64bO9LTN/Pm5rRt0ljV/T5o9
+         jY4N0X2ko+Vf2XL02GoFjSMLQHpLjzGPQ827Q/szXxV8Jc3n9LiKqpl8cVED+aIgTLRW
+         QaeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWUAQ4OiFJbCJ4ZR3HSYJNgq+wHdpmjsh3qQS6vKXELnKwnisbXWxELoy4KLkL028PWNAzRF1x4UoCj/FTEhbBVgAdoOxrASdI0r0zBr103N2j7G3QeXT9aTdQ39iSADYxLxpDusqoNHGisYu8MkIJecCnhBBlCLlu3gtf597YZOSGJadJlyN/b
+X-Gm-Message-State: AOJu0YzpcNiytE9LpRRTSuJ90Inf3WTXIz/uAqPCUsKZXlgIqshRfzWx
+	f0k2JDNtvB94h5rkrhX3jgkgtioZZMWnDclfm8icV2EPfXkAREIX
+X-Google-Smtp-Source: AGHT+IGUka20RbGSTdt31weLyZD5CrTDkIoL5pB4A7Y1ldsaQGmBLLgCExV8/nV3WHdz4i56V+bA9Q==
+X-Received: by 2002:ad4:44a7:0:b0:68f:3dbd:466f with SMTP id n7-20020ad444a7000000b0068f3dbd466fmr1814520qvt.39.1709302879223;
+        Fri, 01 Mar 2024 06:21:19 -0800 (PST)
+Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
+        by smtp.gmail.com with ESMTPSA id em19-20020ad44f93000000b0068fdb03a3a3sm1900825qvb.95.2024.03.01.06.21.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Mar 2024 06:21:18 -0800 (PST)
+Message-ID: <f8d45e8f-81ca-432f-9494-441e9a44b390@gmail.com>
+Date: Fri, 1 Mar 2024 16:21:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,230 +76,66 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 8/8] mm: huge_memory: enable debugfs to split huge
- pages to any order.
-Content-Language: en-GB
-To: Zi Yan <ziy@nvidia.com>
-Cc: Aishwarya TCV <aishwarya.tcv@arm.com>,
- "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>, linux-mm@kvack.org,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
- Yu Zhao <yuzhao@google.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Zach O'Keefe
- <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <20240226205534.1603748-1-zi.yan@sent.com>
- <20240226205534.1603748-9-zi.yan@sent.com>
- <082e48c8-71b7-4937-a5da-7a37b4be16ba@arm.com>
- <0dab0c69-2eac-4e65-9efe-e0b037499abc@arm.com>
- <08703C70-DD6E-446A-9ABC-BC2C8E33B8CD@nvidia.com>
- <f7a3d07d-290b-46d6-884e-fa288901c3c6@arm.com>
- <3D5A5D18-0A20-4BB3-B667-0CB5799BA665@nvidia.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <3D5A5D18-0A20-4BB3-B667-0CB5799BA665@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel
+ Testing
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linuxfoundation.org>,
+ Maxime Ripard <mripard@kernel.org>, Helen Koike <helen.koike@collabora.com>,
+ linuxtv-ci@linuxtv.org, dave.pigott@collabora.com,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com,
+ pawiecz@collabora.com, tales.aparecida@gmail.com, workflows@vger.kernel.org,
+ kernelci@lists.linux.dev, skhan@linuxfoundation.org,
+ kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com,
+ cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com,
+ ricardo.canuelo@collabora.com, kernel@collabora.com,
+ gregkh@linuxfoundation.org
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <20240228225527.1052240-2-helen.koike@collabora.com>
+ <20240229-dancing-laughing-groundhog-d85161@houat>
+ <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com>
+ <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
+ <44ae0339-daf1-4bb9-a12d-e3d2e79b889e@gmail.com>
+ <9183479f-eea8-493e-9a56-9f3f778e3034@sirena.org.uk>
+From: Nikolai Kondrashov <spbnick@gmail.com>
+In-Reply-To: <9183479f-eea8-493e-9a56-9f3f778e3034@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 01/03/2024 13:53, Zi Yan wrote:
-> On 1 Mar 2024, at 8:09, Ryan Roberts wrote:
+On 3/1/24 4:07 PM, Mark Brown wrote:
+> On Fri, Mar 01, 2024 at 12:27:13PM +0200, Nikolai Kondrashov wrote:
+>> On 2/29/24 10:21 PM, Linus Torvalds wrote:
+>>> I would suggest the CI project be separate from the kernel.
 > 
->> On 01/03/2024 12:52, Zi Yan wrote:
->>> On 1 Mar 2024, at 5:33, Ryan Roberts wrote:
->>>
->>>> On 01/03/2024 09:51, Aishwarya TCV wrote:
->>>>>
->>>>>
->>>>> On 26/02/2024 20:55, Zi Yan wrote:
->>>>>> From: Zi Yan <ziy@nvidia.com>
->>>>>>
->>>>>> It is used to test split_huge_page_to_list_to_order for pagecache THPs.
->>>>>> Also add test cases for split_huge_page_to_list_to_order via both
->>>>>> debugfs.
->>>>>>
->>>>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
->>>>>> ---
->>>>>>  mm/huge_memory.c                              |  34 ++++--
->>>>>>  .../selftests/mm/split_huge_page_test.c       | 115 +++++++++++++++++-
->>>>>>  2 files changed, 131 insertions(+), 18 deletions(-)
->>>>>>
->>>>>
->>>>> Hi Zi,
->>>>>
->>>>> When booting the kernel against next-master(20240228)with Arm64 on
->>>>> Marvell Thunder X2 (TX2), the kselftest-mm test 'split_huge_page_test'
->>>>> is failing in our CI (with rootfs over NFS). I can send the full logs if
->>>>> required.
->>>>
->>>> Just to add, I took a quick eyeball and I think there a couple of potential issues:
->>>>
->>>>   - In create_pagecache_thp_and_fd() you do *fd = open(testfile, O_CREAT ...);
->>>>     where testfile is /mnt/thp_fs/testfile. So if /mnt/thp_fs doesn't exist,
->>>>     then the open will fail I think? I'm pretty sure that's what's happening on
->>>>     our CI. Suggest the test needs to setup this dir itself. Is thp_fs a mounted
->>>>     fs or just a dir? If the latter can you just mktemp()?
->>>
->>> The former. the page cache folio split tests require a file system supporting
->>> large folio and I used XFS.
->>
->> OK got it.
->>
->>>
->>>>   - Later in create_pagecache_thp_and_fd() you fail the test if you don't have a
->>>>     filesystem that supports large folios. Can we turn that into a skip? That
->>>>     would reduce noise on the CI.
->>>
->>> I can do that. But is this a new requirement that self tests have to be finish
->>> in CI/CD environment? Can you provide a guideline for it?
->>
->> I'm not sure what's written down, but certainly anyone should be able to run the
->> selftests with as little knowledge as possible, and they should only fail if
->> they detect a real problem. By convention a test should be skipped if the
->> environment (or kernel) isn't compatible. There are lots of examples of that in
->> mm selftests (just grep ksft_test_result_skip). mm selftests also has
->> run_vmtests.sh which does a lot of environment setup (e.g. reserving hugetlb
->> pages, etc) before actually running the tests.
+>> It is possible to have a GitLab CI setup with the YAML files in a separate
+>> repository. And we can start with that. However, ultimately I think it's
+>> better to have it in the same repo with the code being tested. This way you
+>> could submit code changes together with the required tweaks to the CI to keep
+>> it passing, making development smoother and faster.
 > 
-> Got it. I will send a fixup to skip the page cache split test when the mount
-> is not ready, then send a separate patch to set up XFS in run_vmtests.sh and
-> pass it to this test.
+>> With that in mind, and if you agree, where else would you say we could put it?
+>> Under "scripts"? Or "Documentation"? And where it would be best for the
+>> various subsystems to put theirs? Or could we have the top-level "ci" dir and
+>> pile all the different setups there? Or would you like to wait and see how
+>> adoption goes, and then decide?
+> 
+> If we were going to put bits of this in tree how about something like
+> tools/testing/forges?  I'd hope that things could be shared by multiple
+> services, if not we could always have subdirs I guess.  We could put
+> glue bits like defining how to run kunit, checkpatch or whatever with
+> these systems in there so people can share figuring that bit out.
+> Individual trees or CI systems using these forge based systems could
+> then reference these files when defining what specific tests they want
+> to run when which seems more like where the differences will be.
+> 
+> I'm not super familiar with this stuff, the above is based on it looking
+> like there's an OK degree of separation between the "what to run" and
+> "how to run" bits.  I might be misreading things, and it's not clear to
+> me how often it'll be useful to be able to update things in tree.
 
-Thanks - appeciated!
+Yes, facilitating reuse and collaboration between CI setups, even if they're 
+largely different, is another good reason to have it inside the kernel repo.
 
-Although I agree it might be a tall order create and mount an XFS fs in
-run_vmtests.sh. Perhaps it might be good enough to add an optional param to the
-test to pass a path when running the test manually, and if that's not provided,
-just try to create a temp file in the current dir and skip if its not the right
-sort of fs?
-
-> 
->>
->>> Since I always assume
->>> selftests are just ran by human who can set up environment.
->>
->> I believe kernelci have been running mm skeftests on x86 for a long time. We
->> have started running them against arm64 on our CI for the last couple of months
->> and it had found a number of real issues in the kernel in -next, so this is
->> helping find and fix things early. So there is definitely benefit to keeping
->> these tests clean and robust.
-> 
-> Got it. Make sense.
-> 
->>
->>> In addition, I do
->>> not think it is realistic to make the test file to set up all the environment,
->>> since everyone's machine is different. It is much easier to make the CI/CD
->>> environment to make the mount.
->>
->> That's reasonable, but then the requirements should be documented and you
->> probably would want to be able to optionally pass the mount on the command line.
-> 
-> Will do.
-> 
-> Thank you for the explanation.
-> 
->>>>
->>>> Thanks,
->>>> Ryan
->>>>
->>>>>
->>>>> A bisect (full log below) identified this patch as introducing the
->>>>> failure. Bisected it on the tag "next-20240228" at repo
->>>>> "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git".
->>>>>
->>>>> This works fine on  Linux version 6.8.0-rc6
->>>>>
->>>>>
->>>>> Sample log from failure against run on TX2:
->>>>> ------
->>>>> 07:17:34.056125  # # ------------------------------
->>>>> 07:17:34.056543  # # running ./split_huge_page_test
->>>>> 07:17:34.056839  # # ------------------------------
->>>>> 07:17:34.057114  # # TAP version 13
->>>>> 07:17:34.058564  # # 1..12
->>>>> 07:17:34.156822  # # ok 1 Split huge pages successful
->>>>> 07:17:34.214074  # # ok 2 Split PTE-mapped huge pages successful
->>>>> 07:17:34.215630  # # # Please enable pr_debug in
->>>>> split_huge_pages_in_file() for more info.
->>>>> 07:17:34.225503  # # # Please check dmesg for more information
->>>>> 07:17:34.225862  # # ok 3 File-backed THP split test done
->>>>> 07:17:34.236944  # # Bail out! Failed to create a file at /mnt/thp_fs#
->>>>> Planned tests != run tests (12 != 3)
->>>>> 07:17:34.237307  # # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>>> 07:17:34.237620  # # [FAIL]
->>>>> 07:17:34.246430  # not ok 51 split_huge_page_test # exit=1
->>>>>
->>>>>
->>>>> Bisect log:
->>>>> ------
->>>>> git bisect start
->>>>> # good: [d206a76d7d2726f3b096037f2079ce0bd3ba329b] Linux 6.8-rc6
->>>>> git bisect good d206a76d7d2726f3b096037f2079ce0bd3ba329b
->>>>> # bad: [20af1ca418d2c0b11bc2a1fe8c0c88f67bcc2a7e] Add linux-next
->>>>> specific files for 20240228
->>>>> git bisect bad 20af1ca418d2c0b11bc2a1fe8c0c88f67bcc2a7e
->>>>> # bad: [1322f1801e59dddce10591d602d246c1bf49990c] Merge branch 'main' of
->>>>> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
->>>>> git bisect bad 1322f1801e59dddce10591d602d246c1bf49990c
->>>>> # bad: [a82f70041487790b7b09fe4bb45436e1b57021d3] Merge branch 'dev' of
->>>>> git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
->>>>> git bisect bad a82f70041487790b7b09fe4bb45436e1b57021d3
->>>>> # bad: [ce90480b9352ba2bebe8946dad9223e3f24c6e9a] Merge branch
->>>>> 'for-next' of
->>>>> git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
->>>>> git bisect bad ce90480b9352ba2bebe8946dad9223e3f24c6e9a
->>>>> # bad: [5daac92ed3881fd0c656478a301a4e1d124100ee] Merge branch
->>>>> 'mm-everything' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->>>>> git bisect bad 5daac92ed3881fd0c656478a301a4e1d124100ee
->>>>> # good: [acc2643d9e988c63dd4629a9af380ad9ac69c54a] Merge branch
->>>>> 'mm-stable' into mm-unstable
->>>>> git bisect good acc2643d9e988c63dd4629a9af380ad9ac69c54a
->>>>> # good: [0294de8fe7d7c1a7eddc979cbf4c1886406e36b7] Merge branch 'fixes'
->>>>> of git://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git
->>>>> git bisect good 0294de8fe7d7c1a7eddc979cbf4c1886406e36b7
->>>>> # good: [83e0c8f0e777a1ef0977b2f8189101765703b32d] Merge branch
->>>>> 'mm-nonmm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->>>>> git bisect good 83e0c8f0e777a1ef0977b2f8189101765703b32d
->>>>> # good: [a739cbe236e0dd3b6ff26a01fa1d31c73d4fac93] mm: memcg: make memcg
->>>>> huge page split support any order split
->>>>> git bisect good a739cbe236e0dd3b6ff26a01fa1d31c73d4fac93
->>>>> # bad: [efb520aa333b2f11daaaaa13f4a598b5ae4ae823] mm: allow non-hugetlb
->>>>> large folios to be batch processed
->>>>> git bisect bad efb520aa333b2f11daaaaa13f4a598b5ae4ae823
->>>>> # bad: [2258bdebb55e3ad3d30fd3849ddb955ff36825de] mm/zsmalloc: don't
->>>>> hold locks of all pages when free_zspage()
->>>>> git bisect bad 2258bdebb55e3ad3d30fd3849ddb955ff36825de
->>>>> # bad: [7fc0be45acf2878cbacc4dba56923c34c3fd8b1e] mm: remove
->>>>> total_mapcount()
->>>>> git bisect bad 7fc0be45acf2878cbacc4dba56923c34c3fd8b1e
->>>>> # good: [d55fac55da2f87ad5a99178e107df09770bbc411] mm: thp: split huge
->>>>> page to any lower order pages
->>>>> git bisect good d55fac55da2f87ad5a99178e107df09770bbc411
->>>>> # bad: [4050d591c1aaf9336c08511fa5984827186e9ad1] mm/memfd: refactor
->>>>> memfd_tag_pins() and memfd_wait_for_pins()
->>>>> git bisect bad 4050d591c1aaf9336c08511fa5984827186e9ad1
->>>>> # bad: [c0ba89c29ef559c95273feb481b049f622c43c17] mm: huge_memory:
->>>>> enable debugfs to split huge pages to any order
->>>>> git bisect bad c0ba89c29ef559c95273feb481b049f622c43c17
->>>>> # first bad commit: [c0ba89c29ef559c95273feb481b049f622c43c17] mm:
->>>>> huge_memory: enable debugfs to split huge pages to any order
->>>>>
->>>>>
->>>>> Thanks,
->>>>> Aishwarya
->>>
->>>
->>> --
->>> Best Regards,
->>> Yan, Zi
-> 
-> 
-> --
-> Best Regards,
-> Yan, Zi
-
+Nick
 
