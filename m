@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-5696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91B1386DD08
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 09:26:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55D5486DD10
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 09:27:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1ECC1F21957
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 08:26:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 128BC281593
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 08:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95D669DED;
-	Fri,  1 Mar 2024 08:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A66769968;
+	Fri,  1 Mar 2024 08:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="nGoccN7C"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="M81FT9RJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BB769DE5
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Mar 2024 08:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8529669D09
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Mar 2024 08:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709281577; cv=none; b=metaG3YsIexMSPLBOO4i/IyMut4uqcviEvjqKKaVAOkpu6ZNHWf/oaAT51YRModcmiYdqKR45nZ8fiibP58pT8M4IftIbatf1wqO6CY5DG9fzOK0+UFPCjjCo5iLhmuDvAdLpqxGXzU0dneLqlYA15tcxaOGBstFxZRw//yeUsI=
+	t=1709281663; cv=none; b=DIeWjhXUp5+SaJRVCDWKRNLfdncbewIjkWh09GXY+cjKjYXYatQcGDtFzbcqWTxvrfq6zfUKl5ziWen+1k14CFNXmUux8QRsYWmRHT8kA2xvX9MivizHnvLTwooa1WhPxph+HMadcrXT3XV7PxdXd1N/7u4buQxvqaqqKRce2lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709281577; c=relaxed/simple;
-	bh=rGugC4CtKyBNC9wfpMo8MLd50utveTzcgNmmqGOwzrE=;
+	s=arc-20240116; t=1709281663; c=relaxed/simple;
+	bh=XqfNJZAlUlGhU0tMLlsUHrVl8hhs+fFQE6upJ67bxBM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LZ4zHM2CbMFN+jsSpbPS3h8LZfNKpy3o3SNCWm4PXsf6I+JZYkSDrQOTP8/9V2UHhE5z86EzSM2Vr4oaVH9VAzEbWzNHvum6WrQAV+4HJQjZ4S8fNYl7dU/9D77d/srn3GL+kQT5n9ZRCg6nK9lC6yuQVIPRtiwbtKx8t+vhYkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=nGoccN7C; arc=none smtp.client-ip=209.85.161.53
+	 In-Reply-To:Content-Type; b=qdJu65N7xSN3JfUQtQAmIBflJFDgxSmDU5LGGtaZvO1Q4KMv3htNYR1uJ6fGFfKrgllY+pnsII15caNvRnp9WYxLV/rA8xvItd7TcO6wHf+xEoIg6qHWmxQgvwlbQkgpBUcJk+ZETY+s3XE0CYqCcPtB3RjfEZAI5kWFgMcRj4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=M81FT9RJ; arc=none smtp.client-ip=209.85.167.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5a0c7c87dc6so19627eaf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Mar 2024 00:26:14 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3bc21303a35so577131b6e.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Mar 2024 00:27:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1709281574; x=1709886374; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1709281661; x=1709886461; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=f0O2fV0WbAx46xM1Y6qPjUuO/OeNoTHA0KPqbfE4bGA=;
-        b=nGoccN7CErqYXvwaklzhOj1brNmcnCXh6XJTx1evZ0OXdE0dfsLfrfIWF4ePNNeWrQ
-         uZGTmeMbk/Ki+Wg6lixyv5BEvX5fztrVHXFWbuixWVd7cSR7ydQXt42AlUFi0hiEt0Le
-         7D234beEwEK28uNPVwXrw0naedz9oGOOgj6zRdFSTJMMDJX4dtWVZmEbdJcqNiA2IZMS
-         Z77JDQaCtMXe+b+RoCJg6Kp0JevfWqqzjBHudfQ9OZySX9q8XAt9GFbSMbwrcL6ijUkE
-         uOnkBTr5JJgcxtoBiASdYb2494Vqox2awB3QQlRZVM0L3D7tQj0GVAb+W7mff84fFqyu
-         G/hg==
+        bh=u+1gYR9fNMcL6Yz70ujlHI/EnqcOVjeumCs1fZJGDkY=;
+        b=M81FT9RJhuS9Xgc+mQidbYySp/9ztKdkjneZ+/Fya+5wAZ2jd4T5TT7PxYjUJNrVtQ
+         7nJ/ydMd8Lekbv9o+1sTbDzdvUa8jceAfl9NfegRUmgj0VsFOUQqjQXXsUB52qO35QwW
+         ibxtKFAZHEe1WFrNVSAjnlYdCILBObuCHZLZ1KW03DEUl0QyLficwx7qfOz4rBYgUn17
+         dmNlOlW5+E+pGHMIBw1ZeX7VGsrlepDADzU0ymBY5wyb18VL3tiebKSN8LENyRDfv3Us
+         xyM5DOCAMYwDultm2kbe4gnDu6tbxFmbn4W6aYjHEvqBtcuOwoXG5ejfvuhmh9IXBY4s
+         f8FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709281574; x=1709886374;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1709281661; x=1709886461;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f0O2fV0WbAx46xM1Y6qPjUuO/OeNoTHA0KPqbfE4bGA=;
-        b=TyeOK8UJdy6gRcSv2nwIR+riUqo2DKj/R4ks/6FqJPNkLCF5U7MtQuybZP0MfCyUGS
-         tJSUSX0azsa7pFuD7DaCi7zVrEITP9QoLzKHMZfzFgmwyhdDOsxF/kYpFv+S9uOUu1wB
-         B0V58XpbeIEScquQlkNJVbtSmAkmaQtoUd94I+biQMf5kLGqkRBJeBL/VpPXAkp/kFdF
-         s4fONt3Xl8YaIHYvTme799GVOnuN5hMz6A4V8AKfqRhKMdEd7C2iLZRkGXPXGSY2afa2
-         lTI6lSQEDdIu+6kZUFw+6AG11fG0r5cmom+ZvsLCgcHEKXgLyNQ2pwJygNAroaw3qeWd
-         I2/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVQmf8KDVEwYAM86j3pAPWzIVF6YAchhjgPNXsXD1GwJCJXx9fm7HipW//nlEmyZGpNBjQwvinlKgKOkbRN8u1269Q4uJs5krgtFC0dz4cJ
-X-Gm-Message-State: AOJu0Yx+WC6FbxF9aWXziFMUC0H/IzEj9DJ5wBKCpLCrSFBusrW1Al8O
-	xdSrCdkuAbI2EKQ56HH9SvSIq2qaUT6g548rqBk2o8iEpWMtB+yjx2t+3M+29co=
-X-Google-Smtp-Source: AGHT+IEO2VE95MaGXRr6VmSeAK9U9lNiLgxplCLbWJe649iHowWVgQB/IkCDcUSOog4HOG7PQm9Yjw==
-X-Received: by 2002:a05:6820:41:b0:5a0:4216:c5f0 with SMTP id v1-20020a056820004100b005a04216c5f0mr887748oob.0.1709281573977;
-        Fri, 01 Mar 2024 00:26:13 -0800 (PST)
+        bh=u+1gYR9fNMcL6Yz70ujlHI/EnqcOVjeumCs1fZJGDkY=;
+        b=d/A/2b3XcWNdzA1eXpCG63cp9Pykk9yUnY7BkAAMVOyqmfJZGRy98X7+on0mzhBw24
+         haD2V8RGfEaQ5VuHG8zyXwZLNSNADFYahQ8G1fMuj19T+Y+aBY2SPuZubGjM6b+rp4tR
+         QL5VSLtiUZeR3B/qV09dT9p7mHUfy5IqoGCF1eY8A5L84LGGp+68P4Cu6YB4Fc87nFgO
+         YJQFVAAEHEnsoYCMnXq683DOL4suRLZ75des4rbPemC//mTK436+7lVXcHX0WYwEXckk
+         g4XszRN4kbEbjvkNlG2rQjFbuiJwQS2g2aqhWH/+lbbP7URsJllsQgZvydhw3RPTj4gr
+         +IZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXvgOR2COwpt5eo755+HR0hjDCOy1qcy1W/vfVT0bkLleEZ7oReIYuq7AGBeacJel0ZgaHbEqWh4ET15W13VTsygKGg+3FwVKNiqf4lbIKk
+X-Gm-Message-State: AOJu0YwuYUiHASTZZ/x8KUuUm5xztoXeA8ED1AqxPfIbQzBG3Peqm8IM
+	VXZI/12DrkTnok7kSwHPge5TSHsxPUJyoq3LqPK2PT0AGFDnpsoFg3bPPSiRGlA=
+X-Google-Smtp-Source: AGHT+IEdyiT1lfztdP7slsQZvQ1H9ibF+1htyyfiSkFgE7uzu3qWKNguG9y0uIjwtsPG01jsOQ/DmQ==
+X-Received: by 2002:a05:6808:211a:b0:3c1:aa85:7ab4 with SMTP id r26-20020a056808211a00b003c1aa857ab4mr1284563oiw.3.1709281661587;
+        Fri, 01 Mar 2024 00:27:41 -0800 (PST)
 Received: from ?IPV6:2a01:e0a:999:a3a0:1070:febd:b4af:e79a? ([2a01:e0a:999:a3a0:1070:febd:b4af:e79a])
-        by smtp.gmail.com with ESMTPSA id r7-20020aa78b87000000b006e13e202914sm2449292pfd.56.2024.03.01.00.26.03
+        by smtp.gmail.com with ESMTPSA id r7-20020aa78b87000000b006e13e202914sm2449292pfd.56.2024.03.01.00.27.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Mar 2024 00:26:13 -0800 (PST)
-Message-ID: <9c466c89-3788-4473-a657-1f117cd5e5ab@rivosinc.com>
-Date: Fri, 1 Mar 2024 09:25:56 +0100
+        Fri, 01 Mar 2024 00:27:40 -0800 (PST)
+Message-ID: <8e3003f0-ec27-47d4-9b1f-89de2afbb8b8@rivosinc.com>
+Date: Fri, 1 Mar 2024 09:27:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,7 +76,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/15] RISC-V: Fix the typo in Scountovf CSR name
+Subject: Re: [PATCH v4 02/15] RISC-V: Add FIRMWARE_READ_HI definition
+Content-Language: en-US
 To: Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org
 Cc: Mark Rutland <mark.rutland@arm.com>, linux-kselftest@vger.kernel.org,
  Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alexghiti@rivosinc.com>,
@@ -88,56 +89,39 @@ Cc: Mark Rutland <mark.rutland@arm.com>, linux-kselftest@vger.kernel.org,
  Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org,
  Shuah Khan <shuah@kernel.org>, Andrew Jones <ajones@ventanamicro.com>
 References: <20240229010130.1380926-1-atishp@rivosinc.com>
- <20240229010130.1380926-2-atishp@rivosinc.com>
-Content-Language: en-US
+ <20240229010130.1380926-3-atishp@rivosinc.com>
 From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20240229010130.1380926-2-atishp@rivosinc.com>
+In-Reply-To: <20240229010130.1380926-3-atishp@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 
 
 On 29/02/2024 02:01, Atish Patra wrote:
-> The counter overflow CSR name is "scountovf" not "sscountovf".
+> SBI v2.0 added another function to SBI PMU extension to read
+> the upper bits of a counter with width larger than XLEN.
 > 
-> Fix the csr name.
+> Add the definition for that function.
 > 
-> Fixes: 4905ec2fb7e6 ("RISC-V: Add sscofpmf extension support")
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > Reviewed-by: Anup Patel <anup@brainfault.org>
 > Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > ---
->  arch/riscv/include/asm/csr.h         | 2 +-
->  arch/riscv/include/asm/errata_list.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  arch/riscv/include/asm/sbi.h | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 510014051f5d..603e5a3c61f9 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -281,7 +281,7 @@
->  #define CSR_HPMCOUNTER30H	0xc9e
->  #define CSR_HPMCOUNTER31H	0xc9f
+> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> index 6e68f8dff76b..ef8311dafb91 100644
+> --- a/arch/riscv/include/asm/sbi.h
+> +++ b/arch/riscv/include/asm/sbi.h
+> @@ -131,6 +131,7 @@ enum sbi_ext_pmu_fid {
+>  	SBI_EXT_PMU_COUNTER_START,
+>  	SBI_EXT_PMU_COUNTER_STOP,
+>  	SBI_EXT_PMU_COUNTER_FW_READ,
+> +	SBI_EXT_PMU_COUNTER_FW_READ_HI,
+>  };
 >  
-> -#define CSR_SSCOUNTOVF		0xda0
-> +#define CSR_SCOUNTOVF		0xda0
->  
->  #define CSR_SSTATUS		0x100
->  #define CSR_SIE			0x104
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index ea33288f8a25..cd49eb025ddf 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -114,7 +114,7 @@ asm volatile(ALTERNATIVE(						\
->  
->  #define ALT_SBI_PMU_OVERFLOW(__ovl)					\
->  asm volatile(ALTERNATIVE(						\
-> -	"csrr %0, " __stringify(CSR_SSCOUNTOVF),			\
-> +	"csrr %0, " __stringify(CSR_SCOUNTOVF),				\
->  	"csrr %0, " __stringify(THEAD_C9XX_CSR_SCOUNTEROF),		\
->  		THEAD_VENDOR_ID, ERRATA_THEAD_PMU,			\
->  		CONFIG_ERRATA_THEAD_PMU)				\
-
+>  union sbi_pmu_ctr_info {
 
 Reviewed-by: Clément Léger <cleger@rivosinc.com>
 
