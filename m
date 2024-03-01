@@ -1,468 +1,215 @@
-Return-Path: <linux-kselftest+bounces-5773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 711CD86EAEA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 22:10:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7525B86EB85
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 22:56:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C6C0B238E0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 21:10:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9776A1C21709
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 21:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D0D56B8C;
-	Fri,  1 Mar 2024 21:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF42558ADE;
+	Fri,  1 Mar 2024 21:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IIJDkKl+"
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="F+UgJ7+W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1168020DCD;
-	Fri,  1 Mar 2024 21:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709327434; cv=fail; b=au2Xebcw+5OXKVHbXpeFQDOGLSgT9Nrg72liULW7h0TE+qTuekuC2UyRcYDzDqd3s4FkIgcfCNZNCpVjQaNBLQVpCSuu6hZaiSnci0rl7Xq8YC0aFpeGMuC4yA3XesMMIv4xjqO908RiwWrOJ8MAVivc/gITEplyyFenf0Q74Kg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709327434; c=relaxed/simple;
-	bh=uNMsFw7iBAC0uN0gKBc/h/7Zx8Yekr3S3Z5Qi4F1noc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g818LzSe+wdeMV4PteQ1YoH440FdRE/ZlmMGy8GFgkGGaWqWB1DoProPABusrdcVIYXQP7ekpJl/fQ6QnynSeW6uM5lRlDRmny+TUsiFsHRhUoopD61gd8B8fNT54Dg6aph6sUtyMytIPTieUPekvEBlY/tkZ3adRB0IBOGshZ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IIJDkKl+; arc=fail smtp.client-ip=40.107.220.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DCpVDbLUdndU4K5tDAJtYb8II9Ybwk+kvaofUh2ES1yRXFoCAT46LZJE3jw6bmI/Qm8+Seoe/XlBU6FWgRzUXeSDWwKpCV/FlG/ow7RtzDNR/+ZVxlId0JXmjBsvTP+d12J+2k33YORJcyqsf8HjS1UjyxNqMyCgPDJDsqkHRZK37QZiXOGJL9H8aN4hLXk49wHr48RERVg53YTtOn7CcaxPjydb5W+wj0h+MGaaExipULjxcLm4X8+D1ALF8Hw0xfYr/jsTTriFKu6DPcoHjv1a98fuZCR7tBQFoOxBIRKPkQPjivDqc6GoaYowcCiCxKqbhAdXKGuCPJTRmYO2wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=70X9/T2wNE2BSopYdjY6CPgYV9iJ8eQdprpIFaFZdwo=;
- b=Kao+xBn+qeo/WQjHtVYQst5lJr+sDLXV+l++uA4emk2ioirUxdDjpCWvoF+nbRJe6qz7kmAzTj0f+VcO4wnHY/xbOFSgQd0qUKJ92bCENchRHNFeQeTQK2BbCuQ3S96CVbU6WMTOZBej7XF5P2ghoumXjH5Fo7x+mSY39QeP6s/fsUjXaJG6ziZ5xnExpxpcY/BMWDO/GZLcrAk37rDRyjPeDHhpCam9dIl2oPTYBldS12QQxidviLObTB/S8L6lHksuarKX1nTmcxqtBkJyCCnSbtP1Sb8khH3mo9Cdpzqzq7oUToxW5BdfFcK8LTWJZHIfXU14nj+70Mn1Iveb7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=70X9/T2wNE2BSopYdjY6CPgYV9iJ8eQdprpIFaFZdwo=;
- b=IIJDkKl+RsOQipakchnyN2md7C0UeCb3FLqKP5FXb7FuirnEeMTQ3JZm2Kch/fhOogv8to06y7eDBgPEYgC5XltY+daNyncnU8u3u/E5ltEKHqYjoojpGTMiShCgzbo07ofwmCScdzbkigvX7/41g9HU39Z08Tc4h7K7KPyocb0JHIpvLQDavEuLN9haeSSagjkCUrKinFBRTgDMoO/Ubc0NABD5cjw9oDrX1EXlOq7QY4lpbh11++Z58tzOsg17ivYPP3s8Ix0p0kCIGZ3SHTq8J82T+S1V8u1r02WAoR0XD1qp/h51bcXpwYn7H1x8uCu03d7vMR0FDwe5jZVTFw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7339.34; Fri, 1 Mar 2024 21:10:29 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::dc5c:2cf1:d5f5:9753]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::dc5c:2cf1:d5f5:9753%6]) with mapi id 15.20.7339.033; Fri, 1 Mar 2024
- 21:10:29 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Aishwarya TCV <aishwarya.tcv@arm.com>
-Cc: "\"Pankaj Raghav (Samsung)\"" <kernel@pankajraghav.com>,
- linux-mm@kvack.org, "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
- David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
- Yu Zhao <yuzhao@google.com>,
- "\"Kirill A . Shutemov\"" <kirill.shutemov@linux.intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>,
- =?utf-8?q?=22Michal_Koutn=C3=BD=22?= <mkoutny@suse.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- "\"Zach O'Keefe\"" <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v5 8/8] mm: huge_memory: enable debugfs to split huge
- pages to any order.
-Date: Fri, 01 Mar 2024 16:10:26 -0500
-X-Mailer: MailMate (1.14r6018)
-Message-ID: <0685EC19-CDB8-4CD3-BC39-82DE59B5D10C@nvidia.com>
-In-Reply-To: <7E498B77-6CC9-4FC6-B980-D79EEC548CD0@nvidia.com>
-References: <20240226205534.1603748-1-zi.yan@sent.com>
- <20240226205534.1603748-9-zi.yan@sent.com>
- <082e48c8-71b7-4937-a5da-7a37b4be16ba@arm.com>
- <A111EB95-0AF5-4715-82A4-70B8AD900A93@nvidia.com>
- <7E498B77-6CC9-4FC6-B980-D79EEC548CD0@nvidia.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_66DFA667-0A53-41D6-BBC8-0952C7B6C472_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL0PR1501CA0033.namprd15.prod.outlook.com
- (2603:10b6:207:17::46) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748A759166;
+	Fri,  1 Mar 2024 21:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709330198; cv=none; b=CfOQe5YFrsgiUQ3QxetkVCsD7nP+MTJiuGDioJYGeAD/Q+fC4HmboMBHk+Y/4qpjF/rOuS77EnHGNUhlafzQidY0ZDwu6GDyKWSGhTvrimNVfGiCj2Im5VHLMxkfiOoPANAe/5dS5IEEoxyYVJMsirbQXB7NEE3HIoSXh9xUFUg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709330198; c=relaxed/simple;
+	bh=E2YV3tNGVJSt5ox+0FBmlTMWY0RfCcLTCc12+DIDQEU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=W+l8ANxm6yQ3gjDdT2tKtmhYfCiDSUZx01Jkj8a3uKAB9piipKrMpOq2BOvIliWS43po6/+h1HahTGwyJ1iadPCeyeMg2fkpBCPMYxgFX69fv9T5hB4wVo/ITLRupAcG2YWmUNAx6/Vmj40ge6RBdJOHB4WVXxMTN/ygUicp8tM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=F+UgJ7+W; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D6DA21BF204;
+	Fri,  1 Mar 2024 21:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1709330193;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ex6e7ljG1u9CpeqxUac1ORmdsnFmutQlF+JwXX6GWe4=;
+	b=F+UgJ7+Wlx7CID/E0C31iTFp3J7wvXkMR8t3SEApCU6UE+1DR/ebRqy5mmra9ttxxEtKTU
+	01jx5p8xCvFmNeT1nbkUVnwo1pFNn/rQjxEGzctzP7MxSM1xMxmbo9PFJtNmUarKd3JxOp
+	bx7n5eR7K1rds4JZGo06V8PTGlQ2Y/c6sWiduCOwVv4WFYTMzF4Wo4UNv0kzrKY0nFNhtx
+	foNNQGp159yAGYFzGwTwKwe/KB2g5x6lzRSXe4fIqBfQAqDGEyZ6XGf65lLl9xr+hSYEFl
+	S3pSXbz7ZKdtRxvmMCfJyKJXDBvbPwzfa6dhbssWPsvtjmySbaeBNZuGxW5mHg==
+Message-ID: <3d7e66bc-967e-45ec-a9e9-12dafd3b3e68@gtucker.io>
+Date: Fri, 1 Mar 2024 22:56:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|MN2PR12MB4373:EE_
-X-MS-Office365-Filtering-Correlation-Id: be4fd299-1500-4908-2a7b-08dc3a340616
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	uTyUP0AO4+NiEX3cwGBqxg5H3br4E3uduy/tVGmJVKt5j1AcnKYow/kwUQWiNO3Xl2uKSQrpxPl8E4qXcpAFQB26XX03NDrSL8sUEUFt4Jbq/1mi0SMXqGYnNChKQPkRE1ymkIQAvdOiJg+ewwChfteFcAnmI6yoVcDviR/UBaqRZcRCZyLUYvzyRISR5EBJXSm1hP87yPdV4sfS9RBMpG74DNGs6UadQyT+4cZlKZpdGemr3ip4iC0FQau7XZ0PQzl60klvqRz5HPAhkYFBKKtwV5hU0Iw/sKS8HAQmGSpMRsmhsrHq/Gy4ElRNJ5c7xWyL3sUWH6fOlMnVCedSIKkjqEpF6k4KDwirvsM14JpD1baWHfi8/MCRGXGuUdhT1b6gIi2MELufWFaQNU4p3XExm5q2M4KgOC6T94JoWt15Z/icYB1hbGpnETIPJiWbWrA4Q9HelEHfFTU+tcoitifQZPGY6rWPjN7G5tkevmdHo5EsLewvq7yVOXqFqr7JTkkXkzQy8+PVQtfBmXx42tj3mTDXQSia+URe6YxXpatCx1Fbdhvgrh4ULc5MradBPa6vSEYRCa9WcztQWNROfRs0cAXwy99o/H7wHenIVjYO8wfcc/MOjZG+SF/TBj6bLiPNitnnflsSnR/0NGSC8Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3h41bv0tjri2fp1c9/nY/ttla3EI/cKzMTiSnwVt+XpYVdF4eL4C5gTAdxqe?=
- =?us-ascii?Q?DHjgHWQyXXIjkMTprX5Nl1gU8a8kASpMddK4vAsHyFtntdLGN3V8ayi/NI8u?=
- =?us-ascii?Q?GRwDbhFbftpNwPKl0l+4N5eFivKawJlGSAQ3FtKsDh+g2DNaaARO+ZSkkPPE?=
- =?us-ascii?Q?jDRx0cnTbmuvR8zxlY0PaTb5X7gcSB1Qz0GH4SHFOH2ktRMlPNJpQgIfx/mo?=
- =?us-ascii?Q?eGyPvjWPA+W+zcmnqEoc1esxFAqVDBzB2Aum+URSR4EBE2Q3g/0EpNtsUnva?=
- =?us-ascii?Q?5DT6GLwY46sjq78Cp/Zav1D51X+8XchG6lLrqgR1N8KTxB4gOuBWw/4MFu7f?=
- =?us-ascii?Q?Cl+APRWSPztnPkunHMAQVsOfQ8tlDqlSE2CZViUzMyLzvorm7V75eezFMNTc?=
- =?us-ascii?Q?gfVAcFRmhEcNgMenBeGDv1hbiH68/T9fCKXQXr8aHYWUjYbpMmq4kNbcGDgu?=
- =?us-ascii?Q?TmlTe0aBk2XNZeFVLNlzni+P3gRMpil1OEJw32zhmA1TO6maTAc3DrTJt1B5?=
- =?us-ascii?Q?lMfsoSjgXBu4Z1WYphOaEZbI6PG+t4J8dc3QXxPyHI4H6MiSquC30nJ1GEPw?=
- =?us-ascii?Q?J6SZaD3zeYMibalmwVNkhTqQWbMBnVLHYjrc1K49Wj7rPiH9zcHez/QQKYVu?=
- =?us-ascii?Q?J46FWKBdhYUEqRdvu5QMmN/6HptjumG6NbCCmp/3VZe15gQBdbrUU7YadU2o?=
- =?us-ascii?Q?DqcMMtQUxBINCXY6+kIx4yCbhSqTTYI+pvSF3DKi5yumklczpZVH2cUWfZAq?=
- =?us-ascii?Q?cB21TWRbxEmXHB8Dq6lx2YXA18jPW6s3R1YuM3aLlka1ZZRazCjuUdn7L8nP?=
- =?us-ascii?Q?BIw0LanoRwV1YMaJn5UfDM3AduWuNGlxqFbUg1mooM4M9okgKYGQ+HIrYu81?=
- =?us-ascii?Q?c2Du/7rtNPlVvTEfTp/Ekjp0Nl0iCzQevnUmccSFZLuLwXlRPbrc9MPxrYjq?=
- =?us-ascii?Q?ck5mHjm9jz07r6ZKkKQ5m2dawghdFIwV+b4NwMBP725tnKwctbA5Vk/r9bpY?=
- =?us-ascii?Q?yhh4srPAzosoo9E61NgugPqW74kKT/wO5f7Y7LahVgaTvQNjNKZfx8G/WGwz?=
- =?us-ascii?Q?Gb8tFk2XjJLE43eMd2RVE1HuKlyR3vdCWBQwPs80FTJSY2FRK7EJoU3RDqgv?=
- =?us-ascii?Q?3cyi31qbeSIN482A+2Qp9fXZ3dAwGIEmAPRz5Oi4wFUaDC8243w3NmiSml6k?=
- =?us-ascii?Q?9q15nELEsSvM5DTQYYBOrTyrUMWWC8eKwTABm6m4xQbbeHHbHZydmgpKCfa3?=
- =?us-ascii?Q?goeiG8Kr4/osWGYXbh+B+sFCG6ikgHwZ9yh6Y3UtDhbhtfco6Zt91R/1mb1M?=
- =?us-ascii?Q?xUobkNv3f80yTmI3V8dTb0crl5iVmbgSlo9WXqFCgDs7kYoMvfRjq3zTH9vn?=
- =?us-ascii?Q?1XIuHgEel3iOp6XcaVhdlGSxdA9/+EY+1GApMTYnViOroJV8x9ARIyL2/tQ0?=
- =?us-ascii?Q?oKRVU9anbQiCbpZb0qj87U0cxeQfraLI25fWdEoxvVKstxMS7W7Pcunsx6oV?=
- =?us-ascii?Q?zeo5RiRkmkerNLJHhRLTwFvYDMaEv+KaDrY9fKVOI0vwY9f4tRr94lWPKjZY?=
- =?us-ascii?Q?gb7i5feVwE2ejhPvbj5P63K1JjxkNmAdQyk08piM?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be4fd299-1500-4908-2a7b-08dc3a340616
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2024 21:10:29.6080
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LBazU9XjPs8hH0eV2sN0UAnt8yL7SESsbEhWjP/XVPBusTHu4gl7MKRzbfKcjEJE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4373
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel
+ Testing
+Content-Language: en-GB
+To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Nikolai Kondrashov <spbnick@gmail.com>,
+ Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org,
+ dave.pigott@collabora.com, mripard@kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+ gustavo.padovan@collabora.com, pawiecz@collabora.com,
+ tales.aparecida@gmail.com, workflows@vger.kernel.org,
+ kernelci@lists.linux.dev, skhan@linuxfoundation.org,
+ kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com,
+ cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com,
+ ricardo.canuelo@collabora.com, kernel@collabora.com,
+ torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <d99d026e-ed32-4432-bab3-db75296e67d8@gtucker.io>
+ <a5726043-1906-44ba-a6ee-a725a2776269@gmail.com>
+ <51fa8932e57010620e9a9e16a1979f4883e95a7d.camel@collabora.com>
+From: Guillaume Tucker <gtucker@gtucker.io>
+Organization: gtucker.io
+In-Reply-To: <51fa8932e57010620e9a9e16a1979f4883e95a7d.camel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: gtucker@gtucker.io
 
---=_MailMate_66DFA667-0A53-41D6-BBC8-0952C7B6C472_=
-Content-Type: multipart/mixed;
- boundary="=_MailMate_144E51E7-D085-4541-BC72-FA5719E89265_="
-
-
---=_MailMate_144E51E7-D085-4541-BC72-FA5719E89265_=
-Content-Type: text/plain
-
-On 1 Mar 2024, at 15:02, Zi Yan wrote:
-
-> On 1 Mar 2024, at 14:37, Zi Yan wrote:
->
->> On 1 Mar 2024, at 4:51, Aishwarya TCV wrote:
->>
->>> On 26/02/2024 20:55, Zi Yan wrote:
->>>> From: Zi Yan <ziy@nvidia.com>
+On 29/02/2024 17:28, Nicolas Dufresne wrote:
+> Hi,
+> 
+> Le jeudi 29 février 2024 à 16:16 +0200, Nikolai Kondrashov a écrit :
+>> On 2/29/24 2:20 PM, Guillaume Tucker wrote:
+>>> Hello,
+>>>
+>>> On 28/02/2024 23:55, Helen Koike wrote:
+>>>> Dear Kernel Community,
 >>>>
->>>> It is used to test split_huge_page_to_list_to_order for pagecache THPs.
->>>> Also add test cases for split_huge_page_to_list_to_order via both
->>>> debugfs.
+>>>> This patch introduces a `.gitlab-ci` file along with a `ci/` folder, defining a
+>>>> basic test pipeline triggered by code pushes to a GitLab-CI instance. This
+>>>> initial version includes static checks (checkpatch and smatch for now) and build
+>>>> tests across various architectures and configurations. It leverages an
+>>>> integrated cache for efficient build times and introduces a flexible 'scenarios'
+>>>> mechanism for subsystem-specific extensions.
+>>>
+>>> This sounds like a nice starting point to me as an additional way
+>>> to run tests upstream.  I have one particular question as I see a
+>>> pattern through the rest of the email, please see below.
+>>>
+>>> [...]
+>>>
+>>>> 4. **Collaborative Testing Environment:** The kernel community is already
+>>>> engaged in numerous testing efforts, including various GitLab-CI pipelines such
+>>>> as DRM-CI, which I maintain, along with other solutions like KernelCI and
+>>>> BPF-CI. This proposal is designed to further stimulate contributions to the
+>>>> evolving testing landscape. Our goal is to establish a comprehensive suite of
+>>>> common tools and files.
+>>>
+>>> [...]
+>>>
+>>>> **Leveraging External Test Labs:**
+>>>> We can extend our testing to external labs, similar to what DRM-CI currently
+>>>> does. This includes:
+>>>> - Lava labs
+>>>> - Bare metal labs
+>>>> - Using KernelCI-provided labs
 >>>>
->>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
->>>> ---
->>>>  mm/huge_memory.c                              |  34 ++++--
->>>>  .../selftests/mm/split_huge_page_test.c       | 115 +++++++++++++++++-
->>>>  2 files changed, 131 insertions(+), 18 deletions(-)
+>>>> **Other integrations**
+>>>> - Submit results to KCIDB
+>>>
+>>> [...]
+>>>
+>>>> **Join Our Slack Channel:**
+>>>> We have a Slack channel, #gitlab-ci, on the KernelCI Slack instance https://kernelci.slack.com/ .
+>>>> Feel free to join and contribute to the conversation. The KernelCI team has
+>>>> weekly calls where we also discuss the GitLab-CI pipeline.
 >>>>
+>>>> **Acknowledgments:**
+>>>> A special thanks to Nikolai Kondrashov, Tales da Aparecida - both from Red Hat -
+>>>> and KernelCI community for their valuable feedback and support in this proposal.
 >>>
->>> Hi Zi,
+>>> Where does this fit on the KernelCI roadmap?
 >>>
->>> When booting the kernel against next-master(20240228)with Arm64 on
->>> Marvell Thunder X2 (TX2), the kselftest-mm test 'split_huge_page_test'
->>> is failing in our CI (with rootfs over NFS). I can send the full logs if
->>> required.
->>>
->>> A bisect (full log below) identified this patch as introducing the
->>> failure. Bisected it on the tag "next-20240228" at repo
->>> "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git".
->>>
->>> This works fine on  Linux version 6.8.0-rc6
+>>> I see it mentioned a few times but it's not entirely clear
+>>> whether this initiative is an independent one or in some way
+>>> linked to KernelCI.  Say, are you planning to use the kci tool,
+>>> new API, compiler toolchains, user-space and Docker images etc?
+>>> Or, are KernelCI plans evolving to follow this move?
 >>
->> Hi Aishwarya,
->>
->> Can you try the attached patch and see if it fixes the failure? I changed
->> the test to accept XFS dev as input, mount XFS on a temp folder under /tmp,
->> and skip if no XFS is mounted.
->
-> Please try this updated one. It allows you to specify a XFS device path
-> in SPLIT_HUGE_PAGE_TEST_XFS_PATH env variable, which is passed to
-> split_huge_page_test in run_vmtests.sh. It at least allow CI/CD to run
-> the test without too much change.
+>> I would say this is an important part of KernelCI the project, considering its 
+>> aim to improve testing and CI in the kernel. It's not a part of KernelCI the 
+>> service as it is right now, although I would say it would be good to have 
+>> ability to submit KernelCI jobs from GitLab CI and pull results in the same 
+>> pipeline, as we discussed earlier.
 
-OK. This hopefully will be my last churn. Now split_huge_page_test accepts
-a path that is backed by XFS and run_vmtest.sh creates a XFS image in /tmp,
-mounts it in /tmp, and gives the path to split_huge_page_test. I tested
-it locally and it works. Let me know if you have any issue. Thanks.
+Right, I think this needs a bit of disambiguation.  The legacy
+KernelCI system from the Linaro days several years ago is really
+a service on its own like the many other CIs out there.  However,
+the new KernelCI API and related tooling (kci command line, new
+web dashboard, modular runtime design etc.) is not that.  It's
+about addressing all the community requirements and that includes
+being able to run a same test manually in a shell, or in a VM, or
+automatically from GitLab CI or using a main generic pipeline
+hosted by KernelCI itself.  With this approach, there's no
+distinction between "the project" and "the service", and as we
+discussed before there shouldn't even be a distinction with
+KCIDB.  Just KernelCI.
 
---
-Best Regards,
-Yan, Zi
+However I don't really see this happening, unless I'm missing a
+part of the story or some upcoming announcement with an updated
+roadmap.  For some reason the old and established paradigm seems
+unshakeable.  The new KernelCI implementation is starting to look
+just like a refresh of the old one with newer components - which
+is a huge missed opportunity to really change things IMHO.
 
---=_MailMate_144E51E7-D085-4541-BC72-FA5719E89265_=
-Content-Disposition: attachment; filename=selftest.patch
-Content-ID: <5F4E1CC9-131B-409F-B501-01B12E37E49C@nvidia.com>
-Content-Type: text/plain; name=selftest.patch
-Content-Transfer-Encoding: quoted-printable
+This may sound like a bit of a tangent, facilitating GitLab CI
+for the upstream kernel is of course significant progress in any
+case - no question about that.  My comment is more about why it's
+being driven hand-in-hand with KernelCI in what seems like a
+diverging direction from KernelCI's announced plans.  Why push
+for a GitLab-centered orchestration when there's a more universal
+solution being proposed by the project?  I would find it easier
+to understand - and I sense I'm not the only one here reading the
+thread - if KernelCI wasn't mentioned that many times in the
+cover letter and if the scripts didn't have KCI_* in so many
+places, basically if this was clearly an independent initiative
+such as KUnit, 0-day or regzbot.
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/se=
-lftests/mm/run_vmtests.sh
-index fe140a9f4f9d..ffdec5dc0b03 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -412,7 +412,27 @@ CATEGORY=3D"thp" run_test ./khugepaged -s 2
- =
+> I'd like to add that both CI have a different purpose in the Linux project. This
+> CI work is a pre-merge verification. Everyone needs to run checkpatch and
+> smatch, this is automating it (and will catch those that forgot or ran it
+> incorrectly). But it can go further by effectively testing specific patches on
+> real hardware (with pretty narrow filters). It will help catch submission issues
+> earlier, and reduce kernelCI regression rate. As a side effect, kernelCI infra
+> will endup catching the "integration" issues, which are the issue as a result of
+> simultenous changes in different trees. They are also often more complex and
+> benefit from the bisection capabilities.
+> 
+> kernelCI tests are also a lot more intensive, they usually covers everything,
+> but they bundle multiple changes per run. The pre-merge tests will be reduced to
+> what seems meaningful for the changes. Its important to understand that pre-
+> merge CI have a time cost, and we need to make sure CI time does not exceed the
+> merge window period.
 
- CATEGORY=3D"thp" run_test ./transhuge-stress -d 20
- =
-
--CATEGORY=3D"thp" run_test ./split_huge_page_test
-+# Try to create XFS if not provided
-+if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
-+    if test_selected "thp"; then
-+        if grep xfs /proc/filesystems &>/dev/null; then
-+            XFS_IMG=3D$(mktemp /tmp/xfs_img_XXXXXX)
-+            SPLIT_HUGE_PAGE_TEST_XFS_PATH=3D$(mktemp -d /tmp/xfs_dir_XXX=
-XXX)
-+            truncate -s 314572800 ${XFS_IMG}
-+            mkfs.xfs -q ${XFS_IMG}
-+            mount -o loop ${XFS_IMG} ${SPLIT_HUGE_PAGE_TEST_XFS_PATH}
-+            MOUNTED_XFS=3D1
-+        fi
-+    fi
-+fi
-+
-+CATEGORY=3D"thp" run_test ./split_huge_page_test ${SPLIT_HUGE_PAGE_TEST_=
-XFS_PATH}
-+
-+if [ -n "${MOUNTED_XFS}" ]; then
-+    umount ${SPLIT_HUGE_PAGE_TEST_XFS_PATH}
-+    rmdir ${SPLIT_HUGE_PAGE_TEST_XFS_PATH}
-+    rm -f ${XFS_IMG}
-+fi
- =
-
- CATEGORY=3D"migration" run_test ./migration
- =
-
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/te=
-sting/selftests/mm/split_huge_page_test.c
-index cf09fdc9ef22..0b367affaa0d 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -26,7 +26,6 @@ uint64_t pmd_pagesize;
- =
-
- #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
- #define SMAP_PATH "/proc/self/smaps"
--#define THP_FS_PATH "/mnt/thp_fs"
- #define INPUT_MAX 80
- =
-
- #define PID_FMT "%d,0x%lx,0x%lx,%d"
-@@ -268,7 +267,37 @@ void split_file_backed_thp(void)
- 	ksft_exit_fail_msg("Error occurred\n");
- }
- =
-
--void create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, i=
-nt *fd, char **addr)
-+bool prepare_thp_fs(const char *xfs_path, char *thp_fs_template,
-+		const char **thp_fs_loc)
-+{
-+	if (xfs_path) {
-+		*thp_fs_loc =3D xfs_path;
-+		return false;
-+	}
-+
-+	*thp_fs_loc =3D mkdtemp(thp_fs_template);
-+
-+	if (!*thp_fs_loc)
-+		ksft_exit_fail_msg("cannot create temp folder\n");
-+
-+	return true;
-+}
-+
-+void cleanup_thp_fs(const char *thp_fs_loc, bool created_tmp)
-+{
-+	int status;
-+
-+	if (!created_tmp)
-+		return;
-+
-+	status =3D rmdir(thp_fs_loc);
-+	if (status)
-+		ksft_exit_fail_msg("cannot remove tmp dir: %s\n",
-+				   strerror(errno));
-+}
-+
-+int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, in=
-t *fd,
-+		char **addr)
- {
- 	size_t i;
- 	int dummy;
-@@ -277,7 +306,7 @@ void create_pagecache_thp_and_fd(const char *testfile=
-, size_t fd_size, int *fd,
- =
-
- 	*fd =3D open(testfile, O_CREAT | O_RDWR, 0664);
- 	if (*fd =3D=3D -1)
--		ksft_exit_fail_msg("Failed to create a file at "THP_FS_PATH);
-+		ksft_exit_fail_msg("Failed to create a file at %s\n", testfile);
- =
-
- 	for (i =3D 0; i < fd_size; i++) {
- 		unsigned char byte =3D (unsigned char)i;
-@@ -299,7 +328,7 @@ void create_pagecache_thp_and_fd(const char *testfile=
-, size_t fd_size, int *fd,
- =
-
- 	*fd =3D open(testfile, O_RDWR);
- 	if (*fd =3D=3D -1) {
--		ksft_perror("Failed to open a file at "THP_FS_PATH);
-+		ksft_perror("Failed to open testfile\n");
- 		goto err_out_unlink;
- 	}
- =
-
-@@ -314,26 +343,37 @@ void create_pagecache_thp_and_fd(const char *testfi=
-le, size_t fd_size, int *fd,
- 		dummy +=3D *(*addr + i);
- =
-
- 	if (!check_huge_file(*addr, fd_size / pmd_pagesize, pmd_pagesize)) {
--		ksft_print_msg("No large pagecache folio generated, please mount a fil=
-esystem supporting large folio at "THP_FS_PATH"\n");
--		goto err_out_close;
-+		ksft_print_msg("No large pagecache folio generated, please provide a f=
-ilesystem supporting large folio\n");
-+		unlink(testfile);
-+		ksft_test_result_skip("Pagecache folio split skipped\n");
-+		return -2;
- 	}
--	return;
-+	return 0;
- err_out_close:
- 	close(*fd);
- err_out_unlink:
- 	unlink(testfile);
- 	ksft_exit_fail_msg("Failed to create large pagecache folios\n");
-+	return -1;
- }
- =
-
--void split_thp_in_pagecache_to_order(size_t fd_size, int order)
-+void split_thp_in_pagecache_to_order(size_t fd_size, int order, const ch=
-ar *fs_loc)
- {
- 	int fd;
- 	char *addr;
- 	size_t i;
--	const char testfile[] =3D THP_FS_PATH "/test";
-+	char testfile[INPUT_MAX];
- 	int err =3D 0;
- =
-
--	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
-+	err =3D snprintf(testfile, INPUT_MAX, "%s/test", fs_loc);
-+
-+	if (err < 0)
-+		ksft_exit_fail_msg("cannot generate right test file name\n");
-+
-+	err =3D create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
-+	if (err)
-+		return;
-+	err =3D 0;
- =
-
- 	write_debugfs(PID_FMT, getpid(), (uint64_t)addr, (uint64_t)addr + fd_si=
-ze, order);
- =
-
-@@ -351,6 +391,7 @@ void split_thp_in_pagecache_to_order(size_t fd_size, =
-int order)
- 	}
- =
-
- out:
-+	munmap(addr, fd_size);
- 	close(fd);
- 	unlink(testfile);
- 	if (err)
-@@ -362,6 +403,10 @@ int main(int argc, char **argv)
- {
- 	int i;
- 	size_t fd_size;
-+	char *optional_xfs_path =3D NULL;
-+	char fs_loc_template[] =3D "/tmp/thp_fs_XXXXXX";
-+	const char *fs_loc;
-+	bool created_tmp;
- =
-
- 	ksft_print_header();
- =
-
-@@ -370,6 +415,9 @@ int main(int argc, char **argv)
- 		ksft_finished();
- 	}
- =
-
-+	if (argc > 1)
-+		optional_xfs_path =3D argv[1];
-+
- 	ksft_set_plan(3+9);
- =
-
- 	pagesize =3D getpagesize();
-@@ -384,8 +432,11 @@ int main(int argc, char **argv)
- 	split_pte_mapped_thp();
- 	split_file_backed_thp();
- =
-
-+	created_tmp =3D prepare_thp_fs(optional_xfs_path, fs_loc_template,
-+			&fs_loc);
- 	for (i =3D 8; i >=3D 0; i--)
--		split_thp_in_pagecache_to_order(fd_size, i);
-+		split_thp_in_pagecache_to_order(fd_size, i, fs_loc);
-+	cleanup_thp_fs(fs_loc, created_tmp);
- =
-
- 	ksft_finished();
- =
+You're referring to the legacy KernelCI, to illustrate the point
+I made earlier.  The plan with the new implementation was to be
+able to do pre-merge testing as well as many other things,
+basically to provide a platform able to cope with the diversity
+of workflows across the kernel subsystems and the complexity of
+the "system under test" itself.
 
 
---=_MailMate_144E51E7-D085-4541-BC72-FA5719E89265_=--
+Well, let's see how this goes and it does look quite promising.
+Evolution is always a chaotic process, especially in a complex
+project like this.  I'm not expecting to get all the answers to
+the questions I have but it seemed important to raise this point
+and seek a bit more clarity around KernelCI.
 
---=_MailMate_66DFA667-0A53-41D6-BBC8-0952C7B6C472_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
+Guillaume
 
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmXiREIPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU5OQQAJvqGnNYPeBOe4Puk/gYEe8roR0mxAUv2yHR
-Bl9LedJmGIZv6M7l3nwJtD36kR184IGmqi9m3F1EqMuNFaV2/kQrz1milCywnv4S
-tlE2L0DP5kSuBu08YnpcmO0M2xIczz7AwMkt4d+hoMt0zWHhcnlvXjW0wHBWr8Vf
-UNTBrxHt/v2svNaq565AT9O+YvINKVVHclJirYfor3syA45ozPq4k4/mhqlPqyid
-kIPdTQp3wcCapSkly1KC8O5ZusHfhxGqpZk1kOg0RQuFuQBxsff3LUrKzx4d8/09
-3DxA9NfvrBZpvPPd8i9NU947DlTgdrDqyka3ALqp7qG5hs0fOlbOIIRRPkbc0xCa
-zjEl3duMndnq5sHjpHDyffRMRNYYytejPDSKBa2blltoVU2b72vTF0J3gl5APcmt
-Iy5/5QdpDrw3q5+VJEYbHe6q3mgL/GhdANWSH/57SWc9yqraBVawJFh/2n/RjnY6
-9RyRGM4lj+7RnqSXQGB1olHkL7J82si0leYbWCZ/3i1wU1XfHhVKBTvmq8Qv2ieM
-8PZ+QVBkOs0kWQPe4taA5gPKIcIU/6t8UbczqesdSCjVWbDroTjaAsHF4IkddvNd
-zn8BHfjBb4EwNNIzuuT+J7x1pH8HHFpEQbszKI81TcZmxUgana4Xj77rqQPmpVQB
-5/+U0Hl7
-=mkXe
------END PGP SIGNATURE-----
-
---=_MailMate_66DFA667-0A53-41D6-BBC8-0952C7B6C472_=--
 
