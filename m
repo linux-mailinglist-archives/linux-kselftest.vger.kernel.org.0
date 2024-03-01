@@ -1,206 +1,416 @@
-Return-Path: <linux-kselftest+bounces-5711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5173886E0D2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 13:05:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CC1986E0DD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 13:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D265C1F22EA6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 12:05:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A6051C22A15
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Mar 2024 12:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADA7F6CDB8;
-	Fri,  1 Mar 2024 12:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 103C76D505;
+	Fri,  1 Mar 2024 12:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="EqlNMx0b";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="EqlNMx0b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="glTRundD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBC279F1
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Mar 2024 12:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA075FEE3;
+	Fri,  1 Mar 2024 12:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709294754; cv=none; b=orAqKZRuINjZdPagsi+AwbPYyE9hlenF4hxpQu5chTg2XE6YRTzY+N4/6pY8ezNV/PHn2luYeNFC5GN7NJDlEyLKVA5LHllsMtUha3pZR+426NlTENGk1QdNwt/3wKAggoK6M4RrpmS2Fl7q4vYyHhkDnBb8uhZ/iCUrAL8nI3U=
+	t=1709295002; cv=none; b=pY3qZQuPCC0tLFrsBrQThXpig+6Y79dMUBC5a5aIgWIU7F5cYQWqjaXCPhrYWIgB8HGyuWHaOMofYTOZiXrBhpXGHQkqCiQf8RzZMUfynPcP/OpkMi9Vc8MnMvMxMrvA89FXhcpCN7MwSu72NAkcPAyigyoGCog4kCRqXv9Rra0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709294754; c=relaxed/simple;
-	bh=GT8RvPXzpQbNAr+PmwPafqn4JlsxEiG09hLNrTVSe7c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dJxHvdDOCo4lkXbSDGM6Nsugg/pvcy6flKFhuAzHGOBCxdSdTKREgx5FM2GHXfw+BQkNjH3CaqyemOmWFNg/Ctnts1fgxxj9PMXQmsxxTUs4ssw4pMBrnmr2PVwuW+d3HinB8/3B57lfMvvSC37e3LmY8F2otiMfJnxibLJn3js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=EqlNMx0b; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=EqlNMx0b; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id AC9791F867;
-	Fri,  1 Mar 2024 12:05:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1709294750; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WH0PIa1AAXQf6SoL4FRmNRLcMSTmCWq1NW3frVdcIjw=;
-	b=EqlNMx0bulitP8tUYoheeLOINYf1lslQNSVr/b/aUPTkYb89LrH0qQEzkfk4i4rxOX9VRP
-	1/75ACR80d/EKc7FHCFtnrE0NU0858zohW258rkExVEOTVadtQ5BIbnoh6TJW4M8+qATaS
-	Ip6zBOG4yXSag48izezOWtU0uqWkezg=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1709294750; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WH0PIa1AAXQf6SoL4FRmNRLcMSTmCWq1NW3frVdcIjw=;
-	b=EqlNMx0bulitP8tUYoheeLOINYf1lslQNSVr/b/aUPTkYb89LrH0qQEzkfk4i4rxOX9VRP
-	1/75ACR80d/EKc7FHCFtnrE0NU0858zohW258rkExVEOTVadtQ5BIbnoh6TJW4M8+qATaS
-	Ip6zBOG4yXSag48izezOWtU0uqWkezg=
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 39B2013581;
-	Fri,  1 Mar 2024 12:05:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id ODPYAJ7E4WWDPgAAn2gu4w
-	(envelope-from <mpdesouza@suse.com>); Fri, 01 Mar 2024 12:05:50 +0000
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: "kernelci.org bot" <bot@kernelci.org>,
-	kernelci-results@groups.io,
-	linux-kselftest@vger.kernel.org,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	shuah@kernel.org
-Subject: Re: kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.8-rc1-56-g539cd3f4da3f)
-Date: Fri,  1 Mar 2024 09:05:44 -0300
-Message-ID: <20240301120545.15733-1-mpdesouza@suse.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <a304f03b-7b2d-4c6d-9c11-4f4b1cda589c@linuxfoundation.org>
-References: 
+	s=arc-20240116; t=1709295002; c=relaxed/simple;
+	bh=ScRQVG3nMmZ8fe0cGcbyZVAKxEDLmyRQd9yx2uT1RQY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=P23xKCK21NDwplClMmIz/uwkrO5nUB7FNfyi9k+wXXs1IQIhJN16cthtvwRnYT0Ya8QSyKJ6DDeeLPt4bpGBEKa+b2JmVJ3V8NQhJ1P2lrO7ynq4YNHBlSOfdh7n1gb0yoD1xuem2VX6kQTTPcsnocS27/arFX2ELnBpqIwTenY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=glTRundD; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709295000; x=1740831000;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=ScRQVG3nMmZ8fe0cGcbyZVAKxEDLmyRQd9yx2uT1RQY=;
+  b=glTRundDSFBtRQbnOc+leWw9aWu0/hZaZ5jdXAUnoQ3scGpuKjEDFsXy
+   DSOiayxe7rj+R2rek/HS9U/Q9i/Zx0DFV6/ikLorTYNmAg+GGHvpKgl5T
+   hAhv7VyOkmkqWF7pgWR6ms0e7TzuzJYpBAR7GJr7DRlG+1Yv8PQnIdkmw
+   MLUnaGko3p2o06Lg9wdqZU9yXuDbSbBWNyao4rZiOv2w6L5J3CRavYS2u
+   B98KeoU9vPW6b71a2oyMA8wEKkHWcI58pz4zpgmUrIXviRTEuxGHLewat
+   TNe8lnTOyy3+cmDRdFHlYhXC3qy9HsI94yBq8ekH+9rAMIu3AUFULhL3J
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="3717297"
+X-IronPort-AV: E=Sophos;i="6.06,196,1705392000"; 
+   d="scan'208";a="3717297"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 04:09:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,196,1705392000"; 
+   d="scan'208";a="8319181"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.125.242.247]) ([10.125.242.247])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 04:09:55 -0800
+Message-ID: <c005384e-4dae-46d3-81b2-c96ce8cd4acb@linux.intel.com>
+Date: Fri, 1 Mar 2024 20:09:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 15/29] KVM: selftests: TDX: Add TDX MSR read/write
+ tests
+From: Binbin Wu <binbin.wu@linux.intel.com>
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
+ Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
+ Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-16-sagis@google.com>
+ <d4d8831c-0b11-4219-b00e-37e6f0781fe1@linux.intel.com>
+In-Reply-To: <d4d8831c-0b11-4219-b00e-37e6f0781fe1@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=EqlNMx0b
-X-Spamd-Result: default: False [0.69 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 RCPT_COUNT_FIVE(0.00)[6];
-	 DWL_DNSWL_LOW(-1.00)[suse.com:dkim];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 DKIM_TRACE(0.00)[suse.com:+];
-	 MX_GOOD(-0.01)[];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,suse.com:dkim];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%];
-	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Score: 0.69
-X-Rspamd-Queue-Id: AC9791F867
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Bar: /
 
-On Wed, 28 Feb 2024 15:28:14 -0700 Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-> On 2/28/24 00:21, kernelci.org bot wrote:
-> > kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.8-rc1-56-g539cd3f4da3f)
-> > 
-> > Regressions Summary
-> > -------------------
-> > 
-> > platform        | arch | lab           | compiler | defconfig                    | regressions
-> > ----------------+------+---------------+----------+------------------------------+------------
-> > imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+kselftest | 1
-> > 
-> >    Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8-rc1-56-g539cd3f4da3f/plan/kselftest-livepatch/
-> > 
-> >    Test:     kselftest-livepatch
-> >    Tree:     kselftest
-> >    Branch:   next
-> >    Describe: v6.8-rc1-56-g539cd3f4da3f
-> >    URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-> >    SHA:      539cd3f4da3fdbe7dc353634e004e4b0e725c35a
-> > 
-> > 
-> > Test Regressions
-> > ----------------
-> > 
-> > 
-> > platform        | arch | lab           | compiler | defconfig                    | regressions
-> > ----------------+------+---------------+----------+------------------------------+------------
-> > imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+kselftest | 1
-> > 
-> >    Details:     https://kernelci.org/test/plan/id/65ded1d5c2aa34249963703c
-> > 
-> >    Results:     1 PASS, 1 FAIL, 0 SKIP
-> >    Full config: multi_v7_defconfig+kselftest
-> >    Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 20210110)
-> >    Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-56-g539cd3f4da3f/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-livepatch-imx6q-sabrelite.txt
-> >    HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-56-g539cd3f4da3f/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-livepatch-imx6q-sabrelite.html
-> >    Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-kselftest/20240129.0/armhf/initrd.cpio.gz
-> > 
-> > 
-> >    * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case/id/65ded1d5c2aa34249963703e
-> >          failing since 13 days (last pass: v6.8-rc1, first fail: v6.8-rc1-32-g345e8abe4c355)
-> > 
-> >      2024-02-28T06:26:05.757140  / #
-> > 
-> >      2024-02-28T06:26:05.767314
-> > 
-> >      2024-02-28T06:26:10.908349  / # export NFS_ROOTFS='/var/lib/lava/dispatcher/tmp/12885469/extract-nfsrootfs-c33w8jjk'
-> > 
-> >      2024-02-28T06:26:10.925782  export NFS_ROOTFS='/var/lib/lava/dispatcher/tmp/12885469/extract-nfsrootfs-c33w8jjk'
-> > 
-> >      2024-02-28T06:26:13.149970  / # export NFS_SERVER_IP='192.168.201.1'
-> > 
-> >      2024-02-28T06:26:13.161626  export NFS_SERVER_IP='192.168.201.1'
-> > 
-> >      2024-02-28T06:26:13.280972  / # #
-> > 
-> >      2024-02-28T06:26:13.289584  #
-> > 
-> >      2024-02-28T06:26:13.405920  / # export SHELL=/bin/bash
-> > 
-> >      2024-02-28T06:26:13.417269  export SHELL=/bin/bash
-> >   
-> >      ... (112 line(s) more)
-> >    
-> 
-> Hi Marco,
-> 
-> Please take a look at this regression. I applied your patch
-> series that fixed the problems found in o-day bot. Is this
-> a different problem?
 
-Hi Shuah,
+On 3/1/2024 8:00 PM, Binbin Wu wrote:
+>
+>
+> On 12/13/2023 4:46 AM, Sagi Shahar wrote:
+>> The test verifies reads and writes for MSR registers with different 
+>> access
+>> level.
+>>
+>> Signed-off-by: Sagi Shahar <sagis@google.com>
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>> Signed-off-by: Ryan Afranji <afranji@google.com>
+>> ---
+>>   .../selftests/kvm/include/x86_64/tdx/tdx.h    |   5 +
+>>   .../selftests/kvm/lib/x86_64/tdx/tdx.c        |  27 +++
+>>   .../selftests/kvm/x86_64/tdx_vm_tests.c       | 209 ++++++++++++++++++
+>>   3 files changed, 241 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h 
+>> b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+>> index 63788012bf94..85ba6aab79a7 100644
+>> --- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+>> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+>> @@ -9,11 +9,16 @@
+>>   #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+>>     #define TDG_VP_VMCALL_INSTRUCTION_IO 30
+>> +#define TDG_VP_VMCALL_INSTRUCTION_RDMSR 31
+>> +#define TDG_VP_VMCALL_INSTRUCTION_WRMSR 32
+>> +
+>>   void handle_userspace_tdg_vp_vmcall_exit(struct kvm_vcpu *vcpu);
+>>   uint64_t tdg_vp_vmcall_instruction_io(uint64_t port, uint64_t size,
+>>                         uint64_t write, uint64_t *data);
+>>   void tdg_vp_vmcall_report_fatal_error(uint64_t error_code, uint64_t 
+>> data_gpa);
+>>   uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t *r11, uint64_t 
+>> *r12,
+>>                       uint64_t *r13, uint64_t *r14);
+>> +uint64_t tdg_vp_vmcall_instruction_rdmsr(uint64_t index, uint64_t 
+>> *ret_value);
+>> +uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t 
+>> value);
+>>     #endif // SELFTEST_TDX_TDX_H
+>> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c 
+>> b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+>> index e5a9e13c62e2..88ea6f2a6469 100644
+>> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+>> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+>> @@ -87,3 +87,30 @@ uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t 
+>> *r11, uint64_t *r12,
+>>         return ret;
+>>   }
+>> +
+>> +uint64_t tdg_vp_vmcall_instruction_rdmsr(uint64_t index, uint64_t 
+>> *ret_value)
+>> +{
+>> +    uint64_t ret;
+>> +    struct tdx_hypercall_args args = {
+>> +        .r11 = TDG_VP_VMCALL_INSTRUCTION_RDMSR,
+>> +        .r12 = index,
+>> +    };
+>> +
+>> +    ret = __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
+>> +
+>> +    if (ret_value)
+>> +        *ret_value = args.r11;
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t 
+>> value)
+>> +{
+>> +    struct tdx_hypercall_args args = {
+>> +        .r11 = TDG_VP_VMCALL_INSTRUCTION_WRMSR,
+>> +        .r12 = index,
+>> +        .r13 = value,
+>> +    };
+>> +
+>> +    return __tdx_hypercall(&args, 0);
+>> +}
+>> diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c 
+>> b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+>> index 699cba36e9ce..5db3701cc6d9 100644
+>> --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+>> +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+>> @@ -515,6 +515,213 @@ void verify_guest_reads(void)
+>>       printf("\t ... PASSED\n");
+>>   }
+>>   +/*
+>> + * Define a filter which denies all MSR access except the following:
+>> + * MSR_X2APIC_APIC_ICR: Allow read/write access (allowed by default)
+>
+> The default filtering behavior of tdx_msr_test_filter is
+> KVM_MSR_FILTER_DEFAULT_DENY, and MSR_X2APIC_APIC_ICR is not covered
+> by any specific range, shouldn't MSR_X2APIC_APIC_ICR be denied by 
+> default?
 
-I've sent a question to Usama Anjum a couple days ago about it, and he answered
-that this issue is not a test problem, but their setup's fault.
+Sorry, please ignore this comment.
 
-thanks,
-  Marcos
+I see the description from the KVM document later:
+"x2APIC MSR accesses cannot be filtered (KVM silently ignores filters 
+that cover any x2APIC MSRs)."
 
-> 
-> thanks,
-> -- Shuah
+>
+>> + * MSR_IA32_MISC_ENABLE: Allow read access
+>> + * MSR_IA32_POWER_CTL: Allow write access
+>> + */
+>> +#define MSR_X2APIC_APIC_ICR 0x830
+>> +static u64 tdx_msr_test_allow_bits = 0xFFFFFFFFFFFFFFFF;
+>> +struct kvm_msr_filter tdx_msr_test_filter = {
+>> +    .flags = KVM_MSR_FILTER_DEFAULT_DENY,
+>> +    .ranges = {
+>> +        {
+>> +            .flags = KVM_MSR_FILTER_READ,
+>> +            .nmsrs = 1,
+>> +            .base = MSR_IA32_MISC_ENABLE,
+>> +            .bitmap = (uint8_t *)&tdx_msr_test_allow_bits,
+>> +        }, {
+>> +            .flags = KVM_MSR_FILTER_WRITE,
+>> +            .nmsrs = 1,
+>> +            .base = MSR_IA32_POWER_CTL,
+>> +            .bitmap = (uint8_t *)&tdx_msr_test_allow_bits,
+>> +        },
+>> +    },
+>> +};
+>> +
+>> +/*
+>> + * Verifies MSR read functionality.
+>> + */
+>> +void guest_msr_read(void)
+>> +{
+>> +    uint64_t data;
+>> +    uint64_t ret;
+>> +
+>> +    ret = tdg_vp_vmcall_instruction_rdmsr(MSR_X2APIC_APIC_ICR, &data);
+>> +    if (ret)
+>> +        tdx_test_fatal(ret);
+>> +
+>> +    ret = tdx_test_report_64bit_to_user_space(data);
+>> +    if (ret)
+>> +        tdx_test_fatal(ret);
+>> +
+>> +    ret = tdg_vp_vmcall_instruction_rdmsr(MSR_IA32_MISC_ENABLE, &data);
+>> +    if (ret)
+>> +        tdx_test_fatal(ret);
+>> +
+>> +    ret = tdx_test_report_64bit_to_user_space(data);
+>> +    if (ret)
+>> +        tdx_test_fatal(ret);
+>> +
+>> +    /* We expect this call to fail since MSR_IA32_POWER_CTL is write 
+>> only */
+>> +    ret = tdg_vp_vmcall_instruction_rdmsr(MSR_IA32_POWER_CTL, &data);
+>> +    if (ret) {
+>> +        ret = tdx_test_report_64bit_to_user_space(ret);
+>> +        if (ret)
+>> +            tdx_test_fatal(ret);
+>> +    } else {
+>> +        tdx_test_fatal(-99);
+>> +    }
+>> +
+>> +    tdx_test_success();
+>> +}
+>> +
+>> +void verify_guest_msr_reads(void)
+>> +{
+>> +    struct kvm_vm *vm;
+>> +    struct kvm_vcpu *vcpu;
+>> +
+>> +    uint64_t data;
+>> +    int ret;
+>> +
+>> +    vm = td_create();
+>> +    td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+>> +
+>> +    /*
+>> +     * Set explicit MSR filter map to control access to the MSR 
+>> registers
+>> +     * used in the test.
+>> +     */
+>> +    printf("\t ... Setting test MSR filter\n");
+>> +    ret = kvm_check_cap(KVM_CAP_X86_USER_SPACE_MSR);
+>> +    TEST_ASSERT(ret, "KVM_CAP_X86_USER_SPACE_MSR is unavailable");
+>> +    vm_enable_cap(vm, KVM_CAP_X86_USER_SPACE_MSR, 
+>> KVM_MSR_EXIT_REASON_FILTER);
+>> +
+>> +    ret = kvm_check_cap(KVM_CAP_X86_MSR_FILTER);
+>> +    TEST_ASSERT(ret, "KVM_CAP_X86_MSR_FILTER is unavailable");
+>> +
+>> +    ret = ioctl(vm->fd, KVM_X86_SET_MSR_FILTER, &tdx_msr_test_filter);
+>> +    TEST_ASSERT(ret == 0,
+>> +            "KVM_X86_SET_MSR_FILTER failed, ret: %i errno: %i (%s)",
+>> +            ret, errno, strerror(errno));
+>> +
+>> +    vcpu = td_vcpu_add(vm, 0, guest_msr_read);
+>> +    td_finalize(vm);
+>> +
+>> +    printf("Verifying guest msr reads:\n");
+>> +
+>> +    printf("\t ... Setting test MSR values\n");
+>> +    /* Write arbitrary to the MSRs. */
+>> +    vcpu_set_msr(vcpu, MSR_X2APIC_APIC_ICR, 4);
+>> +    vcpu_set_msr(vcpu, MSR_IA32_MISC_ENABLE, 5);
+>> +    vcpu_set_msr(vcpu, MSR_IA32_POWER_CTL, 6);
+>> +
+>> +    printf("\t ... Running guest\n");
+>> +    td_vcpu_run(vcpu);
+>> +    TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+>> +    data = tdx_test_read_64bit_report_from_guest(vcpu);
+>> +    TEST_ASSERT_EQ(data, 4);
+>> +
+>> +    td_vcpu_run(vcpu);
+>> +    TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+>> +    data = tdx_test_read_64bit_report_from_guest(vcpu);
+>> +    TEST_ASSERT_EQ(data, 5);
+>> +
+>> +    td_vcpu_run(vcpu);
+>> +    TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+>> +    data = tdx_test_read_64bit_report_from_guest(vcpu);
+>> +    TEST_ASSERT_EQ(data, TDG_VP_VMCALL_INVALID_OPERAND);
+>> +
+>> +    td_vcpu_run(vcpu);
+>> +    TDX_TEST_ASSERT_SUCCESS(vcpu);
+>> +
+>> +    kvm_vm_free(vm);
+>> +    printf("\t ... PASSED\n");
+>> +}
+>> +
+>> +/*
+>> + * Verifies MSR write functionality.
+>> + */
+>> +void guest_msr_write(void)
+>> +{
+>> +    uint64_t ret;
+>> +
+>> +    ret = tdg_vp_vmcall_instruction_wrmsr(MSR_X2APIC_APIC_ICR, 4);
+>> +    if (ret)
+>> +        tdx_test_fatal(ret);
+>> +
+>> +    /* We expect this call to fail since MSR_IA32_MISC_ENABLE is 
+>> read only */
+>> +    ret = tdg_vp_vmcall_instruction_wrmsr(MSR_IA32_MISC_ENABLE, 5);
+>> +    if (ret) {
+>> +        ret = tdx_test_report_64bit_to_user_space(ret);
+>> +        if (ret)
+>> +            tdx_test_fatal(ret);
+>> +    } else {
+>> +        tdx_test_fatal(-99);
+>> +    }
+>> +
+>> +
+>> +    ret = tdg_vp_vmcall_instruction_wrmsr(MSR_IA32_POWER_CTL, 6);
+>> +    if (ret)
+>> +        tdx_test_fatal(ret);
+>> +
+>> +    tdx_test_success();
+>> +}
+>> +
+>> +void verify_guest_msr_writes(void)
+>> +{
+>> +    struct kvm_vcpu *vcpu;
+>> +    struct kvm_vm *vm;
+>> +
+>> +    uint64_t data;
+>> +    int ret;
+>> +
+>> +    vm = td_create();
+>> +    td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+>> +
+>> +    /*
+>> +     * Set explicit MSR filter map to control access to the MSR 
+>> registers
+>> +     * used in the test.
+>> +     */
+>> +    printf("\t ... Setting test MSR filter\n");
+>> +    ret = kvm_check_cap(KVM_CAP_X86_USER_SPACE_MSR);
+>> +    TEST_ASSERT(ret, "KVM_CAP_X86_USER_SPACE_MSR is unavailable");
+>> +    vm_enable_cap(vm, KVM_CAP_X86_USER_SPACE_MSR, 
+>> KVM_MSR_EXIT_REASON_FILTER);
+>> +
+>> +    ret = kvm_check_cap(KVM_CAP_X86_MSR_FILTER);
+>> +    TEST_ASSERT(ret, "KVM_CAP_X86_MSR_FILTER is unavailable");
+>> +
+>> +    ret = ioctl(vm->fd, KVM_X86_SET_MSR_FILTER, &tdx_msr_test_filter);
+>> +    TEST_ASSERT(ret == 0,
+>> +            "KVM_X86_SET_MSR_FILTER failed, ret: %i errno: %i (%s)",
+>> +            ret, errno, strerror(errno));
+>> +
+>> +    vcpu = td_vcpu_add(vm, 0, guest_msr_write);
+>> +    td_finalize(vm);
+>> +
+>> +    printf("Verifying guest msr writes:\n");
+>> +
+>> +    printf("\t ... Running guest\n");
+>> +    /* Only the write to MSR_IA32_MISC_ENABLE should trigger an exit */
+>> +    td_vcpu_run(vcpu);
+>> +    TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+>> +    data = tdx_test_read_64bit_report_from_guest(vcpu);
+>> +    TEST_ASSERT_EQ(data, TDG_VP_VMCALL_INVALID_OPERAND);
+>> +
+>> +    td_vcpu_run(vcpu);
+>> +    TDX_TEST_ASSERT_SUCCESS(vcpu);
+>> +
+>> +    printf("\t ... Verifying MSR values writen by guest\n");
+>> +
+>> +    TEST_ASSERT_EQ(vcpu_get_msr(vcpu, MSR_X2APIC_APIC_ICR), 4);
+>> +    TEST_ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_MISC_ENABLE), 0x1800);
+>> +    TEST_ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_POWER_CTL), 6);
+>> +
+>> +    kvm_vm_free(vm);
+>> +    printf("\t ... PASSED\n");
+>> +}
+>> +
+>> +
+>>   int main(int argc, char **argv)
+>>   {
+>>       setbuf(stdout, NULL);
+>> @@ -531,6 +738,8 @@ int main(int argc, char **argv)
+>>       run_in_new_process(&verify_get_td_vmcall_info);
+>>       run_in_new_process(&verify_guest_writes);
+>>       run_in_new_process(&verify_guest_reads);
+>> +    run_in_new_process(&verify_guest_msr_writes);
+>> +    run_in_new_process(&verify_guest_msr_reads);
+>>         return 0;
+>>   }
+>
+>
+
 
