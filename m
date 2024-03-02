@@ -1,139 +1,244 @@
-Return-Path: <linux-kselftest+bounces-5778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42F2F86EF49
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 08:47:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A715886EF65
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 08:58:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAB90B218A9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 07:47:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C28551C215E2
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 07:58:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1501A11CA0;
-	Sat,  2 Mar 2024 07:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACCF11C92;
+	Sat,  2 Mar 2024 07:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="n/wzdBv/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mb9qIeS4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A57711C83
-	for <linux-kselftest@vger.kernel.org>; Sat,  2 Mar 2024 07:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8882512E42;
+	Sat,  2 Mar 2024 07:58:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709365664; cv=none; b=lUeX/jXuVdpNpag2fKPPMRpi3eA7eRqS8HSujcS/wkhyhFBjK54/WKAOFOm9ebdZQv5ZaHxtKkjpDvQL5XC6VUEYQHaVgZS8LjBZxTXd2eyvsE0hTDB9ag0FnQyWBey6weseDzaZSMhH0+YX0nOOdjzut5Ce3bVyJ2Md8oHqJTU=
+	t=1709366297; cv=none; b=U4dkgZT/Bg5LfSOMkfuI3tTv50OVuCIujivHhqpM1Ao+iXu71H3OsyQmjyDclIe+ZrM038frY99/WomHsPI2s6iZZhjKWbcg3nMHRIALzonlzg6H8qODR9G/DzoB4UWU31Jyg7AMjO5rPqhVvmQApp9X1joiE6GoaLuwVqkusr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709365664; c=relaxed/simple;
-	bh=HdbsxiJhiXPHCyAoIFfaT7i4095x8iDZOuT2JzlDoBc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j3WHp/KfL4+QPJrkFB/Cyb8s94GKhnAFZx9CyOUpOJ6HmIZ2fdC8Fa8QgOmLwOP1jefXqHhhXezxhCv/Djs5FwIiLvLjCodU9DUOm6mJfA/tPlg7N0cNj2UuateQo/McUYAINxvwRHOiylVqRKLReFC7HzDqNYxWnMUhRQWVph8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=n/wzdBv/; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-412d503f34dso1621935e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Mar 2024 23:47:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1709365660; x=1709970460; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y+Ib+i/7ul2383kueBaIr1KAZdgCE/S8URkt4mrWqYE=;
-        b=n/wzdBv/vRTE+VfO+6JIyiITqK2ST0LxYXZ0bW2qwxU6VJXlYTMk8TpY+uYuaE1sA/
-         WFmkmW5SH8JAWMHkslnUXx4inPxPHkHtSo61pJF4NC5d9jVXGSl4V1wrJLO0nGXlIyPr
-         svWFbcQw7+p30ettygHQlCUeEDqk4UOISLfWAfHTKdmtuVkWKmKvESypsWTS32NMNNXn
-         vVfmLdZrOiUpXFL0zBn+Fjpxtyl/Lvqmd0VFbAwFDwW1LE/zjKM8cAzxnIj7SuNTXcW6
-         nqK+2pcB5jgfEZ15HLZmpzuC46GxgqAaR4K5Ng0v3Fqwugse4ysDWir9ZsxhxyYRTYF5
-         Kutw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709365660; x=1709970460;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y+Ib+i/7ul2383kueBaIr1KAZdgCE/S8URkt4mrWqYE=;
-        b=SWHYeET449W+PKCWrv//1K0kN5rrsXIGAKx5zdKHw7bNVT+yNX1h1Y4UBu61WwMQxA
-         NUQWLFMD6GBUTfF/R3IlxMH1KTVCsCz20n4z7o+j/kNxvB8N4ZCWW4qhb7kPV7YKgrf3
-         7fwTWOs5OeKCDsGPrre23W9CEVVWRYnWezWILW1gB9E0en2lVVLCCrId2GI9zCDbw8UF
-         qUdV0POU5r64olpYy8Vv0NZFHpJHjxvJwk+Oy+3G5gIWDJvZgjYxU0Tly13mdEH6YWQq
-         2eUkQ+hey5nrXVFFOqeQ/o8nLb1WE32zVAculSy5BMWwxrIIxK4lfMqOFDe7w1YhVCja
-         ndAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1AdO7k8Is1N1rBMypt8A1CoHHuWyaGEHrAsWMVGXY/Y3yHivcwlofRUiiIMGV+BCb4LyfqTB/9EwAYPlh0yTnww2xD9JGYF5RF4qT2nLf
-X-Gm-Message-State: AOJu0Yxrrzqzqy8EId9Z70zt+jsH2TXoYoyD3sTDROYm/ClYT6j2waaY
-	pBvl0EF9kQbuzVEMaL81k92E3G4WYpsmW5gRPxtQ7ebzGR8OIJrAAIMfGXylS68=
-X-Google-Smtp-Source: AGHT+IEVoW7uokoz89spH9xj6f+lmKJjEsvkGZk/n4AsgiYDjM2F+XJU0nnyceOxTlFgpo153Zwm1Q==
-X-Received: by 2002:a05:600c:3107:b0:412:b8cf:150b with SMTP id g7-20020a05600c310700b00412b8cf150bmr3321506wmo.10.1709365660476;
-        Fri, 01 Mar 2024 23:47:40 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id l33-20020a05600c1d2100b00412ca88537dsm3348026wms.0.2024.03.01.23.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 23:47:39 -0800 (PST)
-Date: Sat, 2 Mar 2024 08:47:33 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Atish Patra <atishp@rivosinc.com>
-Cc: linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Atish Patra <atishp@atishpatra.org>, Conor Dooley <conor.dooley@microchip.com>, 
-	Guo Ren <guoren@kernel.org>, Icenowy Zheng <uwu@icenowy.me>, kvm-riscv@lists.infradead.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v4 06/15] RISC-V: KVM: No need to update the counter
- value during reset
-Message-ID: <20240302-a82f4ba5d90bc3d85f3ed83b@orel>
-References: <20240229010130.1380926-1-atishp@rivosinc.com>
- <20240229010130.1380926-7-atishp@rivosinc.com>
+	s=arc-20240116; t=1709366297; c=relaxed/simple;
+	bh=vZbc6IDCxYIzD6imxHYIKCytFzfBvyP0Kq3E+nLkKjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P0kkJz0eMv5HvJqqntk5IbENbh0hgvBUedbJCGql2rWf5ZYwsRbbCT8hD0v2tPcvCq7jrhrCmyasaRNoQPolBufVLXAItFEoX15EYLJDWYfypDXa3+w2iC2g4gGDmv6ZQEuZOMP/PnwKHNpjNyQSoBW5Ro5Pw39OF4kV9NWWbJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mb9qIeS4; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709366295; x=1740902295;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vZbc6IDCxYIzD6imxHYIKCytFzfBvyP0Kq3E+nLkKjQ=;
+  b=Mb9qIeS4LhhIWw9I5Dox1Z4swtZnIbAHB0yZkXcwhye0WLZITq0Mb509
+   z2vwMRFW6WvZtM/tFF4A8v8cc/ORbbbAlWqQtjYARxkw0+jDdv3CzhG9n
+   FcWcRYKAasPK0AQWzER0vPRtbNo/2Byy9Kt1YTzbdKNGoHomSCO2D7PE9
+   cZPcwzaVWe0L/ibYJASp3HtNcx4D3c4s8dcEUdOjEgN0oD0R8ZG7AtL9R
+   xx1ORiBE6Bzhl6mVXJW6e5FumGeKsTt06H6xYk/dvFJnUeXzpAeg7y/24
+   OrDrrt2fNpXsITUsL27W2HFzgIBIagcANgF1eB6jlmpZDUxJjwAIBuPew
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11000"; a="3797732"
+X-IronPort-AV: E=Sophos;i="6.06,199,1705392000"; 
+   d="scan'208";a="3797732"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 23:58:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,199,1705392000"; 
+   d="scan'208";a="8367762"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.125.242.247]) ([10.125.242.247])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 23:58:10 -0800
+Message-ID: <f634eee0-d81f-496d-b138-73b44b2bfa5d@linux.intel.com>
+Date: Sat, 2 Mar 2024 15:58:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240229010130.1380926-7-atishp@rivosinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 18/29] KVM: selftests: TDX: Add TDX MMIO writes
+ test
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
+ Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
+ Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-19-sagis@google.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20231212204647.2170650-19-sagis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 28, 2024 at 05:01:21PM -0800, Atish Patra wrote:
-> The virtual counter value is updated during pmu_ctr_read. There is no need
-> to update it in reset case. Otherwise, it will be counted twice which is
-> incorrect.
-> 
-> Fixes: 0cb74b65d2e5 ("RISC-V: KVM: Implement perf support without sampling")
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/vcpu_pmu.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-> index 86391a5061dd..b1574c043f77 100644
-> --- a/arch/riscv/kvm/vcpu_pmu.c
-> +++ b/arch/riscv/kvm/vcpu_pmu.c
-> @@ -397,7 +397,6 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
->  {
->  	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
->  	int i, pmc_index, sbiret = 0;
-> -	u64 enabled, running;
->  	struct kvm_pmc *pmc;
->  	int fevent_code;
->  
-> @@ -432,12 +431,9 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
->  				sbiret = SBI_ERR_ALREADY_STOPPED;
->  			}
->  
-> -			if (flags & SBI_PMU_STOP_FLAG_RESET) {
-> -				/* Relase the counter if this is a reset request */
-> -				pmc->counter_val += perf_event_read_value(pmc->perf_event,
-> -									  &enabled, &running);
-> +			if (flags & SBI_PMU_STOP_FLAG_RESET)
-> +				/* Release the counter if this is a reset request */
->  				kvm_pmu_release_perf_event(pmc);
-> -			}
->  		} else {
->  			sbiret = SBI_ERR_INVALID_PARAM;
->  		}
-> -- 
-> 2.34.1
+
+
+On 12/13/2023 4:46 AM, Sagi Shahar wrote:
+> The test verifies MMIO writes of various sizes from the guest to the host.
 >
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ryan Afranji <afranji@google.com>
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Patch 17 and 18 test the part that guest has received the #VE caused by
+MMIO access, so calls the td vmcall to kvm to do the emulation.
+
+Should the generation of #VE due to MMIO access be covered as well?
+
+> ---
+>   .../selftests/kvm/include/x86_64/tdx/tdx.h    |  2 +
+>   .../selftests/kvm/lib/x86_64/tdx/tdx.c        | 14 +++
+>   .../selftests/kvm/x86_64/tdx_vm_tests.c       | 85 +++++++++++++++++++
+>   3 files changed, 101 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> index 13ce60df5684..502b670ea699 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> @@ -25,5 +25,7 @@ uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t value);
+>   uint64_t tdg_vp_vmcall_instruction_hlt(uint64_t interrupt_blocked_flag);
+>   uint64_t tdg_vp_vmcall_ve_request_mmio_read(uint64_t address, uint64_t size,
+>   					uint64_t *data_out);
+> +uint64_t tdg_vp_vmcall_ve_request_mmio_write(uint64_t address, uint64_t size,
+> +					uint64_t data_in);
+>   
+>   #endif // SELFTEST_TDX_TDX_H
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> index b19f07ebc0e7..f4afa09f7e3d 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> @@ -143,3 +143,17 @@ uint64_t tdg_vp_vmcall_ve_request_mmio_read(uint64_t address, uint64_t size,
+>   
+>   	return ret;
+>   }
+> +
+> +uint64_t tdg_vp_vmcall_ve_request_mmio_write(uint64_t address, uint64_t size,
+> +					uint64_t data_in)
+> +{
+> +	struct tdx_hypercall_args args = {
+> +		.r11 = TDG_VP_VMCALL_VE_REQUEST_MMIO,
+> +		.r12 = size,
+> +		.r13 = TDG_VP_VMCALL_VE_REQUEST_MMIO_WRITE,
+> +		.r14 = address,
+> +		.r15 = data_in,
+> +	};
+> +
+> +	return __tdx_hypercall(&args, 0);
+> +}
+> diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> index 48902b69d13e..5e28ba828a92 100644
+> --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> @@ -885,6 +885,90 @@ void verify_mmio_reads(void)
+>   	printf("\t ... PASSED\n");
+>   }
+>   
+> +void guest_mmio_writes(void)
+> +{
+> +	uint64_t ret;
+> +
+> +	ret = tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 1, 0x12);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	ret = tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 2, 0x1234);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	ret = tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 4, 0x12345678);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	ret = tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 8, 0x1234567890ABCDEF);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	// Write across page boundary.
+> +	ret = tdg_vp_vmcall_ve_request_mmio_write(PAGE_SIZE - 1, 8, 0);
+> +	if (ret)
+> +		tdx_test_fatal(ret);
+> +
+> +	tdx_test_success();
+> +}
+> +
+> +/*
+> + * Varifies guest MMIO writes.
+> + */
+> +void verify_mmio_writes(void)
+> +{
+> +	struct kvm_vm *vm;
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	uint8_t byte_1;
+> +	uint16_t byte_2;
+> +	uint32_t byte_4;
+> +	uint64_t byte_8;
+> +
+> +	vm = td_create();
+> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+> +	vcpu = td_vcpu_add(vm, 0, guest_mmio_writes);
+> +	td_finalize(vm);
+> +
+> +	printf("Verifying TD MMIO writes:\n");
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 1, TDG_VP_VMCALL_VE_REQUEST_MMIO_WRITE);
+> +	byte_1 = *(uint8_t *)(vcpu->run->mmio.data);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 2, TDG_VP_VMCALL_VE_REQUEST_MMIO_WRITE);
+> +	byte_2 = *(uint16_t *)(vcpu->run->mmio.data);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 4, TDG_VP_VMCALL_VE_REQUEST_MMIO_WRITE);
+> +	byte_4 = *(uint32_t *)(vcpu->run->mmio.data);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> +	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 8, TDG_VP_VMCALL_VE_REQUEST_MMIO_WRITE);
+> +	byte_8 = *(uint64_t *)(vcpu->run->mmio.data);
+> +
+> +	TEST_ASSERT_EQ(byte_1, 0x12);
+> +	TEST_ASSERT_EQ(byte_2, 0x1234);
+> +	TEST_ASSERT_EQ(byte_4, 0x12345678);
+> +	TEST_ASSERT_EQ(byte_8, 0x1234567890ABCDEF);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TEST_ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
+> +	TEST_ASSERT_EQ(vcpu->run->system_event.data[1], TDG_VP_VMCALL_INVALID_OPERAND);
+> +
+> +	td_vcpu_run(vcpu);
+> +	TDX_TEST_ASSERT_SUCCESS(vcpu);
+> +
+> +	kvm_vm_free(vm);
+> +	printf("\t ... PASSED\n");
+> +}
+> +
+>   int main(int argc, char **argv)
+>   {
+>   	setbuf(stdout, NULL);
+> @@ -905,6 +989,7 @@ int main(int argc, char **argv)
+>   	run_in_new_process(&verify_guest_msr_reads);
+>   	run_in_new_process(&verify_guest_hlt);
+>   	run_in_new_process(&verify_mmio_reads);
+> +	run_in_new_process(&verify_mmio_writes);
+>   
+>   	return 0;
+>   }
+
 
