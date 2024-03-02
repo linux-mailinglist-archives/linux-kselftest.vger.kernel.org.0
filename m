@@ -1,166 +1,193 @@
-Return-Path: <linux-kselftest+bounces-5790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8AB086F0C3
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 16:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDADB86F29B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 22:48:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 665F22837F1
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 15:06:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9466628312F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Mar 2024 21:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCB817BDF;
-	Sat,  2 Mar 2024 15:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LdWQSRAc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0352241766;
+	Sat,  2 Mar 2024 21:48:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48FEA92F;
-	Sat,  2 Mar 2024 15:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB144120C;
+	Sat,  2 Mar 2024 21:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709391988; cv=none; b=sIqFzFp34yQ/qLOvB8C52wTvN4ER15SYT8AJ20NQ1JYypOW+BurZ7dDizjwxguQky4BZHo3721bIzpXU8ZDGqO5K1r3Sx99WI64dNrmXOBB29HiJrJ1Mt+OkGHgPmzNjjvEFFWBYoucRm20uKJXpBpwYOUvPoPHaIYDumPk8VyI=
+	t=1709416091; cv=none; b=ZmwJlAO4g+1jDmXMrobsL03RiAUOYpxU94LONfjt4BGy0VJxJRAfsbRePquZVqkmZa/DbcL1lC75jbPLBgSj9FCfY3nzVmH8IqtFIPJMBAyMk+Z+7oczilzLDh10u9ukJEHE+YSgij6wqtaAV4C7Hmbi5MF+RbcqNUZ6ANq+wQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709391988; c=relaxed/simple;
-	bh=VezVKG3MnNCr2RdjBJy6ykskbpHlP5qoXhAnVh336Us=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=PWIISJArhisgoc2SA/Dy4e3JgLVV+J6eMuPFCFpS2BzmuP1xYb+7wdlKOSyj3K94gGEixiQePzLLF6N5s/w00vZkM2PoBGW1Ll76qNk5qR649nW0dBxQicF/vzJRRfSRrSrRbQTCFzbU0BzjVWJUIjiV4/EnrLXrpvy+9FZs+/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LdWQSRAc; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-609408d4b31so31574527b3.0;
-        Sat, 02 Mar 2024 07:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709391986; x=1709996786; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qrSAlaPh6y0XeZbwLQygm09FiBVmDsRwj6kIPbpO+ac=;
-        b=LdWQSRAcyhS0wCzn6SiA/ZdHrRJbW/ATT3TJ3ouIqgXdWnV+yhVsm7K6P7FdMIIv+U
-         n1z1oLgJOni4Nxkelb6V89T5x4cn2wT4pitXhFSy5smgdO/+Zbo40nKoXX80j+hlCUAW
-         21NC2Az8IME1W7GiOPk2ytiLBc6lyTodZhtNjjnldSL2eVMSxMo0Jp+T+ekrrYH8B4se
-         BBkYB81eyVV6fxCtFzrECDcVd9QSFuxOI8b/g3g0F52tFoIU7+RXLBvkQauQ0swCSZ4T
-         41m3k6Ka0dJtY3DpIqbzzk+HOdb30CD1NZ3KANEEoiqPiAE7ymhAEO/LKlOucQKCVE3G
-         0jzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709391986; x=1709996786;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qrSAlaPh6y0XeZbwLQygm09FiBVmDsRwj6kIPbpO+ac=;
-        b=hbtmUKRUJiqi8fEZ6gSQTVEATKDp8ANg5+Q/4KPMcAaPHyrY2vqQ15LdEtaQbuThqm
-         u1p4hA3XTiSonkCbpMwvyS1M5azFg5TO7vmwfeEMlOQUP4hc40Jro3Dv+A/erqf9wfHa
-         HwLqmmFv7BZM3h9BIy49Hblugn6wZGB80zktF3lntVnzNBLRLDQ1O0qs010P75NtZBzU
-         KfmRYTaf9jvP8Z8cBXQGO8qZDGCE0Oz6XupAm+a/A2o+d59GKo59yiYNnOKnVeBpel6H
-         D+b5RPd2J9TRVRKVhyjhrOFiuDsB3bVJoslv69Pz4slHcEIFu4zDU2FEI/tAZ88oL1Uo
-         RE5A==
-X-Forwarded-Encrypted: i=1; AJvYcCXZzsA4lrfscMRkwXXcqQqyKFb935CdCXqaKtdlw4kNVmHlzUsjOa/QhMxKigQ1F+mHqhSJwRye4tceIkHcEwBxFokhSnO0N/TOIKB6cP+m+WZU3OYkevc6/p0CpK1x4uAitVoS9+GXQXQ09E6C6P8zGPqvKMw58DfXa/G9UcrJs1KSKV8DeON1Yaf8PElf8zdEQ0UeHoApaB6Au1IDfvPMnZnIIZSIBnfNEaCnO6dO6oywK7/pT5T+567gvx5ZWtCDJRE=
-X-Gm-Message-State: AOJu0Yxs80EUtPKzgI/bPTN8cT+yuFjjFsLQp38NDljMZQpSpMUu+id+
-	6C74m+CnLsytwjUA8RKpq/xlk/zzXyvBFB0qrYHq3HsObX7+3KE2EWJQeqptR52HBDw1VdRsOnL
-	0zHRgOff18bLByBYggVtHRswKlIc=
-X-Google-Smtp-Source: AGHT+IEaoJ0EIEJMr1Auv9LAe6hd3ruRGKQaWswy7UXoWRUhb+BsZa3cljQHfsjmVp7ROvTWXxlriSX3h2quvblOfsc=
-X-Received: by 2002:a81:6f03:0:b0:608:7a9c:9a82 with SMTP id
- k3-20020a816f03000000b006087a9c9a82mr4546852ywc.47.1709391985893; Sat, 02 Mar
- 2024 07:06:25 -0800 (PST)
+	s=arc-20240116; t=1709416091; c=relaxed/simple;
+	bh=Dd1rw4lv4Gh4mHQAg+mf2vjOKVRdZOlXlXZuy1zjhGM=;
+	h=From:In-Reply-To:Content-Type:References:Date:Cc:To:MIME-Version:
+	 Message-ID:Subject; b=Mum9DNQaMA18YL0j/uGAJg17CXIXUqQaqU+HgDDDTBHfzTUwIvi58QzSEtKB5S3RKXzaged9sQ/GQNJmLUSUMeW/57GZWdOYlNl3qoRx0GPWf3qXrLkzNar/CfksJAcOCm1QGBPZrm/2ADkppCBfCNNETw6+3F9/gRfrzvOVU9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Received: from harlem.collaboradmins.com (harlem.collaboradmins.com [IPv6:2a01:4f8:1c0c:5936::1])
+	by madrid.collaboradmins.com (Postfix) with ESMTP id 4D7B83781183;
+	Sat,  2 Mar 2024 21:48:05 +0000 (UTC)
+From: "Gustavo Padovan" <gustavo.padovan@collabora.com>
+In-Reply-To: <3d7e66bc-967e-45ec-a9e9-12dafd3b3e68@gtucker.io>
+Content-Type: text/plain; charset="utf-8"
+X-Forward: 127.0.0.1
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <d99d026e-ed32-4432-bab3-db75296e67d8@gtucker.io>
+ <a5726043-1906-44ba-a6ee-a725a2776269@gmail.com>
+ <51fa8932e57010620e9a9e16a1979f4883e95a7d.camel@collabora.com> <3d7e66bc-967e-45ec-a9e9-12dafd3b3e68@gtucker.io>
+Date: Sat, 02 Mar 2024 21:48:05 +0000
+Cc: "Nicolas Dufresne" <nicolas.dufresne@collabora.com>, "Nikolai Kondrashov" <spbnick@gmail.com>, "Helen Koike" <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org, dave.pigott@collabora.com, mripard@kernel.org, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org, pawiecz@collabora.com, tales.aparecida@gmail.com, workflows@vger.kernel.org, kernelci@lists.linux.dev, skhan@linuxfoundation.org, kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com, ricardo.canuelo@collabora.com, kernel@collabora.com, torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
+To: "Guillaume Tucker" <gtucker@gtucker.io>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
- <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
- <20240220185714.GO4163@brightrain.aerifal.cx> <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
- <20240220235415.GP4163@brightrain.aerifal.cx> <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
- <20240221012736.GQ4163@brightrain.aerifal.cx> <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
- <20240221145800.GR4163@brightrain.aerifal.cx> <4a3809e8-61b2-4341-a868-292ba6e64e8a@sirena.org.uk>
- <20240302145702.GD1884416@port70.net>
-In-Reply-To: <20240302145702.GD1884416@port70.net>
-From: "H.J. Lu" <hjl.tools@gmail.com>
-Date: Sat, 2 Mar 2024 07:05:49 -0800
-Message-ID: <CAMe9rOoVNZ+q0MAcpW-HDuptD8WDEDddZjOycy7G=P48nJ=DSA@mail.gmail.com>
-Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS in userspace
-To: Mark Brown <broonie@kernel.org>, "dalias@libc.org" <dalias@libc.org>, 
-	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, 
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, 
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>, 
-	"musl@lists.openwall.com" <musl@lists.openwall.com>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, "corbet@lwn.net" <corbet@lwn.net>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "oliver.upton@linux.dev" <oliver.upton@linux.dev>, 
-	"palmer@dabbelt.com" <palmer@dabbelt.com>, "debug@rivosinc.com" <debug@rivosinc.com>, 
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>, "oleg@redhat.com" <oleg@redhat.com>, 
-	"fweimer@redhat.com" <fweimer@redhat.com>, "keescook@chromium.org" <keescook@chromium.org>, 
-	"james.morse@arm.com" <james.morse@arm.com>, "ebiederm@xmission.com" <ebiederm@xmission.com>, 
-	"will@kernel.org" <will@kernel.org>, "brauner@kernel.org" <brauner@kernel.org>, 
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>, "ardb@kernel.org" <ardb@kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, 
-	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>, 
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "sorear@fastmail.com" <sorear@fastmail.com>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <1801a-65e39e80-6d-2f4e1180@80294519>
+Subject: =?utf-8?q?Re=3A?= [PATCH 0/3] =?utf-8?q?kci-gitlab=3A?= Introducing 
+ GitLab-CI Pipeline for Kernel Testing
+User-Agent: SOGoMail 5.10.0
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 2, 2024 at 6:57=E2=80=AFAM Szabolcs Nagy <nsz@port70.net> wrote=
-:
->
-> * Mark Brown <broonie@kernel.org> [2024-02-21 17:36:12 +0000]:
->
-> > On Wed, Feb 21, 2024 at 09:58:01AM -0500, dalias@libc.org wrote:
-> > > On Wed, Feb 21, 2024 at 01:53:10PM +0000, Mark Brown wrote:
-> > > > On Tue, Feb 20, 2024 at 08:27:37PM -0500, dalias@libc.org wrote:
-> > > > > On Wed, Feb 21, 2024 at 12:35:48AM +0000, Edgecombe, Rick P wrote=
-:
-> >
-> > > > > > (INCSSP, RSTORSSP, etc). These are a collection of instructions=
- that
-> > > > > > allow limited control of the SSP. When shadow stack gets disabl=
-ed,
-> > > > > > these suddenly turn into #UD generating instructions. So any ot=
-her
-> > > > > > threads executing those instructions when shadow stack got disa=
-bled
-> > > > > > would be in for a nasty surprise.
-> >
-> > > > > This is the kernel's problem if that's happening. It should be
-> > > > > trapping these and returning immediately like a NOP if shadow sta=
-ck
-> > > > > has been disabled, not generating SIGILL.
-> >
-> > > > I'm not sure that's going to work out well, all it takes is some co=
-de
-> > > > that's looking at the shadow stack and expecting something to happe=
-n as
-> > > > a result of the instructions it's executing and we run into trouble=
-.  A
-> >
-> > > I said NOP but there's no reason it strictly needs to be a NOP. It
-> > > could instead do something reasonable to convey the state of racing
-> > > with shadow stack being disabled.
-> >
-> > This feels like it's getting complicated and I fear it may be an uphill
-> > struggle to get such code merged, at least for arm64.  My instinct is
->
-> the aarch64 behaviour is already nop
-> for gcs instructions when gcs is disabled.
-> the isa was designed so async disable is
-> possible.
->
-> only x86 linux would have to emulate this.
+On Friday, March 01, 2024 18:56 -03, Guillaume Tucker <gtucker@gtucker.=
+io> wrote:
 
-On Linux/x86, normal instructions are used to update SSP after
-checking SHSTK is enabled.   If SHSTK is disabled in between,
-program behavior may be undefined.
+> On 29/02/2024 17:28, Nicolas Dufresne wrote:
+> > Hi,
+> >=20
+> > Le jeudi 29 f=C3=A9vrier 2024 =C3=A0 16:16 +0200, Nikolai Kondrasho=
+v a =C3=A9crit=C2=A0:
+> >> On 2/29/24 2:20 PM, Guillaume Tucker wrote:
+> >>> Hello,
+> >>>
+> >>> On 28/02/2024 23:55, Helen Koike wrote:
+> >>>> Dear Kernel Community,
+> >>>>
+> >>>> This patch introduces a `.gitlab-ci` file along with a `ci/` fol=
+der, defining a
+> >>>> basic test pipeline triggered by code pushes to a GitLab-CI inst=
+ance. This
+> >>>> initial version includes static checks (checkpatch and smatch fo=
+r now) and build
+> >>>> tests across various architectures and configurations. It levera=
+ges an
+> >>>> integrated cache for efficient build times and introduces a flex=
+ible 'scenarios'
+> >>>> mechanism for subsystem-specific extensions.
+> >>>
+> >>> This sounds like a nice starting point to me as an additional way
+> >>> to run tests upstream.  I have one particular question as I see a
+> >>> pattern through the rest of the email, please see below.
+> >>>
+> >>> [...]
+> >>>
+> >>>> 4. **Collaborative Testing Environment:** The kernel community i=
+s already
+> >>>> engaged in numerous testing efforts, including various GitLab-CI=
+ pipelines such
+> >>>> as DRM-CI, which I maintain, along with other solutions like Ker=
+nelCI and
+> >>>> BPF-CI. This proposal is designed to further stimulate contribut=
+ions to the
+> >>>> evolving testing landscape. Our goal is to establish a comprehen=
+sive suite of
+> >>>> common tools and files.
+> >>>
+> >>> [...]
+> >>>
+> >>>> **Leveraging External Test Labs:**
+> >>>> We can extend our testing to external labs, similar to what DRM-=
+CI currently
+> >>>> does. This includes:
+> >>>> - Lava labs
+> >>>> - Bare metal labs
+> >>>> - Using KernelCI-provided labs
+> >>>>
+> >>>> **Other integrations**
+> >>>> - Submit results to KCIDB
+> >>>
+> >>> [...]
+> >>>
+> >>>> **Join Our Slack Channel:**
+> >>>> We have a Slack channel, #gitlab-ci, on the KernelCI Slack insta=
+nce https://kernelci.slack.com/ .
+> >>>> Feel free to join and contribute to the conversation. The Kernel=
+CI team has
+> >>>> weekly calls where we also discuss the GitLab-CI pipeline.
+> >>>>
+> >>>> **Acknowledgments:**
+> >>>> A special thanks to Nikolai Kondrashov, Tales da Aparecida - bot=
+h from Red Hat -
+> >>>> and KernelCI community for their valuable feedback and support i=
+n this proposal.
+> >>>
+> >>> Where does this fit on the KernelCI roadmap?
+> >>>
+> >>> I see it mentioned a few times but it's not entirely clear
+> >>> whether this initiative is an independent one or in some way
+> >>> linked to KernelCI.  Say, are you planning to use the kci tool,
+> >>> new API, compiler toolchains, user-space and Docker images etc?
+> >>> Or, are KernelCI plans evolving to follow this move?
+> >>
+> >> I would say this is an important part of KernelCI the project, con=
+sidering its=20
+> >> aim to improve testing and CI in the kernel. It's not a part of Ke=
+rnelCI the=20
+> >> service as it is right now, although I would say it would be good =
+to have=20
+> >> ability to submit KernelCI jobs from GitLab CI and pull results in=
+ the same=20
+> >> pipeline, as we discussed earlier.
+>=20
+> Right, I think this needs a bit of disambiguation.  The legacy
+> KernelCI system from the Linaro days several years ago is really
+> a service on its own like the many other CIs out there.  However,
+> the new KernelCI API and related tooling (kci command line, new
+> web dashboard, modular runtime design etc.) is not that.  It's
+> about addressing all the community requirements and that includes
+> being able to run a same test manually in a shell, or in a VM, or
+> automatically from GitLab CI or using a main generic pipeline
+> hosted by KernelCI itself.  With this approach, there's no
+> distinction between "the project" and "the service", and as we
+> discussed before there shouldn't even be a distinction with
+> KCIDB.  Just KernelCI.
+>=20
+> However I don't really see this happening, unless I'm missing a
+> part of the story or some upcoming announcement with an updated
+> roadmap.  For some reason the old and established paradigm seems
+> unshakeable.  The new KernelCI implementation is starting to look
+> just like a refresh of the old one with newer components - which
+> is a huge missed opportunity to really change things IMHO.
+
+Calling that a missed opportunity is a subjective perspective about
+the latest developments in KernelCI. The system implementation is
+one level less important than the actual kernel community engagement
+the project can generate. If one asks people around, the lack of
+community engagement with KernelCI is evident.
+
+However, after the recent leadership change in the project there is a
+growing effort to bring the kernel community closer to the KernelCI
+project with a renewed focus on high quality test results, clean regres=
+sion
+reporting, among other things. Then, with an increased number of commun=
+ity
+members involved, we will have the necessary feedback (and funding!) to
+evolve the KernelCI infrastructure and technology to new levels.
+
+Otherwise, envisioning something that can solve *all* community testing
+needs would never be anything more than a fantasy in people's heads.
+
+- Gus
 
 --=20
-H.J.
+Gustavo Padovan
+Kernel Lead
+Collabora Ltd.
+
 
