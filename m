@@ -1,173 +1,199 @@
-Return-Path: <linux-kselftest+bounces-5799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A672686F428
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Mar 2024 10:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 65D7086F500
+	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Mar 2024 14:11:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D02C1F21AF6
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Mar 2024 09:31:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D11251F21546
+	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Mar 2024 13:11:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B844AD53;
-	Sun,  3 Mar 2024 09:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3B9B673;
+	Sun,  3 Mar 2024 13:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=valentinobst.de header.i=kernel@valentinobst.de header.b="sv+TsEdx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43644AD2C;
-	Sun,  3 Mar 2024 09:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C11CA73;
+	Sun,  3 Mar 2024 13:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709458273; cv=none; b=bqyLeZIxiQopckT7CDbYOIHzrjGYFdaSekqsvLmQveE2x0oAHQsCwkxF6R7iDxJ06Pz6ZjOtoOqgs3cUYMCdfRRH/qoLDva/+Xhn7+Ts5c5Qn2JhpIz4h7g03ehxitkcWNva84TRJz1CiRnSee32mIRNR9GunC4ZVSBEMk7Hpk0=
+	t=1709471476; cv=none; b=T3C7xibDzFBuUuUxxuKHJVnGl0FGS103eUw3uQB8aOYeBlUbEelswcteNdbbe1ITruo6kCE8N3Cv5CF885jst3oZc+CIvK2RuFQutzp0vA9j1RDEUi7ohBHXCCA9pXXQzT8dl39WQh1ZCrVcBdr2N8r5V+O2iZ4iGvk2XHckDsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709458273; c=relaxed/simple;
-	bh=qNRnfHzytu7FlNcNip2StOGlbTwoZ8fM8RaPRfKvn7A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UuYoBAVonfL07ymm7IAwl9oWyFxA4ce7832rMtp9sq2xNnsl+oW3vMz4di2H+7THlOmHEUbSnha0YGQN0CdO7T4BQGBdkNgGnooMsXC1ErEN92/8YMW07iC7ajjSzt2ydUimajCK+OEs5LHhDIPtqGfjDHUcuuRyTlXR+5Ot8IM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-60978e6f9a3so31982327b3.3;
-        Sun, 03 Mar 2024 01:31:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709458269; x=1710063069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+h+cxR9Zi+zZIFamlmv2ivpOejR06HV/J+RWDkEaK2g=;
-        b=bWVWXdd32OV9jL7z3RuckYbX6ZjpfdArx9zOZ8uoaUl69VnVPtIIO86irJvyzoDj53
-         oJve3PEtiDG2ojA0SdD1d4YmW3BiAj4gAp0e34rgU29U/I6KQX59N5Gcixg9LBdcEa6l
-         YHiq1v4uWx6p4chSLnH/NhMezMePocu8ZvEmwLUvEoR0umw21QHMHxx/YIHMyFN0pzfv
-         oiDVWxxJbob+hr2i/3KHjuWlI7c6vu5pgNaD/hoagvi4n+Bvh+KTxJ8goTU71+EGQa3u
-         6Y0tZcIvOlJaWcyClQaH9mvHlmQYWnWcpCFYhfRTNN80Bhfp7F12qpoAvjSAI2MT8guN
-         UeUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWajYu4PJxdrfWjRDBeN/YTkaBScq40drY3jl9sULh3GWPR4bI1sU1XFuiNmJPvgFi/B/3B6LwJG4OHi3MMbRuC1qt9c0rG+YEcSNTsl7rFC4zu0hRoTqrdggveCwFDVCl6qP8QnRudCOOJNfFD31T3+XKQX/TZXn0jmxrTem2mlzmuDb4BLBu/
-X-Gm-Message-State: AOJu0YwkP+KxkS4qcG/kgoa308HZgM5+V/RcxWXTvymqUkErrVBgs19z
-	t9fnTH4WSUXVjBskqfW2x4gHP2h2NGONEM+X5msmFposUtApQAJaSJ5kzC8HuJE=
-X-Google-Smtp-Source: AGHT+IF3gJ5Cr9PLyLFUiKhGAWk1QYjh/+IegJPCZUkNk0jRj2EtLZ8vLHRb0EU5PB7vLcze5FtwVA==
-X-Received: by 2002:a05:690c:ed4:b0:607:ca2e:f23e with SMTP id cs20-20020a05690c0ed400b00607ca2ef23emr7699212ywb.30.1709458269560;
-        Sun, 03 Mar 2024 01:31:09 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id y17-20020a81a111000000b00607a42af275sm1970289ywg.48.2024.03.03.01.31.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Mar 2024 01:31:09 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dcd94fb9e4dso3465830276.2;
-        Sun, 03 Mar 2024 01:31:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW4zK6VTmLYkkTT+/T6EMMR6Dyp3J+IBWkSt9Vd6g+ha2WniTyk3wH8etVFe5fprffD7pF1h1Z2Wf0H8svOCv+RiLjUdWPEuaOJ2mxAvWanUHqipP6AVFwdOZZgw9d0nLS8FfvgvDswkdC6b3FIKjTkPuaeV0VneSzyxhNGfLVE8Q/PyngNcm3B
-X-Received: by 2002:a81:8494:0:b0:604:9b50:e973 with SMTP id
- u142-20020a818494000000b006049b50e973mr5488306ywf.44.1709458269052; Sun, 03
- Mar 2024 01:31:09 -0800 (PST)
+	s=arc-20240116; t=1709471476; c=relaxed/simple;
+	bh=PYafNNhjJMBNjwpI8k3yoMSKo6rMOK3JKkJ6SSwHO/c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=cDfuEZAjRYsaCsgUk7n02O7ePGL0/OlfVvK4h9K4WQswt8cseZlyGNPF2fz8eANGMYCH/hiFD2xkvuQaUwxKAXVumXZMWoKpgfN6NGDPy80HcOJwa++y3t7OXsidMhwuMQ9Rstt7yPZVlSjPOjzDJysM1aJ/mjhVOBxDPqpZtbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=valentinobst.de; spf=pass smtp.mailfrom=valentinobst.de; dkim=pass (2048-bit key) header.d=valentinobst.de header.i=kernel@valentinobst.de header.b=sv+TsEdx; arc=none smtp.client-ip=217.72.192.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=valentinobst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valentinobst.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=valentinobst.de;
+	s=s1-ionos; t=1709471466; x=1710076266; i=kernel@valentinobst.de;
+	bh=PYafNNhjJMBNjwpI8k3yoMSKo6rMOK3JKkJ6SSwHO/c=;
+	h=X-UI-Sender-Class:From:Date:Subject:To:Cc;
+	b=sv+TsEdxulpP6xxBh3w2qqlA/lfQr9iE+QyomVvKB9E9gm4XPQpo5dJ/Nmx0XTaO
+	 qMIHS2fm/+wT4ramoa1MW6Zii10EdHYDCDyiysaqZNdZ4NIxEhIdOPdN2e51Q0bh9
+	 Rrbo9kIqPwEpeFlBAMmkWPpr95zUBzVawsWaJQ4Ys71MzL0dbwvAOneA+lHlkSsgW
+	 e2k+FNTLV/t0DZeEU0/FLXxpg9+C1b/Zf8m/4H++5RmlIdgVab4dBhpwFat46B09u
+	 N5ynokZbx6ZFroKpEqTeV5LT6ESqQU1jTIYUHFWzRXdYgVA/H4M+hbnW5hDwKLzvb
+	 Wzkbp7Oz7l8/AdBV6w==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from [192.168.2.229] ([80.133.137.1]) by mrelayeu.kundenserver.de
+ (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis) id
+ 1MWAay-1rNOzJ37xi-00XgKM; Sun, 03 Mar 2024 13:44:59 +0100
+From: Valentin Obst <kernel@valentinobst.de>
+Date: Sun, 03 Mar 2024 13:44:36 +0100
+Subject: [PATCH RFC] selftests: default to host arch for LLVM builds
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240228225527.1052240-1-helen.koike@collabora.com>
- <20240228225527.1052240-2-helen.koike@collabora.com> <20240229-dancing-laughing-groundhog-d85161@houat>
- <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com> <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
- <CABXOdTeT2ip1uS2EG2w8pW7254Tnd=ZDNz-KC61-G-yqDTVgJA@mail.gmail.com> <269232e6-41c9-4aa1-9320-662beabcd69b@infradead.org>
-In-Reply-To: <269232e6-41c9-4aa1-9320-662beabcd69b@infradead.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Sun, 3 Mar 2024 10:30:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXuXV9WV3aANFTteuP8Q3JY6R5OWsVBedGOP7e_JguxqA@mail.gmail.com>
-Message-ID: <CAMuHMdXuXV9WV3aANFTteuP8Q3JY6R5OWsVBedGOP7e_JguxqA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel Testing
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Guenter Roeck <groeck@google.com>, Linus Torvalds <torvalds@linuxfoundation.org>, 
-	Nikolai Kondrashov <spbnick@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
-	Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org, 
-	dave.pigott@collabora.com, linux-kernel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org, 
-	gustavo.padovan@collabora.com, pawiecz@collabora.com, 
-	tales.aparecida@gmail.com, workflows@vger.kernel.org, 
-	kernelci@lists.linux.dev, skhan@linuxfoundation.org, 
-	kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com, 
-	cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com, 
-	ricardo.canuelo@collabora.com, kernel@collabora.com, 
-	gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <20240303-selftests-libmk-llvm-rfc-v1-1-9ab53e365e31@valentinobst.de>
+X-B4-Tracking: v=1; b=H4sIALNw5GUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDYwNj3eLUnLSS1OKSYt2czKTcbN2cnLJc3aK0ZF3TtFTj5LREyzQDSxM
+ loPaCotS0zAqw0dFKQW7OSrG1tQA8nkx2bwAAAA==
+To: Shuah Khan <shuah@kernel.org>
+Cc: Anders Roxell <anders.roxell@linaro.org>, 
+ Benjamin Poirier <bpoirier@nvidia.com>, 
+ Guillaume Tucker <guillaume.tucker@collabora.com>, 
+ John Hubbard <jhubbard@nvidia.com>, 
+ Marcos Paulo de Souza <mpdesouza@suse.com>, Mark Brown <broonie@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Valentin Obst <kernel@valentinobst.de>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1709469899; l=4000;
+ i=kernel@valentinobst.de; s=20240131; h=from:subject:message-id;
+ bh=yZzV08YOvoeLyJJ85Mn+deJxF5jyLGkheHCV3AY3Ufs=;
+ b=TSN9jyLjY6bKdK+NLS7g1B8qOvrNCSBg8JOwMdTGuEH/NmHm11YJWG+eHr+U7CQMkaHgHO8id
+ 5nbK2BFfjh8ABJuP+6uaorPV+sBQssX/76EHtCTvre8y/PTwgfmYMvs
+X-Developer-Key: i=kernel@valentinobst.de; a=ed25519;
+ pk=3s7U8y0mqkaiurgHSQQTYWOo2tw5HgzCg5vnJVfw37Y=
+X-Provags-ID: V03:K1:Sz5F4HnDlLJMIKupiDJCbYrM2nc8zUpYRbGOYYRMiddrKjStcw/
+ 7V1Vf7oZPMHDJla9MJDzF50E2SsmkBk8MyFa51I8SIkUHNjyfTUIbiyOjYKlXSmfZs6+4i+
+ J9bGyVj07bHh7iqUEIXrXQvsJhufztJxHDS5uA8tOykeY7LZ9RkI+wEOBOmh7YUsT/7tyxz
+ Z19I4Xx70anfa2xxF7+BA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:/CEI+nyxZus=;PvNMHw0P8TdM9bclnRLsNCwmtWm
+ qzi2i0QYj3wTVzmHuEm3Jws0S1FtDwbYkByzou1DMeLFGHYdXFXyTQ1P+OTBNcj6nDYIwiIVV
+ oqVFJjzCU6ZwVjVvTsUP7FRASskasGhy0K4z8jrmf9bKE/XzhQcz2GYPD00l1AfMD0TsB9BSR
+ Vviu0/MFFQ0AvTuoxEGneDrf5ffFF7GEXkYewC59V4ALVqY/cC29FtC3ILu7dK71P6rnWTLpG
+ JHDCQHz+zBeEqKphOJaYBIXRNC0rykQ0vbu3x+4B2o2GWWd+Le3fBzYn+0Mc0dD6nLVCXWriQ
+ K9PKOFqNT2jUlgDZGqiPRytgMH4Syvrw60bdMl/cqlnRToPH8ZHvEOLF3dScr6foGxGVwbRAM
+ n5hlv7Or+wrrYefzxXVtoqMCleJ4ZOW1AFUOFhM6fD7+k0/iebjx+Jv4XPJQ2Phh+nyYApBHP
+ u3rsrfgHLMa8Hx1XFEaT6Pi83jHazAC39TaPSglzekwassWue8S8dgb+kxW7Ss33VZFeF1O02
+ fnF6UGnWbRjvuNeOGiKR0DuG/MHtULGix0X/uH/fTH8a9kwUM32SV1kryzCUJDu4oiLbPDlvX
+ mkulJZOQvzYBTbSChQIIQGZbUuZQyppPjBFiAdU7fBMyPGcnK2bfJcbG8xEz2C1hYBZ1dY8gu
+ B+6hC2lU30bYXm071ALFt7AwdatS81m4z7UYiYzr2dRan5IY+y5YJmZeglFSZe99Lu4vev9Vc
+ t/DpYFPrhVkZWKs5CNZ55UBjw8b3bKtG+Q2axAb1Eno0VWVCfdeJCo=
 
-On Sun, Mar 3, 2024 at 3:30=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org>=
- wrote:
-> On 3/2/24 14:10, Guenter Roeck wrote:
-> > On Thu, Feb 29, 2024 at 12:21=E2=80=AFPM Linus Torvalds
-> > <torvalds@linuxfoundation.org> wrote:
-> >> On Thu, 29 Feb 2024 at 01:23, Nikolai Kondrashov <spbnick@gmail.com> w=
-rote:
-> >>>
-> >>> However, I think a better approach would be *not* to add the .gitlab-=
-ci.yaml
-> >>> file in the root of the source tree, but instead change the very same=
- repo
-> >>> setting to point to a particular entry YAML, *inside* the repo (somew=
-here
-> >>> under "ci" directory) instead.
-> >>
-> >> I really don't want some kind of top-level CI for the base kernel proj=
-ect.
-> >>
-> >> We already have the situation that the drm people have their own ci
-> >> model. II'm ok with that, partly because then at least the maintainers
-> >> of that subsystem can agree on the rules for that one subsystem.
-> >>
-> >> I'm not at all interested in having something that people will then
-> >> either fight about, or - more likely - ignore, at the top level
-> >> because there isn't some global agreement about what the rules are.
-> >>
-> >> For example, even just running checkpatch is often a stylistic thing,
-> >> and not everybody agrees about all the checkpatch warnings.
-> >
-> > While checkpatch is indeed of arguable value, I think it would help a
-> > lot not having to bother about the persistent _build_ failures on
-> > 32-bit systems. You mentioned the fancy drm CI system above, but they
-> > don't run tests and not even test builds on 32-bit targets, which has
-> > repeatedly caused (and currently does cause) build failures in drm
-> > code when trying to build, say, arm:allmodconfig in linux-next. Most
-> > trivial build failures in linux-next (and, yes, sometimes mainline)
-> > could be prevented with a simple generic CI.
->
-> Yes, definitely. Thanks for bringing that up.
+When using gcc without cross compiling, i.e., `CROSS_COMPILE` unset or
+empty, the selftests build defaults to the host architecture, i.e., it use=
+s
+plain gcc. However, when compiling with clang an unset `ARCH` variable in
+combination with an unset `CROSS_COMPILE` variable, i.e., compiling for
+the host architecture, leads to compilation failures since `lib.mk` can
+not determine the clang target triple. In this case, the following error
+message is displayed for each subsystem that does not set `ARCH` in its
+own Makefile before including `lib.mk` (lines wrapped at 75 chrs):
 
-+1
+  make[1]: Entering directory '/mnt/build/linux/tools/testing/selftests/
+   sysctl'
+  ../lib.mk:33: *** Specify CROSS_COMPILE or add '--target=3D' option to
+   lib.mk.  Stop.
+  make[1]: Leaving directory '/mnt/build/linux/tools/testing/selftests/
+   sysctl'
 
-> > Sure, argue against checkpatch as much as you like, but the code
-> > should at least _build_, and it should not be necessary for random
-> > people to report build failures to the submitters.
->
-> I do 110 randconfig builds nightly (10 each of 11 $ARCH/$BITS).
-> That's about all the horsepower that I have. and I am not a CI.  :)
->
-> So I see quite a bit of what you are saying. It seems that Arnd is
-> in the same boat.
+Align the behavior for gcc and clang builds by interpreting unset
+`ARCH` and `CROSS_COMPILE` variables in `LLVM` builds as a sign that the
+user wants to build for the host architecture.
 
-You don't even have to do your own builds (although it does help),
-and can look at e.g. http://kisskb.ellerman.id.au/kisskb/
+This preserves the property that setting the `ARCH` variable to an
+unknown value will trigger an error that complains about insufficient
+information.
 
-Kisskb can send out email when builds get broken, and when they get
-fixed again.  I receive such emails for the m68k builds.
-I have the feeling this is not used up to its full potential yet.
-My initial plan with the "Build regressions/improvements in ..." emails
-[1] was to fully automate this, and enable it for the other daily builds
-(e.g. linux-next), too, but there are only so many hours in a day...
+RFC since I am not entirely sure if this behavior is in fact known and
+intended, and whether the way to obtain the host target triple is
+sufficiently general. (The flag was introduced in llvm-8 with [1], it
+will be an error for older clang versions, however, currently 13.0.1 is th=
+e
+minimal version required to build the kernel. For some clang binaries it
+prints the 'unknown' instead of the 'linux' version of the target, e.g.,
+mips [2]). An alternative could be to simply do:
 
-[1] https://lore.kernel.org/all/20240226081253.3688538-1-geert@linux-m68k.o=
-rg/
+  ARCH ?=3D $(shell uname -m)
 
-Gr{oetje,eeting}s,
+before using it to select the target. Possibly with some post processing,
+but at that point we would likely be replicating `scripts/subarch.include`=
+.
 
-                        Geert
+Also unsure if it needs a 'Fixes: 795285ef2425 ("selftests: Fix clang
+cross compilation")'. Furthermore, this change might make it possible to
+remove the explicit setting of `ARCH` from the few subsystem Makefiles
+that do it.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Would be happy to get some feedback on those points. If it looks OK I
+can also send it as a patch.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Link: https://reviews.llvm.org/D50755 [1]
+Link: https://godbolt.org/z/r7Gn9bvv1 [2]
+Signed-off-by: Valentin Obst <kernel@valentinobst.de>
+=2D--
+ tools/testing/selftests/lib.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.=
+mk
+index aa646e0661f3..a8f0442a36bc 100644
+=2D-- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -7,6 +7,8 @@ else ifneq ($(filter -%,$(LLVM)),)
+ LLVM_SUFFIX :=3D $(LLVM)
+ endif
+
++CLANG :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
++
+ CLANG_TARGET_FLAGS_arm          :=3D arm-linux-gnueabi
+ CLANG_TARGET_FLAGS_arm64        :=3D aarch64-linux-gnu
+ CLANG_TARGET_FLAGS_hexagon      :=3D hexagon-linux-musl
+@@ -18,7 +20,13 @@ CLANG_TARGET_FLAGS_riscv        :=3D riscv64-linux-gnu
+ CLANG_TARGET_FLAGS_s390         :=3D s390x-linux-gnu
+ CLANG_TARGET_FLAGS_x86          :=3D x86_64-linux-gnu
+ CLANG_TARGET_FLAGS_x86_64       :=3D x86_64-linux-gnu
+-CLANG_TARGET_FLAGS              :=3D $(CLANG_TARGET_FLAGS_$(ARCH))
++
++# Default to host architecture if ARCH is not explicitly given.
++ifeq ($(ARCH),)
++CLANG_TARGET_FLAGS :=3D $(shell $(CLANG) -print-target-triple)
++else
++CLANG_TARGET_FLAGS :=3D $(CLANG_TARGET_FLAGS_$(ARCH))
++endif
+
+ ifeq ($(CROSS_COMPILE),)
+ ifeq ($(CLANG_TARGET_FLAGS),)
+@@ -30,7 +38,7 @@ else
+ CLANG_FLAGS     +=3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
+ endif # CROSS_COMPILE
+
+-CC :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
++CC :=3D $(CLANG) $(CLANG_FLAGS) -fintegrated-as
+ else
+ CC :=3D $(CROSS_COMPILE)gcc
+ endif # LLVM
+
+=2D--
+base-commit: d206a76d7d2726f3b096037f2079ce0bd3ba329b
+change-id: 20240303-selftests-libmk-llvm-rfc-5fe3cfa9f094
+
+Best regards,
+=2D-
+Valentin Obst <kernel@valentinobst.de>
+
 
