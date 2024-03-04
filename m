@@ -1,112 +1,257 @@
-Return-Path: <linux-kselftest+bounces-5847-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F666870934
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 19:12:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D202870975
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 19:25:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91DA81C23BEC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 18:12:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 080B41F21E84
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 18:25:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADB7626D5;
-	Mon,  4 Mar 2024 18:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iD/WO5Y8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95B762176;
+	Mon,  4 Mar 2024 18:25:43 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A558626C7
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Mar 2024 18:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F316167A;
+	Mon,  4 Mar 2024 18:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709575919; cv=none; b=lXO8MSgafTYz51yV/Du2Sh64qZQHh1Szt3K25kLC8yglEoC7XUs1vBx0XIXMbYjEMH9QHiS5eMbddzYLacQScm7oi1/SDbUWmCHWlX4mPIYfMjDgQdtuR1/5Hc627HruiQyPNgzIel+LaAf56BgAY9fgkBUFS5TqKhoLByqTKRg=
+	t=1709576743; cv=none; b=X6LGgv6a33t5De1ULeqNI7rIKZ3HQaNZ6vgqPfKbafC63umRFy65p3R6AkC/qAabvpLNq0B4uBlEDEft46tygj4+oxK+j+JgF5HDz+JBh8F1VU/iVULLRqGIAsa4RxbimVKDTc8gkdG9MciQO3EnuewvZCouJtxCF0bCwGCX+24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709575919; c=relaxed/simple;
-	bh=FqLV9lNiSU7gSVzmh0RUNwWYr0jxygkZHnJe2yCKIHk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EnY+e2Np1EepXK2W+IAcl4DnQENcd/gVFBe0l9DNvXQj8xUmF2P9ysvFCoQk0oxRSYe8lfd8eQ0Dpzdl+0WDeDQj7pEfmGVI18QRPWkgEN3EGgthLRJ00NMpHSXsoWVyggeUbWB2Ot2k+cNn1oomFB0Mt35hlKmLx1ItiQB0Msg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iD/WO5Y8; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6e4867c8ea5so4741842b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Mar 2024 10:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709575917; x=1710180717; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+K8qGGJZU0dVFlAnq42rJW59Laz5svfdA3lu6VKJprE=;
-        b=iD/WO5Y8KkmuAscQ9e4EZbwDgCDT9i4D9nGIF0YtbxoP7oW8KvKsLvxBMqkE++Y65Y
-         5XsHf0AwxpAcwakxfWmtNn82Umw/Zsc9cVo6rlDrf5e3twXtnZA/ssoaSulfpSnROXfO
-         uTy0aUCEFi7L0UlINx5ILgOyJFlOSKlS1IQGbBLt4Up8xI0sQGERCb27i6odUYEoiWkB
-         HAaRlXQ/yHC4Fh+9DCSyIkZEDmhE0emyPQs9QFFKT7W0hfrp/X7cW2xRf+JOgl2vmKC8
-         BBYxSY48k+LjHTnyRAsy8h1a0jnOKP+rb/OW+zUBgm5N5H17SRy4dV6HE925MFd3tsBT
-         Awvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709575917; x=1710180717;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+K8qGGJZU0dVFlAnq42rJW59Laz5svfdA3lu6VKJprE=;
-        b=UOmx/zErVgYnPns0/FBAODkFhl0agEwqCzujwnhhAF8/DX0qqTfZ0sfay9RgPAJeCu
-         gsS1bezw4uo2KhzrM94GDOdVwONLPOrxRRhKr1EM3kDsXhcBvdcmwbJs/cILIAAIR5wQ
-         xYfG03NtcCFdgqRxN8E62psP5tsF9eSsvxmakhvcjcZQwSTvpeITZvQ/zdMucx3+zSQC
-         Vse+H5jvPEN/iyfxUaFJGjZs0ctA+kfEelaYEmodD99wAEOV1/xvhGnCkrY3LqIGPwuz
-         tjy6Ptp6fXZaQ2FIwKz5LT1hhpHpmayUK42nnsswao8yE3RLpnMsIaFEjjSj45HZV/Y7
-         62kw==
-X-Gm-Message-State: AOJu0YwiUqB7IXTyEjxujXEYsbH8Btwr5g1CudjJ7/zy4KTNwpsgo74T
-	rDmXUIyqxkurVXxwpzcascLpbeEDN1o/WzQs3V4xTYBGeQMI3LAA9BayBobkYkOnwULwqK+owNK
-	thQ==
-X-Google-Smtp-Source: AGHT+IEBwRfcpn5x9AGNzJLGA/hp7XJkS1FIgFGPUMaa1opevJ7wVveO9HifQjBfzJMQbCakv4yNwPEcBGY=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:6a00:27a0:b0:6e5:8053:af92 with SMTP id
- bd32-20020a056a0027a000b006e58053af92mr788006pfb.4.1709575917445; Mon, 04 Mar
- 2024 10:11:57 -0800 (PST)
-Date: Mon,  4 Mar 2024 18:11:34 +0000
-In-Reply-To: <20240304181140.644212-1-edliaw@google.com>
+	s=arc-20240116; t=1709576743; c=relaxed/simple;
+	bh=lcFJTrv135Rh7HzhM/qH0hEM9o3PVeiPfKjF13P6JPE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RcDvnmI2XF27UEsEVMQvjwk0XW/TmTp69Eb0ewZuZcKG4RoiYcWKE3n+VGXwpVbjM7SnsSMLmq9GK5+obEBhGezQrja2/birBQR0z4/skeEoaEFvodkpxZETYnoitLgHtEB4lLhMBe4MQ5amCKxN6xhK20iw4n900bOEEGJObpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B8EE2F4;
+	Mon,  4 Mar 2024 10:26:16 -0800 (PST)
+Received: from [10.57.10.152] (unknown [10.57.10.152])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3F173F738;
+	Mon,  4 Mar 2024 10:25:36 -0800 (PST)
+Message-ID: <ade0aded-a0c8-42a4-8543-1affbaff3908@arm.com>
+Date: Mon, 4 Mar 2024 18:25:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240304181140.644212-1-edliaw@google.com>
-X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240304181140.644212-4-edliaw@google.com>
-Subject: [PATCH v1 3/3] selftests/timers/posix_timers: Use llabs for long long
-From: Edward Liaw <edliaw@google.com>
-To: linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 8/8] mm: huge_memory: enable debugfs to split huge
+ pages to any order.
+Content-Language: en-US
+To: Zi Yan <ziy@nvidia.com>
+Cc: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>, linux-mm@kvack.org,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ David Hildenbrand <david@redhat.com>, Yang Shi <shy828301@gmail.com>,
+ Yu Zhao <yuzhao@google.com>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Zach O'Keefe <zokeefe@google.com>, Hugh Dickins <hughd@google.com>,
+ Luis Chamberlain <mcgrof@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+References: <20240226205534.1603748-1-zi.yan@sent.com>
+ <20240226205534.1603748-9-zi.yan@sent.com>
+ <082e48c8-71b7-4937-a5da-7a37b4be16ba@arm.com>
+ <A111EB95-0AF5-4715-82A4-70B8AD900A93@nvidia.com>
+ <7E498B77-6CC9-4FC6-B980-D79EEC548CD0@nvidia.com>
+ <0685EC19-CDB8-4CD3-BC39-82DE59B5D10C@nvidia.com>
+ <0be630f0-ce8e-4a80-b42f-697ea603cfc6@arm.com>
+ <1829EABB-7966-4686-A5E0-F6B6D26C510E@nvidia.com>
+ <bd51b366-60b3-4ca5-9634-95dfbc3d1829@arm.com>
+ <262E4DAA-4A78-4328-B745-1355AE356A07@nvidia.com>
+From: Aishwarya TCV <aishwarya.tcv@arm.com>
+In-Reply-To: <262E4DAA-4A78-4328-B745-1355AE356A07@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Fixes clang warning: absolute value function 'abs' given an argument of
-type 'long long' but has parameter of type 'int' which may cause
-truncation of value.
 
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
- tools/testing/selftests/timers/posix_timers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index 0f550fc9e879..78b4b2d3dc44 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -82,7 +82,7 @@ static int check_diff(struct timeval start, struct timeval end)
- 	diff = end.tv_usec - start.tv_usec;
- 	diff += (end.tv_sec - start.tv_sec) * USECS_PER_SEC;
- 
--	if (abs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2)
-+	if (llabs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2)
- 		return -1;
- 
- 	return 0;
--- 
-2.44.0.rc1.240.g4c46232300-goog
+On 04/03/2024 15:57, Zi Yan wrote:
+> On 4 Mar 2024, at 10:44, Aishwarya TCV wrote:
+> 
+>> On 04/03/2024 14:58, Zi Yan wrote:
+>>> On 4 Mar 2024, at 4:50, Aishwarya TCV wrote:
+>>>
+>>>> On 01/03/2024 21:10, Zi Yan wrote:
+>>>>> On 1 Mar 2024, at 15:02, Zi Yan wrote:
+>>>>>
+>>>>>> On 1 Mar 2024, at 14:37, Zi Yan wrote:
+>>>>>>
+>>>>>>> On 1 Mar 2024, at 4:51, Aishwarya TCV wrote:
+>>>>>>>
+>>>>>>>> On 26/02/2024 20:55, Zi Yan wrote:
+>>>>>>>>> From: Zi Yan <ziy@nvidia.com>
+>>>>>>>>>
+>>>>>>>>> It is used to test split_huge_page_to_list_to_order for pagecache THPs.
+>>>>>>>>> Also add test cases for split_huge_page_to_list_to_order via both
+>>>>>>>>> debugfs.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>>>>>>>>> ---
+>>>>>>>>>  mm/huge_memory.c                              |  34 ++++--
+>>>>>>>>>  .../selftests/mm/split_huge_page_test.c       | 115 +++++++++++++++++-
+>>>>>>>>>  2 files changed, 131 insertions(+), 18 deletions(-)
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> Hi Zi,
+>>>>>>>>
+>>>>>>>> When booting the kernel against next-master(20240228)with Arm64 on
+>>>>>>>> Marvell Thunder X2 (TX2), the kselftest-mm test 'split_huge_page_test'
+>>>>>>>> is failing in our CI (with rootfs over NFS). I can send the full logs if
+>>>>>>>> required.
+>>>>>>>>
+>>>>>>>> A bisect (full log below) identified this patch as introducing the
+>>>>>>>> failure. Bisected it on the tag "next-20240228" at repo
+>>>>>>>> "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git".
+>>>>>>>>
+>>>>>>>> This works fine on  Linux version 6.8.0-rc6
+>>>>>>>
+>>>>>>> Hi Aishwarya,
+>>>>>>>
+>>>>>>> Can you try the attached patch and see if it fixes the failure? I changed
+>>>>>>> the test to accept XFS dev as input, mount XFS on a temp folder under /tmp,
+>>>>>>> and skip if no XFS is mounted.
+>>>>>>
+>>>>>> Please try this updated one. It allows you to specify a XFS device path
+>>>>>> in SPLIT_HUGE_PAGE_TEST_XFS_PATH env variable, which is passed to
+>>>>>> split_huge_page_test in run_vmtests.sh. It at least allow CI/CD to run
+>>>>>> the test without too much change.
+>>>>>
+>>>>> OK. This hopefully will be my last churn. Now split_huge_page_test accepts
+>>>>> a path that is backed by XFS and run_vmtest.sh creates a XFS image in /tmp,
+>>>>> mounts it in /tmp, and gives the path to split_huge_page_test. I tested
+>>>>> it locally and it works. Let me know if you have any issue. Thanks.
+>>>>>
+>>>>> --
+>>>>> Best Regards,
+>>>>> Yan, Zi
+>>>>
+>>>> Hi Zi,
+>>>>
+>>>> Tested the patch by applying it on next-20240304. Logs from our CI with
+>>>> rootfs over nfs is attached below. "Bail out! cannot remove tmp dir:
+>>>> Directory not empty" is still observed.
+>>>
+>>> Hi Aishwarya,
+>>>
+>>> Do you have the config file for the CI kernel? And /tmp is also on nfs?
+>>> Any detailed information about CI machine environment? I cannot reproduce
+>>> the error locally, either on bare metal or VM. Maybe because my /tmp is
+>>> not NFS mounted?
+>>>
+>>
+>> Hi Zi,
+>>
+>> Please find the details below. Hope it helps.
+>>
+>> Do you have the config file for the CI kernel?
+>> - We are using:
+>> defconfig+https://github.com/torvalds/linux/blob/master/tools/testing/selftests/mm/config
+>>
+>> And /tmp is also on nfs?
+>> - Yes
+>>
+>> Any detailed information about CI machine environment?
+>> - We are running the test using LAVA device Cavium Thunder X2 (TX2),
+>> - We have very similar rootfs as - nfsrootfs:
+>> https://storage.kernelci.org/images/rootfs/debian/bullseye-kselftest/20240129.0/arm64/full.rootfs.tar.xz
+>> - We are using grub boot method over nfs
+>> - Additionally Ryan mentioned "Looks like it is failing because he is
+>> trying to delete the temp dir with rmdir() but rmdir() requires the
+>> directory to be empty, which it is not."
+> 
+> Hi Aishwarya,
+> 
+> Thank you for the information and I am able to reproduce it on a NFS folder.
+> The error comes from that the opened test files are not munmapped and their
+> file descriptors are not closed in the skip path. NFS creates .nfsXXX files
+> for them, making the temp folder not empty.
+> 
+> The attached patch cleans up properly and works on a NFS folder. Let me know
+> if it works on your side. Thanks.
+> 
+> --
+> Best Regards,
+> Yan, Zi
+
+Hi Zi,
+
+Tested the attached patch on next-20240304. Confirming that the test is
+running fine. Test run log is attached below.
+
+Test run log:
+# # ------------------------------
+# # running ./split_huge_page_test
+# # ------------------------------
+# # TAP version 13
+# # 1..12
+# # ok 1 Split huge pages successful
+# # ok 2 Split PTE-mapped huge pages successful
+# # # Please enable pr_debug in split_huge_pages_in_file() for more info.
+# # # Please check dmesg for more information
+# # ok 3 File-backed THP split test done
+<6>[ 1769.710429] split_huge_page (111119): drop_caches: 3
+<6>[ 1769.710429] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 4 # SKIP Pagecache folio split skipped
+<6>[ 1775.302315] split_huge_page (111119): drop_caches: 3
+<6>[ 1775.302315] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 5 # SKIP Pagecache folio split skipped
+<6>[ 1780.924147] split_huge_page (111119): drop_caches: 3
+<6>[ 1780.924147] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 6 # SKIP Pagecache folio split skipped
+<6>[ 1786.524931] split_huge_page (111119): drop_caches: 3
+<6>[ 1786.524931] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 7 # SKIP Pagecache folio split skipped
+<6>[ 1792.112869] split_huge_page (111119): drop_caches: 3
+<6>[ 1792.112869] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 8 # SKIP Pagecache folio split skipped
+<6>[ 1797.718863] split_huge_page (111119): drop_caches: 3
+<6>[ 1797.718863] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 9 # SKIP Pagecache folio split skipped
+<6>[ 1803.332343] split_huge_page (111119): drop_caches: 3
+<6>[ 1803.332343] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 10 # SKIP Pagecache folio split skipped
+<6>[ 1808.947913] split_huge_page (111119): drop_caches: 3
+<6>[ 1808.947913] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 11 # SKIP Pagecache folio split skipped
+<6>[ 1814.537995] split_huge_page (111119): drop_caches: 3
+<6>[ 1814.537995] split_huge_page (111119): drop_caches: 3
+# # # No large pagecache folio generated, please provide a filesystem
+supporting large folio
+# # ok 12 # SKIP Pagecache folio split skipped
+# # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:9 error:0
+# # [PASS]
+# ok 51 split_huge_page_test
+# # -------------------
+
+Thanks,
+Aishwarya
+
+
 
 
