@@ -1,164 +1,122 @@
-Return-Path: <linux-kselftest+bounces-5838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA16787065C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 16:59:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F7AC870684
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 17:06:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A6401F2466F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 15:59:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6137C1C20E1E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 16:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C3C482DF;
-	Mon,  4 Mar 2024 15:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03E6E482D0;
+	Mon,  4 Mar 2024 16:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="rIV/+q9Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPZUFFoI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AA44C630;
-	Mon,  4 Mar 2024 15:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28414E1C1;
+	Mon,  4 Mar 2024 16:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709567976; cv=none; b=KDIMecZKBdOFCoH1tB1LoI9vrkgbYMZ8laR/8ZWSY7o4vgULV6C+XcQMANP4t41Kat3nFCXlnINO/VkAn0A+9A3CvsuAgORAezDIdMwOhLywRy0m5W0roFixdvU3+QnmS1QGGw9SXnP01Yc+1L5X6tk8mpKLzWuEGL34p/7uuec=
+	t=1709568308; cv=none; b=TIjEl90S0ZEB+MQz1RZJRxrQ+L0f00STL7AOVjcJ0zHmnNyw3+HnlFe+NhdiC7GxrBUdKo7TBNG2eE+412oM7CKPF/IN6INnYFtNHFXFRmO9jRekBR9kBTsRau4Ma2HKkam9dDFdaGI2HCuJdbvvvwiettyrl9pyAFFEwpObHog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709567976; c=relaxed/simple;
-	bh=kWwhagXSgzGBOzzHe1+SkKphXDZuQxr2VZJ2zSGNr7E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=N+Zdr5zBUr09DO/N7jyS/HWKl7MIsp8EXMgDjN0htqlsC5Wq4dcdiW/tQT7eLE5OM6G4an9mq2tx0P2Y7Eix5LALjv/zh3HJ7YTRtB0GeEB4V9qfXtlFvq7O7Kwnme17t3LFnDrJGrJZ6ev6V8MRTX+JaV5dS3lZdA9IiLhd1HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=rIV/+q9Q; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709567972;
-	bh=kWwhagXSgzGBOzzHe1+SkKphXDZuQxr2VZJ2zSGNr7E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rIV/+q9QuURjC8AzXzjygtQmgYWce2d1gTJp7ei1RAGregxwsWFdzbRILE0UdcLKd
-	 88Fqq5uusnT7lSkf6ryw8INw7HHA1mwyhgUapWWjRdrAdQYvXUtjERJlv0G/xJ6JvB
-	 2cUcXz36Xy9fhPAQohalbcgem08UdrxH1P1J952O4sDtQUeE+6ieiSTOi52sgsFFoQ
-	 7dWTaFlRKTdqgv3EztYRiQvkQvBaADzN/5zYlOCkto0W3cBw7LCA1XfE2HSASXsFyL
-	 d6E4HHMjmVh/00QERi/PY4PfMBcHzNe+joUirI1yK8TnHMkufKlNi8GnEzqrtXlzh1
-	 yaYxLDe6g+asA==
-Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3D72237820CC;
-	Mon,  4 Mar 2024 15:59:26 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: kernel@collabora.com,
-	kernel-janitors@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] selftests/exec: conform test to TAP format output
-Date: Mon,  4 Mar 2024 20:59:25 +0500
-Message-Id: <20240304155928.1818928-3-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240304155928.1818928-1-usama.anjum@collabora.com>
-References: <20240304155928.1818928-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1709568308; c=relaxed/simple;
+	bh=IqKjf/V5VV8UE4R3lEGBliAPiP3FkHrOso1nqZ3aCuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MirgCImQVNPC81Hq32dR8sCRr1jD3Y3l3st8aKYw15ARW8Pz2ZX5dawiylQubQgNopaXll0c7bUtlWYqgsxwhS1efB9+O+iLjdjY3vkcNRSc2Rap1VlRmU66WmRt69sbYoGsh+xDC8Q3uzC7AONXf0kvJAoXBXZodjOdjZzfZws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPZUFFoI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10655C43390;
+	Mon,  4 Mar 2024 16:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709568308;
+	bh=IqKjf/V5VV8UE4R3lEGBliAPiP3FkHrOso1nqZ3aCuQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hPZUFFoISF7hoNFdL4xnmd1M1+T9744bsa0ut//cI3GKpuvePacbzacYODEpQ1W5Y
+	 u8uGDRH9+VYz7Yjuz7BwP6ilvpq7SZZCEFpnrmpMuGisdmSPKQb7rHGkFb+Gk5KPAe
+	 TK6E2wMKN59TlYacTHf/3lGf/YRz4bOjxt8K9wPuFGLde3itcwuXOd7EVvbGuR6RHL
+	 f3DuH1pJ8n5cJtyk1kIRZJwMspexJsb9YlZ7gqCOIWWK/hAIzysux3q+Dtm+h36w9u
+	 zSr2MHI5200MBnykWbm823kjJdKxWD9muE7sg3HmLwFmVpBr/v0r89Sa9SW/vZ/elK
+	 shgUZUIvnzILg==
+Date: Mon, 4 Mar 2024 17:05:05 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Guenter Roeck <groeck@google.com>
+Cc: Linus Torvalds <torvalds@linuxfoundation.org>, 
+	Nikolai Kondrashov <spbnick@gmail.com>, Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org, 
+	dave.pigott@collabora.com, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com, pawiecz@collabora.com, 
+	tales.aparecida@gmail.com, workflows@vger.kernel.org, kernelci@lists.linux.dev, 
+	skhan@linuxfoundation.org, kunit-dev@googlegroups.com, nfraprado@collabora.com, 
+	davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com, 
+	ricardo.canuelo@collabora.com, kernel@collabora.com, gregkh@linuxfoundation.org
+Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+Message-ID: <20240304-ludicrous-grinning-goldfish-090aac@houat>
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <20240228225527.1052240-2-helen.koike@collabora.com>
+ <20240229-dancing-laughing-groundhog-d85161@houat>
+ <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com>
+ <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
+ <CABXOdTeT2ip1uS2EG2w8pW7254Tnd=ZDNz-KC61-G-yqDTVgJA@mail.gmail.com>
+ <20240304-rigorous-silkworm-of-awe-4eee8f@houat>
+ <CABXOdTc4MXcjwgGuJb4_69-4OFELD37x0B6oMr=4z=nxZ2HPXQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="thflmdlthwp7swbs"
+Content-Disposition: inline
+In-Reply-To: <CABXOdTc4MXcjwgGuJb4_69-4OFELD37x0B6oMr=4z=nxZ2HPXQ@mail.gmail.com>
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
-While at it, do minor cleanups like move the declarations of the variables
-on top of the function.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- .../testing/selftests/exec/recursion-depth.c  | 53 +++++++++----------
- 1 file changed, 26 insertions(+), 27 deletions(-)
+--thflmdlthwp7swbs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/exec/recursion-depth.c b/tools/testing/selftests/exec/recursion-depth.c
-index 2dbd5bc45b3ed..b2f37d86a5f62 100644
---- a/tools/testing/selftests/exec/recursion-depth.c
-+++ b/tools/testing/selftests/exec/recursion-depth.c
-@@ -23,45 +23,44 @@
- #include <fcntl.h>
- #include <sys/mount.h>
- #include <unistd.h>
-+#include "../kselftest.h"
- 
- int main(void)
- {
-+	int fd, rv;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
- 	if (unshare(CLONE_NEWNS) == -1) {
- 		if (errno == ENOSYS || errno == EPERM) {
--			fprintf(stderr, "error: unshare, errno %d\n", errno);
--			return 4;
-+			ksft_test_result_skip("error: unshare, errno %d\n", errno);
-+			ksft_finished();
- 		}
--		fprintf(stderr, "error: unshare, errno %d\n", errno);
--		return 1;
--	}
--	if (mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL) == -1) {
--		fprintf(stderr, "error: mount '/', errno %d\n", errno);
--		return 1;
-+		ksft_exit_fail_msg("error: unshare, errno %d\n", errno);
- 	}
-+
-+	if (mount(NULL, "/", NULL, MS_PRIVATE | MS_REC, NULL) == -1)
-+		ksft_exit_fail_msg("error: mount '/', errno %d\n", errno);
-+
- 	/* Require "exec" filesystem. */
--	if (mount(NULL, "/tmp", "ramfs", 0, NULL) == -1) {
--		fprintf(stderr, "error: mount ramfs, errno %d\n", errno);
--		return 1;
--	}
-+	if (mount(NULL, "/tmp", "ramfs", 0, NULL) == -1)
-+		ksft_exit_fail_msg("error: mount ramfs, errno %d\n", errno);
- 
- #define FILENAME "/tmp/1"
- 
--	int fd = creat(FILENAME, 0700);
--	if (fd == -1) {
--		fprintf(stderr, "error: creat, errno %d\n", errno);
--		return 1;
--	}
-+	fd = creat(FILENAME, 0700);
-+	if (fd == -1)
-+		ksft_exit_fail_msg("error: creat, errno %d\n", errno);
-+
- #define S "#!" FILENAME "\n"
--	if (write(fd, S, strlen(S)) != strlen(S)) {
--		fprintf(stderr, "error: write, errno %d\n", errno);
--		return 1;
--	}
-+	if (write(fd, S, strlen(S)) != strlen(S))
-+		ksft_exit_fail_msg("error: write, errno %d\n", errno);
-+
- 	close(fd);
- 
--	int rv = execve(FILENAME, NULL, NULL);
--	if (rv == -1 && errno == ELOOP) {
--		return 0;
--	}
--	fprintf(stderr, "error: execve, rv %d, errno %d\n", rv, errno);
--	return 1;
-+	rv = execve(FILENAME, NULL, NULL);
-+	ksft_test_result(rv == -1 && errno == ELOOP,
-+			 "execve failed as expected (ret %d, errno %d)\n", rv, errno);
-+	ksft_finished();
- }
--- 
-2.39.2
+On Mon, Mar 04, 2024 at 07:46:34AM -0800, Guenter Roeck wrote:
+> On Mon, Mar 4, 2024 at 1:24=E2=80=AFAM Maxime Ripard <mripard@kernel.org>=
+ wrote:
+> [ ... ]
+> >
+> > If anything, it's more of a side-effect to the push for COMPILE_TEST
+> > than anything.
+> >
+>=20
+> If the drm subsystem maintainers don't want people to build it with
+> COMPILE_TEST while at the same time not limiting it to platforms where
+> it doesn't even build, I'd suggest making it dependent on
+> !COMPILE_TEST.
 
+I don't think we want anything. My point was that you can't have an
+option that is meant to explore for bad practices and expose drivers
+that don't go through the proper abstraction, and at the same time
+complain that things gets broken. It's the whole point of it.
+
+> The same applies to all other subsystems where maintainers don't want
+> build tests to run but also don't want to add restrictions such as
+> "64-bit only". After all, this was just one example.
+
+We have drivers for some 32 bits platforms.
+
+Maxime
+
+--thflmdlthwp7swbs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZeXxMAAKCRDj7w1vZxhR
+xYlQAPwIi05mGTIAHwJKG4sBeZKb2fVtGkVhOtt6zHMKVCL4UgEA4a2ngKZUqIko
+YkvJr1Lsw7kRsL8JpjsPGMT6i86ACwY=
+=NUWE
+-----END PGP SIGNATURE-----
+
+--thflmdlthwp7swbs--
 
