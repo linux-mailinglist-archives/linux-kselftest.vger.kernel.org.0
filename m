@@ -1,139 +1,127 @@
-Return-Path: <linux-kselftest+bounces-5853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5ACF870AC1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 20:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 89E90870ADC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 20:44:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DACF282366
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 19:32:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F3C2284A6F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 19:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 204D07995A;
-	Mon,  4 Mar 2024 19:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C2678664;
+	Mon,  4 Mar 2024 19:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="nHlxzap5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZrioYmlW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9477869E
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Mar 2024 19:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B88279957
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Mar 2024 19:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709580731; cv=none; b=H1Ks8/52WYUUo/OofU65oIxGeoHuRU6DKzjkH4C319pdvV07l3j+26ci4DcrCBEAnzqXm84Y6IRspvm8RkDp+g30pJBD7o4UhyY6vH9sYHdneiyHWzuY1ScTIpfknOx6LqOtFG7o+AXUv2v5xrpK1qIjpZoX+BkCjeUEG7NPKHo=
+	t=1709581479; cv=none; b=kgtUNrtxCcA+KC/qjxqUhKVyD42R+l1Y6rIl9KDS32D3gJ9TWNbGjq6tCW0z5zi7cUtZ1EOYiLN1O6PgJ7Bri/HIoTgQOMZZRc9WNDEND6E9NFGCILTmrk/OuCm0t1VZXdDKv/NgROiJrRBS1jsGQL03jFPFVhrWPjSl3JRAo80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709580731; c=relaxed/simple;
-	bh=uHJy5cR+Cz7GNPm99CUukbZb3URnbaKBlxNZRwj9ETA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lOL9vk4fH0Tdq/8RDFvvTo7L6Y7c4NlD4TlvzCkWd08QYDRc2yYSkJMEYCFZ9BqefNcjrr6f/t7bBqFHPfRabBfSc6v9jgZu7oIRUn28ZTztOU7hqtCS4utoSfF6rwucxhYdr7lxQAE6smpa7a9KLSJZ1nIuKrhabOinu65XjFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=nHlxzap5; arc=none smtp.client-ip=83.166.143.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TpTNH1PqrzMvsxB;
-	Mon,  4 Mar 2024 20:31:59 +0100 (CET)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4TpTNG4V1bzMpnPh;
-	Mon,  4 Mar 2024 20:31:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1709580719;
-	bh=uHJy5cR+Cz7GNPm99CUukbZb3URnbaKBlxNZRwj9ETA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nHlxzap5dh7Hb3hyvCUhCG7qrZVTOpWrupgbjtYuF4GQSxXlxZw6zm491eJiOx2t6
-	 tlQfTp+fGl+v1Px8ZwbvyG06lURFRrDrGInj0BWmvAipNSvmgne1XxYzGIkNa1xsQl
-	 pbAVmThO6M1BHZLiDBTqIqOyh6mVEid3QuXZJv6s=
-Date: Mon, 4 Mar 2024 20:31:48 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, keescook@chromium.org, jakub@cloudflare.com, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Will Drewry <wad@chromium.org>
-Subject: Re: [PATCH v4 02/12] selftests/harness: Merge TEST_F_FORK() into
- TEST_F()
-Message-ID: <20240304.ceje1phaiFei@digikod.net>
-References: <20240229005920.2407409-1-kuba@kernel.org>
- <20240229005920.2407409-3-kuba@kernel.org>
- <20240301.Miem9Kei4eev@digikod.net>
+	s=arc-20240116; t=1709581479; c=relaxed/simple;
+	bh=aJziShSE5N9NFf9GEp25onUfKHjDILdb8pau9PDQq4s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P0kNWUX4a5Pc0TqdXSNAJoae9LpIZX4t5MmFzF+D/4scEtZPQ9RUioMcczN4D+6fiaumZjCYvvPEnHJE8NSShUyKq2GiN+zHQ16AEt1gTDzlbp3tu635BIhnjFvA5RTbFWaKnyqUQBFjc5ItUy7pLa0RStB8nVeKtrt0jgSQVqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZrioYmlW; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-42e6939d34fso69291cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Mar 2024 11:44:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709581476; x=1710186276; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aJziShSE5N9NFf9GEp25onUfKHjDILdb8pau9PDQq4s=;
+        b=ZrioYmlW+GykYqhLrDIIgV5gOSzsE7sBQcJ9rOhHYjUpSYtCr/KxE4rrjknPIlp2ki
+         rUuDOTzIPySpWZanxAh/z5yukqWP5HDz2apo8J3D4kgx+pzj/dD6l9+IvSVA/4S+MVbr
+         nO094A9wWgpZUz2p4Caoa9bdfQTNj47i6ulidlbKU1PWsacrZd9X+lWHYEdODs0Z24dK
+         wRXnYXYnmckpGV5E8kpgqIWQhJMs9mhgFNCZj5DQeQtUIYjC2NpscwDGBYpKo32+lkuk
+         v6qP7DRdoDvrke0eIffJUdDDFORCielI1iIfJNM3Y03TCuTK7uPtpWXyqavSgRRepIoN
+         qTrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709581476; x=1710186276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aJziShSE5N9NFf9GEp25onUfKHjDILdb8pau9PDQq4s=;
+        b=so2yYm65Bm3qNOnRXdHiz0BBBaHwAeZWbIpsfCNKISMl5W4Nyou6lKs/EZ+Me03vcx
+         9F84t/YNvPodbFb0SRh0rXQocBGwqNVZ+LL7EhzoE0PitDlTtk88uM4yAQeUGylM0+Fj
+         J/z1Sq6n3HtNcTo+0C1N8ara4b6eTyPYKcyfohaKauWXpO9UVmQirv3Gx66JelKPeSuu
+         cvTn8bJFGrYzePdm3I80sJZGtS/J8AccXHgQBvzw6GlIvG3wV03LjJsNoa61FcrtyQze
+         gUhbOGh1zgifpiyUindrvOFO00U4895xL814kfBC/5MKwhfLmH9sy22ep9QlkWrDUTNg
+         RUEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvezqDgnGFkaJjHlquu3UABcMWNkRlCysm6Z9WgYRemC6f42S6WoNCiDuz0Z2+fDT1axW/bgvLwCm8hfhdew3p7mVi0maVGpXrHlcDlmCQ
+X-Gm-Message-State: AOJu0YwjYrHuYLmB/HO2uogdr8woLcvC5jFFaamAJnU5qnMQ9w+5J6D0
+	5jQ65i6oB27r1nDlVnDsdPsN9s00IRWHow+sCqFXQfq4zCrIjN8s//SLeDG2A2AWyJj3UbQ9bWb
+	qZMcwoh3DYsf0bq9EBEz4x8kUSge8rcrHIB0b
+X-Google-Smtp-Source: AGHT+IHCoxbqlkbvC40r/0Ghlkohpq677Z5qku5s52QYJ8GDMhK8thtW4dw5bCp5PdHftTKp8r3OdR4wiI1Sy39wTq4=
+X-Received: by 2002:ac8:7f56:0:b0:42e:f958:ea67 with SMTP id
+ g22-20020ac87f56000000b0042ef958ea67mr5712qtk.7.1709581476100; Mon, 04 Mar
+ 2024 11:44:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240301.Miem9Kei4eev@digikod.net>
-X-Infomaniak-Routing: alpha
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <20240228225527.1052240-2-helen.koike@collabora.com> <20240229-dancing-laughing-groundhog-d85161@houat>
+ <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com> <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
+ <CABXOdTeT2ip1uS2EG2w8pW7254Tnd=ZDNz-KC61-G-yqDTVgJA@mail.gmail.com>
+ <20240304-rigorous-silkworm-of-awe-4eee8f@houat> <CABXOdTc4MXcjwgGuJb4_69-4OFELD37x0B6oMr=4z=nxZ2HPXQ@mail.gmail.com>
+ <20240304-ludicrous-grinning-goldfish-090aac@houat> <CABXOdTeDydWO9mf2yxWjjebHZ1bE=R2HPs1P4XYwNhzznNKxmw@mail.gmail.com>
+ <20240304-benevolent-brawny-urchin-0af0ad@houat>
+In-Reply-To: <20240304-benevolent-brawny-urchin-0af0ad@houat>
+From: Guenter Roeck <groeck@google.com>
+Date: Mon, 4 Mar 2024 11:44:23 -0800
+Message-ID: <CABXOdTcT+szLRMfx=3WFoXDirOmWCY7T+8Q+zZJ=B5GscpDNnQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel Testing
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Linus Torvalds <torvalds@linuxfoundation.org>, Nikolai Kondrashov <spbnick@gmail.com>, 
+	Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org, 
+	dave.pigott@collabora.com, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org, 
+	gustavo.padovan@collabora.com, pawiecz@collabora.com, 
+	tales.aparecida@gmail.com, workflows@vger.kernel.org, 
+	kernelci@lists.linux.dev, skhan@linuxfoundation.org, 
+	kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com, 
+	cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com, 
+	ricardo.canuelo@collabora.com, kernel@collabora.com, 
+	gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 04, 2024 at 08:27:50PM +0100, Mickaël Salaün wrote:
-> Testing the whole series, I found that some Landlock tests are flaky
-> starting with this patch.  I tried to not use the longjmp in the
-> grandchild but it didn't change.  I suspect missing volatiles but I
-> didn't find the faulty one(s) yet. :/
-> I'll continue investigating tomorrow but help would be much appreciated!
+On Mon, Mar 4, 2024 at 9:09=E2=80=AFAM Maxime Ripard <mripard@kernel.org> w=
+rote:
 
-The issue is with the fs_test.c, often starting with this one:
+[ ...]
 
-#  RUN           layout1.relative_chroot_only ...
-# fs_test.c:294:relative_chroot_only:Expected 0 (0) == umount(TMP_DIR) (-1)
-# fs_test.c:296:relative_chroot_only:Expected 0 (0) == remove_path(TMP_DIR) (16)
-# relative_chroot_only: Test failed
-#          FAIL  layout1.relative_chroot_only
+>
+> And singling out DRM because it regularly allegedly breaks things on
+> xtensa or m68k and claiming we're not taking CI seriously because of it
+> is completely ridiculous. If the all the subsystems were taking CI as
+> seriously as DRM, we would be in a much better place.
+>
 
-...or this one:
+FWIW:
 
-#  RUN           layout3_fs.hostfs.tag_inode_dir_child ...
-# fs_test.c:4707:tag_inode_dir_child:Expected 0 (0) == mkdir(self->dir_path, 0700) (-1)
-# fs_test.c:4709:tag_inode_dir_child:Failed to create directory "tmp/dir": No such file or directory
-# fs_test.c:4724:tag_inode_dir_child:Expected 0 (0) <= fd (-1)
-# fs_test.c:4726:tag_inode_dir_child:Failed to create file "tmp/dir/file": No such file or directory
-# fs_test.c:4729:tag_inode_dir_child:Expected 0 (0) == close(fd) (-1)
-# tag_inode_dir_child: Test failed
-#          FAIL  layout3_fs.hostfs.tag_inode_dir_child
+$ git grep CONFIG_DRM arch/xtensa/ arch/m68k/
+arch/m68k/configs/virt_defconfig:CONFIG_DRM=3Dy
+arch/m68k/configs/virt_defconfig:CONFIG_DRM_FBDEV_EMULATION=3Dy
+arch/m68k/configs/virt_defconfig:CONFIG_DRM_VIRTIO_GPU=3Dy
+arch/xtensa/configs/virt_defconfig:CONFIG_DRM=3Dy
+arch/xtensa/configs/virt_defconfig:CONFIG_DRM_VGEM=3Dy
+arch/xtensa/configs/virt_defconfig:CONFIG_DRM_VIRTIO_GPU=3Dy
 
+If that isn't supported, it might really make sense to declare that
+CONFIG_DRM depends on !xtensa and !m68k.
 
-> 
-> 
-> On Wed, Feb 28, 2024 at 04:59:09PM -0800, Jakub Kicinski wrote:
-> > From: Mickaël Salaün <mic@digikod.net>
-> > 
-> > Replace Landlock-specific TEST_F_FORK() with an improved TEST_F() which
-> > brings four related changes:
-> > 
-> > Run TEST_F()'s tests in a grandchild process to make it possible to
-> > drop privileges and delegate teardown to the parent.
-> > 
-> > Compared to TEST_F_FORK(), simplify handling of the test grandchild
-> > process thanks to vfork(2), and makes it generic (e.g. no explicit
-> > conversion between exit code and _metadata).
-> > 
-> > Compared to TEST_F_FORK(), run teardown even when tests failed with an
-> > assert thanks to commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN
-> > for ASSERT failures").
-> > 
-> > Simplify the test harness code by removing the no_print and step fields
-> > which are not used.  I added this feature just after I made
-> > kselftest_harness.h more broadly available but this step counter
-> > remained even though it wasn't needed after all. See commit 369130b63178
-> > ("selftests: Enhance kselftest_harness.h to print which assert failed").
-> > 
-> > Replace spaces with tabs in one line of __TEST_F_IMPL().
-> > 
-> > Cc: Günther Noack <gnoack@google.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: Will Drewry <wad@chromium.org>
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > --
-> > v4:
-> >  - GAND -> GRAND
-> >  - init child to 1, otherwise assert in setup triggers a longjmp
-> >    which in turn reads child without it ever getting initialized
-> >    (or being 0, i.e. we mistakenly assume we're in the grandchild)
-> 
-> Good catch!
+Guenter
 
