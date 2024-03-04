@@ -1,150 +1,116 @@
-Return-Path: <linux-kselftest+bounces-5851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07B1C870A1B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 20:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FAD3870AAA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 20:28:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B256B1F22D21
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 19:09:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA9981F2325E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 19:28:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5991F78B6C;
-	Mon,  4 Mar 2024 19:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E839A79943;
+	Mon,  4 Mar 2024 19:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GNZH1qsf"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="KkCD7tgF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6E378B5C
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Mar 2024 19:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C946216C
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Mar 2024 19:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709579360; cv=none; b=KgVWphSVtp3NVVeexxxefosyW4zid4+2P8BmPZ3a9oyltqYFKjDUBHdSEoXGEdi9/h2MqPEsvYwFH5uwRdUULvDAopxvH5A06gUPTs4+42KlnzPX3PSgqumn+aS9O4m8KkPaQgflmFwevjNbx0oOFpshZ3GchdrKRK14Xxm8+ew=
+	t=1709580493; cv=none; b=Aw59EOgUhvx4XXZ3rUEPtEF/k/Bsh3UKLVN3LnCwcvRXHAzjqy9Ad4omBwY9uKdT2kFifvsN7zzZTBPkHr6c7PVvXlbpeoo1QnlbPAizWKtaNuElmvR/KYoVewt5Ec9zxuxgtrh/Q/9gPrXjHMwoiKa/3Dkvba3saPiEdoUPp5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709579360; c=relaxed/simple;
-	bh=kIYyxnV0Q3hfFaPKlETsc9QdTOBcN/w5dkg0ZaLqCj0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d06hKEFyhX10WqM7+2HVritpUCPM5HRujSw1iN7BO9ElTTf47rwGIXS8hFiCFckKHD+5USk844BJyTXaV/fTHgX3oR2SFsZYP5mPUX1lx80/JnDQMb/L/WgnK1vryi3Io3FQdwCi7njtINw0aNjR+RiZnOEYhsXx2eCZwxrpDBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GNZH1qsf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709579357;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8tiOsoLjDyH9qgATuk9KBE0wMThlXEkQhbl+ACqPams=;
-	b=GNZH1qsfKJd92mfb/TSGN3YpjBiXcHd+T9vavjt/4IuAxlVJiI05kUk+EAqNoH+CLVW52S
-	bm2L6E87cZFdrSN/RLUEDTY7gNgcvQDD2RnpIC4aOBTcuyj2GMVgTfS7veUYtBmFPJjvVY
-	eTO3sUU7sd48Qdk06eBP/nCpJHIt+90=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-671-_EzvU1aPMly3NdZCYSCuug-1; Mon, 04 Mar 2024 14:09:16 -0500
-X-MC-Unique: _EzvU1aPMly3NdZCYSCuug-1
-Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-dcf22e5b70bso8447557276.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Mar 2024 11:09:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709579355; x=1710184155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8tiOsoLjDyH9qgATuk9KBE0wMThlXEkQhbl+ACqPams=;
-        b=jZCN6NHSL0SXLY5q0Ts09SUXZ9gqpTVYEoh5nqYGhT93Ql7b5edJD7NLxdoC/jENR8
-         0hj3+uqYZVnpXPhXKCiAZOpppg3x/nHAE0ERqaMdeYKzfkkt+6sB+SBuTt+xijLUcQ6r
-         GnMJ65RkXCKg2+6nc+WBuav6AYVaG39iyuGApNpBbs8JsyTwFkhKwBQM7P0dtHZhUIvD
-         wagez26F3j+yyz3MxekV/CpKPUVJgZKtNVc8uVRQwdUfP5rRn3Ov4unaRf2ME1L+ZMYn
-         DYSPWogP/cgsmgGJjD5T/1v5q1m3QvnNyKuAGlWdn3BVgEV6Xna+7+rSZo/3e//PPfYQ
-         mIKw==
-X-Forwarded-Encrypted: i=1; AJvYcCWmQb6KDNAD7f4J1iN1sRxfnBu3ep+Uwd07zSqED4QI3bH3Vc0A8yIvHN9ZVB1m97GqXx1uonMsHMSOBLi8opnhtG+GeRcDoNhT96aE3KIT
-X-Gm-Message-State: AOJu0YybhmHMcRevM94G//0pG6R/868DVRAasoKQbkeWBici4atr0LK7
-	17T4LbWDdPy+55N4l22kDxYC7SjZCyNTow7BoVHiSffuwQWdTdKD0HG38XVBlm1LLuKH2VXgjev
-	F/KZ05xkm13WCqY7UOHLJ5zOP5EbKMqZKRFEKJuxWF/pEGWchUjpeRWRaaK9GxY/MzotdaYkg+h
-	omhnaXEa41umpg6yaPdALmBneKLigwhNwTv6Oh015D
-X-Received: by 2002:a25:b204:0:b0:dcf:56c1:5a12 with SMTP id i4-20020a25b204000000b00dcf56c15a12mr7029279ybj.38.1709579355523;
-        Mon, 04 Mar 2024 11:09:15 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH1WcLBSSbX0iebArXcd5CgjCMzw9CJRS+5TVmsdZ4vzbJ9Vng84vACPnWisD9eqfcpWiPGyAnMVIYG0R7e6VQ=
-X-Received: by 2002:a25:b204:0:b0:dcf:56c1:5a12 with SMTP id
- i4-20020a25b204000000b00dcf56c15a12mr7029265ybj.38.1709579355051; Mon, 04 Mar
- 2024 11:09:15 -0800 (PST)
+	s=arc-20240116; t=1709580493; c=relaxed/simple;
+	bh=vccNteWZN8tzKrezbLNFg7i1Zez+MHEl2AkooCa/4k0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tszOa/h7yK3boD7nyG8j1VqK/kREx8x6dE1XVUdxyipGkBsEvCF7gqcnYXyvLBA+JpAFG78DB59yOaYaz/IyRtILzjMT87u2H/4Pw0rGUqoei5EriGo1AuvSdAwzBE5BgUqi08n2bsbEzIkZ9jFxtxnEh6Fzrq/nnqWA9xye1Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=KkCD7tgF; arc=none smtp.client-ip=45.157.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [10.7.10.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TpTHh0nN7zMysHl;
+	Mon,  4 Mar 2024 20:28:00 +0100 (CET)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4TpTHg0gS3zb2j;
+	Mon,  4 Mar 2024 20:27:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1709580480;
+	bh=vccNteWZN8tzKrezbLNFg7i1Zez+MHEl2AkooCa/4k0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KkCD7tgFNxUA3IFBIhedZOHdArtcSmOKaOTxpUn4FuBn+dNJX81hqroINKaTebfsJ
+	 Chs/nU4dB/LrWL9athFmwfk/7g4MUzJjl00V9QvqtnND4FgWqYrtjbXStHzvpmgPi0
+	 MAEV2O74g1vmmGhp09sUUH5qSkl/fpXuAmm/Ne9g=
+Date: Mon, 4 Mar 2024 20:27:49 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, keescook@chromium.org, jakub@cloudflare.com, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Will Drewry <wad@chromium.org>
+Subject: Re: [PATCH v4 02/12] selftests/harness: Merge TEST_F_FORK() into
+ TEST_F()
+Message-ID: <20240301.Miem9Kei4eev@digikod.net>
+References: <20240229005920.2407409-1-kuba@kernel.org>
+ <20240229005920.2407409-3-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240301073300.287508-1-npache@redhat.com> <d44ada61-8789-444c-9823-fc68704586bd@collabora.com>
-In-Reply-To: <d44ada61-8789-444c-9823-fc68704586bd@collabora.com>
-From: Nico Pache <npache@redhat.com>
-Date: Mon, 4 Mar 2024 12:08:49 -0700
-Message-ID: <CAA1CXcAKXhv1nM8ULoQame2dQonVp_K-hJ9AGSV2PpURPmwtmQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/mm: Dont fail testsuite due to a lack of hugepages
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, ben@decadent.org.uk, shuah@kernel.org, 
-	akpm@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240229005920.2407409-3-kuba@kernel.org>
+X-Infomaniak-Routing: alpha
 
-On Fri, Mar 1, 2024 at 2:35=E2=80=AFAM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> On 3/1/24 12:33 PM, Nico Pache wrote:
-> > On systems that have large core counts and large page sizes, but limite=
-d
-> > memory, the userfaultfd test hugepage requirement is too large.
-> >
-> > Exiting early due to missing one test's requirements is a rather aggres=
-sive
-> > strategy, and prevents a lot of other tests from running. Remove the
-> > early exit to prevent this.
-> Why don't we only skip that particular test which requires huge number of
-> pages instead? Thus the behavior of this script would remain same.
-Hi Muhammad,
+Testing the whole series, I found that some Landlock tests are flaky
+starting with this patch.  I tried to not use the longjmp in the
+grandchild but it didn't change.  I suspect missing volatiles but I
+didn't find the faulty one(s) yet. :/
+I'll continue investigating tomorrow but help would be much appreciated!
 
-That would not solve the problem-- The issue is not with the
-userfaultfd test, but rather this part of the script that tries to
-allocate the hugepages. If it doesnt succeed at allocating the right
-amount of hugepages it will exit the run_vmtests.sh script, thus
-stopping all other tests. With the `exit` removed, the test suite is
-able to run, and upon running the userfaultfd test will result in a
-failed test case.
 
-If you'd like I can follow up with a patch to skip the test cases (in
-the actually test) rather than failing.
-
-Cheers,
--- Nico
->
-> >
-> > Fixes: ee00479d6702 ("selftests: vm: Try harder to allocate huge pages"=
-)
-> > Signed-off-by: Nico Pache <npache@redhat.com>
-> > ---
-> >  tools/testing/selftests/mm/run_vmtests.sh | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
-selftests/mm/run_vmtests.sh
-> > index 246d53a5d7f28..727ea22ba408e 100755
-> > --- a/tools/testing/selftests/mm/run_vmtests.sh
-> > +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> > @@ -173,7 +173,6 @@ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
-> >       if [ "$freepgs" -lt "$needpgs" ]; then
-> >               printf "Not enough huge pages available (%d < %d)\n" \
-> >                      "$freepgs" "$needpgs"
-> > -             exit 1
-> >       fi
-> >  else
-> >       echo "no hugetlbfs support in kernel?"
->
+On Wed, Feb 28, 2024 at 04:59:09PM -0800, Jakub Kicinski wrote:
+> From: Mickaël Salaün <mic@digikod.net>
+> 
+> Replace Landlock-specific TEST_F_FORK() with an improved TEST_F() which
+> brings four related changes:
+> 
+> Run TEST_F()'s tests in a grandchild process to make it possible to
+> drop privileges and delegate teardown to the parent.
+> 
+> Compared to TEST_F_FORK(), simplify handling of the test grandchild
+> process thanks to vfork(2), and makes it generic (e.g. no explicit
+> conversion between exit code and _metadata).
+> 
+> Compared to TEST_F_FORK(), run teardown even when tests failed with an
+> assert thanks to commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN
+> for ASSERT failures").
+> 
+> Simplify the test harness code by removing the no_print and step fields
+> which are not used.  I added this feature just after I made
+> kselftest_harness.h more broadly available but this step counter
+> remained even though it wasn't needed after all. See commit 369130b63178
+> ("selftests: Enhance kselftest_harness.h to print which assert failed").
+> 
+> Replace spaces with tabs in one line of __TEST_F_IMPL().
+> 
+> Cc: Günther Noack <gnoack@google.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Will Drewry <wad@chromium.org>
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > --
-> BR,
-> Muhammad Usama Anjum
->
+> v4:
+>  - GAND -> GRAND
+>  - init child to 1, otherwise assert in setup triggers a longjmp
+>    which in turn reads child without it ever getting initialized
+>    (or being 0, i.e. we mistakenly assume we're in the grandchild)
 
+Good catch!
 
