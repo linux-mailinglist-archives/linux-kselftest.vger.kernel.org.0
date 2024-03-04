@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-5809-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B9EA86F8FE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 04:41:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC1B586F900
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 04:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5850DB20BD6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 03:41:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE2E21C20A20
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 03:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5684539A;
-	Mon,  4 Mar 2024 03:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654A233D1;
+	Mon,  4 Mar 2024 03:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PaHIctQh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMfzHCFR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816134A3E;
-	Mon,  4 Mar 2024 03:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D56613A;
+	Mon,  4 Mar 2024 03:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709523640; cv=none; b=Xk2bveyiKWtQkexjAt8c2nuS2ILnrPwcqWBtyvcfN435dJMVGe21NK6su+TRF7Z8eUN+L2O1uX5Vql9N6l/wGRehxM4uOo3OLXuldGv0b9B4Xd4cpg3sw8n1D0sX4+DjsFpcPtFhSVk8fhDdxyxyfuVEKwNKWJKqOyFE+uFU30s=
+	t=1709523650; cv=none; b=Za2kRW6DBTnEey9Eq7TD/0PErCNUbczhuQAGLMpdkZCA8wr/o/BEdnP78WnBZvs49fe+AW4Dyopy3Pq3mxuE4e5/03+eGzTei2MGFo+DyVlxxcuggqNMC6PCkZHN4kCq8bX6uWk92zX+iDO7DL2cmyYdIS22fJChbfDs9e+29nY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709523640; c=relaxed/simple;
-	bh=1Hey3CwK05YwZTBeLUkTieaMt+Bw603JtB4gBPGwNVM=;
+	s=arc-20240116; t=1709523650; c=relaxed/simple;
+	bh=JOiQGf8AkuLDba6mZptSjrJ64jXNcst88pFN6BENs2Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XvGmyqOc2Bc1hIgjrsZTxXi9RZTnto9flUoY9p91C9ExXc208155vY4RItPTHVXfJQ1nYX/Jh/qrKZX18SKzFNFSufyhw195L4h+3h0NrJUoRxrVKzmJs0RIyi4pkCPO4uaZM+jJKquXkNewLAVfC+i+AylzwvAljgPtbTc60fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PaHIctQh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7A5C433C7;
-	Mon,  4 Mar 2024 03:40:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=XnpiO+7Kl5ddfIf5cHE/uR40kLSaSNvTWC9f6TQHBZ5uoCkwPttDwq9AvHz3kgobB+vzEQAwFW3kh+sFhXMO0Gzvnatg7TX+J1rgaa+rpS2vf3z/ZyW4fyOk0JxJV9eVKrwmXw/jrfdwKTY52nfusb5ajeNUas9d6qfBQKztoeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMfzHCFR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461ACC433F1;
+	Mon,  4 Mar 2024 03:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709523640;
-	bh=1Hey3CwK05YwZTBeLUkTieaMt+Bw603JtB4gBPGwNVM=;
+	s=k20201202; t=1709523650;
+	bh=JOiQGf8AkuLDba6mZptSjrJ64jXNcst88pFN6BENs2Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PaHIctQhHtpyjMJXYj9gt6Lyd5xUZNW7l9YosYBvcmDxl9j7+nRA1dkrEF9jIHsoH
-	 cleeBdVrsBqKws+w8m6irkbRqpYi88wToWpAVnYmLn2JGzecDlwfi0hbKW7GOIxIZx
-	 LQrXk/BZRTIRyryW2SyJtaPFxHDhJ+3vwI8HMSNbh1iP0DPx7CxB6UE/tIOAtjQZAZ
-	 P2crVQr9Baken/GG1iyCdCpQ+at0SM9EPPZ6LG7vh4GUbRX8JZkEuxQ84IuWgyuDAL
-	 VW9VOGD7nVAb8FlJrprdPTftatNOj5FmXcusCfQLvj2fzx/zQIWiVozqV+AOCFYTc3
-	 s0/colTYgkk0w==
+	b=nMfzHCFRn1m/iFXZjsu3f9uPO6ciPqAFm5qem2l0RoitTTr3fj31eKZRyOkdnRHgV
+	 IRvw1ocrf5bc/FrITz2gA4KQMIKPI/oIDoGbnbTyF/xKE1pw6Y7RTBUJb1wCn6m8IK
+	 fqnPdfQHWKg4bq+7W+vi0aIaOu2QU/HLsfTUoRKDAbUxNWPtIMMNyI/73Av/yJY8O5
+	 39M/S/44JhZvRnqh4l17i3jLrmpu83mT3LqAJjhLiz24JVrIaeSg0oqziST8r1Son3
+	 e6prsPegjgk2tu3h8rtrqp+8+6Kb+iWqqNe5QtBK6Lx345uRBx7QIwQKu2MGJ6WEvN
+	 36s6eXaAMDQ0w==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Jiri Olsa <jolsa@kernel.org>
@@ -49,9 +49,9 @@ Cc: linux-kernel@vger.kernel.org,
 	mhiramat@kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 4/8] tracing/probes: cleanup: Set trace_probe::nr_args at trace_probe_init
-Date: Mon,  4 Mar 2024 12:40:36 +0900
-Message-Id: <170952363585.229804.13060759900346411951.stgit@devnote2>
+Subject: [PATCH v3 5/8] tracing: Remove redundant #else block for BTF args from README
+Date: Mon,  4 Mar 2024 12:40:45 +0900
+Message-Id: <170952364558.229804.17285528811097152410.stgit@devnote2>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <170952359657.229804.14867636035660590574.stgit@devnote2>
 References: <170952359657.229804.14867636035660590574.stgit@devnote2>
@@ -67,124 +67,31 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Instead of incrementing the trace_probe::nr_args, init it at
-trace_probe_init(). Without this change, there is no way to get the number
-of trace_probe arguments while parsing it.
-This is a cleanup, so the behavior is not changed.
+Remove redundant #else block for BTF args from README message.
+This is a cleanup, so no change on the message.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- Changes in v3:
-  - Fix build error in trace_{kprobe,fprobe}.c.
-  - Update changelog.
----
- kernel/trace/trace_eprobe.c |    2 +-
- kernel/trace/trace_fprobe.c |    2 +-
- kernel/trace/trace_kprobe.c |    2 +-
- kernel/trace/trace_probe.c  |   10 ++++++----
- kernel/trace/trace_probe.h  |    2 +-
- kernel/trace/trace_uprobe.c |    2 +-
- 6 files changed, 11 insertions(+), 9 deletions(-)
+ kernel/trace/trace.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 03c851f57969..eb72def7410f 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -220,7 +220,7 @@ static struct trace_eprobe *alloc_event_probe(const char *group,
- 	if (!ep->event_system)
- 		goto error;
- 
--	ret = trace_probe_init(&ep->tp, this_event, group, false);
-+	ret = trace_probe_init(&ep->tp, this_event, group, false, nargs);
- 	if (ret < 0)
- 		goto error;
- 
-diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-index 3ccef4d82235..5109650b0d82 100644
---- a/kernel/trace/trace_fprobe.c
-+++ b/kernel/trace/trace_fprobe.c
-@@ -389,7 +389,7 @@ static struct trace_fprobe *alloc_trace_fprobe(const char *group,
- 	tf->tpoint = tpoint;
- 	tf->fp.nr_maxactive = maxactive;
- 
--	ret = trace_probe_init(&tf->tp, event, group, false);
-+	ret = trace_probe_init(&tf->tp, event, group, false, nargs);
- 	if (ret < 0)
- 		goto error;
- 
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index c4c6e0e0068b..843f13f839df 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -290,7 +290,7 @@ static struct trace_kprobe *alloc_trace_kprobe(const char *group,
- 	INIT_HLIST_NODE(&tk->rp.kp.hlist);
- 	INIT_LIST_HEAD(&tk->rp.kp.list);
- 
--	ret = trace_probe_init(&tk->tp, event, group, false);
-+	ret = trace_probe_init(&tk->tp, event, group, false, nargs);
- 	if (ret < 0)
- 		goto error;
- 
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 67a0b9cbb648..93f36f8a108e 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -1423,9 +1423,6 @@ int traceprobe_parse_probe_arg(struct trace_probe *tp, int i, const char *arg,
- 	struct probe_arg *parg = &tp->args[i];
- 	const char *body;
- 
--	/* Increment count for freeing args in error case */
--	tp->nr_args++;
--
- 	body = strchr(arg, '=');
- 	if (body) {
- 		if (body - arg > MAX_ARG_NAME_LEN) {
-@@ -1810,7 +1807,7 @@ void trace_probe_cleanup(struct trace_probe *tp)
- }
- 
- int trace_probe_init(struct trace_probe *tp, const char *event,
--		     const char *group, bool alloc_filter)
-+		     const char *group, bool alloc_filter, int nargs)
- {
- 	struct trace_event_call *call;
- 	size_t size = sizeof(struct trace_probe_event);
-@@ -1846,6 +1843,11 @@ int trace_probe_init(struct trace_probe *tp, const char *event,
- 		goto error;
- 	}
- 
-+	tp->nr_args = nargs;
-+	/* Make sure pointers in args[] are NULL */
-+	if (nargs)
-+		memset(tp->args, 0, sizeof(tp->args[0]) * nargs);
-+
- 	return 0;
- 
- error:
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index c1877d018269..ed8d1052f8a7 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -338,7 +338,7 @@ static inline bool trace_probe_has_single_file(struct trace_probe *tp)
- }
- 
- int trace_probe_init(struct trace_probe *tp, const char *event,
--		     const char *group, bool alloc_filter);
-+		     const char *group, bool alloc_filter, int nargs);
- void trace_probe_cleanup(struct trace_probe *tp);
- int trace_probe_append(struct trace_probe *tp, struct trace_probe *to);
- void trace_probe_unlink(struct trace_probe *tp);
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index a84b85d8aac1..796ebcae9b38 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -337,7 +337,7 @@ alloc_trace_uprobe(const char *group, const char *event, int nargs, bool is_ret)
- 	if (!tu)
- 		return ERR_PTR(-ENOMEM);
- 
--	ret = trace_probe_init(&tu->tp, event, group, true);
-+	ret = trace_probe_init(&tu->tp, event, group, true, nargs);
- 	if (ret < 0)
- 		goto error;
- 
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 8198bfc54b58..516c585f5879 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -5747,11 +5747,9 @@ static const char readme_msg[] =
+ 	"\t     args: <name>=fetcharg[:type]\n"
+ 	"\t fetcharg: (%<register>|$<efield>), @<address>, @<symbol>[+|-<offset>],\n"
+ #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+-#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
+ 	"\t           $stack<index>, $stack, $retval, $comm, $arg<N>,\n"
++#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
+ 	"\t           <argname>[->field[->field|.field...]],\n"
+-#else
+-	"\t           $stack<index>, $stack, $retval, $comm, $arg<N>,\n"
+ #endif
+ #else
+ 	"\t           $stack<index>, $stack, $retval, $comm,\n"
 
 
