@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-5806-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8412786F8F5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 04:40:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F92586F8F8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 04:40:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EEE228150F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 03:40:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 560361F20F6D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 03:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3469B33D1;
-	Mon,  4 Mar 2024 03:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A90E5398;
+	Mon,  4 Mar 2024 03:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NacBqozn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OF/QoMlN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005346ABF;
-	Mon,  4 Mar 2024 03:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042F64C6B;
+	Mon,  4 Mar 2024 03:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709523611; cv=none; b=SglWrATUccwsld1cnE998xkQK2AtRTuLd4LfqW1lguhag7HTUn7yNWCnvVfXmZTaoA0/7O2DyJq83h29N9+QWO8RI87f1Hl8eg+ZfYs1cxuM14Gogb/L0dSAhrLYxQtF8PTg8VEz8e9+Pl4ocpDCr/NWHEPHC+2OiZi1SaZ8n5Q=
+	t=1709523621; cv=none; b=R/WYOarwYpMZhkzXEEAdzQX/LATMuD4de5u9himM+90qzPnzZQA5L8jVWU7RR4QP2sHDg6WLdFsB5w9GFLyGTO1rLOCIAQ5AUPYNSiQWwssG4bq/AMCwfw5oVe9N/cmijpoEJnOa4tVkbpoiUcyTff2InvK92IyVPSB2S7GqZ8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709523611; c=relaxed/simple;
-	bh=S57LBagA5sfS5PxIPRcS7nfl3DEhORZYcIUUZT8qPdc=;
+	s=arc-20240116; t=1709523621; c=relaxed/simple;
+	bh=/dyCFA6euqljnFjmQrQ+oafm97nJtVOUz8aX5A22W/g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tvY3NgJHHDo84RKB8mZhz/nGHgQE4QCdqAOLZzQliVvHAxOazLd2opmLI0/bi07LsGH6yU4/0d3oc0DR76BBLpJFN8bNZnr1HYnlgJH8tMocZdtU17IxbS8ozibz+o4edtH2MpngrpRioQignfseu4Omqk6tfFP+JqztPLvjycU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NacBqozn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2D8C433F1;
-	Mon,  4 Mar 2024 03:40:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=jAWWJR8WVRpSLP9rCmkSug+m/qElNGYZlmz3HddS7Kh4CE04esXkjDu1aZUFkA2A/YohRWtLW+3CW4CL8Iq3YZGo3WPXYhccGu1+VAxWE+ERqHIfpKbEqweLxrgCRfVL1FVM0YL5KTIwPC5PQ1oLz2JkHghTxyUujlKGtFQ9Tho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OF/QoMlN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A4FC433F1;
+	Mon,  4 Mar 2024 03:40:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709523610;
-	bh=S57LBagA5sfS5PxIPRcS7nfl3DEhORZYcIUUZT8qPdc=;
+	s=k20201202; t=1709523620;
+	bh=/dyCFA6euqljnFjmQrQ+oafm97nJtVOUz8aX5A22W/g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NacBqoznCzzfaWEgzeK4cvGYokk7JfPd7hZI2y1k3H9t5eH8As1V1XnB/k5PW8iIA
-	 LHiFLnzBTQ4dfIsZTn7REGHpP+GdHprxLw50GHsRIgjC6fJyU7DFGF/I7rJzQ7JcdK
-	 XuyJMdgX9pPMbh10GuKq2QWoupVs4QhdOdgDJULEMQinHfHPrBwOaW+A+IF1uzzYcD
-	 tvTBbnDwx6g21Phai5nKIh0L++9ZZcVdcgqqRiV/01leBSzP28ZK3/5fB7GYlUF3J+
-	 KSzCYCRKKb2yNHSLn368v5CR0iqK45rFyAFoNXQUJTOl3gtc4AoCYIZRw0bv6Oi/S/
-	 S6Wr1vQUJCfuw==
+	b=OF/QoMlNRXrDJEYBArP5rVYtONQ/MDAnwmWXMjnSsy6T1mdCtsG56hdvm9olasW0f
+	 Cq7ttZGrHeD5EtO1i7E4WM8o+KpVAiD5xZIgYwLFSauhEe8QhnuoXiODJbX/0ISkD2
+	 jZi0VDdXmtIMf/TcbBGVaLVpwAAGLSe5j8INAx41pMNgvd6+RyMdw9/FYMGOwDry0+
+	 7Wf/HD/WL5VmTIN2dxmJ2HHudNngFDfWDS00QIEv4ggROLwX3n/YgyOEPrHYpgr4ro
+	 JZzdSCeSM8IYyV657LQIpQ+heVROkomQ+CHLxf0dLSnpbToYaCk5gbH/4rjEhhvhgF
+	 Y5aT4r4NwiM6Q==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Jiri Olsa <jolsa@kernel.org>
@@ -49,9 +49,9 @@ Cc: linux-kernel@vger.kernel.org,
 	mhiramat@kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 1/8] fprobe: Fix to allocate entry_data_size buffer with rethook instances
-Date: Mon,  4 Mar 2024 12:40:06 +0900
-Message-Id: <170952360657.229804.345771440723430834.stgit@devnote2>
+Subject: [PATCH v3 2/8] tracing/fprobe-event: cleanup: Fix a wrong comment in fprobe event
+Date: Mon,  4 Mar 2024 12:40:16 +0900
+Message-Id: <170952361630.229804.10832200172327797860.stgit@devnote2>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <170952359657.229804.14867636035660590574.stgit@devnote2>
 References: <170952359657.229804.14867636035660590574.stgit@devnote2>
@@ -67,58 +67,26 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fix to allocate fprobe::entry_data_size buffer with rethook instances.
-If fprobe doesn't allocate entry_data_size buffer for each rethook instance,
-fprobe entry handler can cause a buffer overrun when storing entry data in
-entry handler.
+Despite the fprobe event,  "Kretprobe" was commented. So fix it.
 
-Link: https://lore.kernel.org/all/170920576727.107552.638161246679734051.stgit@devnote2/
-
-Reported-by: Jiri Olsa <olsajiri@gmail.com>
-Closes: https://lore.kernel.org/all/Zd9eBn2FTQzYyg7L@krava/
-Fixes: 4bbd93455659 ("kprobes: kretprobe scalability improvement")
-Cc: stable@vger.kernel.org
-Tested-by: Jiri Olsa <olsajiri@gmail.com>
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/fprobe.c |   14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ kernel/trace/trace_fprobe.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index 6cd2a4e3afb8..9ff018245840 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -189,9 +189,6 @@ static int fprobe_init_rethook(struct fprobe *fp, int num)
- {
- 	int size;
+diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+index 7d2ddbcfa377..3ccef4d82235 100644
+--- a/kernel/trace/trace_fprobe.c
++++ b/kernel/trace/trace_fprobe.c
+@@ -210,7 +210,7 @@ fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+ }
+ NOKPROBE_SYMBOL(fentry_trace_func);
  
--	if (num <= 0)
--		return -EINVAL;
--
- 	if (!fp->exit_handler) {
- 		fp->rethook = NULL;
- 		return 0;
-@@ -199,15 +196,16 @@ static int fprobe_init_rethook(struct fprobe *fp, int num)
- 
- 	/* Initialize rethook if needed */
- 	if (fp->nr_maxactive)
--		size = fp->nr_maxactive;
-+		num = fp->nr_maxactive;
- 	else
--		size = num * num_possible_cpus() * 2;
--	if (size <= 0)
-+		num *= num_possible_cpus() * 2;
-+	if (num <= 0)
- 		return -EINVAL;
- 
-+	size = sizeof(struct fprobe_rethook_node) + fp->entry_data_size;
-+
- 	/* Initialize rethook */
--	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler,
--				sizeof(struct fprobe_rethook_node), size);
-+	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler, size, num);
- 	if (IS_ERR(fp->rethook))
- 		return PTR_ERR(fp->rethook);
- 
+-/* Kretprobe handler */
++/* function exit handler */
+ static nokprobe_inline void
+ __fexit_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+ 		   unsigned long ret_ip, struct pt_regs *regs,
 
 
