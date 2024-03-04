@@ -1,159 +1,283 @@
-Return-Path: <linux-kselftest+bounces-5817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5818-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 796D486FCE5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 10:15:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E34786FCF8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 10:17:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 100B21F2282A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 09:15:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3232F1C22173
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Mar 2024 09:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7015D1B7FE;
-	Mon,  4 Mar 2024 09:15:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D0D20DC5;
+	Mon,  4 Mar 2024 09:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HP+FZFPX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LaQ3zIxK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F82F12E73;
-	Mon,  4 Mar 2024 09:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAE020B27;
+	Mon,  4 Mar 2024 09:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709543713; cv=none; b=Y9xzeLWP8mQqAkl3N+qp3hCE0lTLU3c1RZ0vR9scSgx7gj1kUodR5z5Q/UJ8tWiTFio2uepBeMXikEIi2pfz3HaRRG0MFe87bNz3M0qTz2RTfRfHkqjFRvSh4Vkfi9V92K0e+mJKX0pHl+bHQlWgwksscL5L/3Gy4m8xSt60p4E=
+	t=1709543824; cv=none; b=u/6KofVU4dyZkkhZssmIU0DqRrDppaTFJ8QAqcRRNYFlJM8oeQnTS+6jqTRuLMRJDk3jmDRNLxUzsaavYcBUTG9mrrT1JeFlhBzuJo62ktf2/1P0f6icg6XOURSVTzrgmr/tPSa8miXTNzYBn3vcheovAz97+vOtGpn+b1UVQRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709543713; c=relaxed/simple;
-	bh=/HGmx2mq7+zg1VO1bSo8RtqdxxMsZLXO968The90xlA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q37i9ms1wyoOX/LdGQST/U7xEXOSRkqhpLf/YXCS50hSAuFcyMfB4bC9Q66+tHBkL4gQO0KD3TeRBCjh7dEw572WHFAkvbzT2yR85VHL2mUGDEEB80jYFHzBWpgAVBs7proUxpr0+OgT+ldrpkyFa1R3pQIhKUxxNS0OY3Z96xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HP+FZFPX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53598C433F1;
-	Mon,  4 Mar 2024 09:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709543712;
-	bh=/HGmx2mq7+zg1VO1bSo8RtqdxxMsZLXO968The90xlA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HP+FZFPXOKKVJQsIdgavlDGoYvqXJQUUJTik+VmyfcSVlIHCJoOStOdSi67o8BgPM
-	 RNxJ35itRHMj1xY40xFyKnCgdz3eUb8MP1wyTyhkKisRaFFZJxOXzFUwUuguJ2jNT2
-	 GqcVwRbfg/acC7TVu9+6Mfvs+gkXBi4QWXYhuEbnN9CSGMlzH+GPwt3QyHJj/Bx3tp
-	 Gpk/72avlZJlrZv+YakX+vBFNnYwKVT/EYQZUskVAkmgb05w5CnLqJK3yGfkQEr7gW
-	 QK00Wouky8PtAZDqSL9ruRet3bKRKQhct0Nhq2l5tqQpqGgxjXjFk/i6v3wuSzk4/U
-	 XwIwYdTcGOzbg==
-Date: Mon, 4 Mar 2024 10:15:10 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, 
-	Guenter Roeck <groeck@google.com>, Linus Torvalds <torvalds@linuxfoundation.org>, 
-	Nikolai Kondrashov <spbnick@gmail.com>, Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org, 
-	dave.pigott@collabora.com, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com, pawiecz@collabora.com, 
-	tales.aparecida@gmail.com, workflows@vger.kernel.org, kernelci@lists.linux.dev, 
-	skhan@linuxfoundation.org, kunit-dev@googlegroups.com, nfraprado@collabora.com, 
-	davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com, 
-	ricardo.canuelo@collabora.com, kernel@collabora.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for
- Kernel Testing
-Message-ID: <20240304-transparent-oriole-of-honeydew-f4174e@houat>
-References: <20240228225527.1052240-1-helen.koike@collabora.com>
- <20240228225527.1052240-2-helen.koike@collabora.com>
- <20240229-dancing-laughing-groundhog-d85161@houat>
- <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com>
- <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
- <CABXOdTeT2ip1uS2EG2w8pW7254Tnd=ZDNz-KC61-G-yqDTVgJA@mail.gmail.com>
- <269232e6-41c9-4aa1-9320-662beabcd69b@infradead.org>
- <CAMuHMdXuXV9WV3aANFTteuP8Q3JY6R5OWsVBedGOP7e_JguxqA@mail.gmail.com>
- <CAMuHMdWi069YAvOoXe7sHJ_o702tY4tDQgL3sfApPR3aCnZboQ@mail.gmail.com>
+	s=arc-20240116; t=1709543824; c=relaxed/simple;
+	bh=3DwW30fbFMvQ2ySHnVA3fgbqopvn+6yGmMXD+bUNixc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qrCHK9l8VtNLsWJUBs7uBT2CKds1hQq+mdADzBNmoV2TNGty6+wcVHhtEIxExGTrqoyJiI5EgZFRBs6p9x48HIDnlXrzY+QqCm5q+qODAk6y0pZOOVTYvIw7H20GgnaINGFX8e0a17KpXU5OyONfHK/4+1MvzfOMQq/f2MiatJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LaQ3zIxK; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709543823; x=1741079823;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3DwW30fbFMvQ2ySHnVA3fgbqopvn+6yGmMXD+bUNixc=;
+  b=LaQ3zIxKeub5ytSP8j+O1NMnmwULvEEXZijLRekAF9RY5cWXa3+i+CFf
+   LllY/VoUtUtIulX2unkXnezgNXz2YuDKr8Mp9xhnvJ0mrKL8nQgrR0Ilq
+   IkAvM9tmWZJTt2QEdKY7BUodtJN9yeVYUVeMMa/4aXRbJSKoufLI0eMN5
+   RK6GRtr4OfIhDhJqqRF9ZEL8ZRl+ewm5VL0gGEVGMy1VCBX5ltqa+4vbD
+   2cA6LAfNx6SJwGCAvZpL0aRez6kJq5+bbsitWEwWBnq/PoSx2PI4LjpMh
+   lAS615xi0qYirc4ltD1SquJFTw90Xnzau0SoKXzpZqwnT/dYMn9F61GpK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="7833985"
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="7833985"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 01:17:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="8838530"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.218]) ([10.238.8.218])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 01:16:55 -0800
+Message-ID: <0344d85f-d6ab-4d78-abac-d0293d71ef91@linux.intel.com>
+Date: Mon, 4 Mar 2024 17:16:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pjbdi6a4euq6tzrc"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWi069YAvOoXe7sHJ_o702tY4tDQgL3sfApPR3aCnZboQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 10/29] KVM: selftests: TDX: Adding test case for
+ TDX port IO
+To: Yan Zhao <yan.y.zhao@intel.com>, Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
+ Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
+ Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-11-sagis@google.com>
+ <ZeUvtzHmMo9jdMnu@yzhao56-desk.sh.intel.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <ZeUvtzHmMo9jdMnu@yzhao56-desk.sh.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---pjbdi6a4euq6tzrc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 04, 2024 at 09:12:38AM +0100, Geert Uytterhoeven wrote:
-> On Sun, Mar 3, 2024 at 10:30=E2=80=AFAM Geert Uytterhoeven <geert@linux-m=
-68k.org> wrote:
-> > On Sun, Mar 3, 2024 at 3:30=E2=80=AFAM Randy Dunlap <rdunlap@infradead.=
-org> wrote:
-> > > On 3/2/24 14:10, Guenter Roeck wrote:
-> > > > While checkpatch is indeed of arguable value, I think it would help=
- a
-> > > > lot not having to bother about the persistent _build_ failures on
-> > > > 32-bit systems. You mentioned the fancy drm CI system above, but th=
-ey
-> > > > don't run tests and not even test builds on 32-bit targets, which h=
-as
-> > > > repeatedly caused (and currently does cause) build failures in drm
-> > > > code when trying to build, say, arm:allmodconfig in linux-next. Most
-> > > > trivial build failures in linux-next (and, yes, sometimes mainline)
-> > > > could be prevented with a simple generic CI.
-> > >
-> > > Yes, definitely. Thanks for bringing that up.
-> >
-> > +1
->=20
-> > Kisskb can send out email when builds get broken, and when they get
-> > fixed again.  I receive such emails for the m68k builds.
->=20
-> Like this (yes, one more in DRM; sometimes I wonder if DRM is meant only
-> for 64-bit little-endian platforms with +200 GiB/s memory bandwidth):
+On 3/4/2024 10:19 AM, Yan Zhao wrote:
+> On Tue, Dec 12, 2023 at 12:46:25PM -0800, Sagi Shahar wrote:
+>> From: Erdem Aktas <erdemaktas@google.com>
+>>
+>> Verifies TDVMCALL<INSTRUCTION.IO> READ and WRITE operations.
+>>
+>> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+>> Signed-off-by: Sagi Shahar <sagis@google.com>
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>> Signed-off-by: Ryan Afranji <afranji@google.com>
+>> ---
+>>   .../kvm/include/x86_64/tdx/test_util.h        | 34 ++++++++
+>>   .../selftests/kvm/x86_64/tdx_vm_tests.c       | 82 +++++++++++++++++++
+>>   2 files changed, 116 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h b/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
+>> index 6d69921136bd..95a5d5be7f0b 100644
+>> --- a/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
+>> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
+>> @@ -9,6 +9,40 @@
+>>   #define TDX_TEST_SUCCESS_PORT 0x30
+>>   #define TDX_TEST_SUCCESS_SIZE 4
+>>   
+>> +/**
+>> + * Assert that some IO operation involving tdg_vp_vmcall_instruction_io() was
+>> + * called in the guest.
+>> + */
+>> +#define TDX_TEST_ASSERT_IO(VCPU, PORT, SIZE, DIR)			\
+>> +	do {								\
+>> +		TEST_ASSERT((VCPU)->run->exit_reason == KVM_EXIT_IO,	\
+>> +			"Got exit_reason other than KVM_EXIT_IO: %u (%s)\n", \
+>> +			(VCPU)->run->exit_reason,			\
+>> +			exit_reason_str((VCPU)->run->exit_reason));	\
+>> +									\
+>> +		TEST_ASSERT(((VCPU)->run->exit_reason == KVM_EXIT_IO) && \
+>> +			((VCPU)->run->io.port == (PORT)) &&		\
+>> +			((VCPU)->run->io.size == (SIZE)) &&		\
+>> +			((VCPU)->run->io.direction == (DIR)),		\
+>> +			"Got unexpected IO exit values: %u (%s) %d %d %d\n", \
+>> +			(VCPU)->run->exit_reason,			\
+>> +			exit_reason_str((VCPU)->run->exit_reason),	\
+>> +			(VCPU)->run->io.port, (VCPU)->run->io.size,	\
+>> +			(VCPU)->run->io.direction);			\
+>> +	} while (0)
+>> +
+>> +/**
+>> + * Check and report if there was some failure in the guest, either an exception
+>> + * like a triple fault, or if a tdx_test_fatal() was hit.
+>> + */
+>> +#define TDX_TEST_CHECK_GUEST_FAILURE(VCPU)				\
+>> +	do {								\
+>> +		if ((VCPU)->run->exit_reason == KVM_EXIT_SYSTEM_EVENT)	\
+>> +			TEST_FAIL("Guest reported error. error code: %lld (0x%llx)\n", \
+>> +				(VCPU)->run->system_event.data[1],	\
+>> +				(VCPU)->run->system_event.data[1]);	\
+>> +	} while (0)
+>> +
+>>   /**
+>>    * Assert that tdx_test_success() was called in the guest.
+>>    */
+>> diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+>> index 8638c7bbedaa..75467c407ca7 100644
+>> --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+>> +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+>> @@ -2,6 +2,7 @@
+>>   
+>>   #include <signal.h>
+>>   #include "kvm_util_base.h"
+>> +#include "tdx/tdcall.h"
+>>   #include "tdx/tdx.h"
+>>   #include "tdx/tdx_util.h"
+>>   #include "tdx/test_util.h"
+>> @@ -74,6 +75,86 @@ void verify_report_fatal_error(void)
+>>   	printf("\t ... PASSED\n");
+>>   }
+>>   
+>> +#define TDX_IOEXIT_TEST_PORT 0x50
+>> +
+>> +/*
+>> + * Verifies IO functionality by writing a |value| to a predefined port.
+>> + * Verifies that the read value is |value| + 1 from the same port.
+>> + * If all the tests are passed then write a value to port TDX_TEST_PORT
+>> + */
+>> +void guest_ioexit(void)
+>> +{
+>> +	uint64_t data_out, data_in, delta;
+>> +	uint64_t ret;
+>> +
+>> +	data_out = 0xAB;
+>> +	ret = tdg_vp_vmcall_instruction_io(TDX_IOEXIT_TEST_PORT, 1,
+>> +					TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
+>> +					&data_out);
+>> +	if (ret)
+>> +		tdx_test_fatal(ret);
+>> +
+>> +	ret = tdg_vp_vmcall_instruction_io(TDX_IOEXIT_TEST_PORT, 1,
+>> +					TDG_VP_VMCALL_INSTRUCTION_IO_READ,
+>> +					&data_in);
+>> +	if (ret)
+>> +		tdx_test_fatal(ret);
+>> +
+>> +	delta = data_in - data_out;
+>> +	if (delta != 1)
+>> +		tdx_test_fatal(ret);
+>> +
+>> +	tdx_test_success();
+>> +}
+>> +
+>> +void verify_td_ioexit(void)
+>> +{
+>> +	struct kvm_vm *vm;
+>> +	struct kvm_vcpu *vcpu;
+>> +
+>> +	uint32_t port_data;
+>> +
+>> +	vm = td_create();
+>> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+>> +	vcpu = td_vcpu_add(vm, 0, guest_ioexit);
+>> +	td_finalize(vm);
+>> +
+>> +	printf("Verifying TD IO Exit:\n");
+>> +
+>> +	/* Wait for guest to do a IO write */
+>> +	td_vcpu_run(vcpu);
+>> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> This check is a vain, because the first VMExit from vcpu run is always
+> KVM_EXIT_IO caused by tdg_vp_vmcall_instruction_io().
+
+I think tdg_vp_vmcall_instruction_io() could fail if RCX (GPR select) 
+doesn't
+meet the requirement (some bits must be 0).
+Although RCX is set by guest code (in selftest, it set in __tdx_hypercall())
+and it will not trigger the error, it still can be used as a guard to make
+sure guest doesn't pass a invalid RCX.
+
+
 >
-> ---8<-------------------------------------------------------------------
-> Subject: kisskb: FAILED linux-next/m68k-allmodconfig/m68k-gcc8 Mon Mar 04=
-, 06:35
-> To: geert@linux-m68k.org
-> Date: Mon, 04 Mar 2024 08:05:14 -0000
->=20
-> FAILED linux-next/m68k-allmodconfig/m68k-gcc8 Mon Mar 04, 06:35
->=20
-> http://kisskb.ellerman.id.au/kisskb/buildresult/15135537/
->=20
-> Commit:   Add linux-next specific files for 20240304
->           67908bf6954b7635d33760ff6dfc189fc26ccc89
-> Compiler: m68k-linux-gcc (GCC) 8.5.0 / GNU ld (GNU Binutils) 2.36.1
->=20
-> Possible errors
-> ---------------
->=20
-> ERROR: modpost: "__udivdi3" [drivers/gpu/drm/sun4i/sun4i-drm-hdmi.ko] und=
-efined!
-> make[3]: *** [scripts/Makefile.modpost:145: Module.symvers] Error 1
-> make[2]: *** [Makefile:1871: modpost] Error 2
-> make[1]: *** [Makefile:240: __sub-make] Error 2
-> make: *** [Makefile:240: __sub-make] Error 2
->=20
-> No warnings found in log.
-> ------------------------------------------------------------------->8---
+>
+>> +	TDX_TEST_ASSERT_IO(vcpu, TDX_IOEXIT_TEST_PORT, 1,
+>> +			TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
+>> +	port_data = *(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
+>> +
+>> +	printf("\t ... IO WRITE: OK\n");
+> So,  even if there's an error in emulating writing of TDX_IOEXIT_TEST_PORT,
+> and guest would then find a failure and trigger tdx_test_fatal(), this line
+> will still print "IO WRITE: OK", which is not right.
+>
+>> +
+>> +	/*
+>> +	 * Wait for the guest to do a IO read. Provide the previous written data
+>> +	 * + 1 back to the guest
+>> +	 */
+>> +	td_vcpu_run(vcpu);
+>> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> This check is a vain, too, as in  write case.
+>
+>> +	TDX_TEST_ASSERT_IO(vcpu, TDX_IOEXIT_TEST_PORT, 1,
+>> +			TDG_VP_VMCALL_INSTRUCTION_IO_READ);
+>> +	*(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = port_data + 1;
+>> +
+>> +	printf("\t ... IO READ: OK\n");
+> Same as in write case, this line should not be printed until after guest
+> finishing checking return code.
+>
+>> +
+>> +	/*
+>> +	 * Wait for the guest to complete execution successfully. The read
+>> +	 * value is checked within the guest.
+>> +	 */
+>> +	td_vcpu_run(vcpu);
+>> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+>> +	TDX_TEST_ASSERT_SUCCESS(vcpu);
+>> +
+>> +	printf("\t ... IO verify read/write values: OK\n");
+>> +	kvm_vm_free(vm);
+>> +	printf("\t ... PASSED\n");
+>> +}
+>> +
+>>   int main(int argc, char **argv)
+>>   {
+>>   	setbuf(stdout, NULL);
+>> @@ -85,6 +166,7 @@ int main(int argc, char **argv)
+>>   
+>>   	run_in_new_process(&verify_td_lifecycle);
+>>   	run_in_new_process(&verify_report_fatal_error);
+>> +	run_in_new_process(&verify_td_ioexit);
+>>   
+>>   	return 0;
+>>   }
+>> -- 
+>> 2.43.0.472.g3155946c3a-goog
+>>
+>>
 
-The driver is meant for a controller featured in an SoC with a Cortex-A8
-ARM CPU and less than a GiB/s memory bandwidth.
-
-And I just sent a fix for that one, thanks for the report.
-
-Maxime
-
---pjbdi6a4euq6tzrc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZeWRHQAKCRDj7w1vZxhR
-xWFcAPoCgSeoB/8bmUbd4z1ay49ZfEoCqaiqzPyPCcSF7f1QgwD/d8uPHuZl+yLF
-9/aw+Ej9d0qSGEpya7QRzssHubW/7wA=
-=khgr
------END PGP SIGNATURE-----
-
---pjbdi6a4euq6tzrc--
 
