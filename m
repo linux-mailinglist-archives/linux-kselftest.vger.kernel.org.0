@@ -1,530 +1,329 @@
-Return-Path: <linux-kselftest+bounces-5885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE76D871504
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 05:58:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 004538715B1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 07:10:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35D84B21C6C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 04:58:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7652CB233D1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 06:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C98433BA;
-	Tue,  5 Mar 2024 04:58:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB227BAFE;
+	Tue,  5 Mar 2024 06:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iJ+Ra+hq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R8CfdxKy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875F8611A;
-	Tue,  5 Mar 2024 04:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709614679; cv=none; b=DR9hmpTQHN0e78ZOaAYrdnQhbuGTslS2hmeFST7x8lpQvM1qa+04y/Sr6+rOv9tZLJdByvdnX42ADsO2Q9dcmAWD04MYtEgRg+SfqMi7FcS48mmsc3UuIUB96ru7zy4HDlw3RRBRG6Ev1lQwPcrhm4bXP2UXAOqnqKY0ln6CJuA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709614679; c=relaxed/simple;
-	bh=p9A8AKNT5bWayq85gBPsGYGBp5rt1p2gcZJAx2F3Kio=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CcIFN8JYR6PAwlRXvRRe8IgDNfn6LpXysgH5liuEmh16Hj8fex+w9U5FYD7uOzoX3mWDGwQ18Uo4gHBsmCiJ053lddHWCBq1laS3FR+0i2Uo64FBBP83HiTYc2sZ/vTuBrzse8FULz3my7nemGydVbcENqELx+6WnFLGPMO9eOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iJ+Ra+hq; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBF03398B;
+	Tue,  5 Mar 2024 06:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709619048; cv=fail; b=W/9ix409zDrxat107oy9Dk5yASnGDdzFj2ERrmwaztJfhhemXhEnpqYeDbCTBsauFauAhZHSMxJuIG4g9pbSdP4yB0jc34hoBaGZ/i9VeKKN/Y00JdtTbtrIO2qvz5+NDkLxMelV79p4jwgp0tWvsxSKmn2FUVPd3+COXAjRX5I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709619048; c=relaxed/simple;
+	bh=iW+gHiz97dUJYQAYk7XIhMv/xRS8y9W+4SguMPbSbfg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uD4+d4sZ6nXpGSg+qkkLv5d/g1GxfVMC9sYh/szXlGKL1tnSI7XL1PX56lLiM/nX4yRUfk13MirG0meayZAoq+rAFQsGLXaZxMQaVecy84DfXGzEYv04i0sTT8OCMSl1hBNplAo7hNjOCbQbbVQ/Lrb9Wt2MbZVq9SN8v2S7II4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R8CfdxKy; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709614678; x=1741150678;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=p9A8AKNT5bWayq85gBPsGYGBp5rt1p2gcZJAx2F3Kio=;
-  b=iJ+Ra+hq85nqREJjPIgD0f9ZqWYSb5ZikHjixmJhikijiNWVj/ioEv+V
-   JD1w0UhKEHrkolINgnMACk86M0lUGwlzYS2A2SWqpIzzNa4+aLIoHafaR
-   xkStbW3t/Iug7CMlxeZcCHmQ2h4BYYa8t5Qwjz0gxKs77URdjZvdoRRLB
-   b6bvGEA19G/3zwNVKxPiAgJm43iHOkydYxg4YT05HpYKvzR0s6F4XwsI9
-   joHUIE+rtvFaL8/dTXyL8j/ARSScWCl6gexIpYzt5s/mqoCsZcE/1EysF
-   qfTyOpk0S+31jVYXYe8Q9jClPaQ8MnCvTgBtlsOavcGWtNZfjmX1BQKkf
+  t=1709619047; x=1741155047;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=iW+gHiz97dUJYQAYk7XIhMv/xRS8y9W+4SguMPbSbfg=;
+  b=R8CfdxKyluzmJUtZJiJhBZQ3rrBx+fQXEkfx3Z9k/7hxVRToubffps7Q
+   pcJSnOxCZUbYcFBBtTW9UzrBwWU+U9iCEk5iKmwIDYf6nZDxmZQwhXF3F
+   TIzuPbw+tKXdx7IX1HOs+5c9onPbQfbi3ffxmNKla/O/53p8IWaV/BgwY
+   Zxl2EbGYsZzMEryIsyaFzRNYwvDc5BuegkOIeY26wo7y6jvA6HhsgMAiI
+   XFAFimhxoRdhXjbtTcHaBmDqM5a2t9KewaAvSV20c9fN1jK43ssGvxPhI
+   nQGJd3yZgHn9+Wgit2Updbv2GUi6dSjrOOYdS8NSA3Q/Zs3pYBWM6iqAd
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="7913231"
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="4734876"
 X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="7913231"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 20:57:57 -0800
+   d="scan'208";a="4734876"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 22:10:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="46775541"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.218]) ([10.238.8.218])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 20:57:51 -0800
-Message-ID: <ace89472-2d10-47c3-bf6d-232602b689f6@linux.intel.com>
-Date: Tue, 5 Mar 2024 12:57:49 +0800
+   d="scan'208";a="9210199"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Mar 2024 22:10:45 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 4 Mar 2024 22:10:44 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Mon, 4 Mar 2024 22:10:44 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.40) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Mon, 4 Mar 2024 22:10:44 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XERzQoByE7JN17RpN0kzbWXY4tf7cLHZvjO2u39VG2LY8wrcgQX7ENM2zXDN5BZ4gS+JUWYQHM+pPf1GdNaiPx0eT07niXNhepGx5141lzAf6iLEn+DpuNATzL1R0VpLGJXSGQjvYtmi+c6Nu0OoxrpFdmBOxPf2Wj5oAeUPTt3KvxirAMEE0E5qAoR6pvL1mHaAOwfdVmYluJpUGh6O9t4uV7/56RJ0lF29lRiVIEDh4kKaef7Fo9hjyO4gXO4TtnXVaIqZiuakDFcTwlHMMp5t7oo/qQGK4DGiiqrEKbNruo156wvpzrjBr8FA8G9EKlvI+EqC88Ty32UTVE8YjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bvc5HZM8z9+WRvNUROz2fsaP6vyZVdN9BcHM78cOacM=;
+ b=bXlouWvAk02B/ZxAjgcHDVpn8AGJDZjd8Wr942AT5XMQqYF507mwClpgM9zEfOCfmq6eGosrT1h5wIzpBwFJSZC7Pbkx30TJMo9h0QiszJbOx6pRu0NFBEobm5kPL+4jFjsx1YWhQ6XbZLNhyHt8swWIU71z42TsS8Toya39SrBPnUk1xCPyzibhrGNo9pTUfCXHyWkgicZVSGCq/p2Nt2JxCQvsJdXYVBthWfs+OS+QpO1w+PGdq0leXjzFV3Ay9DK36DKbitOYDO4AcaZs3+H2gWHEChRwmDMyOesHrJHB9DNeVAtq/qUe6PS8gTbM5YwnFA2XLxDYwOV4cMJ62A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ SJ0PR11MB5181.namprd11.prod.outlook.com (2603:10b6:a03:2de::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.14; Tue, 5 Mar
+ 2024 06:10:36 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::55f1:8d0:2fa1:c7af]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::55f1:8d0:2fa1:c7af%5]) with mapi id 15.20.7362.019; Tue, 5 Mar 2024
+ 06:10:36 +0000
+Date: Tue, 5 Mar 2024 13:40:42 +0800
+From: Yan Zhao <yan.y.zhao@intel.com>
+To: Binbin Wu <binbin.wu@linux.intel.com>
+CC: Sagi Shahar <sagis@google.com>, <linux-kselftest@vger.kernel.org>,
+	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
+	Erdem Aktas <erdemaktas@google.com>, Isaku Yamahata
+	<isaku.yamahata@intel.com>, Sean Christopherson <seanjc@google.com>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Peter Gonda
+	<pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>, Chao Peng
+	<chao.p.peng@linux.intel.com>, Vishal Annapurve <vannapurve@google.com>,
+	Roger Wang <runanwang@google.com>, Vipin Sharma <vipinsh@google.com>,
+	<jmattson@google.com>, <dmatlack@google.com>, <linux-kernel@vger.kernel.org>,
+	<kvm@vger.kernel.org>, <linux-mm@kvack.org>
+Subject: Re: [RFC PATCH v5 16/29] KVM: selftests: TDX: Add TDX HLT exit test
+Message-ID: <ZeawWs9cAhjLb/YO@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-17-sagis@google.com>
+ <1f9d2b41-95ad-42ca-b1e5-70212b93a9c1@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1f9d2b41-95ad-42ca-b1e5-70212b93a9c1@linux.intel.com>
+X-ClientProxiedBy: SI2P153CA0001.APCP153.PROD.OUTLOOK.COM (2603:1096:4:140::7)
+ To DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 28/29] KVM: selftests: TDX: Add TDX UPM selftest
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
- Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Gonda <pgonda@google.com>, Haibo Xu <haibo1.xu@intel.com>,
- Chao Peng <chao.p.peng@linux.intel.com>,
- Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>,
- Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
-References: <20231212204647.2170650-1-sagis@google.com>
- <20231212204647.2170650-29-sagis@google.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20231212204647.2170650-29-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|SJ0PR11MB5181:EE_
+X-MS-Office365-Filtering-Correlation-Id: def2243a-072a-4b3e-4ead-08dc3cdaf8f9
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SYWkb4rQEmXECL1SfjAXelbyvCbfhJU1mccP/4mV5+kSDOtaDNJNPemDFv39HVHsvpmVDn/5VFNDrfiIPgEHe0EpItz32DmFn2s1a3ZyT9zlzkzfuIY/VANEvCNCxN2EUmJYIS0HVgPiJ86HVGGLEDsHA1vuiJFbUeJZ9G1HDPjLnvHb5NdauRJiOf7ZHXGNJJMxpZbnhb4EbQM5k4MmhIEfjngwWL/MAPGB10z0c8kIxWuCTJRnc0xxugN9tIt6Rr34xuszqjUY5DzE/AFmL3IFXxfTR5/crWe5absdGZ4QyjzwC3W8uOV/oMVwvsDMC1wdjzdI2WcEE5sBtuB7mLuOwWlXto/FQP75TUHXmsxWhv/OFD8Fu2GZNDGAZDkOGmDJcxU4F7nHCW2tqQo2tpIiXpn00Sxg9vAqv2iPw8+hoor33k2G+Vj9+iuZhf3jAEflgWENwVIk3spsmtWhop2wy/1CN7MbyEZJ2cDwHwg5Ezxay052LYchg62YiIEAZA/dKQZaOKzzCUlpSLye1/oqwMLXaIxv/JoTZvc6sdnincsfv5YzCzz/A45vjkcuSTudcqt2mRoEsKSQZ9BUL6jSR52Q9B6xvzqfndz0aRw/AlAJ4eL8apzVf4QO7Q1j0dqUYQlzmFvedQcALjq3XeqIw1osDsm0oSi6TACNii0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hMAiYS88n6O4VC5EyVEBtZ0JYC/HBi/R85TjQCv+na18Fs7OtzUXpgZrFPUQ?=
+ =?us-ascii?Q?r/Seo9DvSIep9lJMaaPPbfsNOns4owGpWePbghLPSNq19wXd4lOXfUP+YYcP?=
+ =?us-ascii?Q?CXg+IQe5s/izBVomTYZw7BsyEDsQoBrYxV8xz2meCERPuqq7CDEizKBEeDxU?=
+ =?us-ascii?Q?al4ssKRpfc5gGaSzf/WVSq57OlNQdLQwxRa9e6YEwHMlWbsPuIra33rBTKjE?=
+ =?us-ascii?Q?0I0DjguqHPiud9OLLJ4dn4l2ksjgEx5PzJfI8sMkWJ1/6CTB0mJWmtKku9Em?=
+ =?us-ascii?Q?yCJ15IokDWCQRmOcOsr0i5cg04O9oGsePzu56mLdhFSObiLj4GPhM3W7MJIA?=
+ =?us-ascii?Q?ZoQUFqn/iiFghJ29JayLsHl9Al873/yYvae5m1GDx4ycNUybPlSB3jxdXuGI?=
+ =?us-ascii?Q?tvONygVl3ykO3y+Ylc4YtSK5DukZFltxi4TjroNBJPq7KfVEvEtT813PZ9zt?=
+ =?us-ascii?Q?KiuFHVxQj4eMsE+jTaqeABvUr1vHOuhJcO6mQRqsbD6X8gGJhJxVdlMxx7E8?=
+ =?us-ascii?Q?9CuzbofhCaxuAysSmHT8RSGOJJPzPVMh4Y0TxsmGK18nYTbC/WHRBWGhSddb?=
+ =?us-ascii?Q?k+Di10RpaumKzEdGJBFBSY6QS+FEDTeVhqYKcTuVFDJh2NHfmn56o/5xJsZi?=
+ =?us-ascii?Q?dV7wSamFxFIita9oarli4zPVfCdBU6AwpWdlBJNp+J2swpiihQS9Rxz3EN6m?=
+ =?us-ascii?Q?RoaHEeh6XBjgtMnRuSzFOvaC977gG0qz2IkpfTiBA2iDcrJOgmS2s+a/T0tw?=
+ =?us-ascii?Q?NrSa51cdjlVX5Hq+NlvvR1X6fS/zg/nJYFfDWSSWKFXs4nMzqj0cKHmznWjR?=
+ =?us-ascii?Q?bUj1KeWArn3buMd9uWN4qnlisDWaobEzZPrVSL963MFBUDD2d65hYXK3eoov?=
+ =?us-ascii?Q?JkrMYC5DYOmZsvFBuzGtcJMo3XPa5V7j+NA4wucQkqP2MjnWjKMSN6I1TDjg?=
+ =?us-ascii?Q?Lkq5s8Mp+UplFP1MU0xncjfcJrnrHLo+nc8jTcqQ5TvxBmDu8MJ+IuawBt2h?=
+ =?us-ascii?Q?YDZsp9fSc1A4W4yZdKFlbmSmxKv03wMDVW2oFsmypiR+MR7lCLs3RHokRYTH?=
+ =?us-ascii?Q?FqmDo7uix4cC8aok5Pm5ToRI7kOSoA9wTKA1IvndmqJWRyqpFAppGTUGUwbj?=
+ =?us-ascii?Q?PkNIxzDUKvZB8xo+jSsjf3RdVgNUHTZlQ9+tyyXe8TiDb6QbOY4BtsK1hz0c?=
+ =?us-ascii?Q?KrCGAyvcoA0Rd9xvNhYyDDsgMZUZSRJMt9GwvBdbbmTPDqGi0zERyb3YudTr?=
+ =?us-ascii?Q?PvrjhzlN8iPZxdlY6rduHN4Eb2ewDOTuDJ2Kgsz91gT8b9rihxr5ApHsy7Er?=
+ =?us-ascii?Q?iF9N6tAfa5TQsJgO+Z/YWKWsaGTLsom1qGz4KZjWIx3BPDE2MMb+7cAa9kX6?=
+ =?us-ascii?Q?HoPaFf4s3BKvZscQBwukpmgW/wIM3Rrnh7pCLlNe/qmzYwTrXAv3AW/ehuz5?=
+ =?us-ascii?Q?T9DoXVnHsLWOSHe8UE2G+VyHvpnYkdv/pMyr+zs0VYxV+ItpC3QSZgEAnHMm?=
+ =?us-ascii?Q?MvbIR/ZCHoJvaw3dMM6tXFA6Toqn2cwnLK7WuxIv21norvqy6DD1fnBJVZT1?=
+ =?us-ascii?Q?GoWxnhKLAcYZkqoQc9QXk/5IGErvQ+NYybVvISSz?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: def2243a-072a-4b3e-4ead-08dc3cdaf8f9
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2024 06:10:35.8844
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yewhIxjduZCRB+SYhhp1l1YQjF2j+BYQt/Zh5qlAXn5J/9WshpMNg6FITvOjARadsf6TTjIxSZaSl4DsOEHEEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5181
+X-OriginatorOrg: intel.com
 
-
-
-On 12/13/2023 4:46 AM, Sagi Shahar wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
+On Sat, Mar 02, 2024 at 03:31:07PM +0800, Binbin Wu wrote:
+> On 12/13/2023 4:46 AM, Sagi Shahar wrote:
+> > The test verifies that the guest runs TDVMCALL<INSTRUCTION.HLT> and the
+> > guest vCPU enters to the halted state.
+> > 
+> > Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+> > Signed-off-by: Sagi Shahar <sagis@google.com>
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > Signed-off-by: Ryan Afranji <afranji@google.com>
+> > ---
+> >   .../selftests/kvm/include/x86_64/tdx/tdx.h    |  2 +
+> >   .../selftests/kvm/lib/x86_64/tdx/tdx.c        | 10 +++
+> >   .../selftests/kvm/x86_64/tdx_vm_tests.c       | 78 +++++++++++++++++++
+> >   3 files changed, 90 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> > index 85ba6aab79a7..b18e39d20498 100644
+> > --- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> > +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> > @@ -8,6 +8,7 @@
+> >   #define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO 0x10000
+> >   #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+> > +#define TDG_VP_VMCALL_INSTRUCTION_HLT 12
+> >   #define TDG_VP_VMCALL_INSTRUCTION_IO 30
+> >   #define TDG_VP_VMCALL_INSTRUCTION_RDMSR 31
+> >   #define TDG_VP_VMCALL_INSTRUCTION_WRMSR 32
+> > @@ -20,5 +21,6 @@ uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t *r11, uint64_t *r12,
+> >   					uint64_t *r13, uint64_t *r14);
+> >   uint64_t tdg_vp_vmcall_instruction_rdmsr(uint64_t index, uint64_t *ret_value);
+> >   uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t value);
+> > +uint64_t tdg_vp_vmcall_instruction_hlt(uint64_t interrupt_blocked_flag);
+> >   #endif // SELFTEST_TDX_TDX_H
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> > index 88ea6f2a6469..9485bafedc38 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> > @@ -114,3 +114,13 @@ uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t value)
+> >   	return __tdx_hypercall(&args, 0);
+> >   }
+> > +
+> > +uint64_t tdg_vp_vmcall_instruction_hlt(uint64_t interrupt_blocked_flag)
+> > +{
+> > +	struct tdx_hypercall_args args = {
+> > +		.r11 = TDG_VP_VMCALL_INSTRUCTION_HLT,
+> > +		.r12 = interrupt_blocked_flag,
+> > +	};
+> > +
+> > +	return __tdx_hypercall(&args, 0);
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> > index 5db3701cc6d9..5fae4c6e5f95 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> > @@ -721,6 +721,83 @@ void verify_guest_msr_writes(void)
+> >   	printf("\t ... PASSED\n");
+> >   }
+> > +/*
+> > + * Verifies HLT functionality.
+> > + */
+> > +void guest_hlt(void)
+> > +{
+> > +	uint64_t ret;
+> > +	uint64_t interrupt_blocked_flag;
+> > +
+> > +	interrupt_blocked_flag = 0;
+> > +	ret = tdg_vp_vmcall_instruction_hlt(interrupt_blocked_flag);
+> > +	if (ret)
+> > +		tdx_test_fatal(ret);
+> > +
+> > +	tdx_test_success();
+> > +}
+> > +
+> > +void _verify_guest_hlt(int signum);
+> > +
+> > +void wake_me(int interval)
+> > +{
+> > +	struct sigaction action;
+> > +
+> > +	action.sa_handler = _verify_guest_hlt;
+> > +	sigemptyset(&action.sa_mask);
+> > +	action.sa_flags = 0;
+> > +
+> > +	TEST_ASSERT(sigaction(SIGALRM, &action, NULL) == 0,
+> > +		    "Could not set the alarm handler!");
+> > +
+> > +	alarm(interval);
+> > +}
+> > +
+> > +void _verify_guest_hlt(int signum)
+> > +{
+> > +	struct kvm_vm *vm;
+> > +	static struct kvm_vcpu *vcpu;
+> > +
+> > +	/*
+> > +	 * This function will also be called by SIGALRM handler to check the
+> > +	 * vCPU MP State. If vm has been initialized, then we are in the signal
+> > +	 * handler. Check the MP state and let the guest run again.
+> > +	 */
+> > +	if (vcpu != NULL) {
+> 
+> What if the following case if there is a bug in KVM so that:
+> 
+> In guest, execution of tdg_vp_vmcall_instruction_hlt() return 0, but the
+> vcpu is not actually halted. Then guest will call tdx_test_success().
+> 
+> And the first call of _verify_guest_hlt() will call kvm_vm_free(vm) to free
+> the vm, which also frees the vcpu, and 1 second later, in this path vcpu
+> will
+> be accessed after free.
 >
-> This tests the use of guest memory with explicit MapGPA calls.
->
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ryan Afranji <afranji@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> ---
->   tools/testing/selftests/kvm/Makefile          |   1 +
->   .../selftests/kvm/x86_64/tdx_upm_test.c       | 401 ++++++++++++++++++
->   2 files changed, 402 insertions(+)
->   create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
->
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 8c0a6b395ee5..2f2669af15d6 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -157,6 +157,7 @@ TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
->   TEST_GEN_PROGS_x86_64 += system_counter_offset_test
->   TEST_GEN_PROGS_x86_64 += x86_64/tdx_vm_tests
->   TEST_GEN_PROGS_x86_64 += x86_64/tdx_shared_mem_test
-> +TEST_GEN_PROGS_x86_64 += x86_64/tdx_upm_test
->   
->   # Compiled outputs used by test targets
->   TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
-> diff --git a/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c b/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
-> new file mode 100644
-> index 000000000000..44671874a4f1
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
-> @@ -0,0 +1,401 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <asm/kvm.h>
-> +#include <asm/vmx.h>
-> +#include <linux/kvm.h>
-> +#include <stdbool.h>
-> +#include <stdint.h>
-> +
-> +#include "kvm_util_base.h"
-> +#include "processor.h"
-> +#include "tdx/tdcall.h"
-> +#include "tdx/tdx.h"
-> +#include "tdx/tdx_util.h"
-> +#include "tdx/test_util.h"
-> +#include "test_util.h"
-> +
-> +/* TDX UPM test patterns */
-> +#define PATTERN_CONFIDENCE_CHECK (0x11)
-> +#define PATTERN_HOST_FOCUS (0x22)
-> +#define PATTERN_GUEST_GENERAL (0x33)
-> +#define PATTERN_GUEST_FOCUS (0x44)
-> +
-> +/*
-> + * 0x80000000 is arbitrarily selected. The selected address need not be the same
-> + * as TDX_UPM_TEST_AREA_GVA_PRIVATE, but it should not overlap with selftest
-> + * code or boot page.
-> + */
-> +#define TDX_UPM_TEST_AREA_GPA (0x80000000)
-> +/* Test area GPA is arbitrarily selected */
-> +#define TDX_UPM_TEST_AREA_GVA_PRIVATE (0x90000000)
-> +/* Select any bit that can be used as a flag */
-> +#define TDX_UPM_TEST_AREA_GVA_SHARED_BIT (32)
-> +/*
-> + * TDX_UPM_TEST_AREA_GVA_SHARED is used to map the same GPA twice into the
-> + * guest, once as shared and once as private
-> + */
-> +#define TDX_UPM_TEST_AREA_GVA_SHARED				\
-> +	(TDX_UPM_TEST_AREA_GVA_PRIVATE |			\
-> +		BIT_ULL(TDX_UPM_TEST_AREA_GVA_SHARED_BIT))
-> +
-> +/* The test area is 2MB in size */
-> +#define TDX_UPM_TEST_AREA_SIZE (2 << 20)
-> +/* 0th general area is 1MB in size */
-> +#define TDX_UPM_GENERAL_AREA_0_SIZE (1 << 20)
-> +/* Focus area is 40KB in size */
-> +#define TDX_UPM_FOCUS_AREA_SIZE (40 << 10)
-> +/* 1st general area is the rest of the space in the test area */
-> +#define TDX_UPM_GENERAL_AREA_1_SIZE				\
-> +	(TDX_UPM_TEST_AREA_SIZE - TDX_UPM_GENERAL_AREA_0_SIZE -	\
-> +		TDX_UPM_FOCUS_AREA_SIZE)
-> +
-> +/*
-> + * The test memory area is set up as two general areas, sandwiching a focus
-> + * area.  The general areas act as control areas. After they are filled, they
-> + * are not expected to change throughout the tests. The focus area is memory
-> + * permissions change from private to shared and vice-versa.
-> + *
-> + * The focus area is intentionally small, and sandwiched to test that when the
-> + * focus area's permissions change, the other areas' permissions are not
-> + * affected.
-> + */
-> +struct __packed tdx_upm_test_area {
-> +	uint8_t general_area_0[TDX_UPM_GENERAL_AREA_0_SIZE];
-> +	uint8_t focus_area[TDX_UPM_FOCUS_AREA_SIZE];
-> +	uint8_t general_area_1[TDX_UPM_GENERAL_AREA_1_SIZE];
-> +};
-> +
-> +static void fill_test_area(struct tdx_upm_test_area *test_area_base,
-> +			uint8_t pattern)
-> +{
-> +	memset(test_area_base, pattern, sizeof(*test_area_base));
-> +}
-> +
-> +static void fill_focus_area(struct tdx_upm_test_area *test_area_base,
-> +			    uint8_t pattern)
-> +{
-> +	memset(test_area_base->focus_area, pattern,
-> +	       sizeof(test_area_base->focus_area));
-> +}
-> +
-> +static bool check_area(uint8_t *base, uint64_t size, uint8_t expected_pattern)
-> +{
-> +	size_t i;
-> +
-> +	for (i = 0; i < size; i++) {
-> +		if (base[i] != expected_pattern)
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +static bool check_general_areas(struct tdx_upm_test_area *test_area_base,
-> +				uint8_t expected_pattern)
-> +{
-> +	return (check_area(test_area_base->general_area_0,
-> +			   sizeof(test_area_base->general_area_0),
-> +			   expected_pattern) &&
-> +		check_area(test_area_base->general_area_1,
-> +			   sizeof(test_area_base->general_area_1),
-> +			   expected_pattern));
-> +}
-> +
-> +static bool check_focus_area(struct tdx_upm_test_area *test_area_base,
-> +			     uint8_t expected_pattern)
-> +{
-> +	return check_area(test_area_base->focus_area,
-> +			  sizeof(test_area_base->focus_area), expected_pattern);
-> +}
-> +
-> +static bool check_test_area(struct tdx_upm_test_area *test_area_base,
-> +			    uint8_t expected_pattern)
-> +{
-> +	return (check_general_areas(test_area_base, expected_pattern) &&
-> +		check_focus_area(test_area_base, expected_pattern));
-> +}
-> +
-> +static bool fill_and_check(struct tdx_upm_test_area *test_area_base, uint8_t pattern)
-> +{
-> +	fill_test_area(test_area_base, pattern);
-> +
-> +	return check_test_area(test_area_base, pattern);
-> +}
-> +
-> +#define TDX_UPM_TEST_ASSERT(x)				\
-> +	do {						\
-> +		if (!(x))				\
-> +			tdx_test_fatal(__LINE__);	\
-> +	} while (0)
-> +
-> +/*
-> + * Shared variables between guest and host
-> + */
-> +static struct tdx_upm_test_area *test_area_gpa_private;
-> +static struct tdx_upm_test_area *test_area_gpa_shared;
-> +
-> +/*
-> + * Test stages for syncing with host
-> + */
-> +enum {
-> +	SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST = 1,
-> +	SYNC_CHECK_READ_SHARED_MEMORY_FROM_HOST,
-> +	SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST_AGAIN,
-> +};
-> +
-> +#define TDX_UPM_TEST_ACCEPT_PRINT_PORT 0x87
-> +
-> +/**
-> + * Does vcpu_run, and also manages memory conversions if requested by the TD.
-> + */
-> +void vcpu_run_and_manage_memory_conversions(struct kvm_vm *vm,
-> +					    struct kvm_vcpu *vcpu)
-> +{
-> +	for (;;) {
-> +		vcpu_run(vcpu);
-> +		if (vcpu->run->exit_reason == KVM_EXIT_TDX &&
-> +			vcpu->run->tdx.type == KVM_EXIT_TDX_VMCALL &&
-> +			vcpu->run->tdx.u.vmcall.subfunction == TDG_VP_VMCALL_MAP_GPA) {
-> +			struct kvm_tdx_vmcall *vmcall_info = &vcpu->run->tdx.u.vmcall;
-> +			uint64_t gpa = vmcall_info->in_r12 & ~vm->arch.s_bit;
-> +
-> +			handle_memory_conversion(vm, gpa, vmcall_info->in_r13,
-> +				!(vm->arch.s_bit & vmcall_info->in_r12));
-> +			vmcall_info->status_code = 0;
-> +			continue;
-> +		} else if (
-> +			vcpu->run->exit_reason == KVM_EXIT_IO &&
-> +			vcpu->run->io.port == TDX_UPM_TEST_ACCEPT_PRINT_PORT) {
-> +			uint64_t gpa = tdx_test_read_64bit(
-> +				vcpu, TDX_UPM_TEST_ACCEPT_PRINT_PORT);
-> +			printf("\t ... guest accepting 1 page at GPA: 0x%lx\n", gpa);
-> +			continue;
-> +		}
-> +
-> +		break;
-> +	}
-> +}
-> +
-> +static void guest_upm_explicit(void)
-> +{
-> +	uint64_t ret = 0;
-> +	uint64_t failed_gpa;
-> +
-> +	struct tdx_upm_test_area *test_area_gva_private =
-> +		(struct tdx_upm_test_area *)TDX_UPM_TEST_AREA_GVA_PRIVATE;
-> +	struct tdx_upm_test_area *test_area_gva_shared =
-> +		(struct tdx_upm_test_area *)TDX_UPM_TEST_AREA_GVA_SHARED;
-> +
-> +	/* Check: host reading private memory does not modify guest's view */
-> +	fill_test_area(test_area_gva_private, PATTERN_GUEST_GENERAL);
-> +
-> +	tdx_test_report_to_user_space(SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST);
-> +
-> +	TDX_UPM_TEST_ASSERT(
-> +		check_test_area(test_area_gva_private, PATTERN_GUEST_GENERAL));
-> +
-> +	/* Remap focus area as shared */
-> +	ret = tdg_vp_vmcall_map_gpa((uint64_t)test_area_gpa_shared->focus_area,
-> +				    sizeof(test_area_gpa_shared->focus_area),
-> +				    &failed_gpa);
-> +	TDX_UPM_TEST_ASSERT(!ret);
-> +
-> +	/* General areas should be unaffected by remapping */
-> +	TDX_UPM_TEST_ASSERT(
-> +		check_general_areas(test_area_gva_private, PATTERN_GUEST_GENERAL));
-> +
-> +	/*
-> +	 * Use memory contents to confirm that the memory allocated using mmap
-> +	 * is used as backing memory for shared memory - PATTERN_CONFIDENCE_CHECK
-> +	 * was written by the VMM at the beginning of this test.
-> +	 */
-> +	TDX_UPM_TEST_ASSERT(
-> +		check_focus_area(test_area_gva_shared, PATTERN_CONFIDENCE_CHECK));
-> +
-> +	/* Guest can use focus area after remapping as shared */
-> +	fill_focus_area(test_area_gva_shared, PATTERN_GUEST_FOCUS);
-> +
-> +	tdx_test_report_to_user_space(SYNC_CHECK_READ_SHARED_MEMORY_FROM_HOST);
-> +
-> +	/* Check that guest has the same view of shared memory */
-> +	TDX_UPM_TEST_ASSERT(
-> +		check_focus_area(test_area_gva_shared, PATTERN_HOST_FOCUS));
-> +
-> +	/* Remap focus area back to private */
-> +	ret = tdg_vp_vmcall_map_gpa((uint64_t)test_area_gpa_private->focus_area,
-> +				    sizeof(test_area_gpa_private->focus_area),
-> +				    &failed_gpa);
-> +	TDX_UPM_TEST_ASSERT(!ret);
-> +
-> +	/* General areas should be unaffected by remapping */
-> +	TDX_UPM_TEST_ASSERT(
-> +		check_general_areas(test_area_gva_private, PATTERN_GUEST_GENERAL));
-> +
-> +	/* Focus area should be zeroed after remapping */
-> +	TDX_UPM_TEST_ASSERT(check_focus_area(test_area_gva_private, 0));
-> +
-> +	tdx_test_report_to_user_space(SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST_AGAIN);
-> +
-> +	/* Check that guest can use private memory after focus area is remapped as private */
-> +	TDX_UPM_TEST_ASSERT(
-> +		fill_and_check(test_area_gva_private, PATTERN_GUEST_GENERAL));
-> +
-> +	tdx_test_success();
-> +}
-> +
-> +static void run_selftest(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
-> +			 struct tdx_upm_test_area *test_area_base_hva)
-> +{
-> +	vcpu_run(vcpu);
-> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+Right. Another possibility is that if buggy KVM returns success to guest
+without putting guest to halted state, the selftest will still print
+"PASSED" because the second _verify_guest_hlt() (after waiting for 1s)
+has no chance to get executed before the process exits.
 
-This check seems to be a vain.
-
-> +	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, TDX_TEST_REPORT_SIZE,
-> +		 TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-> +	TEST_ASSERT_EQ(*(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset),
-> +		  SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST);
-> +
-> +	/*
-> +	 * Check that host should read PATTERN_CONFIDENCE_CHECK from guest's
-> +	 * private memory.
-
-I think this description is confusing.
-It's not actually accessing guest's private memory.
-
-
->   This confirms that regular memory (userspace_addr in
-> +	 * struct kvm_userspace_memory_region) is used to back the host's view
-> +	 * of private memory, since PATTERN_CONFIDENCE_CHECK was written to that
-> +	 * memory before starting the guest.
-> +	 */
-> +	TEST_ASSERT(check_test_area(test_area_base_hva, PATTERN_CONFIDENCE_CHECK),
-> +		"Host should read PATTERN_CONFIDENCE_CHECK from guest's private memory.");
-> +
-> +	vcpu_run_and_manage_memory_conversions(vm, vcpu);
-> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-> +	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, TDX_TEST_REPORT_SIZE,
-> +		 TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-> +	TEST_ASSERT_EQ(*(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset),
-> +		  SYNC_CHECK_READ_SHARED_MEMORY_FROM_HOST);
-> +
-> +	TEST_ASSERT(check_focus_area(test_area_base_hva, PATTERN_GUEST_FOCUS),
-> +		"Host should have the same view of shared memory as guest.");
-> +	TEST_ASSERT(check_general_areas(test_area_base_hva, PATTERN_CONFIDENCE_CHECK),
-> +		"Host's view of private memory should still be backed by regular memory.");
-> +
-> +	/* Check that host can use shared memory */
-> +	fill_focus_area(test_area_base_hva, PATTERN_HOST_FOCUS);
-> +	TEST_ASSERT(check_focus_area(test_area_base_hva, PATTERN_HOST_FOCUS),
-> +		    "Host should be able to use shared memory.");
-> +
-> +	vcpu_run_and_manage_memory_conversions(vm, vcpu);
-> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-> +	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, TDX_TEST_REPORT_SIZE,
-> +		 TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-> +	TEST_ASSERT_EQ(*(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset),
-> +		  SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST_AGAIN);
-> +
-> +	TEST_ASSERT(check_general_areas(test_area_base_hva, PATTERN_CONFIDENCE_CHECK),
-> +		"Host's view of private memory should be backed by regular memory.");
-> +	TEST_ASSERT(check_focus_area(test_area_base_hva, PATTERN_HOST_FOCUS),
-> +		"Host's view of private memory should be backed by regular memory.");
-> +
-> +	vcpu_run(vcpu);
-> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-> +	TDX_TEST_ASSERT_SUCCESS(vcpu);
-> +
-> +	printf("\t ... PASSED\n");
-> +}
-> +
-> +static bool address_between(uint64_t addr, void *lo, void *hi)
-> +{
-> +	return (uint64_t)lo <= addr && addr < (uint64_t)hi;
-> +}
-> +
-> +static void guest_ve_handler(struct ex_regs *regs)
-> +{
-> +	uint64_t ret;
-> +	struct ve_info ve;
-> +
-> +	ret = tdg_vp_veinfo_get(&ve);
-> +	TDX_UPM_TEST_ASSERT(!ret);
-> +
-> +	/* For this test, we will only handle EXIT_REASON_EPT_VIOLATION */
-> +	TDX_UPM_TEST_ASSERT(ve.exit_reason == EXIT_REASON_EPT_VIOLATION);
-> +
-> +	/* Validate GPA in fault */
-> +	TDX_UPM_TEST_ASSERT(
-> +		address_between(ve.gpa,
-> +				test_area_gpa_private->focus_area,
-> +				test_area_gpa_private->general_area_1));
-> +
-> +	tdx_test_send_64bit(TDX_UPM_TEST_ACCEPT_PRINT_PORT, ve.gpa);
-> +
-> +#define MEM_PAGE_ACCEPT_LEVEL_4K 0
-> +#define MEM_PAGE_ACCEPT_LEVEL_2M 1
-> +	ret = tdg_mem_page_accept(ve.gpa, MEM_PAGE_ACCEPT_LEVEL_4K);
-> +	TDX_UPM_TEST_ASSERT(!ret);
-> +}
-> +
-> +static void verify_upm_test(void)
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	vm_vaddr_t test_area_gva_private;
-> +	struct tdx_upm_test_area *test_area_base_hva;
-> +	uint64_t test_area_npages;
-> +
-> +	vm = td_create();
-> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-> +	vcpu = td_vcpu_add(vm, 0, guest_upm_explicit);
-> +
-> +	vm_install_exception_handler(vm, VE_VECTOR, guest_ve_handler);
-> +
-> +	/*
-> +	 * Set up shared memory page for testing by first allocating as private
-> +	 * and then mapping the same GPA again as shared. This way, the TD does
-> +	 * not have to remap its page tables at runtime.
-> +	 */
-> +	test_area_npages = TDX_UPM_TEST_AREA_SIZE / vm->page_size;
-> +	vm_userspace_mem_region_add(vm,
-> +				    VM_MEM_SRC_ANONYMOUS, TDX_UPM_TEST_AREA_GPA,
-> +				    3, test_area_npages, KVM_MEM_PRIVATE);
-> +
-> +	test_area_gva_private = ____vm_vaddr_alloc(
-> +		vm, TDX_UPM_TEST_AREA_SIZE, TDX_UPM_TEST_AREA_GVA_PRIVATE,
-> +		TDX_UPM_TEST_AREA_GPA, 3, true);
-> +	TEST_ASSERT_EQ(test_area_gva_private, TDX_UPM_TEST_AREA_GVA_PRIVATE);
-> +
-> +	test_area_gpa_private = (struct tdx_upm_test_area *)
-> +		addr_gva2gpa(vm, test_area_gva_private);
-> +	virt_map_shared(vm, TDX_UPM_TEST_AREA_GVA_SHARED,
-> +			(uint64_t)test_area_gpa_private,
-> +			test_area_npages);
-> +	TEST_ASSERT_EQ(addr_gva2gpa(vm, TDX_UPM_TEST_AREA_GVA_SHARED),
-> +		  (vm_paddr_t)test_area_gpa_private);
-> +
-> +	test_area_base_hva = addr_gva2hva(vm, TDX_UPM_TEST_AREA_GVA_PRIVATE);
-> +
-> +	TEST_ASSERT(fill_and_check(test_area_base_hva, PATTERN_CONFIDENCE_CHECK),
-> +		"Failed to mark memory intended as backing memory for TD shared memory");
-> +
-> +	sync_global_to_guest(vm, test_area_gpa_private);
-> +	test_area_gpa_shared = (struct tdx_upm_test_area *)
-> +		((uint64_t)test_area_gpa_private | BIT_ULL(vm->pa_bits - 1));
-> +	sync_global_to_guest(vm, test_area_gpa_shared);
-> +
-> +	td_finalize(vm);
-> +
-> +	printf("Verifying UPM functionality: explicit MapGPA\n");
-> +
-> +	run_selftest(vm, vcpu, test_area_base_hva);
-> +
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	/* Disable stdout buffering */
-> +	setbuf(stdout, NULL);
-> +
-> +	if (!is_tdx_enabled()) {
-> +		printf("TDX is not supported by the KVM\n"
-> +		       "Skipping the TDX tests.\n");
-> +		return 0;
-> +	}
-> +
-> +	run_in_new_process(&verify_upm_test);
-> +}
-
+> > +		struct kvm_mp_state mp_state;
+> > +
+> > +		vcpu_mp_state_get(vcpu, &mp_state);
+> > +		TEST_ASSERT_EQ(mp_state.mp_state, KVM_MP_STATE_HALTED);
+> > +
+> > +		/* Let the guest to run and finish the test.*/
+> > +		mp_state.mp_state = KVM_MP_STATE_RUNNABLE;
+> > +		vcpu_mp_state_set(vcpu, &mp_state);
+> > +		return;
+> > +	}
+> > +
+> > +	vm = td_create();
+> > +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+> > +	vcpu = td_vcpu_add(vm, 0, guest_hlt);
+> > +	td_finalize(vm);
+> > +
+> > +	printf("Verifying HLT:\n");
+> > +
+> > +	printf("\t ... Running guest\n");
+> > +
+> > +	/* Wait 1 second for guest to execute HLT */
+> > +	wake_me(1);
+> > +	td_vcpu_run(vcpu);
+> > +
+> > +	TDX_TEST_ASSERT_SUCCESS(vcpu);
+> > +
+> > +	kvm_vm_free(vm);
+> > +	printf("\t ... PASSED\n");
+> > +}
+> > +
+> > +void verify_guest_hlt(void)
+> > +{
+> > +	_verify_guest_hlt(0);
+> > +}
+> >   int main(int argc, char **argv)
+> >   {
+> > @@ -740,6 +817,7 @@ int main(int argc, char **argv)
+> >   	run_in_new_process(&verify_guest_reads);
+> >   	run_in_new_process(&verify_guest_msr_writes);
+> >   	run_in_new_process(&verify_guest_msr_reads);
+> > +	run_in_new_process(&verify_guest_hlt);
+> >   	return 0;
+> >   }
+> 
+> 
 
