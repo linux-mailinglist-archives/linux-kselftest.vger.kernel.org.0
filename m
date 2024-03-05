@@ -1,87 +1,194 @@
-Return-Path: <linux-kselftest+bounces-5938-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5939-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F80987263D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 19:06:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B86BF8726AF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 19:38:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF4AC28831E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 18:06:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCA1A1C22EB3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 18:38:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 126A817BCF;
-	Tue,  5 Mar 2024 18:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E34E118639;
+	Tue,  5 Mar 2024 18:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JqjS3WUm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O5IaiDTh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C5B18C36;
-	Tue,  5 Mar 2024 18:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F771BC26;
+	Tue,  5 Mar 2024 18:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709662002; cv=none; b=UIFyC5j40f3d1psTnr9a5Sdv/4WeZa8Sh0fD4C1nxa0XeMI06FKMzbZ7OvS1zi7QCuxjNcYAwiWS9iTmBMg5wNyUyQBWVebdBhNerZlLscGRkc2ptQmldw3FEk7YBDFA551IPVmruVEFB0UZ6E++0dADRnr2xT6N4IqF2UzWyVE=
+	t=1709663895; cv=none; b=Mb1coxc3JZzE+XjE2BYwVswDssi/c8u3eqjrEQmjQof9V5M5elaHky4XqrSCpQizH5fY5O1RswEJbuNbur8CuT+jp/Ias52VcNOjQVgDyRanex/Som43AtAI7VJ4pSUJOBBiGvydroK9Q7wf+3mc+bRxeW2NpWoKvgvPiudz1kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709662002; c=relaxed/simple;
-	bh=eB5Eb7Q3N9lX4JEVIO23Ppah4P9/QNE627ZDXVi0+XY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QaUxx1JSLBzT9H/q3gF5HGtGdf9WH2ihHm6h4Ci+rmbQaIquExxbjgoNIf04On4eu4gstomSDgVzYe5jJuJm0udKzvcEZ5qHLszy9ikXEbzRaVNrC3iFoaEUleOQFRdHsw0lPWjbboC9AAIDqqW1SNb+KyNlUGzCKwJX0omKLDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JqjS3WUm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0465C433C7;
-	Tue,  5 Mar 2024 18:06:40 +0000 (UTC)
+	s=arc-20240116; t=1709663895; c=relaxed/simple;
+	bh=jpAm1zYYQsLEehQYoa1ojXYdsiZS6ytxodAFhX2P7Vg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HUSSM954r+lqtnaiQw2/NlvrL91q8wLBEUU/ULsDZ2tpa3iYKureJZkp5irR+CBJFWkIVhg5NRPGifJEVR3Fz+M5sMGdcknzVF1ZuRNCKxUVm2RCs/L/pZtDYG1ZR4kDKY3GOGjD5yq4Ig2OYfv3nniv+37180GK+zGPuc0fpLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O5IaiDTh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1AAC433C7;
+	Tue,  5 Mar 2024 18:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709662001;
-	bh=eB5Eb7Q3N9lX4JEVIO23Ppah4P9/QNE627ZDXVi0+XY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JqjS3WUm7GikRVtckKDdUPG+Rm9/j09YCPbybc7JMp6FM/XRLUgwJMuPveP1Ku24m
-	 2gHefV7Ak72RynftzhUJ7qS5Bvg3UlQ5/Lg3+lMMlTn3AYxKvWmAROTP+lhtzriMxm
-	 t/94GNKuXknVgRzamQ1tkqggMPBTb9UzLu5NDoOp7xRGA3FLNmtr+l+F+O6XggKLM1
-	 jQHkrjLZuRoeGMIXR2GWuZ79+4ia9Z74EEXMMmfurHdc8IOr/UC8QysmO4qfFJglaz
-	 oh6iPgesdlHyHJIcWGaOle4AUxDWIygXkFU4lDEMbgSvXEBcHPoHNdyTe6FnuWkaGN
-	 BfKK12Wse/AhQ==
-Date: Tue, 5 Mar 2024 10:06:39 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc: Kees Cook <keescook@chromium.org>, Mark Brown <broonie@kernel.org>,
- davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-security-module@vger.kernel.org, jakub@cloudflare.com
-Subject: Re: [PATCH v4 00/12] selftests: kselftest_harness: support using
- xfail
-Message-ID: <20240305100639.6b040762@kernel.org>
-In-Reply-To: <20240305.phohPh8saa4i@digikod.net>
-References: <20240229005920.2407409-1-kuba@kernel.org>
-	<05f7bf89-04a5-4b65-bf59-c19456aeb1f0@sirena.org.uk>
-	<20240304150411.6a9bd50b@kernel.org>
-	<202403041512.402C08D@keescook>
-	<20240304153902.30cd2edd@kernel.org>
-	<202403050141.C8B1317C9@keescook>
-	<20240305.phohPh8saa4i@digikod.net>
+	s=k20201202; t=1709663895;
+	bh=jpAm1zYYQsLEehQYoa1ojXYdsiZS6ytxodAFhX2P7Vg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=O5IaiDThotBkXPvaVZJNGJwNzbX4phN9vU+0m3EZVajRn5ZUSBJrvWPFFQTjUm5Ke
+	 566mBpxxMHEREV4gBHQm4f6Wqnpi8Onb5tzB2+pUYAUCIMnkxm0WJSk79Oa71u1OzK
+	 Rx6jfA1DOOKgzAoLC5sPUcNhTkrlnY8r3GWQQ96xUtWCV+qFr2lTN1jCLOcPEu0y/a
+	 YCO7MydRi18XWiaURiAXeHuLhu2d7FizVE30i5SkIfgkuPkNHk3sm2N1QUXFSQ2jFQ
+	 nChN/bzWLxp0zRjIqkJ/56PorfYXne8N49eCoieqsfG3PNR4qxkh12VmaXJGV8m6ED
+	 lgxxTUfYaI3NA==
+From: Conor Dooley <conor@kernel.org>
+To: linux-riscv@lists.infradead.org
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	linux-kernel@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	wireguard@lists.zx2c4.com,
+	netdev@vger.kernel.org
+Subject: [PATCH v1 2/2] RISC-V: drop SOC_VIRT for ARCH_VIRT
+Date: Tue,  5 Mar 2024 18:37:06 +0000
+Message-ID: <20240305-stress-earflap-d7ddb8655a4d@spud>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240305-praying-clad-c4fbcaa7ed0a@spud>
+References: <20240305-praying-clad-c4fbcaa7ed0a@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4198; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=SLlSaZ+G4FwHZPlvuZ1ianZDFUhekawPuNsTN8M0NIc=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKnP04KKXSUf5cTo/6v+/e+ixs77UTo717P2my9J05y0o ff93ktJHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZhIdjQjw17OXRd2OTK6nl2i oPE4fl7zvb07y+3+Mkq3Jb6SbTqiPYfhv/fam6sPncvMsT5fPeny3KrCV9/+2Z4S2aem9zfoFdd xMX4A
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-On Tue, 5 Mar 2024 17:05:51 +0100 Micka=C3=ABl Sala=C3=BCn wrote:
-> > I think we have to -- other CIs are now showing the most of seccomp
-> > failing now. (And I can confirm this now -- I had only tested seccomp
-> > on earlier versions of the series.) =20
->=20
-> Sorry for the trouble, I found and fixed the vfork issues.  I tested
-> with seccomp and Landlock.  You can find a dedicated branch here (with
-> some Reviewed-by and Acked-by removed because of the changes):
-> https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/log/?h=3Dks=
-elftest-xfail-fix
->=20
-> Jakub, please send a v5 series with this updated patch and your
-> exit/_exit fixes.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-DaveM merged this already, unfortunately. Could send your changes
-as incremental fixes on top of net-next?
+The ARCH_ and SOC_ versions of this symbol have persisted for quite a
+while now in parallel. Generated .config files from previous LTS kernels
+should have both. Finally remove SOC_VIRT and update all config files
+using it.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+I had a 1.5 year old ack from Jason that I dropped due to the passage of
+time.
+
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Albert Ou <aou@eecs.berkeley.edu>
+CC: Brendan Higgins <brendan.higgins@linux.dev>
+CC: David Gow <davidgow@google.com>
+CC: Rae Moar <rmoar@google.com>
+CC: "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC: Shuah Khan <shuah@kernel.org>
+CC: linux-riscv@lists.infradead.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-kselftest@vger.kernel.org
+CC: kunit-dev@googlegroups.com
+CC: wireguard@lists.zx2c4.com
+CC: netdev@vger.kernel.org
+---
+ arch/riscv/Kconfig.socs                                    | 3 ---
+ arch/riscv/configs/defconfig                               | 2 +-
+ arch/riscv/configs/nommu_virt_defconfig                    | 2 +-
+ tools/testing/kunit/qemu_configs/riscv.py                  | 2 +-
+ tools/testing/selftests/wireguard/qemu/arch/riscv32.config | 2 +-
+ tools/testing/selftests/wireguard/qemu/arch/riscv64.config | 2 +-
+ 6 files changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index e85ffb63c48d..dcbfb659839c 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -52,9 +52,6 @@ config ARCH_THEAD
+ 	  This enables support for the RISC-V based T-HEAD SoCs.
+ 
+ config ARCH_VIRT
+-	def_bool SOC_VIRT
+-
+-config SOC_VIRT
+ 	bool "QEMU Virt Machine"
+ 	select CLINT_TIMER if RISCV_M_MODE
+ 	select POWER_RESET
+diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+index ab3bab313d56..8d46a9137b1e 100644
+--- a/arch/riscv/configs/defconfig
++++ b/arch/riscv/configs/defconfig
+@@ -32,7 +32,7 @@ CONFIG_ARCH_SOPHGO=y
+ CONFIG_SOC_STARFIVE=y
+ CONFIG_ARCH_SUNXI=y
+ CONFIG_ARCH_THEAD=y
+-CONFIG_SOC_VIRT=y
++CONFIG_ARCH_VIRT=y
+ CONFIG_SMP=y
+ CONFIG_HOTPLUG_CPU=y
+ CONFIG_PM=y
+diff --git a/arch/riscv/configs/nommu_virt_defconfig b/arch/riscv/configs/nommu_virt_defconfig
+index b794e2f8144e..de8143d1f738 100644
+--- a/arch/riscv/configs/nommu_virt_defconfig
++++ b/arch/riscv/configs/nommu_virt_defconfig
+@@ -24,7 +24,7 @@ CONFIG_EXPERT=y
+ CONFIG_SLUB=y
+ CONFIG_SLUB_TINY=y
+ # CONFIG_MMU is not set
+-CONFIG_SOC_VIRT=y
++CONFIG_ARCH_VIRT=y
+ CONFIG_NONPORTABLE=y
+ CONFIG_SMP=y
+ CONFIG_CMDLINE="root=/dev/vda rw earlycon=uart8250,mmio,0x10000000,115200n8 console=ttyS0"
+diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+index 12a1d525978a..c87758030ff7 100644
+--- a/tools/testing/kunit/qemu_configs/riscv.py
++++ b/tools/testing/kunit/qemu_configs/riscv.py
+@@ -13,7 +13,7 @@ if not os.path.isfile(OPENSBI_PATH):
+ 
+ QEMU_ARCH = QemuArchParams(linux_arch='riscv',
+ 			   kconfig='''
+-CONFIG_SOC_VIRT=y
++CONFIG_ARCH_VIRT=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_SERIAL_OF_PLATFORM=y
+diff --git a/tools/testing/selftests/wireguard/qemu/arch/riscv32.config b/tools/testing/selftests/wireguard/qemu/arch/riscv32.config
+index 2fc36efb166d..2500eaa9b469 100644
+--- a/tools/testing/selftests/wireguard/qemu/arch/riscv32.config
++++ b/tools/testing/selftests/wireguard/qemu/arch/riscv32.config
+@@ -2,7 +2,7 @@ CONFIG_NONPORTABLE=y
+ CONFIG_ARCH_RV32I=y
+ CONFIG_MMU=y
+ CONFIG_FPU=y
+-CONFIG_SOC_VIRT=y
++CONFIG_ARCH_VIRT=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_SERIAL_OF_PLATFORM=y
+diff --git a/tools/testing/selftests/wireguard/qemu/arch/riscv64.config b/tools/testing/selftests/wireguard/qemu/arch/riscv64.config
+index dc266f3b1915..29a67ac67766 100644
+--- a/tools/testing/selftests/wireguard/qemu/arch/riscv64.config
++++ b/tools/testing/selftests/wireguard/qemu/arch/riscv64.config
+@@ -1,7 +1,7 @@
+ CONFIG_ARCH_RV64I=y
+ CONFIG_MMU=y
+ CONFIG_FPU=y
+-CONFIG_SOC_VIRT=y
++CONFIG_ARCH_VIRT=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_SERIAL_OF_PLATFORM=y
+-- 
+2.43.0
+
 
