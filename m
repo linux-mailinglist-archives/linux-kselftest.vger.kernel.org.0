@@ -1,175 +1,108 @@
-Return-Path: <linux-kselftest+bounces-5926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E32A087215A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 15:20:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB40B8722DB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 16:32:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A3491F21F1A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 14:20:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 606F4283626
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 15:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F6486626;
-	Tue,  5 Mar 2024 14:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 241991272D6;
+	Tue,  5 Mar 2024 15:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="oiujlpEd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UqD4YlfY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE2685927;
-	Tue,  5 Mar 2024 14:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8501126F1F;
+	Tue,  5 Mar 2024 15:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709648406; cv=none; b=AdHPU/r50gThCnofM/5Wvk9eYrXkNgiGpnqrs6StKQEieXqVfHCRPZklsUJ4AgB031jc8XDrRstt2cp3Wkz2upL9eR+EsYeikCc55mBogfasH1l6Xg90Q3fWOf5vqfUgCueHkGHDJzTfDqFVmZsw3PGiEu6YOZHh/J1bBMIixKc=
+	t=1709652771; cv=none; b=n81aPxEOKqyUCrBiufYf/xhYCju44L8/3pGTth28gcdAqxdyoiid+BZmomf+XDQXevO0F0HMth0w09HT6eD2ntHJACQKtUE5Ywwu3pTeZS9SU+9wkY8BL7NduLn2ak4AsEvzoqRdL0c2544MbJuo/V6vPdQzMvH3uhrZOqx0t6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709648406; c=relaxed/simple;
-	bh=LjkGagwDQUYxBS8Ly5tIPDH+f57B7v3rXKFuRJpeBTM=;
-	h=Message-ID:Date:MIME-Version:Cc:To:From:Subject:Content-Type; b=gq+4EbSaX17LP87/bgUDxZV2bPsW2K2YZPtM+jKhao6Q06SeWFVFahELV2G72xk7i5SaxAXFC/T+LSy6oI+/4Seuv0XXQTDafUGQaRmJrAZlVI6lRkAioK4Nf31R4TPqHb3xCxmUX/SBr/se04SsDX7pktNgtgtQwL9wAfYpBqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=oiujlpEd; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709648403;
-	bh=LjkGagwDQUYxBS8Ly5tIPDH+f57B7v3rXKFuRJpeBTM=;
-	h=Date:Cc:To:From:Subject:From;
-	b=oiujlpEdKyN7b7vY1xSeM3scqEksLwiy67ChQxVTN5fiGKHkWz1LE+6h63aCcDHSH
-	 Tc8Z0aCzyxyqSIe3hxuaATKJmMv/vExKML8VdOO65FNUgmVP/oKAlYjaPph1MQrzy0
-	 2Wa/m7pQKdMPjlcpmuQ0MBOwbrs5361IQvXvusQ+DUsplqUZWDAALxBi7GH/aKbdf8
-	 bbLqPe+4WUJ2NJUfhorq1dyl2ZqU+HwjVbJr+A5wU+sneQag+SRpfp33jcFmVUp309
-	 x0MguzNvlG+VR5XaAILTYSp+VJfFmst85qpUmTMOeLJmoG9SCGMGy16XYoNNjvFFyr
-	 cCKqeiDmtnhWQ==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2166B3780627;
-	Tue,  5 Mar 2024 14:19:59 +0000 (UTC)
-Message-ID: <02c8bf8e-1934-44ab-a886-e065b37366a7@collabora.com>
-Date: Tue, 5 Mar 2024 19:20:27 +0500
+	s=arc-20240116; t=1709652771; c=relaxed/simple;
+	bh=H4WKXO6HRBiCO+Jm9cr0kkJOy4F8udfhngxHNNpjHJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r0pzLT0Aa4OXn8UC/kn4FxYsOhBt3VSPPBgznTxeoRnmCkk7362Bc/r6NDCtunCku5SAVYGNf8/7KJn9nOW0YXLyXBqlf1pxo2XvZTZIQGfyPKxfA1bsgRxnOdfW0B5dNxskalR7xl8hvZAJO+nB386N6NWVQCZalFap/xaSUyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UqD4YlfY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6520C433F1;
+	Tue,  5 Mar 2024 15:32:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709652770;
+	bh=H4WKXO6HRBiCO+Jm9cr0kkJOy4F8udfhngxHNNpjHJ0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UqD4YlfY7IpEXvGZ8UgwTFpEOZlZXAXICdaUzn/gFSnHUdAZc+RwtBMFppFXWg96i
+	 V9bPAh30pzAdrigUBAy/ZcK2aXV8ye77tYx91ZvW9+86QEOi/cv0aHIVtENmltKVaS
+	 Z8NhOlzUYHIk4BoNZtBu4syIVaCZB+qLLwrlRuaz1EVsXcp3vys6OpAiHeKbuyZBpm
+	 8d1OpqIFOeShzAUdOMWf/J2n7LySJv/SFE8+W/hj4X84CnvSBwnRkjI2TFnP9TGlDg
+	 AuFDPV2vqDMFUePugPd/T1mmrHY1YLK9W4noaNsucvhUq5mnkjIwVeEFuNWggwAwLS
+	 4f5aacXcfCYQQ==
+Date: Tue, 5 Mar 2024 15:32:44 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, ivan.orlov0322@gmail.com, perex@perex.cz,
+	tiwai@suse.com, shuah@kernel.org, jglisse@redhat.com,
+	akpm@linux-foundation.org, keescook@chromium.org,
+	linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH net-next] selftests: avoid using SKIP(exit()) in harness
+ fixure setup
+Message-ID: <e89d52e4-9510-47fb-a632-94bc01c3e74f@sirena.org.uk>
+References: <20240304233621.646054-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "kernel@collabora.com" <kernel@collabora.com>
-Content-Language: en-US
-To: Eric Biederman <ebiederm@xmission.com>, Kees Cook
- <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
- Mark Brown <broonie@kernel.org>
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [Test Failure Report] exec: Test failures in execveat
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6/TVXBM12eZLqI3t"
+Content-Disposition: inline
+In-Reply-To: <20240304233621.646054-1-kuba@kernel.org>
+X-Cookie: Ahead warp factor one, Mr. Sulu.
 
-Hello,
 
-I've been running execveat (execveat.c) locally on v6.1 and next-20240228.
-It has flaky test case. There are some test cases which fail consistently.
-The comment (not very clear) on top of failing cases is as following:
+--6/TVXBM12eZLqI3t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-/*
- * Execute as a long pathname relative to "/".  If this is a script,
- * the interpreter will launch but fail to open the script because its
- * name ("/dev/fd/5/xxx....") is bigger than PATH_MAX.
- *
- * The failure code is usually 127 (POSIX: "If a command is not found,
- * the exit status shall be 127."), but some systems give 126 (POSIX:
- * "If the command name is found, but it is not an executable utility,
- * the exit status shall be 126."), so allow either.
- */
-The file name is just less than PATH_MAX (4096) and we are expecting the
-execveat() to fail with particular 99 or 127/128 error code. But kernel is
-returning 1 error code. Snippet from full output:
+On Mon, Mar 04, 2024 at 03:36:20PM -0800, Jakub Kicinski wrote:
+> selftest harness uses various exit codes to signal test
+> results. Avoid calling exit() directly, otherwise tests
+> may get broken by harness refactoring (like the commit
+> under Fixes). SKIP() will instruct the harness that the
+> test shouldn't run, it used to not be the case, but that
+> has been fixed. So just return, no need to exit.
+>=20
+> Note that for hmm-tests this actually changes the result
+> from pass to skip. Which seems fair, the test is skipped,
+> after all.
 
-# child 3493092 exited with 1 not 99 nor 99
-# child 3493094 exited with 1 not 127 nor 126
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Tested-by: Mark Brown <broonie@kernel.org>
 
-I'm not sure if test is wrong or the kernel has changed the return error codes.
+This fixes at least the pcmtest-driver suite.
 
-Full test run output:
-./execveat
-TAP version 13
-1..51
-ok 1 Check success of execveat(3, '../execveat', 0)...
-ok 2 Check success of execveat(5, 'execveat', 0)...
-ok 3 Check success of execveat(7, 'execveat', 0)...
-ok 4 Check success of execveat(-100,
-'/home/usama/repos/ke...ftests/exec/execveat', 0)...
-ok 5 Check success of execveat(99,
-'/home/usama/repos/ke...ftests/exec/execveat', 0)...
-ok 6 Check success of execveat(9, '', 4096)...
-ok 7 Check success of execveat(18, '', 4096)...
-ok 8 Check success of execveat(10, '', 4096)...
-ok 9 Check success of execveat(15, '', 4096)...
-ok 10 Check success of execveat(15, '', 4096)...
-ok 11 Check success of execveat(16, '', 4096)...
-ok 12 Check failure of execveat(9, '', 0) with ENOENT
-ok 13 Check failure of execveat(9, '(null)', 4096) with EFAULT
-ok 14 Check success of execveat(5, 'execveat.symlink', 0)...
-ok 15 Check success of execveat(7, 'execveat.symlink', 0)...
-ok 16 Check success of execveat(-100,
-'/home/usama/repos/ke...xec/execveat.symlink', 0)...
-ok 17 Check success of execveat(11, '', 4096)...
-ok 18 Check success of execveat(11, '', 4352)...
-ok 19 Check failure of execveat(5, 'execveat.symlink', 256) with ELOOP
-ok 20 Check failure of execveat(7, 'execveat.symlink', 256) with ELOOP
-ok 21 Check failure of execveat(-100,
-'/home/usama/repos/kernel/linux_mainline/tools/testing/selftests/exec/execveat.symlink',
-256) with ELOOP
-ok 22 Check failure of execveat(5, 'pipe', 0) with EACCES
-ok 23 Check success of execveat(3, '../script', 0)...
-ok 24 Check success of execveat(5, 'script', 0)...
-ok 25 Check success of execveat(7, 'script', 0)...
-ok 26 Check success of execveat(-100,
-'/home/usama/repos/ke...elftests/exec/script', 0)...
-ok 27 Check success of execveat(14, '', 4096)...
-ok 28 Check success of execveat(14, '', 4352)...
-ok 29 Check failure of execveat(19, '', 4096) with ENOENT
-ok 30 Check failure of execveat(8, 'script', 0) with ENOENT
-ok 31 Check success of execveat(17, '', 4096)...
-ok 32 Check success of execveat(17, '', 4096)...
-ok 33 Check success of execveat(4, '../script', 0)...
-ok 34 Check success of execveat(4, 'script', 0)...
-ok 35 Check success of execveat(4, '../script', 0)...
-ok 36 Check failure of execveat(4, 'script', 0) with ENOENT
-ok 37 Check failure of execveat(5, 'execveat', 65535) with EINVAL
-ok 38 Check failure of execveat(5, 'no-such-file', 0) with ENOENT
-ok 39 Check failure of execveat(7, 'no-such-file', 0) with ENOENT
-ok 40 Check failure of execveat(-100, 'no-such-file', 0) with ENOENT
-ok 41 Check failure of execveat(5, '', 4096) with EACCES
-ok 42 Check failure of execveat(5, 'Makefile', 0) with EACCES
-ok 43 Check failure of execveat(12, '', 4096) with EACCES
-ok 44 Check failure of execveat(13, '', 4096) with EACCES
-ok 45 Check failure of execveat(99, '', 4096) with EBADF
-ok 46 Check failure of execveat(99, 'execveat', 0) with EBADF
-ok 47 Check failure of execveat(9, 'execveat', 0) with ENOTDIR
-# Invoke copy of 'execveat' via filename of length 4094:
-ok 48 Check success of execveat(20, '', 4096)...
-# execveat() failed, rc=-1 errno=2 (No such file or directory)
-not ok 49 Check success of execveat(6,
-'home/usama/repos/ker...yyyyyyyyyyyyyyyyyyyy', 0)...
-# child 3493092 exited with 1 not 99 nor 99
-not ok 49 Check success of execveat(6,
-'home/usama/repos/ker...yyyyyyyyyyyyyyyyyyyy', 0)...
-# Invoke copy of 'script' via filename of length 4094:
-ok 50 Check success of execveat(21, '', 4096)...
-# execveat() failed, rc=-1 errno=2 (No such file or directory)
-not ok 51 Check success of execveat(6,
-'home/usama/repos/ker...yyyyyyyyyyyyyyyyyyyy', 0)...
-# child 3493094 exited with 1 not 127 nor 126
-not ok 51 Check success of execveat(6,
-'home/usama/repos/ker...yyyyyyyyyyyyyyyyyyyy', 0)...
-2 tests failed
-# Totals: pass:49 fail:2 xfail:0 xpass:0 skip:0 error:0
+--6/TVXBM12eZLqI3t
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-BR,
-Muhammad Usama Anjum
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXnOxwACgkQJNaLcl1U
+h9AzHgf8CS2NurGGG34xASpGL/e5wwpiuCpZF4zkh6Kixza35RYYIn81k2gVvrYP
+lbsfY3vaG3KSz8mxAyZKthtfXJkdS0sg6qa2m12LapPhczwMWardH5znv3Sti5G1
+7JJNz9t1WBKd1P9Cv5R+1RUR9Iq5Jeus/Te+yRuSlBJuOj0HZz81zSZKy9QlstfC
+mWcJO+JKLm+tsnKB7CsYc8adHIP85scDGFp/to6k4Mo0okSkvslyTxW7Ew9ZDUXd
+L4J2j/DHHJFmJMMk7TgbsNaJMrk4ZccfVJI7ZHBgFSONwi/QrmfD4DPv6j+ARlJz
+5HX+/Stgl8tZX3fr91jPNzBgMczkBw==
+=2N6s
+-----END PGP SIGNATURE-----
+
+--6/TVXBM12eZLqI3t--
 
