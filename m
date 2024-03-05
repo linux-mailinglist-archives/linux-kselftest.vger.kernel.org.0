@@ -1,189 +1,110 @@
-Return-Path: <linux-kselftest+bounces-5902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 717688718F5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 10:06:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0E908719CC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 10:43:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB9ECB2409A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 09:06:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A6CD1F21651
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 09:43:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6639535B6;
-	Tue,  5 Mar 2024 09:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EB653371;
+	Tue,  5 Mar 2024 09:43:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SUA7qEcP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dK6WqAJW"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DtHQdQaQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wfout7-smtp.messagingengine.com (wfout7-smtp.messagingengine.com [64.147.123.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1635025C;
-	Tue,  5 Mar 2024 09:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECE652F81
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Mar 2024 09:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709629509; cv=none; b=jLMkebHKu19+W/+rqGCDC47y3G9KZCUIQ8gd8Jbhh0yDiU9HW8go6sd9Q1rIgGwdCKre6zP/gQPoIvtNI3d6Nz6HusXlSTwOnPO5K6hM3oIUPjNHOLxdu+eKDB5QCDK8qgu8WxWrsTaM97SWtcCGMI4frwc6/QwjhdhtphAG1uk=
+	t=1709631797; cv=none; b=hBqp+H43EykDdNyCV9aoNpmKn7iSy+slmoFq+q8DZa/cXEuAAFcO27Ip4MuO6iaPF/BHC8F/zBwJI2pEK58N/bcMjFdxjUc+7s7kR8AO8aETx8wqrvtRjBJu7Jgonm1h63qAbqgqbecqNkqwLHzfuGUUetn+222DUznpQBV7TU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709629509; c=relaxed/simple;
-	bh=4vEnG02ligmP4LrcfFUAEQhjxpcNYEU0JASPzUPZp/M=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=OI7HcGOtHaAphoatAjA+1DDgwQxAeldkrMRefKnzo3G112Jk/ivKcweRdPFIPwP/pqmDUXByzyRIWtP/ojjH/QisoFH5fsfZp3Kpm0+iUaDsYNJV+GO0iLWn033aEfSsRzjibHYGxSqqvsc7G3HvhIqr0kveYWJZJEnQdtd5KQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SUA7qEcP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dK6WqAJW; arc=none smtp.client-ip=64.147.123.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id 22F5F1C000A7;
-	Tue,  5 Mar 2024 04:05:06 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 05 Mar 2024 04:05:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1709629505; x=1709715905; bh=ekmA5RBZ+C
-	vAhdFbvGw1i/0H90ih8Imy4vkxYH5RFbI=; b=SUA7qEcPhA1VtahsdC2df931yx
-	WPbB2j3ZYmy701buT133pPpg1BhTzr7LF+TWNzdIkaWuMpprUFOS48zOhjCA8X4L
-	QrZ0PgfUBHST7vlB23iK8TH+TnQdfOWnY8aOrjupIq/qqANsZJWFyvJpyjWg49XQ
-	kjRXOzZoQ77VNo+thJ82UMaXMQWyNFyk79VVagp2IFPTRJrbjNr8CBts1AxVPG8M
-	bjO7GLbM23jEwBjN3BWsei4NC56uzvQrCWHyScODnQymG6o+zFz4Vj3N2qCbSW81
-	wItzocagCMHv3/TV7LNM6a5j/ru4N0O9LvD+qMa63R76kXfYgkWIAudRwfUQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709629505; x=1709715905; bh=ekmA5RBZ+CvAhdFbvGw1i/0H90ih
-	8Imy4vkxYH5RFbI=; b=dK6WqAJWMa4c4fjlHpghFjdIt3LMY3xxMkWUuukHuwfJ
-	Fn5R3/jVLrvPK8HPH0xCLR/+EQRpUAFUnWeAiAO+ZCuiq7mxhTwCGwC3vudSRYpt
-	MeEvo6I1Ro59HzaAWLL9L8NGtrxfmpvxyurfxdpMhbcqggJi2damWFe0e3ex8i8z
-	Eqv+wuJnxl0fXLh/9OXryAC1UYrzcyYWGCIn8Zkc5jwx6wVXoHqm9AT52SlDjrOs
-	0f100LdiAiVQXqNw0pVjgHTryUqiRWP7/Beoq04XH3IJ2YH6FjRUMC91NnB331QM
-	8LzFD0JzIrOBD8QThpScqDeqGHRDE8eYEs7KAfNUMg==
-X-ME-Sender: <xms:QeDmZYcmTl0_cUKPjzetyUgwCOJP16-giZuGRCd23Fcaod5mvwuasg>
-    <xme:QeDmZaPNTc_AthIszgRYHzvvnFvvonjkI_CtQvZRuxXxbMGIW4iUjEpDMn314RxJy
-    bedEwcNX31bqifDbbs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:QeDmZZhYhQ4N-Vq4pFq8_Jb84muPkreZpR2XpPiBbPCfq5bfWtDhBA>
-    <xmx:QeDmZd-0Yr0yXb4o9AIDX5bt4MvLmUCpkIyuHvt2PZ4e6x8RKq95Ew>
-    <xmx:QeDmZUshX60bTjTnFeVR9hjLDGUNMOB81JWBVd_07wIqc9qNaUxp0g>
-    <xmx:QeDmZSCXGxdi68ql_0o-PZ2wrqACrIJGaPXzq2fBVieFxYOJvISpL5s74vQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6329AB6008F; Tue,  5 Mar 2024 04:05:05 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
+	s=arc-20240116; t=1709631797; c=relaxed/simple;
+	bh=m15fKz5tn5qjvDx1rmcQ6eNp9BysJTSlwqR2O7YG770=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QhOOy5z/qDAKabPyy0j8Qj7zNDkVQ3fCxJyntHFlzuDpBIRgFFAgERprX7KuLa9jXcb/aTDu4ME1kP1IiZhP8WB2cXTMjb+QK4Q5Jcbk5rPX7dFCFEk4H+QZM9F0g1addNkerSe2X+rvCnafVihtLG5JRbgGLopxyd0j9dIl+6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DtHQdQaQ; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e622b46f45so1558839b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Mar 2024 01:43:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709631795; x=1710236595; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qlO9KJY2+Wev5gu1Gmg14kKqRey8tMMcaneA5J7f8gY=;
+        b=DtHQdQaQ5+evETyYfqOPmpmY/FFdEAbc1u2gNSpz7Jolc6Otib+rUIxoNttSO1tqhD
+         Ow/0pxL6Qmh+f1wZizgbUMAXnDo5sqsMZQY2SNszmMHF+gsD2YHoEc7bEpc4SGXiOX4f
+         Dkf0DM9wjAqeK9vhGjihe1kNkgu98OrxquBJ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709631795; x=1710236595;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qlO9KJY2+Wev5gu1Gmg14kKqRey8tMMcaneA5J7f8gY=;
+        b=OK4JjJse6sxGkhOZzxRyIt1l/+ODiC9mF6oKg/+hUqLC35A6W1rGF9aEuglr84+1CU
+         p+6mdYnVXtg+C6iPdzYH0usPYvl3+vmn2mCBNXZl+bhywVVXcJFXOg+1n+7aAM7il2a0
+         wEfxx9RXqZ65TaD49pgNiYCTR4JK8DB8s/9BJsfpcqoQrWmmLQBPz8o8po2cwpva2P8B
+         iDGK2fpyinU1mEGqgN8HzL6ftllA6GHHCaeIf7C2hr7pBe+79ae9TT8qLpCtQYntEQAf
+         giBL6akxjkVNVdr4HU1j6n155nBGMZHyTAABxnYTjyJVvgN6XBiCOGiw+RWy3GT3fJH4
+         D8DA==
+X-Forwarded-Encrypted: i=1; AJvYcCX9HtXlRDeK8+oeB3iDS2U6Cfg/TU4PZYWQdHqc8/3duTWhcFYCVerdJngxCK6lHYBQWXuN3GBJd0NJDdz/ksJl3rve5nMBUJP0eHPXcglI
+X-Gm-Message-State: AOJu0YzqDubf2niTOxe2VJPkK7H89LoDgRntIe2Gv54dIapLhhGeQlkZ
+	Za3bCHksG1CZ+HzuVXxJw1upEbflnxXdgsQYtYkKIoYSZbgRyuGcwn/00pfG4Q==
+X-Google-Smtp-Source: AGHT+IEHX7VS98PVmPfQMP1A4xGFPH1JI0XcQyxGUfAbT5ZVpEx99l+bOBaCZ6HcNRkSZQoSe7xP0g==
+X-Received: by 2002:a05:6a20:3941:b0:1a1:50d2:58d6 with SMTP id r1-20020a056a20394100b001a150d258d6mr1266291pzg.23.1709631795159;
+        Tue, 05 Mar 2024 01:43:15 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902ceca00b001db94dfc2b5sm10089983plg.107.2024.03.05.01.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Mar 2024 01:43:14 -0800 (PST)
+Date: Tue, 5 Mar 2024 01:43:14 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, davem@davemloft.net,
+	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, mic@digikod.net,
+	linux-security-module@vger.kernel.org, jakub@cloudflare.com
+Subject: Re: [PATCH v4 00/12] selftests: kselftest_harness: support using
+ xfail
+Message-ID: <202403050141.C8B1317C9@keescook>
+References: <20240229005920.2407409-1-kuba@kernel.org>
+ <05f7bf89-04a5-4b65-bf59-c19456aeb1f0@sirena.org.uk>
+ <20240304150411.6a9bd50b@kernel.org>
+ <202403041512.402C08D@keescook>
+ <20240304153902.30cd2edd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
-In-Reply-To: <20240305020153.2787423-6-almasrymina@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com>
-Date: Tue, 05 Mar 2024 10:04:45 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mina Almasry" <almasrymina@google.com>, Netdev <netdev@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "Matt Turner" <mattst88@gmail.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Helge Deller" <deller@gmx.de>, "Andreas Larsson" <andreas@gaisler.com>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@google.com>,
- "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
- "David Ahern" <dsahern@kernel.org>,
- "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
- shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Pavel Begunkov" <asml.silence@gmail.com>, "David Wei" <dw@davidwei.uk>,
- "Jason Gunthorpe" <jgg@ziepe.ca>,
- "Yunsheng Lin" <linyunsheng@huawei.com>,
- "Shailend Chand" <shailend@google.com>,
- "Harshitha Ramamurthy" <hramamurthy@google.com>,
- "Shakeel Butt" <shakeelb@google.com>,
- "Jeroen de Borst" <jeroendb@google.com>,
- "Praveen Kaligineedi" <pkaligineedi@google.com>,
- "Willem de Bruijn" <willemb@google.com>,
- "Kaiyuan Zhang" <kaiyuanz@google.com>
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
-Content-Type: text/plain
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240304153902.30cd2edd@kernel.org>
 
-On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
+On Mon, Mar 04, 2024 at 03:39:02PM -0800, Jakub Kicinski wrote:
+> On Mon, 4 Mar 2024 15:14:04 -0800 Kees Cook wrote:
+> > > Ugh, I'm guessing vfork() "eats" the signal, IOW grandchild signals,
+> > > child exits? vfork() and signals.. I'd rather leave to Kees || Mickael.  
+> > 
+> > Oh no, that does seem bad. Since Mickaël is also seeing weird issues,
+> > can we drop the vfork changes for now?
+> 
+> Seems doable, but won't be a simple revert. "drop" means we'd need 
+> to bring ->step back. More or less go back to v3.
 
-> +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
-> +		       struct netdev_dmabuf_binding **out)
-> +{
-> +	struct netdev_dmabuf_binding *binding;
-> +	static u32 id_alloc_next;
-> +	struct scatterlist *sg;
-> +	struct dma_buf *dmabuf;
-> +	unsigned int sg_idx, i;
-> +	unsigned long virtual;
-> +	int err;
-> +
-> +	if (!capable(CAP_NET_ADMIN))
-> +		return -EPERM;
-> +
-> +	dmabuf = dma_buf_get(dmabuf_fd);
-> +	if (IS_ERR_OR_NULL(dmabuf))
-> +		return -EBADFD;
+I think we have to -- other CIs are now showing the most of seccomp
+failing now. (And I can confirm this now -- I had only tested seccomp
+on earlier versions of the series.)
 
-You should never need to use IS_ERR_OR_NULL() for a properly
-defined kernel interface. This one should always return an
-error or a valid pointer, so don't check for NULL.
-
-> +	binding->attachment = dma_buf_attach(binding->dmabuf, dev->dev.parent);
-> +	if (IS_ERR(binding->attachment)) {
-> +		err = PTR_ERR(binding->attachment);
-> +		goto err_free_id;
-> +	}
-> +
-> +	binding->sgt =
-> +		dma_buf_map_attachment(binding->attachment, DMA_BIDIRECTIONAL);
-> +	if (IS_ERR(binding->sgt)) {
-> +		err = PTR_ERR(binding->sgt);
-> +		goto err_detach;
-> +	}
-
-Should there be a check to verify that this buffer
-is suitable for network data?
-
-In general, dmabuf allows buffers that are uncached or reside
-in MMIO space of another device, but I think this would break
-when you get an skb with those buffers and try to parse the
-data inside of the kernel on architectures where MMIO space
-is not a normal pointer or unaligned access is disallowed on
-uncached data.
-
-        Arnd
+-- 
+Kees Cook
 
