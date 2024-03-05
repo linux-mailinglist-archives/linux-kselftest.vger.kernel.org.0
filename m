@@ -1,284 +1,312 @@
-Return-Path: <linux-kselftest+bounces-5928-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5929-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 808A5872315
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 16:47:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F370987231B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 16:48:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1BED1C22E4D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 15:47:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D9C7B222B8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 15:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E9E127B4A;
-	Tue,  5 Mar 2024 15:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F3D1127B5A;
+	Tue,  5 Mar 2024 15:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="dp/pNqKv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lzj6v1cB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8B08664C;
-	Tue,  5 Mar 2024 15:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709653649; cv=none; b=nP/WxgJJoJKsgl9C78Qhx6pzIcySSV3+qiFzP7fEyJuqLKEbLY5yBf8+nilXoG+iwhzZa08NrNCJVVGUs4wHk8loCD43g8vuzxc7e2JQlYQvEKe4I0p6K9KKzSwwk70m2XZz2B33IOXrfTd1b6fP2r9XTQEneaKR+aXfX1pqWfo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709653649; c=relaxed/simple;
-	bh=duBANKVhq58rBHhVYkw7FTlZOWm2zo4TG4uCQWF95e4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eXOwlNUGAs+UaMmlTkeEiHCF1kbzxwuulx9i7d25h6w+xS3iY7kD9HmjLLz3lpaM+gn/m+kqgzv0cHXQIapSLPoZ/EECUVtI/7X5ZPTSPKZsVP22C5Iu1SScdYLWjKsfJuBU/0Gh1nWf9KoHRHpwQMd+84gDoefM3ohpdcn1NAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=dp/pNqKv; arc=none smtp.client-ip=83.166.143.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Tq0LW5MRvz1nq;
-	Tue,  5 Mar 2024 16:47:15 +0100 (CET)
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Tq0LV6S2ZzCKN;
-	Tue,  5 Mar 2024 16:47:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1709653635;
-	bh=duBANKVhq58rBHhVYkw7FTlZOWm2zo4TG4uCQWF95e4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dp/pNqKvQb4HclVSuUUg/mHvDvYH+GVnYA+Lanaiuq9GbxhHsWD+YDLySuBCemll0
-	 EhCQIdpGnmW1y1mdVMbI2iQn45K5pa5GGov356x4qfxOtVrj4NJOVsG+Jf3yssjG1j
-	 4MWaL1drChA5WJrw2nwTS42luJy8+sjNrC8ERdGY=
-Date: Tue, 5 Mar 2024 16:47:04 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, keescook@chromium.org, jakub@cloudflare.com, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Will Drewry <wad@chromium.org>
-Subject: Re: [PATCH v4 02/12] selftests/harness: Merge TEST_F_FORK() into
- TEST_F()
-Message-ID: <20240305.eth2Ohcawa7u@digikod.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B3D1272CB;
+	Tue,  5 Mar 2024 15:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709653707; cv=fail; b=T2jfE5tUGNXflk2VufCFqz/pj1IcMbG8EeXxAVjNnxEJpRSM+yJ7siXSCU49P5zvb5bXhWHB5iprjcekUsWJavOpiLcxIxVeCC+5nsa/D14mXu68MO+sC0F2lKfcNk7ciExJdn24aE35rA0JY/APpW3OodCr2BQ5FRriJVRcCs0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709653707; c=relaxed/simple;
+	bh=qHVOOWRyXenJi1vX4j08RZljDSrUMdc97LxxCpG2/RY=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=J+iz/f2it17N6anzzGSCPz0t0Bz54DFYEs3R29/q72J/rGp4d+bNGdkQsFwjkugbbV2++lOMyvyn0FHYCU/HsDsznskgCP/qTTFN6Oo1wS9OHioifiRePUW9KJgh7fb84Qh9tAK5npd5+sgAACNu6g2xkBasvBX5rGP6nkxianQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lzj6v1cB; arc=fail smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709653705; x=1741189705;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=qHVOOWRyXenJi1vX4j08RZljDSrUMdc97LxxCpG2/RY=;
+  b=lzj6v1cBN92VHIKGYGIYVgSgzxUZoSW9ppkwsm/8J1A4+Yx38CQSVp4g
+   nYYlqVB6Mn95l6njcJyMWQViMOezjVEzd/88hfAZcJihKEmve+wDoDG2s
+   Y01iNJrLvxaBxipRKDEsl4HYBSJxjF1zhTFA59KeiayL7vyu0dm7SVsmV
+   KIMz+bw6arIAOudks4UXsVpcr3m/WZHja9e8TA1P4k+EY/ehPwEBEsyQM
+   JHrhi3aI1k/f/8SKjBm+MpQlhXBIlV3GsqGXcduiHnLXJ6srg/6fJJzs+
+   bvDafv5VAh0SMi8f5Lrab1tFH7IecS6c6mPoG6dIgLGaBB85itamUTWuj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="8022923"
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="8022923"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 07:48:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="13901871"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Mar 2024 07:48:23 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 5 Mar 2024 07:48:22 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 5 Mar 2024 07:48:22 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 5 Mar 2024 07:48:22 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 5 Mar 2024 07:48:21 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fsqzKtoI+Enk3Hvp/iILU0Cbozz8Wc37G+kOdsjTthYRUX/SjpH3/h+hPaoCgLdCZHH/CI5phe3lnF3sjBvqqQWngPWw5D5jHOUJeZS4DFnnUMcg9CnRFyqgDoaCUk0aiBqOjLzNEjBNPUWVdYfLZp4Eiln258G3ag0/GYNVDonwsKJdR+lBIG5VTt9O6WILHXJ8AQasGydguAZCrHWzHHD/LlvFvaOtl4ZgVxXep7RIrVqo2CfT2N/LgkbfRsaVcpcPpiCAHD6HDnVAGqiBEQz0PZuSUSJqaaofs9gcueXww+qrNlh6Bx2pDTnudx9Xks2TDWCygU8QbSSJpjx3pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qa0B+ruwCX6tG3ouIM72E5GqkFdn7zvnnVDOu/et/Tg=;
+ b=Qx5xs1W5uQaIugFpfW6FbCgcrD20hubAcYFCdb/t9l11EhLe3zlF7Y4aR4fcZgsi/FUyHii2ECtUjYrJta+L3h1dymki5tHoJgMuK18de/t+lkiYKWIhoyXEoRy7h9xUeSBObRvXJIot/awdXQGfWIzEZ04z8MUU9JyFfvR0YBw5VLa1ajpKuRfR7dlxnade8pSlxgA9PpakMf1KFfRF7nQR00G+qskc/PkCoY8onKAw3Iw1zNoisg0JM8fhHEv0DBJHURLR7tdcMm3f0T+UpPfcFLympbFkqi3rzs9JEmLNEbCmlia/z2qBHz+29wpwnQgT2Sw8YN45SbqC/DtV1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN6PR11MB8102.namprd11.prod.outlook.com (2603:10b6:208:46d::9)
+ by PH7PR11MB6698.namprd11.prod.outlook.com (2603:10b6:510:1ac::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.22; Tue, 5 Mar
+ 2024 15:48:14 +0000
+Received: from MN6PR11MB8102.namprd11.prod.outlook.com
+ ([fe80::618b:b1ee:1f99:76ea]) by MN6PR11MB8102.namprd11.prod.outlook.com
+ ([fe80::618b:b1ee:1f99:76ea%5]) with mapi id 15.20.7362.019; Tue, 5 Mar 2024
+ 15:48:14 +0000
+Message-ID: <7bb3b635-9fed-47ab-a640-ccac6d283b54@intel.com>
+Date: Tue, 5 Mar 2024 16:48:06 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/12] selftests: kselftest_harness: support using
+ xfail
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>,
+	<keescook@chromium.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<mic@digikod.net>, <linux-security-module@vger.kernel.org>,
+	<jakub@cloudflare.com>
 References: <20240229005920.2407409-1-kuba@kernel.org>
- <20240229005920.2407409-3-kuba@kernel.org>
- <20240301.Miem9Kei4eev@digikod.net>
- <20240304.ceje1phaiFei@digikod.net>
+ <05f7bf89-04a5-4b65-bf59-c19456aeb1f0@sirena.org.uk>
+ <20240304150411.6a9bd50b@kernel.org>
+From: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+In-Reply-To: <20240304150411.6a9bd50b@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0251.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:f5::12) To MN6PR11MB8102.namprd11.prod.outlook.com
+ (2603:10b6:208:46d::9)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240304.ceje1phaiFei@digikod.net>
-X-Infomaniak-Routing: alpha
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN6PR11MB8102:EE_|PH7PR11MB6698:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba0a6f16-0a51-41c8-5ce2-08dc3d2baae4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uninWjlZci9D601AVmAOHatNHz/BdZ90dOLPuKb84r2qB8Bh1sGOytd9g2ZW6i+kNm5PAip+Bxpk0oS1c8Rp4QRaen6uSoSTU4ABcPAH70g8iwh0X3F4I9EB3/62CbMk3ivzBGhu2pVXqpascAOc4rXdWfkdE1szd/juY7pNEHGJqIg2jtwQz+j64tUbDRP9ECgjDcuEh5DWRA1VwQthfxmBlhKwRBIivKo1D+wQF6K+pKR8gaWmS1etLRvxUC4sfs1daAdd0wkyqg7KWGzSaF43BRWPu5QHhT0gsvaOBRQ7WWE0KQyb6d2XFlz5/eUy01acIkOGBCfEOo6zI6l6p4xtmnzMsQAR2nBnxBlp+74et9j8Me5D4KQFbWHeMVMMlZJQH6M2Ktr/BDYesVfUbOfjDdFAS040w9M/jjC/cByh+s2KkCpnaRdKmEgLsiyMTSG6phlY9tvSUNhUNph2XVv4RxT8QnjaDkyi0gvPWRxcTXeDh4aUwv3d/7SxApvqhho0fmhcA+B/mUwg4YF7EO6WA/bgkbW/Ph8dj8XhF3AhWjBH40WCo5cSw2AawDNTC5wt767taWAY94wM+eTrslNLvgKCD6tzmaSS8Xctgj0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN6PR11MB8102.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ejk4Nno0TDdCNktHRkg5U3FOenRrTHp2MG1CNFpqYzhoNFVCQ0grVldqTVhT?=
+ =?utf-8?B?SXVWVHRxOWdqeW1ENkxISFVMMjR0VlY2NlFmZGdlNUhNTEcrd2s4K2VLaTNG?=
+ =?utf-8?B?Mkg0L2J2QTN4SGd0eGxvblJSNnYzYUgwSkE5ZU5UNko2MGlYQ1o1MFJkNFFJ?=
+ =?utf-8?B?N0xEUzk4MVlvM2lMcFU5bmtNSG5JWFFpQTRlcEd4cllieFVSS21Pdko1dDlY?=
+ =?utf-8?B?SzhMTFVOV29vOS82SWlQRnJUMXU2R3pkSXp4MUF0TlRGTjIzTGl2U1JPcEx2?=
+ =?utf-8?B?N1M1YUFkSytHNXhlTjZpMDhvTzFXUCtoSXlBTEptWmNPdzdwcDl4TFdmUUFS?=
+ =?utf-8?B?ZlRROTBwU3orMy9UNFc2WmoyVjVxYm1RMElrclBiZmhHYmpQSVd3QW1TZE8x?=
+ =?utf-8?B?UFh6Q05jNERpbUQyRjl0SGM5MnpNbG9jbHBhN20rVm83ZXdSNHFKRkhTK1Zq?=
+ =?utf-8?B?dFQ5VXpyZmpXWDhVVEtiLyt1bURsTHR3QjVQK3MwMGxVYVF0WFlyZzI4S0px?=
+ =?utf-8?B?Q1pjajVXNmFQNytMQlA1Y3lsSkU1NEp5alE0UnVBcHlQK284bkVCYnlCNlRK?=
+ =?utf-8?B?bEhQaHBNZU5SM2F5ckw3Q2J6UFIyTGFQMm1pUGtueHdZV0lDdENYVFFLd1V0?=
+ =?utf-8?B?UmQ0WjhldjY1R3ZTM2RTN0RpbU1FM090NklDN2F1b3BsR3BtL0sxZ3VxeGFp?=
+ =?utf-8?B?NXB5WWZLSm1qZ21JOVR5SWtJbWN6RUI4V0UyQUQ5V085NENlNnlERTdNODE4?=
+ =?utf-8?B?amZ2ejlEMkszNm1nZzl4NjU5aGZnTldCOHJ4bXhlSFVHZXRidkpuS0tTMWoy?=
+ =?utf-8?B?SGZjMElndWNWb3VaQnZOcksrWkxqblF2NzdML1pJaDBzVDY5Slg4MjViZjNM?=
+ =?utf-8?B?ekJtT25BWnJvMFhqYlRKNm04OVNmcFpLNlQ2RklBbTE5alhjUzF4NjRLWDBU?=
+ =?utf-8?B?bFlhYzVZL2dQdnhhRGFVQXc4ODdiaCtsSFIwVjQrcEswOGFRUzJnQWFPcEJw?=
+ =?utf-8?B?Si9QYnZORndPUy9MVVZxSzZpRWt3cjdvMlhzeDc1K09vaXVoUFFXYnJlNk42?=
+ =?utf-8?B?ZjZReTlqaTBnYkdVSCs1Z1cvSm9xZmlCL0t6ZFZ2L2srSjloMlVqYmR5bm9H?=
+ =?utf-8?B?Uk05Wmx2eW50bkJreFBiY2tWK3JKWTI2T0o0cG5xZFNpZ0RBSnlrc25tNGRO?=
+ =?utf-8?B?TFZhWkN6UTd1NWZBSW84TGJ0ZllkYnJYbzN5ZGtjTjVDWjg0dGg0R0lUcHE0?=
+ =?utf-8?B?Tlo4Qjc1SlkrTnp5d2NBMmZxNktlK1dlek82dnc2RUVDU2MrZWhWQ2JINk1I?=
+ =?utf-8?B?enJUY1p5NTFUMzViSUlhTHdLUlExZ2dwM3A2Y0ovcG04L0pacEFXV0FPMCs4?=
+ =?utf-8?B?bFdWVm9LaU95bW41TjMzQTFsMC9kT2lqaWExM0FtYVFka3lQNFltT2JNZXVI?=
+ =?utf-8?B?VEJJd1NaSXhmdnREMnR2WCsrY2UwczlDUzgra0FTYnFaaU03VHM4QzZNVXZ4?=
+ =?utf-8?B?ZzdHUElZY2lFcFdsWU5qZUNmWXFxNlo5ZU5mREFQZE5PRHBuc2FuQUxaUk5R?=
+ =?utf-8?B?ZkRxTG1qdFRycHcybWovUXhlUElpY1pwMmNtUURGa1VGQmUyM09wRVc0NTRQ?=
+ =?utf-8?B?QitYVlRJTzAvbE1CbGlKMzRKSVFXQndxRHJ1Q3ordHBXSUZxOTRNU2Nlbjlk?=
+ =?utf-8?B?bU1iMGJvWUwzUjd4QW5tQ3RlVE0wZTRNdWdVRjZiT2xFM2RESVl5elJUMk9S?=
+ =?utf-8?B?d2RwWVBoTElxSUV4S2VsYU81UjVyK25wMUVvYm1zbDBkaGV4UnNjaGw0V0FQ?=
+ =?utf-8?B?dlZJYkZNbmRaZ2UwT0dZd2Q3OFpNWE8vd0RDYVJqeCtHbllBeXNUdXkyYndH?=
+ =?utf-8?B?S1BCMnQ5K0pzaTc0U2wrTTNaM0hocVlvR2lvQmxuUWpaUkVDaXA4c3hBcmYx?=
+ =?utf-8?B?a2E4STVrQzlHMkpxREY1NndneE9tMllCUTI1K0dVR0FteUpNT09XRE5uY1dt?=
+ =?utf-8?B?SE1rTUhVV2FKejZxM25EKytEWHJnNUd2anpEbFlJSGFVcjZlalJEcHNrU3Iy?=
+ =?utf-8?B?NGFhUlR4U3BPNVY2aWV6OXpyZDY5bE9FVktBbTVTNkFCZ1BTN0RkbHhSVjFh?=
+ =?utf-8?B?UE8vTjF1TEhjZlNFTGlKa0RUcXBsWjdaanlieDdLRkZZOWI4V2o5QlF6Q0Zh?=
+ =?utf-8?B?bWc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba0a6f16-0a51-41c8-5ce2-08dc3d2baae4
+X-MS-Exchange-CrossTenant-AuthSource: MN6PR11MB8102.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2024 15:48:14.1640
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DZaRZCDqK8T4sALYxGihX3UaGmOfdFQoaIOLFEDOREHt25PFCANsRS8NmzgT1DSx+UqZkgMw2iwvhJrqxTbW5q4vTzcRDedkqEB9JViznCA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6698
+X-OriginatorOrg: intel.com
 
-I think I fixed all reported issues with the following patch.  It always
-execute the fixture setup in the child process and execute the teardown
-in the child process by default (e.g. for seccomp tests which have
-assumptions about that). Only the Landlock teardown tests are executed
-in the parent process thanks to the new _metadata->teardown_parent
-boolean.  Child signals are always forwarded to the parent process where
-__wait_for_test() check that.  This works with seccomp and Landlock
-tests, and I think with all the others.  I'll send a v2 of the vfork
-patch.
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index ad49832457af..4f192904dfd6 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -382,29 +382,33 @@
- 		/* fixture data is alloced, setup, and torn down per call. */ \
- 		FIXTURE_DATA(fixture_name) self; \
- 		pid_t child = 1; \
-+		int status = 0; \
- 		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
- 		if (setjmp(_metadata->env) == 0) { \
--			fixture_name##_setup(_metadata, &self, variant->data); \
--			/* Let setup failure terminate early. */ \
--			if (!_metadata->passed || _metadata->skip) \
--				return; \
--			_metadata->setup_completed = true; \
- 			/* Use the same _metadata. */ \
- 			child = vfork(); \
- 			if (child == 0) { \
-+				fixture_name##_setup(_metadata, &self, variant->data); \
-+				/* Let setup failure terminate early. */ \
-+				if (!_metadata->passed || _metadata->skip) \
-+					_exit(0); \
-+				_metadata->setup_completed = true; \
- 				fixture_name##_##test_name(_metadata, &self, variant->data); \
--				_exit(0); \
--			} \
--			if (child < 0) { \
-+			} else if (child < 0 || child != waitpid(child, &status, 0)) { \
- 				ksft_print_msg("ERROR SPAWNING TEST GRANDCHILD\n"); \
- 				_metadata->passed = 0; \
- 			} \
- 		} \
--		if (child == 0) \
--			/* Child failed and updated the shared _metadata. */ \
-+		if (child == 0) { \
-+			if (_metadata->setup_completed && !_metadata->teardown_parent) \
-+				fixture_name##_teardown(_metadata, &self, variant->data); \
- 			_exit(0); \
--		if (_metadata->setup_completed) \
-+		} \
-+		if (_metadata->setup_completed && _metadata->teardown_parent) \
- 			fixture_name##_teardown(_metadata, &self, variant->data); \
-+		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
-+			/* Forward signal to __wait_for_test(). */ \
-+			kill(getpid(), WTERMSIG(status)); \
- 		__test_check_assert(_metadata); \
- 	} \
- 	static struct __test_metadata \
-@@ -414,6 +418,7 @@
- 		.fixture = &_##fixture_name##_fixture_object, \
- 		.termsig = signal, \
- 		.timeout = tmout, \
-+		.teardown_parent = false, \
- 	 }; \
- 	static void __attribute__((constructor)) \
- 			_register_##fixture_name##_##test_name(void) \
-@@ -842,6 +847,7 @@ struct __test_metadata {
- 	bool timed_out;	/* did this test timeout instead of exiting? */
- 	bool aborted;	/* stopped test due to failed ASSERT */
- 	bool setup_completed; /* did setup finish? */
-+	bool teardown_parent; /* run teardown in a parent process */
- 	jmp_buf env;	/* for exiting out of test early */
- 	struct __test_results *results;
- 	struct __test_metadata *prev, *next;
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 2d6d9b43d958..1d5952897e05 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -285,6 +285,8 @@ static void prepare_layout_opt(struct __test_metadata *const _metadata,
- 
- static void prepare_layout(struct __test_metadata *const _metadata)
- {
-+	_metadata->teardown_parent = true;
-+
- 	prepare_layout_opt(_metadata, &mnt_tmp);
- }
- 
-@@ -3861,9 +3863,7 @@ FIXTURE_SETUP(layout1_bind)
- 
- FIXTURE_TEARDOWN(layout1_bind)
- {
--	set_cap(_metadata, CAP_SYS_ADMIN);
--	EXPECT_EQ(0, umount(dir_s2d2));
--	clear_cap(_metadata, CAP_SYS_ADMIN);
-+	/* umount(dir_s2d2)) is handled by namespace lifetime. */
- 
- 	remove_layout1(_metadata);
- 
-@@ -4276,9 +4276,8 @@ FIXTURE_TEARDOWN(layout2_overlay)
- 	EXPECT_EQ(0, remove_path(lower_fl1));
- 	EXPECT_EQ(0, remove_path(lower_do1_fo2));
- 	EXPECT_EQ(0, remove_path(lower_fo1));
--	set_cap(_metadata, CAP_SYS_ADMIN);
--	EXPECT_EQ(0, umount(LOWER_BASE));
--	clear_cap(_metadata, CAP_SYS_ADMIN);
-+
-+	/* umount(LOWER_BASE)) is handled by namespace lifetime. */
- 	EXPECT_EQ(0, remove_path(LOWER_BASE));
- 
- 	EXPECT_EQ(0, remove_path(upper_do1_fu3));
-@@ -4287,14 +4286,11 @@ FIXTURE_TEARDOWN(layout2_overlay)
- 	EXPECT_EQ(0, remove_path(upper_do1_fo2));
- 	EXPECT_EQ(0, remove_path(upper_fo1));
- 	EXPECT_EQ(0, remove_path(UPPER_WORK "/work"));
--	set_cap(_metadata, CAP_SYS_ADMIN);
--	EXPECT_EQ(0, umount(UPPER_BASE));
--	clear_cap(_metadata, CAP_SYS_ADMIN);
-+
-+	/* umount(UPPER_BASE)) is handled by namespace lifetime. */
- 	EXPECT_EQ(0, remove_path(UPPER_BASE));
- 
--	set_cap(_metadata, CAP_SYS_ADMIN);
--	EXPECT_EQ(0, umount(MERGE_DATA));
--	clear_cap(_metadata, CAP_SYS_ADMIN);
-+	/* umount(MERGE_DATA)) is handled by namespace lifetime. */
- 	EXPECT_EQ(0, remove_path(MERGE_DATA));
- 
- 	cleanup_layout(_metadata);
-@@ -4691,6 +4687,8 @@ FIXTURE_SETUP(layout3_fs)
- 		SKIP(return, "this filesystem is not supported (setup)");
- 	}
- 
-+	_metadata->teardown_parent = true;
-+
- 	slash = strrchr(variant->file_path, '/');
- 	ASSERT_NE(slash, NULL);
- 	dir_len = (size_t)slash - (size_t)variant->file_path;
-
-
-On Mon, Mar 04, 2024 at 08:31:49PM +0100, Mickaël Salaün wrote:
-> On Mon, Mar 04, 2024 at 08:27:50PM +0100, Mickaël Salaün wrote:
-> > Testing the whole series, I found that some Landlock tests are flaky
-> > starting with this patch.  I tried to not use the longjmp in the
-> > grandchild but it didn't change.  I suspect missing volatiles but I
-> > didn't find the faulty one(s) yet. :/
-> > I'll continue investigating tomorrow but help would be much appreciated!
+On 3/5/24 00:04, Jakub Kicinski wrote:
+> On Mon, 4 Mar 2024 22:20:03 +0000 Mark Brown wrote:
+>> On Wed, Feb 28, 2024 at 04:59:07PM -0800, Jakub Kicinski wrote:
+>>
+>>> When running selftests for our subsystem in our CI we'd like all
+>>> tests to pass. Currently some tests use SKIP for cases they
+>>> expect to fail, because the kselftest_harness limits the return
+>>> codes to pass/fail/skip. XFAIL which would be a great match
+>>> here cannot be used.
+>>>
+>>> Remove the no_print handling and use vfork() to run the test in
+>>> a different process than the setup. This way we don't need to
+>>> pass "failing step" via the exit code. Further clean up the exit
+>>> codes so that we can use all KSFT_* values. Rewrite the result
+>>> printing to make handling XFAIL/XPASS easier. Support tests
+>>> declaring combinations of fixture + variant they expect to fail.
+>>
+>> This series landed in -next today and has caused breakage on all
+>> platforms in the ALSA pcmtest-driver test.  When run on systems that
+>> don't have the driver it needs loaded the test skip but since this
+>> series was merged skipped tests are logged but then reported back as
+>> failures:
+>>
+>> # selftests: alsa: test-pcmtest-driver
+>> # TAP version 13
+>> # 1..5
+>> # # Starting 5 tests from 1 test cases.
+>> # #  RUN           pcmtest.playback ...
+>> # #      SKIP      Can't read patterns. Probably, module isn't loaded
+>> # # playback: Test failed
+>> # #          FAIL  pcmtest.playback
+>> # not ok 1 pcmtest.playback #  Can't read patterns. Probably, module isn't loaded
+>> # #  RUN           pcmtest.capture ...
+>> # #      SKIP      Can't read patterns. Probably, module isn't loaded
+>> # # capture: Test failed
+>> # #          FAIL  pcmtest.capture
+>> # not ok 2 pcmtest.capture #  Can't read patterns. Probably, module isn't loaded
+>> # #  RUN           pcmtest.ni_capture ...
+>> # #      SKIP      Can't read patterns. Probably, module isn't loaded
+>> # # ni_capture: Test failed
+>> # #          FAIL  pcmtest.ni_capture
+>> # not ok 3 pcmtest.ni_capture #  Can't read patterns. Probably, module isn't loaded
+>> # #  RUN           pcmtest.ni_playback ...
+>> # #      SKIP      Can't read patterns. Probably, module isn't loaded
+>> # # ni_playback: Test failed
+>> # #          FAIL  pcmtest.ni_playback
+>> # not ok 4 pcmtest.ni_playback #  Can't read patterns. Probably, module isn't loaded
+>> # #  RUN           pcmtest.reset_ioctl ...
+>> # #      SKIP      Can't read patterns. Probably, module isn't loaded
+>> # # reset_ioctl: Test failed
+>> # #          FAIL  pcmtest.reset_ioctl
+>> # not ok 5 pcmtest.reset_ioctl #  Can't read patterns. Probably, module isn't loaded
+>> # # FAILED: 0 / 5 tests passed.
+>> # # Totals: pass:0 fail:5 xfail:0 xpass:0 skip:0 error:0
+>>
+>> I haven't completely isolated the issue due to some other breakage
+>> that's making it harder that it should be to test.
+>>
+>> A sample full log can be seen at:
+>>
+>>     https://lava.sirena.org.uk/scheduler/job/659576#L1349
 > 
-> The issue is with the fs_test.c, often starting with this one:
+> Thanks! the exit() inside the skip evaded my grep, I'm testing this:
 > 
-> #  RUN           layout1.relative_chroot_only ...
-> # fs_test.c:294:relative_chroot_only:Expected 0 (0) == umount(TMP_DIR) (-1)
-> # fs_test.c:296:relative_chroot_only:Expected 0 (0) == remove_path(TMP_DIR) (16)
-> # relative_chroot_only: Test failed
-> #          FAIL  layout1.relative_chroot_only
+> diff --git a/tools/testing/selftests/alsa/test-pcmtest-driver.c b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+> index a52ecd43dbe3..7ab81d6f9e05 100644
+> --- a/tools/testing/selftests/alsa/test-pcmtest-driver.c
+> +++ b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+> @@ -127,11 +127,11 @@ FIXTURE_SETUP(pcmtest) {
+>   	int err;
+>   
+>   	if (geteuid())
+> -		SKIP(exit(-1), "This test needs root to run!");
+> +		SKIP(exit(KSFT_SKIP), "This test needs root to run!");
+>   
+>   	err = read_patterns();
+>   	if (err)
+> -		SKIP(exit(-1), "Can't read patterns. Probably, module isn't loaded");
+> +		SKIP(exit(KSFT_SKIP), "Can't read patterns. Probably, module isn't loaded");
+>   
+>   	card_name = malloc(127);
+>   	ASSERT_NE(card_name, NULL);
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index 20294553a5dd..356ba5f3b68c 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -138,7 +138,7 @@ FIXTURE_SETUP(hmm)
+>   
+>   	self->fd = hmm_open(variant->device_number);
+>   	if (self->fd < 0 && hmm_is_coherent_type(variant->device_number))
+> -		SKIP(exit(0), "DEVICE_COHERENT not available");
+> +		SKIP(exit(KSFT_SKIP), "DEVICE_COHERENT not available");
+>   	ASSERT_GE(self->fd, 0);
+>   }
+>   
+> @@ -149,7 +149,7 @@ FIXTURE_SETUP(hmm2)
+>   
+>   	self->fd0 = hmm_open(variant->device_number0);
+>   	if (self->fd0 < 0 && hmm_is_coherent_type(variant->device_number0))
+> -		SKIP(exit(0), "DEVICE_COHERENT not available");
+> +		SKIP(exit(KSFT_SKIP), "DEVICE_COHERENT not available");
+>   	ASSERT_GE(self->fd0, 0);
+>   	self->fd1 = hmm_open(variant->device_number1);
+>   	ASSERT_GE(self->fd1, 0);
 > 
-> ...or this one:
+>> but there's no more context.  I'm also seeing some breakage in the
+>> seccomp selftests which also use kselftest-harness:
+>>
+>> # #  RUN           TRAP.dfl ...
+>> # # dfl: Test exited normally instead of by signal (code: 0)
+>> # #          FAIL  TRAP.dfl
+>> # not ok 56 TRAP.dfl
+>> # #  RUN           TRAP.ign ...
+>> # # ign: Test exited normally instead of by signal (code: 0)
+>> # #          FAIL  TRAP.ign
+>> # not ok 57 TRAP.ign
 > 
-> #  RUN           layout3_fs.hostfs.tag_inode_dir_child ...
-> # fs_test.c:4707:tag_inode_dir_child:Expected 0 (0) == mkdir(self->dir_path, 0700) (-1)
-> # fs_test.c:4709:tag_inode_dir_child:Failed to create directory "tmp/dir": No such file or directory
-> # fs_test.c:4724:tag_inode_dir_child:Expected 0 (0) <= fd (-1)
-> # fs_test.c:4726:tag_inode_dir_child:Failed to create file "tmp/dir/file": No such file or directory
-> # fs_test.c:4729:tag_inode_dir_child:Expected 0 (0) == close(fd) (-1)
-> # tag_inode_dir_child: Test failed
-> #          FAIL  layout3_fs.hostfs.tag_inode_dir_child
+> Ugh, I'm guessing vfork() "eats" the signal, IOW grandchild signals,
+> child exits? vfork() and signals.. I'd rather leave to Kees || Mickael.
 > 
 
-This was because the vfork() wasn't followed by a wait().
+Hi, sorry for not trying to reproduce it locally and still commenting,
+but my vfork() man page says:
 
-> 
-> > 
-> > 
-> > On Wed, Feb 28, 2024 at 04:59:09PM -0800, Jakub Kicinski wrote:
-> > > From: Mickaël Salaün <mic@digikod.net>
-> > > 
-> > > Replace Landlock-specific TEST_F_FORK() with an improved TEST_F() which
-> > > brings four related changes:
-> > > 
-> > > Run TEST_F()'s tests in a grandchild process to make it possible to
-> > > drop privileges and delegate teardown to the parent.
-> > > 
-> > > Compared to TEST_F_FORK(), simplify handling of the test grandchild
-> > > process thanks to vfork(2), and makes it generic (e.g. no explicit
-> > > conversion between exit code and _metadata).
-> > > 
-> > > Compared to TEST_F_FORK(), run teardown even when tests failed with an
-> > > assert thanks to commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN
-> > > for ASSERT failures").
-> > > 
-> > > Simplify the test harness code by removing the no_print and step fields
-> > > which are not used.  I added this feature just after I made
-> > > kselftest_harness.h more broadly available but this step counter
-> > > remained even though it wasn't needed after all. See commit 369130b63178
-> > > ("selftests: Enhance kselftest_harness.h to print which assert failed").
-> > > 
-> > > Replace spaces with tabs in one line of __TEST_F_IMPL().
-> > > 
-> > > Cc: Günther Noack <gnoack@google.com>
-> > > Cc: Shuah Khan <shuah@kernel.org>
-> > > Cc: Will Drewry <wad@chromium.org>
-> > > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > > --
-> > > v4:
-> > >  - GAND -> GRAND
-> > >  - init child to 1, otherwise assert in setup triggers a longjmp
-> > >    which in turn reads child without it ever getting initialized
-> > >    (or being 0, i.e. we mistakenly assume we're in the grandchild)
-> > 
-> > Good catch!
+| The child must  not  return  from  the current  function  or  call
+| exit(3) (which would have the effect of calling exit handlers
+| established by the parent process and flushing the parent's stdio(3)
+| buffers), but may call _exit(2).
+
+And you still have some exit(3) calls.
+
+
 
