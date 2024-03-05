@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-5912-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EE21871C25
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:51:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFC77871C27
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:51:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5666B238E2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 10:51:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 949DE285729
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 10:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5286A535CF;
-	Tue,  5 Mar 2024 10:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B925E071;
+	Tue,  5 Mar 2024 10:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVWRJHS+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kdhUdp+r"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EE35DF0D;
-	Tue,  5 Mar 2024 10:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4859A5DF3A;
+	Tue,  5 Mar 2024 10:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709635390; cv=none; b=j94xffIu5MPIQoB3s1QF0zwuje65KGpqgszKPNGHyU4R1umJY7c0efjNyRmxf2n0EV5PB4gYCUqG2Qc+6CNSFTZwADTlJdvf/AZIw+Mrp1dj3egpzqRiDSKUzJ/xaOPdebnkL+4RIlBeMu3YqsOCO7lhISghpZLYGsXcBhIP/Q0=
+	t=1709635393; cv=none; b=htnzt+n5tgAGt/zA7tCQBQSX6fH1VURD7zw3kPclY8BPzuCvj/jaTKcXrIQ0n+dD3nhcXwj95+1ERAD0UYxhmTGQG3vE1zrZBUwE9j4yBEpVZ2n1A+36RmeCMPB09KHWhSAMTG7dPClKPB7HI0Mi/UgmohLOhikkvzif5H9BBYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709635390; c=relaxed/simple;
-	bh=7MuoN5+40TBUchfvIOx0MBwidvrH7l5RkAVhK7k1HtE=;
+	s=arc-20240116; t=1709635393; c=relaxed/simple;
+	bh=nj5zy96gmKnlenBRjur2RORmXzndyrMua5IHgdDEcu8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ljooETCmo8T4fJoQXvOHXJDs6+b65XpehYqj5Pl9FzvdB7J50+9KAxhtibE0nSdKnTrjtyFa8gRdOtopBOlBs4iVlaMIYqLj4BhGYL38Cq6Q0ARjXFDhES8SyM3p8EtdvZyfNPuj+aYNuOM71aya9dwVjatWlgrUC0Wqvt/dzxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVWRJHS+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3552FC433F1;
-	Tue,  5 Mar 2024 10:43:05 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=amHoTYXkR770RHMi8o8AQTztTo798yzZw+COQpbMmV8aQEYpCKW1/5WVqK/ghyPJFeux4k07Lj/8P10EI3pCXDUX9ew1KwjmIv9WbNxkO5htgI6UadLfd2Hm1Ob9PqpRZ2h4R6A2R95UYypdmju0Hh/5THn/UthLf7x1hcJ9mZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kdhUdp+r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA69C433C7;
+	Tue,  5 Mar 2024 10:43:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709635389;
-	bh=7MuoN5+40TBUchfvIOx0MBwidvrH7l5RkAVhK7k1HtE=;
+	s=k20201202; t=1709635393;
+	bh=nj5zy96gmKnlenBRjur2RORmXzndyrMua5IHgdDEcu8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=tVWRJHS+L9Bjz/DQLo3UhB1Vn3rM8Z4CFhPeiri0JAFBaxSjw0H6djCUUsN2VGuPe
-	 I/asD4s4i1fG3kflNefJ7mnRP8PtB5yDWVS8J0/ZEc72fee8DiDvO0yRn4kbbV+2fM
-	 4W7PlNOr40rUdtk7nBohffV2eARKLWe0WxI8oZKIqk7W2LZ1zSAWkDpQLwlHuE+k/w
-	 k/fQ9a3W/3wPMP6CFOUVq3Zj185pteX+6Zn1gzCdzzGpBIZhf1Y+8shlWMqoaNIuT3
-	 XacGkND9Z5DsfOwY5TWEu7euhUv6h+SfezivqYbvgSQa4IOrxEF6+R5CrKeYg1YDU6
-	 8SIwjEbcTy+JQ==
+	b=kdhUdp+rMqncstTrSXPCSRREM+PVrl6uuaQtHSd4OE+SG4ygsjh3ugdrMITenWMNc
+	 4PXzHs315uK1lRBoOTgali5+Eq+G9aGCb7iFZsTIJt9t/l7QCo4bm7d5MsNsFN5pDA
+	 0UpIBsNzl57YqNNTkvTB9UQ/veDuYgXQ4Cp6dATOpR8j514VyZrrgrbUMwzubZOyoV
+	 8lZDy9fNUn8bsE1m1bPm7OGYEx6PXcECN1dqKYpBmGuBVaKoaZ1krUPpzIMQl+1QW7
+	 xtKkTKzW2fYRjv5MshBuNWusSeUQ5bKN1rTZOrV0An4JMzqOWP+deKq6GyQ6lg2pme
+	 tT5YPmc5dM8FA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 05 Mar 2024 11:42:37 +0100
-Subject: [PATCH net-next 07/13] selftests: mptcp: add mptcp_lib_events
- helper
+Date: Tue, 05 Mar 2024 11:42:38 +0100
+Subject: [PATCH net-next 08/13] selftests: mptcp: diag: fix shellcheck
+ warnings
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-7-66618ea5504e@kernel.org>
+Message-Id: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-8-66618ea5504e@kernel.org>
 References: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-0-66618ea5504e@kernel.org>
 In-Reply-To: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-0-66618ea5504e@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -61,126 +61,108 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3467; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=2RK9Mv0/VX8CgX8AP4PwJg4uzfuEN7SHfxg0Gz+tvmU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl5vcctpe9yIoLdlZI++yeZAQNd6V9UaCh+LWZ5
- e4CcmqSw4uJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeb3HAAKCRD2t4JPQmmg
- cz2hD/0beHDIW3LjTJav6xuWQrvvWpal91JrAoQF9jEBW5YSAlLZU/xfjH61FiAIMPrCY3ZW+nq
- elF9s9+i3m59321oIR/ndsB7RJd23GyrQwDGtDaKRwAQTQRfoFfT4BR4l9rCMAbT3Ezl/wT4dRi
- 1Dj7zVw/9CWKF3wd7UuTEKrb6CKmcP6sD500cEt4q5oNSQ7D4davEkJOWssQcb2LSOUYJswZDU5
- rIDn/NGxqc6E4LVmTGNbtxEvdwDu/rBNtNhDW5Y+sI0pSHhBXqzFppiq8GIhUVfgaEil8uboUkH
- AR3mRidaJBjGnZ3dONP7cYdWFxhbm+A0gfjQiFhHBBC8EdYGNMO7Y7GOKhjr17HEoVVJOuJ9oDN
- /fDGcUp6e6UKNK9Tju1Jf8qftcnOArTrt9yHQrSVVEwbtqlmsg6vcMkoNFEPN1S+XOKiYH/Qtp7
- yApkYFLEaQ018trhPzCvv8WX7JaDr5gMLd4c5C1j3MoTfAJ46C8NKClC705Vvq3kuWFwAY6BDwG
- yuvUBTTK45exS/wqEfLHv03foB4GwcPav/xysBu51q4/YFHjSz6i11CzdfKKZN3RbD4MSSU7iUR
- JaBpUgxDiAhrKAQqV3l5Qns48F1iLwEA5TPxltrNC9wnI1JkP0F7RN7c53OpHxgMiD53nbaZ+19
- rMC+hLLUHlKi+gw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2683; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=nj5zy96gmKnlenBRjur2RORmXzndyrMua5IHgdDEcu8=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl5vcd3LGWePGSG1Mlb2jC+Tsdb0YBuRXuGfR2p
+ 6dNoqyyEVGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeb3HQAKCRD2t4JPQmmg
+ c4XrEACUAERJjxSzeSF/rv5EhpTrCB2Uw22Mb0Qf+8BQ5w6lfDaHTgyQvabGgYXT7wwZqOScVrF
+ yXwprARTG7u498tTyHTRPodty+9iYcO9AenM1M5Ub7YS4RT0A+VDf/BEOq2karzMsxaAq4cGWh0
+ qnQttttmrKC91fyIKdWZ9bkTnLgDTB54EOVHcoaHzz+xPWhF7pD4sot2jC4I6oBTzvA6r4ECQpe
+ MSMRuHRVhFsArqu+5GsbcN5FfhP7hCYdjH6AcENeJSm/jeIOhiMKEPpB+SoT5bsXPgurF696lKv
+ aLWtLSjo5UVAL4aSmYXaGWbjrlAQOvFqwHJGeCQaSGWReGl563J1+5TnExgTDbU2NKILYYSWQvs
+ SUWdA+Yk6EpYFqhAFW9KPD0pXtBfPau9g5MyUA876KeLaVQWrPyDmzopq7Bnj2QhfO1qjSz3fk9
+ PaoIJL/qwVA7URyP5sOTfgsuGv26FhenkYbaG67u0zY9/1rOmt2JghLbG0Hd2LdObIm3WkQnqT9
+ kFI1DmwZa94qBERCe/NEzXuJmt++hwbOxfnscd4XYVAUrMIyfZYBzwUWs0l1CEP/tZmgFIvMdmG
+ KyepIZ9ytiFIe3+nRD+/Ewls8gBpfsqGXGZOr3dCqKC69SC4rH5E4hbfC/d7RZ7333LmbnFhnaA
+ 7BABTbNVdEw5t9w==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+shellcheck recently helped to prevent issues. It is then good to fix the
+other harmless issues in order to spot "real" ones later.
 
-To avoid duplicated code in different MPTCP selftests, we can add and
-use helpers defined in mptcp_lib.sh.
+Here, two categories of warnings are now ignored:
 
-This patch unifies "pm_nl_ctl events" related code in userspace_pm.sh
-and mptcp_join.sh into a helper mptcp_lib_events(). Define it in
-mptcp_lib.sh and use it in both scripts.
+- SC2317: Command appears to be unreachable. The cleanup() function is
+  invoked indirectly via the EXIT trap.
 
-Note that mptcp_lib_kill_wait is now call before starting 'events' for
-mptcp_join.sh as well, but that's fine: each test is started from a new
-netns, so there will not be any existing pid there, and nothing is done
-when mptcp_lib_kill_wait is called with 0.
+- SC2086: Double quote to prevent globbing and word splitting. This is
+  recommended, but the current usage is correct and there is no need to
+  do all these modifications to be compliant with this rule.
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+For the modifications:
+
+  - SC2034: ksft_skip appears unused.
+  - SC2046: Quote '$(get_msk_inuse)' to prevent word splitting.
+  - SC2006: Use $(...) notation instead of legacy backticks `...`.
+
+Now this script is shellcheck (0.9.0) compliant. We can easily spot new
+issues.
+
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh   | 10 ++++------
- tools/testing/selftests/net/mptcp/mptcp_lib.sh    | 12 ++++++++++++
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 14 ++------------
- 3 files changed, 18 insertions(+), 18 deletions(-)
+ tools/testing/selftests/net/mptcp/diag.sh | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 2d9cf6f3bbf3..1df2d24979a0 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -430,12 +430,8 @@ reset_with_events()
- {
- 	reset "${1}" || return 1
+diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
+index 0ee93915bccb..d8f080f934ac 100755
+--- a/tools/testing/selftests/net/mptcp/diag.sh
++++ b/tools/testing/selftests/net/mptcp/diag.sh
+@@ -1,10 +1,14 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
  
--	:> "$evts_ns1"
--	:> "$evts_ns2"
--	ip netns exec $ns1 ./pm_nl_ctl events >> "$evts_ns1" 2>&1 &
--	evts_ns1_pid=$!
--	ip netns exec $ns2 ./pm_nl_ctl events >> "$evts_ns2" 2>&1 &
--	evts_ns2_pid=$!
-+	mptcp_lib_events "${ns1}" "${evts_ns1}" evts_ns1_pid
-+	mptcp_lib_events "${ns2}" "${evts_ns2}" evts_ns2_pid
- }
++# Double quotes to prevent globbing and word splitting is recommended in new
++# code but we accept it, especially because there were too many before having
++# address all other issues detected by shellcheck.
++#shellcheck disable=SC2086
++
+ . "$(dirname "${0}")/mptcp_lib.sh"
  
- reset_with_tcp_filter()
-@@ -608,7 +604,9 @@ wait_mpj()
- kill_events_pids()
- {
- 	mptcp_lib_kill_wait $evts_ns1_pid
-+	evts_ns1_pid=0
- 	mptcp_lib_kill_wait $evts_ns2_pid
-+	evts_ns2_pid=0
- }
- 
- pm_nl_set_limits()
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index f98cde130869..5e8a3c4700e4 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -422,3 +422,15 @@ mptcp_lib_ns_exit() {
- 		rm -f /tmp/"${netns}".{nstat,out}
+ ns=""
+-ksft_skip=4
+ test_cnt=1
+ timeout_poll=30
+ timeout_test=$((timeout_poll * 2 + 1))
+@@ -24,6 +28,8 @@ flush_pids()
  	done
  }
-+
-+mptcp_lib_events() {
-+	local ns="${1}"
-+	local evts="${2}"
-+	declare -n pid="${3}"
-+
-+	:>"${evts}"
-+
-+	mptcp_lib_kill_wait "${pid:-0}"
-+	ip netns exec "${ns}" ./pm_nl_ctl events >> "${evts}" 2>&1 &
-+	pid=$!
-+}
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 6d71bf36a1b9..3200d0b96d53 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -178,21 +178,11 @@ make_connection()
- 	if [ -z "$client_evts" ]; then
- 		client_evts=$(mktemp)
- 	fi
--	:>"$client_evts"
--	if [ $client_evts_pid -ne 0 ]; then
--		mptcp_lib_kill_wait $client_evts_pid
--	fi
--	ip netns exec "$ns2" ./pm_nl_ctl events >> "$client_evts" 2>&1 &
--	client_evts_pid=$!
-+	mptcp_lib_events "${ns2}" "${client_evts}" client_evts_pid
- 	if [ -z "$server_evts" ]; then
- 		server_evts=$(mktemp)
- 	fi
--	:>"$server_evts"
--	if [ $server_evts_pid -ne 0 ]; then
--		mptcp_lib_kill_wait $server_evts_pid
--	fi
--	ip netns exec "$ns1" ./pm_nl_ctl events >> "$server_evts" 2>&1 &
--	server_evts_pid=$!
-+	mptcp_lib_events "${ns1}" "${server_evts}" server_evts_pid
- 	sleep 0.5
  
- 	# Run the server
++# This function is used in the cleanup trap
++#shellcheck disable=SC2317
+ cleanup()
+ {
+ 	ip netns pids "${ns}" | xargs --no-run-if-empty kill -SIGKILL &>/dev/null
+@@ -174,7 +180,7 @@ chk_msk_inuse()
+ 	expected=$((expected + listen_nr))
+ 
+ 	for _ in $(seq 10); do
+-		if [ $(get_msk_inuse) -eq $expected ];then
++		if [ "$(get_msk_inuse)" -eq $expected ]; then
+ 			break
+ 		fi
+ 		sleep 0.1
+@@ -260,7 +266,7 @@ chk_msk_inuse 0 "1->0"
+ chk_msk_cestab 0 "1->0"
+ 
+ NR_CLIENTS=100
+-for I in `seq 1 $NR_CLIENTS`; do
++for I in $(seq 1 $NR_CLIENTS); do
+ 	echo "a" | \
+ 		timeout ${timeout_test} \
+ 			ip netns exec $ns \
+@@ -269,7 +275,7 @@ for I in `seq 1 $NR_CLIENTS`; do
+ done
+ mptcp_lib_wait_local_port_listen $ns $((NR_CLIENTS + 10001))
+ 
+-for I in `seq 1 $NR_CLIENTS`; do
++for I in $(seq 1 $NR_CLIENTS); do
+ 	echo "b" | \
+ 		timeout ${timeout_test} \
+ 			ip netns exec $ns \
 
 -- 
 2.43.0
