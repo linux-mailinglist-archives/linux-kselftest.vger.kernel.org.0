@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-5908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECD37871C19
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:50:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A95871C1B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8823CB20A6B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 10:50:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC5DB1F2528E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 10:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155485CDEA;
-	Tue,  5 Mar 2024 10:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4AF5D47E;
+	Tue,  5 Mar 2024 10:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5MpYPos"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CA4lRqOl"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76405CDE2;
-	Tue,  5 Mar 2024 10:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDAB5D47B;
+	Tue,  5 Mar 2024 10:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709635374; cv=none; b=OMJSFxHLlUdqOzqAZyPjfg87jLR+yGxTnyKhM0DX8Bnaf4OitZK8KX1Lx2adsao9qQukDcJT2q+DSwbOEmBHYgnEwGgOBqHW6/ZF06jpUqx4uxTyPxz7ogjWmc+VnRYvaJunJSJeNhQ3KE/hs9DzbyEScoRePYtSqTdZrwRAo/o=
+	t=1709635377; cv=none; b=qCZh9QYtwF++7nT3iLKgu56zEfJ9H49YGnRTvVWSmyKjOCbrQxmp0yJSgEwQC3bMrDupVgcFW6IwFtakJZyha7+5eRPM7luFrj9CE/8CBofa+GjqgewNtP6nnU3B6ZhksRaeSFFYijfXp9DD3cJc8LbK9ExacJjpNvS1oFRD+UU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709635374; c=relaxed/simple;
-	bh=JN2dNESh/y3tfb0TsFQ2avl51emLgu5m25nFtJpTifo=;
+	s=arc-20240116; t=1709635377; c=relaxed/simple;
+	bh=NwaGraVY2orMRXPc4dj4/mlBtx6flfWWyqqm+KZIYZA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pB26cyLLorLgx62ihAGa3xB7lTeUooD8V0U/9kLRTD2327s45vBKYGPnMQ7xEQv/Vtt3lG4dLkd2OL8E3Rs9e3t7U3JwZjQ6bMAHPU8J+BlDzOcD0c4ew9IlgDMNM6qG1fTAxUzwAdm07cmMA94n27QNbo00PYZ/YibK7jaepYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5MpYPos; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6016C433C7;
-	Tue,  5 Mar 2024 10:42:49 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=T9WO/4/IJJRNam1EwlzN/9+6jC703QSBGoh88K5aTdiG3bdC4H4ZaUpadmKxEXTUvqPocqCXoDKTVyXYFS+hlCOwN040ZOQ1zy9633+T3xQYh7ryowfn8vJwHuj2whCvB4b1d79w9oJN2NTRyVAW/1U/LWvK2wpoP9DB8ZpKe9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CA4lRqOl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8357C43390;
+	Tue,  5 Mar 2024 10:42:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709635373;
-	bh=JN2dNESh/y3tfb0TsFQ2avl51emLgu5m25nFtJpTifo=;
+	s=k20201202; t=1709635377;
+	bh=NwaGraVY2orMRXPc4dj4/mlBtx6flfWWyqqm+KZIYZA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=L5MpYPosyRXNolZOet8a+ciMnpda+ZzNAs9DfQSQ/qlwcWSm5kqw+QIlk7EiAIiLZ
-	 kw3v27npw2QhlXWcZeQjA0uIqDlT5L5Td9JZrJpIiajkVHs88KA4DfINqG/Vey3nif
-	 hRthsTXXSYlYyauk8Yme94l5Sb0guziUfgzPAxF01IqA91r8+EVnXHmd/qykgYIZuZ
-	 agmABV/uFoGztuv97AwtpwH+XXWfTMyCxNI1FwGn0Vmd5djQk17Z59ED18Xe1ueKhL
-	 VB0w9HOO0a3CbFkflifWVKtFRsNUUQXQirPTTwdk1o30FuiA6ukVztEFm47vCN/twd
-	 vfioCAuroaKcQ==
+	b=CA4lRqOlXOr3a6i2U6GCtUnowoCK+rEo0Q/5rEfsXIt9PG+SetBisgIkZQ+cr4DEX
+	 DVxE1k6Q2tmGpJnufqbqCabE1Y1A0kapwWxF4+N/bAoH8WI8BJMr/CaNM+DrfnjSgD
+	 0lUBP48pW9imqsW6h0xDWTc0ktNl773Fjy05AXjjg356zGkeGzfR6Ce44il32wA5Cx
+	 4Oito7jmuL5cbJNdgWHgMvPhT3g0hzDzBd4Wwv0dUP1kZqKnrfa2qzLtxsyIqwkuIi
+	 lpaXmZqklPBBxsTCKD3u2/pQ7DrQj9iIb3si859VYIELgUbO6EKSk5C33rp7CdawRZ
+	 gYfyIQVN8F7og==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 05 Mar 2024 11:42:33 +0100
-Subject: [PATCH net-next 03/13] selftests: mptcp: add
- mptcp_lib_check_output helper
+Date: Tue, 05 Mar 2024 11:42:34 +0100
+Subject: [PATCH net-next 04/13] selftests: mptcp: add local variables rndh
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-3-66618ea5504e@kernel.org>
+Message-Id: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-4-66618ea5504e@kernel.org>
 References: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-0-66618ea5504e@kernel.org>
 In-Reply-To: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-0-66618ea5504e@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,71 +63,61 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <tanggeliang@kylinos.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1473; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=nZs0x809wzr+eJddUt9MlJGJF47PT8cW7Q1w0vMKvSs=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl5vccRBX23YStuLEegcwd5kODJJ0cB6NBjHla5
- hSM+45062yJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeb3HAAKCRD2t4JPQmmg
- cwkSEAC7l+udkR6ZJEU8Uc0QWmX9JHZO+S59qOkADmlikuTekT+1y1xstVxwn3eEp+HU85aA9ti
- YB9UEIeLGl7pPR7bG/CJxwSCvsLBFcbfQIc1e0g8hxgxW03qA7H35FqRChb9Q5rLMW+IlTp7Mcw
- Bo9euarfevIHqhScSJliohAxv/kXhxACF5P5uZupd3kHbKDiw6bmmYEVIKv64goTfpLXyKXKlt2
- NM8kqnaZbwAYAB0OT8ADAleCIncBvHFP/3MUj55r4OWXVFE6Ht0wWw8g+bd9KYtpxUJT+2FY/iH
- m8KYnwL684jNoufB4kHked6PyOQziJge64xBhmHBUWoSb+vL3ffXjmVnT4ekU5NebbGTFC4vXjY
- ss9K75epheEiZj6P/vtisHagfuY3QBkQRj4sOWoC5J30Z9fWZ2mYwpEOLLcIAWoiN3qJjU9ah57
- /mAtlAVnCTLJvyzQXWu39wo4Xpz3/17GVoSkIZ26xWPk5VitVYNcEbTH06IEip4UktiXMUgG1r2
- Urd4X7JdcOUdXbksJAe5IginpdN9STEQN7X+n34a41BXlROGFnC72au2nUpIKqYV825p8sv7zUR
- Ss4bqNtA/SVvc+NFm7Brdr/dtrB65dj9ucyRTJHl4TPpVbL1bW8vYSi73cCbaLUR9tXw8ePZiJE
- cLXluGV2PUyY+xw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1438; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=rR83I8+9RuJUsNHRpTCHk6/7gRGCW52wxZZeqhezDd0=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl5vcctx8rBdjKkea/BSXnmiIO9Q/gwbNNqgI36
+ bMV7Q4C/pyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeb3HAAKCRD2t4JPQmmg
+ cwDyEACqvyfCv1JuWAQFsM8rHRSuGs4sxxbWjsiSDRZZvHeohxK5iiAIftryNbvAnGizVQT5/D/
+ W2IrRd6YnpLWTRBt940afAihg1+Gz3ruFi6os4ngK8wQMRC1QmfwNZl7Diyw82RlMJAOHYwjZbr
+ QoYYOfysJ45E5otqSyyBseDJYu5lj8IYWgoZ5E0blcSpOuSeWvfLMEq+YI1jJ1LG64Xe4PJpytE
+ hEoCrXfIB0VvRAVGTuxBKKJFOtBpKaTV0mbfV9UN3b8jkaGYzK7g2T0Xgm8XoCOwijASIKR6xNi
+ Hg9Oc2Wb1b+onpT8C/1qHmXSkI+q9ROw2+ziZHWblUXSiqc+IbPVed6Nqkss4Wc1uGKH6LGjMms
+ tlxisz0e3Y/AJiSzGMtjxxYspi1Iot1A/MYykoV1/0/41jhgkqB3q61gZIdyw2cCm4zoBN7nzzF
+ SVywLBBk09ZGAOPUt2NCv4EJuh7AGsC1oAUCqnGHad/HtHxWBmJnxwNbTOj5oba4HtRZEBo9k9W
+ +hBFtUubw/Yfd1Ke7U8Y/NsosF/gH7opbGgDQGmW9vzJMo5y7h5pLLyhbJ72O8UbYTqzB+DULVQ
+ VCMetI2kZKPBnkRi4ku/dDFPgkQjGCk1zD91tQLV9BJT66bcXsDVEArzCXC75HzNyy+u6hHIuuw
+ Vj2meyzOySeiT9g==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Extract the main part of check() in pm_netlink.sh into a new helper
-named mptcp_lib_check_output in mptcp_lib.sh.
+This patch adds local variables rndh in do_transfer() functions both in
+mptcp_connect.sh and simult_flows.sh, setting it with ${ns1:4}, not the
+global variable rndh. The global one is hidden in the next commit.
 
-This helper will be used for userspace dump addresses tests.
-
-Co-developed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_lib.sh | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh | 1 +
+ tools/testing/selftests/net/mptcp/simult_flows.sh  | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index b1fe354cfe96..ed86bb0bab49 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -373,3 +373,26 @@ mptcp_lib_check_tools() {
- 		esac
- 	done
- }
-+
-+mptcp_lib_check_output() {
-+	local err="${1}"
-+	local cmd="${2}"
-+	local expected="${3}"
-+	local cmd_ret=0
-+	local out
-+
-+	if ! out=$(${cmd} 2>"${err}"); then
-+		cmd_ret=${?}
-+	fi
-+
-+	if [ ${cmd_ret} -ne 0 ]; then
-+		mptcp_lib_print_err "[FAIL] command execution '${cmd}' stderr"
-+		cat "${err}"
-+		return 2
-+	elif [ "${out}" = "${expected}" ]; then
-+		return 0
-+	else
-+		mptcp_lib_print_err "[FAIL] expected '${expected}' got '${out}'"
-+		return 1
-+	fi
-+}
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+index ea52110c3fbc..b609649311f6 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+@@ -348,6 +348,7 @@ do_transfer()
+ 
+ 	if $capture; then
+ 		local capuser
++		local rndh="${connector_ns:4}"
+ 		if [ -z $SUDO_USER ] ; then
+ 			capuser=""
+ 		else
+diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
+index dbbb13d1d74e..3d08116500a4 100755
+--- a/tools/testing/selftests/net/mptcp/simult_flows.sh
++++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
+@@ -139,6 +139,7 @@ do_transfer()
+ 
+ 	if $capture; then
+ 		local capuser
++		local rndh="${ns1:4}"
+ 		if [ -z $SUDO_USER ] ; then
+ 			capuser=""
+ 		else
 
 -- 
 2.43.0
