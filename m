@@ -1,208 +1,142 @@
-Return-Path: <linux-kselftest+bounces-5945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA6268726D5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 19:41:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20C53872738
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 20:02:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59DF71F25A98
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 18:41:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52FA01C254FD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 19:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9E0128382;
-	Tue,  5 Mar 2024 18:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 477E11C29B;
+	Tue,  5 Mar 2024 19:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PMRsMfof"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="3Vx/ki12"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC80086657;
-	Tue,  5 Mar 2024 18:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A3A1B81D
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Mar 2024 19:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709664053; cv=none; b=GIP+Ah348hFqGnxwFrHdh2a2Wjd32xzLdp9gJ9bII1CiVEYZizU5SF2uE+qY/0iuWp2BRH8WxiAt6l3HX76CPcK7YZsMSoa14Bb90SW/Ikjl6CnT2OU+d4Y2afhDqxzVdiaNpvVzk+AqFAfYpFyW8GDrQlzzkyiDIXXBpqEQUQE=
+	t=1709665343; cv=none; b=VfMPiElExBqa5pMm8Le1YNO9wXj9mA24OmeRbS1W48VNUJzvu3kI8+KVzO5lPEwfktDdYnfR7yJVMTA24cEqtmbGoNesgcrYYIl/k+Vh4v1i6slQ/zLBKqZki+DrPmlHvzSQ6nLz4kjGO6jfq/DacgGFPQNnllyievlMfRMKeE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709664053; c=relaxed/simple;
-	bh=noyTquE0oeh4bMQGWb9TTkaxmt5wl0t40DilAAM+zUE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=T9l/81bRW/K/f7DEyIIx6+XJtbYF0TC2VCrWOAaCW7JhhoQf1gXcOcGhi+ySyvEYqQtie1R5VHXKlkAsNRxzSdlVjyB3X/gylt6nb/hKBwGUciW3vDdJfLaux+SEq4jhaeqi0B4+o4n9qe5Q+fDfC7PulKdhDJMHjdRYmdWCy6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PMRsMfof; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e5d7f1f25fso2642904b3a.0;
-        Tue, 05 Mar 2024 10:40:51 -0800 (PST)
+	s=arc-20240116; t=1709665343; c=relaxed/simple;
+	bh=K6FkNMPBXHerOI4xPkbioCN3A0D3+Ds7NwZGpoSSfe0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RGOW+WZ/0Ob1FEfD3LZSyLv0LLmaJdJvOmWxqnI0oNRj68T1tpfYY0IalH53eIYFQdtr5isHWn3VrSmvAZ8WVtAO6L89BxGFVpF7tIodpjTIIbSEplaVt0bqt+U0ehOavhGLbVzEP04Djip2dAvf5PivQ4jsJnzTdeZjoP1QEok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=3Vx/ki12; arc=none smtp.client-ip=209.85.210.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6e4ea4ffafbso1112169a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Mar 2024 11:02:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709664051; x=1710268851; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1709665341; x=1710270141; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X0gUmPSeCCdcwdwoiei/E0Jjh2VpvFQYRxx27Vw8kHc=;
-        b=PMRsMfofxnZjQ1ufzMKFBDkoWmX7tK8N5DIcd0g8BMZFOrVUe3UtQdYTBA6isL1SyQ
-         vPl481VPJYdET9kspk0YxUY97lJaVsgxcolimnfGCxcS1vUKqWM4STqvp2ueSpJSJpCp
-         Jab0mZwzs8aYYl9sl4RCnFb1T4BD/E61CD8a/ZnSyO+xkQMeVtSllNdOvSaELU1Sbbod
-         0G/0RVFc0/yspWIExHl7mdnV7KPkRpy2xz5vZVD61mBnpoIeEm2OPTvIs7RvHXKekYgH
-         zOwDnGxwT0X4yYoo18Ge937b+Q38fMpzHHGYGcFmFb43X6kes0p5WJ7F1lBpqrfX99Qq
-         M+JA==
+        bh=xBwFyKsVTwVp75+p2nwkinAD6Bz4XTPqba7sPzbW0JE=;
+        b=3Vx/ki12OkG9eSjnqNnLIPf1HkuxdA4XBPXIjRZ9w58KHKzpNCzgY0JVed9PmQs4LI
+         rZ9jlpK49HC9sqwvDjREV8J9VNn+GE0NBnJwCflbv/bNI2/Y9OFwYBuxnnShhpAhTSkx
+         1zTiNizcpawsWPFQywsIh2ahOgYWYVqehEtp9Q9RBAQ9HGeKw4e4shhvgdGvKgxFm3Po
+         J3JKs9BO5ZEWtdifoNqtqap/d3dvVHwj2Y1MZW40JnEFckLOvySJaxgUoaizGMe+EsqL
+         UAMGnPMZ99nyV2tg3WTSwaXWHiN/wUYiUiwXzo5w4uwMxTZQYkD5XSgy2RQGOZWqdzbA
+         cXdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709664051; x=1710268851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X0gUmPSeCCdcwdwoiei/E0Jjh2VpvFQYRxx27Vw8kHc=;
-        b=gy7tjKJlI77fZlrMzfrNWDMwBVDZRcuRWhFCIB3rbc4JsxazH5PWyVqhda1EK49bPr
-         5ZHM7fO9jZCqadOri6dIwoEKtW+IE5JMogju5WB+44LdqIyP50XgtR67v9uuFZSsqmnv
-         T9+qpYuTvWYucf0TCUARgJYL0xly1Q6ENV6Dew8J4z62CxGFZb7EmjVa/SB8SAalotJR
-         +4YPIRnhjWxPynYSF3h/a4PsUhPA2EHh+XilAZweWx/PKQWs44NI0dmT70fOsGU9FHs7
-         6p5KqCwsm7kMpI65IZT86YqAMOGNFL6czu8drjNn7amLbWjDHBuj5ZvRZF3se0ux0TQz
-         b6PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7TXW0ZpXWefkSjEir7ggGTZkUn6NK9sK9ubygQcOBuwrriNSpF9O6yzrzI0MfSOuq24Va2yLfrsaH/9vp6RCxK6BTT4PKtMPxY0RkMOmA7KUyapMBRurZQu5SIaxWuCVGB/TrKdcjUg==
-X-Gm-Message-State: AOJu0Yxsn0SSYZsdKsHGxzMELOuUxMoCC3ORrBwQqtceKhyMLppbsAWe
-	BARWIl9yc+VecDLjCRZC+aaooU8mM4aApWxbuSammPpgNFmUhThAKAlsLIZH
-X-Google-Smtp-Source: AGHT+IEh5cNC1e3ALin9EYEqP1JMKTTzvFIxop5uA7PitJpNaz0+Cvy9gmZD//Z/el6YtUoATah/OA==
-X-Received: by 2002:a05:6a21:3403:b0:1a0:e089:e25e with SMTP id yn3-20020a056a21340300b001a0e089e25emr2819250pzb.46.1709664050630;
-        Tue, 05 Mar 2024 10:40:50 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p2-20020aa78602000000b006e24991dd5bsm9538237pfn.98.2024.03.05.10.40.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 10:40:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-kselftest@vger.kernel.org
-Cc: David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [RFC PATCH 5/5] loongarch: Add support for suppressing warning tracebacks
-Date: Tue,  5 Mar 2024 10:40:33 -0800
-Message-Id: <20240305184033.425294-6-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240305184033.425294-1-linux@roeck-us.net>
-References: <20240305184033.425294-1-linux@roeck-us.net>
+        d=1e100.net; s=20230601; t=1709665341; x=1710270141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xBwFyKsVTwVp75+p2nwkinAD6Bz4XTPqba7sPzbW0JE=;
+        b=PKWZhH4VerYK0IJ81LbBJXnDpTafPwXs1kndt3nxGG5FuTArD3q3cCk6KzDA9nBdFa
+         LfsKTg9JzPzIeU805Cumt52YVkdmKVbBffpEnZT3dd9UlBgx/tZeFB8Eeo1QWfmWkOH2
+         LGheLOi6QG3PF2KrD8wgytu/5teQ+1uER8bnbachR1Ac9rw9d06guF/4UM3167dvFKyZ
+         I/s6JqWh3ky+d+ZHiCws1Soqc6DjDa7kWC8zfzpajqnQqHuGwBW48mwHU7pqKKrrSZPe
+         kLz/qTXKBIsgUnUevRpoaQODOo/4pTBvRwtOKsO7ktIIWQapcnL8kR6jmRMXTNBQYJTc
+         MNSA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4kyBJbaH8JHVF3KOdWxB9H+63MwLQ+gSLihV1e5GdWQgIodwbDGVnuhOPDpQHJOTYYBFu227e8GeSyC5W/UT1+RLnsmiDgdqHIx/VysDn
+X-Gm-Message-State: AOJu0YxGJhIAL+j3j8xl5HNvf6Fk8ug41H7kh5XBBveQho+HkpFPMkap
+	ljxkro0R2U61fs4Z8pB0K3hPgIxgsig2v4+xotrCuZ+6GNDJuCqiFCQ3iCB2EUvLvaO8qPfyS0n
+	DBJP38I3oLu5Be0XrYlL0nuVCIwicnpwnL766kA==
+X-Google-Smtp-Source: AGHT+IEWrieqCghcMtuAiU8+E4g1wtb0MN+anUUpKGJrOGNU5YfOBzlImhJC+Y9W4AXeVKQmrFK59za9cu/REtKiSrk=
+X-Received: by 2002:a05:6808:14d:b0:3c2:1944:e2f9 with SMTP id
+ h13-20020a056808014d00b003c21944e2f9mr223145oie.17.1709665340696; Tue, 05 Mar
+ 2024 11:02:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240305002124.7552-1-warthog618@gmail.com>
+In-Reply-To: <20240305002124.7552-1-warthog618@gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 5 Mar 2024 20:02:09 +0100
+Message-ID: <CAMRc=McneyUZztqtdrsbGG1E+DWhBxq2cQH7OWMEStaJjKLkCA@mail.gmail.com>
+Subject: Re: [PATCH] selftest: gpio: remove obsolete gpio-mockup test
+To: Kent Gibson <warthog618@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, bartosz.golaszewski@linaro.org, 
+	andriy.shevchenko@linux.intel.com, christophe.leroy@csgroup.eu, 
+	shuah@kernel.org, bamv2005@gmail.com, Pengfei Xu <pengfei.xu@intel.com>, 
+	Yi Lai <yi1.lai@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add support for selectively suppressing WARNING tracebacks to loongarch.
-This requires adding the function triggering tracebacks to the __bug_table
-object section.
+On Tue, Mar 5, 2024 at 1:26=E2=80=AFAM Kent Gibson <warthog618@gmail.com> w=
+rote:
+>
+> With the removal of the ARCH_NR_GPIOS, the number of available GPIOs
+> is effectively unlimited, causing the gpio-mockup module load failure
+> test that overflowed the number of GPIOs to unexpectedly succeed, and
+> so fail.
+>
+> The test is no longer relevant so remove it.
+> Promote the "no lines defined" test so there is still one load
+> failure test in the basic set.
+>
+> Fixes: 7b61212f2a07 ("gpiolib: Get rid of ARCH_NR_GPIOS")
+> Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+> Reported-by: Yi Lai <yi1.lai@intel.com>
+> Closes: https://lore.kernel.org/linux-gpio/ZC6OHBjdwBdT4sSb@xpf.sh.intel.=
+com/
+> Signed-off-by: Kent Gibson <warthog618@gmail.com>
+> ---
+>  tools/testing/selftests/gpio/gpio-mockup.sh | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/gpio/gpio-mockup.sh b/tools/testing/=
+selftests/gpio/gpio-mockup.sh
+> index 0d6c5f7f95d2..fc2dd4c24d06 100755
+> --- a/tools/testing/selftests/gpio/gpio-mockup.sh
+> +++ b/tools/testing/selftests/gpio/gpio-mockup.sh
+> @@ -377,13 +377,10 @@ if [ "$full_test" ]; then
+>         insmod_test "0,32,32,44,-1,22,-1,31" 32 12 22 31
+>  fi
+>  echo "2.  Module load error tests"
+> -echo "2.1 gpio overflow"
+> -# Currently: The max number of gpio(1024) is defined in arm architecture=
+.
+> -insmod_test "-1,1024"
+> +echo "2.1 no lines defined"
+> +insmod_test "0,0"
+>  if [ "$full_test" ]; then
+> -       echo "2.2 no lines defined"
+> -       insmod_test "0,0"
+> -       echo "2.3 ignore range overlap"
+> +       echo "2.2 ignore range overlap"
+>         insmod_test "0,32,0,1" 32
+>         insmod_test "0,32,1,5" 32
+>         insmod_test "0,32,30,35" 32
+> --
+> 2.39.2
+>
+>
 
-To limit image size impact, the pointer to the function name is only added
-to the __bug_table section if both CONFIG_KUNIT and CONFIG_DEBUG_BUGVERBOSE
-are enabled. Otherwise, the __func__ assembly parameter is replaced with a
-(dummy) NULL parameter to avoid an image size increase due to unused
-__func__ entries (this is necessary because __func__ is not a define but a
-virtual variable).
+Applied, thanks!
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- arch/loongarch/include/asm/bug.h | 38 +++++++++++++++++++++++---------
- 1 file changed, 27 insertions(+), 11 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
-index d4ca3ba25418..25f2b5ae7702 100644
---- a/arch/loongarch/include/asm/bug.h
-+++ b/arch/loongarch/include/asm/bug.h
-@@ -3,47 +3,63 @@
- #define __ASM_BUG_H
- 
- #include <asm/break.h>
-+#include <kunit/bug.h>
- #include <linux/stringify.h>
- 
- #ifndef CONFIG_DEBUG_BUGVERBOSE
--#define _BUGVERBOSE_LOCATION(file, line)
-+#define _BUGVERBOSE_LOCATION(file, func, line)
- #else
--#define __BUGVERBOSE_LOCATION(file, line)			\
-+#if IS_ENABLED(CONFIG_KUNIT)
-+# define HAVE_BUG_FUNCTION
-+# define __BUG_FUNC_PTR(func)  .long func - .;
-+#else
-+# define __BUG_FUNC_PTR(func)
-+#endif
-+
-+#define __BUGVERBOSE_LOCATION(file, func, line)			\
- 		.pushsection .rodata.str, "aMS", @progbits, 1;	\
- 	10002:	.string file;					\
- 		.popsection;					\
- 								\
- 		.long 10002b - .;				\
-+		__BUG_FUNC_PTR(func)				\
- 		.short line;
--#define _BUGVERBOSE_LOCATION(file, line) __BUGVERBOSE_LOCATION(file, line)
-+#define _BUGVERBOSE_LOCATION(file, func, line) __BUGVERBOSE_LOCATION(file, func, line)
- #endif
- 
- #ifndef CONFIG_GENERIC_BUG
--#define __BUG_ENTRY(flags)
-+#define __BUG_ENTRY(flags, func)
- #else
--#define __BUG_ENTRY(flags) 					\
-+#define __BUG_ENTRY(flags, func)				\
- 		.pushsection __bug_table, "aw";			\
- 		.align 2;					\
- 	10000:	.long 10001f - .;				\
--		_BUGVERBOSE_LOCATION(__FILE__, __LINE__)	\
-+		_BUGVERBOSE_LOCATION(__FILE__, func, __LINE__)	\
- 		.short flags; 					\
- 		.popsection;					\
- 	10001:
- #endif
- 
--#define ASM_BUG_FLAGS(flags)					\
--	__BUG_ENTRY(flags)					\
-+#define ASM_BUG_FLAGS(flags, func)				\
-+	__BUG_ENTRY(flags, func)				\
- 	break		BRK_BUG
- 
--#define ASM_BUG()	ASM_BUG_FLAGS(0)
-+#define ASM_BUG()	ASM_BUG_FLAGS(0, .)
-+
-+#ifdef HAVE_BUG_FUNCTION
-+# define __BUG_FUNC    __func__
-+#else
-+# define __BUG_FUNC    NULL
-+#endif
- 
- #define __BUG_FLAGS(flags)					\
--	asm_inline volatile (__stringify(ASM_BUG_FLAGS(flags)));
-+	asm_inline volatile (__stringify(ASM_BUG_FLAGS(flags, %0)) : : "i" (__BUG_FUNC));
- 
- #define __WARN_FLAGS(flags)					\
- do {								\
- 	instrumentation_begin();				\
--	__BUG_FLAGS(BUGFLAG_WARNING|(flags));			\
-+	if (!IS_SUPPRESSED_WARNING(__func__))			\
-+		__BUG_FLAGS(BUGFLAG_WARNING|(flags));		\
- 	instrumentation_end();					\
- } while (0)
- 
--- 
-2.39.2
-
+Bart
 
