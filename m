@@ -1,139 +1,134 @@
-Return-Path: <linux-kselftest+bounces-5919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5921-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09FD4871D4C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 12:20:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7243D871E35
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 12:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D47B1F23662
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:20:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E379283CD2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9013B5A7BF;
-	Tue,  5 Mar 2024 11:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DCF5822E;
+	Tue,  5 Mar 2024 11:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTnLPty5"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gT9ny6Ox";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="r7l5RfFf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B27B5B5A1;
-	Tue,  5 Mar 2024 11:19:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C8E5786E;
+	Tue,  5 Mar 2024 11:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709637550; cv=none; b=Hytz62khZs/NrlEss5IlDYw67Elhl4NqWB/xx/+LOqIucEZyEjK0t1s9sT92hi5O/t1bh2l2yrG5p2ym7UJ4/Ue0z0JJ5RuGitsQ+WYCQnq+SGyyh4fU6Tj6IXvdmyP+p+5hnYLoJj+3u3oPws8qehsS1Ev7RY2ettuVKK1lj2Q=
+	t=1709639157; cv=none; b=HIaKZaJFGjsTtNA2vVJ5EC6qNAkAy6XpuqgRbgyLN71CWPrByyvAcVn2Imo/zUYGzKmxbRLDyqZ5QgPmqA4bP9llECOVY9a/TS4d5Wu6u6/LBbMisPyv2CicvAyfs5fNAj4a4FbEQe0+aqXoMCS4xGbP3pScCqZB6pQH3FQRgxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709637550; c=relaxed/simple;
-	bh=Z4IBEZRKAlbU/N0SOY+SwMF12pQcVJDXcB7KTmyw/KA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hy9OALHH8kvwnerbpSoYj9Dq58dinXM15VDCD+8coB7bz548fr9f7vfDn60jK7FUoTCFFLLRJciUBGUSASJS0RprFS8hpGtm9GgkPETE242MIW0htDrqSYGqgvPC84TDySy8yDSBpExZYyNEUiGgz1+t9cnU66WMbJel3ePHWCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTnLPty5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D602C43390;
-	Tue,  5 Mar 2024 11:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709637548;
-	bh=Z4IBEZRKAlbU/N0SOY+SwMF12pQcVJDXcB7KTmyw/KA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oTnLPty5a1khzX8k8vdcade5csRGX487/YQggUreaqE4IdZBeSaK3/ZvxwI1dTXfY
-	 lMCij9GosSsZMianJnpoWlYpCViw6WJZTjlUet4Ca+E3mgmkbwImI9GnRqPIWzlcTn
-	 mJfKB3/cpYijbm/fOV4D6Rn9tKBFWefpvoXj8kImn8ADD2SoSiRoZHSarq2wOTn/6s
-	 hVhlKMoCBEVpWFc+HSni3gip/Ec9K+oeeWJHVyFg0eBoJ2tZnXNKqt9jOcCpRtYba7
-	 dUB1E9idDfn7Nc7PfXqLo+XIGEs1AfAe0N54Mz5T+RctqVO8WWhhy/an1Tsgnx+s8r
-	 Rx6Un/4ujM1Kg==
-Message-ID: <8b2b6492-d460-4981-8624-068dd766d3ac@kernel.org>
-Date: Tue, 5 Mar 2024 12:19:02 +0100
+	s=arc-20240116; t=1709639157; c=relaxed/simple;
+	bh=cvxuucTIk3cPB6Sfmo73Zpg57jG48hokZ+K6J7a310Y=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=bA43VIZWInlOjMBu9HiWbre9Hiz6JtjctMm6G7MEetmAbp7XpZ/UU4pJk9+LprBzXNclJE8zlo2UOsXxOjnHcZAtDQrDA6qRMNPieiryg0S/7sOjm72Wqf7meKMYpaI6OXBOsbILLuFpj+YS71NTje9DjK3oaBlSpwKv2eXIK4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gT9ny6Ox; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=r7l5RfFf; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id C5C811140119;
+	Tue,  5 Mar 2024 06:45:53 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 05 Mar 2024 06:45:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1709639153; x=1709725553; bh=L0V6fINBaj
+	l5FUIjF3rvm+rXcNcFq8LiVT+eqTz8+4Q=; b=gT9ny6OxXnueQI9xdCBEag7HKO
+	FdCh+erTgJFfAkSJGEeHo3o/CQSkSpNTCQIWB3qHthoZAuHpFNa3Yt2mufh5t8XM
+	RkZPoq58i8sQm7QM6k/0UeVnLtSyrqcTvMNlirly12svIohTJGyBpswiVN+4f2nu
+	a4Gdmra+RLecfGkvMKV1PStNwiBGeT1YCi3G7T9x+UOhkojR3Vckx7QDUlsLBJrh
+	GnA4Jml2c6SDIleCfF0MobGJNkiwYtCpUmXixR4ndlOM77jGOYejxIbDMc9wczNn
+	iZ7DAHPx1RtIdjt2UZe+LmMGAeDQIrSxYAiCxR8NGAxvx6HNwGSgGbrfamsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709639153; x=1709725553; bh=L0V6fINBajl5FUIjF3rvm+rXcNcF
+	q8LiVT+eqTz8+4Q=; b=r7l5RfFfQCs0KXaQISa21e3Vj0J8W2dG2BZKhtyZbzoa
+	xnJHRqLWqDsctD2yeVkohp91MvN0iM/utH2nrY3ZXVonoCPFgkGl4+xB8OrZ+b9C
+	XEUEZLCDl8qUJgEzjwQ9t/ozI5aWIhxa1B1Z/Q9Nji3FmFm3ig0Sr9uwe/RVW8Jv
+	iI2wHoYdoea+0rd3PPTAyAp9r8DEXTgv5b8fHO8rKJT0zYadppNqGkTzDOJXWjVE
+	X673GgaMTas3U54//gV44g6bOwkC0Ldk4+1cJ+vMpiLh2x1Ox0qVnLMvqDHdeNjm
+	wpzwqM+OQeVf29lpC0ShM8xvAcsSMVMTFeeWazTa9A==
+X-ME-Sender: <xms:8QXnZY1TKoSsgzkFqjvFm4sCKvIM8vRTCf2iLFpBW_rz77-zVucHtw>
+    <xme:8QXnZTFdCOHvudbmAbFG1q2XtwcQz8m7HePqTFkmydfa6aMZvb8xbwiMcPkBa9OSh
+    QI3wVL_IgjyfAy3WtQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheelgddvlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:8QXnZQ4M1rLZ00uUutjr9FMXuklVvsc3rxj9vS5XqKuTDeV_HGHlpw>
+    <xmx:8QXnZR0iw_m4FxVYsfGb7IBGYE9BtOm6uxR54nz4R68d3WFtuHybbQ>
+    <xmx:8QXnZbFYu30BCPH0Qo2KVS5wDMPAdKmgxzoHpEp3zyOQucxb2wTb6A>
+    <xmx:8QXnZebooVWsndEZ83Gw-Ut3TBDL0rhPgLrtWUsZkkACk0Pz3WkTrQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7A6EEB6008D; Tue,  5 Mar 2024 06:45:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 03/13] selftests: mptcp: add
- mptcp_lib_check_output helper
-Content-Language: en-GB, fr-BE
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Geliang Tang <tanggeliang@kylinos.cn>
-References: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-0-66618ea5504e@kernel.org>
- <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-3-66618ea5504e@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20240305-upstream-net-next-20240304-selftests-mptcp-shared-code-shellcheck-v1-3-66618ea5504e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Message-Id: <b28dfaba-a5d3-4c33-a07c-9d991c0235a2@app.fastmail.com>
+In-Reply-To: <20231208005250.2910004-5-almasrymina@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-5-almasrymina@google.com>
+Date: Tue, 05 Mar 2024 12:45:33 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mina Almasry" <almasrymina@google.com>,
+ "Shailend Chand" <shailend@google.com>, Netdev <netdev@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Jeroen de Borst" <jeroendb@google.com>,
+ "Praveen Kaligineedi" <pkaligineedi@google.com>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+ "David Ahern" <dsahern@kernel.org>,
+ "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
+ shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "Yunsheng Lin" <linyunsheng@huawei.com>,
+ "Harshitha Ramamurthy" <hramamurthy@google.com>,
+ "Shakeel Butt" <shakeelb@google.com>
+Subject: Re: [net-next v1 04/16] gve: implement queue api
+Content-Type: text/plain
 
-Hello,
+On Fri, Dec 8, 2023, at 01:52, Mina Almasry wrote:
+> +static void *gve_rx_queue_mem_alloc(struct net_device *dev, int idx)
+> +{
+> +	struct gve_per_rx_queue_mem_dqo *gve_q_mem;
+...
+> +
+> +	gve_q_mem = kvcalloc(1, sizeof(*gve_q_mem), GFP_KERNEL);
+> +	if (!gve_q_mem)
+> +		goto err;
 
-On 05/03/2024 11:42, Matthieu Baerts (NGI0) wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> Extract the main part of check() in pm_netlink.sh into a new helper
-> named mptcp_lib_check_output in mptcp_lib.sh.
-> 
-> This helper will be used for userspace dump addresses tests.
+[minor comment]
 
-Arf, I just noticed that when the MPTCP tree got rebased on top of
-net-next, Git didn't drop this patch, but resolved the conflicts by
-duplicating mptcp_lib_check_output() function. Of course, redefining the
-function is OK in Bash, and I didn't notice the issue when running the
-tests...
+The structure does not seem overly large, even if you have
+an array here, I don't see why you would need the vmalloc
+type allocation for struct gve_per_rx_queue_mem_dqo.
 
-I will resend this series without this patch tomorrow.
-
-Sorry for the noise :-/
-
-pw-bot: changes-requested
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+   Arnd
 
