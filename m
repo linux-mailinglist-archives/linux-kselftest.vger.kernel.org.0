@@ -1,134 +1,120 @@
-Return-Path: <linux-kselftest+bounces-5921-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5922-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7243D871E35
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 12:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2954D871E50
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 12:54:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E379283CD2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:46:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D07962845B6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Mar 2024 11:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DCF5822E;
-	Tue,  5 Mar 2024 11:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1343858ABA;
+	Tue,  5 Mar 2024 11:54:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gT9ny6Ox";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="r7l5RfFf"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="lCbW5Fku"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C8E5786E;
-	Tue,  5 Mar 2024 11:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AB458123;
+	Tue,  5 Mar 2024 11:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709639157; cv=none; b=HIaKZaJFGjsTtNA2vVJ5EC6qNAkAy6XpuqgRbgyLN71CWPrByyvAcVn2Imo/zUYGzKmxbRLDyqZ5QgPmqA4bP9llECOVY9a/TS4d5Wu6u6/LBbMisPyv2CicvAyfs5fNAj4a4FbEQe0+aqXoMCS4xGbP3pScCqZB6pQH3FQRgxo=
+	t=1709639661; cv=none; b=qTnaJUzkJwBoltoUbWrraDwkqmse9n1cWO+MND0VcvShD5WjClVe6i/5z2fEIeHpB8NJeFqSbSO+aDZqBjG0N/ICm+Qd9YF+Tp508U+YEqa0K/HDShywLqact+TrRnsOA8o3HKM0EV2RilVX9TH63OFXW2OhzilOIqIPkiJkKLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709639157; c=relaxed/simple;
-	bh=cvxuucTIk3cPB6Sfmo73Zpg57jG48hokZ+K6J7a310Y=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=bA43VIZWInlOjMBu9HiWbre9Hiz6JtjctMm6G7MEetmAbp7XpZ/UU4pJk9+LprBzXNclJE8zlo2UOsXxOjnHcZAtDQrDA6qRMNPieiryg0S/7sOjm72Wqf7meKMYpaI6OXBOsbILLuFpj+YS71NTje9DjK3oaBlSpwKv2eXIK4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gT9ny6Ox; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=r7l5RfFf; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id C5C811140119;
-	Tue,  5 Mar 2024 06:45:53 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 05 Mar 2024 06:45:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1709639153; x=1709725553; bh=L0V6fINBaj
-	l5FUIjF3rvm+rXcNcFq8LiVT+eqTz8+4Q=; b=gT9ny6OxXnueQI9xdCBEag7HKO
-	FdCh+erTgJFfAkSJGEeHo3o/CQSkSpNTCQIWB3qHthoZAuHpFNa3Yt2mufh5t8XM
-	RkZPoq58i8sQm7QM6k/0UeVnLtSyrqcTvMNlirly12svIohTJGyBpswiVN+4f2nu
-	a4Gdmra+RLecfGkvMKV1PStNwiBGeT1YCi3G7T9x+UOhkojR3Vckx7QDUlsLBJrh
-	GnA4Jml2c6SDIleCfF0MobGJNkiwYtCpUmXixR4ndlOM77jGOYejxIbDMc9wczNn
-	iZ7DAHPx1RtIdjt2UZe+LmMGAeDQIrSxYAiCxR8NGAxvx6HNwGSgGbrfamsA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709639153; x=1709725553; bh=L0V6fINBajl5FUIjF3rvm+rXcNcF
-	q8LiVT+eqTz8+4Q=; b=r7l5RfFfQCs0KXaQISa21e3Vj0J8W2dG2BZKhtyZbzoa
-	xnJHRqLWqDsctD2yeVkohp91MvN0iM/utH2nrY3ZXVonoCPFgkGl4+xB8OrZ+b9C
-	XEUEZLCDl8qUJgEzjwQ9t/ozI5aWIhxa1B1Z/Q9Nji3FmFm3ig0Sr9uwe/RVW8Jv
-	iI2wHoYdoea+0rd3PPTAyAp9r8DEXTgv5b8fHO8rKJT0zYadppNqGkTzDOJXWjVE
-	X673GgaMTas3U54//gV44g6bOwkC0Ldk4+1cJ+vMpiLh2x1Ox0qVnLMvqDHdeNjm
-	wpzwqM+OQeVf29lpC0ShM8xvAcsSMVMTFeeWazTa9A==
-X-ME-Sender: <xms:8QXnZY1TKoSsgzkFqjvFm4sCKvIM8vRTCf2iLFpBW_rz77-zVucHtw>
-    <xme:8QXnZTFdCOHvudbmAbFG1q2XtwcQz8m7HePqTFkmydfa6aMZvb8xbwiMcPkBa9OSh
-    QI3wVL_IgjyfAy3WtQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheelgddvlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:8QXnZQ4M1rLZ00uUutjr9FMXuklVvsc3rxj9vS5XqKuTDeV_HGHlpw>
-    <xmx:8QXnZR0iw_m4FxVYsfGb7IBGYE9BtOm6uxR54nz4R68d3WFtuHybbQ>
-    <xmx:8QXnZbFYu30BCPH0Qo2KVS5wDMPAdKmgxzoHpEp3zyOQucxb2wTb6A>
-    <xmx:8QXnZebooVWsndEZ83Gw-Ut3TBDL0rhPgLrtWUsZkkACk0Pz3WkTrQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 7A6EEB6008D; Tue,  5 Mar 2024 06:45:53 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
+	s=arc-20240116; t=1709639661; c=relaxed/simple;
+	bh=x67k3bXd+uwmOFJJWOm3lRnqdPiR3GAdvjQmyD9Eock=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IMHeSuszuuH0N2nzYmrNAoi/atZHiTCvalXDtqtX7S/3n+gSjriET9d4IJvaFqeIZ0eP2/qHnS41blgjK4aDhuBYjBN1g1A5/UX+A7DgM+rjaBIyTDXQy+M3hrsMNgagwM9jXeCboj8YHshTZfQ+oN02uN7ZbzKGEZ3EsEcfYyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=lCbW5Fku; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Tpv9Y2RPSz9sdN;
+	Tue,  5 Mar 2024 12:54:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1709639649;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HiRlMg6h832yaauOUM6BWIgl8Xd8q3pgd4fABlp2sNE=;
+	b=lCbW5Fkub4izG2Oae+U/G280FBsPwV8XxqT1+OYlgVxXYXzDihADmuze4xgdqFMYUvK8rW
+	oJyybsoihkw07bNiavbIs7msvfck72PWOOWrJpj3uur04l60nNW4XiNT2MazDIG2W2VARa
+	+a8hijWBWxiv34doewuhy6xQPcrV4jS9lUt20cdGct+RgK5pnbrx7WDxxZ0dr6/q9A1yh4
+	UgG1XdhWaaoGRB/8J1rihDNeV2+oRpWWFVIc/Nt6eGR+1qHXm5ZO4ZvRGinB7ysS0kj2pb
+	UBuAw51IIfos4Ml37c6FKtD7AeZDaY9K5+q/oTSvnBtn6WL4wk/D5xFyZVwu6A==
+Message-ID: <2c828aa1-d9bb-4b27-844b-a098e206318f@mailbox.org>
+Date: Tue, 5 Mar 2024 12:54:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b28dfaba-a5d3-4c33-a07c-9d991c0235a2@app.fastmail.com>
-In-Reply-To: <20231208005250.2910004-5-almasrymina@google.com>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-5-almasrymina@google.com>
-Date: Tue, 05 Mar 2024 12:45:33 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mina Almasry" <almasrymina@google.com>,
- "Shailend Chand" <shailend@google.com>, Netdev <netdev@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Jeroen de Borst" <jeroendb@google.com>,
- "Praveen Kaligineedi" <pkaligineedi@google.com>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
- "David Ahern" <dsahern@kernel.org>,
- "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
- shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Yunsheng Lin" <linyunsheng@huawei.com>,
- "Harshitha Ramamurthy" <hramamurthy@google.com>,
- "Shakeel Butt" <shakeelb@google.com>
-Subject: Re: [net-next v1 04/16] gve: implement queue api
-Content-Type: text/plain
+Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for Kernel
+ Testing
+To: Linus Torvalds <torvalds@linuxfoundation.org>,
+ Nikolai Kondrashov <spbnick@gmail.com>
+Cc: Maxime Ripard <mripard@kernel.org>,
+ Helen Koike <helen.koike@collabora.com>, linuxtv-ci@linuxtv.org,
+ dave.pigott@collabora.com, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+ gustavo.padovan@collabora.com, pawiecz@collabora.com,
+ tales.aparecida@gmail.com, workflows@vger.kernel.org,
+ kernelci@lists.linux.dev, skhan@linuxfoundation.org,
+ kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com,
+ cocci@inria.fr, Julia.Lawall@inria.fr, laura.nao@collabora.com,
+ ricardo.canuelo@collabora.com, kernel@collabora.com,
+ gregkh@linuxfoundation.org
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <20240228225527.1052240-2-helen.koike@collabora.com>
+ <20240229-dancing-laughing-groundhog-d85161@houat>
+ <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com>
+ <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
+Content-Language: en-CA
+From: =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>
+In-Reply-To: <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: iuhiedtbyd865d5er91f663bapgj73ny
+X-MBO-RS-ID: 76dfc0d5d612d7f2266
 
-On Fri, Dec 8, 2023, at 01:52, Mina Almasry wrote:
-> +static void *gve_rx_queue_mem_alloc(struct net_device *dev, int idx)
-> +{
-> +	struct gve_per_rx_queue_mem_dqo *gve_q_mem;
-...
-> +
-> +	gve_q_mem = kvcalloc(1, sizeof(*gve_q_mem), GFP_KERNEL);
-> +	if (!gve_q_mem)
-> +		goto err;
+On 2024-02-29 21:21, Linus Torvalds wrote:
+> On Thu, 29 Feb 2024 at 01:23, Nikolai Kondrashov <spbnick@gmail.com> wrote:
+>>
+>> However, I think a better approach would be *not* to add the .gitlab-ci.yaml
+>> file in the root of the source tree, but instead change the very same repo
+>> setting to point to a particular entry YAML, *inside* the repo (somewhere
+>> under "ci" directory) instead.
+> 
+> I really don't want some kind of top-level CI for the base kernel project.
+> 
+> We already have the situation that the drm people have their own ci
+> model. II'm ok with that, partly because then at least the maintainers
+> of that subsystem can agree on the rules for that one subsystem.
+> 
+> I'm not at all interested in having something that people will then
+> either fight about, or - more likely - ignore, at the top level
+> because there isn't some global agreement about what the rules are.
+> 
+> For example, even just running checkpatch is often a stylistic thing,
+> and not everybody agrees about all the checkpatch warnings.
+> 
+> I would suggest the CI project be separate from the kernel.
 
-[minor comment]
+That would be missing a lot of the point / benefit of CI.
 
-The structure does not seem overly large, even if you have
-an array here, I don't see why you would need the vmalloc
-type allocation for struct gve_per_rx_queue_mem_dqo.
+A CI system which is separate from the kernel will tend to be out of sync, so it can't gate the merging of changes and thus can't prevent regressions from propagating.
 
-   Arnd
+
+-- 
+Earthling Michel Dänzer            |                  https://redhat.com
+Libre software enthusiast          |         Mesa and Xwayland developer
+
 
