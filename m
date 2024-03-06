@@ -1,449 +1,189 @@
-Return-Path: <linux-kselftest+bounces-6013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60659874281
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 23:11:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E92038742C8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 23:31:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C5FD2818D1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 22:11:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17B791C219F4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 22:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD3951BF2B;
-	Wed,  6 Mar 2024 22:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C89639;
+	Wed,  6 Mar 2024 22:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="imSnvB/g"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SAkTirlS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7330B1BC2C
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 22:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C5C14F98
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 22:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709763073; cv=none; b=m6y/Yu8p7HI1W5ABgUTly8xDsZ+wHw5onElh31LiWq9JCvX7CMsQHnw7HiZwqiJMOQLvaJQATt77k9WU2hkFtM0tvDDKZ9QFuv/GS9+mfee35JqQqBTsbd/6ZwB2HfCMT4fAp3IK9787AhOY8OL2c1xjf94Cvt1kvuVjazgEZKY=
+	t=1709764261; cv=none; b=IZ7RGnsfTs367C5QUE7VnbTS4GCE6j6heWR8yLy1U/8DluvGaV8RfbG0nc+lrRrUV4lE1TdgfzWDBKyV5zKJcjjJywEAfBDGcYKGqhk5h4CutkGHBtg0slAoZNZomLijL3I+El0Its0zNxxeC1+qYTzFr0hHyLfqcwMon6ZzSrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709763073; c=relaxed/simple;
-	bh=e+h5g7ggIAcqtCEsjbwW8QZ4XMZUN74BvuwxvFy1dqE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ilLTkWErX9HnyARCQVX+5vt5sLXEoLHZ/XVZ1C2u+wzVm/kgOeLWNhoLON3yBIJ998+A70/n81Ow8InZaTtTenu9aaxwzequ1p2eoMC+b3tA8i4OoGygU7k7L6ltrCKliwL3u1f2y79MkIqX8SF8vBplIZj7Lcehjz9MzDh0Y8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=imSnvB/g; arc=none smtp.client-ip=209.85.218.47
+	s=arc-20240116; t=1709764261; c=relaxed/simple;
+	bh=lK/a+UW2iqYrSft0qZc8gZiAODZfN0e4TWyPvAGbCBQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=OLCzV1YNeCC0eLj2+yo7i3RCdqG3q0B/ZZARTzSOwRFw4s6r6XOYILWM4WnDu2usxlEpXe2TPuK832w/6PCWOX2ztvmxqcjnY+SNuNhsUJ9UoqKzgV1RbjXe6Bq3HqescRu8rGxVFV7C2RRtOf93ZFOZWkxNvY5Wisvn1X/giS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SAkTirlS; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a45bb2a9c20so32515566b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Mar 2024 14:11:09 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dced704f17cso354476276.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Mar 2024 14:30:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709763068; x=1710367868; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
-        b=imSnvB/glsrcOoPIl62eeq6tzX1mTcMOBOEqK11tyD8Q0h0/m3eXHCKa62zKxIl1k+
-         YqDAFu8QP4A/jo0OqqO3VFfTgffsuHGIPg60Dz2Y/rpwW/z69zYX6P14tfKr3BJFm0LV
-         rpolC4pkfuCAG7xI6MU71ZLwVokmsKyyEvQx9Fva5V6SFM/yuZnVjwezpSC75JLue0FE
-         VqBQp4fGnzQub8hM2Mst6i0IksmKfepM49kQxm+bK49O6M2u0qiSNE5TYZKaxqhaTXVl
-         pptv/cGgeHIqMbTyvqkUl4s18Xy1ph3NeNPUHutsXLXyE5u8Lh4Fy4W0+DQ39RUs8czE
-         25Bw==
+        d=google.com; s=20230601; t=1709764259; x=1710369059; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t/bvsMxpmGUk/de5zo1mkM3uxtDnlir1VqeH2uLCc5M=;
+        b=SAkTirlStmGR/43PTS1GFDwzZHiRLKdIjORwcxqApfj00S4bu2rHNEhfdQVeIPvguN
+         O7EjEmBcRnWEjWIiXZ4rn1KlxlRKPFxesIXnMzdPtQQkX7XgHvuDAbGKDjD52g6JUibv
+         Jr2cKuOY2Ay4sVP/W1AIY2NQVVTJf7UAB33/dQgMhNZxx+UIMd6/extJMHykA74p9jIH
+         hbvXM+J862NTRXtfTVOIeLeAX7auLp8tzrJ0IoQPn6mC0/LGo3zELZua2cxOraSrvpCb
+         /idbIxL0EqM2x27iYnnbzXeT7hzG8lNYbePrJsCOzXcUei2CKdsRwoBAC69qKBTrvjrh
+         NREg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709763068; x=1710367868;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
-        b=aZpDMbWgz2EVZlwESA90rI5wgvjDilDUiXCyvGXV3sMl4SrCXwNvaODpkX1KN6EKYT
-         pyh69ALHFRFfGdUYBkPLl/c9JQr6uUL2yktvfCLSxROm0NVhLeFq4uAPL2i4lpnRwHn0
-         vyQcqzC2bstGjvxHZW2UxY1Ak1T+98bd4ssCFOTNPTEYLAs6hUzsh9+2RgsMNV+NG92X
-         wyaK4QQWIwmxl2zoSBNQ0xXuBXuxVm9bKB0pmn40mByHJ+OCbIKlzWJSZ1wAw+dptS2Z
-         ovY+mgVO2uPU3yQHNQPWupoYt3HGLF8OnUYbXD1044CEOb21yAjM814JmovuRju8OmV3
-         ATOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV5L8xCJdmSsQopqTUXpGmdj5933hhOGQJqxvNE5FQAns4f7R6TtJP8ycfZ3fV8Tug2LWrXGrduxQpJVlY4LaWZ2Z9Vj4iaBTetsvuX92G6
-X-Gm-Message-State: AOJu0YyLeJou1rruz4XKkbRqWPYOX+lSxqsR1t16FIA7mdSaagiBnns2
-	7l3F0rUqmNlqUAcsjDDnW2F6n1TlT/yH6ExDirgt7HcZ+V23e0vnBaekKgh41Zis9mBeIskheM9
-	BhxdEsM9lfHqP/FCGrQIgxnf/OzZBmXZckiet
-X-Google-Smtp-Source: AGHT+IENXwD+VWczLj/dTM2/A1MFyK7LqUp0f5yPqTDI4m7+LrQO5mzGQIb3CxwkX+uMg5NpdLqf746V4nTchzug2EI=
-X-Received: by 2002:a17:906:3442:b0:a44:3ec9:1fd3 with SMTP id
- d2-20020a170906344200b00a443ec91fd3mr9663971ejb.30.1709763067483; Wed, 06 Mar
- 2024 14:11:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709764259; x=1710369059;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t/bvsMxpmGUk/de5zo1mkM3uxtDnlir1VqeH2uLCc5M=;
+        b=p6k2I7P8OtL7rLhLh/MxgQCunK7bLH1sUmzvmGYiqTZ3C4RJfwTDEQzbpAyzSQaj+A
+         96vImtY7MPb7/x0lRpUgquSwXJ6O/nDHQy44yzY6TC8oWRUIVOX3sfFeWced4UNkSkNI
+         1MVYflL7X+2LFLrdA4SUQFlDJhOQNvFN3/oTcxGJyL/ds1VV86rFUeSFwvY0SrwVwi3/
+         nvzL2mgKCsNJjXnkYXxa38ToYnlJojeHdqz0E9yxVsjeWEnsPNbA1HCCqWoi4mmOxYs2
+         v6MtHIw4oQNwA7cTA3fY05XC+hMieI7DrvCGSxWzSPV2vXJSJKzuzQrlffsO9tv/cZxp
+         CYpg==
+X-Gm-Message-State: AOJu0YyZDmyOja/xlNlHDriq5BokZ2O85qJeQnggla8bEUb9PFRR7jeQ
+	jOKPdV785fVMSi9UCJz67eYe+IELY76A9omL+0o4Jrel8TAo/tde0DkBOQ/ejSO6LM5NF6RH0A=
+	=
+X-Google-Smtp-Source: AGHT+IGyamNCZigG0HsVlujxHmVGogCiuk1hBEFD3c7kz4ZcZj/+UiDou6mQry67mxqdeJSfQcOnenjmgg==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a05:6902:726:b0:dcd:b593:6503 with SMTP id
+ l6-20020a056902072600b00dcdb5936503mr660480ybt.2.1709764258897; Wed, 06 Mar
+ 2024 14:30:58 -0800 (PST)
+Date: Wed,  6 Mar 2024 22:30:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com> <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
- <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com> <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
-In-Reply-To: <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 6 Mar 2024 14:10:55 -0800
-Message-ID: <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
+Message-ID: <20240306223056.226518-1-rmoar@google.com>
+Subject: [PATCH v2] kunit: tool: add ability to parse multiple files
+From: Rae Moar <rmoar@google.com>
+To: shuah@kernel.org, davidgow@google.com, dlatypov@google.com, 
+	brendan.higgins@linux.dev, kevko@google.com
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 4:38=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
-> wrote:
->
-> On 2024/3/6 5:17, Mina Almasry wrote:
-> > On Tue, Mar 5, 2024 at 4:55=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:
-> >>
-> >> On 2024/3/5 10:01, Mina Almasry wrote:
-> >>
-> >> ...
-> >>
-> >>>
-> >>> The netdev_dmabuf_binding struct is refcounted, and releases its
-> >>> resources only when all the refs are released.
-> >>>
-> >>> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> >>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> >>> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >>>
-> >>> ---
-> >>>
-> >>> RFC v6:
-> >>> - Validate rx queue index
-> >>> - Refactor new functions into devmem.c (Pavel)
-> >>
-> >> It seems odd that the functions or stucts in a file called devmem.c
-> >> are named after 'dmabuf' instead of 'devmem'.
-> >>
-> >
-> > So my intention with this naming that devmem.c contains all the
-> > functions for all devmem tcp specific support. Currently the only
-> > devmem we support is dmabuf. In the future, other devmem may be
-> > supported and it can fit nicely in devmem.c. For example, if we want
-> > to extend devmem TCP to support NVMe devices, we need to add support
-> > for p2pdma, maybe, and we can add that support under the devmem.c
-> > umbrella rather than add new files.
-> >
-> > But I can rename to dmabuf.c if there is strong objection to the curren=
-t name.
->
-> Grepping 'dmabuf' seems to show that it may be common rename it to
-> something as *_dmabuf.c.
->
-> >
-> >>>
-> >>
-> >> ...
-> >>
-> >>> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> >>> index d8b810245c1d..72e932a1a948 100644
-> >>> --- a/include/net/netmem.h
-> >>> +++ b/include/net/netmem.h
-> >>> @@ -8,6 +8,16 @@
-> >>>  #ifndef _NET_NETMEM_H
-> >>>  #define _NET_NETMEM_H
-> >>>
-> >>> +#include <net/devmem.h>
-> >>> +
-> >>> +/* net_iov */
-> >>> +
-> >>> +struct net_iov {
-> >>> +     struct dmabuf_genpool_chunk_owner *owner;
-> >>> +};
-> >>> +
-> >>> +/* netmem */
-> >>> +
-> >>>  /**
-> >>>   * typedef netmem_ref - a nonexistent type marking a reference to ge=
-neric
-> >>>   * network memory.
-> >>> diff --git a/net/core/Makefile b/net/core/Makefile
-> >>> index 821aec06abf1..592f955c1241 100644
-> >>> --- a/net/core/Makefile
-> >>> +++ b/net/core/Makefile
-> >>> @@ -13,7 +13,7 @@ obj-y                    +=3D dev.o dev_addr_lists.=
-o dst.o netevent.o \
-> >>>                       neighbour.o rtnetlink.o utils.o link_watch.o fi=
-lter.o \
-> >>>                       sock_diag.o dev_ioctl.o tso.o sock_reuseport.o =
-\
-> >>>                       fib_notifier.o xdp.o flow_offload.o gro.o \
-> >>> -                     netdev-genl.o netdev-genl-gen.o gso.o
-> >>> +                     netdev-genl.o netdev-genl-gen.o gso.o devmem.o
-> >>>
-> >>>  obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) +=3D dev_addr_lists_test.o
-> >>>
-> >>> diff --git a/net/core/dev.c b/net/core/dev.c
-> >>> index fe054cbd41e9..bbea1b252529 100644
-> >>> --- a/net/core/dev.c
-> >>> +++ b/net/core/dev.c
-> >>> @@ -155,6 +155,9 @@
-> >>>  #include <net/netdev_rx_queue.h>
-> >>>  #include <net/page_pool/types.h>
-> >>>  #include <net/page_pool/helpers.h>
-> >>> +#include <linux/genalloc.h>
-> >>> +#include <linux/dma-buf.h>
-> >>> +#include <net/devmem.h>
-> >>>
-> >>>  #include "dev.h"
-> >>>  #include "net-sysfs.h"
-> >>> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> >>> new file mode 100644
-> >>> index 000000000000..779ad990971e
-> >>> --- /dev/null
-> >>> +++ b/net/core/devmem.c
-> >>> @@ -0,0 +1,293 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >>> +/*
-> >>> + *      Devmem TCP
-> >>> + *
-> >>> + *      Authors:     Mina Almasry <almasrymina@google.com>
-> >>> + *                   Willem de Bruijn <willemdebruijn.kernel@gmail.c=
-om>
-> >>> + *                   Kaiyuan Zhang <kaiyuanz@google.com
-> >>> + */
-> >>> +
-> >>> +#include <linux/types.h>
-> >>> +#include <linux/mm.h>
-> >>> +#include <linux/netdevice.h>
-> >>> +#include <trace/events/page_pool.h>
-> >>> +#include <net/netdev_rx_queue.h>
-> >>> +#include <net/page_pool/types.h>
-> >>> +#include <net/page_pool/helpers.h>
-> >>> +#include <linux/genalloc.h>
-> >>> +#include <linux/dma-buf.h>
-> >>> +#include <net/devmem.h>
-> >>> +
-> >>> +/* Device memory support */
-> >>> +
-> >>> +#ifdef CONFIG_DMA_SHARED_BUFFER
-> >>
-> >> I still think it is worth adding its own config for devmem or dma-buf
-> >> for networking, thinking about the embeded system.
-> >>
-> >
-> > FWIW Willem did weigh on this previously and said he prefers to have
-> > it unguarded by a CONFIG, but I will submit to whatever the consensus
-> > here. It shouldn't be a huge deal to add a CONFIG technically
-> > speaking.
->
-> Grepping 'CONFIG_DMA_SHARED_BUFFER' show that the API user of dmabuf
-> API does not seems to reuse the CONFIG_DMA_SHARED_BUFFER, instead they
-> seem to define its own config, and select CONFIG_DMA_SHARED_BUFFER
-> if necessary, it that any reason it is different here?
->
-> >
-> >>> +static void netdev_dmabuf_free_chunk_owner(struct gen_pool *genpool,
-> >>> +                                        struct gen_pool_chunk *chunk=
-,
-> >>> +                                        void *not_used)
-> >>
-> >> It seems odd to still keep the netdev_ prefix as it is not really rela=
-ted
-> >> to netdev, perhaps use 'net_' or something better.
-> >>
-> >
-> > Yes, thanks for catching. I can change to net_devmem_ maybe or net_dmab=
-uf_*.
->
-> FWIW, net_dmabuf_* seems like a better name technically.
->
-> >
-> >>> +{
-> >>> +     struct dmabuf_genpool_chunk_owner *owner =3D chunk->owner;
-> >>> +
-> >>> +     kvfree(owner->niovs);
-> >>> +     kfree(owner);
-> >>> +}
-> >>> +
-> >>> +void __netdev_dmabuf_binding_free(struct netdev_dmabuf_binding *bind=
-ing)
-> >>> +{
-> >>> +     size_t size, avail;
-> >>> +
-> >>> +     gen_pool_for_each_chunk(binding->chunk_pool,
-> >>> +                             netdev_dmabuf_free_chunk_owner, NULL);
-> >>> +
-> >>> +     size =3D gen_pool_size(binding->chunk_pool);
-> >>> +     avail =3D gen_pool_avail(binding->chunk_pool);
-> >>> +
-> >>> +     if (!WARN(size !=3D avail, "can't destroy genpool. size=3D%lu, =
-avail=3D%lu",
-> >>> +               size, avail))
-> >>> +             gen_pool_destroy(binding->chunk_pool);
-> >>> +
-> >>> +     dma_buf_unmap_attachment(binding->attachment, binding->sgt,
-> >>> +                              DMA_BIDIRECTIONAL);
-> >>
-> >> For now DMA_FROM_DEVICE seems enough as tx is not supported yet.
-> >>
-> >
-> > Yes, good catch. I suspect we want to reuse this code for TX path. But
-> > for now, I'll test with DMA_FROM_DEVICE and if I see no issues I'll
-> > apply this change.
-> >
-> >>> +     dma_buf_detach(binding->dmabuf, binding->attachment);
-> >>> +     dma_buf_put(binding->dmabuf);
-> >>> +     xa_destroy(&binding->bound_rxq_list);
-> >>> +     kfree(binding);
-> >>> +}
-> >>> +
-> >>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_i=
-dx)
-> >>> +{
-> >>> +     void *new_mem;
-> >>> +     void *old_mem;
-> >>> +     int err;
-> >>> +
-> >>> +     if (!dev || !dev->netdev_ops)
-> >>> +             return -EINVAL;
-> >>> +
-> >>> +     if (!dev->netdev_ops->ndo_queue_stop ||
-> >>> +         !dev->netdev_ops->ndo_queue_mem_free ||
-> >>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
-> >>> +         !dev->netdev_ops->ndo_queue_start)
-> >>> +             return -EOPNOTSUPP;
-> >>> +
-> >>> +     new_mem =3D dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
-> >>> +     if (!new_mem)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     err =3D dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem)=
-;
-> >>> +     if (err)
-> >>> +             goto err_free_new_mem;
-> >>> +
-> >>> +     err =3D dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem)=
-;
-> >>> +     if (err)
-> >>> +             goto err_start_queue;
-> >>> +
-> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
-> >>> +
-> >>> +     return 0;
-> >>> +
-> >>> +err_start_queue:
-> >>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
-> >>
-> >> It might worth mentioning why queue start with old_mem will always
-> >> success here as the return value seems to be ignored here.
-> >>
-> >
-> > So the old queue, we stopped it, and if we fail to bring up the new
-> > queue, then we want to start the old queue back up to get the queue
-> > back to a workable state.
-> >
-> > I don't see what we can do to recover if restarting the old queue
-> > fails. Seems like it should be a requirement that the driver tries as
-> > much as possible to keep the old queue restartable.
->
-> Is it possible that we may have the 'old_mem' leaking if the driver
-> fails to restart the old queue? how does the driver handle the
-> firmware cmd failure for ndo_queue_start()? it seems a little
-> tricky to implement it.
->
+Add ability to parse multiple files. Additionally add the
+ability to parse all results in the KUnit debugfs repository.
 
-I'm not sure what we can do to meaningfully recover from failure to
-restarting the old queue, except log it so the error is visible. In
-theory because we have not modifying any queue configurations
-restarting it would be straight forward, but since it's dealing with
-hardware then any failures are possible.
+How to parse multiple files:
 
-> >
-> > I can improve this by at least logging or warning if restarting the
-> > old queue fails.
->
-> Also the semantics of the above function seems odd that it is not
-> only restarting rx queue, but also freeing and allocating memory
-> despite the name only suggests 'restart', I am a litte afraid that
-> it may conflict with future usecae when user only need the
-> 'restart' part, perhaps rename it to a more appropriate name.
->
+./tools/testing/kunit/kunit.py parse results.log results2.log
 
-Oh, what we want here is just the 'restart' part. However, Jakub
-mandates that if you restart a queue (or a driver), you do it like
-this, hence the slightly more complicated implementation.
+How to parse all files in directory:
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438=
--13-almasrymina@google.com/#25590262
-https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+./tools/testing/kunit/kunit.py parse directory_path/*
 
-> >
-> >>> +
-> >>> +err_free_new_mem:
-> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
-> >>> +
-> >>> +     return err;
-> >>> +}
-> >>> +
-> >>> +/* Protected by rtnl_lock() */
-> >>> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
-> >>> +
-> >>> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
-> >>> +{
-> >>> +     struct netdev_rx_queue *rxq;
-> >>> +     unsigned long xa_idx;
-> >>> +     unsigned int rxq_idx;
-> >>> +
-> >>> +     if (!binding)
-> >>> +             return;
-> >>> +
-> >>> +     if (binding->list.next)
-> >>> +             list_del(&binding->list);
-> >>
-> >> The above does not seems to be a good pattern to delete a entry, is
-> >> there any reason having a checking before the list_del()? seems like
-> >> defensive programming?
-> >>
-> >
-> > I think I needed to apply this condition to handle the case where
-> > netdev_unbind_dmabuf() is called when binding->list is not initialized
-> > or is empty.
-> >
-> > netdev_nl_bind_rx_doit() will call unbind to free a partially
-> > allocated binding in error paths, so, netdev_unbind_dmabuf() may be
-> > called with a partially initialized binding. This is why we check for
-> > binding->list is initialized here and check that rxq->binding =3D=3D
-> > binding below. The main point is that netdev_unbind_dmabuf() may be
-> > asked to unbind a partially bound dmabuf due to error paths.
-> >
-> > Maybe a comment here will test this better. I will double confirm the
-> > check is needed for the error paths in netdev_nl_bind_rx_doit().
-> >
-> >>> +
-> >>> +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> >>> +             if (rxq->binding =3D=3D binding) {
-> >>
-> >> It seems like defensive programming here too?
-> >>
->
+How to parse KUnit debugfs repository:
 
+./tools/testing/kunit/kunit.py parse debugfs
 
---=20
-Thanks,
-Mina
+For each file, the parser outputs the file name, results, and test
+summary. At the end of all parsing, the parser outputs a total summary
+line.
+
+This feature can be easily tested on the tools/testing/kunit/test_data/
+directory.
+
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+Changes since v1:
+- Annotate type of parsed_files
+- Add ability to input file name from stdin again
+- Make for loops a bit terser
+- Add no output warning
+- Change feature to take in multiple fields rather than a directory.
+  Currently nonrecursive. Let me know if people would prefer this as
+  recursive.
+
+ tools/testing/kunit/kunit.py | 45 +++++++++++++++++++++++++-----------
+ 1 file changed, 32 insertions(+), 13 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index bc74088c458a..df804a118aa5 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -511,19 +511,37 @@ def exec_handler(cli_args: argparse.Namespace) -> None:
+ 
+ 
+ def parse_handler(cli_args: argparse.Namespace) -> None:
+-	if cli_args.file is None:
++	parsed_files = [] # type: List[str]
++	total_test = kunit_parser.Test()
++	total_test.status = kunit_parser.TestStatus.SUCCESS
++	if cli_args.files is None:
+ 		sys.stdin.reconfigure(errors='backslashreplace')  # type: ignore
+-		kunit_output = sys.stdin  # type: Iterable[str]
++		parsed_files.append(sys.stdin)
++	elif cli_args.files[0] == "debugfs" and len(cli_args.files) == 1:
++		for (root, _, files) in os.walk("/sys/kernel/debug/kunit"):
++			parsed_files.extend(os.path.join(root, f) for f in files if f == "results")
+ 	else:
+-		with open(cli_args.file, 'r', errors='backslashreplace') as f:
++		parsed_files.extend(f for f in cli_args.files if os.path.isfile(f))
++
++	if len(parsed_files) == 0:
++		print("No output found.")
++
++	for file in parsed_files:
++		print(file)
++		with open(file, 'r', errors='backslashreplace') as f:
+ 			kunit_output = f.read().splitlines()
+-	# We know nothing about how the result was created!
+-	metadata = kunit_json.Metadata()
+-	request = KunitParseRequest(raw_output=cli_args.raw_output,
+-					json=cli_args.json)
+-	result, _ = parse_tests(request, metadata, kunit_output)
+-	if result.status != KunitStatus.SUCCESS:
+-		sys.exit(1)
++		# We know nothing about how the result was created!
++		metadata = kunit_json.Metadata()
++		request = KunitParseRequest(raw_output=cli_args.raw_output,
++						json=cli_args.json)
++		_, test = parse_tests(request, metadata, kunit_output)
++		total_test.subtests.append(test)
++
++	if len(parsed_files) > 1: # if more than one file was parsed output total summary
++		print('All files parsed.')
++		stdout.print_with_timestamp(kunit_parser.DIVIDER)
++		kunit_parser.bubble_up_test_results(total_test)
++		kunit_parser.print_summary_line(total_test)
+ 
+ 
+ subcommand_handlers_map = {
+@@ -569,9 +587,10 @@ def main(argv: Sequence[str]) -> None:
+ 					    help='Parses KUnit results from a file, '
+ 					    'and parses formatted results.')
+ 	add_parse_opts(parse_parser)
+-	parse_parser.add_argument('file',
+-				  help='Specifies the file to read results from.',
+-				  type=str, nargs='?', metavar='input_file')
++	parse_parser.add_argument('files',
++				  help='List of file paths to read results from or keyword'
++				  		'"debugfs" to read all results from the debugfs directory.',
++				  type=str, nargs='*', metavar='input_files')
+ 
+ 	cli_args = parser.parse_args(massage_argv(argv))
+ 
+
+base-commit: 806cb2270237ce2ec672a407d66cee17a07d3aa2
+-- 
+2.44.0.278.ge034bb2e1d-goog
+
 
