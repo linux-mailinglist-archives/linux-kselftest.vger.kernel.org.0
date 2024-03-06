@@ -1,257 +1,576 @@
-Return-Path: <linux-kselftest+bounces-6003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E7F873CE6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 18:05:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3AB0873D8B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 18:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38B2C1F24353
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 17:05:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59EDEB21153
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 17:29:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E773013BADD;
-	Wed,  6 Mar 2024 17:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA58B13BAD7;
+	Wed,  6 Mar 2024 17:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YGPSFtgj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QBWfqzKJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116EC137935
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 17:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709744711; cv=none; b=Zl56OGs17cZQa2PbK7Ugp3Ne7enc832CpWPpWZpE/qzqgX0WZwWPOZXykq4lZQpJj8Pp3q+35MwA5/2l2zERVN2A358MEPrEJSEUiFh8u0SJyP2Z7H2eZhyKHE61ofPTqDdW5yxfH+fwWPtoK93gObuJsjc9uKHjeqFeh1moG1Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709744711; c=relaxed/simple;
-	bh=f1WmBqp+S6Tcw7A8Oq9HJf0VJDtBrJ0ATA6lz8ebmoc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VsF4Iyjb+MQfUTBVWsEB9X78dU/tUSC7ehSwQ81fMFAVhsoFDMEDTRHINkOliybf/gy6o6VxOAuCcT89Ohdahjx0Jf/QGrTStyoQDJrEcE9xLmXBMX1IzLAy0Hxuu/Oycwzm+7x0/9h9JOv8t2t21FRHIIFIVZ7xrEzMag7Iauo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YGPSFtgj; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a44628725e3so2304566b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Mar 2024 09:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709744707; x=1710349507; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A1xSBjsofT/9pZS7Yx9G3XGpR9XoFLam+fQU7TnybVs=;
-        b=YGPSFtgjiZCZ2/fuo+t9hwJeE6OWJF42MA00e/1bbwxL4sNb2/4OygmNqZk6G1kDV3
-         SmmGm7Z2FiRELYmj/mWtsxnVBpHGTCMFWS1a0BaKZalgzAxl0ni/yS8mqyV38GnbNBRr
-         yb5Mb8zHgmrFvODzq1rVBfG+fJ0WfZROjkaIjECLEAnstyK2x++QDjrxpzz75DILwvqm
-         D5Cn45O4ZK52+wqd/abE/c7vgFqhD1Zn4HWJNk7RFSxd2bjYfoz+Yz3CXo5qaYUpaxL9
-         2HSwptCAvjycaff/WigX2F0Ns/pl/6wmEn3v/qS4GPz1tpIuvc7rj5x9lhqJqzb8U0GW
-         nGMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709744707; x=1710349507;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A1xSBjsofT/9pZS7Yx9G3XGpR9XoFLam+fQU7TnybVs=;
-        b=A3pg3NXPkFLDIRK5py7453R+0qTzdT+ophbgWXi2A05Sm80GQ0shlOr6oj9pbAUUB2
-         cHMKY4cIN1uZjM7wcktjPMSS9wXIxVZLqZTZshJatfNMfqpLd5XynWVQTZ1cEI5/7Tr5
-         4QPmyyrlx6FAE6l6zATBTcN9vVR8dAkC2qbZgAl9WTodshXUZEPdotsFG8UwgQeQavT9
-         0jGM1jYHzkhh1BwmvlHauBB1ZZKfvXOcC3UvpAVLJmNeB19EO151n2rV9zTFvcnsDUb2
-         JbkiXp7ajI3mYqv3Ao6rsiXg0Lme/ojSislUfbBOHujEDfaHWrFa4ZBBjaIeyVkRstKG
-         Pbxw==
-X-Forwarded-Encrypted: i=1; AJvYcCXQbHJ76zkaw/oXtV0u2R0XqIbGHpNaPOIFW9Rm+1f1/fBkqm3esGaVhoop1fBRd3CvA8o0fElSCrDZm2l13Sl0rdCNooKabxbVvFpfVp+Q
-X-Gm-Message-State: AOJu0YxDFECduP4Ag/WUFyQuGOClTvksV99WjNOFc2l99WG8vnfIUGH8
-	E++sDq8Tbz+qhcLtLZJ5GO0AzhcyCD2biIPtPGpV1s3XbwA5lfl/7DV8FUxn2OwWkSVBlOKcMYa
-	g2Un3XqFBJow67iOE0TVTNpdHzASPYs02R3zv
-X-Google-Smtp-Source: AGHT+IEFAot1sqpMocgXEq0iHPu0SbjnF94L+Z+kSlPfTE1HrQ8kPH2Z8oVY6d8041os4lHMCzDMgHeBjBfnC6a+Now=
-X-Received: by 2002:a17:906:b00b:b0:a44:c583:dfc8 with SMTP id
- v11-20020a170906b00b00b00a44c583dfc8mr9370474ejy.48.1709744706904; Wed, 06
- Mar 2024 09:05:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49BA4132C0C;
+	Wed,  6 Mar 2024 17:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709746183; cv=fail; b=KZoyzr1FWpeMh2y8bAfCSmHbQhCcW8MigccJ00005TWPPFwAqGlKV5KYlNXDjzsjVFVOkpZs953o/jWwMOCB8Zc0OBUMT5jUHayeK5+JuoShwMMiYWpnDvII2ZhIYR/iUiW1ekrr4ldnFU4Pa/Sc4KQ2t6rhkynl9+QXdzRxhEU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709746183; c=relaxed/simple;
+	bh=Vii56cW3IP4qpInpPq+IlX21/zOej6Jb2HCYDXe5kl8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=UuCNOYmefRWeexCAZn6LLf9/eyBdLRVPquBmJWJy4kz3Degs3xW23FT/gQ/CEzyE3y5G0aCsOvBiSl/IcRQhREwaf03UyU0Bc+cS+is/UPUKKPNrK/MXEzS18gvSMDC+P/iMGArU0Z6imndwVX38PlLl1FWben/vAXx73wU/vyw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QBWfqzKJ; arc=fail smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709746181; x=1741282181;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Vii56cW3IP4qpInpPq+IlX21/zOej6Jb2HCYDXe5kl8=;
+  b=QBWfqzKJ4fUKbQ8HFgI29M5jlepuJBBhi7s4Y/bD+RKnqHbXVxb2+Fa8
+   K+wqjA9txHJco06WxNsXd/30w5AAEyG8AyQJhrvAtpiZD2lM9eOkRR9a6
+   64j+xj1m3qiSO+2NxrHnQbh/RXfOByp10Hr7I5/nIcXuV8Ypq9d/8gdb2
+   ZDc6fP3sgAD5130B6dXN5AxpRGpdT/9BCfFXoRslK2IR8nRWxI5KlzCPs
+   H1A6K41DngvYEXvK9LXGSWuboGbov658U07WXCTAqn5fm0Mhx2ib4z023
+   h+muMDnw7w/uUH4aiO3fP8ins0E9nLH83XJMhNmfyqkM1uTGJH550kM+a
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="4221793"
+X-IronPort-AV: E=Sophos;i="6.06,208,1705392000"; 
+   d="scan'208";a="4221793"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 09:29:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,208,1705392000"; 
+   d="scan'208";a="9805296"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa010.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Mar 2024 09:29:40 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 6 Mar 2024 09:29:39 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 6 Mar 2024 09:29:39 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Wed, 6 Mar 2024 09:29:39 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 6 Mar 2024 09:29:38 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=biXFimdZxdCkuqGLM3Z/R5zVRHjqIGBVy0/NXjxKGDcPT3VLI6EORLjHUAxUSGJzJOGgav8WCVsIsrb0kKZzZZwdjAzL+AUa42HtynUzidmLELtdDahh0SFL8JY2g3p7fuxq7kKsVA98Gz5qcmetQlTYCIoqExGGpa1jDZB663fkYOfkRXMY349PMx4XdL/89Rd5FQKi/6ZZGEYZyzXOCFX1UHWCjKozSCqgQoHkuWzQylxxaxyzF8c2jLAqkl5uasrXqJx9DrbY1F/bPA/IENGEnGFlFzBYD7wXqumZ8NapCTwqDawCT5qS9Vslsh1nOjEFuRN9na1jZ5NkIbNqpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=InqkGmRkAkIJnJ6Dnd1BhpqeFjR3vW1eJppWFvZMkz0=;
+ b=YTGstMxCvmyXEGVM9h1iITX+st3sica4Vxp3nXKa7OLjId5BpgCyf6ltrJAS0jcSU91oiOImd2x/iozM0AytBmnBPWmu/FKj94o0qJMzSnqIrfXdl4lTLiFgSse3T0GE0izmLwG2LukDZBx/+AJGVdfOZjudGB17LjlsTcOwMNHg93hSYzbfTZthJE+XoSqjO6fVjRQBvoGDi53+j30tsfY4TFjH2ECp0I9vtpiY1bUepfqp00VmLZBytoLWAFfVC2gIDU2a95tBiDFJhlooC6wqvZYQy3kd/q7UX1W6pnH94XVRTXNk/Fm32u/mA0Mvg6rFgZgsVMamMHrdsIClJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ SA2PR11MB4827.namprd11.prod.outlook.com (2603:10b6:806:11f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.26; Wed, 6 Mar
+ 2024 17:29:35 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::ccab:b5f4:e200:ee47]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::ccab:b5f4:e200:ee47%6]) with mapi id 15.20.7362.019; Wed, 6 Mar 2024
+ 17:29:35 +0000
+Date: Wed, 6 Mar 2024 18:29:21 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Song Yoong Siang <yoong.siang.song@intel.com>
+CC: Jesse Brandeburg <jesse.brandeburg@intel.com>, Tony Nguyen
+	<anthony.l.nguyen@intel.com>, "David S . Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Richard Cochran <richardcochran@gmail.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>, "Vinicius Costa Gomes"
+	<vinicius.gomes@intel.com>, Florian Bezdeka <florian.bezdeka@siemens.com>,
+	Andrii Nakryiko <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+	<kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+	<jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	<xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [Intel-wired-lan] [PATCH iwl-next, v3 2/2] igc: Add Tx hardware
+ timestamp request for AF_XDP zero-copy packet
+Message-ID: <Zein8XvWkqj8VrHs@boxer>
+References: <20240303083225.1184165-1-yoong.siang.song@intel.com>
+ <20240303083225.1184165-3-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240303083225.1184165-3-yoong.siang.song@intel.com>
+X-ClientProxiedBy: FR4P281CA0327.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:eb::11) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com> <1b57dac2-4b04-4bec-b2d7-d0edb4fcabbc@davidwei.uk>
- <CAHS8izM5O39mnTQ8mhcQE75amDT4G-3vcgozzjcYsAdd_-he1g@mail.gmail.com> <417f293a-848e-4eb2-b690-c8696079b452@gmail.com>
-In-Reply-To: <417f293a-848e-4eb2-b690-c8696079b452@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 6 Mar 2024 09:04:54 -0800
-Message-ID: <CAHS8izNPtHb2GnEMviiJTFT_dPxsxgYsNw5V9s-gSC2YnJRPRg@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, shakeel.butt@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA2PR11MB4827:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31b5162b-8ba0-4bbc-6414-08dc3e02fdc8
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IrZG16H1f6G/N9I5ZgQe4pAAH6P1m8fOPAmFnBZSg31oc6AaBpnUAFKualzb3wvmnmLy8nWViNMINkm0+pUtGdHdPf6tDsDuDKPq4bWnMX07bwhwD2BdFataCc/RFVM0l29c1KHtlPw3xbHTT3wARb8VC1bM7csDCyJueTGwz2AeCxDTJmp5tRzYxM0bNpfvGM4dEfESel3cv+kAHKWOgHGtS2uZciCTh5SsfohKldddjhSFm9314bRgPBpuo4LrVYMjPlegbyq+/TjdykqvMkqrDOcQABa2v+i6dsBDWKjwIFauoGmExpfWbUGNUmDGRZg6O99i6BLAfqNCQbe046wjXIXsTrKX2L787Nja5pVw0hoXIbAcnXWJZLMew+QBNq5t2HpQsBf1dHirxigIKazKmozSjhOiApx0pKzgXreehvmoEZxJN2RrLdrDzbOKPRCvn3ZpcnI1R9NFmeshg51V+ByU04C/8mN/frhArEMdBKJ7P4g2o8tcO0QQGnRIORkGXCj85wnN1HVlY701qsYX6crrsnbLP/aNvwvYSUQkLSMQfqU/5eUqqnOH4Sr5AzsHdqsi1UteotWWL2v91dUEmtxzq4jvi6nh4NNdt/Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nguIRHasCOD8nsIrPCTrkNPRYHyuDW5tReKQh86JeOeH6VSLJAa5VpL01yC2?=
+ =?us-ascii?Q?grJly7Jvlo1r21wArwQuS3lIJzHtj28aQ9lxlhkfKs9YnZtLgptLNgFseZdg?=
+ =?us-ascii?Q?Cy8eo/ppEAYSXt3261p86u32Ybm+yMIFhd21gA2k4Mu2R83C+iMrI8TP5N17?=
+ =?us-ascii?Q?YznX0WoaL60IAx+ysMNTeYAvk439TLT81uUrzD97s287RFemz6Jm7dCXoLmd?=
+ =?us-ascii?Q?POfJFL4Hh6bnrLCRIkw6HFsqfW/9xq2QUty8FpCXdr79digRQ81eRC8MxPqo?=
+ =?us-ascii?Q?ds84x4QFEm8Pc7BzZXihgBB1b6EQO8Wv7CF4x2EKoRIMqBXwrkY3CurvbN6t?=
+ =?us-ascii?Q?MrcwiaVWwmflVmWBtwGFK4fuEHaHdt21Jz/rcV9E3ojJ7wVTZdPdo9Lx/Xum?=
+ =?us-ascii?Q?9twfu7BYMvlYsyf0/ERCTdvldqZoOqU8sflAgXmPnLvzE82VMuKgoVecQ9g0?=
+ =?us-ascii?Q?q+noPKusJPWixwCHSbB5NlB+6RP37/C/Ji6CMjwoQhvi2njy0IG+cEdxTPgX?=
+ =?us-ascii?Q?+eSaViY787s0dn7XSmhRAl0DJ2w16RkI9ejz1KdY/pKPm+kPTaoO2MLP4XOa?=
+ =?us-ascii?Q?zHxySw/zlGFkweI22slqBMBBuX3WJ6AQAGvxXs1eNJX4teb5FWA5bMWH5mW4?=
+ =?us-ascii?Q?LQjhZ/qHPoN9eZ4jl+BGsANftTA8spJqgK/xlKiSiP2zgot7QGDoPA3LIUs4?=
+ =?us-ascii?Q?Jjs1Loh013NXuA1QrHqFtkNYVSyRLt1y6o041fnPzMqkbENTnOgbNUgioC1+?=
+ =?us-ascii?Q?HNB4FBrq9Iu0HzHConcTNctpYWR9h+FLwKljJLGdA+FWD9r3ZzMET5TW3a9e?=
+ =?us-ascii?Q?4s+kKDdEZeYHqvhMMSQtcZa2eg65Rx8yWdneE59fD7QxWIDOTLVL9oAUbc8n?=
+ =?us-ascii?Q?bVxtOarWL0QGq2yJ58bQboFte5ECBmWQlraL2Z3krFwf5spDGrMl/xDmI4DO?=
+ =?us-ascii?Q?DG8JqJ7lvvczLQvdzC58G41y/tRRI17ci0qRKbHDKaw8uA+XsKZTaV1fp38u?=
+ =?us-ascii?Q?5dMWBFu2LmJKNdsCWBs/urWkJvWlU4QrDv4IxPJOeB9vIfc4nHeru/RDPmjb?=
+ =?us-ascii?Q?pi9rUVnnIhNdWAjJW0UcFjXn55Sa4fphJYw0zagCQqQHYzNBkrlEV8FvSL5N?=
+ =?us-ascii?Q?76wrbTEIQDqXCXUccSFr+umrYZ76cfWtw+FSiINYrx3ZsJjxCtAaxbnlreFI?=
+ =?us-ascii?Q?EfJrfntOxqEW2Grh/dRxJQZy5Jn0QhbSJkceEkY7Pg9CDdRtUlUv9xcPB2us?=
+ =?us-ascii?Q?9U4TAn1jOY7kCc+kqbR4Wtq4Odc7xNG8qkBBauGhfytXgJVKfB23v4vHMig4?=
+ =?us-ascii?Q?aKyl0j0FUdfz5cNaXkKNedXBszJcuMw7wmMWptUY3TgfpOYvWNN/rh1SH2Xe?=
+ =?us-ascii?Q?KNU1rulw/sVA4IRB/eg7ocmhH3wttFwEGxkeEg335tss1gBmZWBCI8lEE9T/?=
+ =?us-ascii?Q?qH+ecV8gYuv0h1v0HjdlNEMxnh9dL4ae+KhJJtZzeYFXDWsb/3JvoSd231yV?=
+ =?us-ascii?Q?XYu3SiYLG6fmo0lwtpcVnfDPUB/R8jM/U8DMqRDHtkTwrBHugj8yQreAGAQy?=
+ =?us-ascii?Q?K4+xyTrSwqXb5cpdOO7qXcobLBX+uoiAI2FoAltZvoNea9bnjVbYXtegxEX2?=
+ =?us-ascii?Q?sg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31b5162b-8ba0-4bbc-6414-08dc3e02fdc8
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2024 17:29:35.1176
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7iCNquLhZvhLIP9B0VndhUQWbVt6DLPLxJNPdKIpm4psQVsjyGme1bg1tR90CHp0P6AlhyBpO3ARJrWFgnyHwHnPQG2/rZAWWoN7dpvxl4I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4827
+X-OriginatorOrg: intel.com
 
-On Wed, Mar 6, 2024 at 6:30=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.c=
-om> wrote:
->
-> On 3/5/24 22:36, Mina Almasry wrote:
-> > On Tue, Mar 5, 2024 at 1:55=E2=80=AFPM David Wei <dw@davidwei.uk> wrote=
-:
-> >>
-> >> On 2024-03-04 18:01, Mina Almasry wrote:
-> >>> +struct memory_provider_ops {
-> >>> +     int (*init)(struct page_pool *pool);
-> >>> +     void (*destroy)(struct page_pool *pool);
-> >>> +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
-> >>> +     bool (*release_page)(struct page_pool *pool, struct page *page)=
-;
-> >>
-> >> For ZC Rx we added a scrub() function to memory_provider_ops that is
-> >> called from page_pool_scrub(). Does TCP devmem not custom behaviour
-> >> waiting for all netmem_refs to return before destroying the page pool?
-> >> What happens if e.g. application crashes?
-> >
-> > (sorry for the long reply, but he refcounting is pretty complicated to
-> > explain and I feel like we need to agree on how things currently work)
-> >
-> > Yeah, the addition of the page_pool_scrub() function is a bit of a
-> > head scratcher for me. Here is how the (complicated) refcounting works
-> > for devmem TCP (assuming the driver is not doing its own recycling
-> > logic which complicates things further):
-> >
-> > 1. When a netmem_ref is allocated by the page_pool (from dmabuf or
-> > page), the netmem_get_pp_ref_count_ref()=3D=3D1 and belongs to the page
-> > pool as long as the netmem is waiting in the pool for driver
-> > allocation.
-> >
-> > 2. When a netmem is allocated by the driver, no refcounting is
-> > changed, but the ownership of the netmem_get_pp_ref_count_ref() is
-> > implicitly transferred from the page pool to the driver. i.e. the ref
-> > now belongs to the driver until an skb is formed.
-> >
-> > 3. When the driver forms an skb using skb_rx_add_frag_netmem(), no
-> > refcounting is changed, but the ownership of the
-> > netmem_get_pp_ref_count_ref() is transferred from the driver to the
-> > TCP stack.
-> >
-> > 4. When the TCP stack hands the skb to the application, the TCP stack
-> > obtains an additional refcount, so netmem_get_pp_ref_count_ref()=3D=3D2=
-,
-> > and frees the skb using skb_frag_unref(), which drops the
-> > netmem_get_pp_ref_count_ref()=3D=3D1.
-> >
-> > 5. When the user is done with the skb, the user calls the
-> > DEVMEM_DONTNEED setsockopt which calls napi_pp_put_netmem() which
-> > recycles the netmem back to the page pool. This doesn't modify any
-> > refcounting, but the refcount ownership transfers from the userspace
-> > back to the page pool, and we're back at step 1.
-> >
-> > So all in all netmem can belong either to (a) the page pool, or (b)
-> > the driver, or (c) the TCP stack, or (d) the application depending on
-> > where exactly it is in the RX path.
-> >
-> > When an application running devmem TCP crashes, the netmem that belong
-> > to the page pool or driver are not touched, because the page pool is
-> > not tied to the application in our case really. However, the TCP stack
-> > notices the devmem socket of the application close, and when it does,
-> > the TCP stack will:
-> >
-> > 1. Free all the skbs in the sockets receive queue. This is not custom
-> > behavior for devmem TCP, it's just standard for TCP to free all skbs
-> > waiting to be received by the application.
-> > 2. The TCP stack will free references that belong to the application.
-> > Since the application crashed, it will not call the DEVMEM_DONTNEED
-> > setsockopt, so we need to free those on behalf of the application.
-> > This is done in this diff:
-> >
-> > @@ -2498,6 +2498,15 @@ static void tcp_md5sig_info_free_rcu(struct
-> > rcu_head *head)
-> >   void tcp_v4_destroy_sock(struct sock *sk)
-> >   {
-> >    struct tcp_sock *tp =3D tcp_sk(sk);
-> > + __maybe_unused unsigned long index;
-> > + __maybe_unused void *netmem;
-> > +
-> > +#ifdef CONFIG_PAGE_POOL
-> > + xa_for_each(&sk->sk_user_frags, index, netmem)
-> > + WARN_ON_ONCE(!napi_pp_put_page((__force netmem_ref)netmem, false));
-> > +#endif
-> > +
-> > + xa_destroy(&sk->sk_user_frags);
-> >
-> >    trace_tcp_destroy_sock(sk);
-> >
-> > To be honest, I think it makes sense for the TCP stack to be
-> > responsible for putting the references that belong to it and the
-> > application. To me, it does not make much sense for the page pool to
-> > be responsible for putting the reference that belongs to the TCP stack
-> > or driver via a page_pool_scrub() function, as those references do not
-> > belong to the page pool really. I'm not sure why there is a diff
-> > between our use cases here because I'm not an io_uring expert. Why do
-> > you need to scrub all the references on page pool destruction? Don't
-> > these belong to non-page pool components like io_uring stack or TCP
-> > stack ol otherwise?
->
-> That one is about cleaning buffers that are in b/w 4 and 5, i.e.
-> owned by the user, which devmem does at sock destruction. io_uring
-> could get by without scrub, dropping user refs while unregistering
-> ifq, but then it'd need to wait for all requests to finish so there
-> is no step 4 in the meantime. Might change, can be useful, but it
-> was much easier to hook into the pp release loop.
->
-> Another concern is who and when can reset ifq / kill pp outside
-> of io_uring/devmem. I assume it can happen on a whim, which is
-> hard to handle gracefully.
->
+On Sun, Mar 03, 2024 at 04:32:25PM +0800, Song Yoong Siang wrote:
+> This patch adds support to per-packet Tx hardware timestamp request to
+> AF_XDP zero-copy packet via XDP Tx metadata framework. Please note that
+> user needs to enable Tx HW timestamp capability via igc_ioctl() with
+> SIOCSHWTSTAMP cmd before sending xsk Tx hardware timestamp request.
+> 
+> Same as implementation in RX timestamp XDP hints kfunc metadata, Timer 0
+> (adjustable clock) is used in xsk Tx hardware timestamp. i225/i226 have
+> four sets of timestamping registers. Both *skb and *xsk_tx_buffer pointers
+> are used to indicate whether the timestamping register is already occupied.
+> 
+> Furthermore, a boolean variable named xsk_pending_ts is used to hold the
+> transmit completion until the tx hardware timestamp is ready. This is
+> because, for i225/i226, the timestamp notification event comes some time
+> after the transmit completion event. The driver will retrigger hardware irq
+> to clean the packet after retrieve the tx hardware timestamp.
+> 
+> Besides, xsk_meta is added into struct igc_tx_timestamp_request as a hook
+> to the metadata location of the transmit packet. When the Tx timestamp
+> interrupt is fired, the interrupt handler will copy the value of Tx hwts
+> into metadata location via xsk_tx_metadata_complete().
+> 
+> Co-developed-by: Lai Peter Jun Ann <jun.ann.lai@intel.com>
+> Signed-off-by: Lai Peter Jun Ann <jun.ann.lai@intel.com>
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+> ---
+>  drivers/net/ethernet/intel/igc/igc.h      |  71 ++++++++------
+>  drivers/net/ethernet/intel/igc/igc_main.c | 113 ++++++++++++++++++++--
+>  drivers/net/ethernet/intel/igc/igc_ptp.c  |  45 +++++++--
+>  3 files changed, 189 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+> index cfa6baccec55..22bb4f245240 100644
+> --- a/drivers/net/ethernet/intel/igc/igc.h
+> +++ b/drivers/net/ethernet/intel/igc/igc.h
+> @@ -72,13 +72,46 @@ struct igc_rx_packet_stats {
+>  	u64 other_packets;
+>  };
+>  
+> +enum igc_tx_buffer_type {
+> +	IGC_TX_BUFFER_TYPE_SKB,
+> +	IGC_TX_BUFFER_TYPE_XDP,
+> +	IGC_TX_BUFFER_TYPE_XSK,
+> +};
+> +
+> +/* wrapper around a pointer to a socket buffer,
+> + * so a DMA handle can be stored along with the buffer
+> + */
+> +struct igc_tx_buffer {
+> +	union igc_adv_tx_desc *next_to_watch;
+> +	unsigned long time_stamp;
+> +	enum igc_tx_buffer_type type;
+> +	union {
+> +		struct sk_buff *skb;
+> +		struct xdp_frame *xdpf;
+> +	};
+> +	unsigned int bytecount;
+> +	u16 gso_segs;
+> +	__be16 protocol;
+> +
+> +	DEFINE_DMA_UNMAP_ADDR(dma);
+> +	DEFINE_DMA_UNMAP_LEN(len);
+> +	u32 tx_flags;
+> +	bool xsk_pending_ts;
+> +};
+> +
+>  struct igc_tx_timestamp_request {
+> -	struct sk_buff *skb;   /* reference to the packet being timestamped */
+> +	union {                /* reference to the packet being timestamped */
+> +		struct sk_buff *skb;
+> +		struct igc_tx_buffer *xsk_tx_buffer;
+> +	};
+> +	enum igc_tx_buffer_type buffer_type;
+>  	unsigned long start;   /* when the tstamp request started (jiffies) */
+>  	u32 mask;              /* _TSYNCTXCTL_TXTT_{X} bit for this request */
+>  	u32 regl;              /* which TXSTMPL_{X} register should be used */
+>  	u32 regh;              /* which TXSTMPH_{X} register should be used */
+>  	u32 flags;             /* flags that should be added to the tx_buffer */
+> +	u8 xsk_queue_index;    /* Tx queue which requesting timestamp */
+> +	struct xsk_tx_metadata_compl xsk_meta;	/* ref to xsk Tx metadata */
+>  };
+>  
+>  struct igc_inline_rx_tstamps {
+> @@ -322,6 +355,9 @@ void igc_disable_tx_ring(struct igc_ring *ring);
+>  void igc_enable_tx_ring(struct igc_ring *ring);
+>  int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags);
+>  
+> +/* AF_XDP TX metadata operations */
+> +extern const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops;
+> +
+>  /* igc_dump declarations */
+>  void igc_rings_dump(struct igc_adapter *adapter);
+>  void igc_regs_dump(struct igc_adapter *adapter);
+> @@ -507,32 +543,6 @@ enum igc_boards {
+>  #define TXD_USE_COUNT(S)	DIV_ROUND_UP((S), IGC_MAX_DATA_PER_TXD)
+>  #define DESC_NEEDED	(MAX_SKB_FRAGS + 4)
+>  
+> -enum igc_tx_buffer_type {
+> -	IGC_TX_BUFFER_TYPE_SKB,
+> -	IGC_TX_BUFFER_TYPE_XDP,
+> -	IGC_TX_BUFFER_TYPE_XSK,
+> -};
+> -
+> -/* wrapper around a pointer to a socket buffer,
+> - * so a DMA handle can be stored along with the buffer
+> - */
+> -struct igc_tx_buffer {
+> -	union igc_adv_tx_desc *next_to_watch;
+> -	unsigned long time_stamp;
+> -	enum igc_tx_buffer_type type;
+> -	union {
+> -		struct sk_buff *skb;
+> -		struct xdp_frame *xdpf;
+> -	};
+> -	unsigned int bytecount;
+> -	u16 gso_segs;
+> -	__be16 protocol;
+> -
+> -	DEFINE_DMA_UNMAP_ADDR(dma);
+> -	DEFINE_DMA_UNMAP_LEN(len);
+> -	u32 tx_flags;
+> -};
+> -
+>  struct igc_rx_buffer {
+>  	union {
+>  		struct {
+> @@ -556,6 +566,13 @@ struct igc_xdp_buff {
+>  	struct igc_inline_rx_tstamps *rx_ts; /* data indication bit IGC_RXDADV_STAT_TSIP */
+>  };
+>  
+> +struct igc_metadata_request {
+> +	struct igc_tx_buffer *tx_buffer;
+> +	struct xsk_tx_metadata *meta;
+> +	struct igc_ring *tx_ring;
+> +	u32 cmd_type;
+> +};
+> +
+>  struct igc_q_vector {
+>  	struct igc_adapter *adapter;    /* backlink */
+>  	void __iomem *itr_register;
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 3af52d238f3b..bfa51ecdf8ec 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -2878,6 +2878,89 @@ static void igc_update_tx_stats(struct igc_q_vector *q_vector,
+>  	q_vector->tx.total_packets += packets;
+>  }
+>  
+> +static void igc_xsk_request_timestamp(void *_priv)
+> +{
+> +	struct igc_metadata_request *meta_req = _priv;
+> +	struct igc_ring *tx_ring = meta_req->tx_ring;
+> +	struct igc_tx_timestamp_request *tstamp;
+> +	u32 tx_flags = IGC_TX_FLAGS_TSTAMP;
+> +	struct igc_adapter *adapter;
+> +	unsigned long lock_flags;
+> +	bool found = false;
+> +	int i;
+> +
+> +	if (test_bit(IGC_RING_FLAG_TX_HWTSTAMP, &tx_ring->flags)) {
+> +		adapter = netdev_priv(tx_ring->netdev);
+> +
+> +		spin_lock_irqsave(&adapter->ptp_tx_lock, lock_flags);
+> +
+> +		/* Search for available tstamp regs */
+> +		for (i = 0; i < IGC_MAX_TX_TSTAMP_REGS; i++) {
+> +			tstamp = &adapter->tx_tstamp[i];
+> +
+> +			/* tstamp->skb and tstamp->xsk_tx_buffer are in union.
+> +			 * When tstamp->skb is equal to NULL,
+> +			 * tstamp->xsk_tx_buffer is equal to NULL as well.
+> +			 * This condition means that the particular tstamp reg
+> +			 * is not occupied by other packet.
+> +			 */
+> +			if (!tstamp->skb) {
+> +				found = true;
+> +				break;
+> +			}
+> +		}
+> +
+> +		/* Return if no available tstamp regs */
+> +		if (!found) {
+> +			adapter->tx_hwtstamp_skipped++;
+> +			spin_unlock_irqrestore(&adapter->ptp_tx_lock,
+> +					       lock_flags);
+> +			return;
+> +		}
+> +
+> +		tstamp->start = jiffies;
+> +		tstamp->xsk_queue_index = tx_ring->queue_index;
+> +		tstamp->xsk_tx_buffer = meta_req->tx_buffer;
+> +		tstamp->buffer_type = IGC_TX_BUFFER_TYPE_XSK;
+> +
+> +		/* Hold the transmit completion until timestamp is ready */
+> +		meta_req->tx_buffer->xsk_pending_ts = true;
+> +
+> +		/* Keep the pointer to tx_timestamp, which is located in XDP
+> +		 * metadata area. It is the location to store the value of
+> +		 * tx hardware timestamp.
+> +		 */
+> +		xsk_tx_metadata_to_compl(meta_req->meta, &tstamp->xsk_meta);
+> +
+> +		/* Set timestamp bit based on the _TSTAMP(_X) bit. */
+> +		tx_flags |= tstamp->flags;
+> +		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
+> +						   IGC_TX_FLAGS_TSTAMP,
+> +						   (IGC_ADVTXD_MAC_TSTAMP));
+> +		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
+> +						   IGC_TX_FLAGS_TSTAMP_1,
+> +						   (IGC_ADVTXD_TSTAMP_REG_1));
+> +		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
+> +						   IGC_TX_FLAGS_TSTAMP_2,
+> +						   (IGC_ADVTXD_TSTAMP_REG_2));
+> +		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
+> +						   IGC_TX_FLAGS_TSTAMP_3,
+> +						   (IGC_ADVTXD_TSTAMP_REG_3));
+> +
+> +		spin_unlock_irqrestore(&adapter->ptp_tx_lock, lock_flags);
+> +	}
+> +}
+> +
+> +static u64 igc_xsk_fill_timestamp(void *_priv)
+> +{
+> +	return *(u64 *)_priv;
+> +}
+> +
+> +const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops = {
+> +	.tmo_request_timestamp		= igc_xsk_request_timestamp,
+> +	.tmo_fill_timestamp		= igc_xsk_fill_timestamp,
+> +};
+> +
+>  static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>  {
+>  	struct xsk_buff_pool *pool = ring->xsk_pool;
+> @@ -2899,24 +2982,34 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>  	budget = igc_desc_unused(ring);
+>  
+>  	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
+> -		u32 cmd_type, olinfo_status;
+> +		struct igc_metadata_request meta_req;
+> +		struct xsk_tx_metadata *meta = NULL;
+>  		struct igc_tx_buffer *bi;
+> +		u32 olinfo_status;
+>  		dma_addr_t dma;
+>  
+> -		cmd_type = IGC_ADVTXD_DTYP_DATA | IGC_ADVTXD_DCMD_DEXT |
+> -			   IGC_ADVTXD_DCMD_IFCS | IGC_TXD_DCMD |
+> -			   xdp_desc.len;
+> +		meta_req.cmd_type = IGC_ADVTXD_DTYP_DATA |
+> +				    IGC_ADVTXD_DCMD_DEXT |
+> +				    IGC_ADVTXD_DCMD_IFCS |
+> +				    IGC_TXD_DCMD | xdp_desc.len;
+>  		olinfo_status = xdp_desc.len << IGC_ADVTXD_PAYLEN_SHIFT;
+>  
+>  		dma = xsk_buff_raw_get_dma(pool, xdp_desc.addr);
+> +		meta = xsk_buff_get_metadata(pool, xdp_desc.addr);
+>  		xsk_buff_raw_dma_sync_for_device(pool, dma, xdp_desc.len);
+> +		bi = &ring->tx_buffer_info[ntu];
+> +
+> +		meta_req.tx_ring = ring;
+> +		meta_req.tx_buffer = bi;
+> +		meta_req.meta = meta;
+> +		xsk_tx_metadata_request(meta, &igc_xsk_tx_metadata_ops,
+> +					&meta_req);
+>  
+>  		tx_desc = IGC_TX_DESC(ring, ntu);
+> -		tx_desc->read.cmd_type_len = cpu_to_le32(cmd_type);
+> +		tx_desc->read.cmd_type_len = cpu_to_le32(meta_req.cmd_type);
+>  		tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
+>  		tx_desc->read.buffer_addr = cpu_to_le64(dma);
+>  
+> -		bi = &ring->tx_buffer_info[ntu];
+>  		bi->type = IGC_TX_BUFFER_TYPE_XSK;
+>  		bi->protocol = 0;
+>  		bi->bytecount = xdp_desc.len;
+> @@ -2979,6 +3072,13 @@ static bool igc_clean_tx_irq(struct igc_q_vector *q_vector, int napi_budget)
+>  		if (!(eop_desc->wb.status & cpu_to_le32(IGC_TXD_STAT_DD)))
+>  			break;
+>  
+> +		/* Hold the completions while there's a pending tx hardware
+> +		 * timestamp request from XDP Tx metadata.
+> +		 */
+> +		if (tx_buffer->type == IGC_TX_BUFFER_TYPE_XSK &&
+> +		    tx_buffer->xsk_pending_ts)
+> +			break;
+> +
+>  		/* clear next_to_watch to prevent false hangs */
+>  		tx_buffer->next_to_watch = NULL;
+>  
+> @@ -6818,6 +6918,7 @@ static int igc_probe(struct pci_dev *pdev,
+>  
+>  	netdev->netdev_ops = &igc_netdev_ops;
+>  	netdev->xdp_metadata_ops = &igc_xdp_metadata_ops;
+> +	netdev->xsk_tx_metadata_ops = &igc_xsk_tx_metadata_ops;
+>  	igc_ethtool_set_ops(netdev);
+>  	netdev->watchdog_timeo = 5 * HZ;
+>  
+> diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
+> index 885faaa7b9de..e81b850c035e 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_ptp.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/ktime.h>
+>  #include <linux/delay.h>
+>  #include <linux/iopoll.h>
+> +#include <net/xdp_sock.h>
+>  
+>  #define INCVALUE_MASK		0x7fffffff
+>  #define ISGN			0x80000000
+> @@ -545,6 +546,30 @@ static void igc_ptp_enable_rx_timestamp(struct igc_adapter *adapter)
+>  	wr32(IGC_TSYNCRXCTL, val);
+>  }
+>  
+> +static void igc_ptp_free_tx_buffer(struct igc_adapter *adapter,
+> +				   struct igc_tx_timestamp_request *tstamp)
+> +{
+> +	if (tstamp->buffer_type == IGC_TX_BUFFER_TYPE_XSK) {
+> +		/* Release the transmit completion */
+> +		tstamp->xsk_tx_buffer->xsk_pending_ts = false;
+> +
+> +		/* Note: tstamp->skb and tstamp->xsk_tx_buffer are in union.
+> +		 * By setting tstamp->xsk_tx_buffer to NULL, tstamp->skb will
+> +		 * become NULL as well.
+> +		 */
+> +		tstamp->xsk_tx_buffer = NULL;
+> +		tstamp->buffer_type = 0;
+> +
+> +		/* Trigger txrx interrupt for transmit completion */
+> +		igc_xsk_wakeup(adapter->netdev, tstamp->xsk_queue_index, 0);
+> +
+> +		return;
+> +	}
+> +
+> +	dev_kfree_skb_any(tstamp->skb);
+> +	tstamp->skb = NULL;
+> +}
+> +
+>  static void igc_ptp_clear_tx_tstamp(struct igc_adapter *adapter)
+>  {
+>  	unsigned long flags;
+> @@ -555,8 +580,8 @@ static void igc_ptp_clear_tx_tstamp(struct igc_adapter *adapter)
+>  	for (i = 0; i < IGC_MAX_TX_TSTAMP_REGS; i++) {
+>  		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
+>  
+> -		dev_kfree_skb_any(tstamp->skb);
+> -		tstamp->skb = NULL;
+> +		if (tstamp->skb)
+> +			igc_ptp_free_tx_buffer(adapter, tstamp);
+>  	}
+>  
+>  	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
+> @@ -657,8 +682,9 @@ static int igc_ptp_set_timestamp_mode(struct igc_adapter *adapter,
+>  static void igc_ptp_tx_timeout(struct igc_adapter *adapter,
+>  			       struct igc_tx_timestamp_request *tstamp)
+>  {
+> -	dev_kfree_skb_any(tstamp->skb);
+> -	tstamp->skb = NULL;
+> +	if (tstamp->skb)
+> +		igc_ptp_free_tx_buffer(adapter, tstamp);
+> +
+>  	adapter->tx_hwtstamp_timeouts++;
+>  
+>  	netdev_warn(adapter->netdev, "Tx timestamp timeout\n");
+> @@ -729,10 +755,15 @@ static void igc_ptp_tx_reg_to_stamp(struct igc_adapter *adapter,
+>  	shhwtstamps.hwtstamp =
+>  		ktime_add_ns(shhwtstamps.hwtstamp, adjust);
+>  
+> -	tstamp->skb = NULL;
+> +	/* Copy the tx hardware timestamp into xdp metadata or skb */
+> +	if (tstamp->buffer_type == IGC_TX_BUFFER_TYPE_XSK)
 
-If this is about dropping application refs in step 4 & step 5, then
-from devmem TCP perspective it must be done on socket close & skb
-freeing AFAIU, and not delayed until page_pool destruction. Think
-about a stupid or malicious user that does something like:
+I believe this should also be protected with xp_tx_metadata_enabled()
+check. We recently had following bugfix, PTAL:
 
-1. Set up dmabuf binding using netlink api.
-2. While (100000):
-3.   create devmem TCP socket.
-4.   receive some devmem data on TCP socket.
-5.   close TCP socket without calling DEVMEM_DONTNEED.
-6. clean up dmabuf binding using netlink api.
+https://lore.kernel.org/bpf/20240222-stmmac_xdp-v2-1-4beee3a037e4@linutronix.de/
 
-In this case, we need to drop the references in step 5 when the socket
-is destroyed, so the memory is freed to the page pool and available
-for the next socket in step 3. We cannot delay the freeing until step
-6 when the rx queue is recreated and the page pool is destroyed,
-otherwise the net_iovs would leak in the loop and eventually the NIC
-would fail to find available memory. The same bug would be
-reproducible with io_uring unless you're creating a new page pool for
-each new io_uring socket equivalent.
+I'll take a deeper look at patch tomorrow, might be the case that you've
+addressed that or you were aware of this issue but anyways wanted to bring
+it up. Just check that you don't break standard XDP/AF_XDP traffic :)
 
-But even outside of this, I think it's a bit semantically off to ask
-the page_pool to drop references that belong to the application IMO,
-because those references are not the page_pool's.
-
-> --
-> Pavel Begunkov
-
---=20
-Thanks,
-Mina
+> +		xsk_tx_metadata_complete(&tstamp->xsk_meta,
+> +					 &igc_xsk_tx_metadata_ops,
+> +					 &shhwtstamps.hwtstamp);
+> +	else
+> +		skb_tstamp_tx(skb, &shhwtstamps);
+>  
+> -	skb_tstamp_tx(skb, &shhwtstamps);
+> -	dev_kfree_skb_any(skb);
+> +	igc_ptp_free_tx_buffer(adapter, tstamp);
+>  }
+>  
+>  /**
+> -- 
+> 2.34.1
+> 
 
