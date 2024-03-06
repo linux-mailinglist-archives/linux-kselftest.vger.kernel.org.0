@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-6012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7BAE87423E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 22:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 60659874281
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 23:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E2E82869A3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 21:59:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C5FD2818D1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 22:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA29A1B951;
-	Wed,  6 Mar 2024 21:59:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD3951BF2B;
+	Wed,  6 Mar 2024 22:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bmVU4dFy"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="imSnvB/g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD1D1B813
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 21:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7330B1BC2C
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 22:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709762370; cv=none; b=ImUMYuwdF6ObbP+FAZ13lnSWbst88y20DcHfa/5lMc2HTYWq6g7AEecLr5bX3P3oocAQRvK1xiuUUitPnxA4+OujkGnDOM9WiU+L2L2Cv2Wk30XJk/ysX5y0Nc0a5nKoVRgRLEFENhQo9E63s/9vhCSSayvSk31d+0IefT3IwUs=
+	t=1709763073; cv=none; b=m6y/Yu8p7HI1W5ABgUTly8xDsZ+wHw5onElh31LiWq9JCvX7CMsQHnw7HiZwqiJMOQLvaJQATt77k9WU2hkFtM0tvDDKZ9QFuv/GS9+mfee35JqQqBTsbd/6ZwB2HfCMT4fAp3IK9787AhOY8OL2c1xjf94Cvt1kvuVjazgEZKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709762370; c=relaxed/simple;
-	bh=Bo+Gd71uKG4lljzskLwQACMif97lQBzqlZbNbG6FJb8=;
+	s=arc-20240116; t=1709763073; c=relaxed/simple;
+	bh=e+h5g7ggIAcqtCEsjbwW8QZ4XMZUN74BvuwxvFy1dqE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H9ZL9XB0kmxFjtqqC/YNMPdY+IBjF5fj468gCunHRWO3WxQ+nO1q37ukDMFAa9xHNpDUhmDeKyGV3j72mvW7rvh6bZNGJwDEYrveTpX9vmrgQxtP1chMHxZatguiDqa1h7rGE1P5BmwbvniBFEyHb2rhTGn5gy9jQp2ZzQR3ycQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bmVU4dFy; arc=none smtp.client-ip=209.85.218.48
+	 To:Cc:Content-Type; b=ilLTkWErX9HnyARCQVX+5vt5sLXEoLHZ/XVZ1C2u+wzVm/kgOeLWNhoLON3yBIJ998+A70/n81Ow8InZaTtTenu9aaxwzequ1p2eoMC+b3tA8i4OoGygU7k7L6ltrCKliwL3u1f2y79MkIqX8SF8vBplIZj7Lcehjz9MzDh0Y8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=imSnvB/g; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a3fb8b0b7acso30835266b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Mar 2024 13:59:27 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a45bb2a9c20so32515566b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Mar 2024 14:11:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709762366; x=1710367166; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709763068; x=1710367868; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hlmBc/819XFvfwA5z2rBHWYGDJvaictacNYlJnPI4Mk=;
-        b=bmVU4dFyRE7HoiTKPzvJe1iH1JfZqI2s8XTGsbk5nidjnDj6SSnPfXEUX/gC17kyT4
-         kPCs3KHxfbh7Zfz/UDVBUEVLz5O4O2Gmvcr2W8E1Av5h/CftHi77LhW2yw0RnoReg9Jl
-         w2KRj/xivFAqlsREYys3DjyNrtOeU8VAwgNrt5coRyavSB3jQ/S/nS7ohyWoUyFBIJr6
-         GL3WfiOGyRy9wC2v8lZj2REwGB0QrOtjLi9Le8+hfak6xbxefWoIPyqKrorCAROMXRk/
-         W77jjCGTtczedXtuLDI4fznVqEkL1lLyN/XefqMNFWvFvJqBSTnXt2tRdAB8FweZWCDg
-         P/gQ==
+        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
+        b=imSnvB/glsrcOoPIl62eeq6tzX1mTcMOBOEqK11tyD8Q0h0/m3eXHCKa62zKxIl1k+
+         YqDAFu8QP4A/jo0OqqO3VFfTgffsuHGIPg60Dz2Y/rpwW/z69zYX6P14tfKr3BJFm0LV
+         rpolC4pkfuCAG7xI6MU71ZLwVokmsKyyEvQx9Fva5V6SFM/yuZnVjwezpSC75JLue0FE
+         VqBQp4fGnzQub8hM2Mst6i0IksmKfepM49kQxm+bK49O6M2u0qiSNE5TYZKaxqhaTXVl
+         pptv/cGgeHIqMbTyvqkUl4s18Xy1ph3NeNPUHutsXLXyE5u8Lh4Fy4W0+DQ39RUs8czE
+         25Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709762366; x=1710367166;
+        d=1e100.net; s=20230601; t=1709763068; x=1710367868;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hlmBc/819XFvfwA5z2rBHWYGDJvaictacNYlJnPI4Mk=;
-        b=RT7mL3T2cp6+IAmMAJ0aKg7GINjU6SWAHRBxHIo7Lq3atJvQKDeABidTygcQHjX/MV
-         blvVvtW0+w7MTV764iV1mQ0qXtfnCraRtknhl5+SG47cmFWPgP70wTOakqjJbmBtJWZE
-         EwlQ+JaRrEpsnJMT+3mwfk1Jv1t/b6+i+QzkdWuv+ybOVAO69Z0pfFIYG90n1g46yqfZ
-         n5VT0HY7lpW4pMfkBwA2tTuSTtZJD8YnMU+E3hdFScWLWOiTBbbrvT91sL2PF4CHq9Qs
-         gJnBP2/xA17eVc31vCn8hiiF/OYWcM2GGdkVyjYiQJwjdEiibyltZUa2aPPcz6yqRLhL
-         rKcg==
-X-Forwarded-Encrypted: i=1; AJvYcCX04BkIh3NWlxLPNLNStYlYsSsxbmjMYHy1ZrYIub6OzBGho0jU2ryOJLn8mdVyPvwmj4nwrvu5ZfknGdomkoX2sLZaSBCpLFzkv6QxJeZI
-X-Gm-Message-State: AOJu0YyvUk3dl33/u4mhkRbQWJH6KIIgVI0twtmNgu9kDi6ZANLa0DR4
-	gn2r1kBaVRoDCKRkPL0KJQS+k/QYDyyEW9M4kBk83RpAe0UIFOONvXWeR9ZO6JuP0AFggrfzUB6
-	ROCnXJ3Ah1V2ez3mmkfbaH5hB7H5MPlPVzAU3
-X-Google-Smtp-Source: AGHT+IE6m7qPLUP8r6sXf6aZtd3JIe4+T0XFk3y1+GyBwIcJu6x9zI1qVavUs/CKT4NIFWWIF5O7XuTNz5CKNmZCGMw=
-X-Received: by 2002:a17:906:180a:b0:a44:d746:b1b5 with SMTP id
- v10-20020a170906180a00b00a44d746b1b5mr8351124eje.30.1709762366112; Wed, 06
- Mar 2024 13:59:26 -0800 (PST)
+        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
+        b=aZpDMbWgz2EVZlwESA90rI5wgvjDilDUiXCyvGXV3sMl4SrCXwNvaODpkX1KN6EKYT
+         pyh69ALHFRFfGdUYBkPLl/c9JQr6uUL2yktvfCLSxROm0NVhLeFq4uAPL2i4lpnRwHn0
+         vyQcqzC2bstGjvxHZW2UxY1Ak1T+98bd4ssCFOTNPTEYLAs6hUzsh9+2RgsMNV+NG92X
+         wyaK4QQWIwmxl2zoSBNQ0xXuBXuxVm9bKB0pmn40mByHJ+OCbIKlzWJSZ1wAw+dptS2Z
+         ovY+mgVO2uPU3yQHNQPWupoYt3HGLF8OnUYbXD1044CEOb21yAjM814JmovuRju8OmV3
+         ATOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5L8xCJdmSsQopqTUXpGmdj5933hhOGQJqxvNE5FQAns4f7R6TtJP8ycfZ3fV8Tug2LWrXGrduxQpJVlY4LaWZ2Z9Vj4iaBTetsvuX92G6
+X-Gm-Message-State: AOJu0YyLeJou1rruz4XKkbRqWPYOX+lSxqsR1t16FIA7mdSaagiBnns2
+	7l3F0rUqmNlqUAcsjDDnW2F6n1TlT/yH6ExDirgt7HcZ+V23e0vnBaekKgh41Zis9mBeIskheM9
+	BhxdEsM9lfHqP/FCGrQIgxnf/OzZBmXZckiet
+X-Google-Smtp-Source: AGHT+IENXwD+VWczLj/dTM2/A1MFyK7LqUp0f5yPqTDI4m7+LrQO5mzGQIb3CxwkX+uMg5NpdLqf746V4nTchzug2EI=
+X-Received: by 2002:a17:906:3442:b0:a44:3ec9:1fd3 with SMTP id
+ d2-20020a170906344200b00a443ec91fd3mr9663971ejb.30.1709763067483; Wed, 06 Mar
+ 2024 14:11:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,18 +72,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com> <1b57dac2-4b04-4bec-b2d7-d0edb4fcabbc@davidwei.uk>
- <CAHS8izM5O39mnTQ8mhcQE75amDT4G-3vcgozzjcYsAdd_-he1g@mail.gmail.com>
- <417f293a-848e-4eb2-b690-c8696079b452@gmail.com> <CAHS8izNPtHb2GnEMviiJTFT_dPxsxgYsNw5V9s-gSC2YnJRPRg@mail.gmail.com>
- <772b9ab0-c6d7-4b13-8e05-44dd312b9879@gmail.com>
-In-Reply-To: <772b9ab0-c6d7-4b13-8e05-44dd312b9879@gmail.com>
+ <20240305020153.2787423-6-almasrymina@google.com> <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
+ <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com> <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
+In-Reply-To: <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
 From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 6 Mar 2024 13:59:11 -0800
-Message-ID: <CAHS8izPzBqz4CzL7Axpfy7uXFDN1F5afyCfEeYnysH5KCjEgcQ@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+Date: Wed, 6 Mar 2024 14:10:55 -0800
+Message-ID: <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
+To: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
 	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
 	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
@@ -106,255 +103,344 @@ Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel
 	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
 	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
 	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, shakeel.butt@linux.dev
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 11:14=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
+On Wed, Mar 6, 2024 at 4:38=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
+> wrote:
 >
-> On 3/6/24 17:04, Mina Almasry wrote:
-> > On Wed, Mar 6, 2024 at 6:30=E2=80=AFAM Pavel Begunkov <asml.silence@gma=
-il.com> wrote:
+> On 2024/3/6 5:17, Mina Almasry wrote:
+> > On Tue, Mar 5, 2024 at 4:55=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
+.com> wrote:
 > >>
-> >> On 3/5/24 22:36, Mina Almasry wrote:
-> >>> On Tue, Mar 5, 2024 at 1:55=E2=80=AFPM David Wei <dw@davidwei.uk> wro=
-te:
-> >>>>
-> >>>> On 2024-03-04 18:01, Mina Almasry wrote:
-> >>>>> +struct memory_provider_ops {
-> >>>>> +     int (*init)(struct page_pool *pool);
-> >>>>> +     void (*destroy)(struct page_pool *pool);
-> >>>>> +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp=
-);
-> >>>>> +     bool (*release_page)(struct page_pool *pool, struct page *pag=
-e);
-> >>>>
-> >>>> For ZC Rx we added a scrub() function to memory_provider_ops that is
-> >>>> called from page_pool_scrub(). Does TCP devmem not custom behaviour
-> >>>> waiting for all netmem_refs to return before destroying the page poo=
-l?
-> >>>> What happens if e.g. application crashes?
+> >> On 2024/3/5 10:01, Mina Almasry wrote:
+> >>
+> >> ...
+> >>
 > >>>
-> >>> (sorry for the long reply, but he refcounting is pretty complicated t=
-o
-> >>> explain and I feel like we need to agree on how things currently work=
-)
+> >>> The netdev_dmabuf_binding struct is refcounted, and releases its
+> >>> resources only when all the refs are released.
 > >>>
-> >>> Yeah, the addition of the page_pool_scrub() function is a bit of a
-> >>> head scratcher for me. Here is how the (complicated) refcounting work=
-s
-> >>> for devmem TCP (assuming the driver is not doing its own recycling
-> >>> logic which complicates things further):
+> >>> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> >>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> >>> Signed-off-by: Mina Almasry <almasrymina@google.com>
 > >>>
-> >>> 1. When a netmem_ref is allocated by the page_pool (from dmabuf or
-> >>> page), the netmem_get_pp_ref_count_ref()=3D=3D1 and belongs to the pa=
-ge
-> >>> pool as long as the netmem is waiting in the pool for driver
-> >>> allocation.
+> >>> ---
 > >>>
-> >>> 2. When a netmem is allocated by the driver, no refcounting is
-> >>> changed, but the ownership of the netmem_get_pp_ref_count_ref() is
-> >>> implicitly transferred from the page pool to the driver. i.e. the ref
-> >>> now belongs to the driver until an skb is formed.
+> >>> RFC v6:
+> >>> - Validate rx queue index
+> >>> - Refactor new functions into devmem.c (Pavel)
+> >>
+> >> It seems odd that the functions or stucts in a file called devmem.c
+> >> are named after 'dmabuf' instead of 'devmem'.
+> >>
+> >
+> > So my intention with this naming that devmem.c contains all the
+> > functions for all devmem tcp specific support. Currently the only
+> > devmem we support is dmabuf. In the future, other devmem may be
+> > supported and it can fit nicely in devmem.c. For example, if we want
+> > to extend devmem TCP to support NVMe devices, we need to add support
+> > for p2pdma, maybe, and we can add that support under the devmem.c
+> > umbrella rather than add new files.
+> >
+> > But I can rename to dmabuf.c if there is strong objection to the curren=
+t name.
+>
+> Grepping 'dmabuf' seems to show that it may be common rename it to
+> something as *_dmabuf.c.
+>
+> >
 > >>>
-> >>> 3. When the driver forms an skb using skb_rx_add_frag_netmem(), no
-> >>> refcounting is changed, but the ownership of the
-> >>> netmem_get_pp_ref_count_ref() is transferred from the driver to the
-> >>> TCP stack.
+> >>
+> >> ...
+> >>
+> >>> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> >>> index d8b810245c1d..72e932a1a948 100644
+> >>> --- a/include/net/netmem.h
+> >>> +++ b/include/net/netmem.h
+> >>> @@ -8,6 +8,16 @@
+> >>>  #ifndef _NET_NETMEM_H
+> >>>  #define _NET_NETMEM_H
 > >>>
-> >>> 4. When the TCP stack hands the skb to the application, the TCP stack
-> >>> obtains an additional refcount, so netmem_get_pp_ref_count_ref()=3D=
-=3D2,
-> >>> and frees the skb using skb_frag_unref(), which drops the
-> >>> netmem_get_pp_ref_count_ref()=3D=3D1.
-> >>>
-> >>> 5. When the user is done with the skb, the user calls the
-> >>> DEVMEM_DONTNEED setsockopt which calls napi_pp_put_netmem() which
-> >>> recycles the netmem back to the page pool. This doesn't modify any
-> >>> refcounting, but the refcount ownership transfers from the userspace
-> >>> back to the page pool, and we're back at step 1.
-> >>>
-> >>> So all in all netmem can belong either to (a) the page pool, or (b)
-> >>> the driver, or (c) the TCP stack, or (d) the application depending on
-> >>> where exactly it is in the RX path.
-> >>>
-> >>> When an application running devmem TCP crashes, the netmem that belon=
-g
-> >>> to the page pool or driver are not touched, because the page pool is
-> >>> not tied to the application in our case really. However, the TCP stac=
-k
-> >>> notices the devmem socket of the application close, and when it does,
-> >>> the TCP stack will:
-> >>>
-> >>> 1. Free all the skbs in the sockets receive queue. This is not custom
-> >>> behavior for devmem TCP, it's just standard for TCP to free all skbs
-> >>> waiting to be received by the application.
-> >>> 2. The TCP stack will free references that belong to the application.
-> >>> Since the application crashed, it will not call the DEVMEM_DONTNEED
-> >>> setsockopt, so we need to free those on behalf of the application.
-> >>> This is done in this diff:
-> >>>
-> >>> @@ -2498,6 +2498,15 @@ static void tcp_md5sig_info_free_rcu(struct
-> >>> rcu_head *head)
-> >>>    void tcp_v4_destroy_sock(struct sock *sk)
-> >>>    {
-> >>>     struct tcp_sock *tp =3D tcp_sk(sk);
-> >>> + __maybe_unused unsigned long index;
-> >>> + __maybe_unused void *netmem;
+> >>> +#include <net/devmem.h>
 > >>> +
-> >>> +#ifdef CONFIG_PAGE_POOL
-> >>> + xa_for_each(&sk->sk_user_frags, index, netmem)
-> >>> + WARN_ON_ONCE(!napi_pp_put_page((__force netmem_ref)netmem, false));
-> >>> +#endif
+> >>> +/* net_iov */
 > >>> +
-> >>> + xa_destroy(&sk->sk_user_frags);
+> >>> +struct net_iov {
+> >>> +     struct dmabuf_genpool_chunk_owner *owner;
+> >>> +};
+> >>> +
+> >>> +/* netmem */
+> >>> +
+> >>>  /**
+> >>>   * typedef netmem_ref - a nonexistent type marking a reference to ge=
+neric
+> >>>   * network memory.
+> >>> diff --git a/net/core/Makefile b/net/core/Makefile
+> >>> index 821aec06abf1..592f955c1241 100644
+> >>> --- a/net/core/Makefile
+> >>> +++ b/net/core/Makefile
+> >>> @@ -13,7 +13,7 @@ obj-y                    +=3D dev.o dev_addr_lists.=
+o dst.o netevent.o \
+> >>>                       neighbour.o rtnetlink.o utils.o link_watch.o fi=
+lter.o \
+> >>>                       sock_diag.o dev_ioctl.o tso.o sock_reuseport.o =
+\
+> >>>                       fib_notifier.o xdp.o flow_offload.o gro.o \
+> >>> -                     netdev-genl.o netdev-genl-gen.o gso.o
+> >>> +                     netdev-genl.o netdev-genl-gen.o gso.o devmem.o
 > >>>
-> >>>     trace_tcp_destroy_sock(sk);
+> >>>  obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) +=3D dev_addr_lists_test.o
 > >>>
-> >>> To be honest, I think it makes sense for the TCP stack to be
-> >>> responsible for putting the references that belong to it and the
-> >>> application. To me, it does not make much sense for the page pool to
-> >>> be responsible for putting the reference that belongs to the TCP stac=
-k
-> >>> or driver via a page_pool_scrub() function, as those references do no=
-t
-> >>> belong to the page pool really. I'm not sure why there is a diff
-> >>> between our use cases here because I'm not an io_uring expert. Why do
-> >>> you need to scrub all the references on page pool destruction? Don't
-> >>> these belong to non-page pool components like io_uring stack or TCP
-> >>> stack ol otherwise?
+> >>> diff --git a/net/core/dev.c b/net/core/dev.c
+> >>> index fe054cbd41e9..bbea1b252529 100644
+> >>> --- a/net/core/dev.c
+> >>> +++ b/net/core/dev.c
+> >>> @@ -155,6 +155,9 @@
+> >>>  #include <net/netdev_rx_queue.h>
+> >>>  #include <net/page_pool/types.h>
+> >>>  #include <net/page_pool/helpers.h>
+> >>> +#include <linux/genalloc.h>
+> >>> +#include <linux/dma-buf.h>
+> >>> +#include <net/devmem.h>
+> >>>
+> >>>  #include "dev.h"
+> >>>  #include "net-sysfs.h"
+> >>> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> >>> new file mode 100644
+> >>> index 000000000000..779ad990971e
+> >>> --- /dev/null
+> >>> +++ b/net/core/devmem.c
+> >>> @@ -0,0 +1,293 @@
+> >>> +// SPDX-License-Identifier: GPL-2.0-or-later
+> >>> +/*
+> >>> + *      Devmem TCP
+> >>> + *
+> >>> + *      Authors:     Mina Almasry <almasrymina@google.com>
+> >>> + *                   Willem de Bruijn <willemdebruijn.kernel@gmail.c=
+om>
+> >>> + *                   Kaiyuan Zhang <kaiyuanz@google.com
+> >>> + */
+> >>> +
+> >>> +#include <linux/types.h>
+> >>> +#include <linux/mm.h>
+> >>> +#include <linux/netdevice.h>
+> >>> +#include <trace/events/page_pool.h>
+> >>> +#include <net/netdev_rx_queue.h>
+> >>> +#include <net/page_pool/types.h>
+> >>> +#include <net/page_pool/helpers.h>
+> >>> +#include <linux/genalloc.h>
+> >>> +#include <linux/dma-buf.h>
+> >>> +#include <net/devmem.h>
+> >>> +
+> >>> +/* Device memory support */
+> >>> +
+> >>> +#ifdef CONFIG_DMA_SHARED_BUFFER
 > >>
-> >> That one is about cleaning buffers that are in b/w 4 and 5, i.e.
-> >> owned by the user, which devmem does at sock destruction. io_uring
-> >> could get by without scrub, dropping user refs while unregistering
-> >> ifq, but then it'd need to wait for all requests to finish so there
-> >> is no step 4 in the meantime. Might change, can be useful, but it
-> >> was much easier to hook into the pp release loop.
-> >>
-> >> Another concern is who and when can reset ifq / kill pp outside
-> >> of io_uring/devmem. I assume it can happen on a whim, which is
-> >> hard to handle gracefully.
+> >> I still think it is worth adding its own config for devmem or dma-buf
+> >> for networking, thinking about the embeded system.
 > >>
 > >
-> > If this is about dropping application refs in step 4 & step 5, then
-> > from devmem TCP perspective it must be done on socket close & skb
-> > freeing AFAIU, and not delayed until page_pool destruction.
+> > FWIW Willem did weigh on this previously and said he prefers to have
+> > it unguarded by a CONFIG, but I will submit to whatever the consensus
+> > here. It shouldn't be a huge deal to add a CONFIG technically
+> > speaking.
 >
-> Right, something in the kernel should take care of it. You temporarily
-> attach it to the socket, which is fine. And you could've also stored
-> it in the netlink socket or some other object. In case of zcrx io_uring
-> impl, it's bound to io_uring, io_uring is responsible for cleaning them
-> up. And we do it before __page_pool_destroy, otherwise there would be
-> a ref dependency.
+> Grepping 'CONFIG_DMA_SHARED_BUFFER' show that the API user of dmabuf
+> API does not seems to reuse the CONFIG_DMA_SHARED_BUFFER, instead they
+> seem to define its own config, and select CONFIG_DMA_SHARED_BUFFER
+> if necessary, it that any reason it is different here?
 >
-
-AFAIU today the page_pool_release() waits until there are no more
-pages in flight before calling __page_pool_destroy(), and in existing
-use cases it's common for the page_pool to stay alive after
-page_pool_destroy() is called until all the skbs waiting in the
-receive queue to be recvmsg()'d are received and the page_pool is
-freed. I just didn't modify that behavior.
-
-> A side note, attaching to netlink or some other global object sounds
-> conceptually better, as once you return a buffer to the user, the
-> socket should not have any further business with the buffer. FWIW,
-> that better resembles io_uring approach. For example allows to:
->
-> recv(sock);
-> close(sock);
-> process_rx_buffers();
->
-> or to return (i.e. DEVMEM_DONTNEED) buffers from different sockets
-> in one call. However, I don't think it's important for devmem and
-> perhaps more implementation dictated.
->
-
-Hmm I think this may be a sockets vs io_uring difference? For sockets
-there is no way to recvmsg() new buffers after the sock close and
-there is no way to release buffers to the kernel via the setsockopt()
-after the sock close.
-
-But I don't think we need to align on everything here, right? If
-page_pool_scrub makes more sense in your use case because the lifetime
-of the io_uring buffers is different I don't see any issue with you
-extending the ops with page_pool_scrub(), and not define it for the
-dmabuf_devmem provider which doesn't need a scrub, right?
-
-> > Think
-> > about a stupid or malicious user that does something like:
 > >
-> > 1. Set up dmabuf binding using netlink api.
-> > 2. While (100000):
-> > 3.   create devmem TCP socket.
-> > 4.   receive some devmem data on TCP socket.
-> > 5.   close TCP socket without calling DEVMEM_DONTNEED.
-> > 6. clean up dmabuf binding using netlink api.
+> >>> +static void netdev_dmabuf_free_chunk_owner(struct gen_pool *genpool,
+> >>> +                                        struct gen_pool_chunk *chunk=
+,
+> >>> +                                        void *not_used)
+> >>
+> >> It seems odd to still keep the netdev_ prefix as it is not really rela=
+ted
+> >> to netdev, perhaps use 'net_' or something better.
+> >>
 > >
-> > In this case, we need to drop the references in step 5 when the socket
-> > is destroyed, so the memory is freed to the page pool and available
-> > for the next socket in step 3. We cannot delay the freeing until step
-> > 6 when the rx queue is recreated and the page pool is destroyed,
-> > otherwise the net_iovs would leak in the loop and eventually the NIC
-> > would fail to find available memory. The same bug would be
+> > Yes, thanks for catching. I can change to net_devmem_ maybe or net_dmab=
+uf_*.
 >
-> By "would leak" you probably mean until step 6, right? There are
-
-Yes, sorry I wasn't clear!
-
-> always many ways to shoot yourself in the leg. Even if you clean
-> up in 5, the user can just leak the socket and get the same result
-> with pp starvation. I see it not as a requirement but rather a
-> uapi choice, that's assuming netlink would be cleaned as a normal
-> socket when the task exits.
+> FWIW, net_dmabuf_* seems like a better name technically.
+>
+> >
+> >>> +{
+> >>> +     struct dmabuf_genpool_chunk_owner *owner =3D chunk->owner;
+> >>> +
+> >>> +     kvfree(owner->niovs);
+> >>> +     kfree(owner);
+> >>> +}
+> >>> +
+> >>> +void __netdev_dmabuf_binding_free(struct netdev_dmabuf_binding *bind=
+ing)
+> >>> +{
+> >>> +     size_t size, avail;
+> >>> +
+> >>> +     gen_pool_for_each_chunk(binding->chunk_pool,
+> >>> +                             netdev_dmabuf_free_chunk_owner, NULL);
+> >>> +
+> >>> +     size =3D gen_pool_size(binding->chunk_pool);
+> >>> +     avail =3D gen_pool_avail(binding->chunk_pool);
+> >>> +
+> >>> +     if (!WARN(size !=3D avail, "can't destroy genpool. size=3D%lu, =
+avail=3D%lu",
+> >>> +               size, avail))
+> >>> +             gen_pool_destroy(binding->chunk_pool);
+> >>> +
+> >>> +     dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+> >>> +                              DMA_BIDIRECTIONAL);
+> >>
+> >> For now DMA_FROM_DEVICE seems enough as tx is not supported yet.
+> >>
+> >
+> > Yes, good catch. I suspect we want to reuse this code for TX path. But
+> > for now, I'll test with DMA_FROM_DEVICE and if I see no issues I'll
+> > apply this change.
+> >
+> >>> +     dma_buf_detach(binding->dmabuf, binding->attachment);
+> >>> +     dma_buf_put(binding->dmabuf);
+> >>> +     xa_destroy(&binding->bound_rxq_list);
+> >>> +     kfree(binding);
+> >>> +}
+> >>> +
+> >>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_i=
+dx)
+> >>> +{
+> >>> +     void *new_mem;
+> >>> +     void *old_mem;
+> >>> +     int err;
+> >>> +
+> >>> +     if (!dev || !dev->netdev_ops)
+> >>> +             return -EINVAL;
+> >>> +
+> >>> +     if (!dev->netdev_ops->ndo_queue_stop ||
+> >>> +         !dev->netdev_ops->ndo_queue_mem_free ||
+> >>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
+> >>> +         !dev->netdev_ops->ndo_queue_start)
+> >>> +             return -EOPNOTSUPP;
+> >>> +
+> >>> +     new_mem =3D dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
+> >>> +     if (!new_mem)
+> >>> +             return -ENOMEM;
+> >>> +
+> >>> +     err =3D dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem)=
+;
+> >>> +     if (err)
+> >>> +             goto err_free_new_mem;
+> >>> +
+> >>> +     err =3D dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem)=
+;
+> >>> +     if (err)
+> >>> +             goto err_start_queue;
+> >>> +
+> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
+> >>> +
+> >>> +     return 0;
+> >>> +
+> >>> +err_start_queue:
+> >>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
+> >>
+> >> It might worth mentioning why queue start with old_mem will always
+> >> success here as the return value seems to be ignored here.
+> >>
+> >
+> > So the old queue, we stopped it, and if we fail to bring up the new
+> > queue, then we want to start the old queue back up to get the queue
+> > back to a workable state.
+> >
+> > I don't see what we can do to recover if restarting the old queue
+> > fails. Seems like it should be a requirement that the driver tries as
+> > much as possible to keep the old queue restartable.
+>
+> Is it possible that we may have the 'old_mem' leaking if the driver
+> fails to restart the old queue? how does the driver handle the
+> firmware cmd failure for ndo_queue_start()? it seems a little
+> tricky to implement it.
 >
 
-Yes, thanks for pointing out. The above was a pathological example
-meant to describe the point, but I think this generates a realistic
-edge case I may run into production. I don't know if you care about
-the specifics, but FWIW we split our userspace into an orchestrator
-that allocates dma-bufs and binds them via netlink and the ML
-application that creates tcp connections. We do this because then the
-orchestrator needs CAP_NET_ADMIN for netlink but the ML applications
-do not. If we delay dropping references until page_pool_destroy then
-we delay dropping references until the orchestrator exists, i.e. we
-risk one ML application crashing, leaving references unfreed, and the
-next application (that reuses the buffers) seeing a smaller address
-space because the previous application did not get to release them
-before crash and so on.
+I'm not sure what we can do to meaningfully recover from failure to
+restarting the old queue, except log it so the error is visible. In
+theory because we have not modifying any queue configurations
+restarting it would be straight forward, but since it's dealing with
+hardware then any failures are possible.
 
-Now of course it's possible to work around this by making sure we
-don't reuse bound buffers (when they should be reusable for the same
-user), but in general I think in the socket use case it's a bit
-unnatural IMO for one socket to leave state behind like this and this
-would be a subtlety that the userspace needs to take care of, but like
-you said, maybe a uapi or buffer lifetime choice.
-
-> > reproducible with io_uring unless you're creating a new page pool for
-> > each new io_uring socket equivalent.
+> >
+> > I can improve this by at least logging or warning if restarting the
+> > old queue fails.
 >
-> Surely we don't, but it's still the user's responsibility to
-> return buffers back. And in case of io_uring buffers returned
-> to the user are not attached to a socket, so even the
-> scope / lifetime is a bit different.
+> Also the semantics of the above function seems odd that it is not
+> only restarting rx queue, but also freeing and allocating memory
+> despite the name only suggests 'restart', I am a litte afraid that
+> it may conflict with future usecae when user only need the
+> 'restart' part, perhaps rename it to a more appropriate name.
 >
 
-Yes, sorry, without understanding the specifics it seems your lifetime
-management is different. IMO it's not an issue if we diverge in this
-aspect.
+Oh, what we want here is just the 'restart' part. However, Jakub
+mandates that if you restart a queue (or a driver), you do it like
+this, hence the slightly more complicated implementation.
 
-> > But even outside of this, I think it's a bit semantically off to ask
-> > the page_pool to drop references that belong to the application IMO,
-> > because those references are not the page_pool's.
->
-> Completely agree with you, which is why it was in a callback,
-> totally controlled by io_uring.
->
-> --
-> Pavel Begunkov
+https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438=
+-13-almasrymina@google.com/#25590262
+https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
 
+> >
+> >>> +
+> >>> +err_free_new_mem:
+> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
+> >>> +
+> >>> +     return err;
+> >>> +}
+> >>> +
+> >>> +/* Protected by rtnl_lock() */
+> >>> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
+> >>> +
+> >>> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
+> >>> +{
+> >>> +     struct netdev_rx_queue *rxq;
+> >>> +     unsigned long xa_idx;
+> >>> +     unsigned int rxq_idx;
+> >>> +
+> >>> +     if (!binding)
+> >>> +             return;
+> >>> +
+> >>> +     if (binding->list.next)
+> >>> +             list_del(&binding->list);
+> >>
+> >> The above does not seems to be a good pattern to delete a entry, is
+> >> there any reason having a checking before the list_del()? seems like
+> >> defensive programming?
+> >>
+> >
+> > I think I needed to apply this condition to handle the case where
+> > netdev_unbind_dmabuf() is called when binding->list is not initialized
+> > or is empty.
+> >
+> > netdev_nl_bind_rx_doit() will call unbind to free a partially
+> > allocated binding in error paths, so, netdev_unbind_dmabuf() may be
+> > called with a partially initialized binding. This is why we check for
+> > binding->list is initialized here and check that rxq->binding =3D=3D
+> > binding below. The main point is that netdev_unbind_dmabuf() may be
+> > asked to unbind a partially bound dmabuf due to error paths.
+> >
+> > Maybe a comment here will test this better. I will double confirm the
+> > check is needed for the error paths in netdev_nl_bind_rx_doit().
+> >
+> >>> +
+> >>> +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+> >>> +             if (rxq->binding =3D=3D binding) {
+> >>
+> >> It seems like defensive programming here too?
+> >>
+>
 
 
 --=20
