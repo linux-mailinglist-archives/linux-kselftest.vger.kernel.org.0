@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-6008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8440C87404B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 20:21:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 855F6874050
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 20:21:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31CA11F274B0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 19:21:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7B591C240CA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Mar 2024 19:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8D513F004;
-	Wed,  6 Mar 2024 19:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F319140397;
+	Wed,  6 Mar 2024 19:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mngTw9HN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="txi89XZo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02081487AE;
-	Wed,  6 Mar 2024 19:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210AD13E7CE;
+	Wed,  6 Mar 2024 19:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709752897; cv=none; b=TcTjFECy3jZaDpxdMCkC2SpkWFfQ7bWkof14XKgbRSadaBkz/D5Lp4gco+pUm4Egy4jB6cfk/TVqj2WbDpugcJy1cxMTwGzHB+sDn34TJRspjs7SlovmPKo4vJBKf4HkhAn3adNKZcixLB/l5/hPobw34Jf5HvMjQ5XJu1VSZ8Y=
+	t=1709752900; cv=none; b=cBEAGeuP2k5b5w5CbH9K1CtH/J0rhIfkr0VUTbmSbi6FfrIFj0vkO/oZSGkqTT5wG5qpaPr9GJ/mFw/QMx4RGkhzub80oVonUtltaCuwEJS3QBHMi/+tW3mDNKGS1+FIFFo2y4V7GYC1bXhjfW9H73JN0uQqSg8x5gRCLhjm5X4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709752897; c=relaxed/simple;
-	bh=THy+DO613wqEYRG+KJf/y8DpdmpYj0GtgL/Kwzh6GnU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=axCuizGl2Y5O1WaZ0KQI1322jN+jBpz8lFxjGgjmnI3nmriY9qbiZrgTAOCSusulR1BaE5wbzNrIYa0uVKvn5oxLCZfH28WP3Pd2qFPadTxlfzIGuo2B54/UzQS1QJeuXc448KdTM0l1iruRRCS2LzhNd+ymogMBUP9IstN2VqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mngTw9HN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3910C433C7;
-	Wed,  6 Mar 2024 19:21:33 +0000 (UTC)
+	s=arc-20240116; t=1709752900; c=relaxed/simple;
+	bh=xL1xjg+8MEPz55HWswyeT1lYlU+bIX5B5bi0yf4AeHk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=NYzJE5L3DYBJb5ZPtK1KGTVz3E59l9Okw5jKv8T+uglgpux0i6xqGYum4tddylHvfdWPc5adLjdj0wXPKl1s2xVXJVVfd+5jqeiqLKoafaMnXncor0Ceee5K8EXWaSglRNsjliy87MZ9QfHIguJUvoohMgabuQJASlmNnt85jqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=txi89XZo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F118C43399;
+	Wed,  6 Mar 2024 19:21:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709752896;
-	bh=THy+DO613wqEYRG+KJf/y8DpdmpYj0GtgL/Kwzh6GnU=;
-	h=From:Subject:Date:To:Cc:From;
-	b=mngTw9HNtUjAOosLrwhKwOOxeGwVukXqq3hzRRdWi5/qDKxR6j8lQeddaJl01Evjz
-	 cBFlSTGSizpC74Z2AFdzq9a3YisIge+qWEHYwQIOqUwqmH4LNXzMR33XHm3vcm1hVo
-	 wi211AEhtw8hJky7ldzQ5FqiEjyYE1stjWi7AH454r2Qt3uRB9DBWq4EgbL3iYbk6O
-	 S+nBVXR2ingPqtsfqXi4sgfU0qXKkIXSmnPEfZEqdDjdsuzSQ+2NKyvfNrv/DRQdPz
-	 rG+6qdqpY+4IM+VSDt5ZTF3D6EbBBDkOoGNEwxHx9AMZpQJ/3ZVfMlQHHzwRv8PoEp
-	 j9P77mt4go0Zw==
+	s=k20201202; t=1709752899;
+	bh=xL1xjg+8MEPz55HWswyeT1lYlU+bIX5B5bi0yf4AeHk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=txi89XZoa9oeWHO4VtIVwgJfOBk47detNEn8+YOSq91Ko7cTFuYKNvo64uYZG2/hv
+	 dwhik06iQ+D/ZsMCPD6TkXkCNtxgkC/FPcT/01jVQS8LcH1YeODIawnihKW3oHzZRS
+	 Mz7D/fxP3mlhRV3TaXfIXmdU14TM89jALdoCyxwpZwnAoIREaaytWIdwzJB+ak64J6
+	 thCedDycDuwaFipYwlu7V2K5TwzWb6KAILNZmDfuinj9314mL5tsT/Lr+b1w1ZfJFc
+	 g/9a1O60DxYSPYZd5DRlQca/G9KIfS6PbYyiXx0L9DHtezMcBwQ+SH10Lv6pSmtzYL
+	 Ra2xvWeILm5dQ==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/2] kselftest/tty: Improve integration with automated
- systems
-Date: Wed, 06 Mar 2024 19:21:24 +0000
-Message-Id: <20240306-kselftest-tty-tname-v1-0-33505b31629e@kernel.org>
+Date: Wed, 06 Mar 2024 19:21:25 +0000
+Subject: [PATCH 1/2] kselftest: Add mechanism for reporting a KSFT_ result
+ code
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,9 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADXC6GUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDYwNT3ezi1Jy0ktTiEt2SkkrdkrzE3FRdUxNDQxMTk+RUA2NzJaDOgqL
- UtMwKsKnRsbW1ABhzMCRlAAAA
+Message-Id: <20240306-kselftest-tty-tname-v1-1-33505b31629e@kernel.org>
+References: <20240306-kselftest-tty-tname-v1-0-33505b31629e@kernel.org>
+In-Reply-To: <20240306-kselftest-tty-tname-v1-0-33505b31629e@kernel.org>
 To: Shuah Khan <shuah@kernel.org>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
  Jiri Slaby <jirislaby@kernel.org>
@@ -63,41 +63,74 @@ Cc: Michal Sekletar <msekleta@redhat.com>, linux-serial@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-a684c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=983; i=broonie@kernel.org;
- h=from:subject:message-id; bh=THy+DO613wqEYRG+KJf/y8DpdmpYj0GtgL/Kwzh6GnU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBl6MI7SurFqoe74AEaRPeVCVLp6UWj2UQzcqcp9DdI
- Kb8qBl2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZejCOwAKCRAk1otyXVSH0DI1B/
- 429b8kDiGDVUkT9tP0R52d1y4YXEr+3BN4nX3s8kiHpeH/BrDfxNgwfb+jPLcfjOtHTBBbGaR/S2h7
- 7Iw793xdfEtecrO4dzPhrDdFYHDlRT2L0we90pFkoP+j4d70+LL8PGRcXLqSIvIez7wj0TRFYMhRWD
- fTnfDkTpa5c4kNIQXQ3WpAmsqCfORpCaY1pXD9m7iDJaCtf08cOh2/M/PsQH4mfeM+AfPVdaKwm8GY
- 6Dn2JJQ5p7H1N7cOsSW2WSeIGgYMqGEWipkuFXpt4FiL6NDxhHNn5IBO76XSweJb5xdg4+11iEdBQN
- GLejzlnOv6upSxNVOv8cDpxFCCQAQy
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2019; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=xL1xjg+8MEPz55HWswyeT1lYlU+bIX5B5bi0yf4AeHk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBl6MI8vS9GOsN+KDt8q42xO9wBTJmy5E7Qy5wvEt1U
+ Kf1hg6KJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZejCPAAKCRAk1otyXVSH0MMrB/
+ 9iy9164MfH74pl4LQO0WvyXLRut+raf/mTKsW0lab0Pwr8XsmLNyGuE5/7HA3ht5NH6Vwo+oOJo4v3
+ v3XtAWGh0aTJvztnINY/L5eGUnyuWKbfd3OhJbtoqj29ibNpFLq7zuB/abEFEBtNnrzP2XrZVVsJIi
+ zDJ5qoEvSIkVQOlTOKEjwW0kGACxnBSZXwz5MkmoqHXbA+5+sjHEJRNGVWDvdRzD5WHimvtztcilaI
+ 6bWzi/wGe5HzZnAAqwflljdv9t0I/IsMW/9Vwzf/fgJDYIibDY8pn59Kb0FnyQVf4JEVLNB5c9WUdH
+ Ak7eqXeNojvwZQqlVllleSP2jf0Yye
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-This cleans up the output of the tty_tstamp_update selftest to play a
-bit more nicely with automated systems parsing the test output.
+Currently there's no helper which a test can use to report it's result as
+a KSFT_ result code, we can report a boolean pass/fail but not a skip. This
+is sometimes a useful idiom so let's add a helper ksft_test_result_report()
+which translates into the relevant report types.
 
-To do this I've also added a new helper ksft_test_result() which takes a
-KSFT_ code as a report, this is something I've wanted on other occasions
-but restructured things to avoid needing it.  This time I figured I'd
-just add it since it keeps coming up.
+Due to the use of va_args in the result reporting functions this is done as
+a macro rather than an inline function as one might expect, none of the
+alternatives looked particularly great.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (2):
-      kselftest: Add mechanism for reporting a KSFT_ result code
-      kselftest/tty: Report a consistent test name for the one test we run
+ tools/testing/selftests/kselftest.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
- tools/testing/selftests/kselftest.h             | 22 ++++++++++++
- tools/testing/selftests/tty/tty_tstamp_update.c | 48 +++++++++++++++++--------
- 2 files changed, 55 insertions(+), 15 deletions(-)
----
-base-commit: 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478
-change-id: 20240305-kselftest-tty-tname-5411444ce037
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index a781e6311810..9bc130c269d7 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -20,6 +20,7 @@
+  * and finally report the pass/fail/skip/xfail state of the test with one of:
+  *
+  *     ksft_test_result(condition, fmt, ...);
++ *     ksft_test_result_report(result, fmt, ...);
+  *     ksft_test_result_pass(fmt, ...);
+  *     ksft_test_result_fail(fmt, ...);
+  *     ksft_test_result_skip(fmt, ...);
+@@ -254,6 +255,27 @@ static inline __printf(1, 2) void ksft_test_result_error(const char *msg, ...)
+ 	va_end(args);
+ }
+ 
++/**
++ * ksft_test_result() - Report test success based on truth of condition
++ *
++ * @condition: if true, report test success, otherwise failure.
++ */
++#define ksft_test_result_report(result, fmt, ...) do {		\
++	switch (result) {					\
++	case KSFT_PASS:						\
++		ksft_test_result_pass(fmt, ##__VA_ARGS__);	\
++		break;						\
++	case KSFT_FAIL:						\
++		ksft_test_result_fail(fmt, ##__VA_ARGS__);	\
++		break;						\
++	case KSFT_XFAIL:					\
++		ksft_test_result_xfail(fmt, ##__VA_ARGS__);	\
++		break;						\
++	case KSFT_SKIP:						\
++		ksft_test_result_skip(fmt, ##__VA_ARGS__);	\
++		break;						\
++	} } while (0)
++
+ static inline int ksft_exit_pass(void)
+ {
+ 	ksft_print_cnts();
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
 
