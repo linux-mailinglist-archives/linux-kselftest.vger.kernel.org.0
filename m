@@ -1,200 +1,139 @@
-Return-Path: <linux-kselftest+bounces-6044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD02A874EBB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 13:15:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB899874FDE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 14:22:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20381B2245F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 12:15:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B7B4B24393
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 13:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66DC812A143;
-	Thu,  7 Mar 2024 12:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0EA12C52D;
+	Thu,  7 Mar 2024 13:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLMDsbhQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC444129A7D;
-	Thu,  7 Mar 2024 12:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFB9126F3E;
+	Thu,  7 Mar 2024 13:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709813739; cv=none; b=KPTA8dK7cCg52Bmpo5MmX+2VioQPz3kiPv+WhJu8tFCWRgsXL+BwiwKYFzO59ypyyTGwSI3Ip/Xnk7cxB/XSdQsJ0TcQS7N28uxpcg+qU1A5ewvzFk2MbbWKYCY4eBfw4O4JE637bhSlMaDnkq50c8nfDWd+fnW4SpmZKYVL3PU=
+	t=1709817765; cv=none; b=XpsbZ+ekjBszzMVTYzTyY+bTlU/i2ruB+gfppJ4O3P9jFGJBjQWq+A5bnnQrkjwX890iM/3aMdE9ZHw9wcDYtcrYmljXk6lI8zcDOfDSvM9BLCfW/ltWjGioIVoveJrlVXkIL7+GM8hNsYiLoaq/c6xOYfDZLQlmAu5g8kc3QKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709813739; c=relaxed/simple;
-	bh=33Uzy2N/rqj/7YQgQGuWOf/5Tv1toMJF0Qi0AcbhFw0=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=daHia+g5WZ7eODuIVAll5m8QwdGKqk00OLE0IvF8P6SZV7ETbWPIs2RfpKSz6iT7ggoEThqt1pPvRqiq3lSg0uJPztCHDmqMQnoSFsMn4ChBBZ9SznujZovIg76PZ12yj/2cv0iSKnwXhoarG6SjrIUj7nymYXGgpU8EkHdlcF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Tr7Vw2yQsz1Q9QH;
-	Thu,  7 Mar 2024 20:13:28 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7C1EA14059C;
-	Thu,  7 Mar 2024 20:15:27 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 7 Mar
- 2024 20:15:26 +0800
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to
- netdevice
-To: Mina Almasry <almasrymina@google.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard
- Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
-	<ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
-	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
-	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
-	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
- Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
- Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com>
- <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
- <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com>
- <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
- <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <76266a89-8ec1-6a4c-716b-da422f0b2cd5@huawei.com>
-Date: Thu, 7 Mar 2024 20:15:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	s=arc-20240116; t=1709817765; c=relaxed/simple;
+	bh=BJjO1ugkVUqdf+8Apz35cxnUeUI1ML5rW7GTNeJ5rAM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type; b=h94v5bMT76Q3vkN9DAUoP5MvSz3/USIVtwods2ntTEYTtF/sUVqXR0gJKcVrBLdWDjzjvueag2dqDzyhTA/AZlLOW8hnjcobqv1EGg7YDzsfgrtupYwINAikPzl7Gk/UzY2rHZc7Stu5wa0BPy3+4KUwNiAV3nslfEb4O+SaIT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLMDsbhQ; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-412ea23a750so5702885e9.0;
+        Thu, 07 Mar 2024 05:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709817762; x=1710422562; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:from:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VuTaArBgg54vJ0OjHE2HG4k9mtlNuGTtzmNJHg/V9mo=;
+        b=HLMDsbhQnWzodJu32rYHKHe9mwWkW+uTFrD2Jc6G4gqmE1bFChJnLWJ4YrXe5ne4UG
+         s7U5jWKKJmM2nYFZPKiSZECHc2ry0VXhNDszSCT2Gn8Et8LL273Ezc3OUJI3dghGOxy8
+         xi0OmzREluznSeQ64YQfzAoAkp6CPA5QeHrZb1ZMyZ/l2lbndsLBwre1++ahHAy3OFd4
+         VK5uOiCi0KZkxN4T3GxxauEv/5YkrbSt9VX3vrVo+rBavao69id+o/Xt+ZdekCFbaOio
+         G8dka/97WJqrZFDjBMXb153C62B6Pr4T+oqoQmlZSGm7yaPghoGnm+pfngtxxRDSDpQV
+         chjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709817762; x=1710422562;
+        h=content-transfer-encoding:to:subject:from:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VuTaArBgg54vJ0OjHE2HG4k9mtlNuGTtzmNJHg/V9mo=;
+        b=NDG1CXYwrNGVvlbDyrGVNnc6wU0ecs9fsMzWzuFuNgs39pMXTdvpfgtnQhIsPsxITD
+         /g0Vv27+pReBUxptrTLwrvqPGGUga1thrY6AK7/3MdXn7Ds+nxUPRQKFxXQVtNz5HcRo
+         oJRZMXSajLyYvdWZM7J0fHDvMevu0791UvQPCIewMELh5uLrGi1N9am8Em/VcZVWZAUV
+         T2YgGUF4GAGF5yR85bqxWV1vLE95FIQtRws3WPTI0MAeNFVMj3XjHgiWqYN36sImHCoq
+         tbyjUqfwW3cG4ze72u5PjdIs3fP9aRokszHodJ1inQ8FmQ26CRAiF3BjfNIjzBk9T+Ee
+         Ao4A==
+X-Forwarded-Encrypted: i=1; AJvYcCX9Z3qYKAgLVMU7shT0JKHMB4r1ZStmquAtiMGjMbZ0awIx3p8e0wzpl33O8xyhhvUHIXh8ktcda5jTD8d59dfldQdefwhcrSOia6ylDq0n7idqsnl4jjBuIIdGYNKQ/IMbZ/umfD1TDTQmR6x9Vqqob6T9PaoTtEhPJ6Iea+4HQFH0PvkV
+X-Gm-Message-State: AOJu0Yx9Sw/0bM2VcCGKa32/UPyQEEczZhEIffqxcozAa5NEk4MTPcMn
+	PfKyPXwVoKcX0ddE/A1EB9m233ofiWici6NKKBzs7KDysdlOrN8/
+X-Google-Smtp-Source: AGHT+IEUKtgQ255Jq/XH7tG6mzkgUggI/JjYuvk5f6ZL0x2ze8VuBIAK/A/0vEpzN0QX+9VPF+IYig==
+X-Received: by 2002:a05:600c:4fd2:b0:412:f8e4:78cf with SMTP id o18-20020a05600c4fd200b00412f8e478cfmr296832wmq.5.1709817761759;
+        Thu, 07 Mar 2024 05:22:41 -0800 (PST)
+Received: from debian ([146.70.204.204])
+        by smtp.gmail.com with ESMTPSA id cr14-20020a05600004ee00b0033dd06e628asm20284889wrb.27.2024.03.07.05.22.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Mar 2024 05:22:41 -0800 (PST)
+Message-ID: <2ce1600b-e733-448b-91ac-9d0ae2b866a4@gmail.com>
+Date: Thu, 7 Mar 2024 14:21:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+From: Richard Gobert <richardbgobert@gmail.com>
+Subject: [PATCH net-next v2 0/4] net: gro: encapsulation bug fix and flush
+ checks improvements
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
+ shuah@kernel.org, idosch@nvidia.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500005.china.huawei.com (7.185.36.74)
 
-On 2024/3/7 6:10, Mina Almasry wrote:
+This series fixes a bug in the complete phase of UDP in GRO, in which
+socket lookup fails due to using network_header when parsing encapsulated
+packets. The fix is to pass p_off parameter in *_gro_complete.
 
-...
+Next, inner_network_header is always set in the receive phase of GRO,
+this is then leveraged in the next commit to remove some state from
+napi_gro_cb, and stateful code in {ipv6,inet}_gro_receive which may be
+unnecessarily complicated due to encapsulation support in GRO.
 
->>>>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx)
->>>>> +{
->>>>> +     void *new_mem;
->>>>> +     void *old_mem;
->>>>> +     int err;
->>>>> +
->>>>> +     if (!dev || !dev->netdev_ops)
->>>>> +             return -EINVAL;
->>>>> +
->>>>> +     if (!dev->netdev_ops->ndo_queue_stop ||
->>>>> +         !dev->netdev_ops->ndo_queue_mem_free ||
->>>>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
->>>>> +         !dev->netdev_ops->ndo_queue_start)
->>>>> +             return -EOPNOTSUPP;
->>>>> +
->>>>> +     new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
->>>>> +     if (!new_mem)
->>>>> +             return -ENOMEM;
->>>>> +
->>>>> +     err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
->>>>> +     if (err)
->>>>> +             goto err_free_new_mem;
->>>>> +
->>>>> +     err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
->>>>> +     if (err)
->>>>> +             goto err_start_queue;
->>>>> +
->>>>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
->>>>> +
->>>>> +     return 0;
->>>>> +
->>>>> +err_start_queue:
->>>>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
->>>>
->>>> It might worth mentioning why queue start with old_mem will always
->>>> success here as the return value seems to be ignored here.
->>>>
->>>
->>> So the old queue, we stopped it, and if we fail to bring up the new
->>> queue, then we want to start the old queue back up to get the queue
->>> back to a workable state.
->>>
->>> I don't see what we can do to recover if restarting the old queue
->>> fails. Seems like it should be a requirement that the driver tries as
->>> much as possible to keep the old queue restartable.
->>
->> Is it possible that we may have the 'old_mem' leaking if the driver
->> fails to restart the old queue? how does the driver handle the
->> firmware cmd failure for ndo_queue_start()? it seems a little
->> tricky to implement it.
->>
-> 
-> I'm not sure what we can do to meaningfully recover from failure to
-> restarting the old queue, except log it so the error is visible. In
-> theory because we have not modifying any queue configurations
-> restarting it would be straight forward, but since it's dealing with
-> hardware then any failures are possible.
+In addition, udpgro_fwd selftest is adjusted to include the socket lookup
+case for vxlan. This selftest will test its supposed functionality once
+local bind support is merged (https://lore.kernel.org/netdev/df300a49-7811-4126-a56a-a77100c8841b@gmail.com/).
 
-Yes, we may need to have a clear semantics of how should the driver
-implement the above interface, for example if the driver should free
-the memory when fail to start a queue or the driver should restart
-the queue when fail to stop a queue? Otherwise we may have different
-driver implementing different behavior.
+v1 -> v2:
+ - Pass p_off in *_gro_complete to fix UDP bug
+ - Remove more conditionals and memory fetches from inet_gro_flush
+ - v1:
+   https://lore.kernel.org/netdev/e1d22505-c5f8-4c02-a997-64248480338b@gmail.com/
 
-From the disscusion you mentioned below, does it make senses to
-modeling rdma subsystem by using create_queue/modify_queue/destroy_queue
-semantics instead?
+Richard Gobert (4):
+  net: gro: add p_off param in *_gro_complete
+  selftests/net: add local address bind in vxlan selftest
+  net: gro: set inner_network_header in receive phase
+  net: gro: move L3 flush checks to tcp_gro_receive
 
-> 
->>>
->>> I can improve this by at least logging or warning if restarting the
->>> old queue fails.
->>
->> Also the semantics of the above function seems odd that it is not
->> only restarting rx queue, but also freeing and allocating memory
->> despite the name only suggests 'restart', I am a litte afraid that
->> it may conflict with future usecae when user only need the
->> 'restart' part, perhaps rename it to a more appropriate name.
->>
-> 
-> Oh, what we want here is just the 'restart' part. However, Jakub
-> mandates that if you restart a queue (or a driver), you do it like
-> this, hence the slightly more complicated implementation.
-> 
-> https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438-13-almasrymina@google.com/#25590262
-> https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+ drivers/net/geneve.c                      |  7 +-
+ drivers/net/vxlan/vxlan_core.c            | 11 ++--
+ include/linux/etherdevice.h               |  2 +-
+ include/linux/netdevice.h                 |  3 +-
+ include/linux/udp.h                       |  2 +-
+ include/net/gro.h                         | 33 ++++++----
+ include/net/inet_common.h                 |  2 +-
+ include/net/tcp.h                         |  6 +-
+ include/net/udp.h                         |  8 +--
+ include/net/udp_tunnel.h                  |  2 +-
+ net/8021q/vlan_core.c                     |  9 ++-
+ net/core/gro.c                            |  5 +-
+ net/ethernet/eth.c                        |  5 +-
+ net/ipv4/af_inet.c                        | 53 ++-------------
+ net/ipv4/fou_core.c                       |  9 +--
+ net/ipv4/gre_offload.c                    |  6 +-
+ net/ipv4/tcp_offload.c                    | 80 ++++++++++++++++++-----
+ net/ipv4/udp.c                            |  3 +-
+ net/ipv4/udp_offload.c                    | 26 ++++----
+ net/ipv6/ip6_offload.c                    | 45 +++++--------
+ net/ipv6/tcpv6_offload.c                  |  7 +-
+ net/ipv6/udp.c                            |  3 +-
+ net/ipv6/udp_offload.c                    | 13 ++--
+ tools/testing/selftests/net/udpgro_fwd.sh | 10 ++-
+ 24 files changed, 188 insertions(+), 162 deletions(-)
 
-Thanks for the link.
-
-I like david's idea of "a more generic design where H/W queues are created
-and destroyed - e.g., queues unique to a process which makes the cleanup
-so much easier." , but it seems it is a lot of work for networking to
-implement that for now.
-
-> 
+-- 
+2.36.1
 
