@@ -1,131 +1,177 @@
-Return-Path: <linux-kselftest+bounces-6059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E891D8755B0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 18:59:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A9F78755C2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 19:05:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFBD6B231B1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 17:59:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78927B224D7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 18:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617CF131E31;
-	Thu,  7 Mar 2024 17:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E10F131752;
+	Thu,  7 Mar 2024 18:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fwQ/0QDK"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OU0fE8FN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BF9131E21
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Mar 2024 17:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F6712F5B1;
+	Thu,  7 Mar 2024 18:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709834368; cv=none; b=IddPcDl2eCuUxHVrC2T0pz8edGGyk4lb6k77gbGkKNPm03jsNqqgKaztDtCbkmg2FeW8Ma7Bf/6T91VbNWeaO6J66lVrEkQxXMisp/UcNtYt4rGXU31nX6WvefdcJbTog0ZxbNutqtTPQ7KNf7M0lHqTdm7H9t/AeWyeBJXXizs=
+	t=1709834723; cv=none; b=fS9QUNKkXjIdyQ/+qivdpgCv4k/2tYRuIKA+GPn7TcGYAc0r1J9kla+eqAB0itwarbs3wsQGchXxyxOpBmWEu1m5yV1U8P7eSvrXMI1fHo82I8hgxyKcTgbAT8oLAylQJ/2soMdqIxQpV+iB8CIu0PGlBfFW0aPso0E+d97H6Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709834368; c=relaxed/simple;
-	bh=DOUOkcuf6REntWUk+39dCprquLsjGgsrA9o5nYOuJJw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A+DmK5olJasxjLgO891AHwlMXii9xJYJYt9SUHkNwkADcmd4kW+TmdjE3qaFnx24Pr/LzI8GuvOi3ES4FTHaVHQCJjQ3LnauRarJDspzK6jbS5wlKyuynCeJK1YuIsa6Xeh+LSZ0gKLz8QFfyHLB/ozA94mJtV0fMWD/0+X7yrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fwQ/0QDK; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-568251882d7so737a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Mar 2024 09:59:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709834365; x=1710439165; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2o2Pln6r840e13WOJWTSVZVF4sTC1hDT+VsrrLWTTjQ=;
-        b=fwQ/0QDKdynqm0mcrInYhNelkKAhBVHVYHHEzeigU/oUkYJWcJszYX5LdwNfIUWCQ2
-         japNRTD2DgP0iRatUEPiJO6+HAJxg04LLZ9GyvfLxiY0yj34BbN3LuMA05eCsIOn4OJG
-         o4sI4IHPUiE+csSXFUd8QugHlPygT7T6wmsnqNDykil/rT5+YlwRXGq6G2cZLmQwwPQm
-         o21iZNvQu3JoCfg61VDlx6CErp05nsllyy6fDV5VPcFaemDFQHxSuL5v1H8K1iSAuV/l
-         sWnRzChBWN1lycpwei2FvxS71JgwU/RbIvHTmOoXN5dGv6QSUYdJoHpPguf1etNCVFX0
-         K85A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709834365; x=1710439165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2o2Pln6r840e13WOJWTSVZVF4sTC1hDT+VsrrLWTTjQ=;
-        b=JIu+ovLteE3sVu3E2f+yEwxHg/ATRQaoP9EfkpPJHuGrp+x6WQi08vriD9sQQg9JLM
-         cZZyCOOGbxUPP5gpkmqHOawp64IPoRf4L3F9ysqSC2WsmDESsYYmmymnqn4w417z1FgY
-         RxSdTkGHuDPMVhgtGf087DIbfv7OWoEwXgmX8DKw3PUi/Tu9896ET3kazHJoWuT2ElXH
-         Z2GoYXGMJVcNQWRpV8/JsWhw5n8nVf1mF2ZhmYj9Krqa9kOiM473X+PF7Y/Etj5zY3i9
-         ZHHq/lk7OMzTfQKsemU1uFSMPk5TAUV1E9OJya6oUVfWJaxYmHz+SclwIkdsfLFEninF
-         DiYw==
-X-Forwarded-Encrypted: i=1; AJvYcCWrpYzDUTJMXswWMNhLb9dLKk7yWEdt6ZcA/og3IQWxf1LdTDQYS2lDpLiCzR+mFS9SkO9qivxOA18ZQcJqAECsBDfDJWJSlDZ1zBCdgocg
-X-Gm-Message-State: AOJu0YwqQI44c++DKVfJYSOUMWTYvonag9iBO5Rz1JGXJD+hK2yAOPuX
-	hylwasG4m89jGsidGcauKq0hFLfyLmt6YoNdK3J0rzwPpQ4iS27n6oCc1tflBgxG2o/imNbG2ne
-	+KXqusQLDlf4M81tQpxR/z4T23D/vrD2lTo/I
-X-Google-Smtp-Source: AGHT+IFZzIgjjQB+W6AfKsYHZz4lpE8ZpdiWPzeNLAFZEGTcK+JeSYq4V7wUar3hDsxNIaEiyYfxPN2wpBKMlCM60Y4=
-X-Received: by 2002:aa7:cd42:0:b0:566:b5f5:48cc with SMTP id
- v2-20020aa7cd42000000b00566b5f548ccmr227535edw.5.1709834364705; Thu, 07 Mar
- 2024 09:59:24 -0800 (PST)
+	s=arc-20240116; t=1709834723; c=relaxed/simple;
+	bh=6PdhETDwSB9x/LARJancAnLAUQJ5EbrpK/EH1ojZ3Mc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FbBSRdWpYLA/1D0HFhmm5pkoGm8N9H/zBhC1k4XGxSKCUgRPvYhKFaUnXY2YsbXc+5+ri9obhZyBr538nLga6i7ahkLJf7xUVcf+RO9xXjTRGUy8HbgLTUXihVv26vK02d+HFk2vCNJVUE0UF0lGjsDDBfTVXwd6g/H4eOulM8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OU0fE8FN; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1709834719;
+	bh=6PdhETDwSB9x/LARJancAnLAUQJ5EbrpK/EH1ojZ3Mc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=OU0fE8FNWeNCdyMVaBI+4zAWM0y2JrwciNVCgXFIk5Qctuiac9EcJSIQWKn8GLdzL
+	 gTAxVJhidM9b0q5MCeaePZ7UfOi7iTQl+GDy25E8GwfzLhm2EZbuM7ZX5bdQlbSakU
+	 W4D0VZxomztXYGrHt7Bq2604MnjnKHvYJXfNqvuDbMvD4PELUTQDKC6NNd65GJWs5o
+	 8XgGro4CnGW93oz1/rOknU6b0cERoQtqPMi+NPzgZtMuDwftt0avBWCu1W72EIjcSV
+	 H/B1QVCYi1lbljlJPuaG92wNbtiFCWyXvgp9pxF13OCGia3NHbCOCIXo4WiDqm8YOl
+	 4nSNokRv8JaKw==
+Received: from nicolas-tpx395.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 53FE037820ED;
+	Thu,  7 Mar 2024 18:05:16 +0000 (UTC)
+Message-ID: <d417daa2a8e3951da44bf2d555e04d98c83a3c5c.camel@collabora.com>
+Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Maxime Ripard <mripard@kernel.org>, Helen Koike
+ <helen.koike@collabora.com>
+Cc: linuxtv-ci@linuxtv.org, dave.pigott@collabora.com, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-kselftest@vger.kernel.org, gustavo.padovan@collabora.com, 
+ pawiecz@collabora.com, spbnick@gmail.com, tales.aparecida@gmail.com, 
+ workflows@vger.kernel.org, kernelci@lists.linux.dev,
+ skhan@linuxfoundation.org,  kunit-dev@googlegroups.com,
+ nfraprado@collabora.com, davidgow@google.com,  cocci@inria.fr,
+ Julia.Lawall@inria.fr, laura.nao@collabora.com, 
+ ricardo.canuelo@collabora.com, kernel@collabora.com, 
+ torvalds@linuxfoundation.org, gregkh@linuxfoundation.org
+Date: Thu, 07 Mar 2024 13:05:12 -0500
+In-Reply-To: <20240229-dancing-laughing-groundhog-d85161@houat>
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+	 <20240228225527.1052240-2-helen.koike@collabora.com>
+	 <20240229-dancing-laughing-groundhog-d85161@houat>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2ce1600b-e733-448b-91ac-9d0ae2b866a4@gmail.com> <2076d2ff-cd17-4ab0-b1db-4875d96bf9a6@gmail.com>
-In-Reply-To: <2076d2ff-cd17-4ab0-b1db-4875d96bf9a6@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 7 Mar 2024 18:59:10 +0100
-Message-ID: <CANn89iKq755tvJ1BZFXG5aX2YNd9AycbKu57taxi8gaSWn5Syw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/4] net: gro: set inner_network_header in
- receive phase
-To: Richard Gobert <richardbgobert@gmail.com>
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
-	willemdebruijn.kernel@gmail.com, dsahern@kernel.org, shuah@kernel.org, 
-	idosch@nvidia.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 7, 2024 at 2:28=E2=80=AFPM Richard Gobert <richardbgobert@gmail=
-.com> wrote:
->
-> This patch sets network_header and inner_network_header to their respecti=
-ve
-> values during the receive phase of GRO. This allows us to use
-> inner_network_header later on in GRO. network_header is already set in
-> dev_gro_receive and under encapsulation inner_network_header is set.
->
+Le jeudi 29 f=C3=A9vrier 2024 =C3=A0 10:02 +0100, Maxime Ripard a =C3=A9cri=
+t=C2=A0:
+> Hi Helen,
+>=20
+> Thanks for working on this
+>=20
+> On Wed, Feb 28, 2024 at 07:55:25PM -0300, Helen Koike wrote:
+> > This patch introduces a `.gitlab-ci` file along with a `ci/` folder,
+> > defininga basic test pipeline triggered by code pushes to a GitLab-CI
+> > instance. This initial version includes static checks (checkpatch and
+> > smatch for now) and build tests across various architectures and
+> > configurations. It leverages an integrated cache for efficient build
+> > times and introduces a flexible 'scenarios' mechanism for
+> > subsystem-specific extensions.
+> >=20
+> > [ci: add prerequisites to run check-patch on MRs]
+> > Co-developed-by: Tales Aparecida <tales.aparecida@redhat.com>
+> > Signed-off-by: Tales Aparecida <tales.aparecida@redhat.com>
+> > Signed-off-by: Helen Koike <helen.koike@collabora.com>
+> >=20
+> > ---
+> >=20
+> > Hey all,
+> >=20
+> > You can check the validation of this patchset on:
+> >         https://gitlab.collabora.com/koike/linux/-/pipelines/87035
+> >=20
+> > I would appreciate your feedback on this work, what do you think?
+> >=20
+> > If you would rate from 0 to 5, where:
+> >=20
+> > [ ] 0. I don't think this is useful at all, and I doubt it will ever be=
+. It doesn't seem worthwhile.
+> > [ ] 1. I don't find it useful in its current form.
+> > [ ] 2. It might be useful to others, but not for me.
+> > [ ] 3. It has potential, but it's not yet something I can incorporate i=
+nto my workflow.
+> > [ ] 4. This is useful, but it needs some adjustments before I can inclu=
+de it in my workflow.
+> > [ ] 5. This is really useful! I'm eager to start using it right away. W=
+hy didn't you send this earlier? :)
+> >=20
+> > Which rating would you select?
+>=20
+> 4.5 :)
+>=20
+> One thing I'm wondering here is how we're going to cope with the
+> different requirements each user / framework has.
+>=20
+> Like, Linus probably want to have a different set of CI before merging a
+> PR than (say) linux-next does, or stable, or before doing an actual
+> release.
+>=20
+> Similarly, DRM probably has a different set of requirements than
+> drm-misc, drm-amd or nouveau.
+>=20
+> I don't see how the current architecture could accomodate for that. I
+> know that Gitlab allows to store issues template in a separate repo,
+> maybe we could ask them to provide a feature where the actions would be
+> separate from the main repo? That way, any gitlab project could provide
+> its own set of tests, without conflicting with each others (and we could
+> still share them if we wanted to)
+>=20
+> I know some of use had good relationship with Gitlab, so maybe it would
+> be worth asking?
 
-> +static inline int skb_gro_network_offset(const struct sk_buff *skb)
-> +{
-> +       const u32 mask =3D NAPI_GRO_CB(skb)->encap_mark - 1;
-> +
-> +       return (skb_network_offset(skb) & mask) | (skb_inner_network_offs=
-et(skb) & ~mask);
+As agreed, the .gitlab-ci.yaml file at the list will go away. Its a default
+location, but not a required location. This way, each sub-system can have t=
+heir
+own (or not have one). The different sub-system forks will have to be confi=
+gured
+to point to their respective CI main configuration.
 
-Presumably this is not needed.
+Of course nothing prevents having common set of configuration for jobs and =
+jobs
+template. As an example, we could have a job template common for checkpatch=
+, and
+allow each subsystem adding their own sauce on top. It can save the duplica=
+te
+effort of parsing the tool results and reporting it in a format gitlab
+understand.
 
-> +}
-> +
->  static inline void *skb_gro_network_header(const struct sk_buff *skb)
->  {
-> +       const int offset =3D skb_gro_network_offset(skb);
-> +
->         if (skb_gro_may_pull(skb, skb_gro_offset(skb)))
-> -               return skb_gro_header_fast(skb, skb_network_offset(skb));
-> +               return skb_gro_header_fast(skb, offset);
->
-> -       return skb_network_header(skb);
-> +       return skb->data + offset;
->  }
+This also allow subsystems to offer different coverage, e.g. a fast vs a fu=
+ll
+coverage. Or perhaps a configuration to focus on specific devices. But in
+general, just not having a central config is enough to support the idea. Wh=
+at we
+have now could be entirely drm specific and "commonized" later when other
+subsystem wanting to use gitlab joins (Linux Media is among those).
 
-I would instead add a new offset parameter to this function.
-
-Again, ideally GRO should work without touching any skb->{offset}.
-
-GRO stack should maintain the offsets it needs in its own storage
-(stack parameter, or other storage if needed)
-
-Upper stack can not trust any of these skb fields, otherwise we would
-have some troubles with napi_reuse_skb()
+Nicolas
 
