@@ -1,113 +1,153 @@
-Return-Path: <linux-kselftest+bounces-6062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E32087560C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 19:25:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25A3187562C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 19:36:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21CE91F23DDE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 18:25:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFCFB1F21E2B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 18:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35853134759;
-	Thu,  7 Mar 2024 18:24:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14EC0131731;
+	Thu,  7 Mar 2024 18:36:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Zq8Wt8St"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PbskTq7s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A739913340F
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Mar 2024 18:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648AA12DDA2;
+	Thu,  7 Mar 2024 18:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709835886; cv=none; b=cdKyx8Z27gRCQ5Hi8PnAUN5G9hPxcz2rO6OHIv4y6zWtzc/lV7qTcvngbHuIxC3U3PMRuaV4KFNZltFdGWxyWgCpLem3i6armVhChflNJDTagXBiK5hZBOdKHZAZbw+emq6e9goOSkOhQ2kr7n+fiWVdqXGB/wZk3DFZ7ODglAQ=
+	t=1709836607; cv=none; b=EIsQq/BZK5mz4WVB5VH3oaYa99+M+13WZo7q2L40LwemBVMGQ1FaprzL74YJDi5ukImYeleAIwjQrdnp4VFPcUmoE4QOSKvFnhitLDdZrQ5OJwB7Pn7AKGD4aIUZFAaKO+fInCRGXzV7SGbVauK/V0XwJ+muOMbkZJpcc9lmiyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709835886; c=relaxed/simple;
-	bh=o5cNRugZZzIdyCSXKjEvmt2jqbDFCbmVxFG4IAatR2s=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iEsXY1pxxpb9yaJiMeSaFb6PtAs5ZrSvwmTtrPVjXK4onG7/L0mHuTTevfqVAmsIb8x5qZgnt84wfwI/ZjOp2m+7mNvzWdK0nqqqg7wpJMdI18kIisfZz3W/0hFl64yMCfBP+jDYWtalkNNGTOk/1l9v+G9fKqqHBiBJ+Gg7dN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Zq8Wt8St; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc6b26eef6cso1765855276.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Mar 2024 10:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709835884; x=1710440684; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tmf20qquXCm5BgDJjOs0QNTSjGXizLhNZTJUFBFz11s=;
-        b=Zq8Wt8St+xF2cyam9YwfVwe4x3CobSKF5I5wtvcErbEU3ZZrx5ribcXs44RHRfOyt6
-         YU1wPDXuxJyPDnJTbgDixUsEDPUSYv4aUAJZilMZBXhnWcivw3dbMjLZx7rnv+2nX5jK
-         YZ2fDP1cUT0xjj/iyDRMFd/Rb5k9DvMZhg7+wiRHkjla7vK2sr8hdvtP/Nz7P0P3aHqN
-         f84Nv+xT5HBtb239pRslSoCSdyUAriMrgQ28nsPTNfHkRKgKGz9HGTqeHLBbit1Wf3Uq
-         2UKytWYkJVbkOpmCTzCvH2jBC4dysn6yw6WiPek/BRkSTlqytIQGunXtCAx7B9MAvxue
-         i0uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709835884; x=1710440684;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tmf20qquXCm5BgDJjOs0QNTSjGXizLhNZTJUFBFz11s=;
-        b=XAZhxOtCRU8jjVm+RqlgF10qvlQBxskfUMfb6vw3NXzsfElaRD4wpO4qZKLZXLLnmj
-         NSIUgw14nqTpQD+zQ3pLelt3tUyNM5QR0LC9vRJ+G0FqHnoFU4jAT0JeRN3ElPy/vhRz
-         tJM1zbvtm/lOLvqGv8HodaJgs092xxzZJkxMC6vs5UMK95nLEkaFSgOSlEUkPn/hFaK0
-         CCrhk0+f8mCYMjIYVVHvr3Af4kRYXXQ1yZxkVQ0KcfeKChbcXqh409eOE5VsCJ2LMCo5
-         FHOLB16NSZrij+OOWj78NpftyOXJCnBH1fs6iDbvMyuA7samdTeqgtsfXjP3iVdTPda8
-         tMzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCHkX+/iq9x4qIEtQNV139k487HmhheZdku4HVV6MjGfhqK1+Td/4yDOsSLZFE5udyyZeLBLQq0txx1UgrBXA2ySm+U/pqgHP21pzWR7bB
-X-Gm-Message-State: AOJu0Yxce0df1RFefIqHGECZdjvaU2IJwIQKNwlpTq391Km19R/pd1CG
-	Hf5LWn51dS9H9SfClby2ZsOJukbMemxLRIFzS9QzzD1xwCoh4OsuO55BJ0pLTxzEd01dIrv+UoK
-	2tA==
-X-Google-Smtp-Source: AGHT+IGBNywGbWe053DjXxN00I9scAq0pLzYUHamC39E63b0Ie62RJr8RSL5xpW1+UKIKkf9I0pzPARRwWU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:18d3:b0:dc7:865b:22c6 with SMTP id
- ck19-20020a05690218d300b00dc7865b22c6mr771085ybb.8.1709835883899; Thu, 07 Mar
- 2024 10:24:43 -0800 (PST)
-Date: Thu, 7 Mar 2024 10:24:42 -0800
-In-Reply-To: <ZeoF2vfrUMCja0x7@google.com>
+	s=arc-20240116; t=1709836607; c=relaxed/simple;
+	bh=s9ZMRgsps8xV9aF1ouJT2BympJlLSJgQ9oA0+90tMxk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XdqxH8vgBts5Ih58uua50iB0F7g8Q94qdc9G9cah/HuLN0fukXISaWhpEgaKtLi4S8Jn3RmrFstBYklKg2puF6VZ6V4kVVclV/xsY7tpWDiZ+We/T3r0sXLGMs+j9yr6Iad97nqs7FLEhMIThjFmOxHLZ4YwD+6+cTwL//ocQlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PbskTq7s; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1709836603;
+	bh=s9ZMRgsps8xV9aF1ouJT2BympJlLSJgQ9oA0+90tMxk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PbskTq7sP2K0cTFWbqdr8FsMTtMZ9EhqwsyB6ekP/FBoZw1ITRpPA0evAd06xraou
+	 vB0YNi00wa8vF131ctJ0j2K2JnjIgkG5YXLyu4/4AmkHhVI9JJoHIdG+ihFepeAUXU
+	 GKLqTf8jaNRXBfe8Z7l4LvTRyxoIaKSvkmi59IDzpFw3Xxw/qodwkRTkk76Wv07E6o
+	 +i4UTvuUO2+6O2oy7kPEWG5sOx56z0l9B6BGW/ArD9zV9cV5nSiFF1hc+zazJupaO2
+	 MpNnHI2oZGTAeFlDrCTKSzdAwN/uMZrF7fNR/dHomIws7OKvZUlqJV9oWNeqcvYJsb
+	 lckwIcpGzjNcQ==
+Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E002B378134F;
+	Thu,  7 Mar 2024 18:36:41 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: kernel@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: x86: conform test to TAP format output
+Date: Thu,  7 Mar 2024 23:37:06 +0500
+Message-Id: <20240307183708.2857513-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240307054623.13632-1-manali.shukla@amd.com> <20240307054623.13632-6-manali.shukla@amd.com>
- <ZeoF2vfrUMCja0x7@google.com>
-Message-ID: <ZeoGaujrJHGe5IsN@google.com>
-Subject: Re: [PATCH v1 5/5] selftests: KVM: SVM: Add Idle HLT intercept test
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	shuah@kernel.org, nikunj@amd.com, thomas.lendacky@amd.com, 
-	vkuznets@redhat.com, bp@alien8.de
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 07, 2024, Sean Christopherson wrote:
-> On Thu, Mar 07, 2024, Manali Shukla wrote: From: Manali Shukla <Manali.Shukla@amd.com>
-> > +	xapic_enable();
-> > +
-> > +	icr_val = (APIC_DEST_SELF | APIC_INT_ASSERT | VINTR_VECTOR);
-> > +
-> > +	for (i = 0; i < NUM_ITERATIONS; i++) {
-> > +		xapic_write_reg(APIC_ICR, icr_val);
-> > +		asm volatile("sti; hlt; cli");
-> 
-> Please add safe_halt() and cli() helpers in processor.h.  And then do:
+Conform the layout, informational and status messages to TAP. No
+functional change is intended other than the layout of output messages.
 
-Doh, saw something shiny and forgot to finish my though.  For safe_halt(), copy
-the thing verbatim from KVM-Unit-Tests, as not everyone is familiar with the
-sti=>hlt trick.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/x86/vdso_restorer.c | 29 +++++++++------------
+ 1 file changed, 12 insertions(+), 17 deletions(-)
 
-/*
- * Execute HLT in an STI interrupt shadow to ensure that a pending IRQ that's
- * intended to be a wake event arrives *after* HLT is executed.  Modern CPUs,
- * except for a few oddballs that KVM is unlikely to run on, block IRQs for one
- * instruction after STI, *if* RFLAGS.IF=0 before STI.  Note, Intel CPUs may
- * block other events beyond regular IRQs, e.g. may block NMIs and SMIs too.
- */
-static inline void safe_halt(void)
-{
-	asm volatile("sti; hlt");
-}
+diff --git a/tools/testing/selftests/x86/vdso_restorer.c b/tools/testing/selftests/x86/vdso_restorer.c
+index fe99f24341554..f621167424a9c 100644
+--- a/tools/testing/selftests/x86/vdso_restorer.c
++++ b/tools/testing/selftests/x86/vdso_restorer.c
+@@ -21,6 +21,7 @@
+ #include <unistd.h>
+ #include <syscall.h>
+ #include <sys/syscall.h>
++#include "../kselftest.h"
+ 
+ /* Open-code this -- the headers are too messy to easily use them. */
+ struct real_sigaction {
+@@ -44,17 +45,19 @@ static void handler_without_siginfo(int sig)
+ 
+ int main()
+ {
+-	int nerrs = 0;
+ 	struct real_sigaction sa;
+ 
++	ksft_print_header();
++	ksft_set_plan(2);
++
+ 	void *vdso = dlopen("linux-vdso.so.1",
+ 			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+ 	if (!vdso)
+ 		vdso = dlopen("linux-gate.so.1",
+ 			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+ 	if (!vdso) {
+-		printf("[SKIP]\tFailed to find vDSO.  Tests are not expected to work.\n");
+-		return 0;
++		ksft_print_msg("[SKIP]\tFailed to find vDSO. Tests are not expected to work.\n");
++		return KSFT_SKIP;
+ 	}
+ 
+ 	memset(&sa, 0, sizeof(sa));
+@@ -62,21 +65,16 @@ int main()
+ 	sa.flags = SA_SIGINFO;
+ 	sa.restorer = NULL;	/* request kernel-provided restorer */
+ 
+-	printf("[RUN]\tRaise a signal, SA_SIGINFO, sa.restorer == NULL\n");
++	ksft_print_msg("Raise a signal, SA_SIGINFO, sa.restorer == NULL\n");
+ 
+ 	if (syscall(SYS_rt_sigaction, SIGUSR1, &sa, NULL, 8) != 0)
+ 		err(1, "raw rt_sigaction syscall");
+ 
+ 	raise(SIGUSR1);
+ 
+-	if (handler_called) {
+-		printf("[OK]\tSA_SIGINFO handler returned successfully\n");
+-	} else {
+-		printf("[FAIL]\tSA_SIGINFO handler was not called\n");
+-		nerrs++;
+-	}
++	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
+ 
+-	printf("[RUN]\tRaise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
++	ksft_print_msg("Raise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
+ 
+ 	sa.flags = 0;
+ 	sa.handler = handler_without_siginfo;
+@@ -86,10 +84,7 @@ int main()
+ 
+ 	raise(SIGUSR1);
+ 
+-	if (handler_called) {
+-		printf("[OK]\t!SA_SIGINFO handler returned successfully\n");
+-	} else {
+-		printf("[FAIL]\t!SA_SIGINFO handler was not called\n");
+-		nerrs++;
+-	}
++	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
++
++	ksft_finished();
+ }
+-- 
+2.39.2
+
 
