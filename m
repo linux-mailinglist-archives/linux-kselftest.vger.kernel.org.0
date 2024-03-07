@@ -1,61 +1,68 @@
-Return-Path: <linux-kselftest+bounces-6063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A3187562C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 19:36:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D53187562E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 19:37:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFCFB1F21E2B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 18:36:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0CF81F23625
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Mar 2024 18:37:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14EC0131731;
-	Thu,  7 Mar 2024 18:36:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3BF133980;
+	Thu,  7 Mar 2024 18:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PbskTq7s"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="hR3WT9rn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648AA12DDA2;
-	Thu,  7 Mar 2024 18:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E66512F5A5;
+	Thu,  7 Mar 2024 18:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709836607; cv=none; b=EIsQq/BZK5mz4WVB5VH3oaYa99+M+13WZo7q2L40LwemBVMGQ1FaprzL74YJDi5ukImYeleAIwjQrdnp4VFPcUmoE4QOSKvFnhitLDdZrQ5OJwB7Pn7AKGD4aIUZFAaKO+fInCRGXzV7SGbVauK/V0XwJ+muOMbkZJpcc9lmiyg=
+	t=1709836636; cv=none; b=lZcNGYKAPMApZX4b8yDp7f10FuRwcQirydIQ9ommbKTanPvWoke+EJRONeasoBueQBQkvjKCdXz+eMEVpUzBzWM6IJDMycZ9KUxgkYZDbic45ZxnpwVIopBNYyTQhrrCqcBEKoZHMfv3GHW5rvcgDztEAPl0fayjTzlQSamPCk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709836607; c=relaxed/simple;
-	bh=s9ZMRgsps8xV9aF1ouJT2BympJlLSJgQ9oA0+90tMxk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XdqxH8vgBts5Ih58uua50iB0F7g8Q94qdc9G9cah/HuLN0fukXISaWhpEgaKtLi4S8Jn3RmrFstBYklKg2puF6VZ6V4kVVclV/xsY7tpWDiZ+We/T3r0sXLGMs+j9yr6Iad97nqs7FLEhMIThjFmOxHLZ4YwD+6+cTwL//ocQlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PbskTq7s; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1709836636; c=relaxed/simple;
+	bh=0hw/BO/EMvzsmF1IVaaww3RoUUfz1Eu0MajBXr+3PIk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=saCFzeCohehiMZJtNoBsPNUFvMUdodlkZE0SjkGEmOBJuEgRWJVGqS1Z1SZb+OpDGen5Kz/HrDcLWN27TJcx2wCeLHrqT25oiL1esABkFZPCX2IsF/pjS1mdSziB3R2dPY8qLjKsT/S/OpyVuFLSPofG/gcfyw+HOwN/uq9IPdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=hR3WT9rn; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709836603;
-	bh=s9ZMRgsps8xV9aF1ouJT2BympJlLSJgQ9oA0+90tMxk=;
+	s=mail; t=1709836633;
+	bh=0hw/BO/EMvzsmF1IVaaww3RoUUfz1Eu0MajBXr+3PIk=;
 	h=From:To:Cc:Subject:Date:From;
-	b=PbskTq7sP2K0cTFWbqdr8FsMTtMZ9EhqwsyB6ekP/FBoZw1ITRpPA0evAd06xraou
-	 vB0YNi00wa8vF131ctJ0j2K2JnjIgkG5YXLyu4/4AmkHhVI9JJoHIdG+ihFepeAUXU
-	 GKLqTf8jaNRXBfe8Z7l4LvTRyxoIaKSvkmi59IDzpFw3Xxw/qodwkRTkk76Wv07E6o
-	 +i4UTvuUO2+6O2oy7kPEWG5sOx56z0l9B6BGW/ArD9zV9cV5nSiFF1hc+zazJupaO2
-	 MpNnHI2oZGTAeFlDrCTKSzdAwN/uMZrF7fNR/dHomIws7OKvZUlqJV9oWNeqcvYJsb
-	 lckwIcpGzjNcQ==
+	b=hR3WT9rnguVUkb7FRTJqU5F8NmFxtRh/IDEWIN2BTOzaxtZeniDYVumU9o0X93+IF
+	 OsNZge3SRSkxrPYGVRkOqp47nlseWYYrlHOVy0igcpftzmtQUPRKDPEqW3PVwPwxrf
+	 VGEIm7qmlL8dGgu+GYq3qGJvTeQds7UsTlVmzYrIltNmfWjNeSMSYhT6el3mTkcIaH
+	 0ai14W/ZSazloDh5owQ5QS7VS+nTyyfyBrxttai3La0h9Y9BAn+kqcmhhouwpVFKt2
+	 ayHgqVh3nJETl+j3s4vTKspYaTQ9MBh3R2D1I0hF9ycbnvENnLfXrdcdC3RzHanyge
+	 RjVjPayqzBv6Q==
 Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E002B378134F;
-	Thu,  7 Mar 2024 18:36:41 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BDB8A378134F;
+	Thu,  7 Mar 2024 18:37:09 +0000 (UTC)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	"Chang S. Bae" <chang.seok.bae@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Weihong Zhang <weihong.zhang@intel.com>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	angquan yu <angquan21@gmail.com>
 Cc: kernel@collabora.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: x86: conform test to TAP format output
-Date: Thu,  7 Mar 2024 23:37:06 +0500
-Message-Id: <20240307183708.2857513-1-usama.anjum@collabora.com>
+Subject: [PATCH] selftests: x86: skip the tests if prerequisites aren't fulfilled
+Date: Thu,  7 Mar 2024 23:37:22 +0500
+Message-Id: <20240307183730.2858264-1-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,88 +72,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
+Skip instead of failing when prerequisite conditions aren't fulfilled,
+such as invalid xstate values etc. This patch would make the tests show
+as skip when run by:
+  make -C tools/testing/selftest/ TARGETS=x86 run_tests
+
+  ...
+  # timeout set to 45
+  # selftests: x86: amx_64
+  # # xstate cpuid: invalid tile data size/offset: 0/0
+  ok 42 selftests: x86: amx_64 # SKIP
+  # timeout set to 45
+  # selftests: x86: lam_64
+  # # Unsupported LAM feature!
+  ok 43 selftests: x86: lam_64 # SKIP
+  ...
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/x86/vdso_restorer.c | 29 +++++++++------------
- 1 file changed, 12 insertions(+), 17 deletions(-)
+I'm not sure if xstate values should be correct on all the x86
+processors. If the xstate is invalid on a CPU, the test should be
+skipped instead of failing.
+---
+ tools/testing/selftests/x86/amx.c | 33 ++++++++++++++++++++-----------
+ tools/testing/selftests/x86/lam.c |  2 +-
+ 2 files changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/vdso_restorer.c b/tools/testing/selftests/x86/vdso_restorer.c
-index fe99f24341554..f621167424a9c 100644
---- a/tools/testing/selftests/x86/vdso_restorer.c
-+++ b/tools/testing/selftests/x86/vdso_restorer.c
-@@ -21,6 +21,7 @@
- #include <unistd.h>
- #include <syscall.h>
- #include <sys/syscall.h>
-+#include "../kselftest.h"
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index d884fd69dd510..5d1ca0bbaaae7 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -103,9 +103,10 @@ static void clearhandler(int sig)
  
- /* Open-code this -- the headers are too messy to easily use them. */
- struct real_sigaction {
-@@ -44,17 +45,19 @@ static void handler_without_siginfo(int sig)
- 
- int main()
+ #define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
+ #define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
+-static inline void check_cpuid_xsave(void)
++static inline int check_cpuid_xsave(void)
  {
--	int nerrs = 0;
- 	struct real_sigaction sa;
+ 	uint32_t eax, ebx, ecx, edx;
++	int ret = 0;
  
-+	ksft_print_header();
-+	ksft_set_plan(2);
+ 	/*
+ 	 * CPUID.1:ECX.XSAVE[bit 26] enumerates general
+@@ -113,10 +114,16 @@ static inline void check_cpuid_xsave(void)
+ 	 * XGETBV.
+ 	 */
+ 	__cpuid_count(1, 0, eax, ebx, ecx, edx);
+-	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
+-		fatal_error("cpuid: no CPU xsave support");
+-	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
+-		fatal_error("cpuid: no OS xsave support");
++	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK)) {
++		ksft_print_msg("cpuid: no CPU xsave support\n");
++		ret = -1;
++	}
++	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK)) {
++		ksft_print_msg("cpuid: no OS xsave support\n");
++		ret = -1;
++	}
 +
- 	void *vdso = dlopen("linux-vdso.so.1",
- 			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
- 	if (!vdso)
- 		vdso = dlopen("linux-gate.so.1",
- 			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
- 	if (!vdso) {
--		printf("[SKIP]\tFailed to find vDSO.  Tests are not expected to work.\n");
--		return 0;
-+		ksft_print_msg("[SKIP]\tFailed to find vDSO. Tests are not expected to work.\n");
++	return ret;
+ }
+ 
+ static uint32_t xbuf_size;
+@@ -131,7 +138,7 @@ static struct {
+ #define TILE_CPUID			0x1d
+ #define TILE_PALETTE_ID			0x1
+ 
+-static void check_cpuid_xtiledata(void)
++static int check_cpuid_xtiledata(void)
+ {
+ 	uint32_t eax, ebx, ecx, edx;
+ 
+@@ -153,12 +160,16 @@ static void check_cpuid_xtiledata(void)
+ 	 * eax: XTILEDATA state component size
+ 	 * ebx: XTILEDATA state component offset in user buffer
+ 	 */
+-	if (!eax || !ebx)
+-		fatal_error("xstate cpuid: invalid tile data size/offset: %d/%d",
+-				eax, ebx);
++	if (!eax || !ebx) {
++		ksft_print_msg("xstate cpuid: invalid tile data size/offset: %d/%d\n",
++			       eax, ebx);
++		return -1;
++	}
+ 
+ 	xtiledata.size	      = eax;
+ 	xtiledata.xbuf_offset = ebx;
++
++	return 0;
+ }
+ 
+ /* The helpers for managing XSAVE buffer and tile states: */
+@@ -929,8 +940,8 @@ static void test_ptrace(void)
+ int main(void)
+ {
+ 	/* Check hardware availability at first */
+-	check_cpuid_xsave();
+-	check_cpuid_xtiledata();
++	if (check_cpuid_xsave() || check_cpuid_xtiledata())
++		return KSFT_SKIP;
+ 
+ 	init_stashed_xsave();
+ 	sethandler(SIGILL, handle_noperm, 0);
+diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+index 215b8150b7cca..c0f016f45ee17 100644
+--- a/tools/testing/selftests/x86/lam.c
++++ b/tools/testing/selftests/x86/lam.c
+@@ -1183,7 +1183,7 @@ int main(int argc, char **argv)
+ 
+ 	if (!cpu_has_lam()) {
+ 		ksft_print_msg("Unsupported LAM feature!\n");
+-		return -1;
 +		return KSFT_SKIP;
  	}
  
- 	memset(&sa, 0, sizeof(sa));
-@@ -62,21 +65,16 @@ int main()
- 	sa.flags = SA_SIGINFO;
- 	sa.restorer = NULL;	/* request kernel-provided restorer */
- 
--	printf("[RUN]\tRaise a signal, SA_SIGINFO, sa.restorer == NULL\n");
-+	ksft_print_msg("Raise a signal, SA_SIGINFO, sa.restorer == NULL\n");
- 
- 	if (syscall(SYS_rt_sigaction, SIGUSR1, &sa, NULL, 8) != 0)
- 		err(1, "raw rt_sigaction syscall");
- 
- 	raise(SIGUSR1);
- 
--	if (handler_called) {
--		printf("[OK]\tSA_SIGINFO handler returned successfully\n");
--	} else {
--		printf("[FAIL]\tSA_SIGINFO handler was not called\n");
--		nerrs++;
--	}
-+	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
- 
--	printf("[RUN]\tRaise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
-+	ksft_print_msg("Raise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
- 
- 	sa.flags = 0;
- 	sa.handler = handler_without_siginfo;
-@@ -86,10 +84,7 @@ int main()
- 
- 	raise(SIGUSR1);
- 
--	if (handler_called) {
--		printf("[OK]\t!SA_SIGINFO handler returned successfully\n");
--	} else {
--		printf("[FAIL]\t!SA_SIGINFO handler was not called\n");
--		nerrs++;
--	}
-+	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
-+
-+	ksft_finished();
- }
+ 	while ((c = getopt(argc, argv, "ht:")) != -1) {
 -- 
 2.39.2
 
