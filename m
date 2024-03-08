@@ -1,160 +1,217 @@
-Return-Path: <linux-kselftest+bounces-6114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 709A2876AE0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 19:43:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0CF9876B6A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 20:53:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF4D01F220BA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 18:43:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 674D128267E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 19:53:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9807C249FA;
-	Fri,  8 Mar 2024 18:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6EA5A7BB;
+	Fri,  8 Mar 2024 19:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TgTNQzUK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FQIcIjit"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F163C32;
-	Fri,  8 Mar 2024 18:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1DB5B5B3
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Mar 2024 19:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709923393; cv=none; b=WBA9Zhtkjh91mX0rtuYE7xrPzXdxvpP+/CrbaXr1G1nkQ7bf/phRJSMvXc9sJ+N4B/zZPZNIDdYEtkZJl+uaqeNVtH1W2+W8I7nOQS3PsKAmBgbI6fCyK2INWgCHqn4ILzw7vjAkkEUc59Rmnl93QP+2k+oEFpI1bUNuDqM4bck=
+	t=1709927618; cv=none; b=Wzk7YmvudXBHqgUwEv1xSkza6Kl3lE6isUdxcG9LybzUujxfM14oh3R3RDI0jTx/YFNfKXKkg7+8QrLzaTfSfHqqlAS2Ug0BZfjSProbSI9THFbByO7T4uGFpVf7pJtNx6y242Y78jCTk0BuTQU1FkqgrNtMLca1u8NlWJPgbB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709923393; c=relaxed/simple;
-	bh=xpbjIkk947s/Pk2+JEVwmDNVEUavN0dMxwiURBoqHks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zi5jGwXKoa8ejl8Ns1+jpNGazFfP37ayz/1pOkB0r4SGcYCySEwtvEC55zltQLhOD/t6lLSWNI6EWr1L5YnoAd9mXc97cLsa4MovbNsLtk8o5TJbAG6XivZumHvSZUr8XEgDOd3LO1K/BxGRo2XhNkq+MDk+mW4RrLifZKbO7BY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TgTNQzUK; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709923391; x=1741459391;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xpbjIkk947s/Pk2+JEVwmDNVEUavN0dMxwiURBoqHks=;
-  b=TgTNQzUKrR/6OG1xyczrW1QMYtwzHWE9QY+vjPri/C924ISSSV/Gjfbx
-   /V1ShKHYHJeiaMBdkQ+JMFktaTQaTbLhyoBL5hEyE16AGAX88jZ4Xzy32
-   nNw2ky02pKPN+F6845Yu7a3/lNSStR/zI+zyDPd6pPovvtScL4zwB1h2q
-   MAaGHy/Oa4QOgLK6BlaFv7vDnyYrZ4Lwn9UsO2GC7hnjscl1lgDS9BVau
-   EpHhi8ojwAp60+IIvZzNKiEE7/83scWolYWPgilPhCK0fvAZXFawxroat
-   fk5NnrlDtWUHmgkQef/LVbxJNJfGrIzynDqyMkseNMAqU5qaT019yhRQt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11007"; a="4524152"
-X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
-   d="scan'208";a="4524152"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 10:43:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
-   d="scan'208";a="33681531"
-Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.105])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 10:43:01 -0800
-Date: Fri, 8 Mar 2024 10:42:59 -0800
-From: Tony Luck <tony.luck@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: Reinette Chatre <reinette.chatre@intel.com>,
-	"Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
-	"Yu, Fenghua" <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
-	"ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 4/4] selftests/resctrl: Adjust SNC support messages
-Message-ID: <ZetcM9GO2PH6SC0j@agluck-desk3>
-References: <SJ1PR11MB608310C72D7189C139EA6302FC212@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <o6va7b7rc3q46olsbscav7pla4hxot2g6xhctflhmf64pj5hpx@56vtbg3yyquy>
- <SJ1PR11MB60830E546B3D575B01D37104FC202@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <159474e6-ef11-4769-a182-86483efcf2a6@intel.com>
- <SJ1PR11MB60832DAD58E864F99A16FCC4FC202@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <0393c4ce-7e41-4dcc-940a-a6bea9437970@intel.com>
- <SJ1PR11MB6083AACB10645E41DD3F9639FC202@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <55a55960-8bb1-4ce2-a2c7-68e167da8bcc@intel.com>
- <ZepK4mtoV_J8-UbE@agluck-desk3>
- <eacdc287-24bd-4137-85c8-df055cfd78b1@arm.com>
+	s=arc-20240116; t=1709927618; c=relaxed/simple;
+	bh=+JPchmRbdEWp2hPvsQ8mwR8SsWihb9svN/keL3PqCmM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uNELoVriSqaXuxv7hJMESi54NuTYqmennM0Vn6KPWj8iI2xt/GZwzh+JExcZzQflZ1gU1AGiMa+vYfYc/7ck5LFn/S8a5/SfQTaf/FfZBVvmPtMKarWE2L+2sIlW39JteRJpjhuwyAYe4WZSFPyCI5Y9W5hYrCEa7ETSkaSe3KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FQIcIjit; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a450bedffdfso335985066b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Mar 2024 11:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709927613; x=1710532413; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pd2ZoV00c/hvjjV6TuUocydSDT4SN2a80zpBvuI43a4=;
+        b=FQIcIjitCXslDz2GbbUrP/Dl2A1fHjodIwfcVwX7edPGJjzUe6ft0Dzx4S5sFwe1Vh
+         g88zviT2eLf5PmHmjVJB2aNpgv9n3ocJvS72MSrLxPfMODNwXkIqGml7VkVhyDJXPZ65
+         MjMUs4Lqmk59C5q9pviF7lrr5HVfpNnp9VtqWc7ZvnuMI0EGx3Q5NM/4uZGay3xcEJFy
+         qYcxb+eRfAcYnwP/UVfmW9ErY4qC/DPOwckI+rRsS39kszwhkv8lEpCyJ9PUorpE+Wmk
+         8YbTN6+zdx0SrM+L7muhYuk5uJr4h+Hit4pCKYkJfFmlBE74LLcVw8ZHHf4d82NY4qR1
+         jV5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709927613; x=1710532413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pd2ZoV00c/hvjjV6TuUocydSDT4SN2a80zpBvuI43a4=;
+        b=oNwCHnD41GnnEx/g9ptBETfX4kej1pZOm1VTCfmeVjmGhnbAJuOydzK81vbHsoOF8M
+         qQUV923swOTbbKxZxgN3aE2YBIym5CcuSwqmpKe5Y5TKAMxd/6mnb/4J8vhQa4RWPZcC
+         llTIgSVbo4csEls9owq8w5EEPIXjjdmc70CSBJhpssUmxXv+fRK45FAitCUHRDLK/jEQ
+         So+oT3fzzfaYfTV+pQOzgUQ09eQN8D7hua0l2ODLRw5eWKIctIU30al1QRtkBuwMiXCE
+         BVepmeheHOZbE9PGo9xh7LSKG5b4t+LaK/12SWG5o8/fd2t4Vngouv9GELURYqg8ODkf
+         CUpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUuH4+ze/N0hECXCCnpyBgqB5+7pKavUuleMvZdFzuTFkPbRb5AkfyJT8Eq95dNgkurNIyhiJE7PfzyALEFDUO65t+tzFCyHUcAVhgw6WrL
+X-Gm-Message-State: AOJu0YziBVR9tqk167qHaBRjXaSB/T8IhAg3RJ3v2HugRmEs9KWlvEAc
+	jGzVtZszx06cNfZO1S7fkIuvVQelulwfUONQ8wdZt7vyAZrM7S6ZU3k2LwnTF5wLyD1IFIBZKtn
+	E9nk1ENdgj1/uGqLWX8BqRt3t8o9CWlnKUt2V
+X-Google-Smtp-Source: AGHT+IGdfTizwHQnCpRk5GeSjOHjssHLcb+cVFlrr45NHBDRApEdAye6AN9i0+rO/lWinEjVvgcrkAuNBm/bbSNX5ic=
+X-Received: by 2002:a17:907:76d7:b0:a3e:9aa3:7024 with SMTP id
+ kf23-20020a17090776d700b00a3e9aa37024mr57660ejc.34.1709927612751; Fri, 08 Mar
+ 2024 11:53:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eacdc287-24bd-4137-85c8-df055cfd78b1@arm.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com> <15625bac-dfec-4c4e-a828-d11424f7aced@davidwei.uk>
+In-Reply-To: <15625bac-dfec-4c4e-a828-d11424f7aced@davidwei.uk>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 8 Mar 2024 11:53:18 -0800
+Message-ID: <CAHS8izMC=q_DuR94i-NCKFVsW0JadX7NEbDfyT8PfG3tBwPv-Q@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 08, 2024 at 06:06:45PM +0000, James Morse wrote:
-> Hi guys,
-> 
-> On 07/03/2024 23:16, Tony Luck wrote:
-> > On Thu, Mar 07, 2024 at 02:39:08PM -0800, Reinette Chatre wrote:
-> >> Thank you for the example. I find that significantly easier to
-> >> understand than a single number in a generic "nodes_per_l3_cache".
-> >> Especially with potential confusion surrounding inconsistent "nodes"
-> >> between allocation and monitoring. 
-> >>
-> >> How about domain_cpu_list and domain_cpu_map ?
-> 
-> > Like this (my test system doesn't have SNC, so all domains are the same):
-> > 
-> > $ cd /sys/fs/resctrl/info/
-> > $ grep . */domain*
-> > L3/domain_cpu_list:0: 0-35,72-107
-> > L3/domain_cpu_list:1: 36-71,108-143
-> > L3/domain_cpu_map:0: 0000,00000fff,ffffff00,0000000f,ffffffff
-> > L3/domain_cpu_map:1: ffff,fffff000,000000ff,fffffff0,00000000
-> > L3_MON/domain_cpu_list:0: 0-35,72-107
-> > L3_MON/domain_cpu_list:1: 36-71,108-143
-> > L3_MON/domain_cpu_map:0: 0000,00000fff,ffffff00,0000000f,ffffffff
-> > L3_MON/domain_cpu_map:1: ffff,fffff000,000000ff,fffffff0,00000000
-> > MB/domain_cpu_list:0: 0-35,72-107
-> > MB/domain_cpu_list:1: 36-71,108-143
-> > MB/domain_cpu_map:0: 0000,00000fff,ffffff00,0000000f,ffffffff
-> > MB/domain_cpu_map:1: ffff,fffff000,000000ff,fffffff0,00000000
-> 
-> This duplicates the information in /sys/devices/system/cpu/cpuX/cache/indexY ... is this
-> really because that information is, er, wrong on SNC systems. Is it possible to fix that?
+On Thu, Mar 7, 2024 at 8:57=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
+>
+> On 2024-03-04 18:01, Mina Almasry wrote:
+> > From: Jakub Kicinski <kuba@kernel.org>
+> >
+> > The page providers which try to reuse the same pages will
+> > need to hold onto the ref, even if page gets released from
+> > the pool - as in releasing the page from the pp just transfers
+> > the "ownership" reference from pp to the provider, and provider
+> > will wait for other references to be gone before feeding this
+> > page back into the pool.
+> >
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >
+> > This is implemented by Jakub in his RFC:
+> > https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
+hat.com/T/
+> >
+> > I take no credit for the idea or implementation; I only added minor
+> > edits to make this workable with device memory TCP, and removed some
+> > hacky test code. This is a critical dependency of device memory TCP
+> > and thus I'm pulling it into this series to make it revewable and
+> > mergeable.
+> >
+> > RFC v3 -> v1
+> > - Removed unusued mem_provider. (Yunsheng).
+> > - Replaced memory_provider & mp_priv with netdev_rx_queue (Jakub).
+> >
+> > ---
+> >  include/net/page_pool/types.h | 12 ++++++++++
+> >  net/core/page_pool.c          | 43 +++++++++++++++++++++++++++++++----
+> >  2 files changed, 50 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/net/page_pool/types.h b/include/net/page_pool/type=
+s.h
+> > index 5e43a08d3231..ffe5f31fb0da 100644
+> > --- a/include/net/page_pool/types.h
+> > +++ b/include/net/page_pool/types.h
+> > @@ -52,6 +52,7 @@ struct pp_alloc_cache {
+> >   * @dev:     device, for DMA pre-mapping purposes
+> >   * @netdev:  netdev this pool will serve (leave as NULL if none or mul=
+tiple)
+> >   * @napi:    NAPI which is the sole consumer of pages, otherwise NULL
+> > + * @queue:   struct netdev_rx_queue this page_pool is being created fo=
+r.
+> >   * @dma_dir: DMA mapping direction
+> >   * @max_len: max DMA sync memory size for PP_FLAG_DMA_SYNC_DEV
+> >   * @offset:  DMA sync address offset for PP_FLAG_DMA_SYNC_DEV
+> > @@ -64,6 +65,7 @@ struct page_pool_params {
+> >               int             nid;
+> >               struct device   *dev;
+> >               struct napi_struct *napi;
+> > +             struct netdev_rx_queue *queue;
+> >               enum dma_data_direction dma_dir;
+> >               unsigned int    max_len;
+> >               unsigned int    offset;
+> > @@ -126,6 +128,13 @@ struct page_pool_stats {
+> >  };
+> >  #endif
+> >
+> > +struct memory_provider_ops {
+> > +     int (*init)(struct page_pool *pool);
+> > +     void (*destroy)(struct page_pool *pool);
+> > +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
+> > +     bool (*release_page)(struct page_pool *pool, struct page *page);
+> > +};
+>
+> Separate question as I try to adapt bnxt to this and your queue
+> configuration API.
+>
+> How does GVE handle the need to allocate kernel pages for headers and
+> dmabuf for payloads?
+>
+> Reading the code, struct gve_rx_ring is the main per-ring object with a
+> page pool. gve_queue_page_lists are filled with page pool netmem
+> allocations from the page pool in gve_alloc_queue_page_list(). Are these
+> strictly used for payloads only?
+>
 
-On an SNC system the resctrl domain for L3_MON becomes the SNC node
-instead of the L3 cache instance. With 2, 3, or 4 SNC nodes per L3.
+You're almost correct. We actually don't use the gve queue page lists
+for devmem TCP, that's an unrelated GVE feature/code path for low
+memory VMs. The code in effect is the !qpl code. In that code, for
+incoming RX packets we allocate a new or recycled netmem from the page
+pool in gve_alloc_page_dqo(). These buffers are used for payload only
+in the case where header split is enabled. In the case header split is
+disabled, these buffers are used for the entire incoming packet.
 
-Even without the SNC issue this duplication may be a useful
-convienience. On Intel to get from a resctrl domain is a multi-step
-process to first find which of the indexY directories has level=3
-and then look for the "id" that matches the domain.
+> I found a struct gve_header_buf in both gve_rx_ring and struct
+> gve_per_rx_queue_mem_dpo. This is allocated in gve_rx_queue_mem_alloc()
+> using dma_alloc_coherent(). Is this where GVE stores headers?
+>
 
-> >From Tony's earlier description of how SNC changes things, the MB controls remain
-> per-socket. To me it feels less invasive to fix the definition of L3 on these platforms to
-> describe how it behaves (assuming that is possible), and define a new 'MB' that is NUMA
-> scoped.
-> This direction of redefining L3 means /sys/fs/resctrl and /sys/devices have different
-> views of 'the' cache hierarchy.
+Yes, this is where GVE stores headers.
 
-I almost went partly in that direction when I started this epic voyage.
-The "almost" part was to change the names of the monitoring directories
-under mon_data from (legacy non-SNC system):
+> IOW, GVE only uses page pool to allocate memory for QPLs, and QPLs are
+> used by the device for split payloads. Is my understanding correct?
+>
 
-$ ls -l mon_data
-total 0
-dr-xr-xr-x. 2 root root 0 Mar  8 10:31 mon_L3_00
-dr-xr-xr-x. 2 root root 0 Mar  8 10:31 mon_L3_01
-
-to (2 socket, SNC=2 system):
-
-$ ls -l mon_data
-total 0
-dr-xr-xr-x. 2 root root 0 Mar  8 10:31 mon_NODE_00
-dr-xr-xr-x. 2 root root 0 Mar  8 10:31 mon_NODE_01
-dr-xr-xr-x. 2 root root 0 Mar  8 10:31 mon_NODE_02
-dr-xr-xr-x. 2 root root 0 Mar  8 10:31 mon_NODE_03
-
-While that is in some ways a more accurate view, it breaks a lot of
-legacy monitoring applications that expect the "L3" names.
-
-> (I also think that this be over the threshold on 'funny machines look funny' - but I bet
-> someone builds an arm machine that looks like this too!)
-
--Tony
+--=20
+Thanks,
+Mina
 
