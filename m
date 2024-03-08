@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-6111-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 497378766B1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 15:50:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49EE28766B3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 15:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56F96B22001
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 14:50:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCD611F23A5E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 14:50:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C5B1EA80;
-	Fri,  8 Mar 2024 14:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 926A7208CE;
+	Fri,  8 Mar 2024 14:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ItlpOjxi"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="wULQIMkC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23D51DDFC;
-	Fri,  8 Mar 2024 14:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C15200C1;
+	Fri,  8 Mar 2024 14:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709909389; cv=none; b=SZqibxYNDMCWuQGjFYl7Z3iFz993M5z33wTN7uDuoUGvfHrx15o25/I4KI1AXWdutmBjwrFhTL6eAQ7No/b42sbCoIF6TFpSo2kjCMqPJ1tJ8RTOLNzbUGBlr52ReEx/RGgCebd4djuWCKTLMF4WgWu17XT+L2YKSyyG440/otw=
+	t=1709909392; cv=none; b=EiGRPzsCALXav1UuCeL4OrBejYjFcjSmWrBEK6l2aKmcihwZnCgIkx3yKwEcyfLOE3j12J0Km96qW9/3i+kQbzlO2J5nI4dbL+Tbw4UaDRkKzl/oqC+sOAHdsSfwDYvf/gysBni1KDXTJDC8/U6JPkaQF8Z8X07F/0xu9LqRahs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709909389; c=relaxed/simple;
-	bh=UeS4ZdPkO5z7qjdsXrZyfaBB7u/CUx1wJV4TT44Am5E=;
+	s=arc-20240116; t=1709909392; c=relaxed/simple;
+	bh=WY/qS/ckGhQLvKky6SlRpqOjuzNXZYS0fZnkGAFszI0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IWcr3OSICyouzMkedWgH3L5QhWswJkFyUjTkvlyqoq7j+FSKjZn30ZftOeKG7Zj1MJUXbhh4q4AgMD9hNs2aIZlvPzWBhTSqCLZ+wydNSvZFetHpeLU+T9olwKVWdVIaZrJrdzEsChmrHV2GeOcfXZoNCYgj7vRDQV1M6uFfjAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ItlpOjxi; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=u4J1q1cWoJdEODfchvBfvd7zQzON0r3Xd3zg+KAyvj6jSXwL6+ccDMv/NcIUf9UNz4/pUT16hNOydoHp2GrWl8RR9GCl9kTNKq2Su9tzhW08otvLUcZu2hN0DuoJC2Zg/Iz3HVpzKB8vWY2d8PWPBiVfrSYM/Xln4xOK05XtHJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=wULQIMkC; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709909386;
-	bh=UeS4ZdPkO5z7qjdsXrZyfaBB7u/CUx1wJV4TT44Am5E=;
+	s=mail; t=1709909389;
+	bh=WY/qS/ckGhQLvKky6SlRpqOjuzNXZYS0fZnkGAFszI0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ItlpOjxi44qmDdh53IhqmihoatBwxImLDuMOaRLMXy0CKLga9wLa6veY9iWE6BSoL
-	 uJMzWQJ+z/MIT5uxDk7FXKzZMhDLJsUlOFTM2Z7J/a3tVHS+UIUNhJhf5Be+g8CvSs
-	 pzW26TcPkcsk1n3NqvVUxhBgLfJy7t+SbWeiI5dkYSFas5ibKfBF8grJrfb0NLf8fN
-	 uCik8PtXTsgyYeUwPqykkM8Eao9xZ77xXga9SrQlj6guYVg6tVL6T5rRseRdCz7HoA
-	 mMSFBk9rjjEdIKmkC5Kx9c3IRekw1Nm4LYifH1Y8N0HM26tYMPrmNf326snuSHJ0ww
-	 VzWG9h/241DOw==
+	b=wULQIMkCxXx4EE5m3lJFejVUnirWj/2tNP5kGhXXhKYnP2NAe3v/zVr2ixIxRu79m
+	 opjUYf4gVvC84wdh1Gz/MImANci1fObGdhWJL8m7UjTVhrgaCCg8Cm+KwEjQFCEdWU
+	 JjcNUK7u57x8/TSrsnXHz7DsVxoKk6ajslWyOpBZx8jcEBtmMDXOxAyvECgq2fG2SF
+	 V52ppxHKFUcg+kfuDKoArsdU02zJrUPw0GnDapG2qc/4ZJusX4WzJXX0AAs7N4qswp
+	 eXu1bWzbJ9aWg6o3ra61WKtlvQht6EcYSc0idHRtMobjRkENC9FNGW0IcpVvnbh1r+
+	 0AOHTS4J4W3mQ==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8FC3837820C3;
-	Fri,  8 Mar 2024 14:49:44 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0599337820F1;
+	Fri,  8 Mar 2024 14:49:47 +0000 (UTC)
 From: Laura Nao <laura.nao@collabora.com>
 To: rafael@kernel.org,
 	lenb@kernel.org,
@@ -66,9 +66,9 @@ Cc: dan.carpenter@linaro.org,
 	Tim.Bird@sony.com,
 	dianders@chromium.org,
 	Laura Nao <laura.nao@collabora.com>
-Subject: [RFC PATCH v2 1/2] acpi: Add script to extract ACPI device ids in the kernel
-Date: Fri,  8 Mar 2024 15:49:32 +0100
-Message-Id: <20240308144933.337107-2-laura.nao@collabora.com>
+Subject: [RFC PATCH v2 2/2] kselftest: Add test to detect unprobed devices on ACPI platforms
+Date: Fri,  8 Mar 2024 15:49:33 +0100
+Message-Id: <20240308144933.337107-3-laura.nao@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20240308144933.337107-1-laura.nao@collabora.com>
 References: <20240308144933.337107-1-laura.nao@collabora.com>
@@ -80,145 +80,254 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a script to extract all the supported acpi device ids
-from kernel sources.
+Add new kselftest that tests whether devices declared in the ACPI
+namespace and supported by the kernel are correctly bound
+to a driver.
 
-The script looks for IDs defined in acpi_device_id structs within both
-.c and .h files and prints them. If the -d option is used, the script
-only shows the IDs that are matched by a driver, identified through
-either an ACPI match table or a list of supported IDs provided by the
-driver.
+The test traverses the ACPI sysfs tree to get a list of all the devices
+defined in the ACPI namespace and verifies whether the physical devices
+linked to each ACPI object are bound to a driver.
+The test relies on two lists to skip devices not expected to be bound
+to a driver:
+- List generated by the acpi-extract-ids script: includes the ACPI IDs
+  matched by a driver
+- Manual list of ignored IDs: includes the ID of devices that may be
+  discovered only via the platform firmware and that don't require a
+  driver or cannot be represented as platform devices
 
-The list of IDs returned by the script can be used as a
-reference to determine if a device declared in the ACPI namespace
-with certain _HID/_CID is supported by the kernel or not.
-
-Note: this script cannot identify IDs defined via macros.
+The test also examines the sysfs attributes of the target device objects
+linked by physical_node* to exclude other devices that should not be
+bound to a driver. This includes:
+- Devices not assigned to any subsystem
+- Devices that are linked to other devices
+- Class devices
+- Specific PCI bridges that do not require a driver
 
 Signed-off-by: Laura Nao <laura.nao@collabora.com>
 ---
- MAINTAINERS                   |  1 +
- scripts/acpi/acpi-extract-ids | 99 +++++++++++++++++++++++++++++++++++
- 2 files changed, 100 insertions(+)
- create mode 100755 scripts/acpi/acpi-extract-ids
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/acpi/.gitignore       |   1 +
+ tools/testing/selftests/acpi/Makefile         |  21 +++
+ tools/testing/selftests/acpi/id_ignore_list   |   3 +
+ .../selftests/acpi/test_unprobed_devices.sh   | 138 ++++++++++++++++++
+ 6 files changed, 165 insertions(+)
+ create mode 100644 tools/testing/selftests/acpi/.gitignore
+ create mode 100644 tools/testing/selftests/acpi/Makefile
+ create mode 100644 tools/testing/selftests/acpi/id_ignore_list
+ create mode 100755 tools/testing/selftests/acpi/test_unprobed_devices.sh
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 375d34363777..8333ead448c4 100644
+index 8333ead448c4..1f58949c9e51 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -293,6 +293,7 @@ F:	include/linux/acpi.h
- F:	include/linux/fwnode.h
+@@ -294,6 +294,7 @@ F:	include/linux/fwnode.h
  F:	include/linux/fw_table.h
  F:	lib/fw_table.c
-+F:	scripts/acpi/acpi-extract-ids
+ F:	scripts/acpi/acpi-extract-ids
++F:	tools/testing/selftests/acpi/
  F:	tools/power/acpi/
  
  ACPI APEI
-diff --git a/scripts/acpi/acpi-extract-ids b/scripts/acpi/acpi-extract-ids
-new file mode 100755
-index 000000000000..4c492d384a35
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index e1504833654d..3107301ea4f3 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++TARGETS += acpi
+ TARGETS += alsa
+ TARGETS += amd-pstate
+ TARGETS += arm64
+diff --git a/tools/testing/selftests/acpi/.gitignore b/tools/testing/selftests/acpi/.gitignore
+new file mode 100644
+index 000000000000..3c520e8a1962
 --- /dev/null
-+++ b/scripts/acpi/acpi-extract-ids
-@@ -0,0 +1,99 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/acpi/.gitignore
+@@ -0,0 +1 @@
++id_list
+diff --git a/tools/testing/selftests/acpi/Makefile b/tools/testing/selftests/acpi/Makefile
+new file mode 100644
+index 000000000000..b80d4fb797ac
+--- /dev/null
++++ b/tools/testing/selftests/acpi/Makefile
+@@ -0,0 +1,21 @@
++PY3 = $(shell which python3 2>/dev/null)
++
++ifneq ($(PY3),)
++
++TEST_PROGS := test_unprobed_devices.sh
++TEST_GEN_FILES := id_list
++TEST_FILES := id_ignore_list
++
++include ../lib.mk
++
++$(OUTPUT)/id_list:
++	$(top_srcdir)/scripts/acpi/acpi-extract-ids -d $(top_srcdir) > $@
++
++else
++
++all: no_py3_warning
++
++no_py3_warning:
++	@echo "Missing python3. This test will be skipped."
++
++endif
+\ No newline at end of file
+diff --git a/tools/testing/selftests/acpi/id_ignore_list b/tools/testing/selftests/acpi/id_ignore_list
+new file mode 100644
+index 000000000000..86ddf4b0a55a
+--- /dev/null
++++ b/tools/testing/selftests/acpi/id_ignore_list
+@@ -0,0 +1,3 @@
++PNP0A05
++PNP0A06
++ACPI0004
+\ No newline at end of file
+diff --git a/tools/testing/selftests/acpi/test_unprobed_devices.sh b/tools/testing/selftests/acpi/test_unprobed_devices.sh
+new file mode 100755
+index 000000000000..23e52833c475
+--- /dev/null
++++ b/tools/testing/selftests/acpi/test_unprobed_devices.sh
+@@ -0,0 +1,138 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +#
-+# Heavily inspired by the scripts/dtc/dt-extract-compatibles script,
-+# adapted for the ACPI use case.
++# Copyright (c) 2023 Collabora Ltd
++#
++# Inspired by the tools/testing/selftests/dt/test_unprobed_devices.sh
++# script, adapted for the ACPI use case.
++#
++# This script checks whether devices declared in the ACPI namespace and
++# supported by the kernel are correctly bound to a driver.
++#
++# To do this, two lists are used:
++# * a list of ACPI IDs matched by existing drivers
++# * a list of IDs that should be ignored
 +#
 +
-+import fnmatch
-+import os
-+import glob
-+import re
-+import argparse
++DIR="$(dirname "$(readlink -f "$0")")"
 +
++KTAP_HELPERS="${DIR}/../kselftest/ktap_helpers.sh"
++if ! source "$KTAP_HELPERS"; then
++	exit 4
++fi
 +
-+def parse_acpi_device_id(data, match_list=None):
-+    """ Find all device ids in acpi_device_id structs """
-+    acpi_device_id_list = []
++ACPI_SYSTEM_DIR="/sys/devices/LNXSYSTM:00"
++ID_IGNORE_LIST="${DIR}"/id_ignore_list
++ID_LIST="${DIR}"/id_list
 +
-+    for m in re.finditer(r'acpi_device_id(\s+\S+)?\s+(\S+)\[\](\s+\S+)?\s*=\s*({.*?);', data):
-+        if match_list is not None and m[2] not in match_list:
-+            continue
-+        acpi_device_id_list += re.findall(r'\"(\S+)\"', m[4])
++PCI_CLASS_BRIDGE_HOST="0x0600"
++PCI_CLASS_BRIDGE_ISA="0x0601"
 +
-+    return acpi_device_id_list
++ktap_print_header
 +
-+def parse_acpi_match_table(data):
-+    """ Find all driver's acpi_match_table """
-+    match_table_list = []
-+    for m in re.finditer(r'\.acpi_match_table\s+=\s+(ACPI_PTR\()?([a-zA-Z0-9_-]+)', data):
-+        match_table_list.append(m[2])
++if [[ ! -d "${ACPI_SYSTEM_DIR}" ]]; then
++	ktap_skip_all "${ACPI_SYSTEM_DIR} doesn't exist."
++	exit "${KSFT_SKIP}"
++fi
 +
-+    return match_table_list
++# The ACPI specification mandates that ACPI objects representing devices on
++# non-enumerable and enumerable busses contain a _HID or an _ADR
++# identification object respectively. Get a list of devices of both types,
++# by searching the ACPI sysfs subtree for directories containing a hid or
++# adr attribute.
++supp_dev_paths=$(while IFS=$'\n' read -r dev_path; do
++	if [ ! -f "${dev_path}"/hid ] && [ ! -f "${dev_path}"/adr ]; then
++		continue
++	fi
 +
-+def parse_acpi_driver_ids(data):
-+    """ Find all driver's ids """
-+    id_list = []
-+    for m in re.finditer(r'\.ids\s+=\s+([a-zA-Z0-9_-]+)', data):
-+        id_list.append(m[1])
++	# Check if the device is present, enabled, and functioning properly
++	status="${dev_path}/status"
++	if [ -f "${status}" ]; then
++		status_hex=$(($(cat "${status}")))
 +
-+    return id_list
++		if [ $((status_hex & 1)) -eq 0 ] ||
++			[ $((status_hex >> 1 & 1)) -eq 0 ] ||
++			[ $((status_hex >> 3 & 1)) -eq 0 ]; then
++			continue
++		fi
++	fi
 +
-+def is_header_file(file):
-+    _, extension = os.path.splitext(file)
-+    return extension.lower() == ".h"
++	if [ -n "$(find -L "${dev_path}" -maxdepth 1 -name "physical_node*" -print -quit)" ]; then
++		for node in "${dev_path}"/physical_node*; do
++			# Ignore devices without a subsystem, devices that link to
++			# other devices, and class devices
++			if [ ! -d "${node}/subsystem" ] ||
++				[ -d "${node}/device" ] ||
++				[[ "$(readlink -f "${node}/subsystem")" == /sys/class/* ]]; then
++				continue
++			fi
 +
-+def parse_ids(file, driver_match=False):
-+    with open(file, 'r', encoding='utf-8') as f:
-+        data = f.read().replace('\n', '')
++			echo "${node}"
++		done
++	fi
++done < <(find ${ACPI_SYSTEM_DIR} -name uevent -exec dirname {} \;))
 +
-+    if is_header_file(file) or not driver_match:
-+        return parse_acpi_device_id(data)
-+    else:
-+        match_list = parse_acpi_match_table(data) + parse_acpi_driver_ids(data)
-+        return parse_acpi_device_id(data, match_list)
++supp_dev_paths_num=$(echo "${supp_dev_paths}" | wc -w)
++ktap_set_plan "${supp_dev_paths_num}"
 +
-+def print_ids(filename, id_list):
-+    if not id_list:
-+        return
-+    if show_filename:
-+        compat_str = ' '.join(id_list)
-+        print(filename + ": ID(s): " + compat_str)
-+    else:
-+        print(*id_list, sep='\n')
++# Iterate over ACPI devices
++for dev_path in ${supp_dev_paths}; do
++	if [ -f "${dev_path}/firmware_node/path" ]; then
++		acpi_path="$(<"${dev_path}"/firmware_node/path)"
++	fi
 +
-+def glob_without_symlinks(root, glob):
-+    for path, dirs, files in os.walk(root):
-+        # Ignore hidden directories
-+        for d in dirs:
-+            if fnmatch.fnmatch(d, ".*"):
-+                dirs.remove(d)
-+        for f in files:
-+            if fnmatch.fnmatch(f, glob):
-+                yield os.path.join(path, f)
++	dev_link=$(readlink -f "${dev_path}")
++	desc="${acpi_path}-${dev_link#/sys/devices/}"
 +
-+def files_to_parse(path_args):
-+    for f in path_args:
-+        if os.path.isdir(f):
-+            for filename in glob_without_symlinks(f, "*.[ch]"):
-+                yield filename
-+        else:
-+            yield f
++	if [ -f "${dev_path}/firmware_node/hid" ]; then
++		hid="$(<"${dev_path}"/firmware_node/hid)"
 +
++		if [ -f "${dev_path}/firmware_node/modalias" ]; then
++			modalias=$(<"${dev_path}/firmware_node/modalias")
++			cid=$(echo "${modalias}" | cut -d':' -f3)
 +
-+show_filename = False
++			# Skip devices with ignored HID/CID
++			if ignored_id=$(grep -i "${hid}" "${ID_IGNORE_LIST}" ||
++				{ [ -n "${cid}" ] && grep -i "${cid}" "${ID_IGNORE_LIST}"; }); then
++				ktap_print_msg "ID ${ignored_id} ignored [SKIP]"
++				ktap_test_skip "${desc}"
++				continue
++			fi
++			# Skip devices with unsupported HID/CID
++			if [[ "${hid}" != LNX* ]] && ! grep -x -q -i "${hid}" "${ID_LIST}"; then
++				if [ -z "${cid}" ] || ! grep -x -q -i "${cid}" "${ID_LIST}"; then
++					ktap_print_msg "no match for ${hid}${cid:+:${cid}} found \
++						in the supported IDs list [SKIP]"
++					ktap_test_skip "${desc}"
++					continue
++				fi
++			fi
++		fi
++	fi
 +
-+if __name__ == "__main__":
-+    ap = argparse.ArgumentParser()
-+    ap.add_argument("cfile", type=str, nargs='*',
-+                    help="C source files or directories to parse")
-+    ap.add_argument('-H', '--with-filename',
-+                    help="Print filename with device ids", action="store_true")
-+    ap.add_argument('-d', '--driver-match', help="Only print ids that should match to a driver", action="store_true")
-+    args = ap.parse_args()
++	# Skip bridges that don't require a driver
++	if [ -f "${dev_path}/class" ]; then
++		class=$(<"${dev_path}"/class)
++		if [[ ${class} == ${PCI_CLASS_BRIDGE_HOST}* ]] ||
++			[[ ${class} == ${PCI_CLASS_BRIDGE_ISA}* ]]; then
++			ktap_print_msg "device linked to ${desc} does not require a driver [SKIP]"
++			ktap_test_skip "${desc}"
++			continue
++		fi
++	fi
 +
-+    show_filename = args.with_filename
++	# Search for the driver in both the device folder and the companion's folder
++	if [ -d "${dev_path}/driver" ] || [ -d "${dev_path}/firmware_node/driver" ]; then
++		ktap_test_pass "${desc}"
++	# Skip char devices
++	elif [ -f "${dev_path}/dev" ]; then
++		ktap_print_msg "${desc} is a char device [SKIP]"
++		ktap_test_skip "${desc}"
++		continue
++	else
++		ktap_test_fail "${desc}"
++	fi
 +
-+    for f in files_to_parse(args.cfile):
-+        id_list = parse_ids(f, args.driver_match)
-+        print_ids(f, id_list)
++done
++
++ktap_finished
 -- 
 2.30.2
 
