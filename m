@@ -1,355 +1,178 @@
-Return-Path: <linux-kselftest+bounces-6132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1781876CEE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 23:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15BC2876DEC
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Mar 2024 00:48:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6176B1F227CF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 22:15:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 833EB1F21ADF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 23:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6192F65BAD;
-	Fri,  8 Mar 2024 22:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281E53FB92;
+	Fri,  8 Mar 2024 23:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m+v54EXi"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="L2SVzAze"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339A465BA9;
-	Fri,  8 Mar 2024 22:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E053D0C6
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Mar 2024 23:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709935876; cv=none; b=T0n5+rq1gtE7QaPWxzQRPoUf5uXRHyBBSJBRuF1Dk/pcnBB0If+8tasB786B8VW9hwMbsYY88JYGATogsBlzedp1hebiArIJ0mR/I+ziukaT4PTgm0Oo9QXSmmKgC7l2FHlLiAZR9qts9XawCDGbHVjctk+YSuUppG3gHkqD61M=
+	t=1709941679; cv=none; b=aSSFJpB2hlSoW6R34SBZsizZ+1DMUlD7eszlevqEISd1YlyTQhmOP4c4+VrV8FQeI1hyJVje5mfE6fVaTZtWgsIkRyx9Z1QBhn4wKUolL8G/ss3l2vbWa7oAntTQf8c+ru75NyW8V9pMisKqZ6qJd6lQuuC9hTSU2lF9DxC3xyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709935876; c=relaxed/simple;
-	bh=NDO5GUxYDlFqdD8WdhJZtIxFwcsqQH8196TFTWPwy14=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J3uHKUuWx24kdUBM1wEGAOMUpU9LCRlLfNwuiRfJTBSnFH5oLBUPo8FzOwiaFXlff+qqRtt7NjLZ0dzG5+BVRfin4QX+tEJvD4g+NeRshtDLPh56Z98S6tOuT2pDhLjTcaHO4ma4uoRB26eT73mNmzKpbTX/f7gleECr+2kgu7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m+v54EXi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71849C43394;
-	Fri,  8 Mar 2024 22:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709935875;
-	bh=NDO5GUxYDlFqdD8WdhJZtIxFwcsqQH8196TFTWPwy14=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=m+v54EXif8ZlMTJ7Equ3gKVaVQH8X2Zs5jqRsWksfQI2xWOOByZG7DnH++Q3kKSBa
-	 yYldrq1GFieW3gf23iS3yvSlJm8i+TUjsByAstvz6+9CHTdcxj6KMyMD5es5oL+PgW
-	 YGPaiMWn29FVpZ4ehvJGFKWHMx7G2oTigcN3TZ6yRIS/uNZBiALCe8hdU1FZR+tM7s
-	 zkqbfjQASclPbX9ML6sgj0guUAlKCqNC90AsNpJqUwQbSUtKVXrShfcNtoSxSvUL2f
-	 cEFAvs0vwJgYRJMb6jAd4saEcEbY6KhWxcH34HwD2ZJee2ZDpsLA7UuBHb9f/2+nzq
-	 jQNxebGULZVHg==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 08 Mar 2024 23:10:22 +0100
-Subject: [PATCH net-next 15/15] selftests: mptcp: use
- KSFT_SKIP/KSFT_PASS/KSFT_FAIL
+	s=arc-20240116; t=1709941679; c=relaxed/simple;
+	bh=dchB7UCiRqdqw0lIYP5nDwZdV0ZR/CGk1fMQm9ZuI6c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cYG0ZGvRetL08qFVZBq0tqefhrICnPlWKDXB4XWn/19ylU92YY6MmdJ+keBmm5e7751wsDiywZpZIbSv1ZCOSVHwZNThyS+E2wO7i3NczUUUMb1xzW32DfSIP9eQZtcVzf+8Fo1u/14CVvGClreX19WlL48IahnKll3dPVoz5vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=L2SVzAze; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29b7b9a4908so1004910a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Mar 2024 15:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1709941676; x=1710546476; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9az8igjncgnaY0U1W1wkJljIYsplkUiE6Xc4XiRbO+4=;
+        b=L2SVzAzePwXBRM6vqpB+QFbzZEMkhm600Z9LNU18bXT3rfz7fAe/P7ogRt60U4uG7i
+         HXLidI2y6SP+IL0S0e8jPXgk0ZTJpN0/8y7eullrSL868jS664cbUrjHCXR4O/6af6wp
+         ZFLM6nJH/aSwMmPRAQgT5BU9GqHvIXEaYVB8iHQqH1I3dbD8/HOv68ShDA3QuRuclBlr
+         9zrKlcKkyUVAbCme+7X6/7vFm8kDVZig93IjG7yddBQmcoZmtKttWjR3jTz/d2rjhG8X
+         +gu3mBdIQhOXdcGDqOlGqigx5LEmPztkJ7/Ngv2Sp4AYJ5m8wOa7K11omw88Hs+ppJ82
+         5Ogg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709941676; x=1710546476;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9az8igjncgnaY0U1W1wkJljIYsplkUiE6Xc4XiRbO+4=;
+        b=SqKq7qA3kpXKUco5Zt1lHvfjUH1phYOyDaf0w92bNTpy53xPcTcjT8PVeTXC9LiYnf
+         PXimfI62k08Kg/Kyv+XVYDZ+61jCnqoznccGNEpfdYSqzqXlwUW5vcQuf369ycLW4Fi0
+         WnBwS79rFuOEP5Pj6WBT4o7HTnaw6+rTkxnZiH3uSuUqENZczks84Tz5Yy6LzYl+dn5N
+         dnWXcm3shHWYIhtM9Uhoc0Aq/it8y7MZUxlQ2W8vXNT4DDTWY6zIxa3W6cDZrf+K/0x8
+         OsIwy7c1xtq9t3CrHajs/kbT1Yr8FqKawn1JP8kOI1bg+wzeuQjqfmy0IA3imazOeDyo
+         7NbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUkZBgDgNdqNWBn/owjRh/lH2bfbIiVQiPI21NtSfHQ54blVghMZ8VSI3huc5i93joobSUQcakuw55N+++zKjSqgzN30eg08XMQky8xfWNq
+X-Gm-Message-State: AOJu0YzZv8oOHH95GfckAyCKtQUMDJ24X6tv+kvFzDWAKFXUjX7At7F4
+	mS7ZBhUQhZiuevaG2fFxXgE8L+2Xkrmsj0uOaN3sWkFNRMYe6GfJlSNC6cxzmmA=
+X-Google-Smtp-Source: AGHT+IF8a9eHGDem6IS2N02q+0T3yH36EZ/hJ5LpJRaMKjh8ZuXGZ+UFipKrEBkF+ws+Cz/PyRkACw==
+X-Received: by 2002:a17:90b:1286:b0:29a:e097:50be with SMTP id fw6-20020a17090b128600b0029ae09750bemr690309pjb.31.1709941676412;
+        Fri, 08 Mar 2024 15:47:56 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1156:1:1cbd:da2b:a9f2:881? ([2620:10d:c090:500::5:2342])
+        by smtp.gmail.com with ESMTPSA id d15-20020a17090ad98f00b0029bbf42daeesm265183pjv.30.2024.03.08.15.47.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Mar 2024 15:47:56 -0800 (PST)
+Message-ID: <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
+Date: Fri, 8 Mar 2024 15:47:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
+Content-Language: en-GB
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-2-almasrymina@google.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240305020153.2787423-2-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-15-4f42c347b653@kernel.org>
-References: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
-In-Reply-To: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7667; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=MFPhv4UY1RWRBU0fNNptB2KkxW4wGTFhXA3Gm+mmJuQ=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl64zKklzPyBogkU+fFBi02DdhEwZKmZJbLnVKP
- x3ro4RS0sqJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeuMygAKCRD2t4JPQmmg
- czttEACQ2l2oM/feheHfkCJteq36rDV31r/McILK38NIK47znYj0oxSrAw5hQ/rD/WBK3utLNSz
- uU51Dk0qGnxzXnp9tWkmZE7nFe/lYd8Q+C9D5dn9swyniriVy3qs6wjLnPHRtXme9yQqvdHDBwI
- 26VgouHTX9yVRSPvg3wieY6bBPQN5xaZCS0e5MADkM7VL52ZohEUBr01ShFBXsEQY/Wz0n0fnbM
- pUoscKHgk0SeVZJTdiBHHf7TeisUxjZIfNWvuBFKu4W/aj7hMlB2pG+IyrAugMzX4RocyXxbEzP
- 7p+KaASPLBz4i5Mth/tFPMJuraQwB4NPfAM1E38ccApqmnNwezp19pHEapTd5Qle42eBWjHlJn0
- 82g/E38JcHUZGtqpY2Zl4OenSeA792E0Ul6rcmw2ezZ9Pqg6wr1VYGOuGIrb1efPHw4/x+aLH58
- Gf5Z2ruVRLESJmy4Ynwuk8s01DiUojzIwxOvpzUFZKwuL6wvl6OXKNVDbyoN3FNF8anzdXVB4Vv
- aPVW6SGPNvP4yzmzudWPiBsqxyhh0HUrRVJ0jh4YcuJ7weTh6B9d1Fxp+QODpu+l+CgJgfFOOkz
- i00MaZ0Ye/QyOWrImpOdDYBI83cJZqRuOuIZ9A37z2kekwrJGqf7ZXlvMRj4iaasfGTm2fUzRre
- zN+3kPT+wVrnwng==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On 2024-03-04 18:01, Mina Almasry wrote:
+> This API enables the net stack to reset the queues used for devmem.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+>  include/linux/netdevice.h | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index c41019f34179..3105c586355d 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1435,6 +1435,20 @@ struct netdev_net_notifier {
+>   *			   struct kernel_hwtstamp_config *kernel_config,
+>   *			   struct netlink_ext_ack *extack);
+>   *	Change the hardware timestamping parameters for NIC device.
+> + *
+> + * void *(*ndo_queue_mem_alloc)(struct net_device *dev, int idx);
+> + *	Allocate memory for an RX queue. The memory returned in the form of
+> + *	a void * can be passed to ndo_queue_mem_free() for freeing or to
+> + *	ndo_queue_start to create an RX queue with this memory.
+> + *
+> + * void	(*ndo_queue_mem_free)(struct net_device *dev, void *);
+> + *	Free memory from an RX queue.
+> + *
+> + * int (*ndo_queue_start)(struct net_device *dev, int idx, void *);
+> + *	Start an RX queue at the specified index.
+> + *
+> + * int (*ndo_queue_stop)(struct net_device *dev, int idx, void **);
+> + *	Stop the RX queue at the specified index.
+>   */
+>  struct net_device_ops {
+>  	int			(*ndo_init)(struct net_device *dev);
+> @@ -1679,6 +1693,16 @@ struct net_device_ops {
+>  	int			(*ndo_hwtstamp_set)(struct net_device *dev,
+>  						    struct kernel_hwtstamp_config *kernel_config,
+>  						    struct netlink_ext_ack *extack);
+> +	void *			(*ndo_queue_mem_alloc)(struct net_device *dev,
+> +						       int idx);
+> +	void			(*ndo_queue_mem_free)(struct net_device *dev,
+> +						      void *queue_mem);
+> +	int			(*ndo_queue_start)(struct net_device *dev,
+> +						   int idx,
+> +						   void *queue_mem);
+> +	int			(*ndo_queue_stop)(struct net_device *dev,
+> +						  int idx,
+> +						  void **out_queue_mem);
+>  };
 
-This patch uses the public var KSFT_SKIP in mptcp_lib.sh instead of
-ksft_skip, and drop 'ksft_skip=4' in mptcp_join.sh.
+I'm working to port bnxt over to using this API. What are your thoughts
+on maybe pulling this out and use bnxt to drive it?
 
-Use KSFT_PASS and KSFT_FAIL macros instead of 0 and 1 after 'exit '
-and 'ret=' in all scripts:
-
-        exit 0 -> exit ${KSFT_PASS}
-        exit 1 -> exit ${KSFT_FAIL}
-         ret=0 ->  ret=${KSFT_PASS}
-         ret=1 ->  ret=${KSFT_FAIL}
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 18 +++++++++---------
- tools/testing/selftests/net/mptcp/mptcp_join.sh    | 13 ++++++-------
- tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  4 ++--
- tools/testing/selftests/net/mptcp/pm_netlink.sh    |  8 ++++----
- tools/testing/selftests/net/mptcp/simult_flows.sh  |  4 ++--
- tools/testing/selftests/net/mptcp/userspace_pm.sh  |  4 ++--
- 6 files changed, 25 insertions(+), 26 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-index cb1837f2761a..4c4248554826 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-@@ -65,14 +65,14 @@ while getopts "$optstring" option;do
- 	case "$option" in
- 	"h")
- 		usage $0
--		exit 0
-+		exit ${KSFT_PASS}
- 		;;
- 	"d")
- 		if [ $OPTARG -ge 0 ];then
- 			tc_delay="$OPTARG"
- 		else
- 			echo "-d requires numeric argument, got \"$OPTARG\"" 1>&2
--			exit 1
-+			exit ${KSFT_FAIL}
- 		fi
- 		;;
- 	"e")
-@@ -96,7 +96,7 @@ while getopts "$optstring" option;do
- 			sndbuf="$OPTARG"
- 		else
- 			echo "-S requires numeric argument, got \"$OPTARG\"" 1>&2
--			exit 1
-+			exit ${KSFT_FAIL}
- 		fi
- 		;;
- 	"R")
-@@ -104,7 +104,7 @@ while getopts "$optstring" option;do
- 			rcvbuf="$OPTARG"
- 		else
- 			echo "-R requires numeric argument, got \"$OPTARG\"" 1>&2
--			exit 1
-+			exit ${KSFT_FAIL}
- 		fi
- 		;;
- 	"m")
-@@ -121,7 +121,7 @@ while getopts "$optstring" option;do
- 		;;
- 	"?")
- 		usage $0
--		exit 1
-+		exit ${KSFT_FAIL}
- 		;;
- 	esac
- done
-@@ -263,7 +263,7 @@ check_mptcp_disabled()
- 	if [ "$(ip netns exec ${disabled_ns} sysctl net.mptcp.enabled | awk '{ print $3 }')" -ne 1 ]; then
- 		mptcp_lib_pr_fail "net.mptcp.enabled sysctl is not 1 by default"
- 		mptcp_lib_result_fail "net.mptcp.enabled sysctl is not 1 by default"
--		ret=1
-+		ret=${KSFT_FAIL}
- 		return 1
- 	fi
- 	ip netns exec ${disabled_ns} sysctl -q net.mptcp.enabled=0
-@@ -276,7 +276,7 @@ check_mptcp_disabled()
- 	if [ ${err} -eq 0 ]; then
- 		mptcp_lib_pr_fail "New MPTCP socket cannot be blocked via sysctl"
- 		mptcp_lib_result_fail "New MPTCP socket cannot be blocked via sysctl"
--		ret=1
-+		ret=${KSFT_FAIL}
- 		return 1
- 	fi
- 
-@@ -302,7 +302,7 @@ do_ping()
- 
- 	if [ $rc -ne 0 ] ; then
- 		mptcp_lib_pr_fail "$listener_ns -> $connect_addr connectivity"
--		ret=1
-+		ret=${KSFT_FAIL}
- 
- 		return 1
- 	fi
-@@ -821,7 +821,7 @@ log_if_error()
- 		mptcp_lib_pr_fail "${msg}"
- 
- 		final_ret=${ret}
--		ret=0
-+		ret=${KSFT_PASS}
- 
- 		return ${final_ret}
- 	fi
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 728575fd86ea..5e9211e89825 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -25,7 +25,6 @@ err=""
- capout=""
- ns1=""
- ns2=""
--ksft_skip=4
- iptables="iptables"
- ip6tables="ip6tables"
- timeout_poll=30
-@@ -392,15 +391,15 @@ setup_fail_rules()
- 		-p tcp \
- 		-m length --length 150:9999 \
- 		-m statistic --mode nth --packet 1 --every 99999 \
--		-j MARK --set-mark 42 || return ${ksft_skip}
-+		-j MARK --set-mark 42 || return ${KSFT_SKIP}
- 
--	tc -n $ns2 qdisc add dev ns2eth$i clsact || return ${ksft_skip}
-+	tc -n $ns2 qdisc add dev ns2eth$i clsact || return ${KSFT_SKIP}
- 	tc -n $ns2 filter add dev ns2eth$i egress \
- 		protocol ip prio 1000 \
- 		handle 42 fw \
- 		action pedit munge offset 148 u8 invert \
- 		pipe csum tcp \
--		index 100 || return ${ksft_skip}
-+		index 100 || return ${KSFT_SKIP}
- }
- 
- reset_with_fail()
-@@ -414,7 +413,7 @@ reset_with_fail()
- 	local rc=0
- 	setup_fail_rules "${@}" || rc=$?
- 
--	if [ ${rc} -eq ${ksft_skip} ]; then
-+	if [ ${rc} -eq ${KSFT_SKIP} ]; then
- 		mark_as_skipped "unable to set the 'fail' rules"
- 		return 1
- 	fi
-@@ -450,7 +449,7 @@ reset_with_tcp_filter()
- # $1: err msg
- fail_test()
- {
--	ret=1
-+	ret=${KSFT_FAIL}
- 
- 	if [ ${#} -gt 0 ]; then
- 		print_fail "${@}"
-@@ -3632,7 +3631,7 @@ usage()
- {
- 	if [ -n "${1}" ]; then
- 		echo "${1}"
--		ret=1
-+		ret=${KSFT_FAIL}
- 	fi
- 
- 	echo "mptcp_join usage:"
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-index 96aa8f71bbb0..e2d70c18786e 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-@@ -105,7 +105,7 @@ check_mark()
- 		if [ $v -ne 0 ]; then
- 			mptcp_lib_pr_fail "got $tables $values in ns $ns," \
- 					  "not 0 - not all expected packets marked"
--			ret=1
-+			ret=${KSFT_FAIL}
- 			return 1
- 		fi
- 	done
-@@ -178,7 +178,7 @@ do_transfer()
- 
- 		mptcp_lib_result_fail "transfer ${ip}"
- 
--		ret=1
-+		ret=${KSFT_FAIL}
- 		return 1
- 	fi
- 	if ! mptcp_lib_check_transfer $cin $sout "file received by server"; then
-diff --git a/tools/testing/selftests/net/mptcp/pm_netlink.sh b/tools/testing/selftests/net/mptcp/pm_netlink.sh
-index 69ffff8b076b..6ab8c5d36340 100755
---- a/tools/testing/selftests/net/mptcp/pm_netlink.sh
-+++ b/tools/testing/selftests/net/mptcp/pm_netlink.sh
-@@ -19,11 +19,11 @@ while getopts "$optstring" option;do
- 	case "$option" in
- 	"h")
- 		usage $0
--		exit 0
-+		exit ${KSFT_PASS}
- 		;;
- 	"?")
- 		usage $0
--		exit 1
-+		exit ${KSFT_FAIL}
- 		;;
- 	esac
- done
-@@ -57,13 +57,13 @@ check()
- 	mptcp_lib_check_output "${err}" "${cmd}" "${expected}" || rc=${?}
- 	if [ ${rc} -eq 2 ]; then
- 		mptcp_lib_result_fail "${msg} # error ${rc}"
--		ret=1
-+		ret=${KSFT_FAIL}
- 	elif [ ${rc} -eq 0 ]; then
- 		mptcp_lib_print_ok "[ OK ]"
- 		mptcp_lib_result_pass "${msg}"
- 	elif [ ${rc} -eq 1 ]; then
- 		mptcp_lib_result_fail "${msg} # different output"
--		ret=1
-+		ret=${KSFT_FAIL}
- 	fi
- }
- 
-diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
-index e62052c3206d..1b2366220388 100755
---- a/tools/testing/selftests/net/mptcp/simult_flows.sh
-+++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
-@@ -263,7 +263,7 @@ while getopts "bcdh" option;do
- 	case "$option" in
- 	"h")
- 		usage $0
--		exit 0
-+		exit ${KSFT_PASS}
- 		;;
- 	"b")
- 		bail=1
-@@ -276,7 +276,7 @@ while getopts "bcdh" option;do
- 		;;
- 	"?")
- 		usage $0
--		exit 1
-+		exit ${KSFT_FAIL}
- 		;;
- 	esac
- done
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 72dca742280f..9e2981f2d7f5 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -89,7 +89,7 @@ test_fail()
- 	then
- 		mptcp_lib_pr_fail "${@}"
- 	fi
--	ret=1
-+	ret=${KSFT_FAIL}
- 	mptcp_lib_result_fail "${test_name}"
- }
- 
-@@ -209,7 +209,7 @@ make_connection()
- 	else
- 		test_fail "Expected tokens (c:${client_token} - s:${server_token}) and server (c:${client_serverside} - s:${server_serverside})"
- 		mptcp_lib_result_print_all_tap
--		exit 1
-+		exit ${KSFT_FAIL}
- 	fi
- 
- 	if [ "$is_v6" = "v6" ]
-
--- 
-2.43.0
-
+>  
+>  /**
 
