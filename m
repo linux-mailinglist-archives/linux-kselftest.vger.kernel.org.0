@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-6128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABDCD876CE1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 23:14:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ED54876CE5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 23:14:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 647CF280FA9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 22:14:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E889D1F2251D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 22:14:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD183633EC;
-	Fri,  8 Mar 2024 22:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6000C64CC1;
+	Fri,  8 Mar 2024 22:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cHBK8uD5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZb5nU/9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F064633E9;
-	Fri,  8 Mar 2024 22:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3308E64AB6;
+	Fri,  8 Mar 2024 22:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709935861; cv=none; b=Tace2MQr4/gjijmJQtPNU1/eAb2/gE5eT3Os728xvwrGwfL2GUkwhrf7+W28R30h8bRIK5IzGaM3fsRYFpmnwatDPQEpel3mdrhuo4VMvQ4CeDg7nNRnlyeRlgnqt7Ax08mzROMF6fQ3yF1dO0LJpasS2On4VX6xGmSKIJQp//Q=
+	t=1709935865; cv=none; b=gIGyjk3eA2uqAHcqEsXiL4DigvgBRtUZsv96bNKHygJ03BLc0RSyBtE9TgoKLDASEUtArg0XQKqYYFGAB7antS5oy9wVKL2+BzrndINInTDhZdDH7M2SVHmZx3d5LdDOEZj4Wp/0vvawnbmjjuCLSLCxgdo1BZllCW4oC20Tv5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709935861; c=relaxed/simple;
-	bh=ST+FsQCbwuMBVVqFTYxSEcbjGdoTfeXer5gDUehfP2w=;
+	s=arc-20240116; t=1709935865; c=relaxed/simple;
+	bh=ZIYQB+KzyVVuQY99Ima/pHk8e/qhoSdaRzLvkUvByoE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nH6mS9fFN6yxKkSQXufqiSB2bxRh/kHa6b2dId/tH/aQEur/A+y5niqnk3qHWxbCXL+AIbdhBwPFTvWCZ6i4xXTvt56FEGNtzofHTlegRHZBYBRwQSIv5dFdqf8neUsaVPBbp5cjPdKgv0BySDwMqHwFTOfhjO1f3qEtlcboVGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cHBK8uD5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54791C433C7;
-	Fri,  8 Mar 2024 22:10:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Jyif2j3G70harHXs3e9D+N+u0Ny8JTNCFrVsFHbiR2k3+8+TR5iSxwCQxfa6WAiir7a1sG2lA01xmk9GwsslAmNePtLBOzaJO7ygtCnp7Is1BTn12W7t5jUS8GCR0sNUxUkcisQWqMpstcpjIQrc4mJ2keu1BnzAWV9S+TpAiwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZb5nU/9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3364C433A6;
+	Fri,  8 Mar 2024 22:11:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709935861;
-	bh=ST+FsQCbwuMBVVqFTYxSEcbjGdoTfeXer5gDUehfP2w=;
+	s=k20201202; t=1709935865;
+	bh=ZIYQB+KzyVVuQY99Ima/pHk8e/qhoSdaRzLvkUvByoE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=cHBK8uD5RQVSmQiXqxgriZwQ+W4QztrbfPeS0Lsz/G42EsU6GZO4ojRLfzzomuF5S
-	 vZN2EzL0QSzr5jNqfHUfqUL5pBJ4NUjQurCJcTec4fIjKtKPBMLfdEwj4/3/90ofhS
-	 /Ixc5UCaYxT8ia3ieG+tezzhT1FldqkqPtEiIEzI+rfRZPAazgDB2K/jZTA4kO7Se4
-	 iyDOwnayt20YoQWg5mZw2mvdH1esiV7Up0msTTq5ZTN56NKSMkSd5m5Gg0GV5yVRXe
-	 E04glOiIzjsSVI+7BeSba04K0Qe+Bezp0En2ZtQ++07CAoRktohJLT2ixl7FWxawUu
-	 FDmKdQDXI8MZg==
+	b=lZb5nU/9OrGHjO6k54vqrE46viLbAWBqhuSh9Bf8O5Twjjsnw9dNcUvjB7/Y19sZq
+	 UPa+Skse/uHx6SXuCljbxT1VqaRSXQU4Gc3U0AjpjCko4aFaurT3md/tDlD1dDAH6r
+	 9GNU2/jUoMv+yGYrlVtM8mOZn2p98JJBw+t9OSfqrp+/3HyPM01UpMmlJy4PvRH2FO
+	 DOGnu2fBgFdFs+iD0C+X8WiUUiTE4ARnKIKqP0HFl4FREOZzfJuFnSMh9CZOcdfGsm
+	 ztB6cVCF1nZlzyCegkwpNMX+rOyTH3BusoOfeBh3ExHTaScvXP7l1iuzh+BPBvpXMA
+	 lygEwEFS5GI7g==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 08 Mar 2024 23:10:18 +0100
-Subject: [PATCH net-next 11/15] selftests: mptcp: extract
- mptcp_lib_check_expected
+Date: Fri, 08 Mar 2024 23:10:19 +0100
+Subject: [PATCH net-next 12/15] selftests: mptcp: print_test out of
+ verify_listener_events
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-11-4f42c347b653@kernel.org>
+Message-Id: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-12-4f42c347b653@kernel.org>
 References: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
 In-Reply-To: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,130 +64,70 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2950; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=HA9w5Ex3KPLfxV6h/+RxCQzHWGG3h+xZEiImAvFkmnk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBl64zJzChePs7yPb47ACIKF+toQ/i0dKUzsUcQi
- WbI28q2IamJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeuMyQAKCRD2t4JPQmmg
- c+FID/9LJigb2kitVlzLdDfNjOyz0zc3g5gLVt68PKE4Lhux4/PhPorepxHQII1OnKIg4KvDSLj
- 0arLS6vh/0T5EgB80jk25NTVUBFweWH62QaslhoBppNqNeWFO9KrVRemyAIwTxJaohJ4ChINxdb
- ChPA1I+8e6eD1+FB8FxN5OUtNgAFF3VZDqsT0gTpt58+xfSMlfzp5YOf1vqrduBEVkjmsLM91hY
- u7Um3GLGcCJ2XO1PE9nteaVasfSxyzwFdeyegoTDD3MNud2+6+dREPe1w9ycLRAM+OioA2vbBOh
- FzyE8C1Ib+dV5+ZMYXdqDrR1muWFZGkXTa1Eu4IkEIIjfsns2ZhFk3JZ0MlaqBhBjqX+2UZlVXi
- cLh2SIybFRe+1R4CE1H2EJpLTZerauqNdFvYCKsg0k9MubxNrhuXT1mHvmq/b8qpLIba6ogarUk
- C3k2AL8uIGjWNvP2PfGaalmWE5cbMpBT4cO+2GzMnciDj9V5ubfJh3xLKfu5QM06RJPaC5A4QJ5
- Q2ydE+fa3ei/oarEWyzt3heSeG+7if9dEQc8MleS/H16WnMqg8QTPcMHWO5jwqK/acdq3e8gPLs
- SkOM9kzSpbVqT6PJZFkTHNRna9VnwTurd4nVwyUCeVQPQnK2h72ce2egmxiarRDhDArWSwqQrcP
- 5XGh+ndGM3PYKTA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1806; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=p0AphtGjcDw+iiDKBH/TekIuR6JxnoGE+w4YmACLQaY=;
+ b=owEBawKU/ZANAwAIAfa3gk9CaaBzAcsmYgBl64zJNNdI9bL+Lp4gaXO54fqB3FpDQM2Em4sAH
+ /fwxSeu1nmJAjEEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZeuMyQAKCRD2t4JPQmmg
+ c4NJD+0a4wVzQzMtGhDUW/8Wuf1sf8M+bsbE9NO7RfuKtZigCLLPKwAWCJVJQtsp7HRTbwM7ASa
+ ZLpDXDcOZDTUGbLntA+mN2DgnsVT0tZcDnVUNawjT9tQ5H04ZUBxxaIzDTBrAWres+iJHbk4J3d
+ V5lZsfF7R3Uhz87xZCp7VDoxYwoYyb/RqPxtQrC4Q7TxA0o73+wD+Ri0Hl5FJYApyPDVNbWj1gB
+ yLYVhnWcyWgvjmLW+VzKVEQFfcBLIFILFyn8g9/LYm1AoXq9KUVcVeb0vjNO8SiruBsXRrVqec5
+ rupMLOYAFpNl3THAlaVen2f7B1FSx/Fft544J/XtxENCciSjrwVBLJzcKleftnc6VSzCcKBbDIS
+ 9EDPIv9g+lyXK3DMJlSUFb5ULsh1zCpWIV+JM3pmX1vIfhLcbcOdr2V3xi8gRXDYIFu0+Amnohc
+ snpHq4vko1Y2urO5jj/tXiXz7RtL/HxR0Ozj3P8q9Yk9atIAWKhrG6EWMLJrLScg3YHg/WbT9U1
+ qyZCU0/ppkpXkFocbMKoVwJqPg5b+5Mtus0iBip++DJfszM+CumwhcAQf1oCqRL+MBayT4c3Dan
+ GgVC2oaGF8H3xf7KxBc4y30c57TAQ6mkD4erHrl0USDSKYD8wbjLE5OUZdNcGVQj6D0zwP/9RGy
+ 8HYf77bJVkfg=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Extract the main part of check_expected() in userspace_pm.sh to a new
-function mptcp_lib_check_expected() in mptcp_lib.sh. It will be used
-in both mptcp_john.sh and userspace_pm.sh. check_expected_one() is
-moved into mptcp_lib.sh too as mptcp_lib_check_expected_one().
+verify_listener_events() helper will be exported into mptcp_lib.sh as a
+public function, but print_test() is invoked in it, which is a private
+function in userspace_pm.sh only. So this patch moves print_test() out of
+verify_listener_events().
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_lib.sh    | 30 +++++++++++++++++++++
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 33 ++---------------------
- 2 files changed, 32 insertions(+), 31 deletions(-)
+ tools/testing/selftests/net/mptcp/userspace_pm.sh | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index ea39392c68e7..44491f18ed17 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -438,3 +438,33 @@ mptcp_lib_print_title() {
- 	# shellcheck disable=SC2059 # the format is in a variable
- 	printf "${MPTCP_LIB_TEST_FORMAT}" "$((++MPTCP_LIB_TEST_COUNTER))" "${*}"
- }
-+
-+# $1: var name ; $2: prev ret
-+mptcp_lib_check_expected_one() {
-+	local var="${1}"
-+	local exp="e_${var}"
-+	local prev_ret="${2}"
-+
-+	if [ "${!var}" = "${!exp}" ]; then
-+		return 0
-+	fi
-+
-+	if [ "${prev_ret}" = "0" ]; then
-+		mptcp_lib_pr_fail
-+	fi
-+
-+	mptcp_lib_print_err "Expected value for '${var}': '${!exp}', got '${!var}'."
-+	return 1
-+}
-+
-+# $@: all var names to check
-+mptcp_lib_check_expected() {
-+	local rc=0
-+	local var
-+
-+	for var in "${@}"; do
-+		mptcp_lib_check_expected_one "${var}" "${rc}" || rc=1
-+	done
-+
-+	return "${rc}"
-+}
 diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index bc2f0184b1eb..6d0862a1b68d 100755
+index 6d0862a1b68d..e9aea44edee5 100755
 --- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
 +++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -5,7 +5,7 @@
- # code but we accept it.
- #shellcheck disable=SC2086
+@@ -845,12 +845,6 @@ verify_listener_events()
+ 	local saddr
+ 	local sport
  
--# Some variables are used below but indirectly, see check_expected_one()
-+# Some variables are used below but indirectly, see verify_*_event()
- #shellcheck disable=SC2034
+-	if [ $e_type = $LISTENER_CREATED ]; then
+-		print_test "CREATE_LISTENER $e_saddr:$e_sport"
+-	elif [ $e_type = $LISTENER_CLOSED ]; then
+-		print_test "CLOSE_LISTENER $e_saddr:$e_sport"
+-	fi
+-
+ 	type=$(mptcp_lib_evts_get_info type $evt $e_type)
+ 	family=$(mptcp_lib_evts_get_info family $evt $e_type)
+ 	sport=$(mptcp_lib_evts_get_info sport $evt $e_type)
+@@ -882,6 +876,7 @@ test_listener()
+ 	local listener_pid=$!
  
- . "$(dirname "${0}")/mptcp_lib.sh"
-@@ -228,39 +228,10 @@ make_connection()
- 	fi
+ 	sleep 0.5
++	print_test "CREATE_LISTENER 10.0.2.2:$client4_port"
+ 	verify_listener_events $client_evts $LISTENER_CREATED $AF_INET 10.0.2.2 $client4_port
+ 
+ 	# ADD_ADDR from client to server machine reusing the subflow port
+@@ -898,6 +893,7 @@ test_listener()
+ 	mptcp_lib_kill_wait $listener_pid
+ 
+ 	sleep 0.5
++	print_test "CLOSE_LISTENER 10.0.2.2:$client4_port"
+ 	verify_listener_events $client_evts $LISTENER_CLOSED $AF_INET 10.0.2.2 $client4_port
  }
  
--# $1: var name ; $2: prev ret
--check_expected_one()
--{
--	local var="${1}"
--	local exp="e_${var}"
--	local prev_ret="${2}"
--
--	if [ "${!var}" = "${!exp}" ]
--	then
--		return 0
--	fi
--
--	if [ "${prev_ret}" = "0" ]
--	then
--		mptcp_lib_pr_fail
--	fi
--
--	mptcp_lib_print_err "\tExpected value for '${var}': '${!exp}', got '${!var}'."
--	return 1
--}
--
- # $@: all var names to check
- check_expected()
- {
--	local rc=0
--	local var
--
--	for var in "${@}"
--	do
--		check_expected_one "${var}" "${rc}" || rc=1
--	done
--
--	if [ ${rc} -eq 0 ]
-+	if mptcp_lib_check_expected "${@}"
- 	then
- 		test_pass
- 		return 0
 
 -- 
 2.43.0
