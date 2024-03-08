@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-6104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA7E87653E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 14:26:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D74B0876541
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 14:26:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B2571C2128D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 13:26:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFC41F243BC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 13:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4566B381AB;
-	Fri,  8 Mar 2024 13:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A423FBA9;
+	Fri,  8 Mar 2024 13:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PEdPs6pW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LzMKS+pv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EAC5916F;
-	Fri,  8 Mar 2024 13:25:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2097381AD;
+	Fri,  8 Mar 2024 13:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709904302; cv=none; b=CmAQC2oALc7Wy4vgGWTYi941efxCGRM/P/CQpkVnMUf78udl3Xr5kGxqbB2j3baNCJiKar8nTPxzVCL0tmU7aNA7+NHs3mlHezh0ATOEOsMp405tV8k8WjZY8PfqJRSPO+I3ukaG6MZUMh/Lif4+H2X4L1PXhMrqAydIz5yXD+U=
+	t=1709904310; cv=none; b=PVjoytbCQGP1cd+yRk5Pd/qRhualFceSyxIBiUqM2Zp3udO17AC4Mev7H1aK/IGac/QhEiJNg5zcpBxRQCeSHOYBm4KA2Zg8v7SJe1Jo+QltokENVJDZZb/fJUtUUOgn6pft7QgBGoj4gUbEDhmde0x4uPTjg6gx0sPHMoehPjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709904302; c=relaxed/simple;
-	bh=x3DnjlQUVlSAxB3VKBoysXSz9oqAtOIM0lwfgLDTlME=;
+	s=arc-20240116; t=1709904310; c=relaxed/simple;
+	bh=QABV4KwIXB/01KtAqTeTOsyRjq1X1PQG9cF1D4CCei4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eHN/tLhL5zIxLptN0lTcK4a538hEC8WB0sT/XOorNzda6+354QIz7orKyShE0YXk4012EX6qb8RMNeHMwnWyQC1rA+3woGbp1fQafFVVp53/UOuFx6M4TFVhlMwu9uvh+gB8IgbuPNUBUfzCc9/QtHKLkmmqtLm804BrfaPM3RI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PEdPs6pW; arc=none smtp.client-ip=192.198.163.12
+	 MIME-Version:Content-Type; b=m1MLesj9mZzVw9rmoFP+gf6ZDwFtRtIlJric5fc/mEitnGirFSKSbduPvA29EiRmH9r6LyBGuOBRGd0V4Cs1o3ahNSQkLeIfepNEkS0QBiU83+FVSsFIM+7ZOGZHlINQsy8+gFUoXt47nds4NSrWgFgjTrr/dX2+U2k2b+Je7kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LzMKS+pv; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709904300; x=1741440300;
+  t=1709904309; x=1741440309;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=x3DnjlQUVlSAxB3VKBoysXSz9oqAtOIM0lwfgLDTlME=;
-  b=PEdPs6pWXoEPmiwdcDU1dXXL3wjms+GmUeH5+Clev3+7zLxlhPOK+yRI
-   DIzwMTjYIou+/ga3E0AlkOXWpGxBFXlOfiwpGLTdQN2XUYsXr7bzV8IYI
-   US+mvlA+COvKdA8i1watWhLe43jVbDDJ8lWXzrdWVMulhqMVsqqxl3igT
-   o/lxmkKe36GqZ/hh+aVpuo3OGwhJ4oqzILHjxdrFzGRor294/hYd+Ibhn
-   JIPoKNx4AXnLb5ZzeFjZ76s5/g5BTo0PXNR20h9nv0MHrNBSIe23uhmwg
-   WHzeCpmepiBLWPzplB5RBGhS6W29yY+CdnheFxPX1ypgUwLvEWeDa87Or
+  bh=QABV4KwIXB/01KtAqTeTOsyRjq1X1PQG9cF1D4CCei4=;
+  b=LzMKS+pvQIGrpP6DEVUoO+XqLbgY6E6BQE/hNXWHHEtjbUxOtgUUAVPz
+   O1dkue3c+f9F+Ex1d9ka0OjOg2+CkUKeSdm9a6A6yh0/pqlruQ+RpKnZI
+   jUXyL5tdDJEFLLZkM3cJYA2veMKJUoYgMQzN8JtzVbUFzm+VOGaan7BhH
+   YMv8ySD68OJJ4TtkrS4VTXF/7GoE6gDIPO6JMvu2j7gBkikUQevATkBoY
+   A3YY7VMxcOpxG+O0UKNtaX21uWW5gWB2UHjVJHCcNg38l74gP/0NDyn7U
+   flCkd91yG4/vUZn+BXIk5swGHXW6Pu4Umfd86APsol7JfVZrGiy47b5yo
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="8375238"
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="8375250"
 X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="8375238"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:25:00 -0800
+   d="scan'208";a="8375250"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:25:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="10472795"
+   d="scan'208";a="41394728"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.186])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:24:56 -0800
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:25:05 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -63,9 +63,9 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>,
 	linux-kernel@vger.kernel.org
 Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 11/13] selftests/resctrl: Convert ctrlgrp & mongrp to pointers
-Date: Fri,  8 Mar 2024 15:22:53 +0200
-Message-Id: <20240308132255.14442-12-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 12/13] selftests/resctrl: Remove mongrp from MBA test
+Date: Fri,  8 Mar 2024 15:22:54 +0200
+Message-Id: <20240308132255.14442-13-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240308132255.14442-1-ilpo.jarvinen@linux.intel.com>
 References: <20240308132255.14442-1-ilpo.jarvinen@linux.intel.com>
@@ -78,74 +78,29 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The struct resctrl_val_param has control and monitor groups as char
-arrays but they are not supposed to be mutated within resctrl_val().
+Nothing during MBA test uses mongrp even if it has been defined ever
+since the introduction of the MBA test in the commit 01fee6b4d1f9
+("selftests/resctrl: Add MBA test").
 
-Convert the ctrlgrp and mongrp char array within resctrl_val_param to
-plain const char pointers and adjust the strlen() based checks to
-check NULL instead.
+Remove the mongrp from MBA test.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl.h   | 4 ++--
- tools/testing/selftests/resctrl/resctrlfs.c | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 3ccca8556aa7..f6a77139d1c0 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -86,8 +86,8 @@ struct resctrl_test {
-  */
- struct resctrl_val_param {
- 	char		*resctrl_val;
--	char		ctrlgrp[64];
--	char		mongrp[64];
-+	const char	*ctrlgrp;
-+	const char	*mongrp;
- 	char		filename[64];
- 	unsigned long	mask;
- 	int		num_of_runs;
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index e01044194ddd..597150e4056e 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -433,7 +433,7 @@ static int create_grp(const char *grp_name, char *grp, const char *parent_grp)
- 	 * length of grp_name == 0, it means, user wants to use root con_mon
- 	 * grp, so do nothing
- 	 */
--	if (strlen(grp_name) == 0)
-+	if (!grp_name)
- 		return 0;
- 
- 	/* Check if requested grp exists or not */
-@@ -505,7 +505,7 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
- 	char tasks[1024];
- 	int ret = 0;
- 
--	if (strlen(ctrlgrp))
-+	if (ctrlgrp)
- 		sprintf(controlgroup, "%s/%s", RESCTRL_PATH, ctrlgrp);
- 	else
- 		sprintf(controlgroup, "%s", RESCTRL_PATH);
-@@ -522,7 +522,7 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
- 	/* Create mon grp and write pid into it for "mbm" and "cmt" test */
- 	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)) ||
- 	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
--		if (strlen(mongrp)) {
-+		if (mongrp) {
- 			sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
- 			sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
- 			ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
-@@ -576,7 +576,7 @@ int write_schemata(const char *ctrlgrp, char *schemata, int cpu_no,
- 		goto out;
- 	}
- 
--	if (strlen(ctrlgrp) != 0)
-+	if (ctrlgrp)
- 		sprintf(controlgroup, "%s/%s/schemata", RESCTRL_PATH, ctrlgrp);
- 	else
- 		sprintf(controlgroup, "%s/schemata", RESCTRL_PATH);
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index b5f76aa192eb..ea024bf8088d 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -174,7 +174,6 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+ 	struct resctrl_val_param param = {
+ 		.resctrl_val	= MBA_STR,
+ 		.ctrlgrp	= "c1",
+-		.mongrp		= "m1",
+ 		.filename	= RESULT_FILE_NAME,
+ 		.init		= set_mba_path,
+ 		.setup		= mba_setup,
 -- 
 2.39.2
 
