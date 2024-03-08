@@ -1,71 +1,74 @@
-Return-Path: <linux-kselftest+bounces-6093-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6094-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FD2E876514
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 14:23:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A494D876516
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 14:23:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A63C11F213E4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 13:23:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D68B91C21E1D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Mar 2024 13:23:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E82F2209E;
-	Fri,  8 Mar 2024 13:23:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C36C219FC;
+	Fri,  8 Mar 2024 13:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AraYN6oc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RCkr+vjX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D82A256D;
-	Fri,  8 Mar 2024 13:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BCA1EEE9;
+	Fri,  8 Mar 2024 13:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709904200; cv=none; b=cliyLGAfmcs+iDuQJQ2PfWsMYJ5N627TnchISEMS8PL8/QaPYGdDfVXDZk91ngo6pFLkuSQFlpuEa5x+KCEVv175/wmMXowMSeKFJ3Rjr4uyo8UBYbx9ZfqkdRqu8odmgWRZ2A+IqjiduzGWOprfWRKYxA6wERGnPecawvhsffQ=
+	t=1709904213; cv=none; b=IDyixEE9EvP1yfpRvz8jORADh/jO6m/WwLEkDjkFHOCJtEarpE8aFTMz0cjP6FU0Z+yDAC1BsKnxLgbw4arorBDoP1alqVoZbxexIZJwDsc+nTs3XqvfnF6y6Nv5nbfcn2ZIGM/gjXg/KN/MXGY9Sd1dn+mNlVYPlijDAjmZSik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709904200; c=relaxed/simple;
-	bh=VDlo6QyC8WPJ+nIOkUcxD/O95WbBhi8FFuUJ57pGDCU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=N3n4I8mcnH9zyjmxvaclhwT3ZHQq1/M2uzdm2azeqNclnLOpyHUPeWOmXZYQpOkEojrpX1N76NiOA0tKbEionR3ojao+DylC+v0TY/I54CR4We2NXa9JhzgRGhD4S168LNNCgBwRgIOdCyOgLabP17x7g9Nt6ESjlBEAIP4p/Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AraYN6oc; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1709904213; c=relaxed/simple;
+	bh=bHwKVL1u0+Vdw8KGQFEU4SKrjknuufMsPWFSJoS9tHg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sIOoyhJzLS+fnzjz6QMTOvM4hgHIby9X0HZULfumT5opOBMY3vXgerXFShSC9HAeCZUQ8bejgxm7r7+58n+W6xrBubT4zI8UNZ4e2169WBQU4CbYl/s0i383JDLUh25iL/Nzrxsj6ySUr7LAvToBKHx39O52kOXoMjFNtEbQnTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RCkr+vjX; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709904198; x=1741440198;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VDlo6QyC8WPJ+nIOkUcxD/O95WbBhi8FFuUJ57pGDCU=;
-  b=AraYN6ocpNBwj6msqsdH3YyhhUIa1TV4pxASSzXHZGIZ+zYyTS8w/e4/
-   /7cfd92AxmCIJCcBClUqYf+f6NG54F5bILfaH3l64rmuGExVCoCKHzQF/
-   fghYAY/KGKAy65f5BxtydTi1BbUnpLDVJrg3HHypMSUZ9SExRa/c4dMiA
-   rN5tfhMzMK58dyNnUVKD01pclRx25m203f3rxK/nmzAp8D9RQIIlC6CkL
-   pxpVh9K9QECLEXTIbXCLfs70AoioUUbzuXUtokdIlI9oEG4WGQ+Br7rnJ
-   aWivXEdd++TZuk6Nsq3PMs/1niZdBckIOnuqD9v7ACYSmfTmNXazr4gTw
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="7568390"
+  t=1709904211; x=1741440211;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bHwKVL1u0+Vdw8KGQFEU4SKrjknuufMsPWFSJoS9tHg=;
+  b=RCkr+vjX/CYm1DQXKAK0lSXz/nLm7HXwOA65x753ITvXDhEtCH1FXZCd
+   MwFAUni/1Nn32lJ8sAZc+Pp81Kf0EsbaNmLKeV8oS/0NX8ws87hBadTJi
+   UaCpLUozZ/OEtyr3YPb/OvRzPUm/51bQqksRESVTpjCmaW+hrqJtPhYEe
+   APpxoZX3MKt6zMgNpgRqccRBEQwkq54fgndLggs5oPVY48z7CYxxofJf7
+   PaSVymGZIAp1mjKqw2sVjUVrmKqOrq7AsK7KKQpP8p4H+XBnqBZ6DPrVl
+   x3wwq41eJng/OdMQLiLpsIVO71z+I9bBVRakLhchKHQtQtwZ/kXRfFbdF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="22147507"
 X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="7568390"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:23:15 -0800
+   d="scan'208";a="22147507"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:23:25 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="47927911"
+   d="scan'208";a="15137146"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.186])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:23:12 -0800
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:23:22 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Babu Moger <babu.moger@amd.com>,
-	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 00/13] selftests/resctrl: resctrl_val() related cleanups & improvements
-Date: Fri,  8 Mar 2024 15:22:42 +0200
-Message-Id: <20240308132255.14442-1-ilpo.jarvinen@linux.intel.com>
+	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	linux-kernel@vger.kernel.org
+Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 01/13] selftests/resctrl: Convert get_mem_bw_imc() fd close to for loop
+Date: Fri,  8 Mar 2024 15:22:43 +0200
+Message-Id: <20240308132255.14442-2-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240308132255.14442-1-ilpo.jarvinen@linux.intel.com>
+References: <20240308132255.14442-1-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,57 +78,35 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+The open() side handles fds in a for loop but close() is based on two
+fixed indexes READ and WRITE.
 
-This series does a number of cleanups into resctrl_val() and
-generalizes it by removing test name specific handling from the
-function.
+Match the close() side with the open() side by using for loop for
+consistency.
 
-One of the changes improves MBA/MBM measurement by narrowing down the
-period the resctrl FS derived memory bandwidth numbers are measured
-over. My feel is it didn't cause noticeable difference into the numbers
-because they're generally good anyway except for the small number of
-outliers. To see the impact on outliers, I'd need to setup a test to
-run large number of replications and do a statistical analysis, which
-I've not spent my time on. Even without the statistical analysis, the
-new way to measure seems obviously better and makes sense even if I
-cannot see a major improvement with the setup I'm using.
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ tools/testing/selftests/resctrl/resctrl_val.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-This series has some conflicts with SNC series from Maciej and also
-with the MBA/MBM series from Babu.
-
---
- i.
-
-Ilpo Järvinen (13):
-  selftests/resctrl: Convert get_mem_bw_imc() fd close to for loop
-  selftests/resctrl: Calculate resctrl FS derived mem bw over sleep(1)
-    only
-  selftests/resctrl: Consolidate get_domain_id() into resctrl_val()
-  selftests/resctrl: Use correct type for pids
-  selftests/resctrl: Cleanup bm_pid and ppid usage & limit scope
-  selftests/resctrl: Rename measure_vals() to measure_mem_bw_vals() &
-    document
-  selftests/resctrl: Add ->measure() callback to resctrl_val_param
-  selftests/resctrl: Add ->init() callback into resctrl_val_param
-  selftests/resctrl: Simplify bandwidth report type handling
-  selftests/resctrl: Make some strings passed to resctrlfs functions
-    const
-  selftests/resctrl: Convert ctrlgrp & mongrp to pointers
-  selftests/resctrl: Remove mongrp from MBA test
-  selftests/resctrl: Remove test name comparing from
-    write_bm_pid_to_resctrl()
-
- tools/testing/selftests/resctrl/cache.c       |   6 +-
- tools/testing/selftests/resctrl/cat_test.c    |   5 +-
- tools/testing/selftests/resctrl/cmt_test.c    |  21 +-
- tools/testing/selftests/resctrl/mba_test.c    |  34 ++-
- tools/testing/selftests/resctrl/mbm_test.c    |  33 ++-
- tools/testing/selftests/resctrl/resctrl.h     |  48 ++--
- tools/testing/selftests/resctrl/resctrl_val.c | 269 ++++++------------
- tools/testing/selftests/resctrl/resctrlfs.c   |  55 ++--
- 8 files changed, 224 insertions(+), 247 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 5a49f07a6c85..36139cba7be8 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -368,10 +368,9 @@ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
+ 		writes += w->return_value.value * of_mul_write * SCALE;
+ 	}
+ 
+-	for (imc = 0; imc < imcs; imc++) {
+-		close(imc_counters_config[imc][READ].fd);
+-		close(imc_counters_config[imc][WRITE].fd);
+-	}
++	for (imc = 0; imc < imcs; imc++)
++		for (j = 0; j < 2; j++)
++			close(imc_counters_config[imc][j].fd);
+ 
+ 	if (strcmp(bw_report, "reads") == 0) {
+ 		*bw_imc = reads;
 -- 
 2.39.2
 
