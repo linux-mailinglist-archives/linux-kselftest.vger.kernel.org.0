@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-6137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F161B87719B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Mar 2024 15:25:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F15EC8771A0
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Mar 2024 15:29:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5B02281BA4
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Mar 2024 14:25:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCA71B20CD5
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Mar 2024 14:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BC354436B;
-	Sat,  9 Mar 2024 14:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87E840869;
+	Sat,  9 Mar 2024 14:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="IPR+SSJk";
-	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="iVvx3FEj"
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="v/CGk8qZ";
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="ItXgBku6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC1940878;
-	Sat,  9 Mar 2024 14:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FAA1E498;
+	Sat,  9 Mar 2024 14:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.53.235.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709994313; cv=none; b=kX96wxeatoAkaPymav6xeO5BEiStehOWV0E/J6P3pDIt6s6j0uQBvWi7zs9k8dDtO/xSZF+7O6dOqG3RG9J6K+6xTNTlDLzsiq09EcfJTkCm2Sbpq0Y1a1FUsh1PBxKIG+680CGeexJYquT0j1N+7OTBLk9LAUVvlMC1pUop+AE=
+	t=1709994587; cv=none; b=JvcZO8PVt7WF7WKP8K86EQ88rEuHpNVuv0gTYCK2HtMuFwL7ahUXczTiKMRHA88fd6jf2Rhoc9ZHRJmojF5S4s1zbBcANLy73khY9tV52A9PqeFybr2qcwW4AN0TIiTBBOUO7BSLn2hfktMp3lhn0+eLsfRSfEVn31MhveZh3zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709994313; c=relaxed/simple;
-	bh=iWj34sjzo6IYnYFwenWG7FCvbM9RDs7toJvPBK1qmCY=;
+	s=arc-20240116; t=1709994587; c=relaxed/simple;
+	bh=wTj/Z/kBhcFhDz57sChY8g+8iv5HKc19ElDHM2opLEo=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Jv68UMCOLZnL10ltAi4O54xwhcY5l9/CFgyi2WgDZiTIUfXqVH4SS3gJznhvE4qM3YWZq1a+CkgpurpIDeXttNSVJWxAgGfIQxy4T0uAWzNHHUpXPj0vpgTYUrzvNEXeEIfkONDH09ytYXVcLcw0AXbZUfA0KfX1+vjChSeFxLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr; spf=pass smtp.mailfrom=alu.unizg.hr; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=IPR+SSJk; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=iVvx3FEj; arc=none smtp.client-ip=161.53.235.3
+	 In-Reply-To:Content-Type; b=uN601bnkhLVh+8nEjkBHOqxgCsuA0f50lrxdfX/G57F/6lX+ANjUv7+D0WCxlxw/c74Wr1ORw65BgtGKSOxAXnlY1uZKX9Dt1m8JFOaLDYiK1rBFASZM42iSHVMVwITACoSFJk24x52L91v9NPkRUCCBDSQ0jv5GR/ethuOtCsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr; spf=pass smtp.mailfrom=alu.unizg.hr; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=v/CGk8qZ; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=ItXgBku6; arc=none smtp.client-ip=161.53.235.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alu.unizg.hr
 Received: from localhost (localhost [127.0.0.1])
-	by domac.alu.hr (Postfix) with ESMTP id 7AF6F601A1;
-	Sat,  9 Mar 2024 15:25:05 +0100 (CET)
+	by domac.alu.hr (Postfix) with ESMTP id 66472601A1;
+	Sat,  9 Mar 2024 15:29:42 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1709994305; bh=iWj34sjzo6IYnYFwenWG7FCvbM9RDs7toJvPBK1qmCY=;
+	t=1709994582; bh=wTj/Z/kBhcFhDz57sChY8g+8iv5HKc19ElDHM2opLEo=;
 	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=IPR+SSJkNiyj2/zrycd1bmvtcacuNyPxUpJlSaPTuMkagZtoSgnOD1nW+s9uQHtyf
-	 FeDnd1ahEGbfPMqOZeWwI4DThipDYaweLx/NX0J8lbx4l3STXfe88JEaINMUIcmOMc
-	 qHmATciQz9/ndaeoBoc0Lnsuf08e1XUnbAyjZcDvFEo77rhnU1kWiMNM8mJuaWgMtJ
-	 cy7/41pgP3oSYaKzgxofBLkLHCAM81TXt1VlC2ZHW0NItNrT+HM0vU2AxMdRDb6eky
-	 MLygKZoYx9wtqvw4nsCPB192KvNKZdLII+TJk34hFTfIO4zV2ZxV52cDFbXe21Wc5U
-	 jHxoRRIHULl2w==
+	b=v/CGk8qZOF7jy8cvN7DK8qR0QUFeRjmj6UJRVyyIzyyRhhS12xbD/ShamJlmfrXmA
+	 i8t4DRVVbxTw6zt+p1s6grJ4aCizm/yDk52oBsDI+sD782ajMgXaGfaBrJQiEeiD9E
+	 WDUW09wYKetyoBR77nLxOb5nBq/XxZcUS3t58IFEF0vzV9uH7d4oekQizXn/VfbL21
+	 lkYl0ouIuERoH8j1XTd1NTReiCEG5zIX+Egf5slcGoiX+5AY6T3UDzbu2BsxTgnCA0
+	 c+sE9Kaz/srJ8RIU2wkRMAvehaCANH79pzyu8vT2CrWR8OZ0aodnaWBppPGb+eO9Cw
+	 84m4qFq9OGE5g==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
 	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1SZs1EMjTPbz; Sat,  9 Mar 2024 15:25:03 +0100 (CET)
+	with ESMTP id GhwdfwEdLrrI; Sat,  9 Mar 2024 15:29:40 +0100 (CET)
 Received: from [192.168.178.20] (dh207-40-27.xnet.hr [88.207.40.27])
-	by domac.alu.hr (Postfix) with ESMTPSA id 5CDFA60189;
-	Sat,  9 Mar 2024 15:25:03 +0100 (CET)
+	by domac.alu.hr (Postfix) with ESMTPSA id 422E960189;
+	Sat,  9 Mar 2024 15:29:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1709994303; bh=iWj34sjzo6IYnYFwenWG7FCvbM9RDs7toJvPBK1qmCY=;
+	t=1709994580; bh=wTj/Z/kBhcFhDz57sChY8g+8iv5HKc19ElDHM2opLEo=;
 	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=iVvx3FEj7/ZfdSyxpFZilLVdjIo/FwQmbqcCQVJ0aKtz+mZueSqiiAoRX9R0QjTgx
-	 +nNOCJstDu9mzI3sDK+Tp9W7mZu9qyviG4jV+kZr1uNpGk7Jr8yHZ6zDwCylq819va
-	 rzvg5BEZHadtzBELVWXM31vjth3MuhU7eC9Rhfw4Gx3CeUi1xeRyZ84ocEuaeBcacO
-	 MLO5LqV9L5tC9sv6I8TBPBh9D7LGD+BF9a8QBe87VuSH23dWLM7Y3u3JPMq+YcTSip
-	 +um9cnZ+iI2s3hftONCbrnrTrey5cW3u8k4BaN4/J0THyrMcxTqMFsnffujEmaoYqz
-	 aoqW+ds1L73hg==
-Message-ID: <877426e1-fc7e-467f-944c-9d6c450f11dd@alu.unizg.hr>
-Date: Sat, 9 Mar 2024 15:25:02 +0100
+	b=ItXgBku63zr7NJpWQIPH3qsO4neoLIzw/bn5z3H1KX38+u97fwQm3J0WwUDU8mg+y
+	 1lrAyO23Z2pC5ZGSinrRyaC8EljTdysYEcV7ofmWZmNlUNH3Vqczql0wNpdNrP4qKd
+	 bTwg4RLyp1/o65tO7NMBoMxVVXrgPP3LKbmFjHwfFzBlnYDAhSFqqeV04EZWQGXkA6
+	 EGH5YlkF+YjogAnCp3Jx51VBbACJa5S7RBu/uTzxcx8tQZD9/Kr7p4zfrPiUaepNXt
+	 dLJibQBdCdQAKC+ktAoZDlricdE3vgtDte8mtFVCMQSTVL24DR9HUdcs66h/31oD3x
+	 358SvLl0IqQdA==
+Message-ID: <c6aab6b2-79a7-456c-b640-1ba175b05a87@alu.unizg.hr>
+Date: Sat, 9 Mar 2024 15:29:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,29 +81,16 @@ In-Reply-To: <e2ba3f8c-80e6-477d-9cea-1c9af820e0ed@alu.unizg.hr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+P.S.
 
-There seems to be some additional insight.
+Please consider this additional dmesg diagnostics possibly coinciding with the kill -KILL <stale pids>:
 
-Trying to kill the processes so the testsuite might hopefully continue, this was
-the result: unkillable (-SIGKILL) processes, which can also not be traced with
-strace, and neither the selftest suite continued.
-
-root     1000955    2931  0 01:05 pts/2    00:00:00 ./pidfd_setns_test
-root     1000956 1000955 99 01:05 pts/2    14:09:03 [pidfd_setns_tes] <defunct>
-root     1037946 1005609  0 15:19 pts/3    00:00:00 grep --color=auto pidfd_setns_tes
-root@defiant:/home/marvin/linux/kernel/net-next# strace -p 1000955
-strace: Could not attach to process. If your uid matches the uid of the target process, check the setting of /proc/sys/kernel/yama/ptrace_scope, or try again as the root user. For more details, see /etc/sysctl.d/10-ptrace.conf: Operation not permitted
-strace: attach: ptrace(PTRACE_SEIZE, 1000955): Operation not permitted
-root@defiant:/home/marvin/linux/kernel/net-next# strace -p 1000956
-strace: Could not attach to process. If your uid matches the uid of the target process, check the setting of /proc/sys/kernel/yama/ptrace_scope, or try again as the root user. For more details, see /etc/sysctl.d/10-ptrace.conf: Operation not permitted
-strace: attach: ptrace(PTRACE_SEIZE, 1000956): Operation not permitted
-root@defiant:/home/marvin/linux/kernel/net-next#
-
-Hope this helps.
-
-It would be very interesting to see now what exactly eats 99% of a CPU core, but
-I am not enough technologically savvy for this task ATM.
+[Sat Mar  9 15:18:05 2024] proc-empty-vm[1007004] vsyscall read attempt denied -- look up the vsyscall kernel parameter if you need a workaround ip:5a0754238702 cs:33 sp:7ffed57b6ec0 ax:0 si:0 di:0
+[Sat Mar  9 15:18:06 2024] proc-pid-vm[1007025] vsyscall read attempt denied -- look up the vsyscall kernel parameter if you need a workaround ip:5cf038710e22 cs:33 sp:7ffc3cc4ee60 ax:0 si:0 di:0
+[Sat Mar  9 15:18:08 2024] ICMPv6: process `read' is using deprecated sysctl (syscall) net.ipv6.neigh.default.base_reachable_time - use net.ipv6.neigh.default.base_reachable_time_ms instead
+[Sat Mar  9 15:18:09 2024] sysrq: HELP : loglevel(0-9) reboot(b) crash(c) terminate-all-tasks(e) memory-full-oom-kill(f) kill-all-tasks(i) thaw-filesystems(j) sak(k) show-backtrace-all-active-cpus(l) show-memory-usage(m) nice-all-RT-tasks(n) poweroff(o) show-registers(p) show-all-timers(q) unraw(r) sync(s) show-task-states(t) unmount(u) force-fb(v) show-blocked-tasks(w) dump-ftrace-buffer(z)
+[Sat Mar  9 15:18:55 2024] signal: openat2_test[1025119] overflowed sigaltstack
+[Sat Mar  9 15:18:55 2024] signal: resolve_test[1025139] overflowed sigaltstack
 
 Best regards,
 Mirsad Todorovac
