@@ -1,183 +1,103 @@
-Return-Path: <linux-kselftest+bounces-6222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AD1A878862
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 19:56:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42BF8878895
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 20:14:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11BE6286050
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 18:56:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC3281F218C7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 19:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC49F5467A;
-	Mon, 11 Mar 2024 18:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6804E54BDB;
+	Mon, 11 Mar 2024 19:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xey65aa7"
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="g0t3iAwX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02A75336F
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 18:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EBC56B62;
+	Mon, 11 Mar 2024 19:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710183286; cv=none; b=QPRM8OGxX/TpA5DzUYmByPyMjSqr4Bs8EAbhTiBRpIXVPv1YgRq1k035z53EK7JtlS9qkmGypp5GOGMYifau5JUoqM9LW74z5/IuScuUBJEXOcw9iSD7GS9DNrjv1wU/O4T2JUQ8cZ921r90//ErMvzjDRUAR3gx7Zy0TTM5Uyg=
+	t=1710184460; cv=none; b=fq5szcaIYCkOxdbiAtM6AbVGnh77JJAW/AI0bVHLgOj7++AY59lEkpJFzDzIhJMyCe2osJXTuJZGy1x7Kw5Q9v+2GTml5zw6ppZxtvqEzTyBN2KO60SEz7r/jWCf3dj2kqd85Nlj9CkC3LTVyT3ohzPdsK9hocaD28X2ur+Qc6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710183286; c=relaxed/simple;
-	bh=sg1d/ANVhdMJVWpfU8bbvkMp+uD3nzj9x9rv9aGU7ss=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FJqfQtHCTg9u5X4ZbBNnLngX6V90mv5ifGQ5RxAzH/WPpt3Ib+5UWTSVGNRRY5Q6cLuBRy/0gP5U6l4vPby3gRbYTWlwgMEmSx7g03klNAPjmpHm2tjj+gws5RYCmDYI5ErkF+CirtTqalqYecR3EvZt0wSLEFBoLKy+KNSeSI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xey65aa7; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-366248b78d9so14545ab.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 11:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710183284; x=1710788084; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9EWPj2I4xpYoZRjyOYAm/kocZbdOlLT2RiNEmzadKaY=;
-        b=xey65aa7VE1wIljt/ixV6xel+/R5udOqzmcbCiIrUaErlg1igTj+xHHwuQCYTzh9up
-         gwX6SRiXKyFi/2K6SzwjHRVVhUiSb/E6H1m293SMrMno++CElm7lah0vjw0nbxBPCKF1
-         1KggYhb+LqBJqmmZ+PjaihjMv1sfV3+JTNBadSbrM+lesNUkMK2Ws9704W07WK2+pPYc
-         6yNgIhKkmJeGhuWAccjBZ+gNrzM1cQggQKYtv4DqDvtm1uRcSM2laMjrvR4ONMWaJcGI
-         5Ebo4Df4MVwLcOu1UbbtZ/WX9SPh9X+w0fyq/yEgqaleOURfABAA6PjEc0YfhnymHV3M
-         re1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710183284; x=1710788084;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9EWPj2I4xpYoZRjyOYAm/kocZbdOlLT2RiNEmzadKaY=;
-        b=pAvpZSnzQd99l3UPw4ClGIEo89VxbXiXfYjkhPzDujs7wSwRJWJwo6rnTT6h31DlJC
-         /UseZxtf0aPEQHeHwBFKUXzb1ZIKnOC+pxDCeDs7UhjVXEMbJq99bRrPIDtZkXUXJAD0
-         gLUK6Vi4CV1eUXn0mBJLgo+JENG7QLlwx6mmpE9pchOLCDtjfToZj4bE3vjmsTJ3ZiRd
-         +0Rj+oXyMxZEv6a6VoayTQeKUjU0yaQbvfPw3xQq4To/t8E2OzTjFMCoZkGsf0mLjhZ4
-         OKBelRCj+3i0uHJxCjgUlDWjbnKfldyDQJ6j8OwcBrXzj7tXQbUPrtJkGcjdwPf6Wzoz
-         P75Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVmPRBobO9sVIEzB6XRsYayYR3jT9PIyIOO7/i0YcTjkbCQ5J3566jeumRo5Ug1IX4C1XdZlajKw9hCNRHvR75jpE8zS3utVACALllCSx8F
-X-Gm-Message-State: AOJu0YyP99n9p8MKQMgqVJfSKm2zpYMUMEfZ5H1f7x8k7nXx/DkabuSj
-	JpkVFw3XoaWOUuqeDJAB/SPjhirzLXnL0HMQvgkIKQrl+pNCbDWUjWQeUDY8u3XfpzWyjCUCMwT
-	XG+XgDu2Bth0lPZ+CupT9W7yDsS01wh8sVyXl
-X-Google-Smtp-Source: AGHT+IF9Y1AJY3TwC+yrKD+SLGX6DGVejGuk9zVLbhhSZF+Z1op/fddC1zPHT7AUjYPqnvQvkBSi2u31QCO6TEveBME=
-X-Received: by 2002:a05:6e02:1648:b0:366:444b:82d6 with SMTP id
- v8-20020a056e02164800b00366444b82d6mr6714ilu.15.1710183283551; Mon, 11 Mar
- 2024 11:54:43 -0700 (PDT)
+	s=arc-20240116; t=1710184460; c=relaxed/simple;
+	bh=JuZL7oM7lKhmmzj290jDyn9KcxNQoNasVDvwUuItmEo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pzeONZvU/OSPaDCJvA6MXEeaiKK1LChNWx0oGlaaA5DObnZRohw/r5fUhpzaJ4WaYL2PoHhgDZipIMrsptneKCAonx73Kgv211stOt6C4BjclYG53Y1nos3dQ5tdKbKFRMTBZZtDYVdkFvn97+BpR5lY4VYceq3LLBuvt/vf4EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=g0t3iAwX; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
+	bh=FGf/tNhnC4YEzI6MSBG52sbqC4xqonb3q4yeuMw8Xfk=; b=g0t3iAwXXc+OmGjPUCKpaYYxEY
+	4e1HCDEJMWgdxdzxOzZscPKhQp6IelAcdS5lyKRoNlSGeNe7jNhCjBUrOq1epQ52eqUd4PdxP3jlv
+	0O3BSrwPC7rO9cdIrDh15mVdJOxXnJFotqy1g0XHugt5Z4VMAqYwOZk6ZKbXr72mlSTJ+TxhvTcWj
+	rXIIfVlpiXyBXyKp1BrzMhddv8jQdMi83CIZ4A6FHIMIwaNZuIH0cShfzQLoVfpP+fSmVpUgAEANf
+	EFjNG4jsJvWOP8zIkvc063waQdkX4PVR0olGY3pypVzFX7MIBJsQNJxWLz4mneduNbb6qYdjtBiqx
+	xnlhk1+w==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
+	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1rjkqo-003cD8-2X;
+	Mon, 11 Mar 2024 13:58:18 -0500
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ wine-devel@winehq.org,
+ =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+ Wolfram Sang <wsa@kernel.org>, Arkadiusz Hiler <ahiler@codeweavers.com>,
+ Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 04/31] ntsync: Introduce NTSYNC_IOC_WAIT_ANY.
+Date: Mon, 11 Mar 2024 13:58:18 -0500
+Message-ID: <4875514.GXAFRqVoOG@camazotz>
+In-Reply-To: <20240219223833.95710-5-zfigura@codeweavers.com>
+References:
+ <20240219223833.95710-1-zfigura@codeweavers.com>
+ <20240219223833.95710-5-zfigura@codeweavers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-3-irogers@google.com>
- <CAEf4BzYiH6xRRLFBdUAkjn0uJP=safZod4=1EmEwTTH9PDmVvQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzYiH6xRRLFBdUAkjn0uJP=safZod4=1EmEwTTH9PDmVvQ@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 11 Mar 2024 11:54:32 -0700
-Message-ID: <CAP-5=fUQY=ho1OSk-wosw8=7Sjp8MB_kngggP00BXs+nVNj7Pg@mail.gmail.com>
-Subject: Re: [PATCH v1 02/13] libbpf: Make __printf define conditional
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
-	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
-	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
-	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
-	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
-	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Mar 11, 2024 at 10:49=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sat, Mar 9, 2024 at 6:05=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
-> >
-> > libbpf depends upon linux/err.h which has a linux/compiler.h
-> > dependency. In the kernel includes, as opposed to the tools version,
-> > linux/compiler.h includes linux/compiler_attributes.h which defines
-> > __printf. As the libbpf.c __printf definition isn't guarded by an
-> > ifndef, this leads to a duplicate definition compilation error when
-> > trying to update the tools/include/linux/compiler.h. Fix this by
-> > adding the missing ifndef.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index afd09571c482..2152360b4b18 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -66,7 +66,9 @@
-> >   */
-> >  #pragma GCC diagnostic ignored "-Wformat-nonliteral"
-> >
-> > -#define __printf(a, b) __attribute__((format(printf, a, b)))
-> > +#ifndef __printf
-> > +# define __printf(a, b)        __attribute__((format(printf, a, b)))
->
-> styling nit: don't add spaces between # and define, please
->
-> overall LGTM
->
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
->
-> Two questions, though.
->
-> 1. It seems like just dropping #define __printf in libbpf.c compiles
-> fine (I checked both building libbpf directly, and BPF selftest, and
-> perf, and bpftool directly, all of them built fine). So we can
-> probably just drop this. I'll need to add __printf on Github, but
-> that's fine.
->
-> 2. Logistics. Which tree should this patch go through? Can I land it
-> in bpf-next or it's too much inconvenience for you?
+On Monday, 19 February 2024 16:38:06 CDT Elizabeth Figura wrote:
+> +static struct ntsync_obj *get_obj(struct ntsync_device *dev, int fd)
+> +{
+> +	struct file *file = fget(fd);
+> +	struct ntsync_obj *obj;
+> +
+> +	if (file->f_op != &ntsync_obj_fops) {
+> +		fput(file);
+> +		return NULL;
+> +	}
 
-Thanks Andrii,
+I just noticed during self-review that this fails to check the result of 
+fget() for NULL :-/
 
-dropping the #define (1) sgtm but the current compiler.h will fail to
-build libbpf.c without the later compiler.h update in this series.
-This causes another logistic issue for your point 2. Presumably if
-this patch goes through bpf-next, the first patch "tools bpf:
-Synchronize bpf.h with kernel uapi version" should also go through the
-bpf-next.
+I'll fix this next revision.
 
-Thanks,
-Ian
+> +
+> +	obj = file->private_data;
+> +	if (obj->dev != dev) {
+> +		fput(file);
+> +		return NULL;
+> +	}
+> +
+> +	return obj;
+> +}
 
 
-> > +#endif
-> >
-> >  static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
-> >  static bool prog_is_subprog(const struct bpf_object *obj, const struct=
- bpf_program *prog);
-> > --
-> > 2.44.0.278.ge034bb2e1d-goog
-> >
+
 
