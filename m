@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-6215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBDF08785F1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 18:02:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44363878602
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 18:08:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0CE41F215A8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:02:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC2D4281D61
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BDD0482DB;
-	Mon, 11 Mar 2024 17:02:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6058C4879E;
+	Mon, 11 Mar 2024 17:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NzfB3IFv"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PX0CeTRQ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CCC482D1;
-	Mon, 11 Mar 2024 17:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8073B7AC;
+	Mon, 11 Mar 2024 17:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710176525; cv=none; b=QhXlms1nobwMWhwmc+ImxY8zCuLhfBL+QGTeTM/I1KKPdoXucjwMCaBFoaSfPnVG07kKJKI8SLTLsPNHmXY2LFpQBeN9DzQXGDdSqKRo+vXu+avZX+ZtrfB2C4BrPvBAhSkl4/Jx1SZFwh9DihSVHQLws+3pJzJiy11tWEDT3C4=
+	t=1710176891; cv=none; b=Eu0q5CHp28F4y+yNR/onNsXfpEfLqup3E/f40CeShlquy9MKdNFhryUBhrReQblCQU2RACr54JyyEBL5ZbKpdQvjOTg7dW4cDTODrf4YQsWxXrFG5u5oqxnz18ZNKyoKbpn4oRRSop69+9AWmUC3JJ14G+LZd0qrzJexi+RG7TQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710176525; c=relaxed/simple;
-	bh=D9uVuEy9DT1FDOsqkYiOzDsS+RuUagKwN+xLlAFjNaE=;
+	s=arc-20240116; t=1710176891; c=relaxed/simple;
+	bh=j1+lCDL3pPjq33bhRXpGF+V0YmEJ2UOr72fJ5Hlut3g=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=lcuUFzU1l076b5AJtzZXncWy6NJotzaC1qC7R2TfCh0BTLBBetjSh0MVEJONy4OWdHkVLu/cNZwMXiBeW4rKNvsqJlBkT1qMc2PuKwNVfY3tsVGlGWrF6OaTb2gjJE3RHaLdWH6bLBZ9vKpp/B4wke/27MZV3GcqIJkQecbQ6Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NzfB3IFv; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=qMXU4isdbu0LLzxmwxBokImuzAqdMmODgpPjw+h8qIb0FsZa2pF6y/0X9ZR6DoSPuDPm+9uV9qjuhGNsdVMkdhpmzE3YJq2pIpOCo4FImusDNWF6iijtdoFqsHCfSiq0rs5CEukUjC0ubbhs+hwkwOpiRirRg2RvBFJSmX3R5Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PX0CeTRQ; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1710176521;
-	bh=D9uVuEy9DT1FDOsqkYiOzDsS+RuUagKwN+xLlAFjNaE=;
+	s=mail; t=1710176888;
+	bh=j1+lCDL3pPjq33bhRXpGF+V0YmEJ2UOr72fJ5Hlut3g=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=NzfB3IFv1BMymbFajCTtjdsPZLtrU1+vW8HuhboF2hvMkBDGuRhBM/rlaBETAZGJz
-	 1+ChAyn1jw3l7+zsp4NOlkmVfjz2qIRGI6GhiF9Fp96EJSB1tJ0f88OiWrIMWlU1AH
-	 60sjB3+xcvBIXs148w65/crmfEPrRp507rEYf+ZO8QgJnmBNfxzKRh27eiTLLVwxC5
-	 9tOS1x/sH/JIx4Acz/GLWWeBv0I73i1GSygOBg9F6MDuX2VPZLvrg5shaueKJxpNk3
-	 9U/YV1kGkxdBj5qzMh2TDji5pRZaZSXfV2atuWHp+HyQcPfmL0+Nlc35k3bf6REurN
-	 9b5iOByiYQnKQ==
+	b=PX0CeTRQ/l4o+UZJghvdiZX9xmrFLq9w4rIe1uc7R4LXtVZU2CFNmre2kmJHbI465
+	 9xHfbbc8s1DAZgMVWt1mXB/Z140MOCEKXpH6SJyos8Kio+mRb9M+FxHnPWX/UnULRi
+	 9E+UU39eMR7H5eoPIPin7ZRXsW5kHnMR6vzP8Z+iD0HI8QQnP1LVV8f1c+2yYpJM05
+	 0Ht8Ch1dfgxmcSmDkm2nMpruzg8VSc83qGdi8pDSI6b5qxwLQCAq+YsxDJ+YtFMyBP
+	 8n7fRw1Gq/Rwdx9RaxZHcHWrJmlLXOMpnlewPMq8EgqOIzlhqv5XncZeYed4eK9H/F
+	 MGOWjd81NfAiw==
 Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id F250E378200D;
-	Mon, 11 Mar 2024 17:01:57 +0000 (UTC)
-Message-ID: <c3362840-365e-40cb-80fe-895aa2d979ec@collabora.com>
-Date: Mon, 11 Mar 2024 22:02:27 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 94EF0378200D;
+	Mon, 11 Mar 2024 17:08:05 +0000 (UTC)
+Message-ID: <cf98ff2f-66a8-4800-855f-5c03c952b514@collabora.com>
+Date: Mon, 11 Mar 2024 22:08:36 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,121 +57,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: x86: skip the tests if prerequisites aren't
- fulfilled
-To: "Chang S. Bae" <chang.seok.bae@intel.com>, Shuah Khan <shuah@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Weihong Zhang <weihong.zhang@intel.com>,
- Binbin Wu <binbin.wu@linux.intel.com>, angquan yu <angquan21@gmail.com>
-References: <20240307183730.2858264-1-usama.anjum@collabora.com>
- <dc8d122a-22b7-4d17-abd9-66262af0b058@intel.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
+ Mark Brown <broonie@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: [Test Failure Report] exec: Test failures in execveat
 Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>
+References: <02c8bf8e-1934-44ab-a886-e065b37366a7@collabora.com>
+ <202403051256.7A50FE28E7@keescook>
+ <fd210d04-cc98-4e29-a051-bdb7e1367494@collabora.com>
+ <202403071238.AC7BD90@keescook>
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <dc8d122a-22b7-4d17-abd9-66262af0b058@intel.com>
+In-Reply-To: <202403071238.AC7BD90@keescook>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/9/24 6:06 AM, Chang S. Bae wrote:
-> On 3/7/2024 10:37 AM, Muhammad Usama Anjum wrote:
->>
->> diff --git a/tools/testing/selftests/x86/amx.c
->> b/tools/testing/selftests/x86/amx.c
->> index d884fd69dd510..5d1ca0bbaaae7 100644
->> --- a/tools/testing/selftests/x86/amx.c
->> +++ b/tools/testing/selftests/x86/amx.c
->> @@ -103,9 +103,10 @@ static void clearhandler(int sig)
->>     #define CPUID_LEAF1_ECX_XSAVE_MASK    (1 << 26)
->>   #define CPUID_LEAF1_ECX_OSXSAVE_MASK    (1 << 27)
->> -static inline void check_cpuid_xsave(void)
->> +static inline int check_cpuid_xsave(void)
->>   {
->>       uint32_t eax, ebx, ecx, edx;
->> +    int ret = 0;
->>         /*
->>        * CPUID.1:ECX.XSAVE[bit 26] enumerates general
->> @@ -113,10 +114,16 @@ static inline void check_cpuid_xsave(void)
->>        * XGETBV.
->>        */
->>       __cpuid_count(1, 0, eax, ebx, ecx, edx);
->> -    if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
->> -        fatal_error("cpuid: no CPU xsave support");
->> -    if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
->> -        fatal_error("cpuid: no OS xsave support");
->> +    if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK)) {
->> +        ksft_print_msg("cpuid: no CPU xsave support\n");
->> +        ret = -1;
->> +    }
->> +    if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK)) {
->> +        ksft_print_msg("cpuid: no OS xsave support\n");
->> +        ret = -1;
->> +    }
->> +
->> +    return ret;
->>   }
+On 3/8/24 1:39 AM, Kees Cook wrote:
+> On Thu, Mar 07, 2024 at 02:22:27PM +0500, Muhammad Usama Anjum wrote:
+>> I've tested this patch. Still getting same failures.
 > 
-> I thought check_cpuid_xsave() can go away [1] by simplifying the
-> availability check through arch_prctl():
-In this patch, I'm just focusing on skip login on existing code. I'll make
-this change when I'll transform the entire test to TAP.
+> Okay, thanks for testing!
+> 
+> What environment are you testing under? It would seem like some unexpected
+> userspace conditions exist that the test isn't prepared for. (I was able
+> to reproduce one error with /bin/dash, for example, but not the others,
+> so something must be different in the set up.)
+I'm testing on Debian Bookworm with v6.1, v6.7 and next-20240304 kernels.
+I've tested it on another VM which is also Debian Bookworm. The default
+shell is dash on Debian as well.
 
 > 
-> +#define ARCH_GET_XCOMP_SUPP    0x1021
->  #define ARCH_GET_XCOMP_PERM    0x1022
->  #define ARCH_REQ_XCOMP_PERM    0x1023
-> 
-> @@ -928,8 +911,15 @@ static void test_ptrace(void)
-> 
->  int main(void)
->  {
-> -       /* Check hardware availability at first */
-> -       check_cpuid_xsave();
-> +       unsigned long features;
-> +       long rc;
-> +
-> +       rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
-> +       if (rc || (features & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
-> +               ksft_print_msg("no AMX support\n");
-> +               return KSFT_SKIP;
-> +       }
-> 
->> -static void check_cpuid_xtiledata(void)
->> +static int check_cpuid_xtiledata(void)
->>   {
->>       uint32_t eax, ebx, ecx, edx;
->>   @@ -153,12 +160,16 @@ static void check_cpuid_xtiledata(void)
->>        * eax: XTILEDATA state component size
->>        * ebx: XTILEDATA state component offset in user buffer
->>        */
->> -    if (!eax || !ebx)
->> -        fatal_error("xstate cpuid: invalid tile data size/offset: %d/%d",
->> -                eax, ebx);
->> +    if (!eax || !ebx) {
->> +        ksft_print_msg("xstate cpuid: invalid tile data size/offset:
->> %d/%d\n",
->> +                   eax, ebx);
->> +        return -1;
->> +    }
->>         xtiledata.size          = eax;
->>       xtiledata.xbuf_offset = ebx;
->> +
->> +    return 0;
->>   }
-> 
-> I don't think it is okay to silently skip the test here. If the feature is
-> available, the tile data size and offset should not be zero.
-We are logging that data size/offset are invalid if either eax or ebx are
-invalid and then we are skipping. Not sure what you are asking me to change.
-
-> 
-> Thanks,
-> Chang
-> 
-> [1]
-> https://lore.kernel.org/lkml/327cde12-daea-84ba-4b24-64fe12e89dea@intel.com/
+> -Kees
 > 
 
 -- 
