@@ -1,119 +1,121 @@
-Return-Path: <linux-kselftest+bounces-6213-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6214-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03745878573
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:30:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF48C87858A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:34:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97E131F218E8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 16:30:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19F9E1C21B60
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 16:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C2054BD6;
-	Mon, 11 Mar 2024 16:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HeQ1PhNo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C353FBB2;
+	Mon, 11 Mar 2024 16:34:28 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC9A495CB;
-	Mon, 11 Mar 2024 16:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5317F138E;
+	Mon, 11 Mar 2024 16:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710174420; cv=none; b=dIObtWsirlHGTkVVJ+2DFVzd5W3lnI2li8OG5kKH6Zftt8VjhR/26DZCnhUx8hpuaYzCH9y7pg+j+hyGU/sEu1Wq1LFk3vDg2TPQWIb2Qnzv2l8j8zxtrxi3XgBEnEjlkIoWoQkXTS6/lzWFkuJC9FM0Pc/dxVU5SxFZwWxxwfI=
+	t=1710174868; cv=none; b=I+3uuGsgLSOAOouTbufhyX+3njPNomwdBAO+bbZtlH3vtfxmIXDFLF6UlFQXdIi6H1T9XT9FPw4ebvV8xIywzRtEsrZ2FB6Tejr4iP7k/vn7F+gHYn6mUKb2DQVOHJZ2lMrZN//t4evkKn1d8u4eCt0oi1otJlwrXCNqeio0RQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710174420; c=relaxed/simple;
-	bh=TcSwDHfNNgdR4wLojxjff0dRD10Inq481uYy2p6LuD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WHluNOuFxUtYUBOmqS8U9Jq7YmzSbaaW429moY5f9LXUgF+EIco/IVh7UWrWcOZXCKuQglfOTMtCFRLu4HMhg1OsDeB/ZIrJqvCWWgg4ecT2g5Uvux+8JgI08Ve9Fs86nr905U8tTF+C0Un+4sf71HxEJjmVRVrBTJp6pRKqEys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HeQ1PhNo; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7bc332d3a8cso221410139f.2;
-        Mon, 11 Mar 2024 09:26:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710174418; x=1710779218; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SQKSOiWUfUqtlvjIi4/X3xeJgscUEIjq/1jiDqrAsaU=;
-        b=HeQ1PhNow9FlBsQiUjxTXC6qjMRmYtrIAjDr06x8RlbbtrSaIBcl+s9C6/GQdK5DQO
-         UTpVlQM7MdK+b5QMzaIOMNHOpFZ138Ek9EBGKILftSADyc26E59fGrveXd7W7xOd/k6M
-         GFJ3yr53RRkde+B9dSwc2GITihEV+eFy1l695bmmg5qcZuMB5zq1ljQNLDevJ9isEmbn
-         LUJ6u3Dil+bok1Xzxfaf+R760yRm0MjPLKq+gQ9lYEsOMYgK8/zXP/Kzbmk8opTxf8bv
-         MdqOE1tdyl985OW8HRhPZlLA1vSOVd+gxEpmVncp6OdK79SMkvgGp9WWsfjUtDEOzJxw
-         GFvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710174418; x=1710779218;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SQKSOiWUfUqtlvjIi4/X3xeJgscUEIjq/1jiDqrAsaU=;
-        b=iy3UO2Q0TGFkJQ6KBMczZzj+FN88n4BHwpjE7AAeOKrOZE2TSndy+Pfn9lAaQknGtb
-         xnD4FR2sp5Xp+tPNPpB5yf/kscY3TzoUKc3i01LRQhhM4gkmCcI23uL42xofldvrbH9T
-         CmFMFD5QBpOo5dMIhSphILQvF0KlUOeh2h53L1YhpFs7nG9JxZSm3nbM3nngqwankksk
-         Mz600humMSeGgWgFyWn2h/WCrrbH8+2MI7HIDdgU0/wTGmZYcUylYnzvVrFjz6JfUAQW
-         kubVuoGXPC4Xo8i8TRmNoOqSCqFSqLIu2L6t06m0sxOJj5/3xl+sUH3d1+YmsueaWMAx
-         E3pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVSNZ04fULcQoISqT9zKliJ19/swQUDg03qdCbykSVfX18VUHYtqoyjKXDeQJpxyK5Wkp/Nr4dQWhJLmGOn0YgZbbKfwDKICeo5815dNJdvPe+aryu8dUg0WrgiocZnQM3549rJLOCeCGEDh3/K
-X-Gm-Message-State: AOJu0YwmYsN83gncJFkhhRMfWiVIqbb7UaEiClU3gR/EpSeFiaUEhs7E
-	Jhi2UfEqJ5/nJcI/5DTI7RaCNxIsKEk6spmZaZLuiXh5pJ1xEW4S
-X-Google-Smtp-Source: AGHT+IECo2iHOUjpdeONaUHjvq623/XyoyVPkWsq2s0ydvavN/sgfnJT26x5Rd1V8RdUQt5khihShw==
-X-Received: by 2002:a5e:c10d:0:b0:7c8:c922:202b with SMTP id v13-20020a5ec10d000000b007c8c922202bmr754312iol.7.1710174417711;
-        Mon, 11 Mar 2024 09:26:57 -0700 (PDT)
-Received: from ?IPV6:2601:284:8200:b700:d7e:114:8305:f21a? ([2601:284:8200:b700:d7e:114:8305:f21a])
-        by smtp.googlemail.com with ESMTPSA id u22-20020a05660229b600b007c8c539e1afsm297522ios.26.2024.03.11.09.26.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Mar 2024 09:26:57 -0700 (PDT)
-Message-ID: <685a957d-5ce4-4165-aa6d-71570866b9d4@gmail.com>
-Date: Mon, 11 Mar 2024 10:26:56 -0600
+	s=arc-20240116; t=1710174868; c=relaxed/simple;
+	bh=WixOqrZR+rJh/Fbz+wWrf8dVTfQslX0GeSZNmY4xbK4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=sgNdPA3bpwooKtZGLXUbTSNmXqj4NYWytNwjZUQIDTva+meTuCLnUzYVjFXodSXztS8aGozb4Svzws0v8wD6dL/4xi0A8goC6joZMPAl0oCS+EX+RbAjtZQ+SBGuR4Vd2G0MmRBSNWppn6rjs9aVJF+K2z5V6ENDfoIxYYUhL7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A7831007;
+	Mon, 11 Mar 2024 09:35:02 -0700 (PDT)
+Received: from [192.168.1.100] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D3233F762;
+	Mon, 11 Mar 2024 09:34:12 -0700 (PDT)
+Message-ID: <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+Date: Mon, 11 Mar 2024 16:34:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG net-next] fcnal-test.sh: 4 (four) tests FAIL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
 Content-Language: en-US
-To: Jakub Kicinski <kuba@kernel.org>,
- Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc: netdev@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <9f24a9c3-4813-4518-9cc4-3923c11981cd@alu.unizg.hr>
- <20240311091751.5c4f2947@kernel.org>
-From: David Ahern <dsahern@gmail.com>
-In-Reply-To: <20240311091751.5c4f2947@kernel.org>
+To: Ian Rogers <irogers@google.com>
+References: <20240310020509.647319-1-irogers@google.com>
+ <20240310020509.647319-13-irogers@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Kees Cook <keescook@chromium.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+ David Laight <David.Laight@ACULAB.COM>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>,
+ Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>,
+ Nick Forrington <nick.forrington@arm.com>, Leo Yan <leo.yan@linux.dev>,
+ German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>,
+ John Garry <john.g.garry@oracle.com>, Sean Christopherson
+ <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
+ Fuad Tabba <tabba@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Peter Xu <peterx@redhat.com>, Vishal Annapurve <vannapurve@google.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <20240310020509.647319-13-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/11/24 10:17 AM, Jakub Kicinski wrote:
-> On Sat, 9 Mar 2024 19:45:15 +0100 Mirsad Todorovac wrote:
->> In the vanilla net-next tree build of v6.8-rc7-2348-g75c2946db360, with up-to-date
->> iproute2 built tools, fcnal-test.sh reports certain failures:
->>
->> --------------------------------------------------------------------------------------
->> # TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> # TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> # TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> # TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> --------------------------------------------------------------------------------------
+
+
+On 10/03/2024 02:05, Ian Rogers wrote:
+> compiler.h - synced from include/linux/compiler.h, guards were
+>  added to definitions to avoid redefinition of macros
+>  in libc. ftrace, CONFIG_OBJTOOL and kentry logic was removed as
+>  redundant.
 > 
-> Adding David A to CC.
-> 
-> It rings a bell. We also build ping from source when running the tests
-> locally, I have in my notes "AWS iputils are buggy, use iputils.git"
-> but unfortunately I didn't make a note which tests were failing without
-> it. David might remember..
 
-yes, please update ping -- make sure it has proper support for
-SO_BINDTODEVICE.
+Hi Ian,
 
-It's a bug in versions of iputils ping. It sets the BINDTODEVICE and
-then resets it because the source address is not set on the command line
-(it should not be required - they are separate intents).
+This commit breaks the Arm build (and cross compilation for Arm on x86):
+
+  $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+
+Something like this, but I won't paste the whole output because it's huge:
+
+tools/include/linux/ring_buffer.h: In function ‘ring_buffer_read_head’:
+
+tools/include/asm/../../arch/arm64/include/asm/barrier.h:72:35: error:
+‘__u8_alias_t’ undeclared (first use in this function)
+   72 |                         : "=r" (*(__u8_alias_t *)__u.__c)
+       \
+      |                                   ^~~~~~~~~~~~
+tools/include/linux/ring_buffer.h:59:16: note: in expansion of macro
+‘smp_load_acquire’
+   59 |         return smp_load_acquire(&base->data_head);
+      |                ^~~~~~~~~~~~~~~~
+
+Thanks
+James
 
