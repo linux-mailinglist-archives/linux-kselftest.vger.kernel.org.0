@@ -1,160 +1,132 @@
-Return-Path: <linux-kselftest+bounces-6206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6207-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD97287833F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 16:22:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03CF8783C6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 16:34:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99192282C93
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 15:22:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDC5C1C21B6A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 15:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403E76024B;
-	Mon, 11 Mar 2024 15:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B4A481CE;
+	Mon, 11 Mar 2024 15:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K9QWlWqa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y1IfIw1V"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE9D5FDC4;
-	Mon, 11 Mar 2024 15:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D597F4436C;
+	Mon, 11 Mar 2024 15:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710170011; cv=none; b=euejs2DLLOOq1TvVV0dWQ+ZbgS16F7hzdOdkb9ksZ2qpTyBJ9RroScAmD8tGAP8Dsh4V10Y2lSjcm19lXswXh2oB8xOE/fUnYicUMj1NA6D+uFdA4LjF3WCm8qN+f/hlJwLyZp13R2wGZpUG51aPzomNPb01VFQY77IWOwJCsvU=
+	t=1710170889; cv=none; b=aLOmtUj4BXT3cQ7prxDaHZJXh1ijux2Mngu6Y00V1YFZulgBkdzomofj2NcjnTZEM1GRtvfLu9iWRvvWBm0JJ6Atg4BKydeNhhRY7zM/1zdUfuj2AKihllsIXqnDWWSkULL+KwBtWLu6QFsBk4Rznbfqjbt2fsq/yogFEUyRCSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710170011; c=relaxed/simple;
-	bh=jkL9pcfs3sRnSPlvjikdgvSxArB73ECs5GBn3OKS72M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gENI335pp6riwPCax9UP1HV4RSSVk69SOrHScCMuKhM3/lrGpEhFBjFtzfGn22dKy69hcXT/w16xc73h5qF024W8Q/yxbHME7M9MhII9K9X+hPc/6ExaHknloDMt0ikdPKRBo7JfriVlvQTK8kzGnYswcl7uU+MJMIbWfJP6eIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K9QWlWqa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E755C43390;
-	Mon, 11 Mar 2024 15:13:29 +0000 (UTC)
+	s=arc-20240116; t=1710170889; c=relaxed/simple;
+	bh=em3Se+P5Xrx+0GAaBd00VDrmf7quAlX2gF/aXmOjg44=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B4PP2hE+a8EvM0TRX4g8NlfObo46QpLIG1bkTFQWuUKKI4FtU7xtaanmiXGQQ0o+9LYYeRLkJQBinl3rb8Qipo5WpfsDLJyh323qlEe0m4wTwCNrAJP07/r9PhZHjSZh2daywWF1GQT0U82f5URQq0PsBFKNPZBi/E8BlgqAK4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y1IfIw1V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78064C433F1;
+	Mon, 11 Mar 2024 15:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710170010;
-	bh=jkL9pcfs3sRnSPlvjikdgvSxArB73ECs5GBn3OKS72M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K9QWlWqabci0aYqlvGxyzbo/QVzT4Bp0zl3AgOdgTbNGNFn5PG+AOlJqebJDclynF
-	 X/LFEhvpU0xJDBxrt4QJq5+Y6QVEbK3zA0soyo6bnTWp5LG9c4OPaQDC/5lA6sAxD/
-	 pO4rtklwxvBjh+PrUTtyI/e9ulO1SnNfYM0J+8rzjmg8UciD/4GR6KvU8zfZ6AEwug
-	 s1IaA25VPK8K5w5QO2DLuUTvi7Ewagu+BLkwox35V+1bW9LKowDYPdWsAFsRs/QF0I
-	 l2WbUPy5zf8BMuGE4XlCQ1pBnKfPqTsPMRlpgFc4/x4W1vudmwqp5l+KkmEGD8rMYe
-	 pT161nPGrKpIQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Paolo Abeni <pabeni@redhat.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	martineau@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 09/17] selftests: mptcp: explicitly trigger the listener diag code-path
-Date: Mon, 11 Mar 2024 11:13:00 -0400
-Message-ID: <20240311151314.317776-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240311151314.317776-1-sashal@kernel.org>
-References: <20240311151314.317776-1-sashal@kernel.org>
+	s=k20201202; t=1710170888;
+	bh=em3Se+P5Xrx+0GAaBd00VDrmf7quAlX2gF/aXmOjg44=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Y1IfIw1VUAO6yVnYWHqnM6x3qLyaUGPSZ3qSWE620X0mQMIuJc/CJN3QOYlILZZWD
+	 b6Ym8qqIc/7i/HhouTgEmCykq8SSfTLEji6qb2nwFoZe1po1trqNgZW5BuV7aJ0ANP
+	 mbCqfNiX6Wlasdg7uJBi7ybloBpi/5dwTWd7xVIsxF64eEIkb4N9rAbkvPUhNvfp0V
+	 IBixDJCT999m5RpBVCDuAF8XC3czA+d2QI+ff2ei0Xxj7638VxSgNWIOlW/CMjBvsU
+	 Gt48mLTWEp84D46PDDy3nKxyhe69K/9UoY9fWjE+nGVFqp1p71YVCt8js6brMJ3oL9
+	 hxet0uBW3DISQ==
+Message-ID: <afd248db-921f-4067-b917-a7ea3e807816@kernel.org>
+Date: Mon, 11 Mar 2024 16:28:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.21
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH AUTOSEL 6.7 14/23] selftests: mptcp: explicitly trigger
+ the listener diag code-path
+Content-Language: en-US
+To: Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Cc: Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, martineau@kernel.org, davem@davemloft.net,
+ edumazet@google.com, shuah@kernel.org, netdev@vger.kernel.org,
+ mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org
+References: <20240311151217.317068-1-sashal@kernel.org>
+ <20240311151217.317068-14-sashal@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20240311151217.317068-14-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Paolo Abeni <pabeni@redhat.com>
+Hi Sasha,
 
-[ Upstream commit b4b51d36bbaa3ddb93b3e1ca3a1ef0aa629d6521 ]
+On 11/03/2024 16:11, Sasha Levin wrote:
+> From: Paolo Abeni <pabeni@redhat.com>
+> 
+> [ Upstream commit b4b51d36bbaa3ddb93b3e1ca3a1ef0aa629d6521 ]
 
-The mptcp diag interface already experienced a few locking bugs
-that lockdep and appropriate coverage have detected in advance.
+Thank you for having backported this patch to v6.7 and v6.6 versions.
+But it looks like it depends on commit 9369777c2939 ("selftests: mptcp:
+add mptcp_lib_wait_local_port_listen") which is not in these versions.
 
-Let's add a test-case triggering the relevant code path, to prevent
-similar issues in the future.
+Because CIs will soon use the kselftests from the new v6.8, I think it
+is better to drop this patch from v6.7 and v6.6 versions.
 
-Be careful to cope with very slow environments.
-
-Note that we don't need an explicit timeout on the mptcp_connect
-subprocess to cope with eventual bug/hang-up as the final cleanup
-terminating the child processes will take care of that.
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Reviewed-by: Simon Horman <horms@kernel.org>
-Link: https://lore.kernel.org/r/20240223-upstream-net-20240223-misc-fixes-v1-10-162e87e48497@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/net/mptcp/diag.sh | 30 ++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index 4d8c59be1b30c..ff9a4f45f852f 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -20,7 +20,7 @@ flush_pids()
- 
- 	ip netns pids "${ns}" | xargs --no-run-if-empty kill -SIGUSR1 &>/dev/null
- 
--	for _ in $(seq 10); do
-+	for _ in $(seq $((timeout_poll * 10))); do
- 		[ -z "$(ip netns pids "${ns}")" ] && break
- 		sleep 0.1
- 	done
-@@ -91,6 +91,15 @@ chk_msk_nr()
- 	__chk_msk_nr "grep -c token:" "$@"
- }
- 
-+chk_listener_nr()
-+{
-+	local expected=$1
-+	local msg="$2"
-+
-+	__chk_nr "ss -inmlHMON $ns | wc -l" "$expected" "$msg - mptcp" 0
-+	__chk_nr "ss -inmlHtON $ns | wc -l" "$expected" "$msg - subflows"
-+}
-+
- wait_msk_nr()
- {
- 	local condition="grep -c token:"
-@@ -306,5 +315,24 @@ flush_pids
- chk_msk_inuse 0 "many->0"
- chk_msk_cestab 0 "many->0"
- 
-+chk_listener_nr 0 "no listener sockets"
-+NR_SERVERS=100
-+for I in $(seq 1 $NR_SERVERS); do
-+	ip netns exec $ns ./mptcp_connect -p $((I + 20001)) \
-+		-t ${timeout_poll} -l 0.0.0.0 >/dev/null 2>&1 &
-+done
-+
-+for I in $(seq 1 $NR_SERVERS); do
-+	mptcp_lib_wait_local_port_listen $ns $((I + 20001))
-+done
-+
-+chk_listener_nr $NR_SERVERS "many listener sockets"
-+
-+# graceful termination
-+for I in $(seq 1 $NR_SERVERS); do
-+	echo a | ip netns exec $ns ./mptcp_connect -p $((I + 20001)) 127.0.0.1 >/dev/null 2>&1 &
-+done
-+flush_pids
-+
- mptcp_lib_result_print_all_tap
- exit $ret
+Cheers,
+Matt
 -- 
-2.43.0
+Sponsored by the NGI0 Core fund.
 
 
