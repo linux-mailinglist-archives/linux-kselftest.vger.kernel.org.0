@@ -1,225 +1,263 @@
-Return-Path: <linux-kselftest+bounces-6172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D573877CA8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 10:26:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 246C9877CC4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 10:32:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 810C11C20E6D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 09:26:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FD921F2104A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 09:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BCA71756E;
-	Mon, 11 Mar 2024 09:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9DC182C5;
+	Mon, 11 Mar 2024 09:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lOElgtRq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hXjpKQHu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C1417548;
-	Mon, 11 Mar 2024 09:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710149185; cv=fail; b=eCVhLyqAvaDidFAPTFHBSRJDi5KrITzjOWBcx3U6JXTv8zgSZzoL+erFcdhxBsf81v2w/g0btcODhuCAgM//+fADtsxJIQ1wKrom4117QQXtDwiYdQpUy+QI7Beb7YNjXYroEqJuN04wEcmGoX7ZY8koy2iOX6iCzGCEXWEZkE4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710149185; c=relaxed/simple;
-	bh=YCNGlj83nw+S2HiJQGo8TsEC3dReQDapIJPe6doeBNA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NZGWU9lP+BovfCQdy8KMnOKmtnnj9+tb2chroJ1N7qIJLiHFFUPmn7XJIB3ucDWB2gLGKDg+bgNbMbL2+icvpR6H9xb8lpCNytJjqTZN0YzQjZjBBVdGmkQO0veY392xARf6soE3QwnxX2068w/4k+1ox8CoIhnvkJ2jli1sOH0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lOElgtRq; arc=fail smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710149182; x=1741685182;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=YCNGlj83nw+S2HiJQGo8TsEC3dReQDapIJPe6doeBNA=;
-  b=lOElgtRqKU6Ijfp2OXy+XoFyIqEhmvQEL6lVKGDU+6kzFy3mExcR7tSS
-   FtjU7WA4ZlHvEa5heI3cynZg0/X/4dcFCtrFCj57+wQ01pn4zzxOeFw2f
-   PRe3rluWaTuTpRkToAJ9aedaQArLh+24B+2OOuYq0xXd5/nT85V8USKg/
-   HxAiSy45WPxI6DgRhFXGlWaV7IYIU6/LX3TNAWNCnKtRPigg1Bne2L6u2
-   OZZb3/rZrIUNU0JOy6l7bOu7Y5NKVga9o2m46JJRQ1Dnf4A7cDWza5ziY
-   Gf2tvKPoV5GBO6+zT3U1JwLm7/gsf3JN5oBPagKQqQHJ2RM2jFoymTnmL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="15440567"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="15440567"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 02:26:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="42035044"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orviesa002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Mar 2024 02:26:18 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 11 Mar 2024 02:26:17 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 11 Mar 2024 02:26:16 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Mon, 11 Mar 2024 02:26:16 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 11 Mar 2024 02:26:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D9xC2HhcBTvC9CyFcbk9zfvMJLl+SoDqmI4EyND+uSwPj9vlRoLfjE/+vefrFbUR6cpOHXgJCAhBKxUDKvUBpFJG6htVEkRpACNuhUMPdzpH6i6LwpP7pDczG4AeOz88ARrRSrzvHWSlU2YpD9MDORsJKO9Q68h+LbEET2Lv6hgd4r0t38lCMxxZsK3rADRJchwtsyAGwh4dDqKGTbfTIw9vS265Z/h9qgj1YJUGmvCgNlckLFUr7DAIlHcnYxMuWsZrhXkueSc8dubi42/+FZl6EMd2aJS3zAgHw8dljM6BgfGaGJoAY7wxRDCWjRCYU483okmhDnskGEQZ1IBFmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YCNGlj83nw+S2HiJQGo8TsEC3dReQDapIJPe6doeBNA=;
- b=BXJPAFrepPHBXhY4Vf3I2YcWxYoH/87KroA4S9oYDRPMdryqy7DAJVJpF+3e8PJespvAtTf82ZgWDYZBfJ2NPp4KUxmub4Xkfp/Erk/Rg0XBr8k+4WZc07OJpOs70eurt0riXwfMOmC+ncHRFaf5mp6QRttyaaaXg44QO9l2DJhdbRor6OcOOkvLqd9JMW++/sUuiYBPmBUSp2WcJnvaMKSqouphRRwAqMFj11v7FJ/PSAwUqBHiMTShaQ/7+geP2KHMWBVsURyty/1yVa1fUjeInyXFDEEDYPbhZTKP92+CeBeRN5JGDuxM7sDvFfkAy9zcmE7iASwWsARmm6tsig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CO1PR11MB5092.namprd11.prod.outlook.com (2603:10b6:303:6e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.16; Mon, 11 Mar
- 2024 09:26:15 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::39d:5a9c:c9f5:c327]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::39d:5a9c:c9f5:c327%5]) with mapi id 15.20.7386.016; Mon, 11 Mar 2024
- 09:26:14 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: "Liu, Yi L" <yi.l.liu@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
-CC: "joro@8bytes.org" <joro@8bytes.org>, "alex.williamson@redhat.com"
-	<alex.williamson@redhat.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "cohuck@redhat.com"
-	<cohuck@redhat.com>, "eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"nicolinc@nvidia.com" <nicolinc@nvidia.com>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>, "peterx@redhat.com"
-	<peterx@redhat.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
- Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
-	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
-	<yan.y.zhao@intel.com>
-Subject: RE: [PATCH 1/8] iommu: Introduce a replace API for device pasid
-Thread-Topic: [PATCH 1/8] iommu: Introduce a replace API for device pasid
-Thread-Index: AQHaIPvLwYwLgeiapkWsYOVGHYVJTrDbbB8AgFYpTACAAVNM8A==
-Date: Mon, 11 Mar 2024 09:26:14 +0000
-Message-ID: <BN9PR11MB52766161477C2540969C83568C242@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20231127063428.127436-1-yi.l.liu@intel.com>
- <20231127063428.127436-2-yi.l.liu@intel.com>
- <20240115171950.GL734935@nvidia.com>
- <c831bf5e-f623-402d-9347-8718987d1610@intel.com>
-In-Reply-To: <c831bf5e-f623-402d-9347-8718987d1610@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CO1PR11MB5092:EE_
-x-ms-office365-filtering-correlation-id: b2f5d572-797f-4755-63d1-08dc41ad4c7c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fynPnmOfw+fH98CT/zwHk+GSkQDMobH0MaSOHtyA4gyXYfAneStzYKurITIsSQlr2ER7UpLyG+dCijGGduisc3C+aks1JbItGCc8DPK6mBursibgzYkA+L4KTpGkiDgqVH8ejH3bmqGGM3XHMOVx9gDMZq58CsdQEABOKVMjUwuLB0Lna5B8ED4LJ09IbahUYGF1ufGp230iiqlGwRNiNeC3vUK1/40bPsXcIXvDFU8DKdlteTqOkmb2rj552uQ7Ky2GHdtBL4zX81pr8dlPheeJ6Ml6Nrku9FjVzni3+P8pZWWQ17U88FXto16wWBxkoHLOBqGrRjGJReU9By7+xr485sbfTrclMpA7vvcOjrS7fnHp0r/eOqMxXtFgGO+Q6HWtvPoAinN/gncW+yO6njBC6WHfWNqZm17DiqoG+iQtrwWYF4CDItyLp+xR5hHAhBtSfKSDwuIvPhrWjPFE11HD4sq3be/BnU6IsCVGlObnQCYij8mdyuAn71lI7lNWvjM1xTKx8rPyhTRBfFAlxPOMj0+uusaQX6ZRpzpGxJMGbb68ugIQiM0/uz5SbmhYzOMclI8XrDKsTaK+Z8MJYnAgfjN8uELY4ouWWYilEP5DSi9Cptt/ZrtM5iwp3x4N8h5/ixZiF+1vCmbmBPQ/m2VKNqct6MScobfMCzOhbrQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(7416005)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MjlUVTM3Z2sxdjl3VHcwdzV5YlV2SU5rbUkrN1lLWmJwYjE0ZUxHZG9McnVo?=
- =?utf-8?B?YTNLM2NSK0s3bC8ydjFkWmdiQldoS2ZBL2hLczdqdkFneU5GazlqOUY1MUU4?=
- =?utf-8?B?T1lxL1B5UHcrRVVtUzVTTENZTlA5dFcwRUpRbjZ3VVJaV1lETnZGcW01Ump1?=
- =?utf-8?B?UzgzMmF1QzNpSVppNnV6eUdZWVkwdC91RVpBQTRhUGlEU1ZJcWt1dDM3K0hW?=
- =?utf-8?B?Vk5pTnhhcjNiSDUwTGgxZEJFa2k3Y08vbnQ1T1dsQTRDc3dLelBmYlUvMUJ4?=
- =?utf-8?B?SFNZOGFuVkV4Q1hyaE1UWFU2Sysyc21IU3pHcnBPRDRQQWVpZklRK1NNaUdJ?=
- =?utf-8?B?czltdm1QbElXQlNQV2kxMU5ybFE1L0IwNW9Ma1VGZmNoVXB6WnJnU2VzQmpJ?=
- =?utf-8?B?ck9TbXZ1ekF4RnJWaTZUYUZjdUlFRHorRVBGR1dobjJ5c1pURDdiR0M2bDA5?=
- =?utf-8?B?T1dHRnBocHpJRElPc3hySCtXaDRtbTNJMnpLaVhCSHBsM2lHWkNEZ2xBekow?=
- =?utf-8?B?YzNnUXVDMXdMckV0Q3JPYVZCekZ0Y3huYnBEUTczTWdGWkFDdjM0Y01CRFFi?=
- =?utf-8?B?aU1ZZWlTK09rLzc2bjBUbmVlTHRVU2RLa3ZiL2xham5XbnJTbTJ2UEMvMktV?=
- =?utf-8?B?bXQyVzJLTVQyaEpIZWRvVGpheXYvT2ljT1lYd2xOU3VUVk5TeTJRblNsd0Rl?=
- =?utf-8?B?aVFkeUhzTkxoejlTaGhiNWFUWUlDb1BaZVhEM0hPVFpWdG11ekVOMzNzWDFu?=
- =?utf-8?B?WkxVUVI4OFlBMTlTa29EYTRXdkh3QUg4djl6eFIvSTNNWU41azRnS0wzVnBm?=
- =?utf-8?B?bmlHMlVFMDgwNXR2Z1lMV0VSa1cvRys0RFhEc2dIMG9LOHFzT3J4eHBkV2s2?=
- =?utf-8?B?UnNCRFk1SHhNeXBYUTdJUkc4eXdycFI0VThCYVBYR0N4MTYrYmJoWnBja3Na?=
- =?utf-8?B?Zk8zZzNEUXBseHM2L0RLeFMzbGFRejdid3diVVIybnUvY042RURRbWpERFlG?=
- =?utf-8?B?dWZCWlNwWlVyUThsOUlhc1pUcXpmcGx3VW1wbnpJKzN5bVdTemUyaGkrZlVo?=
- =?utf-8?B?ZnNmVTF0TmF1MklQeE9KMVlNSkRGeTRpQnZGTkM4QUh6ZWhIUWtJYk8zL2Mv?=
- =?utf-8?B?V1V4TVJxMzJXVi9vd3RJYXVvOEx2L1pkQkZVMUh4RnF1a0FZNENmNkVId09G?=
- =?utf-8?B?am5LZDhGYWEyREx0dktRY3Z2R0hNTjRzTmVzbVltSHE1enVIaEdKT1FESjBp?=
- =?utf-8?B?V09NTHczUkdrSzFLWHIreksxL3FSRTJyTUVmRWNrY3ZIclNubVdVeGRpL1Zt?=
- =?utf-8?B?b3VIMTIzdkwrd3VNTXVmdHV0ZEVvUGs0YmJESG1ZdjJnbzdWUTB5RU5nM0tH?=
- =?utf-8?B?K3N0WVN4ZWd4b1VieXNpNDl1R2s1dW5JUFYyQ0NBdEU5ZldqWmVQV2VZTWwx?=
- =?utf-8?B?cldqQ3JBUkoxamhMTllidHk3Rkx4UW1qakNhNjRxdk8weXA4bmp2d3hkMWNs?=
- =?utf-8?B?YlJuQ1hVdXF0ZXdGMSs4cHJSWDgwTTkreXVncTZmQ2JwLzBFZWpDUksvV0dW?=
- =?utf-8?B?NjNBS2lWdDFZczNhQ0NNb0VwbzNsd21NbVpPazVudWhwZ3l2bERCSGJDLzl4?=
- =?utf-8?B?SzZ6aUFhdXVlODdBd0FoR1p6c1JnUFVvZXV0TS9UQzE5d05vWVV6dkJxelVa?=
- =?utf-8?B?WlE3L2xrN2wreEk2cEVWYjlUR2FtMjhRbU1pTU5TWDVCWVB2cG56MmF5Ui9U?=
- =?utf-8?B?R3cwcHRRdlo1aHdUOTFIQmtSUTNsZjh5QWVRQ3JZN3lERDNhODJFa2hDUFNW?=
- =?utf-8?B?OWxmNjlVdzJFYTRxcXg0Und4Y1RUQlZjd25ScGFNQlJrdGNqb2dzYmU4UVo1?=
- =?utf-8?B?ZkVMM2tkdTZUdXJPTzJsRDVBUmNkdTExdkZUbE1rY1ZGckRsM1B2OXRFQlFv?=
- =?utf-8?B?bnMzNTh2NXRQd21aWlF1a0JiTHFuWUFHSHNUOWVOUTQ4TmdDTEV5THlVNlZv?=
- =?utf-8?B?dDFWY3drdEVxd2NuQXo0SXR4angzOTVnNVp5elZpR0NzSi9GK1BtNFNSM2M3?=
- =?utf-8?B?ekNOUE1yVFdKUDhpZVBDME5NUHc2T2dnUGlqUnJDTHlpZVJMQzRrNDVlbU90?=
- =?utf-8?Q?7oicmA7tELs+MMWt/ulP2NuB/?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602DF171A5
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 09:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710149512; cv=none; b=AW/yJTvfe3UoeiTANYF/UTELgy4uiRiLXRAKqttUu03DoqvNJQzcBgyfKmWFeoPx8b24cMxXJkLTFclCwN7bkkQ5Zxr4+PWWisgMSvQ3bQH00ve1QCK0CKlYZ5Y5N6mX8+S2+qibn87mmYfFaWJnz92txYepXDYBJAfuG1w7kwE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710149512; c=relaxed/simple;
+	bh=hH7DjYecXDBb3PppoL62gOMOcFN6iAyb+l+d5Qs1Dxw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M1FQK/THXh34Qu9PfCjMv5v+sems5H6BQ7oKA//+NaXQ1EEutcyTcQWCXwzhmhOg+6KZELzdlqsAFhFMhnQ+R8jriunccmQd/Iy59gKB4KGsbU4BVwdwAPxLaW9yNvVqRiV0w3/LN4oaF6JRnJl3seKQNoQuHj9CBnnScJ5ElGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hXjpKQHu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710149508;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=TRK4RmTk4kmrSDrZbejl0PU5Yx+wA9WMsh0HUgjryk0=;
+	b=hXjpKQHultZY1WgEXj3U/QVLA6jb9/a2rSpjtXT+yFGjZGMjURMtDYAwZllRFyXY02Q0t+
+	o6aDCbcSAbQ0iy/KYRJCu2bF1g/M0W2CIGpTRaARhelVkVpWHVCS+QtPXh1tzL/Q6aMbhP
+	G5tiFSav9FscypuA3RSqVSGjcdg0aIU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-255-sgWZyV6SM5OtMjVObUl2BQ-1; Mon, 11 Mar 2024 05:31:45 -0400
+X-MC-Unique: sgWZyV6SM5OtMjVObUl2BQ-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-33e897f71dcso644356f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 02:31:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710149504; x=1710754304;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TRK4RmTk4kmrSDrZbejl0PU5Yx+wA9WMsh0HUgjryk0=;
+        b=Kllc1RBlNOokjnqB0/vyuMbcys0CLIxinqExoTYrX3+vdSQlPdWTMlLeoUmoqmF9bb
+         nbbTC+q22IouKUw9n6+TjSSW/q4j5BV7dhTe+kOoXPxi9V3c71xM9WyCsApL+JGQ4Kk1
+         QgREZneV3YCezz+d6Ha5B8+VO0uEHoexApGPPaQG4R3hAllj2AWDM1QZiEbd37BEaZK5
+         E4VTQDWAGbldOpss6nfdiRbMw0MobgguYUwK5aeKK9pcWn93aHZBfZ1qROvavuz5Vocb
+         mXPx4SgJR+/Vy8+vm402W2+78l0dphoc8f4bNi6O1hzSZlBN/x/w1sbZzlNj2hju2aNX
+         bOZA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/ygV62yMRIZtQ5CygzaC76sj4bNhm3BXVjCA7meCSDsY77S4VV/3gTRGvTyOnzEH45mK4aWJ2ntqDZ9pUBHeYMsvm4Gn3PToiECOcDgWn
+X-Gm-Message-State: AOJu0YxbVx6+0SNIQg7vK0qvYZe1411c/L5dk9uIH94fsqI2LEIoOFDS
+	HjKO952mhK4FTjE8Y5UQWWnzEn30I7qtinCjgaghza69LF/HS7QXMs9XXCGpiz0oDesUTRclDvo
+	DFw5DhckjMKOSwxdR+Ff6L7HpyfBaB5/sI4hzLhp+bMxGtOAKkvJP/JN9gtahXmLBcQ==
+X-Received: by 2002:adf:9782:0:b0:33e:7c52:c899 with SMTP id s2-20020adf9782000000b0033e7c52c899mr5456057wrb.10.1710149504051;
+        Mon, 11 Mar 2024 02:31:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHgps8TniqOqubxlZesHQUm1fcS2Wcdvy0FCmvqkHgbbVbcMownrrkcgWC0WKaybmoSO6AaXA==
+X-Received: by 2002:adf:9782:0:b0:33e:7c52:c899 with SMTP id s2-20020adf9782000000b0033e7c52c899mr5456027wrb.10.1710149503570;
+        Mon, 11 Mar 2024 02:31:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c72f:6100:aae:4b84:887c:15bb? (p200300cbc72f61000aae4b84887c15bb.dip0.t-ipconnect.de. [2003:cb:c72f:6100:aae:4b84:887c:15bb])
+        by smtp.gmail.com with ESMTPSA id s12-20020a5d424c000000b0033e48db23bdsm5940953wrr.100.2024.03.11.02.31.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 02:31:42 -0700 (PDT)
+Message-ID: <4a5c8d28-7f73-4c15-b288-641f0ccc91c2@redhat.com>
+Date: Mon, 11 Mar 2024 10:31:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2f5d572-797f-4755-63d1-08dc41ad4c7c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2024 09:26:14.8110
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nDO5saf8+gvYMbpLz4LGk7tVFyTCio3xWW226Izzb/a/A3pIqGyJRc6XhweFk2JvcXotClbD9848ficpliBNig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5092
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: BUG selftests/mm]
+Content-Language: en-US
+To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>, linux-mm@kvack.org
+Cc: Peter Xu <peterx@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Axel Rasmussen <axelrasmussen@google.com>
+References: <a9e3120d-8b79-4435-b113-ceb20aa45ee2@alu.unizg.hr>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
+ ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQW
+ AgMBAh4BAheAAhkBFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAl8Ox4kFCRKpKXgACgkQTd4Q
+ 9wD/g1oHcA//a6Tj7SBNjFNM1iNhWUo1lxAja0lpSodSnB2g4FCZ4R61SBR4l/psBL73xktp
+ rDHrx4aSpwkRP6Epu6mLvhlfjmkRG4OynJ5HG1gfv7RJJfnUdUM1z5kdS8JBrOhMJS2c/gPf
+ wv1TGRq2XdMPnfY2o0CxRqpcLkx4vBODvJGl2mQyJF/gPepdDfcT8/PY9BJ7FL6Hrq1gnAo4
+ 3Iv9qV0JiT2wmZciNyYQhmA1V6dyTRiQ4YAc31zOo2IM+xisPzeSHgw3ONY/XhYvfZ9r7W1l
+ pNQdc2G+o4Di9NPFHQQhDw3YTRR1opJaTlRDzxYxzU6ZnUUBghxt9cwUWTpfCktkMZiPSDGd
+ KgQBjnweV2jw9UOTxjb4LXqDjmSNkjDdQUOU69jGMUXgihvo4zhYcMX8F5gWdRtMR7DzW/YE
+ BgVcyxNkMIXoY1aYj6npHYiNQesQlqjU6azjbH70/SXKM5tNRplgW8TNprMDuntdvV9wNkFs
+ 9TyM02V5aWxFfI42+aivc4KEw69SE9KXwC7FSf5wXzuTot97N9Phj/Z3+jx443jo2NR34XgF
+ 89cct7wJMjOF7bBefo0fPPZQuIma0Zym71cP61OP/i11ahNye6HGKfxGCOcs5wW9kRQEk8P9
+ M/k2wt3mt/fCQnuP/mWutNPt95w9wSsUyATLmtNrwccz63XOwU0EVcufkQEQAOfX3n0g0fZz
+ Bgm/S2zF/kxQKCEKP8ID+Vz8sy2GpDvveBq4H2Y34XWsT1zLJdvqPI4af4ZSMxuerWjXbVWb
+ T6d4odQIG0fKx4F8NccDqbgHeZRNajXeeJ3R7gAzvWvQNLz4piHrO/B4tf8svmRBL0ZB5P5A
+ 2uhdwLU3NZuK22zpNn4is87BPWF8HhY0L5fafgDMOqnf4guJVJPYNPhUFzXUbPqOKOkL8ojk
+ CXxkOFHAbjstSK5Ca3fKquY3rdX3DNo+EL7FvAiw1mUtS+5GeYE+RMnDCsVFm/C7kY8c2d0G
+ NWkB9pJM5+mnIoFNxy7YBcldYATVeOHoY4LyaUWNnAvFYWp08dHWfZo9WCiJMuTfgtH9tc75
+ 7QanMVdPt6fDK8UUXIBLQ2TWr/sQKE9xtFuEmoQGlE1l6bGaDnnMLcYu+Asp3kDT0w4zYGsx
+ 5r6XQVRH4+5N6eHZiaeYtFOujp5n+pjBaQK7wUUjDilPQ5QMzIuCL4YjVoylWiBNknvQWBXS
+ lQCWmavOT9sttGQXdPCC5ynI+1ymZC1ORZKANLnRAb0NH/UCzcsstw2TAkFnMEbo9Zu9w7Kv
+ AxBQXWeXhJI9XQssfrf4Gusdqx8nPEpfOqCtbbwJMATbHyqLt7/oz/5deGuwxgb65pWIzufa
+ N7eop7uh+6bezi+rugUI+w6DABEBAAHCwXwEGAEIACYCGwwWIQQb2cqtc1xMOkYN/MpN3hD3
+ AP+DWgUCXw7HsgUJEqkpoQAKCRBN3hD3AP+DWrrpD/4qS3dyVRxDcDHIlmguXjC1Q5tZTwNB
+ boaBTPHSy/Nksu0eY7x6HfQJ3xajVH32Ms6t1trDQmPx2iP5+7iDsb7OKAb5eOS8h+BEBDeq
+ 3ecsQDv0fFJOA9ag5O3LLNk+3x3q7e0uo06XMaY7UHS341ozXUUI7wC7iKfoUTv03iO9El5f
+ XpNMx/YrIMduZ2+nd9Di7o5+KIwlb2mAB9sTNHdMrXesX8eBL6T9b+MZJk+mZuPxKNVfEQMQ
+ a5SxUEADIPQTPNvBewdeI80yeOCrN+Zzwy/Mrx9EPeu59Y5vSJOx/z6OUImD/GhX7Xvkt3kq
+ Er5KTrJz3++B6SH9pum9PuoE/k+nntJkNMmQpR4MCBaV/J9gIOPGodDKnjdng+mXliF3Ptu6
+ 3oxc2RCyGzTlxyMwuc2U5Q7KtUNTdDe8T0uE+9b8BLMVQDDfJjqY0VVqSUwImzTDLX9S4g/8
+ kC4HRcclk8hpyhY2jKGluZO0awwTIMgVEzmTyBphDg/Gx7dZU1Xf8HFuE+UZ5UDHDTnwgv7E
+ th6RC9+WrhDNspZ9fJjKWRbveQgUFCpe1sa77LAw+XFrKmBHXp9ZVIe90RMe2tRL06BGiRZr
+ jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <a9e3120d-8b79-4435-b113-ceb20aa45ee2@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-PiBGcm9tOiBMaXUsIFlpIEwgPHlpLmwubGl1QGludGVsLmNvbT4NCj4gU2VudDogU3VuZGF5LCBN
-YXJjaCAxMCwgMjAyNCA5OjA2IFBNDQo+IA0KPiBPbiAyMDI0LzEvMTYgMDE6MTksIEphc29uIEd1
-bnRob3JwZSB3cm90ZToNCj4gPiBPbiBTdW4sIE5vdiAyNiwgMjAyMyBhdCAxMDozNDoyMVBNIC0w
-ODAwLCBZaSBMaXUgd3JvdGU6DQo+ID4+ICtpbnQgaW9tbXVfcmVwbGFjZV9kZXZpY2VfcGFzaWQo
-c3RydWN0IGlvbW11X2RvbWFpbiAqZG9tYWluLA0KPiA+PiArCQkJICAgICAgIHN0cnVjdCBkZXZp
-Y2UgKmRldiwgaW9hc2lkX3QgcGFzaWQpDQo+ID4+ICt7DQo+ID4+ICsJc3RydWN0IGlvbW11X2dy
-b3VwICpncm91cCA9IGRldi0+aW9tbXVfZ3JvdXA7DQo+ID4+ICsJc3RydWN0IGlvbW11X2RvbWFp
-biAqb2xkX2RvbWFpbjsNCj4gPj4gKwlpbnQgcmV0Ow0KPiA+PiArDQo+ID4+ICsJaWYgKCFkb21h
-aW4pDQo+ID4+ICsJCXJldHVybiAtRUlOVkFMOw0KPiA+PiArDQo+ID4+ICsJaWYgKCFncm91cCkN
-Cj4gPj4gKwkJcmV0dXJuIC1FTk9ERVY7DQo+ID4+ICsNCj4gPj4gKwltdXRleF9sb2NrKCZncm91
-cC0+bXV0ZXgpOw0KPiA+PiArCV9faW9tbXVfcmVtb3ZlX2dyb3VwX3Bhc2lkKGdyb3VwLCBwYXNp
-ZCk7DQo+ID4NCj4gPiBJdCBpcyBub3QgcmVwbGFjZSBpZiB5b3UgZG8gcmVtb3ZlIGZpcnN0Lg0K
-PiA+DQo+ID4gUmVwbGFjZSBtdXN0IGp1c3QgY2FsbCBzZXRfZGV2X3Bhc2lkIGFuZCBub3RoaW5n
-IG11Y2ggZWxzZS4uDQo+IA0KPiBTZWVtcyB1bmVhc3kgdG8gZG8gaXQgc28gZmFyLiBUaGUgVlQt
-ZCBkcml2ZXIgbmVlZHMgdG8gZ2V0IHRoZSBvbGQgZG9tYWluDQo+IGZpcnN0IGluIG9yZGVyIHRv
-IGRvIHJlcGxhY2VtZW50LiBIb3dldmVyLCBWVC1kIGRyaXZlciBkb2VzIG5vdCB0cmFjayB0aGUN
-Cj4gYXR0YWNoZWQgZG9tYWlucyBvZiBwYXNpZHMuIEl0IGdldHMgZG9tYWluIG9mIGEgcGFzaWQN
-Cj4gYnkgaW9tbXVfZ2V0X2RvbWFpbl9mb3JfZGV2X3Bhc2lkKCkuIExpa2UNCj4gaW50ZWxfaW9t
-bXVfcmVtb3ZlX2Rldl9wYXNpZCkNCj4gaW4gbGluayBbMV0uIFdoaWxlIHRoZSBpb21tdSBsYXll
-ciBleGNoYW5nZXMgdGhlIGRvbWFpbiBpbiB0aGUNCj4gZ3JvdXAtPnBhc2lkX2FycmF5IGJlZm9y
-ZSBjYWxsaW5nIGludG8gVlQtZCBkcml2ZXIuIFNvIHdoZW4gY2FsbGluZyBpbnRvDQo+IFZULWQg
-ZHJpdmVyLCB0aGUgZG9tYWluIGdvdCBieSBpb21tdV9nZXRfZG9tYWluX2Zvcl9kZXZfcGFzaWQo
-KSBpcw0KPiBhbHJlYWR5DQo+IHRoZSBuZXcgZG9tYWluLiBUbyBzb2x2ZSBpdCwgd2UgbWF5IG5l
-ZWQgdG8gbGV0IFZULWQgZHJpdmVyIGhhdmUgaXRzDQo+IG93biB0cmFja2luZyBvbiB0aGUgZG9t
-YWlucy4gSG93IGFib3V0IHlvdXIgdGhvdWdodHM/IEBKYXNvbiwgQEtldmluLA0KPiBAQmFvcGx1
-Pw0KPiANCj4gWzFdDQo+IGh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL21h
-c3Rlci9kcml2ZXJzL2lvbW11L2ludGVsL2lvbW11DQo+IC5jI0w0NjIxQzE5LUw0NjIxQzIwDQo+
-IA0KDQpKYXNvbidzIHBvaW50IHdhcyB0aGF0IHRoZSBjb3JlIGhlbHBlciBzaG91bGQgZGlyZWN0
-bHkgY2FsbCBzZXRfZGV2X3Bhc2lkDQphbmQgdW5kZXJseWluZyBpb21tdSBkcml2ZXIgZGVjaWRl
-cyB3aGV0aGVyIGF0b21pYyByZXBsYWNlbWVudA0KY2FuIGJlIGltcGxlbWVudGVkIGluc2lkZSB0
-aGUgY2FsbGJhY2suIElmIHlvdSBmaXJzdCByZW1vdmUgaW4gdGhlIGNvcmUNCnRoZW4gb25lIGNh
-biBuZXZlciBpbXBsZW1lbnQgYSByZXBsYWNlIHNlbWFudGljcy4NCg==
+On 09.03.24 20:12, Mirsad Todorovac wrote:
+> Hi,
+> 
+> Routine run of the test in net-next gave also this mm unit error.
+> 
+> root@defiant:tools/testing/selftests/mm# ./uffd-unit-tests
+> Testing UFFDIO_API (with syscall)... done
+> Testing UFFDIO_API (with /dev/userfaultfd)... done
+> Testing register-ioctls on anon... done
+> Testing register-ioctls on shmem... done
+> Testing register-ioctls on shmem-private... done
+> Testing register-ioctls on hugetlb... skipped [reason: memory allocation failed]
+> Testing register-ioctls on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing zeropage on anon... done
+> Testing zeropage on shmem... done
+> Testing zeropage on shmem-private... done
+> Testing zeropage on hugetlb... skipped [reason: memory allocation failed]
+> Testing zeropage on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing move on anon... done
+> Testing move-pmd on anon... done
+> Testing move-pmd-split on anon... done
+> Testing wp-fork on anon... done
+> Testing wp-fork on shmem... done
+> Testing wp-fork on shmem-private... done
+> Testing wp-fork on hugetlb... skipped [reason: memory allocation failed]
+> Testing wp-fork on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing wp-fork-with-event on anon... done
+> Testing wp-fork-with-event on shmem... done
+> Testing wp-fork-with-event on shmem-private... done
+> Testing wp-fork-with-event on hugetlb... skipped [reason: memory allocation failed]
+> Testing wp-fork-with-event on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing wp-fork-pin on anon... done
+> Testing wp-fork-pin on shmem... done
+> Testing wp-fork-pin on shmem-private... done
+> Testing wp-fork-pin on hugetlb... skipped [reason: memory allocation failed]
+> Testing wp-fork-pin on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing wp-fork-pin-with-event on anon... done
+> Testing wp-fork-pin-with-event on shmem... done
+> Testing wp-fork-pin-with-event on shmem-private... done
+> Testing wp-fork-pin-with-event on hugetlb... skipped [reason: memory allocation failed]
+> Testing wp-fork-pin-with-event on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing wp-unpopulated on anon... done
+> Testing minor on shmem... done
+> Testing minor on hugetlb... skipped [reason: memory allocation failed]
+> Testing minor-wp on shmem... done
+> Testing minor-wp on hugetlb... skipped [reason: memory allocation failed]
+> Testing minor-collapse on shmem... done
+> Testing sigbus on anon... done
+> Testing sigbus on shmem... done
+> Testing sigbus on shmem-private... done
+> Testing sigbus on hugetlb... skipped [reason: memory allocation failed]
+> Testing sigbus on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing sigbus-wp on anon... done
+> Testing sigbus-wp on shmem... done
+> Testing sigbus-wp on shmem-private... done
+> Testing sigbus-wp on hugetlb... skipped [reason: memory allocation failed]
+> Testing sigbus-wp on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing events on anon... done
+> Testing events on shmem... done
+> Testing events on shmem-private... done
+> Testing events on hugetlb... skipped [reason: memory allocation failed]
+> Testing events on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing events-wp on anon... done
+> Testing events-wp on shmem... done
+> Testing events-wp on shmem-private... done
+> Testing events-wp on hugetlb... skipped [reason: memory allocation failed]
+> Testing events-wp on hugetlb-private... skipped [reason: memory allocation failed]
+> Testing poison on anon... done
+> Testing poison on shmem... done
+> Testing poison on shmem-private... done
+> Testing poison on hugetlb... skipped [reason: memory allocation failed]
+> Testing poison on hugetlb-private... skipped [reason: memory allocation failed]
+> Userfaults unit tests: pass=42, skip=24, fail=0 (total=66)
+> root@defiant:tools/testing/selftests/mm# grep -i huge /proc/meminfo
+> 
+> It resulted in alarming errors in the syslog:
+> 
+> Mar  9 19:48:24 defiant kernel: [77187.055103] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4631e000
+> Mar  9 19:48:24 defiant kernel: [77187.055132] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46320000
+> Mar  9 19:48:24 defiant kernel: [77187.055160] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46322000
+> Mar  9 19:48:24 defiant kernel: [77187.055189] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46324000
+> Mar  9 19:48:24 defiant kernel: [77187.055218] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46326000
+> Mar  9 19:48:24 defiant kernel: [77187.055250] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46328000
+> Mar  9 19:48:24 defiant kernel: [77187.055278] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4632a000
+> Mar  9 19:48:24 defiant kernel: [77187.055307] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4632c000
+> Mar  9 19:48:24 defiant kernel: [77187.055336] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4632e000
+> Mar  9 19:48:24 defiant kernel: [77187.055366] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46330000
+> Mar  9 19:48:24 defiant kernel: [77187.055395] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46332000
+> Mar  9 19:48:24 defiant kernel: [77187.055423] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46334000
+> Mar  9 19:48:24 defiant kernel: [77187.055452] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46336000
+> Mar  9 19:48:24 defiant kernel: [77187.055480] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46338000
+> Mar  9 19:48:24 defiant kernel: [77187.055509] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4633a000
+> Mar  9 19:48:24 defiant kernel: [77187.055538] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4633c000
+> Mar  9 19:48:24 defiant kernel: [77187.055567] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4633e000
+> Mar  9 19:48:24 defiant kernel: [77187.055597] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46340000
+> 
+> At this point, it can be problem with my box's memory chips, or something with HUGETLB.
+> 
+> However, since the "classic" allocations were successful, the problem might be in huge pages, or
+> if I understood well, in deliberate poisoning of pages?
+> 
+
+Isn't that just the (expected) side effect of UFFDIO_POISON tests?
+
+IOW, there is no problem here. We are poisoning virtual memory locations 
+(not actual memory) and expect a SIGBUS on next access. While testing 
+that, we receive these messages.
+
+The "ugly" thing here seems to be that we can trigger repeated pr_err() 
+from user space. There is no rate-limiting in place. Maybe UFFDIO_POISON 
+requires root permissions so this cannot be exploited by unprivileged 
+user space to flood the system log?
+
+CCing Axel
+
+-- 
+Cheers,
+
+David / dhildenb
+
 
