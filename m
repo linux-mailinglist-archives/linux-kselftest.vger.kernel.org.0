@@ -1,139 +1,122 @@
-Return-Path: <linux-kselftest+bounces-6231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F2AA878A25
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 22:37:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D04878AA4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 23:20:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C9071C20FA6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 21:37:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 049101F22DB6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 22:20:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68BE056B95;
-	Mon, 11 Mar 2024 21:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D26957330;
+	Mon, 11 Mar 2024 22:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RZQ+07ad"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ncIpVrqC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4F256B79;
-	Mon, 11 Mar 2024 21:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A6B58104;
+	Mon, 11 Mar 2024 22:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710193030; cv=none; b=bitSJvH7UpvXi4NrMfJivuCK8idJjUvSWdlUVkllUl2Z/hkq+UmGapBlt9XTrZ+sMeMagpLUqB6klhI48UygvBHf5OhXbFtHW4jFsAnqUgmv+i0soLS6u0A6XTQ0Ff21EqP5kh16gL7NdN6jNZfIHAad76QimkMXzhq6PVttS0I=
+	t=1710195632; cv=none; b=cF9kI/SqEH0uXpLTNKIGw0a5keWv7gZ1VhX0KTeKfUrhN4/Lh5sc1d/vdNtRQCj0uA+jQxGQ5imBtWFEV3LBzRX+Suff9CGos3iu7FY9bSzBtuMiXu+G/0hPmPGi6998rlT0P13fV7xsH2b9ahs9PhXc6cuMuq5JnV4gn0zcWcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710193030; c=relaxed/simple;
-	bh=7/t73ebbv8sRVNFVm6dXGVP8Cy5gtlrNTZRWv0cey24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ku2XWjmqNMsWnfn0x9cOo1su+onrGaTSdFuFzB3yMK99vPz32K54hyqEKba6e3ynQojyp8NVZaW4UJuYNPnYBHotQn+mIGfWst8yQqOKm/d6pQyL5RNiwY1lp8wSVSOrv9Ww9xtNHvelMgS0CLDeg6afPgS93cjCeXIPG7OsQ/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RZQ+07ad; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710193028; x=1741729028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7/t73ebbv8sRVNFVm6dXGVP8Cy5gtlrNTZRWv0cey24=;
-  b=RZQ+07adTOQ/ErMs+wf882j5eW36hS/hrPXuldSfcMthmOPahDVjJ61Q
-   A7fcDotHLdC7pGAVOFXw4AdvQMg1QB6BdsRZLI2EU/2KUVIsMU1YCIT0T
-   pRY3z1r8J92zPxPqtWMBiUeC+n2t3pd5wWnOE/WEfE3i/1hVdNBiYR4Gf
-   PyOpJ2snrRYjMGJffMzI0PVnUpBYpbqkGPKuzCqGA0q8qfqvS8BGvpYOb
-   tvpf8fpZ44M+DQANbfmmy9L9PP8oFx06sw6vWjN72YgeqmiuxNZhSYvF8
-   Jd/89R65rmS4SMcvIboIwmW1gAkvoB7bsi4lkFskwlXxuHkGsnpij5mEK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="8641371"
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="8641371"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 14:37:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="11375550"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 11 Mar 2024 14:37:01 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjnKM-0009Tt-0U;
-	Mon, 11 Mar 2024 21:36:58 +0000
-Date: Tue, 12 Mar 2024 05:36:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Menglong Dong <dongmenglong.8@bytedance.com>, andrii@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, ast@kernel.org, daniel@iogearbox.net,
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	jolsa@kernel.org, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-	svens@linux.ibm.com, davem@davemloft.net, dsahern@kernel.org,
-	dave.hansen@linux.intel.com, x86@kernel.org, rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com, quentin@isovalent.com,
-	bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 6/9] bpf: tracing: add multi-link support
-Message-ID: <202403120515.LMAOyTdG-lkp@intel.com>
-References: <20240311093526.1010158-7-dongmenglong.8@bytedance.com>
+	s=arc-20240116; t=1710195632; c=relaxed/simple;
+	bh=wpoixAH5hmLkM35K/YQ7kamEzrI2/hx3uKaAyzVuvW0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=k1mHRMDB9reRc+1vlxi25M6YiA2IxU837AG8j6NXJuBeJz3bWaNJDYjvcDWJ1gNjQuWrjaMnbBGhqslvyan1sIXEewzBsmG9p/ZS7tBo2EOIuL5aioraJdQiXt05gZR8zQZPnySK2x1IvvhIegEyse4X7n4hhZO+mqIMWKVg2No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ncIpVrqC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9161EC43390;
+	Mon, 11 Mar 2024 22:20:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710195631;
+	bh=wpoixAH5hmLkM35K/YQ7kamEzrI2/hx3uKaAyzVuvW0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ncIpVrqCU/a4KDUIUnKzFzOXKQFqdMKJhN1H9cFpEi4WQ49Y+8tEhAcTArdYMbGSl
+	 CYNwlWMMJ7pqSXzqzuKEKz7zCSN4lUKIMHL2THGIyLYKsZ4m0/e3NLcUtPDHZbUOTO
+	 8HBkpezzTDrpjoA3mdxMnhXIN4EqeLPTpOqqvxGIpYuj1N8xn4RI+VImGeSujOs7F2
+	 VOvXMc19ZtL4g2No/59y9BZAi+29HNOxKFQ77wDNBZNI+/2L53hpVvH6U5cdWp8Jqn
+	 X42lCpLrfFBfOh2FbKOp48kzcvi1RpvvwVbTTkDGWp5tpiDRlvlTD5/EGIvYKUQb0Y
+	 Zw671a3g4LB9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74BA0D95056;
+	Mon, 11 Mar 2024 22:20:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240311093526.1010158-7-dongmenglong.8@bytedance.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 00/15] selftests: mptcp: various improvements
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171019563147.21986.8830557428552738563.git-patchwork-notify@kernel.org>
+Date: Mon, 11 Mar 2024 22:20:31 +0000
+References: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
+In-Reply-To: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
+To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
+ tanggeliang@kylinos.cn, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Hi Menglong,
+Hello:
 
-kernel test robot noticed the following build errors:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test ERROR on bpf-next/master]
+On Fri, 08 Mar 2024 23:10:07 +0100 you wrote:
+> In this series from Geliang, there are various improvements in MPTCP
+> selftests: sharing code, doing actions the same way, colours, etc.
+> 
+> Patch 1 prints all error messages to stdout: what was done in almost all
+> other MPTCP selftests. This can be now easily changed later if needed.
+> 
+> Patch 2 makes sure the test counter is continuous in mptcp_connect.sh.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/bpf-tracing-add-support-to-record-and-check-the-accessed-args/20240311-173954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240311093526.1010158-7-dongmenglong.8%40bytedance.com
-patch subject: [PATCH bpf-next v2 6/9] bpf: tracing: add multi-link support
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240312/202403120515.LMAOyTdG-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240312/202403120515.LMAOyTdG-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [net-next,01/15] selftests: mptcp: print all error messages to stdout
+    https://git.kernel.org/netdev/net-next/c/6215df11b945
+  - [net-next,02/15] selftests: mptcp: connect: add dedicated port counter
+    https://git.kernel.org/netdev/net-next/c/01ed9838107f
+  - [net-next,03/15] selftests: mptcp: connect: fix misaligned output
+    https://git.kernel.org/netdev/net-next/c/c9161a0f8ff9
+  - [net-next,04/15] selftests: mptcp: sockopt: print every test result
+    https://git.kernel.org/netdev/net-next/c/fd959262c1bb
+  - [net-next,05/15] selftests: mptcp: export TEST_COUNTER variable
+    https://git.kernel.org/netdev/net-next/c/9e6a39ecb9a1
+  - [net-next,06/15] selftests: mptcp: add print_title in mptcp_lib
+    https://git.kernel.org/netdev/net-next/c/3382bb09701b
+  - [net-next,07/15] selftests: mptcp: print test results with counters
+    https://git.kernel.org/netdev/net-next/c/aa7694766f14
+  - [net-next,08/15] selftests: mptcp: use += operator to append strings
+    https://git.kernel.org/netdev/net-next/c/e7c42bf4d320
+  - [net-next,09/15] selftests: mptcp: print test results with colors
+    https://git.kernel.org/netdev/net-next/c/747ba8783a33
+  - [net-next,10/15] selftests: mptcp: call test_fail without argument
+    https://git.kernel.org/netdev/net-next/c/339c225e2e03
+  - [net-next,11/15] selftests: mptcp: extract mptcp_lib_check_expected
+    https://git.kernel.org/netdev/net-next/c/663260e14668
+  - [net-next,12/15] selftests: mptcp: print_test out of verify_listener_events
+    https://git.kernel.org/netdev/net-next/c/8ebb44196585
+  - [net-next,13/15] selftests: mptcp: add mptcp_lib_verify_listener_events
+    https://git.kernel.org/netdev/net-next/c/7f0782ca1ce9
+  - [net-next,14/15] selftests: mptcp: declare event macros in mptcp_lib
+    https://git.kernel.org/netdev/net-next/c/23a0485d1c04
+  - [net-next,15/15] selftests: mptcp: use KSFT_SKIP/KSFT_PASS/KSFT_FAIL
+    https://git.kernel.org/netdev/net-next/c/8f7a69a8e7dc
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403120515.LMAOyTdG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   kernel/bpf/syscall.c: In function 'bpf_tracing_multi_link_release':
->> kernel/bpf/syscall.c:3538:9: error: implicit declaration of function 'bpf_trampoline_multi_unlink_prog'; did you mean 'bpf_trampoline_unlink_prog'? [-Werror=implicit-function-declaration]
-    3538 |         bpf_trampoline_multi_unlink_prog(&multi_link->link);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |         bpf_trampoline_unlink_prog
-   kernel/bpf/syscall.c: In function 'bpf_tracing_prog_attach_multi':
->> kernel/bpf/syscall.c:3815:15: error: implicit declaration of function 'bpf_trampoline_multi_link_prog'; did you mean 'bpf_trampoline_unlink_prog'? [-Werror=implicit-function-declaration]
-    3815 |         err = bpf_trampoline_multi_link_prog(&link->link);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |               bpf_trampoline_unlink_prog
-   cc1: some warnings being treated as errors
-
-
-vim +3538 kernel/bpf/syscall.c
-
-  3532	
-  3533	static void bpf_tracing_multi_link_release(struct bpf_link *link)
-  3534	{
-  3535		struct bpf_tracing_multi_link *multi_link =
-  3536			container_of(link, struct bpf_tracing_multi_link, link.link);
-  3537	
-> 3538		bpf_trampoline_multi_unlink_prog(&multi_link->link);
-  3539		__bpf_tracing_multi_link_release(multi_link);
-  3540	}
-  3541	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
