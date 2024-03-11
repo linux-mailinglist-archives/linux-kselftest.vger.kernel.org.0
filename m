@@ -1,121 +1,180 @@
-Return-Path: <linux-kselftest+bounces-6214-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF48C87858A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:34:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBDF08785F1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 18:02:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19F9E1C21B60
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 16:34:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0CE41F215A8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:02:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C353FBB2;
-	Mon, 11 Mar 2024 16:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BDD0482DB;
+	Mon, 11 Mar 2024 17:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NzfB3IFv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5317F138E;
-	Mon, 11 Mar 2024 16:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CCC482D1;
+	Mon, 11 Mar 2024 17:02:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710174868; cv=none; b=I+3uuGsgLSOAOouTbufhyX+3njPNomwdBAO+bbZtlH3vtfxmIXDFLF6UlFQXdIi6H1T9XT9FPw4ebvV8xIywzRtEsrZ2FB6Tejr4iP7k/vn7F+gHYn6mUKb2DQVOHJZ2lMrZN//t4evkKn1d8u4eCt0oi1otJlwrXCNqeio0RQw=
+	t=1710176525; cv=none; b=QhXlms1nobwMWhwmc+ImxY8zCuLhfBL+QGTeTM/I1KKPdoXucjwMCaBFoaSfPnVG07kKJKI8SLTLsPNHmXY2LFpQBeN9DzQXGDdSqKRo+vXu+avZX+ZtrfB2C4BrPvBAhSkl4/Jx1SZFwh9DihSVHQLws+3pJzJiy11tWEDT3C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710174868; c=relaxed/simple;
-	bh=WixOqrZR+rJh/Fbz+wWrf8dVTfQslX0GeSZNmY4xbK4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=sgNdPA3bpwooKtZGLXUbTSNmXqj4NYWytNwjZUQIDTva+meTuCLnUzYVjFXodSXztS8aGozb4Svzws0v8wD6dL/4xi0A8goC6joZMPAl0oCS+EX+RbAjtZQ+SBGuR4Vd2G0MmRBSNWppn6rjs9aVJF+K2z5V6ENDfoIxYYUhL7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A7831007;
-	Mon, 11 Mar 2024 09:35:02 -0700 (PDT)
-Received: from [192.168.1.100] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D3233F762;
-	Mon, 11 Mar 2024 09:34:12 -0700 (PDT)
-Message-ID: <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
-Date: Mon, 11 Mar 2024 16:34:10 +0000
+	s=arc-20240116; t=1710176525; c=relaxed/simple;
+	bh=D9uVuEy9DT1FDOsqkYiOzDsS+RuUagKwN+xLlAFjNaE=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=lcuUFzU1l076b5AJtzZXncWy6NJotzaC1qC7R2TfCh0BTLBBetjSh0MVEJONy4OWdHkVLu/cNZwMXiBeW4rKNvsqJlBkT1qMc2PuKwNVfY3tsVGlGWrF6OaTb2gjJE3RHaLdWH6bLBZ9vKpp/B4wke/27MZV3GcqIJkQecbQ6Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NzfB3IFv; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1710176521;
+	bh=D9uVuEy9DT1FDOsqkYiOzDsS+RuUagKwN+xLlAFjNaE=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=NzfB3IFv1BMymbFajCTtjdsPZLtrU1+vW8HuhboF2hvMkBDGuRhBM/rlaBETAZGJz
+	 1+ChAyn1jw3l7+zsp4NOlkmVfjz2qIRGI6GhiF9Fp96EJSB1tJ0f88OiWrIMWlU1AH
+	 60sjB3+xcvBIXs148w65/crmfEPrRp507rEYf+ZO8QgJnmBNfxzKRh27eiTLLVwxC5
+	 9tOS1x/sH/JIx4Acz/GLWWeBv0I73i1GSygOBg9F6MDuX2VPZLvrg5shaueKJxpNk3
+	 9U/YV1kGkxdBj5qzMh2TDji5pRZaZSXfV2atuWHp+HyQcPfmL0+Nlc35k3bf6REurN
+	 9b5iOByiYQnKQ==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id F250E378200D;
+	Mon, 11 Mar 2024 17:01:57 +0000 (UTC)
+Message-ID: <c3362840-365e-40cb-80fe-895aa2d979ec@collabora.com>
+Date: Mon, 11 Mar 2024 22:02:27 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: x86: skip the tests if prerequisites aren't
+ fulfilled
+To: "Chang S. Bae" <chang.seok.bae@intel.com>, Shuah Khan <shuah@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Weihong Zhang <weihong.zhang@intel.com>,
+ Binbin Wu <binbin.wu@linux.intel.com>, angquan yu <angquan21@gmail.com>
+References: <20240307183730.2858264-1-usama.anjum@collabora.com>
+ <dc8d122a-22b7-4d17-abd9-66262af0b058@intel.com>
 Content-Language: en-US
-To: Ian Rogers <irogers@google.com>
-References: <20240310020509.647319-1-irogers@google.com>
- <20240310020509.647319-13-irogers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>,
- Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
- David Laight <David.Laight@ACULAB.COM>, "Michael S. Tsirkin"
- <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>,
- Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>,
- Nick Forrington <nick.forrington@arm.com>, Leo Yan <leo.yan@linux.dev>,
- German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>,
- John Garry <john.g.garry@oracle.com>, Sean Christopherson
- <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
- Fuad Tabba <tabba@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Chao Peng <chao.p.peng@linux.intel.com>, Haibo Xu <haibo1.xu@intel.com>,
- Peter Xu <peterx@redhat.com>, Vishal Annapurve <vannapurve@google.com>,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
-From: James Clark <james.clark@arm.com>
-In-Reply-To: <20240310020509.647319-13-irogers@google.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <dc8d122a-22b7-4d17-abd9-66262af0b058@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+On 3/9/24 6:06 AM, Chang S. Bae wrote:
+> On 3/7/2024 10:37 AM, Muhammad Usama Anjum wrote:
+>>
+>> diff --git a/tools/testing/selftests/x86/amx.c
+>> b/tools/testing/selftests/x86/amx.c
+>> index d884fd69dd510..5d1ca0bbaaae7 100644
+>> --- a/tools/testing/selftests/x86/amx.c
+>> +++ b/tools/testing/selftests/x86/amx.c
+>> @@ -103,9 +103,10 @@ static void clearhandler(int sig)
+>>     #define CPUID_LEAF1_ECX_XSAVE_MASK    (1 << 26)
+>>   #define CPUID_LEAF1_ECX_OSXSAVE_MASK    (1 << 27)
+>> -static inline void check_cpuid_xsave(void)
+>> +static inline int check_cpuid_xsave(void)
+>>   {
+>>       uint32_t eax, ebx, ecx, edx;
+>> +    int ret = 0;
+>>         /*
+>>        * CPUID.1:ECX.XSAVE[bit 26] enumerates general
+>> @@ -113,10 +114,16 @@ static inline void check_cpuid_xsave(void)
+>>        * XGETBV.
+>>        */
+>>       __cpuid_count(1, 0, eax, ebx, ecx, edx);
+>> -    if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
+>> -        fatal_error("cpuid: no CPU xsave support");
+>> -    if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
+>> -        fatal_error("cpuid: no OS xsave support");
+>> +    if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK)) {
+>> +        ksft_print_msg("cpuid: no CPU xsave support\n");
+>> +        ret = -1;
+>> +    }
+>> +    if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK)) {
+>> +        ksft_print_msg("cpuid: no OS xsave support\n");
+>> +        ret = -1;
+>> +    }
+>> +
+>> +    return ret;
+>>   }
+> 
+> I thought check_cpuid_xsave() can go away [1] by simplifying the
+> availability check through arch_prctl():
+In this patch, I'm just focusing on skip login on existing code. I'll make
+this change when I'll transform the entire test to TAP.
 
+> 
+> +#define ARCH_GET_XCOMP_SUPP    0x1021
+>  #define ARCH_GET_XCOMP_PERM    0x1022
+>  #define ARCH_REQ_XCOMP_PERM    0x1023
+> 
+> @@ -928,8 +911,15 @@ static void test_ptrace(void)
+> 
+>  int main(void)
+>  {
+> -       /* Check hardware availability at first */
+> -       check_cpuid_xsave();
+> +       unsigned long features;
+> +       long rc;
+> +
+> +       rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
+> +       if (rc || (features & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
+> +               ksft_print_msg("no AMX support\n");
+> +               return KSFT_SKIP;
+> +       }
+> 
+>> -static void check_cpuid_xtiledata(void)
+>> +static int check_cpuid_xtiledata(void)
+>>   {
+>>       uint32_t eax, ebx, ecx, edx;
+>>   @@ -153,12 +160,16 @@ static void check_cpuid_xtiledata(void)
+>>        * eax: XTILEDATA state component size
+>>        * ebx: XTILEDATA state component offset in user buffer
+>>        */
+>> -    if (!eax || !ebx)
+>> -        fatal_error("xstate cpuid: invalid tile data size/offset: %d/%d",
+>> -                eax, ebx);
+>> +    if (!eax || !ebx) {
+>> +        ksft_print_msg("xstate cpuid: invalid tile data size/offset:
+>> %d/%d\n",
+>> +                   eax, ebx);
+>> +        return -1;
+>> +    }
+>>         xtiledata.size          = eax;
+>>       xtiledata.xbuf_offset = ebx;
+>> +
+>> +    return 0;
+>>   }
+> 
+> I don't think it is okay to silently skip the test here. If the feature is
+> available, the tile data size and offset should not be zero.
+We are logging that data size/offset are invalid if either eax or ebx are
+invalid and then we are skipping. Not sure what you are asking me to change.
 
-On 10/03/2024 02:05, Ian Rogers wrote:
-> compiler.h - synced from include/linux/compiler.h, guards were
->  added to definitions to avoid redefinition of macros
->  in libc. ftrace, CONFIG_OBJTOOL and kentry logic was removed as
->  redundant.
+> 
+> Thanks,
+> Chang
+> 
+> [1]
+> https://lore.kernel.org/lkml/327cde12-daea-84ba-4b24-64fe12e89dea@intel.com/
 > 
 
-Hi Ian,
-
-This commit breaks the Arm build (and cross compilation for Arm on x86):
-
-  $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-
-Something like this, but I won't paste the whole output because it's huge:
-
-tools/include/linux/ring_buffer.h: In function ‘ring_buffer_read_head’:
-
-tools/include/asm/../../arch/arm64/include/asm/barrier.h:72:35: error:
-‘__u8_alias_t’ undeclared (first use in this function)
-   72 |                         : "=r" (*(__u8_alias_t *)__u.__c)
-       \
-      |                                   ^~~~~~~~~~~~
-tools/include/linux/ring_buffer.h:59:16: note: in expansion of macro
-‘smp_load_acquire’
-   59 |         return smp_load_acquire(&base->data_head);
-      |                ^~~~~~~~~~~~~~~~
-
-Thanks
-James
+-- 
+BR,
+Muhammad Usama Anjum
 
