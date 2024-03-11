@@ -1,122 +1,182 @@
-Return-Path: <linux-kselftest+bounces-6232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63D04878AA4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 23:20:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A087878ABE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 23:28:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 049101F22DB6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 22:20:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDE031C20B34
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 22:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D26957330;
-	Mon, 11 Mar 2024 22:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A358F5787D;
+	Mon, 11 Mar 2024 22:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ncIpVrqC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cueJJ8Kv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A6B58104;
-	Mon, 11 Mar 2024 22:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C475786B
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 22:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710195632; cv=none; b=cF9kI/SqEH0uXpLTNKIGw0a5keWv7gZ1VhX0KTeKfUrhN4/Lh5sc1d/vdNtRQCj0uA+jQxGQ5imBtWFEV3LBzRX+Suff9CGos3iu7FY9bSzBtuMiXu+G/0hPmPGi6998rlT0P13fV7xsH2b9ahs9PhXc6cuMuq5JnV4gn0zcWcc=
+	t=1710196124; cv=none; b=R8dGUJQZZ9p3XbAPyk8t/4+nbj+2wnmsHQ06/sKEhel21rBFz1q1KAtz0nM8h3wenTLYHewUnMp12TkKfmgIuzdxwoE/QGgprubJTjOOxx5Y6QFDzgRZyo9sMYP4jwy67q7imbuiVieAybDdPVt3PcSMUGTBA48hTO7kCdGEeGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710195632; c=relaxed/simple;
-	bh=wpoixAH5hmLkM35K/YQ7kamEzrI2/hx3uKaAyzVuvW0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=k1mHRMDB9reRc+1vlxi25M6YiA2IxU837AG8j6NXJuBeJz3bWaNJDYjvcDWJ1gNjQuWrjaMnbBGhqslvyan1sIXEewzBsmG9p/ZS7tBo2EOIuL5aioraJdQiXt05gZR8zQZPnySK2x1IvvhIegEyse4X7n4hhZO+mqIMWKVg2No=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ncIpVrqC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9161EC43390;
-	Mon, 11 Mar 2024 22:20:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710195631;
-	bh=wpoixAH5hmLkM35K/YQ7kamEzrI2/hx3uKaAyzVuvW0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ncIpVrqCU/a4KDUIUnKzFzOXKQFqdMKJhN1H9cFpEi4WQ49Y+8tEhAcTArdYMbGSl
-	 CYNwlWMMJ7pqSXzqzuKEKz7zCSN4lUKIMHL2THGIyLYKsZ4m0/e3NLcUtPDHZbUOTO
-	 8HBkpezzTDrpjoA3mdxMnhXIN4EqeLPTpOqqvxGIpYuj1N8xn4RI+VImGeSujOs7F2
-	 VOvXMc19ZtL4g2No/59y9BZAi+29HNOxKFQ77wDNBZNI+/2L53hpVvH6U5cdWp8Jqn
-	 X42lCpLrfFBfOh2FbKOp48kzcvi1RpvvwVbTTkDGWp5tpiDRlvlTD5/EGIvYKUQb0Y
-	 Zw671a3g4LB9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74BA0D95056;
-	Mon, 11 Mar 2024 22:20:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1710196124; c=relaxed/simple;
+	bh=asVmqVidTEc9OS2n8SyaaS+W2FyZ4fww08wr2TcpZ0Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UZ4VcVmcsMgajlqLua4EPLb4jMvDZla5Gut3RkxGxDQ4bucTkVKjEpKA7+5zGsdzAHvlz6NhzyKutU6Wr+8xslYXrTvxVfVeZggJH25SOqXwcx+mPcm0dO+JEFDLKagzEL3ceK7XvoCdt0VMAQpeeBPXjqbvwMT1htrxcSTxqq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cueJJ8Kv; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-609f359b7b1so50770757b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 15:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710196122; x=1710800922; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a0Txb94OJ7hs7tfFRmMyIrRYkzaZsNZOSHys/hiIups=;
+        b=cueJJ8KvhD8VUbXWy0KB1jVBuwp939q/R8CFowGt9YhMSxxvt2XXXkFm73xOjywiKp
+         V0f+NQbZYetaQ/0ZAI53BpxQQKQjJaMKOqTZ/V+iI1ftuDOyzuKoMa8fEe1uhZwIwK6U
+         RjRC+ODvTVpB/TsDP3o0j2DVu1pQazXaox+lp01kdGJjG5o6GgLxCPj5oo1rxNSekDjz
+         HYBoom5Bi7fX0Bl87NC3QcGWucbe0gpTw4aSROicflGuq5dk1utkCDxXDbeEF2F44J4m
+         +oV6UcLPxB8hPpbBJqGKa6XyoJ6s6YDlIResPIuFBWo/FrbzGyJ03wfVU1K1CuGcv/rT
+         AAHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710196122; x=1710800922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a0Txb94OJ7hs7tfFRmMyIrRYkzaZsNZOSHys/hiIups=;
+        b=BCpma4bzzRI+o9+bcGBA7X8XSPhag/qGdR6xG9kbNIuIjOfCqdi4/vtH09+E/iKrrs
+         dKJsiEu4zy5BM7eyiiAv8JTUcawy/FwzInZkmZXv+5cjxCsUUOX6g6fs4czr6cvflqSL
+         XwyhT+eaofvf4ET+MdNafPd9jd2PeXykVl8DAZDRsrNKRLG2T8+Hu+HHZzXzULetaZLs
+         Xa4dnU45pS98CQu4KYlauDiwE/qUkdRdrtU3bo7xUkRDIGLIPPH7OokxtH+8r8shp1pg
+         JJOgNZUI3doocup5TaZFkquhoCZglbVdfwVkMbJbf2E7cFslgTidMvbZUzsXr8+Hg4Qq
+         hmLw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxQcBaEYCJw+XyrDGglno2+Gz1nZvyT46FE0kQeHlyiLiyitARmh+SxxwRnm0OsQE9QbwN7JY+AX9KvS3ZkBC7RZ8HYw+Z8bwE4Gg/9v02
+X-Gm-Message-State: AOJu0YyFk6jeS+rWBSzC4BIl3kDguXhxUzDsYYlN/0HUY6pf9ioeHkca
+	T2ILvY/eNA0vPnPbcG5L9bYy4uoAJSXN4B7SsDe4hv3J7MkSkdd7KtxXGHD65odE7WCvFV63+b5
+	f4pp+zklIyb2egoua/ksUGhV15t0+X+xUdiYj
+X-Google-Smtp-Source: AGHT+IFkjV1f8hMHRyB1TAhaJ/A2QrLDjirsohIM262dKP47DUGZkxQitfL2dcRKha3oni1+rS4cbxLejs71fpkTj4g=
+X-Received: by 2002:a0d:ca84:0:b0:60a:2143:1b0e with SMTP id
+ m126-20020a0dca84000000b0060a21431b0emr6505096ywd.13.1710196121755; Mon, 11
+ Mar 2024 15:28:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 00/15] selftests: mptcp: various improvements
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171019563147.21986.8830557428552738563.git-patchwork-notify@kernel.org>
-Date: Mon, 11 Mar 2024 22:20:31 +0000
-References: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
-In-Reply-To: <20240308-upstream-net-next-20240308-selftests-mptcp-unification-v1-0-4f42c347b653@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
- tanggeliang@kylinos.cn, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <a9e3120d-8b79-4435-b113-ceb20aa45ee2@alu.unizg.hr>
+ <4a5c8d28-7f73-4c15-b288-641f0ccc91c2@redhat.com> <Ze8Wr2qH8V0LMi_5@x1n>
+ <b5ff4c70-6379-4cc7-8c92-778d80a6a658@redhat.com> <Ze8fYF5I4mlUGHd9@x1n>
+ <CAJHvVcie+N+4j60m_Dxh7QzbZLmsjnq2-04peuqE8VkkMq984A@mail.gmail.com>
+ <Ze9bWkrD6UBZ2ErV@x1n> <CADrL8HW59nt4ztY3x5G3VgpmaXQbXoXZeAjvzMp7SpsqxgDCxw@mail.gmail.com>
+In-Reply-To: <CADrL8HW59nt4ztY3x5G3VgpmaXQbXoXZeAjvzMp7SpsqxgDCxw@mail.gmail.com>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Mon, 11 Mar 2024 15:28:28 -0700
+Message-ID: <CACw3F51vMqPBHmvj4ehSA8PadXw30s3MxCqph1op5dxtB-tV6Q@mail.gmail.com>
+Subject: Re: BUG selftests/mm]
+To: James Houghton <jthoughton@google.com>
+Cc: Peter Xu <peterx@redhat.com>, Axel Rasmussen <axelrasmussen@google.com>, 
+	David Hildenbrand <david@redhat.com>, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>, linux-mm@kvack.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Mon, Mar 11, 2024 at 2:27=E2=80=AFPM James Houghton <jthoughton@google.c=
+om> wrote:
+>
+> On Mon, Mar 11, 2024 at 12:28=E2=80=AFPM Peter Xu <peterx@redhat.com> wro=
+te:
+> >
+> > On Mon, Mar 11, 2024 at 11:59:59AM -0700, Axel Rasmussen wrote:
+> > > I'd prefer not to require root or CAP_SYS_ADMIN or similar for
+> > > UFFDIO_POISON, because those control access to lots more things
+> > > besides, which we don't necessarily want the process using UFFD to be
+> > > able to do. :/
+>
+> I agree; UFFDIO_POISON should not require CAP_SYS_ADMIN.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 08 Mar 2024 23:10:07 +0100 you wrote:
-> In this series from Geliang, there are various improvements in MPTCP
-> selftests: sharing code, doing actions the same way, colours, etc.
-> 
-> Patch 1 prints all error messages to stdout: what was done in almost all
-> other MPTCP selftests. This can be now easily changed later if needed.
-> 
-> Patch 2 makes sure the test counter is continuous in mptcp_connect.sh.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,01/15] selftests: mptcp: print all error messages to stdout
-    https://git.kernel.org/netdev/net-next/c/6215df11b945
-  - [net-next,02/15] selftests: mptcp: connect: add dedicated port counter
-    https://git.kernel.org/netdev/net-next/c/01ed9838107f
-  - [net-next,03/15] selftests: mptcp: connect: fix misaligned output
-    https://git.kernel.org/netdev/net-next/c/c9161a0f8ff9
-  - [net-next,04/15] selftests: mptcp: sockopt: print every test result
-    https://git.kernel.org/netdev/net-next/c/fd959262c1bb
-  - [net-next,05/15] selftests: mptcp: export TEST_COUNTER variable
-    https://git.kernel.org/netdev/net-next/c/9e6a39ecb9a1
-  - [net-next,06/15] selftests: mptcp: add print_title in mptcp_lib
-    https://git.kernel.org/netdev/net-next/c/3382bb09701b
-  - [net-next,07/15] selftests: mptcp: print test results with counters
-    https://git.kernel.org/netdev/net-next/c/aa7694766f14
-  - [net-next,08/15] selftests: mptcp: use += operator to append strings
-    https://git.kernel.org/netdev/net-next/c/e7c42bf4d320
-  - [net-next,09/15] selftests: mptcp: print test results with colors
-    https://git.kernel.org/netdev/net-next/c/747ba8783a33
-  - [net-next,10/15] selftests: mptcp: call test_fail without argument
-    https://git.kernel.org/netdev/net-next/c/339c225e2e03
-  - [net-next,11/15] selftests: mptcp: extract mptcp_lib_check_expected
-    https://git.kernel.org/netdev/net-next/c/663260e14668
-  - [net-next,12/15] selftests: mptcp: print_test out of verify_listener_events
-    https://git.kernel.org/netdev/net-next/c/8ebb44196585
-  - [net-next,13/15] selftests: mptcp: add mptcp_lib_verify_listener_events
-    https://git.kernel.org/netdev/net-next/c/7f0782ca1ce9
-  - [net-next,14/15] selftests: mptcp: declare event macros in mptcp_lib
-    https://git.kernel.org/netdev/net-next/c/23a0485d1c04
-  - [net-next,15/15] selftests: mptcp: use KSFT_SKIP/KSFT_PASS/KSFT_FAIL
-    https://git.kernel.org/netdev/net-next/c/8f7a69a8e7dc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
++1.
 
 
+>
+> > >
+> > > Ratelimiting seems fairly reasonable to me. I do see the concern abou=
+t
+> > > dropping some addresses though.
+> >
+> > Do you know how much could an admin rely on such addresses?  How freque=
+nt
+> > would MCE generate normally in a sane system?
+>
+> I'm not sure about how much admins rely on the address themselves. +cc
+> Jiaqi Yan
+
+I think admins mostly care about MCEs from **real** hardware. For
+example they may choose to perform some maintenance if the number of
+hardware DIMM errors, keyed by PFN, exceeds some threshold. And I
+think mcelog or /sys/devices/system/node/node${X}/memory_failure are
+better tools than dmesg. In the case all memory errors are emulated by
+hypervisor after a live migration, these dmesgs may confuse admins to
+think there is dimm error on host but actually it is not the case. In
+this sense, silencing these emulated by UFFDIO_POISON makes sense (if
+not too complicated to do).
+
+SIGBUS (and logged "MCE: Killing %s:%d due to hardware memory
+corruption fault at %lx\n") emit by fault handler due to UFFDIO_POISON
+are less useful to admins AFAIK. They are for sure crucial to
+userspace / vmm / hypervisor, but the SIGBUS sent already contains the
+poisoned address (in si_addr from force_sig_mceerr).
+
+>
+> It's possible for a sane hypervisor dealing with a buggy guest / guest
+> userspace to trigger lots of these pr_errs. Consider the case where a
+> guest userspace uses HugeTLB-1G, finds poison (which HugeTLB used to
+> ignore), and then ignores SIGBUS. It will keep getting MCEs /
+> SIGBUSes.
+>
+> The sane hypervisor will use UFFDIO_POISON to prevent the guest from
+> re-accessing *real* poison, but we will still get the pr_err, and we
+> still keep injecting MCEs into the guest. We have observed scenarios
+> like this before.
+>
+> >
+> > > Perhaps we can mitigate that concern by defining our own ratelimit
+> > > interval/burst configuration?
+> >
+> > Any details?
+> >
+> > > Another idea would be to only ratelimit it if !CONFIG_DEBUG_VM or
+> > > similar. Not sure if that's considered valid or not. :)
+> >
+> > This, OTOH, sounds like an overkill..
+> >
+> > I just checked again on the detail of ratelimit code, where we by defau=
+lt
+> > it has:
+> >
+> > #define DEFAULT_RATELIMIT_INTERVAL      (5 * HZ)
+> > #define DEFAULT_RATELIMIT_BURST         10
+> >
+> > So it allows a 10 times burst rather than 2.. IIUC it means even if
+> > there're continous 10 MCEs it won't get suppressed, until the 11th came=
+, in
+> > 5 seconds interval.  I think it means it's possibly even less of a conc=
+ern
+> > to directly use pr_err_ratelimited().
+>
+> I'm okay with any rate limiting everyone agrees on. IMO, silencing
+> these pr_errs if they came from UFFDIO_POISON (or, perhaps, if they
+> did not come from real hardware MCE events) sounds like the most
+> correct thing to do, but I don't mind. Just don't make UFFDIO_POISON
+> require CAP_SYS_ADMIN. :)
+>
+> Thanks.
 
