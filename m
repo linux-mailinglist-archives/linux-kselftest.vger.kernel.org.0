@@ -1,221 +1,167 @@
-Return-Path: <linux-kselftest+bounces-6218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ACD5878665
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 18:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EE7A8786A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 18:49:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A95541F2334F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:39:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9FCE1F23C19
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 17:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B682243AD6;
-	Mon, 11 Mar 2024 17:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78032524AF;
+	Mon, 11 Mar 2024 17:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9ig3wKS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TwAZDQj7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098C453E0D;
-	Mon, 11 Mar 2024 17:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710178782; cv=fail; b=L7y3Zla9dQNpA8BvLZn+AZoXh6CcolUuzyux/dgk/z4haXU8VDQHRyqimz4gGRyacP2m1fnct9mjo/pF1D6TyO3lRzfp1t+6QMxDClt8Jsxy0puros+fp/XvJqy+xaY3KMfO9D9IQprpUY05QIej5VAhaaFCArynGvT1oE++Rwk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710178782; c=relaxed/simple;
-	bh=0eT7aLijuErCDEBS3mXzxzlLhl2T3qrkx8vyz0f48v8=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ZadveZpp0dn5y/Vy3x2n5qqLE20zMLWt+0EM0JgXgGG3cA6YRNblw1305eKzLw10MP63HIwgI3r6Sz/wFNBRLPQw5oyIF9SHLk3rxwNSww/9ARjuaCYpzOTAbUIFkTxqx2YvvgI+0tU+4V+eZAkaiYyObF91rSYHRg5iN8UJu0Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h9ig3wKS; arc=fail smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710178780; x=1741714780;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0eT7aLijuErCDEBS3mXzxzlLhl2T3qrkx8vyz0f48v8=;
-  b=h9ig3wKSs7F4R+TqQ8eOYR7R4zhK1nTf3S2fY3Mqxv70HdBfiKdRNdzY
-   IAwXEY0nfXwiaTNUivP4KMt08JW1+93VybrU96hVXkOsFJ/576m06Ku3b
-   lKQWOoEjvGtJjNJImJFt8GQlPZLibt7F/kxdgn4H4dNfvRg9QJ8vNZxT5
-   hWcQGWCYA9de2bEOEl5yhgc/tzWvQtZ8QTkdnoNOpIC8pP5fLR2ap0GtL
-   6SVKK3M1ejgVz2fRliqg3FfzZ8+rtJlKHVxYwW/duaWECqLjRTNxCPQEL
-   xLdk+5KFFlFZToXlgi2L7LtfERkxl8ZR5M1oFCxgv3pfRU6N+oKfNxGyT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="27328233"
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="27328233"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 10:39:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="11312926"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Mar 2024 10:39:15 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 11 Mar 2024 10:39:15 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 11 Mar 2024 10:39:15 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Mon, 11 Mar 2024 10:39:15 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 11 Mar 2024 10:39:14 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hJPHwuFDVAmbE8pRW1RIAX7Ht/bTg7+rldJ/Dqr523ZFHfe/V1g2YcEbFvbALckd+qM17i86Z/k2/Sa4uBPuY/IwNJAqfeXsgeRyOPnmBhSS1ltHRamOWOxtBimUQT2fHObnQnQ3WF3z/athYMxXi/6Ax1P7hYW/+EcCyDGqCQNXhfRokHrXxp50JydgCZrbKIhnMUj1jSkiqtgix3Gk0T3oJRvQqI08yaSOMcS/zYzK5kger7ohQzwuXOu2Hcy31mJuPGeKvhvt+crN6sZWm5fGgHu3er2IYqIDPUQv3/mLmNhPW3KY6MqpDTFJVSpiHyjD/EAsSw60uUj37AV4bQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qckV+P0UG3NGxNSj0oqez5Cd88llqKOgv8YntTWjlpo=;
- b=brlzlJDtQGt5VBn6b82qkl9S6//fg1W0QBQx8xSYBq91T3AYNuw9fJPCZjBPJISSm38k/dEWDQJz5SgiPT/IGXKjelvxNPlrA79xwzeNP+K9/O0/0l5ZZcu8q/V2uw+lOxHQAFL8DRua0yzpSFlbY5JdMZqs7BC4+X3xviErvkrD+kX9O7kyfMGXeY8ZOnwXrU4V8KSD8zOuLfcH+7/lXWI19tQG3OPROFiRwQDMrevgAB+/hPJplF/TQpYrOWnzL5Gtvb5gkhz451dZvAn5E+fof9Q0ahhuIgZzGk8VvNqUdoiDvseKUND0W1rDwsw3LeapZNSc2MP+tQDgHW3d2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW4PR11MB7164.namprd11.prod.outlook.com (2603:10b6:303:212::6)
- by MW3PR11MB4745.namprd11.prod.outlook.com (2603:10b6:303:5e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.16; Mon, 11 Mar
- 2024 17:39:13 +0000
-Received: from MW4PR11MB7164.namprd11.prod.outlook.com
- ([fe80::b5bc:2406:7431:8c1]) by MW4PR11MB7164.namprd11.prod.outlook.com
- ([fe80::b5bc:2406:7431:8c1%7]) with mapi id 15.20.7386.015; Mon, 11 Mar 2024
- 17:39:13 +0000
-Message-ID: <1cacbd08-1131-4be4-b318-58c05afda2de@intel.com>
-Date: Mon, 11 Mar 2024 10:39:10 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: x86: skip the tests if prerequisites aren't
- fulfilled
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>, Shuah Khan
-	<shuah@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, "Kirill A.
- Shutemov" <kirill.shutemov@linux.intel.com>, "Peter Zijlstra (Intel)"
-	<peterz@infradead.org>, Weihong Zhang <weihong.zhang@intel.com>, Binbin Wu
-	<binbin.wu@linux.intel.com>, angquan yu <angquan21@gmail.com>
-CC: <kernel@collabora.com>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20240307183730.2858264-1-usama.anjum@collabora.com>
- <dc8d122a-22b7-4d17-abd9-66262af0b058@intel.com>
- <c3362840-365e-40cb-80fe-895aa2d979ec@collabora.com>
-Content-Language: en-US
-From: "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <c3362840-365e-40cb-80fe-895aa2d979ec@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR04CA0141.namprd04.prod.outlook.com
- (2603:10b6:303:84::26) To MW4PR11MB7164.namprd11.prod.outlook.com
- (2603:10b6:303:212::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C273D5467F;
+	Mon, 11 Mar 2024 17:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710179371; cv=none; b=GFYHSXQNiFhKTcDxCjfqppVooQy6UehSQY4yXQRtQTqodAB/E9juZ2Wror0ZbZM+xcN+x85DnpUWaZO33quAkap4Ch+C3Nw+xYhV05G7RW4p8683KGk1qBCoInd9BszwtufcWLhn0kk8glOCLEycZQDa9AHXToXF3OQ9Lw06y0Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710179371; c=relaxed/simple;
+	bh=FruVc137rIMV3xfiSwhivbMir0fGyRuBlxHaGRlShtM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DUF4r5YLgepXaM3UpuE/0wqOq8SJMtQw9+vHFYGrtWY+HaHQaZFg9MEpCQ8R2OUXNFm4j8eDy5l6QmSnKv9VsZYbITfbIycgAmiFsg/7KTdkjK/36VOOkjZ6XSG84FSMnkun08/7PvUYns81aI6H9UsVxEydDNfxbvKIfrCYTLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TwAZDQj7; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso3955923a12.3;
+        Mon, 11 Mar 2024 10:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710179369; x=1710784169; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fbU798yjoe9QW28weq/V45GGj69Gs5hSFHP5NyuJ08o=;
+        b=TwAZDQj7Ve1xAmz6j70L/UFHTlK2nwUQ54hQPjVWTnwDDu+8q0kP6A2lRBN1Z55miy
+         vN4VUcOi27egSN9NPW6olGx/2FAHl5DK/1vwdVfcLkyqaPmhpqRpRLAmLRxahsKBHWxx
+         ZtHA8ZOd1Gcq6f355xmgDdxhkeXYNObOmGjovSllT/Wf8LVv4rRhvV7tRuKxlSTIPE6r
+         c+7mJkW31ocTJ2fmMJvr5zGRLe4QxQUyLLo0WPCe4X/fgOFnVR8EffqRMZi32OGMKeX9
+         MVomS77iLHQPpz8ijBOYp8JMEpGU3JnwhBNM3ACGESZM3q8F1lVRA590jZpOMgjITEjg
+         AJxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710179369; x=1710784169;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fbU798yjoe9QW28weq/V45GGj69Gs5hSFHP5NyuJ08o=;
+        b=poGM+8RxQw27f+id7lEoDsc6dXIE94TqrV43eB9/hc9ydZujE1nlrbsm+820lmLuIS
+         LIpXM00qxgnJWJdNyDk0RXLEIOIl5oB97iYhCP+V3wtlKHK297SLOrelFF1LEc3Vciq1
+         RtTo0AGEcxHCn0XVY+z2kz6AMapDiu29R69wx65BICbdspjnjai/9sHX5hBSmYluk7Uz
+         +ADgG9R2ya5XisgIPxlocPR/MeseNVSlmQRZPZDmVVjF3arDqArsriH3UJkxOBzhpTh5
+         XGnbEtHVH30mRK1kp6wh7cKrJB8bCZk6oyIzr7PTj4Zfo8mzi2xSriptUuS3WCqdEn4k
+         rxBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/0B10mEjr2FIeKTkcn7Tup854ejATWA/e+qFEVQQivhMRlrluZYlGVweeTlsGaenuNPH+mv0lfZsRx/mHpcJ9b3uRYI7bTqqJDaSDydDCf9F5vDs3dQOeEuMGaQFAZGluMTbDAp5/E51JDCRRY+ycmNok3ve69Xxx4sUPJLbR6N8Q7q60cAM2pcrxISGynPiRCKarfXhilcaII/3ZkJ8zuLYb0n4R33O4VUaWHTEvwrEOToKvnZhvIA/UtZAb7H+PDb8T9ci4DpbE7O4eB30d4IQGY8jfMNqswi7kGYr93ACjrM18q8Ze3o/ZfeaptcbOXDHVDBQ=
+X-Gm-Message-State: AOJu0YyXNSCqfjL1S/b/feLQMTWgOnllF/oByARruJeRwX2UonpcREa2
+	qyUUoCFtZQ1ULMyuuDsqC32lvYjHax3YWXsx5iN7+KwRHVZ6BkHPZGRkrKUswLgseVOKkmcQ1c2
+	E7WglPayOkW+AlFAOAJkMpFugbXA=
+X-Google-Smtp-Source: AGHT+IFoTIEdjqsxBYqxcW2ZvSOL+ezHdwHnCQaQtLgWWppeaIwje2I36qXoDeTn1HfSnWTODh8p84OGtT7sU7h7l88=
+X-Received: by 2002:a17:90a:7563:b0:29a:d7ba:2c99 with SMTP id
+ q90-20020a17090a756300b0029ad7ba2c99mr5706073pjk.10.1710179369144; Mon, 11
+ Mar 2024 10:49:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR11MB7164:EE_|MW3PR11MB4745:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a565294-4764-4ae9-769d-08dc41f22a74
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AZ8cFaYiQH4g/lpIo595t1FuHuKYNn2NyPWuVCszZiPn6FG0GQaGyi/N1PJxtLi31Zz6KGOFWUs7ulnj+5itosKrVYTpbYJMaetXDEhV6xiTEXMpPmmZG9yaaaE6G3mVuJkvqizG+AomOvZtCNvJUsR9Yiecksmp5c5XScux0G+Kxrd1WG3JLvvBnpiUtgqOGojBWV6TJDcHgTEJb40v79acqWLg/BXR0bojxqflAcD6TCMRaoCws3P+pDrif9wMFsrH1OiEc688+4Nkm5Nc+7DnMi6c+jvts/TAVfUwFwctGg+hX+n9lrPHTnTInOC2AfpuA3DnopRfCF6Ld7oYoSTpmgVf4YuEX43OhNSQYbiy9QMahjNgEkGayCx8wHdg7nrfTl86lxv+hQFx9HXxiWLVr1gwD14cEAOK9q6b+8tuHDZUOjedrF5wQbpoXnGSLtqvWAmz2TkWsNqNkoccnbaVGERNxBqYjICKWRcVnA4GTqKrLiaBmiLdQ7h+91wHb+xWMq9iAR60u+JMuhuU31qAl50/IMGBWMhsGCt8wwgB/rzP3/IS/PA1ympMxv/CO//VPDbKEVNtw6gdmhM6TkM4kxZDNrq6lFRJSlTF6rELbMwSNYQuQ8chxqckQL0+2TW+T0w23RXOS8VowZUN3cGydu1AZrm5fmUKetJD7Fc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB7164.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bUM3LysvNjdxYVRkY08wa2NoS2ZUaTV3S3p4M3lhZm1RT3FmNDh0SlJENHZ1?=
- =?utf-8?B?ZXlrR3VKREk3YndIWFk5MHFPUG1UeGMrL0dYS2NWejdxdWxHS1J5N1cyb01w?=
- =?utf-8?B?QVpCeWQyUUIrL21nd3BWNE1ldTJjOEtBSkUzNUpPcWNzeWNlbml2eFNleE5h?=
- =?utf-8?B?eC9tZHFieU5DYmVWeXNsOFRmRlBjR3BQcGtWNTg2Rmg4MERtVnpWeHZ1U1VG?=
- =?utf-8?B?QUp0ZWVRWHVLT3pKc1BOUTd3UURCYkNzSUU4SFh5ejVNMldrRnJlYXZMeElk?=
- =?utf-8?B?YUpBQ1FUZEhCMjI0RFNVTlUyaS9BamJLS012VDhjdDlnNEQ5K3d6SFFYcW85?=
- =?utf-8?B?QzE3d1dQNDB0UStIRmpYZHZqT2c0eEl5RHBGRGdCUHE2L3RTUHRtNmREa1Vn?=
- =?utf-8?B?QnhjUll3ZHNqSUZ1Mk95ZWU4YjJKb3NkdGFFY1B3blFvcjdQQlRxanoxN1Vy?=
- =?utf-8?B?MHh1bm4vOU9FYVB3ZWhmUDZYeHpCajZCWjhnRFhhZCtMOEJ3c2gzSUhFNkFv?=
- =?utf-8?B?U0dLMVFBenVZU3crWVVlMTZrVXpHWUMzcktkV0h4Y2RhVTk2amNaU2lzaWRZ?=
- =?utf-8?B?VmJvci9Dd2Z3NmdtbXJTOXBLOW9OM21Tb3Z1UTZEUGpNUHAwRWhObGs0YWhT?=
- =?utf-8?B?NGhaenpSaVJhWDdKYXBnYjNrMEdBTFJMZkJ2UGIzS2I5M3p2T2R0QXBkQ1BO?=
- =?utf-8?B?Y29UN1gwZG85V1pZTENrVDg5RkliRWxzVXJRTHdyTmxrMUxmTjNPSDNudFBT?=
- =?utf-8?B?N0ZEZEFUTTVtcGNKZG45YTJhakgrcHVmRzhGelVUMk5xN2xGWUttMFpCc1Y0?=
- =?utf-8?B?ZEh5NFpWVEZWZHpsNFpvVk1USlZlVGNkeHVhRzhsS3RuZDR0ME53SG4ybm9k?=
- =?utf-8?B?QzM2QU85bnJFSzY1TTFmU01ONUxHclR1ckpYRHN5UlZPdCtJM2g0Y0NHeTNE?=
- =?utf-8?B?REZmUlBoUyt6U2J6bFRUMS91Unp0RXlJMFYybkRZVjczT3paMGN3N3phRFQ2?=
- =?utf-8?B?OEg4eW53UENyZXZOTUlUS0lidlJEMVkwc0xkN0g1b1l3VEF4akUyRWxkWkU5?=
- =?utf-8?B?Q3BHNFg4djZ0N1E1L2FYOU9ibGJjU0ROMFU2ZmpYamliQ3VvbjNwc3dGSzJs?=
- =?utf-8?B?T1JFekRBNHJFdHJRRHNseHBZaEpjVms0WEFHQ29jWE9EM2F6cWZpKzZhZ3oy?=
- =?utf-8?B?U1JXcXhYd1crTlVncElzQmdMYUwrcEREcURKYk9ROTRtcWF2OTlmUDdlUTJs?=
- =?utf-8?B?eFN3d09aWVRpbkh4TjlWNEVVdmNKdTVod3hHUStmN3pGMU0zdldDR3JuY0lZ?=
- =?utf-8?B?ODN4S291elp3TC9oWUJsenZTd0JSYzhMR1Y5aWRrVzJoN3pFd0RLZHA5ckF4?=
- =?utf-8?B?SitYQ3dEVkRzOUtsNFVuM1F4Z1JPNTVhaDVEaWxreXZrM0d1Wm4yM2tqNFlS?=
- =?utf-8?B?MEFEcDZnMUVVZkV2WnQvZHFud0pOZXM5RVF2MnFQMmM3QzBiQTBQeDVBcXNV?=
- =?utf-8?B?V3VWRXNaRXlzREtiZ2V6UG5IcmZBQVFjVnFFZzFWei81SkE0NUIxOXV6N3Rx?=
- =?utf-8?B?amdFZGZ1bFZZWUd1NlJOa3FVQmtsQUxqSWNYajdrc1IvdXVyRzYzU0t1VmVk?=
- =?utf-8?B?WkkzV3dnanI2c01ZdXBzSTBUYVBKUWtDdmdCUjJsWVBXL0Y3TFFpajM4YjZR?=
- =?utf-8?B?SzNCODNmcm5BbU1kT3hZYks3bnlEcEVjeTIrMWVYS0UrOUQ4NjdFRnRqNDA1?=
- =?utf-8?B?VlA2bWFseW5HcWFNMkdpZ1lHNS9CcWZlckQzT1JhKzlFc0RKSHpxdmNNbSsv?=
- =?utf-8?B?eGZaUVNpQmJzaXV0aXNMazA0NGN2N2FqYUU4ZisvcVlGZ014NDZqVzU0dG12?=
- =?utf-8?B?L3pKUmlyaVRUbTkvckJZMnVqWlp2TUpBSmxpOFVwQ2ZCUU9CaXp4cEtPVXVt?=
- =?utf-8?B?aUkxRXg1ZnBLS2hwWXZZNXpGWmlSalRaMjVOQ2ZTTDJUcmtWT3p3NnEyN0F2?=
- =?utf-8?B?MDdGeGdkTnAzc0ttaUt6R3pjaXl6SDBUMGx5MENWV0xrM1NXK2hXcy8zM0Z3?=
- =?utf-8?B?ZVBtSStHaU41OXhPT2tWTDl4WEdUWVMrZ0RHRkRSYzl1Ti96cGNuYTUvellK?=
- =?utf-8?B?b01aSjZMamlJZUk5cDJRUHAwY3hxd2FCQW5hY0ZnNTNCcmJvL0MyaERzbjBs?=
- =?utf-8?B?aVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a565294-4764-4ae9-769d-08dc41f22a74
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB7164.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2024 17:39:13.0991
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jNHJ8fPkVzlqtRwiC9Lv+8hHBcWJ9m62nRwaWg1G7NdODtUfsG0ZydYgvYKp4rZEGwq6zPc7cOzdJ64I3H+P6e0NjmmN5zMD5RtBGLt3WBE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4745
-X-OriginatorOrg: intel.com
+References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-3-irogers@google.com>
+In-Reply-To: <20240310020509.647319-3-irogers@google.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 11 Mar 2024 10:49:17 -0700
+Message-ID: <CAEf4BzYiH6xRRLFBdUAkjn0uJP=safZod4=1EmEwTTH9PDmVvQ@mail.gmail.com>
+Subject: Re: [PATCH v1 02/13] libbpf: Make __printf define conditional
+To: Ian Rogers <irogers@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
+	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
+	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
+	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
+	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
+	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
+	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/11/2024 10:02 AM, Muhammad Usama Anjum wrote:
-> On 3/9/24 6:06 AM, Chang S. Bae wrote:
->> On 3/7/2024 10:37 AM, Muhammad Usama Anjum wrote:
->>
->>> -static void check_cpuid_xtiledata(void)
->>> +static int check_cpuid_xtiledata(void)
->>>    {
->>>        uint32_t eax, ebx, ecx, edx;
->>>    @@ -153,12 +160,16 @@ static void check_cpuid_xtiledata(void)
->>>         * eax: XTILEDATA state component size
->>>         * ebx: XTILEDATA state component offset in user buffer
->>>         */
->>> -    if (!eax || !ebx)
->>> -        fatal_error("xstate cpuid: invalid tile data size/offset: %d/%d",
->>> -                eax, ebx);
->>> +    if (!eax || !ebx) {
->>> +        ksft_print_msg("xstate cpuid: invalid tile data size/offset:
->>> %d/%d\n",
->>> +                   eax, ebx);
->>> +        return -1;
->>> +    }
->>>          xtiledata.size          = eax;
->>>        xtiledata.xbuf_offset = ebx;
->>> +
->>> +    return 0;
->>>    }
->>
->> I don't think it is okay to silently skip the test here. If the feature is
->> available, the tile data size and offset should not be zero.
-> We are logging that data size/offset are invalid if either eax or ebx are
-> invalid and then we are skipping. Not sure what you are asking me to change.
+On Sat, Mar 9, 2024 at 6:05=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
+e:
+>
+> libbpf depends upon linux/err.h which has a linux/compiler.h
+> dependency. In the kernel includes, as opposed to the tools version,
+> linux/compiler.h includes linux/compiler_attributes.h which defines
+> __printf. As the libbpf.c __printf definition isn't guarded by an
+> ifndef, this leads to a duplicate definition compilation error when
+> trying to update the tools/include/linux/compiler.h. Fix this by
+> adding the missing ifndef.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index afd09571c482..2152360b4b18 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -66,7 +66,9 @@
+>   */
+>  #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+>
+> -#define __printf(a, b) __attribute__((format(printf, a, b)))
+> +#ifndef __printf
+> +# define __printf(a, b)        __attribute__((format(printf, a, b)))
 
-You intention seems to skip the test when AMX is not available. But this 
-function should only be invoked when AMX is actually available, not as 
-part of the feature availability check. Therefore, I think this change 
-is not relevant. Also, if we encounter invalid TILEDATA CPUID, it should 
-be a reason to *fail* the test, rather than calling out a skip, right?
+styling nit: don't add spaces between # and define, please
 
-Thanks,
-Chang
+overall LGTM
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+Two questions, though.
+
+1. It seems like just dropping #define __printf in libbpf.c compiles
+fine (I checked both building libbpf directly, and BPF selftest, and
+perf, and bpftool directly, all of them built fine). So we can
+probably just drop this. I'll need to add __printf on Github, but
+that's fine.
+
+2. Logistics. Which tree should this patch go through? Can I land it
+in bpf-next or it's too much inconvenience for you?
+
+
+> +#endif
+>
+>  static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
+>  static bool prog_is_subprog(const struct bpf_object *obj, const struct b=
+pf_program *prog);
+> --
+> 2.44.0.278.ge034bb2e1d-goog
+>
 
