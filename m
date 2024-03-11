@@ -1,177 +1,136 @@
-Return-Path: <linux-kselftest+bounces-6187-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6188-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A285C878058
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 14:14:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A36E88780F3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 14:53:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F027DB20E40
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 13:14:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 447F71F23237
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 13:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F193D0AF;
-	Mon, 11 Mar 2024 13:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26493F8DA;
+	Mon, 11 Mar 2024 13:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMwTmTlx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WBI0Af/A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C15D3FB9D;
-	Mon, 11 Mar 2024 13:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055BA33070;
+	Mon, 11 Mar 2024 13:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710162833; cv=none; b=om4crdmYXWLOKn4rS1dSn1Irr0BWgUaF72rJ+41iOHHVMqyeag3rV5n7uQW+20FcgPATYo1U6svtTf9CRJjGn2ymUts03gi4s959W1bVx8/044xGHa+IYQ5ZmzGGOxXopIbnyVvLNwJbeHFYxwN3G+ES9YZCHDJgIDkN26+eoJM=
+	t=1710165174; cv=none; b=hH4cwAD8kV6/EgXFYpq8bkN5KzWoxjC6uQMeQIbBTGroChXIx5IBUuSeaIb/13/hDnZf/4n2ccU2UNmLjVtaQnR7aQfdLchA8cMJwNpnPJdmhOzpkUh1Gs3xpBYTsNUt8sMFlu9XIFCaVtK7Ckw2FACK5F4LbCfoiylKBV7ntKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710162833; c=relaxed/simple;
-	bh=dgrigR/7NCTojYkAKWD9wX9ICHnAGPtLi21TWc4E8dg=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=L7/72fjuJh/FafHzay48uvPZw23MO8WpZNtRSFa457Z5fkppAVJ5Pv4LAyXhki36MIxbWc8f6HMR6ExntYU9uaRvsDKdkys88SaIDzLc0NQr5LllFUaCbCFDI3v828mKjlKa7i9CeVd9MwsxUYeuiXBNA98ccelVVoYh/y2zApo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMwTmTlx; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5a17a739935so2564207eaf.1;
-        Mon, 11 Mar 2024 06:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710162831; x=1710767631; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dezxuW9pGx05LDmCqYlbJ6coIEuJ6OpOhgk2fuSR0X8=;
-        b=XMwTmTlxM6IzRlzCRPmXobHSLTdnUaKtx5o8VwoNCm4g481wCzpsPN1CaRiyNu7/tz
-         CQmh/H7ZKoPv6NRDdi4w/WtK/hH1ULdHvZrZ1IWLSNy+MNWSsxzw2wf5sCDTv3i2DiHY
-         3+22vPZVxBVczhTwengrspEXTMbzXBQKQicM9lh813BpK/QQ+5jSSjnLzDJxFPPK2nUE
-         YCSl2uvqiZyyqd4RceyHWoA7Zt4w/JTrQOndjHp9fwu4n2aFjpoqFyyDEbv5JeWQr3bM
-         0slY2TuK1nAQXJ0khF6ygXcPsaDFIz444ZCUA1YB9u8SgL16LtsaYmcp6vyDYa5Ieh0k
-         TlqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710162831; x=1710767631;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dezxuW9pGx05LDmCqYlbJ6coIEuJ6OpOhgk2fuSR0X8=;
-        b=j3lRCmJfn6OYz7IYn9Zwf06NcEpfiOICQ+HwPdUYXa8cs3ih/9pQkmGn18EeDsEK69
-         frwt3kkPwvd6vEEOslss0mvyEUJavp25hqeAxQbo2GOvZ11nz3AZ4NkHp6dLMXVdRPaR
-         A56y4im3vegOjYWTsoWlzndJTcprw7JkI3oZ0Friy8+JGSnvr6bilpxMKEHIWOY7vIYw
-         r11jz47oWQC2McFgbXhskkGH+M5GZa4kZzFNEIVzU4kfRzzYQxCqgwTRj7lVOxvucdCp
-         wB1Eilo65MyxSepFX0GYMPDIKGg9fujW1GetXjMDrot6c21ATYnrPKQTKq1+UdWmsrnk
-         zxvg==
-X-Forwarded-Encrypted: i=1; AJvYcCW7Lk/0HvHbUtEiKwhFxYm8xZZ7Y62G5GmD2gZbzKG0QCc8N8N5Q6Nfj+IsX2HGwf84kdOzYrjuMaVOwqFjrzWRvh8jnBUCgl2OFz9bYJ9h9Cxl55a/excXksFTanjk1wYp02uBI21qS1ky2rPNhYYEo6SISZn0lkou3vW3lu/f6cW2F+vb
-X-Gm-Message-State: AOJu0YzO/9Uj2U5LrvrQC3tU9sgk3slZ1Q2FN78HpJD4emqmndY9979I
-	33lyN9rXveGSWuDaV9sb5Bak5mpzdOJhDJfFFuInk/MMQUT7e/FU
-X-Google-Smtp-Source: AGHT+IGTQa8y59aDsLASaj7LZksfhOKifn5u3+CiaI7MeePb6ux4rgQVzmT+x0EFZi2xsLFMGaQnYw==
-X-Received: by 2002:a05:6358:480c:b0:17b:f637:7bb with SMTP id k12-20020a056358480c00b0017bf63707bbmr7300635rwn.30.1710162831109;
-        Mon, 11 Mar 2024 06:13:51 -0700 (PDT)
-Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
-        by smtp.gmail.com with ESMTPSA id f1-20020ac87f01000000b0042f37ebfbf2sm2481546qtk.5.2024.03.11.06.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 06:13:50 -0700 (PDT)
-Date: Mon, 11 Mar 2024 09:13:50 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Richard Gobert <richardbgobert@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Eric Dumazet <edumazet@google.com>
-Cc: davem@davemloft.net, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- dsahern@kernel.org, 
- xeb@mail.ru, 
- shuah@kernel.org, 
- idosch@nvidia.com, 
- razor@blackwall.org, 
- amcohen@nvidia.com, 
- petrm@nvidia.com, 
- jbenc@redhat.com, 
- bpoirier@nvidia.com, 
- b.galvani@gmail.com, 
- gavinl@nvidia.com, 
- liujian56@huawei.com, 
- horms@kernel.org, 
- linyunsheng@huawei.com, 
- therbert@google.com, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <65ef038e78a8b_20699f29437@willemb.c.googlers.com.notmuch>
-In-Reply-To: <d72bfd79-ce72-49db-b648-930a08b9302e@gmail.com>
-References: <f939c84a-2322-4393-a5b0-9b1e0be8ed8e@gmail.com>
- <88831c36-a589-429f-8e8b-2ecb66a30263@gmail.com>
- <CANn89iK5+wqYdqMt_Rg3+jO+Xf4n4yO4kOK0kzNdqh99qgL3iQ@mail.gmail.com>
- <967ed173-b556-4bfc-b3c8-ff0fc902b951@gmail.com>
- <65eef506331e8_1db78c2941c@willemb.c.googlers.com.notmuch>
- <d72bfd79-ce72-49db-b648-930a08b9302e@gmail.com>
-Subject: Re: [PATCH net-next v3 4/4] net: gro: move L3 flush checks to
- tcp_gro_receive
+	s=arc-20240116; t=1710165174; c=relaxed/simple;
+	bh=ogDW4usrkBQKvu63zZhNHxHlG4aF4TlGEfKwECbLXEM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=RI4Xyc36CgMLd6twge1KVT5YF6RNUX/I0gy8+oc/dc64pbvccGDavRpKmFzZsrB+/1bh4dcjbHg/hvw8IROX5W/wXcglzAmrKNNHIbbGIm2+9VgWykfyQW2benk0Q1CsxpA6x/qcvTZc2wCuasnLnUMwl5KkClPCpDgnioPwI40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WBI0Af/A; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710165173; x=1741701173;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ogDW4usrkBQKvu63zZhNHxHlG4aF4TlGEfKwECbLXEM=;
+  b=WBI0Af/Ad++C9a8AebTOJqWeOouvKOdktk0H9zMExHdoITmPrTIUoXTF
+   ZF1gdDnTtN2X66T1GH6jnsMUU1W2m4WHQ6lhiQD9pFDl9IvRyYblL7rew
+   FRUYY4qjjA1wJyn3J2J8rNixiNE5aaWj/G+lbLQ1YPpdXSRH6kuuv3ey9
+   DB6XYFahZfEKDdrSrustsVb+IMyibB4kZYZb6g/xU5zORyCfDH2t5Do6V
+   vsHxe5q/Camd0sgrcCG0PIUK/VBT/pJGQ1akWNl/mIEqqrA0FZqbJCBTS
+   tb8xStMtzMU9+NJO47IMHwwXhKlFi6/lK3ugx7TkhRE1ZE1zr0oMisily
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="15388670"
+X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
+   d="scan'208";a="15388670"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 06:52:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
+   d="scan'208";a="11166577"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.201])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 06:52:44 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: linux-kselftest@vger.kernel.org,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Babu Moger <babu.moger@amd.com>,
+	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>
+Cc: Fenghua Yu <fenghua.yu@intel.com>,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 00/13] selftests/resctrl: resctrl_val() related cleanups & improvements
+Date: Mon, 11 Mar 2024 15:52:17 +0200
+Message-Id: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Richard Gobert wrote:
-> Willem de Bruijn wrote:
-> > Richard Gobert wrote:
-> >> Eric Dumazet wrote:
-> >>> On Sat, Mar 9, 2024 at 4:35=E2=80=AFPM Richard Gobert <richardbgobe=
-rt@gmail.com> wrote:
-> >>>>
-> >>>> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags=
-,
-> >>>> iph->id, ...) against all packets in a loop. These flush checks ar=
-e
-> >>>> relevant only to tcp flows, and as such they're used to determine =
-whether
-> >>>> the packets can be merged later in tcp_gro_receive.
-> >>>>
-> >>>> These checks are not relevant to UDP packets.
-> >>>
-> >>> I do not think this claim is true.
-> >>>
-> >>> Incoming packets  ->  GRO -> GSO -> forwarded packets
-> >>>
-> >>> The {GRO,GSO} step must be transparent, GRO is not LRO.
-> >>
-> >> Sorry, I should rephrase myself. The patch preserves the
-> >> current logic in GRO. These L3 checks (ttl, flags, etc.) are written=
- to
-> >> NAPI_GRO_CB(p)->{flush,flush_id}, and NAPI_GRO_CB(skb)->is_atomic - =
-and
-> >> all of these are currently used only in tcp_gro_receive.
-> > =
+Hi all,
 
-> > That was perhaps an oversight when adding UDP GRO?
-> > =
+This series does a number of cleanups into resctrl_val() and
+generalizes it by removing test name specific handling from the
+function.
 
-> > Simply because the flush is determined in the innermost callback.
-> =
+One of the changes improves MBA/MBM measurement by narrowing down the
+period the resctrl FS derived memory bandwidth numbers are measured
+over. My feel is it didn't cause noticeable difference into the numbers
+because they're generally good anyway except for the small number of
+outliers. To see the impact on outliers, I'd need to setup a test to
+run large number of replications and do a statistical analysis, which
+I've not spent my time on. Even without the statistical analysis, the
+new way to measure seems obviously better and makes sense even if I
+cannot see a major improvement with the setup I'm using.
 
-> It might have been an oversight. From what I have seen it's only releva=
-nt
-> to GRO's UDP fraglist path (it was added in 9fd1ff5d ("udp: Support UDP=
+This series has some conflicts with SNC series from Maciej and also
+with the MBA/MBM series from Babu.
 
-> fraglist GRO/GSO.")). That's the only UDP path that calls skb_gro_recei=
-ve -
-> which may alter the forwarded packets and make GRO/GSO not transparent.=
+--
+ i.
 
-> =
+v2:
+- Resolved conflicts with kselftest/next
+- Spaces -> tabs correction
 
-> AFAIU NAPI_GRO_CB(p)->flush value is not overwritten in encapsulation -=
- it
-> is determined by both outer and inner callbacks.
+Ilpo Järvinen (13):
+  selftests/resctrl: Convert get_mem_bw_imc() fd close to for loop
+  selftests/resctrl: Calculate resctrl FS derived mem bw over sleep(1)
+    only
+  selftests/resctrl: Consolidate get_domain_id() into resctrl_val()
+  selftests/resctrl: Use correct type for pids
+  selftests/resctrl: Cleanup bm_pid and ppid usage & limit scope
+  selftests/resctrl: Rename measure_vals() to measure_mem_bw_vals() &
+    document
+  selftests/resctrl: Add ->measure() callback to resctrl_val_param
+  selftests/resctrl: Add ->init() callback into resctrl_val_param
+  selftests/resctrl: Simplify bandwidth report type handling
+  selftests/resctrl: Make some strings passed to resctrlfs functions
+    const
+  selftests/resctrl: Convert ctrlgrp & mongrp to pointers
+  selftests/resctrl: Remove mongrp from MBA test
+  selftests/resctrl: Remove test name comparing from
+    write_bm_pid_to_resctrl()
 
-Thanks for the context
+ tools/testing/selftests/resctrl/cache.c       |   6 +-
+ tools/testing/selftests/resctrl/cat_test.c    |   5 +-
+ tools/testing/selftests/resctrl/cmt_test.c    |  21 +-
+ tools/testing/selftests/resctrl/mba_test.c    |  34 ++-
+ tools/testing/selftests/resctrl/mbm_test.c    |  33 ++-
+ tools/testing/selftests/resctrl/resctrl.h     |  48 ++--
+ tools/testing/selftests/resctrl/resctrl_val.c | 269 ++++++------------
+ tools/testing/selftests/resctrl/resctrlfs.c   |  55 ++--
+ 8 files changed, 224 insertions(+), 247 deletions(-)
 
-> I tried to preserve the current behaviour in GRO - if we want to change=
-
-> this behaviour I'll gladly do it, although I'd prefer to address it in =
-a
-> different patch series. What do you think?
-
-Yes, it's entirely reasonable to leave that out of this series.
+-- 
+2.39.2
 
 
