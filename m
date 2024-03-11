@@ -1,294 +1,246 @@
-Return-Path: <linux-kselftest+bounces-6201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB4287810F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 14:56:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D25468781B2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 15:35:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1E471C2271A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 13:56:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 474B01F22996
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Mar 2024 14:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E55A3FB30;
-	Mon, 11 Mar 2024 13:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E34E3065B;
+	Mon, 11 Mar 2024 14:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PLfgWJJq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KIAnqE7I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40F6446C8;
-	Mon, 11 Mar 2024 13:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885E025755
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 14:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710165287; cv=none; b=USd83i4XgPBeJNPsxCtvMh8HdFDpx3SXOohjQAES7PfFaRf0raI7p+GKRItb3tcD6QHg3xjsrURNpG9Ry5bVubH7jJwHa+Yg+8QUUEgEIkINPUOtmlHSZkNp+wW88xwz6DFheEqVearqkyjCjRNq2jgrXxCRVqhqJwKnRD1oZSg=
+	t=1710167735; cv=none; b=HeYyX/9/R9mIVTykSuCrPyezaqB6P4NWSY/vbxsdVmeXVdoNb10IvQ9ZUgu/3YITFpsaHugbX/jBHMaX636aINMZGCQ78aS28WfbhcB5hXdeYMAHbdZOmVg2PBSElJ4NmHrbKKPauIa0huOdzaXw+Rp64fqItyNZ95+B+Dr3f8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710165287; c=relaxed/simple;
-	bh=VPYe+KPk8aOURavBcr5qgfEgzrTuYjayKHJkJ4aZNR0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c5PBj5oq5t8TI4GZooDtfbR25p2Qup8ITWZyLhhvt7ZYBGI4g8saMTgT9FE2bw/DWmdDwpg8I5lnIj8pR29bzCuTM4QEwHG/MEtQ3FI75EJgvnI/Pl2P6XIEbCD/hZaIzIgfWmYxN07gWqnU/7Y2/+ZkxN6AHoH5ppgy10dShTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PLfgWJJq; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710165285; x=1741701285;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VPYe+KPk8aOURavBcr5qgfEgzrTuYjayKHJkJ4aZNR0=;
-  b=PLfgWJJqD422tEw3CNl7XMmOxVfL078+Fqmkoyi9C8sk0b3n3aZZvhAv
-   BkGRW0vHG5B1oJ+QSjl1c422tf9AZXCMi3JjeMoWJFjpWSUsDlSwpkukT
-   l5M1bwNWQt7D1jof2qmKqZUHhH+CDYR+e0UAG8GfggwOK+EiHTQoIUxVV
-   SmED4KwBcXnYin+p6FY8L92UwCm/ko3HOZ7whnj1ztdz9ka6zynSqHp1l
-   oNIhuZDJgliyMSJEzfT3E3QqNblR9uaUlF7HmYbTK2Wp0o/GRtwc9m/Qk
-   LATryHKv2cXLooR5s97EHAfnPL5y4Olyj6RMcnyMUoC3bj5ok6jj/iUJd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="4963959"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="4963959"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 06:54:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="11065436"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.201])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 06:54:41 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: linux-kselftest@vger.kernel.org,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Babu Moger <babu.moger@amd.com>,
-	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>,
+	s=arc-20240116; t=1710167735; c=relaxed/simple;
+	bh=48G19bIYgZNrVznxhTkbxd/Lx5dKYqxQShWXkL7I7Hg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q1tqZYCB3CLeEOV7Cd0liLZJ+jbuk0E47NJChpPiHOzhzySmgcMiirfEUvrtfMJm0xDcDmQgC0GddnkOU1UYkvVyE+ks1wMNuXXaZaCLc4kVdQNjvfhD1rbq7gEjEMp3TdTPOLIiHziRh/eXoznf3nxV+Wyt/tD5WCAKnJM+PS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KIAnqE7I; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710167732;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D8Bn0Qza1gC0R7VtqD/37KxM2U8PNSYbow8rmpoOJHE=;
+	b=KIAnqE7IlNBWtXS6BQVp1J6OqP3t7FoRY2RwVZ0WJ0flOWRZmUhKrvJ2NszyCj5Z1kiC99
+	BJJPJgoVr19y8znthO+QoN7GuH2eCUrYtYenrpywmcnQTs6m1SamHNJqf2A7sXhmUAUcLB
+	Gzl1p92WIrd0t6e35gujICE7rMOdajU=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-655-GQuMhY7ZPDWR-LiwDqvBAg-1; Mon, 11 Mar 2024 10:35:31 -0400
+X-MC-Unique: GQuMhY7ZPDWR-LiwDqvBAg-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-690d3f5af86so3311856d6.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 07:35:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710167730; x=1710772530;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D8Bn0Qza1gC0R7VtqD/37KxM2U8PNSYbow8rmpoOJHE=;
+        b=aWXNL6pj2mVCBbmDLJxji9tO9U7ZaDX5RtRKwKPgVuXHGAwdwHuBpKklwIagS7zUKh
+         zz0mTiR857DMNxoYHlE5FjWzMP4blvGceM46+4e1sB8k31i4t23X0nXv1re0kScVPkZq
+         st8pB4Z8NKnRADF3YEz/dXzLEZ7RM1oAmnzGYsjAQ7geGpcoH1UJvVK3Obv3f5CiLIe2
+         vBPhPcOgQL0A9yf0mjuJ8/Cjqk7eYYE0ufsAMavZhu4ouIqe1MZjw+B4rQokxDRc0fv+
+         KcEJZ5aglrEbKzZ06LeK2W1FDSOYUVcs9TvNg5FOjzAJGV9gFRJIfcwM+gNG7tdh4Ujb
+         vMDg==
+X-Forwarded-Encrypted: i=1; AJvYcCXMD80gsnDixvhhPiBvOwprVsP1NUvbt02bohxMWarW2Q6J9MisAfeX2dXRG5qtmMIim+tBzF8c4b9ZhkPU47hRVZ+ySFLscJjvwsbB429Q
+X-Gm-Message-State: AOJu0YwrEGD60/8rpzBeLsnW2kD1lUxh67zfcpZC+onxYlLXmuZx5khq
+	x76Hd5LbeXMZt+URX7YB89WJjVflCdV66l/cgCRdokd1YNyFlZxuBoNEXyRucbNqzfw3IhEPK/M
+	QNy8beoTASSR2A5aqdje6Yl3bd6LxD27zj9Va4NT5HAV5XDij1/Qa4CEpU4mcVVTZRA==
+X-Received: by 2002:a05:6214:5817:b0:690:dcc8:6149 with SMTP id mk23-20020a056214581700b00690dcc86149mr878970qvb.4.1710167730552;
+        Mon, 11 Mar 2024 07:35:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGDFZwfaCB4HAsZiRTNH9ThEFmAZ+oZRyottgFXIagCv5O/Cci8Kk03bGXgk6z75P4DZjUV5g==
+X-Received: by 2002:a05:6214:5817:b0:690:dcc8:6149 with SMTP id mk23-20020a056214581700b00690dcc86149mr878939qvb.4.1710167729947;
+        Mon, 11 Mar 2024 07:35:29 -0700 (PDT)
+Received: from x1n (cpe688f2e2cb7c3-cm688f2e2cb7c0.cpe.net.cable.rogers.com. [99.254.121.117])
+        by smtp.gmail.com with ESMTPSA id w3-20020a0cf703000000b0068f75622543sm2729017qvn.1.2024.03.11.07.35.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Mar 2024 07:35:29 -0700 (PDT)
+Date: Mon, 11 Mar 2024 10:35:27 -0400
+From: Peter Xu <peterx@redhat.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>, linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 13/13] selftests/resctrl: Remove test name comparing from write_bm_pid_to_resctrl()
-Date: Mon, 11 Mar 2024 15:52:30 +0200
-Message-Id: <20240311135230.7007-14-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com>
-References: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com>
+	Axel Rasmussen <axelrasmussen@google.com>
+Subject: Re: BUG selftests/mm]
+Message-ID: <Ze8Wr2qH8V0LMi_5@x1n>
+References: <a9e3120d-8b79-4435-b113-ceb20aa45ee2@alu.unizg.hr>
+ <4a5c8d28-7f73-4c15-b288-641f0ccc91c2@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4a5c8d28-7f73-4c15-b288-641f0ccc91c2@redhat.com>
 
-write_bm_pid_to_resctrl() uses resctrl_val to check test name which is
-not a good interface generic resctrl FS functions should provide.
+On Mon, Mar 11, 2024 at 10:31:41AM +0100, David Hildenbrand wrote:
+> On 09.03.24 20:12, Mirsad Todorovac wrote:
+> > Hi,
+> > 
+> > Routine run of the test in net-next gave also this mm unit error.
+> > 
+> > root@defiant:tools/testing/selftests/mm# ./uffd-unit-tests
+> > Testing UFFDIO_API (with syscall)... done
+> > Testing UFFDIO_API (with /dev/userfaultfd)... done
+> > Testing register-ioctls on anon... done
+> > Testing register-ioctls on shmem... done
+> > Testing register-ioctls on shmem-private... done
+> > Testing register-ioctls on hugetlb... skipped [reason: memory allocation failed]
+> > Testing register-ioctls on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing zeropage on anon... done
+> > Testing zeropage on shmem... done
+> > Testing zeropage on shmem-private... done
+> > Testing zeropage on hugetlb... skipped [reason: memory allocation failed]
+> > Testing zeropage on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing move on anon... done
+> > Testing move-pmd on anon... done
+> > Testing move-pmd-split on anon... done
+> > Testing wp-fork on anon... done
+> > Testing wp-fork on shmem... done
+> > Testing wp-fork on shmem-private... done
+> > Testing wp-fork on hugetlb... skipped [reason: memory allocation failed]
+> > Testing wp-fork on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing wp-fork-with-event on anon... done
+> > Testing wp-fork-with-event on shmem... done
+> > Testing wp-fork-with-event on shmem-private... done
+> > Testing wp-fork-with-event on hugetlb... skipped [reason: memory allocation failed]
+> > Testing wp-fork-with-event on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing wp-fork-pin on anon... done
+> > Testing wp-fork-pin on shmem... done
+> > Testing wp-fork-pin on shmem-private... done
+> > Testing wp-fork-pin on hugetlb... skipped [reason: memory allocation failed]
+> > Testing wp-fork-pin on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing wp-fork-pin-with-event on anon... done
+> > Testing wp-fork-pin-with-event on shmem... done
+> > Testing wp-fork-pin-with-event on shmem-private... done
+> > Testing wp-fork-pin-with-event on hugetlb... skipped [reason: memory allocation failed]
+> > Testing wp-fork-pin-with-event on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing wp-unpopulated on anon... done
+> > Testing minor on shmem... done
+> > Testing minor on hugetlb... skipped [reason: memory allocation failed]
+> > Testing minor-wp on shmem... done
+> > Testing minor-wp on hugetlb... skipped [reason: memory allocation failed]
+> > Testing minor-collapse on shmem... done
+> > Testing sigbus on anon... done
+> > Testing sigbus on shmem... done
+> > Testing sigbus on shmem-private... done
+> > Testing sigbus on hugetlb... skipped [reason: memory allocation failed]
+> > Testing sigbus on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing sigbus-wp on anon... done
+> > Testing sigbus-wp on shmem... done
+> > Testing sigbus-wp on shmem-private... done
+> > Testing sigbus-wp on hugetlb... skipped [reason: memory allocation failed]
+> > Testing sigbus-wp on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing events on anon... done
+> > Testing events on shmem... done
+> > Testing events on shmem-private... done
+> > Testing events on hugetlb... skipped [reason: memory allocation failed]
+> > Testing events on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing events-wp on anon... done
+> > Testing events-wp on shmem... done
+> > Testing events-wp on shmem-private... done
+> > Testing events-wp on hugetlb... skipped [reason: memory allocation failed]
+> > Testing events-wp on hugetlb-private... skipped [reason: memory allocation failed]
+> > Testing poison on anon... done
+> > Testing poison on shmem... done
+> > Testing poison on shmem-private... done
+> > Testing poison on hugetlb... skipped [reason: memory allocation failed]
+> > Testing poison on hugetlb-private... skipped [reason: memory allocation failed]
+> > Userfaults unit tests: pass=42, skip=24, fail=0 (total=66)
+> > root@defiant:tools/testing/selftests/mm# grep -i huge /proc/meminfo
+> > 
+> > It resulted in alarming errors in the syslog:
+> > 
+> > Mar  9 19:48:24 defiant kernel: [77187.055103] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4631e000
+> > Mar  9 19:48:24 defiant kernel: [77187.055132] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46320000
+> > Mar  9 19:48:24 defiant kernel: [77187.055160] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46322000
+> > Mar  9 19:48:24 defiant kernel: [77187.055189] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46324000
+> > Mar  9 19:48:24 defiant kernel: [77187.055218] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46326000
+> > Mar  9 19:48:24 defiant kernel: [77187.055250] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46328000
+> > Mar  9 19:48:24 defiant kernel: [77187.055278] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4632a000
+> > Mar  9 19:48:24 defiant kernel: [77187.055307] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4632c000
+> > Mar  9 19:48:24 defiant kernel: [77187.055336] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4632e000
+> > Mar  9 19:48:24 defiant kernel: [77187.055366] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46330000
+> > Mar  9 19:48:24 defiant kernel: [77187.055395] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46332000
+> > Mar  9 19:48:24 defiant kernel: [77187.055423] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46334000
+> > Mar  9 19:48:24 defiant kernel: [77187.055452] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46336000
+> > Mar  9 19:48:24 defiant kernel: [77187.055480] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46338000
+> > Mar  9 19:48:24 defiant kernel: [77187.055509] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4633a000
+> > Mar  9 19:48:24 defiant kernel: [77187.055538] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4633c000
+> > Mar  9 19:48:24 defiant kernel: [77187.055567] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 4633e000
+> > Mar  9 19:48:24 defiant kernel: [77187.055597] MCE: Killing uffd-unit-tests:1321817 due to hardware memory corruption fault at 46340000
+> > 
+> > At this point, it can be problem with my box's memory chips, or something with HUGETLB.
+> > 
+> > However, since the "classic" allocations were successful, the problem might be in huge pages, or
+> > if I understood well, in deliberate poisoning of pages?
+> > 
+> 
+> Isn't that just the (expected) side effect of UFFDIO_POISON tests?
+> 
+> IOW, there is no problem here. We are poisoning virtual memory locations
+> (not actual memory) and expect a SIGBUS on next access. While testing that,
+> we receive these messages.
 
-Only MBM and CMT tests define mongrp so the test name check in
-write_bm_pid_to_resctrl() can be changed to depend simply on mongrp
-being non-NULL.
+Correct.
 
-With last user of resctrl_val gone, the parameter and member from the
-struct resctrl_val_param can removed. Test name constants can also be
-removed because they are not used anymore.
+> 
+> The "ugly" thing here seems to be that we can trigger repeated pr_err() from
+> user space. There is no rate-limiting in place. Maybe UFFDIO_POISON requires
+> root permissions so this cannot be exploited by unprivileged user space to
+> flood the system log?
+> 
+> CCing Axel
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/cat_test.c    |  5 +--
- tools/testing/selftests/resctrl/cmt_test.c    |  1 -
- tools/testing/selftests/resctrl/mba_test.c    |  1 -
- tools/testing/selftests/resctrl/mbm_test.c    |  1 -
- tools/testing/selftests/resctrl/resctrl.h     | 10 +-----
- tools/testing/selftests/resctrl/resctrl_val.c |  4 +--
- tools/testing/selftests/resctrl/resctrlfs.c   | 33 ++++++++-----------
- 7 files changed, 17 insertions(+), 38 deletions(-)
+This is pretty unfortunate.
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 4cb991be8e31..c0291ecf1d1c 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -158,7 +158,6 @@ static int cat_test(const struct resctrl_test *test,
- 		    struct resctrl_val_param *param,
- 		    size_t span, unsigned long current_mask)
- {
--	char *resctrl_val = param->resctrl_val;
- 	struct perf_event_read pe_read;
- 	struct perf_event_attr pea;
- 	cpu_set_t old_affinity;
-@@ -178,8 +177,7 @@ static int cat_test(const struct resctrl_test *test,
- 		return ret;
- 
- 	/* Write benchmark to specified con_mon grp, mon_grp in resctrl FS*/
--	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
--				      resctrl_val);
-+	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp);
- 	if (ret)
- 		goto reset_affinity;
- 
-@@ -272,7 +270,6 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	start_mask = create_bit_mask(start, n);
- 
- 	struct resctrl_val_param param = {
--		.resctrl_val	= CAT_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.num_of_runs	= 0,
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index e79eca9346f3..ab96411d1015 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -144,7 +144,6 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 	}
- 
- 	struct resctrl_val_param param = {
--		.resctrl_val	= CMT_STR,
- 		.ctrlgrp	= "c1",
- 		.mongrp		= "m1",
- 		.filename	= RESULT_FILE_NAME,
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 5bb73e6cabc3..c44af1f62f55 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -172,7 +172,6 @@ void mba_test_cleanup(void)
- static int mba_run_test(const struct resctrl_test *test, const struct user_params *uparams)
- {
- 	struct resctrl_val_param param = {
--		.resctrl_val	= MBA_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.init		= set_mba_path,
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index c8c9aba81db8..120c356a069e 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -140,7 +140,6 @@ void mbm_test_cleanup(void)
- static int mbm_run_test(const struct resctrl_test *test, const struct user_params *uparams)
- {
- 	struct resctrl_val_param param = {
--		.resctrl_val	= MBM_STR,
- 		.ctrlgrp	= "c1",
- 		.mongrp		= "m1",
- 		.filename	= RESULT_FILE_NAME,
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 54e5bce4c698..4cd7997b39e6 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -79,7 +79,6 @@ struct resctrl_test {
- 
- /*
-  * resctrl_val_param:	resctrl test parameters
-- * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-  * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-  * @mongrp:		Name of the monitor group (mon grp)
-  * @filename:		Name of file to which the o/p should be written
-@@ -88,7 +87,6 @@ struct resctrl_test {
-  * @measure:		Callback that performs the measurement (a single test)
-  */
- struct resctrl_val_param {
--	char		*resctrl_val;
- 	const char	*ctrlgrp;
- 	const char	*mongrp;
- 	char		filename[64];
-@@ -111,11 +109,6 @@ struct perf_event_read {
- 	} values[2];
- };
- 
--#define MBM_STR			"mbm"
--#define MBA_STR			"mba"
--#define CMT_STR			"cmt"
--#define CAT_STR			"cat"
--
- /*
-  * Memory location that consumes values compiler must not optimize away.
-  * Volatile ensures writes to this location cannot be optimized away by
-@@ -141,8 +134,7 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity);
- int taskset_restore(pid_t bm_pid, cpu_set_t *old_affinity);
- int write_schemata(const char *ctrlgrp, char *schemata, int cpu_no,
- 		   const char *resource);
--int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
--			    const char *mongrp, const char *resctrl_val);
-+int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongrp);
- int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- 		    int group_fd, unsigned long flags);
- unsigned char *alloc_buffer(size_t buf_size, int memflush);
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 2f166a5c0c9b..f2101ee665ba 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -632,7 +632,6 @@ int resctrl_val(const struct resctrl_test *test,
- 		const char * const *benchmark_cmd,
- 		struct resctrl_val_param *param)
- {
--	char *resctrl_val = param->resctrl_val;
- 	struct sigaction sigact;
- 	int ret = 0, pipefd[2];
- 	char pipe_message = 0;
-@@ -723,8 +722,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		goto out;
- 
- 	/* Write benchmark to specified control&monitoring grp in resctrl FS */
--	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
--				      resctrl_val);
-+	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp);
- 	if (ret)
- 		goto out;
- 
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index dbe0cc6d74fa..1bd70ac73ae2 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -524,7 +524,6 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
-  * @bm_pid:		PID that should be written
-  * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-  * @mongrp:		Name of the monitor group (mon grp)
-- * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-  *
-  * If a con_mon grp is requested, create it and write pid to it, otherwise
-  * write pid to root con_mon grp.
-@@ -534,8 +533,7 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
-  *
-  * Return: 0 on success, < 0 on error.
-  */
--int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
--			    const char *mongrp, const char *resctrl_val)
-+int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongrp)
- {
- 	char controlgroup[128], monitorgroup[512], monitorgroup_p[256];
- 	char tasks[1024];
-@@ -555,22 +553,19 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
- 	if (ret)
- 		goto out;
- 
--	/* Create mon grp and write pid into it for "mbm" and "cmt" test */
--	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)) ||
--	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
--		if (mongrp) {
--			sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
--			sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
--			ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
--			if (ret)
--				goto out;
--
--			sprintf(tasks, "%s/mon_groups/%s/tasks",
--				controlgroup, mongrp);
--			ret = write_pid_to_tasks(tasks, bm_pid);
--			if (ret)
--				goto out;
--		}
-+	/* Create monitor group and write pid into if it is used */
-+	if (mongrp) {
-+		sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
-+		sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
-+		ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
-+		if (ret)
-+			goto out;
-+
-+		sprintf(tasks, "%s/mon_groups/%s/tasks",
-+			controlgroup, mongrp);
-+		ret = write_pid_to_tasks(tasks, bm_pid);
-+		if (ret)
-+			goto out;
- 	}
- 
- out:
+I'm not concerned too much on flooding whoever kicks off the selftests, but
+indeed this seems to be able to be used by anyone to trigger such endless
+reports in dmesg.
+
+The issue with requiring a privilege means any hypervisor that will need to
+use this to emulate memory errors will also require such privilege, and it
+can be a problem.
+
+Logically such "hwpoison errors" are not real so it is not needed to be
+reported in dmesg, but now we're leveraging it to be exactly the same as a
+real hw error to share the code path, iiuc (e.g. on MCE injections).
+
+One option is to use a different marker reflecting that such hwpoison error
+is internal, so we don't need to report in dmesg. That'll also require
+(besides another bit in pte markers) one extra VM_FAULT_* flag just for
+such reports.  Might be slightly an overkill, but I don't see another
+better way; not reporting HWPOISON will complicate at least kvm use case
+even more.
+
+Or.. does syslog has its own protection in general for such printk floods?
+It'll be easier if that's not a concern to flood then, but I'm not sure
+from that regard.
+
+Thanks,
+
 -- 
-2.39.2
+Peter Xu
 
 
