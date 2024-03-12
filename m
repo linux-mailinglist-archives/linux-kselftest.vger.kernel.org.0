@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-6243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A67E878CAA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 03:01:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2B75878CBB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 03:05:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE882B218EE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 02:01:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1CF71C21039
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 02:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863C6567D;
-	Tue, 12 Mar 2024 02:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3A653A1;
+	Tue, 12 Mar 2024 02:05:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="K+ELwexk"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="cXcf1zwv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E93617F7
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Mar 2024 02:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD3F1C17
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Mar 2024 02:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710208908; cv=none; b=ZqxxH/g2zvxKOtgc/RuYZ5IVO0DMHTjfMrkBTP+GgAeRoi1IRHVixZqQOClLdklQW+CN66VqVrxO+7NXs3V3l9BmG1ZYUQ+5OIrVGWNTmWhGMBFH3R0QvnOqmz8IaUMb2BCo1EFM0sB/ZnbcPenK4rDnKvAvAcCMrBUIQVyBGO4=
+	t=1710209148; cv=none; b=cN6Mkg+VbJmqq1mYMb5UpI5UyILvr7k4wrzmnZPasC1EjnTa1ABbc7lGh2WRSKFplKsEE1Wt/u+wcO61ssrKxAE9R1dKO+jRol/1uImg9EC2KKDixMhpvTN8xonNLI/iJIAD0L3MIq/RLz3zOhPNoqKfTbjnZvkyn+7Cgj5lirA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710208908; c=relaxed/simple;
-	bh=qIQnV/bIS0K3Bxk7jAUmTdn9bktpADBevzDPd5urYgQ=;
+	s=arc-20240116; t=1710209148; c=relaxed/simple;
+	bh=u+cghnX8IkuhizDm1mtP5lcke/YetyNGJY33fxG2Q9s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hsl7ZxEwCs85BZ0zolIC1RFUCrt+DDUGo812756FuBfcDDVPWJQXFWbPewovtacTetwBzPchOBM76suQoamWfUx5PRQ+5zyhKihogxYSe0IgLhx1Voage418sQ8OIYW4zHdBA92Kttzq+WvKjv6GBi7Cq5LSoe4cJiquZdMIiGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=K+ELwexk; arc=none smtp.client-ip=209.85.216.44
+	 To:Cc:Content-Type; b=mjrWwyVsOWsuCV5y/HPHnO0QdlbOwG2iO7gXYRQEjH8xJj1VTQ1ZLfJqK9UtqPqSLy7FcMsVm0pEu49Yj6yboChZDpx8Jtq7MTlmPspyEVTkPazAMHn5Cf+pzd6jOOk4K3qP72CX6UF7BI4Ob5slbewKB2BFNYW/tTXf6WpEglU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=cXcf1zwv; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-29a2545a1e7so3257487a91.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 19:01:46 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-29954bb87b4so2225947a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Mar 2024 19:05:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1710208905; x=1710813705; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1710209146; x=1710813946; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=04korNn+ptS1gdtp9bjAZOdgzha5IIX0Ncig6I/SdC8=;
-        b=K+ELwexktRzT2UrvHjg6Moug/Lxy42rFN4CJd9tC7oT9NYeCpyi2xNFeWnrmxHT0Ds
-         tPY8o8tpDNcE0F8EWpc5JnKqRMAOogdZkfZ7mOJOxg5U3HBCYCPULpekk/4IQxVa4NE9
-         fdmL6IkIzoFyLeCmkHMNM3t234kbH0C70bpxm9frQnD0dDq5h2rC/cjhTcVFFv3ls6Tz
-         XObTbxzW5ZjgBc6aEREei970TVct+4HNpaOr3ntrjpvyT4yQPuVXZrT95ajQLdTcXODX
-         jnZn5abVjuvcLRZo/UHT7LGl3kfaRSBtu6G6HNFwOWSgiWLaFKq1uFuUEPirzU87mPbi
-         JalA==
+        bh=nuFUN/hOP8k7Y+FzC49ZRi5HcBAhtMCwCDKyd6VJ7Rk=;
+        b=cXcf1zwveq2BZWd/hk/hHFZ2bcBAjvdrll3461JJbiXfEV9/3pMGWlPuG/pNBmFeWn
+         efLes1S0DvG6ddCay1haGI+KNrUIGrvHtaGEQn2QwONhSa59Vtp7qwluT7qkTkskd1bt
+         ZEVE1tLa/71CjFipBFpNl4IIiO1ydlP+FnQGuct76Bj2d7vsiG2rcaoD+Yac0BDlhTmC
+         jOVjwt/UyyYGtGxS+6Ipa4w1EyBEixkiT8ksDCT7lM/4fPpepGC7JuMD+KQLUGUN5CFr
+         yL4YcFEjbwIvbbEI22rhvTobOMG7tWg+ce70c1y+mivokvwmGYcIurpPA9a2Hg/LdMC5
+         E81g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710208905; x=1710813705;
+        d=1e100.net; s=20230601; t=1710209146; x=1710813946;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=04korNn+ptS1gdtp9bjAZOdgzha5IIX0Ncig6I/SdC8=;
-        b=evbz0QIOUOn3iY89TRq67HF1OdxIW7aKZcQYxMPstpI8GzMiN+4T2A2WFgg6Y393bS
-         BlOLy/Egw5ozOOSgu6v+gyDFF52M8YBQPe2sB1ksfMjkTQwr0OHPE5ZrWCosW8ujXnpP
-         U4bQnGdKfHqKIxiqG6+7KyIJ3K3bTPpHuK40fb5uqGxkVgo+z68D68Juq3/0ZDUy3q8J
-         LxrFp0y5sBf6cJBsrj4LeqMbM9VqbWhAGllKlI7/yV6RA7Ydr9HiZzLOkbidf1sKarfF
-         w/MtGeBAzwIF7Y/boAU0ZurKwtRwVtMhVCmq5d3l0I8pxklLHIBjYK3PXH4jw3LnV+Up
-         Ou8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUku4RPrFVJ1Zjn99/H8oHHKFwlbiUxvKEgIRyKPj0kzP7LgBGZ8gkpcM2IPaeZwKqdtH1B/z9Sa2+WXjcYY2MT1937RTPaOGwPX9PhZXye
-X-Gm-Message-State: AOJu0YxG7BotZmyzRC6h043jJU1MaXQKjBDOYJHR7GaAIWYa37JgYowM
-	rYYObR5+Cq1uX+4s5juealafV67SmYv8UYigKJjDbWrLdC8mJB9eTXFKA+/e4FWySPpBheNzc8n
-	GXYYzqIfjXoUkmOtqw2Nl4lDaHRCCaE36sT2Ehg==
-X-Google-Smtp-Source: AGHT+IFU9d58jLiUu+dw8DkQB5XXLOOej/TsY11ssdad2M5fQNKdmpNs98xYJ42I4OgsPLsEE36ekbfce1jUks2RugY=
-X-Received: by 2002:a17:90a:df11:b0:29b:b0c1:60cd with SMTP id
- gp17-20020a17090adf1100b0029bb0c160cdmr6423688pjb.23.1710208905551; Mon, 11
- Mar 2024 19:01:45 -0700 (PDT)
+        bh=nuFUN/hOP8k7Y+FzC49ZRi5HcBAhtMCwCDKyd6VJ7Rk=;
+        b=kBdHllHKTlCl67f5CtfasUvS6MA9uw7Gj49E1NsaH2t1Ifs/cbjgjvzD9kYCH8TmOT
+         GiHtbvyZCGo4nzgbrj7N9GuA91dZeMkJAmSu2r66ttnWOp7Y8ybvcjVQATrCSy5K+x6H
+         gDfRq1TlQiwdV6yyyV6IPq7ctBTXEV+1ezY5ESBmRaJT+jISyxGUVKhLxRKOUiSWMvj+
+         yvScJUYg5lYd3mrW+XG1Bxs+PCkTczRFcVi6Gkw8Tc8t+HBy4piPmToifggqeSwJKn9h
+         4+e7qTCr2JHHh4FFM1vpYD8xn/k9/kPlGVPTFZl7TSL+490pVhROcolGizt4rHhHEvro
+         Wjqw==
+X-Forwarded-Encrypted: i=1; AJvYcCVsH/QidlAE6g6gPS5AkDBnyRqOJ9k83haEGhqb1y40fOpWiaor/EbHj+bCDnU8KBu7sAzsWJGOlb8gciSVtYEGWIbK8z1qOllFlbT5gu/6
+X-Gm-Message-State: AOJu0YxjPP+HUVT+HAi3xuD+rkFGodFvzpfmsiFP7UfijBRj1gdjbmKS
+	Enzj9u7BTqH2PYq1+R5UhsfDk5/OlVMxSTGRleoQwvZUrzavCOWxdgmhHEVOgujExtroj9b57Gm
+	a1gXO7lHXJQ5clCqgTz5P1yVTSLmMCxK9nBa4AQ==
+X-Google-Smtp-Source: AGHT+IF0WyYVLRMqbAbNjbiNEwXcYruNNPa78bRdIpKnuRBjtBqbGNQqz6kUmi5cKSh3oZKwaTTzkPnN9f3bSgCjkEM=
+X-Received: by 2002:a17:90b:46d3:b0:29b:ae33:6ef2 with SMTP id
+ jx19-20020a17090b46d300b0029bae336ef2mr6174052pjb.38.1710209146474; Mon, 11
+ Mar 2024 19:05:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,13 +72,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
-In-Reply-To: <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+ <20240311093526.1010158-8-dongmenglong.8@bytedance.com> <CAADnVQK4tdefa3s=sim69Sc+ztd-hHohPEDXaUNVTU-mLNYUiw@mail.gmail.com>
+In-Reply-To: <CAADnVQK4tdefa3s=sim69Sc+ztd-hHohPEDXaUNVTU-mLNYUiw@mail.gmail.com>
 From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Date: Tue, 12 Mar 2024 10:01:34 +0800
-Message-ID: <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
+Date: Tue, 12 Mar 2024 10:05:35 +0800
+Message-ID: <CALz3k9iabeOwHSrPb9mkfCuOebanh3+bAfi7xh3kBBN0DzHC3A@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 7/9] libbpf: don't free btf if
+ program of multi-link tracing existing
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
@@ -98,160 +98,129 @@ Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 9:46=E2=80=AFAM Alexei Starovoitov
+On Tue, Mar 12, 2024 at 9:55=E2=80=AFAM Alexei Starovoitov
 <alexei.starovoitov@gmail.com> wrote:
 >
-> On Mon, Mar 11, 2024 at 2:34=E2=80=AFAM Menglong Dong
+> On Mon, Mar 11, 2024 at 2:35=E2=80=AFAM Menglong Dong
 > <dongmenglong.8@bytedance.com> wrote:
 > >
-> > In this commit, we add the 'accessed_args' field to struct bpf_prog_aux=
-,
-> > which is used to record the accessed index of the function args in
-> > btf_ctx_access().
+> > By default, the kernel btf that we load during loading program will be
+> > freed after the programs are loaded in bpf_object_load(). However, we
+> > still need to use these btf for tracing of multi-link during attaching.
+> > Therefore, we don't free the btfs until the bpf object is closed if any
+> > bpf programs of the type multi-link tracing exist.
 > >
-> > Meanwhile, we add the function btf_check_func_part_match() to compare t=
-he
-> > accessed function args of two function prototype. This function will be
-> > used in the following commit.
+> > Meanwhile, introduce the new api bpf_object__free_btf() to manually fre=
+e
+> > the btfs after attaching.
 > >
 > > Signed-off-by: Menglong Dong <dongmenglong.8@bytedance.com>
 > > ---
-> >  include/linux/bpf.h |   4 ++
-> >  kernel/bpf/btf.c    | 108 +++++++++++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 110 insertions(+), 2 deletions(-)
+> >  tools/lib/bpf/libbpf.c   | 47 ++++++++++++++++++++++++++++++----------
+> >  tools/lib/bpf/libbpf.h   |  2 ++
+> >  tools/lib/bpf/libbpf.map |  1 +
+> >  3 files changed, 38 insertions(+), 12 deletions(-)
 > >
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index 95e07673cdc1..0f677fdcfcc7 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -1461,6 +1461,7 @@ struct bpf_prog_aux {
-> >         const struct btf_type *attach_func_proto;
-> >         /* function name for valid attach_btf_id */
-> >         const char *attach_func_name;
-> > +       u64 accessed_args;
-> >         struct bpf_prog **func;
-> >         void *jit_data; /* JIT specific data. arch dependent */
-> >         struct bpf_jit_poke_descriptor *poke_tab;
-> > @@ -2565,6 +2566,9 @@ struct bpf_reg_state;
-> >  int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog);
-> >  int btf_check_type_match(struct bpf_verifier_log *log, const struct bp=
-f_prog *prog,
-> >                          struct btf *btf, const struct btf_type *t);
-> > +int btf_check_func_part_match(struct btf *btf1, const struct btf_type =
-*t1,
-> > +                             struct btf *btf2, const struct btf_type *=
-t2,
-> > +                             u64 func_args);
-> >  const char *btf_find_decl_tag_value(const struct btf *btf, const struc=
-t btf_type *pt,
-> >                                     int comp_idx, const char *tag_key);
-> >  int btf_find_next_decl_tag(const struct btf *btf, const struct btf_typ=
-e *pt,
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 170d017e8e4a..c2a0299d4358 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -6125,19 +6125,24 @@ static bool is_int_ptr(struct btf *btf, const s=
-truct btf_type *t)
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 567ad367e7aa..fd5428494a7e 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -8267,6 +8267,39 @@ static int bpf_object_prepare_struct_ops(struct =
+bpf_object *obj)
+> >         return 0;
 > >  }
 > >
-> >  static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *fun=
-c_proto,
-> > -                          int off)
-> > +                          int off, int *aligned_idx)
-> >  {
-> >         const struct btf_param *args;
-> >         const struct btf_type *t;
-> >         u32 offset =3D 0, nr_args;
-> >         int i;
-> >
-> > +       if (aligned_idx)
-> > +               *aligned_idx =3D -ENOENT;
-> > +
-> >         if (!func_proto)
-> >                 return off / 8;
-> >
-> >         nr_args =3D btf_type_vlen(func_proto);
-> >         args =3D (const struct btf_param *)(func_proto + 1);
-> >         for (i =3D 0; i < nr_args; i++) {
-> > +               if (aligned_idx && offset =3D=3D off)
-> > +                       *aligned_idx =3D i;
-> >                 t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-> >                 offset +=3D btf_type_is_ptr(t) ? 8 : roundup(t->size, 8=
-);
-> >                 if (off < offset)
-> > @@ -6207,7 +6212,7 @@ bool btf_ctx_access(int off, int size, enum bpf_a=
-ccess_type type,
-> >                         tname, off);
-> >                 return false;
-> >         }
-> > -       arg =3D get_ctx_arg_idx(btf, t, off);
-> > +       arg =3D get_ctx_arg_idx(btf, t, off, NULL);
-> >         args =3D (const struct btf_param *)(t + 1);
-> >         /* if (t =3D=3D NULL) Fall back to default BPF prog with
-> >          * MAX_BPF_FUNC_REG_ARGS u64 arguments.
-> > @@ -6217,6 +6222,9 @@ bool btf_ctx_access(int off, int size, enum bpf_a=
-ccess_type type,
-> >                 /* skip first 'void *__data' argument in btf_trace_##na=
-me typedef */
-> >                 args++;
-> >                 nr_args--;
-> > +               prog->aux->accessed_args |=3D (1 << (arg + 1));
-> > +       } else {
-> > +               prog->aux->accessed_args |=3D (1 << arg);
->
-> What do you need this aligned_idx for ?
-> I'd expect that above "accessed_args |=3D (1 << arg);" is enough.
->
-
-Which aligned_idx? No aligned_idx in the btf_ctx_access(), and
-aligned_idx is only used in the btf_check_func_part_match().
-
-In the btf_check_func_part_match(), I need to compare the
-t1->args[i] and t2->args[j], which have the same offset. And
-the aligned_idx is to find the "j" according to the offset of
-t1->args[i].
-
-> >         }
-> >
-> >         if (arg > nr_args) {
-> > @@ -7024,6 +7032,102 @@ int btf_check_type_match(struct bpf_verifier_lo=
-g *log, const struct bpf_prog *pr
-> >         return btf_check_func_type_match(log, btf1, t1, btf2, t2);
-> >  }
-> >
-> > +static u32 get_ctx_arg_total_size(struct btf *btf, const struct btf_ty=
-pe *t)
+> > +void bpf_object__free_btfs(struct bpf_object *obj)
 > > +{
-> > +       const struct btf_param *args;
-> > +       u32 size =3D 0, nr_args;
 > > +       int i;
 > > +
-> > +       nr_args =3D btf_type_vlen(t);
-> > +       args =3D (const struct btf_param *)(t + 1);
-> > +       for (i =3D 0; i < nr_args; i++) {
-> > +               t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-> > +               size +=3D btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
+> > +       /* clean up module BTFs */
+> > +       for (i =3D 0; i < obj->btf_module_cnt; i++) {
+> > +               close(obj->btf_modules[i].fd);
+> > +               btf__free(obj->btf_modules[i].btf);
+> > +               free(obj->btf_modules[i].name);
 > > +       }
+> > +       free(obj->btf_modules);
+> > +       obj->btf_modules =3D NULL;
+> > +       obj->btf_module_cnt =3D 0;
 > > +
-> > +       return size;
+> > +       /* clean up vmlinux BTF */
+> > +       btf__free(obj->btf_vmlinux);
+> > +       obj->btf_vmlinux =3D NULL;
 > > +}
 > > +
-> > +/* This function is similar to btf_check_func_type_match(), except tha=
-t it
-> > + * only compare some function args of the function prototype t1 and t2=
-.
-> > + */
-> > +int btf_check_func_part_match(struct btf *btf1, const struct btf_type =
-*func1,
-> > +                             struct btf *btf2, const struct btf_type *=
-func2,
-> > +                             u64 func_args)
+> > +static void bpf_object_early_free_btf(struct bpf_object *obj)
+> > +{
+> > +       struct bpf_program *prog;
+> > +
+> > +       bpf_object__for_each_program(prog, obj) {
+> > +               if (prog->expected_attach_type =3D=3D BPF_TRACE_FENTRY_=
+MULTI ||
+> > +                   prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT_M=
+ULTI ||
+> > +                   prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN=
+_MULTI)
+> > +                       return;
+> > +       }
+> > +
+> > +       bpf_object__free_btfs(obj);
+> > +}
+> > +
+> >  static int bpf_object_load(struct bpf_object *obj, int extra_log_level=
+, const char *target_btf_path)
+> >  {
+> >         int err, i;
+> > @@ -8307,18 +8340,7 @@ static int bpf_object_load(struct bpf_object *ob=
+j, int extra_log_level, const ch
+> >         /* clean up fd_array */
+> >         zfree(&obj->fd_array);
+> >
+> > -       /* clean up module BTFs */
+> > -       for (i =3D 0; i < obj->btf_module_cnt; i++) {
+> > -               close(obj->btf_modules[i].fd);
+> > -               btf__free(obj->btf_modules[i].btf);
+> > -               free(obj->btf_modules[i].name);
+> > -       }
+> > -       free(obj->btf_modules);
+> > -
+> > -       /* clean up vmlinux BTF */
+> > -       btf__free(obj->btf_vmlinux);
+> > -       obj->btf_vmlinux =3D NULL;
+> > -
+> > +       bpf_object_early_free_btf(obj);
+> >         obj->loaded =3D true; /* doesn't matter if successfully or not =
+*/
+> >
+> >         if (err)
+> > @@ -8791,6 +8813,7 @@ void bpf_object__close(struct bpf_object *obj)
+> >         usdt_manager_free(obj->usdt_man);
+> >         obj->usdt_man =3D NULL;
+> >
+> > +       bpf_object__free_btfs(obj);
+> >         bpf_gen__free(obj->gen_loader);
+> >         bpf_object__elf_finish(obj);
+> >         bpf_object_unload(obj);
+> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > index 5723cbbfcc41..c41a909ea4c1 100644
+> > --- a/tools/lib/bpf/libbpf.h
+> > +++ b/tools/lib/bpf/libbpf.h
+> > @@ -299,6 +299,8 @@ LIBBPF_API struct bpf_program *
+> >  bpf_object__find_program_by_name(const struct bpf_object *obj,
+> >                                  const char *name);
+> >
+> > +LIBBPF_API void bpf_object__free_btfs(struct bpf_object *obj);
+> > +
 >
-> This is way too much copy paste.
-> Please share the code with btf_check_func_type_match.
+> It shouldn't be exported.
+> libbpf should clean it up when bpf_object is freed.
 
-Okay!
+Yes, libbpf will clean up the btfs when bpf_object is freed in
+this commit. And I'm trying to offer a way to early free the btfs
+by the users manual to reduce the memory usage. Or, the
+btfs that we opened will keep existing until we close the
+bpf_object.
+
+This is optional, I can remove it if you prefer.
 
 Thanks!
 Menglong Dong
