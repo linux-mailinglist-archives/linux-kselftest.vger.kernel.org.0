@@ -1,304 +1,218 @@
-Return-Path: <linux-kselftest+bounces-6264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62441879930
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 17:42:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA989879952
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 17:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85E511C21763
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 16:42:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E362B240A7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Mar 2024 16:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B52C47E578;
-	Tue, 12 Mar 2024 16:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C2D80C00;
+	Tue, 12 Mar 2024 16:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/iSciIw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0M7GvAmw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41A015BF;
-	Tue, 12 Mar 2024 16:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE83D80622
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Mar 2024 16:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710261754; cv=none; b=JSgeGS0tVWvZHHOYhnYS9B7j2omVCZT+7DmyCEVa/DB1HpUYhmkZea/Nvgg1VDJNaYaoWhhSdaVDQWHHSMHdpDDExtmo/0R3JLs//VSF+nq2Sas0zx6qoyqXWk3IDtXxZcO0TMR0p+Qp9Y9LBpy4qhXmjn1rpKrIPYXrEWANa4E=
+	t=1710262091; cv=none; b=Q0ogRl4PYX4M0vJcVG25C2hAp2i2TR97+27PY873XdKnMCKordwd8AQxL7PNoCsW8nygH7Y934xYGeUbiPlsOJXbaQC2QP+bM3ffFegFMaNl0tH46SruwCzJdNPLVUyb09odh875R0U0HDW8S4NfU0YAeA5ocM1uwskQWW7smYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710261754; c=relaxed/simple;
-	bh=IOgqkFC+7YdtEWrDEG6VjFtw1asWxY5nI0CrswHAChw=;
+	s=arc-20240116; t=1710262091; c=relaxed/simple;
+	bh=Q9HjHKn/d07di0Ny/VSuzvRdRoFuJ8TFJKvZUrjtdv0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AirsjUnB326vLJHYVfcOpl8EJhyJUYObcTbvo92ujtEPioQlfOIV1YHkxAwMRNqurXlcY0gcNr9ODJhSktIAXX4diTthGWBU8Up27IK09A5mKeZsj2dLaE0Z9i0isftffBUq4Og4kSbGryrdROgIYUKY8et3ch2v52cLXhch7Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/iSciIw; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33e9df3416bso1255106f8f.3;
-        Tue, 12 Mar 2024 09:42:32 -0700 (PDT)
+	 To:Cc:Content-Type; b=b7nNj6zqLOe0gzKRzT3TMYmmXQCUxuhkZHTBR+nmPTxvIv31kPk5mTLonqqSVQSmgsNW5tu1Kq1CITPlfH0QAETRWgzGcVj/H1KOckUZqOnoO1aB1qjG64bhM/it02N8ta8AHFoiLT+Lb63CO52g97mVTEHYt4CgnPA4m3evk2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0M7GvAmw; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41332865b05so6160295e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Mar 2024 09:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710261751; x=1710866551; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1710262088; x=1710866888; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OLfmcQWu5XXgWrSqV2rZUXevRLdZ2i834nrQ0vcBR5U=;
-        b=d/iSciIwroGieURQlgA8fpaiaFKGNwcyk4A5FC2l9dhiKW6spTNPbw824j8YQbxmJn
-         VaB1YYFXAw6zMZpjeJ8ybd6gVqTIcQ8SECsb9Gnq5t8WpFswyAocjSaErpZXlq/BJmcH
-         KwTPcDoxYZakRsMKF4gbErmSAYHTPFQDtHIdKUTZ1M6tqsIzYjHudZNrU3MqBHWTtnnc
-         mLG1OMez6Qc9U//258c1SDybIw5CFRqg4DJemZMoTV4VJSu3zWZNIjRM2ol4PeDbUUwf
-         nptpMqqrc7XZfW6H2Hz0bKYvgzb5R/RJM9xGf1FL0KwBGe7NHyNWMCH79dbAwYso6FYZ
-         bSDQ==
+        bh=X1JdD3SjakPudHQVJ76rnnq2H2jE37lLZ/0x/M6KH0I=;
+        b=0M7GvAmw5MXxK8s34JKi6K+N9SVvWcUQFaEdziy56einrtrPwp+6Sy7iNgYACkcUe0
+         QwLeRyq4wVefsHU82lFwZ3dA9PzuyU3OyxizEUe3AFDS031FvDjZrf7ReRu5mLL2jTIR
+         x25ZxQH9YjhhSHki1b6HdTLBrVnjEhQtERV77PJ851qQrJozFIYaA2KfXHqdNpiloVkT
+         r+ngswREVrv7r/SkwALcTqUbcosyZkqxzYDwtFPxBecK18WRGlyIku0hq4N3OItRlGsf
+         HC1SYAlvqxmUcvQjsCjlpVAlGhS4Yx9pUWBmpzl8ts2lxhcUmAOsPySEN7ujNhwE071j
+         HwmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710261751; x=1710866551;
+        d=1e100.net; s=20230601; t=1710262088; x=1710866888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OLfmcQWu5XXgWrSqV2rZUXevRLdZ2i834nrQ0vcBR5U=;
-        b=KQ29HysbZoOwqUlT5JGrEL05JJ0+wffQIvkiU7SxZ1Adjzyf1VLJh+hAy2V4BLY2PX
-         jjNMRr5hG89XcjAHXnXBP4WJT8lDWqYtD3tVKPJKrIS/gd5rLJHUnorigb0DEn9mV7uy
-         rtAuBYb0VUtJr6kiW3NIKZ0YFym6ic/0hIt/rcmXxeln5s30mUkZ5ZX7DBq60oj6TkdV
-         ntwRbzkeeuTEbmYHpVUl5CVTWpP20y95y97V72HZ79PYMgwJsOayXXepxfyBOWcrhZUT
-         VkFCzTkyORul1m1CLZzO9ebmpfD+HQTMCMmW89jP1FNB25xOYKX//FIv2bezUfg9YRXE
-         yHTw==
-X-Forwarded-Encrypted: i=1; AJvYcCVNssiKARFpffZ8LoFSbrjGVSAKhQXuefJJFx41gcDFjND5KLa3vPRqxsTM4wa0CCYlkJDjb5BW78pkswMq8V/BMe+Q891K3xaq6iOJgUVVkZistZI7i2ZBJEHJBBs0XAkH2pm+x8ASHdHFPA/f4Qkhk8594XPW+YTG8PWdR6pUB70qTtOiOOekI8y1OABLrihS9A+JPTyQOWhnH3/qdRuAcG6psA0ixnNyyDERJ4EbbTkj8IXs7pK0dCpq7L7WRBMeTxdisQ1i4o26e1b6Mhqh8hSRr5Bn3LhxSQ==
-X-Gm-Message-State: AOJu0Yx4f6A3li4NgbiVm58JtzoXKBefug+tQwcyttaSpOxX5RWiDfuU
-	QKXIk84fwa6J3YFyeIuU2cI9Lfw7kuNqaIJ6yPj5DTuTH7cQnLFq3VxpLIcNXFji9x68OAeB90l
-	7ghPlqBXrzQiHMVduxhgbAKbv/ok=
-X-Google-Smtp-Source: AGHT+IEa+4UMJem4Fp/QIrh+BONIvwnIkZaOvOjaYS7rj5IxmTt11nQG4gevX9xIkt30Kg19GjMMdC27opnimO5UKuk=
-X-Received: by 2002:adf:fa91:0:b0:33e:11c3:7ebf with SMTP id
- h17-20020adffa91000000b0033e11c37ebfmr6854846wrr.62.1710261750841; Tue, 12
- Mar 2024 09:42:30 -0700 (PDT)
+        bh=X1JdD3SjakPudHQVJ76rnnq2H2jE37lLZ/0x/M6KH0I=;
+        b=bEk3eot1yDVYabedOv4h/hk5kVJG5Khyp14QCYN6h8u9CM2Gq116bfz78WxtP6vPWg
+         joaEsMqo+WE3OqCZSOUJj2zjXzaJMk7LKy13S7SJlxnpUeUz5+WSq6AnizrLsdKr+SVl
+         EJHkbrlw3Hs9Wq6fnEhiRn1JdU/lvlfFUYRSyyXeQPBNghpwP/lDyF+t5E9XPiob5v76
+         gnGGa4SHb1bJUi6GwaBGUlbaBlvccLSGSu27oXa8Gd/F2svNFwulWePzEyYmUpcqapjB
+         KZkiSv+WNfzLrKPt3OM7+VLTRBgMFPQNmAinZVymhLXXGm5HiuYfmSozZ9fWFPQO2k2y
+         F6+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXAV78D96C/c2B2/bt8a2WvhETw9Q+DxtCs26G3Wsycl/7GLVczctpaEvzWL4AvV0sFGH0zPEq/nQY/8aqPWT2+WfrvF5BHkJD/Ow07ClTD
+X-Gm-Message-State: AOJu0YyPeQuJf7NQLtagKXmp8z56kfFsayOnQ1zaTkXG6dYC9cro0cXC
+	kKtzqZBw7v5iq0vg9nIBZbxYm3tR+FIFpZlC7paL+nR28EHOlRwhz7JT3/U9VQOOrJL7NpcB9BK
+	3lJsPTK28UV9lbR7y8YWK8kw6glDC7nnMLikmofn7BlQ/WoXMUg==
+X-Google-Smtp-Source: AGHT+IHz1t46LqyIdp7DJe0W007vNHqs968mX/S24f/EmXbCZ+L80gonmf0M4eO18CLGv4wGugu605YqTZHSHfDeU2Y=
+X-Received: by 2002:a05:600c:5251:b0:412:ebce:aa81 with SMTP id
+ fc17-20020a05600c525100b00412ebceaa81mr7255060wmb.23.1710262088195; Tue, 12
+ Mar 2024 09:48:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
- <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
- <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com> <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
-In-Reply-To: <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 12 Mar 2024 09:42:17 -0700
-Message-ID: <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+References: <a9e3120d-8b79-4435-b113-ceb20aa45ee2@alu.unizg.hr>
+ <4a5c8d28-7f73-4c15-b288-641f0ccc91c2@redhat.com> <Ze8Wr2qH8V0LMi_5@x1n>
+ <b5ff4c70-6379-4cc7-8c92-778d80a6a658@redhat.com> <Ze8fYF5I4mlUGHd9@x1n>
+ <CAJHvVcie+N+4j60m_Dxh7QzbZLmsjnq2-04peuqE8VkkMq984A@mail.gmail.com>
+ <Ze9bWkrD6UBZ2ErV@x1n> <CADrL8HW59nt4ztY3x5G3VgpmaXQbXoXZeAjvzMp7SpsqxgDCxw@mail.gmail.com>
+ <CACw3F51vMqPBHmvj4ehSA8PadXw30s3MxCqph1op5dxtB-tV6Q@mail.gmail.com> <ZfB28NIbflrnsqiX@x1n>
+In-Reply-To: <ZfB28NIbflrnsqiX@x1n>
+From: Axel Rasmussen <axelrasmussen@google.com>
+Date: Tue, 12 Mar 2024 09:47:31 -0700
+Message-ID: <CAJHvVcizoDwYVqnkroBz4nrXJRCkynC19=RBgWhT6xPdrvJ0sA@mail.gmail.com>
+Subject: Re: BUG selftests/mm]
+To: Peter Xu <peterx@redhat.com>
+Cc: Jiaqi Yan <jiaqiyan@google.com>, James Houghton <jthoughton@google.com>, 
+	David Hildenbrand <david@redhat.com>, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>, linux-mm@kvack.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongme=
-nglong.8@bytedance.com> wrote:
+On Tue, Mar 12, 2024 at 8:38=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
 >
-> On Tue, Mar 12, 2024 at 10:09=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+> On Mon, Mar 11, 2024 at 03:28:28PM -0700, Jiaqi Yan wrote:
+> > On Mon, Mar 11, 2024 at 2:27=E2=80=AFPM James Houghton <jthoughton@goog=
+le.com> wrote:
+> > >
+> > > On Mon, Mar 11, 2024 at 12:28=E2=80=AFPM Peter Xu <peterx@redhat.com>=
+ wrote:
+> > > >
+> > > > On Mon, Mar 11, 2024 at 11:59:59AM -0700, Axel Rasmussen wrote:
+> > > > > I'd prefer not to require root or CAP_SYS_ADMIN or similar for
+> > > > > UFFDIO_POISON, because those control access to lots more things
+> > > > > besides, which we don't necessarily want the process using UFFD t=
+o be
+> > > > > able to do. :/
+> > >
+> > > I agree; UFFDIO_POISON should not require CAP_SYS_ADMIN.
 > >
-> > On Mon, Mar 11, 2024 at 7:01=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <do=
-ngmenglong.8@bytedance.com> wrote:
-> > >
-> > > On Tue, Mar 12, 2024 at 9:46=E2=80=AFAM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Mon, Mar 11, 2024 at 2:34=E2=80=AFAM Menglong Dong
-> > > > <dongmenglong.8@bytedance.com> wrote:
-> > > > >
-> > > > > In this commit, we add the 'accessed_args' field to struct bpf_pr=
-og_aux,
-> > > > > which is used to record the accessed index of the function args i=
-n
-> > > > > btf_ctx_access().
-> > > > >
-> > > > > Meanwhile, we add the function btf_check_func_part_match() to com=
-pare the
-> > > > > accessed function args of two function prototype. This function w=
-ill be
-> > > > > used in the following commit.
-> > > > >
-> > > > > Signed-off-by: Menglong Dong <dongmenglong.8@bytedance.com>
-> > > > > ---
-> > > > >  include/linux/bpf.h |   4 ++
-> > > > >  kernel/bpf/btf.c    | 108 ++++++++++++++++++++++++++++++++++++++=
-+++++-
-> > > > >  2 files changed, 110 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > > > index 95e07673cdc1..0f677fdcfcc7 100644
-> > > > > --- a/include/linux/bpf.h
-> > > > > +++ b/include/linux/bpf.h
-> > > > > @@ -1461,6 +1461,7 @@ struct bpf_prog_aux {
-> > > > >         const struct btf_type *attach_func_proto;
-> > > > >         /* function name for valid attach_btf_id */
-> > > > >         const char *attach_func_name;
-> > > > > +       u64 accessed_args;
-> > > > >         struct bpf_prog **func;
-> > > > >         void *jit_data; /* JIT specific data. arch dependent */
-> > > > >         struct bpf_jit_poke_descriptor *poke_tab;
-> > > > > @@ -2565,6 +2566,9 @@ struct bpf_reg_state;
-> > > > >  int btf_prepare_func_args(struct bpf_verifier_env *env, int subp=
-rog);
-> > > > >  int btf_check_type_match(struct bpf_verifier_log *log, const str=
-uct bpf_prog *prog,
-> > > > >                          struct btf *btf, const struct btf_type *=
-t);
-> > > > > +int btf_check_func_part_match(struct btf *btf1, const struct btf=
-_type *t1,
-> > > > > +                             struct btf *btf2, const struct btf_=
-type *t2,
-> > > > > +                             u64 func_args);
-> > > > >  const char *btf_find_decl_tag_value(const struct btf *btf, const=
- struct btf_type *pt,
-> > > > >                                     int comp_idx, const char *tag=
-_key);
-> > > > >  int btf_find_next_decl_tag(const struct btf *btf, const struct b=
-tf_type *pt,
-> > > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > > > index 170d017e8e4a..c2a0299d4358 100644
-> > > > > --- a/kernel/bpf/btf.c
-> > > > > +++ b/kernel/bpf/btf.c
-> > > > > @@ -6125,19 +6125,24 @@ static bool is_int_ptr(struct btf *btf, c=
-onst struct btf_type *t)
-> > > > >  }
-> > > > >
-> > > > >  static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_typ=
-e *func_proto,
-> > > > > -                          int off)
-> > > > > +                          int off, int *aligned_idx)
-> > > > >  {
-> > > > >         const struct btf_param *args;
-> > > > >         const struct btf_type *t;
-> > > > >         u32 offset =3D 0, nr_args;
-> > > > >         int i;
-> > > > >
-> > > > > +       if (aligned_idx)
-> > > > > +               *aligned_idx =3D -ENOENT;
-> > > > > +
-> > > > >         if (!func_proto)
-> > > > >                 return off / 8;
-> > > > >
-> > > > >         nr_args =3D btf_type_vlen(func_proto);
-> > > > >         args =3D (const struct btf_param *)(func_proto + 1);
-> > > > >         for (i =3D 0; i < nr_args; i++) {
-> > > > > +               if (aligned_idx && offset =3D=3D off)
-> > > > > +                       *aligned_idx =3D i;
-> > > > >                 t =3D btf_type_skip_modifiers(btf, args[i].type, =
-NULL);
-> > > > >                 offset +=3D btf_type_is_ptr(t) ? 8 : roundup(t->s=
-ize, 8);
-> > > > >                 if (off < offset)
-> > > > > @@ -6207,7 +6212,7 @@ bool btf_ctx_access(int off, int size, enum=
- bpf_access_type type,
-> > > > >                         tname, off);
-> > > > >                 return false;
-> > > > >         }
-> > > > > -       arg =3D get_ctx_arg_idx(btf, t, off);
-> > > > > +       arg =3D get_ctx_arg_idx(btf, t, off, NULL);
-> > > > >         args =3D (const struct btf_param *)(t + 1);
-> > > > >         /* if (t =3D=3D NULL) Fall back to default BPF prog with
-> > > > >          * MAX_BPF_FUNC_REG_ARGS u64 arguments.
-> > > > > @@ -6217,6 +6222,9 @@ bool btf_ctx_access(int off, int size, enum=
- bpf_access_type type,
-> > > > >                 /* skip first 'void *__data' argument in btf_trac=
-e_##name typedef */
-> > > > >                 args++;
-> > > > >                 nr_args--;
-> > > > > +               prog->aux->accessed_args |=3D (1 << (arg + 1));
-> > > > > +       } else {
-> > > > > +               prog->aux->accessed_args |=3D (1 << arg);
-> > > >
-> > > > What do you need this aligned_idx for ?
-> > > > I'd expect that above "accessed_args |=3D (1 << arg);" is enough.
-> > > >
-> > >
-> > > Which aligned_idx? No aligned_idx in the btf_ctx_access(), and
-> > > aligned_idx is only used in the btf_check_func_part_match().
-> > >
-> > > In the btf_check_func_part_match(), I need to compare the
-> > > t1->args[i] and t2->args[j], which have the same offset. And
-> > > the aligned_idx is to find the "j" according to the offset of
-> > > t1->args[i].
+> > +1.
 > >
-> > And that's my question.
-> > Why you don't do the max of accessed_args across all attach
-> > points and do btf_check_func_type_match() to that argno
-> > instead of nargs1.
-> > This 'offset +=3D btf_type_is_ptr(t1) ? 8 : roundup...
-> > is odd.
+> >
+> > >
+> > > > >
+> > > > > Ratelimiting seems fairly reasonable to me. I do see the concern =
+about
+> > > > > dropping some addresses though.
+> > > >
+> > > > Do you know how much could an admin rely on such addresses?  How fr=
+equent
+> > > > would MCE generate normally in a sane system?
+> > >
+> > > I'm not sure about how much admins rely on the address themselves. +c=
+c
+> > > Jiaqi Yan
+> >
+> > I think admins mostly care about MCEs from **real** hardware. For
+> > example they may choose to perform some maintenance if the number of
+> > hardware DIMM errors, keyed by PFN, exceeds some threshold. And I
+> > think mcelog or /sys/devices/system/node/node${X}/memory_failure are
+> > better tools than dmesg. In the case all memory errors are emulated by
+> > hypervisor after a live migration, these dmesgs may confuse admins to
+> > think there is dimm error on host but actually it is not the case. In
+> > this sense, silencing these emulated by UFFDIO_POISON makes sense (if
+> > not too complicated to do).
 >
-> Hi, I'm trying to make the bpf flexible enough. Let's take an example,
-> now we have the bpf program:
+> Now we have three types of such error: (1) PFN poisoned, (2) swapin error=
+,
+> (3) emulated.  Both 1+2 should deserve a global message dump, while (3)
+> should be process-internal, and nobody else should need to care except th=
+e
+> process itself (via the signal + meta info).
 >
-> int test1_result =3D 0;
-> int BPF_PROG(test1, int a, long b, char c)
-> {
->     test1_result =3D a + c;
->     return 0;
-> }
->
-> In this program, only the 1st and 3rd arg is accessed. So all kernel
-> functions whose 1st arg is int and 3rd arg is char can be attached
-> by this bpf program, even if their 2nd arg is different.
->
-> And let's take another example for struct. This is our bpf program:
->
-> int test1_result =3D 0;
-> int BPF_PROG(test1, long a, long b, char c)
-> {
->     test1_result =3D c;
->     return 0;
-> }
->
-> Only the 3rd arg is accessed. And we have following kernel function:
->
-> int kernel_function1(long a, long b, char c)
-> {
-> xxx
-> }
->
-> struct test1 {
->     long a;
->     long b;
-> };
-> int kernel_function2(struct test1 a, char b)
-> {
-> xxx
-> }
->
-> The kernel_function1 and kernel_function2 should be compatible,
-> as the bpf program only accessed the ctx[2], whose offset is 16.
-> And the arg in kernel_function1() with offset 16 is "char c", the
-> arg in kernel_function2() with offset 16 is "char b", which is
-> compatible.
+> If we want to differenciate (2) v.s. (3), we may need 1 more pte marker b=
+it
+> to show whether such poison is "global" or "local" (while as of now 2+3
+> shares the usage of the same PTE_MARKER_POISONED bit); a swapin error can
+> still be seen as a "global" error (instead of a mem error, it can be a di=
+sk
+> error, and the err msg still applies to it describing a VA corrupt).
+> Another VM_FAULT_* flag is also needed to reflect that locality, then
+> ignore a global broadcast for "local" poison faults.
 
-I see.
-I thought you're sharing the trampoline across attachments.
-(since bpf prog is the same).
-But above approach cannot possibly work with a shared trampoline.
-You need to create individual trampoline for all attachment
-and point them to single bpf prog.
+It's easy to implement, as long as folks aren't too offended by taking
+one more bit. :) I can send a patch for this on Monday if there are no
+objections.
 
-tbh I'm less excited about this feature now, since sharing
-the prog across different attachments is nice, but it won't scale
-to thousands of attachments.
-I assumed that there will be a single trampoline with max(argno)
-across attachments and attach/detach will scale to thousands.
-
-With individual trampoline this will work for up to a hundred
-attachments max.
-
-Let's step back.
-What is the exact use case you're trying to solve?
-Not an artificial one as selftest in patch 9, but the real use case?
+>
+> >
+> > SIGBUS (and logged "MCE: Killing %s:%d due to hardware memory
+> > corruption fault at %lx\n") emit by fault handler due to UFFDIO_POISON
+> > are less useful to admins AFAIK. They are for sure crucial to
+> > userspace / vmm / hypervisor, but the SIGBUS sent already contains the
+> > poisoned address (in si_addr from force_sig_mceerr).
+> >
+> > >
+> > > It's possible for a sane hypervisor dealing with a buggy guest / gues=
+t
+> > > userspace to trigger lots of these pr_errs. Consider the case where a
+> > > guest userspace uses HugeTLB-1G, finds poison (which HugeTLB used to
+> > > ignore), and then ignores SIGBUS. It will keep getting MCEs /
+> > > SIGBUSes.
+> > >
+> > > The sane hypervisor will use UFFDIO_POISON to prevent the guest from
+> > > re-accessing *real* poison, but we will still get the pr_err, and we
+> > > still keep injecting MCEs into the guest. We have observed scenarios
+> > > like this before.
+> > >
+> > > >
+> > > > > Perhaps we can mitigate that concern by defining our own ratelimi=
+t
+> > > > > interval/burst configuration?
+> > > >
+> > > > Any details?
+> > > >
+> > > > > Another idea would be to only ratelimit it if !CONFIG_DEBUG_VM or
+> > > > > similar. Not sure if that's considered valid or not. :)
+> > > >
+> > > > This, OTOH, sounds like an overkill..
+> > > >
+> > > > I just checked again on the detail of ratelimit code, where we by d=
+efault
+> > > > it has:
+> > > >
+> > > > #define DEFAULT_RATELIMIT_INTERVAL      (5 * HZ)
+> > > > #define DEFAULT_RATELIMIT_BURST         10
+> > > >
+> > > > So it allows a 10 times burst rather than 2.. IIUC it means even if
+> > > > there're continous 10 MCEs it won't get suppressed, until the 11th =
+came, in
+> > > > 5 seconds interval.  I think it means it's possibly even less of a =
+concern
+> > > > to directly use pr_err_ratelimited().
+> > >
+> > > I'm okay with any rate limiting everyone agrees on. IMO, silencing
+> > > these pr_errs if they came from UFFDIO_POISON (or, perhaps, if they
+> > > did not come from real hardware MCE events) sounds like the most
+> > > correct thing to do, but I don't mind. Just don't make UFFDIO_POISON
+> > > require CAP_SYS_ADMIN. :)
+> > >
+> > > Thanks.
+> >
+>
+> --
+> Peter Xu
+>
 
