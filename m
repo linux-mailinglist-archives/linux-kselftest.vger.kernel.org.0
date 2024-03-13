@@ -1,96 +1,160 @@
-Return-Path: <linux-kselftest+bounces-6306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ED4A87B194
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 20:20:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DF9587B552
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 00:44:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50F491C29459
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 19:20:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3013B21332
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 23:44:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C4845DF27;
-	Wed, 13 Mar 2024 19:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62055D734;
+	Wed, 13 Mar 2024 23:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SJxpdiHv"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B950LDTc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C591B5D907
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Mar 2024 19:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDA45B20F
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Mar 2024 23:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710356706; cv=none; b=Xj1EyxLo74lF4qnHNUKQcKn1Xk9MDSFqDrE2kwB0uSknrVFS1YFJd+dQvunllm46vojiN1CVNPIvIEEytprERPQd5TH54wJ92f6O4b2vYZpI2jwV4ZqX0pV3omRAHm0ajPhy+H/19+hOV4oDZodpf5c+DSzyJ8fiOeZ/MBLmN2I=
+	t=1710373482; cv=none; b=qfT5usPUNMbym1/qyogV/m/emRGVkd2xWDLsI6eEwg46JRYQOTttGThKYlN/4GPV2PdN25pKhjraefywBgnaVALmY0TcQii7w7em8RtG1tBrqp7647nQvtiJDCpy7cvaXVroRlk+RuZLmF05jWN9O2xpVNm2sg9uCRTe1092a/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710356706; c=relaxed/simple;
-	bh=JjFDLPWpxqjU2QEEdDwkP2gB3hpAsOJy37rkMIzHD88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PxieFSx2FhbBgph2JE1jnpOHVDHiGzhQC8OQUZGLxkrli/yROtlc3im/I5TW45Prj0FkpfLs+EY5quArgY/OQAKE7a2203J9viS8fRGGzyM9Zs8wOHH6/9MKuubv/+AZ4BWQ4RPPaGprVys3/Nzg7+EygmyjUAOTDd2qPoS01c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SJxpdiHv; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1dc09556599so1263395ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Mar 2024 12:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1710356704; x=1710961504; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4huMKqPxqzLf5OCIAsTKzbUWeR7Lg0yQNTBgZN7mj/M=;
-        b=SJxpdiHvik7/dbI8Kno7TotkgL1dUs9r4Kwbf9voAgvl3TS/l4f+bGh0boDT+cESI7
-         T9HmL690hjqmh5ohtCymKEglD+zbu3uUBIkMmqU1SKPDDZZ2HPlnHTzrxCvZvlGHTigG
-         aZR+XJYTRQ2ezxEow8QTNislqP9g89lQUlI+8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710356704; x=1710961504;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4huMKqPxqzLf5OCIAsTKzbUWeR7Lg0yQNTBgZN7mj/M=;
-        b=vxuJlivM95R+dgxUKEEropEEN3UKGrsdeLZS73TGirjwBX6dVC9qlwU/QS/NHeVCnn
-         ToVLadfhQ7C92MCoiDTF/UW8ygWsW8IFxtP7FhYLv5TkGQqx+oJRtsu/QfxHPz6p+Qp5
-         Bl+gjXwDF0JCw/Dxz5IitQfQ3P/mL3JCNnXB92RJIztiSTEmxkoews1wx7UHmbhgnr6s
-         gKQuQfbyew+2jM5CRpmsH8+llidw1g2iUh9tmg05EH3kKM8chzWZK1RkL62R4d4QCvSl
-         pIABDtl5fKoGKR9F8W8dqBVc2nYjlR8+Rf9T/UZy2YfXBxxonPJ4kN9oZBeE83WZSnWY
-         0aJg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0iB/FkROh5nX+uXMAXGqxBT4ElI3cNpnFiOLWsahBliWeUNl/PYhlx9e3QdUlcIBZxoW7Z1VvHIItnU0DLp7T7CNB08rbFtQPCuG21HFE
-X-Gm-Message-State: AOJu0YwTsFaW37LpRllMSbJuMiena1zG4JNvS/+l+QXUnL5RuSNCptrr
-	xSPE+6qvgvJf8LPELxgKd+beK+Odgjlj1EfimVxWOTqqOV4hUkiv3zHEJw7TXQ==
-X-Google-Smtp-Source: AGHT+IHO7jXGQDKaRXkUme504UD6kNd5mIw4KUxjBzwWwgkI0TfIS5EUk+wbR2Pl9l0sLSRI4YfEug==
-X-Received: by 2002:a17:902:e741:b0:1dd:a120:7761 with SMTP id p1-20020a170902e74100b001dda1207761mr12028570plf.14.1710356704001;
-        Wed, 13 Mar 2024 12:05:04 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u3-20020a170902e5c300b001dda32430b3sm5998581plf.89.2024.03.13.12.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 12:05:03 -0700 (PDT)
-Date: Wed, 13 Mar 2024 12:05:02 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
-	kernel@collabora.com, kernel-janitors@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] selftests/exec: Add the overall result line
- accourding to TAP
-Message-ID: <202403131204.FF098416C6@keescook>
-References: <20240304155928.1818928-1-usama.anjum@collabora.com>
- <f877ce53-a5ee-4447-a57c-339a1e9701f4@collabora.com>
+	s=arc-20240116; t=1710373482; c=relaxed/simple;
+	bh=HD34+N4HmuIBIUoDyYFlYqEAmxFkbtPrHj9GtqwLe3E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h6gISgvis4QOZ28OtMJH828nVKMOSJhHDw7K1mavPA6cdofxRdWNi3Fek92VRuQX9ZnpVO77m+p49oSSnLbYGtqey+yfhuSrTYhOcEA7OUNRhko/OkTGl1FZtVJ9NqueyHWQw5tqXw4BJyRRR4pErGIBR8fJQmFC+USP7WaJHNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B950LDTc; arc=none smtp.client-ip=91.218.175.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <6da9dc9d-fad6-40f9-91d3-602f87397b47@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1710373478;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MJIpyrb3PHRzKDP68+qCFyuGvH3roDNGt7412UBHY+c=;
+	b=B950LDTcgmmMuFK+GObDC0V29wtU0hoZPvbSOzgc1CLMnMcuZI0MtoxwnRDTGQOceS59vj
+	m2vD6+U7GGcXlqWM2fGP/KO6+0CZ+fPc0Cbarc2NDzp12oEaYhS5BzWDMde/d3nDqWvwEC
+	Hf8PpacFp90wzyjcTD5hzNB4t9xNrj0=
+Date: Wed, 13 Mar 2024 16:44:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f877ce53-a5ee-4447-a57c-339a1e9701f4@collabora.com>
+Subject: Re: [PATCH] tools/testing/selftests/bpf/test_tc_tunnel.sh: Prevent
+ client connect before server bind
+Content-Language: en-US
+To: Alessandro Carminati <alessandro.carminati@gmail.com>
+Cc: Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20240229140000.175274-1-alessandro.carminati@gmail.com>
+ <fe323c90-bda3-4837-8daa-372073014446@linux.dev>
+ <CAPp5cGR2gFtMh3jWHuFHXdHvLdq85j5qcMPh4EoiOv+JA_HYTw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAPp5cGR2gFtMh3jWHuFHXdHvLdq85j5qcMPh4EoiOv+JA_HYTw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Mar 11, 2024 at 10:10:21PM +0500, Muhammad Usama Anjum wrote:
-> Soft reminder!
+On 3/10/24 1:45 AM, Alessandro Carminati wrote:
+> Hi Martin,
+> Thanks for the review.
+> 
+> Il giorno ven 8 mar 2024 alle ore 02:03 Martin KaFai Lau
+> <martin.lau@linux.dev> ha scritto:
+>>
+>> On 2/29/24 6:00 AM, Alessandro Carminati (Red Hat) wrote:
+>>> In some systems, the netcat server can incur in delay to start listening.
+>>> When this happens, the test can randomly fail in various points.
+>>> This is an example error message:
+>>>      # ip gre none gso
+>>>      # encap 192.168.1.1 to 192.168.1.2, type gre, mac none len 2000
+>>>      # test basic connectivity
+>>>      # Ncat: Connection refused.
+>>
+>> This explained what is the issue. Please also explain how the patch solves it.
+>>
+> The issue, as stated, depends on a race condition between the netcat client
+> and server. The test author addressed this problem using a sleep, which I
+> removed in this patch. To easily solve the issue, one could simply increase
+> the sleep duration. However, this patch opts to tackle the problem by
+> querying the /proc directory and verifying TCP binds at the specified port
+> before letting the client connect.
 
-Ah yes! Thanks for the reminder on these. I will get them into -next
-shortly.
+Please include this in the commit message.
 
--- 
-Kees Cook
+>>>
+>>> Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+>>> ---
+>>>    tools/testing/selftests/bpf/test_tc_tunnel.sh | 19 ++++++++++++++++++-
+>>>    1 file changed, 18 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+>>> index 910044f08908..01c0f4b1a8c2 100755
+>>> --- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
+>>> +++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+>>> @@ -72,7 +72,6 @@ cleanup() {
+>>>    server_listen() {
+>>>        ip netns exec "${ns2}" nc "${netcat_opt}" -l "${port}" > "${outfile}" &
+>>>        server_pid=$!
+>>> -     sleep 0.2
+>>>    }
+>>>
+>>>    client_connect() {
+>>> @@ -93,6 +92,22 @@ verify_data() {
+>>>        fi
+>>>    }
+>>>
+>>> +wait_for_port() {
+>>> +     local digits=8
+>>> +     local port2check=$(printf ":%04X" $1)
+>>> +     local prot=$([ "$2" == "-6" ] && echo 6 && digits=32)
+>>> +
+>>> +     for i in $(seq 20); do
+>>> +             if ip netns exec "${ns2}" cat /proc/net/tcp${prot} | \
+>>> +                     sed -r 's/^[ \t]+[0-9]+: ([0-9A-F]{'${digits}'}:[0-9A-F]{4}) .*$/\1/' | \
+>>> +                     grep -q "${port2check}"; then
+>>
+>> The idea is to check if there is socket listening on port 8888?
+>>
+>> May be something simpler like "ss -OHtl src :$1" instead?
+> Indeed, the aim is to ensure that the server is bound before the
+> client attempts to
+> connect by checking if socket is listening, and yes using 'ss' would be shorter.
+> However, I chose not to use 'ss' or 'netstat' to avoid adding new dependencies,
+> considering they are already many.
+
+ss should be in the same iproute package that "(ip) netns..." lives in also. The 
+above changes added sed and grep.
+
+Regardless, this external dependency will be all gone once moved to the 
+selftests/test_progs. The check-and-wait will be gone by creating a listen fd 
+instead of using "nc -l...". A simpler change such that people doing the future 
+test_progs migration will have an easier time.
+
+>> The check-and-wait fix in this patch is fine to get your test environment going.
+>>
+>> Eventually, it will be good to see the test_tc_tunnel.sh test moved to
+>> test_progs. The test_tc_tunnel.sh is not run by bpf CI and issue like this got
+>> unnoticed. Some other "*.sh" tests have already been moved to test_progs.
+.>>
+>>
+> Regards
+> Alessandro
+
 
