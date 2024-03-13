@@ -1,361 +1,226 @@
-Return-Path: <linux-kselftest+bounces-6289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D054F87A0B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 02:26:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE35887A10D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 02:53:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A6CAB22ACA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 01:26:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5F942821E5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 01:53:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914129444;
-	Wed, 13 Mar 2024 01:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD6FBA33;
+	Wed, 13 Mar 2024 01:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="uRyUeg6m"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="gt7CwXCw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954C518057
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Mar 2024 01:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5004BB66C
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Mar 2024 01:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710293123; cv=none; b=oDrMm/hlp0cFeUMKs23KLzEO2diVeejG3mM3fYjtvyWyq/BVftn/TW/PVWNiN191s4FvAedFScKNeyohUeOvZVyasPbJXyrxQS41E+ErGDf7WGfBPairwO8dNIkT4ZEO66siXZqBA3h8jHARKnGIjjh99WklOAnkgtJDvZKfZS8=
+	t=1710294835; cv=none; b=CHHYBOZmxj6dcDvCYYuipOqveMQXY4BflzhHEYJaQROSWJeBCe+uAzTCuSXn8CQO9R2+KonngYku4F9NDQJHpAVX46u5CAjniH6zRxEUbRMMVvIOVB9QZ3WqdT/G8vZJJ5VA0C7V+6AfZurtKf9LIc3hMTYeJ9zju3pv7owG4ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710293123; c=relaxed/simple;
-	bh=mZ2gOIXcUxYPUWs6+iWh+plbgTcX3Uoy+H9V33hkCIo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HQLWvQmvCxMY5Xv6ouEov7jUFZmqK1CA5kWlEmP/AhwpuMf0ZWlkXks/xDUcJHQGY3ypE1T9RSkrWr02gpfeZjvP7AnrK7txNDhn66WriJxA4lQpKfNHycMYbxmevXTmQF94vkLNz0QJjGcEp14YOpfjyv2i+rR0yvSkAcLhQag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=uRyUeg6m; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-690e2d194f6so11213386d6.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Mar 2024 18:25:21 -0700 (PDT)
+	s=arc-20240116; t=1710294835; c=relaxed/simple;
+	bh=VJyuvh6XroWcN//l0X/a6mKR6esThbwoEFp9wLz0ITQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GqRfqKWZUCoTnK23JbAbyObQy1P9SepP3gZ+BaxflcVY49uttuMk2Pn+GgRbE6fpqNrrGGTBveBfGrG++UVWpy1N5fkC9lsO5QrUz3QTgcjV/aldggxFGMk7LqhfkM/gKaPIQg1DsP+2nwYzNLIXT+gbRqxW219uL0LQKmyG66E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=gt7CwXCw; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-29c16b324ecso1891911a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Mar 2024 18:53:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1710293120; x=1710897920; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1710294833; x=1710899633; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CDhDd9Kfjsqh4jLKpVf7J36w/JnuAi2f5V71QMuGAEk=;
-        b=uRyUeg6mq6wGU32l6MxYSiTZqgw6xdBruInJR55ukKU4OudSjzGrWvmc7BTi0iGU7a
-         r1yxcXLtap7K8ZovCrlYbRFxR6Ivv3ofQcR8hc1yOY8cpbEDErChwilRnKhPO6ao4pbW
-         n6RdtUnnr9BKqahguNNeaxxNdch24fjAFd8Ko=
+        bh=7l5GW7Xueu7fYsf7BEOcM5d+RaLSvHptG6HFvYvp5v8=;
+        b=gt7CwXCwKszw+Rpmvl/FJkFc2RIYjA9MXMNVpLpoLDVTL7M1paBlGE7/vHrSqYwR/1
+         08Fh5L+IpOyjdflRw0bX4nd/c7CRQsztH3KTOMGTzHzo+WPHiZfTj04+/xKzDYb7gbMP
+         iI3d3iZnRrzR6tNibiycSDz8htVfmb2eRDP1vC3KsXvGMJY2njLsXxIXt02LQuJ0Bzzs
+         NiSLGG7Us+wH7VgETLbztfzvRnMGpUdBsB6w/Aj49RkHbzFkZk7HDE7WiFrvDLxaRYsS
+         p/8NHL3XplA/Sgmlopu10PVHmj+1iT6HJTcbEiap1nqMLSt8Op/+NI0SVy6uGln4E3jX
+         Y2ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710293120; x=1710897920;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1710294833; x=1710899633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CDhDd9Kfjsqh4jLKpVf7J36w/JnuAi2f5V71QMuGAEk=;
-        b=GqKW9uMHtJte/nlQdkoUJ9gQb8QMUskj1kzIZGvNyldqprSk0RUcClz7w+b/+irABc
-         rIQdFxMwdzpbaYyY07Fi3VycHH7ohaVh/H+W8Yzztb6rvXnZX4JIJlTsAx52jj1uEfnM
-         /teH4wnsOMGR5e3xIfg/kj0I6aHgXcxbSjNK4nPsmvc0+tjUeKA1MZoWZzoHiGQgmVce
-         SFk9GFRUsVKKMOPSvKirFAbTg34txvDClEjz1pgLXN4W/L3TyhrNAGcESOIbgv7SlQx5
-         nwNHMvAllFAlDVMwKnFouFvYGWuB5NzWkoosrjV11GOkpM84KsArEyYupUpnYcxKn+z8
-         Sa7w==
-X-Forwarded-Encrypted: i=1; AJvYcCV9hZ3RcjmwhHz40GGy+Anl8JV/kLcWVTI7/mmlNty8nnQL58QIHUNZYeIJ2waGMTqw4lp17hIg3oP/+Djze9zFmHISOSDt2169gsXSjlx1
-X-Gm-Message-State: AOJu0YxtRfKb0nl0lhe5aOhHdX4wlktyt6XKwVm6N968I5aaf74sp7Ma
-	mDASvQ0x18LfSy+W662QZfbj1RU5Zv+vkf05Eq8tD1q+wo6IttPJ7GdUKxvpWPw=
-X-Google-Smtp-Source: AGHT+IEQH9hW6ZLKUNZbHpb/tPDT6brgu43x+Rcv6hHFE3facBemyF7mOFSe8xs2p97QGgaE6gVu9w==
-X-Received: by 2002:a05:6214:1398:b0:68f:3c36:1b74 with SMTP id pp24-20020a056214139800b0068f3c361b74mr12801088qvb.41.1710293120342;
-        Tue, 12 Mar 2024 18:25:20 -0700 (PDT)
-Received: from joelbox2.. (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id u9-20020a05621411a900b00690314356a4sm4162132qvv.80.2024.03.12.18.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Mar 2024 18:25:19 -0700 (PDT)
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To: linux-kernel@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>
-Cc: Suleiman Souhlal <suleiman@google.com>,
-	Youssef Esmat <youssefesmat@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	David Vernet <void@manifault.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	joseph.salisbury@canonical.com,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Luca Abeni <luca.abeni@santannapisa.it>,
-	Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-	Vineeth Pillai <vineeth@bitbyteword.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Phil Auld <pauld@redhat.com>,
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 08/15] selftests/sched: Migrate cs_prctl_test to kselfttest
-Date: Tue, 12 Mar 2024 21:24:44 -0400
-Message-Id: <20240313012451.1693807-9-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240313012451.1693807-1-joel@joelfernandes.org>
-References: <20240313012451.1693807-1-joel@joelfernandes.org>
+        bh=7l5GW7Xueu7fYsf7BEOcM5d+RaLSvHptG6HFvYvp5v8=;
+        b=NGb/lhfv5I4mQZwnfiLFFwdpYztN507+K6GhQ6WXY0fqaAX5fYqlcn59cKeScc9DPQ
+         NHg8IdoIWE3EEYn8HgCbdxkwLbFEa3xF63MX1cE1RK5N2Hoz77p9Dw8/aixmFh3APeOB
+         RA8kYP3fqJ5m2BsepaMeqjcciqyl0XbKfIWHi/Cl1PEyPS+EqmVn350pKjckP0zn4cC8
+         jFUdHSY6h4GJSpfWMaCy4ah5ReNaAt5qdRtgmdyAZ/dCjaFfAAEaqTkbdnwYJ3mwIS9B
+         k+Id1Jvy7H9mQVq/uutncIt/dQglAX0JEtYMWZS9bh1+fdH4/A+ZBfLGluxx8i0vQacD
+         H6BQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWiOAQwt1TPbbe9hKfq98mHp98XwyqC0ReuxY3LPt01jKQeLoOLFhTyYZmNsVA4ms0ZhdVzFXAcZUjLs4Lv419HCUetf4ex9J40YbiSIp/K
+X-Gm-Message-State: AOJu0YxLqzDQOrJ7iBx2Er+UC3OSHJKJF776J7o7ANSKiKupZXaO+uN0
+	Vq8a94nRXRlbaRriyPhlDtk0rUhBROAgjM2mookAtEEX5NjqXDO5SDToXGyyI3lugliOO/4XJQv
+	baKt1VvB7VBu3Gg/OQjxFKbPeFhbFE7UcrzFd6w==
+X-Google-Smtp-Source: AGHT+IHgGbwSxuf8Mmcf4YK9IOWtZvoBJarSb5lD1Bv4wCl1IDU6oxYJMO4FXlVIEhW8DTCD21/mcpij4jSoKbejNKI=
+X-Received: by 2002:a17:90a:e612:b0:29c:1271:219e with SMTP id
+ j18-20020a17090ae61200b0029c1271219emr6694584pjy.18.1710294833648; Tue, 12
+ Mar 2024 18:53:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+ <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+ <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
+ <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
+ <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com> <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
+In-Reply-To: <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
+From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
+Date: Wed, 13 Mar 2024 09:53:42 +0800
+Message-ID: <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
+ to record and check the accessed args
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This test begs to be a kselftest, is in the kselftest hierarchy and does
-not even use a single kselftest API. Convert it.
+On Wed, Mar 13, 2024 at 12:42=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dong=
+menglong.8@bytedance.com> wrote:
+> >
+[......]
+>
+> I see.
+> I thought you're sharing the trampoline across attachments.
+> (since bpf prog is the same).
 
-It simplifies some of the code and the output also looks much nicer now:
+That seems to be a good idea, which I hadn't thought before.
 
- Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
+> But above approach cannot possibly work with a shared trampoline.
+> You need to create individual trampoline for all attachment
+> and point them to single bpf prog.
+>
+> tbh I'm less excited about this feature now, since sharing
+> the prog across different attachments is nice, but it won't scale
+> to thousands of attachments.
+> I assumed that there will be a single trampoline with max(argno)
+> across attachments and attach/detach will scale to thousands.
+>
+> With individual trampoline this will work for up to a hundred
+> attachments max.
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/testing/selftests/sched/Makefile        |  6 +-
- tools/testing/selftests/sched/cs_prctl_test.c | 74 ++++++++++---------
- 2 files changed, 43 insertions(+), 37 deletions(-)
+What does "a hundred attachments max" means? Can't I
+trace thousands of kernel functions with a bpf program of
+tracing multi-link?
 
-diff --git a/tools/testing/selftests/sched/Makefile b/tools/testing/selftests/sched/Makefile
-index f491d741cb45..90c53bc1337e 100644
---- a/tools/testing/selftests/sched/Makefile
-+++ b/tools/testing/selftests/sched/Makefile
-@@ -1,9 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0+
- TEST_GEN_PROGS := cs_dlserver_test
--
--cs_dlserver_test: cs_dlserver_test.c common.c
-+TEST_GEN_PROGS += cs_prctl_test
- 
- CFLAGS += $(KHDR_INCLUDES)
- CFLAGS += -Wall
- 
- include ../lib.mk
-+
-+$(OUTPUT)/cs_dlserver_test: cs_dlserver_test.c common.c
-+$(OUTPUT)/cs_prctl_test: cs_prctl_test.c common.c
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 7ba057154343..bb7aee703cdf 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -28,10 +28,11 @@
- #include <unistd.h>
- #include <time.h>
- #include <errno.h>
--#include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- 
-+#include "common.h"
-+
- #if __GLIBC_PREREQ(2, 30) == 0
- #include <sys/syscall.h>
- static pid_t gettid(void)
-@@ -80,7 +81,7 @@ static int _prctl(int option, unsigned long arg2, unsigned long arg3, unsigned l
- 	int res;
- 
- 	res = prctl(option, arg2, arg3, arg4, arg5);
--	printf("%d = prctl(%d, %ld, %ld, %ld, %lx)\n", res, option, (long)arg2, (long)arg3,
-+	ksft_print_msg("%d = prctl(%d, %ld, %ld, %ld, %lx)\n", res, option, (long)arg2, (long)arg3,
- 	       (long)arg4, arg5);
- 	return res;
- }
-@@ -91,21 +92,20 @@ static int _prctl(int option, unsigned long arg2, unsigned long arg3, unsigned l
- static void __handle_error(char *fn, int ln, char *msg)
- {
- 	int pidx;
--	printf("(%s:%d) - ", fn, ln);
-+	ksft_print_msg("(%s:%d) - ", fn, ln);
- 	perror(msg);
- 	if (need_cleanup) {
- 		for (pidx = 0; pidx < num_processes; ++pidx)
- 			kill(procs[pidx].cpid, 15);
- 		need_cleanup = 0;
- 	}
--	exit(EXIT_FAILURE);
-+	ksft_exit_fail();
- }
- 
- static void handle_usage(int rc, char *msg)
- {
--	puts(USAGE);
--	puts(msg);
--	putchar('\n');
-+	ksft_print_msg("%s\n", USAGE);
-+	ksft_print_msg("%s\n\n", msg);
- 	exit(rc);
- }
- 
-@@ -117,7 +117,7 @@ static unsigned long get_cs_cookie(int pid)
- 	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, pid, PIDTYPE_PID,
- 		    (unsigned long)&cookie);
- 	if (ret) {
--		printf("Not a core sched system\n");
-+		ksft_print_msg("Not a core sched system\n");
- 		return -1UL;
- 	}
- 
-@@ -160,7 +160,7 @@ static int child_func_process(void *arg)
- 
- 	ret = write(ca->pfd[1], &ca->thr_tids, sizeof(int) * ca->num_threads);
- 	if (ret == -1)
--		printf("write failed on pfd[%d] - error (%s)\n",
-+		ksft_print_msg("write failed on pfd[%d] - error (%s)\n",
- 			ca->pfd[1], strerror(errno));
- 
- 	close(ca->pfd[1]);
-@@ -192,7 +192,7 @@ void create_processes(int num_processes, int num_threads, struct child_args proc
- 	for (i = 0; i < num_processes; ++i) {
- 		ret = read(proc[i].pfd[0], &proc[i].thr_tids, sizeof(int) * proc[i].num_threads);
- 		if (ret == -1)
--			printf("read failed on proc[%d].pfd[0] error (%s)\n",
-+			ksft_print_msg("read failed on proc[%d].pfd[0] error (%s)\n",
- 				i, strerror(errno));
- 		close(proc[i].pfd[0]);
- 	}
-@@ -202,30 +202,29 @@ void disp_processes(int num_processes, struct child_args proc[])
- {
- 	int i, j;
- 
--	printf("tid=%d, / tgid=%d / pgid=%d: %lx\n", gettid(), getpid(), getpgid(0),
-+	ksft_print_msg("tid=%d, / tgid=%d / pgid=%d: %lx\n", gettid(), getpid(), getpgid(0),
- 	       get_cs_cookie(getpid()));
- 
- 	for (i = 0; i < num_processes; ++i) {
--		printf("    tid=%d, / tgid=%d / pgid=%d: %lx\n", proc[i].cpid, proc[i].cpid,
-+		ksft_print_msg("    tid=%d, / tgid=%d / pgid=%d: %lx\n", proc[i].cpid, proc[i].cpid,
- 		       getpgid(proc[i].cpid), get_cs_cookie(proc[i].cpid));
- 		for (j = 0; j < proc[i].num_threads; ++j) {
--			printf("        tid=%d, / tgid=%d / pgid=%d: %lx\n", proc[i].thr_tids[j],
-+			ksft_print_msg("        tid=%d, / tgid=%d / pgid=%d: %lx\n", proc[i].thr_tids[j],
- 			       proc[i].cpid, getpgid(0), get_cs_cookie(proc[i].thr_tids[j]));
- 		}
- 	}
- 	puts("\n");
- }
- 
--static int errors;
--
- #define validate(v) _validate(__LINE__, v, #v)
- void _validate(int line, int val, char *msg)
- {
- 	if (!val) {
--		++errors;
--		printf("(%d) FAILED: %s\n", line, msg);
-+		ksft_print_msg("(%d) FAILED: %s\n", line, msg);
-+		ksft_inc_fail_cnt();
- 	} else {
--		printf("(%d) PASSED: %s\n", line, msg);
-+		ksft_print_msg("(%d) PASSED: %s\n", line, msg);
-+		ksft_inc_pass_cnt();
- 	}
- }
- 
-@@ -254,13 +253,17 @@ int main(int argc, char *argv[])
- 			keypress = 1;
- 			break;
- 		case 'h':
--			printf(USAGE);
-+			ksft_print_msg(USAGE);
- 			exit(EXIT_SUCCESS);
- 		default:
- 			handle_usage(20, "unknown option");
- 		}
- 	}
- 
-+	if (!hyperthreading_enabled()) {
-+		ksft_exit_skip("This test requires hyperthreading to be enabled\n");
-+	}
-+
- 	if (num_processes < 1 || num_processes > MAX_PROCESSES)
- 		handle_usage(1, "Bad processes value");
- 
-@@ -272,17 +275,22 @@ int main(int argc, char *argv[])
- 
- 	srand(time(NULL));
- 
--	/* put into separate process group */
-+	/* Put into separate process group */
- 	if (setpgid(0, 0) != 0)
- 		handle_error("process group");
- 
--	printf("\n## Create a thread/process/process group hiearchy\n");
-+	ksft_print_header();
-+
-+	/* Increase the count if adding more validate() statements. */
-+	ksft_set_plan(17);
-+
-+	ksft_print_msg("\n## Create a thread/process/process group hiearchy\n");
- 	create_processes(num_processes, num_threads, procs);
- 	need_cleanup = 1;
- 	disp_processes(num_processes, procs);
- 	validate(get_cs_cookie(0) == 0);
- 
--	printf("\n## Set a cookie on entire process group\n");
-+	ksft_print_msg("\n## Set a cookie on entire process group\n");
- 	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_CREATE, 0, PIDTYPE_PGID, 0) < 0)
- 		handle_error("core_sched create failed -- PGID");
- 	disp_processes(num_processes, procs);
-@@ -296,7 +304,7 @@ int main(int argc, char *argv[])
- 	validate(get_cs_cookie(0) == get_cs_cookie(pid));
- 	validate(get_cs_cookie(0) == get_cs_cookie(procs[pidx].thr_tids[0]));
- 
--	printf("\n## Set a new cookie on entire process/TGID [%d]\n", pid);
-+	ksft_print_msg("\n## Set a new cookie on entire process/TGID [%d]\n", pid);
- 	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_CREATE, pid, PIDTYPE_TGID, 0) < 0)
- 		handle_error("core_sched create failed -- TGID");
- 	disp_processes(num_processes, procs);
-@@ -305,7 +313,7 @@ int main(int argc, char *argv[])
- 	validate(get_cs_cookie(pid) != 0);
- 	validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[0]));
- 
--	printf("\n## Copy the cookie of current/PGID[%d], to pid [%d] as PIDTYPE_PID\n",
-+	ksft_print_msg("\n## Copy the cookie of current/PGID[%d], to pid [%d] as PIDTYPE_PID\n",
- 	       getpid(), pid);
- 	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_TO, pid, PIDTYPE_PID, 0) < 0)
- 		handle_error("core_sched share to itself failed -- PID");
-@@ -315,7 +323,7 @@ int main(int argc, char *argv[])
- 	validate(get_cs_cookie(pid) != 0);
- 	validate(get_cs_cookie(pid) != get_cs_cookie(procs[pidx].thr_tids[0]));
- 
--	printf("\n## Copy cookie from a thread [%d] to current/PGID [%d] as PIDTYPE_PID\n",
-+	ksft_print_msg("\n## Copy cookie from a thread [%d] to current/PGID [%d] as PIDTYPE_PID\n",
- 	       procs[pidx].thr_tids[0], getpid());
- 	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_FROM, procs[pidx].thr_tids[0],
- 		   PIDTYPE_PID, 0) < 0)
-@@ -325,7 +333,7 @@ int main(int argc, char *argv[])
- 	validate(get_cs_cookie(0) == get_cs_cookie(procs[pidx].thr_tids[0]));
- 	validate(get_cs_cookie(pid) != get_cs_cookie(procs[pidx].thr_tids[0]));
- 
--	printf("\n## Copy cookie from current [%d] to current as pidtype PGID\n", getpid());
-+	ksft_print_msg("\n## Copy cookie from current [%d] to current as pidtype PGID\n", getpid());
- 	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_TO, 0, PIDTYPE_PGID, 0) < 0)
- 		handle_error("core_sched share to self failed -- PGID");
- 	disp_processes(num_processes, procs);
-@@ -340,20 +348,16 @@ int main(int argc, char *argv[])
- 	validate(_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_TO, 0, PIDTYPE_PGID, 1) < 0
- 		&& errno == EINVAL);
- 
--	if (errors) {
--		printf("TESTS FAILED. errors: %d\n", errors);
--		res = 10;
--	} else {
--		printf("SUCCESS !!!\n");
--	}
--
--	if (keypress)
-+	if (keypress) {
-+		ksft_print_msg("Waiting for keypress to exit\n");
- 		getchar();
--	else
-+	} else {
- 		sleep(delay);
-+	}
- 
- 	for (pidx = 0; pidx < num_processes; ++pidx)
- 		kill(procs[pidx].cpid, 15);
- 
-+	ksft_finished();
- 	return res;
- }
--- 
-2.34.1
+>
+> Let's step back.
+> What is the exact use case you're trying to solve?
+> Not an artificial one as selftest in patch 9, but the real use case?
 
+I have a tool, which is used to diagnose network problems,
+and its name is "nettrace". It will trace many kernel functions, whose
+function args contain "skb", like this:
+
+./nettrace -p icmp
+begin trace...
+***************** ffff889be8fbd500,ffff889be8fbcd00 ***************
+[1272349.614564] [dev_gro_receive     ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614579] [__netif_receive_skb_core] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614585] [ip_rcv              ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614592] [ip_rcv_core         ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614599] [skb_clone           ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614616] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614629] [nft_do_chain        ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614635] [ip_rcv_finish       ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614643] [ip_route_input_slow ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614647] [fib_validate_source ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614652] [ip_local_deliver    ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614658] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614663] [ip_local_deliver_finish] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614666] [icmp_rcv            ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614671] [icmp_echo           ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614675] [icmp_reply          ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614715] [consume_skb         ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614722] [packet_rcv          ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+[1272349.614725] [consume_skb         ] ICMP: 169.254.128.15 ->
+172.27.0.6 ping request, seq: 48220
+
+For now, I have to create a bpf program for every kernel
+function that I want to trace, which is up to 200.
+
+With this multi-link, I only need to create 5 bpf program,
+like this:
+
+int BPF_PROG(trace_skb_1, struct *skb);
+int BPF_PROG(trace_skb_2, u64 arg0, struct *skb);
+int BPF_PROG(trace_skb_3, u64 arg0, u64 arg1, struct *skb);
+int BPF_PROG(trace_skb_4, u64 arg0, u64 arg1, u64 arg2, struct *skb);
+int BPF_PROG(trace_skb_5, u64 arg0, u64 arg1, u64 arg2, u64 arg3, struct *s=
+kb);
+
+Then, I can attach trace_skb_1 to all the kernel functions that
+I want to trace and whose first arg is skb; attach trace_skb_2 to kernel
+functions whose 2nd arg is skb, etc.
+
+Or, I can create only one bpf program and store the index
+of skb to the attachment cookie, and attach this program to all
+the kernel functions that I want to trace.
+
+This is my use case. With the multi-link, now I only have
+1 bpf program, 1 bpf link, 200 trampolines, instead of 200
+bpf programs, 200 bpf link and 200 trampolines.
+
+The shared trampoline you mentioned seems to be a
+wonderful idea, which can make the 200 trampolines
+to one. Let me have a look, we create a trampoline and
+record the max args count of all the target functions, let's
+mark it as arg_count.
+
+During generating the trampoline, we assume that the
+function args count is arg_count. During attaching, we
+check the consistency of all the target functions, just like
+what we do now.
+
+Am I right?
+
+Thanks!
+Menglong Dong
 
