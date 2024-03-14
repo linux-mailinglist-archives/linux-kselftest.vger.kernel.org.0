@@ -1,178 +1,168 @@
-Return-Path: <linux-kselftest+bounces-6322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96A7887BB49
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 11:32:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80CF587BBA3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 12:00:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22C7E1F23652
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 10:32:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E994B21748
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 11:00:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907DA5D91E;
-	Thu, 14 Mar 2024 10:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80226DCE3;
+	Thu, 14 Mar 2024 11:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="W0RatWj8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yl+37VDK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF67759B6C;
-	Thu, 14 Mar 2024 10:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219AD6CDA3;
+	Thu, 14 Mar 2024 10:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710412317; cv=none; b=UnMRt8KU474IdU/Fa6W0GS1qTCd9od22f03O9qs025XzobNwifiXervjd0zG9aswx1l+Q+fVIk6B8MMh8aF6qdUUtPkv5WlUdGt3to/EDQg7KnwiRFoHyfV8AZLUk6cT9qWnz+q711b4iwBmpBtES910VWFb14pVF85iooQtkcg=
+	t=1710414001; cv=none; b=R2NCsply3UiR0iDFYxHmCtV4/TK+hHCePHGa+UlDaQi3PEfbADvtZGVizStDHgb0dPem1n3APfjZo2rKVyn/aAvsXA9Kf3bB+VAZzK5Pj5DrFpLtWu9Q0/Y7alKwky9heFmxUcAehsU3I3yNSEidRoJRuSC9BEy6Zvy5xQXOxfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710412317; c=relaxed/simple;
-	bh=exuGrWSRS6cE3AtRRe5kVccLgVt8p90B506qHZAesl8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QOmZYrdyKrdqdfc3n1sFotmyxgTE/oU0QdbhLwmrJH7jMbiwXIOnG/xfmdgAhlbllaeAnoEyTsv9KW04rjFTmovMYlbXEXAQAaSMvk1/enc+QgJD5HOaOstUwjZERQW2juZZREhPAQNQ4blgPvNWzTvyeMABNbsxiJ5AXlPDqis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=W0RatWj8; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1710412314;
-	bh=exuGrWSRS6cE3AtRRe5kVccLgVt8p90B506qHZAesl8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W0RatWj8Swbx6niZjeKRzCrod++h6Ac9U/Ic1C18A2WDqC0CN2lEMdjkUFKtmoxLS
-	 Q5AOwjYX5LRMedgxfsY/HOftEc69QFuIV42SE88MTU732NULeSSgBCfzYpKIQqeG7U
-	 WSJXGTGPxcYY2/rhySRwnRjcuob3UQPqFWDBw9eA/grbl65YTGSu/e/g3bSyGTkc5M
-	 zuJs6DB2kzW5GMWDc2amsDaCrfVv/0px/awDA2zSguIIi+rmMDvv1HSPN+y/XnMuzB
-	 K7aVfSPAiwk3dKjgKnjd5OaxGVZs76v4fJfnQ/qsF6GBySV/3UczlaXz3kbzK6beWT
-	 iVF1soE1ztIsA==
-Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 106AC37820F5;
-	Thu, 14 Mar 2024 10:31:51 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: kernel@collabora.com,
+	s=arc-20240116; t=1710414001; c=relaxed/simple;
+	bh=IsShSKe2XWmUERLMrTIUxY+uPPipgWDxAQnRv8B+s/c=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-type; b=IaB7jtHs1IfbflOTYeAtzrw5u/PR1vZEvz/2FT+TeJYHKMAeokjpoBJI07gIQumESKaE9pdEUdyxCDK40a0Vi3l8s0IOgPCD0sT/MzTEEYvMpnp04cEYm48GKzGMyiz4wMD7Yg+xKrJe/+sDOd6x9p/QkD9P0iw5r32Xfrgyywc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yl+37VDK; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a465ddc2c09so86150766b.2;
+        Thu, 14 Mar 2024 03:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710413998; x=1711018798; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f74il14ZWPvRtCdOjQ7hLLex80lpQ3c6JxKbsOjU1Ps=;
+        b=Yl+37VDKuFR/LB9gRdq9EDL10s4hClWdHIoN8yG2edq7s7MNmb8ArRbyCQqX3eJQ13
+         QKg8aFGkVYF7mhqJasCixxLN3JWHXukkCxQ8dcTDAfPAd5LZJrO/z698HRkmqrQYgKkn
+         tMBFR0p3oAMICT7S2ZzsFW+EPk6xWbUWmOfe1CAB7sSBmNdawARdRieLLYHdQEDJOtU4
+         XEbh3aYf7sQsHirZowNIGR2LZPh+7nsai1HwLgHaj64jhU0xbhKdfImuqsYe7508JTiy
+         4dqLEIsi0xn691fdF6m5cLeLbmCGsm3rtW86dt2IYnAUqAKjl4olbe5bojyW3tSBQxf5
+         IagQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710413998; x=1711018798;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f74il14ZWPvRtCdOjQ7hLLex80lpQ3c6JxKbsOjU1Ps=;
+        b=Q0SxjE4/sPaDv4NIvCotLujG/XN5qVBvGDrFYaqp0JeZ6SVwBwefZf2F16tZbokb/P
+         oq8dzDDLP8IoxMl4pfGzdz5MiE3kJNfRh4XEjWmOxXrk8fVPzk4RZNQ2EiOkimjRXPcR
+         EhcwlieIo7ARiZ/6slS9jMJP0J9XSPNL4Z8aufVHgKoRDau+CjgOScZE3YpfuAIAtiW8
+         qyrXl/Xf58btTRv7xlgJo73l7Dv0ct6VCyloD/DDRrw3mArSvJ+01dQn+G4G5ucOgIwx
+         aHo3MZGyBnRnVwWy2qjJCdzVEq4OtZtndGySOWc8k2uRUX7C1eVfxXZxCmBrsJPPLRu+
+         Pv1A==
+X-Forwarded-Encrypted: i=1; AJvYcCXqbBX6zSPq6erFypttOIWo0tNz17HYq8VUKS4aZpxBfBQCvMtFLC0G5PxDp5NH4oP2WJ30i3Vrg+z7BFFGiRknJwA4NkDYp2KFYA/fDqdHXglGFcAlePB/eX2AylJPslLX6j26bquYATa5MtMXG+IvS/iDJ3uCcYhlFWrvN6cSy8EN
+X-Gm-Message-State: AOJu0YyZXIbcdlVeqdShdlem87+t1BTFoOUPB0oadzKkVlrtJji3n6f9
+	KyLMfIxsKfQ2DoRrEFUD2cViu5+sBLJ2At85F7A2SMwepK1l+jpV
+X-Google-Smtp-Source: AGHT+IG7A6HdmcY9jUncbFxRiJeisYCCIEcG3esBJ+ZAJKVpFR+ycbzcM3+TaJVxKNZ8Teh9Wgu1fQ==
+X-Received: by 2002:a17:906:7f06:b0:a3f:bd94:4d80 with SMTP id d6-20020a1709067f0600b00a3fbd944d80mr804119ejr.76.1710413997949;
+        Thu, 14 Mar 2024 03:59:57 -0700 (PDT)
+Received: from lab.hqhome163.com ([194.183.10.152])
+        by smtp.googlemail.com with ESMTPSA id en2-20020a17090728c200b00a4674ad8ab9sm371988ejc.211.2024.03.14.03.59.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Mar 2024 03:59:57 -0700 (PDT)
+From: "Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alessandro Carminati <alessandro.carminati@gmail.com>,
+	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: x86: test_mremap_vdso: conform test to TAP format output
-Date: Thu, 14 Mar 2024 15:32:14 +0500
-Message-Id: <20240314103216.286603-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240314103216.286603-1-usama.anjum@collabora.com>
-References: <20240314103216.286603-1-usama.anjum@collabora.com>
+Subject: [PATCH v2] tools/testing/selftests/bpf/test_tc_tunnel.sh: Prevent client connect before server bind
+Date: Thu, 14 Mar 2024 10:59:11 +0000
+Message-Id: <20240314105911.213411-1-alessandro.carminati@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
+In some systems, the netcat server can incur in delay to start listening.
+When this happens, the test can randomly fail in various points.
+This is an example error message:
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+   # ip gre none gso
+   # encap 192.168.1.1 to 192.168.1.2, type gre, mac none len 2000
+   # test basic connectivity
+   # Ncat: Connection refused.
+
+The issue stems from a race condition between the netcat client and server.
+The test author had addressed this problem by implementing a sleep, which
+I have removed in this patch.
+This patch introduces a function capable of sleeping for up to two seconds.
+However, it can terminate the waiting period early if the port is reported
+to be listening.
+
+Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
 ---
- .../testing/selftests/x86/test_mremap_vdso.c  | 43 +++++++++----------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+ tools/testing/selftests/bpf/test_tc_tunnel.sh | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/x86/test_mremap_vdso.c b/tools/testing/selftests/x86/test_mremap_vdso.c
-index f0d876d482778..d53959e035930 100644
---- a/tools/testing/selftests/x86/test_mremap_vdso.c
-+++ b/tools/testing/selftests/x86/test_mremap_vdso.c
-@@ -19,6 +19,7 @@
- #include <sys/auxv.h>
- #include <sys/syscall.h>
- #include <sys/wait.h>
-+#include "../kselftest.h"
- 
- #define PAGE_SIZE	4096
- 
-@@ -29,13 +30,13 @@ static int try_to_remap(void *vdso_addr, unsigned long size)
- 	/* Searching for memory location where to remap */
- 	dest_addr = mmap(0, size, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
- 	if (dest_addr == MAP_FAILED) {
--		printf("[WARN]\tmmap failed (%d): %m\n", errno);
-+		ksft_print_msg("WARN: mmap failed (%d): %m\n", errno);
- 		return 0;
- 	}
- 
--	printf("[NOTE]\tMoving vDSO: [%p, %#lx] -> [%p, %#lx]\n",
--		vdso_addr, (unsigned long)vdso_addr + size,
--		dest_addr, (unsigned long)dest_addr + size);
-+	ksft_print_msg("Moving vDSO: [%p, %#lx] -> [%p, %#lx]\n",
-+		       vdso_addr, (unsigned long)vdso_addr + size,
-+		       dest_addr, (unsigned long)dest_addr + size);
- 	fflush(stdout);
- 
- 	new_addr = mremap(vdso_addr, size, size,
-@@ -43,10 +44,10 @@ static int try_to_remap(void *vdso_addr, unsigned long size)
- 	if ((unsigned long)new_addr == (unsigned long)-1) {
- 		munmap(dest_addr, size);
- 		if (errno == EINVAL) {
--			printf("[NOTE]\tvDSO partial move failed, will try with bigger size\n");
-+			ksft_print_msg("vDSO partial move failed, will try with bigger size\n");
- 			return -1; /* Retry with larger */
- 		}
--		printf("[FAIL]\tmremap failed (%d): %m\n", errno);
-+		ksft_print_msg("[FAIL]\tmremap failed (%d): %m\n", errno);
- 		return 1;
- 	}
- 
-@@ -58,11 +59,12 @@ int main(int argc, char **argv, char **envp)
- {
- 	pid_t child;
- 
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
- 	child = fork();
--	if (child == -1) {
--		printf("[WARN]\tfailed to fork (%d): %m\n", errno);
--		return 1;
--	}
-+	if (child == -1)
-+		ksft_exit_fail_msg("failed to fork (%d): %m\n", errno);
- 
- 	if (child == 0) {
- 		unsigned long vdso_size = PAGE_SIZE;
-@@ -70,9 +72,9 @@ int main(int argc, char **argv, char **envp)
- 		int ret = -1;
- 
- 		auxval = getauxval(AT_SYSINFO_EHDR);
--		printf("\tAT_SYSINFO_EHDR is %#lx\n", auxval);
-+		ksft_print_msg("AT_SYSINFO_EHDR is %#lx\n", auxval);
- 		if (!auxval || auxval == -ENOENT) {
--			printf("[WARN]\tgetauxval failed\n");
-+			ksft_print_msg("WARN: getauxval failed\n");
- 			return 0;
- 		}
- 
-@@ -92,16 +94,13 @@ int main(int argc, char **argv, char **envp)
- 		int status;
- 
- 		if (waitpid(child, &status, 0) != child ||
--			!WIFEXITED(status)) {
--			printf("[FAIL]\tmremap() of the vDSO does not work on this kernel!\n");
--			return 1;
--		} else if (WEXITSTATUS(status) != 0) {
--			printf("[FAIL]\tChild failed with %d\n",
--					WEXITSTATUS(status));
--			return 1;
--		}
--		printf("[OK]\n");
-+			!WIFEXITED(status))
-+			ksft_test_result_fail("mremap() of the vDSO does not work on this kernel!\n");
-+		else if (WEXITSTATUS(status) != 0)
-+			ksft_test_result_fail("Child failed with %d\n", WEXITSTATUS(status));
-+		else
-+			ksft_test_result_pass("%s\n", __func__);
- 	}
- 
--	return 0;
-+	ksft_finished();
+diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+index 910044f08908..7989ec608454 100755
+--- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+@@ -72,7 +72,6 @@ cleanup() {
+ server_listen() {
+ 	ip netns exec "${ns2}" nc "${netcat_opt}" -l "${port}" > "${outfile}" &
+ 	server_pid=$!
+-	sleep 0.2
  }
+ 
+ client_connect() {
+@@ -93,6 +92,16 @@ verify_data() {
+ 	fi
+ }
+ 
++wait_for_port() {
++	for i in $(seq 20); do
++		if ip netns exec "${ns2}" ss ${2:--4}OHntl | grep -q "$1"; then
++			return 0
++		fi
++		sleep 0.1
++	done
++	return 1
++}
++
+ set -e
+ 
+ # no arguments: automated test, run all
+@@ -193,6 +202,7 @@ setup
+ # basic communication works
+ echo "test basic connectivity"
+ server_listen
++wait_for_port ${port} ${netcat_opt}
+ client_connect
+ verify_data
+ 
+@@ -204,6 +214,7 @@ ip netns exec "${ns1}" tc filter add dev veth1 egress \
+ 	section "encap_${tuntype}_${mac}"
+ echo "test bpf encap without decap (expect failure)"
+ server_listen
++wait_for_port ${port} ${netcat_opt}
+ ! client_connect
+ 
+ if [[ "$tuntype" =~ "udp" ]]; then
 -- 
-2.39.2
+2.34.1
 
 
