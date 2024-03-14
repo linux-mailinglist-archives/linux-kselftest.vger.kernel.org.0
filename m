@@ -1,160 +1,264 @@
-Return-Path: <linux-kselftest+bounces-6307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DF9587B552
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 00:44:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A84DC87B5C5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 01:26:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3013B21332
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Mar 2024 23:44:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DD162863C8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 00:26:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62055D734;
-	Wed, 13 Mar 2024 23:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3B7863D;
+	Thu, 14 Mar 2024 00:25:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B950LDTc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdqMrdyl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDA45B20F
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Mar 2024 23:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF96C7F;
+	Thu, 14 Mar 2024 00:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710373482; cv=none; b=qfT5usPUNMbym1/qyogV/m/emRGVkd2xWDLsI6eEwg46JRYQOTttGThKYlN/4GPV2PdN25pKhjraefywBgnaVALmY0TcQii7w7em8RtG1tBrqp7647nQvtiJDCpy7cvaXVroRlk+RuZLmF05jWN9O2xpVNm2sg9uCRTe1092a/c=
+	t=1710375951; cv=none; b=PQOLe92SVYXfkAaiLnguOWR3vHcs1cEv/vmNO0gwkFUR4E3ng7W9Qh7DLBZjicGsZhhCiLJ2FGqiLHu7T79YG9gkS+DGCE6+shhMqx+/ryr7ED1Z11pl1Rt8xfcKG81yGVVt1oqvWzdKwQfcDig4HAg9VjIjQZLg4bl3mCeY6VA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710373482; c=relaxed/simple;
-	bh=HD34+N4HmuIBIUoDyYFlYqEAmxFkbtPrHj9GtqwLe3E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h6gISgvis4QOZ28OtMJH828nVKMOSJhHDw7K1mavPA6cdofxRdWNi3Fek92VRuQX9ZnpVO77m+p49oSSnLbYGtqey+yfhuSrTYhOcEA7OUNRhko/OkTGl1FZtVJ9NqueyHWQw5tqXw4BJyRRR4pErGIBR8fJQmFC+USP7WaJHNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B950LDTc; arc=none smtp.client-ip=91.218.175.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <6da9dc9d-fad6-40f9-91d3-602f87397b47@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710373478;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MJIpyrb3PHRzKDP68+qCFyuGvH3roDNGt7412UBHY+c=;
-	b=B950LDTcgmmMuFK+GObDC0V29wtU0hoZPvbSOzgc1CLMnMcuZI0MtoxwnRDTGQOceS59vj
-	m2vD6+U7GGcXlqWM2fGP/KO6+0CZ+fPc0Cbarc2NDzp12oEaYhS5BzWDMde/d3nDqWvwEC
-	Hf8PpacFp90wzyjcTD5hzNB4t9xNrj0=
-Date: Wed, 13 Mar 2024 16:44:30 -0700
+	s=arc-20240116; t=1710375951; c=relaxed/simple;
+	bh=9EoMAftd9vY6BGdahDlojvcesrBvYUJgWbCGJaD+H+c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l1R0a3XYor+KmeTKYIJ4asID37ZsKdtnDnU+j2X5o8Zj6g92KVFmqgyIPthKrxDhJVdIx3xdEPN8XbG+GvLoDC1L0Hfoj2H6i8KHVXSp5FqhllVGo5WVEgHxuH6kXzdp/PnlHgq7fcWC0R898Z/Nsau+5IBOKvsicSn1UgH24mI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdqMrdyl; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33e8e9a4edaso405846f8f.2;
+        Wed, 13 Mar 2024 17:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710375948; x=1710980748; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b1pXXVSLcJWs+QWrQ+i4P/taCr8L+0F6xiRmk8ycZXY=;
+        b=OdqMrdylzqEmk8VEhLX1MaecvtTmKmwYObl/HWkrJz2vxQmpRjFG9i7g8QGYsrvjIS
+         3B4axAft8v/tYcF4Gf34OYyjD5HXLwCu/fQk6dDB5SSUTT54DYmdhidhXRF5oA2YXlAt
+         bMrhze1VDqGgWJn6bURCARSVFag3rtodXL3MFiBzhrQOnbz2Ct8WRc/U76bVoBpsXL0b
+         fUWX1a4am4L1t4shFGn52EjdIYbWHjDksvo3e9tIZtqeVAbxDzo7kbJTYxqazVtuq7VX
+         5uJ1R0NgYUNHglDFpt5lMfQs9/yZ+8b6vvpBFAuqLbwiYr7H5NbhKdhb3DkoKBqdlrRo
+         H7NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710375948; x=1710980748;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b1pXXVSLcJWs+QWrQ+i4P/taCr8L+0F6xiRmk8ycZXY=;
+        b=Gp3B4kqA1uQ7w4ERAzo0xDM1z2drDlO7/W3S6ugQ0teE3UfTsYmFufGLKN0RRBAgXq
+         HoJZBYgAy2aVkhXr9IskiPVpkVUmywVqUVAwR3A1FgNe1w3tdLHsFrAheyHAo2dYocSk
+         iclK+A4Pfzp/Kcm2q7IL1YvhBSYAoOFnTFoohQ9EKLmXOiIaH0lqzyL3g73lA2DxEFme
+         me/8jt86a13+mcB1E1hkOn7lGGRAhAKIozoBvDxriQGDSokksaEBUsxVHkBcdSkfPywR
+         rEJyeACyT7zYvfDTHyWuoQievp651My0kbqZDv45WXImnVtb03Hp/gX89DVgxJND75a5
+         O1tg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+MoOvZgsUoUpQUJPyphFpdDWfJkSqlZfC4RY38bCxBm/0apLstsk9sY/xpTTBkIxVsiNqFrELE7a5mnqpky8QeqEhDrebejlrHmL6VKmoUCUqJT4i0ZJc/SQQ32YQwcVYP/5FE2I298QfePSlXH3NMc+oCSSZBv20cwIPrUG/dwNx4AojkkHcaBpyoHyIR+wpeiDPqqsD3dTH0tBxs/+76XJ0Y44TOwQgPwKbNOXTtHt250J65oGCbLyBj/M/8ghGUS7Scfr6cMx4iUNsJBLOZBQpj2HiJtwoFQ==
+X-Gm-Message-State: AOJu0YyPgXjJNakyVxQExxzx0wjcqTVdVdoGKvzlX6EkDqv5JtZqAkzh
+	vwywPgHZ1JzJQDp84w3Jci1F+ONBlX8zTWXgVAb6YrfiynGjevvSfUC3BPmhO3apr1Jn+VrwNAf
+	QjL+FiG2UxEKVveH8LSBgXj1Fyxs=
+X-Google-Smtp-Source: AGHT+IEluUxpksFRvEO4amy8bxc8cXhNS84YSmujwUrBqdFTzudYkIWBqt3bc5Ekgo5hTd/k08iQyCGhQiEqmdJKoSg=
+X-Received: by 2002:a5d:438e:0:b0:33e:44da:827 with SMTP id
+ i14-20020a5d438e000000b0033e44da0827mr112820wrq.57.1710375947716; Wed, 13 Mar
+ 2024 17:25:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] tools/testing/selftests/bpf/test_tc_tunnel.sh: Prevent
- client connect before server bind
-Content-Language: en-US
-To: Alessandro Carminati <alessandro.carminati@gmail.com>
-Cc: Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>
-References: <20240229140000.175274-1-alessandro.carminati@gmail.com>
- <fe323c90-bda3-4837-8daa-372073014446@linux.dev>
- <CAPp5cGR2gFtMh3jWHuFHXdHvLdq85j5qcMPh4EoiOv+JA_HYTw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAPp5cGR2gFtMh3jWHuFHXdHvLdq85j5qcMPh4EoiOv+JA_HYTw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+ <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+ <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
+ <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
+ <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
+ <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com> <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+In-Reply-To: <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 13 Mar 2024 17:25:35 -0700
+Message-ID: <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
+ to record and check the accessed args
+To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/10/24 1:45 AM, Alessandro Carminati wrote:
-> Hi Martin,
-> Thanks for the review.
-> 
-> Il giorno ven 8 mar 2024 alle ore 02:03 Martin KaFai Lau
-> <martin.lau@linux.dev> ha scritto:
->>
->> On 2/29/24 6:00 AM, Alessandro Carminati (Red Hat) wrote:
->>> In some systems, the netcat server can incur in delay to start listening.
->>> When this happens, the test can randomly fail in various points.
->>> This is an example error message:
->>>      # ip gre none gso
->>>      # encap 192.168.1.1 to 192.168.1.2, type gre, mac none len 2000
->>>      # test basic connectivity
->>>      # Ncat: Connection refused.
->>
->> This explained what is the issue. Please also explain how the patch solves it.
->>
-> The issue, as stated, depends on a race condition between the netcat client
-> and server. The test author addressed this problem using a sleep, which I
-> removed in this patch. To easily solve the issue, one could simply increase
-> the sleep duration. However, this patch opts to tackle the problem by
-> querying the /proc directory and verifying TCP binds at the specified port
-> before letting the client connect.
+On Tue, Mar 12, 2024 at 6:53=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongme=
+nglong.8@bytedance.com> wrote:
+>
+> On Wed, Mar 13, 2024 at 12:42=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <do=
+ngmenglong.8@bytedance.com> wrote:
+> > >
+> [......]
+> >
+> > I see.
+> > I thought you're sharing the trampoline across attachments.
+> > (since bpf prog is the same).
+>
+> That seems to be a good idea, which I hadn't thought before.
+>
+> > But above approach cannot possibly work with a shared trampoline.
+> > You need to create individual trampoline for all attachment
+> > and point them to single bpf prog.
+> >
+> > tbh I'm less excited about this feature now, since sharing
+> > the prog across different attachments is nice, but it won't scale
+> > to thousands of attachments.
+> > I assumed that there will be a single trampoline with max(argno)
+> > across attachments and attach/detach will scale to thousands.
+> >
+> > With individual trampoline this will work for up to a hundred
+> > attachments max.
+>
+> What does "a hundred attachments max" means? Can't I
+> trace thousands of kernel functions with a bpf program of
+> tracing multi-link?
 
-Please include this in the commit message.
+I mean what time does it take to attach one program
+to 100 fentry-s ?
+What is the time for 1k and for 10k ?
 
->>>
->>> Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
->>> ---
->>>    tools/testing/selftests/bpf/test_tc_tunnel.sh | 19 ++++++++++++++++++-
->>>    1 file changed, 18 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
->>> index 910044f08908..01c0f4b1a8c2 100755
->>> --- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
->>> +++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
->>> @@ -72,7 +72,6 @@ cleanup() {
->>>    server_listen() {
->>>        ip netns exec "${ns2}" nc "${netcat_opt}" -l "${port}" > "${outfile}" &
->>>        server_pid=$!
->>> -     sleep 0.2
->>>    }
->>>
->>>    client_connect() {
->>> @@ -93,6 +92,22 @@ verify_data() {
->>>        fi
->>>    }
->>>
->>> +wait_for_port() {
->>> +     local digits=8
->>> +     local port2check=$(printf ":%04X" $1)
->>> +     local prot=$([ "$2" == "-6" ] && echo 6 && digits=32)
->>> +
->>> +     for i in $(seq 20); do
->>> +             if ip netns exec "${ns2}" cat /proc/net/tcp${prot} | \
->>> +                     sed -r 's/^[ \t]+[0-9]+: ([0-9A-F]{'${digits}'}:[0-9A-F]{4}) .*$/\1/' | \
->>> +                     grep -q "${port2check}"; then
->>
->> The idea is to check if there is socket listening on port 8888?
->>
->> May be something simpler like "ss -OHtl src :$1" instead?
-> Indeed, the aim is to ensure that the server is bound before the
-> client attempts to
-> connect by checking if socket is listening, and yes using 'ss' would be shorter.
-> However, I chose not to use 'ss' or 'netstat' to avoid adding new dependencies,
-> considering they are already many.
+The kprobe multi test attaches to pretty much all funcs in
+/sys/kernel/tracing/available_filter_functions
+and it's fast enough to run in test_progs on every commit in bpf CI.
+See get_syms() in prog_tests/kprobe_multi_test.c
 
-ss should be in the same iproute package that "(ip) netns..." lives in also. The 
-above changes added sed and grep.
+Can this new multi fentry do that?
+and at what speed?
+The answer will decide how applicable this api is going to be.
+Generating different trampolines for every attach point
+is an approach as well. Pls benchmark it too.
 
-Regardless, this external dependency will be all gone once moved to the 
-selftests/test_progs. The check-and-wait will be gone by creating a listen fd 
-instead of using "nc -l...". A simpler change such that people doing the future 
-test_progs migration will have an easier time.
+> >
+> > Let's step back.
+> > What is the exact use case you're trying to solve?
+> > Not an artificial one as selftest in patch 9, but the real use case?
+>
+> I have a tool, which is used to diagnose network problems,
+> and its name is "nettrace". It will trace many kernel functions, whose
+> function args contain "skb", like this:
+>
+> ./nettrace -p icmp
+> begin trace...
+> ***************** ffff889be8fbd500,ffff889be8fbcd00 ***************
+> [1272349.614564] [dev_gro_receive     ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614579] [__netif_receive_skb_core] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614585] [ip_rcv              ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614592] [ip_rcv_core         ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614599] [skb_clone           ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614616] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614629] [nft_do_chain        ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614635] [ip_rcv_finish       ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614643] [ip_route_input_slow ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614647] [fib_validate_source ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614652] [ip_local_deliver    ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614658] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614663] [ip_local_deliver_finish] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614666] [icmp_rcv            ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614671] [icmp_echo           ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614675] [icmp_reply          ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614715] [consume_skb         ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614722] [packet_rcv          ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+> [1272349.614725] [consume_skb         ] ICMP: 169.254.128.15 ->
+> 172.27.0.6 ping request, seq: 48220
+>
+> For now, I have to create a bpf program for every kernel
+> function that I want to trace, which is up to 200.
+>
+> With this multi-link, I only need to create 5 bpf program,
+> like this:
+>
+> int BPF_PROG(trace_skb_1, struct *skb);
+> int BPF_PROG(trace_skb_2, u64 arg0, struct *skb);
+> int BPF_PROG(trace_skb_3, u64 arg0, u64 arg1, struct *skb);
+> int BPF_PROG(trace_skb_4, u64 arg0, u64 arg1, u64 arg2, struct *skb);
+> int BPF_PROG(trace_skb_5, u64 arg0, u64 arg1, u64 arg2, u64 arg3, struct =
+*skb);
+>
+> Then, I can attach trace_skb_1 to all the kernel functions that
+> I want to trace and whose first arg is skb; attach trace_skb_2 to kernel
+> functions whose 2nd arg is skb, etc.
+>
+> Or, I can create only one bpf program and store the index
+> of skb to the attachment cookie, and attach this program to all
+> the kernel functions that I want to trace.
+>
+> This is my use case. With the multi-link, now I only have
+> 1 bpf program, 1 bpf link, 200 trampolines, instead of 200
+> bpf programs, 200 bpf link and 200 trampolines.
 
->> The check-and-wait fix in this patch is fine to get your test environment going.
->>
->> Eventually, it will be good to see the test_tc_tunnel.sh test moved to
->> test_progs. The test_tc_tunnel.sh is not run by bpf CI and issue like this got
->> unnoticed. Some other "*.sh" tests have already been moved to test_progs.
-.>>
->>
-> Regards
-> Alessandro
+I see. The use case makes sense to me.
+Andrii's retsnoop is used to do similar thing before kprobe multi was
+introduced.
 
+> The shared trampoline you mentioned seems to be a
+> wonderful idea, which can make the 200 trampolines
+> to one. Let me have a look, we create a trampoline and
+> record the max args count of all the target functions, let's
+> mark it as arg_count.
+>
+> During generating the trampoline, we assume that the
+> function args count is arg_count. During attaching, we
+> check the consistency of all the target functions, just like
+> what we do now.
+
+For one trampoline to handle all attach points we might
+need some arch support, but we can start simple.
+Make btf_func_model with MAX_BPF_FUNC_REG_ARGS
+by calling btf_distill_func_proto() with func=3D=3DNULL.
+And use that to build a trampoline.
+
+The challenge is how to use minimal number of trampolines
+when bpf_progA is attached for func1, func2, func3
+and bpf_progB is attached to func3, func4, func5.
+We'd still need 3 trampolines:
+for func[12] to call bpf_progA,
+for func3 to call bpf_progA and bpf_progB,
+for func[45] to call bpf_progB.
+
+Jiri was trying to solve it in the past. His slides from LPC:
+https://lpc.events/event/16/contributions/1350/attachments/1033/1983/plumbe=
+rs.pdf
+
+Pls study them and his prior patchsets to avoid stepping on the same rakes.
 
