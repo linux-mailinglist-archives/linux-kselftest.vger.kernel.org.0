@@ -1,431 +1,297 @@
-Return-Path: <linux-kselftest+bounces-6312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F48C87B750
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 06:36:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 815B587B7EE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 07:28:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F2E01F2320A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 05:36:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36859285613
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 06:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A055F8F62;
-	Thu, 14 Mar 2024 05:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 647E5DDD9;
+	Thu, 14 Mar 2024 06:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="poDjluEU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UxAJg3a3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2087.outbound.protection.outlook.com [40.107.94.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597BAFC02;
-	Thu, 14 Mar 2024 05:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710394557; cv=fail; b=q78vwkbHG9taSwpGWdhB+3lz0DHHATszrAyYVuDQo7bKncBq/E9ftSLLwVlxoS1u8ST3MEHn+C88nQMraW/n96AiTJJ88IENQKDJWiW4yO3/+8ADN8S/7MXNYlceRnRZdYOelLH5twUiDaVDmuZFRzGN0YshgOurE8cNEwveoFs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710394557; c=relaxed/simple;
-	bh=z8yYhDp/NMwb7/SYGa+aLCdMbTuXNShlfpx/qgQhr4A=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=FKskRL3VyV8m3Cmy7mFOOMKi1OjoDDYUtW1f3gDlSifGS0fETLAbp+KAKV/BgVBKSdgREnTR1Pf8oArBpQFCqh8rN+HtLjsEzTz/a0Tt5yAVE1swnGHUd8zD7/3qxBwls28usRSrVdGUhNKAgCdVgdsKsRzHLW9Pe5qlBPw6iYA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=poDjluEU; arc=fail smtp.client-ip=40.107.94.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nJTV9K6t5KxX3UZb6Xfrv74/+yINkLy0avOkdI8xJ99PJzI0SCCe/XD+8wta4Q17zqK9RMemYCUfa1ue7T4AxZ1DTExtOlQ57rUJ7jeAjxmx7tK5K32azBEwUgY3YdgZiRKE/7/A4+Ax6vC7oIWRxGDuGjt+2DpCzh8BILXRBWlb94o8wtDLtSbXCqDrus653rU2YREUyQC8POFbCtkixWTzK6wbdMd3cFL9Rx4kH3n3VkayAlcEdkLZ7S4EsWaJZcAGh47KN3R7KvmaEf7UrRmYmgDpY9vzWAkAYnn/zjKjmqtoxpi/fGLOA/I4BM824zsARyIljdUDthPHgJvJZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I5l0DC2+krG6dOlNAl+kZ0w1LMhiaoY9OVqaxGRDWSU=;
- b=kE67RZewxE9Boh8phHKag4LZcU1eSFBulZSJ+0iLGVljj2ycb8iLxgw7+X+TePRo4WGhaWTl2tTk1PCGHp8d6IIz+r+MeOrjuQo309CTpKXQuWF0qKZLYRAN4RhZRaENQOAhX+rVHHmJzrt5v3K9uQl5tchxjkmauhWQaS3ecFKBeeo0i39JOMzZo6ekgYeIqH2wska//eWEawiw1BCC1mL83BAAZ9vBW7V0XCBMFmJZIjbGE0y1xmgP0OrFVIAukycwky8pOxuIpUYCGUTz1SOPlr+qZjrI3vl4/l1Y1uQvrP/OUQgz2ZBIqjmq+3Ygao2I0ue4LPiyAh+P+KuJGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I5l0DC2+krG6dOlNAl+kZ0w1LMhiaoY9OVqaxGRDWSU=;
- b=poDjluEUL0egGY/RLFvhK6jFKhUtCgXMHtms5l1RrAKwfj8BJgYi4ubZw9e/xlWTp99RGr4tB8h5XfZUQviDzXpTyICxGKjXvlmGKE7rhrNlh6ytdue+h/3cFS+PbXmr7Dfbs/EjLWMG8UsY2fwVbAmjWanQK+pJgIrctWWRuFI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- IA1PR12MB8405.namprd12.prod.outlook.com (2603:10b6:208:3d8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.18; Thu, 14 Mar
- 2024 05:35:52 +0000
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::60b6:438a:bff1:cd14]) by DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::60b6:438a:bff1:cd14%5]) with mapi id 15.20.7362.035; Thu, 14 Mar 2024
- 05:35:51 +0000
-Message-ID: <075ff472-67c7-4cb1-a344-9c1066821eb4@amd.com>
-Date: Thu, 14 Mar 2024 11:05:41 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v1 5/5] selftests: KVM: SVM: Add Idle HLT intercept test
-To: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- pbonzini@redhat.com, shuah@kernel.org, nikunj@amd.com,
- thomas.lendacky@amd.com, vkuznets@redhat.com, bp@alien8.de,
- Manali Shukla <manali.shukla@amd.com>
-References: <20240307054623.13632-1-manali.shukla@amd.com>
- <20240307054623.13632-6-manali.shukla@amd.com> <ZeoF2vfrUMCja0x7@google.com>
-From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <ZeoF2vfrUMCja0x7@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0082.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:23::27) To DS7PR12MB6214.namprd12.prod.outlook.com
- (2603:10b6:8:96::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C04D27E;
+	Thu, 14 Mar 2024 06:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710397681; cv=none; b=jz/hOO5+UFyK+iNWi4R9EUzxbiLuZ3pQLA+0brzYknFIv8nphiJIYsThX/lohlS8LvbOFFZ0YgDm86k+nMfl7QQoiOW203Y/LodLgPY2BIl2ZUzepPk47qp/qZxznTQzQkrElRp5k8wrs8XNGiEzDZGhJzJzHc23vWVEeFC9uEU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710397681; c=relaxed/simple;
+	bh=9PJKp5d07U4cqQ+doLFO1wV2FwDX/AFcq+h6mLuajhA=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ik5ui+cXHlpMXwDYrvcJ97qBmaoNSjt7Hd8fEEwKAXU3dPJ7RkA5rB4UzfNyZBXNedBca7gAXuP1Sjyr6tNk4kv9nv5m7hCgCFkotRk2IMlGXcCRoc+4GL+lYSvT4Dou1aJ448uNSCLb832JBEc2gP5BkbtPGBduX5t62dJ5NDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UxAJg3a3; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a44f2d894b7so53194866b.1;
+        Wed, 13 Mar 2024 23:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710397676; x=1711002476; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Wy48BMq7k7tUA5PbAAKgjU/lgoVJFz6MN9TbVJQFsQM=;
+        b=UxAJg3a3Z+yT+HhNZCswgwLcX0lMVw/lOrUNh3ZZdeXorK0fIYY810Ti2siwbJb/x2
+         iQKD6YyHgbTXClQ7vpDG1py1frjvjmj1cn9L755waaoc5+8e1OiLbI3ppTDSnVyzjKpj
+         8jTK6JH8sxAH0qk0aWU47f2rUK1rZCoGLhtNvPDQMb5kR/DoR7cc3Ca3fbizS30nM90b
+         2jL4szJTzoLU7Qo2W3HIFTgGk7HrtUzWjqsdKEflBYzZ/kNVhyxc4ZZEluzHSDhgfSgs
+         9FSFHhJZZLB1s8aOrmFe1r4AtqDP1D5hE4hczL4IBB5AHm8ocTyz6QtBe96OFG2UZ2+D
+         weyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710397676; x=1711002476;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wy48BMq7k7tUA5PbAAKgjU/lgoVJFz6MN9TbVJQFsQM=;
+        b=oGF0xO9MUwF9x7XT86KBHYWcVeGVLRG2nWSS2pk0xJjoXMv8NTsXfViLmm7iRyWe6W
+         1nPu28XTXH7TAs/qJuza1nQyw56TniBZzZWHZobBKx5clPXFQbRDo4pa4wAV6vpSGYPw
+         aKGEA61xQOYYwh9Bv7h6NS7k+bQ/fi8bnMjNswX/rOWuKSvQoJHkjbvPubV5n7eu1vXH
+         7odE5kCNELPQlrryi3wQtvVFtT15EPx/jcNh2/35+lfh1do2knTz6RSqb2dUYphyoOBT
+         t+WvlVnPzcY8ahYcZs1oJX+eiDyWf/pyRYDvapi/nQSQO2WLsiYEePXZxSfootmLPgEt
+         DaSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVS9QQXVZkbh6HjwVVx+tCiamGDoMwR3C50rjNo/jD4UJUvZ+fJAw1LJIMufTZdYRrceaQ2L2LCU71xOmgBkYSt/PXS1JOESxxatfca4/1UsmpB4FuoF3NDZuVUnov++Pjer/QCdKhPNSzfA/Yl+6sQzLisTm3CBDM8wQxBPJdFtcQKh5sxo65DzDftg21gxRVxzaNgsDqxOB5TF5Hl6Y3AkYINPFKceZyEd5p1xHi4OUhlcnhkzVnsmIx262h+5KlV6XGq9q5xeSgsN+RPkfJS/dQjgVI5cIvHnw==
+X-Gm-Message-State: AOJu0YyMhHEBNBmHbQxVeZX/yZ4CuzjY5UuYQfXbTfB2fHMvcJlJdMPz
+	3Y91Aw1uABMjgnAgA5Da48JScs492pEMjBwonp8f8tw/o6pLukBh
+X-Google-Smtp-Source: AGHT+IF0pnR3t8OP32CidAqcEwLWVf5pxREHuVK53gI8rH7KwaQf04P9Mb0+ZaiK2iVNQgj+ScQKXQ==
+X-Received: by 2002:a17:906:b899:b0:a3f:5ad2:1ff0 with SMTP id hb25-20020a170906b89900b00a3f5ad21ff0mr391041ejb.46.1710397675813;
+        Wed, 13 Mar 2024 23:27:55 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id ld8-20020a170906f94800b00a46754900a4sm104587ejb.33.2024.03.13.23.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Mar 2024 23:27:55 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 14 Mar 2024 07:27:52 +0100
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: =?utf-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-riscv <linux-riscv@lists.infradead.org>,
+	linux-s390 <linux-s390@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	linux-trace-kernel@vger.kernel.org,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
+ to record and check the accessed args
+Message-ID: <ZfKY6E8xhSgzYL1I@krava>
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+ <20240311093526.1010158-2-dongmenglong.8@bytedance.com>
+ <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+ <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
+ <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
+ <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
+ <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
+ <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+ <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|IA1PR12MB8405:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ba4bf74-8286-42f9-cd0f-08dc43e89c63
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	QDjN9Ih6UuWXLylSYhGXNu1xQ7+cSK4WzY60V/HaisZysPGNZJrqI66fCFHequEiWAKdmxxnae59/avyLpTQkim6NA05fGWsmA+zeNL/v8epizRS/3AWp55g+6NyEyagynvzMO2ErXg8diwopRS7AU7uZs5M8TL5K9FdoJ+eTrlmBEFYhO3EaaZot/c6S+rp6pf0N0jukeHV5pgqcoYeV/acMvKrn6LXtvtQDRXVnL7sTVlZuP99uAOb0HIemkCazPxD/ADrXfzBLZBRbI3gU/J5+ASZNhO1dGyNCXy4/ft6OuvjGA96JMSL+2/MEQX+cYj4WhEQ/GoVI/kKoicE1G9y2Nj3BEgJoMe2jfhJTGppLMBVrl+5+LPLvd0UBkobPJIC37J7gw8TdxP2iadSR0FSmIMAD/irPDppVova3Hzn38U6pXhnbltBuMay64ZT0IaIV0TjPZ6LAsPmt8n1A6eKIEzl1ZEwO+dfyIHpaJOco1xtb4lQlzT0WEEbFvjWmu20fvuONrroddrwYf9DTlcITlk7MTEO0D9diRmyZjVcolH94tvF4q6pjEb1bdEPBHksKTxm41yJgzfx7VaPPnND4o8USToiDPk98sW9KFq76I701UsOhkPD2CmT+Ipj7XSiXcPHyo9JAvYVGaqsWct/bmbXv/ywSny8lr30dpc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U0R5VERXMXdXUk1EeWw1d3l5UzcyUkxOYTYvdllqWWl4SHphWUNsTENoWEVD?=
- =?utf-8?B?SUZiZnp3NXJZcFdlN2V1TEY5SUhieGJRa0IxT0l2M0JXWVFrKzBwVVdiRHJ4?=
- =?utf-8?B?c0FxTjdWYzdxenN4ZDl3eVJtMDMxTHpvWkU4OEdGdTlJS296VHBVSWNVVytY?=
- =?utf-8?B?MU45bWlIeVJwM085eEU2V1YxbU05ZjBBQlYzUmVTeFdBbDE1blArUFdJY0c5?=
- =?utf-8?B?aG1zUDBMM0oxcTd4dzNnRmFScDZ0eUZrUkduT2NvclNMOUdwUWd2aWRPbmJR?=
- =?utf-8?B?OXhOcmJCSXhzZHM3Sm9UcmJlTGgrR01rbElTNjg2YURQZCtodnNXQWNxREs4?=
- =?utf-8?B?RGdNVU53S2gyaC9mZzVRZEN5Nm03Rm90UllsZXQreVBRbzlmdkNqenB1Zks0?=
- =?utf-8?B?ZzIvejRKODJ3K3owcTJWTnlRVFBBbTdwNDI0ajY3ZWI2NzIxb3ZPWFJveXo3?=
- =?utf-8?B?M3RJY2FyNmlhdllxZTd1bmhwWUUrRENOcGFCNjFYMEtUcUdHSUFITHRobC9M?=
- =?utf-8?B?cVpWQ0FIMUxNUVVNSkFuZ1Y4NDFXS2U2M3JYdjNIMnBrdGhVbC9TOEh2emlE?=
- =?utf-8?B?L2RUUllmWmE0NVpMekpnbGM0QnJyQnVtcEhuRjU1Qlc4c2hvSjNoR1hYcEFu?=
- =?utf-8?B?V3R0cDRrK1E2QzRrdlZQMXducStzcWJXTE5RVW1QaS84cG9IVVFtVzNPeW1a?=
- =?utf-8?B?Ly9uNkNBc1NBcnJHU2NsUTRNOWZudDRBZDFXOVh5cHVWSEVINUppeXRKNEo3?=
- =?utf-8?B?Nko2dVNkL2d6eTBYQ1RMNTdqZmNTT3VQd0lIaG5XT2FrTm9nRnNEc0VFL3I0?=
- =?utf-8?B?N1VtVlQxa3lzQkluNDYxOEJRNXhkN2lnQ25PZENJd2IydmlTckJITEFFMUt2?=
- =?utf-8?B?OFVoMHh0U3hxbjVZTzF6MmhrSWJpV0xtOWVBTlBaaktiNU5FbHJPZ3NtS0Z5?=
- =?utf-8?B?NTlqUlA5TVhkc3hrNlI3MUZNb0M1aHpRZFRtRGY1WCsvZ3h3d3hNdEVmalhE?=
- =?utf-8?B?azlPcFh3ZmNPUUlNaXFtdXJ1cFlzUldhQnpCaHNlSFJiWURIbXMyWFFsZzlH?=
- =?utf-8?B?T1FtR2lRcnZmM2JwRGtBRkRIbG1EZ2NsanJ3SnJjM3Q3REtJNzBvZWtOWWZi?=
- =?utf-8?B?dXJBdzhGMktZV2dIUDVzQnNoeGEyYzlmdHFiS1hjZ0VXcVZueDZvajZzVE90?=
- =?utf-8?B?SE9CRHBJUS82dHBOWXYzZjVuemRVcXh5NlBDMzAzOVZsRUEwNkxpUTJrR1k5?=
- =?utf-8?B?Q21RTFJ4QmFXaFJwUVRoWlhSMDRyUWFHYnJiUTNvZ2ZJdG5BQ0liTGZ6QnRX?=
- =?utf-8?B?V0c2MFhxaGM0d3d3UHEySzcySjRqVE5lVmFDajdZc1p4bm9uU09VYStmenJn?=
- =?utf-8?B?OEg2bmI0UmMycUNBWUVzNFF2ZENoT3ZUMnI2VThrcjNneWFNQ0ZzYktYdXlu?=
- =?utf-8?B?NDFDMUkxKzdDVU5YNzVGRmExZzg4K2MyS3JsZGd6ZWJTcXBuWlk2VmJHQW5v?=
- =?utf-8?B?V0xlK29Hb0ZqU2RQckpsWlRxZG5nN2VUNmV4M0ZVOWdMSXQrLzBtRGlIeGc5?=
- =?utf-8?B?cUNmb3pOaW54K1Y1NlBhdDNITDNYUlFRNnhVQWpFTW05NEIyNXhML3ZiODFN?=
- =?utf-8?B?NkFralMvS25Wa251ZDlOODdGRkpPWkViYm9LQkd3YWllQmRneWdlS3dMODBn?=
- =?utf-8?B?RjN5ZUw3YVNDamc5S3k2MklyaEY5VHI1eDJBVjQ5TTdGMnFmR256MEs4a0xt?=
- =?utf-8?B?dnd3RjNZbTFPZ0Z6YXJwUmh1T2QyMk9yeGZBa0JXQVJ2QVlhdVFmbWNzZ3FO?=
- =?utf-8?B?ZVFCbkFYc0hNZ0kyVlhCWjEzL25VMEVGUEdqSWxRdjVidDNaNWxvTEFWbSsv?=
- =?utf-8?B?NEhMK2lnNGJDalFEcEVKcnp1aGtDZ24rcVhUQ01YbEJrcTl5dGtYdnFyY2hS?=
- =?utf-8?B?MHNhMWdFdW92RzZ6ZjdORUZWUXNkUU9zd1V5UlZBZWZVdXp1VjdCV1ROcWF2?=
- =?utf-8?B?aGpMME83ejdvNERzdXcrQm9Jc1pmNjAyRjNwd2p4eUxoY2ZyazZOTHpmL09H?=
- =?utf-8?B?L0RadnlydjlNOVFWYmhZUkorazFJUFdYZVpTcENodWppMG1JZHMvZ0RVdms2?=
- =?utf-8?Q?fNbw0z3A9JjmZIdwwZ94/4Pym?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ba4bf74-8286-42f9-cd0f-08dc43e89c63
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2024 05:35:51.8797
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: n8FoUI3fjRVV4vjY/oI7AqoSUIzjJNFdbVzevweEMLBeX7Sn4tF7mt6eSMWDbAgz3qrH5ZdM/6j6EkmjEIdDuw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8405
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
 
-Hi Sean,
+On Wed, Mar 13, 2024 at 05:25:35PM -0700, Alexei Starovoitov wrote:
+> On Tue, Mar 12, 2024 at 6:53 PM 梦龙董 <dongmenglong.8@bytedance.com> wrote:
+> >
+> > On Wed, Mar 13, 2024 at 12:42 AM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Mon, Mar 11, 2024 at 7:42 PM 梦龙董 <dongmenglong.8@bytedance.com> wrote:
+> > > >
+> > [......]
+> > >
+> > > I see.
+> > > I thought you're sharing the trampoline across attachments.
+> > > (since bpf prog is the same).
+> >
+> > That seems to be a good idea, which I hadn't thought before.
+> >
+> > > But above approach cannot possibly work with a shared trampoline.
+> > > You need to create individual trampoline for all attachment
+> > > and point them to single bpf prog.
+> > >
+> > > tbh I'm less excited about this feature now, since sharing
+> > > the prog across different attachments is nice, but it won't scale
+> > > to thousands of attachments.
+> > > I assumed that there will be a single trampoline with max(argno)
+> > > across attachments and attach/detach will scale to thousands.
+> > >
+> > > With individual trampoline this will work for up to a hundred
+> > > attachments max.
+> >
+> > What does "a hundred attachments max" means? Can't I
+> > trace thousands of kernel functions with a bpf program of
+> > tracing multi-link?
+> 
+> I mean what time does it take to attach one program
+> to 100 fentry-s ?
+> What is the time for 1k and for 10k ?
+> 
+> The kprobe multi test attaches to pretty much all funcs in
+> /sys/kernel/tracing/available_filter_functions
+> and it's fast enough to run in test_progs on every commit in bpf CI.
+> See get_syms() in prog_tests/kprobe_multi_test.c
+> 
+> Can this new multi fentry do that?
+> and at what speed?
+> The answer will decide how applicable this api is going to be.
+> Generating different trampolines for every attach point
+> is an approach as well. Pls benchmark it too.
+> 
+> > >
+> > > Let's step back.
+> > > What is the exact use case you're trying to solve?
+> > > Not an artificial one as selftest in patch 9, but the real use case?
+> >
+> > I have a tool, which is used to diagnose network problems,
+> > and its name is "nettrace". It will trace many kernel functions, whose
+> > function args contain "skb", like this:
+> >
+> > ./nettrace -p icmp
+> > begin trace...
+> > ***************** ffff889be8fbd500,ffff889be8fbcd00 ***************
+> > [1272349.614564] [dev_gro_receive     ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614579] [__netif_receive_skb_core] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614585] [ip_rcv              ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614592] [ip_rcv_core         ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614599] [skb_clone           ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614616] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614629] [nft_do_chain        ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614635] [ip_rcv_finish       ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614643] [ip_route_input_slow ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614647] [fib_validate_source ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614652] [ip_local_deliver    ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614658] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614663] [ip_local_deliver_finish] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614666] [icmp_rcv            ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614671] [icmp_echo           ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614675] [icmp_reply          ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614715] [consume_skb         ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614722] [packet_rcv          ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> > [1272349.614725] [consume_skb         ] ICMP: 169.254.128.15 ->
+> > 172.27.0.6 ping request, seq: 48220
+> >
+> > For now, I have to create a bpf program for every kernel
+> > function that I want to trace, which is up to 200.
+> >
+> > With this multi-link, I only need to create 5 bpf program,
+> > like this:
+> >
+> > int BPF_PROG(trace_skb_1, struct *skb);
+> > int BPF_PROG(trace_skb_2, u64 arg0, struct *skb);
+> > int BPF_PROG(trace_skb_3, u64 arg0, u64 arg1, struct *skb);
+> > int BPF_PROG(trace_skb_4, u64 arg0, u64 arg1, u64 arg2, struct *skb);
+> > int BPF_PROG(trace_skb_5, u64 arg0, u64 arg1, u64 arg2, u64 arg3, struct *skb);
+> >
+> > Then, I can attach trace_skb_1 to all the kernel functions that
+> > I want to trace and whose first arg is skb; attach trace_skb_2 to kernel
+> > functions whose 2nd arg is skb, etc.
+> >
+> > Or, I can create only one bpf program and store the index
+> > of skb to the attachment cookie, and attach this program to all
+> > the kernel functions that I want to trace.
+> >
+> > This is my use case. With the multi-link, now I only have
+> > 1 bpf program, 1 bpf link, 200 trampolines, instead of 200
+> > bpf programs, 200 bpf link and 200 trampolines.
+> 
+> I see. The use case makes sense to me.
+> Andrii's retsnoop is used to do similar thing before kprobe multi was
+> introduced.
+> 
+> > The shared trampoline you mentioned seems to be a
+> > wonderful idea, which can make the 200 trampolines
+> > to one. Let me have a look, we create a trampoline and
+> > record the max args count of all the target functions, let's
+> > mark it as arg_count.
+> >
+> > During generating the trampoline, we assume that the
+> > function args count is arg_count. During attaching, we
+> > check the consistency of all the target functions, just like
+> > what we do now.
+> 
+> For one trampoline to handle all attach points we might
+> need some arch support, but we can start simple.
+> Make btf_func_model with MAX_BPF_FUNC_REG_ARGS
+> by calling btf_distill_func_proto() with func==NULL.
+> And use that to build a trampoline.
+> 
+> The challenge is how to use minimal number of trampolines
+> when bpf_progA is attached for func1, func2, func3
+> and bpf_progB is attached to func3, func4, func5.
+> We'd still need 3 trampolines:
+> for func[12] to call bpf_progA,
+> for func3 to call bpf_progA and bpf_progB,
+> for func[45] to call bpf_progB.
+> 
+> Jiri was trying to solve it in the past. His slides from LPC:
+> https://lpc.events/event/16/contributions/1350/attachments/1033/1983/plumbers.pdf
+> 
+> Pls study them and his prior patchsets to avoid stepping on the same rakes.
 
-Thank you for reviewing my patches.
+yep, I refrained from commenting not to take you down the same path
+I did, but if you insist.. ;-) 
 
-On 3/7/2024 11:52 PM, Sean Christopherson wrote:
-> On Thu, Mar 07, 2024, Manali Shukla wrote:
->> From: Manali Shukla <Manali.Shukla@amd.com>
->>
->> The Execution of the HLT instruction results in a VMEXIT. Hypervisor
->> observes pending V_INTR and V_NMI events just after the VMEXIT
->> generated by the HLT for the vCPU and causes VM entry to service the
->> pending events.  The Idle HLT intercept feature avoids the wasteful
->> VMEXIT during the halt if there are pending V_INTR and V_NMI events
->> for the vCPU.
->>
->> The selftest for the Idle HLT intercept instruments the above-mentioned
->> scenario.
->>
->> Signed-off-by: Manali Shukla <Manali.Shukla@amd.com>
->> ---
->>  tools/testing/selftests/kvm/Makefile          |   1 +
->>  .../selftests/kvm/x86_64/svm_idlehlt_test.c   | 118 ++++++++++++++++++
->>  2 files changed, 119 insertions(+)
->>  create mode 100644 tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c
->>
->> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
->> index 492e937fab00..7ad03dc4f35e 100644
->> --- a/tools/testing/selftests/kvm/Makefile
->> +++ b/tools/testing/selftests/kvm/Makefile
->> @@ -89,6 +89,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
->>  TEST_GEN_PROGS_x86_64 += x86_64/smm_test
->>  TEST_GEN_PROGS_x86_64 += x86_64/state_test
->>  TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
->> +TEST_GEN_PROGS_x86_64 += x86_64/svm_idlehlt_test
-> 
-> Uber nit, maybe svm_idle_hlt_test?  I find "idlehlt" hard to parse.
-Sure I will change it to svm_idle_hlt_test.
+I managed to forgot almost all of it, but the IIRC the main pain point
+was that at some point I had to split existing trampoline which caused
+the whole trampolines management and error paths to become a mess
 
-> 
->>  TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
->>  TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
->>  TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_shutdown_test
->> diff --git a/tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c b/tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c
->> new file mode 100644
->> index 000000000000..1564511799d4
->> --- /dev/null
->> +++ b/tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c
->> @@ -0,0 +1,118 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + *  svm_idlehalt_test
->> + *
-> 
-> Please omit this, file comments that state the name of the test inevitably
-> become stale (see above).
+I tried to explain things in [1] changelog and the latest patchset is in [0]
 
-Sure. I will remove it.
-> 
->> + *  Copyright (C) 2024 Advanced Micro Devices, Inc.
->> + *
->> + *  For licencing details see kernel-base/COPYING
-> 
-> This seems gratuitous, doesn't the SPDX stuff take care this?
+feel free to use/take anything, but I advice strongly against it ;-)
+please let me know if I can help
 
-Agreed, I will remove this.
+jirka
 
-> 
->> + *
->> + *  Author:
->> + *  Manali Shukla  <manali.shukla@amd.com>
->> + */
->> +#include "kvm_util.h"
->> +#include "svm_util.h"
->> +#include "processor.h"
->> +#include "test_util.h"
->> +#include "apic.h"
->> +
->> +#define VINTR_VECTOR     0x30
->> +#define NUM_ITERATIONS 100000
-> 
-> What's the runtime?  If it's less than a second, then whatever, but if it's at
-> all longer than that, then I'd prefer to use a lower default and make this user-
-> configurable.
 
-It takes ~34s to run this test. 
-> 
->> +/*
->> + * Incremented in the VINTR handler. Provides evidence to the sender that the
->> + * VINR is arrived at the destination.
-> 
-> Evidence is useless if there's no detective looking for it.  Yeah, it gets
-> printed out in the end, but in reality, no one is going to look at that.
-> 
-> Rather than read this from the host, just make it a non-volatile bool and assert
-> that it set after every 
-> 
-
-Sure. I can do that.
-
->> + */
->> +static volatile uint64_t vintr_rcvd;
->> +
->> +void verify_apic_base_addr(void)
->> +{
->> +	uint64_t msr = rdmsr(MSR_IA32_APICBASE);
->> +	uint64_t base = GET_APIC_BASE(msr);
->> +
->> +	GUEST_ASSERT(base == APIC_DEFAULT_GPA);
->> +}
->> +
->> +/*
->> + * The halting guest code instruments the scenario where there is a V_INTR pending
->> + * event available while hlt instruction is executed. The HLT VM Exit doesn't
->> + * occur in above-mentioned scenario if the Idle HLT intercept feature is enabled.
->> + */
->> +
->> +static void halter_guest_code(void)
-> 
-> Just "guest_code()".  Yeah, it's a weird generic name, but at this point it's so
-> ubiquitous that it's analogous to main(), i.e. readers know that guest_code() is
-> the entry point.  And deviating from that suggests that there is a second vCPU
-> running _other_ guest code (otherwise, why differentiate?), which isn't the case.
-> 
-
-Sure.
-
->> +{
->> +	uint32_t icr_val;
->> +	int i;
->> +
->> +	verify_apic_base_addr();
-> 
-> Why?  The test will fail if the APIC is borked, this is just unnecessary noise
-> that distracts readers.
-> 
-> Sure. I will remove it in V2.
-
->> +	xapic_enable();
->> +
->> +	icr_val = (APIC_DEST_SELF | APIC_INT_ASSERT | VINTR_VECTOR);
->> +
->> +	for (i = 0; i < NUM_ITERATIONS; i++) {
->> +		xapic_write_reg(APIC_ICR, icr_val);
->> +		asm volatile("sti; hlt; cli");
-> 
-> Please add safe_halt() and cli() helpers in processor.h.  And then do:
-> 
-> 		cli();
-> 		xapic_write_reg(APIC_ICR, icr_val);
-> 		safe_halt();
-> 
-> to guarantee that interrupts are disabled when the IPI is sent.  And as above,
-> 
-> 		GUEST_ASSERT(READ_ONCE(irq_received));
-> 		WRITE_ONCE(irq_received, false);
-> 
-
-Sure.
->> +	}
->> +	GUEST_DONE();
->> +}
->> +
->> +static void guest_vintr_handler(struct ex_regs *regs)
->> +{
->> +	vintr_rcvd++;
->> +	xapic_write_reg(APIC_EOI, 0x30);
-> 
-> EOI is typically written with '0', not the vector, because the legacy EOI register
-> clears the highest ISR vector, not whatever is specified.  IIRC, one of the Intel
-> or AMD specs even says to use '0'.
-> 
-> AMD's Specific EOI register does allow targeting a specific vector, but that's
-> not what's being used here.
-
-Sure.
-> 
->> +}
->> +
->> +int main(int argc, char *argv[])
->> +{
->> +	struct kvm_vm *vm;
->> +	struct kvm_vcpu *vcpu;
->> +	struct ucall uc;
->> +	uint64_t  halt_exits, vintr_exits;
->> +	uint64_t *pvintr_rcvd;
->> +
->> +	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-> 
-> No, this test doesn't require SVM, which is KVM advertising *nested* SVM.  This
-> test does require idle-hlt support though...
-
-Sure. I will add it in V2.
-
-> 
->> +	/* Check the extension for binary stats */
->> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_BINARY_STATS_FD));
->> +
->> +	vm = vm_create_with_one_vcpu(&vcpu, halter_guest_code);
->> +
->> +	vm_init_descriptor_tables(vm);
->> +	vcpu_init_descriptor_tables(vcpu);
->> +	vm_install_exception_handler(vm, VINTR_VECTOR, guest_vintr_handler);
->> +	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
->> +
->> +	vcpu_run(vcpu);
->> +	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
->> +
->> +	halt_exits = vcpu_get_stat(vcpu, "halt_exits");
-> 
-> Is there really no way to get binary stats without having to pass in strings?
-
-I could see one of the test case is passing the strings to get binary stats of
-vm. That is why I used strings to get binary stats of vcpu. I will try to find another
-way to get the binary stats.
-
-> 
->> +	vintr_exits = vcpu_get_stat(vcpu, "irq_window_exits");
->> +	pvintr_rcvd = (uint64_t *)addr_gva2hva(vm, (uint64_t)&vintr_rcvd);
->> +
->> +	switch (get_ucall(vcpu, &uc)) {
->> +	case UCALL_ABORT:
->> +		REPORT_GUEST_ASSERT(uc);
->> +		/* NOT REACHED */
-> 
-> Eh, just put a "break;" here and drop the comment.
-> 
-Sure.
-
->> +	case UCALL_DONE:
->> +		goto done;
-> 
-> break;
-> 
->> +	default:
->> +		TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
->> +	}
->> +
->> +done:
->> +	TEST_ASSERT(halt_exits == 0,
-> 
-> So in all honesty, this isn't a very interesting test.  It's more of a CPU test
-> than a KVM test.  I do think it's worth adding, because why not.
-> 
-> But I'd also like to see a testcase for KVM_X86_DISABLE_EXITS_HLT.  It would be
-> a generic test, i.e. not specific to idle-hlt since there is no dependency and
-> the test shouldn't care.  I _think_ it would be fairly straightforward: create
-> a VM without an in-kernel APIC (so that HLT exits to userspace), disable HLT
-> interception, send a signal from a different task after some delay, and execute
-> HLT in the guest.  Then verify the vCPU exited because of -EINTR and not HLT.
-
-I will create this test.
-> 
->> +		    "Test Failed:\n"
->> +		    "Guest executed VINTR followed by halts: %d times\n"
->> +		    "The guest exited due to halt: %ld times and number\n"
->> +		    "of vintr exits: %ld and vintr got re-injected: %ld times\n",
->> +		    NUM_ITERATIONS, halt_exits, vintr_exits, *pvintr_rcvd);
-> 
-> I appreciate the effort to provide more info, but this is way too noisy.  If
-> anything, print gory details in a pr_debug() *before* the assert (see below),
-> and then simply do:
-> 
-> 	TEST_ASSERT_EQ(halt_exits, 0);
-> 
-Sure.
-
->> +	fprintf(stderr,
->> +		"Test Successful:\n"
->> +		"Guest executed VINTR followed by halts: %d times\n"
->> +		"The guest exited due to halt: %ld times and number\n"
->> +		"of vintr exits: %ld and vintr got re-injected: %ld times\n",
->> +		NUM_ITERATIONS, halt_exits, vintr_exits, *pvintr_rcvd);
-> 
-> And this should be pr_debug(), because no human is going to look at this except
-> when the test isn't working correctly.
-
-I will change it to pr_debug() in V2.
-> 
->> +
->> +	kvm_vm_free(vm);
->> +	return 0;
->> +}
->> -- 
->> 2.34.1
->> /pvintr_rcvd
-> 
-
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=bpf/batch
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?h=bpf/batch&id=52a1d4acdf55df41e99ca2cea51865e6821036ce
 
