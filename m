@@ -1,138 +1,132 @@
-Return-Path: <linux-kselftest+bounces-6335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37D7B87C0FC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 17:10:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0957F87C4D2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 22:46:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3EA2282BB6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 16:10:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B25D1C217B8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 21:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954BE73510;
-	Thu, 14 Mar 2024 16:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C817641B;
+	Thu, 14 Mar 2024 21:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NUka1LRJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B6/0zVer"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34B173500;
-	Thu, 14 Mar 2024 16:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5471E76412;
+	Thu, 14 Mar 2024 21:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710432596; cv=none; b=NYjZuFF6fTR8v+gxN1xXn1Ye7D8Wg3h5BHqsSJt9kNg+tNJqVYTo2urB5x+85QUbo2u/i7YXxBge3rBF0rMkii7LkCjDqLskVs8ptmDAVGIINKTMM1P/tr71andUloRq2ADOVIR2zGaOGUNgDrH199nRVHxPQTJLPwe2dIBvlrk=
+	t=1710452802; cv=none; b=K8XZ31k4tz+XZXOXmSt5Hf4KJeX8j2GGyq6pcCrOvXer2sWeCXUqtLv1xTf0ePwJThGSDJT9ch5ZYrL0dnVVEODQYvI2n5F+9Xn7Jn4v+oFx8dJatlTWYm4AcxkLkgOSqQ1P/PztYND1oJE3jhEWAW2viSA87cexfEPCjD+GgP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710432596; c=relaxed/simple;
-	bh=9u/UDzD0XpRwRBiuyHSJknNscac+rwwiSKoT//XPWhA=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=rTN1xJjB0EbjFBoBcegZ3NOC1/JbcdkKRRo1z/IHteRnrmaX/zgZInJI22tpxGpmiaRh+3EGvSwuVyjCAEGhOsu11BJ6XvEROpMbFgb787jnv/T+Oaa8dxVseUKsISApzeRDQGJqXy7fjAs23L4Q1+GEYOt449ZnNg51m/MP2iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NUka1LRJ; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1710452802; c=relaxed/simple;
+	bh=024QBEVLTI+6kcoD7J49NoiaMMt3w6GMzvKHMg9E6rg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=EBOnSP75E5MnPtqOLJj4642d0e9+4DqXSq+gJkn5dq9/WvNXTqCU1W8GSRqRo7IHFtYpbt+f6i5A/mY2IBzbRg4+/8c0NmoBwteVvwLsM4CBrzBQhGvU3+S7fx6NNQIUTzueRJ+TrxHqe1A9Odgq/kOXQx5nEUfUeUuuE2khpDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B6/0zVer; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710432595; x=1741968595;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=9u/UDzD0XpRwRBiuyHSJknNscac+rwwiSKoT//XPWhA=;
-  b=NUka1LRJjGE3BgA0krMcPuF3KcyIs12wMVI8OdYVuR98N/DLKTCX4rJX
-   rjh9imJnV0BbxArnps0YO5v8MDA0/ZtzTy92gBp2UCN6RsbU9XfgE0tEu
-   AZU+E2fIAQShp94AGyWKtELPW8dIsiIjRWHt7zR+W6Ic0gHjFuDZ+n1XD
-   Oxt65rlplxgGKczrTwX9i3TTSJWcWKpeOgeyAysrdBytT1J7U0aaiTIYP
-   +TSWtFFnTHWk4iu3c/OKjooTyuKZUbh08kw06x4TZOJTqA/svle3jDM/y
-   BsHHM//MJMOBJjoUmPSU4gZCWcLTsHZwjgXHalJYyBRcD7Sjgi2aSUrvt
+  t=1710452800; x=1741988800;
+  h=message-id:date:mime-version:subject:to:references:cc:
+   from:in-reply-to:content-transfer-encoding;
+  bh=024QBEVLTI+6kcoD7J49NoiaMMt3w6GMzvKHMg9E6rg=;
+  b=B6/0zVerh3uONZl4KPvBZ/l6fRcW//g/96B5cRs7iKJKwXbRmZqE/FN2
+   hARNnv3w6oZO5Kk8FZkgE/Fm4LBlN+WZBq/XWTAOkoS2Ud0k+QcDH3tSW
+   sW37fl2/2mza2TtYRAO+oc6/gnNpCxmepyDfoc5fznVIt9vYp6T6PeQVF
+   um7WxmQ19QPd9q+LQClnTH1QLf/IjokgFxmODGNpYflc35uG68aHbge3A
+   m0ARCqjA5HvEfMk13aKnF/ab9DtAjCtOFPykUcl5PpKN4kjSC/tFJoTxX
+   0SAMZdZH+FHJO0NTvriENhwB247ud9dfTEhfQq5QoUR2HoQ729kOM64q5
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="5389648"
-X-IronPort-AV: E=Sophos;i="6.07,125,1708416000"; 
-   d="scan'208";a="5389648"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 09:09:54 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="15853634"
+X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
+   d="scan'208";a="15853634"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 14:46:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,125,1708416000"; 
-   d="scan'208";a="12735604"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.8])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 09:09:52 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 14 Mar 2024 18:09:48 +0200 (EET)
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-cc: linux-kselftest@vger.kernel.org, 
-    Reinette Chatre <reinette.chatre@intel.com>, Shuah Khan <shuah@kernel.org>, 
-    Babu Moger <babu.moger@amd.com>, Fenghua Yu <fenghua.yu@intel.com>, 
-    LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 08/13] selftests/resctrl: Add ->init() callback into
- resctrl_val_param
-In-Reply-To: <jzyc3lehsspybfa7fjzpwwcw2lgyfftsyqysqmpbrpq37aggln@cbjul5wgozu7>
-Message-ID: <78991c6c-2a0e-b7aa-1653-4836921507fa@linux.intel.com>
-References: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com> <20240311135230.7007-9-ilpo.jarvinen@linux.intel.com> <jzyc3lehsspybfa7fjzpwwcw2lgyfftsyqysqmpbrpq37aggln@cbjul5wgozu7>
+X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
+   d="scan'208";a="16918258"
+Received: from soc-cp83kr3.jf.intel.com (HELO [10.24.10.77]) ([10.24.10.77])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 14:46:39 -0700
+Message-ID: <03592298-4390-4111-870b-129b6be98d3a@intel.com>
+Date: Thu, 14 Mar 2024 14:46:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-2033180368-1710432588=:1017"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 27/29] KVM: selftests: Propagate
+ KVM_EXIT_MEMORY_FAULT to userspace
+Content-Language: en-US
+To: Sagi Shahar <sagis@google.com>, linux-kselftest@vger.kernel.org,
+ Ackerley Tng <ackerleytng@google.com>, "Afranji, Ryan" <afranji@google.com>,
+ "Aktas, Erdem" <erdemaktas@google.com>, Sagi Shahar <sagis@google.com>,
+ "Yamahata, Isaku" <isaku.yamahata@intel.com>
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-28-sagis@google.com>
+ <DS7PR11MB78860170A5FD77253573BC09F6292@DS7PR11MB7886.namprd11.prod.outlook.com>
+Cc: Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, "Xu, Haibo1" <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ "Annapurve, Vishal" <vannapurve@google.com>,
+ Roger Wang <runanwang@google.com>, Vipin Sharma <vipinsh@google.com>,
+ jmattson@google.com, dmatlack@google.com, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-mm@kvack.org
+From: "Chen, Zide" <zide.chen@intel.com>
+In-Reply-To: <DS7PR11MB78860170A5FD77253573BC09F6292@DS7PR11MB7886.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-2033180368-1710432588=:1017
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On Thu, 14 Mar 2024, Maciej Wieczor-Retman wrote:
-> On 2024-03-11 at 15:52:25 +0200, Ilpo J=E4rvinen wrote:
-> >diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/=
-selftests/resctrl/mbm_test.c
-> >index 17398cd3aace..ffbfcecf9bd6 100644
-> >--- a/tools/testing/selftests/resctrl/mbm_test.c
-> >+++ b/tools/testing/selftests/resctrl/mbm_test.c
-> >@@ -8,12 +8,19 @@
-> >  *    Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-> >  *    Fenghua Yu <fenghua.yu@intel.com>
-> >  */
-> >+#include <limits.h>
-> >+
-> > #include "resctrl.h"
-> >=20
-> > #define RESULT_FILE_NAME=09"result_mbm"
-> > #define MAX_DIFF_PERCENT=098
-> > #define NUM_OF_RUNS=09=095
-> >=20
-> >+#define CON_MON_MBM_LOCAL_BYTES_PATH \
-> >+=09"%s/%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
-> >+
-> >+static char mbm_total_path[PATH_MAX];
-> >+
-> > static int
-> > show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span=
-)
-> > {
-> >@@ -86,6 +93,20 @@ static int check_results(size_t span)
-> > =09return ret;
-> > }
-> >=20
-> >+static int set_mbm_path(const struct resctrl_val_param *param, int doma=
-in_id)
-> >+{
-> >+=09int ret;
-> >+
-> >+=09ret =3D initialize_mem_bw_imc();
->=20
-> I just noticed this. Since there is not only path stuff here but also som=
-e imc
-> logic maybe the function names could be changed? Something like
->=20
-> =09set_mbm_path -> init_mbm
->=20
-> The same could apply for all these init functions or at least the mba one=
-=2E
+On 12/12/2023 12:47 PM, Shashar, Sagi wrote:
+> 
+> 
+> -----Original Message-----
+> From: Sagi Shahar <sagis@google.com> 
+> Sent: Tuesday, December 12, 2023 12:47 PM
+> To: linux-kselftest@vger.kernel.org; Ackerley Tng <ackerleytng@google.com>; Afranji, Ryan <afranji@google.com>; Aktas, Erdem <erdemaktas@google.com>; Sagi Shahar <sagis@google.com>; Yamahata, Isaku <isaku.yamahata@intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>; Paolo Bonzini <pbonzini@redhat.com>; Shuah Khan <shuah@kernel.org>; Peter Gonda <pgonda@google.com>; Xu, Haibo1 <haibo1.xu@intel.com>; Chao Peng <chao.p.peng@linux.intel.com>; Annapurve, Vishal <vannapurve@google.com>; Roger Wang <runanwang@google.com>; Vipin Sharma <vipinsh@google.com>; jmattson@google.com; dmatlack@google.com; linux-kernel@vger.kernel.org; kvm@vger.kernel.org; linux-mm@kvack.org
+> Subject: [RFC PATCH v5 27/29] KVM: selftests: Propagate KVM_EXIT_MEMORY_FAULT to userspace
+> 
+> Allow userspace to handle KVM_EXIT_MEMORY_FAULT instead of triggering TEST_ASSERT.
+> 
+> From the KVM_EXIT_MEMORY_FAULT documentation:
+> Note!  KVM_EXIT_MEMORY_FAULT is unique among all KVM exit reasons in that it accompanies a return code of '-1', not '0'!  errno will always be set to EFAULT or EHWPOISON when KVM exits with KVM_EXIT_MEMORY_FAULT, userspace should assume kvm_run.exit_reason is stale/undefined for all other error numbers.
 
-Ah yes, I'll rename them.
+If KVM exits to userspace with KVM_EXIT_MEMORY_FAULT, most likely it's because the guest attempts to access the gfn in a way that is different from what the KVM is configured, in terms of private/shared property. I'd suggest to drop this patch and work on the selftests code to eliminate this exit.
 
---=20
- i.
+If we need a testcase to catch this exit intentionally, we may call _vcpu_run() directly from the testcase and keep the common API vcpu_run() intact.
 
---8323328-2033180368-1710432588=:1017--
+> 
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index d024abc5379c..8fb041e51484 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1742,6 +1742,10 @@ void vcpu_run(struct kvm_vcpu *vcpu)  {
+>  	int ret = _vcpu_run(vcpu);
+>  
+> +	// Allow this scenario to be handled by the caller.
+> +	if (ret == -1 && errno == EFAULT)
+> +		return;
+> +
+>  	TEST_ASSERT(!ret, KVM_IOCTL_ERROR(KVM_RUN, ret));  }
+>  
+> --
+> 2.43.0.472.g3155946c3a-goog
+> 
 
