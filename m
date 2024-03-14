@@ -1,264 +1,177 @@
-Return-Path: <linux-kselftest+bounces-6308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A84DC87B5C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 01:26:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 400EE87B6A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 04:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DD162863C8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 00:26:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B17111F24D62
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 03:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3B7863D;
-	Thu, 14 Mar 2024 00:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdqMrdyl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442451841;
+	Thu, 14 Mar 2024 03:04:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF96C7F;
-	Thu, 14 Mar 2024 00:25:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C14B7E1;
+	Thu, 14 Mar 2024 03:04:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710375951; cv=none; b=PQOLe92SVYXfkAaiLnguOWR3vHcs1cEv/vmNO0gwkFUR4E3ng7W9Qh7DLBZjicGsZhhCiLJ2FGqiLHu7T79YG9gkS+DGCE6+shhMqx+/ryr7ED1Z11pl1Rt8xfcKG81yGVVt1oqvWzdKwQfcDig4HAg9VjIjQZLg4bl3mCeY6VA=
+	t=1710385452; cv=none; b=Orw62CEscGUZkTsdO3Hqx6sIlcUPxGUI91Vg4Gm3LbvawEkYbpxqI/LBXDDe/Ax+6F+QiyShFRna84M/d4JN4e/+shekRdUV1BaTf38JZlXsygj6MBp2GbESn04wUQ8ghBuyAq7hlLkaNKajh1CT9ikiDk5crta/ERUoudVM4aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710375951; c=relaxed/simple;
-	bh=9EoMAftd9vY6BGdahDlojvcesrBvYUJgWbCGJaD+H+c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l1R0a3XYor+KmeTKYIJ4asID37ZsKdtnDnU+j2X5o8Zj6g92KVFmqgyIPthKrxDhJVdIx3xdEPN8XbG+GvLoDC1L0Hfoj2H6i8KHVXSp5FqhllVGo5WVEgHxuH6kXzdp/PnlHgq7fcWC0R898Z/Nsau+5IBOKvsicSn1UgH24mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdqMrdyl; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33e8e9a4edaso405846f8f.2;
-        Wed, 13 Mar 2024 17:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710375948; x=1710980748; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b1pXXVSLcJWs+QWrQ+i4P/taCr8L+0F6xiRmk8ycZXY=;
-        b=OdqMrdylzqEmk8VEhLX1MaecvtTmKmwYObl/HWkrJz2vxQmpRjFG9i7g8QGYsrvjIS
-         3B4axAft8v/tYcF4Gf34OYyjD5HXLwCu/fQk6dDB5SSUTT54DYmdhidhXRF5oA2YXlAt
-         bMrhze1VDqGgWJn6bURCARSVFag3rtodXL3MFiBzhrQOnbz2Ct8WRc/U76bVoBpsXL0b
-         fUWX1a4am4L1t4shFGn52EjdIYbWHjDksvo3e9tIZtqeVAbxDzo7kbJTYxqazVtuq7VX
-         5uJ1R0NgYUNHglDFpt5lMfQs9/yZ+8b6vvpBFAuqLbwiYr7H5NbhKdhb3DkoKBqdlrRo
-         H7NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710375948; x=1710980748;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b1pXXVSLcJWs+QWrQ+i4P/taCr8L+0F6xiRmk8ycZXY=;
-        b=Gp3B4kqA1uQ7w4ERAzo0xDM1z2drDlO7/W3S6ugQ0teE3UfTsYmFufGLKN0RRBAgXq
-         HoJZBYgAy2aVkhXr9IskiPVpkVUmywVqUVAwR3A1FgNe1w3tdLHsFrAheyHAo2dYocSk
-         iclK+A4Pfzp/Kcm2q7IL1YvhBSYAoOFnTFoohQ9EKLmXOiIaH0lqzyL3g73lA2DxEFme
-         me/8jt86a13+mcB1E1hkOn7lGGRAhAKIozoBvDxriQGDSokksaEBUsxVHkBcdSkfPywR
-         rEJyeACyT7zYvfDTHyWuoQievp651My0kbqZDv45WXImnVtb03Hp/gX89DVgxJND75a5
-         O1tg==
-X-Forwarded-Encrypted: i=1; AJvYcCV+MoOvZgsUoUpQUJPyphFpdDWfJkSqlZfC4RY38bCxBm/0apLstsk9sY/xpTTBkIxVsiNqFrELE7a5mnqpky8QeqEhDrebejlrHmL6VKmoUCUqJT4i0ZJc/SQQ32YQwcVYP/5FE2I298QfePSlXH3NMc+oCSSZBv20cwIPrUG/dwNx4AojkkHcaBpyoHyIR+wpeiDPqqsD3dTH0tBxs/+76XJ0Y44TOwQgPwKbNOXTtHt250J65oGCbLyBj/M/8ghGUS7Scfr6cMx4iUNsJBLOZBQpj2HiJtwoFQ==
-X-Gm-Message-State: AOJu0YyPgXjJNakyVxQExxzx0wjcqTVdVdoGKvzlX6EkDqv5JtZqAkzh
-	vwywPgHZ1JzJQDp84w3Jci1F+ONBlX8zTWXgVAb6YrfiynGjevvSfUC3BPmhO3apr1Jn+VrwNAf
-	QjL+FiG2UxEKVveH8LSBgXj1Fyxs=
-X-Google-Smtp-Source: AGHT+IEluUxpksFRvEO4amy8bxc8cXhNS84YSmujwUrBqdFTzudYkIWBqt3bc5Ekgo5hTd/k08iQyCGhQiEqmdJKoSg=
-X-Received: by 2002:a5d:438e:0:b0:33e:44da:827 with SMTP id
- i14-20020a5d438e000000b0033e44da0827mr112820wrq.57.1710375947716; Wed, 13 Mar
- 2024 17:25:47 -0700 (PDT)
+	s=arc-20240116; t=1710385452; c=relaxed/simple;
+	bh=WeupC+sep6l8TNqmhA+tJld0CwFHMTozvuXCDeX3nPE=;
+	h=Subject:From:To:Cc:References:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=NeZ5SIF0BbqzHa5yisbg3arftB92SyHkppCkLJf5y33UoiAuPTTyxTW8cFTT45eDR9hcY6fjyHT5IvuLENfaLWSg2RcQc7Gruvh+pW6CZs9CTgneTaD6vtpapYd9S0LKcAjd+ZP81pq6aUiBSwT1OVHQJPOlk4qE5HMJLh6XU68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.173])
+	by gateway (Coremail) with SMTP id _____8CxmeggafJl6PEYAA--.40819S3;
+	Thu, 14 Mar 2024 11:04:00 +0800 (CST)
+Received: from [10.20.42.173] (unknown [10.20.42.173])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTs0dafJlhHdZAA--.36976S3;
+	Thu, 14 Mar 2024 11:03:59 +0800 (CST)
+Subject: Re: [PATCH v7 0/4] KVM: selftests: Add LoongArch support
+From: maobibo <maobibo@loongson.cn>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>
+Cc: Tianrui Zhao <zhaotianrui@loongson.cn>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240202041046.3405779-1-maobibo@loongson.cn>
+Message-ID: <0276944f-0404-d09f-1e75-8e78e05a563b@loongson.cn>
+Date: Thu, 14 Mar 2024 11:03:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
- <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
- <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
- <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
- <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com> <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
-In-Reply-To: <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 13 Mar 2024 17:25:35 -0700
-Message-ID: <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240202041046.3405779-1-maobibo@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8AxTs0dafJlhHdZAA--.36976S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxury3Xr45Jr4DWF1UAF1fuFX_yoWrXFWfpa
+	4I9Fn8Krs7JFyIq3Z7G34kWF1Sya1xKrWxCr1agryUuw42yry8JrWxKFWqyas5Z398XF10
+	v3W8twnrW3WUtacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
+	AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-
+	e5UUUUU==
 
-On Tue, Mar 12, 2024 at 6:53=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongme=
-nglong.8@bytedance.com> wrote:
->
-> On Wed, Mar 13, 2024 at 12:42=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <do=
-ngmenglong.8@bytedance.com> wrote:
-> > >
-> [......]
-> >
-> > I see.
-> > I thought you're sharing the trampoline across attachments.
-> > (since bpf prog is the same).
->
-> That seems to be a good idea, which I hadn't thought before.
->
-> > But above approach cannot possibly work with a shared trampoline.
-> > You need to create individual trampoline for all attachment
-> > and point them to single bpf prog.
-> >
-> > tbh I'm less excited about this feature now, since sharing
-> > the prog across different attachments is nice, but it won't scale
-> > to thousands of attachments.
-> > I assumed that there will be a single trampoline with max(argno)
-> > across attachments and attach/detach will scale to thousands.
-> >
-> > With individual trampoline this will work for up to a hundred
-> > attachments max.
->
-> What does "a hundred attachments max" means? Can't I
-> trace thousands of kernel functions with a bpf program of
-> tracing multi-link?
+Paolo, Sean
 
-I mean what time does it take to attach one program
-to 100 fentry-s ?
-What is the time for 1k and for 10k ?
+ping again -:)
 
-The kprobe multi test attaches to pretty much all funcs in
-/sys/kernel/tracing/available_filter_functions
-and it's fast enough to run in test_progs on every commit in bpf CI.
-See get_syms() in prog_tests/kprobe_multi_test.c
+There is little materials for Loongarch. Can I apply merge privilege for 
+Loongarch kvm if you are not convenient to give the review comments?
 
-Can this new multi fentry do that?
-and at what speed?
-The answer will decide how applicable this api is going to be.
-Generating different trampolines for every attach point
-is an approach as well. Pls benchmark it too.
+Regards
+Bibo Mao
 
-> >
-> > Let's step back.
-> > What is the exact use case you're trying to solve?
-> > Not an artificial one as selftest in patch 9, but the real use case?
->
-> I have a tool, which is used to diagnose network problems,
-> and its name is "nettrace". It will trace many kernel functions, whose
-> function args contain "skb", like this:
->
-> ./nettrace -p icmp
-> begin trace...
-> ***************** ffff889be8fbd500,ffff889be8fbcd00 ***************
-> [1272349.614564] [dev_gro_receive     ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614579] [__netif_receive_skb_core] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614585] [ip_rcv              ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614592] [ip_rcv_core         ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614599] [skb_clone           ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614616] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614629] [nft_do_chain        ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614635] [ip_rcv_finish       ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614643] [ip_route_input_slow ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614647] [fib_validate_source ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614652] [ip_local_deliver    ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614658] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614663] [ip_local_deliver_finish] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614666] [icmp_rcv            ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614671] [icmp_echo           ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614675] [icmp_reply          ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614715] [consume_skb         ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614722] [packet_rcv          ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614725] [consume_skb         ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
->
-> For now, I have to create a bpf program for every kernel
-> function that I want to trace, which is up to 200.
->
-> With this multi-link, I only need to create 5 bpf program,
-> like this:
->
-> int BPF_PROG(trace_skb_1, struct *skb);
-> int BPF_PROG(trace_skb_2, u64 arg0, struct *skb);
-> int BPF_PROG(trace_skb_3, u64 arg0, u64 arg1, struct *skb);
-> int BPF_PROG(trace_skb_4, u64 arg0, u64 arg1, u64 arg2, struct *skb);
-> int BPF_PROG(trace_skb_5, u64 arg0, u64 arg1, u64 arg2, u64 arg3, struct =
-*skb);
->
-> Then, I can attach trace_skb_1 to all the kernel functions that
-> I want to trace and whose first arg is skb; attach trace_skb_2 to kernel
-> functions whose 2nd arg is skb, etc.
->
-> Or, I can create only one bpf program and store the index
-> of skb to the attachment cookie, and attach this program to all
-> the kernel functions that I want to trace.
->
-> This is my use case. With the multi-link, now I only have
-> 1 bpf program, 1 bpf link, 200 trampolines, instead of 200
-> bpf programs, 200 bpf link and 200 trampolines.
+On 2024/2/2 下午12:10, Bibo Mao wrote:
+> This patchset adds KVM selftests for LoongArch system, currently only
+> some common test cases are supported and pass to run. These testcase
+> are listed as following:
+>          demand_paging_test
+>          dirty_log_perf_test
+>          dirty_log_test
+>          guest_print_test
+>          hardware_disable_test
+>          kvm_binary_stats_test
+>          kvm_create_max_vcpus
+>          kvm_page_table_test
+>          memslot_modification_stress_test
+>          memslot_perf_test
+>          set_memory_region_test
+> 
+> This patchset originally is posted from zhaotianrui, I continue to work
+> on his efforts.
+> 
+> ---
+> Changes in v7:
+> 1. Refine code to add LoongArch support in test case
+> set_memory_region_test.
+> 
+> Changes in v6:
+> 1. Refresh the patch based on latest kernel 6.8-rc1, add LoongArch
+> support about testcase set_memory_region_test.
+> 2. Add hardware_disable_test test case.
+> 3. Drop modification about macro DEFAULT_GUEST_TEST_MEM, it is problem
+> of LoongArch binutils, this issue is raised to LoongArch binutils owners.
+> 
+> Changes in v5:
+> 1. In LoongArch kvm self tests, the DEFAULT_GUEST_TEST_MEM could be
+> 0x130000000, it is different from the default value in memstress.h.
+> So we Move the definition of DEFAULT_GUEST_TEST_MEM into LoongArch
+> ucall.h, and add 'ifndef' condition for DEFAULT_GUEST_TEST_MEM
+> in memstress.h.
+> 
+> Changes in v4:
+> 1. Remove the based-on flag, as the LoongArch KVM patch series
+> have been accepted by Linux kernel, so this can be applied directly
+> in kernel.
+> 
+> Changes in v3:
+> 1. Improve implementation of LoongArch VM page walk.
+> 2. Add exception handler for LoongArch.
+> 3. Add dirty_log_test, dirty_log_perf_test, guest_print_test
+> test cases for LoongArch.
+> 4. Add __ASSEMBLER__ macro to distinguish asm file and c file.
+> 5. Move ucall_arch_do_ucall to the header file and make it as
+> static inline to avoid function calls.
+> 6. Change the DEFAULT_GUEST_TEST_MEM base addr for LoongArch.
+> 
+> Changes in v2:
+> 1. We should use ".balign 4096" to align the assemble code with 4K in
+> exception.S instead of "align 12".
+> 2. LoongArch only supports 3 or 4 levels page tables, so we remove the
+> hanlders for 2-levels page table.
+> 3. Remove the DEFAULT_LOONGARCH_GUEST_STACK_VADDR_MIN and use the common
+> DEFAULT_GUEST_STACK_VADDR_MIN to allocate stack memory in guest.
+> 4. Reorganize the test cases supported by LoongArch.
+> 5. Fix some code comments.
+> 6. Add kvm_binary_stats_test test case into LoongArch KVM selftests.
+> 
+> ---
+> Tianrui Zhao (4):
+>    KVM: selftests: Add KVM selftests header files for LoongArch
+>    KVM: selftests: Add core KVM selftests support for LoongArch
+>    KVM: selftests: Add ucall test support for LoongArch
+>    KVM: selftests: Add test cases for LoongArch
+> 
+>   tools/testing/selftests/kvm/Makefile          |  16 +
+>   .../selftests/kvm/include/kvm_util_base.h     |   5 +
+>   .../kvm/include/loongarch/processor.h         | 133 +++++++
+>   .../selftests/kvm/include/loongarch/ucall.h   |  20 ++
+>   .../selftests/kvm/lib/loongarch/exception.S   |  59 ++++
+>   .../selftests/kvm/lib/loongarch/processor.c   | 332 ++++++++++++++++++
+>   .../selftests/kvm/lib/loongarch/ucall.c       |  38 ++
+>   .../selftests/kvm/set_memory_region_test.c    |   2 +-
+>   8 files changed, 604 insertions(+), 1 deletion(-)
+>   create mode 100644 tools/testing/selftests/kvm/include/loongarch/processor.h
+>   create mode 100644 tools/testing/selftests/kvm/include/loongarch/ucall.h
+>   create mode 100644 tools/testing/selftests/kvm/lib/loongarch/exception.S
+>   create mode 100644 tools/testing/selftests/kvm/lib/loongarch/processor.c
+>   create mode 100644 tools/testing/selftests/kvm/lib/loongarch/ucall.c
+> 
+> 
+> base-commit: 6764c317b6bb91bd806ef79adf6d9c0e428b191e
+> 
 
-I see. The use case makes sense to me.
-Andrii's retsnoop is used to do similar thing before kprobe multi was
-introduced.
-
-> The shared trampoline you mentioned seems to be a
-> wonderful idea, which can make the 200 trampolines
-> to one. Let me have a look, we create a trampoline and
-> record the max args count of all the target functions, let's
-> mark it as arg_count.
->
-> During generating the trampoline, we assume that the
-> function args count is arg_count. During attaching, we
-> check the consistency of all the target functions, just like
-> what we do now.
-
-For one trampoline to handle all attach points we might
-need some arch support, but we can start simple.
-Make btf_func_model with MAX_BPF_FUNC_REG_ARGS
-by calling btf_distill_func_proto() with func=3D=3DNULL.
-And use that to build a trampoline.
-
-The challenge is how to use minimal number of trampolines
-when bpf_progA is attached for func1, func2, func3
-and bpf_progB is attached to func3, func4, func5.
-We'd still need 3 trampolines:
-for func[12] to call bpf_progA,
-for func3 to call bpf_progA and bpf_progB,
-for func[45] to call bpf_progB.
-
-Jiri was trying to solve it in the past. His slides from LPC:
-https://lpc.events/event/16/contributions/1350/attachments/1033/1983/plumbe=
-rs.pdf
-
-Pls study them and his prior patchsets to avoid stepping on the same rakes.
 
