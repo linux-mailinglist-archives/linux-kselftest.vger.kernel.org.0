@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-6355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B84A87CF33
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 15:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D3C187CF38
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 15:45:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE49D1F233E9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 14:45:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFC161F233E9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 14:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED333BB52;
-	Fri, 15 Mar 2024 14:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A11A3D3A1;
+	Fri, 15 Mar 2024 14:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQZgPncf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J34MSr1p"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DFE1BDE0;
-	Fri, 15 Mar 2024 14:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150243D0CA;
+	Fri, 15 Mar 2024 14:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710513890; cv=none; b=hR9YHdbUuZ09oKtTUnSaNBLEtg4VGclo1DEu6u8IyTR6/IY8fXNgZ+5o6BgQk3Ycxi+V2mz58oN9ZJtnmUFOhhWXnVh3jRaQNCc+obdUaigl+jzB0sCngf/LPsSHC8IXUBuGJQzZP7CQajxQ6+hg+rWYMsgLJKNvV2/nu4CBzIk=
+	t=1710513893; cv=none; b=bNC9HHatI7sGuFvDsTbYpCS1sNdNr+xtGRgu3KpDuWuzerl6lW6yNdxZX/QnUjeARZERQJE/kDhktz+2pNECyoZ2+S885X8PgRg1Inwj0EWoCGpyhOXNgALDy3EL6+C2v2yyf3sDSr2l7+C5fFlK45dIfA0mkjmJA/xEatkC1nY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710513890; c=relaxed/simple;
-	bh=oLZvjVXr7zNxl0tYVVqGxzqOMyHkWY4EukDLBuqjtGw=;
+	s=arc-20240116; t=1710513893; c=relaxed/simple;
+	bh=zq66QKtjnXJ4Qer6GMlak1OP/mCYAo+o7m/hoYuei0o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=c6LS6MEM4vR/G49m7zRklPiLm9cuBTKUrQ+cK+JKo/b8Lz0L5ltOAO4Z8MyVoINoRqMhXgaxH61FbZFuG5V4pWLuo8L2ooenEWvxhDbAGHKepgcGm90E4a4Pzftx2mf1xZ3qOZSL8yNSHuk1rdKY13FE7rL9aC1PVf5T9dYwl9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQZgPncf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C57CC43399;
-	Fri, 15 Mar 2024 14:44:48 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=ss2HjfHokVXmNTpKklr1AxZcUPVWAD2X/6LIYxwneiUI4NSpf8g4kEQAkgcLn3jBhpEv9AQCcP2YblLJ3w5vQIynr7/EUqdeDB4YR93t6oT44f0NpeMH1TnR6mS26JWMYzbMwCyEgiyohPlqOWR4gMfL8aZbIPPGIk3NazhMrbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J34MSr1p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD460C32784;
+	Fri, 15 Mar 2024 14:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710513890;
-	bh=oLZvjVXr7zNxl0tYVVqGxzqOMyHkWY4EukDLBuqjtGw=;
+	s=k20201202; t=1710513892;
+	bh=zq66QKtjnXJ4Qer6GMlak1OP/mCYAo+o7m/hoYuei0o=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=CQZgPncfGTG/5mpBofStzL0F7GrEfhlqrhzzu3wdI73bQWSoEOGI8rtOK2tP69Ecb
-	 /dvjQSRSNMfuJoENEpB/EiWP+pXrw6d8fil9PGozEsLfFdTYa91Q3Jh9NFcj9NEXdc
-	 ojUF1Hf3xLXrxFApJhZ8EB/CS6SDlD83tvKKCvaPbeszLQLjxAawmFTq2lZV9EWqE5
-	 4A6ohzkAMyBsO8VXyIRoYl+9Hr9Qx1N6+ci0i3tGelWIREaqNUmDD9/yJJ/NVe5J+Q
-	 fIJrVXPhoP08PmXR/Sewi5CCml8BL03rDOJAL64EuihQSbTdGoBBLmZ0ePOSZlWo0u
-	 KyBoG3ww6C8VQ==
+	b=J34MSr1pP1mHZVnp9Lcni2ceQKxT/azQc7edzymyCKZWwb+iyL9g/IbNuRZ9cRSTr
+	 4uvW1zWQjyTYBZ45BGwAKxjrfI10xQ3DAxmWzqKMUR62TvZnaKstIBYShyWqfLsQKL
+	 sAVdgf5FIhvy9rD/P+4aNl/ch97Qx6uSYJ5YDYUcvmw4d0D0Xwir6i8yXscoo5g+8c
+	 83a54CSetuS7vQEzkGtyDT2/SjdoROVowWQEPFdfV4s2q5CXfjcDtPBnrMfu98p+NK
+	 RZDL7gjEtHj0X/napdKvs3rdz2jRuhOUNqQDeOICcPFi96Vk/tplNnchsFPvYYSoCx
+	 ZC4mAAUJF8CAQ==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Fri, 15 Mar 2024 15:44:38 +0100
-Subject: [PATCH v4 1/7] HID: bpf/dispatch: regroup kfuncs definitions
+Date: Fri, 15 Mar 2024 15:44:39 +0100
+Subject: [PATCH v4 2/7] HID: bpf: export hid_hw_output_report as a BPF
+ kfunc
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240315-b4-hid-bpf-new-funcs-v4-1-079c282469d3@kernel.org>
+Message-Id: <20240315-b4-hid-bpf-new-funcs-v4-2-079c282469d3@kernel.org>
 References: <20240315-b4-hid-bpf-new-funcs-v4-0-079c282469d3@kernel.org>
 In-Reply-To: <20240315-b4-hid-bpf-new-funcs-v4-0-079c282469d3@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, 
@@ -62,16 +63,19 @@ Cc: Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1710513885; l=3541;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1710513885; l=6547;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=oLZvjVXr7zNxl0tYVVqGxzqOMyHkWY4EukDLBuqjtGw=;
- b=/ra8+t0jpst1C0YN+qdKGFMxcgj5YhI9W4lmREI9BNtYg+4l0B24KuWZodmipU96Q2SwV3Q6+
- ltel/lxtfV2A0OyTGDD1H1V6nFHwuqmXQteFsfrKYM3+zDYWoh5maXr
+ bh=zq66QKtjnXJ4Qer6GMlak1OP/mCYAo+o7m/hoYuei0o=;
+ b=cnsXrVOWz3Ti0W+sZSx3G5daPohvB0026JiATxm4hhzvVmUdHLCYCkiOQsBV1hXVie570p1Qs
+ uapkg6Jf4TjCyslK3XpaTmDXttpMnNK9/FnCL6tPmTAiM1Mo7wTjy6p
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-No code change, just move down the hid_bpf_get_data() kfunc definition
-so we have only one block of __bpf_kfunc_start/end_defs()
+We currently only export hid_hw_raw_request() as a BPF kfunc.
+However, some devices require an explicit write on the Output Report
+instead of the use of the control channel.
+
+So also export hid_hw_output_report to BPF
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
@@ -83,114 +87,212 @@ no changes in v3
 
 no changes in v2
 ---
- drivers/hid/bpf/hid_bpf_dispatch.c | 80 ++++++++++++++++++--------------------
- 1 file changed, 38 insertions(+), 42 deletions(-)
+ Documentation/hid/hid-bpf.rst      |   2 +-
+ drivers/hid/bpf/hid_bpf_dispatch.c | 112 +++++++++++++++++++++++++++----------
+ drivers/hid/hid-core.c             |   1 +
+ include/linux/hid_bpf.h            |   1 +
+ 4 files changed, 86 insertions(+), 30 deletions(-)
 
+diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
+index 4fad83a6ebc3..a575004d9025 100644
+--- a/Documentation/hid/hid-bpf.rst
++++ b/Documentation/hid/hid-bpf.rst
+@@ -179,7 +179,7 @@ Available API that can be used in syscall HID-BPF programs:
+ -----------------------------------------------------------
+ 
+ .. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
+-   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_allocate_context hid_bpf_release_context
++   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_allocate_context hid_bpf_release_context
+ 
+ General overview of a HID-BPF program
+ =====================================
 diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index e630caf644e8..52abb27426f4 100644
+index 52abb27426f4..a5b88b491b80 100644
 --- a/drivers/hid/bpf/hid_bpf_dispatch.c
 +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -143,48 +143,6 @@ u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *s
+@@ -376,6 +376,46 @@ hid_bpf_release_context(struct hid_bpf_ctx *ctx)
+ 	put_device(&hid->dev);
  }
- EXPORT_SYMBOL_GPL(call_hid_bpf_rdesc_fixup);
  
--/* Disables missing prototype warnings */
--__bpf_kfunc_start_defs();
--
--/**
-- * hid_bpf_get_data - Get the kernel memory pointer associated with the context @ctx
-- *
-- * @ctx: The HID-BPF context
-- * @offset: The offset within the memory
-- * @rdwr_buf_size: the const size of the buffer
-- *
-- * @returns %NULL on error, an %__u8 memory pointer on success
-- */
--__bpf_kfunc __u8 *
--hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr_buf_size)
--{
--	struct hid_bpf_ctx_kern *ctx_kern;
--
--	if (!ctx)
--		return NULL;
--
--	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
--
--	if (rdwr_buf_size + offset > ctx->allocated_size)
--		return NULL;
--
--	return ctx_kern->data + offset;
--}
--__bpf_kfunc_end_defs();
--
--/*
-- * The following set contains all functions we agree BPF programs
-- * can use.
-- */
--BTF_KFUNCS_START(hid_bpf_kfunc_ids)
--BTF_ID_FLAGS(func, hid_bpf_get_data, KF_RET_NULL)
--BTF_KFUNCS_END(hid_bpf_kfunc_ids)
--
--static const struct btf_kfunc_id_set hid_bpf_kfunc_set = {
--	.owner = THIS_MODULE,
--	.set   = &hid_bpf_kfunc_ids,
--};
--
- static int device_match_id(struct device *dev, const void *id)
- {
- 	struct hid_device *hdev = to_hid_device(dev);
-@@ -281,6 +239,31 @@ static int do_hid_bpf_attach_prog(struct hid_device *hdev, int prog_fd, struct b
- /* Disables missing prototype warnings */
- __bpf_kfunc_start_defs();
- 
-+/**
-+ * hid_bpf_get_data - Get the kernel memory pointer associated with the context @ctx
-+ *
-+ * @ctx: The HID-BPF context
-+ * @offset: The offset within the memory
-+ * @rdwr_buf_size: the const size of the buffer
-+ *
-+ * @returns %NULL on error, an %__u8 memory pointer on success
-+ */
-+__bpf_kfunc __u8 *
-+hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr_buf_size)
++static int
++__hid_bpf_hw_check_params(struct hid_bpf_ctx *ctx, __u8 *buf, size_t *buf__sz,
++			  enum hid_report_type rtype)
 +{
-+	struct hid_bpf_ctx_kern *ctx_kern;
++	struct hid_report_enum *report_enum;
++	struct hid_report *report;
++	struct hid_device *hdev;
++	u32 report_len;
 +
-+	if (!ctx)
-+		return NULL;
++	/* check arguments */
++	if (!ctx || !hid_bpf_ops || !buf)
++		return -EINVAL;
 +
-+	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
++	switch (rtype) {
++	case HID_INPUT_REPORT:
++	case HID_OUTPUT_REPORT:
++	case HID_FEATURE_REPORT:
++		break;
++	default:
++		return -EINVAL;
++	}
 +
-+	if (rdwr_buf_size + offset > ctx->allocated_size)
-+		return NULL;
++	if (*buf__sz < 1)
++		return -EINVAL;
 +
-+	return ctx_kern->data + offset;
++	hdev = (struct hid_device *)ctx->hid; /* discard const */
++
++	report_enum = hdev->report_enum + rtype;
++	report = hid_bpf_ops->hid_get_report(report_enum, buf);
++	if (!report)
++		return -EINVAL;
++
++	report_len = hid_report_len(report);
++
++	if (*buf__sz > report_len)
++		*buf__sz = report_len;
++
++	return 0;
 +}
 +
  /**
-  * hid_bpf_attach_prog - Attach the given @prog_fd to the given HID device
+  * hid_bpf_hw_request - Communicate with a HID device
   *
-@@ -474,6 +457,19 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
+@@ -392,24 +432,14 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
+ 		   enum hid_report_type rtype, enum hid_class_request reqtype)
+ {
+ 	struct hid_device *hdev;
+-	struct hid_report *report;
+-	struct hid_report_enum *report_enum;
++	size_t size = buf__sz;
+ 	u8 *dma_data;
+-	u32 report_len;
+ 	int ret;
+ 
+ 	/* check arguments */
+-	if (!ctx || !hid_bpf_ops || !buf)
+-		return -EINVAL;
+-
+-	switch (rtype) {
+-	case HID_INPUT_REPORT:
+-	case HID_OUTPUT_REPORT:
+-	case HID_FEATURE_REPORT:
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
++	ret = __hid_bpf_hw_check_params(ctx, buf, &size, rtype);
++	if (ret)
++		return ret;
+ 
+ 	switch (reqtype) {
+ 	case HID_REQ_GET_REPORT:
+@@ -423,29 +453,16 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (buf__sz < 1)
+-		return -EINVAL;
+-
+ 	hdev = (struct hid_device *)ctx->hid; /* discard const */
+ 
+-	report_enum = hdev->report_enum + rtype;
+-	report = hid_bpf_ops->hid_get_report(report_enum, buf);
+-	if (!report)
+-		return -EINVAL;
+-
+-	report_len = hid_report_len(report);
+-
+-	if (buf__sz > report_len)
+-		buf__sz = report_len;
+-
+-	dma_data = kmemdup(buf, buf__sz, GFP_KERNEL);
++	dma_data = kmemdup(buf, size, GFP_KERNEL);
+ 	if (!dma_data)
+ 		return -ENOMEM;
+ 
+ 	ret = hid_bpf_ops->hid_hw_raw_request(hdev,
+ 					      dma_data[0],
+ 					      dma_data,
+-					      buf__sz,
++					      size,
+ 					      rtype,
+ 					      reqtype);
+ 
+@@ -455,6 +472,42 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
+ 	kfree(dma_data);
+ 	return ret;
  }
++
++/**
++ * hid_bpf_hw_output_report - Send an output report to a HID device
++ *
++ * @ctx: the HID-BPF context previously allocated in hid_bpf_allocate_context()
++ * @buf: a %PTR_TO_MEM buffer
++ * @buf__sz: the size of the data to transfer
++ *
++ * @returns the number of bytes transferred on success, a negative error code otherwise.
++ */
++__bpf_kfunc int
++hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz)
++{
++	struct hid_device *hdev;
++	size_t size = buf__sz;
++	u8 *dma_data;
++	int ret;
++
++	/* check arguments */
++	ret = __hid_bpf_hw_check_params(ctx, buf, &size, HID_OUTPUT_REPORT);
++	if (ret)
++		return ret;
++
++	hdev = (struct hid_device *)ctx->hid; /* discard const */
++
++	dma_data = kmemdup(buf, size, GFP_KERNEL);
++	if (!dma_data)
++		return -ENOMEM;
++
++	ret = hid_bpf_ops->hid_hw_output_report(hdev,
++						dma_data,
++						size);
++
++	kfree(dma_data);
++	return ret;
++}
  __bpf_kfunc_end_defs();
  
-+/*
-+ * The following set contains all functions we agree BPF programs
-+ * can use.
-+ */
-+BTF_KFUNCS_START(hid_bpf_kfunc_ids)
-+BTF_ID_FLAGS(func, hid_bpf_get_data, KF_RET_NULL)
-+BTF_KFUNCS_END(hid_bpf_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set hid_bpf_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &hid_bpf_kfunc_ids,
-+};
-+
- /* our HID-BPF entrypoints */
- BTF_SET8_START(hid_bpf_fmodret_ids)
- BTF_ID_FLAGS(func, hid_bpf_device_event)
+ /*
+@@ -488,6 +541,7 @@ BTF_ID_FLAGS(func, hid_bpf_attach_prog)
+ BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE)
+ BTF_ID_FLAGS(func, hid_bpf_hw_request)
++BTF_ID_FLAGS(func, hid_bpf_hw_output_report)
+ BTF_KFUNCS_END(hid_bpf_syscall_kfunc_ids)
+ 
+ static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index de7a477d6665..1243595890ba 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2974,6 +2974,7 @@ EXPORT_SYMBOL_GPL(hid_check_keys_pressed);
+ static struct hid_bpf_ops hid_ops = {
+ 	.hid_get_report = hid_get_report,
+ 	.hid_hw_raw_request = hid_hw_raw_request,
++	.hid_hw_output_report = hid_hw_output_report,
+ 	.owner = THIS_MODULE,
+ 	.bus_type = &hid_bus_type,
+ };
+diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
+index 7118ac28d468..5c7ff93dc73e 100644
+--- a/include/linux/hid_bpf.h
++++ b/include/linux/hid_bpf.h
+@@ -103,6 +103,7 @@ struct hid_bpf_ops {
+ 				  unsigned char reportnum, __u8 *buf,
+ 				  size_t len, enum hid_report_type rtype,
+ 				  enum hid_class_request reqtype);
++	int (*hid_hw_output_report)(struct hid_device *hdev, __u8 *buf, size_t len);
+ 	struct module *owner;
+ 	const struct bus_type *bus_type;
+ };
 
 -- 
 2.44.0
