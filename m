@@ -1,258 +1,170 @@
-Return-Path: <linux-kselftest+bounces-6338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE85C87C67F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 00:38:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B733887C8F9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 08:23:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 296A9B2309F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Mar 2024 23:38:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7814B21C08
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 07:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE9AFC09;
-	Thu, 14 Mar 2024 23:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439A04414;
+	Fri, 15 Mar 2024 07:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JkOkgK4+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HS7OOA1U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042F717591;
-	Thu, 14 Mar 2024 23:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710459487; cv=fail; b=gjUJQw9VsGWO6nffNFvV9SEJGNiYRmPgZK3HP+vaaFbD4zrIHMELV4pHGarulpikTXgPdXVgoFh0XLwWXegMv1dV9l5Q5lSh26fsZzGN7AwXFadadQp6T9SzaBMFd1kCwbp0kD/xHUJYNKTHJNxCEC4pRui8bLs+wHUGs0kFV7Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710459487; c=relaxed/simple;
-	bh=9uNrUPtkkgZWKiC2ziBxl0TO9shN8jNzTlwmjifAYuM=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=jQFcO7vzTWvqEvryt2CDbsm1Rfo1lwKLOAV9g0G0gIpq5J7YiYGLn+CbS2OBynUSkRQz87Y40FZMpGKkM4bXmJcJElYQCMPdE354RXkGMMkpBVPpAqAJfwfI/NaUZzPiyzpIb2jpFkB/JoLBTz5Zuyro0pQJbUsG6Q3kMkylDL4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JkOkgK4+; arc=fail smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710459485; x=1741995485;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9uNrUPtkkgZWKiC2ziBxl0TO9shN8jNzTlwmjifAYuM=;
-  b=JkOkgK4+uuBS+IPeF6VapVHWhSCo+7m1MPZsg0f/ob7zvyM2wVsOA2Ys
-   OqdTM9U3q7mhVK8udUwWzMJv7hn/cDT6/Kde8J6ByidForQrEfm9YNLz8
-   7DxJ4mLuF5U3spRLzTPcNS3k0HwgtqZaihWlIe6FZ2zXigZPfaCYW3N8S
-   pyf3FzDPeXhzd+iU0Rd6+jJ0yskqs6MpXx/EblRiFm6Q75jetK4bZMPNh
-   ACUMLOFBi0TE+ckDgD855SPZZTPkaWunATzEL8XwU9xs3LuvmbNAF04CH
-   6w6h6ACnRiuEFP9qJ7S5Ukh3xO0Ao1AMXtVLb6W4SfvZB2CfTTUPpYjWf
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="22832104"
-X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
-   d="scan'208";a="22832104"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 16:38:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
-   d="scan'208";a="12555914"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Mar 2024 16:38:02 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 14 Mar 2024 16:38:01 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Thu, 14 Mar 2024 16:38:01 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 14 Mar 2024 16:38:01 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nfS778/alOYg+kbp/QICB5Q5hIrv1O9lBC7nfvNI5QGjIvLq5cskjPXBbZOpllasJojqLSN/u0WGY0K5e/ai5aV4UwdG1EHUXfjEmFwFKg6n7/0UZsTctsd9tYHHFZddCEG6q7kz0KKa4VzOHEvf90TUz0UmNGqJxznTx8YGI/CBm9CSxHMZ57rOPusXvztpVhTQtC2a7bnr8TFyRy+mapUZk9/fEBPQ7M1nkl6UBWiGFzCXIN0BaNZEx1X3HQ1BKinDrc6pwM96VOEvpW6tQyR/HsVegkh0ETcvBprsyQUiL+mo2gtXD7YOFy22esWBsUQPDqhcmjeRYphIghF5qA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DxGSBWuhJotKWVq/cGQi2BT/qgpFCI84Aqu85bZR/uQ=;
- b=d70DgI3uOX3KfYYwswWHFIwmdxovtHyi0Nh8DIvji8Ch64QrRCvPPD+zMl3x0ZRj9UVzUJmOb7ZhemMm38q8GA6VautokNSr4RhdIGBZOOy2JQU3knsAqhKmP1V+MBx0pN8Z8++wrKZlqVTYC94pAhZBPzJy+wjW4PgMwo9bVXjr4iRvCNsMb6VBXtMoQvNu8H8QvxU4BChF/wT2YJQPC71lmi3AGGuWSYgEvuvxtGpV8ALW4Xcmti8X2qkx1F0C/hG8R5/1Dw8+YhkdxZCBNgVaxKJKPsLT6BtT2gU1yaWlGE8ltUeXhfx62soklMpMzRwhGKnn6Rb5I4uVouP0Pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW4PR11MB7164.namprd11.prod.outlook.com (2603:10b6:303:212::6)
- by IA1PR11MB8248.namprd11.prod.outlook.com (2603:10b6:208:447::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.18; Thu, 14 Mar
- 2024 23:37:58 +0000
-Received: from MW4PR11MB7164.namprd11.prod.outlook.com
- ([fe80::b5bc:2406:7431:8c1]) by MW4PR11MB7164.namprd11.prod.outlook.com
- ([fe80::b5bc:2406:7431:8c1%7]) with mapi id 15.20.7386.017; Thu, 14 Mar 2024
- 23:37:58 +0000
-Message-ID: <1c0b80ed-f56f-4840-b5ca-54840b1b60a3@intel.com>
-Date: Thu, 14 Mar 2024 16:37:55 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: x86: skip the tests if prerequisites aren't
- fulfilled
-Content-Language: en-US
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>, Shuah Khan
-	<shuah@kernel.org>, "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, Binbin Wu
-	<binbin.wu@linux.intel.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Weihong Zhang <weihong.zhang@intel.com>, angquan yu <angquan21@gmail.com>
-CC: <kernel@collabora.com>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20240314114502.466806-1-usama.anjum@collabora.com>
-From: "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <20240314114502.466806-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0327.namprd04.prod.outlook.com
- (2603:10b6:303:82::32) To MW4PR11MB7164.namprd11.prod.outlook.com
- (2603:10b6:303:212::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7514E134BE
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 07:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710486221; cv=none; b=ZpxneT72qNbGjgaUWJYCR70MDOhEZ4t0KYBHmk9M87JmFjo6rfT/34cMnlrvE8I0FNgcbBSXLnuBROgMyb2ljn2G4k3lGD4Ym6NnA675a3X1fMD91iGKJBAc+TVimdDB2zMafAX6Vnb3MztcRswoT6DHA66By1aZalKwy3QH2yw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710486221; c=relaxed/simple;
+	bh=kKiu8mn3SOtyyrqWFC90kmC6DfbLVJByCZKEaQuz0O0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=YNXNqnOTDpLzSfSIilDooDDbZArjebiFM3yIUCEYutUsHuZg94cfuETSvYlpVi2G0ASMaLAz2bubHwgoJamHtbBFZjUcz5eMR111DvNOzyK1bp5bb6kVnnOlc6HXTke7XQPg3CmvXpezElOSvA/SpaPID2ymQeL011sLytWznP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HS7OOA1U; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710486218;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=ILH/8Wu0pRuebE0YVOWDXHtt8730s41+llFapfiSRAM=;
+	b=HS7OOA1UGQf7yA/ceGvaprrVnRTK5VoEDphOfAXf8X2RBlKeJhwDW1ZgUPtJFsP4BvCOMQ
+	p/FENEp1ubMqwo2JlIxlCh1IVCNwlpyVPydyGaPvXNVxDvGJGH31NnF//905myS6FBvwAt
+	AWAp/572Hxr6bwG5i773dtHMwueB78Q=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-153-Ru_yrNWrMp-Pem7htSh-pA-1; Fri, 15 Mar 2024 03:03:34 -0400
+X-MC-Unique: Ru_yrNWrMp-Pem7htSh-pA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4140336d32cso461415e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 00:03:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710486213; x=1711091013;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ILH/8Wu0pRuebE0YVOWDXHtt8730s41+llFapfiSRAM=;
+        b=p5349yXTJHaAKM49kzg3TS0ApVq9U4s6weftpNTebKJeJYu+sZ36cJf1/dbFSxR8jc
+         eAIHGypEYWX4+GlkZr+PWk7jcHSl8zd/w76dfOXSgI6CWJfH2NHVrWZDxdP9TQHSbiUw
+         0Q8Q/0R7anJNHJMsC0tSTKp7mtGI9Ttb/+3PYNOr8nHQyoXWxJQyygBRGMTSjbjB0rMu
+         fpZPAlGTgqYq6xm/3saY6/e920z9OCCZ/vfifKb03MS6iCkcqHpYRAm15LiEIespLM1J
+         R6fUolkzzJalE3GKl5TUJ8OxkdaWRtzG8MS+OPCC1pO/L6rEAwMDcJRiUp2aoq+kYs5v
+         EJUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjFgbiHcf3NVpO8sWKqHnDx7I0VqtJRT99BaL+Ec3c6U4a/1pGyvcVaEXqss99oIRizkFhlH3l8b7OtBts6BqGMwaXmCGw46p3AQSjH9qb
+X-Gm-Message-State: AOJu0YyWYspDdJPvmcs4jSVkPaoRqH1/K9ijpSCmYDmJklzDhNbS0SU6
+	zqf/WLYe6gHY5ylbTSDvIzSlmpR0Qsx2N5SZy0kYPA4d594tVT3MOpC2l6hji62l7leGTeCgdco
+	4NY44vQ+nulMlBilbu785YHoCXT/05hlOYik0GlMy3wK5yJUhsJjmA4kUJKwRwUnYmQ==
+X-Received: by 2002:a05:600c:45c4:b0:414:222:ad5e with SMTP id s4-20020a05600c45c400b004140222ad5emr299437wmo.11.1710486213078;
+        Fri, 15 Mar 2024 00:03:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGTyeJ7LNz+hDv9XMF6v2QbMpoUPOhv5YJ00YFIh0Ysj9HceNLwdt8ctWZZvyT3TEsTHK/OWQ==
+X-Received: by 2002:a05:600c:45c4:b0:414:222:ad5e with SMTP id s4-20020a05600c45c400b004140222ad5emr299421wmo.11.1710486212795;
+        Fri, 15 Mar 2024 00:03:32 -0700 (PDT)
+Received: from [192.168.0.9] (ip-109-43-176-251.web.vodafone.de. [109.43.176.251])
+        by smtp.gmail.com with ESMTPSA id bg32-20020a05600c3ca000b00414037f27a9sm201874wmb.31.2024.03.15.00.03.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Mar 2024 00:03:32 -0700 (PDT)
+Message-ID: <8402ad7d-9ecb-410c-8c01-f9ca1bedb65f@redhat.com>
+Date: Fri, 15 Mar 2024 08:03:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR11MB7164:EE_|IA1PR11MB8248:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee6f3287-7217-4651-a7b6-08dc447fc7c6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cg2XcDsSBts7JABsuMf2//OU/g5QbIhFWHNe0XyMOXFfIrhh3CGOpsmKqx9vJsTxw8mmiOd3xkera+mVXWu+5YvZf004q5ulPfndBEPxd/8oNNhj6lTp9mntfhb5C3fEbE49/wC7xFtpNfQ8XTBoxeCQqF1IUOQwWIuwmpFhRGFKxW9hoGEoROc7FYnsUvqxFQYt/k4YwCiLEEc7z9zrC89yKFLri8YdFPYJ3eY1b2VVcKOZ+MCmt/ms00APC8FBewbE7L/CMdnQE2U2nKS7UoHQO1dLN5xp/ihPrtFi/3cOOSEfDujgPh5g9AMZWUItDZPmTUMs1OCm7O4mkr+Q7U1fpYFaositikXy1i6U8185SulIpiXbrHwOcwCTxNuXGLkZK1KNXGwtmjkwgK4b86NK7zZb8kOdeDD2Z5ZQvSHncSF+q9zsPlk26RsW6KuLw0aESfniOR55hR16rVZVQVJkrJnyR96vW+hGeV9zzRGJa83MCdkbuJppTAhDfEyHuGAAz+WwBJ7layotHDjZCc2g9564g7t3PNuSnzrpPyoQI3il9V9H+Hj7QYoFgZ5bvQuQpTEKv75hn28E2zxugpNp0c8CKX3pAnP51Jc1iNlvCuCgBYruu7vP6mU1r2doSgEgh5vQ7eJYqfXGPtZMJpA/DoXz9NSK1q8VgcFzdJg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB7164.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MHRSZWpJM0hZOEZ5OVZIMjRaK2YzQW9xZDZtZk11U1dUTHpnYURCdTArQWNY?=
- =?utf-8?B?T3NGbHM2RGxmK2NBWFlPM0RjaGxrd1ZzekNXYlZlcFh3UWl6bjVqMXBXQmMw?=
- =?utf-8?B?dTYzdUh0WjJBamRqeVppcnN0RlgzSUFidnZ2bm56eUYxVUNCSGZUVURpWURU?=
- =?utf-8?B?blBxRnl4K0xad09KV2IrSENsbnFDT3VMbE1XM1NHSEZwaXNORDR0SXRIQlVL?=
- =?utf-8?B?NFkrc29UMHBrMEdOYTluQmZ0QTdMN2tnZzNNcE94bXRtSE1LMWk3a3BHNFJG?=
- =?utf-8?B?dlQ2b0tzUmRWWUplWS9FZmIxb1pXSXdsL0RvNWZ3Y1ZxUHk4UWs4SkM1ZjJt?=
- =?utf-8?B?bmJiMXhCdlczWENoMXVMUjRZbDJxOUtySUhZOEp1WFg5d3h3MmloYVhRL25t?=
- =?utf-8?B?ZHRDUUU2c1hNc3krVzdyT2VhTVphL0s3dUM2bnBXTmU1WlZUK1BqNllNRGdC?=
- =?utf-8?B?U0w2SndiVUNKRGg1VGdCQ1FsUGpNNkxHT1QzV28zNUdXTnlINE95RVkzb3Va?=
- =?utf-8?B?TnlvK0xxeDA2bHpNaytWUHBGaXEreFBNdkJCdkNzRmRvZlVKUFhHSFhKQ0ov?=
- =?utf-8?B?Q0s5R2FtQ3NIdGk1bXBYUExLeWhhSWt1cU84VndUU2dWSFVrU25BQ2ZMelZ4?=
- =?utf-8?B?cDVHOXFKUTFLejlrV3R2MDJYU3JFYWJMb0ViUXljRDYzNjc0UW9jb01WSVZj?=
- =?utf-8?B?MkxOMnZMMDZVamgwa2x0Ty9VZXRWb0cvN2loNk1LajkrWWtwVVk4czZSSUVJ?=
- =?utf-8?B?KzZxcEdidnY0NGtQTnBXb2Q3SUNBVUlhN01lSUJ4Q2h2WVR5N212bzhLSWVN?=
- =?utf-8?B?Tm44bFlnSkptZ1VuYldBRVJqbGdUY09aanJYRTRjdUo1clBZQnVYRVBnZ0cr?=
- =?utf-8?B?SHJHWU9TeVdmYlhrNFBGQmUxRUlnYzhUdVdZVEtvaFNQTG1zeFpzbUhJMUNK?=
- =?utf-8?B?L1dUNjBkbHhPWXB1VFExWUh0dk95OHVsZU9ETHBXMlpQOExOc3VKblM1RGMz?=
- =?utf-8?B?WUZPNVJmem1qZWNOWXo1UWtlSlBZckgyRURyN2x3WmlnRDNRN0hPbGoyM29Z?=
- =?utf-8?B?Y1AzdjRXQjhTcFp6c21VWGdnZkhjNTE4WnVYNnFHbmRRejIwcHR0c2ZWVFBJ?=
- =?utf-8?B?ZC9XdjI5WVNiSmZuUUJyUm5oSGlmSEFHZzFTZ3VWTTEyKzJXWGRtcWcvK1d2?=
- =?utf-8?B?T1FWVnRIUS9TR1FDUXcrUFU0bUZ5ZzFVQTlvYXpZKysyMTBISlVIR0xRSlN1?=
- =?utf-8?B?QXpJQlRjeDFXdFB6MkIvOCtjRDlsbk9hUHA4WkIvQ3pLU0VhL3lXejNUb2lT?=
- =?utf-8?B?ajZhbEJRSFpDMFdSYStWcjJnM0tUd1BRZld6OHpETzVoeGZQRU04L3pGbDRD?=
- =?utf-8?B?MjVIRGFCQ0N4RERmRERDZHpxd0YvQmFaTTJFRnhtZGVhbEVOc3pqOUFNSHJ4?=
- =?utf-8?B?RlZKNXoxYzAwcTRvVGZoVm80Wk05N3JWS3ZROUFmR2M2WkEycU9KMDVjSXRy?=
- =?utf-8?B?Nno3aXZRTzZjTEJSaVgrUGVFOE14bWxLYmYrMWpuU2M0TkxiOEhuY2FiMzJm?=
- =?utf-8?B?NE0yeE1CZ293SWFuNjdpMEJSMkxic0FOVGxZU2x1ZGpLb2R6SWFyVk5rUm4r?=
- =?utf-8?B?alp1b05IL2dJY1RQN2NOZkdRbmdyei9CM2VsMllkdEJ3SC9MTG1qak1adlhx?=
- =?utf-8?B?YW5vdVRCb05vZ2xYY3ZrWUQ3cll1blNaT2w2Z3FoUmlJK25PZE9JWDY5RUFV?=
- =?utf-8?B?YVJDTUtJUStkbkVTRnpiVmxjdllDdGt0WjlNczI4S1BlZ2tqa2x2VEhaYlor?=
- =?utf-8?B?WXBmamFwRFVkNlVzS0xTMzRpWTVRU2RIMWxSTVZYT1BCNW5Vek44NmxCYXNB?=
- =?utf-8?B?OWkzdlFkOGI5WjFuT3kwUDFyNU9QUG9mMzN6Mm1DMENkamxkT21OaGtiYUha?=
- =?utf-8?B?a2k1QUlxRk9KOUllQ2NjbDZWRlBmb0p2amlPcU9WRUEycTRFZjc3TkdlWTUx?=
- =?utf-8?B?djh6ZmJ3YkU3SGNmNGVVWERmKzk1ckZLbUprNTl2U2xIZFF5UlF4Q0d0ek5t?=
- =?utf-8?B?N1VHaDRmdUZvUTVUOHk4WUhLM0czUC9OME5WR0pJN2FLQUs3Q3RFTmxOMW1V?=
- =?utf-8?B?RlVXYXNGUXRMUVpMS29wQlk0SGoyVGVZbEpXWW8zWER3dkNYMjAyNUNJek1Y?=
- =?utf-8?B?WUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee6f3287-7217-4651-a7b6-08dc447fc7c6
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB7164.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2024 23:37:58.6968
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nXdVOd93Hvi1WDaZmLdN1dwxXuTve+ekGzSURA7FYX0nvCOzfWa6p716X8kHWCCOaItJtVJGP6S9+uArXqXMPIe006C/yBQknPWhIqX45w0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8248
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] KVM: selftests: Use TAP in the steal_time test
+Content-Language: en-US
+From: Thomas Huth <thuth@redhat.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Andrew Jones <ajones@ventanamicro.com>
+References: <20231019095900.450467-1-thuth@redhat.com>
+ <20231019-2946dcc38c3e95e0e7433eae@orel>
+ <abfbb656-fc55-4b10-ab54-e7fb96896bc9@redhat.com>
+Autocrypt: addr=thuth@redhat.com; keydata=
+ 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
+In-Reply-To: <abfbb656-fc55-4b10-ab54-e7fb96896bc9@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 3/14/2024 4:44 AM, Muhammad Usama Anjum wrote:
-> Skip instead of failing when prerequisite conditions aren't fulfilled,
-> such as invalid xstate values etc. This patch would make the tests show
-> as skip when run by:
->    make -C tools/testing/selftests/ TARGETS=x86 run_tests
+On 11/12/2023 10.39, Thomas Huth wrote:
+> On 19/10/2023 15.13, Andrew Jones wrote:
+>> On Thu, Oct 19, 2023 at 11:59:00AM +0200, Thomas Huth wrote:
+>>> For easier use of the tests in automation and for having some
+>>> status information for the user while the test is running, let's
+>>> provide some TAP output in this test.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>>> ---
+>>>   NB: This patch does not use the interface from kselftest_harness.h
+>>>       since it is not very suitable for the for-loop in this patch.
+>>>
+>>>   tools/testing/selftests/kvm/steal_time.c | 46 ++++++++++++------------
+>>>   1 file changed, 23 insertions(+), 23 deletions(-)
+>>>
+>>
+>> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 > 
->    ...
->    # timeout set to 45
->    # selftests: x86: amx_64
->    # # xstate cpuid: invalid tile data size/offset: 0/0
->    ok 42 selftests: x86: amx_64 # SKIP
->    # timeout set to 45
->    # selftests: x86: lam_64
->    # # Unsupported LAM feature!
->    ok 43 selftests: x86: lam_64 # SKIP
->    ...
+> Thanks Andrew!
 > 
-> Cc: Chang S. Bae <chang.seok.bae@intel.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> Changes since v1:
-> - Use arch_prctl to check if amx is supported
-> ---
->   tools/testing/selftests/x86/amx.c | 27 ++++++++++-----------------
->   tools/testing/selftests/x86/lam.c |  2 +-
->   2 files changed, 11 insertions(+), 18 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-> index d884fd69dd510..95aad6d8849be 100644
-> --- a/tools/testing/selftests/x86/amx.c
-> +++ b/tools/testing/selftests/x86/amx.c
-> @@ -103,21 +103,6 @@ static void clearhandler(int sig)
->   
->   #define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
->   #define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
-> -static inline void check_cpuid_xsave(void)
-> -{
-> -	uint32_t eax, ebx, ecx, edx;
-> -
-> -	/*
-> -	 * CPUID.1:ECX.XSAVE[bit 26] enumerates general
-> -	 * support for the XSAVE feature set, including
-> -	 * XGETBV.
-> -	 */
-> -	__cpuid_count(1, 0, eax, ebx, ecx, edx);
-> -	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
-> -		fatal_error("cpuid: no CPU xsave support");
-> -	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
-> -		fatal_error("cpuid: no OS xsave support");
-> -}
->   
->   static uint32_t xbuf_size;
->   
-> @@ -350,6 +335,7 @@ enum expected_result { FAIL_EXPECTED, SUCCESS_EXPECTED };
->   
->   /* arch_prctl() and sigaltstack() test */
->   
-> +#define ARCH_GET_XCOMP_SUPP	0x1021
->   #define ARCH_GET_XCOMP_PERM	0x1022
->   #define ARCH_REQ_XCOMP_PERM	0x1023
->   
-> @@ -928,8 +914,15 @@ static void test_ptrace(void)
->   
->   int main(void)
->   {
-> -	/* Check hardware availability at first */
-> -	check_cpuid_xsave();
-> +	unsigned long features;
-> +	long rc;
-> +
-> +	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
-> +	if (rc || (features & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
-> +		ksft_print_msg("no AMX support\n");
-> +		return KSFT_SKIP;
-> +	}
-> +
+> Paolo, if there are no other concerns, could you maybe pick it up for 
+> kvm/next ?
 
-Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
+Ping?
 
-Thanks,
-Chang
+  Thomas
+
+
 
