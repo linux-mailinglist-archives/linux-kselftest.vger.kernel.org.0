@@ -1,160 +1,330 @@
-Return-Path: <linux-kselftest+bounces-6368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E7DB87D6C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 23:42:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4520387D745
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 00:16:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08A421F213D9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 22:42:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 022801C211B6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 23:16:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28585823D;
-	Fri, 15 Mar 2024 22:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43E75A10B;
+	Fri, 15 Mar 2024 23:16:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b="NuG1v4kN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Pgv/7/Aa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC9259B66
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 22:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38D6DDAD
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 23:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710542537; cv=none; b=H76aC6N65D9EdMcFVcpdZZRXUPAObRk8dz5ryAk3qKHEY8qSXnv+Sr4SyMz8s6JzRpR87kYdS2sSNSHHpUYYstYB/pGUINHZuAyuP7S9JvN5k65hoKVvMYDeMnT0Tr99VG/lLxwU9jEYH74mp0u7iNjraOg0KcG1TmMRbUqSEXw=
+	t=1710544608; cv=none; b=eghVDafVSK3/ybE6QelL5wWE6jobSN/AmYuig8fvMKuQv6vO4JF8Sfms9lxclbOXEwG1xvDPgH0DACCM+cs9Sofo8Qv9HCvm3us9Ss13TFPBuK02eXBZ6XU9i9ybdaq8S994guLjNLmWU3aYmXdsr5AAewgUIAy4jhBWRcsWsJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710542537; c=relaxed/simple;
-	bh=9aTC8xKicnal5qtnDL3cjqNci//gvsNOASreQ2FWddk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jCnh2Lx78p2wP6AOcxFThEfjM+i1+otZF8NMbXmUBI5SszWVYa/UmoTn9vtMvB9o8QuE6v4Ze0orkhoXeOhXpw25geqbAwFl1Vr5q3CjAw4sTrZQstvONwghCgpDZfjjoEN0dX9blN3h1CwV9DQd25M4kQMqj1LKySNB4Dt+yTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com; spf=pass smtp.mailfrom=netflix.com; dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b=NuG1v4kN; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netflix.com
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-7c8aed81a3bso69442439f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 15:42:14 -0700 (PDT)
+	s=arc-20240116; t=1710544608; c=relaxed/simple;
+	bh=YG1vd1juQNaQvSUKtPdn0fqcJqdzmUUrzhazjbC0GP0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=txXWQG2bh2+eLJKUx32FxK1CqbHVg6Ylp/BhFlAtbOsYsz6QJ2inFGRQ/Lrph5DDrxlV1SDOx93VTRAz1+QVNYRNyD0AkPr72jcNbtV0M0PIvsin4BNkRjW8+S1Zbnaf+T2/wW8QctvWUPiXHULZTULif8yby3krBeyZ/lWw1oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Pgv/7/Aa; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5687ebddd8eso6134a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 16:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netflix.com; s=google; t=1710542534; x=1711147334; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LsRqTXgMaYQKprnwZS46sKtunWtNyYt/xYWjCFRYquc=;
-        b=NuG1v4kN0tBNM8FYruKU8M5f/mqN01+dXs/ZiwkD3SyRgzyIcBPzyUKEiCnzcT5Zhn
-         Gnnbzhlio4SeWTNsxFlj8zgWvLreRGORREl4v+nrDWiUbAljBMiyD2WekGJWqleN6bHo
-         42CwjqS6jRNLV9etWkx8479k0SF79AMR/q6fc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710542534; x=1711147334;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1710544603; x=1711149403; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LsRqTXgMaYQKprnwZS46sKtunWtNyYt/xYWjCFRYquc=;
-        b=ZZKcQs35+/ET1Ii6dXiU+hg2/xcozN7l38iJXtMLLtSF9D3mLkI6nA2XfYkZI418aH
-         vw9gCNtVlvOXHVIyLlKSmIyK+pTFlzFy8zud76V3+g+TrIa+HB6jR3RvsnreM7JFcBUU
-         XAd/xEyfWAPWJcxFXOEmdFItlkNYy9qg9urDvPxgUVkQLRO7iCgrfXWUz+fCExrhqc7R
-         DFALjD4uh9c+0PIS3/fOdVtRBVzb5If7i7T0sk5GREuYpGKdDVERA66aQEBtbOeYUM48
-         XhrkzKtbIGQWFwGIFZ/vXIXGcVZIcxyHJIER+79Ad9uCD2kgE6XDf1qPTCZR1Jk8I4v8
-         N77Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXq5wtjwoNNoNGgui7Z/2r68JJ6cXtgraa6axZTSVajEEA3eYlMmD97e+ZVP9KJtdtZGkStVgJI2BKo+2kVKP9JtdbOWxVYA3e0F10tju4z
-X-Gm-Message-State: AOJu0YxamSb/NkiOMucTUd1VfEZNgVVm1Ov0MnL9+Z6qMDWL4scwhdIe
-	2rfdZ9+XgZFoh0dxi0ZvsXodkoxlrzu+0pFUfG7Z5ext4N7bC709llrJ3Pf9yfs=
-X-Google-Smtp-Source: AGHT+IGfhVeqIsZOso6gswm+yxDMnUr35mGAJUjS8wARQgdmrfpH74HsobqMOyD3K0gWlSYbttz7rw==
-X-Received: by 2002:a6b:4f17:0:b0:7cb:f1d0:a1cc with SMTP id d23-20020a6b4f17000000b007cbf1d0a1ccmr3704914iob.4.1710542533892;
-        Fri, 15 Mar 2024 15:42:13 -0700 (PDT)
-Received: from localhost ([2601:285:8700:8f20:80e2:186e:c8ca:d2a2])
-        by smtp.gmail.com with UTF8SMTPSA id w25-20020a029699000000b00474350caf1asm958836jai.175.2024.03.15.15.42.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Mar 2024 15:42:13 -0700 (PDT)
-Date: Fri, 15 Mar 2024 16:42:12 -0600
-From: Jose Fernandez <josef@netflix.com>
-To: Stanislav Fomichev <sdf@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Tycho Andersen <tycho@tycho.pizza>
-Subject: Re: [PATCH bpf-next 1/2] bpf: add btf_task_get_cgroup_id kfunc
-Message-ID: <20240315224212.sinyco7bxbnlgw2e@SlimPro9i>
-References: <20240315182804.216081-1-josef@netflix.com>
- <ZfSYiWcE0_au_ZPt@google.com>
+        bh=RwLzfWwBwbCcEZKduRLWrp8dVywQR/08FJQ2Cohkdxk=;
+        b=Pgv/7/AazUMuiuJwUE47lyE32bdBeKtM8Ci1LOHucW3alba10AE6pAVoi5cbme/P3J
+         +r8KyzbogSonYhi0XqUoHp93QC7QEeyBGTpf3+gRGfOI6JVczCaOurOIS2Ss54+xp8fE
+         X5jgw6WTwdyHUjIIoslLoe8U1+pO1UWsCiTiebrJBbAkzYYoApj5x0Jnex23/kviSdH/
+         M/lkG58Z3q6FviFILpO74EcntvEmByPXQhv8EOifviIU+z5NAj5iBJgzNbi0lKqssaMb
+         KfZ5FAVnu+A/6Q3UzLgI0Vbg02MGIwANQ3kwTTE4m99MAbnXttBGDFeeaVRiZEgCVLGy
+         Y19Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710544603; x=1711149403;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RwLzfWwBwbCcEZKduRLWrp8dVywQR/08FJQ2Cohkdxk=;
+        b=HiEGgiRBN3s99Oj1JK/UoT/XZIiB0HT0Y3uXw0J9VLSlk/ZtokH06tjBo6J+O1x59C
+         0zw81NQ53MFeovr11ASceWWXcqAHdY20AdgUKyDuW4pfSDxIj4demUhkNcnIMOfNb65+
+         V8MRD2RUmQBacsNvsfZYee9exUDXqTAo1TGbvT8d/2xJsPJpMfvqqQKDcTi/sI/pfWA7
+         RvCXPfewxnrzbO/fqanPE603cImF920dmIjb2ReTu3Abf+VeXTGwjtatr+AaDVS9/dfA
+         wBnr+v3vgqcI+f3vpG7WGe6WLxTl64UeVzrdbDxkys+g0FgOmfv0Z1U8Xg9ZaYJqS0EL
+         KXqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVHrkr1vgS3dE8AvGX/Dr1r8n/n8UYx9YydGPCUq+AcRfw7HE9YJn1Uj7gpK1L/LxtQGftmDs80nWPgdat99Y0nkhB7xoIoP20mHJYZgchI
+X-Gm-Message-State: AOJu0YybZHzPcv3VnZ+Vxc5+SOBB03Rmj3DnmYOAy8a3bLFWCVG+yFCN
+	jBXJrARyQW1jqwNCtabTzRMdR/Oql12otVcrhZzDhzeNELI8aUP8HSR6JuGBy9coHNCaUutdlph
+	wTIkJtH3YWBXAWnGER/QCqmjt/0ZzIFtDpieJ
+X-Google-Smtp-Source: AGHT+IGKD8w8/5z/F0F9q8ayCrR92OJWIbaZuDsOWlQLAzyPphKXnc4hYGvwLrq4DSMEKG49OUJvLfIeuKwgMy4Ibew=
+X-Received: by 2002:a05:6402:898:b0:568:6ca6:98c1 with SMTP id
+ e24-20020a056402089800b005686ca698c1mr18546edy.0.1710544602820; Fri, 15 Mar
+ 2024 16:16:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZfSYiWcE0_au_ZPt@google.com>
+References: <20240307222932.584164-1-rmoar@google.com>
+In-Reply-To: <20240307222932.584164-1-rmoar@google.com>
+From: Daniel Latypov <dlatypov@google.com>
+Date: Fri, 15 Mar 2024 16:16:30 -0700
+Message-ID: <CAGS_qxr==N-E4VHei0o-A1=5dno_ozqMsHPHoq7RFF5bearhpg@mail.gmail.com>
+Subject: Re: [PATCH v3] kunit: tool: add ability to parse multiple files
+To: Rae Moar <rmoar@google.com>
+Cc: shuah@kernel.org, davidgow@google.com, brendan.higgins@linux.dev, 
+	kevko@google.com, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24/03/15 11:50AM, Stanislav Fomichev wrote:
-> On 03/15, Jose Fernandez wrote:
-> > This patch enhances the BPF helpers by adding a kfunc to retrieve the
-> > cgroup v2 ID of a specific task, addressing a previous limitation where
-> > only bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
-> > particularly useful for scenarios where obtaining the cgroup ID of a
-> > task other than the "current" one is necessary, which the existing
-> > bpf_get_current_cgroup_id helper cannot accommodate. A specific use case
-> > at Netflix involved the sched_switch tracepoint, where we had to get
-> > the cgroup IDs of both the previous and next tasks.
-> > 
-> > The bpf_task_get_cgroup_id kfunc returns a task's cgroup ID, correctly
-> > implementing RCU read locking and unlocking for safe data access, and
-> > leverages existing cgroup.h helpers to fetch the cgroup and its ID.
-> > 
-> > Signed-off-by: Jose Fernandez <josef@netflix.com>
-> > Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
-> > ---
-> >  kernel/bpf/helpers.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> > 
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index a89587859571..8038b2bd3488 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -2266,6 +2266,27 @@ bpf_task_get_cgroup1(struct task_struct *task, int hierarchy_id)
-> >  		return NULL;
-> >  	return cgrp;
-> >  }
-> > +
-> > +/**
-> > + * bpf_task_get_cgroup_id - Get the cgroup ID of a task.
-> > + * @task: The target task
-> > + *
-> > + * This function returns the ID of the task's default cgroup, primarily
-> > + * designed for use with cgroup v2. In cgroup v1, the concept of default
-> > + * cgroup varies by subsystem, and while this function will work with
-> > + * cgroup v1, it's recommended to use bpf_task_get_cgroup1 instead.
-> > + */
-> > +__bpf_kfunc u64 bpf_task_get_cgroup_id(struct task_struct *task)
-> > +{
-> > +	struct cgroup *cgrp;
-> > +	u64 cgrp_id;
-> > +
-> > +	rcu_read_lock();
-> > +	cgrp = task_dfl_cgroup(task);
-> > +	cgrp_id = cgroup_id(cgrp);
-> > +	rcu_read_unlock();
-> > +	return cgrp_id;
-> > +}
-> >  #endif /* CONFIG_CGROUPS */
-> >  
-> >  /**
-> > @@ -2573,6 +2594,7 @@ BTF_ID_FLAGS(func, bpf_cgroup_ancestor, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-> >  BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
-> >  BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
-> >  BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-> > +BTF_ID_FLAGS(func, bpf_task_get_cgroup_id, KF_RCU)
-> 
-> Any reason we are not returning 'struct cgroup' pointer? That should
-> allow using other kfuncs that are all 'struct cgrop' based as well.
+On Thu, Mar 7, 2024 at 2:29=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
+>
+> Add ability to parse multiple files. Additionally add the
+> ability to parse all results in the KUnit debugfs repository.
+>
+> How to parse multiple files:
+>
+> ./tools/testing/kunit/kunit.py parse results.log results2.log
+>
+> How to parse all files in directory:
+>
+> ./tools/testing/kunit/kunit.py parse directory_path/*
+>
+> How to parse KUnit debugfs repository:
+>
+> ./tools/testing/kunit/kunit.py parse debugfs
+>
+> For each file, the parser outputs the file name, results, and test
+> summary. At the end of all parsing, the parser outputs a total summary
+> line.
+>
+> This feature can be easily tested on the tools/testing/kunit/test_data/
+> directory.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
+> Changes since v2:
+> - Fixed bug with input from command line. I changed this to use
+>   input(). Daniel, let me know if this works for you.
 
-Returning the cgroup pointer would make this kfunc more flexible, agreed. 
-My intention was to make the kfunc more user friendly by returning the cgroup ID, 
-but I can see how it would be beneficial to have the cgroup pointer as well. 
-I'll update the patch to return the cgroup pointer.
+Oops, sorry for the delay.
+
+Hmm, it seems to be treating the stdin lines like file names
+
+$ ./tools/testing/kunit/kunit.py parse <
+./tools/testing/kunit/test_data/test_config_printk_time.log
+File path: Could not find  [    0.060000] printk: console [mc-1] enabled
+
+Oh, I see, we're prompting the user via
+  input("File path: ")
+?
+
+I'm not necessarily against such a change, but I would personally
+prefer the old behavior of being able to read ktap from stdin
+directly.
+As a user, I'd also prefer to only type out filenames as arguments
+where I can get autocomplete, so `input()` here wouldn't help me
+personally.
+
+Applying a hackish patch like this [1] on top gets the behavior I'd
+personally expect:
+$ ./tools/testing/kunit/kunit.py parse <
+./tools/testing/kunit/test_data/test_config_printk_time.log
+/dev/stdin
+...
+[16:01:50] Testing complete. Ran 10 tests: passed: 10
+
+I'd mentioned in the previous version that we could have parsed files
+contain a `Union[str, TextIO]` and then read from the `sys.stdin` file
+object directly.
+But having it blindly open `/dev/stdin` seems to work just the same,
+if we want to keep our list simpler and just hold strings.
+
+[1] this just also re-orders the `os.path.isdir()` check as mentioned
+below, which simplifies things
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 1aa3d736d80c..311d107bd684 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -515,18 +515,18 @@ def parse_handler(cli_args: argparse.Namespace) -> No=
+ne:
+        total_test =3D kunit_parser.Test()
+        total_test.status =3D kunit_parser.TestStatus.SUCCESS
+        if not parsed_files:
+-               parsed_files.append(input("File path: "))
+-
+-       if parsed_files[0] =3D=3D "debugfs" and len(parsed_files) =3D=3D 1:
++               parsed_files.append('/dev/stdin')
++       elif len(parsed_files) =3D=3D 1 and parsed_files[0] =3D=3D "debugfs=
+":
+                parsed_files.pop()
+                for (root, _, files) in os.walk("/sys/kernel/debug/kunit"):
+                        parsed_files.extend(os.path.join(root, f) for
+f in files if f =3D=3D "results")
+-
+-       if not parsed_files:
+-               print("No files found.")
++               if not parsed_files:
++                       print("No files found.")
+
+        for file in parsed_files:
+-               if os.path.isfile(file):
++               if os.path.isdir(file):
++                       print("Ignoring directory ", file)
++               elif os.path.exists(file):
+                        print(file)
+                        with open(file, 'r', errors=3D'backslashreplace') a=
+s f:
+                                kunit_output =3D f.read().splitlines()
+@@ -536,8 +536,6 @@ def parse_handler(cli_args: argparse.Namespace) -> None=
+:
+                                                        json=3Dcli_args.jso=
+n)
+                        _, test =3D parse_tests(request, metadata, kunit_ou=
+tput)
+                        total_test.subtests.append(test)
+-               elif os.path.isdir(file):
+-                       print("Ignoring directory ", file)
+                else:
+                        print("Could not find ", file)
+
+
+> - Add more specific warning messages
+>
+>  tools/testing/kunit/kunit.py | 56 +++++++++++++++++++++++++-----------
+>  1 file changed, 40 insertions(+), 16 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index bc74088c458a..1aa3d736d80c 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -511,19 +511,42 @@ def exec_handler(cli_args: argparse.Namespace) -> N=
+one:
+>
+>
+>  def parse_handler(cli_args: argparse.Namespace) -> None:
+> -       if cli_args.file is None:
+> -               sys.stdin.reconfigure(errors=3D'backslashreplace')  # typ=
+e: ignore
+> -               kunit_output =3D sys.stdin  # type: Iterable[str]
+> -       else:
+> -               with open(cli_args.file, 'r', errors=3D'backslashreplace'=
+) as f:
+> -                       kunit_output =3D f.read().splitlines()
+> -       # We know nothing about how the result was created!
+> -       metadata =3D kunit_json.Metadata()
+> -       request =3D KunitParseRequest(raw_output=3Dcli_args.raw_output,
+> -                                       json=3Dcli_args.json)
+> -       result, _ =3D parse_tests(request, metadata, kunit_output)
+> -       if result.status !=3D KunitStatus.SUCCESS:
+> -               sys.exit(1)
+> +       parsed_files =3D cli_args.files # type: List[str]
+> +       total_test =3D kunit_parser.Test()
+> +       total_test.status =3D kunit_parser.TestStatus.SUCCESS
+> +       if not parsed_files:
+> +               parsed_files.append(input("File path: "))
+> +
+> +       if parsed_files[0] =3D=3D "debugfs" and len(parsed_files) =3D=3D =
+1:
+> +               parsed_files.pop()
+> +               for (root, _, files) in os.walk("/sys/kernel/debug/kunit"=
+):
+> +                       parsed_files.extend(os.path.join(root, f) for f i=
+n files if f =3D=3D "results")
+> +
+> +       if not parsed_files:
+> +               print("No files found.")
+> +
+> +       for file in parsed_files:
+> +               if os.path.isfile(file):
+
+Note: perhaps we should reorder this to
+
+if os.path.isdir(file):
+   ...
+elif os.path.exists(file):
+  ...
+
+That way this code will then start handling non-regular, yet readable
+files, like links, etc.
+That would also help out if we started passing in the magic
+"/dev/stdin" (since it's a symlink)
+
+> +                       print(file)
+> +                       with open(file, 'r', errors=3D'backslashreplace')=
+ as f:
+> +                               kunit_output =3D f.read().splitlines()
+> +                       # We know nothing about how the result was create=
+d!
+> +                       metadata =3D kunit_json.Metadata()
+> +                       request =3D KunitParseRequest(raw_output=3Dcli_ar=
+gs.raw_output,
+> +                                                       json=3Dcli_args.j=
+son)
+> +                       _, test =3D parse_tests(request, metadata, kunit_=
+output)
+> +                       total_test.subtests.append(test)
+> +               elif os.path.isdir(file):
+> +                       print("Ignoring directory ", file)
+
+minor nit: `print()` will automatically put a space between arguments, e.g.
+> Ignoring directory  .
+is what it'll print if I run `kunit.py parse .`
+
+It might be better to use a f-string so put quotes around it, like so
+  print(f'Ignoring directory "{file}"')}
+and below,
+  print(f'Could not find "{file}"')
+
+> +               else:
+> +                       print("Could not find ", file)
+> +
+> +       if len(parsed_files) > 1: # if more than one file was parsed outp=
+ut total summary
+> +               print('All files parsed.')
+> +               if not request.raw_output:
+> +                       stdout.print_with_timestamp(kunit_parser.DIVIDER)
+> +                       kunit_parser.bubble_up_test_results(total_test)
+> +                       kunit_parser.print_summary_line(total_test)
+>
+>
+>  subcommand_handlers_map =3D {
+> @@ -569,9 +592,10 @@ def main(argv: Sequence[str]) -> None:
+>                                             help=3D'Parses KUnit results =
+from a file, '
+>                                             'and parses formatted results=
+.')
+>         add_parse_opts(parse_parser)
+> -       parse_parser.add_argument('file',
+> -                                 help=3D'Specifies the file to read resu=
+lts from.',
+> -                                 type=3Dstr, nargs=3D'?', metavar=3D'inp=
+ut_file')
+> +       parse_parser.add_argument('files',
+> +                                 help=3D'List of file paths to read resu=
+lts from or keyword'
+> +                                               '"debugfs" to read all re=
+sults from the debugfs directory.',
+
+minor spacing note: there are two ' 's here in the series of tabs, i.e.
+  ^I^I^I^I  ^I^I'"debugfs" to read all results from the debugfs directory.'=
+,$
+(using vim's :list formatting)
+
+This was copy-pasted from the lines above and below which look like
+  ^I^I^I^I  help=3D'List of file paths to read results from or keyword'$
+i.e. they use the 2 spaces to align after the tabs.
+
+We can just drop those 2 spaces since they won't visually affect the
+outcome with a tabwidth of 8 spaces.
+
+Sorry again for the delayed reply,
+Daniel
 
