@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-6359-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6360-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC4C87CF48
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 15:46:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F20987CF4F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 15:46:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3B94283943
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 14:46:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DE1E1C222BC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 14:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39CC45020;
-	Fri, 15 Mar 2024 14:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7543B789;
+	Fri, 15 Mar 2024 14:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tt1YoZjW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VZ0dtYY+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC73D4500B;
-	Fri, 15 Mar 2024 14:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DDF46544;
+	Fri, 15 Mar 2024 14:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710513900; cv=none; b=PM51em9SuD32GvET+ZI1/AxcVkK4DFPx2YXmdfP8YIwcFZZponxlbPYSLr14x1EFDwUXBqQFDERFqpsFDzMLhGWBc1j+1V86PFHzm82Wana2ha8xx/BNtn/r8o6na1/xh/kmVSsSpslhRulEp0lNqTbRmMN5EBCqb5mwe/s+Z9Y=
+	t=1710513903; cv=none; b=dTSZpX0mvoUord0wmCYmVRJSzFgc2FGd1b+zGdSsUJ9k0iNfapA1KJz+5g3PvD3Ye6lx9bks2VAqDEF1H71uzfirgL24+XSeWL5EMkDdKSqzP56PkqbAyAbQKX0ySbDAhrkNGlz7erZ/aUTR2vDuB9ZaTtnXwINRduM/bOHLWAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710513900; c=relaxed/simple;
-	bh=/oHVc4ITn2gHZ2tfhFRi9yxxyiWXm+F07UEEsHeUq6M=;
+	s=arc-20240116; t=1710513903; c=relaxed/simple;
+	bh=lYHlpbXv8wmdpHJLSDMirre3aCp7tdPr2ucjfV4U1U8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jyoVCuZSW0O3VE3Ssf/EYkAVd8zBM6ESEMYPtCF5/qQ7bC3ptfPTnlA0Gz3tfnoIk0yxgtJUpZmcGHjd8mFxuQg7E8KFIlyXzRtDyvaqdo7lrTi8j+LWzWEUv5LEc8tRgQiy1wGXDUSgBw6MnbdADxuzP4OwcYZ5cu1JjHPXiGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tt1YoZjW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3AEC43609;
-	Fri, 15 Mar 2024 14:44:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=CVnAUiyDtn/Km7TkC+jS/Nd03N0BNn4mVo0qy7+gf5yQxDFjF5/Hv0/z/XFYRF1D4++pRtNcJE9AAXnahsYL0WznPcMUQ72BLbhWjhalQm6kxLUIfnNfhU8sUHno7PqSpbZem38JSYe/U0gxzkdvEpBbQH1OkwAGWilAgT1QasU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VZ0dtYY+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1B9C433F1;
+	Fri, 15 Mar 2024 14:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710513900;
-	bh=/oHVc4ITn2gHZ2tfhFRi9yxxyiWXm+F07UEEsHeUq6M=;
+	s=k20201202; t=1710513902;
+	bh=lYHlpbXv8wmdpHJLSDMirre3aCp7tdPr2ucjfV4U1U8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=tt1YoZjWjVTv5x+nxf9fa5f8NhDuD10Mu+izqemGgJxl2pSrpFPiMV0KjoBZ2ktOt
-	 byinqVtY9egGMYIOfVAC3ZFkyawgnOa5STwJvEgZGFSRmyv/cyrXv5+HUakEekBMqU
-	 P//rrquI8EI3qwGyanGY7uVjeU8Cfiiw4wuoR1lM7i58rqWdFo3e0KmCTv/CHnQPmg
-	 IeI/ht6Yi9/AI0Fd/h/CzE0VbuWnyOCz2EhnVibBqwEewLHzo3qr2FycbigDDVGAYF
-	 nDSAHdJOZ+beZ74fL5NZrHti2GIzeLVQpRWVXmjPwNWmbitUI1q7MvO5pF2doMkti9
-	 +rJzFAoY7Fylw==
+	b=VZ0dtYY+oDlLwucql1aC6sy0cTEuCi3fEdRQ4dhwzugjxByCeHGKnflp42Ed7KxaY
+	 /Sew4SrSWKD9HTtgtOWPVNdjg9vCJMObMdB8BoVfQPP/9P+PSVVUQgivmI5lt/FyAf
+	 bKtztad+76f9XD2tJglys/BBvB3Pt1dKtC8o6gbcmHJQXdVx7jHqs5qEg8U9GWw9kT
+	 iyqCDEXc4p9g8yRQSFHFfMv4nYnA8uFOizaq0t7Mao4xPdwfbpG3VTPv+9pZi4bI7D
+	 RsVbvd1ayJJ4BUOxGSExeLI6cHpj9Drh7YBIDOn38qIXpuHiOjNg8+7MqVAuYc4d1J
+	 IAF25MZJamuuA==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Fri, 15 Mar 2024 15:44:42 +0100
-Subject: [PATCH v4 5/7] HID: bpf: allow to inject HID event from BPF
+Date: Fri, 15 Mar 2024 15:44:43 +0100
+Subject: [PATCH v4 6/7] selftests/hid: add tests for hid_bpf_input_report
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240315-b4-hid-bpf-new-funcs-v4-5-079c282469d3@kernel.org>
+Message-Id: <20240315-b4-hid-bpf-new-funcs-v4-6-079c282469d3@kernel.org>
 References: <20240315-b4-hid-bpf-new-funcs-v4-0-079c282469d3@kernel.org>
 In-Reply-To: <20240315-b4-hid-bpf-new-funcs-v4-0-079c282469d3@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, 
@@ -62,21 +62,16 @@ Cc: Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1710513885; l=4162;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1710513885; l=4246;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=/oHVc4ITn2gHZ2tfhFRi9yxxyiWXm+F07UEEsHeUq6M=;
- b=pmNfz8SNJ365ckpVlztGoaqjLKyJnC67YDeKUoWiRbm9qrXqhlz0CRdXkETKByFODZdTYeeEp
- kI5oJb3zMjkA1dtR/9UwlJV8V9S4//QEirXbuxf3ger8IuZxwyQf9RN
+ bh=lYHlpbXv8wmdpHJLSDMirre3aCp7tdPr2ucjfV4U1U8=;
+ b=IIe/kVEZQ/jDRK2mnYLrzNf7zUvgbeEt3ejpPJX82UWsH0HVPIsWT8VFNroSxg7DNnzBPLM7f
+ +FeZxznY/E1C+j3MsVXYOul9vrKfmH5SKdVsrwesBLPOJ9SfWllyd1h
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-It can be interesting to inject events from BPF as if the event were
-to come from the device.
-For example, some multitouch devices do not all the time send a proximity
-out event, and we might want to send it for the physical device.
-
-Compared to uhid, we can now inject events on any physical device, not
-just uhid virtual ones.
+Usual way of testing, we call the function and ensures we receive
+the event
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
@@ -88,97 +83,125 @@ no changes in v3
 
 no changes in v2
 ---
- Documentation/hid/hid-bpf.rst      |  2 +-
- drivers/hid/bpf/hid_bpf_dispatch.c | 29 +++++++++++++++++++++++++++++
- drivers/hid/hid-core.c             |  1 +
- include/linux/hid_bpf.h            |  2 ++
- 4 files changed, 33 insertions(+), 1 deletion(-)
+ tools/testing/selftests/hid/hid_bpf.c              | 49 +++++++++++++++++++++-
+ tools/testing/selftests/hid/progs/hid.c            | 22 ++++++++++
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  |  4 ++
+ 3 files changed, 73 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
-index a575004d9025..0765b3298ecf 100644
---- a/Documentation/hid/hid-bpf.rst
-+++ b/Documentation/hid/hid-bpf.rst
-@@ -179,7 +179,7 @@ Available API that can be used in syscall HID-BPF programs:
- -----------------------------------------------------------
- 
- .. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
--   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_allocate_context hid_bpf_release_context
-+   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_input_report hid_bpf_allocate_context hid_bpf_release_context
- 
- General overview of a HID-BPF program
- =====================================
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index a5b88b491b80..e1a650f4a626 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -508,6 +508,34 @@ hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz)
- 	kfree(dma_data);
- 	return ret;
+diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
+index 8332014838b0..f825623e3edc 100644
+--- a/tools/testing/selftests/hid/hid_bpf.c
++++ b/tools/testing/selftests/hid/hid_bpf.c
+@@ -749,6 +749,52 @@ TEST_F(hid_bpf, test_hid_change_report)
+ 	ASSERT_EQ(buf[2], 0) TH_LOG("leftovers_from_previous_test");
  }
-+
-+/**
-+ * hid_bpf_input_report - Inject a HID report in the kernel from a HID device
-+ *
-+ * @ctx: the HID-BPF context previously allocated in hid_bpf_allocate_context()
-+ * @type: the type of the report (%HID_INPUT_REPORT, %HID_FEATURE_REPORT, %HID_OUTPUT_REPORT)
-+ * @buf: a %PTR_TO_MEM buffer
-+ * @buf__sz: the size of the data to transfer
-+ *
-+ * @returns %0 on success, a negative error code otherwise.
+ 
++/*
++ * Call hid_bpf_input_report against the given uhid device,
++ * check that the program is called and does the expected.
 + */
-+__bpf_kfunc int
-+hid_bpf_input_report(struct hid_bpf_ctx *ctx, enum hid_report_type type, u8 *buf,
-+		     const size_t buf__sz)
++TEST_F(hid_bpf, test_hid_user_input_report_call)
 +{
-+	struct hid_device *hdev;
-+	size_t size = buf__sz;
-+	int ret;
++	struct hid_hw_request_syscall_args args = {
++		.retval = -1,
++		.size = 10,
++	};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
++	);
++	__u8 buf[10] = {0};
++	int err, prog_fd;
 +
-+	/* check arguments */
-+	ret = __hid_bpf_hw_check_params(ctx, buf, &size, type);
-+	if (ret)
-+		return ret;
++	LOAD_BPF;
 +
-+	hdev = (struct hid_device *)ctx->hid; /* discard const */
++	args.hid = self->hid_id;
++	args.data[0] = 1; /* report ID */
++	args.data[1] = 2; /* report ID */
++	args.data[2] = 42; /* report ID */
 +
-+	return hid_input_report(hdev, type, buf, size, 0);
++	prog_fd = bpf_program__fd(self->skel->progs.hid_user_input_report);
++
++	/* check that there is no data to read from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(self->hidraw_fd, buf, sizeof(buf));
++	ASSERT_EQ(err, -1) TH_LOG("read_hidraw");
++
++	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
++
++	ASSERT_OK(err) TH_LOG("error while calling bpf_prog_test_run_opts");
++
++	ASSERT_EQ(args.retval, 0);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(self->hidraw_fd, buf, sizeof(buf));
++	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
++	ASSERT_EQ(buf[0], 1);
++	ASSERT_EQ(buf[1], 2);
++	ASSERT_EQ(buf[2], 42);
 +}
- __bpf_kfunc_end_defs();
++
+ /*
+  * Call hid_bpf_hw_output_report against the given uhid device,
+  * check that the program is called and does the expected.
+@@ -797,8 +843,7 @@ TEST_F(hid_bpf, test_hid_user_output_report_call)
+ }
  
  /*
-@@ -542,6 +570,7 @@ BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE)
- BTF_ID_FLAGS(func, hid_bpf_hw_request)
- BTF_ID_FLAGS(func, hid_bpf_hw_output_report)
-+BTF_ID_FLAGS(func, hid_bpf_input_report)
- BTF_KFUNCS_END(hid_bpf_syscall_kfunc_ids)
+- * Attach hid_user_raw_request to the given uhid device,
+- * call the bpf program from userspace
++ * Call hid_hw_raw_request against the given uhid device,
+  * check that the program is called and does the expected.
+  */
+ TEST_F(hid_bpf, test_hid_user_raw_request_call)
+diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
+index 2c2b679a83b1..f67d35def142 100644
+--- a/tools/testing/selftests/hid/progs/hid.c
++++ b/tools/testing/selftests/hid/progs/hid.c
+@@ -125,6 +125,28 @@ int hid_user_output_report(struct hid_hw_request_syscall_args *args)
+ 	return 0;
+ }
  
- static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 1243595890ba..b1fa0378e8f4 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -2975,6 +2975,7 @@ static struct hid_bpf_ops hid_ops = {
- 	.hid_get_report = hid_get_report,
- 	.hid_hw_raw_request = hid_hw_raw_request,
- 	.hid_hw_output_report = hid_hw_output_report,
-+	.hid_input_report = hid_input_report,
- 	.owner = THIS_MODULE,
- 	.bus_type = &hid_bus_type,
- };
-diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-index 5c7ff93dc73e..17b08f500098 100644
---- a/include/linux/hid_bpf.h
-+++ b/include/linux/hid_bpf.h
-@@ -104,6 +104,8 @@ struct hid_bpf_ops {
- 				  size_t len, enum hid_report_type rtype,
- 				  enum hid_class_request reqtype);
- 	int (*hid_hw_output_report)(struct hid_device *hdev, __u8 *buf, size_t len);
-+	int (*hid_input_report)(struct hid_device *hid, enum hid_report_type type,
-+				u8 *data, u32 size, int interrupt);
- 	struct module *owner;
- 	const struct bus_type *bus_type;
- };
++SEC("syscall")
++int hid_user_input_report(struct hid_hw_request_syscall_args *args)
++{
++	struct hid_bpf_ctx *ctx;
++	const size_t size = args->size;
++	int i, ret = 0;
++
++	if (size > sizeof(args->data))
++		return -7; /* -E2BIG */
++
++	ctx = hid_bpf_allocate_context(args->hid);
++	if (!ctx)
++		return -1; /* EPERM check */
++
++	ret = hid_bpf_input_report(ctx, HID_INPUT_REPORT, args->data, size);
++	args->retval = ret;
++
++	hid_bpf_release_context(ctx);
++
++	return 0;
++}
++
+ static const __u8 rdesc[] = {
+ 	0x05, 0x01,				/* USAGE_PAGE (Generic Desktop) */
+ 	0x09, 0x32,				/* USAGE (Z) */
+diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+index 50c6a0d5765e..9cd56821d0f1 100644
+--- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
++++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+@@ -96,5 +96,9 @@ extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
+ 			      enum hid_class_request reqtype) __ksym;
+ extern int hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx,
+ 				    __u8 *buf, size_t buf__sz) __ksym;
++extern int hid_bpf_input_report(struct hid_bpf_ctx *ctx,
++				enum hid_report_type type,
++				__u8 *data,
++				size_t buf__sz) __ksym;
+ 
+ #endif /* __HID_BPF_HELPERS_H */
 
 -- 
 2.44.0
