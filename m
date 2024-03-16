@@ -1,61 +1,76 @@
-Return-Path: <linux-kselftest+bounces-6371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10F8887D90E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 07:25:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03A2787DAB5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 17:17:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CBB31F21B51
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 06:25:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 270791C20A67
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 16:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED49C79F3;
-	Sat, 16 Mar 2024 06:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F841BC26;
+	Sat, 16 Mar 2024 16:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NdSGXzFH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cGuK5ex0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14CDF9CF;
-	Sat, 16 Mar 2024 06:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA984125C9;
+	Sat, 16 Mar 2024 16:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710570298; cv=none; b=CAumLe2oIil73o/B2Z142c54fhCPWHeOYzXyGYMZgEbwENkoThC9+DdGVFi6jzL63tUeSYWMKQxVxt7nCE4zEX0ZCzHcAZypEHrOhXNWlaouu08Jgdy/nL1Daun5kae4WcEnONkZXplPNQYcft0MIqOBQAsuAelUb2Jn7ijHuto=
+	t=1710605822; cv=none; b=lqYOtUwVYNO2djASP9frXi2Fu3x/JyCgfli0zJbeH5KaqRDJsjuVG2Go3pTGsWfb4ETnKpmr9TogGJGVgEmSQUDtRYqQuA5HN2C4/soPMWfdRUlXXZHofs0UTE/z/FZvQ1lrnWn/an5KHgmfP3u1Rq5pvWRyeYDDVnWbmW8Ihjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710570298; c=relaxed/simple;
-	bh=lpCmIOaWDW0lK0tO6FfNL6Zr9krWRVmzaB1o7KsbiFs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:References:Cc:
-	 In-Reply-To:Content-Type; b=FPPDJXGIdoffTTm4tXLpos5U6AMJSWVvQAPCcwf53GKoQofTeTuY8GPvBsAagC6Xvq/4nVMoJN71xQ6lsHrFQcWEZMALAa5zzgrW1lXBRRrR+51ZmGKPNZ+3H3MPmkjCmQNLXE3hOsVWylRMyfJt/oe2VcMSIXI7izQ+Hx5DMUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NdSGXzFH; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710570296; x=1742106296;
-  h=message-id:date:mime-version:from:subject:to:references:
-   cc:in-reply-to:content-transfer-encoding;
-  bh=lpCmIOaWDW0lK0tO6FfNL6Zr9krWRVmzaB1o7KsbiFs=;
-  b=NdSGXzFHXxDexDejLsM4r7C0ihhWfJ2biAENlIYvACI45eT81rArG37U
-   kHwaYRxoObfg0DXNAczeciHHNvBw6IUU3ImhnGXomvHtmpJie+uTI+yJd
-   xo/3JVJgwvSUsenlXAHl2o5dieleub6cyP75kAjOcPiGW6oUaUmlaCjKD
-   GFl3Eb6sNAW/xgtsUxqE9h0R1EVN5lXySOnd9mXKFljjb7PowGN4QQ+Jo
-   Oq3ft73cITozfSzJg1KqnYG76StOoE1xioUCuddYK5FCMBNbGp5RSb9LV
-   MzbIpCE9fYJRPJdLEBiF7HRIfpArk1PtzmKCRwftGfSA/bYbM4vbDaJlL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11014"; a="16099338"
-X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
-   d="scan'208";a="16099338"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 23:24:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
-   d="scan'208";a="43953442"
-Received: from jhanbaba-mobl.amr.corp.intel.com (HELO [10.124.36.86]) ([10.124.36.86])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 23:24:55 -0700
-Message-ID: <548933c5-04aa-422c-9738-110ab5eb4ad4@intel.com>
-Date: Fri, 15 Mar 2024 23:24:56 -0700
+	s=arc-20240116; t=1710605822; c=relaxed/simple;
+	bh=aU1sWavNspkwe5ksK+PmDUc1vOgq01LGH753my8dzqQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TTjkGQEI+04QnooQ24LztLBkHk9pz6cVT6w0+RNv731tnw0zAgROcFpVwXi+0TOTitIJ+jS5d4JPDatUhnD4e2Uf0zy1mKH4CpShVTGTNlqafK2XHdp2vMFxGol82mU6PYoC7Z//B0lefF8eCF62hhyfoNjGjPXJ8DQelKX0Stk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cGuK5ex0; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e00896dfdcso1043105ad.1;
+        Sat, 16 Mar 2024 09:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710605820; x=1711210620; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ad79nxUV3suzPFik/TywaNEexbwGs2i2M0+RnoUpzx8=;
+        b=cGuK5ex0gNh7QJgOK0f9OKHLbip/0cyoX5kqaLN2wxGv+cMnIAvo1rdA/vwfQY/s08
+         leFdVLQJlJsWEVsexC9FKLhxlM36tklmVDN0f4tVHtc0XqAaVPp+KzkVoZVJxYULuZzR
+         BdOvKv8ekGlWpmrt9l+2yUseE5LK8mJKLE12sfhmOMiO9/nl3P6KLkZYIOGmu5JJg8k8
+         qLDSszqxnPPO+dTMPzVno9q6tFPueB5BgHBeTWw7+0IgFZ2Xalrnt4iRJ6tsooT8Mual
+         0ltLsA4XJmbs76GPLVg4gB9veMdDqEKapPDS/UcNqgfVyXPOxN1hOnqSrSsXfTLinaXQ
+         RlZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710605820; x=1711210620;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ad79nxUV3suzPFik/TywaNEexbwGs2i2M0+RnoUpzx8=;
+        b=Ufi1hWjtjo2KPnZulGkzY1rZ2nhfavMJCb0OpVVPLyj5/1BAUA1973kvUtssNJMj2I
+         5aPnhOBShZnRCb1F94Rt4gQu4yP2sRdtvFosxWGTno65JeNnuglgy9sMsDl8O52yT2Zf
+         hP7Ai83X9AU+eXLWEYqm5MQLVj/Vo5YE25W1iYb+DK7zj8rhPj7EZ//M1I2KAdMx3wCQ
+         p/oaHNNmYeFGmov1Cltyv0N3Ii6lt4ZQ3BW7ex2EBkARmC3l629u/8lUtaW7cxULVpdQ
+         qRds5Mslxn1JdzFlT2jBI3U13UkzBOrXLAopYGZRwteKbXrTG+H2d5Cie2WVzwPzGBPf
+         FrLg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+/HV9B6NL5LvmAc58xTw3amYlt6PsMepEa40hgBnojcbj6lnuJdypwzKmfsTEhoAUqItiRnp5OyHSW3oxZhS8KUPXbZijMBLvinvPz1e63RZz2UdTeW1cbcj7fH8S1KcFwuPCIxkwvP2I/5vROE1AViH9MILZLDVNEYcPK4ql6HZambO6VYysjdzJFuo7havWfN7hK2QmXAEpv2MSScwdZunYNWcKoC6J9KkWl39Wo5iIAwTZYcXdAPAlU2Nw2kMY+gE9uWcq/33cBXtwDtiwKCLfjjno5A==
+X-Gm-Message-State: AOJu0YzHI0RpE+CCwasMkesD2vYE9FRtpsBV/PwnIXclEGyTOhX2Sjx4
+	R/ycoE697Jf/HQo34s8g15+ZLBAHwNW5NLbMiVQZSlSDTrMPaA829EITZglj
+X-Google-Smtp-Source: AGHT+IGA+TA01Bxsw9/mfWXt9gpOVUmZyN7CpbFyOEGBY8brlAsGWTPBr93mRcRuI84f8oFkGg0zAg==
+X-Received: by 2002:a17:903:22c6:b0:1e0:9a7:e606 with SMTP id y6-20020a17090322c600b001e009a7e606mr552821plg.0.1710605820013;
+        Sat, 16 Mar 2024 09:17:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z17-20020a170903409100b001dd88a5dc47sm5958808plc.290.2024.03.16.09.16.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Mar 2024 09:16:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <04f34097-7788-490d-a9c2-82b44bf6af44@roeck-us.net>
+Date: Sat, 16 Mar 2024 09:16:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,329 +78,161 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: "Chen, Zide" <zide.chen@intel.com>
-Subject: Re: [RFC PATCH v5 23/29] KVM: selftests: TDX: Add shared memory test
-To: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
- "Afranji, Ryan" <afranji@google.com>, "Aktas, Erdem"
- <erdemaktas@google.com>, Sagi Shahar <sagis@google.com>,
- "Yamahata, Isaku" <isaku.yamahata@intel.com>
-References: <20231212204647.2170650-1-sagis@google.com>
- <20231212204647.2170650-24-sagis@google.com>
- <DS7PR11MB7886AA5F8A19CDFCB5566B0EF6292@DS7PR11MB7886.namprd11.prod.outlook.com>
+Subject: Re: [PATCH 00/14] Add support for suppressing warning backtraces
 Content-Language: en-US
-Cc: Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Gonda <pgonda@google.com>, "Xu, Haibo1" <haibo1.xu@intel.com>,
- Chao Peng <chao.p.peng@linux.intel.com>,
- "Annapurve, Vishal" <vannapurve@google.com>,
- Roger Wang <runanwang@google.com>, Vipin Sharma <vipinsh@google.com>,
- jmattson@google.com, dmatlack@google.com, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-mm@kvack.org
-In-Reply-To: <DS7PR11MB7886AA5F8A19CDFCB5566B0EF6292@DS7PR11MB7886.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Guenter Roeck <linux@roeck-us.net>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
+ <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>,
+ Kees Cook <keescook@chromium.org>, Daniel Diaz <daniel.diaz@linaro.org>,
+ David Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
+ <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
+ kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ loongarch@lists.linux.dev, netdev@lists.linux.dev
+References: <20240312170309.2546362-1-linux@roeck-us.net>
+ <CAMuHMdUkvagJVEfnhq=Nx2jnmdS0Ax+zy1CvyN0k7k1EwUpu+g@mail.gmail.com>
+ <6d9269c0-bd38-4965-a454-4358e0a182e3@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <6d9269c0-bd38-4965-a454-4358e0a182e3@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 3/14/24 07:37, Guenter Roeck wrote:
+> On 3/14/24 06:36, Geert Uytterhoeven wrote:
+>> Hi Günter,
+>>
+>> On Tue, Mar 12, 2024 at 6:03 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>> Some unit tests intentionally trigger warning backtraces by passing bad
+>>> parameters to kernel API functions. Such unit tests typically check the
+>>> return value from such calls, not the existence of the warning backtrace.
+>>>
+>>> Such intentionally generated warning backtraces are neither desirable
+>>> nor useful for a number of reasons.
+>>> - They can result in overlooked real problems.
+>>> - A warning that suddenly starts to show up in unit tests needs to be
+>>>    investigated and has to be marked to be ignored, for example by
+>>>    adjusting filter scripts. Such filters are ad-hoc because there is
+>>>    no real standard format for warnings. On top of that, such filter
+>>>    scripts would require constant maintenance.
+>>>
+>>> One option to address problem would be to add messages such as "expected
+>>> warning backtraces start / end here" to the kernel log.  However, that
+>>> would again require filter scripts, it might result in missing real
+>>> problematic warning backtraces triggered while the test is running, and
+>>> the irrelevant backtrace(s) would still clog the kernel log.
+>>>
+>>> Solve the problem by providing a means to identify and suppress specific
+>>> warning backtraces while executing test code. Support suppressing multiple
+>>> backtraces while at the same time limiting changes to generic code to the
+>>> absolute minimum. Architecture specific changes are kept at minimum by
+>>> retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
+>>> CONFIG_KUNIT are enabled.
+>>>
+>>> The first patch of the series introduces the necessary infrastructure.
+>>> The second patch introduces support for counting suppressed backtraces.
+>>> This capability is used in patch three to implement unit tests.
+>>> Patch four documents the new API.
+>>> The next two patches add support for suppressing backtraces in drm_rect
+>>> and dev_addr_lists unit tests. These patches are intended to serve as
+>>> examples for the use of the functionality introduced with this series.
+>>> The remaining patches implement the necessary changes for all
+>>> architectures with GENERIC_BUG support.
+>>
+>> Thanks for your series!
+>>
+>> I gave it a try on m68k, just running backtrace-suppression-test,
+>> and that seems to work fine.
+>>
+>>> Design note:
+>>>    Function pointers are only added to the __bug_table section if both
+>>>    CONFIG_KUNIT and CONFIG_DEBUG_BUGVERBOSE are enabled to avoid image
+>>>    size increases if CONFIG_KUNIT=n. There would be some benefits to
+>>>    adding those pointers all the time (reduced complexity, ability to
+>>>    display function names in BUG/WARNING messages). That change, if
+>>>    desired, can be made later.
+>>
+>> Unfortunately this also increases kernel size in the CONFIG_KUNIT=m
+>> case (ca. 80 KiB for atari_defconfig), making it less attractive to have
+>> kunit and all tests enabled as modules in my standard kernel.
+>>
+> 
+> Good point. Indeed, it does. I wanted to avoid adding a configuration option,
+> but maybe I should add it after all. How about something like this ?
+> 
+> +config KUNIT_SUPPRESS_BACKTRACE
+> +       bool "KUnit - Enable backtrace suppression"
+> +       default y
+> +       help
+> +         Enable backtrace suppression for KUnit. If enabled, backtraces
+> +         generated intentionally by KUnit tests can be suppressed. Disable
+> +         to reduce kernel image size if image size is more important than
+> +         suppression of backtraces generated by KUnit tests.
+> +
+> 
 
+Any more comments / feedback on this ? Otherwise I'll introduce the
+above configuration option in v2 of the series.
 
-On 12/12/2023 12:47 PM, Sagi Shahar wrote:
-> 
-> 
-> -----Original Message-----
-> From: Sagi Shahar <sagis@google.com> 
-> Sent: Tuesday, December 12, 2023 12:47 PM
-> To: linux-kselftest@vger.kernel.org; Ackerley Tng <ackerleytng@google.com>; Afranji, Ryan <afranji@google.com>; Aktas, Erdem <erdemaktas@google.com>; Sagi Shahar <sagis@google.com>; Yamahata, Isaku <isaku.yamahata@intel.com>
-> Cc: Sean Christopherson <seanjc@google.com>; Paolo Bonzini <pbonzini@redhat.com>; Shuah Khan <shuah@kernel.org>; Peter Gonda <pgonda@google.com>; Xu, Haibo1 <haibo1.xu@intel.com>; Chao Peng <chao.p.peng@linux.intel.com>; Annapurve, Vishal <vannapurve@google.com>; Roger Wang <runanwang@google.com>; Vipin Sharma <vipinsh@google.com>; jmattson@google.com; dmatlack@google.com; linux-kernel@vger.kernel.org; kvm@vger.kernel.org; linux-mm@kvack.org
-> Subject: [RFC PATCH v5 23/29] KVM: selftests: TDX: Add shared memory test
-> 
-> From: Ryan Afranji <afranji@google.com>
-> 
-> Adds a test that sets up shared memory between the host and guest.
-> 
-> Signed-off-by: Ryan Afranji <afranji@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/include/x86_64/tdx/tdx.h    |   2 +
->  .../kvm/include/x86_64/tdx/tdx_util.h         |   2 +
->  .../selftests/kvm/lib/x86_64/tdx/tdx.c        |  26 ++++
->  .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   |  25 ++++
->  .../kvm/x86_64/tdx_shared_mem_test.c          | 135 ++++++++++++++++++
->  6 files changed, 191 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_shared_mem_test.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 80d4a50eeb9f..8c0a6b395ee5 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -156,6 +156,7 @@ TEST_GEN_PROGS_x86_64 += steal_time
->  TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
->  TEST_GEN_PROGS_x86_64 += system_counter_offset_test
->  TEST_GEN_PROGS_x86_64 += x86_64/tdx_vm_tests
-> +TEST_GEN_PROGS_x86_64 += x86_64/tdx_shared_mem_test
->  
->  # Compiled outputs used by test targets
->  TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
-> index 6b176de1e795..db4cc62abb5d 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
-> @@ -8,6 +8,7 @@
->  #define TDG_VP_INFO 1
->  
->  #define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO 0x10000
-> +#define TDG_VP_VMCALL_MAP_GPA 0x10001
->  #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
->  
->  #define TDG_VP_VMCALL_INSTRUCTION_CPUID 10 @@ -36,5 +37,6 @@ uint64_t tdg_vp_vmcall_instruction_cpuid(uint32_t eax, uint32_t ecx,  uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
->  		     uint64_t *r8, uint64_t *r9,
->  		     uint64_t *r10, uint64_t *r11);
-> +uint64_t tdg_vp_vmcall_map_gpa(uint64_t address, uint64_t size, 
-> +uint64_t *data_out);
->  
->  #endif // SELFTEST_TDX_TDX_H
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
-> index 32dd6b8fda46..3e850ecb85a6 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util.h
-> @@ -13,5 +13,7 @@ void td_initialize(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
->  		   uint64_t attributes);
->  void td_finalize(struct kvm_vm *vm);
->  void td_vcpu_run(struct kvm_vcpu *vcpu);
-> +void handle_memory_conversion(struct kvm_vm *vm, uint64_t gpa, uint64_t size,
-> +			bool shared_to_private);
->  
->  #endif // SELFTESTS_TDX_KVM_UTIL_H
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
-> index bcd9cceb3372..061a5c0bef34 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
-> @@ -4,9 +4,11 @@
->  
->  #include "tdx/tdcall.h"
->  #include "tdx/tdx.h"
-> +#include "tdx/tdx_util.h"
->  
->  void handle_userspace_tdg_vp_vmcall_exit(struct kvm_vcpu *vcpu)  {
-> +	struct kvm_vm *vm = vcpu->vm;
->  	struct kvm_tdx_vmcall *vmcall_info = &vcpu->run->tdx.u.vmcall;
->  	uint64_t vmcall_subfunction = vmcall_info->subfunction;
->  
-> @@ -20,6 +22,14 @@ void handle_userspace_tdg_vp_vmcall_exit(struct kvm_vcpu *vcpu)
->  		vcpu->run->system_event.data[2] = vmcall_info->in_r13;
->  		vmcall_info->status_code = 0;
->  		break;
-> +	case TDG_VP_VMCALL_MAP_GPA:
-> +		uint64_t gpa = vmcall_info->in_r12 & ~vm->arch.s_bit;
-> +		bool shared_to_private = !(vm->arch.s_bit &
-> +					   vmcall_info->in_r12);
-> +		handle_memory_conversion(vm, gpa, vmcall_info->in_r13,
-> +					 shared_to_private);
-> +		vmcall_info->status_code = 0;
-> +		break;
->  	default:
->  		TEST_FAIL("TD VMCALL subfunction %lu is unsupported.\n",
->  			  vmcall_subfunction);
-> @@ -210,3 +220,19 @@ uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
->  
->  	return ret;
->  }
-> +
-> +uint64_t tdg_vp_vmcall_map_gpa(uint64_t address, uint64_t size, 
-> +uint64_t *data_out) {
-> +	uint64_t ret;
-> +	struct tdx_hypercall_args args = {
-> +		.r11 = TDG_VP_VMCALL_MAP_GPA,
-> +		.r12 = address,
-> +		.r13 = size
-> +	};
-> +
-> +	ret = __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
-> +
-> +	if (data_out)
-> +		*data_out = args.r11;
-> +	return ret;
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> index d745bb6287c1..92fa6bd13229 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-> @@ -531,3 +531,28 @@ void td_vcpu_run(struct kvm_vcpu *vcpu)
->  		handle_userspace_tdg_vp_vmcall_exit(vcpu);
->  	}
->  }
-> +
-> +/**
-> + * Handle conversion of memory with @size beginning @gpa for @vm. Set
-> + * @shared_to_private to true for shared to private conversions and 
-> +false
-> + * otherwise.
-> + *
-> + * Since this is just for selftests, we will just keep both pieces of 
-> +backing
-> + * memory allocated and not deallocate/allocate memory; we'll just do 
-> +the
-> + * minimum of calling KVM_MEMORY_ENCRYPT_REG_REGION and
-> + * KVM_MEMORY_ENCRYPT_UNREG_REGION.
-> + */
-> +void handle_memory_conversion(struct kvm_vm *vm, uint64_t gpa, uint64_t size,
-> +			bool shared_to_private)
-> +{
-> +	struct kvm_memory_attributes range;
-> +
-> +	range.address = gpa;
-> +	range.size = size;
-> +	range.attributes = shared_to_private ? KVM_MEMORY_ATTRIBUTE_PRIVATE : 0;
-> +	range.flags = 0;
-> +
-> +	printf("\t ... calling KVM_SET_MEMORY_ATTRIBUTES ioctl with gpa=%#lx, 
-> +size=%#lx, attributes=%#llx\n", gpa, size, range.attributes);
-> +
-> +	vm_ioctl(vm, KVM_SET_MEMORY_ATTRIBUTES, &range); }
-> diff --git a/tools/testing/selftests/kvm/x86_64/tdx_shared_mem_test.c b/tools/testing/selftests/kvm/x86_64/tdx_shared_mem_test.c
-> new file mode 100644
-> index 000000000000..ba6bdc470270
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/tdx_shared_mem_test.c
-> @@ -0,0 +1,135 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/kvm.h>
-> +#include <stdint.h>
-> +
-> +#include "kvm_util_base.h"
-> +#include "processor.h"
-> +#include "tdx/tdcall.h"
-> +#include "tdx/tdx.h"
-> +#include "tdx/tdx_util.h"
-> +#include "tdx/test_util.h"
-> +#include "test_util.h"
-> +
-> +#define TDX_SHARED_MEM_TEST_PRIVATE_GVA (0x80000000) #define 
-> +TDX_SHARED_MEM_TEST_VADDR_SHARED_MASK BIT_ULL(30)
-> +#define TDX_SHARED_MEM_TEST_SHARED_GVA     \
-> +	(TDX_SHARED_MEM_TEST_PRIVATE_GVA | \
-> +	 TDX_SHARED_MEM_TEST_VADDR_SHARED_MASK)
-> +
-> +#define TDX_SHARED_MEM_TEST_GUEST_WRITE_VALUE (0xcafecafe) #define 
-> +TDX_SHARED_MEM_TEST_HOST_WRITE_VALUE (0xabcdabcd)
-> +
-> +#define TDX_SHARED_MEM_TEST_INFO_PORT 0x87
-> +
-> +/*
-> + * Shared variables between guest and host  */ static uint64_t 
-> +test_mem_private_gpa; static uint64_t test_mem_shared_gpa;
-> +
-> +void guest_shared_mem(void)
-> +{
-> +	uint32_t *test_mem_shared_gva =
-> +		(uint32_t *)TDX_SHARED_MEM_TEST_SHARED_GVA;
-> +
-> +	uint64_t placeholder;
-> +	uint64_t ret;
-> +
-> +	/* Map gpa as shared */
-> +	ret = tdg_vp_vmcall_map_gpa(test_mem_shared_gpa, PAGE_SIZE,
-> +				    &placeholder);
-> +	if (ret)
-> +		tdx_test_fatal_with_data(ret, __LINE__);
-> +
-> +	*test_mem_shared_gva = TDX_SHARED_MEM_TEST_GUEST_WRITE_VALUE;
-> +
-> +	/* Exit so host can read shared value */
-> +	ret = tdg_vp_vmcall_instruction_io(TDX_SHARED_MEM_TEST_INFO_PORT, 4,
-> +					   TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
-> +					   &placeholder);
-> +	if (ret)
-> +		tdx_test_fatal_with_data(ret, __LINE__);
-> +
-> +	/* Read value written by host and send it back out for verification */
-> +	ret = tdg_vp_vmcall_instruction_io(TDX_SHARED_MEM_TEST_INFO_PORT, 4,
-> +					   TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
-> +					   (uint64_t *)test_mem_shared_gva);
-> +	if (ret)
-> +		tdx_test_fatal_with_data(ret, __LINE__); }
-> +
-> +int verify_shared_mem(void)
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	vm_vaddr_t test_mem_private_gva;
-> +	uint32_t *test_mem_hva;
-> +
-> +	vm = td_create();
-> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-> +	vcpu = td_vcpu_add(vm, 0, guest_shared_mem);
-> +
-> +	/*
-> +	 * Set up shared memory page for testing by first allocating as private
-> +	 * and then mapping the same GPA again as shared. This way, the TD does
-> +	 * not have to remap its page tables at runtime.
-> +	 */
-> +	test_mem_private_gva = vm_vaddr_alloc(vm, vm->page_size,
-> +					      TDX_SHARED_MEM_TEST_PRIVATE_GVA);
-> +	TEST_ASSERT_EQ(test_mem_private_gva, TDX_SHARED_MEM_TEST_PRIVATE_GVA);
-> +
-> +	test_mem_hva = addr_gva2hva(vm, test_mem_private_gva);
-> +	TEST_ASSERT(test_mem_hva != NULL,
-> +		    "Guest address not found in guest memory regions\n");
-> +
-> +	test_mem_private_gpa = addr_gva2gpa(vm, test_mem_private_gva);
-> +	virt_pg_map_shared(vm, TDX_SHARED_MEM_TEST_SHARED_GVA,
-> +			   test_mem_private_gpa);
+In this context, any suggestions if it should be enabled or disabled by
+default ? I personally think it would be more important to be able to
+suppress backtraces, but I understand that others may not be willing to
+accept a ~1% image size increase with CONFIG_KUNIT=m unless
+KUNIT_SUPPRESS_BACKTRACE is explicitly disabled.
 
-As mentioned in the comments in [PATCH 22/29], how about replacing
-virt_pg_map_shared() with the following?
+Thanks,
+Guenter
 
-  vm_phy_pages_conversion();  // new API to update protected_phy_pages
-  virt_pg_map(); // set s_bit according to protected_phy_pages
- > +
-> +	test_mem_shared_gpa = test_mem_private_gpa | BIT_ULL(vm->pa_bits - 1);
-> +	sync_global_to_guest(vm, test_mem_private_gpa);
-> +	sync_global_to_guest(vm, test_mem_shared_gpa);
-> +
-> +	td_finalize(vm);
-> +
-> +	printf("Verifying shared memory accesses for TDX\n");
-> +
-> +	/* Begin guest execution; guest writes to shared memory. */
-> +	printf("\t ... Starting guest execution\n");
-> +
-> +	/* Handle map gpa as shared */
-> +	td_vcpu_run(vcpu);
-> +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-> +
-> +	td_vcpu_run(vcpu);
-> +	TDX_TEST_ASSERT_IO(vcpu, TDX_SHARED_MEM_TEST_INFO_PORT, 4,
-> +			   TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-> +	TEST_ASSERT_EQ(*test_mem_hva, TDX_SHARED_MEM_TEST_GUEST_WRITE_VALUE);
-> +
-> +	*test_mem_hva = TDX_SHARED_MEM_TEST_HOST_WRITE_VALUE;
-> +	td_vcpu_run(vcpu);
-> +	TDX_TEST_ASSERT_IO(vcpu, TDX_SHARED_MEM_TEST_INFO_PORT, 4,
-> +			   TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-> +	TEST_ASSERT_EQ(
-> +		*(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset),
-> +		TDX_SHARED_MEM_TEST_HOST_WRITE_VALUE);
-> +
-> +	printf("\t ... PASSED\n");
-> +
-> +	kvm_vm_free(vm);
-> +
-> +	return 0;
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	if (!is_tdx_enabled()) {
-> +		printf("TDX is not supported by the KVM\n"
-> +		       "Skipping the TDX tests.\n");
-> +		return 0;
-> +	}
-> +
-> +	return verify_shared_mem();
-> +}
-> --
-> 2.43.0.472.g3155946c3a-goog
-> 
 
