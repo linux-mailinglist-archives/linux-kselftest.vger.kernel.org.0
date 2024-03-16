@@ -1,330 +1,250 @@
-Return-Path: <linux-kselftest+bounces-6369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6370-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4520387D745
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 00:16:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BA6387D90B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 07:24:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 022801C211B6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Mar 2024 23:16:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C508A281DA6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Mar 2024 06:24:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43E75A10B;
-	Fri, 15 Mar 2024 23:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4389679F3;
+	Sat, 16 Mar 2024 06:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Pgv/7/Aa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bB0k2tLJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38D6DDAD
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 23:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1378EAD4;
+	Sat, 16 Mar 2024 06:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710544608; cv=none; b=eghVDafVSK3/ybE6QelL5wWE6jobSN/AmYuig8fvMKuQv6vO4JF8Sfms9lxclbOXEwG1xvDPgH0DACCM+cs9Sofo8Qv9HCvm3us9Ss13TFPBuK02eXBZ6XU9i9ybdaq8S994guLjNLmWU3aYmXdsr5AAewgUIAy4jhBWRcsWsJw=
+	t=1710570284; cv=none; b=LXwtUa24ED8pNwyy+ss7kPbgl2qhvdQouZ75mFGeS78+y03DSizkYikbTblktn/AF8mCyG2r817MUEEp8BVq+xCdTJvoBwybwGL7znmhKtcJm+LYWX7ncEB/5iYPAv3Q7FKGJOMOOl1NhwnXOyRek5KMDu6vOy5W6E92VW7Rx/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710544608; c=relaxed/simple;
-	bh=YG1vd1juQNaQvSUKtPdn0fqcJqdzmUUrzhazjbC0GP0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=txXWQG2bh2+eLJKUx32FxK1CqbHVg6Ylp/BhFlAtbOsYsz6QJ2inFGRQ/Lrph5DDrxlV1SDOx93VTRAz1+QVNYRNyD0AkPr72jcNbtV0M0PIvsin4BNkRjW8+S1Zbnaf+T2/wW8QctvWUPiXHULZTULif8yby3krBeyZ/lWw1oA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Pgv/7/Aa; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5687ebddd8eso6134a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Mar 2024 16:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710544603; x=1711149403; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RwLzfWwBwbCcEZKduRLWrp8dVywQR/08FJQ2Cohkdxk=;
-        b=Pgv/7/AazUMuiuJwUE47lyE32bdBeKtM8Ci1LOHucW3alba10AE6pAVoi5cbme/P3J
-         +r8KyzbogSonYhi0XqUoHp93QC7QEeyBGTpf3+gRGfOI6JVczCaOurOIS2Ss54+xp8fE
-         X5jgw6WTwdyHUjIIoslLoe8U1+pO1UWsCiTiebrJBbAkzYYoApj5x0Jnex23/kviSdH/
-         M/lkG58Z3q6FviFILpO74EcntvEmByPXQhv8EOifviIU+z5NAj5iBJgzNbi0lKqssaMb
-         KfZ5FAVnu+A/6Q3UzLgI0Vbg02MGIwANQ3kwTTE4m99MAbnXttBGDFeeaVRiZEgCVLGy
-         Y19Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710544603; x=1711149403;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RwLzfWwBwbCcEZKduRLWrp8dVywQR/08FJQ2Cohkdxk=;
-        b=HiEGgiRBN3s99Oj1JK/UoT/XZIiB0HT0Y3uXw0J9VLSlk/ZtokH06tjBo6J+O1x59C
-         0zw81NQ53MFeovr11ASceWWXcqAHdY20AdgUKyDuW4pfSDxIj4demUhkNcnIMOfNb65+
-         V8MRD2RUmQBacsNvsfZYee9exUDXqTAo1TGbvT8d/2xJsPJpMfvqqQKDcTi/sI/pfWA7
-         RvCXPfewxnrzbO/fqanPE603cImF920dmIjb2ReTu3Abf+VeXTGwjtatr+AaDVS9/dfA
-         wBnr+v3vgqcI+f3vpG7WGe6WLxTl64UeVzrdbDxkys+g0FgOmfv0Z1U8Xg9ZaYJqS0EL
-         KXqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVHrkr1vgS3dE8AvGX/Dr1r8n/n8UYx9YydGPCUq+AcRfw7HE9YJn1Uj7gpK1L/LxtQGftmDs80nWPgdat99Y0nkhB7xoIoP20mHJYZgchI
-X-Gm-Message-State: AOJu0YybZHzPcv3VnZ+Vxc5+SOBB03Rmj3DnmYOAy8a3bLFWCVG+yFCN
-	jBXJrARyQW1jqwNCtabTzRMdR/Oql12otVcrhZzDhzeNELI8aUP8HSR6JuGBy9coHNCaUutdlph
-	wTIkJtH3YWBXAWnGER/QCqmjt/0ZzIFtDpieJ
-X-Google-Smtp-Source: AGHT+IGKD8w8/5z/F0F9q8ayCrR92OJWIbaZuDsOWlQLAzyPphKXnc4hYGvwLrq4DSMEKG49OUJvLfIeuKwgMy4Ibew=
-X-Received: by 2002:a05:6402:898:b0:568:6ca6:98c1 with SMTP id
- e24-20020a056402089800b005686ca698c1mr18546edy.0.1710544602820; Fri, 15 Mar
- 2024 16:16:42 -0700 (PDT)
+	s=arc-20240116; t=1710570284; c=relaxed/simple;
+	bh=Z9CPgMx4k6xbyqdhStgFoDUX8JdMY2zitvwklGw/CEw=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:References:Cc:
+	 In-Reply-To:Content-Type; b=i8lAN4Spc+UrS26Lffoi2CW4rMGCoPnj23rxwpnVK/4Mmw7398wxs7lpGVM8li0wWxnf7qclgsbtKZwl9CmU/7MvbO40HWEMWM7mRRjDuoMfEGbNqNCgLhJU9OTCU4P5Yz1Ff7Wz1BWudWJdJPcUOk2OYq9aA1Y7jmcqocBzTwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bB0k2tLJ; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710570282; x=1742106282;
+  h=message-id:date:mime-version:from:subject:to:references:
+   cc:in-reply-to:content-transfer-encoding;
+  bh=Z9CPgMx4k6xbyqdhStgFoDUX8JdMY2zitvwklGw/CEw=;
+  b=bB0k2tLJwOS6DxRGtCGOfgbAtemIArROpuOt7uxVmBcjdwB071xpTPFK
+   Ii+lBdWu9CSBXJIOGmuAffkl3G/3+ejlRL007f8gubcKkwKSHALy+rsUL
+   1Krzv54wAPn6yXjdkeZBCf08N6voYtmbqFZ7QFG/k14YgUqq2cUd+Xu1Z
+   tGLkblI1tG0mfbS2d6USNCQJSgGBW+Soiga61uGaxorPw+iutuGAUrmvT
+   VfinWQLMAVcVaWiwyTq4ECEezNdR6hAAo4CFpSykIKOGl3JhYMI12ZzYL
+   5/kInIKJl2Cv1YFWzIELDTv8mG8JOKVQJQ6XelbKbci7CkGro/8likAax
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11014"; a="16099328"
+X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
+   d="scan'208";a="16099328"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 23:24:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
+   d="scan'208";a="43953437"
+Received: from jhanbaba-mobl.amr.corp.intel.com (HELO [10.124.36.86]) ([10.124.36.86])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 23:24:40 -0700
+Message-ID: <98b54b29-6f1d-4a3b-97d1-1e08b0ed0465@intel.com>
+Date: Fri, 15 Mar 2024 23:24:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240307222932.584164-1-rmoar@google.com>
-In-Reply-To: <20240307222932.584164-1-rmoar@google.com>
-From: Daniel Latypov <dlatypov@google.com>
-Date: Fri, 15 Mar 2024 16:16:30 -0700
-Message-ID: <CAGS_qxr==N-E4VHei0o-A1=5dno_ozqMsHPHoq7RFF5bearhpg@mail.gmail.com>
-Subject: Re: [PATCH v3] kunit: tool: add ability to parse multiple files
-To: Rae Moar <rmoar@google.com>
-Cc: shuah@kernel.org, davidgow@google.com, brendan.higgins@linux.dev, 
-	kevko@google.com, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: "Chen, Zide" <zide.chen@intel.com>
+Subject: Re: [RFC PATCH v5 22/29] KVM: selftests: Add functions to allow
+ mapping as shared
+To: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>,
+ "Afranji, Ryan" <afranji@google.com>, "Aktas, Erdem"
+ <erdemaktas@google.com>, Sagi Shahar <sagis@google.com>,
+ "Yamahata, Isaku" <isaku.yamahata@intel.com>
+References: <20231212204647.2170650-1-sagis@google.com>
+ <20231212204647.2170650-23-sagis@google.com>
+ <DS7PR11MB7886BD37E5E56DAB9A0087A3F6292@DS7PR11MB7886.namprd11.prod.outlook.com>
+Content-Language: en-US
+Cc: Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Gonda <pgonda@google.com>, "Xu, Haibo1" <haibo1.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>,
+ "Annapurve, Vishal" <vannapurve@google.com>,
+ Roger Wang <runanwang@google.com>, Vipin Sharma <vipinsh@google.com>,
+ jmattson@google.com, dmatlack@google.com, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-mm@kvack.org
+In-Reply-To: <DS7PR11MB7886BD37E5E56DAB9A0087A3F6292@DS7PR11MB7886.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 7, 2024 at 2:29=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
->
-> Add ability to parse multiple files. Additionally add the
-> ability to parse all results in the KUnit debugfs repository.
->
-> How to parse multiple files:
->
-> ./tools/testing/kunit/kunit.py parse results.log results2.log
->
-> How to parse all files in directory:
->
-> ./tools/testing/kunit/kunit.py parse directory_path/*
->
-> How to parse KUnit debugfs repository:
->
-> ./tools/testing/kunit/kunit.py parse debugfs
->
-> For each file, the parser outputs the file name, results, and test
-> summary. At the end of all parsing, the parser outputs a total summary
-> line.
->
-> This feature can be easily tested on the tools/testing/kunit/test_data/
-> directory.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
+
+
+On 12/12/2023 12:47 PM, Sagi Shahar wrote:
+
+> 
+> 
+> -----Original Message-----
+> From: Sagi Shahar <sagis@google.com> 
+> Sent: Tuesday, December 12, 2023 12:47 PM
+> To: linux-kselftest@vger.kernel.org; Ackerley Tng <ackerleytng@google.com>; Afranji, Ryan <afranji@google.com>; Aktas, Erdem <erdemaktas@google.com>; Sagi Shahar <sagis@google.com>; Yamahata, Isaku <isaku.yamahata@intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>; Paolo Bonzini <pbonzini@redhat.com>; Shuah Khan <shuah@kernel.org>; Peter Gonda <pgonda@google.com>; Xu, Haibo1 <haibo1.xu@intel.com>; Chao Peng <chao.p.peng@linux.intel.com>; Annapurve, Vishal <vannapurve@google.com>; Roger Wang <runanwang@google.com>; Vipin Sharma <vipinsh@google.com>; jmattson@google.com; dmatlack@google.com; linux-kernel@vger.kernel.org; kvm@vger.kernel.org; linux-mm@kvack.org
+> Subject: [RFC PATCH v5 22/29] KVM: selftests: Add functions to allow mapping as shared
+
+Since protected_phy_pages is introduced to keep track of the guest
+memory's private/shared property, it's better to keep it consistent with
+the guest mappings.
+
+Instead of having a set of new APIs to force it to map shared guest
+pages, how about to update protected_phy_pages sparsebits right before
+the mapping, and just call the existing virt_pg_map() to do the mapping?
+
+
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ryan Afranji <afranji@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
 > ---
-> Changes since v2:
-> - Fixed bug with input from command line. I changed this to use
->   input(). Daniel, let me know if this works for you.
-
-Oops, sorry for the delay.
-
-Hmm, it seems to be treating the stdin lines like file names
-
-$ ./tools/testing/kunit/kunit.py parse <
-./tools/testing/kunit/test_data/test_config_printk_time.log
-File path: Could not find  [    0.060000] printk: console [mc-1] enabled
-
-Oh, I see, we're prompting the user via
-  input("File path: ")
-?
-
-I'm not necessarily against such a change, but I would personally
-prefer the old behavior of being able to read ktap from stdin
-directly.
-As a user, I'd also prefer to only type out filenames as arguments
-where I can get autocomplete, so `input()` here wouldn't help me
-personally.
-
-Applying a hackish patch like this [1] on top gets the behavior I'd
-personally expect:
-$ ./tools/testing/kunit/kunit.py parse <
-./tools/testing/kunit/test_data/test_config_printk_time.log
-/dev/stdin
-...
-[16:01:50] Testing complete. Ran 10 tests: passed: 10
-
-I'd mentioned in the previous version that we could have parsed files
-contain a `Union[str, TextIO]` and then read from the `sys.stdin` file
-object directly.
-But having it blindly open `/dev/stdin` seems to work just the same,
-if we want to keep our list simpler and just hold strings.
-
-[1] this just also re-orders the `os.path.isdir()` check as mentioned
-below, which simplifies things
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 1aa3d736d80c..311d107bd684 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -515,18 +515,18 @@ def parse_handler(cli_args: argparse.Namespace) -> No=
-ne:
-        total_test =3D kunit_parser.Test()
-        total_test.status =3D kunit_parser.TestStatus.SUCCESS
-        if not parsed_files:
--               parsed_files.append(input("File path: "))
--
--       if parsed_files[0] =3D=3D "debugfs" and len(parsed_files) =3D=3D 1:
-+               parsed_files.append('/dev/stdin')
-+       elif len(parsed_files) =3D=3D 1 and parsed_files[0] =3D=3D "debugfs=
-":
-                parsed_files.pop()
-                for (root, _, files) in os.walk("/sys/kernel/debug/kunit"):
-                        parsed_files.extend(os.path.join(root, f) for
-f in files if f =3D=3D "results")
--
--       if not parsed_files:
--               print("No files found.")
-+               if not parsed_files:
-+                       print("No files found.")
-
-        for file in parsed_files:
--               if os.path.isfile(file):
-+               if os.path.isdir(file):
-+                       print("Ignoring directory ", file)
-+               elif os.path.exists(file):
-                        print(file)
-                        with open(file, 'r', errors=3D'backslashreplace') a=
-s f:
-                                kunit_output =3D f.read().splitlines()
-@@ -536,8 +536,6 @@ def parse_handler(cli_args: argparse.Namespace) -> None=
-:
-                                                        json=3Dcli_args.jso=
-n)
-                        _, test =3D parse_tests(request, metadata, kunit_ou=
-tput)
-                        total_test.subtests.append(test)
--               elif os.path.isdir(file):
--                       print("Ignoring directory ", file)
-                else:
-                        print("Could not find ", file)
-
-
-> - Add more specific warning messages
->
->  tools/testing/kunit/kunit.py | 56 +++++++++++++++++++++++++-----------
->  1 file changed, 40 insertions(+), 16 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index bc74088c458a..1aa3d736d80c 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -511,19 +511,42 @@ def exec_handler(cli_args: argparse.Namespace) -> N=
-one:
->
->
->  def parse_handler(cli_args: argparse.Namespace) -> None:
-> -       if cli_args.file is None:
-> -               sys.stdin.reconfigure(errors=3D'backslashreplace')  # typ=
-e: ignore
-> -               kunit_output =3D sys.stdin  # type: Iterable[str]
-> -       else:
-> -               with open(cli_args.file, 'r', errors=3D'backslashreplace'=
-) as f:
-> -                       kunit_output =3D f.read().splitlines()
-> -       # We know nothing about how the result was created!
-> -       metadata =3D kunit_json.Metadata()
-> -       request =3D KunitParseRequest(raw_output=3Dcli_args.raw_output,
-> -                                       json=3Dcli_args.json)
-> -       result, _ =3D parse_tests(request, metadata, kunit_output)
-> -       if result.status !=3D KunitStatus.SUCCESS:
-> -               sys.exit(1)
-> +       parsed_files =3D cli_args.files # type: List[str]
-> +       total_test =3D kunit_parser.Test()
-> +       total_test.status =3D kunit_parser.TestStatus.SUCCESS
-> +       if not parsed_files:
-> +               parsed_files.append(input("File path: "))
+>  .../selftests/kvm/include/kvm_util_base.h     | 24 ++++++++++++++
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 32 +++++++++++++++++++
+>  .../selftests/kvm/lib/x86_64/processor.c      | 15 +++++++--
+>  3 files changed, 69 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index b353617fcdd1..efd7ae8abb20 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -574,6 +574,8 @@ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
+>  
+>  void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+>  	      unsigned int npages);
+> +void virt_map_shared(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+> +		     unsigned int npages);
+>  void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa);  void *addr_gva2hva(struct kvm_vm *vm, vm_vaddr_t gva);  vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva); @@ -1034,6 +1036,28 @@ static inline void virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr
+>  	virt_arch_pg_map(vm, vaddr, paddr);
+>  }
+>  
+> +/*
+> + * VM Virtual Page Map as Shared
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vaddr - VM Virtual Address
+> + *   paddr - VM Physical Address
+> + *   memslot - Memory region slot for new virtual translation tables
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Within @vm, creates a virtual translation for the page starting
+> + * at @vaddr to the page starting at @paddr.
+> + */
+> +void virt_arch_pg_map_shared(struct kvm_vm *vm, uint64_t vaddr, 
+> +uint64_t paddr);
 > +
-> +       if parsed_files[0] =3D=3D "debugfs" and len(parsed_files) =3D=3D =
-1:
-> +               parsed_files.pop()
-> +               for (root, _, files) in os.walk("/sys/kernel/debug/kunit"=
-):
-> +                       parsed_files.extend(os.path.join(root, f) for f i=
-n files if f =3D=3D "results")
+> +static inline void virt_pg_map_shared(struct kvm_vm *vm, uint64_t 
+> +vaddr, uint64_t paddr) {
+> +	virt_arch_pg_map_shared(vm, vaddr, paddr); }
+>  
+>  /*
+>   * Address Guest Virtual to Guest Physical diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 4f1ae0f1eef0..28780fa1f0f2 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1573,6 +1573,38 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+>  	}
+>  }
+>  
+> +/*
+> + * Map a range of VM virtual address to the VM's physical address as 
+> +shared
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vaddr - Virtuall address to map
+> + *   paddr - VM Physical Address
+> + *   npages - The number of pages to map
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Within the VM given by @vm, creates a virtual translation for
+> + * @npages starting at @vaddr to the page range starting at @paddr.
+> + */
+> +void virt_map_shared(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+> +		     unsigned int npages)
+> +{
+> +	size_t page_size = vm->page_size;
+> +	size_t size = npages * page_size;
 > +
-> +       if not parsed_files:
-> +               print("No files found.")
+> +	TEST_ASSERT(vaddr + size > vaddr, "Vaddr overflow");
+> +	TEST_ASSERT(paddr + size > paddr, "Paddr overflow");
 > +
-> +       for file in parsed_files:
-> +               if os.path.isfile(file):
-
-Note: perhaps we should reorder this to
-
-if os.path.isdir(file):
-   ...
-elif os.path.exists(file):
-  ...
-
-That way this code will then start handling non-regular, yet readable
-files, like links, etc.
-That would also help out if we started passing in the magic
-"/dev/stdin" (since it's a symlink)
-
-> +                       print(file)
-> +                       with open(file, 'r', errors=3D'backslashreplace')=
- as f:
-> +                               kunit_output =3D f.read().splitlines()
-> +                       # We know nothing about how the result was create=
-d!
-> +                       metadata =3D kunit_json.Metadata()
-> +                       request =3D KunitParseRequest(raw_output=3Dcli_ar=
-gs.raw_output,
-> +                                                       json=3Dcli_args.j=
-son)
-> +                       _, test =3D parse_tests(request, metadata, kunit_=
-output)
-> +                       total_test.subtests.append(test)
-> +               elif os.path.isdir(file):
-> +                       print("Ignoring directory ", file)
-
-minor nit: `print()` will automatically put a space between arguments, e.g.
-> Ignoring directory  .
-is what it'll print if I run `kunit.py parse .`
-
-It might be better to use a f-string so put quotes around it, like so
-  print(f'Ignoring directory "{file}"')}
-and below,
-  print(f'Could not find "{file}"')
-
-> +               else:
-> +                       print("Could not find ", file)
+> +	while (npages--) {
+> +		virt_pg_map_shared(vm, vaddr, paddr);
+> +		vaddr += page_size;
+> +		paddr += page_size;
+> +	}
+> +}
 > +
-> +       if len(parsed_files) > 1: # if more than one file was parsed outp=
-ut total summary
-> +               print('All files parsed.')
-> +               if not request.raw_output:
-> +                       stdout.print_with_timestamp(kunit_parser.DIVIDER)
-> +                       kunit_parser.bubble_up_test_results(total_test)
-> +                       kunit_parser.print_summary_line(total_test)
->
->
->  subcommand_handlers_map =3D {
-> @@ -569,9 +592,10 @@ def main(argv: Sequence[str]) -> None:
->                                             help=3D'Parses KUnit results =
-from a file, '
->                                             'and parses formatted results=
-.')
->         add_parse_opts(parse_parser)
-> -       parse_parser.add_argument('file',
-> -                                 help=3D'Specifies the file to read resu=
-lts from.',
-> -                                 type=3Dstr, nargs=3D'?', metavar=3D'inp=
-ut_file')
-> +       parse_parser.add_argument('files',
-> +                                 help=3D'List of file paths to read resu=
-lts from or keyword'
-> +                                               '"debugfs" to read all re=
-sults from the debugfs directory.',
+>  /*
+>   * Address VM Physical to Host Virtual
+>   *
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 566d82829da4..aa2a57ddb8d3 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -190,7 +190,8 @@ static uint64_t *virt_create_upper_pte(struct kvm_vm *vm,
+>  	return pte;
+>  }
+>  
+> -void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
+> +static void ___virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+> +			   int level, bool protected)
+>  {
+>  	const uint64_t pg_size = PG_LEVEL_SIZE(level);
+>  	uint64_t *pml4e, *pdpe, *pde;
+> @@ -235,17 +236,27 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
+>  		    "PTE already present for 4k page at vaddr: 0x%lx\n", vaddr);
+>  	*pte = PTE_PRESENT_MASK | PTE_WRITABLE_MASK | (paddr & PHYSICAL_PAGE_MASK);
+>  
+> -	if (vm_is_gpa_protected(vm, paddr))
+> +	if (protected)>  		*pte |= vm->arch.c_bit;
+>  	else
+>  		*pte |= vm->arch.s_bit;
+>  }
+>  
+> +void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, 
+> +int level) {
+> +	___virt_pg_map(vm, vaddr, paddr, level, vm_is_gpa_protected(vm, 
+> +paddr)); }
+> +
+>  void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)  {
+>  	__virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K);  }
+>  
+> +void virt_arch_pg_map_shared(struct kvm_vm *vm, uint64_t vaddr, 
+> +uint64_t paddr) {
+> +	___virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K, false); }
 
-minor spacing note: there are two ' 's here in the series of tabs, i.e.
-  ^I^I^I^I  ^I^I'"debugfs" to read all results from the debugfs directory.'=
-,$
-(using vim's :list formatting)
+Here, it tries to create the guest mappings regardless of what the value
+of protected_phy_pages is, which could create confusion.
 
-This was copy-pasted from the lines above and below which look like
-  ^I^I^I^I  help=3D'List of file paths to read results from or keyword'$
-i.e. they use the 2 spaces to align after the tabs.
-
-We can just drop those 2 spaces since they won't visually affect the
-outcome with a tabwidth of 8 spaces.
-
-Sorry again for the delayed reply,
-Daniel
+> +
+>  void virt_map_level(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+>  		    uint64_t nr_bytes, int level)
+>  {
+> --
+> 2.43.0.472.g3155946c3a-goog
+> 
 
