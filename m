@@ -1,197 +1,117 @@
-Return-Path: <linux-kselftest+bounces-6384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD64E87E287
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 04:25:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B032B87E299
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 04:35:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A063281051
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 03:25:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC38D1C213FD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 03:35:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0DD21E89D;
-	Mon, 18 Mar 2024 03:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B4C31EB21;
+	Mon, 18 Mar 2024 03:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="aZwR6Ce1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ogn+bVi9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6A01E86A;
-	Mon, 18 Mar 2024 03:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03BC1E866;
+	Mon, 18 Mar 2024 03:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710732311; cv=none; b=bVnLtilTpvxblq3GqKOOQCY1jMff3LNbrlXXEqytJ63xkGzDPeRFdWgQCznu1G/vDh0BVUEM2pbGeLKdOVdvLLgc1z2VnoraEwOX8XpGnkK3VoU/K9+BYbDKYf4gRhSyw3JKEStzKi9qVjMuWbVeCHqPEuEjU8qxqkVcl1/37t4=
+	t=1710732921; cv=none; b=smzWdAm6ClZyM4qy4eE5d43ztS/lU5KH3VNqd9zNDKFiQrVy3tMMENp3mPwcP28W7LnwRoV7WetOS13MJ6qcY255K3QTYx0B2OWMsr7curFBMNM7zGVuzhf+429k04LqMPzpeabl9FGyX2ftbN4LvQMU0l4KHQgvt9uKz3zPbCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710732311; c=relaxed/simple;
-	bh=NV+IEiKEp7lCdjzjbneFkp6G29/AFeVDyz/GqmHX3m4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qI9I8/C6jvBvgSNuCCFvnjTqzeoFisRHqtE3qI9yvJaq+bb9OBGWx/yWfy95GlIINluKUU0ORg9rRQPsS//T9CGnBX7SRqWHI+cE8l0dQBnISAYkJQmE8ckRG8rqFgRFENJzD+8w/hC7e8ec2LSh5cj7ssB8mqmDCiAbeKq/Jw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=aZwR6Ce1; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1710732306;
-	bh=NV+IEiKEp7lCdjzjbneFkp6G29/AFeVDyz/GqmHX3m4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=aZwR6Ce11vNXim4mOCh1eXkx7K65RfM+cau+BhgB9SdLqlZPW+NSBiMfH6HvhOd0A
-	 Cxq4iA45zUMfJd0t0fiCZUW9oT7MdElC1lAHDwjgYhkFVet+3SexBY3VTuWZ+t2GS/
-	 R6YtLN+mqg6XUSgVsgcCPTEOKRlHDfSmPt/ef1FfXW6waLfQPAdiG7JMm/zsq5BT3k
-	 vdQUUXBAz8sJiI6L7YfwQCfB8GuYQWxC3Reysu8xNTnmju7VZ+DNwIB5BF60uJsyDk
-	 OdmHw4LQNlhzuekWxZGLa0lNLJlIa+tl6Z4Z3Fg6YFxfGk0yqItTN1sXJzV54NgtGp
-	 w8QwwUGGGIyQQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TygG42yLDz4wc1;
-	Mon, 18 Mar 2024 14:25:00 +1100 (AEDT)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Guenter Roeck <linux@roeck-us.net>, Geert Uytterhoeven
- <geert@linux-m68k.org>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, Arnd
- Bergmann <arnd@arndb.de>, =?utf-8?Q?Ma=C3=ADra?= Canal <mcanal@igalia.com>,
- Dan Carpenter
- <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>, Daniel Diaz
- <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>, Arthur Grillo
- <arthurgrillo@riseup.net>, Brendan Higgins <brendan.higgins@linux.dev>,
- Naresh Kamboju <naresh.kamboju@linaro.org>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Andrew Morton
- <akpm@linux-foundation.org>, Maxime Ripard <mripard@kernel.org>, Ville
- =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, Daniel Vetter
- <daniel@ffwll.ch>,
- Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
- kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- loongarch@lists.linux.dev, netdev@lists.linux.dev
-Subject: Re: [PATCH 00/14] Add support for suppressing warning backtraces
-In-Reply-To: <04f34097-7788-490d-a9c2-82b44bf6af44@roeck-us.net>
-References: <20240312170309.2546362-1-linux@roeck-us.net>
- <CAMuHMdUkvagJVEfnhq=Nx2jnmdS0Ax+zy1CvyN0k7k1EwUpu+g@mail.gmail.com>
- <6d9269c0-bd38-4965-a454-4358e0a182e3@roeck-us.net>
- <04f34097-7788-490d-a9c2-82b44bf6af44@roeck-us.net>
-Date: Mon, 18 Mar 2024 14:24:59 +1100
-Message-ID: <87ttl4z0fo.fsf@mail.lhotse>
+	s=arc-20240116; t=1710732921; c=relaxed/simple;
+	bh=srHab0CvgrTVsFnDbUyGDJnK/gDZ2myxNeNNeVJC15c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B9HU0kIKHLrhFnNTyde+uldrTg+cvGzx45h6keiSqyehPTFGqz00quE6L6N4QEVcyHJrL7vVwwtLMGUJrf1y/0i0IvnRDOm8DJRqEj0JnYhBKp3Yaia9ki+aOOdf/KoYXhg3yQLoyFK1a0KZVNoDRZQpnQ2OfWCBGBBS8GJjwl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ogn+bVi9; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3c38b719ab5so29856b6e.2;
+        Sun, 17 Mar 2024 20:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710732918; x=1711337718; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wrOYXD68fVx///jNgINMPnwrCj4qHGzpRc3DdPVkGqc=;
+        b=Ogn+bVi9cotmunPBgtG1gKXqibTOilcfjI9YpwV9fjFLBn5BFYoD2/UHcwwGS3ht+p
+         vEFdlZt5HVJwF1whZkYbScoGVkdxSbMBZPG0tIglxNzvhT4mj+7C8nB3atRi110+n8u+
+         QCJ9lURSLdjnYilVYgt1E7GHVMy1DpLnxlsrzmPoY0yIDXRQdKIYsS6OMKv9zHoo289G
+         dOof5/4KZhVr0zo2kaKNP8Ao6mWf6TNRrV0KofTEIllEo3TFeQRFIo99ulYb++9X24c/
+         9t0PkSyPIsmZ8XGsWMYivkhNXfsHExXaTNdx94D7RV+0NtBAA0EaO3HBUsyg+1dQx7gw
+         D4nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710732918; x=1711337718;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wrOYXD68fVx///jNgINMPnwrCj4qHGzpRc3DdPVkGqc=;
+        b=bG6viKo202y+bkLsNAV2/CdtGtl7nnMzV/UoP/981anIXcWDw6hPcepUePIVgOojM1
+         zl5QKrwiI9Rpr6gmTmefVCy4h7fOnZGigJZJIWrVJ2nD/04PqopevJQ4M0aXdM9zn6xS
+         iZYoVQPM5XnlMQG3cZYgsgI+TJSNg3sHWVvj/kC9PoE2LrG4SlIbuRYGXjm+qWlLt8LX
+         PjsAIRzxxnfuFxWU8OZu59taoesf6qBlbEtq4zw9GX+mVtYmizzN97QcMXawwTTZ9g1j
+         fmgpKmtt7Ukm8Yd9pHPGjyIEoVypOf83QbP8l6ZGiY7PEKAiMXWncvVL/ytFBTCbgdzi
+         jSbw==
+X-Forwarded-Encrypted: i=1; AJvYcCXMh1pUJcDf2sOyL8/uim8XQLhV5FejOp0krFT3EqO8mEhuuKcavk6LyWRzJywtKb7iRUDIiTlnXtxtnQeTKVlbQraDuzhjjdOI2QRVuB8RwoutRu7Vz5GcfepQdS2biFzxAdtUZHxCHCfdKP/7
+X-Gm-Message-State: AOJu0Yw6S9i/6Zefag0Mxt3AEH3XMMFKUdeVZykytPOOx77tXITwl14G
+	Aj35at3t6/rrOlIONCZ67QLYBjUGvT/E+bvKZKOyrhgu5MRr9Fu9
+X-Google-Smtp-Source: AGHT+IE/uNSXoSrFg8tJozjHDVYN/SchdG9u6ImD1VcULJ9M33t1PQu81kTJDBuhxhesXPkGn8ELmw==
+X-Received: by 2002:a05:6808:228b:b0:3c3:814a:fc6f with SMTP id bo11-20020a056808228b00b003c3814afc6fmr5118573oib.38.1710732918389;
+        Sun, 17 Mar 2024 20:35:18 -0700 (PDT)
+Received: from Laptop-X1 ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id y125-20020a62ce83000000b006e6b2ba1577sm7166090pfg.138.2024.03.17.20.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Mar 2024 20:35:17 -0700 (PDT)
+Date: Mon, 18 Mar 2024 11:35:12 +0800
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>
+Subject: Re: [BUG] selftests/net: test_vxlan_mdb.sh: 84 out of 642 tests
+ [FAIL]
+Message-ID: <Zfe2cGv_EWFAZXAJ@Laptop-X1>
+References: <5bb50349-196d-4892-8ed2-f37543aa863f@alu.unizg.hr>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5bb50349-196d-4892-8ed2-f37543aa863f@alu.unizg.hr>
 
-Guenter Roeck <linux@roeck-us.net> writes:
-> On 3/14/24 07:37, Guenter Roeck wrote:
->> On 3/14/24 06:36, Geert Uytterhoeven wrote:
->>> Hi G=C3=BCnter,
->>>
->>> On Tue, Mar 12, 2024 at 6:03=E2=80=AFPM Guenter Roeck <linux@roeck-us.n=
-et> wrote:
->>>> Some unit tests intentionally trigger warning backtraces by passing bad
->>>> parameters to kernel API functions. Such unit tests typically check the
->>>> return value from such calls, not the existence of the warning backtra=
-ce.
->>>>
->>>> Such intentionally generated warning backtraces are neither desirable
->>>> nor useful for a number of reasons.
->>>> - They can result in overlooked real problems.
->>>> - A warning that suddenly starts to show up in unit tests needs to be
->>>> =C2=A0=C2=A0 investigated and has to be marked to be ignored, for exam=
-ple by
->>>> =C2=A0=C2=A0 adjusting filter scripts. Such filters are ad-hoc because=
- there is
->>>> =C2=A0=C2=A0 no real standard format for warnings. On top of that, suc=
-h filter
->>>> =C2=A0=C2=A0 scripts would require constant maintenance.
->>>>
->>>> One option to address problem would be to add messages such as "expect=
-ed
->>>> warning backtraces start / end here" to the kernel log.=C2=A0 However,=
- that
->>>> would again require filter scripts, it might result in missing real
->>>> problematic warning backtraces triggered while the test is running, and
->>>> the irrelevant backtrace(s) would still clog the kernel log.
->>>>
->>>> Solve the problem by providing a means to identify and suppress specif=
-ic
->>>> warning backtraces while executing test code. Support suppressing mult=
-iple
->>>> backtraces while at the same time limiting changes to generic code to =
-the
->>>> absolute minimum. Architecture specific changes are kept at minimum by
->>>> retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
->>>> CONFIG_KUNIT are enabled.
->>>>
->>>> The first patch of the series introduces the necessary infrastructure.
->>>> The second patch introduces support for counting suppressed backtraces.
->>>> This capability is used in patch three to implement unit tests.
->>>> Patch four documents the new API.
->>>> The next two patches add support for suppressing backtraces in drm_rect
->>>> and dev_addr_lists unit tests. These patches are intended to serve as
->>>> examples for the use of the functionality introduced with this series.
->>>> The remaining patches implement the necessary changes for all
->>>> architectures with GENERIC_BUG support.
->>>
->>> Thanks for your series!
->>>
->>> I gave it a try on m68k, just running backtrace-suppression-test,
->>> and that seems to work fine.
->>>
->>>> Design note:
->>>> =C2=A0=C2=A0 Function pointers are only added to the __bug_table secti=
-on if both
->>>> =C2=A0=C2=A0 CONFIG_KUNIT and CONFIG_DEBUG_BUGVERBOSE are enabled to a=
-void image
->>>> =C2=A0=C2=A0 size increases if CONFIG_KUNIT=3Dn. There would be some b=
-enefits to
->>>> =C2=A0=C2=A0 adding those pointers all the time (reduced complexity, a=
-bility to
->>>> =C2=A0=C2=A0 display function names in BUG/WARNING messages). That cha=
-nge, if
->>>> =C2=A0=C2=A0 desired, can be made later.
->>>
->>> Unfortunately this also increases kernel size in the CONFIG_KUNIT=3Dm
->>> case (ca. 80 KiB for atari_defconfig), making it less attractive to have
->>> kunit and all tests enabled as modules in my standard kernel.
->>>
->>=20
->> Good point. Indeed, it does. I wanted to avoid adding a configuration op=
-tion,
->> but maybe I should add it after all. How about something like this ?
->>=20
->> +config KUNIT_SUPPRESS_BACKTRACE
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool "KUnit - Enable backtrace sup=
-pression"
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 default y
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 help
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable backtrace suppr=
-ession for KUnit. If enabled, backtraces
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 generated intentionall=
-y by KUnit tests can be suppressed. Disable
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to reduce kernel image=
- size if image size is more important than
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 suppression of backtra=
-ces generated by KUnit tests.
->
-> Any more comments / feedback on this ? Otherwise I'll introduce the
-> above configuration option in v2 of the series.
->
-> In this context, any suggestions if it should be enabled or disabled by
-> default ? I personally think it would be more important to be able to
-> suppress backtraces, but I understand that others may not be willing to
-> accept a ~1% image size increase with CONFIG_KUNIT=3Dm unless
-> KUNIT_SUPPRESS_BACKTRACE is explicitly disabled.
+On Sun, Mar 17, 2024 at 12:19:12AM +0100, Mirsad Todorovac wrote:
+> Hi,
+> 
+> While running kselftest on vanilla torvalds tree kernel commit v6.8-11167-g4438a810f396,
+> the test suite reported a number of errors.
+> 
+> I was using the latest iproute2-next suite on an Ubuntu 22.04 LTS box.
+> 
+> # Tests passed: 558
+> # Tests failed:  84
+> not ok 90 selftests: net: test_vxlan_mdb.sh # exit=1
 
-Please enable it by default.
+FYI, I tested with 6.8 kernel with net tree. All passed.
 
-There are multiple CI systems that will benefit from it, whereas the
-number of users enabling KUNIT in severely spaced constrainted
-environments is surely small - perhaps just Geert ;).
+Data path: MDB torture test - IPv6 overlay / IPv6 underlay
+----------------------------------------------------------
+TEST: Torture test                                                  [ OK ]
 
-cheers
+Tests passed: 642
+Tests failed:   0
+
+# uname -r
+6.8.0-virtme
+
+Thanks
+Hangbin
 
