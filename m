@@ -1,192 +1,170 @@
-Return-Path: <linux-kselftest+bounces-6402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F40F87F21B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 22:27:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D076087F2A4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 22:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55324281C33
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 21:27:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2E7A1C20365
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 21:53:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9908958230;
-	Mon, 18 Mar 2024 21:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D246B59B59;
+	Mon, 18 Mar 2024 21:53:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FwuKAMEZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NE3VREp5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E350759B42
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Mar 2024 21:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1994659B53;
+	Mon, 18 Mar 2024 21:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710797268; cv=none; b=TjgDncGwVXVxqP9MkrRmvG69/gdrakdwGT1KI0I2qzH6LyCymz06o5NKR3YbuOKxlj14xmstIU3Wuw9rdWk5MAkGaSYk1ceRszxZb5IzcUokLOKJxyO56r/8upzPT+toU3Af21l2AzdpD1yviHYnSQsVc2Lxq1MuR7rEPay/bow=
+	t=1710798824; cv=none; b=cAxLZ4EbDDA6/94DnhGCa2doxfDJVnxHya8G0LnmW067Wr5GdiHXc45soBUgdmExtJxDb15uCWyzzSIn7GunG9kmK0zh5EIKNmGn+HvicOVELBaOOHxDzuDVg4lnIp/6UstI9ucBiUGGdK2oVlaFZYBjn6kZgYVQF21e4fo7HnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710797268; c=relaxed/simple;
-	bh=vmXf9hen+ww7UwnjCyTyA1t3Yt4iiFW6uRFTYiKQPwA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=AgSCDKZOjI7e122VKm9kkP94EChZsi3RvljJb5ripgzFcg0xdHUliwOwP3sEwad8VBEqcpK7j3SKQjM8ZyA/LVET9Fu3adiirX/LwL3iSLlCCDveNdOW2LGimuyzNELH0M4NFgQ40xCekp4HFr7BAcgXtCAJCaBmBef7Je+PVf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FwuKAMEZ; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc6b2682870so7343644276.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Mar 2024 14:27:46 -0700 (PDT)
+	s=arc-20240116; t=1710798824; c=relaxed/simple;
+	bh=TMVNZBnuky+xlmSCjV7x5xWLbLKK7AsrIZ3eQuj1Enw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XgRc8dK3XCYtbf1ywrTw1uwjUZJZ4HzlWmt10VhfcIsjdBR31NoKHNz1hOWItZWSi5EzIlma9VN7GhVuYAG6Ma/SOd0egHy18t/AjHpHonrxV8FdICkXDEIucUJ2F+f98XmtIwGOiLQnf3y8qi58IqzCaXDQpoZ5yV15w97mvBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NE3VREp5; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a46d9fbb5a5so19022666b.2;
+        Mon, 18 Mar 2024 14:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710797266; x=1711402066; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qYYHZ4rmvHoUFOfsHiMEKzZLvI6O49Agsr51YnPkVVs=;
-        b=FwuKAMEZwBYAxIzDEHwzNrcyVv786mfW6QCIq527jIWvE/z11ihc5D/0OC92gTCTb9
-         xhs9ViU0OywPdFUqWwLdM6z4YdHC13wErVs9dJYzE2hOV96fpPJRPYtjI84A+EYgLBfz
-         0rXKMkSRO3ix1RI/kLmcMLdQKLGoywpszInQrhJ6JzMpjpdtf3AB0BTmyE1Kfhy4iqiA
-         0r9YD5dDSMD+o7O6IIcUnL9RJSYyQTdWd0Ywk4RPAyX1Fldn3ZEw245UqrXIY6+9YHtN
-         fWMDmAg26zDvBN0/dMV+6VVPH4xCl7HkhQGofk4S0VbcuHC6lduBCpgdyUhHx0d/2W8E
-         cFRg==
+        d=gmail.com; s=20230601; t=1710798821; x=1711403621; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NnQYQBcAPykINWSewEXD0u4daVYuhsM4radIRFdbYFs=;
+        b=NE3VREp5sFde6bCi6ihQ4EaSsMb3UxSib5eJNwzdE3yqGBcZubcMNtZLp0M+w8YwrX
+         wHYGSP2Cuh9xTX2Cosv9AqEAO9G4/vGEEi8sW27FG62WlgUOCchm8I5c28uHXaKK8gs5
+         TpSupcdZChjyHKkQGHERfMo2YDl048RlB7ZDXGJ2ErADNhd1GLdJ8TEZcZ5PjA0W8onB
+         m1JE6rNhN13+PJ2jBcH/z4pd+v9QfRpDL1/4zAym3Dq2ougoqH3gT7jwDA5H3CNvS3ml
+         I0yOB5PuhZUnBzMlNtDZ9cqH1kxriVBUX4xbeaanY+/lT1TqhR9O0tISWbJ7JrKTAIC6
+         8ONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710797266; x=1711402066;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qYYHZ4rmvHoUFOfsHiMEKzZLvI6O49Agsr51YnPkVVs=;
-        b=mGe+MRDIhKJs4XjTQ0QdwXCb9o0e9qOty0Xu49HJPOfaAd1SRDzoubHr+hJACxJTiS
-         c++fp5K4gG0CHS9tsYGCAGFfNq43zj1/ghHExSGQTvrf7FSTOxq02cqa1vc9I7U/jHtl
-         vS3LCv+BP456o0ke3QWZlNZFm7ZZ0BQBJUit7vn4iHS223HVlKOnd/+t5/whVywF/A6a
-         8GfwhtGMYCu/ODmgEckfdb96m40JaeTrhuI0ZOWMulWFH93wBgA/uFkG0NdLD4/0tKSQ
-         FHE1p5JcJ03+uCkcrh7+tw4PlkXNOVrkpMZWTNlQsn43xGWlPjUoa2SpTjK2rZMWSTLx
-         Bp+g==
-X-Gm-Message-State: AOJu0YxpfkrggDAYceR1Pf/dHuECdIcWC7fC5CDmCNrm+I4dq/UOgoHM
-	vjwcT03t85Uxxq4b7Ur2Rmg3GGpc1kH3YO1N73XBS+jysDtdxSe6aCV+ljeiHqCEMrDx16pjPQ=
-	=
-X-Google-Smtp-Source: AGHT+IGKAqFu3qBLUi9P18lamHu1iDSypU8dNxgfUULB9Qh8q8BdEz4QgtAmkzrUXqulzme+fpo8AePL1A==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a05:6902:2609:b0:dd9:3a6b:11f8 with SMTP id
- dw9-20020a056902260900b00dd93a6b11f8mr75071ybb.5.1710797266005; Mon, 18 Mar
- 2024 14:27:46 -0700 (PDT)
-Date: Mon, 18 Mar 2024 21:27:34 +0000
+        d=1e100.net; s=20230601; t=1710798821; x=1711403621;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NnQYQBcAPykINWSewEXD0u4daVYuhsM4radIRFdbYFs=;
+        b=h9mBb0ZcyPZARwiV7aMAvnkA5MAaypgxV3ohKS+Zc8/1YMYCDLv/sF/XnOlbJ/x+n3
+         KuGfuXXhOEDEnTZBuSupjj4dLNNYiVrSGxwpgVfrQU3YzcgOPGzI+JhcwXSZzf1+S1tp
+         mDOnjqaFtxw9XoRjAKVYdcQPNfMX0ErpxuAuBUvaFDheHVrBYgLPEguYGenKa3Bw4EDW
+         SsaHI1pl8iWVKy2znRBW9aYjBCE3IMOdC3eD0rkHEF4l8QRCLGesIbQb3wb2e+KhhI1A
+         dflFxANTdlxLRCSG5M/UwwqrtTeORfj4TCtiHHNkPkJLyeAqumW914K7UXrYHxQReIvs
+         oiMA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7VGf2NCP5nzB8DAbtsKHSna2asFEZxZ6fQvl7RbuQ2rpqMS7DRZSil1edHFpQZWLDdrfjyloPRSeMHBJKC6OY/Jm0JjseRUAS8PnnSna4jkEwp1r8inMavSNczVV85P9IMTJhwWLu7rEgUPLM
+X-Gm-Message-State: AOJu0YzGEFFKruzlxQ+OhJgg6vNlLaLvLS5bpaoyzn2Rw4b1v5UQBnAf
+	LEtDqon58u1FqMVwvC6BOSPaG07h7fz47vYvik4yaNuLAUtfLkmh
+X-Google-Smtp-Source: AGHT+IHF2D27pWU94tlJuR1p3Y0pw03GvY7HKfdSE7KhKCAUaVeAWnCINmbgB/pbW1P007iDUUmS/g==
+X-Received: by 2002:a17:906:6957:b0:a46:cee9:e412 with SMTP id c23-20020a170906695700b00a46cee9e412mr359010ejs.15.1710798821193;
+        Mon, 18 Mar 2024 14:53:41 -0700 (PDT)
+Received: from [192.168.6.255] ([5.1.5.0])
+        by smtp.gmail.com with ESMTPSA id hz13-20020a1709072ced00b00a46a9cdcfa5sm2969787ejc.162.2024.03.18.14.53.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Mar 2024 14:53:40 -0700 (PDT)
+Message-ID: <88fde9a0bb55c74fe34667e891572d8af9eec21d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/6] bpf/verifier: add bpf_timer as a kfunc
+ capable type
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Mon, 18 Mar 2024 23:53:39 +0200
+In-Reply-To: <20240315-hid-bpf-sleepable-v4-2-5658f2540564@kernel.org>
+References: <20240315-hid-bpf-sleepable-v4-0-5658f2540564@kernel.org>
+	 <20240315-hid-bpf-sleepable-v4-2-5658f2540564@kernel.org>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.291.gc1ea87d7ee-goog
-Message-ID: <20240318212734.3508838-1-rmoar@google.com>
-Subject: [PATCH v4] kunit: tool: add ability to parse multiple files
-From: Rae Moar <rmoar@google.com>
-To: shuah@kernel.org, davidgow@google.com, dlatypov@google.com, 
-	brendan.higgins@linux.dev, kevko@google.com
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-Add ability to parse multiple files. Additionally add the
-ability to parse all results in the KUnit debugfs repository.
+On Fri, 2024-03-15 at 15:29 +0100, Benjamin Tissoires wrote:
+[...]
 
-How to parse multiple files:
+> @@ -12021,6 +12034,12 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>  			if (ret)
+>  				return ret;
+>  			break;
+> +		case KF_ARG_PTR_TO_TIMER:
+> +			if (reg->type !=3D PTR_TO_MAP_VALUE) {
+> +				verbose(env, "arg#%d doesn't point to a map value\n", i);
+> +				return -EINVAL;
+> +			}
+> +			break;
 
-./tools/testing/kunit/kunit.py parse results.log results2.log
+I think that pointer offset has to be checked as well,
+otherwise the following program verifies w/o error:
 
-How to parse all files in directory:
+--- 8< ----------------------------
 
-./tools/testing/kunit/kunit.py parse directory_path/*
+#include <linux/bpf.h>
+#include <time.h>
+#include <errno.h>
+#include <bpf/bpf_helpers.h>
+#include "bpf_tcp_helpers.h"
 
-How to parse KUnit debugfs repository:
+extern int bpf_timer_set_sleepable_cb_impl(struct bpf_timer *timer,
+		int (callback_fn)(void *map, int *key, struct bpf_timer *timer), void *au=
+x__ign) __ksym;
 
-./tools/testing/kunit/kunit.py parse debugfs
+#define bpf_timer_set_sleepable_cb(timer, cb) \
+	bpf_timer_set_sleepable_cb_impl(timer, cb, NULL)
 
-For each file, the parser outputs the file name, results, and test
-summary. At the end of all parsing, the parser outputs a total summary
-line.
+struct elem {
+	struct bpf_timer t;
+};
 
-This feature can be easily tested on the tools/testing/kunit/test_data/
-directory.
+struct {
+	__uint(type, BPF_MAP_TYPE_ARRAY);
+	__uint(max_entries, 2);
+	__type(key, int);
+	__type(value, struct elem);
+} array SEC(".maps");
 
-Signed-off-by: Rae Moar <rmoar@google.com>
----
-Changes since v3:
-- Changing from input() to stdin
-- Add checking for non-regular files
-- Spacing fix
-- Small printing fix
+static int cb_sleepable(void *map, int *key, struct bpf_timer *timer)
+{
+	return 0;
+}
 
- tools/testing/kunit/kunit.py | 54 +++++++++++++++++++++++++-----------
- 1 file changed, 38 insertions(+), 16 deletions(-)
+SEC("fentry/bpf_fentry_test5")
+int BPF_PROG2(test_sleepable, int, a)
+{
+	struct bpf_timer *arr_timer;
+	int array_key =3D 1;
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index bc74088c458a..641b8ca83e3e 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -511,19 +511,40 @@ def exec_handler(cli_args: argparse.Namespace) -> None:
- 
- 
- def parse_handler(cli_args: argparse.Namespace) -> None:
--	if cli_args.file is None:
--		sys.stdin.reconfigure(errors='backslashreplace')  # type: ignore
--		kunit_output = sys.stdin  # type: Iterable[str]
--	else:
--		with open(cli_args.file, 'r', errors='backslashreplace') as f:
--			kunit_output = f.read().splitlines()
--	# We know nothing about how the result was created!
--	metadata = kunit_json.Metadata()
--	request = KunitParseRequest(raw_output=cli_args.raw_output,
--					json=cli_args.json)
--	result, _ = parse_tests(request, metadata, kunit_output)
--	if result.status != KunitStatus.SUCCESS:
--		sys.exit(1)
-+	parsed_files = cli_args.files # type: List[str]
-+	total_test = kunit_parser.Test()
-+	total_test.status = kunit_parser.TestStatus.SUCCESS
-+	if not parsed_files:
-+		parsed_files.append('/dev/stdin')
-+	elif len(parsed_files) == 1 and parsed_files[0] == "debugfs":
-+		parsed_files.pop()
-+		for (root, _, files) in os.walk("/sys/kernel/debug/kunit"):
-+			parsed_files.extend(os.path.join(root, f) for f in files if f == "results")
-+		if not parsed_files:
-+			print("No files found.")
-+
-+	for file in parsed_files:
-+		if os.path.isdir(file):
-+			print(f'Ignoring directory "{file}"')
-+		elif os.path.exists(file):
-+			print(file)
-+			with open(file, 'r', errors='backslashreplace') as f:
-+				kunit_output = f.read().splitlines()
-+			# We know nothing about how the result was created!
-+			metadata = kunit_json.Metadata()
-+			request = KunitParseRequest(raw_output=cli_args.raw_output,
-+							json=cli_args.json)
-+			_, test = parse_tests(request, metadata, kunit_output)
-+			total_test.subtests.append(test)
-+		else:
-+			print(f'Could not find "{file}"')
-+
-+	if len(parsed_files) > 1: # if more than one file was parsed output total summary
-+		print('All files parsed.')
-+		if not request.raw_output:
-+			stdout.print_with_timestamp(kunit_parser.DIVIDER)
-+			kunit_parser.bubble_up_test_results(total_test)
-+			kunit_parser.print_summary_line(total_test)
- 
- 
- subcommand_handlers_map = {
-@@ -569,9 +590,10 @@ def main(argv: Sequence[str]) -> None:
- 					    help='Parses KUnit results from a file, '
- 					    'and parses formatted results.')
- 	add_parse_opts(parse_parser)
--	parse_parser.add_argument('file',
--				  help='Specifies the file to read results from.',
--				  type=str, nargs='?', metavar='input_file')
-+	parse_parser.add_argument('files',
-+				  help='List of file paths to read results from or keyword'
-+				  '"debugfs" to read all results from the debugfs directory.',
-+				  type=str, nargs='*', metavar='input_files')
- 
- 	cli_args = parser.parse_args(massage_argv(argv))
- 
+	arr_timer =3D bpf_map_lookup_elem(&array, &array_key);
+	if (!arr_timer)
+		return 0;
+	bpf_timer_init(arr_timer, &array, CLOCK_MONOTONIC);
+	bpf_timer_set_sleepable_cb((void *)arr_timer + 1, // <-- note incorrect of=
+fset
+				   cb_sleepable);
+	bpf_timer_start(arr_timer, 0, 0);
+	return 0;
+}
 
-base-commit: 806cb2270237ce2ec672a407d66cee17a07d3aa2
--- 
-2.44.0.291.gc1ea87d7ee-goog
+char _license[] SEC("license") =3D "GPL";
 
+---------------------------- >8 ---
 
