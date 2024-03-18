@@ -1,141 +1,184 @@
-Return-Path: <linux-kselftest+bounces-6378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6379-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3176787E228
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 03:35:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B73C87E22F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 03:38:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4A2B1F21EA0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 02:35:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C91BCB20BC5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Mar 2024 02:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47201FDA;
-	Mon, 18 Mar 2024 02:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58A117740;
+	Mon, 18 Mar 2024 02:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a8UVOrop"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74ECF17547;
-	Mon, 18 Mar 2024 02:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472578814;
+	Mon, 18 Mar 2024 02:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710729308; cv=none; b=tRkJxhTEilTC8ARPtltVFEkzKl1QGOlvf8ZhWal1r6veBFZ3ozhLjtITzjYxGKUD2VeLej1JrJfTZrLvLlSf1T2hkiCMaDDjecTRFL4X3BDr6Z488cdqTfy7W8ohqMsozwo72bnJSbI9M48HIVBM+hrls6snOdzEwGRU8CXcasY=
+	t=1710729525; cv=none; b=fWGQ9RnbTORIdkCBcg5JmI806qix9CFW1boabD/w0saR2Be2lpYz1tzXxckDleRzBRacoXDke1TDUoMi5DAFY4bMqxhzO1MM98rZwk4/4uiGeMzAeAji53kQNZMMMlsKojIN4jOIf8yh1JZjFxaZTGgCbrJQHeXH2MCvy9ZCb+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710729308; c=relaxed/simple;
-	bh=3fvjQ3XM2dUSCoHrk4prb1GoygcuSIqrovfjGK/r3oA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A21ZIJCwLsiQXpUrSPUo00iygoGH3bNR9tQzsgEcO/b2cIcTGRKE+MW0Qvw+q2cD+TkiBQiOmw1WCBCnc3ZANnsEdGKGypqCasMCWf+sjAX14D6PtmI8+uTyh9TWMSUc7V5fqH0vIIzNGUw2cvdG8sijfiE/HaL3VZXzgDimDXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id B1C3E72C8F5;
-	Mon, 18 Mar 2024 05:35:03 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [193.43.10.9])
-	by imap.altlinux.org (Postfix) with ESMTPSA id 9DA5836D015F;
-	Mon, 18 Mar 2024 05:35:03 +0300 (MSK)
-From: Vitaly Chikunov <vt@altlinux.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Keith Busch <kbusch@kernel.org>,
-	Yang Shi <shy828301@gmail.com>,
-	Zi Yan <ziy@nvidia.com>,
-	David Hildenbrand <david@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Vitaly Chikunov <vt@altlinux.org>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] selftests/mm: Fix build with _FORTIFY_SOURCE
-Date: Mon, 18 Mar 2024 05:34:44 +0300
-Message-ID: <20240318023445.3192922-1-vt@altlinux.org>
-X-Mailer: git-send-email 2.42.1
+	s=arc-20240116; t=1710729525; c=relaxed/simple;
+	bh=WF/f6CCamw+J9eLrDPFmQG50mTmLC8pIzPQMHw5BqEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dtc54wl5aESXoc8bUTAuyAZmSAe+Iev4FSGWptUHZDyUnZCw2azhMNKyTl8+wqCHGSoP7E92/OZN22LiIEWLhuTVgA0oiB/oXbSVAGb+j5IKHvPpqIY6chUjWf8cOasJpFQxoV8rq7WR9V6/QrO8yDQC7FCCKSaHV+TnOATKl7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a8UVOrop; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6e6f6d782e4so2053269b3a.0;
+        Sun, 17 Mar 2024 19:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710729523; x=1711334323; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mbDMqvrws+XkBBTMQ0YCUnc4hLWNGOlIuRUrBtvBFuc=;
+        b=a8UVOrop3lsoMlENR8XXmCLD7AWo1kgK9fSRPcQFvBVF4uZXxIzcPUDaGYJ8LLABoI
+         q56O1fEabnLNrJP2pCGfRlaxz+eqPxAG98td8NLupx1zKd3Othcpq4EGkLoBYh5yelCx
+         dIeXuXTisEDeKpCv0dHrZUXrYQ9HymUeRStCPVnVW1XWMhCbocRNyXwC6KmRIPj+dXJ1
+         VnEBxa/RK/YpkPyS8cKposat3X30xgfMqZnBsKxxkYTyq9zHm6WsIAeoXDQfGTa7YqI4
+         ECLhUKllb2t/lIcXzKejuHg6zLyWSKUFU4NzlxRmLUjgh/1b70Sbk1kvqXkfmrSg0jVU
+         E+iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710729523; x=1711334323;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mbDMqvrws+XkBBTMQ0YCUnc4hLWNGOlIuRUrBtvBFuc=;
+        b=L5M0O08a2TXj07vl6OUqD3IyLs4QQQpK6cVYaIrewWYCkbwriVlXcDspdjsJCIjf1A
+         +jM+TYgApAGYApFK6a70tnuT4yHfLf2beGHLL/PtfErg3iTRA4GDl5d09N7Q0eeUKFZN
+         rp5SXu8I0vCM7C2B4laaAyr3afyHbx36gJxuwHKDAdl9cJ+78aCkG6lTQTPTz+45dBvP
+         AypRAGhINbMWQN1afxd5jLv0k7dHCjDQOWkyQu/bwXot2wKydhuBtWIuIRinoRP1yWaQ
+         7gW3TtgWsH2KXiWBaMZ4k5o6TwcQpYGiYYRDB89ucNKAZMmkiZbb0XeanDQ2YXmoZo6u
+         P8rQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXtxF67SWOzenvaYCk1IB2P5cn0wjbDJu1aBsHilt57qS/tZCfIxj48qsMMSLy72y59ae8EkLpl4b9lhviwb+EBBoufa9xPwa+VbGe1ksmNYk5jNM25v8dj1gxNDu82nYIc7rk/N2ROrJQLY86K
+X-Gm-Message-State: AOJu0Yz9K5bY4YGOTswHlkrU7LL3VtX8L46R+8W+gPhilaeKCHKHixI8
+	Dm18FGPz1evpv6ZE+620m6WftCcDhlwPRnjhz7utf88tRWbvQPIf
+X-Google-Smtp-Source: AGHT+IFzCWxwJh1/DXovSmofPMWc4wI2/C4hwbYM8ThEdMdgGut76PvnNp6mpHmXZp+E2x7cgtYmjA==
+X-Received: by 2002:a05:6a00:194c:b0:6e6:8df5:e903 with SMTP id s12-20020a056a00194c00b006e68df5e903mr10765193pfk.13.1710729521995;
+        Sun, 17 Mar 2024 19:38:41 -0700 (PDT)
+Received: from Laptop-X1 ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id t7-20020a625f07000000b006e6f0b4d950sm6046842pfb.4.2024.03.17.19.38.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Mar 2024 19:38:40 -0700 (PDT)
+Date: Mon, 18 Mar 2024 10:38:35 +0800
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, David Ahern <dsahern@gmail.com>,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>
+Subject: Re: [BUG] selftests/net: icmp_redirect.sh: 12 out of 40 test result
+ with [FAIL]
+Message-ID: <ZfepK3xItcv3ARVV@Laptop-X1>
+References: <dfb4b2fa-1728-43f2-ad73-f06145399fc9@alu.unizg.hr>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dfb4b2fa-1728-43f2-ad73-f06145399fc9@alu.unizg.hr>
 
-Add missing flags argument to open(2) call with O_CREAT.
+Hi Mirsad,
 
-Some tests fail to compile if _FORTIFY_SOURCE is defined (to any valid
-value) (together with -O), resulting in similar error messages such as:
+On Sat, Mar 16, 2024 at 11:59:54PM +0100, Mirsad Todorovac wrote:
+> Hi,
+> 
+> With the commit v6.8-11167-g4438a810f396 in vanilla torvalds tree, there seem to be problems with
+> the icmp_redirect.sh tests.
+> 
+> The iproute2-next tools were used, commit 7a6d30c95da9.
+> 
+> # timeout set to 3600
+> # selftests: net: icmp_redirect.sh
+> #
+> # ###########################################################################
+> # Legacy routing
+> # ###########################################################################
+> #
+> # TEST: IPv4: redirect exception                                      [FAIL]
+> # TEST: IPv6: redirect exception                                      [ OK ]
+> # TEST: IPv4: redirect exception plus mtu                             [FAIL]
+> # TEST: IPv6: redirect exception plus mtu                             [ OK ]
+> # TEST: IPv4: routing reset                                           [ OK ]
+> # TEST: IPv6: routing reset                                           [ OK ]
+> # TEST: IPv4: mtu exception                                           [ OK ]
+> # TEST: IPv6: mtu exception                                           [ OK ]
+> # TEST: IPv4: mtu exception plus redirect                             [FAIL]
+> # TEST: IPv6: mtu exception plus redirect                             [ OK ]
+> #
+...
+> #
+> # TEST: IPv4: redirect exception                                      [FAIL]
+> # TEST: IPv6: redirect exception                                      [ OK ]
+> # TEST: IPv4: redirect exception plus mtu                             [FAIL]
+> # TEST: IPv6: redirect exception plus mtu                             [ OK ]
+> # TEST: IPv4: routing reset                                           [ OK ]
+> # TEST: IPv6: routing reset                                           [ OK ]
+> # TEST: IPv4: mtu exception                                           [ OK ]
+> # TEST: IPv6: mtu exception                                           [ OK ]
+> # TEST: IPv4: mtu exception plus redirect                             [FAIL]
+> # TEST: IPv6: mtu exception plus redirect                             [ OK ]
+> #
+> # Tests passed:  28
+> # Tests failed:  12
+> # Tests xfailed:   0
+> not ok 45 selftests: net: icmp_redirect.sh # exit=1
+> 
+> These errors are not introduced with this commit, but were already present at least in 6.8-rc7.
 
-  In file included from /usr/include/fcntl.h:342,
-                   from gup_test.c:1:
-  In function 'open',
-      inlined from 'main' at gup_test.c:206:10:
-  /usr/include/bits/fcntl2.h:50:11: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
-     50 |           __open_missing_mode ();
-        |           ^~~~~~~~~~~~~~~~~~~~~~
+I tried kernel 6.8 with net tree. All passed.
 
-_FORTIFY_SOURCE is enabled by default in some distributions, so the
-tests are not built by default and are skipped.
+# ./icmp_redirect.sh
 
-open(2) man-page warns about missing flags argument: "if it is not
-supplied, some arbitrary bytes from the stack will be applied as the
-file mode."
+###########################################################################
+Legacy routing
+###########################################################################
 
-Fixes: aeb85ed4f41a ("tools/testing/selftests/vm/gup_benchmark.c: allow user specified file")
-Fixes: fbe37501b252 ("mm: huge_memory: debugfs for file-backed THP split")
-Fixes: c942f5bd17b3 ("selftests: soft-dirty: add test for mprotect")
-Cc: Keith Busch <kbusch@kernel.org>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
- tools/testing/selftests/mm/gup_test.c             | 2 +-
- tools/testing/selftests/mm/soft-dirty.c           | 2 +-
- tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+TEST: IPv4: redirect exception                                      [ OK ]
+TEST: IPv6: redirect exception                                      [ OK ]
+TEST: IPv4: redirect exception plus mtu                             [ OK ]
+TEST: IPv6: redirect exception plus mtu                             [ OK ]
+TEST: IPv4: routing reset                                           [ OK ]
+TEST: IPv6: routing reset                                           [ OK ]
+TEST: IPv4: mtu exception                                           [ OK ]
+TEST: IPv6: mtu exception                                           [ OK ]
+TEST: IPv4: mtu exception plus redirect                             [ OK ]
+TEST: IPv6: mtu exception plus redirect                             [ OK ]
+...
+TEST: IPv4: redirect exception                                      [ OK ]
+TEST: IPv6: redirect exception                                      [ OK ]
+TEST: IPv4: redirect exception plus mtu                             [ OK ]
+TEST: IPv6: redirect exception plus mtu                             [ OK ]
+TEST: IPv4: routing reset                                           [ OK ]
+TEST: IPv6: routing reset                                           [ OK ]
+TEST: IPv4: mtu exception                                           [ OK ]
+TEST: IPv6: mtu exception                                           [ OK ]
+TEST: IPv4: mtu exception plus redirect                             [ OK ]
+TEST: IPv6: mtu exception plus redirect                             [ OK ]
 
-diff --git a/tools/testing/selftests/mm/gup_test.c b/tools/testing/selftests/mm/gup_test.c
-index cbe99594d319..18a49c70d4c6 100644
---- a/tools/testing/selftests/mm/gup_test.c
-+++ b/tools/testing/selftests/mm/gup_test.c
-@@ -203,7 +203,7 @@ int main(int argc, char **argv)
- 	ksft_print_header();
- 	ksft_set_plan(nthreads);
- 
--	filed = open(file, O_RDWR|O_CREAT);
-+	filed = open(file, O_RDWR|O_CREAT, 0664);
- 	if (filed < 0)
- 		ksft_exit_fail_msg("Unable to open %s: %s\n", file, strerror(errno));
- 
-diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
-index cc5f144430d4..7dbfa53d93a0 100644
---- a/tools/testing/selftests/mm/soft-dirty.c
-+++ b/tools/testing/selftests/mm/soft-dirty.c
-@@ -137,7 +137,7 @@ static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
- 		if (!map)
- 			ksft_exit_fail_msg("anon mmap failed\n");
- 	} else {
--		test_fd = open(fname, O_RDWR | O_CREAT);
-+		test_fd = open(fname, O_RDWR | O_CREAT, 0664);
- 		if (test_fd < 0) {
- 			ksft_test_result_skip("Test %s open() file failed\n", __func__);
- 			return;
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index 856662d2f87a..6c988bd2f335 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -223,7 +223,7 @@ void split_file_backed_thp(void)
- 		ksft_exit_fail_msg("Fail to create file-backed THP split testing file\n");
- 	}
- 
--	fd = open(testfile, O_CREAT|O_WRONLY);
-+	fd = open(testfile, O_CREAT|O_WRONLY, 0664);
- 	if (fd == -1) {
- 		ksft_perror("Cannot open testing file");
- 		goto cleanup;
--- 
-2.42.1
+Tests passed:  40
+Tests failed:   0
+Tests xfailed:   0
 
+# uname -r
+6.8.0-virtme
+
+You can try enable verbose output and see where the failure occurred.
+
+Wild guess, the last change of icmp_redirect is my netns update. Maybe there
+are something default sysctl settings in netns cause the error?
+
+Thanks
+Hangbin
 
