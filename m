@@ -1,130 +1,220 @@
-Return-Path: <linux-kselftest+bounces-6410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C871187F468
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Mar 2024 01:15:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D362E87F497
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Mar 2024 01:31:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEBBC1C21589
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Mar 2024 00:15:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 629171F21CAD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Mar 2024 00:31:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2064E193;
-	Tue, 19 Mar 2024 00:15:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC59018D;
+	Tue, 19 Mar 2024 00:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWIKtc9+"
+	dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b="hioRiCan"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC2E7EB;
-	Tue, 19 Mar 2024 00:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F773D6A
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Mar 2024 00:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710807302; cv=none; b=HGXgOLsghnxipFqw2dujGRDNrwqpFLbrivGvGdPHDrnVHxwsfwbp5MznhF11r67CQ5ITFbIMu0y+nHN9wXMC801vIXhZGy882lP6/VFBvvZtQima6Tu0lNdDRB30RvfmmHxtU33KgP9+hZ/YNrNsA5FpMxmfbFhUFOSFK2cP2LQ=
+	t=1710808259; cv=none; b=S1YfiD5zLOSJRFw1APyX8Zb+S32n7/ln8034KXUtSfDYr3vzdhHeDZZDAkPSpK9rdeJt9Q5WZvWonu8kPZr3YR6R0wfHaBRisUTH/kS/uAPmzBFXvFwcGQ3rGMUDM7aMtJW4PoaG7opUIBi0WaHW67VZ2rzriaIlSlskijtRDXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710807302; c=relaxed/simple;
-	bh=Xml8UrA+/N9DI1sriDiEA3m1U8/jThWp7kGRn7KX/W8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oHnS+OcSI1S4YiFUXzxDvsyvA7Id3xutcwGW7SfTkuiDyG4KL1bGjCoqSAdLrNs7iFu0SgQQXQzqlYLlopjddzH+/Qcngmxpy8hrSho+wa9y/tIQ00+LFj3+zJ3aY5Hd152MSUcpDruS3BmljosKb1Z7ubU1Y32ZmE88LBzdvFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWIKtc9+; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46cf8f649dso140536566b.3;
-        Mon, 18 Mar 2024 17:15:00 -0700 (PDT)
+	s=arc-20240116; t=1710808259; c=relaxed/simple;
+	bh=8DfVubo4KjNWHw2+1Glu8UP/tZQT++5v3hFkpgpZ4Ao=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IsNFRGAuoPJpG/Bsr3fx7HtsbcJ56yL8HWA+JuekBn+oxNfFWHCJ3wSKFD1sk3JSaEj5Ipe59rNma9RcK9fe6twcGeboOheSi26e5S0Ngpk9BD0ENK3tyh0sLGtfsG9uk0dfqIOZ14NJTTy5MWbKqCZKgG6pbPlZmetf5qg34IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com; spf=pass smtp.mailfrom=netflix.com; dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b=hioRiCan; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netflix.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1dee5ef2a7bso33000455ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Mar 2024 17:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710807299; x=1711412099; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5g8p3IqxgARfKYTGktm7aut6cdCT60gi+hlyJV5ViYE=;
-        b=JWIKtc9+v6qs5pn6mlGt2C0b9Tp7fXAUPJzrYiS54FQjXvSph6RsVubdYRN3kSa67h
-         XsJphIWilsfbb0shYONdC9MwJNO1ne/bXXJSoL1PrhtMCQiOfCifN5jFqLQXm7xaC03p
-         FDoIZLv7Y7NTTbhOVUcijalnJ69yXE/yuK3FqAhbWTUfGDN5qF5ymZp+YDNueFa8bQBM
-         0+hwcHPz9nl7HpqpEYlAy0Jm0y2IdVFpFX0KfQr3YpdQxFsuijlGSggDIzhAvF13bpsO
-         8VB/u4rqZrC48dgXTDi+1vJJJk5hqw5r9cXWQcuQpPSskznNhTGVnZ67d7yveZNsYrV5
-         1wOQ==
+        d=netflix.com; s=google; t=1710808257; x=1711413057; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dX5+kGt94i8LgMCxRW3yMQ+Kn76GryytdXFaAC5Pwhc=;
+        b=hioRiCanH4L0PUR3MthXneI8Mg6RopWapzyK5OBNG75ES51W11rhFOeYCVD2lpneuI
+         +rWCt9VwWPQ5mnK/dL7ZeYiQfmssFYF+XxU4Japfx8UA/3yVeN+Ey/SBKCIjQlLOxUBL
+         UCL5uwfvGaBXU/8nh8/5xNFfuide5nzwTPefo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710807299; x=1711412099;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5g8p3IqxgARfKYTGktm7aut6cdCT60gi+hlyJV5ViYE=;
-        b=QoZVeVTxYswgfuEFHhILjdNoKGYdPMN01V7pJBg8FU9it7otZ54SlAPe/YatYhOtXX
-         4C8nYpc8HmrXe4dvv3Nnl9XzTloLU209R7z5cVqnmCKswPcfNqodDmA4ih+tCSj5dbc4
-         RkOMc71Cu4ZvdQiWbWRf38X7r1jn7QCzQs4URucy5bpJ64FX4FtQ+eg8cDwr3GlBb28D
-         PwlCsE27fplLN/52kFaN5YuZkA4Rxfc2SNk584eVpRDI3CAh+kThiyt58uUNCZn/SVvH
-         ahl+Njqm0Kn+FybDiNnBOVXfjkYoTNgYxuAt91GzQAlL9sTJr75UZxHuElZ/hAoEjghk
-         WiBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVtpf0Gsv5kf25X3QTuWJs6B5UYEedqU76byYrY15wSEwnhK41UN03JZpyC7lEFOmpjyGR/75xsErJlsUQk1bHaMQzClN8OzjG1SOVOAOMrsMZmUCb18hdYSwBtBfx4R5eXVtK9UwRQrBhWD+OC
-X-Gm-Message-State: AOJu0YwWntR9lQkQhIuBpWXVqU48nPxq6a0txkYrfBQYZ2czZl4zkT7v
-	zZEZbN7lJZo91SnvYYvuMR1+SMuXawuSxMXqH4B9h1Gr6u1K9skr
-X-Google-Smtp-Source: AGHT+IEqaXjurhuhSHzFitnnwvEJbQxx8vRt7Mfz+RXSuN+q4PXsUtc9PE6WTppBGjFIoLgo8rTQeA==
-X-Received: by 2002:a17:907:7886:b0:a46:aaaa:4220 with SMTP id ku6-20020a170907788600b00a46aaaa4220mr572354ejc.32.1710807298480;
-        Mon, 18 Mar 2024 17:14:58 -0700 (PDT)
-Received: from [192.168.6.255] ([5.1.5.0])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170906358c00b00a46cffe6d06sm802577ejb.42.2024.03.18.17.14.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Mar 2024 17:14:57 -0700 (PDT)
-Message-ID: <89e76fa5834bd34ef94761bcbc987a1be245b261.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: add sleepable timer tests
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
- <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Tue, 19 Mar 2024 02:14:56 +0200
-In-Reply-To: <20240315-hid-bpf-sleepable-v4-6-5658f2540564@kernel.org>
-References: <20240315-hid-bpf-sleepable-v4-0-5658f2540564@kernel.org>
-	 <20240315-hid-bpf-sleepable-v4-6-5658f2540564@kernel.org>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+        d=1e100.net; s=20230601; t=1710808257; x=1711413057;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dX5+kGt94i8LgMCxRW3yMQ+Kn76GryytdXFaAC5Pwhc=;
+        b=BuT1Z2OY1IRCe5i500VjTughe5Yulmx6GAgVUXJjNXo3EPgDDYAC8qX5W1zmB3e7+5
+         2bpceyEqZEjsplI/yIIzjbKl7aONN/1fqyGQncCajpjZOEu7QK7DIBJsHVDs7Ds6oZC1
+         aweCkTDGoNnkQRPBTWiHwpi9j6LHIA16Mm806/vaTvWdDQiB+qjPyFP6ynJZ222kGdWJ
+         y1ruH48rdqYlnxVfOJSa7H1LDWOUpKg4Z2FfhAZzc+RAerdenJbnmJcp9MR/PrBXAtZV
+         cjzyrM3ZJHCvTkocAAvcC6PW6jRUuHzEtJiKUtsA4BMbIMB15v9dmBWZdZkHOWHDjpgf
+         DgSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVGvE19RjCb0PN4YcbGfCzRoi1rHu/WWlxw0hmqAttrmKSRwpmmwdzSKmEllsXQQanWFcwEFBJMB6pOdn8tUYEjcBmrEiM1D7ENkxk0R7mi
+X-Gm-Message-State: AOJu0YyEk55tzav90jIXZK0VwYJtnRjWhJqZ/wDH+XJ23ye8qvgO43iM
+	5ANRv5gl6jh1TPvky2m7oA8FvIjGLTT13RGZomuxFJnpKTCxVZ8Fdth7S5dWz38=
+X-Google-Smtp-Source: AGHT+IG6UAZkCVAh0gLOZ+HwUvODQs/BjE7k2nfUF76GedDJUZnBHYF3RE854UocPj9mHspVEHt3IA==
+X-Received: by 2002:a17:902:ecc9:b0:1de:f3bf:a47a with SMTP id a9-20020a170902ecc900b001def3bfa47amr13747269plh.9.1710808257419;
+        Mon, 18 Mar 2024 17:30:57 -0700 (PDT)
+Received: from localhost ([2607:fb10:7301::3])
+        by smtp.gmail.com with UTF8SMTPSA id 13-20020a170902ee4d00b001dd7d66aa18sm9884535plo.67.2024.03.18.17.30.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Mar 2024 17:30:56 -0700 (PDT)
+Date: Mon, 18 Mar 2024 18:30:54 -0600
+From: Jose Fernandez <josef@netflix.com>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Tycho Andersen <tycho@tycho.pizza>
+Subject: Re: [PATCH V2 bpf-next 2/2] selftests/bpf: add selftest for
+ bpf_task_get_cgroup
+Message-ID: <20240319003054.tegzffeydaec45ql@SlimPro9i>
+References: <20240316162241.628855-1-josef@netflix.com>
+ <20240316162241.628855-2-josef@netflix.com>
+ <ZfgQXlU_wKpXScwh@krava>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZfgQXlU_wKpXScwh@krava>
 
-On Fri, 2024-03-15 at 15:29 +0100, Benjamin Tissoires wrote:
-> bpf_experimental.h and ../bpf_testmod/bpf_testmod_kfunc.h are both
-> including vmlinux.h, which is not compatible with including time.h
-> or bpf_tcp_helpers.h.
->=20
-> So prevent vmlinux.h to be included, and override the few missing
-> types.
->=20
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+On 24/03/18 10:58AM, Jiri Olsa wrote:
+> On Sat, Mar 16, 2024 at 10:22:41AM -0600, Jose Fernandez wrote:
+> 
+> SNIP
+> 
+> > +void test_task_get_cgroup(void)
+> > +{
+> > +	struct test_task_get_cgroup *skel;
+> > +	int err, fd;
+> > +	pid_t pid;
+> > +	__u64 cgroup_id, expected_cgroup_id;
+> > +	const struct timespec req = {
+> > +		.tv_sec = 1,
+> > +		.tv_nsec = 0,
+> > +	};
+> > +
+> > +	fd = test__join_cgroup(TEST_CGROUP);
+> > +	if (!ASSERT_OK(fd < 0, "test_join_cgroup_TEST_CGROUP"))
+> > +		return;
+> > +
+> > +	skel = test_task_get_cgroup__open();
+> > +	if (!ASSERT_OK_PTR(skel, "test_task_get_cgroup__open"))
+> > +		goto cleanup;
+> > +
+> > +	err = test_task_get_cgroup__load(skel);
+> > +	if (!ASSERT_OK(err, "test_task_get_cgroup__load"))
+> > +		goto cleanup;
+> 
+> nit, you could call test_task_get_cgroup__open_and_load
 
-[...]
+I'll rename.
 
-> @@ -6,6 +6,14 @@
->  #include <bpf/bpf_helpers.h>
->  #include "bpf_tcp_helpers.h"
-> =20
-> +#define __VMLINUX_H__
-> +#define u32 __u32
-> +#define u64 __u64
-> +#include "bpf_experimental.h"
-> +struct prog_test_member1;
-> +#include "../bpf_testmod/bpf_testmod_kfunc.h"
-> +#undef __VMLINUX_H__
+> > +
+> > +	err = test_task_get_cgroup__attach(skel);
+> > +	if (!ASSERT_OK(err, "test_task_get_cgroup__attach"))
+> > +		goto cleanup;
+> > +
+> > +	pid = getpid();
+> > +	expected_cgroup_id = get_cgroup_id(TEST_CGROUP);
+> > +	if (!ASSERT_GT(expected_cgroup_id, 0, "get_cgroup_id"))
+> > +		goto cleanup;
+> > +
+> > +	/* Trigger nanosleep to enter the sched_switch tracepoint */
+> > +	/* The previous task should be this process */
+> > +	syscall(__NR_nanosleep, &req, NULL);
+> 
+> would smaller sleep do? also we have our own usleep (in test_progs.c)
+> that calls nanosleep
 
-Tbh, this looks very ugly.
-Would it be possible to create a new tests file sleepable_timer.c
-and include bpf_experimental.h there, skipping time.h?
-It appears that for the new tests the only necessary definition from
-time.h is CLOCK_MONOTONIC.
+Yes a smaller sleep should be fine.
+I'll reduce the sleep and use the usleep helper.
 
+> > +
+> > +	err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.pid_to_cgid_map), &pid,
+> > +				  &cgroup_id);
+> > +
+> > +	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
+> > +		goto cleanup;
+> > +
+> > +	ASSERT_EQ(cgroup_id, expected_cgroup_id, "cgroup_id");
+> > +
+> > +cleanup:
+> > +	test_task_get_cgroup__destroy(skel);
+> > +	close(fd);
+> > +}
+> > diff --git a/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
+> > new file mode 100644
+> > index 000000000000..580f8f0657d5
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
+> > @@ -0,0 +1,37 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +// Copyright 2024 Netflix, Inc.
+> > +
+> > +#include "vmlinux.h"
+> > +#include <bpf/bpf_helpers.h>
+> > +#include <bpf/bpf_tracing.h>
+> > +
+> > +struct cgroup *bpf_task_get_cgroup(struct task_struct *task) __ksym;
+> > +void bpf_cgroup_release(struct cgroup *cgrp) __ksym;
+> > +
+> > +struct {
+> > +	__uint(type, BPF_MAP_TYPE_HASH);
+> > +	__uint(max_entries, 4096);
+> > +	__type(key, __u32);
+> > +	__type(value, __u64);
+> > +} pid_to_cgid_map SEC(".maps");
+> > +
+> > +SEC("tp_btf/sched_switch")
+> > +int BPF_PROG(sched_switch, bool preempt, struct task_struct *prev,
+> > +	     struct task_struct *next)
+> > +{
+> > +	struct cgroup *cgrp;
+> > +	u64 cgroup_id;
+> > +	u32 pid;
+> > +
+> 
+> could you filter for your pid in here like we do in other places,
+> (eg in progs/kprobe_multi.c)
+> 
+> in which case you won't need hash map, but just a single value
+> to store the cgroup id to
+> 
+> jirka
+
+I'll apply this suggestion as well and include it in V3. 
+Thanks for the feedback.
+
+> 
+> > +	cgrp = bpf_task_get_cgroup(prev);
+> > +	if (cgrp == NULL)
+> > +		return 0;
+> > +	cgroup_id = cgrp->kn->id;
+> > +	pid = prev->pid;
+> > +	bpf_map_update_elem(&pid_to_cgid_map, &pid, &cgroup_id, BPF_ANY);
+> > +
+> > +	bpf_cgroup_release(cgrp);
+> > +	return 0;
+> > +}
+> > +
+> > +char _license[] SEC("license") = "GPL";
+> > -- 
+> > 2.40.1
+> > 
 
