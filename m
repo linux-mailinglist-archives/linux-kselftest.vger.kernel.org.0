@@ -1,55 +1,50 @@
-Return-Path: <linux-kselftest+bounces-6448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 906F3880CE2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 09:18:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5048818C0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 21:50:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8200B21B4F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 08:18:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD3761C213D8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 20:50:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28742E62E;
-	Wed, 20 Mar 2024 08:18:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4F885C6A;
+	Wed, 20 Mar 2024 20:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJj/jQiL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415BB2DF7D;
-	Wed, 20 Mar 2024 08:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E393885C45;
+	Wed, 20 Mar 2024 20:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710922694; cv=none; b=nTftO7V3ZBKI36QVXvEGYTHk3eZKCPpX/UdSzxuJllt9ePBQpDKGklgwp7481d7HuSikCthSoD3hL/u6x6m5E0xT9N63mjCHiF6a8I7YTGLbEKKHWyaR28ObCJ5Rk2IALJWw2FuJBUloim/T3RQaBJC7ndYAfPrUY23DrqRizks=
+	t=1710967840; cv=none; b=U1S2Ov4KA9tBjnZk9meMOUCV1L0xkxJiWZsrvD16H8kOU+sNpuj89czjKnZRAhH1bQ4RdjDEpeyqVqF/gq+wQxVDZXDJHbftB/N0TgHcfp5XupyQ8cvty7yyeA31uJfQuD4Rm3lfyE0/pTCnNQK82TAl8lM3W5KF6ug0o3C0YVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710922694; c=relaxed/simple;
-	bh=60sKjZFMDkIGBZ34PBAlSHbXPnG2diZASmVrBzUBnok=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NvsK+x7n3Llla4xM6zMmvLz9pjBx+LW8Z+cIvt+E0CcrBap2cWTw9TfxCBW/VgRBVysNb55ZVvUOj+8tyEiIPG3SN1FStM2RVxyhnrlkBBu7GpTXgM/m6Lep6j91AjpecglGg+Dmtn/nMs4HZU+nh42tJRqJb9dLw/2eSVcUq2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V01gH1LT4z4f3kK1;
-	Wed, 20 Mar 2024 16:18:03 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 1085A1A0172;
-	Wed, 20 Mar 2024 16:18:07 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.101.6])
-	by APP3 (Coremail) with SMTP id _Ch0CgDnpZ29m_plVnGcHQ--.12753S2;
-	Wed, 20 Mar 2024 16:18:06 +0800 (CST)
-From: Kemeng Shi <shikemeng@huaweicloud.com>
-To: brendan.higgins@linux.dev,
-	davidgow@google.com,
-	rmoar@google.com,
-	corbet@lwn.net
-Cc: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: kunit: correct KUNIT_VERY_SLOW to KUNIT_SPEED_VERY_SLOW
-Date: Thu, 21 Mar 2024 01:14:24 +0800
-Message-Id: <20240320171424.6536-1-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
+	s=arc-20240116; t=1710967840; c=relaxed/simple;
+	bh=i1YYsB3MkP8iWkMd09oORaDoitK5kjLZDlxRsz79N1Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=UVrcitfpLqtGnEKUwavx3hw1mfCFrKa6s801OqqM2hlulgF7QNVhwCQ7lLesv/aMKdcOFJximX5djlBZSG8J5QTqCB74nrFxcLJDO4d42U3w6XNqC++N+OkvLf2nMuS4qx+QOM9eR/zZLR6Ht9MGZKh4Nt4PFM9V9lRcrevepek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJj/jQiL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 73813C4167D;
+	Wed, 20 Mar 2024 20:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710967839;
+	bh=i1YYsB3MkP8iWkMd09oORaDoitK5kjLZDlxRsz79N1Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=iJj/jQiLmTJUJiTcmVysHQ35TqjzpH6Xv7OMXSzge7zuIjAgmJkWNvKGx5ly7nUKd
+	 w1mJzh9SXKMmv/6yq9A5uNV6GwWJkwn7rL7h5/uwndCaBH2Nnjw0K/N4jqnZtNBoCS
+	 a89v3+a3sav5bNZZ9DhDJanqyKwWR96AOgQzJ+7AjWggcdTwCRZreXQQGV+ov65WjF
+	 8lcQ1/9IFMyafWO2P2jv5h92222ipyp3uP1y4pTncDD2xQvquj9elRnYTsdRSvKi5T
+	 me5vXqyw/h3lLTQyTT/dQDDlRppUVMQqdWsHkF7AuqC3E5uiOBzcqnCH/LTqb0S6s5
+	 JfUdxK6D1jcuw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 699D8D98302;
+	Wed, 20 Mar 2024 20:50:39 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,54 +52,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgDnpZ29m_plVnGcHQ--.12753S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jry5Zry3XFyDtr4kArWxCrg_yoWDtFXEva
-	4rZFn3CFW3tr9aqr4jyF1SyFn3GFW8Cr48Wr4DKF98Cr1SyasrKFyDJ3sF9r1Uur1S9a4f
-	tan7ur1jvwn7AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JFv_Gryl8c
-	AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq
-	3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gc
-	CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
-	r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
-	Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IY
-	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jIGQDUUUUU=
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+Subject: Re: [PATCH v2 0/3] riscv: mm: Use hint address in mmap if available
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <171096783942.6804.4445478539972921604.git-patchwork-notify@kernel.org>
+Date: Wed, 20 Mar 2024 20:50:39 +0000
+References: <20240130-use_mmap_hint_address-v2-0-f34ebfd33053@rivosinc.com>
+In-Reply-To: <20240130-use_mmap_hint_address-v2-0-f34ebfd33053@rivosinc.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, alexghiti@rivosinc.com,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ shuah@kernel.org, corbet@lwn.net, cyy@cyyself.name, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org
 
-There is no KUNIT_VERY_SLOW, I guess we mean KUNIT_SPEED_VERY_SLOW.
+Hello:
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
----
- Documentation/dev-tools/kunit/running_tips.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
-index bd689db6fdd2..482f598d141c 100644
---- a/Documentation/dev-tools/kunit/running_tips.rst
-+++ b/Documentation/dev-tools/kunit/running_tips.rst
-@@ -294,7 +294,7 @@ macro to define the test case instead of ``KUNIT_CASE(test_name)``.
- .. code-block:: c
- 
- 	static const struct kunit_attributes example_attr = {
--		.speed = KUNIT_VERY_SLOW,
-+		.speed = KUNIT_SPEED_VERY_SLOW,
- 	};
- 
- 	static struct kunit_case example_test_cases[] = {
-@@ -311,7 +311,7 @@ suite definition.
- .. code-block:: c
- 
- 	static const struct kunit_attributes example_attr = {
--		.speed = KUNIT_VERY_SLOW,
-+		.speed = KUNIT_SPEED_VERY_SLOW,
- 	};
- 
- 	static struct kunit_suite example_test_suite = {
+On Tue, 30 Jan 2024 11:04:29 -0800 you wrote:
+> On riscv, mmap currently returns an address from the largest address
+> space that can fit entirely inside of the hint address. This makes it
+> such that the hint address is almost never returned. This patch raises
+> the mappable area up to and including the hint address. This allows mmap
+> to often return the hint address, which allows a performance improvement
+> over searching for a valid address as well as making the behavior more
+> similar to other architectures.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,1/3] riscv: mm: Use hint address in mmap if available
+    (no matching commit)
+  - [v2,2/3] selftests: riscv: Generalize mm selftests
+    (no matching commit)
+  - [v2,3/3] docs: riscv: Define behavior of mmap
+    https://git.kernel.org/riscv/c/371a3c2055db
+
+You are awesome, thank you!
 -- 
-2.30.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
