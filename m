@@ -1,138 +1,163 @@
-Return-Path: <linux-kselftest+bounces-6451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CA8D88132F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 15:18:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B6D588137F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 15:41:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2262284D3B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 14:18:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEBBE1F23432
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 14:41:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01E84207F;
-	Wed, 20 Mar 2024 14:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FB047F72;
+	Wed, 20 Mar 2024 14:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Odv2kcKM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57D441C84;
-	Wed, 20 Mar 2024 14:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BD41A291;
+	Wed, 20 Mar 2024 14:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710944333; cv=none; b=CJ3tVQCUX5g9mjX3eV/tOpy/62zvaC7T+fNmigz8vpN7IazA04OndL0hdvKEI0KRV7eksy0gZss6TwmPukHdnea3NLvRiSS85C2JDTiP9YyMTLEJNXLpZ3ctPFFbNjfzObfv0R4+YDB+HAco6xWzemZEXk9DrCpJ3/sfOY+CuCg=
+	t=1710945682; cv=none; b=rdw9CQbq4lYoai0VtJD45xJCOy/kuurFAhBIqVadJQbgUon3bhOuLnPBeKST+CPVhg4/RUHa8V6e2xa7I2vwDfYBcw8CGYIIq0J635QqnNupvrwIpY49xpbefjPSATMJjaSBtxAZnbtDD9e8AG2Pyjwr2ElM0+/Z2lIS/atzLwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710944333; c=relaxed/simple;
-	bh=xmbyWobTD3RpSNLREBva1eUC9VLaDy7wqoqKn/PRejE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dBgKnOlnK4DJO4uifxKkt4ak+4RnA+Ege+o3eu9EJMHjbTl8zDhZBX9cFoIyA2LEl9jYxmGPhp+CU53C0K8/ZT/OwFBL5D349yCFnksErOUu/LQSOjewGegWl0DDpSPLndbQLUC9H07x1h3gfortN7Oyj9rk+peszvIGAfPk7PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFD591007;
-	Wed, 20 Mar 2024 07:19:25 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8F3253F64C;
-	Wed, 20 Mar 2024 07:18:49 -0700 (PDT)
-From: Mark Rutland <mark.rutland@arm.com>
-To: linux-kernel@vger.kernel.org
-Cc: aishwarya.tcv@arm.com,
-	linux-kselftest@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	mark.rutland@arm.com,
-	mathieu.desnoyers@efficios.com,
-	mhiramat@kernel.org,
-	rostedt@goodmis.org,
-	shuah@kernel.org
-Subject: [PATCH] selftests/ftrace: Fix event filter target_func selection
-Date: Wed, 20 Mar 2024 14:18:44 +0000
-Message-Id: <20240320141844.1779984-1-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1710945682; c=relaxed/simple;
+	bh=fgOCc2Xhdclblgsu6udDHoN+Tmr1BWbG4hJb0qImDyY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t6RpN4k1dYf4djI4RZqf5nzZSr2SyeceDUhMn/wOjx5i8QxM2LjMyGsOHK9nDDa72f7sfPaHNLMjBUKZ9PAh6I5CUMdMRCKFBbOQ6LL7oawqOf3ibSgc2spKzpEtnGkiDdo43cShzrPOyZOnugUm1qptLnnxhQNGfH8iEk2C6Uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Odv2kcKM; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-609f1f97864so74037977b3.0;
+        Wed, 20 Mar 2024 07:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710945679; x=1711550479; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0J7VKp53yijpgZI901ch7zhYg0qj6RwRSqJUmVcaUBY=;
+        b=Odv2kcKMLdpyMCQ/htHyH5Db8kb/9FHQ/CSu9Uy9iH01vRiFlXASKlwj2pSzbvon40
+         q8/6htmf4rDX3mDrsH1z463V3W1PKF/en/urt5GklCSaWgfl7ZlFaupcL2kbAlfL6nlY
+         mYNT2oKjbUumqe3P66SyJa8eFZAFe70fg8jNDPXi4nzfE/Uhn43nEKG8xyTNp6dychx9
+         wYlW9aBw7UUYXN9tVYaKQaAEdFzaTiUplIooAzaua0Q7tSbG4DxJ+NxBUHrdXFn1YjIK
+         Z8vMUGEK7x2aJ7sd9Jy7H2TFe6elMM26QR7S/SzjfMqu8mtb1YKB1r/RVH1E6C2cF5MM
+         AH1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710945679; x=1711550479;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0J7VKp53yijpgZI901ch7zhYg0qj6RwRSqJUmVcaUBY=;
+        b=AEH6nEgviz/I7M1ciPs26mU9NuNWc3sQJG/4Lcqmcfey+gCcae8o9QlfCLNWOqFhKP
+         e4cYYYcclpBHYK2JMJSFajZr807XnhmXQ8+l2e3Fb/TCkF6t2aSI5+P24r2FTqr7hfUq
+         5bUnbj/KPIcqCPkKZ+1ifRQH1w+0AkcTTsqGBVw+alXC6WO4KQ5LlhjbrrPlLyJAhNhB
+         +zUvaksiD0g7xZKAHCT7yLhnde1Fet/DLyIIRob5MWUtX3YLvPmkMau6D2mrKTHB4VL7
+         i/57ROathn8+Ezi4an7riESbgDSJFcwsGcC1iZU30rqQXFTO/SLfqSQrEY1dVnNNpLlD
+         GV+w==
+X-Forwarded-Encrypted: i=1; AJvYcCVhBJpEQiAbVTNECARYznP7kfKfLfMB1eEyjyvwmbMEExrNRWGjxdwMlK/4XSCltuFmx99g0rzcRQRPUOaira+zooZYcRQX0flkBFrVRPf/Nr7huSSEQJA97cknSjWDF9mpOKwhSewrrcD+tGAKGXbEpKtxs5cJOJ3gBGftcyRtjdNP
+X-Gm-Message-State: AOJu0YwU/nufNerVNjnbf9CiTeIndwmHCpAqbSi/zPO5/sz5FyHzK3ed
+	vCjBc2WA9jDRCgw3rmj9+V+MwqYlF4dMQWWujFxCkDB3V1cZeiLVQf93MQ7y
+X-Google-Smtp-Source: AGHT+IEknFVM/pV9erRySbDktQRCKez9PunzGmtN0+wjAn+6XPp749HSD1dx4X4Y2QVu6RNWqWxGZw==
+X-Received: by 2002:a81:6284:0:b0:610:b930:816a with SMTP id w126-20020a816284000000b00610b930816amr6662455ywb.49.1710945679527;
+        Wed, 20 Mar 2024 07:41:19 -0700 (PDT)
+Received: from localhost ([2600:1700:2ec0:58c0::44])
+        by smtp.gmail.com with ESMTPSA id et13-20020a05690c2e0d00b00609f45c6b89sm2778205ywb.88.2024.03.20.07.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Mar 2024 07:41:19 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Wed, 20 Mar 2024 07:41:17 -0700
+From: Tejun Heo <tj@kernel.org>
+To: Jose Fernandez <josef@netflix.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>
+Subject: Re: [PATCH V3 bpf-next 1/2] bpf: add bpf_task_get_cgroup kfunc
+Message-ID: <Zfr1jQ6W6yaLsHID@mtj.duckdns.org>
+References: <20240319050302.1085006-1-josef@netflix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240319050302.1085006-1-josef@netflix.com>
 
-The event filter function test has been failing in our internal test
-farm:
+On Mon, Mar 18, 2024 at 11:03:01PM -0600, Jose Fernandez wrote:
+> This patch enhances the BPF helpers by adding a kfunc to retrieve the
+> cgroup v2 of a task, addressing a previous limitation where only
+> bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
+> particularly useful for scenarios where obtaining the cgroup ID of a
+> task other than the "current" one is necessary, which the existing
+> bpf_get_current_cgroup_id helper cannot accommodate. A specific use
+> case at Netflix involved the sched_switch tracepoint, where we had to
+> get the cgroup IDs of both the prev and next tasks.
+> 
+> The bpf_task_get_cgroup kfunc acquires and returns a reference to a
+> task's default cgroup, ensuring thread-safe access by correctly
+> implementing RCU read locking and unlocking. It leverages the existing
+> cgroup.h helper, and cgroup_tryget to safely acquire a reference to it.
+> 
+> Signed-off-by: Jose Fernandez <josef@netflix.com>
+> Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> Acked-by: Stanislav Fomichev <sdf@google.com>
 
-| # not ok 33 event filter function - test event filtering on functions
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Running the test in verbose mode indicates that this is because the test
-erroneously determines that kmem_cache_free() is the most common caller
-of kmem_cache_free():
+but some questions below
 
-  # # + cut -d: -f3 trace
-  # # + sed s/call_site=([^+]*)+0x.*/1/
-  # # + sort
-  # # + uniq -c
-  # # + sort
-  # # + tail -n 1
-  # # + sed s/^[ 0-9]*//
-  # # + target_func=kmem_cache_free
+> +__bpf_kfunc struct cgroup *bpf_task_get_cgroup(struct task_struct *task)
+> +{
+> +	struct cgroup *cgrp;
+> +
+> +	rcu_read_lock();
+> +	cgrp = task_dfl_cgroup(task);
+> +	if (!cgroup_tryget(cgrp))
+> +		cgrp = NULL;
+> +	rcu_read_unlock();
+> +	return cgrp;
+> +}
 
-... and as kmem_cache_free() doesn't call itself, setting this as the
-filter function for kmem_cache_free() results in no hits, and
-consequently the test fails:
+So, as this is a lot easier in cgroup2, the above can probably be written
+directly in BPF (untested and not sure the necessary annotations are in
+place, so please take it with a big grain of salt):
 
-  # # + grep kmem_cache_free trace
-  # # + grep kmem_cache_free
-  # # + wc -l
-  # # + hitcnt=0
-  # # + grep kmem_cache_free trace
-  # # + grep -v kmem_cache_free
-  # # + wc -l
-  # # + misscnt=0
-  # # + [ 0 -eq 0 ]
-  # # + exit_fail
+	bpf_rcu_read_lock();
+	cgrp = task->cgroups->dfl_cgrp;
+	cgrp = bpf_cgroup_from_id(cgrp->kn.id);
+	bpf_rcu_read_unlock();
 
-This seems to be because the system in question has tasks with ':' in
-their name (which a number of kernel worker threads have). These show up
-in the trace, e.g.
+If all you need is ID, it's even simpler:
 
-  test:.sh-1299    [004] .....  2886.040608: kmem_cache_free: call_site=putname+0xa4/0xc8 ptr=000000000f4d22f4 name=names_cache
+	bpf_rcu_read_lock();
+	cgrp_id = task->cgroups->dfl_cgrp->kn.id;
+	bpf_rcu_read_unlock();
 
-... and so when we try to extact the call_site with:
+In the first example, it's not great that we go from task pointer to cgroup
+pointer to ID and then back to acquired cgroup pointer. I wonder whether
+what we really want is to support something like the following:
 
-  cut -d: -f3 trace | sed 's/call_site=\([^+]*\)+0x.*/\1/'
+	bpf_rcu_read_lock();
+	cgrp = bpf_cgroup_tryget(task->cgroups->dfl_cgrp);
+	bpf_rcu_read_unlock();
 
-... the 'cut' command will extrace the column containing
-'kmem_cache_free' rather than the column containing 'call_site=...', and
-the 'sed' command will leave this unchanged. Consequently, the test will
-decide to use 'kmem_cache_free' as the filter function, resulting in the
-failure seen above.
+What do you think?
 
-Fix this by matching the 'call_site=<func>' part specifically to extract
-the function name.
+Thanks.
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-trace-kernel@vger.kernel.org
----
- .../selftests/ftrace/test.d/filter/event-filter-function.tc     | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-index 2de7c61d1ae3..3f74c09c56b6 100644
---- a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-+++ b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-@@ -24,7 +24,7 @@ echo 0 > events/enable
- echo "Get the most frequently calling function"
- sample_events
- 
--target_func=`cut -d: -f3 trace | sed 's/call_site=\([^+]*\)+0x.*/\1/' | sort | uniq -c | sort | tail -n 1 | sed 's/^[ 0-9]*//'`
-+target_func=`cat trace | grep -o 'call_site=\([^+]*\)' | sed 's/call_site=//' | sort | uniq -c | sort | tail -n 1 | sed 's/^[ 0-9]*//'`
- if [ -z "$target_func" ]; then
-     exit_fail
- fi
 -- 
-2.39.2
-
+tejun
 
