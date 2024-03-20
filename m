@@ -1,152 +1,180 @@
-Return-Path: <linux-kselftest+bounces-6440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F8D08808AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 01:48:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB04C8809F5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 03:51:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DDDF1C20F71
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 00:48:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF8FA1C22AE3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Mar 2024 02:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D231B64C;
-	Wed, 20 Mar 2024 00:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA46F9FD;
+	Wed, 20 Mar 2024 02:50:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="NIrztfyK";
-	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="oNEk2Nt0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BXO0M8j0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39034629;
-	Wed, 20 Mar 2024 00:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.53.235.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C21FC17;
+	Wed, 20 Mar 2024 02:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710895680; cv=none; b=CR8T/J9OYcp9n4JgM8HYNelWG6M75dFeA6cdufvT3iOtsKqrKkdqJoMZ5MC9tFFCy/h4g9fW4TzjXWQN0PwSResBC2zJ/Qv+iiSfgCFjE6PiBS7CinkWCF9OsZMVcAEKhChMgGVaTDlEqUjauBPOHmP0/PP/GpsiVoJymNvXu6g=
+	t=1710903043; cv=none; b=OHoKGC+Jeor8yrBIb60mwnqRT/2plOWMaPxiJI79HPeo6k4g8W/DlFyL9vU4frGMqC3pHR7L6BL85vpkKG2w7ADvZqzKix9UCllRAeq7ZDRtRECKwKYTrB+Y2+OEGeNr67FZcu9OP0EylDF+8jgxItzm5AircfhqJLxAta8bY3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710895680; c=relaxed/simple;
-	bh=GNUn5F0m1NSdDdpA3rmiVn684OoVB6CLL1oKo3QkbTk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vgm5tayLEvH/9HTPOz2DtBBXjWxDyjbIlFugiKeU8QGK1I17GvBGCLopv+WCgjm5NpVTNrYkdceEgVdD2nTooX2PzyUPG11FAhbtC8D3z7sp9J4oVoOiDtiRSiLfqbzpIlXwSYIjjhcfheuUimr7TDDDVw9FQ0NtbYaXtPQxumk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr; spf=pass smtp.mailfrom=alu.unizg.hr; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=NIrztfyK; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=oNEk2Nt0; arc=none smtp.client-ip=161.53.235.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alu.unizg.hr
-Received: from localhost (localhost [127.0.0.1])
-	by domac.alu.hr (Postfix) with ESMTP id 449FA6019C;
-	Wed, 20 Mar 2024 01:47:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1710895665; bh=GNUn5F0m1NSdDdpA3rmiVn684OoVB6CLL1oKo3QkbTk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NIrztfyKOT4mzU46ujiHR9eJFjXWQTIgS+urz7lwdT2aNmR7KS/F9AqMcRNAS6qDM
-	 gdPw9+yBPd815nptOdQilTZ8GQ7ggmJMo9+i0mqlgteNh1J1oVk+tXQJAy/mwTKc3x
-	 AfQ50JInr/sZst1fkVDnH09fgRfQzpnnf99pf63zisY4Arr7WleFIXcRCguP8oXXlI
-	 dEDhBsppTEDGajNKq4CuNNcRcEQ8gWuvsABWE2Idgm1qTtNVjx4Xu1zVtr2ImAITdy
-	 kWU+lkaHqn9Ov5Mjkz99FsqB1178LUctz8et+UXuEr5VSori7h0L41HolvhWQsIxFs
-	 r/8qwHpdq3b0A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dlJEwr47upLE; Wed, 20 Mar 2024 01:47:41 +0100 (CET)
-Received: from [192.168.178.20] (dh207-42-61.xnet.hr [88.207.42.61])
-	by domac.alu.hr (Postfix) with ESMTPSA id 3487B60195;
-	Wed, 20 Mar 2024 01:47:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1710895661; bh=GNUn5F0m1NSdDdpA3rmiVn684OoVB6CLL1oKo3QkbTk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oNEk2Nt0ojxj/eBtWTaMp8l3lFVXFncUWanhLNgX56G41nTGy4vsbZTd2PFeUzUxt
-	 P0TNu8f5E4M2f59C52Pzww+fQyiIDahH1ccX4BW0H5vY3FaQVArlV9P7DZfIePtQVQ
-	 EEu4LqafflIZbmV8wIISZkoZ4oQgNRhtAeKdcGZcSaZ1OtdtFr+6yyAPux6rR28R5n
-	 G9teB0kt0dVE7FOstVQT59FASfDdzgjwk3zxW5OH+D5rwnLQJsG0WovEtOKDnMeckO
-	 7egvjemijLTVW4OYa3mH8qZJK/iwmoVESikoD9mE3s3pOJd9UDHL7GmkRNqCtb4liZ
-	 ymR6N/34ndPyA==
-Message-ID: <87634afb-d14b-42ce-be25-1000591ee57c@alu.unizg.hr>
-Date: Wed, 20 Mar 2024 01:47:36 +0100
+	s=arc-20240116; t=1710903043; c=relaxed/simple;
+	bh=q2C5sPp5hDLmsM86/ov3qGNGGWpRQK3bmN/ElXRFtaw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mUvKpCM2cZv7ZQ9ecZ+WGAzHUYC9YHoWTZw5wpgEK6rmRKGB867oIxvmBGdPHZWHttu86kYr6VJcb+gAcTKDqYPXpYLSCPhIMY4Y2sKTmtSWZUDK/zuTn6E30Dwv9FyvXw+lDubQebPd1fDRJ48zh6Nkf+Q7rp1kMsbGf5aoUsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BXO0M8j0; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710903042; x=1742439042;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=q2C5sPp5hDLmsM86/ov3qGNGGWpRQK3bmN/ElXRFtaw=;
+  b=BXO0M8j0uIxuDoqD1Or24SEn84CYtiBboc2rhjPGWIUkiLnt8MBvDsyi
+   GFjfHl9bQ80azSLB7PuJgUv53+Zrbqa8Fr1XyQZYfUCKubNDkTzs4ahDA
+   sRdkhKq1Or+LXnMY1QLZNQnFyjn7H2YK1yS+WoCsxzFTzYLpmVGLIaeBO
+   8z3tM0YBOtMFM4rX41nZTSin/vqtozdlLGzx9kTpQNVQqJXeTO6YcW65u
+   F57A936EzxwB+/q1Yq2cQNi+zKzUK6QsN14n2VVSzCKqPVcuUpncRy0nl
+   mdDYUn7sWGF86Ku0td8ZjTAEi/mgOEbeelW23Ruvue1UNsoPbuYv6N1Xv
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="17213078"
+X-IronPort-AV: E=Sophos;i="6.07,138,1708416000"; 
+   d="scan'208";a="17213078"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2024 19:50:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,138,1708416000"; 
+   d="scan'208";a="14089850"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2024 19:50:38 -0700
+From: "Huang, Ying" <ying.huang@intel.com>
+To: Gregory Price <gourry.memverge@gmail.com>
+Cc: linux-mm@kvack.org,  linux-api@vger.kernel.org,
+  linux-arch@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  dan.j.williams@intel.com,
+  honggyu.kim@sk.com,  corbet@lwn.net,  arnd@arndb.de,  luto@kernel.org,
+  akpm@linux-foundation.org,  shuah@kernel.org,  Gregory Price
+ <gregory.price@memverge.com>
+Subject: Re: [RFC v3 0/3] move_phys_pages syscall - migrate page contents given
+In-Reply-To: <20240319172609.332900-1-gregory.price@memverge.com> (Gregory
+	Price's message of "Tue, 19 Mar 2024 13:26:06 -0400")
+References: <20240319172609.332900-1-gregory.price@memverge.com>
+Date: Wed, 20 Mar 2024 10:48:44 +0800
+Message-ID: <87v85hsjn7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] selftests/net: test_vxlan_mdb.sh: 84 out of 642 tests
- [FAIL]
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <5bb50349-196d-4892-8ed2-f37543aa863f@alu.unizg.hr>
- <Zfe2cGv_EWFAZXAJ@Laptop-X1>
- <f005453c-c7cf-4e1d-b266-ffe1cf8fc79e@alu.unizg.hr>
- <ZfmgdVUmy-DgNklu@shredder>
-Content-Language: en-US
-From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZfmgdVUmy-DgNklu@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=ascii
 
+Gregory Price <gourry.memverge@gmail.com> writes:
 
+> v3:
+> - pull forward to v6.8
+> - style and small fixups recommended by jcameron
+> - update syscall number (will do all archs when RFC tag drops)
+> - update for new folio code
+> - added OCP link to device-tracked address hotness proposal
+> - kept void* over __u64 simply because it integrates cleanly with
+>   existing migration code. If there's strong opinions, I can refactor.
+>
+> This patch set is a proposal for a syscall analogous to move_pages,
+> that migrates pages between NUMA nodes using physical addressing.
+>
+> The intent is to better enable user-land system-wide memory tiering
+> as CXL devices begin to provide memory resources on the PCIe bus.
+>
+> For example, user-land software which is making decisions based on
+> data sources which expose physical address information no longer
+> must convert that information to virtual addressing to act upon it
+> (see background for info on how physical addresses are acquired).
+>
+> The syscall requires CAP_SYS_ADMIN, since physical address source
+> information is typically protected by the same (or CAP_SYS_NICE).
+>
+> This patch set broken into 3 patches:
+>   1) refactor of existing migration code for code reuse
+>   2) The sys_move_phys_pages system call.
+>   3) ktest of the syscall
+>
+> The sys_move_phys_pages system call validates the page may be
+> migrated by checking migratable-status of each vma mapping the page,
+> and the intersection of cpuset policies each vma's task.
+>
+>
+> Background:
+>
+> Userspace job schedulers, memory managers, and tiering software
+> solutions depend on page migration syscalls to reallocate resources
+> across NUMA nodes. Currently, these calls enable movement of memory
+> associated with a specific PID. Moves can be requested in coarse,
+> process-sized strokes (as with migrate_pages), and on specific virtual
+> pages (via move_pages).
+>
+> However, a number of profiling mechanisms provide system-wide information
+> that would benefit from a physical-addressing version move_pages.
+>
+> There are presently at least 4 ways userland can acquire physical
+> address information for use with this interface, and 1 hardware offload
+> mechanism being proposed by opencompute.
+>
+> 1) /proc/pid/pagemap: can be used to do page table translations.
+>      This is only really useful for testing, and the ktest was
+>      written using this functionality.
+>
+> 2) X86:  IBS (AMD) and PEBS (Intel) can be configured to return physical
+>      and/or vitual address information.
+>
+> 3) zoneinfo:  /proc/zoneinfo exposes the start PFN of zones
+>
+> 4) /sys/kernel/mm/page_idle:  A way to query whether a PFN is idle.
+>    So long as the page size is known, this can be used to identify
+>    system-wide idle pages that could be migrated to lower tiers.
+>
+>    https://docs.kernel.org/admin-guide/mm/idle_page_tracking.html
+>
+> 5) CXL Offloaded Hotness Monitoring (Proposed): a CXL memory device
+>    may provide hot/cold information about its memory. For example,
+>    it may report the hottest device addresses (0-based) or a physical
+>    address (if it has access to decoders for convert bases).
+>
+>    DPA can be cheaply converted to HPA by combining it with data
+>    exposed by /sys/bus/cxl/ information (region address bases).
+>
+> See: https://www.opencompute.org/documents/ocp-cms-hotness-tracking-requirements-white-paper-pdf-1
+>
+>
+> Information from these sources facilitates systemwide resource management,
+> but with the limitations of migrate_pages and move_pages applying to
+> individual tasks, their outputs must be converted back to virtual addresses
+> and re-associated with specific PIDs.
+>
+> Doing this reverse-translation outside of the kernel requires considerable
+> space and compute, and it will have to be performed again by the existing
+> system calls.  Much of this work can be avoided if the pages can be
+> migrated directly with physical memory addressing.
 
-On 3/19/24 15:25, Ido Schimmel wrote:
-> On Tue, Mar 19, 2024 at 06:05:16AM +0100, Mirsad Todorovac wrote:
->> On 3/18/24 04:35, Hangbin Liu wrote:
->>> On Sun, Mar 17, 2024 at 12:19:12AM +0100, Mirsad Todorovac wrote:
->>>> Hi,
->>>>
->>>> While running kselftest on vanilla torvalds tree kernel commit v6.8-11167-g4438a810f396,
->>>> the test suite reported a number of errors.
->>>>
->>>> I was using the latest iproute2-next suite on an Ubuntu 22.04 LTS box.
->>>>
->>>> # Tests passed: 558
->>>> # Tests failed:  84
->>>> not ok 90 selftests: net: test_vxlan_mdb.sh # exit=1
->>>
->>> FYI, I tested with 6.8 kernel with net tree. All passed.
->>>
->>> Data path: MDB torture test - IPv6 overlay / IPv6 underlay
->>> ----------------------------------------------------------
->>> TEST: Torture test                                                  [ OK ]
->>>
->>> Tests passed: 642
->>> Tests failed:   0
->>>
->>> # uname -r
->>> 6.8.0-virtme
->>>
->>> Thanks
->>> Hangbin
->>
->> Hi, Hangbin,
->>
->> I am running an Ubuntu 22.04 LTS configuration.
-> 
-> Didn't get your first mail for some reason.
+One difficulty of the idea of the physical address is that we lacks some
+user space specified policy information to make decision.  For example,
+users may want to pin some pages in DRAM to improve latency, or pin some
+pages in CXL memory to do some best effort work.  To make the correct
+decision, we need PID and virtual address.
 
-Your organisation's Office 365 is configured against compressed attachments:
+Yes, I found that you have tried to avoid to break the existing policy
+in the code.  But it seems better to consider the policy beforehand to
+avoid to make the wrong decision in the first place.
 
-Diagnostic-Code: smtp;550 5.0.350 One or more of the attachments in your email is of a file type
-that is NOT allowed by the recipient's organization.
-
-I will try to remember this.
-
-> Anyway, it might be related
-> to the fact that Ubuntu is using an old version of libnet:
-> 
-> https://launchpad.net/ubuntu/+source/libnet
-> 
-> I remember fixing similar issues in the past:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cb034948ac292da82cc0e6bc1340f81be36e117d
-
-I recall that last August.
-
-> Will look into it today or later this week.
-
-Thank you for considering this.
-
-Best regards,
-Mirsad Todorovac
+--
+Best Regards,
+Huang, Ying
 
