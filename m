@@ -1,127 +1,184 @@
-Return-Path: <linux-kselftest+bounces-6471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55843886179
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Mar 2024 21:11:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 574E2886297
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Mar 2024 22:37:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FE221C21BAB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Mar 2024 20:11:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0BEC2829CA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Mar 2024 21:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E45A313443C;
-	Thu, 21 Mar 2024 20:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF4313664C;
+	Thu, 21 Mar 2024 21:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="qTF7Ea2T";
-	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="RxMk2VDo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4hKH7/W3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061E5134404;
-	Thu, 21 Mar 2024 20:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.53.235.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3DB134CEF
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Mar 2024 21:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711051862; cv=none; b=eIc1J9fE5dPQtw1oK/kXtz+yFdnoDx4hvOmoESMf2JPk7HHzwL2UfOWn//8lED56HeSiYxDlIGHBQI9wPUlPI0ysbO3FJfWbTAt+B5E9cKa/zwasmY0LyVSEoZRQm7Ma42hcWnqc+Rkm5/Tzndtk6zLusMzRGQSy7EW/Y1G9S0M=
+	t=1711057065; cv=none; b=pywmRTx//vVOY8L0FBotfeRMDvpwSMvAW0RWV/eENZ+jILRneQe7s+owoIuwtY+bFTFe5FMUxjbenVZfICeOB6Zt1JjvcuReU/7wAWmslYkSdydJh5AM6quyf8/+4iG8Wzr6VQJtXTln7ZnfkUe3rn81xHCIAYtdQ0OLBBhcQpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711051862; c=relaxed/simple;
-	bh=QMqBRt3qEO8LJ5O3+VuzCT6Y+LAtdZG1pvlw1Zc6YBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BmDDDIdm5A4TlQOM8rNGS4pgkxYhmTOSDQksbBEubAbpNW8hOiiyiy/cH417mpTJ/UuvDH0FHwBUxHkbOjlxyNI4VAXhqNHRHy4tjNrunZsvo2XouL60DPqUNQTuZanFAhw+GtZ9kG1e1pWTkiGkM97+nunmOzKCG09jW6Ptyhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr; spf=pass smtp.mailfrom=alu.unizg.hr; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=qTF7Ea2T; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=RxMk2VDo; arc=none smtp.client-ip=161.53.235.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alu.unizg.hr
-Received: from localhost (localhost [127.0.0.1])
-	by domac.alu.hr (Postfix) with ESMTP id 70F4960171;
-	Thu, 21 Mar 2024 21:10:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1711051854; bh=QMqBRt3qEO8LJ5O3+VuzCT6Y+LAtdZG1pvlw1Zc6YBA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qTF7Ea2TZj0ZR8M2xBt59oIED5u0OnJ/1jaw5qjQRHg3LP1xsTyIB4JpgUYbxudhH
-	 vWmK6PLGMXi51V42xlytWBA0fxo0sG4arD2zEG1tw2iCeVz5yAT4f4lSlthFX6aDUP
-	 YDxdyDzHGn7Og/1WmcXoBuPlfOvcJkt8s0KffU6ux7qoOyE0ocqnWJcIZ9QqYgDrHX
-	 sVy/CLwTOVgaHqt3naiaaWqr9LRn1Ugvw43aCP37rotI1GZKM3vPXWeVZv+voeA4Od
-	 ackSVpmdxiMY5pDDGTAUB2TRxkH85euvzgvrVcBQL/Xpa3wqctFyViG1SwE5FwHMh2
-	 IfzkJ2Q8a2lFA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pS2AF6Qr0691; Thu, 21 Mar 2024 21:10:44 +0100 (CET)
-Received: from [192.168.178.20] (dh207-43-75.xnet.hr [88.207.43.75])
-	by domac.alu.hr (Postfix) with ESMTPSA id 2802160177;
-	Thu, 21 Mar 2024 21:10:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1711051843; bh=QMqBRt3qEO8LJ5O3+VuzCT6Y+LAtdZG1pvlw1Zc6YBA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RxMk2VDoS1Xe2p92oLh6nE2faWGkoGYE06lNsWwrBA9RiIjQN5uxdrP9N21zyc10J
-	 KBo9E0kdJjNTQArZ/tIyDjkkofaRua/M+cK7wqURk+tfrnRO6qWwDNqM2wQhAEvtSI
-	 JQyzIIP45dN2KyRypxycHoy4Cvgn0QDxzdztrF7lYmq4+g3ORtH7k6UeUcCdGmFBPA
-	 P5m61aG1Rh40p1OzAy+XcHlzg0IUmU1Qck8qlkh0oymRiSwAR81BD8cju9HPIhSbXa
-	 QSd1RBtHxlaLukwPb+JQ9DFTSrtw5JcQQZpYBONN1rAYnj5p+1AqmivFSQ2gfhHSoe
-	 r7tC1vpJO2p9Q==
-Message-ID: <a2bfb669-e201-44eb-9a16-38c671e8ef00@alu.unizg.hr>
-Date: Thu, 21 Mar 2024 21:10:42 +0100
+	s=arc-20240116; t=1711057065; c=relaxed/simple;
+	bh=17nLr5++Gj5gPnA/3LVk7GlcT9/oObVsxL2RNm5//ng=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Qc9orqW+naR/VEKuYit4pHKjKA+YmzAWJLg1EXop5irSLg6pMLXEnCfvlVKGAzt4CDkx3fYAqj2ClkYhSpgpGX196xbFFK2gkYZX3jMI2SQgGWaIEvqlJfosLhqISg9/pGh0oaPQPcAaYxy3HFXU1rzyj8p21iknSAQlfIyZ/yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4hKH7/W3; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5d5a080baf1so835739a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Mar 2024 14:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711057063; x=1711661863; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wOtrT19asMXEr0TwJpVFoh7wEKo99GZ26en2SG6Gpmk=;
+        b=4hKH7/W3UDowwovv1Q1sNb1buuDOb7tGrwCFSAQALV/opyM8WW5VncOj6caWEcqgAZ
+         AMkJjhyKTbFjiQYDrCeqiKc/+swjYtHYxiQW2kz+AAV1iQ0QjaX/fOUH+W1geO0a45sr
+         Gxpegg8Nf37eTMM+UVRjXX2im2U+ELwPUHBc2wsRW4EFRvXZQY+un2uPi62PMExQgTHH
+         henRfVN7Gskbg1BSeTHu58ZBVsAo6D5pPHO7zXDkitroBCFSn53jXBNRTvHdBvEDfqpB
+         qoKnejrWsoC+RmTXf9+5Kqlh+B4nl/e7AcTaqwrSV6M2HfT+lcrN3iDSdzeJUKInA8jQ
+         N4fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711057063; x=1711661863;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wOtrT19asMXEr0TwJpVFoh7wEKo99GZ26en2SG6Gpmk=;
+        b=UVJmLHGkH53PZ+ooITafXP0KHsf4jf5so0KeYEcmqgk/VihZKP1e4mNaHCS7FyaqQ0
+         cxhDDR8UPaGWd9XQciepYahkQ/I4wi8z5SxbRu99HAV6lWmXKhjRFc913XFQCXc/1WWi
+         Sh6wi/cjOy/xxatI0tKina9zi8h+LucLlvh/HYPAP2GPjs7Vyk5cRQKV8Y5sccidthv1
+         MmWKCY4B4rzsmkfAxkXA0p5qDJbEgZspUjfkxV/8aBKy5EzNcmVWc2ibSnWE3+tlIkn6
+         ya3SqDJ0SaLly3hTWU4a0kBnD0b4bG/OJwg8z1LBdz5MLd5Bhgoy+ej7Tk4QwYx++Lza
+         jIIA==
+X-Gm-Message-State: AOJu0YxSmybIXQQkvA24Ye/SOzD3Ixtt+hZ/RkSIjISg4otQo1hy5Gml
+	R6H0E8ZYkUwTEOtbgIVPVvpXH1uvO7tQCgSx/S3y1Bid2gmVlFOZ66LxDYZVORkFRq/dNL+KRg+
+	6Hw==
+X-Google-Smtp-Source: AGHT+IFG44GRpyLSoCdzTAgGOvr+Ykn7xEnNSiVaxpdqGc3Wa47XGjUxz3BVE+W4nqXyifeoqem9jdAgDIM=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a63:f1e:0:b0:5d5:1e4d:c845 with SMTP id
+ e30-20020a630f1e000000b005d51e4dc845mr1288pgl.10.1711057063490; Thu, 21 Mar
+ 2024 14:37:43 -0700 (PDT)
+Date: Thu, 21 Mar 2024 21:37:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] selftests/net: test_vxlan_mdb.sh: 84 out of 642 tests
- [FAIL]
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <5bb50349-196d-4892-8ed2-f37543aa863f@alu.unizg.hr>
- <Zfe2cGv_EWFAZXAJ@Laptop-X1>
- <f005453c-c7cf-4e1d-b266-ffe1cf8fc79e@alu.unizg.hr>
- <ZfmgdVUmy-DgNklu@shredder>
- <87634afb-d14b-42ce-be25-1000591ee57c@alu.unizg.hr>
- <ZfrB7hATyOcl4RSy@shredder>
-Content-Language: en-US
-From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZfrB7hATyOcl4RSy@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
+Message-ID: <20240321213738.1705396-1-edliaw@google.com>
+Subject: [PATCH v2] uffd-unit-tests: Fix ARM related issue with fork after pthread_create
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, Lokesh Gidra <lokeshgidra@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
+Following issue was observed while running the uffd-unit-tests selftest
+on ARM devices. On x86_64 no issues were detected:
 
+pthread_create followed by fork caused deadlock in certain cases
+wherein fork required some work to be completed by the created thread.
+Used synchronization to ensure that created thread's start function has
+started before invoking fork.
 
-On 3/20/24 12:01, Ido Schimmel wrote:
-> On Wed, Mar 20, 2024 at 01:47:36AM +0100, Mirsad Todorovac wrote:
->> On 3/19/24 15:25, Ido Schimmel wrote:
->>> Will look into it today or later this week.
->>
->> Thank you for considering this.
-> 
-> Can you please try the following patch?
-> 
-> https://github.com/idosch/linux/commit/58f25dd8766dbe9ac50c76b44f9ba92350ebb5c6.patch
+Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
+[edliaw: Refactored to use atomic_bool]
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/mm/uffd-common.c     |  3 +++
+ tools/testing/selftests/mm/uffd-common.h     |  2 ++
+ tools/testing/selftests/mm/uffd-unit-tests.c | 10 ++++++++++
+ 3 files changed, 15 insertions(+)
 
-Congratulations, apparently, your patch had fixed them all:
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index b0ac0ec2356d..7ad6ba660c7d 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -18,6 +18,7 @@ bool test_uffdio_wp = true;
+ unsigned long long *count_verify;
+ uffd_test_ops_t *uffd_test_ops;
+ uffd_test_case_ops_t *uffd_test_case_ops;
++atomic_bool ready_for_fork;
+ 
+ static int uffd_mem_fd_create(off_t mem_size, bool hugetlb)
+ {
+@@ -518,6 +519,8 @@ void *uffd_poll_thread(void *arg)
+ 	pollfd[1].fd = pipefd[cpu*2];
+ 	pollfd[1].events = POLLIN;
+ 
++	ready_for_fork = true;
++
+ 	for (;;) {
+ 		ret = poll(pollfd, 2, -1);
+ 		if (ret <= 0) {
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index cb055282c89c..cc5629c3d2aa 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -32,6 +32,7 @@
+ #include <inttypes.h>
+ #include <stdint.h>
+ #include <sys/random.h>
++#include <stdatomic.h>
+ 
+ #include "../kselftest.h"
+ #include "vm_util.h"
+@@ -103,6 +104,7 @@ extern bool map_shared;
+ extern bool test_uffdio_wp;
+ extern unsigned long long *count_verify;
+ extern volatile bool test_uffdio_copy_eexist;
++extern atomic_bool ready_for_fork;
+ 
+ extern uffd_test_ops_t anon_uffd_test_ops;
+ extern uffd_test_ops_t shmem_uffd_test_ops;
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 2b9f8cc52639..4a48dc617c6b 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -775,6 +775,8 @@ static void uffd_sigbus_test_common(bool wp)
+ 	char c;
+ 	struct uffd_args args = { 0 };
+ 
++	ready_for_fork = false;
++
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+ 
+ 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
+@@ -790,6 +792,9 @@ static void uffd_sigbus_test_common(bool wp)
+ 	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+ 		err("uffd_poll_thread create");
+ 
++	while (!ready_for_fork)
++		; /* Wait for the poll_thread to start executing before forking */
++
+ 	pid = fork();
+ 	if (pid < 0)
+ 		err("fork");
+@@ -829,6 +834,8 @@ static void uffd_events_test_common(bool wp)
+ 	char c;
+ 	struct uffd_args args = { 0 };
+ 
++	ready_for_fork = false;
++
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+ 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
+ 			  true, wp, false))
+@@ -838,6 +845,9 @@ static void uffd_events_test_common(bool wp)
+ 	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+ 		err("uffd_poll_thread create");
+ 
++	while (!ready_for_fork)
++		; /* Wait for the poll_thread to start executing before forking */
++
+ 	pid = fork();
+ 	if (pid < 0)
+ 		err("fork");
+-- 
+2.44.0.396.g6e790dbe36-goog
 
-# TEST: Torture test                                                  [ OK ]
-#
-# Data path: MDB torture test - IPv6 overlay / IPv6 underlay
-# ----------------------------------------------------------
-# TEST: Torture test                                                  [ OK ]
-#
-# Tests passed: 642
-# Tests failed:   0
-ok 90 selftests: net: test_vxlan_mdb.sh
-
-Please consider adding:
-
-Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-at your convenience.
-
-Shalom, and have a great evening!
-
-Best regards,
-Mirsad Todorovac
 
