@@ -1,89 +1,109 @@
-Return-Path: <linux-kselftest+bounces-6484-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 100728865E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 06:13:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29556886BC2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 12:59:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB1ED1F2447E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 05:13:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81048286AB7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 11:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E65A79EF;
-	Fri, 22 Mar 2024 05:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB86D3F9FD;
+	Fri, 22 Mar 2024 11:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iiDE30CD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50C510F2;
-	Fri, 22 Mar 2024 05:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BBC405CF;
+	Fri, 22 Mar 2024 11:59:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711084377; cv=none; b=nUoP0lV4lM6MdmPUR1JlqUg4f70i9vi0r2igqyz78QVgo1rFaWyFrP727Kla9yvt9hCcvLW8q080w/2oKo5vc/ivCYa9RAOMstWuer4z/wv5gH1qY/tK5bHh15m7qWaJkDzr87TNeq9t1qYq3awekiHetTdm2zhjNm4OcTP+y6s=
+	t=1711108766; cv=none; b=lEjoNJyR3o/drvw222IO6q0OXT/58hlc10A8XaLXyIu9wC5phYpGXNysKd30kVXEG3VwpuhQEPDMxOtWOZesITYvVWKMXpohz3q1mXG8zIP5mhU8btme4jleV3/1fJi7/TjTHEt04lCE7Ycx3KQthpt8JX+Gfyxb/ihiVoyG9w0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711084377; c=relaxed/simple;
-	bh=bt1svfdkfR6+XUmbLAUP+ZbBeUXKfxqS+J71mNiovBQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h3X3XHWbckEGnR6fWghq9Ujp0JZUWOplgY1DUso6IQRIkHmMtBnpplpWh6x+jvCQyEP3/6TGmE98u8vm33f1XRTMPEuJ7Y86RY+IDmINTFrBTS2J0PbN+s8Ru9RSfEuZWaidQzFreiS0IaYiyG7YPVQPCycOtgsl1e6YmlbRjlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF4C71007;
-	Thu, 21 Mar 2024 22:13:26 -0700 (PDT)
-Received: from [10.162.40.23] (e116581.arm.com [10.162.40.23])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CABEE3F762;
-	Thu, 21 Mar 2024 22:12:50 -0700 (PDT)
-Message-ID: <d91c8c36-b01d-48f9-b0f6-8faa58edaed0@arm.com>
-Date: Fri, 22 Mar 2024 10:42:47 +0530
+	s=arc-20240116; t=1711108766; c=relaxed/simple;
+	bh=TKSr/w6Kq4SXbYjQlg7s7QfJJPOToQ5LI6caBUIa0eU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=WP/LNBAYHjIPgCEdO0WotXx61C5qSCvrEn0drSDN5zFouCHxof+nePbsPB5J4WWkbZx9aVhDvpa05SaUzMxOl6HVCCfeFRLu2E+LPSwRilJM7GCSx4IxyFmc1kUksXi2Z4sKc1fPUasBKUjb/hFYNPpUCYloBp0UqJufupt0iXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iiDE30CD; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711108765; x=1742644765;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=TKSr/w6Kq4SXbYjQlg7s7QfJJPOToQ5LI6caBUIa0eU=;
+  b=iiDE30CDP6Dvwz6015u+gki77/wWYNoPlUtr0XYIDRnsbXLeswXB3obd
+   bqds2dcqC4VSztg96IVoIjwoRmntNVE15NgpUYy9IDReR5pRWK+DQ6F0d
+   9IQx3dnBH9ty50OOtSJJobvRfGUjEaAj2bNG5gjM0duqm9Ms97c35qUm6
+   8OxMVmB7Eiz7G42f8OGZzDdAP1AaQVvtZjhLxUNh9CIa69ezhdHd7rGxh
+   lusjZNPwdYJC4dNvMVAxb9q6d/HhDQol6CDZJ9yk0Lb80AzJtCFAr1MgZ
+   ABxd75CdnYPoZFXkZ0S8FtNxEYLNGqtDlL7AlSNghMNqEalQHjPpnL4ft
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="6007605"
+X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
+   d="scan'208";a="6007605"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 04:59:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
+   d="scan'208";a="19588296"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.18])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 04:59:21 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 22 Mar 2024 13:59:17 +0200 (EET)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Babu Moger <babu.moger@amd.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    Fenghua Yu <fenghua.yu@intel.com>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 01/13] selftests/resctrl: Convert get_mem_bw_imc() fd
+ close to for loop
+In-Reply-To: <832ec5e1-db5c-4123-8768-39ba9e6cca82@intel.com>
+Message-ID: <a263ee49-b987-90e2-c794-4d2af0ce50ca@linux.intel.com>
+References: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com> <20240311135230.7007-2-ilpo.jarvinen@linux.intel.com> <832ec5e1-db5c-4123-8768-39ba9e6cca82@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Confirm VA exhaustion without reliance on
- correctness of mmap()
-Content-Language: en-US
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Anshuman.Khandual@arm.com
-References: <20240321103522.516097-1-dev.jain@arm.com>
- <20240321145146.a3ce8a1e247371e33a437978@linux-foundation.org>
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20240321145146.a3ce8a1e247371e33a437978@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-1575227933-1711108757=:1115"
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 3/22/24 03:21, Andrew Morton wrote:
-> On Thu, 21 Mar 2024 16:05:22 +0530 Dev Jain <dev.jain@arm.com> wrote:
->
->> Currently, VA exhaustion is being checked by passing a hint to mmap() and
->> expecting it to fail. This patch makes a stricter test by successful write()
->> calls from /proc/self/maps to a dump file, confirming that a free chunk is
->> indeed not available.
-> What's wrong with the current approach?
-While populating the lower VA space, mmap() fails because we have 
-exhausted the space.
+--8323328-1575227933-1711108757=:1115
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Then, in validate_lower_address_hint(), because mmap() fails, we confirm 
-that we have
+On Tue, 19 Mar 2024, Reinette Chatre wrote:
+> On 3/11/2024 6:52 AM, Ilpo J=C3=A4rvinen wrote:
+> > The open() side handles fds in a for loop but close() is based on two
+> > fixed indexes READ and WRITE.
+> >=20
+> > Match the close() side with the open() side by using for loop for
+> > consistency.
+>=20
+> I find the close() side to be more appropriate. I say this for two
+> reasons: (a) looking at the close() calls as they are now it is
+> obvious what the close() applies to and transitioning to a loop
+> adds a layer of unnecessary indirection, (b) I do not think a loop
+> is appropriate for the READ/WRITE define that just happen to be 0
+> and 1 ... there should not be an assumption about their underlying
+> value.
 
-indeed exhausted the space. There is a circular logic involved here.
+Hi,
 
-Assume that there is a bug in mmap(), also assume that it exists 
-independent of whether
+So to confirm are you suggesting I should remove all the other loops=20
+instead?
 
-you pass a hint address or not; that for some reason it is not able to 
-find a 1GB chunk.
+--=20
+ i.
 
-My idea is to assert the exhaustion against some other method.
-
-
-Also, in the following line in validate_complete_va_space():
-
-         if (start_addr - prev_end_addr >= SZ_1GB)
-
-I made a small error, I forgot to use MAP_CHUNK_SIZE instead of SZ_1GB.
+--8323328-1575227933-1711108757=:1115--
 
