@@ -1,145 +1,130 @@
-Return-Path: <linux-kselftest+bounces-6490-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDAAF886C17
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 13:30:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5362E886D98
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 14:43:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A48E0280F00
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 12:30:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E866C1F25927
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 13:43:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1C8040BE5;
-	Fri, 22 Mar 2024 12:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23C15D917;
+	Fri, 22 Mar 2024 13:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VJvpB8nQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZnSRT1mu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D662770C;
-	Fri, 22 Mar 2024 12:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078C645BFF;
+	Fri, 22 Mar 2024 13:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711110637; cv=none; b=GEDTM9TOmmGDmi2GCcbu4z+2A8niYk5KXrdybtFjGmeCl5klz2L2HP+pgp3mTRq9A+ZSNUdVIbkl2NBdIZdqmWXNjgUFOw5tYIRuODH445pyZ+9nd/TG48NcG5AXDFfV/uxEU/01upAkqN25nuskpWXzdsjf6QJE5JvzsAJs6qY=
+	t=1711114570; cv=none; b=dBHOJGUjMz1M6UeG4KNhYe2pybZ2h25C23vTh7oEaBZgpL8JgYZvddF95VFrFUPzYPZHl1KkWRycVxhfxLsorHJ+DYHc+no016wsWYv0n6MENhNOMySswa1fF7pewqkLO2+gFeG8Z/uFwvkV8HtXmD3SwnHIG9lFgYIs8JX1XIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711110637; c=relaxed/simple;
-	bh=n9NG5Ms0xKvPeFj5HVos821T8N2D2xc4BOS+QKWMqMw=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=tWomicDk1wDGLHxUkmvNQmJzwof7Wrw83+81CG/5h3HSufxz1IY8rVVbitJigMNpcJNeWGVEt4B7TBo9TxC1OxBlJ/PVW1OFpxwbMq9djyCAxFShTdKIxrJThDBbdh47XhyvhqyG/BPW4lTd+BMQbJ7S6hw39rz5pusAw8xmGbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VJvpB8nQ; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711110636; x=1742646636;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=n9NG5Ms0xKvPeFj5HVos821T8N2D2xc4BOS+QKWMqMw=;
-  b=VJvpB8nQVwAtFJ9Dq2lOt31IfW6RGaQCYScmVkp45k6DdPdhQEEelIVK
-   vYRBAelULRm7pkIakkzbVsY/4ttqHQia7WkqZ9aJXWJfSxvIIDeu8sGge
-   uZyzsLU3urqgmosW1DipQEra62FuDrhhZ/N3TrPVOUtoZZ8ErEkD97VjP
-   ZrIgzSnj6Xb0fAzOjlHoCsQRaDB6G9vnY5kFWxucvPRG7mXH+yaQKH3Bl
-   afJIDvrAdC/I/cFj5BQIdCwYhcYfDIIiZ1Pzyxhx6luqZJ/68N+8p05zM
-   RkM+dj1cxq3qAx1Rox0leoTcBgg7cNFqU2EsB+aD7sOcWwI3FRCzEFOba
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="16882498"
-X-IronPort-AV: E=Sophos;i="6.07,146,1708416000"; 
-   d="scan'208";a="16882498"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 05:30:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,146,1708416000"; 
-   d="scan'208";a="46014435"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.18])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 05:30:32 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 22 Mar 2024 14:30:28 +0200 (EET)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-    Babu Moger <babu.moger@amd.com>, 
-    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
-    Fenghua Yu <fenghua.yu@intel.com>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 11/13] selftests/resctrl: Convert ctrlgrp & mongrp to
- pointers
-In-Reply-To: <578d0b55-c51a-49d1-8f54-989215a3a4b8@intel.com>
-Message-ID: <93e4f096-47df-9eba-095f-e8a8c3cd04f5@linux.intel.com>
-References: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com> <20240311135230.7007-12-ilpo.jarvinen@linux.intel.com> <578d0b55-c51a-49d1-8f54-989215a3a4b8@intel.com>
+	s=arc-20240116; t=1711114570; c=relaxed/simple;
+	bh=NfRx8CDuW51pFCmmfqak9U6I8Vq3ncrRG8KMibzqtyk=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=J8lwKG3HCwS0l349Sf/3h6dQWGwWDc68ZogM6w43CKfFdXIOfArd7uHqgN5Oown2ushxrX8d9yyxK5KzAgVcjBBRaN82Zb+NEOYFQXjiyJy00e7ldlEFwC9e+EaPYXD+Sg+PSzRipMj0F0fUv2qtHRq9MhIMSQo3TcaTtwOLGPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZnSRT1mu; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4141156f245so15375785e9.2;
+        Fri, 22 Mar 2024 06:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711114567; x=1711719367; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=89J9FNeshMeUYJqlt0RIBQEumND/jE9mTsgfiNGVfzM=;
+        b=ZnSRT1muO+CTD9/5Se1uZb5k3rGliPlTpSFD5G0CptFPtyLlaLhCMXBpOkqEGy84UI
+         foySl81Hy2icfMcvZ2VnN9dhreYgtjGXbleqsOx3ZZrEtNgHTkCIIlG01BKggvxYpSKH
+         0yti8l6QKeGA6/H4gXyEP31PU+/9PJj/KtMNpW6Zm7ZTN9zkqsqwmRsL1vggspqq/WRp
+         TZk2S0EmU4TirgbfOfSJ3rg4WtgIGnsTFGr/ieho5dKuyMiSjleHwAwriyl6XDuyCJxs
+         aPAIKUrRAwDYqXLj1DIJDZyblhpjorUrdjjp/RKAG2HFGJTe0od8JZUAWAM34p5vMj5Z
+         ARKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711114567; x=1711719367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=89J9FNeshMeUYJqlt0RIBQEumND/jE9mTsgfiNGVfzM=;
+        b=b873NG56EVhxRt8rBebRicaPxLI2o3ckvrjPhTEpr4q5lzETetDP3KkYglAhYaxS5q
+         xW7WJHWwWkbJuAnhL/TNiFX7slcLS00SGliG5D8r4lTlBD+wXm+8+zajy4PoCukVioMk
+         a/G5Z3APc+OLp/55ZWKp/hg5uf0khNnjUA9HNfuj8Stan4HBi2pHF+9ubHHdArtur7GW
+         vNrCGYzWYNHT0+teIi7/InoA+XY7dYo3wi91xSUjvYyj9xx76GTkOKtOSmJqnrHMYi0U
+         vcWFhUrgaw91ky4bLHUM9yr3dE5Jzq7pM5paynQ3y4zklH3psrTrIMpXT9hF1DPeSAZJ
+         N6Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTHEMymT0ttaVaazqLLD+QBwNbZ3Qr5Aqye5KJg4yWmU2d4g6ajrrClZPYOGKxyNVPh9NuXE9mP08vMX+xfGV/L8AuaAZFQOgNRPffNLot7PhGHqlLr8HNUociiD+tB1GXk619P77gPbbTlI01AY1whHLL4pPDp+PYR0A93U3dd54s
+X-Gm-Message-State: AOJu0Yxe7OU7O5HfuxawmJ00aDoT7m1ZBkwrZQ2CxAUjPGk0U/nJt0+5
+	+U1L6bdcvpotpHu287W2h1e2DsAQvQmjYxKS6fhMS6E/OB7PFpsw
+X-Google-Smtp-Source: AGHT+IFHWWCIm2FvVfLXD8MAk1Gtxae0467JGCEEHu7Yt9gcY27h73Rs8Nqg9TSXbZJchh4+SyahcQ==
+X-Received: by 2002:a05:600c:35d4:b0:414:7db3:5757 with SMTP id r20-20020a05600c35d400b004147db35757mr956306wmq.30.1711114567008;
+        Fri, 22 Mar 2024 06:36:07 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id h13-20020a05600c314d00b004146d736fcdsm8397220wmo.36.2024.03.22.06.36.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Mar 2024 06:36:06 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] selftests/bpf: verifier_arena: fix mmap address for arm64
+Date: Fri, 22 Mar 2024 13:35:52 +0000
+Message-Id: <20240322133552.70681-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-552054796-1711110628=:1115"
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+The arena_list selftest uses (1ull << 32) in the mmap address
+computation for arm64. Use the same in the verifier_arena selftest.
 
---8323328-552054796-1711110628=:1115
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+This makes the selftest pass for arm64 on the CI[1].
 
-On Wed, 20 Mar 2024, Reinette Chatre wrote:
-> On 3/11/2024 6:52 AM, Ilpo J=C3=A4rvinen wrote:
-> > The struct resctrl_val_param has control and monitor groups as char
-> > arrays but they are not supposed to be mutated within resctrl_val().
-> >=20
-> > Convert the ctrlgrp and mongrp char array within resctrl_val_param to
-> > plain const char pointers and adjust the strlen() based checks to
-> > check NULL instead.
-> >=20
-> > Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  tools/testing/selftests/resctrl/resctrl.h   | 4 ++--
-> >  tools/testing/selftests/resctrl/resctrlfs.c | 8 ++++----
-> >  2 files changed, 6 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/=
-selftests/resctrl/resctrl.h
-> > index 52769b075233..54e5bce4c698 100644
-> > --- a/tools/testing/selftests/resctrl/resctrl.h
-> > +++ b/tools/testing/selftests/resctrl/resctrl.h
-> > @@ -89,8 +89,8 @@ struct resctrl_test {
-> >   */
-> >  struct resctrl_val_param {
-> >  =09char=09=09*resctrl_val;
-> > -=09char=09=09ctrlgrp[64];
-> > -=09char=09=09mongrp[64];
-> > +=09const char=09*ctrlgrp;
-> > +=09const char=09*mongrp;
-> >  =09char=09=09filename[64];
-> >  =09unsigned long=09mask;
-> >  =09int=09=09num_of_runs;
-> > diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testin=
-g/selftests/resctrl/resctrlfs.c
-> > index 79cf1c593106..dbe0cc6d74fa 100644
-> > --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> > +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> > @@ -469,7 +469,7 @@ static int create_grp(const char *grp_name, char *g=
-rp, const char *parent_grp)
-> >  =09 * length of grp_name =3D=3D 0, it means, user wants to use root co=
-n_mon
-> >  =09 * grp, so do nothing
-> >  =09 */
->=20
-> Could you please confirm that the comments are still accurate?
+[1] https://github.com/kernel-patches/bpf/pull/6622
 
-It's not, I missed it.
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+---
+ tools/testing/selftests/bpf/progs/verifier_arena.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> > -=09if (strlen(grp_name) =3D=3D 0)
-> > +=09if (!grp_name)
-> >  =09=09return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+index 5540b05ff9ee..91818a84e86d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+@@ -12,7 +12,11 @@ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARENA);
+ 	__uint(map_flags, BPF_F_MMAPABLE);
+ 	__uint(max_entries, 2); /* arena of two pages close to 32-bit boundary*/
+-	__ulong(map_extra, (1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1)); /* start of mmap() region */
++#ifdef __TARGET_ARCH_arm64
++        __ulong(map_extra, (1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1)); /* start of mmap() region */
++#else
++        __ulong(map_extra, (1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1)); /* start of mmap() region */
++#endif
+ } arena SEC(".maps");
+ 
+ SEC("syscall")
+-- 
+2.40.1
 
-But now when looking into the surrounding code, to me it looks the correct=
-=20
-action here is to remove the comment and return -1 instead of 0. It makes
-this just an internal sanity check that grp_name is provided by the=20
-caller.
-
---=20
- i.
-
---8323328-552054796-1711110628=:1115--
 
