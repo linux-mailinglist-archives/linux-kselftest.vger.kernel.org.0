@@ -1,202 +1,239 @@
-Return-Path: <linux-kselftest+bounces-6503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B448870E0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 17:31:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BE518870F3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 17:34:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 051F1283003
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 16:31:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7794E1F21CBF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 16:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E25B5A4EF;
-	Fri, 22 Mar 2024 16:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6EC43AAC;
+	Fri, 22 Mar 2024 16:33:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jLpe1wis"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oF6gPW+O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f193.google.com (mail-oi1-f193.google.com [209.85.167.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B307E4411;
-	Fri, 22 Mar 2024 16:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDAC2208F
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Mar 2024 16:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711125087; cv=none; b=Lvo3R1r4GwW3/Ds+A2L0W/KR8iD3jYoeIONberTuJWVfZilzBGHA6ai86rR15e5BCcrdyBfuOUPv0Eg4F1xvNcCe49MUmliQ4r6V5PrjhbcbZTzNJ7kWAdmjeOFdvWJKfwpDyyEoF0gSHpfLGebcSx5v7RNY9xTtgq13R8rszxY=
+	t=1711125236; cv=none; b=LzokMC259fSrixf+dxgAupyGxGmnHNKzgyB1d+aMPs4AfJ+gO1LZOcRL4KrprnyIdSUwa5C711fgSGPqoCnwonaB+X+FiEIKLIfwO8SAu2Feqjuo2Fy+EWKRcX0rDgjkUl2ZOhSmeTsPAXaBj3+tcMaa8q5ApZKR+gcvrnbxmnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711125087; c=relaxed/simple;
-	bh=jv4xl30OffQdBcNiHQX8Jw9miue7Rq0L2m7x+7lmBos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GSih7O4VXt9rs3eLPTeARkdfOe7n+GNJvU1Jzbp6I9dVLqQMxZ5IcdofZAaGLWOO0XyHDO34qQKwyopYn/P/GNc1B47jj+vsxGGK6MKvPkfM4X52ThsUiK6xRz4KfQ+bcdlGCTs27/CAMMWm1iijaV7NmKKxQJC/fKS1zdTFnYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jLpe1wis; arc=none smtp.client-ip=209.85.167.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f193.google.com with SMTP id 5614622812f47-3c36dcb305cso1058020b6e.0;
-        Fri, 22 Mar 2024 09:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711125085; x=1711729885; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=31Xzl+gdQnZUFvRLDH3yOLlBVWmU9n4CWu1bwRmZ1EY=;
-        b=jLpe1wisjOyiSRMK+9OA7/fntUNLoD0yCRmo+LZYjEqkBS3XpOYnGKAtRF2hu2DsL3
-         MAu+ZQ/mlAvRgP99VJeASQTC4NWim4bA3t15gnl6guaU3ZFSSLvCyOQBl9rP2mpmElvZ
-         eR5iEgatEedbrBEB88vPA3xjjF1tGo4T+I8WN/7kFuDNZHByYrL7wW+nmP04jfGE4fqV
-         t/NBsVJgxB4dZug1zzP3BHZ9rnynRhO8KfF1712b9yhKHOi8CCchiGjYgviJUsCiZ8YA
-         sophhBFQ9gLzrl5F3uozZ5I+blvWGUhtnorHQS4UjpUA6ufBQrsVNmyRBEKCbrvKSdzq
-         gO4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711125085; x=1711729885;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=31Xzl+gdQnZUFvRLDH3yOLlBVWmU9n4CWu1bwRmZ1EY=;
-        b=ODn5xLfDDo+4Ho74xsnrs/RTPUtmKQh0vFQMPi968ZLvHtAo5BCQtieVOTF37WDLzw
-         uxAVZAotdq5d1qYPB7fDjZHb0r62MOGZB4rltNl1q7gDg0RV3jVoFuglp6Bx7fNi/6l5
-         i0FCxCkZAc7PxWVMnTC+OeDE+46UUm/OieC6oyUvfV9ddvQaJB8bVR7kcihNcuCeN+rj
-         CzTyYHcVjcExi+p0Ed6RI2wadI8ZpK28Bmh1GOP9mfVQH7T8wFOZPg523HH6Ma160XLa
-         xzwXihQSPYFIZaR1BBv7usRTXTdl25OTl8dMbr1pP6DjkSh51QHbRlbSxF463PXP0Tf9
-         D/8g==
-X-Forwarded-Encrypted: i=1; AJvYcCUS6Ls3QwyjBIvANu2up1BoW9QLfO6wZ8RqwNFnkL61kepDxxjd2VJynAH/oPGpU+k3HNw76/9JoYIV/FpMMroBj5EfYx30ML3LpT0HfXSfzuXFhtWX4dvB919QrHSt63fwJxWMQ7Rk47NNjVPjQN1IjCzKt1804zLm52nGOLQxHsBP
-X-Gm-Message-State: AOJu0YyqoqqhvREnw0gyE0UC3ChPSjaKcu3Tir8UMF7ii4EiVEsTHvMY
-	A2LYgMFa/ZJ2L0cOceQDABrtWCZdbCO56GU3BKiXjF4fbbJEZb4T+8Rldyy1PzaTbaK7cCSDWvK
-	I0lM/F3VZFe/Jm2jbp9UOqWRhQkY=
-X-Google-Smtp-Source: AGHT+IHE3n0KTkYfD8Yj8NNJsSoEmcC2B+raJBYpEdqfWFILSH7LndOJX5ZQH98sJ9VDaqaGMoFzmRcrK7N+VhyrjD8=
-X-Received: by 2002:a05:6808:bce:b0:3c3:85f9:550a with SMTP id
- o14-20020a0568080bce00b003c385f9550amr1087400oik.17.1711125084644; Fri, 22
- Mar 2024 09:31:24 -0700 (PDT)
+	s=arc-20240116; t=1711125236; c=relaxed/simple;
+	bh=jFgzHuf+C6eWq8tkQGtyBbiJvXgYi6XxZOXS+E5Xf2A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bUA3RHg+9Zgo8a8OqvKqQeeRCgA2kb5wEA2SFhaiozc7yh+PalKoGOq0a2Qjojs6ll7zhUGXKl+rNT7cPXKhlLbs1f37dOlCmiiz3tdyA+Gmx14oKu8BLOl5nQaw0lhH7WM1O5KS5Bw4rTClT0y59bgBVbJ6EL49ykx0zSwp4HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oF6gPW+O; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711125234; x=1742661234;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jFgzHuf+C6eWq8tkQGtyBbiJvXgYi6XxZOXS+E5Xf2A=;
+  b=oF6gPW+O0FTlyxJC2G7hVcPMtNINxwa3EUqhWscJN3Pw7UOOJl43nD8Z
+   yxkNd4kwZJo5yROJw9XTcr5nL84qnsQeX/x571SSwlaox3WWKzZXsBPY7
+   8Xhqn6QESdxxS+y2YjuoKOIbEpmjpT6S+AnWv5VYpWxgWhGBna5fH2tYE
+   mvu076/VnfDAECCwL2Pdr+nwfmxtJa0/48d9rw/WN8NMgTIAdDsRh2jaF
+   MJIZokc5rhGajk87JF2Q5fcZQyp/oU/BoNkYo2pN5GM4eCkmeARk7QTq2
+   npi6KD/mrDAznBA6xRvoZjwxd4Gcm0+XHoNhnYxKZ3UZPFr3WI6mnYTiX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="23637523"
+X-IronPort-AV: E=Sophos;i="6.07,146,1708416000"; 
+   d="scan'208";a="23637523"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 09:33:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,146,1708416000"; 
+   d="scan'208";a="15019269"
+Received: from 984fee00c67b.jf.intel.com ([10.23.0.114])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 09:33:52 -0700
+From: Zide Chen <zide.chen@intel.com>
+To: linux-kselftest@vger.kernel.org
+Cc: seanjc@google.com,
+	pbonzini@redhat.com,
+	Zide Chen <zide.chen@intel.com>
+Subject: [PATCH] selftests/rseq: take large C-state exit latency into consideration
+Date: Fri, 22 Mar 2024 09:33:51 -0700
+Message-Id: <20240322163351.150673-1-zide.chen@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org> <20240322-hid-bpf-sleepable-v5-2-179c7b59eaaa@kernel.org>
-In-Reply-To: <20240322-hid-bpf-sleepable-v5-2-179c7b59eaaa@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 22 Mar 2024 17:30:46 +0100
-Message-ID: <CAP01T76oYpkNdgxXo+6v53afjObvYU4LWRLfkg2S7pNivzaEvg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 2/6] bpf/verifier: add bpf_timer as a kfunc
- capable type
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 22 Mar 2024 at 15:57, Benjamin Tissoires <bentiss@kernel.org> wrote:
->
-> We need to extend the bpf_timer API, but the way forward relies on kfuncs.
-> So make bpf_timer known for kfuncs from the verifier PoV
->
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
->
-> ---
->
-> changes in v5:
-> - also check for the reg offset
->
-> changes in v4:
-> - enforce KF_ARG_PTR_TO_TIMER to be of type PTR_TO_MAP_VALUE
->
-> new in v3 (split from v2 02/10)
-> ---
->  kernel/bpf/verifier.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 63749ad5ac6b..24a604e26ec7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10826,6 +10826,7 @@ enum {
->         KF_ARG_LIST_NODE_ID,
->         KF_ARG_RB_ROOT_ID,
->         KF_ARG_RB_NODE_ID,
-> +       KF_ARG_TIMER_ID,
->  };
->
->  BTF_ID_LIST(kf_arg_btf_ids)
-> @@ -10834,6 +10835,7 @@ BTF_ID(struct, bpf_list_head)
->  BTF_ID(struct, bpf_list_node)
->  BTF_ID(struct, bpf_rb_root)
->  BTF_ID(struct, bpf_rb_node)
-> +BTF_ID(struct, bpf_timer_kern)
->
->  static bool __is_kfunc_ptr_arg_type(const struct btf *btf,
->                                     const struct btf_param *arg, int type)
-> @@ -10877,6 +10879,12 @@ static bool is_kfunc_arg_rbtree_node(const struct btf *btf, const struct btf_par
->         return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_RB_NODE_ID);
->  }
->
-> +static bool is_kfunc_arg_timer(const struct btf *btf, const struct btf_param *arg)
-> +{
-> +       bool ret = __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_TIMER_ID);
-> +       return ret;
-> +}
-> +
->  static bool is_kfunc_arg_callback(struct bpf_verifier_env *env, const struct btf *btf,
->                                   const struct btf_param *arg)
->  {
-> @@ -10946,6 +10954,7 @@ enum kfunc_ptr_arg_type {
->         KF_ARG_PTR_TO_NULL,
->         KF_ARG_PTR_TO_CONST_STR,
->         KF_ARG_PTR_TO_MAP,
-> +       KF_ARG_PTR_TO_TIMER,
->  };
->
->  enum special_kfunc_type {
-> @@ -11102,6 +11111,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
->         if (is_kfunc_arg_map(meta->btf, &args[argno]))
->                 return KF_ARG_PTR_TO_MAP;
->
-> +       if (is_kfunc_arg_timer(meta->btf, &args[argno]))
-> +               return KF_ARG_PTR_TO_TIMER;
-> +
->         if ((base_type(reg->type) == PTR_TO_BTF_ID || reg2btf_ids[base_type(reg->type)])) {
->                 if (!btf_type_is_struct(ref_t)) {
->                         verbose(env, "kernel function %s args#%d pointer type %s %s is not supported\n",
-> @@ -11735,6 +11747,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->                 case KF_ARG_PTR_TO_CALLBACK:
->                 case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
->                 case KF_ARG_PTR_TO_CONST_STR:
-> +               case KF_ARG_PTR_TO_TIMER:
->                         /* Trusted by default */
->                         break;
->                 default:
-> @@ -12021,6 +12034,16 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->                         if (ret)
->                                 return ret;
->                         break;
-> +               case KF_ARG_PTR_TO_TIMER:
-> +                       if (reg->type != PTR_TO_MAP_VALUE) {
-> +                               verbose(env, "arg#%d doesn't point to a map value\n", i);
-> +                               return -EINVAL;
-> +                       }
-> +                       if (reg->off) {
-> +                               verbose(env, "arg#%d offset can not be greater than 0\n", i);
-> +                               return -EINVAL;
-> +                       }
+Currently, the migration worker delays 1-10 us, assuming that one
+KVM_RUN iteration only takes a few microseconds.  But if C-state exit
+latencies are large enough, for example, hundreds or even thousands
+of microseconds on server CPUs, it may happen that it's not able to
+bring the target CPU out of C-state before the migration worker starts
+to migrate it to the next CPU.
 
-This won't be correct. You don't really check whether the timer exists
-at reg->off (and if you did, this would still restrict it to 0 offset,
-and not check the variable offset which would be non-zero). What I
-would suggest is calling process_timer_func (see how dynptr calls the
-same underlying process_dynptr_func to enforce type invariants). This
-would allow sharing the same checks and avoid bugs from creeping in.
-It does all checks wrt constant/variable offset and looking up the
-timer field offset and matching it against the one in the pointer.
+If the system workload is light, most CPUs could be at a certain level
+of C-state, and the vCPU thread may waste milliseconds before it can
+actually migrate to a new CPU.
 
-> +                       break;
->                 }
->         }
->
->
-> --
-> 2.44.0
->
->
+Thus, the tests may be inefficient in such systems, and in some cases
+it may fail the migration/KVM_RUN ratio sanity check.
+
+Since we are not able to turn off the cpuidle sub-system in run time,
+this patch creates an idle thread on every CPU to prevent them from
+entering C-states.
+
+Additionally, seems it's reasonable to randomize the length of usleep(),
+other than delay in a fixed pattern.
+
+Signed-off-by: Zide Chen <zide.chen@intel.com>
+---
+ tools/testing/selftests/kvm/rseq_test.c | 76 ++++++++++++++++++++++---
+ 1 file changed, 69 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index 28f97fb52044..d6e8b851d29e 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -11,6 +11,7 @@
+ #include <syscall.h>
+ #include <sys/ioctl.h>
+ #include <sys/sysinfo.h>
++#include <sys/resource.h>
+ #include <asm/barrier.h>
+ #include <linux/atomic.h>
+ #include <linux/rseq.h>
+@@ -29,9 +30,10 @@
+ #define NR_TASK_MIGRATIONS 100000
+ 
+ static pthread_t migration_thread;
++static pthread_t *idle_threads;
+ static cpu_set_t possible_mask;
+-static int min_cpu, max_cpu;
+-static bool done;
++static int min_cpu, max_cpu, nproc;
++static volatile bool done;
+ 
+ static atomic_t seq_cnt;
+ 
+@@ -150,7 +152,7 @@ static void *migration_worker(void *__rseq_tid)
+ 		 * Use usleep() for simplicity and to avoid unnecessary kernel
+ 		 * dependencies.
+ 		 */
+-		usleep((i % 10) + 1);
++		usleep((rand() % 10) + 1);
+ 	}
+ 	done = true;
+ 	return NULL;
+@@ -158,7 +160,7 @@ static void *migration_worker(void *__rseq_tid)
+ 
+ static void calc_min_max_cpu(void)
+ {
+-	int i, cnt, nproc;
++	int i, cnt;
+ 
+ 	TEST_REQUIRE(CPU_COUNT(&possible_mask) >= 2);
+ 
+@@ -186,6 +188,61 @@ static void calc_min_max_cpu(void)
+ 		       "Only one usable CPU, task migration not possible");
+ }
+ 
++static void *idle_thread_fn(void *__idle_cpu)
++{
++	int r, cpu = (int)(unsigned long)__idle_cpu;
++	cpu_set_t allowed_mask;
++
++	CPU_ZERO(&allowed_mask);
++	CPU_SET(cpu, &allowed_mask);
++
++	r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
++	TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
++		errno, strerror(errno));
++
++	/* lowest priority, trying to prevent it from entering C-states */
++	r = setpriority(PRIO_PROCESS, 0, 19);
++	TEST_ASSERT(!r, "setpriority failed, errno = %d (%s)",
++		errno, strerror(errno));
++
++	while(!done);
++
++	return NULL;
++}
++
++static void spawn_threads(void)
++{
++	int cpu;
++
++	/* Run a dummy thread on every CPU */
++	for (cpu = min_cpu; cpu <= max_cpu; cpu++) {
++		if (!CPU_ISSET(cpu, &possible_mask))
++			continue;
++
++		pthread_create(&idle_threads[cpu], NULL, idle_thread_fn,
++			       (void *)(unsigned long)cpu);
++	}
++
++	pthread_create(&migration_thread, NULL, migration_worker,
++		       (void *)(unsigned long)syscall(SYS_gettid));
++}
++
++static void join_threads(void)
++{
++	int cpu;
++
++	pthread_join(migration_thread, NULL);
++
++	for (cpu = min_cpu; cpu <= max_cpu; cpu++) {
++		if (!CPU_ISSET(cpu, &possible_mask))
++			continue;
++
++		pthread_join(idle_threads[cpu], NULL);
++	}
++
++	free(idle_threads);
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	int r, i, snapshot;
+@@ -199,6 +256,12 @@ int main(int argc, char *argv[])
+ 
+ 	calc_min_max_cpu();
+ 
++	srand(time(NULL));
++
++	idle_threads = malloc(sizeof(pthread_t) * nproc);
++	TEST_ASSERT(idle_threads, "malloc failed, errno = %d (%s)", errno,
++		    strerror(errno));
++
+ 	r = rseq_register_current_thread();
+ 	TEST_ASSERT(!r, "rseq_register_current_thread failed, errno = %d (%s)",
+ 		    errno, strerror(errno));
+@@ -210,8 +273,7 @@ int main(int argc, char *argv[])
+ 	 */
+ 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+ 
+-	pthread_create(&migration_thread, NULL, migration_worker,
+-		       (void *)(unsigned long)syscall(SYS_gettid));
++	spawn_threads();
+ 
+ 	for (i = 0; !done; i++) {
+ 		vcpu_run(vcpu);
+@@ -258,7 +320,7 @@ int main(int argc, char *argv[])
+ 	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
+ 		    "Only performed %d KVM_RUNs, task stalled too much?", i);
+ 
+-	pthread_join(migration_thread, NULL);
++	join_threads();
+ 
+ 	kvm_vm_free(vm);
+ 
+-- 
+2.34.1
+
 
