@@ -1,146 +1,167 @@
-Return-Path: <linux-kselftest+bounces-6505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5151588713E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 17:50:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D11B1887201
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 18:41:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C879281C2F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 16:50:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E0C284725
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Mar 2024 17:41:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C3865D47B;
-	Fri, 22 Mar 2024 16:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0776026B;
+	Fri, 22 Mar 2024 17:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvwRa8y8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NuAiMh/M"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f66.google.com (mail-oa1-f66.google.com [209.85.160.66])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963DE5674C;
-	Fri, 22 Mar 2024 16:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6ED5FDA4
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Mar 2024 17:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711126251; cv=none; b=ICf4M0iS91CF60xBVRBTSxMtNN7aB0gwji4gH1HpygOs4QsrNx95y0hsQcF4tyVG9NxDzI8hNATI/nXsUHExklLh6A/fKhxwuTdMpBMEbwN7u0H9/inNC5toiTHtOK8yc4XwtosZ0V8BiD7v5mC3FIljTQO20P4Z2jm3hCGyFRM=
+	t=1711129244; cv=none; b=tEaPu/6gmWDBl7zJs9928sd0QHPtFb1PqlIfmgga1Hfx2bgrlHkfDkjf+m0MYGmEEeDREAet5uCrQKhN6+jT1gQ/SoMYoQytEL7LokADnc0DZQEvjAv3CsvxoHbyJoPRprKgEUKdkr3SQq298miPyd3NK174IqAPGENkqhk6WxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711126251; c=relaxed/simple;
-	bh=zWVaHDgjOuHVfjlI/i15WMIyLZ98z083v88nOntCkzE=;
+	s=arc-20240116; t=1711129244; c=relaxed/simple;
+	bh=7T0QYgj6Z0QWJ7WZghtr6Q0zZ77ROAwtyZEJQAtnJrY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P7khhA9i2mQ5iZ7ptcIZdkRHgsyUtUp3Byofhi81Qr+73ChhOi3UaxjfBQ9IZc9Qeo0NcguMKHRjkgdZEE5xg7eRyxqpgInvDJBZNbIWMFzZqlvNedmbBve47JUgewTnEzRf+sKlS29FJgRAV0/6bnwjU72vF7w7GfW4g9IEv8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvwRa8y8; arc=none smtp.client-ip=209.85.160.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f66.google.com with SMTP id 586e51a60fabf-221e76cad07so1447972fac.0;
-        Fri, 22 Mar 2024 09:50:49 -0700 (PDT)
+	 To:Cc:Content-Type; b=JBh3hilHVRKOank/BJHLOJlV2bTiZa1Hj8Qklt0shtJ/N7Z7BsOkIKYcYix7QOCfqBA1lHu6R0ix+GnrSVDN7+lgkTJ7/jlq+hf5ebX9Gf5X+JLHbw8X7Llf+GpwsnXjkjhMdMNXybAqkNaY/7fF1f2GWJwh5Njo/7h9EWqDUYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NuAiMh/M; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a450bedffdfso292960766b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Mar 2024 10:40:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711126248; x=1711731048; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IMFU2MbnOsDAXDgvuXOEwtIjtmzVMSKHwsLZ0yMQ728=;
-        b=mvwRa8y8y0NVCZQTP6gYYfL2NdtzJDBAszJKffHH2YUiClTQGqOc4A7sJCPL61vwFa
-         z4PToPUrBUUDrnF+APL75PiEC1ITnc5R5mDLijFRhQ3uwnBGoZXJIwGOavBZXSaS4ejD
-         SpcvzKWPDQaj4cO9ZlnXJv9PGhxJUQyVOkBlRtwkc+k9vlV9FYpkm94dWrEeGoy+R4rn
-         OEtG6oR7qji5iF/3NBZ2eu+yXAEjJZvY9S0zUPMJJ7K8hAVRNz5oT6cScVPErrxfTk3b
-         1Ms9zj9ZjcubL+BRApkOR1Ura0h0w54rJys7J3y+TP/xalGkttS3FBIaPXQAjt3fX5/p
-         /xbg==
+        d=google.com; s=20230601; t=1711129239; x=1711734039; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7YM4J2ObtCNq8IqrJeUkrlLZCafy3cmXh0Ri66R+dm4=;
+        b=NuAiMh/MosGpuJph6/CXhnqgtnF7qTB4wgozIjMxlP7xwIMTBUkxGp7jiLeBJeNUA8
+         uf3RbWvwApbMZFE+1zAiSE/rUFH1AmO4Inn/LeR4eLLIyJhCb6kAZF5e/IqWygoVbAS0
+         YNddRISS5xPN/6moDsAN0RJLCFP7BYfwoyTBXRz81dPr4VwAGpuAx4kKX1ddy3i+i8J0
+         GW8CtvhZyNMxHOAbds+zU9+r9Ux6hPYEAFI7Xi+I0b4x9bRWTLPNpPCI2wo9BHwHpm54
+         90xv2NndkuSs6tCPxxNLMeQMMbA9UkVREUUY00h8sSJNFZUydz03W+30nass1/Zv6OwQ
+         wtCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711126248; x=1711731048;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IMFU2MbnOsDAXDgvuXOEwtIjtmzVMSKHwsLZ0yMQ728=;
-        b=tnBbXGiMUIrYpBFRR1FCrbJmtQw7nBLZaxD2fSkwFoMMmJjMJ3HwVNbAJmcyO3MvWS
-         sM5eJ32dt8v6/J6oBVu/WrqTzPezrppidA3vMYpM++CdH6KciVysm+2AbcashsQ4Ovxo
-         yW51nfT0MfVwgRok/I74qCmU6aPe2hv8XvyybGPSfVYiPqbE1bybCNyDHEyXe08Qry/a
-         dry/OqcatJ7l7tFAeBu4979y6uMH6w708KEqjqLuYaJKoI0RPnnCnpbQ4lf2x5OLveAq
-         k8+w/7P44IzGxauH0gG1Os/cpl2oFMq7E7t2bSmwHUSmJ3C61L7A6J6fOu2psCBEd5+s
-         17hg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3U2JZrFi+3ZV3WoudLu2vis1Un1wQzzidnHqQlFh2ATdruRfs36tLZjYh5+kvYQFMwxgk23b3v60FsIZwPVHC2hzP5lGMPU5tUW0Uoa1bgODczvXblNzmmPXGpA4evHb7XqBKW1/WY2odLGYKmNzn1atltaHvzbl54plPP6QkZs5L
-X-Gm-Message-State: AOJu0Ywcrsq8mqsZP7OIGEtlFApCeuYCXa+aN3YWJT7Kak2LKvNLPuHQ
-	C9yv0xXv7fYvAmR7U1WkNVCJzNMhkioR0ZGAeAjPmSgbS++F8h/MbjNmNI9+A+q6yjuzJdNGLoY
-	5D0WYQlh87M45lwcR95x2ppfhNI0=
-X-Google-Smtp-Source: AGHT+IGPOoEEYRbtKYoZlOJzHAn0rx0HGoNUpSFoPMOl2wuDeaJmXaacZVSR2+zxC3yP7RBZl0VWSvbJ/3xnqjcqyb8=
-X-Received: by 2002:a05:6870:332a:b0:229:b0b5:a3db with SMTP id
- x42-20020a056870332a00b00229b0b5a3dbmr63284oae.3.1711126248523; Fri, 22 Mar
- 2024 09:50:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711129239; x=1711734039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7YM4J2ObtCNq8IqrJeUkrlLZCafy3cmXh0Ri66R+dm4=;
+        b=Biy9O1COEfrqqKwmKLGrjcQzEdPp/nam0CnSd3N2JeFIvZn9voxU1jQPRZjf5X5bqY
+         8zdk2RolCMGeALg3dn7UmIInSP6E5eazzvDGdK7nUDXUQrjCwgmqcYgdEpMDBUrGxVgY
+         Hw5xyr4PwB3NKfAH7R0r929GhIQjNetReIE4X+cqozoLs2S/NvqcYFUdM0n6aj9WYXHu
+         7rFva97a4+SLJ4ZY8k9eonX55Kg9uGd5yuwznx2yL9hHQP1Fu5pgf6xlB2wLBSZSgjx7
+         oMGjjj5M9TtJASobGv/Eb6FbzxHEA+3y/AGW0DHYrJ5t8Nb7Ihb4GTh3oKgxEzwSKMgE
+         XzmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsFeyyswN7JWoEW4kWgbIwH2yHvCakmVzBKtLO5LvuhdThODfeasVout5uIvH81t8j5nM0jZ+WSgo+ypUA8QRUISw+9hTxupkBTPjt+lYZ
+X-Gm-Message-State: AOJu0YxMey6JghdvK2orBU7hQdnDTMSllUBpFsICO+w41fne/ju7Z2z0
+	W0MTDo6s0j+2h1ASDBcfc+QzSYVPGctpA2S58xC5jUWVFm7nx4ojs4lC2ruTZ8vAtfVieK8VlWE
+	QOmSfpHbSyY/iCTttV9KMyDsPge/RM8Oubzoq
+X-Google-Smtp-Source: AGHT+IH25NX6qQBoFnVnA4psBCYCRYBaiXOTPUtbfU8ggcYNeDelzQNuP6wH36Jj0kmkf8kYIMZ+vwfa54Dm4tCqR3s=
+X-Received: by 2002:a17:906:c2d4:b0:a46:befa:f0b0 with SMTP id
+ ch20-20020a170906c2d400b00a46befaf0b0mr293662ejb.45.1711129238808; Fri, 22
+ Mar 2024 10:40:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org> <20240322-hid-bpf-sleepable-v5-3-179c7b59eaaa@kernel.org>
-In-Reply-To: <20240322-hid-bpf-sleepable-v5-3-179c7b59eaaa@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 22 Mar 2024 17:50:11 +0100
-Message-ID: <CAP01T74+naPau2_=1G2_TUSjY_ZCAWQ2XVBKxs9xSKHobZcEeQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/6] bpf/helpers: introduce
- bpf_timer_set_sleepable_cb() kfunc
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
+ <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk> <ZfjMopBl27-7asBc@infradead.org>
+In-Reply-To: <ZfjMopBl27-7asBc@infradead.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 22 Mar 2024 10:40:26 -0700
+Message-ID: <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>
+Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 22 Mar 2024 at 15:57, Benjamin Tissoires <bentiss@kernel.org> wrote:
->
-> In this patch, bpf_timer_set_sleepable_cb() is functionally equivalent
-> to bpf_timer_set_callback(), to the exception that it enforces
-> the timer to be started with BPF_F_TIMER_SLEEPABLE.
->
-> But given that bpf_timer_set_callback() is a helper when
-> bpf_timer_set_sleepable_cb() is a kfunc, we need to teach the verifier
-> about its attached callback.
-> Marking that callback as sleepable will be done in a separate patch
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
->
-> ---
-> [...]
->
-> @@ -19548,6 +19582,28 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->                    desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
->                 insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
->                 *cnt = 1;
-> +       } else if (is_bpf_timer_set_sleepable_cb_impl_kfunc(desc->func_id)) {
-> +               /* The verifier will process callback_fn as many times as necessary
-> +                * with different maps and the register states prepared by
-> +                * set_timer_callback_state will be accurate.
-> +                *
-> +                * The following use case is valid:
-> +                *   map1 is shared by prog1, prog2, prog3.
-> +                *   prog1 calls bpf_timer_init for some map1 elements
-> +                *   prog2 calls bpf_timer_set_callback for some map1 elements.
-> +                *     Those that were not bpf_timer_init-ed will return -EINVAL.
-> +                *   prog3 calls bpf_timer_start for some map1 elements.
-> +                *     Those that were not both bpf_timer_init-ed and
-> +                *     bpf_timer_set_callback-ed will return -EINVAL.
-> +                */
-> +               struct bpf_insn ld_addrs[2] = {
-> +                       BPF_LD_IMM64(BPF_REG_3, (long)env->prog->aux),
-> +               };
-> +
-> +               insn_buf[0] = ld_addrs[0];
-> +               insn_buf[1] = ld_addrs[1];
-> +               insn_buf[2] = *insn;
-> +               *cnt = 3;
->         }
+Hi Christoph,
 
-Would be better to handle the fixup of all kfuncs in one place, i.e.
-fixup_kfunc_call.
+Sorry for the late reply, I've been out for a few days.
 
->         return 0;
->  }
+On Mon, Mar 18, 2024 at 4:22=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
+g> wrote:
 >
-> --
-> 2.44.0
+> On Sun, Mar 17, 2024 at 07:49:43PM -0700, David Wei wrote:
+> > I'm working on a similar proposal for zero copy Rx but to host memory
+> > and depend on this memory provider API.
 >
+> How do you need a different provider for that vs just udmabuf?
 >
+
+This was discussed on the io_uring ZC RFC in one of the earliest RFCs.
+Here is a link to Pavel's response:
+
+https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438=
+-6-almasrymina@google.com/#25589471
+
+The UAPI of wrapping io_uring memory into a udmabuf just to use it
+with devmem TCP only for the user to have to unwrap it is undesirable
+to him.
+
+> > Jakub also designed this API for hugepages too IIRC. Basically there's
+> > going to be at least three fancy ways of providing pages (one of which
+> > isn't actually pages, hence the merged netmem_t series) to drivers.
+>
+> How do hugepages different from a normal page allocation?  They should
+> just a different ordered passed to the page allocator.
+>
+
+Yes, that's more-or-less what's what the hugepage memory provider
+Jakub proposed does. The memory provider would allocate a hugepage and
+hold a reference to it. Then when the page_pool needs a page, it would
+allocate a PAGE_SIZE page from said hugepage region and provide it to
+the page_pool, and the pool back to the driver. This allows the
+hugepages to work without the page_pool and driver to be hugepage
+aware and to insert huge page specific processing in it.
+
+Other designs for this hugepage use case are possible, I'm just
+describing Jakub's idea for it as a potential use-case for these
+hooks. For example technically the page_pool at the moment does
+support non-0 order allocations, but most drivers simply set the order
+to 0 and use the page pool only for PAGE_SIZE allocations. An
+alternative design could be to use this support in the page pool, but
+that requires every driver to adopt this rather than a core networking
+change that can apply transparently (to a large extent) to all
+page_pool drivers.
+
+--=20
+Thanks,
+Mina
 
