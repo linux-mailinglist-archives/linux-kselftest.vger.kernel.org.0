@@ -1,129 +1,142 @@
-Return-Path: <linux-kselftest+bounces-6522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E415887F6C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Mar 2024 23:13:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 024A2889236
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 08:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 132BD281579
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Mar 2024 22:13:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC6C71F2E4A1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 07:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C310C2574F;
-	Sun, 24 Mar 2024 22:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87261B5DDF;
+	Mon, 25 Mar 2024 00:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfzAX4Ug"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iF7DWwIh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF7EDDBC;
-	Sun, 24 Mar 2024 22:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD8D2733F2;
+	Sun, 24 Mar 2024 23:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711318403; cv=none; b=YX5z8xJFlc1JE0cdwBu5xoInxXmZNus73hUOG14xFqT1ZW/DRJeOJatKvnMcIeakuotpbPyOt9tDHmzoPUljkzojBiD6gDOCbMAjKAF03M1UA+WI6v74l96atwne6SEl98RXC6GV+HGXD6z/cuGOsJRiT6fiGZCsV6ssJJVBPwE=
+	t=1711323325; cv=none; b=V4i42sNwmFtejMoS6ppzpbJFpUqNNR6iU+iyog+EbCKmThdCMoybhazaS3dU8Nr23OUyz6qkz/AbangdluQmAr5yMEhRq+oiBv3/XnzjvNWbsoxNQYuauHUb3h0jrNQFSx9tNGR4vtByFbXUc010kkGyPumHyZJ7s35GkfyQCds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711318403; c=relaxed/simple;
-	bh=hywmCcBW0orQmN+UCYCOuHWcheXYsAC7Tj6t+LOGyjU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T4LAhhBfZgtc2RFSXPyfVDj+9t6FWmDxOb/KE/TxCQcJyXTLdZwhQo3somkHWCrWF7Ra4uGkM4j9e6+81K1bzU2MUCJ+hYIlTLRJ2x71NFypyx7B8s16OBmrK8iYhbVm/0i3cDvLcUsLLqHnvL5gek+kkYuNw80LNoup1hxIxb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfzAX4Ug; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4146e9e45c8so24042065e9.1;
-        Sun, 24 Mar 2024 15:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711318400; x=1711923200; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hywmCcBW0orQmN+UCYCOuHWcheXYsAC7Tj6t+LOGyjU=;
-        b=DfzAX4UgpvVeAWmgrptkHAbWz4TTKj7YwPWXdW9uRQ0a6TyZfAOGhp8hm2ANQUCdwH
-         ZsS3J4Ueb4dulVhcz98FovMrOpPWTMsWEEsy+UZebGCIZfWRV110MkJdRW0Yo/agXNTr
-         Z+tXwrJgg6yGhyZ+5zQCO8orxNNieSX35edWMonZ8k7jdUR37ZxcIyJJ0sXLQeXHDgyX
-         H0GFUSQQeMU8z457mBmWBHS67O73wzhE0SQkk63QXV8tuMewuLXxbSu7wDJuZ0xVZA2q
-         Qt2snfgUW+8y0Jjd3vEjGciuDceFexooDxMPVzPt3WCeaK//C993GAB3nD/lkJxYXQye
-         Ud+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711318400; x=1711923200;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hywmCcBW0orQmN+UCYCOuHWcheXYsAC7Tj6t+LOGyjU=;
-        b=g17z4HiXhHexpfcoZ4VcXRiZkP7Zw5N8fRqIFzFqOWdHwd2QTwTxn/8SQw9sQ7328W
-         DQ++mX1+bZ2FYf8huzWyBSzYAfvxP25F9TkU2J4wK0Aw+K4R549Q61fQkoFd2AVeotrG
-         EA+8D8JrysNyqUXBjJDQcrD+vfqXRmr+bWRQnnI7i1FqE3hcz8U+uHfC8A6dtwcjahYO
-         6Dh8HkEPzEk4DjHwesDGlOjBZgVJPkl0w2zWz5jRFpX9vurKCdy4wWtNiJ4k+cxbr/2c
-         iNJJ2pt0DZ/VLidNsXDt8PyFjbPachXL19O7wO4+zHgYPx/asIm3ll4PE23Ytzud5qbC
-         OC4g==
-X-Forwarded-Encrypted: i=1; AJvYcCXuAH4eV5QvpjKiekqOyCgsm2ktdUjR+jBZuefwh7uL/AjZZQVIWZGftWQGSkIaUxkdF6oLZZDko/g10hWhbp20K1CrGVaSiOv2D3RrUc4hX9K8a+HPQloNHoDFYalbtS3aOZRJR7IX+wZnrtG1PWfmuWanB8KQN2MIID2qEhIhLQx2
-X-Gm-Message-State: AOJu0Yy+QpiEf2KTOxmm71MHvFFP6J160Xmvplp3DRxv8qvd+rnXJMn+
-	Ttk/tH0TxZIhBydVKdIJwoisvhQnF8uBaGsvlTu1D2WWz8slRUR2b+6C4hWA5MLEhAMklNQ4bpe
-	/SyBElnzRRAG10MKzkye7ZNNqltg=
-X-Google-Smtp-Source: AGHT+IG34qAnMqbaSfcff2cfsm3hhOYWc0eUO7q3sIj/I0742jLBohIFfqPT1Wyx4f6WIl9dZ1Wzkq01fSARWrHUnHk=
-X-Received: by 2002:adf:e90d:0:b0:33e:c5fd:6636 with SMTP id
- f13-20020adfe90d000000b0033ec5fd6636mr3606269wrm.3.1711318400124; Sun, 24 Mar
- 2024 15:13:20 -0700 (PDT)
+	s=arc-20240116; t=1711323325; c=relaxed/simple;
+	bh=w3DndtsjG6zas1wfMjz8RZMmPG7WJq8zOlcY33vgO1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rTGa00yHWOCy0w9IMnpQoUD3KDYqfX8zJuKF7G5p/jTW/laVf4vZcyQtujh32imp6F9s1ERucJSJIB8fOD4a3UhusvJjgPcHVOCP5uBemqwVo2T0NKQeDWirKAAGtt3IusoP0zZPFh5YbyqpItiOrGTj67v2cHiF9CoF13e3tTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iF7DWwIh; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=ghVT0JSAZhWZjIMzPkaSyKQMLg9eo2J9vvVmkWYzHY0=; b=iF7DWwIhKNw1JXqENX4aC5VQuT
+	Q+y8J0fuVGe5AwYlRzm3NLZujnu/cR27zhXmnagtXn8d3D3rIzlQWL/6pWHpEyOsjyQKu9U2fsYdZ
+	0j1Mu5FqrQQdlfn/nychyLmO+m2AXW7q8ktbLO3WvzRguveQN+9kvatO/5ZHsKHKGvl81OGqJ/bIy
+	sZGsGxnt09H55+3KNacdrD6wCQHPICcVluG/tqUD+roC24jyBL7Ek0i83zLxKbvBPSHsaoG9qMe/T
+	QWvbXHUSflmRJN4m5L8+F8u1KOq4Yn6T495UloKN1oQ8QbpHceqV4E+DC4cZ93dBQ+vH4TaLdVtcg
+	S6F8ELJQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1roXMv-0000000Dtyv-0e3z;
+	Sun, 24 Mar 2024 23:35:13 +0000
+Date: Sun, 24 Mar 2024 16:35:13 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Christoph Hellwig <hch@infradead.org>, David Wei <dw@davidwei.uk>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <ZgC4sWfHFGTY9HzY@infradead.org>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com>
+ <ZfegzB341oNc_Ocz@infradead.org>
+ <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
+ <ZfjMopBl27-7asBc@infradead.org>
+ <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org>
- <20240322-hid-bpf-sleepable-v5-2-179c7b59eaaa@kernel.org> <CAP01T76oYpkNdgxXo+6v53afjObvYU4LWRLfkg2S7pNivzaEvg@mail.gmail.com>
- <CAADnVQL_mQgN8uKsNFR0FBtWoaweCkzXw03EvbnQ-iFVWvXxuw@mail.gmail.com>
- <CAP01T753_FjFdj1CbCX5Bh1itYUWf8DUh41F7R_7Fdb=2SEL8g@mail.gmail.com>
- <CAADnVQ+5mSEW-LJwS30hED1cJeHOhqfCTKdBzYCcRd8EiVNvtA@mail.gmail.com> <CAP01T757ddmmFR+Cnj70DrTLFcEu+9uAcbscrO-uOmSVGB8eJA@mail.gmail.com>
-In-Reply-To: <CAP01T757ddmmFR+Cnj70DrTLFcEu+9uAcbscrO-uOmSVGB8eJA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 24 Mar 2024 15:13:08 -0700
-Message-ID: <CAADnVQK=aAcNt-8BBJNnp3QGkxVWLYhZ9=9dizo-7eQosjNtow@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 2/6] bpf/verifier: add bpf_timer as a kfunc
- capable type
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Sat, Mar 23, 2024 at 9:57=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
-
-> > > >
-> > > > Observation is correct. The patch is buggy,
-> > > > but the suggestion to follow process_dynptr_func() will lead
-> > > > to unnecessary complexity.
-> > > > dynptr-s are on stack with plenty of extra checks.
-> > >
-> > > The suggestion was to call process_timer_func, not process_dynptr_fun=
-c.
-> > >
-> > > > In this case bpf_timer is in map_value.
-> > > > Much simpler is to follow KF_ARG_PTR_TO_MAP approach.
-> > >
-> > > What I meant by the example was that dynptr handling does the same
-> > > thing for kfuncs and helpers (using the same function), so timer
-> > > arguments should do the same (i.e. use process_timer_func), which wil=
-l
-> > > do all checks for constant offset (ensuring var_off is tnum_is_const)
-> > > and match it against btf_record->timer_off.
+On Fri, Mar 22, 2024 at 10:40:26AM -0700, Mina Almasry wrote:
+> Hi Christoph,
+> 
+> Sorry for the late reply, I've been out for a few days.
+> 
+> On Mon, Mar 18, 2024 at 4:22 PM Christoph Hellwig <hch@infradead.org> wrote:
 > >
-> > I don't follow. Please elaborate with a patch.
-> > The var_off and off is a part of the bug, but it's not the biggest part=
- of it.
->
-> Not compile tested.
+> > On Sun, Mar 17, 2024 at 07:49:43PM -0700, David Wei wrote:
+> > > I'm working on a similar proposal for zero copy Rx but to host memory
+> > > and depend on this memory provider API.
+> >
+> > How do you need a different provider for that vs just udmabuf?
+> >
+> 
+> This was discussed on the io_uring ZC RFC in one of the earliest RFCs.
+> Here is a link to Pavel's response:
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438-6-almasrymina@google.com/#25589471
 
-I see. All makes sense to me.
+Undesirable is not a good argument.  We need one proper API that
+different subsystems share for this use case (this is the same Feedback
+I gave Keith for the similar block proposal btw, not picking on the net
+folks here).
 
-Benjamin,
-pls incorporate it in your set.
+If dmabuf/udmabuf doesn't work for that we need to enhance or replace
+it, but not come up with little subsystem specific side channels.
+
 
