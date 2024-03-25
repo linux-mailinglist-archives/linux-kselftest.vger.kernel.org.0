@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-6562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39DEE88AD1F
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96FC088AD20
 	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 19:10:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E9923218FE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:10:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E1111F3752D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1505C131E39;
-	Mon, 25 Mar 2024 17:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D74130AEB;
+	Mon, 25 Mar 2024 17:33:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nnMsm4Ma"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fI45JxAE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2076.outbound.protection.outlook.com [40.107.95.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B619512C545
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 Mar 2024 17:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3225412C545
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 Mar 2024 17:33:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711387993; cv=fail; b=pZNxFqbMqExOekWPgGR+2gn4bZjarLFGFjQ5hDr/8kAn7mQbDf8Jq3um+vMKyXSS4SCMzYKW+VTVqe0ULOwCpp4Q1HTbYX1U9KMryTl0+2WUnVgfqj8dVQcHegH5HYtycmvgWPfC2n8VanedSkf/odoszQdfWwC5IgMu3dcnXRQ=
+	t=1711387996; cv=fail; b=nbx8QxgU+hpn6lDnWj0Y5EKZU6nUwbhg8quaT+Q4Xa4DVUJPKlKF0VGST/pg6Jk09jnF0Te7V2R44uwiHqpCiDhqeqrXbkizsjbkohFn/eSTOsp4O90rzwqET9JKH9C9/oTMVOR6My5TJgCKM3aq4X/bZ59PwGskow2Cv8Ywa9g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711387993; c=relaxed/simple;
-	bh=HdLBc7LTJzlez+0pU/02noPPYY1UjQ1+t4Q4/yvFYcs=;
+	s=arc-20240116; t=1711387996; c=relaxed/simple;
+	bh=Z2UsHHfIZ1dfSYQOicILd9VGYKjI68UbAs5c2qIZLP8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lBd8x0WSUVgP2TSSkDwFyNuQKMzR1RAzihEDJUn5QZjeSTT2cQh9e/3QfxAGi1xf2TnVN/txcIvBLrKgEg56SEeEaT1bPP/s8bzPm5ozrVMp1NlylL1xUmxEfAEBLqSN9JibEEFxljlH6IunshqICH2MW0TamWYNTLf2lgA7SnY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nnMsm4Ma; arc=fail smtp.client-ip=40.107.223.75
+	 MIME-Version:Content-Type; b=q2opLdItDkwwxf/StIBdFI8wZS2mZvUvGaME5+F7I66dA5PcbckG3ua4CdNnjUEgwJ7GbUxrHC9zlhpD0uZozNa0InVMCNHtTnTOBbAm0+gV9Sk/VAt/kRhbcQWP4JamxLZ/Lt+mloXqQS3mZCfEnbmEMS3DVB7A5HcKrDxUJvY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fI45JxAE; arc=fail smtp.client-ip=40.107.95.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VRSoiJJXg16olACrrB3m/g9xQjdaftxnGNs4u4HX94VjKcUsW/ybJlr5gTu6AVyVOmBKi0E+k05IROOpiinA6s5CDTnRjIWy4DvYUumAqbLdHExWhCbaoTUXXkgU+t/7xTK5pDta1rhvTvbI/vd+toN9Po1VUaE+kzvyEuyj/hNuIOHGj7XBAKKsGB4KTTWQtZJ2rwgN9VaHFNGPEEILXNfPMF3BD+rxCuoIlTfY8thTd1QFLk7o4D77CRZTthbPfdtW0YCGZ2U9bBhguX4rOIggEn0Pll9b8O+vM7aL2z291c8FjLW1Jn1Yhe+D115AsSoyQL+pQXfIi+zVZOZQWg==
+ b=d7lPHU6PdGFEaareJoC+v3ZsHM2NYvHBop8nYf3+xNnwK9F3ICjOWr7m6XDARNHrQfT1ULCBMhx6gGU2K12mnIUMGrOdCkDoEdN+PcRknKsYpWXo4mVVS9/k9Nd0p/2Q8iowgDadAGz8U0lwlr5WUd2iIf0RAj+1Xy2IU9A2n1A4oK02XYSAUtcs5Wcln482mIgRFOIs122XbkjXmnhG9Nj1cpuwiq5+7XtVVM6UmNEp2eB2zwBX4TGGjeLs2etLz0rHfnE77E21pYySlKYzHaKI/HUhS57i38h+DinyCHSQjv8pQA+qweST+JFxlVc/SlPq0q7fZzQy9wwvHcJZ1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3RrFesxMWCipUUd2qwALPiQvXKGIjqkZiMQWbB7nrhk=;
- b=mif2B3Imlp6GT2uJAf2zJABhEM0ITUxR2klhimqvlGqPB08kkFL1awyTPNtwQ0k3iEcrdrVVh9xkITA0L9dE4TPtZOywxTQSDXUhOYvTzJvwQMz7NEkr4rZ3HzXJQ1j5GKI5ONDu6zdWcxV11ZSLXxkOxMxFcZ+to/ZcpVHVSZlgRDfeOFtR/C70I52Tke8H8o2UYa7m+aM0+9cPqT3hqWZRnbutsumDQFf+XCJbuzd5siKhpyxd/ElBDgK7t3xXdq1EH0Y5Gla7Mmt5NjZ8zel0zOs/brH7mEFC1OfdI0WbBpy40gticdJmD77c0PpJvMqikCYKzVv5zmuDf/3wKA==
+ bh=WaubpYhMibDQ6SdKpL9fTZ9ADyHIA00Zw3380a5t9+c=;
+ b=GQsYGonDIdgzm/d4l8ssIzqFWdcEYxE0TLq16M7EmkAYG8Ppy3JQXklC9tHBhHdm0v7idH4SJVPY42tTP1lZl7gt6B9250rx7R3DXTns/O1+IE50jRjECUfK98YEyMIUc863HIiqlfUv5lrZfDXCFc4cVozdXdpJg5SNANOie1IcdVG2IARE50zO2wdCj5Lio8d39r2cJHNb1DOy7Xelfb+nZTFGP1Z1S5LoS3YUVdNW+IboweQo6KR5OSETBPx64zIbpLIBNVazZ2zn4iZSZkkFsVuMgIkctvEqjBjCu84yuM/z47jt8yDHkmmGNBbJKeFt9hNIAz3Tqi1zRnfwrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3RrFesxMWCipUUd2qwALPiQvXKGIjqkZiMQWbB7nrhk=;
- b=nnMsm4MapMvuEU5YtBV9flPDwGtbGeJT43FU4ZuWwtp1YEcPqG09xOzVjHpOU4oi2SoZ7/dZcyLljxKUD+N9e6lFHfCJOWrVvHmt1/SewmO3S68ERx1FeFeWNDR+MeCplT8K307rUNi+hFHOgGUjNiR+338D181ceSG39WWDsE9fR4XVnXVwEnl3h3dguwpiyw7wttvz3Y29hwMkyut0JONpMF4oJgChIGaQpz+SH0LJo6gLNyXYZEEZ8BFHbgakVGhxJSHRJURKrZSt557+rT7u1qAu/u9FZHrdLcv/QFCMw5rp/wlaXQpATytqso9xl/kR1wmv4svGmmDuJ6aO9w==
-Received: from SJ0PR03CA0201.namprd03.prod.outlook.com (2603:10b6:a03:2ef::26)
- by PH8PR12MB7301.namprd12.prod.outlook.com (2603:10b6:510:222::12) with
+ bh=WaubpYhMibDQ6SdKpL9fTZ9ADyHIA00Zw3380a5t9+c=;
+ b=fI45JxAEX8pNfLBUHzUjJqPbOwJyW0otow5USJ96ofLKbu9EHufbwDyiV1AZyncgzHzwnnrbt/BpFfJzKnLsB9pdsGEF1AdHknLiCT1qZgJkeLIcUBHqkvEAKAzPu2l0bJsYxRXTatZemM+jtmkoOVv6wUi9jYqNIwT95NdzpvZfzOgbtXDY82T298ZXbmBc3pCz+ZeJexue4TZ7e2ZKFZbdkTzTj10Clz9qnuZGgZQBgT4cy52GXTOuw7/d/EBQIl3jwlFb3UYk0gqrfE6eQK4tcPxsbHBgM73x7Q58BhJKGsU7gWw+9i/Oc3W2HTrNlJTIowQPSWs8GI060+dbMA==
+Received: from SJ0PR13CA0030.namprd13.prod.outlook.com (2603:10b6:a03:2c0::35)
+ by CH3PR12MB8354.namprd12.prod.outlook.com (2603:10b6:610:12f::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.24; Mon, 25 Mar
- 2024 17:33:07 +0000
-Received: from SJ5PEPF000001CF.namprd05.prod.outlook.com
- (2603:10b6:a03:2ef:cafe::cf) by SJ0PR03CA0201.outlook.office365.com
- (2603:10b6:a03:2ef::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.32 via Frontend
- Transport; Mon, 25 Mar 2024 17:33:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Mon, 25 Mar
+ 2024 17:33:12 +0000
+Received: from SJ5PEPF000001CC.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c0:cafe::10) by SJ0PR13CA0030.outlook.office365.com
+ (2603:10b6:a03:2c0::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.11 via Frontend
+ Transport; Mon, 25 Mar 2024 17:33:11 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -64,17 +64,17 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- SJ5PEPF000001CF.mail.protection.outlook.com (10.167.242.43) with Microsoft
+ SJ5PEPF000001CC.mail.protection.outlook.com (10.167.242.41) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.10 via Frontend Transport; Mon, 25 Mar 2024 17:33:06 +0000
+ 15.20.7409.10 via Frontend Transport; Mon, 25 Mar 2024 17:33:11 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 25 Mar
- 2024 10:32:48 -0700
+ 2024 10:32:53 -0700
 Received: from localhost.localdomain (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Mon, 25 Mar
- 2024 10:32:42 -0700
+ 2024 10:32:48 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -84,9 +84,9 @@ CC: Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
 	<vladimir.oltean@nxp.com>, Benjamin Poirier <bpoirier@nvidia.com>, "Ido
  Schimmel" <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
 	<linux-kselftest@vger.kernel.org>, Petr Machata <petrm@nvidia.com>
-Subject: [RFC PATCH net-next mlxsw 09/14] selftests: forwarding: Have RET track kselftest framework constants
-Date: Mon, 25 Mar 2024 18:29:16 +0100
-Message-ID: <fb7c72469b1d51556914b8a4ba3b7dd6e16815ec.1711385796.git.petrm@nvidia.com>
+Subject: [RFC PATCH net-next mlxsw 10/14] selftests: forwarding: Convert log_test() to recognize RET values
+Date: Mon, 25 Mar 2024 18:29:17 +0100
+Message-ID: <a73c7706b6e6138ffcddeab63eacf71c34ce797d.1711385796.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <cover.1711385795.git.petrm@nvidia.com>
 References: <cover.1711385795.git.petrm@nvidia.com>
@@ -102,140 +102,183 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CF:EE_|PH8PR12MB7301:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc865e05-495d-4879-d1e2-08dc4cf1a1e4
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CC:EE_|CH3PR12MB8354:EE_
+X-MS-Office365-Filtering-Correlation-Id: cc7e2494-04d8-4f76-59f3-08dc4cf1a4b5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	u3GwReVuIj1qBvyrLHO43yGUcoeRhvSIil/I8BGII3KOn1+qjQjyKP/8qZpUDjf48L0W1YJwQvMEjm4BzX6mf/dFCqfr2/xpcO8btKZTyaG9Q+4t6S6nCcT6wESkVWoRxMGhd8iwRINHQtlIW6sX3WdZ0z//IEEeG6BhNvI4Y4yUeFAIz95LYevVaxb8yXog4p3392UqPHqRuP9BPlE6sBkixNgHAT0CYukSwPDk1gqC83BnvPjd1hV63S9nPT7hEK5mGb7pQ3kDOxPSa4hy0K6Z/VeZOn9R+94V0j9lFipgQW8ofT4kG9v3ZEzwsjHxkkzDP8pCIXPdE0O7DV1Dr7ueZcS2AzPCcxexHS7YI7NlZeXyxYvk6KdPHhfoULPzF48ui90wYU1XqK+BuqCAOUjqy27n5oELjLrEzgucq9SGo+23IH4kMh2XLIP1O/c1eT3lkZzKZRE24becH3lgrTfa92G1EhH5qmNXwmQFLjJpjgJcllNWlyJcpmSRJkwdpVwT3D8Yu0WGS042NwxMY3M0OnBYEPau5xM0VKbrY0ZgkxvZfQ0hfp35qDH49SzdXNVMVVzydK/EHpbgvbQJt1BZ1DihAKn1k9NhUGm7h+o0cu1KEZ5Tnn3DPK0v2TewOTuUa5HB2yyvTPQCtE03BTSn5fuMCm7LtSVRwekMOWc/BEIeYI3pYWH8WXuugCeX0wmBadhDNG+XRZd7krYtguBTEvnb9rl10uCEBcTmytoV2YE5PpqbRHSugOqqnvPO
+	+9CWir7KpHTg2HBCbpz0N3VyaN+gSTZXaPkqJqtUxRhDC+5YJjZKiqcbI1/RGlm8AC3qLO1dZRVSPMfv5KUiTKleFe5WLXICTJjCp5nTQ6dqKJZED78pEss+sG2wZnHZ73yQFSnfSRTaEGET/Mb3WYpMCn5cRWBaS9QSynasMF9L97j2B8Dzfmdcy0Qtrigr6E0xC6lO0MTRfzmhvt/TUYKiiiDYptFLeuQAYjCtOxoeAw74wt6lFZA+7kBeR7O7/pD2/BQFz6Rfh5WfxcB65RK4W5ljdZM80XLovGYlHfw5dS22aXy/knWa1G3lgNnG5sGhHtA6qroRPxhz2vXMokqdSOMGuXMyUml1m1Hlw/eDN1gF2pbEoxCeex7rR4h0AP9+DuVs0s48Hx6l+Fo4yVgboM5ol+7dP9kad4GKDlVks0IptYunAgL7HYi1cbCcSXlySYIaVbfP/A2G7U1I5lePD4zCsA6A3+6Ep1fuOrTJFmgRDNUaHx+CH509bsOK8rvy3L9JJln75gkHMLp63EW/6289pAqxeNGMAMerE/HSTE5UfSA6Zcd5KxELY8IIIjzH9dRpsGO5OuiMkMbw4fJkIjFYgnXb89JBc+uKI+FW8mFe6NV/T4i66mGPD+3TiFutyaN1vi48FIqL0WduwAksT4tqQjuhwiWE9kuPWlvIsKKwMCohqyILUq1i08iJhE4TyVkHCC47pEcrpKmEL2uN32yf2/Fcjw0mxnJWqDeePuGX4CMMQiiDgfePVDJf
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(1800799015)(376005);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(376005)(1800799015);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2024 17:33:06.6412
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2024 17:33:11.3476
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc865e05-495d-4879-d1e2-08dc4cf1a1e4
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc7e2494-04d8-4f76-59f3-08dc4cf1a4b5
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001CF.namprd05.prod.outlook.com
+	SJ5PEPF000001CC.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7301
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8354
 
-The variable RET keeps track of whether the test under execution has so far
-failed or not. Currently it works in binary fashion: zero means everything
-is fine, non-zero means something failed. log_test() then uses the value to
-given a human-readable message.
+In a previous patch, the interpretation of RET value was changed to mean
+the kselftest framework constant with the test outcome: $ksft_pass,
+$ksft_xfail, etc.
 
-In order to allow log_test() to report skips and xfails, the semantics of
-RET need to be more fine-grained. Therefore have RET value be one of
-kselftest framework constants: $ksft_fail, $ksft_xfail, etc.
+Update log_test() to recognize the various possible RET values.
 
-The current logic in check_err() is such that first non-zero value of RET
-trumps all those that follow. But that is not right when RET has more
-fine-grained value semantics. Different outcomes have different weights.
+Then have EXIT_STATUS track the RET value of the current test. This differs
+subtly from the way RET tracks the value: while for RET we want to
+recognize XFAIL as a separate status, for purposes of exit code, we want to
+to conflate XFAIL and PASS, because they both communicate non-failure. Thus
+add a new helper, ksft_exit_status_merge().
 
-The results of PASS and XFAIL are mostly the same: they both communicate a
-test that did not go wrong. SKIP communicates lack of tooling, which the
-user should go and try to fix, and as such should not be overridden by the
-passes. So far, the higher-numbered statuses can be considered weightier.
-But FAIL should be the weightiest.
-
-Add a helper, ksft_status_merge(), which merges two statuses in a way that
-respects the above conditions. Express it in a generic manner, because exit
-status merge is subtly different, and we want to reuse the same logic.
-
-Use the new helper when setting RET in check_err().
-
-Re-express check_fail() in terms of check_err() to avoid duplication.
+With this log_test_skip() and log_test_xfail() can be reexpressed as thin
+wrappers around log_test.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 21 ++++++++-----
- tools/testing/selftests/net/lib.sh            | 30 +++++++++++++++++++
- 2 files changed, 44 insertions(+), 7 deletions(-)
+ tools/testing/selftests/net/forwarding/lib.sh | 92 ++++++++++++++-----
+ tools/testing/selftests/net/lib.sh            |  9 ++
+ 2 files changed, 77 insertions(+), 24 deletions(-)
 
 diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 5415b8d29862..e72b2370238c 100644
+index e72b2370238c..942f38988941 100644
 --- a/tools/testing/selftests/net/forwarding/lib.sh
 +++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -396,14 +396,24 @@ EXIT_STATUS=0
- # Per-test return value. Clear at the beginning of each test.
- RET=0
- 
-+set_ret()
-+{
-+	local nret=$1; shift
-+	local msg=$1; shift
-+
-+	RET=$(ksft_status_merge $RET $nret)
-+	if (( $? )); then
-+		retmsg=$msg
-+	fi
-+}
-+
- check_err()
- {
- 	local err=$1
- 	local msg=$2
- 
--	if [[ $RET -eq 0 && $err -ne 0 ]]; then
--		RET=$err
--		retmsg=$msg
-+	if ((err)); then
-+		set_ret $ksft_fail "$msg"
+@@ -438,6 +438,62 @@ check_err_fail()
  	fi
  }
  
-@@ -412,10 +422,7 @@ check_fail()
- 	local err=$1
- 	local msg=$2
- 
--	if [[ $RET -eq 0 && $err -eq 0 ]]; then
--		RET=1
--		retmsg=$msg
--	fi
-+	check_err $((!err)) "$msg"
- }
- 
- check_err_fail()
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index d9bdf6aa3bf1..88f6133ca319 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -19,6 +19,36 @@ NS_LIST=""
- 
- ##############################################################################
- # Helpers
-+
-+__ksft_status_merge()
++log_test_result()
 +{
-+	local a=$1; shift
-+	local b=$1; shift
-+	local -A weights
-+	local weight=0
++	local test_name=$1; shift
++	local opt_str=$1; shift
++	local result=$1; shift
++	local retmsg=$1; shift
 +
-+	for i in "$@"; do
-+		weights[$i]=$((weight++))
-+	done
-+
-+	if [[ ${weights[$a]} > ${weights[$b]} ]]; then
-+		echo "$a"
-+		return 0
-+	else
-+		echo "$b"
-+		return 1
++	printf "TEST: %-60s  [%s]\n" "$test_name $opt_str" "$result"
++	if [[ $retmsg ]]; then
++		printf "\t%s\n" "$retmsg"
 +	fi
 +}
 +
-+ksft_status_merge()
++pause_on_fail()
++{
++	if [[ $PAUSE_ON_FAIL == yes ]]; then
++		echo "Hit enter to continue, 'q' to quit"
++		read a
++		[[ $a == q ]] && exit 1
++	fi
++}
++
++handle_test_result_pass()
++{
++	local test_name=$1; shift
++	local opt_str=$1; shift
++
++	log_test_result "$test_name" "$opt_str" " OK "
++}
++
++handle_test_result_fail()
++{
++	local test_name=$1; shift
++	local opt_str=$1; shift
++
++	log_test_result "$test_name" "$opt_str" FAIL "$retmsg"
++	pause_on_fail
++}
++
++handle_test_result_xfail()
++{
++	local test_name=$1; shift
++	local opt_str=$1; shift
++
++	log_test_result "$test_name" "$opt_str" XFAIL "$retmsg"
++	pause_on_fail
++}
++
++handle_test_result_skip()
++{
++	local test_name=$1; shift
++	local opt_str=$1; shift
++
++	log_test_result "$test_name" "$opt_str" SKIP "$retmsg"
++}
++
+ log_test()
+ {
+ 	local test_name=$1
+@@ -447,40 +503,28 @@ log_test()
+ 		opt_str="($opt_str)"
+ 	fi
+ 
+-	if [[ $RET -ne 0 ]]; then
+-		EXIT_STATUS=1
+-		printf "TEST: %-60s  [FAIL]\n" "$test_name $opt_str"
+-		if [[ ! -z "$retmsg" ]]; then
+-			printf "\t%s\n" "$retmsg"
+-		fi
+-		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
+-			echo "Hit enter to continue, 'q' to quit"
+-			read a
+-			[ "$a" = "q" ] && exit 1
+-		fi
+-		return 1
++	if ((RET == ksft_pass)); then
++		handle_test_result_pass "$test_name" "$opt_str"
++	elif ((RET == ksft_xfail)); then
++		handle_test_result_xfail "$test_name" "$opt_str"
++	elif ((RET == ksft_skip)); then
++		handle_test_result_skip "$test_name" "$opt_str"
++	else
++		handle_test_result_fail "$test_name" "$opt_str"
+ 	fi
+ 
+-	printf "TEST: %-60s  [ OK ]\n" "$test_name $opt_str"
+-	return 0
++	EXIT_STATUS=$(ksft_exit_status_merge $EXIT_STATUS $RET)
++	return $RET
+ }
+ 
+ log_test_skip()
+ {
+-	local test_name=$1
+-	local opt_str=$2
+-
+-	printf "TEST: %-60s  [SKIP]\n" "$test_name $opt_str"
+-	return 0
++	RET=$ksft_skip retmsg= log_test "$@"
+ }
+ 
+ log_test_xfail()
+ {
+-	local test_name=$1
+-	local opt_str=$2
+-
+-	printf "TEST: %-60s  [XFAIL]\n" "$test_name $opt_str"
+-	return 0
++	RET=$ksft_xfail retmsg= log_test "$@"
+ }
+ 
+ log_info()
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 88f6133ca319..b7f7b8695165 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -49,6 +49,15 @@ ksft_status_merge()
+ 		$ksft_pass $ksft_xfail $ksft_skip $ksft_fail
+ }
+ 
++ksft_exit_status_merge()
 +{
 +	local a=$1; shift
 +	local b=$1; shift
 +
 +	__ksft_status_merge "$a" "$b" \
-+		$ksft_pass $ksft_xfail $ksft_skip $ksft_fail
++		$ksft_xfail $ksft_pass $ksft_skip $ksft_fail
 +}
 +
  busywait()
