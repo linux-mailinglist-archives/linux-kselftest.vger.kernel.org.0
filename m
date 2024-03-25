@@ -1,162 +1,199 @@
-Return-Path: <linux-kselftest+bounces-6590-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6591-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72AD388B3F2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 23:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF88488B5A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 00:53:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0EF8C05DCA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 19:25:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 088A8BA0798
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 19:41:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8541BC23;
-	Mon, 25 Mar 2024 19:24:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B824776E;
+	Mon, 25 Mar 2024 19:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2GIPcWj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eQnbFjAP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABE51946C;
-	Mon, 25 Mar 2024 19:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF81D45033
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 Mar 2024 19:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711394685; cv=none; b=unkn2fX76BRsSjVl3mfXMcL+IETbMYwXFH4lsU4xKZrr4/QnetbM9k6midWUo+NFSS9brc07bZQqKPVnS1oOceioPFruQ3V9CwvEaOrEaxfrGZOkzIBXaPTu72sq5G2WNLDuBrq65Ng+o0WurMUt3PWxvGi035cTiFbpEr3bK84=
+	t=1711395666; cv=none; b=dRN9qXqU5QlqHv58FgmxLW4l6dm4G9A7J5FKveX6JTYbVg3MMdya6Ne2Q1LPR9K3MZRyNKLhRB0T/jPnicFltDfgHaKOXilO46Y11oup3nGzktA1vNVyqZjiovGcpSZmX6AVKBmokMjA0biCpIX/NR7utyxWZOcbuJfmv4LMDFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711394685; c=relaxed/simple;
-	bh=TkGuL+w7G+3t6UUem74ucq9Zu8Hv0WBY2IBJlQ7xZQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MEI9kccaAzouUrU/fbFbh0x2blCh+FJUS9EYj/WLgu51ksfTYBxH+n/w0AU5ZQPE+eSuLCpvU4SNInVSfLTJXgMNdVLNHX7nDF/LkdeaBzGTPQxae7DyN+/p3+OWwZXPm4RFkJwdfLILyfdTVfWolqWicFN+4icIAx4sx9vxzk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2GIPcWj; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5dcc4076c13so2943607a12.0;
-        Mon, 25 Mar 2024 12:24:43 -0700 (PDT)
+	s=arc-20240116; t=1711395666; c=relaxed/simple;
+	bh=PgpYmWwF+ZKkxz+jpDH8JrvQco+XVEcrWMSMSoX2y8M=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=BA0tByiEuld4+LwILkkWQYYH1owE3hBO/VQ5SbQ/nhDQoCyXJxyfVAS16q4SdTvm/h24cn4bRKyEnHJhfW+8DLB5bVMt29hiWdS0gkW19meN8LN5lKIuzsn2kX8JSzBK7SiL4BvCSz41Duiv/ufhjeAacUSxx/p4q6xtyUJMHRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eQnbFjAP; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1e0b5e79a57so7750145ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Mar 2024 12:41:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711394683; x=1711999483; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P8SlcQVDmaEWiOte6mDmefSXrzEKVOFtuPmb7V2Kzic=;
-        b=g2GIPcWjYhY/TKBekNp9G3RH5zQW7HWUWyWjU4a3NA2BwZXYGkWMZyla6Wf2JfAzKb
-         sOtkpvEqQWhnzvSloidpzBmsOg1T4T/oVm4/JZorkq0Ublr1neanl0p5cZEqWmEjkgKm
-         DxYu27nZx63MzMH4zEOnk0ocQ3jyGfMyWiuRBCR7WhEKp3WEJYRYJAJyX5FvrkNEVZKD
-         GrUNZOCBCOWk1aRCW8jtTi+HAMdFCCHxHF+f0pMOqcs6q4S8dSJg8piRQSaycYHfgN1u
-         fDzuTBAS1FmQx2bxKD9LfP/dFBiFMtfG3WFNXGB8MjhVkbYvxyUkh8fSR8pN7PfmxVUP
-         Ms+g==
+        d=google.com; s=20230601; t=1711395664; x=1712000464; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cX0Tst/fD3eEaDcxw6zP7p1X7prwnotLNua44hovj0E=;
+        b=eQnbFjAPZuE2cDH3+Mh10RyDVE+oRZe9JmkleOhzl4AKdO873iqBqCbow9sIIDfnmF
+         SqVr9aCDU6TkiIxOoYstytmbcbqHa+/o3mVvRgB9j/yuf20oUsUGsmj+SSg2cIZG92vk
+         i4GFc4w1qcLQcpd6W/hSi6rk/IfHUY9ZcLSg5dmihWqwxDL1Wzl0pLKiS6qzG6nZR/wa
+         kNQG3mvQ39KFHwc7XNlu4NYYoh1GVBoO7jk7fO/rBksBemtJiAESs7rfN5PsYjdQ2U2n
+         HFbX0T6u1uc1yb/j12WRTfUP/VYr3la7D/LAICXdYCGbQrwrdhqrEuH83/it0Bhvq+tL
+         +Gxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711394683; x=1711999483;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P8SlcQVDmaEWiOte6mDmefSXrzEKVOFtuPmb7V2Kzic=;
-        b=T6nS/EGiTlpRiWfsOHFs/2J2DIm14wqkdhHh/IPKGKXCXs1Odogds9Af0QdDbrD2JF
-         pc31kz7YSBpsZfoTQ3GtO4EkTx6uS/0/ITaZUFsJ/B1BmBnyFtJ2oiaxxDtH3bd8eqJ6
-         8kfE6GNbU+FK2hmRpLZPzG+XrFlHwMWlRpHW6PKxaWPSrsg505aYPprL3zXRIsAawiN8
-         BRHOk8pyCW0sbxOQuG1E7U9/MOo8aUDH4eow9e1yHnDzOCXUo5cJPEZacDRrO8mDJKBL
-         5jj+nxOsRSNnCodxYHYXoE6wUrEvCENvceBZjWkBPBqy0Jaj16Q8u1XFH0HxcGAVS9HL
-         o0Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCXMy/W6KhwZlJyibe2OWrqOcpOBJzHsiL2ZFW8elCXMrf1qkNEiqJq++TcL0E/wqPtW3flV3bmmoSN6Zk5iQDejpNIr/4Uy/JWKK95c8ZRFtCQpGBuhnhHr9bp2jDi/19j1RRBT5vLX2qim1iNkdhGFZ3L0jaK6Tay4QuUOSR9JlHuOVX5qRkeHg3xAFlbytamlXSXBG7jzWFapYI1039vgSgsGt0TtvXmTBoOYIik53pLrBHGxVR+RuIOu+vc3FNcrAAIIsH2YzPErQKmrX1QxeUnqrU4iXCAr5vcsfQA9OEqQYf+vgWp/L23fnWnMJg==
-X-Gm-Message-State: AOJu0YxEp602xXjjpoxl8bSxu0JSd33jAmTr0DefPzeT8QPqG36LVK+8
-	pTQGOPdkUUa00fXuoL+ypps9ZVUHM7hCs0oweuMUs3kUx6d2jyLI
-X-Google-Smtp-Source: AGHT+IFwrImv53xAJXZaDSLJtn5nAAXYRWdj5wAShxC6nIYkDeejlGCGK79rEKa0DnGROBP9wWQclw==
-X-Received: by 2002:a17:90b:3d8:b0:29b:a345:620a with SMTP id go24-20020a17090b03d800b0029ba345620amr10896738pjb.20.1711394683229;
-        Mon, 25 Mar 2024 12:24:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q7-20020a17090a304700b0029bf9969afbsm10113710pjl.53.2024.03.25.12.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 12:24:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 25 Mar 2024 12:24:40 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH v2 05/14] drm: Suppress intentional warning backtraces in
- scaling unit tests
-Message-ID: <e880828b-552e-488e-9f31-3989bec276ae@roeck-us.net>
-References: <20240325175248.1499046-1-linux@roeck-us.net>
- <20240325175248.1499046-6-linux@roeck-us.net>
- <0729b218-53f1-4139-b165-a324794a9abd@igalia.com>
+        d=1e100.net; s=20230601; t=1711395664; x=1712000464;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cX0Tst/fD3eEaDcxw6zP7p1X7prwnotLNua44hovj0E=;
+        b=Z/Y6vhCV/RRHnhkAyhW2DtB3+crwMnKUT9WIioZW4NO3l2UhC1zuQaKQwBnjmXmtA9
+         hS9AHu3148H02OgTjbfu62f5I85oSoLCAIma3nOE2IOlSTGU7Qvl6N2p90q4lvYssUGC
+         UK1BMbt6urzXMqBCfqlUXdX+7oBMEZTQU05+ynlAW0FB0ICRSoPLAfB6RrXI/PcuTo7o
+         QpNu/m5yPBPZX9654zV67nd6lMKssCcAHD51Kmyjd8+1HwmclmBbzBH4fqm+nYBYtxsC
+         5xiNBo1dZrqLkMDseIHCY1TngL4cpoyXaCTK5TZ/XfdRZKwUDgs66yVms1AYJjDKceYc
+         uhKA==
+X-Gm-Message-State: AOJu0Yw2S+EscStkVIz0isrKHQRoY3f8GWPYCS7PLHRJAA2ZX3MFRhm4
+	6eu8ndsJk3FW2NjHN36IfuzhqHdyUFT3UZfmFIaNjfZMHsna1LTIsbpf9QfBZ8adgLhgEZ/Qdys
+	w3g==
+X-Google-Smtp-Source: AGHT+IHu0ZTXU78B+0X+LXpELIc87+D4aJxq4bKR0NhoBZQXd5O+HZEP47xhnKe66UWD9zpspAK+wE700/M=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a17:902:d2cf:b0:1de:f18c:ce4 with SMTP id
+ n15-20020a170902d2cf00b001def18c0ce4mr662860plc.0.1711395663954; Mon, 25 Mar
+ 2024 12:41:03 -0700 (PDT)
+Date: Mon, 25 Mar 2024 19:40:52 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0729b218-53f1-4139-b165-a324794a9abd@igalia.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
+Message-ID: <20240325194100.775052-1-edliaw@google.com>
+Subject: [PATCH v3] selftests/mm: Fix ARM related issue with fork after pthread_create
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, Lokesh Gidra <lokeshgidra@google.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Following issue was observed while running the uffd-unit-tests selftest
+on ARM devices. On x86_64 no issues were detected:
 
-On Mon, Mar 25, 2024 at 04:05:06PM -0300, Maíra Canal wrote:
-> Hi Guenter,
-> 
-> On 3/25/24 14:52, Guenter Roeck wrote:
-> > The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
-> > intentionally trigger warning backtraces by providing bad parameters to
-> > the tested functions. What is tested is the return value, not the existence
-> > of a warning backtrace. Suppress the backtraces to avoid clogging the
-> > kernel log.
-> > 
-> > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> > - Rebased to v6.9-rc1
-> > - Added Tested-by:, Acked-by:, and Reviewed-by: tags
-> > 
-> >   drivers/gpu/drm/tests/drm_rect_test.c | 6 ++++++
-> >   1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
-> > index 76332cd2ead8..75614cb4deb5 100644
-> > --- a/drivers/gpu/drm/tests/drm_rect_test.c
-> > +++ b/drivers/gpu/drm/tests/drm_rect_test.c
-> > @@ -406,22 +406,28 @@ KUNIT_ARRAY_PARAM(drm_rect_scale, drm_rect_scale_cases, drm_rect_scale_case_desc
-> >   static void drm_test_rect_calc_hscale(struct kunit *test)
-> >   {
-> > +	DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
-> >   	const struct drm_rect_scale_case *params = test->param_value;
-> >   	int scaling_factor;
-> > +	START_SUPPRESSED_WARNING(drm_calc_scale);
-> 
-> I'm not sure if it is not that obvious only to me, but it would be nice
-> to have a comment here, remembering that we provide bad parameters in
-> some test cases.
+pthread_create followed by fork caused deadlock in certain cases
+wherein fork required some work to be completed by the created thread.
+Used synchronization to ensure that created thread's start function has
+started before invoking fork.
 
-Sure. Something like this ?
+Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
+[edliaw: Refactored to use atomic_bool]
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
 
-        /*
-         * drm_rect_calc_hscale() generates a warning backtrace whenever bad
-         * parameters are passed to it. This affects all unit tests with an
-         * error code in expected_scaling_factor.
-         */
+v2: restored accidentally removed uffd_test_case_ops when merging
+v3: fixed commit subject to use selftests/mm prefix
 
-Thanks,
-Guenter
+ tools/testing/selftests/mm/uffd-common.c     |  3 +++
+ tools/testing/selftests/mm/uffd-common.h     |  2 ++
+ tools/testing/selftests/mm/uffd-unit-tests.c | 10 ++++++++++
+ 3 files changed, 15 insertions(+)
+
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index b0ac0ec2356d..7ad6ba660c7d 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -18,6 +18,7 @@ bool test_uffdio_wp = true;
+ unsigned long long *count_verify;
+ uffd_test_ops_t *uffd_test_ops;
+ uffd_test_case_ops_t *uffd_test_case_ops;
++atomic_bool ready_for_fork;
+
+ static int uffd_mem_fd_create(off_t mem_size, bool hugetlb)
+ {
+@@ -518,6 +519,8 @@ void *uffd_poll_thread(void *arg)
+ 	pollfd[1].fd = pipefd[cpu*2];
+ 	pollfd[1].events = POLLIN;
+
++	ready_for_fork = true;
++
+ 	for (;;) {
+ 		ret = poll(pollfd, 2, -1);
+ 		if (ret <= 0) {
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index cb055282c89c..cc5629c3d2aa 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -32,6 +32,7 @@
+ #include <inttypes.h>
+ #include <stdint.h>
+ #include <sys/random.h>
++#include <stdatomic.h>
+
+ #include "../kselftest.h"
+ #include "vm_util.h"
+@@ -103,6 +104,7 @@ extern bool map_shared;
+ extern bool test_uffdio_wp;
+ extern unsigned long long *count_verify;
+ extern volatile bool test_uffdio_copy_eexist;
++extern atomic_bool ready_for_fork;
+
+ extern uffd_test_ops_t anon_uffd_test_ops;
+ extern uffd_test_ops_t shmem_uffd_test_ops;
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 2b9f8cc52639..4a48dc617c6b 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -775,6 +775,8 @@ static void uffd_sigbus_test_common(bool wp)
+ 	char c;
+ 	struct uffd_args args = { 0 };
+
++	ready_for_fork = false;
++
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+
+ 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
+@@ -790,6 +792,9 @@ static void uffd_sigbus_test_common(bool wp)
+ 	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+ 		err("uffd_poll_thread create");
+
++	while (!ready_for_fork)
++		; /* Wait for the poll_thread to start executing before forking */
++
+ 	pid = fork();
+ 	if (pid < 0)
+ 		err("fork");
+@@ -829,6 +834,8 @@ static void uffd_events_test_common(bool wp)
+ 	char c;
+ 	struct uffd_args args = { 0 };
+
++	ready_for_fork = false;
++
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+ 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
+ 			  true, wp, false))
+@@ -838,6 +845,9 @@ static void uffd_events_test_common(bool wp)
+ 	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+ 		err("uffd_poll_thread create");
+
++	while (!ready_for_fork)
++		; /* Wait for the poll_thread to start executing before forking */
++
+ 	pid = fork();
+ 	if (pid < 0)
+ 		err("fork");
+--
+2.44.0.396.g6e790dbe36-goog
+
 
