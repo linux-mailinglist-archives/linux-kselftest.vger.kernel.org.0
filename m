@@ -1,141 +1,168 @@
-Return-Path: <linux-kselftest+bounces-6536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4409788A6D7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 16:37:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E4D888AB1F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:15:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E980A324557
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 15:37:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7CF2BA3A66
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 15:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98FE131E31;
-	Mon, 25 Mar 2024 13:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406935F578;
+	Mon, 25 Mar 2024 13:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h+pqa6jw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RjyVlKlw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6391D84D1B;
-	Mon, 25 Mar 2024 13:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E7C47A52;
+	Mon, 25 Mar 2024 13:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711372100; cv=none; b=XqaPO11HRhS/gE8g4Pc2S5GyoTLaAxb7P0nNmuzb7zTATtoNrk0EFtFkzOykVaZB9RNjBEhOvE5JXTIXuCblHjXdsR5NC9X/g0lTXGLhd1wHwof1i0bPxlRO6Jsg9+EO2nTRc3/hl3BrkOOXl/+OXAg4jpbjAi94uDTXBIQbB5I=
+	t=1711372467; cv=none; b=gh0TodPxIfll/3J9hTGlscRFym4uAY0/lr1x6Ugzw/AQCO/+LlueUv+O06K6Hc+8KDYhVOR5bKP8c70JNUPe3JYVowSmrtfZ2dryokq+ZuykTfbfR7+jA9KZjew5Rvcj9JCeKORxFE0Xdmf2RpJw8+gdh3cnrMF4szyL6JmPq1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711372100; c=relaxed/simple;
-	bh=4PI/TUfF/UJPyeIEUcIHtre7UdX4Ew/J+I0lCMM5Ric=;
+	s=arc-20240116; t=1711372467; c=relaxed/simple;
+	bh=paNEJwhjSuKW21GSgQhTXiZKf5ZqX9Zxj5ICBM/xyCM=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=X/ysvkgKBPmsmElfI9LE7ghrzPhFtljcOI04PThVMHx+80c5+dgX3PRdIpnv9wuVQjKgLs5hfOHi/rynnDz9Ki0recTkGe1dyf6OFfWg4sIAmBNt28iIK9SDq6ArOocJa03Ma1d4sUjLrRa0a2F3kiqiU8eZ45Mat0zTCjZOv9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h+pqa6jw; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version:Content-Type; b=V+uWIadURHsqpvz4H1P7oBBkmB1LRTWYJoRKLCUnqcl0wL2NswINjob1ydZL2HvnzFRK/quFYjJN+OUK9uPMkzNz/bNybnwb82FjZWwkibEXaUG6XSgv1D8rkZ3fZqSK0JXsTkNMXs6DSIYUiauA8n2tXTZyxCamyPvh4LWLOz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RjyVlKlw; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711372099; x=1742908099;
+  t=1711372465; x=1742908465;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=4PI/TUfF/UJPyeIEUcIHtre7UdX4Ew/J+I0lCMM5Ric=;
-  b=h+pqa6jwXsCB49Huxjo+mVuO5sbBlBmfiahEGCfYrmNuvoDfdIkKIkg7
-   s0b5W8ibNxT171rH5pCYo8mYM9aklLHqf/8LlpEQEX01YFbNTdxURXqVM
-   ir1k5dC1ktyrvC9oN8gMHcsp2AMI6MRMDSnREcUyPz0LCJoJUslmh9Gk7
-   dlkitJ8RFSfY7QFSo2Qz8Skv70Y4qAtryG3rRMbxdoOCURyGYhmbABGRw
-   JcyewYoKzZtHyax7ibjPX2fYPswclqm17TiI6DHPwQa57ls6mbaXV467R
-   SpjZTxjdBTVvITX4d9QjjYyap4HwRrTvWwikzmD7p60vmxPv4P3292ySr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6267212"
+  bh=paNEJwhjSuKW21GSgQhTXiZKf5ZqX9Zxj5ICBM/xyCM=;
+  b=RjyVlKlwufgsYqCYHNBzmoV4kUZt9BYKaEMMCxcshrcHUHLtrsvISYBP
+   ILYlRsX0OB2RsBK8Thc3gkE8+32yhlm/c2TL4l309eByHTtetYlZ8CFkc
+   +HU0EKNDaT8/7mK+XMTGG3PA5jfwHY63npcMS11rlVQpybb5JIF8oPzoS
+   9CC4rfxUfbEHT6eDg2GpTj6aQIzBOVRBL3lPr5ZrfwABxOT+aBgQyz5CD
+   Vhu0XLMQO1/89gZl3WuD2USB2MbZleJfd5Y0ZG3xU3cfSFmf6ujwPR80n
+   2GFwWadkIGr/aenrTLUCoPnU5EzMJGgedKj/zs5oMhEKRp09Uf1rqnEoo
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6268136"
 X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="6267212"
+   d="scan'208";a="6268136"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 06:08:19 -0700
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 06:14:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="20146773"
+   d="scan'208";a="20148591"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.19])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 06:08:16 -0700
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 06:14:22 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 25 Mar 2024 15:08:09 +0200 (EET)
+Date: Mon, 25 Mar 2024 15:14:16 +0200 (EET)
 To: Reinette Chatre <reinette.chatre@intel.com>
 cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
     Babu Moger <babu.moger@amd.com>, 
     =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
     Fenghua Yu <fenghua.yu@intel.com>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 02/13] selftests/resctrl: Calculate resctrl FS derived
- mem bw over sleep(1) only
-In-Reply-To: <0910f9ed-2312-46b7-9c64-2982709da3d8@intel.com>
-Message-ID: <10baa8db-3143-fdd4-49a8-0298db90cc4f@linux.intel.com>
-References: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com> <20240311135230.7007-3-ilpo.jarvinen@linux.intel.com> <fe5c0d10-a57c-4a3a-ae30-a7cfa93bc3e8@intel.com> <f214c635-500f-43ea-fce8-0a7083bc1606@linux.intel.com>
- <0910f9ed-2312-46b7-9c64-2982709da3d8@intel.com>
+Subject: Re: [PATCH v2 11/13] selftests/resctrl: Convert ctrlgrp & mongrp to
+ pointers
+In-Reply-To: <8964b621-657d-4f9c-aeb0-3d3ed8c62c3f@intel.com>
+Message-ID: <32c9f2ca-a483-97f3-25d1-8e16e2fdf042@linux.intel.com>
+References: <20240311135230.7007-1-ilpo.jarvinen@linux.intel.com> <20240311135230.7007-12-ilpo.jarvinen@linux.intel.com> <578d0b55-c51a-49d1-8f54-989215a3a4b8@intel.com> <93e4f096-47df-9eba-095f-e8a8c3cd04f5@linux.intel.com>
+ <8964b621-657d-4f9c-aeb0-3d3ed8c62c3f@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1681402267-1711372089=:1020"
+Content-Type: multipart/mixed; boundary="8323328-152287454-1711372456=:1020"
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-1681402267-1711372089=:1020
+--8323328-152287454-1711372456=:1020
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 
 On Fri, 22 Mar 2024, Reinette Chatre wrote:
-> On 3/22/2024 5:11 AM, Ilpo J=C3=A4rvinen wrote:
-> > On Tue, 19 Mar 2024, Reinette Chatre wrote:
+> On 3/22/2024 5:30 AM, Ilpo J=C3=A4rvinen wrote:
+> > On Wed, 20 Mar 2024, Reinette Chatre wrote:
 > >> On 3/11/2024 6:52 AM, Ilpo J=C3=A4rvinen wrote:
-
-> >>> + * Return: =3D 0 on success. < 0 on failure.
-> >>> + */
-> >>> +static int get_mem_bw_imc(char *bw_report, float *bw_imc)
-> >>> +{
-> >>> +=09float reads, writes, of_mul_read, of_mul_write;
-> >>> +=09int imc, j;
-> >>> +
-> >>> +=09/* Start all iMC counters to log values (both read and write) */
-> >>> +=09reads =3D 0, writes =3D 0, of_mul_read =3D 1, of_mul_write =3D 1;
-> >>> =20
-> >>>  =09/*
-> >>>  =09 * Get results which are stored in struct type imc_counter_config
-> >=20
-> >>> @@ -696,7 +725,6 @@ int resctrl_val(const struct resctrl_test *test,
-> >>>  =09=09struct resctrl_val_param *param)
-> >>>  {
-> >>>  =09char *resctrl_val =3D param->resctrl_val;
-> >>> -=09unsigned long bw_resc_start =3D 0;
+> >>> The struct resctrl_val_param has control and monitor groups as char
+> >>> arrays but they are not supposed to be mutated within resctrl_val().
+> >>>
+> >>> Convert the ctrlgrp and mongrp char array within resctrl_val_param to
+> >>> plain const char pointers and adjust the strlen() based checks to
+> >>> check NULL instead.
+> >>>
+> >>> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> >>> ---
+> >>>  tools/testing/selftests/resctrl/resctrl.h   | 4 ++--
+> >>>  tools/testing/selftests/resctrl/resctrlfs.c | 8 ++++----
+> >>>  2 files changed, 6 insertions(+), 6 deletions(-)
+> >>>
+> >>> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testin=
+g/selftests/resctrl/resctrl.h
+> >>> index 52769b075233..54e5bce4c698 100644
+> >>> --- a/tools/testing/selftests/resctrl/resctrl.h
+> >>> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> >>> @@ -89,8 +89,8 @@ struct resctrl_test {
+> >>>   */
+> >>>  struct resctrl_val_param {
+> >>>  =09char=09=09*resctrl_val;
+> >>> -=09char=09=09ctrlgrp[64];
+> >>> -=09char=09=09mongrp[64];
+> >>> +=09const char=09*ctrlgrp;
+> >>> +=09const char=09*mongrp;
+> >>>  =09char=09=09filename[64];
+> >>>  =09unsigned long=09mask;
+> >>>  =09int=09=09num_of_runs;
+> >>> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/test=
+ing/selftests/resctrl/resctrlfs.c
+> >>> index 79cf1c593106..dbe0cc6d74fa 100644
+> >>> --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> >>> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> >>> @@ -469,7 +469,7 @@ static int create_grp(const char *grp_name, char =
+*grp, const char *parent_grp)
+> >>>  =09 * length of grp_name =3D=3D 0, it means, user wants to use root =
+con_mon
+> >>>  =09 * grp, so do nothing
+> >>>  =09 */
 > >>
-> >> In the current implementation the first iteration's starting measureme=
-nt
-> >> is, as seen above, 0 ... which makes the first measurement unreliable
-> >> and dropped for both the MBA and MBM tests. In this enhancement, the
-> >> first measurement is no longer skewed so much so I wonder if this enha=
-ncement
-> >> can be expanded to the analysis phase where first measurement no longe=
-r
-> >> needs to be dropped?
+> >> Could you please confirm that the comments are still accurate?
 > >=20
-> > In ideal world, yes, but I'll have to check the raw numbers. My general=
-=20
-> > feel is that the numbers tend to converge slowly with more iterations=
-=20
-> > being run so the first iteration might still be "off" by quite much (th=
-is=20
-> > is definitely the case with CAT tests iterations but I'm not entirely s=
-ure=20
-> > any more how it is with other selftests).
+> > It's not, I missed it.
+> >=20
+> >>> -=09if (strlen(grp_name) =3D=3D 0)
+> >>> +=09if (!grp_name)
+> >>>  =09=09return 0;
+> >=20
+> > But now when looking into the surrounding code, to me it looks the corr=
+ect=20
+> > action here is to remove the comment and return -1 instead of 0. It mak=
+es
+> > this just an internal sanity check that grp_name is provided by the=20
+> > caller.
+> >=20
 >=20
-> >From what I can tell the CAT test is not dropping any results. It looks
-> to me that any "settling" is and should be handled in the test before
-> the data collection starts.
+> hmmm ... this should not be an error because the caller is not required
+> to provide grp_name. Not providing grp_name has a specific meaning
+> of this operating on the CON_MON group and a failure would break flows
+> operating on the CON_MON group.
 
-It doesn't, but the "settling" is there in the raw numbers. I've=20
-considered adding warm-up test(s) before the actual runs to improve the=20
-situation but there's just so many thing still to do...
+write_bm_pid_to_resctrl() checks for non-NULL mongrp before it calls into=
+=20
+create_grp() so with current code, I don't think it changes anything. And=
+=20
+param->ctrlgrp is always non-NULL too so I don't think the return ever=20
+triggers with the current codebase.
+
+However, I was more talking from API point of view. It feels more natural=
+=20
+for "create group" function to return error if the caller is inconsistent
+with itself by asking to create a group but doesn't want to create a=20
+group.
 
 --=20
  i.
 
---8323328-1681402267-1711372089=:1020--
+--8323328-152287454-1711372456=:1020--
 
