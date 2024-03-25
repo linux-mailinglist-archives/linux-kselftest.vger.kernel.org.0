@@ -1,113 +1,88 @@
-Return-Path: <linux-kselftest+bounces-6549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1377488AB85
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:25:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C14588AB80
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:24:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD63C288AB8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 17:25:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F089B1F67351
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 17:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 971CD12C7FB;
-	Mon, 25 Mar 2024 16:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFCA127B43;
+	Mon, 25 Mar 2024 16:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olLbVQnO"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="A+GtRDey"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BED12B16C;
-	Mon, 25 Mar 2024 16:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8D7839F9;
+	Mon, 25 Mar 2024 16:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711383479; cv=none; b=I22R1LEr58uehzetsWQQa2YwbaE8IqYStw1mgEWOZkNdFVDO4SHkI6e2ue7ZncbuxsKa+n19UlS4kxI9oZ353Mz0/7ZlKOY3S2NPpCSQ8shGLEBkuVB3maK1hIIILWGiBzNNhq/V1k651MN03PVl7MYydM9T2eTNpdTCfMKyTdM=
+	t=1711383400; cv=none; b=rEHygo2iyRxuHoMVYZvqAskmtW7Xm4xiieQdr1Pt0wr1zbrnwS3E6cNwinnVCwJ/ULFBqTpe+Tox2i21kYixyage3pWe1hr3Pi245JwuU0eKh17mT2BiPVOYwWGhPBI7aOdCNZ2VYQAvMxocWza0pLW68NxeyuxNpbDBMrnZhh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711383479; c=relaxed/simple;
-	bh=IDZmVTQL6FUPF4VXy4kvhrE06bFthcPgs9kXAUa4MHw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j+zOB9H8AbdKZmGiF4eyQI1cth8c2eYF1KzaIOy/PzhOc6iG4WYwNsxceKF9d8FM5KNHyWGg1+9b+dwaZ66MlIlqwyxtmykNlT+cOWmTrjia/CipKdS9X1Pzk7HOk6xWSJ9ZU7RbCOZJsQnTN+00XVE+7qyIF+iLY4wXraSNoVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olLbVQnO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1196DC433C7;
-	Mon, 25 Mar 2024 16:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711383479;
-	bh=IDZmVTQL6FUPF4VXy4kvhrE06bFthcPgs9kXAUa4MHw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=olLbVQnO7TGptxzycuqWSNXMlKEHChyw3zRv46MXcNhG+rA4lTdWrWl1p55ElHepQ
-	 LLd4jgr2KR4jhrjUtvXYUfu7scQNng9XgK4kos6NVaei3IUfMdEcAxuoBK+0eRBcYX
-	 HiQ2h/cZ5godDGLrRp6KN3QVrUUK70k7nGyYk9aBnR9ZNJNteTnSdMPfcoHX7fiuFd
-	 WR8pYa1ht+0Kdyhj+QL/FwKlq8wKY7h5usqz6ItdcSmaZOHoMiUx+7qKIajX3+eYD1
-	 1P5S7MRnrcRwaIfDgPuPGyFfJnmUcvtqxonsRC/Mlz+IVV/a6dgWoI11bpWZcs26I+
-	 Aju6CICJQAWxQ==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 25 Mar 2024 16:15:51 +0000
-Subject: [PATCH 2/2] tracing/selftests: Default to verbose mode when
- running in kselftest
+	s=arc-20240116; t=1711383400; c=relaxed/simple;
+	bh=vhysHfkaQ11aFpQ0qHmLTGDQbRzjDgbO6RjYe+i/sVM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Nt7luvbfvUD5SK8FgiJCBDOFWHe3jB5DSVsKISmNd1xNFwTMQBw3YFXzr1tlWgCiRojX7z1vJWyhUmk5IQMTslNUpIpNXlLFNS7BNEfeTcjqGIcvneY/n5eswJpM0NnOqguXPa92hh6R+rV5GiExSykShRnq360sBaAaMe9qaf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=A+GtRDey; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=vhysHfkaQ11aFpQ0qHmLTGDQbRzjDgbO6RjYe+i/sVM=;
+	t=1711383399; x=1712592999; b=A+GtRDey9cKVu1Ia+XKk4zhU7wCcgSSA+tRxzGof/6V5PHR
+	DfzMfEXMZBXnuoL/SZsqyYydwn7nOUPTdEQHW45sqUDxVdJ6EMPb+33NbNevpdwLCafLWiuHZHtYb
+	KcZ7zpgHA+4BI7i11L85XWaiUe8YRncMUbCWoU0BZqXCfPirtLVBBL7wXzWjZL7hU/jROqf4gYuO8
+	h57eXzj+sP1UxlnN+cJ+cPd1LcnVjF6r4PwwNRi+OnXlQE1A6xCR3kOR+UWJ10cun0MVoeYzU+lCP
+	OFdxuj/LYs54RFW9NZyorwWjKAzi6WXM4kqNBtPZMrkiaxlpW4wyaBl782Pq15MQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.97)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1ron00-0000000DwVC-2aTa;
+	Mon, 25 Mar 2024 17:16:36 +0100
+Message-ID: <0d314451371764362a43c4368469c2be6a17eb8c.camel@sipsolutions.net>
+Subject: Re: kunit alltests runs broken in mainline
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Mark Brown <broonie@kernel.org>
+Cc: Brendan Higgins <brendanhiggins@google.com>, David Gow
+ <davidgow@google.com>,  Rae Moar <rmoar@google.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, x86@kernel.org, linux-wireless@vger.kernel.org
+Date: Mon, 25 Mar 2024 17:16:35 +0100
+In-Reply-To: <c01d6e1c-1dad-4012-b8b0-dccf19b2e3f2@sirena.org.uk>
+References: <b743a5ec-3d07-4747-85e0-2fb2ef69db7c@sirena.org.uk>
+	 <9c9e1297e2548b363fc93e774c8546e6ebf4efd6.camel@sipsolutions.net>
+	 <c01d6e1c-1dad-4012-b8b0-dccf19b2e3f2@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240325-kselftest-ftrace-ktap-verbose-v1-2-3785199809da@kernel.org>
-References: <20240325-kselftest-ftrace-ktap-verbose-v1-0-3785199809da@kernel.org>
-In-Reply-To: <20240325-kselftest-ftrace-ktap-verbose-v1-0-3785199809da@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, 
- Aishwarya TCV <aishwarya.tcv@arm.com>, linux-kernel@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1363; i=broonie@kernel.org;
- h=from:subject:message-id; bh=IDZmVTQL6FUPF4VXy4kvhrE06bFthcPgs9kXAUa4MHw=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmAaOvbRVid4KdhaOgoFVH1DkequIpxxcu0SW4Fv5d
- efPO+peJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZgGjrwAKCRAk1otyXVSH0DT3B/
- 4o3VAA+e8nn0hiFSXN4UX8I2TMbL8acEu2QQIzdscZ6Hm9SoRI6ksxZ8fu8/7a+JEhPhKL0z/yYYsW
- K4z3InUL1ZUWoavhgesdozrbtaBDRDayXXZgcL0op5eaSwOJk1yGD2kS1rp4Eqpvokuua+5D1Kf+qf
- rO/etGks1AFPnn4qQboUAKX6gr1j6erXjqG4jhuSd28c+7CgS9ojhHvDFbz4X42+R+lgdU8bwGLPIw
- FewY60hhYn8c26Va7vDNHCREvWEoNNUz6zGKzVZxTzU2ln8tAWyFAbPVZ5OHewsrvoWooJR9JW32WA
- kelLkuwOuNi5IuCvZX6c9qAgmiJQDP
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-malware-bazaar: not-scanned
 
-In order to facilitate debugging of issues from automated runs of the ftrace
-selftests turn on verbose logging by default when run from the kselftest
-runner. This is primarily used by automated systems where developers may
-not have direct access to the system so defaulting to providing diagnostic
-information which might help debug problems seems like a good idea.
+On Mon, 2024-03-25 at 15:55 +0000, Mark Brown wrote:
+> On Mon, Mar 25, 2024 at 04:29:53PM +0100, Johannes Berg wrote:
+>=20
+> > But I'm not sure why ARCH=3Dum is different?
+>=20
+> It's probably something to do with it lacking a bunch of features of
+> normal architectures, especially around hardware support.
 
-When tests pass no extra output is generated, when they fail a full log of
-the test run is provided. Since this really is rather verbose when there are
-a large number of test failures or output is slow (eg, with a serial
-console) this could substantially increase the run time for the tests which
-might present problems with timeout detection for affected systems,
-hopefully we keep the tests running well enough that this is not too much
-of an issue.
+Feels though that should make it *more* likely to not have support for
+some hardware driver like iwlwifi, not *less* :-)
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/ftrace/ftracetest-ktap | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Anyway, does it fix it for you as well? if yes, where/how should we get
+that in?
 
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-index b3284679ef3a..14e62ef3f3b9 100755
---- a/tools/testing/selftests/ftrace/ftracetest-ktap
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -5,4 +5,4 @@
- #
- # Copyright (C) Arm Ltd., 2023
- 
--./ftracetest -K
-+./ftracetest -K -v
-
--- 
-2.30.2
-
+johannes
 
