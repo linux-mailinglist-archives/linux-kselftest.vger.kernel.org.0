@@ -1,137 +1,151 @@
-Return-Path: <linux-kselftest+bounces-6531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B3DE88A562
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 15:56:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ABB088A1AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 14:23:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D65ADB3AEBA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 13:44:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E1961C38082
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 13:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32CEB43AAA;
-	Mon, 25 Mar 2024 10:28:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B45913CFBE;
+	Mon, 25 Mar 2024 10:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfEEXMXP"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="qJ/zhvel"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF935D480;
-	Mon, 25 Mar 2024 08:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35CE3DAC10
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 Mar 2024 08:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711356135; cv=none; b=RrCgoxYDhlaPL6nBDR5hgvV4vv+vzZLb6cDdXaOi+0twLo4aUJS+sMjuzKVsFBubAiK+rcvh/W3Lchp6DqGpH545T2yNSe9FJql5SBF/N+T0RG3tvwievzuCfxIzmTy+c3sm76avCsTVIH/1vrCyMBQKj1yF+7E+V5Z8SaaiQDk=
+	t=1711356355; cv=none; b=SAl0JYC5Nq4rPSBCOb6blr36Rf/nBoH5M4LiN/RecJkT84UaW1KERbV0wNCjXWXvgGYtkLZEnFJCpYo8vR+zXH741uQeFvgZKnwIV5NPe3i62YRmhw6I0JhbciCIqQKYgcbXVYN7MVwHEQWMX993M1z7/x751tQQdyrLKucxkjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711356135; c=relaxed/simple;
-	bh=T7/juRgI0RYFtzJn/DyHvQa9WLQrkIas1WYOJnYYG/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PJxJw8xvcZqADK+Tlv0zLGYX3dQapeTmMuM7if//SaTrn9gJGh8Otee/Pjn5d3Q2EZYJidNQi0ZTFARsq9iQAS+QUHlk+80Szz3U+7NkpIJ5ep8oPEM7t+/B9pGZjjb8bC95PXCBTc+Agmxdy1wreYWwBIQp4knDrF+jqS6JI/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfEEXMXP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA01C433C7;
-	Mon, 25 Mar 2024 08:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711356134;
-	bh=T7/juRgI0RYFtzJn/DyHvQa9WLQrkIas1WYOJnYYG/Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jfEEXMXPQow2DoAAD+t7eJCuk4c9KnusX05DCDf/bK+Nsu9UZiyZMvIsYXE52+zFu
-	 KlHld6yGaNSlSguP2KQbDDys8fL2gpBBgI2xNpC1TKZH2vNI7ZrV6gFO3jJmUpKTVV
-	 0eybsTG8SXWefeh2wcX7GWYoJIdFp02eoCXg7vP93hRiwVrbFJ1foJ/kVfQ0zjwv0R
-	 nFKFxwkjHp/n4b1LUn9VVAa3vSKEwV8ikcInYf/MkCj83ZWEujBFarXtj5Spt/6sdN
-	 DrJ3+iAV9yQERO05dHT1MvIPtELUxVciEO46Xtp0oqfuDXzUjdM4lecGJHF+tuGL/K
-	 Whcm8N3ppdtmw==
-Date: Mon, 25 Mar 2024 09:42:08 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v5 2/6] bpf/verifier: add bpf_timer as a kfunc
- capable type
-Message-ID: <d3qeziyeiqfdofuzj266r47g4jpno56jd4dy2wgnm4h7z6fhmu@sltzwlkwj4z5>
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org>
- <20240322-hid-bpf-sleepable-v5-2-179c7b59eaaa@kernel.org>
- <CAP01T76oYpkNdgxXo+6v53afjObvYU4LWRLfkg2S7pNivzaEvg@mail.gmail.com>
- <CAADnVQL_mQgN8uKsNFR0FBtWoaweCkzXw03EvbnQ-iFVWvXxuw@mail.gmail.com>
- <CAP01T753_FjFdj1CbCX5Bh1itYUWf8DUh41F7R_7Fdb=2SEL8g@mail.gmail.com>
- <CAADnVQ+5mSEW-LJwS30hED1cJeHOhqfCTKdBzYCcRd8EiVNvtA@mail.gmail.com>
- <CAP01T757ddmmFR+Cnj70DrTLFcEu+9uAcbscrO-uOmSVGB8eJA@mail.gmail.com>
- <CAADnVQK=aAcNt-8BBJNnp3QGkxVWLYhZ9=9dizo-7eQosjNtow@mail.gmail.com>
+	s=arc-20240116; t=1711356355; c=relaxed/simple;
+	bh=fO1r3ga0JBx751mFkNBSV+bA60NgEtVq6JELHzFB+jE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rPWOZG4FfDybQL7RsgO3KqDCbO4e90Bo6I1vkhQP/7LKoDM4KoMP8386+iyNkp98PvZjZs2qrl7lnr2VK0XFcn5JpmuKLJjGvUOEWylVeEgtSSw2SvdSApf6K8INNWDRGnzFvgMo+0VuQbiKFqBZ9qKPcuVExyeZ+RBY4qlBGxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=qJ/zhvel; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7d03515dc4aso95297439f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Mar 2024 01:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1711356353; x=1711961153; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mAJj9egrVyRikkG0RKQceibcTBuLJH9YKNRRgrENxgU=;
+        b=qJ/zhveltvzZ1dy0tj5EosPrq6kX8avnMBJsc+ZW7iRUqfiZovHGCG6I7Di+XjsY4c
+         ITMVf9Dr9BXOqvNyGNipW/h4ackSA5L4kkvnrH/WgkenECqv5G00DLwQvxoHwi2Zx+wi
+         CtYRihtWqX2bie+DDmk09/mAUBQ4H3+/Svb0jbsKoI4qw6Ivgg0qmlPyPAky1o9mM9zH
+         HDlX4Bsln6E+FiYO33Xb+6kjUOC/G0w4SCNlfLXvn8if4hepBqRX0okMIrlpGH3C6Up/
+         7vWyi9byhaiTFJ9fapfAuuTKBYejZPj8Vtd5aqnzPJ4zfJgc0uvVvOtOCseGKU3qAjDO
+         v4ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711356353; x=1711961153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mAJj9egrVyRikkG0RKQceibcTBuLJH9YKNRRgrENxgU=;
+        b=GKpswhZmECTOgb5OLyQw7oOsQ0GjiMijwpKGtKDSwwtL9RWtvjdPuaU71WEIKWXp8x
+         IgFZE99LTi6uUnmrGPHCd3k2K5ejvSyYh/VSbFa7uoCTd0kzEzyOelCb+7D0+SDQW7Bk
+         96hxCrx1zLtXE+jUApebE9vGjVsXj3TOrjw57bmPCugqsY1cJHT3lYl2l7C5zsJCt86T
+         m6Yw5543yQirp2TrKu8WLFgJ2rA5ghTyWBfntpvgnfE5kkH1+J6bByxoAsHl7f1NAve2
+         kPZADhnPREhtizQ0kjI1OrsG71UeJeydw0JFEok5OfUmsvtuqSA5ZgMnCgmKXKmG1+F0
+         wzSw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1z2jUsPYRs8zoBdpUs86nP6qPaQdbV4WhN1m8LRVMqRRptmmcVDjQvj9ICOI6XyrWBgFNaGub6KcVr6tKgSDVyijFyj2lHeF1OmF0jADj
+X-Gm-Message-State: AOJu0YwlrsX5BgAlB2VJIACV6nBS8krlflH6tcBBbkktlYwV9Qi7g9g7
+	lj0f61WFKQ9ZH3Yb47gjXV+7vtWDzehu8Z/Fa6ydYqDn7mggGIq23HGIT4Hk0/FHxhmIrA5Iehu
+	HzIu71Z4fjkjLgWERqIixxZ4KXY2c3I41YLaNEg==
+X-Google-Smtp-Source: AGHT+IFVuCUCa9T26qI8wOCmAKjs5jQ0HPi7rCqnQz+zQAp9mUrZiWSUVy4an898YpR/XXTQ+Vy8tiAEK/p3ABMeQm0=
+X-Received: by 2002:a92:ce04:0:b0:368:4766:ad75 with SMTP id
+ b4-20020a92ce04000000b003684766ad75mr7623231ilo.10.1711356351275; Mon, 25 Mar
+ 2024 01:45:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQK=aAcNt-8BBJNnp3QGkxVWLYhZ9=9dizo-7eQosjNtow@mail.gmail.com>
+References: <20240307081951.1954830-1-colin.i.king@gmail.com>
+In-Reply-To: <20240307081951.1954830-1-colin.i.king@gmail.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Mon, 25 Mar 2024 14:15:40 +0530
+Message-ID: <CAAhSdy2zg4dD6_hKOWDuXxxcpiiu1RwpeL_h6-hvm+Y2B1hEeQ@mail.gmail.com>
+Subject: Re: [PATCH][next] KVM: selftests: Fix spelling mistake "trigged" -> "triggered"
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Atish Patra <atishp@atishpatra.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mar 24 2024, Alexei Starovoitov wrote:
-> On Sat, Mar 23, 2024 at 9:57 PM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> 
-> > > > >
-> > > > > Observation is correct. The patch is buggy,
-> > > > > but the suggestion to follow process_dynptr_func() will lead
-> > > > > to unnecessary complexity.
-> > > > > dynptr-s are on stack with plenty of extra checks.
-> > > >
-> > > > The suggestion was to call process_timer_func, not process_dynptr_func.
-> > > >
-> > > > > In this case bpf_timer is in map_value.
-> > > > > Much simpler is to follow KF_ARG_PTR_TO_MAP approach.
-> > > >
-> > > > What I meant by the example was that dynptr handling does the same
-> > > > thing for kfuncs and helpers (using the same function), so timer
-> > > > arguments should do the same (i.e. use process_timer_func), which will
-> > > > do all checks for constant offset (ensuring var_off is tnum_is_const)
-> > > > and match it against btf_record->timer_off.
-> > >
-> > > I don't follow. Please elaborate with a patch.
-> > > The var_off and off is a part of the bug, but it's not the biggest part of it.
-> >
-> > Not compile tested.
+On Thu, Mar 7, 2024 at 1:49=E2=80=AFPM Colin Ian King <colin.i.king@gmail.c=
+om> wrote:
+>
+> There are spelling mistakes in __GUEST_ASSERT messages. Fix them.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Compiles just fine :)
+Queued this patch for Linux-6.9 fixes.
 
-> 
-> I see. All makes sense to me.
-> 
-> Benjamin,
-> pls incorporate it in your set.
-> 
+Thanks,
+Anup
 
-OK, done!
-
-I just had to revert to the following or KF_ARG_TIMER_ID was not
-recognized by the verifier:
-
----
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7ee20e9d14bd..a5e147468ac8 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10848,7 +10848,7 @@ BTF_ID(struct, bpf_list_head)
- BTF_ID(struct, bpf_list_node)
- BTF_ID(struct, bpf_rb_root)
- BTF_ID(struct, bpf_rb_node)
--BTF_ID(struct, bpf_timer)
-+BTF_ID(struct, bpf_timer_kern)
- 
- static bool __is_kfunc_ptr_arg_type(const struct btf *btf,
- 				    const struct btf_param *arg, int type)
----
-
-Cheers,
-Benjamin
-
+> ---
+>  tools/testing/selftests/kvm/aarch64/arch_timer.c | 2 +-
+>  tools/testing/selftests/kvm/riscv/arch_timer.c   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/tes=
+ting/selftests/kvm/aarch64/arch_timer.c
+> index ddba2c2fb5de..16ac74d07d68 100644
+> --- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> +++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> @@ -136,7 +136,7 @@ static void guest_run_stage(struct test_vcpu_shared_d=
+ata *shared_data,
+>                 irq_iter =3D READ_ONCE(shared_data->nr_iter);
+>                 __GUEST_ASSERT(config_iter + 1 =3D=3D irq_iter,
+>                                 "config_iter + 1 =3D 0x%lx, irq_iter =3D =
+0x%lx.\n"
+> -                               "  Guest timer interrupt was not trigged =
+within the specified\n"
+> +                               "  Guest timer interrupt was not triggere=
+d within the specified\n"
+>                                 "  interval, try to increase the error ma=
+rgin by [-e] option.\n",
+>                                 config_iter + 1, irq_iter);
+>         }
+> diff --git a/tools/testing/selftests/kvm/riscv/arch_timer.c b/tools/testi=
+ng/selftests/kvm/riscv/arch_timer.c
+> index e22848f747c0..0f9cabd99fd4 100644
+> --- a/tools/testing/selftests/kvm/riscv/arch_timer.c
+> +++ b/tools/testing/selftests/kvm/riscv/arch_timer.c
+> @@ -60,7 +60,7 @@ static void guest_run(struct test_vcpu_shared_data *sha=
+red_data)
+>                 irq_iter =3D READ_ONCE(shared_data->nr_iter);
+>                 __GUEST_ASSERT(config_iter + 1 =3D=3D irq_iter,
+>                                 "config_iter + 1 =3D 0x%x, irq_iter =3D 0=
+x%x.\n"
+> -                               "  Guest timer interrupt was not trigged =
+within the specified\n"
+> +                               "  Guest timer interrupt was not triggere=
+d within the specified\n"
+>                                 "  interval, try to increase the error ma=
+rgin by [-e] option.\n",
+>                                 config_iter + 1, irq_iter);
+>         }
+> --
+> 2.39.2
+>
 
