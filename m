@@ -1,159 +1,157 @@
-Return-Path: <linux-kselftest+bounces-6588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6589-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D7B088B5CD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 01:08:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88FC388AF5C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 20:06:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 005EBB2D612
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:54:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 403A61F612D4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 19:06:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2544D3DAC11;
-	Mon, 25 Mar 2024 18:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124A36FDC;
+	Mon, 25 Mar 2024 19:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8MsTo9Z"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="KrsZ3Dg+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5E46FDC;
-	Mon, 25 Mar 2024 18:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E221C290;
+	Mon, 25 Mar 2024 19:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711392820; cv=none; b=tFn7x7KMYxqXqSPc0wNNkskEducJjE251MOO8EWIiNR43CoYeMloCeBm3Z/ggA/A4vNTu5i3DKIbHhkSGxC37iiCZljR2rA8obrQ8ZqJtLxkDYgqbfZ8pS6NcpAvf1FIahXKILUsnlsGFhlCdn5L6go2Pm+mhpwV4qjorRwFyKQ=
+	t=1711393538; cv=none; b=JNG4+w0vDsHhYeqtLJGM3URRTg9lrI7ks4FwDdcxj0vEeZHMs9KK2JuOw9uq2igw8/wme/AP0s0PA1iVYxkY7GdIkE/fQbkDWAmkX887KeiZdamXhwTWSQeMNZMaRK84/SbN4s1lOpu7HbGgbofSUlsUuxRe+onWaIAWQqV5knw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711392820; c=relaxed/simple;
-	bh=dHJnqiu0d3Amh21YXYif8J99OePzMNkm5pLyOHnLViE=;
-	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=tue1fJza5SsdSacrW2aQ/xtE5wSMAheuU/LEu7yqUgF1Al+4TXIDtpPUH784Mbg82n7peUxi9XcgnJZ2UTDfRxkZbqcASyR+m53llV8gn3gY2aBUcJ+xhVji8XbDWjX1/rsmCPgvSryZQyO0u8d9OD29aeCx8IvjQVql/fNLrr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I8MsTo9Z; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-60a0579a968so49991327b3.3;
-        Mon, 25 Mar 2024 11:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711392817; x=1711997617; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1bp10ctRl8y8tt0avIquIVKHyA25BiReIcnLxTfH/WA=;
-        b=I8MsTo9Z6eDEXCX81L7ehB8WvD1FPboKKynGCqtmFo2gDBps4KD1sewxbyJw7ll2jg
-         g0G4SMVFRpyUMZUlx/wfFCx6+bDD8kF8LNzXiJyXzAsXIcGTMjR7GQBitVRwPF48a9pA
-         OEqD13rejGwirjrToQKncNeQB8ykdHWP/GRCpoYfgVEW7iHSIepoI6maDrmCJdvT0Y0L
-         Ot5dyfZX3xUynTI658uLDy0VgaGLdwCrCwpIfZAxcb3BriKwCB/EfKHtT9FNwcvkQeFy
-         zO8JBmzRmVCSk1B7IzymU10yCr2sQ+LjCCteBZb6zVnqgvZuyklNDPXKT/rkPO8J5Qs0
-         s4NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711392817; x=1711997617;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1bp10ctRl8y8tt0avIquIVKHyA25BiReIcnLxTfH/WA=;
-        b=IBFmfyJNImWeNKtwifnZTPfmaxJ9mPBMq6QQm5i+7rI8b+RXYFpADKJVUPqv5FkHg5
-         dsjSawGcI9ps7oo1uHGO0Z33IIThqGg82jQT956W9keSd18gqgaVmgkyS12L3Mm8Whjp
-         c+ntSJ4EuDKWgsXZpogin8ZjOsBdAFDDtzMD568Aq5Sm8CKcJEKpO25Zz3V4eevvbAiH
-         hP4ovMOeSkRqb6dh78coZT2ahaMFkowyJGLR3vMoOyqcJs9s++6uVpzHjQ4s3I3yDV2W
-         /lkCc/0GpGbuMIn/ROkFF7hkqx2nlgZfETjZqwzC0cPJY7i9+BKZBTncayBIiRDgLSoE
-         c0eA==
-X-Forwarded-Encrypted: i=1; AJvYcCV49euTUqMToeN3+tT40DGdnIZstjrD5YFnM0RE059Sl5BCKDpphrabNAQnTMhtzw1r3XkbRUbgsxgZBqYY9B9yIn+Boemn5qGhclNqho8PNLP7wNcpw0Ddwg27UH4vZume3S/VldUE9iMUUjkEM533CpR+y0OeeiItViCsWsu4Aa7heezY
-X-Gm-Message-State: AOJu0Yyk3+hrQp4e4GKUcJYHdto1Yx+dB1F/WrDi4eCM4sWmgdWm3B5K
-	NdFLWTmN5OUKOfjBM61AqoRB2eYc6lR9LgJc7rIC3d7UxYgTGf4O
-X-Google-Smtp-Source: AGHT+IEoRoxiwSZNxekFJF9ohPhsmxIG38hlQq9AgZwVYfGPaOM251BTFfL8/NS3lz/PfULLvN4gxQ==
-X-Received: by 2002:a81:8805:0:b0:60c:ba36:1ff6 with SMTP id y5-20020a818805000000b0060cba361ff6mr6332111ywf.32.1711392817444;
-        Mon, 25 Mar 2024 11:53:37 -0700 (PDT)
-Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
-        by smtp.gmail.com with ESMTPSA id pc17-20020a05620a841100b007881a59042dsm2341233qkn.66.2024.03.25.11.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 11:53:37 -0700 (PDT)
-Date: Mon, 25 Mar 2024 14:53:36 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Richard Gobert <richardbgobert@gmail.com>, 
- davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- willemdebruijn.kernel@gmail.com, 
- dsahern@kernel.org, 
- xeb@mail.ru, 
- shuah@kernel.org, 
- idosch@nvidia.com, 
- amcohen@nvidia.com, 
- petrm@nvidia.com, 
- jbenc@redhat.com, 
- bpoirier@nvidia.com, 
- b.galvani@gmail.com, 
- liujian56@huawei.com, 
- horms@kernel.org, 
- linyunsheng@huawei.com, 
- richardbgobert@gmail.com, 
- therbert@google.com, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <6601c830c1daa_11c6072943b@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240325182543.87683-5-richardbgobert@gmail.com>
-References: <20240325182543.87683-1-richardbgobert@gmail.com>
- <20240325182543.87683-5-richardbgobert@gmail.com>
-Subject: Re: [PATCH net-next v4 4/4] net: gro: move L3 flush checks to
- tcp_gro_receive
+	s=arc-20240116; t=1711393538; c=relaxed/simple;
+	bh=2naQ2zIwUDbAjnJ5fx8ylGGomTwmKBGC8b+4Kf4kgXw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZKKwoXze11LAMBjxdcLVzxmfnYhIqJTKwRHRZTMtMLs5WArJ/m8wBv1TmosY7rRV2q5rQJ70apWVJoBkZFO5G/ZhrSkPJfdNjmMAdB7sA5OaCQnP/4pFCjYkgu1sZnn0cak1RdkTGJLw81Ezo/syNiCbRXO7Kmmc0C+YDy6LjEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=KrsZ3Dg+; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=/cOCj+3wz4G6mk7yJiOWKe+zWsog28msEXqYEYYF/PM=; b=KrsZ3Dg+BwR2PxtUZN7tRdXRM/
+	hzD6VT43T4jmCbBOlQa33Sar4qRrk34fr3Gcfdp4NQWyMpNKX4DH6J6albLyamFGb2CGEiZOtE5rW
+	nfLSP5bRkADNvscY10NWmVllXMUJQDKsyuMyDODwaUtYaCGTGsGnQon7XaddORjvYOehlVXeE6sfa
+	n/bIrGl+ZGAr/bWkdry+5ZKkzUgSzgmqpPyWvxvxDDYmJrN43CkrvCrpPuNbz7XsoF5Y7Liw6IIBe
+	NgZRaSze46IWt9cBigdGv5ZmmlmhThf/TXsUVgjI26u4CbbOLSlCdcwSS/EtJiOUe4764vjuRvM+Q
+	SpYZMTlA==;
+Received: from [177.34.169.255] (helo=[192.168.0.139])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1ropdK-00FBOo-Kv; Mon, 25 Mar 2024 20:05:23 +0100
+Message-ID: <0729b218-53f1-4139-b165-a324794a9abd@igalia.com>
+Date: Mon, 25 Mar 2024 16:05:06 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 05/14] drm: Suppress intentional warning backtraces in
+ scaling unit tests
+To: Guenter Roeck <linux@roeck-us.net>, linux-kselftest@vger.kernel.org
+Cc: David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>,
+ Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>,
+ Arthur Grillo <arthurgrillo@riseup.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
+ <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
+ kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ loongarch@lists.linux.dev, netdev@vger.kernel.org,
+ Linux Kernel Functional Testing <lkft@linaro.org>
+References: <20240325175248.1499046-1-linux@roeck-us.net>
+ <20240325175248.1499046-6-linux@roeck-us.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
+Autocrypt: addr=mcanal@igalia.com; keydata=
+ xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
+ H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
+ hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
+ GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
+ rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
+ s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
+ GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
+ pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
+In-Reply-To: <20240325175248.1499046-6-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Richard Gobert wrote:
-> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags,
-> iph->id, ...) against all packets in a loop. These flush checks are used
-> currently only in tcp flows in GRO.
-> 
-> These checks need to be done only once in tcp_gro_receive and only against
-> the found p skb, since they only affect flush and not same_flow.
-> 
-> Levaraging the previous commit in the series, in which correct network
-> header offsets are saved for both outer and inner network headers -
-> allowing these checks to be done only once, in tcp_gro_receive. As a
-> result, NAPI_GRO_CB(p)->flush is not used at all. In addition - flush_id
-> checks are more declarative and contained in inet_gro_flush, thus removing
-> the need for flush_id in napi_gro_cb.
-> 
-> This results in less parsing code for UDP flows and non-loop flush tests
-> for TCP flows.
-> 
-> For example, running 40 IP/UDP netperf connections:
-> ./super_netperf.sh 40 -H 1.1.1.2 -t UDP_STREAM -l 120
-> 
-> Running perf top for 90s we can see that relatively less time is spent
-> on inet_gro_receive when GRO is not coalescing UDP:
-> 
-> net-next:
->    1.26%  [kernel]  [k] inet_gro_receive
-> 
-> patch applied:
->    0.85%  [kernel]  [k] inet_gro_receive
-> 
-> udpgro_bench.sh single connection GRO improvement:
-> net-next:
->    0.76%  [kernel]  [k] inet_gro_receive
-> 
-> patch applied:
->    0.61%  [kernel]  [k] inet_gro_receive
-> 
-> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+Hi Guenter,
 
-In v3 we discussed how the flush on network layer differences (like
-TTL or ToS) currently only affect the TCP GRO path, but should apply
-more broadly.
+On 3/25/24 14:52, Guenter Roeck wrote:
+> The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
+> intentionally trigger warning backtraces by providing bad parameters to
+> the tested functions. What is tested is the return value, not the existence
+> of a warning backtrace. Suppress the backtraces to avoid clogging the
+> kernel log.
+> 
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> - Rebased to v6.9-rc1
+> - Added Tested-by:, Acked-by:, and Reviewed-by: tags
+> 
+>   drivers/gpu/drm/tests/drm_rect_test.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
+> index 76332cd2ead8..75614cb4deb5 100644
+> --- a/drivers/gpu/drm/tests/drm_rect_test.c
+> +++ b/drivers/gpu/drm/tests/drm_rect_test.c
+> @@ -406,22 +406,28 @@ KUNIT_ARRAY_PARAM(drm_rect_scale, drm_rect_scale_cases, drm_rect_scale_case_desc
+>   
+>   static void drm_test_rect_calc_hscale(struct kunit *test)
+>   {
+> +	DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
+>   	const struct drm_rect_scale_case *params = test->param_value;
+>   	int scaling_factor;
+>   
+> +	START_SUPPRESSED_WARNING(drm_calc_scale);
 
-We agreed that it is fine to leave that to a separate patch series.
+I'm not sure if it is not that obvious only to me, but it would be nice
+to have a comment here, remembering that we provide bad parameters in
+some test cases.
 
-But seeing this patch, it introduces a lot of churn, but also makes
-it harder to address that issue for UDP, as it now moves network
-layer checks directly to the TCP code.
+Best Regards,
+- Maíra
+
+>   	scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
+>   					      params->min_range, params->max_range);
+> +	END_SUPPRESSED_WARNING(drm_calc_scale);
+>   
+>   	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
+>   }
+>   
+>   static void drm_test_rect_calc_vscale(struct kunit *test)
+>   {
+> +	DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
+>   	const struct drm_rect_scale_case *params = test->param_value;
+>   	int scaling_factor;
+>   
+> +	START_SUPPRESSED_WARNING(drm_calc_scale);
+>   	scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
+>   					      params->min_range, params->max_range);
+> +	END_SUPPRESSED_WARNING(drm_calc_scale);
+>   
+>   	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
+>   }
 
