@@ -1,121 +1,102 @@
-Return-Path: <linux-kselftest+bounces-6541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6BF888AA84
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:01:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6267C88AFF6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 20:29:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C56BA1C379ED
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 17:01:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F7E2C050DC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 17:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF861F5F3;
-	Mon, 25 Mar 2024 15:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3AD91514CD;
+	Mon, 25 Mar 2024 15:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="CpADAJ8K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SeyOuI7h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B0FBE4D;
-	Mon, 25 Mar 2024 15:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87E73DABE4;
+	Mon, 25 Mar 2024 15:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711380598; cv=none; b=SUQtHs+sBW3h23jaVVz3oMt8+RCh+FIMBPv30hTjlHsOgKNtcT6aInKxoVYfzJ6dJBc6Bpwi3PzNODIALIYiTOkZEvd2fYcvCtNVF7KbgF3GgGjxTCIzcIyw97vYGtOJuJpronNVo7qasgrjeqDtSCdGaZUK94Whi6EFDkZj8kI=
+	t=1711382123; cv=none; b=XB67EDXV4eAw5akSW/H6R8bekB3crwTr6O81r7SV0Qo3iI/ujR6SLZgwX4YMXALNhmh3ftiJd2ykt31ji+OHMPIwVOaVI+6sym+7MV7bJydbmlBcIvQig7rJ8pEh1nPN7yuLnORLh+rDelQmVdGnxifC3XrVioXuWay9TMb0IEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711380598; c=relaxed/simple;
-	bh=Z9wl0wR2An/kmRhXC6Ho2gg5mobyAPKO/Su2QBRhSrg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cOLsBkLhzuHYgbFHnDEf9qjl3bx/ygIB8tuksdZ6QCc1GmfQKUI/Mhrh3Gutprg4Vy5UYERKL5bLWureZA7ce5LV+wLY9+5HouIkbagyO1o5Yu0F8mjHNqdLFU5D6VlT5mJwWorZ6G4GGzRcTyqUwW6Fjr7WOfiUp2FcpxNzf20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=CpADAJ8K; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=5QLR/nEDVTTBKMOckzPhGn+SQjqCovOExkDFAsXssMs=;
-	t=1711380596; x=1712590196; b=CpADAJ8KthFv55AWtA3KSI7lMBw0Kz2tEDZg4WCYB7z1CyA
-	Sp35hepZ6Joz6YSixjVFRHBK33zQXrf2dDkcI5qCNUHf6atYD8JOZWkMUVmC529QRYMbSPi+eDee0
-	fphBc6/y08QIbN+npdX0JtuXqR+ucNbeNaRMGcY1tvISG7yIJ+wFlTPw5rEaPRe/wcBe1sSShJyBy
-	2mem5IITYAKrGtU9vNekTA9PKbYoRi6y4BNSPMQojJCJchxUzDMa0GKypdB+29CkfV0W4rnMziutl
-	edlLc92AwZ0RkkojFG4N9xmAkEtCfIrkkSip5ACu62r7dZij/2xM3Qxdg/R7Eotw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1romGo-0000000DuOz-18js;
-	Mon, 25 Mar 2024 16:29:54 +0100
-Message-ID: <9c9e1297e2548b363fc93e774c8546e6ebf4efd6.camel@sipsolutions.net>
+	s=arc-20240116; t=1711382123; c=relaxed/simple;
+	bh=KCKMR+ILD4PVJLMsuipVfj8QVOZrAGWjhVprqfmw3eM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KT6baVoFVlASoKVe0Y2e9qxFAFH81X/ffUor1uESQlJRvL5q3y0/ZUge/fPsiPFnN16X83u+srz4LEKamgPkqDFjg6xmPYGtgm6Geq+eDK4uBeHCcgG0uHIQ2Pa4Hl4nvYkXmyJPnkffgcLxpDV81B64Qb5lDuq++QsoiIWPai0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SeyOuI7h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09906C433C7;
+	Mon, 25 Mar 2024 15:55:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711382123;
+	bh=KCKMR+ILD4PVJLMsuipVfj8QVOZrAGWjhVprqfmw3eM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SeyOuI7hEeFDNtNHmTwXhfq1ktE+wDYayMxGK2ZLVMYuwp0kbnwLz5e7Jmt/ns1ym
+	 u2ofHLYbYwBOXyGplLOOVb+6dnJwPk6Q5ZFQze/PLrViEtIOruOSEr3wVUt0GpZRlq
+	 VlJEg31GSfcodBpziQTUS+4hVlu0/79hyrA3Qxa1H942H8Bto1U4Ekx1mLU46+2DMX
+	 9SUM9LAyWtepGWr5XWprmlsLhkKBUbI6s2EY/pxoV6lFEQUMruzqQQQw3dHVLystmT
+	 DEk6ONnMoC6dWei9FCiwuNihKscwW/Z2kirMneP00lkvqgGqhDAfXQotktbf6LDRCf
+	 wHsaoesDL0BkQ==
+Date: Mon, 25 Mar 2024 15:55:18 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, x86@kernel.org,
+	linux-wireless@vger.kernel.org
 Subject: Re: kunit alltests runs broken in mainline
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Mark Brown <broonie@kernel.org>, Brendan Higgins
- <brendanhiggins@google.com>,  David Gow <davidgow@google.com>, Rae Moar
- <rmoar@google.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, x86@kernel.org, linux-wireless@vger.kernel.org
-Date: Mon, 25 Mar 2024 16:29:53 +0100
-In-Reply-To: <b743a5ec-3d07-4747-85e0-2fb2ef69db7c@sirena.org.uk>
+Message-ID: <c01d6e1c-1dad-4012-b8b0-dccf19b2e3f2@sirena.org.uk>
+Mail-Followup-To: Johannes Berg <johannes@sipsolutions.net>,
+	Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, x86@kernel.org,
+	linux-wireless@vger.kernel.org
 References: <b743a5ec-3d07-4747-85e0-2fb2ef69db7c@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+ <9c9e1297e2548b363fc93e774c8546e6ebf4efd6.camel@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-
-On Mon, 2024-03-25 at 15:21 +0000, Mark Brown wrote:
-> Hi,
->=20
-> Commit 28b3df1fe6ba2cb4 ("kunit: add wireless unit tests") which I can't
-> seem to find on lore breaks full kunit runs on non-UML builds and is now
-> present in mainline.  If I run:
->=20
->    ./tools/testing/kunit/kunit.py run --alltests --cross_compile x86_64-l=
-inux-gnu- --arch x86_64
->=20
-> on a clean tree then I get:
->=20
->    [15:09:20] Configuring KUnit Kernel ...
->    Generating .config ...
->    Populating config with:
->    $ make ARCH=3Dx86_64 O=3D.kunit olddefconfig CROSS_COMPILE=3Dx86_64-li=
-nux-gnu-
->    ERROR:root:Not all Kconfig options selected in kunitconfig were in the=
- generated .config.
->    This is probably due to unsatisfied dependencies.
->    Missing: CONFIG_IWLWIFI=3Dy, CONFIG_WLAN_VENDOR_INTEL=3Dy
->=20
-> UML works fine, but other real architectures (eg, arm64) seem similarly
-> broken.
-
-Hmm, strange.
-
-> I've not looked properly yet, I'm a bit confused given that
-> there's not even any dependencies for WLAN_VENDOR_INTEL and it's not
-> mentoned in the defconfig.
-
-Well it's in the directory dependencies or something I think, this seems
-to help:
-
---- a/tools/testing/kunit/configs/all_tests.config
-+++ b/tools/testing/kunit/configs/all_tests.config
-@@ -28,6 +28,8 @@ CONFIG_MCTP_FLOWS=3Dy
- CONFIG_INET=3Dy
- CONFIG_MPTCP=3Dy
-=20
-+CONFIG_NETDEVICES=3Dy
-+CONFIG_WLAN=3Dy
- CONFIG_CFG80211=3Dy
- CONFIG_MAC80211=3Dy
- CONFIG_WLAN_VENDOR_INTEL=3Dy
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4jvBTpuTtm1bPuXu"
+Content-Disposition: inline
+In-Reply-To: <9c9e1297e2548b363fc93e774c8546e6ebf4efd6.camel@sipsolutions.net>
+X-Cookie: Evil isn't all bad.
 
 
-But I'm not sure why ARCH=3Dum is different?
+--4jvBTpuTtm1bPuXu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-johannes
+On Mon, Mar 25, 2024 at 04:29:53PM +0100, Johannes Berg wrote:
+
+> But I'm not sure why ARCH=um is different?
+
+It's probably something to do with it lacking a bunch of features of
+normal architectures, especially around hardware support.
+
+--4jvBTpuTtm1bPuXu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYBnmUACgkQJNaLcl1U
+h9ALDgf/XYMGzxDASg1Yc8Xy1aYc9Vb0lyDqOp0iIGFDCn4UraS7RU63hYEfJ9R8
+DV/58lF9zliBinTQ4thT4fesKQsvQF51UJNH/WGUxyRg1McSxUtXkSK1DzRJmMKG
+JdFBftK8O4DlXrV96jszwXw9TZZNCaaRY8adwLVSZ1Y6FWlTTsz4miog5lZlIyWB
+N79/pkCbXjFD2MTtCiqNop+TXS1c24fLKH3G146bU4voKKd3Kx7Uo1uiiZQ2ebco
+Ofa+UNn14ETNn0YKsM5vngb5MaD+/EMFpxOPKEtX4fu0BPt+0akIr8UcnM5K6BTi
+z+U6vwsi/C1NgLQQLkS5Kpi0evb0vQ==
+=Pr7g
+-----END PGP SIGNATURE-----
+
+--4jvBTpuTtm1bPuXu--
 
