@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-6547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BB8588AB82
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 18:24:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9B0588B464
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 23:43:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65C111C3D2ED
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 17:24:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6DB4DB31CAD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Mar 2024 17:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25A614CB37;
-	Mon, 25 Mar 2024 16:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E18129E79;
+	Mon, 25 Mar 2024 16:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPB3dDB9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nsfSBmoK"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AA741A85;
-	Mon, 25 Mar 2024 16:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A65D128384;
+	Mon, 25 Mar 2024 16:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711383475; cv=none; b=Wpr4/AD1y8VN/QGHsk+YpvnkRccPSxl/HqaTDr2zZ4J+pJI7khlKWTAg4Vh7ZiFHPNgdwubC3F+7+RZ7Eey0QHxjty0e2IrIh3N06SscvBZJLOF6qgP0NZz7T2ILz2lVrp2CCQJIZikzWj58q9uNRvYXRgb+K6V3bHrXEDUbIRc=
+	t=1711383477; cv=none; b=nAIA7S2ksbD1zguxjXkj+u8ot/SuliGINp1sUYXuU+q5/M58h8rOakw3Lu+4woklKzTzrWpVC4ftd0R/aRggrEVIFQNMLiKsdFD5rdw9UAUIxMLW+N23p1hD6Grmwm5TJJq3KlR4ZmcM536RnLyuWjTBqwKMcXuNmkVeCsTzq4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711383475; c=relaxed/simple;
-	bh=d8LARACfnquRpxUsYeteRURYDSj2tOGCZwlTBTxdixk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=h4IKEsJD7BJudFDfC/spqAnhW62XS7mxn5H+T+nGLUZMeIB0ZxC291zdHFoJDa+V3eI+Ku0nSP6OD+hrVKdY/H6xlGULdYpjCIZPQKhjMtpZvfY2+DpN6Phuax8DekhAppFskk3qf7LOpQfSzzsXfGU2o7wp5GICaJ5V0zvjzqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPB3dDB9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DFA0C433F1;
-	Mon, 25 Mar 2024 16:17:52 +0000 (UTC)
+	s=arc-20240116; t=1711383477; c=relaxed/simple;
+	bh=CxI/roqLmFPpR2Hha1nY/b7X963/yvMAOGGo5SgRBwY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JVCyeBs8Xcpv00A40FqAnNic5vAJ2/6wkejTXwVfE/LLFQU/nEj+U8NCsmmO1ll14KAIWgW5mzNdoanoO6r5mQBw1ZUTD6fIaWi85qhQZvbt+suCh/JYQBiwN6ibro4PCB1XsJZkfFAgy5LYy+9MvHD4r1issQulkdlu1+aBZ60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nsfSBmoK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4217C433B1;
+	Mon, 25 Mar 2024 16:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711383474;
-	bh=d8LARACfnquRpxUsYeteRURYDSj2tOGCZwlTBTxdixk=;
-	h=From:Subject:Date:To:Cc:From;
-	b=kPB3dDB9/JuMhfVeH0Ic2u9UcxixPymt1LwUE/RgcJujGIvkxfoVIiw91BJZudMoV
-	 7JMXlazSv4+JHvmS4bt2e5MdB23JUnfjFB+1jHK3vyKzkdBrqroiTOQsQkQTVBgPHT
-	 y8rdC3hEK0OC+cAkKNOWX4FN5Q/bGOcf37+uGj0FPjpPqQbKmyU0PLvZzUyi7EgzXr
-	 0insZRxjgoE4E98e24JOcMrTaapTGqR6NeM0hLEPaWG22eOlzbq20DbPuBFDiDaoBP
-	 Je2hY2H9XVKLTSdFTaXchuaGAdZOnIPUcGvSSD3tBdfMux1dMeDPgF6+wQJ9flHXey
-	 hqR4C4Cf2twbA==
+	s=k20201202; t=1711383476;
+	bh=CxI/roqLmFPpR2Hha1nY/b7X963/yvMAOGGo5SgRBwY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=nsfSBmoKyXXPw+fT5obU4phfsjWDn2XOldfVOnQRulY08FsNuIX3Oz/6rtvxiBU3w
+	 lGY6BVp3pF7/+Hast6zF7sPFxEhwEB5gIxmO3J9QN56wcGa8Esc+udlC0yapn2CD7p
+	 tNXJSC1zex2E+1yNvxm1MIHYiHqckDt1XRZWfSkZFTeHIjU2dhYJh6mJoULNPmmyqx
+	 ptrUGeGqOaPsTko9wWs2+6Kf8SEUpmRzcL31AVsGCvyFwYwborjS7aleryRG9aMCI2
+	 tMM+C1dBcxvoLvwI/ekA8qvG/3+v17AZqUlYWwf8IjLsXtixSUC9pNzkZaXScy0Bwv
+	 VOBogIt7ImBzw==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/2] tracing/selftests: Verbosity improvements to KTAP
- output
-Date: Mon, 25 Mar 2024 16:15:49 +0000
-Message-Id: <20240325-kselftest-ftrace-ktap-verbose-v1-0-3785199809da@kernel.org>
+Date: Mon, 25 Mar 2024 16:15:50 +0000
+Subject: [PATCH 1/2] tracing/selftests: Support log output when generating
+ KTAP output
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,9 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADWjAWYC/x3MQQqDMBAF0KvIrDtgkpZgr1K6SO1PHRSVmSAF8
- e4Gl2/zdjKowOjZ7KTYxGSZK9ytoX5I8w8s32ryrb+3wXU8GqZcYIVz0dSDx5JW3qCfxcDRI8T
- uEeFdoHqsiiz/63+9j+MEbmoH/28AAAA=
+Message-Id: <20240325-kselftest-ftrace-ktap-verbose-v1-1-3785199809da@kernel.org>
+References: <20240325-kselftest-ftrace-ktap-verbose-v1-0-3785199809da@kernel.org>
+In-Reply-To: <20240325-kselftest-ftrace-ktap-verbose-v1-0-3785199809da@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>, 
  Masami Hiramatsu <mhiramat@kernel.org>, 
  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
@@ -65,44 +65,51 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
  linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1129; i=broonie@kernel.org;
- h=from:subject:message-id; bh=d8LARACfnquRpxUsYeteRURYDSj2tOGCZwlTBTxdixk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmAaOthF+NZ9+e9WfJ08NlmbdUWMzywsrAN4vMy4FD
- KyPNduuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZgGjrQAKCRAk1otyXVSH0LEYB/
- 4pKD/4WfQ6kWqz6gWfkXSAQOh+VNI/zMROqw8K4SSUEfrOAMY8c0adso9m3oj7lfWRR67YIqmgxzSL
- mP73DyMc/bXFN6cdqSyYzUzujXHMlbOeEl2v/zggBq1kMFwp9DAUMb6eOHvS/OkOWCURzQdi/5XGtf
- Z5S0KduXN2iI19BpC2ocBNhKuVNSOghsxIZ9oXWoUFNZMUhnn+vCVRgI70tGm02BiMKan7sGURqTo6
- yAFwOi86XFWMwgsOBVnE2HvdpJ3vK4c6nXXPHxDdfBoxvyJCoUQCAuJ3QcAosG1vnh61rv4WUkjNwS
- OLmN+oA3kcEr2Bf6ZMrHstGm5rYD1F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1218; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=CxI/roqLmFPpR2Hha1nY/b7X963/yvMAOGGo5SgRBwY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmAaOuDdcW/Bl6VlAkmoAAnO4Bj4ULO6YUx1zdiLb7
+ P08+SPyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZgGjrgAKCRAk1otyXVSH0Fr0B/
+ wPqT/zxNbf5zUFigZq4cx0MyjRgJbriybraCGdQLbt4rIEY6OVikQztgYZ5huMIyZZnqDWT6pE3G+j
+ tJerHTgzylob9cxVuBGrHv/zxXtV+NVAL7PjYwdW2560TvZ6CqunTFTgBWUnDKEc8l9au7z0Vuxg3T
+ zv48QQQcguh9Fw9agc/pGuRwopP8nFpYXhCGWGuE6u6sneHmctMJHVkgBvGZbiBmajGBtom0n5oE6L
+ UWRkwlndIWVM+1dTz8GfTYhxpz4MfF1zKXtovnkL35sPuzWfiwKYXkjFe9mdR9i/1+5D+9zX/CkwHo
+ ZmTEC2EcsRBGFKs0lEJTRtpTnEb6pK
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-This series aims to improve the usability of the ftrace selftests when
-running as part of the kselftest runner, mainly for use with automated
-systems.  It fixes the output of verbose mode when run in KTAP output
-mode and then enables verbose mode by default when invoked from the
-kselftest runner so that the diagnostic information is there by default
-when run in automated systems.
-
-I've split this into two patches in case there is a concern with one
-part but not the other, especially given the verbosity of the verbose
-output when it triggers.
+When -v is specified ftracetest will dump logs of test execution to the
+console which if -K is also specified for KTAP output will result in
+output that is not properly KTAP formatted. All that's required for KTAP
+formatting is that anything we log have a '#' at the start of the line so
+we can improve things by washing the output through a simple read loop.
+This will help automated parsers when verbose mode is enabled.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (2):
-      tracing/selftests: Support log output when generating KTAP output
-      tracing/selftests: Default to verbose mode when running in kselftest
+ tools/testing/selftests/ftrace/ftracetest | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
- tools/testing/selftests/ftrace/ftracetest      | 8 +++++++-
- tools/testing/selftests/ftrace/ftracetest-ktap | 2 +-
- 2 files changed, 8 insertions(+), 2 deletions(-)
----
-base-commit: 4cece764965020c22cff7665b18a012006359095
-change-id: 20240319-kselftest-ftrace-ktap-verbose-72e37957e213
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 25d4e0fca385..cce72f8b03dc 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -255,7 +255,13 @@ prlog() { # messages
+   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+ }
+ catlog() { #file
+-  cat $1
++  if [ "${KTAP}" = "1" ]; then
++    cat $1 | while read line ; do
++      echo "# $line"
++    done
++  else
++    cat $1
++  fi
+   [ "$LOG_FILE" ] && cat $1 | strip_esc >> $LOG_FILE
+ }
+ prlog "=== Ftrace unit tests ==="
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
 
