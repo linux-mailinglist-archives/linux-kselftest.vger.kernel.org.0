@@ -1,70 +1,71 @@
-Return-Path: <linux-kselftest+bounces-6660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA40088CD53
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 20:39:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C4988CD7B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 20:49:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD4A02E63C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 19:39:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 117F81F3B289
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 19:49:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C7B13D246;
-	Tue, 26 Mar 2024 19:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B67C713D257;
+	Tue, 26 Mar 2024 19:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OMbKCBdi"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WXaoxIQq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B5913C9AA
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 19:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1A3481A3
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 19:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711481963; cv=none; b=PVVyqWhoznKXVgr6qPt2blTptytxlXvORRHsXWmYyz1bs7KbmsC3WXNj1UALn7N7VaMTQFQrh43QDF8CwcuqHY60pzowcKKC0DHVedX2QjAO52syXHOsUjXyLaj8yZujURdxezzeCOj8yr4TC2eLrS3V/G5qjZn0T1VLwrRtDcc=
+	t=1711482554; cv=none; b=Y/ULFTw0MN2+i5Qj5rbX3YldV+lzfWYnPPWvqIyUsgVQ2LZx5SultSWWGzG3SbYBz+Frbkv8I1BKHX4/j3KcISpPxJbwKrNUOCNP7mflLKtWUZPBWXgbNK7nVVpdSPKfQEfIFARGblO1FamNpYHIX73iogS7fKkv5xCoS5BWosw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711481963; c=relaxed/simple;
-	bh=f8IAuCv4gUREScserGsKJssKOzX2hE9FKGkkBG8wz28=;
+	s=arc-20240116; t=1711482554; c=relaxed/simple;
+	bh=ckIAyLQl5mq51v12U33D/Ha/ZKgjrWdTuDjM1X+ZMIQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=goaZd/C+FVDxV8jrZKcb8E9SdkNHyzmlTds5XgEJvuYJjmVLA+5r7S4bBgmdGVFWgH6d1zp9VtQiPPvNvXMSXo+gKsB8Cru6de8mXB+0l/r2QVLmPhsMPL1YjYZLOUjJMjy3Xrha7OBGkO+H1iV2RWPoKo5WgY9sls2gJJtAWko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OMbKCBdi; arc=none smtp.client-ip=209.85.166.43
+	 In-Reply-To:Content-Type; b=jXEUoyUCpJPS34PCeAbFkHkksvJeEW9siW8XQew5/psLbU8X6pBpXxDap48JZsZ9TOUhVAnu926yLPYAs5VgaF0aD85v1ySBJ+S4qk35W3/j0OUcOxPR8/YSP/w/cRuhqzyrPnKqXakiK+aYHHmUFZcwY4Bg/b8GdVyEl9iNlfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WXaoxIQq; arc=none smtp.client-ip=209.85.166.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7cb9dd46babso38869939f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 12:39:21 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7c86e6f649aso45285839f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 12:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1711481961; x=1712086761; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1711482552; x=1712087352; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1hUrXnVJiaP3UIt3+1+KPRUPhVeRHkFsXjdILUhEUUw=;
-        b=OMbKCBdixfQcUvIcg6bhzO4eYUnCp2dgAxb/SZvtcQCYXzEdNbHqdQndm0Bhtu+Njj
-         jnuOIc2a4GZwGHBQoq/3/9alMWQkhcn8066iR2EEbV9YnNi2usF68ygWJLDoKdhnzCzk
-         JsebbDMyJgIUYuogWndOcewt9P0VbrM0C6PUs=
+        bh=CiANCJrg/wRMLPS+Tm1vUgemn4LO4mSL7aK+8H//EqY=;
+        b=WXaoxIQqaM98i2aCaKG1CXVdG9T66N85m1rd1MIC+bgH4UtyblpZOLcuoRLU5fs2S6
+         gErkcytQbU7zfdmIQpomF3Cr4WYps6zspV9u6+QaPwVpeUQkrEk4a5Xi4VOeRHR2XiE5
+         Xd5gG8fCYdeNpJl6bKwrwR4sLswTH65TYFKNE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711481961; x=1712086761;
+        d=1e100.net; s=20230601; t=1711482552; x=1712087352;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1hUrXnVJiaP3UIt3+1+KPRUPhVeRHkFsXjdILUhEUUw=;
-        b=WBBaOHamTC8XUvryRAn8O45jqIO8mxlU/Uxwjcno496ROqkdqL/Z6iPs37hfA5Keav
-         2GZ80LqbnTyO+LvRy5Q5+gwK8W07Vn7H8vswHOpiDv8EK4YxoJeF0DqdeT1DyYwH6A2H
-         NS4Iq+oi4DdJFoZuyWmyqCq0nYJNnXmvfpgOD44/tfiTNovc5uqiI1IhY1RmaG4Odpsf
-         0QmWV8yBbGgmZrRQQXKgzdY+31t2/Zs1x2SgDuSlRZQFsUStHGRWdegQe7Ipn2Y7ba7K
-         JGWmh2GZUbQZN1WQPg1TwRyE3lHaWrR431SD5EFjf/7ikXDDIzd+FJTfPGqLhxzx9Q/q
-         ExdA==
-X-Gm-Message-State: AOJu0Yz+2WrhXgq2ROoHN6ArPe/Tr90s8BFgyjiJz99Q9dfuSge/FzER
-	0/dt0OX9wRekEVp9qwu05YuKJje6OOB6GtpVyKFna+axg9UqPL+AMUaieZXOR/U=
-X-Google-Smtp-Source: AGHT+IELE5TEI/KwSAhMRRyWge1264Y2/bq1sHDymje4IB2JI1C7z0RT3ECNTzcBbOsmujdjyvwpYQ==
-X-Received: by 2002:a05:6e02:20ee:b0:368:76cf:2c97 with SMTP id q14-20020a056e0220ee00b0036876cf2c97mr13234789ilv.2.1711481960492;
-        Tue, 26 Mar 2024 12:39:20 -0700 (PDT)
+        bh=CiANCJrg/wRMLPS+Tm1vUgemn4LO4mSL7aK+8H//EqY=;
+        b=XpRw6o9krHGa7oykNE+kmySSKW0gkDDxbplBHrCUzgtUzZLo68G9w0bqGcctDb1nHq
+         gvca+Q4Wa+u7yPMZkPAGROABg+29Zq/4tjncrxhtb5RWH0YRGVnpXf0kjAVUln+uXmpN
+         9ojJNisoDW468fbaX33sA6XMfYy0QGfhAqeWArIv+5hM2ZNWxh4n5cg9MmU23yz1nV8s
+         VJ28DS7ks1d3FN4XHDUUl5xEXDhKrpJKW4TB4W2YfcyVnRrH2IS9WqWP1uw+bVly5JmF
+         QGsNdHXMYmr5c7JHOHy3Jv102ojg/vAOgrKp6cYyPuJTRUddQKrbns7caJEFPnAyWPyY
+         qqpA==
+X-Forwarded-Encrypted: i=1; AJvYcCXrsDRIUbHp8DFd7GKIkevMpbJzRVnRS9cNcKGOg3M38uD3QW8eGe4zutI09HURaGYN8LOEZqTZH+84omV5JLin01I8ufRIm5njmz2yI+0U
+X-Gm-Message-State: AOJu0Yx22+MvqVf/4PRa78wUxeeLSvj/WOqa75jkV1Wn7nU6IOhlUPvU
+	card+rHtw1SzQzhRlBsjoL8C+ZIr8bmhzappcZQVwAmxtWjQI3+W+Rw4jJjT0w0=
+X-Google-Smtp-Source: AGHT+IGa8PwsF4Gc4Jfzc/5pVDeCx6+YWmIQj5bTrUxyJHndqjf4XpTOeOLeEaqgdiSKQz2W7xIYeA==
+X-Received: by 2002:a5e:834c:0:b0:7d0:6728:66eb with SMTP id y12-20020a5e834c000000b007d0672866ebmr3473863iom.1.1711482552185;
+        Tue, 26 Mar 2024 12:49:12 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id b4-20020a92c564000000b003688e773845sm1536623ilj.59.2024.03.26.12.39.19
+        by smtp.gmail.com with ESMTPSA id eq27-20020a0566384e3b00b004772b93a134sm2824161jab.3.2024.03.26.12.49.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Mar 2024 12:39:20 -0700 (PDT)
-Message-ID: <95c18689-6a98-4d5c-9b38-200270696662@linuxfoundation.org>
-Date: Tue, 26 Mar 2024 13:39:19 -0600
+        Tue, 26 Mar 2024 12:49:11 -0700 (PDT)
+Message-ID: <6b0e9e08-62c3-4fed-95d8-185ceb4ce67f@linuxfoundation.org>
+Date: Tue, 26 Mar 2024 13:49:11 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,60 +73,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/seccomp: Try to fit runtime of benchmark
- into timeout
+Subject: Re: [PATCH 0/2] kselftest/tty: Improve integration with automated
+ systems
 Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>, Kees Cook <keescook@chromium.org>,
- Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Michal Sekletar <msekleta@redhat.com>, linux-serial@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240325-b4-kselftest-seccomp-benchmark-timeout-v2-1-77292da87966@kernel.org>
+References: <20240306-kselftest-tty-tname-v1-0-33505b31629e@kernel.org>
+ <2024030633-managing-identical-9b92@gregkh>
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240325-b4-kselftest-seccomp-benchmark-timeout-v2-1-77292da87966@kernel.org>
+In-Reply-To: <2024030633-managing-identical-9b92@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/25/24 10:57, Mark Brown wrote:
-> The seccomp benchmark runs five scenarios, one calibration run with no
-> seccomp filters enabled then four further runs each adding a filter. The
-> calibration run times itself for 15s and then each additional run executes
-> for the same number of times.
+On 3/6/24 15:51, Greg Kroah-Hartman wrote:
+> On Wed, Mar 06, 2024 at 07:21:24PM +0000, Mark Brown wrote:
+>> This cleans up the output of the tty_tstamp_update selftest to play a
+>> bit more nicely with automated systems parsing the test output.
+>>
+>> To do this I've also added a new helper ksft_test_result() which takes a
+>> KSFT_ code as a report, this is something I've wanted on other occasions
+>> but restructured things to avoid needing it.  This time I figured I'd
+>> just add it since it keeps coming up.
+>>
+>> Signed-off-by: Mark Brown <broonie@kernel.org>
 > 
-> Currently the seccomp tests, including the benchmark, run with an extended
-> 120s timeout but this is not sufficient to robustly run the tests on a lot
-> of platforms. Sample timings from some recent runs:
-> 
->     Platform          Run 1  Run 2  Run 3  Run 4
->     ---------         -----  -----  -----  -----
->     PowerEdge R200    16.6s  16.6s  31.6s  37.4s
->     BBB (arm)         20.4s  20.4s  54.5s
->     Synquacer (arm64) 20.7s  23.7s  40.3s
-> 
-> The x86 runs from the PowerEdge are quite marginal and routinely fail, for
-> the successful run reported here the timed portions of the run are at
-> 117.2s leaving less than 3s of margin which is frequently breached. The
-> added overhead of adding filters on the other platforms is such that there
-> is no prospect of their runs fitting into the 120s timeout, especially
-> on 32 bit arm where there is no BPF JIT.
-> 
-> While we could lower the time we calibrate for I'm also already seeing the
-> currently completing runs reporting issues with the per filter overheads
-> not matching expectations:
-> 
-> Let's instead raise the timeout to 180s which is only a 50% increase on the
-> current timeout which is itself not *too* large given that there's only two
-> tests in this suite.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v2:
-> - Rebase onto v6.9-rc1.
-> - Link to v1: https://lore.kernel.org/r/20231219-b4-kselftest-seccomp-benchmark-timeout-v1-1-8515c73015b9@kernel.org
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Applied to linux-kselftest fixes for next rc.
+
+Thank you. Applied to linux-kselftest next for 6.10-rc1.
 
 thanks,
 -- Shuah
-
 
