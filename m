@@ -1,427 +1,120 @@
-Return-Path: <linux-kselftest+bounces-6612-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 335FE88BEB6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 11:05:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A58C288BEDB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 11:08:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 565B21C3C613
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 10:05:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28E40B24C8C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 10:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C0B6F51F;
-	Tue, 26 Mar 2024 10:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81F2C56757;
+	Tue, 26 Mar 2024 10:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JSx1NK/8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W4R+E31m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7992F5B1EB
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 10:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADAC5B1FB
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 10:07:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711447481; cv=none; b=iCzHRGBoC6vewKL3UB9F3DemL/1MEFv5OI7VsJydm9VQ+RtCBIUTWM7WY7oEYMO/CfEVRu5RoYCryAaJthuZDameTaMgwiCHnSVe54V+aN2LWvVkdHxAFquivGIAkBnUp/52ll7uehh4GeZg091EDvpnrwrcWjIyEDpR8+oH5b0=
+	t=1711447672; cv=none; b=bSansSFFyS7C7J8waglNmp8ZFtBV+3JG7eeggycRG7crROdoVW3sk+FCx3uLtgBsYwdd5N8w2xYoQ1ILokwEy42uQU8cfxFEFzUyj2tx7Qu9eZX1KmDyurU9+/ZoqkC2Sr62d3YdIsG3mGWcQhhhH1XVahD9s8Oj58njhK8JrbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711447481; c=relaxed/simple;
-	bh=X4fNxkqHrvNilL5EJi7n4AWaFPh2JTq2Sk7Rj6AwTU4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BZpsSO8kaV8n4Wjq0BpmmG2sQbSaXMOiyX9LzdvKXSI+VkzNG/LOIRkaoKWpbnQWSQ1pcFjTwhwFq4Bu35k30ZQLzSDmjbYNYUcisDpCtUOUypAels1sL7w10KZ2iY+cjTqZz5o5k7pKmlx9iQ/GHkRKKJgU4MKiFstHhyge1dY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JSx1NK/8; arc=none smtp.client-ip=209.85.221.74
+	s=arc-20240116; t=1711447672; c=relaxed/simple;
+	bh=+G6LAk+yEHqNbO0JO+tLpmM3eDC5/I1CZRFOR+V45KM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=QZpH3zVMFfcW0mXIYtyneAku3hDZwYQ9aExlVIdOqmxlf16+YY7nJm87NxKSHR0eTNd9rFRlLJ4s+oso9Dn2pSrAOdLnndjZDPlukWIFwHq7fvBaWuM3nqsKxhd3SFQfsw5qmeggzYB4dekov3iSceE8TLTNol2M+GIhuj8m5Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W4R+E31m; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-33ed489edcaso3038631f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 03:04:39 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-ddaf165a8d9so1227529276.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 03:07:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711447478; x=1712052278; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UuIkN0zX2MQNfbCDwIEOWActo/+STrYH1ER+CouzEs=;
-        b=JSx1NK/8sIEiCzBLve9VtdK0LOZ78UyyUkqln3cqmv27FU2WY6zETzE/ywM60SLPem
-         bqEajz9kIRYmEZj1F+kMmrCsF80DgAP2NDbRqJFWbQdmSevTXOvwXjUTMz/VGxH7GAIo
-         x+4ClNe3VfPVn6pLVzYQDyhNIcg/Dh70M1jDn1abrhr+EXoWC5J0MAKC/ARNOEbll0Kh
-         KYVzFlRvc+pM/LgbDjyiHcgAPuNUwVAz7YaCUN4a04S1B/kuOytXY115DKg5e4BHBZjM
-         vdRUT/KCr0bVdh1I9d7kX5ZW/Rxeu8oKSfB7fM9hPAiebhXv5GvAKMYikJFQbkMddkAu
-         vPLQ==
+        d=google.com; s=20230601; t=1711447670; x=1712052470; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2RbBdaobUXsca5coxxV6oOWp8XKT6HorsbFw32NCXco=;
+        b=W4R+E31mBPslCh4wY3hCfQDKeUs//dt9FMtWgikiRVf/LQE/S7uApa2ETr86+aYQ8B
+         d/sF7jx3wb4palEvBEfHMcZl6PVMhsGBWPHbMwuClE035eTfuFH3ylGPjxf2MlZ5EoFi
+         D7R6l9xzvlFJPa+ocgGBW+Vpx3f0HpFvDyonxlg8aNNzE2ArGSeEjZwiSnmeorfMkvzB
+         41bHMFQW7WnbwxVr5gXZ5mMZbXnKU6VKaIErzBBCJJ759hBiSHkr32gnvECKNegewkhR
+         wubBWoHWtykpf7Bd06PtnQ5Jyk3d7D0wqinggf1QtFA9nEuUBi8LuQycI9AAAgzVhb51
+         5Ytg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711447478; x=1712052278;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UuIkN0zX2MQNfbCDwIEOWActo/+STrYH1ER+CouzEs=;
-        b=M5U9LkBw/jO8n9nq4yQl5RhLqFgW8oud3bT9x9C2te5a25p6rlXkg5CpMkxbSgd4Nh
-         FWNsHixqfnzZfBARja9QKrAb6OLaJM2SMwLk5KfDvdnq/tHteosy36Ej8JrgI2dC19S6
-         OluOoqnhLIdZIrVWO8dgcHYb3qJUGLB1MXpJ+AonLi2SHJCDh2BNqLJZPbRVAdnJeBw2
-         DMWZU14JyrtXi0qGe4NGLetQGTc4EwcmWTZwCugGZyIkHU/F1crxrmDjVhLh8ZjeNafL
-         1EDcor5PRWsldxYWR82oRqmOpLYUD3ytgRhjX9DfGgjZGMs53LCWccnjvNqozKw0phDo
-         HJ/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXpZG1hIWwd12SS9pH9yzjAT7QM944Nv4D2krR0NRo+9+FRljGtDy+aciMlP8HwmE6ub3gxdxDrbxU9LoCJRlDgZiuGU/1Y1QZSyaNvwulf
-X-Gm-Message-State: AOJu0YysOSy+JiR1dYaSxUuavfKUzcg8awd/mU60pqnbNH460pK/vh8q
-	LxP+FCSYt4Dg5HmMCGg15VtoEIy2RPXVsjQxYwB7CjqwejzmQuBS7/MKox/DsVHHXZF8MSOhudt
-	uUoy1sMI2pOZ25A5i/w==
-X-Google-Smtp-Source: AGHT+IGNyLQvGh2hxy9vQyzAVAqVk3UFqpdsTwbarhjVMIeldiIOZFMiec6AEOrSjKKi3m7Us+Db34MHEZC9frNs
-X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a05:600c:3b16:b0:414:908e:aa9e with
- SMTP id m22-20020a05600c3b1600b00414908eaa9emr5484wms.6.1711447477963; Tue,
- 26 Mar 2024 03:04:37 -0700 (PDT)
-Date: Tue, 26 Mar 2024 10:03:30 +0000
-In-Reply-To: <20240326100330.1321861-1-vdonnefort@google.com>
+        d=1e100.net; s=20230601; t=1711447670; x=1712052470;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2RbBdaobUXsca5coxxV6oOWp8XKT6HorsbFw32NCXco=;
+        b=NJC7bNtU9JlE9tW45EfrB6FAelxhW43QP5O69sVSZtJQn2ovpbtDy845H0+fsKIc9h
+         nN0GfHbavclh9vIMWg2R+hh7eif8rkO1YVrHTD0mVgOyUbU35MGlMRKIIODqeP4Xxgf2
+         +WKm2aXW2YHMlbX+wSuYrdq1po6nByrlgN1/H3+0xn9lNx4nDdzuYecSKp6JOAguDHTc
+         eMKNowefHBBUp85sLkHvsOAys5TVPC4go0LIm1VNnTFmu+v/mo6Eo8/04e3qZmzRh7Yr
+         Cx+TNF25hweGwGiR3MrhnmFqHGx/b3ulbTQ4lAIBpUovuFOscB3zMx496kCot9nk+MNn
+         13lQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW5X7qybWUYIZGj23DQL1p/DlmL8DqK8vPP8nUn48h2ufoNPLsafLibmLxlYI3+z2+9j4qdCEzdGZsbX7oaLL7KTM1InD46A94nCOkCFmB4
+X-Gm-Message-State: AOJu0Yyr8IJjBYqfT5bRkiFG4jvTJXXDxjcBg9MY1zRGaUbVx4lwvjs9
+	FRZAV+Cw9P6Jns/Awy6VSEkhk5/HDhRBBBdrS+2wZRg4Wr9T9fPt8MDiTuDr8OLsR39Tmpkg02Y
+	Ks5NgknYEdA==
+X-Google-Smtp-Source: AGHT+IEC4khUGqXzhYaQdt2H1zWZaE5a54/9dd/Pdyx/tywdDoRy9BvDAIj1fzNU93/ObzxgBm8rZeWyFlm7Bw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6902:1604:b0:dc6:d890:1a97 with SMTP
+ id bw4-20020a056902160400b00dc6d8901a97mr578453ybb.9.1711447670059; Tue, 26
+ Mar 2024 03:07:50 -0700 (PDT)
+Date: Tue, 26 Mar 2024 18:07:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240326100330.1321861-1-vdonnefort@google.com>
 X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
-Message-ID: <20240326100330.1321861-6-vdonnefort@google.com>
-Subject: [PATCH v19 5/5] ring-buffer/selftest: Add ring-buffer mapping test
-From: Vincent Donnefort <vdonnefort@google.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Cc: mathieu.desnoyers@efficios.com, kernel-team@android.com, 
-	Vincent Donnefort <vdonnefort@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
+Message-ID: <20240326100740.178594-1-davidgow@google.com>
+Subject: [PATCH] kunit: configs: Enable CONFIG_DAMON_DBGFS_DEPRECATED for --alltests
+From: David Gow <davidgow@google.com>
+To: SeongJae Park <sj@kernel.org>, Rae Moar <rmoar@google.com>, Mark Brown <broonie@kernel.org>, 
+	Johannes Berg <johannes.berg@intel.com>
+Cc: David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 
-This test maps a ring-buffer and validate the meta-page after reset and
-after emitting few events.
+This is required, as CONFIG_DAMON_DEBUGFS is enabled, and --alltests UML
+builds will fail due to the missing config option otherwise.
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Fixes: f4cba4bf6777 ("mm/damon: rename CONFIG_DAMON_DBGFS to DAMON_DBGFS_DEPRECATED")
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
-new file mode 100644
-index 000000000000..627c5fa6d1ab
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -Wl,-no-as-needed -Wall
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -D_GNU_SOURCE
-+
-+TEST_GEN_PROGS = map_test
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/ring-buffer/config b/tools/testing/selftests/ring-buffer/config
-new file mode 100644
-index 000000000000..d936f8f00e78
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/config
-@@ -0,0 +1,2 @@
-+CONFIG_FTRACE=y
-+CONFIG_TRACER_SNAPSHOT=y
-diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
-new file mode 100644
-index 000000000000..50a09e1371d4
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/map_test.c
-@@ -0,0 +1,302 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Ring-buffer memory mapping tests
-+ *
-+ * Copyright (c) 2024 Vincent Donnefort <vdonnefort@google.com>
-+ */
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <linux/trace_mmap.h>
-+
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+
-+#include "../user_events/user_events_selftests.h" /* share tracefs setup */
-+#include "../kselftest_harness.h"
-+
-+#define TRACEFS_ROOT "/sys/kernel/tracing"
-+
-+static int __tracefs_write(const char *path, const char *value)
-+{
-+	int fd, ret;
-+
-+	fd = open(path, O_WRONLY | O_TRUNC);
-+	if (fd < 0)
-+		return fd;
-+
-+	ret = write(fd, value, strlen(value));
-+
-+	close(fd);
-+
-+	return ret == -1 ? -errno : 0;
-+}
-+
-+static int __tracefs_write_int(const char *path, int value)
-+{
-+	char *str;
-+	int ret;
-+
-+	if (asprintf(&str, "%d", value) < 0)
-+		return -1;
-+
-+	ret = __tracefs_write(path, str);
-+
-+	free(str);
-+
-+	return ret;
-+}
-+
-+#define tracefs_write_int(path, value) \
-+	ASSERT_EQ(__tracefs_write_int((path), (value)), 0)
-+
-+#define tracefs_write(path, value) \
-+	ASSERT_EQ(__tracefs_write((path), (value)), 0)
-+
-+static int tracefs_reset(void)
-+{
-+	if (__tracefs_write_int(TRACEFS_ROOT"/tracing_on", 0))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/trace", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/set_event", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/current_tracer", "nop"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+struct tracefs_cpu_map_desc {
-+	struct trace_buffer_meta	*meta;
-+	int				cpu_fd;
-+};
-+
-+int tracefs_cpu_map(struct tracefs_cpu_map_desc *desc, int cpu)
-+{
-+	int page_size = getpagesize();
-+	char *cpu_path;
-+	void *map;
-+
-+	if (asprintf(&cpu_path,
-+		     TRACEFS_ROOT"/per_cpu/cpu%d/trace_pipe_raw",
-+		     cpu) < 0)
-+		return -ENOMEM;
-+
-+	desc->cpu_fd = open(cpu_path, O_RDONLY | O_NONBLOCK);
-+	free(cpu_path);
-+	if (desc->cpu_fd < 0)
-+		return -ENODEV;
-+
-+	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, desc->cpu_fd, 0);
-+	if (map == MAP_FAILED)
-+		return -errno;
-+
-+	desc->meta = (struct trace_buffer_meta *)map;
-+
-+	return 0;
-+}
-+
-+void tracefs_cpu_unmap(struct tracefs_cpu_map_desc *desc)
-+{
-+	munmap(desc->meta, desc->meta->meta_page_size);
-+	close(desc->cpu_fd);
-+}
-+
-+FIXTURE(map) {
-+	struct tracefs_cpu_map_desc	map_desc;
-+	bool				umount;
-+};
-+
-+FIXTURE_VARIANT(map) {
-+	int	subbuf_size;
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_4k) {
-+	.subbuf_size = 4,
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_8k) {
-+	.subbuf_size = 8,
-+};
-+
-+FIXTURE_SETUP(map)
-+{
-+	int cpu = sched_getcpu();
-+	cpu_set_t cpu_mask;
-+	bool fail, umount;
-+	char *message;
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+
-+	ASSERT_GE(cpu, 0);
-+
-+	ASSERT_EQ(tracefs_reset(), 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/buffer_subbuf_size_kb", variant->subbuf_size);
-+
-+	ASSERT_EQ(tracefs_cpu_map(&self->map_desc, cpu), 0);
-+
-+	/*
-+	 * Ensure generated events will be found on this very same ring-buffer.
-+	 */
-+	CPU_ZERO(&cpu_mask);
-+	CPU_SET(cpu, &cpu_mask);
-+	ASSERT_EQ(sched_setaffinity(0, sizeof(cpu_mask), &cpu_mask), 0);
-+}
-+
-+FIXTURE_TEARDOWN(map)
-+{
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+
-+	tracefs_cpu_unmap(&self->map_desc);
-+}
-+
-+TEST_F(map, meta_page_check)
-+{
-+	struct tracefs_cpu_map_desc *desc = &self->map_desc;
-+	int cnt = 0;
-+
-+	ASSERT_EQ(desc->meta->entries, 0);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 0);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+	ASSERT_EQ(desc->meta->reader.read, 0);
-+
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/tracing_on", 1);
-+	for (int i = 0; i < 16; i++)
-+		tracefs_write_int(TRACEFS_ROOT"/trace_marker", i);
-+again:
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+
-+	ASSERT_EQ(desc->meta->entries, 16);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 16);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 1);
-+
-+	if (!(cnt++))
-+		goto again;
-+}
-+
-+TEST_F(map, data_mmap)
-+{
-+	struct tracefs_cpu_map_desc *desc = &self->map_desc;
-+	unsigned long meta_len, data_len;
-+	void *data;
-+
-+	meta_len = desc->meta->meta_page_size;
-+	data_len = desc->meta->subbuf_size * desc->meta->nr_subbufs;
-+
-+	/* Map all the available subbufs */
-+	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
-+		    desc->cpu_fd, meta_len);
-+	ASSERT_NE(data, MAP_FAILED);
-+	munmap(data, data_len);
-+
-+	/* Map all the available subbufs - 1 */
-+	data_len -= desc->meta->subbuf_size;
-+	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
-+		    desc->cpu_fd, meta_len);
-+	ASSERT_NE(data, MAP_FAILED);
-+	munmap(data, data_len);
-+
-+	/* Overflow the available subbufs by 1 */
-+	meta_len += desc->meta->subbuf_size * 2;
-+	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
-+		    desc->cpu_fd, meta_len);
-+	ASSERT_EQ(data, MAP_FAILED);
-+
-+	/* Verify meta-page padding */
-+	if (desc->meta->meta_page_size > getpagesize()) {
-+		void *addr;
-+
-+		data_len = desc->meta->meta_page_size;
-+		data = mmap(NULL, data_len,
-+			    PROT_READ, MAP_SHARED, desc->cpu_fd, 0);
-+		ASSERT_NE(data, MAP_FAILED);
-+
-+		addr = (void *)((unsigned long)data + getpagesize());
-+		ASSERT_EQ(*((int *)addr), 0);
-+		munmap(data, data_len);
-+	}
-+}
-+
-+FIXTURE(snapshot) {
-+	bool	umount;
-+};
-+
-+FIXTURE_SETUP(snapshot)
-+{
-+	bool fail, umount;
-+	struct stat sb;
-+	char *message;
-+
-+	if (stat(TRACEFS_ROOT"/snapshot", &sb))
-+		SKIP(return, "Skipping: %s", "snapshot not available");
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+}
-+
-+FIXTURE_TEARDOWN(snapshot)
-+{
-+	__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+			"!snapshot");
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+}
-+
-+TEST_F(snapshot, excludes_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_GE(cpu, 0);
-+	tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+		      "snapshot");
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), -EBUSY);
-+}
-+
-+TEST_F(snapshot, excluded_by_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), 0);
-+
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+				  "snapshot"), -EBUSY);
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/snapshot",
-+				  "1"), -EBUSY);
-+}
-+
-+TEST_HARNESS_MAIN
+This is breaking all UML alltests builds, so we'd like to fix it sooner
+rather than later. SeongJae, would you rather take this yourself, or can
+we push it alongside any other KUnit fixes?
+
+Johannes: Does this conflict with the CONFIG_NETDEVICES / CONFIG_WLAN
+fixes to all_tests.config? I'd assume not, but I'm happy to take them
+via KUnit if you'd prefer anyway.
+
+Thanks,
+-- David
+
+---
+ tools/testing/kunit/configs/all_tests.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
+index aa5ec149f96c..f388742cf266 100644
+--- a/tools/testing/kunit/configs/all_tests.config
++++ b/tools/testing/kunit/configs/all_tests.config
+@@ -38,6 +38,7 @@ CONFIG_DAMON_VADDR=y
+ CONFIG_DAMON_PADDR=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_DAMON_DBGFS=y
++CONFIG_DAMON_DBGFS_DEPRECATED=y
+ 
+ CONFIG_REGMAP_BUILD=y
+ 
 -- 
 2.44.0.396.g6e790dbe36-goog
 
