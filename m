@@ -1,71 +1,72 @@
-Return-Path: <linux-kselftest+bounces-6657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7A3A88CCE7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 20:17:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7173088CD23
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 20:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9682EB243CA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 19:17:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 128471F879CC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 19:25:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224A013CF8A;
-	Tue, 26 Mar 2024 19:17:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F48113D26C;
+	Tue, 26 Mar 2024 19:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SFKwvYbt"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="B273VRIJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7276E13CC6F
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 19:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B958A13D24C
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 19:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711480630; cv=none; b=eKomicvJM0+HdiEGgjuApx7+tUDGKYl0kfrvj0qz2vAP98nfZwTI3TdqsTYlIkiZn/4bYzvcG/h4lvAkhx17X6KW3ISs1rlVhTyntnsCGWjW503/9Jayxc53gGRUUhkBhc6C1rOIJDmI3XzvtCErx3cgg3S/Q4RRvNj7qL1nw7U=
+	t=1711481091; cv=none; b=Ejuhm5lU4dU38Yzhhb90C/MEc4C5o/QAN9oe+ZYq7uvgy42aeM8uK6w02ttBfQrgM3gc7/2wCVG+Bk1dz6YAwsMEbXzGlFcgbx3ntTkg7kNCXSb9xqVF9smJdu06HQX9bFrQdZySsR/iCRVZ1AYNiBujsWHdbb7uwqF/+Rjd8LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711480630; c=relaxed/simple;
-	bh=d5oiFHuXdlxBu9o91T6TmgxwTU7ItEYzvBVBFxokMdc=;
+	s=arc-20240116; t=1711481091; c=relaxed/simple;
+	bh=nJEBYeRpGreh1QGrVI8xb2lqButvSZ322Cq+521//Gw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D1+MVxhvhehu9xHt5+e7vacRDs94/eqB+L9tpH+gEvgpAfheDROOlKDhVZ4fe4M2z8x/tCiLOZPzyhshvpG226c4Gh2XlEU8g2ohF24PCB76wupa9R7khsAEAgCPqtkAgw+Fzavkya++GzGh9NBrdVoJUzpo+8ycgIWe+Ou4M4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SFKwvYbt; arc=none smtp.client-ip=209.85.166.177
+	 In-Reply-To:Content-Type; b=LFnzQwhEMVxKECBX/1BiCs4BcHqrTlFdZELcYSV8FHhpqYN7qUg01BbVOS3gvzRS4BhbHg7bYfu9RPJRIfdEkNM8hDvfWQ0qXYbMwq9KgmDP+y+wl8SYAPTbDqnq3KSEZn4IOSHn3P+lOtxskmhGN5b5U5MS1FGraSoQih8Wlyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=B273VRIJ; arc=none smtp.client-ip=209.85.166.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3688dcc5055so419985ab.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 12:17:08 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7cc0e831e11so85595039f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 12:24:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1711480627; x=1712085427; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1711481089; x=1712085889; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aAgAdxoAWBggRCLmNhHzURpQUXyex1VS2og6I0eJHg4=;
-        b=SFKwvYbtiHIg9dmQJc36AJa97p5dNiJUIsXe5/J5phY0QkI7AJnz8O3z5wd+tvllSi
-         N32lGwd03I0cGdX+rcHl5v8303HpKd3q6eNfB8cYd9S5FMEesU9Gz//SnBjj8fGgsn+g
-         5gkU+fqUlbk2BUeZ1kqbkW1AfNjWyqIqfUFno=
+        bh=ldMsiEP3mMIpydboV2AKm9Ciyx4AVPzGnmoIpfuSLAY=;
+        b=B273VRIJvuaLdT0PcUdpfdXj7ikTwf5++cK/1AeEyiFcAP4cxK4mM7r95Uv9GLcZ9U
+         mdmMmEax/pay4QZNK4/JPbS19fCH7XICDqc7KX39MGMT6xIS4xNdZvO999PyU0uR0s5P
+         TynnZLio/9xEancMrDWcP4XAzEBgBsKQoq1qw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711480627; x=1712085427;
+        d=1e100.net; s=20230601; t=1711481089; x=1712085889;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aAgAdxoAWBggRCLmNhHzURpQUXyex1VS2og6I0eJHg4=;
-        b=GkEIKLQ78AcT/bLbyIitojGDdH+DYpzzswTUa47dZkLvOfn1eZkdWfDcaBI/OkirTy
-         2hT6u7lEm7ytM4GzzNt+YwJlLScEhq20jlM+ACizATgutZ5aZeRmYmmIf8K1BL7WiM0Q
-         jboFpDLCX9gL15HkXpGNMnYLlEUSb6L68yXr5GDKEiOJzh3ZwyFaDKHmjsAlOug1Uy2t
-         IL1SqcJXYhwUABrw42eohaUte+H+qINQ7Gf1WJo6VtRouK0j3r5JIus3ueOKzbHtiSHo
-         gp5XoMbCUIg6jSQABYC7skM6oK122mAIbGn2kWsvLKOvPWFqa671KyBEORRMVYKKmg8u
-         D8QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWozPOBexwPPUpsz3w7DV/yXjxjMMfRYr8Idb9N8iDoie3bICsNPlPWfqyyb4r09A241dEZUsfF/TI2XbaOvbGS4jRgfwP0sMUkgvVmJFXU
-X-Gm-Message-State: AOJu0YyabKu/Up7vKJzmlcTUvRGNAm+aKMO18FUKnBYMuChYtEEr31pF
-	WVkLtMKpSvttPdQlYcJ0fWJwkLtYhqYS7kqfMbNHnnNcw26uzoimsC3Fyzv7lJw=
-X-Google-Smtp-Source: AGHT+IERj3hrIyDnCZJ5UcMAXz2os4t+ojmXAKvLHG/6knoGZCHVaoWkXymnVBqCdt4RsIW8XSrQPw==
-X-Received: by 2002:a92:c9c6:0:b0:368:80b8:36fa with SMTP id k6-20020a92c9c6000000b0036880b836famr8573443ilq.2.1711480627401;
-        Tue, 26 Mar 2024 12:17:07 -0700 (PDT)
+        bh=ldMsiEP3mMIpydboV2AKm9Ciyx4AVPzGnmoIpfuSLAY=;
+        b=ALbeibUqaSDbbWKjdY+69HV5Jvn9k20XH9NfvIwjoFmTxJU8bQvySe8KVkj2MxZaQY
+         cD8jMhbaCxuNVVDU+mC94DvZLdXXWCtK3EzgHjlyUKSEk+anHgB4WTpCKePpb3ATDBhQ
+         tF6NirIYGe2OjDt5aqp8V1DnoImLqlsmVdxwMX5jV104NHViRAiAgTjrglUdVZNqMj7a
+         yLtSmPl77gV6xLgKb7iT6Ap1K9Wovq0ENYs6FMn3fAb8BnFl5UoKs4Q6rOGhycKpemZ/
+         5skhl52yrgzSOKIsQi66jIZz5AUSv/8tAFSGhHDUdxQul9l6wCuBQyvelpZKXRFTNFpA
+         lvnw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBpfOrMlQYk8AojeLqMukyJeaeiVSlROQtooHT+mOBa7A+ZEQYo0PBEBg66I9TRteJ5krC1ovykKC45Diqv2xCAE+vlZzhgsOf5iGLj6s4
+X-Gm-Message-State: AOJu0Yz7lDCRfIli41BTAiAT7KwMI3fPGeruHX8kP3jXVM0mruD6a9ee
+	QAA8WRkdpvItvc6HQXzrDlxZnAui8bBG91+Xw403zumv0G5sWsrg4VHlBHPpcpl2hNmCfuGT2kU
+	q
+X-Google-Smtp-Source: AGHT+IFUHe5xOEXL/Du4BCSSxq1iQ4534XkkfdPWlPWgaWBt+Z+AC8GWX/FuKYk9lSWgJA/RBthZ0w==
+X-Received: by 2002:a92:dc4f:0:b0:368:a917:168f with SMTP id x15-20020a92dc4f000000b00368a917168fmr1220395ilq.3.1711481088841;
+        Tue, 26 Mar 2024 12:24:48 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id m18-20020a92c532000000b00368984422e1sm927267ili.23.2024.03.26.12.17.06
+        by smtp.gmail.com with ESMTPSA id v12-20020a92d24c000000b00366bb13bd89sm3115775ilg.41.2024.03.26.12.24.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Mar 2024 12:17:07 -0700 (PDT)
-Message-ID: <0cee99af-f058-47a0-9119-94cc9a37e88b@linuxfoundation.org>
-Date: Tue, 26 Mar 2024 13:17:06 -0600
+        Tue, 26 Mar 2024 12:24:48 -0700 (PDT)
+Message-ID: <54e5ac2c-d844-47c2-b811-03d949554515@linuxfoundation.org>
+Date: Tue, 26 Mar 2024 13:24:47 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,51 +74,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] kselftest/clone3: Make test names for set_tid test
- stable
+Subject: Re: [PATCH] selftests/ftrace: Fix event filter target_func selection
 Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, aishwarya.tcv@arm.com,
+ linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ mathieu.desnoyers@efficios.com, rostedt@goodmis.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240325-kselftest-clone3-set-tid-v3-1-6fdd91506e53@kernel.org>
+References: <20240320141844.1779984-1-mark.rutland@arm.com>
+ <20240321090950.f96e6b3918bb2dfd121db138@kernel.org>
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240325-kselftest-clone3-set-tid-v3-1-6fdd91506e53@kernel.org>
+In-Reply-To: <20240321090950.f96e6b3918bb2dfd121db138@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/25/24 08:29, Mark Brown wrote:
-> The test results reported for the clone3_set_tid tests interact poorly with
-> automation for running kselftest since the reported test names include TIDs
-> dynamically allocated at runtime. A lot of automation for running kselftest
-> will compare runs by looking at the test name to identify if the same test
-> is being run so changing names make it look like the testsuite has been
-> updated to include new tests. This makes the results display less clearly
-> and breaks cases like bisection.
+On 3/20/24 18:09, Masami Hiramatsu (Google) wrote:
+> On Wed, 20 Mar 2024 14:18:44 +0000
+> Mark Rutland <mark.rutland@arm.com> wrote:
 > 
-> Address this by providing a brief description of the tests and logging that
-> along with the stable parameters for the test currently logged. The TIDs
-> are already logged separately in existing logging except for the final test
-> which has a new log message added. We also tweak the formatting of the
-> logging of expected/actual values for clarity.
+>> The event filter function test has been failing in our internal test
+>> farm:
+>>
+>> | # not ok 33 event filter function - test event filtering on functions
+>>
+>> Running the test in verbose mode indicates that this is because the test
+>> erroneously determines that kmem_cache_free() is the most common caller
+>> of kmem_cache_free():
+>>
+>>    # # + cut -d: -f3 trace
+>>    # # + sed s/call_site=([^+]*)+0x.*/1/
+>>    # # + sort
+>>    # # + uniq -c
+>>    # # + sort
+>>    # # + tail -n 1
+>>    # # + sed s/^[ 0-9]*//
+>>    # # + target_func=kmem_cache_free
+>>
+>> .. and as kmem_cache_free() doesn't call itself, setting this as the
+>> filter function for kmem_cache_free() results in no hits, and
+>> consequently the test fails:
+>>
+>>    # # + grep kmem_cache_free trace
+>>    # # + grep kmem_cache_free
+>>    # # + wc -l
+>>    # # + hitcnt=0
+>>    # # + grep kmem_cache_free trace
+>>    # # + grep -v kmem_cache_free
+>>    # # + wc -l
+>>    # # + misscnt=0
+>>    # # + [ 0 -eq 0 ]
+>>    # # + exit_fail
+>>
+>> This seems to be because the system in question has tasks with ':' in
+>> their name (which a number of kernel worker threads have). These show up
+>> in the trace, e.g.
+>>
+>>    test:.sh-1299    [004] .....  2886.040608: kmem_cache_free: call_site=putname+0xa4/0xc8 ptr=000000000f4d22f4 name=names_cache
+>>
+>> .. and so when we try to extact the call_site with:
+>>
+>>    cut -d: -f3 trace | sed 's/call_site=\([^+]*\)+0x.*/\1/'
+>>
+>> .. the 'cut' command will extrace the column containing
+>> 'kmem_cache_free' rather than the column containing 'call_site=...', and
+>> the 'sed' command will leave this unchanged. Consequently, the test will
+>> decide to use 'kmem_cache_free' as the filter function, resulting in the
+>> failure seen above.
+>>
+>> Fix this by matching the 'call_site=<func>' part specifically to extract
+>> the function name.
+>>
 > 
-> There are still issues with the logging of skipped tests (many are simply
-> not logged at all when skipped and all are logged with different names) but
-> these are less disruptive since the skips are all based on not being run as
-> root, a condition likely to be stable for a given test system.
+> Looks good to me.
 > 
-> Acked-by: Christian Brauner <brauner@kernel.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v3:
-> - Rebase onto v6.9-rc1.
-> - This is the second release I've posted this for with no changes or
->    review comments.
-> - Link to v2: https://lore.kernel.org/r/20240122-kselftest-clone3-set-tid-v2-1-72af5d7dbae8@kernel.org
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> I think this should be a fix because test task name can have ':'.
+> 
+> Fixes: eb50d0f250e9 ("selftests/ftrace: Choose target function for filter test from samples")
+> Cc: stable@vger.kernel.org
+> 
+> Shuah, can you pick this as a fix?
 > 
 
-Thank you for patience. Applied now to linux-kselftest fixes for
-next rc.
+Applied to linux-ksleftest fixes for next rc
 
 thanks,
 -- Shuah
