@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-6645-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1183888CA06
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 18:02:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95F3588CA14
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 18:03:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CCF7B231B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 17:02:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D603E32158D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 17:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCDE13D611;
-	Tue, 26 Mar 2024 17:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96081F61C;
+	Tue, 26 Mar 2024 17:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dqQ2LYF+"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mHxuLD/T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2070.outbound.protection.outlook.com [40.107.223.70])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2056.outbound.protection.outlook.com [40.107.237.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA9713D508;
-	Tue, 26 Mar 2024 17:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BEE1F60A;
+	Tue, 26 Mar 2024 17:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.56
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711472490; cv=fail; b=I4gRmfO1Vq1nw4KVTIJUtIsRi5fQYfcK8kxIpHrGPKa0SG44FVLm2rP61w9+t9pov0I+fqcwGy1pVLAAeVMsXZ7S6fegrykR+zoA4HGI/umN4m75wznuD7q4PSmbfGEvYlQsr2n6GqySz6dmN6eJDvXO0pgilw+xDhND5GrfXjI=
+	t=1711472499; cv=fail; b=gF8AMB/4x9Ex+p8Y/Eq3PtRbBV75MUXF+PeJ4hnFAcOa3O8mBJQJXVqVhZdosRtyaaFScj4gp3Rv4fRCEG2wPiBS65WjmaZ5ocpNEXut4APVxDy7nVcAkFVqHryHu5UVVOfWTw9hbA9HpPG7r7oLZ+tgG4CD0b7hOCVVsLCkaIs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711472490; c=relaxed/simple;
-	bh=MxJe5u4kKh1gF0M8vK+ZVWbNyh5kNSewZOLFJ5VB0m0=;
+	s=arc-20240116; t=1711472499; c=relaxed/simple;
+	bh=HDf28ffDoLt2OzHE5NC0EZDQjL9LK9TeToUEyEt1fpg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ptcH1T1q4gWgLt3zKXKjpiknHDZB4E4jEirhUXfcG89YiCAmTCOq0mEfCMDFznI/Ib1Z2lx3sO76t5Y3weip+Ac/WP1j1YzTGCkItgX774p30q+KS8m5q0GUmC8tD55ufRcxvr9eA8at5VXsb3YE4F5msN7WcM3qDCA9iBl80DQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dqQ2LYF+; arc=fail smtp.client-ip=40.107.223.70
+	 MIME-Version:Content-Type; b=gzZ12isXqJiG3PtZuh+XVoFHFXWX6rbR5wZ0h4gx4x/RCaeoo3cw+m1CQgTOZNFrHQ6yQ/0ytDRfLVgs5XCH0tqZJU7tN6xWIgkCvPckEoddDimZ6F2LWDg+JDB83KvZH74bI5oRIl8Sd4vNS5JFf0rc8LsqJ7/FkJwCvcnjrQw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mHxuLD/T; arc=fail smtp.client-ip=40.107.237.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VpAPQW2Z/YYnJHq8ZoNCbO5VKJ1Hkv7XuUYNEvT/Mxwd/L9Kdb2QqOWXVJbtXmdCmaH+UmFFEepH53CSmZRb19WyfBEiEET1HcvYascQzbXP9qyaaX6OPI0vYsnGzmxB6SovBLfzlLa3pslTMmktk6brrBrnZ/ryaEQwF/srWAh6tWDlw2etf7iwhMnpwT4UH+pldSS+Wz+u9FtRjQts5Kfjjl+ckfVnHlOOhb7okuRZGl+6AE9Hhz8mZhJSQ5EnNFZb1V6cG06YfejHPJ6KjzivLRns3BqhuWuVQSG7krViWbOBtk3FS2ZUnHeFVbhNsCWXNs3WVGxRSaatlHTf3g==
+ b=dpfIEfdccUNdxW7s9V3FQZTjC3pxxMcqVVRgs7U2gX0cm6PEsFOY4vQkWpS/YMPM3w12SlFZyoykRpphHDxontwtLgN46XGA31CMHF4zqxwR54mJGd0R03vEDYwkylvBVEm6I1eAxpAXFIc1DywPcT/R28EQV50vH8nCqhW3PHsvASz9JjYoQXV1qnANm30syPwavA8ZSm9RmlHk1cCuXXt8ZxtxDBegBIJEE44xeq1HYkVnLJILh1p6obP+QQ4iAxae/okawXJQxFEytIAKYJ3NviR++lceJX3ZwV9t7vwyMrN6SFiAzYzaPLq3wOx0Hd0ttktlTPinwa0ZXZRVVg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GmLUvKFraZqK99YQ3BehQvq+UYAaDsAUcKG2ZujckoI=;
- b=PziCKnSoxr15hNXsdQZdjvodQmS8IApeaszUHECksaWN8KYtNIP/ZPexXjjI55om0AG/fWOeaL2q+EuNy9RxiYsowmDM7KfYRNNWixhityD+4a/K8BdYUHBT79NNZiJTR7qimuBit7MPWh51mNnaZsHYgIIOAOiUmJSK5l89Vla/d+NCESUurRT0ScIuVI9zBNxQjupBQQbFptcgJ+yCZldpidg7BxTfocsMD4kZPLpYNhAxVhYHpTzv3orNYzSljTosFvzUqSHWemfhuWpJeCWRQqwfRHw869lwgOlV14aOrKMd2PNdJ/lAAay3/Sk90/sQAdVaC6Umi441CpbcRA==
+ bh=vmFb6laAYMesL6/V0w2y95pwC3ay+pBzgWlmAeKdWro=;
+ b=UuPp8QWyNrnR3uDv0XckyobISmUSjwgU/fNdUqdOC0E39DMIIl8J78E/uG4immZ4AWypkwP2xHWv5MqSvmh40tKZgozRfgicf1HrtugAB2gJcT2pBGB+cYfRUzfSdWLHFcPs8HGo8MQu+OV9Hy5XbZiQuu0DEs/KJlCDoqKiELT0NIcHWcKPNGjeYz1u1BC8qPi5/2gM1veSIhbBjwgE1ibjdN/iKEgyqrJLtFddAqPIxvesMZZicxHMe+VrpoGyGPL25zGpM3XTrSAox8amFkuV82VhQM73Fuyxw0ZboRZasX85DuCuyDZq93RB4N2Sh6s6SgYxCyTwAjGJwwkQow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GmLUvKFraZqK99YQ3BehQvq+UYAaDsAUcKG2ZujckoI=;
- b=dqQ2LYF+nqUNIPtcGfF20vfT1Lh7tSkPOWPwyIUPaHIOtfhgZQbP5JYo/R3jWtAgTX01SYxzO2WpyVfXnAnq4BtzDiqIAjxB3UxQUriPiH/CYDQ+RW25olqz6D5v44WY9WgzO+79kHH1/pSY8mn6kGtDG0WGC3aV3ApQvY89zR49BHZpZtYtxc5xGFr2MYKg0JJlpiea4koM1pxE8pvVFIA2hwdr9CC85ksSu9MvZPViv/5Mp00sFm3c+Ry0UhpvDzpVFMuUolsI7ph0k4c/MWdLkF+S1w92SREhiC5nz44amE/G5AwovL16oY6x+mwn6w8bo7hGBNZGSGJxygo64w==
+ bh=vmFb6laAYMesL6/V0w2y95pwC3ay+pBzgWlmAeKdWro=;
+ b=mHxuLD/TKC1/ajjIY90TOlZTY6TCJdQCV5eoxgyZ7aSso3wlnSFxb0A6iNWGGfOgg5MCFakqliPJ4sHIl+mf5+3ywYKCAg3wQZ4hhimHBSZKtibklukMdB6bQtIXeSHSe8wYFX2nOeQgf5jOph0hAQ5gGUp5l/ZVpRyO+YgO3zVXeOYhEly+SBMafLeFvrBJ2FH3963HtHuv/B9LEb6bbXLaGcq4lOFivfQZrz9RcNigIvAheQ2RF9AslWIKqF5qr4kjwLeyvqKdG47l9NxYXrgcpuhi1jQS423iSDqbj5z0lhLgNj7n5OVNqFZrcZVBFKOgPNAubPt905J68j2m0Q==
 Received: from BN9PR03CA0112.namprd03.prod.outlook.com (2603:10b6:408:fd::27)
- by DS0PR12MB9424.namprd12.prod.outlook.com (2603:10b6:8:1b4::6) with
+ by SA1PR12MB8859.namprd12.prod.outlook.com (2603:10b6:806:37c::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Tue, 26 Mar
- 2024 17:01:21 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Tue, 26 Mar
+ 2024 17:01:30 +0000
 Received: from BN1PEPF00004686.namprd03.prod.outlook.com
- (2603:10b6:408:fd:cafe::c0) by BN9PR03CA0112.outlook.office365.com
+ (2603:10b6:408:fd:cafe::52) by BN9PR03CA0112.outlook.office365.com
  (2603:10b6:408:fd::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
- Transport; Tue, 26 Mar 2024 17:01:21 +0000
+ Transport; Tue, 26 Mar 2024 17:01:26 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -66,15 +66,15 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.117.160) by
  BN1PEPF00004686.mail.protection.outlook.com (10.167.243.91) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 17:01:20 +0000
+ 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 17:01:26 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 26 Mar
- 2024 10:00:48 -0700
+ 2024 10:00:55 -0700
 Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Tue, 26 Mar
- 2024 10:00:43 -0700
+ 2024 10:00:49 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -84,10 +84,10 @@ CC: Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
 	<vladimir.oltean@nxp.com>, Benjamin Poirier <bpoirier@nvidia.com>, "Ido
  Schimmel" <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
 	<linux-kselftest@vger.kernel.org>, Petr Machata <petrm@nvidia.com>,
-	<mlxsw@nvidia.com>, Tobias Waldekranz <tobias@waldekranz.com>
-Subject: [PATCH net-next 07/14] selftests: forwarding: Change inappropriate log_test_skip() calls
-Date: Tue, 26 Mar 2024 17:54:34 +0100
-Message-ID: <3d668d8fb6fa0d9eeb47ce6d9e54114348c7c179.1711464583.git.petrm@nvidia.com>
+	<mlxsw@nvidia.com>, Davide Caratti <dcaratti@redhat.com>
+Subject: [PATCH net-next 08/14] selftests: lib: Define more kselftest exit codes
+Date: Tue, 26 Mar 2024 17:54:35 +0100
+Message-ID: <545a03046c7aca0628a51a389a9b81949ab288ce.1711464583.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1711464583.git.petrm@nvidia.com>
 References: <cover.1711464583.git.petrm@nvidia.com>
@@ -103,142 +103,72 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00004686:EE_|DS0PR12MB9424:EE_
-X-MS-Office365-Filtering-Correlation-Id: d660fcdb-7b9f-4931-703b-08dc4db65c5d
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004686:EE_|SA1PR12MB8859:EE_
+X-MS-Office365-Filtering-Correlation-Id: 24124de0-79ca-4064-bea3-08dc4db65fb7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	/NBVky3AkCSdQPTy3WCXEjFy5zcG6tTjCmJi8R2NUJz4xR5x0V+P9e2dZHaaEz0S0gkuGp0XfTuEjSZEEa7Io37KHr7vYfMyNC2gzq4IZjtFFcsMNSXZlz6A+CN7niJz0oov9YV/n1B7taJK8o67yEkRn1YntyVDhymhP2eDQS7f0JinG80LeMGgCqA2ldCZBfYsWwDfYE56+hzG7gOgCYGOKrAZSxcxAdBBhmnt+qPIUC+Ynip+V4yzsQXkR5TaK+s7l+mUA/IdivdUqmtiq4dZQi0GlQZ4zHIiMEIy4kGY26wA4xcBMbocc3NqmDuIG8SV6w6EXi28B3iW0sZETuseR2CHWloPalf1P3hnRMy2/GnKVybe6PwEkcxzOqpftJcMqGHpJfaGaEbQ6a64GsoZ1An7ObPNttajSK78WY8epByZ+2wI0RPCFNNWgpFr+pdL1NStJb8n1DjN7Y03CkomVXU34MZBZJ03xgqHR6pk+JFKEqTMbPMYgNR8mbkD2q9DG0zaAGIHisbUHEjBwWTV+8ctKahdnLpb9p4Pafq2xDrnM3bXRI69VqUIuW3AZA/OvOH2dD9aKVN/CHL7b9Iid708aF+4J0f31dpk7dqLUng4mhu4yvbUS4bdDZ66hdUsMCe6xbj8nRnC2allxRrkceV5Y/6924FSIH4ptrFb+587bAKciMwt+I/JOXBr0c7bPiLa3Yppuh5GST58m+eEMXdPHNYL9t0AKDI0bH86Fn1zq3KBCoh3KhI6ZnLY
+	DhL9lmNro9/vf83zo8HYA+bg5RCzQ+jlnCNTIspTchHZ4uVbXfFM8tvQkFTigTs4XxaxLwmYjF/PrJEV2xiGqDl5FCY1ktLmFWnktilOlLigQiwQv675r586Wny6s+vyM6A2nUJM3AspbKpOAikzYfnub73KqPj/dalrioq7nWEmbybV3kW17dWl1tIX7VlFE/DN+6t+UsSNidTtU2kUldfRUEOTvU4bQOJLIgt/G8Zf7Q5U3BWyliJ54Vf1CJR25Ns+yM2BLcSxfvV6aZGdAaUoB72sOSudpFP0AEH1caHlp2BgwuUzsYWhbRYFsBuPsZQQlf1XwK6lS6G0fKuUmKUlElL7rLhMFfoJpckRO+f497RN514hV4PYoqLtDaQpEG595oIDbfbMlKYg2gciTV6kFMDs9/qrvi80Qv9ORDVumIMJrzEUknyTNWxrkb3fhYCbHfoSv2EskZboRZLEQI6lqypqPCyGnUyl/46k7eSVQ6UFpavPquLHCyemTUbnDwDa0a3C6CVzqPntNcwO1CiWYnHMtsPL7H9Do5FM4rSMSyF9hEGOt8GX7g4T2IHunwa3d7+mv+sf9PNuy4WlOp4o2sQn7YLjlYAzXhqhXZ3LzASOQeKVq/Ev5Du/UnA8DvKQ3YO/l3LGyemyHW5Ge5NUCCdnbdSIezwdrcqYyCIpUABekQkgF5gkAuVbac1185eZsYY1Vd6bRatks5Yq1+ywya3yF+2tVW+WTOig7W3GWo+YPrkugMNz1YR4aiYd
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(376005)(1800799015)(7416005);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(1800799015)(82310400014)(376005)(7416005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 17:01:20.6750
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 17:01:26.3000
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d660fcdb-7b9f-4931-703b-08dc4db65c5d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24124de0-79ca-4064-bea3-08dc4db65fb7
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	BN1PEPF00004686.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9424
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8859
 
-The SKIP return should be used for cases where tooling of the machine under
-test is lacking. For cases where HW is lacking, the appropriate outcome is
-XFAIL.
+The following patches will operate with more exit codes besides
+ksft_skip. Add them here.
 
-This is the case with ethtool_rmon and mlxsw_lib. For these, introduce a
-new helper, log_test_xfail().
+Additionally, move a duplicated skip exit code definition from
+forwarding/tc_tunnel_key.sh. Keep a similar duplicate in
+forwarding/devlink_lib.sh, because even though lib.sh will have
+been sourced in all cases where devlink_lib is, the inclusion is not
+visible in the file itself, and relying on it would be confusing.
 
-Do the same for router_mpath_nh_lib. Note that it will be fixed using a
-more reusable way in a following patch.
-
-For the two resource_scale selftests, the log should simply not be written,
-because there is no problem.
-
-Cc: Tobias Waldekranz <tobias@waldekranz.com>
+Cc: Davide Caratti <dcaratti@redhat.com>
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh   | 4 ++--
- tools/testing/selftests/drivers/net/mlxsw/mlxsw_lib.sh   | 2 +-
- .../drivers/net/mlxsw/spectrum-2/resource_scale.sh       | 1 -
- .../drivers/net/mlxsw/spectrum/resource_scale.sh         | 1 -
- tools/testing/selftests/net/forwarding/lib.sh            | 9 +++++++++
- .../selftests/net/forwarding/router_mpath_nh_lib.sh      | 2 +-
- 6 files changed, 13 insertions(+), 6 deletions(-)
+ tools/testing/selftests/net/forwarding/tc_tunnel_key.sh | 2 --
+ tools/testing/selftests/net/lib.sh                      | 6 +++++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
-index 709433a4c886..e2a1c10d3503 100755
---- a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
-+++ b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
-@@ -79,7 +79,7 @@ rmon_histogram()
+diff --git a/tools/testing/selftests/net/forwarding/tc_tunnel_key.sh b/tools/testing/selftests/net/forwarding/tc_tunnel_key.sh
+index 5a5dd9034819..79775b10b99f 100755
+--- a/tools/testing/selftests/net/forwarding/tc_tunnel_key.sh
++++ b/tools/testing/selftests/net/forwarding/tc_tunnel_key.sh
+@@ -1,7 +1,5 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
  
- 		for if in $iface $neigh; do
- 			if ! ensure_mtu $if ${bucket[0]}; then
--				log_test_skip "$if does not support the required MTU for $step"
-+				log_test_xfail "$if does not support the required MTU for $step"
- 				return
- 			fi
- 		done
-@@ -94,7 +94,7 @@ rmon_histogram()
- 		jq -r ".[0].rmon[\"${set}-pktsNtoM\"][]|[.low, .high]|@tsv" 2>/dev/null)
+ ALL_TESTS="tunnel_key_nofrag_test"
  
- 	if [ $nbuckets -eq 0 ]; then
--		log_test_skip "$iface does not support $set histogram counters"
-+		log_test_xfail "$iface does not support $set histogram counters"
- 		return
- 	fi
- }
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/mlxsw_lib.sh b/tools/testing/selftests/drivers/net/mlxsw/mlxsw_lib.sh
-index 6369927e9c37..48395cfd4f95 100644
---- a/tools/testing/selftests/drivers/net/mlxsw/mlxsw_lib.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/mlxsw_lib.sh
-@@ -42,7 +42,7 @@ __mlxsw_only_on_spectrum()
- 	local src=$1; shift
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 5b366cc4fc43..d9bdf6aa3bf1 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -8,8 +8,12 @@
  
- 	if ! mlxsw_on_spectrum "$rev"; then
--		log_test_skip $src:$caller "(Spectrum-$rev only)"
-+		log_test_xfail $src:$caller "(Spectrum-$rev only)"
- 		return 1
- 	fi
- }
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh
-index a88d8a8c85f2..899b6892603f 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh
-@@ -47,7 +47,6 @@ for current_test in ${TESTS:-$ALL_TESTS}; do
- 		RET=0
- 		target=$(${current_test}_get_target "$should_fail")
- 		if ((target == 0)); then
--			log_test_skip "'$current_test' should_fail=$should_fail test"
- 			continue
- 		fi
+ BUSYWAIT_TIMEOUT=$((WAIT_TIMEOUT * 1000)) # ms
  
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
-index f981c957f097..482ebb744eba 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
-@@ -52,7 +52,6 @@ for current_test in ${TESTS:-$ALL_TESTS}; do
- 			RET=0
- 			target=$(${current_test}_get_target "$should_fail")
- 			if ((target == 0)); then
--				log_test_skip "'$current_test' [$profile] should_fail=$should_fail test"
- 				continue
- 			fi
- 			${current_test}_setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index ca433ba3612e..5415b8d29862 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -467,6 +467,15 @@ log_test_skip()
- 	return 0
- }
- 
-+log_test_xfail()
-+{
-+	local test_name=$1
-+	local opt_str=$2
+-# Kselftest framework requirement - SKIP code is 4.
++# Kselftest framework constants.
++ksft_pass=0
++ksft_fail=1
++ksft_xfail=2
+ ksft_skip=4
 +
-+	printf "TEST: %-60s  [XFAIL]\n" "$test_name $opt_str"
-+	return 0
-+}
-+
- log_info()
- {
- 	local msg=$1
-diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh
-index 7e7d62161c34..b2d2c6cecc01 100644
---- a/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh
-@@ -69,7 +69,7 @@ nh_stats_test_dispatch_swhw()
- 		nh_stats_do_test "HW $what" "$nh1_id" "$nh2_id" "$group_id" \
- 				 nh_stats_get_hw "${mz[@]}"
- 	elif [[ $kind == veth ]]; then
--		log_test_skip "HW stats not offloaded on veth topology"
-+		log_test_xfail "HW stats not offloaded on veth topology"
- 	fi
- }
+ # namespace list created by setup_ns
+ NS_LIST=""
  
 -- 
 2.43.0
