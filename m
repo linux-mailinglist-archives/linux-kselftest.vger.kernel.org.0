@@ -1,94 +1,96 @@
-Return-Path: <linux-kselftest+bounces-6609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C59388BBBB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 08:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CA1C88BC1B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 09:16:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD2E61C28AB2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 07:55:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E7031C3002A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 08:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8BE1327F7;
-	Tue, 26 Mar 2024 07:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F755130AC8;
+	Tue, 26 Mar 2024 08:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="V3Cn5kn9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DVd5tMVx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A3C4CB2E;
-	Tue, 26 Mar 2024 07:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0456412AADB;
+	Tue, 26 Mar 2024 08:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711439717; cv=none; b=dI0AeUXhy25kMSL/HWpWHfDuvNjT7ze3VoBXK83V4mjMoSmxIU4hu7l9dAZmhIO4zqwKCFXvSooofm7zD+C6YKVqvD5cHegF5QLTNJgsw82WiW+HxSXc6cbNSz3U/btC+9zWJIpOhL67HiG0YmipjvY5b3jZYbapNIrRy4P4Bk4=
+	t=1711440979; cv=none; b=CUuOFFRFYi+O5Ria73UWk+e5X8Lli/LNBgiIw/eUydaOfhemN9k1+/vQ9ff11DqNgNJxQX+2ZWMfWYAWNQ7D1nNvChHfpWyJf+jiZ3IHNCwJKQUE07VYK5/h9/2TATVlcBwfgcYPZhqmcFnldgqk6TgXZv7ZySvwb3yNkHd72h8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711439717; c=relaxed/simple;
-	bh=GH6L6DVebNLO9qCIIvAyQqQvKLzQMc2f+nrivTepdgg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BOBKsEgyqd6x71VVUKed4ngqZ/33T3P1GNxhDSkjG6NRV6IcOd9UcT9hkBWrleQecQzMQJa+w+KFxGIDDBss0MwqAA9zi7IYdQPmwYa32o+jmczRWGDRkZm3anHNRiBfXZV/tzt1xnFVgFHU7XZUMKUsbnFmfPEG7bRxOZzHLpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=V3Cn5kn9; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=GH6L6DVebNLO9qCIIvAyQqQvKLzQMc2f+nrivTepdgg=;
-	t=1711439715; x=1712649315; b=V3Cn5kn9MehIgP4+xVrchyL7yrmvlJ97sjRe62bYfFMiuIx
-	91s+0BqJef12RoUaUw/hnu6Fjl8fa9c2whpxTcbtmjfUE6tSFy06wXrdHob0kWdmLU3HyKRQk8iky
-	pd7Pzqowqeb2nF09aYq8TNDEuNISMRNsRBTYF/6u2vFKFM+P3e0KmmVmU8YZA38WfKvnrwO5HxWQ2
-	CGnHROcmO94soLIL19onjZhdztlIVgq63UXe8r2GezRbjbjq1xVA/xJP5TGLBI0en+tRJdTSYUJAl
-	8tpCNnF1y2dmy6g5IrgNFgKtrL2jzIv6uMmBwR7/BGAYT2eXlG5mq5eU387nitkA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1rp1eL-0000000FYMJ-0ma9;
-	Tue, 26 Mar 2024 08:55:13 +0100
-Message-ID: <33670310a2b84d1a650b2aa087ac9657fa4abf84.camel@sipsolutions.net>
-Subject: Re: kunit alltests runs broken in mainline
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc: Brendan Higgins <brendanhiggins@google.com>, David Gow
- <davidgow@google.com>,  Rae Moar <rmoar@google.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>, "x86@kernel.org"
- <x86@kernel.org>
-Date: Tue, 26 Mar 2024 08:55:12 +0100
-In-Reply-To: <20240325185235.2f704004@kernel.org>
-References: <b743a5ec-3d07-4747-85e0-2fb2ef69db7c@sirena.org.uk>
-	 <20240325185235.2f704004@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+	s=arc-20240116; t=1711440979; c=relaxed/simple;
+	bh=cfHV3so/oLbM3PTbry+d/EPObawsMb4Bf5kpaemSprk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RBGdkkbHr/cFCV+eNtWGzTsdJwwj3VpLc6OPUo9e4AnPUmYgbKmSnVJHRGcfCH/YFQA3XlNEhaXQ5bCoEeiR4hSEebDNRgjyW7ANb1Ye1CDjo3boOSr/ByopJiLQsEYVmUJotQBrvvpRBr2aOBIlMyDJlUOMS/4tjs6AsUZKoQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DVd5tMVx; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711440977; x=1742976977;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cfHV3so/oLbM3PTbry+d/EPObawsMb4Bf5kpaemSprk=;
+  b=DVd5tMVxZ6ZyvZLGyjYshZlSIrnjODBR0j35FKLth35S8zuwLEXICJMH
+   i0y5yyeNGfeM76nSB7+a8I/64e0UCB/ERv+JWokXcvqL1jMImduFDFEjX
+   G4cKHpx+MIC20c/O1aBZH7yxLSNIjSSOiTTgU66VoMAgr7DzVLZ0flFhn
+   wJCKzA3NbwJphzosTDjqWIHc5OGm+jQjVrf0RzT2qbPutbNfs028ocLYs
+   ig+e5+dxylMJnKZ12whF5wJyFAVecSZvZki6xGpdlm4OXM6MBJ+Wft2Ly
+   +ykoQI202+5hyh1SPbdmAPWPrwrS8eL09K9PkX/JRGuCeRe93OFwNtX7T
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6370621"
+X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
+   d="scan'208";a="6370621"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 01:16:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
+   d="scan'208";a="20603139"
+Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.36])
+  by orviesa005.jf.intel.com with ESMTP; 26 Mar 2024 01:16:14 -0700
+Date: Tue, 26 Mar 2024 16:30:09 +0800
+From: Zhao Liu <zhao1.liu@intel.com>
+To: Thomas Huth <thuth@redhat.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Use TAP in the steal_time test
+Message-ID: <ZgKHkd+qpE4XsiOI@intel.com>
+References: <20231019095900.450467-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231019095900.450467-1-thuth@redhat.com>
 
-On Tue, 2024-03-26 at 01:52 +0000, Jakub Kicinski wrote:
->=20
-> I'm late to the party, but FWIW I had to toss this into netdev testing
-> tree as a local patch:
->=20
-> CONFIG_NETDEVICES=3Dy
-> CONFIG_WLAN=3Dy
+On Thu, Oct 19, 2023 at 11:59:00AM +0200, Thomas Huth wrote:
+> Date:   Thu, 19 Oct 2023 11:59:00 +0200
+> From: Thomas Huth <thuth@redhat.com>
+> Subject: [PATCH] KVM: selftests: Use TAP in the steal_time test
+> 
+> For easier use of the tests in automation and for having some
+> status information for the user while the test is running, let's
+> provide some TAP output in this test.
+> 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  NB: This patch does not use the interface from kselftest_harness.h
+>      since it is not very suitable for the for-loop in this patch.
+> 
+>  tools/testing/selftests/kvm/steal_time.c | 46 ++++++++++++------------
+>  1 file changed, 23 insertions(+), 23 deletions(-)
+>
 
-I'll send this in the next wireless pull, soon.
+Reviewed-by: Zhao Liu <zhao1.liu@intel.com>
 
-> CONFIG_DAMON_DBGFS_DEPRECATED=3Dy
-
-> The DAMON config was also breaking UML for us, BTW, and I don't see
-> any fix for that in Linus's tree. Strangeness.
-
-I noticed that too (though didn't actually find the fix) against net-
-next, wireless trees are still a bit behind. I guess it'll get fixed
-eventually.
-
-johannes
 
