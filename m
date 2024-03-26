@@ -1,57 +1,62 @@
-Return-Path: <linux-kselftest+bounces-6601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF5388B71A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 02:52:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 626A888B774
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 03:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E13211F3E511
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 01:52:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93E181C2ECC5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 02:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 866DB288DB;
-	Tue, 26 Mar 2024 01:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E533128378;
+	Tue, 26 Mar 2024 02:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GyTUbtTT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nr4BgcbT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2D0208A0;
-	Tue, 26 Mar 2024 01:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A5D1272DC;
+	Tue, 26 Mar 2024 02:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711417957; cv=none; b=E+6VqVNkELlWk11W9PoXpaxOz8CTudJtZnkl5UL+lYPyIJi7bDjmQwRJMWGQ8GfUMqpU6X5JjagcbzBqYqqOcHuZDfz/FI+hfuWv2hAf3AL/uB+iBhtADSZUYO/M32tKF0kUI5+Vx+LW+Tmayr9PCcge9WHPU36u++5qCIu1qgI=
+	t=1711420421; cv=none; b=fAG+oHgScDenvqYC79RGLZ33s3KUp58x4MNnt79vsff/BFGLTYfST/biJKdGLfPnm4xjZHLix/37fesMhdJMxuf8AcdBH9iE1oiZ/eoGu3ZB2Rmk+jdHKdDQhFRBLB2vgNjIolcbJM2iLaNMGH0XLMp48DFN+ZuRke8L9K89HKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711417957; c=relaxed/simple;
-	bh=41HzCcmKGdpC5F2Ac6G0iIm2fkdlbujw9uvFa0tJEh8=;
+	s=arc-20240116; t=1711420421; c=relaxed/simple;
+	bh=PWWez+GCtzHxL+Q3cBOsyLC3Pjq/o440jxyRuUA0HBE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fr/GYkkFJ5x90XvztdcTTgIE/lhX9w3YG/qTSub0lSfJ5wfs6k0k/8vL/jWypkOZj0utu3k/doffuRhZYWjvrV/qjtjN3aChCj8+M/t9DkFFf3qCRhqpYb7mOV+KUdEedNSg8bzhyhGgKI3Mxpy0haiSBmAJGZAgKGhqcI8eVag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GyTUbtTT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B70C433F1;
-	Tue, 26 Mar 2024 01:52:36 +0000 (UTC)
+	 MIME-Version:Content-Type; b=meXvpgOb3C1jIns9U7xkb2xD6XbB6dv0OQae5WEZTMfnqE/riXFyyBrSbwDNupuGz6xbp1JNxJp+o6KpVs0dsgQj21ilypNunBICnRYemJh88+zAvxaktnAThoqaMs3lPn3kp3SrMpd1Qq1/w1Jp0UmiO2N75nIgRNtMwdM9XuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nr4BgcbT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F1C2C433F1;
+	Tue, 26 Mar 2024 02:33:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711417956;
-	bh=41HzCcmKGdpC5F2Ac6G0iIm2fkdlbujw9uvFa0tJEh8=;
+	s=k20201202; t=1711420420;
+	bh=PWWez+GCtzHxL+Q3cBOsyLC3Pjq/o440jxyRuUA0HBE=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GyTUbtTT/+lK39/t1cAhOoP5DswYTsi6hk2B5d43nkrVsvlJ/fcIxIRKMpJJFDMor
-	 5ayovZsp26/P+PSTLTSU3h334wLThM6mxS+aEtq7Zsb77ReMdZ1ESmiDIAjmepaErd
-	 R2VATHqvZqTdc7rjlfIPELACI9CynhopuLXq1NJoeVphzbL33F1FqJF4H79PlBv17q
-	 lOsRnuZb/j0golrV6oTbWtjyQsopxto7B3O56FagUPttf7Y9MQyXAujBuZW6qfMolj
-	 9+1qvXqH7see4+ynEbvnmKkgXTnBQ5jaZHQ3mR6nrzeCqftFWXMByuVVnD3dZ40wzH
-	 D4MxfJ7j2pszw==
-Date: Mon, 25 Mar 2024 18:52:35 -0700
+	b=Nr4BgcbTvRaBmyTyiDaqh0FqlHuYfefFC+IXxVFq/ApLTk1sVLb0xjv7r92kJ1iqV
+	 2ZYyhky/tPHOmOjpy7qvb4YoufvMY14ilBjZ+3zTbAzbh7GAIN5cEmXgC+xAfJ8e6E
+	 qD1MN4pmY5qylBsJ3UNrBubrI6A1PPhYyb2wORcke8wmPAyeHrrkq8FfcH/LENJqzn
+	 ZVoC1igpWA10v1Mn7ViEqvNT9d107JB5gFcpeVsNJBX6dnjQRxkYdoZUnqM+1P3zu0
+	 XXLP8GvSOwQS9KyjaLMkf8Smbbqf0jWPUn3YrHsIL9q4u1yAwqGxKBKJ9rspU9iLJX
+	 8+1/BFu4yearg==
+Date: Mon, 25 Mar 2024 19:33:38 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Johannes Berg <johannes.berg@intel.com>, Brendan Higgins
- <brendanhiggins@google.com>, David Gow <davidgow@google.com>, Rae Moar
- <rmoar@google.com>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, x86@kernel.org
-Subject: Re: kunit alltests runs broken in mainline
-Message-ID: <20240325185235.2f704004@kernel.org>
-In-Reply-To: <b743a5ec-3d07-4747-85e0-2fb2ef69db7c@sirena.org.uk>
-References: <b743a5ec-3d07-4747-85e0-2fb2ef69db7c@sirena.org.uk>
+To: Richard Gobert <richardbgobert@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ willemdebruijn.kernel@gmail.com, dsahern@kernel.org, xeb@mail.ru,
+ shuah@kernel.org, idosch@nvidia.com, amcohen@nvidia.com, petrm@nvidia.com,
+ jbenc@redhat.com, bpoirier@nvidia.com, b.galvani@gmail.com,
+ liujian56@huawei.com, horms@kernel.org, linyunsheng@huawei.com,
+ therbert@google.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 4/4] net: gro: move L3 flush checks to
+ tcp_gro_receive
+Message-ID: <20240325193338.565a4e45@kernel.org>
+In-Reply-To: <20240325182543.87683-5-richardbgobert@gmail.com>
+References: <20240325182543.87683-1-richardbgobert@gmail.com>
+	<20240325182543.87683-5-richardbgobert@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,45 +66,14 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 25 Mar 2024 15:21:33 +0000 Mark Brown wrote:
-> Hi,
-> 
-> Commit 28b3df1fe6ba2cb4 ("kunit: add wireless unit tests") which I can't
-> seem to find on lore breaks full kunit runs on non-UML builds and is now
-> present in mainline.  If I run:
-> 
->    ./tools/testing/kunit/kunit.py run --alltests --cross_compile x86_64-linux-gnu- --arch x86_64
-> 
-> on a clean tree then I get:
-> 
->    [15:09:20] Configuring KUnit Kernel ...
->    Generating .config ...
->    Populating config with:
->    $ make ARCH=x86_64 O=.kunit olddefconfig CROSS_COMPILE=x86_64-linux-gnu-
->    ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
->    This is probably due to unsatisfied dependencies.
->    Missing: CONFIG_IWLWIFI=y, CONFIG_WLAN_VENDOR_INTEL=y
-> 
-> UML works fine, but other real architectures (eg, arm64) seem similarly
-> broken.  I've not looked properly yet, I'm a bit confused given that
-> there's not even any dependencies for WLAN_VENDOR_INTEL and it's not
-> mentoned in the defconfig.
+On Mon, 25 Mar 2024 19:25:43 +0100 Richard Gobert wrote:
+> +	const u32 id = ntohl(*(__be32 *)&iph->id);
+> +	const u32 id2 = ntohl(*(__be32 *)&iph2->id);
+> +	const int flush_id = ntohs(id >> 16) - ntohs(id2 >> 16);
 
-I'm late to the party, but FWIW I had to toss this into netdev testing
-tree as a local patch:
-
-CONFIG_NETDEVICES=y
-CONFIG_WLAN=y
-CONFIG_DAMON_DBGFS_DEPRECATED=y
-https://github.com/linux-netdev/testing/commit/9a632301bf3dbc9ba553562a0ba2657af6fa84d1
-
-We run using:
-
-	./tools/testing/kunit/kunit.py run --alltests
-
-it got broken after we fast-forwarded to Linus on Thu, so I assumed it
-was kunit itself that changed. Not that I found the relevant commit.
-
-The DAMON config was also breaking UML for us, BTW, and I don't see
-any fix for that in Linus's tree. Strangeness.
+The endian conversions don't match types here. sparse is unhappy.
+If id is in host endian shouldn't it be htons(id >> 16) ?
+Also if you cast to a bitwise type you need __force
+-- 
+pw-bot: cr
 
