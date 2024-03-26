@@ -1,130 +1,252 @@
-Return-Path: <linux-kselftest+bounces-6637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FE9788C8C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 17:14:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F22D988C9EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 18:00:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 012F91F81720
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 16:14:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A1931C63680
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Mar 2024 17:00:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF39F13C9DC;
-	Tue, 26 Mar 2024 16:14:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3127B13D2BF;
+	Tue, 26 Mar 2024 17:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bgavmBFY"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Aovy57vq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2077.outbound.protection.outlook.com [40.107.93.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE2D13C9AF
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 16:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711469661; cv=none; b=kS0olMkAzMXmWPX656LJZlGJgat7DhYGjxqGx0HeJCVpgzy78bkLzyZgyhxG8VLe6JriUjN/uzNZR/vMZb9HJegtvwCu64HU4yK8i+4FHp6QfLOJAJkjR+oC7zIB79TuEvvjq27uhGIH7V6DN571TOb0If3xMVgbpRhuwX696q4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711469661; c=relaxed/simple;
-	bh=7SawbmnWI7rPJsnre2a+4vB+2de3J0Bbtlxm2lwABJA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BTz+wSPBaGXBQQBG6iHMORI+W12ZZ4+d537UWNoH1HQ5cx40AMZNk4ci+xLJofKdt0RDhq4hqIYWmCU3k53mXm2jzgWvpvPLyqsdF1M4dL9zpW0oEMc73jDN+4rt4XwrH0HZ3TQBwPvnxYM2Kd4luneYKb8KFd4w+EK6WWgOdoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bgavmBFY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711469659;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=7SawbmnWI7rPJsnre2a+4vB+2de3J0Bbtlxm2lwABJA=;
-	b=bgavmBFY4MX9cZ7ZJMWsfhJCXbypcrMmyiFYPRieQi+rqEqreXDOEO4xrAgcawec/Nnray
-	wChPyxFhQwvp9BO37MbJrref5321ODwj7ELIzKn9KbQnacXn67bH37+JzM2PCLgI/GzqAR
-	ZUX0t7Q50KAscAawXV4WlRcEKTLp4/M=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-144-NN-YainkPQWqjv27Y2-dLQ-1; Tue, 26 Mar 2024 12:14:16 -0400
-X-MC-Unique: NN-YainkPQWqjv27Y2-dLQ-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-341d0499bbdso415370f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 09:14:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711469654; x=1712074454;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7SawbmnWI7rPJsnre2a+4vB+2de3J0Bbtlxm2lwABJA=;
-        b=rGHTOVLSNfvEDlZYYw5C7LMmTOwPyc+qGaNDH0nf9sh19D2fBc6t0t6+5IbeCvexRe
-         +mYYYiXwgvj2Sn2VmnQ8fLne9kpCG00HvNXxDbe/hSnCJjPfp7wYQPlUV9cju7qW07vk
-         DNuYCbaXuRBe0M7FPIGP0Twi5Y3GjyPpYsUzfuqD71UgC1uGRl4A8H3d0HP1bmtjirJh
-         lJWKRjng1xOkbDxXQ9IYCUJosJvXHalcc3kNSpFJuaanITMC5noiOYT4/9idFsf+skGA
-         hcvihK8dz0Mg2gA9gDGzsGHcqdezXYUwH9Qyrha0oDhoUNMIgTYAbzHfpVX1wHE9pXOY
-         a+5A==
-X-Forwarded-Encrypted: i=1; AJvYcCXE8vLQhUo8dmQbVx7b+NDML03OTYS2Stbf/r7338FfUbqz9KY47Zy9LPDr0EEPbF1AEvnydo2Yjh3lWnH2aRHmXSwrl3dh6TFfh5UOwOIy
-X-Gm-Message-State: AOJu0YxnVh/VjZyQ+pdWFW7ZCCH07LZOYidzQS4ca4NAFexVGBh+zK6M
-	0hzXipFJGMwt1BNbadZljK5uU9u7Ep0c5dFaAVLbY7trxLte2WYHhHchahGVPW7h0DG5I9wOmii
-	BJiIFooL7CVfpuL2Nv2vgsp7FaIt1oqNKjs+cMeiZYDUrWpyWtukad+PO/6aspkg5vw==
-X-Received: by 2002:a05:6000:1d8f:b0:341:cf6a:9edb with SMTP id bk15-20020a0560001d8f00b00341cf6a9edbmr5122117wrb.1.1711469654757;
-        Tue, 26 Mar 2024 09:14:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHjShKKyWXmkUtgp7SlwTyVgwVrWoywvcERPA7AbkHbHielkBEJwiDiyusdfK4L/qlc139cWw==
-X-Received: by 2002:a05:6000:1d8f:b0:341:cf6a:9edb with SMTP id bk15-20020a0560001d8f00b00341cf6a9edbmr5122103wrb.1.1711469654383;
-        Tue, 26 Mar 2024 09:14:14 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-229-159.dyn.eolo.it. [146.241.229.159])
-        by smtp.gmail.com with ESMTPSA id bf12-20020a0560001ccc00b0033e745b8bcfsm12550390wrb.88.2024.03.26.09.14.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Mar 2024 09:14:13 -0700 (PDT)
-Message-ID: <d60c6185b8394da02479100981fa3f1306d9c81f.camel@redhat.com>
-Subject: Re: [PATCH net-next v4 4/4] net: gro: move L3 flush checks to
- tcp_gro_receive
-From: Paolo Abeni <pabeni@redhat.com>
-To: Richard Gobert <richardbgobert@gmail.com>, Eric Dumazet
-	 <edumazet@google.com>
-Cc: davem@davemloft.net, kuba@kernel.org, willemdebruijn.kernel@gmail.com, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Tue, 26 Mar 2024 17:14:12 +0100
-In-Reply-To: <6566fd5f-fcdf-4dc7-b8a2-5e8a182f8c49@gmail.com>
-References: <20240325182543.87683-1-richardbgobert@gmail.com>
-	 <20240325182543.87683-5-richardbgobert@gmail.com>
-	 <CANn89iKzeTKuBA3NL0DQUmUHmmc0QzZ0X62DUarZ2Q7cKRZvSA@mail.gmail.com>
-	 <46e0c775-91e7-4bf6-88f3-53ab5e00414f@gmail.com>
-	 <CANn89iJkDbzLKmUGRHNFpfiaO8z19i44qgqkBA9Updt4QsRkyg@mail.gmail.com>
-	 <6566fd5f-fcdf-4dc7-b8a2-5e8a182f8c49@gmail.com>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F375413CC45;
+	Tue, 26 Mar 2024 17:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711472421; cv=fail; b=PQot79ePwjxuPb86QjyKKBgGNT7uiVf97nBOyC5i8q75EgrytotJNuQDhdtw4An8wOibHZCNEShgDXCEr3n/9L+pQam2uS/YevAvS2dL8xxDO2ai+EcdIZXL7eNKmM5Xy6zQAyJUS7IUEeeiUPp3z+GjXVCwVMb01XFC6Ls5JYA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711472421; c=relaxed/simple;
+	bh=DySJ6Edk7iujm9Lie52WbYyT5clS5bT2Y6nzp3I+Sw4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lRIrxr9Y9dhppkSU4IfWa/oeTLewKxWV/f6ReXjBh5nRMKY/edwBxgBZwJ3Tlwdiyw6KtG1ESOnVK2gDjCqQ1Luwk/izZo+8IA8L1MVPnYHeT23fulndXb1v9O7ICm7zY5EwzKJZkouJ7Jhp/r5Q9pXDd0lohkffCLQ9p81FW6o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Aovy57vq; arc=fail smtp.client-ip=40.107.93.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YfU+I5isqPwyQyER9yliHetY2JTdhfZ/ECMHuLHZ7Bvm1kyMI9sg2xu2DLL0MB9zZc+SnDjh1ZxcX/tfntMWcS/P1GGY1hyq8YRjcRPTOdVpNZVPfq0Nt9stW4JlCwvd56W4SBfMWxd3+U3+7SUNMW455FYNkm46kaRKkYJmHhlLNDS4X85YuVwdBLEQ61Ev9EhDTjZLLfW+RVXQIqGudL1hTyO/hQAjAIPoiJPyCBBoF2OH3A10dfnql89ANwVnpqv2T1gjMV9RghQcILMSqV6T6kB6x01UFVt4dIoiDZgZ8OXr3Gv8UFdMlPAJH/WUPP0VvMjc5OSxsCBAoKnYpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iehVLWae0CZTFySjJUhoDWJ5I/9dD9Z++6kXSjhp7zA=;
+ b=WeQY3iSqway2ErZ26luj3uVGMKG0GlZ33v9+YXnoTPimxYsW3Gxo2kltDDPJJ4DAdvbv+uM4fkMbkgSnvw1MORrDJGFnhRe3iEgDhYHOEvkfmXWHf66qSQENQOP7F5xtk52+/oxceX6x1twmwaz0YdQ6PpxzIUp9Z4Q+pHMrD3QSnUxbAKOaJ5q5MMFZcZMlDF1smPZMOKW+71ImV+/AB6QgZ/vUhUxuE4UYLN1PqfwLcw0JWEP0GNVy6wKtuSPfOiz1e9IXWgD3viGG//Ue2CrDNY+3jlghQvei3phHZ/A0HZeZwOd2ehh3IvXEeroEIbdZUx8mXuWBOYTijHzRWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iehVLWae0CZTFySjJUhoDWJ5I/9dD9Z++6kXSjhp7zA=;
+ b=Aovy57vqIgmU4SmyluTfd1oaoDp9Fek+zJQXoe/mfG6tUKzsX9zRXGYfBE1bzOMkiGElVGS2wcTAjHCSqO6EUgLPCS9SYYrhmmfB+DpSFjt+fvCj9iJP5gcGzlMy2/boTq7IEuuebPNFiT2oc1UaDgzxakBoJZryxDjjMNVjfsMHXlryd5bQ5qBaqyPwCwn4sOTD/YUq/PPKJJnq05T4Mlchs9lzOO/c43EzGs3w8nblMIa7m3hAYdyr5NJa5MKk74lm+OjTcWxCr7+Fr1jOtWifaydRQUiPoDY3mfl6HGKtCXT+GYo++fDhLWsj/YcSFWWpz72h0DhU00Un7B9Rvw==
+Received: from BN9PR03CA0330.namprd03.prod.outlook.com (2603:10b6:408:112::35)
+ by SJ2PR12MB8925.namprd12.prod.outlook.com (2603:10b6:a03:542::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Tue, 26 Mar
+ 2024 17:00:14 +0000
+Received: from BN1PEPF00004682.namprd03.prod.outlook.com
+ (2603:10b6:408:112:cafe::84) by BN9PR03CA0330.outlook.office365.com
+ (2603:10b6:408:112::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
+ Transport; Tue, 26 Mar 2024 17:00:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN1PEPF00004682.mail.protection.outlook.com (10.167.243.88) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 17:00:13 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 26 Mar
+ 2024 10:00:03 -0700
+Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Tue, 26 Mar
+ 2024 09:59:56 -0700
+From: Petr Machata <petrm@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC: Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+	Hangbin Liu <liuhangbin@gmail.com>, Vladimir Oltean
+	<vladimir.oltean@nxp.com>, Benjamin Poirier <bpoirier@nvidia.com>, "Ido
+ Schimmel" <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+	<linux-kselftest@vger.kernel.org>, Petr Machata <petrm@nvidia.com>,
+	<mlxsw@nvidia.com>
+Subject: [PATCH net-next 00/14] selftests: Fixes for kernel CI
+Date: Tue, 26 Mar 2024 17:54:27 +0100
+Message-ID: <cover.1711464583.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004682:EE_|SJ2PR12MB8925:EE_
+X-MS-Office365-Filtering-Correlation-Id: ffaf26a6-775d-4e87-48eb-08dc4db63469
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	u/kHsDjhiEFMTIy+tVKfKpSWqZZAXug+817ARpq9FN8SeCBghW0HswNW8xyf7ly8gxIrSgute//GQ8+yrFu2YvLlSyzuxnDgAZJoXaPG8o8DlaVLeWzxdsrWEHQ3FZKcS7Tx3FYfrl7W/IuSLLQJ3NJY9g0ytiIfszAoqZTA8k5iTFGUJYqHGuOGbhoMn6ReHqyzS6XBHcqFJxkGavLdndPbeG1EQrx5cJjAAeMn3drfQez058IgUbv2ZSy2wMII2CleSyp3SVeKioUd7dA9FwPenvHBMesrR57ebxtBdWDD+TxVQi5YU48XFqekHiERO59EcoeUpe+2qPZD+2UXYl4fdJkDRHkoAcoaD1ab6RH8P1/IMIr7YmUbvVYbRHCms4hwDI59UNEIVbYaoBIJpD6e2RCPeBU5gXNieEF1BgTnmss1iuPBPn7bqUzbHP7Gv9jOK8QIn+LMYyH+7GxAI5D2E477OH9NfI6Rp2YHXVBHnVlGHhAqND+a/ELqOB7zU18Qb/lxEY8NrVne04GDRmQq3tA8HY+w/CTQfl61E3ZKTEKk90YSRIitJDQU67m8cc1bIohTdwoAx6qNjRnPvNIQ4MEhqI4EAVO273Wthl0IjadrIctEALvDsT1CcD02KVP3+4Wk5qVLO8OjmTeETHLi3rGZG174mP+x3DSMSXyTkjikdFVzEp/2bhD6OKsiUjzWXguYd+goRV3itFdJqlgLLoHvdl5KCyV4PxTB9K7c6ZZ/P633A0vpyEvm6WlX
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(376005)(36860700004)(82310400014)(7416005)(1800799015);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 17:00:13.6438
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ffaf26a6-775d-4e87-48eb-08dc4db63469
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004682.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8925
 
-Hi,
+As discussed on the bi-weekly call on Jan 30, and in mailing around
+kernel CI effort, some changes are desirable in the suite of forwarding
+selftests the better to work with the CI tooling. Namely:
 
-On Tue, 2024-03-26 at 16:02 +0100, Richard Gobert wrote:
-> This patch is meaningful by itself - removing checks against non-relevant
-> packets and making the flush/flush_id checks in a single place.
+- The forwarding selftests use a configuration file where names of
+  interfaces are defined and various variables can be overridden. There
+  is also forwarding.config.sample that users can use as a template to
+  refer to when creating the config file. What happens a fair bit is
+  that users either do not know about this at all, or simply forget, and
+  are confused by cryptic failures about interfaces that cannot be
+  created.
 
-I'm personally not sure this patch is a win. The code churn is
-significant. I understand this is for performance's sake, but I don't
-see the benefit???=20
+  In patches #1 - #3 have lib.sh just be the single source of truth with
+  regards to which variables exist. That includes the topology variables
+  which were previously only in the sample file, and any "tweak
+  variables", such as what tools to use, sleep times, etc.
 
-The changelog shows that perf reports slightly lower figures for
-inet_gro_receive(). That is expected, as this patch move code out of
-such functio. What about inet_gro_flush()/tcp_gro_receive() where such
-code is moved?
+  forwarding.config.sample then becomes just a placeholder with a couple
+  examples. Unless specific HW should be exercised, or specific tools
+  used, the defaults are usually just fine.
 
-Additionally the reported deltas is within noise level according to my
-personal experience with similar tests.
+- Several net/forwarding/ selftests (and one net/ one) cannot be run on
+  veth pairs, they need an actual HW interface to run on. They are
+  generic in the sense that any capable HW should pass them, which is
+  why they have been put to net/forwarding/ as opposed to drivers/net/,
+  but they do not generalize to veth. The fact that these tests are in
+  net/forwarding/, but still complaining when run, is confusing.
 
-I think we are better off without this patch.
+  In patches #4 - #6 move these tests to a new directory
+  drivers/net/hw.
 
-Paolo
+- The following patches extend the codebase to handle well test results
+  other than pass and fail.
 
+  Patch #7 is preparatory. It converts several log_test_skip to XFAIL,
+  so that tests do not spuriously end up returning non-0 when they
+  are not supposed to.
+
+  In patches #8 - #10, introduce some missing ksft constants, then support
+  having those constants in RET, and then finally in EXIT_STATUS.
+
+- The traffic scheduler tests generate a large amount of network traffic
+  to test the behavior of the scheduler. This demands a relatively
+  high-performance computer. On slow machines, such as with a debugging
+  kernel, the test would spuriously fail.
+
+  It can still be useful to "go through the motions" though, to possibly
+  catch bugs in setup of the scheduler graph and passing packets around.
+  Thus we still want to run the tests, just with lowered demands.
+
+  To that end, in patches #11 - #12, introduce an environment variable
+  KSFT_MACHINE_SLOW, with obvious meaning. Tests can then make checks
+  more lenient, such as mark failures as XFAIL. A helper, xfail_on_slow,
+  is provided to mark performance-sensitive parts of the selftest.
+
+- In patch #13, use a similar mechanism to mark a NH group stats
+  selftest to XFAIL HW stats tests when run on VETH pairs.
+
+- All these changes complicate the hitherto straightforward logging and
+  checking logic, so in patch #14, add a selftest that checks this
+  functionality in lib.sh.
+
+v1 (vs. an RFC circulated through linux-kselftest):
+- Patch #9:
+    - Clarify intended usage by s/set_ret/ret_set_ksft_status/,
+      s/nret/ksft_status/
+
+Petr Machata (14):
+  selftests: net: libs: Change variable fallback syntax
+  selftests: forwarding.config.sample: Move overrides to lib.sh
+  selftests: forwarding: README: Document customization
+  selftests: forwarding: ipip_lib: Do not import lib.sh
+  selftests: forwarding: Move several selftests
+  selftests: forwarding: Ditch skip_on_veth()
+  selftests: forwarding: Change inappropriate log_test_skip() calls
+  selftests: lib: Define more kselftest exit codes
+  selftests: forwarding: Have RET track kselftest framework constants
+  selftests: forwarding: Convert log_test() to recognize RET values
+  selftests: forwarding: Support for performance sensitive tests
+  selftests: forwarding: Mark performance-sensitive tests
+  selftests: forwarding: router_mpath_nh_lib: Don't skip, xfail on veth
+  selftests: forwarding: Add a test for testing lib.sh functionality
+
+ .../testing/selftests/drivers/net/hw/Makefile |  25 ++
+ .../net/hw}/devlink_port_split.py             |   0
+ .../forwarding => drivers/net/hw}/ethtool.sh  |   5 +-
+ .../net/hw}/ethtool_extended_state.sh         |   5 +-
+ .../net/hw}/ethtool_lib.sh                    |   0
+ .../net/hw}/ethtool_mm.sh                     |   3 +-
+ .../net/hw}/ethtool_rmon.sh                   |   7 +-
+ .../net/hw}/hw_stats_l3.sh                    |  19 +-
+ .../net/hw}/hw_stats_l3_gre.sh                |   7 +-
+ .../forwarding => drivers/net/hw}/loopback.sh |   5 +-
+ .../testing/selftests/drivers/net/hw/settings |   1 +
+ .../selftests/drivers/net/mlxsw/mlxsw_lib.sh  |   2 +-
+ .../net/mlxsw/spectrum-2/resource_scale.sh    |   1 -
+ .../net/mlxsw/spectrum/resource_scale.sh      |   1 -
+ tools/testing/selftests/net/Makefile          |   1 -
+ .../testing/selftests/net/forwarding/Makefile |   9 +-
+ tools/testing/selftests/net/forwarding/README |  33 +++
+ .../net/forwarding/forwarding.config.sample   |  53 ++--
+ .../selftests/net/forwarding/ipip_lib.sh      |   1 -
+ tools/testing/selftests/net/forwarding/lib.sh | 255 +++++++++++++-----
+ .../selftests/net/forwarding/lib_sh_test.sh   | 208 ++++++++++++++
+ .../net/forwarding/router_mpath_nh_lib.sh     |  12 +-
+ .../selftests/net/forwarding/sch_ets_tests.sh |  19 +-
+ .../selftests/net/forwarding/sch_red.sh       |  10 +-
+ .../selftests/net/forwarding/sch_tbf_core.sh  |   2 +-
+ .../selftests/net/forwarding/tc_common.sh     |   2 +-
+ .../selftests/net/forwarding/tc_tunnel_key.sh |   2 -
+ tools/testing/selftests/net/lib.sh            |  48 +++-
+ 28 files changed, 565 insertions(+), 171 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/Makefile
+ rename tools/testing/selftests/{net => drivers/net/hw}/devlink_port_split.py (100%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/ethtool.sh (98%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/ethtool_extended_state.sh (96%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/ethtool_lib.sh (100%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/ethtool_mm.sh (99%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/ethtool_rmon.sh (92%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/hw_stats_l3.sh (96%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/hw_stats_l3_gre.sh (92%)
+ rename tools/testing/selftests/{net/forwarding => drivers/net/hw}/loopback.sh (92%)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/settings
+ create mode 100755 tools/testing/selftests/net/forwarding/lib_sh_test.sh
+
+-- 
+2.43.0
 
 
