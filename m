@@ -1,849 +1,210 @@
-Return-Path: <linux-kselftest+bounces-6742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCCCC88F104
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 22:33:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A7CA88F125
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 22:44:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED7AAB2295A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 21:33:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E96B1C2CF91
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 21:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C0C1552F3;
-	Wed, 27 Mar 2024 21:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E529152E03;
+	Wed, 27 Mar 2024 21:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="x72k5wPN"
+	dkim=pass (1024-bit key) header.d=memverge.com header.i=@memverge.com header.b="CG7ZZKiO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2138.outbound.protection.outlook.com [40.107.212.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52578154C15
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 21:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711575107; cv=none; b=jTcqfOF4mLH/Qaoe7hESowx5IHfset/Ieeqv/f7Y/WJwYzNTjr2uRTkCXfczvVjBtUjoYbDYDEAR5qqRlvm9UDUvYKk5y5U45Y19aKPEaZByzcXzbLGJU6M7mFvSXGgUhqb5x6BALp1ziRAkd2zXIt/UqsRL/k7PpLfnajoNXoQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711575107; c=relaxed/simple;
-	bh=ODPZnHhZflNC9BZbtwGgK4tRgbN0RJNs/bz0ja0tKnQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SPqagQmcIjp6COHga2ntjmpbN1ti1nWiQnnLyw8xHfOISe7bsB7IjyU5ozmJRTKY2sqbSzFdUiYk0B3kQ77AeEsgEyCrFfjR9zzpnFzaxxzmScscnIkk5iFrC0MhSkGDGULYZFeglmshd3IFdB7m2wUAVd/OPsJcuHATAk5QyFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuanchu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=x72k5wPN; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuanchu.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dcdc3db67f0so1632622276.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 14:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711575103; x=1712179903; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7c7k4V/S7G6QBja8bewx6p+TNglNHZEZpbTAgR+I/w=;
-        b=x72k5wPNVswejkJ+ejrKs6ZM7RnW1y+xt6NEWi6iY0lMAdguuNo14fMlBcBWH3DU10
-         rLmeWJioJ79A3org0JteXAa4fUtBe31DOQ+P/+rZhqROONSKeZAsE4hl/fkIjMxgaNs/
-         LmqzDX6ajvfzYXZsPoUdrsYmznuZrCK3TB5pdrEgIxFOr7MLDFPwQCDzh7CfPdT6wF0d
-         J2tnzhL3DkWyJGaJzgurnqzBocJj1EuFyb2c/i6TON09iDx2mpSHh4Q0w5QgERT9e9Aw
-         REEEMje8yWE0C92z74eI4vml/nZw0YuVCAfyvxZx5a0su1P3AWjdyyypF7uZgJ6SHXXM
-         v82A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711575103; x=1712179903;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7c7k4V/S7G6QBja8bewx6p+TNglNHZEZpbTAgR+I/w=;
-        b=FPOmUo5dpb1j9USG74ZZU2oTkhDulLceLXaoPVVhKU4nt1F7l+Rmcze8jEZntxl0kL
-         f/faelOhQRr/IGxtKJIVGMM7msrBhjdUHJ+LzPyH4hu1dRTJ41+PehHqf4ZDgJXeB1QA
-         FudyTzKxT5wfhiO7vnpV19951hKOBU240tXGtGR+8UpNnQ650xpgGTTG3NbhICk2GPAr
-         V7NDK/9mmGIXl5E8Vfe6JwVwhRHvqtdzQx3Bk/oU/WN4KGJ59zkTffAvdxn/VrT60MY2
-         HPv3JYtY5Uhs6KarBjYCiNnR1DjKgmjVPkkJ6DjMph2Nmsqc5oXiTmufOOGFeg+vwWAd
-         B9ew==
-X-Forwarded-Encrypted: i=1; AJvYcCXTc6K3Z0wijESQGQbHIe8CTdi6EZ9pkeeScb85NToKhp5Dllm0K1KenTqGtTqZMTd/RFGLyjnSq6v2hTK/cUyNgEsq2z1WLAbDfrDBe9Dq
-X-Gm-Message-State: AOJu0Yw8HRpLz4phfv4994cmzpeZk7reXc2D4QTX8/rP/qtYJfWYIQ15
-	fi9rrhUor++c99hTWYO83xVxZ3MV2qKxtYNXxEv4IelllhZGvzWGj291azvJJcGrVOWU9ngVq9R
-	GjaB1Eg==
-X-Google-Smtp-Source: AGHT+IG08I1h3s4iLQpGTmc8i+JOVJgv8ta59pUthTIq/uAtBVC/Cxu1sn92i5SwYJx/4S1FLyw2LapJLN5i
-X-Received: from yuanchu-desktop.svl.corp.google.com ([2620:15c:2a3:200:6df3:ef42:a58e:a6b1])
- (user=yuanchu job=sendgmr) by 2002:a05:6902:1507:b0:dbd:ee44:8908 with SMTP
- id q7-20020a056902150700b00dbdee448908mr154820ybu.0.1711575103440; Wed, 27
- Mar 2024 14:31:43 -0700 (PDT)
-Date: Wed, 27 Mar 2024 14:31:07 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC6C14E2D1;
+	Wed, 27 Mar 2024 21:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.138
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711575876; cv=fail; b=rrt7KhzQY5zcrWyyJnOD/BJHunK8ZNmiDLZEl0r9rupowvxC702Ng5wyWsz89a2BwLhrYjKlCMXL9vvby3EsY4CSBE1euwfvLa0jstYAoRhRoNWw1d6kiHQoT/U8EYPUK96SRAqnv0uS/BU0w4pxU44U35E6j3mFVzYa2LrwY0c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711575876; c=relaxed/simple;
+	bh=r785iyQiV9UY7L6S3poT1iaEbAUg1J3MS5p3RdcTvwc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VDiL9h6s36N41e3e96UqeqNMU0i/7gQejZ4eYGn6SEWRYg1hmQUEZ49DhDZXHGMyUEDDZ/5dZ32WLMfTDqlaPqjlxjlqLG0oW9vAEbxJtqI/C4gGnKrCpWXaJxKE5f9navqFbG7OeIeg2K1B0JeyUrdKxx1jr6fIfW+ue2x5wv0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=memverge.com; spf=pass smtp.mailfrom=memverge.com; dkim=pass (1024-bit key) header.d=memverge.com header.i=@memverge.com header.b=CG7ZZKiO; arc=fail smtp.client-ip=40.107.212.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=memverge.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=memverge.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OL2nt4Z5qwjP1ftXw+ShYdZZsV1bmWEzs1ekmGzhw83mrTjpvntNILF6l3/I1rte0amgwc80p589dPGE8QT8uFITcHGmM1nBEwdosNX8igu6H5qJC7VuSHEFwXK9rsqmQRE387uoB0TOAOl4N9ojvr7kSsVVIPO+2Sm0uMImD22VhOm7OysKOLqHURtCDdbLWBjn66zZHsbOOW7r4LTvRpwjMIDjDqNp6HuIkd6/Fcc9kxyzzmPBYtN/wQa9kkemWiB4mpXAKEPG8GL3BU5XX4wmFBqOOLL4U69fPXiEekE9csiKQbfSUhN6AwIzCrqSATQe522EgMXMOpGan1LVIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fPrbadTmSdCZnFbXMz4gw887g5jXtH8Tcdyl8fb2vvE=;
+ b=bCBaam+MpQ0jYRlWClsGLw8FbBI5fml34nTNIoqAgssP9Hct6ZgzbCYJGTdEl/PbfCJPP7Dvt4DV0tzH/EbE+iHTLxl8jEtoxUA7lxctCi0RAq5sCH8QNR+CiuissmFU32cgIAvGCLP+TgwGR6VTSJzdpAuzsY5ksYkeXSpV7CgwPjK4A55PSXnF8XYKB09E58TSrZqm25V2o8UCafBXl7MkDV5Y5S0SaI7G4PtQMIXhnkrx9cCvz9wrXbdeY8sH7ec7YyTEe81YJEJ56XRLDkWnlX5fAxxC/0vlrWMHDQqm/Y7ddlC+VKKEhgEZVW0zNWo09pSyxOlfnqJhv/HJhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
+ dkim=pass header.d=memverge.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fPrbadTmSdCZnFbXMz4gw887g5jXtH8Tcdyl8fb2vvE=;
+ b=CG7ZZKiOTFmAgwLx6Wq1mwvri8G8ytM4uu4Do6rXghC8M9+1KmHcIDBtNC800oXZGwD6LaUElz3jcFE0eoLKvs0N3IIHHA2IJlmvVeaLGJyYKN8HyJZj/jodQt+cqIVgAfjPOQJISBgA3r2W1ghzzAd7W7DWUebL6Yjo8nGj/Xs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=memverge.com;
+Received: from SJ0PR17MB5512.namprd17.prod.outlook.com (2603:10b6:a03:394::19)
+ by SJ0PR17MB4415.namprd17.prod.outlook.com (2603:10b6:a03:29c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Wed, 27 Mar
+ 2024 21:44:30 +0000
+Received: from SJ0PR17MB5512.namprd17.prod.outlook.com
+ ([fe80::6657:814f:5df0:bb5b]) by SJ0PR17MB5512.namprd17.prod.outlook.com
+ ([fe80::6657:814f:5df0:bb5b%5]) with mapi id 15.20.7409.031; Wed, 27 Mar 2024
+ 21:44:30 +0000
+Date: Wed, 27 Mar 2024 17:44:20 -0400
+From: Gregory Price <gregory.price@memverge.com>
+To: Yuanchu Xie <yuanchu@google.com>
+Cc: David Hildenbrand <david@redhat.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+	Khalid Aziz <khalid.aziz@oracle.com>,
+	Henry Huang <henry.hj@antgroup.com>, Yu Zhao <yuzhao@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Huang Ying <ying.huang@intel.com>, Wei Xu <weixugc@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+	Kairui Song <kasong@tencent.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Vasily Averin <vasily.averin@linux.dev>,
+	Nhat Pham <nphamcs@gmail.com>, Miaohe Lin <linmiaohe@huawei.com>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v3 0/8] mm: workingset reporting
+Message-ID: <ZgSTNCP5f+T5VtBI@memverge.com>
+References: <20240327213108.2384666-1-yuanchu@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20240327213108.2384666-1-yuanchu@google.com>
+X-ClientProxiedBy: SJ0PR03CA0069.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::14) To SJ0PR17MB5512.namprd17.prod.outlook.com
+ (2603:10b6:a03:394::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240327213108.2384666-1-yuanchu@google.com>
-X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
-Message-ID: <20240327213108.2384666-9-yuanchu@google.com>
-Subject: [RFC PATCH v3 8/8] mm: test system-wide workingset reporting
-From: Yuanchu Xie <yuanchu@google.com>
-To: David Hildenbrand <david@redhat.com>, "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, 
-	Khalid Aziz <khalid.aziz@oracle.com>, Henry Huang <henry.hj@antgroup.com>, 
-	Yu Zhao <yuzhao@google.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Gregory Price <gregory.price@memverge.com>, Huang Ying <ying.huang@intel.com>
-Cc: Wei Xu <weixugc@google.com>, David Rientjes <rientjes@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Shuah Khan <shuah@kernel.org>, 
-	Yosry Ahmed <yosryahmed@google.com>, Matthew Wilcox <willy@infradead.org>, 
-	Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>, Kairui Song <kasong@tencent.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Vasily Averin <vasily.averin@linux.dev>, Nhat Pham <nphamcs@gmail.com>, 
-	Miaohe Lin <linmiaohe@huawei.com>, Qi Zheng <zhengqi.arch@bytedance.com>, 
-	Abel Wu <wuyun.abel@bytedance.com>, "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, 
-	Kefeng Wang <wangkefeng.wang@huawei.com>, Yuanchu Xie <yuanchu@google.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR17MB5512:EE_|SJ0PR17MB4415:EE_
+X-MS-Office365-Filtering-Correlation-Id: 66b0b045-0b2e-4a29-427a-08dc4ea714f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	o6YbhuLZOSfCZtYaeiPgRbpCtuixDVi9eAUOjae49shBqERAGh7HQVveRErfR6PS20a6f/KahqDjdoM+Kh3qhpBv7n09eW9Ex5ui4BWNbkaRVkNlkwObko1YHXUfNwtnjrN6RCm9Js0TQ3UCQq5N9RZ8tTrXbUr4JL8ZcdAjw6KVDvm8wXQzSsLWRGpW8qgAe+WcI5CbmbxmnB2+cO9K/Crt/9Qrml12f5n3wizA6kVzlRs8ZANMSo3lJ+w3LV9di9zXbDbilf2M971NWzm7o/TxsBO8GR3HjdgOa7GYSEJT1rKHuh+dUjRxd2V7xvNNvbN0xnYJGM1a9EYQZ1egDGPY1us0VOOe5KAuvxSs0c5RxL1FrwlTjM5kDFoOSrKmfB5Tb2DgiGrpN/UUiMW4xuqaXkzoH7mkYtpLBJVmhd574pUFX+bU8gubj7WGPbeSJre7bltf8RhU5FnjJqUp9kpgHnnWMSFkkhNmnvWeqZ2Dlna5KEQYTHh6vDDLb8Bz1KrIhAxRvabadEbd9pr6XFFFzpZTN5QVPjeWGjl/jIFF5q0VcbRX2PF3qlYqLlot3pReTQpmLms2vflsy4bubKrgf2LXF3FlZGqQbwAaeTQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR17MB5512.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015)(366007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?opcnGY6zV3HhA/ubBvv0n2D52orFU1EjwDOa9aUyD7a/vxthwyYWXPqvT9P5?=
+ =?us-ascii?Q?FCyluu7uSeRyWATN5Gl9tgqFg37MuRkjoym+pbxfC8r1Vriqgit5drQfS3Zt?=
+ =?us-ascii?Q?6r2Z2GMPV9gTw9grJ8W6GvyvBPvcPFTYInPtmaRGgPHPkFjdUZzFPZK4Wdak?=
+ =?us-ascii?Q?R8pGbXmmtIUiZCkFmaIDBl8avIT3ynFdpz2QXT/m9FuDMU6uVgH8LhkeQX7M?=
+ =?us-ascii?Q?8ApfV+9n7WdrAXkHy6dYO47FTrwJ3YfwJNP+2bHQ08oT6X7ttqMPKo7lCRtJ?=
+ =?us-ascii?Q?D2llU6+Zfye2Kgq4Nc+Rp4vdBOLgYKTDbpmsXQtAWQ9QbOt/qXDxZHhkzNOh?=
+ =?us-ascii?Q?1PR4QckiS/bBNaDpqtFig65ALC8czwePJucmT6be/oizzUa1DwgIrUZbs/U6?=
+ =?us-ascii?Q?q/R66ULZZEqYUPMQr8Qs3CUaMJ/68+DzdDeQrtASP7upGMDOPqHGhpCBvqlI?=
+ =?us-ascii?Q?bAOEBHlrxBTL7mJh+b4RTRFwZIUPT1Xub4CcCxfUrE5oPW2zeVETOKafbvFm?=
+ =?us-ascii?Q?RHsTFbfhsSfvunjB8aSaE763rHBiw6JMWgdhHFVUE4UgVMQ7q914zcYB23DH?=
+ =?us-ascii?Q?+zJ7QCI9p1YKiy1tIz6hEs+vUF5Uai9Syz9Z6iQGQgtajozX1W9EjKQxeNqW?=
+ =?us-ascii?Q?VnQR4/nfxH9TKOMuzVz00bqtsXYG9VV+Pkl+gg0y5n4b3ifhu+dMv8p1T/lR?=
+ =?us-ascii?Q?Z3kLnUnvM9uywhmrm6CagHdjfyEfCh4wt2sNmSo3tZaKvY0Y10cPEmb3ime5?=
+ =?us-ascii?Q?aC3KgdQX7BbE13x0JtfgMwfdg6TUkblFlXFl4HhxVoFR/uiL1iXT6F+M7bsS?=
+ =?us-ascii?Q?YiHHQCCTmt1ni+qjYTE0CQBlJeJPdaggyKqR4WpSp4nFqniRUB2GEhhqSbNX?=
+ =?us-ascii?Q?m74f7GmMhvumPjvZGxL/tz/A6bdpSItSU1ryYVOZ0ZpRa8gvsqS2JxuR2vyZ?=
+ =?us-ascii?Q?OvJNsM0OKZBwtWvy8aXzOYQvOn3lhN+YMvQBSDkPMGgAI604WI/QhJz9ofkb?=
+ =?us-ascii?Q?M6xtG0ik602f/PgNIOmZkjxS4tYy9IQvyqq16PVXNoujBE7eHMuGrxI7C1jg?=
+ =?us-ascii?Q?fc81D/h5SHR+xP/05ha/7Pv59AHntCmEMCfYjLr4YC65dr6kJ/hIHELynXNh?=
+ =?us-ascii?Q?ONH3+WC8TVkX1dDQrrKQxHTH/Z3aKdCxIZ1g689IXWdcp5mUUJuzjch9sbjh?=
+ =?us-ascii?Q?mqKaoFoIC6KvZBP7oLd1mc1GX/1MvCI0Q1Q7xwel6K8yDtTzn0kRmBmnGINE?=
+ =?us-ascii?Q?RQW+lX6gAghTuUavV8XLSuJlZoRMM8G51KS7yIknGn9Q6gXDoBVhDHvn+BHG?=
+ =?us-ascii?Q?x/FtKPiooS9ByVhoa6YiQSCnG2NQk7jAFCFGQ9ObbRORBXYhkkNZfNHbXHyG?=
+ =?us-ascii?Q?r/QKtu/3gn86CT0qoIHT9OM2Q8K3gm5oH1KzsCrHun32Q+toXZDUbHVHEnMA?=
+ =?us-ascii?Q?2NRyTZVhyFKG7qvEkG8diCwmOt71KinBrrWOREO2ltx7vHTwFgJq5fvtSVb/?=
+ =?us-ascii?Q?PJSylsK5+urA9+XI+ouH5ur9LO9wTS32gjX0wYH6m3ZEezXdzw0avWypeUr8?=
+ =?us-ascii?Q?GOxQoYgu+NyjAXKlzVE/IByDwt0WpAGzqJvYz6F1VlKCh2dI8jHotp1PtbB7?=
+ =?us-ascii?Q?jg=3D=3D?=
+X-OriginatorOrg: memverge.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66b0b045-0b2e-4a29-427a-08dc4ea714f6
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR17MB5512.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2024 21:44:29.9421
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HYpFakEk3+fZcHt45p0ZpBMAoZNcrg0eTijptV41JUG7T+qb2Vo3Wowi9OSA+9rfUiKb8PPCUdmWiL6GbYeDWHdXrh0+o3a/XrUojVPsRPk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR17MB4415
 
-A basic test that verifies the working set size of a simple memory
-accessor. It should work with or without the aging thread.
+On Wed, Mar 27, 2024 at 02:30:59PM -0700, Yuanchu Xie wrote:
+> 
+> Promotion/Demotion
+> Similar to proactive reclaim, a workingset report enables demotion to a
+> slower tier of memory.
+> For promotion, the workingset report interfaces need to be extended to
+> report hotness and gather hotness information from the devices[1].
+> 
+> [1]
+> https://www.opencompute.org/documents/ocp-cms-hotness-tracking-requirements-white-paper-pdf-1
+> 
+> Sysfs and Cgroup Interfaces
+> ==========
+> The interfaces are detailed in the patches that introduce them. The main
+> idea here is we break down the workingset per-node per-memcg into time
+> intervals (ms), e.g.
+> 
+> 1000 anon=137368 file=24530
+> 20000 anon=34342 file=0
+> 30000 anon=353232 file=333608
+> 40000 anon=407198 file=206052
+> 9223372036854775807 anon=4925624 file=892892
+> 
+> I realize this does not generalize well to hotness information, but I
+> lack the intuition for an abstraction that presents hotness in a useful
+> way. Based on a recent proposal for move_phys_pages[2], it seems like
+> userspace tiering software would like to move specific physical pages,
+> instead of informing the kernel "move x number of hot pages to y
+> device". Please advise.
+> 
+> [2]
+> https://lore.kernel.org/lkml/20240319172609.332900-1-gregory.price@memverge.com/
+> 
 
-Question: I don't know how to best test file memory in selftests. Is
-there a place where I should put the temporary file? /tmp can be tmpfs
-mounted in many distros.
+Please note that this proposed interface (move_phys_pages) is very
+unlikely to be received upstream due to side channel concerns. Instead,
+it's more likely that the tiering component will expose a "promote X
+pages from tier A to tier B", and the kernel component would then
+use/consume hotness information to determine which pages to promote.
 
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
- tools/testing/selftests/mm/.gitignore         |   1 +
- tools/testing/selftests/mm/Makefile           |   3 +
- .../testing/selftests/mm/workingset_report.c  | 315 +++++++++++++++++
- .../testing/selftests/mm/workingset_report.h  |  37 ++
- .../selftests/mm/workingset_report_test.c     | 328 ++++++++++++++++++
- 5 files changed, 684 insertions(+)
- create mode 100644 tools/testing/selftests/mm/workingset_report.c
- create mode 100644 tools/testing/selftests/mm/workingset_report.h
- create mode 100644 tools/testing/selftests/mm/workingset_report_test.c
+(Just as one example, there are many more realistic designs)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 4ff10ea61461..14a2412c8257 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -46,3 +46,4 @@ gup_longterm
- mkdirty
- va_high_addr_switch
- hugetlb_fault_after_madv
-+workingset_report_test
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 2453add65d12..c0869bf07e99 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -70,6 +70,7 @@ TEST_GEN_FILES += ksm_tests
- TEST_GEN_FILES += ksm_functional_tests
- TEST_GEN_FILES += mdwe_test
- TEST_GEN_FILES += hugetlb_fault_after_madv
-+TEST_GEN_FILES += workingset_report_test
- 
- ifneq ($(ARCH),arm64)
- TEST_GEN_FILES += soft-dirty
-@@ -123,6 +124,8 @@ $(TEST_GEN_FILES): vm_util.c thp_settings.c
- $(OUTPUT)/uffd-stress: uffd-common.c
- $(OUTPUT)/uffd-unit-tests: uffd-common.c
- 
-+$(OUTPUT)/workingset_report_test: workingset_report.c
-+
- ifeq ($(ARCH),x86_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
- BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
-diff --git a/tools/testing/selftests/mm/workingset_report.c b/tools/testing/selftests/mm/workingset_report.c
-new file mode 100644
-index 000000000000..93387f0f30ee
---- /dev/null
-+++ b/tools/testing/selftests/mm/workingset_report.c
-@@ -0,0 +1,315 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "workingset_report.h"
-+
-+#include <stddef.h>
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+
-+#define SYSFS_NODE_ONLINE "/sys/devices/system/node/online"
-+#define PROC_DROP_CACHES "/proc/sys/vm/drop_caches"
-+
-+/* Returns read len on success, or -errno on failure. */
-+static ssize_t read_text(const char *path, char *buf, size_t max_len)
-+{
-+	ssize_t len;
-+	int fd, err;
-+	size_t bytes_read = 0;
-+
-+	if (!max_len)
-+		return -EINVAL;
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0)
-+		return -errno;
-+
-+	while (bytes_read < max_len - 1) {
-+		len = read(fd, buf + bytes_read, max_len - 1 - bytes_read);
-+
-+		if (len <= 0)
-+			break;
-+		bytes_read += len;
-+	}
-+
-+	buf[bytes_read] = '\0';
-+
-+	err = -errno;
-+	close(fd);
-+	return len < 0 ? err : bytes_read;
-+}
-+
-+/* Returns written len on success, or -errno on failure. */
-+static ssize_t write_text(const char *path, const char *buf, ssize_t max_len)
-+{
-+	int fd, len, err;
-+	size_t bytes_written = 0;
-+
-+	fd = open(path, O_WRONLY | O_APPEND);
-+	if (fd < 0)
-+		return -errno;
-+
-+	while (bytes_written < max_len) {
-+		len = write(fd, buf + bytes_written, max_len - bytes_written);
-+
-+		if (len < 0)
-+			break;
-+		bytes_written += len;
-+	}
-+
-+	err = -errno;
-+	close(fd);
-+	return len < 0 ? err : bytes_written;
-+}
-+
-+static long read_num(const char *path)
-+{
-+	char buf[21];
-+
-+	if (read_text(path, buf, sizeof(buf)) <= 0)
-+		return -1;
-+	return (long)strtoul(buf, NULL, 10);
-+}
-+
-+static int write_num(const char *path, unsigned long n)
-+{
-+	char buf[21];
-+
-+	sprintf(buf, "%lu", n);
-+	if (write_text(path, buf, strlen(buf)) < 0)
-+		return -1;
-+	return 0;
-+}
-+
-+long sysfs_get_refresh_interval(int nid)
-+{
-+	char file[128];
-+
-+	snprintf(
-+		file,
-+		sizeof(file),
-+		"/sys/devices/system/node/node%d/workingset_report/refresh_interval",
-+		nid);
-+	return read_num(file);
-+}
-+
-+int sysfs_set_refresh_interval(int nid, long interval)
-+{
-+	char file[128];
-+
-+	snprintf(
-+		file,
-+		sizeof(file),
-+		"/sys/devices/system/node/node%d/workingset_report/refresh_interval",
-+		nid);
-+	return write_num(file, interval);
-+}
-+
-+int sysfs_get_page_age_intervals_str(int nid, char *buf, int len)
-+{
-+	char path[128];
-+
-+	snprintf(
-+		path,
-+		sizeof(path),
-+		"/sys/devices/system/node/node%d/workingset_report/page_age_intervals",
-+		nid);
-+	return read_text(path, buf, len);
-+
-+}
-+
-+int sysfs_set_page_age_intervals_str(int nid, const char *buf, int len)
-+{
-+	char path[128];
-+
-+	snprintf(
-+		path,
-+		sizeof(path),
-+		"/sys/devices/system/node/node%d/workingset_report/page_age_intervals",
-+		nid);
-+	return write_text(path, buf, len);
-+}
-+
-+int sysfs_set_page_age_intervals(int nid, const char *intervals[],
-+				 int nr_intervals)
-+{
-+	char file[128];
-+	char buf[1024];
-+	int i;
-+	int err, len = 0;
-+
-+	for (i = 0; i < nr_intervals; ++i) {
-+		err = snprintf(buf + len, sizeof(buf) - len, "%s", intervals[i]);
-+
-+		if (err < 0)
-+			return err;
-+		len += err;
-+
-+		if (i < nr_intervals - 1) {
-+			err = snprintf(buf + len, sizeof(buf) - len, ",");
-+			if (err < 0)
-+				return err;
-+			len += err;
-+		}
-+	}
-+
-+	snprintf(
-+		file,
-+		sizeof(file),
-+		"/sys/devices/system/node/node%d/workingset_report/page_age_intervals",
-+		nid);
-+	return write_text(file, buf, len);
-+}
-+
-+int get_nr_nodes(void)
-+{
-+	char buf[22];
-+	char *found;
-+
-+	if (read_text(SYSFS_NODE_ONLINE, buf, sizeof(buf)) <= 0)
-+		return -1;
-+	found = strstr(buf, "-");
-+	if (found)
-+		return (int)strtoul(found + 1, NULL, 10) + 1;
-+	return (long)strtoul(buf, NULL, 10) + 1;
-+}
-+
-+int drop_pagecache(void)
-+{
-+	return write_num(PROC_DROP_CACHES, 1);
-+}
-+
-+ssize_t sysfs_page_age_read(int nid, char *buf, size_t len)
-+
-+{
-+	char file[128];
-+
-+	snprintf(file,
-+		sizeof(file),
-+		 "/sys/devices/system/node/node%d/workingset_report/page_age",
-+		 nid);
-+	return read_text(file, buf, len);
-+}
-+
-+/*
-+ * Finds the first occurrence of "N<nid>\n"
-+ * Modifies buf to terminate before the next occurrence of "N".
-+ * Returns a substring of buf starting after "N<nid>\n"
-+ */
-+char *page_age_split_node(char *buf, int nid, char **next)
-+{
-+	char node_str[5];
-+	char *found;
-+	int node_str_len;
-+
-+	node_str_len = snprintf(node_str, sizeof(node_str), "N%u\n", nid);
-+
-+	/* find the node prefix first */
-+	found = strstr(buf, node_str);
-+	if (!found) {
-+		fprintf(stderr, "cannot find '%s' in page_idle_age", node_str);
-+		return NULL;
-+	}
-+	found += node_str_len;
-+
-+	*next = strchr(found, 'N');
-+	if (*next)
-+		*(*next - 1) = '\0';
-+
-+	return found;
-+}
-+
-+ssize_t page_age_read(const char *buf, const char *interval, int pagetype)
-+{
-+	static const char * const type[ANON_AND_FILE] = { "anon=", "file=" };
-+	char *found;
-+
-+	found = strstr(buf, interval);
-+	if (!found) {
-+		fprintf(stderr, "cannot find %s in page_age", interval);
-+		return -1;
-+	}
-+	found = strstr(found, type[pagetype]);
-+	if (!found) {
-+		fprintf(stderr, "cannot find %s in page_age", type[pagetype]);
-+		return -1;
-+	}
-+	found += strlen(type[pagetype]);
-+	return (long)strtoul(found, NULL, 10);
-+}
-+
-+static const char *TEMP_FILE = "/tmp/workingset_selftest";
-+void cleanup_file_workingset(void)
-+{
-+	remove(TEMP_FILE);
-+}
-+
-+int alloc_file_workingset(void *arg)
-+{
-+	int err = 0;
-+	char *ptr;
-+	int fd;
-+	int ppid;
-+	char *mapped;
-+	size_t size = (size_t)arg;
-+	size_t page_size = getpagesize();
-+
-+	ppid = getppid();
-+
-+	fd = open(TEMP_FILE, O_RDWR | O_CREAT);
-+	if (fd < 0) {
-+		err = -errno;
-+		perror("failed to open temp file\n");
-+		goto cleanup;
-+	}
-+
-+	if (fallocate(fd, 0, 0, size) < 0) {
-+		err = -errno;
-+		perror("fallocate");
-+		goto cleanup;
-+	}
-+
-+	mapped = (char *)mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+			      fd, 0);
-+	if (mapped == NULL) {
-+		err = -errno;
-+		perror("mmap");
-+		goto cleanup;
-+	}
-+
-+	while (getppid() == ppid) {
-+		sync();
-+		for (ptr = mapped; ptr < mapped + size; ptr += page_size)
-+			*ptr = *ptr ^ 0xFF;
-+	}
-+
-+cleanup:
-+	cleanup_file_workingset();
-+	return err;
-+}
-+
-+int alloc_anon_workingset(void *arg)
-+{
-+	char *buf, *ptr;
-+	int ppid = getppid();
-+	size_t size = (size_t)arg;
-+	size_t page_size = getpagesize();
-+
-+	buf = malloc(size);
-+
-+	if (!buf) {
-+		fprintf(stderr, "cannot allocate anon workingset");
-+		exit(1);
-+	}
-+
-+	while (getppid() == ppid) {
-+		for (ptr = buf; ptr < buf + size; ptr += page_size)
-+			*ptr = *ptr ^ 0xFF;
-+	}
-+
-+	free(buf);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/mm/workingset_report.h b/tools/testing/selftests/mm/workingset_report.h
-new file mode 100644
-index 000000000000..f72a931298e0
---- /dev/null
-+++ b/tools/testing/selftests/mm/workingset_report.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef WORKINGSET_REPORT_H_
-+#define WORKINGSET_REPORT_H_
-+
-+#define _GNU_SOURCE
-+
-+#include <fcntl.h>
-+#include <sys/stat.h>
-+#include <errno.h>
-+#include <stdint.h>
-+#include <sys/types.h>
-+
-+#define PAGETYPE_ANON 0
-+#define PAGETYPE_FILE 1
-+#define ANON_AND_FILE 2
-+
-+int get_nr_nodes(void);
-+int drop_pagecache(void);
-+
-+long sysfs_get_refresh_interval(int nid);
-+int sysfs_set_refresh_interval(int nid, long interval);
-+
-+int sysfs_get_page_age_intervals_str(int nid, char *buf, int len);
-+int sysfs_set_page_age_intervals_str(int nid, const char *buf, int len);
-+
-+int sysfs_set_page_age_intervals(int nid, const char *intervals[],
-+				 int nr_intervals);
-+
-+char *page_age_split_node(char *buf, int nid, char **next);
-+ssize_t sysfs_page_age_read(int nid, char *buf, size_t len);
-+ssize_t page_age_read(const char *buf, const char *interval, int pagetype);
-+
-+int alloc_file_workingset(void *arg);
-+void cleanup_file_workingset(void);
-+int alloc_anon_workingset(void *arg);
-+
-+#endif /* WORKINGSET_REPORT_H_ */
-diff --git a/tools/testing/selftests/mm/workingset_report_test.c b/tools/testing/selftests/mm/workingset_report_test.c
-new file mode 100644
-index 000000000000..e6e857d8fe35
---- /dev/null
-+++ b/tools/testing/selftests/mm/workingset_report_test.c
-@@ -0,0 +1,328 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "workingset_report.h"
-+
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <signal.h>
-+#include <time.h>
-+
-+#include "../clone3/clone3_selftests.h"
-+
-+#define REFRESH_INTERVAL 5000
-+#define MB(x) (x << 20)
-+
-+static void sleep_ms(int milliseconds)
-+{
-+	struct timespec ts;
-+
-+	ts.tv_sec = milliseconds / 1000;
-+	ts.tv_nsec = (milliseconds % 1000) * 1000000;
-+	nanosleep(&ts, NULL);
-+}
-+
-+/*
-+ * Checks if two given values differ by less than err% of their sum.
-+ */
-+static inline int values_close(long a, long b, int err)
-+{
-+	return abs(a - b) <= (a + b) / 100 * err;
-+}
-+
-+static const char * const PAGE_AGE_INTERVALS[] = {
-+	"6000", "10000", "15000", "18446744073709551615",
-+};
-+#define NR_PAGE_AGE_INTERVALS (ARRAY_SIZE(PAGE_AGE_INTERVALS))
-+/* add one for the catch all last interval */
-+
-+static int set_page_age_intervals_all_nodes(const char *intervals, int nr_nodes)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_nodes; ++i) {
-+		int err = sysfs_set_page_age_intervals_str(
-+			i, &intervals[i * 1024], strlen(&intervals[i * 1024]));
-+
-+		if (err < 0)
-+			return err;
-+	}
-+	return 0;
-+}
-+
-+static int get_page_age_intervals_all_nodes(char *intervals, int nr_nodes)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_nodes; ++i) {
-+		int err = sysfs_get_page_age_intervals_str(
-+			i, &intervals[i * 1024], 1024);
-+
-+		if (err < 0)
-+			return err;
-+	}
-+	return 0;
-+}
-+
-+static int set_refresh_interval_all_nodes(const long *interval, int nr_nodes)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_nodes; ++i) {
-+		int err = sysfs_set_refresh_interval(i, interval[i]);
-+
-+		if (err < 0)
-+			return err;
-+	}
-+	return 0;
-+}
-+
-+static int get_refresh_interval_all_nodes(long *interval, int nr_nodes)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_nodes; ++i) {
-+		long val = sysfs_get_refresh_interval(i);
-+
-+		if (val < 0)
-+			return val;
-+		interval[i] = val;
-+	}
-+	return 0;
-+}
-+
-+static pid_t clone_and_run(int fn(void *arg), void *arg)
-+{
-+	pid_t pid;
-+
-+	struct __clone_args args = {
-+		.exit_signal = SIGCHLD,
-+	};
-+
-+	pid = sys_clone3(&args, sizeof(struct __clone_args));
-+
-+	if (pid == 0)
-+		exit(fn(arg));
-+
-+	return pid;
-+}
-+
-+static int read_workingset(int pagetype, int nid,
-+			   unsigned long page_age[NR_PAGE_AGE_INTERVALS])
-+{
-+	int i, err;
-+	char buf[4096];
-+
-+	err = sysfs_page_age_read(nid, buf, sizeof(buf));
-+	if (err < 0)
-+		return err;
-+
-+	for (i = 0; i < NR_PAGE_AGE_INTERVALS; ++i) {
-+		err = page_age_read(buf, PAGE_AGE_INTERVALS[i], pagetype);
-+		if (err < 0)
-+			return err;
-+		page_age[i] = err;
-+	}
-+
-+	return 0;
-+}
-+
-+static ssize_t read_interval_all_nodes(int pagetype, int interval)
-+{
-+	int i, err;
-+	unsigned long page_age[NR_PAGE_AGE_INTERVALS];
-+	ssize_t ret = 0;
-+	int nr_nodes = get_nr_nodes();
-+
-+	for (i = 0; i < nr_nodes; ++i) {
-+		err = read_workingset(pagetype, i, page_age);
-+		if (err < 0)
-+			return err;
-+
-+		ret += page_age[interval];
-+	}
-+
-+	return ret;
-+}
-+
-+#define TEST_SIZE MB(500l)
-+
-+static int run_test(int f(void))
-+{
-+	int i, err, test_result;
-+	long *old_refresh_intervals;
-+	long *new_refresh_intervals;
-+	char *old_page_age_intervals;
-+	int nr_nodes = get_nr_nodes();
-+
-+	if (nr_nodes <= 0) {
-+		fprintf(stderr, "failed to get nr_nodes\n");
-+		return KSFT_FAIL;
-+	}
-+
-+	old_refresh_intervals = calloc(nr_nodes, sizeof(long));
-+	new_refresh_intervals = calloc(nr_nodes, sizeof(long));
-+	old_page_age_intervals = calloc(nr_nodes, 1024);
-+
-+	if (!(old_refresh_intervals && new_refresh_intervals &&
-+	      old_page_age_intervals)) {
-+		fprintf(stderr, "failed to allocate memory for intervals\n");
-+		return KSFT_FAIL;
-+	}
-+
-+	err = get_refresh_interval_all_nodes(old_refresh_intervals, nr_nodes);
-+	if (err < 0) {
-+		fprintf(stderr, "failed to read refresh interval\n");
-+		return KSFT_FAIL;
-+	}
-+
-+	err = get_page_age_intervals_all_nodes(old_page_age_intervals, nr_nodes);
-+	if (err < 0) {
-+		fprintf(stderr, "failed to read page age interval\n");
-+		return KSFT_FAIL;
-+	}
-+
-+	for (i = 0; i < nr_nodes; ++i)
-+		new_refresh_intervals[i] = REFRESH_INTERVAL;
-+	err = set_refresh_interval_all_nodes(new_refresh_intervals, nr_nodes);
-+	if (err < 0) {
-+		fprintf(stderr, "failed to set refresh interval\n");
-+		test_result = KSFT_FAIL;
-+		goto fail;
-+	}
-+
-+	for (i = 0; i < nr_nodes; ++i) {
-+		err = sysfs_set_page_age_intervals(i, PAGE_AGE_INTERVALS,
-+						   NR_PAGE_AGE_INTERVALS - 1);
-+		if (err < 0) {
-+			fprintf(stderr, "failed to set page age interval\n");
-+			test_result = KSFT_FAIL;
-+			goto fail;
-+		}
-+	}
-+
-+	sync();
-+	drop_pagecache();
-+
-+	test_result = f();
-+
-+fail:
-+	err = set_refresh_interval_all_nodes(old_refresh_intervals, nr_nodes);
-+	if (err < 0) {
-+		fprintf(stderr, "failed to restore refresh interval\n");
-+		test_result = KSFT_FAIL;
-+	}
-+	err = set_page_age_intervals_all_nodes(old_page_age_intervals, nr_nodes);
-+	if (err < 0) {
-+		fprintf(stderr, "failed to restore page age interval\n");
-+		test_result = KSFT_FAIL;
-+	}
-+	return test_result;
-+}
-+
-+static int test_file(void)
-+{
-+	ssize_t ws_size_ref, ws_size_test;
-+	int ret = KSFT_FAIL, i;
-+	pid_t pid = 0;
-+
-+	ws_size_ref = read_interval_all_nodes(PAGETYPE_FILE, 0);
-+	if (ws_size_ref < 0)
-+		goto cleanup;
-+
-+	pid = clone_and_run(alloc_file_workingset, (void *)TEST_SIZE);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	read_interval_all_nodes(PAGETYPE_FILE, 0);
-+	sleep_ms(REFRESH_INTERVAL);
-+
-+	for (i = 0; i < 3; ++i) {
-+		sleep_ms(REFRESH_INTERVAL);
-+		ws_size_test = read_interval_all_nodes(PAGETYPE_FILE, 0);
-+
-+		if (!values_close(ws_size_test - ws_size_ref, TEST_SIZE, 10)) {
-+			fprintf(stderr,
-+				"file working set size difference too large: actual=%ld, expected=%ld\n",
-+				ws_size_test - ws_size_ref, TEST_SIZE);
-+			goto cleanup;
-+		}
-+	}
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (pid > 0)
-+		kill(pid, SIGKILL);
-+	cleanup_file_workingset();
-+	return ret;
-+}
-+
-+static int test_anon(void)
-+{
-+	ssize_t ws_size_ref, ws_size_test;
-+	pid_t pid = 0;
-+	int ret = KSFT_FAIL, i;
-+
-+	ws_size_ref = read_interval_all_nodes(PAGETYPE_ANON, 0);
-+	if (ws_size_ref < 0)
-+		goto cleanup;
-+
-+	pid = clone_and_run(alloc_anon_workingset, (void *)TEST_SIZE);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	sleep_ms(REFRESH_INTERVAL);
-+	read_interval_all_nodes(PAGETYPE_ANON, 0);
-+
-+	for (i = 0; i < 5; ++i) {
-+		sleep_ms(REFRESH_INTERVAL);
-+		ws_size_test = read_interval_all_nodes(PAGETYPE_ANON, 0);
-+		if (ws_size_test < 0)
-+			goto cleanup;
-+
-+		if (!values_close(ws_size_test - ws_size_ref, TEST_SIZE, 10)) {
-+			fprintf(stderr,
-+				"anon working set size difference too large: actual=%ld, expected=%ld\n",
-+				ws_size_test - ws_size_ref, TEST_SIZE);
-+			/* goto cleanup; */
-+		}
-+	}
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (pid > 0)
-+		kill(pid, SIGKILL);
-+	return ret;
-+}
-+
-+
-+#define T(x) { x, #x }
-+struct workingset_test {
-+	int (*fn)(void);
-+	const char *name;
-+} tests[] = {
-+	T(test_anon),
-+	T(test_file),
-+};
-+#undef T
-+
-+int main(int argc, char **argv)
-+{
-+	int ret = EXIT_SUCCESS, i, err;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		err = run_test(tests[i].fn);
-+		switch (err) {
-+		case KSFT_PASS:
-+			ksft_test_result_pass("%s\n", tests[i].name);
-+			break;
-+		case KSFT_SKIP:
-+			ksft_test_result_skip("%s\n", tests[i].name);
-+			break;
-+		default:
-+			ret = EXIT_FAILURE;
-+			ksft_test_result_fail("%s with error %d\n",
-+					      tests[i].name, err);
-+			break;
-+		}
-+	}
-+	return ret;
-+}
--- 
-2.44.0.396.g6e790dbe36-goog
+So if there is a way to expose workingset data to the mm/memory_tiers.c
+component instead of via sysfs/cgroup - that is preferable.
 
+The 'move_phys_pages' interface is more of an experimental interface to
+test the effectiveness of this approach without having to plumb out the
+entire system.  Definitely anything userland interface should not be
+designed to generate physical address information for consumption unless
+it is hard-locked behind admin caps.
+
+Regards,
+Gregory
 
