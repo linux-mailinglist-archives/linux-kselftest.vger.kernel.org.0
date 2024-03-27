@@ -1,178 +1,186 @@
-Return-Path: <linux-kselftest+bounces-6730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2881D88EE7D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 19:46:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 304B688EF68
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 20:39:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83B3A1F2595D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 18:46:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3A81B27201
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 19:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995C71514F2;
-	Wed, 27 Mar 2024 18:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3366143C4C;
+	Wed, 27 Mar 2024 19:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VPReqIQw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SKHszxO4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CA31514D7;
-	Wed, 27 Mar 2024 18:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CAC1E52C;
+	Wed, 27 Mar 2024 19:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711565190; cv=none; b=CYc4IcgLKFtPi6faZSXqeFv7tIt0zucB5kn2SFApwVQUQHaixyV37PjIgql00XvRtl+CJES+drN9pndxr+Pxny4Cum0SFpT1CahP+ZnaMMzLKphaEWkd++Suuk55bRRTrmXunXTjGhrEqCLDANqCdfBfzklasA6QhH5lJlDnfOo=
+	t=1711568368; cv=none; b=FcxLBpnxJPTGsCQKJMaOehbjOnGZv0TNC/pyZ6T7tdFg+uBHQwVGc16bCJcdyNA+71PziK55Za2q+3nBvJUVGuDRHK1jSOYkaQ+9cYpBwUfrfdDVkO+Pv/3MXf5WgcytgMqIv95wAePvIIhynu03vdW+N3nNEUjVYn9UexMxuxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711565190; c=relaxed/simple;
-	bh=exuGrWSRS6cE3AtRRe5kVccLgVt8p90B506qHZAesl8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NcosPgd2H+2OnFfPm3Y6oDomR5v59Cn2kOnKEnEfnLgaczhZLbdbVNsSvCF4NuCEsQdFKUz57M94BV1aCAUdqckJxsZkwsAZVRQKqDkvj2CjvHdLH2ZG7MZU/TWEZ3bF+rXM/RF7Di/p1vmyi/n9/M3/KjgW2oiihnl/xmUNwgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VPReqIQw; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711565187;
-	bh=exuGrWSRS6cE3AtRRe5kVccLgVt8p90B506qHZAesl8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VPReqIQwUUmoG4xowLTiPRGvbJGt7PCFZgNNTRRP5FEGNNp/dDYKU00A1/Kz01gph
-	 uYqjDx59GtX8BuVOZSD2MInoovfdiYIZLmMTLyNCC4DpDRtsdn7EtFz7fyNnYeLnYz
-	 RcP+JpA7x/zvrGvKJHiDRIp+b/+rYZsPa4WIDmN4Jdudgya/6D53QX0zOW4gxDJ6LH
-	 +vxK5y/PvS6tfVJVQOvpttXRJzBgO6HeIm/zdt+t1uVluqaxtUXQe8pXHbORAETy4H
-	 yMV9UUXjJZ0AUtaTAXnMGSYiBE/nILtiXGZb+A26sG1u2Lv2at454lEB/NgzkKA7Jx
-	 tWjdVS1HlhhOQ==
-Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 541C83782114;
-	Wed, 27 Mar 2024 18:46:24 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: kernel@collabora.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] selftests: x86: test_mremap_vdso: conform test to TAP format output
-Date: Wed, 27 Mar 2024 23:46:36 +0500
-Message-Id: <20240327184637.3915969-3-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240327184637.3915969-1-usama.anjum@collabora.com>
-References: <20240327184637.3915969-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1711568368; c=relaxed/simple;
+	bh=mgDCCV9DYm3gE81YovhkygNKHO9RS0DsGnhFgu3kHyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ohTEiRVoma0GCSa7EZZ90JwMYtXJic6dw9IzrR9wHmJQ9MtPyovNYumX29+ZdXjgF61t624A31HreBfXT0zzfYOWEhomcosS0n6pTOUuJuYSomT1MhJBycaoToZ++zc1eKJDPY3BzxV7cmdCFuSRbFmNes9+sEUpW4BKTRVKy5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SKHszxO4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3492BC433C7;
+	Wed, 27 Mar 2024 19:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711568368;
+	bh=mgDCCV9DYm3gE81YovhkygNKHO9RS0DsGnhFgu3kHyA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SKHszxO4HY0/TKQKrYd5xjeNheZExttn6ouZSQo7RamEADgZOHEGKOgxLgWnDAQsX
+	 TQk1EiCgbOjPSXUXVDKc1GHuMb8JYfr2n9dUTSMBL4fPlQCFaWvqtzr7SljGX8ozL0
+	 d+GxeE8i5/jrK3YAq+PzsRs9yg9Ub9Ye0zUWxbvydciwA80gaS/Cm+ZdJSIaW62wjN
+	 8mgdqhfJd0T7WESQFdfsQPBT5oU/lItq2D11cSo/Qk/7TSLc6IaPfRphmumfAFxMTP
+	 w0oml1KABCZkKYStlxNthCpMKTFGN6FZPoQQlay9J46ava0AXCk2S+OoNd/Q7U91J0
+	 LlcAACEC05P/g==
+Date: Wed, 27 Mar 2024 19:39:20 +0000
+From: Simon Horman <horms@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org,
+	Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: Re: [PATCH v2 12/14] sh: Add support for suppressing warning
+ backtraces
+Message-ID: <20240327193920.GV403975@kernel.org>
+References: <20240325175248.1499046-1-linux@roeck-us.net>
+ <20240325175248.1499046-13-linux@roeck-us.net>
+ <20240327144431.GL403975@kernel.org>
+ <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
+On Wed, Mar 27, 2024 at 08:10:51AM -0700, Guenter Roeck wrote:
+> On 3/27/24 07:44, Simon Horman wrote:
+> > On Mon, Mar 25, 2024 at 10:52:46AM -0700, Guenter Roeck wrote:
+> > > Add name of functions triggering warning backtraces to the __bug_table
+> > > object section to enable support for suppressing WARNING backtraces.
+> > > 
+> > > To limit image size impact, the pointer to the function name is only added
+> > > to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
+> > > CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
+> > > parameter is replaced with a (dummy) NULL parameter to avoid an image size
+> > > increase due to unused __func__ entries (this is necessary because __func__
+> > > is not a define but a virtual variable).
+> > > 
+> > > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > ---
+> > > - Rebased to v6.9-rc1
+> > > - Added Tested-by:, Acked-by:, and Reviewed-by: tags
+> > > - Introduced KUNIT_SUPPRESS_BACKTRACE configuration option
+> > > 
+> > >   arch/sh/include/asm/bug.h | 26 ++++++++++++++++++++++----
+> > >   1 file changed, 22 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/sh/include/asm/bug.h b/arch/sh/include/asm/bug.h
+> > > index 05a485c4fabc..470ce6567d20 100644
+> > > --- a/arch/sh/include/asm/bug.h
+> > > +++ b/arch/sh/include/asm/bug.h
+> > > @@ -24,21 +24,36 @@
+> > >    * The offending file and line are encoded in the __bug_table section.
+> > >    */
+> > >   #ifdef CONFIG_DEBUG_BUGVERBOSE
+> > > +
+> > > +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
+> > > +# define HAVE_BUG_FUNCTION
+> > > +# define __BUG_FUNC_PTR	"\t.long %O2\n"
+> > > +#else
+> > > +# define __BUG_FUNC_PTR
+> > > +#endif /* CONFIG_KUNIT_SUPPRESS_BACKTRACE */
+> > > +
+> > 
+> > Hi Guenter,
+> > 
+> > a minor nit from my side: this change results in a Kernel doc warning.
+> > 
+> >       .../bug.h:29: warning: expecting prototype for _EMIT_BUG_ENTRY(). Prototype was for HAVE_BUG_FUNCTION() instead
+> > 
+> > Perhaps either the new code should be placed above the Kernel doc,
+> > or scripts/kernel-doc should be enhanced?
+> > 
+> 
+> Thanks a lot for the feedback.
+> 
+> The definition block needs to be inside CONFIG_DEBUG_BUGVERBOSE,
+> so it would be a bit odd to move it above the documentation
+> just to make kerneldoc happy. I am not really sure that to do
+> about it.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- .../testing/selftests/x86/test_mremap_vdso.c  | 43 +++++++++----------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+FWIIW, I agree that would be odd.
+But perhaps the #ifdef could also move above the Kernel doc?
+Maybe not a great idea, but the best one I've had so far.
 
-diff --git a/tools/testing/selftests/x86/test_mremap_vdso.c b/tools/testing/selftests/x86/test_mremap_vdso.c
-index f0d876d482778..d53959e035930 100644
---- a/tools/testing/selftests/x86/test_mremap_vdso.c
-+++ b/tools/testing/selftests/x86/test_mremap_vdso.c
-@@ -19,6 +19,7 @@
- #include <sys/auxv.h>
- #include <sys/syscall.h>
- #include <sys/wait.h>
-+#include "../kselftest.h"
- 
- #define PAGE_SIZE	4096
- 
-@@ -29,13 +30,13 @@ static int try_to_remap(void *vdso_addr, unsigned long size)
- 	/* Searching for memory location where to remap */
- 	dest_addr = mmap(0, size, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
- 	if (dest_addr == MAP_FAILED) {
--		printf("[WARN]\tmmap failed (%d): %m\n", errno);
-+		ksft_print_msg("WARN: mmap failed (%d): %m\n", errno);
- 		return 0;
- 	}
- 
--	printf("[NOTE]\tMoving vDSO: [%p, %#lx] -> [%p, %#lx]\n",
--		vdso_addr, (unsigned long)vdso_addr + size,
--		dest_addr, (unsigned long)dest_addr + size);
-+	ksft_print_msg("Moving vDSO: [%p, %#lx] -> [%p, %#lx]\n",
-+		       vdso_addr, (unsigned long)vdso_addr + size,
-+		       dest_addr, (unsigned long)dest_addr + size);
- 	fflush(stdout);
- 
- 	new_addr = mremap(vdso_addr, size, size,
-@@ -43,10 +44,10 @@ static int try_to_remap(void *vdso_addr, unsigned long size)
- 	if ((unsigned long)new_addr == (unsigned long)-1) {
- 		munmap(dest_addr, size);
- 		if (errno == EINVAL) {
--			printf("[NOTE]\tvDSO partial move failed, will try with bigger size\n");
-+			ksft_print_msg("vDSO partial move failed, will try with bigger size\n");
- 			return -1; /* Retry with larger */
- 		}
--		printf("[FAIL]\tmremap failed (%d): %m\n", errno);
-+		ksft_print_msg("[FAIL]\tmremap failed (%d): %m\n", errno);
- 		return 1;
- 	}
- 
-@@ -58,11 +59,12 @@ int main(int argc, char **argv, char **envp)
- {
- 	pid_t child;
- 
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
- 	child = fork();
--	if (child == -1) {
--		printf("[WARN]\tfailed to fork (%d): %m\n", errno);
--		return 1;
--	}
-+	if (child == -1)
-+		ksft_exit_fail_msg("failed to fork (%d): %m\n", errno);
- 
- 	if (child == 0) {
- 		unsigned long vdso_size = PAGE_SIZE;
-@@ -70,9 +72,9 @@ int main(int argc, char **argv, char **envp)
- 		int ret = -1;
- 
- 		auxval = getauxval(AT_SYSINFO_EHDR);
--		printf("\tAT_SYSINFO_EHDR is %#lx\n", auxval);
-+		ksft_print_msg("AT_SYSINFO_EHDR is %#lx\n", auxval);
- 		if (!auxval || auxval == -ENOENT) {
--			printf("[WARN]\tgetauxval failed\n");
-+			ksft_print_msg("WARN: getauxval failed\n");
- 			return 0;
- 		}
- 
-@@ -92,16 +94,13 @@ int main(int argc, char **argv, char **envp)
- 		int status;
- 
- 		if (waitpid(child, &status, 0) != child ||
--			!WIFEXITED(status)) {
--			printf("[FAIL]\tmremap() of the vDSO does not work on this kernel!\n");
--			return 1;
--		} else if (WEXITSTATUS(status) != 0) {
--			printf("[FAIL]\tChild failed with %d\n",
--					WEXITSTATUS(status));
--			return 1;
--		}
--		printf("[OK]\n");
-+			!WIFEXITED(status))
-+			ksft_test_result_fail("mremap() of the vDSO does not work on this kernel!\n");
-+		else if (WEXITSTATUS(status) != 0)
-+			ksft_test_result_fail("Child failed with %d\n", WEXITSTATUS(status));
-+		else
-+			ksft_test_result_pass("%s\n", __func__);
- 	}
- 
--	return 0;
-+	ksft_finished();
- }
--- 
-2.39.2
-
+> I'll wait for comments from others before making any changes.
+> 
+> Thanks,
+> Guenter
+> 
+> > >   #define _EMIT_BUG_ENTRY				\
+> > >   	"\t.pushsection __bug_table,\"aw\"\n"	\
+> > >   	"2:\t.long 1b, %O1\n"			\
+> > > -	"\t.short %O2, %O3\n"			\
+> > > -	"\t.org 2b+%O4\n"			\
+> > > +	__BUG_FUNC_PTR				\
+> > > +	"\t.short %O3, %O4\n"			\
+> > > +	"\t.org 2b+%O5\n"			\
+> > >   	"\t.popsection\n"
+> > >   #else
+> > >   #define _EMIT_BUG_ENTRY				\
+> > >   	"\t.pushsection __bug_table,\"aw\"\n"	\
+> > >   	"2:\t.long 1b\n"			\
+> > > -	"\t.short %O3\n"			\
+> > > -	"\t.org 2b+%O4\n"			\
+> > > +	"\t.short %O4\n"			\
+> > > +	"\t.org 2b+%O5\n"			\
+> > >   	"\t.popsection\n"
+> > >   #endif
+> > > +#ifdef HAVE_BUG_FUNCTION
+> > > +# define __BUG_FUNC	__func__
+> > > +#else
+> > > +# define __BUG_FUNC	NULL
+> > > +#endif
+> > > +
+> > >   #define BUG()						\
+> > >   do {							\
+> > >   	__asm__ __volatile__ (				\
+> > 
+> > ...
+> 
 
