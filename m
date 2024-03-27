@@ -1,432 +1,148 @@
-Return-Path: <linux-kselftest+bounces-6748-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6744-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E29588F23A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 23:56:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C99F588F224
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 23:54:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C21BD29CA74
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 22:56:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F9951F2E99D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 22:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509B6154424;
-	Wed, 27 Mar 2024 22:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B429154BF9;
+	Wed, 27 Mar 2024 22:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C/Zjr4l+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KYewmMvm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8A6153BED;
-	Wed, 27 Mar 2024 22:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48AF9153BEB
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 22:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711580134; cv=none; b=pUuf9B3m9q5HZyudtmB+WqL4PJEjzbemyEtAVhUJhj5tKXdpUNzQE8MQ0zIeWWnJCsVT+LS3zy4v8H54nwm/A7DAq/Nnb70cyVvmehyd9AH21p2nXSST+BYOgu5UnFYNY50nStb7I6Wmkdp2dZA6VLxarBTru9dLDuRhRxfUJXg=
+	t=1711580038; cv=none; b=VQMKpuvLEMcPGY4Z1mLUZw61OBWosYo0d6NGOJDgTZTm5Ac8o2Fn//L8EPnyQ1Td2V5Rq299xG3tQ9uvq7U27sclFePYRxT9QXDsBBctY81KJmXl6tcCn5t8xID25ggkGqGfq208OvixWSEK5NjgR/XuhbWcoUxk8PbrAz3Eif4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711580134; c=relaxed/simple;
-	bh=VUW8SqAA/+2sHQhA2ammk2FQgHtxhgRr3LE1tD2/QzQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JslUuwivjy5PvuZC8/MCIyzTNw3GwX278ugCJofTsKHzHeUbyUtGhMV+SnhMbxHcxgxsSZ0y9Bt/BdivQtqYswTKkyI66XpYHuyhlPSDrqfABjIZP9yzTrbViG90vrgw/kZu5/dG+qiN/Z4mU7Go0CZpMGeyQ7iKkbDAQM1NKmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C/Zjr4l+; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-341b01dbebbso225149f8f.0;
-        Wed, 27 Mar 2024 15:55:32 -0700 (PDT)
+	s=arc-20240116; t=1711580038; c=relaxed/simple;
+	bh=ippSELgaRyUKakbXbpn0arphUywutW7eB+Upxu7AcEE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hym6+qAubzuSlsC7A/yV23snmBES4Ezi4mem9m3n72vQo50FCIrdNF2FKAFjOTFWwKzzhD3dxSPliVwcMXzMHKkVF6YSLjnm0toi69iroz6s1Ed3Aan5NFO1Lo+DuML3hNsT1ezVxbK4FVxw5yDTQL71SdDYDPgMAAz6eHbCDTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KYewmMvm; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-60a046c5262so3770187b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 15:53:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711580131; x=1712184931; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1711580035; x=1712184835; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KP36tHqP7P+dmRhIwVHlpSLJhJGKUjScQFwDQs5TYi4=;
-        b=C/Zjr4l+ZoGJCbtUKuI6eEVuWw7ytQwA85B7OqHbm+1IJENhsToM8Q/YmKGUp8YNBI
-         /dlbd3a4I8oPTbTRBC/oB1hk1PzxF4xJMXdhPYx6lNwR5tYZykJS0JmayosHJBdOsPZ0
-         9cOhzZL/ADQCxjkw7rhAaBNWAOA6iz0UGjpx4FjRQ+FQqFHM/iYkmg2R4F5vcReFOsfz
-         O81I2usonFRDvDGw4tsB9F+h4ZbQ2cQ7tVwIhxi5G8oQER+m10QmNU5vuBYjUAEMPrOt
-         QUz0bZPi8iIWIqBjh2hWwf8xcEtbArdfzm3/j9hfj0WSbC3axiJlGg13Xu5KEYEQdZzV
-         bxaw==
+        bh=ddFX6WA7Vse1WsWNG5JUtWurIddg/WeWShq3oKWotbI=;
+        b=KYewmMvmb3rOnZ/lt9sqYPiXvG9/UqqkM/vdJbQa8BxC20jBCkB+OUkqorM8ZaT5Of
+         toWq+d5aZEzQ5jqtYKUwFTQc0QwMcHYQPtVUNZDyK5QEVDP1tVxxUzS3YA2NY5PetQaI
+         MI6yCs96ZH37+YdpfqYpU37ShSD8KjtTHi+AnMDOOLXvxXX+wM6pfjQG5zMY0hfP++Kx
+         UwbwWq2egI0x9Y8ASJd4e93Z+7uIDkD6eNS4Oa+xGMWI6EjAqzucoawvo4LmlRCX+OGm
+         t3Cwp5le2DSjx9rqxDBNPWBcLoDoR2CflrCLZ+5faD7I/m5MPXJ/38yzjxW9wVsXK9Jz
+         fuXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711580131; x=1712184931;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1711580035; x=1712184835;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KP36tHqP7P+dmRhIwVHlpSLJhJGKUjScQFwDQs5TYi4=;
-        b=Nreev+sZ6A/mUJHZ5Vq1d3TJpRp+0fYfXDYOIlA/i2JlC1UQBhjWmG0+L2c4Hk9+tB
-         hKLsDmZQeZqIdXC4UWwpt8sOAdolIdoOBiTAgyfqWnh49NZLXJmpNYVu1e7v7vNpQySw
-         QKttZuJdM0yxadXVxAV7dK2ws/LDJtfGwsTWHokN0n0z3R4W+JiO2wcrvbVAFuIv8Oh1
-         W5DISwj5k9e+orjBWINZTuvHrH7pNV8ZJn69tzb7SbyySt0l1550fvIZuuIaBWyQr/td
-         DB0FUP5EhVGWShygzln2obOkvZTlES3qFyRJxPOa3K8DL+DQMLxcePWeu4atwqmt/cOP
-         nk2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXL5RmUvIVqR/IBt00Ew1BKiCGSdjwVQmMrx9WNGNxrYEf3zDWedp++pTbsxRcLuMkqgo4/M67mnEeREAO4IoeRLTJ+pL7xUcE2mUNzWaFMkX/RI6GPLGbvj6lhZbMpNLaM4UIBnOd1qOiSHjJMk/wKuyX0NPhsK2H2ZlKCur8d5Jw9FjflNR4/Kvs81o821N2Dfd9fJrdOleaB4A==
-X-Gm-Message-State: AOJu0Yw+jlk351tRu/fYMADJ2C1jE9uR847o1Y5FE72QGbyffAJwVphR
-	2ZZTEiywoUL/PPGqjsSoIAmRKX7xU/HrN2yFmcKddMoXI1YMPTmL
-X-Google-Smtp-Source: AGHT+IH7e2g0Y7KVgrgTneD3KILz2Xw+4uPpn/4EBcTEadHjIlt00UCW1BykdWehFemRxO7De3P+fw==
-X-Received: by 2002:a5d:59a8:0:b0:341:e5d1:d353 with SMTP id p8-20020a5d59a8000000b00341e5d1d353mr1355183wrr.14.1711580130666;
-        Wed, 27 Mar 2024 15:55:30 -0700 (PDT)
-Received: from rorona-tty.. ([154.121.114.3])
-        by smtp.googlemail.com with ESMTPSA id cc7-20020a5d5c07000000b0033e75e5f280sm152348wrb.113.2024.03.27.15.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 15:55:30 -0700 (PDT)
-From: Djalal Harouni <tixxdz@gmail.com>
-To: tixxdz@gmail.com
-Cc: Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH bpf-next 3/3] selftests/bpf: add selftest for bpf_task_freeze_cgroup
-Date: Wed, 27 Mar 2024 23:53:25 +0100
-Message-Id: <20240327225334.58474-4-tixxdz@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240327225334.58474-1-tixxdz@gmail.com>
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com>
+        bh=ddFX6WA7Vse1WsWNG5JUtWurIddg/WeWShq3oKWotbI=;
+        b=Ik9VOgU+p4eNmSu2scyR4ij+x3WS9bnghScOPX6iPvlhMbIiWcS9awBImk7RG/wWxd
+         WVt44B053XHpWeOOspOoPA6KXBvQjSygwNEtYMGFR+6kFFu9WvAmnE57jHS9so+HUVQB
+         DxTzs0rVCDBu62rx6Vmp2wFWtA3A4Kg4yyCoSPgzq0YCqe6JgIUON7EJ1dqkBQb+CLlI
+         6oTS4jQUPEnHtyIGnO5uBoGCMbRLpaFp3DpOsA4rFEJJJNyiTHKZuRBsjVQ66N6P+3nH
+         P2EFP6JtkpL2/TivS/2CnXI1dD2hN2Wr+JwPn+V86Bp7C9lK9UR9m2RPNTEUpUTs/xcP
+         5ysA==
+X-Forwarded-Encrypted: i=1; AJvYcCVKWgcVCRRW5gtzvXSNbVoNdNcZu8hn+zuNAsRoiyWiLPcisaNawmedL/R2eJ5v7Vu2DZksS+NE/cJbmk1908iX+pYLA+Wl8UipddyIThM0
+X-Gm-Message-State: AOJu0YziZbnnexBz60d5Wpny9WdCy7k1k7HgA3Qn7+7ZYeGSoGooogEL
+	hHh+jcc724GDbi6wE4SQl5EVwfd3uMtP1+faP2iyluJUMzTbpy+sxTKEHfmzlfIQ+I1GptjPq7Z
+	JmHrYo7SmyjbdADyX80dRUo1vMiFbU4TwE2ro
+X-Google-Smtp-Source: AGHT+IEEprNR4NF3Q3WnvLiotmlkp3Lt8bivSWWsO+fQy1wY94j5tqAZMqFwzhr1EI+Qy0IGP5aJU7WpBj2TgO+DJIY=
+X-Received: by 2002:a05:6902:136d:b0:dcc:97e4:bc61 with SMTP id
+ bt13-20020a056902136d00b00dcc97e4bc61mr1324930ybb.57.1711580033859; Wed, 27
+ Mar 2024 15:53:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240327213108.2384666-1-yuanchu@google.com> <ZgSTNCP5f+T5VtBI@memverge.com>
+In-Reply-To: <ZgSTNCP5f+T5VtBI@memverge.com>
+From: Yuanchu Xie <yuanchu@google.com>
+Date: Wed, 27 Mar 2024 15:53:39 -0700
+Message-ID: <CAJj2-QEg3+Ztg3rK6FpVVCxSG4DaDPWsO_bha5v5GrJazc5DVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 0/8] mm: workingset reporting
+To: Gregory Price <gregory.price@memverge.com>
+Cc: David Hildenbrand <david@redhat.com>, "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, 
+	Khalid Aziz <khalid.aziz@oracle.com>, Henry Huang <henry.hj@antgroup.com>, 
+	Yu Zhao <yuzhao@google.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Huang Ying <ying.huang@intel.com>, Wei Xu <weixugc@google.com>, 
+	David Rientjes <rientjes@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Yosry Ahmed <yosryahmed@google.com>, 
+	Matthew Wilcox <willy@infradead.org>, Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>, 
+	Kairui Song <kasong@tencent.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Vasily Averin <vasily.averin@linux.dev>, Nhat Pham <nphamcs@gmail.com>, 
+	Miaohe Lin <linmiaohe@huawei.com>, Qi Zheng <zhengqi.arch@bytedance.com>, 
+	Abel Wu <wuyun.abel@bytedance.com>, "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, 
+	Kefeng Wang <wangkefeng.wang@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This adds a selftest for `bpf_task_freeze_cgroup` kfunc. The test works
-by forking a child then:
+On Wed, Mar 27, 2024 at 2:44=E2=80=AFPM Gregory Price
+<gregory.price@memverge.com> wrote:
+>
+> On Wed, Mar 27, 2024 at 02:30:59PM -0700, Yuanchu Xie wrote:
+> > I realize this does not generalize well to hotness information, but I
+> > lack the intuition for an abstraction that presents hotness in a useful
+> > way. Based on a recent proposal for move_phys_pages[2], it seems like
+> > userspace tiering software would like to move specific physical pages,
+> > instead of informing the kernel "move x number of hot pages to y
+> > device". Please advise.
+> >
+> > [2]
+> > https://lore.kernel.org/lkml/20240319172609.332900-1-gregory.price@memv=
+erge.com/
+> >
+>
+> Please note that this proposed interface (move_phys_pages) is very
+> unlikely to be received upstream due to side channel concerns. Instead,
+> it's more likely that the tiering component will expose a "promote X
+> pages from tier A to tier B", and the kernel component would then
+> use/consume hotness information to determine which pages to promote.
 
-1. Child:
- - Migrate to a new cgroup
- - Loads bpf programs
- - Trigger the 'lsm_freeze_cgroup' bpf program so it freeze itself.
-   by calling "bpf_task_freeze_cgroup(child, 1)"
+I see that mm/memory-tiers.c only has support for demotion. What kind
+of hotness information do devices typically provide? The OCP proposal
+is not very specific about this.
+A list of hot pages with configurable threshold?
+Access frequency for all pages at configured granularity?
+Is there a way to tell which NUMA node is accessing them, for page promotio=
+n?
+>
+> (Just as one example, there are many more realistic designs)
+>
+> So if there is a way to expose workingset data to the mm/memory_tiers.c
+> component instead of via sysfs/cgroup - that is preferable.
 
-   <- wait for parent to unthaw
-
- - On unthaw it continues, forks another process and triggers the
-   'tp_newchild' bpf program to set some monitored pids of the new
-   process, that are asserted at user space, to ensure that we
-   resumed correctly.
-
-2. Parent:
- - Keeps reading the 'cgroup.freeze' file of the child cgroup until
-   it prints 1 which means the child cgroup is frozen
- - Attaches the sample 'lsm_task_free' so it triggers the bpf program
-   and then calls "bpf_task_freeze_cgroup(task, 0);" on the child task
-   to unthaw its cgroup.
- - Then waits for a clean exit of the child process.
-
-The scenario allows to test both: freeze and unthaw a task cgroup.
-
-Signed-off-by: Djalal Harouni <tixxdz@gmail.com>
----
- .../bpf/prog_tests/task_freeze_cgroup.c       | 165 ++++++++++++++++++
- .../bpf/progs/test_task_freeze_cgroup.c       | 110 ++++++++++++
- 2 files changed, 275 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_freeze_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_freeze_cgroup.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_freeze_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_freeze_cgroup.c
-new file mode 100644
-index 000000000000..afb7d46194c5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_freeze_cgroup.c
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2024 Isovalent */
-+
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include <unistd.h>
-+#include "test_task_freeze_cgroup.skel.h"
-+
-+#define FOO	"/test-task-freeze-cgroup"
-+
-+static int bpf_sleepable(struct test_task_freeze_cgroup *skel)
-+{
-+	int err, foo;
-+	pid_t pid;
-+
-+	foo = test__join_cgroup(FOO);
-+	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-+		return -errno;
-+
-+	skel = test_task_freeze_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_freeze_cgroup__open"))
-+		return -errno;
-+
-+	skel->rodata->parent_pid = getppid();
-+	skel->rodata->monitor_pid = getpid();
-+	skel->rodata->cgid = get_cgroup_id(FOO);
-+	skel->bss->new_pid = getpid();
-+	skel->bss->freeze = 1;
-+
-+	err = test_task_freeze_cgroup__load(skel);
-+	if (!ASSERT_OK(err, "test_task_freeze_cgroup__load"))
-+		goto cleanup;
-+
-+	/* First, attach the LSM program, and then it will be triggered when the
-+	 * TP_BTF program is attached.
-+	 */
-+	skel->links.lsm_freeze_cgroup =
-+		bpf_program__attach_lsm(skel->progs.lsm_freeze_cgroup);
-+	if (!ASSERT_OK_PTR(skel->links.lsm_freeze_cgroup, "attach_lsm")) {
-+		err = -errno;
-+		goto cleanup;
-+	}
-+
-+	/* This will fail */
-+	skel->links.tp_newchild =
-+		bpf_program__attach_trace(skel->progs.tp_newchild);
-+	if (!ASSERT_EQ(errno, EPERM, "attach_trace")) {
-+		err = -EINVAL;
-+		goto cleanup;
-+	}
-+
-+	/* Try again now */
-+	skel->links.tp_newchild =
-+		bpf_program__attach_trace(skel->progs.tp_newchild);
-+	if (!ASSERT_OK_PTR(skel->links.tp_newchild, "attach_trace")) {
-+		err = -EINVAL;
-+		goto cleanup;
-+	}
-+
-+	/* Trigger a new child and assert unfrozen state */
-+	pid = fork();
-+	if (pid == 0)
-+		exit(0);
-+
-+	err = (pid == -1);
-+	if (ASSERT_OK(err, "fork process"))
-+		wait(NULL);
-+
-+	/* Now we should continue, assert that new_pid reflects child */
-+	ASSERT_NEQ(skel->rodata->monitor_pid, skel->bss->new_pid,
-+		   "test task_freeze_cgroup failed  at monitor_pid != new_pid");
-+	ASSERT_NEQ(0, skel->bss->new_pid,
-+		   "test task_freeze_cgroup failed  at remote_pid != 0");
-+
-+	/* Assert that bpf set new_pid to new forked child pid */
-+	ASSERT_EQ(pid, skel->bss->new_pid,
-+		   "test task_freeze_cgroup failed  at pid == new_pid");
-+
-+	test_task_freeze_cgroup__detach(skel);
-+
-+cleanup:
-+	test_task_freeze_cgroup__destroy(skel);
-+	close(foo);
-+	return err;
-+}
-+
-+void test_task_freeze_cgroup(void)
-+{
-+	pid_t pid, result;
-+	char buf[512] = {0};
-+	char path[PATH_MAX] = {0};
-+	int ret, status, attempts, frozen = 0;
-+	struct test_task_freeze_cgroup *skel = NULL;
-+
-+	pid = fork();
-+	ret = (pid == -1);
-+	if (!ASSERT_OK(ret, "fork process"))
-+		return;
-+
-+	if (pid == 0) {
-+		ret = bpf_sleepable(skel);
-+		ASSERT_EQ(0, ret, "bpf_sleepable failed");
-+		exit(ret);
-+	}
-+
-+	skel = test_task_freeze_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_freeze_cgroup__open"))
-+		goto out;
-+
-+	snprintf(path, sizeof(path),
-+		 "/sys/fs/cgroup/cgroup-test-work-dir%d%s/cgroup.freeze",
-+		 pid, FOO);
-+
-+	for (attempts = 5; attempts >= 0; attempts--) {
-+		ret = 0;
-+		int fd = open(path, O_RDONLY);
-+		if (fd > 0)
-+			ret = read(fd, buf, sizeof(buf) - 1);
-+		if (ret > 0) {
-+			errno = 0;
-+			frozen = strtol(buf, NULL, 10);
-+			if (errno)
-+				frozen = 0;
-+		}
-+
-+		close(fd);
-+		if (frozen)
-+			break;
-+		sleep(1);
-+	}
-+
-+	/* Assert that child cgroup is frozen */
-+	if (!ASSERT_EQ(1, frozen, "child cgroup not frozen"))
-+		goto out;
-+
-+	ret = test_task_freeze_cgroup__load(skel);
-+	if (!ASSERT_OK(ret, "test_task_freeze_cgroup__load"))
-+		goto out;
-+
-+	/* Unthaw child cgroup from parent */
-+	skel->links.lsm_task_free =
-+		bpf_program__attach_lsm(skel->progs.lsm_task_free);
-+	if (!ASSERT_OK_PTR(skel->links.lsm_task_free, "attach_lsm"))
-+		goto out;
-+
-+	result = waitpid(pid, &status, WUNTRACED);
-+	if (!ASSERT_NEQ(result, -1, "waitpid"))
-+		goto detach;
-+
-+	result = WIFEXITED(status);
-+	if (!ASSERT_EQ(result, 1, "forked process did not terminate normally"))
-+		goto detach;
-+
-+	result = WEXITSTATUS(status);
-+	if (!ASSERT_EQ(result, 0, "forked process did not exit successfully"))
-+		goto detach;
-+
-+detach:
-+	test_task_freeze_cgroup__detach(skel);
-+
-+out:
-+	if (skel)
-+		test_task_freeze_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_task_freeze_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_freeze_cgroup.c
-new file mode 100644
-index 000000000000..dbd2d60f464e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_freeze_cgroup.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2024 Isovalent */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+#include <errno.h>
-+#include "bpf_misc.h"
-+
-+struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-+long bpf_task_under_cgroup(struct task_struct *task, struct cgroup *ancestor) __ksym;
-+void bpf_cgroup_release(struct cgroup *p) __ksym;
-+struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
-+struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+
-+int bpf_task_freeze_cgroup(struct task_struct *task, int freeze) __ksym;
-+
-+const volatile int parent_pid;
-+const volatile int monitor_pid;
-+const volatile __u64 cgid;
-+int new_pid;
-+int freeze;
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(tp_newchild, struct task_struct *task, u64 clone_flags)
-+{
-+	struct cgroup *cgrp = NULL;
-+	struct task_struct *acquired;
-+
-+	if (monitor_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (!acquired)
-+		return 0;
-+
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		goto out;
-+
-+	if (bpf_task_under_cgroup(acquired, cgrp))
-+		new_pid = acquired->tgid;
-+
-+out:
-+	if (cgrp)
-+		bpf_cgroup_release(cgrp);
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+/* This is attached from parent to trigger the bpf lsm hook, so parent
-+ * can unthaw the child.
-+ */
-+SEC("lsm/task_free")
-+int BPF_PROG(lsm_task_free, struct task_struct *task)
-+{
-+	return 0;
-+}
-+
-+SEC("lsm.s/bpf")
-+int BPF_PROG(lsm_freeze_cgroup, int cmd, union bpf_attr *attr, unsigned int size)
-+{
-+	int ret = 0;
-+	struct cgroup *cgrp = NULL;
-+	struct task_struct *task;
-+
-+	if (cmd != BPF_LINK_CREATE)
-+		return ret;
-+
-+	task = bpf_get_current_task_btf();
-+	if (parent_pid == task->pid) {
-+		/* Unthaw child from parent */
-+		task = bpf_task_from_pid(monitor_pid);
-+		if (!task)
-+			return -ENOENT;
-+
-+		ret = bpf_task_freeze_cgroup(task, 0);
-+		bpf_task_release(task);
-+		return ret;
-+	}
-+
-+	if (monitor_pid != task->pid)
-+		return 0;
-+
-+	/* Freeze the child cgroup from its context */
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		goto out;
-+
-+	if (!bpf_task_under_cgroup(task, cgrp))
-+		goto out;
-+
-+	if (freeze) {
-+		/* Schedule freeze task and return -EPERM */
-+		ret = bpf_task_freeze_cgroup(task, 1);
-+		if (!ret) {
-+			ret = -EPERM;
-+			/* reset for next call */
-+			freeze = 0;
-+		}
-+	}
-+out:
-+	if (cgrp)
-+		bpf_cgroup_release(cgrp);
-+	return ret;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
-
+Appreciate the feedback. The data in its current form might be useful
+to inform demotion decisions, but for promotion, are you aware of any
+recent developments? I would like to encode hotness as workingset data
+as well.
+>
+> The 'move_phys_pages' interface is more of an experimental interface to
+> test the effectiveness of this approach without having to plumb out the
+> entire system.  Definitely anything userland interface should not be
+> designed to generate physical address information for consumption unless
+> it is hard-locked behind admin caps.
+>
+> Regards,
+> Gregory
 
