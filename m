@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-6740-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB4FB88F0FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 22:32:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 177D388F0FF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 22:33:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 114BAB22AF5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 21:32:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD91229DB21
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 21:33:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E06154BE7;
-	Wed, 27 Mar 2024 21:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238BC154C09;
+	Wed, 27 Mar 2024 21:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4VehKRhS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VHwp2kwn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF5C153BC9
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 21:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FAD115445B
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 21:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711575102; cv=none; b=C3n29yeK1wabbUKviso8C3EHGIAhCc4VE/A0GeKXCpjMDgM40Pg0PMMWPz/G5W5Zg/3sdjhqvzycTVPfICZv1QZ9OiPWvJou0leQe2yfquKdpHONGpEj7zPzIpgtj202lcmIgScNS1jN6PYiBe2ygAUuQ8NNW9ctvM8g4nxqniQ=
+	t=1711575104; cv=none; b=JyAu3RxgEfuiPRmsZslZI5LHXSK+o06IBogs7cn+Rc29lzGBImpbYaJTOQ8Rv/CpORh3uUxpdYlb8pa64S4Y6FbfQKbdNl3+kgoArqVCUKf7FA5La3q+oU2W3uz2oscB4dnYDfCrFZDfhuRpnZr/uJ1a6nZKqbJ3+A5IjGwP1ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711575102; c=relaxed/simple;
-	bh=9iofqq5XqTy0xSzgNBoBMiZSw9jPsidndoirLIq9dec=;
+	s=arc-20240116; t=1711575104; c=relaxed/simple;
+	bh=lVBINjNVkAHsnoaSqt6PDQAq7kG3nIqmxIKIXIBHmXM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VJWNWa8RNdZQAvv6RtCKNsfl5ZYhKCiWNVqND4QHHOKL2vkH6o2zh0G11x7PwF3IEtYuAhJCRA/RS4uJ35DHG9tgAaXb3/kKUl20qqV+W0yA4VO7x/YZ7XAm7X9gD37ICXfUYQTkHoiV8ZdHWx+s500tCiii+pwjg66Uoir45tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuanchu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4VehKRhS; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=ZEmL5AJ53M3sgS5tHUmpLe7XSf/geb5oIlEds0V2wJ6TmNPR0o4eZb+KX2ykAFMJKIDKnAJdEmsPB3OnGHMPkjvq5iH63QdL7I+k64/DrWIcqmtc8sTYeS3MOQZsg1CtrFCt6bbYMf6PZfwK6hEZuy63ycmb2ybbF9DG2R2lZZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuanchu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VHwp2kwn; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuanchu.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-609fe93b5cfso5276757b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 14:31:40 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-607838c0800so14501677b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 14:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711575099; x=1712179899; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711575101; x=1712179901; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pYcWZ+uvnfpBRrJgdHxDGPK9xqtHO7VyC+05VAboBBI=;
-        b=4VehKRhSB8dvrqwQqUXbhCMsh8DX0Hw70BAR8m9ymXpcN+zL/DJDc+is9au7vGlKuA
-         dePcM174kofMfyyxRuiMAL8eDg3DaI/N/j8b/ip8A3VnIPTLiRIf4k3jUhE28nV4TLdT
-         C5LksHQy7mW9FOZtBYCJLfsKXgGvq0lHV0IpeA5OLsg9N3Pm7yF876qaHqg31OtTpe7u
-         Jm5dMrMe8qSzPzIlCala4tHA1OfjXg1+/uybudErfrSPvK+TyKqxjvvgsoOcp6qnv1n7
-         d7lWYEm/GgRBg1hTOYZtzFGYEibDgkc841QTpm1nySwlEiqFvTy9creeQmU28QKFL9wr
-         BWhg==
+        bh=A565PQouZoECoC+bAbMpMjHjbmuhcXoGplNwxvsLI/Q=;
+        b=VHwp2kwnIF60mr5EeVW7NxiCPW1QzRnDw7RMa+qY6d6aYgn5UFIgp085//ht1w93jT
+         oWkySLf/Lq/9DGbyTw41pmLXiI8B3YFy9OinJAXf3BlUxnaNOV6aC68A6k7gFJx3NL5W
+         BSuFmualpHaESi70Pt2SlbrU64+YxsS16xgsteJZ+99dgfJkFkS8s3BKWJj752fcvl9l
+         oEfMlzGMUyWSXzte1V7rbQTO9h97vQO222Gf7pUHf/5IYuhQRuh1y3eU5dNpsI+6QmjG
+         nLomY9U/2og8m3eV9gT2NunZmvZmk1dkAVO32ZAm+bpp6m7DFbL3qQK7N4bgLgMfgBQN
+         8TRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711575099; x=1712179899;
+        d=1e100.net; s=20230601; t=1711575101; x=1712179901;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pYcWZ+uvnfpBRrJgdHxDGPK9xqtHO7VyC+05VAboBBI=;
-        b=sB9S5CtAuYUpVgc+3wDAMVlwT9wYsLnHGF/6I5Vr+gk5qrzAkFn/8wFZdjCiqR6bZ0
-         A15MkCUWA1Z+OLrLI0uTXgpUEsvBOSnuqZd1Prqn/BADk6u1ago6QjSxJwDrRAY556KR
-         x7bH5MRgiwwWGQqWz1m2h4t1OPuui4LPBOS9sfJTFTfJJvm119O6xRXe9E6rUex5vxaz
-         0E75zr8TpAWj4QgKujeU3cwVejGdRPbc3r2vydrFWMi1iJqvZBp9hr/C4TTRxOoGz4hm
-         H26gFS5ptpSAN1Got9kJ4b6lA9min1Za/P1rJFfeGuVUQEAM5CfyJDT6T4+Rn3vR820O
-         knvg==
-X-Forwarded-Encrypted: i=1; AJvYcCW0dAc8vtsEMoAqLiDR7zakdSSFNoEICh3npD2Vg4x0DgeRTT0cirVh3P+ITvlhNKCXpohiAgZ2En9iP3GIflqJgS7vi+NiaVn8rxNdU1Xu
-X-Gm-Message-State: AOJu0YzBqV0vNzSqdVdo0J5N29qyXmwGxn5TPMQ5CjGq5oyIGgOE1NaC
-	iCIsfMbQ/475uzWkpi16qP9MxzQ/ZdGWhx9QB+LcThUhlsfuxeR0Ed48Z/O3JVPUwclYFXphxCh
-	O7yL5Ow==
-X-Google-Smtp-Source: AGHT+IH29n/bXDk4V5f6G2KmwU71qUf9qBBJl3gumyEah4UzaOtBiCsSyfr3pIgcLollPnQRaMOx5Jjvfzl5
+        bh=A565PQouZoECoC+bAbMpMjHjbmuhcXoGplNwxvsLI/Q=;
+        b=FKVzio2MN7iMd9Nzg4KM7cPu4HU+1dU90bkZv/Us7jzzK61gB6WFvu75uWOFVcMRvq
+         u1mCqTfD6CHVpKhuw4Z1bEaGn37Vxsxpz9R7MM7a0haspioRNBQNq0ZVhZAyHulNGSMU
+         rDizJp+FKCx9AeJL2qAUJytyDc09t/rqBk2x6JyZBJRcdler4+U9xqPfk3ZGkVZXPXjS
+         n4JgW4a3aSEEE4GP0jN3dQ92WefQ7Gs1xj8TPIJsy9SqCF1T33fBt5wkRtwJxNQ0AsLr
+         h6pXS3XiRYeorfUku8AzPVfSCF8g2KKyy7gp+nGS32ledSNQmxXqPCCbIWigfEZ7pHfT
+         GgfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVc4E6fJC0o9vsPAxa6oUQKsjJefXkaP+szbi3GUR4XcbHZlWGkO1g7pUBypCUAU5lPkQip5n/F7/M9Z2foN0Wf27Kpuasq/lOQq4NNzGY1
+X-Gm-Message-State: AOJu0YyFprjJqhoHmVkfqYg+9+wh8FnCaDws4NxrGnzqKWWTzK8/L3+H
+	APYx2X9Kpv1VsipqNayccb59/5pQ8/Tp2edopOlBDmVFox7pLtdeXs0HjrWWawlx6Lcp51uD//x
+	3ZS8EiA==
+X-Google-Smtp-Source: AGHT+IGWjQUNRXXoGUh5+QqHFNkK8JcuM0kAdyJ/QDj3Y482hU2DxaC1k/t+Vf+seKF4W2aB0l9ObuFk2jZg
 X-Received: from yuanchu-desktop.svl.corp.google.com ([2620:15c:2a3:200:6df3:ef42:a58e:a6b1])
- (user=yuanchu job=sendgmr) by 2002:a05:6902:2088:b0:dc6:e20f:80cb with SMTP
- id di8-20020a056902208800b00dc6e20f80cbmr89815ybb.3.1711575099385; Wed, 27
- Mar 2024 14:31:39 -0700 (PDT)
-Date: Wed, 27 Mar 2024 14:31:05 -0700
+ (user=yuanchu job=sendgmr) by 2002:a0d:df0d:0:b0:611:3077:2de7 with SMTP id
+ i13-20020a0ddf0d000000b0061130772de7mr101184ywe.3.1711575101306; Wed, 27 Mar
+ 2024 14:31:41 -0700 (PDT)
+Date: Wed, 27 Mar 2024 14:31:06 -0700
 In-Reply-To: <20240327213108.2384666-1-yuanchu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240327213108.2384666-1-yuanchu@google.com>
 X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
-Message-ID: <20240327213108.2384666-7-yuanchu@google.com>
-Subject: [RFC PATCH v3 6/8] mm: add per-memcg reaccess histogram
+Message-ID: <20240327213108.2384666-8-yuanchu@google.com>
+Subject: [RFC PATCH v3 7/8] mm: add kernel aging thread for workingset reporting
 From: Yuanchu Xie <yuanchu@google.com>
 To: David Hildenbrand <david@redhat.com>, "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, 
 	Khalid Aziz <khalid.aziz@oracle.com>, Henry Huang <henry.hj@antgroup.com>, 
@@ -96,629 +96,321 @@ Cc: Wei Xu <weixugc@google.com>, David Rientjes <rientjes@google.com>,
 	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-A reaccess refers to detecting an access on a page via refault
-or access bit harvesting after the initial access. Similar to
-the working set histogram, the reaccess histogram breaks down
-reaccesses into user-defined bins.
+For reliable and timely aging on memcgs, one has to read
+the page age histograms on time. A kernel thread makes it easier
+by aging memcgs with valid page_age_intervals and refresh_interval
+when they can be refreshed, and also reduces the latency of any
+userspace consumers of the page age histogram.
 
-It tracks reaccesses from MGLRU walks, where a move from older
-generations to the young generation counts as a reaccess.
-Swapped out pages are tracked with the generation number
-encoded in mm/workingset.c, and additional tracking is added
-for enabled memory cgroups to track an additional 4 swapped out
-generations.
-
-Memcg interfaces:
-/sys/fs/cgroup/.../memory.workingset.reaccess
-	The format is identical to memory.workingset.page_age, but the
-	content breaks down reaccesses into pre-defined intervals.
-	e.g.
-	N0
-	1000 anon=6330 file=0
-	2000 anon=72 file=0
-	4000 anon=0 file=0
-	18446744073709551615 anon=0 file=0
-	N1
-	18446744073709551615 anon=0 file=0
-
-/sys/fs/cgroup/.../memory.workingset.reaccess_intervals
-	Defines the per-node intervals for memory.workingset.reaccess.
-	e.g.
-	echo N0=120000,240000,480000 > memory.workingset.reaccess_intervals
+The kernel aging thread is gated behind CONFIG_WORKINGSET_REPORT_AGING.
+Debugging stats may be added in the future for when aging cannot
+keep up with the configured refresh_interval.
 
 Signed-off-by: Yuanchu Xie <yuanchu@google.com>
 ---
- include/linux/workingset_report.h |  20 +++
- mm/internal.h                     |  28 ++++
- mm/memcontrol.c                   | 112 ++++++++++++++
- mm/vmscan.c                       |   8 +-
- mm/workingset.c                   |   9 +-
- mm/workingset_report.c            | 249 ++++++++++++++++++++++++++++++
- 6 files changed, 419 insertions(+), 7 deletions(-)
+ include/linux/workingset_report.h |  11 ++-
+ mm/Kconfig                        |   6 ++
+ mm/Makefile                       |   1 +
+ mm/memcontrol.c                   |  11 ++-
+ mm/workingset_report.c            |  14 +++-
+ mm/workingset_report_aging.c      | 127 ++++++++++++++++++++++++++++++
+ 6 files changed, 163 insertions(+), 7 deletions(-)
+ create mode 100644 mm/workingset_report_aging.c
 
 diff --git a/include/linux/workingset_report.h b/include/linux/workingset_report.h
-index 502542c812b3..e908c5678b1e 100644
+index e908c5678b1e..759486a3a285 100644
 --- a/include/linux/workingset_report.h
 +++ b/include/linux/workingset_report.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/types.h>
- #include <linux/mutex.h>
-+#include <linux/rcutree.h>
- 
- struct mem_cgroup;
- struct pglist_data;
-@@ -19,6 +20,12 @@ struct cgroup_file;
- #define WORKINGSET_INTERVAL_MAX ((unsigned long)-1)
- #define ANON_AND_FILE 2
- 
-+/*
-+ * MAX_NR_EVICTED_GENS is set to 4 so we can track the same number of
-+ * generations as MGLRU has resident.
-+ */
-+#define MAX_NR_EVICTED_GENS 4
-+
- struct wsr_report_bin {
- 	unsigned long idle_age;
- 	unsigned long nr_pages[ANON_AND_FILE];
-@@ -35,6 +42,18 @@ struct wsr_page_age_histo {
- 	struct wsr_report_bins bins;
- };
- 
-+struct wsr_evicted_gen {
-+	unsigned long timestamp;
-+	int seq;
-+};
-+
-+struct wsr_reaccess_histo {
-+	struct rcu_head rcu;
-+	/* evicted gens start from min_seq[LRU_GEN_ANON] - 1 */
-+	struct wsr_evicted_gen gens[MAX_NR_EVICTED_GENS];
-+	struct wsr_report_bins bins;
-+};
-+
- struct wsr_state {
- 	unsigned long report_threshold;
- 	unsigned long refresh_interval;
-@@ -47,6 +66,7 @@ struct wsr_state {
- 	/* breakdown of workingset by page age */
- 	struct mutex page_age_lock;
- 	struct wsr_page_age_histo *page_age;
-+	struct wsr_reaccess_histo __rcu *reaccess;
- };
- 
- void wsr_init(struct lruvec *lruvec);
-diff --git a/mm/internal.h b/mm/internal.h
-index 3730c8399ad4..077340b526e8 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -205,16 +205,44 @@ void putback_lru_page(struct page *page);
- void folio_putback_lru(struct folio *folio);
- extern void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason);
- 
-+/*
-+ * in mm/workingset.c
-+ */
-+#define WORKINGSET_SHIFT 1
-+#define EVICTION_SHIFT	((BITS_PER_LONG - BITS_PER_XA_VALUE) +	\
-+			 WORKINGSET_SHIFT + NODES_SHIFT + \
-+			 MEM_CGROUP_ID_SHIFT)
-+#define EVICTION_MASK	(~0UL >> EVICTION_SHIFT)
-+
- #ifdef CONFIG_WORKINGSET_REPORT
- /*
-  * in mm/wsr.c
+@@ -77,9 +77,18 @@ void wsr_destroy(struct lruvec *lruvec);
+  * The next refresh time is stored in refresh_time.
   */
-+void report_lru_gen_eviction(struct lruvec *lruvec, int type, int min_seq);
-+void lru_gen_report_reaccess(struct lruvec *lruvec,
-+			     struct lru_gen_mm_walk *walk);
-+void report_reaccess_refault(struct lruvec *lruvec, unsigned long token,
-+			     int type, int nr_pages);
- void notify_workingset(struct mem_cgroup *memcg, struct pglist_data *pgdat);
- /* Requires wsr->page_age_lock held */
- void wsr_refresh_scan(struct lruvec *lruvec, unsigned long refresh_interval);
- int workingset_report_intervals_parse(char *src,
- 				      struct wsr_report_bins *bins);
+ bool wsr_refresh_report(struct wsr_state *wsr, struct mem_cgroup *root,
+-			struct pglist_data *pgdat);
++			struct pglist_data *pgdat, unsigned long *refresh_time);
+ void wsr_register_node(struct node *node);
+ void wsr_unregister_node(struct node *node);
++
++#ifdef CONFIG_WORKINGSET_REPORT_AGING
++void wsr_wakeup_aging_thread(void);
++#else /* CONFIG_WORKINGSET_REPORT_AGING */
++static inline void wsr_wakeup_aging_thread(void)
++{
++}
++#endif /* CONFIG_WORKINGSET_REPORT_AGING */
++
  #else
-+struct lru_gen_mm_walk;
-+static inline void report_lru_gen_eviction(struct lruvec *lruvec, int type,
-+					   int min_seq)
-+{
-+}
-+static inline void lru_gen_report_reaccess(struct lruvec *lruvec,
-+					   struct lru_gen_mm_walk *walk)
-+{
-+}
-+static inline void report_reaccess_refault(struct lruvec *lruvec,
-+					   unsigned long token, int type,
-+					   int nr_pages)
-+{
-+}
- static inline void notify_workingset(struct mem_cgroup *memcg,
- 				     struct pglist_data *pgdat)
+ static inline void wsr_init(struct lruvec *lruvec)
  {
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 212f203b10b9..1e6aa1bd63f2 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1270,6 +1270,12 @@ config WORKINGSET_REPORT
+ 	  This option exports stats and events giving the user more insight
+ 	  into its memory working set.
+ 
++config WORKINGSET_REPORT_AGING
++	bool "Workingset report kernel aging thread"
++	depends on WORKINGSET_REPORT
++	help
++	  Performs aging on memcgs with their configured refresh intervals.
++
+ source "mm/damon/Kconfig"
+ 
+ endmenu
+diff --git a/mm/Makefile b/mm/Makefile
+index 57093657030d..7caae7f2d6cf 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -93,6 +93,7 @@ obj-$(CONFIG_TRANSPARENT_HUGEPAGE) += huge_memory.o khugepaged.o
+ obj-$(CONFIG_PAGE_COUNTER) += page_counter.o
+ obj-$(CONFIG_MEMCG) += memcontrol.o vmpressure.o
+ obj-$(CONFIG_WORKINGSET_REPORT) += workingset_report.o
++obj-$(CONFIG_WORKINGSET_REPORT_AGING) += workingset_report_aging.o
+ ifdef CONFIG_SWAP
+ obj-$(CONFIG_MEMCG) += swap_cgroup.o
+ endif
 diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 75bda5f7994d..2a39a4445bb7 100644
+index 2a39a4445bb7..86e15b9fc8e2 100644
 --- a/mm/memcontrol.c
 +++ b/mm/memcontrol.c
-@@ -7108,6 +7108,71 @@ static ssize_t memory_ws_page_age_intervals_write(struct kernfs_open_file *of,
- 	return err;
- }
- 
-+static int memory_ws_reaccess_intervals_show(struct seq_file *m, void *v)
-+{
-+	int nid;
-+	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
-+
-+	for_each_node_state(nid, N_MEMORY) {
-+		struct wsr_state *wsr;
-+		struct wsr_reaccess_histo *reaccess;
-+		int i, nr_bins;
-+
-+		wsr = &mem_cgroup_lruvec(memcg, NODE_DATA(nid))->wsr;
-+		rcu_read_lock();
-+		reaccess = rcu_dereference(wsr->reaccess);
-+		if (!reaccess)
-+			goto unlock;
-+		seq_printf(m, "N%d=", nid);
-+		nr_bins = reaccess->bins.nr_bins;
-+		for (i = 0; i < nr_bins; ++i) {
-+			struct wsr_report_bin *bin = &reaccess->bins.bins[i];
-+
-+			seq_printf(m, "%u", jiffies_to_msecs(bin->idle_age));
-+			if (i + 1 < nr_bins)
-+				seq_putc(m, ',');
-+		}
-+		seq_putc(m, ' ');
-+unlock:
-+		rcu_read_unlock();
-+	}
-+	seq_putc(m, '\n');
-+
-+	return 0;
-+}
-+
-+static ssize_t memory_ws_reaccess_intervals_write(struct kernfs_open_file *of,
-+						  char *buf, size_t nbytes,
-+						  loff_t off)
-+{
-+	unsigned int nid;
-+	int err;
-+	struct wsr_state *wsr;
-+	struct wsr_reaccess_histo *reaccess = NULL, *old;
-+	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-+
-+	reaccess = kzalloc(sizeof(struct wsr_reaccess_histo), GFP_KERNEL);
-+	if (!reaccess)
-+		return -ENOMEM;
-+
-+	err = memory_wsr_interval_parse(of, buf, nbytes, &nid, &reaccess->bins);
-+	if (err < 0)
-+		goto failed;
-+
-+	if (err == 0) {
-+		kfree(reaccess);
-+		reaccess = NULL;
-+	}
-+
-+	wsr = &mem_cgroup_lruvec(memcg, NODE_DATA(nid))->wsr;
-+	old = xchg(&wsr->reaccess, reaccess);
-+	kfree_rcu(old, rcu);
-+	return nbytes;
-+failed:
-+	kfree(reaccess);
-+	return err;
-+}
-+
- static int memory_ws_refresh_interval_show(struct seq_file *m, void *v)
+@@ -7102,6 +7102,8 @@ static ssize_t memory_ws_page_age_intervals_write(struct kernfs_open_file *of,
+ 	old = xchg(&wsr->page_age, page_age);
+ 	mutex_unlock(&wsr->page_age_lock);
+ 	kfree(old);
++	if (err && READ_ONCE(wsr->refresh_interval))
++		wsr_wakeup_aging_thread();
+ 	return nbytes;
+ failed:
+ 	kfree(page_age);
+@@ -7227,14 +7229,17 @@ static ssize_t memory_ws_refresh_interval_write(struct kernfs_open_file *of,
  {
- 	int nid;
-@@ -7242,6 +7307,42 @@ static int memory_ws_page_age_show(struct seq_file *m, void *v)
+ 	unsigned int nid, msecs;
+ 	struct wsr_state *wsr;
++	unsigned long old_interval;
+ 	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+ 	ssize_t ret = memory_wsr_threshold_parse(buf, nbytes, &nid, &msecs);
  
- 	return 0;
+ 	if (ret < 0)
+ 		return ret;
+-
+ 	wsr = &mem_cgroup_lruvec(memcg, NODE_DATA(nid))->wsr;
++	old_interval = jiffies_to_msecs(READ_ONCE(wsr->refresh_interval));
+ 	WRITE_ONCE(wsr->refresh_interval, msecs_to_jiffies(msecs));
++	if (msecs && (!old_interval || jiffies_to_msecs(old_interval) > msecs))
++		wsr_wakeup_aging_thread();
+ 	return ret;
  }
-+
-+static int memory_ws_reaccess_histogram_show(struct seq_file *m, void *v)
-+{
-+	int nid;
-+	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
-+
-+	for_each_node_state(nid, N_MEMORY) {
-+		struct wsr_state *wsr =
-+			&mem_cgroup_lruvec(memcg, NODE_DATA(nid))->wsr;
-+		struct wsr_reaccess_histo *reaccess;
-+		struct wsr_report_bin *bin;
-+
-+		rcu_read_lock();
-+		reaccess = rcu_dereference(wsr->reaccess);
-+
-+		if (!reaccess)
-+			goto unlock;
-+
-+		wsr_refresh_report(wsr, memcg, NODE_DATA(nid));
-+
-+		seq_printf(m, "N%d\n", nid);
-+		for (bin = reaccess->bins.bins;
-+		     bin->idle_age != WORKINGSET_INTERVAL_MAX; bin++)
-+			seq_printf(m, "%u anon=%lu file=%lu\n",
-+				   jiffies_to_msecs(bin->idle_age),
-+				   bin->nr_pages[0], bin->nr_pages[1]);
-+
-+		seq_printf(m, "%lu anon=%lu file=%lu\n", WORKINGSET_INTERVAL_MAX,
-+			   bin->nr_pages[0], bin->nr_pages[1]);
-+
-+unlock:
-+		rcu_read_unlock();
-+	}
-+
-+	return 0;
-+}
- #endif
  
- static struct cftype memory_files[] = {
-@@ -7337,6 +7438,17 @@ static struct cftype memory_files[] = {
- 		.file_offset = offsetof(struct mem_cgroup, workingset_page_age_file),
- 		.seq_show = memory_ws_page_age_show,
- 	},
-+	{
-+		.name = "workingset.reaccess_intervals",
-+		.flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
-+		.seq_show = memory_ws_reaccess_intervals_show,
-+		.write = memory_ws_reaccess_intervals_write,
-+	},
-+	{
-+		.name = "workingset.reaccess",
-+		.flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
-+		.seq_show = memory_ws_reaccess_histogram_show,
-+	},
- #endif
- 	{} /* terminate */
- };
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index c6acd5265b3f..4d9245e2c0d1 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3637,6 +3637,7 @@ static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_
- 		mem_cgroup_unlock_pages();
- 
- 		if (walk->batched) {
-+			lru_gen_report_reaccess(lruvec, walk);
- 			spin_lock_irq(&lruvec->lru_lock);
- 			reset_batch_size(lruvec, walk);
- 			spin_unlock_irq(&lruvec->lru_lock);
-@@ -3709,6 +3710,7 @@ static bool inc_min_seq(struct lruvec *lruvec, int type, bool can_swap)
- 	}
- done:
- 	reset_ctrl_pos(lruvec, type, true);
-+	report_lru_gen_eviction(lruvec, type, lrugen->min_seq[type] + 1);
- 	WRITE_ONCE(lrugen->min_seq[type], lrugen->min_seq[type] + 1);
- 
- 	return true;
-@@ -3750,6 +3752,7 @@ static bool try_to_inc_min_seq(struct lruvec *lruvec, bool can_swap)
+@@ -7285,7 +7290,7 @@ static int memory_ws_page_age_show(struct seq_file *m, void *v)
+ 		if (!READ_ONCE(wsr->page_age))
  			continue;
  
- 		reset_ctrl_pos(lruvec, type, true);
-+		report_lru_gen_eviction(lruvec, type, min_seq[type]);
- 		WRITE_ONCE(lrugen->min_seq[type], min_seq[type]);
- 		success = true;
- 	}
-@@ -4565,11 +4568,14 @@ static int evict_folios(struct lruvec *lruvec, struct scan_control *sc, int swap
- 		sc->nr_scanned -= folio_nr_pages(folio);
- 	}
+-		wsr_refresh_report(wsr, memcg, NODE_DATA(nid));
++		wsr_refresh_report(wsr, memcg, NODE_DATA(nid), NULL);
+ 		mutex_lock(&wsr->page_age_lock);
+ 		if (!wsr->page_age)
+ 			goto unlock;
+@@ -7325,7 +7330,7 @@ static int memory_ws_reaccess_histogram_show(struct seq_file *m, void *v)
+ 		if (!reaccess)
+ 			goto unlock;
  
-+	walk = current->reclaim_state->mm_walk;
-+	if (walk && walk->batched)
-+		lru_gen_report_reaccess(lruvec, walk);
-+
- 	spin_lock_irq(&lruvec->lru_lock);
+-		wsr_refresh_report(wsr, memcg, NODE_DATA(nid));
++		wsr_refresh_report(wsr, memcg, NODE_DATA(nid), NULL);
  
- 	move_folios_to_lru(lruvec, &list);
- 
--	walk = current->reclaim_state->mm_walk;
- 	if (walk && walk->batched)
- 		reset_batch_size(lruvec, walk);
- 
-diff --git a/mm/workingset.c b/mm/workingset.c
-index 226012974328..057fbedd91ea 100644
---- a/mm/workingset.c
-+++ b/mm/workingset.c
-@@ -17,6 +17,8 @@
- #include <linux/fs.h>
- #include <linux/mm.h>
- 
-+#include "internal.h"
-+
- /*
-  *		Double CLOCK lists
-  *
-@@ -179,12 +181,6 @@
-  * refault distance will immediately activate the refaulting page.
-  */
- 
--#define WORKINGSET_SHIFT 1
--#define EVICTION_SHIFT	((BITS_PER_LONG - BITS_PER_XA_VALUE) +	\
--			 WORKINGSET_SHIFT + NODES_SHIFT + \
--			 MEM_CGROUP_ID_SHIFT)
--#define EVICTION_MASK	(~0UL >> EVICTION_SHIFT)
--
- /*
-  * Eviction timestamps need to be able to cover the full range of
-  * actionable refaults. However, bits are tight in the xarray
-@@ -294,6 +290,7 @@ static void lru_gen_refault(struct folio *folio, void *shadow)
- 		goto unlock;
- 
- 	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + type, delta);
-+	report_reaccess_refault(lruvec, token, type, delta);
- 
- 	if (!recent)
- 		goto unlock;
+ 		seq_printf(m, "N%d\n", nid);
+ 		for (bin = reaccess->bins.bins;
 diff --git a/mm/workingset_report.c b/mm/workingset_report.c
-index b00ffbfebcab..504d840bbe6a 100644
+index 504d840bbe6a..da658967eac2 100644
 --- a/mm/workingset_report.c
 +++ b/mm/workingset_report.c
-@@ -34,6 +34,7 @@ void wsr_destroy(struct lruvec *lruvec)
- 
- 	mutex_destroy(&wsr->page_age_lock);
- 	kfree(wsr->page_age);
-+	kfree_rcu(wsr->reaccess, rcu);
- 	memset(wsr, 0, sizeof(*wsr));
+@@ -234,7 +234,7 @@ static void refresh_aggregate(struct wsr_page_age_histo *page_age,
  }
  
-@@ -259,6 +260,254 @@ bool wsr_refresh_report(struct wsr_state *wsr, struct mem_cgroup *root,
- }
- EXPORT_SYMBOL_GPL(wsr_refresh_report);
- 
-+static void lru_gen_collect_reaccess_refault(struct wsr_report_bins *bins,
-+					     unsigned long timestamp, int type,
-+					     int nr_pages)
-+{
-+	unsigned long curr_timestamp = jiffies;
-+	struct wsr_report_bin *bin = &bins->bins[0];
-+
-+	while (bin->idle_age != WORKINGSET_INTERVAL_MAX &&
-+	       time_before(timestamp + bin->idle_age, curr_timestamp))
-+		bin++;
-+
-+	bin->nr_pages[type] += nr_pages;
-+}
-+
-+static void collect_reaccess_type(struct lru_gen_mm_walk *walk,
-+				  const struct lru_gen_folio *lrugen,
-+				  struct wsr_report_bin *bin,
-+				  unsigned long max_seq, unsigned long min_seq,
-+				  unsigned long curr_timestamp, int type)
-+{
-+	unsigned long seq;
-+
-+	/* Skip max_seq because a reaccess moves a page from another seq
-+	 * to max_seq. We use the negative change in page count from
-+	 * other seqs to track the number of reaccesses.
-+	 */
-+	for (seq = max_seq - 1; seq + 1 > min_seq; seq--) {
-+		int younger_gen, gen, zone;
-+		unsigned long gen_end, gen_start;
-+		long delta = 0;
-+
-+		gen = lru_gen_from_seq(seq);
-+
-+		for (zone = 0; zone < MAX_NR_ZONES; zone++) {
-+			long nr_pages = walk->nr_pages[gen][type][zone];
-+
-+			if (nr_pages < 0)
-+				delta += -nr_pages;
-+		}
-+
-+		gen_end = READ_ONCE(lrugen->timestamps[gen]);
-+		younger_gen = lru_gen_from_seq(seq + 1);
-+		gen_start = READ_ONCE(lrugen->timestamps[younger_gen]);
-+
-+		/* ensure gen_start is within idle_age of bin */
-+		while (bin->idle_age != WORKINGSET_INTERVAL_MAX &&
-+		       time_before(gen_start + bin->idle_age, curr_timestamp))
-+			bin++;
-+
-+		while (bin->idle_age != WORKINGSET_INTERVAL_MAX &&
-+		       time_before(gen_end + bin->idle_age, curr_timestamp)) {
-+			unsigned long proportion = (long)gen_start -
-+						   (long)curr_timestamp +
-+						   (long)bin->idle_age;
-+			unsigned long gen_len = (long)gen_start - (long)gen_end;
-+
-+			if (!gen_len)
-+				break;
-+			if (proportion) {
-+				unsigned long split_bin =
-+					delta / gen_len * proportion;
-+				bin->nr_pages[type] += split_bin;
-+				delta -= split_bin;
-+			}
-+			gen_start = curr_timestamp - bin->idle_age;
-+			bin++;
-+		}
-+		bin->nr_pages[type] += delta;
-+	}
-+}
-+
-+/*
-+ * Reaccesses are propagated up the memcg hierarchy during scanning/refault.
-+ * Collect the reaccess information from a multi-gen LRU walk.
-+ */
-+static void lru_gen_collect_reaccess(struct wsr_report_bins *bins,
-+				     struct lru_gen_folio *lrugen,
-+				     struct lru_gen_mm_walk *walk)
-+{
-+	int type;
-+	unsigned long curr_timestamp = jiffies;
-+	unsigned long max_seq = READ_ONCE(walk->max_seq);
-+	unsigned long min_seq[ANON_AND_FILE] = {
-+		READ_ONCE(lrugen->min_seq[LRU_GEN_ANON]),
-+		READ_ONCE(lrugen->min_seq[LRU_GEN_FILE]),
-+	};
-+
-+	for (type = 0; type < ANON_AND_FILE; type++) {
-+		struct wsr_report_bin *bin = &bins->bins[0];
-+
-+		collect_reaccess_type(walk, lrugen, bin, max_seq,
-+				      min_seq[type], curr_timestamp, type);
-+	}
-+}
-+
-+void lru_gen_report_reaccess(struct lruvec *lruvec, struct lru_gen_mm_walk *walk)
-+{
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
-+	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-+
-+	for (memcg = lruvec_memcg(lruvec); memcg;
-+	     memcg = parent_mem_cgroup(memcg)) {
-+		struct lruvec *memcg_lruvec =
-+			mem_cgroup_lruvec(memcg, lruvec_pgdat(lruvec));
-+		struct wsr_state *wsr = &memcg_lruvec->wsr;
-+		struct wsr_reaccess_histo *reaccess;
-+
-+		rcu_read_lock();
-+		reaccess = rcu_dereference(wsr->reaccess);
-+		if (!reaccess) {
-+			rcu_read_unlock();
-+			continue;
-+		}
-+		lru_gen_collect_reaccess(&reaccess->bins, lrugen, walk);
-+		rcu_read_unlock();
-+	}
-+}
-+
-+static inline int evicted_gen_from_seq(unsigned long seq)
-+{
-+	return seq % MAX_NR_EVICTED_GENS;
-+}
-+
-+void report_lru_gen_eviction(struct lruvec *lruvec, int type, int min_seq)
-+{
-+	int seq;
-+	struct wsr_reaccess_histo *reaccess = NULL;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
-+	struct wsr_state *wsr = &lruvec->wsr;
-+
-+	/*
-+	 * Since file can go ahead of anon, min_seq[file] >= min_seq[anon]
-+	 * only record evictions when anon moves forward.
-+	 */
-+	if (type != LRU_GEN_ANON)
-+		return;
-+
-+	/*
-+	 * lru_lock is held during eviction, so reaccess accounting
-+	 * can be serialized.
-+	 */
-+	lockdep_assert_held(&lruvec->lru_lock);
-+
-+	rcu_read_lock();
-+	reaccess = rcu_dereference(wsr->reaccess);
-+	if (!reaccess)
-+		goto unlock;
-+
-+	for (seq = READ_ONCE(lrugen->min_seq[LRU_GEN_ANON]); seq < min_seq;
-+	     ++seq) {
-+		int evicted_gen = evicted_gen_from_seq(seq);
-+		int gen = lru_gen_from_seq(seq);
-+
-+		WRITE_ONCE(reaccess->gens[evicted_gen].seq, seq);
-+		WRITE_ONCE(reaccess->gens[evicted_gen].timestamp,
-+			   READ_ONCE(lrugen->timestamps[gen]));
-+	}
-+
-+unlock:
-+	rcu_read_unlock();
-+}
-+
-+/*
-+ * May yield an incorrect timestamp if the token collides with
-+ * a recently evicted generation.
-+ */
-+static int timestamp_from_workingset_token(struct lruvec *lruvec,
-+					   unsigned long token,
-+					   unsigned long *timestamp)
-+{
-+	int type, err = -EEXIST;
-+	unsigned long seq, evicted_min_seq;
-+	struct wsr_reaccess_histo *reaccess = NULL;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
-+	struct wsr_state *wsr = &lruvec->wsr;
-+	unsigned long min_seq[ANON_AND_FILE] = {
-+		READ_ONCE(lrugen->min_seq[LRU_GEN_ANON]),
-+		READ_ONCE(lrugen->min_seq[LRU_GEN_FILE])
-+	};
-+
-+	token >>= LRU_REFS_WIDTH;
-+
-+	/* recent eviction */
-+	for (type = 0; type < ANON_AND_FILE; ++type) {
-+		if (token ==
-+		    (min_seq[type] & (EVICTION_MASK >> LRU_REFS_WIDTH))) {
-+			int gen = lru_gen_from_seq(min_seq[type]);
-+
-+			*timestamp = READ_ONCE(lrugen->timestamps[gen]);
-+			return 0;
-+		}
-+	}
-+
-+	rcu_read_lock();
-+	reaccess = rcu_dereference(wsr->reaccess);
-+	if (!reaccess)
-+		goto unlock;
-+
-+	/* look up in evicted gen buffer */
-+	evicted_min_seq = min_seq[LRU_GEN_ANON] - MAX_NR_EVICTED_GENS;
-+	if (min_seq[LRU_GEN_ANON] < MAX_NR_EVICTED_GENS)
-+		evicted_min_seq = 0;
-+	for (seq = min_seq[LRU_GEN_ANON]; seq > evicted_min_seq; --seq) {
-+		int gen = evicted_gen_from_seq(seq - 1);
-+
-+		if (token == (reaccess->gens[gen].seq &
-+			      (EVICTION_MASK >> LRU_REFS_WIDTH))) {
-+			*timestamp = reaccess->gens[gen].timestamp;
-+
-+			goto unlock;
-+		}
-+	}
-+
-+unlock:
-+	rcu_read_unlock();
-+	return err;
-+}
-+
-+void report_reaccess_refault(struct lruvec *lruvec, unsigned long token,
-+			     int type, int nr_pages)
-+{
-+	unsigned long timestamp;
-+	int err;
-+	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-+
-+	err = timestamp_from_workingset_token(lruvec, token, &timestamp);
-+	if (err)
-+		return;
-+
-+	for (memcg = lruvec_memcg(lruvec); memcg;
-+	     memcg = parent_mem_cgroup(memcg)) {
-+		struct lruvec *memcg_lruvec =
-+			mem_cgroup_lruvec(memcg, lruvec_pgdat(lruvec));
-+		struct wsr_state *wsr = &memcg_lruvec->wsr;
-+		struct wsr_reaccess_histo *reaccess = NULL;
-+
-+		rcu_read_lock();
-+		reaccess = rcu_dereference(wsr->reaccess);
-+		if (!reaccess) {
-+			rcu_read_unlock();
-+			continue;
-+		}
-+		lru_gen_collect_reaccess_refault(&reaccess->bins, timestamp,
-+						 type, nr_pages);
-+		rcu_read_unlock();
-+	}
-+}
-+
- static struct pglist_data *kobj_to_pgdat(struct kobject *kobj)
+ bool wsr_refresh_report(struct wsr_state *wsr, struct mem_cgroup *root,
+-			struct pglist_data *pgdat)
++			struct pglist_data *pgdat, unsigned long *refresh_time)
  {
- 	int nid = IS_ENABLED(CONFIG_NUMA) ? kobj_to_dev(kobj)->id :
+ 	struct wsr_page_age_histo *page_age = NULL;
+ 	unsigned long refresh_interval = READ_ONCE(wsr->refresh_interval);
+@@ -253,6 +253,8 @@ bool wsr_refresh_report(struct wsr_state *wsr, struct mem_cgroup *root,
+ 		goto unlock;
+ 	refresh_scan(wsr, root, pgdat, refresh_interval);
+ 	refresh_aggregate(page_age, root, pgdat);
++	if (refresh_time)
++		*refresh_time = page_age->timestamp + refresh_interval;
+ 
+ unlock:
+ 	mutex_unlock(&wsr->page_age_lock);
+@@ -564,12 +566,16 @@ static ssize_t refresh_interval_store(struct kobject *kobj,
+ 	unsigned int interval;
+ 	int err;
+ 	struct wsr_state *wsr = kobj_to_wsr(kobj);
++	unsigned long old_interval;
+ 
+ 	err = kstrtouint(buf, 0, &interval);
+ 	if (err)
+ 		return err;
+ 
+-	WRITE_ONCE(wsr->refresh_interval, msecs_to_jiffies(interval));
++	old_interval = xchg(&wsr->refresh_interval, msecs_to_jiffies(interval));
++	if (interval &&
++	    (!old_interval || jiffies_to_msecs(old_interval) > interval))
++		wsr_wakeup_aging_thread();
+ 
+ 	return len;
+ }
+@@ -642,6 +648,8 @@ static ssize_t page_age_intervals_store(struct kobject *kobj,
+ 	mutex_unlock(&wsr->page_age_lock);
+ 	kfree(old);
+ 	kfree(buf);
++	if (err && READ_ONCE(wsr->refresh_interval))
++		wsr_wakeup_aging_thread();
+ 	return len;
+ failed:
+ 	kfree(page_age);
+@@ -663,7 +671,7 @@ static ssize_t page_age_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 	if (!READ_ONCE(wsr->page_age))
+ 		return -EINVAL;
+ 
+-	wsr_refresh_report(wsr, NULL, kobj_to_pgdat(kobj));
++	wsr_refresh_report(wsr, NULL, kobj_to_pgdat(kobj), NULL);
+ 
+ 	mutex_lock(&wsr->page_age_lock);
+ 	if (!wsr->page_age) {
+diff --git a/mm/workingset_report_aging.c b/mm/workingset_report_aging.c
+new file mode 100644
+index 000000000000..91ad5020778a
+--- /dev/null
++++ b/mm/workingset_report_aging.c
+@@ -0,0 +1,127 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Workingset report kernel aging thread
++ *
++ * Performs aging on behalf of memcgs with their configured refresh interval.
++ * While a userspace program can periodically read the page age breakdown
++ * per-memcg and trigger aging, the kernel performing aging is less overhead,
++ * more consistent, and more reliable for the use case where every memcg should
++ * be aged according to their refresh interval.
++ */
++#define pr_fmt(fmt) "workingset report aging: " fmt
++
++#include <linux/jiffies.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/init.h>
++#include <linux/kthread.h>
++#include <linux/memcontrol.h>
++#include <linux/swap.h>
++#include <linux/wait.h>
++#include <linux/mmzone.h>
++#include <linux/workingset_report.h>
++
++static DECLARE_WAIT_QUEUE_HEAD(aging_wait);
++static bool refresh_pending;
++
++static bool do_aging_node(int nid, unsigned long *next_wake_time)
++{
++	struct mem_cgroup *memcg;
++	bool should_wait = true;
++	struct pglist_data *pgdat = NODE_DATA(nid);
++
++	memcg = mem_cgroup_iter(NULL, NULL, NULL);
++	do {
++		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
++		struct wsr_state *wsr = &lruvec->wsr;
++		unsigned long refresh_time;
++
++		/* use returned time to decide when to wake up next */
++		if (wsr_refresh_report(wsr, memcg, pgdat, &refresh_time)) {
++			if (should_wait) {
++				should_wait = false;
++				*next_wake_time = refresh_time;
++			} else if (time_before(refresh_time, *next_wake_time)) {
++				*next_wake_time = refresh_time;
++			}
++		}
++
++		cond_resched();
++	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)));
++
++	return should_wait;
++}
++
++static int do_aging(void *unused)
++{
++	while (!kthread_should_stop()) {
++		int nid;
++		long timeout_ticks;
++		unsigned long next_wake_time;
++		bool should_wait = true;
++
++		WRITE_ONCE(refresh_pending, false);
++		for_each_node_state(nid, N_MEMORY) {
++			unsigned long node_next_wake_time;
++
++			if (do_aging_node(nid, &node_next_wake_time))
++				continue;
++			if (should_wait) {
++				should_wait = false;
++				next_wake_time = node_next_wake_time;
++			} else if (time_before(node_next_wake_time,
++					       next_wake_time)) {
++				next_wake_time = node_next_wake_time;
++			}
++		}
++
++		if (should_wait) {
++			wait_event_interruptible(aging_wait, refresh_pending);
++			continue;
++		}
++
++		/* sleep until next aging */
++		timeout_ticks = next_wake_time - jiffies;
++		if (timeout_ticks > 0 &&
++		    timeout_ticks != MAX_SCHEDULE_TIMEOUT) {
++			schedule_timeout_idle(timeout_ticks);
++			continue;
++		}
++	}
++	return 0;
++}
++
++/* Invoked when refresh_interval shortens or changes to a non-zero value. */
++void wsr_wakeup_aging_thread(void)
++{
++	WRITE_ONCE(refresh_pending, true);
++	wake_up_interruptible(&aging_wait);
++}
++
++static struct task_struct *aging_thread;
++
++static int aging_init(void)
++{
++	struct task_struct *task;
++
++	task = kthread_run(do_aging, NULL, "kagingd");
++
++	if (IS_ERR(task)) {
++		pr_err("Failed to create aging kthread\n");
++		return PTR_ERR(task);
++	}
++
++	aging_thread = task;
++	pr_info("module loaded\n");
++	return 0;
++}
++
++static void aging_exit(void)
++{
++	kthread_stop(aging_thread);
++	aging_thread = NULL;
++	pr_info("module unloaded\n");
++}
++
++module_init(aging_init);
++module_exit(aging_exit);
 -- 
 2.44.0.396.g6e790dbe36-goog
 
