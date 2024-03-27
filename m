@@ -1,198 +1,509 @@
-Return-Path: <linux-kselftest+bounces-6709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1915788DCDB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 12:50:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89AA488DCE8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 12:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3FCD29788C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 11:50:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E701F26775
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 11:53:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B6E12BEBB;
-	Wed, 27 Mar 2024 11:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE74C12C552;
+	Wed, 27 Mar 2024 11:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="BQBpcsby"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="B5N3Z8/b"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B4312BE94
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 11:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDDE12C525;
+	Wed, 27 Mar 2024 11:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711540203; cv=none; b=SmDBrYMhn+oAOZNOyftILa5PMdDiaBFdfXawM5WMvg1h51nSnvEix0yv8OxfNgLUCwGO927OCQU68OV93sHB81FXKSe4THHOuVKSv1xKKxuxAHLQV3qVTxGDNSDJBqSw3xw5QcxhARR2IzY+M8bJ7hE27ftVtB4nj6XBigX+EmU=
+	t=1711540418; cv=none; b=fDEllgJvCyk70lr7hL8t3qiuv9NwPq2868sj/OXaOSCzThZmRLYfLEaLDjIUGO19b8DD3H+3Vg3TjLTTxJ+LO97ufQIKYoTLKMsdiASMAH570tx9qdByhQCyxnI1mH04AN9iCuWnJyfnF2WnUEVgUl5RsBX0Lrevy0uSU0UGbOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711540203; c=relaxed/simple;
-	bh=jUGLMXfJA53XClr/yZYHyekFyse0uCD0AkZBZQ9HFPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VMAVG3qiTPU3iBko1WmW/RCg9O16cDInbH2c+ggKRojr51NNd3GOl3K2kBQDQSAQqQcDQo7oDX++Kd756RvyRSwg7z0EWyx4Bvd+1CF3kXGA3OF2d1HH9PLXY5u6czhuq9C9L37r/X0mf+ds5TryIibekVH+3WGRFckPUqDkd04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=BQBpcsby; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-78a2a97c296so410539085a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 04:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1711540200; x=1712145000; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cRCwxUtywPyv/sfMfB7vDdhGhWd2UBJnlU1eKR4NMmg=;
-        b=BQBpcsbyXCy0ANtozaTBatHeafDnspgjIEG2xp6GBwPgOxoUijzM9jeUsUmXP6fAvL
-         5VWSwAUiIyjShgj/OP2Q3356zJ7kL0fwkz42TM4jCBA0EwG6zofcfW16DZ4uTLhbaQIc
-         J45x64Z+Vwav2A+pKQRPuMThDY4lrOGgKnUQT14O3nu4dxTMiVZ+MiWgllzJ3GDk8psw
-         XQsHkKLz+1B7nRJaqkeqiPURhksE4fgkipKmNxMBM3Da7+oruXvhLwhrXSSDe5F/tX0c
-         6qrxMk4OD5x82v83ndu2aqnRGpYOHBfB943qmPcTj+ZgoYju4PxwLyihCgSMCnDtxqUZ
-         c6GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711540200; x=1712145000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cRCwxUtywPyv/sfMfB7vDdhGhWd2UBJnlU1eKR4NMmg=;
-        b=RC+mIOoiwVDAHUW9O+UIzVjtzpknsgK2+tbqAJWpSeUdrvN7iks/u6p5us+qW+YR/r
-         JlkBY+vN6t+A1h9a2PWOXpTl24oJNNLlzbo94cQfhGO9Ym0DDcPSAEIT1516e/AcifHm
-         yr0WByDvQeItX7rFuKS74P3t9pwBszL/mzcfTa+FvbbshA9yqCMpLxAxbnaaXbN41frF
-         +KEMYOjkVhNJRzQ80PzxFQIn8aGmpCr0l5/kzHqcwKDBrP1FHNvihWmpOODwvYTqTHop
-         5jD42pvsvIY6+S3Upkh5Fm6q93BhSeb58SScFNE2694ZtOf4GrvsqhTFWLcpHsg+ST8X
-         Ds1g==
-X-Forwarded-Encrypted: i=1; AJvYcCXWyOxBjW8fvXE8aQ42LkCoQiR2DsOYH+kUgTBHVwQlwhjxlgVJyvTxn+IvQExqDSW7Kl7TZGNPyZ0BvGKgWQP+PfeFpU7+lTdrEUlkm7q/
-X-Gm-Message-State: AOJu0Yw0/5zz3A2zGmwZDJ7/h9tYG23tls0o0LifArkegyS/FsSsJA3/
-	7XUk7B2HT0HitLEgM0NwSHQSi4DeyljhBDTVkBEw4Dw1gqaWjn9G+G2cvFB0Gtw=
-X-Google-Smtp-Source: AGHT+IHwk5sSFKdm6Uh7Tlt4FGOA8xWOgg7e771JOsFUfYRAlXL6Y42sG4BEWKBvccGOUUtZiQb1mA==
-X-Received: by 2002:ae9:f407:0:b0:78a:5feb:d3aa with SMTP id y7-20020ae9f407000000b0078a5febd3aamr995720qkl.15.1711540199785;
-        Wed, 27 Mar 2024 04:49:59 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
-        by smtp.gmail.com with ESMTPSA id k26-20020a05620a0b9a00b00789e2961225sm3808233qkh.61.2024.03.27.04.49.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 04:49:59 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1rpRn4-0051gL-Np;
-	Wed, 27 Mar 2024 08:49:58 -0300
-Date: Wed, 27 Mar 2024 08:49:58 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Nicolin Chen <nicolinc@nvidia.com>
-Cc: kernel@collabora.com, iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Kevin Tian <kevin.tian@intel.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] selftests: iommu: add config needed for iommufd_fail_nth
-Message-ID: <20240327114958.GG8419@ziepe.ca>
-References: <20240325090048.1423908-1-usama.anjum@collabora.com>
- <31fcc276-acd6-4277-bd6c-4a871c7fb28a@collabora.com>
- <20240326150340.GE8419@ziepe.ca>
- <56cc8b9e-c1cf-4520-ba45-b1237e8b7b64@collabora.com>
+	s=arc-20240116; t=1711540418; c=relaxed/simple;
+	bh=hqyLU1Joi1RQhgBqSVEErd8zzBIoSRaagRQVKefQx4o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fgbaJQVjvA2Pez83XMVKi9hr+ehG0eVox0BSWilA5r7oofI7NftYNRKarGIKxkM5Ec8HxpxFBfdz0Q76HtEnIsVDzhdzubxbY7m2jjwdsGznKkPpyLH1msOtaNnduNrHbfjOZG2So2Vhgk8KL8GWHsOQrpNpdzHEzdQrPAO9VZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=B5N3Z8/b; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1711540414;
+	bh=hqyLU1Joi1RQhgBqSVEErd8zzBIoSRaagRQVKefQx4o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=B5N3Z8/bTVafZAa7MjCzdnkZyHNkfUCTShga5P2rHRCK7IrWA9YoLtEhRHT3yWHco
+	 NqVZVu24kmhoCyUtML0o0T1emIr8Vz0744XiKAca3F8RlhLdKjp4Bvfutf4gi5KC4y
+	 DhwC8cl2ukrF5o00IElwvYMDxgxYrL/SDhbpRoM5hx5s5X9QydzkqgczDMWlT3E6cw
+	 hPmw7Z7zsYf/P25b59Yf2CrO8LnI9GNuRAVUpLqyz9COEFiHCzhjVAsvQd2u3YBRCh
+	 ziBFyUWKcFSTLBR1Rr4pv6tdFIrVzG5awwjTIQq9glQj5A6sOg/SWjvTfEXzzk2n/f
+	 xNa3qDBdDzgaw==
+Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2EDA637820E4;
+	Wed, 27 Mar 2024 11:53:31 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	"T.J. Mercier" <tjmercier@google.com>
+Cc: kernel@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6] selftests/dmabuf-heap: conform test to TAP format output
+Date: Wed, 27 Mar 2024 16:53:52 +0500
+Message-Id: <20240327115353.3634735-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56cc8b9e-c1cf-4520-ba45-b1237e8b7b64@collabora.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 27, 2024 at 03:14:25PM +0500, Muhammad Usama Anjum wrote:
-> On 3/26/24 8:03 PM, Jason Gunthorpe wrote:
-> > On Tue, Mar 26, 2024 at 06:09:34PM +0500, Muhammad Usama Anjum wrote:
-> >> Even after applying this config patch and following snippet (which doesn't
-> >> terminate the program if mmap doesn't allocate exactly as the hint), I'm
-> >> finding failed tests.
-> >>
-> >> @@ -1746,7 +1748,7 @@ FIXTURE_SETUP(iommufd_dirty_tracking)
-> >>         assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
-> >>         vrc = mmap(self->buffer, variant->buffer_size, PROT_READ | PROT_WRITE,
-> >>                    mmap_flags, -1, 0);
-> >> -       assert(vrc == self->buffer);
-> >> +       assert(vrc == self->buffer);// ???
-> >>
-> >> On x86:
-> >> # Totals: pass:176 fail:4 xfail:0 xpass:0 skip:0 error:0
-> >> On ARM64:
-> >> # Totals: pass:166 fail:14 xfail:0 xpass:0 skip:0 error:0
-> >>
-> >> The log files are attached.
-> > 
-> > You probably don't have enough transparent huge pages available to the process
-> > 
-> >       echo 1024 > /proc/sys/vm/nr_hugepages
-> After making huge pages available, the iommufd test always passed on x86.
-> But there are still failures on arm64. I'm looking into the failures.
+Conform the layout, informational and status messages to TAP. No
+functional change is intended other than the layout of output messages.
+Improve the TAP messages as well.
 
-Oh that is really strange. Joao? Nicolin?
+Reviewed-by: T.J. Mercier <tjmercier@google.com>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes since v5:
+- Make the TAP messages more by adding more informat
 
-> #  RUN           iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap ...
-> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap
-> not ok 139 iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap
+Changes since v4:
+- close fds correctly with code changes added in v3
 
-> #  RUN           iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap_no_clear ...
-> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap_no_clear: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap_no_clear
-> not ok 140 iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap_no_clear
+Chanages since v3:
+- abort test-case instead of exiting if heap/mem allocation fails
+- Correct test_alloc_zeroed() test case in case of failure
 
-> #  RUN           iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap ...
-> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap
-> not ok 144 iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap
+Changes since v2:
+- Minor improvements in test_alloc_zeroed() results
 
-> #  RUN           iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap_no_clear ...
-> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap_no_clear: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap_no_clear
-> not ok 145 iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap_no_clear
+Changes since v1:
+- Update some more error handling code
+---
+ .../selftests/dmabuf-heaps/dmabuf-heap.c      | 247 +++++++-----------
+ 1 file changed, 101 insertions(+), 146 deletions(-)
 
-> #  RUN           iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap ...
-> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap
-> not ok 149 iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap
-
-> #  RUN           iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap_no_clear ...
-> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap_no_clear: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap_no_clear
-> not ok 150 iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap_no_clear
-
-> #  RUN           iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap ...
-> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap
-> not ok 159 iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap
-
-> #  RUN           iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap_no_clear ...
-> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap_no_clear: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap_no_clear
-> not ok 160 iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap_no_clear
-
-> #  RUN           iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap ...
-> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap
-> not ok 164 iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap
-
-> #  RUN           iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap_no_clear ...
-> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap_no_clear: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap_no_clear
-> not ok 165 iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap_no_clear
-
-> #  RUN           iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap ...
-> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap
-> not ok 169 iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap
-
-> #  RUN           iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap_no_clear ...
-> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
-> # get_dirty_bitmap_no_clear: Test terminated by assertion
-> #          FAIL  iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap_no_clear
-> not ok 170 iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap_no_clear
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index 890a8236a8ba7..5f541522364fb 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -15,6 +15,7 @@
+ #include <linux/dma-buf.h>
+ #include <linux/dma-heap.h>
+ #include <drm/drm.h>
++#include "../kselftest.h"
+ 
+ #define DEVPATH "/dev/dma_heap"
+ 
+@@ -90,14 +91,13 @@ static int dmabuf_heap_open(char *name)
+ 	char buf[256];
+ 
+ 	ret = snprintf(buf, 256, "%s/%s", DEVPATH, name);
+-	if (ret < 0) {
+-		printf("snprintf failed!\n");
+-		return ret;
+-	}
++	if (ret < 0)
++		ksft_exit_fail_msg("snprintf failed! %d\n", ret);
+ 
+ 	fd = open(buf, O_RDWR);
+ 	if (fd < 0)
+-		printf("open %s failed!\n", buf);
++		ksft_exit_fail_msg("open %s failed: %s\n", buf, strerror(errno));
++
+ 	return fd;
+ }
+ 
+@@ -140,7 +140,7 @@ static int dmabuf_sync(int fd, int start_stop)
+ 
+ #define ONE_MEG (1024 * 1024)
+ 
+-static int test_alloc_and_import(char *heap_name)
++static void test_alloc_and_import(char *heap_name)
+ {
+ 	int heap_fd = -1, dmabuf_fd = -1, importer_fd = -1;
+ 	uint32_t handle = 0;
+@@ -148,27 +148,19 @@ static int test_alloc_and_import(char *heap_name)
+ 	int ret;
+ 
+ 	heap_fd = dmabuf_heap_open(heap_name);
+-	if (heap_fd < 0)
+-		return -1;
+ 
+-	printf("  Testing allocation and importing:  ");
++	ksft_print_msg("Testing allocation and importing:\n");
+ 	ret = dmabuf_heap_alloc(heap_fd, ONE_MEG, 0, &dmabuf_fd);
+ 	if (ret) {
+-		printf("FAIL (Allocation Failed!)\n");
+-		ret = -1;
+-		goto out;
++		ksft_test_result_fail("FAIL (Allocation Failed!) %d\n", ret);
++		return;
+ 	}
++
+ 	/* mmap and write a simple pattern */
+-	p = mmap(NULL,
+-		 ONE_MEG,
+-		 PROT_READ | PROT_WRITE,
+-		 MAP_SHARED,
+-		 dmabuf_fd,
+-		 0);
++	p = mmap(NULL, ONE_MEG, PROT_READ | PROT_WRITE, MAP_SHARED, dmabuf_fd, 0);
+ 	if (p == MAP_FAILED) {
+-		printf("FAIL (mmap() failed)\n");
+-		ret = -1;
+-		goto out;
++		ksft_test_result_fail("FAIL (mmap() failed): %s\n", strerror(errno));
++		goto close_and_return;
+ 	}
+ 
+ 	dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
+@@ -178,71 +170,64 @@ static int test_alloc_and_import(char *heap_name)
+ 
+ 	importer_fd = open_vgem();
+ 	if (importer_fd < 0) {
+-		ret = importer_fd;
+-		printf("(Could not open vgem - skipping):  ");
++		ksft_test_result_skip("Could not open vgem %d\n", importer_fd);
+ 	} else {
+ 		ret = import_vgem_fd(importer_fd, dmabuf_fd, &handle);
+-		if (ret < 0) {
+-			printf("FAIL (Failed to import buffer)\n");
+-			goto out;
+-		}
++		ksft_test_result(ret >= 0, "Import buffer %d\n", ret);
+ 	}
+ 
+ 	ret = dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
+ 	if (ret < 0) {
+-		printf("FAIL (DMA_BUF_SYNC_START failed!)\n");
++		ksft_print_msg("FAIL (DMA_BUF_SYNC_START failed!) %d\n", ret);
+ 		goto out;
+ 	}
+ 
+ 	memset(p, 0xff, ONE_MEG);
+ 	ret = dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_END);
+ 	if (ret < 0) {
+-		printf("FAIL (DMA_BUF_SYNC_END failed!)\n");
++		ksft_print_msg("FAIL (DMA_BUF_SYNC_END failed!) %d\n", ret);
+ 		goto out;
+ 	}
+ 
+ 	close_handle(importer_fd, handle);
+-	ret = 0;
+-	printf(" OK\n");
++	ksft_test_result_pass("%s dmabuf sync succeeded\n", __func__);
++	return;
++
+ out:
+-	if (p)
+-		munmap(p, ONE_MEG);
+-	if (importer_fd >= 0)
+-		close(importer_fd);
+-	if (dmabuf_fd >= 0)
+-		close(dmabuf_fd);
+-	if (heap_fd >= 0)
+-		close(heap_fd);
++	ksft_test_result_fail("%s dmabuf sync failed\n", __func__);
++	munmap(p, ONE_MEG);
++	close(importer_fd);
+ 
+-	return ret;
++close_and_return:
++	close(dmabuf_fd);
++	close(heap_fd);
+ }
+ 
+-static int test_alloc_zeroed(char *heap_name, size_t size)
++static void test_alloc_zeroed(char *heap_name, size_t size)
+ {
+ 	int heap_fd = -1, dmabuf_fd[32];
+-	int i, j, ret;
++	int i, j, k, ret;
+ 	void *p = NULL;
+ 	char *c;
+ 
+-	printf("  Testing alloced %ldk buffers are zeroed:  ", size / 1024);
++	ksft_print_msg("Testing alloced %ldk buffers are zeroed:\n", size / 1024);
+ 	heap_fd = dmabuf_heap_open(heap_name);
+-	if (heap_fd < 0)
+-		return -1;
+ 
+ 	/* Allocate and fill a bunch of buffers */
+ 	for (i = 0; i < 32; i++) {
+ 		ret = dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]);
+-		if (ret < 0) {
+-			printf("FAIL (Allocation (%i) failed)\n", i);
+-			goto out;
++		if (ret) {
++			ksft_test_result_fail("FAIL (Allocation (%i) failed) %d\n", i, ret);
++			goto close_and_return;
+ 		}
++
+ 		/* mmap and fill with simple pattern */
+ 		p = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, dmabuf_fd[i], 0);
+ 		if (p == MAP_FAILED) {
+-			printf("FAIL (mmap() failed!)\n");
+-			ret = -1;
+-			goto out;
++			ksft_test_result_fail("FAIL (mmap() failed!): %s\n", strerror(errno));
++			goto close_and_return;
+ 		}
++
+ 		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
+ 		memset(p, 0xff, size);
+ 		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
+@@ -251,48 +236,47 @@ static int test_alloc_zeroed(char *heap_name, size_t size)
+ 	/* close them all */
+ 	for (i = 0; i < 32; i++)
+ 		close(dmabuf_fd[i]);
++	ksft_test_result_pass("Allocate and fill a bunch of buffers\n");
+ 
+ 	/* Allocate and validate all buffers are zeroed */
+ 	for (i = 0; i < 32; i++) {
+ 		ret = dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]);
+ 		if (ret < 0) {
+-			printf("FAIL (Allocation (%i) failed)\n", i);
+-			goto out;
++			ksft_test_result_fail("FAIL (Allocation (%i) failed) %d\n", i, ret);
++			goto close_and_return;
+ 		}
+ 
+ 		/* mmap and validate everything is zero */
+ 		p = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, dmabuf_fd[i], 0);
+ 		if (p == MAP_FAILED) {
+-			printf("FAIL (mmap() failed!)\n");
+-			ret = -1;
+-			goto out;
++			ksft_test_result_fail("FAIL (mmap() failed!): %s\n", strerror(errno));
++			goto close_and_return;
+ 		}
++
+ 		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
+ 		c = (char *)p;
+ 		for (j = 0; j < size; j++) {
+ 			if (c[j] != 0) {
+-				printf("FAIL (Allocated buffer not zeroed @ %i)\n", j);
+-				break;
++				ksft_print_msg("FAIL (Allocated buffer not zeroed @ %i)\n", j);
++				dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
++				munmap(p, size);
++				goto out;
+ 			}
+ 		}
+ 		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
+ 		munmap(p, size);
+ 	}
+-	/* close them all */
+-	for (i = 0; i < 32; i++)
+-		close(dmabuf_fd[i]);
+-
+-	close(heap_fd);
+-	printf("OK\n");
+-	return 0;
+ 
+ out:
+-	while (i > 0) {
+-		close(dmabuf_fd[i]);
+-		i--;
+-	}
++	ksft_test_result(i == 32, "Allocate and validate all buffers are zeroed\n");
++
++close_and_return:
++	/* close them all */
++	for (k = 0; k < i; k++)
++		close(dmabuf_fd[k]);
++
+ 	close(heap_fd);
+-	return ret;
++	return;
+ }
+ 
+ /* Test the ioctl version compatibility w/ a smaller structure then expected */
+@@ -360,126 +344,97 @@ static int dmabuf_heap_alloc_newer(int fd, size_t len, unsigned int flags,
+ 	return ret;
+ }
+ 
+-static int test_alloc_compat(char *heap_name)
++static void test_alloc_compat(char *heap_name)
+ {
+-	int heap_fd = -1, dmabuf_fd = -1;
+-	int ret;
++	int ret, heap_fd = -1, dmabuf_fd = -1;
+ 
+ 	heap_fd = dmabuf_heap_open(heap_name);
+-	if (heap_fd < 0)
+-		return -1;
+ 
+-	printf("  Testing (theoretical)older alloc compat:  ");
++	ksft_print_msg("Testing (theoretical) older alloc compat:\n");
+ 	ret = dmabuf_heap_alloc_older(heap_fd, ONE_MEG, 0, &dmabuf_fd);
+-	if (ret) {
+-		printf("FAIL (Older compat allocation failed!)\n");
+-		ret = -1;
+-		goto out;
+-	}
+-	close(dmabuf_fd);
+-	printf("OK\n");
++	if (dmabuf_fd >= 0)
++		close(dmabuf_fd);
++	ksft_test_result(!ret, "dmabuf_heap_alloc_older\n");
+ 
+-	printf("  Testing (theoretical)newer alloc compat:  ");
++	ksft_print_msg("Testing (theoretical) newer alloc compat:\n");
+ 	ret = dmabuf_heap_alloc_newer(heap_fd, ONE_MEG, 0, &dmabuf_fd);
+-	if (ret) {
+-		printf("FAIL (Newer compat allocation failed!)\n");
+-		ret = -1;
+-		goto out;
+-	}
+-	printf("OK\n");
+-out:
+ 	if (dmabuf_fd >= 0)
+ 		close(dmabuf_fd);
+-	if (heap_fd >= 0)
+-		close(heap_fd);
++	ksft_test_result(!ret, "dmabuf_heap_alloc_newer\n");
+ 
+-	return ret;
++	close(heap_fd);
+ }
+ 
+-static int test_alloc_errors(char *heap_name)
++static void test_alloc_errors(char *heap_name)
+ {
+ 	int heap_fd = -1, dmabuf_fd = -1;
+ 	int ret;
+ 
+ 	heap_fd = dmabuf_heap_open(heap_name);
+-	if (heap_fd < 0)
+-		return -1;
+ 
+-	printf("  Testing expected error cases:  ");
++	ksft_print_msg("Testing expected error cases:\n");
+ 	ret = dmabuf_heap_alloc(0, ONE_MEG, 0x111111, &dmabuf_fd);
+-	if (!ret) {
+-		printf("FAIL (Did not see expected error (invalid fd)!)\n");
+-		ret = -1;
+-		goto out;
+-	}
++	ksft_test_result(ret, "Error expected on invalid fd %d\n", ret);
+ 
+ 	ret = dmabuf_heap_alloc(heap_fd, ONE_MEG, 0x111111, &dmabuf_fd);
+-	if (!ret) {
+-		printf("FAIL (Did not see expected error (invalid heap flags)!)\n");
+-		ret = -1;
+-		goto out;
+-	}
++	ksft_test_result(ret, "Error expected on invalid heap flags %d\n", ret);
+ 
+ 	ret = dmabuf_heap_alloc_fdflags(heap_fd, ONE_MEG,
+ 					~(O_RDWR | O_CLOEXEC), 0, &dmabuf_fd);
+-	if (!ret) {
+-		printf("FAIL (Did not see expected error (invalid fd flags)!)\n");
+-		ret = -1;
+-		goto out;
+-	}
++	ksft_test_result(ret, "Error expected on invalid heap flags %d\n", ret);
+ 
+-	printf("OK\n");
+-	ret = 0;
+-out:
+ 	if (dmabuf_fd >= 0)
+ 		close(dmabuf_fd);
+-	if (heap_fd >= 0)
+-		close(heap_fd);
++	close(heap_fd);
++}
+ 
+-	return ret;
++static int numer_of_heaps(void)
++{
++	DIR *d = opendir(DEVPATH);
++	struct dirent *dir;
++	int heaps = 0;
++
++	while ((dir = readdir(d))) {
++		if (!strncmp(dir->d_name, ".", 2))
++			continue;
++		if (!strncmp(dir->d_name, "..", 3))
++			continue;
++		heaps++;
++	}
++
++	return heaps;
+ }
+ 
+ int main(void)
+ {
+-	DIR *d;
+ 	struct dirent *dir;
+-	int ret = -1;
++	DIR *d;
++
++	ksft_print_header();
+ 
+ 	d = opendir(DEVPATH);
+ 	if (!d) {
+-		printf("No %s directory?\n", DEVPATH);
+-		return -1;
++		ksft_print_msg("No %s directory?\n", DEVPATH);
++		return KSFT_SKIP;
+ 	}
+ 
+-	while ((dir = readdir(d)) != NULL) {
++	ksft_set_plan(11 * numer_of_heaps());
++
++	while ((dir = readdir(d))) {
+ 		if (!strncmp(dir->d_name, ".", 2))
+ 			continue;
+ 		if (!strncmp(dir->d_name, "..", 3))
+ 			continue;
+ 
+-		printf("Testing heap: %s\n", dir->d_name);
+-		printf("=======================================\n");
+-		ret = test_alloc_and_import(dir->d_name);
+-		if (ret)
+-			break;
+-
+-		ret = test_alloc_zeroed(dir->d_name, 4 * 1024);
+-		if (ret)
+-			break;
+-
+-		ret = test_alloc_zeroed(dir->d_name, ONE_MEG);
+-		if (ret)
+-			break;
+-
+-		ret = test_alloc_compat(dir->d_name);
+-		if (ret)
+-			break;
+-
+-		ret = test_alloc_errors(dir->d_name);
+-		if (ret)
+-			break;
++		ksft_print_msg("Testing heap: %s\n", dir->d_name);
++		ksft_print_msg("=======================================\n");
++		test_alloc_and_import(dir->d_name);
++		test_alloc_zeroed(dir->d_name, 4 * 1024);
++		test_alloc_zeroed(dir->d_name, ONE_MEG);
++		test_alloc_compat(dir->d_name);
++		test_alloc_errors(dir->d_name);
+ 	}
+ 	closedir(d);
+ 
+-	return ret;
++	ksft_finished();
+ }
+-- 
+2.39.2
 
 
