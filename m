@@ -1,105 +1,106 @@
-Return-Path: <linux-kselftest+bounces-6713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0187588E863
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 16:19:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C984288E8E9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 16:26:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24A0A1C2EFEC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 15:19:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8CE9B3170E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 15:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4231D12EBE3;
-	Wed, 27 Mar 2024 15:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC44143898;
+	Wed, 27 Mar 2024 15:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="T9bsZV64";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="P+vr4omv"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="f9VYn5z8";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="IwOnQqSN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C48C12EBD1;
-	Wed, 27 Mar 2024 15:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F96B142E84;
+	Wed, 27 Mar 2024 15:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711551607; cv=fail; b=g4LwwapstMfmSi47HcOrdes0rgCXgcR93jl+RvCkpbVxAsGFP0IgrRMR0QXTWls+Oaj/a1ROaJzHzIuOcyXqtbC6vsC7ZC+JodB65YomqADVAzUU30tvtXr2V1Hj0xkCPxxecBFPwimgZeQNWWCUqRAInd8dGq5EcBL1gpE63tU=
+	t=1711551869; cv=fail; b=aP5vq3vKVfscxARgDSGD1pyhmMmcEtqgTeh0ccriSiX6LdH+RppauBHSXhWxwrOYro2AC25ZmCJgVYoDglJWRxMLGP5pZo0s31vpBnzVViwLTn/pDvZyZ0khXzre+NYSk/3mWUL8LwEJpkGCrDcg+R5VcsIAEpYH0AuhML4tGBA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711551607; c=relaxed/simple;
-	bh=QcCzq1qmc3nPR0QPl6inVV85x8uR+DnDT2IJ+mEWF+I=;
+	s=arc-20240116; t=1711551869; c=relaxed/simple;
+	bh=6gys1uwYb+tK86sL8kee5goqDiMoSwyGd6I0wegjIp4=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=QnF+bwEUQ7Pkmrp5WnErt5I/H+qsD6N+5WdilBHRSnV3uTE4Ly3SUPtNBhnqaPU+h9aFYb5t4RDAg8ZC/TiF4P6TjEQCn9+UPiMcewd46Sp7pr3PjVHr9S6fBt8t5PpyfAIVJcGHZVNTBhLhHXx9v2zOaMhC5V3vi+60ecmwL38=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=T9bsZV64; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=P+vr4omv; arc=fail smtp.client-ip=205.220.177.32
+	 Content-Type:MIME-Version; b=GIb/a0NcwbkbBrhuNcMettoV3K+Fhcl1Y4EmR4k60CG2L54trR5DFZpIFYb9mhc5aYkz5av6bT69riajXhejtisL7sFzmJZE+NBKA30nfgZPotrNqTI9eas4NVn0fLdMUbCo9Umf3XVxYBOsk7z6yIPOmkiAY2IRBG0gjNQTayo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=f9VYn5z8; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=IwOnQqSN; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42REhuC5019502;
-	Wed, 27 Mar 2024 14:59:53 GMT
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42REiaEN007348;
+	Wed, 27 Mar 2024 15:04:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=corp-2023-11-20;
- bh=f0r6zthg5+qqdmmlg/qc3qs4zysUXczAv6I23TGzvvs=;
- b=T9bsZV641dTzC/MGVkybG2KYAaKY5XI2uVvz1RDY+WEtsP/vtUoBm3HG94INhopQXj6U
- ZTBS/LkU8kUhhBq45AdOvlmELmzKUTRINbGk4Y3kzyvoTatuGKL6h17kUm1kkjHL6vWt
- uW5gEeGcVg+MrCKWhPIT3L6l+8F6DjDfhqgCr2QMGiraN7vIZPma6Jh3ZCcfD4F6PGVv
- TelgG66uuc1SNrdFhCkr8wEyJodlV35t0fMDrPwt6HHiqN5OENSDbJZCJGr3R41fAPhj
- IVa3/U4gll6YdOHPVbExOUXxOKBmwvSewH60+ts5aGVgMHH2gPZCRJ+h3HkhWhpPvRxz kA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x4cxy11u7-1
+ bh=JTGq9Xsl+sBs44MnRCcgpAk+isSfWnLoSwkMByArhfc=;
+ b=f9VYn5z8/20swMc7sVB9iDRcjP1jpDijc6Wcms7HWhQv0uftJ0ObcE+qhNQ7KlyeADSd
+ YGm5g6S1w6+gno7lHVqYuIPKz0P679U5O80Y302UqgLb2q++HdtBilbArPmu0GMUYj5t
+ YGv3dy5ZkenVFjN8QeZho1TZ5/7jNiwsBujDarWpq3RxzKlPAOzWRAI/fBLh501CcF+L
+ 3PpOhbsUEX6HFJ09oMgCdP0PzToGaCF4a5grz6BDYqi7HP7DaOdzQMa3wK1CT+1ocJ9J
+ INHZyQR0spvrbl9113omAplTnKVgzfV14hMVBi48krcse3wH5wQWdb6HRbQP4pJRRRrv MQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x28ct700k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 27 Mar 2024 14:59:53 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42REBrXj015082;
-	Wed, 27 Mar 2024 14:59:52 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2040.outbound.protection.outlook.com [104.47.56.40])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x1nhevqus-1
+	Wed, 27 Mar 2024 15:04:17 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42RDv4t9008926;
+	Wed, 27 Mar 2024 15:04:16 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2168.outbound.protection.outlook.com [104.47.73.168])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3x1nh8xjru-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 27 Mar 2024 14:59:52 +0000
+	Wed, 27 Mar 2024 15:04:16 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MhV5CF71H3rNyXQB5LoVXdXMbmZDh+/o5Mye1c0WjTNkOjTDII9i87uP9/vr5xF6rboXxb8kBWfHR8vrJM451XjiJc07s3ZsPjOC670tnSr2cUl4PTje6CjOeTHCG169uJ44FRkTfeDawHX05oXcup0ZQvC1b0cnWZMv6/H+37drfK35MN41wCJCQRQoiQuFSV8OLRYcWMMhXXszPoKmThKwmlwjs3lYHiAIzIQ56/koz2e9tCOWr6R9ymTLP3ITWOksGQpB3L8uY8T60xB4JYAHf4ULhuWkmVx+ivDDxjX26WWyVzgGR2scC7crEbNpGQGEeKr0Ho6uH1Rb/Bo+gw==
+ b=az46jj1Vl9dkVf03hS4rPHXTnFF5Wu7p5bIHdeTIqE7J1beblxFavEAw4oK23KExSIkzTd0cALuIGVBe2knj1nbV0o9endSn7wboo87yVWU2D799ZY5kafwOpD4IcKWhqCvAUjnQkJ7W/VC7+ADGMZibV45JeNR9KfMxAvM6WbNFos954rqPfagTM+hgl3M0nV4O2JDk8fiws67EkvS8alxVzgf229KD25HZnYBc7erCaWjNMbQbCcAO7Td/dMH6uBuoRmIyueYBJ0PiYRHFOlCHAiUdjjjOGgJgv/eS8+Wy7GnGZro8hU5iyj+tM6pVXQu45YyZRhRoqli3mpQwoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f0r6zthg5+qqdmmlg/qc3qs4zysUXczAv6I23TGzvvs=;
- b=AG/O1R/obpVUIAGj36PpHyqm1jhS24ppf5N29ju7v1YbDFacKYMB0qv1/AG9IaxyZh4v5mclXiiIBV0eDQlgbnGx0nHaU94QsKu7iCCw59Pk5Zplm65qrc+sNVPbJsJBMjlmKqTDTftYvmoKhp+mRopluxf1J4yniYnS9HSuNel2AFoEB61J9M/Y4j95r986Il7LQNCQJe2+dX7W5f7Loqjp7/+YxaZDAOvoRlV7P+yeisBv8YCaTFngiJ6jqAbYm9u/HSx/weidE94Fg6YjfdrS9LbnMHw5gM5CUMYt2fdgmES3q12BwXcug1vYCbpOXYxFedvQUGOP9k86gkzGGw==
+ bh=JTGq9Xsl+sBs44MnRCcgpAk+isSfWnLoSwkMByArhfc=;
+ b=OFkhyvUP4JRbLWjFtL0caIMtx6ck0lF3l2Lqvd7PbDDn6MnBk3J8/dS/ggXXTJpkOqly5ltC7P/mxII4RQTCbBbDDzQXSG5p3f+w/sRzDGoeB8waSHepHPo4vBjQu80xgRgL3GgzySEGu9dACzn2lOol1JKqdXgG8rHZQXe0xRduJA43LmpgHR9qLg/V6PQET33SdhZVaEVVx6TJKNnJ9qmfPnzrQqtH0ykyj3yr2JTX9EPuXHQV9NRCgKFAmtrhXmTnuG8MLhlaoXAWwwqbdeIHB7LuCNa93SMG8sSyEpUk+k5JZiSLqMZvHJn7V+fXwunFSoQsJYdBr5nQfBc3jg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f0r6zthg5+qqdmmlg/qc3qs4zysUXczAv6I23TGzvvs=;
- b=P+vr4omvHw49vatewooZhxMFtF/3tDzPu3gucaj8RjJ0IKSE6HUlNllEIPaLeWNNYM8KrXPWqJH6OuKZP9OpsNGfRVGUttSvgBZkmrQ2p/Pf8mPQX/tesWg/JJvTgn3Hsh3F7C1+sg7amnRBNA/58pPdm86SM5/fSJ0HREGIqu4=
+ bh=JTGq9Xsl+sBs44MnRCcgpAk+isSfWnLoSwkMByArhfc=;
+ b=IwOnQqSNpp8DwXnmboNIOikinduK1KVBIDt6YoC0C9moL9jU1iTWLaXcWlNL+RFcKf8MWh699ZvTFyltr1IDDiHta6r5V1QxbqLcnmLFrFOuwmL8+uLS1fTLpAEXuihuHouj3HvI3G0nRr3OjidsH1hD0e1Cz5SaITHhke4BKJ0=
 Received: from PH0PR10MB5893.namprd10.prod.outlook.com (2603:10b6:510:149::11)
- by CO1PR10MB4724.namprd10.prod.outlook.com (2603:10b6:303:96::22) with
+ by SA2PR10MB4812.namprd10.prod.outlook.com (2603:10b6:806:115::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Wed, 27 Mar
- 2024 14:59:50 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.33; Wed, 27 Mar
+ 2024 15:04:14 +0000
 Received: from PH0PR10MB5893.namprd10.prod.outlook.com
  ([fe80::b037:6181:76f0:9a72]) by PH0PR10MB5893.namprd10.prod.outlook.com
  ([fe80::b037:6181:76f0:9a72%7]) with mapi id 15.20.7409.028; Wed, 27 Mar 2024
- 14:59:50 +0000
-Message-ID: <51f493a9-08e7-44d8-ae4a-58b2994ea276@oracle.com>
-Date: Wed, 27 Mar 2024 14:59:44 +0000
-Subject: Re: [PATCH] selftests: iommu: add config needed for iommufd_fail_nth
-To: Jason Gunthorpe <jgg@ziepe.ca>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Nicolin Chen <nicolinc@nvidia.com>
-Cc: kernel@collabora.com, iommu@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kevin Tian <kevin.tian@intel.com>, Shuah Khan <shuah@kernel.org>
-References: <20240325090048.1423908-1-usama.anjum@collabora.com>
- <31fcc276-acd6-4277-bd6c-4a871c7fb28a@collabora.com>
- <20240326150340.GE8419@ziepe.ca>
- <56cc8b9e-c1cf-4520-ba45-b1237e8b7b64@collabora.com>
- <20240327114958.GG8419@ziepe.ca>
+ 15:04:14 +0000
+Message-ID: <ab5d2b61-2dd2-46d6-a106-a9aea69b0a1a@oracle.com>
+Date: Wed, 27 Mar 2024 15:04:09 +0000
+Subject: Re: [BUG] seltests/iommu: runaway ./iommufd consuming 99% CPU after a
+ failed assert()
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>, iommu@lists.linux.dev,
+        Kevin Tian <kevin.tian@intel.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <0d5c3b29-fc5b-41d9-9556-5ce94262dac8@alu.unizg.hr>
+ <20240319135852.GA393211@nvidia.com>
+ <a692d5d7-11d5-4c1b-9abc-208d2194ccde@alu.unizg.hr>
+ <cdc9c46b-1bad-41cd-8f98-38cc2171186a@oracle.com>
+ <20240325135207.GC6245@nvidia.com>
+ <f8e03425-98cf-4076-8959-d85eda846bab@oracle.com>
+ <20240327114029.GC946323@nvidia.com>
 Content-Language: en-US
 From: Joao Martins <joao.m.martins@oracle.com>
-In-Reply-To: <20240327114958.GG8419@ziepe.ca>
+In-Reply-To: <20240327114029.GC946323@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PAYP264CA0024.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:11f::11) To PH0PR10MB5893.namprd10.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PAZP264CA0257.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:239::21) To PH0PR10MB5893.namprd10.prod.outlook.com
  (2603:10b6:510:149::11)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -108,191 +109,120 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5893:EE_|CO1PR10MB4724:EE_
-X-MS-Office365-Filtering-Correlation-Id: f109ccfd-9762-48b7-6ae7-08dc4e6e8d12
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5893:EE_|SA2PR10MB4812:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65b1b41b-39de-43e3-2b57-08dc4e6f2a7b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info: 
-	DOD0J/GKqPi3QYF6XU9JuQ109l1Pak0qBaUD+SamsT809IYWD0GrJwSJg08rVhbJFMSg6arnO6ALssguIa8m9UwqRUM+zkOS39KHZV45iZWKj07Ux0AatdrddIegWpF3bQmRGLD1y0xs2HO9aVtxrLl8g3rxHpODUnMFCpBVKBRcBKoaJOOvrHA1Pf6gCN4EMzpmJPW7+GYgDOrij4kEjGelNa6NoaKYxvYYPvhcDixDqtjbfSbDd4XJGQ1mtZcgEI1j/VENovoTNiyhqH6aOanZ2wA5LQMpBRmlxzVn3QSiP+cieyul9XFtHqV8jUmurhtw1MrPJgZop0DCvb5ta1h/L1QZc0BvgLM0IsSKkqo0Dy2jAK4dl49hdQGgj1J/knPjTYcoRYvl9SvC1I1UkrsLV32xADgXMZ2LJRvEVLQHzMuoeIxK9NWFLHO+g4WKjQ52S2I+/rpnPmttzmKnJmExkauXz44/r7jgm9uepBoOuTpN0foitO0dZpDjOvgz16nnmSFJFp7B0thxnswsRRbX1bvJBT+yUmE+WeSwGMydTPGQOC5BQdHYOSD2bwKy+1Diqd23jHHadWD3gjCmPqgup/dYuVG2aXi76iuY4N3o3+9myf72X8C4QNc0iW8J4/Ubq75kzPZ9GdOEWtmXsmIGaW4bbWMjL8qTfNfTYZk=
+	YR/0KOoWvk1+E+SIWsy8h9ouApySvSs3EIIQmTUEdLCBgEcSI1EFjVUgT/ydwC4H1VuC2V799uxVVGGMYx7BjjbcHQkA/MzFPheDAAQY6rNcZDeSwdvSwVtTjjnUYGEczhfbJNXrr4B+yMa82ZiJipYzJs2ClvCPClsRMYxD/E9/dzs+QzwecO75MhZre+rLmYJxXiGo8Gt3Ibadph0QYGm7vu9UDFZCsXw7wm5k7A1KCc/mJ22jDMEGCnhuD4kBb5MmK0nf0CwZ/2twCuSqDbNgQHqtgeQ9DJnFt/XBMXrfI6Ug7Yo5BF3zNp5Jw8Z9GcvM8sjjOyq7V4ppMapyvGHcq+fiqqprQAjTO+1jcanAWslccrQYdy3DWO7sIaP7Kk+Y0F3ocfncPI0HwCxTaRfItOgU+rs9U/mtAHdGW7HBmsFhelMV67Bwe1v5ETB7oAuCyFkrqJxwSa/2Zlwnppv5tECCB/vTQMcjTNq9TtCXtGPhSB3RmdiWTaySE3BFJLuhPxAIYRjG3vPD+vvHS8Ew2jmQnCr+Utg5TW3r2o4rOySf46C2DMM4DF81Oe8xNc3lL3W/3EidqxD80jeTCQvfuQOoPiG+m9mEQsM8MbuqdPRw2Mn72EHgMbWvui4Olc8SCNO3N0i58OHqsC1RKGRGJ7aSCw/vUJ3+aH7jfXc=
 X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5893.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5893.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?bHdUTEZXZjNkN20vemNibWZaV2pOR3ZPM2l6Zks1bFVGbnR4bWQyMWJVVXNO?=
- =?utf-8?B?OEt5UllxVkhSNmhFcC9yOGFLNXlLZHRoN1RDUStia1dmTlZ2Y3U5RDNqbkNV?=
- =?utf-8?B?QTQ4UlI3dzlrUU5MYWFTcXJFUkdsYm1FeUR1WXNhTDNnY1J1RVdjdUFUNkNO?=
- =?utf-8?B?RFlDOVpPNlljcExEZkZXdml3blFSdGowTWlRRVVRMEpGK0paa2VHek9lRWNk?=
- =?utf-8?B?TERZRlozVlhFNmFhMlZBZlZIN3ZOTjhtZzdUU1pBMitEeFBYRkZVYUNnVDZ2?=
- =?utf-8?B?aElMR2c4czdnbGxlWTBZcTk2ZlFnajlvTGp2bHJsbUQrQm1vMFVudFdsLzJB?=
- =?utf-8?B?NHhzYUVPem5zL1lZTWxGQXZVZ0N1MVA3eW9SYXMrOWg0OGNTUW9neXNSeUNk?=
- =?utf-8?B?SERMNzdGUEd4Y2ZicTZhM0xOTGc2NDZtK2hLQjZSRU5FNGdVeHk0MFpvdnFx?=
- =?utf-8?B?Ylc2bGFJRGtIUFo0QlhPRkt2OE5KaVdGOHE5ZENjYjVDdzZQaXBnVjFZZ0R4?=
- =?utf-8?B?YVQ2anllV2c4UlpSTTE5dFU1NkJTbDV5T3l2b2tTWFl2TUxKS3krRERsRk56?=
- =?utf-8?B?MWp4YUF0V1lRazRTS05XWUlIRjExeXZZMWxQTkZBWi9ZV2RlMmpLUzJlQnUz?=
- =?utf-8?B?ZDFoWUdqVWFGRWVYamdSL3FaQWVUeVZlR3VRUTN6amdwdVdWUGhQTHBNaGMw?=
- =?utf-8?B?emdodVFML3hjOGllVmMrVlRxQyswT29KaWR5WEgzZnF6ZSs3MCszZkQ4RTJ5?=
- =?utf-8?B?cXd6R1pDWG9oU2tLaUlMK0VGNjdzTXVWQjNRNk5UZlhNakF0dWV2bTAwVXEy?=
- =?utf-8?B?bWxlbm9WdGxWaHBqOUZUbFJDUFJJYW1waFpDbXRsVDMzUkZqUDRFUjJqMWJp?=
- =?utf-8?B?VVNwWENjSzd2SmRQSW1saWt2aXl0TWxSSjZoTHdMN3dLOGt1bkE3bHlIbVVP?=
- =?utf-8?B?c3gwUmtkL3dWbzI1VDZtREh3TUVqelZPN211WGU3czZ5UFYyR1hNeGQ2SUYx?=
- =?utf-8?B?ZW5DQnBDclZEUmpYT0UzWE9rWUlIeW5SVVlEUVhWenR3STJ2RlpzZGlPbFNW?=
- =?utf-8?B?Ym5ObEd0ZlE1NkZEbEJpRWJ0SThQMEZYdVZsVFY5ZkRCUDhoWGNZZ0h2dlRL?=
- =?utf-8?B?aWJ1ZnpwS2RoejJYWFlWMmE3UDRxQWdobTQwNnFkZ3haWUo4VE9FejgwaWdC?=
- =?utf-8?B?OWUySURBcFlXSWo0aUFsREhXS2JWZVZMU0EvUHo3VXF1RkRRaXVmRUdZTnhx?=
- =?utf-8?B?aFNWMU9EcG9sNFZMNGIxTzJOdnBCeGN4VFFVRTRnZmVWMENQTWk1bFJDMzFw?=
- =?utf-8?B?TXdialdKRUdLU2I2Vk5KTFlNcTJSVkNCNEdZTHI0eHBNVWgvdzlEelo0cEZM?=
- =?utf-8?B?NXpSODNyVkhPUjZzYTY3Z3VDMHcxV2k3blJWN1ViYU9mVzkyQms3cTVUbFJP?=
- =?utf-8?B?ZWJtcUpEM0x3R3hrNEV5ZjVrWm9ramdNUk9yYzk0R2x4QzNOU2pTWlZxQWla?=
- =?utf-8?B?dVlUV2ovWXkrU2RYbkhwNHMvaWE2VUVhZnNNa2lpSTQ1RkhJOXc5TktwN2FD?=
- =?utf-8?B?akRXWmxiU1B3dTljQnBvUFI1TG1yRllEQUVsdS8yTWNSY1QxTzhBQ0Z3eEV1?=
- =?utf-8?B?SldTNWdyRmd0N2JxYzU4bldybGJvOVNtL3ovclY1NFBuZWhzTnBBb29Qckk1?=
- =?utf-8?B?QmhFR3hLUkdrazgzejF2cFI5WGM2amdtbWwrSUd0dU92UzJ1anJyWDlRYzdq?=
- =?utf-8?B?K0JGcXczKzZ6UHdaNGZLRSt0WEp5ZWE4M1dKd1ZiVGpycjNMR3FYYTlXZmEz?=
- =?utf-8?B?SnFPR2tSZlBiZWg1ZXFPQWhESDNpaGtNeGNRN1lUaFpacDZLRjZ4ZU9LRkZm?=
- =?utf-8?B?bVlYVndjUlY5VjQwMDlPSk1IbVNRWEdLRFB5VVRYdjUzekU4dDNYYmphVjRY?=
- =?utf-8?B?Wi9ER21DWTFHNEZqQkdHYnE2T0hnK0gweUpmYWpBL1NwVnljR2FEejdyWEFm?=
- =?utf-8?B?WDhIL0ZDeGl1SUVyL2lhU3BoblU3MjdHcTkyNVBadElKMEtLdE81RmVCeGF0?=
- =?utf-8?B?QVdWRGdyVmNZaEI2R21ZN1FYYzlYNnJjcnJ5TStsUU55akltd1pPRmdxMGV6?=
- =?utf-8?B?TkpqcXQxUUhQbVlZQlA1SlVNOWNobFVuWmRMSUxFRzNEeHkzdmJQMWQxS2Qw?=
- =?utf-8?B?UVE9PQ==?=
+	=?utf-8?B?Q3dZUEpyQWwwM1psSjAvcDhTeG50MW9DSmxWelhidC84NnJlUzRYUDB2ZjdU?=
+ =?utf-8?B?UnhTVkdxTHBtT0FLQVJEVmZOTWZMSmR2bDQ3V3g5MWlpaEFrVkR0SEhCd0hJ?=
+ =?utf-8?B?endFMCtxWGVWbVVvcmRMdkxaM3hxVDBoZ3AvdDE1WklrbWtyK0JFcnE2N1VX?=
+ =?utf-8?B?c3lYb0NscnpkMVFwb0o1RVQ4MWxFYUdQRzlhNGZKRXB2ZkVlTWcrOVVxZkVk?=
+ =?utf-8?B?Ulk5ZUpFMTFaMWkrbHJneXliOFZVb3MzY2N1R3dFQTBqVGR4L3V2ZTZUYUox?=
+ =?utf-8?B?YU80Sk9lWnRxMHNuTytMeWtlRFJ4amN4ajhmMzhSdVdUNkVTUlpFcWxXMFRG?=
+ =?utf-8?B?QzJ3R2ppbHErT2t6aWFaQm9LOEpacUU2Si9uYTF1VE1hNlkxTi9HREt1VHM0?=
+ =?utf-8?B?Zk1VTFpqNGhWUnB5RmxQWjFMdnRrZ2Y1aExHT2hKQXlGY2VHc3N1N3dPNFk4?=
+ =?utf-8?B?aUwwaEF6Q1BDNTVvLzRkdTQxUlZrWUZsaGdjbFRjTElnTW11eDJ1bUpITnph?=
+ =?utf-8?B?UXJNcnJ6eU5seXBubWlycm9KR2FZV29wVGo1OENoakFXTk91UThLckdkTTlF?=
+ =?utf-8?B?SlVjYmJBamgxajZXaUhWS1JxbnU5dDZSU2UzeStUNmg4NXkyR05DNHFVV1hX?=
+ =?utf-8?B?K3gwMlV3SHdKcVZaQWovMDlWM2laeGs2OGFsckdRZUxhSDBLc0VYRG5maVkx?=
+ =?utf-8?B?TCt0UEtRN0V0SUQ5Y1M5dFlHSisydHY2Rm1XVHY0VVVqTTlVbWlnMVlwL2w0?=
+ =?utf-8?B?NUxJQUgwQ0k2d0VSbXFIN1Y3WDlCTDg1bDl0U0QrVzVGdzlEcWlMVEJQSk9Q?=
+ =?utf-8?B?V1ZMRGxkSjkrS3lWQ1lpWUJMMm5aSnRnOHo3bDQ0ZWkwRzd5SnhOZDZTNDU1?=
+ =?utf-8?B?V0tOVUVKeWxyS2xmenQ5UFk0VEY0RWN1T1lYUDh0Y2Y2clVZM0hNd1g2ZWoy?=
+ =?utf-8?B?T0xYNVNpaVBIQ3puTkgzZHgwVk9QOTNzKzFxdUsrUGI5SGpReUdyMVl4a3lp?=
+ =?utf-8?B?Q1RnOWdiY1J0ZmZQZTRyMUlVRVZPa093alAvTEdxWTZ2ejlLTG8zMU9wWnNk?=
+ =?utf-8?B?NFRxSWtOZXlmQnlBZkU5alFWOERTVW10ZUNNRm9uVkk0WFVWa1I4RXkwV1Qx?=
+ =?utf-8?B?cytpQUc1dnY5K2tnVjZoUEo1VEJjVzI5c2lzbW1RM0JibGRWUVpPdk5MbEpi?=
+ =?utf-8?B?dzNTN2xXTWJ2cXg3ZnBjSCszVUR3QWx5bXJiOXNjTTVqR3YxbGh1aU9uVmZF?=
+ =?utf-8?B?TE9YalErRjAzMDloZE5wS0RIK29kNUNhM0RsQVJMTnU2NVpZUG1RdmtPZ01p?=
+ =?utf-8?B?VnJHY25JYlJrcWVBUWhmczlUY3RDc0dkNHhrMHlOUXNQZGtyZVRuUDF4bVVC?=
+ =?utf-8?B?UG9JTHg0VmlvNEVRblRWOVZWWjcrZU9tekxmSlNWUnRocWtKSVRURURjTTVC?=
+ =?utf-8?B?WVNiTEFUWExDeTlCZ1BwNE12eXh5L1lZdFZCYnVVVUNXN1RLbmpGanF1aCty?=
+ =?utf-8?B?UE1rOGdkeDBoVFE4MmhJZVNLV3NLZVdVbzVNRUNjQk9udi94QmdjbnVnamh4?=
+ =?utf-8?B?d0ZZRHpwTmZObTg1RG9PZldROFNkMXFxanorSzBJY2k3MlRJVEFzNVRtTWV3?=
+ =?utf-8?B?S1ZGQTdIaXJ1a3NnOUVmdFJVWGtscjQyZVVLSTlJSTd3ZDhTWUZudmo0RUZh?=
+ =?utf-8?B?c3dhM1lPZ3h0cUZaa1Q5clBYVE9wRENyMU0xME9DQ0hyTTZydUJaN0RVT0lM?=
+ =?utf-8?B?ZzFWKzRHWDRzcm9ZMHdHQmRNYTNWTDc4S3lyTEpubWV1ZFE2YndaTHZ3dkV2?=
+ =?utf-8?B?NG5MTjJ5UHlvYlpqVXNyZXdsck42ZXkrY3lvcFJ0Ylc5c3E2N3NOekdBVzdS?=
+ =?utf-8?B?eWRRenBrdEQzTnAxRUgxMDFQRDV2NE5WWFhaZUFubUp4TDhiejh3c0gvTWJ2?=
+ =?utf-8?B?TUVmVVB3TjByQ3pBUFJWTmRoRGVKQStlalRIblR0RTAwVzdLekNZcWZ6Tk9W?=
+ =?utf-8?B?K2RsNW51cVZxZ292ZU5aOXZGNUpBcmpXR2lzaE5ycmxIMVhmNWNwVjg0Rmpj?=
+ =?utf-8?B?RnJ3MTJZbllzWjgzR1oyV2UraGV5Tm5CSkNLT3piZzczYnRxeHVNZTFCRno1?=
+ =?utf-8?B?UEloWW1ScVdlRm1EN0htYWxKTjMrb3RYMUdxSk9lclZWOUc3Q2JwbmNZeDdQ?=
+ =?utf-8?B?alE9PQ==?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	hQVA1Y8hg9Z47jIZVFvMfZpE4Pnazk9FZuNinJDLrhw4ItqFxP5CLKntXJBKT6cPIdte/E9jBEr1zg6Tps/rWoA46sTZ4HcJSjjoVWNnmmb/XEumh5ab6lcW+Qp0SYnUnggnjfq2EEhD3oUtVNf8N50nrXVvkM0vLjU+x7LVCMbolyuga8nAWPxhgn7xrTZnTXn1H4VF8vc6u0oY7vhpIYLuixtH3CIpoo1+tTJi6374NagdzIUhL7YJVVNPYWG14614q6UY0r6khCAORncbNa2AAlDAKzYw1DBmAToGtrsyY80hu0JuwBjKc+afAxbqg8HarFaLwhXwyz8uv9aP4yTzkzjK8GKJIe7WNTEoNlpHpzFiaNGnTzaGDHe7t+UxQxSxtyY/QctIoUt7D0nK27IwUsZF08yqrcd4LTt8yIKyHRXw0uvoLf2v5e3A2gyjF7g+PMhLADQTBHAstruitbQGJZuv1kN+sa/Bqwe8s4PKoCPNG7MUNxzXifPtp/X2WerL2pBWEsEWJR9ghcsuNBv6LV/tOIhIldqMtqqjYQmMbDLtGUpRrHbBQ6MsRz3qp9LwnHNFQqCtMHAxSnhEmR0l2Q9gWYKBA0u71/JPVJM=
+	/3h+bc+1I+hSuxb4vT5hGC8c3a/xTe9AzpGUDW1TD0QO1q3fBu8PeUed0mGVko4adSJTXyn+haz+wekj9+Nz8SmClKLLJgjsaO/6ptWZHjleTWkyL/qdyWdeJr+PqVckZ3WnPdgLa8MOla+Xrxsc4rBCPRkFbHneLh0kGpd/FeKafun4/hWo5k65Zemi0eSpZx5ftBWJ5D1XTJHRwvjak6UOYOi+u80Erck/z93GxxMoGi/IQmQpL3OUA3xqnTwfjEIJvNlySqXvFBn7I8aGTXtsaTvKPG56nm072XZrcH/5cj0MDCQye0OD025eI7qwEWMinKH1AFpgVZ5xxitq4IGHa1wo8aWTqv9M9WP4TMhNJLs00iwUEDxWLNNeqPXO9xCLkaZjyXF/MZZHfNkUmAiNI2qN1NDcdvlzSl8VbHMHw05A8Fdh0soteztSXF7ZsXpsLTQTpUePsbrkmZ4m3spzsrvzR6Q0dcrs+V/h/krE8k6CQTu9GzANvBuuLcmQWq9OZmWIQAiCQRcdeQONLagZRnoEadVMw7XdxgBIOtMrDJz8WmL746JAvaFudJuRwswW5KCXHQ9zHf4tB/i1UR8n2Vo+PENwJuI6+pzxnGQ=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f109ccfd-9762-48b7-6ae7-08dc4e6e8d12
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65b1b41b-39de-43e3-2b57-08dc4e6f2a7b
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5893.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2024 14:59:50.2242
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2024 15:04:14.5003
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wSPCQGBNcZxRRAQFgOKiy/NBkNf/HbomxyzmDUS11B3xHWx2ozZBy3IXcV4sUvJGdcaGINukZHW5ELdQBX1OZYljM1q1NbbEZFCb+TmY0QA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4724
+X-MS-Exchange-CrossTenant-UserPrincipalName: QNNS4PeRxegqoDcgmJAgFHI1I8QjNNFBfvR1UvZMKQSt6AnnMhjF/bQwp3Pdy5Mi/pBrYCtXy6gJcm4Evx36XK6rE0NZSZsR3ZiS3dsykq0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4812
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-03-27_12,2024-03-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
- mlxlogscore=900 bulkscore=0 spamscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2403210000
- definitions=main-2403270102
-X-Proofpoint-ORIG-GUID: 485qmAULmT2aNToLU_6nA_Pk75kfIPwl
-X-Proofpoint-GUID: 485qmAULmT2aNToLU_6nA_Pk75kfIPwl
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=964 phishscore=0
+ bulkscore=0 spamscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2403210000 definitions=main-2403270103
+X-Proofpoint-GUID: ebrfvk3DAp3SdgSMu9A2KshoVgP1bmvl
+X-Proofpoint-ORIG-GUID: ebrfvk3DAp3SdgSMu9A2KshoVgP1bmvl
 
-On 27/03/2024 11:49, Jason Gunthorpe wrote:
-> On Wed, Mar 27, 2024 at 03:14:25PM +0500, Muhammad Usama Anjum wrote:
->> On 3/26/24 8:03 PM, Jason Gunthorpe wrote:
->>> On Tue, Mar 26, 2024 at 06:09:34PM +0500, Muhammad Usama Anjum wrote:
->>>> Even after applying this config patch and following snippet (which doesn't
->>>> terminate the program if mmap doesn't allocate exactly as the hint), I'm
->>>> finding failed tests.
+On 27/03/2024 11:40, Jason Gunthorpe wrote:
+> On Wed, Mar 27, 2024 at 10:41:52AM +0000, Joao Martins wrote:
+>> On 25/03/2024 13:52, Jason Gunthorpe wrote:
+>>> On Mon, Mar 25, 2024 at 12:17:28PM +0000, Joao Martins wrote:
+>>>>> However, I am not smart enough to figure out why ...
+>>>>>
+>>>>> Apparently, from the source, mmap() fails to allocate pages on the desired address:
+>>>>>
+>>>>>   1746         assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
+>>>>>   1747         vrc = mmap(self->buffer, variant->buffer_size, PROT_READ |
+>>>>> PROT_WRITE,
+>>>>>   1748                    mmap_flags, -1, 0);
+>>>>> → 1749         assert(vrc == self->buffer);
+>>>>>   1750
+>>>>>
+>>>>> But I am not that deep into the source to figure our what was intended and what
+>>>>> went
+>>>>> wrong :-/
 >>>>
->>>> @@ -1746,7 +1748,7 @@ FIXTURE_SETUP(iommufd_dirty_tracking)
->>>>         assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
->>>>         vrc = mmap(self->buffer, variant->buffer_size, PROT_READ | PROT_WRITE,
->>>>                    mmap_flags, -1, 0);
->>>> -       assert(vrc == self->buffer);
->>>> +       assert(vrc == self->buffer);// ???
+>>>> I can SKIP() the test rather assert() in here if it helps. Though there are
+>>>> other tests that fail if no hugetlb pages are reserved.
 >>>>
->>>> On x86:
->>>> # Totals: pass:176 fail:4 xfail:0 xpass:0 skip:0 error:0
->>>> On ARM64:
->>>> # Totals: pass:166 fail:14 xfail:0 xpass:0 skip:0 error:0
->>>>
->>>> The log files are attached.
+>>>> But I am not sure if this is problem here as the initial bug email had an
+>>>> enterily different set of failures? Maybe all you need is an assert() and it
+>>>> gets into this state?
 >>>
->>> You probably don't have enough transparent huge pages available to the process
->>>
->>>       echo 1024 > /proc/sys/vm/nr_hugepages
->> After making huge pages available, the iommufd test always passed on x86.
->> But there are still failures on arm64. I'm looking into the failures.
+>>> I feel like there is something wrong with the kselftest framework,
+>>> there should be some way to fail the setup/teardown operations without
+>>> triggering an infinite loop :(
+>>
+>> I am now wondering if the problem is the fact that we have an assert() in the
+>> middle of FIXTURE_{TEST,SETUP} whereby we should be having ASSERT_TRUE() (or any
+>> other kselftest macro that). The expect/assert macros from kselftest() don't do
+>> asserts and it looks like we are failing mid tests in the assert().
 > 
-> Oh that is really strange. Joao? Nicolin?
-> 
-Definitely strange, I'll have a look.
+> Those ASSERT_TRUE cause infinite loops when used within the setup
+> context, I removed them and switched to assert because of this - which
+> did work OK in my testing at least.
 
-So it set the expected number of dirty bits as that assert doesn't fail, but it
-is failing when we check that even bits are set but not odd ones. Like it's
-hasn't set those bits.
+Strange because we make use of ASSERT* widely in our selftests fixture-setup.
 
-For mock tests there should be no difference between x86 and ARM assuming the
-typical 4K page-size. Maybe this is 64k base pages in ARM? That's the only thing
-that I can think of that affected mock domain.
-
-Muhammad, could you paste your kconfig?
-
->> #  RUN           iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap ...
->> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap
->> not ok 139 iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap_no_clear ...
->> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap_no_clear: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap_no_clear
->> not ok 140 iommufd_dirty_tracking.domain_dirty128k.get_dirty_bitmap_no_clear
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap ...
->> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap
->> not ok 144 iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap_no_clear ...
->> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap_no_clear: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap_no_clear
->> not ok 145 iommufd_dirty_tracking.domain_dirty256k.get_dirty_bitmap_no_clear
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap ...
->> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap
->> not ok 149 iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap_no_clear ...
->> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap_no_clear: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap_no_clear
->> not ok 150 iommufd_dirty_tracking.domain_dirty640k.get_dirty_bitmap_no_clear
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap ...
->> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap
->> not ok 159 iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap_no_clear ...
->> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap_no_clear: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap_no_clear
->> not ok 160 iommufd_dirty_tracking.domain_dirty128M_huge.get_dirty_bitmap_no_clear
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap ...
->> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap
->> not ok 164 iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap_no_clear ...
->> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap_no_clear: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap_no_clear
->> not ok 165 iommufd_dirty_tracking.domain_dirty256M.get_dirty_bitmap_no_clear
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap ...
->> # iommufd_utils.h:374:get_dirty_bitmap:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap
->> not ok 169 iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap
-> 
->> #  RUN           iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap_no_clear ...
->> # iommufd_utils.h:374:get_dirty_bitmap_no_clear:Expected j < npte (1) == test_bit(i + j, (unsigned long *)bitmap) (0)
->> # get_dirty_bitmap_no_clear: Test terminated by assertion
->> #          FAIL  iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap_no_clear
->> not ok 170 iommufd_dirty_tracking.domain_dirty256M_huge.get_dirty_bitmap_no_clear
-> 
+setup_sizes() is run before the tests so it can't use ASSERT macros for sure;
+maybe that's what you refer?
 
 
