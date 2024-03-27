@@ -1,186 +1,139 @@
-Return-Path: <linux-kselftest+bounces-6731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 304B688EF68
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 20:39:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AFC588EFE2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 21:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3A81B27201
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 19:39:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167942A42A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 20:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3366143C4C;
-	Wed, 27 Mar 2024 19:39:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1248315444A;
+	Wed, 27 Mar 2024 20:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SKHszxO4"
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="PC2+GKS7";
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="lWFJtavM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CAC1E52C;
-	Wed, 27 Mar 2024 19:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09AE154443;
+	Wed, 27 Mar 2024 20:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.53.235.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711568368; cv=none; b=FcxLBpnxJPTGsCQKJMaOehbjOnGZv0TNC/pyZ6T7tdFg+uBHQwVGc16bCJcdyNA+71PziK55Za2q+3nBvJUVGuDRHK1jSOYkaQ+9cYpBwUfrfdDVkO+Pv/3MXf5WgcytgMqIv95wAePvIIhynu03vdW+N3nNEUjVYn9UexMxuxI=
+	t=1711569871; cv=none; b=iQIROD4On3zzX1jJf/kohZV4lh08VMuKUkbMViYhj+3RmHb4TtBQUrcBBgA0n/qaFkk0G50h5IeOCBH0UnfRDWAizLv9UJssBV1T8lnzD9DllaRCu11Vhsc3jOjKEpYE1zNDxm9c5tELSUQWqQv9/neFlfPsjzORiHkmzHGu1is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711568368; c=relaxed/simple;
-	bh=mgDCCV9DYm3gE81YovhkygNKHO9RS0DsGnhFgu3kHyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ohTEiRVoma0GCSa7EZZ90JwMYtXJic6dw9IzrR9wHmJQ9MtPyovNYumX29+ZdXjgF61t624A31HreBfXT0zzfYOWEhomcosS0n6pTOUuJuYSomT1MhJBycaoToZ++zc1eKJDPY3BzxV7cmdCFuSRbFmNes9+sEUpW4BKTRVKy5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SKHszxO4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3492BC433C7;
-	Wed, 27 Mar 2024 19:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711568368;
-	bh=mgDCCV9DYm3gE81YovhkygNKHO9RS0DsGnhFgu3kHyA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SKHszxO4HY0/TKQKrYd5xjeNheZExttn6ouZSQo7RamEADgZOHEGKOgxLgWnDAQsX
-	 TQk1EiCgbOjPSXUXVDKc1GHuMb8JYfr2n9dUTSMBL4fPlQCFaWvqtzr7SljGX8ozL0
-	 d+GxeE8i5/jrK3YAq+PzsRs9yg9Ub9Ye0zUWxbvydciwA80gaS/Cm+ZdJSIaW62wjN
-	 8mgdqhfJd0T7WESQFdfsQPBT5oU/lItq2D11cSo/Qk/7TSLc6IaPfRphmumfAFxMTP
-	 w0oml1KABCZkKYStlxNthCpMKTFGN6FZPoQQlay9J46ava0AXCk2S+OoNd/Q7U91J0
-	 LlcAACEC05P/g==
-Date: Wed, 27 Mar 2024 19:39:20 +0000
-From: Simon Horman <horms@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH v2 12/14] sh: Add support for suppressing warning
- backtraces
-Message-ID: <20240327193920.GV403975@kernel.org>
-References: <20240325175248.1499046-1-linux@roeck-us.net>
- <20240325175248.1499046-13-linux@roeck-us.net>
- <20240327144431.GL403975@kernel.org>
- <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
+	s=arc-20240116; t=1711569871; c=relaxed/simple;
+	bh=Ld6HrLqtuw7crMLsCyP8gsr/CSuqB+o5MzFpyBX3MuU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sMopCdejrgjrcz6nEYJp4hOXMWEOpv4n4wwIysYl0A4oVB0fYzXhZhtfoOyKP045bQK8Q7Lq6Yfr+LNampo5ujNIhDfMc8qKDWmBsnoOKHpIuKnMpaJq+vtupvYwZTQMeIsvxioOfN25IbOZ23HZ7S++z0y/2fPxet2rzwOVxRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr; spf=pass smtp.mailfrom=alu.unizg.hr; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=PC2+GKS7; dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b=lWFJtavM; arc=none smtp.client-ip=161.53.235.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alu.unizg.hr
+Received: from localhost (localhost [127.0.0.1])
+	by domac.alu.hr (Postfix) with ESMTP id CF2436015E;
+	Wed, 27 Mar 2024 21:04:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1711569857; bh=Ld6HrLqtuw7crMLsCyP8gsr/CSuqB+o5MzFpyBX3MuU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PC2+GKS7Ac4kwpM4fTB41Rare2g71xW+I3p+wGU1pvbY0zx269WaEIvMJH7wiPOSp
+	 trSdOquY9FRFfy20rezD4w4lg+TyDCXGLeUJ6LpdHfXJ1ueQhSUJaDv1R2NYSFoAZG
+	 y997SVPUiBp/SgPCzuNweTTfpLJJ660YE7bT1SxXFEjEbwMs53G5sJnRzgCWFROVvO
+	 /bz1XnXn1Ay7RUGZlDPw0eF4+/DeqTO1Ai5sdOl3zjjlL2l1iFUVxHx2UwzBO7Rkev
+	 v10R1r6tl26bKhVhWSJVp5iGbSro6e0Ushwp6KfLXaFc7D+oSvlAAiMBR4nVkK1z4s
+	 JV9KzKOM8wt+A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VXsdPIWA-2IT; Wed, 27 Mar 2024 21:04:15 +0100 (CET)
+Received: from [192.168.178.20] (dh207-41-201.xnet.hr [88.207.41.201])
+	by domac.alu.hr (Postfix) with ESMTPSA id 24FA16015F;
+	Wed, 27 Mar 2024 21:04:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1711569855; bh=Ld6HrLqtuw7crMLsCyP8gsr/CSuqB+o5MzFpyBX3MuU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lWFJtavMe5WgV7tBQiIC1mIUZqOAeFey4enMQD67L6kMIQHtRpxRrxbe5iiFWxBMI
+	 sRMBZfOkZxK6k+ngBYIzOJ1G26WZCqKwWP4P1Vxv0Jh+W+ieFsLIVfFtFrPFweWXZO
+	 86jVFYXA2E+UFXtfYKvQCaBfxw02AJbulwUqxnX8TvYmRHY0RHA9GwoenhOanO1l1T
+	 yg0sCh/Nseo9VcT/lMlKVJeXeDUtwcGFwBmu0/foy2pdgK2iDQJmk6HnYhHTQHiqVC
+	 kGUYA69hOnoQCKiH0qR2d71matlP7QdjzNY27qh/idLGkNnCUv3iy2ysSC7RdxLPaI
+	 NjChKfqX7c9Cg==
+Message-ID: <08a13b79-e94a-4f80-96e9-ce223d928b3e@alu.unizg.hr>
+Date: Wed, 27 Mar 2024 21:04:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] seltests/iommu: runaway ./iommufd consuming 99% CPU after a
+ failed assert()
+To: Joao Martins <joao.m.martins@oracle.com>, Jason Gunthorpe <jgg@nvidia.com>
+Cc: iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <0d5c3b29-fc5b-41d9-9556-5ce94262dac8@alu.unizg.hr>
+ <20240319135852.GA393211@nvidia.com>
+ <a692d5d7-11d5-4c1b-9abc-208d2194ccde@alu.unizg.hr>
+ <cdc9c46b-1bad-41cd-8f98-38cc2171186a@oracle.com>
+ <20240325135207.GC6245@nvidia.com>
+ <f8e03425-98cf-4076-8959-d85eda846bab@oracle.com>
+Content-Language: en-US
+From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <f8e03425-98cf-4076-8959-d85eda846bab@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 27, 2024 at 08:10:51AM -0700, Guenter Roeck wrote:
-> On 3/27/24 07:44, Simon Horman wrote:
-> > On Mon, Mar 25, 2024 at 10:52:46AM -0700, Guenter Roeck wrote:
-> > > Add name of functions triggering warning backtraces to the __bug_table
-> > > object section to enable support for suppressing WARNING backtraces.
-> > > 
-> > > To limit image size impact, the pointer to the function name is only added
-> > > to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
-> > > CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
-> > > parameter is replaced with a (dummy) NULL parameter to avoid an image size
-> > > increase due to unused __func__ entries (this is necessary because __func__
-> > > is not a define but a virtual variable).
-> > > 
-> > > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > > ---
-> > > - Rebased to v6.9-rc1
-> > > - Added Tested-by:, Acked-by:, and Reviewed-by: tags
-> > > - Introduced KUNIT_SUPPRESS_BACKTRACE configuration option
-> > > 
-> > >   arch/sh/include/asm/bug.h | 26 ++++++++++++++++++++++----
-> > >   1 file changed, 22 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/arch/sh/include/asm/bug.h b/arch/sh/include/asm/bug.h
-> > > index 05a485c4fabc..470ce6567d20 100644
-> > > --- a/arch/sh/include/asm/bug.h
-> > > +++ b/arch/sh/include/asm/bug.h
-> > > @@ -24,21 +24,36 @@
-> > >    * The offending file and line are encoded in the __bug_table section.
-> > >    */
-> > >   #ifdef CONFIG_DEBUG_BUGVERBOSE
-> > > +
-> > > +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
-> > > +# define HAVE_BUG_FUNCTION
-> > > +# define __BUG_FUNC_PTR	"\t.long %O2\n"
-> > > +#else
-> > > +# define __BUG_FUNC_PTR
-> > > +#endif /* CONFIG_KUNIT_SUPPRESS_BACKTRACE */
-> > > +
-> > 
-> > Hi Guenter,
-> > 
-> > a minor nit from my side: this change results in a Kernel doc warning.
-> > 
-> >       .../bug.h:29: warning: expecting prototype for _EMIT_BUG_ENTRY(). Prototype was for HAVE_BUG_FUNCTION() instead
-> > 
-> > Perhaps either the new code should be placed above the Kernel doc,
-> > or scripts/kernel-doc should be enhanced?
-> > 
-> 
-> Thanks a lot for the feedback.
-> 
-> The definition block needs to be inside CONFIG_DEBUG_BUGVERBOSE,
-> so it would be a bit odd to move it above the documentation
-> just to make kerneldoc happy. I am not really sure that to do
-> about it.
 
-FWIIW, I agree that would be odd.
-But perhaps the #ifdef could also move above the Kernel doc?
-Maybe not a great idea, but the best one I've had so far.
 
-> I'll wait for comments from others before making any changes.
+On 3/27/24 11:41, Joao Martins wrote:
+> On 25/03/2024 13:52, Jason Gunthorpe wrote:
+>> On Mon, Mar 25, 2024 at 12:17:28PM +0000, Joao Martins wrote:
+>>>> However, I am not smart enough to figure out why ...
+>>>>
+>>>> Apparently, from the source, mmap() fails to allocate pages on the desired address:
+>>>>
+>>>>    1746         assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
+>>>>    1747         vrc = mmap(self->buffer, variant->buffer_size, PROT_READ |
+>>>> PROT_WRITE,
+>>>>    1748                    mmap_flags, -1, 0);
+>>>> → 1749         assert(vrc == self->buffer);
+>>>>    1750
+>>>>
+>>>> But I am not that deep into the source to figure our what was intended and what
+>>>> went
+>>>> wrong :-/
+>>>
+>>> I can SKIP() the test rather assert() in here if it helps. Though there are
+>>> other tests that fail if no hugetlb pages are reserved.
+>>>
+>>> But I am not sure if this is problem here as the initial bug email had an
+>>> enterily different set of failures? Maybe all you need is an assert() and it
+>>> gets into this state?
+>>
+>> I feel like there is something wrong with the kselftest framework,
+>> there should be some way to fail the setup/teardown operations without
+>> triggering an infinite loop :(
 > 
-> Thanks,
-> Guenter
+> I am now wondering if the problem is the fact that we have an assert() in the
+> middle of FIXTURE_{TEST,SETUP} whereby we should be having ASSERT_TRUE() (or any
+> other kselftest macro that). The expect/assert macros from kselftest() don't do
+> asserts and it looks like we are failing mid tests in the assert().
 > 
-> > >   #define _EMIT_BUG_ENTRY				\
-> > >   	"\t.pushsection __bug_table,\"aw\"\n"	\
-> > >   	"2:\t.long 1b, %O1\n"			\
-> > > -	"\t.short %O2, %O3\n"			\
-> > > -	"\t.org 2b+%O4\n"			\
-> > > +	__BUG_FUNC_PTR				\
-> > > +	"\t.short %O3, %O4\n"			\
-> > > +	"\t.org 2b+%O5\n"			\
-> > >   	"\t.popsection\n"
-> > >   #else
-> > >   #define _EMIT_BUG_ENTRY				\
-> > >   	"\t.pushsection __bug_table,\"aw\"\n"	\
-> > >   	"2:\t.long 1b\n"			\
-> > > -	"\t.short %O3\n"			\
-> > > -	"\t.org 2b+%O4\n"			\
-> > > +	"\t.short %O4\n"			\
-> > > +	"\t.org 2b+%O5\n"			\
-> > >   	"\t.popsection\n"
-> > >   #endif
-> > > +#ifdef HAVE_BUG_FUNCTION
-> > > +# define __BUG_FUNC	__func__
-> > > +#else
-> > > +# define __BUG_FUNC	NULL
-> > > +#endif
-> > > +
-> > >   #define BUG()						\
-> > >   do {							\
-> > >   	__asm__ __volatile__ (				\
-> > 
-> > ...
-> 
+> Maybe it is OK for setup_sizes(), but maybe not OK for the rest (i.e. during the
+> actual setup / tests). I can throw a patch there to see if this helps Mirsad.
+
+Well, we are in the job of making the kernel better and as bug free as we can.
+
+Maybe we should not delve too much into detail: is this a kernel bug, or the kselftest
+program bug?
+
+Some people already mentioned that I might have sysctl variable problems. I don't see
+what the mmap() HUGEPAGE allocation at fixed address was meant to prove?
+
+Thanks,
+Mirsad
 
