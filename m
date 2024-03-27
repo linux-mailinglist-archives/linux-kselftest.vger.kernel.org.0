@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-6718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E81A88EAF5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 17:18:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7E4388EAF9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 17:19:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 600921C31DD4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 16:18:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A2D61F33E86
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Mar 2024 16:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62AB712F393;
-	Wed, 27 Mar 2024 16:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4240D130497;
+	Wed, 27 Mar 2024 16:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eTOccIel"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gZhVMWfq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD60512F58B
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 16:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C2712F58B
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 16:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711556320; cv=none; b=poGUafzU4dh/Gb88vBbQTR64vKWGaGHnsoNOyTMsZAt4b28AyVQ5W7YlEwS1+g/pMzbj1RWRjS0VQVK434ThyNSYqsx58rljrA0avoUAqY3nsfmNzDb4uBBXUc3PG1IJIFY5TaGQ3knV6Ppca/Xsl6v4V1OOEYDXcy77yVGXIZg=
+	t=1711556363; cv=none; b=iui8ipMFcZHp+u+tlQ9uWgl3q6M94lqu3VVf7lTgj4gIPiKcGYN7RSVSBMbG0235PTduivWH2lmiQ5yIUVtNt70YNrQajRrgoQAqLCNP6KBd0TOD/+RMzf4SYLG0E0m69dRvUUl8QQeoAcECBhEMvYKOkRvvZuSq1ST6KrCTIIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711556320; c=relaxed/simple;
-	bh=2mlVydQJmeDZD0C210CqOG3B6PFVjqqc5l12YwGy1jw=;
+	s=arc-20240116; t=1711556363; c=relaxed/simple;
+	bh=OrY2sRkMGUSl5qS4bbQVcCvtD+x52pQ3Jvu2+0Cf6vg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SET2BHihU5QuoB8Jm6ig9aJvR8Jz36mo9KdAbtD14Unds5tf0gzNGY1crK+FhMuj9TNZHepTCznl+47X/5i1dLXvbwgyGp4KQBbD7WF3s0XA/ugYAtYwAl1n7AIrMP51K+W55o5V6BiiNP6jxOREy9oYPoZFiB2pJs+xapWK4To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eTOccIel; arc=none smtp.client-ip=209.85.166.180
+	 In-Reply-To:Content-Type; b=nx3Ep3ob4tm/tYinklGa48WfKIROY2rwiQF26Jf1wq4afCm8qyxHg16stu5Rs2m5cadIgSn/CzqweQ5pmhH7fW4EcrLccm0/l4drShF6nu6GL9yI3yu9Nzn5uNVZ3Svi3YWTDKj+qpTyPZDdoTh29k/N4FhhOIh4v+c/FNidTp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gZhVMWfq; arc=none smtp.client-ip=209.85.166.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3685acaa878so3940995ab.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 09:18:38 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7d0772bb5ffso22282739f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Mar 2024 09:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1711556318; x=1712161118; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1711556361; x=1712161161; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=A3n7vo3IDDksA0EyXBWwDk90r432Y6GahhgJq9RLXhk=;
-        b=eTOccIel0gv9NCDLPwZ8ZF+n5k5rog3msuprLfq0mjf5DwNRx5m3093ma07/lj+gNC
-         BdQ6Gj7vdVRX/UG2oxGynqxknYkMKWMN3RM/oHADMijOyePGgUtnhKmsAcaVTYHJe7Xz
-         3/MTTz4P6py7av2PwKjJ8uxU7OZoRyXBlkrKg=
+        bh=H+EwpnV1TovlT/K7a9fk3BdjFCSuIGfXvPuki/X3eHY=;
+        b=gZhVMWfq39SffqUOh9P6lBRApIrh8XpYkurdi2D+KF3nEw7MBy51+59j0MvYKOePJc
+         H2YUxrE25zne1efGXlWgibB405807+6BjNjnPKLdyZTXkhKNenMQZPFGpA33yeaQb2Bt
+         anGyHmi7kCo/YVSVVKUUl+9Olcs0i6KF2ys5Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711556318; x=1712161118;
+        d=1e100.net; s=20230601; t=1711556361; x=1712161161;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A3n7vo3IDDksA0EyXBWwDk90r432Y6GahhgJq9RLXhk=;
-        b=jh4pQQi0I1hJ4Hzqyx/2lav8GxznizzhcL5cy7c/Q2XojPK/SQ5I+ed+6aUYgzxzAj
-         dUgytl0zBVGB7eMD34DmFgSYKalRZs17iTK070b7RcyM+W3DLoeg+TzsA37larB61f19
-         vy8b2O6ZjU/hMkul6Hn9mvUdb7YMyuOph37YCEf4j8JDtecuQO0nEoUtLZJ4EMjpbJpt
-         fDAWz1pjM+X8H8CQHNIBV17xL5+AGEOn3By5juGH3R+gbri35+AoSG2Zedm+nH86l5y3
-         oDDSZy1R/rJY3Eqap0RUwN2QcyTmnCZYQYMe84ZAv56LJwaGSWey58HcLYqXlu4gVRhN
-         a4Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCUyn4Qj0Kh0q8EMw81WscggO1YAuua9wT112kNce3ow6YtpywXyvSNuU/x/MgcvIrUzqMbv0dRydBEw64oYWpX/I83kyr2l5t0pMnCL1keV
-X-Gm-Message-State: AOJu0Yw5BMZKuQtXhFYeh/wl7XtkDda9yovcXHQtAGYn6ivy7CsC0xVY
-	YmziA8v+mx3lwtlGPymJu3hpJSAyDf7vk7NB94GeefWhEAduQbcftWvDyFrbnJ8=
-X-Google-Smtp-Source: AGHT+IF7yIh3uN51oX9Uv2Qm743DenbAnFk7aOHkg5zmiVoM2zf/D2qzzwRJyzdHl8poXARbs/VXTg==
-X-Received: by 2002:a5e:8c15:0:b0:7d0:6728:66eb with SMTP id n21-20020a5e8c15000000b007d0672866ebmr609391ioj.1.1711556317589;
-        Wed, 27 Mar 2024 09:18:37 -0700 (PDT)
+        bh=H+EwpnV1TovlT/K7a9fk3BdjFCSuIGfXvPuki/X3eHY=;
+        b=CXyTYiwYIhp5sjRptJi0I1SEhUtEvN9d03HuW1wbH9RpHuP/KFFkjorh+Q9PabeeFN
+         JtKwrHNIqG0LkDCUcjOIMmp9ODwKM73WR7Tg0bsFvcgQS/0akXp4ho2YLP6TGYRThtfr
+         2AydtOHJqNXVTyaTiIfsutj4xvZG14HlKwFbKgTTNPKup8L4vN7IZQy8LnJvOS1hDSaR
+         TdzoFBmFSUo4hV5b+ycayG1Bu4vMWRnlfR6OhA+B13qWHWf/9Q4gb6rucO22R8laybuk
+         iNqbGl8JMBUPg4M3X1QaGxkRaXlNFHdTRTrS5yCSICGODfM7ooHKyloBXH8QnxYRtdLX
+         ol8w==
+X-Forwarded-Encrypted: i=1; AJvYcCW6WYcY7NglxXdeGh8VnLjR2EotgA30A08kLwLWFtcGt3coiozGDLRfzB4F7YYpdaUSkgG4Dz7Y8ui054gZSuIA+THbDXaqhQELO067gKvu
+X-Gm-Message-State: AOJu0YyyN1IOGcK+jAiVQomC1hGYy2Ee0WnjmlJQ7000tTllQ2GnDt1q
+	0X/TO/LA+VhLoqauNPPEneDcO8bICK2ktQmAfa9BkC1/Sj6BY7/fz42P3mi0s4E=
+X-Google-Smtp-Source: AGHT+IGFTq5dd597zpcFVDKJzVe2QfZkJrAeL8dZzhpz4JfDnNyVSDojkp6US9cbLAxZzL7lqBXjxg==
+X-Received: by 2002:a5e:9402:0:b0:7d0:3d2c:5987 with SMTP id q2-20020a5e9402000000b007d03d2c5987mr672625ioj.0.1711556360742;
+        Wed, 27 Mar 2024 09:19:20 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id r23-20020a5e9517000000b007cf05417adbsm3598725ioj.22.2024.03.27.09.18.36
+        by smtp.gmail.com with ESMTPSA id q16-20020a02c8d0000000b0047c17c664fbsm2007031jao.115.2024.03.27.09.19.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 09:18:37 -0700 (PDT)
-Message-ID: <646effc4-c67d-4248-8e69-4279a3d7ec28@linuxfoundation.org>
-Date: Wed, 27 Mar 2024 10:18:36 -0600
+        Wed, 27 Mar 2024 09:19:20 -0700 (PDT)
+Message-ID: <cfa1ee01-1480-4869-9ea8-daaff0ce3ac9@linuxfoundation.org>
+Date: Wed, 27 Mar 2024 10:19:19 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,45 +73,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: x86: skip the tests if prerequisites aren't
- fulfilled
-To: "Chang S. Bae" <chang.seok.bae@intel.com>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Shuah Khan <shuah@kernel.org>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Binbin Wu <binbin.wu@linux.intel.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Weihong Zhang <weihong.zhang@intel.com>, angquan yu <angquan21@gmail.com>
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240314114502.466806-1-usama.anjum@collabora.com>
- <9b30d5a7-1a23-4f48-b6c3-4908535a998b@linuxfoundation.org>
- <a2b8e7b3-2f38-40a7-9e3e-c2cfa2ba8892@intel.com>
+Subject: Re: [PATCH] selftests/exec: execveat: Improve debug reporting
+To: Kees Cook <keescook@chromium.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
+ Mark Brown <broonie@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240313185606.work.073-kees@kernel.org>
+ <1dd87e89-2306-4669-844f-ffe9e56523b6@collabora.com>
+ <fa109cff-5326-4f94-aa3b-d83827d5f968@linuxfoundation.org>
+ <202403261540.8F0D7A0@keescook>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <a2b8e7b3-2f38-40a7-9e3e-c2cfa2ba8892@intel.com>
+In-Reply-To: <202403261540.8F0D7A0@keescook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/26/24 15:20, Chang S. Bae wrote:
-> On 3/26/2024 1:51 PM, Shuah Khan wrote:
+On 3/26/24 16:40, Kees Cook wrote:
+> On Tue, Mar 26, 2024 at 02:46:02PM -0600, Shuah Khan wrote:
+>> On 3/14/24 02:54, Muhammad Usama Anjum wrote:
+>>> On 3/13/24 11:56 PM, Kees Cook wrote:
+>>>> Children processes were reporting their status, duplicating the
+>>>> parent's. Remove that, and add some additional details about the test
+>>>> execution.
+>>>>
+>>>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>>>> ---
+>>>> Cc: Eric Biederman <ebiederm@xmission.com>
+>>>> Cc: Shuah Khan <shuah@kernel.org>
+>>>> Cc: Mark Brown <broonie@kernel.org>
+>>>> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>> Cc: linux-mm@kvack.org
+>>>> Cc: linux-kselftest@vger.kernel.org
+>>> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>
 >>
->> show that there are bo backwards compatibility issues
-> In older kernels lacking AMX support [1], arch_prctl() returns EINVAL. With AMX support, the kernel will properly set 'features'.
+>> Applied to linux-kselftest fixes for the next rc.
 > 
-> It is also worth noting that this simplification was previously acknowledged [2], albeit some time ago.
-> 
-> Thanks,
-> Chang
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db8268df0983adc2bb1fb48c9e5f7bfbb5f617f3
-> [2] https://lore.kernel.org/lkml/de61ffdb-638a-ca84-31b5-55f6a8616597@linuxfoundation.org/
-> 
+> This is already part of the execve tree...
 > 
 
-Thanks. This can be included in the change log so it is
-clear.
+Thanks. I will go drop it.
 
 thanks,
 -- Shuah
