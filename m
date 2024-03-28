@@ -1,192 +1,144 @@
-Return-Path: <linux-kselftest+bounces-6781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54258890E60
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 00:17:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF9B5890E76
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 00:23:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E76290C7B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 23:17:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 581BA1F22999
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 23:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4947E772;
-	Thu, 28 Mar 2024 23:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7BC82D66;
+	Thu, 28 Mar 2024 23:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FZORLLVM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HsUzo0Dx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89F73BBF1;
-	Thu, 28 Mar 2024 23:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCFA3F9EA;
+	Thu, 28 Mar 2024 23:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711667854; cv=none; b=GXxLly7f42ZVPohQUJrkguieuROh8N+zEdKyQb56kiNhdvp8POAgArD5exAMwV6QkDULSaoYxipMDgWgU2Nfv9RheM7nQsRuoabVtkzsLZaXnBaP2tcxYAd1BngnxixHwJa6NJy47kYInW+nAh24wzgqv0dASW7JVqpd2kSebPk=
+	t=1711668206; cv=none; b=GgPpP40mfkaA5eElv27qi2lZ2ZZKEqQimNI+jYR0ZtnWeLk7ELCEr92RH0oYsQa5bGD/GlTcgxtiNEiJvwmuu3mRpB1rE3+cKyztc7V+rE4LH2QZgyHFtPVPsrzBYQ2LpVkAotYvk1wFFPTgy8I7kznZJHlSd7UDgHa7wMuyYA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711667854; c=relaxed/simple;
-	bh=lxs2ZFR/bExqKNMSEhSfupLSlYECG6xtGJZ2Htju2B4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FIHMp4GUzrUUQ3yTRz/G/FMagjavFSfHSAJrrYmzV7/hTROS/LtudG66Fm/dZ0199SEms9GgsmwvQmVjkXoORw/rIdTZ5VB+sOE40K7GzykLs5AOmru4r53RlmfsmiWuCM6ZiAef1Gh6t7E7diOrBeLx+KgrekEJNREJAwu0wQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FZORLLVM; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1711668206; c=relaxed/simple;
+	bh=f+Fn0IVd1CXhIBMUfKxmbY6PpiZuXCT5Jwa6jncWG1c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j/fSNAuRKHY70oeLFpbQJrkOQRTZC74Rzd3F80pUUEO2pdKpxCWohIHCt10bBhMJg1N7mIHCaOFObjJs39ogovKHht08nLs41pUVcJgHN5bgIqf1pywJhHubkXP3ANBwoFKSOjVThNGlSfT0FPfGfhkJUzA3PGv7Ss0PoeDPeoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HsUzo0Dx; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2d717603aa5so586161fa.0;
-        Thu, 28 Mar 2024 16:17:32 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e740fff1d8so1327639b3a.1;
+        Thu, 28 Mar 2024 16:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711667851; x=1712272651; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VBPtswbRJVFEjRlZATnnC5PXpnMT+l8bd9tpx27HnBM=;
-        b=FZORLLVM4zTQrqx2Nmbsi0cxFMKlY+f0aT4H8rCdE6yZSJYjqMDcdjuqe/TEn+Wo7F
-         ghBvacZZoOJOcpwzMcXvG0TG3S/0fOKIdwHFmFRxu2LYqVYBt+rMN7bjgyQnaJBxPkf9
-         h+liqXbkE9MUNcLcxMa0vOhpY7I582D/xgj+HRQALIYoSnC6YUy45xGAbxV5SB/1JeCy
-         6BMhl4d9G3np8DiZMRhYLdJ2NDZd9berzJVlhWriMAj/RaXWcZ2fqquz1dnEdRGvTgGw
-         cT79hNvmyuCk+jFeZoKG0m2pdrOzjq4LEZYArlYYR9pzXxo4ZxayLmm+RDHtfH7PcfSu
-         u3mg==
+        d=gmail.com; s=20230601; t=1711668204; x=1712273004; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pjgXiS9mThv24KOLFrcYAxjGt4bSxcV19+6gwf0UgxU=;
+        b=HsUzo0Dxh1VYe4WWFqSmxN/uGTbMb4jeaLMWzKxAivvIRD0w2fi3P21vdDhPCAd8xw
+         vkJnbMUX1GuJsC6Mzsp1HqFfwL5ahrzWcPHk8o2qSStAvMj/h5JQYNWY6biSAcYU4/0T
+         LBu5TKHZzLpoQj5YcH8oeDLzYw3ZQerXZhWbwSazCn8ltQDYdZn3oAq7InXrK1w2cIJ/
+         7InQeSASODFeYc+z9kAgFJEq+P/MKRJqSvgo+OTSdAFHazZ6v1zLaO3OfRfxGD+C7iUe
+         Was0zY43K57AYYD1x9NfgcH7KJd/fCXC0WSt81ebZ5sDGlVTGZxWl1kkq9T6ZBLOM7Fb
+         O0lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711667851; x=1712272651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1711668204; x=1712273004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VBPtswbRJVFEjRlZATnnC5PXpnMT+l8bd9tpx27HnBM=;
-        b=xBC3yMEy+HMKWfXGDitVEIWuIyFzdFfJiXpOKiUUO55CbpduuFFsIX6Q1nmtUIiqAa
-         yrh0Z7vpFFSJbot1mO0B24HeDaMMxLSdUgOElK38mwLLx/JvhSShIKrH6zcCEwgzCFz0
-         EjIVA8mk/ITVub1JKA1wPoflbfpkYtdZWUqpIr3wxmVRMmDBw3VASGu2r5MDfvStJP/3
-         EiZ/w40Vwv7pAb7wrcVkSCcYva05Fy1SZ7lAuezqiZdBD03BB0kiagmOIiTcri9SUOCx
-         FEgcPpaDRxaW6WU9myeJA6xhY8P4eBl++2bSBMep53snjpUDpxqH0Wn3m4khbZkdzx1Z
-         dIdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrEhk9ZCNz2T3dkDxm800rRE2SbENK0BG54VELoFgUmeu90XQvXJYAaBWTJb0R/vKfbyGH1N+YU+X4V6FmXQZhvezuJm96cn+XHgqFU/L7f+19eWedq3rADJ3G6q2Y4iTpjdYR3e1CuDm7MUcY7d+Hu1xZxHYiBEshJBjQU/NIS33K7Hx5f3u+u2mk5hjYCHQjjZvuyu3Q0gNUpiOA+w36R7dhy7k4zS9tUlEmDs6kXHb9HgvmU72zuHkzrunOk3HnMrroQzgUNW1kPcmiBr06JnzXwNwo7keA5A==
-X-Gm-Message-State: AOJu0YzLkPKp0+yi/a53yiskBjpLMm/atVgfDkEzvBTNZVeSz9RK3D39
-	0c6gtF6WEEu20HS2BbEKxaMfXuNlIJXO6MBhMDxIvA0xoCXpUQq3YmQb+BLMhmo6KjNFzPleVX6
-	jUb/86upMXvx4sSYsD90CpFmTiPs=
-X-Google-Smtp-Source: AGHT+IG5xIH2Dr8kwrbaPKFwGkwQN2RxPioeS2J7HN42D01hRwbUDEoBKIDHKJKBLqNdT3QFt8lsl8OnqZLOHWZb5Wo=
-X-Received: by 2002:a05:651c:1692:b0:2d6:c7b5:989c with SMTP id
- bd18-20020a05651c169200b002d6c7b5989cmr378385ljb.28.1711667850565; Thu, 28
- Mar 2024 16:17:30 -0700 (PDT)
+        bh=pjgXiS9mThv24KOLFrcYAxjGt4bSxcV19+6gwf0UgxU=;
+        b=BZhyGagJTBWm047299r0wwnleZ6YGjF0nfBOOTO5bz7t3xuTjwPfcEGniZBG9W8Hle
+         oPXcnBfDqLwCuYXddeQrBd3uWfLndmaCEpUiHuCcFceVPPFYuS54EblFyNAnUdRi7D4k
+         2llGqxXodgUIeNOTSFnrO9TXc+YtRYHAdlFru8cex4zptPLHq2JxbvKjOJwfGz62dmRW
+         8eaOeINZzAMQ4VUCgGVSIsnw4lpr7oPlsQHn8mRZHQVvtYQd5UDbsJjZHgKDXPoiGdSL
+         uCvczGotbLh0YOYoW79WhKySGuw04VzzXG381i0jbnGS3utCt63jfGWQPzcKc2gvYfsy
+         BofQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXNRAFsaUFyMf+wds197nQJULS2/AKiVooK0hu2LNbcpptbNq+nVLSMZbBrdqaJs984/prRz+3GTl4DQYclPkiaUZzt74Qs2dQbGETLsXFQNJzHfzJAuv6+dQngVSnIrRm/xP2C3XOr3D8mWM+DSOJNjbEi8Te7w2OaCGbpv5RYxlEkKgQf8urZ2ReANN1WD4DTMNqHNdM4YjqzFg==
+X-Gm-Message-State: AOJu0YzXM9fsVEc/cc39dLqXHxbJrNgcrqqKcuryKpArpf4/n+yKaIgi
+	sromWI4DFK1ilTOI9MN0HO3gejLtxWL84vO9AVXE6pBukvZOwMlG
+X-Google-Smtp-Source: AGHT+IED4+zMpS52gRLtiDL2tuGN2olL7XAhhBJZ5TcYamtrSCl87g6jlNerqqK47bJO7a629WacbA==
+X-Received: by 2002:a05:6a00:9284:b0:6ea:c2ef:3b71 with SMTP id jw4-20020a056a00928400b006eac2ef3b71mr927159pfb.20.1711668203684;
+        Thu, 28 Mar 2024 16:23:23 -0700 (PDT)
+Received: from localhost (dhcp-141-239-158-86.hawaiiantel.net. [141.239.158.86])
+        by smtp.gmail.com with ESMTPSA id e5-20020aa79805000000b006eac9c54f7csm1968972pfl.96.2024.03.28.16.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 16:23:23 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Thu, 28 Mar 2024 13:23:22 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
+Message-ID: <ZgX76nX2NfcxuYb8@slm.duckdns.org>
+References: <20240327-ccb56fc7a6e80136db80876c@djalal>
+ <20240327225334.58474-1-tixxdz@gmail.com>
+ <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
+ <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
+ <ZgWv19ySvoACAll4@slm.duckdns.org>
+ <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
+ <ZgXMww9kJiKi4Vmd@slm.duckdns.org>
+ <CAADnVQK970_Nx3918V41ue031RkGs+WsteOAm6EJOY7oSwzS1A@mail.gmail.com>
+ <ZgXallkHApJC-adM@slm.duckdns.org>
+ <CAADnVQLSDOfKccynu2jt-7=8nJqoLtoNkRchvHo1NCUEYOQJ7Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
- <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
- <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
- <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
- <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
- <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
- <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
- <CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
- <CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com> <20240328111330.194dcbe5@gandalf.local.home>
-In-Reply-To: <20240328111330.194dcbe5@gandalf.local.home>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 28 Mar 2024 16:17:19 -0700
-Message-ID: <CAADnVQKsuV2OhT4rc+k=WDmVMQxbjDiC4+zNbre2Kpj1hod5xw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQLSDOfKccynu2jt-7=8nJqoLtoNkRchvHo1NCUEYOQJ7Q@mail.gmail.com>
 
-On Thu, Mar 28, 2024 at 8:10=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Thu, 28 Mar 2024 22:43:46 +0800
-> =E6=A2=A6=E9=BE=99=E8=91=A3 <dongmenglong.8@bytedance.com> wrote:
->
-> > I have done a simple benchmark on creating 1000
-> > trampolines. It is slow, quite slow, which consume up to
-> > 60s. We can't do it this way.
-> >
-> > Now, I have a bad idea. How about we introduce
-> > a "dynamic trampoline"? The basic logic of it can be:
-> >
-> > """
-> > save regs
-> > bpfs =3D trampoline_lookup_ip(ip)
-> > fentry =3D bpfs->fentries
-> > while fentry:
-> >   fentry(ctx)
-> >   fentry =3D fentry->next
-> >
-> > call origin
-> > save return value
-> >
-> > fexit =3D bpfs->fexits
-> > while fexit:
-> >   fexit(ctx)
-> >   fexit =3D fexit->next
-> >
-> > xxxxxx
-> > """
-> >
-> > And we lookup the "bpfs" by the function ip in a hash map
-> > in trampoline_lookup_ip. The type of "bpfs" is:
-> >
-> > struct bpf_array {
-> >   struct bpf_prog *fentries;
-> >  struct bpf_prog *fexits;
-> >   struct bpf_prog *modify_returns;
-> > }
-> >
-> > When we need to attach the bpf progA to function A/B/C,
-> > we only need to create the bpf_arrayA, bpf_arrayB, bpf_arrayC
-> > and add the progA to them, and insert them to the hash map
-> > "direct_call_bpfs", and attach the "dynamic trampoline" to
-> > A/B/C. If bpf_arrayA exist, just add progA to the tail of
-> > bpf_arrayA->fentries. When we need to attach progB to
-> > B/C, just add progB to bpf_arrayB->fentries and
-> > bpf_arrayB->fentries.
-> >
-> > Compared to the trampoline, extra overhead is introduced
-> > by the hash lookuping.
-> >
-> > I have not begun to code yet, and I am not sure the overhead is
-> > acceptable. Considering that we also need to do hash lookup
-> > by the function in kprobe_multi, maybe the overhead is
-> > acceptable?
->
-> Sounds like you are just recreating the function management that ftrace
-> has. It also can add thousands of trampolines very quickly, because it do=
-es
-> it in batches. It takes special synchronization steps to attach to fentry=
-.
-> ftrace (and I believe multi-kprobes) updates all the attachments for each
-> step, so the synchronization needed is only done once.
->
-> If you really want to have thousands of functions, why not just register =
-it
-> with ftrace itself. It will give you the arguments via the ftrace_regs
-> structure. Can't you just register a program as the callback?
->
-> It will probably make your accounting much easier, and just let ftrace
-> handle the fentry logic. That's what it was made to do.
+Hello,
 
-Absolutely agree.
-There is no point re-inventing this logic.
+On Thu, Mar 28, 2024 at 02:28:51PM -0700, Alexei Starovoitov wrote:
+> > > So filename will be one of cgroup_base_files[].name ?
+> > > We probably don't want psi or cgroup1_base_files in there.
+> >
+> > Would it matter?
+> 
+> Few weak reasons:
+> . cgroup_psi_files have show/write/poll/release which
+>   doesn't map to this bpf_cgroup_knob_write/read ?
+> . cgroup1_base_files probably needs to a separate kfunc
+>   bpf_cgroup1_...
+> 
+> > If the user has root perm, they can do whatever with the
+> > files anyway, so I'm not sure why we'd restrict any specific knob. Maybe we
+> > wanna make sure @filename doesn't include '/'? Or is it that you don't want
+> > to go through the usual file name look up?
+> 
+> yeah. why do a file lookup? The names are there in the array.
+> cgroup pointer gives that "relative path" and knob name is the last
+> part of such "path". Easy to search in that array(s).
 
-Menlong,
-before you hook up into ftrace check whether
-it's going to be any different from kprobe-multi,
-since it's the same ftrace underneath.
-I suspect it will look exactly the same.
-So it sounds like multi-fentry idea will be shelved once again.
+Difficult to tell without looking at the implementation but I don't have
+strong opinions. The interface makes sense to me and as long as we can hook
+it up in a reasonably way, it should be okay. We can always change internal
+implementation later if necessary.
+
+Thanks.
+
+-- 
+tejun
 
