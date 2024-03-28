@@ -1,153 +1,101 @@
-Return-Path: <linux-kselftest+bounces-6779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B34890C7F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 22:29:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D20DF890D70
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 23:21:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BF0F1C24D25
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 21:29:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D47828B13E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 22:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782EA13AD2E;
-	Thu, 28 Mar 2024 21:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF66713BAD4;
+	Thu, 28 Mar 2024 22:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q815/UKF"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="amT/7IC5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA0813A244;
-	Thu, 28 Mar 2024 21:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2ED313BACD;
+	Thu, 28 Mar 2024 22:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711661346; cv=none; b=tTxZ8tHF/8tkQ2vw9raAeofoSaQbT0c2gM9zSyryf3eIVQu5EdfBaIIlMRmBfp0tlRJ20tLfJuiMvlw9AgfNEK6fNV6sgezv4W6qU0cOGJBCYW/YwGJi7IeqQlbhgQJksaaNJ4OLwjKAka8l3MdwuU9YyKmuwcNxHpVHLVHUqic=
+	t=1711663922; cv=none; b=rYASPYL5DR7lzDr96nKThCmQTSFm4yayLUQcyu17axy+6QMFY5dL+8gY6HEERy7zTpsI+vreOnc6IYAP5v6D9GOVbggQmXPGGjdB7Vd7KIjcHPiJPay1pDq6VEYAejiblRie7zQPT+TG/lD1w3qqCEVygccSXMSyWH4rvhS/VrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711661346; c=relaxed/simple;
-	bh=fu9vUyiydStv12IrbMDN19YasY8MTA7HLFJT94T3dNY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KC4mmtA4yD2P/l6oXss3CISRulBgFlo6JIIA9Mlg1UOuJUTUcm4par3dxGqCmSbk6VwG/7KQQaP7PMq7nV4YQQVtWNGb+876R3GbjUnzSxPYCeUQ8bHsFDMXg6WLLZzSG0KMSNP+htmdtOeAIEmWc+Cpfm5H436AaG1KxYE99WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q815/UKF; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-33ed6078884so1365193f8f.1;
-        Thu, 28 Mar 2024 14:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711661343; x=1712266143; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7rZ5v4VYB7xFxkylJdxU/zw8gdhhfD99ak8fXt5M6cs=;
-        b=Q815/UKFhLZgHH2DPzS7HNK8+2Kw8u7gnSGggT3Yc2LTSITyeD8UrF0SCh9A0NwGyw
-         Bakn/NtkGmXfHWiFvyKaY0S/27xmG6lsRMspt+GNkL4XHej0mgwHTgP8t2O7ww5K6SHl
-         u/g4luUdSl7hXuS/uQd1Qotq20z9mb4Alp5bz9DoEO0wtEw5rV/qtM3WoDCtM+N40D4G
-         y4uVUSbPOoQPY1WxF5SObSZp20AuD4ERNaXVQtZIo+C1KO3cPLruDc6zEd0O1AeT8e+l
-         3nInnEWmxYLFdfWRLPNdTr4zgtruOmY0InsOu0ueJBhjJL8XB4w1cnSRLcuCdZHSbctc
-         sASQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711661343; x=1712266143;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7rZ5v4VYB7xFxkylJdxU/zw8gdhhfD99ak8fXt5M6cs=;
-        b=r+C+EfMrsHpBQORYSxqRWSiAlSniXsZEA/hdv2lG0p8xW8gRzkbh07335OF/dLV3tW
-         67d0pQRX0mlH1/j9rBetNRGb0b1oT1b4FJFLWtUY8A0g1DLt5ktxXzEiaKAvybvcpGDD
-         6oks55LorDf3V3uO4RWDq8QaDvUcO4N0eEJENb/hHYX3woHwQg6dDATh2CJD8bdy92iF
-         DhoqxxxfHaFKgeeesOZQ/G7RKpF53mDbxrHltu9y0B0odk4jHnMbAYB3pFH0tAAMt0Xr
-         IEkX0FnfdS6oltUpxybmeaZB/Km16awfDkN1PZHGE2tu+JI9dKD4oB57cAJfGLaYzHAD
-         mPLg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJBBt3duXQK07lAchJ1gmKVEe20UjjCSl2WgiDM7lHwjh5qb9K6WaDxSN8ZnhYBkfNcdX7+ffaQQS8esT0BqGSdSCQAMZ+Lx+5Hcg95o7MW+oZVMrCjn3Bgnl0OMmWaddPWE/KJt4xySjvz1oQkfgYlIG5X0PQXNUPGcR4coE7D3bM5OaYv0NJ/IdMZr3Ub9J+n9iYclUag9iT4g==
-X-Gm-Message-State: AOJu0YxgEzRCct6JP53fDhO/N/Ra5Mca5MXytm2ALRkW1Gr7ppq0LDV+
-	wObdDVLV4YEvh/8Bd4TjdtiBz+j3eVbq08ys/twrOG6MM3uV8OLCR36w6kY21n+/CTyMN2hdLLH
-	Xu4KwHrbfz7B8Ewr7uAj14oM0hQs=
-X-Google-Smtp-Source: AGHT+IFzIhW2YQyUd9cAOcumnuAgNA8lL7LVX7R3nvoZOS1vxlZNbuJ3S0Kc3PqSPmS2+VvmBf1rEWus56RvmsoxrqI=
-X-Received: by 2002:adf:e606:0:b0:342:d5ac:c712 with SMTP id
- p6-20020adfe606000000b00342d5acc712mr609862wrm.7.1711661342976; Thu, 28 Mar
- 2024 14:29:02 -0700 (PDT)
+	s=arc-20240116; t=1711663922; c=relaxed/simple;
+	bh=ehbsRbh2x7F3tw4Jrc369T8BwH+Mb2OxM/pImqRP/Qk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nvTgDpTujnQZicUoIx4cS7aELmzFFGevzBnA9CIJeHe9YZ9o1V1KCxq4F69u6zgi34mQ10JSDvwSKwPdP4+yebtEwurN/BdSz3JOudKTkmG9pjCUBVRuTXkm/OAecN6putiok78Wztw8Jcg46UWl7soOkIEsI8/TiR7CEQHcm7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=amT/7IC5; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=ehbsRbh2x7F3tw4Jrc369T8BwH+Mb2OxM/pImqRP/Qk=;
+	t=1711663919; x=1712873519; b=amT/7IC52/2NyjGDtcGT2vjNUAcYERizCX+MVJ9q7/RLGk0
+	WUvdx9kMS9PAOskGyKGRO8GiniVn8Kn5CFOfgL/3ysRX6jroUfvoCIWzy+Tq7ic0sD37OYHIGWqkY
+	lCeUiQL+hK5LfXHWAuvlt+PbdKmFLQ2F+MpAC8FGftHh8pfmAnQl40D5fvR8d1PoxCIcy+PoP3Jx2
+	OkrSdGozWUHik9C1YZECEqx8nDkD3LukFhbYJHk9fNYPL6uphilaGtB1QlTkAsT3MNg2LrJrj52NI
+	iQXQzISWs67IqFD4+RY2QoAFhyftXtAL5tPuwYuo3fEbTka/KhtyprQ4mQg9EEkw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.97)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1rpxyW-00000001PRE-2aun;
+	Thu, 28 Mar 2024 23:11:56 +0100
+Message-ID: <eccb00604d9dae9b67d3d97d0526eb53cd6ffca7.camel@sipsolutions.net>
+Subject: Re: kunit alltests runs broken in mainline
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Shuah Khan <skhan@linuxfoundation.org>, David Gow <davidgow@google.com>,
+  SeongJae Park <sj@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>, 
+ Brendan Higgins <brendanhiggins@google.com>, Rae Moar <rmoar@google.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>, "x86@kernel.org"
+ <x86@kernel.org>
+Date: Thu, 28 Mar 2024 23:11:55 +0100
+In-Reply-To: <6591ea0d-572b-4deb-b2a7-da58ed91c8f9@linuxfoundation.org>
+References: <b743a5ec-3d07-4747-85e0-2fb2ef69db7c@sirena.org.uk>
+	 <20240325185235.2f704004@kernel.org>
+	 <33670310a2b84d1a650b2aa087ac9657fa4abf84.camel@sipsolutions.net>
+	 <CABVgOS=F0uFA=6+cab56a_-bS1p79BrpF6zJco7j+W74Z4BR5A@mail.gmail.com>
+	 <6591ea0d-572b-4deb-b2a7-da58ed91c8f9@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240327-ccb56fc7a6e80136db80876c@djalal> <20240327225334.58474-1-tixxdz@gmail.com>
- <ZgWnPZtwBYfHEFzf@slm.duckdns.org> <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
- <ZgWv19ySvoACAll4@slm.duckdns.org> <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
- <ZgXMww9kJiKi4Vmd@slm.duckdns.org> <CAADnVQK970_Nx3918V41ue031RkGs+WsteOAm6EJOY7oSwzS1A@mail.gmail.com>
- <ZgXallkHApJC-adM@slm.duckdns.org>
-In-Reply-To: <ZgXallkHApJC-adM@slm.duckdns.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 28 Mar 2024 14:28:51 -0700
-Message-ID: <CAADnVQLSDOfKccynu2jt-7=8nJqoLtoNkRchvHo1NCUEYOQJ7Q@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-To: Tejun Heo <tj@kernel.org>
-Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-malware-bazaar: not-scanned
 
-On Thu, Mar 28, 2024 at 2:01=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Thu, Mar 28, 2024 at 01:45:56PM -0700, Alexei Starovoitov wrote:
-> > On Thu, Mar 28, 2024 at 1:02=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote=
-:
-> > >
-> > > There's also cgroup.kill which would be useful for similar use cases.=
- We can
-> > > add interface for both but idk. Let's say we have something like the
-> > > following (pardon the bad naming):
-> > >
-> > >   bpf_cgroup_knob_write(struct cgroup *cgrp, char *filename, char *bu=
-f)
-> > >
-> > > Would that work? I'm not necessarily in love with the idea or against=
- adding
-> > > separate helpers but the duplication still bothers me a bit.
-> >
-> > I liked it.
-> > So filename will be one of cgroup_base_files[].name ?
-> > We probably don't want psi or cgroup1_base_files in there.
->
-> Would it matter?
+On Thu, 2024-03-28 at 14:08 -0600, Shuah Khan wrote:
+> On 3/26/24 04:09, David Gow wrote:
+> > On Tue, 26 Mar 2024 at 15:55, Johannes Berg <johannes@sipsolutions.net>=
+ wrote:
+> > >=20
+> > > On Tue, 2024-03-26 at 01:52 +0000, Jakub Kicinski wrote:
+> > > >=20
+> > > > I'm late to the party, but FWIW I had to toss this into netdev test=
+ing
+> > > > tree as a local patch:
+> > > >=20
+> > > > CONFIG_NETDEVICES=3Dy
+> > > > CONFIG_WLAN=3Dy
+> > >=20
+> > > I'll send this in the next wireless pull, soon.
+>=20
+> You are welcome to send this with wireless pull if you like
+> or I can include it in my pull request.
 
-Few weak reasons:
-. cgroup_psi_files have show/write/poll/release which
-  doesn't map to this bpf_cgroup_knob_write/read ?
-. cgroup1_base_files probably needs to a separate kfunc
-  bpf_cgroup1_...
+It's already in net now, and in the pull request to Linus here:
+https://lore.kernel.org/netdev/20240328143117.26574-1-pabeni@redhat.com
 
-> If the user has root perm, they can do whatever with the
-> files anyway, so I'm not sure why we'd restrict any specific knob. Maybe =
-we
-> wanna make sure @filename doesn't include '/'? Or is it that you don't wa=
-nt
-> to go through the usual file name look up?
-
-yeah. why do a file lookup? The names are there in the array.
-cgroup pointer gives that "relative path" and knob name is the last
-part of such "path". Easy to search in that array(s).
-
-> > From the verifier pov 2nd arg can be "char *knob__str" and
-> > the verifier will make sure it's a constant NULL terminated string,
-> > so at runtime it will be easier to search cgroup_base_files array.
-> > And 'buf' can be: void *mem, int mem__sz with kfunc doing
-> > run-time validation that there a null there.
->
-> That all sound good.
->
-> Thanks.
->
-> --
-> tejun
+johannes
 
