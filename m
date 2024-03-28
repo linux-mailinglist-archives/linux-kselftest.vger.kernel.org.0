@@ -1,122 +1,132 @@
-Return-Path: <linux-kselftest+bounces-6771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88163890929
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 20:25:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 738D789098C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 20:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2C92B231C1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 19:25:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13A321F21A9F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 19:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA2A137769;
-	Thu, 28 Mar 2024 19:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B85C1386A3;
+	Thu, 28 Mar 2024 19:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AxsHOXrN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KUerO6QI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909D042AA1
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 Mar 2024 19:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1B21849;
+	Thu, 28 Mar 2024 19:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711653904; cv=none; b=MgwYL48TPfa+u+eDgVH6iQddjdfyGigJ+r9b3pWtaHQaeiEm1QwKKVPCkSOvid08CnhlVRjRfinvi5E5QHhaQO3b5hhb1A5nx2RHHNX2aB+f7Nysyc7Ig8Iu/CT1VNpJz8y+tVGuRHHNWLjR/lmIEkGBS/BHV2oqEXE6W3oGaME=
+	t=1711655178; cv=none; b=LOtlFXufwnuEClYWoTg4ex/XkoPP9iobuIH0cGcV+Q2gZ6JpZfkt5jAiQMDfyWExXEsj0VVpXMtdWz6O8Q+Ei/AgAyfd2djbrIklkJzKwLBsZzO4KNNXcnuSUvKyyS3I7A4QCS7tFKE8T5trLdRM+B82ea354ah1tWo9yXlprFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711653904; c=relaxed/simple;
-	bh=hBWOhLsL9Ye63hqwNmxZ7yS9NmFDcm9/Bynf03sExEQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jjDwAqv5SelUwZSCBJK93sKDuUiRdFCDws/5stTm/GqxjXwkToUnNQz1Qoo/4SG6Dz5rHyihg/VNtVWKiEcuqA2KWmtVTnh+kJBc/RedEFQfTxglH6xE/K4lWpRF6zGX2PAdLXKH28m3uvM2fi3jVSm53zWTYTFfcUY85th3z9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AxsHOXrN; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-7d0772bb5ffso24743039f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Mar 2024 12:25:02 -0700 (PDT)
+	s=arc-20240116; t=1711655178; c=relaxed/simple;
+	bh=spgJqmt4sgwaRYWhJ7flL2ZvsHlYCW0N6JgDCKojbDc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BTBgBQXZH6tC5+nWZ+58cqKF6KpLSgiBl5ocQlnP8+cFILHiOnVKPyX7ETgKrk8QeOMdBeLJmxe1xdRWWxv0f7DTqsrENEQEc0QHG7P4PQyWmZhZzS5MoG2Wh917D58kcl5Se1ryTjo95poKbVu3cukjFOLdibmxl9v5d0iL6KQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KUerO6QI; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-341b9f6fb2eso864898f8f.2;
+        Thu, 28 Mar 2024 12:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1711653901; x=1712258701; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mqfP/Sm/AvXF18rY9yxd2mEaaANtVKOU3PQdF/crOyM=;
-        b=AxsHOXrN8eXJtyRLq2WYHrAAXYnnhKX1yzGNBM/sSZx93uwR1OpEDN2gAXjsll+c+3
-         NuObr1aX/eVjAaI1/nTAJHyEKQAz1QA0Haq63J8QM2zInIPjPoB4FJc3X4nVFCrakZaT
-         IlVubZLwsVb5S5nzALUOTh94c5sOYVJP0K8sg=
+        d=gmail.com; s=20230601; t=1711655175; x=1712259975; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=spgJqmt4sgwaRYWhJ7flL2ZvsHlYCW0N6JgDCKojbDc=;
+        b=KUerO6QI5JQ/YwBujcu/N1ElqfV1Y2/PcBI8LWNh9Fa6l8ijI3QLr8qJdyViTUUiPM
+         +px9K9TO6dB4AYxUMt1wJs0SRW6m81gG7YZ6SmMDKtlYNuZafuadriIH5nx6hT5cEHwi
+         yL8bh90xea5HssZdWnVYdg4rMCDrrdRU4MTt/gqJqvjoByO9cNF+olYepzDomrCOYL48
+         k7odhOKf+q+yEYZWB2we4vmKNKkFaXTFlDliF7GXqflWBDcqXCkIllBBNgCJvzpMJqCw
+         w5cxtzO0MT+gpgyDXcm6cJ+O1P0Q/YgUPFBZau52yJCnA3umiZeqkLbHP+MNMmdE5BdC
+         He4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711653901; x=1712258701;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mqfP/Sm/AvXF18rY9yxd2mEaaANtVKOU3PQdF/crOyM=;
-        b=YHNpOAcs5+qYrblb9BUyeBIIvM76vLAv0odqC0EI7eWjQgn03quUHiuuN3bvOw6i1n
-         52M3tipEDd7JfTreZjSISZexIiJjpOwZFmBaT42vYaSPyHiEdLcjXNgE1COU+vXHaX8w
-         7+T36ZAbgGoq+6Myg7Zm9nVKkn9Y6iBq9nMjrb9aJRboeq+6rN1nkk71fArgJwNpSm1r
-         MvTnle/eQe7KXXxuIhCz/Pa8EtyvKvp8t6sUN/WeVm4XngYw9EnDm3Q/jdAL9tzpoXaG
-         umq8/eu6Akz3t4/dL8V28cM6D/uGl2BHTS0hRkOdxTWa3ZPlcKXpD/FgOJEFA4jRKSjz
-         FGsw==
-X-Gm-Message-State: AOJu0Yw9GeXI5ykV/3zvOgpZ4dRIsS6p6WLmkVYbKNG8CobZTBgBNdmx
-	TwQcRJJ2HO92r70baEXpilqIt2PPHhJGK6U45af/YUlhKlujzOVazYzjpUry92XFUX/T/R1lLwW
-	b
-X-Google-Smtp-Source: AGHT+IGtTTIf7AXmbvzvLto51rLUJUqYbsjFWVf0UyhyBamPjBVqlk4ueoMBV1jcCsOgdB203HW7fw==
-X-Received: by 2002:a05:6602:5c7:b0:7d0:4d5a:51da with SMTP id w7-20020a05660205c700b007d04d5a51damr99957iox.2.1711653901688;
-        Thu, 28 Mar 2024 12:25:01 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id f8-20020a056638168800b0047bedc27024sm515749jat.144.2024.03.28.12.25.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Mar 2024 12:25:01 -0700 (PDT)
-Message-ID: <b5ad9249-8775-40fa-b770-810afdcfb8f7@linuxfoundation.org>
-Date: Thu, 28 Mar 2024 13:25:00 -0600
+        d=1e100.net; s=20230601; t=1711655175; x=1712259975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=spgJqmt4sgwaRYWhJ7flL2ZvsHlYCW0N6JgDCKojbDc=;
+        b=wxRhp7FJJIYFXOzdkpxi4Ww4+S6sFV2FvI401AAB0DtPbJ/aMmVq3elJin3iEXl7pr
+         0vmQS3O+gZFNg9JSIE9XAUo2XLFmjG/eWA3bJF5mEDS0yB3vE5C0UvXS3czozFUFMbXC
+         ZRdGW+Hq8eL+BILnorEsKjEyzr3Te3AG8n/UHsgMk1gwal1PTEDnO4AwiZNs2Xhywm2X
+         66egB2wI/2hjXantqUty6aQNTZAZRmzcZF49SnLxXeLI5onXeklWBU98nYMyK9Prjdvk
+         CDzHTrqllPssygOeUVzJQip/5Kd7j4ot5mvwy6S7gnpRbhSYiprMes2AC1bnevc5y+N0
+         YCEg==
+X-Forwarded-Encrypted: i=1; AJvYcCVx1HhP/nhXQAOaPeZRUMSKnTQoB133dgUlTHs6kdDVrVVmkjDCXuSAx7k9/bm91tJussp0S4yjRQFdrvHbHGNBeF85Ho+9N1EbFHFPF85Iu+BDR7xvEl4dwlWQPLIjaFhRFy61JnA/t3HRQBnZyDvrc1NFew/i9bxneSVIa1G292wjYzTCdj9KgIogxDpmd0o3rNkLxv2bpVt2Ag==
+X-Gm-Message-State: AOJu0YwC47D81a/brX+fwjRQoofLbXvy4XqaNUAXpXC9SY0HOvo1qB2W
+	hpbJDj4kmgaQS5gR9ZEIEIHnIAVaHYRw1FC/dq2TXfhXJIvcLgaZkZkEzmTxVG9JElV/NIJepD2
+	0mFCnzBimdByA1q/EYTm5InsxVeQ=
+X-Google-Smtp-Source: AGHT+IFWusnGRofxUqkdce214ptGaKSLBbD5ujAd410w8xh3y92TbU6CAQLelLuqig0w7Y4NkcB6iXOU8DyX1KjSe4Q=
+X-Received: by 2002:a5d:66d0:0:b0:33e:d547:4318 with SMTP id
+ k16-20020a5d66d0000000b0033ed5474318mr29659wrw.47.1711655174605; Thu, 28 Mar
+ 2024 12:46:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] selftests/resctrl: Simplify test cleanup functions
-To: Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- ilpo.jarvinen@linux.intel.com, "Yu, Fenghua" <fenghua.yu@intel.com>,
- Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1709018050.git.maciej.wieczor-retman@intel.com>
- <ac887a4a-5647-468a-9696-4a3909e42561@intel.com>
- <f7a81e14-7fb9-45bc-9885-383ab7a2e708@intel.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <f7a81e14-7fb9-45bc-9885-383ab7a2e708@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240327-ccb56fc7a6e80136db80876c@djalal> <20240327225334.58474-1-tixxdz@gmail.com>
+ <ZgWnPZtwBYfHEFzf@slm.duckdns.org> <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
+ <ZgWv19ySvoACAll4@slm.duckdns.org>
+In-Reply-To: <ZgWv19ySvoACAll4@slm.duckdns.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 28 Mar 2024 12:46:03 -0700
+Message-ID: <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
+To: Tejun Heo <tj@kernel.org>
+Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/27/24 17:08, Reinette Chatre wrote:
-> Hi Shuah,
-> 
-> On 2/27/2024 8:36 AM, Reinette Chatre wrote:
->> Hi Shuah,
->>
->> Could you please consider this series for inclusion? I do admit that
->> there has been a lot of resctrl selftest work recently. This should be
->> it for a while as new work is still being worked on.
->>
+On Thu, Mar 28, 2024 at 10:58=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello, Alexei.
+>
+> On Thu, Mar 28, 2024 at 10:32:24AM -0700, Alexei Starovoitov wrote:
+> > > It bothers me a bit that it's adding a dedicated interface for someth=
+ing
+> > > which already has a defined userspace interface. Would it be better t=
+o have
+> > > kfunc wrappers for kernel_read() and kernel_write()?
+> >
+> > How would that look ?
+> > prog cannot and shouldn't open a file.
+>
+> Oh, I didn't know. Why is that?
+>
+> > The seq_file would be passed/pinned by user space?
+>
+> Would it work if it's just "open this file, write this and then close it"=
+?
 
-No worries about the number of patches. Thank you for the cleanups
-and fixes.
-
-Looks like there another series in the works :)
-
-  selftests/resctrl: resctrl_val() related cleanups & improvements
-
->> Thank you very much.
->>
->> Reinette
-> 
-> I think we missed the cutoff for the previous merge window. Could you
-> please consider this series for inclusion in preparation for
-> the next merge window?
-> 
-
-Applied to linux-kselftest next for 6.10-rc1.
-
-thanks,
--- Shuah
+Continuing discussion...
+To use kernel_file_open() it would need path, inode, cred.
+None of that is available now.
+Allocating all these structures just to wrap a cgroup pointer
+feels like overkill.
+Of course, it would solve the need to introduce other
+cgroup apis that are already available via text based cgroupfs
+read/write. So there are pros and cons in both approaches.
+Maybe the 3rd option would be to expose:
+cgroup_lock() as a special blend of acquire plus lock.
+Then there will be no need for bpf_task_freeze_cgroup() with task
+argument. Instead cgroup_freeze() will be such kfunc that
+takes cgroup argument and the verifier will check that
+cgroup was acquired/locked.
+Sort-of what we check to access bpf_rb_root.
 
