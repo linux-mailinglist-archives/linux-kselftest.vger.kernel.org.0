@@ -1,148 +1,128 @@
-Return-Path: <linux-kselftest+bounces-6761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E24A98902B3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 16:10:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E196489070D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 18:22:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1939E1C2AA6A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 15:10:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08B3D1C26952
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 17:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86EE912D76F;
-	Thu, 28 Mar 2024 15:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C757C5A780;
+	Thu, 28 Mar 2024 17:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKf6inN+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B2A2C6AD;
-	Thu, 28 Mar 2024 15:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BAC1EA6E;
+	Thu, 28 Mar 2024 17:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711638651; cv=none; b=RTF9NSHXD+5MhH16WmzEsgBTAMHv5ymC3bHdaNYbwEbeBwYZmuhtjESbIG32YEAU/3A9o9B9sRqpH813TbJ1VJlV9ScMQoC5me7S318cwAXy0IDCcrc/rueWivK4dn2euhCnfWdvrVO79K6rnoW+CmrqWHIywX9Mu3knaQYMK1A=
+	t=1711646529; cv=none; b=AFH25Fscp9VGig1Gx2XgwrwQSarjjVg/Z5LyBRpjd6+Hr8DyI7AaQH+74XTqRsI8YO/7wkjJMeVZwQ32HKiBFYFHZ78ESD4chF+eldF9pchOo3oJfMs2DjqRQbw2uNMm2TYO9hdWQnJIgZmWg2QoNaEBCrpfLIlyMfxrAiWYzg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711638651; c=relaxed/simple;
-	bh=r2D0EqkpCrFqFode/ZlZv88Dg4Xknt6j7iyrIgxbYTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZrLs/p/darscR+NvP4+RVCZY73NhOQzeshRJ3qXd6r1FWuvJGfJv0F4JqW6gZYetnh3TH61LJ9Zc1Ch7Kb0z0CYuRI+BHxvs9E5PKPZqVeFXneU3UMXcNHyTC7QUddAc6/+WXNB0fbW87TAnaNWrSnH93X9jJXa8kxH/O/lhXDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D2BC433C7;
-	Thu, 28 Mar 2024 15:10:47 +0000 (UTC)
-Date: Thu, 28 Mar 2024 11:13:30 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jiri Olsa
- <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, "David S.
- Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Dave
- Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet
- <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>, linux-arm-kernel
- <linux-arm-kernel@lists.infradead.org>, LKML
- <linux-kernel@vger.kernel.org>, linux-riscv
- <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- linux-trace-kernel@vger.kernel.org, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add
- support to record and check the accessed args
-Message-ID: <20240328111330.194dcbe5@gandalf.local.home>
-In-Reply-To: <CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
-	<20240311093526.1010158-2-dongmenglong.8@bytedance.com>
-	<CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
-	<CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
-	<CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
-	<CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
-	<CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
-	<CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
-	<CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
-	<CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
-	<CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1711646529; c=relaxed/simple;
+	bh=rTVGMrfwkd+NlU1R9C/m47OpxkWT83eOW/pXXryVqcc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bn1D9TmIHPigIqj7jeFQTHTsyDewiFVSX8Pbo64Q7ueSUc+0FtCPyub0W1tMwGMLxOED0wfqXpIoG9sp8nYgylzwdvUCW402yUNqZUgyM1anZCAyD/iCSxjY2ShwJHyKuBXYQG2rQ0wxxQuWuotgzloFiYTVbA57u4AjVqXENXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKf6inN+; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e6b54a28d0so989242b3a.2;
+        Thu, 28 Mar 2024 10:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711646528; x=1712251328; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nJTs2T19ZBiaUU6XEnV+BuULbMh1YwOJefd/Q2W0TsI=;
+        b=VKf6inN+ywJknsS50jG5870ZVt4uTBvXS/YhJyDKGoRxb+cTmts+c1EChjZ7LUhC/a
+         zmREgWU4OwDxm+NMG7HMPS18CGK2v/KxxSG3LyEiIqCChWFFsdMXPKl0rgufFVmWR6AO
+         3H8jVYKeZeISLiUR4KLIqw5NNk/DYt1oA41RjU3Q4eVRSTLReLoGtDp7/vsbMTKmTwAP
+         etycr06zN/jR2XX9aK0K88BbndPVBvYpmxQMxhD60poZs7O+raLG65zJ6dKYL1bR0G5R
+         VoDfufXBogD2h1nQxHlXOrHpVGHgRu12dGfZzsQANl/pvOkdrb/V2pj/JEoJlpt0tklK
+         xFgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711646528; x=1712251328;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nJTs2T19ZBiaUU6XEnV+BuULbMh1YwOJefd/Q2W0TsI=;
+        b=OcwKIC0YMI/ocLQtGKL+/2pBIlo3z1WNB9URjWt51mjYZS3j5MB+ahiqzRIR9HtFQx
+         1K3kFQ71MuiutBSYhIenPBjYotAnPga8PXSuE0ZxSvKpvVORC5wEFVbTyJ5ZxC1Jc+PL
+         +Dz1ACp8LunyAnnDjJb9kIhEpQGgyBBVBFbHhoBXuD8qvSVNzvTorNOsPRYeLgYvaRTq
+         lPJTvrXRFREN+wiMs2okT66a+3a7nqMihEGqV6MTdXSmO7jf2cm8Py1grB7IlvfXpwjL
+         abxjNHIYp4utYfmqU+XCdAngzpNMQ9RQY6aHtohX4LO4JYC3BaxSyY4U8xwsp7a6o8L3
+         4WoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUBSGh/uVwvzYqW7br/GecEyF1ZDcnskdTx9Ia5S3oCd+SAJl7bzAavJ3EEYi3FbvulAzabF41qIHWBv/MrOw3i6UGrbWRVqaPyhsyEFUxCfVkciDeXL+ES9k2Jji6EvRH/ugLoLWHL1vHJ1TR9dxN5ceSTsEw4kquhH3oK5gxkWddIiDkC5y3cPwPy+pbzZbWeLBCmoj6WZEKu6g==
+X-Gm-Message-State: AOJu0Yy8mGhM1Vp9bXI1qhyQyOIVpmJ0mV/2imvHfaxjI/nnwinEKb5F
+	42E/yAGQgAqNXUcPD1J4X72Qai8wbehtsrA12IVLH5SzV3qw7G4W
+X-Google-Smtp-Source: AGHT+IEQw6JvwbE25jnXK5NyR/sgTVhJaXMx83kTTEkRAeXjs5/u197o7f4DiVoEvkuWqC97fCG8OA==
+X-Received: by 2002:aa7:8893:0:b0:6ea:c4f4:13cc with SMTP id z19-20020aa78893000000b006eac4f413ccmr4333915pfe.26.1711646527638;
+        Thu, 28 Mar 2024 10:22:07 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:4d4e])
+        by smtp.gmail.com with ESMTPSA id gu5-20020a056a004e4500b006ead4eb1b09sm1619509pfb.124.2024.03.28.10.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 10:22:07 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Thu, 28 Mar 2024 07:22:05 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Djalal Harouni <tixxdz@gmail.com>
+Cc: Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
+Message-ID: <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
+References: <20240327-ccb56fc7a6e80136db80876c@djalal>
+ <20240327225334.58474-1-tixxdz@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240327225334.58474-1-tixxdz@gmail.com>
 
-On Thu, 28 Mar 2024 22:43:46 +0800
-=E6=A2=A6=E9=BE=99=E8=91=A3 <dongmenglong.8@bytedance.com> wrote:
+Hello, Djalal.
 
-> I have done a simple benchmark on creating 1000
-> trampolines. It is slow, quite slow, which consume up to
-> 60s. We can't do it this way.
->=20
-> Now, I have a bad idea. How about we introduce
-> a "dynamic trampoline"? The basic logic of it can be:
->=20
-> """
-> save regs
-> bpfs =3D trampoline_lookup_ip(ip)
-> fentry =3D bpfs->fentries
-> while fentry:
->   fentry(ctx)
->   fentry =3D fentry->next
->=20
-> call origin
-> save return value
->=20
-> fexit =3D bpfs->fexits
-> while fexit:
->   fexit(ctx)
->   fexit =3D fexit->next
->=20
-> xxxxxx
-> """
->=20
-> And we lookup the "bpfs" by the function ip in a hash map
-> in trampoline_lookup_ip. The type of "bpfs" is:
->=20
-> struct bpf_array {
->   struct bpf_prog *fentries;
->  struct bpf_prog *fexits;
->   struct bpf_prog *modify_returns;
-> }
->=20
-> When we need to attach the bpf progA to function A/B/C,
-> we only need to create the bpf_arrayA, bpf_arrayB, bpf_arrayC
-> and add the progA to them, and insert them to the hash map
-> "direct_call_bpfs", and attach the "dynamic trampoline" to
-> A/B/C. If bpf_arrayA exist, just add progA to the tail of
-> bpf_arrayA->fentries. When we need to attach progB to
-> B/C, just add progB to bpf_arrayB->fentries and
-> bpf_arrayB->fentries.
->=20
-> Compared to the trampoline, extra overhead is introduced
-> by the hash lookuping.
->=20
-> I have not begun to code yet, and I am not sure the overhead is
-> acceptable. Considering that we also need to do hash lookup
-> by the function in kprobe_multi, maybe the overhead is
-> acceptable?
+On Wed, Mar 27, 2024 at 11:53:22PM +0100, Djalal Harouni wrote:
+> This patch series adds support to freeze the task cgroup hierarchy
+> that is on a default cgroup v2 without going through kernfs interface.
+> 
+> For some cases we want to freeze the cgroup of a task based on some
+> signals, doing so from bpf is better than user space which could be
+> too late.
+> 
+> Planned users of this feature are: tetragon and systemd when freezing
+> a cgroup hierarchy that could be a K8s pod, container, system service
+> or a user session.
+> 
+> Patch 1: cgroup: add cgroup_freeze_no_kn() to freeze a cgroup from bpf
+> Patch 2: bpf: add bpf_task_freeze_cgroup() to freeze the cgroup of a task
+> Patch 3: selftests/bpf: add selftest for bpf_task_freeze_cgroup
 
-Sounds like you are just recreating the function management that ftrace
-has. It also can add thousands of trampolines very quickly, because it does
-it in batches. It takes special synchronization steps to attach to fentry.
-ftrace (and I believe multi-kprobes) updates all the attachments for each
-step, so the synchronization needed is only done once.
+It bothers me a bit that it's adding a dedicated interface for something
+which already has a defined userspace interface. Would it be better to have
+kfunc wrappers for kernel_read() and kernel_write()?
 
-If you really want to have thousands of functions, why not just register it
-with ftrace itself. It will give you the arguments via the ftrace_regs
-structure. Can't you just register a program as the callback?
+Thanks.
 
-It will probably make your accounting much easier, and just let ftrace
-handle the fentry logic. That's what it was made to do.
-
--- Steve
+-- 
+tejun
 
