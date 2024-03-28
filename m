@@ -1,143 +1,132 @@
-Return-Path: <linux-kselftest+bounces-6755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 590F188F8CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 08:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 845D288FA9D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 10:02:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7308B226CE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 07:31:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED2C1B276BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 09:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3ADD524AD;
-	Thu, 28 Mar 2024 07:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D955789B;
+	Thu, 28 Mar 2024 09:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gcYWJotu"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="b2FZwegd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E32F2561F;
-	Thu, 28 Mar 2024 07:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225953FBB3;
+	Thu, 28 Mar 2024 09:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711611101; cv=none; b=l35qVSooQJgulXf8OEKXM4ee0eiW9zEiabwibizv6f8FKhsfkL2kBsAFdsaSVFGnwEn/j5SNqdoECfx+4U/wzWExWXSMbiYW1R5710zGqQWe24Zt57/6WWij+zk0Y4X16uKXZLVUG59umzXIyA3yrmEdXTITyXfMyzhZ9bFyVQA=
+	t=1711616541; cv=none; b=WTsGgeeEcRNEe0vbzWDyP4Bp8XzRl7/y4+O9wstMRWCRFMka7cTn77UB3Jl8UrmdsGFEAYJfHunUQY7L1jbMO4nBGeOC+c5zce1FGV1DnEg3p4BfuWc56wfiYREhrFFFUCXeFWVfh8G8Je777resR9udUk0fnt9GSONvDgt60Qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711611101; c=relaxed/simple;
-	bh=UiexvZQWK+4Yc+SMZ9M3zHpPBZVoEYHrn9anANb9C5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5Fm6ImLcHPV6UYzlsQeYNsjvAQufCBZvBPsa210F2htuofaAshATEDf/2A5+yv08JlFkWpjmTYRAyXYwW6T0YT/0SU5eCH/gYnEQ9pXljqsRinJCl/lnkDFftrLbeUWzIEzBr/O7AtKnfMOcFBuMtBpAoSVFpTIrHmgldSXXD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gcYWJotu; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vttzHoZOnFV3RpiKvH6mM16x2BnNpMVa6ppcy7eNO+k=; b=gcYWJotuQVW8GYZ0l03Qd1Y7Rx
-	geRqzubUVBuSA9E2/DAQoiPMRqhx1n9l+w28Wiufj/ZAExFJaqfwavTjC8gzuWje1jZN2jUSkE+qE
-	Q15FOsZFQN2b0luQEwgHnGe7lzK15zDdvK7FQjfmrbwwmVTazNYcBHn8mWmTha+YKF08jxIWc0REQ
-	+8EyFi9U6Gl0G+TAuZmP4Qd6h8HYQgYngvPlmHvo3Jo8XSRKsSWUmgiFQ8nfw+lmfCUH+lF0bMRBm
-	3NB7t68iGeniQOu1nPNBlIsx+leXTDUB9ZbdcRiTXuwjN/rjZyp29U3bvNZvER0Ozv/NSab0o7bxJ
-	CYLe7RCQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rpkEV-0000000CslI-1PHG;
-	Thu, 28 Mar 2024 07:31:31 +0000
-Date: Thu, 28 Mar 2024 00:31:31 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Christoph Hellwig <hch@infradead.org>, shakeel.butt@linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZgUc07Szbx5x-obb@infradead.org>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
- <ZfegzB341oNc_Ocz@infradead.org>
- <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
- <ZgC5JoSiWAYf3IgX@infradead.org>
- <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
+	s=arc-20240116; t=1711616541; c=relaxed/simple;
+	bh=Ufh8ofbcGIpZqebBgeU63gQtywNxj6fTHPQwgJxbxWg=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=mFc2Uok5j88T/6LsXh53Ih5jqkpO9ejQf8l5/iRRuu207PufEHlRRoUqN86UqtPWujxeJVsvHw4fZYQdSHtoSfJIbzVktDaucrgXeoi8b7BQhyvPrONsSw6q8lTnwMxnKkPQg72dgUoiVUDEOjfxUxA48jMNYOoFCqlD0WfjLww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=b2FZwegd; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1711616533;
+	bh=Ufh8ofbcGIpZqebBgeU63gQtywNxj6fTHPQwgJxbxWg=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=b2FZwegdsqBcB5ZhCCFwc/bldEv6XVivywv06kdoiGWU0RcYjHt5zMCWulL3/NR1r
+	 23xglYTKKi+7RS/HgMV4gOr2rj8wVGGG+UYU9fo9W+2F2WBT9t4AQbrRB1KzkiHTUK
+	 F6KqIPM+KaKmq+vvh9Itvt7mlQz4i049g8DVeNZradHZ6S78T4o5/Ps+rokYDOsAP8
+	 CWKuBOfTG6JfAAtFdigDMwPjBm7GVSeH5LWf+MSbxKDir8s1iEds7Ln0sAAvNLuQlG
+	 qk/0S0dub42+CpvkX5ezpk4YMpKk8R+TEqF+YlyBbvl6ryPwMGUQn3ZOVkOm5pibg6
+	 2HKQnaGsx/law==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6D43B3782115;
+	Thu, 28 Mar 2024 09:02:09 +0000 (UTC)
+Message-ID: <6d82298b-b17b-440a-beef-590177d0ff50@collabora.com>
+Date: Thu, 28 Mar 2024 14:02:37 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Axel Rasmussen <axelrasmussen@google.com>,
+ Andrea Arcangeli <aarcange@redhat.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Mark Brown <broonie@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, Guillaume Tucker <gtucker@gtucker.io>
+Subject: Re: [PATCH 0/2] Fix selftests/mm build without requiring "make
+ headers"
+Content-Language: en-US
+To: John Hubbard <jhubbard@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+References: <20240328033418.203790-1-jhubbard@nvidia.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240328033418.203790-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 26, 2024 at 01:19:20PM -0700, Mina Almasry wrote:
+On 3/28/24 8:34 AM, John Hubbard wrote:
+> Hi,
 > 
-> Are you envisioning that dmabuf support would be added to the block
-> layer
+> As mentioned in each patch, this implements the solution that we discussed in
+> December 2023, in [1]. This turned out to be very clean and easy. It should also
+> be quite easy to maintain.
+There is another way. The headers should be built automatically by make
+dependency. The topmost make file always builds headers before building
+kselftest i.e., make kselftest
 
-Yes.
+The tools/testing/selftests/Makefile and others Makefiles in test suites
+should be updated to build the headers as well. This used to be the
+behavior until there were un-resolvable bugs in the Makefiles and it was
+reverted:
+https://lore.kernel.org/all/cover.1657614127.git.guillaume.tucker@collabora.com/
 
-> (which I understand is part of the VFS and not driver specific),
+We should come up with the revert of this series such that all the
+different scenarios are covered instead of yet again a new solution;
+resorting to the duplication of header files or any sort of duplication.
 
-The block layer isn't really the VFS, it's just another core stack
-like the network stack.
+> 
+> This should also make Peter Zijlstra happy, because it directly addresses the
+> root cause of his "NAK NAK NAK" reply [2]. :)
+> 
+> I haven't done much build testing, because selftests are not so easy to build
+> with a cross-compiler. So it's just tested on x86 64-bit so far.
+> 
+> [1] https://lore.kernel.org/all/783a4178-1dec-4e30-989a-5174b8176b09@redhat.com/
+> [2] https://lore.kernel.org/lkml/20231103121652.GA6217@noisy.programming.kicks-ass.net/
+> 
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> 
+> John Hubbard (2):
+>   selftests: break the dependency upon local header files
+>   selftests/mm: fix additional build errors for selftests
+> 
+>  tools/include/uapi/linux/memfd.h       |  39 +++
+>  tools/include/uapi/linux/userfaultfd.h | 386 +++++++++++++++++++++++++
+>  tools/testing/selftests/lib.mk         |   9 +
+>  tools/testing/selftests/mm/Makefile    |   2 +-
+>  4 files changed, 435 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/include/uapi/linux/memfd.h
+>  create mode 100644 tools/include/uapi/linux/userfaultfd.h
+> 
+> 
+> base-commit: 98560e9019851bf55b8a4073978a623a3bcf98c0
 
-> or as part of the specific storage driver (like nvme for example)? If
-> we can add dmabuf support to the block layer itself that sounds
-> awesome. We may then be able to do devmem TCP on all/most storage
-> devices without having to modify each individual driver.
-
-I suspect we'll still need to touch the drivers to understand it,
-but hopefully all the main infrastructure can live in the block layer.
-
-> In your estimation, is adding dmabuf support to the block layer
-> something technically feasible & acceptable upstream? I notice you
-> suggested it so I'm guessing yes to both, but I thought I'd confirm.
-
-I think so, and I know there has been quite some interest to at least
-pre-register userspace memory so that the iommu overhead can be
-pre-loaded.  It also is a much better interface for Peer to Peer
-transfers than what we currently have.
-
+-- 
+BR,
+Muhammad Usama Anjum
 
