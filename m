@@ -1,175 +1,124 @@
-Return-Path: <linux-kselftest+bounces-6763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B6E5890732
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 18:30:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F44890739
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 18:32:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05EEF1F24927
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 17:30:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E91A29B54C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 17:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B1281725;
-	Thu, 28 Mar 2024 17:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1FE25A4C7;
+	Thu, 28 Mar 2024 17:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Oiqg1GgN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ilfbABG2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7A742A86;
-	Thu, 28 Mar 2024 17:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711647000; cv=fail; b=c0istSTnw/vspmt8kG4CqHBv6esYz1/y6as6KfzSBHvHC+NtVerdT34oQikkqhMrakZCqpOjfMsQqBQqwuRY1xunevss/KqYY1GjWHkABStYwj5XkdOAyqjnHWIJI/M+VY1bOj8UDrADvfUTIY3zSVl6foDedPvklGzn+1dSI/I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711647000; c=relaxed/simple;
-	bh=fRVZ/0TN21qQ5mIeRyJoawG2z2CSHMFXDCMLy0+nflM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=rOBerZc6yhQyBcWtSUR9+kEmj73NryNdVUnhFODY17lPyfk2HtECiSYxmQ14TUveOQD3l+b+XQbONWVIis6Ob/6pffglZFJVQqW1CHo9j00CyJ3tOgsBJtzogju+O2193eNg8g1m5g4kDu+ENX9VqcWrJ9YptAaRbEdhLHHh5qM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Oiqg1GgN; arc=fail smtp.client-ip=40.107.220.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OmH0HH6lC10ZIUuDx5TxZApVSYIBHjefpe09flusfN1kewK8FjZOKo/I0mka5nSWhxKsJxR0hn4cgpTLO96jTinFL0JFARiECM96fFCsudHeB4D7fPhx2gUmoSv6F/f7SJ4km5brDGg5xw/e8D1KZ6MJKQM4RTNCOwRfS3DXZKTbW5p3+fNILwnZbZLT5sS4Q5RPKfedYyd/Tm/sztgPpPsChnidFQuE+ThuOimC/he5rUENcZ+rk/xFiftKqBfewHr9Grz3RHiuBOc6SF1iICgV98k0DqA7d6EAfkmhGlyNo2PSHBFuZcreRKmk6T0M3Jainm8XidVFSPfvELxj7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cRVDdqkRE9u811TlxFnDjKgnALbB0yjT3536hZRI8LE=;
- b=nFftzH0Kb31DXJqW5+apSdeg6NINSPOqVjWUDW39dEPrS6rkE5FOQK0IRiggg/fQXQayZEYxLuhIcy+lOYmsWgi4aTNFIJClHvs1I+dTVCC7592wGzLuBsSG2ysmAxMqxu3/gpbKW2sdmld03MnUf2ihybJ1R9OateWmYbhAaU8DpEvIP8i1gFE02SYhMwo/vJJeFw1JUW7BGP7FmK05F1REcobgmUuGS6wANIditYk55ex0ZE3jTjz9QMOmgMf0jTvMFYPZkbAN9xk3Fh+yzTyYZ52vEJ3tsLQ5o7Ba2hRoy+EpKr9SJCb/BdcA8PP8tvo4gQlyMcAHXw6nwsGomw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cRVDdqkRE9u811TlxFnDjKgnALbB0yjT3536hZRI8LE=;
- b=Oiqg1GgN9ssneohjsqIQvwO7qxD2lepWeMQx9lasMCILN83wgliVkGxzHL36q56/u8o62n4stCXiRzQuFAQgLrwAPD+L5K/JMyx7BtBaWlwAtbYZ745Er5ZR+oRfC/kl2b7x0lgdLcxgPdu0cQpVyE9zYAhkHV/G936x0hWx4mD4B1rWoZiugRiM9P2TbQW9wYTk+Cs9bIl54HSND1DneXIsz9/2ZA8R+6mZwB9UCpcyforqUZiWaRFoFMi8QDFN5/KuwYvFm7snFPBiTIVU736YkvtiEwAS15mK9GjvY+UkuMBIDvtRRVQXP1OP8jKo3QPqQhBVTTivU5PDRfhxuw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by PH0PR12MB8175.namprd12.prod.outlook.com (2603:10b6:510:291::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Thu, 28 Mar
- 2024 17:29:55 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::3889:abf7:8a5e:cbbf]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::3889:abf7:8a5e:cbbf%3]) with mapi id 15.20.7409.031; Thu, 28 Mar 2024
- 17:29:54 +0000
-Message-ID: <834542e1-bb29-49ed-98ee-13a79168819f@nvidia.com>
-Date: Thu, 28 Mar 2024 10:28:38 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] Fix selftests/mm build without requiring "make
- headers"
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
- Axel Rasmussen <axelrasmussen@google.com>,
- Andrea Arcangeli <aarcange@redhat.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Mark Brown <broonie@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Peter Zijlstra <peterz@infradead.org>, Guillaume Tucker <gtucker@gtucker.io>
-References: <20240328033418.203790-1-jhubbard@nvidia.com>
- <6d82298b-b17b-440a-beef-590177d0ff50@collabora.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <6d82298b-b17b-440a-beef-590177d0ff50@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0010.namprd05.prod.outlook.com
- (2603:10b6:a03:254::15) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B18BA53;
+	Thu, 28 Mar 2024 17:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711647158; cv=none; b=DJIn+o1HxTaFpXB+9fQT2MfKX4VDaMnzkixh8s0GmDvag5nYBi7Ve1Fh8aQCKw21f2UYYc5mvf+zHkO3SvLDte2AjWnQtSab+z2MntNAXLPgtOni9/ngmaQNUQt8KS6gHRMNkeKvPsXVSNDALyiwazKl1tyzDkGRno/G1Y3Fjtw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711647158; c=relaxed/simple;
+	bh=Jba/NBEtobnWwSOLGRTSPW+X4r7PO9y8nFeOlUUwwJk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A2saZwotQY2nRxtntJSaQ5l9SNRe0goKV6D2UnNbaPiq5msayfRaXW4P94iyKIsE3tfUqDFjC6E8kTSsxbC2HnsAFtx1YvNqXbbume/XrgJPAsqT8XeavLYH5z+2PvZyhWna03nFhxuYN4rkR0rqcwYOlAc2SSbisWAMsqQYuNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ilfbABG2; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-34261edaf7eso798691f8f.1;
+        Thu, 28 Mar 2024 10:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711647155; x=1712251955; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jba/NBEtobnWwSOLGRTSPW+X4r7PO9y8nFeOlUUwwJk=;
+        b=ilfbABG2VVWiigBk1SamGdenbe3i2CG5k7DhHWaiy9O3k8M5i+qS3kTsmxEJTi4IyX
+         km7uyLmGPUgnVfxqJx/OiDlSLc/MFIQ2DT+FP8dKYShnn9Y8T0JllfcsZBpPF6KKmzX0
+         zcRTg0c8hdf/U3fnBmPAgsh1aTE+2OweoVz2pyV3AlkJHz0BEFfZ4Vidaaqq8a4jIYJ5
+         0bTnZA3b2G+B244aNCh4bPzxaK12LP/P/cXLg+f6MkHrGxooK5TTb77pDKL86pFStouD
+         7fxxP3DkOU5CMr9Wnp0/JUeaH0cTEM2QV8OjG2fPYyc4DwJ2P0pb/0EZJzT4AzTP6hvB
+         Uk4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711647155; x=1712251955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jba/NBEtobnWwSOLGRTSPW+X4r7PO9y8nFeOlUUwwJk=;
+        b=qGRNjnDBWk/50UngZ69fy8UlzEMtDhtWkWylwpgyU1HhrguZvUG6A9nwJH7V8eaDTE
+         T2hikUs/lB0+Jyw+Bp8HogdBeCT68/mjPMOVcYFpewbBm8QbMwi/RJH4bR+tqNPfqUhU
+         /VF6usJkyrpLzeX3zko555belBFwFicRxDQUIPre34rvz+yb8Y4reydL56nZVKVGp/hX
+         WVoklbJEMSuK8jn8FC7oCGjOgpm6wWEzqv4KpoiUEb8NP5DNErom5aTUMdfbmr2LOSru
+         j/Wad69b/C36lBUTXhvUt4r7L2KpaeA65AwqYvw2sSRamw85z9bZDD3BJYYuKGoozjCA
+         Xk7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCViulTH7jUfsC2l4Uby6WOlWGzB9V5w/TKidxSAaZcv73fNUAbWgK7oxRzyxtHMw+w0OjWJEn7gdYxHyGGlhniT1HE3SLvP1tDbLKG/FylWHY76vm7/t1mxNg6gga1zQiR9r9TV2MfFqNfq4Ikj8OKMhAN/iM6NOSGVbGROvNEOwOZUoF9AuUrSLdiVLRcK/NjnJmQQ+HBFnF0xaw==
+X-Gm-Message-State: AOJu0Yyb8nIT61mgj1kd5BT77pVB3+oY2Bz2rFtcTqrmD3glSNWlJ9S1
+	OsX7guAXaisvcQDvlWJeUYtnToLZj2cJPm16bwYE5iPqFAhYS6L97sazhUb+I5qmBBpFlmp2eZn
+	Ir6fPDKK9cjlmWHT2ztD3YXTJhy4=
+X-Google-Smtp-Source: AGHT+IGxHxpYSrQE3BHdMGUjeDCOpPh1GjOHwBrRWkc7YiXCuhlL0gSm0Kum/fOUSJFZW35T+vzZwvKYVqopgwk2PRc=
+X-Received: by 2002:a5d:67c3:0:b0:33e:7f5c:a75d with SMTP id
+ n3-20020a5d67c3000000b0033e7f5ca75dmr2368612wrw.57.1711647155284; Thu, 28 Mar
+ 2024 10:32:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|PH0PR12MB8175:EE_
-X-MS-Office365-Filtering-Correlation-Id: c4de883d-cfff-43c9-2199-08dc4f4caea1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	K0ANV4ao7aCyZmGrdgWewnGQUsdLhYy1BbW/PfpmsjTfGvXFzEZMFc8/BshS02A2Imjrq9oy3WLPF/1aNWHNvUidPqKDWkaBXG0mLDfB+nnaPdtUEwNtjDnonjnFyafjBDy+TTB/xKZjqIhz3bPRXoDHvrQIPRW/1Jrc7aM32HDXjoXopQBco9XSrkcRs316yONPSBkZAdQGRKh09lPrEvVGkizaiQfoncBQoN50Vbqip7hRQtNhfXywWF9hVfTw3F89K9n+nEIq42PEDPDMPrvFI/OSTcJYn3DzslFHhdAAyFkcj8h/QhOCAcEu8SKeUsnl/szYIu5Qvph3xScZy8E+6dscgin1rKSAxINobEUsifT/FQGNuBtNZVTUSN5yX07GXT85ZcTMqHx0CBaDsbI8QB6k+nNIrPv9gKXpgndHfW2YFVyE3RGv+ZUc+1YoeTjCRzEntc3BteQylpivnCJLJVcob7o0RCNntCbKzJQ3LGEPWcTHU7gJ4nyx1cexfjiYkGOUSfxsKrqzDAGgMtD0MMZ8hPUYf1INThpMYlCEH6/ivVRxrnNZWn9H+E/HgP8uqRC0JViMyMHCgb9cF1dnDvMwe9lSfKEsV11h2igP/aJcOdrUhIJEJJjSwqZaaYJNA+vTFQ8CWOlIKzBUrfBGQxgn4XT0JJJNEbhb/Xk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RUtQS2tRY256QmVyaXpwNS96K2x4dWxoMHdsOVpkb2t5MFJwcGpLUllMNHJ1?=
- =?utf-8?B?ZEFaRWpJdFNoWmdFb1piQTBXdmd5enVneEEwYWc1azNSTTF5eHU1TTlheUhz?=
- =?utf-8?B?Mm5VQWV1ZC9lSG5KQnZaMmZ2UitTQjkvYW40NnhxTFFpczU3aW5NME9IVlhk?=
- =?utf-8?B?dEgzcTY3Y21iQk9JRHU1UzFHWDAvR1AyVGxkamZPWWhoUEJPcTQ5dGphRTVP?=
- =?utf-8?B?MUdYS3lBOWFpR2d2bTdYQzJjQkZVSGxXTVNvSEt0QzNOak5MWHI4TjdnRW1U?=
- =?utf-8?B?REVrRVd3L1lqbkJoR2c5c1R4cDdOUVJnVWh1Qkh5V09Qa2ltdFJpTkVmUURn?=
- =?utf-8?B?SDZLN1VPTnhZK25Xa2tVeVpua0IzVEdEbjR4N2RQK0U4bTI2Q0wzNk44aGUz?=
- =?utf-8?B?T21jOVdxOGNTcjhodkdFVFRDbWhPVEF0cDlVQ1JKMGhsZEFSc2RIQnM5b01W?=
- =?utf-8?B?RS8rL04xbGpYV1lic05SeHpkT2dXMUEvaXVJenIySHlTdEdFQjQrdnhNZWls?=
- =?utf-8?B?SGt2Uldnc0Nob1R0Z214alNWTDZnS2NNdWdPUkx6TThYWjJqdVRqM0I4b2dQ?=
- =?utf-8?B?SlF1SW9ZdE5Kc0k3c1ZQKytNZW1reUpiMkN4Z1gvNTU3Mnh0eXAwcEVSVjJE?=
- =?utf-8?B?L1hhK3JOQzNlUVpNOGF3SDRZb1dHV0k1RytKelM1NU0wOGt0SktCMEM4cDFI?=
- =?utf-8?B?MXBOcnh3R1RvK29Id3BGdWg3SEVJM01kcTA5YXIvNFJCdVJPSktaSXhlbkhX?=
- =?utf-8?B?VHpKOW9aOW1lQm1VcXVmVVg4V0JTSzBrVjFETU40Q1MzVzVSbjhWODNJUVZR?=
- =?utf-8?B?SVlaYVBWRDMrQlVGMEFDUVBpSXFsR1Z3UmdrZjFpWkhlODBudUJET29nY1VZ?=
- =?utf-8?B?RmhmRjhRQXlTVnNtWDJrbEpEaFVabmRMWHhlTXRrczMvM0R4WGlCb3VvSlM5?=
- =?utf-8?B?QnNpeUxnejF5ZUpJY0JyWTRrY2tZSVV3RUljOHcvREpFdEpDZTdKWnJISWM5?=
- =?utf-8?B?RWpqVm82UDBtN1NITWxqdFlwY0s0WGxoeU9wSU5UMUNPb3JRbVRONTJWSGxK?=
- =?utf-8?B?aFFoQWpyOXA5Y0FmN1FpTzBtREVxSWs2ZGFJOGo2Vzk1QUR4Sjk1WGZHbmdH?=
- =?utf-8?B?cEZDUUlQaGg1YmdxdjlGWGtld2R1c0ZDQXhOejVERTc5b2tnZVVOek5DOWZN?=
- =?utf-8?B?clhzNWM5SVVIWXdzdzBYcVR3RmJpMXpWeE9FVS9GMm1lQzQ0VG9uM1VmU1ZS?=
- =?utf-8?B?MjFhcVdpWWRMVy9tMGlqU3MvL1JMMlpYeUFIOXlZNGxxdUJteWJNTWR3cmxz?=
- =?utf-8?B?K1ppeHlxWlJRMlhqQnZmcW4yR2hiQ3AxaHFwdmkwSWllRHN6OVUrQS85dEsz?=
- =?utf-8?B?VDRTdjlBNE14TjRVN2t0aVpuNVFQdDBxTHhtS2l3YVVXNUJ5cW5KSEcwY3B4?=
- =?utf-8?B?ZmlaOEhKMFZJd2JpUmp6eXFHU0dSRzdBMnlFVWxPSEdvdk94TStDak9GandK?=
- =?utf-8?B?YlhxYTNVR1FIYUxxMHpjV3k3OXRxMzF4dTJBVG9LTDArWStsN09rRHlrSmR6?=
- =?utf-8?B?bENDcU80RWZSZ0NUeE5DV3k5aHlCMG5lOFhSWE5pL2xERDEyNDdSc3MvbmRk?=
- =?utf-8?B?ME1PSzFYTFRldGxFamxiYVcxY2tsSm1wWUhLTTIreWdlQWVML0R0RVlBVFNp?=
- =?utf-8?B?M3NaUUNUMDRtaVdrS2ZvNy9vUUdGclI0QkloK1BXWUhTOHAzdHl4eXZQVTdp?=
- =?utf-8?B?dTNUeE5UZi9kNU1RVS82WDRTODFwVHVBTmtjOTBsQXZ0cU5mQW9iQnhJRkVn?=
- =?utf-8?B?bCtXYVVON0Q4SXhVV0Z5Y3lEa2VORWFsWXFFNTN5dUc0eElhb2J0UGhkVVdR?=
- =?utf-8?B?VEN5UldWUCs3N3JPbUcwUC9QeC9OVUZ0a3MramVFcnJHNkNtMktuRXBJb1JE?=
- =?utf-8?B?L0ExZVJydy9SNVplcktZWjZRZXZPaWtHa2ZmN2gwNUY2ODg2VjRWeWdiK1VX?=
- =?utf-8?B?NkxvRFFpNXZtMmpaN1dxOWtoc1BhWmFacXdodm85eDVhc3l1SzhhajhzL004?=
- =?utf-8?B?Ry9rd2VkL1FLRUc5c0hwR0tEMWVKY3FEN01IQUNpdDIyZW9ySVM5bmFrTGVX?=
- =?utf-8?B?c2k3Um5LdUx6eHh0MHlNemFBdEJuakk1MzYyY0pudXdqRUdBenFNeWRWV1M3?=
- =?utf-8?B?Y3c9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4de883d-cfff-43c9-2199-08dc4f4caea1
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2024 17:29:54.6822
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pepeeygQHwRWjBbKqKvmyLXB7r/Oy3gZsBfHnGtnuissL4oXaX95Yo4psCikZJBpqOEFOG2m1TIBDFDZgbtNFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8175
+References: <20240327-ccb56fc7a6e80136db80876c@djalal> <20240327225334.58474-1-tixxdz@gmail.com>
+ <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
+In-Reply-To: <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 28 Mar 2024 10:32:24 -0700
+Message-ID: <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
+To: Tejun Heo <tj@kernel.org>
+Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/28/24 2:02 AM, Muhammad Usama Anjum wrote:
-> On 3/28/24 8:34 AM, John Hubbard wrote:
->> Hi,
->>
->> As mentioned in each patch, this implements the solution that we discussed in
->> December 2023, in [1]. This turned out to be very clean and easy. It should also
->> be quite easy to maintain.
-> There is another way. The headers should be built automatically by make
-> dependency. The topmost make file always builds headers before building
-> kselftest i.e., make kselftest
-> 
+On Thu, Mar 28, 2024 at 10:22=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello, Djalal.
+>
+> On Wed, Mar 27, 2024 at 11:53:22PM +0100, Djalal Harouni wrote:
+> > This patch series adds support to freeze the task cgroup hierarchy
+> > that is on a default cgroup v2 without going through kernfs interface.
+> >
+> > For some cases we want to freeze the cgroup of a task based on some
+> > signals, doing so from bpf is better than user space which could be
+> > too late.
+> >
+> > Planned users of this feature are: tetragon and systemd when freezing
+> > a cgroup hierarchy that could be a K8s pod, container, system service
+> > or a user session.
+> >
+> > Patch 1: cgroup: add cgroup_freeze_no_kn() to freeze a cgroup from bpf
+> > Patch 2: bpf: add bpf_task_freeze_cgroup() to freeze the cgroup of a ta=
+sk
+> > Patch 3: selftests/bpf: add selftest for bpf_task_freeze_cgroup
+>
+> It bothers me a bit that it's adding a dedicated interface for something
+> which already has a defined userspace interface. Would it be better to ha=
+ve
+> kfunc wrappers for kernel_read() and kernel_write()?
 
-I think we talked through this already: Peter Z. pointed out the problems
-with requiring this kind of prerequisite. And it really it overkill. The
-approach here is simple, easy to maintain, and avoids breaking the various
-unusual build setups that people have.
-
-I'll shut up now and let others weigh in, though. :)
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
+How would that look ?
+prog cannot and shouldn't open a file.
+The seq_file would be passed/pinned by user space?
 
