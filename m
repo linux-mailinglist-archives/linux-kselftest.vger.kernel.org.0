@@ -1,193 +1,108 @@
-Return-Path: <linux-kselftest+bounces-6767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A526D890845
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 19:28:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9EA89086B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 19:40:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1138AB21D98
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 18:28:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB8EA286D32
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Mar 2024 18:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82D6136E28;
-	Thu, 28 Mar 2024 18:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C269136E30;
+	Thu, 28 Mar 2024 18:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/yG/doR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f7/6KMub"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A81136E29;
-	Thu, 28 Mar 2024 18:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E935A36AF5
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 Mar 2024 18:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711650506; cv=none; b=RWO+xypqnhY/5wo8iMzBkWKfk6+UGu83i7eq9FW3GlMpBdO9qopL/d19xWWSKdC9Lhq+INg+3hSdKkSvoFmFvoHugE4jiJrYGk8NY4JHCB/uNxhAz/+mqAxCINg4NjCVqWQtR2I0zzgpwfezrLU5OdGc8GOnv0xBXR88AfBJW+0=
+	t=1711651204; cv=none; b=F8x4x0B81dHM+0yNGVNT7lAJQ0MWpSzT6iLtbq+gWuhyhS9WDZxeHFZ2dxrfF32z5jPUZ3ZARj/NHATQMHcvm9BlPekX9Q2c3MwHqAGIxRqca7NgReBqXP7bmv1oAb09U7U1JPzpxoPPIspJf8n8NwSD4wcVvcZwwltcJJw1TTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711650506; c=relaxed/simple;
-	bh=fCpsuqpXPx6EiIEqbV6/oK+Mco4Eg3WQcaCu8FFYxmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=szC01qJIyRbhFpJ2EdWWwRN8BTvKblSusZFXnbGqVAt9h9OFgkWngQ4p+w2eGOUCY3feMg5MP4zH4njT8c1LYGmNiAIa3Fu3UR5j066mxjzIUIpkwm6IucL8beqWx3rzRqGNz9tpBXr5tkJrYmpwPpMhjzpiTDf6fx/X2PtbAec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/yG/doR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27A2C433F1;
-	Thu, 28 Mar 2024 18:28:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711650505;
-	bh=fCpsuqpXPx6EiIEqbV6/oK+Mco4Eg3WQcaCu8FFYxmE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d/yG/doRGyXpqxmVEGZRl29Gx01ZBHRqsLyBFhmaT8mmf44tImPwfhWbq/+onqqYQ
-	 Mk7belOYYdf/oaQElpAohzTOcmJEhrO4/oBdC872X4+PkuC19MXZYEObKWc8b1DXht
-	 E4JJM33unaXbObP+98zU5UfutVyF0MSVFb61PFWrUjcxtA1CoRmOrTxZIvLd/2j5Xc
-	 i2AR4w5A19X/edVUb5L7inWvNDxXBn2PViw3xzrRFzrBAWN5Ov77wY7xaniySz8nzx
-	 dj+p8Y9PBq0IYtN+jR1hn0KR4MgR7mupP9oDLO77XhK2IZq0VluR8c5zcvoWCrB8P2
-	 oprZ6oa0nyp9A==
-Date: Thu, 28 Mar 2024 18:28:12 +0000
-From: Simon Horman <horms@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [RFC PATCH net-next v7 04/14] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240328182812.GJ651713@kernel.org>
-References: <20240326225048.785801-1-almasrymina@google.com>
- <20240326225048.785801-5-almasrymina@google.com>
+	s=arc-20240116; t=1711651204; c=relaxed/simple;
+	bh=5ORy6hh6Pj4sj97rnaLda12WtwInrQlYkxhTjSS2hnE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TgZ3J6/dXmlXeOyvPLIBvxN+JkYOeXrR9tcma1AG/Pq6fFwcbVxlX3Ddlx8OOuIaBbCo0ZEoQiGcmryKpQ7qmNpqz+7D4msH6ybIHF3OX/frfVgi3yQMlQ7TCAr1L/VPD0i5GWhyL0VpDo+u6ZQyrQ/bkKSXOedcvPSt4s4rQds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f7/6KMub; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3686ab64840so1829135ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Mar 2024 11:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1711651201; x=1712256001; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2g0kgrksduzPpTAzBEbZB+YDBF3iH1wIPE3J9n7lWg=;
+        b=f7/6KMubQtVrgCfHgLqx3nCdD2twAmAdO+hj+kA2Um1mhlo8Y7tcsDRLNYyEBj6RkW
+         wcZugbwgl/Wmpc5vqrMpv0u3JuECmlBzG+YTAVCee/K2EoVB/n5KRXL6y+rq5J4sLvUz
+         ee8cucL9m9vNZ8a2M7rowPlnQ8gfBWgWsE7oY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711651201; x=1712256001;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2g0kgrksduzPpTAzBEbZB+YDBF3iH1wIPE3J9n7lWg=;
+        b=Q7vq5MamciTbTen52eKWNUkLzDqbwgfCeC3hSmJswBcJGl++Rka1/09DW+F6bPT394
+         aPu1xi2FufVwuCzUNyCAViXQapEm/2l2ZF+lYX8Bz4X92Zht8s019HLhYWz1sHQErmtb
+         9lkVgB+H7beVHIlMb8kloFwzwgpw/ctxAQUwV7gLUx+cbtVTJW1JyM52s4PXhldgGjuN
+         moqks9WMDHMR6WLCpjFNBSPPNERsYsO+c1pXeLKg/5wQJ2M0l416uoaCfqg28II8epXB
+         uYEKK3dHE1yQ07t7agU9oDhY5zaQPAF3USf5p/pY7wUWz33F35RuQkCggkc5aNEZORBV
+         5o6A==
+X-Forwarded-Encrypted: i=1; AJvYcCX802neyCOY63/OKG/raPBkNvOXG/4P30PURuzCQKdpSrtKVklteCDOWeGvhYpWmcWBD27g4S3eEEvWqZ1belQb/CocXiF0iFKyn2Kr2FTA
+X-Gm-Message-State: AOJu0Yzi90nq2JMf6TKcaSmgJL1uuc55OOodS/8p4gkPiNot5a9sI1V4
+	tYsK8d3m1jjsuxoYuJVEY1hfC3dQR+wREwqcoW6lb2kJht4/E006+1sOiubyWLE=
+X-Google-Smtp-Source: AGHT+IGd+gyzScz2N+XqO9Cc1NJsPFjnzA8T8an4jUaf7fymquIzGI6WsTJTBaMFXavIcNu3vQNLGg==
+X-Received: by 2002:a05:6602:2bc6:b0:7d0:8985:827 with SMTP id s6-20020a0566022bc600b007d089850827mr52930iov.0.1711651201099;
+        Thu, 28 Mar 2024 11:40:01 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e12-20020a6b730c000000b007d057e4a970sm531652ioh.48.2024.03.28.11.40.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Mar 2024 11:40:00 -0700 (PDT)
+Message-ID: <b06db8aa-9548-4b92-af7e-61fbd8a654c2@linuxfoundation.org>
+Date: Thu, 28 Mar 2024 12:39:59 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240326225048.785801-5-almasrymina@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] selftests: x86: test_vsyscall: reorder code to
+ reduce #ifdef blocks
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240327184637.3915969-1-usama.anjum@collabora.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240327184637.3915969-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 26, 2024 at 03:50:35PM -0700, Mina Almasry wrote:
-> Add a netdev_dmabuf_binding struct which represents the
-> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
-> rx queues on the netdevice. On the binding, the dma_buf_attach
-> & dma_buf_map_attachment will occur. The entries in the sg_table from
-> mapping will be inserted into a genpool to make it ready
-> for allocation.
+On 3/27/24 12:46, Muhammad Usama Anjum wrote:
+> There are multiple #ifdef blocks inside functions where they return just
+> 0 if #ifdef is false. This makes number of tests counting difficult.
+> Move those functions inside one #ifdef block and move all of them
+> together. This is preparatory patch for next patch to convert this into
+> TAP format. So in this patch, we are just moving functions around
+> without any changes.
 > 
-> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
-> holds the dma-buf offset of the base of the chunk and the dma_addr of
-> the chunk. Both are needed to use allocations that come from this chunk.
+> With and without this patch, the output of this patch is same.
 > 
-> We create a new type that represents an allocation from the genpool:
-> net_iov. We setup the net_iov allocation size in the
-> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
-> allocated by the page pool and given to the drivers.
-> 
-> The user can unbind the dmabuf from the netdevice by closing the netlink
-> socket that established the binding. We do this so that the binding is
-> automatically unbound even if the userspace process crashes.
-> 
-> The binding and unbinding leaves an indicator in struct netdev_rx_queue
-> that the given queue is bound, but the binding doesn't take effect until
-> the driver actually reconfigures its queues, and re-initializes its page
-> pool.
-> 
-> The netdev_dmabuf_binding struct is refcounted, and releases its
-> resources only when all the refs are released.
-> 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
 
-...
+Pulled all three patches in this series. In the future, please
+add a cover-letter when you send patch series.
 
-> +int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
-> +				    struct net_devmem_dmabuf_binding *binding)
-> +{
-> +	struct netdev_rx_queue *rxq;
-> +	u32 xa_idx;
-> +	int err;
-> +
-> +	if (rxq_idx >= dev->num_rx_queues)
-> +		return -ERANGE;
-> +
-> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
-> +	if (rxq->mp_params.mp_priv)
-> +		return -EEXIST;
-> +
-> +	err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
-> +		       GFP_KERNEL);
-> +	if (err)
-> +		return err;
-> +
-> +	/* We hold the rtnl_lock while binding/unbinding dma-buf, so we can't
-> +	 * race with another thread that is also modifying this value. However,
-> +	 * the driver may read this config while it's creating its * rx-queues.
-> +	 * WRITE_ONCE() here to match the READ_ONCE() in the driver.
-> +	 */
-> +	WRITE_ONCE(rxq->mp_params.mp_ops, &dmabuf_devmem_ops);
+thanks,
+-- Shuah
 
-Hi Mina,
-
-This causes a build failure because mabuf_devmem_ops is not added until a
-subsequent patch in this series.
-
-> +	WRITE_ONCE(rxq->mp_params.mp_priv, binding);
-> +
-> +	err = net_devmem_restart_rx_queue(dev, rxq_idx);
-> +	if (err)
-> +		goto err_xa_erase;
-> +
-> +	return 0;
-> +
-> +err_xa_erase:
-> +	WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
-> +	WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
-> +	xa_erase(&binding->bound_rxq_list, xa_idx);
-> +
-> +	return err;
-> +}
-
-...
 
