@@ -1,155 +1,296 @@
-Return-Path: <linux-kselftest+bounces-6898-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5DB08924C6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 21:02:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CB628924DE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 21:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DC191F223D9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 20:02:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11DA328594F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 20:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28D313B292;
-	Fri, 29 Mar 2024 20:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27F3D13AA48;
+	Fri, 29 Mar 2024 20:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PpdbJ3dL"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="el4MOXz8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5946081752
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 20:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DEA12D603;
+	Fri, 29 Mar 2024 20:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711742538; cv=none; b=J03vkgNNdcy7W3uPYia+Gtk5+Vz2khBM3gheXhF1ffSJ8yhDxyuNtd0QdKGmw8UiBgbT73pOQd2KhTLbHqPS5SbqWyKOCSBL0DW1kbByJM5R/ujnQTrkiCGFO6bE6BsS24CSxig6nFHLeMnBDe414RQ1tBJZQNo3YO7k5zRc1mg=
+	t=1711742807; cv=none; b=XDZJspkiURZoHDF+KQkbtsgTde/hEio5937E5L31u9Qb4NeFKASHbwl+QjT6q3YRWLMxzX7tpzJ13BOBtSDFxifDKjA7HhbSU2yKMNALfMbEIEbfv6qM+FSY+huKW8oFk8uE8OuvzQtJyQMBoivtT9X9OYh1sxUUaPCoi/vRfsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711742538; c=relaxed/simple;
-	bh=4s7FSUVD/FVF5uIwuXZCch5XKC36897y0OwJwUbVkWU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bcdgzo6KQyAHEEl9fA3phpORxwxjM/+JfuRPv9taZzFNX44pkt6s0E4jkQspUiZ/J1KxrAYZctafbFlZmslv47AqnrcLNimd8OdDJmSKl4iEyTsq1pUvdRQYidkgRr2d+UKGQpKvakSY3Fnz0zHxt9SFzy6xFonl6hE5i00iu1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PpdbJ3dL; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dc25e12cc63so3015189276.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 13:02:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1711742534; x=1712347334; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t40h4ZVVyU3YcHuS3ADegeoOz9PnpHCj92mWxUgwXKE=;
-        b=PpdbJ3dLERUkITJYMoM+a1cy/96JymF+wE1D1yJKQX5faXTDoD72D6WoH0axtT/aSs
-         Yz/BoJn7V8VbfqVkGpvBGRA+tAP/tOHT8chsRJ682qF6ZbPVud3ICpQAs/RhzGMdi43F
-         IwKLEhFhZpo48O/UbPyEolSn8HVhWo2fHAzMZenHzcYFXxgwE3iKO2XLjTlRSHjfRj9+
-         340BsyUD6TQCaikIUq/1pc/GuyEyw4xOWRkXnGOGw+gd9kxQNwUbzQ+rmWiNgxf9lKl4
-         zpUZona16fJXAtqbsRG65WeSQpklE2v1ubUdzBXVoIDFbkLAsfzspl5VW77VM9K48Awi
-         FqVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711742534; x=1712347334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t40h4ZVVyU3YcHuS3ADegeoOz9PnpHCj92mWxUgwXKE=;
-        b=my0sNIEreoTCqVzcZ60YFDdVCkYt2SBRV5LQHvSF5t8Yjg68MRnnaNLf0luqd2eCqq
-         p6mlp9UXn38ygu2yjGJvlqjYuloMRU09SQOnSDuU0or2kOh98SC5fLzbYtN5dWDWo9sb
-         yUOobLynBdP7ixqGYIphfmBiLQ3MoodoUpijNiLKn9Bm3ARbm3jpHgIZjymfZ3saLIVP
-         GYxJukWcCfCdIO+aT9Syva+EZijLvNvNygcvfPp2duLGVV4e8kseKhmxzo5RhiPbvm96
-         Ix0smnV+lL8fNOu87qU/f6QGR007krBbPvXsCKGJyoiAxjAU3rDfOgCJ/W14stS1LUwV
-         e3ug==
-X-Forwarded-Encrypted: i=1; AJvYcCWkWXo6oC+Ks3YvsGPJnGBXQz7DYSQCrsO8TYXSH+AzN/XXcjwK5fi1A6Oa2MnfqWWcP3m+KtspA3DQEdaEGVaPfd7yr/Dmd0Zf9LX/tFhT
-X-Gm-Message-State: AOJu0YwPxBE5U3l3g3L6mHfwZ0Ja4Aui4kupg7zfPxwlWE1pLCFMBazi
-	9aKZJbBjEAZ1wYI+Q6axi4BW0rq6K/wNM/oJ9Dc2qtyQdTdaye9DyI6ZzezCEfXxPlYetVoB0XS
-	EQ4JKdPJOxeOY4G/uR0ihPWZQlDf22u0coPofqA==
-X-Google-Smtp-Source: AGHT+IGtnKg+yyXhs907Pora7J+RzD45KJQ+UfSqQQ1XkC5eECGLQ66rb6PRiDq9m4/5ND7CCb26prI4BwPY/uB5eaA=
-X-Received: by 2002:a25:f912:0:b0:dc7:494e:ff33 with SMTP id
- q18-20020a25f912000000b00dc7494eff33mr2270811ybe.7.1711742534274; Fri, 29 Mar
- 2024 13:02:14 -0700 (PDT)
+	s=arc-20240116; t=1711742807; c=relaxed/simple;
+	bh=IpR8t9TlCO6dA+NNoYBZAT4Y1SQ8QTNF0MuQmcy6ew8=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ANQyL0fmTVAnXTpfmHaayweuX9OYFa9Um/6UFGaCrJL6ZXEkchlIrdX7tNdXs72i7ex3dM+NbawsBMz976ZfxQtVN9ziCmnlw+zulaZY259d4TUu/QVUw/eQnbWc6oX0Hb/I/exwc7xGvLNEb/s9aPbT0xd/9dZR52y9ClFg10k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=el4MOXz8; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1711742803;
+	bh=IpR8t9TlCO6dA+NNoYBZAT4Y1SQ8QTNF0MuQmcy6ew8=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=el4MOXz80U1jbiT/qhNxjT5/5A3rUR5erGlcL7dZWo1O4eLq6SQeeHZTFkZiTz9t4
+	 YdBruf9i/J5nwtqQ6p57zn1iK59M4LrLbeCzJ94N+cdvdpL7+vRhR9bpUs7hRAOIRe
+	 XoZn6SqkqWeSwaOeXYV+36WfhF1bY9Ylk0vSVp91GUV7Hi7l74eDJ2fknMlZfDbdjW
+	 ZTSYsmSvpR0XD9+qpJJIycTM2otVzRCJmWWHfJ/BdJ649o9ioAlRt6bMaI0WW8LWbp
+	 x35wmoNL2AQ13jxstCMIuAGcIZtBJHD+pQqJ5Ld5sD2gLklmWCRBHk2DHejnBsZfg+
+	 lPG1xH2Y/IPXg==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 633C33780C22;
+	Fri, 29 Mar 2024 20:06:38 +0000 (UTC)
+Message-ID: <a3176f4c-1b03-4537-9217-c90678509611@collabora.com>
+Date: Sat, 30 Mar 2024 01:07:08 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329044459.3990638-1-debug@rivosinc.com> <20240329044459.3990638-28-debug@rivosinc.com>
- <4b38393a-f69d-4a77-a896-b6cd42c7edcf@collabora.com>
-In-Reply-To: <4b38393a-f69d-4a77-a896-b6cd42c7edcf@collabora.com>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Fri, 29 Mar 2024 13:02:03 -0700
-Message-ID: <CAKC1njQ_RU=uHhrna=MFVdjAMjjQNqZWnkjPoJvO7CxtPMeNuQ@mail.gmail.com>
-Subject: Re: [PATCH v2 27/27] kselftest/riscv: kselftest for user mode cfi
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com, broonie@kernel.org, 
-	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org, 
-	ajones@ventanamicro.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, 
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, palmer@sifive.com, 
-	conor@kernel.org, linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-mm@kvack.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, corbet@lwn.net, 
-	tech-j-ext@lists.risc-v.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com, 
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com, shuah@kernel.org, 
-	brauner@kernel.org, andy.chiu@sifive.com, jerry.shih@sifive.com, 
-	hankuan.chen@sifive.com, greentime.hu@sifive.com, evan@rivosinc.com, 
-	xiao.w.wang@intel.com, charlie@rivosinc.com, apatel@ventanamicro.com, 
-	mchitale@ventanamicro.com, dbarboza@ventanamicro.com, sameo@rivosinc.com, 
-	shikemeng@huaweicloud.com, willy@infradead.org, vincent.chen@sifive.com, 
-	guoren@kernel.org, samitolvanen@google.com, songshuaishuai@tinylab.org, 
-	gerg@kernel.org, heiko@sntech.de, bhe@redhat.com, 
-	jeeheng.sia@starfivetech.com, cyy@cyyself.name, maskray@google.com, 
-	ancientmodern4@gmail.com, mathis.salmen@matsal.de, cuiyunhui@bytedance.com, 
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, 
-	david@redhat.com, catalin.marinas@arm.com, revest@chromium.org, 
-	josh@joshtriplett.org, shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, 
-	ojeda@kernel.org, jhubbard@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ wine-devel@winehq.org, =?UTF-8?Q?Andr=C3=A9_Almeida?=
+ <andrealmeid@igalia.com>, Wolfram Sang <wsa@kernel.org>,
+ Arkadiusz Hiler <ahiler@codeweavers.com>,
+ Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v3 17/30] selftests: ntsync: Add some tests for semaphore
+ state.
+To: Elizabeth Figura <zfigura@codeweavers.com>, Arnd Bergmann
+ <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+References: <20240329000621.148791-1-zfigura@codeweavers.com>
+ <20240329000621.148791-18-zfigura@codeweavers.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240329000621.148791-18-zfigura@codeweavers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 29, 2024 at 12:50=E2=80=AFPM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> On 3/29/24 9:44 AM, Deepak Gupta wrote:
-> > Adds kselftest for RISC-V control flow integrity implementation for use=
-r
-> > mode. There is not a lot going on in kernel for enabling landing pad fo=
-r
-> > user mode. Thus kselftest simply enables landing pad for the binary and
-> > a signal handler is registered for SIGSEGV. Any control flow violation =
-are
-> > reported as SIGSEGV with si_code =3D SEGV_CPERR. Test will fail on reci=
-eving
-> > any SEGV_CPERR. Shadow stack part has more changes in kernel and thus t=
-here
-> > are separate tests for that
-> >       - enable and disable
-> >       - Exercise `map_shadow_stack` syscall
-> >       - `fork` test to make sure COW works for shadow stack pages
-> >       - gup tests
-> >         As of today kernel uses FOLL_FORCE when access happens to memor=
-y via
-> >         /proc/<pid>/mem. Not breaking that for shadow stack
-> >       - signal test. Make sure signal delivery results in token creatio=
-n on
-> >       shadow stack and consumes (and verifies) token on sigreturn
-> >     - shadow stack protection test. attempts to write using regular sto=
-re
-> >         instruction on shadow stack memory must result in access faults
-> >
-> > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> > ---
-> >  tools/testing/selftests/riscv/Makefile        |   2 +-
-> >  tools/testing/selftests/riscv/cfi/Makefile    |  10 +
-> >  .../testing/selftests/riscv/cfi/cfi_rv_test.h |  85 ++++
-> >  .../selftests/riscv/cfi/riscv_cfi_test.c      |  91 +++++
-> >  .../testing/selftests/riscv/cfi/shadowstack.c | 376 ++++++++++++++++++
-> >  .../testing/selftests/riscv/cfi/shadowstack.h |  39 ++
-> Please add generated binaries in the .gitignore files.
+On 3/29/24 5:06 AM, Elizabeth Figura wrote:
+> Wine has tests for its synchronization primitives, but these are more accessible
+> to kernel developers, and also allow us to test some edge cases that Wine does
+> not care about.
+> 
+> This patch adds tests for semaphore-specific ioctls NTSYNC_IOC_SEM_POST and
+> NTSYNC_IOC_SEM_READ, and waiting on semaphores.
+> 
+> Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
+> ---
+>  tools/testing/selftests/Makefile              |   1 +
+>  .../testing/selftests/drivers/ntsync/Makefile |   8 +
+>  tools/testing/selftests/drivers/ntsync/config |   1 +
+>  .../testing/selftests/drivers/ntsync/ntsync.c | 149 ++++++++++++++++++
+Please add generated binary objects in .gitignore file.
 
-hmm...
-I don't see binary as part of the patch. Which file are you referring
-to here being binary?
+>  4 files changed, 159 insertions(+)
+>  create mode 100644 tools/testing/selftests/drivers/ntsync/Makefile
+>  create mode 100644 tools/testing/selftests/drivers/ntsync/config
+>  create mode 100644 tools/testing/selftests/drivers/ntsync/ntsync.c
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index e1504833654d..6f95206325e1 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -16,6 +16,7 @@ TARGETS += damon
+>  TARGETS += devices
+>  TARGETS += dmabuf-heaps
+>  TARGETS += drivers/dma-buf
+> +TARGETS += drivers/ntsync
+>  TARGETS += drivers/s390x/uvdevice
+>  TARGETS += drivers/net/bonding
+>  TARGETS += drivers/net/team
+> diff --git a/tools/testing/selftests/drivers/ntsync/Makefile b/tools/testing/selftests/drivers/ntsync/Makefile
+> new file mode 100644
+> index 000000000000..a34da5ccacf0
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/ntsync/Makefile
+> @@ -0,0 +1,8 @@
+> +# SPDX-LICENSE-IDENTIFIER: GPL-2.0-only
+> +TEST_GEN_PROGS := ntsync
+> +
+> +top_srcdir =../../../../..
+> +CFLAGS += -I$(top_srcdir)/usr/include
+Please use KHDR_INCLUDES instead of specifying include path.
 
->
+> +LDLIBS += -lpthread
+> +
+> +include ../../lib.mk
+> diff --git a/tools/testing/selftests/drivers/ntsync/config b/tools/testing/selftests/drivers/ntsync/config
+> new file mode 100644
+> index 000000000000..60539c826d06
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/ntsync/config
+> @@ -0,0 +1 @@
+> +CONFIG_WINESYNC=y
+> diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
+> new file mode 100644
+> index 000000000000..1e145c6dfded
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
+> @@ -0,0 +1,149 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Various unit tests for the "ntsync" synchronization primitive driver.
+> + *
+> + * Copyright (C) 2021-2022 Elizabeth Figura <zfigura@codeweavers.com>
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <sys/ioctl.h>
+> +#include <sys/stat.h>
+> +#include <fcntl.h>
+> +#include <time.h>
+> +#include <pthread.h>
+> +#include <linux/ntsync.h>
+> +#include "../../kselftest_harness.h"
+> +
+> +static int read_sem_state(int sem, __u32 *count, __u32 *max)
+> +{
+> +	struct ntsync_sem_args args;
+> +	int ret;
+> +
+> +	memset(&args, 0xcc, sizeof(args));
+> +	ret = ioctl(sem, NTSYNC_IOC_SEM_READ, &args);
+> +	*count = args.count;
+> +	*max = args.max;
+> +	return ret;
+> +}
+> +
+> +#define check_sem_state(sem, count, max) \
+> +	({ \
+> +		__u32 __count, __max; \
+> +		int ret = read_sem_state((sem), &__count, &__max); \
+> +		EXPECT_EQ(0, ret); \
+> +		EXPECT_EQ((count), __count); \
+> +		EXPECT_EQ((max), __max); \
+> +	})
+> +
+> +static int post_sem(int sem, __u32 *count)
+> +{
+> +	return ioctl(sem, NTSYNC_IOC_SEM_POST, count);
+> +}
+> +
+> +static int wait_any(int fd, __u32 count, const int *objs, __u32 owner, __u32 *index)
+> +{
+> +	struct ntsync_wait_args args = {0};
+> +	struct timespec timeout;
+> +	int ret;
+> +
+> +	clock_gettime(CLOCK_MONOTONIC, &timeout);
+> +
+> +	args.timeout = timeout.tv_sec * 1000000000 + timeout.tv_nsec;
+> +	args.count = count;
+> +	args.objs = (uintptr_t)objs;
+> +	args.owner = owner;
+> +	args.index = 0xdeadbeef;
+> +	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &args);
+> +	*index = args.index;
+> +	return ret;
+> +}
+> +
+> +TEST(semaphore_state)
+> +{
+> +	struct ntsync_sem_args sem_args;
+> +	struct timespec timeout;
+> +	__u32 count, index;
+> +	int fd, ret, sem;
+> +
+> +	clock_gettime(CLOCK_MONOTONIC, &timeout);
+> +
+> +	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
+> +	ASSERT_LE(0, fd);
+> +
+> +	sem_args.count = 3;
+> +	sem_args.max = 2;
+> +	sem_args.sem = 0xdeadbeef;
+> +	ret = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
+> +	EXPECT_EQ(-1, ret);
+> +	EXPECT_EQ(EINVAL, errno);
+> +
+> +	sem_args.count = 2;
+> +	sem_args.max = 2;
+> +	sem_args.sem = 0xdeadbeef;
+> +	ret = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
+> +	EXPECT_EQ(0, ret);
+> +	EXPECT_NE(0xdeadbeef, sem_args.sem);
+> +	sem = sem_args.sem;
+> +	check_sem_state(sem, 2, 2);
+> +
+> +	count = 0;
+> +	ret = post_sem(sem, &count);
+> +	EXPECT_EQ(0, ret);
+> +	EXPECT_EQ(2, count);
+> +	check_sem_state(sem, 2, 2);
+> +
+> +	count = 1;
+> +	ret = post_sem(sem, &count);
+> +	EXPECT_EQ(-1, ret);
+> +	EXPECT_EQ(EOVERFLOW, errno);
+> +	check_sem_state(sem, 2, 2);
+> +
+> +	ret = wait_any(fd, 1, &sem, 123, &index);
+> +	EXPECT_EQ(0, ret);
+> +	EXPECT_EQ(0, index);
+> +	check_sem_state(sem, 1, 2);
+> +
+> +	ret = wait_any(fd, 1, &sem, 123, &index);
+> +	EXPECT_EQ(0, ret);
+> +	EXPECT_EQ(0, index);
+> +	check_sem_state(sem, 0, 2);
+> +
+> +	ret = wait_any(fd, 1, &sem, 123, &index);
+> +	EXPECT_EQ(-1, ret);
+> +	EXPECT_EQ(ETIMEDOUT, errno);
+> +
+> +	count = 3;
+> +	ret = post_sem(sem, &count);
+> +	EXPECT_EQ(-1, ret);
+> +	EXPECT_EQ(EOVERFLOW, errno);
+> +	check_sem_state(sem, 0, 2);
+> +
+> +	count = 2;
+> +	ret = post_sem(sem, &count);
+> +	EXPECT_EQ(0, ret);
+> +	EXPECT_EQ(0, count);
+> +	check_sem_state(sem, 2, 2);
+> +
+> +	ret = wait_any(fd, 1, &sem, 123, &index);
+> +	EXPECT_EQ(0, ret);
+> +	ret = wait_any(fd, 1, &sem, 123, &index);
+> +	EXPECT_EQ(0, ret);
+> +
+> +	count = 1;
+> +	ret = post_sem(sem, &count);
+> +	EXPECT_EQ(0, ret);
+> +	EXPECT_EQ(0, count);
+> +	check_sem_state(sem, 1, 2);
+> +
+> +	count = ~0u;
+> +	ret = post_sem(sem, &count);
+> +	EXPECT_EQ(-1, ret);
+> +	EXPECT_EQ(EOVERFLOW, errno);
+> +	check_sem_state(sem, 1, 2);
+> +
+> +	close(sem);
+> +
+> +	close(fd);
+> +}
+> +
+> +TEST_HARNESS_MAIN
+
+-- 
+BR,
+Muhammad Usama Anjum
 
