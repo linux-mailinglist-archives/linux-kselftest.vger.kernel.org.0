@@ -1,158 +1,138 @@
-Return-Path: <linux-kselftest+bounces-6854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6855-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A399389144E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 08:29:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F07C891467
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 08:36:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 586381F22E6F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 07:29:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F5171C22F62
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 07:36:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2431141C9D;
-	Fri, 29 Mar 2024 07:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2108C405C6;
+	Fri, 29 Mar 2024 07:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="q9KYzPmV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e7yiiUGi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B234640852;
-	Fri, 29 Mar 2024 07:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5E73C6BA;
+	Fri, 29 Mar 2024 07:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711697187; cv=none; b=hw6Eis9ddJb9IwD2cv+WrzkxEgnn3ggAGYt54NetTIUX2no+Qrv0lhTaC+E5WVBzbiJIvjMpiaLQysG1JxwHd770r0LyUJHdm1b/q8aDwKBYYlSxZoRZslPS3kXXSgQ5MgGh57+kr4yI6ZvJX+kDedmgKjv3cgW5fKfFcadPR2I=
+	t=1711697776; cv=none; b=VZ96QsUMsAzDt9e9IsVlUNj+k9lRAsZiWNeO9mmBllHLAYeAcrvQq56eJloJZrSEelXsFZklMX4jVGmOmYylHiOR0uh0+qCII0+Pkiyx+xyq+W33fOCDlePQKRe+9wcfhX8Bci0WZ3mC3um8RH4yneQRfz6/C401LVHNUWulLtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711697187; c=relaxed/simple;
-	bh=bInZpQe27T+FP7otvnqd8TxPV4Zh13QdnbFoeMPgJnc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eENRMVkbYq0Ozk126qilqOn8vnqfbV0JoR/eKYpsdKXVETtdecyS5UKOqPO2VsixeRY8cHbpY3eohIsJcaUAL0650rRGo3ZD6Ky4pa1pBOc1DO8djG6pkN3YaZLCtmRqcOv45EDzuuHsmkBVbYlLSmYaXF/XLFhSY51t1mbEMJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=q9KYzPmV; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1711697184; x=1743233184;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bInZpQe27T+FP7otvnqd8TxPV4Zh13QdnbFoeMPgJnc=;
-  b=q9KYzPmVJjrJ6tgXYfLM0nykx+0MF85Rv9lRi5SK4IlswgbmhkfvpkU1
-   McZnx1IyjywhW5dOhKUiDz/GYTG5lhKOpC8z/eLroZ2E3dNbOdE4dc0Sx
-   CoQYB1SdH2Uud/yTiymvOP7RFYNJkYnOWMq9kpmSTTTz1obfHZI/eeWhL
-   kndenZr2p7+q6SLDRTRiSav3rYwG2B8fTT8xWvhCQfj9Yr5NrRZORoGDm
-   axA2QjRMetVFd7MbTexiRrdvy3hwf5j8IFtHXTN5d8Fnz1CaJaKV+OGOD
-   kLrwA7mokw6PLG5tkRX9l5VAMPE8t22/nfeLGPiJZsp6kDMAQZ5Lv2HUh
-   Q==;
-X-CSE-ConnectionGUID: 15IXURycT2uyFkZ6j12usw==
-X-CSE-MsgGUID: 3NX0TeF6T2SxAshBbDmoVA==
-X-IronPort-AV: E=Sophos;i="6.07,164,1708412400"; 
-   d="asc'?scan'208";a="18569006"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2024 00:26:21 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 29 Mar 2024 00:25:57 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 29 Mar 2024 00:25:45 -0700
-Date: Fri, 29 Mar 2024 07:24:57 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Deepak Gupta <debug@rivosinc.com>
-CC: <paul.walmsley@sifive.com>, <rick.p.edgecombe@intel.com>,
-	<broonie@kernel.org>, <Szabolcs.Nagy@arm.com>, <kito.cheng@sifive.com>,
-	<keescook@chromium.org>, <ajones@ventanamicro.com>, <cleger@rivosinc.com>,
-	<atishp@atishpatra.org>, <alex@ghiti.fr>, <bjorn@rivosinc.com>,
-	<alexghiti@rivosinc.com>, <samuel.holland@sifive.com>, <palmer@sifive.com>,
-	<conor@kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<corbet@lwn.net>, <tech-j-ext@lists.risc-v.org>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <oleg@redhat.com>,
-	<akpm@linux-foundation.org>, <arnd@arndb.de>, <ebiederm@xmission.com>,
-	<Liam.Howlett@oracle.com>, <vbabka@suse.cz>, <lstoakes@gmail.com>,
-	<shuah@kernel.org>, <brauner@kernel.org>, <andy.chiu@sifive.com>,
-	<jerry.shih@sifive.com>, <hankuan.chen@sifive.com>,
-	<greentime.hu@sifive.com>, <evan@rivosinc.com>, <xiao.w.wang@intel.com>,
-	<charlie@rivosinc.com>, <apatel@ventanamicro.com>,
-	<mchitale@ventanamicro.com>, <dbarboza@ventanamicro.com>,
-	<sameo@rivosinc.com>, <shikemeng@huaweicloud.com>, <willy@infradead.org>,
-	<vincent.chen@sifive.com>, <guoren@kernel.org>, <samitolvanen@google.com>,
-	<songshuaishuai@tinylab.org>, <gerg@kernel.org>, <heiko@sntech.de>,
-	<bhe@redhat.com>, <jeeheng.sia@starfivetech.com>, <cyy@cyyself.name>,
-	<maskray@google.com>, <ancientmodern4@gmail.com>, <mathis.salmen@matsal.de>,
-	<cuiyunhui@bytedance.com>, <bgray@linux.ibm.com>, <mpe@ellerman.id.au>,
-	<baruch@tkos.co.il>, <alx@kernel.org>, <david@redhat.com>,
-	<catalin.marinas@arm.com>, <revest@chromium.org>, <josh@joshtriplett.org>,
-	<shr@devkernel.io>, <deller@gmx.de>, <omosnace@redhat.com>,
-	<ojeda@kernel.org>, <jhubbard@nvidia.com>
-Subject: Re: [PATCH v2 04/27] riscv: zicfiss/zicfilp enumeration
-Message-ID: <20240329-condition-morse-c3d02720853a@wendy>
-References: <20240329044459.3990638-1-debug@rivosinc.com>
- <20240329044459.3990638-5-debug@rivosinc.com>
+	s=arc-20240116; t=1711697776; c=relaxed/simple;
+	bh=o0M0IyJcUookuFin+xzyNuPuMIMMXKwrYyJEBdm6SJE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QFMEzbQzTZZymUi2Kzw1It4lBCGrpoQQn1738oYlziyas8I5tibQeBPG27o33C/XXN7cbx9X3JI2tZ3z+O1ZL0bBgnI01LpQtClAosI/AvM+nS/CobH1WR0U4cZmfnq3tm0F+t2VVWqGEjzecNEbyn4lX/wKQ1QymaSUJ0agBOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e7yiiUGi; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a44ad785a44so197581666b.3;
+        Fri, 29 Mar 2024 00:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711697773; x=1712302573; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=02I2vw7o3fgaPYQWfuiF5lp5H//jn5NlPZdLwJYApkY=;
+        b=e7yiiUGi8fNB7VES8CzjifBgq1WubODph8HpFMbzWe6Bb0iEXl1V+G48Q+kC0LGwAU
+         5TkqcJdt8S5Xs6ARdXOiF9qj2ydHJx8ZXWnZ9jPqEeMMUqBBN0+F4s8lcS9OtTvq/ruh
+         5sbv76LoqzCxgVP9oV1R8czGLhAnGEmTyZavJrpNVT3mghQu0VDqxcU2XiZ9EepCikHO
+         4vzGwuf1s8ubKFumqlJ2fS3LF2cl9SrIKeXeKNNE8b01XLG6SbuP/y1j59EXiPFDBQsI
+         OcgxxvOFXNMDMdWAUpyktvAxVCLylzyxV1G0R0rG8FWXGgcThc4tPOX2WuxIf0x0x6cr
+         tR5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711697773; x=1712302573;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=02I2vw7o3fgaPYQWfuiF5lp5H//jn5NlPZdLwJYApkY=;
+        b=k2Ax1m18yJLjiFNsrz750BQ8H1JxN2gx/tu0/fGYUxZ3vhU1ImcU7r9AcPaKRbRbgs
+         aAJKsqPTTd0kCWovBS0zALMswxUGvEQvobzD8O+DOeTvOnPzibd12dRJn8/CwEr5jW5f
+         eyh4tp/8r/hKlrZL/KTiniUQPhc+5abFAlzFJWNhnRrdf77sQ6MHyByr55MJY6HpEX+N
+         2nJVXIhhn/D4xRNAx50Oc9xtOYtnp4TRsuv3V/uwc6+hSDr6K7Y2290dcK5DaipDhF1P
+         XOqdnHP0CjVXApuAS2pH7PAzBcEk2aSe7LcczkG0oY9VD8hstMJEHEnMRs01CsJCuDsV
+         BQ+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWTWzfjZSbxcDFYzH7V8VaO4fVsooRC0Oe2q9SpOlsR6R29RoyUEFxbabaDFaxRzXidKRBOa2U70mKGqkNQibZpMUO7ZJsuBKCwKfML5w2xe3IGMZwna6OSTYSybSPWedQGvrHM2TdJxwlG/foL
+X-Gm-Message-State: AOJu0Yw6Ynap/ENj+X+PSHAkdpkjaRUzkro31uGYRmcF4/I73RfCwvQF
+	c3Y/QDZ+81p3msifFMYAM332AU2x3atIcK2eHnPodEMpzfXm8oSzWzGPJz3d+Ic=
+X-Google-Smtp-Source: AGHT+IHXLBlv/nEicaqmAk+ih73rZR/7gfPb4gK99oBc5EpKbjwFNQ5lncW1Jkn34lUCoEQx7EZrHw==
+X-Received: by 2002:a17:906:3554:b0:a4e:1d55:c21 with SMTP id s20-20020a170906355400b00a4e1d550c21mr896950eja.67.1711697772462;
+        Fri, 29 Mar 2024 00:36:12 -0700 (PDT)
+Received: from gmail.com (195-38-112-2.pool.digikabel.hu. [195.38.112.2])
+        by smtp.gmail.com with ESMTPSA id f4-20020a17090660c400b00a457a55b814sm1629825ejk.73.2024.03.29.00.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 00:36:11 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Fri, 29 Mar 2024 08:36:09 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Chang S. Bae" <chang.seok.bae@intel.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	angquan yu <angquan21@gmail.com>, kernel@collabora.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests: x86: skip the tests if prerequisites
+ aren't fulfilled
+Message-ID: <ZgZvaUbZIr0qpxK5@gmail.com>
+References: <20240327111720.3509180-1-usama.anjum@collabora.com>
+ <1d6418a3-67eb-4a39-891a-7d653a26f1fc@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="kiXl0dlDZ9ZIiu8P"
-Content-Disposition: inline
-In-Reply-To: <20240329044459.3990638-5-debug@rivosinc.com>
-
---kiXl0dlDZ9ZIiu8P
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1d6418a3-67eb-4a39-891a-7d653a26f1fc@linuxfoundation.org>
 
-On Thu, Mar 28, 2024 at 09:44:36PM -0700, Deepak Gupta wrote:
-> Adds description in dt-bindings (extensions.yaml)
->=20
-> This patch adds support for detecting zicfiss and zicfilp. zicfiss and zi=
-cfilp
-> stands for unprivleged integer spec extension for shadow stack and branch
-> tracking on indirect branches, respectively.
->=20
-> This patch looks for zicfiss and zicfilp in device tree and accordinlgy l=
-ights
-> up bit in cpu feature bitmap. Furthermore this patch adds detection utili=
-ty
-> functions to return whether shadow stack or landing pads are supported by
-> cpu.
->=20
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
 
->  .../devicetree/bindings/riscv/extensions.yaml       | 10 ++++++++++
+* Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-Checkpatch should have told you that bindings changes need to be in
-separate patches.
+> On 3/27/24 05:17, Muhammad Usama Anjum wrote:
+> > Skip instead of failing when prerequisite conditions aren't fulfilled,
+> > such as invalid xstate values etc. This patch would make the tests show
+> > as skip when run by:
+> >    make -C tools/testing/selftests/ TARGETS=x86 run_tests
+> > 
+> >    ...
+> >    # timeout set to 45
+> >    # selftests: x86: amx_64
+> >    # # xstate cpuid: invalid tile data size/offset: 0/0
+> >    ok 42 selftests: x86: amx_64 # SKIP
+> >    # timeout set to 45
+> >    # selftests: x86: lam_64
+> >    # # Unsupported LAM feature!
+> >    ok 43 selftests: x86: lam_64 # SKIP
+> >    ...
+> > 
+> > In amx test, Move away from check_cpuid_xsave() and start using
+> > arch_prctl() to find out if amx support is present or not. In the
+> > kernels where amx isn't present, arch_prctl returns -EINVAL. Hence it is
+> > backward compatible.
+> > 
+> > Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
+> > Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > ---
+> > Changes since v2:
+> > - Update the changelog
+> > 
+> 
+> Thank you - applied to linux-kselftest next for 6.10-rc1
+
+Please don't, I've applied the patch to tip:x86/cpu with a tidied up 
+changelog.
 
 Thanks,
-Conor.
 
->  arch/riscv/include/asm/cpufeature.h                 | 13 +++++++++++++
->  arch/riscv/include/asm/hwcap.h                      |  2 ++
->  arch/riscv/include/asm/processor.h                  |  1 +
->  arch/riscv/kernel/cpufeature.c                      |  2 ++
-
---kiXl0dlDZ9ZIiu8P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgZsvgAKCRB4tDGHoIJi
-0iYTAQD/x2jCSMw3PvwFsNJ6v7adg+YdWitg5NvBburVYvIikAEA0Qu7dWdDtcJk
-H0K8lWXiWqqumgSgXhcWgk/Gp2U1igQ=
-=0twh
------END PGP SIGNATURE-----
-
---kiXl0dlDZ9ZIiu8P--
+	Ingo
 
