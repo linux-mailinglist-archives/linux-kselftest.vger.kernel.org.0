@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-6894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14FA6892469
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 20:43:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 014DB892498
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 20:51:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFB45284F28
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 19:43:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54778B2219D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 19:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DAC2139CE7;
-	Fri, 29 Mar 2024 19:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9FB13AD09;
+	Fri, 29 Mar 2024 19:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="n7z5twiI"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Wa7YX088"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE8E1E529;
-	Fri, 29 Mar 2024 19:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170FD131E59;
+	Fri, 29 Mar 2024 19:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711741382; cv=none; b=X+fgX4MavXA24Oc2o1vvWWbW4OvDfp+C5qjQ0sKj000SQrLm57IfHn/L9q5PrAZ//ZMy0jXvMZsR1tvgEc4lDowAVsoWwg+EPHJnxiabU7i2yzsa9I0yxtORLoMEm9BPC9KmI/1k40dGhKwoN8MxOS/yFl6TJt4C8g9+B5A0fno=
+	t=1711741808; cv=none; b=VBGZ7f902JYVnWFy3C3FqcWpRqpDvIUv55TnZiBZXA/S8c4RVY9cWztiFIOxAfwkB5Oda2n01zJDXeM31lvRsdFr9LMX+N8QMWGo+dXZ+iDWt4JNafAAIW5SqTqPqPYckwlO8qpXpZgw8gSWvdv80RLEk5N+Et7etYe+KnGrD5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711741382; c=relaxed/simple;
-	bh=80xtOevugz6QWOrvG2hJVhtRvl7HXBsF0obq3zGA5Ns=;
+	s=arc-20240116; t=1711741808; c=relaxed/simple;
+	bh=yYbZhqg6Kn2qjH/2vqPgNHZZG9gDIqfnwF9btJXe0Sc=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Dfgdhbltml/OBZvFrT5nZDnYkf13kMPuDRlf2rR4SmDVeQKbSgieKORPJv9RJWiltC0ziWr39qbZXBll86tjJ6Dkmby3V8ovtLpvC7yt8uYqbKsPGAtBNBghEq5A9pL5M3+HPlsEAz7YxfP0ytxz+gDWZiVSMel/4p23l6IWg2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=n7z5twiI; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=sQdIw9MLGYdQnewr0mFGTw0YzwLe+a8QXKeDpuVSP081HySNdnyvcjQ9/VqJGIsQMUwp3VeiobSk4NzUdMvUWytF+1QpEz9eQIQ2B/4z7S493e3FlPfKvVb252KNPF8i5owx2U0pkHtgTEcW07RmbcPpnH6kKqFhou0NsCHQNf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Wa7YX088; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711741377;
-	bh=80xtOevugz6QWOrvG2hJVhtRvl7HXBsF0obq3zGA5Ns=;
+	s=mail; t=1711741803;
+	bh=yYbZhqg6Kn2qjH/2vqPgNHZZG9gDIqfnwF9btJXe0Sc=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=n7z5twiIe1daBip1hOJr1mSl7C47SSbGLlsOc28ILMWSs272LtgdF68IQPncU38n8
-	 2QhBwafpZ3ArUm5rcINRw1qIk6FBT8YYQ4qIxO9l2IIj8ALEYL7SAevl/JqVUw6aMK
-	 dqY8f+Hy4ly+2WwBj4qlAEMtF7ktByyzhz5ZlzbH3kMiIbaay7cXqEjywPCHlc/30j
-	 whPZ0S7QIgw2pznMgTOv4hUaCORevyvf3patp2jQ3rrV9wyHju2sDUG82R6RBdGHXk
-	 fjm7lOjBWCQGJK26IQScFUqtsDNbSLD5Vt2DPDJdW1s+WCmvqJlrFSQirpfbwE5/1E
-	 jGMhrI2G3Memw==
+	b=Wa7YX088KbkDi+I3Lt+BNMagPIUovcs4Kdec0zlxyKldZWCS1OHkf4bbgYK6ufxKK
+	 I3Hlpr5kuB/8CAg3/b9dveIk+9j9oIf/YM5QIyVXxurgQwNWsyWWPphdGQrl/r+PZk
+	 C/vMgVeAvDvdHydWg41lPZTkxTvt58kixFhwBQaG7+thEmyfFLF3no/vP6TcunxqmZ
+	 N6nDRV9hS1oT7h6QObaJ/51XkUYfE6w3Cm04mwe1OcZgbfiTF82aZyFBvT7/RGvbaK
+	 7Isr7TELxJV8fiwhx/eTNolfOW8BjFYp/6SOAvi1DSRzcjD7i02GmO/WaSU2nXdPCz
+	 g4mFwQZyZY66w==
 Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 500303781FCE;
-	Fri, 29 Mar 2024 19:42:46 +0000 (UTC)
-Message-ID: <e85f049f-8b49-4656-adfd-f91b7706f4d6@collabora.com>
-Date: Sat, 30 Mar 2024 00:43:17 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C327A3780C22;
+	Fri, 29 Mar 2024 19:49:38 +0000 (UTC)
+Message-ID: <4b38393a-f69d-4a77-a896-b6cd42c7edcf@collabora.com>
+Date: Sat, 30 Mar 2024 00:50:09 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,790 +57,724 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Wei Xu <weixugc@google.com>, David Rientjes <rientjes@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Muchun Song <muchun.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Yosry Ahmed <yosryahmed@google.com>, Matthew Wilcox <willy@infradead.org>,
- Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
- Kairui Song <kasong@tencent.com>, "Michael S. Tsirkin" <mst@redhat.com>,
- Vasily Averin <vasily.averin@linux.dev>, Nhat Pham <nphamcs@gmail.com>,
- Miaohe Lin <linmiaohe@huawei.com>, Qi Zheng <zhengqi.arch@bytedance.com>,
- Abel Wu <wuyun.abel@bytedance.com>,
- "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
- Kefeng Wang <wangkefeng.wang@huawei.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v3 8/8] mm: test system-wide workingset reporting
-To: Yuanchu Xie <yuanchu@google.com>, David Hildenbrand <david@redhat.com>,
- "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
- Khalid Aziz <khalid.aziz@oracle.com>, Henry Huang <henry.hj@antgroup.com>,
- Yu Zhao <yuzhao@google.com>, Dan Williams <dan.j.williams@intel.com>,
- Gregory Price <gregory.price@memverge.com>, Huang Ying <ying.huang@intel.com>
-References: <20240327213108.2384666-1-yuanchu@google.com>
- <20240327213108.2384666-9-yuanchu@google.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, corbet@lwn.net,
+ tech-j-ext@lists.risc-v.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
+ akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+ Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
+ shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
+ jerry.shih@sifive.com, hankuan.chen@sifive.com, greentime.hu@sifive.com,
+ evan@rivosinc.com, xiao.w.wang@intel.com, charlie@rivosinc.com,
+ apatel@ventanamicro.com, mchitale@ventanamicro.com,
+ dbarboza@ventanamicro.com, sameo@rivosinc.com, shikemeng@huaweicloud.com,
+ willy@infradead.org, vincent.chen@sifive.com, guoren@kernel.org,
+ samitolvanen@google.com, songshuaishuai@tinylab.org, gerg@kernel.org,
+ heiko@sntech.de, bhe@redhat.com, jeeheng.sia@starfivetech.com,
+ cyy@cyyself.name, maskray@google.com, ancientmodern4@gmail.com,
+ mathis.salmen@matsal.de, cuiyunhui@bytedance.com, bgray@linux.ibm.com,
+ mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, david@redhat.com,
+ catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org,
+ shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+ jhubbard@nvidia.com
+Subject: Re: [PATCH v2 27/27] kselftest/riscv: kselftest for user mode cfi
+To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
+ rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
+ kito.cheng@sifive.com, keescook@chromium.org, ajones@ventanamicro.com,
+ conor.dooley@microchip.com, cleger@rivosinc.com, atishp@atishpatra.org,
+ alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com,
+ samuel.holland@sifive.com, palmer@sifive.com, conor@kernel.org,
+ linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-mm@kvack.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240329044459.3990638-1-debug@rivosinc.com>
+ <20240329044459.3990638-28-debug@rivosinc.com>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240327213108.2384666-9-yuanchu@google.com>
+In-Reply-To: <20240329044459.3990638-28-debug@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Please add selftest tag in the subject in selftest patches.
-
-On 3/28/24 2:31 AM, Yuanchu Xie wrote:
-> A basic test that verifies the working set size of a simple memory
-> accessor. It should work with or without the aging thread.
+On 3/29/24 9:44 AM, Deepak Gupta wrote:
+> Adds kselftest for RISC-V control flow integrity implementation for user
+> mode. There is not a lot going on in kernel for enabling landing pad for
+> user mode. Thus kselftest simply enables landing pad for the binary and
+> a signal handler is registered for SIGSEGV. Any control flow violation are
+> reported as SIGSEGV with si_code = SEGV_CPERR. Test will fail on recieving
+> any SEGV_CPERR. Shadow stack part has more changes in kernel and thus there
+> are separate tests for that
+> 	- enable and disable
+> 	- Exercise `map_shadow_stack` syscall
+> 	- `fork` test to make sure COW works for shadow stack pages
+> 	- gup tests
+> 	  As of today kernel uses FOLL_FORCE when access happens to memory via
+> 	  /proc/<pid>/mem. Not breaking that for shadow stack
+> 	- signal test. Make sure signal delivery results in token creation on
+>       shadow stack and consumes (and verifies) token on sigreturn
+>     - shadow stack protection test. attempts to write using regular store
+> 	  instruction on shadow stack memory must result in access faults
 > 
-> Question: I don't know how to best test file memory in selftests. Is
-> there a place where I should put the temporary file? /tmp can be tmpfs
-> mounted in many distros.
-> 
-> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
-Thanks for writing most of the test in TAP compliant format. Only replace
-printing directly to strerr to ksft_exit_fail_msg() instead.
-
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->  tools/testing/selftests/mm/.gitignore         |   1 +
->  tools/testing/selftests/mm/Makefile           |   3 +
->  .../testing/selftests/mm/workingset_report.c  | 315 +++++++++++++++++
->  .../testing/selftests/mm/workingset_report.h  |  37 ++
->  .../selftests/mm/workingset_report_test.c     | 328 ++++++++++++++++++
->  5 files changed, 684 insertions(+)
->  create mode 100644 tools/testing/selftests/mm/workingset_report.c
->  create mode 100644 tools/testing/selftests/mm/workingset_report.h
->  create mode 100644 tools/testing/selftests/mm/workingset_report_test.c
+>  tools/testing/selftests/riscv/Makefile        |   2 +-
+>  tools/testing/selftests/riscv/cfi/Makefile    |  10 +
+>  .../testing/selftests/riscv/cfi/cfi_rv_test.h |  85 ++++
+>  .../selftests/riscv/cfi/riscv_cfi_test.c      |  91 +++++
+>  .../testing/selftests/riscv/cfi/shadowstack.c | 376 ++++++++++++++++++
+>  .../testing/selftests/riscv/cfi/shadowstack.h |  39 ++
+Please add generated binaries in the .gitignore files.
+
+>  6 files changed, 602 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/riscv/cfi/Makefile
+>  create mode 100644 tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+>  create mode 100644 tools/testing/selftests/riscv/cfi/riscv_cfi_test.c
+>  create mode 100644 tools/testing/selftests/riscv/cfi/shadowstack.c
+>  create mode 100644 tools/testing/selftests/riscv/cfi/shadowstack.h
 > 
-> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-> index 4ff10ea61461..14a2412c8257 100644
-> --- a/tools/testing/selftests/mm/.gitignore
-> +++ b/tools/testing/selftests/mm/.gitignore
-> @@ -46,3 +46,4 @@ gup_longterm
->  mkdirty
->  va_high_addr_switch
->  hugetlb_fault_after_madv
-> +workingset_report_test
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index 2453add65d12..c0869bf07e99 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -70,6 +70,7 @@ TEST_GEN_FILES += ksm_tests
->  TEST_GEN_FILES += ksm_functional_tests
->  TEST_GEN_FILES += mdwe_test
->  TEST_GEN_FILES += hugetlb_fault_after_madv
-> +TEST_GEN_FILES += workingset_report_test
+> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
+> index 4a9ff515a3a0..867e5875b7ce 100644
+> --- a/tools/testing/selftests/riscv/Makefile
+> +++ b/tools/testing/selftests/riscv/Makefile
+> @@ -5,7 +5,7 @@
+>  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
 >  
->  ifneq ($(ARCH),arm64)
->  TEST_GEN_FILES += soft-dirty
-> @@ -123,6 +124,8 @@ $(TEST_GEN_FILES): vm_util.c thp_settings.c
->  $(OUTPUT)/uffd-stress: uffd-common.c
->  $(OUTPUT)/uffd-unit-tests: uffd-common.c
->  
-> +$(OUTPUT)/workingset_report_test: workingset_report.c
-> +
->  ifeq ($(ARCH),x86_64)
->  BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
->  BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
-> diff --git a/tools/testing/selftests/mm/workingset_report.c b/tools/testing/selftests/mm/workingset_report.c
+>  ifneq (,$(filter $(ARCH),riscv))
+> -RISCV_SUBTARGETS ?= hwprobe vector mm
+> +RISCV_SUBTARGETS ?= hwprobe vector mm cfi
+>  else
+>  RISCV_SUBTARGETS :=
+>  endif
+> diff --git a/tools/testing/selftests/riscv/cfi/Makefile b/tools/testing/selftests/riscv/cfi/Makefile
 > new file mode 100644
-> index 000000000000..93387f0f30ee
+> index 000000000000..77f12157fa29
 > --- /dev/null
-> +++ b/tools/testing/selftests/mm/workingset_report.c
-> @@ -0,0 +1,315 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "workingset_report.h"
+> +++ b/tools/testing/selftests/riscv/cfi/Makefile
+> @@ -0,0 +1,10 @@
+> +CFLAGS += -I$(top_srcdir)/tools/include
 > +
+> +CFLAGS += -march=rv64gc_zicfilp_zicfiss
+> +
+> +TEST_GEN_PROGS := cfitests
+> +
+> +include ../../lib.mk
+> +
+> +$(OUTPUT)/cfitests: riscv_cfi_test.c shadowstack.c
+> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+> diff --git a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+> new file mode 100644
+> index 000000000000..27267a2e1008
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+> @@ -0,0 +1,85 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef SELFTEST_RISCV_CFI_H
+> +#define SELFTEST_RISCV_CFI_H
 > +#include <stddef.h>
-> +#include <stdlib.h>
-> +#include <stdio.h>
-> +#include <stdbool.h>
-> +#include <unistd.h>
-> +#include <string.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
-> +
-> +#define SYSFS_NODE_ONLINE "/sys/devices/system/node/online"
-> +#define PROC_DROP_CACHES "/proc/sys/vm/drop_caches"
-> +
-> +/* Returns read len on success, or -errno on failure. */
-> +static ssize_t read_text(const char *path, char *buf, size_t max_len)
-> +{
-> +	ssize_t len;
-> +	int fd, err;
-> +	size_t bytes_read = 0;
-> +
-> +	if (!max_len)
-> +		return -EINVAL;
-> +
-> +	fd = open(path, O_RDONLY);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	while (bytes_read < max_len - 1) {
-> +		len = read(fd, buf + bytes_read, max_len - 1 - bytes_read);
-> +
-> +		if (len <= 0)
-> +			break;
-> +		bytes_read += len;
-> +	}
-> +
-> +	buf[bytes_read] = '\0';
-> +
-> +	err = -errno;
-> +	close(fd);
-> +	return len < 0 ? err : bytes_read;
-> +}
-> +
-> +/* Returns written len on success, or -errno on failure. */
-> +static ssize_t write_text(const char *path, const char *buf, ssize_t max_len)
-> +{
-> +	int fd, len, err;
-> +	size_t bytes_written = 0;
-> +
-> +	fd = open(path, O_WRONLY | O_APPEND);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	while (bytes_written < max_len) {
-> +		len = write(fd, buf + bytes_written, max_len - bytes_written);
-> +
-> +		if (len < 0)
-> +			break;
-> +		bytes_written += len;
-> +	}
-> +
-> +	err = -errno;
-> +	close(fd);
-> +	return len < 0 ? err : bytes_written;
-> +}
-> +
-> +static long read_num(const char *path)
-> +{
-> +	char buf[21];
-> +
-> +	if (read_text(path, buf, sizeof(buf)) <= 0)
-> +		return -1;
-> +	return (long)strtoul(buf, NULL, 10);
-> +}
-> +
-> +static int write_num(const char *path, unsigned long n)
-> +{
-> +	char buf[21];
-> +
-> +	sprintf(buf, "%lu", n);
-> +	if (write_text(path, buf, strlen(buf)) < 0)
-> +		return -1;
-> +	return 0;
-> +}
-> +
-> +long sysfs_get_refresh_interval(int nid)
-> +{
-> +	char file[128];
-> +
-> +	snprintf(
-> +		file,
-> +		sizeof(file),
-> +		"/sys/devices/system/node/node%d/workingset_report/refresh_interval",
-> +		nid);
-> +	return read_num(file);
-> +}
-> +
-> +int sysfs_set_refresh_interval(int nid, long interval)
-> +{
-> +	char file[128];
-> +
-> +	snprintf(
-> +		file,
-> +		sizeof(file),
-> +		"/sys/devices/system/node/node%d/workingset_report/refresh_interval",
-> +		nid);
-> +	return write_num(file, interval);
-> +}
-> +
-> +int sysfs_get_page_age_intervals_str(int nid, char *buf, int len)
-> +{
-> +	char path[128];
-> +
-> +	snprintf(
-> +		path,
-> +		sizeof(path),
-> +		"/sys/devices/system/node/node%d/workingset_report/page_age_intervals",
-> +		nid);
-> +	return read_text(path, buf, len);
-> +
-> +}
-> +
-> +int sysfs_set_page_age_intervals_str(int nid, const char *buf, int len)
-> +{
-> +	char path[128];
-> +
-> +	snprintf(
-> +		path,
-> +		sizeof(path),
-> +		"/sys/devices/system/node/node%d/workingset_report/page_age_intervals",
-> +		nid);
-> +	return write_text(path, buf, len);
-> +}
-> +
-> +int sysfs_set_page_age_intervals(int nid, const char *intervals[],
-> +				 int nr_intervals)
-> +{
-> +	char file[128];
-> +	char buf[1024];
-> +	int i;
-> +	int err, len = 0;
-> +
-> +	for (i = 0; i < nr_intervals; ++i) {
-> +		err = snprintf(buf + len, sizeof(buf) - len, "%s", intervals[i]);
-> +
-> +		if (err < 0)
-> +			return err;
-> +		len += err;
-> +
-> +		if (i < nr_intervals - 1) {
-> +			err = snprintf(buf + len, sizeof(buf) - len, ",");
-> +			if (err < 0)
-> +				return err;
-> +			len += err;
-> +		}
-> +	}
-> +
-> +	snprintf(
-> +		file,
-> +		sizeof(file),
-> +		"/sys/devices/system/node/node%d/workingset_report/page_age_intervals",
-> +		nid);
-> +	return write_text(file, buf, len);
-> +}
-> +
-> +int get_nr_nodes(void)
-> +{
-> +	char buf[22];
-> +	char *found;
-> +
-> +	if (read_text(SYSFS_NODE_ONLINE, buf, sizeof(buf)) <= 0)
-> +		return -1;
-> +	found = strstr(buf, "-");
-> +	if (found)
-> +		return (int)strtoul(found + 1, NULL, 10) + 1;
-> +	return (long)strtoul(buf, NULL, 10) + 1;
-> +}
-> +
-> +int drop_pagecache(void)
-> +{
-> +	return write_num(PROC_DROP_CACHES, 1);
-> +}
-> +
-> +ssize_t sysfs_page_age_read(int nid, char *buf, size_t len)
-> +
-> +{
-> +	char file[128];
-> +
-> +	snprintf(file,
-> +		sizeof(file),
-> +		 "/sys/devices/system/node/node%d/workingset_report/page_age",
-> +		 nid);
-> +	return read_text(file, buf, len);
-> +}
-> +
-> +/*
-> + * Finds the first occurrence of "N<nid>\n"
-> + * Modifies buf to terminate before the next occurrence of "N".
-> + * Returns a substring of buf starting after "N<nid>\n"
-> + */
-> +char *page_age_split_node(char *buf, int nid, char **next)
-> +{
-> +	char node_str[5];
-> +	char *found;
-> +	int node_str_len;
-> +
-> +	node_str_len = snprintf(node_str, sizeof(node_str), "N%u\n", nid);
-> +
-> +	/* find the node prefix first */
-> +	found = strstr(buf, node_str);
-> +	if (!found) {
-> +		fprintf(stderr, "cannot find '%s' in page_idle_age", node_str);
-> +		return NULL;
-> +	}
-> +	found += node_str_len;
-> +
-> +	*next = strchr(found, 'N');
-> +	if (*next)
-> +		*(*next - 1) = '\0';
-> +
-> +	return found;
-> +}
-> +
-> +ssize_t page_age_read(const char *buf, const char *interval, int pagetype)
-> +{
-> +	static const char * const type[ANON_AND_FILE] = { "anon=", "file=" };
-> +	char *found;
-> +
-> +	found = strstr(buf, interval);
-> +	if (!found) {
-> +		fprintf(stderr, "cannot find %s in page_age", interval);
-> +		return -1;
-> +	}
-> +	found = strstr(found, type[pagetype]);
-> +	if (!found) {
-> +		fprintf(stderr, "cannot find %s in page_age", type[pagetype]);
-> +		return -1;
-> +	}
-> +	found += strlen(type[pagetype]);
-> +	return (long)strtoul(found, NULL, 10);
-> +}
-> +
-> +static const char *TEMP_FILE = "/tmp/workingset_selftest";
-> +void cleanup_file_workingset(void)
-> +{
-> +	remove(TEMP_FILE);
-> +}
-> +
-> +int alloc_file_workingset(void *arg)
-> +{
-> +	int err = 0;
-> +	char *ptr;
-> +	int fd;
-> +	int ppid;
-> +	char *mapped;
-> +	size_t size = (size_t)arg;
-> +	size_t page_size = getpagesize();
-> +
-> +	ppid = getppid();
-> +
-> +	fd = open(TEMP_FILE, O_RDWR | O_CREAT);
-> +	if (fd < 0) {
-> +		err = -errno;
-> +		perror("failed to open temp file\n");
-> +		goto cleanup;
-> +	}
-> +
-> +	if (fallocate(fd, 0, 0, size) < 0) {
-> +		err = -errno;
-> +		perror("fallocate");
-> +		goto cleanup;
-> +	}
-> +
-> +	mapped = (char *)mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED,
-> +			      fd, 0);
-> +	if (mapped == NULL) {
-> +		err = -errno;
-> +		perror("mmap");
-> +		goto cleanup;
-> +	}
-> +
-> +	while (getppid() == ppid) {
-> +		sync();
-> +		for (ptr = mapped; ptr < mapped + size; ptr += page_size)
-> +			*ptr = *ptr ^ 0xFF;
-> +	}
-> +
-> +cleanup:
-> +	cleanup_file_workingset();
-> +	return err;
-> +}
-> +
-> +int alloc_anon_workingset(void *arg)
-> +{
-> +	char *buf, *ptr;
-> +	int ppid = getppid();
-> +	size_t size = (size_t)arg;
-> +	size_t page_size = getpagesize();
-> +
-> +	buf = malloc(size);
-> +
-> +	if (!buf) {
-> +		fprintf(stderr, "cannot allocate anon workingset");
-> +		exit(1);
-> +	}
-> +
-> +	while (getppid() == ppid) {
-> +		for (ptr = buf; ptr < buf + size; ptr += page_size)
-> +			*ptr = *ptr ^ 0xFF;
-> +	}
-> +
-> +	free(buf);
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/mm/workingset_report.h b/tools/testing/selftests/mm/workingset_report.h
-> new file mode 100644
-> index 000000000000..f72a931298e0
-> --- /dev/null
-> +++ b/tools/testing/selftests/mm/workingset_report.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef WORKINGSET_REPORT_H_
-> +#define WORKINGSET_REPORT_H_
-> +
-> +#define _GNU_SOURCE
-> +
-> +#include <fcntl.h>
-> +#include <sys/stat.h>
-> +#include <errno.h>
-> +#include <stdint.h>
 > +#include <sys/types.h>
+> +#include "shadowstack.h"
 > +
-> +#define PAGETYPE_ANON 0
-> +#define PAGETYPE_FILE 1
-> +#define ANON_AND_FILE 2
+> +#define RISCV_CFI_SELFTEST_COUNT RISCV_SHADOW_STACK_TESTS
 > +
-> +int get_nr_nodes(void);
-> +int drop_pagecache(void);
+> +#define CHILD_EXIT_CODE_SSWRITE		10
+> +#define CHILD_EXIT_CODE_SIG_TEST	11
 > +
-> +long sysfs_get_refresh_interval(int nid);
-> +int sysfs_set_refresh_interval(int nid, long interval);
+> +#define BAD_POINTER	(NULL)
 > +
-> +int sysfs_get_page_age_intervals_str(int nid, char *buf, int len);
-> +int sysfs_set_page_age_intervals_str(int nid, const char *buf, int len);
+> +#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)		\
+> +({															\
+> +	register long _num  __asm__ ("a7") = (num);				\
+> +	register long _arg1 __asm__ ("a0") = (long)(arg1);		\
+> +	register long _arg2 __asm__ ("a1") = (long)(arg2);		\
+> +	register long _arg3 __asm__ ("a2") = (long)(arg3);		\
+> +	register long _arg4 __asm__ ("a3") = (long)(arg4);		\
+> +	register long _arg5 __asm__ ("a4") = (long)(arg5);		\
+> +															\
+> +	__asm__ volatile (										\
+> +		"ecall\n"											\
+> +		: "+r"(_arg1)										\
+> +		: "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5),	\
+> +		  "r"(_num)											\
+> +		: "memory", "cc"									\
+> +	);														\
+> +	_arg1;													\
+> +})
 > +
-> +int sysfs_set_page_age_intervals(int nid, const char *intervals[],
-> +				 int nr_intervals);
+> +#define my_syscall3(num, arg1, arg2, arg3)					\
+> +({															\
+> +	register long _num  __asm__ ("a7") = (num);				\
+> +	register long _arg1 __asm__ ("a0") = (long)(arg1);		\
+> +	register long _arg2 __asm__ ("a1") = (long)(arg2);		\
+> +	register long _arg3 __asm__ ("a2") = (long)(arg3);		\
+> +															\
+> +	__asm__ volatile (										\
+> +		"ecall\n"											\
+> +		: "+r"(_arg1)										\
+> +		: "r"(_arg2), "r"(_arg3),							\
+> +		  "r"(_num)											\
+> +		: "memory", "cc"									\
+> +	);														\
+> +	_arg1;													\
+> +})
 > +
-> +char *page_age_split_node(char *buf, int nid, char **next);
-> +ssize_t sysfs_page_age_read(int nid, char *buf, size_t len);
-> +ssize_t page_age_read(const char *buf, const char *interval, int pagetype);
+> +#ifndef __NR_prctl
+> +#define __NR_prctl 167
+> +#endif
 > +
-> +int alloc_file_workingset(void *arg);
-> +void cleanup_file_workingset(void);
-> +int alloc_anon_workingset(void *arg);
+> +#ifndef __NR_map_shadow_stack
+> +#define __NR_map_shadow_stack 453
+> +#endif
 > +
-> +#endif /* WORKINGSET_REPORT_H_ */
-> diff --git a/tools/testing/selftests/mm/workingset_report_test.c b/tools/testing/selftests/mm/workingset_report_test.c
+> +#define CSR_SSP 0x011
+> +
+> +#ifdef __ASSEMBLY__
+> +#define __ASM_STR(x)    x
+> +#else
+> +#define __ASM_STR(x)    #x
+> +#endif
+> +
+> +#define csr_read(csr)									\
+> +({														\
+> +	register unsigned long __v;							\
+> +	__asm__ __volatile__ ("csrr %0, " __ASM_STR(csr)	\
+> +						  : "=r" (__v) :				\
+> +						  : "memory");					\
+> +	__v;												\
+> +})
+> +
+> +#define csr_write(csr, val)								\
+> +({														\
+> +	unsigned long __v = (unsigned long) (val);			\
+> +	__asm__ __volatile__ ("csrw " __ASM_STR(csr) ", %0"	\
+> +						  : : "rK" (__v)				\
+> +						  : "memory");					\
+> +})
+> +
+> +#endif
+> diff --git a/tools/testing/selftests/riscv/cfi/riscv_cfi_test.c b/tools/testing/selftests/riscv/cfi/riscv_cfi_test.c
 > new file mode 100644
-> index 000000000000..e6e857d8fe35
+> index 000000000000..c116ae4bb358
 > --- /dev/null
-> +++ b/tools/testing/selftests/mm/workingset_report_test.c
-> @@ -0,0 +1,328 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "workingset_report.h"
+> +++ b/tools/testing/selftests/riscv/cfi/riscv_cfi_test.c
+> @@ -0,0 +1,91 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +
-> +#include <stdlib.h>
-> +#include <stdio.h>
+> +#include "../../kselftest.h"
 > +#include <signal.h>
-> +#include <time.h>
+> +#include <asm/ucontext.h>
+> +#include <linux/prctl.h>
+> +#include "cfi_rv_test.h"
 > +
-> +#include "../clone3/clone3_selftests.h"
+> +/* do not optimize cfi related test functions */
+> +#pragma GCC push_options
+> +#pragma GCC optimize("O0")
 > +
-> +#define REFRESH_INTERVAL 5000
-> +#define MB(x) (x << 20)
+> +#define SEGV_CPERR 10 /* control protection fault */
 > +
-> +static void sleep_ms(int milliseconds)
+> +void sigsegv_handler(int signum, siginfo_t *si, void *uc)
 > +{
-> +	struct timespec ts;
+> +	struct ucontext *ctx = (struct ucontext *) uc;
 > +
-> +	ts.tv_sec = milliseconds / 1000;
-> +	ts.tv_nsec = (milliseconds % 1000) * 1000000;
-> +	nanosleep(&ts, NULL);
+> +	if (si->si_code == SEGV_CPERR) {
+> +		printf("Control flow violation happened somewhere\n");
+> +		printf("pc where violation happened %lx\n", ctx->uc_mcontext.gregs[0]);
+> +		exit(-1);
+> +	}
+> +
+> +	/* null pointer deref */
+> +	if (si->si_addr == BAD_POINTER)
+> +		exit(CHILD_EXIT_CODE_NULL_PTR_DEREF);
+> +
+> +	/* shadow stack write case */
+> +	exit(CHILD_EXIT_CODE_SSWRITE);
+> +}
+> +
+> +int lpad_enable(void)
+> +{
+> +	int ret = 0;
+> +
+> +	ret = my_syscall5(__NR_prctl, PR_SET_INDIR_BR_LP_STATUS, PR_INDIR_BR_LP_ENABLE, 0, 0, 0);
+> +
+> +	return ret;
+> +}
+> +
+> +bool register_signal_handler(void)
+> +{
+> +	struct sigaction sa = {};
+> +
+> +	sa.sa_sigaction = sigsegv_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL)) {
+> +		printf("registering signal handler for landing pad violation failed\n");
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int ret = 0;
+> +	unsigned long lpad_status = 0;
+> +
+> +	ksft_print_header();
+> +
+> +	ksft_set_plan(RISCV_CFI_SELFTEST_COUNT);
+> +
+> +	ksft_print_msg("starting risc-v tests\n");
+> +
+> +	/*
+> +	 * Landing pad test. Not a lot of kernel changes to support landing
+> +	 * pad for user mode except lighting up a bit in senvcfg via a prctl
+> +	 * Enable landing pad through out the execution of test binary
+> +	 */
+> +	ret = my_syscall5(__NR_prctl, PR_GET_INDIR_BR_LP_STATUS, &lpad_status, 0, 0, 0);
+> +	if (ret)
+> +		ksft_exit_skip("Get landing pad status failed with %d\n", ret);
+> +
+> +	ret = lpad_enable();
+> +
+> +	if (ret)
+> +		ksft_exit_skip("Enabling landing pad failed with %d\n", ret);
+> +
+> +	if (!register_signal_handler())
+> +		ksft_exit_skip("registering signal handler for SIGSEGV failed\n");
+> +
+> +	ksft_print_msg("landing pad enabled for binary\n");
+> +	ksft_print_msg("starting risc-v shadow stack tests\n");
+> +	execute_shadow_stack_tests();
+> +
+> +	ksft_finished();
+> +}
+> +
+> +#pragma GCC pop_options
+> diff --git a/tools/testing/selftests/riscv/cfi/shadowstack.c b/tools/testing/selftests/riscv/cfi/shadowstack.c
+> new file mode 100644
+> index 000000000000..126654801bed
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/cfi/shadowstack.c
+> @@ -0,0 +1,376 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include "../../kselftest.h"
+> +#include <sys/wait.h>
+> +#include <signal.h>
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +#include <sys/mman.h>
+> +#include "shadowstack.h"
+> +#include "cfi_rv_test.h"
+> +
+> +/* do not optimize shadow stack related test functions */
+> +#pragma GCC push_options
+> +#pragma GCC optimize("O0")
+> +
+> +void zar(void)
+> +{
+> +	unsigned long ssp = 0, swaped_val = 0;
+> +
+> +	ssp = csr_read(CSR_SSP);
+> +	printf("inside %s and shadow stack ptr is %lx\n", __func__, ssp);
+> +}
+> +
+> +void bar(void)
+> +{
+> +	printf("inside %s\n", __func__);
+> +	zar();
+> +}
+> +
+> +void foo(void)
+> +{
+> +	printf("inside %s\n", __func__);
+> +	bar();
+> +}
+> +
+> +void zar_child(void)
+> +{
+> +	unsigned long ssp = 0;
+> +
+> +	ssp = csr_read(CSR_SSP);
+> +	printf("inside %s and shadow stack ptr is %lx\n", __func__, ssp);
+> +}
+> +
+> +void bar_child(void)
+> +{
+> +	printf("inside %s\n", __func__);
+> +	zar_child();
+> +}
+> +
+> +void foo_child(void)
+> +{
+> +	printf("inside %s\n", __func__);
+> +	bar_child();
+> +}
+> +
+> +typedef void (call_func_ptr)(void);
+> +/*
+> + * call couple of functions to test push pop.
+> + */
+> +int shadow_stack_call_tests(call_func_ptr fn_ptr, bool parent)
+> +{
+> +	if (parent)
+> +		printf("call test for parent\n");
+> +	else
+> +		printf("call test for child\n");
+> +
+> +	(fn_ptr)();
+> +
+> +	return 0;
+> +}
+> +
+> +bool enable_disable_check(unsigned long test_num, void *ctx)
+> +{
+> +	int ret = 0;
+> +
+> +	if (!my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, PR_SHADOW_STACK_ENABLE, 0, 0, 0)) {
+> +		printf("Shadow stack was enabled\n");
+> +		shadow_stack_call_tests(&foo, true);
+> +
+> +		ret = my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, 0, 0, 0, 0);
+> +		if (ret)
+> +			ksft_test_result_fail("shadow stack disable failed\n");
+> +	} else {
+> +		ksft_test_result_fail("shadow stack enable failed\n");
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	return ret ? false : true;
+> +}
+> +
+> +/* forks a thread, and ensure shadow stacks fork out */
+> +bool shadow_stack_fork_test(unsigned long test_num, void *ctx)
+> +{
+> +	int pid = 0, child_status = 0, parent_pid = 0;
+> +
+> +	printf("exercising shadow stack fork test\n");
+> +
+> +	if (my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, PR_SHADOW_STACK_ENABLE, 0, 0, 0)) {
+> +		printf("shadow stack enable prctl failed\n");
+> +		return false;
+> +	}
+> +
+> +	parent_pid = getpid();
+> +	pid = fork();
+> +
+> +	if (pid) {
+> +		printf("Parent pid %d and child pid %d\n", parent_pid, pid);
+> +		shadow_stack_call_tests(&foo, true);
+> +	} else
+> +		shadow_stack_call_tests(&foo_child, false);
+> +
+> +	if (pid) {
+> +		printf("waiting on child to finish\n");
+> +		wait(&child_status);
+> +	} else {
+> +		/* exit child gracefully */
+> +		exit(0);
+> +	}
+> +
+> +	if (pid && WIFSIGNALED(child_status)) {
+> +		printf("child faulted");
+> +		return false;
+> +	}
+> +
+> +	/* disable shadow stack again */
+> +	if (my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, 0, 0, 0, 0)) {
+> +		printf("shadow stack disable prctl failed\n");
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +/* exercise `map_shadow_stack`, pivot to it and call some functions to ensure it works */
+> +#define SHADOW_STACK_ALLOC_SIZE 4096
+> +bool shadow_stack_map_test(unsigned long test_num, void *ctx)
+> +{
+> +	unsigned long shdw_addr;
+> +	int ret = 0;
+> +
+> +	shdw_addr = my_syscall3(__NR_map_shadow_stack, NULL, SHADOW_STACK_ALLOC_SIZE, 0);
+> +
+> +	if (((long) shdw_addr) <= 0) {
+> +		printf("map_shadow_stack failed with error code %d\n", (int) shdw_addr);
+> +		return false;
+> +	}
+> +
+> +	ret = munmap((void *) shdw_addr, SHADOW_STACK_ALLOC_SIZE);
+> +
+> +	if (ret) {
+> +		printf("munmap failed with error code %d\n", ret);
+> +		return false;
+> +	}
+> +
+> +	return true;
 > +}
 > +
 > +/*
-> + * Checks if two given values differ by less than err% of their sum.
+> + * shadow stack protection tests. map a shadow stack and
+> + * validate all memory protections work on it
 > + */
-> +static inline int values_close(long a, long b, int err)
+> +bool shadow_stack_protection_test(unsigned long test_num, void *ctx)
 > +{
-> +	return abs(a - b) <= (a + b) / 100 * err;
+> +	unsigned long shdw_addr;
+> +	unsigned long *write_addr = NULL;
+> +	int ret = 0, pid = 0, child_status = 0;
+> +
+> +	shdw_addr = my_syscall3(__NR_map_shadow_stack, NULL, SHADOW_STACK_ALLOC_SIZE, 0);
+> +
+> +	if (((long) shdw_addr) <= 0) {
+> +		printf("map_shadow_stack failed with error code %d\n", (int) shdw_addr);
+> +		return false;
+> +	}
+> +
+> +	write_addr = (unsigned long *) shdw_addr;
+> +	pid = fork();
+> +
+> +	/* no child was created, return false */
+> +	if (pid == -1)
+> +		return false;
+> +
+> +	/*
+> +	 * try to perform a store from child on shadow stack memory
+> +	 * it should result in SIGSEGV
+> +	 */
+> +	if (!pid) {
+> +		/* below write must lead to SIGSEGV */
+> +		*write_addr = 0xdeadbeef;
+> +	} else {
+> +		wait(&child_status);
+> +	}
+> +
+> +	/* test fail, if 0xdeadbeef present on shadow stack address */
+> +	if (*write_addr == 0xdeadbeef) {
+> +		printf("write suceeded\n");
+> +		return false;
+> +	}
+> +
+> +	/* if child reached here, then fail */
+> +	if (!pid) {
+> +		printf("child reached unreachable state\n");
+> +		return false;
+> +	}
+> +
+> +	/* if child exited via signal handler but not for write on ss */
+> +	if (WIFEXITED(child_status) &&
+> +		WEXITSTATUS(child_status) != CHILD_EXIT_CODE_SSWRITE) {
+> +		printf("child wasn't signaled for write on shadow stack\n");
+> +		return false;
+> +	}
+> +
+> +	ret = munmap(write_addr, SHADOW_STACK_ALLOC_SIZE);
+> +	if (ret) {
+> +		printf("munmap failed with error code %d\n", ret);
+> +		return false;
+> +	}
+> +
+> +	return true;
 > +}
 > +
-> +static const char * const PAGE_AGE_INTERVALS[] = {
-> +	"6000", "10000", "15000", "18446744073709551615",
+> +#define SS_MAGIC_WRITE_VAL 0xbeefdead
+> +
+> +int gup_tests(int mem_fd, unsigned long *shdw_addr)
+> +{
+> +	unsigned long val = 0;
+> +
+> +	lseek(mem_fd, (unsigned long)shdw_addr, SEEK_SET);
+> +	if (read(mem_fd, &val, sizeof(val)) < 0) {
+> +		printf("reading shadow stack mem via gup failed\n");
+> +		return 1;
+> +	}
+> +
+> +	val = SS_MAGIC_WRITE_VAL;
+> +	lseek(mem_fd, (unsigned long)shdw_addr, SEEK_SET);
+> +	if (write(mem_fd, &val, sizeof(val)) < 0) {
+> +		printf("writing shadow stack mem via gup failed\n");
+> +		return 1;
+> +	}
+> +
+> +	if (*shdw_addr != SS_MAGIC_WRITE_VAL) {
+> +		printf("GUP write to shadow stack memory didn't happen\n");
+> +		return 1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +bool shadow_stack_gup_tests(unsigned long test_num, void *ctx)
+> +{
+> +	unsigned long shdw_addr = 0;
+> +	unsigned long *write_addr = NULL;
+> +	int fd = 0;
+> +	bool ret = false;
+> +
+> +	shdw_addr = my_syscall3(__NR_map_shadow_stack, NULL, SHADOW_STACK_ALLOC_SIZE, 0);
+> +
+> +	if (((long) shdw_addr) <= 0) {
+> +		printf("map_shadow_stack failed with error code %d\n", (int) shdw_addr);
+> +		return false;
+> +	}
+> +
+> +	write_addr = (unsigned long *) shdw_addr;
+> +
+> +	fd = open("/proc/self/mem", O_RDWR);
+> +	if (fd == -1)
+> +		return false;
+> +
+> +	if (gup_tests(fd, write_addr)) {
+> +		printf("gup tests failed\n");
+> +		goto out;
+> +	}
+> +
+> +	ret = true;
+> +out:
+> +	if (shdw_addr && munmap(write_addr, SHADOW_STACK_ALLOC_SIZE)) {
+> +		printf("munmap failed with error code %d\n", ret);
+> +		ret = false;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +volatile bool break_loop;
+> +
+> +void sigusr1_handler(int signo)
+> +{
+> +	printf("In sigusr1 handler\n");
+> +	break_loop = true;
+> +}
+> +
+> +bool sigusr1_signal_test(void)
+> +{
+> +	if (signal(SIGUSR1, sigusr1_handler) == SIG_ERR) {
+> +		printf("registerting sigusr1 handler failed\n");
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +/*
+> + * shadow stack signal test. shadow stack must be enabled.
+> + * register a signal, fork another thread which is waiting
+> + * on signal. Send a signal from parent to child, verify
+> + * that signal was received by child. If not test fails
+> + */
+> +bool shadow_stack_signal_test(unsigned long test_num, void *ctx)
+> +{
+> +	int pid = 0, child_status = 0;
+> +	unsigned long ssp = 0;
+> +
+> +	if (my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, PR_SHADOW_STACK_ENABLE, 0, 0, 0)) {
+> +		printf("shadow stack enable prctl failed\n");
+> +		return false;
+> +	}
+> +
+> +	pid = fork();
+> +
+> +	if (pid == -1) {
+> +		printf("signal test: fork failed\n");
+> +		goto out;
+> +	}
+> +
+> +	if (pid == 0) {
+> +		/* this should be caught by signal handler and do an exit */
+> +		if (!sigusr1_signal_test()) {
+> +			printf("sigusr1_signal_test failed\n");
+> +			exit(-1);
+> +		}
+> +
+> +		while (!break_loop)
+> +			sleep(1);
+> +
+> +		exit(11);
+> +		/* child shouldn't go beyond here */
+> +	}
+> +	/* send SIGUSR1 to child */
+> +	kill(pid, SIGUSR1);
+> +	wait(&child_status);
+> +
+> +out:
+> +	if (my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, 0, 0, 0, 0)) {
+> +		printf("shadow stack disable prctl failed\n");
+> +		return false;
+> +	}
+> +
+> +	return (WIFEXITED(child_status) &&
+> +			WEXITSTATUS(child_status) == 11);
+> +}
+> +
+> +int execute_shadow_stack_tests(void)
+> +{
+> +	int ret = 0;
+> +	unsigned long test_count = 0;
+> +	unsigned long shstk_status = 0;
+> +
+> +	printf("Executing RISC-V shadow stack self tests\n");
+> +
+> +	ret = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &shstk_status, 0, 0, 0);
+> +
+> +	if (ret != 0)
+> +		ksft_exit_skip("Get shadow stack status failed with %d\n", ret);
+> +
+> +	/*
+> +	 * If we are here that means get shadow stack status succeeded and
+> +	 * thus shadow stack support is baked in the kernel.
+> +	 */
+> +	while (test_count < ARRAY_SIZE(shstk_tests)) {
+> +		ksft_test_result((*shstk_tests[test_count].t_func)(test_count, NULL),
+> +						 shstk_tests[test_count].name);
+> +		test_count++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +#pragma GCC pop_options
+> diff --git a/tools/testing/selftests/riscv/cfi/shadowstack.h b/tools/testing/selftests/riscv/cfi/shadowstack.h
+> new file mode 100644
+> index 000000000000..92cb0752238d
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/cfi/shadowstack.h
+> @@ -0,0 +1,39 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef SELFTEST_SHADOWSTACK_TEST_H
+> +#define SELFTEST_SHADOWSTACK_TEST_H
+> +#include <stddef.h>
+> +#include <linux/prctl.h>
+> +
+> +/*
+> + * a cfi test returns true for success or false for fail
+> + * takes a number for test number to index into array and void pointer.
+> + */
+> +typedef bool (*shstk_test_func)(unsigned long test_num, void *);
+> +
+> +struct shadow_stack_tests {
+> +	char *name;
+> +	shstk_test_func t_func;
 > +};
-> +#define NR_PAGE_AGE_INTERVALS (ARRAY_SIZE(PAGE_AGE_INTERVALS))
-> +/* add one for the catch all last interval */
 > +
-> +static int set_page_age_intervals_all_nodes(const char *intervals, int nr_nodes)
-> +{
-> +	int i;
+> +bool enable_disable_check(unsigned long test_num, void *ctx);
+> +bool shadow_stack_fork_test(unsigned long test_num, void *ctx);
+> +bool shadow_stack_map_test(unsigned long test_num, void *ctx);
+> +bool shadow_stack_protection_test(unsigned long test_num, void *ctx);
+> +bool shadow_stack_gup_tests(unsigned long test_num, void *ctx);
+> +bool shadow_stack_signal_test(unsigned long test_num, void *ctx);
 > +
-> +	for (i = 0; i < nr_nodes; ++i) {
-> +		int err = sysfs_set_page_age_intervals_str(
-> +			i, &intervals[i * 1024], strlen(&intervals[i * 1024]));
-> +
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int get_page_age_intervals_all_nodes(char *intervals, int nr_nodes)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < nr_nodes; ++i) {
-> +		int err = sysfs_get_page_age_intervals_str(
-> +			i, &intervals[i * 1024], 1024);
-> +
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int set_refresh_interval_all_nodes(const long *interval, int nr_nodes)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < nr_nodes; ++i) {
-> +		int err = sysfs_set_refresh_interval(i, interval[i]);
-> +
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int get_refresh_interval_all_nodes(long *interval, int nr_nodes)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < nr_nodes; ++i) {
-> +		long val = sysfs_get_refresh_interval(i);
-> +
-> +		if (val < 0)
-> +			return val;
-> +		interval[i] = val;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static pid_t clone_and_run(int fn(void *arg), void *arg)
-> +{
-> +	pid_t pid;
-> +
-> +	struct __clone_args args = {
-> +		.exit_signal = SIGCHLD,
-> +	};
-> +
-> +	pid = sys_clone3(&args, sizeof(struct __clone_args));
-> +
-> +	if (pid == 0)
-> +		exit(fn(arg));
-> +
-> +	return pid;
-> +}
-> +
-> +static int read_workingset(int pagetype, int nid,
-> +			   unsigned long page_age[NR_PAGE_AGE_INTERVALS])
-> +{
-> +	int i, err;
-> +	char buf[4096];
-> +
-> +	err = sysfs_page_age_read(nid, buf, sizeof(buf));
-> +	if (err < 0)
-> +		return err;
-> +
-> +	for (i = 0; i < NR_PAGE_AGE_INTERVALS; ++i) {
-> +		err = page_age_read(buf, PAGE_AGE_INTERVALS[i], pagetype);
-> +		if (err < 0)
-> +			return err;
-> +		page_age[i] = err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t read_interval_all_nodes(int pagetype, int interval)
-> +{
-> +	int i, err;
-> +	unsigned long page_age[NR_PAGE_AGE_INTERVALS];
-> +	ssize_t ret = 0;
-> +	int nr_nodes = get_nr_nodes();
-> +
-> +	for (i = 0; i < nr_nodes; ++i) {
-> +		err = read_workingset(pagetype, i, page_age);
-> +		if (err < 0)
-> +			return err;
-> +
-> +		ret += page_age[interval];
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +#define TEST_SIZE MB(500l)
-> +
-> +static int run_test(int f(void))
-> +{
-> +	int i, err, test_result;
-> +	long *old_refresh_intervals;
-> +	long *new_refresh_intervals;
-> +	char *old_page_age_intervals;
-> +	int nr_nodes = get_nr_nodes();
-> +
-> +	if (nr_nodes <= 0) {
-> +		fprintf(stderr, "failed to get nr_nodes\n");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	old_refresh_intervals = calloc(nr_nodes, sizeof(long));
-> +	new_refresh_intervals = calloc(nr_nodes, sizeof(long));
-> +	old_page_age_intervals = calloc(nr_nodes, 1024);
-> +
-> +	if (!(old_refresh_intervals && new_refresh_intervals &&
-> +	      old_page_age_intervals)) {
-> +		fprintf(stderr, "failed to allocate memory for intervals\n");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	err = get_refresh_interval_all_nodes(old_refresh_intervals, nr_nodes);
-> +	if (err < 0) {
-> +		fprintf(stderr, "failed to read refresh interval\n");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	err = get_page_age_intervals_all_nodes(old_page_age_intervals, nr_nodes);
-> +	if (err < 0) {
-> +		fprintf(stderr, "failed to read page age interval\n");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	for (i = 0; i < nr_nodes; ++i)
-> +		new_refresh_intervals[i] = REFRESH_INTERVAL;
-> +	err = set_refresh_interval_all_nodes(new_refresh_intervals, nr_nodes);
-> +	if (err < 0) {
-> +		fprintf(stderr, "failed to set refresh interval\n");
-> +		test_result = KSFT_FAIL;
-> +		goto fail;
-> +	}
-> +
-> +	for (i = 0; i < nr_nodes; ++i) {
-> +		err = sysfs_set_page_age_intervals(i, PAGE_AGE_INTERVALS,
-> +						   NR_PAGE_AGE_INTERVALS - 1);
-> +		if (err < 0) {
-> +			fprintf(stderr, "failed to set page age interval\n");
-> +			test_result = KSFT_FAIL;
-> +			goto fail;
-> +		}
-> +	}
-> +
-> +	sync();
-> +	drop_pagecache();
-> +
-> +	test_result = f();
-> +
-> +fail:
-> +	err = set_refresh_interval_all_nodes(old_refresh_intervals, nr_nodes);
-> +	if (err < 0) {
-> +		fprintf(stderr, "failed to restore refresh interval\n");
-> +		test_result = KSFT_FAIL;
-> +	}
-> +	err = set_page_age_intervals_all_nodes(old_page_age_intervals, nr_nodes);
-> +	if (err < 0) {
-> +		fprintf(stderr, "failed to restore page age interval\n");
-> +		test_result = KSFT_FAIL;
-> +	}
-> +	return test_result;
-> +}
-> +
-> +static int test_file(void)
-> +{
-> +	ssize_t ws_size_ref, ws_size_test;
-> +	int ret = KSFT_FAIL, i;
-> +	pid_t pid = 0;
-> +
-> +	ws_size_ref = read_interval_all_nodes(PAGETYPE_FILE, 0);
-> +	if (ws_size_ref < 0)
-> +		goto cleanup;
-> +
-> +	pid = clone_and_run(alloc_file_workingset, (void *)TEST_SIZE);
-> +	if (pid < 0)
-> +		goto cleanup;
-> +
-> +	read_interval_all_nodes(PAGETYPE_FILE, 0);
-> +	sleep_ms(REFRESH_INTERVAL);
-> +
-> +	for (i = 0; i < 3; ++i) {
-> +		sleep_ms(REFRESH_INTERVAL);
-> +		ws_size_test = read_interval_all_nodes(PAGETYPE_FILE, 0);
-> +
-> +		if (!values_close(ws_size_test - ws_size_ref, TEST_SIZE, 10)) {
-> +			fprintf(stderr,
-> +				"file working set size difference too large: actual=%ld, expected=%ld\n",
-> +				ws_size_test - ws_size_ref, TEST_SIZE);
-> +			goto cleanup;
-> +		}
-> +	}
-> +	ret = KSFT_PASS;
-> +
-> +cleanup:
-> +	if (pid > 0)
-> +		kill(pid, SIGKILL);
-> +	cleanup_file_workingset();
-> +	return ret;
-> +}
-> +
-> +static int test_anon(void)
-> +{
-> +	ssize_t ws_size_ref, ws_size_test;
-> +	pid_t pid = 0;
-> +	int ret = KSFT_FAIL, i;
-> +
-> +	ws_size_ref = read_interval_all_nodes(PAGETYPE_ANON, 0);
-> +	if (ws_size_ref < 0)
-> +		goto cleanup;
-> +
-> +	pid = clone_and_run(alloc_anon_workingset, (void *)TEST_SIZE);
-> +	if (pid < 0)
-> +		goto cleanup;
-> +
-> +	sleep_ms(REFRESH_INTERVAL);
-> +	read_interval_all_nodes(PAGETYPE_ANON, 0);
-> +
-> +	for (i = 0; i < 5; ++i) {
-> +		sleep_ms(REFRESH_INTERVAL);
-> +		ws_size_test = read_interval_all_nodes(PAGETYPE_ANON, 0);
-> +		if (ws_size_test < 0)
-> +			goto cleanup;
-> +
-> +		if (!values_close(ws_size_test - ws_size_ref, TEST_SIZE, 10)) {
-> +			fprintf(stderr,
-> +				"anon working set size difference too large: actual=%ld, expected=%ld\n",
-> +				ws_size_test - ws_size_ref, TEST_SIZE);
-> +			/* goto cleanup; */
-> +		}
-> +	}
-> +	ret = KSFT_PASS;
-> +
-> +cleanup:
-> +	if (pid > 0)
-> +		kill(pid, SIGKILL);
-> +	return ret;
-> +}
-> +
-> +
-> +#define T(x) { x, #x }
-> +struct workingset_test {
-> +	int (*fn)(void);
-> +	const char *name;
-> +} tests[] = {
-> +	T(test_anon),
-> +	T(test_file),
+> +static struct shadow_stack_tests shstk_tests[] = {
+> +	{ "enable disable\n", enable_disable_check },
+> +	{ "shstk fork test\n", shadow_stack_fork_test },
+> +	{ "map shadow stack syscall\n", shadow_stack_map_test },
+> +	{ "shadow stack gup tests\n", shadow_stack_gup_tests },
+> +	{ "shadow stack signal tests\n", shadow_stack_signal_test},
+> +	{ "memory protections of shadow stack memory\n", shadow_stack_protection_test }
 > +};
-> +#undef T
 > +
-> +int main(int argc, char **argv)
-> +{
-> +	int ret = EXIT_SUCCESS, i, err;
+> +#define RISCV_SHADOW_STACK_TESTS ARRAY_SIZE(shstk_tests)
 > +
-> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-> +		err = run_test(tests[i].fn);
-> +		switch (err) {
-> +		case KSFT_PASS:
-> +			ksft_test_result_pass("%s\n", tests[i].name);
-> +			break;
-> +		case KSFT_SKIP:
-> +			ksft_test_result_skip("%s\n", tests[i].name);
-> +			break;
-> +		default:
-> +			ret = EXIT_FAILURE;
-> +			ksft_test_result_fail("%s with error %d\n",
-> +					      tests[i].name, err);
-> +			break;
-> +		}
-> +	}
-> +	return ret;
-> +}
+> +int execute_shadow_stack_tests(void);
+> +
+> +#endif
 
 -- 
 BR,
