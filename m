@@ -1,509 +1,151 @@
-Return-Path: <linux-kselftest+bounces-6786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5508890EE7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 01:07:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E7A4890EFB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 01:14:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1488B1C217EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 00:07:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 041E91F23867
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 00:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45DE71876;
-	Fri, 29 Mar 2024 00:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0A4A3D;
+	Fri, 29 Mar 2024 00:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="Q3Y5l2nB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kuX5Q4Ik"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D7F196;
-	Fri, 29 Mar 2024 00:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9EEA29;
+	Fri, 29 Mar 2024 00:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711670803; cv=none; b=HpPyyBs5Bnia78/DNwVKKdXNAWRBLgMxUAEgTCG0pdj71rik+TuN+wdz4S0SMbyRx2pV6Zu6H/HxltQiu0DcvumA/6Da//vxpvncBlG5qMt8Us+P1AWJBCh2S767oQraxlTVCKe8b/pMJpp6OZ3ff2IjyRHdiIqoDu6oiFKJqkw=
+	t=1711671235; cv=none; b=aO5MfWuV94XhRxD8Ji7DtGKWLdJNVdSfSHRZU/q/mrEC5TT/waO1UrQp1lb9NZcc4598UgYhXhvzDv4hwVYSfOPpeaIs/Dwvb6e02D29VpM0LATEGlpytoDjr5w/qFkEGW3S8eLSCx+PE0Kh0qs6+9p1UGvRdcMfAV9yQ9/CGug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711670803; c=relaxed/simple;
-	bh=p/tEDNlovFHyFEdnxqFjovVcr8etrN9wllDG2tOC7D4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sHyb4XOvXPFOpdb7rZapxJSbM7pE9/njYuIKDTXWAutiw094c65xRPkjMZR5/ulrkb5O+DqkgTgcQkXblgzdc/oH45eNNSEzoUAs7OJGDl2SajkagwqV5jQI+9tSVv+M577HgonHenYBLVnYFAcePNlhtFC4H0iMpqNr76kHai4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=Q3Y5l2nB; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=H/BUeGl9zyXmK8Oa0b1FlhnBU43CAfc0yND/4MgmwRk=; b=Q3Y5l2nBf7ohKpQWck0fN6ZQhi
-	/UHWc+iVOhuaEQWVhfJPReLnD80jdoGJgjEOgeJ4X/G/sN2LB62TluJlkXw8RskrYhZYq7VI9UPLt
-	fb/WaZXuZLfoQ52TrvnJ1C9ZiejQAReM5b72+Dy5gcaiIt6mlqi8O3LjhC4ioi5uEjIcxU5KzM51v
-	voXq5g9ZILa7pSf9s233Pj94W3uc8lrXXj8ovBZPEJne02l/m6vtzRF3/gan85Or+wVZfoNxncynB
-	OYCT2ADNvkQZ2Y1oQ0dv9CXqYd+39FmQclxzEtt2J/lMe4v/b7gaqiKYz610xyqlEz2Gim6w/Tup6
-	qeNNUgcw==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
-	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1rpzlX-000iik-0G;
-	Thu, 28 Mar 2024 19:06:39 -0500
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	wine-devel@winehq.org,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Arkadiusz Hiler <ahiler@codeweavers.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [PATCH v3 30/30] docs: ntsync: Add documentation for the ntsync uAPI.
-Date: Thu, 28 Mar 2024 19:06:21 -0500
-Message-ID: <20240329000621.148791-31-zfigura@codeweavers.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240329000621.148791-1-zfigura@codeweavers.com>
-References: <20240329000621.148791-1-zfigura@codeweavers.com>
+	s=arc-20240116; t=1711671235; c=relaxed/simple;
+	bh=WaKteGNUZ/NFFEBoV918r7uJ9rXae9sVwJg6sjxhGbw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=esVaTMHSnYhGApuOM+HmD0zOl0hKiDNwdqA96R1JdCoRlvdRwMshnsWKLlKnculmVB5Cnamy0KpGwJex1aTmNSQ9EwBP7y+IgJPA0+fOAIFOOf0ZAWAu2NoX1AI5zARtydkk1OwxMbCqejkdhLFV5mYRTRMpisdIAvKPmiZgEBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kuX5Q4Ik; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F18CEC433C7;
+	Fri, 29 Mar 2024 00:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711671234;
+	bh=WaKteGNUZ/NFFEBoV918r7uJ9rXae9sVwJg6sjxhGbw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=kuX5Q4IkEeEaR/oS6zXwUH4ubqqp6YCgizU0yk5+deofn+YXBfRHnf46itFog4OUU
+	 hZvPZyPx9/SubnZGE7jE7diObsfEFrzNAeDyLmp5Hyq2FVYncxlLIm9aCH/KvTM+AS
+	 I27Q+/qK1CHRRgGWT7FIuuMbvJJebTMTkqIGeIcDago/poV2bpUL/ky9P7McOrijjq
+	 gHdVJ92tS6pWE9PhtYJHqDEJYBKcCv9MHUrd6rfNPokrKYK5uREakM5jh+FMVG5GUS
+	 hmafnX76XNHxvVXR2gspAlCjbhOvqE7oxjpcUHPvhdOHH3+4QI/dcEXrf4wFv0jtHx
+	 Oq8wadNHMUGTw==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v6 0/5] KVM: arm64: Support for 2023 dpISA extensions
+Date: Fri, 29 Mar 2024 00:13:41 +0000
+Message-Id: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALUHBmYC/23QS2rEMAwG4KsMXtdFluVHuuo9SheOrcyYtslgl
+ 9Ay5O51hpZAk4UWv0CfhG6icslcxdPpJgrPueZpbME+nES8hPHMMqeWBQJqBaBlKB+W5BpluuY
+ aJA46oXFkyZFoY9fCQ/66ky+vLV9y/ZzK933DrNbuL4Z2j81KgvTkIKXOd32Pz29cRn5/nMpZr
+ NqMm6AUHQjYBHJolO9osMHvBL0JCOZA0E1Ifexj8tYFN+wE+hMIFOKBQE1wzjJ05K1Ke8Fsgoa
+ jP5gmRGM9p9jq3w3LsvwA40aa6bkBAAA=
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Dave Martin <Dave.Martin@arm.com>, kvmarm@lists.linux.dev, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2988; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=WaKteGNUZ/NFFEBoV918r7uJ9rXae9sVwJg6sjxhGbw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmBge6b1dMM99N8t/UdqYyloY6+6oVeNZr+0mCG0iK
+ cM25EaqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZgYHugAKCRAk1otyXVSH0Oa9B/
+ 9xM8b3qsLcPZzl+tOQkQVDP78MiPgRLRAwyT9YSUS7v4si4z9EMCibX/Wb5OtRS8w+SAnbkcLXKUoK
+ BW0H3zZtUlGWa2gm/xJYzSSD9HSM/7XslxGkYPwcXiZyVBn7k6PdSdapDdGmqyTNZJQtbl+CG8b2M0
+ Hyw82EZvE/hR58v1RU5ooeHvjgll+xO4YtJlrKR/FxPRroqi9StmZvEeo14AwrkLybv4K0e33heaoZ
+ 8UNSBxH1W2VubJAQVtMtqOvzB6/Oqx5BCm4kOdaQtqa7DwzNyeQfa+qFoQD+/U1uoshY75K2RuJdzH
+ Ju7mK4CMrWahCyc04g12i7WHWz/PlV
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Add an overall explanation of the driver architecture, and complete and precise
-specification for its intended behaviour.
+This series implements support for the 2023 dpISA extensions in KVM
+guests, it was previously posted as part of a series with the host
+support but that has now been merged so only the KVM portions remain.
 
-Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
+Most of these extensions add only new instructions so the guest support
+consists of adding the relevant ID registers, masking out other features
+like the 2023 MTE extensions.  
+
+FEAT_FPMR introduces a new system register FPMR to the floating point
+state which we enable guest access to and context switch when the ID
+registers indicate that it is supported.  Currently we implement
+visibility for FPMR with a fpmr_visibility() function as for other
+system registers, I will separately look into adding support for
+specifying this in the struct sys_reg_desc.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/userspace-api/index.rst  |   1 +
- Documentation/userspace-api/ntsync.rst | 399 +++++++++++++++++++++++++
- 2 files changed, 400 insertions(+)
- create mode 100644 Documentation/userspace-api/ntsync.rst
+Changes in v6:
+- Rebase onto v6.9-rc1.
+- The host portions of the series were merged so only the KVM guest
+  support remains.
+- Link to v5: https://lore.kernel.org/r/20240306-arm64-2023-dpisa-v5-0-c568edc8ed7f@kernel.org
 
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index afecfe3cc4a8..d5745a500fa7 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -62,6 +62,7 @@ Everything else
-    vduse
-    futex2
-    perf_ring_buffer
-+   ntsync
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/userspace-api/ntsync.rst b/Documentation/userspace-api/ntsync.rst
-new file mode 100644
-index 000000000000..202c2350d3af
---- /dev/null
-+++ b/Documentation/userspace-api/ntsync.rst
-@@ -0,0 +1,399 @@
-+===================================
-+NT synchronization primitive driver
-+===================================
-+
-+This page documents the user-space API for the ntsync driver.
-+
-+ntsync is a support driver for emulation of NT synchronization
-+primitives by user-space NT emulators. It exists because implementation
-+in user-space, using existing tools, cannot match Windows performance
-+while offering accurate semantics. It is implemented entirely in
-+software, and does not drive any hardware device.
-+
-+This interface is meant as a compatibility tool only, and should not
-+be used for general synchronization. Instead use generic, versatile
-+interfaces such as futex(2) and poll(2).
-+
-+Synchronization primitives
-+==========================
-+
-+The ntsync driver exposes three types of synchronization primitives:
-+semaphores, mutexes, and events.
-+
-+A semaphore holds a single volatile 32-bit counter, and a static 32-bit
-+integer denoting the maximum value. It is considered signaled when the
-+counter is nonzero. The counter is decremented by one when a wait is
-+satisfied. Both the initial and maximum count are established when the
-+semaphore is created.
-+
-+A mutex holds a volatile 32-bit recursion count, and a volatile 32-bit
-+identifier denoting its owner. A mutex is considered signaled when its
-+owner is zero (indicating that it is not owned). The recursion count is
-+incremented when a wait is satisfied, and ownership is set to the given
-+identifier.
-+
-+A mutex also holds an internal flag denoting whether its previous owner
-+has died; such a mutex is said to be abandoned. Owner death is not
-+tracked automatically based on thread death, but rather must be
-+communicated using ``NTSYNC_IOC_MUTEX_KILL``. An abandoned mutex is
-+inherently considered unowned.
-+
-+Except for the "unowned" semantics of zero, the actual value of the
-+owner identifier is not interpreted by the ntsync driver at all. The
-+intended use is to store a thread identifier; however, the ntsync
-+driver does not actually validate that a calling thread provides
-+consistent or unique identifiers.
-+
-+An event holds a volatile boolean state denoting whether it is signaled
-+or not. There are two types of events, auto-reset and manual-reset. An
-+auto-reset event is designaled when a wait is satisfied; a manual-reset
-+event is not. The event type is specified when the event is created.
-+
-+Unless specified otherwise, all operations on an object are atomic and
-+totally ordered with respect to other operations on the same object.
-+
-+Objects are represented by files. When all file descriptors to an
-+object are closed, that object is deleted.
-+
-+Char device
-+===========
-+
-+The ntsync driver creates a single char device /dev/ntsync. Each file
-+description opened on the device represents a unique instance intended
-+to back an individual NT virtual machine. Objects created by one ntsync
-+instance may only be used with other objects created by the same
-+instance.
-+
-+ioctl reference
-+===============
-+
-+All operations on the device are done through ioctls. There are four
-+structures used in ioctl calls::
-+
-+   struct ntsync_sem_args {
-+   	__u32 sem;
-+   	__u32 count;
-+   	__u32 max;
-+   };
-+
-+   struct ntsync_mutex_args {
-+   	__u32 mutex;
-+   	__u32 owner;
-+   	__u32 count;
-+   };
-+
-+   struct ntsync_event_args {
-+   	__u32 event;
-+   	__u32 signaled;
-+   	__u32 manual;
-+   };
-+
-+   struct ntsync_wait_args {
-+   	__u64 timeout;
-+   	__u64 objs;
-+   	__u32 count;
-+   	__u32 owner;
-+   	__u32 index;
-+   	__u32 alert;
-+   	__u32 flags;
-+   	__u32 pad;
-+   };
-+
-+Depending on the ioctl, members of the structure may be used as input,
-+output, or not at all. All ioctls return 0 on success.
-+
-+The ioctls on the device file are as follows:
-+
-+.. c:macro:: NTSYNC_IOC_CREATE_SEM
-+
-+  Create a semaphore object. Takes a pointer to struct
-+  :c:type:`ntsync_sem_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``sem``
-+       - On output, contains a file descriptor to the created semaphore.
-+     * - ``count``
-+       - Initial count of the semaphore.
-+     * - ``max``
-+       - Maximum count of the semaphore.
-+
-+  Fails with ``EINVAL`` if ``count`` is greater than ``max``.
-+
-+.. c:macro:: NTSYNC_IOC_CREATE_MUTEX
-+
-+  Create a mutex object. Takes a pointer to struct
-+  :c:type:`ntsync_mutex_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``mutex``
-+       - On output, contains a file descriptor to the created mutex.
-+     * - ``count``
-+       - Initial recursion count of the mutex.
-+     * - ``owner``
-+       - Initial owner of the mutex.
-+
-+  If ``owner`` is nonzero and ``count`` is zero, or if ``owner`` is
-+  zero and ``count`` is nonzero, the function fails with ``EINVAL``.
-+
-+.. c:macro:: NTSYNC_IOC_CREATE_EVENT
-+
-+  Create an event object. Takes a pointer to struct
-+  :c:type:`ntsync_event_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``event``
-+       - On output, contains a file descriptor to the created event.
-+     * - ``signaled``
-+       - If nonzero, the event is initially signaled, otherwise
-+         nonsignaled.
-+     * - ``manual``
-+       - If nonzero, the event is a manual-reset event, otherwise
-+         auto-reset.
-+
-+The ioctls on the individual objects are as follows:
-+
-+.. c:macro:: NTSYNC_IOC_SEM_POST
-+
-+  Post to a semaphore object. Takes a pointer to a 32-bit integer,
-+  which on input holds the count to be added to the semaphore, and on
-+  output contains its previous count.
-+
-+  If adding to the semaphore's current count would raise the latter
-+  past the semaphore's maximum count, the ioctl fails with
-+  ``EOVERFLOW`` and the semaphore is not affected. If raising the
-+  semaphore's count causes it to become signaled, eligible threads
-+  waiting on this semaphore will be woken and the semaphore's count
-+  decremented appropriately.
-+
-+.. c:macro:: NTSYNC_IOC_MUTEX_UNLOCK
-+
-+  Release a mutex object. Takes a pointer to struct
-+  :c:type:`ntsync_mutex_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``mutex``
-+       - Ignored.
-+     * - ``owner``
-+       - Specifies the owner trying to release this mutex.
-+     * - ``count``
-+       - On output, contains the previous recursion count.
-+
-+  If ``owner`` is zero, the ioctl fails with ``EINVAL``. If ``owner``
-+  is not the current owner of the mutex, the ioctl fails with
-+  ``EPERM``.
-+
-+  The mutex's count will be decremented by one. If decrementing the
-+  mutex's count causes it to become zero, the mutex is marked as
-+  unowned and signaled, and eligible threads waiting on it will be
-+  woken as appropriate.
-+
-+.. c:macro:: NTSYNC_IOC_SET_EVENT
-+
-+  Signal an event object. Takes a pointer to a 32-bit integer, which on
-+  output contains the previous state of the event.
-+
-+  Eligible threads will be woken, and auto-reset events will be
-+  designaled appropriately.
-+
-+.. c:macro:: NTSYNC_IOC_RESET_EVENT
-+
-+  Designal an event object. Takes a pointer to a 32-bit integer, which
-+  on output contains the previous state of the event.
-+
-+.. c:macro:: NTSYNC_IOC_PULSE_EVENT
-+
-+  Wake threads waiting on an event object while leaving it in an
-+  unsignaled state. Takes a pointer to a 32-bit integer, which on
-+  output contains the previous state of the event.
-+
-+  A pulse operation can be thought of as a set followed by a reset,
-+  performed as a single atomic operation. If two threads are waiting on
-+  an auto-reset event which is pulsed, only one will be woken. If two
-+  threads are waiting a manual-reset event which is pulsed, both will
-+  be woken. However, in both cases, the event will be unsignaled
-+  afterwards, and a simultaneous read operation will always report the
-+  event as unsignaled.
-+
-+.. c:macro:: NTSYNC_IOC_READ_SEM
-+
-+  Read the current state of a semaphore object. Takes a pointer to
-+  struct :c:type:`ntsync_sem_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``sem``
-+       - Ignored.
-+     * - ``count``
-+       - On output, contains the current count of the semaphore.
-+     * - ``max``
-+       - On output, contains the maximum count of the semaphore.
-+
-+.. c:macro:: NTSYNC_IOC_READ_MUTEX
-+
-+  Read the current state of a mutex object. Takes a pointer to struct
-+  :c:type:`ntsync_mutex_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``mutex``
-+       - Ignored.
-+     * - ``owner``
-+       - On output, contains the current owner of the mutex, or zero
-+         if the mutex is not currently owned.
-+     * - ``count``
-+       - On output, contains the current recursion count of the mutex.
-+
-+  If the mutex is marked as abandoned, the function fails with
-+  ``EOWNERDEAD``. In this case, ``count`` and ``owner`` are set to
-+  zero.
-+
-+.. c:macro:: NTSYNC_IOC_READ_EVENT
-+
-+  Read the current state of an event object. Takes a pointer to struct
-+  :c:type:`ntsync_event_args`, which is used as follows:
-+
-+  .. list-table::
-+
-+     * - ``event``
-+       - Ignored.
-+     * - ``signaled``
-+       - On output, contains the current state of the event.
-+     * - ``manual``
-+       - On output, contains 1 if the event is a manual-reset event,
-+         and 0 otherwise.
-+
-+.. c:macro:: NTSYNC_IOC_KILL_OWNER
-+
-+  Mark a mutex as unowned and abandoned if it is owned by the given
-+  owner. Takes an input-only pointer to a 32-bit integer denoting the
-+  owner. If the owner is zero, the ioctl fails with ``EINVAL``. If the
-+  owner does not own the mutex, the function fails with ``EPERM``.
-+
-+  Eligible threads waiting on the mutex will be woken as appropriate
-+  (and such waits will fail with ``EOWNERDEAD``, as described below).
-+
-+.. c:macro:: NTSYNC_IOC_WAIT_ANY
-+
-+  Poll on any of a list of objects, atomically acquiring at most one.
-+  Takes a pointer to struct :c:type:`ntsync_wait_args`, which is
-+  used as follows:
-+
-+  .. list-table::
-+
-+     * - ``timeout``
-+       - Absolute timeout in nanoseconds. If ``NTSYNC_WAIT_REALTIME``
-+         is set, the timeout is measured against the REALTIME clock;
-+         otherwise it is measured against the MONOTONIC clock. If the
-+         timeout is equal to or earlier than the current time, the
-+         function returns immediately without sleeping. If ``timeout``
-+         is U64_MAX, the function will sleep until an object is
-+         signaled, and will not fail with ``ETIMEDOUT``.
-+     * - ``objs``
-+       - Pointer to an array of ``count`` file descriptors
-+         (specified as an integer so that the structure has the same
-+         size regardless of architecture). If any object is
-+         invalid, the function fails with ``EINVAL``.
-+     * - ``count``
-+       - Number of objects specified in the ``objs`` array.
-+         If greater than ``NTSYNC_MAX_WAIT_COUNT``, the function fails
-+         with ``EINVAL``.
-+     * - ``owner``
-+       - Mutex owner identifier. If any object in ``objs`` is a mutex,
-+         the ioctl will attempt to acquire that mutex on behalf of
-+         ``owner``. If ``owner`` is zero, the ioctl fails with
-+         ``EINVAL``.
-+     * - ``index``
-+       - On success, contains the index (into ``objs``) of the object
-+         which was signaled. If ``alert`` was signaled instead,
-+         this contains ``count``.
-+     * - ``alert``
-+       - Optional event object file descriptor. If nonzero, this
-+         specifies an "alert" event object which, if signaled, will
-+         terminate the wait. If nonzero, the identifier must point to a
-+         valid event.
-+     * - ``flags``
-+       - Zero or more flags. Currently the only flag is
-+         ``NTSYNC_WAIT_REALTIME``, which causes the timeout to be
-+         measured against the REALTIME clock instead of MONOTONIC.
-+     * - ``pad``
-+       - Unused, must be set to zero.
-+
-+  This function attempts to acquire one of the given objects. If unable
-+  to do so, it sleeps until an object becomes signaled, subsequently
-+  acquiring it, or the timeout expires. In the latter case the ioctl
-+  fails with ``ETIMEDOUT``. The function only acquires one object, even
-+  if multiple objects are signaled.
-+
-+  A semaphore is considered to be signaled if its count is nonzero, and
-+  is acquired by decrementing its count by one. A mutex is considered
-+  to be signaled if it is unowned or if its owner matches the ``owner``
-+  argument, and is acquired by incrementing its recursion count by one
-+  and setting its owner to the ``owner`` argument. An auto-reset event
-+  is acquired by designaling it; a manual-reset event is not affected
-+  by acquisition.
-+
-+  Acquisition is atomic and totally ordered with respect to other
-+  operations on the same object. If two wait operations (with different
-+  ``owner`` identifiers) are queued on the same mutex, only one is
-+  signaled. If two wait operations are queued on the same semaphore,
-+  and a value of one is posted to it, only one is signaled. The order
-+  in which threads are signaled is not specified.
-+
-+  If an abandoned mutex is acquired, the ioctl fails with
-+  ``EOWNERDEAD``. Although this is a failure return, the function may
-+  otherwise be considered successful. The mutex is marked as owned by
-+  the given owner (with a recursion count of 1) and as no longer
-+  abandoned, and ``index`` is still set to the index of the mutex.
-+
-+  The ``alert`` argument is an "extra" event which can terminate the
-+  wait, independently of all other objects. If members of ``objs`` and
-+  ``alert`` are both simultaneously signaled, a member of ``objs`` will
-+  always be given priority and acquired first.
-+
-+  It is valid to pass the same object more than once, including by
-+  passing the same event in the ``objs`` array and in ``alert``. If a
-+  wakeup occurs due to that object being signaled, ``index`` is set to
-+  the lowest index corresponding to that object.
-+
-+  The function may fail with ``EINTR`` if a signal is received.
-+
-+.. c:macro:: NTSYNC_IOC_WAIT_ALL
-+
-+  Poll on a list of objects, atomically acquiring all of them. Takes a
-+  pointer to struct :c:type:`ntsync_wait_args`, which is used
-+  identically to ``NTSYNC_IOC_WAIT_ANY``, except that ``index`` is
-+  always filled with zero on success if not woken via alert.
-+
-+  This function attempts to simultaneously acquire all of the given
-+  objects. If unable to do so, it sleeps until all objects become
-+  simultaneously signaled, subsequently acquiring them, or the timeout
-+  expires. In the latter case the ioctl fails with ``ETIMEDOUT`` and no
-+  objects are modified.
-+
-+  Objects may become signaled and subsequently designaled (through
-+  acquisition by other threads) while this thread is sleeping. Only
-+  once all objects are simultaneously signaled does the ioctl acquire
-+  them and return. The entire acquisition is atomic and totally ordered
-+  with respect to other operations on any of the given objects.
-+
-+  If an abandoned mutex is acquired, the ioctl fails with
-+  ``EOWNERDEAD``. Similarly to ``NTSYNC_IOC_WAIT_ANY``, all objects are
-+  nevertheless marked as acquired. Note that if multiple mutex objects
-+  are specified, there is no way to know which were marked as
-+  abandoned.
-+
-+  As with "any" waits, the ``alert`` argument is an "extra" event which
-+  can terminate the wait. Critically, however, an "all" wait will
-+  succeed if all members in ``objs`` are signaled, *or* if ``alert`` is
-+  signaled. In the latter case ``index`` will be set to ``count``. As
-+  with "any" waits, if both conditions are filled, the former takes
-+  priority, and objects in ``objs`` will be acquired.
-+
-+  Unlike ``NTSYNC_IOC_WAIT_ANY``, it is not valid to pass the same
-+  object more than once, nor is it valid to pass the same object in
-+  ``objs`` and in ``alert``. If this is attempted, the function fails
-+  with ``EINVAL``.
+Changes in v5:
+- Rebase onto v6.8-rc3.
+- Use u64 rather than unsigned long for storing FPMR.
+- Temporarily drop KVM guest support due to issues with KVM being a
+  moving target.
+- Link to v4: https://lore.kernel.org/r/20240122-arm64-2023-dpisa-v4-0-776e094861df@kernel.org
+
+Changes in v4:
+- Rebase onto v6.8-rc1.
+- Move KVM support to the end of the series.
+- Link to v3: https://lore.kernel.org/r/20231205-arm64-2023-dpisa-v3-0-dbcbcd867a7f@kernel.org
+
+Changes in v3:
+- Rebase onto v6.7-rc3.
+- Hook up traps for FPMR in emulate-nested.c.
+- Link to v2: https://lore.kernel.org/r/20231114-arm64-2023-dpisa-v2-0-47251894f6a8@kernel.org
+
+Changes in v2:
+- Rebase onto v6.7-rc1.
+- Link to v1: https://lore.kernel.org/r/20231026-arm64-2023-dpisa-v1-0-8470dd989bb2@kernel.org
+
+---
+Mark Brown (5):
+      KVM: arm64: Share all userspace hardened thread data with the hypervisor
+      KVM: arm64: Add newly allocated ID registers to register descriptions
+      KVM: arm64: Support FEAT_FPMR for guests
+      KVM: arm64: selftests: Document feature registers added in 2023 extensions
+      KVM: arm64: selftests: Teach get-reg-list about FPMR
+
+ arch/arm64/include/asm/kvm_host.h                  |  6 ++++--
+ arch/arm64/include/asm/processor.h                 |  2 +-
+ arch/arm64/kvm/emulate-nested.c                    |  9 ++++++++
+ arch/arm64/kvm/fpsimd.c                            | 15 +++++++-------
+ arch/arm64/kvm/hyp/include/hyp/switch.h            |  9 ++++++--
+ arch/arm64/kvm/hyp/nvhe/hyp-main.c                 |  4 ++--
+ arch/arm64/kvm/sys_regs.c                          | 24 +++++++++++++++++++---
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c | 11 ++++++++--
+ 8 files changed, 60 insertions(+), 20 deletions(-)
+---
+base-commit: 4cece764965020c22cff7665b18a012006359095
+change-id: 20231003-arm64-2023-dpisa-2f3d25746474
+
+Best regards,
 -- 
-2.43.0
+Mark Brown <broonie@kernel.org>
 
 
