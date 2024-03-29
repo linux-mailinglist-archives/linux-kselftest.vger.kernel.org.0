@@ -1,291 +1,336 @@
-Return-Path: <linux-kselftest+bounces-6822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 873998911B6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 03:43:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E78AC89126F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 05:45:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98C1F1C246F0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 02:43:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E50A1C20F97
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 04:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537C633070;
-	Fri, 29 Mar 2024 02:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9B6B39AEC;
+	Fri, 29 Mar 2024 04:45:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qi5/uoF/"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="OX+BqqpZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F571C691;
-	Fri, 29 Mar 2024 02:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711680189; cv=fail; b=YIujUwBKLHotGIx/JWiIbT+NtyrKKLTAw9PIYZ6v2KUly15+NMzMyeO0YXUtH2j6EuW4GbDMD+VL7yBjR0w8rmLJHaYJVs3tLZAuJ3728acRY0kle49b2AmAxaTsR0D1/qGPyYW4zpfCxVQ6IYXJca8JgGeFIPAqWh3Fo/r5os8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711680189; c=relaxed/simple;
-	bh=xPsUM2eGtelz6uETpbh7bkTi9YMrj2Jo20fvTvdjpiw=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:MIME-Version; b=o/kPTbMIjITZ21XL306nJsBsUZiAkgKay+KgAstFbjgoXhdj+l/igzFYyCU/OMMRQfDVeuyH085yGxEWiVhafMk2gnoPkmrixy/nfgHzEEsoOLl5G5w4nfur2/4BfPA11Eep1coUQR8VEqHIShujoif8yHkCGwnV94V5pVgHQZU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qi5/uoF/; arc=fail smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711680187; x=1743216187;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xPsUM2eGtelz6uETpbh7bkTi9YMrj2Jo20fvTvdjpiw=;
-  b=Qi5/uoF/r6YsNKZefJUEzV+qjjQ3BGSvr4nWD63jHqJVDI792h9lWQbn
-   feoggCsAjfLpblBJbUpYDzXBGWGzeTROG04fZh5WS/rZ6zabq3Y5OqMWA
-   emso2arY+5tJuI/iBGLzbAquUx5uDizDedBzbvXrSMqr8HHKbQcEKww8l
-   snjuC9zBEMVwy7sD2XxshiiGNU27cESwvHvrPLRTcbxWl5hQ70NwkVpeM
-   J30PbGjhzqxMZyviQUr4ySorFoi7pZ1/wrLsvC6yFnZY3ou2L0nFOLMQ0
-   UMlOGaOYO9vJW7mLe+aGlN/pxhQXTRCz8RB0RESLPxs0P2vkR9N2hjRJh
-   A==;
-X-CSE-ConnectionGUID: XngZ92GMQtGDbD3INqe8dg==
-X-CSE-MsgGUID: RVsbUseWTX2uv2XLjrzDjA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="10671217"
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="10671217"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 19:43:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="16808812"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa009.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 28 Mar 2024 19:43:06 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 28 Mar 2024 19:43:05 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 28 Mar 2024 19:43:05 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Thu, 28 Mar 2024 19:43:05 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 28 Mar 2024 19:43:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M/SG+t76nDPlMdKGOV1M5nc3xDS5VQRrTQYFjHu4NY85gI8dxRKfwXxLayF3lxjXVFouL6QIkKkc2wh4QH4Igt1uqP0LI+AqaKROyzBTF1ikc/H7RyiVfSYrSw+25lMB4xCSZRMGJ5rUvvzcFZaH12+NwgqMLkjRet/SMo2gQoZBJIESGvYc0SLVwlcgDVhVQSkCqo/Ls3zWcrf7X0+sEc3jZ5leBiQcTm4+ObLLyVp1lPD+Zd/87dmaHaXn8wIBx+3VP9YYp5h1WaUUCuhMbqma97HDkpaSSv/TOUSL7YQy/c/VaZbcu1cCZoWOD7D9n27em0D4nRdBIF9Gas+tOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kt+FO5SozjCYlJahjvba7azpiF0n0F/nmL82Bjtx7Qk=;
- b=BGxsF0xAvg88ql8kM9DH8VieA70uLlm/XfqnJtpIniYz5q0tzMeSLxapuD8m0BiN+Xi2InMV05GjYKYYC8F+uVxbfsIOur5qAl8a9IayQI9sbguCKpoqdlOATw6gru3qXraRm2GMy/iu2KUiceQHnk1bDUUpK/7ASMUOgVSCT/XhRm0phg8scD9j1Z3J/e3NEp7zOTn4dnNIdGqk+bKDggBbgGuFLpJftKUEO+xhEUyMvx9CPzwa+SJagM2szMHavK0PIpsSDMs4yEHdQmgDqeaHcQMn/3eubeoa5Ct4sQXxI+O35fcI1/JAmQMJ7zp/hIZLAuiOL8WfJrZHzvvnzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
- by MW4PR11MB6714.namprd11.prod.outlook.com (2603:10b6:303:20f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Fri, 29 Mar
- 2024 02:43:02 +0000
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::58dd:99ca:74a6:2e3e]) by LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::58dd:99ca:74a6:2e3e%3]) with mapi id 15.20.7409.031; Fri, 29 Mar 2024
- 02:43:01 +0000
-Date: Fri, 29 Mar 2024 10:42:51 +0800
-From: kernel test robot <oliver.sang@intel.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
-	"David S. Miller" <davem@davemloft.net>, =?iso-8859-1?Q?G=FCnther?= Noack
-	<gnoack@google.com>, Shuah Khan <shuah@kernel.org>, Will Drewry
-	<wad@chromium.org>, Kees Cook <keescook@chromium.org>, Jakub Kicinski
-	<kuba@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-security-module@vger.kernel.org>, <oliver.sang@intel.com>
-Subject: [linus:master] [selftests/harness]  0710a1a73f:
- kernel-selftests.pidfd.pidfd_setns_test.fail
-Message-ID: <202403291015.1fcfa957-oliver.sang@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: SG2PR06CA0213.apcprd06.prod.outlook.com
- (2603:1096:4:68::21) To LV3PR11MB8603.namprd11.prod.outlook.com
- (2603:10b6:408:1b6::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C431137152
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 04:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711687510; cv=none; b=YIAxeErpK+cFC3nZJi05aLauyE3sEOmXiONVLZXhNLDzCamY7+WOnsDYhF6all2ZWSjgF77C/6oETCTBWqEpRqdWa1xyn5jEhQ4dUwzYvei6Hr9z3jjN76SZbSzHRynuN8duwl4G/6BIJH5CynOcZNH4Syzdha79WllXTLSHcgc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711687510; c=relaxed/simple;
+	bh=i95L3JKkoDlPbWapUWUu3TGU34mpk6ghqmrMaoYNLzw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qYfgy6rCnbZdN2zuvZM+eMd8fVT7/LNZm94p7GEwYOf4xq9boFUZnxiEXfaopfLhTmlClqXpfZKqec4u6k4+MMHVxeIyDawxkB5rR9FP+Ddf47z/COtyo9ASBNayxZuIwH804ovQrS5T1LTs5o1XC+9KEJFbXMe7f/VJbFh51ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=OX+BqqpZ; arc=none smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-229b7ada9e8so715730fac.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Mar 2024 21:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1711687508; x=1712292308; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EqtDO42QHAr23qi0CzfGPQCsTN5H+bnmkZbW5sqZyb4=;
+        b=OX+BqqpZUkkhXf5R01Zp8Z4aPAqzqMT8LTX19+Ca2lH1JU54Y+U0cvZl/D3piKU6Hm
+         AXMZgTzR0FUMzphKswotw/SAn9RJo1IIUR7pel3RVTVmsj3ShBnTlHEN0WaW1TQ2zL5A
+         T+800iXRioHnz+Df6OI/vIl52mF+/nXQ5UVqUhPXjbu4TquPi+58CUYB3q/z/hG+r1aY
+         zuLdpH9iJxFXxBsbrAi6wk3r/DwYUPE2ZzuCXHf1Oyff/Bm4UXLPRF/iyN8vU8zxr5Mo
+         DJ09WrlWQCNq3rgfN3mfhtnPlPIuYej6s4FdR0fI91vGQ5z550CdlgRHnJKhwbLvFof+
+         76Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711687508; x=1712292308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EqtDO42QHAr23qi0CzfGPQCsTN5H+bnmkZbW5sqZyb4=;
+        b=XT+hBuCojT+3j5Px0q0nArPtEg+3i8VGt9fsBSkTfRyH3pNMzlf1H1RN9Y980spibZ
+         HiQ9uSJd2HpqaahiXUrTHYJqYf+i69oWjX6mYdNyVs8VE2S8RoTm59QZVTJ8T53MHZRt
+         4dcpDXM5ixd7U06Hq9a2osXqzkptGzh1nOocv0Ehd7o/GlKxRzM2Ftt6fKw5wdwlSDiV
+         qDyL72QRzWp06iY2lRDy9W485PiV7xsSUGuzwLWn8Vib+SkvZxM6iEwFdI4sWx2gL1L2
+         JMPcZIzCtnbJBjqAsJIacc00ibj/lPAadCPYrJW8cx14285RnLPYMw6GbHdIwaROHT62
+         k/jA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOezhJOBrlBnjPUMWd44Cbgt17KwNW6YSBivoMzlaHOStNr81SwKkc4GArNUmIOVVmaLPhVhaIq0Ef5arC4C/kTkvWiJ1Bxc2kJnGl5aAg
+X-Gm-Message-State: AOJu0YzhNlqBvb1/aC9uI+l3dRyAjFldr+k3txmUuKzkR7DQ991Xk0yH
+	M22nGo+gE6u5pVa+CInSQLsvjw0Sa51P4YRf/Tv8Vg2u0Mp/TLwztOiU0uIEoG0=
+X-Google-Smtp-Source: AGHT+IGk8Phd46dcfosR9Oo5hXv/PvR5tBNwvT90McPidSgaKVOwDwxJqZMjb6jIVw0g1/5CoCMZaA==
+X-Received: by 2002:a05:6870:328a:b0:22a:f03:8259 with SMTP id q10-20020a056870328a00b0022a0f038259mr1171868oac.41.1711687507664;
+        Thu, 28 Mar 2024 21:45:07 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id i18-20020aa78b52000000b006ea7e972947sm2217120pfd.130.2024.03.28.21.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 21:45:07 -0700 (PDT)
+From: Deepak Gupta <debug@rivosinc.com>
+To: paul.walmsley@sifive.com,
+	rick.p.edgecombe@intel.com,
+	broonie@kernel.org,
+	Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com,
+	keescook@chromium.org,
+	ajones@ventanamicro.com,
+	conor.dooley@microchip.com,
+	cleger@rivosinc.com,
+	atishp@atishpatra.org,
+	alex@ghiti.fr,
+	bjorn@rivosinc.com,
+	alexghiti@rivosinc.com,
+	samuel.holland@sifive.com,
+	palmer@sifive.com,
+	conor@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: corbet@lwn.net,
+	tech-j-ext@lists.risc-v.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	oleg@redhat.com,
+	akpm@linux-foundation.org,
+	arnd@arndb.de,
+	ebiederm@xmission.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	lstoakes@gmail.com,
+	shuah@kernel.org,
+	brauner@kernel.org,
+	debug@rivosinc.com,
+	andy.chiu@sifive.com,
+	jerry.shih@sifive.com,
+	hankuan.chen@sifive.com,
+	greentime.hu@sifive.com,
+	evan@rivosinc.com,
+	xiao.w.wang@intel.com,
+	charlie@rivosinc.com,
+	apatel@ventanamicro.com,
+	mchitale@ventanamicro.com,
+	dbarboza@ventanamicro.com,
+	sameo@rivosinc.com,
+	shikemeng@huaweicloud.com,
+	willy@infradead.org,
+	vincent.chen@sifive.com,
+	guoren@kernel.org,
+	samitolvanen@google.com,
+	songshuaishuai@tinylab.org,
+	gerg@kernel.org,
+	heiko@sntech.de,
+	bhe@redhat.com,
+	jeeheng.sia@starfivetech.com,
+	cyy@cyyself.name,
+	maskray@google.com,
+	ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com,
+	mpe@ellerman.id.au,
+	baruch@tkos.co.il,
+	alx@kernel.org,
+	david@redhat.com,
+	catalin.marinas@arm.com,
+	revest@chromium.org,
+	josh@joshtriplett.org,
+	shr@devkernel.io,
+	deller@gmx.de,
+	omosnace@redhat.com,
+	ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: [PATCH v2 00/27] riscv control-flow integrity for usermode
+Date: Thu, 28 Mar 2024 21:44:32 -0700
+Message-Id: <20240329044459.3990638-1-debug@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|MW4PR11MB6714:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vmtGMTr6Xwn9Ep/6Cc7uUomAIoWrf9XAVlR0NA2hDEq8BV/Hn5qGDi/HHX5RC/Ley4wiF4mVByOQWZ0HQdAckN8lri2iYFhdPfSMkm/RcGUUXc+NB6nLfPLJ5RT0sDaq6VqWpuOFgGle2DauF6WTQUibJ9IBhoZB897mnBv2rUyhyfygFH/h+5RYiun69Zwh8x2ngrH8U77vXo/tz6G+7F0cabwEMWt5CePYmjr7ihsvQHIt8ZTb3Okln6MhkB2eoWm/rgWLSLakJCL8ywq+Xt5o6KSmF6nI/W7+rBT5XMUOU6wXUxSu4foBUwi9lF5U+Zz83KjKJmINPeYZ9AxUJh+ZQkuQvLYP7RukHd4l0O/2lZfLnmq05GsvTLgzkZcXbB7FDAlz/ovDHbDU8DLt8V+p0VjwPH9G35j4YAsnRylXWop3s0Yst4o4wNALslrJF4HrxF3kknN6/UE0YRkDAg3X2/FuqBFQeviAQhuj4MvQX1gjq3uKATVLXAhadtMk65fcCaSL0ZXRxXc/tGR3ENw8Bsht5TU+aADY28Gi8OtElXeF/v6uLKudB/CPHO+aSsbxFf0cIFpsL71A/m/Nich8FnXOFkb2N0YEbSfMCaN0CufXpQXb/IEVR0LVXX6S
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(7416005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y2ZYMm5prznj/nWejske8FqZjnlQ8KD3qSbO+68V7gbe2D15fskTIegDKpcI?=
- =?us-ascii?Q?2SHrfFCB8oeisbPG+uB+v6m9y0In713LNTtUYNJrZTAvOonSuY6pJ4QqNxVe?=
- =?us-ascii?Q?sQddxzPx4NhEoH3lveti/nPxxeyxMtwmLW9f9C2qkYPgLTd8Wb0AWuPhoNko?=
- =?us-ascii?Q?XPJGozX7gD0PIEWbKyydPMUVCAvxY/P8cgaX8je9RBvaeQXefbgd2HrKda3P?=
- =?us-ascii?Q?AymbMHVRhOXEAr7HEV+Yzse/RUOE/La0MFYZJpoBeQQN3h2T9A+9ip1TTLLX?=
- =?us-ascii?Q?T8jqRZLK22uTtB7TMnCmIWUp6R4t/YsKSzeA5LPo9g3pYGoum92dC2SU1ILV?=
- =?us-ascii?Q?8tEvl/si3GxJRt1mZLk/t6cz0ii1YtzwgBQnOfewvXrg8VzbhY575eH4r082?=
- =?us-ascii?Q?Qjg8HdWHDg3+wSvMfrg0ugYqGDcIq2eLnhlGSmt4o+0gAw6Ry0LfyOOa3KWg?=
- =?us-ascii?Q?qzIn/cpeYrTtGOVcLewp/pNuXVY6sK+KWNjTjz6YhX+iCjaB3gn+NNWr9oT0?=
- =?us-ascii?Q?ptIEWYVZBqJ7TGAqlblmtIsqvuzOMp+Qu2/hx35zTpxTsHAmP8cTya66R4ix?=
- =?us-ascii?Q?wvVGF4gxT2+5Ai/nKPqBQ8zpb0SFaoOc9KBrne16OnyH25kRhQMKKNV8hsRp?=
- =?us-ascii?Q?/Ug3Cs8EsUN4G/Xc/mK13eTnZj3R/qw3+QMB73g+QJMhJ0VMajInbJCbCLPD?=
- =?us-ascii?Q?D9zsvKrEIC8aP29ojBmGUu7EvIfY8+wu/xi2P+kPmdC64iEgm24okCrLvaXr?=
- =?us-ascii?Q?G/zem3AQjiHAajFhobr88Xt6A7yaqsndDZtYVlEd1bIp7/3PYStt658XhEwP?=
- =?us-ascii?Q?BJu/5iBWzwbweKhloeiAVkPeNnZa9IHMtmPkrxWlaNLxwfUhmo/h6S2Qrhei?=
- =?us-ascii?Q?J1lqmxbDZljdCeq4wtO/ccB2PMoVamls0xbtsZljp2Otg7i6w5FNFj+tInLN?=
- =?us-ascii?Q?+UNUlUUwJm1jczaiPa6tPTn31rC17h4zR2Q6wEHhapbSDHApA4K1epdvnOeq?=
- =?us-ascii?Q?hKVBm8AO9J7jZ822Uq3nlofQu9FirmN61wSYryLYVZf9eWY7XZwiOfq+UZ9g?=
- =?us-ascii?Q?1l3jQl7ZqCKRr+8pKI5E8LUi5laF8GOfOVz5HDvYFZZnQuwQUIpejvSdkUtb?=
- =?us-ascii?Q?7exyz9OccQ0ySWw+6eKkte96HeOTCGZfTztTJF6MkC2ke/r3ix0nx7gM4u0j?=
- =?us-ascii?Q?aT1YjRsxAATvDkm8TVhKItlPlHE0Jai4ktRFitqZZ99h1XmsApninUA+U4yr?=
- =?us-ascii?Q?rxLS7FSlrFTmKvkJnFIobQf+L3skaEY3L0wRpRXlDok8S1D4mvp5/TfPNAAy?=
- =?us-ascii?Q?1QPOEUyxyT17d1XRxn0s2My7MjT75oddaaRHJapDniPbDOrXJF9LU6SZJTRy?=
- =?us-ascii?Q?Hpxheg/LYFfjm4AQu01z5wm0kVrSF4R/c9US4FnZMIOwhV25ZBLMDVa4L5jR?=
- =?us-ascii?Q?9+V0S1zzDPHcl4zSEECGiAR3Um1woufvy7PCbblnQyC18kH8Ab1NMau0BmYs?=
- =?us-ascii?Q?XTpHT7G5OWiup+n7WdIhkAfjVYIvf/wo3gVbnxBQy5FJsR6yvXbCYEOwUCZ9?=
- =?us-ascii?Q?6ALxPnQBgBcL8d4ivgxTHsg3LvAJ6++w4hmxhjrn/k4lt7wBY9NgxCfzXCbu?=
- =?us-ascii?Q?7g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4634e923-7739-4ae1-37d0-08dc4f99f336
-X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2024 02:43:01.1677
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bjGeTQr9UQ51L5fZsSGu+ySDx4pzljbYmv/iFBs9035EatLWYiDegraoyZjK68FeLHGVBcgTTBLMlp8jonTNOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6714
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+
+I had sent RFC patchset early this year (January) [7] to enable CPU assisted
+control-flow integrity for usermode on riscv. Since then I've been able to do
+more testing of the changes. As part of testing effort, compiled a rootfs with
+shadow stack and landing pad enabled (libraries and binaries) and booted to
+shell. As part of long running tests, I have been able to run some spec 2006
+benchmarks [8] (here link is provided only for list of benchmarks that were
+tested for long running tests, excel sheet provided here actually is for some
+static stats like code size growth on spec binaries). Thus converting from RFC
+to regular patchset.
+
+Securing control-flow integrity for usermode requires following
+
+    - Securing forward control flow : All callsites must reach
+      reach a target that they actually intend to reach.
+
+    - Securing backward control flow : All function returns must
+      return to location where they were called from.
+
+This patch series use riscv cpu extension `zicfilp` [2] to secure forward
+control flow and `zicfiss` [2] to secure backward control flow. `zicfilp`
+enforces that all indirect calls or jmps must land on a landing pad instr
+and label embedded in landing pad instr must match a value programmed in
+`x7` register (at callsite via compiler). `zicfiss` introduces shadow stack
+which can only be writeable via shadow stack instructions (sspush and
+ssamoswap) and thus can't be tampered with via inadvertent stores. More
+details about extension can be read from [2] and there are details in
+documentation as well (in this patch series).
+
+Using config `CONFIG_RISCV_USER_CFI`, kernel support for riscv control flow
+integrity for user mode programs can be compiled in the kernel.
+
+Enabling of control flow integrity for user programs is left to user runtime
+(specifically expected from dynamic loader). There has been a lot of earlier
+discussion on the enabling topic around x86 shadow stack enabling [3, 4, 5] and
+overall consensus had been to let dynamic loader (or usermode) to decide for
+enabling the feature.
+
+This patch series introduces arch agnostic `prctls` to enable shadow stack
+and indirect branch tracking. And implements them on riscv. arm64 is expected
+to implement shadow stack part of these arch agnostic `prctls` [6]
+
+Changes since last time
+***********************
+
+Spec changes
+------------
+- Forward cfi spec has become much simpler. `lpad` instruction is pseudo for
+  `auipc rd, <20bit_imm>`. `lpad` checks x7 against 20bit embedded in instr.
+  Thus label width is 20bit.
+
+- Shadow stack management instructions are reduced to
+    sspush - to push x1/x5 on shadow stack
+    sspopchk - pops from shadow stack and comapres with x1/x5.
+    ssamoswap - atomically swap value on shadow stack.
+    rdssp - reads current shadow stack pointer
+
+- Shadow stack accesses on readonly memory always raise AMO/store page fault.
+  `sspopchk` is load but if underlying page is readonly, it'll raise a store
+  page fault. It simplifies hardware and kernel for COW handling for shadow
+  stack pages.
+
+- riscv defines a new exception type `software check exception` and control flow
+  violations raise software check exception.
+
+- enabling controls for shadow stack and landing are in xenvcfg CSR and controls
+  lower privilege mode enabling. As an example senvcfg controls enabling for U and
+  menvcfg controls enabling for S mode.
+
+core mm shadow stack enabling
+-----------------------------
+Shadow stack for x86 usermode are now in mainline and thus this patch
+series builds on top of that for arch-agnostic mm related changes. Big
+thanks and shout out to Rick Edgecombe for that.
+
+selftests
+---------
+Created some minimal selftests to test the patch series.
 
 
+[1] - https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
+[2] - https://github.com/riscv/riscv-cfi
+[3] - https://lore.kernel.org/lkml/ZWHcBq0bJ+15eeKs@finisterre.sirena.org.uk/T/#mb121cd8b33d564e64234595a0ec52211479cf474
+[4] - https://lore.kernel.org/all/20220130211838.8382-1-rick.p.edgecombe@intel.com/
+[5] - https://lore.kernel.org/lkml/CAHk-=wgP5mk3poVeejw16Asbid0ghDt4okHnWaWKLBkRhQntRA@mail.gmail.com/
+[6] - https://lore.kernel.org/linux-mm/20231122-arm64-gcs-v7-2-201c483bd775@kernel.org/
+[7] - https://lore.kernel.org/lkml/20240125062739.1339782-1-debug@rivosinc.com/
+[8] - https://docs.google.com/spreadsheets/d/1_cHGH4ctNVvFRiS7hW9dEGKtXLAJ3aX4Z_iTSa3Tw2U/edit#gid=0
 
-Hello,
+Deepak Gupta (26):
+  riscv: envcfg save and restore on task switching
+  riscv: define default value for envcfg
+  riscv/Kconfig: enable HAVE_EXIT_THREAD for riscv
+  riscv: zicfiss/zicfilp enumeration
+  riscv: zicfiss/zicfilp extension csr and bit definitions
+  riscv: usercfi state for task and save/restore of CSR_SSP on trap
+    entry/exit
+  mm: Define VM_SHADOW_STACK for RISC-V
+  mm: abstract shadow stack vma behind `arch_is_shadow_stack`
+  riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+  riscv mm: manufacture shadow stack pte
+  riscv mmu: teach pte_mkwrite to manufacture shadow stack PTEs
+  riscv mmu: write protect and shadow stack
+  riscv/mm: Implement map_shadow_stack() syscall
+  riscv/shstk: If needed allocate a new shadow stack on clone
+  prctl: arch-agnostic prtcl for indirect branch tracking
+  riscv: Implements arch agnostic shadow stack prctls
+  riscv: Implements arch argnostic indirect branch tracking prctls
+  riscv/kernel: update __show_regs to print shadow stack register
+  riscv/traps: Introduce software check exception
+  riscv sigcontext: adding cfi state field in sigcontext
+  riscv signal: Save and restore of shadow stack for signal
+  riscv/ptrace: riscv cfi status and state via ptrace and in core files
+  riscv: create a config for shadow stack and landing pad instr support
+  riscv: Documentation for landing pad / indirect branch tracking
+  riscv: Documentation for shadow stack on riscv
+  kselftest/riscv: kselftest for user mode cfi
 
-kernel test robot noticed "kernel-selftests.pidfd.pidfd_setns_test.fail" on:
+Mark Brown (1):
+  prctl: arch-agnostic prctl for shadow stack
 
-commit: 0710a1a73fb45033ebb06073e374ab7d44a05f15 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-
-[test failed on linus/master 4cece764965020c22cff7665b18a012006359095]
-
-in testcase: kernel-selftests
-version: kernel-selftests-x86_64-4306b286-1_20240301
-with following parameters:
-
-	group: pidfd
-
-
-
-compiler: gcc-12
-test machine: 36 threads 1 sockets Intel(R) Core(TM) i9-10980XE CPU @ 3.00GHz (Cascade Lake) with 32G memory
-
-(please refer to attached dmesg/kmsg for entire log/backtrace)
-
-
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
-
-
-
-# timeout set to 300
-# selftests: pidfd: pidfd_setns_test
-# TAP version 13
-# 1..7
-# # Starting 7 tests from 2 test cases.
-# #  RUN           global.setns_einval ...
-# #            OK  global.setns_einval
-# ok 1 global.setns_einval
-# #  RUN           current_nsset.invalid_flags ...
-# # pidfd_setns_test.c:161:invalid_flags:Expected self->child_pid_exited (0) > 0 (0)
-# #            OK  current_nsset.invalid_flags
-# ok 2 current_nsset.invalid_flags
-# #  RUN           current_nsset.pidfd_exited_child ...
-# # pidfd_setns_test.c:161:pidfd_exited_child:Expected self->child_pid_exited (0) > 0 (0)
-# #            OK  current_nsset.pidfd_exited_child
-# ok 3 current_nsset.pidfd_exited_child
-# #  RUN           current_nsset.pidfd_incremental_setns ...
-# # pidfd_setns_test.c:161:pidfd_incremental_setns:Expected self->child_pid_exited (0) > 0 (0)
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to user namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to mnt namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to pid namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to uts namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to ipc namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to net namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to cgroup namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:408:pidfd_incremental_setns:Managed to correctly setns to pid_for_children namespace of 45423 via pidfd 20
-# # pidfd_setns_test.c:391:pidfd_incremental_setns:Expected setns(self->child_pidfd1, info->flag) (-1) == 0 (0)
-# # pidfd_setns_test.c:392:pidfd_incremental_setns:Too many users - Failed to setns to time namespace of 45423 via pidfd 20
-# # pidfd_incremental_setns: Test terminated by timeout
-# #          FAIL  current_nsset.pidfd_incremental_setns
-# not ok 4 current_nsset.pidfd_incremental_setns
-# #  RUN           current_nsset.nsfd_incremental_setns ...
-# # pidfd_setns_test.c:161:nsfd_incremental_setns:Expected self->child_pid_exited (0) > 0 (0)
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to user namespace of 45524 via nsfd 19
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to mnt namespace of 45524 via nsfd 24
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to pid namespace of 45524 via nsfd 27
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to uts namespace of 45524 via nsfd 30
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to ipc namespace of 45524 via nsfd 33
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to net namespace of 45524 via nsfd 36
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to cgroup namespace of 45524 via nsfd 39
-# # pidfd_setns_test.c:444:nsfd_incremental_setns:Managed to correctly setns to pid_for_children namespace of 45524 via nsfd 42
-# # pidfd_setns_test.c:427:nsfd_incremental_setns:Expected setns(self->child_nsfds1[i], info->flag) (-1) == 0 (0)
-# # pidfd_setns_test.c:428:nsfd_incremental_setns:Too many users - Failed to setns to time namespace of 45524 via nsfd 45
-# # nsfd_incremental_setns: Test terminated by timeout
-# #          FAIL  current_nsset.nsfd_incremental_setns
-# not ok 5 current_nsset.nsfd_incremental_setns
-# #  RUN           current_nsset.pidfd_one_shot_setns ...
-# # pidfd_setns_test.c:161:pidfd_one_shot_setns:Expected self->child_pid_exited (0) > 0 (0)
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding user namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding mnt namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding pid namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding uts namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding ipc namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding net namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding cgroup namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding pid_for_children namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:462:pidfd_one_shot_setns:Adding time namespace of 45630 to list of namespaces to attach to
-# # pidfd_setns_test.c:466:pidfd_one_shot_setns:Expected setns(self->child_pidfd1, flags) (-1) == 0 (0)
-# # pidfd_setns_test.c:467:pidfd_one_shot_setns:Too many users - Failed to setns to namespaces of 45630
-# # pidfd_one_shot_setns: Test terminated by timeout
-# #          FAIL  current_nsset.pidfd_one_shot_setns
-# not ok 6 current_nsset.pidfd_one_shot_setns
-# #  RUN           current_nsset.no_foul_play ...
-# # pidfd_setns_test.c:161:no_foul_play:Expected self->child_pid_exited (0) > 0 (0)
-# # pidfd_setns_test.c:506:no_foul_play:Adding user namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:506:no_foul_play:Adding mnt namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:506:no_foul_play:Adding pid namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:506:no_foul_play:Adding uts namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:506:no_foul_play:Adding ipc namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:506:no_foul_play:Adding net namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:506:no_foul_play:Adding cgroup namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:506:no_foul_play:Adding time namespace of 45737 to list of namespaces to attach to
-# # pidfd_setns_test.c:510:no_foul_play:Expected setns(self->child_pidfd1, flags) (-1) == 0 (0)
-# # pidfd_setns_test.c:511:no_foul_play:Too many users - Failed to setns to namespaces of 45737 vid pidfd 20
-# # no_foul_play: Test terminated by timeout
-# #          FAIL  current_nsset.no_foul_play
-# not ok 7 current_nsset.no_foul_play
-# # FAILED: 3 / 7 tests passed.
-# # Totals: pass:3 fail:4 xfail:0 xpass:0 skip:0 error:0
-not ok 7 selftests: pidfd: pidfd_setns_test # exit=1
-make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-0710a1a73fb45033ebb06073e374ab7d44a05f15/tools/testing/selftests/pidfd'
-
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20240329/202403291015.1fcfa957-oliver.sang@intel.com
-
-
+ Documentation/arch/riscv/zicfilp.rst          | 104 ++++
+ Documentation/arch/riscv/zicfiss.rst          | 169 ++++++
+ .../devicetree/bindings/riscv/extensions.yaml |  10 +
+ arch/riscv/Kconfig                            |  19 +
+ arch/riscv/include/asm/asm-prototypes.h       |   1 +
+ arch/riscv/include/asm/cpufeature.h           |  13 +
+ arch/riscv/include/asm/csr.h                  |  18 +
+ arch/riscv/include/asm/hwcap.h                |   2 +
+ arch/riscv/include/asm/mman.h                 |  24 +
+ arch/riscv/include/asm/pgtable.h              |  32 +-
+ arch/riscv/include/asm/processor.h            |   2 +
+ arch/riscv/include/asm/switch_to.h            |  10 +
+ arch/riscv/include/asm/thread_info.h          |   4 +
+ arch/riscv/include/asm/usercfi.h              | 118 ++++
+ arch/riscv/include/uapi/asm/ptrace.h          |  18 +
+ arch/riscv/include/uapi/asm/sigcontext.h      |   5 +
+ arch/riscv/kernel/Makefile                    |   2 +
+ arch/riscv/kernel/asm-offsets.c               |   4 +
+ arch/riscv/kernel/cpufeature.c                |   2 +
+ arch/riscv/kernel/entry.S                     |  29 +
+ arch/riscv/kernel/process.c                   |  35 +-
+ arch/riscv/kernel/ptrace.c                    |  83 +++
+ arch/riscv/kernel/signal.c                    |  45 ++
+ arch/riscv/kernel/sys_riscv.c                 |  11 +
+ arch/riscv/kernel/traps.c                     |  38 ++
+ arch/riscv/kernel/usercfi.c                   | 510 ++++++++++++++++++
+ arch/riscv/mm/init.c                          |   2 +-
+ arch/riscv/mm/pgtable.c                       |  21 +
+ include/linux/mm.h                            |  35 +-
+ include/uapi/asm-generic/mman.h               |   1 +
+ include/uapi/linux/elf.h                      |   1 +
+ include/uapi/linux/prctl.h                    |  49 ++
+ kernel/sys.c                                  |  60 +++
+ mm/gup.c                                      |   5 +-
+ mm/internal.h                                 |   2 +-
+ mm/mmap.c                                     |   1 +
+ tools/testing/selftests/riscv/Makefile        |   2 +-
+ tools/testing/selftests/riscv/cfi/Makefile    |  10 +
+ .../testing/selftests/riscv/cfi/cfi_rv_test.h |  85 +++
+ .../selftests/riscv/cfi/riscv_cfi_test.c      |  91 ++++
+ .../testing/selftests/riscv/cfi/shadowstack.c | 376 +++++++++++++
+ .../testing/selftests/riscv/cfi/shadowstack.h |  39 ++
+ 42 files changed, 2077 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/arch/riscv/zicfilp.rst
+ create mode 100644 Documentation/arch/riscv/zicfiss.rst
+ create mode 100644 arch/riscv/include/asm/mman.h
+ create mode 100644 arch/riscv/include/asm/usercfi.h
+ create mode 100644 arch/riscv/kernel/usercfi.c
+ create mode 100644 tools/testing/selftests/riscv/cfi/Makefile
+ create mode 100644 tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+ create mode 100644 tools/testing/selftests/riscv/cfi/riscv_cfi_test.c
+ create mode 100644 tools/testing/selftests/riscv/cfi/shadowstack.c
+ create mode 100644 tools/testing/selftests/riscv/cfi/shadowstack.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.2
 
 
