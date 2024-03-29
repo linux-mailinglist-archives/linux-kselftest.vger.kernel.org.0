@@ -1,147 +1,102 @@
-Return-Path: <linux-kselftest+bounces-6877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17BC2892149
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 17:09:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A6C0892135
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 17:06:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78BECB21642
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 15:40:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 526DA1C22D38
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 16:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C5417550;
-	Fri, 29 Mar 2024 15:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913105B1E6;
+	Fri, 29 Mar 2024 16:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUnOUR7H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dIza9N1y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322D41FBA;
-	Fri, 29 Mar 2024 15:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F794A0A;
+	Fri, 29 Mar 2024 16:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711726810; cv=none; b=HdL6QUR0uK57/gTcFmuwvsxwp7Is231eNnIyOK3oJoSeiErgq7txZMZXkemJ706h/3MmF23TBwrqyhDa9y9T797U3gTA7l+PYCyGN3Vb9GQ6TMhG45bwnPk+c/GXRpXpOdQ5QM7Yl7gPnUD9NcZZiU/zvvniuIML2PnCNLTipfo=
+	t=1711728361; cv=none; b=qNQX41RLDACmE/CEzYXmQA5Dpz8EDXGmAH3sFWO/FHZLb0H/B4yHa4BgsYUxiuyYr3R9dvcNFM0G0xLaGPjZyUNhUwhNyk3A0zAC6tXzIcFV8TdJ0UXsDtUtn/Qy9sql5E7YCtQXPU30dtWqsLsdr87muyW1BN5Z9uZi3MmqQAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711726810; c=relaxed/simple;
-	bh=XCgoZLnAXnGDp3scNF5htnbob5J7JStC8D45eQoM9R4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oCDryKTCwNBa1XESY+HXrS2fCn9Ozuiym1DVVy5CR6Vvze0hKrsJPXVEBXqEViTLFl7Ah4vNuiXZkU1sw6aoJwNBYy/7swRzdJ6OJ4/g2oFdS5u6stGkcvDtlZvAxMIncnK4B4wXmzWtYqljaYhhZLEz+CdqsKwIqq45swgykpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUnOUR7H; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-53fa455cd94so1519286a12.2;
-        Fri, 29 Mar 2024 08:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711726808; x=1712331608; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iN31wd2vCkiTGMz1OBtEaB4JW8VyiA1XbISlyEebr3E=;
-        b=MUnOUR7HY6vwYa92neIZHYGUvH5I1dF1Bo7/9/nYC/METJ1LcvRfTJ3UrdSMmUe6FC
-         gOsAAcZI5fuMBtnYd1XYteTpD7iilDnzNJGQCDkjNtdSbNtsjQ+H+tT/p1giGio6N6XG
-         c/fOoWgNLNBTXbnefO75MQyI51dLo+b1SVQJb2BkA3/hB5pZIlony882eQZu9ZFNh0ep
-         33bUFemjBqO3ZNk+x0tiQjkOnJ9fcXv2MQdOFypkFGG4FahpdXL6b/Vj7wCz/gfVSbTO
-         MJv/wJzO/jQ7Kdcxmde4Pb9pySSflIuFcgkUN32tfKWGxoR+Pm6mK6F5SJkvChQwYmRp
-         iBRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711726808; x=1712331608;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iN31wd2vCkiTGMz1OBtEaB4JW8VyiA1XbISlyEebr3E=;
-        b=UZeXNTugUFF7ZLvxjcEC/t4b+REmywz0B1oaHxSC/FPLuIS2hcg1pnvyr0iY283ORN
-         J5yEbOt82e+srx1WEoeZxx18mHADhxIVjqxIVbQNtO4YiNF84vQOwZMaHanx1QVhiyzi
-         30wGweoNPXMcu+4ZWuBv3tB2/AoFu/tSpvKnPAWTc7R6lGG+QXfoQhPIQ7qjxKDGkZ/v
-         ZJQajuGvmLhkcxFBNd/VvXMN8OomN4lQ8AYg3AZRV7z5QGBJz9SzBiYDR89eJ0i3NxkZ
-         b5QdJT8wzr3pwABneBZST1fjtCVvHVrB0uBTt6LeVO0XZJ6PaIXbQAQEZLISaKtvJJrU
-         M9VA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJOnvfqDstoGNWqya9c2CpvRlfeBuOGCz4oaW4BjNSstCi+JbsgNWSWKPkJTvDezGHP1l1yt3hbnjRuFMnFnP+ODAPa9B0KTgUzCTR4wBP509TYdlj1Yoc63C0gBx0PyATOTXRoU50jgTOCW5LOyzh02XO+PpOPZrzO6aKzu2WEDkkG11VeaYfUts4cuOCmJsj3BdXu8Ah9dTKuzXBAT0pXxXfErO3rzYezy4btqFL9YZzGWecZIDTEK13C8CLPsUfnn+9dXWOLXiWYAyrOYsmXUR2uml0icj4IJpVvUdrtlcQ8t8eBsSlQqEEb3VDGg==
-X-Gm-Message-State: AOJu0Yzacj+0ODnB61m4DFEwTd9U4g+aPd/faEYvzFALoBq7a3kkjEky
-	RWWg6gr0dcatrVIFarTUu05/TalspZjQ1+zHRsDZleqZmcPuyvLR
-X-Google-Smtp-Source: AGHT+IF0O7HII5MYlv2g0E+BHBSm5qRGKAR+0KxI+xwk6+g8c7fXn65jtKX0C7ci+tZdnr/ge20LGw==
-X-Received: by 2002:a05:6a20:3c90:b0:1a5:6bfb:76de with SMTP id b16-20020a056a203c9000b001a56bfb76demr2694088pzj.2.1711726808383;
-        Fri, 29 Mar 2024 08:40:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170902db0900b001dd578121d4sm3581907plx.204.2024.03.29.08.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 08:40:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 29 Mar 2024 08:40:05 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Simon Horman <horms@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH v2 12/14] sh: Add support for suppressing warning
- backtraces
-Message-ID: <d7663e19-74d5-478d-becc-0a080075e7d6@roeck-us.net>
-References: <20240325175248.1499046-1-linux@roeck-us.net>
- <20240325175248.1499046-13-linux@roeck-us.net>
- <20240327144431.GL403975@kernel.org>
- <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
- <20240327193920.GV403975@kernel.org>
+	s=arc-20240116; t=1711728361; c=relaxed/simple;
+	bh=xAO0MOQRzEEHjfZUz8OrPjqUg3u4o2CfCpy2srumAxk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A31sncvEAaknn9JCVhfpMPHE5xXRA2Pkr8zXciDpsrSVc0jJyhD5Cn8lhsl/03yy8hkDXGx64d8Z0PwlY8FhgVkwns57h4Xx8qLXvScJwpSE9KMI5viozQv6qXRIQ70NhQMjL1QUJtsi4I2Z9zO36mABnpuOApb4NIGhcm1tx/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dIza9N1y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F24C433C7;
+	Fri, 29 Mar 2024 16:06:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711728360;
+	bh=xAO0MOQRzEEHjfZUz8OrPjqUg3u4o2CfCpy2srumAxk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dIza9N1y3l9JKIw6+LpZ03JLXJS88OxCXzEFA4tXyE8deP2YTqiF6Ix/CqO5d4L2u
+	 9XG5OhZ9A+qUaoAhklw4xJywfW0gFRtFOWXn2eFG+L4noEJYXrimNTA5HF78yHniyE
+	 rQ53xhtD+ZEEbeDsR+bKBJjHeslW3TmVkoxHHRpsqjoAZVdxJvJPOThIUNiVdT9/N8
+	 myuE8F4mpu5h5N7muxqm5mofNcGanBiOyP6HgQiWpDGIcP2AyQP7B3FuklFAY+vZVD
+	 cwR8KJ8kH7HUa/BAdygNIf2nFLf5qfecP/f9ZQu0+All7aRRoFLgimv6WiRRLOdT9Q
+	 DPJsk6zX8JpIg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	jbacik@fb.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: reuseaddr_conflict: add missing new line at the end of the output
+Date: Fri, 29 Mar 2024 09:05:59 -0700
+Message-ID: <20240329160559.249476-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327193920.GV403975@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 27, 2024 at 07:39:20PM +0000, Simon Horman wrote:
-[ ... ]
-> > > 
-> > > Hi Guenter,
-> > > 
-> > > a minor nit from my side: this change results in a Kernel doc warning.
-> > > 
-> > >       .../bug.h:29: warning: expecting prototype for _EMIT_BUG_ENTRY(). Prototype was for HAVE_BUG_FUNCTION() instead
-> > > 
-> > > Perhaps either the new code should be placed above the Kernel doc,
-> > > or scripts/kernel-doc should be enhanced?
-> > > 
-> > 
-> > Thanks a lot for the feedback.
-> > 
-> > The definition block needs to be inside CONFIG_DEBUG_BUGVERBOSE,
-> > so it would be a bit odd to move it above the documentation
-> > just to make kerneldoc happy. I am not really sure that to do
-> > about it.
-> 
-> FWIIW, I agree that would be odd.
-> But perhaps the #ifdef could also move above the Kernel doc?
-> Maybe not a great idea, but the best one I've had so far.
-> 
+The netdev CI runs in a VM and captures serial, so stdout and
+stderr get combined. Because there's a missing new line in
+stderr the test ends up corrupting KTAP:
 
-I did that for the next version of the patch series. It is a bit more
-clumsy, so I left it as separate patch on top of this patch. I'd
-still like to get input from others before making the change final.
+  # Successok 1 selftests: net: reuseaddr_conflict
 
-Thanks,
-Guenter
+which should have been:
+
+  # Success
+  ok 1 selftests: net: reuseaddr_conflict
+
+Fixes: 422d8dc6fd3a ("selftest: add a reuseaddr test")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+Low risk and seems worth backporting to stable, hence the fixes tag.
+
+CC: shuah@kernel.org
+CC: jbacik@fb.com
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/reuseaddr_conflict.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/reuseaddr_conflict.c b/tools/testing/selftests/net/reuseaddr_conflict.c
+index 7c5b12664b03..bfb07dc49518 100644
+--- a/tools/testing/selftests/net/reuseaddr_conflict.c
++++ b/tools/testing/selftests/net/reuseaddr_conflict.c
+@@ -109,6 +109,6 @@ int main(void)
+ 	fd1 = open_port(0, 1);
+ 	if (fd1 >= 0)
+ 		error(1, 0, "Was allowed to create an ipv4 reuseport on an already bound non-reuseport socket with no ipv6");
+-	fprintf(stderr, "Success");
++	fprintf(stderr, "Success\n");
+ 	return 0;
+ }
+-- 
+2.44.0
+
 
