@@ -1,70 +1,55 @@
-Return-Path: <linux-kselftest+bounces-6903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F31C892526
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 21:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2D54892523
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 21:19:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B26BD1C20CCE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 20:20:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E722A1C20CCE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 20:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4951313BAC4;
-	Fri, 29 Mar 2024 20:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 762E013AA54;
+	Fri, 29 Mar 2024 20:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZPh41XLi"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="N22rtauF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6A613B58D
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 20:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F291DDEA;
+	Fri, 29 Mar 2024 20:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711743596; cv=none; b=ZhbA8i1R4pv7hm7ir4NaMxo66tMHL575OXGT4QmsVA1Hi0Kfc8MXYuWCDxo9FZvbgzHvd33QJLilkzj1jnSX01A8hhZVI6G9SZpFvWGZFO5LKgWTeXHUh1XN6DfdBUi0cTWDGwphBMntkBmTEHzx560m0k/rjjO2UzM4ick1w8c=
+	t=1711743586; cv=none; b=qnXEe1EYigl/K65We6SvcODXKCB+IpBocFIYyAS6qKIQOdYnSNPI4EDUExcju3TrsLQVOTxPy6VVGNu/AMK41YUnWuWfSK3J4VIHZKSPkHC/A3xpjkT8TlV15oD7OVbVH9stU10/4j5Ldaw+LG1bYZCsAEbiKdFUc6YK/bUjLNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711743596; c=relaxed/simple;
-	bh=vl+i70ZMCodkAigSW5hho0Ztj2SmfeRNq80IcW3/8ZA=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=b2DdYvZp/vBGDvimbrTo+NvLtPhtNdfytPSQEHcmseHx7meAtEFTwCbEgujUjhK4etRTqosNN1eBQSFF83BbeGOo1SkWrS9OO8R+momHo3is44f7z/D2lSqC6gt8bI6FII4vn4S7ZdsmCPBUsyDXbCWaiAnks3wa381CzYbqrDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZPh41XLi; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-368539ef3dfso1934015ab.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 13:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1711743593; x=1712348393; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=An2c+m0EBVjUyZtfRNWkkg/EmLKM6ADwwn2qcGZufac=;
-        b=ZPh41XLino/bd3mlpbAEOsdQJv+egyl50n0re4XEsscXA7SPDK2mFuWIv3BG2IxFnd
-         56B7cYDnc4yNaBG48usAjUOzjB0YXpz8OZ1QrnGbkS1BL2G491HFspO5RAwYzJDhp0NY
-         fRqNOdFVHYpInmIE8kJpcfXQIEHWwkM/YQIEo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711743593; x=1712348393;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=An2c+m0EBVjUyZtfRNWkkg/EmLKM6ADwwn2qcGZufac=;
-        b=himP3RenBIvkAo23f6irO60Tl4WRG3PILzJqCa10w11pY5ACX/EgPBVySG9HKfVGI6
-         JDirb22aKFt8tYaZhespI7UADGvBink4WU3xs5NBKJZ8AHaOeZ/wzrd5jwk2Qf8svUpz
-         lE2Tx+RktVIms8fevwox2aqYATXu0xxxST+GcvGNYIp8buTb8LrF9Q0fnCR8GOOsMMwI
-         NaeGmFScwnffO+3Oa1iOqKVeYvgy4vJOR8zv4lrhLHFftUmgJFeaF0ThOZMc4hXRB1Z1
-         ZB4bevb4/mI34V+E9HwCgYuRUxXaQ7KammtcpNor6/JmZD2/unWCZvQoEZa3m9x5BLY4
-         jMjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEhWY5RWJ9C/+JX8kC9JeqTExNNL6HtYX7mpoL8JDD14ErElMLnXZj9CiyjU2UYWw6gkuVjQWWOgj+i0S81BHP7XIQatwC8rlj7W71earp
-X-Gm-Message-State: AOJu0YxcthTDvHivjfMiYiNzgFs7EJ1WBdbFmI4/nMq0pg5IoTadrFEI
-	XzhBtS6UefuP6gBBgiHOJ4aOhf+MZOpJNrh7x00Jus0Rx81XgxqjzaO6wcLW9Jw=
-X-Google-Smtp-Source: AGHT+IFUE0Sf7NoL7vX8ci6ITd6PYpGYErdQvzC4eTqLCCaNA/qbYj/Mkoud1o2JaL29+504kfmRNg==
-X-Received: by 2002:a5e:da04:0:b0:7d0:32b0:5764 with SMTP id x4-20020a5eda04000000b007d032b05764mr3331372ioj.0.1711743593467;
-        Fri, 29 Mar 2024 13:19:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id p23-20020a6bfa17000000b007cbf94d8698sm1223132ioh.4.2024.03.29.13.19.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Mar 2024 13:19:53 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------OWEC03me0GRkyfQ0OjAfR75D"
-Message-ID: <c9b1f203-a8b6-479f-86c2-49d6aac378bf@linuxfoundation.org>
-Date: Fri, 29 Mar 2024 14:19:52 -0600
+	s=arc-20240116; t=1711743586; c=relaxed/simple;
+	bh=LxBnhveT9wJc5Gb452ltbRcCzBPRzEznzVbAaylCB0E=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eEnnbZUbfwnbTLA0M3xwe3LeK91G1tMIC8oTD9hUVw6DPyVZVDtH36Q2M5FZEH/q2la/kLSc6JE+pyR0SaQmFBEhduFFqPUnmNJwGDdFkV38PPSM84vKhA2yJKGLtXfKsEfCKTNTfKey+WXIcuqZ6o6xoBZd5Wxb+AMn2hSYoao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=N22rtauF; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1711743583;
+	bh=LxBnhveT9wJc5Gb452ltbRcCzBPRzEznzVbAaylCB0E=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=N22rtauFy6Yed3RlP3fQ/dTIfwik75IoPKQjcVgRbkiFg7QiykyVwd2zm32mOkipp
+	 Esb9Yh2EfNtA2yQbFTtVRptVkASaCOdvvrtZQcqarYgLcmSerT2TBMJen8ay3Dudjr
+	 TFeYPrtKCL/z7mshKEWWmqe2K5+ZDb9H6u2w0/7zfQfZFKF0hJzBSpFH5/9tnBKjJ4
+	 as9YQgHNNGLj7TMjLbaolgGXgRveBZ7n21Zc57OtMrB5H566pAxgJcOcycKJevqxGb
+	 ErOQwIp1Hkja1wuJ8ZbI5n54c+ILtHPgUc+K0GZBNQt+5g16w4mXus8PItGHuyDKjS
+	 3lrHUSuxwR+vw==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E2413378211A;
+	Fri, 29 Mar 2024 20:19:39 +0000 (UTC)
+Message-ID: <ca7a1547-5bb0-40d7-a77a-9ca6c14fd6f2@collabora.com>
+Date: Sat, 30 Mar 2024 01:20:10 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,99 +57,230 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: cgroup: skip test_cgcore_lesser_ns_open when
+ cgroup2 mounted without nsdelegate
+To: Tianchen Ding <dtcccc@linux.alibaba.com>, linux-kernel@vger.kernel.org
+References: <20240327024437.3196-1-dtcccc@linux.alibaba.com>
 Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 6.9-rc2
-
-This is a multi-part message in MIME format.
---------------OWEC03me0GRkyfQ0OjAfR75D
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240327024437.3196-1-dtcccc@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+On 3/27/24 7:44 AM, Tianchen Ding wrote:
+> The test case test_cgcore_lesser_ns_open only tasks effect when cgroup2
+> is mounted with "nsdelegate" mount option. If it misses this option, or
+> is remounted without "nsdelegate", the test case will fail. For example,
+> running bpf/test_cgroup_storage first, and then run cgroup/test_core will
+> fail on test_cgcore_lesser_ns_open. Skip it if "nsdelegate" is not
+> detected in cgroup2 mount options.
+> 
+> Fixes: bf35a7879f1d ("selftests: cgroup: Test open-time cgroup namespace usage for migration checks")
+> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Please pull the following kselftest fixes update for Linux 6.9rc2.
+> ---
+>  tools/testing/selftests/cgroup/cgroup_util.c        | 8 +++++---
+>  tools/testing/selftests/cgroup/cgroup_util.h        | 2 +-
+>  tools/testing/selftests/cgroup/test_core.c          | 7 ++++++-
+>  tools/testing/selftests/cgroup/test_cpu.c           | 2 +-
+>  tools/testing/selftests/cgroup/test_cpuset.c        | 2 +-
+>  tools/testing/selftests/cgroup/test_freezer.c       | 2 +-
+>  tools/testing/selftests/cgroup/test_hugetlb_memcg.c | 2 +-
+>  tools/testing/selftests/cgroup/test_kill.c          | 2 +-
+>  tools/testing/selftests/cgroup/test_kmem.c          | 2 +-
+>  tools/testing/selftests/cgroup/test_memcontrol.c    | 2 +-
+>  tools/testing/selftests/cgroup/test_zswap.c         | 2 +-
+>  11 files changed, 20 insertions(+), 13 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+> index 0340d4ca8f51..432db923bced 100644
+> --- a/tools/testing/selftests/cgroup/cgroup_util.c
+> +++ b/tools/testing/selftests/cgroup/cgroup_util.c
+> @@ -195,10 +195,10 @@ int cg_write_numeric(const char *cgroup, const char *control, long value)
+>  	return cg_write(cgroup, control, buf);
+>  }
+>  
+> -int cg_find_unified_root(char *root, size_t len)
+> +int cg_find_unified_root(char *root, size_t len, bool *nsdelegate)
+>  {
+>  	char buf[10 * PAGE_SIZE];
+> -	char *fs, *mount, *type;
+> +	char *fs, *mount, *type, *options;
+>  	const char delim[] = "\n\t ";
+>  
+>  	if (read_text("/proc/self/mounts", buf, sizeof(buf)) <= 0)
+> @@ -211,12 +211,14 @@ int cg_find_unified_root(char *root, size_t len)
+>  	for (fs = strtok(buf, delim); fs; fs = strtok(NULL, delim)) {
+>  		mount = strtok(NULL, delim);
+>  		type = strtok(NULL, delim);
+> -		strtok(NULL, delim);
+> +		options = strtok(NULL, delim);
+>  		strtok(NULL, delim);
+>  		strtok(NULL, delim);
+>  
+>  		if (strcmp(type, "cgroup2") == 0) {
+>  			strncpy(root, mount, len);
+> +			if (nsdelegate)
+> +				*nsdelegate = !!strstr(options, "nsdelegate");
+>  			return 0;
+>  		}
+>  	}
+> diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+> index 1df7f202214a..89e8519fb271 100644
+> --- a/tools/testing/selftests/cgroup/cgroup_util.h
+> +++ b/tools/testing/selftests/cgroup/cgroup_util.h
+> @@ -21,7 +21,7 @@ static inline int values_close(long a, long b, int err)
+>  	return abs(a - b) <= (a + b) / 100 * err;
+>  }
+>  
+> -extern int cg_find_unified_root(char *root, size_t len);
+> +extern int cg_find_unified_root(char *root, size_t len, bool *nsdelegate);
+>  extern char *cg_name(const char *root, const char *name);
+>  extern char *cg_name_indexed(const char *root, const char *name, int index);
+>  extern char *cg_control(const char *cgroup, const char *control);
+> diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+> index 80aa6b2373b9..a5672a91d273 100644
+> --- a/tools/testing/selftests/cgroup/test_core.c
+> +++ b/tools/testing/selftests/cgroup/test_core.c
+> @@ -18,6 +18,8 @@
+>  #include "../kselftest.h"
+>  #include "cgroup_util.h"
+>  
+> +static bool nsdelegate;
+> +
+>  static int touch_anon(char *buf, size_t size)
+>  {
+>  	int fd;
+> @@ -775,6 +777,9 @@ static int test_cgcore_lesser_ns_open(const char *root)
+>  	pid_t pid;
+>  	int status;
+>  
+> +	if (!nsdelegate)
+> +		return KSFT_SKIP;
+> +
+>  	cg_test_a = cg_name(root, "cg_test_a");
+>  	cg_test_b = cg_name(root, "cg_test_b");
+>  
+> @@ -862,7 +867,7 @@ int main(int argc, char *argv[])
+>  	char root[PATH_MAX];
+>  	int i, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), &nsdelegate))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  
+>  	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
+> diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+> index 24020a2c68dc..186bf96f6a28 100644
+> --- a/tools/testing/selftests/cgroup/test_cpu.c
+> +++ b/tools/testing/selftests/cgroup/test_cpu.c
+> @@ -700,7 +700,7 @@ int main(int argc, char *argv[])
+>  	char root[PATH_MAX];
+>  	int i, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  
+>  	if (cg_read_strstr(root, "cgroup.subtree_control", "cpu"))
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
+> index b061ed1e05b4..4034d14ba69a 100644
+> --- a/tools/testing/selftests/cgroup/test_cpuset.c
+> +++ b/tools/testing/selftests/cgroup/test_cpuset.c
+> @@ -249,7 +249,7 @@ int main(int argc, char *argv[])
+>  	char root[PATH_MAX];
+>  	int i, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  
+>  	if (cg_read_strstr(root, "cgroup.subtree_control", "cpuset"))
+> diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
+> index 8845353aca53..8730645d363a 100644
+> --- a/tools/testing/selftests/cgroup/test_freezer.c
+> +++ b/tools/testing/selftests/cgroup/test_freezer.c
+> @@ -827,7 +827,7 @@ int main(int argc, char *argv[])
+>  	char root[PATH_MAX];
+>  	int i, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+>  		switch (tests[i].fn(root)) {
+> diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+> index f0fefeb4cc24..856f9508ea56 100644
+> --- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+> +++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+> @@ -214,7 +214,7 @@ int main(int argc, char **argv)
+>  		return ret;
+>  	}
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  
+>  	switch (test_hugetlb_memcg(root)) {
+> diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
+> index 6153690319c9..0e5bb6c7307a 100644
+> --- a/tools/testing/selftests/cgroup/test_kill.c
+> +++ b/tools/testing/selftests/cgroup/test_kill.c
+> @@ -276,7 +276,7 @@ int main(int argc, char *argv[])
+>  	char root[PATH_MAX];
+>  	int i, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+>  		switch (tests[i].fn(root)) {
+> diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+> index c82f974b85c9..137506db0312 100644
+> --- a/tools/testing/selftests/cgroup/test_kmem.c
+> +++ b/tools/testing/selftests/cgroup/test_kmem.c
+> @@ -420,7 +420,7 @@ int main(int argc, char **argv)
+>  	char root[PATH_MAX];
+>  	int i, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  
+>  	/*
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index c7c9572003a8..b462416b3806 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -1314,7 +1314,7 @@ int main(int argc, char **argv)
+>  	char root[PATH_MAX];
+>  	int i, proc_status, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  
+>  	/*
+> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+> index f0e488ed90d8..ef7f39545317 100644
+> --- a/tools/testing/selftests/cgroup/test_zswap.c
+> +++ b/tools/testing/selftests/cgroup/test_zswap.c
+> @@ -440,7 +440,7 @@ int main(int argc, char **argv)
+>  	char root[PATH_MAX];
+>  	int i, ret = EXIT_SUCCESS;
+>  
+> -	if (cg_find_unified_root(root, sizeof(root)))
+> +	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+>  
+>  	if (!zswap_configured())
 
-This kselftest fixes update for Linux 6.9-rc2 consists of fixes
-to seccomp and ftrace tests and a change to add config file for
-dmabuf-heap test to increase coverage.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
-
-   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-6.9-rc2
-
-for you to fetch changes up to 224fe424c356cb5c8f451eca4127f32099a6f764:
-
-   selftests: dmabuf-heap: add config file for the test (2024-03-29 13:57:14 -0600)
-
-----------------------------------------------------------------
-linux_kselftest-fixes-6.9-rc2
-
-This kselftest fixes update for Linux 6.9-rc2 consists of fixes
-to seccomp and ftrace tests and a change to add config file for
-dmabuf-heap test to increase coverage.
-
-----------------------------------------------------------------
-Mark Brown (1):
-       selftests/seccomp: Try to fit runtime of benchmark into timeout
-
-Mark Rutland (1):
-       selftests/ftrace: Fix event filter target_func selection
-
-Muhammad Usama Anjum (1):
-       selftests: dmabuf-heap: add config file for the test
-
-  tools/testing/selftests/dmabuf-heaps/config                           | 3 +++
-  tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc | 2 +-
-  tools/testing/selftests/seccomp/settings                              | 2 +-
-  3 files changed, 5 insertions(+), 2 deletions(-)
-  create mode 100644 tools/testing/selftests/dmabuf-heaps/config
-----------------------------------------------------------------
---------------OWEC03me0GRkyfQ0OjAfR75D
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux_kselftest-fixes-6.9-rc2.diff"
-Content-Disposition: attachment; filename="linux_kselftest-fixes-6.9-rc2.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RtYWJ1Zi1oZWFwcy9jb25m
-aWcgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kbWFidWYtaGVhcHMvY29uZmlnCm5ldyBm
-aWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAwMC4uYmUwOTFmMWNkZmEwCi0tLSAv
-ZGV2L251bGwKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZG1hYnVmLWhlYXBzL2Nv
-bmZpZwpAQCAtMCwwICsxLDMgQEAKK0NPTkZJR19ETUFCVUZfSEVBUFM9eQorQ09ORklHX0RN
-QUJVRl9IRUFQU19TWVNURU09eQorQ09ORklHX0RSTV9WR0VNPXkKZGlmZiAtLWdpdCBhL3Rv
-b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvZmlsdGVyL2V2ZW50LWZpbHRl
-ci1mdW5jdGlvbi50YyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQv
-ZmlsdGVyL2V2ZW50LWZpbHRlci1mdW5jdGlvbi50YwppbmRleCAyZGU3YzYxZDFhZTMuLjNm
-NzRjMDljNTZiNiAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZnRyYWNl
-L3Rlc3QuZC9maWx0ZXIvZXZlbnQtZmlsdGVyLWZ1bmN0aW9uLnRjCisrKyBiL3Rvb2xzL3Rl
-c3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvZmlsdGVyL2V2ZW50LWZpbHRlci1mdW5j
-dGlvbi50YwpAQCAtMjQsNyArMjQsNyBAQCBlY2hvIDAgPiBldmVudHMvZW5hYmxlCiBlY2hv
-ICJHZXQgdGhlIG1vc3QgZnJlcXVlbnRseSBjYWxsaW5nIGZ1bmN0aW9uIgogc2FtcGxlX2V2
-ZW50cwogCi10YXJnZXRfZnVuYz1gY3V0IC1kOiAtZjMgdHJhY2UgfCBzZWQgJ3MvY2FsbF9z
-aXRlPVwoW14rXSpcKSsweC4qL1wxLycgfCBzb3J0IHwgdW5pcSAtYyB8IHNvcnQgfCB0YWls
-IC1uIDEgfCBzZWQgJ3MvXlsgMC05XSovLydgCit0YXJnZXRfZnVuYz1gY2F0IHRyYWNlIHwg
-Z3JlcCAtbyAnY2FsbF9zaXRlPVwoW14rXSpcKScgfCBzZWQgJ3MvY2FsbF9zaXRlPS8vJyB8
-IHNvcnQgfCB1bmlxIC1jIHwgc29ydCB8IHRhaWwgLW4gMSB8IHNlZCAncy9eWyAwLTldKi8v
-J2AKIGlmIFsgLXogIiR0YXJnZXRfZnVuYyIgXTsgdGhlbgogICAgIGV4aXRfZmFpbAogZmkK
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3NlY2NvbXAvc2V0dGluZ3Mg
-Yi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9zZWNjb21wL3NldHRpbmdzCmluZGV4IDYwOTFi
-NDVkMjI2Yi4uYTk1M2M5NmFhMTZlIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9zZWNjb21wL3NldHRpbmdzCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Nl
-Y2NvbXAvc2V0dGluZ3MKQEAgLTEgKzEgQEAKLXRpbWVvdXQ9MTIwCit0aW1lb3V0PTE4MAo=
-
-
---------------OWEC03me0GRkyfQ0OjAfR75D--
+-- 
+BR,
+Muhammad Usama Anjum
 
