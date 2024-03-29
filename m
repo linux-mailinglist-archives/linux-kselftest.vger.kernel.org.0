@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-6865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42E38915F4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 10:31:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 053378915FA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 10:31:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 132EB1C23308
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 09:31:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BD101F22D19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Mar 2024 09:31:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CF97C0AA;
-	Fri, 29 Mar 2024 09:28:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB367F475;
+	Fri, 29 Mar 2024 09:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="SUrseKtc"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="FYXbOwAT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D346A8D1
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 09:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB767E586
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 09:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711704494; cv=none; b=p7yMfLRGDdQVfv+KRPGPOtc78IEzv5dftUty3eRbPIamXsLHWOi5jq6yFfZSc9Z0eyphwuujuaSkGEkrJ5ksFdpfX4EBZaMUeW74mB3cIjE2H864gnYlkNZ9SKVW1Eh/K4kf7eDus2exY3lkQ5+NQA75iDXkS7tFSwIvtPYc5Kg=
+	t=1711704498; cv=none; b=QSSSk5WkrZ7qdsXzMmJuVpl9nkiLDPLN0a5yxVKxjShiGDJsNU8pPD//d6luvXOLfccFZ+lDid1lPxcSYtzSBaMve9P5iz8U0C5uhaZrmRbb4RdOHUW2ha0sLx1D2jqd630RbooSYghTd/tFjikcx/Md2fM+k5duJZIpqpzvtzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711704494; c=relaxed/simple;
-	bh=S2OuTXD/Hjwavyzf8jEj8OwBxUmb/feid5vEZT5nX48=;
+	s=arc-20240116; t=1711704498; c=relaxed/simple;
+	bh=bQlDZHUxe+DlLwpEaFAb1U/lWAzGpXz5Uk4pAXpoJP0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FTm6H4Dg90v19pyLFwM4QAIZUa/Imwo2DiMHiun6MXfbgAqhpgLmCqWvqZOMDx3PlibCt26/LSv8JhmWcKYAuVghk2Oq7dByYK/lxgC11ZSogubfQ3TYb1G2KRuaRikJwhjviozwV2ZpRhogSGdp9X3q9ssUXGaIqphevsoEsuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=SUrseKtc; arc=none smtp.client-ip=209.85.216.45
+	 In-Reply-To:To:Cc; b=BHIQFXnjaoFEcwzenaSnxMBGDfJUyghpYWEM0qFxMQu44360Ta/VV6JVFWoM8ixrNRTaQV+egHJmNKlolv3Fqyn9O3YgCWULcL1hlVqYpabWlSZ3T5IlpWuxRLyEfhx0X0PjWIY58xypc2ZWOloeQBSFgWwidMNCCALP2ldF8fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=FYXbOwAT; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-29f69710cbbso1284507a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 02:28:13 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e0d82c529fso16524015ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Mar 2024 02:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1711704492; x=1712309292; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1711704496; x=1712309296; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D8h7cMSHewFGFYlfFfESe4dUXe0bnXjUVrh6WZkusMc=;
-        b=SUrseKtcyxJkwmPkTHXU9ft56oU+M+9AhtAp7zTnmNFWpQE2BCJSRZ+QCXBvgfyDWn
-         XGBWTkddGAxAzQCUq70hQOLNtivzxIYK2Htz9XWaCJuHyrU6uYcQwsolDBqQTuvF5iwY
-         fcWxdyYrQwdNXZ5kn1PDtVvetp8zGZe7tzb2XouA3wOfkMz7E7GIGASx01NFCo9EoUjk
-         c8VmLJ7VSdEvEsrtnh5dTH3RaMf99WQWVpP3IXn1p4jhejc+5eTincMD8dd5T1VMTGeo
-         WnT8+ctptmMCyKVeUCccI94s6t978E7CHsuI/9678lTUpia4RCVs01zN27Aw/k/aoOQc
-         dS1A==
+        bh=/lyzq0wGOrToQ2iQEyeXKMeMPovCKQNw+2NCntCzWKQ=;
+        b=FYXbOwATeZgdTGKgPxwSFYqJVy/+FaR3oLsB/zmkjxmTcYUjC8TUp5GVi3DQaw94xt
+         4qQ/nVjczIXj7dBM27oOGl7QQSy1bY6pP3AaqWUjC/GVTpS209Dwpe04XMhKwVRbv6eN
+         FGwvpjQyjm8F1uepTaUHgnY8ru5Mc6mK3L31cUlAPCTSVd390oawVFcRMuyc5KLZEpnA
+         JqRb0Wc+JKsr9/qbjWojGxGNGW9PmTpDSX9DhtsM3NLCGMEIhxJMGNw+T2AID/v5RtKZ
+         5NaY4NlUI2/mgrRZowVb23fE/mx+toxgl+PaGYQNgL2YpOCfaKIAJXI2IUNAcf42MmJw
+         ASjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711704492; x=1712309292;
+        d=1e100.net; s=20230601; t=1711704496; x=1712309296;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D8h7cMSHewFGFYlfFfESe4dUXe0bnXjUVrh6WZkusMc=;
-        b=UhNr9YZmJnLzkUgh+waswMeVDh9wv0Ax43wHNHfnVQY1gQZpKAAwzrMJtMUBeIa4Vn
-         ugyIaO61Zl+aBmz0d+9Q2aOHVHGR3Aglz5nxSgD8yUBdOgdiSuih18OZ6HfHRz/fRDZV
-         vjOtA//Nc+mSFjEMwhYojb8+ygdfdQ/6/NNs0jseRot7JXXU8tB8TG7EFVlM3SLoCItS
-         VTfwPOek4jeeZIahzDAnS6IXN0qvJmSsI8rNbmtyYqwejTT+NHXLek8BEJh2sgR1e+Kh
-         bWmRU9NZBx1saYvFDm/g2qDePUsBihlaUKKZykXQ0qfCbIucPJhRQowrzx8A06JaBBz9
-         LvWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVCrYy0JDGSwm3/1q0MOhLN6TGWnU9hUqMOLgnzxPiDvH+ZZKeVbr4bAY48nUBK4tlXrTHuXkRC2IrMK6AWR3guToGAsXaY81OyZKS/sjhf
-X-Gm-Message-State: AOJu0YyxSh5qwS5WEWzfPDKLa5onAA+VD79vyN+b9fcfu2Gje8EIOGT+
-	nLwiWX/cbE8OdwbHJ+Vix/vmEoQ24ovxwD3jP+lpZaAVW7m5Ewbt6ah7BcaSFM0=
-X-Google-Smtp-Source: AGHT+IHUaxFv/dBvqwWUSlGt4S9YT575kSY8SadSYy/sbeUKbzKaMImn5kh/n16Q0rGOAx3nqMZItA==
-X-Received: by 2002:a17:90a:e386:b0:29b:46f0:6f8e with SMTP id b6-20020a17090ae38600b0029b46f06f8emr2770618pjz.8.1711704492529;
-        Fri, 29 Mar 2024 02:28:12 -0700 (PDT)
+        bh=/lyzq0wGOrToQ2iQEyeXKMeMPovCKQNw+2NCntCzWKQ=;
+        b=vsKvn6kUegpgWRd/sVFn874wqfoKbiRLZjbKfgKXrZ1wfwgsQM1wQjZQhr9R0f3VVE
+         oZsFgtZzZk8ci/pu6QwXJoJThelcBHm1NnTl7awwPGWHZ2JsOYnPkWWTO34E90duZ33R
+         4AsAh4PFMzCmDuw5TV+Jx4SUJKCInhCFZBqbEN2UIUv/QfDqgGgGzlY04v8GgagEWZ6Y
+         MxtCf8/355Imd08V/Jc9IVn4VvDUTWEjl0EB6PSMtydN15ZZHYrGTB9Wx5K+g5YI2Fq1
+         d9WIjrfyntvnsW20MV9pr524yASIyVAu/15d6v9tArPH2w4SVuWCNEYi3Acqz4MelYVe
+         gN9g==
+X-Forwarded-Encrypted: i=1; AJvYcCW1YJdNq39+uYwgkNbWPpG4D/HWC7FyGWzVqesRGJz7C5qTBnD+jUuxRMOAlvTh70DtE39AYwXCHwCnfno8YFWwFnyAiMzAytOieM/oy2ts
+X-Gm-Message-State: AOJu0YyYgMOGYVG2inV1o4xJmmdbHTyhJqN111JTT03duRhwDLly8DFU
+	M6mEcZmvW0ozTIavphuxSdG6vHP5Hw5j9s/kbCp344VMjCwRrftJo7O7o+hqc2I=
+X-Google-Smtp-Source: AGHT+IERD9iL6cC6QBlpwrE+WhviS3lzGnj6I0fmkcIha5EAxHWeUpBSJ6740UpJGEHt1s0r02s0NQ==
+X-Received: by 2002:a17:90b:1091:b0:2a0:2b14:6d8d with SMTP id gj17-20020a17090b109100b002a02b146d8dmr1780476pjb.1.1711704496150;
+        Fri, 29 Mar 2024 02:28:16 -0700 (PDT)
 Received: from [127.0.1.1] (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id cv17-20020a17090afd1100b002a02f8d350fsm2628830pjb.53.2024.03.29.02.28.09
+        by smtp.gmail.com with ESMTPSA id cv17-20020a17090afd1100b002a02f8d350fsm2628830pjb.53.2024.03.29.02.28.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 02:28:12 -0700 (PDT)
+        Fri, 29 Mar 2024 02:28:15 -0700 (PDT)
 From: Max Hsu <max.hsu@sifive.com>
-Date: Fri, 29 Mar 2024 17:26:25 +0800
-Subject: [PATCH RFC 09/11] riscv: KVM: Add scontext to ONE_REG
+Date: Fri, 29 Mar 2024 17:26:26 +0800
+Subject: [PATCH RFC 10/11] riscv: KVM: Add hcontext support
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,8 +77,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240329-dev-maxh-lin-452-6-9-v1-9-1534f93b94a7@sifive.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240329-dev-maxh-lin-452-6-9-v1-10-1534f93b94a7@sifive.com>
 References: <20240329-dev-maxh-lin-452-6-9-v1-0-1534f93b94a7@sifive.com>
 In-Reply-To: <20240329-dev-maxh-lin-452-6-9-v1-0-1534f93b94a7@sifive.com>
 To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -97,157 +97,188 @@ X-Mailer: b4 0.13.0
 
 From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
 
-Updte the ONE_REG interface to allow the scontext CSR can be accessed from
-user space.
+hcontext CSR store the ID of the currently running machine status.
+When a virtual machine is initialized, it will obtain and utilize
+the first available ID.
+It will be updated to VM ID when switch to a virtual machine,
+and updated to 0 when switch back to host machine.
 
 Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
 Co-developed-by: Max Hsu <max.hsu@sifive.com>
 Signed-off-by: Max Hsu <max.hsu@sifive.com>
 ---
- arch/riscv/include/uapi/asm/kvm.h |  8 +++++
- arch/riscv/kvm/vcpu_onereg.c      | 62 +++++++++++++++++++++++++++++++++++++--
- 2 files changed, 68 insertions(+), 2 deletions(-)
+ arch/riscv/include/asm/kvm_host.h       |  3 ++
+ arch/riscv/include/asm/kvm_vcpu_debug.h |  7 +++
+ arch/riscv/kvm/main.c                   |  4 ++
+ arch/riscv/kvm/vcpu_debug.c             | 78 +++++++++++++++++++++++++++++++++
+ arch/riscv/kvm/vm.c                     |  4 ++
+ 5 files changed, 96 insertions(+)
 
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 9f70da85ed51..1886722127d7 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -98,6 +98,11 @@ struct kvm_riscv_smstateen_csr {
- 	unsigned long sstateen0;
+diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+index d495279d99e1..b5d972783116 100644
+--- a/arch/riscv/include/asm/kvm_host.h
++++ b/arch/riscv/include/asm/kvm_host.h
+@@ -103,6 +103,9 @@ struct kvm_arch {
+ 
+ 	/* AIA Guest/VM context */
+ 	struct kvm_aia aia;
++
++	/* hcontext ID for guest VM */
++	unsigned long hcontext;
  };
  
-+/* Sdtrig CSR for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-+struct kvm_riscv_sdtrig_csr {
-+	unsigned long scontext;
-+};
-+
- /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
- struct kvm_riscv_timer {
- 	__u64 frequency;
-@@ -224,12 +229,15 @@ struct kvm_riscv_sbi_sta {
- #define KVM_REG_RISCV_CSR_GENERAL	(0x0 << KVM_REG_RISCV_SUBTYPE_SHIFT)
- #define KVM_REG_RISCV_CSR_AIA		(0x1 << KVM_REG_RISCV_SUBTYPE_SHIFT)
- #define KVM_REG_RISCV_CSR_SMSTATEEN	(0x2 << KVM_REG_RISCV_SUBTYPE_SHIFT)
-+#define KVM_REG_RISCV_CSR_SDTRIG	(0x3 << KVM_REG_RISCV_SUBTYPE_SHIFT)
- #define KVM_REG_RISCV_CSR_REG(name)	\
- 		(offsetof(struct kvm_riscv_csr, name) / sizeof(unsigned long))
- #define KVM_REG_RISCV_CSR_AIA_REG(name)	\
- 	(offsetof(struct kvm_riscv_aia_csr, name) / sizeof(unsigned long))
- #define KVM_REG_RISCV_CSR_SMSTATEEN_REG(name)  \
- 	(offsetof(struct kvm_riscv_smstateen_csr, name) / sizeof(unsigned long))
-+#define KVM_REG_RISCV_CSR_SDTRIG_REG(name)  \
-+	(offsetof(struct kvm_riscv_sdtrig_csr, name) / sizeof(unsigned long))
+ struct kvm_cpu_trap {
+diff --git a/arch/riscv/include/asm/kvm_vcpu_debug.h b/arch/riscv/include/asm/kvm_vcpu_debug.h
+index 6e7ce6b408a6..0a025fc4e6dd 100644
+--- a/arch/riscv/include/asm/kvm_vcpu_debug.h
++++ b/arch/riscv/include/asm/kvm_vcpu_debug.h
+@@ -11,6 +11,13 @@
  
- /* Timer registers are mapped as type 4 */
- #define KVM_REG_RISCV_TIMER		(0x04 << KVM_REG_RISCV_TYPE_SHIFT)
-diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
-index 10dda5ddc0a6..2796a86ec70b 100644
---- a/arch/riscv/kvm/vcpu_onereg.c
-+++ b/arch/riscv/kvm/vcpu_onereg.c
-@@ -471,6 +471,34 @@ static int kvm_riscv_vcpu_smstateen_get_csr(struct kvm_vcpu *vcpu,
+ #include <linux/types.h>
+ 
++DECLARE_STATIC_KEY_FALSE(use_hcontext);
++extern atomic_long_t hcontext_id_share;
++
++void kvm_riscv_debug_init(void);
++void kvm_riscv_debug_exit(void);
++void kvm_riscv_debug_get_hcontext_id(struct kvm *kvm);
++void kvm_riscv_debug_return_hcontext_id(struct kvm *kvm);
+ void kvm_riscv_debug_vcpu_swap_in_guest_context(struct kvm_vcpu *vcpu);
+ void kvm_riscv_debug_vcpu_swap_in_host_context(struct kvm_vcpu *vcpu);
+ 
+diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+index 225a435d9c9a..ff28b96ad70b 100644
+--- a/arch/riscv/kvm/main.c
++++ b/arch/riscv/kvm/main.c
+@@ -125,6 +125,8 @@ static int __init riscv_kvm_init(void)
+ 		return rc;
+ 	}
+ 
++	kvm_riscv_debug_init();
++
+ 	return 0;
+ }
+ module_init(riscv_kvm_init);
+@@ -133,6 +135,8 @@ static void __exit riscv_kvm_exit(void)
+ {
+ 	kvm_riscv_aia_exit();
+ 
++	kvm_riscv_debug_exit();
++
+ 	kvm_exit();
+ }
+ module_exit(riscv_kvm_exit);
+diff --git a/arch/riscv/kvm/vcpu_debug.c b/arch/riscv/kvm/vcpu_debug.c
+index e7e9263c2e30..5081c272f01d 100644
+--- a/arch/riscv/kvm/vcpu_debug.c
++++ b/arch/riscv/kvm/vcpu_debug.c
+@@ -6,6 +6,84 @@
+ #include <linux/kvm_host.h>
+ #include <asm/switch_to.h>
+ 
++DEFINE_SPINLOCK(hcontext_lock);
++unsigned long *hcontext_bitmap;
++unsigned long hcontext_bitmap_len;
++
++static __always_inline bool has_hcontext(void)
++{
++	return static_branch_likely(&use_hcontext);
++}
++
++void kvm_riscv_debug_init(void)
++{
++	/*
++	 * As from riscv-debug-spec, Chapter 5.7.9:
++	 * If the H extension is implemented, it’s recommended to
++	 * implement no more than 7 bits on RV32 and 14 on RV64.
++	 * Allocating bit array according to spec size.
++	 */
++#if __riscv_xlen > 32
++	unsigned long tmp = atomic_long_read(&hcontext_id_share) & GENMASK(13, 0);
++#else
++	unsigned long tmp = atomic_long_read(&hcontext_id_share) & GENMASK(6, 0);
++#endif
++	if (has_hcontext()) {
++		while (tmp) {
++			kvm_info("hcontext: try to allocate 0x%lx-bit array\n", tmp);
++			hcontext_bitmap_len = tmp + 1;
++			hcontext_bitmap = bitmap_zalloc(tmp, 0);
++			if (hcontext_bitmap)
++				break;
++			tmp = tmp >> 1;
++		}
++
++		if (tmp == 0) {
++			/* We can't allocate any space for hcontext bitmap */
++			static_branch_disable(&use_hcontext);
++		} else {
++			/* ID 0 is hypervisor */
++			set_bit(0, hcontext_bitmap);
++		}
++	}
++}
++
++void kvm_riscv_debug_exit(void)
++{
++	if (has_hcontext()) {
++		static_branch_disable(&use_hcontext);
++		kfree(hcontext_bitmap);
++	}
++}
++
++void kvm_riscv_debug_get_hcontext_id(struct kvm *kvm)
++{
++	if (has_hcontext()) {
++		unsigned long free_id;
++
++		spin_lock(&hcontext_lock);
++		free_id = find_first_zero_bit(hcontext_bitmap, hcontext_bitmap_len);
++
++		/* share the maximum ID when we run out of the hcontext ID */
++		if (free_id <= hcontext_bitmap_len)
++			set_bit(free_id, hcontext_bitmap);
++		else
++			free_id -= 1;
++
++		kvm->arch.hcontext = free_id;
++		spin_unlock(&hcontext_lock);
++	}
++}
++
++void kvm_riscv_debug_return_hcontext_id(struct kvm *kvm)
++{
++	if (has_hcontext()) {
++		spin_lock(&hcontext_lock);
++		clear_bit(kvm->arch.hcontext, hcontext_bitmap);
++		spin_unlock(&hcontext_lock);
++	}
++}
++
+ void kvm_riscv_debug_vcpu_swap_in_guest_context(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_vcpu_sdtrig_csr *csr = &vcpu->arch.sdtrig_csr;
+diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+index ce58bc48e5b8..275f5f05d4dd 100644
+--- a/arch/riscv/kvm/vm.c
++++ b/arch/riscv/kvm/vm.c
+@@ -45,6 +45,8 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+ 
+ 	kvm_riscv_guest_timer_init(kvm);
+ 
++	kvm_riscv_debug_get_hcontext_id(kvm);
++
  	return 0;
  }
  
-+static inline int kvm_riscv_vcpu_sdtrig_set_csr(struct kvm_vcpu *vcpu,
-+						unsigned long reg_num,
-+						unsigned long reg_val)
-+{
-+	struct kvm_vcpu_sdtrig_csr *csr = &vcpu->arch.sdtrig_csr;
-+
-+	if (reg_num >= sizeof(struct kvm_riscv_sdtrig_csr) /
-+		sizeof(unsigned long))
-+		return -EINVAL;
-+
-+	((unsigned long *)csr)[reg_num] = reg_val;
-+	return 0;
-+}
-+
-+static int kvm_riscv_vcpu_sdtrig_get_csr(struct kvm_vcpu *vcpu,
-+					 unsigned long reg_num,
-+					 unsigned long *out_val)
-+{
-+	struct kvm_vcpu_sdtrig_csr *csr = &vcpu->arch.sdtrig_csr;
-+
-+	if (reg_num >= sizeof(struct kvm_riscv_sdtrig_csr) /
-+		sizeof(unsigned long))
-+		return -EINVAL;
-+
-+	*out_val = ((unsigned long *)csr)[reg_num];
-+	return 0;
-+}
-+
- static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
- 				      const struct kvm_one_reg *reg)
- {
-@@ -500,6 +528,11 @@ static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
- 			rc = kvm_riscv_vcpu_smstateen_get_csr(vcpu, reg_num,
- 							      &reg_val);
- 		break;
-+	case KVM_REG_RISCV_CSR_SDTRIG:
-+		rc = -EINVAL;
-+		if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SDTRIG))
-+			rc = kvm_riscv_vcpu_sdtrig_get_csr(vcpu, reg_num, &reg_val);
-+		break;
- 	default:
- 		rc = -ENOENT;
- 		break;
-@@ -545,6 +578,11 @@ static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
- 			rc = kvm_riscv_vcpu_smstateen_set_csr(vcpu, reg_num,
- 							      reg_val);
- 		break;
-+	case KVM_REG_RISCV_CSR_SDTRIG:
-+		rc = -EINVAL;
-+		if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SDTRIG))
-+			rc = kvm_riscv_vcpu_sdtrig_set_csr(vcpu, reg_num, reg_val);
-+		break;
- 	default:
- 		rc = -ENOENT;
- 		break;
-@@ -803,6 +841,8 @@ static inline unsigned long num_csr_regs(const struct kvm_vcpu *vcpu)
- 		n += sizeof(struct kvm_riscv_aia_csr) / sizeof(unsigned long);
- 	if (riscv_isa_extension_available(vcpu->arch.isa, SMSTATEEN))
- 		n += sizeof(struct kvm_riscv_smstateen_csr) / sizeof(unsigned long);
-+	if (riscv_isa_extension_available(vcpu->arch.isa, SDTRIG))
-+		n += sizeof(struct kvm_riscv_sdtrig_csr) / sizeof(unsigned long);
+@@ -53,6 +55,8 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
+ 	kvm_destroy_vcpus(kvm);
  
- 	return n;
- }
-@@ -811,7 +851,7 @@ static int copy_csr_reg_indices(const struct kvm_vcpu *vcpu,
- 				u64 __user *uindices)
- {
- 	int n1 = sizeof(struct kvm_riscv_csr) / sizeof(unsigned long);
--	int n2 = 0, n3 = 0;
-+	int n2 = 0, n3 = 0, n4 = 0;
- 
- 	/* copy general csr regs */
- 	for (int i = 0; i < n1; i++) {
-@@ -863,7 +903,25 @@ static int copy_csr_reg_indices(const struct kvm_vcpu *vcpu,
- 		}
- 	}
- 
--	return n1 + n2 + n3;
-+	/* copy Sdtrig csr regs */
-+	if (riscv_isa_extension_available(vcpu->arch.isa, SDTRIG)) {
-+		n4 = sizeof(struct kvm_riscv_sdtrig_csr) / sizeof(unsigned long);
+ 	kvm_riscv_aia_destroy_vm(kvm);
 +
-+		for (int i = 0; i < n4; i++) {
-+			u64 size = IS_ENABLED(CONFIG_32BIT) ?
-+				   KVM_REG_SIZE_U32 : KVM_REG_SIZE_U64;
-+			u64 reg = KVM_REG_RISCV | size | KVM_REG_RISCV_CSR |
-+					  KVM_REG_RISCV_CSR_SDTRIG | i;
-+
-+			if (uindices) {
-+				if (put_user(reg, uindices))
-+					return -EFAULT;
-+				uindices++;
-+			}
-+		}
-+	}
-+
-+	return n1 + n2 + n3 + n4;
++	kvm_riscv_debug_return_hcontext_id(kvm);
  }
  
- static inline unsigned long num_timer_regs(void)
+ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irql,
 
 -- 
 2.43.2
