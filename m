@@ -1,147 +1,97 @@
-Return-Path: <linux-kselftest+bounces-6914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39401892AA4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Mar 2024 12:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 083B8892B34
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Mar 2024 13:28:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95742B217C9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Mar 2024 11:09:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92C21B21071
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Mar 2024 12:28:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4D42838E;
-	Sat, 30 Mar 2024 11:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="euXEljFp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F03B37714;
+	Sat, 30 Mar 2024 12:28:01 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02421200D3;
-	Sat, 30 Mar 2024 11:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECF6EBB;
+	Sat, 30 Mar 2024 12:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711796938; cv=none; b=FEcveKNQgbXWYiT92+YVjwy5sFMhCvs25TnN1P7N2C0/KWpMy63Qnss/Q2f+u5QGdIfPio/razF5ucCzF6j2kNnNqO0CvUFbyYDSdpvIwmBJY9husK5c3GiYkhOk7GTMVI1sEt4WT17bT6H9aB8p3rK/yFOCXO1U5bwIS9tq4QM=
+	t=1711801681; cv=none; b=XMC/96MZSbgwj61e0gdowqy0FCkjyu42MF09+oZiehSzpXvXiQVif54H/QB7/7yjK1rzsj7HeoPAFMnOzD6V2AwAjUVxit3L3JxPr5vYhgR/ECEEBgtTqUEKtIfSHrSC4sSOLYRLy9SOuq8HJq5lL8u6QAzrzO2majlhjCWz12w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711796938; c=relaxed/simple;
-	bh=8VXre+juWgMI4bw+ps7LXjkOXBPEsjsy51WIROR95I0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BtBcw1dlulPS3PcE0DMSeOSsNd9d6KBIFsLe9kO00YnyrRjCm61TCRiHo/ZC3zXXtg9ptPGdxwM7iFBGrTPpgsGijbXTCrPM0Kq/pY7oc6R7bCKpgJYNS27MMDXDEE6I47MoxG2St6fNiuswPZbKBm424qOTPeFRwJKB/TI3xKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=euXEljFp; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56bdf81706aso3312844a12.2;
-        Sat, 30 Mar 2024 04:08:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711796935; x=1712401735; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8xYKCmanOx7E4s4iOABsWWeyfHS9OU5GO/KxHmhFWWw=;
-        b=euXEljFp5sf9iS9jhbkJK0ijQfzJnDhcaKlobjsud2pVom6c/8JjHK54Zj4gvIYnov
-         k619iC0b+SLz+P2jAccs0pcVPW6vtKMWmpTQybKPIVgGEZeeLeGT+gemlhNGZ7T1gvqO
-         IBR+g7/pApyh9v+KDkf9zfOMahDLClQJB68Rr0VY2lG4KeWwmMK8rQw20WKksf2v2k+Z
-         kvixD3HeSxEefXBO45QDemIC9j1mX89yi8e2U7AyCYJh33hJEe98ay8jbSE2A1LrHhHF
-         IqpjUSfVZxmMfdunnL5lFzt1OgjlskfZpVVtjFjJStn0TnFKN+kgIILRGIZIQtSu7ZAw
-         eoaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711796935; x=1712401735;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8xYKCmanOx7E4s4iOABsWWeyfHS9OU5GO/KxHmhFWWw=;
-        b=D2/2V2lQQbEiPxIkvxMnOnI4mWNIeGzB1ZJjfaOpFDv0oFlyxBqUndiKAAQlZPRwwM
-         asTATPgNnDAd9FItvFYdgFOqhbhjuzYrI+gZW68MZuUKwkRERCVPimCdugbV2eUQnEj9
-         M1fGEnHOYUA0mLh7QpV8+bSB1+ZQakg8tFKI47qab4JQlZ3guJ4GT3A0w04F7FapWTY6
-         qqMvmgqthJhpdyqAwCr6Z0vlOMif7xqQZpgtxIFw9r0s3DUwJ2tYgCizuND5qdG7axsg
-         jUsFr9StZPDCUUnA8914rtFEl2pCoIgPCFiWYecTJF4/U+YJin+xlcJ6sT9TmZnJEgvx
-         sTAg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0+p6AYxWrjJCObZ4ttmzJml8S7x2nDkT6WEzkmT//+JHNoC3mpJyRNbf+wbxFGkalxJ+tEF4GGhGgEuYyJLp752bUCKaUcVEtEv2ydBW9Nx357MvkFMw+m+/i4E9TEYM1Rww8g8pZI6k+28tf
-X-Gm-Message-State: AOJu0YyW8zk61KB9fnFZTWx55WgMs3i9SMRR5tArNhEg5PvbzUF6jZxg
-	cb3VDCLWAEuTuwdyuIqSNwCOXdZj7wAwTrEnSM8BE3JJmZ66l9qpXTSOPoOvfZ0=
-X-Google-Smtp-Source: AGHT+IEx02O5HNbOVc8Kj6OvzFHtJiN0t5Ty9Tyfmsay24/ivTTLlzNoZ3LNQ7WgyNi98QjGVEWWjQ==
-X-Received: by 2002:a17:907:972a:b0:a46:575c:a9a2 with SMTP id jg42-20020a170907972a00b00a46575ca9a2mr3731178ejc.45.1711796934772;
-        Sat, 30 Mar 2024 04:08:54 -0700 (PDT)
-Received: from gmail.com (84-236-113-97.pool.digikabel.hu. [84.236.113.97])
-        by smtp.gmail.com with ESMTPSA id d19-20020a170906041300b00a4750131edasm2954792eja.206.2024.03.30.04.08.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Mar 2024 04:08:54 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Sat, 30 Mar 2024 12:08:52 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Chang S. Bae" <chang.seok.bae@intel.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>,
-	angquan yu <angquan21@gmail.com>, kernel@collabora.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests: x86: skip the tests if prerequisites
- aren't fulfilled
-Message-ID: <ZgfyxD15dg9tLzyT@gmail.com>
-References: <20240327111720.3509180-1-usama.anjum@collabora.com>
- <1d6418a3-67eb-4a39-891a-7d653a26f1fc@linuxfoundation.org>
- <ZgZvaUbZIr0qpxK5@gmail.com>
- <70698a24-3794-4621-ac74-7aaeae01a750@linuxfoundation.org>
+	s=arc-20240116; t=1711801681; c=relaxed/simple;
+	bh=+XibKb/dVHl63f9D33WQCt1jS1SK+C5P2v4d73y4tCE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hUlyYf7p366bQRa3JZqk4Cp6bt37v50Ad3tUe7DYPNyanyqj99e1dCTiSTgXuvgwT+fSzrSs80v6G5q+b6u+2UarYDQe0HTRHd0TzZRnzRuGeTC0ForTLXT+Bg6hepPoE3PO+qDKaEuJdXYoZLRM0KjuONFa5sumGwDZErecWTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0898C433F1;
+	Sat, 30 Mar 2024 12:27:56 +0000 (UTC)
+Date: Sat, 30 Mar 2024 08:27:55 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>, Alexei
+ Starovoitov <alexei.starovoitov@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, "David S.
+ Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Dave
+ Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet
+ <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>, linux-arm-kernel
+ <linux-arm-kernel@lists.infradead.org>, LKML
+ <linux-kernel@vger.kernel.org>, linux-riscv
+ <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>,
+ linux-trace-kernel@vger.kernel.org, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add
+ support to record and check the accessed args
+Message-ID: <20240330082755.1cbeb8c6@rorschach.local.home>
+In-Reply-To: <CAEf4BzYgzOti+Hfdn3SUCjuofGedXRSGApVDD+K2TdG6oNE-pw@mail.gmail.com>
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+	<20240311093526.1010158-2-dongmenglong.8@bytedance.com>
+	<CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+	<CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
+	<CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
+	<CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
+	<CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
+	<CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+	<CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
+	<CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
+	<CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
+	<20240328111330.194dcbe5@gandalf.local.home>
+	<CAEf4BzYgzOti+Hfdn3SUCjuofGedXRSGApVDD+K2TdG6oNE-pw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <70698a24-3794-4621-ac74-7aaeae01a750@linuxfoundation.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 29 Mar 2024 16:28:33 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-* Shuah Khan <skhan@linuxfoundation.org> wrote:
+> I thought I'll just ask instead of digging through code, sorry for
+> being lazy :) Is there any way to pass pt_regs/ftrace_regs captured
+> before function execution to a return probe (fexit/kretprobe)? I.e.,
+> how hard is it to pass input function arguments to a kretprobe? That's
+> the biggest advantage of fexit over kretprobe, and if we can make
+> these original pt_regs/ftrace_regs available to kretprobe, then
+> multi-kretprobe will effectively be this multi-fexit.
 
-> On 3/29/24 01:36, Ingo Molnar wrote:
-> > 
-> > * Shuah Khan <skhan@linuxfoundation.org> wrote:
-> > 
-> > > On 3/27/24 05:17, Muhammad Usama Anjum wrote:
-> > > > Skip instead of failing when prerequisite conditions aren't fulfilled,
-> > > > such as invalid xstate values etc. This patch would make the tests show
-> > > > as skip when run by:
-> > > >     make -C tools/testing/selftests/ TARGETS=x86 run_tests
-> > > > 
-> > > >     ...
-> > > >     # timeout set to 45
-> > > >     # selftests: x86: amx_64
-> > > >     # # xstate cpuid: invalid tile data size/offset: 0/0
-> > > >     ok 42 selftests: x86: amx_64 # SKIP
-> > > >     # timeout set to 45
-> > > >     # selftests: x86: lam_64
-> > > >     # # Unsupported LAM feature!
-> > > >     ok 43 selftests: x86: lam_64 # SKIP
-> > > >     ...
-> > > > 
-> > > > In amx test, Move away from check_cpuid_xsave() and start using
-> > > > arch_prctl() to find out if amx support is present or not. In the
-> > > > kernels where amx isn't present, arch_prctl returns -EINVAL. Hence it is
-> > > > backward compatible.
-> > > > 
-> > > > Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
-> > > > Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > > Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> > > > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> > > > ---
-> > > > Changes since v2:
-> > > > - Update the changelog
-> > > > 
-> > > 
-> > > Thank you - applied to linux-kselftest next for 6.10-rc1
-> > 
-> > Please don't, I've applied the patch to tip:x86/cpu with a tidied up
-> > changelog.
-> > 
-> 
-> Thanks. I will drop it.
+This should be possible with the updates that Masami is doing with the
+fgraph code.
 
-Thank you!
-
-	Ingo
+-- Steve
 
