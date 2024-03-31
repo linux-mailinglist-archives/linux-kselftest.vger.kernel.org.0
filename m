@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-6923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9889E893125
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Mar 2024 12:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1E68893163
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Mar 2024 13:00:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7B121F21BDE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Mar 2024 10:00:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8268F1F22F71
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Mar 2024 11:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A4C76036;
-	Sun, 31 Mar 2024 10:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A2AF144302;
+	Sun, 31 Mar 2024 10:59:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KmMMF4Fq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERqxj6v8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F5A1C33;
-	Sun, 31 Mar 2024 10:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3461442FC;
+	Sun, 31 Mar 2024 10:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711879249; cv=none; b=MYHpxZ2baLuuXk7FsGlgbEwUH+HAuPp9bbi7hbv7x/XUpDh68/74rZxiXEynQFIh5DFhLLVg7jnwKxSwlGUG/evRsjqJLt77mQT62Ch2KdJkgqGzpLqyJnC2eZxZ1JASoSAeRivoog4wQ2A1txbOaYZg1mf/v5qEWW7P60L9ur0=
+	t=1711882750; cv=none; b=mE2QJmQaRFWpC77Zk86KzIytnIw+PmbOrvlk8N3YcLk+c+XNgsDunycRo7j5IFeg0w9AMT5OUVcdupkwW0KBWhCHtolZ+3Xs8hUY8ywR6awgCCx3CHjRvD/6z1M7luaVmNaDWqJxYexsNdHABCo7ZWIZ5P4liaLj9Ct522UZDWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711879249; c=relaxed/simple;
-	bh=8ZlEK5607Jk4tOKuXpJJJZbQBuqSIL7N3MY76VqKGds=;
+	s=arc-20240116; t=1711882750; c=relaxed/simple;
+	bh=E/mXO2r8N+mvHUjPMnvWB+Izzfu4L00THFiMK03lb68=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tQq5PggapuYJ0UGG0JZQAfZD4QGTMlk6ZJqtF5xLRvsC/wnVcyqPLprYzKCbsnvIrdAwTZUM29Zy62dABUkYeSYjBkSczJ8FvIZZT32HoGhsz3k4bZMoUz0hsi/dTBecJdH/jy0v0T/I0jd9cP65b1yiAqJAjewNCzHSD86q830=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KmMMF4Fq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61394C433F1;
-	Sun, 31 Mar 2024 10:00:48 +0000 (UTC)
+	 MIME-Version:Content-Type; b=unv5mOchm02l9EyaJgtpkb1SQA+F1m49zkocsKnJM5Y6EbCIW+wr6nAI1riJZwPNnO16iCP4qcQoXykclYVMnlaxWGWkrGEXq2H8QLzeN8VswQZLMv1i852ptQ4Iq+QGNpfXiWno2o9ZHFe8i40oAFi8ypqjsMOgBBjKBHnTcXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERqxj6v8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61FCC433F1;
+	Sun, 31 Mar 2024 10:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711879248;
-	bh=8ZlEK5607Jk4tOKuXpJJJZbQBuqSIL7N3MY76VqKGds=;
+	s=k20201202; t=1711882749;
+	bh=E/mXO2r8N+mvHUjPMnvWB+Izzfu4L00THFiMK03lb68=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KmMMF4FqWijFeM4Mc1d+9Ubdwa3TgkbMdi6eJ6RH0MAB8zu2AokIMtuynk9zHpst7
-	 sjaOhpoiX/WY/rN5CHXvjADJSyWPVAk6E29IYeTIpMKQgGbS0bjQEdOxCPRzZrHqRo
-	 4I61gRbw7wBV0302LHrINBbf1Qu8jogvvPA2OPYB5Rda+tdjSWwlpUrBL94xa7zCyT
-	 sxQ3fdtYh4Ed+8k8UoLlhy5wUCDdk+g9Ee0f7ZkPcpfN1U2bUQTJtR0mIKbmN2Yu8J
-	 cWc12qcfmDEeapF4GLr3ETEj5czb7hk7mGI/Lk19OgAijibq+r+28/DKr5RV5kcQ3E
-	 ZsOTd8Sgq5fug==
-Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+	b=ERqxj6v8X0bw8+Nn+UE7aUiWGYJc9LvPo4mBhsECJoHarVZLp3LXI7/62lAKBZap3
+	 GNdoJwAn6Q2oj9ABUEihq76OhmeRXXlifkDzaOieupHDMIgPrf6Nh0A1yBmWwQhBUn
+	 l2TjZW042YsgfyPN3wsh67WXvdLDSaIbF4tbVvMmFyPYjA2J4Rjv1Z9u8MqZPvJ1Lx
+	 iXuxOEjcbKO7F0h9mPEkG0ZtiMjbDBHzWcgFSzszSNJjsVo/HB9broW2NE45amyl4q
+	 Bh86kTlGq1jzIVKVFrodRfdnMv/V+mojH0BBsljrTxB1MEXkQYlFPXTj/wTPVyAUEl
+	 9+eBc973iZJyQ==
+Received: from 82-132-233-13.dab.02.net ([82.132.233.13] helo=wait-a-minute.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1rqrzY-00013r-IH;
-	Sun, 31 Mar 2024 11:00:45 +0100
-Date: Sun, 31 Mar 2024 11:00:41 +0100
-Message-ID: <87msqesoty.wl-maz@kernel.org>
+	id 1rqsu3-0001gL-Ea;
+	Sun, 31 Mar 2024 11:59:07 +0100
+Date: Sun, 31 Mar 2024 11:59:06 +0100
+Message-ID: <87le5ysm4l.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -64,10 +64,10 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	kvmarm@lists.linux.dev,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] KVM: arm64: Share all userspace hardened thread data with the hypervisor
-In-Reply-To: <20240329-arm64-2023-dpisa-v6-1-ba42db6c27f3@kernel.org>
+Subject: Re: [PATCH v6 2/5] KVM: arm64: Add newly allocated ID registers to register descriptions
+In-Reply-To: <20240329-arm64-2023-dpisa-v6-2-ba42db6c27f3@kernel.org>
 References: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
-	<20240329-arm64-2023-dpisa-v6-1-ba42db6c27f3@kernel.org>
+	<20240329-arm64-2023-dpisa-v6-2-ba42db6c27f3@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -78,65 +78,69 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Connect-IP: 82.132.233.13
 X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Dave.Martin@arm.com, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, 29 Mar 2024 00:13:42 +0000,
+On Fri, 29 Mar 2024 00:13:43 +0000,
 Mark Brown <broonie@kernel.org> wrote:
 > 
-> As part of the lazy FPSIMD state transitioning done by the hypervisor we
-> currently share the userpsace FPSIMD state in thread->uw.fpsimd_state with
-> the host. Since this struct is non-extensible userspace ABI we have to keep
+> The 2023 architecture extensions have allocated some new ID registers, add
+> them to the KVM system register descriptions so that they are visible to
+> guests.
+> 
+> We make the newly introduced dpISA features writeable, as well as
+> allowing writes to ID_AA64ISAR3_EL1.CPA for FEAT_CPA which only
+> introduces straigforward new instructions with no additional
+> architectural state or traps.
 
-Using the same representation is just pure convenience, and nothing
-requires us to use the it in the kernel/hypervisor.
-
-> the definition as is but the addition of FPMR in the 2023 dpISA means that
-> we will want to share more storage with the host. To facilitate this
-> refactor the current code to share the entire thread->uw rather than just
-> the one field.
-
-So this increase the required sharing with EL2 from 528 bytes to
-560. Not a huge deal, but definitely moving in the wrong direction. Is
-there any plans to add more stuff to this structure that wouldn't be
-*directly* relevant to the hypervisor?
+FPMR actively gets trapped by HCRX_EL2.
 
 > 
-> The large number of references to fpsimd_state make it very inconvenient
-> to add an additional wrapper struct.
->
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  arch/arm64/include/asm/kvm_host.h       |  3 ++-
->  arch/arm64/include/asm/processor.h      |  2 +-
->  arch/arm64/kvm/fpsimd.c                 | 13 ++++++-------
->  arch/arm64/kvm/hyp/include/hyp/switch.h |  2 +-
->  arch/arm64/kvm/hyp/nvhe/hyp-main.c      |  4 ++--
->  5 files changed, 12 insertions(+), 12 deletions(-)
+>  arch/arm64/kvm/sys_regs.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 9e8a496fb284..8a251f0da900 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -27,6 +27,7 @@
->  #include <asm/fpsimd.h>
->  #include <asm/kvm.h>
->  #include <asm/kvm_asm.h>
-> +#include <asm/processor.h>
->  #include <asm/vncr_mapping.h>
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index c9f4f387155f..a3c20d1a36aa 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -2293,12 +2293,15 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  		   ID_AA64PFR0_EL1_AdvSIMD |
+>  		   ID_AA64PFR0_EL1_FP), },
+>  	ID_SANITISED(ID_AA64PFR1_EL1),
+> -	ID_UNALLOCATED(4,2),
+> +	ID_WRITABLE(ID_AA64PFR2_EL1, ~(ID_AA64PFR2_EL1_RES0 |
+> +				       ID_AA64PFR2_EL1_MTEFAR |
+> +				       ID_AA64PFR2_EL1_MTESTOREONLY |
+> +				       ID_AA64PFR2_EL1_MTEPERM)),
+>  	ID_UNALLOCATED(4,3),
+>  	ID_WRITABLE(ID_AA64ZFR0_EL1, ~ID_AA64ZFR0_EL1_RES0),
+>  	ID_HIDDEN(ID_AA64SMFR0_EL1),
+>  	ID_UNALLOCATED(4,6),
+> -	ID_UNALLOCATED(4,7),
+> +	ID_WRITABLE(ID_AA64FPFR0_EL1, ~ID_AA64FPFR0_EL1_RES0),
 >  
->  #define __KVM_HAVE_ARCH_INTC_INITIALIZED
-> @@ -640,7 +641,7 @@ struct kvm_vcpu_arch {
->  	struct kvm_guest_debug_arch vcpu_debug_state;
->  	struct kvm_guest_debug_arch external_debug_state;
->  
-> -	struct user_fpsimd_state *host_fpsimd_state;	/* hyp VA */
-> +	struct thread_struct_uw *host_uw;	/* hyp VA */
->  	struct task_struct *parent_task;
+>  	/* CRm=5 */
+>  	{ SYS_DESC(SYS_ID_AA64DFR0_EL1),
+> @@ -2325,7 +2328,9 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	ID_WRITABLE(ID_AA64ISAR2_EL1, ~(ID_AA64ISAR2_EL1_RES0 |
+>  					ID_AA64ISAR2_EL1_APA3 |
+>  					ID_AA64ISAR2_EL1_GPA3)),
+> -	ID_UNALLOCATED(6,3),
+> +	ID_WRITABLE(ID_AA64ISAR3_EL1, ~(ID_AA64ISAR2_EL1_RES0 |
+> +					ID_AA64ISAR3_EL1_PACM |
+> +					ID_AA64ISAR3_EL1_TLBIW)),
+>  	ID_UNALLOCATED(6,4),
+>  	ID_UNALLOCATED(6,5),
+>  	ID_UNALLOCATED(6,6),
+> 
 
-Well, this is going away, and you know it.
+Where is the code that enforces the lack of support for MTEFAR,
+MTESTOREONLY, and MTEPERM for SCTLR_ELx, EnPACM and EnFPM in HCRX_EL2?
+And I haven't checked whether TLBI VMALLWS2 can be trapped.
 
 	M.
 
