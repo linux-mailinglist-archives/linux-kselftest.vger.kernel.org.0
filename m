@@ -1,184 +1,138 @@
-Return-Path: <linux-kselftest+bounces-6955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D811D894565
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 21:22:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 743AF8945E8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 22:17:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A1352828BB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 19:22:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F7F7282E8B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 20:17:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB7953388;
-	Mon,  1 Apr 2024 19:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B2E447A53;
+	Mon,  1 Apr 2024 20:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="22uWaDKI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aAiPbrGh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F0C524C4
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Apr 2024 19:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FFD537F0
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Apr 2024 20:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711999360; cv=none; b=u7J+gRswY9IMlEUOWab+Pdw+wesexDfZYfMwnIJyZbiHD7+uzKjyTQpEmXgoTGLBxQbgX4cYhG1tqj7zfjnZDhBAh0vBRTXQPS0DSPNp51xbe0dSi78m7v9a4MB24cA9gDMynbWmeGMy91YW2y++DH0cLKBhdQJGTWva+PwlOAs=
+	t=1712002645; cv=none; b=Za08EoBc1Yr5qE1APNgq91bVFxLVTJApqCtbCjkK2xUeL4/o9J70JZ+Xh//9xy+Br/zPd9WA5Jb1NVR9UV+NxrCZFVLD6A76EmkjjwWj3uXcgC7PB+OMbGLPg6e777L1tyR/NRMEB6Ti8A2/nHRmoIwKy+swCNtCe1U4l+jZ9Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711999360; c=relaxed/simple;
-	bh=8oUFGMmpkpqLpkNpA3EMKT/yDO5+7f6Bm1WN7AwolPE=;
+	s=arc-20240116; t=1712002645; c=relaxed/simple;
+	bh=DHtBhqBNeZBIKrY/GX3JtpOpPT1r6vgPt3XKywQu1Os=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WYLi/tfjQqypM4wmkE2RaOPW1cxc1xsCS1vr7JWUmT00T6Q1P8+Y6u9wiVfYJ775lrSrpiwQVrusHKvjNXU2v+Vq5dEpQNhVNnhsyMyyBHXxj/5u62+xCU2pSpS9hx1hEoeEnq1SxDe5IShW2b79uimGSFDzjUV6ojfEHxTOvsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=22uWaDKI; arc=none smtp.client-ip=209.85.218.52
+	 To:Cc:Content-Type; b=c+SmF+mvQkH9PV91F5/oy00ROHJfvrr5SD4zgODiEY1FgG/8NgnYMPDsoeX+XW9e9+iNricXAi+vYa+X5s3KUVhTUWz5cdcQUmbxAjtl4HB2rtgLz2jIO5qitPm7g/2mYZfkQODz+QVBqh0Mf5MYGZyQDY+Itj4DXumr8mV4VJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aAiPbrGh; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a472f8c6a55so545753966b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Apr 2024 12:22:38 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-413f8c8192eso225405e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Apr 2024 13:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711999357; x=1712604157; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1712002642; x=1712607442; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pRKdoK98qnZzkUcUn3OGBOuDQ1g75ltD3kRhKb3BL0c=;
-        b=22uWaDKINClGQOvJi06fBpyOOT7pMDPbf3vKhzp0A0EZNqEMJZEU9ZEQI+hZSku6MG
-         bDpe0EjXvO13ddBX37ofmNnPNsgpJXqGc4AuCCQ8nuthzsZBfIFoF3l84MfjgVpQ/rMz
-         X8r0RgAF5nL/37G5R4ZMVUu7g7ccxrgvXJyBok31bWJ4U/eF8uRTx4l9dRQ4jGtBlNPe
-         xA9xU5PEKcZ6Mo8JfTxnSnXSqVcfGA88I4+hdQ1b5EIF6VP5bvS6Re5X1nESesLYTzOM
-         keFQM0jW7oXypgbtrwSnBZZnye/NvRo6H4FNnGy3aoPjs0A0kSwZBaIAE8vZ+9L09KAa
-         hy5A==
+        bh=J3aFjL6s1SfTb0uIG99KnzgQCy9He0FDmkud5jyqZjA=;
+        b=aAiPbrGh4OnL9TCoh/ir7CKcMXHdrs7U1Kw0YmHTEqofzsmjb2xjhroFlMP56MnhAK
+         ce2M0R8W2K+uh5APaeY9aliOMrrrrA3e6RhCmz1Ltow/3YrStYO0JbKBgJqHSysuSeU6
+         G3ka5zVN0GMCNbiJ1ZpWtFULncwEbCWM4H5b+X/4GmypNwQJxWdlgsfuesMDKwuG25bk
+         4G8/WsmZt3O210YXOKGciDvGH0hvGAHV1AOue/C32RIY9R+Zq8GcSnEFSsfJ/abSwHFD
+         7OkVjL132DRWPrjHqkfil8rI2oyRuF1pLBM7a+eLjiVcmZP77p/fh4LPtNxjsvKgBWAb
+         VRSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711999357; x=1712604157;
+        d=1e100.net; s=20230601; t=1712002642; x=1712607442;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pRKdoK98qnZzkUcUn3OGBOuDQ1g75ltD3kRhKb3BL0c=;
-        b=mxptqfQ9M61JuV/0JPKWzxm+RODiysoWE6h0IoHyUG64ZJae1AesbZueSSDlccd/rr
-         +0mjUrS7POFcAhCwKyyEWBh7Ur0HLq8E7nMGNi1DVnOhdv5xM8Wu64UV57foUNOEjuFB
-         MOLyfetJLgmfWx+cChI1O080gThXEjK6asZ1LoPjIE3YQzIgB6wnGOGkqaMFU6GwvMNz
-         fFkn/Anok7m/yZMA1doFRbT0AhUAt+XdRMRoXRjDE5zcU3IcYoLiFskP4NZTRYbHjBrz
-         bZwrL7nMsySPntGcS22KKYAS9lLr0dG4pBfuQFEQFFReRY96n6Y3bSFXj2EfPKjaXXEN
-         PFDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkZhOWS1m1Jtd+OjYuPMdn/dU5Vt9c7Wzkd/KD8Z1uMVgks2Xu8Znl7onaPdKMz1DuRnt0u5DTYLfPpePud33k/6VegmoQ8O27sM0TDfuO
-X-Gm-Message-State: AOJu0YwbxojktiIN1SnBloBqkFq5pmRPDlaW6HQsLeczXCQ78i5baqBy
-	3bfXttVtcnGvhSndv3dYqRO1E7ZRO6zPvuNpMmz2YOmV/MfGkKbalW5n0+urCWjID3BAAjIu7Gi
-	9SFKlIMwMRnKAxOko1binA38Pwp+9USK9Kuc6
-X-Google-Smtp-Source: AGHT+IFnZAdqBNjychftax9hJ9HmWGsuFKJlToxmGxuKATUcrfF8Wqh8ADOKipJFMzVFEgjjXqwoqI01MVv3yIjrd3E=
-X-Received: by 2002:a17:906:f289:b0:a46:d978:bf02 with SMTP id
- gu9-20020a170906f28900b00a46d978bf02mr6594862ejb.34.1711999356578; Mon, 01
- Apr 2024 12:22:36 -0700 (PDT)
+        bh=J3aFjL6s1SfTb0uIG99KnzgQCy9He0FDmkud5jyqZjA=;
+        b=QPSmppvojSHsi6PVOrtJbUlmvOamy29l9PncsLIHdF0knBNlwiFXgiOeUEylgKTZzt
+         CxlxzJy6dPQT+orXJ3IjZSITLCRBWxR+FlKrarNY0XW4f+ID2DBTy0olagz6d5VugCCd
+         b0uAtmPEgzICp3Hq0Epm9eG0SvqRx/EPi6aeITDEz8LpS8PyMjxYMA+smcgopF5aW0XQ
+         79i0f0xz/ejB8t8ZNm2VrfVVGXrz2exGI3FPXdsu0vtXs4CqYv9Bm17ucqf045AOAb0Z
+         VM+beZtUshBuEV6/9CzT1E1qEK7i2e5FS317zn5eD2wsx+v2Ugabb42cpt7TxrQ8rcP6
+         g06g==
+X-Forwarded-Encrypted: i=1; AJvYcCWZgEpeqFFIU0jZbyriW/2PLYhrNK4cC0x004CKUKWk8G08pjH2neuy6LvVhTvtewkFS214RlNyCSioqZw0hdZkZM5tGBAwKvM44srIkFSl
+X-Gm-Message-State: AOJu0YydmRnecBeEcFyq8+sk6VZcVWPosYIX9uwN3lAQU1B42Trk/uTd
+	C27X6u6TYd7g2K5rL3VrNY4QskYWfNyxdeB6LltwxNDzEK8ogk8sQ9DC5Ac2rwcgkZP2leIiiqu
+	I6MH0rcmwp4i624FRsw3YUddpZfzbkv4f7Z0=
+X-Google-Smtp-Source: AGHT+IH4u6ixRGerfhByJbubIH4VZXbfeMuEQl6z//6B53qEEPTxywQn+A1RXkYeDD69+9wPxjVog+ULgLhkr/oAGMs=
+X-Received: by 2002:a05:600c:3587:b0:414:800f:f9b1 with SMTP id
+ p7-20020a05600c358700b00414800ff9b1mr640853wmq.2.1712002641819; Mon, 01 Apr
+ 2024 13:17:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
- <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
- <ZgC5JoSiWAYf3IgX@infradead.org> <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
- <ZgUc07Szbx5x-obb@infradead.org>
-In-Reply-To: <ZgUc07Szbx5x-obb@infradead.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 1 Apr 2024 12:22:24 -0700
-Message-ID: <CAHS8izM8iLC9J1xSHScMrMkVyoY5HZ_nFMRO4V7HYarHhZhk6Q@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>, Marc Harvey <marcharvey@google.com>, 
-	"Cong Wang ." <cong.wang@bytedance.com>
-Cc: shakeel.butt@linux.dev, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20230316123028.2890338-1-elver@google.com>
+In-Reply-To: <20230316123028.2890338-1-elver@google.com>
+From: John Stultz <jstultz@google.com>
+Date: Mon, 1 Apr 2024 13:17:09 -0700
+Message-ID: <CANDhNCqBGnAr_MSBhQxWo+-8YnPPggxoVL32zVrDB+NcoKXVPQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
+ current thread
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	"Eric W. Biederman" <ebiederm@xmission.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>, 
+	kasan-dev@googlegroups.com, Edward Liaw <edliaw@google.com>, 
+	Carlos Llamas <cmllamas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 12:31=E2=80=AFAM Christoph Hellwig <hch@infradead.o=
-rg> wrote:
+On Thu, Mar 16, 2023 at 5:30=E2=80=AFAM Marco Elver <elver@google.com> wrot=
+e:
 >
-> On Tue, Mar 26, 2024 at 01:19:20PM -0700, Mina Almasry wrote:
-> >
-> > Are you envisioning that dmabuf support would be added to the block
-> > layer
+> From: Dmitry Vyukov <dvyukov@google.com>
 >
-> Yes.
+> POSIX timers using the CLOCK_PROCESS_CPUTIME_ID clock prefer the main
+> thread of a thread group for signal delivery.     However, this has a
+> significant downside: it requires waking up a potentially idle thread.
 >
-> > (which I understand is part of the VFS and not driver specific),
+> Instead, prefer to deliver signals to the current thread (in the same
+> thread group) if SIGEV_THREAD_ID is not set by the user. This does not
+> change guaranteed semantics, since POSIX process CPU time timers have
+> never guaranteed that signal delivery is to a specific thread (without
+> SIGEV_THREAD_ID set).
 >
-> The block layer isn't really the VFS, it's just another core stack
-> like the network stack.
+> The effect is that we no longer wake up potentially idle threads, and
+> the kernel is no longer biased towards delivering the timer signal to
+> any particular thread (which better distributes the timer signals esp.
+> when multiple timers fire concurrently).
 >
-> > or as part of the specific storage driver (like nvme for example)? If
-> > we can add dmabuf support to the block layer itself that sounds
-> > awesome. We may then be able to do devmem TCP on all/most storage
-> > devices without having to modify each individual driver.
->
-> I suspect we'll still need to touch the drivers to understand it,
-> but hopefully all the main infrastructure can live in the block layer.
->
-> > In your estimation, is adding dmabuf support to the block layer
-> > something technically feasible & acceptable upstream? I notice you
-> > suggested it so I'm guessing yes to both, but I thought I'd confirm.
->
-> I think so, and I know there has been quite some interest to at least
-> pre-register userspace memory so that the iommu overhead can be
-> pre-loaded.  It also is a much better interface for Peer to Peer
-> transfers than what we currently have.
->
+> Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+> Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-I think this is positively thrilling news for me. I was worried that
-adding devmemTCP support to storage devices would involve using a
-non-dmabuf standard of buffer sharing like pci_p2pdma_
-(drivers/pci/p2pdma.c) and that would require messy changes to
-pci_p2pdma_ that would get nacked. Also it would require adding
-pci_p2pdma_ support to devmem TCP, which is a can of worms. If adding
-dma-buf support to storage devices is feasible and desirable, that's a
-much better approach IMO. (a) it will maybe work with devmem TCP
-without any changes needed on the netdev side of things and (b)
-dma-buf support may be generically useful and a good contribution even
-outside of devmem TCP.
+Apologies for drudging up this old thread.
 
-I don't have a concrete user for devmem TCP for storage devices but
-the use case is very similar to GPU and I imagine the benefits in perf
-can be significant in some setups.
+I wanted to ask if anyone had objections to including this in the -stable t=
+rees?
 
-Christoph, if you have any hints or rough specific design in mind for
-how dma-buf support can be added to the block layer, please do let us
-know and we'll follow your hints to investigate. But I don't want to
-use up too much of your time. Marc and I can definitely read enough
-code to figure out how to do it ourselves :-)
+After this and the follow-on patch e797203fb3ba
+("selftests/timers/posix_timers: Test delivery of signals across
+threads") landed, folks testing older kernels with the latest
+selftests started to see the new test checking for this behavior to
+stall.  Thomas did submit an adjustment to the test here to avoid the
+stall: https://lore.kernel.org/lkml/20230606142031.071059989@linutronix.de/=
+,
+but it didn't seem to land, however that would just result in the test
+failing instead of hanging.
 
-Marc, please review and consider this thread and work, this could be a
-good project for you and I. I imagine the work would be:
+This change does seem to cherry-pick cleanly back to at least
+stable/linux-5.10.y cleanly, so it looks simple to pull this change
+back. But I wanted to make sure there wasn't anything subtle I was
+missing before sending patches.
 
-1. Investigate how to add dma-buf support to the block layer (maybe
-write a prototype code, and maybe even test it with devmem TCP).
-2. Share a code or no-code proposal with netdev/fs/block layer mailing
-list and try to work through concerns/nacks.
-3. Finally share RFC through merging etc.
-
---
-Thanks,
-Mina
+thanks
+-john
 
