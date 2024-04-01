@@ -1,80 +1,81 @@
-Return-Path: <linux-kselftest+bounces-6958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A59EE89475C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 00:36:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB83B89475F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 00:37:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCB77B2137B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 22:36:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00F5A1C2137E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 22:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6647A51016;
-	Mon,  1 Apr 2024 22:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238BA51C2B;
+	Mon,  1 Apr 2024 22:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b="DisrqAxU"
+	dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b="OEmtXUxR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B1D8F6F
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Apr 2024 22:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BBB8F6F
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Apr 2024 22:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712010991; cv=none; b=Ey42SfZM7RUjFcAjq25pWF7NUlWz7M7CzlqnOtqLRdlFqYPAz00TpADr8kBFsCWpzsh6bFVug855idXA/Z7/y8NHRV46UIlZ01uKbcQmgqXQytspUdMDvQoCe1Fz4TJL7JP9g2YUnz1MfZKA/7iKwJHQZb+S3bWXTykg+u3UGFE=
+	t=1712011036; cv=none; b=WvYw8fmF6Qt6GJwm6g8HY9TmlgPytA5zupp8mAq8IO1D9BI+Ort+eL9kBj/Oyx3uWj3h/E3ZTI1SUvr0KiYIQ++cVpWLme26DWaSO3jFh5eZFXAaU8PU5DbhGrW8UV6TTMffWzPwYChaqSZhSxLrOcazq9iYwzcmcT8RChy2/mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712010991; c=relaxed/simple;
-	bh=l7tANeGH1NplxmfJX0fGMQhsUOfslz3MessZ0Nyt/LE=;
+	s=arc-20240116; t=1712011036; c=relaxed/simple;
+	bh=NTg0LNvASPU60r1Pc8Xg21cU9Db2pDu0bl/8+t+KWZg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AF0UdopYU0x9aLxlEC/4GkismABdrR0dW7oQNudC9Cm2WK9EJQ3AEnqPIi1mbGKCa2mgC+IT/1PLvxMwPSCxvzVSc7PEtUQTloOg9/GMWr4fBcGcEmgaeXhpckptleLKont4TQh1NyOM4IQPRY7Jb+I6uGjjBnrGa3Tbc6MnAuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atishpatra.org; spf=pass smtp.mailfrom=atishpatra.org; dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b=DisrqAxU; arc=none smtp.client-ip=209.85.208.178
+	 To:Cc:Content-Type; b=jj51cbYrDxj2pwwQ4uPm7U/Pvd81DII3TyXdZvcHPO9WEgaposbL+mIwzflB8Au6nxUqEzS7hliKPwX9zn58PIDIQJIf44yRil60c6C0W4fIcnsbods76lr/trkvZF3gYilKftyKnDhAgs6x5Ds0NtFc6DcylNSYkzUO2v0qcHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atishpatra.org; spf=pass smtp.mailfrom=atishpatra.org; dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b=OEmtXUxR; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atishpatra.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atishpatra.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d4979cd8c8so43959921fa.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Apr 2024 15:36:28 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2d6ee6c9945so33638171fa.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Apr 2024 15:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1712010987; x=1712615787; darn=vger.kernel.org;
+        d=atishpatra.org; s=google; t=1712011032; x=1712615832; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WvDPAlziQ7mAcfBxPAH8ZIQ8p10MVAgkj4gxes2yMQc=;
-        b=DisrqAxUy3BCQfM4f/Zt71IkTmx7bHrq4pBldO3p7LqiZu0SRspCq420BwVxoHtfe8
-         7wX4LjTV1/zVeTPTgyibfcMHN2fOMpg7ytgym7ORAOPgq27uK63bYaOj5VKwj7jOdEKf
-         l8HuUEwqz2y7SMu4muEBMDwEKKVrfN6XflxCc=
+        bh=aY4S4yPUfIj0lcZIhHGm/I+32cExDlXkzSV19aujdnE=;
+        b=OEmtXUxRtFiXZW6cQjKo9p5rXSTBp/6P8FcepU+kL8H3t5v7zCxK8XLDgALUHeKAqQ
+         8H7oNeNCGwmMmEchSDVVdnkeOZFZz0ExUvy4rRbVhXnC0RuYkpJUaKwmsDHlxDUj5xsA
+         LaGACyClK2phAkDZxwFvBVuXisHlB8q+imrvk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712010987; x=1712615787;
+        d=1e100.net; s=20230601; t=1712011032; x=1712615832;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WvDPAlziQ7mAcfBxPAH8ZIQ8p10MVAgkj4gxes2yMQc=;
-        b=Hf1MWgPs1wnXP969gCND6Oz6Zr1sXDelXwQXm6ymVoY3JI03oXgPz7RUS+8DX/UnGS
-         7kHx7cHxaRHbayM9OUNe9WCUPYrhwF3PZD+M2TPYGIzqNBKRL+XfiVjvqxItOAJdiE4A
-         Yl/l0A6cE2n7VaZAO0rTAiLgzCdG1PvK5cYWJP2T2GSaaHI3TG+8zcezkatfrPtSj6hl
-         7bo4MrWTFdDf7dmmuEBVM/zX4qSiEU0GndthKK3pS8RdXI5y/BjsnA7RYZ4qbe+2lrlm
-         Xzhl2kD7kAfxV+v0hmIUS5Sk5kznjj3FV5e6OYTOIUUQdqdZXEYJL8c7kNXWTY0fP7RN
-         Mmrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUtprOgyySWGonn+6LGiWIiHnJDT6dtVPhJxctDN5u5lNbXX053yM2HLvHNqySShWc+hLYyTx4eUtYPIqPvjt6qWR+DWMORgfxSOL3+CSkt
-X-Gm-Message-State: AOJu0YyMe3DhpgFB8IIdWKvL4lNB6xLr1hWbCcVsl1ppyS3Fg0dlgSsq
-	qDTkkXYVEc6oJyn0VWadPKfXqzqrPqxGhSMr4PY4sURf5u0wB5b9vImk2dDTQDdH0trVaaPkpxx
-	AoLTxJrHuuOL5V9yZQ5MKFsbZ845VGBKkaU53
-X-Google-Smtp-Source: AGHT+IEISW7E+Ezw5vjEMx6zUqgUMTTf0rKbH/YyFvkddIlkMXtwQtIYHwJcyp5Givggct6PxukvH0f6QWkg7m5WUHY=
-X-Received: by 2002:a2e:b710:0:b0:2d5:9f6f:1df2 with SMTP id
- j16-20020a2eb710000000b002d59f6f1df2mr4822642ljo.0.1712010986601; Mon, 01 Apr
- 2024 15:36:26 -0700 (PDT)
+        bh=aY4S4yPUfIj0lcZIhHGm/I+32cExDlXkzSV19aujdnE=;
+        b=sCNvFiu0DDaEJgvIgan150FyoyNTaAR0cbRvoueDCqBaw8gbtcDkLDmhxMs/GPeAM9
+         f8P8Quhkbk1ZjPVeVbQ2oRnEqRcwsyOk9s8Q4jkki1DC75yVyaZfsh2fC9UsOJHowdf2
+         Es4EHXjVEq0zs/vMHs49rZXJ5tisJJ5dnGBweYfmMPMR6Spq2FNmxzmCWD6oEnObXzTm
+         /js1SNOzzxVy4hskXykdCbiBlqDjIFU6tNAGZ8XdYI8hxqh/R4X/hTo3IilngDD90D1n
+         /1Wn/qlye1xXEJVk6UPlwZsp96DNEnGDHaHEHfk7bmzNn82Dtl85xUhDSkjXncMtx503
+         /g/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWKED8/w0yf9q4v8v7iOWBuejEZHI2hzTgaKq+7oRPw2xFy8BolJpkLThPC7LLA39SEBejvcLTZ1zmQ8sc3Jp7ldGfxmMRzqO2O7tcoSuTI
+X-Gm-Message-State: AOJu0YyVbhDL3mROK6Wq21LEtKYmI/2sbuENN7QS6XN5DNqOBUr0VxvV
+	RyQipR5u6RRgBgiSn15vTdLTgL/7cyLlTSR07wGGQFVJCq2jXe3mq/JJzKdjVJS+sRxAQat08d/
+	MnFxC+Rr5MUGs2ln6WzILQ7wIoSoTE7A+VK2W
+X-Google-Smtp-Source: AGHT+IG/nrfJyiecsCRexI+R+JQkltSWLIGxNJI1MuunG9lO7Xv1PZB0PJSIO5fHcSDuaVZDyAvA8i4t7A+QtlxnzZU=
+X-Received: by 2002:a05:651c:14a:b0:2d4:514b:428 with SMTP id
+ c10-20020a05651c014a00b002d4514b0428mr6412640ljd.6.1712011032590; Mon, 01 Apr
+ 2024 15:37:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240229010130.1380926-1-atishp@rivosinc.com> <20240229010130.1380926-9-atishp@rivosinc.com>
- <20240302-6ae8fe37b90f127bc9be737f@orel>
-In-Reply-To: <20240302-6ae8fe37b90f127bc9be737f@orel>
+References: <20240229010130.1380926-1-atishp@rivosinc.com> <20240229010130.1380926-8-atishp@rivosinc.com>
+ <20240302-1a3c0df25f2422e1e6abecf3@orel>
+In-Reply-To: <20240302-1a3c0df25f2422e1e6abecf3@orel>
 From: Atish Patra <atishp@atishpatra.org>
-Date: Mon, 1 Apr 2024 15:36:14 -0700
-Message-ID: <CAOnJCUKjZWnS_SaR78Fy5AUOxrd+4gBx=_YrA=FQCa20iwifNQ@mail.gmail.com>
-Subject: Re: [PATCH v4 08/15] RISC-V: KVM: Implement SBI PMU Snapshot feature
+Date: Mon, 1 Apr 2024 15:37:01 -0700
+Message-ID: <CAOnJCUJCQjBfLZFW-3iLUB6ygyRmz1Anu+fhfrT4Lpoj2iNB5Q@mail.gmail.com>
+Subject: Re: [PATCH v4 07/15] RISC-V: KVM: No need to exit to the user space
+ if perf event failed
 To: Andrew Jones <ajones@ventanamicro.com>
 Cc: Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org, 
 	Anup Patel <anup@brainfault.org>, Albert Ou <aou@eecs.berkeley.edu>, 
@@ -88,451 +89,137 @@ Cc: Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 2, 2024 at 1:49=E2=80=AFAM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
+On Sat, Mar 2, 2024 at 12:16=E2=80=AFAM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
 >
-> On Wed, Feb 28, 2024 at 05:01:23PM -0800, Atish Patra wrote:
-> > PMU Snapshot function allows to minimize the number of traps when the
-> > guest access configures/access the hpmcounters. If the snapshot feature
-> > is enabled, the hypervisor updates the shared memory with counter
-> > data and state of overflown counters. The guest can just read the
-> > shared memory instead of trap & emulate done by the hypervisor.
+> On Wed, Feb 28, 2024 at 05:01:22PM -0800, Atish Patra wrote:
+> > Currently, we return a linux error code if creating a perf event failed
+> > in kvm. That shouldn't be necessary as guest can continue to operate
+> > without perf profiling or profiling with firmware counters.
 > >
-> > This patch doesn't implement the counter overflow yet.
+> > Return appropriate SBI error code to indicate that PMU configuration
+> > failed. An error message in kvm already describes the reason for failur=
+e.
+>
+> I don't know enough about the perf subsystem to know if there may be
+> a concern that resources are temporarily unavailable. If so, then this
+
+Do you mean the hardware resources unavailable because the host is using it=
+ ?
+
+> patch would make it possible for a guest to do the exact same thing,
+> but sometimes succeed and sometimes get SBI_ERR_NOT_SUPPORTED.
+> sbi_pmu_counter_config_matching doesn't currently have any error types
+> specified that say "unsupported at the moment, maybe try again", which
+> would be more appropriate in that case. I do see
+> perf_event_create_kernel_counter() can return ENOMEM when memory isn't
+> available, but if the kernel isn't able to allocate a small amount of
+> memory, then we're in bigger trouble anyway, so the concern would be
+> if there are perf resource pools which may temporarily be exhausted at
+> the time the guest makes this request.
+>
+
+For other cases, this patch ensures that guests continue to run without fai=
+lure
+which allows the user in the guest to try again if this fails due to a temp=
+orary
+resource availability.
+
+> One comment below.
+>
 > >
+> > Fixes: 0cb74b65d2e5 ("RISC-V: KVM: Implement perf support without sampl=
+ing")
 > > Reviewed-by: Anup Patel <anup@brainfault.org>
 > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > > ---
-> >  arch/riscv/include/asm/kvm_vcpu_pmu.h |   7 ++
-> >  arch/riscv/kvm/vcpu_pmu.c             | 120 +++++++++++++++++++++++++-
-> >  arch/riscv/kvm/vcpu_sbi_pmu.c         |   3 +
-> >  drivers/perf/riscv_pmu_sbi.c          |   2 +-
-> >  4 files changed, 129 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include=
-/asm/kvm_vcpu_pmu.h
-> > index 395518a1664e..586bab84be35 100644
-> > --- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > @@ -50,6 +50,10 @@ struct kvm_pmu {
-> >       bool init_done;
-> >       /* Bit map of all the virtual counter used */
-> >       DECLARE_BITMAP(pmc_in_use, RISCV_KVM_MAX_COUNTERS);
-> > +     /* The address of the counter snapshot area (guest physical addre=
-ss) */
-> > +     gpa_t snapshot_addr;
-> > +     /* The actual data of the snapshot */
-> > +     struct riscv_pmu_snapshot_data *sdata;
-> >  };
-> >
-> >  #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu_context)
-> > @@ -85,6 +89,9 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu =
-*vcpu, unsigned long ctr_ba
-> >  int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long c=
-idx,
-> >                               struct kvm_vcpu_sbi_return *retdata);
-> >  void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu);
-> > +int kvm_riscv_vcpu_pmu_setup_snapshot(struct kvm_vcpu *vcpu, unsigned =
-long saddr_low,
-> > +                                   unsigned long saddr_high, unsigned =
-long flags,
-> > +                                   struct kvm_vcpu_sbi_return *retdata=
-);
->
-> I prefer to name this function
->
-> kvm_riscv_vcpu_pmu_snapshot_set_shmem
->
-
-Sure.
-
-> >  void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu);
-> >  void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
+> >  arch/riscv/kvm/vcpu_pmu.c     | 14 +++++++++-----
+> >  arch/riscv/kvm/vcpu_sbi_pmu.c |  6 +++---
+> >  2 files changed, 12 insertions(+), 8 deletions(-)
 > >
 > > diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-> > index 29bf4ca798cb..74865e6050a1 100644
+> > index b1574c043f77..29bf4ca798cb 100644
 > > --- a/arch/riscv/kvm/vcpu_pmu.c
 > > +++ b/arch/riscv/kvm/vcpu_pmu.c
-> > @@ -311,6 +311,81 @@ int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *v=
-cpu, unsigned int csr_num,
-> >       return ret;
+> > @@ -229,8 +229,9 @@ static int kvm_pmu_validate_counter_mask(struct kvm=
+_pmu *kvpmu, unsigned long ct
+> >       return 0;
 > >  }
 > >
-> > +static void kvm_pmu_clear_snapshot_area(struct kvm_vcpu *vcpu)
-> > +{
-> > +     struct kvm_pmu *kvpmu =3D vcpu_to_pmu(vcpu);
-> > +     int snapshot_area_size =3D sizeof(struct riscv_pmu_snapshot_data)=
-;
-> > +
-> > +     if (kvpmu->sdata) {
-> > +             memset(kvpmu->sdata, 0, snapshot_area_size);
-> > +             if (kvpmu->snapshot_addr !=3D INVALID_GPA)
->
-> It's a KVM bug if we have non-null sdata but snapshot_addr is INVALID_GPA=
-,
-> right? Maybe we should warn if we see that. We can also move the memset
-> inside the if block.
->
-
-Added a warning.
-
-> > +                     kvm_vcpu_write_guest(vcpu, kvpmu->snapshot_addr,
-> > +                                          kvpmu->sdata, snapshot_area_=
-size);
-> > +             kfree(kvpmu->sdata);
-> > +             kvpmu->sdata =3D NULL;
-> > +     }
-> > +     kvpmu->snapshot_addr =3D INVALID_GPA;
-> > +}
-> > +
-> > +int kvm_riscv_vcpu_pmu_setup_snapshot(struct kvm_vcpu *vcpu, unsigned =
-long saddr_low,
-> > +                                   unsigned long saddr_high, unsigned =
-long flags,
-> > +                                   struct kvm_vcpu_sbi_return *retdata=
-)
-> > +{
-> > +     struct kvm_pmu *kvpmu =3D vcpu_to_pmu(vcpu);
-> > +     int snapshot_area_size =3D sizeof(struct riscv_pmu_snapshot_data)=
-;
-> > +     int sbiret =3D 0;
-> > +     gpa_t saddr;
-> > +     unsigned long hva;
-> > +     bool writable;
-> > +
-> > +     if (!kvpmu) {
-> > +             sbiret =3D SBI_ERR_INVALID_PARAM;
-> > +             goto out;
-> > +     }
->
-> Need to check that flags is zero or return SBI_ERR_INVALID_PARAM.
->
-
-Fixed.
-
-> > +
-> > +     if (saddr_low =3D=3D -1 && saddr_high =3D=3D -1) {
->
-> We introduced SBI_STA_SHMEM_DISABLE for these magic -1's for STA. Since
-> SBI is using the -1 approach for all its shmem, then maybe we should
-> rename SBI_STA_SHMEM_DISABLE to SBI_SHMEM_DISABLE and then use them here
-> too.
->
-
-Fixed
-
-> > +             kvm_pmu_clear_snapshot_area(vcpu);
-> > +             return 0;
-> > +     }
-> > +
-> > +     saddr =3D saddr_low;
-> > +
-> > +     if (saddr_high !=3D 0) {
-> > +             if (IS_ENABLED(CONFIG_32BIT))
-> > +                     saddr |=3D ((gpa_t)saddr << 32);
-> > +             else
-> > +                     sbiret =3D SBI_ERR_INVALID_ADDRESS;
-> > +             goto out;
-> > +     }
-> > +
-> > +     if (kvm_is_error_gpa(vcpu->kvm, saddr)) {
-> > +             sbiret =3D SBI_ERR_INVALID_PARAM;
-> > +             goto out;
-> > +     }
->
-> Does the check above provide anything more than what the check below does=
-?
->
-You are correct. I have removed the check
-
-> > +
-> > +     hva =3D kvm_vcpu_gfn_to_hva_prot(vcpu, saddr >> PAGE_SHIFT, &writ=
-able);
-> > +     if (kvm_is_error_hva(hva) || !writable) {
-> > +             sbiret =3D SBI_ERR_INVALID_ADDRESS;
-> > +             goto out;
-> > +     }
-> > +
-> > +     kvpmu->snapshot_addr =3D saddr;
-> > +     kvpmu->sdata =3D kzalloc(snapshot_area_size, GFP_ATOMIC);
-> > +     if (!kvpmu->sdata)
->
-> Should reset snapshot_addr to INVALID_GPA here on error. Or maybe we
-> should just set snapshot_addr to saddr at the bottom of this function if
-> we make it.
->
-
-Done.
-
-> > +             return -ENOMEM;
-> > +
-> > +     if (kvm_vcpu_write_guest(vcpu, saddr, kvpmu->sdata, snapshot_area=
-_size)) {
-> > +             kfree(kvpmu->sdata);
-> > +             kvpmu->snapshot_addr =3D INVALID_GPA;
-> > +             sbiret =3D SBI_ERR_FAILURE;
->
-> I agree we should return this SBI error for this case, but unfortunately
-> the spec is missing the
->
->  SBI_ERR_FAILED - The request failed for unspecified or unknown other rea=
-sons.
->
-> that we have for other SBI functions. I guess we should keep the code lik=
-e
-> this and open a PR to the spec.
->
-
-I have created a blanket github issue for now. I will send a PR.
-
-> > +     }
-> > +
-> > +out:
-> > +     retdata->err_val =3D sbiret;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu,
-> >                               struct kvm_vcpu_sbi_return *retdata)
+> > -static int kvm_pmu_create_perf_event(struct kvm_pmc *pmc, struct perf_=
+event_attr *attr,
+> > -                                  unsigned long flags, unsigned long e=
+idx, unsigned long evtdata)
+> > +static long kvm_pmu_create_perf_event(struct kvm_pmc *pmc, struct perf=
+_event_attr *attr,
+> > +                                   unsigned long flags, unsigned long =
+eidx,
+> > +                                   unsigned long evtdata)
 > >  {
-> > @@ -344,20 +419,33 @@ int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu =
-*vcpu, unsigned long ctr_base,
-> >       int i, pmc_index, sbiret =3D 0;
-> >       struct kvm_pmc *pmc;
-> >       int fevent_code;
-> > +     bool snap_flag_set =3D flags & SBI_PMU_START_FLAG_INIT_FROM_SNAPS=
-HOT;
->
-> This function should confirm no undefined bits are set in flags and the
-> spec should specify that the reserved flags must be zero otherwise an
-> invalid param will be returned.
->
-> Also here would should confirm that only one of the two flags is set,
-> otherwise return invalid param, as they've specified to be mutually
-> exclusive.
->
-
-That makes sense. Update the same github issue.
-(https://github.com/riscv-non-isa/riscv-sbi-doc/issues/145)
-
-I will make the necessary changes in a separate series after the spec is me=
-rged.
-
-> Regarding the spec, the note about the counter value not being modified
-> unless SBI_PMU_START_SET_INIT_VALUE is set should be modified to state
-> unless either of the two flags are set (so I think we need another spec
-> PR).
->
-> (The same flags checking/specifying comments apply to the other functions
-> with flags too.)
->
-
-Noted (https://github.com/riscv-non-isa/riscv-sbi-doc/issues/146).
-
+> >       struct perf_event *event;
 > >
-> >       if (kvm_pmu_validate_counter_mask(kvpmu, ctr_base, ctr_mask) < 0)=
- {
-> >               sbiret =3D SBI_ERR_INVALID_PARAM;
-> >               goto out;
-> >       }
-> >
-> > +     if (snap_flag_set && kvpmu->snapshot_addr =3D=3D INVALID_GPA) {
-> > +             sbiret =3D SBI_ERR_NO_SHMEM;
-> > +             goto out;
-> > +     }
-> > +
-> >       /* Start the counters that have been configured and requested by =
-the guest */
-> >       for_each_set_bit(i, &ctr_mask, RISCV_MAX_COUNTERS) {
-> >               pmc_index =3D i + ctr_base;
-> >               if (!test_bit(pmc_index, kvpmu->pmc_in_use))
-> >                       continue;
-> >               pmc =3D &kvpmu->pmc[pmc_index];
-> > -             if (flags & SBI_PMU_START_FLAG_SET_INIT_VALUE)
-> > +             if (flags & SBI_PMU_START_FLAG_SET_INIT_VALUE) {
-> >                       pmc->counter_val =3D ival;
-> > +             } else if (snap_flag_set) {
-> > +                     kvm_vcpu_read_guest(vcpu, kvpmu->snapshot_addr, k=
-vpmu->sdata,
-> > +                                         sizeof(struct riscv_pmu_snaps=
-hot_data));
->
-> The snapshot read should be outside the for_each_set_bit() loop and we
-> should warn and abort the counter starting if the read fails.
->
-
-Fixed. This should also fall under the SBI_ERR_FAILURE category.
-
-> > +                     /* The counter index in the snapshot are relative=
- to the counter base */
-> > +                     pmc->counter_val =3D kvpmu->sdata->ctr_values[i];
-> > +             }
-> > +
-> >               if (pmc->cinfo.type =3D=3D SBI_PMU_CTR_TYPE_FW) {
-> >                       fevent_code =3D get_event_code(pmc->event_idx);
-> >                       if (fevent_code >=3D SBI_PMU_FW_MAX) {
-> > @@ -398,14 +486,21 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *=
-vcpu, unsigned long ctr_base,
+> > @@ -454,7 +455,8 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcp=
+u *vcpu, unsigned long ctr_ba
+> >                                    unsigned long eidx, u64 evtdata,
+> >                                    struct kvm_vcpu_sbi_return *retdata)
 > >  {
-> >       struct kvm_pmu *kvpmu =3D vcpu_to_pmu(vcpu);
-> >       int i, pmc_index, sbiret =3D 0;
-> > +     u64 enabled, running;
-> >       struct kvm_pmc *pmc;
-> >       int fevent_code;
-> > +     bool snap_flag_set =3D flags & SBI_PMU_STOP_FLAG_TAKE_SNAPSHOT;
-> >
-> > -     if (kvm_pmu_validate_counter_mask(kvpmu, ctr_base, ctr_mask) < 0)=
- {
-> > +     if ((kvm_pmu_validate_counter_mask(kvpmu, ctr_base, ctr_mask) < 0=
-)) {
->
-> Added unnecessary () here.
->
-
-Fixed.
-
-> >               sbiret =3D SBI_ERR_INVALID_PARAM;
-> >               goto out;
-> >       }
-> >
-> > +     if (snap_flag_set && kvpmu->snapshot_addr =3D=3D INVALID_GPA) {
-> > +             sbiret =3D SBI_ERR_NO_SHMEM;
-> > +             goto out;
-> > +     }
-> > +
-> >       /* Stop the counters that have been configured and requested by t=
-he guest */
-> >       for_each_set_bit(i, &ctr_mask, RISCV_MAX_COUNTERS) {
-> >               pmc_index =3D i + ctr_base;
-> > @@ -438,9 +533,28 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *v=
-cpu, unsigned long ctr_base,
-> >               } else {
-> >                       sbiret =3D SBI_ERR_INVALID_PARAM;
-> >               }
-> > +
-> > +             if (snap_flag_set && !sbiret) {
-> > +                     if (pmc->cinfo.type =3D=3D SBI_PMU_CTR_TYPE_FW)
-> > +                             pmc->counter_val =3D kvpmu->fw_event[feve=
-nt_code].value;
-> > +                     else if (pmc->perf_event)
-> > +                             pmc->counter_val +=3D perf_event_read_val=
-ue(pmc->perf_event,
-> > +                                                                      =
- &enabled, &running);
-> > +                     /* TODO: Add counter overflow support when sscofp=
-mf support is added */
-> > +                     kvpmu->sdata->ctr_values[i] =3D pmc->counter_val;
-> > +                     kvm_vcpu_write_guest(vcpu, kvpmu->snapshot_addr, =
-kvpmu->sdata,
-> > +                                          sizeof(struct riscv_pmu_snap=
-shot_data));
->
-> Should just set a boolean here saying that the snapshot needs an update
-> and then do the update outside the for_each_set_bit loop.
->
-
-Done.
-
+> > -     int ctr_idx, ret, sbiret =3D 0;
+> > +     int ctr_idx, sbiret =3D 0;
+> > +     long ret;
+> >       bool is_fevent;
+> >       unsigned long event_code;
+> >       u32 etype =3D kvm_pmu_get_perf_event_type(eidx);
+> > @@ -513,8 +515,10 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vc=
+pu *vcpu, unsigned long ctr_ba
+> >                       kvpmu->fw_event[event_code].started =3D true;
+> >       } else {
+> >               ret =3D kvm_pmu_create_perf_event(pmc, &attr, flags, eidx=
+, evtdata);
+> > -             if (ret)
+> > -                     return ret;
+> > +             if (ret) {
+> > +                     sbiret =3D SBI_ERR_NOT_SUPPORTED;
+> > +                     goto out;
 > > +             }
-> > +
-> >               if (flags & SBI_PMU_STOP_FLAG_RESET) {
-> >                       pmc->event_idx =3D SBI_PMU_EVENT_IDX_INVALID;
-> >                       clear_bit(pmc_index, kvpmu->pmc_in_use);
-> > +                     if (snap_flag_set) {
-> > +                             /* Clear the snapshot area for the upcomi=
-ng deletion event */
-> > +                             kvpmu->sdata->ctr_values[i] =3D 0;
-> > +                             kvm_vcpu_write_guest(vcpu, kvpmu->snapsho=
-t_addr, kvpmu->sdata,
-> > +                                                  sizeof(struct riscv_=
-pmu_snapshot_data));
->
-> The spec isn't clear on this (so we should clarify it), but I'd expect
-> that a caller who set both the reset and the snapshot flag would want
-> the snapshot from before the reset when this call completes and then
-> assume that when they start counting again, and look at the snapshot
-> again, that those new counts would be from the reset values. Or maybe
-> not :-) Maybe they want to do a reset and take a snapshot in order to
-> look at the snapshot and confirm the reset happened? Either way, it
-> seems we should only do one of the two here. Either update the snapshot
-> before resetting, and not again after reset, or reset and then update
-> the snapshot (with no need to update before).
->
-
-The reset call should happen when the event is deleted by the perf
-framework in supervisor.
-If we don't clear the values, the shared memory may have stale data of
-last read counters
-which is not ideal. That's why, I am clearing it upon resetting.
-The actual counter value should be read while stopping the counters.
-
-I thought the current description is clear enough as it says
-
-"SBI_PMU_STOP_FLAG_RESET - Reset the counter to event mapping."
-
-Do you feel we should be more explicit about this ?
-
-> > +                     }
-> >               }
 > >       }
 > >
-> > @@ -566,6 +680,7 @@ void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
-> >       kvpmu->num_hw_ctrs =3D num_hw_ctrs + 1;
-> >       kvpmu->num_fw_ctrs =3D SBI_PMU_FW_MAX;
-> >       memset(&kvpmu->fw_event, 0, SBI_PMU_FW_MAX * sizeof(struct kvm_fw=
-_event));
-> > +     kvpmu->snapshot_addr =3D INVALID_GPA;
-> >
-> >       if (kvpmu->num_hw_ctrs > RISCV_KVM_MAX_HW_CTRS) {
-> >               pr_warn_once("Limiting the hardware counters to 32 as spe=
-cified by the ISA");
-> > @@ -625,6 +740,7 @@ void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcp=
-u)
-> >       }
-> >       bitmap_zero(kvpmu->pmc_in_use, RISCV_MAX_COUNTERS);
-> >       memset(&kvpmu->fw_event, 0, SBI_PMU_FW_MAX * sizeof(struct kvm_fw=
-_event));
-> > +     kvm_pmu_clear_snapshot_area(vcpu);
-> >  }
-> >
-> >  void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
+> >       set_bit(ctr_idx, kvpmu->pmc_in_use);
 > > diff --git a/arch/riscv/kvm/vcpu_sbi_pmu.c b/arch/riscv/kvm/vcpu_sbi_pm=
 u.c
-> > index b70179e9e875..9f61136e4bb1 100644
+> > index 7eca72df2cbd..b70179e9e875 100644
 > > --- a/arch/riscv/kvm/vcpu_sbi_pmu.c
 > > +++ b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> > @@ -64,6 +64,9 @@ static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *v=
+> > @@ -42,9 +42,9 @@ static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *v=
 cpu, struct kvm_run *run,
-> >       case SBI_EXT_PMU_COUNTER_FW_READ:
-> >               ret =3D kvm_riscv_vcpu_pmu_ctr_read(vcpu, cp->a0, retdata=
-);
-> >               break;
-> > +     case SBI_EXT_PMU_SNAPSHOT_SET_SHMEM:
-> > +             ret =3D kvm_riscv_vcpu_pmu_setup_snapshot(vcpu, cp->a0, c=
-p->a1, cp->a2, retdata);
-> > +             break;
-> >       default:
-> >               retdata->err_val =3D SBI_ERR_NOT_SUPPORTED;
-> >       }
-> > diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.=
-c
-> > index 8de5721e8019..1a22ce1ff8c8 100644
-> > --- a/drivers/perf/riscv_pmu_sbi.c
-> > +++ b/drivers/perf/riscv_pmu_sbi.c
-> > @@ -802,7 +802,7 @@ static noinline void pmu_sbi_start_ovf_ctrs_snapsho=
-t(struct cpu_hw_events *cpu_h
-> >       struct riscv_pmu_snapshot_data *sdata =3D cpu_hw_evt->snapshot_ad=
-dr;
-> >
-> >       for_each_set_bit(idx, cpu_hw_evt->used_hw_ctrs, RISCV_MAX_COUNTER=
-S) {
-> > -             if (ctr_ovf_mask & (1 << idx)) {
-> > +             if (ctr_ovf_mask & (BIT(idx))) {
-> >                       event =3D cpu_hw_evt->events[idx];
-> >                       hwc =3D &event->hw;
-> >                       max_period =3D riscv_pmu_ctr_get_width_mask(event=
-);
+> >  #endif
+> >               /*
+> >                * This can fail if perf core framework fails to create a=
+n event.
+> > -              * Forward the error to userspace because it's an error w=
+hich
+> > -              * happened within the host kernel. The other option woul=
+d be
+> > -              * to convert to an SBI error and forward to the guest.
+> > +              * No need to forward the error to userspace and exit the=
+ guest
+>
+> Period after guest
+>
+>
+> > +              * operation can continue without profiling. Forward the
+>
+> The operation
+>
+
+Fixed the above two.
+
+
+> > +              * appropriate SBI error to the guest.
+> >                */
+> >               ret =3D kvm_riscv_vcpu_pmu_ctr_cfg_match(vcpu, cp->a0, cp=
+->a1,
+> >                                                      cp->a2, cp->a3, te=
+mp, retdata);
 > > --
 > > 2.34.1
 > >
@@ -542,7 +229,7 @@ S) {
 
 
 
---=20
+--
 Regards,
 Atish
 
