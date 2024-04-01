@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-6937-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6938-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E5BA8939C1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 11:48:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7CBE8939C4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 11:50:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CD391F2213E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 09:48:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 656FA28247F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 09:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 597B310A3F;
-	Mon,  1 Apr 2024 09:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A95C10A09;
+	Mon,  1 Apr 2024 09:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="IKkpukb8"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FpSh5jv+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905DE1095A;
-	Mon,  1 Apr 2024 09:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0003F10965;
+	Mon,  1 Apr 2024 09:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711964889; cv=none; b=iMxA5RUze03NOGMcnJ8ey3HJAXlIoaLgkq1TDpE2oLgpzPzsDKZFmDIV8yoELl0JZF51VeMpx6OZ9S5yFPhw1SC6NncsC+OXqr4PQIgzbBj0QmfxL/gViIw+e1F+SJsPR86onPtH3gfvHqGqYe2hJOoIQ9gNc50YJpvsih3zuLM=
+	t=1711965017; cv=none; b=abBr/9lOtXstroMEP52oMK26YUwZEszYjDQz8YWfVojYi3SLBwdrhVhnLPhD5CfwDgBsptfDkTnY4u2uGh+jN1WXm4dGULeeZDgOcfUIiIR3gVBbmkg3djTZCHyBv0q3jgPMj/FxW1+AlxovYmyf04JQJd2MwS0e+CfjnSKLGs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711964889; c=relaxed/simple;
-	bh=06wOk/U0MualMJ4bunj44L58B9nb+s9Iaqf0BY9Iihk=;
+	s=arc-20240116; t=1711965017; c=relaxed/simple;
+	bh=7ysw4ufqTXNT3dIoSjrzTxCpKtjVoVAcMuNW6UXWP+M=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=R0fbu7d0cnvSSeCj3pCBCiwTZkqtlB0XIWrn59lYf7ez8ee3gzmrVeKm1j3rIsioVzGqIXa3ofzsMpcbtw5Vexqdb8RoimQje0WX9K0wZ1LnLPsPeaMuX612eLaUce6H4YpULPJoreYQraGH9UGwICmVPk39VF6Ck1/EyuxJV0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=IKkpukb8; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=Q+7nmIYMDckyBTNNAvBNkaoHivvwN+gYwTk76TR9KXmN4oN1PxDn2LPizl6ywY4ymf4ZlInUVbKeXswxP6Fw4XzX4J1VOz6fDWcaN1x0Ao2ybn6y78IIcstbqfq7vZEuge1VrDJCUJONZwNcj3ld+Fk0x6yVICiY20X3kM5MtLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FpSh5jv+; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711964885;
-	bh=06wOk/U0MualMJ4bunj44L58B9nb+s9Iaqf0BY9Iihk=;
+	s=mail; t=1711965014;
+	bh=7ysw4ufqTXNT3dIoSjrzTxCpKtjVoVAcMuNW6UXWP+M=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=IKkpukb884sj8Eg4Yw/1yM6F+jVI41WbIFR5wppl38DPIFzg7d+snPhJSh90a3YbB
-	 6UxRTezpSmT4wNQmWC70hAfP/JxH0Ch921mvOmRMG6ao7uQPIuZ7OsFD7KR2aH5N87
-	 tG0r+nrikfEXbQvrvlxX1XWEKAWH5gay7UPdFl6DDuIhYIr3WnRTZy/d4En7a/hkhB
-	 ryU3/OINHUKgVPtbeLhy24Ru35rCA0iPfjdVytimtX+uverHEJe3H4njiECn3UAPIe
-	 pNY86YqfqdyTKZh6NivIn+8POtsgH3Jxd+ULYNYtQQqgOUeGD7ZqZngxjW5K5IDaXk
-	 qoDfDq7BJ5Z5Q==
+	b=FpSh5jv+L0Z9PLapdkN4Gx01Y2IlfRjhwCxGvkepetDwug8NV39krbt1CuU3Pgjbq
+	 bGjSURTa8wmqPbxCscLDQ6gQiNqjeQ5/OOqZKCSdk7qHwhnZH/i1LsyT3zmCCueRhh
+	 fpxCGkcSK2n5Mx9FUD9w4MAOeMIkETFMZ04vKDD2RATvpio3GPP9Mj/BrQSdBq+TmY
+	 Aw+Celgabdcjs09bVOiKwIjYNc/bxv12AeMmAJIZ5Qp+rY7C91gb3ly9ktX2BX2zvf
+	 rc4F6qfVCI/5kIADtlPc9FTxJATOP56ZvrKO7QfEDY2ju9esvWPWBPta9JfON9fMOf
+	 Nr5OYy+UcMATg==
 Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8BFC2378148F;
-	Mon,  1 Apr 2024 09:47:23 +0000 (UTC)
-Message-ID: <ef72ae20-6b68-496a-a819-8818ade0d433@collabora.com>
-Date: Mon, 1 Apr 2024 14:46:13 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A6BAD378148F;
+	Mon,  1 Apr 2024 09:50:08 +0000 (UTC)
+Message-ID: <30e88cb0-e31d-4cdb-bfd8-4559854937d1@collabora.com>
+Date: Mon, 1 Apr 2024 14:50:29 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,88 +58,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- paul.walmsley@sifive.com, rick.p.edgecombe@intel.com, broonie@kernel.org,
- Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
- ajones@ventanamicro.com, conor.dooley@microchip.com, cleger@rivosinc.com,
- atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
- alexghiti@rivosinc.com, samuel.holland@sifive.com, palmer@sifive.com,
- conor@kernel.org, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, corbet@lwn.net,
- tech-j-ext@lists.risc-v.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
- akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
- shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
- jerry.shih@sifive.com, hankuan.chen@sifive.com, greentime.hu@sifive.com,
- evan@rivosinc.com, xiao.w.wang@intel.com, charlie@rivosinc.com,
- apatel@ventanamicro.com, mchitale@ventanamicro.com,
- dbarboza@ventanamicro.com, sameo@rivosinc.com, shikemeng@huaweicloud.com,
- willy@infradead.org, vincent.chen@sifive.com, guoren@kernel.org,
- samitolvanen@google.com, songshuaishuai@tinylab.org, gerg@kernel.org,
- heiko@sntech.de, bhe@redhat.com, jeeheng.sia@starfivetech.com,
- cyy@cyyself.name, maskray@google.com, ancientmodern4@gmail.com,
- mathis.salmen@matsal.de, cuiyunhui@bytedance.com, bgray@linux.ibm.com,
- mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, david@redhat.com,
- catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org,
- shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
- jhubbard@nvidia.com
-Subject: Re: [PATCH v2 27/27] kselftest/riscv: kselftest for user mode cfi
-To: Deepak Gupta <debug@rivosinc.com>
-References: <20240329044459.3990638-1-debug@rivosinc.com>
- <20240329044459.3990638-28-debug@rivosinc.com>
- <4b38393a-f69d-4a77-a896-b6cd42c7edcf@collabora.com>
- <CAKC1njQ_RU=uHhrna=MFVdjAMjjQNqZWnkjPoJvO7CxtPMeNuQ@mail.gmail.com>
+ linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+ "Mike Rapoport (IBM)" <rppt@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests/mm: import strings.h for ffsl
+To: Edward Liaw <edliaw@google.com>
+References: <20240329174236.2278217-1-edliaw@google.com>
+ <909806c1-a9c4-4f51-a807-46075efb8ab9@collabora.com>
+ <CAG4es9UYvT5tRPFtsRUqJnz9obLuAz03b0+61aAagmGjGTMnsA@mail.gmail.com>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CAKC1njQ_RU=uHhrna=MFVdjAMjjQNqZWnkjPoJvO7CxtPMeNuQ@mail.gmail.com>
+In-Reply-To: <CAG4es9UYvT5tRPFtsRUqJnz9obLuAz03b0+61aAagmGjGTMnsA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 3/30/24 1:02 AM, Deepak Gupta wrote:
-> On Fri, Mar 29, 2024 at 12:50 PM Muhammad Usama Anjum
+On 3/30/24 1:33 AM, Edward Liaw wrote:
+> On Fri, Mar 29, 2024 at 12:32 PM Muhammad Usama Anjum
 > <usama.anjum@collabora.com> wrote:
 >>
->> On 3/29/24 9:44 AM, Deepak Gupta wrote:
->>> Adds kselftest for RISC-V control flow integrity implementation for user
->>> mode. There is not a lot going on in kernel for enabling landing pad for
->>> user mode. Thus kselftest simply enables landing pad for the binary and
->>> a signal handler is registered for SIGSEGV. Any control flow violation are
->>> reported as SIGSEGV with si_code = SEGV_CPERR. Test will fail on recieving
->>> any SEGV_CPERR. Shadow stack part has more changes in kernel and thus there
->>> are separate tests for that
->>>       - enable and disable
->>>       - Exercise `map_shadow_stack` syscall
->>>       - `fork` test to make sure COW works for shadow stack pages
->>>       - gup tests
->>>         As of today kernel uses FOLL_FORCE when access happens to memory via
->>>         /proc/<pid>/mem. Not breaking that for shadow stack
->>>       - signal test. Make sure signal delivery results in token creation on
->>>       shadow stack and consumes (and verifies) token on sigreturn
->>>     - shadow stack protection test. attempts to write using regular store
->>>         instruction on shadow stack memory must result in access faults
+>> On 3/29/24 10:42 PM, Edward Liaw wrote:
+>>> Got a compilation error for ffsl after 91b80cc5b39f ("selftests: mm: fix
+>>> map_hugetlb failure on 64K page size systems") imported vm_util.h.
 >>>
->>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->>> ---
->>>  tools/testing/selftests/riscv/Makefile        |   2 +-
->>>  tools/testing/selftests/riscv/cfi/Makefile    |  10 +
->>>  .../testing/selftests/riscv/cfi/cfi_rv_test.h |  85 ++++
->>>  .../selftests/riscv/cfi/riscv_cfi_test.c      |  91 +++++
->>>  .../testing/selftests/riscv/cfi/shadowstack.c | 376 ++++++++++++++++++
->>>  .../testing/selftests/riscv/cfi/shadowstack.h |  39 ++
->> Please add generated binaries in the .gitignore files.
+>>> Fixes: af605d26a8f2 ("selftests/mm: merge util.h into vm_util.h")
+>> Why do you think this Fixes tag is needed? This refers to a patch which is
+>> just moving code. It doesn't seem to have any thing related to strings.h.
+> Oops, I guess it should be:
 > 
-> hmm...
-> I don't see binary as part of the patch. Which file are you referring
-> to here being binary?
-shadowstack would be generated by the build. Create a .gitignore file and
-add it there. For example, look at
-tools/testing/selftests/riscv/vector/.gitignore to understand.
+> Fixes: 6f6a841fb77d ("selftest/vm: add helpers to detect PAGE_SIZE and
+> PAGE_SHIFT")
+LGTM
 
-
-> 
->>
 > 
 
 -- 
