@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-6946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24C99893CC1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 17:21:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB7D4893CC3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 17:21:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79125B2226A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 15:21:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62E1EB20E51
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Apr 2024 15:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7024776F;
-	Mon,  1 Apr 2024 15:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C74247A5C;
+	Mon,  1 Apr 2024 15:20:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wZUXEsvZ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ago/TfE2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2045.outbound.protection.outlook.com [40.107.100.45])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADC445974;
-	Mon,  1 Apr 2024 15:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738A445BF9;
+	Mon,  1 Apr 2024 15:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711984855; cv=fail; b=SeJSCXm3XtPyfWGmH8tV9v4iW6xozKcmrArMbliTmEWAG0MQGPVf+drJXzpxgC+RXWREtuMg2myD57BqYrn9JTSCfaZJ6Lr3aJvog6KPPSh0CIJ1pgCWTM2Ssc26+NlyQE0oCgdB0GuVXM5Aj1DeDU6sbaUeIAq1fmjSpfoGYVM=
+	t=1711984856; cv=fail; b=VMlFGD1hwtgqNNzVctqpjUFCilhxHABxqFdS/6a3wT/ndM5sVHDMTJ9y+cWmsDLQ799URvFGGSfZIBD9iWVQ0qZ3U6AtsK0DVDrWLzV5apDSbp6RCnYlwB5DEOdlWh47fq9RnZAYo0hsiO+uCwlULTRPKEI6Wfa64uyTbSWICJY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711984855; c=relaxed/simple;
-	bh=cIXPCP9VIzqggJSbJ2xL1nWa0+tx2BxN39ziiPIF2fE=;
+	s=arc-20240116; t=1711984856; c=relaxed/simple;
+	bh=SkgcnncwvNsa46ffTlhRMbwEsfaM2MErO8EH2oIJcGQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l4dqBXrFvNbxWmkjtwise9rGPeDXX1eS72nFolNtY2DBKNPhyNig2rWXbGp/alRRzLYxTk1nblCZ1sXmnO26711kCbLbJv/0kbJkpsl4OJivsrfKm7uXDJIBgqY81D1LRYqWugXvvxY5Q7zpNU/h7RCP8FXHTPeZggWRGM3vJOw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wZUXEsvZ; arc=fail smtp.client-ip=40.107.100.45
+	 MIME-Version:Content-Type; b=PZaXT9/eDxaeiqypSZCacjC1eBv8ssrZqgA9Mtoowyo6Gc3mVYpZAWWsgxP761RupOrSkulw5wgE1IhmXn6eygdkX6YmVY4bRjvubRM3/6LiA7ndaiAFWljYSwGwVuN5p7c54Gbjbu1pdU68WZchN0RVgZkVLuLRbgat7xw0jPI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ago/TfE2; arc=fail smtp.client-ip=40.107.243.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dXYlG9AR/cstapQtIw2//qPo7gd8iseGMyJjZt5vhH9MntDMjmxx1uEjvc8t07SvyAvdsb5FCwkuNZK+B7LYe0F9ea3bIM/HdTpf5ZJt2WO9GeFW2qYneN9v4fAuAUmxc1Q4TYa3FZKNUEc9e6iHbuYqEnZKuZBBnB54EYzjzpfe5HaZlJVyz4OBAMD/YuAHUvU/A3nWKzZ8b2jn0MeV2CnWvMTW9xSwDnMpaToRvSlEqS/S+aNSZHcCri5aSioQmf1mX1qjalY+8C5uME3DDpSzI0IH2Ar81Dl9wx3CmN1GJ4I2TLFZ03s7Yev+/USSYiZZcTZNMsoHXinIsguGAA==
+ b=aWERJmw8UzHUOl4vqxhm78TKmgbQOwUWorrmIDxM3ZAcETkWfetseQrRPvoZ9EH3SluPy5+aGaDKVGjJzkkqHeK/kAtK/kWNpdB9h64psyFsNE1HR/HVjUv2KBy2zwU8yDA95EiQ5boryNmJxqanVRsYTG+pu1pd96OfOFNehzsyP3C6ZNWjGfOfnTBXZBTuJcxURHj+b9le01I9WLDYSPLzceWB0ibDndQOZWQ36aVhSGJdGMVD8rmWKAZDL+mAVlUciieUBHpEbvU4+oY3kerZZlhqvuVAM/wJBIazcG+gxoIbBQduL7iY05IJalKdDPZaX7vCM9hPGAXYjNu9BQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cX+rKTonKC/Xzvc3qReLHgMb8uENoiOV1/dTUvezd8o=;
- b=RCZjZKyw8h1xVEvEw6924NKpqeUor6wE4eyQMJAoGYuk4ZHpucFF3YWdxpcOVd/ZYUgvrhjLWif/mENZxLe7w2OwFy1GgWd8k/uLFS3Z2rOjEULqrINZY4NIzGLVG1fm8UmEd4PopsSFILYr/4PbJg38RBSMSYv6ApITzvenqu9ghGnvJtyoe6ELUfyajICHGLjw78JzLWNg0+BKXYEO4A3YekgmOx3qrqUaCmIQGflCuWI3l/erUEiT/Q4RteK9jirogab8Lf+uvKRAcpLTXwEmJm/8WumRfhdU15HFotdxdSgrmgBGYxsDI68u4hpGABKXaT4UvLau5OMPAnCvcQ==
+ bh=YWy0BvLzcmDiATFcGPlFYN2W1W9D2CiwcqjK082S9/8=;
+ b=GHtyChryJuvRq1wuM87hNt4QLsZYbh7LZ+S37qKa0pCNq+SRqMihCXLQlBJSX0mJucO6MNrSR/+3HZdFHTRgQiY2v5epk2RRBlVUoN1P6oKoV4AYq3LnYpPqiQ6qe6Q0ZmX/ebN5+rZNYW9RTXMd4YFvvcQtokobHnvXIyssu2cp2A4Ii2d+rVZ2te6jO0Pb7l9o4I2qKmDvxy2qGW6Z+586oK6CxVmyDSdFZzj2jz5a9bRbnWeiOr+VgjQhXsLwGuFT1iiHFLYBYvMspa5JqWwtvbYmjUn3wEcyN2SLPO17LA0WF0ShnEVI+K+jPEC/R/S99qHkO9JZSRV1gNOSnw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cX+rKTonKC/Xzvc3qReLHgMb8uENoiOV1/dTUvezd8o=;
- b=wZUXEsvZczTif/XIcJcLG2MbXLEN218z9K2VCPwH2TgpFzsnLUzTK3fPG50yoSid/Lv8g33xpDFd/WBzqeLoqZdoGXts28NrWbUhJTFHdswCOdtICh2V+wmzZyLtGmA83Xz8Nlj27h+xgQJSYt/HmZYDOOFOF1vgaZbr8dYDzaY=
-Received: from SJ0PR05CA0092.namprd05.prod.outlook.com (2603:10b6:a03:334::7)
- by PH7PR12MB7938.namprd12.prod.outlook.com (2603:10b6:510:276::9) with
+ bh=YWy0BvLzcmDiATFcGPlFYN2W1W9D2CiwcqjK082S9/8=;
+ b=ago/TfE2FKDZlv5VxQZgbBj9uPp10ZzdVSV4BAam2DGRxbguMrcKXL9M0fEtzkjOHhtKyfATr/l17C+9qJfao4WPNTiznvcuO4CnkWGI9kfO3Mlvi5/jbrJBOQqysWljN0Ir2GXpMb1qGfg1faEGKOn1AtCQyR/fz6mELc23I4s=
+Received: from SJ0PR05CA0113.namprd05.prod.outlook.com (2603:10b6:a03:334::28)
+ by PH0PR12MB5679.namprd12.prod.outlook.com (2603:10b6:510:14f::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Mon, 1 Apr
  2024 15:20:51 +0000
 Received: from SJ5PEPF000001C9.namprd05.prod.outlook.com
- (2603:10b6:a03:334:cafe::c7) by SJ0PR05CA0092.outlook.office365.com
- (2603:10b6:a03:334::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.25 via Frontend
+ (2603:10b6:a03:334:cafe::33) by SJ0PR05CA0113.outlook.office365.com
+ (2603:10b6:a03:334::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.24 via Frontend
  Transport; Mon, 1 Apr 2024 15:20:51 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
@@ -65,19 +65,19 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  SJ5PEPF000001C9.mail.protection.outlook.com (10.167.242.37) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7452.22 via Frontend Transport; Mon, 1 Apr 2024 15:20:50 +0000
+ 15.20.7452.22 via Frontend Transport; Mon, 1 Apr 2024 15:20:51 +0000
 Received: from chalupa-4a00host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 1 Apr
- 2024 10:20:47 -0500
+ 2024 10:20:48 -0500
 From: Manali Shukla <manali.shukla@amd.com>
 To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
 	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <manali.shukla@amd.com>,
 	<ajones@ventanamicro.com>
-Subject: [PATCH v2 2/3] KVM: selftests: Extend @shape to allow creation of VM without in-kernel APIC
-Date: Mon, 1 Apr 2024 15:20:31 +0000
-Message-ID: <20240401152032.4284-3-manali.shukla@amd.com>
+Subject: [PATCH v2 3/3] KVM: selftests: Add a test case for KVM_X86_DISABLE_EXITS_HLT
+Date: Mon, 1 Apr 2024 15:20:32 +0000
+Message-ID: <20240401152032.4284-4-manali.shukla@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240401152032.4284-1-manali.shukla@amd.com>
 References: <20240401152032.4284-1-manali.shukla@amd.com>
@@ -93,119 +93,178 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001C9:EE_|PH7PR12MB7938:EE_
-X-MS-Office365-Filtering-Correlation-Id: 29c8a016-6d2a-4737-b2e2-08dc525f50cc
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001C9:EE_|PH0PR12MB5679:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77800e54-0342-40e5-608e-08dc525f511b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	aQqAt0Bb9V6w5yLUBb0CZtwGAZv8C80Um9fswU69B1UWTuWx71G2Md2wkc2GjqQh4LZwBtatK5w3Smn4oQG++tdbtvIUkrv+FXApIDtcDXZ1XtxtjDtmjPRiMigSU1PA2rDbMcE/1mZjcVdjoZKRm4T3MA/L0VlEv9mW0BGkexzp5wFZze6UE8mYIFKEiAaVS/mrtuRxyT0qmOUG96ngBDGd/bSFyLA3y2hGFCz4/F9cv1H1x9KcN5pigk7/ENzt6AYZoOLb/hWrjTmxXma0f4EeSeAFgvOk4GQ0NsNOHAuyDFmAHKAnnX5ZPR5pPwxjCsaTho6/SVFTPdp9BHg2QhrrYAg0sAUI0Wv0RpkKM9wtb4QCxFESBgMEiYIPe/7VGSkIijLwj1b0DSg5COCrBJuJs97+2fsFEBStH/eLtury5/vfwQ5r4WljElzE8p/f56vNowVLP6PoVK/LXINe0ySkfVD4hJA/GkTLFZONq2KzO5wH//nnw7TMb2/TvJwtzgho9lDMDIRAzMgQiZYIcJ20KXzVeVmU9prjonJuI3WlR+yXP/hUR6EEYI0/DrBvyxXzyrjg/K6viZMQYZKSzxSFS2loLHymNvCXEfnZDk3J7OaYCGz5DqSydDCzju04MBwr7rpRPx134DK1rkjBLJ2VLVxnZ7IjO8SnxKdPE05RA1wi433vltPeRf5OAYk0Z78nVf4nIajY7udJAfSB8vUWo/1NiFtvslCweim59e86Sdbp7VPkQy0DS/6f1wgn
+	MYenObSioRc/rn5ywvKzNvcwg4SumH1nayU1ELxm2FlSbZbR+ai7YUB1LBjI00TWdbGhcBknvFLFhwApVsERB3mwNvbsavW3g8dQM9pvUocDguIKcKUEALEmV/AUL3IE/zmu5aDU/1fB3XXsYU7NxVHwMVjqiKx/S6Qa+jia7jcRO7/cFA6DU8spy67BQDbQX/9qpiRnzER1pWih7xd4YvBYkjIRn3xUOBhPmjlfbDo/ohzyzZhLw0zfA6shhMZ3+JNbEiJi6tl+0LqylW4p9lDrsXbuimtNRuxXtlP3DUV2F73gasRQpE0zDJ14UzHTzZqiOiicSdngCxdkRXorJLXp3Gz+BYvvrJNpXmZmuBN9j0dhduX+vHKlhLFixuhvlM3IA6EcpTtpR9yzU85NmIFPnvuwiw9fzWkQ9jRSHpQ79jEs0y/RdnBD0K6EFXwtSnQMMioXro7qrUBqffFgpwX6EAkayiCR5mROkun6CiPIpAq91lgRHMsdrNSPJlWcMMG1gXmIHOADFyvntGjomaKenct1aHqBk7BdDndtO1mZhLsQEtc5ILbCQnTVCgFQJ17/7O44urSm3U6lYQmJg4o9S2ObGJatfuNudjobHKf82oPW4e5TiQl0NhrG949lnKL+dcPZOqRjbVO2+1oE92cQQ6pmYDMfdkPl2gX36Hs/5TBfMl7TYF4JcK1ayx75x9gCS5N4qIv+k9tGdewCY7oTzX4vI3hjSaPv3MavPjlbCtbwCkRJKkzo3EJQvXs8
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(376005)(1800799015);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(376005)(1800799015)(82310400014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2024 15:20:50.9324
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2024 15:20:51.4481
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29c8a016-6d2a-4737-b2e2-08dc525f50cc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77800e54-0342-40e5-608e-08dc525f511b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SJ5PEPF000001C9.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7938
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5679
 
-Currently, all the VMs are created with in-kernel APIC support in KVM
-selftests because KVM_CREATE_IRQCHIP ioctl is called by default from
-kvm_arch_vm_post_create().
+By default, HLT instruction executed by guest is intercepted by hypervisor.
+However, KVM_CAP_X86_DISABLE_EXITS capability can be used to not intercept
+HLT by setting KVM_X86_DISABLE_EXITS_HLT.
 
-Carve out space in the @shape passed to the various VM creation helpers to
-allow using the shape to control creation of a VM without in-kernel APIC
-support or with in-kernel APIC support.
+Add a test case to test KVM_X86_DISABLE_EXITS_HLT functionality.
 
-This is a preparatory patch to create a vm without in-kernel APIC support for
-the KVM_X86_DISABLE_EXITS_HLT test.
-
-Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Manali Shukla <manali.shukla@amd.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h       | 17 ++++++++++++++++-
- tools/testing/selftests/kvm/lib/kvm_util.c      |  1 +
- .../selftests/kvm/lib/x86_64/processor.c        |  4 +++-
- 3 files changed, 20 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../kvm/x86_64/halt_disable_exit_test.c       | 119 ++++++++++++++++++
+ 2 files changed, 120 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/halt_disable_exit_test.c
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 4a40b332115d..c94cfbdf0150 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -130,6 +130,7 @@ struct kvm_vm {
- 	 * memslot.
- 	 */
- 	uint32_t memslots[NR_MEM_REGIONS];
-+	uint8_t flags;
- };
- 
- struct vcpu_reg_sublist {
-@@ -197,11 +198,14 @@ enum vm_guest_mode {
- 	NUM_VM_MODES,
- };
- 
-+#define NO_IRQCHIP  0x01
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index c75251d5c97c..9f72abb95d2e 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -89,6 +89,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
+ TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
+ TEST_GEN_PROGS_x86_64 += x86_64/smm_test
+ TEST_GEN_PROGS_x86_64 += x86_64/state_test
++TEST_GEN_PROGS_x86_64 += x86_64/halt_disable_exit_test
+ TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
+diff --git a/tools/testing/selftests/kvm/x86_64/halt_disable_exit_test.c b/tools/testing/selftests/kvm/x86_64/halt_disable_exit_test.c
+new file mode 100644
+index 000000000000..4cc6a09906a2
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/halt_disable_exit_test.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * KVM disable halt exit test
++ *
++ *  Copyright (C) 2024 Advanced Micro Devices, Inc.
++ */
++#include <pthread.h>
++#include <signal.h>
++#include "kvm_util.h"
++#include "processor.h"
++#include "test_util.h"
 +
- struct vm_shape {
- 	uint32_t type;
- 	uint8_t  mode;
- 	uint8_t  subtype;
--	uint16_t padding;
-+	uint8_t  flags;
-+	uint8_t padding;
- };
- 
- kvm_static_assert(sizeof(struct vm_shape) == sizeof(uint64_t));
-@@ -218,6 +222,17 @@ kvm_static_assert(sizeof(struct vm_shape) == sizeof(uint64_t));
- 	shape;					\
- })
- 
-+#define VM_SHAPE_FLAGS(__FLAGS)			\
-+({						\
-+	struct vm_shape shape = {		\
-+		.mode = VM_MODE_DEFAULT,	\
-+		.type = VM_TYPE_DEFAULT,	\
-+		.flags = __FLAGS		\
-+	};					\
-+						\
-+	shape;					\
-+})
++#define SIG_IPI SIGUSR1
++static pthread_t task_thread, vcpu_thread;
 +
- #if defined(__aarch64__)
- 
- extern enum vm_guest_mode vm_mode_default;
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index adc51b0712ca..86546f603959 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -226,6 +226,7 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
- 	vm->mode = shape.mode;
- 	vm->type = shape.type;
- 	vm->subtype = shape.subtype;
-+	vm->flags = shape.flags;
- 
- 	vm->pa_bits = vm_guest_mode_params[vm->mode].pa_bits;
- 	vm->va_bits = vm_guest_mode_params[vm->mode].va_bits;
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 49288fe10cd3..e5ca92feae67 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -574,7 +574,9 @@ static void vcpu_setup(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
- 
- void kvm_arch_vm_post_create(struct kvm_vm *vm)
- {
--	vm_create_irqchip(vm);
-+	if (!(vm->flags & NO_IRQCHIP))
-+		vm_create_irqchip(vm);
++static void guest_code(uint64_t *is_hlt_exec)
++{
++	while (!READ_ONCE(*is_hlt_exec))
++		;
 +
- 	sync_global_to_guest(vm, host_cpu_is_intel);
- 	sync_global_to_guest(vm, host_cpu_is_amd);
- 
++	safe_halt();
++	GUEST_DONE();
++}
++
++static void *task_worker(void *arg)
++{
++	uint64_t *is_hlt_exec = (uint64_t *)arg;
++
++	usleep(100000);
++	WRITE_ONCE(*is_hlt_exec, 1);
++	pthread_kill(vcpu_thread, SIG_IPI);
++	return 0;
++}
++
++static void *vcpu_worker(void *arg)
++{
++	int ret;
++	int sig = -1;
++	struct kvm_vcpu *vcpu = (struct kvm_vcpu *) arg;
++	struct kvm_run *run;
++
++	struct kvm_signal_mask *sigmask = alloca(offsetof(struct kvm_signal_mask, sigset)
++						 + sizeof(sigset_t));
++	sigset_t *sigset = (sigset_t *) &sigmask->sigset;
++
++	/*
++	 * SIG_IPI is unblocked atomically while in KVM_RUN.  It causes the
++	 * ioctl to return with -EINTR, but it is still pending and we need
++	 * to accept it with the sigwait.
++	 */
++	sigmask->len = 8;
++	pthread_sigmask(0, NULL, sigset);
++	sigdelset(sigset, SIG_IPI);
++	vcpu_ioctl(vcpu, KVM_SET_SIGNAL_MASK, sigmask);
++	sigemptyset(sigset);
++	sigaddset(sigset, SIG_IPI);
++	run = vcpu->run;
++
++again:
++	ret = __vcpu_run(vcpu);
++	TEST_ASSERT_EQ(errno, EINTR);
++
++	if (ret == -1 && errno == EINTR) {
++		sigwait(sigset, &sig);
++		assert(sig == SIG_IPI);
++		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_INTR);
++		goto again;
++	}
++
++	if (run->exit_reason == KVM_EXIT_HLT)
++		TEST_FAIL("Expected KVM_EXIT_INTR, got KVM_EXIT_HLT");
++
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++	return 0;
++}
++
++int main(int argc, char *argv[])
++{
++	vm_vaddr_t hlt_vm_addr;
++
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++	uint64_t *host_hlt_addr;
++	void *retval;
++	sigset_t sigset;
++	int ret;
++
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_DISABLE_EXITS));
++
++	/* Create a VM without in kernel APIC support */
++	vm = __vm_create(VM_SHAPE_FLAGS(NO_IRQCHIP), 1, 0);
++	vm_enable_cap(vm, KVM_CAP_X86_DISABLE_EXITS, KVM_X86_DISABLE_EXITS_HLT);
++	vcpu = vm_vcpu_add(vm, 0, guest_code);
++
++
++	hlt_vm_addr = vm_vaddr_alloc_page(vm);
++	host_hlt_addr = (uint64_t *)addr_gva2hva(vm, hlt_vm_addr);
++	vcpu_args_set(vcpu, 1, hlt_vm_addr);
++
++	/* Ensure that vCPU threads start with SIG_IPI blocked.  */
++	sigemptyset(&sigset);
++	sigaddset(&sigset, SIG_IPI);
++	pthread_sigmask(SIG_BLOCK, &sigset, NULL);
++
++	ret = pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);
++	TEST_ASSERT(ret == 0, "pthread_create vcpu thread failed errno=%d", errno);
++
++	ret = pthread_create(&task_thread, NULL, task_worker, host_hlt_addr);
++	TEST_ASSERT(ret == 0, "pthread_create task thread failed errno=%d", errno);
++
++	ret = pthread_join(vcpu_thread, &retval);
++	TEST_ASSERT(ret == 0, "pthread_join on vcpu thread failed with errno=%d", ret);
++
++	ret = pthread_join(task_thread, &retval);
++	TEST_ASSERT(ret == 0, "pthread_join on task thread failed with errno=%d", ret);
++
++	kvm_vm_free(vm);
++	return 0;
++}
 -- 
 2.34.1
 
