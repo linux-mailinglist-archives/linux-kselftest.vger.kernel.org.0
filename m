@@ -1,175 +1,179 @@
-Return-Path: <linux-kselftest+bounces-7010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9205B895FB2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 00:43:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC21D895F88
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 00:17:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5FD51C23896
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 22:43:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6181A2827F6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 22:17:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30304DA13;
-	Tue,  2 Apr 2024 22:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84CE15E80B;
+	Tue,  2 Apr 2024 22:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mU95MNhd"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="krdVDKVQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274FE47A53;
-	Tue,  2 Apr 2024 22:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712097765; cv=fail; b=O/KAZpRaBgIeynU1CAbhRuaAcZ6hSB6PxYT3Li5QLHYGlWUrs/BVf18gfNaV7Nfj63FvgnE83BjXgCjMMKVD6qnamiky2PEx9XuyC2sdjyjInTzbdLYo5W5XUYGNIbqMIDbp1bVDpO0zBNDXXxy02W8spYsfd8TWD4Jz1iPzK2g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712097765; c=relaxed/simple;
-	bh=qV3dGnWNL22Lztjn8ZYBsWqq6b3m+tYzRhuAHldrc1w=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=XudAC29v0nNc85WqHbfQEmhLiE+4Tzf34HBuvnbZPMZeVJJdu+6emjiXlX1rb0zAbIrcmn+HTEv1zGPn+rUSbFN3b9QxjjGsWSkuPHHjqu1M6bxh1P96f6zapJ+hhuI/JEwAADWoPqhA36xkkuBB/gSuAwwGd6AaJNBorKPsXuo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mU95MNhd; arc=fail smtp.client-ip=40.107.223.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AixGs62xDSvqcj5Lt5IxIfzDmqmHyzJR5UWp2BkOSzAJgFsf2OGpGWVlISUPfvMZ1QkFOVVnQsLo5CJXlM2BlOgz2GJkCZLEFVIYETMauZb4Aw4TgIqublrz4TiE7bPVEX+uTJ8mDpT8k0H81yvTLPmBVpKhMd9Dsl0y6C6FzMpYqrgIrMd784HfoavmxK6z8CCClJxwVx7Z1hjtLKHHUeyZqZshISzFzzPJG+CyO0kMZLIyFHdKTttE9vSdT1B5y0UWxDJxPvcadffySiHzUYt7SYJD5XZE0TRyFdZbEXcK6rJoCJ+hEDP2/YkrmW+CCIyiPC5Q2kNl7YusA9PmgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=le8ykD15yQBVEeQNY/z0N7Wn1YmoMhjDViiTJSw3gic=;
- b=MYE3DR40SW5xfkv4L0nkbCXNZkrL33gPzwqXloJjCiV7vXU6S4x7cVG5E+wuRS6qg2f2OislvOH8ZHp11tJNNswGxplWugORbt1XIoR0fdYmscQyu8Jth9aguMCnOJmMJ9JaIfuB7q4GN/z/NfE79t4vL2IPM7VxXdO/o9YSgjjPsQczXykpk0yX2WUy7iH+O25ijs07LXXnDTiZfvw2u49rGnJW9vKksHGJQr911p3g7NHm4UQ8VwoDgkpCsx3o4gMHl8EV905fk0nJrecSZVzMX0JTIQapP8yQrDKyNdwHMPMjgYf01XqId1+Iqm878+U/RkzQ+E6t/dgksKqJ8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=le8ykD15yQBVEeQNY/z0N7Wn1YmoMhjDViiTJSw3gic=;
- b=mU95MNhdjXJRSzKWYK0fLDCjU9El0Vzm7LPHvqYBO7qmFvYOMQLZX9sOLbUI+Rus8ZgICJ1eXEICCQVos80REVnCSpAJL+nz+5877f/G1xMkkzA/gFMR3wb8mmdUEvn+HaKTpCcJj9o9IYRssAVcWF4hrYr6s5DEI39blNjretTRoyQYkR629ZOYjJ0ioGyo1I5bElgvKXBGWy9HyDYzS1+MNKJk+2dNJBPp8oHf3Jt7nhVtZcj8gtfVv2hS4bMnXsPJc8EEUPRbeBixJoPRQbnpvL0vHEVtaXbZPKeE8rndXLNvUdtzhkloHgBc6mMPQuX6wNmp4czFLxs6W4FIpg==
-Received: from MW4PR04CA0079.namprd04.prod.outlook.com (2603:10b6:303:6b::24)
- by CY5PR12MB6225.namprd12.prod.outlook.com (2603:10b6:930:23::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Tue, 2 Apr
- 2024 22:42:40 +0000
-Received: from MWH0EPF000971E6.namprd02.prod.outlook.com
- (2603:10b6:303:6b:cafe::5e) by MW4PR04CA0079.outlook.office365.com
- (2603:10b6:303:6b::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46 via Frontend
- Transport; Tue, 2 Apr 2024 22:42:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- MWH0EPF000971E6.mail.protection.outlook.com (10.167.243.74) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Tue, 2 Apr 2024 22:42:40 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 2 Apr 2024
- 15:42:26 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Tue, 2 Apr
- 2024 15:42:22 -0700
-References: <20240402010520.1209517-1-kuba@kernel.org>
- <20240402010520.1209517-8-kuba@kernel.org> <87bk6rit8f.fsf@nvidia.com>
- <20240402103111.7d190fb1@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Petr Machata <petrm@nvidia.com>, <davem@davemloft.net>,
-	<netdev@vger.kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>,
-	<shuah@kernel.org>, <sdf@google.com>, <donald.hunter@gmail.com>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 7/7] testing: net-drv: add a driver test for
- stats reporting
-Date: Wed, 3 Apr 2024 00:04:14 +0200
-In-Reply-To: <20240402103111.7d190fb1@kernel.org>
-Message-ID: <8734s3idys.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDF215E7F9
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Apr 2024 22:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712096129; cv=none; b=WaRgaCF+3lMQ95EuCvr5iazTVIraCjVG2cWUfINFz5b2eHBJY/ZJOgKQDHBzoLovBK1umy/PNCmI7Jojfi++fBqcEZ2DZxpHIpvr0QiqcxjT08HwweCXQhkmDHoFfoLkpZhMxBbBEnTFp+cbcOFgp7kCnrUUXiMSD3fvEqVqLrk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712096129; c=relaxed/simple;
+	bh=1J4EuNcO/swNXB8cRuA42Uam7QPQ1stdbiUKk/oDTnk=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=LjCVkQm+3wYijPaIJoBYeG2POlFM7UGrxtc0sSk+lVThQVVuUkmFvywgwBkIruc6v0BlPjep0NyYykPBsPAnKQcdXW/+Pr3M1/g4w7fkxJlMt8wGmHd7lM88IMdYFFoqHwcO6nOEP8kvF1FaKlErmacfsVhA6BV3vTwL4ISz57Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=krdVDKVQ; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ead4093f85so5395153b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 15:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712096127; x=1712700927; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=NmGJE5yni5aedzu78VrXe4FTebdM8Bb+r1t8IcP3yg0=;
+        b=krdVDKVQGzZ8NkX9Mxvz47x2zViLuMIAft1ZXlzixPk/Js4Rmngkf/W8tg9txKbFRe
+         VZTXnHiYPHOZf+9sWVyO6qWPQfU50z6kuZ2I5CVO+E1XkFHPvxr4Exm8fIzOrzcDwWby
+         9fXowasDl1asG0tzH+XrGHR1Wc2b5eRguqom5OsAvOvEFs5YbzJtWhQh3NOWbWQ2gMex
+         tfW0G8dbHElAmpn6UxnDyAftCymxSwf3XKx4KD3DnMWMzxTHF/GVa/nmnhbhxmyio7kQ
+         BS1DqNaQajyjLN0AWgw+HmfedgUI7rTZRaubLD7AKNGDLYQAjJI9d+hoTXqX4HwGGy/N
+         laog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712096127; x=1712700927;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NmGJE5yni5aedzu78VrXe4FTebdM8Bb+r1t8IcP3yg0=;
+        b=RzHkvNqbYL7xLcXaGQmY1BIva0nwaR2MA3Mhkg3wLys6Jjb9B9KUfOBDeUhi1KCAob
+         TaVT5U/nYsM0b+VqA3QpVDXuGn28635lihKZpn6aoGHXDvN1z/KNwivB8dq8Vvv53mnm
+         5p6F4gjjXGxq/w/iibNwghJv8rN52aM574AJp7zBgyX0QHN/aefZf0WFx74NghG2Jmk0
+         RHpc5HWMhTRD1BjabBhnGXIXucS0Fd0sa/85TeatmkiHSGr2LcYrw6W9BKt3xxklexqy
+         68QU8wApof1U6RA0/w0p81Bavn4Ixa+nKbKd2mOtm38lGxklhBYE19RZrVSSMUfXWbK1
+         8Fsg==
+X-Forwarded-Encrypted: i=1; AJvYcCWb1FGHRo1ZTkagcyVlcEjbVaOdhV30Q8c0dMOWw8qbCJ0qxc3hBSiSafNEQb2z8UfbzLq7T3SEK0+FG0W6ieh70PDnDHC+wyCZyfQWiqzR
+X-Gm-Message-State: AOJu0YyF/4Fv4oXid1qz73Ef4O0x+Tbg2maVSX7h9IfwB79VW5vWGcQZ
+	9SaJcBjjzXxdC30TybCx7K1st1VdXNc4PT1N/mDxlPyrL63PakPblrI4gD5CYzK/wmxEeJeGVHz
+	a
+X-Google-Smtp-Source: AGHT+IH6oEzjtw5mSm0h1HmKYf22zlMGeVERBvpKcYsEjUwyxTFtRjJqRcTXiU7SafBWN4uWU0nb4A==
+X-Received: by 2002:a05:6a00:1403:b0:6e7:3223:4556 with SMTP id l3-20020a056a00140300b006e732234556mr12903453pfu.32.1712096126767;
+        Tue, 02 Apr 2024 15:15:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056a00084a00b006ea9108ec12sm10290659pfk.115.2024.04.02.15.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 15:15:26 -0700 (PDT)
+Message-ID: <660c837e.050a0220.8ba58.c801@mx.google.com>
+Date: Tue, 02 Apr 2024 15:15:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E6:EE_|CY5PR12MB6225:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54f86d6e-f33f-4fcd-420b-08dc53663421
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Apc127HyTqcCELcD8U8ARIEC5rto6RyT0M2IPLdUodbElqpZYJddU6sTXaPSSRQaeaBsjGUP38plFOzDn9RlYv8My7yZjP3rLkwZFM/UP3oN/KFYxs7KOP1e5t6AwpNGZaEOn5a+xgisagOPaekxrmpn/s+oLF2Hy2vvCkuYEdVXZckph7Ix+hpFS73oaHeCLSGaJx41rtQDL3C7Yy9BjFVc0Q9QFC79XzLa9pT8tr8VVJxTSyevinV+M2nDel34dDevgVjXiFqPyXQEji7x7gG6HZKWTjG50+KXckJq18fk4BD1oNLevpvx4gNELQkAZnNkkQ27Ku59OpOrcEhlRC64qUCqQVVxxIs1ZgQWDVE3sB5f/7rZRk8lnx2EPyrVQHFw63ccS+o5v5zBasiFjUVPhOWqpXcSKw4qNQ4l9hQ/fPqflrcoyEqDYVcOfF/zE0tUtVdR7Pl1OBGkddv9hS2O44xtF90hD7+NPIBKjwIxMx9LhvcZ7BK7o1Ibq8K4lU5BDGkfK9sr1e7ZI3F0huv+JzsXkW/crW4vpDQIia9D9B+gC70wuiKa8Tcgq4CWuvgmuHDVUV0hYynk/DBeDpxYVLy2J7IISaLKYAz0o4w5Ho19Sxd+4cQTJBiaF+c0jZsgMkOoYQw1de+5m1MIT8b5nXgcc5uMMd91MMx6/oUMhH1yBxYTKmKaPf4YNeljQXvXTbvcYPopCsYheQPnX5MDl5rEL271J4s4Nj/ilGoNFr4Es8YMTR5zMOzSKSSf
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(1800799015)(82310400014)(376005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2024 22:42:40.4569
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54f86d6e-f33f-4fcd-420b-08dc53663421
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000971E6.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6225
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.9-rc1-11-ge1e4db64728f8
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-livepatch: 1 runs,
+ 1 regressions (v6.9-rc1-11-ge1e4db64728f8)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
+
+kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.9-rc1-11-ge1e=
+4db64728f8)
+
+Regressions Summary
+-------------------
+
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
 
 
-Jakub Kicinski <kuba@kernel.org> writes:
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.9=
+-rc1-11-ge1e4db64728f8/plan/kselftest-livepatch/
 
-> On Tue, 2 Apr 2024 18:37:44 +0200 Petr Machata wrote:
->> Yeah, this would be usually done through context managers, as I mention
->> in the other e-mail. But then cfg would be lexically scoped, which IMHO
->> is a good thing, but then it needs to be passed around as an argument,
->> and that makes the ksft_run() invocation a bit messy:
->> 
->>     with NetDrvEnv(__file__) as cfg:
->>         ksft_run([lambda: check_pause(cfg),
->>                   lambda: check_fec(cfg),
->>                   lambda: pkt_byte_sum(cfg)])
->> 
->> Dunno, maybe it could forward *args **kwargs to the cases? But then it
->> loses some of the readability again.
->
-> Yes, I was wondering about that. It must be doable, IIRC 
-> the multi-threading API "injects" args from a tuple.
-> I was thinking something along the lines of:
->
->     with NetDrvEnv(__file__) as cfg:
->         ksft_run([check_pause, check_fec, pkt_byte_sum],
->                  args=(cfg, ))
->
-> I got lazy, let me take a closer look. Another benefit
-> will be that once we pass in "env" / cfg - we can "register" 
-> objects in there for auto-cleanup (in the future, current
-> tests don't need cleanup)
+  Test:     kselftest-livepatch
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.9-rc1-11-ge1e4db64728f8
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      e1e4db64728f8f43c610ca723e443f6caebf19b4 =
 
-Yeah, though some of those should probably just be their own context
-managers IMHO, not necessarily hooked to cfg. I'm thinking something
-fairly general, so that the support boilerplate doesn't end up costing
-an arm and leg:
 
-    with build("ip route add 192.0.2.1/28 nexthop via 192.0.2.17",
-               "ip route del 192.0.2.1/28"),
-         build("ip link set dev %s master %s" % (swp1, h1),
-               "ip link set dev %s nomaster" % swp1):
-        le_test()
 
-Dunno. I guess it makes sense to have some of the common stuff
-predefined, e.g. "with vrf() as h1". And then the stuff that's typically
-in lib.sh's setup() and cleanup(), can be losslessly hooked up to cfg.
+Test Regressions
+---------------- =
 
-This is what I ended up gravitating towards after writing a handful of
-LNST tests anyway. The scoping makes it clear where the object exists,
-lifetime is taken care of, it's all ponies rainbows basically. At least
-as long as your object lifetimes can be cleanly nested, which admittedly
-is not always.
+
+
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/660c750c088794ab4c4c42e1
+
+  Results:     1 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.9-rc1-11-ge1=
+e4db64728f8/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
+-livepatch-imx6q-sabrelite.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.9-rc1-11-ge1=
+e4db64728f8/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
+-livepatch-imx6q-sabrelite.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/armhf/initrd.cpio.gz =
+
+
+
+  * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case=
+/id/660c750c088794ab4c4c42e3
+        failing since 48 days (last pass: v6.8-rc1, first fail: v6.8-rc1-32=
+-g345e8abe4c355)
+
+    2024-04-02T21:14:33.350409  / # =
+
+
+    2024-04-02T21:14:33.359779  =
+
+
+    2024-04-02T21:14:38.504480  / # export NFS_ROOTFS=3D'/var/lib/lava/disp=
+atcher/tmp/13230997/extract-nfsrootfs-ap2ts0b8'
+
+    2024-04-02T21:14:38.518602  export NFS_ROOTFS=3D'/var/lib/lava/dispatch=
+er/tmp/13230997/extract-nfsrootfs-ap2ts0b8'
+
+    2024-04-02T21:14:40.745765  / # export NFS_SERVER_IP=3D'192.168.201.1'
+
+    2024-04-02T21:14:40.756705  export NFS_SERVER_IP=3D'192.168.201.1'
+
+    2024-04-02T21:14:40.873847  / # #
+
+    2024-04-02T21:14:40.882366  #
+
+    2024-04-02T21:14:40.999740  / # export SHELL=3D/bin/bash
+
+    2024-04-02T21:14:41.010110  export SHELL=3D/bin/bash
+ =
+
+    ... (147 line(s) more)  =
+
+ =20
 
