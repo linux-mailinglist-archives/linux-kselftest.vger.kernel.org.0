@@ -1,179 +1,113 @@
-Return-Path: <linux-kselftest+bounces-7008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC21D895F88
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 00:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 428FB895F9F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 00:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6181A2827F6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 22:17:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A13EC2868FB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 22:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84CE15E80B;
-	Tue,  2 Apr 2024 22:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F163249FE;
+	Tue,  2 Apr 2024 22:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="krdVDKVQ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZtpnuJTs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDF215E7F9
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Apr 2024 22:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD7222615
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Apr 2024 22:33:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712096129; cv=none; b=WaRgaCF+3lMQ95EuCvr5iazTVIraCjVG2cWUfINFz5b2eHBJY/ZJOgKQDHBzoLovBK1umy/PNCmI7Jojfi++fBqcEZ2DZxpHIpvr0QiqcxjT08HwweCXQhkmDHoFfoLkpZhMxBbBEnTFp+cbcOFgp7kCnrUUXiMSD3fvEqVqLrk=
+	t=1712097208; cv=none; b=cbD0nGPK8qc1oLp2v4DNtOqaeEYfHLMI9zHkyOhaDa5POAKSEENlsXx37LOp/aKH/9B/mYQl98Xg9yrdOyhiMr8JYFYEtrRMgpfWkOOEZYW+lHn8+89tQsNYzv1x7qncxaLy972hLkjXroJpBPTfMS2oOHwBOc4yH2o2zySwNC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712096129; c=relaxed/simple;
-	bh=1J4EuNcO/swNXB8cRuA42Uam7QPQ1stdbiUKk/oDTnk=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=LjCVkQm+3wYijPaIJoBYeG2POlFM7UGrxtc0sSk+lVThQVVuUkmFvywgwBkIruc6v0BlPjep0NyYykPBsPAnKQcdXW/+Pr3M1/g4w7fkxJlMt8wGmHd7lM88IMdYFFoqHwcO6nOEP8kvF1FaKlErmacfsVhA6BV3vTwL4ISz57Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=krdVDKVQ; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ead4093f85so5395153b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 15:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712096127; x=1712700927; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NmGJE5yni5aedzu78VrXe4FTebdM8Bb+r1t8IcP3yg0=;
-        b=krdVDKVQGzZ8NkX9Mxvz47x2zViLuMIAft1ZXlzixPk/Js4Rmngkf/W8tg9txKbFRe
-         VZTXnHiYPHOZf+9sWVyO6qWPQfU50z6kuZ2I5CVO+E1XkFHPvxr4Exm8fIzOrzcDwWby
-         9fXowasDl1asG0tzH+XrGHR1Wc2b5eRguqom5OsAvOvEFs5YbzJtWhQh3NOWbWQ2gMex
-         tfW0G8dbHElAmpn6UxnDyAftCymxSwf3XKx4KD3DnMWMzxTHF/GVa/nmnhbhxmyio7kQ
-         BS1DqNaQajyjLN0AWgw+HmfedgUI7rTZRaubLD7AKNGDLYQAjJI9d+hoTXqX4HwGGy/N
-         laog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712096127; x=1712700927;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NmGJE5yni5aedzu78VrXe4FTebdM8Bb+r1t8IcP3yg0=;
-        b=RzHkvNqbYL7xLcXaGQmY1BIva0nwaR2MA3Mhkg3wLys6Jjb9B9KUfOBDeUhi1KCAob
-         TaVT5U/nYsM0b+VqA3QpVDXuGn28635lihKZpn6aoGHXDvN1z/KNwivB8dq8Vvv53mnm
-         5p6F4gjjXGxq/w/iibNwghJv8rN52aM574AJp7zBgyX0QHN/aefZf0WFx74NghG2Jmk0
-         RHpc5HWMhTRD1BjabBhnGXIXucS0Fd0sa/85TeatmkiHSGr2LcYrw6W9BKt3xxklexqy
-         68QU8wApof1U6RA0/w0p81Bavn4Ixa+nKbKd2mOtm38lGxklhBYE19RZrVSSMUfXWbK1
-         8Fsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWb1FGHRo1ZTkagcyVlcEjbVaOdhV30Q8c0dMOWw8qbCJ0qxc3hBSiSafNEQb2z8UfbzLq7T3SEK0+FG0W6ieh70PDnDHC+wyCZyfQWiqzR
-X-Gm-Message-State: AOJu0YyF/4Fv4oXid1qz73Ef4O0x+Tbg2maVSX7h9IfwB79VW5vWGcQZ
-	9SaJcBjjzXxdC30TybCx7K1st1VdXNc4PT1N/mDxlPyrL63PakPblrI4gD5CYzK/wmxEeJeGVHz
-	a
-X-Google-Smtp-Source: AGHT+IH6oEzjtw5mSm0h1HmKYf22zlMGeVERBvpKcYsEjUwyxTFtRjJqRcTXiU7SafBWN4uWU0nb4A==
-X-Received: by 2002:a05:6a00:1403:b0:6e7:3223:4556 with SMTP id l3-20020a056a00140300b006e732234556mr12903453pfu.32.1712096126767;
-        Tue, 02 Apr 2024 15:15:26 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00084a00b006ea9108ec12sm10290659pfk.115.2024.04.02.15.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 15:15:26 -0700 (PDT)
-Message-ID: <660c837e.050a0220.8ba58.c801@mx.google.com>
-Date: Tue, 02 Apr 2024 15:15:26 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712097208; c=relaxed/simple;
+	bh=kkzlSA66i26GYwqP48fW+uIkvk54teFui2Jrdf90kTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BRDy7OjFyKLdXsrv0JIsckO4QPLw8onuuAh6jLoudpTXN74P5lrTFt2eWP09za7N5LeG1yLR6AOL8PWeyKsiz1iiD96IGeYRuBb63BoxkR1rPXrbrNAW6W/HlXWL74rpcfD49GyYzy2J92tK/RNnToiCkx+ua3nto9xYlsTwTXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZtpnuJTs; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <e5a1261d-0366-4459-b78c-86557d6e1834@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712097204;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8S9cgMSyZXFXQwkW18aRhug4biM7UCnBGh847SJ+7ak=;
+	b=ZtpnuJTsEoaGToEeRIPVsngQ6SP0HDjZo4AX3xGVWx57B+V9xFeemlcIC7Tr2v3wGnG1Q4
+	/yz+6FW6Hxuf5wf8AuXJkNGtdvU9VohoiDrFTFRtyg5A4YgwUwQbf0gj+7B66nNHcecRNP
+	8rCpXv387lfHd/Byk3qyJ4ggr26l6Nw=
+Date: Tue, 2 Apr 2024 15:33:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.9-rc1-11-ge1e4db64728f8
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-livepatch: 1 runs,
- 1 regressions (v6.9-rc1-11-ge1e4db64728f8)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH v1 bpf-next 4/8] selftests/bpf: Add recv_msg_from_client
+ to network helpers
+To: Jordan Rife <jrife@google.com>
+Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ Daan De Meyer <daan.j.demeyer@gmail.com>, bpf@vger.kernel.org
+References: <20240329191907.1808635-1-jrife@google.com>
+ <20240329191907.1808635-5-jrife@google.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20240329191907.1808635-5-jrife@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.9-rc1-11-ge1e=
-4db64728f8)
+On 3/29/24 12:18 PM, Jordan Rife wrote:
+> +int recvmsg_from_client(int sockfd, struct sockaddr_storage *src_addr)
+> +{
+> +	struct timeval tv;
+> +	struct msghdr hdr;
+> +	struct iovec iov;
+> +	char data[64];
+> +	fd_set rfds;
+> +
+> +	FD_ZERO(&rfds);
+> +	FD_SET(sockfd, &rfds);
+> +
+> +	tv.tv_sec = 2;
+> +	tv.tv_usec = 0;
+> +
+> +	if (select(sockfd + 1, &rfds, NULL, NULL, &tv) <= 0 ||
 
-Regressions Summary
--------------------
+The socket fd created by the helpers in network_helpers.c should be a blocking 
+socket and has a 3s default delay. select should not be needed. Try to stay with 
+the default. If the default turned out to be too flaky in the bpf CI in the 
+future, one default change is easier.
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
+> +	    !FD_ISSET(sockfd, &rfds))
+> +		return -1;
+> +
+> +	memset(&iov, 0, sizeof(iov));
+> +	iov.iov_base = data;
+> +	iov.iov_len = sizeof(data);
+> +
+> +	memset(&hdr, 0, sizeof(hdr));
+> +	hdr.msg_name = src_addr;
+> +	hdr.msg_namelen = sizeof(struct sockaddr_storage);
+> +	hdr.msg_iov = &iov;
+> +	hdr.msg_iovlen = 1;
+> +
+> +	return recvmsg(sockfd, &hdr, 0);
+> +}
 
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.9=
--rc1-11-ge1e4db64728f8/plan/kselftest-livepatch/
-
-  Test:     kselftest-livepatch
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.9-rc1-11-ge1e4db64728f8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      e1e4db64728f8f43c610ca723e443f6caebf19b4 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/660c750c088794ab4c4c42e1
-
-  Results:     1 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.9-rc1-11-ge1=
-e4db64728f8/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
--livepatch-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.9-rc1-11-ge1=
-e4db64728f8/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
--livepatch-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case=
-/id/660c750c088794ab4c4c42e3
-        failing since 48 days (last pass: v6.8-rc1, first fail: v6.8-rc1-32=
--g345e8abe4c355)
-
-    2024-04-02T21:14:33.350409  / # =
-
-
-    2024-04-02T21:14:33.359779  =
-
-
-    2024-04-02T21:14:38.504480  / # export NFS_ROOTFS=3D'/var/lib/lava/disp=
-atcher/tmp/13230997/extract-nfsrootfs-ap2ts0b8'
-
-    2024-04-02T21:14:38.518602  export NFS_ROOTFS=3D'/var/lib/lava/dispatch=
-er/tmp/13230997/extract-nfsrootfs-ap2ts0b8'
-
-    2024-04-02T21:14:40.745765  / # export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-04-02T21:14:40.756705  export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-04-02T21:14:40.873847  / # #
-
-    2024-04-02T21:14:40.882366  #
-
-    2024-04-02T21:14:40.999740  / # export SHELL=3D/bin/bash
-
-    2024-04-02T21:14:41.010110  export SHELL=3D/bin/bash
- =
-
-    ... (147 line(s) more)  =
-
- =20
 
