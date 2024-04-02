@@ -1,55 +1,62 @@
-Return-Path: <linux-kselftest+bounces-6990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E66638957EF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 17:16:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA38C89583F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 17:31:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20FB61C2150F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 15:16:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60103286B6D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 15:31:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A9112C539;
-	Tue,  2 Apr 2024 15:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4C96134CC8;
+	Tue,  2 Apr 2024 15:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="RBiDW8md"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ccWtYnl2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB6412BF26;
-	Tue,  2 Apr 2024 15:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2848113328A
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Apr 2024 15:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712070961; cv=none; b=Kav4utdzQTNGab6reTwQVvepAOlE67j7OpAjZonbfB6vEoRuAJNYQ99NK6IAgUUGWRyw0P0dyMg+gbluCUFWUbXi0VY69FkyH7Yu/gUgMw+gaRBcee3bNNa/tLqmB+MBXtPN62pjFORIAMdBLm0sQtZ2a8dNgGQ8tg5SHRL8QCg=
+	t=1712071822; cv=none; b=ITAbg8hp/YuxOwrk81n/fxBe4vE5CVfLqkzXjOSix18Yz0vFr4ZfGdHSGh+ugDRAzp3lWoxjmlYYF5+yJ9ZRr4QpiHrvXcyDjEtN1KShYKNQPsf1PPHxIelfvKuDj8kKnXCkxRsdnLxE8fEOnFwEzbCuvaTgtjmBcsX6nlSLz3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712070961; c=relaxed/simple;
-	bh=GXhvZfSf7YECAxV/84N1Fg6bLWjEnFuy4JkVVvzvWzQ=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BeToLwTQB7Ya+7p0S+yMSM6bMCAA8bmgNClBplwzjd8pbl0n7HVQ9p2YdIRB967pLWAQUzzrOChbJma6zorz7gx4TDcTBxgzZ2/yiIxqm/aHVEI6M5kXy0Xj6WAano6YUCs5+rjUSSM3ZkRkDVHGFmzyGd25Un2EGRso7LXz6HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=RBiDW8md; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712070958;
-	bh=GXhvZfSf7YECAxV/84N1Fg6bLWjEnFuy4JkVVvzvWzQ=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=RBiDW8mdInVUnysarnambAqLqWtsl+BAL08wH5uMBupCQ30qCIWbw52CF9D7BZ6kv
-	 RQTil7RymCSw6D+fWT7D56AqssAyKEC5sKX7cW/OF0/W0NKTYTjwHIqQam8oHfwg6s
-	 V7j9+JFaGf00zhjbSR5SS6JHPZwyqsutHN2h7+9Bnd1CrUsp7hDBL+ljqGDrUj+3eR
-	 AOooX0th5M2jBtyXavfFBsOt608A59pOFpJv47Sled/ORbaYQrIdRYOfJH61x+k1x4
-	 x8/wzhKv3EHE4pa2cjqqQNxiu16gzRDoVMj8MXKAQxEbcVhFyATy+Scl/ikPSdlYcV
-	 boiUGJPkZ52Qw==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	s=arc-20240116; t=1712071822; c=relaxed/simple;
+	bh=23qNJ4ftegx5H447MVacyBoGDIcrxV1t1VQ4lsSZJ/A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mizsPqEcrnf4pw7co+6E/ygsItLCYxIzP4VP6R/Rgtun4DTI0W9ad6gZJm0tme+4T8NjtHvm282JKGhxx+swvsEzzIbAMXLEsawcxlaBlSdBwThpMOC3cTWbe2ZMZ7a1/FbnsJzbLmGm7fITZvzhIwaRE+dEOAbo+L6bewdwxnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ccWtYnl2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712071819;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9CES7zO5vAsVp440eN4HWeKNk0OJ2Kki5eVVcnl1iPU=;
+	b=ccWtYnl23mrz3Nm3cutm92nzgcpcMKmTLd4LDdW8ugk+FodpvfVj+EthhezvqewwImJNxw
+	AOy/IUunSdxJSmqy3h7R/4vBzbhulOK3hecXhvyRK+gIjT7nossy0ITIPfd3bUmwGYrYgm
+	NJdWulTn3uLvmGE5tg9pOncEn2tRz/o=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-611-mCLhMP9nP1GCXUty7wZCZQ-1; Tue,
+ 02 Apr 2024 11:30:14 -0400
+X-MC-Unique: mCLhMP9nP1GCXUty7wZCZQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 422FD3780626;
-	Tue,  2 Apr 2024 15:15:54 +0000 (UTC)
-Message-ID: <cfecd6ea-8fa3-477f-bd32-4087aefee2af@collabora.com>
-Date: Tue, 2 Apr 2024 20:16:25 +0500
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 575BD1E441D0;
+	Tue,  2 Apr 2024 15:30:13 +0000 (UTC)
+Received: from [10.22.33.108] (unknown [10.22.33.108])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E66122022EA7;
+	Tue,  2 Apr 2024 15:30:11 +0000 (UTC)
+Message-ID: <548efd52-e45f-41fa-a477-bc5112d7b00c@redhat.com>
+Date: Tue, 2 Apr 2024 11:30:11 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,107 +64,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Move test_dev_cgroup to
- prog_tests
-To: Yonghong Song <yonghong.song@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20240401123455.1377896-1-usama.anjum@collabora.com>
- <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
+ synchronous
 Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Frederic Weisbecker <frederic@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+ Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Alex Shi <alexs@kernel.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Barry Song <song.bao.hua@hisilicon.com>
+References: <20240401145858.2656598-1-longman@redhat.com>
+ <20240401145858.2656598-2-longman@redhat.com>
+ <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-Yonghong Song,
 
-Thank you so much for replying. I was missing how to run pipeline manually.
-Thanks a ton.
+On 4/2/24 10:13, Michal Koutný wrote:
+> Hello Waiman.
+>
+> (I have no opinion on the overall locking reworks, only the bits about
+> v1 migrations caught my attention.)
+>
+> On Mon, Apr 01, 2024 at 10:58:57AM -0400, Waiman Long <longman@redhat.com> wrote:
+> ...
+>> @@ -4383,12 +4377,20 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
+>>   	/*
+>>   	 * Move tasks to the nearest ancestor with execution resources,
+>>   	 * This is full cgroup operation which will also call back into
+>> -	 * cpuset. Should be done outside any lock.
+>> +	 * cpuset. Execute it asynchronously using workqueue.
+>                     ...to avoid deadlock on cpus_read_lock
+>
+> Is this the reason?
+> Also, what happens with the tasks in the window till the migration
+> happens?
+> Is it handled gracefully that their cpu is gone?
 
-On 4/1/24 11:53 PM, Yonghong Song wrote:
-> 
-> On 4/1/24 5:34 AM, Muhammad Usama Anjum wrote:
->> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
->> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
->> dev_cgroup.skel.h and load program from it accourdingly.
->>
->>    ./test_progs -t dev_cgroup
->>    mknod: /tmp/test_dev_cgroup_null: Operation not permitted
->>    64+0 records in
->>    64+0 records out
->>    32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
->>    dd: failed to open '/dev/full': Operation not permitted
->>    dd: failed to open '/dev/random': Operation not permitted
->>    #72     test_dev_cgroup:OK
->>    Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> Changes since v2:
->> - Replace test_dev_cgroup with serial_test_dev_cgroup as there is
->>    probability that the test is racing against another cgroup test
->> - Minor changes to the commit message above
->>
->> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
->> next. It is passing on both. Not sure why it was failed on BPFCI.
->> Test run with vmtest.h:
->> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh
->> ./test_progs -t dev_cgroup
->> ./test_progs -t dev_cgroup
->> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
->> 64+0 records in
->> 64+0 records out
->> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
->> dd: failed to open '/dev/full': Operation not permitted
->> dd: failed to open '/dev/random': Operation not permitted
->>   #69      dev_cgroup:OK
->> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> The CI failure:
-> 
-> 
-> Error: #72 dev_cgroup
-> serial_test_dev_cgroup:PASS:skel_open_and_load 0 nsec
-> serial_test_dev_cgroup:PASS:cgroup_setup_and_join 0 nsec
-> serial_test_dev_cgroup:PASS:bpf_attach 0 nsec
-> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
-> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
-> serial_test_dev_cgroup:PASS:rm 0 nsec
-> serial_test_dev_cgroup:PASS:mknod 0 nsec
-> serial_test_dev_cgroup:PASS:rm 0 nsec
-> serial_test_dev_cgroup:PASS:rm 0 nsec
-> serial_test_dev_cgroup:FAIL:mknod unexpected mknod: actual 256 != expected 0
-> serial_test_dev_cgroup:PASS:rm 0 nsec
-> serial_test_dev_cgroup:PASS:dd 0 nsec
-> serial_test_dev_cgroup:PASS:dd 0 nsec
-> serial_test_dev_cgroup:PASS:dd 0 nsec
-> 
-> (cgroup_helpers.c:353: errno: Device or resource busy) umount cgroup2
-> 
-> The error code 256 means mknod execution has some issues. Maybe you need to
-> find specific errno to find out what is going on. I think you can do ci
-> on-demanding test to debug.
-errno is 2 --> No such file or directory
+Yes, there is a potential that a cpus_read_lock() may be called leading 
+to deadlock. So unless we reverse the current cgroup_mutex --> 
+cpu_hotplug_lock ordering, it is not safe to call 
+cgroup_transfer_tasks() directly.
 
-Locally I'm unable to reproduce it until I don't remove
-rm -f /tmp/test_dev_cgroup_zero such that the /tmp/test_dev_cgroup_zero
-node is present before test execution. The error code is 256 with errno 2.
-I'm debugging by placing system("ls /tmp 1>&2"); to find out which files
-are already present in /tmp. But ls's output doesn't appear on the CI logs.
 
-> 
-> https://www.kernel.org/doc/Documentation/bpf/bpf_devel_QA.rst
-> 
+>
+>
+>> -	if (is_empty) {
+>> -		mutex_unlock(&cpuset_mutex);
+>> -		remove_tasks_in_empty_cpuset(cs);
+>> -		mutex_lock(&cpuset_mutex);
+>> +	if (is_empty && css_tryget_online(&cs->css)) {
+>> +		struct cpuset_remove_tasks_struct *s;
+>> +
+>> +		s = kzalloc(sizeof(*s), GFP_KERNEL);
+> Is there a benefit of having a work for each cpuset?
+> Instead of traversing whole top_cpuset once in the async work.
 
--- 
-BR,
-Muhammad Usama Anjum
+We could do that too. It's just that we have the repeat the iteration 
+process once the workfn is invoked, but that has the advantage of not 
+needing to do memory allocation. I am OK with either way. Let's see what 
+other folks think about that.
+
+Cheers,
+Longman
+
 
