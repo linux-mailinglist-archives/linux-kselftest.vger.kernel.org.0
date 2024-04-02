@@ -1,159 +1,157 @@
-Return-Path: <linux-kselftest+bounces-7005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7006-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A56E7895B9C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 20:21:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBD25895E8A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 23:17:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31B271F22EB3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 18:21:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BB961F27527
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 21:17:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 157EA15B101;
-	Tue,  2 Apr 2024 18:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B6215E5C3;
+	Tue,  2 Apr 2024 21:17:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EXEWBeks"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="lWjg5NMp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4539015AD8D;
-	Tue,  2 Apr 2024 18:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B966415E5C4
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Apr 2024 21:17:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712082055; cv=none; b=bgurQEP7b89OBAvZ7sCWDT3qj+qmyFTi7HyDtqMDV+8VN2ebiAvvfnujk7IZh2fa4CZIw2nzwm1Fcnog8A3cMb9qTsBuhlP8oOTrrBByODH3GWCL8FgW+/kNZoRXllaUBWKNREi3+3z6QTnschQr5M9T7WnQYQ6Qdf/2tmNFGkc=
+	t=1712092637; cv=none; b=p3ec0d4kdkuFutd/H+gu61ijwo6Lr5tDktxuVdTMesV/CGIgl5NEsNNctiPnnLs8nFLzkVKVbQGPKdDOOe8jooK/oR+HEnrwOILtHwP0aNO7T8KPNnMVVhmALU0auh7BlkKJknDT22lYPlCMM4B8RmXtLPplb/DvwpznRlrOLow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712082055; c=relaxed/simple;
-	bh=zv7sHKFkjNevE/UqWToiX8FmogO6sxuivtv/ibrNNXA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YI50ILQF3doVAiYBSDY5dFBenoeXtNMpQklNEhREGBKzDk0vOjjF1vlOBRaAtZvPcTiSGpNTsF1SVEi9bfwXWiNxoBw/fVxrC0KQTuQCQXXuIPIR4DqrN7LGHZ8JICa8R3L6eATjfELEN13XOQVPqCaPGoGfyPLDANFvletPifI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EXEWBeks; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-415584360c0so21876535e9.1;
-        Tue, 02 Apr 2024 11:20:52 -0700 (PDT)
+	s=arc-20240116; t=1712092637; c=relaxed/simple;
+	bh=EuC3dE64aqGiTj5+Qt8ts2cfmZkXI7waHw0OEnGFpho=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=YxnbLwqwcpJLGHVwPNVuPzcIk/tXShn/X39znZOsbLNYbk4PkZ4laeeSybEaAxUDum7KaikyYKwsiyDu8l6OMGqHhlW4zUlCQoDMkUUGuh3RyvqRJe4nQ8AQcw39ivnEiN7UEJ+NbDFyyQFgpTR72K+Bk8ZrlBMa6/FWZhsDt1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=lWjg5NMp; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5cdbc4334edso3056824a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 14:17:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712082051; x=1712686851; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DCiVkwPQCDGfrvASyvu6t9tXKJzzMnM8zHvPzO/AMwA=;
-        b=EXEWBeksImfeRSHMAf69o9CTGp5sPYwl2nt+2fYso1zzFlA1+JOi+zHxkA+8uIOGsJ
-         VoSpeXGY4aQxrHDyxDmicnkObs8PRW+6GYbeZTvG3xrV8XKd4MJsDXP0ji2N86K2FJvE
-         gZ0Z60STS+OUIllD7JZcZ2vxbRdjr/rT6VxJwkI42txqJRBNf7qDsDUIv8jpgUNSqs8o
-         LhxkBYp7YW4/CXu3f4usjEp99j1QUDvUCk1RaB0IMpQVwkm3sjFxs+aZRbS7ZPGR7W3t
-         eRCwtgeDgZK2SyZM/o3oBBNPXXM8ctM2vJ8NkBVabVQBxRvesnho2phfNvMpSI6IHRg0
-         IN+A==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712092635; x=1712697435; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=pzCANURn04nu5Dksr2CkKzWEAQ4eKn0BQRYNWWOxWEU=;
+        b=lWjg5NMpwFNqNkozsR4U7byZ0nZhorivNTjEvKuUM2B9ItVsWWrkBnrWOr0Hwq9Fn7
+         Q08MWF+49GIEVt9LXaj0Hu4Rw8uHkFD2QBq4lLQNxYm1QJw0+kFRjW6nxmBiGFSLHCXK
+         jvMvSCwB2xWw8KG0+JOJgOYLtuWqV1599bXFL2hSsyac7y6Kpt7qQrjPJjbIPOHJAAYD
+         D6vpA0yEChYR6Bdack977kRUxRfRUuhQiTQoOaqLdQCW5jKa3YZ4DuqzJypiuO6CVIu8
+         ncZ/8QNN3jy/9BpH+p0LXqVv4MQXi6chOay9vci0OHj2H5REL5NkkTDTx5CkB8o412RU
+         PZtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712082051; x=1712686851;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DCiVkwPQCDGfrvASyvu6t9tXKJzzMnM8zHvPzO/AMwA=;
-        b=Hr+MyqdyYgLkb2ugWDrZ2PacAWEg6IlhDqWD7j2VyyJQQQOrPNlAxmUqx27YaPS568
-         LStDoxYx1LTD61vqdMq2JS43EXTsnsUBMGY5/gkPvY4njAUrOd9oAgzwaUsjo9vx5Ltu
-         W7dvCpIXWPXrlBFevuJ0vRRorJ9UD0FQD81SmwgAoKmTGxrzP7uf/ouSoqFMEtG26Jon
-         xdjcPrq1o/1OQKu6fOUWci6oDAer5kKMLkO7VoX2thWOfs96+qLGJDQbqYmPe0pBs1iu
-         cR/AgyIjp5TOMQT1m0rK7woFMA4m34DM6AdBQXlB/2F3yhhNdOWE36nakuzq5+S6vtvx
-         A43w==
-X-Forwarded-Encrypted: i=1; AJvYcCUJPvvnnJQRU609ms0G7s+YXwy4NPZi0vjZPztQg8zR/YxHnVS69KLN9haoF4NSAagixYVGK7HMKji3FF1mcXBQQ2cCKVFQjLCjsJrRDK7JQo+5zPCZBM8RDD4GDsgHBhbcAmkr05FklcIWXfp/Gmja9CHY5tN7csQVMhkaXVsiA8VeHnD0lUp0gjEuZkIZLIeRsBj+ltVts43VyA==
-X-Gm-Message-State: AOJu0YzsSkbUp+Y6iZ8CZZjYa6AucfAIM9UOcARLhM8xMn1OJovdp9DP
-	9awiWrPfRdvN3qPFI9zHYS2/69GNi0ib/0TCYvKhNOxJhkZWH3BL
-X-Google-Smtp-Source: AGHT+IH7dZM98T8LsIjrzMa4icTrHivRPJMZDMvbLYQyhm1OTnVSmFrT5rXdsQklfK67izIlApE9XA==
-X-Received: by 2002:a05:600c:1394:b0:415:6121:5171 with SMTP id u20-20020a05600c139400b0041561215171mr5870525wmf.32.1712082049265;
-        Tue, 02 Apr 2024 11:20:49 -0700 (PDT)
-Received: from [192.168.1.113] ([105.109.56.176])
-        by smtp.gmail.com with ESMTPSA id q17-20020a05600c46d100b0041409db0349sm18761667wmo.48.2024.04.02.11.20.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Apr 2024 11:20:48 -0700 (PDT)
-Message-ID: <705d7180-aced-46ba-80a6-84ac4e2b96b9@gmail.com>
-Date: Tue, 2 Apr 2024 19:20:45 +0100
+        d=1e100.net; s=20230601; t=1712092635; x=1712697435;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pzCANURn04nu5Dksr2CkKzWEAQ4eKn0BQRYNWWOxWEU=;
+        b=FxwAFNG6h+Yi8iFa/r98pvmJssL4zMnXJEQAjyBGEqfGYFygjZe+mDoqK46Ijc4DcU
+         gAi/hrJtL+AyUHGTtHjB8VMZfW5xdrWDMCGGwq6g/zS6KGWG4cGu3V/71vWSppmeeZ09
+         l8uQ7tdtYuxkbzO/JEuS7DkohXLE4i0AS9sNEcp766nzoqKfZbRgZy4RL/+G1FYV3JKI
+         7uK9ngGR6nB++VITYkzHCCASCLd9vyaG9yRBBAWDpjAtRYGUqK/Nyb8MqbFthVmsm9e0
+         2lcGO3TGPnX/D5YWHi8jMY8T1idUBMCGOORwMEl3PfDl5jBGL004dNzfgb1HH3c80xZ1
+         RVvw==
+X-Forwarded-Encrypted: i=1; AJvYcCW+EgmL8Xou2mYe4Cq5/wm2YkoiEAyWGHpD5CVXwcvXjxmMQUd1BetfQiD9rzdaVKk77M5KD6djFTtmJoyd8iVZOwCNm4DpEga5XDRSKeFw
+X-Gm-Message-State: AOJu0YyjMnpbg6PPrFqhppATvfs1S+QSE7ITF+CcwT+Ba6Ucg0AvfLYL
+	/E3io8zUVpO38ySmbkSzGx2npD0m7Z9kpONXA46UYQIGUXqy1JESLPrz2Fz5xjw=
+X-Google-Smtp-Source: AGHT+IFZ6thh/cbUltGMfZvrNLIzu87cERwFqDIlsw4lVMDKCqSHgq4pTlLFZiqHe4RN325UULLkkw==
+X-Received: by 2002:a17:90b:1e07:b0:2a2:4f92:b1e7 with SMTP id pg7-20020a17090b1e0700b002a24f92b1e7mr3837827pjb.1.1712092634957;
+        Tue, 02 Apr 2024 14:17:14 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id c21-20020a17090aa61500b002a076b6cc69sm10144263pjq.23.2024.04.02.14.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 14:17:14 -0700 (PDT)
+Message-ID: <660c75da.170a0220.f9f2d.aee6@mx.google.com>
+Date: Tue, 02 Apr 2024 14:17:14 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com>
- <ex2uipr54lb2odxwzwp22ycvlwplsy4mm3shx26hczo3mjtkvz@uuzyk6535prw>
-Content-Language: en-US
-From: Djalal Harouni <tixxdz@gmail.com>
-In-Reply-To: <ex2uipr54lb2odxwzwp22ycvlwplsy4mm3shx26hczo3mjtkvz@uuzyk6535prw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.9-rc1-11-ge1e4db64728f8
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 4 builds: 0 failed, 4 passed,
+ 1 warning (v6.9-rc1-11-ge1e4db64728f8)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hello Michal,
+kselftest/next build: 4 builds: 0 failed, 4 passed, 1 warning (v6.9-rc1-11-=
+ge1e4db64728f8)
 
-On 4/2/24 18:16, Michal Koutný wrote:
-> Hello.
-> 
-> On Wed, Mar 27, 2024 at 11:53:22PM +0100, Djalal Harouni <tixxdz@gmail.com> wrote:
->> ...
->> For some cases we want to freeze the cgroup of a task based on some
->> signals, doing so from bpf is better than user space which could be
->> too late.
-> 
-> Notice that freezer itself is not immediate -- tasks are frozen as if a
-> signal (kill(2)) was delivered to them (i.e. returning to userspace).
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.9-rc1-11-ge1e4db64728f8/
 
-Thanks yes, I would expect freeze to behave like signal, and if one
-wants to block immediately there is the LSM override return. The
-selftest attached tries to do exactly that.
+Tree: kselftest
+Branch: next
+Git Describe: v6.9-rc1-11-ge1e4db64728f8
+Git Commit: e1e4db64728f8f43c610ca723e443f6caebf19b4
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 3 unique architectures
 
-> What kind of signals (also kill?) are you talking about for
-> illustration?
+Warnings Detected:
 
-Could be security signals, reading sensitive files or related to any
-operation management, for X reasons this user session should be freezed
-or killed.
+arm64:
 
-The kill is an effective defense against fork-bombs as an example.
+arm:
 
->> Planned users of this feature are: tetragon and systemd when freezing
->> a cgroup hierarchy that could be a K8s pod, container, system service
->> or a user session.
-> 
-> It sounds like the signals are related to a particular process. If so
-> what is it good for to freeze unrelated processes in the same cgroup?
+i386:
 
-Today some container/pod operations are performed at bpf level, having
-the freeze and kill available is straightforward to perform this.
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
 
 
-> I think those answers better clarify why this is needed.
+Warnings summary:
 
-Alright will add those in v2.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x149bf9
 
-> 
-> As for the generalization to any cgroup attribute (or kernfs). Can this
-> be compared with sysctls -- I see there are helpers to intercept user
-> writes but no helpers to affect sysctl values without an outer writer.
-> What would justify different approaches between kernfs attributes and
-> sysctls (direct writes vs modified writes)?
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-For generalizing this, haven't thought about it that much. First use
-case is to try to get freeze and possibly kill support, and use a common
-interface as requested.
+Detailed per-defconfig build reports:
 
-Thank you!
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
-> 
-> Thanks,
-> Michal
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x149bf9
+
+---
+For more info write to <info@kernelci.org>
 
