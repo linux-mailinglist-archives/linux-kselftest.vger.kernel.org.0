@@ -1,78 +1,64 @@
-Return-Path: <linux-kselftest+bounces-6996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3FC6895A7F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 19:16:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC4E0895A92
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 19:22:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F1881F23948
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 17:16:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE637B24954
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 17:22:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB8715A48D;
-	Tue,  2 Apr 2024 17:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0905A15A48F;
+	Tue,  2 Apr 2024 17:22:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="HyDNeoUo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rUsFC7g0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E4015990F;
-	Tue,  2 Apr 2024 17:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C969D159915;
+	Tue,  2 Apr 2024 17:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712078202; cv=none; b=KBe1BNEs+p8Utt7UMOp8o9wKunXLsxXXxMrtGtd2FNt1aIKwA6f4exP1Qv4QYg6/ZlpVQuMabfVUeqOBEgcwGvTld5ImhVXtMntLTODt75gEObO7YagF/ILl8UUcRnCAopMtNaeMZcOmi375UiyKXu6oauNh5x/f5IHIaTSFF4w=
+	t=1712078521; cv=none; b=lZ8WfDYuC9kl+bOSgieuvlOVNc2HbgfCLWnb5pa+5X6vn+EMubyAXgJ5LdFAKwaNj8ASD939tEsUEiT6MuM4CIvdgSlJ5mfmyTBwtpcYvR/fT0CbjTyvEJ5pNlf8uMpPjisrea3rNs4hxQG+j5mTEuwbUd5sQK5yDK0HaKDnzGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712078202; c=relaxed/simple;
-	bh=pP519wusPUAXRys+Pm1fP6WiHUMTu+p8h8uiy+wJCy0=;
+	s=arc-20240116; t=1712078521; c=relaxed/simple;
+	bh=H8uWhCo1O/OYYi2drPcE1c99n/60JeLgX1yS8IFjOsk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhN2ioAM1ciUs4CDbPC5zygsxd3URYjQXuGoz17kk8MorneA35V05UY/BIZ0ItY+fpZQj54EL2Ax2oLat2m0BFIgLLiWIlwHrlyU8pZauhRg9Dp8qFU5nEd2lv9Cdc+G1L2DMVuPX1L9A2fE6KFjj7IE8IRY4zvlK9pljnRBMu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=HyDNeoUo; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8637B34934;
-	Tue,  2 Apr 2024 17:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1712078198; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pP519wusPUAXRys+Pm1fP6WiHUMTu+p8h8uiy+wJCy0=;
-	b=HyDNeoUoZJkyHWwJ8XCspPVKQE0grsOAe6fIzOJfL6spCvd8yGbYzAefLUZLCRHZcjQuWZ
-	P21owtoIlNmvKSzoFThdyX2PRKtb7ph/zuDKnK7aTsZtPYc5WbgwGy/kozkVocQijFMnGr
-	KxxnZHv5eGwVoSboBVG4imEzEAx39Mk=
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 7240F13357;
-	Tue,  2 Apr 2024 17:16:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id vLDAG3Y9DGZiIgAAn2gu4w
-	(envelope-from <mkoutny@suse.com>); Tue, 02 Apr 2024 17:16:38 +0000
-Date: Tue, 2 Apr 2024 19:16:29 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Djalal Harouni <tixxdz@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-Message-ID: <ex2uipr54lb2odxwzwp22ycvlwplsy4mm3shx26hczo3mjtkvz@uuzyk6535prw>
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JGjNJvIGiGFxZ35jwloiqOyX4lx1s7uKAagoiaDbI6kFisY5rIQHe7dCCwMtSZUPhlAN3SpNNa9DtWbtyJKI6VDlkLQyR+FzTMr6O+gYwE6uF83XOnsZrbys24cOTWffYgrkhfy7Lf/LKtdQsbcBFKiOpOh/O51Visq3xBA0CkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rUsFC7g0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42F3C43390;
+	Tue,  2 Apr 2024 17:21:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712078521;
+	bh=H8uWhCo1O/OYYi2drPcE1c99n/60JeLgX1yS8IFjOsk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rUsFC7g0Q8/lx515dHicpBE0b06tm9dIdiVGdJrsr/6FaGJR6vinlLAZH9bgWuqvl
+	 f4m31h7gXvhkrs0Dl8t1ul36NFUo6zzgt3NSRwa3AZxkWbcqfLL+Vlm95Rdg+9Dv8C
+	 WROYbTvaWiWyVC7ninEYSu2rSblY5/Pb1IXjdYYsIFsuw49/0sFPUwVcyf5kdR92rr
+	 KYKKG/aeS2u88JSqQHabJxVZo6DzmwNi1Acf2aV65bvZp9NvABFZtzSW/dL1Dv87dL
+	 ybQ6VcrhQTLubmx+epTLdNltL5zoO8PwmeYkORVX/BkT3fbVJSo+kxqxJjejJooHH9
+	 FYkLS5oUeTWng==
+Date: Tue, 2 Apr 2024 18:21:55 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Dave Martin <Dave.Martin@arm.com>, kvmarm@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 2/5] KVM: arm64: Add newly allocated ID registers to
+ register descriptions
+Message-ID: <73c6012f-adb0-470b-bd47-6093d28aea97@sirena.org.uk>
+References: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
+ <20240329-arm64-2023-dpisa-v6-2-ba42db6c27f3@kernel.org>
+ <87le5ysm4l.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,86 +66,71 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jy46jtmbnpyw2njk"
+	protocol="application/pgp-signature"; boundary="pwE/A28+XRVGQBHe"
 Content-Disposition: inline
-In-Reply-To: <20240327225334.58474-1-tixxdz@gmail.com>
-X-Spam-Score: -2.01
-X-Spamd-Result: default: False [-2.01 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.62)[82.04%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.19)[-0.971];
-	 RCPT_COUNT_TWELVE(0.00)[22];
-	 SIGNED_PGP(-2.00)[];
-	 FREEMAIL_TO(0.00)[gmail.com];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+,1:+,2:~];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[kernel.org,bytedance.com,cmpxchg.org,iogearbox.net,linux.dev,gmail.com,google.com,fb.com,vger.kernel.org];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
+In-Reply-To: <87le5ysm4l.wl-maz@kernel.org>
+X-Cookie: Knowledge is power.
 
 
---jy46jtmbnpyw2njk
+--pwE/A28+XRVGQBHe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hello.
+On Sun, Mar 31, 2024 at 11:59:06AM +0100, Marc Zyngier wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-On Wed, Mar 27, 2024 at 11:53:22PM +0100, Djalal Harouni <tixxdz@gmail.com> wrote:
-> ...
-> For some cases we want to freeze the cgroup of a task based on some
-> signals, doing so from bpf is better than user space which could be
-> too late.
+> > The 2023 architecture extensions have allocated some new ID registers, add
+> > them to the KVM system register descriptions so that they are visible to
+> > guests.
 
-Notice that freezer itself is not immediate -- tasks are frozen as if a
-signal (kill(2)) was delivered to them (i.e. returning to userspace).
+> > We make the newly introduced dpISA features writeable, as well as
+> > allowing writes to ID_AA64ISAR3_EL1.CPA for FEAT_CPA which only
+> > introduces straigforward new instructions with no additional
+> > architectural state or traps.
 
-What kind of signals (also kill?) are you talking about for
-illustration?
+> FPMR actively gets trapped by HCRX_EL2.
 
-> Planned users of this feature are: tetragon and systemd when freezing
-> a cgroup hierarchy that could be a K8s pod, container, system service
-> or a user session.
+Sure, I'm not clear what you're trying to say here?  The "no additional"
+bit is referring to FEAT_CPA.
 
-It sounds like the signals are related to a particular process. If so
-what is it good for to freeze unrelated processes in the same cgroup?
+> > -	ID_UNALLOCATED(6,3),
+> > +	ID_WRITABLE(ID_AA64ISAR3_EL1, ~(ID_AA64ISAR2_EL1_RES0 |
+> > +					ID_AA64ISAR3_EL1_PACM |
+> > +					ID_AA64ISAR3_EL1_TLBIW)),
+> >  	ID_UNALLOCATED(6,4),
+> >  	ID_UNALLOCATED(6,5),
+> >  	ID_UNALLOCATED(6,6),
 
-I think those answers better clarify why this is needed.
+> Where is the code that enforces the lack of support for MTEFAR,
+> MTESTOREONLY, and MTEPERM for SCTLR_ELx, EnPACM and EnFPM in HCRX_EL2?
 
+Could you please be more explicit regarding what you're expecting to see
+here?  Other than the writeability mask for the ID register I would have
+expected to need explicit code to enable new features rather than
+explicit code to keep currently unsupported features unsupported.  I'm
+sure what you're referencing will be obvious once I see it but I'm
+drawing a blank.
 
-As for the generalization to any cgroup attribute (or kernfs). Can this
-be compared with sysctls -- I see there are helpers to intercept user
-writes but no helpers to affect sysctl values without an outer writer.
-What would justify different approaches between kernfs attributes and
-sysctls (direct writes vs modified writes)?
+> And I haven't checked whether TLBI VMALLWS2 can be trapped.
 
+I didn't see anything but I might not be aware of where to look, there
+doesn't seem to be anything for that specifically in HFGITR_EL2 or
+HFGITR2_EL2 which would be the main places I'd expect to find something.
 
-Thanks,
-Michal
-
---jy46jtmbnpyw2njk
+--pwE/A28+XRVGQBHe
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZgw9awAKCRAGvrMr/1gc
-jkx3AP9q4yObx2ZVhnJrJtyuNXurHxN0CyA34JgyPMSJk2fz8wD/eQvPgsUzvuGS
-lms51KfenKpEwlwmmEfvlZSNXVAU1Qw=
-=rjUz
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYMPrIACgkQJNaLcl1U
+h9CulwgAgH5V5RmaWYuHCCBQIUQDkouUTMklMpA9Df1ChBIBvmW1OZl0PeW56Sui
+640DAUobRml9J+gh6HsMUS3vnRLyGP11gEhxxTccwvoKuxH6ZsiBUaXkdN+f2Qfv
+R8XxRO7JYoC7un2DPg2IjgAuyEX9OB8XzPmnRnFj276YjsQHy/oYUkwqemOMCMvB
+3/rWpnLsoQ6/UC0RAfXCqN5jTPVG2fVBEFKcyiFi3eLqBxdDF/ugPgTIHtgP31Fz
+rPtAVmzDu6El/d+hpIqAtb70IH/mk8uqYzd1EoTuiTZlGnsIoZLjn5Yft89t0Ets
+B51k7JPujYgRrvFdBiC0WlPL3wYmjg==
+=Xh1Z
 -----END PGP SIGNATURE-----
 
---jy46jtmbnpyw2njk--
+--pwE/A28+XRVGQBHe--
 
