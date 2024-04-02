@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-6981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B259895232
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 13:52:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 728A6895236
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 13:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35C9E1C21B69
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 11:52:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12E6B1F2264D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 11:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D8867C46;
-	Tue,  2 Apr 2024 11:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3AA969945;
+	Tue,  2 Apr 2024 11:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b="CMhfUceI"
+	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b="lUn7NZ5t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6142032C;
-	Tue,  2 Apr 2024 11:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.134.164.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4639C2032C;
+	Tue,  2 Apr 2024 11:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.134.164.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712058744; cv=none; b=AHJkaBlsNc4OHtuEPmUTmRJ6sB3NLT9HLIc9YuUTGk/NDKJC7YYbHM8o7bDKL21+a3rlQCS3xc7sfrbgzGZ/IdzcuABCGleBQaL8ny5fAxT69kyqpacGxEZo3/Zt1ckQtTrRoUrhPEsDB1RLoRwXHoDNbyyQdhS7TuiyRrJfvQQ=
+	t=1712058896; cv=none; b=nLqix1rEOuSrrxjfI3jQtJ4WVUgVXYxkDqI6/WYEQFzd90PJohiyYPrtdMJ4nOEUBtsbH0SrqTf7/iVMrUn0MoQkkzm3Yp/5BdL2dh8FJOgY51T2//PdJrTQEIkodupmg64qXbpc7kN8NKknVdVYW/fOQeFPcluUz+bBf24pQro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712058744; c=relaxed/simple;
-	bh=ZpYymrpfvEduDZOAIJzJ17kLRLB1LqvyhMQYAS2WWbU=;
+	s=arc-20240116; t=1712058896; c=relaxed/simple;
+	bh=AbcJNfryz3ikREq1ToLFUEKmW32S8324XKssQNFnC/o=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=VxMUhfoYxj8dmdwes4nlS6ZmviOoNtkkC5mBcXZX53JgzHUEOomLPCHSsamaqmUk9IEmAC8a5RtmeMXEAoFRLkYJ3XLh8PVzn6IPvHsnXqTfnM5u59/ixhIXSkNEYv7kpZdRFjnawL37drUuEgevjOqJhf1lPoWds0WonL65Ywg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr; spf=pass smtp.mailfrom=inria.fr; dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b=CMhfUceI; arc=none smtp.client-ip=192.134.164.83
+	 MIME-Version:Content-Type; b=QUleJV6NgnmMf4R2sbHCWaea4OiYmr3e7IVIYCDnnzjdDg9yst6hKaB1m7oneVpYTE4KIWsV2La4jDA0qd65gPkxIEtBpI3vx43cJuGCYWhUgbIkN4TIN7M9oGAkvVDsZkX414e/gosKx/pDxooB87sjc0KwhlxHk5hxACCkwKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr; spf=pass smtp.mailfrom=inria.fr; dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b=lUn7NZ5t; arc=none smtp.client-ip=192.134.164.104
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inria.fr
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=6FRn1lui8yV9rswDp+X3k/HmkSXENJTtFuKLmrczy1I=;
-  b=CMhfUceIv61VkIGfTBIIbzslxaOLl8yMrqy0A5tIyoDW+tPRPMxjHBCd
-   xFfpBsXYFUOC1btOVXQg41gC/rA118oFACSyde0LqZzDn9NkzH8X/5BNk
-   N4n0gCdxEPAk1ESll9X6j3lmO98GU3rR5Hk7rwqOZ4opqLGWw40n64snL
-   k=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+  bh=amhJgKxkEum2SG4fYWqJx66qHnEM75pqagVaDk/5ic4=;
+  b=lUn7NZ5tN794UWgWFjCP3saUsHSRGC0XLErDkfc4J6K0jEwSx/DIOfGA
+   5SPa34SOq6Pks/01idfZCee6RbyGV+FUKb2zSyHo03ToV1tcIKB08bjAx
+   qPD3PeiHY5xcRbZ5PR/701ROfKmj9XN2Ry33t0bbMGDzvoukVm2Np3PYn
+   M=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.07,174,1708383600"; 
-   d="scan'208";a="159493475"
+   d="scan'208";a="83651121"
 Received: from 71-51-181-183.chvl.centurylink.net (HELO hadrien) ([71.51.181.183])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 13:52:15 +0200
-Date: Tue, 2 Apr 2024 07:52:13 -0400 (EDT)
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 13:54:44 +0200
+Date: Tue, 2 Apr 2024 07:54:42 -0400 (EDT)
 From: Julia Lawall <julia.lawall@inria.fr>
 To: Saasha Gupta <saashaa1122@gmail.com>
 cc: outreachy@lists.linux.dev, mic@digikod.net, 
@@ -54,7 +54,7 @@ cc: outreachy@lists.linux.dev, mic@digikod.net,
 Subject: Re: Subject: [PATCH] Add test for more file systems in landlock -
  ext4
 In-Reply-To: <860c9cadb2fa06c8f10db42ad38405ee19d43a16.camel@gmail.com>
-Message-ID: <25e51fbb-1341-e5f6-bf6-325d74159644@inria.fr>
+Message-ID: <3cdf4be4-a9ee-4e4-c839-29ae58e4c199@inria.fr>
 References: <860c9cadb2fa06c8f10db42ad38405ee19d43a16.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -69,25 +69,28 @@ Content-Type: text/plain; charset=US-ASCII
 On Tue, 2 Apr 2024, Saasha Gupta wrote:
 
 > Date: Mon, 2 Apr 2024 19:59:56 +0530
-
-Not clear why this is part of the message.
-
+>
 > RE: This patch is now properly preformatted.
-
-Such a comment belongs below the ---.  People who look at the history of
-the file in the git logs have no idea that the patch was previously ill
-formatted.
-
-julia
-
 >
 > Landlock LSM, a part of the security subsystem, has some tests in place
 > for synthetic filesystems such as tmpfs, proc, sysfs, etc. The goal of
 > the new issue, and hence this patch is to add tests for non synthetic
 > file systems, such as ext4, btrfs, etc
->
+
+Not clear what "the new issue" could be.  Remember that the log message
+will be read by people 10 years from now.  Not just by the recipientes of
+the patch.
+
 > This patch adds tests for the ext4 file system. This includes creation
 > of a loop device (test-ext4.img) and formating with mkfs.
+
+This should be "Add tests for the ext4 file system".
+You seem to have joined application period quite late, but you need to
+read the entirety of the tutorial and be prepared to follow it, at least
+in the future.
+
+julia
+
 >
 > Signed-off-by: Saasha Gupta <saashaa1122@gmail.com>
 > ---
