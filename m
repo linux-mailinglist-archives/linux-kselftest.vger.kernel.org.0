@@ -1,140 +1,108 @@
-Return-Path: <linux-kselftest+bounces-6988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F9AB895786
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 16:53:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F7AF8957CE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 17:08:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B07A11C210B3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 14:53:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1C83B29063
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 14:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F381292CA;
-	Tue,  2 Apr 2024 14:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AAE129E78;
+	Tue,  2 Apr 2024 14:57:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u9wM5BM1"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qtcSN0Ml";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1uVgVveT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8CD98595C;
-	Tue,  2 Apr 2024 14:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715CE17BD8;
+	Tue,  2 Apr 2024 14:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712069617; cv=none; b=IQc5puMsMAKZO99uY5aqVJ+ExfzFV8QAetmlXBGMpR3bodV9UOrFNK1O0cR2i1MN+SlpTOyS2V5IPhVgeDvYUiVJtvw264Za+VnCN4oicacu+Cy9d9dobziRoEzjw6hE/piLuoNTdm2CBoiD34wCqb8aBwHDFl6zkoshzXU4s3Y=
+	t=1712069865; cv=none; b=fOTOoKgzc5kULlzDc7xE1MPgblE4p9DVFzDotGLK1Vvm8XFsvDlbjceY60ZDDKpB74hhCT7bu9TFuSVwYO9vHv88VPj1ewYsJWP0ZaOYAKjn20iscbqJ+a3MXuj1uDMhT5hNbtm/1FI1cdBWZ79vWPrv/1/+YBFDtHpEFoTWwGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712069617; c=relaxed/simple;
-	bh=vhQsnvRHzwOy3ox3OvUmqvwn0itwQb57/FmYwbndCXU=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tdhKOhAIJB09r6zXm66mKr7tPndtFmuX2mUgV6t7lsvvA4tCvhYdH6lpOcuCmWes+DYrUWhlY4sBxpm7LPCzWbFklpkx8DCfilIGIS5RzippkjiGbd20mDnpChP3MLrJpGaVbvJYaMtDbScXNrdE782nEfdejQanZYrIjwSGKwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u9wM5BM1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 509FAC43390;
-	Tue,  2 Apr 2024 14:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712069616;
-	bh=vhQsnvRHzwOy3ox3OvUmqvwn0itwQb57/FmYwbndCXU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=u9wM5BM1zVlflI8QFJDAHZYDZYOnPeNYUCR981yXBTjIUiYAuk/3ukwrzYyE9RB94
-	 ggNYHgQ1aWLaJAIwPMuPzimCq9JWUddvfke5tuHoM0dsQKwtlwps5xe/l4EwBAzHDD
-	 rf1z2ocnPeEVj5O5c+AsMaSSwuS16ukcZIEKrjjEBxANfz4eCcf1IS4sLyBX7WGV4J
-	 X6bfAXGXEkMAukyHifrFowQ8fi42i71UHSa2nc5rdtHTyYs00rXjuHJJ55XSR2HdyJ
-	 0d0USc13F8w/JmKNxjLr8RyCue8Q7EheKu9KzyehW7omtUJefOH2yADQqrus5BNuSp
-	 yCsACeDACsJbQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rrfW1-000lX6-Ji;
-	Tue, 02 Apr 2024 15:53:33 +0100
-Date: Tue, 02 Apr 2024 15:53:33 +0100
-Message-ID: <86h6gju87m.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Dave Martin <Dave.Martin@arm.com>,
-	kvmarm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] KVM: arm64: Share all userspace hardened thread data with the hypervisor
-In-Reply-To: <fb54d7b0-9c83-4a0c-a08b-b722c9381ca7@sirena.org.uk>
-References: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
-	<20240329-arm64-2023-dpisa-v6-1-ba42db6c27f3@kernel.org>
-	<87msqesoty.wl-maz@kernel.org>
-	<fb54d7b0-9c83-4a0c-a08b-b722c9381ca7@sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1712069865; c=relaxed/simple;
+	bh=5fZg5QWgvKLZtjYce+k9weQ/XmQqOIU56cLlpWouz1U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=azHpFG/ufl8ADeZxwzQEIpUw6pIw+JwKmltlX/evFcPxKA6UYrL+D38ENGc76tkySIXeezPWeFRv6jNm8VhyF5YEwHE6llk6DO9EH493qsRs44bOXIStaV0SWJtqL6Wet6tbJdyOXWVsh3gca7vOVSQZMMKaDfUTfoFGGFSKjog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qtcSN0Ml; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1uVgVveT; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712069862;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NIf2A5XgT+mSuLeFeNcerJGYHIuW/buAb+x1UGGwSvc=;
+	b=qtcSN0Ml+uulz1MBPI5yX3dxO+D+BxS0GQB9loNAx+1qy8o8f6+08TJdS1yPqvCCZRS5ZL
+	Vh8IA+n+yInbBJYszYKIVGNzObdD8SnGPs2FvsvfWlsxdiLXOv4Ulevvhbpyqk83xkIR7F
+	b98/XBV2uVbowtiNEhZ/yDBbUIADwwQD0hoKEOI3UFzp3PVNZU2PTrab11N5zWR6atqf+f
+	2RDgeaAvI9zBaZc1BYZFxprWY2jeQoDC3VVYGgUrtc5IH0Fu5WaRxLYtw4yxYpgJRBxvbh
+	VjYhALIE1hnqdY51w+5f2NN3RUmP2JxlnaLswQD0HAdidlPqum0MxRI+UKNicA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712069862;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NIf2A5XgT+mSuLeFeNcerJGYHIuW/buAb+x1UGGwSvc=;
+	b=1uVgVveT8jsAq2IsPas3JyTp+ZuLAZAUuFrNVw2wPOpr24nhGjd8RuBTFQ6NW+lJIHkHNI
+	EwMq2PfkSoKDYPDA==
+To: John Stultz <jstultz@google.com>, Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+ Oleg Nesterov <oleg@redhat.com>, "Eric W. Biederman"
+ <ebiederm@xmission.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+ kasan-dev@googlegroups.com, Edward Liaw <edliaw@google.com>, Carlos Llamas
+ <cmllamas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
+ current thread
+In-Reply-To: <CANDhNCqBGnAr_MSBhQxWo+-8YnPPggxoVL32zVrDB+NcoKXVPQ@mail.gmail.com>
+References: <20230316123028.2890338-1-elver@google.com>
+ <CANDhNCqBGnAr_MSBhQxWo+-8YnPPggxoVL32zVrDB+NcoKXVPQ@mail.gmail.com>
+Date: Tue, 02 Apr 2024 16:57:42 +0200
+Message-ID: <87frw3dd7d.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Dave.Martin@arm.com, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Tue, 02 Apr 2024 15:34:27 +0100,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> [1  <text/plain; us-ascii (quoted-printable)>]
-> On Sun, Mar 31, 2024 at 11:00:41AM +0100, Marc Zyngier wrote:
-> > Mark Brown <broonie@kernel.org> wrote:
-> 
-> > > As part of the lazy FPSIMD state transitioning done by the hypervisor we
-> > > currently share the userpsace FPSIMD state in thread->uw.fpsimd_state with
-> > > the host. Since this struct is non-extensible userspace ABI we have to keep
-> 
-> > Using the same representation is just pure convenience, and nothing
-> > requires us to use the it in the kernel/hypervisor.
-> 
-> Indeed, the additional data seemed contained enough that it was a
-> reasonable tradeoff.
-> 
-> > > the definition as is but the addition of FPMR in the 2023 dpISA means that
-> > > we will want to share more storage with the host. To facilitate this
-> > > refactor the current code to share the entire thread->uw rather than just
-> > > the one field.
-> 
-> > So this increase the required sharing with EL2 from 528 bytes to
-> > 560. Not a huge deal, but definitely moving in the wrong direction. Is
-> > there any plans to add more stuff to this structure that wouldn't be
-> > *directly* relevant to the hypervisor?
-> 
-> I'm not aware of any current plans to extend this.
-> 
-> > > @@ -640,7 +641,7 @@ struct kvm_vcpu_arch {
-> > >  	struct kvm_guest_debug_arch vcpu_debug_state;
-> > >  	struct kvm_guest_debug_arch external_debug_state;
-> > >  
-> > > -	struct user_fpsimd_state *host_fpsimd_state;	/* hyp VA */
-> > > +	struct thread_struct_uw *host_uw;	/* hyp VA */
-> > >  	struct task_struct *parent_task;
-> 
-> > Well, this is going away, and you know it.
-> 
-> Sure, those patches are still in flight though.  It does seem reasonable
-> to target the current code.
+On Mon, Apr 01 2024 at 13:17, John Stultz wrote:
+> Apologies for drudging up this old thread.
+> I wanted to ask if anyone had objections to including this in the -stable trees?
+>
+> After this and the follow-on patch e797203fb3ba
+> ("selftests/timers/posix_timers: Test delivery of signals across
+> threads") landed, folks testing older kernels with the latest
+> selftests started to see the new test checking for this behavior to
+> stall.  Thomas did submit an adjustment to the test here to avoid the
+> stall: https://lore.kernel.org/lkml/20230606142031.071059989@linutronix.de/,
+> but it didn't seem to land, however that would just result in the test
+> failing instead of hanging.
 
-Sure, if your intent is for this code not to be merged.
+Thanks for reminding me about this series. I completely forgot about it.
 
-Because it means this series assumes a different data life cycle, and
-the review effort spent on it will be invalidated once you move to the
-per-CPU state.
+> This change does seem to cherry-pick cleanly back to at least
+> stable/linux-5.10.y cleanly, so it looks simple to pull this change
+> back. But I wanted to make sure there wasn't anything subtle I was
+> missing before sending patches.
 
-	M.
+This test in particular exercises new functionality/behaviour, which
+really has no business to be backported into stable just to make the
+relevant test usable on older kernels.
 
--- 
-Without deviation from the norm, progress is not possible.
+Why would testing with latest tests against an older kernel be valid per
+se?
+
+Thanks,
+
+        tglx
+
 
