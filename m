@@ -1,254 +1,172 @@
-Return-Path: <linux-kselftest+bounces-6985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-6986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7675895659
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 16:12:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 794E1895664
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 16:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 053081C22BC5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 14:12:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33B16284AF7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Apr 2024 14:14:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD72126F39;
-	Tue,  2 Apr 2024 14:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B81286656;
+	Tue,  2 Apr 2024 14:13:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="du+Ob9F4"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Y2B+7rff"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F7A8625B
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Apr 2024 14:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6FB86259;
+	Tue,  2 Apr 2024 14:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712067134; cv=none; b=QPqj4WeSNh4K0mQtrkgllqgQhj4QaPRm+LZm+8OUvP7yybN/CK4xehAY90hL73VhaEP3SvsW5jl4NvbaOqZBFMcLw4F2CL046tyPrJsmQIiQlwQJ6euR4aaQWOOFjS5Wui9GUaNZIoAIuSIvU6YE/TPWxmF9EkBBzJ0L1Yrfj/k=
+	t=1712067230; cv=none; b=db0Plv7fct2Jz2osOdOnziEY7Rg4j0svbRpmDT1N4KXhhs+Chu4sCO1pIOAM/nJx6/4Jhv/9aFXybJOPc00LaoT6FEWaYzccnfC0kTOHiIiHrM4s29+D3JT6xhe+ISQcX4wj6UdNIBXcflShbHOUEqeRnVbIpM5E04pJzCY3gpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712067134; c=relaxed/simple;
-	bh=sqtzLdkkHF7eoc3wt3sssV414hUqto11OAy3YqMHUWw=;
+	s=arc-20240116; t=1712067230; c=relaxed/simple;
+	bh=36P1uOtujsizwW2usw7mfkPhuqvi59s5Nt+PgGGqx0c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PJrtukAUjyl3sr/pOwtFaXfKnwgFlXOMH/DMZVOaBEgm+P69fKKCb4cmleniI9xNR8w+83GDii2Gs6xmaZNCCB9K17o7nSvXDGeu1FfdfuzmpCOoZDnLq18EnvrzqMC7PwRGYIzhcjIbl46qgyjqxefBrVucWIdYuTEyslgXxcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=du+Ob9F4; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d717603aa5so52914451fa.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 07:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1712067131; x=1712671931; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/0cQjXn5RxGYF1hs4ZqgtS6/DW8noiaC0SrX/L7JoeE=;
-        b=du+Ob9F4+riGMx2GBx/d6ZxADfOIBIsApc4oY8aXiJX+aS340x+hD4YD4VRP0d1S9F
-         oxkVlm4TZdrOuuuGSzrPS/Yn+JTJaa0RnHxq6oy8lovlqHWxfx5NzW5rt+ZpQd8Qij0k
-         NxsV8jM/EPPjEZARtXwi/fGL7UD7kFK5WFX//kcvMguY+upa5dWl+TQPpxDKcAkqN6Sy
-         2xswLWN/90joOHUzfHXQP/NR1LC1WdCC0atbfIAUT7LUPcRyGwZkxWyK/iM0AT0gXNVk
-         x3Uu2AIEIxP33e1S4nIToQoiAdJGdyagDVKDbNOxFelUAB78RaScsTqnBOK0OXozAIKR
-         FX6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712067131; x=1712671931;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/0cQjXn5RxGYF1hs4ZqgtS6/DW8noiaC0SrX/L7JoeE=;
-        b=UzZCimIpLscAS/ayBOmxXZ2y0vw+LwNk034Uh4rdeDT72Czpu+5VqrqB6rYdNTrtW6
-         6fIqwjbuekSgd+AdcTVrcQO6fYu9PkfS2KbEGSs2v9K+00jFSRMJRlfeJDrII4vRr38j
-         JPQqEckeao7On8YOQBA6g5VQpW9Q4f3SFXXbIyGfAhm9aciBwBWAdy9Yiw/kEmSyN5Su
-         Huqno97fMBvpBCBTuq+reGhGtXVeECS74csf44Cn/Snt95/jS5H1ZHhma3t9EfoNP5g7
-         JsaQvxcpt2KJ86bRGMQoYi4vkrv0XRpHPg+Fze0vlXBk6GFK0zcHPLfKbvkAoS/9bUGB
-         iQRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVtIiQvhQEG7haFyBuKV53pOUkImF65pnfn65IL56id4pEHqqnH3bLhg/mHMW4JqwN0vWVWPY/p83EpivYL19wgNSa9l67Afwrasbog/js
-X-Gm-Message-State: AOJu0Yw058YiH5ikU51566k/eyBjA08lyYPSMmvjOBywj5Xbtunzu5/e
-	+bFxsEleTCNBIdAJN7uprvlsnBWamEXTabiQzyhGgoss4kiYbsuOv/GiMSggzQI=
-X-Google-Smtp-Source: AGHT+IE6N5GbqAreIPZgVb2waHGGo5ub3tGfpFdJfv9DhQRFznhz1kQgSzFrTE9IPNvatlBuKLWx+w==
-X-Received: by 2002:a2e:9602:0:b0:2d4:2bc5:38dc with SMTP id v2-20020a2e9602000000b002d42bc538dcmr7404927ljh.30.1712067129349;
-        Tue, 02 Apr 2024 07:12:09 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id p14-20020a05600c1d8e00b004156ea0faa0sm3322302wms.4.2024.04.02.07.12.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 07:12:08 -0700 (PDT)
-Date: Tue, 2 Apr 2024 16:12:02 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Haibo Xu <haibo1.xu@intel.com>
-Cc: xiaobo55x@gmail.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] KVM: riscv: selftests: Add SBI base extension test
-Message-ID: <20240402-7bd2b9ed00094befa6927b60@orel>
-References: <20240401082019.2318193-1-haibo1.xu@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LcEW63i967IIA9Khq0BAlyAeMZNST+wDFXPISvneQIwhUhgAYWF93Jq01L9LldYNIiMcyCoMl2pTRbzPcrY9sNmBXRJLiGjyRdfgjwjLTtPaEBR9MzeXFiLAlIj3L5/WMNo9pEJoaTzNSfMQlP/LhOVoQIofUHIcFpg1gN8z5qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Y2B+7rff; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DDFFA5BE2C;
+	Tue,  2 Apr 2024 14:13:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712067226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KA7AVUof0UCDazD9kIzVR9xQgcPzIYUy3fkudyiEwWk=;
+	b=Y2B+7rffqbEm69uPQnaA7mdz2w0eK/38jkGPgDQNkMcQKA374UbUoeFc45NFeiLZyw3USB
+	LOnnWKV3sfhN0kfcSC946P9eJTPVNi6U3gYFCnc5aixSwPz2vhlDAxN1/XGc10nBRVDsys
+	F6ICdlUQn+ZzhTJsur2HWshIBvDb604=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id C9C1A13A90;
+	Tue,  2 Apr 2024 14:13:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id GiIRMZoSDGboYwAAn2gu4w
+	(envelope-from <mkoutny@suse.com>); Tue, 02 Apr 2024 14:13:46 +0000
+Date: Tue, 2 Apr 2024 16:13:41 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+	Valentin Schneider <vschneid@redhat.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Alex Shi <alexs@kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
+ synchronous
+Message-ID: <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+References: <20240401145858.2656598-1-longman@redhat.com>
+ <20240401145858.2656598-2-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="m3jtt4lb3pupq4nw"
+Content-Disposition: inline
+In-Reply-To: <20240401145858.2656598-2-longman@redhat.com>
+X-Spam-Score: -1.19
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-1.19 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-0.96)[-0.965];
+	 MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.20)[-0.999];
+	 RCPT_COUNT_TWELVE(0.00)[22];
+	 SIGNED_PGP(-2.00)[];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(2.20)[];
+	 MIME_TRACE(0.00)[0:+,1:+,2:~];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.52)[80.23%];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from]
+X-Spam-Level: 
+X-Rspamd-Queue-Id: DDFFA5BE2C
+
+
+--m3jtt4lb3pupq4nw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240401082019.2318193-1-haibo1.xu@intel.com>
 
-On Mon, Apr 01, 2024 at 04:20:18PM +0800, Haibo Xu wrote:
-> This is the first patch to enable the base extension selftest
-> for the SBI implementation in KVM. Test for other extensions
-> will be added later.
+Hello Waiman.
 
-I'm not sure we want SBI tests in KVM selftests since we already
-plan to add them to kvm-unit-tests, where they can be used to
-test both KVM's SBI implementation and M-mode firmware implementations.
-If we also have them here, then we'll end up duplicating that effort.
+(I have no opinion on the overall locking reworks, only the bits about
+v1 migrations caught my attention.)
 
-I do like the approach of only checking for an error, rather than
-also for a value, for these ID getters. In kvm-unit-tests we're
-currently requiring that the expected value be passed in, otherwise
-the whole test is skipped. We could fallback to only checking for
-an error instead, as is done here.
+On Mon, Apr 01, 2024 at 10:58:57AM -0400, Waiman Long <longman@redhat.com> wrote:
+...
+> @@ -4383,12 +4377,20 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
+>  	/*
+>  	 * Move tasks to the nearest ancestor with execution resources,
+>  	 * This is full cgroup operation which will also call back into
+> -	 * cpuset. Should be done outside any lock.
+> +	 * cpuset. Execute it asynchronously using workqueue.
+
+                   ...to avoid deadlock on cpus_read_lock
+
+Is this the reason?
+Also, what happens with the tasks in the window till the migration
+happens?
+Is it handled gracefully that their cpu is gone?
+
+
+> -	if (is_empty) {
+> -		mutex_unlock(&cpuset_mutex);
+> -		remove_tasks_in_empty_cpuset(cs);
+> -		mutex_lock(&cpuset_mutex);
+> +	if (is_empty && css_tryget_online(&cs->css)) {
+> +		struct cpuset_remove_tasks_struct *s;
+> +
+> +		s = kzalloc(sizeof(*s), GFP_KERNEL);
+
+Is there a benefit of having a work for each cpuset?
+Instead of traversing whole top_cpuset once in the async work.
+
 
 Thanks,
-drew
+Michal
 
-> 
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |  1 +
->  .../selftests/kvm/include/riscv/processor.h   |  8 +-
->  tools/testing/selftests/kvm/riscv/sbi_test.c  | 95 +++++++++++++++++++
->  3 files changed, 103 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/kvm/riscv/sbi_test.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 741c7dc16afc..a6acbbcad757 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -189,6 +189,7 @@ TEST_GEN_PROGS_s390x += rseq_test
->  TEST_GEN_PROGS_s390x += set_memory_region_test
->  TEST_GEN_PROGS_s390x += kvm_binary_stats_test
->  
-> +TEST_GEN_PROGS_riscv += riscv/sbi_test
->  TEST_GEN_PROGS_riscv += arch_timer
->  TEST_GEN_PROGS_riscv += demand_paging_test
->  TEST_GEN_PROGS_riscv += dirty_log_test
-> diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-> index ce473fe251dd..df530ac751c4 100644
-> --- a/tools/testing/selftests/kvm/include/riscv/processor.h
-> +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-> @@ -178,7 +178,13 @@ enum sbi_ext_id {
->  };
->  
->  enum sbi_ext_base_fid {
-> -	SBI_EXT_BASE_PROBE_EXT = 3,
-> +	SBI_EXT_BASE_GET_SPEC_VERSION = 0,
-> +	SBI_EXT_BASE_GET_IMP_ID,
-> +	SBI_EXT_BASE_GET_IMP_VERSION,
-> +	SBI_EXT_BASE_PROBE_EXT,
-> +	SBI_EXT_BASE_GET_MVENDORID,
-> +	SBI_EXT_BASE_GET_MARCHID,
-> +	SBI_EXT_BASE_GET_MIMPID,
->  };
->  
->  struct sbiret {
-> diff --git a/tools/testing/selftests/kvm/riscv/sbi_test.c b/tools/testing/selftests/kvm/riscv/sbi_test.c
-> new file mode 100644
-> index 000000000000..b9378546e3b6
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/riscv/sbi_test.c
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * sbi_test - SBI API test for KVM's SBI implementation.
-> + *
-> + * Copyright (c) 2024 Intel Corporation
-> + *
-> + * Test cover the following SBI extentions:
-> + *  - Base: All functions in this extension should be supported
-> + */
-> +
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "test_util.h"
-> +
-> +/*
-> + * Test that all functions in the base extension must be supported
-> + */
-> +static void base_ext_guest_code(void)
-> +{
-> +	struct sbiret ret;
-> +
-> +	/*
-> +	 * Since the base extension was introduced in SBI Spec v0.2,
-> +	 * assert if the implemented SBI version is below 0.2.
-> +	 */
-> +	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_SPEC_VERSION, 0,
-> +			0, 0, 0, 0, 0);
-> +	__GUEST_ASSERT(!ret.error && ret.value >= 2, "Get Spec Version Error: ret.error=%ld, "
-> +			"ret.value=%ld\n", ret.error, ret.value);
-> +
-> +	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_IMP_ID, 0,
-> +			0, 0, 0, 0, 0);
-> +	__GUEST_ASSERT(!ret.error && ret.value == 3, "Get Imp ID Error: ret.error=%ld, "
-> +			"ret.value=%ld\n",
-> +			ret.error, ret.value);
-> +
-> +	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_IMP_VERSION, 0,
-> +			0, 0, 0, 0, 0);
-> +	__GUEST_ASSERT(!ret.error, "Get Imp Version Error: ret.error=%ld\n", ret.error);
-> +
-> +	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_PROBE_EXT, SBI_EXT_BASE,
-> +			0, 0, 0, 0, 0);
-> +	__GUEST_ASSERT(!ret.error && ret.value == 1, "Probe ext Error: ret.error=%ld, "
-> +			"ret.value=%ld\n",
-> +			ret.error, ret.value);
-> +
-> +	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_MVENDORID, 0,
-> +			0, 0, 0, 0, 0);
-> +	__GUEST_ASSERT(!ret.error, "Get Machine Vendor ID Error: ret.error=%ld\n", ret.error);
-> +
-> +	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_MARCHID, 0,
-> +			0, 0, 0, 0, 0);
-> +	__GUEST_ASSERT(!ret.error, "Get Machine Arch ID Error: ret.error=%ld\n", ret.error);
-> +
-> +	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_MIMPID, 0,
-> +			0, 0, 0, 0, 0);
-> +	__GUEST_ASSERT(!ret.error, "Get Machine Imp ID Error: ret.error=%ld\n", ret.error);
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static void sbi_base_ext_test(void)
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +	struct ucall uc;
-> +
-> +	vm = vm_create_with_one_vcpu(&vcpu, base_ext_guest_code);
-> +	while (1) {
-> +		vcpu_run(vcpu);
-> +		TEST_ASSERT(vcpu->run->exit_reason == UCALL_EXIT_REASON,
-> +			    "Unexpected exit reason: %u (%s),",
-> +			    vcpu->run->exit_reason, exit_reason_str(vcpu->run->exit_reason));
-> +
-> +		switch (get_ucall(vcpu, &uc)) {
-> +		case UCALL_DONE:
-> +			goto done;
-> +		case UCALL_ABORT:
-> +			fprintf(stderr, "Guest assert failed!\n");
-> +			REPORT_GUEST_ASSERT(uc);
-> +		default:
-> +			TEST_FAIL("Unexpected ucall %lu", uc.cmd);
-> +		}
-> +	}
-> +
-> +done:
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(void)
-> +{
-> +	sbi_base_ext_test();
-> +
-> +	return 0;
-> +}
-> -- 
-> 2.34.1
-> 
+
+--m3jtt4lb3pupq4nw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZgwSkwAKCRAGvrMr/1gc
+jku7AP4wunT3qTbn0gNfnNlgS+aZURi7eScVHpxboPBoGEeorgEA0EEpGH79hJUs
+C5xcOZLm/5ZRgE5MXKIx0kiWKBGt9QY=
+=8lGP
+-----END PGP SIGNATURE-----
+
+--m3jtt4lb3pupq4nw--
 
