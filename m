@@ -1,73 +1,72 @@
-Return-Path: <linux-kselftest+bounces-7056-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3357389679E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 10:07:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF5948967AA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 10:07:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 644931C20DE5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 08:07:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E5A41F24EAC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 08:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9000C7FBC6;
-	Wed,  3 Apr 2024 08:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD5C8174C;
+	Wed,  3 Apr 2024 08:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="TSeifkcC"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="kj1jNd4T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC4B7A15C
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 08:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5C48004D
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 08:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712131531; cv=none; b=m6IfhwEF8Gp7OPzcZ9+3Ap3WWgMXjGWFbtrXzF1eXFFUcM4VoVGH//STXu39Rs3jJYhuz2eJHqp7yrbRr+UXZbDOYsq0RT+UpgPlu7Pm/cjgL8MJTRasiUdcuXZZ4VWvQXOzvVfYIuFriEXX0c3fHA3+q/ksHJiBtXiB6twW8S0=
+	t=1712131533; cv=none; b=rb4jJccuylGhw7nRafVHjRxZf3eRnJsFhToKswao0iFcH6Q/OqupzdQgMubBpzTvw2ozl3SmrI2X7hoQWpr9GtmXaTVWSurmmwiHp9PulZh0L8XejldPCYb/eCwnyZHyC5m0q/zmBxDqOCNAWlQs3TWAMB6fI344WQ0zbmi1Pp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712131531; c=relaxed/simple;
-	bh=qmTer1L5IWEJQe0rkUy5cvb4CMl5u/8y+hPoEZoMutA=;
+	s=arc-20240116; t=1712131533; c=relaxed/simple;
+	bh=es6oj90niK7eIua41w4bb0VuAogviBB5JDOj1DIbVoo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=R5ARgN4+DYOa1+ItuwejkTMJWKT+0B1gYSle0f/rtqg9x9VTI29KnmGw9D5z89hQMe/ybuWdlTfpG/wileiCgOXlJ/ZZ7z3nMHpqsmVqZBX15Az69l0Vc+RB/Jygg+/RXak1JJmpwy6r+oKXbn6tfG2ZLGMKt7U3w+Flh4yXwo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=TSeifkcC; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=h3mD3c5JnHdBfSqR4CrkSHuf5LgbUeTePEqUXXL187IBur9RDt85vutEfpJAQggTUUhO2caozgzhUPnIdmmjxaeMwGDxlz70bT+2rn20SnIEDXz5Ie5z0PPeFxsV2PZ13NKfhxGr8CQC4nzJNfwd4NpTr6vbRUDif0t4O+YPVyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=kj1jNd4T; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1e2232e30f4so46283725ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 01:05:29 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1e28856ed7aso8288135ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 01:05:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712131529; x=1712736329; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712131531; x=1712736331; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2HMUEh/ouJpwrjadx4E8ELJ1oGZIEAqlVNHNOiveHPA=;
-        b=TSeifkcCVel9tg4BDxNqVioc8wG9MlkoJ3zjDFmQ42yLVyPQQ8/t+ga6mhJbasv/cw
-         kdJkdlohOprTHDTHFncMalAz2OKXkpESH3KiBcjPJ3O0ROPYzDMLNerLFiJXwcaURbUe
-         3mI2ilSR2OFLFlLOLX1B4cW/7jrw41WmIldFZwK2rPx7Q4ZzK6Bw97v8K/ZJs5yHr3TS
-         6SlM4sakMFvnbC9Gbl3qb8BFO+Y+NQVomRmg8WnYURs55sBXVKzOufTz7YG/ZqSp8MLp
-         ZVpChGoH1VXBdxE7bFMf9Dp0wm1JhxgFxm0n5HeRKbSBSShB8oHiu3umukjLxijTUd35
-         srDg==
+        bh=+MJsU2/1DVF77yTSQMrmRq+eYVFGn04LSwUVmAHv4W8=;
+        b=kj1jNd4T8fIHxcVBo6zc+oA4iL6egZxuQwfHFbT8z3Lqfur2HrQO/pwmBQsivMY8rW
+         v2T+XavCkXLQlN1z/o+pjAuh/mRhz6/BQmNZs1SO/T1YyWu3pBcoh0khpDdz/iJmJnVF
+         Jml3E+a2iYTsOq3E+xSYwN1y/zHwAnUo6MSpkVkQmX4o0j9FdYjhB5pOnUbR1grpcjaT
+         IEEeW1IXghX2DWT/wn5TX8eIp8wAhfi9jq53iL5+4rs8oI0gu0zHkkGRYy2naSN73QrG
+         bDtEoGVgdXEEjlIIofYSt7+rRLudeP3zVh77IjZUHNNpwg3GHe6De9D5zbgQ7jlZWRBP
+         NLAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712131529; x=1712736329;
+        d=1e100.net; s=20230601; t=1712131531; x=1712736331;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2HMUEh/ouJpwrjadx4E8ELJ1oGZIEAqlVNHNOiveHPA=;
-        b=ib9UFhmzn6ctWrvpoY7Tu9btfOlBGOX/PuOSH+WWtrgWx0YNeX1MxgNH12wJpfUuSV
-         eMZ6/DL7b+vlzVf7UbaSDcYxPudyQk1SS+1dBh5HDdia7iEs6m7IHTvlsiUctuZZ2Dgw
-         8tUUjnpDOK2C80EIG0/QXw5lzNB7+Eltul8lTbEt37+gJNvCwk33oRsU/SFUCqQWojwL
-         AKGO2hQLisDRXyoXxj4NPRQOR5AbIpUi9WvjZzm5pvg59/CpTDeL2PREmODlDZ0M+DuB
-         iPvrXJ+Nwr7NeSqJNZD9uuQG8XPH98om7tGDhi9I+S/eCJ8fYeKCZ0RPH3CLyn4KOJlD
-         H93w==
-X-Forwarded-Encrypted: i=1; AJvYcCVDi5RixXwGcY6YnMrkg/nCVLC727LuDPHeaN3JpLxhTzoBp3HS8WAJ2mGq3BTZL5JmnVMNwEgLwsma2p/cRgOI2bZFHISCna+ZFKvyU4er
-X-Gm-Message-State: AOJu0Yz7eB08WhO+xAzaGJlBq8vYGrMR6UPKkyo87RXcnqluLqZ/sTus
-	aV+C+Ib4M6NepPKGKOEaqXjCGPJC4osrN225V5+3ELVbYFRpnCbd4uBTefG3FRCV/rFz0PoGbfg
-	d
-X-Google-Smtp-Source: AGHT+IF30gBaFjuZamH6gB+fLa8VQAOCDXL32p+FdETcNWyCBYGk0g9s0A7zOmyK2RvO8zqC4rEDCA==
-X-Received: by 2002:a17:902:aa04:b0:1e2:23b8:98dd with SMTP id be4-20020a170902aa0400b001e223b898ddmr14090965plb.69.1712131529484;
-        Wed, 03 Apr 2024 01:05:29 -0700 (PDT)
+        bh=+MJsU2/1DVF77yTSQMrmRq+eYVFGn04LSwUVmAHv4W8=;
+        b=FnScc6KvvVibvWmZ9jji/8pd6ZWIngziVeXky7xZ0bGI/JNjjI+MWyN1E05W8BFjrN
+         KfXt6YoxNAGp3SDV/zcYA/YDWGjhQ7Sz+5ndgp+Qxp8gRf18z6FQnsrupTpppgRey+qa
+         8vLrhd/kLKn2lCIJwvf+O/nMc88hAxMM4zv+eASpW9up2p4/icZ2QgJWfsrrKI5CtElo
+         QGkbDDWaCm36KHKMQ7uNes3urJ2UxOin0Pa1ubaiyB7G6+nGBb0+fRWsi9BT9tT5hotl
+         E8P4q7KWVIEqOHmqfEpPXe68gbwDs80E6ZVbicdAO4kCtvQ9rD/pubfckGmTJ1hh3IG2
+         8fBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWmgnLS65K0u0iRMUcW5EULWKioMcH0Lv4hZNorvXRKrl7hKXf2pRgNirGVYIy5GUIQcv91ZpsI9N/d7X+DJ01MXUqtQ62got8Wd7yjYrV2
+X-Gm-Message-State: AOJu0YwoMxPAQJPdDMhp9jEmIbzWugn5GpPJvGhPdB/MBDslxKYqghQP
+	U9shgG/Cd7Ts/c+Z4MD6K7zYiWOY4v+PB1cm4+gPqnBGZ7dtnJ4gtqAU6qrBukk=
+X-Google-Smtp-Source: AGHT+IE6hcM+iluLyfs2xAMwl4nidxEf2cHLsogRdu+mNxI8DxtzYjnOXL+jL/8fbjTuoDpYxOz/uQ==
+X-Received: by 2002:a17:903:244c:b0:1e2:6191:f6ae with SMTP id l12-20020a170903244c00b001e26191f6aemr2389190pls.0.1712131531142;
+        Wed, 03 Apr 2024 01:05:31 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b001e0b5d49fc7sm12557229plg.161.2024.04.03.01.05.27
+        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b001e0b5d49fc7sm12557229plg.161.2024.04.03.01.05.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 01:05:28 -0700 (PDT)
+        Wed, 03 Apr 2024 01:05:30 -0700 (PDT)
 From: Atish Patra <atishp@rivosinc.com>
 To: linux-kernel@vger.kernel.org
 Cc: Atish Patra <atishp@rivosinc.com>,
@@ -91,9 +90,9 @@ Cc: Atish Patra <atishp@rivosinc.com>,
 	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
 	Will Deacon <will@kernel.org>,
 	x86@kernel.org
-Subject: [PATCH v5 08/22] RISC-V: KVM: Fix the initial sample period value
-Date: Wed,  3 Apr 2024 01:04:37 -0700
-Message-Id: <20240403080452.1007601-9-atishp@rivosinc.com>
+Subject: [PATCH v5 09/22] RISC-V: KVM: Rename the SBI_STA_SHMEM_DISABLE to a generic name
+Date: Wed,  3 Apr 2024 01:04:38 -0700
+Message-Id: <20240403080452.1007601-10-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240403080452.1007601-1-atishp@rivosinc.com>
 References: <20240403080452.1007601-1-atishp@rivosinc.com>
@@ -105,28 +104,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The initial sample period value when counter value is not assigned
-should be set to maximum value supported by the counter width.
-Otherwise, it may result in spurious interrupts.
+SBI_STA_SHMEM_DISABLE is a macro to invoke disable shared memory
+commands. As this can be invoked from other SBI extension context
+as well, rename it to more generic name as SBI_SHMEM_DISABLE.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/vcpu_pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/include/asm/sbi.h  | 2 +-
+ arch/riscv/kernel/paravirt.c  | 6 +++---
+ arch/riscv/kvm/vcpu_sbi_sta.c | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-index 86391a5061dd..cee1b9ca4ec4 100644
---- a/arch/riscv/kvm/vcpu_pmu.c
-+++ b/arch/riscv/kvm/vcpu_pmu.c
-@@ -39,7 +39,7 @@ static u64 kvm_pmu_get_sample_period(struct kvm_pmc *pmc)
- 	u64 sample_period;
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index 9aada4b9f7b5..f31650b10899 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -277,7 +277,7 @@ struct sbi_sta_struct {
+ 	u8 pad[47];
+ } __packed;
  
- 	if (!pmc->counter_val)
--		sample_period = counter_val_mask + 1;
-+		sample_period = counter_val_mask;
- 	else
- 		sample_period = (-pmc->counter_val) & counter_val_mask;
+-#define SBI_STA_SHMEM_DISABLE		-1
++#define SBI_SHMEM_DISABLE		-1
  
+ /* SBI spec version fields */
+ #define SBI_SPEC_VERSION_DEFAULT	0x1
+diff --git a/arch/riscv/kernel/paravirt.c b/arch/riscv/kernel/paravirt.c
+index 0d6225fd3194..fa6b0339a65d 100644
+--- a/arch/riscv/kernel/paravirt.c
++++ b/arch/riscv/kernel/paravirt.c
+@@ -62,7 +62,7 @@ static int sbi_sta_steal_time_set_shmem(unsigned long lo, unsigned long hi,
+ 	ret = sbi_ecall(SBI_EXT_STA, SBI_EXT_STA_STEAL_TIME_SET_SHMEM,
+ 			lo, hi, flags, 0, 0, 0);
+ 	if (ret.error) {
+-		if (lo == SBI_STA_SHMEM_DISABLE && hi == SBI_STA_SHMEM_DISABLE)
++		if (lo == SBI_SHMEM_DISABLE && hi == SBI_SHMEM_DISABLE)
+ 			pr_warn("Failed to disable steal-time shmem");
+ 		else
+ 			pr_warn("Failed to set steal-time shmem");
+@@ -84,8 +84,8 @@ static int pv_time_cpu_online(unsigned int cpu)
+ 
+ static int pv_time_cpu_down_prepare(unsigned int cpu)
+ {
+-	return sbi_sta_steal_time_set_shmem(SBI_STA_SHMEM_DISABLE,
+-					    SBI_STA_SHMEM_DISABLE, 0);
++	return sbi_sta_steal_time_set_shmem(SBI_SHMEM_DISABLE,
++					    SBI_SHMEM_DISABLE, 0);
+ }
+ 
+ static u64 pv_time_steal_clock(int cpu)
+diff --git a/arch/riscv/kvm/vcpu_sbi_sta.c b/arch/riscv/kvm/vcpu_sbi_sta.c
+index d8cf9ca28c61..5f35427114c1 100644
+--- a/arch/riscv/kvm/vcpu_sbi_sta.c
++++ b/arch/riscv/kvm/vcpu_sbi_sta.c
+@@ -93,8 +93,8 @@ static int kvm_sbi_sta_steal_time_set_shmem(struct kvm_vcpu *vcpu)
+ 	if (flags != 0)
+ 		return SBI_ERR_INVALID_PARAM;
+ 
+-	if (shmem_phys_lo == SBI_STA_SHMEM_DISABLE &&
+-	    shmem_phys_hi == SBI_STA_SHMEM_DISABLE) {
++	if (shmem_phys_lo == SBI_SHMEM_DISABLE &&
++	    shmem_phys_hi == SBI_SHMEM_DISABLE) {
+ 		vcpu->arch.sta.shmem = INVALID_GPA;
+ 		return 0;
+ 	}
 -- 
 2.34.1
 
