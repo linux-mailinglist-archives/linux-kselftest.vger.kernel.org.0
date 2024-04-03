@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-7043-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADCB98962AF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 04:51:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE8B08962BF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 05:06:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28F522879D9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 02:51:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 555C21F222CD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 03:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0821B950;
-	Wed,  3 Apr 2024 02:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237191BC58;
+	Wed,  3 Apr 2024 03:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="RPxbavw6"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="dVSIJEl9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146611FA4
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 02:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FA01BC3C
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 03:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712112665; cv=none; b=lqMM/oqflWRu56cMHhmKzDpjCqRcCNHDoT0/dMsjNBmsjdh9b3oSbynh+M3kQ9zimF2oN0NVm4qB4H/JnU+hCbsn9rBGe2Kmqtq7Tdi/SNjm4Y9Fb6UOU4n96Tw378h3UfiwAUbRLu+SgvN6PswGoQ5EboI1tcj+cl/uH7r+8bE=
+	t=1712113598; cv=none; b=dcqYardlq5mIGfg6dmnZPBMMGnEKUBYVxS74TuOPPSRPHqnES4d0hFcV1SLO88mghPeacSTvFAFWh2YkOtNusQZEEY9Kk0RiukI3bE1Oo5n2C6OM8GNrVhI5CiiscTCcRHmblnAv0llmqJjcTSlt/8nzTU24vEW6VJ9xEfFYbUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712112665; c=relaxed/simple;
-	bh=UD1id9vQsm3zxRZyXz3MGDJDaSN5smpRKuo3BMIhJS4=;
+	s=arc-20240116; t=1712113598; c=relaxed/simple;
+	bh=gfRBx+4Y9iM1sMe+Ux972EkdKEGN5qo3qtP6v7LkPqo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d/sP9vYa/4P5G/3lp6BpQBXQThtjpNy7XH4+X7ZUOIHc47+S2Ckb4UNz52bFzZRDDov6VvWqsfGzp808tByFLcQWoyKDNXSwdAz9+8mXLELRXqfC5EnackwGy1n2SlKma8UYlfCqmQ7XnrM8yRIlgTpbmvITG+STZQ1vg0d6y40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=RPxbavw6; arc=none smtp.client-ip=209.85.210.47
+	 In-Reply-To:Content-Type; b=J2YVQJsqQ+SE+bLu/khBd0HoNpwW6zXfJphxlgYNyqeyvs1yw9Z7oRNn+G6P3RusvJBGn+2DFL6FJBYBFas8Es3i9WMBD3Y/3cBNbRqzhRqIZNhO4swd5pTPxWlKbWGBcZCPP8Sfd0s7OhFcJX5Wf5HXH0qeCDiP0fwQ49ascuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=dVSIJEl9; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6e707210ab9so2391274a34.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 19:51:03 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e782e955adso5671184b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 20:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1712112663; x=1712717463; darn=vger.kernel.org;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1712113595; x=1712718395; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KvNCN7b/5A+DFcsDCFKgdbvgot6yvnB3BUodDkQmmg0=;
-        b=RPxbavw6iMx4vl4LFfRqssmlpHg3qwUHBkwgwdhG4Ip4OQYzuLt6t253T9d3D7LO79
-         vxxVNYHLqGv7Kr7NrmCgqYO5mWb6Sh667cKVbmQ9YmG2f9KOnWWiVwstiWwh2OajIKvi
-         hBwNQmBx/fyEbaE3Wf9wA3YRR2lERQGa46FSKvymNXM9JD7s/xLnwMI5YQza+xw3/8aL
-         wTxxyqkSLfjIffRZBcMS/+/nWvCu4w6Fy9JkS4R4c1kH1BK5Qglj/I2VwcbDcb3gt3Dh
-         eiNYltTd1alTs06rDTlRGY5FCrnpaFmKV//5+dUCsRSBny7g6cMNDRCcY+58tNAldNxQ
-         TaQQ==
+        bh=nyLbNqsjlfVWogT37V/VMxi7jOiuzGi7H5ixOhAI8Og=;
+        b=dVSIJEl9auDM3f0Cl1Z2PybMT7kASu5BfrzCygXL4DSGzs5wIsVmKPgJHqFQMoU3Ti
+         /ODIdWy8vPHPWQAXQH10tfpZ697g+J2F1zLYbpEzbKR2sPuLpXEvhUqn6RBMibdsrktF
+         kXtw6Ph/KFy0WlzeJSYwtapwhFnRFGtLviYPEzNR33CmtXSYs/qk6QxNxZ+UR5zkfDTY
+         1Cs2EljpgzpaVtsoilxZcfHFR1U/JEChGlR/c/pbfguoB7mdGVuBqWJOYMN+fHet+rMR
+         c5B8U7WtBNTTRSeP5tmn2QhGVBmuT8OCe7rkIuzFTwMzKqe/CvTCxKEZ3CzpFIvPegp4
+         pljQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712112663; x=1712717463;
+        d=1e100.net; s=20230601; t=1712113595; x=1712718395;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KvNCN7b/5A+DFcsDCFKgdbvgot6yvnB3BUodDkQmmg0=;
-        b=nbpxFqJ+JoqJiUn07NsVEG2gNQ1gs4NmMnjFv+5plL74OfBstI6LnHcsYtSkPxbf4+
-         VW5X1JYBtiuoaGqmNShYOE7aDcbXvbgDonzB2v/bCjfBTEelSLwI+sdTiTl26wSfP4gp
-         aLw8OQWeWIASZ0IZ1nMbBCMu28CXzbBZ8Gxz5qwMKSxLtydNkYoCXooP3c8YZpeg4DUe
-         Nw6Y2kdIavSpBMvIrnzLzTh1LbPcnAbgSH1BT4YeOtL3qpYYMoT8471PAsrgBLeYM6Mt
-         bHP+QXt35xD2wTq9KBu8GHCDx/4eDkotBkIIiU0ak9Imupx7I3pmG5gxXDR+AhH9uOeh
-         J7YQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXV86f95+8QoWtaQDrNu0vlHgWpHqLi1/xsoRMVD6RMWsFX5SqdDp2oSLID1yV9ZH99k+0EaIRMgIybXMjPiU3OCXSjg3hER9YpGIa1iCZi
-X-Gm-Message-State: AOJu0YzKSyjvZmbfEQOyU6nEYhf7NjzY1+qJOVjgcpJf21cZdbr1ivWK
-	kM1LRdSPYwqJHugXqKpYg/Gj78cbEVcTgFx5KncRtVZWLBUz4L/sE+C7+lgR9ps=
-X-Google-Smtp-Source: AGHT+IFLNbA5tGs9D8K1m995WGY502JvTsOPr8auGr+q5hn2J89zIUTgZGaaR1uVoTdH2Xg7j02ZUQ==
-X-Received: by 2002:a9d:6f12:0:b0:6e9:2e80:5a0d with SMTP id n18-20020a9d6f12000000b006e92e805a0dmr2534695otq.28.1712112663022;
-        Tue, 02 Apr 2024 19:51:03 -0700 (PDT)
+        bh=nyLbNqsjlfVWogT37V/VMxi7jOiuzGi7H5ixOhAI8Og=;
+        b=ikCJXrgxq4bKGZEBkFqAGmiMarQ9Fq9Rf2VCbYfK2dl+9K9yFDyr00Lgl9yKRCWXjL
+         qAOT8XUMbz4SH26BRy3wlYuwfFwNwfLipc5HFWXMb71S3mmGrB8HWbm3w8/bt94S26FQ
+         RGNQVMtyPleM5PWxch/yYMA7UZONVMM5kucRLhJuiLZTKg92aQwNWRe7EucZc8iHuVlQ
+         XN7IUSqVdawMhkLDJODIPC+eTyY/jc4ykvxvlZDRveb5YueEOlbIrgxWwEDyMPg+WnC7
+         kBsHKeeth1TNYwg6W0kfwo44PcojkMWgSmHq59h6RhO8jpq/m4exF5DMOkBzuhpuwIf4
+         LXgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUd6d0wdOs2vxqaAKi0jTZtThGt3RCaQXZ9+s3W4oZLY9TZv+kyaYdjHJS2BCGdqp4+pErNLOCGpqvl1gBuuCLRjF8w3BAp9en9wEWjITOA
+X-Gm-Message-State: AOJu0YwwXwekzIEajLO2CsrAbE05hpjlNgtF1OFVSocMT31OjZEt0pyp
+	g3CB/tPzV7jxLbqZ60tIPD/S4SfV/H7U+Jz2R9zvZ/tVGuZo7CRCPxElbs+Sr6s=
+X-Google-Smtp-Source: AGHT+IEw9B57KJAiOx1SXzebZJ0dc/cCWqqLsrVE1ofZ6/aUx5wrJKSi79X+hdpFZ/W3MMZP9MHEUQ==
+X-Received: by 2002:a05:6a00:180f:b0:6eb:3c2a:90ab with SMTP id y15-20020a056a00180f00b006eb3c2a90abmr1948515pfa.30.1712113595548;
+        Tue, 02 Apr 2024 20:06:35 -0700 (PDT)
 Received: from [192.168.1.26] (71-212-18-124.tukw.qwest.net. [71.212.18.124])
-        by smtp.gmail.com with ESMTPSA id n28-20020a63591c000000b005dcc8a3b26esm10325041pgb.16.2024.04.02.19.51.02
+        by smtp.gmail.com with ESMTPSA id k8-20020aa78208000000b006eaad01817esm10660094pfi.105.2024.04.02.20.06.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Apr 2024 19:51:02 -0700 (PDT)
-Message-ID: <7fd250f7-30e9-4392-ae1e-c3664222f9de@davidwei.uk>
-Date: Tue, 2 Apr 2024 19:51:01 -0700
+        Tue, 02 Apr 2024 20:06:35 -0700 (PDT)
+Message-ID: <b39992a9-ebb5-40e1-a00a-ea6019346115@davidwei.uk>
+Date: Tue, 2 Apr 2024 20:06:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,147 +76,326 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 5/7] netdevsim: report stats by default, like a
- real device
+Subject: Re: [PATCH net-next 6/7] selftests: drivers: add scaffolding for
+ Netlink tests in Python
 Content-Language: en-GB
 To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
 Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
  shuah@kernel.org, sdf@google.com, donald.hunter@gmail.com,
  linux-kselftest@vger.kernel.org, petrm@nvidia.com
 References: <20240402010520.1209517-1-kuba@kernel.org>
- <20240402010520.1209517-6-kuba@kernel.org>
+ <20240402010520.1209517-7-kuba@kernel.org>
 From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20240402010520.1209517-6-kuba@kernel.org>
+In-Reply-To: <20240402010520.1209517-7-kuba@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 2024-04-01 18:05, Jakub Kicinski wrote:
-> Real devices should implement qstats. Devices which support
-> pause or FEC configuration should also report the relevant stats.
-> 
-> nsim was missing FEC stats completely, some of the qstats
-> and pause stats required toggling a debugfs knob.
-> 
-> Note that the tests which used pause always initialize the setting
-> so they shouldn't be affected by the different starting value.
+> Add drivers/net as a target for mixed-use tests.
+> The setup is expected to work similarly to the forwarding tests.
+> Since we only need one interface (unlike forwarding tests)
+> read the target device name from NETIF. If not present we'll
+> try to run the test against netdevsim.
 > 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
->  drivers/net/netdevsim/ethtool.c | 11 ++++++++
->  drivers/net/netdevsim/netdev.c  | 45 +++++++++++++++++++++++++++++++++
->  2 files changed, 56 insertions(+)
+>  tools/testing/selftests/Makefile              |   3 +-
+>  tools/testing/selftests/drivers/net/Makefile  |   7 ++
+>  .../testing/selftests/drivers/net/README.rst  |  30 +++++
+>  .../selftests/drivers/net/lib/py/__init__.py  |  17 +++
+>  .../selftests/drivers/net/lib/py/env.py       |  41 ++++++
+>  .../testing/selftests/net/lib/py/__init__.py  |   1 +
+>  tools/testing/selftests/net/lib/py/nsim.py    | 118 ++++++++++++++++++
+>  7 files changed, 216 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/drivers/net/Makefile
+>  create mode 100644 tools/testing/selftests/drivers/net/README.rst
+>  create mode 100644 tools/testing/selftests/drivers/net/lib/py/__init__.py
+>  create mode 100644 tools/testing/selftests/drivers/net/lib/py/env.py
+>  create mode 100644 tools/testing/selftests/net/lib/py/nsim.py
 > 
-> diff --git a/drivers/net/netdevsim/ethtool.c b/drivers/net/netdevsim/ethtool.c
-> index bd546d4d26c6..3f9c9327f149 100644
-> --- a/drivers/net/netdevsim/ethtool.c
-> +++ b/drivers/net/netdevsim/ethtool.c
-> @@ -140,6 +140,13 @@ nsim_set_fecparam(struct net_device *dev, struct ethtool_fecparam *fecparam)
->  	return 0;
->  }
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 0cffdfb4b116..d015ec14a85e 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -17,6 +17,7 @@ TARGETS += devices
+>  TARGETS += dmabuf-heaps
+>  TARGETS += drivers/dma-buf
+>  TARGETS += drivers/s390x/uvdevice
+> +TARGETS += drivers/net
+>  TARGETS += drivers/net/bonding
+>  TARGETS += drivers/net/team
+>  TARGETS += dt
+> @@ -117,7 +118,7 @@ TARGETS_HOTPLUG = cpu-hotplug
+>  TARGETS_HOTPLUG += memory-hotplug
 >  
-> +static void
-> +nsim_get_fec_stats(struct net_device *dev, struct ethtool_fec_stats *fec_stats)
-> +{
-> +	fec_stats->corrected_blocks.total = 123;
-> +	fec_stats->uncorrectable_blocks.total = 4;
-> +}
+>  # Networking tests want the net/lib target, include it automatically
+> -ifneq ($(filter net ,$(TARGETS)),)
+> +ifneq ($(filter net drivers/net,$(TARGETS)),)
+>  ifeq ($(filter net/lib,$(TARGETS)),)
+>  	override TARGETS := $(TARGETS) net/lib
+>  endif
+> diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+> new file mode 100644
+> index 000000000000..379cdb1960a7
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/Makefile
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
 > +
->  static int nsim_get_ts_info(struct net_device *dev,
->  			    struct ethtool_ts_info *info)
->  {
-> @@ -163,6 +170,7 @@ static const struct ethtool_ops nsim_ethtool_ops = {
->  	.set_channels			= nsim_set_channels,
->  	.get_fecparam			= nsim_get_fecparam,
->  	.set_fecparam			= nsim_set_fecparam,
-> +	.get_fec_stats			= nsim_get_fec_stats,
->  	.get_ts_info			= nsim_get_ts_info,
->  };
->  
-> @@ -182,6 +190,9 @@ void nsim_ethtool_init(struct netdevsim *ns)
->  
->  	nsim_ethtool_ring_init(ns);
->  
-> +	ns->ethtool.pauseparam.report_stats_rx = true;
-> +	ns->ethtool.pauseparam.report_stats_tx = true;
+> +TEST_INCLUDES := $(wildcard lib/py/*.py)
 > +
->  	ns->ethtool.fec.fec = ETHTOOL_FEC_NONE;
->  	ns->ethtool.fec.active_fec = ETHTOOL_FEC_NONE;
->  
-> diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-> index 8330bc0bcb7e..096ac0abbc02 100644
-> --- a/drivers/net/netdevsim/netdev.c
-> +++ b/drivers/net/netdevsim/netdev.c
-> @@ -19,6 +19,7 @@
->  #include <linux/module.h>
->  #include <linux/netdevice.h>
->  #include <linux/slab.h>
-> +#include <net/netdev_queues.h>
->  #include <net/netlink.h>
->  #include <net/pkt_cls.h>
->  #include <net/rtnetlink.h>
-> @@ -330,6 +331,49 @@ static const struct net_device_ops nsim_vf_netdev_ops = {
->  	.ndo_set_features	= nsim_set_features,
->  };
->  
-> +/* We don't have true par-queue stats, yet, so do some random fakery here. */
+> +TEST_PROGS := stats.py
+> +
+> +include ../../lib.mk
+> diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
+> new file mode 100644
+> index 000000000000..5ef7c417d431
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/README.rst
+> @@ -0,0 +1,30 @@
+> +Running tests
+> +=============
+> +
+> +Tests are executed within kselftest framework like any other tests.
+> +By default tests execute against software drivers such as netdevsim.
+> +All tests must support running against a real device (SW-only tests
+> +should instead be placed in net/ or drivers/net/netdevsim, HW-only
+> +tests in drivers/net/hw).
+> +
+> +Set appropriate variables to point the tests at a real device.
+> +
+> +Variables
+> +=========
+> +
+> +Variables can be set in the environment or by creating a net.config
+> +file in the same directory as this README file. Example::
+> +
+> +  $ NETIF=eth0 ./some_test.sh
+> +
+> +or::
+> +
+> +  $ cat tools/testing/selftests/drivers/net/net.config
+> +  # Variable set in a file
+> +  NETIF=eth0
+> +
+> +NETIF
+> +~~~~~
+> +
+> +Name of the netdevice against which the test should be executed.
+> +When empty or not set software devices will be used.
+> diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+> new file mode 100644
+> index 000000000000..4653dffcd962
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+> @@ -0,0 +1,17 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +import sys
+> +from pathlib import Path
+> +
+> +KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
+> +
+> +try:
+> +    sys.path.append(KSFT_DIR.as_posix())
+> +    from net.lib.py import *
+> +except ModuleNotFoundError as e:
+> +    ksft_pr("Failed importing `net` library from kernel sources")
+> +    ksft_pr(str(e))
+> +    ktap_result(True, comment="SKIP")
+> +    sys.exit(4)
+> +
+> +from .env import *
+> diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+> new file mode 100644
+> index 000000000000..ee4a44555d83
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +import os
+> +import shlex
+> +from pathlib import Path
+> +from lib.py import ip
+> +from lib.py import NetdevSimDev
 
-nit: per-queue
+nit: these could be on the same line.
 
-> +static void nsim_get_queue_stats_rx(struct net_device *dev, int idx,
-> +				    struct netdev_queue_stats_rx *stats)
-> +{
-> +	struct rtnl_link_stats64 rtstats = {};
 > +
-> +	nsim_get_stats64(dev, &rtstats);
+> +class NetDrvEnv:
+> +    def __init__(self, src_path):
+> +        self.env = os.environ.copy()
+> +        self._load_env_file(src_path)
 > +
-> +	stats->packets = rtstats.rx_packets - !!rtstats.rx_packets;
+> +        if 'NETIF' in self.env:
+> +            self._ns = None
 
-Why subtract !!rtstats.rx_packets? This evaluates to 0 if rx_packets is
-0 and 1 if rx_packets is non-zero.
+My brain interprets 'ns' as 'namespace'. How about something like
+nsimdev/nsdev/nsim?
 
-> +	stats->bytes = rtstats.rx_bytes;
-> +}
+> +            self.dev = ip("link show dev " + self.env['NETIF'], json=True)[0]
+> +        else:
+> +            self._ns = NetdevSimDev()
+> +            self.dev = self._ns.nsims[0].dev
+> +        self.ifindex = self.dev['ifindex']
 > +
-> +static void nsim_get_queue_stats_tx(struct net_device *dev, int idx,
-> +				    struct netdev_queue_stats_tx *stats)
-> +{
-> +	struct rtnl_link_stats64 rtstats = {};
+> +    def __del__(self):
+> +        if self._ns:
+> +            self._ns.remove()
 > +
-> +	nsim_get_stats64(dev, &rtstats);
+> +    def _load_env_file(self, src_path):
+> +        src_dir = Path(src_path).parent.resolve()
+> +        if not (src_dir / "net.config").exists():
+> +            return
 > +
-> +	stats->packets = rtstats.tx_packets - !!rtstats.tx_packets;
-> +	stats->bytes = rtstats.tx_bytes;
-> +}
+> +        lexer = shlex.shlex(open((src_dir / "net.config").as_posix(), 'r').read())
+> +        k = None
+> +        for token in lexer:
+> +            if k is None:
+> +                k = token
+> +                self.env[k] = ""
+> +            elif token == "=":
+> +                pass
+> +            else:
+> +                self.env[k] = token
+> +                k = None
+> diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+> index 81a8d14b68f0..99cfc8dc4dca 100644
+> --- a/tools/testing/selftests/net/lib/py/__init__.py
+> +++ b/tools/testing/selftests/net/lib/py/__init__.py
+> @@ -3,4 +3,5 @@
+>  from .ksft import *
+>  from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFamily
+>  from .consts import KSRC
+> +from .nsim import *
+>  from .utils import *
+> diff --git a/tools/testing/selftests/net/lib/py/nsim.py b/tools/testing/selftests/net/lib/py/nsim.py
+> new file mode 100644
+> index 000000000000..13eb42c82829
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/lib/py/nsim.py
+> @@ -0,0 +1,118 @@
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +static void nsim_get_base_stats(struct net_device *dev,
-> +				struct netdev_queue_stats_rx *rx,
-> +				struct netdev_queue_stats_tx *tx)
-> +{
-> +	struct rtnl_link_stats64 rtstats = {};
+> +import json
+> +import os
+> +import random
+> +import re
+> +import time
+> +from .utils import cmd, ip
 > +
-> +	nsim_get_stats64(dev, &rtstats);
 > +
-> +	rx->packets = !!rtstats.rx_packets;
-> +	rx->bytes = 0;
-> +	tx->packets = !!rtstats.tx_packets;
-> +	tx->bytes = 0;
-> +}
+> +class NetdevSim:
+> +    """
+> +    Class for netdevsim netdevice and its attributes.
+> +    """
 > +
-> +static const struct netdev_stat_ops nsim_stat_ops = {
-> +	.get_queue_stats_tx	= nsim_get_queue_stats_tx,
-> +	.get_queue_stats_rx	= nsim_get_queue_stats_rx,
-> +	.get_base_stats		= nsim_get_base_stats,
-> +};
+> +    def __init__(self, nsimdev, port_index, ifname, ns=None):
+> +        # In case udev renamed the netdev to according to new schema,
+> +        # check if the name matches the port_index.
+> +        nsimnamere = re.compile("eni\d+np(\d+)")
+> +        match = nsimnamere.match(ifname)
+> +        if match and int(match.groups()[0]) != port_index + 1:
+> +            raise Exception("netdevice name mismatches the expected one")
 > +
->  static void nsim_setup(struct net_device *dev)
->  {
->  	ether_setup(dev);
-> @@ -360,6 +404,7 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
->  
->  	ns->phc = phc;
->  	ns->netdev->netdev_ops = &nsim_netdev_ops;
-> +	ns->netdev->stat_ops = &nsim_stat_ops;
->  
->  	err = nsim_udp_tunnels_info_create(ns->nsim_dev, ns->netdev);
->  	if (err)
+> +        self.ifname = ifname
+> +        self.nsimdev = nsimdev
+> +        self.port_index = port_index
+> +        self.ns = ns
+> +        self.dfs_dir = "%s/ports/%u/" % (nsimdev.dfs_dir, port_index)
+> +        ret = ip("-j link show dev %s" % ifname, ns=ns)
+> +        self.dev = json.loads(ret.stdout)[0]
+> +
+> +    def dfs_write(self, path, val):
+> +        self.nsimdev.dfs_write(f'ports/{self.port_index}/' + path, val)
+> +
+> +
+> +class NetdevSimDev:
+> +    """
+> +    Class for netdevsim bus device and its attributes.
+> +    """
+> +    @staticmethod
+> +    def ctrl_write(path, val):
+> +        fullpath = os.path.join("/sys/bus/netdevsim/", path)
+> +        with open(fullpath, "w") as f:
+> +            f.write(val)
+> +
+> +    def dfs_write(self, path, val):
+> +        fullpath = os.path.join(f"/sys/kernel/debug/netdevsim/netdevsim{self.addr}/", path)
+> +        with open(fullpath, "w") as f:
+> +            f.write(val)
+> +
+> +    def __init__(self, port_count=1, ns=None):
+> +        # nsim will spawn in init_net, we'll set to actual ns once we switch it the.sre
+> +        self.ns = None
+> +
+> +        if not os.path.exists("/sys/bus/netdevsim"):
+> +            cmd("modprobe netdevsim")
+> +
+> +        addr = random.randrange(1 << 15)
+> +        while True:
+> +            try:
+> +                self.ctrl_write("new_device", "%u %u" % (addr, port_count))
+> +            except OSError as e:
+> +                if e.errno == errno.ENOSPC:
+> +                    addr = random.randrange(1 << 15)
+> +                    continue
+> +                raise e
+> +            break
+> +        self.addr = addr
+> +
+> +        # As probe of netdevsim device might happen from a workqueue,
+> +        # so wait here until all netdevs appear.
+> +        self.wait_for_netdevs(port_count)
+> +
+> +        if ns:
+> +            cmd(f"devlink dev reload netdevsim/netdevsim{addr} netns {ns.name}")
+> +            self.ns = ns
+> +
+> +        cmd("udevadm settle", ns=self.ns)
+> +        ifnames = self.get_ifnames()
+> +
+> +        self.dfs_dir = "/sys/kernel/debug/netdevsim/netdevsim%u/" % addr
+> +
+> +        self.nsims = []
+> +        for port_index in range(port_count):
+> +            self.nsims.append(NetdevSim(self, port_index, ifnames[port_index],
+> +                                        ns=ns))
+> +
+> +    def get_ifnames(self):
+> +        ifnames = []
+> +        listdir = cmd(f"ls /sys/bus/netdevsim/devices/netdevsim{self.addr}/net/",
+> +                      ns=self.ns).stdout.split()
+> +        for ifname in listdir:
+> +            ifnames.append(ifname)
+> +        ifnames.sort()
+> +        return ifnames
+> +
+> +    def wait_for_netdevs(self, port_count):
+> +        timeout = 5
+> +        timeout_start = time.time()
+> +
+> +        while True:
+> +            try:
+> +                ifnames = self.get_ifnames()
+> +            except FileNotFoundError as e:
+> +                ifnames = []
+> +            if len(ifnames) == port_count:
+> +                break
+> +            if time.time() < timeout_start + timeout:
+> +                continue
+> +            raise Exception("netdevices did not appear within timeout")
+> +
+> +    def remove(self):
+> +        self.ctrl_write("del_device", "%u" % (self.addr, ))
+
+I really want this to be in the dtor, but couldn't get it to work
+because Python doesn't let you open files in __del__(). :(
+
+> +
+> +    def remove_nsim(self, nsim):
+> +        self.nsims.remove(nsim)
+> +        self.ctrl_write("devices/netdevsim%u/del_port" % (self.addr, ),
+> +                        "%u" % (nsim.port_index, ))
 
