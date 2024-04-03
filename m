@@ -1,269 +1,239 @@
-Return-Path: <linux-kselftest+bounces-7076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7077-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98FEB896F08
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 14:41:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F6A2897020
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 15:19:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD2841C238FD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 12:41:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D26DA1F21FE1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 13:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A100F59155;
-	Wed,  3 Apr 2024 12:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22C4147C98;
+	Wed,  3 Apr 2024 13:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TkFrhMgP";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ag9EqcHN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g8+qq+KH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AC6B66E;
-	Wed,  3 Apr 2024 12:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F5F146A7E;
+	Wed,  3 Apr 2024 13:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712148081; cv=none; b=Ec5s+9nftwGnebnMUKAt9vJPE1DXZld6eHfMDm2q2M5zOdnZWUeBTeGFuy91mt52Z3kx8iP0IL/+TDB/yWYAB6Jej8R1pRKhKTO+rldoTZ57qcKwIbcNCimbpfqHO/hSylUdDpQXbydTH1VBfMzkZgG9ASMF3tBHF1s0BZADKKk=
+	t=1712150384; cv=none; b=QkgYaXcpKo9orSgros14iuQLoKodmHdXOmQ0ouhWtHbo6/BT0NTDlQR0SkkP1CcrA1XL35zpHjkqprOV1ZJSRk7qEvg0JRrMbt5+xc/GBswEKywueLcTO+5viE3300frtUOkEqApkDT6gwJKVuvvoH/mW5OP3SBwdUdiHJP0Psg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712148081; c=relaxed/simple;
-	bh=8mKGsxi0RIo7UC0KAoB9yp5qpM4nBYh1Fe5vakSTcJs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=AuFs5Y+26xf0KkyOVq5q7767V5zh+oycQv1gttYVF1nK4JXoQT/YKNWJQYbKYe9Sjd9kgc8djNHkm98FwXR3+VtQxVl7ucF9mcKzOXzio0QYhrh/k9juRYc69601yj6+5iXu7pCWTyzbwZ6aC+77a84qa4QsPqpwTUVydECRfGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TkFrhMgP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ag9EqcHN; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1712148077;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j8VcjIqJYxqL7stv0uL/vZUNq6uNvM3BP6g5mSRVMO0=;
-	b=TkFrhMgPzV1MWq/iw8liKFrNWj6RpfRhswmjmiUnOFwoXWeEmcaVjTRmaj3oIxO0/QGhaq
-	T2tTvC14dLQEIrNQMVAaFpm/xq4cR/rfC1a40PMABKETn7QNuun+2Ny+Z7MoD4fFOGqMx3
-	3/5rk5duDBfDgiKjq74bCw4ZcY3LIbiigRcLrTLtipjsWs362vjDhsNeFXm256wM8dj/RV
-	fqfCBY9zluR1oBQsH2SB9PY6L631z8T8lKFbKUup3PpC90PmfGf4yO06pnue+BQlEuBQH2
-	wZ2r/S/7jdA2wSmYl4JietlTRCEgSy4C4/AkEj++PAKG+ypBDzz01p8XsH9CkA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1712148077;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j8VcjIqJYxqL7stv0uL/vZUNq6uNvM3BP6g5mSRVMO0=;
-	b=Ag9EqcHNXII8mxlpd+yiaY1+USazt/F0l7SzBD+SJ2H/XU4wqPvsmhqjbQF3OrwIiFmAbO
-	2vKJVbvJs8MvRWDA==
-To: John Stultz <jstultz@google.com>
-Cc: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>, Oleg Nesterov <oleg@redhat.com>, "Eric W.
- Biederman" <ebiederm@xmission.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
- kasan-dev@googlegroups.com, Edward Liaw <edliaw@google.com>, Carlos Llamas
- <cmllamas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
- current thread
-In-Reply-To: <CANDhNCqbJHTNcnBj=twHQqtLjXiGNeGJ8tsbPrhGFq4Qz53c5w@mail.gmail.com>
-References: <20230316123028.2890338-1-elver@google.com>
- <CANDhNCqBGnAr_MSBhQxWo+-8YnPPggxoVL32zVrDB+NcoKXVPQ@mail.gmail.com>
- <87frw3dd7d.ffs@tglx>
- <CANDhNCqbJHTNcnBj=twHQqtLjXiGNeGJ8tsbPrhGFq4Qz53c5w@mail.gmail.com>
-Date: Wed, 03 Apr 2024 14:41:17 +0200
-Message-ID: <874jcid3f6.ffs@tglx>
+	s=arc-20240116; t=1712150384; c=relaxed/simple;
+	bh=l/Ke/wiPt7/TaV9ybG3TveTzs1CGNNNgzCBPCA58cXg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T2XKSWFqepNHm0ZwXRLashhbvkytXagXL/k4dX0R9wdymoH3N+/jKn7516MDyDCcJY4EeoVOBLqLEgr4o+ZRAbpmFZDr7NXnZRjjITu32HbVGETRiUQ94CVc3Yoom5KQLDjbx9LBHHtrtSHooNQNDvoZcSvw90zmFaVgRVO2oPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g8+qq+KH; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e0f2798cd8so52875975ad.3;
+        Wed, 03 Apr 2024 06:19:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712150381; x=1712755181; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=5jeOyVY2AHqhv0KvV6kieVXey6Da3SBwUwdCTK976WY=;
+        b=g8+qq+KH/4ZOw4yKmBeAN1AEjHVv4iug/VmhgFNn9K3CpsBNyhSrCcyW9HDX4iUS3w
+         /zOuq23Y7ylAmJ4g4SKSm5GrP+9Hqr6mx5kq8xfut73OVqpZgFccbQufMji2kpyz3nfO
+         WSRP0qc8YcgQIWWCuGBmNtnMRy8uHFeX7UmbnrEVJ+WdKNlhVeJe2PxSE29c8fb/UuPF
+         cM+41js+04qz9ygVpN/pJELTfwE2hs7qLkiAIj6xdSS0+HXwRtraj8/WGlsPpvq7JPOT
+         23hJBjMtOmfbX7uNlA3nB/TKAiZlRrLRsMTzScAcHJfYJqpdvOMj4dNodseyrs5d4QoS
+         ye3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712150381; x=1712755181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5jeOyVY2AHqhv0KvV6kieVXey6Da3SBwUwdCTK976WY=;
+        b=Te9qcRJDk+wo+ljEOihoLhkG/BO1zjSc8CsltTQQV3pbB0vrTGVdqzy9NJZeqazZPW
+         vyBNrS2F2O3EPCWckNAGeJSFhbMAFHg1jO0eVYt2+501YhSDUsssAhPCP91CNLtc+yg2
+         5hBeNrp8SU3rkC7Rha2I99Uv5nAeObtwC1XaNhabZF5GakQTnew36LLfgdz4iXWaFxkD
+         8BXE2lioeV1/WsrOLlv4Fw7zgr1hpIuMz8KL2FdPHQRsfmCDvuklMa7NWObtgW6G8IqB
+         610kBPh7nlCBHy7/lzBmzrLrqzsGMlrf4o2YtQp9Kz8MLDbWxhaA24Q5ZL6sp7KwGMum
+         vWaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVn0tQYIthAh+dAgS8It5Dh0e3tsOptMMWzEWD/SPt3Ish5IZRiZqXw0uINqRmcZxvGGcp+89IvG/mMP7dY8wvxoRQ6rOSFkG0yLOeimq9lTis3JTucGBfm/YpMyj4Z0BQmES0q80vOEM10OqYR+pKMFj0BjfCwDWk/m5GIkvfhHY4wnChUpiwWxhKtE8BAUMguqT0Whm5VCbZMEG7J5SLP5jnkT+LaX03yGTnRoREmVufV2u+DT4EF11djn8CafzBoycRVj8jg54Mz5ZsvmTpu2apKGcR1pgcQsMDBUVS8UZzqbD+1jn3U5agG/sCmbw==
+X-Gm-Message-State: AOJu0YwwkDi2irBujbKEOLv/JDyRJlsvoxKJjgfm2x6yf9eVUoHMGxJy
+	vdVkc3vj9oZ2iOJHypcpRflgPNmTlWltVpHF6nDNmdo/z/TR9wrdovK/eWbd
+X-Google-Smtp-Source: AGHT+IGUUHIUOOsCxCF/TsSf8IWxMRQa7fBTBtgLaZOyDBRCO0Z9+JW6g9cTcLQ9TLR427e8GbHcQA==
+X-Received: by 2002:a17:902:f68b:b0:1e2:8ec0:90c4 with SMTP id l11-20020a170902f68b00b001e28ec090c4mr2621403plg.2.1712150381396;
+        Wed, 03 Apr 2024 06:19:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902780200b001e00e17c6e2sm13430178pll.138.2024.04.03.06.19.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 06:19:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-kselftest@vger.kernel.org
+Cc: David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org,
+	kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	netdev@vger.kernel.org,
+	x86@kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v3 00/15] Add support for suppressing warning backtraces
+Date: Wed,  3 Apr 2024 06:19:21 -0700
+Message-Id: <20240403131936.787234-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 02 2024 at 10:23, John Stultz wrote:
-> On Tue, Apr 2, 2024 at 7:57=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
-e> wrote:
->> This test in particular exercises new functionality/behaviour, which
->> really has no business to be backported into stable just to make the
->> relevant test usable on older kernels.
->
-> That's fair. I didn't have all the context around what motivated the
-> change and the follow-on test, which is why I'm asking here.
+Some unit tests intentionally trigger warning backtraces by passing bad
+parameters to kernel API functions. Such unit tests typically check the
+return value from such calls, not the existence of the warning backtrace.
 
-It's a performance enhancement to avoid waking up idle threads for
-signal delivery instead of just delivering it to the current running
-thread which made the CPU timer fire. So it does not qualify for fix.
+Such intentionally generated warning backtraces are neither desirable
+nor useful for a number of reasons.
+- They can result in overlooked real problems.
+- A warning that suddenly starts to show up in unit tests needs to be
+  investigated and has to be marked to be ignored, for example by
+  adjusting filter scripts. Such filters are ad-hoc because there is
+  no real standard format for warnings. On top of that, such filter
+  scripts would require constant maintenance.
 
->> Why would testing with latest tests against an older kernel be valid per
->> se?
->
-> So yeah, it definitely can get fuzzy trying to split hairs between
-> when a change in behavior is a "new feature" or a "fix".
->
-> Greg could probably articulate it better, but my understanding is the
-> main point for running newer tests on older kernels is that newer
-> tests will have more coverage of what is expected of the kernel. For
-> features that older kernels don't support, ideally the tests will
-> check for that functionality like userland applications would, and
-> skip that portion of the test if it's unsupported. This way, we're
-> able to find issues (important enough to warrant tests having been
-> created) that have not yet been patched in the -stable trees.
->
-> In this case, there is a behavioral change combined with a compliance
-> test, which makes it look a bit more like a fix, rather than a feature
-> (additionally the lack of a way for userland to probe for this new
-> "feature" makes it seem fix-like).  But the intended result of this is
-> just spurring this discussion to see if it makes sense to backport or
-> not.  Disabling/ignoring the test (maybe after Thomas' fix to avoid it
-> from hanging :) is a fine solution too, but not one I'd want folks to
-> do until they've synced with maintainers and had full context.
+One option to address problem would be to add messages such as "expected
+warning backtraces start / end here" to the kernel log.  However, that
+would again require filter scripts, it might result in missing real
+problematic warning backtraces triggered while the test is running, and
+the irrelevant backtrace(s) would still clog the kernel log.
 
-I was staring at this test because it hangs even on upstream on a
-regular base, at least in a VM. The timeout change I posted prevents the
-hang, but still the posixtimer test will not have 0 fails.
+Solve the problem by providing a means to identify and suppress specific
+warning backtraces while executing test code. Support suppressing multiple
+backtraces while at the same time limiting changes to generic code to the
+absolute minimum. Architecture specific changes are kept at minimum by
+retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
+CONFIG_KUNIT are enabled.
 
-The test if fragile as hell as there is absolutely no guarantee that the
-signal target distribution is as expected. The expectation is based on a
-statistical assumption which does not really hold.
+The first patch of the series introduces the necessary infrastructure.
+The second patch introduces support for counting suppressed backtraces.
+This capability is used in patch three to implement unit tests.
+Patch four documents the new API.
+The next two patches add support for suppressing backtraces in drm_rect
+and dev_addr_lists unit tests. These patches are intended to serve as
+examples for the use of the functionality introduced with this series.
+The remaining patches implement the necessary changes for all
+architectures with GENERIC_BUG support.
 
-So I came up with a modified variant of that, which can deduce pretty
-reliably that the test runs on an older kernel.
+With CONFIG_KUNIT enabled, image size increase with this series applied is
+approximately 1%. The image size increase (and with it the functionality
+introduced by this series) can be avoided by disabling
+CONFIG_KUNIT_SUPPRESS_BACKTRACE.
 
-Thanks,
+This series is based on the RFC patch and subsequent discussion at
+https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
+and offers a more comprehensive solution of the problem discussed there.
 
-        tglx
----
-Subject: selftests/timers/posix_timers: Make signal distribution test less =
-fragile
-From: Thomas Gleixner <tglx@linutronix.de>
-Date: Mon, 15 May 2023 00:40:10 +0200
+Design note:
+  Function pointers are only added to the __bug_table section if both
+  CONFIG_KUNIT_SUPPRESS_BACKTRACE and CONFIG_DEBUG_BUGVERBOSE are enabled
+  to avoid image size increases if CONFIG_KUNIT is disabled. There would be
+  some benefits to adding those pointers all the time (reduced complexity,
+  ability to display function names in BUG/WARNING messages). That change,
+  if desired, can be made later.
 
-The signal distribution test has a tendency to hang for a long time as the
-signal delivery is not really evenly distributed. In fact it might never be
-distributed across all threads ever in the way it is written.
+Checkpatch note:
+  Remaining checkpatch errors and warnings were deliberately ignored.
+  Some are triggered by matching coding style or by comments interpreted
+  as code, others by assembler macros which are disliked by checkpatch.
+  Suggestions for improvements are welcome.
 
-Address this by:
+Changes since RFC:
+- Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
+- Minor cleanups and bug fixes
+- Added support for all affected architectures
+- Added support for counting suppressed warnings
+- Added unit tests using those counters
+- Added patch to suppress warning backtraces in dev_addr_lists tests
 
-   1) Adding a timeout which aborts the test
+Changes since v1:
+- Rebased to v6.9-rc1
+- Added Tested-by:, Acked-by:, and Reviewed-by: tags
+  [I retained those tags since there have been no functional changes]
+- Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
+  default.
 
-   2) Letting the test threads do a usleep() once they got a signal instead
-      of running continuously. That ensures that the other threads will exp=
-ire
-      the timer and get the signal
+Changes since v2:
+- Rebased to v6.9-rc2
+- Added comments to drm warning suppression explaining why it is needed.
+- Added patch to move conditional code in arch/sh/include/asm/bug.h
+  to avoid kerneldoc warning
+- Added architecture maintainers to Cc: for architecture specific patches
+- No functional changes
 
-   3) Adding a detection whether all signals arrvied at the main thread,
-      which allows to run the test on older kernels.
+----------------------------------------------------------------
+Guenter Roeck (15):
+      bug/kunit: Core support for suppressing warning backtraces
+      kunit: bug: Count suppressed warning backtraces
+      kunit: Add test cases for backtrace warning suppression
+      kunit: Add documentation for warning backtrace suppression API
+      drm: Suppress intentional warning backtraces in scaling unit tests
+      net: kunit: Suppress lock warning noise at end of dev_addr_lists tests
+      x86: Add support for suppressing warning backtraces
+      arm64: Add support for suppressing warning backtraces
+      loongarch: Add support for suppressing warning backtraces
+      parisc: Add support for suppressing warning backtraces
+      s390: Add support for suppressing warning backtraces
+      sh: Add support for suppressing warning backtraces
+      sh: Move defines needed for suppressing warning backtraces
+      riscv: Add support for suppressing warning backtraces
+      powerpc: Add support for suppressing warning backtraces
 
-While at it get rid of the pointless atomic operation on a the thread local
-variable in the signal handler.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- tools/testing/selftests/timers/posix_timers.c |   48 +++++++++++++++++----=
------
- 1 file changed, 32 insertions(+), 16 deletions(-)
-
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -184,18 +184,22 @@ static int check_timer_create(int which)
- 	return 0;
- }
-=20
--int remain;
--__thread int got_signal;
-+static int remain;
-+static __thread int got_signal;
-=20
- static void *distribution_thread(void *arg)
- {
--	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
--	return NULL;
-+	while (__atomic_load_n(&remain, __ATOMIC_RELAXED) && !done) {
-+		if (got_signal)
-+			usleep(10);
-+	}
-+
-+	return (void *)got_signal;
- }
-=20
- static void distribution_handler(int nr)
- {
--	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
-+	if (++got_signal =3D=3D 1)
- 		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
- }
-=20
-@@ -205,8 +209,6 @@ static void distribution_handler(int nr)
-  */
- static int check_timer_distribution(void)
- {
--	int err, i;
--	timer_t id;
- 	const int nthreads =3D 10;
- 	pthread_t threads[nthreads];
- 	struct itimerspec val =3D {
-@@ -215,7 +217,11 @@ static int check_timer_distribution(void
- 		.it_interval.tv_sec =3D 0,
- 		.it_interval.tv_nsec =3D 1000 * 1000,
- 	};
-+	int err, i, nsigs;
-+	time_t start, now;
-+	timer_t id;
-=20
-+	done =3D 0;
- 	remain =3D nthreads + 1;  /* worker threads + this thread */
- 	signal(SIGALRM, distribution_handler);
- 	err =3D timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
-@@ -231,7 +237,7 @@ static int check_timer_distribution(void
-=20
- 	for (i =3D 0; i < nthreads; i++) {
- 		err =3D pthread_create(&threads[i], NULL, distribution_thread,
--				     NULL);
-+				     thread_sigs + i);
- 		if (err) {
- 			ksft_print_msg("Can't create thread: %s (%d)\n",
- 				       strerror(errno), errno);
-@@ -240,23 +246,33 @@ static int check_timer_distribution(void
- 	}
-=20
- 	/* Wait for all threads to receive the signal. */
--	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-+	now =3D start =3D time(NULL);
-+	while (__atomic_load_n(&remain, __ATOMIC_RELAXED)) {
-+		now =3D time(NULL);
-+		if (now - start > 5)
-+			break;
-+	}
-+	done =3D 1;
-=20
--	for (i =3D 0; i < nthreads; i++) {
-+	if (timer_delete(id)) {
-+		ksft_perror("Can't delete timer\n");
-+		return -1;
-+	}
-+
-+	for (i =3D 0, nsigs =3D 0; i < nthreads; i++) {
- 		err =3D pthread_join(threads[i], NULL);
- 		if (err) {
- 			ksft_print_msg("Can't join thread: %s (%d)\n",
- 				       strerror(errno), errno);
- 			return -1;
- 		}
-+		nsigs +=3D thread_sigs[i];
- 	}
-=20
--	if (timer_delete(id)) {
--		ksft_perror("Can't delete timer");
--		return -1;
--	}
--
--	ksft_test_result_pass("check_timer_distribution\n");
-+	if (!nsigs)
-+		ksft_test_result_skip("No signal distribution. Assuming old kernel\n");
-+	else
-+		ksft_test_result(now - start < 5, "check_timer_distribution\n");
- 	return 0;
- }
-=20
-
-
+ Documentation/dev-tools/kunit/usage.rst |  30 ++++++++-
+ arch/arm64/include/asm/asm-bug.h        |  29 ++++++---
+ arch/arm64/include/asm/bug.h            |   8 ++-
+ arch/loongarch/include/asm/bug.h        |  38 ++++++++----
+ arch/parisc/include/asm/bug.h           |  29 ++++++---
+ arch/powerpc/include/asm/bug.h          |  37 +++++++++---
+ arch/riscv/include/asm/bug.h            |  38 ++++++++----
+ arch/s390/include/asm/bug.h             |  17 +++++-
+ arch/sh/include/asm/bug.h               |  28 +++++++--
+ arch/x86/include/asm/bug.h              |  21 +++++--
+ drivers/gpu/drm/tests/drm_rect_test.c   |  16 +++++
+ include/asm-generic/bug.h               |  16 ++++-
+ include/kunit/bug.h                     |  56 +++++++++++++++++
+ include/kunit/test.h                    |   1 +
+ include/linux/bug.h                     |  13 ++++
+ lib/bug.c                               |  51 ++++++++++++++--
+ lib/kunit/Kconfig                       |   9 +++
+ lib/kunit/Makefile                      |   7 ++-
+ lib/kunit/backtrace-suppression-test.c  | 104 ++++++++++++++++++++++++++++++++
+ lib/kunit/bug.c                         |  42 +++++++++++++
+ net/core/dev_addr_lists_test.c          |   6 ++
+ 21 files changed, 524 insertions(+), 72 deletions(-)
+ create mode 100644 include/kunit/bug.h
+ create mode 100644 lib/kunit/backtrace-suppression-test.c
+ create mode 100644 lib/kunit/bug.c
 
