@@ -1,119 +1,108 @@
-Return-Path: <linux-kselftest+bounces-7115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A744C897910
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 21:35:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E199897929
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 21:43:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 445FE1F21525
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 19:35:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47DD1B255C7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 19:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E9F155305;
-	Wed,  3 Apr 2024 19:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A77B9155315;
+	Wed,  3 Apr 2024 19:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bf9yguDD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZJT+mgl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEA014885B
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 19:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256B52F24;
+	Wed,  3 Apr 2024 19:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712172920; cv=none; b=WTvd6wdcVgu0kB8cPDh4xOmJ3xvq1Fm280VlQ2syNwh44TRVovHJfwCUXv0cdUihPjooC5+OHinbbR1KchtYmAQ3drS7FfAw8YGHAulFWNh0uR01kvywX6zXv8Jj0leSM0lciM3GvelXZyMCE50Sz7I3JHpX2RCRzKQ01wHf+fo=
+	t=1712173378; cv=none; b=JSxb9bfzDSFz+e1TWcYuNoHFXzttCw9KtmlWt5XHr87uN+Cb0DLeVC1g7gFu6smk4rYrQSkG08LANBuG2KP7VsrDdfIoRysxvN4VihFtHXJl6ywotz5A8STz1d/QU6rlgl2Qm5ZBRLby1XXf5iv3heWKSItaNpMwWyvehpIkM54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712172920; c=relaxed/simple;
-	bh=Wz+XAmCjUc8PDsaYphxSsci9OJCLtebQHEYs8FmStqA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RyZM3DoX23BzCPxe2pgWA0SE5djJaJxfl2TFrqr/dzp1t2EUozYFI/wpByTd1aBdQwi14Q8DQ2B5f2BmlCrNcede2Uq8xUCn/wBsiHadbhqBAU7SugjT92Qxpg2VoqMiimUhppJaitQmri2NT4efeQdrXlWRP/6jGPvl8KOhT8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bf9yguDD; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-413f8c8192eso21435e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 12:35:18 -0700 (PDT)
+	s=arc-20240116; t=1712173378; c=relaxed/simple;
+	bh=3WUH9SubfwYcKxvgcz+D1M4r1DIyiUItWr+37jMl3Vw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=exzdnVnn1PlQh3YExmyxlRg8WKqMUmmovjhSR8YAnULyv7QyjH52XZTUivkGmWYB0Pzg75iRgnaZw2TeOmfBNK7wzLwwxMwueB0jrSxZzcbONxeuLqanVYQoDmuEOc3lfYzYzAwuVUEpoqkbFbIoCDXJ2BMoQbF8w/+rDtGmhB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZJT+mgl; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2a28b11db68so110749a91.2;
+        Wed, 03 Apr 2024 12:42:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712172917; x=1712777717; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wz+XAmCjUc8PDsaYphxSsci9OJCLtebQHEYs8FmStqA=;
-        b=Bf9yguDDXSrI+aNRMNFLcLdKGpG2myuUFtGLECbxeLCXpHJvnMZi2S9citztBNOOFJ
-         MDiaUinEQZZZv5uOtBB2gaOvgJ+XDcuk+B5Rq4s+BOlVVLMqvMDew8mKSpStNAjDwmiW
-         8wQMX6od3iJZ8VXCmgARiA4BwHcRExdNhmke6dUjnnEiIqqlhuHgDVhxCqhFGLIa8ETH
-         EnPwwUzr3TIl5o4MBU65qKD3zzHltVFw8PiEfmrHeQ2r0Zxqo8cgQuksooJNBIlmms5Q
-         jojbsGkunr1ibtn1oVX/vKYg8d1zG/Hdxubz0LNB/y88nutoLoo+t8H/dSgzsMqaXhCv
-         f5lA==
+        d=gmail.com; s=20230601; t=1712173376; x=1712778176; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MUae7FX57GCbhwQ8NWUH2pJwsLTvGchJ6LyegeiE4d0=;
+        b=OZJT+mglv8j4K+Q6smrVixru9z92cltp74WDeoxWjcbgJ3dqUZv1rA3XSO4xBe0vlA
+         JDwRcHniqTXgh6JcTvUfTqhrm0v+5tYURVq++tp+za6Wn+Bb1puKuUiTVNUn3vgCfInb
+         ftFBhiQJYiujhiYJ+TeEEBplguAw4hUxZnzxZw/qJY5Qg9peeViri3CT/mN87Ma8N0Ie
+         ac6FLeVEu+fmpxRu05RxMkKI7H0VLsCkVqmw5V27adNMOmR74NM4oeXwcpIjG00/XwRQ
+         61EhcHsxveDHlv1bqZKeDPL5y6NaOSDWbnEOvroMp3AOrnTOMmK1N+aJGj7AfnKIJxYR
+         51AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712172917; x=1712777717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1712173376; x=1712778176;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wz+XAmCjUc8PDsaYphxSsci9OJCLtebQHEYs8FmStqA=;
-        b=ljS7zEUx84XOv8vviimfjqwnR8lbfuvdwLDXgMpilkrznwfIlQnfHz161kP+KiLEXt
-         ypblmlQVPWZzB95QFhFwEmquvjdPnOXIfyX0EmhnwAXRMkPCTaYSaeEt2buYYokn+ErG
-         Xv5UTmJt4Tn3SCD1aDf7mw4J7sJP4IH0cicuZLFs7S8uCGdieAww8D2vLHHjqWhQfTxF
-         qc6yoMZKnKjqCIvIAQOeI6xpUIfYouI23w6/xjQiaVF22xWOyLnykCZSextLe23jSXbf
-         WnDeLq80pZ3DGtPYkQeZ4Gu8hiArdXy6bZP9c3djZqDmJ0zVls+M83hVLzgq4OyDY3QY
-         TM7g==
-X-Forwarded-Encrypted: i=1; AJvYcCWwgscBOCtITZUdMm2eBB5BuM7mnRH9lBOvyi75agQ5HRWYrK1qIyK4XqLnu5XA4115tLGnTlB2TKThXAhKrsma7XiTyHmlkW7wxIV6Q2Rw
-X-Gm-Message-State: AOJu0YxVyF3M/t5PzmwSoCL8/vhPRUy7SNVsb5i2nGL28U3LZUwNdS2J
-	YOv1tFFNXvIVSanZCMHjzS6+6+PbXgGmA2logZCIxaAmmC1VmrvHl7m4ot2FQC4srMsox5q/mZv
-	4+maDJww4DypcVDNk4Gklfz988fN1BsXFwH4=
-X-Google-Smtp-Source: AGHT+IEzkSBTxCD4EO3RWvVhNTCuadU+0PmJnuJ2msK4apHkHqQwAY0UNc4MQ7EFCG3/6oJj5BZZcSRNAnuoqXIEKLg=
-X-Received: by 2002:a05:600c:1d25:b0:416:1eba:175f with SMTP id
- l37-20020a05600c1d2500b004161eba175fmr299989wms.6.1712172917250; Wed, 03 Apr
- 2024 12:35:17 -0700 (PDT)
+        bh=MUae7FX57GCbhwQ8NWUH2pJwsLTvGchJ6LyegeiE4d0=;
+        b=WjkX1YyyEotKyhkd1hyxqPczeiuopidwA0YQInwgSawyAf/L6adJ4WJJ8CywmFX0xN
+         wqzYm+YMT+EOY3tdOfsqijCmX/MuFHSes2mg1SlDxy8j/XpgStvHbcgOYW5BfP8wOhGC
+         3KKTpygFDSWxVcUJvfKorczaoM1Xol2nTeWtI+VPWAJA+VIXYeeuyo1YmR7ysivIYI+s
+         s3xrx/jAvjP2qu7W7n++8wtYbmtKYnRtgcuHn6iPLzX58tRuqLHAJH6RRJs8vMlIn8Ct
+         xp79eBEqRQzVIg/XvNVudW3tkpRVG7OURzRu1/hu5XMFcpYs1XqKV42oHTxBEtSPlLff
+         ICig==
+X-Forwarded-Encrypted: i=1; AJvYcCULJHWELfRobEGZYa8xhlRuslmKt/FmGucqlwFvSVtJ/3unKWs8DA6CN+s850/7WZFqWVTHSs9RHfcEpGh94Vqki0MVLLYk9+wGZGM//H+zNBpT5MpbQqBhuphWbrKsZzbu2Jv/OHLE3g==
+X-Gm-Message-State: AOJu0Yxv5SqHKVeofOLzEbJYuNHyz5WzRnSwkAx/qtZ33LMSzCCMOgm2
+	Cy4jkfCYpCudGaqbXJ0k70ZXmoazp1bOg54Vw0aS5v6WSXRXFsVj
+X-Google-Smtp-Source: AGHT+IEVXZX4Q2IoMb+hEcs5wG+rtM60qFsELk5WmIi68s8cL1mTcSnvyfYFxW/wOCpaOy2eQGQZBg==
+X-Received: by 2002:a17:90a:43c5:b0:29b:2268:3349 with SMTP id r63-20020a17090a43c500b0029b22683349mr508502pjg.18.1712173376438;
+        Wed, 03 Apr 2024 12:42:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:25ab])
+        by smtp.gmail.com with ESMTPSA id nh12-20020a17090b364c00b0029c61521eb5sm64786pjb.43.2024.04.03.12.42.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 12:42:56 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Wed, 3 Apr 2024 09:42:54 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc: linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: cgroup: skip test_cgcore_lesser_ns_open when
+ cgroup2 mounted without nsdelegate
+Message-ID: <Zg2xPtwFvT-lsSJX@slm.duckdns.org>
+References: <20240327024437.3196-1-dtcccc@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <87sf02bgez.ffs@tglx> <87r0fmbe65.ffs@tglx> <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
- <87o7aqb6uw.ffs@tglx>
-In-Reply-To: <87o7aqb6uw.ffs@tglx>
-From: John Stultz <jstultz@google.com>
-Date: Wed, 3 Apr 2024 12:35:04 -0700
-Message-ID: <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
- current thread
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Oleg Nesterov <oleg@redhat.com>, Marco Elver <elver@google.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	"Eric W. Biederman" <ebiederm@xmission.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>, 
-	kasan-dev@googlegroups.com, Edward Liaw <edliaw@google.com>, 
-	Carlos Llamas <cmllamas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240327024437.3196-1-dtcccc@linux.alibaba.com>
 
-On Wed, Apr 3, 2024 at 12:10=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
-> wrote:
->
-> On Wed, Apr 03 2024 at 11:16, John Stultz wrote:
-> > On Wed, Apr 3, 2024 at 9:32=E2=80=AFAM Thomas Gleixner <tglx@linutronix=
-.de> wrote:
-> > Thanks for this, Thomas!
-> >
-> > Just FYI: testing with 6.1, the test no longer hangs, but I don't see
-> > the SKIP behavior. It just fails:
-> > not ok 6 check signal distribution
-> > # Totals: pass:5 fail:1 xfail:0 xpass:0 skip:0 error:0
-> >
-> > I've not had time yet to dig into what's going on, but let me know if
-> > you need any further details.
->
-> That's weird. I ran it on my laptop with 6.1.y ...
->
-> What kind of machine is that?
+On Wed, Mar 27, 2024 at 10:44:37AM +0800, Tianchen Ding wrote:
+> The test case test_cgcore_lesser_ns_open only tasks effect when cgroup2
+> is mounted with "nsdelegate" mount option. If it misses this option, or
+> is remounted without "nsdelegate", the test case will fail. For example,
+> running bpf/test_cgroup_storage first, and then run cgroup/test_core will
+> fail on test_cgcore_lesser_ns_open. Skip it if "nsdelegate" is not
+> detected in cgroup2 mount options.
+> 
+> Fixes: bf35a7879f1d ("selftests: cgroup: Test open-time cgroup namespace usage for migration checks")
+> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
 
-I was running it in a VM.
+Applied to cgroup/for-6.10.
 
-Interestingly with 64cpus it sometimes will do the skip behavior, but
-with 4 cpus it seems to always fail.
+Thanks.
 
-thanks
--john
+-- 
+tejun
 
