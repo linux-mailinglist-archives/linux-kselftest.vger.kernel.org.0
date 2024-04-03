@@ -1,178 +1,161 @@
-Return-Path: <linux-kselftest+bounces-7033-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7034-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7B808961C0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 03:07:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03EA2896282
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 04:34:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E4A2286DE7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 01:07:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3426285FE2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 02:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD62DDC9;
-	Wed,  3 Apr 2024 01:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A168879F2;
+	Wed,  3 Apr 2024 02:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="RP2VELNW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I2UZlzci"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244D0134B2
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 01:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783D217BAB;
+	Wed,  3 Apr 2024 02:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712106442; cv=none; b=A/tTmZGZ/MO4n2/Uv4DeMR5q+de1mPLMHxBa8SBvxUfYTia2wmMeNkGouNCnQ2roZ3fvJg2l55FBd0eBz2lQlNhdLzLIJ5ELszIZKpqLxzxnCN8EGUlWpZRlwLDosbWGrW2C3GQYtA3DH1JGmfXlz2/ExWg7zHS3j+XmS5wRVL4=
+	t=1712111672; cv=none; b=J0EHiXKJAYJtT+I37msjt0msennsLzlUxy9hOj/yAArVrL2gas4h8yP1ZoE/PNaohXCDvla87yUeGBLbLTuOou05YoZ/PehaCcpmwUlzMSBlfvpImYavQfki8G3LTMndQiAiZLgetVuv26zcM76iZPrDDTFmij+QEY7ycG2SNY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712106442; c=relaxed/simple;
-	bh=zODTvQdaF6tU5CpSDasbsIIWNLg9RI5yW/ya7DNzewE=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=XIX0zqz9Rp3FJAlw7HVjo9/vbsOrbrryRZjEDXW/3bubvWyGpLu9zqf7vCkwpnERSIWV1jNyEhyQqQlJHkldljiiF/tPYuYtesYET2SaotL2qv1FnLpv4h45akDiUOdnhIRdyngFr+ngLuzAlb/kL9MHGZgiAq/BkaOExjGLSaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=RP2VELNW; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-29e0a1fd9a7so3747688a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 18:07:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712106440; x=1712711240; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4EvXcar2GbZqj+rBOfAcZLPenYPgCCAfKHMwVPuMQlM=;
-        b=RP2VELNWy6gHfkvQimg+bq79LfWUMbkvRLEFLshbgQDg8RWf2uYeT/ZmVdq1M+aFv4
-         PRNuL4nFnV5cpVeAwCfm+d6uWgq4MsBKNT96VPSDARPXfusBawP6w4Cn15bHzkHiPUXL
-         mW2fR3RIXk1dT9MTKiRoib580B3nz23Dclc2lwOn57lC4/ua8OeVUah+S8DeV8RZQ0pP
-         SuiR2PIc+9QR7/Ys3/HSato3bYtAcsc3n3UeW+6M9WfwfwsUTgwBV36tndwC6IbbA0be
-         ieqlKXjaOMfh7gZs1yQwjsp9PxBxDASk4Meo1i3T6+b+mWtupFqlbnfq9MdNZ1F04066
-         73LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712106440; x=1712711240;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4EvXcar2GbZqj+rBOfAcZLPenYPgCCAfKHMwVPuMQlM=;
-        b=Afl+TXhfJ+9viPnRvwCKdWuod3ZUG5E7AH09r9S0iaZMmFPb0fyPOWOFS5nJtvNtMZ
-         S4kdsf2rSoAHC/xU2mgRerxT3b44CFSYj6O3NSyFCllneefagPLZxYrcVBRmcGQ0lVHA
-         HA3tg44Wr9PYFSYMYBHH1tVrzPl5YlN5f8iuMhUAzYovVT8U85sE1AiBqh8eU2hfwxIU
-         vKPzau8W9zV8m0bt3QunkKWqo/K5Z3LTuytL/i5zcoUt00RKG6tnKXYGFCqKOkJM2mqx
-         3mRUN9aqJGBvy5PS/3JW/to2ASJasA2x+URkekcf9cq+iNA+RPj+73QbEdkPo2hsZmYj
-         sq0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUUeAHGFgE/JPsgF5SIL73eP2DYiXDvrtssv0iN/EEP+4Q+5/ybCJma8BiCoDFwMHqZ5ZeM5PtO0CZQ1EbO/0c5hcqQXLLC9dtUIPiP23iX
-X-Gm-Message-State: AOJu0YzThbJuh5uv6KKnCWtobdPont8JkRuz/FJaIAnSw14MtrUUllfc
-	U6GI3y5xcODFbfD6d6fAmqVfD+3VL0zQtqMQKmUHLczF47IitbSznz9bOrNOzsQwgszfGOPmPVs
-	S
-X-Google-Smtp-Source: AGHT+IFvtcHAwSwSwBVz291qHG5gXOUSERwkSfC9m9tjXgpR1cYmvy30lyhH/Dcb+u7e3EqrAJJpJg==
-X-Received: by 2002:a17:90b:3e83:b0:2a0:765d:183d with SMTP id rj3-20020a17090b3e8300b002a0765d183dmr1382889pjb.18.1712106440424;
-        Tue, 02 Apr 2024 18:07:20 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id f32-20020a635120000000b005dc4fc80b21sm10433978pgb.70.2024.04.02.18.07.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 18:07:19 -0700 (PDT)
-Message-ID: <660cabc7.630a0220.e9fbd.cf89@mx.google.com>
-Date: Tue, 02 Apr 2024 18:07:19 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712111672; c=relaxed/simple;
+	bh=YJByJDcZnprdhLCoGxWdlJMxvPUCqYi57jxdSPR2L5U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hmJ3oGnKPEaECv2f1RUyFqj95jRdo6F65tz+8mzPiIQWE7NuLvvDPUxzAeCIWOgsfPMe1fTUzAexzkhlTzzo78zJje7NaVYdC+lZJ0XpQtVePsA+vqtv/yd+Dx3+1zvV8+D8Ekoi+HPBrLM51L/nWsMmPAjYO6ob+hkCJiJDSPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I2UZlzci; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70643C433F1;
+	Wed,  3 Apr 2024 02:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712111672;
+	bh=YJByJDcZnprdhLCoGxWdlJMxvPUCqYi57jxdSPR2L5U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=I2UZlzciD2v7Vijtuw5WbM3XKYQv1PM7X+Tr3cQgvX0gj9ENiQGRGL4v45Z4XgCyn
+	 seteKNceapMx5qSKLu2Nh12IZYDDgEwB5W8eImzgz0zVCewwQ67Eb21YI3cjyeqqSp
+	 3jwvJsDPvYGCWn4cfMwBYk7Oua2fcp0gaBsNoXMCeKDZ9bSAkbb4UExNSYHsCKUpKi
+	 Qb9it0l011iVPYuNlaM2sKbGfv+MCkh7zWHdFbJOGuiho+2sD+s3hm3BUYQPy9+lH3
+	 xQWC4PZIThokY2TWeCwY6N2rL1QdpHeBY4uwbvm1MTCevTsRXCZY9XaBgOqOltkc7G
+	 m5US/Rx2QvhnA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	sdf@google.com,
+	donald.hunter@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	petrm@nvidia.com,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next v2 0/7] selftests: net: groundwork for YNL-based tests
+Date: Tue,  2 Apr 2024 19:34:19 -0700
+Message-ID: <20240403023426.1762996-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: linux_kselftest-fixes-6.9-rc2
-X-Kernelci-Report-Type: test
-Subject: kselftest/fixes kselftest-livepatch: 1 runs,
- 1 regressions (linux_kselftest-fixes-6.9-rc2)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 
-kselftest/fixes kselftest-livepatch: 1 runs, 1 regressions (linux_kselftest=
--fixes-6.9-rc2)
+Currently the options for writing networking tests are C, bash or
+some mix of the two. YAML/Netlink gives us the ability to easily
+interface with Netlink in higher level laguages. In particular,
+there is a Python library already available in tree, under tools/net.
+Add the scaffolding which allows writing tests using this library.
 
-Regressions Summary
--------------------
+The "scaffolding" is needed because the library lives under
+tools/net and uses YAML files from under Documentation/.
+So we need a small amount of glue code to find those things
+and add them to TEST_FILES.
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
+This series adds both a basic SW sanity test and driver
+test which can be run against netdevsim or a real device.
+When I develop core code I usually test with netdevsim,
+then a real device, and then a backport to Meta's kernel.
+Because of the lack of integration, until now I had
+to throw away the (YNL-based) test script and netdevsim code.
 
+Running tests in tree directly:
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
-ux_kselftest-fixes-6.9-rc2/plan/kselftest-livepatch/
+ $ ./tools/testing/selftests/net/nl_netdev.py
+ KTAP version 1
+ 1..2
+ ok 1 nl_netdev.empty_check
+ ok 2 nl_netdev.lo_check
+ # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-  Test:     kselftest-livepatch
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: linux_kselftest-fixes-6.9-rc2
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      224fe424c356cb5c8f451eca4127f32099a6f764 =
+in tree via make:
 
+ $ make -C tools/testing/selftests/ TARGETS=net \
+	TEST_PROGS=nl_netdev.py TEST_GEN_PROGS="" run_tests
+  [ ... ]
 
+and installed externally, all seem to work:
 
-Test Regressions
----------------- =
+ $ make -C tools/testing/selftests/ TARGETS=net \
+	install INSTALL_PATH=/tmp/ksft-net
+ $ /tmp/ksft-net/run_kselftest.sh -t net:nl_netdev.py
+  [ ... ]
 
+For driver tests I followed the lead of net/forwarding and
+get the device name from env and/or a config file.
 
+v2: (see patches for minor changes)
+ - don't add to TARGETS, create a deperate variable with deps
+ - support and use with
+ - support and use passing arguments to tests
+v1: https://lore.kernel.org/all/20240402010520.1209517-1-kuba@kernel.org/
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
+Jakub Kicinski (7):
+  netlink: specs: define ethtool header flags
+  tools: ynl: copy netlink error to NlError
+  selftests: net: add scaffolding for Netlink tests in Python
+  selftests: nl_netdev: add a trivial Netlink netdev test
+  netdevsim: report stats by default, like a real device
+  selftests: drivers: add scaffolding for Netlink tests in Python
+  testing: net-drv: add a driver test for stats reporting
 
+ Documentation/netlink/specs/ethtool.yaml      |   6 +
+ drivers/net/netdevsim/ethtool.c               |  11 ++
+ drivers/net/netdevsim/netdev.c                |  45 +++++++
+ tools/net/ynl/lib/ynl.py                      |   3 +-
+ tools/testing/selftests/Makefile              |  10 +-
+ tools/testing/selftests/drivers/net/Makefile  |   7 ++
+ .../testing/selftests/drivers/net/README.rst  |  30 +++++
+ .../selftests/drivers/net/lib/py/__init__.py  |  17 +++
+ .../selftests/drivers/net/lib/py/env.py       |  52 ++++++++
+ tools/testing/selftests/drivers/net/stats.py  |  86 +++++++++++++
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/lib/Makefile      |   8 ++
+ .../testing/selftests/net/lib/py/__init__.py  |   7 ++
+ tools/testing/selftests/net/lib/py/consts.py  |   9 ++
+ tools/testing/selftests/net/lib/py/ksft.py    |  96 ++++++++++++++
+ tools/testing/selftests/net/lib/py/nsim.py    | 118 ++++++++++++++++++
+ tools/testing/selftests/net/lib/py/utils.py   |  47 +++++++
+ tools/testing/selftests/net/lib/py/ynl.py     |  49 ++++++++
+ tools/testing/selftests/net/nl_netdev.py      |  24 ++++
+ 19 files changed, 624 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/Makefile
+ create mode 100644 tools/testing/selftests/drivers/net/README.rst
+ create mode 100644 tools/testing/selftests/drivers/net/lib/py/__init__.py
+ create mode 100644 tools/testing/selftests/drivers/net/lib/py/env.py
+ create mode 100755 tools/testing/selftests/drivers/net/stats.py
+ create mode 100644 tools/testing/selftests/net/lib/Makefile
+ create mode 100644 tools/testing/selftests/net/lib/py/__init__.py
+ create mode 100644 tools/testing/selftests/net/lib/py/consts.py
+ create mode 100644 tools/testing/selftests/net/lib/py/ksft.py
+ create mode 100644 tools/testing/selftests/net/lib/py/nsim.py
+ create mode 100644 tools/testing/selftests/net/lib/py/utils.py
+ create mode 100644 tools/testing/selftests/net/lib/py/ynl.py
+ create mode 100755 tools/testing/selftests/net/nl_netdev.py
 
-  Details:     https://kernelci.org/test/plan/id/660c9d6bcd8b3644e54c42e3
+-- 
+2.44.0
 
-  Results:     1 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux_kselftes=
-t-fixes-6.9-rc2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kself=
-test-livepatch-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux_kselftes=
-t-fixes-6.9-rc2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kself=
-test-livepatch-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case=
-/id/660c9d6bcd8b3644e54c42e5
-        new failure (last pass: v6.8-rc1-4-gb54761f6e9773)
-
-    2024-04-03T00:12:20.432938  / # =
-
-
-    2024-04-03T00:12:20.442618  =
-
-
-    2024-04-03T00:12:25.587416  / # export NFS_ROOTFS=3D'/var/lib/lava/disp=
-atcher/tmp/13232321/extract-nfsrootfs-wi2n58cp'
-
-    2024-04-03T00:12:25.602875  export NFS_ROOTFS=3D'/var/lib/lava/dispatch=
-er/tmp/13232321/extract-nfsrootfs-wi2n58cp'
-
-    2024-04-03T00:12:27.830234  / # export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-04-03T00:12:27.841188  export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-04-03T00:12:27.959289  / # #
-
-    2024-04-03T00:12:27.967780  #
-
-    2024-04-03T00:12:28.085294  / # export SHELL=3D/bin/bash
-
-    2024-04-03T00:12:28.095623  export SHELL=3D/bin/bash
- =
-
-    ... (108 line(s) more)  =
-
- =20
 
