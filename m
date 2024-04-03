@@ -1,167 +1,274 @@
-Return-Path: <linux-kselftest+bounces-7122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 138D1897BA6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 00:29:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5192F897C16
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 01:41:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F6F4B288B2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 22:29:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A2F71C26AD0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 23:41:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293A4156987;
-	Wed,  3 Apr 2024 22:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 606CD156C59;
+	Wed,  3 Apr 2024 23:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbZUkI8B"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="GRZqw+R9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E6215696E;
-	Wed,  3 Apr 2024 22:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0434156C4D
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 23:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712183351; cv=none; b=PKJrwRGnXXNR+Y3gY7fO5ZYxyfSRps47jE33QQVLhzxDndwdXUB9gFiBs3LTmgcbJ15D5kXsHDYcZ4f8sHTWAr+Pu3jMrKzTMbPXWI/7VyfKcWWNERoVIFzMzQ27N0wpBOK0XF3HxcW50FxBjGuhBSYXDjF9rQ6P9iy5yare2Vc=
+	t=1712187694; cv=none; b=izvy0Ay7zd6kh6S2DdzOf1569eTq5nJxD2H8AW95INs/kHYNXvLebCK2lsCwKaHvvP77z+naxwIuQreW1lSpgD3zxDp1kq/yPDzd18ARXFHIUfW8PBivDoIKUJ2JlKCqnf5UDwMAlSKKkhAeGLjX0ye2d4NXWyNVPgKwOKQWBZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712183351; c=relaxed/simple;
-	bh=4aLkd10Lo2WhHC9i/1cfAE1l2UBmEvaje1UIW+so6jc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=p1NRLUPde2eLFWGSpeJUix8J0sCkR8w6G2eioL7R2rjPY4CHCdNfojMZkowFqm+Iu1ccQj3oSD/s07yr8iNhcUj9586i0UBMgcESJGDAldYSsH4EWrFsiaXzyM3ktEjSxadQB8uPBkc+xSZy99iCXFEsbvmYl6/FqRFT0PwU5DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbZUkI8B; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-369f0e324adso1388745ab.3;
-        Wed, 03 Apr 2024 15:29:09 -0700 (PDT)
+	s=arc-20240116; t=1712187694; c=relaxed/simple;
+	bh=B9ELv+AlTbjVYoeAK4IUIRfzH1eGLSZ74eq5ShhJDK8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LBFNJ79txFWv4OsOFU4eRlXExl+8RjNLaW0lu87TVsPh3tLHoSqb7Ed4usGSQ/uWr8whONL5juTbtnFwuGGfBIFsCMaUC28xhGy7wqf8SVCErCbwkwNC5dfzRbE71wVmRZTToHTJWvFGrlvXuuYOMpm0rVQM+ypBytrmS0SFR4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=GRZqw+R9; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e0f2798cd8so3401315ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 16:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712183348; x=1712788148; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+yLZU73RnPM4fYtVO+QurfgtkvmbTz6ysxGe01JcUXk=;
-        b=RbZUkI8B3k+TqKQCtEoEyvTQROUL7TX/r6uLAzmNV79Ei+/xXwqYNJCootsUQLaBna
-         83yxjzYODxZisos2kNL/6QQIX7Yva9Py9VRgINZsY7sEMB8ucNOg/jz3DO25o/dw4jQI
-         eU0FjEp78MuMgCt41XIrDIp3hulTEzp+mwTWOYtyrh5KsIfZtRO35n1aXNRyLDDCPCpd
-         oZEDtNSku2ZJm1O6iaoB3WvxAsxVk/Bt4GgzG2hWiBOvS7/KWywS+n0ox29BbMBGhMQK
-         85m1XHcMhyk6HzTBS3/KWbUmKVvuSQHdvpTo0D0T5zc7zHGh332UNTmEDv4iTqJcxVaK
-         aXdA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712187691; x=1712792491; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rv0B5ns63COKymo1kiAr4r2DGtjIZSKU8HdFj+0IH40=;
+        b=GRZqw+R9vHANT/gMhhVL7l0gGNKGvJteRFGJETcVu3pMozRmmyxZvYU5kT3iaoB13c
+         fYfvK8SidhDZvjOaq6WD9nWyWCjhjH8McmivtakwjRcc/brhzDZZqIaB4T1t7dL7b5Ld
+         8QTLK64niLh69GjzQOd94lzGByDTE+xjoZAnbpZTWhMnCmXcWnN3pZE4Az0ruNqEQkje
+         UfqMRCg/urlJTuC48tUUKAx7uae2Z3gP1u0ypLanh92/zxGoeqmVQ+Y7NaloWPzJoPEg
+         tKeqM4w/umADlkS1z28LgjNGt7nCSZRJ5RbzkOBIX2YkLDWbSbH6Rdm7Bf6eVJDAV7TJ
+         3V9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712183348; x=1712788148;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+yLZU73RnPM4fYtVO+QurfgtkvmbTz6ysxGe01JcUXk=;
-        b=UAerGv4ZeOqC1w+OSA6LomruywNrROH8dmVq0NJFM3jyw6CH02VoevqWhfMii+2x+7
-         RbXQfBFANnlw4xS4yY61PqGW4UVbqMFaa+eEckAcXgyI6lI8QJQ1ajoI50SCai6klC6h
-         Bo8Lv5ytBUv0FuI9FUGaU42fuetMZjZGIE4uoUasRzyfOM9BG5/r2OZFMgd9JVtyTn0z
-         gqOW0Z4Ep+C3p4+J/Uo4ajOTTIA/zfhqRfG2yIj9RdGPzW5pj4MzX847yTzt3GfzTyma
-         uRlDwPOazqt1H9Uf+Z3qQ0QH2ab2FYedAFfMaKH23joJ0NNPfy8WO7PIiiygEV5Rj5/0
-         uGew==
-X-Forwarded-Encrypted: i=1; AJvYcCVrcnRcKMRybp4X7cQGDPDwXL/DRNv6S2x0s29Ewj4xnc6yaOBMM6Odqe+DGdqtuqtif8VY0J5N9cynhXlFsOfkgYnf0+2579EOJxzIop3GqGycZNYosYEjd6YDvIXYucCw3fak
-X-Gm-Message-State: AOJu0YzOVXqDA2PaXmSr5k6/bubfpxEtUrnTPVDMWyEyCJB7XS/gx+L/
-	8tPYFB1kmu2rwdcj3h5FgDap3PbcAKob3Z04EyeTH++YPqhPGcmr
-X-Google-Smtp-Source: AGHT+IGQ239+0H7dF1jVYOz+dq1I6fdbYYS0G35Vn3uTj/gsplQWSsBrOhDL3zzDweZlTcToq0cBrg==
-X-Received: by 2002:a92:c241:0:b0:369:aa8f:c199 with SMTP id k1-20020a92c241000000b00369aa8fc199mr1292301ilo.2.1712183348446;
-        Wed, 03 Apr 2024 15:29:08 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id k14-20020a635a4e000000b005dc832ed816sm12163575pgm.59.2024.04.03.15.29.07
+        d=1e100.net; s=20230601; t=1712187691; x=1712792491;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rv0B5ns63COKymo1kiAr4r2DGtjIZSKU8HdFj+0IH40=;
+        b=eOjvJTBZRJNlmi4VcD8hmWuU9eoDX/1NoIb7qXSRKGrjzX/4jMs+LYRwrcyUnTF1cg
+         Qa8Ca2TWGsjtZVGpFnFnEz7I58ybiHDPR5Sa55jjnlc75rA8vsV3R5eXsuYLIA92+XgI
+         t/dLwGGQ5rKQf+wpi1a+SHA6STcJS8V6X4gfW9Az/Ix19JAnkLWACQhN23gHckF8078H
+         60loRjxqDp/xhDeJYW0xpFIU/HcUfgVS9x/Gin4fl7XVUvDLsEp1AeSD2oCKkp5LI9Fv
+         hoBoqOEvwDx4PcQTvertd5OlzZg1Wkyn+KsHBenAG0uhCR6D7iC/C77ntIyIv1/+mabi
+         AFgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUySt2hq72odAO20Sq0FX93f4Z2As4KVUeh+GTGQWONshMRy0kSiiqn4dV0L0Fus6gj6LNtQtY8M2YzuXmH8MXOLH4MQETz+H/Lggt4B94I
+X-Gm-Message-State: AOJu0YwLFWXNlnIa4XYCvnPsh4M1WZB8Q6gAF557VDhDgryuiy53TtBh
+	ZwGuXkCC97xf8yn+6OlOBUMa8EMe/b4Iz3P50D723PsiYXIU/0fu7+NIYbIV1z4=
+X-Google-Smtp-Source: AGHT+IG0BMforFKG/Z+mj8l+gwmdkHRGf0wkX6Dm3/AG2fDf6ErYVT/6uGhIGHy46uRoq1WTT9/6ig==
+X-Received: by 2002:a17:902:c402:b0:1dd:c953:cfa0 with SMTP id k2-20020a170902c40200b001ddc953cfa0mr1051389plk.48.1712187690540;
+        Wed, 03 Apr 2024 16:41:30 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id b18-20020a170902d51200b001deeac592absm13899117plg.180.2024.04.03.16.41.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 15:29:07 -0700 (PDT)
-Date: Wed, 03 Apr 2024 15:29:07 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>, 
- Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>, 
- bpf@vger.kernel.org, 
- mptcp@lists.linux.dev, 
- linux-kselftest@vger.kernel.org
-Message-ID: <660dd833358bd_2144820881@john.notmuch>
-In-Reply-To: <878r1ubq8q.fsf@cloudflare.com>
-References: <b67101632c6858d281f105b5d4e1bc62dd6b7d27.1712133039.git.tanggeliang@kylinos.cn>
- <878r1ubq8q.fsf@cloudflare.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add F_SETFL for fcntl
+        Wed, 03 Apr 2024 16:41:30 -0700 (PDT)
+From: Deepak Gupta <debug@rivosinc.com>
+To: paul.walmsley@sifive.com,
+	rick.p.edgecombe@intel.com,
+	broonie@kernel.org,
+	Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com,
+	keescook@chromium.org,
+	ajones@ventanamicro.com,
+	conor.dooley@microchip.com,
+	cleger@rivosinc.com,
+	atishp@atishpatra.org,
+	alex@ghiti.fr,
+	bjorn@rivosinc.com,
+	alexghiti@rivosinc.com,
+	samuel.holland@sifive.com,
+	conor@kernel.org
+Cc: linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	corbet@lwn.net,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	oleg@redhat.com,
+	akpm@linux-foundation.org,
+	arnd@arndb.de,
+	ebiederm@xmission.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	lstoakes@gmail.com,
+	shuah@kernel.org,
+	brauner@kernel.org,
+	debug@rivosinc.com,
+	andy.chiu@sifive.com,
+	jerry.shih@sifive.com,
+	hankuan.chen@sifive.com,
+	greentime.hu@sifive.com,
+	evan@rivosinc.com,
+	xiao.w.wang@intel.com,
+	charlie@rivosinc.com,
+	apatel@ventanamicro.com,
+	mchitale@ventanamicro.com,
+	dbarboza@ventanamicro.com,
+	sameo@rivosinc.com,
+	shikemeng@huaweicloud.com,
+	willy@infradead.org,
+	vincent.chen@sifive.com,
+	guoren@kernel.org,
+	samitolvanen@google.com,
+	songshuaishuai@tinylab.org,
+	gerg@kernel.org,
+	heiko@sntech.de,
+	bhe@redhat.com,
+	jeeheng.sia@starfivetech.com,
+	cyy@cyyself.name,
+	maskray@google.com,
+	ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com,
+	mpe@ellerman.id.au,
+	baruch@tkos.co.il,
+	alx@kernel.org,
+	david@redhat.com,
+	catalin.marinas@arm.com,
+	revest@chromium.org,
+	josh@joshtriplett.org,
+	shr@devkernel.io,
+	deller@gmx.de,
+	omosnace@redhat.com,
+	ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: [PATCH v3 00/29] riscv control-flow integrity for usermode
+Date: Wed,  3 Apr 2024 16:34:48 -0700
+Message-ID: <20240403234054.2020347-1-debug@rivosinc.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Jakub Sitnicki wrote:
-> Hi Geliang,
-> 
-> On Wed, Apr 03, 2024 at 04:32 PM +08, Geliang Tang wrote:
-> > From: Geliang Tang <tanggeliang@kylinos.cn>
-> >
-> > Incorrect arguments are passed to fcntl() in test_sockmap.c when invoking
-> > it to set file status flags. If O_NONBLOCK is used as 2nd argument and
-> > passed into fcntl, -EINVAL will be returned (See do_fcntl() in fs/fcntl.c).
-> > The correct approach is to use F_SETFL as 2nd argument, and O_NONBLOCK as
-> > 3rd one.
-> >
-> > Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
-> > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> > ---
-> >  tools/testing/selftests/bpf/test_sockmap.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> > index 024a0faafb3b..34d6a1e6f664 100644
-> > --- a/tools/testing/selftests/bpf/test_sockmap.c
-> > +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> > @@ -603,7 +603,7 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
-> >  		struct timeval timeout;
-> >  		fd_set w;
-> >  
-> > -		fcntl(fd, fd_flags);
-> > +		fcntl(fd, F_SETFL, fd_flags);
-> >  		/* Account for pop bytes noting each iteration of apply will
-> >  		 * call msg_pop_data helper so we need to account for this
-> >  		 * by calculating the number of apply iterations. Note user
-> 
-> Good catch. But we also need to figure out why some tests failing with
-> this patch applied and fix them in one go:
-> 
-> # 6/ 7  sockmap::txmsg test skb:FAIL
-> #21/ 7 sockhash::txmsg test skb:FAIL
-> #36/ 7 sockhash:ktls:txmsg test skb:FAIL
-> Pass: 42 Fail: 3
-> 
-> I'm seeing this error message when running `test_sockmap`:
-> 
-> detected skb data error with skb ingress update @iov[0]:0 "00 00 00 00" != "PASS"
-> data verify msg failed: Unknown error -5
-> rx thread exited with err 1.
+Sending out v3 for cpu assisted riscv user mode control flow integrity.
 
-I have a theory this is a real bug in the SK_SKB_STREAM_PARSER which has an
-issue with wakup logic. Maybe we wakeup the poll/select logic before the
-data is copied and because the recv() is actually nonblocking now we get
-the error.
+v2 [9] was sent a week ago for this riscv usermode control flow integrity
+enabling. RFC patchset was (v1) early this year (January) [7].
 
-> 
-> I'd also:
-> - add an error check for fnctl, so we don't regress,
-> - get rid of fd_flags, pass O_NONBLOCK flag directly to fnctl.
-> 
-> Thanks,
-> -jkbs
+changes in v3
+--------------
+envcfg:
+logic to pick up base envcfg had a bug where `ENVCFG_CBZE` could have been
+picked on per task basis, even though CPU didn't implement it. Fixed in
+this series.
 
+dt-bindings:
+As suggested, split into separate commit. fixed the messaging that spec is
+in public review
+
+arch_is_shadow_stack change:
+arch_is_shadow_stack changed to vma_is_shadow_stack
+
+hwprobe:
+zicfiss / zicfilp if present will get enumerated in hwprobe
+
+selftests:
+As suggested, added object and binary filenames to .gitignore
+Selftest binary anyways need to be compiled with cfi enabled compiler which
+will make sure that landing pad and shadow stack are enabled. Thus removed
+separate enable/disable tests. Cleaned up tests a bit.
+
+changes in v2
+---------------
+As part of testing effort, compiled a rootfs with shadow stack and landing
+pad enabled (libraries and binaries) and booted to shell. As part of long
+running tests, I have been able to run some spec 2006 benchmarks [8] (here
+link is provided only for list of benchmarks that were tested for long
+running tests, excel sheet provided here actually is for some static stats
+like code size growth on spec binaries). Thus converting from RFC to
+regular patchset.
+
+Securing control-flow integrity for usermode requires following
+
+    - Securing forward control flow : All callsites must reach
+      reach a target that they actually intend to reach.
+
+    - Securing backward control flow : All function returns must
+      return to location where they were called from.
+
+This patch series use riscv cpu extension `zicfilp` [2] to secure forward
+control flow and `zicfiss` [2] to secure backward control flow. `zicfilp`
+enforces that all indirect calls or jmps must land on a landing pad instr
+and label embedded in landing pad instr must match a value programmed in
+`x7` register (at callsite via compiler). `zicfiss` introduces shadow stack
+which can only be writeable via shadow stack instructions (sspush and
+ssamoswap) and thus can't be tampered with via inadvertent stores. More
+details about extension can be read from [2] and there are details in
+documentation as well (in this patch series).
+
+Using config `CONFIG_RISCV_USER_CFI`, kernel support for riscv control flow
+integrity for user mode programs can be compiled in the kernel.
+
+Enabling of control flow integrity for user programs is left to user runtime
+(specifically expected from dynamic loader). There has been a lot of earlier
+discussion on the enabling topic around x86 shadow stack enabling [3, 4, 5] and
+overall consensus had been to let dynamic loader (or usermode) to decide for
+enabling the feature.
+
+This patch series introduces arch agnostic `prctls` to enable shadow stack
+and indirect branch tracking. And implements them on riscv. arm64 is expected
+to implement shadow stack part of these arch agnostic `prctls` [6]
+
+Changes since last time
+***********************
+
+Spec changes
+------------
+- Forward cfi spec has become much simpler. `lpad` instruction is pseudo for
+  `auipc rd, <20bit_imm>`. `lpad` checks x7 against 20bit embedded in instr.
+  Thus label width is 20bit.
+
+- Shadow stack management instructions are reduced to
+    sspush - to push x1/x5 on shadow stack
+    sspopchk - pops from shadow stack and comapres with x1/x5.
+    ssamoswap - atomically swap value on shadow stack.
+    rdssp - reads current shadow stack pointer
+
+- Shadow stack accesses on readonly memory always raise AMO/store page fault.
+  `sspopchk` is load but if underlying page is readonly, it'll raise a store
+  page fault. It simplifies hardware and kernel for COW handling for shadow
+  stack pages.
+
+- riscv defines a new exception type `software check exception` and control flow
+  violations raise software check exception.
+
+- enabling controls for shadow stack and landing are in xenvcfg CSR and controls
+  lower privilege mode enabling. As an example senvcfg controls enabling for U and
+  menvcfg controls enabling for S mode.
+
+core mm shadow stack enabling
+-----------------------------
+Shadow stack for x86 usermode are now in mainline and thus this patch
+series builds on top of that for arch-agnostic mm related changes. Big
+thanks and shout out to Rick Edgecombe for that.
+
+selftests
+---------
+Created some minimal selftests to test the patch series.
+
+
+[1] - https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
+[2] - https://github.com/riscv/riscv-cfi
+[3] - https://lore.kernel.org/lkml/ZWHcBq0bJ+15eeKs@finisterre.sirena.org.uk/T/#mb121cd8b33d564e64234595a0ec52211479cf474
+[4] - https://lore.kernel.org/all/20220130211838.8382-1-rick.p.edgecombe@intel.com/
+[5] - https://lore.kernel.org/lkml/CAHk-=wgP5mk3poVeejw16Asbid0ghDt4okHnWaWKLBkRhQntRA@mail.gmail.com/
+[6] - https://lore.kernel.org/linux-mm/20231122-arm64-gcs-v7-2-201c483bd775@kernel.org/
+[7] - https://lore.kernel.org/lkml/20240125062739.1339782-1-debug@rivosinc.com/
+[8] - https://docs.google.com/spreadsheets/d/1_cHGH4ctNVvFRiS7hW9dEGKtXLAJ3aX4Z_iTSa3Tw2U/edit#gid=0
+[9] - https://lore.kernel.org/lkml/20240329044459.3990638-1-debug@rivosinc.com/
 
 
