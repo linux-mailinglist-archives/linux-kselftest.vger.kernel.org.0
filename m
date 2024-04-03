@@ -1,230 +1,235 @@
-Return-Path: <linux-kselftest+bounces-7072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 262AD896C29
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 12:24:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56792896E99
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 14:02:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 491011C20E3B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 10:24:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8EEB1F23827
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 12:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CAE41369A0;
-	Wed,  3 Apr 2024 10:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF0E143892;
+	Wed,  3 Apr 2024 12:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="F3dSO+3r"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="nrmmy/zs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697D2259C;
-	Wed,  3 Apr 2024 10:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712139848; cv=fail; b=lfxVOxaLa9f13utMzMaxxwVMkazjZmmx6tU501zK4U4MDKcV17dVTPKAWW2phihb+biL05Sy46IK8AIO69uGbdAoajCLi5lkJlvriAHOhbhaNDaGg7/IfqXqXeItq++XMFvjuMsos8NEJdsTXcHBwcjbTY1lIxuLrqHEsavlxns=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712139848; c=relaxed/simple;
-	bh=sPqzE6fQQocWV/5YUk9DfTs3wG3gEV+33NTxzCSqBJk=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=f5bM+pBRgv6zbSANIxGcrInbrgD6WZZmYxNWIGsPGLWGNcgYVGzE7DltV1Z/gpDRfikrbf3DN7412kKcsU/5ciqNPV81br144a75GhoMYAQAHjQ2p+KSORswaJ0jwG0tVnj7NUeCGJ5LZ/E3vq6tZaWhTF6rs5rJHbgDKOuJLRE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=F3dSO+3r; arc=fail smtp.client-ip=40.107.236.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TYNTDUnn1Oo8hokfzER2qEC4k6vp8yDKyoRBMKGB3whPvyWVZ8q5TDkee5UKStvHhfMTS6Y1PzwU3NEJEP0mK5satVqz9x3Re03awZL0Jb4XOHgd0mBxZA5S/XphrJUpSfgUtRXfH1YNtj+KyYCpeCTyDMGPBHgAel2/vxSUy9ThDfrUAyplkoU3ipHHCDkUJdpp2LTKf+E+NTpspYYC16Ch00CCMWRZ3w8TQsk9CEmKh0dIFRLRmoeUZlvkOItZvpLsFdfPr4YHkFoT58HUv5lzEGEgNN83UBZo4t31fiLfs3lH58wwRLnFrpjSOh+vO3KOPv2wv/whxC/svU8GeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CRXg+W+FJ/+AOmJuz7lpzQVx3lcpgTOkxV28HmFcTtM=;
- b=ABbjghZlGVjhluYp3aE+LtCD8fje6dL241BoK84s6d8jYAyNewUoX6a6izqYNuembdg6X1DLUOPw1By0QATOJJ0Dg8h01QmWMOHivWKRoMRGNL6KjmX3jyHJF5RrQ9qSVOlCub9MCt3Kw+6ce4XSizIsYcfbWHVIPhuVZ1bCZXaKQ+WtXcYO0lKQ07qEaMkPbga1TiRPOs7E4OvJcwR2Y5eKhWelPHKIE3yFbIj3r54UUExFmaypsOZ++lj60/IKwN/CefTUhi4i2espuKOjBLbV8n1s2Poc9zei9T67XwNKsqD9OEZfTy/FO2vqNOSXL7rvS2Bw3BM9YupfK31USQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CRXg+W+FJ/+AOmJuz7lpzQVx3lcpgTOkxV28HmFcTtM=;
- b=F3dSO+3rYRGXKVyDBJzv6FGuYciWVgdd+MSGzLc0v5Ol2dbCQ0+wCltnkLIVCWRA0rn1RH1yiLccTttklBjLmkrgP3RfLr2pe/ggw0fDO1TKO9n0PNMbcED/wsPp9KRu0MwAVIOcbhRUTf6Y3IjIYNHzfSyLqPsfVwrqLVNDRBV5RoixajAvo8ceO5vHsEpPB7AdUiPiqNTvmbroNQESZDvbZ0UgOiHE8Lfi9vUofaTZK15DAYTEQzyuav4xZ9K+z6qRI07PtP9Ouhgc1Z1OXtMW276ozuAv9ePGXc4UvB0jL7zEABU8G10H+sfes8/UNudiz0SL+ImqEiCYCvqvow==
-Received: from CH0P223CA0008.NAMP223.PROD.OUTLOOK.COM (2603:10b6:610:116::19)
- by DM4PR12MB7720.namprd12.prod.outlook.com (2603:10b6:8:100::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Wed, 3 Apr
- 2024 10:24:03 +0000
-Received: from CH2PEPF0000013D.namprd02.prod.outlook.com
- (2603:10b6:610:116:cafe::61) by CH0P223CA0008.outlook.office365.com
- (2603:10b6:610:116::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46 via Frontend
- Transport; Wed, 3 Apr 2024 10:24:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH2PEPF0000013D.mail.protection.outlook.com (10.167.244.69) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Wed, 3 Apr 2024 10:24:03 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 3 Apr 2024
- 03:23:46 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Wed, 3 Apr
- 2024 03:23:42 -0700
-References: <20240402010520.1209517-1-kuba@kernel.org>
- <20240402010520.1209517-8-kuba@kernel.org> <87bk6rit8f.fsf@nvidia.com>
- <20240402103111.7d190fb1@kernel.org> <8734s3idys.fsf@nvidia.com>
- <20240402163649.4fdc2d3b@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Petr Machata <petrm@nvidia.com>, <davem@davemloft.net>,
-	<netdev@vger.kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>,
-	<shuah@kernel.org>, <sdf@google.com>, <donald.hunter@gmail.com>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 7/7] testing: net-drv: add a driver test for
- stats reporting
-Date: Wed, 3 Apr 2024 10:58:19 +0200
-In-Reply-To: <20240402163649.4fdc2d3b@kernel.org>
-Message-ID: <87y19uhhhx.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075E9134CCA;
+	Wed,  3 Apr 2024 12:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712145754; cv=none; b=POW+VnB4HhS3daBV13fxrVOd2OsUcboo8lJW2IxHn+RIcyg8dFFcp+iqBBIJDhqchqrMq7tF/J+JzzZMKh1WUGReT/KICoQz/NOve5up/ZQV777XVD/bA7RTqog5vJMm3gJAllXIOA4qcBQqSn+dyCVD46S4tZvCxbR/ovFi8ZI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712145754; c=relaxed/simple;
+	bh=MIjlzCP1Z9ehRzIIXpDe3raQA7sAPJ0M61/wEYcg7/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pjj1obuyqROJJIec3Oj2hT8xVAMER9ThYa5P4NkAzwC8++P6jVYixOqzJLqUxo7Cvben3xDi1nx4ttE72JhlTSFEVnXCyNC8XFP/OzmpMsyvivq11B2LHsFmbNVuVthDzfYoYBPO0EsfR6xGtmnxaic3sDQZW3yIHW1dtXy9R4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=nrmmy/zs; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4A955352D4;
+	Wed,  3 Apr 2024 12:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712145751; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=t2Hnk77vjkotvAO37I/a2KOyOgPIBZ2Mq+MuEdRqQKg=;
+	b=nrmmy/zsneWTeL++5/D9B2Y0Ll8wNr1h4y1OcBKbzxxAa3w+x6B5a3WrzWOY7ihqsnRvnj
+	8QXs7vq++BB08smCjZwoqVuLc9qWMJSmeLYkMm4KloSdvgTsNU+wCUTk4xgmdL9P9tBXHJ
+	E93kGqd5umuaEbHIHpQSg3BQxcqavNM=
+Authentication-Results: smtp-out1.suse.de;
+	none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 329991331E;
+	Wed,  3 Apr 2024 12:02:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id zqkpDFdFDWbALQAAn2gu4w
+	(envelope-from <mkoutny@suse.com>); Wed, 03 Apr 2024 12:02:31 +0000
+Date: Wed, 3 Apr 2024 14:02:22 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+	Valentin Schneider <vschneid@redhat.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Alex Shi <alexs@kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
+ synchronous
+Message-ID: <u3naomgv34t5rnc7pmyy4zjppgf36skeo45orss2xnqcvtrcez@m74tsl2ws76f>
+References: <20240401145858.2656598-1-longman@redhat.com>
+ <20240401145858.2656598-2-longman@redhat.com>
+ <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+ <548efd52-e45f-41fa-a477-bc5112d7b00c@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000013D:EE_|DM4PR12MB7720:EE_
-X-MS-Office365-Filtering-Correlation-Id: a521082e-175e-42f6-a862-08dc53c82f83
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	e5wjNMFHqI2PprYndnUtw3hyKJKM3rAU7107EYRE9VpUX95mgM4bpSaGhn1ukrQH6jZ85tihwTr8JqcR4Apbz+s4eE6R+5+Lj7matauzf6pOK+w/aSp3286lNbzWr8NTH7wIGNmwVdka6WBqvgM5WJ1pfG5IDglfCbyNOjkTe69LJH13zrM+an7utDAr7JeVCMkyMxLD2X10rrlCiIAbmYKiY7Sdgb/Rq6qdg9ub5xOSsrwVmvK0MF6xgGMjaluBN9pSStY7lcoWOxsl4f2waVl5SnOC7Tssskb5dY6J07sIHcGu/b/7LUakUEU+teWPaDXMdLlWNNAou17bpA0u6aDUSpQpQKM1fmSb7jB0HI4qs2I8u13KycFFzvOGqiJJCnCD1PeCWiskP6ZVFYHTOGXf0OZvUCgjCrEiRYP9mThQroz4uDfiTXvHMm321y07gbCo5YVC13tpbSkxPYT+2wLyGw6gDq7P4MV7lYLRKv/fhXLUQZz/onAXEWOGxzb90+GZswV238KIFd05VyGRp6Y+IZou1nUAmUtk0yJYGLul2O/Tw3VdwafpRfSguQpkDS4j/wPm5fWontocmz2Us0IKwk80Kh1eqp1JSWSU7nzcZGhk96/xEo9F2bxXGC3DSCkYARaolWTdjdtdmuAV6aoORj1gk9aj+1MwCNEDMvv5TUdC5Xj5BSxlwnavm90s+WxgIl5MVqaiuTUWU3P0Sm0wROpXuR0cdG4l9fmzvexslu9AFtvSloFy+8+zFgqs
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(1800799015)(376005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2024 10:24:03.3927
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a521082e-175e-42f6-a862-08dc53c82f83
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000013D.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7720
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hasfuqktmb566gtt"
+Content-Disposition: inline
+In-Reply-To: <548efd52-e45f-41fa-a477-bc5112d7b00c@redhat.com>
+X-Spam-Score: -5.90
+X-Spamd-Result: default: False [-5.90 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 NEURAL_HAM_SHORT(-0.20)[-0.992];
+	 RCPT_COUNT_TWELVE(0.00)[22];
+	 SIGNED_PGP(-2.00)[];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+,1:+,2:~];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%]
+X-Spam-Level: 
+X-Spam-Flag: NO
 
 
-Jakub Kicinski <kuba@kernel.org> writes:
+--hasfuqktmb566gtt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Wed, 3 Apr 2024 00:04:14 +0200 Petr Machata wrote:
->> > Yes, I was wondering about that. It must be doable, IIRC 
->> > the multi-threading API "injects" args from a tuple.
->> > I was thinking something along the lines of:
->> >
->> >     with NetDrvEnv(__file__) as cfg:
->> >         ksft_run([check_pause, check_fec, pkt_byte_sum],
->> >                  args=(cfg, ))
->> >
->> > I got lazy, let me take a closer look. Another benefit
->> > will be that once we pass in "env" / cfg - we can "register" 
->> > objects in there for auto-cleanup (in the future, current
->> > tests don't need cleanup)  
->> 
->> Yeah, though some of those should probably just be their own context
->> managers IMHO, not necessarily hooked to cfg. I'm thinking something
->> fairly general, so that the support boilerplate doesn't end up costing
->> an arm and leg:
->> 
->>     with build("ip route add 192.0.2.1/28 nexthop via 192.0.2.17",
->>                "ip route del 192.0.2.1/28"),
->>          build("ip link set dev %s master %s" % (swp1, h1),
->>                "ip link set dev %s nomaster" % swp1):
->>         le_test()
->>
->> Dunno. I guess it makes sense to have some of the common stuff
->> predefined, e.g. "with vrf() as h1". And then the stuff that's typically
->> in lib.sh's setup() and cleanup(), can be losslessly hooked up to cfg.
->
-> I was thinking of something along the lines of:
->
-> def test_abc(cfg):
->     cfg.build("ip route add 192.0.2.1/28 nexthop via 192.0.2.17",
->               "ip route del 192.0.2.1/28")
->     cfg.build("ip link set dev %s master %s" % (swp1, h1),
->               "ip link set dev %s nomaster" % swp1)
->
-> optionally we could then also:
->
->      thing = cfg.build("ip link set dev %s master %s" % (swp1, h1),
->                        "ip link set dev %s nomaster" % swp1)
->
->      # ... some code which may raise ...
->
->      # unlink to do something else with the device
->      del thing
->      # ... more code ... 
->
-> cfg may not be best here, could be cleaner to create a "test" object,
-> always pass it in as the first param, and destroy it after each test.
+On Tue, Apr 02, 2024 at 11:30:11AM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> Yes, there is a potential that a cpus_read_lock() may be called leading to
+> deadlock. So unless we reverse the current cgroup_mutex --> cpu_hotplug_l=
+ock
+> ordering, it is not safe to call cgroup_transfer_tasks() directly.
 
-I assume above you mean that cfg inherits the thing, but cfg lifetime
-currently looks like it spreads across several test cases. ksft_run()
-would need to know about it and call something to issue the postponed
-cleanups between cases.
+I see that cgroup_transfer_tasks() has the only user -- cpuset. What
+about bending it for the specific use like:
 
-Also, it's not clear what "del thing" should do in that context, because
-if cfg also keeps a reference, __del__ won't get called. There could be
-a direct method, like thing.exit() or whatever, but then you need
-bookkeeping so as not to clean up the second time through cfg. It's the
-less straightforward way of going about it IMHO.
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 34aaf0e87def..64deb7212c5c 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -109,7 +109,7 @@ struct cgroup *cgroup_get_from_fd(int fd);
+ struct cgroup *cgroup_v1v2_get_from_fd(int fd);
+=20
+ int cgroup_attach_task_all(struct task_struct *from, struct task_struct *);
+-int cgroup_transfer_tasks(struct cgroup *to, struct cgroup *from);
++int cgroup_transfer_tasks_locked(struct cgroup *to, struct cgroup *from);
+=20
+ int cgroup_add_dfl_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
+ int cgroup_add_legacy_cftypes(struct cgroup_subsys *ss, struct cftype *cft=
+s);
+diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
+index 520a11cb12f4..f97025858c7a 100644
+--- a/kernel/cgroup/cgroup-v1.c
++++ b/kernel/cgroup/cgroup-v1.c
+@@ -91,7 +91,8 @@ EXPORT_SYMBOL_GPL(cgroup_attach_task_all);
+  *
+  * Return: %0 on success or a negative errno code on failure
+  */
+-int cgroup_transfer_tasks(struct cgroup *to, struct cgroup *from)
++int cgroup_transfer_tasks_locked(struct cgroup *to, struct cgroup *from)
+ {
+ 	DEFINE_CGROUP_MGCTX(mgctx);
+ 	struct cgrp_cset_link *link;
+@@ -106,9 +106,11 @@ int cgroup_transfer_tasks(struct cgroup *to, struct cg=
+roup *from)
+ 	if (ret)
+ 		return ret;
+=20
+-	cgroup_lock();
+-
+-	cgroup_attach_lock(true);
++	/* The locking rules serve specific purpose of v1 cpuset hotplug
++	 * migration, see hotplug_update_tasks_legacy() and
++	 * cgroup_attach_lock() */
++	lockdep_assert_held(&cgroup_mutex);
++	lockdep_assert_cpus_held();
++	percpu_down_write(&cgroup_threadgroup_rwsem);
+=20
+ 	/* all tasks in @from are being moved, all csets are source */
+ 	spin_lock_irq(&css_set_lock);
+@@ -144,8 +146,7 @@ int cgroup_transfer_tasks(struct cgroup *to, struct cgr=
+oup *from)
+ 	} while (task && !ret);
+ out_err:
+ 	cgroup_migrate_finish(&mgctx);
+-	cgroup_attach_unlock(true);
+-	cgroup_unlock();
++	percpu_up_write(&cgroup_threadgroup_rwsem);
+ 	return ret;
+ }
+=20
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 13d27b17c889..94fb8b26f038 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -4331,7 +4331,7 @@ static void remove_tasks_in_empty_cpuset(struct cpuse=
+t *cs)
+ 			nodes_empty(parent->mems_allowed))
+ 		parent =3D parent_cs(parent);
+=20
+-	if (cgroup_transfer_tasks(parent->css.cgroup, cs->css.cgroup)) {
++	if (cgroup_transfer_tasks_locked(parent->css.cgroup, cs->css.cgroup)) {
+ 		pr_err("cpuset: failed to transfer tasks out of empty cpuset ");
+ 		pr_cont_cgroup_name(cs->css.cgroup);
+ 		pr_cont("\n");
+@@ -4376,21 +4376,9 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
+=20
+ 	/*
+ 	 * Move tasks to the nearest ancestor with execution resources,
+-	 * This is full cgroup operation which will also call back into
+-	 * cpuset. Execute it asynchronously using workqueue.
+ 	 */
+-	if (is_empty && css_tryget_online(&cs->css)) {
+-		struct cpuset_remove_tasks_struct *s;
+-
+-		s =3D kzalloc(sizeof(*s), GFP_KERNEL);
+-		if (WARN_ON_ONCE(!s)) {
+-			css_put(&cs->css);
+-			return;
+-		}
+-
+-		s->cs =3D cs;
+-		INIT_WORK(&s->work, cpuset_migrate_tasks_workfn);
+-		schedule_work(&s->work);
++	if (is_empty)
++		remove_tasks_in_empty_cpuset(cs);
+ 	}
+ }
+=20
 
-I know that I must sound like a broken record at this point, but look:
+--hasfuqktmb566gtt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    with build("ip link set dev %s master %s" % (swp1, h1),
-               "ip link set dev %s nomaster" % swp1) as thing:
-        ... some code which may rise ...
-    ... more code, interface detached, `thing' gone ...
+-----BEGIN PGP SIGNATURE-----
 
-It's just as concise, makes it very clear where the device is part of
-the bridge and where not anymore, and does away with the intricacies of
-lifetime management.
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZg1FSwAKCRAGvrMr/1gc
+jrAhAP9EAPzvP9ut5Lv9vhE3zzjDfzz7OiWPnQ20fgbULZsGqQEA5zpBHRFrppA/
+1N8N9HiJAV3pbeOdaHR/ZDy7Cg6Qjwg=
+=GFHO
+-----END PGP SIGNATURE-----
 
-If lifetimes don't nest, I think it's just going to be ugly either way.
-But I don't think this comes up often.
-
-I don't really see stuff that you could just throw at cfg to keep track
-of, apart from the suite configuration (i.e. topology set up). But I
-suppose if it comes up, we can do something like:
-
-    thing = cfg.retain(build(..., ...))
-
-Or maybe have a dedicated retainer object, or whatever, it doesn't
-necessarily need to be cfg itself.
-
->> This is what I ended up gravitating towards after writing a handful of
->> LNST tests anyway. The scoping makes it clear where the object exists,
->> lifetime is taken care of, it's all ponies rainbows basically. At least
->> as long as your object lifetimes can be cleanly nested, which admittedly
->> is not always.
->
-> Should be fairly easy to support all cases - "with", "recording on
-> cfg/test" and del.  Unfortunately in the two tests I came up with
-
-Yup.
-
-> quickly for this series cleanup is only needed for the env itself.
-> It's a bit awkward to add the lifetime helpers without any users.
-
-Yeah. I'm basically delving in this now to kinda try and steer future
-expectations.
+--hasfuqktmb566gtt--
 
