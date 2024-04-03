@@ -1,153 +1,96 @@
-Return-Path: <linux-kselftest+bounces-7113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 397EA89789C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 20:50:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C6058978D4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 21:10:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D0701C21844
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 18:50:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4C151F2378A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 19:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CEFD154431;
-	Wed,  3 Apr 2024 18:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1196154442;
+	Wed,  3 Apr 2024 19:10:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WPEgSBQJ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xShiaKJt";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yQTIGrSR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C714C146D62;
-	Wed,  3 Apr 2024 18:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24853154BE8;
+	Wed,  3 Apr 2024 19:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712170251; cv=none; b=bMZrlcVHnLNFUnatHAHPnzIALaT27H7LRY/4XFKPDYaVaUsnGHM0I9+Jux6fXkmoyRZ7hmH2b5VINat1tlh+vSXCQCr6kntoS16LugEsDA2gpmC9TL5mUE2EnRiQ+k2SHQ20AfO0b1Xm41YJ+/3GeoNHnRlyBQoi9m7xk51VMBM=
+	t=1712171404; cv=none; b=W/iUOQEB1uwwdbPSld8qxzu8u/7TUHqTRtlu3v9lQjJWfJpBcJS1NaBPq6ceViNh6P6OmSG//NU2gJQ4SzxFHGwvPAtEiCAH9vBlIwY0lqKcQRxZj+6wOWDTNmdAJIvrSoF+x1WIb4WqdGb45d+0Tvo+smKnpCWN9KJ6lehXjPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712170251; c=relaxed/simple;
-	bh=qafNT2/0QJfqG8NsAUxvf/4aoz+ZQ2sjYAFG0qQ4kJg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k5B4aWXqWm9CMCCZCMZLXFEYx21gaOiTlkdu3XyJc6B+V6/AvBgoDMRfreFMM/1zFs2oltCwREKZRnpbKmqjiT6ofgTNkEibqddGUUt7jVab7ZMhUh8IMgYdV+2uLIJXVooy6AKThH5v98zA3UACVsCiB1qQegwsxFYrGt8vFSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WPEgSBQJ; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4148c6132b4so7937215e9.1;
-        Wed, 03 Apr 2024 11:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712170248; x=1712775048; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OxSYstRLcf6NjaNLix3NVlN+e1nyvxy/tW96r1wlIgc=;
-        b=WPEgSBQJ5wtLUjOybunFFfwsczl9sjhe1roV+ajMlLAxLxUbCCwhPaUceSgIwMxF0G
-         Oc3qtC2uqJOh8fHJdoI/kgqMspN1aCS555KpppEdQLpaJ0kV34WUoPElPHdDqiocAp1A
-         MM6dxfy/232X48KWC9k975ectWnC/OIllDGk9CFMvr2HQQ0OaOAZj2JyDWFCgTgRYOQV
-         vJQDOEunVPbeNVHwI23FitC4CoOtj5+BLh6Sr04RRAhikBCo+XmF7jiDBUxkp8hCf4HO
-         vtTQfNd8ccmS2Gs3lzkd07AzEnWz8awtNyBD5R3SsF1++d+UcG6y9UEVqQThQpZkAVmu
-         DnqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712170248; x=1712775048;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OxSYstRLcf6NjaNLix3NVlN+e1nyvxy/tW96r1wlIgc=;
-        b=lBViPiPMuDsKzkIuNUpmziEwhK0jMyHqTjg7FGOm3uqcD1AyJ24CREV7sLfJ1xY5mE
-         rsJ2Us9B6DL8vVP69jKykWQd+OHWUYaWNAePM1Kyr48O1OPOGD/Xoi8GY4O9PzF2Bhd4
-         VRRr7hBEvLGMfLqno/zUKNgBn+ehmhNV2hp7+gyjce+h1r1MQPuw5Vrj64UyhdH0PeDD
-         06b648w9PTiInHNbm2O9+5tfqcXBKovq3cQAwWWRLpL1RRqBA0XOfH/BSDpCAP9SaUhY
-         RUXK7dOFXyCsDnZ6MuXt8KxLBLUxsFM6ywPWfrEk6fix4Yzp/2mnwwUcZZfjzc2Hpqk3
-         pYhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVN0z60jiwquGpM1wmFzoFA93Lp2MkUfgnEBi3jdiu4aV+fMNvpcbzrMKhXwNNtbq74deFC3cPjrDr6Xh11trygMkMM/uAeqHTMgIOhHg3bLcJ0bHVL12skTQ6AFqq2bsd0aVuqfVyJMTomFu/Lpbjo/aP/DaM+zvuvnbKu8IjNn9rq
-X-Gm-Message-State: AOJu0Yxr3cjRJKhMPG67bI8Hy3TUeq0tnvGOxQxKU5cB4NjL6Spz2slr
-	2h4fekBxQMCmiVr8LmvAanwRG2qj5b2xeSrVgvzRd+OGuhxNFMNFPgW/RlrWmocRknL/FQfq/at
-	4S6tko31CEqOsY2c53s5eM+POYPs=
-X-Google-Smtp-Source: AGHT+IFHD+3PR+fgRwZMJjTgYhMmPSdB2eD57GJTKu9dMg2ovytKxAkRB3EOzbVq0oLmPVabnf7ws4D80/Hi2rZ5M34=
-X-Received: by 2002:a5d:6845:0:b0:341:c9bc:6340 with SMTP id
- o5-20020a5d6845000000b00341c9bc6340mr462892wrw.12.1712170248019; Wed, 03 Apr
- 2024 11:50:48 -0700 (PDT)
+	s=arc-20240116; t=1712171404; c=relaxed/simple;
+	bh=pzIK4B66bc749NQfKqD2bPVYkt2kauVqKBN7X+SGq3E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=TaXQj+65uaiikNzYDAYXElADaBjuj0aYe9TVteR12RGRwdGbYaHuyZDwo/btgGPCOquXXOQqN8YyFrqQvLhDwnPs9lzbvvaiyVXngAfd6UuunuoM6nVD8NxC4I03lELXb3A4a8aU6ql0f9k6ij5tipDw0+DO9WCX2ErnbEtyNjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xShiaKJt; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yQTIGrSR; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712171400;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pzIK4B66bc749NQfKqD2bPVYkt2kauVqKBN7X+SGq3E=;
+	b=xShiaKJtyR1gQrMBFejJXh9EOxZcQKqLRlqUo2VQSNyezhFjw8uL7AgQVFFH3WoL8UWVoM
+	qqUbWmOt5mj7xv+xIIlInxnDutryQDoqKhi5UaxGJfp76YuXAoBb3PoIvdcL0ctW6D/KoS
+	8KOCCzs68MUSN4ArjooctEz4Fa3elbUWdBF1j8MIzrtezNp3EWgUqixRTFk8TMs3U/ygR1
+	Lx/T82SO6tQXwLAOb2sNpdKoxFe0QY8FToetMe5ASjJXWTJW+CviQKSAyKq7zvO1ci2aRb
+	R+tfAvHyWCd/4SnXMxiT0h/An0GqR2l7yUeNNoSymJbC/q2By6Qput9Hss7KTw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712171400;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pzIK4B66bc749NQfKqD2bPVYkt2kauVqKBN7X+SGq3E=;
+	b=yQTIGrSRROvqb/a+uelr9JkgAlV+FG5YEN1BnUHIl/D0lqJpMHfdH1p9uU2wBTSg+ans0g
+	Vl3NTnuxa6I1+TBA==
+To: John Stultz <jstultz@google.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Marco Elver <elver@google.com>, Peter
+ Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, "Eric W.
+ Biederman" <ebiederm@xmission.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+ kasan-dev@googlegroups.com, Edward Liaw <edliaw@google.com>, Carlos Llamas
+ <cmllamas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
+ current thread
+In-Reply-To: <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
+References: <87sf02bgez.ffs@tglx> <87r0fmbe65.ffs@tglx>
+ <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
+Date: Wed, 03 Apr 2024 21:09:59 +0200
+Message-ID: <87o7aqb6uw.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org>
- <20240322-hid-bpf-sleepable-v5-1-179c7b59eaaa@kernel.org> <CAADnVQJdm7+7tbJC8yhPqDUijE0DTD9UG4LOQmNRCWchQ3uGsg@mail.gmail.com>
- <CAO-hwJKVVjhg6_0tAM75HGJL0WcERotyJc+7oBVvDiTGJAqTfw@mail.gmail.com>
-In-Reply-To: <CAO-hwJKVVjhg6_0tAM75HGJL0WcERotyJc+7oBVvDiTGJAqTfw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 3 Apr 2024 11:50:36 -0700
-Message-ID: <CAADnVQ+5NqjqyeFS3XgDU0OCFgt1Y9bmTbHOPv6ekw1sJasyaA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/6] bpf/helpers: introduce sleepable bpf_timers
-To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 27, 2024 at 10:02=E2=80=AFAM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
-> > >                 goto out;
-> > >         }
-> > > +       spin_lock(&t->sleepable_lock);
-> > >         drop_prog_refcnt(t);
-> > > +       spin_unlock(&t->sleepable_lock);
-> >
-> > this also looks odd.
+On Wed, Apr 03 2024 at 11:16, John Stultz wrote:
+> On Wed, Apr 3, 2024 at 9:32=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
+e> wrote:
+> Thanks for this, Thomas!
 >
-> I basically need to protect "t->prog =3D NULL;" from happening while
-> bpf_timer_work_cb is setting up the bpf program to be run.
+> Just FYI: testing with 6.1, the test no longer hangs, but I don't see
+> the SKIP behavior. It just fails:
+> not ok 6 check signal distribution
+> # Totals: pass:5 fail:1 xfail:0 xpass:0 skip:0 error:0
+>
+> I've not had time yet to dig into what's going on, but let me know if
+> you need any further details.
 
-Ok. I think I understand the race you're trying to fix.
-The bpf_timer_cancel_and_free() is doing
-cancel_work()
-and proceeds with
-kfree_rcu(t, rcu);
+That's weird. I ran it on my laptop with 6.1.y ...
 
-That's the only race and these extra locks don't help.
-
-The t->prog =3D NULL is nothing to worry about.
-The bpf_timer_work_cb() might still see callback_fn =3D=3D NULL
-"when it's being setup" and it's ok.
-These locks don't help that.
-
-I suggest to drop sleepable_lock everywhere.
-READ_ONCE of callback_fn in bpf_timer_work_cb() is enough.
-Add rcu_read_lock_trace() before calling bpf prog.
-
-The race to fix is above 'cancel_work + kfree_rcu'
-since kfree_rcu might free 'struct bpf_hrtimer *t'
-while the work is pending and work_queue internal
-logic might UAF struct work_struct work.
-By the time it may luckily enter bpf_timer_work_cb() it's too late.
-The argument 'struct work_struct *work' might already be freed.
-
-To fix this problem, how about the following:
-don't call kfree_rcu and instead queue the work to free it.
-After cancel_work(&t->work); the work_struct can be reused.
-So set it up to call "freeing callback" and do
-schedule_work(&t->work);
-
-There is a big assumption here that new work won't be
-executed before cancelled work completes.
-Need to check with wq experts.
-
-Another approach is to do something smart with
-cancel_work() return code.
-If it returns true set a flag inside bpf_hrtimer and
-make bpf_timer_work_cb() free(t) after bpf prog finishes.
-
-> Also, side note: if anyone feels like it would go faster to fix those
-> races by themself instead of teaching me how to properly do it, this
-> is definitely fine from me :)
-
-Most of the time goes into analyzing and thinking :)
-Whoever codes it doesn't speed things much.
-Pls do another respin if you still have cycles to work on it.
+What kind of machine is that?
 
