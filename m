@@ -1,151 +1,164 @@
-Return-Path: <linux-kselftest+bounces-7016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D112C896081
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 02:09:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A46089608B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 02:15:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9E6283C1D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 00:09:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64BF01C231D3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 00:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB8836C;
-	Wed,  3 Apr 2024 00:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD0510FD;
+	Wed,  3 Apr 2024 00:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="ThLe1Mc1"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="U1ptod+k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4316635
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 00:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31853161
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 00:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712102948; cv=none; b=grIEte94/Lc5aJKM/d7zn0jiys1/jdJw1q2texJkdeC/0RB/Dbw26G8YwofoMoptWmmtpkvE4wGYBt5AWstuluWbxV0vzkK4Fcv9DO9bVl6iqHULUYgaRtHUAZYKlk38ZLOF1RNL6pQDNX6mWZM1hnmWVy7agKDv5v4GWS/TT+o=
+	t=1712103337; cv=none; b=JsOVfOpjDx1tKOR42g9srhJkf8vuieaKCaHAKoGUOOA/zcew5Wa5v4jsRtuL5jcBZubbdwSTh8AvASl3Sw8dHfeofUnb4g6lDlCFVqWXdi/GoZsaJTkGmmlpZn4Gi0X7FMGf1U+AvWpclsiCuYeocIN4hCMX7cLnsXcEWiZhJgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712102948; c=relaxed/simple;
-	bh=b3/zBHssu+YuvWrMyZ7W46753okESTMkqY2ouGqp7Fs=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=pFkZy4KEs0XBoSkcPSNoUr11b16xJPtskQZqY2cYs4r3nnjuUmn43vjlnCKpEc5p5oJBUryjMBdpDcD4ilSnOVC9pcFQcrDUzFwQZgXe2EjmkpIHKQyTKuKWTas8n9a6u+cm11r9u0V4sR/s/GCZVaZkJQ/WC0Iuu3YvmsQJIDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=ThLe1Mc1; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5a49261093cso3300160eaf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 17:09:06 -0700 (PDT)
+	s=arc-20240116; t=1712103337; c=relaxed/simple;
+	bh=LPCkjeRWMWWSeeJOeB2h2H7o2AvbMa0PqbIjbluyxKc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N6nBv5UFOrUSSfaIzFsR9shp5GwytT6hs88qyVmBmkPK97tfxyfGR+eGIoAFbLinqhsnEikTD685ZcdtFfnyerC4P2q5B8dJjdEPByy2kteXMzf7njyX6H15S0fSv6ECGY6iS5GYYXylv84MMfJYhGttxqRXXI/7o4z89N+3+nI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=U1ptod+k; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2a2474f2595so1678253a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Apr 2024 17:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712102946; x=1712707746; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vNowzICwSHCBIy9WZnsYUYXcl4Hz0AjkOmlYQwywLXY=;
-        b=ThLe1Mc125NMMt/MJuOU5ONmeBdSiS8jE2n0jk4NwZPxw3Req2gGFkPcSoUJnbah8d
-         ve07ujmcq1efq4z38mPpRv2EHvpamZstKb7Fgd61HIzhAlY0gDFpiiQEsHxdCsBXQaAj
-         DMTPNV3KTzmewYWzLyRXdfgvPzuh79H2aAhAqowyoDX4tawUV8QeYIPrnjA8tBWTk29m
-         ZZxjwSbb269mO9W/UGKvR5RqI9GmkKfVIikzYInTCwSrUwUupi+f42zrAGWIW7l3Wa6u
-         eJHPOIr0lt8HCLyCPdtrBGj2TLFOiIJ6HzRNJe30V7UMKmmPh2kUqCdD2i7aEhHUUvPd
-         v/rw==
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1712103335; x=1712708135; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pM00jwZmYNO3tMEKktR01JogzF+1t+O98oYD6goaZiM=;
+        b=U1ptod+kaM0QL8GYcBK8HO68TbWrTzBvzfZ9pwr7lC/9fLo7ypR8xSlF0IFB3yv30f
+         8krMqmYN1l4epDsiSHkxnpAs9KWJCFTxrV0HFEvhq4YuF8AEmC5Ur5sKciwu1Vtcj7XC
+         dK18B5S7OX1BbEI1UYe0cGD9S93V869ITQyb1IcErXKJmZ7O35zNb+C8k9tCd+m9DeRD
+         rqK3QTLqmFBBvjsCBLB9aBTwyK0UBhDrc13h5HLi6lIOzvJwR4+MPqC00ykEeuEZhJYl
+         GJa4VGOKAHVzRRmK5EU+cYU0zcJawQGgqjDxcZ8FxHiDfjwCOy7bzfN/VX+whJg5XCt7
+         7itA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712102946; x=1712707746;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vNowzICwSHCBIy9WZnsYUYXcl4Hz0AjkOmlYQwywLXY=;
-        b=WD2k8Dtun0SA556SAETWXpXEdCbRn7m8WY2SDexc3ErdG3loSPeQWuJVeZVdbeYKzF
-         xBE137JkyPgeTLTLfeexAD5GOwYv8Fqfi2Jy8d5m/qj0IEGOHgLIYrfwcHnCpvbVkA11
-         RJTDVbbwl+UUxoxfAWJHXsOLc1fChmjy10MeSAhAe7Un1lTMkfj13zb/Wm2y+NZjCTaV
-         ADdhPVXh1ADTkleeqrXWXQayH/WKiLDMxPXmcGMTd7RllMdunaoZgVkGvqqa9cuqMkMg
-         2vDQ5sR/t4wPoigxjn3/BCtY0fc+VgtMziK2ud7D7NeUIMPR96d1wQV0ECi/pS4IqflX
-         rKiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVF9xbovO+p15VA2IGLTA+xGAn0cOghChVbEFuPV03m741P9bQRJfPni3dZUwxxyWI54wU/oHDY421k1cA8x23worgnEoqyeGtk2MXomUf8
-X-Gm-Message-State: AOJu0Yyk7RStdTHJPsS2XxxVBHgcQXWN+eWOW7P3eguZt6/syw0mWfks
-	JEh8fh+0+jj5HR2zrazaMVdRIzvFOnDBYrjfrkLnfgMKVko2rZiE2JTwx+0xlj+TBznBux8wA7n
-	P
-X-Google-Smtp-Source: AGHT+IEmThi15A4fI//wvRzl672csVux5uAKmi/+IrW4ZVo6rk7/JZfxJJOV/wHS7DkeJqWd6niWuQ==
-X-Received: by 2002:a05:6358:5919:b0:183:630a:a88e with SMTP id g25-20020a056358591900b00183630aa88emr1290753rwf.7.1712102945671;
-        Tue, 02 Apr 2024 17:09:05 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id g29-20020a63565d000000b005f05b06229dsm10314732pgm.41.2024.04.02.17.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 17:09:04 -0700 (PDT)
-Message-ID: <660c9e20.630a0220.34a35.bd66@mx.google.com>
-Date: Tue, 02 Apr 2024 17:09:04 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1712103335; x=1712708135;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pM00jwZmYNO3tMEKktR01JogzF+1t+O98oYD6goaZiM=;
+        b=Gn5zy24/kR0vQIy6lgGaZ98q07veiwaNgYcOSrP5bz9sMmXXHGQjXH/EwPYbtRzFF/
+         JjFIjIVd0WwGnY44l6czLdDKAM09eJlDgUnNleBaEft3QgO9gRhmGfbeHlyQbUXDkuyh
+         G6jAZ5FMnOvzwKzJv52F73vwCq9D+Q5FOTrMgucy194RTgyn6RW8B8DECEcW1hNiZnP3
+         symEOQeix1Rlp5fKhRsTrRMmlNjsfkBh0Y771FENpGspeN+jyL0v9301aMpv8+xcES5o
+         1GlX7NrTwCmmAEfG37o+yweHVoOlB+Qv/j6OsOqJbI9hg8FO+UVvEylWC4i/+CoA1h+V
+         aYPg==
+X-Forwarded-Encrypted: i=1; AJvYcCVn5l9QuegeTHWze6uQQR8Vsvw9eu+q5H1W8jf5+MoeVIRY6Uzsxrdwy3kuuI1rzXPwWHrMHCrIKg6Y0YQagUU0VNAY8+y8ZJNHIDWJ8fYc
+X-Gm-Message-State: AOJu0YymrJi9wLXhiXILUamTQEkyV5n+xUpR0Vh+c6PyGLRW0N9KxT4D
+	8+Bwdpgubm622mPq9Bk3h8sWBxntKdKWPJd+lex4UFQ7uzegZwntUCw496vS1uc=
+X-Google-Smtp-Source: AGHT+IGk3TSX8HHpaTJFm0NNp0U3b98ZljZPvAasLFxFq+z6hp2s4c96oHv6jcmaANjVHD83+Wv16w==
+X-Received: by 2002:a17:90a:ea0b:b0:2a1:2506:b937 with SMTP id w11-20020a17090aea0b00b002a12506b937mr1307605pjy.23.1712103335346;
+        Tue, 02 Apr 2024 17:15:35 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:1cbd:da2b:a9f2:881? ([2620:10d:c090:500::7:f97b])
+        by smtp.gmail.com with ESMTPSA id i4-20020a17090ac40400b0029f8d8db93esm12493723pjt.19.2024.04.02.17.15.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Apr 2024 17:15:35 -0700 (PDT)
+Message-ID: <fd8a7bc9-4eb9-4898-be79-ab8d3af28ce7@davidwei.uk>
+Date: Tue, 2 Apr 2024 17:15:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: linux_kselftest-fixes-6.9-rc2
-X-Kernelci-Report-Type: build
-Subject: kselftest/fixes build: 4 builds: 0 failed, 4 passed,
- 1 warning (linux_kselftest-fixes-6.9-rc2)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 4/7] selftests: nl_netdev: add a trivial Netlink
+ netdev test
+Content-Language: en-GB
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ shuah@kernel.org, sdf@google.com, donald.hunter@gmail.com,
+ linux-kselftest@vger.kernel.org, petrm@nvidia.com
+References: <20240402010520.1209517-1-kuba@kernel.org>
+ <20240402010520.1209517-5-kuba@kernel.org>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240402010520.1209517-5-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kselftest/fixes build: 4 builds: 0 failed, 4 passed, 1 warning (linux_kself=
-test-fixes-6.9-rc2)
+On 2024-04-01 18:05, Jakub Kicinski wrote:
+> Add a trivial test using YNL.
+> 
+>   $ ./tools/testing/selftests/net/nl_netdev.py
+>   KTAP version 1
+>   1..2
+>   ok 1 nl_netdev.empty_check
+>   ok 2 nl_netdev.lo_check
+> 
+> Instantiate the family once, it takes longer than the test itself.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: shuah@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/net/Makefile     |  1 +
+>  tools/testing/selftests/net/nl_netdev.py | 24 ++++++++++++++++++++++++
+>  2 files changed, 25 insertions(+)
+>  create mode 100755 tools/testing/selftests/net/nl_netdev.py
+> 
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index cb418a2346bc..5e34c93aa51b 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -34,6 +34,7 @@ TEST_PROGS += gre_gso.sh
+>  TEST_PROGS += cmsg_so_mark.sh
+>  TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
+>  TEST_PROGS += netns-name.sh
+> +TEST_PROGS += nl_netdev.py
+>  TEST_PROGS += srv6_end_dt46_l3vpn_test.sh
+>  TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
+>  TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
+> diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+> new file mode 100755
+> index 000000000000..40a59857f984
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/nl_netdev.py
+> @@ -0,0 +1,24 @@
+> +#!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +from lib.py import ksft_run, ksft_pr, ksft_eq, ksft_ge, NetdevFamily
+> +
+> +
+> +nf = NetdevFamily()
+> +
+> +
+> +def empty_check() -> None:
+> +    global nf
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/linux_kselftest-fixes-6.9-rc2/
+I know you're rolling your own instead of using unittest or pytest. How
+about adding a Test class of some sort and make each test case a method?
+Then you wouldn't need to do this for each test case.
 
-Tree: kselftest
-Branch: fixes
-Git Describe: linux_kselftest-fixes-6.9-rc2
-Git Commit: 224fe424c356cb5c8f451eca4127f32099a6f764
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 3 unique architectures
+Also it would allow you to share some base functionality across
+different test suites.
 
-Warnings Detected:
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x149bf9
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x149bf9
-
----
-For more info write to <info@kernelci.org>
+> +    devs = nf.dev_get({}, dump=True)
+> +    ksft_ge(len(devs), 1)
+> +
+> +
+> +def lo_check() -> None:
+> +    global nf
+> +    lo_info = nf.dev_get({"ifindex": 1})
+> +    ksft_eq(len(lo_info['xdp-features']), 0)
+> +    ksft_eq(len(lo_info['xdp-rx-metadata-features']), 0)
+> +
+> +
+> +if __name__ == "__main__":
+> +    ksft_run([empty_check, lo_check])
 
