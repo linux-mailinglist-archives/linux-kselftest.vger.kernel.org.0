@@ -1,185 +1,127 @@
-Return-Path: <linux-kselftest+bounces-7106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7548897565
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 18:40:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B70A897557
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 18:38:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F5BA282322
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 16:40:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D0221C24DF9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Apr 2024 16:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F8F14A62A;
-	Wed,  3 Apr 2024 16:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E37BC14D71E;
+	Wed,  3 Apr 2024 16:38:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="f9d7h/aC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X2dBHy20"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6545A1514CC
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 16:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF3750A60
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 16:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712162445; cv=none; b=BV/8+4U18CBOMCV+sFs5PY/yLcOXSRIEzyGxV88zhdUA16Iw6kppqgd8Zybsn+OlXZ6mj61N/Kp7z80wQIchHiQTNw11FZZAl/IFZrz57TXUnXsRbRmTHzYjhkU8U5qEwJPlUfrI1uSukQsdoQpqJ1Ik/hHq6CDVlSAJe1B0mT4=
+	t=1712162282; cv=none; b=REAlgY0vEYL4AedieO3wA6+WZ4YY/6Y4roq4HjPRKuhJowhyuTCY9FIQa1y2VCXASE49YOq3Kt9IYTTuX6dsI1LEpRIOYiHC95ci58OJ2ulgoUPQ+cw1v397yobOuYLRapgViOk5kkOc8fBJyIcaG6LvNsKZdEXjRdjgsMKisE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712162445; c=relaxed/simple;
-	bh=2mD3wd3nmiYzDQWwIH66jr73DzAk3vQYxK4D3uGstmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jYcM2y7oBCJUPH54drq+Ya1ySxMspZPZy1pEmElGBQCKFs0ccre7Q/VY/c1q6YRF779sQLhzw+hHhdhZcHaVvzqiipJ9Cq/itZzVEugJDD3H/XYiU8xfMJpJKvF5ldjjN8v5iOj26BV6MUA1wx42T4sVqKBhvfcsZ1EdUIfrdY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=f9d7h/aC; arc=none smtp.client-ip=83.166.143.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4V8qzD5W0DzJnJ;
-	Wed,  3 Apr 2024 18:32:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1712161944;
-	bh=2mD3wd3nmiYzDQWwIH66jr73DzAk3vQYxK4D3uGstmU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f9d7h/aCKQsdTBMI+Epb4SZd4Eo/slK/sWHGQMS/E78snT9F4cU62k9vtYT7Cb0SC
-	 D0Uoq2D73VwBlL4L+NHYM3SRaKTNZn7Q2msLaYzRFt/lx0jvs/FB8PMWoKJWwjhTiJ
-	 6A+zBL+s1pMyFK0D6UxgQLIH5TG841e6Jj8lZ9CU=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4V8qzD0VSHz3Hw;
-	Wed,  3 Apr 2024 18:32:24 +0200 (CEST)
-Date: Wed, 3 Apr 2024 18:32:23 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Saasha Gupta <saashaa1122@gmail.com>
-Cc: outreachy@lists.linux.dev, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alison.schofield@intel.com, paul@paul-moore.com, 
-	shuah@kernel.org
-Subject: Re: Subject: [PATCH] Add test for more file systems in landlock -
- ext4
-Message-ID: <20240403.gaingaeR2zez@digikod.net>
-References: <860c9cadb2fa06c8f10db42ad38405ee19d43a16.camel@gmail.com>
+	s=arc-20240116; t=1712162282; c=relaxed/simple;
+	bh=ytvGI9heir8jUTNz8fa21KCx3UR41dZ1BEei/fkS/tk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=X0u0RSBfBg3gtJ5IcRgtH14j6VXTcWlbDMaJEg2GDUHx04Zn5JCrfSofE32+Jr1HvHH2S5QHKa6txbNcAIqPhLdDhZJ8B/dCtbvoVF7qSzb4rQQ58fbeDdb9gETfO8KL/RDM2mZ0NZf9WXAfT505FyFd4FnEKVGhbZzoU2yS2t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rananta.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X2dBHy20; arc=none smtp.client-ip=209.85.166.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rananta.bounces.google.com
+Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-7d022d0c76aso2862739f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 09:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712162280; x=1712767080; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=q1vrkM4qy+eCxZFi+KNPrNFLVrCIYB9n/XwoXXqqv5s=;
+        b=X2dBHy20VCfrkvrQ6WM2WSZVss0oa5SFr3NpuNhg6lMs1wVBBc0U+qJfCXzpXvRdAz
+         3EnOr43T6+cwziuo9Ez1jx9GO1UkoLE0wGcys4K3+9tqoxUST6TcVyn2KUnfiOrv/UYs
+         1qFf77G3s5l0KgLHt82yoo+eMjTI4JDJO75HKUdMLfvY7Gay2+WC4nJM49FXoNDegy40
+         I+PkoFZOlZoy812OD+CWreLMYEYdh0fq2XtKFERUDxmWhsErqEWfF/POnUPGqdc+wjUl
+         GHF/0htmJxmizb0DyMDSoPlj5vh2CYdmK5xHx+MXLuroELuq1gucI9ZSyLUH0CmIWp00
+         brCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712162280; x=1712767080;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q1vrkM4qy+eCxZFi+KNPrNFLVrCIYB9n/XwoXXqqv5s=;
+        b=ZgA5XjNkAecAiVTbZVVWnj9aLAXZP8eIoG/qF77jiH4YQc1cVRIlrL4dt6NbWAwH+U
+         ap7f4B34G3YIr+AfVsWiTxzfsNZHvcI/RgSodtWGRtH3CW4OFTgjy+kguH25uMcsAx4X
+         C0AlqQuxtbnyNi2PB4OSNB8xHMs5cXXsZ3xLgpiPoSTsurPql1DlpcCAzoz3aktpj0Z/
+         +uxWfWw8b7ArTWWZgFJ6GBuUrID8qGVaxhg1xdHMBZ/NWRXAidO/UIS3X6AQ+FZ7mN0g
+         Ks4PDJTWwe+H+NZGqj8gQv2al8Y9xSWTAHwSsvwaFa2PH2n8W35KI26GLGI+5c6f/gfY
+         oyGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXU6/twsnulBOJ7/U44XmDNs+nbwdTAgmaRvxL7pr17OeLNsgGYSopee2rqtJ75Ea2ngtkfEY8CpfB3w2/Bwnp1oVT7uJ7/EV0qrDUkI0h
+X-Gm-Message-State: AOJu0YzGZs6nzT+fFMTILEsDUzviNLJ4mx1/i+EvUuoMt9E81Q/4pKWR
+	f/QJ1gJYZK60Sk9sKqZpcm8vu8e3hMMeXoHjqvz5FuM1lCc6hR4qe+R/F+ZZ3hk1yQ2yoLxnxCm
+	86g88kw==
+X-Google-Smtp-Source: AGHT+IGB4vV/Sw5krILq3RILr7noozz1vwF6KwvYjFIURr/fONHnLOvW+gLWPcsGnEAhdPwH930QmeaHYght
+X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:20a1])
+ (user=rananta job=sendgmr) by 2002:a05:6638:3488:b0:47c:1788:e23 with SMTP id
+ t8-20020a056638348800b0047c17880e23mr953740jal.4.1712162280573; Wed, 03 Apr
+ 2024 09:38:00 -0700 (PDT)
+Date: Wed,  3 Apr 2024 16:37:52 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <860c9cadb2fa06c8f10db42ad38405ee19d43a16.camel@gmail.com>
-X-Infomaniak-Routing: alpha
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
+Message-ID: <20240403163753.1717560-1-rananta@google.com>
+Subject: [PATCH] KVM: selftests: Fix build error due to assert in dirty_log_test
+From: Raghavendra Rao Ananta <rananta@google.com>
+To: Sean Christopherson <seanjc@google.com>, Sasha Levin <sashal@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Raghavendra Rao Ananta <rananta@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Apr 02, 2024 at 01:37:44PM +0530, Saasha Gupta wrote:
-> Date: Mon, 2 Apr 2024 19:59:56 +0530
-> 
-> RE: This patch is now properly preformatted.
-> 
-> Landlock LSM, a part of the security subsystem, has some tests in place
-> for synthetic filesystems such as tmpfs, proc, sysfs, etc. The goal of
-> the new issue, and hence this patch is to add tests for non synthetic
-> file systems, such as ext4, btrfs, etc
+The commit e5ed6c922537 ("KVM: selftests: Fix a semaphore imbalance in
+the dirty ring logging test") backported the fix from v6.8 to stable
+v6.1. However, since the patch uses 'TEST_ASSERT_EQ()', which doesn't
+exist on v6.1, the following build error is seen:
 
-I agree with Julia's review.
+dirty_log_test.c:775:2: error: call to undeclared function
+'TEST_ASSERT_EQ'; ISO C99 and later do not support implicit function
+declarations [-Wimplicit-function-declaration]
+        TEST_ASSERT_EQ(sem_val, 0);
+        ^
+1 error generated.
 
-> 
-> This patch adds tests for the ext4 file system. This includes creation
-> of a loop device (test-ext4.img) and formating with mkfs.
-> 
-> Signed-off-by: Saasha Gupta <saashaa1122@gmail.com>
-> ---
->  tools/testing/selftests/landlock/fs_test.c | 65 ++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index 9a6036fbf..b2f2cd5a5 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -4675,6 +4675,14 @@ FIXTURE_VARIANT_ADD(layout3_fs, hostfs) {
->  	.cwd_fs_magic = HOSTFS_SUPER_MAGIC,
->  };
->  
-> +/* Add more filesystems */
-> +FIXTURE_VARIANT_ADD(layout3_fs, ext4) {
-> +	.mnt = {
-> +		.type = "ext4",
-> +	},
-> +	.file_path = TMP_DIR "/dir/file",
-> +};
-> +
->  FIXTURE_SETUP(layout3_fs)
->  {
->  	struct stat statbuf;
-> @@ -4728,6 +4736,63 @@ FIXTURE_SETUP(layout3_fs)
->  		self->has_created_file = true;
->  		clear_cap(_metadata, CAP_DAC_OVERRIDE);
->  	}
-> +
-> +	/* Create non synthetic file system - ext4 */
-> +	if (stat(self->dir_path, &statbuf) != 0) {
+Replace the macro with its equivalent, 'ASSERT_EQ()' to fix the issue.
 
-dir_path should already exist with previous code right?
+Fixes: e5ed6c922537 ("KVM: selftests: Fix a semaphore imbalance in the dirty ring logging test")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+Change-Id: I52c2c28d962e482bb4f40f285229a2465ed59d7e
+---
+ tools/testing/selftests/kvm/dirty_log_test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +		pid_t pid = fork();
-> +
-> +		if (pid == -1) {
-> +			perror("Failed to fork");
-> +			exit(EXIT_FAILURE);
-> +		} else if (pid == 0) {
-> +			static const fallocate_argv[] = { "fallocate", "--length",
-> +						   "4M", "test-ext4.img",
-> +						   NULL };
-> +			execvp(fallocate_argv[0], fallocate_argv);
+diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+index ec40a33c29fd..711b9e4d86aa 100644
+--- a/tools/testing/selftests/kvm/dirty_log_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_test.c
+@@ -772,9 +772,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	 * verification of all iterations.
+ 	 */
+ 	sem_getvalue(&sem_vcpu_stop, &sem_val);
+-	TEST_ASSERT_EQ(sem_val, 0);
++	ASSERT_EQ(sem_val, 0);
+ 	sem_getvalue(&sem_vcpu_cont, &sem_val);
+-	TEST_ASSERT_EQ(sem_val, 0);
++	ASSERT_EQ(sem_val, 0);
+ 
+ 	pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);
+ 
 
-Using system() would makes this much simpler (see net_test.c).
+base-commit: e5cd595e23c1a075359a337c0e5c3a4f2dc28dd1
+-- 
+2.44.0.478.gd926399ef9-goog
 
-> +			perror("execvp failed");
-> +			exit(EXIT_FAILURE);
-> +		} else {
-> +			int status;
-> +
-> +			if (waitpid(pid, &status, 0) == -1) {
-> +				perror("waitpid failed");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +			if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-> +				TH_LOG(stderr,
-> +					"Failed to create ext4 filesystem image: fallocate failed\n");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +		}
-> +	}
-> +
-> +	/* Formate and mount non synthetic file system - ext4 */
-> +	if (stat("mnt", &statbuf) != 0) {
-
-"mnt" never exists, so this would always run this code...
-
-> +		pid_t pid = fork();
-> +
-> +		if (pid == -1) {
-> +			perror("Failed to fork");
-> +			exit(EXIT_FAILURE);
-> +		} else if (pid == 0) {
-> +			static const mkfs_argv[] = { "mkfs.ext4", "-q",
-> +					      "test-ext4.img", "mnt", NULL };
-> +			execvp(mkfs_argv[0], mkfs_argv);
-> +			perror("execvp failed");
-> +			exit(EXIT_FAILURE);
-> +		} else {
-> +			int status;
-> +
-> +			if (waitpid(pid, &status, 0) == -1) {
-> +				perror("waitpid failed");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +			if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-> +				TH_LOG(stderr,
-> +					"Failed to format ext4 filesystem image: mkfs.ext4 failed\n");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +		}
-> +	}
->  }
->  
->  FIXTURE_TEARDOWN(layout3_fs)
-> -- 
-> 2.44.0
-> 
-> 
-> 
 
