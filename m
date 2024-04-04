@@ -1,115 +1,107 @@
-Return-Path: <linux-kselftest+bounces-7240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CEC68992F4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 03:58:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5711C8992FA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 04:08:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 750291C21317
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 01:58:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12909288857
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 02:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1468C13D;
-	Fri,  5 Apr 2024 01:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695A1DDA0;
+	Fri,  5 Apr 2024 02:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bqdRmaSX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j0PlOwH4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792CF1C02;
-	Fri,  5 Apr 2024 01:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6C36AB6;
+	Fri,  5 Apr 2024 02:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712282326; cv=none; b=gUWI8K2DBbK9dBvAnzSxdnGXGXwqK3GK0gh5S2wI0lxQ8UmsPxKARVg+bFIEiZjRPXkwOc867ejSIDOhVsZH60P+SfvXsYN2cKFAuTAjspp9h4vHXmeksc6KZOOkBvjqM4C4eCWQNotY828tkexff17QmuaJUN5AcjZrKcRkOOA=
+	t=1712282877; cv=none; b=QaGPzmmZeIk++wcA/8kLYcJ4/v35vtfBavce3bp0INks4OTOZeQ3eMqbwahLVilaWAF7+gm7x3ySS83e7g0hPNidRuVr39tBWonYP2g0Opym9upWdCSq3aWeyEjjg5KcEsWvNuWKxaID95d4GU7UwJ93s9mcfD/EZqG4DMsaUqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712282326; c=relaxed/simple;
-	bh=G2BSx76EhmeknzsYLYGm9uUqS2jps2xIR7gwh3ktd9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OT5VGZklxHrTWe4ANzXfmp6ohYWN1yisq0DqqzB+/aRT41XmHrM7RZAXjBicvuCRSIK9XNnvbwCc4ybxySRewCSyGsrP8cdiZJzCzfGR4gwwLvB1F9MnYNITl/j4Gwn/fZabApAvIyp20uZHuLKeiDMQb+u0EFXBXycojcPYht4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bqdRmaSX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C825C433F1;
-	Fri,  5 Apr 2024 01:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712282326;
-	bh=G2BSx76EhmeknzsYLYGm9uUqS2jps2xIR7gwh3ktd9s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bqdRmaSX4RAXO7BrhELtwCKBBeVqq3zFd6Yj+dDEKSlRNsJwu7/F3K2LswsslKuWM
-	 a61kc1Ms3O0wB56WEUD3rGE2nn/OeJ6syCTpwGLY/4T43pbi6N93c8Upkh+BYT/shP
-	 UiQLztBECXcvxd1q4o+ArDX+VIx5Odg7oW59EiF9OX7gWKvXNOCOMebkg3bJBQNO9Y
-	 kTNG0kfAbbvBS+1djtO1yo/IbBT4Mtc/RhQ1PWZ00ZyCy1J2YqZqoT/yN87yRnAO6h
-	 3s0vhxfmeIFAiqSmu1234pX7xS4dS0vKgj7oOlMlxXAeqTbAA8kJEwbULlN1f66ne1
-	 BNdMuUNkp7EbQ==
-Date: Thu, 4 Apr 2024 18:58:44 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Petr Machata <petrm@nvidia.com>
-Cc: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
- <pabeni@redhat.com>, <shuah@kernel.org>, <sdf@google.com>,
- <donald.hunter@gmail.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 6/7] selftests: drivers: add scaffolding for
- Netlink tests in Python
-Message-ID: <20240404185844.0ddb8632@kernel.org>
-In-Reply-To: <87zfu9fk2v.fsf@nvidia.com>
-References: <20240403023426.1762996-1-kuba@kernel.org>
-	<20240403023426.1762996-7-kuba@kernel.org>
-	<87zfu9fk2v.fsf@nvidia.com>
+	s=arc-20240116; t=1712282877; c=relaxed/simple;
+	bh=STPVYoPQr3IUpl3V11g5YGSOIYs+skD4DTzlIbgQUPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qc8+FnWa9X9baPVyPFl046UxWayJKVFE6WmK6D0iml1XJnEjuAjYviVfjuPgLYkko+sdnkgMZaeCf9B+06n8jJRVczxFx0afSNwpzRKXSmq7VsEcY9FRFD7s1ovq/scXmyFHTTuaPHMZ7f73DBE3JF5pzyMteH4tu14SA68u78M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j0PlOwH4; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-789dbd9a6f1so94479085a.1;
+        Thu, 04 Apr 2024 19:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712282875; x=1712887675; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lZ9R5uibYBrT2uu3N8NZ5MqGVHwCm+hOT4GQItGAlZk=;
+        b=j0PlOwH4Yz/WpL923brCObHsHhrRLtYE30dF/gFOXxR9gNchfJGxLixW9R0fQe41/2
+         Qt5QPuauq2ikrA6AjHhGdbSpeW5Bhgxmsp63tTGhzE91xdL75IDfmlqT0tRZ0wH25DtX
+         ruNBGaP/4dSSi+CFBD6xRB/JF17M82Y+Yam/zAPzOofkPzIYmqa3A5jAKqiHhGhaaObU
+         uIReRl7pFM+j6HTL8OteEIoZTrsxGC7qBbA3oCI8/GRv9AL+u2AFos0Qs2cSvZjP8oVE
+         NbzorzBdziHUdaGzG5K1B9SkepxirALUElWe54UUN6a1n3rsOZ0QOCLuQIwvdfH4Y/EH
+         B9SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712282875; x=1712887675;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lZ9R5uibYBrT2uu3N8NZ5MqGVHwCm+hOT4GQItGAlZk=;
+        b=di/1+NBUBEe6xAo740chyoiAPODLm37TUHRu3H+DFeTlum7JBYE8jYqCneOhHg9RBP
+         P5GP6hzsEei4ST59v/tjnEl+pXKjavolRMq5WHdo2qHZRGRtkpyJ1D4bcsnaRUNujlta
+         LY8BX0DdL60BGVIO8I0m+ZI+SOfrQQNdPiPFj6H7zfBZy7PnQH282ayQTaFbxYNAGNvX
+         f00hyibTLOaj7sKAIYEN1K1vuzAWwv18MbZxwBiG3pAW25WjIpPuHAWtSNFcozR5UL9e
+         ZvrO1/BG0Z08Gk05Wb6bJdslnhUazaEh/3vuVSSDBWmhiTWjKeMQ3V9SdGtyi1bBbLWD
+         qb7g==
+X-Forwarded-Encrypted: i=1; AJvYcCX1ohiECoEQO0g6yR6oWE/VOEFbOspOBRddAIuzw2ljI7d6cjhBTvQTRMdBH1ycrBq/ydYEYbe6Z7cv+fKvtHNSfR25IX1W8/OsUkmvhGChgmi/ih5qjq+M8/6Na/y4wEQW/KXg6RYiM/3V4xz9rYmdB1FpgCCFwkneC3nPI6U5wfEzE8tz
+X-Gm-Message-State: AOJu0Yw88u+vvpbhAMuuAcJbZmQCf8BLcW51zJ4DwlNBdTFRrYxO7jpe
+	BRToSRYcLRmOX1vEHuphdkuGT25CUpfuvCmVvHEcLMiZCzMAw2jrNXhsidw3
+X-Google-Smtp-Source: AGHT+IEZ0Y+Ggjtdk1QIkeoBztmF5GXff/tXhEHhrQ83G49fWIg/xTy4lklVP7/JFpIzA0YnZfafbg==
+X-Received: by 2002:a05:620a:5207:b0:78b:c3a2:26c6 with SMTP id dc7-20020a05620a520700b0078bc3a226c6mr140825qkb.21.1712282874782;
+        Thu, 04 Apr 2024 19:07:54 -0700 (PDT)
+Received: from localhost ([2601:8c:502:14f0:acdd:1182:de4a:7f88])
+        by smtp.gmail.com with ESMTPSA id g17-20020a05620a40d100b0078bd8d2b272sm255133qko.123.2024.04.04.19.07.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 19:07:54 -0700 (PDT)
+Date: Thu, 4 Apr 2024 18:07:55 -0400
+From: Oliver Crumrine <ozlinuxc@gmail.com>
+To: axboe@kernel.dk, asml.silence@gmail.com, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, 
+	leitao@debian.org
+Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCHSET 0/3] Add REQ_F_CQE_SKIP support to io_uring zerocopy
+Message-ID: <aqoc4kq3reefpxhfyj5d7kfdhtznl37a75vuugpyxaaag2iwee@jyxoj3y2vr3r>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 4 Apr 2024 12:42:24 +0200 Petr Machata wrote:
-> > +    def __init__(self, nsimdev, port_index, ifname, ns=None):
-> > +        # In case udev renamed the netdev to according to new schema,
-> > +        # check if the name matches the port_index.
-> > +        nsimnamere = re.compile(r"eni\d+np(\d+)")
-> > +        match = nsimnamere.match(ifname)
-> > +        if match and int(match.groups()[0]) != port_index + 1:
-> > +            raise Exception("netdevice name mismatches the expected one")
-> > +
-> > +        self.ifname = ifname
-> > +        self.nsimdev = nsimdev
-> > +        self.port_index = port_index
-> > +        self.ns = ns
-> > +        self.dfs_dir = "%s/ports/%u/" % (nsimdev.dfs_dir, port_index)
-> > +        ret = ip("-j link show dev %s" % ifname, ns=ns)
-> > +        self.dev = json.loads(ret.stdout)[0]  
-> 
-> I don't think self.ifname, .ns, .dfs_dir, .dev are actually used outside
-> of this function.
+This patchset allows for io_uring zerocopy to support REQ_F_CQE_SKIP,
+skipping the normal completion notification, but not the zerocopy buffer
+release notification.
 
-Right, one of the "further down the line" tests need these.
-I'll remove for now.
+This patchset also includes a test to test these changes, and a patch to
+mini_liburing to enable io_uring_peek_cqe, which is needed for the test.
 
-> > +    def dfs_write(self, path, val):
-> > +        self.nsimdev.dfs_write(f'ports/{self.port_index}/' + path, val)
-> > +
-> > +
-> > +class NetdevSimDev:
-> > +    """
-> > +    Class for netdevsim bus device and its attributes.
-> > +    """
-> > +    @staticmethod
-> > +    def ctrl_write(path, val):
-> > +        fullpath = os.path.join("/sys/bus/netdevsim/", path)
-> > +        with open(fullpath, "w") as f:
-> > +            f.write(val)
-> > +
-> > +    def dfs_write(self, path, val):
-> > +        fullpath = os.path.join(f"/sys/kernel/debug/netdevsim/netdevsim{self.addr}/", path)
-> > +        with open(fullpath, "w") as f:
-> > +            f.write(val)
-> > +
-> > +    def __init__(self, port_count=1, ns=None):
-> > +        # nsim will spawn in init_net, we'll set to actual ns once we switch it the.sre  
-> 
-> the.sre?
+Oliver Crumrine (3):
+  io_uring: Add REQ_F_CQE_SKIP support for io_uring zerocopy
+  io_uring: Add io_uring_peek_cqe to mini_liburing
+  io_uring: Support IOSQE_CQE_SKIP_SUCCESS in io_uring zerocopy test
 
-Ha, must have started typing with focus on the wrong window.
-Good it wasn't my password :D
+ io_uring/net.c                                |  6 +--
+ tools/include/io_uring/mini_liburing.h        | 18 +++++++++
+ .../selftests/net/io_uring_zerocopy_tx.c      | 37 +++++++++++++++++--
+ .../selftests/net/io_uring_zerocopy_tx.sh     |  7 +++-
+ 4 files changed, 59 insertions(+), 10 deletions(-)
+
+-- 
+2.44.0
+
 
