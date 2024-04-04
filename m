@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-7215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C11C7898CB5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 18:54:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B481B898CF7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 19:06:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D0FCB26311
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 16:54:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65542284D13
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 17:06:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD55712D75D;
-	Thu,  4 Apr 2024 16:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49924129E88;
+	Thu,  4 Apr 2024 17:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="F0X3Aebe"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OO3lc94R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33F512D1EA
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 16:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3F81F922
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 17:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712249655; cv=none; b=ahQv4T5TDtW9ai3CnWlLOqtZVmpL4ldd6E9pRc39XbY2XeR8DVaYbFfaO6p993O3WenrIG9i5CZwyohpX+KAEfDwmf1RTJy5k51SDeQBiqkNuCtEVEp68cYTm4V21jZYXIq3P4aQDb5jXHq3rORzxLskxK8QL+cMb0XF0rD8rVo=
+	t=1712250386; cv=none; b=iJfYIPCeSjSKp8CCHVQ3uZwvyFwXb8Hn+gxJPP9d5HuAGXSizsWQ0x7k8wBE6Gu3DH6xbLywD+A09bS45FeH+pYKFGWWGIIv9ALibL4oMtNMWKFXiD5Sm+9vLF/vkR7t2AYYEC2+aPPgUJHIgduekaMpv+HCa3VBD5DhnLbdoTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712249655; c=relaxed/simple;
-	bh=lQXxyaAh1yfepGvWX1Dxa3BYz89/8nOI90HRYgFhJjQ=;
+	s=arc-20240116; t=1712250386; c=relaxed/simple;
+	bh=OSPqJ91WFQCaW0PJb6559Z/+qaB8INvw9x8X/jLyFgI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OzAhbQoTR6UcngJ6Om6dxDfU4wlgCHAPoKSapEbUzqUVzNVBHn9xsdzpPByxmG+JY8wluWXuPdi+pKIkFviUwTi5P9GUHq9GPUBTDhrVfe6KIUbjZ6Sbr0nbUmV1KlrejNf8m3J8glAwLBmZPEHz4Z9fZn8XGVGETMbBQHRMcUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=F0X3Aebe; arc=none smtp.client-ip=209.85.166.170
+	 In-Reply-To:Content-Type; b=qTQKXq7ZRWIgfIcG6MSIpg2i0zlfKMozMiQp/bmVrTrLvoLPCE24r6Y2+HlaIon1AcKXQLgM6H8/4XaEuXBB4YQoyGnudtyVtncCttquSGgsASEUVpN3yrul+sHaTllWdEICrZfqdC38Otl7KZLIiPS3i6yeeqapx6VVE8gJJ5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OO3lc94R; arc=none smtp.client-ip=209.85.166.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-36990f24098so37605ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 09:54:13 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7c8e4c0412dso13096039f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 10:06:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1712249653; x=1712854453; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1712250384; x=1712855184; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=mbKbff6IZcMe7tMchG80ujSCo/40juHuTAkwW5EuY0s=;
-        b=F0X3Aebe9NyQCOC/I4YAA4IVCOMFwL+tyiSU4HIy03qTwfxTQlc65pKNF7IBbQJ5JF
-         +XpYJ5XHseqtB7RUvsTfeFQTeUeZkcJwmN9uv3XlBN4nfOsSbhPdrsu/uKfemAIz6EBq
-         UKhUSzotn5VVmSiGxqSLD5Ck9tWE+1WEzQfyQ=
+        bh=S4+pPZmfnMRvuzCTlrw9RHK+nPpZuPKzM5pjyBfGGjY=;
+        b=OO3lc94R4WR6QoxKazbfb7vIGroC/uHZbbsOqlfRXYpFDB5xw7WMB7hcfHEHxN1yxg
+         3+1+aBjXfBobKZ6R/0FOvmh8Rnqgaasfabvl6o6sJ3B8V25/OOm1esH7sHB3aTPSrLKB
+         xAJD1xCVezt5HNfz+f2P5KAJJ8tKW8K1Ui3ag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712249653; x=1712854453;
+        d=1e100.net; s=20230601; t=1712250384; x=1712855184;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mbKbff6IZcMe7tMchG80ujSCo/40juHuTAkwW5EuY0s=;
-        b=VgUad62lE9g0vhbRAbo/vk4sN2XL+UhTRMQacQbpaIOniWgrcGbAn/0JGOJvnr8TB4
-         8RGGmBgSzTUP0jPK+RMmG9TlnpdEvf+ejzVyFxta1GglXfY4di3o3NmfKbo/98yPm3fN
-         InXUmTz/WBo7S+OCQv9NoERk+AOoDtiIkDoNrZj421GQ87GXytTQfpD90MDnWuMbIO3L
-         16Eo+o4WkNDrRboyPFcbcWxgDKfKio3iWKbv8xi6MLLcUgEbT9k3Y/OaeLX2c79JUIQG
-         jx4lDiBLXv8460iIaLNUNPRpxbOhxxpi+Mzmuuz2mdiRvftajl0hR5CVhtmHIgPxl1hj
-         gw3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUrGp3trs3pbvNtSQpbOUFykchc+goIAhGMH4OVVYy3Fm5wfTQDhHSc+soIeiSyTSOm7OYxvLpqV2udbXxEXcFhixoXX1rp5//orGA/t37h
-X-Gm-Message-State: AOJu0Yz0fE6iXCKIZBrZzQXtAd1dMhSV9PdxscSta/dToQbHOGxXNTPv
-	ke0zn+deP8mnZCVC20DDdSRbJv8seMNXPkU/C3K9fIT5diMIUfcb7cvN/cbxOmc=
-X-Google-Smtp-Source: AGHT+IFIoeSIptPcK/ZIht/gxDhBth3YhYHyf8Hmsc8CO9peKgWubokh48VKo1WOettsk1NRD6I0ng==
-X-Received: by 2002:a05:6e02:541:b0:368:efa4:be12 with SMTP id i1-20020a056e02054100b00368efa4be12mr3434944ils.3.1712249653087;
-        Thu, 04 Apr 2024 09:54:13 -0700 (PDT)
+        bh=S4+pPZmfnMRvuzCTlrw9RHK+nPpZuPKzM5pjyBfGGjY=;
+        b=bXtRSLUf+i84+/7sBTho3Oz9HIGzChXOfIcPR45QL5gjLW8qdHU0YDfepuAfwpW1Ed
+         xeqQ8c3GUCIRdCy0s5Iu0mK5hvv9qsdNL0lttnrW3u76D87TvvAWQbyi/q4l6FfeVJwY
+         5pqmB9xf8d6FXAA3jwVOcnnjscRg7vBin/uj24X109WTRtGrposmJwGzqzzpX/ihI50Q
+         VccPB5EALraPKVcc17ZOissTfRMbh3UWKelqM55YusmgxdDlbDcnG9x65fQca2/0TRVq
+         fkjB5d/mCpzmZuFYeuc9OAZjsR9FwFRojEBdjC/PVOGGdFFMHVVrWfs8oHgOADTxnwtv
+         Pu3g==
+X-Forwarded-Encrypted: i=1; AJvYcCV5IAK2lpMWaZ++E5An+krB4CYY/SwN7TC/JIRkrbKa1ybL122IECvYa8GoPT0FD8thIscuiyP2ZNqnM5vv6yj8TlpEAQl+iz2Z+naG7tfv
+X-Gm-Message-State: AOJu0YztXRN59b2xEE5qOL2f46HjyqAVWSUm/SNwAfFDeLex7Au0X2n2
+	6gbXkK4lJxv2wJz5/h5zWvAjkET9ljTdxaXS28N69SfADlw/+WIUJGq7hex2hpo=
+X-Google-Smtp-Source: AGHT+IGBSo+ofsQpk2L5vpwRRgN7skJmv9Ao+cuVo9Akhk+UCk1M/bFzDJtgrQxmsRVuuo6GDjI0fw==
+X-Received: by 2002:a6b:fc1a:0:b0:7d3:4f72:afd with SMTP id r26-20020a6bfc1a000000b007d34f720afdmr3224480ioh.0.1712250383695;
+        Thu, 04 Apr 2024 10:06:23 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id j3-20020a92c203000000b00369bb06ae5dsm1081324ilo.25.2024.04.04.09.54.12
+        by smtp.gmail.com with ESMTPSA id g18-20020a05663816d200b00474d6e60dc4sm4679108jat.117.2024.04.04.10.06.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 09:54:12 -0700 (PDT)
-Message-ID: <e565670b-d31e-48fa-a873-6c68dba5b04b@linuxfoundation.org>
-Date: Thu, 4 Apr 2024 10:54:12 -0600
+        Thu, 04 Apr 2024 10:06:23 -0700 (PDT)
+Message-ID: <7b7447d8-cf99-4a0a-9510-f4d2d9791264@linuxfoundation.org>
+Date: Thu, 4 Apr 2024 11:06:22 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,79 +73,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] seltests/iommu: runaway ./iommufd consuming 99% CPU after a
- failed assert()
-To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
- Joao Martins <joao.m.martins@oracle.com>, Jason Gunthorpe <jgg@nvidia.com>
-Cc: iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+Subject: Re: [PATCH] kselftest: Add missing signature to the comments
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <0d5c3b29-fc5b-41d9-9556-5ce94262dac8@alu.unizg.hr>
- <20240319135852.GA393211@nvidia.com>
- <a692d5d7-11d5-4c1b-9abc-208d2194ccde@alu.unizg.hr>
- <cdc9c46b-1bad-41cd-8f98-38cc2171186a@oracle.com>
- <20240325135207.GC6245@nvidia.com>
- <f8e03425-98cf-4076-8959-d85eda846bab@oracle.com>
- <08a13b79-e94a-4f80-96e9-ce223d928b3e@alu.unizg.hr>
+References: <20240404155511.57502-1-usama.anjum@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <08a13b79-e94a-4f80-96e9-ce223d928b3e@alu.unizg.hr>
+In-Reply-To: <20240404155511.57502-1-usama.anjum@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/27/24 14:04, Mirsad Todorovac wrote:
+On 4/4/24 09:55, Muhammad Usama Anjum wrote:
+> The comment on top of the file is used by many developers to glance over
+> all the available functions. Add the recently added ksft_perror() to it.
 > 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   tools/testing/selftests/kselftest.h | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> On 3/27/24 11:41, Joao Martins wrote:
->> On 25/03/2024 13:52, Jason Gunthorpe wrote:
->>> On Mon, Mar 25, 2024 at 12:17:28PM +0000, Joao Martins wrote:
->>>>> However, I am not smart enough to figure out why ...
->>>>>
->>>>> Apparently, from the source, mmap() fails to allocate pages on the desired address:
->>>>>
->>>>>    1746         assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
->>>>>    1747         vrc = mmap(self->buffer, variant->buffer_size, PROT_READ |
->>>>> PROT_WRITE,
->>>>>    1748                    mmap_flags, -1, 0);
->>>>> → 1749         assert(vrc == self->buffer);
->>>>>    1750
->>>>>
->>>>> But I am not that deep into the source to figure our what was intended and what
->>>>> went
->>>>> wrong :-/
->>>>
->>>> I can SKIP() the test rather assert() in here if it helps. Though there are
->>>> other tests that fail if no hugetlb pages are reserved.
->>>>
->>>> But I am not sure if this is problem here as the initial bug email had an
->>>> enterily different set of failures? Maybe all you need is an assert() and it
->>>> gets into this state?
->>>
->>> I feel like there is something wrong with the kselftest framework,
->>> there should be some way to fail the setup/teardown operations without
->>> triggering an infinite loop :(
->>
->> I am now wondering if the problem is the fact that we have an assert() in the
->> middle of FIXTURE_{TEST,SETUP} whereby we should be having ASSERT_TRUE() (or any
->> other kselftest macro that). The expect/assert macros from kselftest() don't do
->> asserts and it looks like we are failing mid tests in the assert().
->>
->> Maybe it is OK for setup_sizes(), but maybe not OK for the rest (i.e. during the
->> actual setup / tests). I can throw a patch there to see if this helps Mirsad.
-> 
-> Well, we are in the job of making the kernel better and as bug free as we can.
-> 
-> Maybe we should not delve too much into detail: is this a kernel bug, or the kselftest
-> program bug?
-> 
-> Some people already mentioned that I might have sysctl variable problems. I don't see
-> what the mmap() HUGEPAGE allocation at fixed address was meant to prove?
-> 
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index 7d650a06ca359..159bf8e314fa3 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -16,6 +16,7 @@
+>    * For each test, report any progress, debugging, etc with:
+>    *
+>    *     ksft_print_msg(fmt, ...);
+> + *     ksft_perror(msg);
+>    *
+>    * and finally report the pass/fail/skip/xfail state of the test with one of:
+>    *
 
-I applied fix to this problem to linux-kselftest fixes branch for next rc.
-Please give it a try.
+Thank you. Applied to linux-kselftest next for Linux 6.10-rc1
 
 thanks,
 -- Shuah
-
 
