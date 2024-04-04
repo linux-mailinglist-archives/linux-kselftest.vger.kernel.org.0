@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-7223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E829898E38
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 20:46:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 408DB898E70
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 20:58:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E74D1C20EA5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 18:46:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E82B428B4B5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 18:58:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15BA513173C;
-	Thu,  4 Apr 2024 18:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679B2131E41;
+	Thu,  4 Apr 2024 18:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dMzGjhIb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Oil0Tc1H"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850FA12D201
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 18:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243241B7F4
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 18:58:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712256385; cv=none; b=pJZnREBzlPUaVJB4R6ZsdagkLQRHpqWxVZeFxaNr4ugVlG6I+g5x+dy+wdTLN/9Q5ra1eyWllfkeB0MmEpv570oL7Yc6U9ysS5Vqzocg0axAFLfhd7edYqL1hXwyS8Wya5t+Prg9SqaFfAKTOtVkm1YKGfCLVjyZylbFGLlhOHo=
+	t=1712257096; cv=none; b=jd437NuA1JvjqvlEQ2Yns50AtWnM6wCPHH+O6uTtuOdtJ+tB0WPSdEqAYn4w6iWiNcFmgEfVRX2qmG27pcUCzqpzjEuPa05EOO3eSMb2XoOnN0FCYZK5+RBUxaHGhgepetyHG9WctqmWgIpVq85im19I4kuCNPvFyUMIlZPFSGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712256385; c=relaxed/simple;
-	bh=9juXWwgZPF88eFgPjM9DmD/zCAiyVz5xr459LXtFJpE=;
+	s=arc-20240116; t=1712257096; c=relaxed/simple;
+	bh=bW+qYJIcgCeHhAAtpvbzFnMst/WuvYdclKU+v5/Rbv8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xs5gdiNtqp5o1eJLNbvE4fBHDxVWDC4/E+t8YzPLQSRmTMUJl3jJbi3/1Gnxxss9PmrAkl2w8Iut7QEyZM9QIhZ/c1qRRsRxKEL1lGPTpcWC1yMQnmfKzP5UoR6RPguJ3fd2BU8kyfpV/n0ULYn6bjhe74OcrZZPlZDM2Mbju0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dMzGjhIb; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=Bed8ZCMNg6ogCLk2t7xXn4akVNA/8KUWiOotAG08mxj+By4EJNcgBqEJykYf4klg+48eK7ZRFKd9IQEmV7zei3qHKouXMqT8srCXVD4tMOCs/jDxs2U8Z3hdVdobusNfLymrhiiwH5gDFEYECZ6grMuRDdjYuPmN2NP7uEeZVK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Oil0Tc1H; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712256382;
+	s=mimecast20190719; t=1712257093;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=0AOlev0rhdBhXYrOzdipWHKiceO/AO7mgrDVbM4w7yo=;
-	b=dMzGjhIbbUmqWzNQTb7N16TcBO8YQkxwJUOd9q/5FlBaCpxu6GRGP9/vsKPPVLomu/WzKN
-	DfHMcg1kIQCZLC08sNEgaCFydeYURcuIvt8GUCoXth/SLoPhjgY9TpauMW6GzfN574na6/
-	6kdJ5Cv9IAKCEq1zCHYo5N1ujThQCoI=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=iUpAfMHg+laFfCU8zqN8B3PSMZVWl02POndufzeitW0=;
+	b=Oil0Tc1HvnWGuD8vpAxluoDjs1d49z5KiAOvm8Hml0fDVdk6b7QPGp7ImQVk2DTQ9B9f1R
+	hC3nzFPSdm/8gUWk7slih3L6GqmXmR9jJiZ22oiZZdRksF1TAGjWeT3VeU/iduWRgSnGP0
+	KR1X5kueqtFNpU0rk6GLS7IPZzx4IIE=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-587-Tj03xQ6oPqS-Dr8hSJSa6Q-1; Thu, 04 Apr 2024 14:46:20 -0400
-X-MC-Unique: Tj03xQ6oPqS-Dr8hSJSa6Q-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-343c6bb1f21so495437f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 11:46:19 -0700 (PDT)
+ us-mta-267-aCzY9ktvMxqHdCdi1WBT2A-1; Thu, 04 Apr 2024 14:58:11 -0400
+X-MC-Unique: aCzY9ktvMxqHdCdi1WBT2A-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-34364bba472so652313f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 11:58:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712256379; x=1712861179;
+        d=1e100.net; s=20230601; t=1712257090; x=1712861890;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=0AOlev0rhdBhXYrOzdipWHKiceO/AO7mgrDVbM4w7yo=;
-        b=B8Domz+wxTAWdeVhqZcVovRAFaTxaPCDEpsFWzM5+wr5S4T95ginw3Qib3r5uii/A5
-         SaQq4KnKY7aJq43pj4n882zW62X5yYpyQQKnOWCy9UEx2Ahj62XECd5ceWfrNpSBmyUr
-         igerqLHnILL2LCBYqj3JDVg0dsulf9HT2jqfTMKHcVLfIT3FE4HsRBXTfZWa2nqTwNW0
-         NN7w2931W6JKAP7pLjMbb/93UP2MZM4JIM6C7c4saAsB6LtdMUotV4K79sEbwjdNYcNC
-         ClI6RvdD4+CEmZf349eQZHmhSTIC1CIaWTKLdQjt2j8J8uChh2sVcATfWrEcIxDotBQR
-         3O8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVT74WCc/63yhepnhFnr/oNcZAVQMg5os1GmSigNmB/n5ycBz/dcddwyY2H/65bQODN/5vjRFhp8ENphmEVwj/fqmjGZ7Xyc9SAX1N08ikq
-X-Gm-Message-State: AOJu0YyrZ1VIcVYbl8kTi0bXAVwxRfCzxr0YvZvrrrrfi7GOvjqkU6/a
-	RoXRgRKZHGDiEvYuiUZiWf5bWEIocSp600G1F4+vvISphsICZq+PLTT1qhu2jUWmvrueSWusQrU
-	9+IvR+HshHBsB69LuL54QE8IRoUFmzUCv86Au9ykbI6d/fnLVj84AMX/LllxTIPudlA==
-X-Received: by 2002:adf:e845:0:b0:33e:363b:a7dd with SMTP id d5-20020adfe845000000b0033e363ba7ddmr2730283wrn.20.1712256378911;
-        Thu, 04 Apr 2024 11:46:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHGvr9qkZUMbzisaz2zVsEMYJ2EQHjo/AAPd5Mf9RdtKX5SLgDn9m3+bMlybOtjfDyVDWQZhw==
-X-Received: by 2002:adf:e845:0:b0:33e:363b:a7dd with SMTP id d5-20020adfe845000000b0033e363ba7ddmr2730266wrn.20.1712256378489;
-        Thu, 04 Apr 2024 11:46:18 -0700 (PDT)
+        bh=iUpAfMHg+laFfCU8zqN8B3PSMZVWl02POndufzeitW0=;
+        b=WNq4pdfv/NsH7RJQvEMPRHnJHz8ZIRq/DiTSrK+Aq+EgY2dvWLsTU4O6SSmLxgzF19
+         +pAANfN5kvna++Px8Qayy6bp1ZsFUy61AA9P1pKolL1wW2DGUe6cTU3hajQfQ4bL0F5J
+         jgMNeZVgXF1hXYLrjSYf1p9+dfvYB2gLhbzlgbgKrnmlmr/Bhnxn6102xunSkW/go+xG
+         Ztn60+YIPrI7L6d7IUXePG1pS8plLfgiUM5bukbCLz1N07zRGv7TbWOZTrWs/an4rMEv
+         bo3HwpWPR/itraa7pZqSSeyS6MCYNjyoSlakBKUX2xEo6cuA8+t/qWdAeO/30h/Jit45
+         jk3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVBTBeFEEahV9i89BOJGgqNKDrU5jhGt2qgf0ScZKNG0vML1OuE34co15LRztdmssVzSPSpwpFvlIbun8gLsXWrC44+DMQPBaG5BKVnegvJ
+X-Gm-Message-State: AOJu0YwyQFf3Gk/bedBVk5fneyzI5q8J2pQ10lQ8x3TMVQvXXzGkz/9K
+	3FxSziZx0imeDQhvOnWyA7WqPEF/0UyGCXfcgIpzQyeywdn391XWAZX72lueOeG2PBcfTC4FUqT
+	olLfKNM08Nu5e8xCNwoV3/nIrhWvABV2AkqsEbuPrw0ik3dgzOoUoDViCaBEOR16fmw==
+X-Received: by 2002:adf:fa08:0:b0:343:3e49:d6d9 with SMTP id m8-20020adffa08000000b003433e49d6d9mr2425586wrr.47.1712257090530;
+        Thu, 04 Apr 2024 11:58:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHIR5jv3Y+pA9R56BJ+nFHyzZuCjuoYvHQwb+bhK5m09rZk21mZB5x6rbzPgcQOkLvLeAqwTQ==
+X-Received: by 2002:adf:fa08:0:b0:343:3e49:d6d9 with SMTP id m8-20020adffa08000000b003433e49d6d9mr2425540wrr.47.1712257089897;
+        Thu, 04 Apr 2024 11:58:09 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c743:de00:7030:120f:d1c9:4c3c? (p200300cbc743de007030120fd1c94c3c.dip0.t-ipconnect.de. [2003:cb:c743:de00:7030:120f:d1c9:4c3c])
-        by smtp.gmail.com with ESMTPSA id di3-20020a0560000ac300b00341c7129e28sm40761wrb.91.2024.04.04.11.46.17
+        by smtp.gmail.com with ESMTPSA id k2-20020a5d5242000000b00343c0c24a65sm63462wrc.89.2024.04.04.11.58.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 11:46:18 -0700 (PDT)
-Message-ID: <394a3c47-b25d-422b-b9bf-d043501739a5@redhat.com>
-Date: Thu, 4 Apr 2024 20:46:16 +0200
+        Thu, 04 Apr 2024 11:58:09 -0700 (PDT)
+Message-ID: <8fb37319-288c-4f77-9cd7-92f17bb567ee@redhat.com>
+Date: Thu, 4 Apr 2024 20:58:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,19 +83,37 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/mm: fix additional build errors for
- selftests
-To: John Hubbard <jhubbard@nvidia.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>,
- Andrea Arcangeli <aarcange@redhat.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Mark Brown <broonie@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Suren Baghdasaryan <surenb@google.com>, Peter Zijlstra <peterz@infradead.org>
-References: <20240328033418.203790-1-jhubbard@nvidia.com>
- <20240328033418.203790-3-jhubbard@nvidia.com>
+Subject: Re: [PATCH v3 08/29] mm: Define VM_SHADOW_STACK for RISC-V
+To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
+ rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
+ kito.cheng@sifive.com, keescook@chromium.org, ajones@ventanamicro.com,
+ conor.dooley@microchip.com, cleger@rivosinc.com, atishp@atishpatra.org,
+ alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com,
+ samuel.holland@sifive.com, conor@kernel.org
+Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-mm@kvack.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
+ akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+ Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
+ shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
+ jerry.shih@sifive.com, hankuan.chen@sifive.com, greentime.hu@sifive.com,
+ evan@rivosinc.com, xiao.w.wang@intel.com, charlie@rivosinc.com,
+ apatel@ventanamicro.com, mchitale@ventanamicro.com,
+ dbarboza@ventanamicro.com, sameo@rivosinc.com, shikemeng@huaweicloud.com,
+ willy@infradead.org, vincent.chen@sifive.com, guoren@kernel.org,
+ samitolvanen@google.com, songshuaishuai@tinylab.org, gerg@kernel.org,
+ heiko@sntech.de, bhe@redhat.com, jeeheng.sia@starfivetech.com,
+ cyy@cyyself.name, maskray@google.com, ancientmodern4@gmail.com,
+ mathis.salmen@matsal.de, cuiyunhui@bytedance.com, bgray@linux.ibm.com,
+ mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org,
+ catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org,
+ shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+ jhubbard@nvidia.com
+References: <20240403234054.2020347-1-debug@rivosinc.com>
+ <20240403234054.2020347-9-debug@rivosinc.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -143,34 +161,71 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240328033418.203790-3-jhubbard@nvidia.com>
+In-Reply-To: <20240403234054.2020347-9-debug@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 28.03.24 04:34, John Hubbard wrote:
-> These build errors only occur if one fails to first run "make headers".
-> However, that is a non-obvious and instrusive requirement, and so there
-> was a discussion on how to get rid of it [1]. This uses that solution.
+On 04.04.24 01:34, Deepak Gupta wrote:
+> VM_SHADOW_STACK is defined by x86 as vm flag to mark a shadow stack vma.
 > 
-> These two files were created by taking a snapshot of the generated
-> header files that are created via "make headers". These two files were
-> copied from ./usr/include/linux/ to ./tools/include/uapi/linux/ .
+> x86 uses VM_HIGH_ARCH_5 bit but that limits shadow stack vma to 64bit only.
+> arm64 follows same path (see links)
 > 
-> That fixes the selftests/mm build on today's Arch Linux (which required
-> the userfaultfd.h) and Ubuntu 23.04 (which additionally required
-> memfd.h).
+> To keep things simple, RISC-V follows the same.
+> This patch adds `ss` for shadow stack in process maps.
 > 
-> [1] https://lore.kernel.org/all/783a4178-1dec-4e30-989a-5174b8176b09@redhat.com/
+> Links:
+> https://lore.kernel.org/lkml/20231009-arm64-gcs-v6-12-78e55deaa4dd@kernel.org/#r
 > 
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Cc: Suren Baghdasaryan <surenb@google.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
+>   fs/proc/task_mmu.c |  3 +++
+>   include/linux/mm.h | 11 ++++++++++-
+>   2 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 3f78ebbb795f..d9d63eb74f0d 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -702,6 +702,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+>   #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+>   #ifdef CONFIG_X86_USER_SHADOW_STACK
+>   		[ilog2(VM_SHADOW_STACK)] = "ss",
+> +#endif
+> +#ifdef CONFIG_RISCV_USER_CFI
+> +		[ilog2(VM_SHADOW_STACK)] = "ss",
+>   #endif
+>   	};
+>   	size_t i;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index f5a97dec5169..64109f6c70f5 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -352,7 +352,16 @@ extern unsigned int kobjsize(const void *objp);
+>    * for more details on the guard size.
+>    */
+>   # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+> -#else
+> +#endif
+> +
+> +#ifdef CONFIG_RISCV_USER_CFI
+> +/*
+> + * RISC-V is going along with using VM_HIGH_ARCH_5 bit position for shadow stack
+> + */
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Wow, really?! I could never have guesses that from the code :P
+
+Just drop that comment. Are them semantics the same as for the x86 variant documented?
+("VM_SHADOW_STACK should not be set with VM_SHARED because of lack of")
+
+
+I assume so. So it might now make sense to merge both paths
+
+#if defined(CONFIG_X86_USER_SHADOW_STACK) || defined(CONFIG_RISCV_USER_CFI)
+
+
+or even introduce some ARCH_HAS_SHADOW_STACK so we can remove these
+arch-specific thingies here.
 
 -- 
 Cheers,
