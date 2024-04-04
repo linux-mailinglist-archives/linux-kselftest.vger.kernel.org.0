@@ -1,280 +1,168 @@
-Return-Path: <linux-kselftest+bounces-7156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD457897D2A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 02:44:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D70C897D3B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 03:01:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C61C81C27E03
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 00:44:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3C1EB22112
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 01:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6334689;
-	Thu,  4 Apr 2024 00:43:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82FD4C97;
+	Thu,  4 Apr 2024 01:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Dpo8It0M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xt5Dbdpn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B473FF4
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 00:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46D123CE;
+	Thu,  4 Apr 2024 01:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712191435; cv=none; b=EbEUmJ8Vfv902X/DLIKB8BlZQhKWG/TpbDitoGGnlOA0lKSWJBqwQdzy2nfBThc8Py2ekHMl9q5EDKMzT5uFF8eVJpo+SHN5ySkpbl4jMdnX5RvlB5dCDSlSDhypt5cxXs78TwVLmagaYNR2pmpgo2rZWChZXrAMSpSNv8m8YtA=
+	t=1712192482; cv=none; b=jDVuDnglQkvluN2ShVF/olh4YI5RVtuY1l46MYY63suJMzR8R4u9wOjro3cO5/bF+q7Vo4dNbrXxv+1S6xGpqZ53RhuAI0LPvrr4V7g+v881SER83i8g2e8Xfw/B99iJUFwMkNoIknm3/d4SIcYuJfT8WW5V5iWVXBtLUvA65jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712191435; c=relaxed/simple;
-	bh=l7SjNlBscIXDHCJfPdHXfaKN62Yzih8xgtSq0+UhS8I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DnUDgit+2rcvVVyflbrdq50ve3MlukLNwaFh/NqpMnmiSADKGP3vu5bkcojW9BSjSZ9oUej3CrEdbg4MMaJAN8+yl3J6a3O2NxLAgbk+jMJIAxcfwtTShvb99TWwiG83RpUFwRe/NR9Bfs8l7Ko2spwMUCpcb85rAvFad6woGVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Dpo8It0M; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so443304a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 17:43:53 -0700 (PDT)
+	s=arc-20240116; t=1712192482; c=relaxed/simple;
+	bh=VcITItGHjtKY9dfEMl4G05gYTHqgBMk3fUlh/7jjiJc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lMJC7dYTlJX1NWVGmvVzpvPyVBb+0Mq+SUmpaT6L/h8gwR8Ac/hykqLDJ3Dse61PqKc4ktisdjksuTtli8kC6l7hRp9v6A2mYoMcKWI3Hfw1ImgTZQ9aOP+mgkbLwyEiUXcnNTbxODDYRFCFTyq6c9dEmBF9Tztzgt8KQAf2hHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xt5Dbdpn; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33ddd1624beso207012f8f.1;
+        Wed, 03 Apr 2024 18:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712191433; x=1712796233; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NPAkNpwkOcE2aj5H76UIs4DtdZThjvuKeLHUXLWOipM=;
-        b=Dpo8It0MpO/4EKZq/dLqnl8VTu/k+kFqte8YzPZCW+5NoceEpdaptDFvkM8/6Qp43d
-         9aypLH9C07xpgQMJtdus0fCSBOWsyIIhHZqIiZqqJ1XIpWOq6/mBSAombSzU7SMjrp+w
-         3ZG1rgfLsPJ2zA+DL1jUDkCwmaadAYXXFL4ifkZVdFcvFrK289icC7M4z0pvZvhSBW9w
-         PlakplbIsNIe0nOeBfn6Jkz5QZ99sYccO/6nFtSjHC1R4dyNSVAj9ul9ayPNggDfY0z2
-         EvhPU+WQSIjICum+rhVFKsJNw0PtJmGWsYEnoFHImkJUXgoiwCZ5bnf1Wvd9/PNqd/X2
-         azkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712191433; x=1712796233;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1712192479; x=1712797279; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NPAkNpwkOcE2aj5H76UIs4DtdZThjvuKeLHUXLWOipM=;
-        b=ajPJifJIrAUWAZSBP0weA/2/ZdwSqdj7JfF9vlCRtfBSP5L9bpmxo4+IyQ5MIrVyn6
-         wXNYvMwI3kRfdZcQsrmGdW/RfQGGRVaefMfWbz2JDYlqMdamX/qiwSuhKJn9hKQmjd6q
-         nDsomXZKEdNDyPwjp5B3qgkr0Ok0LNt78KUoBY4KwqwsMGk7/N84fDDBt1PQq9NK/H7K
-         JBmbgJ26q+aKCtnpj5JaMUwobE5zMpVgIM2x6IYux37si8be1WQPxXLeQXaoT0hmdTD5
-         2oGCEgUc/2DxECT7TyKGckZ97xogGDQgRI5jLVcEYAUSl0qdlAXEk/r3v/zn1s2XeV1D
-         dKCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUn3KrBkWsbmRMbuipe0m+wZlRUH+sm2hNBMlCtmifJAT6BzvT0GAC0wvfJynWKppN2mvxjr2oBUjbKy6/9LpOMpiDBT3rSXhTKqDUjlIp5
-X-Gm-Message-State: AOJu0Yx+irc7LEprtAk38S1ZvCkcY1W8m42DSiLub3WUUgEimc5O882Q
-	m/sh83YEXbkOWfH1gOVCXtl5ERvVUoNopucJmJ7gbp1wTF3EiRSEx/mXCY0AFaM=
-X-Google-Smtp-Source: AGHT+IHnuXNye/1qJaXWs5vSMSc0DTbHIYysP8Hv++UrbD3hU/8w6vGpoI5sVVOGEgQrqnzTMEj70w==
-X-Received: by 2002:a17:90a:8d01:b0:2a2:b5db:79cf with SMTP id c1-20020a17090a8d0100b002a2b5db79cfmr1155132pjo.21.1712191433057;
-        Wed, 03 Apr 2024 17:43:53 -0700 (PDT)
-Received: from ghost ([2601:647:5700:6860:b005:9197:83df:91f1])
-        by smtp.gmail.com with ESMTPSA id t15-20020a17090a0d0f00b002a24886fa5asm358052pja.36.2024.04.03.17.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 17:43:52 -0700 (PDT)
-Date: Wed, 3 Apr 2024 17:43:50 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Vineet Gupta <vineetg@rivosinc.com>
-Cc: Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Andy Chiu <andy.chiu@sifive.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] riscv: selftests: Add signal handling vector tests
-Message-ID: <Zg33xhwOe6Zwi23A@ghost>
-References: <20240403-vector_sigreturn_tests-v1-1-2e68b7a3b8d7@rivosinc.com>
- <56863fe7-4d82-4f37-a518-2acf368c3ea6@rivosinc.com>
+        bh=HLU2APTaqoheKuuzuNc2tSXn6E7XDkIQ0oPwW38nA4I=;
+        b=Xt5DbdpnBGpOIWyRpSnbHEtDXN0wnQd1F7Qou3PIzQSoe/wf57mdql9R4FJxiiEG8V
+         ffsNkTEMPFwGCSxykrCWYEGIs6Wfe7a7zsY3RdSe0zSxjT6u8TdQIiSh/4oCPfCOhTDO
+         j0WwvGfhZ1EWzyzN1R9AoXt0sEFgSfJE83YffBaiIWuMPh5Y+B6Z11Bo9jsQ81av5LyF
+         QtLzYxRkuZJEG3qndqKCs/GqMLfpN0JKA0yG6T/AenSuPMGyfr8JO+3XZU04C4mK4U9Z
+         ObN5UKhUnGc0fe7Xay/5W1qRSr+wvhmXqtMQqej4Y485rY/kkB8cH6bYU++b+CQC3SWd
+         QX+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712192479; x=1712797279;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HLU2APTaqoheKuuzuNc2tSXn6E7XDkIQ0oPwW38nA4I=;
+        b=bzfBPktrhhOsbsS+4XdoHH2WMXxsxZcSSS2CucFW0NKFL4z5ciDQVUCnv4iIPr4Z4w
+         wbpjHip8I7GYxGfakJoVFBF2Tl4olddnDnrfatE/1zObmB/EPGVPmr5basbxFtqNt2kv
+         OJuZSJb1boqWJU2GX10sbAcMQnDA58dnK7y7G4CKVp5vRQGOyVRcxRt2ehXd/IwTW7VC
+         1Fy7LwsselMEiSyGRMQAwmMiEWKxIRZUJoft8BLpUqzEtxhFADfpHqMem8sbHVwxtWG2
+         g6UrbU2tW3JaNdsZ0rP7XJr89faXo3LAAsHXDD+DKVWzOoGZETkzcXN4M/GsdwwGIzNe
+         Q9CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3ovBuL1GzsPXy1KvQfVa2F2DnNXRdTyA1ELG2hSRDyB696Lkln7EICeEEZnfVT4bM/sawSnf8UdJefkKzsmsOmj/c1WRJzUBU1NOPCAx+nlx2Qk5/JwRijQVi5MK7jfIG6q4S32G415oHOSUsrjYLLLojLvAa187oi5J9alTmUGql
+X-Gm-Message-State: AOJu0YwpKjn+lYaIO+pa8wrRYQWwsjyXrCr5rWtbykkQnExEPA87Uqun
+	ukuWJPTt9S5gD1Txn4qWXXgPNIzAxXDUy/xIlXN72qIYASyXnALnvlzklyVbZzW+nNmCVKTCk3F
+	VLB8rJ89gbH5//dE6v29bLmAr3gQ=
+X-Google-Smtp-Source: AGHT+IGgve8RYBKKY6vg33L/syRyrb3Z5pP3xZmPioDKEq/WUwRK0ivhdEAPpSvjxORCV87KADxzfEeudnxPjlunbPA=
+X-Received: by 2002:a05:6000:4f1:b0:343:6c07:c816 with SMTP id
+ cr17-20020a05600004f100b003436c07c816mr1064770wrb.16.1712192478995; Wed, 03
+ Apr 2024 18:01:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56863fe7-4d82-4f37-a518-2acf368c3ea6@rivosinc.com>
+References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org>
+ <20240322-hid-bpf-sleepable-v5-1-179c7b59eaaa@kernel.org> <CAADnVQJdm7+7tbJC8yhPqDUijE0DTD9UG4LOQmNRCWchQ3uGsg@mail.gmail.com>
+ <CAO-hwJKVVjhg6_0tAM75HGJL0WcERotyJc+7oBVvDiTGJAqTfw@mail.gmail.com> <CAADnVQ+5NqjqyeFS3XgDU0OCFgt1Y9bmTbHOPv6ekw1sJasyaA@mail.gmail.com>
+In-Reply-To: <CAADnVQ+5NqjqyeFS3XgDU0OCFgt1Y9bmTbHOPv6ekw1sJasyaA@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 3 Apr 2024 18:01:07 -0700
+Message-ID: <CAADnVQJm7bi=iFtWj1XCmEdyDwb64KjxeP5RFo57paG3-zZo_g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/6] bpf/helpers: introduce sleepable bpf_timers
+To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 03, 2024 at 05:27:23PM -0700, Vineet Gupta wrote:
-> On 4/3/24 16:50, Charlie Jenkins wrote:
-> > Add two tests to check vector save/restore when a signal is received
-> > during a vector routine. One test ensures that a value is not clobbered
-> > during signal handling. The other verifies that vector registers
-> > modified in the signal handler are properly reflected when the signal
-> > handling is complete.
-> 
-> Hmm, isn't this testing two contradictory things ?
-> 
-> We do want V regs to be not clobbered across a handled signal, o/w V
-> enabled code would just not work at all.
-> That implies that anything done by signal handler should just be
-> discarded - no ?
-> 
-> Am I missing something.
-> 
-> -Vineet
-
-This is referring to the user-implemented signal handler. The test in
-question is testing the ability of the user-implemented signal handler
-to be able to modify the vector registers. In the test:
-
-static void vector_override(int sig_no, siginfo_t *info, void *vcontext)
-{ ...
-
-	*(int *)v_ext_state->datap = SIGNAL_HANDLER_OVERRIDE;
-
-	...  }
-
-This line is changing the saved state of the user program's vector
-registers.
-
-When the signal handling concludes and the original user program resumes
-execution, the content of the user-context registers that were modified
-by the signal handler should be restored into the hardware registers.
-Hence the test case checks that the v0 register contains the value
-SIGNAL_HANDLER_OVERRIDE.
-
-EXPECT_EQ(SIGNAL_HANDLER_OVERRIDE, result);
-
-- Charlie
-
-> 
+On Wed, Apr 3, 2024 at 11:50=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Mar 27, 2024 at 10:02=E2=80=AFAM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> > > >                 goto out;
+> > > >         }
+> > > > +       spin_lock(&t->sleepable_lock);
+> > > >         drop_prog_refcnt(t);
+> > > > +       spin_unlock(&t->sleepable_lock);
+> > >
+> > > this also looks odd.
 > >
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > ---
-> > These tests came about to highlight the bug fixed in
-> > https://lore.kernel.org/lkml/20240403072638.567446-1-bjorn@kernel.org/
-> > and will only pass with that fix applied.
-> > ---
-> >  tools/testing/selftests/riscv/Makefile             |  2 +-
-> >  tools/testing/selftests/riscv/sigreturn/.gitignore |  1 +
-> >  tools/testing/selftests/riscv/sigreturn/Makefile   | 12 ++++
-> >  .../testing/selftests/riscv/sigreturn/sigreturn.c  | 82 ++++++++++++++++++++++
-> >  4 files changed, 96 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-> > index 4a9ff515a3a0..7ce03d832b64 100644
-> > --- a/tools/testing/selftests/riscv/Makefile
-> > +++ b/tools/testing/selftests/riscv/Makefile
-> > @@ -5,7 +5,7 @@
-> >  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-> >  
-> >  ifneq (,$(filter $(ARCH),riscv))
-> > -RISCV_SUBTARGETS ?= hwprobe vector mm
-> > +RISCV_SUBTARGETS ?= hwprobe vector mm sigreturn
-> >  else
-> >  RISCV_SUBTARGETS :=
-> >  endif
-> > diff --git a/tools/testing/selftests/riscv/sigreturn/.gitignore b/tools/testing/selftests/riscv/sigreturn/.gitignore
-> > new file mode 100644
-> > index 000000000000..35002b8ae780
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/sigreturn/.gitignore
-> > @@ -0,0 +1 @@
-> > +sigreturn
-> > diff --git a/tools/testing/selftests/riscv/sigreturn/Makefile b/tools/testing/selftests/riscv/sigreturn/Makefile
-> > new file mode 100644
-> > index 000000000000..eb8bac9279a8
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/sigreturn/Makefile
-> > @@ -0,0 +1,12 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# Copyright (C) 2021 ARM Limited
-> > +# Originally tools/testing/arm64/abi/Makefile
-> > +
-> > +CFLAGS += -I$(top_srcdir)/tools/include
-> > +
-> > +TEST_GEN_PROGS := sigreturn
-> > +
-> > +include ../../lib.mk
-> > +
-> > +$(OUTPUT)/sigreturn: sigreturn.c
-> > +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> > diff --git a/tools/testing/selftests/riscv/sigreturn/sigreturn.c b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
-> > new file mode 100644
-> > index 000000000000..62397d5934f1
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
-> > @@ -0,0 +1,82 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +#include <signal.h>
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +#include <ucontext.h>
-> > +#include <linux/ptrace.h>
-> > +#include "../../kselftest_harness.h"
-> > +
-> > +#define RISCV_V_MAGIC		0x53465457
-> > +#define DEFAULT_VALUE		2
-> > +#define SIGNAL_HANDLER_OVERRIDE	3
-> > +
-> > +static void simple_handle(int sig_no, siginfo_t *info, void *vcontext)
-> > +{
-> > +	ucontext_t *context = vcontext;
-> > +
-> > +	context->uc_mcontext.__gregs[REG_PC] = context->uc_mcontext.__gregs[REG_PC] + 4;
-> > +}
-> > +
-> > +static void vector_override(int sig_no, siginfo_t *info, void *vcontext)
-> > +{
-> > +	ucontext_t *context = vcontext;
-> > +
-> > +	// vector state
-> > +	struct __riscv_extra_ext_header *ext;
-> > +	struct __riscv_v_ext_state *v_ext_state;
-> > +
-> > +	/* Find the vector context. */
-> > +	ext = (void *)(&context->uc_mcontext.__fpregs);
-> > +	if (ext->hdr.magic != RISCV_V_MAGIC) {
-> > +		fprintf(stderr, "bad vector magic: %x\n", ext->hdr.magic);
-> > +		abort();
-> > +	}
-> > +
-> > +	v_ext_state = (void *)((char *)(ext) + sizeof(*ext));
-> > +
-> > +	*(int *)v_ext_state->datap = SIGNAL_HANDLER_OVERRIDE;
-> > +
-> > +	context->uc_mcontext.__gregs[REG_PC] = context->uc_mcontext.__gregs[REG_PC] + 4;
-> > +}
-> > +
-> > +static int vector_sigreturn(int data, void (*handler)(int, siginfo_t *, void *))
-> > +{
-> > +	int after_sigreturn;
-> > +	struct sigaction sig_action = {
-> > +		.sa_sigaction = handler,
-> > +		.sa_flags = SA_SIGINFO
-> > +	};
-> > +
-> > +	sigaction(SIGSEGV, &sig_action, 0);
-> > +
-> > +	asm(".option push				\n\
-> > +		.option		arch, +v		\n\
-> > +		vsetivli	x0, 1, e32, ta, ma	\n\
-> > +		vmv.s.x		v0, %1			\n\
-> > +		# Generate SIGSEGV			\n\
-> > +		lw		a0, 0(x0)		\n\
-> > +		vmv.x.s		%0, v0			\n\
-> > +		.option pop" : "=r" (after_sigreturn) : "r" (data));
-> > +
-> > +	return after_sigreturn;
-> > +}
-> > +
-> > +TEST(vector_restore)
-> > +{
-> > +	int result;
-> > +
-> > +	result = vector_sigreturn(DEFAULT_VALUE, &simple_handle);
-> > +
-> > +	EXPECT_EQ(DEFAULT_VALUE, result);
-> > +}
-> > +
-> > +TEST(vector_restore_signal_handler_override)
-> > +{
-> > +	int result;
-> > +
-> > +	result = vector_sigreturn(DEFAULT_VALUE, &vector_override);
-> > +
-> > +	EXPECT_EQ(SIGNAL_HANDLER_OVERRIDE, result);
-> > +}
-> > +
-> > +TEST_HARNESS_MAIN
-> >
-> > ---
-> > base-commit: 4cece764965020c22cff7665b18a012006359095
-> > change-id: 20240403-vector_sigreturn_tests-8118f0ac54fa
-> 
+> > I basically need to protect "t->prog =3D NULL;" from happening while
+> > bpf_timer_work_cb is setting up the bpf program to be run.
+>
+> Ok. I think I understand the race you're trying to fix.
+> The bpf_timer_cancel_and_free() is doing
+> cancel_work()
+> and proceeds with
+> kfree_rcu(t, rcu);
+>
+> That's the only race and these extra locks don't help.
+>
+> The t->prog =3D NULL is nothing to worry about.
+> The bpf_timer_work_cb() might still see callback_fn =3D=3D NULL
+> "when it's being setup" and it's ok.
+> These locks don't help that.
+>
+> I suggest to drop sleepable_lock everywhere.
+> READ_ONCE of callback_fn in bpf_timer_work_cb() is enough.
+> Add rcu_read_lock_trace() before calling bpf prog.
+>
+> The race to fix is above 'cancel_work + kfree_rcu'
+> since kfree_rcu might free 'struct bpf_hrtimer *t'
+> while the work is pending and work_queue internal
+> logic might UAF struct work_struct work.
+> By the time it may luckily enter bpf_timer_work_cb() it's too late.
+> The argument 'struct work_struct *work' might already be freed.
+>
+> To fix this problem, how about the following:
+> don't call kfree_rcu and instead queue the work to free it.
+> After cancel_work(&t->work); the work_struct can be reused.
+> So set it up to call "freeing callback" and do
+> schedule_work(&t->work);
+>
+> There is a big assumption here that new work won't be
+> executed before cancelled work completes.
+> Need to check with wq experts.
+>
+> Another approach is to do something smart with
+> cancel_work() return code.
+> If it returns true set a flag inside bpf_hrtimer and
+> make bpf_timer_work_cb() free(t) after bpf prog finishes.
+
+Looking through wq code... I think I have to correct myself.
+cancel_work and immediate free is probably fine from wq pov.
+It has this comment:
+        worker->current_func(work);
+        /*
+         * While we must be careful to not use "work" after this, the trace
+         * point will only record its address.
+         */
+        trace_workqueue_execute_end(work, worker->current_func);
+
+the bpf_timer_work_cb() might still be running bpf prog.
+So it shouldn't touch 'struct bpf_hrtimer *t' after bpf prog returns,
+since kfree_rcu(t, rcu); could have freed it by then.
+There is also this code in net/rxrpc/rxperf.c
+        cancel_work(&call->work);
+        kfree(call);
+
+So it looks like it's fine to drop sleepable_lock,
+add rcu_read_lock_trace() and things should be ok.
 
