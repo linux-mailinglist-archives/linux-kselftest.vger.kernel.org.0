@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-7222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 316F7898E36
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 20:45:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E829898E38
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 20:46:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B45D51F2115E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 18:45:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E74D1C20EA5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 18:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69F1131199;
-	Thu,  4 Apr 2024 18:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15BA513173C;
+	Thu,  4 Apr 2024 18:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b6ZbSYFj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dMzGjhIb"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E45E130A57
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 18:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850FA12D201
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 18:46:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712256344; cv=none; b=SWlkCNysNJerz28TOW0RvwSMGZ4PK77oG8eJb3UNg95bYfLbtdULep5Cjt/PgD054wikfQ3fUSftMdO0Me8foREH9g6DDokxglkGLY8gF5knt8/xFH2Hb4h2srKLLLGFDlGeNgAJ4yU0ztOD+qaVlodm+z+AR7ydZxHQLPD/ZZI=
+	t=1712256385; cv=none; b=pJZnREBzlPUaVJB4R6ZsdagkLQRHpqWxVZeFxaNr4ugVlG6I+g5x+dy+wdTLN/9Q5ra1eyWllfkeB0MmEpv570oL7Yc6U9ysS5Vqzocg0axAFLfhd7edYqL1hXwyS8Wya5t+Prg9SqaFfAKTOtVkm1YKGfCLVjyZylbFGLlhOHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712256344; c=relaxed/simple;
-	bh=YEZl3q1yTtHHvXmwpJPizfDKb035qKkATo3/f18BQ8Y=;
+	s=arc-20240116; t=1712256385; c=relaxed/simple;
+	bh=9juXWwgZPF88eFgPjM9DmD/zCAiyVz5xr459LXtFJpE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zoi9XYZKYgXyvRsad+se51DdMTJP0VI6BeudJL1lTGQwDv23xpwRfATx0Oj9w6yQtpgQ+2ztB+e9pcTcZUrwXzCoLYfgEnRE11tEr1WfOavInLc4UdrX9bvb9TgQQ+LPZPjIjARG9ZufUUWvi8TQ+OrLnAh2h1fszUAjtOehpqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b6ZbSYFj; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=Xs5gdiNtqp5o1eJLNbvE4fBHDxVWDC4/E+t8YzPLQSRmTMUJl3jJbi3/1Gnxxss9PmrAkl2w8Iut7QEyZM9QIhZ/c1qRRsRxKEL1lGPTpcWC1yMQnmfKzP5UoR6RPguJ3fd2BU8kyfpV/n0ULYn6bjhe74OcrZZPlZDM2Mbju0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dMzGjhIb; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712256342;
+	s=mimecast20190719; t=1712256382;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=P4CFFV+alXdlCyG25YnJ9l+lNB6f5pGDPyHcNnnheEo=;
-	b=b6ZbSYFjS8Gx8gbpTbYLSSKMwFyLAqhaVi7MyFqVL9xNGqfahlF3xEAxaZadD8FP4UKR4y
-	vlY40Xww0AOhL1vDWNiQ/3KXQyIjmlazhD2y9RqOmm+2209UsUiZBQYQaNJZ4Id26QVyWc
-	ud5W0s3Rt/nAQrC+fB6QTpFC1YiuSoI=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=0AOlev0rhdBhXYrOzdipWHKiceO/AO7mgrDVbM4w7yo=;
+	b=dMzGjhIbbUmqWzNQTb7N16TcBO8YQkxwJUOd9q/5FlBaCpxu6GRGP9/vsKPPVLomu/WzKN
+	DfHMcg1kIQCZLC08sNEgaCFydeYURcuIvt8GUCoXth/SLoPhjgY9TpauMW6GzfN574na6/
+	6kdJ5Cv9IAKCEq1zCHYo5N1ujThQCoI=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-457-uEkFS5A0OwSCHukmDxRdCQ-1; Thu, 04 Apr 2024 14:45:40 -0400
-X-MC-Unique: uEkFS5A0OwSCHukmDxRdCQ-1
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2d6ef704b35so12842631fa.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 11:45:40 -0700 (PDT)
+ us-mta-587-Tj03xQ6oPqS-Dr8hSJSa6Q-1; Thu, 04 Apr 2024 14:46:20 -0400
+X-MC-Unique: Tj03xQ6oPqS-Dr8hSJSa6Q-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-343c6bb1f21so495437f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 11:46:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712256339; x=1712861139;
+        d=1e100.net; s=20230601; t=1712256379; x=1712861179;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=P4CFFV+alXdlCyG25YnJ9l+lNB6f5pGDPyHcNnnheEo=;
-        b=rijcMBpCg6/Rd3rWzsy7pGzdN8dDvuSX1xCGmyAUEkAfurB5T7XSBcRfykW/O+NxC5
-         sT/17EHJTuOZCQhF6wC6EQ4zIMoG8dizw7J65OrcOakj3NnpVcjRuVy5wZx/dEaotz0h
-         0DzFDnqFG97L3qds3oN7SFqLfKnG8w+9xnSvXSRrhAo5O4oxWNcuCxlZoQw2pYAfyyHi
-         QtqZ8hpccKZMQZBqrrNUwpfdapRPKVfqC2D6KP2rUB49Ivgzu1RoMoMjag/1Cl6a0HT9
-         RrxVyd5RF1+KMItnrWJ4kAjj81IciWJ9QaFVShzy2bVZudjNxFurllJYaXKaT3cz3hzi
-         tm9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVH9kSzBqe2q8d13OzVGgu1grHMgY8pFpMIKMFYY0f6D9ubrBAG8f5Divl6vc1QDYEfx9/8hO33OKNgQWHvCQCw0MDBqzL+uetGY/x913Jk
-X-Gm-Message-State: AOJu0YwsnVypFO49PEssMxPZBLMhoIkGGAIwWnS0RVQQgvjhyxSnoXH4
-	BaWtHDOMRlfyraxnmki9WT1Mvyjn1dFcGbLvxzZg5+jRJq3VEefDnld7q9jv0R8BnjKvVq6UZ8U
-	qQF7Vw3TaN7mXwGTRh1Noe7iNj9b4aMkhqQUEqMY+ivd4I1wqdZvKAH/1CHQUPPMIsA==
-X-Received: by 2002:a2e:9058:0:b0:2d8:2d48:18f7 with SMTP id n24-20020a2e9058000000b002d82d4818f7mr2547848ljg.9.1712256339255;
-        Thu, 04 Apr 2024 11:45:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGlatkvsg0q9AcaDAZlYYVlE3sMxwFbiNRjElWgpj6wFxXDcDH3J+9Fo7R1SYp8wnfuw0f9Eg==
-X-Received: by 2002:a2e:9058:0:b0:2d8:2d48:18f7 with SMTP id n24-20020a2e9058000000b002d82d4818f7mr2547837ljg.9.1712256338887;
-        Thu, 04 Apr 2024 11:45:38 -0700 (PDT)
+        bh=0AOlev0rhdBhXYrOzdipWHKiceO/AO7mgrDVbM4w7yo=;
+        b=B8Domz+wxTAWdeVhqZcVovRAFaTxaPCDEpsFWzM5+wr5S4T95ginw3Qib3r5uii/A5
+         SaQq4KnKY7aJq43pj4n882zW62X5yYpyQQKnOWCy9UEx2Ahj62XECd5ceWfrNpSBmyUr
+         igerqLHnILL2LCBYqj3JDVg0dsulf9HT2jqfTMKHcVLfIT3FE4HsRBXTfZWa2nqTwNW0
+         NN7w2931W6JKAP7pLjMbb/93UP2MZM4JIM6C7c4saAsB6LtdMUotV4K79sEbwjdNYcNC
+         ClI6RvdD4+CEmZf349eQZHmhSTIC1CIaWTKLdQjt2j8J8uChh2sVcATfWrEcIxDotBQR
+         3O8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVT74WCc/63yhepnhFnr/oNcZAVQMg5os1GmSigNmB/n5ycBz/dcddwyY2H/65bQODN/5vjRFhp8ENphmEVwj/fqmjGZ7Xyc9SAX1N08ikq
+X-Gm-Message-State: AOJu0YyrZ1VIcVYbl8kTi0bXAVwxRfCzxr0YvZvrrrrfi7GOvjqkU6/a
+	RoXRgRKZHGDiEvYuiUZiWf5bWEIocSp600G1F4+vvISphsICZq+PLTT1qhu2jUWmvrueSWusQrU
+	9+IvR+HshHBsB69LuL54QE8IRoUFmzUCv86Au9ykbI6d/fnLVj84AMX/LllxTIPudlA==
+X-Received: by 2002:adf:e845:0:b0:33e:363b:a7dd with SMTP id d5-20020adfe845000000b0033e363ba7ddmr2730283wrn.20.1712256378911;
+        Thu, 04 Apr 2024 11:46:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHGvr9qkZUMbzisaz2zVsEMYJ2EQHjo/AAPd5Mf9RdtKX5SLgDn9m3+bMlybOtjfDyVDWQZhw==
+X-Received: by 2002:adf:e845:0:b0:33e:363b:a7dd with SMTP id d5-20020adfe845000000b0033e363ba7ddmr2730266wrn.20.1712256378489;
+        Thu, 04 Apr 2024 11:46:18 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c743:de00:7030:120f:d1c9:4c3c? (p200300cbc743de007030120fd1c94c3c.dip0.t-ipconnect.de. [2003:cb:c743:de00:7030:120f:d1c9:4c3c])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05600c314f00b004155afe0c11sm3615895wmo.15.2024.04.04.11.45.37
+        by smtp.gmail.com with ESMTPSA id di3-20020a0560000ac300b00341c7129e28sm40761wrb.91.2024.04.04.11.46.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 11:45:38 -0700 (PDT)
-Message-ID: <7c54ce8d-b18b-4c5d-bd7d-56482e2bd946@redhat.com>
-Date: Thu, 4 Apr 2024 20:45:37 +0200
+        Thu, 04 Apr 2024 11:46:18 -0700 (PDT)
+Message-ID: <394a3c47-b25d-422b-b9bf-d043501739a5@redhat.com>
+Date: Thu, 4 Apr 2024 20:46:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftests: break the dependency upon local header
- files
+Subject: Re: [PATCH 2/2] selftests/mm: fix additional build errors for
+ selftests
 To: John Hubbard <jhubbard@nvidia.com>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
@@ -95,7 +95,7 @@ Cc: Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
  Muhammad Usama Anjum <usama.anjum@collabora.com>,
  Suren Baghdasaryan <surenb@google.com>, Peter Zijlstra <peterz@infradead.org>
 References: <20240328033418.203790-1-jhubbard@nvidia.com>
- <20240328033418.203790-2-jhubbard@nvidia.com>
+ <20240328033418.203790-3-jhubbard@nvidia.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -143,29 +143,22 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240328033418.203790-2-jhubbard@nvidia.com>
+In-Reply-To: <20240328033418.203790-3-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 28.03.24 04:34, John Hubbard wrote:
-> Use tools/include/uapi/ files instead. These are obtained by taking a
-> snapshot: run "make headers" at the top level, then copy the desired
-> header file into the appropriate subdir in tools/uapi/.
+> These build errors only occur if one fails to first run "make headers".
+> However, that is a non-obvious and instrusive requirement, and so there
+> was a discussion on how to get rid of it [1]. This uses that solution.
 > 
-> This was discussed and solved in [1].
+> These two files were created by taking a snapshot of the generated
+> header files that are created via "make headers". These two files were
+> copied from ./usr/include/linux/ to ./tools/include/uapi/linux/ .
 > 
-> However, even before copying any additional files there, there are
-> already quite a few in tools/include/uapi already. And these will
-> immediately fix a number of selftests/mm build failures.
-> 
-> So this patch:
-> 
-> a) Adds TOOLS_INCLUDES to selftests/lib.mk, so that all selftests can
-> immediately and easily include the snapshotted header files.
-> 
-> b) Uses $(TOOLS_INCLUDES) in the selftests/mm build. On today's Arch
-> Linux, this already fixes all build errors except for a few
-> userfaultfd.h (those will be addressed in a subsequent patch).
+> That fixes the selftests/mm build on today's Arch Linux (which required
+> the userfaultfd.h) and Ubuntu 23.04 (which additionally required
+> memfd.h).
 > 
 > [1] https://lore.kernel.org/all/783a4178-1dec-4e30-989a-5174b8176b09@redhat.com/
 > 
@@ -176,7 +169,6 @@ On 28.03.24 04:34, John Hubbard wrote:
 > Cc: Peter Zijlstra <peterz@infradead.org>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > ---
->
 
 Acked-by: David Hildenbrand <david@redhat.com>
 
