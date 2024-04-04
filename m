@@ -1,203 +1,144 @@
-Return-Path: <linux-kselftest+bounces-7180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7174-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690048985FA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 13:23:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D350889857A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 12:56:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D9C028B4B0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 11:23:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86ACF1F24950
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 10:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE1B82864;
-	Thu,  4 Apr 2024 11:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06A9480BF7;
+	Thu,  4 Apr 2024 10:56:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fOd42MNN"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ls25L0vf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F845757F8;
-	Thu,  4 Apr 2024 11:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712229806; cv=fail; b=p6tg0/0RjTYXFxC4tFRrT2T/wwVdwVuPw5N7gM5YraSt+bu4GDj/aOigFGopXtXsk3w4AwhS5tysQxX5wzpaNiB4cPzT0F6KMRUwrV+L50ALDjcrBoYiRuDNIltb7XG5E/xahmqkALkZ28yK6ID4PaTgUtcK331c6B+f2VZjzaw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712229806; c=relaxed/simple;
-	bh=iJkV+5QXOMt/0Qo/4ahXfYzQBbiPa93OAzG+vOrctoo=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=mVbwOy76kamnErTltJQ/0HOJaeRUA0YYnPsUSErf20K15U82uBcNoaLwr63wLNSagPiavZGCrw6bUmd3MPQikz8HBfasfc/bjmsgDqGk//ir+LuknLVSbiYpVdg2f+oBAOgRihj6PyDyotQdug9PVQIzxwhzeI0Te58NmGT8L98=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fOd42MNN; arc=fail smtp.client-ip=40.107.236.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W8UA6WWmnWFi3PnxZFS3pnPHe+/102EbYLF8UXYBGh0OQzLY2ZIv/gW0nTFaiWTToPRDl1wan8xBBggijuEyIiTJeIQdTnGIu8NICvMv/xO8BaSXcsiT3vhU4+urY0MPbunkO09aaR0FRG+qS0pw2ScMZ6m6ywi7TKg6JsAuT/krvQgtqGbCWeyCpQfK2/5VT/Pl64ne72Tl38ckEKhSDFWet1sqXJTozf6yneBRTpTCINi8go1s2MEiw1QWFQaQGiOHUN6QQja5kLiZE/zoMh7FAsLzPu1+lNgwVZutcdXKOJUJNeA4XCWjo2Ud/3+oZGNkGbQYvM9jlHZOwvUXpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yD+IdKoIgrnWmIibRwawUw7HFGKsSujic+64NwX7ykI=;
- b=FZC93CkusrfOIoQXniXrFYsHkn/70ZTZNht9M6agaVMAGMyowHXLSBpybVn0CrCwJEfL33BMPgbFkAQNjT+AqQQ37j7H2mm/UuXe/h3CDnqUmyNUqOvCC/G5ES07OS7uzSOllYNIno689LV2idTcndSBXEFqThWSxi752BHbzq685HeYNlCavnJ3WupsVPGIxjOBwGr1eDSAq424b0h5h0OHXKPUVv7rRrubpUW1A52E6lcABmrXP4BNkeIJC9AMMb4ktwfpg4+QZPZewbpDh6nly442fJBEqLSKwCARhbWFWszUXEOG18lsslH0/VtViAnSXUUstbFdMKskseoClQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yD+IdKoIgrnWmIibRwawUw7HFGKsSujic+64NwX7ykI=;
- b=fOd42MNNVJTEr9sgpMf250dXC4efdbmldUX0CNAlLqNRwdLcFHjhjjvsrDIIZ139UelPUNQIx/6ThLiQfPd62sFOcpKvf3Cx7zhmiD8noyDxk85NMD/gGVGr1SOC4WGgzf0UUajlKPpfy+O616+NForIlTYKDs3WEugmNiQ6MsyKWZvblkAccEA/eUuiL1j4yuKihXriHS+OVA7YBEgM3+gW8PUGWVSNIp19ypaCsOC6idHP/sUYAvbPusIAQTdnBl0vEJfDOQLUpJMI5YVwBv0UtDzIzzC2F7rX+U1dZmLczX9QFTvX5tYS+qpjLchL0+h7OEnOLbJQuXLpTX/DJA==
-Received: from SA1P222CA0137.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c2::6)
- by DS0PR12MB8453.namprd12.prod.outlook.com (2603:10b6:8:157::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 4 Apr
- 2024 11:23:22 +0000
-Received: from SA2PEPF00003AE4.namprd02.prod.outlook.com
- (2603:10b6:806:3c2:cafe::68) by SA1P222CA0137.outlook.office365.com
- (2603:10b6:806:3c2::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46 via Frontend
- Transport; Thu, 4 Apr 2024 11:23:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SA2PEPF00003AE4.mail.protection.outlook.com (10.167.248.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Thu, 4 Apr 2024 11:23:22 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 4 Apr 2024
- 04:23:11 -0700
-Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Thu, 4 Apr
- 2024 04:23:07 -0700
-References: <20240403023426.1762996-1-kuba@kernel.org>
- <20240403023426.1762996-7-kuba@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <shuah@kernel.org>, <sdf@google.com>,
-	<donald.hunter@gmail.com>, <linux-kselftest@vger.kernel.org>,
-	<petrm@nvidia.com>
-Subject: Re: [PATCH net-next v2 6/7] selftests: drivers: add scaffolding for
- Netlink tests in Python
-Date: Thu, 4 Apr 2024 12:42:24 +0200
-In-Reply-To: <20240403023426.1762996-7-kuba@kernel.org>
-Message-ID: <87zfu9fk2v.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC3680623
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 10:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712228201; cv=none; b=q0xDVErSzOy5Lmrl9vgiWISj44Wx7Nn4Favj0sHbmEiROvuzaXEODKx9dKZRbAhmEVMs974ZhYZEE84XwYGOCtrMYzKuCrA0hgZcYkPacwFyn5mB50oWrP9c73o1JS3rdIZIIYUgjioGdKufuNsKmpL3bsj+q5HdZuga/iDO1QQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712228201; c=relaxed/simple;
+	bh=ILJL7HVZXiFmQJJigk5doa9mj2osaYbOmdnt4D25RYk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t5clm5lf7hLQN40cbpKngl5qUxS2l7aTGvfDDjjAvYWcPZcVYGgNoPvbspC2+WmksHLeTJh8RK81Viy6ypvfGZeT3otL6Xv+DuFghuXW9ApQHbBEwhh2wjuX5vrJT1eqkJ339QaOWFjnQSP0tWTaj7B8Mx9mwLiWOP+cFoY9/sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ls25L0vf; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3416df43cabso560466f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 03:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1712228198; x=1712832998; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EFHFiM3SNW59iwbZR58YbB15YVKnaSxrhFOdislttik=;
+        b=ls25L0vf8AIRxamXmlvbryDGvwgL6FELj8Kc/p9WXITVooxCUcq3h6CSkdjN13lBXI
+         RsEHJkOqC7ueTL37LjjW7vf6VuIgcPZbxodGleL8KM83g/OVLGkTmrM+7wWidbF65W1X
+         aOd/rQwYOXsTkjwn0k7fB1l5iidi3SpHGwTjuBmuMpXexC3MJEzgCtxJtJIzlHUqQA8X
+         hfGDEQKJDSlAY1rl6X0Wlx9FNEuYvCnHB9H3CtgZ6Yb4Ze79ZWynrhpV8ZB2s0epx3Fb
+         0OLauckwBZZQ23IGiCUtzY6mN2mZ6QyeYtqEYs0c5EvFkCMb1cep6+q6Ofu3gpTCpnFd
+         Vw7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712228198; x=1712832998;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EFHFiM3SNW59iwbZR58YbB15YVKnaSxrhFOdislttik=;
+        b=afXyvrpCJatCAZou/gWhpa9oo9UXyXfhoUeqnrnafbJDbG8b6RqtnK5Gaab5Aw2i66
+         diSxIj6Z2xm4oumXqbmmOMIxJqpPavHQnJFvEQRswcO5f8rse36VokwBdhTFqMJlFohA
+         844UIWMIHuBZve0wBQB9ZGkgF6nzWVQ6lyda5EYMth8wDDc8fkcFTvKBj7pcVMP5KrhB
+         YOeMos207jCbCLMwvuURY4RgSaM5k6BdK87SmyZPxhR6oewekgIoxobxyvz5wIQufd+s
+         i1WpkP1qi6UvW1veK5H1S7sq4+PyZSlKeW1bs5hzXK9+odkn3NEWE3mtBN9bsdsY7404
+         pq5A==
+X-Forwarded-Encrypted: i=1; AJvYcCWMrG3gbmXn5TiKSVl1M/ETJrQNkj3s+LxysVIyh3YbzLp1tuDPbNer0jnyy6i0NZLXx3ss9q6dK6dxKhNmgKK+N+5xw96Ix/1dnsp5DB+6
+X-Gm-Message-State: AOJu0YzyXvaQxDkexgqfNQILVTPja8qfIVaaBdoE5AnZ/4RhIFVUuYtd
+	q5mQJ+skS+UgQ29WXUo6DqEJsUXh7rrSyEQ2GS+sMERiIevFOXhy/id9d/PCrL4=
+X-Google-Smtp-Source: AGHT+IENSyz17ALt9X+5ZUYzaEpWJFzo0+v4zqkPSZygVwnsdSsHijcp2D+46t60iJ6/39PaQMtB1w==
+X-Received: by 2002:a05:6000:1805:b0:343:7158:aace with SMTP id m5-20020a056000180500b003437158aacemr1379890wrh.17.1712228198219;
+        Thu, 04 Apr 2024 03:56:38 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id f10-20020a0560001b0a00b00341dbb4a3a7sm19705617wrz.86.2024.04.04.03.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 03:56:37 -0700 (PDT)
+Date: Thu, 4 Apr 2024 12:56:36 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: linux-kernel@vger.kernel.org, 
+	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	Anup Patel <anup@brainfault.org>, Ajay Kaher <akaher@vmware.com>, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Alexey Makhalov <amakhalov@vmware.com>, 
+	Juergen Gross <jgross@suse.com>, kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, 
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Will Deacon <will@kernel.org>, x86@kernel.org
+Subject: Re: [PATCH v5 01/22] RISC-V: Fix the typo in Scountovf CSR name
+Message-ID: <20240404-9c750d13d89168feb5ff34de@orel>
+References: <20240403080452.1007601-1-atishp@rivosinc.com>
+ <20240403080452.1007601-2-atishp@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE4:EE_|DS0PR12MB8453:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9515932-e68d-4cbe-a460-08dc5499a326
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	aGpM05/pPjtraIv9js5rPOwgtTzOK/oQTiBfvMw7j9izcIU/p9wsePg1ZrMoCjnZPdN1ZX3mNv9tXrNKHRm0o7qDseGc53M6LfYHTLIDcTSa8U4Z6ecMtferkFaam1X6+/OdT9wnCNhPYqquEQ95YKPAhFJ/JXxLkLsov3dKbkmVgo4cagJmf3+coMCz/gPzr34WWcGMaHc4hEDV11ZilpQdf9LftQQ3vFe5EM2YYHXNXs54Ff9skamQ+jnN91q170LwXbhmAAa/UIL84XkAtB6LTxkmVOHVKNVlAzhCZP1JXaOaRO9o3xo0xk0Gc2g6bvRnXrpFmQoWvHzgML8sdPYo2K1ucJOQ4AZ6TJTotRZT8pehX6AKrTq6yEtbBH/aNXUCH1pIbamy53vepk1dBy1SCbCD6ZsDRXC2b8NDeNiMS0EIzN/pWBfSmvvkbctCOpgHcBMBH4SsNFGc/nQTeSuvoV2WrqrvK0JTBnxux6On91CUbN3eQaZ+nJfUrWE/k7uhiDhKYF/LjfcHwIrGIYALt+Vsw7fD5yvwUw1xgd42JhaGqRXA/tBc0ULffPuo87grvQ60E0xgK3cwIO70RH6ZZwbH7Ox5RsZPy8we2iwWPJ27DnSaFvdelEix7NWeqjYc6UzhCza8gFtLXEMJ1bKn6LVm602/KOa2tj/4AoF4RO0wqWdqCl/5f3BPbc1RjFedtz57OcO97eF1YM1dsJYJED4WkOrJBYNhz1uD7JoF4d7gdtGiGdivrEgeCyg/
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 11:23:22.2309
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9515932-e68d-4cbe-a460-08dc5499a326
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AE4.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8453
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240403080452.1007601-2-atishp@rivosinc.com>
 
-
-Jakub Kicinski <kuba@kernel.org> writes:
-
-> Add drivers/net as a target for mixed-use tests.
-> The setup is expected to work similarly to the forwarding tests.
-> Since we only need one interface (unlike forwarding tests)
-> read the target device name from NETIF. If not present we'll
-> try to run the test against netdevsim.
+On Wed, Apr 03, 2024 at 01:04:30AM -0700, Atish Patra wrote:
+> The counter overflow CSR name is "scountovf" not "sscountovf".
+> 
+> Fix the csr name.
+> 
+> Fixes: 4905ec2fb7e6 ("RISC-V: Add sscofpmf extension support")
+> Reviewed-by: Clément Léger <cleger@rivosinc.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/csr.h | 2 +-
+>  drivers/perf/riscv_pmu_sbi.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 2468c55933cd..9d1b07932794 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -281,7 +281,7 @@
+>  #define CSR_HPMCOUNTER30H	0xc9e
+>  #define CSR_HPMCOUNTER31H	0xc9f
+>  
+> -#define CSR_SSCOUNTOVF		0xda0
+> +#define CSR_SCOUNTOVF		0xda0
+>  
+>  #define CSR_SSTATUS		0x100
+>  #define CSR_SIE			0x104
+> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> index 8cbe6e5f9c39..3e44d2fb8bf8 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -27,7 +27,7 @@
+>  
+>  #define ALT_SBI_PMU_OVERFLOW(__ovl)					\
+>  asm volatile(ALTERNATIVE_2(						\
+> -	"csrr %0, " __stringify(CSR_SSCOUNTOVF),			\
+> +	"csrr %0, " __stringify(CSR_SCOUNTOVF),				\
+>  	"csrr %0, " __stringify(THEAD_C9XX_CSR_SCOUNTEROF),		\
+>  		THEAD_VENDOR_ID, ERRATA_THEAD_PMU,			\
+>  		CONFIG_ERRATA_THEAD_PMU,				\
+> -- 
+> 2.34.1
 >
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-
-However:
-
-> diff --git a/tools/testing/selftests/net/lib/py/nsim.py b/tools/testing/selftests/net/lib/py/nsim.py
-> new file mode 100644
-> index 000000000000..25ae0d081788
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lib/py/nsim.py
-> @@ -0,0 +1,118 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +import json
-> +import os
-> +import random
-> +import re
-> +import time
-> +from .utils import cmd, ip
-> +
-> +
-> +class NetdevSim:
-> +    """
-> +    Class for netdevsim netdevice and its attributes.
-> +    """
-> +
-> +    def __init__(self, nsimdev, port_index, ifname, ns=None):
-> +        # In case udev renamed the netdev to according to new schema,
-> +        # check if the name matches the port_index.
-> +        nsimnamere = re.compile(r"eni\d+np(\d+)")
-> +        match = nsimnamere.match(ifname)
-> +        if match and int(match.groups()[0]) != port_index + 1:
-> +            raise Exception("netdevice name mismatches the expected one")
-> +
-> +        self.ifname = ifname
-> +        self.nsimdev = nsimdev
-> +        self.port_index = port_index
-> +        self.ns = ns
-> +        self.dfs_dir = "%s/ports/%u/" % (nsimdev.dfs_dir, port_index)
-> +        ret = ip("-j link show dev %s" % ifname, ns=ns)
-> +        self.dev = json.loads(ret.stdout)[0]
-
-I don't think self.ifname, .ns, .dfs_dir, .dev are actually used outside
-of this function.
-
-> +
-> +    def dfs_write(self, path, val):
-> +        self.nsimdev.dfs_write(f'ports/{self.port_index}/' + path, val)
-> +
-> +
-> +class NetdevSimDev:
-> +    """
-> +    Class for netdevsim bus device and its attributes.
-> +    """
-> +    @staticmethod
-> +    def ctrl_write(path, val):
-> +        fullpath = os.path.join("/sys/bus/netdevsim/", path)
-> +        with open(fullpath, "w") as f:
-> +            f.write(val)
-> +
-> +    def dfs_write(self, path, val):
-> +        fullpath = os.path.join(f"/sys/kernel/debug/netdevsim/netdevsim{self.addr}/", path)
-> +        with open(fullpath, "w") as f:
-> +            f.write(val)
-> +
-> +    def __init__(self, port_count=1, ns=None):
-> +        # nsim will spawn in init_net, we'll set to actual ns once we switch it the.sre
-
-the.sre?
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
