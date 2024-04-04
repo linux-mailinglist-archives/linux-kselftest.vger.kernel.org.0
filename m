@@ -1,159 +1,163 @@
-Return-Path: <linux-kselftest+bounces-7178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 011C48985D9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 13:15:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3129689865C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 13:48:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABC402825FB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 11:15:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA8561F2165D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 11:48:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86C6E82860;
-	Thu,  4 Apr 2024 11:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4463784A31;
+	Thu,  4 Apr 2024 11:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="LeY/pptd"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="EMxuqA/C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA4E7FBB6
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 11:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F0982876;
+	Thu,  4 Apr 2024 11:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712229305; cv=none; b=fE9ylvrhyyNsfBIK0863IidHf2MNk2dj4SN6aJYF1vrIa3eME8+LBKz2u+7pT4Yb3249rw7ijBQYy5kKwURRf20uucrc1imBGFZwZnizYFWxxH6+f60kTC8mcGvRuWPHlXuuYZlBDJ46KPlTDWw7tihubajShz5YgmXES5TJcOM=
+	t=1712231298; cv=none; b=u+wOFECmwBcpR468dEmMVoOhBPGDGZPLgSvU1nCCXO8280k78OhyDcibUY8n0e5b6YLbgGc6D19btO3mWkxnF/tCFhM3Kn5jphjzdDLSxDWx8fjY2iRUEOLq72CaeoJbRPnmnCrGjdrpcsqfqAxUvqmiomcSbiVQOViaRFo16is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712229305; c=relaxed/simple;
-	bh=lcJ+0RKOVKyrFkZyrW0bb1gbt91d8N2KUr9gV2aCHuQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ooMPwk7q2ktR/HUzkCuMnRULd58uhy5kncJ5U3TDkDOH2l36zh4WLDRwjo5EXGdVFrYpzp0njY/SKVrcfaCOMIskze668qUCWSvL68ekPA0QQ9LfNMu54aSXMsESby8de6ySXtpDuZtGfxeraDhcIABd3sQ9gxLMf8hP3QLKAno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=LeY/pptd; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56e030624d1so1368389a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 04:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1712229301; x=1712834101; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=25ODCdRY+Jn4wzM+mEjHDke5+vqaysXX4gL6DfhOAvg=;
-        b=LeY/pptd4pc15OvlMMzvYYgW1REaFvv+8aB3TzuqRawEQUHFYNHLNVe2z1Zv/Svg6K
-         Dzb64pkVl8UFOhy2Fkgwl5B9cwlN0j5M+JkXiTCRFG0yVU4xGtXSzQuYQyiZrqHAhvGE
-         64jTqqgOIi3BGe0lRwZy8Lbsjmv5C3wStrplGZACVg1n2ZIwWLMmz3yNv6fZ7/HC2dbg
-         LudmSqah5AIRGyQuLYy61j8mEJoAlQQqdyvvjuopvHAlsBJHmG7hd46QPvnr7EiuLJQ3
-         HDqaGP/K1MQsZH4eJAs2UPbzaO82PErSFaVi8FeRah3q+LGwHpDQNsfL+rrIpET+Hbit
-         nPqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712229301; x=1712834101;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=25ODCdRY+Jn4wzM+mEjHDke5+vqaysXX4gL6DfhOAvg=;
-        b=uwSKiIg5smXr9ZsVzYfQcoGr4TYABkUJTjsM/VuwYikpyqCTolsoAPrYlFxi4aP732
-         yZiTMThw41YhyOhTgijh8hrDxlUiq1ck7D+J8Y1eDjPWeO6mwD3QdbZWNUJAnbQnkv9g
-         Zcx83r/eoejMpQiOc+iaU1S+cGXkl4G81AEILJqf3zSwbLhhlCTruQ+kurLETNMMzLzp
-         NJ5CliBigsjZ/lbsC/gms+7CrjQ0TOMmvLoIUcOGHP+EPP+cyZC/UNptWChP4ey9D54z
-         VfWZObx4cxujFZL/t32bBIknyNh6L/W9PvmzXYzc49+S/EgJEE3BDukod3j1973YuNaN
-         6ISA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDz6kh2Uo+ZOYb9KWVfdx6BHFmW6LobqhGlGtD2N/hTY76IzYyte0iUa+W3leO87C464RDhRFrdxbq+WP/AfYiBa9vCLVRrauIAmLNSjaE
-X-Gm-Message-State: AOJu0Yy4N6Ksn1hGTTp8uGlYZ0P84I1wv6y9Sy5wEvAwUqY/eSqpSwZ1
-	za5pVYvP9Hn7nfZCVUPLDK2ZBmn9dIKrzxOLKmq5+XW/Mibj3XVbcFjFSbJwrDM=
-X-Google-Smtp-Source: AGHT+IHVQCEpGYXXQyLBKL2NnoOYXTEECAPh40NJ3Rd5iw4YTlh7y+zWHd66X26Mz6VjXnim0PWvpg==
-X-Received: by 2002:a50:8e4f:0:b0:567:824:e36c with SMTP id 15-20020a508e4f000000b005670824e36cmr1856431edx.14.1712229301530;
-        Thu, 04 Apr 2024 04:15:01 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id fj22-20020a0564022b9600b0056a2cc5c868sm9061098edb.72.2024.04.04.04.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 04:14:59 -0700 (PDT)
-Date: Thu, 4 Apr 2024 13:14:58 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Atish Patra <atishp@rivosinc.com>
-Cc: linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>, 
-	Palmer Dabbelt <palmer@rivosinc.com>, Ajay Kaher <akaher@vmware.com>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Alexey Makhalov <amakhalov@vmware.com>, 
-	Conor Dooley <conor.dooley@microchip.com>, Juergen Gross <jgross@suse.com>, kvm-riscv@lists.infradead.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, 
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Will Deacon <will@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH v5 05/22] RISC-V: Add SBI PMU snapshot definitions
-Message-ID: <20240404-ecddd056e774ccec7cea3be8@orel>
-References: <20240403080452.1007601-1-atishp@rivosinc.com>
- <20240403080452.1007601-6-atishp@rivosinc.com>
+	s=arc-20240116; t=1712231298; c=relaxed/simple;
+	bh=X+2uugPuVrXC1l1UkYxfOwgJq2ar4xrcrs39UDAIhSQ=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=AtlOYboXCeT7c+fogq9RCA7SBYnMypDvZiLO+8Ro47oHikhEdTGNBcQitA+gQZIOnrCWwq3ftwwQ3wO2x7fqsaKvtQjlNHPmGPKlAYpVpfxJJyn9QDvQsNyqGEI3JLbdNTjmSE1IL38FQsvvThZ1rzFHOy2X0rEYNiV5rd6PVNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=EMxuqA/C; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1712231293;
+	bh=X+2uugPuVrXC1l1UkYxfOwgJq2ar4xrcrs39UDAIhSQ=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=EMxuqA/CkRRKiGL1H3kwhSO7t636rfKNJSFagYNeGkQi30BSxSuudOK9sLwgDMZp0
+	 Fia08ny7dQml2JGL7l9z9aS/DIGbLZjzTEWFiv1phdhXd+AAx2TloQ+TuDEpGRbzvy
+	 mlxddAgHGqHi+Xy3YxPIYgPlE6Ujn25yvx9W5yzdYFRAaJ6f6frVKii5ugs+padpNk
+	 Jb2PKX1LccI2BIKtoOalTPb03IfZBJQVMXTbZ3XrgjDXv5STV72e7/0AvVZ3jlU7pK
+	 qhsbWWC3Ddy/368QXMnwwDOK634Le/UlmFEeOU2omFPnEWB8+6xteo81rmnmAkKq0P
+	 z6D62BJUak7RQ==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 82AAC378200D;
+	Thu,  4 Apr 2024 11:48:11 +0000 (UTC)
+Message-ID: <18b3976e-49a5-43d2-8d1b-bb87f2a312eb@collabora.com>
+Date: Thu, 4 Apr 2024 16:48:43 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403080452.1007601-6-atishp@rivosinc.com>
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Nicolin Chen <nicolinc@nvidia.com>, kernel@collabora.com,
+ iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] selftests: iommu: add config needed for iommufd_fail_nth
+To: Jason Gunthorpe <jgg@ziepe.ca>, Joao Martins <joao.m.martins@oracle.com>
+References: <20240325090048.1423908-1-usama.anjum@collabora.com>
+ <31fcc276-acd6-4277-bd6c-4a871c7fb28a@collabora.com>
+ <20240326150340.GE8419@ziepe.ca>
+ <56cc8b9e-c1cf-4520-ba45-b1237e8b7b64@collabora.com>
+ <20240327114958.GG8419@ziepe.ca>
+ <51f493a9-08e7-44d8-ae4a-58b2994ea276@oracle.com>
+ <f78b685d-a147-4b59-beb2-cde9d34ce22a@collabora.com>
+ <e9cb60bf-5035-4fed-9b36-ca2edf048fe8@oracle.com>
+ <20240327182050.GA1363414@ziepe.ca>
+ <ccab9229-c0de-4c38-bb5c-7f32cbd7fa2b@collabora.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ccab9229-c0de-4c38-bb5c-7f32cbd7fa2b@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 03, 2024 at 01:04:34AM -0700, Atish Patra wrote:
-> SBI PMU Snapshot function optimizes the number of traps to
-> higher privilege mode by leveraging a shared memory between the S/VS-mode
-> and the M/HS mode. Add the definitions for that extension and new error
-> codes.
+On 3/28/24 1:13 AM, Muhammad Usama Anjum wrote:
+> On 3/27/24 11:20 PM, Jason Gunthorpe wrote:
+>> On Wed, Mar 27, 2024 at 06:09:37PM +0000, Joao Martins wrote:
+>>> On 27/03/2024 17:49, Muhammad Usama Anjum wrote:
+>>>> On 3/27/24 7:59 PM, Joao Martins wrote:
+>>>>> On 27/03/2024 11:49, Jason Gunthorpe wrote:
+>>>>>> On Wed, Mar 27, 2024 at 03:14:25PM +0500, Muhammad Usama Anjum wrote:
+>>>>>>> On 3/26/24 8:03 PM, Jason Gunthorpe wrote:
+>>>>>>>> On Tue, Mar 26, 2024 at 06:09:34PM +0500, Muhammad Usama Anjum wrote:
+>>>>>>>>> Even after applying this config patch and following snippet (which doesn't
+>>>>>>>>> terminate the program if mmap doesn't allocate exactly as the hint), I'm
+>>>>>>>>> finding failed tests.
+>>>>>>>>>
+>>>>>>>>> @@ -1746,7 +1748,7 @@ FIXTURE_SETUP(iommufd_dirty_tracking)
+>>>>>>>>>         assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
+>>>>>>>>>         vrc = mmap(self->buffer, variant->buffer_size, PROT_READ | PROT_WRITE,
+>>>>>>>>>                    mmap_flags, -1, 0);
+>>>>>>>>> -       assert(vrc == self->buffer);
+>>>>>>>>> +       assert(vrc == self->buffer);// ???
+>>>>>>>>>
+>>>>>>>>> On x86:
+>>>>>>>>> # Totals: pass:176 fail:4 xfail:0 xpass:0 skip:0 error:0
+>>>>>>>>> On ARM64:
+>>>>>>>>> # Totals: pass:166 fail:14 xfail:0 xpass:0 skip:0 error:0
+>>>>>>>>>
+>>>>>>>>> The log files are attached.
+>>>>>>>>
+>>>>>>>> You probably don't have enough transparent huge pages available to the process
+>>>>>>>>
+>>>>>>>>       echo 1024 > /proc/sys/vm/nr_hugepages
+>>>>>>> After making huge pages available, the iommufd test always passed on x86.
+>>>>>>> But there are still failures on arm64. I'm looking into the failures.
+>>>>>>
+>>>>>> Oh that is really strange. Joao? Nicolin?
+>>>>>>
+>>>>> Definitely strange, I'll have a look.
+>>>>>
+>>>>> So it set the expected number of dirty bits as that assert doesn't fail, but it
+>>>>> is failing when we check that even bits are set but not odd ones. Like it's
+>>>>> hasn't set those bits.
+>>>>>
+>>>>> For mock tests there should be no difference between x86 and ARM assuming the
+>>>>> typical 4K page-size. Maybe this is 64k base pages in ARM? That's the only thing
+>>>>> that I can think of that affected mock domain.
+>>>> The config is attached. The defaults are being used i.e., 4k page.
+>>>
+>>> Looks like CONFIG_IOMMUFD_DRIVER is not defined :(
+>>>
+>>> Thus no bits are being set.
+>>
+>> Oh! 
+>>
+>> --- a/drivers/iommu/iommufd/Kconfig
+>> +++ b/drivers/iommu/iommufd/Kconfig
+>> @@ -37,6 +37,7 @@ config IOMMUFD_TEST
+>>         depends on DEBUG_KERNEL
+>>         depends on FAULT_INJECTION
+>>         depends on RUNTIME_TESTING_MENU
+>> +       select IOMMUFD_DRIVER
+>>         default n
+>>         help
+>>           This is dangerous, do not enable unless running
+>>
+> Tested this patch on my system and it fixes all issues for ARM64. Please
+> add tag for this Kconfig patch:
+> Tested by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/include/asm/sbi.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index 4afa2cd01bae..9aada4b9f7b5 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -132,6 +132,7 @@ enum sbi_ext_pmu_fid {
->  	SBI_EXT_PMU_COUNTER_STOP,
->  	SBI_EXT_PMU_COUNTER_FW_READ,
->  	SBI_EXT_PMU_COUNTER_FW_READ_HI,
-> +	SBI_EXT_PMU_SNAPSHOT_SET_SHMEM,
->  };
->  
->  union sbi_pmu_ctr_info {
-> @@ -148,6 +149,13 @@ union sbi_pmu_ctr_info {
->  	};
->  };
->  
-> +/* Data structure to contain the pmu snapshot data */
-> +struct riscv_pmu_snapshot_data {
-> +	u64 ctr_overflow_mask;
-> +	u64 ctr_values[64];
-> +	u64 reserved[447];
-> +};
-> +
->  #define RISCV_PMU_RAW_EVENT_MASK GENMASK_ULL(47, 0)
->  #define RISCV_PMU_RAW_EVENT_IDX 0x20000
->  
-> @@ -244,9 +252,11 @@ enum sbi_pmu_ctr_type {
->  
->  /* Flags defined for counter start function */
->  #define SBI_PMU_START_FLAG_SET_INIT_VALUE BIT(0)
-> +#define SBI_PMU_START_FLAG_INIT_SNAPSHOT BIT(1)
->  
->  /* Flags defined for counter stop function */
->  #define SBI_PMU_STOP_FLAG_RESET BIT(0)
-> +#define SBI_PMU_STOP_FLAG_TAKE_SNAPSHOT BIT(1)
->  
->  enum sbi_ext_dbcn_fid {
->  	SBI_EXT_DBCN_CONSOLE_WRITE = 0,
-> @@ -285,6 +295,7 @@ struct sbi_sta_struct {
->  #define SBI_ERR_ALREADY_AVAILABLE -6
->  #define SBI_ERR_ALREADY_STARTED -7
->  #define SBI_ERR_ALREADY_STOPPED -8
-> +#define SBI_ERR_NO_SHMEM	-9
->  
->  extern unsigned long sbi_spec_version;
->  struct sbiret {
-> -- 
-> 2.34.1
->
+> Also please accept the patch in this current series.
+Please let me know if you need me to send the config patch. Please accept
+the config patch as well.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>>
+>> ???
+>>
+>> Jason
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
 
