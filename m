@@ -1,110 +1,252 @@
-Return-Path: <linux-kselftest+bounces-7218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8284C898D7A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 19:48:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D5CC898D8D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 19:57:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 392F31F273B8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 17:48:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C804B28A783
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 17:57:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D97129E88;
-	Thu,  4 Apr 2024 17:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09F9512FB0A;
+	Thu,  4 Apr 2024 17:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OIRMCtj3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V+d6WqOC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EC612CDB2
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 17:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535C512E1C7
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 17:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712252908; cv=none; b=mtnbF+wEJny8eFTfzN2Trd0SFSO94hDgHVzK4M4IJADberHPUJClyk1fLWJx2IGQUE8DzhEsfBWaHOdnWzqSERROq2kwHiTIKYG5D9ba8errBKgm12fLNnQy6lR9DCN14GKX/xMcryScoWuSdXq6eCMmEjichKE0Q+QJKwEZPcI=
+	t=1712253418; cv=none; b=IVPHhy5/QP19ppiHP7zSJvqs0g8QczbNdsLOfPiemHvDS4vLcr5m+rDnt4K+9H+3Tqvos0/rnryU9PE6YIlFWqr08jrgzRtTYDMZOZXcXuag5L8jloxeJn9NcQOU0BHQDHQ4IgSJfBSkkp1F7B9bs7D8/5Zj2bwfjGZJfc8PY/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712252908; c=relaxed/simple;
-	bh=3cSbmZrjAfQIrrTlLR0hOFNu/HfpV2pnoC7RSDEECic=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uPko5QaziNFZvxo1LbJ/0geXUldhQ+2smXSChGald93pJCIOQEzSjsHT/IViD/+x4nJy2dr+QoN9TqWDfzsRpt4CTlX/t/o4j7V6R3oFH+Xmo5/V1lwkifUPLRr6Dz4QUiJuZq4gWDDEpxMSjpZHvvthADKIbunilTWcTsl07sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OIRMCtj3; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7cc5e664d52so27086539f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 10:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1712252906; x=1712857706; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KY5NyprwqnUz5XuA9Kl5z+7VSecMAoWLl/z+MUE9h3s=;
-        b=OIRMCtj3/kGO/7uP4JL/ySFZnoCc7BiSL1RmL+60eii00FJKxt/6hS97g4YyrSLfyq
-         kOCg5j4O5+diKaawE3BZOS05l+Sn7hX6GxIShiU/ZXPyYttcZ8eP9vIG9h9xi/evHRC7
-         3WG8+n19o5WhvobuxmqQZVfvj1ADdIjhjdGag=
+	s=arc-20240116; t=1712253418; c=relaxed/simple;
+	bh=L5Z1KtHeSyCWra/ak3cQEWjMPwF+P9JaVwq4yTb9K4U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Co2zIx4W72pgn+RFjCTQVisEgCpsm2togfhT9kim+erSu3JzQjrxvKNlCIy3Gl6wyDaiWWrZHotbrc27tszzbdBRUijzPDfdd/Kt+hDzza9A79853jzfEHOrTEAtm43HM6s/Pi2cU6k7iQVCGAI/DKc0ejjWN+KAm5cOmDCiD4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V+d6WqOC; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712253416;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=q+nUddKgnGzsUpVaJmj75uqcQku+cMdBtxn5p2n0yuI=;
+	b=V+d6WqOC8i68lBj7CG7QlzEvKNghzppgCYAVjLe9K2Yd5FcWiUZc2kV4tazAFHOYqqgNm2
+	ynGbXSQI+RUXUVuFJA9oaYl1CnX1656imAjZ91kdwZjD/TIonMxGFBuJHXIBpqgKToapH/
+	YX+Fj7kfEP+bkTgFQFVWhK1uqK1SWWU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-692-4Yqf9PwCNlmd9raD5tU8zw-1; Thu, 04 Apr 2024 13:56:54 -0400
+X-MC-Unique: 4Yqf9PwCNlmd9raD5tU8zw-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-56c3dc8d331so901983a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 10:56:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712252906; x=1712857706;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KY5NyprwqnUz5XuA9Kl5z+7VSecMAoWLl/z+MUE9h3s=;
-        b=jt0IraMBpX95KFxTiEjAzhaAVNnzpPRDHZP4QU2QNWYJHrrwGMwz8bYkgeS9pDKptF
-         6ja5MtDYhZcqCZLJfl7xuBV2oysv7HBXYgzyTG/vtqiTfYsYIsOUmldjgKcpIqOyw8T4
-         /o1TDUAoLBgFPrNILPivuY9yobzP+8aPV+/HSbJIotdPwqX1SIXUh57TaZ07vxK1GzBB
-         VhU7PqRL2SsO9cpm717Xv9CDTeuGLCNvFPb2DVGAKXYn8HSdUA8qwmJxg4Lul0RZ+7g1
-         3GtaC1CuW8HCqDk5h5o7tOOmsPQDvRuqi+UdISCCicLX8wakrYFwU598Lj6HOR2RoAOP
-         OlOA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6usY9vOo0pDwdg20IWAMnb5I6zfPW+U/RizWiQ2acs9113CqaKe04Lwn+SL+QuZikEVn0+OBHIQ05TKrs2fdpsis7P1wFG2BI7vGZTHLM
-X-Gm-Message-State: AOJu0YwRaAT480AfRhaKqxujstw725gzdJ4rpDe8nE2RtfGhCPwIWwsb
-	u2ewaGB3e/TPESTLsWQE2+VPlmXeDzD172BQQKV/MwPNcVrFP38Z40g2GXQaGn8=
-X-Google-Smtp-Source: AGHT+IEQpErISzxtGnTtE2N5Xs2rTdzy5TuY1rIwnpn+T8yboQI6fXwKLovL7m1U6HCU8niYZE9xgw==
-X-Received: by 2002:a92:cc4a:0:b0:369:b728:583c with SMTP id t10-20020a92cc4a000000b00369b728583cmr3556416ilq.3.1712252905984;
-        Thu, 04 Apr 2024 10:48:25 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id he21-20020a0566386d1500b0047f1a41f958sm1238024jab.56.2024.04.04.10.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 10:48:25 -0700 (PDT)
-Message-ID: <9a2b6f33-451b-4cb3-ad6b-be87b4c03a94@linuxfoundation.org>
-Date: Thu, 4 Apr 2024 11:48:25 -0600
+        d=1e100.net; s=20230601; t=1712253412; x=1712858212;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q+nUddKgnGzsUpVaJmj75uqcQku+cMdBtxn5p2n0yuI=;
+        b=FJcoypKiWsJ17O+HM6vpTxi/urRuluvH5dJSZ6/8pAokVMBJaQVh1dHMtnU1XIlw6D
+         41GGbekrPaHin4UMYnwEG584xgfLYPk/zDlcW1iSxpnfuH9/2hU2fF+4voKeCyGEBt+Y
+         2geFzm9dYs97bQFsOrJ00qFpOrJYnXGZvIsm32/RfzwNJ7/6ZVJC3+zb65uW0AUFBY9l
+         fjCoitcRLkYui4OUEEUbdE/9b5o15EvcsUgZYHHz19hG0XIBnxEuKacWZN/Z2pdeJ6vi
+         ezpoITZPbfW0nRzLCYHO+bq+LM8b3j6WVPH+CqWtPj0qvTO779Sn6xGtrbEM5RuHFvbI
+         Tcyw==
+X-Forwarded-Encrypted: i=1; AJvYcCWG+IIvLnAbWiKKPwR4AcMdgdd+d/NkjpFmQRXP8ZDiq8L3aN4bEMsTww22nEvUAJy/mqdVOqruTCd38nwvvP89woE3UkDmSDjmltHEcsRz
+X-Gm-Message-State: AOJu0YwiLtS9tl9iLxhpaDMoHW8fWChD2V8RNEGsSn933YYw4DinX3rJ
+	Dm5ZJP/l/UZNpj8NYAz91PAry2jbG38Urkh/AxLJHW6I9AMOM8QK5WfV/OGEegFjNtIbtre0VfM
+	Aar6BiicKHjE6DVMWNdqw8NdOPpF7PXJfW1IGsZtGBuRjuEMdSNaxSNQZHGFb+66kdEBDCFenDO
+	Oy8b/cD9iJ8SOWQuLpRn+QyNCQHcU/YTSqk/hNsXjsTxtlCXx16X0=
+X-Received: by 2002:a50:9507:0:b0:568:be6d:e5e5 with SMTP id u7-20020a509507000000b00568be6de5e5mr333056eda.37.1712253412427;
+        Thu, 04 Apr 2024 10:56:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHuz2mJfdvVKG6SKd8f9ftw27WMcaZq7NnSkL5KWH2HoMuzr3TqXfYdrtJVmeNRE9cwC4MBtAopilPOb6UUhTw=
+X-Received: by 2002:a50:9507:0:b0:568:be6d:e5e5 with SMTP id
+ u7-20020a509507000000b00568be6de5e5mr333045eda.37.1712253412054; Thu, 04 Apr
+ 2024 10:56:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] selftests: add ksft_exit_fail_perror()
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>,
- Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: kernel@collabora.com
-References: <20240404161433.114497-1-usama.anjum@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240404161433.114497-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org>
+ <20240322-hid-bpf-sleepable-v5-1-179c7b59eaaa@kernel.org> <CAADnVQJdm7+7tbJC8yhPqDUijE0DTD9UG4LOQmNRCWchQ3uGsg@mail.gmail.com>
+ <CAO-hwJKVVjhg6_0tAM75HGJL0WcERotyJc+7oBVvDiTGJAqTfw@mail.gmail.com>
+ <CAADnVQ+5NqjqyeFS3XgDU0OCFgt1Y9bmTbHOPv6ekw1sJasyaA@mail.gmail.com>
+ <CAADnVQJm7bi=iFtWj1XCmEdyDwb64KjxeP5RFo57paG3-zZo_g@mail.gmail.com>
+ <CAADnVQKSwdpfx8EoqURvzFymYNr1evkB3+4dRt_coPOZhW2LTw@mail.gmail.com>
+ <CAO-hwJLDuGHDNLRAJit7+5Dh7MRmwmWNt0+rreMyjf7P6UpAYg@mail.gmail.com> <CAADnVQ+gikPakTuYpD4-oxS6yS5-Dd_HanfqyNnGW-nk7=eXNg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+gikPakTuYpD4-oxS6yS5-Dd_HanfqyNnGW-nk7=eXNg@mail.gmail.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date: Thu, 4 Apr 2024 19:56:39 +0200
+Message-ID: <CAO-hwJLz4ET8Rba-_8icR+7t9T63BPnf97JrSFjviJWG+i8dVQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/6] bpf/helpers: introduce sleepable bpf_timers
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/4/24 10:14, Muhammad Usama Anjum wrote:
-> In this series, ksft_exit_fail_perror() is being added which is helper
-> function on top of ksft_exit_fail_msg(). It prints errno and its string
-> form always. After writing and porting several kselftests, I've found
-> out that most of times ksft_exit_fail_msg() isn't useful if errno value
-> isn't printed. The ksft_exit_fail_perror() provides a convenient way to
-> always print errno when its used.
-> 
-> Muhammad Usama Anjum (2):
->    selftests: add ksft_exit_fail_perror()>    selftests: exec: Use new ksft_exit_fail_perror() helper
-> 
->   tools/testing/selftests/exec/recursion-depth.c | 10 +++++-----
->   tools/testing/selftests/kselftest.h            | 14 ++++++++++++++
->   2 files changed, 19 insertions(+), 5 deletions(-)
-> 
+On Thu, Apr 4, 2024 at 6:41=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Apr 4, 2024 at 8:27=E2=80=AFAM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> >
+> > >
+> > > So we need something like:
+> > >
+> > > struct bpf_hrtimer {
+> > >   union {
+> > >     struct hrtimer timer;
+> > > +   struct work_struct work;
+> > >   };
+> > >   struct bpf_map *map;
+> > >   struct bpf_prog *prog;
+> > >   void __rcu *callback_fn;
+> > >   void *value;
+> > >   union {
+> >
+> > Are you sure we need an union here? If we get to call kfree_rcu() we
+> > need to have both struct rcu_head and sync_work, not one or the other.
+>
+> why? with an extra flag it's one or the other.
+> In bpf_timer_cancel_and_free()
+> if (flag & SLEEPABLE) {
+>     schedule_work() to cancel_work_sync + kfree_rcu
+> } else {
+>    hrtimer_cancel
+>    kfree_rcu
+> }
 
-Applied the two patches to linux-kselftest next for Linux 6.10-rc1.
+I thought kfree_rcu required struct rcu_head, and given that we need
+to initialize sync_work it will be poisoned...
 
-thanks,
--- Shuah
+>
+> > >     struct rcu_head rcu;
+> > > +   struct work_struct sync_work;
+> > >   };
+> > > + u64 flags; // bpf_timer_init() will require BPF_F_TIMER_SLEEPABLE
+> >
+> > If I understand, you want BPF_F_TIMER_SLEEPABLE in bpf_timer_init()
+> > (like in my v2 or v3 IIRC). But that means that once a timer is
+> > initialized it needs to be of one or the other type (especially true
+> > with the first union in this struct).
+>
+> yes. That's an idea.
+> The code to support wq vs timer seems to be diverging more
+> than what we expected initially.
+> It seems cleaner to set it as init time and enforce in
+> other helpers.
+
+OK, works for me.
+
+>
+> Also with two work_struct-s we're pushing the sizeof(bpf_hrtimer)
+> too far.
+> It's already at 112 bytes and some people use bpf_timer per flow.
+> So potentially millions of such timers.
+> Adding extra sizeof(struct work_struct)=3D32 * 2 that won't be
+> used is too much.
+> Note that sizeof(struct hrtimer)=3D64, so unions make everything
+> fit nicely.
+
+Maybe we should do
+union {
+  struct hrtimer timer;
+  struct {
+    struct work_struct work;
+    struct work_struct sync_work;
+  }
+}
+
+(not nice to read but at least we don't change the size at the beginning)
+
+>
+> > So should we reject during run time bpf_timer_set_callback() for
+> > sleepable timers and only allow bpf_timer_set_sleepable_cb() for
+> > those? (and the invert in the other case).
+>
+> yes.
+>
+> > This version of the patch allows for one timer to be used as softIRQ
+> > or WQ, depending on the timer_set_callback that is used. But it might
+> > be simpler for the kfree_rcu race to define the bpf_timer to be of one
+> > kind, so we are sure to call the correct kfree method.
+>
+> I think one or another simplifies the code and makes it easier
+> to think through combinations.
+>
+> I'm still contemplating adding new "struct bpf_wq" and new kfuncs
+> to completely separate wq vs timer.
+> The code reuse seems to be relatively small.
+
+There is some code reuse in the verifier, but it can be factored out I thin=
+k.
+
+Though the biggest reuse might be in the map portion of bpf_timer,
+which I haven't looked much TBH.
+
+> We can potentially factor out internals of bpf_timer_* into smaller
+> helpers and use them from bpf_timer_* and from new bpf_wq_* kfuncs.
+
+Yeah, also, given that we are going to enforce delay =3D=3D 0 for
+sleepable timers (wq), the user api would be much cleaner if we can
+have a dedicated bpf_wq (and it would make the flags of bpf_timer_init
+easier to deal with).
+
+>
+> One more thing.
+> bpf_timer_cancel() api turned out to be troublesome.
+> Not only it cancels the timer, but drops callback too.
+> It was a surprising behavior for people familiar with
+> kernel timer api-s.
+> We should not repeat this mistake with wq.
+>
+> We can try to fix bpf_timer_cancel() too.
+> If we drop drop_prog_refcnt() from it it shouldn't affect
+> existing bpf_timer users who are forced to do:
+> bpf_timer_cancel()
+> bpf_timer_set_callback()
+> bpf_timer_start()
+> all the time.
+> If/when bpf_timer_cancel() stops dropping the callback
+> such bpf prog won't be affected. So low chance of breaking any prog.
+> wdyt?
+>
+
+How would a program know set_callback() is not required after a
+cancel() because the kernel kept it around? It seems that it's going
+to be hard for them to know that (unless by trying first a start()),
+and it will add more code.
+
+timer_cancel() would be hard to change but we can always do the change
+and add a new kfunc timer_cancel_no_drop() which would clearly allow
+for new programs to know that set_callback() is not required to be
+called. In a few kernel releases we could remove it and say that
+timer_cancel() is the same (and replaced by a #define)
+
+Anyway, the more I think of it, the more I think the best API would be
+a dedicated wq API. It's probably going to need a little bit more
+work, but it'll be more or less this work plus the new bpf_wq type in
+the map.
+
+Cheers,
+Benjamin
+
 
