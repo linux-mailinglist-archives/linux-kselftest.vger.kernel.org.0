@@ -1,131 +1,181 @@
-Return-Path: <linux-kselftest+bounces-7228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7229-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5FB3898EE4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 21:21:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04D20898F5F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 22:07:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7061A2828FC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 19:21:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 278861C2350D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Apr 2024 20:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E821339AB;
-	Thu,  4 Apr 2024 19:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D501350E3;
+	Thu,  4 Apr 2024 20:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="KBQj/lSE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OkBoT7cB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD5D133426
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 19:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7001BC46
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Apr 2024 20:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712258474; cv=none; b=ZdEUMJeJgeTACIImTbO8ZILviiE5HS7V2Hj4+PelOepGkAhohLUQesh9hQ27NbH9mQyxeZMcVrGtni24PnQ7zDIctdWeelMaiUZgHHtDlEDxQ6+y4zgR8dB7PecCvRKUAnOJUKA2SisgVSGVXM0MqWLtAOM18HSI8priTgACE5g=
+	t=1712261223; cv=none; b=gcUsH8OhI4NqKarWIQ9NMsBQ74HV3AYLilq7VUIhkSafwVqerPdg3uO+7Da5Pf5blnKunpfqA97DVzVXeRvuQyWinQZ1qeS8F4F/j6ViX1KkdQt41S1+ckALLpcr5DQulDME2EwWdidZRBfE70ghETkDtNwKTScRv4mBDvdgL9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712258474; c=relaxed/simple;
-	bh=CVr2IxXDHjqtPIjdakFNnsSdpqceotjDCl0kfyrywLA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iN3iyYiu5Oh1Fk1CL6hJ8iut91NeVi98ECRp7lovWGuz+DhxOQfyfQcpSWvPuY+rdVadfPYx20tQvRU19acqzHUdiC8eXG4k4EJWqgR8LYU8ai0JYH7um9lpFhAsul+4cLiKKfd2faI/9VlousE8HVPKhztGhN8LPWwdo++uOSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=KBQj/lSE; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-61149e50602so10270287b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 12:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712258472; x=1712863272; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dl/FopeODNdULB5NSwrsajN91zng/VnqM090COn1yWc=;
-        b=KBQj/lSEZpu6lpVtuj6vzcFweWjT8/rKVwz+ZUh6Lv3d8KOkBbvx5uXejk73IwFE35
-         wdKPc+rm0gS14kpdoo06ZOpjSb8GIKeVAh6ZDJdBKJXsIXoB2ZmYJU+yy6gzGJJFmX3P
-         rcJe1Uhilps6C5LDxJUWay3FSyt4mwewYB2J5ANZB/0e6H/WDkTSyoZCL4stNx6dkZjM
-         j2NvxGCyjfPxVs47V+zWIOO9AZmtUvBT4m0snww90NXGvRpfGyUiyUDiIP77xBYD5pZO
-         9Gv2qNFtM1BalkylcoJUt6mXM834x79Rr0oVTr6MaUbOo0F5ZN/Dfr8aNgjNkpR9ePCW
-         +DhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712258472; x=1712863272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dl/FopeODNdULB5NSwrsajN91zng/VnqM090COn1yWc=;
-        b=upllgi7Ww82ETYM/r2K6ar12pyPKdAKi+OAwQKAMPnG6CM8gHJwhvkGRwnbtQBL55T
-         OwZEiQChJ1TjXR0Il3xcC5yTxu+0JZ0AzwoG46alKkSGzUfGT3Xquq6WOfsK/ehLHh+R
-         BqO2JESK7AmatZ9+k6ce3XjgQ5UH1Um6FEop/UETjKeFp9fkFDTWyj/i0kChyQ+kHfQF
-         qODGxiyIbohpIyW+jrrhC7C6Ni4ywDrTISxEp6ebKLmfO7uQaTiUsgRie4QS6kxAHVyP
-         fxFt+GINPOmb7q+xblGEq0wyusWWLui9qHRcJEDHOunaOVXtPv01yNmXTT8jwNEfuj5I
-         fjRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVcaRG/0DHTdQGtMLHvcH0CLkzw3Qiz05YjtCxN2hAu6xAle8BPMeT5QWvs+OfYkN2W+6n2H4tvedWWiegtrUEVmbT7yM1Q5pCrGVGtdXH+
-X-Gm-Message-State: AOJu0YzENtmdC8LO4rQoE/DNUcyhAVwqa6i0mD/dw3zPwBHss2lz3sQz
-	U1JjOZd+ykJHhWiaYxbthnR7UhpDI8flX0SVFNGStrPZ3Tqc7ubYYP63BdAcqCjd1WKw2CXdILB
-	F6BUqAnidIeOjLH4/4ijfAVwgs+xae+qjYL9ZlA==
-X-Google-Smtp-Source: AGHT+IGyZ3JMNrz8F2bkpirKnyuGQawxZoeXVCC/y6GzZBE4nmRVGOFkLbxGUyQaEHSmHXKt9NtfMMywjFKnI39zfuA=
-X-Received: by 2002:a0d:dd8c:0:b0:615:e10:691c with SMTP id
- g134-20020a0ddd8c000000b006150e10691cmr414269ywe.1.1712258471733; Thu, 04 Apr
- 2024 12:21:11 -0700 (PDT)
+	s=arc-20240116; t=1712261223; c=relaxed/simple;
+	bh=DuFa4hmd+yyQJc4kdYQczPH/6uJpnYrciswo6eFuxBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LyrYav7QHVvBea/0eE/9RQJ1I3P4Ye7vIzb7nM3Nurl21WA4k+ygO0Ay5AiajolbsipGnbfd6+dYEGRqKd9WLrOusRbDJnVVtS5DHRN1KLWY9RsYePCSYW4t1BxYgYhUclBXa6L5q083OX9DpYFreuW/DHJ/CaHsSX6C2HJ3GK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OkBoT7cB; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <ff36e8fa-14f4-42a6-8210-cec24a7779a0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712261218;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n1SLGajoYfkd/BVU/Z4IP2IUlKcHDqf4f4XKLUjAyXc=;
+	b=OkBoT7cBI9fR/9QKUis94AcIOB+rQcO8qjNPV0qOlGiPE5LTyG+5KtIv8xohW7d0i6xBKt
+	kwcOrQMKMzqDBJYkhbkF/4eud9cKIrLoQhoOeLGM+QwTREYPdvRzBYZ41PrIvo+FsdQJz0
+	7B3SnsMQ3UNpaUeJPZccXW1/xWvKcZQ=
+Date: Thu, 4 Apr 2024 13:06:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403234054.2020347-1-debug@rivosinc.com> <20240403234054.2020347-9-debug@rivosinc.com>
- <8fb37319-288c-4f77-9cd7-92f17bb567ee@redhat.com> <d3689521-58a7-47df-bd6a-0e2e60464491@sirena.org.uk>
- <604863a6-0387-4f29-9c4e-5ef86a8ca904@redhat.com>
-In-Reply-To: <604863a6-0387-4f29-9c4e-5ef86a8ca904@redhat.com>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Thu, 4 Apr 2024 12:21:00 -0700
-Message-ID: <CAKC1njRT0GHJEY2NYWuPm7Az7yCj0ZWSevYj1NY6npr136jfsA@mail.gmail.com>
-Subject: Re: [PATCH v3 08/29] mm: Define VM_SHADOW_STACK for RISC-V
-To: David Hildenbrand <david@redhat.com>
-Cc: Mark Brown <broonie@kernel.org>, paul.walmsley@sifive.com, 
-	rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, 
-	keescook@chromium.org, ajones@ventanamicro.com, conor.dooley@microchip.com, 
-	cleger@rivosinc.com, atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, 
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-mm@kvack.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, corbet@lwn.net, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com, akpm@linux-foundation.org, 
-	arnd@arndb.de, ebiederm@xmission.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-	lstoakes@gmail.com, shuah@kernel.org, brauner@kernel.org, 
-	andy.chiu@sifive.com, jerry.shih@sifive.com, hankuan.chen@sifive.com, 
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com, 
-	charlie@rivosinc.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
-	dbarboza@ventanamicro.com, sameo@rivosinc.com, shikemeng@huaweicloud.com, 
-	willy@infradead.org, vincent.chen@sifive.com, guoren@kernel.org, 
-	samitolvanen@google.com, songshuaishuai@tinylab.org, gerg@kernel.org, 
-	heiko@sntech.de, bhe@redhat.com, jeeheng.sia@starfivetech.com, 
-	cyy@cyyself.name, maskray@google.com, ancientmodern4@gmail.com, 
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com, bgray@linux.ibm.com, 
-	mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, 
-	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, 
-	shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org, 
-	jhubbard@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: Move test_dev_cgroup to
+ prog_tests
+Content-Language: en-GB
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240401123455.1377896-1-usama.anjum@collabora.com>
+ <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
+ <cfecd6ea-8fa3-477f-bd32-4087aefee2af@collabora.com>
+ <0ff5c7d0-d5c5-4b61-ba89-8e7f9f775935@linux.dev>
+ <0973bc93-7a8d-451c-9944-d91a77d68755@collabora.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <0973bc93-7a8d-451c-9944-d91a77d68755@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 4, 2024 at 12:15=E2=80=AFPM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 04.04.24 21:04, Mark Brown wrote:
-> > On Thu, Apr 04, 2024 at 08:58:06PM +0200, David Hildenbrand wrote:
-> >
-> >> or even introduce some ARCH_HAS_SHADOW_STACK so we can remove these
-> >> arch-specific thingies here.
-> >
-> > It would be convenient if you could pull the ARCH_HAS_USER_SHADOW_STACK
-> > patch out of my clone3 series to do that:
-> >
-> >     https://lore.kernel.org/all/20240203-clone3-shadow-stack-v5-3-322c6=
-9598e4b@kernel.org/
->
-> Crazy, I completely forgot about that one. Yes!
 
-I missed that. Roger.
-Will do that in the next series.
-Thanks.
+On 4/3/24 5:03 AM, Muhammad Usama Anjum wrote:
+> On 4/3/24 7:36 AM, Yonghong Song wrote:
+>> On 4/2/24 8:16 AM, Muhammad Usama Anjum wrote:
+>>> Yonghong Song,
+>>>
+>>> Thank you so much for replying. I was missing how to run pipeline manually.
+>>> Thanks a ton.
+>>>
+>>> On 4/1/24 11:53 PM, Yonghong Song wrote:
+>>>> On 4/1/24 5:34 AM, Muhammad Usama Anjum wrote:
+>>>>> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
+>>>>> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
+>>>>> dev_cgroup.skel.h and load program from it accourdingly.
+>>>>>
+>>>>>      ./test_progs -t dev_cgroup
+>>>>>      mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>>>>>      64+0 records in
+>>>>>      64+0 records out
+>>>>>      32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
+>>>>>      dd: failed to open '/dev/full': Operation not permitted
+>>>>>      dd: failed to open '/dev/random': Operation not permitted
+>>>>>      #72     test_dev_cgroup:OK
+>>>>>      Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>>> ---
+>>>>> Changes since v2:
+>>>>> - Replace test_dev_cgroup with serial_test_dev_cgroup as there is
+>>>>>      probability that the test is racing against another cgroup test
+>>>>> - Minor changes to the commit message above
+>>>>>
+>>>>> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
+>>>>> next. It is passing on both. Not sure why it was failed on BPFCI.
+>>>>> Test run with vmtest.h:
+>>>>> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh
+>>>>> ./test_progs -t dev_cgroup
+>>>>> ./test_progs -t dev_cgroup
+>>>>> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>>>>> 64+0 records in
+>>>>> 64+0 records out
+>>>>> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
+>>>>> dd: failed to open '/dev/full': Operation not permitted
+>>>>> dd: failed to open '/dev/random': Operation not permitted
+>>>>>     #69      dev_cgroup:OK
+>>>>> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>> The CI failure:
+>>>>
+>>>>
+>>>> Error: #72 dev_cgroup
+>>>> serial_test_dev_cgroup:PASS:skel_open_and_load 0 nsec
+>>>> serial_test_dev_cgroup:PASS:cgroup_setup_and_join 0 nsec
+>>>> serial_test_dev_cgroup:PASS:bpf_attach 0 nsec
+>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:PASS:mknod 0 nsec
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:FAIL:mknod unexpected mknod: actual 256 !=
+>>>> expected 0
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>>
+>>>> (cgroup_helpers.c:353: errno: Device or resource busy) umount cgroup2
+>>>>
+>>>> The error code 256 means mknod execution has some issues. Maybe you need to
+>>>> find specific errno to find out what is going on. I think you can do ci
+>>>> on-demanding test to debug.
+>>> errno is 2 --> No such file or directory
+>>>
+>>> Locally I'm unable to reproduce it until I don't remove
+>>> rm -f /tmp/test_dev_cgroup_zero such that the /tmp/test_dev_cgroup_zero
+>>> node is present before test execution. The error code is 256 with errno 2.
+>>> I'm debugging by placing system("ls /tmp 1>&2"); to find out which files
+>>> are already present in /tmp. But ls's output doesn't appear on the CI logs.
+>> errno 2 means ENOENT.
+>>  From mknod man page (https://linux.die.net/man/2/mknod), it means
+>>    A directory component in/pathname/  does not exist or is a dangling
+>> symbolic link.
+>>
+>> It means /tmp does not exist or a dangling symbolic link.
+>> It is indeed very strange. To make the test robust, maybe creating a temp
+>> directory with mkdtemp and use it as the path? The temp directory
+>> creation should be done before bpf prog attach.
+> I've tried following but still no luck:
+> * /tmp is already present. Then I thought maybe the desired file is already
+> present. I've verified that there isn't file of same name is present inside
+> /tmp.
+> * I thought maybe mknod isn't present in the system. But mknod --help succeeds.
+> * I switched from /tmp to current directory to create the mknod. But the
+> result is same error.
+> * I've tried to use the same kernel config as the BPF CI is using. I'm not
+> able to reproduce it.
+>
+> Not sure which edge case or what's going on. The problem is appearing
+> because of some limitation in the rootfs.
+
+Maybe you could collect /tmp mount options to see whether anything is
+suspicious? In my vm, I have
+   tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=3501540k,nr_inodes=1048576)
+and the test works fine.
+
 
