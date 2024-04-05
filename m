@@ -1,188 +1,115 @@
-Return-Path: <linux-kselftest+bounces-7236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F5048992BF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 03:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CEC68992F4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 03:58:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31E121C222AE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 01:17:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 750291C21317
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 01:58:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F262256A;
-	Fri,  5 Apr 2024 01:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1468C13D;
+	Fri,  5 Apr 2024 01:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="KjuvqYvh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bqdRmaSX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE822AD23
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Apr 2024 01:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792CF1C02;
+	Fri,  5 Apr 2024 01:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712279858; cv=none; b=JkZRLiPRBYW5EwzfQJxyPJXYonzrFTqbedHmxwAglhVy2JF/rIidQV2yvKieDMXdzosPn1+sbEKP9BwTH9hy9ffnFfUclalXZqV4x+DegK89O+uxyeMqUhg3fu0aXSqVIvP96zI/kJ/H1X2C+d+A9Xp5jwWKPcebGVUZBGWTvJk=
+	t=1712282326; cv=none; b=gUWI8K2DBbK9dBvAnzSxdnGXGXwqK3GK0gh5S2wI0lxQ8UmsPxKARVg+bFIEiZjRPXkwOc867ejSIDOhVsZH60P+SfvXsYN2cKFAuTAjspp9h4vHXmeksc6KZOOkBvjqM4C4eCWQNotY828tkexff17QmuaJUN5AcjZrKcRkOOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712279858; c=relaxed/simple;
-	bh=+g7L3scXyIwgceQbsdUcaMyWeC5qVSJ6514AMwxlRts=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=tHZElrXW32Q0qkAP5Zg4K4cgdSjgdTCc3j4gEuYnPAADc52YdN6aIETE1gYLRO9bVtjcaoTbaqPDRdiyz+SVM9h8GV2e9rEHNkJTc06vhzdkjhjj8sJ0Z/ztyielKKVBW1vxeU3oKjYqZuJ1ZI+ANxr9G/r7Zc62XKOgW1sv3C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=KjuvqYvh; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6ecec796323so1254605b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Apr 2024 18:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712279856; x=1712884656; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=33zd2GNtNRTWN3d/GSXCcs16pHgm6apuyfsBkEe3sXA=;
-        b=KjuvqYvhDtpos5lih0FWQF2Edy/NX1rrBiOp9bmdarjhdD5Zy4XvlJVplw+nu560z7
-         rESRwqqxmj+KO+/EtQWqSwHuovxQ1JouQQAvZIu7cHpGTRFM+yTcfmifYlN6Yvc9/gts
-         Zwo4ZztNvLH64LPwK0N4IQ0ZzwFiGSh8TcFfEwfzKcRI4E7yW2mnV70W/XeZmRoVmucN
-         U9YeFzuO/Ibpx8J2HAOkA/SeVOduS9aipvBLJRbd7Cs2X6IP8ejWn3Kfp4qw86cjFAR0
-         lbVYuaUcUCkHOo1TzjEKPdtMnK+ZswqZZ1oRDtqO+hYbf36LBPjWfrf+VsYjDfRZ+9Mf
-         A9FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712279856; x=1712884656;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=33zd2GNtNRTWN3d/GSXCcs16pHgm6apuyfsBkEe3sXA=;
-        b=qQhOlkIa2E/z6MYw3DYsYD1XvoIqE1boMB41zf7uXWvVlah2YzsvZtXF+/y3jdvYuP
-         0Ch73R4cQnp2yo8sEo5C/sq33dDmjP+wAxoVCLwJQLTNBzAOiuMZ/VHrT8rk5fHSmGMU
-         vtxBte/X4LKEB5qLPnkYKbYExMFP4FJv0lE67OzVmTULqPL1atPuLEfC45AUuUVXSqZk
-         iIDvI/vz5FHsM5BytSUkizb+KUAyNdfqrqIFkOVZpsFE23eZ8sP7y9prwXq6jsgCu810
-         Qf6xR5kgU1quPTAfduYRJ+0tshGvpuVl0RhTC9ni0S+xo3/xtgzV9o90gXdJv240dsib
-         a4Tw==
-X-Forwarded-Encrypted: i=1; AJvYcCVibtNFVCAKgu7HUMyilF9hAOKv9NMYK1e7dXWQF2xc4AfgGPDyi5cA1OOIFnNPcMLlOxbmXc9Bves50iRMOe+NIZlGXK4lOV+hsfrWzzud
-X-Gm-Message-State: AOJu0YxFnSrMbKIhxkRKap/8Dms7ZWf67BKmT529VvVgQfQZbgD6KNy2
-	O6fPA18PsFs51Q16PvhrXDrY4zLQUujpAzjiSgR6ocCdvlmSFyt1gByMtlvh/XI=
-X-Google-Smtp-Source: AGHT+IFPDMJjj2WvaOoYEQWHCANiU7SwvG7sdGBSJ973EetvG9rqvkhMm2wuN5cCgO+J2KslUuAPdw==
-X-Received: by 2002:a05:6a00:98d:b0:6ea:d114:5ea1 with SMTP id u13-20020a056a00098d00b006ead1145ea1mr165116pfg.17.1712279855834;
-        Thu, 04 Apr 2024 18:17:35 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id z4-20020a631904000000b005f0a5118863sm296447pgl.12.2024.04.04.18.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 18:17:35 -0700 (PDT)
-Message-ID: <660f512f.630a0220.7ce3a.1aa3@mx.google.com>
-Date: Thu, 04 Apr 2024 18:17:35 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712282326; c=relaxed/simple;
+	bh=G2BSx76EhmeknzsYLYGm9uUqS2jps2xIR7gwh3ktd9s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OT5VGZklxHrTWe4ANzXfmp6ohYWN1yisq0DqqzB+/aRT41XmHrM7RZAXjBicvuCRSIK9XNnvbwCc4ybxySRewCSyGsrP8cdiZJzCzfGR4gwwLvB1F9MnYNITl/j4Gwn/fZabApAvIyp20uZHuLKeiDMQb+u0EFXBXycojcPYht4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bqdRmaSX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C825C433F1;
+	Fri,  5 Apr 2024 01:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712282326;
+	bh=G2BSx76EhmeknzsYLYGm9uUqS2jps2xIR7gwh3ktd9s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=bqdRmaSX4RAXO7BrhELtwCKBBeVqq3zFd6Yj+dDEKSlRNsJwu7/F3K2LswsslKuWM
+	 a61kc1Ms3O0wB56WEUD3rGE2nn/OeJ6syCTpwGLY/4T43pbi6N93c8Upkh+BYT/shP
+	 UiQLztBECXcvxd1q4o+ArDX+VIx5Odg7oW59EiF9OX7gWKvXNOCOMebkg3bJBQNO9Y
+	 kTNG0kfAbbvBS+1djtO1yo/IbBT4Mtc/RhQ1PWZ00ZyCy1J2YqZqoT/yN87yRnAO6h
+	 3s0vhxfmeIFAiqSmu1234pX7xS4dS0vKgj7oOlMlxXAeqTbAA8kJEwbULlN1f66ne1
+	 BNdMuUNkp7EbQ==
+Date: Thu, 4 Apr 2024 18:58:44 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Petr Machata <petrm@nvidia.com>
+Cc: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+ <pabeni@redhat.com>, <shuah@kernel.org>, <sdf@google.com>,
+ <donald.hunter@gmail.com>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 6/7] selftests: drivers: add scaffolding for
+ Netlink tests in Python
+Message-ID: <20240404185844.0ddb8632@kernel.org>
+In-Reply-To: <87zfu9fk2v.fsf@nvidia.com>
+References: <20240403023426.1762996-1-kuba@kernel.org>
+	<20240403023426.1762996-7-kuba@kernel.org>
+	<87zfu9fk2v.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.9-rc2-14-g4389636db356
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-lib: 3 runs,
- 2 regressions (v6.9-rc2-14-g4389636db356)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-kselftest/next kselftest-lib: 3 runs, 2 regressions (v6.9-rc2-14-g4389636db=
-356)
+On Thu, 4 Apr 2024 12:42:24 +0200 Petr Machata wrote:
+> > +    def __init__(self, nsimdev, port_index, ifname, ns=None):
+> > +        # In case udev renamed the netdev to according to new schema,
+> > +        # check if the name matches the port_index.
+> > +        nsimnamere = re.compile(r"eni\d+np(\d+)")
+> > +        match = nsimnamere.match(ifname)
+> > +        if match and int(match.groups()[0]) != port_index + 1:
+> > +            raise Exception("netdevice name mismatches the expected one")
+> > +
+> > +        self.ifname = ifname
+> > +        self.nsimdev = nsimdev
+> > +        self.port_index = port_index
+> > +        self.ns = ns
+> > +        self.dfs_dir = "%s/ports/%u/" % (nsimdev.dfs_dir, port_index)
+> > +        ret = ip("-j link show dev %s" % ifname, ns=ns)
+> > +        self.dev = json.loads(ret.stdout)[0]  
+> 
+> I don't think self.ifname, .ns, .dfs_dir, .dev are actually used outside
+> of this function.
 
-Regressions Summary
--------------------
+Right, one of the "further down the line" tests need these.
+I'll remove for now.
 
-platform                     | arch  | lab           | compiler | defconfig=
-           | regressions
------------------------------+-------+---------------+----------+----------=
------------+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kselftest | 1          =
+> > +    def dfs_write(self, path, val):
+> > +        self.nsimdev.dfs_write(f'ports/{self.port_index}/' + path, val)
+> > +
+> > +
+> > +class NetdevSimDev:
+> > +    """
+> > +    Class for netdevsim bus device and its attributes.
+> > +    """
+> > +    @staticmethod
+> > +    def ctrl_write(path, val):
+> > +        fullpath = os.path.join("/sys/bus/netdevsim/", path)
+> > +        with open(fullpath, "w") as f:
+> > +            f.write(val)
+> > +
+> > +    def dfs_write(self, path, val):
+> > +        fullpath = os.path.join(f"/sys/kernel/debug/netdevsim/netdevsim{self.addr}/", path)
+> > +        with open(fullpath, "w") as f:
+> > +            f.write(val)
+> > +
+> > +    def __init__(self, port_count=1, ns=None):
+> > +        # nsim will spawn in init_net, we'll set to actual ns once we switch it the.sre  
+> 
+> the.sre?
 
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.9=
--rc2-14-g4389636db356/plan/kselftest-lib/
-
-  Test:     kselftest-lib
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.9-rc2-14-g4389636db356
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      4389636db35667bb5d59422bfdfb3c876c3654c8 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-           | regressions
------------------------------+-------+---------------+----------+----------=
------------+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/660f4486286d25ee324c42e9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.9-rc2-14-g43=
-89636db356/arm64/defconfig+kselftest/gcc-10/lab-collabora/kselftest-lib-mes=
-on-g12b-a311d-khadas-vim3.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.9-rc2-14-g43=
-89636db356/arm64/defconfig+kselftest/gcc-10/lab-collabora/kselftest-lib-mes=
-on-g12b-a311d-khadas-vim3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lib.login: https://kernelci.org/test/case/id/660f4486286d25ee=
-324c42ea
-        failing since 535 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-           | regressions
------------------------------+-------+---------------+----------+----------=
------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/660f460bfe18d4f7524c42fb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.9-rc2-14-g43=
-89636db356/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-lib-meson=
--gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.9-rc2-14-g43=
-89636db356/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-lib-meson=
--gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lib.login: https://kernelci.org/test/case/id/660f460bfe18d4f7=
-524c42fc
-        failing since 532 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1-1-gde3ee3f63400a) =
-
- =20
+Ha, must have started typing with focus on the wrong window.
+Good it wasn't my password :D
 
