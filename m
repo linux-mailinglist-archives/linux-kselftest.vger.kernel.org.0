@@ -1,257 +1,133 @@
-Return-Path: <linux-kselftest+bounces-7258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 887D789987A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 10:50:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8923F899B3A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 12:52:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB4BC1C20AB1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 08:50:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43B55283ADB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 10:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84BBF15FD0A;
-	Fri,  5 Apr 2024 08:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF6E16ABC0;
+	Fri,  5 Apr 2024 10:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCn6Daww"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAEE215FCE5;
-	Fri,  5 Apr 2024 08:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AD64D5A0;
+	Fri,  5 Apr 2024 10:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712307009; cv=none; b=KbonToAGYINBXgzLBEKl6rG5hzFiMUVXHf/UNXpddiBhrBwoL1WxQBDOc9TGidwxY90J6BWgyQ0XJQFCMmWFGBQXpCnGVD6doGWuXMxvrsGFcOyPjzj1qiNqpb7J5AAL2cnL0OUsonix5sDMWK29Dn5KeLEQFaiXDWH/sp9o9M0=
+	t=1712314345; cv=none; b=tko09H/k2dQrBX/jVIegZwyiHdxdStr/RpW01xWifEe0Uk/qZRaJ87rKZBLohRkD7oGhf8ibHGXGEPTSm/9UBeoysxf6I+vFaQVmOrJM8Jyf5UFSwr69/oNXGaKVNGiXvtOh7mO45MH48PgZDCXvEYvhAsztSkS3jDObxJSprHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712307009; c=relaxed/simple;
-	bh=9XmSaTIPqe9Pt3FDDTmsRHsZ/7wIjsNeFBiZvnO0NS0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ejfReHN5dsx0wgCKAyMMWaQiJhQhyvEnz0tgGfBfBwnrwerIQ7qzoh5x7iHYN+xelMOnrNyEnEYslczwxR1nfKyYdAwlxniSHVQ/AvST4rdLBj8QjzFDyNzqH1daOLvo4MtBOm3Vrq70C1twtLIeGp8gCb4qQW2ksadpWfPn8dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B34F5FEC;
-	Fri,  5 Apr 2024 01:50:36 -0700 (PDT)
-Received: from e116581.blr.arm.com (e116581.arm.com [10.162.43.7])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DB4553F64C;
-	Fri,  5 Apr 2024 01:50:01 -0700 (PDT)
-From: Dev Jain <dev.jain@arm.com>
-To: shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Anshuman.Khandual@arm.com,
-	suzuki.poulose@arm.com,
-	ryan.roberts@arm.com,
-	rob.herring@arm.com,
-	Catalin.Marinas@arm.com,
-	broonie@kernel.org,
-	will@kernel.org,
-	mark.rutland@arm.com,
-	Dev Jain <dev.jain@arm.com>
-Subject: [PATCH 4/4] selftests: Add build infrastructure along with README
-Date: Fri,  5 Apr 2024 14:14:10 +0530
-Message-Id: <20240405084410.256788-5-dev.jain@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240405084410.256788-1-dev.jain@arm.com>
-References: <20240405084410.256788-1-dev.jain@arm.com>
+	s=arc-20240116; t=1712314345; c=relaxed/simple;
+	bh=4cBVJpU3X7dIPVhhAjRHxZNJxNztq5qvGbJcVAE20BU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gowANXjRmcQC7JTITPd4fYWMmxfb4ELK1GHQ5MzjEg3ksmsCjqBjeVyoWrchYIoWXqHbFxJpAh0L1t7Asm7Gwm9IWP4B0GCwe4SWW336YxjVZekPJ6Fq5xxW9DnKT2wfeFt8Kkhqy4i/kwCxsjnhj5dFI7BEbTJNIO7wRjVdzVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCn6Daww; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC9DC43390;
+	Fri,  5 Apr 2024 10:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712314345;
+	bh=4cBVJpU3X7dIPVhhAjRHxZNJxNztq5qvGbJcVAE20BU=;
+	h=From:Subject:Date:To:Cc:From;
+	b=XCn6Daww1ja7WDSrTWVmIBsTV4ZbHSes9xE5mT1NXsrZYmHO/SvAW598Y7uuptVHe
+	 lu45Kunek03tCxEnLcRu/I+cwKuHudsjO5pQX02j9MI7c28/Dk75rGd4/rilrNxYVI
+	 ndrFp52KOSvF7cUoieNX7AOauIID34Jfi5wkJv83XLv4Bm9h1bA0Zjcl6voodXZp2s
+	 1lynq6erZ9YMt/+S6PZuC3eSczW1xQMwTDso7vj7DDWj0tp48g1BSTEHcR9P3uah/2
+	 aGfl/qCX4tecd8DINOFaFW+gKPC2/jyLBzklcLXy4yMh97d6eOJqNfkWo3z5/liaCt
+	 vxynNWf4avARw==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 00/11] selftests: mptcp: cleanups and 'ip mptcp'
+ support
+Date: Fri, 05 Apr 2024 12:52:04 +0200
+Message-Id: <20240405-upstream-net-next-20240405-mptcp-selftests-refactoring-v1-0-eabc9b960966@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANTXD2YC/z2NQQrCMBBFr1Jm7UAsLVavIi5K8lMHbBoyUymU3
+ t0g6OIvHg/e30lRBEq3ZqeCt6gsqcL51JB/jmkCS6hMrWs717me16xWMM6cYHWb8V/N2XxmxSs
+ a1JQL4uhtKZImjj3C9TK4EAdQjecqZfse3+mXosdxfAB7AfHukgAAAA==
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Geliang Tang <tanggeliang@kylinos.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2201; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=4cBVJpU3X7dIPVhhAjRHxZNJxNztq5qvGbJcVAE20BU=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmD9fkPXcohyMDtCEsZR+mIMb7dP47N2VzOCJmN
+ 8CH0mzsHeKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZg/X5AAKCRD2t4JPQmmg
+ cynDEACsEXR+NP3YiPx+QfKZNq1fnfb4M3E0g1eEQ4S7y7q83c8YttaLBlXpr1rWKZWYkKIrmhA
+ ZOfGKn8Rf/fFuERD9c/1LkC+mt/oTj+jvEy6/LL19feXRMquk7Ec6voYdUUgaVp/nEw2F+2xvh1
+ lFz2siigg1W7uunqpLkWdq9dqqcfZBZsd3oEMJqoHZnoTjmuj2u56PlbFMTqcisdQyIcO0zKAQu
+ 31xZpJL8HNILFPBokZtHc9foir/3somMv+wR7YdYHZhx+70RmElL6FLyDG08Z1QzPpsdqTlZH9Q
+ w0GssY69oJ/5NfuZnwifbNN4aZCwjuSv/d1GM9MK8GEIwhbDkegdStOUNCpwfluG8qXnFC+YSeJ
+ 1A6C2HKXSTPtqwiGIwrUsh/RBLJEzvFiCRihrX+fxUPrwq+pfqEXyruzpY1uG6omquVDAkVzAOU
+ oNOTCk+JV3dTZ6q8zS2oOE4guCiWpYiilEq8e6RaDyiYY+R7LmTqikUuhwIoZi7Z4K2fd+hFzdD
+ TWFWNhjQLRVWpv12povcafhSxgiLMk9ew+RPYy6Oq92YdKPyHQXzgIHbrJKO4wgPBBUBJcIJYti
+ w14xXE4d/ReUhsDAzo9O1Z/yI6r1vFB4GM1jLA3DLtGpmDBU4AqKJz5sx1vPajkrDHcd00E+Br3
+ VlVvjjLKvISBCTA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Add arm target, individual Makefile targets, and instructions to build the
-tests.
+Here are some patches from Geliang, doing different cleanups, and
+supporting 'ip mptcp' in more MPTCP selftests.
 
-Signed-off-by: Dev Jain <dev.jain@arm.com>
+Patch 1 checks that TC is available in selftests requiring it.
+
+Patch 2 adds 'ms' units in TC commands, to avoid confusions.
+
+Patches 3-9 are some prerequisites for patch 10: some export code from
+mptcp_join.sh to mptcp_lib.sh, to be re-used in pm_netlink.sh,
+mptcp_sockopt.sh and simult_flows.sh ; and others add helpers to
+pm_netlink.sh to easily support both 'ip mptcp' and 'pm_nl_ctl' tools to
+interact with the in-kernel MPTCP path-manager.
+
+Patch 10 adds a '-i' parameter in mptcp_sockopt.sh, pm_netlink.sh, and
+simult_flows.sh to use 'ip mptcp' tool instead of 'pm_nl_ctl'.
+
+Patch 11 fixes some ShellCheck warnings in pm_netlink.sh, in order to
+drop a ShellCheck's 'disable' instruction.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/Makefile            |  1 +
- tools/testing/selftests/arm/Makefile        | 57 +++++++++++++++++++++
- tools/testing/selftests/arm/README          | 31 +++++++++++
- tools/testing/selftests/arm/elf/Makefile    |  6 +++
- tools/testing/selftests/arm/mm/Makefile     |  6 +++
- tools/testing/selftests/arm/signal/Makefile | 30 +++++++++++
- 6 files changed, 131 insertions(+)
- create mode 100644 tools/testing/selftests/arm/Makefile
- create mode 100644 tools/testing/selftests/arm/README
- create mode 100644 tools/testing/selftests/arm/elf/Makefile
- create mode 100644 tools/testing/selftests/arm/mm/Makefile
- create mode 100644 tools/testing/selftests/arm/signal/Makefile
+Geliang Tang (11):
+      selftests: mptcp: add tc check for check_tools
+      selftests: mptcp: add ms units for tc-netem delay
+      selftests: mptcp: export ip_mptcp to mptcp_lib
+      selftests: mptcp: netlink: add 'limits' helpers
+      selftests: mptcp: add {get,format}_endpoint(s) helpers
+      selftests: mptcp: netlink: add change_address helper
+      selftests: mptcp: join: update endpoint ops
+      selftests: mptcp: export pm_nl endpoint ops
+      selftests: mptcp: use pm_nl endpoint ops
+      selftests: mptcp: ip_mptcp option for more scripts
+      selftests: mptcp: netlink: drop disable=SC2086
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 15b6a111c3be..8478d94cda4c 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- TARGETS += alsa
- TARGETS += amd-pstate
-+TARGETS += arm
- TARGETS += arm64
- TARGETS += bpf
- TARGETS += breakpoints
-diff --git a/tools/testing/selftests/arm/Makefile b/tools/testing/selftests/arm/Makefile
-new file mode 100644
-index 000000000000..039224bc006e
---- /dev/null
-+++ b/tools/testing/selftests/arm/Makefile
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
-+ifneq (,$(filter $(ARCH),aarch64 arm64 arm armv7l armv8l))
-+ARM_SUBTARGETS ?= mm signal elf
-+else
-+ARM_SUBTARGETS :=
-+endif
-+
-+CFLAGS := -Wall -O2 -g -static
-+
-+# A proper top_srcdir is needed by KSFT(lib.mk)
-+top_srcdir = $(realpath ../../../../)
-+
-+# Additional include paths needed by kselftest.h and local headers
-+CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
-+
-+CFLAGS += -I$(top_srcdir)/tools/include
-+
-+export CFLAGS
-+export top_srcdir
-+
-+all:
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		mkdir -p $$BUILD_TARGET;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+install: all
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+run_tests: all
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+# Avoid any output on non arm on emit_tests
-+emit_tests:
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+clean:
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+.PHONY: all clean install run_tests emit_tests
-diff --git a/tools/testing/selftests/arm/README b/tools/testing/selftests/arm/README
-new file mode 100644
-index 000000000000..1a05c043d7ee
---- /dev/null
-+++ b/tools/testing/selftests/arm/README
-@@ -0,0 +1,31 @@
-+KSelfTest ARM
-+===============
-+
-+- This is a series of compatibility tests, wherein the source files are
-+  built statically into a 32 bit ELF; they should pass on both 32 and 64
-+  bit kernels. They are not built or run but just skipped completely when
-+  env-variable ARCH is found to be different than 'arm64' or 'arm' and
-+  `uname -m` reports other than 'aarch64', 'armv7l' or 'armv8l'.
-+
-+- Please ensure that the test kernel is built with CONFIG_COMPAT enabled.
-+
-+- Holding true the above, ARM KSFT tests can be run within the KSelfTest
-+  framework using standard Linux top-level-makefile targets. Please set
-+  $(CROSS_COMPILE) to 'arm-linux-gnueabi-' or 'arm-linux-gnueabihf-'.
-+
-+      $ make TARGETS=arm kselftest-clean
-+      $ make $(CROSS_COMPILE) TARGETS=arm kselftest
-+
-+      or
-+
-+      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
-+		INSTALL_PATH=<your-installation-path> install
-+
-+      or, alternatively, only specific arm/ subtargets can be picked:
-+
-+      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
-+		ARM_SUBTARGETS="signal" INSTALL_PATH=<your-installation-path> \
-+			install
-+
-+   Further details on building and running KFST can be found in:
-+     Documentation/dev-tools/kselftest.rst
-diff --git a/tools/testing/selftests/arm/elf/Makefile b/tools/testing/selftests/arm/elf/Makefile
-new file mode 100644
-index 000000000000..86636fe02994
---- /dev/null
-+++ b/tools/testing/selftests/arm/elf/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 ARM Limited
-+
-+TEST_GEN_PROGS := parse_elf
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/arm/mm/Makefile b/tools/testing/selftests/arm/mm/Makefile
-new file mode 100644
-index 000000000000..d8bfa45df98c
---- /dev/null
-+++ b/tools/testing/selftests/arm/mm/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 ARM Limited
-+
-+TEST_GEN_PROGS := compat_va
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/arm/signal/Makefile b/tools/testing/selftests/arm/signal/Makefile
-new file mode 100644
-index 000000000000..3540a25de75a
---- /dev/null
-+++ b/tools/testing/selftests/arm/signal/Makefile
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 ARM Limited
-+
-+# Additional include paths needed by kselftest.h and local headers
-+CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
-+
-+SRCS := $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
-+PROGS := $(patsubst %.c,%,$(SRCS))
-+
-+# Generated binaries to be installed by top KSFT script
-+TEST_GEN_PROGS := $(notdir $(PROGS))
-+
-+# Get Kernel headers installed and use them.
-+
-+# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
-+# to account for any OUTPUT target-dirs optionally provided by
-+# the toplevel makefile
-+include ../../lib.mk
-+
-+$(TEST_GEN_PROGS): $(PROGS)
-+	cp $(PROGS) $(OUTPUT)/
-+
-+# Common test-unit targets to build common-layout test-cases executables
-+# Needs secondary expansion to properly include the testcase c-file in pre-reqs
-+COMMON_SOURCES := test_signals.c test_signals_utils.c
-+COMMON_HEADERS := test_signals.h test_signals_utils.h
-+
-+.SECONDEXPANSION:
-+$(PROGS): $$@.c ${COMMON_SOURCES} ${COMMON_HEADERS}
-+	$(CC) $(CFLAGS) ${@}.c ${COMMON_SOURCES} -o $@
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |   2 +-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 155 ++----------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 135 ++++++++++
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  34 ++-
+ tools/testing/selftests/net/mptcp/pm_netlink.sh    | 281 +++++++++++++--------
+ tools/testing/selftests/net/mptcp/simult_flows.sh  |  20 +-
+ 6 files changed, 375 insertions(+), 252 deletions(-)
+---
+base-commit: d76c740b2eaaddc5fc3a8b21eaec5b6b11e8c3f5
+change-id: 20240405-upstream-net-next-20240405-mptcp-selftests-refactoring-f5ed9780df8e
+
+Best regards,
 -- 
-2.39.2
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
