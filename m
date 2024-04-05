@@ -1,125 +1,134 @@
-Return-Path: <linux-kselftest+bounces-7293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6302A89A049
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 16:56:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 596B789A101
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 17:26:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17EB71F22B58
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 14:56:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6AD7EB20AF1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 15:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9692316F829;
-	Fri,  5 Apr 2024 14:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FCAF16F8FF;
+	Fri,  5 Apr 2024 15:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="O7LpCr7H"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="Wm/RTCN1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C4716F27A
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Apr 2024 14:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A11216F29A
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Apr 2024 15:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712328996; cv=none; b=pQZmcqP2HlCoQz8tXWdz0a4ALK46pPVaBGqx+nZET4zBQ2CeoLFDJ1R0py/7x+LZ20XRTSOam9ybOen2FCVME/QM/XOaMCIAWEDVUOauWXYk06KpEJRqcpaqALa59PA1cdSy8bMnJ7e2zj+xFL16bkgEyuuZqIcYGwEfLxiSER8=
+	t=1712330769; cv=none; b=Ih7V6kZkPfC758YZ59qDfdOzW+QwRZD0yZHpIxYW/IHzJKN/uXi2/+W5zVTJIBZGI4Ryd+99FaLdplhPIumzbqCoOs+6iy1y0mCq0C+6f9sTqRYuNyBAZ3EKc2/w4bmEGzeODADRu4zocJxuuuWErS0vs2CKZf4+fXSjCSspznw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712328996; c=relaxed/simple;
-	bh=zTMZhwQ+6oLIfkGA01wNSBzTksqHQBG/2caFP1/JlXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JnQjIi3htwjlUDXsRST9YCFFjiK3BkHicIIdShK3WrB37M4MWEk7dSTsS+OtUegwaawviF9pyrq9cQ+wXcYOapD6DDvx7S+ZeFD8h1cmTktodbshUa1p40lmo91ji5ZFf7mxxNSUGHBavLvLZtulRsnbLH/xb3Lz03vI89xmmsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=O7LpCr7H; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7c86e6f649aso22129039f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Apr 2024 07:56:33 -0700 (PDT)
+	s=arc-20240116; t=1712330769; c=relaxed/simple;
+	bh=FpZsHScShuiC5TLeSY6xcW0Dmrsa7iCr6rnrwxcP7HE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kq9mR6fKEpeFVWsQd90yZ9W1H951tYBtwtgptg1/BgpoFZpEArDaKY66pnrAx8UttvPrgNdBGxSP2fD/WNnLl5Na8ybegP2wLth6CPkBe7AZOHyuTITzPeB54MIPjbtl/QrOLYLBmT3JE2HrxdJZ5zN4Kri0Jy3sdHpLj8XtiYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=Wm/RTCN1; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-565c6cf4819so5982061a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Apr 2024 08:26:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1712328993; x=1712933793; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eVVvp+398iheOw5gutAtm6G0zLb/uxNorrWUv4KFnio=;
-        b=O7LpCr7HWxXvkHzrM5aMANERAPz/6RjV/hyI1ZZ5SIzoDzonLylgFSBEBKgRkdQ1Zb
-         qz4r8jtYdS5Lwj4JwYxW3egougdpAxVQQ0TsPxJyLPXS8womcmcLl4A6e3VbiLXNvhPT
-         +WJ5CM6HaAWp+DASAIKSrYqHhZgEMpEzZ1f6A=
+        d=ventanamicro.com; s=google; t=1712330766; x=1712935566; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ed5x3XFfsBgZRAt34RC2mOQsGKeyKPo4QsC0c+Fqv3c=;
+        b=Wm/RTCN1H4zqI6tvTsI2Y1Wugd3J7bAQpDuRnLw/ck9uBGNWE/VM6C1KxhdQCJuWG7
+         rKgt9xO8xILvQgnUy5PsfJ/YeEV3Pjsx0Y09VDcOFlG5Atf8KRg6B/nmOO8s2v3xBnh1
+         ysR+iPvrpO6LzGBdrGMlgXzAwGxWuNPGLNd7xgaOmS83MjcSAqYh+M9hjZTt40oq7B2H
+         PI5F6th+qQIwqdl4Uwp3OPT0z2HH0NINm8PwFP3XltsulFvCu81hyUsUziw7wtiL8hYT
+         Tj/pXavMeoSa883CsU79YKMIqGQ9fln4AjUYl6GnPzi1R8lshp2PuiHtScOK06csT7ig
+         LWwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712328993; x=1712933793;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1712330766; x=1712935566;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eVVvp+398iheOw5gutAtm6G0zLb/uxNorrWUv4KFnio=;
-        b=nxAd3bybyQ83llfkf3RNdSJP+ZFZpbneFnUOOAkytM8HxHObj15ldNJ23qg25D/Pt6
-         3Q6U8lHp5sZKVYoLg0AteZIHU9vuZ6QyOUN5yVRFwP+S/w9c+CbAQe1wOqMGUmQpkAJ+
-         A7deJ1DP9kfdt6ZAQFnP0e2NQ4/+4N+NYfQ7zW3vv8MP6DC3gnqAoyjaXHx0n3ttdYCL
-         Y5Y6yqZHJj1jH4KZSfiSWN5wiFwh9zHI/+ToR6M+gRRt2a2cDTzn0hMUugzqZa2X/PVx
-         8qteCvhgYkK4Y1PNcapptCBLgjy7sOTeh8+EZkE5yiUIbrJRVK7lrScOVhMW61zFYbEz
-         nkqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDbuzSGwtXi36HckHeKtLA2nlolE23w8Vt5EUdGNex7ZMy37d1wANP6aCHrrg1ydXbUq3Q3ctf4twKhH3N0sJHaJjExWKSDFEM2WhzpZuU
-X-Gm-Message-State: AOJu0Yy5CeOYlaSNnBde3jl8jj1xpnx+Wj2qDNrXckvCziaGz+qT6ZEs
-	h6Yn4hVazogD3SGgryVrXxJVvnucbe2E1KMz/ijXfjZFiEuzr9ijoJYpIj0Sx7s=
-X-Google-Smtp-Source: AGHT+IEkdy1rdEG+rjc30ywKaQ9qlK6/njmx8r/DcDzK1jQaFuF4ReeRun+a1EcXGR4eE0eknNVLJw==
-X-Received: by 2002:a5e:c648:0:b0:7d3:4ff8:7bb1 with SMTP id s8-20020a5ec648000000b007d34ff87bb1mr1694674ioo.1.1712328992992;
-        Fri, 05 Apr 2024 07:56:32 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id j4-20020a05663822c400b0047ad636c705sm601613jat.73.2024.04.05.07.56.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Apr 2024 07:56:32 -0700 (PDT)
-Message-ID: <2a77adeb-ed22-4a9b-a1d9-ac5d29ae696d@linuxfoundation.org>
-Date: Fri, 5 Apr 2024 08:56:31 -0600
+        bh=ed5x3XFfsBgZRAt34RC2mOQsGKeyKPo4QsC0c+Fqv3c=;
+        b=cj0q9NHP5nftWcQhdoOX0mGG6bCvtKyCdatICJ0G65f25f/MBUgBPqRnvHezhtUVP0
+         3GoxGdIt1pYvr+uZAMlvwNGtZfc0JRrHrmqDm2boiupp+n9Ts10cDvW7/dL4u3fp8hjH
+         WNVGoJD3GPsOeoyQaVizA8iUwuEJ+IYY6pjJVtF1rwZrjCtvlsT7+n7iZFDgvzsojvQ4
+         MjFKDTlHeapkv2ND0U6CCSfhKr/f4GQOXOqhf/qnkLSi5Q1gqhy7fDsZgqx3MYrGgLFw
+         bd4vAQaLxPaHY/AtL0Nn0J75IU9s5zADDvGNrQ9dtQYfbibPcQPCt1VMY6uCWd++Ex76
+         XAcg==
+X-Forwarded-Encrypted: i=1; AJvYcCUNKP89mdD+3EcWwStmczPbaQWCtbiyFe9XVFOOSz6Id104IygHRCeEtdiecP2uNvwrWmlvFDczkuNCkdBQTdjfsvC0NDAqbqQptljakuAj
+X-Gm-Message-State: AOJu0YwFWbZPSSTMJcnidowUMSM9QfyDKJVDKY++uINXtEf2qcATgGdC
+	GdWEn3tIpKAYAzlZWj4NLCccb8IdE3zUmc/pNEFirlJtNO6zCFZjFHR8z3u4ViU=
+X-Google-Smtp-Source: AGHT+IE6KiAsWau+yt3agpehbLfQdmB5U5LrPm1st7ROHU8ZRsWd/qG+KSVTOZ1UuqjphPekzLBQLg==
+X-Received: by 2002:a17:906:684f:b0:a4e:2dbf:2eb0 with SMTP id a15-20020a170906684f00b00a4e2dbf2eb0mr2301320ejs.38.1712330765762;
+        Fri, 05 Apr 2024 08:26:05 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id gx5-20020a1709068a4500b00a4e579ce949sm950515ejc.51.2024.04.05.08.26.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 08:26:05 -0700 (PDT)
+Date: Fri, 5 Apr 2024 17:26:04 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>, 
+	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/5] Add parsing for Zimop ISA extension
+Message-ID: <20240405-091c6c174f023d74b434059d@orel>
+References: <20240404103254.1752834-1-cleger@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] selftests: Replace "Bail out" with "Error" in
- ksft_exit_fail_msg()
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>,
- Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240405131748.1582646-1-usama.anjum@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240405131748.1582646-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240404103254.1752834-1-cleger@rivosinc.com>
 
-On 4/5/24 07:17, Muhammad Usama Anjum wrote:
-> "Bail out! " is not descriptive. It rather should be: "Failed: " and
-> then this added prefix doesn't need to be added everywhere. Usually in
-> the logs, we are searching for "Failed" or "Error" instead of "Bail
-> out" so it must be replace.
+On Thu, Apr 04, 2024 at 12:32:46PM +0200, Clément Léger wrote:
+> The Zimop ISA extension was ratified recently. This series adds support
+> for parsing it from riscv,isa, hwprobe export and kvm support for
+> Guest/VM.
+
+I'm not sure we need this. Zimop by itself isn't useful, so I don't know
+if we need to advertise it at all. When an extension comes along that
+redefines some MOPs, then we'll advertise that extension, but the fact
+Zimop is used for that extension is really just an implementation detail.
+
+Thanks,
+drew
+
 > 
-> Remove Error/Failed prefixes from all usages as well.
+> Clément Léger (5):
+>   dt-bindings: riscv: add Zimop ISA extension description
+>   riscv: add ISA extension parsing for Zimop
+>   riscv: hwprobe: export Zimop ISA extension
+>   RISC-V: KVM: Allow Zimop extension for Guest/VM
+>   KVM: riscv: selftests: Add Zimop extension to get-reg-list test
 > 
-> Muhammad Usama Anjum (2):
->    selftests: Replace "Bail out" with "Error"
->    selftests: Remove Error/Failed prefix from ksft_exit_fail*() usages
+>  Documentation/arch/riscv/hwprobe.rst                    | 4 ++++
+>  Documentation/devicetree/bindings/riscv/extensions.yaml | 5 +++++
+>  arch/riscv/include/asm/hwcap.h                          | 1 +
+>  arch/riscv/include/uapi/asm/hwprobe.h                   | 1 +
+>  arch/riscv/include/uapi/asm/kvm.h                       | 1 +
+>  arch/riscv/kernel/cpufeature.c                          | 1 +
+>  arch/riscv/kernel/sys_hwprobe.c                         | 1 +
+>  arch/riscv/kvm/vcpu_onereg.c                            | 2 ++
+>  tools/testing/selftests/kvm/riscv/get-reg-list.c        | 4 ++++
+>  9 files changed, 20 insertions(+)
 > 
->   tools/testing/selftests/exec/load_address.c   |   8 +-
->   .../testing/selftests/exec/recursion-depth.c  |  10 +-
->   tools/testing/selftests/kselftest.h           |   2 +-
->   .../selftests/mm/map_fixed_noreplace.c        |  24 +--
->   tools/testing/selftests/mm/map_populate.c     |   2 +-
->   tools/testing/selftests/mm/mremap_dontunmap.c |   2 +-
->   tools/testing/selftests/mm/pagemap_ioctl.c    | 166 +++++++++---------
->   .../selftests/mm/split_huge_page_test.c       |   2 +-
->   8 files changed, 108 insertions(+), 108 deletions(-)
+> -- 
+> 2.43.0
 > 
-
-Andrew, Kees,
-
-I will apply these to linux-kselftest next as a series since these
-changes depend on change to tools/testing/selftests/kselftest.h
-and need to go together.
-
-Are you okay with that?
-
-thanks,
--- Shuah
-
+> 
+> -- 
+> kvm-riscv mailing list
+> kvm-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kvm-riscv
 
