@@ -1,175 +1,116 @@
-Return-Path: <linux-kselftest+bounces-7282-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3E26899DDA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 15:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA12899DEC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 15:06:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A32A283521
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 13:01:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF4C9283C1B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 13:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB2C16D32E;
-	Fri,  5 Apr 2024 13:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A970E16D4C5;
+	Fri,  5 Apr 2024 13:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PG0UrNNs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4I8sVlg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58F812E5B;
-	Fri,  5 Apr 2024 13:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7832F1DFE4;
+	Fri,  5 Apr 2024 13:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712322070; cv=none; b=THwbPnV+GCiAW5h1uMHurh+8VxRqGqMYB32xvBw2EWaFSnQgM15y6SC1VklShG3Duu8W2iWGyRoi9Htq0FrKBtE6Nxk/1xijoxR0pEDQuHVwy1vVoWkLCsPFmZMSdsa2+Acm5ZD8GNd04LtOdRVl5v+QSvjGDREXyDbWFGepRE8=
+	t=1712322396; cv=none; b=LeLOAC9EaPUi7Fu2vv2InEJVdu0S2ial6aThB0m94YTeyG29XDucWlMhQh4VtmDqdxICwgYsgBqqkxvXOUmft/+qZwbQqvf8iHJX80ezLJLRrhOCL4kIlXC3x8KqQyhEmpn+aB2BrnFNd78vmYvWjcsRo9Ziqn/UlMXcE3j4MeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712322070; c=relaxed/simple;
-	bh=YJjJlpzvj2uxvu1IoSI6mcOLJx5rK4qWeNXOjT7Z3rs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YSiPbIn/sAFB0v4ez7Keo3a/uk0ILAHcEDNZ9uQ7wFV2hundO6xlUvjeZa6xYneAHK78Rekfe5dHnkW8DkzNIRQ9LgsHmJpANFA5IJKx3xwNGPlcF6oHf11sQRiZXFGeQR4yAvFEMJ+Z5JMpubv5I0TODHONlNXUszFzVF+CgN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PG0UrNNs; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46ea03c2a5so367785066b.1;
-        Fri, 05 Apr 2024 06:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712322067; x=1712926867; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6EhxJU6AmPMJUb0rbbwJX02/QxE9CvtNuAXYPepR4nI=;
-        b=PG0UrNNse83Ggt5TIr3/KRI56Qe8+5Dpy+Hy0JDNiHZdYhSZus2GJ2mYZDsE+itQz3
-         vX0BdaVr3MfCRlvUwX+cPP/KuKccaZ3VKDGTSRnvrpK7zjZhoh+aoNcqiOenQMe3wMj+
-         F43QXBHsc5KIVP2mU2n9aBEIU8jokclr7OexYROMANUjf/8DgsHxYsHWQtwA3zHAvnPn
-         DsEYkT/EKYIy35Zh/eTYolbxc+cGUy7kedP2vElktRBaSFD7caOZKEu/TPn6QtISGExW
-         GGWCsPdQ0bkdhIY69Q5g4yYs9OabABqNMtUgRaVV+DnLT6Vt6zeyWrilrWH6dblxOikO
-         0Oyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712322067; x=1712926867;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6EhxJU6AmPMJUb0rbbwJX02/QxE9CvtNuAXYPepR4nI=;
-        b=BpeET0TwPD1YULV1GG3knUEUMQ+YpTKx6eFztUsKeOvqYki77onID/9Sv20MwxsypQ
-         MZUc8fpk1pI7SlaVy51ZuxhcShdd19kjk0Kn0A2LLm0WApC9Ov+ORkSFpYoZKeKSYIdR
-         GonR8HAWca9p8T06JZhEtWc7YygpARvjbOFXRSctIoOCrG6b6oT0JO8BmlO63Ln8JL0Y
-         t4J9gUhO5pDmA9VfVXZBK5KLFBLsXCJ8OturdRGA4jBu3OFi3BfUDnFYDvFW2DsTALWr
-         cn9ITUECRgycZkIE5/f9pVR6Q6vLWI8CPpCL0pVicunz/I6NLev325QGIQsyruUpzGeK
-         n9/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVOZoxpXovLZ1K2Q914Xjl3R1GNHu48U1FHSn6+5oSg/bKialUXHKxOCnwZ64rJ1fVM2fl+8l4tIIh7M5bC8xzkdhCbcwbnVDyyJnWRY6OrEYPxM0x4m2e1FFiV/5wJUDp1dGbaUkp5GZDSqpTDdZ9qGaYcPFmI6Pp7BbkfLl2sddi5o67O
-X-Gm-Message-State: AOJu0YzH9qbhTVXczXazBebATeU9MxNwF+HoE5es4sZbTPHXP1Awd722
-	hJSUzrG5b+cdDc5IKKtIuciguMxmQz70hq396A0dty0riuyJtHZ4RZlXOlUl
-X-Google-Smtp-Source: AGHT+IEZtv93Er+f7fXJTh4vjB2CuAU6dhEVVGKjUJq4Jv9JVv4wtP0ZuhQTBJSLWKsCsCjw71VxCQ==
-X-Received: by 2002:a17:906:4a44:b0:a51:9575:bd3a with SMTP id a4-20020a1709064a4400b00a519575bd3amr1167948ejv.38.1712322066954;
-        Fri, 05 Apr 2024 06:01:06 -0700 (PDT)
-Received: from [192.168.42.78] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id hx12-20020a170906846c00b00a51a9eccf2asm456248ejc.125.2024.04.05.06.01.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Apr 2024 06:01:06 -0700 (PDT)
-Message-ID: <6850f08d-0e89-4eb3-bbfb-bdcc5d4e1b78@gmail.com>
-Date: Fri, 5 Apr 2024 14:01:07 +0100
+	s=arc-20240116; t=1712322396; c=relaxed/simple;
+	bh=aiTtOgawA1gl+sKd/BL+KKsnX7hyyYugKZCpLonIlAk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=necKBGHKqE4XQGjV5CAIZBTGx1cQYvI+uxgrBJJxZsLrTrCbbVna+pOrIHuvxN9ftCuUtWKYGHwdN4A6j+sel81PX0nQ2118EHQ5zgalyz19EXPXQr03bb5hyUvPheiIMlfTx8S53v3DsHisjT6xjEYQBuVJSkc7CN5Nlw9panw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4I8sVlg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D319C433F1;
+	Fri,  5 Apr 2024 13:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712322396;
+	bh=aiTtOgawA1gl+sKd/BL+KKsnX7hyyYugKZCpLonIlAk=;
+	h=From:Subject:Date:To:Cc:From;
+	b=j4I8sVlgrQ3jetssQjEvZ926rndqiioLxqiNtHYXfK1GV1hjwD4EBfbQAvpERTKsH
+	 XDoA+HdX1ovylqxGPDOeS1uSEVfhQZaiX8DP/14b/Uf2ZkVmT2W5BwChg2MF2tIaMr
+	 pmoluv2TrZb48BnvEpz8U1duOplkukiFmOoFwN+jiRtbfHFYcLTkoAy+ybnGjDK0rk
+	 axF+BeY6gALyi7pYSIC01mZKPG2X/1A1ZWNlcnloTKKANGNRCiK8XpGX3pkfLmvTTR
+	 axm06j/PTigcgp4klJwNzdnyjT26B+WKPbf/QINQ0mKDKSd81f8sXW5ZMzQ30Egm73
+	 uvL9qh8jgxj4A==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/2] mptcp: add last time fields in mptcp_info
+Date: Fri, 05 Apr 2024 15:06:20 +0200
+Message-Id: <20240405-upstream-net-next-20240405-mptcp-last-time-info-v1-0-52dc49453649@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] io_uring: Add REQ_F_CQE_SKIP support for io_uring
- zerocopy
-To: Oliver Crumrine <ozlinuxc@gmail.com>, axboe@kernel.dk,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, shuah@kernel.org, leitao@debian.org
-Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1712268605.git.ozlinuxc@gmail.com>
- <b1a047a1b2d55c1c245a78ca9772c31a9b3ceb12.1712268605.git.ozlinuxc@gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <b1a047a1b2d55c1c245a78ca9772c31a9b3ceb12.1712268605.git.ozlinuxc@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEz3D2YC/z2NwQrCMBBEf6Xs2YVNW6X6K9JDWje6YNKQrFIo/
+ XcXQQ9zeAzzZoPKRbjCpdmg8FuqLMnAHRqYHz7dGeVmDC21PfV0xFeuWthHTKyWVfFfxaxzxqe
+ viirRlikseJ6oO7mBaQgOzJoLB1m/j1f4OWDc9w9b+edaiwAAAA==
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Geliang Tang <tanggeliang@kylinos.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1238; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=aiTtOgawA1gl+sKd/BL+KKsnX7hyyYugKZCpLonIlAk=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmD/dYTs4Nh1M3Y3r9Yx3wcV7xGdpd2pup/0HIL
+ HFlecIH0z+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZg/3WAAKCRD2t4JPQmmg
+ c2UoD/9m56ReagBAujFA3sYu5/Z8OuB4jsQqPGMSSoHZpLzAlx8QacdEAsbVgLioaf3b1btSBoY
+ 09W4qNP8uwrLYx25BecWFoe+PzFsecCNjUtYgfCdMlQnt+sbbzpwgfgyELl0fFHsgNewI8VVqD2
+ Yxtv/A4VBB6MitPaS+QQ/MQD2j0pqOB/+lNZtd6c9PKkYzpyjxp6iWMlUfTbKIl8bLWZlp+/7lx
+ bheh5G9+wUtipZn6VpINqfxuVXOACFTILk5as97XeEE/xq9yMwchWqwa6w7kY6lzc7zRGx16W2g
+ i7x0BhMLfhpmQcFUNmwZL5MTgOs3O7C5TCYUiULeEA8JElFlYDvmppLI2knW2h2MeA1GfoiphSI
+ iADfUf0CW+surlAvS4F2MMVMFVaktJGCYfM/Mk//kFBrUU7+UrkX+booNvx6fkCXTjMSAEL6WeG
+ YWN0opPw4K5nJGC6/rMHnrwfOYtyilBffMHY28qW/vI2aaXmLakCEkexSiPolLjqB77ZhPIVsvg
+ w+VD+ApD5yKG9bgB9MSjDfJaYm3w9d9k/kBpcJJac9w6+wePpL0TlRE/4HWyCkxZLoA3yMgn+Pc
+ baTUNW2bTz7I44mT0VcO36MEvVA/6VQ6iJt05T/fmxZDO56T0k8AGKbwH/cSMAveeGRbu36LGN1
+ rynsFVEpFmsERFA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On 4/4/24 23:17, Oliver Crumrine wrote:
-> In his patch to enable zerocopy networking for io_uring, Pavel Begunkov
-> specifically disabled REQ_F_CQE_SKIP, as (at least from my
-> understanding) the userspace program wouldn't receive the
-> IORING_CQE_F_MORE flag in the result value.
+These patches from Geliang add support for the "last time" field in
+MPTCP Info, and verify that the counters look valid.
 
-No. IORING_CQE_F_MORE means there will be another CQE from this
-request, so a single CQE without IORING_CQE_F_MORE is trivially
-fine.
+Patch 1 adds these counters: last_data_sent, last_data_recv and
+last_ack_recv. They are available in the MPTCP Info, so exposed via
+getsockopt(MPTCP_INFO) and the Netlink Diag interface.
 
-The problem is the semantics, because by suppressing the first
-CQE you're loosing the result value. You might rely on WAITALL
-as other sends and "fail" (in terms of io_uring) the request
-in case of a partial send posting 2 CQEs, but that's not a great
-way and it's getting userspace complicated pretty easily.
+Patch 2 adds a test in diag.sh MPTCP selftest, to check that the
+counters have moved by at least 250ms, after having waited twice that
+time.
 
-In short, it was left out for later because there is a
-better way to implement it, but it should be done carefully
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Geliang Tang (2):
+      mptcp: add last time fields in mptcp_info
+      selftests: mptcp: test last time mptcp_info
 
+ include/uapi/linux/mptcp.h                |  4 +++
+ net/mptcp/options.c                       |  1 +
+ net/mptcp/protocol.c                      |  7 ++++
+ net/mptcp/protocol.h                      |  3 ++
+ net/mptcp/sockopt.c                       |  4 +++
+ tools/testing/selftests/net/mptcp/diag.sh | 53 +++++++++++++++++++++++++++++++
+ 6 files changed, 72 insertions(+)
+---
+base-commit: d76c740b2eaaddc5fc3a8b21eaec5b6b11e8c3f5
+change-id: 20240405-upstream-net-next-20240405-mptcp-last-time-info-9b03618e08f1
 
-> To fix this, instead of keeping track of how many CQEs have been
-> received, and subtracting notifs from that, programs can keep track of
-
-That's a benchmark way of doing it, more realistically
-it'd be more like
-
-event_loop() {
-	cqe = wait_cqe();
-	struct req *r = (struct req *)cqe->user_data;
-	r->callback(r, cqe);
-}
-
-send_zc_callback(req, cqe) {
-	if (cqe->flags & F_MORE) {
-		// don't free the req
-		// we should wait for another CQE
-		...
-	}
-}
-
-> how many SQEs they have issued, and if a CQE is returned with an error,
-> they can simply subtract from how many notifs they expect to receive.
-
-The design specifically untangles those two notions, i.e. there can
-be a notification even when the main CQE fails (ret<0). It's safer
-this way, even though AFAIK relying on errors would be fine with
-current users (TCP/UDP).
-
-
-> Signed-off-by: Oliver Crumrine <ozlinuxc@gmail.com>
-> ---
->   io_uring/net.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/io_uring/net.c b/io_uring/net.c
-> index 1e7665ff6ef7..822f49809b68 100644
-> --- a/io_uring/net.c
-> +++ b/io_uring/net.c
-> @@ -1044,9 +1044,6 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->   
->   	if (unlikely(READ_ONCE(sqe->__pad2[0]) || READ_ONCE(sqe->addr3)))
->   		return -EINVAL;
-> -	/* we don't support IOSQE_CQE_SKIP_SUCCESS just yet */
-> -	if (req->flags & REQ_F_CQE_SKIP)
-> -		return -EINVAL;
->   
->   	notif = zc->notif = io_alloc_notif(ctx);
->   	if (!notif)
-> @@ -1342,7 +1339,8 @@ void io_sendrecv_fail(struct io_kiocb *req)
->   		req->cqe.res = sr->done_io;
->   
->   	if ((req->flags & REQ_F_NEED_CLEANUP) &&
-> -	    (req->opcode == IORING_OP_SEND_ZC || req->opcode == IORING_OP_SENDMSG_ZC))
-> +	    (req->opcode == IORING_OP_SEND_ZC || req->opcode == IORING_OP_SENDMSG_ZC) &&
-> +	    !(req->flags & REQ_F_CQE_SKIP))
->   		req->cqe.flags |= IORING_CQE_F_MORE;
->   }
->   
-
+Best regards,
 -- 
-Pavel Begunkov
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
 
