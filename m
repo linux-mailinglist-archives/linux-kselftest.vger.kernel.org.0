@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-7283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FA12899DEC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 15:06:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 480A3899DEE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 15:06:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF4C9283C1B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 13:06:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BD0E1C229F7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 13:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A970E16D4C5;
-	Fri,  5 Apr 2024 13:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C668B16D4F4;
+	Fri,  5 Apr 2024 13:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4I8sVlg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e1Hoj24J"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7832F1DFE4;
-	Fri,  5 Apr 2024 13:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9698E16D4F1;
+	Fri,  5 Apr 2024 13:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712322396; cv=none; b=LeLOAC9EaPUi7Fu2vv2InEJVdu0S2ial6aThB0m94YTeyG29XDucWlMhQh4VtmDqdxICwgYsgBqqkxvXOUmft/+qZwbQqvf8iHJX80ezLJLRrhOCL4kIlXC3x8KqQyhEmpn+aB2BrnFNd78vmYvWjcsRo9Ziqn/UlMXcE3j4MeY=
+	t=1712322399; cv=none; b=R47BxTbMggZEnUOsoezXNDdxKdpxuEDW4lIOKVe4fl6MZdz7ShsE6BtdACwGk3FmpvvVQhVwtFjNHXbAYEWqV5fPg0mdWyQrZVUVAHuMm7THp5Ix06xaUeLD8MvIFMkY03pDrNk4/+8+m3rzT9vvT+h8qH/fvp/OQgB+EhR5lM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712322396; c=relaxed/simple;
-	bh=aiTtOgawA1gl+sKd/BL+KKsnX7hyyYugKZCpLonIlAk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=necKBGHKqE4XQGjV5CAIZBTGx1cQYvI+uxgrBJJxZsLrTrCbbVna+pOrIHuvxN9ftCuUtWKYGHwdN4A6j+sel81PX0nQ2118EHQ5zgalyz19EXPXQr03bb5hyUvPheiIMlfTx8S53v3DsHisjT6xjEYQBuVJSkc7CN5Nlw9panw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4I8sVlg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D319C433F1;
-	Fri,  5 Apr 2024 13:06:33 +0000 (UTC)
+	s=arc-20240116; t=1712322399; c=relaxed/simple;
+	bh=1j3hW9YAEW484MOqJDnQae4PhbxqhnhN/Z1nRM6/His=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=taqSSemFaTK2YsWIgiLBgmhrtJvpfNRjrCI4zC0XgBwlio/Qw5AwIrSUoFbYUTZJyqy9fQdHU4U1Nq+GYK8kcWu+7y0vdbH9fE7xw44g0SpjAOnMKlvVXAmf32ZOzT6252EA03nBtXr4PrJ/DqH45MVsABaRACbzrwqkwme4jWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e1Hoj24J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E10FC433C7;
+	Fri,  5 Apr 2024 13:06:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712322396;
-	bh=aiTtOgawA1gl+sKd/BL+KKsnX7hyyYugKZCpLonIlAk=;
-	h=From:Subject:Date:To:Cc:From;
-	b=j4I8sVlgrQ3jetssQjEvZ926rndqiioLxqiNtHYXfK1GV1hjwD4EBfbQAvpERTKsH
-	 XDoA+HdX1ovylqxGPDOeS1uSEVfhQZaiX8DP/14b/Uf2ZkVmT2W5BwChg2MF2tIaMr
-	 pmoluv2TrZb48BnvEpz8U1duOplkukiFmOoFwN+jiRtbfHFYcLTkoAy+ybnGjDK0rk
-	 axF+BeY6gALyi7pYSIC01mZKPG2X/1A1ZWNlcnloTKKANGNRCiK8XpGX3pkfLmvTTR
-	 axm06j/PTigcgp4klJwNzdnyjT26B+WKPbf/QINQ0mKDKSd81f8sXW5ZMzQ30Egm73
-	 uvL9qh8jgxj4A==
+	s=k20201202; t=1712322399;
+	bh=1j3hW9YAEW484MOqJDnQae4PhbxqhnhN/Z1nRM6/His=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=e1Hoj24JvzvkJutMHOhlkTnSDViBOqWCtSoacbzNispGSZvXymRht49DMk2HSz5wt
+	 Kh73QTOuBfy36l1xtaALQ7mfYnJT65KJ9aWB0eBrGWTT93qInE96IBgkt0P56gG2tm
+	 9OWKuVVbEAk8RGCbitxOglnuGA/lp7YKSu0FpQl4I+K+plDNVcVwGqYBXXmd+mXOUY
+	 7hLi5Ycas98l0Mxwd/T7+7yXFKvDgMN1Ybp0wQRQD9D0t2vUw4N2y1uDtjPvURVFtW
+	 3yG6RHO3/Zgu3lLFyqaStYazCDUNRcy++kiKzxudjls4FeYSI4rdcizmaaGJ+S6X2D
+	 efdXDCbJ/UEJQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net-next 0/2] mptcp: add last time fields in mptcp_info
-Date: Fri, 05 Apr 2024 15:06:20 +0200
-Message-Id: <20240405-upstream-net-next-20240405-mptcp-last-time-info-v1-0-52dc49453649@kernel.org>
+Date: Fri, 05 Apr 2024 15:06:21 +0200
+Subject: [PATCH net-next 1/2] mptcp: add last time fields in mptcp_info
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,9 +52,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEz3D2YC/z2NwQrCMBBEf6Xs2YVNW6X6K9JDWje6YNKQrFIo/
- XcXQQ9zeAzzZoPKRbjCpdmg8FuqLMnAHRqYHz7dGeVmDC21PfV0xFeuWthHTKyWVfFfxaxzxqe
- viirRlikseJ6oO7mBaQgOzJoLB1m/j1f4OWDc9w9b+edaiwAAAA==
+Message-Id: <20240405-upstream-net-next-20240405-mptcp-last-time-info-v1-1-52dc49453649@kernel.org>
+References: <20240405-upstream-net-next-20240405-mptcp-last-time-info-v1-0-52dc49453649@kernel.org>
+In-Reply-To: <20240405-upstream-net-next-20240405-mptcp-last-time-info-v1-0-52dc49453649@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -64,53 +64,157 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <tanggeliang@kylinos.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1238; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=aiTtOgawA1gl+sKd/BL+KKsnX7hyyYugKZCpLonIlAk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmD/dYTs4Nh1M3Y3r9Yx3wcV7xGdpd2pup/0HIL
- HFlecIH0z+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZg/3WAAKCRD2t4JPQmmg
- c2UoD/9m56ReagBAujFA3sYu5/Z8OuB4jsQqPGMSSoHZpLzAlx8QacdEAsbVgLioaf3b1btSBoY
- 09W4qNP8uwrLYx25BecWFoe+PzFsecCNjUtYgfCdMlQnt+sbbzpwgfgyELl0fFHsgNewI8VVqD2
- Yxtv/A4VBB6MitPaS+QQ/MQD2j0pqOB/+lNZtd6c9PKkYzpyjxp6iWMlUfTbKIl8bLWZlp+/7lx
- bheh5G9+wUtipZn6VpINqfxuVXOACFTILk5as97XeEE/xq9yMwchWqwa6w7kY6lzc7zRGx16W2g
- i7x0BhMLfhpmQcFUNmwZL5MTgOs3O7C5TCYUiULeEA8JElFlYDvmppLI2knW2h2MeA1GfoiphSI
- iADfUf0CW+surlAvS4F2MMVMFVaktJGCYfM/Mk//kFBrUU7+UrkX+booNvx6fkCXTjMSAEL6WeG
- YWN0opPw4K5nJGC6/rMHnrwfOYtyilBffMHY28qW/vI2aaXmLakCEkexSiPolLjqB77ZhPIVsvg
- w+VD+ApD5yKG9bgB9MSjDfJaYm3w9d9k/kBpcJJac9w6+wePpL0TlRE/4HWyCkxZLoA3yMgn+Pc
- baTUNW2bTz7I44mT0VcO36MEvVA/6VQ6iJt05T/fmxZDO56T0k8AGKbwH/cSMAveeGRbu36LGN1
- rynsFVEpFmsERFA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4848; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=648syyUDg04+UEijLZ/0zq6tkZDYCTtkOW9fCgS5UZI=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmD/dYvb88pQACCDDSa2iZSLWuhLOGJnuYjBQqP
+ ZOVB4woMIyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZg/3WAAKCRD2t4JPQmmg
+ c0XsD/9PY5SESZduyV3fPr/FNouKfQv+pzP8Y99J8UrQiXin17r6re0rykZFsIkAW/iAmzY7HPd
+ OPGk75Zn8TcrhsyJK/gmbaZyh9m5aOUSZehUDoWkIG4geRodjdlLr2uuj3XyqKvtd8VsYCnFSo1
+ MgqcameFq+sc4qb1evsmMwvTrLJIzQxh4G6YaIoCygu3e3TVJLi0p3+0/yBUaWohniGx4fIHDWq
+ Oxsn257UBMC2jpeMfHdNOP+/M+uiI57FPz82RnTkddjV4mz3o5/k+sQnz99CQfdMVcI+SRYBy1Q
+ 2ytXBRiMhaRnux/yJz9mCYmCcbRJF9UhWkuu5OjHUV7DBmKboeJxOJu6Qc/+9hCFUPd7A3Ibgfn
+ 7bDWuXG5F45S9lSRFvbMo3l1JGpN/I52I0n4bBxGCh3Yv+L6MKoPpEAX/G8aQp+xbohJKDkUfyI
+ G4hMrXTJdkxtR6k9lAGSSf9FF0Wv6QtXw9gnCgTKneCjvwpBIST1h6UJ+QO93ije/FkotiwMmC+
+ uwxud8ATuM9qM38ZGME5Ml4zwsbPNrtLfx4hLcwjTCG0bmcUoqHmwTc61R//fEH521a2OCwQgqT
+ F3ex7Nln3yzlPI6lrNGWlL04FaU0lDy/dlvf9Z8MW2qYBNd6gtA819hX5wNl602PeNqRTq0T7RK
+ 9KwaJEn9RHaxdlw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-These patches from Geliang add support for the "last time" field in
-MPTCP Info, and verify that the counters look valid.
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Patch 1 adds these counters: last_data_sent, last_data_recv and
-last_ack_recv. They are available in the MPTCP Info, so exposed via
-getsockopt(MPTCP_INFO) and the Netlink Diag interface.
+This patch adds "last time" fields last_data_sent, last_data_recv and
+last_ack_recv in struct mptcp_sock to record the last time data_sent,
+data_recv and ack_recv happened. They all are initialized as
+tcp_jiffies32 in __mptcp_init_sock(), and updated as tcp_jiffies32 too
+when data is sent in __subflow_push_pending(), data is received in
+__mptcp_move_skbs_from_subflow(), and ack is received in ack_update_msk().
 
-Patch 2 adds a test in diag.sh MPTCP selftest, to check that the
-counters have moved by at least 250ms, after having waited twice that
-time.
+Similar to tcpi_last_data_sent, tcpi_last_data_recv and tcpi_last_ack_recv
+exposed with TCP, this patch exposes the last time "an action happened" for
+MPTCP in mptcp_info, named mptcpi_last_data_sent, mptcpi_last_data_recv and
+mptcpi_last_ack_recv, calculated in mptcp_diag_fill_info() as the time
+deltas between now and the newly added last time fields in mptcp_sock.
 
+Also add three reserved bytes in struct mptcp_info not to have holes in
+this structure exposed to userspace.
+
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/446
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Geliang Tang (2):
-      mptcp: add last time fields in mptcp_info
-      selftests: mptcp: test last time mptcp_info
+ include/uapi/linux/mptcp.h | 4 ++++
+ net/mptcp/options.c        | 1 +
+ net/mptcp/protocol.c       | 7 +++++++
+ net/mptcp/protocol.h       | 3 +++
+ net/mptcp/sockopt.c        | 4 ++++
+ 5 files changed, 19 insertions(+)
 
- include/uapi/linux/mptcp.h                |  4 +++
- net/mptcp/options.c                       |  1 +
- net/mptcp/protocol.c                      |  7 ++++
- net/mptcp/protocol.h                      |  3 ++
- net/mptcp/sockopt.c                       |  4 +++
- tools/testing/selftests/net/mptcp/diag.sh | 53 +++++++++++++++++++++++++++++++
- 6 files changed, 72 insertions(+)
----
-base-commit: d76c740b2eaaddc5fc3a8b21eaec5b6b11e8c3f5
-change-id: 20240405-upstream-net-next-20240405-mptcp-last-time-info-9b03618e08f1
+diff --git a/include/uapi/linux/mptcp.h b/include/uapi/linux/mptcp.h
+index 74cfe496891e..67d015df8893 100644
+--- a/include/uapi/linux/mptcp.h
++++ b/include/uapi/linux/mptcp.h
+@@ -58,6 +58,10 @@ struct mptcp_info {
+ 	__u64	mptcpi_bytes_received;
+ 	__u64	mptcpi_bytes_acked;
+ 	__u8	mptcpi_subflows_total;
++	__u8	reserved[3];
++	__u32	mptcpi_last_data_sent;
++	__u32	mptcpi_last_data_recv;
++	__u32	mptcpi_last_ack_recv;
+ };
+ 
+ /* MPTCP Reset reason codes, rfc8684 */
+diff --git a/net/mptcp/options.c b/net/mptcp/options.c
+index 27ca42c77b02..8e8dcfbc2993 100644
+--- a/net/mptcp/options.c
++++ b/net/mptcp/options.c
+@@ -1068,6 +1068,7 @@ static void ack_update_msk(struct mptcp_sock *msk,
+ 		__mptcp_snd_una_update(msk, new_snd_una);
+ 		__mptcp_data_acked(sk);
+ 	}
++	msk->last_ack_recv = tcp_jiffies32;
+ 	mptcp_data_unlock(sk);
+ 
+ 	trace_ack_update_msk(mp_opt->data_ack,
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 7e74b812e366..6c1af0155bb0 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -706,6 +706,8 @@ static bool __mptcp_move_skbs_from_subflow(struct mptcp_sock *msk,
+ 		}
+ 	} while (more_data_avail);
+ 
++	if (moved > 0)
++		msk->last_data_recv = tcp_jiffies32;
+ 	*bytes += moved;
+ 	return done;
+ }
+@@ -1556,6 +1558,8 @@ static int __subflow_push_pending(struct sock *sk, struct sock *ssk,
+ 	err = copied;
+ 
+ out:
++	if (err > 0)
++		msk->last_data_sent = tcp_jiffies32;
+ 	return err;
+ }
+ 
+@@ -2793,6 +2797,9 @@ static void __mptcp_init_sock(struct sock *sk)
+ 	WRITE_ONCE(msk->allow_infinite_fallback, true);
+ 	msk->recovery = false;
+ 	msk->subflow_id = 1;
++	msk->last_data_sent = tcp_jiffies32;
++	msk->last_data_recv = tcp_jiffies32;
++	msk->last_ack_recv = tcp_jiffies32;
+ 
+ 	mptcp_pm_data_init(msk);
+ 
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index 46f4655b7123..fdfa843e2d88 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -282,6 +282,9 @@ struct mptcp_sock {
+ 	u64		bytes_acked;
+ 	u64		snd_una;
+ 	u64		wnd_end;
++	u32		last_data_sent;
++	u32		last_data_recv;
++	u32		last_ack_recv;
+ 	unsigned long	timer_ival;
+ 	u32		token;
+ 	int		rmem_released;
+diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
+index 73fdf423de44..2ec2fdf9f4af 100644
+--- a/net/mptcp/sockopt.c
++++ b/net/mptcp/sockopt.c
+@@ -896,6 +896,7 @@ static int mptcp_getsockopt_first_sf_only(struct mptcp_sock *msk, int level, int
+ void mptcp_diag_fill_info(struct mptcp_sock *msk, struct mptcp_info *info)
+ {
+ 	struct sock *sk = (struct sock *)msk;
++	u32 now = tcp_jiffies32;
+ 	u32 flags = 0;
+ 	bool slow;
+ 
+@@ -930,6 +931,7 @@ void mptcp_diag_fill_info(struct mptcp_sock *msk, struct mptcp_info *info)
+ 	info->mptcpi_snd_una = msk->snd_una;
+ 	info->mptcpi_rcv_nxt = msk->ack_seq;
+ 	info->mptcpi_bytes_acked = msk->bytes_acked;
++	info->mptcpi_last_ack_recv = jiffies_to_msecs(now - msk->last_ack_recv);
+ 	mptcp_data_unlock(sk);
+ 
+ 	slow = lock_sock_fast(sk);
+@@ -942,6 +944,8 @@ void mptcp_diag_fill_info(struct mptcp_sock *msk, struct mptcp_info *info)
+ 	info->mptcpi_bytes_retrans = msk->bytes_retrans;
+ 	info->mptcpi_subflows_total = info->mptcpi_subflows +
+ 		__mptcp_has_initial_subflow(msk);
++	info->mptcpi_last_data_sent = jiffies_to_msecs(now - msk->last_data_sent);
++	info->mptcpi_last_data_recv = jiffies_to_msecs(now - msk->last_data_recv);
+ 	unlock_sock_fast(sk, slow);
+ }
+ EXPORT_SYMBOL_GPL(mptcp_diag_fill_info);
 
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.43.0
 
 
