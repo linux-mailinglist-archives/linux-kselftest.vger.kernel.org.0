@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-7248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AA2689934A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 04:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 34B3089934C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 04:45:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BF9B1C2245C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 02:45:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 654C91C223D8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 02:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E29B61803D;
-	Fri,  5 Apr 2024 02:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8473E1B299;
+	Fri,  5 Apr 2024 02:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDcB1IeA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UfWWnXN6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B951B17BAA;
-	Fri,  5 Apr 2024 02:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D58719BA3;
+	Fri,  5 Apr 2024 02:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712285134; cv=none; b=GuOPbreBd6+bCp3rOSyapngnWSQ7kHdhQH2nlzDwkn9Moy7e7Y1x1A/d27Gdfuhe5lJVEc0pfa8nbY6wjUxP/uUcEU8h94EO9q1F0HhamFU5rx9g7k6J41PouVEXBuI1F5+0+cI0FWLzf37ypuFTOjNo5pqBe9+0eTg0KJ5Maqw=
+	t=1712285135; cv=none; b=a+J0YEtkQfTuCBdJe6jPFiCZPsR8e4ZxOkBCg5RUtx6Xd5qccz705bTgngulMq823WiG/Weu0iK/DC4pmN7eI6GH7h4bOiu28g+YnVJQa6QpKWqZbcGaKrnIx4y5azwoIIkNVyyQW/znlwg/kbaGowXr5CxzwSbYUsO58IeSf9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712285134; c=relaxed/simple;
-	bh=IvV+aDZV9LoDJKeFJ1Ku34Z4N3M29tyMD6RuL09yyoA=;
+	s=arc-20240116; t=1712285135; c=relaxed/simple;
+	bh=8zBOozCsRUE20wUotX0eaUXsRl6qJOhNiqFBWZmLX4Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fE9++DTTpPN/dVBo0lvwA1vWQYUhdxTkYzTulC/5X5TZvk4kR5Aqgnt+063dX22XESNs6jPbckjqMHLl++zyMVdtTb8pdh9oRBx+LrwrAfqtLxQDVt9Z32XVqWd1dFRQ5goKPOqpLW376EBdzAd/DvFpwSbowRl9tFMX7GRNoSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDcB1IeA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4955C43399;
-	Fri,  5 Apr 2024 02:45:33 +0000 (UTC)
+	 MIME-Version; b=QgIxHghqzHYqykqUMAzyC8Ea/OPfLzFFRNby1+Pzu5/Nj/BW3dZEqJ2jPCC0u0RhxCUjgyoX8iACahNuvv1fJ/oOuL8mzCJ4wBH9oTCZzdwAL3yoXil5ELKJoGF3SjItWAJxKjBL8Rbq9PIW8UT5Qfsbss64u/j48oAgWB0oT4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UfWWnXN6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 720DFC43394;
+	Fri,  5 Apr 2024 02:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1712285134;
-	bh=IvV+aDZV9LoDJKeFJ1Ku34Z4N3M29tyMD6RuL09yyoA=;
+	bh=8zBOozCsRUE20wUotX0eaUXsRl6qJOhNiqFBWZmLX4Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BDcB1IeA03Bu8noSy2z6U3BLh8W7kOBZSS0UcgZQBnpjWBytfaH6UVNs2QMwoNJRz
-	 BFwdu1ytU5BwOZ1T8TednGteeSByxtxNl82uh8AdhrpWWK1JJKnbxGxR4JAWg04jtF
-	 EzKHTKgImJnv6sK4QA2JfUTp1dDJFJcvMOdy8cLmd80/6NuPgnh65pViStIfxX9RbC
-	 3Q1Z06JbtjSwa4Z3oIOrPwX8qDHh3opL9gKUthsW7t7bYEmCgdGtQyhU/B5KSFj+xU
-	 GQSE8yY0vOiORrkK3PQeND2zSV0bj0WgfUNlRw6qr0Uq4zKDgJ7VdbxUFtyGka9EWP
-	 JNwTWaaTaRFdQ==
+	b=UfWWnXN689gX8u4dgs0mmnWWHWTr/psYHV93a6WZYXQt9KsLYUFJgXwpccgC6U5LO
+	 fgbjQnemZgYPRLsu/oYyFBJZ6LtEz4ZLxDpO6NqfUAxrBHl+k8+QG7+h9nzjBDc00h
+	 Vbwqg2GoRVznZzyaNXdqMUa8P75xR/xa96qiwy7N9ddpQTWIArcUTBjUtMd/DduToq
+	 KPYVvNwa/MnNyB1839yCAxE9wUPo5e4vnwbpjFqxXmCubFzfEG9qtUdR3iFQkP9zHb
+	 QmcKsPca72Llk9yUnjvWh3eWCdehyjjfb2A4F/DhfhAMxv6fa8UPhrE9BDmxiDnODi
+	 2D7eVY531LLNg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	petrm@nvidia.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v3 2/5] selftests: nl_netdev: add a trivial Netlink netdev test
-Date: Thu,  4 Apr 2024 19:45:23 -0700
-Message-ID: <20240405024526.2752998-3-kuba@kernel.org>
+Subject: [PATCH net-next v3 3/5] netdevsim: report stats by default, like a real device
+Date: Thu,  4 Apr 2024 19:45:24 -0700
+Message-ID: <20240405024526.2752998-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240405024526.2752998-1-kuba@kernel.org>
 References: <20240405024526.2752998-1-kuba@kernel.org>
@@ -66,72 +66,135 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a trivial test using YNL.
+Real devices should implement qstats. Devices which support
+pause or FEC configuration should also report the relevant stats.
 
-  $ ./tools/testing/selftests/net/nl_netdev.py
-  KTAP version 1
-  1..2
-  ok 1 nl_netdev.empty_check
-  ok 2 nl_netdev.lo_check
+nsim was missing FEC stats completely, some of the qstats
+and pause stats required toggling a debugfs knob.
 
-Instantiate the family once, it takes longer than the test itself.
+Note that the tests which used pause always initialize the setting
+so they shouldn't be affected by the different starting value.
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-v2:
- - pass family as argument
-
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
+v3:
+ - spelling in comment
+ - make sure we don't break when more queues present
 ---
- tools/testing/selftests/net/Makefile     |  1 +
- tools/testing/selftests/net/nl_netdev.py | 24 ++++++++++++++++++++++++
- 2 files changed, 25 insertions(+)
- create mode 100755 tools/testing/selftests/net/nl_netdev.py
+ drivers/net/netdevsim/ethtool.c | 11 ++++++++
+ drivers/net/netdevsim/netdev.c  | 49 +++++++++++++++++++++++++++++++++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index cb418a2346bc..5e34c93aa51b 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -34,6 +34,7 @@ TEST_PROGS += gre_gso.sh
- TEST_PROGS += cmsg_so_mark.sh
- TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
- TEST_PROGS += netns-name.sh
-+TEST_PROGS += nl_netdev.py
- TEST_PROGS += srv6_end_dt46_l3vpn_test.sh
- TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
- TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
-diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-new file mode 100755
-index 000000000000..2b8b488fb419
---- /dev/null
-+++ b/tools/testing/selftests/net/nl_netdev.py
-@@ -0,0 +1,24 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/net/netdevsim/ethtool.c b/drivers/net/netdevsim/ethtool.c
+index bd546d4d26c6..3f9c9327f149 100644
+--- a/drivers/net/netdevsim/ethtool.c
++++ b/drivers/net/netdevsim/ethtool.c
+@@ -140,6 +140,13 @@ nsim_set_fecparam(struct net_device *dev, struct ethtool_fecparam *fecparam)
+ 	return 0;
+ }
+ 
++static void
++nsim_get_fec_stats(struct net_device *dev, struct ethtool_fec_stats *fec_stats)
++{
++	fec_stats->corrected_blocks.total = 123;
++	fec_stats->uncorrectable_blocks.total = 4;
++}
 +
-+from lib.py import ksft_run, ksft_pr, ksft_eq, ksft_ge, NetdevFamily
+ static int nsim_get_ts_info(struct net_device *dev,
+ 			    struct ethtool_ts_info *info)
+ {
+@@ -163,6 +170,7 @@ static const struct ethtool_ops nsim_ethtool_ops = {
+ 	.set_channels			= nsim_set_channels,
+ 	.get_fecparam			= nsim_get_fecparam,
+ 	.set_fecparam			= nsim_set_fecparam,
++	.get_fec_stats			= nsim_get_fec_stats,
+ 	.get_ts_info			= nsim_get_ts_info,
+ };
+ 
+@@ -182,6 +190,9 @@ void nsim_ethtool_init(struct netdevsim *ns)
+ 
+ 	nsim_ethtool_ring_init(ns);
+ 
++	ns->ethtool.pauseparam.report_stats_rx = true;
++	ns->ethtool.pauseparam.report_stats_tx = true;
 +
+ 	ns->ethtool.fec.fec = ETHTOOL_FEC_NONE;
+ 	ns->ethtool.fec.active_fec = ETHTOOL_FEC_NONE;
+ 
+diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+index 8330bc0bcb7e..d7ba447db17c 100644
+--- a/drivers/net/netdevsim/netdev.c
++++ b/drivers/net/netdevsim/netdev.c
+@@ -19,6 +19,7 @@
+ #include <linux/module.h>
+ #include <linux/netdevice.h>
+ #include <linux/slab.h>
++#include <net/netdev_queues.h>
+ #include <net/netlink.h>
+ #include <net/pkt_cls.h>
+ #include <net/rtnetlink.h>
+@@ -330,6 +331,53 @@ static const struct net_device_ops nsim_vf_netdev_ops = {
+ 	.ndo_set_features	= nsim_set_features,
+ };
+ 
++/* We don't have true per-queue stats, yet, so do some random fakery here.
++ * Only report stuff for queue 0.
++ */
++static void nsim_get_queue_stats_rx(struct net_device *dev, int idx,
++				    struct netdev_queue_stats_rx *stats)
++{
++	struct rtnl_link_stats64 rtstats = {};
 +
-+def empty_check(nf) -> None:
-+    devs = nf.dev_get({}, dump=True)
-+    ksft_ge(len(devs), 1)
++	if (!idx)
++		nsim_get_stats64(dev, &rtstats);
 +
++	stats->packets = rtstats.rx_packets - !!rtstats.rx_packets;
++	stats->bytes = rtstats.rx_bytes;
++}
 +
-+def lo_check(nf) -> None:
-+    lo_info = nf.dev_get({"ifindex": 1})
-+    ksft_eq(len(lo_info['xdp-features']), 0)
-+    ksft_eq(len(lo_info['xdp-rx-metadata-features']), 0)
++static void nsim_get_queue_stats_tx(struct net_device *dev, int idx,
++				    struct netdev_queue_stats_tx *stats)
++{
++	struct rtnl_link_stats64 rtstats = {};
 +
++	if (!idx)
++		nsim_get_stats64(dev, &rtstats);
 +
-+def main() -> None:
-+    nf = NetdevFamily()
-+    ksft_run([empty_check, lo_check], args=(nf, ))
++	stats->packets = rtstats.tx_packets - !!rtstats.tx_packets;
++	stats->bytes = rtstats.tx_bytes;
++}
 +
++static void nsim_get_base_stats(struct net_device *dev,
++				struct netdev_queue_stats_rx *rx,
++				struct netdev_queue_stats_tx *tx)
++{
++	struct rtnl_link_stats64 rtstats = {};
 +
-+if __name__ == "__main__":
-+    main()
++	nsim_get_stats64(dev, &rtstats);
++
++	rx->packets = !!rtstats.rx_packets;
++	rx->bytes = 0;
++	tx->packets = !!rtstats.tx_packets;
++	tx->bytes = 0;
++}
++
++static const struct netdev_stat_ops nsim_stat_ops = {
++	.get_queue_stats_tx	= nsim_get_queue_stats_tx,
++	.get_queue_stats_rx	= nsim_get_queue_stats_rx,
++	.get_base_stats		= nsim_get_base_stats,
++};
++
+ static void nsim_setup(struct net_device *dev)
+ {
+ 	ether_setup(dev);
+@@ -360,6 +408,7 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
+ 
+ 	ns->phc = phc;
+ 	ns->netdev->netdev_ops = &nsim_netdev_ops;
++	ns->netdev->stat_ops = &nsim_stat_ops;
+ 
+ 	err = nsim_udp_tunnels_info_create(ns->nsim_dev, ns->netdev);
+ 	if (err)
 -- 
 2.44.0
 
