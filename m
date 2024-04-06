@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-7351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E546289AD11
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 23:31:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA70A89AD13
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 23:37:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 151061C20A88
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 21:31:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24D411F211A4
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 21:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3C64EB41;
-	Sat,  6 Apr 2024 21:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237754AEF7;
+	Sat,  6 Apr 2024 21:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CUxgIwux"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="TkXSICni"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3293B18D;
-	Sat,  6 Apr 2024 21:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430C038389;
+	Sat,  6 Apr 2024 21:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712439112; cv=none; b=tCgUhg3OwsqYYz9zRqBMrI4pVtQ5A0g0eCVWvrVSce/qL3UKNLNUwGx3mYw8zQPzvCXrhbQS1/sVaz0i+qLc8ewH51X3S1kDiUtYq9U8J0KtKrWBBsycybLlU9RcTQBJWTXelE0uhDRS3/sG3a18QdU7rSQtaldeyu4L7fYaXNk=
+	t=1712439445; cv=none; b=rOOAqz1a9GmBKyrnApJPFEGTQ07+kMa2iKIlryGHDliDHWzKM793Y/21wrz+5BdVDIquR1w0PuhBLNKsajXYizJ2nz9zn5cz9ytw24c5miybeSzf5rqpkbzlqvYg3mSF8MAu9mnAccw81FCkYwkrwYKK6fPTGhv3Bcz51Mb34JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712439112; c=relaxed/simple;
-	bh=LCeSaZVCLLa2JNuSPQv7Fn1dVBTwCW+zy4H4kD71hew=;
+	s=arc-20240116; t=1712439445; c=relaxed/simple;
+	bh=EtEAijm9uw1TWIb7s9qNwCRb3mIKCqYyJPbwcSFUuAA=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=G8fS2ghR43I1z9YvTvBr5k0pPlHvO3UB5rHpHD17ArujmGxgebaQTOLVyg18zw4CGj2ILecudbPICG2tF/Fn6Tj2NjZXcW88kH3ablD8L0wtjoXSuBSoHwShnMgPcB0+WS7AJ/pZ6T/o4ffSUNPxCftBdPHGolc6hEwXSaRhdXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CUxgIwux; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=LNX2lHU7zQpVenbW5qSU4de5mSxEWWecX7ipc+NmtsxbYyEwE8HJfxFHGuaKvC949IMnP6qy2YkUCB94AbxpvjhWbAWuG3wzj0gwO7vILInAsHzZi9lo3HJelS8/NcjRYOXS74y7qeYgV89bzVCFogPYf//DxpCBasfy3bU+y1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=TkXSICni; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712439109;
-	bh=LCeSaZVCLLa2JNuSPQv7Fn1dVBTwCW+zy4H4kD71hew=;
+	s=mail; t=1712439441;
+	bh=EtEAijm9uw1TWIb7s9qNwCRb3mIKCqYyJPbwcSFUuAA=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=CUxgIwuxt9Z2TbuPaK0KaJqZX5CFQs0UvOc+VhaVr+ZMgIx/95583IfGieS42QQkd
-	 vT1ZMJvZwW4T715q58kGa+Ws9C4I5loYW+gzBrqAqQnzzwaSEzKWb7/94PnQ2smIrj
-	 7RZbCF8vU1T8NjHp8N56zuJ5jC64b+ZcVJA69fRNX6sfvtv7qs6NW/9BZDsMNLSEOW
-	 xEJU8rhaLLaUL6/yLnc4ZJCheJcy9o7+mHs/tuP7iYuwWRMeyXSZ6PQU087dKPVEh+
-	 8yVTOSOW2mmjIzgVVNh9j6r3Viwdjh9LICFAXJiC8SDuQHMXyAD+DIxVeAm7EmRA8t
-	 0SyTF6ct8mOUg==
+	b=TkXSICniY6CWWM/OTWLRuNCDbbGcZsFf2LZBopnkGc1ZLw/nXCV7Us/RMrRyoGh2m
+	 vyZw4qpT2hom2ufj1Ek9n3G6IQJvDdd1zxEYYpFTeYcT8/2ivwazjeh85KCXuXCJCH
+	 M/m1EZyW4/ovbzoRj12A3vkQtTaBSRS9mKtK2E5SmqOb09ihQ6L4LIjY9564ej4+q2
+	 QAkg2qPRPsbZqPs7daMA5cI38zsFBo4FrXFyAlre7biAjWtW9lCxveAj8XQt1c1pFx
+	 50qb1bnom1P5OeMM4Sx+q88asJ9gy4bjXIgoi4KRLuGo2dXaERN9rPYyqwSL9kJPMA
+	 CqVPmsSvKsN6Q==
 Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 89F6037809CE;
-	Sat,  6 Apr 2024 21:31:41 +0000 (UTC)
-Message-ID: <a282446a-6e37-4be7-bb9c-e268c99656b6@collabora.com>
-Date: Sun, 7 Apr 2024 02:32:14 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 70F1E37809CE;
+	Sat,  6 Apr 2024 21:37:13 +0000 (UTC)
+Message-ID: <a45c2ece-acb4-4cff-9d53-f5c007c9b905@collabora.com>
+Date: Sun, 7 Apr 2024 02:37:44 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,162 +58,258 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "Eric W. Biederman" <ebiederm@xmission.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
- kasan-dev@googlegroups.com
-Subject: Re: [PATCH v6 2/2] selftests/timers/posix_timers: Test delivery of
- signals across threads
-To: Oleg Nesterov <oleg@redhat.com>
-References: <20230316123028.2890338-1-elver@google.com>
- <20230316123028.2890338-2-elver@google.com>
- <46ad25c9-f63c-4bb7-9707-4bc8b21ccaca@collabora.com>
- <20240406211312.GD3060@redhat.com>
+ Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [RFC PATCH v3 6/9] selftests: cgroup: Add basic tests for pids
+ controller
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240405170548.15234-1-mkoutny@suse.com>
+ <20240405170548.15234-7-mkoutny@suse.com>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240406211312.GD3060@redhat.com>
+In-Reply-To: <20240405170548.15234-7-mkoutny@suse.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/7/24 2:13 AM, Oleg Nesterov wrote:
-> Muhammad,
+On 4/5/24 10:05 PM, Michal Koutný wrote:
+> This commit adds (and wires in) new test program for checking basic pids
+> controller functionality -- restricting tasks in a cgroup and correct
+> event counting.
 > 
-> I am sorry, but... are you aware that this patch was applied over a year ago,
-> and then this code was updated to use the ksft_API?
-Sorry, didn't realized this is already applied. So this patch is already
-applied and it has already been made compliant.
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> ---
+>  tools/testing/selftests/cgroup/Makefile    |   2 +
+>  tools/testing/selftests/cgroup/test_pids.c | 187 +++++++++++++++++++++
+Please create/add test_pid to .gitignore file.
 
-Thanks
+>  2 files changed, 189 insertions(+)
+>  create mode 100644 tools/testing/selftests/cgroup/test_pids.c
+> 
+> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+> index f3e1ef69e88d..f5f0886a2c4a 100644
+> --- a/tools/testing/selftests/cgroup/Makefile
+> +++ b/tools/testing/selftests/cgroup/Makefile
+> @@ -15,6 +15,7 @@ TEST_GEN_PROGS += test_hugetlb_memcg
+>  TEST_GEN_PROGS += test_kill
+>  TEST_GEN_PROGS += test_kmem
+>  TEST_GEN_PROGS += test_memcontrol
+> +TEST_GEN_PROGS += test_pids
+>  TEST_GEN_PROGS += test_zswap
+>  
+>  LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+> @@ -29,4 +30,5 @@ $(OUTPUT)/test_hugetlb_memcg: cgroup_util.c
+>  $(OUTPUT)/test_kill: cgroup_util.c
+>  $(OUTPUT)/test_kmem: cgroup_util.c
+>  $(OUTPUT)/test_memcontrol: cgroup_util.c
+> +$(OUTPUT)/test_pids: cgroup_util.c
+>  $(OUTPUT)/test_zswap: cgroup_util.c
+> diff --git a/tools/testing/selftests/cgroup/test_pids.c b/tools/testing/selftests/cgroup/test_pids.c
+> new file mode 100644
+> index 000000000000..c1c3a3965624
+> --- /dev/null
+> +++ b/tools/testing/selftests/cgroup/test_pids.c
+> @@ -0,0 +1,187 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +
+> +#include <errno.h>
+> +#include <linux/limits.h>
+> +#include <signal.h>
+> +#include <string.h>
+> +#include <sys/stat.h>
+> +#include <sys/types.h>
+> +#include <unistd.h>
+> +
+> +#include "../kselftest.h"
+> +#include "cgroup_util.h"
+> +
+> +static int run_success(const char *cgroup, void *arg)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int run_pause(const char *cgroup, void *arg)
+> +{
+> +	return pause();
+> +}
+> +
+> +/*
+> + * This test checks that pids.max prevents forking new children above the
+> + * specified limit in the cgroup.
+> + */
+> +static int test_pids_max(const char *root)
+> +{
+> +	int ret = KSFT_FAIL;
+> +	char *cg_pids;
+> +	int pid;
+> +
+> +
+Please remove extra line.
 
-> 
-> Oleg.
-> 
-> On 04/07, Muhammad Usama Anjum wrote:
->>
->> On 3/16/23 5:30 PM, Marco Elver wrote:
->>> From: Dmitry Vyukov <dvyukov@google.com>
->>>
->>> Test that POSIX timers using CLOCK_PROCESS_CPUTIME_ID eventually deliver
->>> a signal to all running threads.  This effectively tests that the kernel
->>> doesn't prefer any one thread (or subset of threads) for signal delivery.
->>>
->>> Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
->>> Signed-off-by: Marco Elver <elver@google.com>
->>> ---
->>> v6:
->>> - Update wording on what the test aims to test.
->>> - Fix formatting per checkpatch.pl.
->>> ---
->>>  tools/testing/selftests/timers/posix_timers.c | 77 +++++++++++++++++++
->>>  1 file changed, 77 insertions(+)
->>>
->>> diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
->>> index 0ba500056e63..8a17c0e8d82b 100644
->>> --- a/tools/testing/selftests/timers/posix_timers.c
->>> +++ b/tools/testing/selftests/timers/posix_timers.c
->>> @@ -188,6 +188,80 @@ static int check_timer_create(int which)
->>>  	return 0;
->>>  }
->>>  
->>> +int remain;
->>> +__thread int got_signal;
->>> +
->>> +static void *distribution_thread(void *arg)
->>> +{
->>> +	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
->>> +	return NULL;
->>> +}
->>> +
->>> +static void distribution_handler(int nr)
->>> +{
->>> +	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
->>> +		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
->>> +}
->>> +
->>> +/*
->>> + * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
->>> + * timer signals. This primarily tests that the kernel does not favour any one.
->>> + */
->>> +static int check_timer_distribution(void)
->>> +{
->>> +	int err, i;
->>> +	timer_t id;
->>> +	const int nthreads = 10;
->>> +	pthread_t threads[nthreads];
->>> +	struct itimerspec val = {
->>> +		.it_value.tv_sec = 0,
->>> +		.it_value.tv_nsec = 1000 * 1000,
->>> +		.it_interval.tv_sec = 0,
->>> +		.it_interval.tv_nsec = 1000 * 1000,
->>> +	};
->>> +
->>> +	printf("Check timer_create() per process signal distribution... ");
->> Use APIs from kselftest.h. Use ksft_print_msg() here.
->>
->>> +	fflush(stdout);
->>> +
->>> +	remain = nthreads + 1;  /* worker threads + this thread */
->>> +	signal(SIGALRM, distribution_handler);
->>> +	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
->>> +	if (err < 0) {
->>> +		perror("Can't create timer\n");
->> ksft_perror() here
->>
->>> +		return -1;
->>> +	}
->>> +	err = timer_settime(id, 0, &val, NULL);
->>> +	if (err < 0) {
->>> +		perror("Can't set timer\n");
->>> +		return -1;
->>> +	}
->>> +
->>> +	for (i = 0; i < nthreads; i++) {
->>> +		if (pthread_create(&threads[i], NULL, distribution_thread, NULL)) {
->>> +			perror("Can't create thread\n");
->>> +			return -1;
->>> +		}
->>> +	}
->>> +
->>> +	/* Wait for all threads to receive the signal. */
->>> +	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
->>> +
->>> +	for (i = 0; i < nthreads; i++) {
->>> +		if (pthread_join(threads[i], NULL)) {
->>> +			perror("Can't join thread\n");
->>> +			return -1;
->>> +		}
->>> +	}
->>> +
->>> +	if (timer_delete(id)) {
->>> +		perror("Can't delete timer\n");
->>> +		return -1;
->>> +	}
->>> +
->>> +	printf("[OK]\n");
->> ksft_test_result or _pass variant as needed?
->>
->>> +	return 0;
->>> +}
->>> +
->>>  int main(int argc, char **argv)
->>>  {
->>>  	printf("Testing posix timers. False negative may happen on CPU execution \n");
->>> @@ -217,5 +291,8 @@ int main(int argc, char **argv)
->>>  	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
->>>  		return ksft_exit_fail();
->>>  
->>> +	if (check_timer_distribution() < 0)
->>> +		return ksft_exit_fail();
->>> +
->>>  	return ksft_exit_pass();
->>>  }
->>
->> -- 
->> BR,
->> Muhammad Usama Anjum
->>
-> 
+> +	cg_pids = cg_name(root, "pids_test");
+> +	if (!cg_pids)
+> +		goto cleanup;
+> +
+> +	if (cg_create(cg_pids))
+> +		goto cleanup;
+> +
+> +	if (cg_read_strcmp(cg_pids, "pids.max", "max\n"))
+> +		goto cleanup;
+> +
+> +	if (cg_write(cg_pids, "pids.max", "2"))
+> +		goto cleanup;
+> +
+> +	if (cg_enter_current(cg_pids))
+> +		goto cleanup;
+> +
+> +	pid = cg_run_nowait(cg_pids, run_pause, NULL);
+> +	if (pid < 0)
+> +		goto cleanup;
+> +
+> +	if (cg_run_nowait(cg_pids, run_success, NULL) != -1 || errno != EAGAIN)
+> +		goto cleanup;
+> +
+> +	if (kill(pid, SIGINT))
+> +		goto cleanup;
+> +
+> +	ret = KSFT_PASS;
+> +
+> +cleanup:
+> +	cg_enter_current(root);
+> +	cg_destroy(cg_pids);
+> +	free(cg_pids);
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * This test checks that pids.max prevents forking new children above the
+> + * specified limit in the cgroup.
+> + */
+> +static int test_pids_events(const char *root)
+> +{
+> +	int ret = KSFT_FAIL;
+> +	char *cg_parent = NULL, *cg_child = NULL;
+> +	int pid;
+> +
+> +
+> +	cg_parent = cg_name(root, "pids_parent");
+> +	cg_child = cg_name(cg_parent, "pids_child");
+> +	if (!cg_parent || !cg_child)
+> +		goto cleanup;
+> +
+> +	if (cg_create(cg_parent))
+> +		goto cleanup;
+> +	if (cg_write(cg_parent, "cgroup.subtree_control", "+pids"))
+> +		goto cleanup;
+> +	if (cg_create(cg_child))
+> +		goto cleanup;
+> +
+> +	if (cg_write(cg_parent, "pids.max", "2"))
+> +		goto cleanup;
+> +
+> +	if (cg_read_strcmp(cg_child, "pids.max", "max\n"))
+> +		goto cleanup;
+> +
+> +	if (cg_enter_current(cg_child))
+> +		goto cleanup;
+> +
+> +	pid = cg_run_nowait(cg_child, run_pause, NULL);
+> +	if (pid < 0)
+> +		goto cleanup;
+> +
+> +	if (cg_run_nowait(cg_child, run_success, NULL) != -1 || errno != EAGAIN)
+> +		goto cleanup;
+> +
+> +	if (kill(pid, SIGINT))
+> +		goto cleanup;
+> +
+> +
+Remove extra line.
+
+> +	if (cg_read_key_long(cg_child, "pids.events", "max ") != 0)
+> +		goto cleanup;
+> +	if (cg_read_key_long(cg_child, "pids.events", "max.imposed ") != 1)
+> +		goto cleanup;
+> +
+> +	if (cg_read_key_long(cg_parent, "pids.events", "max ") != 1)
+> +		goto cleanup;
+> +	if (cg_read_key_long(cg_parent, "pids.events", "max.imposed ") != 1)
+> +		goto cleanup;
+> +
+> +
+> +	ret = KSFT_PASS;
+> +
+> +cleanup:
+> +	cg_enter_current(root);
+> +	if (cg_child)
+> +		cg_destroy(cg_child);
+> +	if (cg_parent)
+> +		cg_destroy(cg_parent);
+> +	free(cg_child);
+> +	free(cg_parent);
+> +
+> +	return ret;
+> +}
+> +
+> +
+> +
+> +#define T(x) { x, #x }
+> +struct pids_test {
+> +	int (*fn)(const char *root);
+> +	const char *name;
+> +} tests[] = {
+> +	T(test_pids_max),
+> +	T(test_pids_events),
+> +};
+> +#undef T
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	char root[PATH_MAX];
+> +	int i, ret = EXIT_SUCCESS;
+The
+	ksft_print_header();
+	ksft_set_plan(total_number_of_tests);
+are missing. Please use all of the ksft APIs to make the test TAP compliant.
+
+> +
+> +	if (cg_find_unified_root(root, sizeof(root)))
+> +		ksft_exit_skip("cgroup v2 isn't mounted\n");
+> +
+> +	/*
+> +	 * Check that pids controller is available:
+> +	 * pids is listed in cgroup.controllers
+> +	 */
+> +	if (cg_read_strstr(root, "cgroup.controllers", "pids"))
+> +		ksft_exit_skip("pids controller isn't available\n");
+> +
+> +	if (cg_read_strstr(root, "cgroup.subtree_control", "pids"))
+> +		if (cg_write(root, "cgroup.subtree_control", "+pids"))
+> +			ksft_exit_skip("Failed to set pids controller\n");
+> +
+> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+> +		switch (tests[i].fn(root)) {
+> +		case KSFT_PASS:
+> +			ksft_test_result_pass("%s\n", tests[i].name);
+> +			break;
+> +		case KSFT_SKIP:
+> +			ksft_test_result_skip("%s\n", tests[i].name);
+> +			break;
+> +		default:
+> +			ret = EXIT_FAILURE;
+> +			ksft_test_result_fail("%s\n", tests[i].name);
+> +			break;
+Use ksft_test_result_report() instead of swith-case here.
+
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
 
 -- 
 BR,
