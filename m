@@ -1,123 +1,140 @@
-Return-Path: <linux-kselftest+bounces-7322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD04D89A77F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 01:01:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B01ED89A9C2
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 10:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69B0C281F60
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Apr 2024 23:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B337282929
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 08:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA9972E84E;
-	Fri,  5 Apr 2024 23:01:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7748D22EF3;
+	Sat,  6 Apr 2024 08:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fMoJt3Np"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="RQXFG31G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B7A19BA3
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Apr 2024 23:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED64200BF
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Apr 2024 08:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712358077; cv=none; b=nld7WfEk+rvuOYb0NCjA222nuqW9Mt9PdwKkhAUhd81ucALBjXApBa8QP8oLEpMkcP2DK07Mb+Zq5tx37VgKefFXfnIJWxASotrh7BYOBl0zxVi0gRLt0OLcyT0BtAywek3zGEBuHVrdlR2GP5MiIQgSTrVPEhkWogTw4ljKsoQ=
+	t=1712391923; cv=none; b=e20Zqjbtq6AmkdtBHrLUVJtfDEIpeGEUy1/h6ZJ3Ny80lebEGpi3Z3RPmI3q9xOg2hn5EJZ6Dll5jlhJt7JC09bnJc8wnxbDC6H3ybwj5zLaAotDO3ZqoUp13cvD9UnfTidajULDOc5i1iAPGp0EgKSAaSFp++ca43TKBWi+t6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712358077; c=relaxed/simple;
-	bh=vpyLulb0cbEWPZIm2RbGs/BJ85Xm3dVsvtdL4Qm45tA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RZixpPXXPYJLoJEOkuKgbn88DnSRE6KNlvoqRkqrk+NCOnZcBVWKW459eozGZriNQ2GKEq/4pzsv8isUzRt67N4pQH3RZs3qwzpaBq92zN1icbIIpCjHBZPGyT9XH3nzSW4/WRSr3m5/eHC2bT95Pw6LZ1WcpHR7CtuZsJ326ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fMoJt3Np; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-ddaf165a8d9so4560999276.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Apr 2024 16:01:16 -0700 (PDT)
+	s=arc-20240116; t=1712391923; c=relaxed/simple;
+	bh=Yp70LyV42TC86owiqwUo+ei2yFC/VLhbCv0icbZUJFE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sjGS0ncEmp8ku4bX8vQyUihquM5RadbFyzbPf5fLKkhn+5NL1EuVdQkiVyH8OUJ1zXDOC6KriliIFE0mqiGKsD97dXTKgIi9+FbDq8jgwL3en57bjIAVpPNXlGr4i9enpVxYBy8DHlkpwNBpo5rr+pB21qqJGKDfnv9PmH008os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=RQXFG31G; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-416434311eeso201225e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 06 Apr 2024 01:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712358075; x=1712962875; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfG9IfZBbUxYxhjFKINYSmP1ysXJ3ABcVl7iYfbfY2A=;
-        b=fMoJt3NptUL12YWDlIbhLyGLpQ6aZPdD5YIaHlldjzaZQKd7aOxUPaz8/VAPsQ3TW0
-         dBcKDeIiFOHYumvDrwRe2FptvImEqO1dUqEBHgyOnyGAfg/eskJXbrrQQHNwf4IoRfYl
-         Bkma8cb3euD3GduEEw5X8KnkPOOstbmRFyOlgpIIrdtnIu3IC3mHbVemdh5na+uiAdrb
-         uBhkV2NX7LBIjR7Oundl/stNP2B26iTCtlRIHAYnBPvBNAO5HTC37NpadkvmeD1WK/wh
-         9duagW6Zuv2EPRNv/6WMOwFwz03ibj8wF+EtxZd2977TYd8do4g3S2rBDvp6X0c8UquD
-         QfIg==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1712391920; x=1712996720; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QBJNfaYHzuiXuMZUpgDPs9xtiQNCWuPWeZpuB9UBK3o=;
+        b=RQXFG31GJAWymDTWNhTKADUAB9uLWMTl6XLDZsCjsq48E0qlICb8X5ZIYM+ZFvPxY+
+         2iTmDH2B1OdN9K8TMnnATglFXoHTbTWRzBWWDkwJ3o+vYAyxonhSKaU2L6EFlUFJMeVk
+         5eKsxULDCoQlQLghZy2H4tfZ62ywrUO4qnvkpTZCbil65UKBTo1Nk6cLNBkuuNAfi7ba
+         dnIVBhElxMmNSPRnwBE1OAan/2MXAgTo7UfQp1MkFaMFcRlS+vyE/6rw/Mn/VpWuJp3N
+         JETK06m6C8UTxZxjVMsd1Cg6mpJZwgChIcsqmUAK8gs32cNQoI7Ugv32HgdBYOXF7rHr
+         ++ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712358075; x=1712962875;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfG9IfZBbUxYxhjFKINYSmP1ysXJ3ABcVl7iYfbfY2A=;
-        b=QPBhdg09VTrEZFekPn9sPn/rMhkva0q//Vgqzh4vA3SHsI7NBw+/e2tH2gcVxUz1gO
-         GI3AylWCBkmlF8SG5lxByyCzMMUozAas73PVbB+ruY+wiwul/Il9YT4FIA58dt5EYhVo
-         dqA2dQKhy+5htkfwo1S6AQvqOl/mQxFFImIdAilC1ooZvnQMnlFmUqa5daeBew7zloOd
-         0ezYmJXKO39ap5f84PG8fe6s7GbCscTK7py/cK8dzdHj49LnyljG4fHwmxlg2w51LJeA
-         r5JYVUCYEzthy9JMDidAaVVGtjhmu30yGKvcjPHIhuRFtdIubK+Wa/JxT8kJOcNfhf0F
-         sKhw==
-X-Gm-Message-State: AOJu0YyBbSs7L4USZeLf1ZEy9suad488QT/4u9ne+fxinKwWqpBRI/ZR
-	EqGqz9+d7Nf/+hLchF7m/OS0LypABZ5Y9fEDWoXOW0pyXsKqBZUjjGzJ1/I73QztyhI+NaFVdbz
-	GAg==
-X-Google-Smtp-Source: AGHT+IHQONwOAXZUuQpKEzHzWJjAcRoq3GLnMYLuEfuPWU/vYM/gSAw8M9A6w+X4FnHoW3md4eNi3rzAK50=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:20c9:b0:dd9:312c:83c8 with SMTP id
- dj9-20020a05690220c900b00dd9312c83c8mr167750ybb.10.1712358075290; Fri, 05 Apr
- 2024 16:01:15 -0700 (PDT)
-Date: Fri, 5 Apr 2024 16:01:13 -0700
-In-Reply-To: <20240322163351.150673-1-zide.chen@intel.com>
+        d=1e100.net; s=20230601; t=1712391920; x=1712996720;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QBJNfaYHzuiXuMZUpgDPs9xtiQNCWuPWeZpuB9UBK3o=;
+        b=hkekcRCRVzm7CQ2trOXUm9ED+EgSso6TDFZn6NtAnyOVtO+wz3BStGfPnTTxxMtvih
+         2vJ6X1UTJUiaQwpi6drqrtx93ND5Y0vQmSGCqS03gqhxPgfPasbYqpr6KNsfu0jMdUME
+         kZ/xdXR21WBNqXQoiMQkJGTKAWNzVWouFhZ/yI/w40LcetUc7dy05d0NZH18HSf0Xcd+
+         MRd0EpCp6YrpMheMVE5cxFoIEZvxj5QwvpDKjcXHo1X3/fU23tZ/+JYFbHoa4znhMMJW
+         jycqfF8VeaRW39mL5BBH8s7QfmaWTtZJ2lxXIBLXghBp0zBUzS1PyT+gFrw7+POteZpb
+         O6oA==
+X-Forwarded-Encrypted: i=1; AJvYcCXuOJ2FfX497enNHqoWBzrtTSDaqDvHvNN8elTdrzdleFzL1N39NhpTteTmgKc0x+v9otxgQk/P6LKKZkSQbXxMoC+UOUlb/0d090HPNt9A
+X-Gm-Message-State: AOJu0YyAbDv+rkBWdfNyytLy7E5ahT+OPGwnNEOHUbGUT3HXc+xbpMEy
+	O0ucN1Z0wC9ZhF/a/2Y+6+yPgqCfQdO0i+KfKbVOnz4UNXXbDjA1LcBRLiF+b/I=
+X-Google-Smtp-Source: AGHT+IErFMsFHaLT/wvJseM7VLt7L5c4EEUPJNvPHKcBFR7A7uLC4IE0vs6uWbJXA8BJb/8NdN1U/g==
+X-Received: by 2002:a05:600c:1c13:b0:416:3de5:1364 with SMTP id j19-20020a05600c1c1300b004163de51364mr437857wms.18.1712391919991;
+        Sat, 06 Apr 2024 01:25:19 -0700 (PDT)
+Received: from f1.redhat.com ([2a06:c701:46c7:8900:15f8:24e1:258e:dbd5])
+        by smtp.gmail.com with ESMTPSA id g11-20020a05600c310b00b00416244a53b8sm5794220wmo.4.2024.04.06.01.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Apr 2024 01:25:19 -0700 (PDT)
+From: Yuri Benditovich <yuri.benditovich@daynix.com>
+To: willemdebruijn.kernel@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: yan@daynix.com,
+	andrew@daynix.com
+Subject: [PATCH] net: change maximum number of UDP segments to 128
+Date: Sat,  6 Apr 2024 11:25:13 +0300
+Message-Id: <20240406082513.78692-1-yuri.benditovich@daynix.com>
+X-Mailer: git-send-email 2.34.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240322163351.150673-1-zide.chen@intel.com>
-Message-ID: <ZhCCub4ajIvpvrBk@google.com>
-Subject: Re: [PATCH] selftests/rseq: take large C-state exit latency into consideration
-From: Sean Christopherson <seanjc@google.com>
-To: Zide Chen <zide.chen@intel.com>
-Cc: linux-kselftest@vger.kernel.org, pbonzini@redhat.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 22, 2024, Zide Chen wrote:
-> Currently, the migration worker delays 1-10 us, assuming that one
-> KVM_RUN iteration only takes a few microseconds.  But if C-state exit
-> latencies are large enough, for example, hundreds or even thousands
-> of microseconds on server CPUs, it may happen that it's not able to
-> bring the target CPU out of C-state before the migration worker starts
-> to migrate it to the next CPU.
-> 
-> If the system workload is light, most CPUs could be at a certain level
-> of C-state, and the vCPU thread may waste milliseconds before it can
-> actually migrate to a new CPU.
+Earlier commit fc8b2a619469378 ("net: more strict VIRTIO_NET_HDR_GSO_UDP_L4 validation")
+added check of potential number of UDP segment vs UDP_MAX_SEGMENTS
+in linux/virtio_net.h.
+After this change certification test of USO guest-to-guest
+transmit on Windows driver for virtio-net device fails,
+for example with packet size of ~64K and mss of 536 bytes.
+In general the USO should not be more restrictive than TSO.
+Indeed, in case of unreasonably small mss a lot of segments
+can cause queue overflow and packet loss on the destination.
+Limit of 128 segments is good for any practical purpose,
+with minimal meaningful mss of 536 the maximal UDP packet will
+be divided to ~120 segments.
 
-Well fudge.  That's definitely not on my bingo sheet.
+Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
+---
+ include/linux/udp.h                  | 2 +-
+ tools/testing/selftests/net/udpgso.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Thus, the tests may be inefficient in such systems, and in some cases
-> it may fail the migration/KVM_RUN ratio sanity check.
-> 
-> Since we are not able to turn off the cpuidle sub-system in run time,
-> this patch creates an idle thread on every CPU to prevent them from
-> entering C-states.
+diff --git a/include/linux/udp.h b/include/linux/udp.h
+index 3748e82b627b..7e75ccdf25fe 100644
+--- a/include/linux/udp.h
++++ b/include/linux/udp.h
+@@ -108,7 +108,7 @@ struct udp_sock {
+ #define udp_assign_bit(nr, sk, val)		\
+ 	assign_bit(UDP_FLAGS_##nr, &udp_sk(sk)->udp_flags, val)
+ 
+-#define UDP_MAX_SEGMENTS	(1 << 6UL)
++#define UDP_MAX_SEGMENTS	(1 << 7UL)
+ 
+ #define udp_sk(ptr) container_of_const(ptr, struct udp_sock, inet.sk)
+ 
+diff --git a/tools/testing/selftests/net/udpgso.c b/tools/testing/selftests/net/udpgso.c
+index 1d975bf52af3..85b3baa3f7f3 100644
+--- a/tools/testing/selftests/net/udpgso.c
++++ b/tools/testing/selftests/net/udpgso.c
+@@ -34,7 +34,7 @@
+ #endif
+ 
+ #ifndef UDP_MAX_SEGMENTS
+-#define UDP_MAX_SEGMENTS	(1 << 6UL)
++#define UDP_MAX_SEGMENTS	(1 << 7UL)
+ #endif
+ 
+ #define CONST_MTU_TEST	1500
+-- 
+2.34.3
 
-First off, huge thanks for debugging this!  That must have been quite the task
-(no pun intended).
-
-While spinning up threads on every CPU is a clever way to ensure they don't go
-into a deep sleep state, I'm not exactly excited about the idea of putting every
-reachable CPU into a busy loop.  And while this doesn't add _that_ much complexity,
-I'm not sure the benefit (preserving the assert for all systems) is worth it.  I
-also don't want to arbitrarily prevent idle task (as in, the kernel's idle task)
-interactions.  E.g. it's highly (highly) unlikely, but not impossible for there
-to be a bug that's unique to idle tasks, or C-states, or other edge case.
-
-Are there any metrics/stats that can be (easily) checked to grant an exception
-to the sanity check?  That's a very hand-wavy question, as I'm not even sure what
-type of stat we'd want to look at.  Actual runtime of a task, maybe?
-
-If that's not easy, what if we add an off-by-default command line option to skip
-the sanity check?  I was resistant to simply deleting the assert in the past, but
-that was mainly because I didn't want to delete it without understanding what was
-causing problems.  That would allow CI environments to opt-out as needed, while
-still keeping the sanity check alive for enough systems to make it useful.
 
