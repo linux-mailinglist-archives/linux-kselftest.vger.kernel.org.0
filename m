@@ -1,161 +1,245 @@
-Return-Path: <linux-kselftest+bounces-7331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7332-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C22D89AB7B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 17:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4016189AB8D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 17:11:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A90031C20B23
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 15:03:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63B351C20A26
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 15:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00CB1383A6;
-	Sat,  6 Apr 2024 15:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PFiaeLE/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B129338F86;
+	Sat,  6 Apr 2024 15:11:49 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654F5376E0;
-	Sat,  6 Apr 2024 15:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEE120314
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Apr 2024 15:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712415797; cv=none; b=Pbmf4vV0o6wOuEBLhac3OATAJIXkyW7h9i2BQbBDPW2M+Xt6tgEs42eIUP/IY6MFUSLiQ2ZOG5PAYiMCIzvkA7DzgZbyODYaO30rANuMTBjOYlCagne69oUqV51QxquU6oS77NSG+bPCb5tI4cYzwpoglJl6yIX9m4GU17QA8Fw=
+	t=1712416309; cv=none; b=JEAzt7unUkXKTA8zQjCDzgxZTHetF6Zgj1qyrA1eTvV1GNtanTjTnXKzfWNqyCyUBFPJMJbsXd5qhvcS6sgTKCEBkwmYevo5G980zJQAEXqM5k3jCv9r7/g5zjGJy94m4CPZ6sk8UHbr57UOq0te506iWAHow+9Nchxh1I0C6ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712415797; c=relaxed/simple;
-	bh=CAq2D4Inwn3Za5vQna+/XQvSndgmRav7iHL7fAy3yyM=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=pZIJsshov0YnYWmT+pQ19+fwUUqPG3Yd7jEvd1UuHhwbEacuJC0OlEpL38k5j0pY2wpdKE1vBqRowIj5TAldQ+h8Sh/4jKnmyx7szmDacuCYOadxZzTqlgA4VNyMc1B+VCXMpCe/uDIqIIsN65D/cy0Sc5ecalD9bRu66tKxTrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PFiaeLE/; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-430b7b22b17so18051541cf.2;
-        Sat, 06 Apr 2024 08:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712415795; x=1713020595; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a7oZc1r1+1pQl56GfIW2CdrbD4i8j9cKjnw4MtdeYuc=;
-        b=PFiaeLE/RTYRHPtqIkrHGucHcYABPoBZycwxjeaBa+S1DWnGCPvahY9b8Noa75Cvpk
-         j5L+dn39bNY3kGEUzHMEQOp1si2vicTnm6F5bXxQB2UIRDz9OaqopeQZh5WIPx8ucccR
-         t1FIycd6YILBdPOyT6Ay8DjE1mgDXz8W2eHV3CVSk9NlJ6HVvTPLd6Ao5euxoVaQ3W8Y
-         H/Scw1/GOIRnb3vXLKw96Qd7Z1EWeXm2m2l+S/nDeEXOKWV2KKuN+ejLZdT2vO2wA6Jp
-         /PsmidNqciw95XoANF6jJmgCizwRGliErU0FoZ4dzD7UbQA8wxTzURUDh7lRj3BnrMN+
-         5kWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712415795; x=1713020595;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a7oZc1r1+1pQl56GfIW2CdrbD4i8j9cKjnw4MtdeYuc=;
-        b=eeQ9/qYvK6ywKZJy5wlPoV9Ltxhfqh+Av23LJLXkD2w/Y+e5VraAWxTytSb5xpHfpy
-         3nkic/ewrbBc2iMjer0cVCt1P2lkrxVaE7C6h53ina/OQ+U1awi2g3ge+EteuidyiIIo
-         pVGKSKIkQVGf17g4CJI+JLMfyJnpBkg5uI9YH1bQ5l8DfsNHh9TinzDBndtph25oX92f
-         4Zw2P/4Dn8RdEERGP2/08sce2GWiLRUJ3A9/flot+M6/0z9sd/zV1m7VGbcb32vQZZ6G
-         GIuaHVvbLL15e68IEYiLnEDeMTD4rE1qcffdAf6Rwh7x+LqaeaT5f+hj+RqT47XoxjYJ
-         JX2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVSWsMVm5Mfc76t8FOsdvzVfSo8gx/JKcf3ez/QH9trO4ly/bsgwQYfhy3GjGFZO6L0XYOY7awICKcrfAWoB7ulhcv9DISZQ31n5NpNUvGm8AgdyrTeAWM4wGd8aVyg/l941Eq2wwet7qLEJr6m6CxG44Wdo4FUHKSPa1gDtfTRkr6/0sCM
-X-Gm-Message-State: AOJu0YwmXv+w513LGACEsUE6lm8WJiCAPE/Is3JB4ewZo8JyraDTFGGA
-	fpeF5kHFDiHQg8C01O49ME2U6+Fw1vtwD7yJXkTMJ32SZnc18SaI
-X-Google-Smtp-Source: AGHT+IHxoO6b2MerF1U3CAmgXcBlPetNiGPIdanb85cHChz2yvph3qr1eOxLcgarxaWdzQTe3bNd6Q==
-X-Received: by 2002:ac8:7c44:0:b0:434:7944:bafc with SMTP id o4-20020ac87c44000000b004347944bafcmr1289053qtv.16.1712415795225;
-        Sat, 06 Apr 2024 08:03:15 -0700 (PDT)
-Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
-        by smtp.gmail.com with ESMTPSA id w22-20020ac843d6000000b0043146d55f0csm416039qtn.60.2024.04.06.08.03.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Apr 2024 08:03:14 -0700 (PDT)
-Date: Sat, 06 Apr 2024 11:03:14 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Yuri Benditovich <yuri.benditovich@daynix.com>, 
- willemdebruijn.kernel@gmail.com, 
- davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: yan@daynix.com, 
- andrew@daynix.com
-Message-ID: <66116432b55ce_16bd4c2943e@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240406082513.78692-1-yuri.benditovich@daynix.com>
-References: <20240406082513.78692-1-yuri.benditovich@daynix.com>
-Subject: Re: [PATCH] net: change maximum number of UDP segments to 128
+	s=arc-20240116; t=1712416309; c=relaxed/simple;
+	bh=m7FZIiwrd7YEBY/n2UxCR55958qoIAOrRTaYULHViHY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s4+GJh0xhTwMBfQiCG8DGxYU8q2GbfKtOodOPYuVuAsPbQQO0fPsSy3v3vuxhrrTbTWhnw+KzBi2l+5XZUw174kXsx4SJQDPRVQYGepve41iMxTbB/feTIyQcxcuVIks/2QIzCL20JKD4P+lJrrzXp3TYIxh3Jh+US5eJHLDiPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-505-8qpYagkzMxSV1T4VL2nekg-1; Sat,
+ 06 Apr 2024 11:11:40 -0400
+X-MC-Unique: 8qpYagkzMxSV1T4VL2nekg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F348128AC1E7;
+	Sat,  6 Apr 2024 15:11:39 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.136])
+	by smtp.corp.redhat.com (Postfix) with SMTP id 0E9593C20;
+	Sat,  6 Apr 2024 15:11:36 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sat,  6 Apr 2024 17:10:15 +0200 (CEST)
+Date: Sat, 6 Apr 2024 17:09:51 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: John Stultz <jstultz@google.com>, Marco Elver <elver@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+	Edward Liaw <edliaw@google.com>,
+	Carlos Llamas <cmllamas@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] selftests/timers/posix_timers: reimplement
+ check_timer_distribution()
+Message-ID: <20240406150950.GA3060@redhat.com>
+References: <87sf02bgez.ffs@tglx>
+ <87r0fmbe65.ffs@tglx>
+ <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
+ <87o7aqb6uw.ffs@tglx>
+ <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
+ <87frw2axv0.ffs@tglx>
+ <20240404145408.GD7153@redhat.com>
+ <87le5t9f14.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87le5t9f14.ffs@tglx>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-Yuri Benditovich wrote:
-> Earlier commit fc8b2a619469378 ("net: more strict VIRTIO_NET_HDR_GSO_UDP_L4 validation")
-> added check of potential number of UDP segment vs UDP_MAX_SEGMENTS
-> in linux/virtio_net.h.
-> After this change certification test of USO guest-to-guest
-> transmit on Windows driver for virtio-net device fails,
-> for example with packet size of ~64K and mss of 536 bytes.
-> In general the USO should not be more restrictive than TSO.
+Thomas says:
 
-Ack
+	The signal distribution test has a tendency to hang for a long
+	time as the signal delivery is not really evenly distributed. In
+	fact it might never be distributed across all threads ever in
+	the way it is written.
 
-> Indeed, in case of unreasonably small mss a lot of segments
-> can cause queue overflow and packet loss on the destination.
-> Limit of 128 segments is good for any practical purpose,
-> with minimal meaningful mss of 536 the maximal UDP packet will
-> be divided to ~120 segments.
-> 
-> Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
+To me even the
 
-Please mark fixes as [PATCH net] and include a fixes tag:
+	This primarily tests that the kernel does not favour any one.
 
-Fixes: fc8b2a619469 ("net: more strict VIRTIO_NET_HDR_GSO_UDP_L4 validation")
+comment doesn't look right. The kernel does favour a thread which hits
+the timer interrupt when CLOCK_PROCESS_CPUTIME_ID expires.
 
-Otherwise this looks fine to me. UDP_MAX_SEGMENTS exists to block
-egregious examples, such as 64K 1B segments. Doubling to 128 to handle
-536B MSS is well within the reasonable range.
+The new version simply checks that the group leader sleeping in join()
+never receives SIGALRM, cpu_timer_fire() should always send the signal
+to the thread which burns cpu.
 
-> ---
->  include/linux/udp.h                  | 2 +-
->  tools/testing/selftests/net/udpgso.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/udp.h b/include/linux/udp.h
-> index 3748e82b627b..7e75ccdf25fe 100644
-> --- a/include/linux/udp.h
-> +++ b/include/linux/udp.h
-> @@ -108,7 +108,7 @@ struct udp_sock {
->  #define udp_assign_bit(nr, sk, val)		\
->  	assign_bit(UDP_FLAGS_##nr, &udp_sk(sk)->udp_flags, val)
->  
-> -#define UDP_MAX_SEGMENTS	(1 << 6UL)
-> +#define UDP_MAX_SEGMENTS	(1 << 7UL)
->  
->  #define udp_sk(ptr) container_of_const(ptr, struct udp_sock, inet.sk)
->  
-> diff --git a/tools/testing/selftests/net/udpgso.c b/tools/testing/selftests/net/udpgso.c
-> index 1d975bf52af3..85b3baa3f7f3 100644
-> --- a/tools/testing/selftests/net/udpgso.c
-> +++ b/tools/testing/selftests/net/udpgso.c
-> @@ -34,7 +34,7 @@
->  #endif
->  
->  #ifndef UDP_MAX_SEGMENTS
-> -#define UDP_MAX_SEGMENTS	(1 << 6UL)
-> +#define UDP_MAX_SEGMENTS	(1 << 7UL)
->  #endif
->  
->  #define CONST_MTU_TEST	1500
-> -- 
-> 2.34.3
-> 
+Without the commit bcb7ee79029d ("posix-timers: Prefer delivery of signals
+to the current thread") the test-case fails immediately, the very 1st tick
+wakes the leader up. Otherwise it quickly succeeds after 100 ticks.
+
+Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+---
+ tools/testing/selftests/timers/posix_timers.c | 102 ++++++++----------
+ 1 file changed, 46 insertions(+), 56 deletions(-)
+
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index d49dd3ffd0d9..2586a6552737 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -184,80 +184,70 @@ static int check_timer_create(int which)
+ 	return 0;
+ }
+ 
+-int remain;
+-__thread int got_signal;
++static pthread_t ctd_thread;
++static volatile int ctd_count, ctd_failed;
+ 
+-static void *distribution_thread(void *arg)
++static void ctd_sighandler(int sig)
+ {
+-	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
+-	return NULL;
++	if (pthread_self() != ctd_thread)
++		ctd_failed = 1;
++	ctd_count--;
+ }
+ 
+-static void distribution_handler(int nr)
++static void *ctd_thread_func(void *arg)
+ {
+-	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
+-		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
+-}
+-
+-/*
+- * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
+- * timer signals. This primarily tests that the kernel does not favour any one.
+- */
+-static int check_timer_distribution(void)
+-{
+-	int err, i;
+-	timer_t id;
+-	const int nthreads = 10;
+-	pthread_t threads[nthreads];
+ 	struct itimerspec val = {
+ 		.it_value.tv_sec = 0,
+ 		.it_value.tv_nsec = 1000 * 1000,
+ 		.it_interval.tv_sec = 0,
+ 		.it_interval.tv_nsec = 1000 * 1000,
+ 	};
++	timer_t id;
+ 
+-	remain = nthreads + 1;  /* worker threads + this thread */
+-	signal(SIGALRM, distribution_handler);
+-	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
+-	if (err < 0) {
+-		ksft_perror("Can't create timer");
+-		return -1;
+-	}
+-	err = timer_settime(id, 0, &val, NULL);
+-	if (err < 0) {
+-		ksft_perror("Can't set timer");
+-		return -1;
+-	}
++	/* 1/10 seconds to ensure the leader sleeps */
++	usleep(10000);
+ 
+-	for (i = 0; i < nthreads; i++) {
+-		err = pthread_create(&threads[i], NULL, distribution_thread,
+-				     NULL);
+-		if (err) {
+-			ksft_print_msg("Can't create thread: %s (%d)\n",
+-				       strerror(errno), errno);
+-			return -1;
+-		}
+-	}
++	ctd_count = 100;
++	if (timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id))
++		return "Can't create timer";
++	if (timer_settime(id, 0, &val, NULL))
++		return "Can't set timer";
+ 
+-	/* Wait for all threads to receive the signal. */
+-	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++	while (ctd_count > 0 && !ctd_failed)
++		;
+ 
+-	for (i = 0; i < nthreads; i++) {
+-		err = pthread_join(threads[i], NULL);
+-		if (err) {
+-			ksft_print_msg("Can't join thread: %s (%d)\n",
+-				       strerror(errno), errno);
+-			return -1;
+-		}
+-	}
++	if (timer_delete(id))
++		return "Can't delete timer";
+ 
+-	if (timer_delete(id)) {
+-		ksft_perror("Can't delete timer");
+-		return -1;
+-	}
++	return NULL;
++}
++
++/*
++ * Test that only the running thread receives the timer signal.
++ */
++static int check_timer_distribution(void)
++{
++	const char *errmsg;
++
++	signal(SIGALRM, ctd_sighandler);
++
++	errmsg = "Can't create thread";
++	if (pthread_create(&ctd_thread, NULL, ctd_thread_func, NULL))
++		goto err;
++
++	errmsg = "Can't join thread";
++	if (pthread_join(ctd_thread, (void **)&errmsg) || errmsg)
++		goto err;
++
++	if (ctd_failed)
++		ksft_test_result_skip("No signal distribution. Assuming old kernel\n");
++	else
++		ksft_test_result_pass("check signal distribution\n");
+ 
+-	ksft_test_result_pass("check_timer_distribution\n");
+ 	return 0;
++err:
++	ksft_print_msg(errmsg);
++	return -1;
+ }
+ 
+ int main(int argc, char **argv)
+-- 
+2.25.1.362.g51ebf55
 
 
 
