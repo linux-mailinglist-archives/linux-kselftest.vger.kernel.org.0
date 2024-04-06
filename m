@@ -1,218 +1,282 @@
-Return-Path: <linux-kselftest+bounces-7346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1E3089ACFF
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 23:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1163B89ACFD
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 23:14:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97E76282120
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 21:14:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99ED528202E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 21:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 710754EB51;
-	Sat,  6 Apr 2024 21:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCCE4E1C8;
+	Sat,  6 Apr 2024 21:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DZPRGUz3"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1oyfLxj/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985474DA0D
-	for <linux-kselftest@vger.kernel.org>; Sat,  6 Apr 2024 21:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36F7482EA;
+	Sat,  6 Apr 2024 21:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712438092; cv=none; b=MPpJsKlRYoYpZA6LWlEXwgAEiLZRKACG14wN2sAKmcu4l9sbAMM+5TdUWLIolT/k6VQgJ2ArGNNKOJ1HXdWdx3cagPJZLGNawQPUd6XCbltDmze6+jSG7MaE+0itS1NMjqpWoVXo8box99ZMBZp2z5PrGzoQqPj5soNyxHT8Yvo=
+	t=1712438090; cv=none; b=aJ9XL6hMc6BaPYwknhrJkAMXdNfdYxsgIaiUcp2PWeLHNJ0a235omjLwOZtdVWaTk5AIy2nLgEr2FraxhnqdnlYphedNrzAuq/3CHJKHubY8tweyLD195Pl6wPKnSFOJlHPUmc1VVCQlNp4UV9+OwYneUxWR+7Uda3zySqDgJD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712438092; c=relaxed/simple;
-	bh=dmNNyfbVSsVmGstlEtt+9GFUYC6Tw+gx4nXYmXDUBh0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LcRQg97DD8EX2ecUykrFr7mJtuM/OsEY06A0pF/6PR5SPDr8krR6TS0Ps1FLEGktNvy9IQ+3sLQE9DAa6KI6ksY0XhTLrtTHfPEz8XBW8MU73BMTSEiwe9zwFuLCmmixXZVi3zkGSTtu9SWcsz/ubQdDk7R+ne5uEiAmVhLyP+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DZPRGUz3; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712438089;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oHlEIGlMy5AeytAApxqnvbACljlKOkZKhDAKTWpoYzU=;
-	b=DZPRGUz3isSNzRRzBeEcix0QeuhgcVQamI58OfNBwlhqq++4O8wUZCW4BEF3nGQh/I2U1t
-	ochdpn43Uu/aNfqNtIe58uKYPXgxD2CyMipoDNp7h0j/3X96nWxcR2W4V/1mzNYCDxH7B4
-	64udNuZxfdPG8uVlB2Swo5Eqat7/JAI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-156-xrmUZh_FPx27M8azjuNlpg-1; Sat, 06 Apr 2024 17:14:45 -0400
-X-MC-Unique: xrmUZh_FPx27M8azjuNlpg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	s=arc-20240116; t=1712438090; c=relaxed/simple;
+	bh=hhz6IpanWydt8WUTjJ/lmeFHNnKRshU3Zaa8XFkk05s=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=T+5S+Z0gx5Ik5yJxdBKlXNDH7l2GaSCWNd32QYOCl62qYDoI368D8TnSvk8/HMV9wjgHGinwGK5AQMvnTws67iKIBqPZ4BbVRS17ceGIQNBMidferBZx2Da5iWC0zpF+fLnebIYHpwTyG+fO+DjHWyc+6PbsRn6zsyXXQ1MoevY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1oyfLxj/; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1712438087;
+	bh=hhz6IpanWydt8WUTjJ/lmeFHNnKRshU3Zaa8XFkk05s=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=1oyfLxj/FML4m8aCygitnXqdREbMvB+E0/6/IWpycUDD+1I66xqzMJS8HzpBmdaQ2
+	 Apdo8+cnpRCATIUTHu/jlAaAMEj43pOUue6rPhzR53VKmApQ/WmQIxR+1L1tYKYpuS
+	 ZTN2FQ/wNuhYi9rOk++jBymeQbRJqwYCsdkkNYCRyBkODNOcIuIFAPOibsvGihjczV
+	 KROakduPEMduugmssUU1uKdjqEuxYiPT525vNXA8ve2sGLMxjlvkcoMhg68Bjw3lAL
+	 Zqa4+13Vlm6O0ECqP4sxfUzA0SbkI+NyjW5h6WVJRh1kGrL3PWztdJQ59aFeD5y8Kp
+	 kSty/OMXFwhZg==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0DBCD180A1E7;
-	Sat,  6 Apr 2024 21:14:45 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.136])
-	by smtp.corp.redhat.com (Postfix) with SMTP id A5BB2100077A;
-	Sat,  6 Apr 2024 21:14:42 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sat,  6 Apr 2024 23:13:20 +0200 (CEST)
-Date: Sat, 6 Apr 2024 23:13:13 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v6 2/2] selftests/timers/posix_timers: Test delivery of
- signals across threads
-Message-ID: <20240406211312.GD3060@redhat.com>
-References: <20230316123028.2890338-1-elver@google.com>
- <20230316123028.2890338-2-elver@google.com>
- <46ad25c9-f63c-4bb7-9707-4bc8b21ccaca@collabora.com>
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0E8F0378020A;
+	Sat,  6 Apr 2024 21:14:41 +0000 (UTC)
+Message-ID: <ab271c32-dca8-413f-b97e-c8ceb6d7924c@collabora.com>
+Date: Sun, 7 Apr 2024 02:15:15 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <46ad25c9-f63c-4bb7-9707-4bc8b21ccaca@collabora.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Anshuman.Khandual@arm.com, suzuki.poulose@arm.com, ryan.roberts@arm.com,
+ rob.herring@arm.com, Catalin.Marinas@arm.com, broonie@kernel.org,
+ will@kernel.org, mark.rutland@arm.com
+Subject: Re: [PATCH 4/4] selftests: Add build infrastructure along with README
+To: Dev Jain <dev.jain@arm.com>, shuah@kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240405084410.256788-1-dev.jain@arm.com>
+ <20240405084410.256788-5-dev.jain@arm.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240405084410.256788-5-dev.jain@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Muhammad,
+On 4/5/24 1:44 PM, Dev Jain wrote:
+> Add arm target, individual Makefile targets, and instructions to build the
+> tests.
+> 
+> Signed-off-by: Dev Jain <dev.jain@arm.com>
+> ---
+>  tools/testing/selftests/Makefile            |  1 +
+>  tools/testing/selftests/arm/Makefile        | 57 +++++++++++++++++++++
+>  tools/testing/selftests/arm/README          | 31 +++++++++++
+>  tools/testing/selftests/arm/elf/Makefile    |  6 +++
+>  tools/testing/selftests/arm/mm/Makefile     |  6 +++
+>  tools/testing/selftests/arm/signal/Makefile | 30 +++++++++++
+>  6 files changed, 131 insertions(+)
+>  create mode 100644 tools/testing/selftests/arm/Makefile
+>  create mode 100644 tools/testing/selftests/arm/README
+>  create mode 100644 tools/testing/selftests/arm/elf/Makefile
+>  create mode 100644 tools/testing/selftests/arm/mm/Makefile
+>  create mode 100644 tools/testing/selftests/arm/signal/Makefile
+Add one recursive .gitignore file or multiple .gitignore files and put
+generated object files in it to avoid clutter of generated objects in git
+history.
 
-I am sorry, but... are you aware that this patch was applied over a year ago,
-and then this code was updated to use the ksft_API?
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 15b6a111c3be..8478d94cda4c 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  TARGETS += alsa
+>  TARGETS += amd-pstate
+> +TARGETS += arm
+>  TARGETS += arm64
+>  TARGETS += bpf
+>  TARGETS += breakpoints
+> diff --git a/tools/testing/selftests/arm/Makefile b/tools/testing/selftests/arm/Makefile
+> new file mode 100644
+> index 000000000000..039224bc006e
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/Makefile
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# When ARCH not overridden for crosscompiling, lookup machine
+> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+> +
+> +ifneq (,$(filter $(ARCH),aarch64 arm64 arm armv7l armv8l))
+> +ARM_SUBTARGETS ?= mm signal elf
+> +else
+> +ARM_SUBTARGETS :=
+> +endif
+> +
+> +CFLAGS := -Wall -O2 -g -static
+> +
+> +# A proper top_srcdir is needed by KSFT(lib.mk)
+> +top_srcdir = $(realpath ../../../../)
+> +
+> +# Additional include paths needed by kselftest.h and local headers
+> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+> +
+> +CFLAGS += -I$(top_srcdir)/tools/include
+Please use KHDR_INCLUDE instead of using absolute path
 
-Oleg.
+> +
+> +export CFLAGS
+> +export top_srcdir
+> +
+> +all:
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		mkdir -p $$BUILD_TARGET;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +install: all
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +run_tests: all
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +# Avoid any output on non arm on emit_tests
+> +emit_tests:
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +clean:
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +.PHONY: all clean install run_tests emit_tests
+> diff --git a/tools/testing/selftests/arm/README b/tools/testing/selftests/arm/README
+> new file mode 100644
+> index 000000000000..1a05c043d7ee
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/README
+> @@ -0,0 +1,31 @@
+> +KSelfTest ARM
+> +===============
+> +
+> +- This is a series of compatibility tests, wherein the source files are
+> +  built statically into a 32 bit ELF; they should pass on both 32 and 64
+> +  bit kernels. They are not built or run but just skipped completely when
+> +  env-variable ARCH is found to be different than 'arm64' or 'arm' and
+> +  `uname -m` reports other than 'aarch64', 'armv7l' or 'armv8l'.
+> +
+> +- Please ensure that the test kernel is built with CONFIG_COMPAT enabled.
+Please create a config file and put all the per-requisite configurations in
+that. For example, look at tools/testing/selftests/mm/config
 
-On 04/07, Muhammad Usama Anjum wrote:
->
-> On 3/16/23 5:30 PM, Marco Elver wrote:
-> > From: Dmitry Vyukov <dvyukov@google.com>
-> > 
-> > Test that POSIX timers using CLOCK_PROCESS_CPUTIME_ID eventually deliver
-> > a signal to all running threads.  This effectively tests that the kernel
-> > doesn't prefer any one thread (or subset of threads) for signal delivery.
-> > 
-> > Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > ---
-> > v6:
-> > - Update wording on what the test aims to test.
-> > - Fix formatting per checkpatch.pl.
-> > ---
-> >  tools/testing/selftests/timers/posix_timers.c | 77 +++++++++++++++++++
-> >  1 file changed, 77 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-> > index 0ba500056e63..8a17c0e8d82b 100644
-> > --- a/tools/testing/selftests/timers/posix_timers.c
-> > +++ b/tools/testing/selftests/timers/posix_timers.c
-> > @@ -188,6 +188,80 @@ static int check_timer_create(int which)
-> >  	return 0;
-> >  }
-> >  
-> > +int remain;
-> > +__thread int got_signal;
-> > +
-> > +static void *distribution_thread(void *arg)
-> > +{
-> > +	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-> > +	return NULL;
-> > +}
-> > +
-> > +static void distribution_handler(int nr)
-> > +{
-> > +	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
-> > +		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
-> > +}
-> > +
-> > +/*
-> > + * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
-> > + * timer signals. This primarily tests that the kernel does not favour any one.
-> > + */
-> > +static int check_timer_distribution(void)
-> > +{
-> > +	int err, i;
-> > +	timer_t id;
-> > +	const int nthreads = 10;
-> > +	pthread_t threads[nthreads];
-> > +	struct itimerspec val = {
-> > +		.it_value.tv_sec = 0,
-> > +		.it_value.tv_nsec = 1000 * 1000,
-> > +		.it_interval.tv_sec = 0,
-> > +		.it_interval.tv_nsec = 1000 * 1000,
-> > +	};
-> > +
-> > +	printf("Check timer_create() per process signal distribution... ");
-> Use APIs from kselftest.h. Use ksft_print_msg() here.
-> 
-> > +	fflush(stdout);
-> > +
-> > +	remain = nthreads + 1;  /* worker threads + this thread */
-> > +	signal(SIGALRM, distribution_handler);
-> > +	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
-> > +	if (err < 0) {
-> > +		perror("Can't create timer\n");
-> ksft_perror() here
-> 
-> > +		return -1;
-> > +	}
-> > +	err = timer_settime(id, 0, &val, NULL);
-> > +	if (err < 0) {
-> > +		perror("Can't set timer\n");
-> > +		return -1;
-> > +	}
-> > +
-> > +	for (i = 0; i < nthreads; i++) {
-> > +		if (pthread_create(&threads[i], NULL, distribution_thread, NULL)) {
-> > +			perror("Can't create thread\n");
-> > +			return -1;
-> > +		}
-> > +	}
-> > +
-> > +	/* Wait for all threads to receive the signal. */
-> > +	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-> > +
-> > +	for (i = 0; i < nthreads; i++) {
-> > +		if (pthread_join(threads[i], NULL)) {
-> > +			perror("Can't join thread\n");
-> > +			return -1;
-> > +		}
-> > +	}
-> > +
-> > +	if (timer_delete(id)) {
-> > +		perror("Can't delete timer\n");
-> > +		return -1;
-> > +	}
-> > +
-> > +	printf("[OK]\n");
-> ksft_test_result or _pass variant as needed?
-> 
-> > +	return 0;
-> > +}
-> > +
-> >  int main(int argc, char **argv)
-> >  {
-> >  	printf("Testing posix timers. False negative may happen on CPU execution \n");
-> > @@ -217,5 +291,8 @@ int main(int argc, char **argv)
-> >  	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
-> >  		return ksft_exit_fail();
-> >  
-> > +	if (check_timer_distribution() < 0)
-> > +		return ksft_exit_fail();
-> > +
-> >  	return ksft_exit_pass();
-> >  }
-> 
-> -- 
-> BR,
-> Muhammad Usama Anjum
-> 
+> +
+> +- Holding true the above, ARM KSFT tests can be run within the KSelfTest
+> +  framework using standard Linux top-level-makefile targets. Please set
+> +  $(CROSS_COMPILE) to 'arm-linux-gnueabi-' or 'arm-linux-gnueabihf-'.
+> +
+> +      $ make TARGETS=arm kselftest-clean
+> +      $ make $(CROSS_COMPILE) TARGETS=arm kselftest
+> +
+> +      or
+> +
+> +      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
+> +		INSTALL_PATH=<your-installation-path> install
+> +
+> +      or, alternatively, only specific arm/ subtargets can be picked:
+> +
+> +      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
+> +		ARM_SUBTARGETS="signal" INSTALL_PATH=<your-installation-path> \
+> +			install
+> +
+> +   Further details on building and running KFST can be found in:
+> +     Documentation/dev-tools/kselftest.rst
+Thanks for this well written documentation.
 
+> diff --git a/tools/testing/selftests/arm/elf/Makefile b/tools/testing/selftests/arm/elf/Makefile
+> new file mode 100644
+> index 000000000000..86636fe02994
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/elf/Makefile
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2024 ARM Limited
+> +
+> +TEST_GEN_PROGS := parse_elf
+> +
+> +include ../../lib.mk
+> diff --git a/tools/testing/selftests/arm/mm/Makefile b/tools/testing/selftests/arm/mm/Makefile
+> new file mode 100644
+> index 000000000000..d8bfa45df98c
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/mm/Makefile
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2024 ARM Limited
+> +
+> +TEST_GEN_PROGS := compat_va
+> +
+> +include ../../lib.mk
+> diff --git a/tools/testing/selftests/arm/signal/Makefile b/tools/testing/selftests/arm/signal/Makefile
+> new file mode 100644
+> index 000000000000..3540a25de75a
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/Makefile
+> @@ -0,0 +1,30 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2024 ARM Limited
+> +
+> +# Additional include paths needed by kselftest.h and local headers
+> +CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
+> +
+> +SRCS := $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
+> +PROGS := $(patsubst %.c,%,$(SRCS))
+> +
+> +# Generated binaries to be installed by top KSFT script
+> +TEST_GEN_PROGS := $(notdir $(PROGS))
+> +
+> +# Get Kernel headers installed and use them.
+> +
+> +# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
+> +# to account for any OUTPUT target-dirs optionally provided by
+> +# the toplevel makefile
+> +include ../../lib.mk
+> +
+> +$(TEST_GEN_PROGS): $(PROGS)
+> +	cp $(PROGS) $(OUTPUT)/
+> +
+> +# Common test-unit targets to build common-layout test-cases executables
+> +# Needs secondary expansion to properly include the testcase c-file in pre-reqs
+> +COMMON_SOURCES := test_signals.c test_signals_utils.c
+> +COMMON_HEADERS := test_signals.h test_signals_utils.h
+> +
+> +.SECONDEXPANSION:
+> +$(PROGS): $$@.c ${COMMON_SOURCES} ${COMMON_HEADERS}
+> +	$(CC) $(CFLAGS) ${@}.c ${COMMON_SOURCES} -o $@
+
+-- 
+BR,
+Muhammad Usama Anjum
 
