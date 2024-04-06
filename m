@@ -1,74 +1,55 @@
-Return-Path: <linux-kselftest+bounces-7348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7349-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01F4989AD06
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 23:23:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABBEF89AD09
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 23:27:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABC5F2820EB
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 21:23:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6B611C20A9C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Apr 2024 21:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFAC4EB29;
-	Sat,  6 Apr 2024 21:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180C04E1C1;
+	Sat,  6 Apr 2024 21:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TuKgBBwj"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Dw+2gJ5t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1A433CF5;
-	Sat,  6 Apr 2024 21:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A8CBE6C;
+	Sat,  6 Apr 2024 21:27:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712438623; cv=none; b=kMhSH11W2idBfbLIarnjS2YJwJtmnm/ps9ZLpTWmUC+OFzZeBSszKpmIxMr3B9pJwTiTJM5VXbsypzrxEOH786MtTWvn+nstD1u1vH3h3kxogqfq3/SHc+JilD2KsmrUc5mpGraKUNHzR04BizFw5Wy9rNaVjzflASDY1bj9U/o=
+	t=1712438864; cv=none; b=NBvupRF7py5w3tGBqWQm4JYlwHmkj9hrYwE6Ti+fmQWyANcHkKc+dT9rQJEz66/mjL9iUmfGl5sa8zrKjktq5uDOM4HHEN9yHCvmEOfD4cazjmCNWQ7rizWc5NBmfbkkQ/8ddMVGSz/fxbffxPlnFX0lhFSFeWdLVwZn9nRh01Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712438623; c=relaxed/simple;
-	bh=xekX2VNMX9pkpb1KoWTSkt8oCN5TWOmbwAfup0O8TFk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sSXUUKfDUCFhKP1U12cGNaq1DTNwIcohdT4JQjXEQKqfrPjZ+Ytj2CjJMYWVQaUfyQQ/HRbYfvimQAumrvOs7hcc28Zs6DHU6OnOvPV8JHemYy8LtkTwvu74FieNAXEXPZ7x99p9SYTX4QBxq7S1znpS0djhUKVxM8SYXkwt0uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TuKgBBwj; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4156c4fe401so21364595e9.1;
-        Sat, 06 Apr 2024 14:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712438620; x=1713043420; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xe9mpNX2ePbRFOYQ2jfSCtDgueOpx0fpIIDZK7IoYcM=;
-        b=TuKgBBwj3IKpROHDz3+Y4zsg0EgRu1+Bv9MlVHXVw0F+puuieuDV7tnp+qvJiUU58Z
-         0gwJFHqq7kz1CLmVm93ReKWXDeah1qyq2buE0hznUqBawqBzlKW3Snno/sr9DesHZEAE
-         /VJOflYn+jg6MkCN3vj8+WukOkoBBmr/vhZm2eWG2KkSvsY3n7/JrtvjxwhmSslxZiyH
-         nbuuLUjMc7GdgYTFAKlEphhiSIgR6xrZXuIAKlB9RcEowaSzZSKg/Ab/JP0ig0+1126V
-         hHN0j5a17ktQgNdBiNAq0d5UmuGKcSwiusKFReEfZi0cdWkWJ7J6EUORbxPqpG61Cy2X
-         DGaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712438620; x=1713043420;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xe9mpNX2ePbRFOYQ2jfSCtDgueOpx0fpIIDZK7IoYcM=;
-        b=jeAlyc12HPQGa74PP4y63b9BpNwue65BRGP3Jt6nzsG20SrR7YCBEWx8GgNd3V7Ft1
-         ergcr3yanXhKUHGMlizThmVXVu/RRi8922Cnr9lok0iWythlic9hL9drJe01UaudC3tv
-         JBAKHFBy32ZoXJ9YUpNzt2H+nHeExnLTMRN0HsgGBZuIOdUCQB9tqjoGwehlFw01MniX
-         RyFOFAgAO74rEvxXQR+rRz62xJekcSgmE9xcxlTmXDPUQrKqNEmdAr3N/CjK8dbPAY0y
-         zqXp0NGw/WWSxSjlyOKD1GbHrDcBrm8Zkd4NEn/Y3Z4KYDiTw64I0jDxlt6JAOti+8BD
-         egWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWp2tbtDkOGK/PVO2scPlhpF3HhlvunCnJZLoE13J1M92rpVK9lmf/7RpSbNmqz6BVtwMWuJ7r8DcLxapq4qNkZ/ni5OkZIuNVuHsZ7fJcYZfe3BmJn2VZFoY5gPG8w0DBqdQYIjNVhs9LM+0xrV9urzyxHmaq3p7N6fP72CXthH2ahCKbj
-X-Gm-Message-State: AOJu0YzIdZtQLZad4T0sNu8/Yejp0f9VzOtahIuJWGYEGeBXR/jM8mDf
-	IrTrXkIbWbZAqVONrl0QOokN8Orn3BSO1cPNwf6TdTPm6aVKYJYuhEWqzwRo
-X-Google-Smtp-Source: AGHT+IHobdRPAl721MvMJSTDg4Ch3BQIPmtFuRakJ3lDIyFPFMOJVhTMq7lIHmrwners6HfubgXnEg==
-X-Received: by 2002:a05:600c:1e23:b0:416:3e33:cd88 with SMTP id ay35-20020a05600c1e2300b004163e33cd88mr1633575wmb.30.1712438619811;
-        Sat, 06 Apr 2024 14:23:39 -0700 (PDT)
-Received: from [192.168.42.178] ([85.255.235.79])
-        by smtp.gmail.com with ESMTPSA id i11-20020adfe48b000000b0034330c9eccasm5300058wrm.79.2024.04.06.14.23.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Apr 2024 14:23:39 -0700 (PDT)
-Message-ID: <c2e63753-5901-47b2-8def-1a98d8fcdd41@gmail.com>
-Date: Sat, 6 Apr 2024 22:23:38 +0100
+	s=arc-20240116; t=1712438864; c=relaxed/simple;
+	bh=MBFCsX6Mb7MeMYdtCbn0YRk3xZc2KfwwFXanEwGtUzk=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=jb+mJVJv5Jqlgq+Pe+cx34u2rDLN1Gk/MzMJhefDzeLILDyHRPDKCyJnmqxjyXkOJf6uF99J4QbNELw4KF7GAKalqkLfJRhskkO7ntOf8EPb3rzm1uEuuArMJc++MmYpaECepvxO9Y/6Fk9kLREXdwn4IkUgPQBylvv+UuWQtJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Dw+2gJ5t; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1712438859;
+	bh=MBFCsX6Mb7MeMYdtCbn0YRk3xZc2KfwwFXanEwGtUzk=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=Dw+2gJ5tOSmDXzrzyqf2Ei3zC+7qwcpqEAj/XS9GOAHBnG++azLZUzb5NDI85gVx8
+	 7MqgieBAaMU+ZkcY/FbGUBG9aDp0lTen2sU0OtNWKORonzVOH3FOTzeaXgElZ1/5Y+
+	 BrjzF4HvUYL5W1qdEOLAM0njsk0INuf4wv1S27ceqkgRIrA7/SJifw5HGPEkDFzo3U
+	 9dm61Bb+T6RT/8bFhGllPNHhmRepLiR3Scc9O6KD9uo0y/imRy+Y49FwEWIRTLpUND
+	 rwEymze28ulKW1sEYCCYNIBdDSnM/94FDyAx9RuNBUEe/9DKvP7MyMqxBblRGqBaja
+	 KwF4h+X7dfDBg==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 285F537809CE;
+	Sat,  6 Apr 2024 21:27:33 +0000 (UTC)
+Message-ID: <1ce0e9c7-0bd3-47c1-893c-3ea5aa95fef5@collabora.com>
+Date: Sun, 7 Apr 2024 02:28:06 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,191 +57,637 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] io_uring: Add REQ_F_CQE_SKIP support for io_uring
- zerocopy
-To: Oliver Crumrine <ozlinuxc@gmail.com>, axboe@kernel.dk,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, shuah@kernel.org, leitao@debian.org
-Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1712268605.git.ozlinuxc@gmail.com>
- <b1a047a1b2d55c1c245a78ca9772c31a9b3ceb12.1712268605.git.ozlinuxc@gmail.com>
- <6850f08d-0e89-4eb3-bbfb-bdcc5d4e1b78@gmail.com>
- <CAK1VsR17Ea6cmks7BcdvS4ZHQMRz_kWd1NhPh8J1fUpsgC7WFg@mail.gmail.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Anshuman.Khandual@arm.com, suzuki.poulose@arm.com, ryan.roberts@arm.com,
+ rob.herring@arm.com, Catalin.Marinas@arm.com, broonie@kernel.org,
+ will@kernel.org, mark.rutland@arm.com
+Subject: Re: [PATCH 2/4] selftests/arm: Add signal tests
+To: Dev Jain <dev.jain@arm.com>, shuah@kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240405084410.256788-1-dev.jain@arm.com>
+ <20240405084410.256788-3-dev.jain@arm.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAK1VsR17Ea6cmks7BcdvS4ZHQMRz_kWd1NhPh8J1fUpsgC7WFg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240405084410.256788-3-dev.jain@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/5/24 21:04, Oliver Crumrine wrote:
-> Pavel Begunkov wrote:
->> On 4/4/24 23:17, Oliver Crumrine wrote:
->>> In his patch to enable zerocopy networking for io_uring, Pavel Begunkov
->>> specifically disabled REQ_F_CQE_SKIP, as (at least from my
->>> understanding) the userspace program wouldn't receive the
->>> IORING_CQE_F_MORE flag in the result value.
->>
->> No. IORING_CQE_F_MORE means there will be another CQE from this
->> request, so a single CQE without IORING_CQE_F_MORE is trivially
->> fine.
->>
->> The problem is the semantics, because by suppressing the first
->> CQE you're loosing the result value. You might rely on WAITALL
-> That's already happening with io_send.
+On 4/5/24 1:44 PM, Dev Jain wrote:
+> This patch introduces two signal tests, and generic test wrappers similar to
+> selftests/arm64/signal directory, along with the mangling testcases found
+> therein. arm_cpsr, dumped by the kernel to user space in the ucontext structure
+> to the signal handler, is mangled with. The kernel must spot this illegal
+> attempt and the testcases are expected to terminate via SEGV.
+> 
+> Signed-off-by: Dev Jain <dev.jain@arm.com>
+> ---
+>  .../selftests/arm/signal/test_signals.c       |  27 ++
+>  .../selftests/arm/signal/test_signals.h       |  74 +++++
+>  .../selftests/arm/signal/test_signals_utils.c | 257 ++++++++++++++++++
+>  .../selftests/arm/signal/test_signals_utils.h | 128 +++++++++
+>  .../signal/testcases/mangle_cpsr_aif_bits.c   |  33 +++
+>  .../mangle_cpsr_invalid_compat_toggle.c       |  29 ++
+Too many files/tests in one patch. Break this patch logically into multiple
+tests for easy to review and follow.
 
-Right, and it's still annoying and hard to use
+>  6 files changed, 548 insertions(+)
+>  create mode 100644 tools/testing/selftests/arm/signal/test_signals.c
+>  create mode 100644 tools/testing/selftests/arm/signal/test_signals.h
+>  create mode 100644 tools/testing/selftests/arm/signal/test_signals_utils.c
+>  create mode 100644 tools/testing/selftests/arm/signal/test_signals_utils.h
+>  create mode 100644 tools/testing/selftests/arm/signal/testcases/mangle_cpsr_aif_bits.c
+>  create mode 100644 tools/testing/selftests/arm/signal/testcases/mangle_cpsr_invalid_compat_toggle.c
+> 
+> diff --git a/tools/testing/selftests/arm/signal/test_signals.c b/tools/testing/selftests/arm/signal/test_signals.c
+> new file mode 100644
+> index 000000000000..1ecf1e9f041c
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/test_signals.c
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2024 ARM Limited
+> + *
+> + * Generic test wrapper for arm signal tests.
+> + *
+> + * Each test provides its own tde struct tdescr descriptor to link with
+> + * this wrapper. Framework provides common helpers.
+> + */
+> +#include <kselftest.h>
+> +
+> +#include "test_signals.h"
+> +#include "test_signals_utils.h"
+> +
+> +struct tdescr *current = &tde;
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	ksft_print_msg("%s :: %s\n", current->name, current->descr);
+> +	if (test_setup(current) && test_init(current)) {
+> +		test_run(current);
+> +		test_cleanup(current);
+> +	}
+> +	test_result(current);
+> +
+> +	return current->result;
+> +}
+This test isn't TAP compliant. Please make this and all tests TAP
+compilant. The 1/4 patch has example of TAP usage.
 
->> as other sends and "fail" (in terms of io_uring) the request
->> in case of a partial send posting 2 CQEs, but that's not a great
->> way and it's getting userspace complicated pretty easily.
->>
->> In short, it was left out for later because there is a
->> better way to implement it, but it should be done carefully
-> Maybe we could put the return values in the notifs? That would be a
-> discrepancy between io_send and io_send_zc, though.
-
-Yes. And yes, having a custom flavour is not good. It'd only
-be well usable if apart from returning the actual result
-it also guarantees there will be one and only one CQE, then
-the userspace doesn't have to do the dancing with counting
-and checking F_MORE. In fact, I outlined before how a generic
-solution may looks like:
-
-https://github.com/axboe/liburing/issues/824
-
-The only interesting part, IMHO, is to be able to merge the
-main completion with its notification. Below is an old stash
-rebased onto for-6.10. The only thing missing is relinking,
-but maybe we don't even care about it. I need to cover it
-well with tests.
-
-
-
-
-commit ca5e4fb6d105b5dfdf3768d46ce01529b7bb88c5
-Author: Pavel Begunkov <asml.silence@gmail.com>
-Date:   Sat Apr 6 15:46:38 2024 +0100
-
-     io_uring/net: introduce single CQE send zc mode
-     
-     IORING_OP_SEND[MSG]_ZC requests are posting two completions, one to
-     notify that the data was queued, and later a second, usually referred
-     as "notification", to let the user know that the buffer used can be
-     reused/freed. In some cases the user might not care about the main
-     completion and would be content getting only the notification, which
-     would allow to simplify the userspace.
-     
-     One example is when after a send the user would be waiting for the other
-     end to get the message and reply back not pushing any more data in the
-     meantime. Another case is unreliable protocols like UDP, which do not
-     require a confirmation from the other end before dropping buffers, and
-     so the notifications are usually posted shortly after the send request
-     is queued.
-     
-     Add a flag merging completions into a single CQE. cqe->res will store
-     the send's result as usual, and it will have IORING_CQE_F_NOTIF set if
-     the buffer was potentially used. Timewise, it would be posted at the
-     moment when the notification would have been originally completed.
-     
-     Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 7bd10201a02b..e2b528c341c9 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -356,6 +356,7 @@ enum io_uring_op {
-  #define IORING_RECV_MULTISHOT		(1U << 1)
-  #define IORING_RECVSEND_FIXED_BUF	(1U << 2)
-  #define IORING_SEND_ZC_REPORT_USAGE	(1U << 3)
-+#define IORING_SEND_ZC_COMBINE_CQE	(1U << 4)
-  
-  /*
-   * cqe.res for IORING_CQE_F_NOTIF if
-diff --git a/io_uring/net.c b/io_uring/net.c
-index a74287692071..052f030ab8f8 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -992,7 +992,19 @@ void io_send_zc_cleanup(struct io_kiocb *req)
-  	}
-  }
-  
--#define IO_ZC_FLAGS_COMMON (IORING_RECVSEND_POLL_FIRST | IORING_RECVSEND_FIXED_BUF)
-+static inline void io_sendzc_adjust_res(struct io_kiocb *req)
-+{
-+	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-+
-+	if (sr->flags & IORING_SEND_ZC_COMBINE_CQE) {
-+		sr->notif->cqe.res = req->cqe.res;
-+		req->flags |= REQ_F_CQE_SKIP;
-+	}
-+}
-+
-+#define IO_ZC_FLAGS_COMMON (IORING_RECVSEND_POLL_FIRST | \
-+			    IORING_RECVSEND_FIXED_BUF | \
-+			    IORING_SEND_ZC_COMBINE_CQE)
-  #define IO_ZC_FLAGS_VALID  (IO_ZC_FLAGS_COMMON | IORING_SEND_ZC_REPORT_USAGE)
-  
-  int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-@@ -1022,6 +1034,8 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-  		if (zc->flags & ~IO_ZC_FLAGS_VALID)
-  			return -EINVAL;
-  		if (zc->flags & IORING_SEND_ZC_REPORT_USAGE) {
-+			if (zc->flags & IORING_SEND_ZC_COMBINE_CQE)
-+				return -EINVAL;
-  			io_notif_set_extended(notif);
-  			io_notif_to_data(notif)->zc_report = true;
-  		}
-@@ -1197,6 +1211,9 @@ int io_send_zc(struct io_kiocb *req, unsigned int issue_flags)
-  	else if (zc->done_io)
-  		ret = zc->done_io;
-  
-+	io_req_set_res(req, ret, IORING_CQE_F_MORE);
-+	io_sendzc_adjust_res(req);
-+
-  	/*
-  	 * If we're in io-wq we can't rely on tw ordering guarantees, defer
-  	 * flushing notif to io_send_zc_cleanup()
-@@ -1205,7 +1222,6 @@ int io_send_zc(struct io_kiocb *req, unsigned int issue_flags)
-  		io_notif_flush(zc->notif);
-  		io_req_msg_cleanup(req, 0);
-  	}
--	io_req_set_res(req, ret, IORING_CQE_F_MORE);
-  	return IOU_OK;
-  }
-  
-@@ -1258,6 +1274,9 @@ int io_sendmsg_zc(struct io_kiocb *req, unsigned int issue_flags)
-  	else if (sr->done_io)
-  		ret = sr->done_io;
-  
-+	io_req_set_res(req, ret, IORING_CQE_F_MORE);
-+	io_sendzc_adjust_res(req);
-+
-  	/*
-  	 * If we're in io-wq we can't rely on tw ordering guarantees, defer
-  	 * flushing notif to io_send_zc_cleanup()
-@@ -1266,7 +1285,6 @@ int io_sendmsg_zc(struct io_kiocb *req, unsigned int issue_flags)
-  		io_notif_flush(sr->notif);
-  		io_req_msg_cleanup(req, 0);
-  	}
--	io_req_set_res(req, ret, IORING_CQE_F_MORE);
-  	return IOU_OK;
-  }
-  
-@@ -1278,8 +1296,10 @@ void io_sendrecv_fail(struct io_kiocb *req)
-  		req->cqe.res = sr->done_io;
-  
-  	if ((req->flags & REQ_F_NEED_CLEANUP) &&
--	    (req->opcode == IORING_OP_SEND_ZC || req->opcode == IORING_OP_SENDMSG_ZC))
-+	    (req->opcode == IORING_OP_SEND_ZC || req->opcode == IORING_OP_SENDMSG_ZC)) {
-  		req->cqe.flags |= IORING_CQE_F_MORE;
-+		io_sendzc_adjust_res(req);
-+	}
-  }
-  
-  int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-
+> diff --git a/tools/testing/selftests/arm/signal/test_signals.h b/tools/testing/selftests/arm/signal/test_signals.h
+> new file mode 100644
+> index 000000000000..bbd147127d66
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/test_signals.h
+> @@ -0,0 +1,74 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Copyright (C) 2024 ARM Limited */
+> +
+> +#ifndef __TEST_SIGNALS_H__
+> +#define __TEST_SIGNALS_H__
+> +
+> +#include <signal.h>
+> +#include <stdbool.h>
+> +#include <ucontext.h>
+> +
+> +/*
+> + * Using ARCH specific and sanitized Kernel headers from the tree.
+> + */
+> +#include <asm/ptrace.h>
+> +#include <asm/hwcap.h>
+> +
+> +/*
+> + * A descriptor used to describe and configure a test case.
+> + * Fields with a non-trivial meaning are described inline in the following.
+> + */
+> +struct tdescr {
+> +	/* KEEP THIS FIELD FIRST for easier lookup from assembly */
+> +	void			*token;
+> +	/* when disabled token based sanity checking is skipped in handler */
+> +	bool			sanity_disabled;
+> +	/* just a name for the test-case; manadatory field */
+> +	char			*name;
+> +	char			*descr;
+> +
+> +	bool			initialized;
+> +	unsigned int		minsigstksz;
+> +	/* signum used as a test trigger. Zero if no trigger-signal is used */
+> +	int			sig_trig;
+> +	/*
+> +	 * signum considered as a successful test completion.
+> +	 * Zero when no signal is expected on success
+> +	 */
+> +	int			sig_ok;
+> +	/* signum expected on unsupported CPU features. */
+> +	int			sig_unsupp;
+> +	/* a timeout in second for test completion */
+> +	unsigned int		timeout;
+> +	bool			triggered;
+> +	bool			pass;
+> +	unsigned int		result;
+> +	/* optional sa_flags for the installed handler */
+> +	int			sa_flags;
+> +	ucontext_t		saved_uc;
+> +	/* used by get_current_ctx() */
+> +	size_t			live_sz;
+> +	ucontext_t		*live_uc;
+> +	volatile sig_atomic_t	live_uc_valid;
+> +	/* optional test private data */
+> +	void			*priv;
+> +
+> +	/* a custom setup: called alternatively to default_setup */
+> +	int (*setup)(struct tdescr *td);
+> +	/* a custom init: called by default test init after test_setup */
+> +	bool (*init)(struct tdescr *td);
+> +	/* a custom cleanup function called before test exits */
+> +	void (*cleanup)(struct tdescr *td);
+> +	/* an optional function to be used as a trigger for starting test */
+> +	int (*trigger)(struct tdescr *td);
+> +	/*
+> +	 * the actual test-core: invoked differently depending on the
+> +	 * presence of the trigger function above; this is mandatory
+> +	 */
+> +	int (*run)(struct tdescr *td, siginfo_t *si, ucontext_t *uc);
+> +	/* an optional function for custom results' processing */
+> +	void (*check_result)(struct tdescr *td);
+> +};
+> +
+> +extern struct tdescr tde;
+> +#endif
+> diff --git a/tools/testing/selftests/arm/signal/test_signals_utils.c b/tools/testing/selftests/arm/signal/test_signals_utils.c
+> new file mode 100644
+> index 000000000000..96aeb11de151
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/test_signals_utils.c
+> @@ -0,0 +1,257 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2024 ARM Limited */
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <signal.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <assert.h>
+> +#include <sys/auxv.h>
+> +#include <linux/auxvec.h>
+> +#include <ucontext.h>
+> +
+> +#include <asm/unistd.h>
+> +
+> +#include <kselftest.h>
+> +
+> +#include "test_signals.h"
+> +#include "test_signals_utils.h"
+> +
+> +
+> +extern struct tdescr *current;
+> +
+> +static int sig_copyctx = SIGTRAP;
+> +
+> +static void unblock_signal(int signum)
+> +{
+> +	sigset_t sset;
+> +
+> +	sigemptyset(&sset);
+> +	sigaddset(&sset, signum);
+> +	sigprocmask(SIG_UNBLOCK, &sset, NULL);
+> +}
+> +
+> +static void default_result(struct tdescr *td, bool force_exit)
+> +{
+> +	if (td->result == KSFT_SKIP) {
+> +		fprintf(stderr, "==>> completed. SKIP.\n");
+> +	} else if (td->pass) {
+> +		fprintf(stderr, "==>> completed. PASS(1)\n");
+> +		td->result = KSFT_PASS;
+> +	} else {
+> +		fprintf(stdout, "==>> completed. FAIL(0)\n");
+> +		td->result = KSFT_FAIL;
+> +	}
+> +
+> +	if (force_exit)
+> +		exit(td->result);
+> +}
+> +
+> +/*
+> + * The following handle_signal_* helpers are used by main default_handler
+> + * and are meant to return true when signal is handled successfully:
+> + * when false is returned instead, it means that the signal was somehow
+> + * unexpected in that context and it was NOT handled; default_handler will
+> + * take care of such unexpected situations.
+> + */
+> +
+> +static bool handle_signal_unsupported(struct tdescr *td,
+> +				      siginfo_t *si, void *uc)
+> +{
+> +
+> +	/* Mangling PC to avoid loops on original SIGILL */
+> +	((ucontext_t *)uc)->uc_mcontext.arm_pc += 4;
+> +
+> +	if (!td->initialized) {
+> +		fprintf(stderr,
+> +			"Got SIG_UNSUPP @test_init. Ignore.\n");
+> +	} else {
+> +		fprintf(stderr,
+> +			"-- RX SIG_UNSUPP on unsupported feat...OK\n");
+> +		td->pass = 1;
+> +		default_result(current, 1);
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static bool handle_signal_trigger(struct tdescr *td,
+> +				  siginfo_t *si, void *uc)
+> +{
+> +	td->triggered = 1;
+> +
+> +	/* ->run was asserted NON-NULL in test_setup() already */
+> +	td->run(td, si, uc);
+> +
+> +	return true;
+> +}
+> +
+> +static bool handle_signal_ok(struct tdescr *td,
+> +			     siginfo_t *si, void *uc)
+> +{
+> +
+> +	/*
+> +	 * it's a bug in the test code when this assert fail:
+> +	 * if sig_trig was defined, it must have been used before getting here.
+> +	 */
+> +	assert(!td->sig_trig || td->triggered);
+> +	fprintf(stderr,
+> +		"SIG_OK -- SP:0x%lX  si_addr@:%p  si_code:%d  token@:%p  offset:%d\n",
+> +		((ucontext_t *)uc)->uc_mcontext.arm_sp,
+> +		si->si_addr, si->si_code, td->token, td->token - si->si_addr);
+> +
+> +	/*
+> +	 * Trying to narrow down the SEGV to the ones generated by Kernel itself
+> +	 * via arm64_notify_segfault(). This is a best-effort check anyway, and
+> +	 * the si_code check may need to change if this aspect of the kernel
+> +	 * ABI changes.
+> +	 */
+> +	if (td->sig_ok == SIGSEGV && si->si_code != SEGV_ACCERR) {
+> +		fprintf(stdout,
+> +			"si_code != SEGV_ACCERR...test is probably broken!\n");
+> +		abort();
+> +	}
+> +	td->pass = 1;
+> +	/*
+> +	 * Some tests can lead to SEGV loops: in such a case we want to
+> +	 * terminate immediately exiting straight away; some others are not
+> +	 * supposed to outlive the signal handler code, due to the content of
+> +	 * the fake sigframe which caused the signal itself.
+> +	 */
+> +	default_result(current, 1);
+> +
+> +	return true;
+> +}
+> +
+> +static void default_handler(int signum, siginfo_t *si, void *uc)
+> +{
+> +	if (current->sig_unsupp && signum == current->sig_unsupp &&
+> +	    handle_signal_unsupported(current, si, uc)) {
+> +		fprintf(stderr, "Handled SIG_UNSUPP\n");
+> +	} else if (current->sig_trig && signum == current->sig_trig &&
+> +		   handle_signal_trigger(current, si, uc)) {
+> +		fprintf(stderr, "Handled SIG_TRIG\n");
+> +	} else if (current->sig_ok && signum == current->sig_ok &&
+> +		   handle_signal_ok(current, si, uc)) {
+> +		fprintf(stderr, "Handled SIG_OK\n");
+> +	} else if (signum == sig_copyctx && current->live_uc) {
+> +		fprintf(stderr, "Handled SIG_COPYCTX\n");
+> +	} else {
+> +		if (signum == SIGALRM && current->timeout) {
+> +			fprintf(stderr, "-- Timeout !\n");
+> +		} else {
+> +			fprintf(stderr,
+> +				"-- RX UNEXPECTED SIGNAL: %d code %d address %p\n",
+> +				signum, si->si_code, si->si_addr);
+> +		}
+> +		default_result(current, 1);
+> +	}
+> +}
+> +
+> +static int default_setup(struct tdescr *td)
+> +{
+> +	struct sigaction sa;
+> +
+> +	sa.sa_sigaction = default_handler;
+> +	sa.sa_flags = SA_SIGINFO | SA_RESTART;
+> +	sa.sa_flags |= td->sa_flags;
+> +	sigemptyset(&sa.sa_mask);
+> +	/* uncatchable signals naturally skipped ... */
+> +	for (int sig = 1; sig < 32; sig++)
+> +		sigaction(sig, &sa, NULL);
+> +	/*
+> +	 * RT Signals default disposition is Term but they cannot be
+> +	 * generated by the Kernel in response to our tests; so just catch
+> +	 * them all and report them as UNEXPECTED signals.
+> +	 */
+> +	for (int sig = SIGRTMIN; sig <= SIGRTMAX; sig++)
+> +		sigaction(sig, &sa, NULL);
+> +
+> +	/* just in case...unblock explicitly all we need */
+> +	if (td->sig_trig)
+> +		unblock_signal(td->sig_trig);
+> +	if (td->sig_ok)
+> +		unblock_signal(td->sig_ok);
+> +	if (td->sig_unsupp)
+> +		unblock_signal(td->sig_unsupp);
+> +
+> +	if (td->timeout) {
+> +		unblock_signal(SIGALRM);
+> +		alarm(td->timeout);
+> +	}
+> +	fprintf(stderr, "Registered handlers for all signals.\n");
+> +
+> +	return 1;
+> +}
+> +
+> +static inline int default_trigger(struct tdescr *td)
+> +{
+> +	return !raise(td->sig_trig);
+> +}
+> +
+> +int test_init(struct tdescr *td)
+> +{
+> +	if (td->sig_trig == sig_copyctx) {
+> +		fprintf(stdout,
+> +			"Signal %d is RESERVED, cannot be used as a trigger. Aborting\n",
+> +			sig_copyctx);
+> +		return 0;
+> +	}
+> +	/* just in case */
+> +	unblock_signal(sig_copyctx);
+> +
+> +	td->minsigstksz = getauxval(AT_MINSIGSTKSZ);
+> +	if (!td->minsigstksz)
+> +		td->minsigstksz = MINSIGSTKSZ;
+> +	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
+> +
+> +	/* Perform test specific additional initialization */
+> +	if (td->init && !td->init(td)) {
+> +		fprintf(stderr, "FAILED Testcase initialization.\n");
+> +		return 0;
+> +	}
+> +	td->initialized = 1;
+> +	fprintf(stderr, "Testcase initialized.\n");
+> +
+> +	return 1;
+> +}
+> +
+> +int test_setup(struct tdescr *td)
+> +{
+> +	/* assert core invariants symptom of a rotten testcase */
+> +	assert(current);
+> +	assert(td);
+> +	assert(td->name);
+> +	assert(td->run);
+> +
+> +	/* Default result is FAIL if test setup fails */
+> +	td->result = KSFT_FAIL;
+> +	if (td->setup)
+> +		return td->setup(td);
+> +	else
+> +		return default_setup(td);
+> +}
+> +
+> +int test_run(struct tdescr *td)
+> +{
+> +	if (td->trigger)
+> +		return td->trigger(td);
+> +	else if (td->sig_trig)
+> +		return default_trigger(td);
+> +	else
+> +		return td->run(td, NULL, NULL);
+> +}
+> +
+> +void test_result(struct tdescr *td)
+> +{
+> +	if (td->initialized && td->result != KSFT_SKIP && td->check_result)
+> +		td->check_result(td);
+> +	default_result(td, 0);
+> +}
+> +
+> +void test_cleanup(struct tdescr *td)
+> +{
+> +	if (td->cleanup)
+> +		td->cleanup(td);
+> +}
+> diff --git a/tools/testing/selftests/arm/signal/test_signals_utils.h b/tools/testing/selftests/arm/signal/test_signals_utils.h
+> new file mode 100644
+> index 000000000000..386dcc6c268d
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/test_signals_utils.h
+> @@ -0,0 +1,128 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Copyright (C) 2024 ARM Limited */
+> +
+> +#ifndef __TEST_SIGNALS_UTILS_H__
+> +#define __TEST_SIGNALS_UTILS_H__
+> +
+> +#include <assert.h>
+> +#include <stdio.h>
+> +#include <string.h>
+> +
+> +#include <linux/compiler.h>
+> +#include "test_signals.h"
+> +
+> +int test_init(struct tdescr *td);
+> +int test_setup(struct tdescr *td);
+> +void test_cleanup(struct tdescr *td);
+> +int test_run(struct tdescr *td);
+> +void test_result(struct tdescr *td);
+> +
+> +/*
+> + * Obtaining a valid and full-blown ucontext_t from userspace is tricky:
+> + * libc getcontext does() not save all the regs and messes with some of
+> + * them (pstate value in particular is not reliable).
+> + *
+> + * Here we use a service signal to grab the ucontext_t from inside a
+> + * dedicated signal handler, since there, it is populated by Kernel
+> + * itself in setup_sigframe(). The grabbed context is then stored and
+> + * made available in td->live_uc.
+> + *
+> + * As service-signal is used a SIGTRAP induced by a 'brk' instruction,
+> + * because here we have to avoid syscalls to trigger the signal since
+> + * they would cause any SVE sigframe content (if any) to be removed.
+> + *
+> + * Anyway this function really serves a dual purpose:
+> + *
+> + * 1. grab a valid sigcontext into td->live_uc for result analysis: in
+> + * such case it returns 1.
+> + *
+> + * 2. detect if, somehow, a previously grabbed live_uc context has been
+> + * used actively with a sigreturn: in such a case the execution would have
+> + * magically resumed in the middle of this function itself (seen_already==1):
+> + * in such a case return 0, since in fact we have not just simply grabbed
+> + * the context.
+> + *
+> + * This latter case is useful to detect when a fake_sigreturn test-case has
+> + * unexpectedly survived without hitting a SEGV.
+> + *
+> + * Note that the case of runtime dynamically sized sigframes (like in SVE
+> + * context) is still NOT addressed: sigframe size is supposed to be fixed
+> + * at sizeof(ucontext_t).
+> + */
+> +static __always_inline bool get_current_context(struct tdescr *td,
+> +						ucontext_t *dest_uc,
+> +						size_t dest_sz)
+> +{
+> +	static volatile bool seen_already;
+> +	int i;
+> +	char *uc = (char *)dest_uc;
+> +
+> +	assert(td && dest_uc);
+> +	/* it's a genuine invocation..reinit */
+> +	seen_already = 0;
+> +	td->live_uc_valid = 0;
+> +	td->live_sz = dest_sz;
+> +
+> +	/*
+> +	 * This is a memset() but we don't want the compiler to
+> +	 * optimise it into either instructions or a library call
+> +	 * which might be incompatible with streaming mode.
+> +	 */
+> +	for (i = 0; i < td->live_sz; i++) {
+> +		uc[i] = 0;
+> +		OPTIMIZER_HIDE_VAR(uc[0]);
+> +	}
+> +
+> +	td->live_uc = dest_uc;
+> +	/*
+> +	 * Grab ucontext_t triggering a SIGTRAP.
+> +	 *
+> +	 * Note that:
+> +	 * - live_uc_valid is declared volatile sig_atomic_t in
+> +	 *   struct tdescr since it will be changed inside the
+> +	 *   sig_copyctx handler
+> +	 * - the additional 'memory' clobber is there to avoid possible
+> +	 *   compiler's assumption on live_uc_valid and the content
+> +	 *   pointed by dest_uc, which are all changed inside the signal
+> +	 *   handler
+> +	 * - BRK causes a debug exception which is handled by the Kernel
+> +	 *   and finally causes the SIGTRAP signal to be delivered to this
+> +	 *   test thread. Since such delivery happens on the ret_to_user()
+> +	 *   /do_notify_resume() debug exception return-path, we are sure
+> +	 *   that the registered SIGTRAP handler has been run to completion
+> +	 *   before the execution path is restored here: as a consequence
+> +	 *   we can be sure that the volatile sig_atomic_t live_uc_valid
+> +	 *   carries a meaningful result. Being in a single thread context
+> +	 *   we'll also be sure that any access to memory modified by the
+> +	 *   handler (namely ucontext_t) will be visible once returned.
+> +	 * - note that since we are using a breakpoint instruction here
+> +	 *   to cause a SIGTRAP, the ucontext_t grabbed from the signal
+> +	 *   handler would naturally contain a PC pointing exactly to this
+> +	 *   BRK line, which means that, on return from the signal handler,
+> +	 *   or if we place the ucontext_t on the stack to fake a sigreturn,
+> +	 *   we'll end up in an infinite loop of BRK-SIGTRAP-handler.
+> +	 *   For this reason we take care to artificially move forward the
+> +	 *   PC to the next instruction while inside the signal handler.
+> +	 */
+> +	asm volatile ("brk #666"
+> +		      : "+m" (*dest_uc)
+> +		      :
+> +		      : "memory");
+> +
+> +	/*
+> +	 * If we get here with seen_already==1 it implies the td->live_uc
+> +	 * context has been used to get back here....this probably means
+> +	 * a test has failed to cause a SEGV...anyway live_uc does not
+> +	 * point to a just acquired copy of ucontext_t...so return 0
+> +	 */
+> +	if (seen_already) {
+> +		fprintf(stdout,
+> +			"Unexpected successful sigreturn detected: live_uc is stale !\n");
+> +		return 0;
+> +	}
+> +	seen_already = 1;
+> +
+> +	return td->live_uc_valid;
+> +}
+> +
+> +#endif
+> diff --git a/tools/testing/selftests/arm/signal/testcases/mangle_cpsr_aif_bits.c b/tools/testing/selftests/arm/signal/testcases/mangle_cpsr_aif_bits.c
+> new file mode 100644
+> index 000000000000..f422cd11ccf2
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/testcases/mangle_cpsr_aif_bits.c
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2024 ARM Limited
+> + *
+> + * Try to mangle the ucontext from inside a signal handler, mangling the
+> + * AIF bits in an illegal manner: this attempt must be spotted by Kernel
+> + * and the test case is expected to be terminated via SEGV.
+> + *
+> + */
+> +
+> +#include "test_signals_utils.h"
+> +
+> +static int mangle_invalid_cpsr_run(struct tdescr *td, siginfo_t *si,
+> +				   ucontext_t *uc)
+> +{
+> +
+> +	/*
+> +	 * This config should trigger a SIGSEGV by Kernel when it checks
+> +	 * the sigframe consistency in valid_user_regs() routine.
+> +	 */
+> +	uc->uc_mcontext.arm_cpsr |= PSR_A_BIT | PSR_I_BIT | PSR_F_BIT;
+> +
+> +	return 1;
+> +}
+> +
+> +struct tdescr tde = {
+> +		.sanity_disabled = true,
+> +		.name = "MANGLE_CPSR_INVALID_AIF_BITS",
+> +		.descr = "Mangling uc_mcontext with INVALID AIF_BITS",
+> +		.sig_trig = SIGUSR1,
+> +		.sig_ok = SIGSEGV,
+> +		.run = mangle_invalid_cpsr_run,
+> +};
+> diff --git a/tools/testing/selftests/arm/signal/testcases/mangle_cpsr_invalid_compat_toggle.c b/tools/testing/selftests/arm/signal/testcases/mangle_cpsr_invalid_compat_toggle.c
+> new file mode 100644
+> index 000000000000..cb7eb8aec7f2
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/testcases/mangle_cpsr_invalid_compat_toggle.c
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2024 ARM Limited
+> + *
+> + * Try to mangle the ucontext from inside a signal handler, toggling
+> + * the execution state bit: this attempt must be spotted by Kernel and
+> + * the test case is expected to be terminated via SEGV.
+> + */
+> +
+> +#include "test_signals_utils.h"
+> +
+> +static int mangle_invalid_cpsr_run(struct tdescr *td, siginfo_t *si,
+> +				   ucontext_t *uc)
+> +{
+> +
+> +	/* This config should trigger a SIGSEGV by Kernel */
+> +	uc->uc_mcontext.arm_cpsr ^= MODE32_BIT;
+> +
+> +	return 1;
+> +}
+> +
+> +struct tdescr tde = {
+> +		.sanity_disabled = true,
+> +		.name = "MANGLE_CPSR_INVALID_STATE_TOGGLE",
+> +		.descr = "Mangling uc_mcontext with INVALID STATE_TOGGLE",
+> +		.sig_trig = SIGUSR1,
+> +		.sig_ok = SIGSEGV,
+> +		.run = mangle_invalid_cpsr_run,
+> +};
 
 -- 
-Pavel Begunkov
+BR,
+Muhammad Usama Anjum
 
