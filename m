@@ -1,308 +1,193 @@
-Return-Path: <linux-kselftest+bounces-7356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8ED589AEC6
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Apr 2024 08:09:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FDA089AF70
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Apr 2024 10:10:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EF071F2341A
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Apr 2024 06:09:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7268B207A6
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Apr 2024 08:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90CD51876;
-	Sun,  7 Apr 2024 06:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B952E1876;
+	Sun,  7 Apr 2024 08:10:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RP1IllP8"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="kRJ0Uw0u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA4E6FC3;
-	Sun,  7 Apr 2024 06:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876AD14A8F
+	for <linux-kselftest@vger.kernel.org>; Sun,  7 Apr 2024 08:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712470143; cv=none; b=OdU0JO0yCz324ekQRo1oMyy60DbxRmU4mEIJkmW9126koD7buXq21SXb96zuXrinVP1an8DniqggKCjzp084VhnCxRGPs8PyNKeRq3fGLGYbZ+iK1NWs9lb8ONVHb6c1wMZ++Qs9OVd2VY5fH53MBU+RDgn1BbmMJs+AxBXN5lg=
+	t=1712477404; cv=none; b=R6jSfMd0tRAMhLu2mIY7t6WsPs1A+Ry0oZlwQmdV0CaQrWGPSe1ffC9LqMgqkrn35cCNUAC6sxAGPZtdSo/XbLlJuWtOvV+zGXtRQFEauT0nLpsh6xM2E1Ezh9Rs9oQgzQHpB37UE54M8ZTMBx+1xdygcHv88i3dujuAKIaUKWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712470143; c=relaxed/simple;
-	bh=delEZxan1fnhA6L/GdiGgg5yR6lq/O1F1NB/EXbR57U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CXy3axCyZoM/iKPlQPd6kINeQdO7/JQknPkfXbVw8Ymcbp6GCWIdrOMCDO2gjmyYeyDgT0ngT4XlHCoegcxB2FNHNhrerayg63VmkFjIEm5GDjl1FjvhlnoKkKjmIh0N/hwMLPNEJpSnBwPQmFOfMvdBt2XaiTa2rZ5fQOcXun4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RP1IllP8; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-516ef30b16eso400671e87.3;
-        Sat, 06 Apr 2024 23:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712470140; x=1713074940; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wwqhdfOJOk0MaHNZfcfnTsXGw1LNLnH298zQoiFoYps=;
-        b=RP1IllP8cgpwcrhIKhXxkfN7doPW2NYdU84QCOH6lDPoV/szsdfKuQArrsv5xMJi+r
-         SS30dWGoq2VANJbLIuUIjWMYEhilu5kB4fvfjP7Bw2cis6tt8lxOs28e76hrLSbJqrRB
-         2wLZGgQMnVx7G4q+TDkctkSJtykYlBv9iRydqEXNMxTj9keV2F3gvGO0v65yR+TM8Ak1
-         FCw/RBvPvm+fJFwb3HJHcUTvvpQkZULYdjFdIHd2/fWiab34sWgdOwQy+1FTdTgabsoz
-         EYDGqUYlNg9zNilS79c9SZk6g01aG300maoWMDnfd/BC0B3RWM179HjFQujhqEJRShlD
-         4oOA==
+	s=arc-20240116; t=1712477404; c=relaxed/simple;
+	bh=VBnMmaY/jSdSTkC4TB/mxJq/6u5SVhMScG2xHkwOpHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JymZGH4sgPD9a5OriJXsgi0cKlwJdlz2L1K/ZPVrRsh2iko4D7IReFbupSEInIJmvnQKCJOjAZsyZiW7r5nK03FpYwe4uWRdI5mqpDwKc48keBVWcHQo2gR6+U0uiUXBT9D9aWMesWocXWflKtB6nxkTqHtT5q3Nj852qtOq9RQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=kRJ0Uw0u; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 08F9A3F231
+	for <linux-kselftest@vger.kernel.org>; Sun,  7 Apr 2024 08:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1712477395;
+	bh=MRAOR6NXs+WDh7P3Pk4nsf9IHt46kV2t0C6KeL8Xd0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:In-Reply-To;
+	b=kRJ0Uw0u6uzC0GNue0afmq/wg+Ngdj9pUFHlWctEyoLdMWVZIpw0gymzbRum5lRoU
+	 hTyr9GBm7sGstGp/T+hAK8RBaOybrSodWtpeES5ghbYZzKAMiCRjatb44a0RiL9cLD
+	 pLY8g1/UplkOCoV9UGX1Vju0GMqGn/BLYPcOi5nVok1rLA9n0mb8uQmcyGkYozcklu
+	 fbH/TY4ZB8WlUNyOT/Qe9BabOnYOCTQsyfE+PSX65pKXENyyO8oCSppX9ybOABbZvi
+	 jPZciZpIXH7veMjp3LhLiOiQIEyGQE/tmiviAWBVfV4nS1hd9SNxOIJd3BCGXeP8ZT
+	 953qCDspOKmIg==
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-343d1d16d9fso1453172f8f.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Apr 2024 01:09:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712470140; x=1713074940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wwqhdfOJOk0MaHNZfcfnTsXGw1LNLnH298zQoiFoYps=;
-        b=ZNJaUZIwvJyO7u5tozik3z6FaWtMKZg7OCcOTLEpZoeoTcvi4aGd1KAmbAsX0YIRB3
-         NNeLvYgV/28i1iQBANnmwMCZJsS1z1zmUN90MhMPr6n2WslStdDxk4QjPh/PLABoJX1b
-         MPVvxako/KkC7pRHp+5dbwWkVTyK/kdtYjf1ATIg01Pgv8R8iQru3DSeXBGaYMF43xhh
-         gjo1IJkkwM0H4TB5AZE4sA7jcKe3HSj4P4RnJutXJhLZKdOzllm/xh+36zbsJBG9A4hL
-         olWa4r0+NxPGf73lkMqU07Obmfs9D8RcklFuOCsWMS2gJxc6O6gidSvP5/qPx3aSHQCq
-         14fA==
-X-Forwarded-Encrypted: i=1; AJvYcCXCij/tsGJZ6kBNUYWyGRMVOORDm88sk6xAMwXET73PQVwY3IpJnqYtD5vYQ4AjUQ6WOfvkOM/pjmOzxdNvk+m24gOi74BGB6PT94DfOD1VNMnajPPgqO1/T8hOkimdmns8K6151mRflcb/dmWjmx1f3vXEdA546qTIrM9dxzWl1sb2
-X-Gm-Message-State: AOJu0YwrstRvmx8M0U7skZrcyTfepJQYu25rLPfR4iMjUAPGNdOdypZC
-	E2TDskmh+qylqESO2f4IQUCWKzVYNgQC5S7q7V0v1u4Q74xMA46wQAk44UJq87zcMbAVFu2xtt4
-	LMv5QYWaYreLE4CPhpFHjccgvzuk=
-X-Google-Smtp-Source: AGHT+IHalJgBeNYHv+OuduAaadjWLpFmG82zb9mgb6Kh58GYSp/jo01qprOElHIH7I5cRFWp08asDejmjLO69MaXlAw=
-X-Received: by 2002:a19:6908:0:b0:513:ccda:bc86 with SMTP id
- e8-20020a196908000000b00513ccdabc86mr3280571lfc.4.1712470139341; Sat, 06 Apr
- 2024 23:08:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712477394; x=1713082194;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MRAOR6NXs+WDh7P3Pk4nsf9IHt46kV2t0C6KeL8Xd0c=;
+        b=c0Gw+9XG0f0qC4/OizndpG/xI2zwdMj27yhUVkauJwnCq352jntUWoxKffnDL8jH+S
+         WEXIrPrs3vshBt9zdec0r4RRkGzmwGhFv58QKL3jYLGz7rcPVlSLYk0kbbXYAwBvm2aD
+         RSzOMlIL8R6Jgr6VdCh/DO1tSCj29msblQgiDNJ915eDpJg3DPsn16lNCQleD51skhxc
+         5NDaurFro5Y27FomsDKB2waMLoBgX9/iZaUgGfDhT7hf0t/Kn4bG61JDuCRYWc5rCg7d
+         gerfsZ2SpzohHfZ3a7upEF7fLXJQS3e3FiykPSGAFc5XZSKT7g+9D/GTlUP29kBJdaAP
+         p+GQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWfoMkdyGo7iL7/0Wv/kMhlg/BmbIM20t1rIfQ+S+cMeVVvlj/YGjXuLsuCuccDHbWP0q5kOd3Vw08yqxB5kEd0JHf3JXnGa5gIyy22IC6m
+X-Gm-Message-State: AOJu0YyteDuL9UeaP8S7s7UiP4AkroSBQYyYZEHZ/6oCKdSmcr5TB6We
+	8rVc+Zb0ivpy6UmaTCqo4ardcdm359CXGzHUmIaBKzHL5UJ2+sy1JcDuSjNDaH0rDZ4c6CjA5UM
+	OUFfbDX7HNMCMSVwDu6+GLXBEXJf03vW8+jVWj5UYyaKRRGu0G4mPc1HaqTcf/SGyPYKX6RuqsF
+	S/3f1ilA==
+X-Received: by 2002:adf:fed1:0:b0:343:a183:4218 with SMTP id q17-20020adffed1000000b00343a1834218mr4431414wrs.52.1712477394383;
+        Sun, 07 Apr 2024 01:09:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE7O+B0XCMESRc4pHeuqRzfZFND+/CmarJwhrJTwar81zScxLL0MtBoOtKhKPuUzsu2gsRPkA==
+X-Received: by 2002:adf:fed1:0:b0:343:a183:4218 with SMTP id q17-20020adffed1000000b00343a1834218mr4431370wrs.52.1712477393487;
+        Sun, 07 Apr 2024 01:09:53 -0700 (PDT)
+Received: from localhost (net-2-39-142-110.cust.vodafonedsl.it. [2.39.142.110])
+        by smtp.gmail.com with ESMTPSA id q13-20020a056000136d00b00343e3023fbasm5866411wrz.34.2024.04.07.01.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Apr 2024 01:09:52 -0700 (PDT)
+Date: Sun, 7 Apr 2024 10:09:47 +0200
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] selftests/bpf: Add tests for ring__consume_n and
+ ring_buffer__consume_n
+Message-ID: <ZhJUy6nWFOFi8oT_@gpd>
+References: <20240406092005.92399-1-andrea.righi@canonical.com>
+ <20240406092005.92399-5-andrea.righi@canonical.com>
+ <CAEf4BzanzbBaVgP7Qu8v4jnfsWt+9vJqB6D9G7NjE5QL+3iKXQ@mail.gmail.com>
+ <CAEf4BzaR4zqUpDmj44KNLdpJ=Tpa97GrvzuzVNO5nM6b7oWd1w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240401082019.2318193-1-haibo1.xu@intel.com> <20240402-7bd2b9ed00094befa6927b60@orel>
- <CAJve8onPGb_ZqXaU7t50893PKS=9mrbzqvthc8dYMHDFKJdUAg@mail.gmail.com> <CAK9=C2WZB1hB-1d=16gsfWB3y=xCq5=PtfDGXc-W4ERwvWjRUg@mail.gmail.com>
-In-Reply-To: <CAK9=C2WZB1hB-1d=16gsfWB3y=xCq5=PtfDGXc-W4ERwvWjRUg@mail.gmail.com>
-From: Haibo Xu <xiaobo55x@gmail.com>
-Date: Sun, 7 Apr 2024 14:08:47 +0800
-Message-ID: <CAJve8ok1NtEf7=eDKkvZ-wv4Qb2UqzFQ-mWqkP1RNQKZRwnSKA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: riscv: selftests: Add SBI base extension test
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>, Haibo Xu <haibo1.xu@intel.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzaR4zqUpDmj44KNLdpJ=Tpa97GrvzuzVNO5nM6b7oWd1w@mail.gmail.com>
 
-On Sun, Apr 7, 2024 at 12:45=E2=80=AFPM Anup Patel <apatel@ventanamicro.com=
-> wrote:
->
-> On Sun, Apr 7, 2024 at 8:11=E2=80=AFAM Haibo Xu <xiaobo55x@gmail.com> wro=
-te:
+On Sat, Apr 06, 2024 at 10:52:10AM -0700, Andrii Nakryiko wrote:
+> On Sat, Apr 6, 2024 at 10:39 AM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > On Tue, Apr 2, 2024 at 10:12=E2=80=AFPM Andrew Jones <ajones@ventanamic=
-ro.com> wrote:
+> > On Sat, Apr 6, 2024 at 2:20 AM Andrea Righi <andrea.righi@canonical.com> wrote:
 > > >
-> > > On Mon, Apr 01, 2024 at 04:20:18PM +0800, Haibo Xu wrote:
-> > > > This is the first patch to enable the base extension selftest
-> > > > for the SBI implementation in KVM. Test for other extensions
-> > > > will be added later.
+> > > Add tests for new API ring__consume_n() and ring_buffer__consume_n().
 > > >
-> > > I'm not sure we want SBI tests in KVM selftests since we already
-> > > plan to add them to kvm-unit-tests, where they can be used to
-> > > test both KVM's SBI implementation and M-mode firmware implementation=
-s.
-> > > If we also have them here, then we'll end up duplicating that effort.
+> > > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> > > ---
+> > >  tools/testing/selftests/bpf/prog_tests/ringbuf.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
 > > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> > > index 48c5695b7abf..33aba7684ab9 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> > > @@ -304,10 +304,18 @@ static void ringbuf_subtest(void)
+> > >         err = ring_buffer__consume(ringbuf);
+> > >         CHECK(err < 0, "rb_consume", "failed: %d\b", err);
+> > >
+> > > +       /* try to consume up to one item */
+> > > +       err = ring_buffer__consume_n(ringbuf, 1);
+> > > +       CHECK(err < 0 || err > 1, "rb_consume_n", "failed: %d\b", err);
+> > > +
+> > >         /* also consume using ring__consume to make sure it works the same */
+> > >         err = ring__consume(ring);
+> > >         ASSERT_GE(err, 0, "ring_consume");
+> > >
+> > > +       /* try to consume up to one item */
+> > > +       err = ring__consume_n(ring, 1);
+> > > +       CHECK(err < 0 || err > 1, "ring_consume_n", "failed: %d\b", err);
+> > > +
 > >
-> > Thanks for the information, Andrew!
+> > Did you actually run this test? There is ring_buffer__consume() and
+> > ring__consume() calls right before your added calls, so consume_n will
+> > return zero.
 > >
-> > The SBI KVM selftest was planned last year when I talked with Anup abou=
-t
-> > KVM selftest support on RISC-V. Since the kvm-unit-tests has already co=
-vered
-> > it, I'm fine to drop the support in KVM selftest.
->
-> Initially we did plan to have all SBI tests under KVM selftests but later
-> we decided to have SBI tests at a common place which will benefit all
-> hypervisors and M-mode firmwares implementing SBI spec.
->
-> Instead of this, I suggest we should have more selfttests targeting
-> AIA (CSRs, IMSIC, and APLIC) virtualization.
->
+> > I dropped this broken patch. Please send a proper test as a follow up.
+> 
+> Sorry, technically, it's not broken, it just doesn't test much (CHECK
+> conditions confused me, I didn't realize you allow zero initially). We
+> will never consume anything and the result will be zero, which isn't
+> very meaningful.
+> 
+> "Interesting" test would set up things so that we have >1 item in
+> ringbuf and we consume exactly one at a time, because that's the new
+> logic you added.
+> 
+> I think it will be simpler to add a dedicated and simpler ringbuf test
+> for this, where you can specify how many items to submit, and then do
+> a bunch of consume/consume_n invocations, checking exact results.
+> 
+> Plus, please don't add new CHECK() uses, use ASSERT_XXX() ones instead.
+> 
+> I've applied first three patches because they look correct and it's
+> good to setup libbpf 1.5 dev cycle, but please do follow up with a
+> better test. Thanks.
 
-Sure.
+Yeah, sorry, I tried to add a minimal test to the existing one, but I
+agree that it not very meaningful.
 
-> Regards,
-> Anup
->
+I already have a better dedicated test case for this
+(https://github.com/arighi/ebpf-maps/blob/libbpf-consume-n/src/main.c#L118),
+I just need to integrate it in the kselftest properly (and maybe
+pre-generate more than N records in the ring buffer, so that we can
+better test if the limit works as expected).
+
+I'll send another patch to add a proper test case.
+
+Thanks for applying the other patches!
+-Andrea
+
+> 
 > >
-> > Regards,
-> > Haibo
-> >
-> > > I do like the approach of only checking for an error, rather than
-> > > also for a value, for these ID getters. In kvm-unit-tests we're
-> > > currently requiring that the expected value be passed in, otherwise
-> > > the whole test is skipped. We could fallback to only checking for
-> > > an error instead, as is done here.
+> > >         /* 3 rounds, 2 samples each */
+> > >         cnt = atomic_xchg(&sample_cnt, 0);
+> > >         CHECK(cnt != 6, "cnt", "exp %d samples, got %d\n", 6, cnt);
+> > > --
+> > > 2.43.0
 > > >
-> > > Thanks,
-> > > drew
-> > >
-> > > >
-> > > > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > > > ---
-> > > >  tools/testing/selftests/kvm/Makefile          |  1 +
-> > > >  .../selftests/kvm/include/riscv/processor.h   |  8 +-
-> > > >  tools/testing/selftests/kvm/riscv/sbi_test.c  | 95 +++++++++++++++=
-++++
-> > > >  3 files changed, 103 insertions(+), 1 deletion(-)
-> > > >  create mode 100644 tools/testing/selftests/kvm/riscv/sbi_test.c
-> > > >
-> > > > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/s=
-elftests/kvm/Makefile
-> > > > index 741c7dc16afc..a6acbbcad757 100644
-> > > > --- a/tools/testing/selftests/kvm/Makefile
-> > > > +++ b/tools/testing/selftests/kvm/Makefile
-> > > > @@ -189,6 +189,7 @@ TEST_GEN_PROGS_s390x +=3D rseq_test
-> > > >  TEST_GEN_PROGS_s390x +=3D set_memory_region_test
-> > > >  TEST_GEN_PROGS_s390x +=3D kvm_binary_stats_test
-> > > >
-> > > > +TEST_GEN_PROGS_riscv +=3D riscv/sbi_test
-> > > >  TEST_GEN_PROGS_riscv +=3D arch_timer
-> > > >  TEST_GEN_PROGS_riscv +=3D demand_paging_test
-> > > >  TEST_GEN_PROGS_riscv +=3D dirty_log_test
-> > > > diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h =
-b/tools/testing/selftests/kvm/include/riscv/processor.h
-> > > > index ce473fe251dd..df530ac751c4 100644
-> > > > --- a/tools/testing/selftests/kvm/include/riscv/processor.h
-> > > > +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-> > > > @@ -178,7 +178,13 @@ enum sbi_ext_id {
-> > > >  };
-> > > >
-> > > >  enum sbi_ext_base_fid {
-> > > > -     SBI_EXT_BASE_PROBE_EXT =3D 3,
-> > > > +     SBI_EXT_BASE_GET_SPEC_VERSION =3D 0,
-> > > > +     SBI_EXT_BASE_GET_IMP_ID,
-> > > > +     SBI_EXT_BASE_GET_IMP_VERSION,
-> > > > +     SBI_EXT_BASE_PROBE_EXT,
-> > > > +     SBI_EXT_BASE_GET_MVENDORID,
-> > > > +     SBI_EXT_BASE_GET_MARCHID,
-> > > > +     SBI_EXT_BASE_GET_MIMPID,
-> > > >  };
-> > > >
-> > > >  struct sbiret {
-> > > > diff --git a/tools/testing/selftests/kvm/riscv/sbi_test.c b/tools/t=
-esting/selftests/kvm/riscv/sbi_test.c
-> > > > new file mode 100644
-> > > > index 000000000000..b9378546e3b6
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/kvm/riscv/sbi_test.c
-> > > > @@ -0,0 +1,95 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +/*
-> > > > + * sbi_test - SBI API test for KVM's SBI implementation.
-> > > > + *
-> > > > + * Copyright (c) 2024 Intel Corporation
-> > > > + *
-> > > > + * Test cover the following SBI extentions:
-> > > > + *  - Base: All functions in this extension should be supported
-> > > > + */
-> > > > +
-> > > > +#include "kvm_util.h"
-> > > > +#include "processor.h"
-> > > > +#include "test_util.h"
-> > > > +
-> > > > +/*
-> > > > + * Test that all functions in the base extension must be supported
-> > > > + */
-> > > > +static void base_ext_guest_code(void)
-> > > > +{
-> > > > +     struct sbiret ret;
-> > > > +
-> > > > +     /*
-> > > > +      * Since the base extension was introduced in SBI Spec v0.2,
-> > > > +      * assert if the implemented SBI version is below 0.2.
-> > > > +      */
-> > > > +     ret =3D sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_SPEC_VERSION=
-, 0,
-> > > > +                     0, 0, 0, 0, 0);
-> > > > +     __GUEST_ASSERT(!ret.error && ret.value >=3D 2, "Get Spec Vers=
-ion Error: ret.error=3D%ld, "
-> > > > +                     "ret.value=3D%ld\n", ret.error, ret.value);
-> > > > +
-> > > > +     ret =3D sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_IMP_ID, 0,
-> > > > +                     0, 0, 0, 0, 0);
-> > > > +     __GUEST_ASSERT(!ret.error && ret.value =3D=3D 3, "Get Imp ID =
-Error: ret.error=3D%ld, "
-> > > > +                     "ret.value=3D%ld\n",
-> > > > +                     ret.error, ret.value);
-> > > > +
-> > > > +     ret =3D sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_IMP_VERSION,=
- 0,
-> > > > +                     0, 0, 0, 0, 0);
-> > > > +     __GUEST_ASSERT(!ret.error, "Get Imp Version Error: ret.error=
-=3D%ld\n", ret.error);
-> > > > +
-> > > > +     ret =3D sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_PROBE_EXT, SBI_E=
-XT_BASE,
-> > > > +                     0, 0, 0, 0, 0);
-> > > > +     __GUEST_ASSERT(!ret.error && ret.value =3D=3D 1, "Probe ext E=
-rror: ret.error=3D%ld, "
-> > > > +                     "ret.value=3D%ld\n",
-> > > > +                     ret.error, ret.value);
-> > > > +
-> > > > +     ret =3D sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_MVENDORID, 0=
-,
-> > > > +                     0, 0, 0, 0, 0);
-> > > > +     __GUEST_ASSERT(!ret.error, "Get Machine Vendor ID Error: ret.=
-error=3D%ld\n", ret.error);
-> > > > +
-> > > > +     ret =3D sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_MARCHID, 0,
-> > > > +                     0, 0, 0, 0, 0);
-> > > > +     __GUEST_ASSERT(!ret.error, "Get Machine Arch ID Error: ret.er=
-ror=3D%ld\n", ret.error);
-> > > > +
-> > > > +     ret =3D sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_MIMPID, 0,
-> > > > +                     0, 0, 0, 0, 0);
-> > > > +     __GUEST_ASSERT(!ret.error, "Get Machine Imp ID Error: ret.err=
-or=3D%ld\n", ret.error);
-> > > > +
-> > > > +     GUEST_DONE();
-> > > > +}
-> > > > +
-> > > > +static void sbi_base_ext_test(void)
-> > > > +{
-> > > > +     struct kvm_vm *vm;
-> > > > +     struct kvm_vcpu *vcpu;
-> > > > +     struct ucall uc;
-> > > > +
-> > > > +     vm =3D vm_create_with_one_vcpu(&vcpu, base_ext_guest_code);
-> > > > +     while (1) {
-> > > > +             vcpu_run(vcpu);
-> > > > +             TEST_ASSERT(vcpu->run->exit_reason =3D=3D UCALL_EXIT_=
-REASON,
-> > > > +                         "Unexpected exit reason: %u (%s),",
-> > > > +                         vcpu->run->exit_reason, exit_reason_str(v=
-cpu->run->exit_reason));
-> > > > +
-> > > > +             switch (get_ucall(vcpu, &uc)) {
-> > > > +             case UCALL_DONE:
-> > > > +                     goto done;
-> > > > +             case UCALL_ABORT:
-> > > > +                     fprintf(stderr, "Guest assert failed!\n");
-> > > > +                     REPORT_GUEST_ASSERT(uc);
-> > > > +             default:
-> > > > +                     TEST_FAIL("Unexpected ucall %lu", uc.cmd);
-> > > > +             }
-> > > > +     }
-> > > > +
-> > > > +done:
-> > > > +     kvm_vm_free(vm);
-> > > > +}
-> > > > +
-> > > > +int main(void)
-> > > > +{
-> > > > +     sbi_base_ext_test();
-> > > > +
-> > > > +     return 0;
-> > > > +}
-> > > > --
-> > > > 2.34.1
-> > > >
-> >
 
