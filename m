@@ -1,175 +1,166 @@
-Return-Path: <linux-kselftest+bounces-7390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B42489BE03
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 13:19:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D653889BE20
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 13:29:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFF591C2125F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 11:19:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92238282A24
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 11:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A07657C1;
-	Mon,  8 Apr 2024 11:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24386657C5;
+	Mon,  8 Apr 2024 11:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="j8zrpaIf"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="DIqmKBfp";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="TiejnKOe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E8F657A3
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Apr 2024 11:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2293D53AC;
+	Mon,  8 Apr 2024 11:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712575185; cv=none; b=GHUsRBjzZgeNey4dAI0V02rU8ScfFl4JIbZhHkuWM7zFQjwgAU+M7w8UKMh5+Ec95UlosTY8XiFySVYxGkRLKUCKMOAJn6p28SZhGN0kzdbHVFJ0wZrSd8AufAjUctfbFS8DCv/+vBBnh/Eax+o2trMAACKjRrbEY6/2YcA3m9c=
+	t=1712575782; cv=none; b=U1yYal8B5FShSnjCzcxBRWoKucLZGQe2stM+GgFysXUE37hWekSNCK+x6hn8+iacPwgGkEGNtkxGzvbxbGMnzgG10YXGo7Fe8ZF7JrBxTkcEqLNUxGA+Knc5GcOjqKijO7KUXXG7Pgs8d4/YoJBNTN71Lg/HLv4Q4o4qCqK5gME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712575185; c=relaxed/simple;
-	bh=43OKLW6FinsPWAmKzjoljUIVwv0vdGeQy+WbPiLUGCw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mAePH/SzFKWdoMbic0J13iwqhJtlseINc5DNm827I9cYPXUv3j7tx3kKPSYNDDEuKmzj7gGAjvFpCpvBbBVQEF1FPKNQyYjp+4FFphyPLaBfkNgTZ7zPgPSsvy2JuAgDhjdVQ7ZDVpTmuXhcP2i+/7HVW3amNFhjQFxfHR9/Yqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=j8zrpaIf; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-343c8d7064aso570882f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Apr 2024 04:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712575181; x=1713179981; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WSk7g629HcnobUYtS9ld5wkokmcC8tpl1DGu7N0oFPU=;
-        b=j8zrpaIfIve+C9k81yyhYpmocDiY095DUVPRcM+yNHwMLcHMqxx3tH6mnN9Ku5dDnc
-         Y2HMgo2eWi45Jh9wVjpm0daA35Pq9OmbQql+Sciq2GvheLG6Khz/exHMQkCYpB88cj8B
-         sDLJFCPHz+RoHNagFS9AdNN6KKmz3y49EYo4L8J6TwHDyx5fcl4zm4inXhT5SuT51+i9
-         4zSpl0BnSTX5m4rX6VKbugQ+4QhthBzoqH1hApclgWg+5bWJeXHRd2YluE0VURfddd8L
-         mFdtDb7tW+9gO/PJGiAh6JRFSiv2/DGEd89orAKSkgmu0/wG1juC02GEp6Cm0LAo3AcS
-         52dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712575181; x=1713179981;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WSk7g629HcnobUYtS9ld5wkokmcC8tpl1DGu7N0oFPU=;
-        b=wGoI1HMFA++gOtFB+tV3ymivw8/AAqfrjSLelglkkMZ3rhpxvxTuAs38fZ3YlVl7Iv
-         cfVAmJ3gajTIpoOqKwz6ohW3jmkV/YjjlMa7IOhSNGHrpHmvSWBW7RjYR624K+gHnLxZ
-         ZDYhgteR8NbOQw5Pg6OtXVE6A2PGX+KyGZyxx3zffPXPPxEb/Cpl5AMx4vf4N4u7U5Mt
-         A+rHB1s2xHkklpQZiQOkVmuzdRoZfIo+iTD7y7qbOnVID0Ym4wePDASjYBWwBFIcbcgl
-         Gzngpw/yWN/1hV4pgCwJglxs6fDPR/KzEo4iDsO5lNvXbEODIbWU1QTJp/1vAq/jwNfG
-         oIqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUVlwCdaQY2a9vt3FIERCwFBBl5+3O4aOxVfaqV57nSFod3CTMEKO78283jZ1g1KARb3SRnjAa+YCHUXm7wJv+Ot8KA9FgvxIigRSiFKZLr
-X-Gm-Message-State: AOJu0Yw30hGZzQxVNd17C+rtGOYmblCyeqCVpqvLrq7hFciQ6t9ZYU9k
-	JCkxO2/jfT6sDi/CNDAurpHfKuVDLzKabLexU7f4GL8qf/r7GfJHEjJy598nLT8=
-X-Google-Smtp-Source: AGHT+IFsrqlt8EPvaHLsA1X/PyCnOOmKPkgttAzXmXfIr/HqmjcOS9we1W6RxidEv01fKclvnQ/mqQ==
-X-Received: by 2002:a05:600c:4fd4:b0:416:5c22:1200 with SMTP id o20-20020a05600c4fd400b004165c221200mr2651159wmq.4.1712575181415;
-        Mon, 08 Apr 2024 04:19:41 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:6327:edd6:6580:3ead? ([2a01:e0a:999:a3a0:6327:edd6:6580:3ead])
-        by smtp.gmail.com with ESMTPSA id dr20-20020a5d5f94000000b0033ea499c645sm8885921wrb.4.2024.04.08.04.19.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Apr 2024 04:19:40 -0700 (PDT)
-Message-ID: <89d4a24c-db24-487b-8c5c-bdc1fa2d42b4@rivosinc.com>
-Date: Mon, 8 Apr 2024 13:19:39 +0200
+	s=arc-20240116; t=1712575782; c=relaxed/simple;
+	bh=ui6zO61OoRy1WTVBGgbxlxDqE3SIMw1GmctCU6KhCl4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TCBtSvANB+KDmnQemjnkGm4StfRggbPppD8fRqywkdGqsVndcc2rYIvCotwI4EWb+uZCN9qtuBeFfQx9Qox9hGrgPT8p8paYgHTZx/Cs+dioTu6Dg0wAisuNJuRaS1t1kWYMhfzpKawdpe/WkPfHykqHrBB29761NN8llIwDvqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=DIqmKBfp; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=TiejnKOe; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E89E3227FC;
+	Mon,  8 Apr 2024 11:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712575778; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wkruFaWMqf9jEP3pbWk4gnmTixQ96+6DeaVPdg/LTxU=;
+	b=DIqmKBfpSnO93JQKiKSKdz07gIxN3frXvts4GqUuIVrpLsnXpUIAD9AqOnSE2U4UbWJ4y5
+	1qKvZC/NhfysrAs6dgkyumU3cYhxHfOkkYjz5SLXTbe7qxEY0oC7PubfFxqDH9UpMr8zco
+	d21F+St+kZjSELYc0FwvNdEXuJgsV88=
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712575777; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wkruFaWMqf9jEP3pbWk4gnmTixQ96+6DeaVPdg/LTxU=;
+	b=TiejnKOefeUVgeT83QWTu1r65qefyoQ8qFnWHlaeBW3PatGsL8R8sCpR/OVF7TevYdnAw9
+	VRVxwiUlsK2nW/882oESPIEgFk1EUVeNw132mjhulJ4O2SzHfdviMXAuDQQGwBuCQwhH/S
+	Ab8OcVJTMWizgCNgfm9f3rpYVRaxCNU=
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id DA25313A92;
+	Mon,  8 Apr 2024 11:29:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id w3wONSHVE2b9RgAAn2gu4w
+	(envelope-from <mkoutny@suse.com>); Mon, 08 Apr 2024 11:29:37 +0000
+Date: Mon, 8 Apr 2024 13:29:32 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Tejun Heo <tj@kernel.org>, 
+	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Subject: Re: Re: [RFC PATCH v3 6/9] selftests: cgroup: Add basic tests for
+ pids controller
+Message-ID: <qweowkm4wlfzovp3qhtkzbybeampodtwmpbp2kbtiqcrhmjtdt@syk4itfkpmfr>
+References: <20240405170548.15234-1-mkoutny@suse.com>
+ <20240405170548.15234-7-mkoutny@suse.com>
+ <a45c2ece-acb4-4cff-9d53-f5c007c9b905@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Add parsing for Zimop ISA extension
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Deepak Gupta <debug@rivosinc.com>, Jonathan Corbet <corbet@lwn.net>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
- Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <20240404103254.1752834-1-cleger@rivosinc.com>
- <20240405-091c6c174f023d74b434059d@orel>
- <CAKC1njQ3qQ8mTMoYkhhoGQfRSVtp2Tfd2LjDhAmut7UcW9-bGw@mail.gmail.com>
- <ddc5555a-3ae8-42e5-a08a-ca5ceaf0bf28@rivosinc.com>
- <20240408-6c93f3f50b55234f3825ca33@orel>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20240408-6c93f3f50b55234f3825ca33@orel>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="u36r24juol4udy4e"
+Content-Disposition: inline
+In-Reply-To: <a45c2ece-acb4-4cff-9d53-f5c007c9b905@collabora.com>
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.90 / 50.00];
+	SIGNED_PGP(-2.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	BAYES_HAM(-0.00)[40.95%];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:helo,imap2.dmz-prg2.suse.org:rdns]
+X-Spam-Score: -2.90
+X-Spam-Flag: NO
 
 
+--u36r24juol4udy4e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 08/04/2024 13:03, Andrew Jones wrote:
-> On Mon, Apr 08, 2024 at 10:01:12AM +0200, Clément Léger wrote:
->>
->>
->> On 05/04/2024 19:33, Deepak Gupta wrote:
->>> On Fri, Apr 5, 2024 at 8:26 AM Andrew Jones <ajones@ventanamicro.com> wrote:
->>>>
->>>> On Thu, Apr 04, 2024 at 12:32:46PM +0200, Clément Léger wrote:
->>>>> The Zimop ISA extension was ratified recently. This series adds support
->>>>> for parsing it from riscv,isa, hwprobe export and kvm support for
->>>>> Guest/VM.
->>>>
->>>> I'm not sure we need this. Zimop by itself isn't useful, so I don't know
->>>> if we need to advertise it at all. When an extension comes along that
->>>> redefines some MOPs, then we'll advertise that extension, but the fact
->>>> Zimop is used for that extension is really just an implementation detail.
->>>
->>> Only situation I see this can be useful is this:--
->>>
->>> An implementer, implemented Zimops in CPU solely for the purpose that they can
->>> run mainline distro & packages on their hardware and don't want to leverage any
->>> feature which are built on top of Zimop.
->>
->> Yes, the rationale was that some binaries using extensions that overload
->> MOPs could still be run. With Zimop exposed, the loader could determine
->> if the binary can be executed without potentially crashing. We could
->> also let the program run anyway but the execution could potentially
->> crash unexpectedly, which IMHO is not really good for the user
->> experience nor for debugging. I already think that the segfaults which
->> happens when executing binaries that need some missing extension are not
->> so easy to debug, so better add more guards.
-> 
-> OK. It's only one more extension out of dozens, so I won't complain more,
+On Sun, Apr 07, 2024 at 02:37:44AM +0500, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+> The
+> 	ksft_print_header();
+> 	ksft_set_plan(total_number_of_tests);
+> are missing. Please use all of the ksft APIs to make the test TAP compliant.
 
-No worries, your point *is* valid since I'm not sure yet that the loader
-will actually do that one day.
+Will do.
 
-BTW, are you aware of any effort to make the elf dynamic loader
-"smarter" and actually check for needed extensions to be present rather
-than blindly running the elf and potentially catching SIGILL ?
+> > +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+> > +		switch (tests[i].fn(root)) {
+> > +		case KSFT_PASS:
+> > +			ksft_test_result_pass("%s\n", tests[i].name);
+> > +			break;
+> > +		case KSFT_SKIP:
+> > +			ksft_test_result_skip("%s\n", tests[i].name);
+> > +			break;
+> > +		default:
+> > +			ret = EXIT_FAILURE;
+> > +			ksft_test_result_fail("%s\n", tests[i].name);
+> > +			break;
+> Use ksft_test_result_report() instead of swith-case here.
+
+Do you mean ksft_test_result()? That one cannot distinguish the
+KSFT_SKIP case.
+Or ksft_test_result_code(tests[i].fn(root), tests[i].name)?
+
+Would the existing ksft_test_resul_*() calls inside switch-case still
+TAP-work?
 
 Thanks,
+Michal
 
-Clément
+--u36r24juol4udy4e
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> but I was thinking that binaries that use particular extensions would
-> check for those particular extensions (step 2), rather than Zimop.
-> 
-> Thanks,
-> drew
-> 
->>
->>>
->>> As an example zicfilp and zicfiss are dependent on zimops. glibc can
->>> do following
->>>
->>> 1) check elf header if binary was compiled with zicfiss and zicfilp,
->>> if yes goto step 2, else goto step 6.
->>> 2) check if zicfiss/zicfilp is available in hw via hwprobe, if yes
->>> goto step 5. else goto step 3
->>> 3) check if zimop is available via hwprobe, if yes goto step 6, else goto step 4
->>
->> I think you meant step 5 rather than step 6.
->>
->> Clément
->>
->>> 4) This binary won't be able to run successfully on this platform,
->>> issue exit syscall. <-- termination
->>> 5) issue prctl to enable shadow stack and landing pad for current task
->>> <-- enable feature
->>> 6) let the binary run <-- let the binary run because no harm can be done
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZhPVGgAKCRAGvrMr/1gc
+jkcRAQDfTQHi6illQsUgcXSAIodsO9Z2hcWZ0Oly6vYAN7OZXgEAn0NtUBk0wQBw
+tQYzo52YpkylzKawaHv3c1ayxTXUwgc=
+=hKE+
+-----END PGP SIGNATURE-----
+
+--u36r24juol4udy4e--
 
