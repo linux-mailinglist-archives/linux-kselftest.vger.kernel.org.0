@@ -1,175 +1,145 @@
-Return-Path: <linux-kselftest+bounces-7428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D93BA89CA67
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 19:08:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E019589CA9C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 19:17:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6663F1F2320F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 17:08:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F283EB25F7F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 17:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D096A142E99;
-	Mon,  8 Apr 2024 17:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E254143C4E;
+	Mon,  8 Apr 2024 17:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1tlSgsr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DGc9L4dp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151ED142E85;
-	Mon,  8 Apr 2024 17:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7668143890
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Apr 2024 17:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712596082; cv=none; b=ZxMRnFfYWcZag0C5UubHtTLeA+CMG4dcqVgvgCmbEDHM1RklPPxtrNmMmlRKKq9KDXT0QyEMV6NPeaS8oQXqLu6O5fnqlQ3/fsErp9G6m15E5IGB4hFjXky/dzERk7I1E/aZ85OrwOB3iZELKyhlqGkIj5mjF9jhcuACPBSZtm8=
+	t=1712596636; cv=none; b=RCLmLg//SaAXe5m8lX5B5HzV4miRLku18P5p6EuDZm/6NxhmSr3QcCCbuPBhqgXzRh2rQlfCUlu9D6ZpU0rvhDYHkoahLYylnstDt2qy9MCxTwn3ZKRG8Ku8kAuoJ2Xa0qHz+B1OVwo+t7xIs3hqLf3SaSGP9n7tHXRUs6iXOIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712596082; c=relaxed/simple;
-	bh=8AXBpkc9DmcdVZTxpjLc5ajKXA0N+5NVVl+9uENqQ1o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WO7AuzpMd9QhZUqO7+Csoe7AIo/kI0JVj/ZJ/Y4u7t+mJyc1TFkZNd7R+csHynUcjZo2So/PDP8tDq0hnq4xVRTVxA2cBbwvcd615zeRV9Rz0mwn4bVgNxiZJld+rVZsanDy6oj30gc4PCtIytjF0nl2PehN83UOZ1Zg1i9PQ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1tlSgsr; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56e47843cc7so1839872a12.0;
-        Mon, 08 Apr 2024 10:08:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712596079; x=1713200879; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3rblefnzDeUpBGRU9KzMwI/WwyErcHXFjWyidNir4MI=;
-        b=N1tlSgsrvISy6khV/A+21P8mYaij+xiIVejUn+VuAgT4fO5NfccHuj/p8qv++bwuZZ
-         J7DGJTbUV0dfpDowDMfbuJjVPDOV+vZr8PTAPXmr4u5eN1lodwSMh2fACQgtk+CI5fCW
-         auTDjHAhCechFJWnrg4nQMriCIVcqlqDnX+/Mu0B9hFGp31rbAwRPI9PazxMkXqSknQ3
-         HnLPvwVPAv7D12mhdC8btGUiIwi86PRSR/e/PUIr8NrWfN0uRJYcDE7r1/f3ecQahhRN
-         UeiuRv8kCaK9WWeJ71jvz8qGKr6T6/TU7dAX4Mpq08kNM45rRiV5h2gmwCfepcE1YxNq
-         NhoA==
+	s=arc-20240116; t=1712596636; c=relaxed/simple;
+	bh=xF4xeuz99ep8htCfVfsU9KUXsF8OcTckfAdeLONyRZA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fNt/6I9m2uihCvQqMvkEILoD8++/eles+tNXY8oZrknTS1l8kOLx4GqujJrnMluDvY90nd8mLGWLK4EpvC7bl/wPQu76jCNSuDWhZuGaosJhRJxAFwF3NHOg9pfBXanK0fGvsxIrU87MQ46WgRPLMfg3Z+EEI7qQmOp6QCzzL3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DGc9L4dp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712596633;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WW0XvdmjMS/v2Hm/5i1sBEwUsjS5WooxJxuAgT2dOlY=;
+	b=DGc9L4dpC50G4fIjgG+SMha2gpdnY1RFqgZqesmx43aQaiZqtAveJQ/0/wolm4ZCEGnSjA
+	cCb8hr7uCZ11HcvJxKX1D53uBxp7mgisIJb5BjRjOgrN+RE9SXxCIegd6ncDBIzq+TpFVX
+	pdgObnp5gUoH4Rn2lHLynVx2mkZ+5Ts=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-63-7WASjMKQPaqcsB27OnDVtw-1; Mon, 08 Apr 2024 13:17:10 -0400
+X-MC-Unique: 7WASjMKQPaqcsB27OnDVtw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a51a1c8d979so30766566b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Apr 2024 10:17:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712596079; x=1713200879;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3rblefnzDeUpBGRU9KzMwI/WwyErcHXFjWyidNir4MI=;
-        b=qjkMQpPTP5By10/c38x3Zz2ANi2RkcTgsfMAKymWkU8L3BhgRoI+882MPew2y9pvuC
-         LWtCakw/ckcXZSYwF3ZrqGppHYlUcK0Jqjm7P06DHD7xP5Q01zdmBdJfbqI3LXNsGyQ/
-         y3z2g4KVwY8J+1KCLo5F4Z7cbFfRJ3T95pwil5VGD+qILn7NdgERHfyAyGWkb0Ztr57+
-         xkV0yiabokP9I9K8C5Foah9dIpr0wEClHvNx8+4OuRcH9Xwx9naoI1xUBYferTHcf2T6
-         jZUwxSaoSLt6HpmtqRarPNjlCi7POuFtkifM20PYibtbc2/b2Z4imecFmzii1MODzVrI
-         LtCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV0DAvWsDay1mZYx1rj81IAUZPr+y0fyvs72sSmvbbiPIR2uiHaIo9bOo8j5HReyEXsfYZx4wfqUyn1ChOI0KguFkxfCCIxr0fcwd0uzN4VMShxN4t+fBCM1olfg0eQqRNY9AzS4Gfr79exvtJF
-X-Gm-Message-State: AOJu0YwEDjBw7Kp/9dbU5hyt0SmCyI9Tzv+8eObw4eYXb16P9531jSLh
-	S3vZwqMK9yBiKWHiyOsY4XtNam8BP6j3G5pACA4/zMC22Y1S2ux8
-X-Google-Smtp-Source: AGHT+IG1DEEuzoXCClJookqK62YxLMOh4p3ScRQPHvmWZ4rPoV3Kwit6nDIzL2HlBDLLsBO1e1CDFw==
-X-Received: by 2002:a50:c04c:0:b0:56d:c40d:b921 with SMTP id u12-20020a50c04c000000b0056dc40db921mr6356885edd.20.1712596079128;
-        Mon, 08 Apr 2024 10:07:59 -0700 (PDT)
-Received: from [192.168.100.206] ([89.28.99.140])
-        by smtp.gmail.com with ESMTPSA id h1-20020a0564020e8100b005682a0e915fsm4280069eda.76.2024.04.08.10.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 10:07:58 -0700 (PDT)
-Message-ID: <65c249a6af45bfa5fe0f6c2331dcc1771a6f0b05.camel@gmail.com>
-Subject: Re: [PATCH RFC bpf-next v6 1/6] bpf/helpers: introduce sleepable
- bpf_timers
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
- <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Mon, 08 Apr 2024 20:07:56 +0300
-In-Reply-To: <20240408-hid-bpf-sleepable-v6-1-0499ddd91b94@kernel.org>
-References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
-	 <20240408-hid-bpf-sleepable-v6-1-0499ddd91b94@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.0 
+        d=1e100.net; s=20230601; t=1712596629; x=1713201429;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WW0XvdmjMS/v2Hm/5i1sBEwUsjS5WooxJxuAgT2dOlY=;
+        b=WJPPEKCjBQDkrD5XD+wbTkifRd4k8SXlmhyhkNEU96iKtuzv0Uw5Gy/oso2RqAp6x3
+         HiS3k0zTRjwrxdW4CNSkadAtCmkQgCkx1rEW2pYrrEpgtzuA/cHmSLLPLh7+mPhbHYj1
+         1TA1N0hCWg0N1wW3IxW9PyT/tNuzs85NS4M6cccT3SG+x7zWK8wBOWyXJLYSDOizRbmz
+         +Uf4BZetVwQ2dVrj9k8Sl05x9ugIQJvzRGXTCK3tlvFYwlgO0l0LQ31PUntzUZ3z6Ine
+         adNkDLN6PB2dNg6Kuiqao0fg1Cab2D+WGsAouVn2f43XG5oWE861NnDKghZKwJTVks7c
+         7a6g==
+X-Forwarded-Encrypted: i=1; AJvYcCVsRTH9l+PladIZJAF8m/1CI8MwBdOzMX4pzAwfVw4Ur601eidmyQAfb0lwR653/mSX/nX54XljPbifeEFz7DvL74Sq8W6MXNVys0OpLJRJ
+X-Gm-Message-State: AOJu0Yy13ztoqCHRjT3uuGdPKk+MT7Q7jhgUXcl68EOk/oO0cE1+Jra6
+	/9nRVw78bXtwEXGOhfw80sNyCZzoOQQyHkgYHnp6oBPsze86xMZd5eR2fE3ebAu1Y0PSQzkAsBL
+	k/XW9Uz8WoX/1KqCkUiOaej+Z+PxPelsP1cFGAkgituTEkXSxJAn+W/aeqRZvDGqJXDsFTobiTG
+	8YulUhfRrOnXVTnRl4KIHYq//SXb1r4mwlH7sLJ2pO
+X-Received: by 2002:a50:bae3:0:b0:56d:eef4:28f0 with SMTP id x90-20020a50bae3000000b0056deef428f0mr8272241ede.20.1712596629297;
+        Mon, 08 Apr 2024 10:17:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEAF1+hbaATpPBSLsawJT9hD9ZY/wEezf8GBaxPQ4bTaPU4MyEkTrtk9mJjETJCu6N8z9MdWpNoScSpWk06qzY=
+X-Received: by 2002:a50:bae3:0:b0:56d:eef4:28f0 with SMTP id
+ x90-20020a50bae3000000b0056deef428f0mr8272229ede.20.1712596629007; Mon, 08
+ Apr 2024 10:17:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
+ <20240408-hid-bpf-sleepable-v6-3-0499ddd91b94@kernel.org> <ed027c1d54cb588914602a84fa12dfb2a9a403bd.camel@gmail.com>
+In-Reply-To: <ed027c1d54cb588914602a84fa12dfb2a9a403bd.camel@gmail.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date: Mon, 8 Apr 2024 19:16:57 +0200
+Message-ID: <CAO-hwJJtrNDcJVcsU_XpS_HxXgwVXYQiAoia_UKnd1-rjCGguw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v6 3/6] bpf/helpers: introduce
+ bpf_timer_set_sleepable_cb() kfunc
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2024-04-08 at 10:09 +0200, Benjamin Tissoires wrote:
+On Mon, Apr 8, 2024 at 4:31=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> On Mon, 2024-04-08 at 10:09 +0200, Benjamin Tissoires wrote:
+> [...]
+>
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index fd05d4358b31..d6528359b3f4 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+>
+> [...]
+>
+> > @@ -2726,6 +2764,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_null)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_size)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_clone)
+> > +BTF_ID_FLAGS(func, bpf_timer_set_sleepable_cb_impl)
+>
+> Note:
+> this hunk does not apply cleanly on top of current master.
+> The line 'BTF_ID_FLAGS(func, bpf_modify_return_test_tp)'
+> was added to the list since last time current patch-set was merged.
 
-[...]
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 9234174ccb21..fd05d4358b31 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1096,12 +1096,19 @@ const struct bpf_func_proto bpf_snprintf_proto =
-=3D {
->   * freeing the timers when inner map is replaced or deleted by user spac=
-e.
->   */
->  struct bpf_hrtimer {
-> -	struct hrtimer timer;
-> +	union {
-> +		struct hrtimer timer;
-> +		struct work_struct work;
-> +	};
->  	struct bpf_map *map;
->  	struct bpf_prog *prog;
->  	void __rcu *callback_fn;
->  	void *value;
-> -	struct rcu_head rcu;
-> +	union {
-> +		struct rcu_head rcu;
-> +		struct work_struct sync_work;
+Oops, thanks for the update.
 
-Nit:
-I find this name very confusing, the field is used to cancel timer
-execution, is it a convention to call such things '...sync...'?
+Just to be clear, I already mentioned it in the cover letter, but this
+series is not intended to be merged just now (thus RFC again). The
+plan is to add a new bpf_wq API on the side, and compare it with this
+v6 to see which one is best, because I am trying to force the
+workqueue API into a timer, when it's getting further and further away
+from each other.
 
-> +	};
-> +	u64 flags;
->  };
-> =20
+Cheers,
+Benjamin
 
-[...]
 
-> +static void bpf_timer_sync_work_cb(struct work_struct *work)
-> +{
-> +	struct bpf_hrtimer *t =3D container_of(work, struct bpf_hrtimer, sync_w=
-ork);
-> +
-> +	cancel_work_sync(&t->work);
-> +
-> +	kfree_rcu(t, rcu);
-
-Sorry, I might be wrong, but this looks suspicious.
-The 'rcu' field of 'bpf_hrtimer' is defined as follows:
-
-struct bpf_hrtimer {
-	...
-	union {
-		struct rcu_head rcu;
-		struct work_struct sync_work;
-	};
-	...
-};
-
-And for sleepable timers the 'sync_work' field is set as follows:
-
-BPF_CALL_3(bpf_timer_init, struct bpf_timer_kern *, timer, struct bpf_map *=
-, map,
-	   u64, flags)
-{
-	...
-	INIT_WORK(&t->sync_work, bpf_timer_sync_work_cb);
-	...
-}
-
-So, it looks like 'kfree_rcu' would be called for a non-rcu pointer.
-
-> +}
-> +
-
+>
+>
+> >  BTF_KFUNCS_END(common_btf_ids)
+> >
+> >  static const struct btf_kfunc_id_set common_kfunc_set =3D {
+>
 
 
