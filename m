@@ -1,308 +1,141 @@
-Return-Path: <linux-kselftest+bounces-7366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CDC289B68E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 05:45:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D2E189B910
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 09:49:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FDC51C20E0C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 03:45:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E2371F211A3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 07:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0882B1877;
-	Mon,  8 Apr 2024 03:45:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12F5383A5;
+	Mon,  8 Apr 2024 07:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qRUBN82i"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="R0lW9IRV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11A81C0DEB;
-	Mon,  8 Apr 2024 03:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50D77462
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Apr 2024 07:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712547953; cv=none; b=TEuRJPg3OIHDbzUHVqwiFn304G9o7HX+zCGrjB8nakjcJ9guY+o9tbEJtUVRPVlIecWDRSjgUIjekhAGTpoBqF+E9nsaLJHy1wSmyXD/taJevvAh981OOokHvd1dbMMRWaq/NEdIr0S6nj6O4LePvOBIOnBINxnTrtD9+gGCOuY=
+	t=1712562423; cv=none; b=RYNFfGVHVRztGmqu/A76l/pmld/XpGMEsyga681hppNLaOwDEprLcuUitAbs6WlhfxCxfdzEfz+LJXIK6HFyrZrLI47Yy9l8InjhpQubybGpUM/A0SUiOAxr6V+8F6/zYS4wGnQyokhctIqz8bUeK+vI/128Un6OTHck0sJO/lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712547953; c=relaxed/simple;
-	bh=YxtZ+o7jIVqquLJ4Df4JmVl3GjZNVMXsuF41jlodVds=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QPnJzgeJOvtbRVz5Vr5C9b9PLPa3bIim0kQ/qxj9MGcI9DWWwY5iJszXto0r7TLdrUmuDOc7TqjPO6PUroKwCIko5IhIyq42ZbKG2uS8GgFTPYsva/t7014U8UXhsr+kvGaoQh7hEWEl+YE6NjKtIlY87RYWPwS/FbyLIoo9ml4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qRUBN82i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DC56C433C7;
-	Mon,  8 Apr 2024 03:45:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712547953;
-	bh=YxtZ+o7jIVqquLJ4Df4JmVl3GjZNVMXsuF41jlodVds=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qRUBN82idhS8v5U0WBedrqBYdRc3yg/wgoG9A38W1sqAWUsv89lqaVnFwgIU+rwyS
-	 IJhPMlA3zfXBDeYK1PoPKpmkKrJXdqin6HqPv3u3H3KVK/SRVMfG5EndsxCo/rbudt
-	 IxPFqBZ7HDngN52hGvKVuOaQBFCyDs8NUfRp48Ngx4uCL+TlZQM0qsF5kQ7hy89K06
-	 4uPU3Bf6J6YOgjQRTJ6TOSJ4J7k7oWu+JgQqmuSto7lPtqEsCglcku+qGpsJIU5XD3
-	 flARlTCmKPTPGpnJ6s5tgcp9tB/wLuimuD5diZv1pNG8GLEZ3SVUl83a4DWLsatiE+
-	 7IGPIa7bYT4fw==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Export send_recv_data helper
-Date: Mon,  8 Apr 2024 11:45:31 +0800
-Message-Id: <a8153ab2b82c8cd57aca2c6d44d5d327e8c7be92.1712547287.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1712547287.git.tanggeliang@kylinos.cn>
-References: <cover.1712547287.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1712562423; c=relaxed/simple;
+	bh=Yw7gXVy/DL5VfiZ97miPEyVcUDPjJaMAJFbpu/mcTYE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=B/zmGQLT3omG00k6cMvOtRrfffUQk99Tp2uinlKQuTzbMrKkdBjNtPA15Xasa+rMSZXNg9KE0LQGQoe8Pl1qCg22MxR3Idr2qbYrtegARV40WH5Pim8WxU8LpHzNYRX6GlRhQznxA+mYxqJPUrHK7wpa+xLtzKmjmrbzsm0K3Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=R0lW9IRV; arc=none smtp.client-ip=45.157.188.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VCh4W5P57zKJH;
+	Mon,  8 Apr 2024 09:46:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1712562411;
+	bh=Yw7gXVy/DL5VfiZ97miPEyVcUDPjJaMAJFbpu/mcTYE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=R0lW9IRVvl6F/kPeybNuvjtYv0Teh9x++29SOplMcOGEWpreKFfNGb1GfENwY8zFC
+	 JMNQaG4RhCByvaJuIJNhjJZHuZSDkl5xb7lOzgXF20FovjOxx7wh6SC9xzhzt1sSaN
+	 wWC7mCG/ImOpzkRf23ynalfvoOww0LNTZ6fWhWtM=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VCh4S5h81zSYJ;
+	Mon,  8 Apr 2024 09:46:48 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"Eric W . Biederman" <ebiederm@xmission.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Kees Cook <keescook@chromium.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+	Marco Pagani <marpagan@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thara Gopinath <tgopinath@microsoft.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Zahra Tarkhani <ztarkhani@microsoft.com>,
+	kunit-dev@googlegroups.com,
+	kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	x86@kernel.org
+Subject: [PATCH v4 RESEND 0/7] Handle faults in KUnit tests
+Date: Mon,  8 Apr 2024 09:46:18 +0200
+Message-ID: <20240408074625.65017-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Hi,
 
-This patch extracts the code to send and receive data into a new
-helper named send_recv_data() in network_helpers.c and export it
-in network_helpers.h.
+This patch series teaches KUnit to handle kthread faults as errors, and
+it brings a few related fixes and improvements.
 
-This helper will be used for MPTCP BPF selftests.
+Shuah, everything should be OK now, could you please merge this series?
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- tools/testing/selftests/bpf/network_helpers.c | 85 +++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 81 +-----------------
- 3 files changed, 87 insertions(+), 80 deletions(-)
+All these tests pass (on top of v6.8):
+./tools/testing/kunit/kunit.py run --alltests
+./tools/testing/kunit/kunit.py run --alltests --arch x86_64
+./tools/testing/kunit/kunit.py run --alltests --arch arm64 \
+  --cross_compile=aarch64-linux-gnu-
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 04175e16195a..e17d19f88a36 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -545,3 +545,88 @@ int set_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
- 	close(sockfd);
- 	return 0;
- }
-+
-+struct send_recv_arg {
-+	int		fd;
-+	uint32_t	bytes;
-+	int		stop;
-+};
-+
-+static void *send_recv_server(void *arg)
-+{
-+	struct send_recv_arg *a = (struct send_recv_arg *)arg;
-+	ssize_t nr_sent = 0, bytes = 0;
-+	char batch[1500];
-+	int err = 0, fd;
-+
-+	fd = accept(a->fd, NULL, NULL);
-+	while (fd == -1) {
-+		if (errno == EINTR)
-+			continue;
-+		err = -errno;
-+		goto done;
-+	}
-+
-+	if (settimeo(fd, 0)) {
-+		err = -errno;
-+		goto done;
-+	}
-+
-+	while (bytes < a->bytes && !READ_ONCE(a->stop)) {
-+		nr_sent = send(fd, &batch,
-+			       MIN(a->bytes - bytes, sizeof(batch)), 0);
-+		if (nr_sent == -1 && errno == EINTR)
-+			continue;
-+		if (nr_sent == -1) {
-+			err = -errno;
-+			break;
-+		}
-+		bytes += nr_sent;
-+	}
-+
-+	ASSERT_EQ(bytes, a->bytes, "send");
-+
-+done:
-+	if (fd >= 0)
-+		close(fd);
-+	if (err) {
-+		WRITE_ONCE(a->stop, 1);
-+		return ERR_PTR(err);
-+	}
-+	return NULL;
-+}
-+
-+void send_recv_data(int lfd, int fd, uint32_t total_bytes)
-+{
-+	ssize_t nr_recv = 0, bytes = 0;
-+	struct send_recv_arg arg = {
-+		.fd	= lfd,
-+		.bytes	= total_bytes,
-+		.stop	= 0,
-+	};
-+	pthread_t srv_thread;
-+	void *thread_ret;
-+	char batch[1500];
-+	int err;
-+
-+	err = pthread_create(&srv_thread, NULL, send_recv_server, (void *)&arg);
-+	if (!ASSERT_OK(err, "pthread_create"))
-+		return;
-+
-+	/* recv total_bytes */
-+	while (bytes < total_bytes && !READ_ONCE(arg.stop)) {
-+		nr_recv = recv(fd, &batch,
-+			       MIN(total_bytes - bytes, sizeof(batch)), 0);
-+		if (nr_recv == -1 && errno == EINTR)
-+			continue;
-+		if (nr_recv == -1)
-+			break;
-+		bytes += nr_recv;
-+	}
-+
-+	ASSERT_EQ(bytes, total_bytes, "recv");
-+
-+	WRITE_ONCE(arg.stop, 1);
-+	pthread_join(srv_thread, &thread_ret);
-+	ASSERT_OK(IS_ERR(thread_ret), "thread_ret");
-+}
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 6457445cc6e2..5172f0b7bf6e 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -76,6 +76,7 @@ struct nstoken;
-  */
- struct nstoken *open_netns(const char *name);
- void close_netns(struct nstoken *token);
-+void send_recv_data(int lfd, int fd, uint32_t total_bytes);
- 
- static __u16 csum_fold(__u32 csum)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index 64f172f02a9a..3f822100c2b3 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -33,75 +33,15 @@ static int settcpca(int fd, const char *tcp_ca)
- 	return 0;
- }
- 
--struct send_recv_arg {
--	int		fd;
--	uint32_t	bytes;
--	int		stop;
--};
--
--static void *server(void *arg)
--{
--	struct send_recv_arg *a = (struct send_recv_arg *)arg;
--	ssize_t nr_sent = 0, bytes = 0;
--	char batch[1500];
--	int err = 0, fd;
--
--	fd = accept(a->fd, NULL, NULL);
--	while (fd == -1) {
--		if (errno == EINTR)
--			continue;
--		err = -errno;
--		goto done;
--	}
--
--	if (settimeo(fd, 0)) {
--		err = -errno;
--		goto done;
--	}
--
--	while (bytes < a->bytes && !READ_ONCE(a->stop)) {
--		nr_sent = send(fd, &batch,
--			       MIN(a->bytes - bytes, sizeof(batch)), 0);
--		if (nr_sent == -1 && errno == EINTR)
--			continue;
--		if (nr_sent == -1) {
--			err = -errno;
--			break;
--		}
--		bytes += nr_sent;
--	}
--
--	ASSERT_EQ(bytes, a->bytes, "send");
--
--done:
--	if (fd >= 0)
--		close(fd);
--	if (err) {
--		WRITE_ONCE(a->stop, 1);
--		return ERR_PTR(err);
--	}
--	return NULL;
--}
--
- static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- {
--	ssize_t nr_recv = 0, bytes = 0;
--	struct send_recv_arg arg = {
--		.bytes	= total_bytes,
--		.stop	= 0,
--	};
- 	int lfd = -1, fd = -1;
--	pthread_t srv_thread;
--	void *thread_ret;
--	char batch[1500];
- 	int err;
- 
- 	lfd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
- 	if (!ASSERT_NEQ(lfd, -1, "socket"))
- 		return;
- 
--	arg.fd = lfd;
--
- 	fd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (!ASSERT_NEQ(fd, -1, "socket")) {
- 		close(lfd);
-@@ -133,26 +73,7 @@ static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- 			goto done;
- 	}
- 
--	err = pthread_create(&srv_thread, NULL, server, (void *)&arg);
--	if (!ASSERT_OK(err, "pthread_create"))
--		goto done;
--
--	/* recv total_bytes */
--	while (bytes < total_bytes && !READ_ONCE(arg.stop)) {
--		nr_recv = recv(fd, &batch,
--			       MIN(total_bytes - bytes, sizeof(batch)), 0);
--		if (nr_recv == -1 && errno == EINTR)
--			continue;
--		if (nr_recv == -1)
--			break;
--		bytes += nr_recv;
--	}
--
--	ASSERT_EQ(bytes, total_bytes, "recv");
--
--	WRITE_ONCE(arg.stop, 1);
--	pthread_join(srv_thread, &thread_ret);
--	ASSERT_OK(IS_ERR(thread_ret), "thread_ret");
-+	send_recv_data(lfd, fd, total_bytes);
- 
- done:
- 	close(lfd);
+I also built and ran KUnit tests as a kernel module.
+
+A new test case check NULL pointer dereference, which wasn't possible
+before.
+
+This is useful to test current kernel self-protection mechanisms or
+future ones such as Heki: https://github.com/heki-linux
+
+Previous versions:
+v3: https://lore.kernel.org/r/20240319104857.70783-1-mic@digikod.net
+v2: https://lore.kernel.org/r/20240301194037.532117-1-mic@digikod.net
+v1: https://lore.kernel.org/r/20240229170409.365386-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (7):
+  kunit: Handle thread creation error
+  kunit: Fix kthread reference
+  kunit: Fix timeout message
+  kunit: Handle test faults
+  kunit: Fix KUNIT_SUCCESS() calls in iov_iter tests
+  kunit: Print last test location on fault
+  kunit: Add tests for fault
+
+ include/kunit/test.h      | 24 ++++++++++++++++++---
+ include/kunit/try-catch.h |  3 ---
+ kernel/kthread.c          |  1 +
+ lib/kunit/kunit-test.c    | 45 ++++++++++++++++++++++++++++++++++++++-
+ lib/kunit/try-catch.c     | 38 ++++++++++++++++++++++-----------
+ lib/kunit_iov_iter.c      | 18 ++++++++--------
+ 6 files changed, 101 insertions(+), 28 deletions(-)
+
+
+base-commit: e8f897f4afef0031fe618a8e94127a0934896aba
 -- 
-2.40.1
+2.44.0
 
 
