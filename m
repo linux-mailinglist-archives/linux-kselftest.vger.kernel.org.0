@@ -1,436 +1,184 @@
-Return-Path: <linux-kselftest+bounces-7382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8892A89B9E4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 10:13:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADECB89BA4E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 10:31:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3A001F21F40
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 08:13:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AA172883D2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 08:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAC347F6A;
-	Mon,  8 Apr 2024 08:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC8D9383AC;
+	Mon,  8 Apr 2024 08:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aly/g6MA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m2tm/66T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8727550261;
-	Mon,  8 Apr 2024 08:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3189640858
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Apr 2024 08:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712563814; cv=none; b=BkH3oZyv5kE793ikygLvdYCBB39oQ/uPi245+Hxj9S6Bh9oVMRhzxgDF3vfqafo61/m2iagPeDtWG16fO1L1WXC6qgBAdl5B+P0F17dZOIW3MRi5W6Kfyofh75nSTO10mF7/EIrLonvDf3LiJE4gLTTzDrz+sPrI8sfSpRv+txk=
+	t=1712565047; cv=none; b=sJcYbYxoPzrFiylP7NA5azbEGyOXOwRhl+tXwrBKCubD1wepMZf/H7tPLbRphnjqhhh0YGCQHcyLLHh20JcLu4LzRHyfXeuMBWucJSpVbTsQPmb4PstvVpt2AVQAcsz3Dyc3KFhCGG0n0TB+sjgIkN/Rexmbl1HvGXShQuI7wyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712563814; c=relaxed/simple;
-	bh=VK5TMS1RBt4n3wTN5emOMrl/EafXnUKW81ujAeZ/zaQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tKUNF/gM7iua3JR3zZadGJ2E0Iqs15tKvComVVnQYiMzECnrhG0Z21jWCd8GasKndFk7YGF80q/3S/OGFgQYaJhHwzoMmsy0dZ9gUgJGbQZx4AQcTjaJFqeGDRwf+oFwh7GR0B2IMLPTLsJZS9NrjFWWRNMy+TZOyrhiCj5C6cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aly/g6MA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2F1C433C7;
-	Mon,  8 Apr 2024 08:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712563814;
-	bh=VK5TMS1RBt4n3wTN5emOMrl/EafXnUKW81ujAeZ/zaQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=aly/g6MAD0Joz022TK5sZ9ySr8NS3Gg2ZjmhgV9eUlJJq2Th/WS1AvTi0gHlnqWAD
-	 M7z1TjSgkjqnnf8o80InKUs1yDnwvKB0ZtgMxDdSbL59po7T4zGGw7xsKd5zErHN+M
-	 AwzoDToAUCDwxJwkxwhS/Tz2lOEc2Dz/IDfN3FQoyuXHTeXM8DxFZzyORFxcDsU+JZ
-	 +PMKfmVf9TPJJP7THWRxp2Adt4qHJBJQzriHT+Tf9mbsgTJ+GmRw5dDP1s35yLYAJg
-	 zzXpQmwlSSrvMEDoF8rpyBRt0MVRNqXmbrDybjuNAKafjNFinJZj8OZzpYhkefd4ls
-	 lmuNsrdOsIrEQ==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Mon, 08 Apr 2024 10:09:31 +0200
-Subject: [PATCH RFC bpf-next v6 6/6] selftests/bpf: add sleepable timer
- tests
+	s=arc-20240116; t=1712565047; c=relaxed/simple;
+	bh=DlCB0MLCDKFbZ6OQNy2rzkZOL85cCf+2vW/rg/QwDXQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Jpkivlj8kBNCOM1chdSxSBlNpnIRzECVzvZaCCeiy5TVf6LnXfjP/+ucz+lMIbOA0VI/r2yGkT/MkDdPPkACR4PPdL/vr41Bm3WSHQ4Q7iWKoat6A3+FeZ+n8vu1Gfr/C/dmCTJvYXO0iUkrGpTn1meWCdbLA+exyZf66BZGa68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m2tm/66T; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56e67402a3fso3227a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Apr 2024 01:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712565044; x=1713169844; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W9xvn/M8xXcsYEzO1oyT+gGu7oWuytzcOqfktvcQPMI=;
+        b=m2tm/66TXfi4TtA8dT0qginmmQIuMBsFvai40coLQHtwq3175DldiQX1JLNkaU3nO7
+         vkGMAEpNSt/6sw8bF3tSJ96tNJxZ4B7vG4Hr9KtCU8Lu9ZQM+qqvEV+GUrZGy9N3Vf1/
+         4IbWVstqqMSgU1k1ro6JYq0GHIXSaJzlMxFQ2n9pgDGZCqWlmw8YmQPeLfMKyOBR0FdG
+         wXAemPBPS7sDTxlhpysDlCUzSE3/8L0sD+IEKKrFLD3fKw85gPtuc6e51qdtO3zlHylc
+         90nSBdfOJi+yCJgR2zeXkLzNwutmXZ1eUkUxQhr/jgYiROahU8N4uxcaUn1gZ1jFP16B
+         vLdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712565044; x=1713169844;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W9xvn/M8xXcsYEzO1oyT+gGu7oWuytzcOqfktvcQPMI=;
+        b=k9rhzrd8gGaTb/4qpmzYT8/V+PwAuQeNv5dcEthLpVXWv55d8jQ5TQ4a+147AUD/0x
+         86OqLTF87ZmXB3MUFAOUaMcZM0JGrT0xmMrRZUde8KqMV/SLF+jx2ycb9Yg+t24eOe0W
+         zTLun+nndTvufjm5OblIWNlQA0YGIR4mb1s++vxHJmdx6zo8zlIoejV9A9c54ipksB+I
+         9/K0OuojNC9UG82e9+IZ0fE2Q6wWhvlf8HtZ1odfS1ed74uo0JPtASv7wYJtvuKBAj32
+         roj9clpg2KDzhkScNeLUS2lp8SEFiu/aJI5OIcLPq/xK4H3TSst7xHLa0nCqmZSdLV77
+         npsA==
+X-Forwarded-Encrypted: i=1; AJvYcCVulYKCYVAjioApswgqXmM/SYY0baphTSIBDU6oZjNbFmNjiK6jPTmuBy4H98/v2zBoWFuNI8gLDN1agjkNCMdMVXzEYysnfyudyf/YlYXN
+X-Gm-Message-State: AOJu0YzqpO7ZkHcxOnp4dz1r9qOCytWLFuvWsmvqh/4Gc7l8j7r01ps9
+	mdg8yZu241wjP2800WyGtX2CYMfMADhpVKZ0/QH2pB4JwYYTn58tA7hripjdMdIXtJGVqlIEnNx
+	qoBUs+14TSLQSkWFhCfSCS6bTY7fDv1vf2E9k
+X-Google-Smtp-Source: AGHT+IGo86f+JsIMmosO2vCw07SGAuz9k/s/hLLN/rH0J0gPgIV9YJdb3JCApyMU+QZ12S3yUx1niuFqmBiJ/5noLeE=
+X-Received: by 2002:a05:6402:542:b0:56e:ac4:e1f3 with SMTP id
+ i2-20020a056402054200b0056e0ac4e1f3mr203931edx.7.1712565044222; Mon, 08 Apr
+ 2024 01:30:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240408-hid-bpf-sleepable-v6-6-0499ddd91b94@kernel.org>
-References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
-In-Reply-To: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1712563787; l=10863;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=VK5TMS1RBt4n3wTN5emOMrl/EafXnUKW81ujAeZ/zaQ=;
- b=DkDztKSSM7lLUnbAHdGqP2rfKfHFrniK23AmOurdhWu2n1ngDjhSbKcRfGY08H+huRvSX8YNF
- DafjdkIw+xHDY0WMCUKiwZoi0dO0lrq27KPkm5BiTlAhm39gffESED5
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+References: <87sf02bgez.ffs@tglx> <87r0fmbe65.ffs@tglx> <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
+ <87o7aqb6uw.ffs@tglx> <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
+ <87frw2axv0.ffs@tglx> <20240404145408.GD7153@redhat.com> <87le5t9f14.ffs@tglx>
+ <20240406150950.GA3060@redhat.com> <20240406151057.GB3060@redhat.com>
+In-Reply-To: <20240406151057.GB3060@redhat.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Mon, 8 Apr 2024 10:30:32 +0200
+Message-ID: <CACT4Y+Ych4+pdpcTk=yWYUOJcceL5RYoE_B9djX_pwrgOcGmFA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/timers/posix_timers: reimplement check_timer_distribution()
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, John Stultz <jstultz@google.com>, 
+	Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
+	"Eric W. Biederman" <ebiederm@xmission.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kasan-dev@googlegroups.com, 
+	Edward Liaw <edliaw@google.com>, Carlos Llamas <cmllamas@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-bpf_experimental.h and ../bpf_testmod/bpf_testmod_kfunc.h are both
-including vmlinux.h, which is not compatible with including time.h
-or bpf_tcp_helpers.h.
+On Sat, 6 Apr 2024 at 17:12, Oleg Nesterov <oleg@redhat.com> wrote:
+>
+> Dmitry, Thomas,
+>
+> To simplify the review I've attached the code with this patch applied below.
+>
+> Yes, this changes the "semantics" of check_timer_distribution(), perhaps it
+> should be renamed.
+>
+> But I do not see a better approach, and in fact I think that
+>
+>         Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
+>
+> is the wrong goal.
+>
+> Do you agree?
+>
+> Oleg.
+> -------------------------------------------------------------------------------
+>
+> static pthread_t ctd_thread;
+> static volatile int ctd_count, ctd_failed;
+>
+> static void ctd_sighandler(int sig)
+> {
+>         if (pthread_self() != ctd_thread)
+>                 ctd_failed = 1;
+>         ctd_count--;
+> }
+>
+> static void *ctd_thread_func(void *arg)
+> {
+>         struct itimerspec val = {
+>                 .it_value.tv_sec = 0,
+>                 .it_value.tv_nsec = 1000 * 1000,
+>                 .it_interval.tv_sec = 0,
+>                 .it_interval.tv_nsec = 1000 * 1000,
+>         };
+>         timer_t id;
+>
+>         /* 1/10 seconds to ensure the leader sleeps */
+>         usleep(10000);
+>
+>         ctd_count = 100;
+>         if (timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id))
+>                 return "Can't create timer";
+>         if (timer_settime(id, 0, &val, NULL))
+>                 return "Can't set timer";
+>
+>         while (ctd_count > 0 && !ctd_failed)
+>                 ;
+>
+>         if (timer_delete(id))
+>                 return "Can't delete timer";
+>
+>         return NULL;
+> }
+>
+> /*
+>  * Test that only the running thread receives the timer signal.
+>  */
+> static int check_timer_distribution(void)
+> {
+>         const char *errmsg;
+>
+>         signal(SIGALRM, ctd_sighandler);
+>
+>         errmsg = "Can't create thread";
+>         if (pthread_create(&ctd_thread, NULL, ctd_thread_func, NULL))
+>                 goto err;
+>
+>         errmsg = "Can't join thread";
+>         if (pthread_join(ctd_thread, (void **)&errmsg) || errmsg)
+>                 goto err;
+>
+>         if (ctd_failed)
+>                 ksft_test_result_skip("No signal distribution. Assuming old kernel\n");
 
-So keep sleepable tests in a separate bpf source file.
+Shouldn't the test fail here? The goal of a test is to fail when
+things don't work.
+I don't see any other ksft_test_result_fail() calls, and it does not
+look that the test will hang on incorrect distribution.
 
-The first correct test is run twice for convenience:
-- first through RUN_TESTS
-- then we ensure that the timer was actually executed, in a manual
-  load/attach/run
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-
----
-
-changes in v6:
-- use of new _init API with BPF_F_TIMER_SLEEPABLE
-
-changes in v5b:
-- do not use SEC(syscall) as they are run in a sleepable context
-  already
-- duplicate test_call_sleepable() so we can test if the callback gets
-  called
-
-changes in v5:
-- keep sleepable test separate
-
-new in v4
----
- tools/testing/selftests/bpf/bpf_experimental.h     |   5 +
- .../selftests/bpf/bpf_testmod/bpf_testmod.c        |   5 +
- .../selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h  |   1 +
- tools/testing/selftests/bpf/prog_tests/timer.c     |  34 ++++
- .../testing/selftests/bpf/progs/timer_sleepable.c  | 213 +++++++++++++++++++++
- 5 files changed, 258 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index a5b9df38c162..06ed98b3bc51 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -459,4 +459,9 @@ extern int bpf_iter_css_new(struct bpf_iter_css *it,
- extern struct cgroup_subsys_state *bpf_iter_css_next(struct bpf_iter_css *it) __weak __ksym;
- extern void bpf_iter_css_destroy(struct bpf_iter_css *it) __weak __ksym;
- 
-+extern int bpf_timer_set_sleepable_cb_impl(struct bpf_timer *timer,
-+		int (callback_fn)(void *map, int *key, struct bpf_timer *timer),
-+		void *aux__ign) __ksym;
-+#define bpf_timer_set_sleepable_cb(timer, cb) \
-+	bpf_timer_set_sleepable_cb_impl(timer, cb, NULL)
- #endif
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index 39ad96a18123..eb2b78552ca2 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -494,6 +494,10 @@ __bpf_kfunc static u32 bpf_kfunc_call_test_static_unused_arg(u32 arg, u32 unused
- 	return arg;
- }
- 
-+__bpf_kfunc void bpf_kfunc_call_test_sleepable(void)
-+{
-+}
-+
- BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
-@@ -520,6 +524,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS | KF_RCU)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_sleepable, KF_SLEEPABLE)
- BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
- 
- static int bpf_testmod_ops_init(struct btf *btf)
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
-index 7c664dd61059..ce5cd763561c 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
-@@ -96,6 +96,7 @@ void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
- void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
- 
- void bpf_kfunc_call_test_destructive(void) __ksym;
-+void bpf_kfunc_call_test_sleepable(void) __ksym;
- 
- void bpf_kfunc_call_test_offset(struct prog_test_ref_kfunc *p);
- struct prog_test_member *bpf_kfunc_call_memb_acquire(void);
-diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
-index d66687f1ee6a..c6c7c623b31c 100644
---- a/tools/testing/selftests/bpf/prog_tests/timer.c
-+++ b/tools/testing/selftests/bpf/prog_tests/timer.c
-@@ -3,6 +3,7 @@
- #include <test_progs.h>
- #include "timer.skel.h"
- #include "timer_failure.skel.h"
-+#include "timer_sleepable.skel.h"
- 
- #define NUM_THR 8
- 
-@@ -95,3 +96,36 @@ void serial_test_timer(void)
- 
- 	RUN_TESTS(timer_failure);
- }
-+
-+/* isolate sleepable tests from main timer tests
-+ * because if test_timer fails, it spews the console
-+ * with 10000 * 5 "spin_lock_thread:PASS:test_run_opts retval 0 nsec"
-+ */
-+void serial_test_sleepable_timer(void)
-+{
-+	struct timer_sleepable *timer_sleepable_skel = NULL;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	RUN_TESTS(timer_sleepable);
-+
-+	/* re-run the success test to check if the timer was actually executed */
-+
-+	timer_sleepable_skel = timer_sleepable__open_and_load();
-+	if (!ASSERT_OK_PTR(timer_sleepable_skel, "timer_sleepable_skel_load"))
-+		return;
-+
-+	err = timer_sleepable__attach(timer_sleepable_skel);
-+	if (!ASSERT_OK(err, "timer_sleepable_attach"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(timer_sleepable_skel->progs.test_syscall_sleepable);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "test_run");
-+
-+	usleep(50); /* 10 usecs should be enough, but give it extra */
-+
-+	ASSERT_EQ(timer_sleepable_skel->bss->ok_sleepable, 1, "ok_sleepable");
-+}
-diff --git a/tools/testing/selftests/bpf/progs/timer_sleepable.c b/tools/testing/selftests/bpf/progs/timer_sleepable.c
-new file mode 100644
-index 000000000000..fc7829d8b6c4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/timer_sleepable.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook
-+ * Copyright (c) 2024 Benjamin Tissoires
-+ */
-+
-+#include "bpf_experimental.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "../bpf_testmod/bpf_testmod_kfunc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define CLOCK_MONOTONIC 1
-+
-+struct elem {
-+	struct bpf_timer t;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 3);
-+	__type(key, int);
-+	__type(value, struct elem);
-+} timer_map SEC(".maps");
-+
-+__u32 ok_sleepable;
-+
-+/* callback for sleepable timer */
-+static int timer_cb_sleepable(void *map, int *key, struct bpf_timer *timer)
-+{
-+	bpf_kfunc_call_test_sleepable();
-+	ok_sleepable |= (1 << *key);
-+	return 0;
-+}
-+
-+SEC("tc")
-+/* check that calling bpf_timer_start() with BPF_F_TIMER_SLEEPABLE on a sleepable
-+ * callback works
-+ */
-+__retval(0)
-+long test_call_sleepable(void *ctx)
-+{
-+	int key = 0;
-+	struct bpf_timer *timer;
-+
-+	if (ok_sleepable & 1)
-+		return -1;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (timer) {
-+		if (bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC | BPF_F_TIMER_SLEEPABLE) != 0)
-+			return -2;
-+		bpf_timer_set_sleepable_cb(timer, timer_cb_sleepable);
-+		if (bpf_timer_start(timer, 0, 0))
-+			return -3;
-+	} else {
-+		return -4;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+/* check that calling bpf_timer_start() with BPF_F_TIMER_SLEEPABLE on a sleepable
-+ * callback works.
-+ */
-+__retval(0)
-+long test_syscall_sleepable(void *ctx)
-+{
-+	int key = 0;
-+	struct bpf_timer *timer;
-+
-+	if (ok_sleepable & 1)
-+		return -1;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (timer) {
-+		if (bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC | BPF_F_TIMER_SLEEPABLE) != 0)
-+			return -2;
-+		bpf_timer_set_sleepable_cb(timer, timer_cb_sleepable);
-+		if (bpf_timer_start(timer, 0, 0))
-+			return -3;
-+	} else {
-+		return -4;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("?tc")
-+__log_level(2)
-+__failure
-+/* check that bpf_timer_set_callback() can not be called with a
-+ * sleepable callback
-+ */
-+__msg("mark_precise: frame0: regs=r1 stack= before")
-+__msg(": (85) call bpf_kfunc_call_test_sleepable#") /* anchor message */
-+__msg("program must be sleepable to call sleepable kfunc bpf_kfunc_call_test_sleepable")
-+long test_non_sleepable_sleepable_callback(void *ctx)
-+{
-+	int key = 0;
-+	struct bpf_timer *timer;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (timer) {
-+		bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC | BPF_F_TIMER_SLEEPABLE);
-+		bpf_timer_set_callback(timer, timer_cb_sleepable);
-+		bpf_timer_start(timer, 0, 0);
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("tc")
-+/* check that calling bpf_timer_set_sleepable_cb() without a sleepable timer
-+ * initialized with BPF_F_TIMER_SLEEPABLE on a sleepable
-+ * callback is returning -EINVAL
-+ */
-+__retval(3)
-+long test_call_sleepable_missing_flag(void *ctx)
-+{
-+	int key = 1;
-+	struct bpf_timer *timer;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (!timer)
-+		return 1;
-+
-+	if (bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC))
-+		return 2;
-+
-+	if (bpf_timer_set_sleepable_cb(timer, timer_cb_sleepable))
-+		return 3;
-+
-+	return bpf_timer_start(timer, 0, 0);
-+}
-+
-+SEC("tc")
-+/* check that calling bpf_timer_start() with a delay on a sleepable
-+ * callback is returning -EINVAL
-+ */
-+__retval(-22)
-+long test_call_sleepable_delay(void *ctx)
-+{
-+	int key = 2;
-+	struct bpf_timer *timer;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (!timer)
-+		return 1;
-+
-+	if (bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC | BPF_F_TIMER_SLEEPABLE))
-+		return 2;
-+
-+	if (bpf_timer_set_sleepable_cb(timer, timer_cb_sleepable))
-+		return 3;
-+
-+	return bpf_timer_start(timer, 1, 0);
-+}
-+
-+SEC("?tc")
-+__log_level(2)
-+__failure
-+/* check that the first argument of bpf_timer_set_callback()
-+ * is a correct bpf_timer pointer.
-+ */
-+__msg("mark_precise: frame0: regs=r1 stack= before")
-+__msg(": (85) call bpf_timer_set_sleepable_cb_impl#") /* anchor message */
-+__msg("arg#0 doesn't point to a map value")
-+long test_wrong_pointer(void *ctx)
-+{
-+	int key = 0;
-+	struct bpf_timer *timer;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (!timer)
-+		return 1;
-+
-+	if (bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC | BPF_F_TIMER_SLEEPABLE))
-+		return 2;
-+
-+	if (bpf_timer_set_sleepable_cb((void *)&timer, timer_cb_sleepable))
-+		return 3;
-+
-+	return -22;
-+}
-+
-+SEC("?tc")
-+__log_level(2)
-+__failure
-+/* check that the first argument of bpf_timer_set_callback()
-+ * is a correct bpf_timer pointer.
-+ */
-+__msg("mark_precise: frame0: regs=r1 stack= before")
-+__msg(": (85) call bpf_timer_set_sleepable_cb_impl#") /* anchor message */
-+__msg("off 1 doesn't point to 'struct bpf_timer' that is at 0")
-+long test_wrong_pointer_offset(void *ctx)
-+{
-+	int key = 0;
-+	struct bpf_timer *timer;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (!timer)
-+		return 1;
-+
-+	if (bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC | BPF_F_TIMER_SLEEPABLE))
-+		return 2;
-+
-+	if (bpf_timer_set_sleepable_cb((void *)timer + 1, timer_cb_sleepable))
-+		return 3;
-+
-+	return -22;
-+}
-
--- 
-2.44.0
-
+>         else
+>                 ksft_test_result_pass("check signal distribution\n");
+>
+>         return 0;
+> err:
+>         ksft_print_msg(errmsg);
+>         return -1;
+> }
+>
 
