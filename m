@@ -1,150 +1,175 @@
-Return-Path: <linux-kselftest+bounces-7421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CCF889C9AD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 18:35:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D93BA89CA67
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 19:08:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 879801F26910
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 16:35:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6663F1F2320F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 17:08:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D788F1448CD;
-	Mon,  8 Apr 2024 16:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D096A142E99;
+	Mon,  8 Apr 2024 17:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QTU+IVz7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1tlSgsr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C5C1442F3;
-	Mon,  8 Apr 2024 16:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151ED142E85;
+	Mon,  8 Apr 2024 17:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712594075; cv=none; b=dErg0lcdWQ7cDOhzAC12FDmUSSJqWTrdpe6mz8h9q/DYgFQnjbLZA2BGGTtj/yUKBmwab02Uc8gSuPr8YeNljgRO2LOUJa3Ki+cBZZ5sBNlm8yQs5vGToO+LjOfEqPpphCnMelDnYYMyPzV76k47v3WIfjOJ1m9Zhvg896SBtDQ=
+	t=1712596082; cv=none; b=ZxMRnFfYWcZag0C5UubHtTLeA+CMG4dcqVgvgCmbEDHM1RklPPxtrNmMmlRKKq9KDXT0QyEMV6NPeaS8oQXqLu6O5fnqlQ3/fsErp9G6m15E5IGB4hFjXky/dzERk7I1E/aZ85OrwOB3iZELKyhlqGkIj5mjF9jhcuACPBSZtm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712594075; c=relaxed/simple;
-	bh=GDjg6EBXUVwAARwkkfl8HCARLRaI322ITo8J7xf4XpE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kgVbKgNqFb+5c5UnJ81yzx0OzQeZ5UcVuGtgFu2a9rE7AIO68vhhZFMsA0kDkBrTSfxHwGzT6DXpiT6DPeQ4UqBSETJ3X4F2ho2K29L6PgQVVoZtr40Kjynlr4CWRokeHzjKyO8gLerfBtYDvWALuBjcTqiHfhZLo9X6S0iWNtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QTU+IVz7; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1712596082; c=relaxed/simple;
+	bh=8AXBpkc9DmcdVZTxpjLc5ajKXA0N+5NVVl+9uENqQ1o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WO7AuzpMd9QhZUqO7+Csoe7AIo/kI0JVj/ZJ/Y4u7t+mJyc1TFkZNd7R+csHynUcjZo2So/PDP8tDq0hnq4xVRTVxA2cBbwvcd615zeRV9Rz0mwn4bVgNxiZJld+rVZsanDy6oj30gc4PCtIytjF0nl2PehN83UOZ1Zg1i9PQ4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1tlSgsr; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1e2a7b5ef7bso38330425ad.1;
-        Mon, 08 Apr 2024 09:34:33 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56e47843cc7so1839872a12.0;
+        Mon, 08 Apr 2024 10:08:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712594073; x=1713198873; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y8W6JiQXMJlyRVh6G0P1/xRBUWDgR2AudHru0aHPOuY=;
-        b=QTU+IVz7TvT4wffdmtolLM28ZZb8ERtTjT/kTEDBsVVH2aoQZ9eWX3OSkfDLON+mGP
-         /Lrn9e42beiGPwNv+84wjKjHyd5NIzeLw1buAo+hW8BBYpQe5QxKQM8dnxtE/kl97i5K
-         CY7hJgkjCZwN2ZeA4zyiraBAuwTg/sBSf7swHSmIWj4BASDX0op1Uz8gOCFBEqeklzc4
-         6eJ1JqUYGwVmHMIMM+YA6wjdCABihemlv5VV6PTZkTqU798GI0PnA+74OFO/HJPzpjdT
-         ECmZ5qWTbxDqj6lxmfcNQ/ubQY0WVxl6EkpMTnHSnYHPdC4Pik2wo24m76VmzfOW6CB0
-         1r6A==
+        d=gmail.com; s=20230601; t=1712596079; x=1713200879; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3rblefnzDeUpBGRU9KzMwI/WwyErcHXFjWyidNir4MI=;
+        b=N1tlSgsrvISy6khV/A+21P8mYaij+xiIVejUn+VuAgT4fO5NfccHuj/p8qv++bwuZZ
+         J7DGJTbUV0dfpDowDMfbuJjVPDOV+vZr8PTAPXmr4u5eN1lodwSMh2fACQgtk+CI5fCW
+         auTDjHAhCechFJWnrg4nQMriCIVcqlqDnX+/Mu0B9hFGp31rbAwRPI9PazxMkXqSknQ3
+         HnLPvwVPAv7D12mhdC8btGUiIwi86PRSR/e/PUIr8NrWfN0uRJYcDE7r1/f3ecQahhRN
+         UeiuRv8kCaK9WWeJ71jvz8qGKr6T6/TU7dAX4Mpq08kNM45rRiV5h2gmwCfepcE1YxNq
+         NhoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712594073; x=1713198873;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y8W6JiQXMJlyRVh6G0P1/xRBUWDgR2AudHru0aHPOuY=;
-        b=XZsIVtTfROBGgTF8bkH7xuslGiQveQFFpW+MkELO0Q1KRbiTqkoq2S4Sl7ZdZmoHdt
-         hv24XE6DTwzylS9buL7r/dFpiTfMv+Wd243pM0YXdmyiBmvuH74hXaB+B2EY5TpoNBiv
-         8XgQyphGQIVPhnrvT4TSQAeTSHkoD+zz0hHUwZ96Exq2MMLogo/pH+F2yEwc5UsQXosU
-         qBuEkkLmPZlYxn0NHfkiivkP2K5eOs8uEpSPKw1dGReWRzL4VNBKStBNubUJpAyQrkA+
-         npnsNMy3ZDHRjHx0BstNkrvgMPTGQUYMuGDgxVomclN/gd/fb6PS39TNtZEXyPr+WMZ/
-         oFYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWnetRmlnnE+4xixXAqICi8M0WxLstu4JIkfqweDjTDz1AeRzgRh7W5sA//BnBU+ty4CaIxLeg0ftA+DK7Tjtxn0GE9AGmWbQAl/27XWFbjRNGAigeYDCC3Jhthv6q09AdIfmKx6mLdCsd3xYqeb4sST7fWg3FJKwVJzC9fe8GBBvU8zm1H8669dfQYJHqiyG3jsjVqhsH1qIV44h4JagHdy5JUe6WangRv73lX53880zGhtP4FLdKm/1rkwHT+zkbsPYDH9Dua2GvcSTiyqNf3bJ1r3XkqTjT4QCovQ5seOxpMD53H1NuMdDhEwWOonw==
-X-Gm-Message-State: AOJu0Yyz+0MsWPjyUrus+EYJJKcHeisIGo3v82FzoD6e3BWYJ0kzVg4t
-	yl6iu1in7rdMr8aLYmTQAPmmOENonDswAlFItDpZieG8kh7MU/A5
-X-Google-Smtp-Source: AGHT+IHjgwPwZy3e5AEopzEIQpEcmD2hcpsHcoA+sLwIBYMIqqkK3bLGAgIh/jDVDgJdWRaZ9xWs0g==
-X-Received: by 2002:a17:902:cec7:b0:1e3:f911:22b2 with SMTP id d7-20020a170902cec700b001e3f91122b2mr6050960plg.7.1712594073047;
-        Mon, 08 Apr 2024 09:34:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n4-20020a170902e54400b001e2b36d0c8esm7189331plf.7.2024.04.08.09.34.32
+        d=1e100.net; s=20230601; t=1712596079; x=1713200879;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3rblefnzDeUpBGRU9KzMwI/WwyErcHXFjWyidNir4MI=;
+        b=qjkMQpPTP5By10/c38x3Zz2ANi2RkcTgsfMAKymWkU8L3BhgRoI+882MPew2y9pvuC
+         LWtCakw/ckcXZSYwF3ZrqGppHYlUcK0Jqjm7P06DHD7xP5Q01zdmBdJfbqI3LXNsGyQ/
+         y3z2g4KVwY8J+1KCLo5F4Z7cbFfRJ3T95pwil5VGD+qILn7NdgERHfyAyGWkb0Ztr57+
+         xkV0yiabokP9I9K8C5Foah9dIpr0wEClHvNx8+4OuRcH9Xwx9naoI1xUBYferTHcf2T6
+         jZUwxSaoSLt6HpmtqRarPNjlCi7POuFtkifM20PYibtbc2/b2Z4imecFmzii1MODzVrI
+         LtCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV0DAvWsDay1mZYx1rj81IAUZPr+y0fyvs72sSmvbbiPIR2uiHaIo9bOo8j5HReyEXsfYZx4wfqUyn1ChOI0KguFkxfCCIxr0fcwd0uzN4VMShxN4t+fBCM1olfg0eQqRNY9AzS4Gfr79exvtJF
+X-Gm-Message-State: AOJu0YwEDjBw7Kp/9dbU5hyt0SmCyI9Tzv+8eObw4eYXb16P9531jSLh
+	S3vZwqMK9yBiKWHiyOsY4XtNam8BP6j3G5pACA4/zMC22Y1S2ux8
+X-Google-Smtp-Source: AGHT+IG1DEEuzoXCClJookqK62YxLMOh4p3ScRQPHvmWZ4rPoV3Kwit6nDIzL2HlBDLLsBO1e1CDFw==
+X-Received: by 2002:a50:c04c:0:b0:56d:c40d:b921 with SMTP id u12-20020a50c04c000000b0056dc40db921mr6356885edd.20.1712596079128;
+        Mon, 08 Apr 2024 10:07:59 -0700 (PDT)
+Received: from [192.168.100.206] ([89.28.99.140])
+        by smtp.gmail.com with ESMTPSA id h1-20020a0564020e8100b005682a0e915fsm4280069eda.76.2024.04.08.10.07.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 09:34:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Apr 2024 09:34:26 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, x86@kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v3 06/15] net: kunit: Suppress lock warning noise at end
- of dev_addr_lists tests
-Message-ID: <9e8718bf-da81-463b-9436-6c8b0881a045@roeck-us.net>
-References: <20240403131936.787234-1-linux@roeck-us.net>
- <20240403131936.787234-7-linux@roeck-us.net>
- <20240403183412.16254318@kernel.org>
+        Mon, 08 Apr 2024 10:07:58 -0700 (PDT)
+Message-ID: <65c249a6af45bfa5fe0f6c2331dcc1771a6f0b05.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next v6 1/6] bpf/helpers: introduce sleepable
+ bpf_timers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Mon, 08 Apr 2024 20:07:56 +0300
+In-Reply-To: <20240408-hid-bpf-sleepable-v6-1-0499ddd91b94@kernel.org>
+References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
+	 <20240408-hid-bpf-sleepable-v6-1-0499ddd91b94@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.0 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403183412.16254318@kernel.org>
 
-On Wed, Apr 03, 2024 at 06:34:12PM -0700, Jakub Kicinski wrote:
-> On Wed,  3 Apr 2024 06:19:27 -0700 Guenter Roeck wrote:
-> > dev_addr_lists_test generates lock warning noise at the end of tests
-> > if lock debugging is enabled. There are two sets of warnings.
-> > 
-> > WARNING: CPU: 0 PID: 689 at kernel/locking/mutex.c:923 __mutex_unlock_slowpath.constprop.0+0x13c/0x368
-> > DEBUG_LOCKS_WARN_ON(__owner_task(owner) != __get_current())
-> > 
-> > WARNING: kunit_try_catch/1336 still has locks held!
-> > 
-> > KUnit test cleanup is not guaranteed to run in the same thread as the test
-> > itself. For this test, this means that rtnl_lock() and rtnl_unlock() may
-> > be called from different threads. This triggers the warnings.
-> > Suppress the warnings because they are irrelevant for the test and just
-> > confusing and distracting.
-> > 
-> > The first warning can be suppressed by using START_SUPPRESSED_WARNING()
-> > and END_SUPPRESSED_WARNING() around the call to rtnl_unlock(). To suppress
-> > the second warning, it is necessary to set debug_locks_silent while the
-> > rtnl lock is held.
-> 
-> Is it okay if I move the locking into the tests, instead?
-> It's only 4 lines more and no magic required, seems to work fine.
+On Mon, 2024-04-08 at 10:09 +0200, Benjamin Tissoires wrote:
 
-I don't think it is that simple. Unit tests run in a kernel thread
-and exit immediately if a test fails. While the unit test code _looks_
-sequential, that isn't really the case. Every instance of KUNIT_ASSERT_x
-or KUNIT_FAIL() results in immediate kernel thread termination. If
-that happens, any rtnl_unlock() in the failed function would not be
-executed. I am not aware of an equivalent of atexit() for kernel threads
-which would fix the problem. My understanding is that the kunit system
-doesn't support an equivalent either, but at least sometimes executes
-the exit function in a different thread context.
+[...]
 
-Guenter
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 9234174ccb21..fd05d4358b31 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1096,12 +1096,19 @@ const struct bpf_func_proto bpf_snprintf_proto =
+=3D {
+>   * freeing the timers when inner map is replaced or deleted by user spac=
+e.
+>   */
+>  struct bpf_hrtimer {
+> -	struct hrtimer timer;
+> +	union {
+> +		struct hrtimer timer;
+> +		struct work_struct work;
+> +	};
+>  	struct bpf_map *map;
+>  	struct bpf_prog *prog;
+>  	void __rcu *callback_fn;
+>  	void *value;
+> -	struct rcu_head rcu;
+> +	union {
+> +		struct rcu_head rcu;
+> +		struct work_struct sync_work;
+
+Nit:
+I find this name very confusing, the field is used to cancel timer
+execution, is it a convention to call such things '...sync...'?
+
+> +	};
+> +	u64 flags;
+>  };
+> =20
+
+[...]
+
+> +static void bpf_timer_sync_work_cb(struct work_struct *work)
+> +{
+> +	struct bpf_hrtimer *t =3D container_of(work, struct bpf_hrtimer, sync_w=
+ork);
+> +
+> +	cancel_work_sync(&t->work);
+> +
+> +	kfree_rcu(t, rcu);
+
+Sorry, I might be wrong, but this looks suspicious.
+The 'rcu' field of 'bpf_hrtimer' is defined as follows:
+
+struct bpf_hrtimer {
+	...
+	union {
+		struct rcu_head rcu;
+		struct work_struct sync_work;
+	};
+	...
+};
+
+And for sleepable timers the 'sync_work' field is set as follows:
+
+BPF_CALL_3(bpf_timer_init, struct bpf_timer_kern *, timer, struct bpf_map *=
+, map,
+	   u64, flags)
+{
+	...
+	INIT_WORK(&t->sync_work, bpf_timer_sync_work_cb);
+	...
+}
+
+So, it looks like 'kfree_rcu' would be called for a non-rcu pointer.
+
+> +}
+> +
+
+
 
