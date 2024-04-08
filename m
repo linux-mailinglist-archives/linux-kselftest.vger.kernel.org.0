@@ -1,298 +1,150 @@
-Return-Path: <linux-kselftest+bounces-7427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B303589C9C5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 18:38:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CCF889C9AD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 18:35:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D99F5B223EA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 16:38:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 879801F26910
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 16:35:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6800514388A;
-	Mon,  8 Apr 2024 16:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D788F1448CD;
+	Mon,  8 Apr 2024 16:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P7nkEvgr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QTU+IVz7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82163143C56;
-	Mon,  8 Apr 2024 16:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C5C1442F3;
+	Mon,  8 Apr 2024 16:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712594132; cv=none; b=e+GoFfIMRAbsiOl0Vyi+sT73HgYU8qwhJEGLDWRoAau8Hrwi2irmKlYQDY8AuXROWT+Aer0nYaNkaZU967vxIh/FM8JzBjageGheO0Pl1/e8t9pb6h9+0pjjQvPALZQzDhpS9p/tj+WMOzzgN69ZDeSkRSd+mMvHQbACAypY7P8=
+	t=1712594075; cv=none; b=dErg0lcdWQ7cDOhzAC12FDmUSSJqWTrdpe6mz8h9q/DYgFQnjbLZA2BGGTtj/yUKBmwab02Uc8gSuPr8YeNljgRO2LOUJa3Ki+cBZZ5sBNlm8yQs5vGToO+LjOfEqPpphCnMelDnYYMyPzV76k47v3WIfjOJ1m9Zhvg896SBtDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712594132; c=relaxed/simple;
-	bh=Pi8iFK7pv9gVSy4zoMZi823T9m60lWJMkW/RGNBSPt4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BlNwzvYoGV5YlDTa+VJ7Tye0xf4HmYpfvqphFTpHHkETxfzCMaJDibOWSuhQzP/iaVyFl3q67QvhjMcX2YEuULy1ark0epYb8b4xKxsyXMBenlu3wxqUZ5+sH6Qy+VHwQlayKEoFp9ybvrRc3jB9fB+y18GrLnL0qHVRS5K/lKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P7nkEvgr; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712594130; x=1744130130;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Pi8iFK7pv9gVSy4zoMZi823T9m60lWJMkW/RGNBSPt4=;
-  b=P7nkEvgr+4+oj9fWOeCFnBb/Fz985GiVB6Qh4fvZXiHrkmvww1bKeLrF
-   N9niTH7h/sdgSsQbr1qCgS9FW1t+ls4kxREMSwDunP31WVCVlMEYQBwjH
-   T53uEXSMQiKks8N8ZgYxaqs2BvUacCmt6KYoc/vA59omE2o2lSOh8maZo
-   eEUQrpRqmHKEt8vOxCUbf9I6fkDBGj158UonzqHgkqqVvrryeFOuQxSut
-   G28gXmgZNpC/hIYUbyjg+knEeZYmijgc47dRcfGdl8ju98dRiUPiMsCwk
-   GFSQ8gPZUZn9FgGOh8iWZkGiK5/xtG/DdrG3aNG3U7CbCHhdE2pcjBzjq
-   A==;
-X-CSE-ConnectionGUID: u6/IEKL/QJ+fPhuLLyt6OA==
-X-CSE-MsgGUID: oGxkhFJrTnO6jtgW3twb2g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7739013"
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="7739013"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:35:30 -0700
-X-CSE-ConnectionGUID: d3Vm6xtjSLekTdGc28CwmA==
-X-CSE-MsgGUID: QzRKYmE9RQSZG364hhtU4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="20503591"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.28])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:35:27 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: linux-kselftest@vger.kernel.org,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Babu Moger <babu.moger@amd.com>,
-	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 16/16] selftests/resctrl: Remove test name comparing from write_bm_pid_to_resctrl()
-Date: Mon,  8 Apr 2024 19:32:47 +0300
-Message-Id: <20240408163247.3224-17-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240408163247.3224-1-ilpo.jarvinen@linux.intel.com>
-References: <20240408163247.3224-1-ilpo.jarvinen@linux.intel.com>
+	s=arc-20240116; t=1712594075; c=relaxed/simple;
+	bh=GDjg6EBXUVwAARwkkfl8HCARLRaI322ITo8J7xf4XpE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kgVbKgNqFb+5c5UnJ81yzx0OzQeZ5UcVuGtgFu2a9rE7AIO68vhhZFMsA0kDkBrTSfxHwGzT6DXpiT6DPeQ4UqBSETJ3X4F2ho2K29L6PgQVVoZtr40Kjynlr4CWRokeHzjKyO8gLerfBtYDvWALuBjcTqiHfhZLo9X6S0iWNtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QTU+IVz7; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1e2a7b5ef7bso38330425ad.1;
+        Mon, 08 Apr 2024 09:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712594073; x=1713198873; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y8W6JiQXMJlyRVh6G0P1/xRBUWDgR2AudHru0aHPOuY=;
+        b=QTU+IVz7TvT4wffdmtolLM28ZZb8ERtTjT/kTEDBsVVH2aoQZ9eWX3OSkfDLON+mGP
+         /Lrn9e42beiGPwNv+84wjKjHyd5NIzeLw1buAo+hW8BBYpQe5QxKQM8dnxtE/kl97i5K
+         CY7hJgkjCZwN2ZeA4zyiraBAuwTg/sBSf7swHSmIWj4BASDX0op1Uz8gOCFBEqeklzc4
+         6eJ1JqUYGwVmHMIMM+YA6wjdCABihemlv5VV6PTZkTqU798GI0PnA+74OFO/HJPzpjdT
+         ECmZ5qWTbxDqj6lxmfcNQ/ubQY0WVxl6EkpMTnHSnYHPdC4Pik2wo24m76VmzfOW6CB0
+         1r6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712594073; x=1713198873;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y8W6JiQXMJlyRVh6G0P1/xRBUWDgR2AudHru0aHPOuY=;
+        b=XZsIVtTfROBGgTF8bkH7xuslGiQveQFFpW+MkELO0Q1KRbiTqkoq2S4Sl7ZdZmoHdt
+         hv24XE6DTwzylS9buL7r/dFpiTfMv+Wd243pM0YXdmyiBmvuH74hXaB+B2EY5TpoNBiv
+         8XgQyphGQIVPhnrvT4TSQAeTSHkoD+zz0hHUwZ96Exq2MMLogo/pH+F2yEwc5UsQXosU
+         qBuEkkLmPZlYxn0NHfkiivkP2K5eOs8uEpSPKw1dGReWRzL4VNBKStBNubUJpAyQrkA+
+         npnsNMy3ZDHRjHx0BstNkrvgMPTGQUYMuGDgxVomclN/gd/fb6PS39TNtZEXyPr+WMZ/
+         oFYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWnetRmlnnE+4xixXAqICi8M0WxLstu4JIkfqweDjTDz1AeRzgRh7W5sA//BnBU+ty4CaIxLeg0ftA+DK7Tjtxn0GE9AGmWbQAl/27XWFbjRNGAigeYDCC3Jhthv6q09AdIfmKx6mLdCsd3xYqeb4sST7fWg3FJKwVJzC9fe8GBBvU8zm1H8669dfQYJHqiyG3jsjVqhsH1qIV44h4JagHdy5JUe6WangRv73lX53880zGhtP4FLdKm/1rkwHT+zkbsPYDH9Dua2GvcSTiyqNf3bJ1r3XkqTjT4QCovQ5seOxpMD53H1NuMdDhEwWOonw==
+X-Gm-Message-State: AOJu0Yyz+0MsWPjyUrus+EYJJKcHeisIGo3v82FzoD6e3BWYJ0kzVg4t
+	yl6iu1in7rdMr8aLYmTQAPmmOENonDswAlFItDpZieG8kh7MU/A5
+X-Google-Smtp-Source: AGHT+IHjgwPwZy3e5AEopzEIQpEcmD2hcpsHcoA+sLwIBYMIqqkK3bLGAgIh/jDVDgJdWRaZ9xWs0g==
+X-Received: by 2002:a17:902:cec7:b0:1e3:f911:22b2 with SMTP id d7-20020a170902cec700b001e3f91122b2mr6050960plg.7.1712594073047;
+        Mon, 08 Apr 2024 09:34:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170902e54400b001e2b36d0c8esm7189331plf.7.2024.04.08.09.34.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 09:34:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 8 Apr 2024 09:34:26 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, x86@kernel.org,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v3 06/15] net: kunit: Suppress lock warning noise at end
+ of dev_addr_lists tests
+Message-ID: <9e8718bf-da81-463b-9436-6c8b0881a045@roeck-us.net>
+References: <20240403131936.787234-1-linux@roeck-us.net>
+ <20240403131936.787234-7-linux@roeck-us.net>
+ <20240403183412.16254318@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403183412.16254318@kernel.org>
 
-write_bm_pid_to_resctrl() uses resctrl_val to check test name which is
-not a good interface generic resctrl FS functions should provide.
+On Wed, Apr 03, 2024 at 06:34:12PM -0700, Jakub Kicinski wrote:
+> On Wed,  3 Apr 2024 06:19:27 -0700 Guenter Roeck wrote:
+> > dev_addr_lists_test generates lock warning noise at the end of tests
+> > if lock debugging is enabled. There are two sets of warnings.
+> > 
+> > WARNING: CPU: 0 PID: 689 at kernel/locking/mutex.c:923 __mutex_unlock_slowpath.constprop.0+0x13c/0x368
+> > DEBUG_LOCKS_WARN_ON(__owner_task(owner) != __get_current())
+> > 
+> > WARNING: kunit_try_catch/1336 still has locks held!
+> > 
+> > KUnit test cleanup is not guaranteed to run in the same thread as the test
+> > itself. For this test, this means that rtnl_lock() and rtnl_unlock() may
+> > be called from different threads. This triggers the warnings.
+> > Suppress the warnings because they are irrelevant for the test and just
+> > confusing and distracting.
+> > 
+> > The first warning can be suppressed by using START_SUPPRESSED_WARNING()
+> > and END_SUPPRESSED_WARNING() around the call to rtnl_unlock(). To suppress
+> > the second warning, it is necessary to set debug_locks_silent while the
+> > rtnl lock is held.
+> 
+> Is it okay if I move the locking into the tests, instead?
+> It's only 4 lines more and no magic required, seems to work fine.
 
-Only MBM and CMT tests define mongrp so the test name check in
-write_bm_pid_to_resctrl() can be changed to depend simply on mongrp
-being non-NULL.
+I don't think it is that simple. Unit tests run in a kernel thread
+and exit immediately if a test fails. While the unit test code _looks_
+sequential, that isn't really the case. Every instance of KUNIT_ASSERT_x
+or KUNIT_FAIL() results in immediate kernel thread termination. If
+that happens, any rtnl_unlock() in the failed function would not be
+executed. I am not aware of an equivalent of atexit() for kernel threads
+which would fix the problem. My understanding is that the kunit system
+doesn't support an equivalent either, but at least sometimes executes
+the exit function in a different thread context.
 
-With last user of resctrl_val gone, the parameter and member from the
-struct resctrl_val_param can removed. Test name constants can also be
-removed because they are not used anymore.
-
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/cat_test.c    |  5 +--
- tools/testing/selftests/resctrl/cmt_test.c    |  1 -
- tools/testing/selftests/resctrl/mba_test.c    |  1 -
- tools/testing/selftests/resctrl/mbm_test.c    |  1 -
- tools/testing/selftests/resctrl/resctrl.h     | 10 +-----
- tools/testing/selftests/resctrl/resctrl_val.c |  4 +--
- tools/testing/selftests/resctrl/resctrlfs.c   | 33 ++++++++-----------
- 7 files changed, 17 insertions(+), 38 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index c7686fb6641a..d4dffc934bc3 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -158,7 +158,6 @@ static int cat_test(const struct resctrl_test *test,
- 		    struct resctrl_val_param *param,
- 		    size_t span, unsigned long current_mask)
- {
--	char *resctrl_val = param->resctrl_val;
- 	struct perf_event_read pe_read;
- 	struct perf_event_attr pea;
- 	cpu_set_t old_affinity;
-@@ -178,8 +177,7 @@ static int cat_test(const struct resctrl_test *test,
- 		return ret;
- 
- 	/* Write benchmark to specified con_mon grp, mon_grp in resctrl FS*/
--	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
--				      resctrl_val);
-+	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp);
- 	if (ret)
- 		goto reset_affinity;
- 
-@@ -272,7 +270,6 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	start_mask = create_bit_mask(start, n);
- 
- 	struct resctrl_val_param param = {
--		.resctrl_val	= CAT_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.num_of_runs	= 0,
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 238f514ba7e6..e1fadc1bfa37 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -144,7 +144,6 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 	}
- 
- 	struct resctrl_val_param param = {
--		.resctrl_val	= CMT_STR,
- 		.ctrlgrp	= "c1",
- 		.mongrp		= "m1",
- 		.filename	= RESULT_FILE_NAME,
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 5e0b1e794295..1f2a7dc73b62 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -164,7 +164,6 @@ static void mba_test_cleanup(void)
- static int mba_run_test(const struct resctrl_test *test, const struct user_params *uparams)
- {
- 	struct resctrl_val_param param = {
--		.resctrl_val	= MBA_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.init		= mba_init,
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 0a3ab99b31ab..b027d17b57c5 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -132,7 +132,6 @@ static void mbm_test_cleanup(void)
- static int mbm_run_test(const struct resctrl_test *test, const struct user_params *uparams)
- {
- 	struct resctrl_val_param param = {
--		.resctrl_val	= MBM_STR,
- 		.ctrlgrp	= "c1",
- 		.mongrp		= "m1",
- 		.filename	= RESULT_FILE_NAME,
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index a999fbc13fd3..2dda56084588 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -81,7 +81,6 @@ struct resctrl_test {
- 
- /*
-  * resctrl_val_param:	resctrl test parameters
-- * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-  * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-  * @mongrp:		Name of the monitor group (mon grp)
-  * @filename:		Name of file to which the o/p should be written
-@@ -90,7 +89,6 @@ struct resctrl_test {
-  * @measure:		Callback that performs the measurement (a single test)
-  */
- struct resctrl_val_param {
--	char		*resctrl_val;
- 	const char	*ctrlgrp;
- 	const char	*mongrp;
- 	char		filename[64];
-@@ -113,11 +111,6 @@ struct perf_event_read {
- 	} values[2];
- };
- 
--#define MBM_STR			"mbm"
--#define MBA_STR			"mba"
--#define CMT_STR			"cmt"
--#define CAT_STR			"cat"
--
- /*
-  * Memory location that consumes values compiler must not optimize away.
-  * Volatile ensures writes to this location cannot be optimized away by
-@@ -143,8 +136,7 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity);
- int taskset_restore(pid_t bm_pid, cpu_set_t *old_affinity);
- int write_schemata(const char *ctrlgrp, char *schemata, int cpu_no,
- 		   const char *resource);
--int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
--			    const char *mongrp, const char *resctrl_val);
-+int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongrp);
- int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- 		    int group_fd, unsigned long flags);
- unsigned char *alloc_buffer(size_t buf_size, int memflush);
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index a9e0bb35a4ab..17b93b44b013 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -664,7 +664,6 @@ int resctrl_val(const struct resctrl_test *test,
- 		const char * const *benchmark_cmd,
- 		struct resctrl_val_param *param)
- {
--	char *resctrl_val = param->resctrl_val;
- 	struct sigaction sigact;
- 	int ret = 0, pipefd[2];
- 	char pipe_message = 0;
-@@ -755,8 +754,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		goto out;
- 
- 	/* Write benchmark to specified control&monitoring grp in resctrl FS */
--	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
--				      resctrl_val);
-+	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp);
- 	if (ret)
- 		goto out;
- 
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 6b4448588666..4bf1fe6dc308 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -519,7 +519,6 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
-  * @bm_pid:		PID that should be written
-  * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-  * @mongrp:		Name of the monitor group (mon grp)
-- * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-  *
-  * If a con_mon grp is requested, create it and write pid to it, otherwise
-  * write pid to root con_mon grp.
-@@ -529,8 +528,7 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
-  *
-  * Return: 0 on success, < 0 on error.
-  */
--int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
--			    const char *mongrp, const char *resctrl_val)
-+int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongrp)
- {
- 	char controlgroup[128], monitorgroup[512], monitorgroup_p[256];
- 	char tasks[1024];
-@@ -550,22 +548,19 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
- 	if (ret)
- 		goto out;
- 
--	/* Create mon grp and write pid into it for "mbm" and "cmt" test */
--	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)) ||
--	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
--		if (mongrp) {
--			sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
--			sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
--			ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
--			if (ret)
--				goto out;
--
--			sprintf(tasks, "%s/mon_groups/%s/tasks",
--				controlgroup, mongrp);
--			ret = write_pid_to_tasks(tasks, bm_pid);
--			if (ret)
--				goto out;
--		}
-+	/* Create monitor group and write pid into if it is used */
-+	if (mongrp) {
-+		sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
-+		sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
-+		ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
-+		if (ret)
-+			goto out;
-+
-+		sprintf(tasks, "%s/mon_groups/%s/tasks",
-+			controlgroup, mongrp);
-+		ret = write_pid_to_tasks(tasks, bm_pid);
-+		if (ret)
-+			goto out;
- 	}
- 
- out:
--- 
-2.39.2
-
+Guenter
 
