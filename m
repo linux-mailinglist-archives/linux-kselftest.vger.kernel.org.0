@@ -1,100 +1,127 @@
-Return-Path: <linux-kselftest+bounces-7394-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FD0D89BE99
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 14:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DD5389BEAF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 14:12:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 238371F22295
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 12:04:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47D941F21AE1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 12:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EE56A32F;
-	Mon,  8 Apr 2024 12:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985A36A33B;
+	Mon,  8 Apr 2024 12:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZTtdS40X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vl5tW+US"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9912865BAD;
-	Mon,  8 Apr 2024 12:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA8769E07;
+	Mon,  8 Apr 2024 12:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712577861; cv=none; b=FvnOS7YIb6N8mgVG5urG2dI9x4KFGnl2HkEnSBcfszkurqk7nXLayQMCVu57mcV6ZKdQr/R/pElflGWHeX5j52d68o8g2hQeZu8qq+S1p9xlJUW/ta6sEQG7tDGrDZzLqnDnNO7GBUKZ4/fFmy6QdRcHWtOZ2GXTr2MX2ICtN4I=
+	t=1712578347; cv=none; b=eyKuS9qjDWndhAAOwywxG3F9gTYmAsDdkHPNzam1U+mzeL8BUMpk93IlUsLpPCgdv8fxGldiztPlaIado6VnQf2+v/re/ulsjaiMq1qfMkEmdCyzMVE563wL2+1UMC6AajG7P+39exRHFd1KiY1AptuKNySJED8uMqlyBU9ilI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712577861; c=relaxed/simple;
-	bh=0ZKNyQdKBROVhYNVqucQYJL92ZoOSW1dLVeb4QPSfKg=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=opZJE5igXthY66ozWxdHfqLS7NWTvfhIyM7hLpJWx1x6bwgN+2hGZc0zxftNbUYvAsNmx6Mhb8Wp2DaiQOjBqg8tm8DA5KFT0OVU52GvrlyuRiOmlWGftJr8NRszKf1snwGSI6RE/Cd9CHkagz1gb3Y6jv7xjuMpqRRdE7b+xHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZTtdS40X; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712577857;
-	bh=0ZKNyQdKBROVhYNVqucQYJL92ZoOSW1dLVeb4QPSfKg=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=ZTtdS40X29dqKTIyheUlr8HdjyRLHTd7PL7GFZvvGqGFolZFvoWOVChTwJPhklG/4
-	 oyoMx2UjY/WKW7JwuJ2o4Fgy/0G7RMQRkQcwzzUT/zes8BgJbOcG1KyTVFj+1PeU++
-	 uu85JxMf7WsQIk6FPK13vs6cRwqDvgtfenJo+Tsceuw3tZih+2lzl/W6ioxw50CHZk
-	 tf3bj7R+wCEY3NFES896wHAmbPsTaGXq2Gj1VJcolcH+KqqGTtvDF8bvqK93rHqHZB
-	 zzRPzQGeoX4TreiCwFNFr3eXZ8F+0pzJYNy4Zvih9yfnosVCNirpyA9pNsO0wD8u75
-	 hu9g6WUPJaOFA==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E397E37814B0;
-	Mon,  8 Apr 2024 12:04:11 +0000 (UTC)
-Message-ID: <4bae7682-801e-498f-88c9-9c9d45364bfc@collabora.com>
-Date: Mon, 8 Apr 2024 17:04:44 +0500
+	s=arc-20240116; t=1712578347; c=relaxed/simple;
+	bh=vMSCjQT2myET9suDYZEPUOmwcRvfB4t+Bz0J1v9ExsE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=raHcgTWCqSrIMOrh+QhNePzymdPpPsBUD8eNeVcWJhlFLa+XYN1D4YffPvFqQgHVwpLFu0VyX+G8bEPdqkFZhKdu/VfuOZSk+w0eX9ADaoULjRGJVfEzYeocXDlGz4NWk7TXCEVH1jjKWZVQOQQqphi6ALTrq11bfsl4QyHdFsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vl5tW+US; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419B3C433F1;
+	Mon,  8 Apr 2024 12:12:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712578347;
+	bh=vMSCjQT2myET9suDYZEPUOmwcRvfB4t+Bz0J1v9ExsE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vl5tW+USe5BvdmV9SiYYIe5EsZpjpNVcWf0jbWr503WM7zUifY49LcCKCKS+zjQVj
+	 1csscUtgIq486b42/UbxdrA+bWgmFqGCOz9iwkAJ1Uhoopk4QOOruopsFivzir/Yrl
+	 6I1p5/Jd/ngDk71tDTBVrP0RSjRfzEeeCcCWgikAgm17pRxPBHwLoGsNpvga/wEu1r
+	 cFER3AQF+kgCxi4M00h/ODs6CGnho3jn54xsBIJe/hZnrHbq2joLHmlZWnrvdC2Pjw
+	 ay+9i5KHG7od/6/EioJh44kqV5E1XJnGLJFfRVfKsIxJb9mqy6tTxir8R84kpYXsSJ
+	 KD687eAWpfZ0A==
+Date: Mon, 8 Apr 2024 13:12:21 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Dev Jain <dev.jain@arm.com>, shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anshuman.Khandual@arm.com, suzuki.poulose@arm.com,
+	ryan.roberts@arm.com, rob.herring@arm.com, Catalin.Marinas@arm.com,
+	will@kernel.org, mark.rutland@arm.com
+Subject: Re: [PATCH 2/4] selftests/arm: Add signal tests
+Message-ID: <f673314c-3a22-4a62-a994-ce6262593914@sirena.org.uk>
+References: <20240405084410.256788-1-dev.jain@arm.com>
+ <20240405084410.256788-3-dev.jain@arm.com>
+ <1ce0e9c7-0bd3-47c1-893c-3ea5aa95fef5@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>
-Subject: Re: [RFC PATCH v3 6/9] selftests: cgroup: Add basic tests for pids
- controller
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-References: <20240405170548.15234-1-mkoutny@suse.com>
- <20240405170548.15234-7-mkoutny@suse.com>
- <a45c2ece-acb4-4cff-9d53-f5c007c9b905@collabora.com>
- <qweowkm4wlfzovp3qhtkzbybeampodtwmpbp2kbtiqcrhmjtdt@syk4itfkpmfr>
- <41dd9c5a-0e07-4b98-9dfb-fb57eaa74fa2@collabora.com>
- <oosadt3f5i3qsvisrxe6hrs46ryfqbyxyk3a6jimd7cqczjtcw@dvlsm7eh3b6r>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <oosadt3f5i3qsvisrxe6hrs46ryfqbyxyk3a6jimd7cqczjtcw@dvlsm7eh3b6r>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qZP1wOhkGWh/mDjB"
+Content-Disposition: inline
+In-Reply-To: <1ce0e9c7-0bd3-47c1-893c-3ea5aa95fef5@collabora.com>
+X-Cookie: Drive defensively.  Buy a tank.
 
-On 4/8/24 5:01 PM, Michal Koutný wrote:
-> On Mon, Apr 08, 2024 at 04:53:11PM +0500, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
->> ksft_test_result_report(tests[i].fn(root), tests[i].name)
-> 
-> $ git grep ksft_test_result_report v6.9-rc3 -- 
-> (empty result)
-> 
-> I can't find that helper. Is that in some devel repositories?
-Sorry, I always do development on next. So it has been added recently. Try
-searching it on next:
 
-git grep ksft_test_result_report next-20240404 --
+--qZP1wOhkGWh/mDjB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> Michal
+On Sun, Apr 07, 2024 at 02:28:06AM +0500, Muhammad Usama Anjum wrote:
+> On 4/5/24 1:44 PM, Dev Jain wrote:
 
--- 
-BR,
-Muhammad Usama Anjum
+> > +	ksft_print_msg("%s :: %s\n", current->name, current->descr);
+> > +	if (test_setup(current) && test_init(current)) {
+> > +		test_run(current);
+> > +		test_cleanup(current);
+> > +	}
+> > +	test_result(current);
+> > +
+> > +	return current->result;
+> > +}
+
+> This test isn't TAP compliant. Please make this and all tests TAP
+> compilant. The 1/4 patch has example of TAP usage.
+
+It's based on the 64 bit version of these tests which are also not TAP
+compliant.  TBH I'm not sure how worthwile it is to fix at all given
+that they're all single test executables anyway, if it does get fixed
+it'd be good to do the arm64 ones as well.
+
+> > +	} else {
+> > +		fprintf(stdout, "==>> completed. FAIL(0)\n");
+> > +		td->result = KSFT_FAIL;
+> > +	}
+> > +
+> > +	if (force_exit)
+> > +		exit(td->result);
+> > +}
+> > +
+
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
+
+--qZP1wOhkGWh/mDjB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYT3yQACgkQJNaLcl1U
+h9DmvQf+LUmNX3wMgRZgOE8R5TMnKhRAImfgyCZZmViWqco8+Iqo5qlwkW+t3Rfv
+xoKtvMzrLCdMKSu1w7tUCufvf+US2FnAicHbeZkvkssDbORrrWLRm25AH4K0ooCp
+du0W9s6tJJQa9+cEnPtPQEdu3SbZ9WdPdUIEVBhboyGpLLkFCNFjppiP5x6MMnE4
+QNDoEMXIqwD/ycfVpEMTHmV5yz/fJGyiIeLJ/++wRthcHhXihuAA0pz0WEIuqwtU
+ZMfcjNQM2EZtduAefDtoQIW8SITEifs2eLkkpzRH2cKm3sSnurQO/4Ofl74lCEkD
+JXVCD3PQpvxS1v37IxUn+vXbT3mztg==
+=tYml
+-----END PGP SIGNATURE-----
+
+--qZP1wOhkGWh/mDjB--
 
