@@ -1,129 +1,116 @@
-Return-Path: <linux-kselftest+bounces-7433-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9FD89CBFD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 20:52:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAEB589CD52
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 23:17:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73C9E1F28D8D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 18:52:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D9C7B228C4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 21:17:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97547142E99;
-	Mon,  8 Apr 2024 18:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D6B147C72;
+	Mon,  8 Apr 2024 21:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NtVmSA8N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZGQ+rU8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FF6433BD
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Apr 2024 18:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750437482;
+	Mon,  8 Apr 2024 21:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712602316; cv=none; b=c7co1vUuvJ1S14Lid+ro8uzeyWhZ7Sx4TS2KRfe8+3c2jw+qEJFu+PYR1F6n8DbFJxlQqHob1/nnJkRfJdzbIh9NI54PagoWa2RAhfn/rdkc6Rgfq9yeRBbPDNWrlfgtPOhRg7f2DdI5MsSFTb9x72mHJd/iAL1tyBa+KDLEcXM=
+	t=1712611066; cv=none; b=hh6dZG2a47UoSDYM7KiLrAP/Pqo1mnyp80OEfX6rIrcuhq5HXNJwMlEv2bvlkAWJTFJoEQ5lkInH5N+bGKzMr98b7b26lWgFnZupF/ZxxyCwJb6EkOsoYFxrDJBriXjy1JPyGvRBhYatCrXZuppqdLoiSbMYO2Ejf+N/lahFXA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712602316; c=relaxed/simple;
-	bh=KxP9VvzkBIh/ITMiBM/OmZA5vpjjIbNabDqh1TmLwoE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UblVMyGXPqKSjHpoxxwxCMO7ZGySUVWyR0sHMd4LvfoKFp3LqG4hq5pawmGrbPTxwNwcUILiADrw8ZI1IO42VlEzXXebWRN1SxtopHs+SJJvezG4b51tUoNyiRf1m6Iu0BNgE4BeGoNDfXKcIy25I5KUDiMjHQ1h0CwxTMLpmHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NtVmSA8N; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712602313;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q8dFnN+DVwM1sWsRYbzV9b0Y7Yoo7FUCyFFFRTCNFqQ=;
-	b=NtVmSA8NuLt/FGmuPN+k+Sm6FwUFGkkkAfer9H9Z9uA8ugVdYW2rj80h22d8Qz568iCFC4
-	cTlbbpAl2QwunjYSrB8E1TvSEpZmm3RLizhUdjl2GH3suY79OavQ02mrinqyPeQMbEhWCS
-	+B82Ow71TH5Dck73NleNPIXMD95tv68=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-537-aQW-xCk8MX2eTz_blcr48A-1; Mon, 08 Apr 2024 14:51:47 -0400
-X-MC-Unique: aQW-xCk8MX2eTz_blcr48A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE1D1802CA7;
-	Mon,  8 Apr 2024 18:51:46 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.180])
-	by smtp.corp.redhat.com (Postfix) with SMTP id DD1B3489;
-	Mon,  8 Apr 2024 18:51:43 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon,  8 Apr 2024 20:50:21 +0200 (CEST)
-Date: Mon, 8 Apr 2024 20:49:57 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, John Stultz <jstultz@google.com>,
-	Marco Elver <elver@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kasan-dev@googlegroups.com, Edward Liaw <edliaw@google.com>,
-	Carlos Llamas <cmllamas@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/timers/posix_timers: reimplement
- check_timer_distribution()
-Message-ID: <20240408184957.GD25058@redhat.com>
-References: <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
- <87o7aqb6uw.ffs@tglx>
- <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
- <87frw2axv0.ffs@tglx>
- <20240404145408.GD7153@redhat.com>
- <87le5t9f14.ffs@tglx>
- <20240406150950.GA3060@redhat.com>
- <20240406151057.GB3060@redhat.com>
- <CACT4Y+Ych4+pdpcTk=yWYUOJcceL5RYoE_B9djX_pwrgOcGmFA@mail.gmail.com>
- <20240408102639.GA25058@redhat.com>
+	s=arc-20240116; t=1712611066; c=relaxed/simple;
+	bh=nccc6s/QyxPnhkMngljVQwgwV5GBYeJoErKU2w5fY5Y=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RprXRQD30AzMj7i6/dUbljHAsrP2wYfV0fQebJdWnotSUL8j1WHffuvwMzTWYgZFkoBnQfkBX+8vCB4FkMnGymX2hCxW0ue7hrnXbWlLXXeqHbTHyo7oA9ZXSc/Yd5xnpOykR1NO8z6lWDjXKxO2L9d5+P3Yq0YWT1JgxfgM6FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZGQ+rU8; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56e2b3e114fso4598301a12.2;
+        Mon, 08 Apr 2024 14:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712611063; x=1713215863; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nccc6s/QyxPnhkMngljVQwgwV5GBYeJoErKU2w5fY5Y=;
+        b=cZGQ+rU8gUpkMDcEslNTS4zqSB31mSN+8UxH7trxE47KyMJ9NMMnPuVRS5PL3mgbWV
+         1sNBocXozq9K8MTT9Ls370hmX9b985JlbuKogUdk+iSdKPHXQK0bvTGEAbn4HEkbjfut
+         oMC73oWuxlEy1nw85/WcitUvclAQN++5OSa6J4oupHlfBmV8W/ebEJkkSVcOvYLKtHJn
+         Pa6BY+ctg2yiK9DYrrZBH4HRooRI0QhG1YisbEKBijOJAggR+YXKBmLBvPLd6/MGcitp
+         xiCjKvy4iP6O2kvoW0Kmz2BvgkJ2sK4VvaEYgIVAiaVTsraPNAx/xkdtz8Ou3/3xNk3v
+         6njw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712611063; x=1713215863;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nccc6s/QyxPnhkMngljVQwgwV5GBYeJoErKU2w5fY5Y=;
+        b=dHzMcFvgqt/HH1MxUQJzbZDcf6SjVgqpHeZA/EsXdePnX1ugan3J0w1udRXUTaZ4CE
+         5n7F2aI0LYBUm52aafsb/afbMkIwqDyvMRbN7ZDp5ZpgeCetC4Y6O2tGht0NCZUx7dN7
+         DyxKauHtp+PsWKN+MnZRjOdG7MImdGtpcN39t7wLMnkvvm76SXYFQjW8m8QukN99YgaW
+         bsEiFfI5v9VFY+MN/ALdbwR/KgG30f/hSqiD1VjpaQ+BaW8c4kC/kduEtes3Zn45Ad4k
+         8GM1pyFAtpQ9ZSD+C66Ghem6UZCU7cKLGl4ubiT0Yz33+/Yd9EtiiulwqPAoa0Y0ikq4
+         czYg==
+X-Forwarded-Encrypted: i=1; AJvYcCVBDUyNqOvfW1mpJ70+Vk9dCwB34Ph7Qd/CDzmpk9JU43G/Sgj/thzzzL4cG5XrVLaHVZfy/4HqPlXpDN0eNtLQ3l7Owz2sS30q/ifEHJl7EWmWCfMbeQAOLP40bo0hpZiqKCQ+9YnGYQFCH5JSN4ZP0uhAQ4Z42q7/dLID1pz71MGt
+X-Gm-Message-State: AOJu0Yy68tz2DfQZrd/qm4q3LMY51Wa0Q8mE2TcntsKnViI/pocTd0Zv
+	BmPcoJeWXR3UvmcCopey51cwewfPMoGvcqt6VKxPteebdUzfRSN1
+X-Google-Smtp-Source: AGHT+IFGcXZQpUVnkBg6IX3TYcnATbe7YapUuNx2sNZb2AlCGn04W/UKHOiLipHNyxj3R/sNKBYc7A==
+X-Received: by 2002:a17:906:5296:b0:a51:b23c:13f8 with SMTP id c22-20020a170906529600b00a51b23c13f8mr4969629ejm.1.1712611062465;
+        Mon, 08 Apr 2024 14:17:42 -0700 (PDT)
+Received: from [192.168.100.206] ([89.28.99.140])
+        by smtp.gmail.com with ESMTPSA id q14-20020a170906a08e00b00a4e8353be19sm4874556ejy.224.2024.04.08.14.17.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 14:17:41 -0700 (PDT)
+Message-ID: <371c84608bd10736de6b1a8abee3fd1d43664a9a.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next v6 1/6] bpf/helpers: introduce sleepable
+ bpf_timers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>, bpf@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Tue, 09 Apr 2024 00:17:38 +0300
+In-Reply-To: <CAO-hwJ+0erX3iJcOh9KBG3f01UiYvGk_Gx+-zyFc4Vb5LCcHxA@mail.gmail.com>
+References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
+	 <20240408-hid-bpf-sleepable-v6-1-0499ddd91b94@kernel.org>
+	 <65c249a6af45bfa5fe0f6c2331dcc1771a6f0b05.camel@gmail.com>
+	 <CAO-hwJ+0erX3iJcOh9KBG3f01UiYvGk_Gx+-zyFc4Vb5LCcHxA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.0 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240408102639.GA25058@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On 04/08, Oleg Nesterov wrote:
->
-> On 04/08, Dmitry Vyukov wrote:
-> >
-> > >
-> > >         if (ctd_failed)
-> > >                 ksft_test_result_skip("No signal distribution. Assuming old kernel\n");
-> >
-> > Shouldn't the test fail here? The goal of a test is to fail when
-> > things don't work.
->
-> I've copied this from the previous patch from Thomas, I am fine
-> either way.
->
-> > I don't see any other ksft_test_result_fail() calls, and it does not
-> > look that the test will hang on incorrect distribution.
->
-> Yes, it should never hang.
+On Mon, 2024-04-08 at 19:20 +0200, Benjamin Tissoires wrote:
 
-Forgot to say...
+[...]
 
-To me this test should simply do
+> That was my initial assumption too, but Alexei told me it was fine.
+> And I think he is correct because kfree_rcu doesn't need the rcu_head
+> to be initialized.
+>=20
+> So in the end, we initialize the memory as a work_struct, and when
+> that work kicks in, we reuse that exact same memory as the rcu_head.
+> This is fine because that work will never be reused.
 
-	ksft_test_result(!ctd_failed, "check signal distribution\n");
-	return 0;
+Oh, I get it, thank you for explanation.
 
-but I am not familiar with tools/testing/selftests/ and I am not sure
-I understand the last email from Thomas.
-
-I agree with whatever you and Thomas decide.
-
-Oleg.
-
+Thanks,
+Eduard
 
