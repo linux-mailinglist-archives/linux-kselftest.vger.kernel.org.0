@@ -1,117 +1,105 @@
-Return-Path: <linux-kselftest+bounces-7385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1C6B89BD18
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 12:28:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4634789BD84
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 12:50:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 615EC1F229FA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 10:28:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF4E4B2248B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 10:50:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E5C53804;
-	Mon,  8 Apr 2024 10:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E928A5FBAF;
+	Mon,  8 Apr 2024 10:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G89pwlj6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lF+gfVx5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE8A535C8
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Apr 2024 10:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8DD5FB8C;
+	Mon,  8 Apr 2024 10:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712572101; cv=none; b=ZcwK5qtc+CU38EpReqyfbVc7AfwupON7t5LpItypEDP9Rkm8SNFZzVE0MwTbXXhWgd2JN1HOxL/JbAMfm6iQ6WhO72wl0kMifDqCtheYuaTrYu/Rct3Gb+A8BjRzCbNzz9ofxMBP26y000n7f3v7UUfvbVtF8GwX3BoesQDEpkE=
+	t=1712573427; cv=none; b=iqWB96Mz1aGBDFXaK7jocStNzo/w7CT6YYMXNJDT25GeBuZzTGiN1bkQrAKc7fBI9deOcgYTdK9OUkWNu9CxIsRWmbd6Yp0mIdzBRJGehLv5m3Jb6QlhswKK7zDvRl68TCqAW46OL3RIpeL/66YaMXo2Kya57tkDk+UYgslJ044=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712572101; c=relaxed/simple;
-	bh=6a0a1WjW79c7b2kHhlwJtsBrCzJPwJXkLVW5NplQJfY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JtwFG8SfacQzhSiVuXDq1x3sf665iAmdxDYUeRtDamQPIOxjGfgn/rqYPPv1qER/baR2K37UUMnNRDEpU/xKwieV726JFr77FxeV5bL5uI5+iZVW3e4NBfgxPx+a+f4Zwg1/OYQz/8rR3OavtKt8tgdxzjowWr8rx75EiN+WJIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G89pwlj6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712572099;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yVwuBF0GMcngCoZS7e29Q9IFctmXTtqweEvVhF9yYKQ=;
-	b=G89pwlj6JvvwDbuEpH/9dVGSkE1mrT+HIrL+GTfkINoqUi7d/pXqUnNfllPz0bdg9+T3IZ
-	/PhwEVSv1sYV0o2SU+nSt15xuypfrumX010CIlvNwet/IoxOzwgfAvmzeTaou5lkVYPOiO
-	j8a7ZKZZ4mnBvjF9zGBze4Oy7pne7DY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-351-cRvw7A-sN3iP_MupvctXnA-1; Mon,
- 08 Apr 2024 06:28:14 -0400
-X-MC-Unique: cRvw7A-sN3iP_MupvctXnA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C8FD29AC007;
-	Mon,  8 Apr 2024 10:28:13 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.180])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 290AF10061E0;
-	Mon,  8 Apr 2024 10:28:09 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon,  8 Apr 2024 12:26:47 +0200 (CEST)
-Date: Mon, 8 Apr 2024 12:26:39 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, John Stultz <jstultz@google.com>,
-	Marco Elver <elver@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kasan-dev@googlegroups.com, Edward Liaw <edliaw@google.com>,
-	Carlos Llamas <cmllamas@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/timers/posix_timers: reimplement
- check_timer_distribution()
-Message-ID: <20240408102639.GA25058@redhat.com>
-References: <87r0fmbe65.ffs@tglx>
- <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
- <87o7aqb6uw.ffs@tglx>
- <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
- <87frw2axv0.ffs@tglx>
- <20240404145408.GD7153@redhat.com>
- <87le5t9f14.ffs@tglx>
- <20240406150950.GA3060@redhat.com>
- <20240406151057.GB3060@redhat.com>
- <CACT4Y+Ych4+pdpcTk=yWYUOJcceL5RYoE_B9djX_pwrgOcGmFA@mail.gmail.com>
+	s=arc-20240116; t=1712573427; c=relaxed/simple;
+	bh=nYFUGgAe6JEVlDZJ6H84eYG+or3I6A2rmoi4NbVi+bI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uAqObldMwYDlVmEfZghci+7nVWm5CHQOKekAzggX1heyDfw8RHvG7rQGtKZly2BmdK/SBNrO9aNRenw6aqZZZO5QkFXFxd6tpyAFcFyna6swBXRme+SBJmz6D0ALQ2di809YT3sOwaNnNYQqcmbxL0X0eufnKeF9mrZo+75h0q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lF+gfVx5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59F8FC43390;
+	Mon,  8 Apr 2024 10:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712573427;
+	bh=nYFUGgAe6JEVlDZJ6H84eYG+or3I6A2rmoi4NbVi+bI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=lF+gfVx5Xe5MBpI46z/YyX7D21uLo+a7niU+ciALzFZlXk1VuxEcy+gUTsK+5Xr7I
+	 +2l+SxHn5orr/1jNoX+kvvS5wa36FSR6zidqSdjhmgQ/pLcDAiFmN+ODq/FbSccbDt
+	 5TCFK79Okj8S7xGkrB2Tw9A3wgpLjK0wF3O9/jdKi6m1+gXGuLh6d6gOlc9LfFHaqg
+	 9Nan/GwBMi2xMYBBi90FYioR/fqDqnvcigrRKs6aIHkf9rrb0AnpCg6DaxpNVRaTr4
+	 Gx+7PPfWLi9cfSqACjlxoZlCPyGe9Y4ZiNyCgONmL9cL2YcHV+avtOOhmNmTXWWTfC
+	 ed58pRA18nPkQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50FB3C54BD6;
+	Mon,  8 Apr 2024 10:50:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+Ych4+pdpcTk=yWYUOJcceL5RYoE_B9djX_pwrgOcGmFA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/5] selftests: net: groundwork for YNL-based
+ tests
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171257342732.21044.16185402025320251923.git-patchwork-notify@kernel.org>
+Date: Mon, 08 Apr 2024 10:50:27 +0000
+References: <20240405024526.2752998-1-kuba@kernel.org>
+In-Reply-To: <20240405024526.2752998-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, sdf@google.com, donald.hunter@gmail.com,
+ linux-kselftest@vger.kernel.org, petrm@nvidia.com
 
-On 04/08, Dmitry Vyukov wrote:
->
-> >
-> >         if (ctd_failed)
-> >                 ksft_test_result_skip("No signal distribution. Assuming old kernel\n");
->
-> Shouldn't the test fail here? The goal of a test is to fail when
-> things don't work.
+Hello:
 
-I've copied this from the previous patch from Thomas, I am fine
-either way.
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-> I don't see any other ksft_test_result_fail() calls, and it does not
-> look that the test will hang on incorrect distribution.
+On Thu,  4 Apr 2024 19:45:21 -0700 you wrote:
+> Currently the options for writing networking tests are C, bash or
+> some mix of the two. YAML/Netlink gives us the ability to easily
+> interface with Netlink in higher level laguages. In particular,
+> there is a Python library already available in tree, under tools/net.
+> Add the scaffolding which allows writing tests using this library.
+> 
+> The "scaffolding" is needed because the library lives under
+> tools/net and uses YAML files from under Documentation/.
+> So we need a small amount of glue code to find those things
+> and add them to TEST_FILES.
+> 
+> [...]
 
-Yes, it should never hang.
+Here is the summary with links:
+  - [net-next,v3,1/5] selftests: net: add scaffolding for Netlink tests in Python
+    https://git.kernel.org/netdev/net-next/c/b86761ff6374
+  - [net-next,v3,2/5] selftests: nl_netdev: add a trivial Netlink netdev test
+    https://git.kernel.org/netdev/net-next/c/796c8c7fd257
+  - [net-next,v3,3/5] netdevsim: report stats by default, like a real device
+    https://git.kernel.org/netdev/net-next/c/f216306bfb60
+  - [net-next,v3,4/5] selftests: drivers: add scaffolding for Netlink tests in Python
+    https://git.kernel.org/netdev/net-next/c/b4db9f840283
+  - [net-next,v3,5/5] testing: net-drv: add a driver test for stats reporting
+    https://git.kernel.org/netdev/net-next/c/f0e6c86e4bab
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Oleg.
 
 
