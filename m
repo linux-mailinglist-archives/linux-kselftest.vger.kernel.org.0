@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-7419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7416-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 098C089C9A6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 18:35:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE5189C99E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 18:34:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3661EB27DFA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 16:35:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFBF5B27988
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Apr 2024 16:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01BE142651;
-	Mon,  8 Apr 2024 16:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE75914265F;
+	Mon,  8 Apr 2024 16:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P+adrHRL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kAOKQRY6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002AE142E6D;
-	Mon,  8 Apr 2024 16:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3042414264D;
+	Mon,  8 Apr 2024 16:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712594071; cv=none; b=J8dGTOMxqtS9ljSntXXksl+neu5Atmfb56r40T2K1LOfBu3+BO2rvdPpJ/S9JKnkS/M3jN8vZcN/SFpkjbZahcqOcONsDbNO/EJ+augcG2yhqeueZIVhEPFnQy8fs84yrGDBAiH4akZdga02Cc5aXRDZ4nkpZgr7fYcgJXpQyyc=
+	t=1712594048; cv=none; b=F4T1QhZARIADIbzp8+kyhyVUZ19ttyZ81B9Z4pvoaHA6acAkRtvM5gl0oj3VitDbo2+0c5ZJxGmVfdeubN+2hJPteyBHpXg2nz4I7dhssJw3ghomTxMhFk8Xow83tqehPXOFZilOzyv7lJ70FEotyzOyeMYdiNqlGjQ4lCY+Mrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712594071; c=relaxed/simple;
-	bh=iFMcF4sxF33XR0Lkc9Cq46XcFGCgzur5ZS+neQp1wWE=;
+	s=arc-20240116; t=1712594048; c=relaxed/simple;
+	bh=e6yPicx1vzBwO5X4sy8D6sFs8x4CvbrZODV7UJSyblM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hU3L0Yc+Ms78spJ91MU2zd341vghuE4pgz4uA8k+0cY1pACxvImxWIuST8J8mhE9mEgvFwrtMg3wkiwYMlTy0S/7MTSQxR7H2mqEjsEhzy3LakLayEkYp/vbqHVDsNq0/rHjavV29rbeCFgsJK++CnpiM7j5SdPuipkrdTzfr/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P+adrHRL; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version:Content-Type; b=Cuox2dRta8NzQjkYPUSR9GjHxBOwBkctiVpfXc6jmoYIXMhtQwOGGbxwOBfP2+NSeU4M+C8qA1SwxutnGJuot/WuXSLVkG7jui+DyRh5GrIWC55rOvSbd5wBkHO+LoNASUcrKfs5/PYBhQMGq4iWpwCF4itMRli2nmCAbkl3qEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kAOKQRY6; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712594071; x=1744130071;
+  t=1712594047; x=1744130047;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=iFMcF4sxF33XR0Lkc9Cq46XcFGCgzur5ZS+neQp1wWE=;
-  b=P+adrHRLZl6H9xRP9qLJHdufvLVPRC3VjxeehokucKLM6EE7fyzVj8P0
-   iKXAx7TosY06e5Oe3anE/RWnQJ+n4tWJAlBIfunR4FV5nGkFTEqT64uLA
-   kfwS64m/Y/XVquDh2yZVtAc/itQCtVo4thYcXQG2ahOJrRERYOHoPdvC/
-   flqrJm8Tn7QhE00Bw47PqVupCPmwnlTgGd3X91uAqqciFKXYzJYPOGwm9
-   Z2EtmrmENG4JdhqS9lEBk9D1wgg/6b4lrHMLUsvac2uNjLGtZvQqJ/t4z
-   kBvGb9v/GbJNHI7Fh0u6b5j6vpGf2eHMKO9GN4zwfciG6EzzrZ1hhpaSS
-   Q==;
-X-CSE-ConnectionGUID: cBiNJ4h8QoGR87sOU/L18g==
-X-CSE-MsgGUID: wjjGYG3WRhOJczl2CjsCxQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="19315363"
+  bh=e6yPicx1vzBwO5X4sy8D6sFs8x4CvbrZODV7UJSyblM=;
+  b=kAOKQRY60ZkLbapMC69DICodn4vlkqA3/43o4LoN/J9bNK2rhBYc4Uxv
+   8RmQ5FTxK5n92NTSJI2iQbWHfX4oVeYzJeV+1iHDDpenC4rNFgfNkGd3J
+   gwkYlI+kZ3QQ9sJ/cmpsakwirHeZr3a2ieTXWEsQrz06SLseHmcbq14eJ
+   r2uScpeZnH1Bedt6F/zaEZTgayxVk7GdZdtANLOb/tXANW3HO91OV4RXN
+   mpPdoc07kuO248P7kjY2k3KHbhpPsFzH5XO7wfSB8PUaZUyUv7zQ3+RTn
+   xxUfOQKziX5m02kc6lmFUseRAdsvR4FSBIWuMlPEOpcWDXLsoAHTczEcb
+   A==;
+X-CSE-ConnectionGUID: CfsTOY9EQf2Q7Oe/RZJ69Q==
+X-CSE-MsgGUID: iyF9ShedRFuu9xGvawEHvg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="8461084"
 X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="19315363"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:33:59 -0700
-X-CSE-ConnectionGUID: LT2GzFtkS7qSQ3N55rtxKg==
-X-CSE-MsgGUID: iY1ZCACeRRaG7V1N+76N+w==
+   d="scan'208";a="8461084"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:34:06 -0700
+X-CSE-ConnectionGUID: u9trlsRxSRK02Ty7GgLAPA==
+X-CSE-MsgGUID: szICwBOkR4Gu3nRLSaCzTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="43113598"
+   d="scan'208";a="19813003"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.28])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:33:54 -0700
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:34:03 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -67,9 +67,9 @@ To: linux-kselftest@vger.kernel.org,
 Cc: Fenghua Yu <fenghua.yu@intel.com>,
 	linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 07/16] selftests/resctrl: Cleanup bm_pid and ppid usage & limit scope
-Date: Mon,  8 Apr 2024 19:32:38 +0300
-Message-Id: <20240408163247.3224-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 08/16] selftests/resctrl: Rename measure_vals() to measure_mem_bw_vals() & document
+Date: Mon,  8 Apr 2024 19:32:39 +0300
+Message-Id: <20240408163247.3224-9-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240408163247.3224-1-ilpo.jarvinen@linux.intel.com>
 References: <20240408163247.3224-1-ilpo.jarvinen@linux.intel.com>
@@ -82,139 +82,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-'bm_pid' and 'ppid' are global variables. As they are used by different
-processes and in signal handler, they cannot be entirely converted into
-local variables.
-
-The scope of those variables can still be reduced into resctrl_val.c
-only. As PARENT_EXIT() macro is using 'ppid', make it a function in
-resctrl_val.c and pass ppid to it as an argument because it is easier
-to understand than using the global variable directly.
-
-Pass 'bm_pid' into measure_val() instead of relying on the global
-variable which helps to make the call signatures of measure_val() and
-measure_llc_resctrl() more similar to each other.
+measure_val() is awfully generic name so rename it to measure_mem_bw()
+to describe better what it does and document the function parameters.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl.h     |  9 --------
- tools/testing/selftests/resctrl/resctrl_val.c | 23 ++++++++++++-------
- 2 files changed, 15 insertions(+), 17 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_val.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index e6f221236c79..e4b6dc672ecc 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -43,13 +43,6 @@
- 
- #define DEFAULT_SPAN		(250 * MB)
- 
--#define PARENT_EXIT()				\
--	do {					\
--		kill(ppid, SIGKILL);		\
--		umount_resctrlfs();		\
--		exit(EXIT_FAILURE);		\
--	} while (0)
--
- /*
-  * user_params:		User supplied parameters
-  * @cpu:		CPU number to which the benchmark will be bound to
-@@ -127,8 +120,6 @@ struct perf_event_read {
-  */
- extern volatile int *value_sink;
- 
--extern pid_t bm_pid, ppid;
--
- extern char llc_occup_path[1024];
- 
- int get_vendor(void);
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 5ef97d171cef..928c31903af2 100644
+index 928c31903af2..e4ad60963b0d 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -496,7 +496,7 @@ static int get_mem_bw_resctrl(unsigned long *mbm_total)
- 	return 0;
+@@ -628,8 +628,14 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+ 		set_cmt_path(ctrlgrp, mongrp, domain_id);
  }
  
--pid_t bm_pid, ppid;
-+static pid_t bm_pid, ppid;
- 
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr)
- {
-@@ -554,6 +554,13 @@ void signal_handler_unregister(void)
- 	}
- }
- 
-+static void parent_exit(pid_t ppid)
-+{
-+	kill(ppid, SIGKILL);
-+	umount_resctrlfs();
-+	exit(EXIT_FAILURE);
-+}
-+
- /*
-  * print_results_bw:	the memory bandwidth results are stored in a file
-  * @filename:		file that stores the results
-@@ -622,7 +629,7 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
- }
- 
- static int measure_vals(const struct user_params *uparams,
--			struct resctrl_val_param *param)
-+			struct resctrl_val_param *param, pid_t bm_pid)
+-static int measure_vals(const struct user_params *uparams,
+-			struct resctrl_val_param *param, pid_t bm_pid)
++/*
++ * measure_mem_bw - Measures memory bandwidth numbers while benchmark runs
++ * @uparams:		User supplied parameters
++ * @param:		parameters passed to resctrl_val()
++ * @bm_pid:		PID that runs the benchmark
++ */
++static int measure_mem_bw(const struct user_params *uparams,
++			  struct resctrl_val_param *param, pid_t bm_pid)
  {
  	unsigned long bw_resc, bw_resc_start, bw_resc_end;
  	float bw_imc;
-@@ -682,7 +689,7 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 	fp = freopen("/dev/null", "w", stdout);
- 	if (!fp) {
- 		ksft_perror("Unable to direct benchmark status to /dev/null");
--		PARENT_EXIT();
-+		parent_exit(ppid);
- 	}
- 
- 	if (strcmp(benchmark_cmd[0], "fill_buf") == 0) {
-@@ -696,7 +703,7 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 			once = false;
- 		} else {
- 			ksft_print_msg("Invalid once parameter\n");
--			PARENT_EXIT();
-+			parent_exit(ppid);
- 		}
- 
- 		if (run_fill_buf(span, memflush, operation, once))
-@@ -710,7 +717,7 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 
- 	fclose(stdout);
- 	ksft_print_msg("Unable to run specified benchmark\n");
--	PARENT_EXIT();
-+	parent_exit(ppid);
- }
- 
- /*
-@@ -789,7 +796,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		/* Register for "SIGUSR1" signal from parent */
- 		if (sigaction(SIGUSR1, &sigact, NULL)) {
- 			ksft_perror("Can't register child for signal");
--			PARENT_EXIT();
-+			parent_exit(ppid);
- 		}
- 
- 		/* Tell parent that child is ready */
-@@ -807,7 +814,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		sigsuspend(&sigact.sa_mask);
- 
- 		ksft_perror("Child is done");
--		PARENT_EXIT();
-+		parent_exit(ppid);
- 	}
- 
- 	ksft_print_msg("Benchmark PID: %d\n", bm_pid);
-@@ -877,7 +884,7 @@ int resctrl_val(const struct resctrl_test *test,
+@@ -884,7 +890,7 @@ int resctrl_val(const struct resctrl_test *test,
  
  		if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
  		    !strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
--			ret = measure_vals(uparams, param);
-+			ret = measure_vals(uparams, param, bm_pid);
+-			ret = measure_vals(uparams, param, bm_pid);
++			ret = measure_mem_bw(uparams, param, bm_pid);
  			if (ret)
  				break;
  		} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
