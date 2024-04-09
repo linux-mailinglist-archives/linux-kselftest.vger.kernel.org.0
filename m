@@ -1,144 +1,98 @@
-Return-Path: <linux-kselftest+bounces-7494-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3367989DFF3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 18:03:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BD1689E00B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 18:10:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 558C61C22068
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 16:03:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D14691F24019
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 16:10:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96BF713D63D;
-	Tue,  9 Apr 2024 16:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D5713D88F;
+	Tue,  9 Apr 2024 16:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="cFbC+aHp"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="STelNkvp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BB513D631
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 16:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA5D13D885
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 16:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712678570; cv=none; b=JhStWUEKEa1wdzU7mel3zTu92hvaF8I+dutLG5AOZRiPsdNCjlRF1jxQGM9ioQoqDvV1/uyEEDF8SO9+kIx5MAC3MXLsL5HyGiM112944Ss56YTmAaMTSeStqT2Vy4NtygPtC7E6JqGNcDseWA6KDBHZ9YUH95J4BmJ802hjJQA=
+	t=1712679008; cv=none; b=HlA/sqRXonkCQHhrlqr01gIXirw9GYLcfyG9Yv2B/fN/8bUliaFwwXgq0O4YBYFB9uuxWDjQ4Fc4nGA+8M37Y5cKSYKp3wcMXgAU2CWCbzhYdRQ+uPRopUOSjtbHSpjSjVWQxY9AEH+5OlUFbdfSW2qwWEOBtFVl+sG7ik2t+Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712678570; c=relaxed/simple;
-	bh=dyL+TLXIFrRx9Lp5PrForFMQ5coJeHhlaD95G4Nkex4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A06CWKcA/kDlT8l0Ty0D0FURRo8CLuQUfhtPPjmNdIfWF/QRIuMbSd+Yc7HyjbNjz/BCmOrruOrvLh7jprxEORLQ+TI7nSpKpCpl7VnqLemxzgmvAk2YnAjPVfBc5VonC6HZPhnKUkROdORB36NXYKfgiDO3jWwpWCAK+zcMec4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b=cFbC+aHp; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-22edbef3b4eso1144072fac.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Apr 2024 09:02:48 -0700 (PDT)
+	s=arc-20240116; t=1712679008; c=relaxed/simple;
+	bh=L54kcvC7tM5k3CHEDDLLg9GL0uS3slGoj9IlpaeX31c=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=olFHfx0IF2DoLnMZPL4ei8He4tFcxVDQxc0rH7Q4tM1UMmMVIjBwY0Yg8moULF9y8oG87RYDiN3guwKOaxp6KBb4Qv/M5E+gA1D8f1+Smk3ZY/ll4F39CM/QPyMIYx5o2pBzD4T4B4H/cOu2H4oV6A0nrv2haMNGP+CWIBasqqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=STelNkvp; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dd8e82dd47eso8049985276.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Apr 2024 09:10:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1712678567; x=1713283367; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cqPDnUUjz+kqldNCaECmKcsoHhRA5eglyoZJn6Trgmg=;
-        b=cFbC+aHp4L0u99cQueshGb2OyxJygUyW51VW1PlaL42GL5fVSk8i6pKHcDcMNFQy8b
-         dvRcySxYAOd9RLXXzSK7cMTp2WnL9/RjeWGNtre+Bvw648YJJH8jC8ByiFuw3ScLTt57
-         W/vBdHsBQUaDYB/EYie3Q8tyFt31KpsQy1xCa+S8Dq/2JzTrfF724TMBFgD+kvSBIeMW
-         kk+j6jERo8QvKYvXir0aeTJKwWs5JGGxdwHtVuD42GKXfuTww0g8XrIANMPLZU0E4xFr
-         eCzHoUxTMia0C1GXgDaqF4xmiEX2gjCoH+QBNTBHCUcLf4ETCCOaX6lxyyvzZaDGxnIz
-         0CMQ==
+        d=google.com; s=20230601; t=1712679006; x=1713283806; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTzBA8vCpg1bQoyDxMrjJAPBioScXieCvpaS67N6E3s=;
+        b=STelNkvp2N8Jd5d84GuyhHp6kqSVAW1feJpsZMatiLuhHAU7nAVYJ5bIOpOQRufdAX
+         nKrai2HEUa3TCCqEOynm8fh0JFSTzxbMYL/SLmHmXSzhcb5q1/Pwh1odwl5hF3G5CFI1
+         /JRa2A3588CE3F+c8RbpETqB+tjE0Dp3CjlHuSQju4mMQr89ZgbXo0g32DUCeq4T/+ny
+         bai34qX6u4PnOJ/zP3CFQJD2h9IgIAyxe05mVvhUWbB4iwiIcY4+S0UNroDPHFy3RCMK
+         UnWgzK/w0SMsmgc2hJO7HjIi9v8AHNHHX5CpC7AoySgPvNqn/CUtqiphLRICRBgabq4Y
+         ur0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712678567; x=1713283367;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cqPDnUUjz+kqldNCaECmKcsoHhRA5eglyoZJn6Trgmg=;
-        b=vBjWhTBXtdzqhfDX8KbruL5PJp6bVCjTXRONrsNt8xXNABkfl7C9EbdFlj7bqU5L3D
-         CNjcw/m5fSmnGotEsFiyrrFIoG2YUI0RBOZy0dB2OZDvg0zmN394JQk+Z4tekCCND9CY
-         L+4ItObyAM2vx0MPsmdew58mQy0Z9VVAz6zMUNJKigWVscxdnX/Si0Liba//48P3lWHQ
-         YOWcqVnUTVLcD5UnZ6X9K4WOn4YiOWlwbxc/VPJuq0O5NAfIW2a6VdaUQ0KEqQUfBw23
-         5n2QwQnUpZ3EIb4gFQFoOb1zWtboKYYFPHrzS4BR/IM8wjGeXHPqFdaBP+3GzRoF/ja7
-         eEWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWYswTE0+bT3DSf+hE2QRHdqhhsv8lJkJWmhJE2hDnNZYXzCdyTLv2E8pcD5qRNX7wCMlKHDdRYJuMhicx4/bd97jZg1lYhv4OWFIYYfvU+
-X-Gm-Message-State: AOJu0YwudE0geCuQAEISlg1J+DLxyhUk4jAd4TE2t4lXQJggD6tlG0cK
-	AQ9D78OLdLrAgWiF9MB//6p/MH/inHa1WoqyXxM0KJbSWWFkFk/HRm/iiY9FzkQ=
-X-Google-Smtp-Source: AGHT+IEGoBrNhBqtGIUytEyqGsTfxZZgidVeUlPKiXIyqqZM8wDHEt7Se1Z5Tgf7yF4UEbMKRsx9Xg==
-X-Received: by 2002:a05:6870:3753:b0:229:f403:136e with SMTP id a19-20020a056870375300b00229f403136emr13014545oak.56.1712678567546;
-        Tue, 09 Apr 2024 09:02:47 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:6db8])
-        by smtp.gmail.com with ESMTPSA id i10-20020ac871ca000000b00434af976d2dsm1785597qtp.88.2024.04.09.09.02.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Apr 2024 09:02:46 -0700 (PDT)
-Date: Tue, 9 Apr 2024 12:02:41 -0400
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: Tejun Heo <tj@kernel.org>
-Cc: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [RFC PATCH v3 2/9] cgroup/pids: Separate semantics of
- pids.events related to pids.max
-Message-ID: <20240409160241.GC1057805@cmpxchg.org>
-References: <20240405170548.15234-1-mkoutny@suse.com>
- <20240405170548.15234-3-mkoutny@suse.com>
- <ZhQvmnnxhiVo1duU@slm.duckdns.org>
+        d=1e100.net; s=20230601; t=1712679006; x=1713283806;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTzBA8vCpg1bQoyDxMrjJAPBioScXieCvpaS67N6E3s=;
+        b=ar3c2QjajUW7n5ANJqvEP9s+9Glx4ukK41viF8Edy6YpVuCwFy0G9BsMGa3nC5HM0E
+         qyE4uUBi3W8x0MMTeiF6DoOVA4hcc/ZY6OobKbk9cKsdZXHGZTlGmkxJ8qptsm+pdMXl
+         RmkA6QCWfDnYhmuLPzG5YAkwECiahPzW1PE29/sZfL6dclrAKjsJyJ+UjlCKxba2DAya
+         0Dv3WVpLTeXHBOAY3wfczQlPfcDUomEH6WplwJ5JgROusabyO3CoRJorioseq80omi7C
+         MGY0txIY0hIDVodzNQQeozSk5TwK56ASVzBONYvkGmCinpDvMpQ3DVTYDWiFuKiuplHo
+         oSzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfyZO7jgPiOB3YGl8RIsK1z6YzcSEPuF37lTYUfpiCXssYsNmgTeFnVHDSJnbaPRg554fcpqiYhk+wDqpp2744gGpuekb80feZXeE+tysA
+X-Gm-Message-State: AOJu0YyzQMkmkAs166KObxFOgwGM6nxCAKl8Z9Lx/6IOe7AhZWey9dnU
+	VmAglWKyX2zMZAMkjLgdX8RMq7aeq/WBJNKvvVM3PGcAQENPt6n/dQGuXoUwtsWNfQ==
+X-Google-Smtp-Source: AGHT+IE38beRAL/GyZV4u501PGP7OFfQCcNi6umKaAXPP8K0ga6UOvT4QIR9eYTeiccqjAl5Tf1y/Cw=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6902:2b88:b0:dcd:2f3e:4d18 with SMTP id
+ fj8-20020a0569022b8800b00dcd2f3e4d18mr14472ybb.12.1712679006109; Tue, 09 Apr
+ 2024 09:10:06 -0700 (PDT)
+Date: Tue, 9 Apr 2024 09:10:04 -0700
+In-Reply-To: <20240409031549.3531084-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZhQvmnnxhiVo1duU@slm.duckdns.org>
+Mime-Version: 1.0
+References: <20240409031549.3531084-1-kuba@kernel.org>
+Message-ID: <ZhVoXIE9HhV5LYXV@google.com>
+Subject: Re: [PATCH net-next 0/4] selftests: move bpf-offload test from bpf to net
+From: Stanislav Fomichev <sdf@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, bpf@vger.kernel.org, andrii@kernel.org, mykolal@fb.com, 
+	eddyz87@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Apr 08, 2024 at 07:55:38AM -1000, Tejun Heo wrote:
-> Hello,
+On 04/08, Jakub Kicinski wrote:
+> The test_offload.py test fits in networking and bpf equally
+> well. We started adding more Python tests in networking
+> and some of the code in test_offload.py can be reused,
+> so move it to networking. Looks like it bit rotted over
+> time and some fixes are needed.
 > 
-> On Fri, Apr 05, 2024 at 07:05:41PM +0200, Michal Koutný wrote:
-> > Currently, when pids.max limit is breached in the hierarchy, the event
-> > is counted and reported in the cgroup where the forking task resides.
-> > 
-> > This decouples the limit and the notification caused by the limit making
-> > it hard to detect when the actual limit was effected.
-> > 
-> > Let's introduce new events:
-> > 	  max
-> > 		The number of times the limit of the cgroup was hit.
-> > 
-> > 	  max.imposed
-> > 		The number of times fork failed in the cgroup because of self
-> > 		or ancestor limit.
-> 
-> The whole series make sense to me. I'm not sure about max.imposed field
-> name. Maybe a name which clearly signfies rejection of forks would be
-> clearer? Johannes, what do you think?
+> Admittedly more code could be extracted but I only had
+> the time for a minor cleanup :(
 
-The max event at the level where the limit is set (and up, for
-hierarchical accounting) makes sense to me.
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
-max.imposed is conceptually not entirely unprecedented, but something
-we've tried to avoid. Usually the idea is that events correspond to
-specific cgroup limitations at that level. Failures due to constraints
-higher up could be from anything, including system-level shortages.
-
-IOW, events are supposed to be more about "how many times did this
-limit here trigger", and less about "how many times did something
-happen to the tasks local to this group".
-
-It's a bit arbitrary and not perfectly followed everywhere, but I
-think there is value in trying to maintain that distinction, so that
-somebody looking at those files doesn't have to rack their brains or
-look up every counter in the docs to figure out what it's tracking.
-
-It's at least true for the misc controller, and for most of memcg -
-with the weird exception of the swap.max events which we've tried to
-fix before...
-
-For "things that are happening to the tasks in this group", would it
-make more sense to have an e.g. pids.stat::forkfail instead?
-
-(Or just not have that event at all? I'm not sure if it's actually
-needed or whether you kept it only to maintain some form of the
-information that is currently provided by the pr_info()).
+Far too often I've seen this test broken because it's not in the CI :-(
+Hope you can put it in the netdev one so we get a better signal.
 
