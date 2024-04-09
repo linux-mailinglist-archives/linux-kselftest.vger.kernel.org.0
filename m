@@ -1,74 +1,62 @@
-Return-Path: <linux-kselftest+bounces-7441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C833E89CF28
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 02:04:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C6689CF3C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 02:13:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 818222835C5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 00:04:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F1DEB228F4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 00:12:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9199E10E6;
-	Tue,  9 Apr 2024 00:04:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E116638B;
+	Tue,  9 Apr 2024 00:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ag5YBuC4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CBgUIW4k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50C2181
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 00:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFDA370
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 00:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712621087; cv=none; b=S0cJmL0PMrrZzPGlJg9NtcHN210h7QHrRzvNCA9hj1i2AWlyEPtaDkmYcZwvGEMXamrJQeaSQsOHI3HGEDtEHF/E5GN47CWqGVTvYjbeHm0P9LpXmxjJWFrFiVVa5IASNb+3se5r0t7jMmYrBOTFfIXFuj0VynRtam3qBV+DTbM=
+	t=1712621573; cv=none; b=hfejzVLTxiMWOpWqfKPAG9PIZPT31EA2KILyY4qLCDd7KYw/qVSs9JW8OLDiS+BS9rokl7l8kciKVbPaCMK6LJxVCPEubMSgoePELkyqd72Qv0/DaJKI5bniASrxiwMwB++elXp9e2LhiNi86Z80wkaqyZv/WJfUOxn+enQ/ivw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712621087; c=relaxed/simple;
-	bh=tGemAdGs1i/th5kpM2ts3FwXyK6yltFMw9jonLi8+1s=;
+	s=arc-20240116; t=1712621573; c=relaxed/simple;
+	bh=rA42DVPIz8tTwXvz9KosnbYvthn+MzPB6Blbd4aKlmM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uEarfnPlM3OaAbmfdLbHXuO8du7h/flQaibxQDnj2mAakDWgFHhV1MxBZnsqO8Z2K9jjO0nLcZAEAlgtXt50Z0GN27p08PKDLjml0B5bOyit2lHMc1mwFtDlRHlP+fdym2OKGdBgmaNl9iV+d5Z3S4l/GB+t3kc0hT7gCuAi2/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ag5YBuC4; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e424bd30fbso11196925ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Apr 2024 17:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712621084; x=1713225884; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xd+FWiZlX/lpCLCXGGzdHlU3p21YETfnnn9ljhWHF9I=;
-        b=ag5YBuC4jZYDWk+vcemFhfpKim+usl0i89xx/mLRK/sZ5KhQu4noBx6ZHCWYMvbb3z
-         1HberzLuUvZ17p8Xp5sTpijGt+9K+T787qIibS53AIQnhGEsCskhHiJHhqTaHTdGbdJB
-         4WOrHva4e8dWwlu0Fp50P+XxdpZJEP7HxVU2wenl4GV9nFd6Us/ONeBn8hzAUTCSy0rP
-         DM9/owVNWzWVhxY04snMMIxglq4qND5KGAp/5eMeEQb8D8lDXqSzvtKnhAPVRi11mC/P
-         xr4qRFRV01w8gYyXp4yy0SLWXIcQUf4OcVnbSIGue3lSE1x4W9UhZEdev9rED215ppxZ
-         BJcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712621084; x=1713225884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xd+FWiZlX/lpCLCXGGzdHlU3p21YETfnnn9ljhWHF9I=;
-        b=exXdvxqU/VyUJB8XXYDvllfw3tmtP6UaFN+QuVTjAiP+opemiokTANu7AEYxKuYLOK
-         uRGYs2JCsIB7mWMGitU2qDoYg2/a38P/GX8mb0JrH9v1aGd7xjLeJvahcFsKChXZ6QdL
-         rsXJJi9tonXesl6nNMicg+TGK8TsIXTfQsiQVvLauuwjqqlZBJdOXd3fsfpvzR4OiJzb
-         wg4LH5KKZ4aqTuQrkVg05D+ODTLlfv5JJuLScMouRqjIrFF7SvT6xb9rvMcu/PlutvS7
-         lMnVD47QpSE18MU304SAOTi6ZgWO+z0bx5oU8MmcLmJBaqn9I9VJNfXW6lTQgmZ+poVv
-         HYXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVmnj+iPm58dja9BCrb/xcdok8hNFtKO+gTDzFU3KmXwfuzAwIZrq0iHgXr3uSASQ1WDYR9BUZpjzOamYKaZ3f/iSDCIQjRPZF4wlWghTfB
-X-Gm-Message-State: AOJu0Yz/H0edYGhmiQhRTAG6SLuriTnYx62rnm/9RrJP1RumrlNG/Iw+
-	QnUJRBqA3iPBNtkvdKRYOa7u/oaFWNuSiDZqUDiiQxBSLDyye8lp1qCr9nFT5EQ=
-X-Google-Smtp-Source: AGHT+IG0OLdQkdZe7TuiqVfC4hYuT4+LNj+NNHp96L1eyYQkeOCssr3BNq26TdksuIIDjP/3fRra5A==
-X-Received: by 2002:a17:902:d2ca:b0:1e4:1932:b0a5 with SMTP id n10-20020a170902d2ca00b001e41932b0a5mr5371923plc.68.1712621084126;
-        Mon, 08 Apr 2024 17:04:44 -0700 (PDT)
-Received: from ?IPV6:2601:647:4180:9630::e8c1? ([2601:647:4180:9630::e8c1])
-        by smtp.gmail.com with ESMTPSA id c17-20020a170902d49100b001e1071cf0bbsm4411011plg.302.2024.04.08.17.04.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Apr 2024 17:04:43 -0700 (PDT)
-Message-ID: <e95f9821-e83c-4abb-941d-60ce24b9c0a3@rivosinc.com>
-Date: Mon, 8 Apr 2024 17:04:41 -0700
+	 In-Reply-To:Content-Type; b=M9lMZNfhWCUKpJJZ8xZHL2GRgLxWGOqkj6yAtjSfLZE1ZaEH7tfBvTB3UDk9IG8mIlU2opUUQjKzmoPJV1BtnKx/EleoIkBq728wfhsClwGLhBNWiML52swtxqNZFUbEdA2hB4FmYZ1jaj/HYOcOwAc7WW+JZpnliQ/upMSyKa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CBgUIW4k; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712621571;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EZMDqLk/ajYnQzQR/K3NrKQIpgpLukxRoVqcEZWTdt4=;
+	b=CBgUIW4kd54nQZWRDPtcMqRyjk3VK3VbHDeMJGRoM8CMOUgY6RmI46qBtYeoxHGxOwGzKB
+	pldW0Gg+PaEwBlkcMnF3+oyCSDoQxS3V/5t/BDeQqNFefLvt/eFFuACeg6ACbtta/TYj/Q
+	AFRY6TmQPBSEy1Hf7xuuH73TqlEIpdM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620-YqHu-p8-MzCfFmqjip8zgg-1; Mon, 08 Apr 2024 20:12:45 -0400
+X-MC-Unique: YqHu-p8-MzCfFmqjip8zgg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D880802A6F;
+	Tue,  9 Apr 2024 00:12:44 +0000 (UTC)
+Received: from [10.22.34.20] (unknown [10.22.34.20])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 77F11C09A05;
+	Tue,  9 Apr 2024 00:12:43 +0000 (UTC)
+Message-ID: <ec74bc9f-8e63-44b9-b3a6-ca7d6d366c69@redhat.com>
+Date: Mon, 8 Apr 2024 20:12:43 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,118 +64,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 03/22] drivers/perf: riscv: Read upper bits of a
- firmware counter
+Subject: Re: [RFC PATCH v3 6/9] selftests: cgroup: Add basic tests for pids
+ controller
 Content-Language: en-US
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
- Conor Dooley <conor.dooley@microchip.com>, Anup Patel <anup@brainfault.org>,
- Ajay Kaher <akaher@vmware.com>, Alexandre Ghiti <alexghiti@rivosinc.com>,
- Alexey Makhalov <amakhalov@vmware.com>, Juergen Gross <jgross@suse.com>,
- kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>,
- virtualization@lists.linux.dev,
- VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
- Will Deacon <will@kernel.org>, x86@kernel.org
-References: <20240403080452.1007601-1-atishp@rivosinc.com>
- <20240403080452.1007601-4-atishp@rivosinc.com>
- <20240404-89ee7d7f90a5fcc91809065e@orel>
-From: Atish Patra <atishp@rivosinc.com>
-In-Reply-To: <20240404-89ee7d7f90a5fcc91809065e@orel>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>
+References: <20240405170548.15234-1-mkoutny@suse.com>
+ <20240405170548.15234-7-mkoutny@suse.com>
+ <a45c2ece-acb4-4cff-9d53-f5c007c9b905@collabora.com>
+ <qweowkm4wlfzovp3qhtkzbybeampodtwmpbp2kbtiqcrhmjtdt@syk4itfkpmfr>
+ <41dd9c5a-0e07-4b98-9dfb-fb57eaa74fa2@collabora.com>
+ <oosadt3f5i3qsvisrxe6hrs46ryfqbyxyk3a6jimd7cqczjtcw@dvlsm7eh3b6r>
+ <4bae7682-801e-498f-88c9-9c9d45364bfc@collabora.com>
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <4bae7682-801e-498f-88c9-9c9d45364bfc@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-On 4/4/24 04:02, Andrew Jones wrote:
-> On Wed, Apr 03, 2024 at 01:04:32AM -0700, Atish Patra wrote:
->> SBI v2.0 introduced a explicit function to read the upper 32 bits
->> for any firmware counter width that is longer than 32bits.
->> This is only applicable for RV32 where firmware counter can be
->> 64 bit.
->>
->> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->> Reviewed-by: Anup Patel <anup@brainfault.org>
->> Signed-off-by: Atish Patra <atishp@rivosinc.com>
->> ---
->>   drivers/perf/riscv_pmu_sbi.c | 25 ++++++++++++++++++++-----
->>   1 file changed, 20 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
->> index 3e44d2fb8bf8..babf1b9a4dbe 100644
->> --- a/drivers/perf/riscv_pmu_sbi.c
->> +++ b/drivers/perf/riscv_pmu_sbi.c
->> @@ -57,6 +57,8 @@ asm volatile(ALTERNATIVE(						\
->>   PMU_FORMAT_ATTR(event, "config:0-47");
->>   PMU_FORMAT_ATTR(firmware, "config:63");
->>   
->> +static bool sbi_v2_available;
->> +
->>   static struct attribute *riscv_arch_formats_attr[] = {
->>   	&format_attr_event.attr,
->>   	&format_attr_firmware.attr,
->> @@ -511,19 +513,29 @@ static u64 pmu_sbi_ctr_read(struct perf_event *event)
->>   	struct hw_perf_event *hwc = &event->hw;
->>   	int idx = hwc->idx;
->>   	struct sbiret ret;
->> -	union sbi_pmu_ctr_info info;
->>   	u64 val = 0;
->> +	union sbi_pmu_ctr_info info = pmu_ctr_list[idx];
->>   
->>   	if (pmu_sbi_is_fw_event(event)) {
->>   		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_FW_READ,
->>   				hwc->idx, 0, 0, 0, 0, 0);
->> -		if (!ret.error)
->> -			val = ret.value;
->> +		if (ret.error)
->> +			return 0;
->> +
->> +		val = ret.value;
->> +		if (IS_ENABLED(CONFIG_32BIT) && sbi_v2_available && info.width >= 32) {
->> +			ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_FW_READ_HI,
->> +					hwc->idx, 0, 0, 0, 0, 0);
->> +			if (!ret.error)
->> +				val |= ((u64)ret.value << 32);
->> +			else
->> +				WARN_ONCE(1, "Unable to read upper 32 bits of firmware counter error: %d\n",
->> +					  sbi_err_map_linux_errno(ret.error));
-> 
-> I don't think we should use sbi_err_map_linux_errno() in this case since
-> we don't have a 1:1 mapping of SBI errors to Linux errors and we don't
-> propagate the error as a Linux error. For warnings, it's better to output
-> the exact SBI error.
-> 
 
-Sure. Fixed it.
-
->> +		}
->>   	} else {
->> -		info = pmu_ctr_list[idx];
->>   		val = riscv_pmu_ctr_read_csr(info.csr);
->>   		if (IS_ENABLED(CONFIG_32BIT))
->> -			val = ((u64)riscv_pmu_ctr_read_csr(info.csr + 0x80)) << 31 | val;
->> +			val |= ((u64)riscv_pmu_ctr_read_csr(info.csr + 0x80)) << 32;
->>   	}
->>   
->>   	return val;
->> @@ -1135,6 +1147,9 @@ static int __init pmu_sbi_devinit(void)
->>   		return 0;
->>   	}
->>   
->> +	if (sbi_spec_version >= sbi_mk_version(2, 0))
->> +		sbi_v2_available = true;
->> +
->>   	ret = cpuhp_setup_state_multi(CPUHP_AP_PERF_RISCV_STARTING,
->>   				      "perf/riscv/pmu:starting",
->>   				      pmu_sbi_starting_cpu, pmu_sbi_dying_cpu);
->> -- 
->> 2.34.1
+On 4/8/24 08:04, Muhammad Usama Anjum wrote:
+> On 4/8/24 5:01 PM, Michal Koutný wrote:
+>> On Mon, Apr 08, 2024 at 04:53:11PM +0500, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+>>> ksft_test_result_report(tests[i].fn(root), tests[i].name)
+>> $ git grep ksft_test_result_report v6.9-rc3 --
+>> (empty result)
 >>
-> 
-> Thanks,
-> drew
+>> I can't find that helper. Is that in some devel repositories?
+> Sorry, I always do development on next. So it has been added recently. Try
+> searching it on next:
+>
+> git grep ksft_test_result_report next-20240404 --
+
+I don't believe it is a good idea to make this patch having a dependency 
+on another set of patches in -next because the test won't run in a 
+non-next environment. We can always have additional patches later on to 
+modify the tests to use the newly available APIs.
+
+Cheers,
+Longman
+
+>
+>> Michal
 
 
