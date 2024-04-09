@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-7458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5820189D0DF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 05:17:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61D6A89D0E5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 05:17:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13025285F54
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 03:17:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 018501F257D2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 03:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF5454BCA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BAE56465;
 	Tue,  9 Apr 2024 03:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tHFlhLjI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3LyIE9A"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D00C548FC;
-	Tue,  9 Apr 2024 03:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943505578A;
+	Tue,  9 Apr 2024 03:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712632618; cv=none; b=PUoKmcYxkkDw/fdl1wgkZKgodZzfV2jIrCJcfxAoqvTMdV4vrUt2wwmz9ZT1FaaH8ycNWf5zqeU0aC8nCd0lzkZ80oxzvm5O7v7wLu7Kr9tVpZrEhtQPYWsTUBn17xoyQs2Ucqph5tDf6LSBKrxHskhbEZcb+7Rn88QnFrjeYfE=
+	t=1712632618; cv=none; b=Dv54r5h4Syd4uZNMgp9/GS2Ok0ewDfaxqDW7P9gRnFAn2YZlmSU8GGnfo+E+faxuYZaxEhNWDOlEa/FAWIwjRjSIQZ+m5htC7SvYPkT4ErRPEXoaMvA0TUKptOEGZgq8L27nxSSOnqe2PGe2fglHnnotLlOxE8MDMRLIwpl9l8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712632618; c=relaxed/simple;
-	bh=IIxE3PzC/7i7cnSTl0qPB9glUfBRw55X9DcZwinzfp8=;
+	bh=gZcoxT+eHxeUPYgzQtfsTv7+4vbMaAl8YaTwWiTQxRc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HOa/QMuaCsDmGMPlwNOyinNePpwHohB5xlcJgw4VWZdzWcdTU3lvTaCBOzROKLYl02sPNJDn0kWi+iDuJwWOFDAtjWNwj6jJZvUftEs8eMyOyrWDF1qWLgBrJu01H+g4n9e3nFRKTqeJ6cdac4kowftOsSizFYyq7AoF64xvZCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tHFlhLjI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E97C433A6;
+	 MIME-Version; b=UV8Kal+Mqqe1lcuH7KkocfKV1Y8pNjWgAH5KKYa7scNWTMpc82b4fdrUZbS+dnjZS9DHUHGIZKPg8FcSa3kv4BTmmpypodoasXapt9J07DB/b/2pkz0+lLShj4vryafL6WNEtw5yrGrd0Zv2mma3KLX/szohyyVs6S1o2z2rUVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3LyIE9A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EF3C433F1;
 	Tue,  9 Apr 2024 03:16:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712632617;
-	bh=IIxE3PzC/7i7cnSTl0qPB9glUfBRw55X9DcZwinzfp8=;
+	s=k20201202; t=1712632618;
+	bh=gZcoxT+eHxeUPYgzQtfsTv7+4vbMaAl8YaTwWiTQxRc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tHFlhLjId0BHL0tZnvPPOBiARRDKV1rJuyMQRAz/spjeWWhmR9z/uL3jvUp0mg+cR
-	 6h10oW76Vy5Omd9SU302d9Fy3NlJne5PKy4KAj4W2AUg3S3SG11Nk+VSNk1bHQHpEh
-	 4hCIUHt5AsNnOI6s46QczywXYray6ihqVUPd6UVzERFqliU3OAX02QVb+K7JW2oU3s
-	 wPlRCAwhCzUfYDbd3q1HJ2uyQgR+xUAT9Fo2JJ9XxRd0erk2CDyQETRBsq2u1ggalF
-	 14Q3pS5FKXzqZkGO1RJou/GfNmfa0okjO2RWzTcKHIvxWaFQn0176djy2PclnuTbzA
-	 yKm8hECcY05HA==
+	b=c3LyIE9AXANuzef+WL7A/qfePVDcNU2+DTmQTqbUfI6TlIllagO23f7BNkd3fAXFt
+	 A+z2rOnACQPSMggmVjOohojkd511nHIXQuihd0uroKFMRNduIKm786gUDeUbkVcSaA
+	 r/ku9+ijudhvhwv/iykvTAo6GfqRTsFGPnN+LDiYhr/lF4o5hryDqjNFQibAc4q8Yq
+	 NjNCU6rPrRme4LNLiZd9QGABaIQjI9CLM0iVC1SXw0K1RS1VLTfB3mKSrlv7C/8YPL
+	 sf3aR8wTBhs98Yv8c3sSpHJiFBfoEwrdiXOmFx6K6ZIghMdmR8JH+le3IUd9nFj8yI
+	 SIK01BSKpMETA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 1/4] selftests: move bpf-offload test from bpf to net
-Date: Mon,  8 Apr 2024 20:15:46 -0700
-Message-ID: <20240409031549.3531084-2-kuba@kernel.org>
+Subject: [PATCH net-next 2/4] selftests: net: bpf_offload: wait for maps
+Date: Mon,  8 Apr 2024 20:15:47 -0700
+Message-ID: <20240409031549.3531084-3-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240409031549.3531084-1-kuba@kernel.org>
 References: <20240409031549.3531084-1-kuba@kernel.org>
@@ -67,78 +67,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We're building more python tests on the netdev side, and some
-of the classes from the venerable BPF offload tests can be reused.
+Maps are removed asynchronously. Either there's a bigger delay
+now or the test has always been flaky. Retry waiting in the loop.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile                      | 1 -
- tools/testing/selftests/net/Makefile                      | 8 +++++++-
- .../selftests/{bpf/test_offload.py => net/bpf_offload.py} | 0
- .../progs/sample_map_ret0.c => net/sample_map_ret0.bpf.c} | 0
- .../{bpf/progs/sample_ret0.c => net/sample_ret0.bpf.c}    | 0
- 5 files changed, 7 insertions(+), 2 deletions(-)
- rename tools/testing/selftests/{bpf/test_offload.py => net/bpf_offload.py} (100%)
- rename tools/testing/selftests/{bpf/progs/sample_map_ret0.c => net/sample_map_ret0.bpf.c} (100%)
- rename tools/testing/selftests/{bpf/progs/sample_ret0.c => net/sample_ret0.bpf.c} (100%)
+ tools/testing/selftests/net/bpf_offload.py | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3b9eb40d6343..b0be07f29dde 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -102,7 +102,6 @@ TEST_PROGS := test_kmod.sh \
- 	test_xdp_redirect_multi.sh \
- 	test_xdp_meta.sh \
- 	test_xdp_veth.sh \
--	test_offload.py \
- 	test_sock_addr.sh \
- 	test_tunnel.sh \
- 	test_lwt_seg6local.sh \
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 5e34c93aa51b..e8bfa715aa49 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -84,6 +84,8 @@ TEST_GEN_FILES += sctp_hello
- TEST_GEN_FILES += csum
- TEST_GEN_FILES += nat6to4.o
- TEST_GEN_FILES += xdp_dummy.o
-+TEST_GEN_FILES += sample_ret0.bpf.o
-+TEST_GEN_FILES += sample_map_ret0.bpf.o
- TEST_GEN_FILES += ip_local_port_range
- TEST_GEN_FILES += bind_wildcard
- TEST_PROGS += test_vxlan_mdb.sh
-@@ -93,6 +95,7 @@ TEST_PROGS += test_bridge_backup_port.sh
- TEST_PROGS += fdb_flush.sh
- TEST_PROGS += fq_band_pktlimit.sh
- TEST_PROGS += vlan_hw_filter.sh
-+TEST_PROGS += bpf_offload.py
+diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
+index 6157f884d091..174dba1a48d3 100755
+--- a/tools/testing/selftests/net/bpf_offload.py
++++ b/tools/testing/selftests/net/bpf_offload.py
+@@ -201,11 +201,11 @@ netns = [] # net namespaces to be removed
+         time.sleep(0.05)
+     raise Exception("Time out waiting for program counts to stabilize want %d, have %d" % (expected, nprogs))
  
- TEST_FILES := settings
- TEST_FILES += in_netns.sh lib.sh net_helper.sh setup_loopback.sh setup_veth.sh
-@@ -142,7 +145,10 @@ endif
+-def bpftool_map_list_wait(expected=0, n_retry=20):
++def bpftool_map_list_wait(expected=0, n_retry=20, ns=""):
+     for i in range(n_retry):
+-        nmaps = len(bpftool_map_list())
+-        if nmaps == expected:
+-            return
++        maps = bpftool_map_list(ns=ns)
++        if len(maps) == expected:
++            return maps
+         time.sleep(0.05)
+     raise Exception("Time out waiting for map counts to stabilize want %d, have %d" % (expected, nmaps))
  
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+@@ -605,7 +605,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
+     return file_name, bpf_pinned(file_name)
  
--$(OUTPUT)/nat6to4.o $(OUTPUT)/xdp_dummy.o: $(OUTPUT)/%.o : %.c $(BPFOBJ) | $(MAKE_DIRS)
-+BPF_PROG_OBJS := $(OUTPUT)/nat6to4.o $(OUTPUT)/xdp_dummy.o \
-+	$(OUTPUT)/sample_map_ret0.bpf.o $(OUTPUT)/sample_ret0.bpf.o
-+
-+$(BPF_PROG_OBJS): $(OUTPUT)/%.o : %.c $(BPFOBJ) | $(MAKE_DIRS)
- 	$(CLANG) -O2 --target=bpf -c $< $(CCINCLUDE) $(CLANG_SYS_INCLUDES) -o $@
+ def pin_map(file_name, idx=0, expected=1):
+-    maps = bpftool_map_list(expected=expected)
++    maps = bpftool_map_list_wait(expected=expected)
+     m = maps[idx]
+     bpftool("map pin id %d %s" % (m["id"], file_name))
+     files.append(file_name)
+@@ -618,7 +618,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
+     ret, err = bpftool("prog show pin %s" % (prog_file), fail=False)
+     fail(ret != 0, "failed to show prog with removed device")
  
- $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
-diff --git a/tools/testing/selftests/bpf/test_offload.py b/tools/testing/selftests/net/bpf_offload.py
-similarity index 100%
-rename from tools/testing/selftests/bpf/test_offload.py
-rename to tools/testing/selftests/net/bpf_offload.py
-diff --git a/tools/testing/selftests/bpf/progs/sample_map_ret0.c b/tools/testing/selftests/net/sample_map_ret0.bpf.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/progs/sample_map_ret0.c
-rename to tools/testing/selftests/net/sample_map_ret0.bpf.c
-diff --git a/tools/testing/selftests/bpf/progs/sample_ret0.c b/tools/testing/selftests/net/sample_ret0.bpf.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/progs/sample_ret0.c
-rename to tools/testing/selftests/net/sample_ret0.bpf.c
+-    bpftool_map_list(expected=0)
++    bpftool_map_list_wait(expected=0)
+     ret, err = bpftool("map show pin %s" % (map_file), fail=False)
+     fail(ret == 0, "Showing map with removed device did not fail")
+     fail(err["error"].find("No such device") == -1,
+@@ -642,7 +642,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
+     else:
+         fail("ifname" in dev.keys(), "Ifname is reported for other ns")
+ 
+-    maps = bpftool_map_list(expected=2, ns=ns)
++    maps = bpftool_map_list_wait(expected=2, ns=ns)
+     for m in maps:
+         fail("dev" not in m.keys(), "Device parameters not reported")
+         fail(dev != m["dev"], "Map's device different than program's")
+@@ -1206,7 +1206,7 @@ netns = []
+ 
+     start_test("Test map update (no flags)...")
+     sim.set_xdp(map_obj, "offload", JSON=False) # map fixup msg breaks JSON
+-    maps = bpftool_map_list(expected=2)
++    maps = bpftool_map_list_wait(expected=2)
+     array = maps[0] if maps[0]["type"] == "array" else maps[1]
+     htab = maps[0] if maps[0]["type"] == "hash" else maps[1]
+     for m in maps:
 -- 
 2.44.0
 
