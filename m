@@ -1,214 +1,111 @@
-Return-Path: <linux-kselftest+bounces-7501-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7502-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 075F089E44F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 22:22:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D743D89E48F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 22:39:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E7AFB22F46
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 20:22:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DAD61F22A0E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 20:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D44C1581F1;
-	Tue,  9 Apr 2024 20:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4F7158851;
+	Tue,  9 Apr 2024 20:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W1aX+ESO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hMUuwKXV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764FB157A46
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 20:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29CE158843;
+	Tue,  9 Apr 2024 20:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712694148; cv=none; b=n3biwqGtuAm2UEJ8gJ+iTLT+osgBQTNiP/yQ8h+HJEdCCbGi7NYfZfmm17wJfD52vjOFRiH92aufsojxBUGn10n0e25r+LRgmrO/V1REtyVkcElzlc2gn+OnaKHyeUM+Az4SuXZmFhHAsHeWS/EJISpPnboSsb3GwhTIsHBlD5k=
+	t=1712695189; cv=none; b=IKYrQJO00e9fKqQ5eNZk4m3SvFzi3ZpGVgESAmeWFRKyz7gzrF6eRg4rJuKWUdcuog6mZ80hDK02sN+lZuJgipKbyRY2U4bc0Beh5xNY1o68uYYpzqs1qIh++sS8J3wOPNVN2qklPNbJOVY43RsVodvcTnCDmjuL7bwWVl0VZjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712694148; c=relaxed/simple;
-	bh=OyKQ9sJJ6C6VnOwLDCfS8LH7HDNugc1Wux7C2Pl0u4c=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=h2qcNgmByv0tPJeV1wj6QZvV6Hl2VPhxruEh2zOHE7xL5WuND/Bq6HxHlri0BZ7lU33/d+7WJax+4ifE8Z2sEQN0+CGiF9T7B5TouOmHakNca1Mb2j3VpSRgLKmn87jQR/nySolvRQxH0sX1spwrn5Y7z01G4n3UUYGiSL3t0vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W1aX+ESO; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2a473ba0632so4133348a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Apr 2024 13:22:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712694147; x=1713298947; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ih/ZHhpIYD49Y538EsPcvifBS2/Zoe6MXjtzsgxjeVI=;
-        b=W1aX+ESOuEUTZdx6V3aE2VNJ5rLGO4EAh7sdHHTxInmoxhCJvltU7B0actqVfApOyk
-         vLC2c1J3gsgT/+MaeSC14EUiDRS2kx+A81agsVTxBGAe5nFey+xudJSbKamchGFLFp3x
-         5IZo6XwqqsOhgNJ9K7u3HMvvYHN5qNpkcuosjztUEAc+Xi1ncmo1iQh+3Um/CGk42Wtq
-         UFjYXkQKDYFcRuJlHEAs/YBQQjw8ceXt17BCJCOojwiwl4ln7MW8zIFeK1Jz1yQRS7rO
-         xHp1sMqz7Y/16pxiHZW7lo/LoWeP6E7guAQ1ifnnMssUYwh6CbDuqJF+dPWX4SkLgLq1
-         uXmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712694147; x=1713298947;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ih/ZHhpIYD49Y538EsPcvifBS2/Zoe6MXjtzsgxjeVI=;
-        b=SIL13+OB7tDCHPhLQAhkHOo+mjobSVOn4wgOCXDufLNk1DpqXpJlTVfykQT1tKvqEp
-         3pnvSnsKp2RxbN8cv2b9gNy2xq69r64gvRB1uz68AVBz4NmK1Rs9740Fr0ThhJ27SKhW
-         JIqceb8CL+Epv08qWp1KUA0awE/TTy5eNWv5xjy0Pwkd624WeJtwHoU7lJMMruyIhxP+
-         dmfnvqJa0neQeY9+w2v5hZEHVVCtoszb03YU4qXWQ6yC0JSunIPpeORUmEqOfl3LM5y2
-         UdFxDef5zKUMNizk0ap1zli+dDjMOFrW9uZYHMchW5mVUXyIfW4krGMOchmo8qZ+GN4U
-         CURA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4ez4Hxjuah02SjKiX3TpIXJtCNMfhkTQH5x+6M84SHkjyqlvrs9WVFrB7dKL0zOmx3U2Hs4t9GC0zfjTujlQQYN+2FcixCzHCv/gMDZxt
-X-Gm-Message-State: AOJu0Yy5l5Mm1Uhpm6+YbSZJ/s8Vfy439JjKFQlzKXa9mVoblVpohDeE
-	rP3Mu5GT6OQhImjPTvdaOraXybjsMRQs1bMGQCAQdtQLjGda2aT65X7mDCGhg78HQYn+7B/JcCL
-	25JeI
-X-Google-Smtp-Source: AGHT+IGoWbaS5twejsOF39j/qOAoZI5wiTbn50PiLN504jBMF5YBvtg7yLuORdys8BuFqK3GIyZKmzkuzJXE
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:90b:b08:b0:2a2:5cad:85c4 with SMTP id
- bf8-20020a17090b0b0800b002a25cad85c4mr2193pjb.0.1712694146758; Tue, 09 Apr
- 2024 13:22:26 -0700 (PDT)
-Date: Tue,  9 Apr 2024 13:22:12 -0700
+	s=arc-20240116; t=1712695189; c=relaxed/simple;
+	bh=0Yc1aRq0cfqJFhJyIkDldFkrL/Y5AHCSI3i6IACqU04=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=c3/3YAFnlxhsREjMDtUwU4xPl1mU/RhxxqRuOSN2KHRuD6E4T4owXIWYu0o3RvuH4xSu5uYNBTe4btSbefPH6IuiVew6rheTKC1w3j5Xf/R0ttosrL9FJQV3Jbyp5W6KS+8wnoC/P9KM2Nlliv+2VUbNB3/Vs6AFMiDBE0gEYt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hMUuwKXV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C00EC433F1;
+	Tue,  9 Apr 2024 20:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712695189;
+	bh=0Yc1aRq0cfqJFhJyIkDldFkrL/Y5AHCSI3i6IACqU04=;
+	h=From:Date:Subject:To:Cc:From;
+	b=hMUuwKXVWpHSCB08oTL4bQsM+y2MbzeXwjXoms7bGBa1G1wxAiIlFqmDglUGVtHh2
+	 EhFEtWcXHWQ77H6s773LvtZZVRuYWDbpKV/WbiTWyl3wvnOBEMoCFO53OVkpxATMvh
+	 g3CgrbeNJOmfdhwho49UTwhm4W8XKOrOvTI0oTubkaB0qcP0nT7eF9AqIqrVOL5wNA
+	 rnUuMZHICDV+7P4ve0J6SzHkq8HBnarLl7DGL097BxKJ4IpqDo/vO/ZA6ktPXtDX1M
+	 46HOP0FbxUrkYIZ+Dkecgtb2a1sx0OYpkydAxx/5d0V7G1/qrXYVilGQZWjwfQqw9y
+	 TZqp8SG9kdSww==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 09 Apr 2024 21:39:43 +0100
+Subject: [PATCH] selftests/clone3: Check that the child exited cleanly
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240409202222.2830476-1-jstultz@google.com>
-Subject: [PATCH] selftests: timers: Fix valid-adjtimex signed left-shift
- undefined behavior
-From: John Stultz <jstultz@google.com>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Lee Jones <joneslee@google.com>, Muhammad Usama Anjum <usama.anjum@collabora.com>, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240409-kselftest-clone3-signal-v1-1-bbe49156171d@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAI+nFWYC/x3MQQqDMBBG4avIrDuQmEjBq5Quov6xgyGWjIgg3
+ t3g8lu8d5KiCJT65qSCXVTWXGFfDY2/kGewTNXUmtYbbzpeFClu0I3HtGY4VplzSGwxDTa42Pm
+ 3o1r/C6Icz/nzva4bQIBCWmkAAAA=
+To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1383; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=0Yc1aRq0cfqJFhJyIkDldFkrL/Y5AHCSI3i6IACqU04=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmFaeTbrxsxMQPVHOJS1Rq3fBJfXRe6ITHtiWAWxK/
+ MzXc+gmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZhWnkwAKCRAk1otyXVSH0Ke9B/
+ 9w6DBsuLvUH5CBI7kbhMfrrpkgyrnX3pibIAWlpmiaV695Fg8918CCCEfeatGxKIstjfhk/EN3tGbv
+ mwLbqbdBjlw0CtiwwL9oA7Rge5UKwGfEzYwPkM4IIXbK8BVqEtp49wpdyMLDS2eE4BHfn8PRznjkHT
+ GW866EZm7CNM5AYNWiTBBnTQw7qfsu9XrEPNPIUKxrwPYo5V+TigOvUSWKjsoB49dohj7blrvb+yJ5
+ KascqXrfTvk/W1qzx5ljXkCy3h6I2xNYXWO0Dv/Ui59BT8FS5evOB89h6hwy+Lpe0MT1uOH/FAP0lr
+ PQUr3cMWKSN1tdnlRkuF8mIZuUqPtA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-So, the struct adjtimex freq field takes a signed value who's
-units are in shifted (<<16) parts-per-million.
+When the child exits during the clone3() selftest we use WEXITSTATUS() to
+get the exit status from the process without first checking WIFEXITED() to
+see if the result will be valid. This can lead to incorrect results, for
+example if the child exits due to signal. Add a WIFEXTED() check and report
+any non-standard exit as a failure, using EXIT_FAILURE as the exit status
+for call_clone3() since we otherwise report 0 or negative errnos.
 
-Unfortunately for negative adjustments, the straightforward use
-of:
-	freq = ppm<<16
-will trip undefined behavior warnings with clang:
-
-valid-adjtimex.c:66:6: warning: shifting a negative signed value is undefined [-Wshift-negative-value]
-        -499<<16,
-        ~~~~^
-valid-adjtimex.c:67:6: warning: shifting a negative signed value is undefined [-Wshift-negative-value]
-        -450<<16,
-        ~~~~^
-...
-
-So fix our use of shifting negative values in the valid-adjtimex
-test case to use multiply by (1<<16) to avoid this.
-
-The patch also aligns the values a bit to make it look nicer.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Lee Jones <joneslee@google.com>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: linux-kselftest@vger.kernel.org
-Reported-by: Lee Jones <joneslee@google.com>
-Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Link: https://lore.kernel.org/lkml/0c6d4f0d-2064-4444-986b-1d1ed782135f@collabora.com/
-Signed-off-by: John Stultz <jstultz@google.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../testing/selftests/timers/valid-adjtimex.c | 69 ++++++++++---------
- 1 file changed, 35 insertions(+), 34 deletions(-)
+ tools/testing/selftests/clone3/clone3.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-index 48b9a803235a..9606d45767e7 100644
---- a/tools/testing/selftests/timers/valid-adjtimex.c
-+++ b/tools/testing/selftests/timers/valid-adjtimex.c
-@@ -62,45 +62,46 @@ int clear_time_state(void)
- #define NUM_FREQ_OUTOFRANGE 4
- #define NUM_FREQ_INVALID 2
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index 3c9bf0cd82a8..0e0e5dfa97c6 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -98,6 +98,11 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
+ 		ksft_print_msg("Child returned %s\n", strerror(errno));
+ 		return -errno;
+ 	}
++	if (!WIFEXITED(status)) {
++		ksft_print_msg("Child did not exit normally, status 0x%x\n",
++			       status);
++		return EXIT_FAILURE;
++	}
+ 	if (WEXITSTATUS(status))
+ 		return WEXITSTATUS(status);
  
-+#define SHIFTED_PPM (1 << 16)
- long valid_freq[NUM_FREQ_VALID] = {
--	-499<<16,
--	-450<<16,
--	-400<<16,
--	-350<<16,
--	-300<<16,
--	-250<<16,
--	-200<<16,
--	-150<<16,
--	-100<<16,
--	-75<<16,
--	-50<<16,
--	-25<<16,
--	-10<<16,
--	-5<<16,
--	-1<<16,
-+	 -499 * SHIFTED_PPM,
-+	 -450 * SHIFTED_PPM,
-+	 -400 * SHIFTED_PPM,
-+	 -350 * SHIFTED_PPM,
-+	 -300 * SHIFTED_PPM,
-+	 -250 * SHIFTED_PPM,
-+	 -200 * SHIFTED_PPM,
-+	 -150 * SHIFTED_PPM,
-+	 -100 * SHIFTED_PPM,
-+	  -75 * SHIFTED_PPM,
-+	  -50 * SHIFTED_PPM,
-+	  -25 * SHIFTED_PPM,
-+	  -10 * SHIFTED_PPM,
-+	   -5 * SHIFTED_PPM,
-+	   -1 * SHIFTED_PPM,
- 	-1000,
--	1<<16,
--	5<<16,
--	10<<16,
--	25<<16,
--	50<<16,
--	75<<16,
--	100<<16,
--	150<<16,
--	200<<16,
--	250<<16,
--	300<<16,
--	350<<16,
--	400<<16,
--	450<<16,
--	499<<16,
-+	    1 * SHIFTED_PPM,
-+	    5 * SHIFTED_PPM,
-+	   10 * SHIFTED_PPM,
-+	   25 * SHIFTED_PPM,
-+	   50 * SHIFTED_PPM,
-+	   75 * SHIFTED_PPM,
-+	  100 * SHIFTED_PPM,
-+	  150 * SHIFTED_PPM,
-+	  200 * SHIFTED_PPM,
-+	  250 * SHIFTED_PPM,
-+	  300 * SHIFTED_PPM,
-+	  350 * SHIFTED_PPM,
-+	  400 * SHIFTED_PPM,
-+	  450 * SHIFTED_PPM,
-+	  499 * SHIFTED_PPM,
- };
- 
- long outofrange_freq[NUM_FREQ_OUTOFRANGE] = {
--	-1000<<16,
--	-550<<16,
--	550<<16,
--	1000<<16,
-+	-1000 * SHIFTED_PPM,
-+	 -550 * SHIFTED_PPM,
-+	  550 * SHIFTED_PPM,
-+	 1000 * SHIFTED_PPM,
- };
- 
- #define LONG_MAX (~0UL>>1)
+
+---
+base-commit: 39cd87c4eb2b893354f3b850f916353f2658ae6f
+change-id: 20240405-kselftest-clone3-signal-1edb1a3f5473
+
+Best regards,
 -- 
-2.44.0.478.gd926399ef9-goog
+Mark Brown <broonie@kernel.org>
 
 
