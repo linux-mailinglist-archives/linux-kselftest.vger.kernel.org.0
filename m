@@ -1,72 +1,105 @@
-Return-Path: <linux-kselftest+bounces-7510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AA1289E5E8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 01:09:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 769D389E656
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 01:46:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABF7E1C22261
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 23:09:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 312DF2858D5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 23:46:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB313158DA8;
-	Tue,  9 Apr 2024 23:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB03F158DD3;
+	Tue,  9 Apr 2024 23:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCSlAEXM"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Zcbj2GTY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C13158D95;
-	Tue,  9 Apr 2024 23:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32318158DC4
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 23:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712704162; cv=none; b=TuldzEoBiz31a0NWHijPycLQSm38TVJoNsInpm9DTS1ttS+SU8cu+3F0b/Qklb8/Doi5nRQqhOmU5/ZdT6EBVUDXkkw/srs9MhMZuo5YKcz/MmrueQzQ+D+Zr2FCcAYc2t28jaCKVjiqGtGvFbwKz0pymfW1dURpzWuMl5IVt/k=
+	t=1712706403; cv=none; b=XjSO5XQK00Ul0BGwKAiEdSkPNDEyxbqcvEawcrss2XEDdAMGBwhNiTzHFAe2HJsOf16PAbpoaeCrxLti9gx1rFbwRu4PTk1BNAtGPPuhoLbqGh4etA/VuVqxlFskjgxDqAhrSCvq4MmfBju0sJE6nGCO4po8DVPRP+WODL4vP9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712704162; c=relaxed/simple;
-	bh=44f1BURDVDavtHs5VgCDimxWZS2jWuTMtVWaaTmGnks=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fGW8WDUBUbzXdHdgXsXPNXuQIAEQLnITUEWAr0nwApZqi8jKcmV6nHPmq8q5njhRj0QTHsI3voFksOsBoII5WvREWmzM5lTEmry+u4zdIvkB5b1Rq17/Z/HRomOWClzMl0fyxX7aDnsmmkvgx1L8R/jmvp1icpmK7E9cva2yR9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCSlAEXM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADDD7C433F1;
-	Tue,  9 Apr 2024 23:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712704162;
-	bh=44f1BURDVDavtHs5VgCDimxWZS2jWuTMtVWaaTmGnks=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eCSlAEXMyKvNcSJxudd6yoYMUYQ1HJHm298Ahmq93A2l00Mt63iOwFmxr2YoaLzo2
-	 2Vx1pMf1s+fzRX6MQH8NXMfRrlhB7ITaGx4WrZsorSyfXYLRInSJ5zc7M7Ng0Xlvau
-	 hpBWlVcBDLvsaLfU4vm0G/8gSmfRuD/KE9Li9UtNJ/nLNoPkv4xosoWlEXS1SEwVlm
-	 GsDlkPQpH8UngBnFA/utF5K2r1YTl9q5GIq6Pc0fWjQx3zV8mWuhT78G8iFTokZ+7+
-	 UUrQe6ZXl2rG07kwq0IG10r3o0HUhoNh/Qtg9ihkc5zoATkEiAFS0/vJsWLw2OlY7f
-	 xUiFRqESA56gA==
-Date: Tue, 9 Apr 2024 16:09:20 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1712706403; c=relaxed/simple;
+	bh=jNSBzWXhZJZfc+eIqIw5Gr2uSmaIhh7uL5umKj2kPfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AQDBC1IS4NUG51XMQf9e39agMGQ2qFmjvZHwbIjeiZuiKMR7Y/hZQuAsH7jezma4oWbFOmCWC5EagC7pFM4vxD4dS6VW7YHaivN68pvMxCqhbc3lndvWNwNUB/qZWQ7YXbsrUqtmv6C2NOsPxfSUTcfV7/DCV+5/luxXbJDxBso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Zcbj2GTY; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e3e56c9d2cso29275215ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Apr 2024 16:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1712706401; x=1713311201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iAaMW4DkptdB8vkfU6X0XRhtKwrtwp59dGPucd4k3xk=;
+        b=Zcbj2GTYCWEyQONPzz/ca0ax9BEJU1j4H7WYHwfusA7b5HiFO9dim32PdP+GMBk5J6
+         F4KNg1gEmgOZRBdhrZiOpTA/FgmX9lllGLX6bKUFLv51je9iNs1Hkp3EDgAu5cE57ilu
+         YnFG7kKgqjPXzUn7HT/Iye17drfYtVGU1m2p4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712706401; x=1713311201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iAaMW4DkptdB8vkfU6X0XRhtKwrtwp59dGPucd4k3xk=;
+        b=WP1yYNWMTIjAtyYsD7znIA6Zq4dL/0SaBuz4RFl0UsOvyZ+Ni2LiWCfYz8tL/7wNJg
+         ktxwQj1N8slCtMd4NxFQOVBj+le/pF4u24AOtaMl3K5gexSKdO7LMKEVjU2H22fWqohi
+         aQKBMiOILZVmiNokEFuv9qb2ZVwXuPJsPdvT5kZCunG4vf6Q0SoKLV2Kt71KODv2EBOd
+         jUr+xJ2KrVbcxiD0D1N1cKZbNxFFVjpGZQp7NTmWuMWkywcsf19tF+dQ7oU8zs8QCx2/
+         TCkgS5YBhIdL7pHeOGMZA0P5O9jF0KZa9p+/TpNC8zikWhyC3i9E/9K2lPldffT7KaLO
+         YzHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjHl8E7mlRLx3a5XwVPMNnEPYtiANhOyFLu7BWGaBPDzVWuv4L7ng8VFnzdguZ42PJW9yAmwngcPw0zigk8l7Tv/TwR8K4xZEx0OF/vine
+X-Gm-Message-State: AOJu0Ywext+JW43EeoGrdnMrfGH37gKpzNLQfJTKhwUZSD2YI3S9WjoW
+	kbF3HsAr1yLEIufHsZtTVfOca22k0jsIsKpyrX57QO+T9mN1YV/ClaZGiOEIpw==
+X-Google-Smtp-Source: AGHT+IGINmKk+cI6DD2WQ7SjjT99R0HHKYxf0CC6JwcygaTUpcCJ8LVus266jgna/DTBfAx9a5m9Ow==
+X-Received: by 2002:a17:902:eb8f:b0:1e3:cf18:7344 with SMTP id q15-20020a170902eb8f00b001e3cf187344mr1829767plg.11.1712706401500;
+        Tue, 09 Apr 2024 16:46:41 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i13-20020a170902eb4d00b001e2086fddecsm9497419pli.139.2024.04.09.16.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Apr 2024 16:46:41 -0700 (PDT)
+Date: Tue, 9 Apr 2024 16:46:40 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] selftests: kselftest_harness: Print empty string, not
  empty fmt on PASS/FAIL
-Message-ID: <20240409160920.3bfe3eeb@kernel.org>
-In-Reply-To: <20240409224256.1581292-1-seanjc@google.com>
+Message-ID: <202404091644.9CFF82A@keescook>
 References: <20240409224256.1581292-1-seanjc@google.com>
+ <20240409160920.3bfe3eeb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240409160920.3bfe3eeb@kernel.org>
 
-On Tue,  9 Apr 2024 15:42:56 -0700 Sean Christopherson wrote:
-> -	ksft_test_result_code(t->exit_code, test_name,
-> -			      diagnostic ? "%s" : "", diagnostic);
-> +	ksft_test_result_code(t->exit_code, test_name, "%s", diagnostic);
+On Tue, Apr 09, 2024 at 04:09:20PM -0700, Jakub Kicinski wrote:
+> On Tue,  9 Apr 2024 15:42:56 -0700 Sean Christopherson wrote:
+> > -	ksft_test_result_code(t->exit_code, test_name,
+> > -			      diagnostic ? "%s" : "", diagnostic);
+> > +	ksft_test_result_code(t->exit_code, test_name, "%s", diagnostic);
+> 
+> Have you tested that to make sure it doesn't change the output?
+> 
+> .. warning: ^^ leading question ;)
 
-Have you tested that to make sure it doesn't change the output?
+Probably should be just this, without changing the NULL init?
 
-.. warning: ^^ leading question ;)
+	ksft_test_result_code(t->exit_code, test_name, "%s",
+			      diagnostic ?: "");
+
+-- 
+Kees Cook
 
