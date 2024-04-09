@@ -1,48 +1,49 @@
-Return-Path: <linux-kselftest+bounces-7502-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D743D89E48F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 22:39:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EF1689E495
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 22:40:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DAD61F22A0E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 20:39:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F6511C210EE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 20:40:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4F7158851;
-	Tue,  9 Apr 2024 20:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43BB0158846;
+	Tue,  9 Apr 2024 20:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hMUuwKXV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZPEdseiB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29CE158843;
-	Tue,  9 Apr 2024 20:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1FC13E3E8;
+	Tue,  9 Apr 2024 20:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712695189; cv=none; b=IKYrQJO00e9fKqQ5eNZk4m3SvFzi3ZpGVgESAmeWFRKyz7gzrF6eRg4rJuKWUdcuog6mZ80hDK02sN+lZuJgipKbyRY2U4bc0Beh5xNY1o68uYYpzqs1qIh++sS8J3wOPNVN2qklPNbJOVY43RsVodvcTnCDmjuL7bwWVl0VZjY=
+	t=1712695239; cv=none; b=HTXDE0bs5t1kD4kCXQ4BaKp6dnaAVI6SU+XraI6efhE6MjYzt0n3lgdN/IR+MyLjxgxgsN0P6OEg3bNghiRbZG0svjT+MsKFZC2KbH//AO/JdXGoMFMdVe5N1xch3Cce+dsR+aiq8G7bZyEoSni9QUXnhgAVgwjYZzr6a2OC5Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712695189; c=relaxed/simple;
-	bh=0Yc1aRq0cfqJFhJyIkDldFkrL/Y5AHCSI3i6IACqU04=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=c3/3YAFnlxhsREjMDtUwU4xPl1mU/RhxxqRuOSN2KHRuD6E4T4owXIWYu0o3RvuH4xSu5uYNBTe4btSbefPH6IuiVew6rheTKC1w3j5Xf/R0ttosrL9FJQV3Jbyp5W6KS+8wnoC/P9KM2Nlliv+2VUbNB3/Vs6AFMiDBE0gEYt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hMUuwKXV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C00EC433F1;
-	Tue,  9 Apr 2024 20:39:47 +0000 (UTC)
+	s=arc-20240116; t=1712695239; c=relaxed/simple;
+	bh=QjNSSY66Qn3fpHE7t3xN6VwDZVTkupieYJdnQIRVOa0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=cyLxjekUfPI/YtBSYrU9+UrtpXsLUdVAXXCkq4sU6MFDk5/iddoUcq5rtSsCjEo7yc4Qrn+4XwTQ1sJ07FAv2QdcqsOqKDOK4VwbkCoC/xwnHYFrMVz7dSuoZYPKCgxXYvVX9KiesRMbOANA2+tlyU07bIHwX6bXLV1oYQ8Ecxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZPEdseiB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7910C433C7;
+	Tue,  9 Apr 2024 20:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712695189;
-	bh=0Yc1aRq0cfqJFhJyIkDldFkrL/Y5AHCSI3i6IACqU04=;
+	s=k20201202; t=1712695238;
+	bh=QjNSSY66Qn3fpHE7t3xN6VwDZVTkupieYJdnQIRVOa0=;
 	h=From:Date:Subject:To:Cc:From;
-	b=hMUuwKXVWpHSCB08oTL4bQsM+y2MbzeXwjXoms7bGBa1G1wxAiIlFqmDglUGVtHh2
-	 EhFEtWcXHWQ77H6s773LvtZZVRuYWDbpKV/WbiTWyl3wvnOBEMoCFO53OVkpxATMvh
-	 g3CgrbeNJOmfdhwho49UTwhm4W8XKOrOvTI0oTubkaB0qcP0nT7eF9AqIqrVOL5wNA
-	 rnUuMZHICDV+7P4ve0J6SzHkq8HBnarLl7DGL097BxKJ4IpqDo/vO/ZA6ktPXtDX1M
-	 46HOP0FbxUrkYIZ+Dkecgtb2a1sx0OYpkydAxx/5d0V7G1/qrXYVilGQZWjwfQqw9y
-	 TZqp8SG9kdSww==
+	b=ZPEdseiB8PUHZk4Nrm2rxQ+hRppYNTRuvDsdcDG5tUC7S6hKsPhc83k03H8TkR5pN
+	 IFu/X26ltYYGl5Sa5bu72Ll1VQP8yMkhR2y8ABDGaf8S2a6OREnC8xmEWn2ObJPWdm
+	 aYPTcrluUOJqQm34E6UOZXhoLAEE36BmSN9dy8BPJ9QZcvgdRnEUsG24i4V2yFqpQc
+	 CoDzO0fcC9yn7t73ma6YW7r42r4++/2dLpmEL0EYiT+BW8J0eAakONiIggkgfOMp5n
+	 3MQuzh1IwyPKtPqmtFNrj8gqD21TfIoKzSdYSduYtWUnU6r+3/PmVr0s8upPOIkPjx
+	 BXIYYRIl8Hhkw==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 09 Apr 2024 21:39:43 +0100
-Subject: [PATCH] selftests/clone3: Check that the child exited cleanly
+Date: Tue, 09 Apr 2024 21:40:32 +0100
+Subject: [PATCH] selftests/clone3: Correct log message for waitpid()
+ failures
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,58 +52,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240409-kselftest-clone3-signal-v1-1-bbe49156171d@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAI+nFWYC/x3MQQqDMBBG4avIrDuQmEjBq5Quov6xgyGWjIgg3
- t3g8lu8d5KiCJT65qSCXVTWXGFfDY2/kGewTNXUmtYbbzpeFClu0I3HtGY4VplzSGwxDTa42Pm
- 3o1r/C6Icz/nzva4bQIBCWmkAAAA=
+Message-Id: <20240409-kselftest-clone3-waitpid-v1-1-2b31e4aaac16@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAL+nFWYC/x3MQQqEMAxA0atI1hPo2FbEqwyzkJpoUKo0ZUaQ3
+ t3i8i3+v0ApCSkMzQWJfqKyx4r3q4GwjHEmlKkaWtM644zHVWnjTJoxbHski/9R8iETdn1wvbW
+ BPTPU/EjEcj7rz7eUGx/DwbJqAAAA
 To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1383; i=broonie@kernel.org;
- h=from:subject:message-id; bh=0Yc1aRq0cfqJFhJyIkDldFkrL/Y5AHCSI3i6IACqU04=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmFaeTbrxsxMQPVHOJS1Rq3fBJfXRe6ITHtiWAWxK/
- MzXc+gmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZhWnkwAKCRAk1otyXVSH0Ke9B/
- 9w6DBsuLvUH5CBI7kbhMfrrpkgyrnX3pibIAWlpmiaV695Fg8918CCCEfeatGxKIstjfhk/EN3tGbv
- mwLbqbdBjlw0CtiwwL9oA7Rge5UKwGfEzYwPkM4IIXbK8BVqEtp49wpdyMLDS2eE4BHfn8PRznjkHT
- GW866EZm7CNM5AYNWiTBBnTQw7qfsu9XrEPNPIUKxrwPYo5V+TigOvUSWKjsoB49dohj7blrvb+yJ5
- KascqXrfTvk/W1qzx5ljXkCy3h6I2xNYXWO0Dv/Ui59BT8FS5evOB89h6hwy+Lpe0MT1uOH/FAP0lr
- PQUr3cMWKSN1tdnlRkuF8mIZuUqPtA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1103; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=QjNSSY66Qn3fpHE7t3xN6VwDZVTkupieYJdnQIRVOa0=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmFafEQiwprOZALX3sQJyJ5+qdeqYdrvpE8CNl/2Bv
+ WAs+7SaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZhWnxAAKCRAk1otyXVSH0IX8B/
+ 4sMqd+yPOS+o3NzuZH+mjJ39Mi0De7fhC35ion9Xcn+88nvB7Ac+RV+Dk/k6LLsBrUvA/AhV/lmMr1
+ BfrQnmJzaRu+IbBpEYqtv7IEH231qrYhYZfKz32HGPQNApQymg2tZWHCcsF7bbvAlyM3onzp9NqWzi
+ dznw5f2iJW61eLOId9Y8qhAH0jWZ8pCEengeaQHb15ySs0rf4CjtJBcUt5UytCjYtwvWtyCAw6htjG
+ DTYJ57YhYrsd97kfN1hktdAMfUdjHEr/cOZ1FAUgZUc8ScHl9LFdv+uDFmPWOqIpt8q6SA+ZHg9BCj
+ xLN4vHvYXYmOIEFVMdUEFFdwDTIUKU
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-When the child exits during the clone3() selftest we use WEXITSTATUS() to
-get the exit status from the process without first checking WIFEXITED() to
-see if the result will be valid. This can lead to incorrect results, for
-example if the child exits due to signal. Add a WIFEXTED() check and report
-any non-standard exit as a failure, using EXIT_FAILURE as the exit status
-for call_clone3() since we otherwise report 0 or negative errnos.
+When logging an error from calling waitpid() on the child we print a
+misleading error message saying that the error we report was returned by
+the chilld. Fix this to say the error is from waitpid().
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/clone3/clone3.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/clone3/clone3.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 3c9bf0cd82a8..0e0e5dfa97c6 100644
+index 3c9bf0cd82a8..eb108727c35c 100644
 --- a/tools/testing/selftests/clone3/clone3.c
 +++ b/tools/testing/selftests/clone3/clone3.c
-@@ -98,6 +98,11 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- 		ksft_print_msg("Child returned %s\n", strerror(errno));
+@@ -95,7 +95,7 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
+ 			getpid(), pid);
+ 
+ 	if (waitpid(-1, &status, __WALL) < 0) {
+-		ksft_print_msg("Child returned %s\n", strerror(errno));
++		ksft_print_msg("waitpid() returned %s\n", strerror(errno));
  		return -errno;
  	}
-+	if (!WIFEXITED(status)) {
-+		ksft_print_msg("Child did not exit normally, status 0x%x\n",
-+			       status);
-+		return EXIT_FAILURE;
-+	}
  	if (WEXITSTATUS(status))
- 		return WEXITSTATUS(status);
- 
 
 ---
-base-commit: 39cd87c4eb2b893354f3b850f916353f2658ae6f
-change-id: 20240405-kselftest-clone3-signal-1edb1a3f5473
+base-commit: 8cb4a9a82b21623dbb4b3051dd30d98356cf95bc
+change-id: 20240405-kselftest-clone3-waitpid-68c4833cf5ff
 
 Best regards,
 -- 
