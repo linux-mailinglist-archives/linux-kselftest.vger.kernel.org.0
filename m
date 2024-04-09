@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-7460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61D6A89D0E5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 05:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C270189D0EA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 05:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 018501F257D2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 03:17:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A1AA1F25720
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 03:17:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BAE56465;
-	Tue,  9 Apr 2024 03:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CCC86A8AE;
+	Tue,  9 Apr 2024 03:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3LyIE9A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/j0IdO/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943505578A;
-	Tue,  9 Apr 2024 03:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700FA6A00B;
+	Tue,  9 Apr 2024 03:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712632618; cv=none; b=Dv54r5h4Syd4uZNMgp9/GS2Ok0ewDfaxqDW7P9gRnFAn2YZlmSU8GGnfo+E+faxuYZaxEhNWDOlEa/FAWIwjRjSIQZ+m5htC7SvYPkT4ErRPEXoaMvA0TUKptOEGZgq8L27nxSSOnqe2PGe2fglHnnotLlOxE8MDMRLIwpl9l8E=
+	t=1712632619; cv=none; b=N4Lf8Ko+s/0cNByDFN0KMLc3WOixo0gQ6xWZYyLuyOpLBFo7IHDD2RDG7bKfTZqSfzuPBxI1yra1LBRWFe1etRYs6njjVnClq+EO1CzzeYkM18w7XIzG+an0e8g5+s4N3GYsvydag8WUMx9sM3HiygqdrU+BPNKWMLWN83AC/no=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712632618; c=relaxed/simple;
-	bh=gZcoxT+eHxeUPYgzQtfsTv7+4vbMaAl8YaTwWiTQxRc=;
+	s=arc-20240116; t=1712632619; c=relaxed/simple;
+	bh=b9pGv5qifj9nfMAOHGw9amG7xO4utK1lJIFTulXjYR4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UV8Kal+Mqqe1lcuH7KkocfKV1Y8pNjWgAH5KKYa7scNWTMpc82b4fdrUZbS+dnjZS9DHUHGIZKPg8FcSa3kv4BTmmpypodoasXapt9J07DB/b/2pkz0+lLShj4vryafL6WNEtw5yrGrd0Zv2mma3KLX/szohyyVs6S1o2z2rUVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3LyIE9A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EF3C433F1;
-	Tue,  9 Apr 2024 03:16:57 +0000 (UTC)
+	 MIME-Version; b=SI18OO/KNbKiT83Dlr1UD3fxiNYKEyCUifaLOkoZSBqMOdSOCq+xfEsHPshPqNVSHOeSTRdrNPtV9fZjcGu5B15nAPS0qAlCtuLcgL7y+IPSYZkJPUNVTCiffToRL09TZE43rJU9KQ1c4PwWbvOe2cKZhlaf/ZpXEZ4hgtWSzvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/j0IdO/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87878C433C7;
+	Tue,  9 Apr 2024 03:16:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712632618;
-	bh=gZcoxT+eHxeUPYgzQtfsTv7+4vbMaAl8YaTwWiTQxRc=;
+	s=k20201202; t=1712632619;
+	bh=b9pGv5qifj9nfMAOHGw9amG7xO4utK1lJIFTulXjYR4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c3LyIE9AXANuzef+WL7A/qfePVDcNU2+DTmQTqbUfI6TlIllagO23f7BNkd3fAXFt
-	 A+z2rOnACQPSMggmVjOohojkd511nHIXQuihd0uroKFMRNduIKm786gUDeUbkVcSaA
-	 r/ku9+ijudhvhwv/iykvTAo6GfqRTsFGPnN+LDiYhr/lF4o5hryDqjNFQibAc4q8Yq
-	 NjNCU6rPrRme4LNLiZd9QGABaIQjI9CLM0iVC1SXw0K1RS1VLTfB3mKSrlv7C/8YPL
-	 sf3aR8wTBhs98Yv8c3sSpHJiFBfoEwrdiXOmFx6K6ZIghMdmR8JH+le3IUd9nFj8yI
-	 SIK01BSKpMETA==
+	b=I/j0IdO/MgWcKlOVjOtRrHSkxhyhpNlRdEQIx5hfU7KmQJ90W4N7671FSPEExwPB8
+	 BSzyrHCbtU75+iZBZkZ94WJBdN4QSRXShUoCYJDX3Xvao+p0bE282J5gj6oxUERnXv
+	 PUY+qJ2DgLKRjs1hqzKkDOzMzflO9w8tAlb3va+tLu5cX7y32td2fzQ80EME/wPPon
+	 bcDgXf9fcUlcnczlEnBgkA0zlRGaPuoOIsNduI6nBJOe5cmBLgs+fm8QjznhDRJo+G
+	 9EinsbGRQVq0J3VTrefwwSl4m0ZEAo/aaPoBCKxBqRelII4OGy1CxetxVef9W18tCc
+	 vDJlLV11tWLIg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 2/4] selftests: net: bpf_offload: wait for maps
-Date: Mon,  8 Apr 2024 20:15:47 -0700
-Message-ID: <20240409031549.3531084-3-kuba@kernel.org>
+Subject: [PATCH net-next 3/4] selftests: net: declare section names for bpf_offload
+Date: Mon,  8 Apr 2024 20:15:48 -0700
+Message-ID: <20240409031549.3531084-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240409031549.3531084-1-kuba@kernel.org>
 References: <20240409031549.3531084-1-kuba@kernel.org>
@@ -67,70 +67,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Maps are removed asynchronously. Either there's a bigger delay
-now or the test has always been flaky. Retry waiting in the loop.
+Non-ancient ip (iproute2-5.15.0, libbpf 0.7.0) refuses to load
+the sample with maps because we don't generate BTF:
+
+   libbpf: BTF is required, but is missing or corrupted.
+   ERROR: opening BPF object file failed
+
+Enable BTF by adding -g to clang flags. With that done
+neither of the programs load:
+
+  libbpf: prog 'func': error relocating .BTF.ext function info: -22
+  libbpf: prog 'func': failed to relocate calls: -22
+  libbpf: failed to load object 'ksft-net-drv/net/sample_ret0.bpf.o'
+
+Andrii explains that this is because we don't specify
+section names for the code. Add the section names, too.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/net/bpf_offload.py | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/Makefile              | 3 ++-
+ tools/testing/selftests/net/bpf_offload.py        | 2 +-
+ tools/testing/selftests/net/sample_map_ret0.bpf.c | 2 +-
+ tools/testing/selftests/net/sample_ret0.bpf.c     | 3 +++
+ 4 files changed, 7 insertions(+), 3 deletions(-)
 
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index e8bfa715aa49..a3c781cb8367 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -149,7 +149,8 @@ BPF_PROG_OBJS := $(OUTPUT)/nat6to4.o $(OUTPUT)/xdp_dummy.o \
+ 	$(OUTPUT)/sample_map_ret0.bpf.o $(OUTPUT)/sample_ret0.bpf.o
+ 
+ $(BPF_PROG_OBJS): $(OUTPUT)/%.o : %.c $(BPFOBJ) | $(MAKE_DIRS)
+-	$(CLANG) -O2 --target=bpf -c $< $(CCINCLUDE) $(CLANG_SYS_INCLUDES) -o $@
++	$(CLANG) -O2 -g --target=bpf $(CCINCLUDE) $(CLANG_SYS_INCLUDES) \
++	-c $< -o $@
+ 
+ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
+ 	   $(APIDIR)/linux/bpf.h					       \
 diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
-index 6157f884d091..174dba1a48d3 100755
+index 174dba1a48d3..76b53ac2c8c6 100755
 --- a/tools/testing/selftests/net/bpf_offload.py
 +++ b/tools/testing/selftests/net/bpf_offload.py
-@@ -201,11 +201,11 @@ netns = [] # net namespaces to be removed
-         time.sleep(0.05)
-     raise Exception("Time out waiting for program counts to stabilize want %d, have %d" % (expected, nprogs))
+@@ -237,7 +237,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
+ def ethtool(dev, opt, args, fail=True):
+     return cmd("ethtool %s %s %s" % (opt, dev["ifname"], args), fail=fail)
  
--def bpftool_map_list_wait(expected=0, n_retry=20):
-+def bpftool_map_list_wait(expected=0, n_retry=20, ns=""):
-     for i in range(n_retry):
--        nmaps = len(bpftool_map_list())
--        if nmaps == expected:
--            return
-+        maps = bpftool_map_list(ns=ns)
-+        if len(maps) == expected:
-+            return maps
-         time.sleep(0.05)
-     raise Exception("Time out waiting for map counts to stabilize want %d, have %d" % (expected, nmaps))
+-def bpf_obj(name, sec=".text", path=bpf_test_dir,):
++def bpf_obj(name, sec="xdp", path=bpf_test_dir,):
+     return "obj %s sec %s" % (os.path.join(path, name), sec)
  
-@@ -605,7 +605,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
-     return file_name, bpf_pinned(file_name)
+ def bpf_pinned(name):
+diff --git a/tools/testing/selftests/net/sample_map_ret0.bpf.c b/tools/testing/selftests/net/sample_map_ret0.bpf.c
+index 495990d355ef..43ca92594926 100644
+--- a/tools/testing/selftests/net/sample_map_ret0.bpf.c
++++ b/tools/testing/selftests/net/sample_map_ret0.bpf.c
+@@ -17,7 +17,7 @@ struct {
+ } array SEC(".maps");
  
- def pin_map(file_name, idx=0, expected=1):
--    maps = bpftool_map_list(expected=expected)
-+    maps = bpftool_map_list_wait(expected=expected)
-     m = maps[idx]
-     bpftool("map pin id %d %s" % (m["id"], file_name))
-     files.append(file_name)
-@@ -618,7 +618,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
-     ret, err = bpftool("prog show pin %s" % (prog_file), fail=False)
-     fail(ret != 0, "failed to show prog with removed device")
+ /* Sample program which should always load for testing control paths. */
+-SEC(".text") int func()
++SEC("xdp") int func()
+ {
+ 	__u64 key64 = 0;
+ 	__u32 key = 0;
+diff --git a/tools/testing/selftests/net/sample_ret0.bpf.c b/tools/testing/selftests/net/sample_ret0.bpf.c
+index fec99750d6ea..1df5ca98bb65 100644
+--- a/tools/testing/selftests/net/sample_ret0.bpf.c
++++ b/tools/testing/selftests/net/sample_ret0.bpf.c
+@@ -1,6 +1,9 @@
+ /* SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) */
  
--    bpftool_map_list(expected=0)
-+    bpftool_map_list_wait(expected=0)
-     ret, err = bpftool("map show pin %s" % (map_file), fail=False)
-     fail(ret == 0, "Showing map with removed device did not fail")
-     fail(err["error"].find("No such device") == -1,
-@@ -642,7 +642,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
-     else:
-         fail("ifname" in dev.keys(), "Ifname is reported for other ns")
- 
--    maps = bpftool_map_list(expected=2, ns=ns)
-+    maps = bpftool_map_list_wait(expected=2, ns=ns)
-     for m in maps:
-         fail("dev" not in m.keys(), "Device parameters not reported")
-         fail(dev != m["dev"], "Map's device different than program's")
-@@ -1206,7 +1206,7 @@ netns = []
- 
-     start_test("Test map update (no flags)...")
-     sim.set_xdp(map_obj, "offload", JSON=False) # map fixup msg breaks JSON
--    maps = bpftool_map_list(expected=2)
-+    maps = bpftool_map_list_wait(expected=2)
-     array = maps[0] if maps[0]["type"] == "array" else maps[1]
-     htab = maps[0] if maps[0]["type"] == "hash" else maps[1]
-     for m in maps:
++#define SEC(name) __attribute__((section(name), used))
++
+ /* Sample program which should always load for testing control paths. */
++SEC("xdp")
+ int func()
+ {
+ 	return 0;
 -- 
 2.44.0
 
