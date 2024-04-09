@@ -1,269 +1,107 @@
-Return-Path: <linux-kselftest+bounces-7505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E119589E58F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 00:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4339789E5A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 00:26:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E57DF1C2204A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 22:11:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BE9A1C20F1A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 22:26:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94E9158D74;
-	Tue,  9 Apr 2024 22:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2921B158D87;
+	Tue,  9 Apr 2024 22:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="RhnzFJav"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oZ0D5WTm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87156158D6D
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 22:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA5F158A2B;
+	Tue,  9 Apr 2024 22:26:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712700711; cv=none; b=AcynTWB4l5A8i2auXs0KMTUkm+6vtXmTT3756Mn54NkutDpSMUUSVcMNHeRnbSNlr3uHP/DU0En7E/ctIlSNj6O1R5HAnQWTiy9M9MKdPwiybCI1PDx1L6StIR2/qJrbzpr0SGY2XMYHZCo9vLBK68DkDoyPOpoTCGlAvUYK+68=
+	t=1712701563; cv=none; b=mFqXMLd1EP8mnpYI3bY8BSOzwkUJCWnDZ/5v5raznCd3rthyp5bz6QPKC4TFgC201cVVIOAh77CW56LOwUAenAfabRz7GoG8jCFsRenBjI37f8u+jkaczKKoYgSJJr7YQWivICWXyMkWb/XVq9W5cz/AXsUNS4Ho4BAE5cdTRyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712700711; c=relaxed/simple;
-	bh=uMpfpNZT/JircILPCLdeo5TrXY5VRv3On2Rb7xVenag=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kCv/6W06ZJsQce5zROg5hbXjGoNU+K1coiap3/EUj3AmqqlzcQA5Qp9u5eOU2ykDVe4Pxp8WlDOI7kHKA1h0tt1vnvUEkZ/iKEa16WXvdMuqjcGfOXTGCuYdim+0dRLJQiyfUOYhv+23W763fg49RStktzweWF44OImfydSB7Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=RhnzFJav; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-516c97ddcd1so7242873e87.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Apr 2024 15:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712700707; x=1713305507; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cl1aEg9ZkKTDAHIndPvHsR0jY5Vb252ppSopDvYPPc0=;
-        b=RhnzFJavAW22HzyhcV/Gy4v2dytOK6WXyYGaaavpe4bm1F3DBPuUVWEl9YyJDglq02
-         hz20n5XkmPKvl64MrlD07li95V5W7X4keJtztYRcKbcZIOYocJG9230XSzaLgKiMPT/m
-         qvwgolJ2761GdbMaRrVRoD0NEfiNqQxXFsle/Wn3P+BSBiPv0smTZfNileY6pKzKwdY8
-         3TMcJhI+lTjd42dIcPZJ3PMHloCzp0Qt5nT0+g8anlfZvUpvnD+G9PgwlaEHKtc91uXg
-         6limkaC8xel9vjq9BNB6qVct2X/s+fTSY26SxwXoGXU0+59t1evcss6Xx3+rh39Lz6GI
-         xGxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712700707; x=1713305507;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cl1aEg9ZkKTDAHIndPvHsR0jY5Vb252ppSopDvYPPc0=;
-        b=FCmr6bSfCdZIQXH35HortgX3HW6tPcFEyRFicQhYAMjhA0bxxSr9FJ1Dm1fGZCHjZh
-         ujBGO5daHZKd8sCdrzH9ZAWE5Dw2kGYlpq33ZpgrRJ+545YASuBP2KmtMgQzKoDrHlbr
-         pqqfT5GWguUpmeRcum948XPFAGeAxhOENPplWwFBpQgAxBUAN8QLfzpxY8jCrV/1wBFW
-         mlSBobcwP1rYs6K8WJ1AKzKW9SZWcmL9ZnpZilRU8XfHTyyVPuWDg6dzqZfKGOjuvLJQ
-         P5xDtdhBkWIAJhqcFbh0fxn4SdoMx0kMzLFyGIc1sTgWd7EdFkTrC82Q7ATV7a29n39s
-         0M2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUlD84XzgV3IDUfvTZWM+TmygWV2dxJ1vIOzRC0h4GvKhLEHuvJs0jgUFghwk3SmmaL/mQb737YZ0dBwfR68hLNZ5nNhtZ/mgVwy6gEVP7G
-X-Gm-Message-State: AOJu0Yxsf0iQDagf5D3f2wGX+vFRineIE+acwP6l/O6aE7u0cZ015RXJ
-	0y9Utlv/CX6FF/Cf2LUm4/HmOzTq1VGywidHtheAzavmRAbJe6tD62jlOEwN0DSOpOEQeigbZ9e
-	VUdwMfGCJnUP2o+HSJzVy4rCVIxlqsz8wWl2J4Q==
-X-Google-Smtp-Source: AGHT+IFTUPK3REgvGdMgOwGApDJXWXHwEqfkXjMrnKsgvS0JKy+X2AS1/dTWFN/mLB8J3aVxZ0Rh0sVUHLgSm3wYrPg=
-X-Received: by 2002:a19:f70b:0:b0:513:b90f:f4dd with SMTP id
- z11-20020a19f70b000000b00513b90ff4ddmr352775lfe.49.1712700707477; Tue, 09 Apr
- 2024 15:11:47 -0700 (PDT)
+	s=arc-20240116; t=1712701563; c=relaxed/simple;
+	bh=8/cFucOeeKlTH3yzMI5vn5hL40q+Izc6GOcx3MvaKKk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=smP0XZkab38XKxPhEnTqRfXdl9yTPvLyg9dXPJhp+E+IqD/ipwzUCdOir2BnU4j03S+AynXIoaT50oGZ2Y+9kwtKgdSHoc0Gj/XpYIAJ7rxe92NipuNkMrHdVq0Gkp+W8uYTmkp+e3ALh4iDY/FXjB2VkxQdzObQmz4B+KQpzvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oZ0D5WTm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37138C43390;
+	Tue,  9 Apr 2024 22:26:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712701562;
+	bh=8/cFucOeeKlTH3yzMI5vn5hL40q+Izc6GOcx3MvaKKk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=oZ0D5WTmAdMKmTvopb0qjX7Kbcvi566oBYT1F4uWLFSL+kv8M6JXD+Prw3wjHkEVS
+	 kRa5kzV0ZjWhj6xt3hzz+Sph366jhBf6+EZEaG9xSvAhvu/r0AMW/A7UQa0Ddp1m0L
+	 65V05/hLl4FIpgjrgm/NSwbewBnpWC9z2E0MEm7hmrTluwSLBzCiC2DhlzZWleE2Qx
+	 /uNbjw4WgFBS1kZBKnzgsxJ8CSmI3C2/HD7APuyLMcvuuID6sNYTdPRWuYDm4Gg5sv
+	 TwuPiVr/QgE85n8oYdC2MgvlvxuXEk1WgQ8K03vEHPY9S+mCZRi/YdVy/x+zKEva/f
+	 J8k/39CJ4wgQw==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 09 Apr 2024 23:24:51 +0100
+Subject: [PATCH] selftests/clone3: Fix compiler warning
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403080452.1007601-1-atishp@rivosinc.com> <20240403080452.1007601-21-atishp@rivosinc.com>
- <20240405-d1a4cb9a441a05a9d2f8b1c8@orel> <976411ab-6ddf-4b10-8e13-1575928415ce@rivosinc.com>
- <20240409-dd055c3d08e027cf2a5cb4dc@orel>
-In-Reply-To: <20240409-dd055c3d08e027cf2a5cb4dc@orel>
-From: Atish Kumar Patra <atishp@rivosinc.com>
-Date: Tue, 9 Apr 2024 15:11:36 -0700
-Message-ID: <CAHBxVyEh0K5b0SdN-asrOuuggBztZ-mjCoOR=EC067pURRg3aA@mail.gmail.com>
-Subject: Re: [PATCH v5 20/22] KVM: riscv: selftests: Add SBI PMU selftest
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>, 
-	Ajay Kaher <akaher@vmware.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Alexey Makhalov <amakhalov@vmware.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Juergen Gross <jgross@suse.com>, kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, 
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Will Deacon <will@kernel.org>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240409-clone3-warning-fix-v1-1-03720200f1b4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADLAFWYC/x2MQQqAIBAAvxJ7bsFSQvtKdBDbaiG2UKhA/HvSc
+ QZmMiSKTAnGJkOkmxOfUqFrGwi7l42Ql8rQq94ooxyG4xTS+PgoLBuu/KJ1Xg86DNY5ghpekar
+ +p9NcygcFT906ZAAAAA==
+To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Shuah Khan <skhan@linuxfoundation.org>, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1322; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=8/cFucOeeKlTH3yzMI5vn5hL40q+Izc6GOcx3MvaKKk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmFcB4ohOSySFEcqyRnkDV/zaqiFySgS3odCDfWUns
+ mUWkvluJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZhXAeAAKCRAk1otyXVSH0IcoB/
+ 92YSQediGO39+3BGKBUczDGFD6CjDYL+/rJ6NhMSsGoc2U7QeU6Wxh+5uQXHwiAmmzAPLPLw3lrGmA
+ bNuMGEwjmW3nksWuza+gTlrrelUUHUS4JWF8YmtyN3iu7zdJfoDiOm9O1L/tfjIYB/C9vhHp1nTx0T
+ uD4INyFWeJ9g+VQjNcRDwJ44XCOyy1+84HR3dnaAJJSVMQeoEpKsFJAc3Fa0LMu383q0jeT4zH9+ns
+ 72HYJ2LdGyHtFvLOybVwq24caB+Zfm04kW7xaKJTQCuyYmRrA84fsOwXC9Ay5FI0ZwnF25Dz993oO7
+ amj5K2hlGxDqWB1fiyEt+DbofsKRzy
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Tue, Apr 9, 2024 at 1:01=E2=80=AFAM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> On Mon, Apr 08, 2024 at 05:37:19PM -0700, Atish Patra wrote:
-> > On 4/5/24 05:50, Andrew Jones wrote:
-> > > On Wed, Apr 03, 2024 at 01:04:49AM -0700, Atish Patra wrote:
-> > > ...
-> > > > +static void test_pmu_basic_sanity(void)
-> > > > +{
-> > > > + long out_val =3D 0;
-> > > > + bool probe;
-> > > > + struct sbiret ret;
-> > > > + int num_counters =3D 0, i;
-> > > > + union sbi_pmu_ctr_info ctrinfo;
-> > > > +
-> > > > + probe =3D guest_sbi_probe_extension(SBI_EXT_PMU, &out_val);
-> > > > + GUEST_ASSERT(probe && out_val =3D=3D 1);
-> > > > +
-> > > > + num_counters =3D get_num_counters();
-> > > > +
-> > > > + for (i =3D 0; i < num_counters; i++) {
-> > > > +         ret =3D sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_GET_IN=
-FO, i,
-> > > > +                         0, 0, 0, 0, 0);
-> > > > +
-> > > > +         /* There can be gaps in logical counter indicies*/
-> > > > +         if (ret.error)
-> > > > +                 continue;
-> > > > +         GUEST_ASSERT_NE(ret.value, 0);
-> > > > +
-> > > > +         ctrinfo.value =3D ret.value;
-> > > > +
-> > > > +         /**
-> > > > +          * Accesibillity check of hardware and read capability of=
- firmware counters.
-> > >
-> > > Accessibility
-> > >
-> >
-> > Fixed it.
-> >
-> > > > +          * The spec doesn't mandate any initial value. No need to=
- check any value.
-> > > > +          */
-> > > > +         read_counter(i, ctrinfo);
-> > > > + }
-> > > > +
-> > > > + GUEST_DONE();
-> > > > +}
-> > > > +
-> > > > +static void run_vcpu(struct kvm_vcpu *vcpu)
-> > > > +{
-> > > > + struct ucall uc;
-> > > > +
-> > > > + vcpu_run(vcpu);
-> > > > + switch (get_ucall(vcpu, &uc)) {
-> > > > + case UCALL_ABORT:
-> > > > +         REPORT_GUEST_ASSERT(uc);
-> > > > +         break;
-> > > > + case UCALL_DONE:
-> > > > + case UCALL_SYNC:
-> > > > +         break;
-> > > > + default:
-> > > > +         TEST_FAIL("Unknown ucall %lu", uc.cmd);
-> > > > +         break;
-> > > > + }
-> > > > +}
-> > > > +
-> > > > +void test_vm_destroy(struct kvm_vm *vm)
-> > > > +{
-> > > > + memset(ctrinfo_arr, 0, sizeof(union sbi_pmu_ctr_info) * RISCV_MAX=
-_PMU_COUNTERS);
-> > > > + counter_mask_available =3D 0;
-> > > > + kvm_vm_free(vm);
-> > > > +}
-> > > > +
-> > > > +static void test_vm_basic_test(void *guest_code)
-> > > > +{
-> > > > + struct kvm_vm *vm;
-> > > > + struct kvm_vcpu *vcpu;
-> > > > +
-> > > > + vm =3D vm_create_with_one_vcpu(&vcpu, guest_code);
-> > > > + __TEST_REQUIRE(__vcpu_has_sbi_ext(vcpu, KVM_RISCV_SBI_EXT_PMU),
-> > > > +                            "SBI PMU not available, skipping test"=
-);
-> > > > + vm_init_vector_tables(vm);
-> > > > + /* Illegal instruction handler is required to verify read access =
-without configuration */
-> > > > + vm_install_exception_handler(vm, EXC_INST_ILLEGAL, guest_illegal_=
-exception_handler);
-> > >
-> > > I still don't see where the "verify" part is. The handler doesn't rec=
-ord
-> > > that it had to handle anything.
-> > >
-> >
-> > The objective of the test is to ensure that we get an illegal instructi=
-on
-> > without configuration.
->
-> This part I guessed.
->
-> > The presence of the registered exception handler is
-> > sufficient for that.
->
-> This part I disagree with. The handler may not be necessary and not run i=
-f
-> we don't get the ILL. Usually when I write tests like these I set a
-> boolean in the handler and check it after the instruction which should
-> have sent us there to make sure we did indeed go there.
->
+Shuah reported a compiler warning with an Ubuntu GCC 13 build, I've been
+unable to reproduce it but hopefully this fixes the issue:
 
-Ahh I got your point now. That makes sense. Since it was just a sanity test=
-,
-I hadn't put the boolean check earlier. But you are correct about bugs
-in kvm code which wouldn't
-generate an expected ILL .
+clone3_set_tid.c:136:43: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
 
-I have added it. Thanks for the suggestion :)
+Reported-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/clone3/clone3_set_tid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >
-> > The verify part is that the test doesn't end up in a illegal instructio=
-n
-> > exception when you try to access a counter without configuring.
-> >
-> > Let me know if you think we should more verbose comment to explain the
-> > scenario.
-> >
->
-> With a boolean the test code will be mostly self documenting, but a short
-> comment saying why we expect the boolean to be set would be good too.
->
-> Thanks,
-> drew
->
-> >
-> > > > +
-> > > > + vcpu_init_vector_tables(vcpu);
-> > > > + run_vcpu(vcpu);
-> > > > +
-> > > > + test_vm_destroy(vm);
-> > > > +}
-> > > > +
-> > > > +static void test_vm_events_test(void *guest_code)
-> > > > +{
-> > > > + struct kvm_vm *vm =3D NULL;
-> > > > + struct kvm_vcpu *vcpu =3D NULL;
-> > > > +
-> > > > + vm =3D vm_create_with_one_vcpu(&vcpu, guest_code);
-> > > > + __TEST_REQUIRE(__vcpu_has_sbi_ext(vcpu, KVM_RISCV_SBI_EXT_PMU),
-> > > > +                            "SBI PMU not available, skipping test"=
-);
-> > > > + run_vcpu(vcpu);
-> > > > +
-> > > > + test_vm_destroy(vm);
-> > > > +}
-> > > > +
-> > > > +int main(void)
-> > > > +{
-> > > > + test_vm_basic_test(test_pmu_basic_sanity);
-> > > > + pr_info("SBI PMU basic test : PASS\n");
-> > > > +
-> > > > + test_vm_events_test(test_pmu_events);
-> > > > + pr_info("SBI PMU event verification test : PASS\n");
-> > > > +
-> > > > + return 0;
-> > > > +}
-> > > > --
-> > > > 2.34.1
-> > > >
-> > >
-> > > Thanks,
-> > > drew
-> >
+diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
+index 9ae38733cb6e..fbf813a5a06f 100644
+--- a/tools/testing/selftests/clone3/clone3_set_tid.c
++++ b/tools/testing/selftests/clone3/clone3_set_tid.c
+@@ -133,7 +133,7 @@ static void test_clone3_set_tid(const char *desc,
+ 		"[%d] clone3() with CLONE_SET_TID %d says: %d - expected %d\n",
+ 		getpid(), set_tid[0], ret, expected);
+ 
+-	ksft_test_result(ret == expected, "%s with %d TIDs and flags 0x%x\n",
++	ksft_test_result(ret == expected, "%s with %zu TIDs and flags 0x%x\n",
+ 			 desc, set_tid_size, flags);
+ }
+ 
+
+---
+base-commit: a053fd3ca5d1b927a8655f239c84b0d790218fda
+change-id: 20240409-clone3-warning-fix-89a363c6899e
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
