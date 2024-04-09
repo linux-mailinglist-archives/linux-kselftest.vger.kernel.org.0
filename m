@@ -1,139 +1,118 @@
-Return-Path: <linux-kselftest+bounces-7481-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7482-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38EA389D8C2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 14:03:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B60889D9B1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 15:02:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2F8E2831D7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 12:03:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CD1A1F21CF2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 13:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9900D12CD81;
-	Tue,  9 Apr 2024 12:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D09D12E1E7;
+	Tue,  9 Apr 2024 13:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UNuLPP5S";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CyTwhFEo"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="5OiQGvD7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F1512D1E7;
-	Tue,  9 Apr 2024 12:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BBC12DDB0;
+	Tue,  9 Apr 2024 13:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712664167; cv=none; b=MmWC0fVy9J5N2cRPJj/6uIKJ1nkRdLtX0T1IJ9Yi3ifbsX6WfkXhgI+9F2/tW8a2+Hfot+TzGRRhyDM/wHpZBy3coPHGnlR/H6Dy1/iU/VzBBUfZCpHaV7bjc2ETFaQfHkpPGs5Eqc6b9EapzXDMG3CrjCnabVrIhXZq8czOimI=
+	t=1712667614; cv=none; b=feuYLaokAa62CH5ZOTrbkrSoS/PgQTXvAalX79mCxhqBYzaRfEjh2bW5JgV66PdTuWn+3JzKEgLm28wqDG9eT48FnXtwuTRu4aOmrw8jPI9NhiIKSB+CZKlMpTROLJwKtdi+O6utFCYfQXMUNx7VYhQgOAA5ZZyVWveRciA2RTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712664167; c=relaxed/simple;
-	bh=OSEZ/IJn1fMBgDMHSVQYwhSOUU5+Mc8UTTRDuJvngM4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dqyOC+uAkIi3h3gS1E9PULA32TutDirJoe4NNMQwKe3zbW4pMYzl6BDUPFCA3YB2pf7xeMHdT3co+Saq55lACmBVA6Noy1qBm3G8PqSFRjEuQ7LRCay2L0/U18x4KKiAmj7Q3sCJxrznvdqsGkBOIc9gDJ4Ju7uxpWhr5fH7hHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UNuLPP5S; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CyTwhFEo; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1712664161;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8NoF74+Dpoxqa48kWnxI0CEBaofoHHeQ96U8jZayGGY=;
-	b=UNuLPP5SrIkQee7qfz1ZyYRNb3d2WR3QPojM6WUZB3XqsvAeRsfziV+c6gfUoWCLTAc6j5
-	cb8UB5Ju1TSnxx+mDDxo8//mRkDg3Ou+HjilxSksmg4SUyhCkGADdMa4Ia63ZPLhZ0CJ5e
-	60KCV3dcBKnDFSMb5ltGzZvZp2T6gYlhdGYQpbJikI2fpbCere63+gMUjQ7iYB+nb6gfy/
-	Zi2cIzneMdqEgV0lV7YuxJ6Dqbn0g+ofkSddir1skWrWdfIDEtN10oDojrqJpJ94hiVzQH
-	I6NGXeZtQzeMMbJC24agR34DgADXUD/yECpAE7ewmxx1ucJPdq13qlKmPAZ0hA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1712664161;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8NoF74+Dpoxqa48kWnxI0CEBaofoHHeQ96U8jZayGGY=;
-	b=CyTwhFEoeUdjhwP0bMFPIs9b+VK/snwqfq0q92W1RQ3TQBS8Nl3h9TRGLDVxlui91hbbnU
-	TzjvW8K/YGS/vPBQ==
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>, John Stultz <jstultz@google.com>,
- Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>, "Eric W. Biederman"
- <ebiederm@xmission.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kasan-dev@googlegroups.com, Edward Liaw
- <edliaw@google.com>, Carlos Llamas <cmllamas@google.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/timers/posix_timers: reimplement
- check_timer_distribution()
-In-Reply-To: <20240409111051.GB29396@redhat.com>
-References: <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
- <87frw2axv0.ffs@tglx> <20240404145408.GD7153@redhat.com>
- <87le5t9f14.ffs@tglx> <20240406150950.GA3060@redhat.com>
- <20240406151057.GB3060@redhat.com>
- <CACT4Y+Ych4+pdpcTk=yWYUOJcceL5RYoE_B9djX_pwrgOcGmFA@mail.gmail.com>
- <20240408102639.GA25058@redhat.com> <20240408184957.GD25058@redhat.com>
- <87il0r7b4k.ffs@tglx> <20240409111051.GB29396@redhat.com>
-Date: Tue, 09 Apr 2024 14:02:40 +0200
-Message-ID: <877ch67nhb.ffs@tglx>
+	s=arc-20240116; t=1712667614; c=relaxed/simple;
+	bh=t5r6dEc4u5E4PiDu2jwLXpYVRAhdOQAi2gPnB6n/Xl4=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dPoS9EaV6X0sPZAeSF9HvBJtCp5A31et15BoREoKmAySPYHvJaN8HxRHcZHkuN7142qjKzLycUBXc6cOMHVccgz9eowWehc1SE2H+lp0CxckukLwWYbQVG3fFx6ivoUMdvUmvmYoGdRR+fLKaMIoDbkoJuCGSL7vHzGQRrm893A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=5OiQGvD7; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1712667610;
+	bh=t5r6dEc4u5E4PiDu2jwLXpYVRAhdOQAi2gPnB6n/Xl4=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=5OiQGvD7axFiUJem0skEujBB3FJUsOqa8tiYES6UVyUJFgHmoCKC1zok06I7SA8Xq
+	 Vgq6X6hTN3Qq2f/Tg6OTgutyepD4O4DKLurqpbfe/rbW4zBXx3BnMMeU8YMPMyyf7t
+	 JQ7IReNSoakpdea71ct8clLTbubfiOrJ9HT598qm4z+lsS2C30eUf1mZ/veWAZ5/Zz
+	 cm1zr7sCxa6ZJcNKU742cin8jhFKQdO8VVbFBzMlWXpQpb5y4sWagvcIay8hq5YFOw
+	 YB6vDxJnSmGIXe7VsFrx538nve+eB+3+VQ+Y7DLeC+lAUoAHRA7usOQfpSDpBf9bam
+	 ND/Rh1oCXnj6Q==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6C83237813CA;
+	Tue,  9 Apr 2024 13:00:06 +0000 (UTC)
+Message-ID: <2196cc49-e5da-432b-bc35-64d55623749d@collabora.com>
+Date: Tue, 9 Apr 2024 18:00:38 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [RFC PATCH v3 6/9] selftests: cgroup: Add basic tests for pids
+ controller
+To: Waiman Long <longman@redhat.com>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>
+References: <20240405170548.15234-1-mkoutny@suse.com>
+ <20240405170548.15234-7-mkoutny@suse.com>
+ <a45c2ece-acb4-4cff-9d53-f5c007c9b905@collabora.com>
+ <qweowkm4wlfzovp3qhtkzbybeampodtwmpbp2kbtiqcrhmjtdt@syk4itfkpmfr>
+ <41dd9c5a-0e07-4b98-9dfb-fb57eaa74fa2@collabora.com>
+ <oosadt3f5i3qsvisrxe6hrs46ryfqbyxyk3a6jimd7cqczjtcw@dvlsm7eh3b6r>
+ <4bae7682-801e-498f-88c9-9c9d45364bfc@collabora.com>
+ <ec74bc9f-8e63-44b9-b3a6-ca7d6d366c69@redhat.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ec74bc9f-8e63-44b9-b3a6-ca7d6d366c69@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 09 2024 at 13:10, Oleg Nesterov wrote:
-> On 04/09, Thomas Gleixner wrote:
-> It seems that this is because in your tree check_timer_distribution() does
->
-> 	if (timer_delete(id)) {
-> 		ksft_perror("Can't delete timer");
-> 		return 0;
-> 	}
->
-> while in Linus's tree it returns -1 if timer_delete()
-> fails. Nevermind.
+On 4/9/24 5:12 AM, Waiman Long wrote:
+> 
+> On 4/8/24 08:04, Muhammad Usama Anjum wrote:
+>> On 4/8/24 5:01 PM, Michal Koutný wrote:
+>>> On Mon, Apr 08, 2024 at 04:53:11PM +0500, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>> ksft_test_result_report(tests[i].fn(root), tests[i].name)
+>>> $ git grep ksft_test_result_report v6.9-rc3 --
+>>> (empty result)
+>>>
+>>> I can't find that helper. Is that in some devel repositories?
+>> Sorry, I always do development on next. So it has been added recently. Try
+>> searching it on next:
+>>
+>> git grep ksft_test_result_report next-20240404 --
+> 
+> I don't believe it is a good idea to make this patch having a dependency on
+> another set of patches in -next because the test won't run in a non-next
+> environment. We can always have additional patches later on to modify the
+> tests to use the newly available APIs.
+Sure, it is okay with me.
 
-Ooops.
+> 
+> Cheers,
+> Longman
+> 
+>>
+>>> Michal
+> 
+> 
 
->> +static bool check_kernel_version(unsigned int min_major, unsigned int min_minor)
->> +{
->> +	unsigned int major, minor;
->> +	struct utsname info;
->> +
->> +	uname(&info);
->> +	if (sscanf(info.release, "%u.%u.", &major, &minor) != 2)
->> +		ksft_exit_fail();
->> +	return major > min_major || (major == min_major && minor >= min_minor);
->> +}
->
-> this looks useful regardless. Perhaps it should be moved into
-> tools/testing/selftests/kselftest.h as ksft_ck_kernel_version() ?
-
-Makes sense.
-
->> +static int check_timer_distribution(void)
->> +{
->> +	const char *errmsg;
->> +
->> +	if (!check_kernel_version(6, 3)) {
->> +		ksft_test_result_skip("check signal distribution (old kernel)\n");
->>  		return 0;
->
-> ..
->
->> +	ksft_test_result(!ctd_failed, "check signal distribution\n");
->
-> Perhaps
->
-> 	if (!ctd_failed)
-> 		ksft_test_result_pass("check signal distribution\n");
-> 	else if (check_kernel_version(6, 3))
-> 		ksft_test_result_fail("check signal distribution\n");
-> 	else
-> 		ksft_test_result_skip("check signal distribution (old kernel)\n");
->
-> makes more sense?
->
-> This way it can be used on the older kernels with bcb7ee79029d backported.
-
-Indeed.
+-- 
+BR,
+Muhammad Usama Anjum
 
