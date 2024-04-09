@@ -1,110 +1,150 @@
-Return-Path: <linux-kselftest+bounces-7449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A4E189D099
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 05:02:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95F7A89D0A5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 05:06:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A598E1F21FD0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 03:02:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7DAE1C21C4C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Apr 2024 03:06:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD4E5467C;
-	Tue,  9 Apr 2024 03:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF725473F;
+	Tue,  9 Apr 2024 03:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="bOeGMoWd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ce21qbkg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190125464A
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 03:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFEB548F2
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 03:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712631719; cv=none; b=dA3nYdh2GP68iWeDzlH24+t3vJNSKgFXl9DUgZrAnrW89vmD+xWwp4HH1GZop+Cek7RQdke2lElHHWodzbEfi3GASPN2N2EZFLYqmn3sIdD5vclsc8N1YBJBjcqi7rXzR7c5tzF55NWOZTIcmcJKcF1VgQpxXXnV9CNKtl5VgQI=
+	t=1712631992; cv=none; b=B6LrTYyRaFAC9TEgETWzTDtwpaKBcqFvgHn/VAKKK1TJMSB+m/GYywO00ipdfhPqB3FK/4dsnpGMoxFIZM3iSlSkcOKFAzr9m+SByluuVtiH5YzRFGBjZiR0ffUClzdHaRqDMogYoSAkcp22c1biwIDVBvBxEZ5HVfYAkURRHVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712631719; c=relaxed/simple;
-	bh=mMhjxCCXtqewYhIaOMBsuZj2va2Oyrp6d//G8WU88iY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ntVvtIX5SkL2gH7deQt017LGS+FZmyXE7djG/4LZ+d+NmVpXbWB4ScGFXcVgrFsCjoQxlpjDQgORHzy5y6etXcmtROZuOLejDQbTb7vBG5h3PHSeGgmoR34aQ4819TvhbgidtVNyHlI8bohjmCuSZvnbI+Jw7rQDI9xeDbWRTsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=bOeGMoWd; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-61804067da0so17905597b3.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Apr 2024 20:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1712631717; x=1713236517; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mMhjxCCXtqewYhIaOMBsuZj2va2Oyrp6d//G8WU88iY=;
-        b=bOeGMoWd3P+QV7H6RTRSVoZuylpQUOicI7k4+Wxhx/P8Rtrp063aQ5Ob2Ymyp1UuVN
-         90b6acp+ZetHvStVAtUWvKEhCEw04JOHkcmznG8TGfGzU56D9z+R1pJcmTsPRcyOyUYj
-         1rz/G1qaFXCXag5ABZD/WBdPlBf5U0ngbnlpw6UW86lU+kKovbKnIp7TcE8RX00jZ6/J
-         ouQR0Gu6bTQdWvf3FAeSgEVTl1py2MzmPzvJmaeEueyb8Ax7M8XRMkWmlTjtJH4Kksgh
-         TH2qY2xvb9cItHQpgbx0+2AzZZU7/3W41NpxzGtQNtI/KMQ+Mvm8XXI/hHoyOJFmq3Sj
-         6XHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712631717; x=1713236517;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mMhjxCCXtqewYhIaOMBsuZj2va2Oyrp6d//G8WU88iY=;
-        b=TORarYuP41ES9DoLuUBKlKShhXszm8ZvNveDr8EmMRsdBLs9NS5NtV5l0eSYU66nbH
-         tVjNuj4Q7KWKmsGpk0Ep9qnNzcfh+rsPbVO4o/rdjJogRhSgOeb6eQyTdSxNgYdIagIW
-         6UENlDjcP1CLYVAyXhOpHqu+fDIDBVVAp7zfNiyLxZKTyofovfnesO2b4TthkOfp0eBm
-         DL4MA4L8Ad/7HqwyrCbr1cY7dnxufYhTs8M+aXM0NUy0I5VHc2SjQicUyXvPQ2UmQN+k
-         aN8Z8urMEjAvlc3RUaN5VFOf31lzPJ/fZFQCgbTfRzVq//U13TqK956INKAG1jsEFCSo
-         mSDw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkiQsSLimc4fvn9p/El1r6CmXrWcGjuMDWI8zup6+B7oLzecE0wwmk1tAHA5fm0G2zSyggpmaOEwF2tD+n5qFHf3Ao/Ld+kQ8jbVYO5h+j
-X-Gm-Message-State: AOJu0YyXwusuSzQnzDNMREKKrGpG0MvKsxlOTGfkrb6nxoYLorUhQidV
-	Phsp2K0tkBpTDA9s1VxolHieTarstVa15J8RtFvSiQkPdcRpkSfscx9+/JhVINqebdwXIMZx+qh
-	9UeU/LHgCqDE3tOy2Q1n15E7QgZzNrYlzeoUvOQ==
-X-Google-Smtp-Source: AGHT+IGlMfC7YmTw0Qwgs8NfQmPIC72Qt4+rc4wZc+lexO5+feXuB2iXYRklLy5rm87lMCCLYeUbAGlgnX6g1UFvvus=
-X-Received: by 2002:a25:eb0a:0:b0:dc7:497e:cddf with SMTP id
- d10-20020a25eb0a000000b00dc7497ecddfmr7972914ybs.33.1712631717011; Mon, 08
- Apr 2024 20:01:57 -0700 (PDT)
+	s=arc-20240116; t=1712631992; c=relaxed/simple;
+	bh=N4sxI9pzkVnczNB9OhVPdKGn1mKGvMMhqcWAS7kPLTI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RSKx0BKejLI4Aaj9S2ye8lR2rYq5xXqvLym98XM2JxYvsUteYcAFzzVN7e6mc7KK+6WQw7oDdQrJ1G4TO/340H4EF56P6NPrlNbyvfiWbTQHBKbDgQ5mhursv2kwA0UPvfIY38A1Su5HZjcwV+dGEiQn81N1aUfPANFuQReRD+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ce21qbkg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712631989;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oZkhwxc1rV+er5vlPURBYWccH3WvtLWNURgRz3mDLRM=;
+	b=ce21qbkgVcc2ilLNj76CAb6JFVjGX1HDIyImJdQc4ubq1gZ9ztURs/mLTgxdLzmFO0NDqn
+	E4tUlV8jIS2XElTrlRohe2ZH6vLx7m+0lZjR7N8hsbda9IDNHfjxssF+ZwCxq4tvipR3Bm
+	PEYFbTRR3twAuJhUTh2ZwVXViCI5pY8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-63-UutkogDIMyqz7slyz7zimg-1; Mon,
+ 08 Apr 2024 23:06:27 -0400
+X-MC-Unique: UutkogDIMyqz7slyz7zimg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB65E1C03162;
+	Tue,  9 Apr 2024 03:06:26 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 64DA717AB1;
+	Tue,  9 Apr 2024 03:06:26 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Shaoqin Huang <shahuang@redhat.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH v7 0/3] KVM: selftests: aarch64: Introduce pmu_event_filter_test
+Date: Mon,  8 Apr 2024 23:03:13 -0400
+Message-Id: <20240409030320.182591-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403-vector_sigreturn_tests-v1-1-2e68b7a3b8d7@rivosinc.com> <87bk6pof1t.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87bk6pof1t.fsf@all.your.base.are.belong.to.us>
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Tue, 9 Apr 2024 11:01:46 +0800
-Message-ID: <CABgGipUQ4nQSpKFEbpXvcf5n7Zkbh-HQnky1H5GeEvKw5OxSfg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: selftests: Add signal handling vector tests
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Charlie Jenkins <charlie@rivosinc.com>, Shuah Khan <shuah@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Vineet Gupta <vineetg@rivosinc.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-On Thu, Apr 4, 2024 at 1:47=E2=80=AFPM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.=
-org> wrote:
->
-> Charlie Jenkins <charlie@rivosinc.com> writes:
->
-> > Add two tests to check vector save/restore when a signal is received
-> > during a vector routine. One test ensures that a value is not clobbered
-> > during signal handling. The other verifies that vector registers
-> > modified in the signal handler are properly reflected when the signal
-> > handling is complete.
-> >
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
->
-> Nice!
->
-> Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+The test is inspired by the pmu_event_filter_test which implemented by x86. On
+the arm64 platform, there is the same ability to set the pmu_event_filter
+through the KVM_ARM_VCPU_PMU_V3_FILTER attribute. So add the test for arm64.
 
-Thanks!
+The series first create the helper function which can be used
+for the vpmu related tests. Then, it implement the test.
 
-Reviewed-by: Andy Chiu <andy.chiu@sifive.com>
-Tested-by: Andy Chiu <andy.chiu@sifive.com>
+Changelog:
+----------
+v6->v7:
+  - Rebased to v6.9-rc3.
+
+v5->v6:
+  - Rebased to v6.9-rc1.
+  - Collect RB.
+  - Add multiple filter test.
+
+v4->v5:
+  - Rebased to v6.8-rc6.
+  - Refactor the helper function, make it fine-grained and easy to be used.
+  - Namimg improvements.
+  - Use the kvm_device_attr_set() helper.
+  - Make the test descriptor array readable and clean.
+  - Delete the patch which moves the pmu related helper to vpmu.h.
+  - Remove the kvm_supports_pmu_event_filter() function since nobody will run
+  this on a old kernel.
+
+v3->v4:
+  - Rebased to the v6.8-rc2.
+
+v2->v3:
+  - Check the pmceid in guest code instead of pmu event count since different
+  hardware may have different event count result, check pmceid makes it stable
+  on different platform.                        [Eric]
+  - Some typo fixed and commit message improved.
+
+v1->v2:
+  - Improve the commit message.                 [Eric]
+  - Fix the bug in [enable|disable]_counter.    [Raghavendra & Marc]
+  - Add the check if kvm has attr KVM_ARM_VCPU_PMU_V3_FILTER.
+  - Add if host pmu support the test event throught pmceid0.
+  - Split the test_invalid_filter() to another patch. [Eric]
+
+v1: https://lore.kernel.org/all/20231123063750.2176250-1-shahuang@redhat.com/
+v2: https://lore.kernel.org/all/20231129072712.2667337-1-shahuang@redhat.com/
+v3: https://lore.kernel.org/all/20240116060129.55473-1-shahuang@redhat.com/
+v4: https://lore.kernel.org/all/20240202025659.5065-1-shahuang@redhat.com/
+v5: https://lore.kernel.org/all/20240229065625.114207-1-shahuang@redhat.com/
+v6: https://lore.kernel.org/all/20240326033706.117189-1-shahuang@redhat.com/
+
+Shaoqin Huang (3):
+  KVM: selftests: aarch64: Add helper function for the vpmu vcpu
+    creation
+  KVM: selftests: aarch64: Introduce pmu_event_filter_test
+  KVM: selftests: aarch64: Add invalid filter test in
+    pmu_event_filter_test
+
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../kvm/aarch64/pmu_event_filter_test.c       | 336 ++++++++++++++++++
+ .../kvm/aarch64/vpmu_counter_access.c         |  33 +-
+ .../selftests/kvm/include/aarch64/vpmu.h      |  28 ++
+ 4 files changed, 372 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+ create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
+
+-- 
+2.40.1
+
 
