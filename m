@@ -1,136 +1,172 @@
-Return-Path: <linux-kselftest+bounces-7525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E6A189EA8A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 08:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3DC189EA9F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 08:17:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D05EB22F19
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 06:14:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27A28B22DDE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 06:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8F6036B00;
-	Wed, 10 Apr 2024 06:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C2BF22085;
+	Wed, 10 Apr 2024 06:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kDWUu3zu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N3uzvzJA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8828A2206C;
-	Wed, 10 Apr 2024 06:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0DF20E3;
+	Wed, 10 Apr 2024 06:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712729646; cv=none; b=NXYNmFWyfc90TMrVgd5TwSItTYijjT1N1NP62aGmv6wsN839a4IrMvaN4ZoC8el3eTPyngiMWaXaYRA3RxCz9dYSXhkj/YYrv05I9WWtLVpXKbgCmMr9dTE7p0npKPAn1CoJ2+kPT728kj2CdCRXMRgQ7e4McIM+wJW0dVOCSS4=
+	t=1712729840; cv=none; b=bZ6halXmz88io/PzxyKTPnChS05egMrtlJVeDoFkZAZ6DtpBgd96VoCE+WqbE7/maJwFsekAQeTXr8tZWS33Lx0DX7XpWdcK939js0bE2C0ZjR/nTqqdyPKmJ61AgrCHSJy0o+nDstH0aqqwbdfGk+7pB6r/ZYq6d3sl9wwfSGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712729646; c=relaxed/simple;
-	bh=bDa3Vcz6I4Pm6HBOcI4duaKWHOWwh5YyRDPmIvGlPB0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YGqciXWVDpkcAtmMvrnSmZ/yOftMuq6LplP3pT/XUV+qWwRtPPolxoIsITrh53ZwHRkBr3L9V1l00h4fxAtRHHzelt4Wf6gCco0tBOj509egAkyQtqCdi1GBnzKZwBCowvioUKjMsfKqcd6YeLWsXN6pHflCpZ6/g8PotTn4U38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kDWUu3zu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCBBC43399;
-	Wed, 10 Apr 2024 06:14:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712729646;
-	bh=bDa3Vcz6I4Pm6HBOcI4duaKWHOWwh5YyRDPmIvGlPB0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kDWUu3zu/P9veaO8fBdmD4bNQ1ncUzrnVcixhzEkRH+8cgVQvI9eZgYuy5yR3nf0x
-	 d+cCq7Ov9hb5SY1/deaf4y2oJ9pemdVdhVqmCEzNbeQpZgqabhs3TnNTpIBX/BnrLd
-	 yXsqLiAVGN7opF10Ks1OxWxU6polwoIJmNcjxlLTYyiMkYUSDztfVp4TsZcz67RE1e
-	 +zzO8XHDXUn2A35FdF+1o2nswHmAgaSbt5wd3kHeFAZ4RmRN6Hdyh+YrP9Pi9pwPsN
-	 iQMkPMCpX4jLbnEldqT2IWplTJ3/NO86GWJfauMwu/lTalAZBE/AOSJ4g4fFpBTZa5
-	 TsJK1EUo4EC9g==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 3/3] selftests/bpf: Support nonblock for send_recv_data
-Date: Wed, 10 Apr 2024 14:13:31 +0800
-Message-Id: <9cd358958245f8ec87c4f553779aa4243f967a2f.1712729342.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1712729342.git.tanggeliang@kylinos.cn>
-References: <cover.1712729342.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1712729840; c=relaxed/simple;
+	bh=qs6l5jxvkDTBRQoimBG8GeWEgWg+7YUN6vqxESKx63g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=o2oNrlHoTGq9Fpaanx3yNXVz1sFrnMPXCSVY87M1PWK6m00TonjUo9ZbtA4dVMeO3XvX7NnnMfZmJJrHyb24w63tED7s+1tYbnULTerLRoaaCvJ8HkW2zNSLDG1nP+CpPrvJ1nUlW8cPZrk/CGIk5W2g6ybO7wbccPcHWAccMKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N3uzvzJA; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712729839; x=1744265839;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=qs6l5jxvkDTBRQoimBG8GeWEgWg+7YUN6vqxESKx63g=;
+  b=N3uzvzJAsxoMkZb+Cg1Bc6Gj83UuhC/pRLqV4y7nFyVYKjtHhvnvA8nJ
+   O0egrWfdbGKgscHuNJhghhQKeGj1SqV1pyF/NhnaTp73h/wtFu1fmmFgl
+   kF7NqM7JeB1HO19v/symA97mt1ijIUP6WIj89Px+2TQvSAU14ZO1RJnHV
+   2TGjXdfM3v+jyzrT41Vqm+dBcFcG4A5tyBdWYU8wXuTL3296VRdbECJ+B
+   xqLPZMSk5h4CWE+rPfPS/piM3AW4Wr4kxzMJ1CiHrloe/0iYgckIgJ86T
+   BLyw3Dj+ksiYmr3LFU5s+5QK9icvNIiAkMncaoqxLnE9vSKDfe9qIGj3w
+   Q==;
+X-CSE-ConnectionGUID: ydyTWxHgQRadfEkjXhi33A==
+X-CSE-MsgGUID: OW7cXftDRQW3cmWjVWPAPw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11863830"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="11863830"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 23:17:18 -0700
+X-CSE-ConnectionGUID: cp1nF6qKSI6i7+BTGKxGuw==
+X-CSE-MsgGUID: H3oek+f/TLqHQrJCTDjbhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="24930831"
+Received: from unknown (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 23:17:12 -0700
+From: "Huang, Ying" <ying.huang@intel.com>
+To: Yuanchu Xie <yuanchu@google.com>
+Cc: David Hildenbrand <david@redhat.com>,  "Aneesh Kumar K.V"
+ <aneesh.kumar@linux.ibm.com>,  Khalid Aziz <khalid.aziz@oracle.com>,
+  Henry Huang <henry.hj@antgroup.com>,  Yu Zhao <yuzhao@google.com>,  Dan
+ Williams <dan.j.williams@intel.com>,  Gregory Price
+ <gregory.price@memverge.com>,  Wei Xu <weixugc@google.com>,  David
+ Rientjes <rientjes@google.com>,  Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,  "Rafael J. Wysocki" <rafael@kernel.org>,
+  Andrew Morton <akpm@linux-foundation.org>,  Johannes Weiner
+ <hannes@cmpxchg.org>,  Michal Hocko <mhocko@kernel.org>,  Roman Gushchin
+ <roman.gushchin@linux.dev>,  Muchun Song <muchun.song@linux.dev>,  Shuah
+ Khan <shuah@kernel.org>,  Yosry Ahmed <yosryahmed@google.com>,  Matthew
+ Wilcox <willy@infradead.org>,  Sudarshan Rajagopalan
+ <quic_sudaraja@quicinc.com>,  Kairui Song <kasong@tencent.com>,  "Michael
+ S. Tsirkin" <mst@redhat.com>,  Vasily Averin <vasily.averin@linux.dev>,
+  Nhat Pham <nphamcs@gmail.com>,  Miaohe Lin <linmiaohe@huawei.com>,  Qi
+ Zheng <zhengqi.arch@bytedance.com>,  Abel Wu <wuyun.abel@bytedance.com>,
+  "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,  Kefeng Wang
+ <wangkefeng.wang@huawei.com>,  linux-kernel@vger.kernel.org,
+  linux-mm@kvack.org,  cgroups@vger.kernel.org,
+  linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v3 1/8] mm: multi-gen LRU: ignore non-leaf pmd_young
+ for force_scan=true
+In-Reply-To: <CAJj2-QEczZzon8AhO32_B=D2MAZG+1YWp0yrgSKQOChjQnN1OA@mail.gmail.com>
+	(Yuanchu Xie's message of "Tue, 9 Apr 2024 15:36:04 -0700")
+References: <20240327213108.2384666-1-yuanchu@google.com>
+	<20240327213108.2384666-2-yuanchu@google.com>
+	<875xwr81x9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+	<CAJj2-QEczZzon8AhO32_B=D2MAZG+1YWp0yrgSKQOChjQnN1OA@mail.gmail.com>
+Date: Wed, 10 Apr 2024 14:15:18 +0800
+Message-ID: <87plux68w9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Yuanchu Xie <yuanchu@google.com> writes:
 
-Some tests, such as the MPTCP bpf tests, require send_recv_data helper
-to run in nonblock mode.
+> On Mon, Apr 8, 2024 at 11:52=E2=80=AFPM Huang, Ying <ying.huang@intel.com=
+> wrote:
+>>
+>> Yuanchu Xie <yuanchu@google.com> writes:
+>>
+>> > When non-leaf pmd accessed bits are available, MGLRU page table walks
+>> > can clear the accessed bit and promptly ignore the accessed bit on the
+>> > pte because it's on a different node, so the walk does not update the
+>> > generation of said page. When the next scan comes around on the right
+>> > node, the non-leaf pmd accessed bit might remain cleared and the pte
+>> > accessed bits won't be checked. While this is sufficient for
+>> > reclaim-driven aging, where the goal is to select a reasonably cold
+>> > page, the access can be missed when aging proactively for measuring the
+>> > working set size of a node/memcg.
+>> >
+>> > Since force_scan disables various other optimizations, we check
+>> > force_scan to ignore the non-leaf pmd accessed bit.
+>> >
+>> > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+>> > ---
+>> >  mm/vmscan.c | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> > index 4f9c854ce6cc..1a7c7d537db6 100644
+>> > --- a/mm/vmscan.c
+>> > +++ b/mm/vmscan.c
+>> > @@ -3522,7 +3522,7 @@ static void walk_pmd_range(pud_t *pud, unsigned =
+long start, unsigned long end,
+>> >
+>> >               walk->mm_stats[MM_NONLEAF_TOTAL]++;
+>> >
+>> > -             if (should_clear_pmd_young()) {
+>> > +             if (!walk->force_scan && should_clear_pmd_young()) {
+>> >                       if (!pmd_young(val))
+>> >                               continue;
+>>
+>> Sorry, I don't understand why we need this.  If !pmd_young(val), we
+>> don't need to update the generation.  If pmd_young(val), the bloom
+>> filter will be ignored if force_scan =3D=3D true.  Or do I miss somethin=
+g?
+> If !pmd_young(val), we still might need to update the generation.
+>
+> The get_pfn_folio function returns NULL if the folio's nid !=3D node
+> under scanning,
+> so the pte accessed bit does not get cleared and the generation is not up=
+dated.
+> Now the pmd_young flag of this pmd is cleared, and if none of the
+> pte's are accessed
+> before another round of scanning occurs on the folio's node, the pmd_youn=
+g check
+> fails and the pte accessed bit is skipped.
+>
+> This is fine for kswapd but can introduce inaccuracies when scanning
+> proactively for
+> workingset estimation.
 
-This patch adds nonblock support for send_recv_data(). Check if it is
-currently in nonblock mode, and if so, ignore EWOULDBLOCK to continue
-sending and receiving.
+Got it!  Thanks for detailed explanation.  Can you give more details in
+patch description too?
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- tools/testing/selftests/bpf/network_helpers.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+It's unfortunate because PMD young checking helps scanning performance
+much.  It's unnecessary to be done in this patchset, but I hope we can
+find some way to get it back at some time.
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 137cd18ef3f2..ca16ef2b648e 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -555,6 +555,7 @@ struct send_recv_arg {
- static void *send_recv_server(void *arg)
- {
- 	struct send_recv_arg *a = (struct send_recv_arg *)arg;
-+	int flags = fcntl(a->fd, F_GETFL);
- 	ssize_t nr_sent = 0, bytes = 0;
- 	char batch[1500];
- 	int err = 0, fd;
-@@ -578,6 +579,8 @@ static void *send_recv_server(void *arg)
- 		if (nr_sent == -1 && errno == EINTR)
- 			continue;
- 		if (nr_sent == -1) {
-+			if (flags & O_NONBLOCK && errno == EWOULDBLOCK)
-+				continue;
- 			err = -errno;
- 			break;
- 		}
-@@ -599,6 +602,7 @@ static void *send_recv_server(void *arg)
- 
- int send_recv_data(int lfd, int fd, uint32_t total_bytes)
- {
-+	int flags = fcntl(lfd, F_GETFL);
- 	ssize_t nr_recv = 0, bytes = 0;
- 	struct send_recv_arg arg = {
- 		.fd	= lfd,
-@@ -622,8 +626,11 @@ int send_recv_data(int lfd, int fd, uint32_t total_bytes)
- 			       MIN(total_bytes - bytes, sizeof(batch)), 0);
- 		if (nr_recv == -1 && errno == EINTR)
- 			continue;
--		if (nr_recv == -1)
-+		if (nr_recv == -1) {
-+			if (flags & O_NONBLOCK && errno == EWOULDBLOCK)
-+				continue;
- 			break;
-+		}
- 		bytes += nr_recv;
- 	}
- 
--- 
-2.40.1
-
+--
+Best Regards,
+Huang, Ying
 
