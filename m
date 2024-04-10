@@ -1,166 +1,127 @@
-Return-Path: <linux-kselftest+bounces-7564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68FE289EFDD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 12:32:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF88789F18C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 13:58:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD131B22F68
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 10:32:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8331C28102A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 11:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9B3E1591E1;
-	Wed, 10 Apr 2024 10:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A1AA15ADBE;
+	Wed, 10 Apr 2024 11:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KzalsUOm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CzWGbFT0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DC8C157;
-	Wed, 10 Apr 2024 10:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330D01494D6;
+	Wed, 10 Apr 2024 11:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712745125; cv=none; b=ZmKKzlG500g2ZsSrP94U/Va4UL+nuToYgUC0nRO/26hP7wHG7qKXLaeRlF3vIIUuci92GjEeltOxy8iHpMjYTIuQ8NSHvWrnxp7fveKi8XqJ0t6tIelxQ/8ZYtALFtQVEtoI4IcpYG1LXb7PRAWfxjBknJxcBRpDELVya8Uv6W0=
+	t=1712750289; cv=none; b=cs600o/+zWgpkPKooha44d3/MDQgeO4dniFxJsxThV4Uxk2uxuPwLH/hQaW6iQBt4J6TPiAlIpCEtSzLhaBNNgQcNGLTM9JJXDzjE+t1XXmtYU1AC4iPO+sbI4arvO3wdUYH59vBJ0OtaAPoNVEihsuAfIUuNZteRJMHkKNJ/wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712745125; c=relaxed/simple;
-	bh=OzNxKoT6rtjavH+sSKdTA2aMIU0990lfBRRYYlSp7XA=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=feKDrXhCCL6T2+UqZkQfZgeLH8Kmhaj4bifMXew/8xX5wRmwRpWhV1RvE8M25+evx6Gejpb5LI5+aVchC9n0mEkGhtMDo/X2vncczQTn7M86EqfvZJ33KFnvU3biKrdOk/BScaSNmWAYy4Ul3uMky5jVYD7zSJP1J7tyYazyupc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KzalsUOm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0D0C433F1;
-	Wed, 10 Apr 2024 10:32:05 +0000 (UTC)
+	s=arc-20240116; t=1712750289; c=relaxed/simple;
+	bh=NNn9PFSTYD7cqCl6hz0HImhdmwtK0pBHKxKy9hV4DKE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P7gmFfTG3LUU4byB8dPK7jeaQCE6tB90HFYz3xAh4x4odKHgr/dTl6A7nn1mDXeo0WSPzga+R+FfxK2IGWU2AbQPuf8XOLSKXpr2hFnu0wDDzXrf7Ge9+AvqklFYCY4eCOyqBE7LRHfxEVzz0fXwzhWYKantmSYUpPvaeylkVdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CzWGbFT0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EFAC433F1;
+	Wed, 10 Apr 2024 11:58:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712745125;
-	bh=OzNxKoT6rtjavH+sSKdTA2aMIU0990lfBRRYYlSp7XA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KzalsUOmcblbIZ97GurA1rdPl9SC/8tq1vtLK++nVmvjVqR9HNbhdulCsgNlNpZUj
-	 NhO4HaeutbcfxdSMSiqUGFVU9mek+M+PfbLiaK11UZ2O3Pcm1Mc6zY7XAj8g8UbSaE
-	 6lkkhGnAxVFqTDIIrcjTnF3NVdW+jFwkEWP5fqybV7kidLwDueM6sPMB+OgxKrRLvV
-	 10I2eCvh2td9EFeowCycDH7ErIUGJUsVYaVx/+/g6ilmIJedkvHTmHYxFyRHGtKmvh
-	 hLtqtr2WwFmFYoQtdoA/57HlbU1WoYW7Bi6w8Te9JxTp9jOoVuF78A9vuezWC0U/rN
-	 DW7g6eiwYTL1A==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1ruVFK-0036qE-TU;
-	Wed, 10 Apr 2024 11:32:02 +0100
-Date: Wed, 10 Apr 2024 11:32:02 +0100
-Message-ID: <86ttk9se3h.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Dave Martin <Dave.Martin@arm.com>,
-	kvmarm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 2/5] KVM: arm64: Add newly allocated ID registers to register descriptions
-In-Reply-To: <73c6012f-adb0-470b-bd47-6093d28aea97@sirena.org.uk>
-References: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
-	<20240329-arm64-2023-dpisa-v6-2-ba42db6c27f3@kernel.org>
-	<87le5ysm4l.wl-maz@kernel.org>
-	<73c6012f-adb0-470b-bd47-6093d28aea97@sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1712750288;
+	bh=NNn9PFSTYD7cqCl6hz0HImhdmwtK0pBHKxKy9hV4DKE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CzWGbFT0pQPr5PGe5Mcpjxw+oeW+QocsoylRdvqaI5HLgB/f62hSvN+KLluR14H3A
+	 smtVRLg7hWq30aJc0OtF9AkgPjXk4vdGiUZTqVnIiCWiuq9ym6kXsvJrz/sR+f8LIX
+	 3vG8UsYAU08EoVHW7xqRYL0OeFU0whxwBhRaKMuYc1emqwVMTYOQOxCy69w1IsYpjy
+	 qvvpk7I1MXLnliKVw6Eh0e9XcgtmXLAOtcLSyXjCnUFC1C1G5UjslgeuhsKAJC80VB
+	 JVZz7+uAoUUFLtMnpOcf4GaFRMGB86qujVcjf2mXX39UZ0Elock/AgrsExJQtkfL2a
+	 7xzQfVgNVQLxg==
+Date: Wed, 10 Apr 2024 06:58:06 -0500
+From: Rob Herring <robh@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
+	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
+	keescook@chromium.org, ajones@ventanamicro.com,
+	conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, krzysztof.kozlowski+dt@linaro.org,
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
+	ebiederm@xmission.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	lstoakes@gmail.com, shuah@kernel.org, brauner@kernel.org,
+	andy.chiu@sifive.com, jerry.shih@sifive.com,
+	hankuan.chen@sifive.com, greentime.hu@sifive.com, evan@rivosinc.com,
+	xiao.w.wang@intel.com, charlie@rivosinc.com,
+	apatel@ventanamicro.com, mchitale@ventanamicro.com,
+	dbarboza@ventanamicro.com, sameo@rivosinc.com,
+	shikemeng@huaweicloud.com, willy@infradead.org,
+	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
+	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
+	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
+	maskray@google.com, ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
+	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
+	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: Re: [PATCH v3 04/29] riscv: zicfilp / zicfiss in dt-bindings
+ (extensions.yaml)
+Message-ID: <20240410115806.GA4044117-robh@kernel.org>
+References: <20240403234054.2020347-1-debug@rivosinc.com>
+ <20240403234054.2020347-5-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Dave.Martin@arm.com, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403234054.2020347-5-debug@rivosinc.com>
 
-On Tue, 02 Apr 2024 18:21:55 +0100,
-Mark Brown <broonie@kernel.org> wrote:
+On Wed, Apr 03, 2024 at 04:34:52PM -0700, Deepak Gupta wrote:
+> Make an entry for cfi extensions in extensions.yaml.
 > 
-> On Sun, Mar 31, 2024 at 11:59:06AM +0100, Marc Zyngier wrote:
-> > Mark Brown <broonie@kernel.org> wrote:
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  .../devicetree/bindings/riscv/extensions.yaml          | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> > > The 2023 architecture extensions have allocated some new ID registers, add
-> > > them to the KVM system register descriptions so that they are visible to
-> > > guests.
+> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> index 63d81dc895e5..45b87ad6cc1c 100644
+> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> @@ -317,6 +317,16 @@ properties:
+>              The standard Zicboz extension for cache-block zeroing as ratified
+>              in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
+>  
+> +        - const: zicfilp
+> +          description:
+> +            The standard Zicfilp extension for enforcing forward edge control-flow
+> +            integrity in commit 3a20dc9 of riscv-cfi and is in public review.
+
+Does in public review mean the commit sha is going to change?
+
+> +
+> +        - const: zicfiss
+> +          description:
+> +            The standard Zicfiss extension for enforcing backward edge control-flow
+> +            integrity in commit 3a20dc9 of riscv-cfi and is in publc review.
+> +
+>          - const: zicntr
+>            description:
+>              The standard Zicntr extension for base counters and timers, as
+> -- 
+> 2.43.2
 > 
-> > > We make the newly introduced dpISA features writeable, as well as
-> > > allowing writes to ID_AA64ISAR3_EL1.CPA for FEAT_CPA which only
-> > > introduces straigforward new instructions with no additional
-> > > architectural state or traps.
-> 
-> > FPMR actively gets trapped by HCRX_EL2.
-> 
-> Sure, I'm not clear what you're trying to say here?
-
-I'm saying (and not trying to say) that there are traps implied by the
-features that you are adding.
-
-> The "no additional" bit is referring to FEAT_CPA.
-
-Well, that wasn't clear to me.
-
-And when it comes to CPA, there are additional controls in SCTLR2_ELx,
-which doesn't even gets context switched for EL1. What could possibly
-go wrong?
-
-> 
-> > > -	ID_UNALLOCATED(6,3),
-> > > +	ID_WRITABLE(ID_AA64ISAR3_EL1, ~(ID_AA64ISAR2_EL1_RES0 |
-> > > +					ID_AA64ISAR3_EL1_PACM |
-> > > +					ID_AA64ISAR3_EL1_TLBIW)),
-> > >  	ID_UNALLOCATED(6,4),
-> > >  	ID_UNALLOCATED(6,5),
-> > >  	ID_UNALLOCATED(6,6),
-> 
-> > Where is the code that enforces the lack of support for MTEFAR,
-> > MTESTOREONLY, and MTEPERM for SCTLR_ELx, EnPACM and EnFPM in HCRX_EL2?
-> 
-> Could you please be more explicit regarding what you're expecting to see
-> here?
-
-I'm expecting you to add all the required masking and fine-grained
-disabling of features that are not explicitly advertised to the guest.
-
-This should translate into additional init code in kvm_init_sysreg(),
-kvm_init_nv_sysregs() and limit_nv_id_reg(). You also should update
-the exception triaging infrastructure in emulate-nested.c.
-
-> Other than the writeability mask for the ID register I would have
-> expected to need explicit code to enable new features rather than
-> explicit code to keep currently unsupported features unsupported.  I'm
-> sure what you're referencing will be obvious once I see it but I'm
-> drawing a blank.
-> 
-> > And I haven't checked whether TLBI VMALLWS2 can be trapped.
-> 
-> I didn't see anything but I might not be aware of where to look, there
-> doesn't seem to be anything for that specifically in HFGITR_EL2 or
-> HFGITR2_EL2 which would be the main places I'd expect to find
-> something.
-
-That's a really odd place to look. This is a S2 invalidation
-primitive, which by definition is under the sole control of EL2, and
-therefore cannot be trapped by any of the FGT registers, as they only
-affect lesser-privileged ELs.
-
-The instruction is described in the XML:
-
-https://developer.arm.com/documentation/ddi0601/2024-03/AArch64-Instructions/TLBI-VMALLWS2E1--TLB-Invalidate-stage-2-dirty-state-by-VMID--EL1-0
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
 
