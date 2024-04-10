@@ -1,120 +1,166 @@
-Return-Path: <linux-kselftest+bounces-7563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39E7E89EFA7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 12:15:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68FE289EFDD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 12:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7E8828527D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 10:15:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD131B22F68
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 10:32:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE7E4158206;
-	Wed, 10 Apr 2024 10:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9B3E1591E1;
+	Wed, 10 Apr 2024 10:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="i5qBhIEP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KzalsUOm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2926155737;
-	Wed, 10 Apr 2024 10:15:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DC8C157;
+	Wed, 10 Apr 2024 10:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712744137; cv=none; b=X+kHfgKZ9c218yENLF9d+QFe1TdhRQwrkgpi3lFWscsa8G8f0I77lr7ePZu2Fh8b2nFuFGwwcsjCku33Wp6AANcldUqz9bjSnnjmZnKeKC3/wFBmhha807mB6pqlwQgqTFfqiGJrHMryOxKsFmvy8jpca0z+JVd50EDXQiYBUj8=
+	t=1712745125; cv=none; b=ZmKKzlG500g2ZsSrP94U/Va4UL+nuToYgUC0nRO/26hP7wHG7qKXLaeRlF3vIIUuci92GjEeltOxy8iHpMjYTIuQ8NSHvWrnxp7fveKi8XqJ0t6tIelxQ/8ZYtALFtQVEtoI4IcpYG1LXb7PRAWfxjBknJxcBRpDELVya8Uv6W0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712744137; c=relaxed/simple;
-	bh=YC5mpI3zmUDjy80vR1JbXqLidS+Mq+LuGjUVGLaf+NY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:Content-Type:
-	 MIME-Version; b=pGCRTpXEUt/GPbA6ndenSju7dZjzpNBDhjrtGk2eh3sLRi9SewgQyXHYWAz7LsHmKjpSpeXntw45TBP/3kjQqTadEnyvdZ5YaYl6rpqsVsPfF0jeGubetxPJsXk9Hqa1SV1HXP0YvBFq9snYdfJv758+Sb/Wc/PIdxSgFPtFYz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=i5qBhIEP; arc=none smtp.client-ip=52.119.213.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1712744133; x=1744280133;
-  h=from:to:cc:subject:date:message-id:in-reply-to:reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=YC5mpI3zmUDjy80vR1JbXqLidS+Mq+LuGjUVGLaf+NY=;
-  b=i5qBhIEPOnQe4iL6q2UhWD4hLxpcf6C+3vEA1w8un/WPc0HSNdh4I2/6
-   O+1RlZ2Pwextq6kidyrlpdnajEM3Ik0QhMdRtexZIQArccb+EGpLxrQY2
-   FwSIEFe/w3pBW+ip1JOSNWxz6qdjwbzMgLtlUqbQNrWDJXr/otPoAnsG0
-   M=;
-X-IronPort-AV: E=Sophos;i="6.07,190,1708387200"; 
-   d="scan'208";a="197624342"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.2])
-  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 10:15:31 +0000
-Received: from EX19MTAEUC001.ant.amazon.com [10.0.43.254:28828]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.25.48:2525] with esmtp (Farcaster)
- id 4757ae82-0365-4d6b-a303-bd85ff575e01; Wed, 10 Apr 2024 10:15:29 +0000 (UTC)
-X-Farcaster-Flow-ID: 4757ae82-0365-4d6b-a303-bd85ff575e01
-Received: from EX19D033EUC001.ant.amazon.com (10.252.61.132) by
- EX19MTAEUC001.ant.amazon.com (10.252.51.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Wed, 10 Apr 2024 10:15:29 +0000
-Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
- EX19D033EUC001.ant.amazon.com (10.252.61.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Wed, 10 Apr 2024 10:15:29 +0000
-Received: from EX19D033EUC004.ant.amazon.com ([fe80::8359:4d84:fb19:f6e9]) by
- EX19D033EUC004.ant.amazon.com ([fe80::8359:4d84:fb19:f6e9%3]) with mapi id
- 15.02.1258.028; Wed, 10 Apr 2024 10:15:29 +0000
-From: "Allister, Jack" <jalliste@amazon.co.uk>
-To: "dongli.zhang@oracle.com" <dongli.zhang@oracle.com>
-CC: "corbet@lwn.net" <corbet@lwn.net>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"seanjc@google.com" <seanjc@google.com>, "mingo@redhat.com"
-	<mingo@redhat.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "dwmw2@infradead.org"
-	<dwmw2@infradead.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "paul@xen.org"
-	<paul@xen.org>, "bp@alien8.de" <bp@alien8.de>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Allister, Jack" <jalliste@amazon.co.uk>, "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH 2/2] KVM: selftests: Add KVM/PV clock selftest to prove
- timer drift correction
-Thread-Topic: [PATCH 2/2] KVM: selftests: Add KVM/PV clock selftest to prove
- timer drift correction
-Thread-Index: AQHaizADgCaxniBg/kihxnKaQcWS/w==
-Date: Wed, 10 Apr 2024 10:15:29 +0000
-Message-ID: <4f1ca4e1a8a9a31eae8057f9a813fc13d3172f77.camel@amazon.co.uk>
-In-Reply-To: <9377995a-26a4-2523-e421-be1cd92bdc34@oracle.com>
-Reply-To: "9377995a-26a4-2523-e421-be1cd92bdc34@oracle.com"
-	<9377995a-26a4-2523-e421-be1cd92bdc34@oracle.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FA4954794EA1A8499DCB60759E1D7EB2@amazon.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1712745125; c=relaxed/simple;
+	bh=OzNxKoT6rtjavH+sSKdTA2aMIU0990lfBRRYYlSp7XA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=feKDrXhCCL6T2+UqZkQfZgeLH8Kmhaj4bifMXew/8xX5wRmwRpWhV1RvE8M25+evx6Gejpb5LI5+aVchC9n0mEkGhtMDo/X2vncczQTn7M86EqfvZJ33KFnvU3biKrdOk/BScaSNmWAYy4Ul3uMky5jVYD7zSJP1J7tyYazyupc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KzalsUOm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0D0C433F1;
+	Wed, 10 Apr 2024 10:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712745125;
+	bh=OzNxKoT6rtjavH+sSKdTA2aMIU0990lfBRRYYlSp7XA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KzalsUOmcblbIZ97GurA1rdPl9SC/8tq1vtLK++nVmvjVqR9HNbhdulCsgNlNpZUj
+	 NhO4HaeutbcfxdSMSiqUGFVU9mek+M+PfbLiaK11UZ2O3Pcm1Mc6zY7XAj8g8UbSaE
+	 6lkkhGnAxVFqTDIIrcjTnF3NVdW+jFwkEWP5fqybV7kidLwDueM6sPMB+OgxKrRLvV
+	 10I2eCvh2td9EFeowCycDH7ErIUGJUsVYaVx/+/g6ilmIJedkvHTmHYxFyRHGtKmvh
+	 hLtqtr2WwFmFYoQtdoA/57HlbU1WoYW7Bi6w8Te9JxTp9jOoVuF78A9vuezWC0U/rN
+	 DW7g6eiwYTL1A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1ruVFK-0036qE-TU;
+	Wed, 10 Apr 2024 11:32:02 +0100
+Date: Wed, 10 Apr 2024 11:32:02 +0100
+Message-ID: <86ttk9se3h.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Dave Martin <Dave.Martin@arm.com>,
+	kvmarm@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 2/5] KVM: arm64: Add newly allocated ID registers to register descriptions
+In-Reply-To: <73c6012f-adb0-470b-bd47-6093d28aea97@sirena.org.uk>
+References: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
+	<20240329-arm64-2023-dpisa-v6-2-ba42db6c27f3@kernel.org>
+	<87le5ysm4l.wl-maz@kernel.org>
+	<73c6012f-adb0-470b-bd47-6093d28aea97@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Dave.Martin@arm.com, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-PiBBRkFJUiwgSSBjb3BpZWQgY2hlY2tfY2xvY2tzb3VyY2UoKSBmcm9tIGV4aXN0aW5nIGNvZGUg
-ZHVyaW5nIHRoYXQgPg0KdGltZS4NCg0KPiBUaGUgY29tbWl0IGU0NDBjNWYyZSAoIktWTTogc2Vs
-ZnRlc3RzOiBHZW5lcmFsaXplIGNoZWNrX2Nsb2Nrc291cmNlKCkNCj4gZnJvbSBrdm1fY2xvY2tf
-dGVzdCIpIGhhcyBpbnRyb2R1Y2VkIHN5c19jbG9ja3NvdXJjZV9pc190c2MoKS4gTGF0ZXINCj4g
-aXQgaXMgcmVuYW1lZCB0byBzeXNfY2xvY2tzb3VyY2VfaXNfYmFzZWRfb25fdHNjKCkuDQo+IEFu
-eSBjaGFuY2UgdG8gcmUtdXNlIHN5c19jbG9ja3NvdXJjZV9pc19iYXNlZF9vbl90c2MoKT8NCg0K
-WWVzIEknbSBtb3JlIHRoYW4gaGFwcHkgdG8gY2hhbmdlIGl0IHRvIHRoYXQuIEkgd2FzIHVzaW5n
-IHlvdXIgb3JpZ2luYWwNCm1haWwgYXMgYSByZWZlcmVuY2UgYW5kIGRpZCBub3QgcmVhbGlzZSB0
-aGVyZSB3YXMgYSB1dGlsaXR5IHByZXNlbnQgZm9yDQp0aGlzLg0KDQo+IElzIGNvbmZpZ3VyZV9z
-Y2FsZWRfdHNjKCkgYW5lY2Vzc2FyeT8gT3IgaG93IGFib3V0IHRvIG1ha2UgaXQgYW4gID4NCm9w
-dGlvbi9hcmc/DQo+IFRoZW4gSSB3aWxsIGJlIGFibGUgdG8gdGVzdCBpdCBvbiBhIFZNL3NlcnZl
-ciB3aXRob3V0IFRTQyBzY2FsaW5nLg0KDQpTbyBpZiBUU0Mgc2NhbGluZyBmcm9tIDNHSHogKGhv
-c3QpIC0+IDEuNUdIeiAoZ3Vlc3QpIEkgZG8gc2VlIGEgc2tldyBvZg0KfjM1MDBucyBhZnRlciB0
-aGUgdXBkYXRlLiBXaGVyZSBhcyB3aXRob3V0IHNjYWxpbmcgYSBkZWx0YSBjYW4gYmUgc2Vlbg0K
-YnV0IGlzIHJvdWdobHkgfjE4MG5zLg0KDQpJbiBWMiBJJ3ZlIGFkanVzdGVkIHRoZSB0ZXN0IHNv
-IHRoYXQgbm93IGJ5IGRlZmF1bHQgc2NhbGluZyB3b24ndCB0YWtlDQpwbGFjZSwgaG93ZXZlciBp
-ZiBzb21lb25lIHdhbnRzIHRvIHRlc3Qgd2l0aCBpdCBlbmFibGVkIHRoZXkgY2FuIHBhc3MNCiIt
-cy8tLXNjYWxlLXRzYyIgdG8gaW5kdWNlIHRoZSBncmVhdGVyIGRlbHRhLg0KDQoNClRoYW5rcyB5
-b3UgZm9yIHRoZSBmZWVkYmFjaywNCkphY2sgQWxsaXN0ZXINCg0KDQoNCg==
+On Tue, 02 Apr 2024 18:21:55 +0100,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> On Sun, Mar 31, 2024 at 11:59:06AM +0100, Marc Zyngier wrote:
+> > Mark Brown <broonie@kernel.org> wrote:
+> 
+> > > The 2023 architecture extensions have allocated some new ID registers, add
+> > > them to the KVM system register descriptions so that they are visible to
+> > > guests.
+> 
+> > > We make the newly introduced dpISA features writeable, as well as
+> > > allowing writes to ID_AA64ISAR3_EL1.CPA for FEAT_CPA which only
+> > > introduces straigforward new instructions with no additional
+> > > architectural state or traps.
+> 
+> > FPMR actively gets trapped by HCRX_EL2.
+> 
+> Sure, I'm not clear what you're trying to say here?
+
+I'm saying (and not trying to say) that there are traps implied by the
+features that you are adding.
+
+> The "no additional" bit is referring to FEAT_CPA.
+
+Well, that wasn't clear to me.
+
+And when it comes to CPA, there are additional controls in SCTLR2_ELx,
+which doesn't even gets context switched for EL1. What could possibly
+go wrong?
+
+> 
+> > > -	ID_UNALLOCATED(6,3),
+> > > +	ID_WRITABLE(ID_AA64ISAR3_EL1, ~(ID_AA64ISAR2_EL1_RES0 |
+> > > +					ID_AA64ISAR3_EL1_PACM |
+> > > +					ID_AA64ISAR3_EL1_TLBIW)),
+> > >  	ID_UNALLOCATED(6,4),
+> > >  	ID_UNALLOCATED(6,5),
+> > >  	ID_UNALLOCATED(6,6),
+> 
+> > Where is the code that enforces the lack of support for MTEFAR,
+> > MTESTOREONLY, and MTEPERM for SCTLR_ELx, EnPACM and EnFPM in HCRX_EL2?
+> 
+> Could you please be more explicit regarding what you're expecting to see
+> here?
+
+I'm expecting you to add all the required masking and fine-grained
+disabling of features that are not explicitly advertised to the guest.
+
+This should translate into additional init code in kvm_init_sysreg(),
+kvm_init_nv_sysregs() and limit_nv_id_reg(). You also should update
+the exception triaging infrastructure in emulate-nested.c.
+
+> Other than the writeability mask for the ID register I would have
+> expected to need explicit code to enable new features rather than
+> explicit code to keep currently unsupported features unsupported.  I'm
+> sure what you're referencing will be obvious once I see it but I'm
+> drawing a blank.
+> 
+> > And I haven't checked whether TLBI VMALLWS2 can be trapped.
+> 
+> I didn't see anything but I might not be aware of where to look, there
+> doesn't seem to be anything for that specifically in HFGITR_EL2 or
+> HFGITR2_EL2 which would be the main places I'd expect to find
+> something.
+
+That's a really odd place to look. This is a S2 invalidation
+primitive, which by definition is under the sole control of EL2, and
+therefore cannot be trapped by any of the FGT registers, as they only
+affect lesser-privileged ELs.
+
+The instruction is described in the XML:
+
+https://developer.arm.com/documentation/ddi0601/2024-03/AArch64-Instructions/TLBI-VMALLWS2E1--TLB-Invalidate-stage-2-dirty-state-by-VMID--EL1-0
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
