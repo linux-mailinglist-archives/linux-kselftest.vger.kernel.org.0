@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-7579-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41CEF89FE28
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 19:20:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAF7389FE2B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 19:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0C1F1F230FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 17:20:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90BDC2855F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 17:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D5717F386;
-	Wed, 10 Apr 2024 17:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BA317F39D;
+	Wed, 10 Apr 2024 17:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFhQ6N+O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JQdOpSnm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D34A17BB0F;
-	Wed, 10 Apr 2024 17:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8689C17F37A;
+	Wed, 10 Apr 2024 17:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712769596; cv=none; b=jeQJpSjvZdHKCV0+hRSrp+AFW+VPMua1cuLhz0BRVktqh2Qzfp3bhBAmUDzyNuobzXUqap58J52sHx07egW6KjK5t1KClVxbL4BWIsW/3VQNiRSmbBJ11IaxgeaPp29HoRtJW2PbbGrxizvdejPOrZZQvUzpyDub4Fg78O2QC+A=
+	t=1712769598; cv=none; b=nmGHHhGv0gUeVrZOELmWnuJ4UJlOFqEwSapUO/mo3QM9u/74r5qpu8/c6naaeXwjW2phQPXNKEBrbazFq3g8pep7UfrevyOT6YKXdopse6tYwmDYAZUAZCxVmQmUDYmfX/Du3zUL9qlaFzm5dS+ICtKjNgjKNvGu0h3ix3ioIfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712769596; c=relaxed/simple;
-	bh=qnOx4kwAtp+iJZuheRdUFKOI1XAe6N2x+tnqr0tcebg=;
+	s=arc-20240116; t=1712769598; c=relaxed/simple;
+	bh=W29a1hCohS/gyp1nsAMz6TYmQs533xWczThWwbjEjU4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aRlT1m/v8Rglfx2vqoyZF17dleK+HLRK4QZu2OEf0S/hOOfTR70zwtXBtskaSaNjceL1Lp74NRsPo0/8U3LGA/NLxfSWCl/q9viivSNmBZ1aRHO1Q8b9xWith47wo9r9qH1yCZbyAPdQI4LzE0BKGdJZ9Ol0rskvipi17Mr9D3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFhQ6N+O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6388EC433B1;
-	Wed, 10 Apr 2024 17:19:54 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=gGEeXMOG8a7lO9RH14Kmbs+eZNEEKHZeUGg7mWmzDf2aJUHmy6k8SFMn3bOgxBtNmxE5o0ipeiSnGL9DYkR/q8SfgFv5Jw4SwXeWlwxy0lbjIX97uFAsaIL5PaPgecKUlQN0QSqu24/1Erh00fSwIFwhyqetEIeawnExhDHt06Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JQdOpSnm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68949C433F1;
+	Wed, 10 Apr 2024 17:19:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712769596;
-	bh=qnOx4kwAtp+iJZuheRdUFKOI1XAe6N2x+tnqr0tcebg=;
+	s=k20201202; t=1712769598;
+	bh=W29a1hCohS/gyp1nsAMz6TYmQs533xWczThWwbjEjU4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KFhQ6N+OwvL6Grm6ZvlK+Xk2XAupRdrETDckOyDSneA5tL1sTkIjmCZFd3M0RLjop
-	 Ow8kV72QssjazQp5YIdt5kEvkdhrpmfxnmxjbc+q0QROW2eldFe/4WX7O0eweT1ApL
-	 hE7HMP4DbmEAsJ4PEhB1GWSWzgvrunsmmY0kHZbbQHcYq0nWyfPiIC4vwbfWVEAndt
-	 HzK/XmeJB2T5jqipM9098lHLa9e4VK+WvW0KPxUmc/nmwnayIPIWS2NgXhIMpJmuA2
-	 SVwFViCupIsZg5Nv9+jQ/Zic0/e9Clr2ECLlBPMVU7BfoDGY6mg9KiZIIGEzpfmmBX
-	 1+kPykYvexxBQ==
+	b=JQdOpSnmS823gyd70Tv4QWMXCjbNbEf4fE+WGQQZhn79sHIbXMlSeGP6Cliy5v/mg
+	 VwMtIARmyRvrbZY8jjMwyOc0eo+N/LGcGDI5zDmWIyPtJmHh/16AlCWJ3Qw0Fy/kM4
+	 T1ELQCDnj5Q79Te2Um/nNf/ZKk6idRmNu/LDmhN3Fp3ZPB1+qXVUJ2ZmYPAtp1Cw6l
+	 7EbnG30JoTbLuiM6IGS8O4RemxHRd2c0lPuF8dig8Bu+ozXR4OItGIWsdO4fU5Xq8+
+	 6xNYfQvKXjAd4r3aCDaMhS9zj20DUwm3rjRShPeMGFD79s+4eJ4gxWWMASoeUamvKn
+	 WtTOKzfj5cmtg==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 10 Apr 2024 19:19:22 +0200
-Subject: [PATCH 02/18] HID: bpf: add first in-tree HID-BPF fix for the
- XPPen Artist 24
+Date: Wed, 10 Apr 2024 19:19:23 +0200
+Subject: [PATCH 03/18] HID: bpf: add in-tree HID-BPF fix for the XPPen
+ Artist 16
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,257 +52,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240410-bpf_sources-v1-2-a8bf16033ef8@kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240410-bpf_sources-v1-3-a8bf16033ef8@kernel.org>
 References: <20240410-bpf_sources-v1-0-a8bf16033ef8@kernel.org>
 In-Reply-To: <20240410-bpf_sources-v1-0-a8bf16033ef8@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
  Shuah Khan <shuah@kernel.org>, Peter Hutterer <peter.hutterer@who-t.net>
 Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
+ linux-kselftest@vger.kernel.org, Martin Sivak <mars@montik.net>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1712769589; l=24791;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712769589; l=13125;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=qnOx4kwAtp+iJZuheRdUFKOI1XAe6N2x+tnqr0tcebg=;
- b=K+/QjTgZ5vYZCQqW81mSrFaaIlL/zhoE2luCiuZPd/BzQh+3r35KnoAJzik4n53lCzzJCYFy4
- ptreTWEorC/Bn/CUH1OPhO0PI/uQiyDWOzJKBPOaJ2fA//yIb4VK9tX
+ bh=W29a1hCohS/gyp1nsAMz6TYmQs533xWczThWwbjEjU4=;
+ b=AZKy9wvROvQhIcMtPugqXwldrw+ELC+v7Iz+fQJehXe1zP384h0tNnxtDgxynO/06t+kNDkoA
+ YzngU7914mMCnwt0DZmEXuA48vcKp5qbeNW2DQYkGAPeGy7vNYoJ2hI
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-This commit adds a fix for XPPen Artist 24 where the second button on
-the pen is used as an eraser.
+Same problem than the Artist 24: the second button on the pen is treated
+like an eraser.
+But the problem is even worse this time. There is an actual eraser at
+the tail of the pen.
 
-It's a "feature" from Microsoft, but it turns out that it's actually
-painful for artists. So we ship here a HID-BPF program that turns this
-second button into an actual button.
+The compensation of the coordinates was done by Martin
 
-Note that the HID-BPF program is not directly loaded by the kernel itself
-but by udev-hid-bpf[0]. But having the sources here allows us to also
-integrate tests into tools/testing/selftests/hid to ensure the HID-BPF
-program are actually tested.
-
-[0] https://gitlab.freedesktop.org/libevdev/udev-hid-bpf
-
+Signed-off-by: Martin Sivak <mars@montik.net>
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- drivers/hid/bpf/progs/Makefile              |  91 +++++++++++
- drivers/hid/bpf/progs/README                | 102 +++++++++++++
- drivers/hid/bpf/progs/XPPen__Artist24.bpf.c | 229 ++++++++++++++++++++++++++++
- drivers/hid/bpf/progs/hid_bpf.h             |  15 ++
- drivers/hid/bpf/progs/hid_bpf_helpers.h     | 170 +++++++++++++++++++++
- 5 files changed, 607 insertions(+)
+ drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c | 274 +++++++++++++++++++++
+ 1 file changed, 274 insertions(+)
 
-diff --git a/drivers/hid/bpf/progs/Makefile b/drivers/hid/bpf/progs/Makefile
+diff --git a/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c b/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
 new file mode 100644
-index 000000000000..63ed7e02adf1
+index 000000000000..65ef10036126
 --- /dev/null
-+++ b/drivers/hid/bpf/progs/Makefile
-@@ -0,0 +1,91 @@
-+# SPDX-License-Identifier: GPL-2.0
-+OUTPUT := .output
-+abs_out := $(abspath $(OUTPUT))
-+
-+CLANG ?= clang
-+LLC ?= llc
-+LLVM_STRIP ?= llvm-strip
-+
-+TOOLS_PATH := $(abspath ../../../../tools)
-+BPFTOOL_SRC := $(TOOLS_PATH)/bpf/bpftool
-+BPFTOOL_OUTPUT := $(abs_out)/bpftool
-+DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
-+BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+
-+LIBBPF_SRC := $(TOOLS_PATH)/lib/bpf
-+LIBBPF_OUTPUT := $(abs_out)/libbpf
-+LIBBPF_DESTDIR := $(LIBBPF_OUTPUT)
-+LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)/include
-+BPFOBJ := $(LIBBPF_OUTPUT)/libbpf.a
-+
-+INCLUDES := -I$(OUTPUT) -I$(LIBBPF_INCLUDE) -I$(TOOLS_PATH)/include/uapi
-+CFLAGS := -g -Wall
-+
-+VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
-+		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
-+		     ../../../../vmlinux				\
-+		     /sys/kernel/btf/vmlinux				\
-+		     /boot/vmlinux-$(shell uname -r)
-+VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-+ifeq ($(VMLINUX_BTF),)
-+$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
-+endif
-+
-+ifeq ($(V),1)
-+Q =
-+msg =
-+else
-+Q = @
-+msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-+MAKEFLAGS += --no-print-directory
-+submake_extras := feature_display=0
-+endif
-+
-+.DELETE_ON_ERROR:
-+
-+.PHONY: all clean
-+
-+SOURCES = $(wildcard *.bpf.c)
-+TARGETS = $(SOURCES:.bpf.c=.bpf.o)
-+
-+all: $(TARGETS)
-+
-+clean:
-+	$(call msg,CLEAN)
-+	$(Q)rm -rf $(OUTPUT) $(TARGETS)
-+
-+%.bpf.o: %.bpf.c vmlinux.h $(BPFOBJ) | $(OUTPUT)
-+	$(call msg,BPF,$@)
-+	$(Q)$(CLANG) -g -O2 --target=bpf $(INCLUDES)			      \
-+		 -c $(filter %.c,$^) -o $@ &&				      \
-+	$(LLVM_STRIP) -g $@
-+
-+vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
-+ifeq ($(VMLINUX_H),)
-+	$(call msg,GEN,,$@)
-+	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-+else
-+	$(call msg,CP,,$@)
-+	$(Q)cp "$(VMLINUX_H)" $@
-+endif
-+
-+$(OUTPUT) $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
-+	$(call msg,MKDIR,$@)
-+	$(Q)mkdir -p $@
-+
-+$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUTPUT)
-+	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC)			       \
-+		    OUTPUT=$(abspath $(dir $@))/ prefix=		       \
-+		    DESTDIR=$(LIBBPF_DESTDIR) $(abspath $@) install_headers
-+
-+ifeq ($(CROSS_COMPILE),)
-+$(DEFAULT_BPFTOOL): $(BPFOBJ) | $(BPFTOOL_OUTPUT)
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFTOOL_SRC)			       \
-+		    OUTPUT=$(BPFTOOL_OUTPUT)/				       \
-+		    LIBBPF_BOOTSTRAP_OUTPUT=$(LIBBPF_OUTPUT)/		       \
-+		    LIBBPF_BOOTSTRAP_DESTDIR=$(LIBBPF_DESTDIR)/ bootstrap
-+else
-+$(DEFAULT_BPFTOOL): | $(BPFTOOL_OUTPUT)
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFTOOL_SRC)			       \
-+		    OUTPUT=$(BPFTOOL_OUTPUT)/ bootstrap
-+endif
-diff --git a/drivers/hid/bpf/progs/README b/drivers/hid/bpf/progs/README
-new file mode 100644
-index 000000000000..20b0928f385b
---- /dev/null
-+++ b/drivers/hid/bpf/progs/README
-@@ -0,0 +1,102 @@
-+# HID-BPF programs
-+
-+This directory contains various fixes for devices. They add new features or
-+fix some behaviors without being entirely mandatory. It is better to load them
-+when you have such a device, but they should not be a requirement for a device
-+to be working during the boot stage.
-+
-+The .bpf.c files provided here are not automatically compiled in the kernel.
-+They should be loaded in the kernel by `udev-hid-bpf`:
-+
-+https://gitlab.freedesktop.org/libevdev/udev-hid-bpf
-+
-+The main reasons for these fixes to be here is to have a central place to
-+"upstream" them, but also this way we can test them thanks to the HID
-+selftests.
-+
-+Once a .bpf.c file is accepted here, it is duplicated in `udev-hid-bpf`
-+in the `src/bpf/stable` directory, and distributions are encouraged to
-+only ship those bpf objects. So adding a file here should eventually
-+land in distributions when they update `udev-hid-bpf`
-+
-+## Compilation
-+
-+Just run `make`
-+
-+## Installation
-+
-+### Automated way
-+
-+Just run `sudo udev-hid-bpf install ./my-awesome-fix.bpf.o`
-+
-+### Manual way
-+
-+- copy the `.bpf.o` you want in `/etc/udev-hid-bpf/`
-+- create a new udev rule to automatically load it
-+
-+The following should do the trick (assuming udev-hid-bpf is available in
-+/usr/bin):
-+
-+```
-+$> cp xppen-ArtistPro16Gen2.bpf.o /etc/udev-hid-bpf/
-+$> udev-hid-bpf inspect xppen-ArtistPro16Gen2.bpf.o
-+[
-+  {
-+    "name": "xppen-ArtistPro16Gen2.bpf.o",
-+    "devices": [
-+      {
-+        "bus": "0x0003",
-+        "group": "0x0001",
-+        "vid": "0x28BD",
-+        "pid": "0x095A"
-+      },
-+      {
-+        "bus": "0x0003",
-+        "group": "0x0001",
-+        "vid": "0x28BD",
-+        "pid": "0x095B"
-+      }
-+    ],
-+...
-+$> cat <EOF > /etc/udev/rules.d/99-load-hid-bpf-xppen-ArtistPro16Gen2.rules
-+ACTION!="add|remove", GOTO="hid_bpf_end"
-+SUBSYSTEM!="hid", GOTO="hid_bpf_end"
-+
-+# xppen-ArtistPro16Gen2.bpf.o
-+ACTION=="add",ENV{MODALIAS}=="hid:b0003g0001v000028BDp0000095A", RUN{program}+="/usr/local/bin/udev-hid-bpf add $sys$devpath /etc/udev-hid-bpf/xppen-ArtistPro16Gen2.bpf.o"
-+ACTION=="remove",ENV{MODALIAS}=="hid:b0003g0001v000028BDp0000095A", RUN{program}+="/usr/local/bin/udev-hid-bpf remove $sys$devpath "
-+# xppen-ArtistPro16Gen2.bpf.o
-+ACTION=="add",ENV{MODALIAS}=="hid:b0003g0001v000028BDp0000095B", RUN{program}+="/usr/local/bin/udev-hid-bpf add $sys$devpath /etc/udev-hid-bpf/xppen-ArtistPro16Gen2.bpf.o"
-+ACTION=="remove",ENV{MODALIAS}=="hid:b0003g0001v000028BDp0000095B", RUN{program}+="/usr/local/bin/udev-hid-bpf remove $sys$devpath "
-+
-+LABEL="hid_bpf_end"
-+EOF
-+$> udevadm control --reload
-+```
-+
-+Then unplug and replug the device.
-+
-+## Checks
-+
-+### udev rule
-+
-+You can check that the udev rule is correctly working by issuing
-+
-+```
-+$> udevadm test /sys/bus/hid/devices/0003:28BD:095B*
-+...
-+run: '/usr/local/bin/udev-hid-bpf add /sys/devices/virtual/misc/uhid/0003:28BD:095B.0E57 /etc/udev-hid-bpf/xppen-ArtistPro16Gen2.bpf.o'
-+```
-+
-+### program loaded
-+
-+You can check that the program has been properly loaded with `bpftool`
-+
-+```
-+$> bpftool prog
-+...
-+247: tracing  name xppen_16_fix_eraser tag 18d389353ed2ef07  gpl
-+	loaded_at 2024-03-28T16:02:28+0100  uid 0
-+	xlated 120B  jited 77B  memlock 4096B
-+	btf_id 487
-+```
-diff --git a/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c b/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
-new file mode 100644
-index 000000000000..e1be6a12bb75
---- /dev/null
-+++ b/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
-@@ -0,0 +1,229 @@
++++ b/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
+@@ -0,0 +1,274 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright (c) 2023 Benjamin Tissoires
 + */
@@ -313,19 +98,21 @@ index 000000000000..e1be6a12bb75
 +#include <bpf/bpf_tracing.h>
 +
 +#define VID_UGEE 0x28BD /* VID is shared with SinoWealth and Glorious and prob others */
-+#define PID_ARTIST_24 0x093A
-+#define PID_ARTIST_24_PRO 0x092D
++#define PID_ARTIST_PRO14_GEN2 0x095A
++#define PID_ARTIST_PRO16_GEN2 0x095B
 +
 +HID_BPF_CONFIG(
-+	HID_DEVICE(BUS_USB, HID_GROUP_GENERIC, VID_UGEE, PID_ARTIST_24),
-+	HID_DEVICE(BUS_USB, HID_GROUP_GENERIC, VID_UGEE, PID_ARTIST_24_PRO)
++	HID_DEVICE(BUS_USB, HID_GROUP_GENERIC, VID_UGEE, PID_ARTIST_PRO14_GEN2),
++	HID_DEVICE(BUS_USB, HID_GROUP_GENERIC, VID_UGEE, PID_ARTIST_PRO16_GEN2)
 +);
 +
 +/*
 + * We need to amend the report descriptor for the following:
 + * - the device reports Eraser instead of using Secondary Barrel Switch
-+ * - the pen doesn't have a rubber tail, so basically we are removing any
-+ *   eraser/invert bits
++ * - when the eraser button is pressed and the stylus is touching the tablet,
++ *   the device sends Tip Switch instead of sending Eraser
++ *
++ * This descriptor uses physical dimensions of the 16" device.
 + */
 +static const __u8 fixed_rdesc[] = {
 +	0x05, 0x0d,                    // Usage Page (Digitizers)             0
@@ -337,67 +124,56 @@ index 000000000000..e1be6a12bb75
 +	0x09, 0x42,                    //   Usage (Tip Switch)                12
 +	0x09, 0x44,                    //   Usage (Barrel Switch)             14
 +	0x09, 0x5a,                    //   Usage (Secondary Barrel Switch)   16  /* changed from 0x45 (Eraser) to 0x5a (Secondary Barrel Switch) */
-+	0x15, 0x00,                    //   Logical Minimum (0)               18
-+	0x25, 0x01,                    //   Logical Maximum (1)               20
-+	0x75, 0x01,                    //   Report Size (1)                   22
-+	0x95, 0x03,                    //   Report Count (3)                  24
-+	0x81, 0x02,                    //   Input (Data,Var,Abs)              26
-+	0x95, 0x02,                    //   Report Count (2)                  28
-+	0x81, 0x03,                    //   Input (Cnst,Var,Abs)              30
-+	0x09, 0x32,                    //   Usage (In Range)                  32
-+	0x95, 0x01,                    //   Report Count (1)                  34
-+	0x81, 0x02,                    //   Input (Data,Var,Abs)              36
-+	0x95, 0x02,                    //   Report Count (2)                  38
-+	0x81, 0x03,                    //   Input (Cnst,Var,Abs)              40
-+	0x75, 0x10,                    //   Report Size (16)                  42
-+	0x95, 0x01,                    //   Report Count (1)                  44
-+	0x35, 0x00,                    //   Physical Minimum (0)              46
-+	0xa4,                          //   Push                              48
-+	0x05, 0x01,                    //   Usage Page (Generic Desktop)      49
-+	0x09, 0x30,                    //   Usage (X)                         51
-+	0x65, 0x13,                    //   Unit (EnglishLinear: in)          53
-+	0x55, 0x0d,                    //   Unit Exponent (-3)                55
-+	0x46, 0xf0, 0x50,              //   Physical Maximum (20720)          57
-+	0x26, 0xff, 0x7f,              //   Logical Maximum (32767)           60
-+	0x81, 0x02,                    //   Input (Data,Var,Abs)              63
-+	0x09, 0x31,                    //   Usage (Y)                         65
-+	0x46, 0x91, 0x2d,              //   Physical Maximum (11665)          67
-+	0x26, 0xff, 0x7f,              //   Logical Maximum (32767)           70
-+	0x81, 0x02,                    //   Input (Data,Var,Abs)              73
-+	0xb4,                          //   Pop                               75
-+	0x09, 0x30,                    //   Usage (Tip Pressure)              76
-+	0x45, 0x00,                    //   Physical Maximum (0)              78
-+	0x26, 0xff, 0x1f,              //   Logical Maximum (8191)            80
-+	0x81, 0x42,                    //   Input (Data,Var,Abs,Null)         83
-+	0x09, 0x3d,                    //   Usage (X Tilt)                    85
-+	0x15, 0x81,                    //   Logical Minimum (-127)            87
-+	0x25, 0x7f,                    //   Logical Maximum (127)             89
-+	0x75, 0x08,                    //   Report Size (8)                   91
-+	0x95, 0x01,                    //   Report Count (1)                  93
-+	0x81, 0x02,                    //   Input (Data,Var,Abs)              95
-+	0x09, 0x3e,                    //   Usage (Y Tilt)                    97
-+	0x15, 0x81,                    //   Logical Minimum (-127)            99
-+	0x25, 0x7f,                    //   Logical Maximum (127)             101
-+	0x81, 0x02,                    //   Input (Data,Var,Abs)              103
-+	0xc0,                          //  End Collection                     105
-+	0xc0,                          // End Collection                      106
++	0x09, 0x3c,                    //   Usage (Invert)                    18
++	0x09, 0x45,                    //   Usage (Eraser)                    16  /* created over a padding bit at offset 29-33 */
++	0x15, 0x00,                    //   Logical Minimum (0)               20
++	0x25, 0x01,                    //   Logical Maximum (1)               22
++	0x75, 0x01,                    //   Report Size (1)                   24
++	0x95, 0x05,                    //   Report Count (5)                  26  /* changed from 4 to 5 */
++	0x81, 0x02,                    //   Input (Data,Var,Abs)              28
++	0x09, 0x32,                    //   Usage (In Range)                  34
++	0x15, 0x00,                    //   Logical Minimum (0)               36
++	0x25, 0x01,                    //   Logical Maximum (1)               38
++	0x95, 0x01,                    //   Report Count (1)                  40
++	0x81, 0x02,                    //   Input (Data,Var,Abs)              42
++	0x95, 0x02,                    //   Report Count (2)                  44
++	0x81, 0x03,                    //   Input (Cnst,Var,Abs)              46
++	0x75, 0x10,                    //   Report Size (16)                  48
++	0x95, 0x01,                    //   Report Count (1)                  50
++	0x35, 0x00,                    //   Physical Minimum (0)              52
++	0xa4,                          //   Push                              54
++	0x05, 0x01,                    //   Usage Page (Generic Desktop)      55
++	0x09, 0x30,                    //   Usage (X)                         57
++	0x65, 0x13,                    //   Unit (EnglishLinear: in)          59
++	0x55, 0x0d,                    //   Unit Exponent (-3)                61
++	0x46, 0xff, 0x34,              //   Physical Maximum (13567)          63
++	0x26, 0xff, 0x7f,              //   Logical Maximum (32767)           66
++	0x81, 0x02,                    //   Input (Data,Var,Abs)              69
++	0x09, 0x31,                    //   Usage (Y)                         71
++	0x46, 0x20, 0x21,              //   Physical Maximum (8480)           73
++	0x26, 0xff, 0x7f,              //   Logical Maximum (32767)           76
++	0x81, 0x02,                    //   Input (Data,Var,Abs)              79
++	0xb4,                          //   Pop                               81
++	0x09, 0x30,                    //   Usage (Tip Pressure)              82
++	0x45, 0x00,                    //   Physical Maximum (0)              84
++	0x26, 0xff, 0x3f,              //   Logical Maximum (16383)           86
++	0x81, 0x42,                    //   Input (Data,Var,Abs,Null)         89
++	0x09, 0x3d,                    //   Usage (X Tilt)                    91
++	0x15, 0x81,                    //   Logical Minimum (-127)            93
++	0x25, 0x7f,                    //   Logical Maximum (127)             95
++	0x75, 0x08,                    //   Report Size (8)                   97
++	0x95, 0x01,                    //   Report Count (1)                  99
++	0x81, 0x02,                    //   Input (Data,Var,Abs)              101
++	0x09, 0x3e,                    //   Usage (Y Tilt)                    103
++	0x15, 0x81,                    //   Logical Minimum (-127)            105
++	0x25, 0x7f,                    //   Logical Maximum (127)             107
++	0x81, 0x02,                    //   Input (Data,Var,Abs)              109
++	0xc0,                          //  End Collection                     111
++	0xc0,                          // End Collection                      112
 +};
 +
-+#define BIT(n) (1UL << n)
-+
-+#define TIP_SWITCH		BIT(0)
-+#define BARREL_SWITCH		BIT(1)
-+#define ERASER			BIT(2)
-+/* padding			BIT(3) */
-+/* padding			BIT(4) */
-+#define IN_RANGE		BIT(5)
-+/* padding			BIT(6) */
-+/* padding			BIT(7) */
-+
-+#define U16(index) (data[index] | (data[index + 1] << 8))
-+
 +SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+int BPF_PROG(hid_fix_rdesc_xppen_artist24, struct hid_bpf_ctx *hctx)
++int BPF_PROG(hid_fix_rdesc_xppen_artistpro16gen2, struct hid_bpf_ctx *hctx)
 +{
 +	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
 +
@@ -406,110 +182,164 @@ index 000000000000..e1be6a12bb75
 +
 +	__builtin_memcpy(data, fixed_rdesc, sizeof(fixed_rdesc));
 +
++	/* Fix the Physical maximum values for different sizes of the device
++	 * The 14" screen device descriptor size is 11.874" x 7.421"
++	 */
++	if (hctx->hid->product == PID_ARTIST_PRO14_GEN2) {
++		data[63] = 0x2e;
++		data[62] = 0x62;
++		data[73] = 0x1c;
++		data[72] = 0xfd;
++	}
++
 +	return sizeof(fixed_rdesc);
 +}
 +
-+static __u8 prev_state = 0;
-+
-+/*
-+ * There are a few cases where the device is sending wrong event
-+ * sequences, all related to the second button (the pen doesn't
-+ * have an eraser switch on the tail end):
-+ *
-+ *   whenever the second button gets pressed or released, an
-+ *   out-of-proximity event is generated and then the firmware
-+ *   compensate for the missing state (and the firmware uses
-+ *   eraser for that button):
-+ *
-+ *   - if the pen is in range, an extra out-of-range is sent
-+ *     when the second button is pressed/released:
-+ *     // Pen is in range
-+ *     E:                               InRange
-+ *
-+ *     // Second button is pressed
-+ *     E:
-+ *     E:                        Eraser InRange
-+ *
-+ *     // Second button is released
-+ *     E:
-+ *     E:                               InRange
-+ *
-+ *     This case is ignored by this filter, it's "valid"
-+ *     and userspace knows how to deal with it, there are just
-+ *     a few out-of-prox events generated, but the user doesn´t
-+ *     see them.
-+ *
-+ *   - if the pen is in contact, 2 extra events are added when
-+ *     the second button is pressed/released: an out of range
-+ *     and an in range:
-+ *
-+ *     // Pen is in contact
-+ *     E: TipSwitch                     InRange
-+ *
-+ *     // Second button is pressed
-+ *     E:                                         <- false release, needs to be filtered out
-+ *     E:                        Eraser InRange   <- false release, needs to be filtered out
-+ *     E: TipSwitch              Eraser InRange
-+ *
-+ *     // Second button is released
-+ *     E:                                         <- false release, needs to be filtered out
-+ *     E:                               InRange   <- false release, needs to be filtered out
-+ *     E: TipSwitch                     InRange
-+ *
-+ */
 +SEC("fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(xppen_24_fix_eraser, struct hid_bpf_ctx *hctx)
++int BPF_PROG(xppen_16_fix_eraser, struct hid_bpf_ctx *hctx)
 +{
 +	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
-+	__u8 current_state, changed_state;
-+	bool prev_tip;
-+	__u16 tilt;
 +
 +	if (!data)
 +		return 0; /* EPERM check */
 +
-+	current_state = data[1];
-+
-+	/* if the state is identical to previously, early return */
-+	if (current_state == prev_state)
++	if ((data[1] & 0x29) != 0x29) /* tip switch=1 invert=1 inrange=1 */
 +		return 0;
 +
-+	prev_tip = !!(prev_state & TIP_SWITCH);
++	/* xor bits 0,3 and 4: convert Tip Switch + Invert into Eraser only */
++	data[1] ^= 0x19;
 +
-+	/*
-+	 * Illegal transition: pen is in range with the tip pressed, and
-+	 * it goes into out of proximity.
-+	 *
-+	 * Ideally we should hold the event, start a timer and deliver it
-+	 * only if the timer ends, but we are not capable of that now.
-+	 *
-+	 * And it doesn't matter because when we are in such cases, this
-+	 * means we are detecting a false release.
-+	 */
-+	if ((current_state & IN_RANGE) == 0) {
-+		if (prev_tip)
-+			return HID_IGNORE_EVENT;
-+		return 0;
++	return 0;
++}
++
++/*
++ * Static coordinate offset table based on positive only angles
++ * Two tables are needed, because the logical coordinates are scaled
++ *
++ * The table can be generated by Python like this:
++ * >>> full_scale = 11.874 # the display width/height in inches
++ * >>> tip_height = 0.055677699 # the center of the pen coil distance from screen in inch (empirical)
++ * >>> h = tip_height * (32767 / full_scale) # height of the coil in logical coordinates
++ * >>> [round(h*math.sin(math.radians(d))) for d in range(0, 128)]
++ * [0, 13, 26, ....]
++ */
++
++/* 14" inch screen 11.874" x 7.421" */
++static const __u16 angle_offsets_horizontal_14[128] = {
++	0, 3, 5, 8, 11, 13, 16, 19, 21, 24, 27, 29, 32, 35, 37, 40, 42, 45, 47, 50, 53,
++	55, 58, 60, 62, 65, 67, 70, 72, 74, 77, 79, 81, 84, 86, 88, 90, 92, 95, 97, 99,
++	101, 103, 105, 107, 109, 111, 112, 114, 116, 118, 119, 121, 123, 124, 126, 127,
++	129, 130, 132, 133, 134, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
++	147, 148, 148, 149, 150, 150, 151, 151, 152, 152, 153, 153, 153, 153, 153, 154,
++	154, 154, 154, 154, 153, 153, 153, 153, 153, 152, 152, 151, 151, 150, 150, 149,
++	148, 148, 147, 146, 145, 144, 143, 142, 141, 140, 139, 138, 137, 136, 134, 133,
++	132, 130, 129, 127, 126, 124, 123
++};
++static const __u16 angle_offsets_vertical_14[128] = {
++	0, 4, 9, 13, 17, 21, 26, 30, 34, 38, 43, 47, 51, 55, 59, 64, 68, 72, 76, 80, 84,
++	88, 92, 96, 100, 104, 108, 112, 115, 119, 123, 127, 130, 134, 137, 141, 145, 148,
++	151, 155, 158, 161, 165, 168, 171, 174, 177, 180, 183, 186, 188, 191, 194, 196,
++	199, 201, 204, 206, 208, 211, 213, 215, 217, 219, 221, 223, 225, 226, 228, 230,
++	231, 232, 234, 235, 236, 237, 239, 240, 240, 241, 242, 243, 243, 244, 244, 245,
++	245, 246, 246, 246, 246, 246, 246, 246, 245, 245, 244, 244, 243, 243, 242, 241,
++	240, 240, 239, 237, 236, 235, 234, 232, 231, 230, 228, 226, 225, 223, 221, 219,
++	217, 215, 213, 211, 208, 206, 204, 201, 199, 196
++};
++
++/* 16" inch screen 13.567" x 8.480" */
++static const __u16 angle_offsets_horizontal_16[128] = {
++	0, 2, 5, 7, 9, 12, 14, 16, 19, 21, 23, 26, 28, 30, 33, 35, 37, 39, 42, 44, 46, 48,
++	50, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 86, 88, 90,
++	92, 93, 95, 97, 98, 100, 101, 103, 105, 106, 107, 109, 110, 111, 113, 114, 115,
++	116, 118, 119, 120, 121, 122, 123, 124, 125, 126, 126, 127, 128, 129, 129, 130,
++	130, 131, 132, 132, 132, 133, 133, 133, 134, 134, 134, 134, 134, 134, 134, 134,
++	134, 134, 134, 134, 134, 133, 133, 133, 132, 132, 132, 131, 130, 130, 129, 129,
++	128, 127, 126, 126, 125, 124, 123, 122, 121, 120, 119, 118, 116, 115, 114, 113,
++	111, 110, 109, 107
++};
++static const __u16 angle_offsets_vertical_16[128] = {
++	0, 4, 8, 11, 15, 19, 22, 26, 30, 34, 37, 41, 45, 48, 52, 56, 59, 63, 66, 70, 74,
++	77, 81, 84, 88, 91, 94, 98, 101, 104, 108, 111, 114, 117, 120, 123, 126, 129, 132,
++	135, 138, 141, 144, 147, 149, 152, 155, 157, 160, 162, 165, 167, 170, 172, 174,
++	176, 178, 180, 182, 184, 186, 188, 190, 192, 193, 195, 197, 198, 199, 201, 202,
++	203, 205, 206, 207, 208, 209, 210, 210, 211, 212, 212, 213, 214, 214, 214, 215,
++	215, 215, 215, 215, 215, 215, 215, 215, 214, 214, 214, 213, 212, 212, 211, 210,
++	210, 209, 208, 207, 206, 205, 203, 202, 201, 199, 198, 197, 195, 193, 192, 190,
++	188, 186, 184, 182, 180, 178, 176, 174, 172
++};
++
++static void compensate_coordinates_by_tilt(__u8 *data, const __u8 idx,
++		const __s8 tilt, const __u16 (*compensation_table)[128])
++{
++	__u16 coords = data[idx+1];
++
++	coords <<= 8;
++	coords += data[idx];
++
++	__u8 direction = tilt > 0 ? 0 : 1; /* Positive tilt means we need to subtract the compensation (vs. negative angle where we need to add) */
++	__u8 angle = tilt > 0 ? tilt : -tilt;
++
++	if (angle > 127)
++		return;
++
++	__u16 compensation = (*compensation_table)[angle];
++
++	if (direction == 0) {
++		coords = (coords > compensation) ? coords - compensation : 0;
++	} else {
++		const __u16 logical_maximum = 32767;
++		__u16 max = logical_maximum - compensation;
++
++		coords = (coords < max) ? coords + compensation : logical_maximum;
 +	}
 +
-+	/*
-+	 * XOR to only set the bits that have changed between
-+	 * previous and current state
-+	 */
-+	changed_state = prev_state ^ current_state;
++	data[idx] = coords & 0xff;
++	data[idx+1] = coords >> 8;
++}
 +
-+	/* Store the new state for future processing */
-+	prev_state = current_state;
++SEC("fmod_ret/hid_bpf_device_event")
++int BPF_PROG(xppen_16_fix_angle_offset, struct hid_bpf_ctx *hctx)
++{
++	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
++
++	if (!data)
++		return 0; /* EPERM check */
 +
 +	/*
-+	 * We get both a tipswitch and eraser change in the same HID report:
-+	 * this is not an authorized transition and is unlikely to happen
-+	 * in real life.
-+	 * This is likely to be added by the firmware to emulate the
-+	 * eraser mode so we can skip the event.
++	 * Compensate X and Y offset caused by tilt.
++	 *
++	 * The magnetic center moves when the pen is tilted, because the coil
++	 * is not touching the screen.
++	 *
++	 * a (tilt angle)
++	 * |  /... h (coil distance from tip)
++	 * | /
++	 * |/______
++	 *         |x (position offset)
++	 *
++	 * x = sin a * h
++	 *
++	 * Subtract the offset from the coordinates. Use the precomputed table!
++	 *
++	 * bytes 0   - report id
++	 *       1   - buttons
++	 *       2-3 - X coords (logical)
++	 *       4-5 - Y coords
++	 *       6-7 - pressure (ignore)
++	 *       8   - tilt X
++	 *       9   - tilt Y
 +	 */
-+	if ((changed_state & (TIP_SWITCH | ERASER)) == (TIP_SWITCH | ERASER)) /* we get both a tipswitch and eraser change at the same time */
-+		return HID_IGNORE_EVENT;
++
++	__s8 tilt_x = (__s8) data[8];
++	__s8 tilt_y = (__s8) data[9];
++
++	if (hctx->hid->product == PID_ARTIST_PRO14_GEN2) {
++		compensate_coordinates_by_tilt(data, 2, tilt_x, &angle_offsets_horizontal_14);
++		compensate_coordinates_by_tilt(data, 4, tilt_y, &angle_offsets_vertical_14);
++	} else if (hctx->hid->product == PID_ARTIST_PRO16_GEN2) {
++		compensate_coordinates_by_tilt(data, 2, tilt_x, &angle_offsets_horizontal_16);
++		compensate_coordinates_by_tilt(data, 4, tilt_y, &angle_offsets_vertical_16);
++	}
 +
 +	return 0;
 +}
@@ -520,7 +350,7 @@ index 000000000000..e1be6a12bb75
 +	/*
 +	 * The device exports 3 interfaces.
 +	 */
-+	ctx->retval = ctx->rdesc_size != 107;
++	ctx->retval = ctx->rdesc_size != 113;
 +	if (ctx->retval)
 +		ctx->retval = -EINVAL;
 +
@@ -532,203 +362,6 @@ index 000000000000..e1be6a12bb75
 +}
 +
 +char _license[] SEC("license") = "GPL";
-diff --git a/drivers/hid/bpf/progs/hid_bpf.h b/drivers/hid/bpf/progs/hid_bpf.h
-new file mode 100644
-index 000000000000..7ee371cac2e1
---- /dev/null
-+++ b/drivers/hid/bpf/progs/hid_bpf.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
-+
-+#ifndef ____HID_BPF__H
-+#define ____HID_BPF__H
-+
-+struct hid_bpf_probe_args {
-+	unsigned int hid;
-+	unsigned int rdesc_size;
-+	unsigned char rdesc[4096];
-+	int retval;
-+};
-+
-+#endif /* ____HID_BPF__H */
-diff --git a/drivers/hid/bpf/progs/hid_bpf_helpers.h b/drivers/hid/bpf/progs/hid_bpf_helpers.h
-new file mode 100644
-index 000000000000..1d53b10aaa2e
---- /dev/null
-+++ b/drivers/hid/bpf/progs/hid_bpf_helpers.h
-@@ -0,0 +1,170 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
-+
-+#ifndef __HID_BPF_HELPERS_H
-+#define __HID_BPF_HELPERS_H
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <linux/errno.h>
-+
-+extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
-+			      unsigned int offset,
-+			      const size_t __sz) __ksym;
-+extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
-+extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
-+extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
-+			      __u8 *data,
-+			      size_t buf__sz,
-+			      enum hid_report_type type,
-+			      enum hid_class_request reqtype) __ksym;
-+
-+#define HID_MAX_DESCRIPTOR_SIZE	4096
-+#define HID_IGNORE_EVENT	-1
-+
-+/* extracted from <linux/input.h> */
-+#define BUS_ANY			0x00
-+#define BUS_PCI			0x01
-+#define BUS_ISAPNP		0x02
-+#define BUS_USB			0x03
-+#define BUS_HIL			0x04
-+#define BUS_BLUETOOTH		0x05
-+#define BUS_VIRTUAL		0x06
-+#define BUS_ISA			0x10
-+#define BUS_I8042		0x11
-+#define BUS_XTKBD		0x12
-+#define BUS_RS232		0x13
-+#define BUS_GAMEPORT		0x14
-+#define BUS_PARPORT		0x15
-+#define BUS_AMIGA		0x16
-+#define BUS_ADB			0x17
-+#define BUS_I2C			0x18
-+#define BUS_HOST		0x19
-+#define BUS_GSC			0x1A
-+#define BUS_ATARI		0x1B
-+#define BUS_SPI			0x1C
-+#define BUS_RMI			0x1D
-+#define BUS_CEC			0x1E
-+#define BUS_INTEL_ISHTP		0x1F
-+#define BUS_AMD_SFH		0x20
-+
-+/* extracted from <linux/hid.h> */
-+#define HID_GROUP_ANY				0x0000
-+#define HID_GROUP_GENERIC			0x0001
-+#define HID_GROUP_MULTITOUCH			0x0002
-+#define HID_GROUP_SENSOR_HUB			0x0003
-+#define HID_GROUP_MULTITOUCH_WIN_8		0x0004
-+#define HID_GROUP_RMI				0x0100
-+#define HID_GROUP_WACOM				0x0101
-+#define HID_GROUP_LOGITECH_DJ_DEVICE		0x0102
-+#define HID_GROUP_STEAM				0x0103
-+#define HID_GROUP_LOGITECH_27MHZ_DEVICE		0x0104
-+#define HID_GROUP_VIVALDI			0x0105
-+
-+/* include/linux/mod_devicetable.h defines as (~0), but that gives us negative size arrays */
-+#define HID_VID_ANY				0x0000
-+#define HID_PID_ANY				0x0000
-+
-+/* duplicated from incluse/linux/array_size.h
-+ */
-+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+
-+/* Helper macro to convert (foo, __LINE__)  into foo134 so we can use __LINE__ for
-+ * field/variable names
-+ */
-+#define COMBINE1(X, Y) X ## Y
-+#define COMBINE(X, Y) COMBINE1(X, Y)
-+
-+/* Macro magic:
-+ * __uint(foo, 123) creates a int (*foo)[1234]
-+ *
-+ * We use that macro to declare an anonymous struct with several
-+ * fields, each is the declaration of an pointer to an array of size
-+ * bus/group/vid/pid. (Because it's a pointer to such an array, actual storage
-+ * would be sizeof(pointer) rather than sizeof(array). Not that we ever
-+ * instantiate it anyway).
-+ *
-+ * This is only used for BTF introspection, we can later check "what size
-+ * is the bus array" in the introspection data and thus extract the bus ID
-+ * again.
-+ *
-+ * And we use the __LINE__ to give each of our structs a unique name so the
-+ * BPF program writer doesn't have to.
-+ *
-+ * $ bpftool btf dump file target/bpf/HP_Elite_Presenter.bpf.o
-+ * shows the inspection data, start by searching for .hid_bpf_config
-+ * and working backwards from that (each entry references the type_id of the
-+ * content).
-+ */
-+
-+#define HID_DEVICE(b, g, ven, prod)	\
-+	struct {			\
-+		__uint(name, 0);	\
-+		__uint(bus, (b));	\
-+		__uint(group, (g));	\
-+		__uint(vid, (ven));	\
-+		__uint(pid, (prod));	\
-+	} COMBINE(_entry, __LINE__)
-+
-+/* Macro magic below is to make HID_BPF_CONFIG() look like a function call that
-+ * we can pass multiple HID_DEVICE() invocations in.
-+ *
-+ * For up to 16 arguments, HID_BPF_CONFIG(one, two) resolves to
-+ *
-+ * union {
-+ *    HID_DEVICE(...);
-+ *    HID_DEVICE(...);
-+ * } _device_ids SEC(".hid_bpf_config")
-+ *
-+ */
-+
-+/* Returns the number of macro arguments, this expands
-+ * NARGS(a, b, c) to NTH_ARG(a, b, c, 15, 14, 13, .... 4, 3, 2, 1).
-+ * NTH_ARG always returns the 16th argument which in our case is 3.
-+ *
-+ * If we want more than 16 values _COUNTDOWN and _NTH_ARG both need to be
-+ * updated.
-+ */
-+#define _NARGS(...)  _NARGS1(__VA_ARGS__, _COUNTDOWN)
-+#define _NARGS1(...) _NTH_ARG(__VA_ARGS__)
-+
-+/* Add to this if we need more than 16 args */
-+#define _COUNTDOWN \
-+	15, 14, 13, 12, 11, 10, 9, 8,  \
-+	 7,  6,  5,  4,  3,  2, 1, 0
-+
-+/* Return the 16 argument passed in. See _NARGS above for usage. Note this is
-+ * 1-indexed.
-+ */
-+#define _NTH_ARG( \
-+	_1,  _2,  _3,  _4,  _5,  _6,  _7, _8, \
-+	_9, _10, _11, _12, _13, _14, _15,\
-+	 N, ...) N
-+
-+/* Turns EXPAND(_ARG, a, b, c) into _ARG3(a, b, c) */
-+#define _EXPAND(func, ...) COMBINE(func, _NARGS(__VA_ARGS__)) (__VA_ARGS__)
-+
-+/* And now define all the ARG macros for each number of args we want to accept */
-+#define _ARG1(_1)                                                         _1;
-+#define _ARG2(_1, _2)                                                     _1; _2;
-+#define _ARG3(_1, _2, _3)                                                 _1; _2; _3;
-+#define _ARG4(_1, _2, _3, _4)                                             _1; _2; _3; _4;
-+#define _ARG5(_1, _2, _3, _4, _5)                                         _1; _2; _3; _4; _5;
-+#define _ARG6(_1, _2, _3, _4, _5, _6)                                     _1; _2; _3; _4; _5; _6;
-+#define _ARG7(_1, _2, _3, _4, _5, _6, _7)                                 _1; _2; _3; _4; _5; _6; _7;
-+#define _ARG8(_1, _2, _3, _4, _5, _6, _7, _8)                             _1; _2; _3; _4; _5; _6; _7; _8;
-+#define _ARG9(_1, _2, _3, _4, _5, _6, _7, _8, _9)                         _1; _2; _3; _4; _5; _6; _7; _8; _9;
-+#define _ARG10(_1, _2, _3, _4, _5, _6, _7, _8, _9, _a)                     _1; _2; _3; _4; _5; _6; _7; _8; _9; _a;
-+#define _ARG11(_1, _2, _3, _4, _5, _6, _7, _8, _9, _a, _b)                 _1; _2; _3; _4; _5; _6; _7; _8; _9; _a; _b;
-+#define _ARG12(_1, _2, _3, _4, _5, _6, _7, _8, _9, _a, _b, _c)             _1; _2; _3; _4; _5; _6; _7; _8; _9; _a; _b; _c;
-+#define _ARG13(_1, _2, _3, _4, _5, _6, _7, _8, _9, _a, _b, _c, _d)         _1; _2; _3; _4; _5; _6; _7; _8; _9; _a; _b; _c; _d;
-+#define _ARG14(_1, _2, _3, _4, _5, _6, _7, _8, _9, _a, _b, _c, _d, _e)     _1; _2; _3; _4; _5; _6; _7; _8; _9; _a; _b; _c; _d; _e;
-+#define _ARG15(_1, _2, _3, _4, _5, _6, _7, _8, _9, _a, _b, _c, _d, _e, _f) _1; _2; _3; _4; _5; _6; _7; _8; _9; _a; _b; _c; _d; _e; _f;
-+
-+
-+#define HID_BPF_CONFIG(...)  union { \
-+	_EXPAND(_ARG, __VA_ARGS__) \
-+} _device_ids SEC(".hid_bpf_config")
-+
-+#endif /* __HID_BPF_HELPERS_H */
 
 -- 
 2.44.0
