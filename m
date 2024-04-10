@@ -1,187 +1,137 @@
-Return-Path: <linux-kselftest+bounces-7548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF5789ED5B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 10:14:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BD6089EE45
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 11:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E4B81C20AA9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 08:14:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B42B42831CC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 09:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A6FCBA37;
-	Wed, 10 Apr 2024 08:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6781615AD9A;
+	Wed, 10 Apr 2024 09:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ujac6vTK"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="FdZ1AB63"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3DFBA2E;
-	Wed, 10 Apr 2024 08:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F74315AACF
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Apr 2024 09:11:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712736884; cv=none; b=YepDwRJXwX8euNaD8aVYf+sD7cevpPoZY2cgtfDQRkGPPPEAXcA7g4IHMTr+XGrggSCfgMf+gUlUfmd6mSmR751eInJBXbd6VERD12VzcXG/4nwttBTkyBOzi9fIkDIvjRHRVVoku0PkhjcpFWgLD5FBOq3l7V3K/aNlNalWG4k=
+	t=1712740274; cv=none; b=exu0KYqvPUHrurvkLZn+k59JQICA8PpuP4drNKUCjX+P1tdBgcL9toa7USu9WRnl5g2IhTOsWw0UqI2CxOpuMzb8Q52+p2mR2v7Yt3wmskH1i3lSSwLfVXk3bsyRKEhzM80RgCfB2KGuMC4VqlNBN3hmvmCC1tyv+HJM7gG5vHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712736884; c=relaxed/simple;
-	bh=O+leYepAFRo8ICmIGEVY0G/02B8AAx2Wdt3lPfF8SJE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hZaDDvbKux3/VI4QnASEhQQHf0HGlqshDJtWlpusOgVWTFGb8v9Zr7joLbSYyiPdklDVr65siEWSJ/uD/mxi2a/rVW0foHRNEacu1vcCtt42O4EmcMzTgLs+lOgLs4nm02/kVbQJ/UiTNo7OKcjHhFG2DI9T2pp+ULO9TEl7Dd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ujac6vTK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B16C433C7;
-	Wed, 10 Apr 2024 08:14:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712736883;
-	bh=O+leYepAFRo8ICmIGEVY0G/02B8AAx2Wdt3lPfF8SJE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Ujac6vTKUvzJmZtrXgkUem3F4helFt39NZHJG9soE23W++90jVtkGUOTLs0scMtH6
-	 hPjd/dd93mUOJ8GfMKkJgRy6suXLm9nzOmRNZfC/hotF4E0BxmJ5wTEmUjTbLRiw3a
-	 oVjrPMW+EZoSVzDl5bk6noE7Xmtp8owYC0guD0zy5gl8oj6GR46ACWvWaP4t0utrAs
-	 PGxLs33k1+rf7sGIsFq5xDA/YRm4/SWr29m9eq+Z93NfKUIlL2G35BserSDaSvmvWn
-	 ACjkHJXNscHKMBVl7KI9sfVYzWKZCFwwzeFlBgLBzE7pJaMaC8NWxO3FFi+kqnxs3K
-	 GzrbGnlOK0CZw==
-Message-ID: <ff6874d5bd8dc5c89fcd913c3f1ba1820fe7ae4f.camel@kernel.org>
-Subject: Re: [PATCH bpf-next 06/14] selftests/bpf: Use log_err in
- network_helpers
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-Date: Wed, 10 Apr 2024 16:14:29 +0800
-In-Reply-To: <77e0288d4757b2fcc2c491a2ed535ef223268071.1712733999.git.tanggeliang@kylinos.cn>
-References: <cover.1712733999.git.tanggeliang@kylinos.cn>
-	 <77e0288d4757b2fcc2c491a2ed535ef223268071.1712733999.git.tanggeliang@kylinos.cn>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.0-1 
+	s=arc-20240116; t=1712740274; c=relaxed/simple;
+	bh=02wvApY4YND9L077VdDD/SvGSk0u3FcO0EiGYiuzYnU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OAqF6YI3umS4QyXP+PBkOTS0zFTVhILq4Ytt+LWiHZMpljfCjcoqp9nKseUNuj/SzcbREv2pFmHrNeuHylwYPM5vHpFG/8Zw/OBswkJwdSZ8DEnm2fEouSKcsp9qVv3OPBgUEHHDkX8o/hKo5UfcLhaA2EoOfdfHEK6X7yy16yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=FdZ1AB63; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-345606e8ac0so589023f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Apr 2024 02:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712740270; x=1713345070; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9SSkPjIJRaiY6nqvP2nXREr1dqNKWljAWGAyK7z7Oro=;
+        b=FdZ1AB63nr0YKyaVj2pv8TgPftr2h7prARsnXTmUCy9rF6XEob0XnX7FZCb688LVIC
+         fvEJXwZMebpTUfXJIKfCbveRhUHfxPfHVKA+9ytZ5gTKUcOfR6/quQSpeaYGu8MlioRi
+         BwcZFc2B73oV7o8HReulOeM8O7MrgxXZNGxyCof8h02COqdPpv25pWYCuiTj+MBfPQzN
+         WTj4zx1M+NypiM7ediOCQuqAqwJRdVuND40SMibdePC7CzuMjRz0WPyj0s64mBZB9vbb
+         pwz2jjs1jeLiylmdAqMUuERRuefaSNn6m2wfhBsYSwrhcBEhJ/2y+uENsAWPD3FckMu7
+         tFdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712740270; x=1713345070;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9SSkPjIJRaiY6nqvP2nXREr1dqNKWljAWGAyK7z7Oro=;
+        b=YGMv2aCoDPnzqnkoy8Haweu3doX2Jw0+n/tN88eIIi/swYXsor/emESMR4/XBgxSaw
+         4praod5fCn0uO/m/VLFFfIyWIhEbLwHAXdVSjO+gDaWK6UNyWMOVD5L+GvQY8sq16T98
+         6PCLjnYrkiRAFT7590y1FT4UEXgnjIOWyfHHyrBAVlsM3Ts2feBkOReffm9xnewCxYWF
+         PUHT1C9MypaYwOa3DTRRTKG3lR08ZaIUcogCYgGG+N43BV+WCStHZn43abB5uNUozzBq
+         c5oLzSVCBB5ATIaJ3bx5xFhKIRNo9UWI8oRirrf99K5CDxfpuIqOx+1ryDnBMmC28V2d
+         1Buw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7hAXASYKqGzWx471WeowvJ5ZbCvsholYUrqGCFPq0k8wB3v+Pt5Zh0QNcwcHezNBoGPuXqpNYXXSEhqIlvK6XjeEyJ4JLYCT33Aj+BWLW
+X-Gm-Message-State: AOJu0Yyn4SB6x12lmyCiDb7M4zRK53Osd+i10ZvLC1IXPpQaLXzL0J7K
+	2CeAC5Q770hJzuEGu3vpt31ihhYy/SiX1BcsHhmn0p14M/9N1Cc0MCzr1P7u5QY=
+X-Google-Smtp-Source: AGHT+IGq6GULyAjPCGB9cLzSRwOlrzNIJikNMv8sgGSqEmo6q9aRp4LbhqVra1QQcW7xHav631ZdHA==
+X-Received: by 2002:a5d:4a52:0:b0:346:500f:9297 with SMTP id v18-20020a5d4a52000000b00346500f9297mr1449075wrs.2.1712740270397;
+        Wed, 10 Apr 2024 02:11:10 -0700 (PDT)
+Received: from carbon-x1.. ([2a01:e0a:999:a3a0:d4a6:5856:3e6c:3dff])
+        by smtp.gmail.com with ESMTPSA id d6-20020a056000114600b003456c693fa4sm9079086wrx.93.2024.04.10.02.11.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Apr 2024 02:11:09 -0700 (PDT)
+From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Anup Patel <anup@brainfault.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+	Atish Patra <atishp@atishpatra.org>,
+	linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 00/10] Add support for a few Zc* extensions as well as Zcmop
+Date: Wed, 10 Apr 2024 11:10:53 +0200
+Message-ID: <20240410091106.749233-1-cleger@rivosinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2024-04-10 at 15:29 +0800, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
->=20
-> The helpers ASSERT_OK/GE/OK_PTR should avoid using in public
-> functions.
-> This patch uses log_err() to replace them in network_helpers.c.
->=20
-> And drop '#include "test_progs.h"' in it, include <pthread.h> and
-> <sys/param.h> instead.
+Add support for (yet again) more RVA23U64 missing extensions. Add
+support for Zcmop, Zca, Zcf, Zcd and Zcb extensions isa string parsing,
+hwprobe and kvm support. Zce, Zcmt and Zcmp extensions have been left
+out since they target microcontrollers/embedded CPUs and are not needed
+by RVA23U64
 
-Sorry, CI complains about this:
+This series is based on the Zimop one [1].
 
-  network_helpers.c: In function =E2=80=98open_netns=E2=80=99:
-  network_helpers.c:466:25: error: implicit declaration of function
-=E2=80=98open=E2=80=99; did you mean =E2=80=98popen=E2=80=99? [-Werror=3Dim=
-plicit-function-declaration]
-    466 |  token->orig_netns_fd =3D open("/proc/self/ns/net", O_RDONLY);
-        |                         ^~~~
-        |                         popen
+Link: https://lore.kernel.org/linux-riscv/20240404103254.1752834-1-cleger@rivosinc.com/ [1]
 
-"test_progs.h" is still needed. I'll update this in v2.
+Clément Léger (10):
+  dt-bindings: riscv: add Zca, Zcf, Zcd and Zcb ISA extension
+    description
+  riscv: add ISA parsing for Zca, Zcf, Zcd and Zcb
+  riscv: hwprobe: export Zca, Zcf, Zcd and Zcb ISA extensions
+  RISC-V: KVM: Allow Zca, Zcf, Zcd and Zcb extensions for Guest/VM
+  KVM: riscv: selftests: Add some Zc* extensions to get-reg-list test
+  dt-bindings: riscv: add Zcmop ISA extension description
+  riscv: add ISA extension parsing for Zcmop
+  riscv: hwprobe: export Zcmop ISA extension
+  RISC-V: KVM: Allow Zcmop extension for Guest/VM
+  KVM: riscv: selftests: Add Zcmop extension to get-reg-list test
 
-Changes Requested.
+ Documentation/arch/riscv/hwprobe.rst          | 24 ++++++++++++
+ .../devicetree/bindings/riscv/extensions.yaml | 37 +++++++++++++++++++
+ arch/riscv/include/asm/hwcap.h                |  5 +++
+ arch/riscv/include/uapi/asm/hwprobe.h         |  5 +++
+ arch/riscv/include/uapi/asm/kvm.h             |  5 +++
+ arch/riscv/kernel/cpufeature.c                |  5 +++
+ arch/riscv/kernel/sys_hwprobe.c               |  5 +++
+ arch/riscv/kvm/vcpu_onereg.c                  | 10 +++++
+ .../selftests/kvm/riscv/get-reg-list.c        | 20 ++++++++++
+ 9 files changed, 116 insertions(+)
 
--Geliang
-
->=20
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
-> =C2=A0tools/testing/selftests/bpf/network_helpers.c | 22 ++++++++++++++--=
--
-> --
-> =C2=A01 file changed, 16 insertions(+), 6 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c
-> b/tools/testing/selftests/bpf/network_helpers.c
-> index 7ddeb6698ec7..9fd271d5d571 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -7,11 +7,13 @@
-> =C2=A0#include <string.h>
-> =C2=A0#include <unistd.h>
-> =C2=A0#include <sched.h>
-> +#include <pthread.h>
-> =C2=A0
-> =C2=A0#include <arpa/inet.h>
-> =C2=A0#include <sys/mount.h>
-> =C2=A0#include <sys/stat.h>
-> =C2=A0#include <sys/un.h>
-> +#include <sys/param.h>
-> =C2=A0
-> =C2=A0#include <linux/err.h>
-> =C2=A0#include <linux/in.h>
-> @@ -20,7 +22,6 @@
-> =C2=A0
-> =C2=A0#include "bpf_util.h"
-> =C2=A0#include "network_helpers.h"
-> -#include "test_progs.h"
-> =C2=A0
-> =C2=A0#ifndef IPPROTO_MPTCP
-> =C2=A0#define IPPROTO_MPTCP 262
-> @@ -447,22 +448,30 @@ struct nstoken *open_netns(const char *name)
-> =C2=A0	struct nstoken *token;
-> =C2=A0
-> =C2=A0	token =3D calloc(1, sizeof(struct nstoken));
-> -	if (!ASSERT_OK_PTR(token, "malloc token"))
-> +	if (!token) {
-> +		log_err("malloc token");
-> =C2=A0		return NULL;
-> +	}
-> =C2=A0
-> =C2=A0	token->orig_netns_fd =3D open("/proc/self/ns/net", O_RDONLY);
-> -	if (!ASSERT_GE(token->orig_netns_fd, 0, "open
-> /proc/self/ns/net"))
-> +	if (token->orig_netns_fd <=3D 0) {
-> +		log_err("open /proc/self/ns/net");
-> =C2=A0		goto fail;
-> +	}
-> =C2=A0
-> =C2=A0	snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns",
-> name);
-> =C2=A0	nsfd =3D open(nspath, O_RDONLY | O_CLOEXEC);
-> -	if (!ASSERT_GE(nsfd, 0, "open netns fd"))
-> +	if (nsfd <=3D 0) {
-> +		log_err("open netns fd");
-> =C2=A0		goto fail;
-> +	}
-> =C2=A0
-> =C2=A0	err =3D setns(nsfd, CLONE_NEWNET);
-> =C2=A0	close(nsfd);
-> -	if (!ASSERT_OK(err, "setns"))
-> +	if (err) {
-> +		log_err("setns");
-> =C2=A0		goto fail;
-> +	}
-> =C2=A0
-> =C2=A0	return token;
-> =C2=A0fail:
-> @@ -475,7 +484,8 @@ void close_netns(struct nstoken *token)
-> =C2=A0	if (!token)
-> =C2=A0		return;
-> =C2=A0
-> -	ASSERT_OK(setns(token->orig_netns_fd, CLONE_NEWNET),
-> "setns");
-> +	if (setns(token->orig_netns_fd, CLONE_NEWNET))
-> +		log_err("setns");
-> =C2=A0	close(token->orig_netns_fd);
-> =C2=A0	free(token);
-> =C2=A0}
+-- 
+2.43.0
 
 
