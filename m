@@ -1,171 +1,173 @@
-Return-Path: <linux-kselftest+bounces-7576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AFBF89FCF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 18:34:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7EB989FE22
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 19:19:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CC2F1C20FA1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 16:34:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DA7B1F22375
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 17:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4652F17B500;
-	Wed, 10 Apr 2024 16:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7728217BB15;
+	Wed, 10 Apr 2024 17:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FW+Hl4No"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iw3NnDtI"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C83EC3;
-	Wed, 10 Apr 2024 16:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4934917BB0F;
+	Wed, 10 Apr 2024 17:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712766838; cv=none; b=J56UdHAfglbfSCUDQPiqdyg8ENNMvAdWriOXTpIyRq7wT5lYW3ctkidyfIAVZm0jErhJbA/8UbdVnIPXxf63VV8E+dVjkFRMGB2mHxcYb8S0Al8nuKwOF51uD1DOyQK5jlAhVa6Ymq4Q7aDk7geqKA72Ocr29wyrdNmUN3JO0fs=
+	t=1712769592; cv=none; b=YBq0gznoXVn8+86nuPAMkmvBKS7YMrnY4BwOVZkiNU01rIypuo42GcTMF210Eg7eNzHq1A2s22j0mxU/UO3j7xUzMSlBFkWzWIUrFQjFbSYPuRey9D9tyzXvLPqtNn2hXq7GiKFSiNVQb9tcmIYzlRMEt9oHqRRm1KztTI8Eab4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712766838; c=relaxed/simple;
-	bh=Lxk+nu1ElmHbPqbruGu7bsCZtblhfeKs04cJc3fu7sA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ajm76df1MDiwOh95ZARK3UXy6Ro92TM7ngggzpq1GTTcRPe9Z2HKM63j54JUiCnmv1Evea2wIgbxraG5v1KjIEun+sduztHGyGoZ5ftlxnAYn5Aqp/G69rmdzleHDWlxo280sge4Yx2nNyZbYGPI02iM1P4/5cW3dUCWYLnsJiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FW+Hl4No; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 967DBC433F1;
-	Wed, 10 Apr 2024 16:33:52 +0000 (UTC)
+	s=arc-20240116; t=1712769592; c=relaxed/simple;
+	bh=6Hn8w2/tHxyjB+9DMsHB0GAVTOXeeu71uZLUXMLz+MY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=psRrZHwwR2EBbb1mO2/6+T4AistI3S+bmKUiOP7HrNbIt1A0vrpkS6bYxQ73+WKPBCxBqoVSb5j0qpRRHNSAIvBpedYt2FuyyKMjZ1ehDeTMPlpN83iIz/dZbX/xpwrvFQ+3ccBToBb3xl+HCfPLUiwZ6MFUM0JrkjPhpxg3yZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iw3NnDtI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCBAC433C7;
+	Wed, 10 Apr 2024 17:19:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712766837;
-	bh=Lxk+nu1ElmHbPqbruGu7bsCZtblhfeKs04cJc3fu7sA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FW+Hl4NofBz3bb9/GOCLtbNKqxiAn1TWdNN3GjRrqtJHwGxDcCubSNaWE3Do938+7
-	 aYHv6EhsuI1WuxI3jzD0kThrtlO+DLOapzjM5Ud+RcLxG6DP5ApxDtsBgrUUQ0xoHz
-	 Xby8GC2mEEs7sHmahMt0C6wK5ofCaZ/EOS0HnqmPoCY2K8o9zaYNFZFGIibeBECdu9
-	 40EJFHEYvUsFZHcyh49fWsvnAiOtA7CbvtS0r1tjn1WGlLFt6R+kOQNcnkwgcUw2N7
-	 T7yuLRbQ3/olqdsLWkWDmCabyw7d/wC+fmByyL8BU0gN0Da9H/2m01bMEHdylz6D5d
-	 OQldnWjCWBRRA==
-Date: Wed, 10 Apr 2024 17:33:49 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Dave Martin <Dave.Martin@arm.com>, kvmarm@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 2/5] KVM: arm64: Add newly allocated ID registers to
- register descriptions
-Message-ID: <d7263b50-adda-44c0-90de-0e0890722b92@sirena.org.uk>
-References: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
- <20240329-arm64-2023-dpisa-v6-2-ba42db6c27f3@kernel.org>
- <87le5ysm4l.wl-maz@kernel.org>
- <73c6012f-adb0-470b-bd47-6093d28aea97@sirena.org.uk>
- <86ttk9se3h.wl-maz@kernel.org>
+	s=k20201202; t=1712769592;
+	bh=6Hn8w2/tHxyjB+9DMsHB0GAVTOXeeu71uZLUXMLz+MY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Iw3NnDtIMq//xAo9OFKaD7T0kj/vRBXn46OJrE2/476IYB5LXdw1GgrE5R/jwUk8b
+	 AFwoxuJ1n0D/+s0eaInUMLzW1ZRy+CJ7DiaN0Xuz0FbAAzLwQXX6yOVdSDu/37PtGJ
+	 gxq9mAq498bsN9wlIvV4fqx5O4DI7os0SgVK01Z1UUX9U8H8ZiZaAtzp2YRqqeGk/0
+	 YjKVDQOYm3sPznflP+a9c3achXJ3ZxQppeUtiWYoF4tcI5ozxhPki1874EfZUo+XT+
+	 SFagDUVXJaMWqq919jYg5J4Ui7ly6AWR8cKU0sjDF8p9IvJWsNtfY9exW7b315SBbH
+	 ThQyM9LW6jUVw==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH 00/18] HID: Include current HID-BPF fixes in tree
+Date: Wed, 10 Apr 2024 19:19:20 +0200
+Message-Id: <20240410-bpf_sources-v1-0-a8bf16033ef8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="x4qkr4Sz7m9EvEWi"
-Content-Disposition: inline
-In-Reply-To: <86ttk9se3h.wl-maz@kernel.org>
-X-Cookie: A bachelor is an unaltared male.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABjKFmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDYyML3aSCtPji/NKi5NRi3aRUwzTjZDND82TTVCWgjoKi1LTMCrBp0bG
+ 1tQDcwZGFXQAAAA==
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Peter Hutterer <peter.hutterer@who-t.net>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Martin Sivak <mars@montik.net>, 
+ Ping Cheng <pinglinux@gmail.com>, Jason Gerecke <killertofu@gmail.com>, 
+ Aaron Armstrong Skomra <skomra@gmail.com>, 
+ Joshua Dickens <Joshua@joshua-dickens.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712769589; l=4998;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=6Hn8w2/tHxyjB+9DMsHB0GAVTOXeeu71uZLUXMLz+MY=;
+ b=4u3UJmMlfDaLYKJ4I0Ma//8KMyyoUN8KeH2/6JvseMZ2t+tHYRFsk4AWtNKrHvabriBx/1hlA
+ H6sKRtFR2hzCXXOgazQhJqLwQ+Y+58hzd8P+YpnxD6KMjePxVfckorN
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
+When I introduced HID-BPF, I mentioned that we should ship the HID-BPF
+programs in the kernel when they are fixes so that everybody can benefit
+from them.
 
---x4qkr4Sz7m9EvEWi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I tried multiple times to do so but I was confronted to a tough problem:
+how can I make the kernel load them automatically?
 
-On Wed, Apr 10, 2024 at 11:32:02AM +0100, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
-> > On Sun, Mar 31, 2024 at 11:59:06AM +0100, Marc Zyngier wrote:
-> > > Mark Brown <broonie@kernel.org> wrote:
+I went over a few solutions, but it always came down to something either
+ugly, or either not satisfying (like forcing `bpftool` to be compiled
+first, or not being able to insert them as a module).
 
-> And when it comes to CPA, there are additional controls in SCTLR2_ELx,
-> which doesn't even gets context switched for EL1. What could possibly
-> go wrong?
+OTOH, I was working with Peter on `udev-hid-bpf`[0] as a proof of
+concept on how a minimal loader should look like. This allowed me to
+experiment on the BPF files and how they should look like.
 
-Yes, I'd missed those - they were rather buried in the XML
-unfortunately.  I'd already disabled CPA in my local code, and I've also
-refactored the exposure of FPMR to be in the patch that context switches
-it.
+And after further thoughts, I realized that `udev-hid-bpf` could very
+well be the `kmod load` that we currently have:
+- the kernel handles the device normally
+- a udev event is emitted
+- a udev rule fires `udev-hid-bpf` and load the appropriate HID-BPF
+  file(s) based on the modalias
 
-> > > > -	ID_UNALLOCATED(6,3),
-> > > > +	ID_WRITABLE(ID_AA64ISAR3_EL1, ~(ID_AA64ISAR2_EL1_RES0 |
-> > > > +					ID_AA64ISAR3_EL1_PACM |
+Given that most HID devices are supposed to work to a minimal level when
+connected without any driver, this makes the whole HID-BPF programs nice
+to have but not critical. We can then postpone the HID-BPF loading when
+userspace is ready.
 
-> > > >  	ID_UNALLOCATED(6,4),
-> > > >  	ID_UNALLOCATED(6,5),
-> > > >  	ID_UNALLOCATED(6,6),
+Working with HID-BPF is also a much better user experience for end users
+(as I predicted). All they have to do is to go to the `udev-hid-bpf`
+project, fetch an artifact from the MR that concerns them, run
+`install.sh` (no compilation required), and their devices are fixed
+(minus some back and forth when the HID-BPF program needs some changes).
 
-> > > Where is the code that enforces the lack of support for MTEFAR,
-> > > MTESTOREONLY, and MTEPERM for SCTLR_ELx, EnPACM and EnFPM in HCRX_EL2?
+So I already have that loader available, and it works well enough for
+our users. But the missing point was still how to "upstream" those BPF
+fixes?
 
-> > Could you please be more explicit regarding what you're expecting to see
-> > here?
+That's where this patch series comes in: we simply store the fixes in
+the kernel under `drivers/hid/bpf/progs`, provide a way to compile them,
+but also add tests for them in the selftests dir.
 
-> I'm expecting you to add all the required masking and fine-grained
-> disabling of features that are not explicitly advertised to the guest.
+Once a program is accepted here, for convenience, the same program will
+move from a "testing" directory to a "stable" directory on
+`udev-hid-bpf`. This way, distributions don't need to follow when there
+is a new program added here, they can just ship the "stable" ones from
+`udev-hid-bpf`.
 
-> This should translate into additional init code in kvm_init_sysreg(),
-> kvm_init_nv_sysregs() and limit_nv_id_reg(). You also should update
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
-I see that in limit_nv_id_reg() I am missing updates to expose the new
-dpISA features to nested guests.  However from a first pass it looks
-like kvm_init_nv_sysregs() already handles everything I'd expect it to,
-AFAICT it's handling all known trap bits?  For kvm_init_sysreg() with
-HCRX AFAICT we default to having all bits 0 with explicit relaxations
-for supported features (currently FEAT_MOPS, also FEAT_FPMR with this
-series) meaning that I'm still unclear what exactly the updates you're
-looking for are.  For SCTLR unless I'm misunderstanding things we've got
-an existing issue with not initialising the res0 and res1 fields in
-kvm_init_nv_sysregs() but that doesn't seem right... =20
+[0] https://gitlab.freedesktop.org/libevdev/udev-hid-bpf/
 
-> the exception triaging infrastructure in emulate-nested.c.
+---
+Benjamin Tissoires (18):
+      HID: do not assume HAT Switch logical max < 8
+      HID: bpf: add first in-tree HID-BPF fix for the XPPen Artist 24
+      HID: bpf: add in-tree HID-BPF fix for the XPPen Artist 16
+      HID: bpf: add in-tree HID-BPF fix for the HP Elite Presenter Mouse
+      HID: bpf: add in-tree HID-BPF fix for the IOGear Kaliber Gaming MMOmentum mouse
+      HID: bpf: add in-tree HID-BPF fix for the Wacom ArtPen
+      HID: bpf: add in-tree HID-BPF fix for the XBox Elite 2 over Bluetooth
+      HID: bpf: add in-tree HID-BPF fix for the Huion Kamvas Pro 19
+      HID: bpf: add in-tree HID-BPF fix for the Raptor Mach 2
+      selftests/hid: import base_device.py from hid-tools
+      selftests/hid: add support for HID-BPF pre-loading before starting a test
+      selftests/hid: tablets: reduce the number of pen state
+      selftests/hid: tablets: add a couple of XP-PEN tablets
+      selftests/hid: tablets: also check for XP-Pen offset correction
+      selftests/hid: add Huion Kamvas Pro 19 tests
+      selftests/hid: import base_gamepad.py from hid-tools
+      selftests/hid: move the gamepads definitions in the test file
+      selftests/hid: add tests for the Raptor Mach 2 joystick
 
-Again I am really struggling to identify which specific updates you are
-looking for here.
+ drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c  | 185 ++++++
+ drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c    |  58 ++
+ drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c   | 290 +++++++++
+ .../hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c  |  59 ++
+ drivers/hid/bpf/progs/Makefile                     |  91 +++
+ .../hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c    | 133 ++++
+ drivers/hid/bpf/progs/README                       | 102 +++
+ drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c          | 173 +++++
+ drivers/hid/bpf/progs/XPPen__Artist24.bpf.c        | 229 +++++++
+ drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c | 274 ++++++++
+ drivers/hid/bpf/progs/hid_bpf.h                    |  15 +
+ drivers/hid/bpf/progs/hid_bpf_helpers.h            | 170 +++++
+ include/linux/hid.h                                |   6 +-
+ tools/testing/selftests/hid/tests/base.py          |  87 ++-
+ tools/testing/selftests/hid/tests/base_device.py   | 421 ++++++++++++
+ tools/testing/selftests/hid/tests/base_gamepad.py  | 238 +++++++
+ tools/testing/selftests/hid/tests/test_gamepad.py  | 457 ++++++++++++-
+ tools/testing/selftests/hid/tests/test_tablet.py   | 723 +++++++++++++++------
+ 18 files changed, 3507 insertions(+), 204 deletions(-)
+---
+base-commit: 3e78a6c0d3e02e4cf881dc84c5127e9990f939d6
+change-id: 20240328-bpf_sources-be1f3c617c5e
 
-> > > And I haven't checked whether TLBI VMALLWS2 can be trapped.
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
 
-> > I didn't see anything but I might not be aware of where to look, there
-> > doesn't seem to be anything for that specifically in HFGITR_EL2 or
-> > HFGITR2_EL2 which would be the main places I'd expect to find
-> > something.
-
-> That's a really odd place to look. This is a S2 invalidation
-> primitive, which by definition is under the sole control of EL2, and
-> therefore cannot be trapped by any of the FGT registers, as they only
-> affect lesser-privileged ELs.
-
-> The instruction is described in the XML:
-
-> https://developer.arm.com/documentation/ddi0601/2024-03/AArch64-Instructi=
-ons/TLBI-VMALLWS2E1--TLB-Invalidate-stage-2-dirty-state-by-VMID--EL1-0
-
-That's TLBI VMALLWSE1 which is a more specific instruction.  TBH I can't
-remember exactly what I was looking for, I did go into the instruction
-pseudocode a bit (I was going in via SYS at one point) but didn't find
-anything so was also trawling sysregs looking for something.  If I'm
-reading this right there are no traps?
-
---x4qkr4Sz7m9EvEWi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYWv2wACgkQJNaLcl1U
-h9C8OQf/X+t5aQ5/nMQBNyVUWzuv0H4al1uPXrqHbjYcuaLB6extGWPsVnzhcikJ
-ejycYkszbTrF/28+Ix3QmYCqv5bNph/A8a2xAvtbhcqAmQ3m1NuH5aCfGNcGxOmk
-VWtSmljce1GeJh6xPOkCbTF8zwIoSp0cvubFxTTaZb4LnaiJdT+28TGVzpmc1vQl
-ZFrv/ZRyf8lxVu9IZuCRtSthRJOYyhkwC1GUcBnyrZ+4ViJE0qmzxDDTO9kvtoVu
-weHy/oBXNsfRdlkZubuQv2/zCqo2MVXkUhoxwGPXqPRgN0DFCgyFt70N841OjP4j
-hwQ0PKE5A4w3JRp+kM/DX0MURgxStg==
-=zSnw
------END PGP SIGNATURE-----
-
---x4qkr4Sz7m9EvEWi--
 
