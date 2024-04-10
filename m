@@ -1,152 +1,167 @@
-Return-Path: <linux-kselftest+bounces-7530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FCEB89EBE1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 09:27:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFC3189EBE9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 09:28:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B11A281EFE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 07:27:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A263B236EC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Apr 2024 07:28:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4EB13CFAC;
-	Wed, 10 Apr 2024 07:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A08C13CFB2;
+	Wed, 10 Apr 2024 07:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6opM9M0"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="JPLJR127"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E22CDDC1;
-	Wed, 10 Apr 2024 07:27:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC59F13CFA1
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Apr 2024 07:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712734033; cv=none; b=L9d6LMaBAt1wWIJxnQlEJSdFmFS45CNigLzPvUCPMKbLBuIjB+8LeHJZvn5n2pmo2FXPXxoHzAWPa2rbU5UI0VTlZBi32Q4oVqhYi9+TpHGOBZZdeZS4zUbBKpAkUPwRFz8kzIcYUFy93lwU4Z6Pa6hfG+pvI2FrQqDbLdBGYEQ=
+	t=1712734092; cv=none; b=IcLZa6tqvfWiyOfMNjFBHrjmvCjjiguKykSp96NuSfYJNZiuNuCUhLpel+7HdG0tCoJrqPtIhPpqwx/XcvxQUNbBWjwPOTW9hp/edB9tu26C7MvBokiCdl/54AtwfzpcaY0y5lne3BQscTjmHJ5qO8rs+tYOwVruGQLKjZ3BLV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712734033; c=relaxed/simple;
-	bh=Nlv4greCsNCXD6xVDNfDR2Ichl1UewO2fmoorEV3bHM=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Sobu7SdHn5Hre/AzqtJ8D5R3hPFtyIDLhTOIb6Wir8DltcoTOATRDqVZD+Jtpbw4Onr/Oryp50I4TJslOnS5SExP/+BLPfMMWebD35gCfWy76eAqcSXQFqCyNlyMCcjsW2pbdHQkJFVAFYHiOfsxCCDDp0DtxfmqiqdPvuhm2dQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6opM9M0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CE3C433C7;
-	Wed, 10 Apr 2024 07:27:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712734032;
-	bh=Nlv4greCsNCXD6xVDNfDR2Ichl1UewO2fmoorEV3bHM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=U6opM9M0oVk3Jcvjud9swIeKHMJODpauPi3b83JrjVz2UH9LJv+U4EJjmdJ29TkOx
-	 Q2sjUJ6y/TFIzFk7+FPNleUGzi7qLJL761VtSoKIVSy/9ASdbchhfAjfd4VoiUVhra
-	 jqBUsSwwVVSxinEK7G/87PIgNRtTGyegbm1QR5P1rYG679Xt/+HPolCmuzxO+4qSgb
-	 sxPY6oC5Eqs2e/mGdC9XyR7fUo3hBQKMxXmjOVvdsagIsshUpxdgaXQ/+HztEXbMoR
-	 i3ZSdcqGbCuu2HhkiruwbQSKJjQ8DFU2w1BnC16exY2DDxyAcgJXqBxPXbS9PQTeja
-	 cuAub6PQhWMEw==
-Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1ruSMQ-00333E-2I;
-	Wed, 10 Apr 2024 08:27:10 +0100
-Date: Wed, 10 Apr 2024 08:27:07 +0100
-Message-ID: <87a5m1smno.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Dave Martin <Dave.Martin@arm.com>,
-	kvmarm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] KVM: arm64: Share all userspace hardened thread data with the hypervisor
-In-Reply-To: <562e1ddb-75e5-4c02-83ea-b946b88d35c8@sirena.org.uk>
-References: <20240329-arm64-2023-dpisa-v6-0-ba42db6c27f3@kernel.org>
-	<20240329-arm64-2023-dpisa-v6-1-ba42db6c27f3@kernel.org>
-	<87msqesoty.wl-maz@kernel.org>
-	<fb54d7b0-9c83-4a0c-a08b-b722c9381ca7@sirena.org.uk>
-	<86h6gju87m.wl-maz@kernel.org>
-	<562e1ddb-75e5-4c02-83ea-b946b88d35c8@sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1712734092; c=relaxed/simple;
+	bh=EkKWgtjZ08/3JU/NJqPbGnAGIGRetFZ9LJ/ZTT3RuXs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M+jFTGz1YlvW8OLA9szRH2QoCr5EMHvpMJNQmHR1SvfR2WXBQxtpY0LZQSymrny6xJYwtgX1K1jYo/tLAGMbu614EGYnHVxynFUsp4DoWDpzT/o6yhQWsD7BNFBvCUf6VRVFJtP3S/auKwXoa8N/Q86zsk2+oiCyXF7r1N7q4n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=JPLJR127; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6ead4093f85so5253968b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Apr 2024 00:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712734090; x=1713338890; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3Ig32zWmBFLYBqQb21rAU7TmYkM7kXOo2WhlPw8o8aY=;
+        b=JPLJR1275hLAJD2IWWdpocerPztq2DVkHEVyO6VRJ9VXg5oAFs3BWUqN6mlt8+vo3r
+         1yQpKFnYIMwQqi5p1NhOr1uoQ7H/NI5hr3kDjKuce8gxNmXw489+yKDNi3irlzgyuIZB
+         5QlqftdBuwHFAyDGm/zht4ylBb1djXYhJmy4asXe2vi5VjksimZDByHqIqxOncjVYh5D
+         NAU1fpjltk6HDoQwhg0dkKq2/SnaWyoCFaWrURGH79qz9RAUkozk9dZ3v5YXkFzUo2BW
+         ugi5+ajk3qY7GniqeFcucXPq07GI48C4fuf/de21UztKPV6rHzMj1zYDN0PIrGfWEJtN
+         ugzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712734090; x=1713338890;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Ig32zWmBFLYBqQb21rAU7TmYkM7kXOo2WhlPw8o8aY=;
+        b=htVtX/RDt7slmERkefZMHvagAvdxNqXJvJeDWq6meng9v4Wcj3aIS9jN/Y3dM+NfE3
+         f+rtMs9B5WYbghssQ2q0YMixdhFfe/0ZkQ80wuxiYw9v+R2xCwMLyiUjpR2f8xS+Rtfj
+         u1D0s8S+Q7jO2wWupH6aoVOGLsrTbc8uszIf2vYPSDJqfpwkXMHsZ6Qh2FAqnPzWUI/t
+         W0YXmPWR2HKL46bpZaRxragvGaZgjpCy5sfDx1MDavTnOVg94BLBUJO5BBGARp9n5iPV
+         zBPeNjBiPQd/LxDeLZtLcuBciFLje3GCeExlfASAiNCnPyDNrrietsP0iPOd+3RKiwT+
+         e1uA==
+X-Forwarded-Encrypted: i=1; AJvYcCUapqTDeYtbfZvoMS85ecxeI9GaEeau0QqJoyMXNx2LV1xqclEaKgSGDkag5wfWCl8dUbj2PZY4CwOvWjyaqzZOzk8VcRp99b0xjjgDiWC7
+X-Gm-Message-State: AOJu0YzF6HNenU1EPCSqwqNXB1tLc6mlIOAhHLH2HytvMcy6waqGt6ys
+	5nHbYauu4zgdonNgh0XYmWK+MenMGblm61hOwtvKKCsiMvOcL/kix8Y+jJ1nQ2U=
+X-Google-Smtp-Source: AGHT+IGnAZXE/XiGFQ0xzq27+Bwb+2iBqYQega7VKj5SmqFQEmNOu1qpGgpcd92WDjvowGcA4TzlPQ==
+X-Received: by 2002:a05:6a20:7488:b0:1a3:53e7:16da with SMTP id p8-20020a056a20748800b001a353e716damr2250861pzd.15.1712734089807;
+        Wed, 10 Apr 2024 00:28:09 -0700 (PDT)
+Received: from [172.16.0.21] (c-67-188-2-18.hsd1.ca.comcast.net. [67.188.2.18])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170903110f00b001e20587b552sm10131456plh.163.2024.04.10.00.28.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Apr 2024 00:28:09 -0700 (PDT)
+Message-ID: <4a428500-4e37-4e7d-968d-3da20dd822af@rivosinc.com>
+Date: Wed, 10 Apr 2024 00:28:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.104.136.29
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Dave.Martin@arm.com, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 21/22] KVM: riscv: selftests: Add a test for PMU
+ snapshot functionality
+Content-Language: en-US
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+ Ajay Kaher <akaher@vmware.com>, Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Alexey Makhalov <amakhalov@vmware.com>,
+ Conor Dooley <conor.dooley@microchip.com>, Juergen Gross <jgross@suse.com>,
+ kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+ Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>,
+ virtualization@lists.linux.dev,
+ VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+ Will Deacon <will@kernel.org>, x86@kernel.org
+References: <20240403080452.1007601-1-atishp@rivosinc.com>
+ <20240403080452.1007601-22-atishp@rivosinc.com>
+ <20240405-4e840120e8117c286cb593f9@orel>
+ <8748dbed-d105-4f26-a808-667c3b56c8ec@rivosinc.com>
+ <20240410-2a41e43624596a442d6a95cd@orel>
+From: Atish Patra <atishp@rivosinc.com>
+In-Reply-To: <20240410-2a41e43624596a442d6a95cd@orel>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 02 Apr 2024 17:20:36 +0100,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> On Tue, Apr 02, 2024 at 03:53:33PM +0100, Marc Zyngier wrote:
-> > Mark Brown <broonie@kernel.org> wrote:
-> 
-> > > Sure, those patches are still in flight though.  It does seem reasonable
-> > > to target the current code.
-> 
-> > Sure, if your intent is for this code not to be merged.
-> 
-> > Because it means this series assumes a different data life cycle, and
-> > the review effort spent on it will be invalidated once you move to the
-> > per-CPU state.
-> 
-> I don't have any visibility on when those patches are likely to get
-> merged or the general practices with in flight serieses here, last time
-> around with some of the serieses that were in flight it was quite late
-> which did make it unclear if things would go in during that release
-> cycle at all.
 
-Here's a trick: you could ask. Other people do.
+On 4/10/24 00:10, Andrew Jones wrote:
+> On Tue, Apr 09, 2024 at 03:52:40PM -0700, Atish Patra wrote:
+>> On 4/5/24 06:11, Andrew Jones wrote:
+>>> On Wed, Apr 03, 2024 at 01:04:50AM -0700, Atish Patra wrote:
+> ...
+>>>> +	probe = guest_sbi_probe_extension(SBI_EXT_PMU, &out_val);
+>>>> +	GUEST_ASSERT(probe && out_val == 1);
+>>>> +
+>>>> +	if (get_host_sbi_spec_version() < sbi_mk_version(2, 0))
+>>>> +		__GUEST_ASSERT(0, "SBI implementation version doesn't support PMU Snapshot");
+>>>> +}
+>>> It's a pity we can't check the SBI spec version that KVM is advertising
+>>> from KVM userspace. Normally we'd want to check something like this at
+>>> the start of the test with TEST_REQUIRE() before running a VCPU in order
+>>> to generate a skip exit.
+>>>
+>> Agreed. I will send a separate series for that as it is an ABI change.
+>>
+>>> (We probably should allow reading and even writing the SBI spec version
+>>> from the VMM in order to better support migration.)
+>>>
+>> How that would work for SBI spec version write use case ? For migraiton, you
+>> can't go back to older SBI versions in the host. Isn't it ?
+>>
+>> Considering this case your VM is running with PMU snapshot as the host has
+>> SBI v2.0. It can't be migrated to v1.0 and expecting it work. Correct ?
+>>
+> We can start a VM on a host with SBI v2.0, but tell KVM to tell the VM
+> that it has v1.0. Then, the guest shouldn't use any features from SBI
+> that appear after v1.0 and it should be safe to migrate to a host with
+> v1.0.
 
-> The amount of churn in KVM recently and long periods where the relevant
-> patches are apparently pre accepted but for various not always clear
+That depends on when the VMM request to KVM to change the version.
+Most of SBI implementation checks the SBI version at the boot and 
+enable/disable
+feature based on the SBI version available. If the SBI version supported 
+by KVM changes
+to an older one, the calls from VM will fail unexpectedly.
 
-Nothing is "pre accepted". Everything gets discussed and reviewed.
-Specially when it comes to what you call "churn", which I call "crap
-removal".
+> A more likely scenario might be this though:
+>
+>   1. KVM userspace checks and captures the SBI version of the host where
+>      the VM is first being launched, e.g. v2.0
+>   2. The VM gets migrated to another host which supports something later,
+>      e.g. v3.0, but to
+>      - avoid possibly confusing the guest we tell the destination host
+>        that it should expose v2.0 as the SBI version
+>      - allow rollback to the source host without concern that the guest
+>        has already seen v3.0 and started to use something that the
+>        source can't provide
 
-> reasons not actually merged is making it quite hard to target, you're
+This makes sense though. As per my understanding, we should not allow 
+modifying
+the SBI version that is less that the version VM already boot with.
+However, we can allow modifying the SBI version that is higher or same 
+as the VM booted with.
 
-Things get merged when they are reviewed and ready. Not before.
+I can't think of a use case for the higher version though.
 
-> obviously going to be a lot more in the loop so this is doubtless
-> clearer to you than to me.  It's also been a little unclear what the
-> expectations are for basing things on - some people do prefer to do
-> their own merging for example, and while you have mentioned your in
-
-This isn't about resolving a simple conflict. This is a fundamental
-change in the way the state is tracked. We have argued about this for
-months now, you were Cc'd on the patches addressing this problem, and
-you even reviewed them. What other hint do you need?
-
-> flight serieses your communication style means that it's not been
-> entirely clear if you're just noting the overlap.
-
-Not clear? That's a first. I'm usually seen as "blunt and assertive".
-But I'll keep that in mind and aspire to greater clarity in the future.
-
-> Is it just that
-> refactoring series you want taking into account here or are there other
-> in flight serieses that should be rolled into a base?
-
-That, and the already merged feature enforcement framework which you
-keep ignoring. I'll push out a rc3-based branch in to -next shortly so
-that it is crystal clear what you need to base things on.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+> Thanks,
+> drew
 
