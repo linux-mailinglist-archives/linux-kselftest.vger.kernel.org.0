@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-7630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D6B68A047E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 02:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E22CB8A0482
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 02:11:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE2D11C219BA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 00:11:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FF651C22EC7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 00:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3083933C5;
-	Thu, 11 Apr 2024 00:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E07E6FB5;
+	Thu, 11 Apr 2024 00:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="l6q4d0pp"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="qb6VCKE0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88CF1D52D
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 00:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C325F21105
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 00:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712794116; cv=none; b=nPIzqTUoZ1sRiUie2lhiFjgKVP3jEjOTnWEJML+S5PvngELpgzpInzViO5oXmBi3TnMj4ZNCraof7BGsyJXimbW421AkfYX+gC8r/rxz5Q4HLrAVPRlBVC1qzqo9wVHMDI+wbYsS2sOMWsnId7DHxu1rxAM6wi0UK6JIUezWZUo=
+	t=1712794118; cv=none; b=m1ZrQYnW0gR51juQn8f8u1Noy5+6Ua54lWklQfq5VEH7BA+SUwlBRsaaGYmcXJnZhJftBRUE+zRugrNTcEwvp3l6vn7UmYShLoAj2BIboke0rPsYPz72GixmgNmxuBRUpzz5cZ9uCIGtTK263i181GODl+AfDWzIsQFgHEreeTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712794116; c=relaxed/simple;
-	bh=i4/+SnhxIOkVH6jnqRPVGKLSvQvEdBjQqHeh5YP3SQk=;
+	s=arc-20240116; t=1712794118; c=relaxed/simple;
+	bh=+BS7mctHpN9iWLFPEwC2/74zIoWzY97OXSTjHAOIU1s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MNtHG9Ll/kYsfLFD3ZkV3CTcdqwvtoWGBbGanlptmQNVZdDcbhgVxKFtgr4phLDRYrUbJfzhlcmUvk17UO/rZfOizA1Sx93bBoVR9WtsM2+FVPjFrcghtJ+upnBnTIQ7Oa53TMadXFw78NpRtGpF7QTcLDTat5qnlZYqqkPUO14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=l6q4d0pp; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version; b=ZKC1vZ0fQlMJv0Fzfc+YyPYTyVc1VGIJa4CT6IaMmVds9oIp/0P6YeQU8/dd6isfC19UTATj2FZKxHsWVp8flovQrDRUSEg77C8FVjrSkeQie2a0kLCc4vV6ZJYzgEwVR2RjtQdmVAB4NP5Blbbb6dAsCnWiP0nPLM/vItuZMNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=qb6VCKE0; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso5381114a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Apr 2024 17:08:34 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e3f17c6491so35812035ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Apr 2024 17:08:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712794114; x=1713398914; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712794116; x=1713398916; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N3Hu7DESDZEmcgrq2jc0sr2sorL47aa7h3H8SzaxXXM=;
-        b=l6q4d0ppNxosr61PxpO+nUwCvp8BuauMe8AT/gF+ws53u+i1hRcpLbAxgLL/RR9FNM
-         I2ehD7DsI9uFFtzN6CmfRs0UQs23vpNYKPCV57cGjhERXd1jCXhEJT2XFyXnERDqU9qr
-         hDX27UVa/IAVTggAs3avcEOHN+5kbilri8uxj9GTd4MxtBzOYq5BfIxhtGBbRNNxF0aC
-         wxUA2/IWKnkYOblTYQWHV9V0yVhMugliuiLDTPpoiAiGaf7gwPk1BOQlymixilBoEsco
-         ZIa3OcH8XGoBnSDo99fhtXchf3E5jKN4U/1Tgx5MpbrQaf8hHA/losih3lakGF2Xx5UE
-         TcZw==
+        bh=oLadZMY/1E+aj61iqE390ie32fUnJXqsMN5cFXtebck=;
+        b=qb6VCKE00YMtOknbAUXNkED4zt6DeWc6S20red6fPf+F1MiWv9QhvY3XNigJ/hlgPZ
+         SpOWVpj5nlam32LwHkzUtmtd4ZX/j61MNPZTyUELTfEVWg+UJ8lFbuZnXdng3ChiRbT6
+         bTWBaEvSHTYbXo3Hj85zRgFLrKvrrCUlMwIrG4eN5rZ/GuEbp5aZeCbmXE3SdDWVB5tA
+         Y8WUoH5iD9DZcWp0sn5/ng+V4W3T923PUy5XtWSWYhsrcuXucl8qv4AXY9l5Z+r/PP6k
+         eMFp6zcleGBS6tSX++hMI+o1XFUXYMW/mc/wBOnzw/oFKzpDxYETcaFWbLVVTPToIVEv
+         xcRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712794114; x=1713398914;
+        d=1e100.net; s=20230601; t=1712794116; x=1713398916;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N3Hu7DESDZEmcgrq2jc0sr2sorL47aa7h3H8SzaxXXM=;
-        b=lk68bZ4NLnkVi6KlI34trSwhemVbbgi8B0dNNH6RFBNe/bFNYE9ODwArEiq7jAgPuQ
-         aTUHyeKw3jRkDylJziUyqFlciqWuXSedqddzgjk5VpA+88qL/ODhPi6R5MRlz9Lgdezy
-         o9MrF3q+sRv/yVZysJV+94JXGAvKh7xUFzjyYJNUd1JkyK13OIRen2acDJUrgZW97BmP
-         vw5LpKWQ+eW2FbvR0o60PBKOJJYxTloInA4VKlHylC2q+gb9zTjiM5WKk1sYzQZGPuSI
-         Nul8i3VV7ZCazjDvUzFk+ziwIfgnYr/KIxMF8p4CNo13wmL28Lxq3musbR6xGZPiBDvw
-         lwjg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+ECo2Sv7VZRfSzO0IG5KU33rEu90JEYrv9JxYTZgq+/hg8LlSTAhguu5bbeIPw8XoW+bhXMx4csMigAF3tDrMIDwcUS72fjHQFhOI4a9H
-X-Gm-Message-State: AOJu0YyGW8FAd9+c5PKh0eiJ1AzLC+Ie8JF8UXOT1i3HeaVAmv59tnLV
-	rEPyhVeCc17ZuYbhJvaU9L87NyLKX4GkLmnariGormK4bf59oK+OwPQaYDS4/M4=
-X-Google-Smtp-Source: AGHT+IGlZjUnG/cOH6oxCvOCuQrtoKifdSzPlvvNyoKqm+NzGiaKMBomwqkIVAChpjCW/s39Q+Uflg==
-X-Received: by 2002:a17:902:8490:b0:1e0:119e:f935 with SMTP id c16-20020a170902849000b001e0119ef935mr3564608plo.15.1712794114043;
-        Wed, 10 Apr 2024 17:08:34 -0700 (PDT)
+        bh=oLadZMY/1E+aj61iqE390ie32fUnJXqsMN5cFXtebck=;
+        b=FPmMXKg4XeELp506Q8bf1HovijRrXFe0R8Dqsd7lokrIjpeeizkQA9eGvDOVUrFcom
+         4n480nRdlEEZZiHP0BR4DIAE0uDmU4pO1yAjHUE9519w05fRBqyqft0Xqn2s+X7Q4E+W
+         JqPo8HRI0UgXpWjG0FremZBfVSpT9TvWz1TtXNteFzHym5yiBjeNcfzaULbcD1sBhvI0
+         AZLg7ZJL8UlBbal6F6Z5/jj66BE4c4jPXEg0u6RoWvHpZNnVTarqANkhrZw1W0xb3/Cd
+         xrNRvtrGt1eyTOG+gozzJCuGIaW9NG8r9cHhzYaWSrpUcHNQckWHJK6bmfVo3/6sB81l
+         N5mA==
+X-Forwarded-Encrypted: i=1; AJvYcCWFKXL6IcKB1TYOVQrdsrzUBiDIP7m7ihOCCePHOZYr/M3fjvn6VLyFxnxBOOZ3ZhNMArqa4EedY9wuroN2yj0dtDwMRwPJEXBwG9xBj/rU
+X-Gm-Message-State: AOJu0Yzm1NCbVtKM2vi0sSE6AprfCXXAFB1HAG0iwTB8BKuj4R1M0qRs
+	tI5r3Dyla5HRWvjuTwIE4cZ9zOUlcvQdUoror7gnAi0mOma0LP/ljUs1J+Qmi1k=
+X-Google-Smtp-Source: AGHT+IHzUax2ZWhBgUrf+kjl8kX3eFwG3U4ev74//NPfPvOpyLG8kxL1HYpH/nLS8u5KiTb01/SP5A==
+X-Received: by 2002:a17:903:48c:b0:1e4:3f8d:12ca with SMTP id jj12-20020a170903048c00b001e43f8d12camr4120344plb.14.1712794116104;
+        Wed, 10 Apr 2024 17:08:36 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b001e3d8a70780sm130351pln.171.2024.04.10.17.08.31
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b001e3d8a70780sm130351pln.171.2024.04.10.17.08.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 17:08:33 -0700 (PDT)
+        Wed, 10 Apr 2024 17:08:35 -0700 (PDT)
 From: Atish Patra <atishp@rivosinc.com>
 To: linux-kernel@vger.kernel.org
 Cc: Atish Patra <atishp@rivosinc.com>,
+	Anup Patel <anup@brainfault.org>,
 	Andrew Jones <ajones@ventanamicro.com>,
 	Ajay Kaher <ajay.kaher@broadcom.com>,
 	Albert Ou <aou@eecs.berkeley.edu>,
 	Alexandre Ghiti <alexghiti@rivosinc.com>,
 	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
-	Anup Patel <anup@brainfault.org>,
 	Atish Patra <atishp@atishpatra.org>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
 	Conor Dooley <conor.dooley@microchip.com>,
@@ -92,9 +92,9 @@ Cc: Atish Patra <atishp@rivosinc.com>,
 	virtualization@lists.linux.dev,
 	Will Deacon <will@kernel.org>,
 	x86@kernel.org
-Subject: [PATCH v6 10/24] RISC-V: KVM: Fix the initial sample period value
-Date: Wed, 10 Apr 2024 17:07:38 -0700
-Message-Id: <20240411000752.955910-11-atishp@rivosinc.com>
+Subject: [PATCH v6 11/24] RISC-V: KVM: No need to update the counter value during reset
+Date: Wed, 10 Apr 2024 17:07:39 -0700
+Message-Id: <20240411000752.955910-12-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240411000752.955910-1-atishp@rivosinc.com>
 References: <20240411000752.955910-1-atishp@rivosinc.com>
@@ -106,29 +106,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The initial sample period value when counter value is not assigned
-should be set to maximum value supported by the counter width.
-Otherwise, it may result in spurious interrupts.
+The virtual counter value is updated during pmu_ctr_read. There is no need
+to update it in reset case. Otherwise, it will be counted twice which is
+incorrect.
 
+Fixes: 0cb74b65d2e5 ("RISC-V: KVM: Implement perf support without sampling")
+Reviewed-by: Anup Patel <anup@brainfault.org>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/vcpu_pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/kvm/vcpu_pmu.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-index 86391a5061dd..cee1b9ca4ec4 100644
+index cee1b9ca4ec4..b5159ce4592d 100644
 --- a/arch/riscv/kvm/vcpu_pmu.c
 +++ b/arch/riscv/kvm/vcpu_pmu.c
-@@ -39,7 +39,7 @@ static u64 kvm_pmu_get_sample_period(struct kvm_pmc *pmc)
- 	u64 sample_period;
+@@ -397,7 +397,6 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+ {
+ 	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+ 	int i, pmc_index, sbiret = 0;
+-	u64 enabled, running;
+ 	struct kvm_pmc *pmc;
+ 	int fevent_code;
  
- 	if (!pmc->counter_val)
--		sample_period = counter_val_mask + 1;
-+		sample_period = counter_val_mask;
- 	else
- 		sample_period = (-pmc->counter_val) & counter_val_mask;
+@@ -432,12 +431,9 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+ 				sbiret = SBI_ERR_ALREADY_STOPPED;
+ 			}
  
+-			if (flags & SBI_PMU_STOP_FLAG_RESET) {
+-				/* Relase the counter if this is a reset request */
+-				pmc->counter_val += perf_event_read_value(pmc->perf_event,
+-									  &enabled, &running);
++			if (flags & SBI_PMU_STOP_FLAG_RESET)
++				/* Release the counter if this is a reset request */
+ 				kvm_pmu_release_perf_event(pmc);
+-			}
+ 		} else {
+ 			sbiret = SBI_ERR_INVALID_PARAM;
+ 		}
 -- 
 2.34.1
 
