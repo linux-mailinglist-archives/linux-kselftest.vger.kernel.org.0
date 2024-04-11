@@ -1,300 +1,151 @@
-Return-Path: <linux-kselftest+bounces-7702-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7E98A148E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 14:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 897C68A14D2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 14:42:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 522B21C22805
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 12:26:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAF781C22567
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 12:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D19DF14F9E2;
-	Thu, 11 Apr 2024 12:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7F11EB31;
+	Thu, 11 Apr 2024 12:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRFRu4LM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8556D14C58E;
-	Thu, 11 Apr 2024 12:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BA11EA7D;
+	Thu, 11 Apr 2024 12:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712838294; cv=none; b=Oah5AM9iBkOJkUjieSLbtuA40KTCoeiRUBxdrt+EG/y0Hb1Y9ix2bNllurLR5Sxs8uTQcdsI+aQ1+/fW5yDfQTBg7e53BFSSgxVUUCINXvs2qq1TkVigS6f91OI7xlMNTWDc5/xecmncxANXR3u6MtqfmdU2e1t+3KHC4OeqmPQ=
+	t=1712839326; cv=none; b=g9FYIDgmX6aCD74LFnVX4NEMbQyksBXxS4/50KRcjrz6VG0jM23rAEgzYFB7HTNnvegK+gVRGCmmtKwjISskZTeEWZ4XKIdWp3uessBFG6M50yUjDo8mjKbxZUc305IYKVsyiXU5dysr1ufg69sRd+m0qxh06j9E1v2saWo3Kl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712838294; c=relaxed/simple;
-	bh=7wRPyiijTTGAood9GVZT6zaerpy6Jchgb4iGjZRVSao=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oGiN2UT8SKh3qaTgqmGKfj4Yw5n9Hs1wS3hzo2IpJAhlTKFw4yOqXMvML7OGIZTjy68h/s2ufoRsKfvhe7TusQ/MTIKPfhEpyR2i8IX9lVt4zOvcGnBEPi4N1zUuhBdBKk9sgIdMgJO0bLUDm7eWt5NxirJf/geGch+TPv21Mbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4VFf5h1h4Cz4f3kjW;
-	Thu, 11 Apr 2024 20:24:40 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 1BE6D1A0568;
-	Thu, 11 Apr 2024 20:24:47 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP4 (Coremail) with SMTP id gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S13;
-	Thu, 11 Apr 2024 20:24:46 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Brendan Jackman <jackmanb@chromium.org>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Khadija Kamran <kamrankhadijadj@gmail.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	John Johansen <john.johansen@canonical.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Subject: [PATCH bpf-next v3 11/11] selftests/bpf: Add verifier tests for bpf lsm
-Date: Thu, 11 Apr 2024 20:27:52 +0800
-Message-Id: <20240411122752.2873562-12-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
-References: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
+	s=arc-20240116; t=1712839326; c=relaxed/simple;
+	bh=PxTp+fmSvnK/+mwcHlID3Kvo0O7S7lNkjkYYM7rv7bY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QvoKlfTcGYkwPx4J/i5Q5EaD9KLUql24/qHX8Nhfy6MesOQ2YMTjJnJkh8MXZjIAYR3AxlhC6LV35j4tRfsErtuCOjAMsNcBoA9hcBJb72IPg0Bdgo8kgWq7mhn70oMCNLY3DhQWYTQJJOmQ+ja60vGfUym2yg/LhO1MRddZl0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRFRu4LM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9039C433C7;
+	Thu, 11 Apr 2024 12:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712839326;
+	bh=PxTp+fmSvnK/+mwcHlID3Kvo0O7S7lNkjkYYM7rv7bY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VRFRu4LMSAcDcIV/Zn5qo6j1KR0AjcaZC/E48Yv2LdLv1JLDJgIA6CPMmCC2B9WVK
+	 +JxX1LFJOG9lf53HU44Dp+VCqoGW+9nmp50VUY49aTi+IzSRtstEvaoxLSpR0AswgF
+	 Bp7+m/bhrpFE9IfpPs8OO2JrRFlKUswlN/Q6cDB+a6mtfQcbuqZgRAiO0H4KAO+MGh
+	 h1nvrkubyJ/Dqd0jOCAa8Rk7ZcSC8O6X/lfdLEhDvKUHWI7DfoFs/HJ1Me+erh7uKO
+	 8700e1u7b0Eod5ljxJT/+2QN6mpalo9oqWw8fMzIA2ATMD6mdCYlTOx37Cy+Jyt2ry
+	 i324Or5q88Jjg==
+Date: Thu, 11 Apr 2024 13:41:59 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, John Stultz <jstultz@google.com>,
+	Marco Elver <elver@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+	Edward Liaw <edliaw@google.com>,
+	Carlos Llamas <cmllamas@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/timers/posix_timers: reimplement
+ check_timer_distribution()
+Message-ID: <a9a4a964-6f0c-43a5-9fa8-10926d74fbf1@sirena.org.uk>
+References: <87sf02bgez.ffs@tglx>
+ <87r0fmbe65.ffs@tglx>
+ <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
+ <87o7aqb6uw.ffs@tglx>
+ <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
+ <87frw2axv0.ffs@tglx>
+ <20240404145408.GD7153@redhat.com>
+ <87le5t9f14.ffs@tglx>
+ <20240406150950.GA3060@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S13
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFy8ZryxZF13Gry3Jry3XFb_yoW7Ar45pr
-	97K3s7uF9Yyr9Igr1xCFWUuFyfGFs2qryrXF4Fvr15AF4xJrnrGrZ7Ww1UXrn3Jan3uwn0
-	va12yay3ur1UA3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dyKDlGTPSGYPjOVd"
+Content-Disposition: inline
+In-Reply-To: <20240406150950.GA3060@redhat.com>
+X-Cookie: Elliptic paraboloids for sale.
 
-From: Xu Kuohai <xukuohai@huawei.com>
 
-Add verifier tests to check bpf lsm return values and disabled hooks.
+--dyKDlGTPSGYPjOVd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- .../selftests/bpf/prog_tests/verifier.c       |   3 +-
- .../selftests/bpf/progs/verifier_lsm.c        | 155 ++++++++++++++++++
- 2 files changed, 157 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_lsm.c
+On Sat, Apr 06, 2024 at 05:09:51PM +0200, Oleg Nesterov wrote:
+> Thomas says:
+>=20
+> 	The signal distribution test has a tendency to hang for a long
+> 	time as the signal delivery is not really evenly distributed. In
+> 	fact it might never be distributed across all threads ever in
+> 	the way it is written.
+>=20
+> To me even the
+>=20
+> 	This primarily tests that the kernel does not favour any one.
+>=20
+> comment doesn't look right. The kernel does favour a thread which hits
+> the timer interrupt when CLOCK_PROCESS_CPUTIME_ID expires.
+>=20
+> The new version simply checks that the group leader sleeping in join()
+> never receives SIGALRM, cpu_timer_fire() should always send the signal
+> to the thread which burns cpu.
+>=20
+> Without the commit bcb7ee79029d ("posix-timers: Prefer delivery of signals
+> to the current thread") the test-case fails immediately, the very 1st tick
+> wakes the leader up. Otherwise it quickly succeeds after 100 ticks.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index c4f9f306646e..07398846085c 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -84,6 +84,7 @@
- #include "verifier_xadd.skel.h"
- #include "verifier_xdp.skel.h"
- #include "verifier_xdp_direct_packet_access.skel.h"
-+#include "verifier_lsm.skel.h"
- 
- #define MAX_ENTRIES 11
- 
-@@ -196,8 +197,8 @@ void test_verifier_value_illegal_alu(void)    { RUN(verifier_value_illegal_alu);
- void test_verifier_value_or_null(void)        { RUN(verifier_value_or_null); }
- void test_verifier_var_off(void)              { RUN(verifier_var_off); }
- void test_verifier_xadd(void)                 { RUN(verifier_xadd); }
--void test_verifier_xdp(void)                  { RUN(verifier_xdp); }
- void test_verifier_xdp_direct_packet_access(void) { RUN(verifier_xdp_direct_packet_access); }
-+void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
- 
- static int init_test_val_map(struct bpf_object *obj, char *map_name)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_lsm.c b/tools/testing/selftests/bpf/progs/verifier_lsm.c
-new file mode 100644
-index 000000000000..005f28eebf71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_lsm.c
-@@ -0,0 +1,155 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+SEC("lsm/file_alloc_security")
-+__description("lsm bpf prog exit with valid return code. test 1")
-+__success
-+__naked int return_code_vaild_test1(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/file_alloc_security")
-+__description("lsm bpf prog exit with valid return code. test 2")
-+__success
-+__naked int return_code_vaild_test2(void)
-+{
-+	asm volatile ("					\
-+	r0 = -4095;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/file_alloc_security")
-+__description("lsm bpf prog exit with valid return code. test 3")
-+__success
-+__naked int return_code_vaild_test3(void)
-+{
-+	asm volatile ("                                 \
-+	call %[bpf_get_prandom_u32];                    \
-+	r0 <<= 63;                                      \
-+	r0 s>>= 63;                                     \
-+	r0 &= -13;                                      \
-+	exit;                                           \
-+	"      :
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("lsm/vm_enough_memory")
-+__description("lsm bpf prog exit with valid return code. test 4")
-+__success
-+__naked int return_code_vaild_test4(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/vm_enough_memory")
-+__description("lsm bpf prog exit with valid return code. test 5")
-+__success
-+__naked int return_code_vaild_test5(void)
-+{
-+	asm volatile ("					\
-+	r0 = -4096;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/vm_enough_memory")
-+__description("lsm bpf prog exit with valid return code. test 6")
-+__success
-+__naked int return_code_vaild_test6(void)
-+{
-+	asm volatile ("					\
-+	r0 = 4096;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/file_free_security")
-+__description("lsm bpf prog exit with valid return code. test 7")
-+__success
-+__naked void return_code_vaild_test7(void)
-+{
-+	asm volatile ("					\
-+	r0 = -4096;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/file_free_security")
-+__description("lsm bpf prog exit with valid return code. test 8")
-+__success
-+__naked void return_code_vaild_test8(void)
-+{
-+	asm volatile ("					\
-+	r0 = 4096;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/file_alloc_security")
-+__description("lsm bpf prog exit with invalid return code. test 1")
-+__failure __msg("R0 has smin=1 smax=1 should have been in [-4095, 0]")
-+__naked int return_code_invalid_test1(void)
-+{
-+	asm volatile ("					\
-+	r0 = 1;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/file_alloc_security")
-+__description("lsm bpf prog exit with invalid return code. test 2")
-+__failure __msg("R0 has smin=-4096 smax=-4096 should have been in [-4095, 0]")
-+__naked int return_code_invalid_test2(void)
-+{
-+	asm volatile ("					\
-+	r0 = -4096;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/getprocattr")
-+__description("lsm disabled hook: getprocattr")
-+__failure __msg("points to disabled bpf lsm hook")
-+__naked int disabled_hook_test1(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/setprocattr")
-+__description("lsm disabled hook: setprocattr")
-+__failure __msg("points to disabled bpf lsm hook")
-+__naked int disabled_hook_test2(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("lsm/ismaclabel")
-+__description("lsm disabled hook: ismaclabel")
-+__failure __msg("points to disabled bpf lsm hook")
-+__naked int disabled_hook_test3(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.30.2
+This has landed in -next and is causing warning spam throughout
+kselftest when built with clang:
 
+/home/broonie/git/bisect/tools/testing/selftests/kselftest.h:435:6: warning=
+: variable 'major' is used uninitialized whenever '||' condition is true [-=
+Wsometimes-uninitialized]
+        if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) =
+!=3D 2)
+            ^~~~~~~~~~~~
+/home/broonie/git/bisect/tools/testing/selftests/kselftest.h:438:9: note: u=
+ninitialized use occurs here
+        return major > min_major || (major =3D=3D min_major && minor >=3D m=
+in_minor);
+               ^~~~~
+/home/broonie/git/bisect/tools/testing/selftests/kselftest.h:435:6: note: r=
+emove the '||' if its condition is always false
+        if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) =
+!=3D 2)
+            ^~~~~~~~~~~~~~~
+/home/broonie/git/bisect/tools/testing/selftests/kselftest.h:432:20: note: =
+initialize the variable 'major' to silence this warning
+        unsigned int major, minor;
+                          ^
+                           =3D 0
+
+--dyKDlGTPSGYPjOVd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYX2pcACgkQJNaLcl1U
+h9BWSAf8Ce2hIytHCkF6x1UmNuIwLSR+DyWc98yv65Jm8C0/yq8fOxHApvkBkoJD
+TPfPTSw/my83GMGiSkXAyoMcRuK6C5MS6Nnr74SPv8y6sweoXDEr2lQ8MSr3m08e
+HSE21HDCyG/zXhs00vukeR55ffNA7VGDB3BFoogyVDtILTpYgjz5xoJeFCyRQ6Kn
+P/QpL4Ig57dAWqYfCk3ya6OFpwNN2GFeBV6OL8Lmxa4EXXHqJY0S9Zkn8Rg9oISf
+qisPgNrW2RZ9xGHlRKAw4/g2Rqu5NHSUXQ3zhf7nK3m34MU2CccG2400FyF/X9u3
+JO2v7g6vTGB3SDPcCJhahFtF76LMgA==
+=8Eym
+-----END PGP SIGNATURE-----
+
+--dyKDlGTPSGYPjOVd--
 
