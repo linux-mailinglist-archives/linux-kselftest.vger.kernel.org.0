@@ -1,67 +1,87 @@
-Return-Path: <linux-kselftest+bounces-7710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E33AF8A1A4E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 18:46:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A1858A1B30
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 19:24:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AD0A1C20BC0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 16:46:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27438B33731
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 17:23:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5716A1D4284;
-	Thu, 11 Apr 2024 15:39:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4ED054BEA;
+	Thu, 11 Apr 2024 15:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WB9pt5su"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MjwyaDQ4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295741D4280;
-	Thu, 11 Apr 2024 15:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269B72BB1F
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 15:52:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712849988; cv=none; b=qijKxSS+Q2m2rq+XJqY+Q3SXGGpFiWTN0Vehmef0E+QOozm/tqS1bumYABTK2SYuT9V+9w64PW+nu59JlCxD7NNtE5QYaTy1yUvIxgCaLXq4X8PxTqMJMfx+7tivvsLY+J3NHoI6lm04Fy1p1oRdSFcCykiJT50ccEyRzKq0f2s=
+	t=1712850755; cv=none; b=j3Xz6ptp7h5K6Jxpa2Ov7gN9dvHKv55ThUhmTVeeYCICgpnxpkjnpwuld+Q5oJuChNNZP0jqYxaT3wcPJR6VhYKNIdudtqO0cF3uY4UUItyJX8buxnoH5uASP1jc78HLGDBrJBFKk1Z9f5VD7ROQuPAVWuPZjacVu5+ckM4TMfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712849988; c=relaxed/simple;
-	bh=BAaUVpCnVLVHiTGwbzDBqzGX029scJjx0KK1ilZVLbM=;
+	s=arc-20240116; t=1712850755; c=relaxed/simple;
+	bh=nDZMCq6OOx0OiVELF/ddgdMVhELl/RKgZdcDQsB7ojI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=idq/7VxW/6IBBCVk+dzOWW9OIjFxqDC+AdOCT1phN/7AcJiSwXYj8wHKNmgLT98sY3nCXe8DqteVoN7PpgBE/qfgQ9yGLZhsmDWeOd6rQD+JBcmnNzY4u/GLDQNxWMS1awKWF4c0pHwKXVy+cI8jKaJKa/Hs9dd4tX48nYquxB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WB9pt5su; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD1CC072AA;
-	Thu, 11 Apr 2024 15:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712849987;
-	bh=BAaUVpCnVLVHiTGwbzDBqzGX029scJjx0KK1ilZVLbM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WB9pt5suMDCAZ+xxIXJxK9uDd7v0cMO1K2Y4ucIbBGO8Zaf8PQTbLSvsHZ3YQoisE
-	 PHwvD+U/QBFUeEhGXeQlOxlHO0AyeLynSlilsv6NtidFwvk1m6m+xnkX5LRXuX7ENf
-	 THdjOeZ0iOIV/Vv0eiuvTz3MNz4dyNRqtZ+GLUi30sFczshA3hKVfoyjSGFC80Ad+F
-	 Ni21755PZqbAYz12ggyuS+YnYlXdDOkAf9XcxdjL7HCmboTIQXlvBLTFlFQ4k8bvi8
-	 KPVwqYC4jQno1yKDQMxNs0X/grVOYt1ffexNVoexNSLCGQEGAz56gVyVVFp8dAS8zF
-	 BhmGTvR7EObrQ==
-Date: Thu, 11 Apr 2024 08:39:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: John Stultz <jstultz@google.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=QnYR91ERXbcY0z+rcHNZw+Cpnt3uYtAidA20pqCApF3Eqicq/z+W3klJpAniHIFocOYyt8Xde4eVeaLD3yaQjzkRfJ3VoWpx26GuJmJHN3pzlvikcgcgVwAMKZAdLMvnFuFZTymP1MY7tns9SAv8WnazyO729zFbI1+ve6ZiybU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MjwyaDQ4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712850753;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QCBZYuEx8E6Ilt7WeXhmEcjbf72dLVjaYQUFG/SF9i0=;
+	b=MjwyaDQ4zMwpLwQYMH3YA2/XdbwZ5AmUA7LgsVuJZl7g8ZMop3A/zmalt6BM0Tv6JnIoZi
+	5c+779DfJiSTbOl6xdP6ofwY6FEyNqmy4WyukL0eX871cWSszAq/+BvMefzZe62oPMom5A
+	Y7vzIxF9vmrm74BqJHUeX4qaZDyUgTY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-264-0IQtr4SfPViOJ6MMcKm6dw-1; Thu,
+ 11 Apr 2024 11:52:28 -0400
+X-MC-Unique: 0IQtr4SfPViOJ6MMcKm6dw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D84DD1E441CD;
+	Thu, 11 Apr 2024 15:52:27 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.235])
+	by smtp.corp.redhat.com (Postfix) with SMTP id BCF632166B34;
+	Thu, 11 Apr 2024 15:52:24 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Thu, 11 Apr 2024 17:51:01 +0200 (CEST)
+Date: Thu, 11 Apr 2024 17:50:53 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Mark Brown <broonie@kernel.org>, John Stultz <jstultz@google.com>,
+	Marco Elver <elver@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
 	Edward Liaw <edliaw@google.com>,
-	Carlos Llamas <cmllamas@google.com>, kernel-team@android.com,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] selftests: timers: Fix uninitialized variable
- warning in ksft_min_kernel_version
-Message-ID: <20240411153945.GA2507795@dev-arch.thelio-3990X>
-References: <20240410232637.4135564-1-jstultz@google.com>
- <20240410232637.4135564-2-jstultz@google.com>
+	Carlos Llamas <cmllamas@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/timers/posix_timers: reimplement
+ check_timer_distribution()
+Message-ID: <20240411155053.GD5494@redhat.com>
+References: <87r0fmbe65.ffs@tglx>
+ <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
+ <87o7aqb6uw.ffs@tglx>
+ <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
+ <87frw2axv0.ffs@tglx>
+ <20240404145408.GD7153@redhat.com>
+ <87le5t9f14.ffs@tglx>
+ <20240406150950.GA3060@redhat.com>
+ <f0523b3a-ea08-4615-b0fb-5b504a2d39df@sirena.org.uk>
+ <87il0o0yrc.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,99 +90,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240410232637.4135564-2-jstultz@google.com>
+In-Reply-To: <87il0o0yrc.ffs@tglx>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
-On Wed, Apr 10, 2024 at 04:26:29PM -0700, John Stultz wrote:
-> Building with clang, I see the following warning:
-> 
-> In file included from posix_timers.c:17:
-> ./../kselftest.h:398:6: warning: variable 'major' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
->         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
->             ^~~~~~~~~~~~
-> ./../kselftest.h:401:9: note: uninitialized use occurs here
->         return major > min_major || (major == min_major && minor >= min_minor);
->                ^~~~~
-> 
-> This is a bit of a red-herring as if the uname() call did fail,
-> we would hit ksft_exit_fail_msg() which should exit.
+On 04/11, Thomas Gleixner wrote:
+>
+> On Thu, Apr 11 2024 at 13:44, Mark Brown wrote:
+> >
+> > Further to my previous mail it's also broken the arm64 selftest builds,
+> > they use kselftest.h with nolibc in order to test low level
+> > functionality mainly used by libc implementations and nolibc doesn't
+> > implement uname():
+> >
+> > In file included from za-fork.c:12:
+> > ../../kselftest.h:433:17: error: variable has incomplete type 'struct utsname'
+> >         struct utsname info;
+> >                        ^
+> > ../../kselftest.h:433:9: note: forward declaration of 'struct utsname'
+> >         struct utsname info;
+> >                ^
+> > ../../kselftest.h:435:6: error: call to undeclared function 'uname'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
+> >             ^
+> > ../../kselftest.h:435:22: error: call to undeclared function 'sscanf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
+>
+> Grrr. Let me stare at this.
 
-Correct, although we have not really conveyed that to the compiler,
-right? exit() is noreturn, which means all functions that call exit()
-unconditionally are also noreturn, such as ksft_exit_fail_msg(). LLVM
-will figure this out once it performs inlining and such but that happens
-after clang's static analysis phase that this warning occurs in. I think
-a better solution would be to add __noreturn to the functions in
-tools/testing/selftests/kselftest.h that call exit(), so that the
-compiler is aware of this through all pipeline phases, maybe something
-like this? It resolves the wawrning for me.
+Damn ;)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 050c5fd01840..29364c9f3332 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -83,6 +83,7 @@
- #define KSFT_XPASS 3
- #define KSFT_SKIP  4
- 
-+#define __noreturn       __attribute__((__noreturn__))
- #define __printf(a, b)   __attribute__((format(printf, a, b)))
- 
- /* counters */
-@@ -324,13 +325,13 @@ void ksft_test_result_code(int exit_code, const char *test_name,
- 		break;						\
- 	} } while (0)
- 
--static inline int ksft_exit_pass(void)
-+static inline __noreturn int ksft_exit_pass(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_PASS);
- }
- 
--static inline int ksft_exit_fail(void)
-+static inline __noreturn int ksft_exit_fail(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_FAIL);
-@@ -357,7 +358,7 @@ static inline int ksft_exit_fail(void)
- 		  ksft_cnt.ksft_xfail +	\
- 		  ksft_cnt.ksft_xskip)
- 
--static inline __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
-+static inline __noreturn __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
- {
- 	int saved_errno = errno;
- 	va_list args;
-@@ -372,7 +373,7 @@ static inline __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
- 	exit(KSFT_FAIL);
- }
- 
--static inline void ksft_exit_fail_perror(const char *msg)
-+static inline __noreturn void ksft_exit_fail_perror(const char *msg)
- {
- #ifndef NOLIBC
- 	ksft_exit_fail_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
-@@ -385,19 +386,19 @@ static inline void ksft_exit_fail_perror(const char *msg)
- #endif
- }
- 
--static inline int ksft_exit_xfail(void)
-+static inline __noreturn int ksft_exit_xfail(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_XFAIL);
- }
- 
--static inline int ksft_exit_xpass(void)
-+static inline __noreturn int ksft_exit_xpass(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_XPASS);
- }
- 
--static inline __printf(1, 2) int ksft_exit_skip(const char *msg, ...)
-+static inline __noreturn __printf(1, 2) int ksft_exit_skip(const char *msg, ...)
- {
- 	int saved_errno = errno;
- 	va_list args;
+Can't we just turn ksft_min_kernel_version() into
+
+	static inline int ksft_min_kernel_version(unsigned int min_major,
+						  unsigned int min_minor)
+	{
+	#ifdef NOLIBC
+		return -1;
+	#else
+		unsigned int major, minor;
+		struct utsname info;
+
+		if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
+		       ksft_exit_fail_msg("Can't parse kernel version\n");
+
+		return major > min_major || (major == min_major && minor >= min_minor);
+	#endif
+	}
+
+?
+
+Not sure what should check_timer_distribution() do in this case, to me
+ksft_test_result_fail() is fine.
+
+Oleg.
+
 
