@@ -1,95 +1,129 @@
-Return-Path: <linux-kselftest+bounces-7717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92F778A1DDE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 20:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 331408A1E88
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 20:37:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49D6A1F267EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 18:20:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE7811F29763
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 18:37:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC06469949;
-	Thu, 11 Apr 2024 17:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DC66524B8;
+	Thu, 11 Apr 2024 18:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7+fhPxI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vSoiG2zy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB22459160;
-	Thu, 11 Apr 2024 17:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616C113A248
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 18:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712856629; cv=none; b=oybJ6zz8UbhZPVuWwsOxRQEKcxBq6VN4pgFF8j2zQ74vsPnkqzWV0ZjkxhP1XwTvBO8jHRT9jTn9Fo5hNk94SOTHxzep6Fu0+E7514fDbstBr318QhLPx9JHun/4ZYuvdaAgXSVxYr2VwJcNNrEu2YY4PbxP8yvJmMo4De6SsNM=
+	t=1712859133; cv=none; b=hWLgymOZnh/7i93NUzd0QOyoJyOylgECEJ+rtkAdNNfJs/nNlXulRovI3PvblqoUaPJs5k6edhS4AC/jC3MaQR+kkxP2YAIyxxTX/6Ofb6nanh8Z6vHiMIJwpQVOCDot4SbMgjBk+haVpprCARZ7/0gTKprQ6APSC+OECfzizEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712856629; c=relaxed/simple;
-	bh=vUH25OsPFa4RcBBeVz7wpTctxBONPQTL7NjwQVVnSok=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ZRoYESYMBD681EWJoZKGxPCWk1w0QUshttAxbUtf8jivBm9MJx+blKSr4WVb+NcXak53T58cgAVIT483+2tvVbbKrerBOKBtIAbXVH/q0qxbVkdVhasiN65Vc9/8tZe1UHeQJwZqcLTm/qoEPXTk1NwErOnazQDbPzo5aRS42wU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7+fhPxI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3610AC113CD;
-	Thu, 11 Apr 2024 17:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712856629;
-	bh=vUH25OsPFa4RcBBeVz7wpTctxBONPQTL7NjwQVVnSok=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=S7+fhPxIcy/4bgIhutbfJAdv2uH+nG0YuAJ4cbhJE+9zmSQBN4S7CXL96Ey1cqxU9
-	 6GABvx0BvzB4nO3yy/T/b6D8rQvqDgD/PfLGbQl3gpTMsK7RCENnDeZ7CFfZKucceJ
-	 4iLIUnOi/J2C5kLoCAuPKCX4U77qcwWLtp91zP37ox/B4q+adLzcLdniNGuhWisXR3
-	 DELm+S40U+5OdUTDChm6JLs35XzGJAjjDPdnZql7CMRYIeyRCTVL5mgmPMFmM2AL5j
-	 IH3X1ISXrEtjqYkrmB+/5HWqXbtuBEV1hksqZYTyulP/4Ov58B/LJBqFTbSRT/RmyD
-	 0y2K2aHcjPAug==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 20662C433F2;
-	Thu, 11 Apr 2024 17:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712859133; c=relaxed/simple;
+	bh=/dUJA+XbUGenD4g8v83RfIj7fBGYLUqYG5CdW+CW3Hc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BgNkqdfy9r+STBLzeBJWuf3H4/C9KZZHO9G7Gffg1GAAQQYttIQRFE5RzOFihn8XqbZSXqjdReOXRY0xegBKtsa35ql8gbUguVYUsMJJXRBna1Np5vQfLv3yL2yZ02X1XyxxICF3h/TsLKwnGJoX4LSxAz5IA0U7ijjarcvuLf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vSoiG2zy; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-41641a889ccso10935e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 11:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712859131; x=1713463931; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HHxm013cvc73THS5FG/NfOp7xgo/HGk9+aw/ZnEUmUY=;
+        b=vSoiG2zyGTZ80NJ7G6Lt3XuLVEOgWGAUe/fXqzCXLYGV2Tl2avVdiQLGJqVT+Rz46g
+         ynEfJX4eiD3j6l9WXpZT8X/0JUKYaBwuIXJ/SNJbiE6wtaf8enuLLzv1ZcnCr56CE9Av
+         0SJgyKy2yv5cIr1S+SYMQi6ZGpO8dVXUFX+n5UaROqhKtatQa1YVk98LaEI9ZFptbWnx
+         HUExqpm+SLiLSQLTDsaNVVss/mIvQeJ2rZZZ1Ai8vKzx7g8SXqI2SXr59K9IlMoRbsN6
+         sv8SNto6UvRUSVoGbZgFr5QDj4rROy0HHiR/5LVa3Y7l8zzKE5FovJHBe0Xm/7LXl6su
+         QWLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712859131; x=1713463931;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HHxm013cvc73THS5FG/NfOp7xgo/HGk9+aw/ZnEUmUY=;
+        b=h1SCMHD6FAuYjVqeH/v/QMp+9AIcJCqnqUpXYocLbTOsihluD8Kdku/f13wpVkI+SK
+         bMjNQAuIpuLCntBGX99x4/6zaUzJOq1oSDLnDLPeEMkanLAvoEgD67p2ebFTLLCGuXy+
+         VkRJG7rS7dx+js4zxqqYqD4OPALXoQbNT4dqnmYyDZS4tcZ3n1aMoPOL8cOVi0n3N2W2
+         6suosnXybJlZ6JRkHAYqYynTn2XsqiFDPeWtiStrojfYDMaAn3yvIK4NbAaQeCklmLv4
+         +8cyzt/duN02jipZpwuUFtQ3F3ffJCxVpVdqB8SeXnQ+l7rtoCjsjJB9rsayKrBab/2q
+         S6Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCWC4WRVv2TcUprRyBQevjWAp1phFXsDYpYiOmQM1nQK7bFiaySqwenzv+UQ7DRSdfdaxPU0DqgEUKNcSExdh4ktaFxboXVfMcJuTo570GzN
+X-Gm-Message-State: AOJu0YwN43dKN/lwVlbQW7EhUkHM2vhckf5SGg3f1EKi4PqJiAvZg9f2
+	1UvkEV64mOhLELd/w0jdn/72QLf/Nsi+IyDga6GsRMMCKiZCL0UbfeWeU5Cjt5shQPMtImFZDmD
+	ZTitMpvCQh4Tskh63Ew7B/bTRklM3aCEIgfc=
+X-Google-Smtp-Source: AGHT+IET2OjDmigYTA+klusxCOo2xcGggARz2NyK1d1Aq9DKT8j1m4xgCtR+8b3T5JLCku8nxoJa9KeESPqI2Ti+IcE=
+X-Received: by 2002:a05:600c:3b1b:b0:415:4436:2a12 with SMTP id
+ m27-20020a05600c3b1b00b0041544362a12mr4008wms.3.1712859130655; Thu, 11 Apr
+ 2024 11:12:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/2] mptcp: add last time fields in mptcp_info
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171285662912.10890.774534823632472407.git-patchwork-notify@kernel.org>
-Date: Thu, 11 Apr 2024 17:30:29 +0000
-References: <20240410-upstream-net-next-20240405-mptcp-last-time-info-v2-0-f95bd6b33e51@kernel.org>
-In-Reply-To: <20240410-upstream-net-next-20240405-mptcp-last-time-info-v2-0-f95bd6b33e51@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, tanggeliang@kylinos.cn
+References: <20240410232637.4135564-1-jstultz@google.com> <20240410232637.4135564-2-jstultz@google.com>
+ <20240411153945.GA2507795@dev-arch.thelio-3990X>
+In-Reply-To: <20240411153945.GA2507795@dev-arch.thelio-3990X>
+From: John Stultz <jstultz@google.com>
+Date: Thu, 11 Apr 2024 11:11:59 -0700
+Message-ID: <CANDhNCoaMX7B5_SLuo-oaYD6VGdqT7vqPw2fe8ONz7AFqO22qg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] selftests: timers: Fix uninitialized variable warning
+ in ksft_min_kernel_version
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Oleg Nesterov <oleg@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Edward Liaw <edliaw@google.com>, 
+	Carlos Llamas <cmllamas@google.com>, kernel-team@android.com, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Thu, Apr 11, 2024 at 8:39=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+> On Wed, Apr 10, 2024 at 04:26:29PM -0700, John Stultz wrote:
+> > Building with clang, I see the following warning:
+> >
+> > In file included from posix_timers.c:17:
+> > ./../kselftest.h:398:6: warning: variable 'major' is used uninitialized=
+ whenever '||' condition is true [-Wsometimes-uninitialized]
+> >         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &min=
+or) !=3D 2)
+> >             ^~~~~~~~~~~~
+> > ./../kselftest.h:401:9: note: uninitialized use occurs here
+> >         return major > min_major || (major =3D=3D min_major && minor >=
+=3D min_minor);
+> >                ^~~~~
+> >
+> > This is a bit of a red-herring as if the uname() call did fail,
+> > we would hit ksft_exit_fail_msg() which should exit.
+>
+> Correct, although we have not really conveyed that to the compiler,
+> right? exit() is noreturn, which means all functions that call exit()
+> unconditionally are also noreturn, such as ksft_exit_fail_msg(). LLVM
+> will figure this out once it performs inlining and such but that happens
+> after clang's static analysis phase that this warning occurs in. I think
+> a better solution would be to add __noreturn to the functions in
+> tools/testing/selftests/kselftest.h that call exit(), so that the
+> compiler is aware of this through all pipeline phases, maybe something
+> like this? It resolves the wawrning for me.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+No objection from me if this is the better approach.
 
-On Wed, 10 Apr 2024 11:48:23 +0200 you wrote:
-> These patches from Geliang add support for the "last time" field in
-> MPTCP Info, and verify that the counters look valid.
-> 
-> Patch 1 adds these counters: last_data_sent, last_data_recv and
-> last_ack_recv. They are available in the MPTCP Info, so exposed via
-> getsockopt(MPTCP_INFO) and the Netlink Diag interface.
-> 
-> [...]
+Would you send that patch out?
 
-Here is the summary with links:
-  - [net-next,v2,1/2] mptcp: add last time fields in mptcp_info
-    https://git.kernel.org/netdev/net-next/c/18d82cde7432
-  - [net-next,v2,2/2] selftests: mptcp: test last time mptcp_info
-    https://git.kernel.org/netdev/net-next/c/22724c89892f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+thanks
+-john
 
