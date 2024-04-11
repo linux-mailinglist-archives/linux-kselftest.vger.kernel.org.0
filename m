@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-7651-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36FE58A0535
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 03:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4394C8A0537
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 03:04:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA5871F236E0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 01:04:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D83E11F2374A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 01:04:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC68460253;
-	Thu, 11 Apr 2024 01:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA44604C8;
+	Thu, 11 Apr 2024 01:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f1Ki49ck"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2tLgnTO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846B15FDD2;
-	Thu, 11 Apr 2024 01:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84D4604B3;
+	Thu, 11 Apr 2024 01:04:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712797445; cv=none; b=dnZwcBQQZM/goLERGV2GyXSBuwkXUYSVK0lbspeQv4wy+emtwq/HjqTK5lyQPqF3ffiQoeqWS8AzEr4qW9Xiwmarlr3GURL1dhgAlX31lkFHLzuzQk0v1tmRqNZPuZVO6Nde1tfBJfvWPKfcax/Nf37O+2ZjMECgmYEuGKJGpz8=
+	t=1712797452; cv=none; b=fL8/Msw90jY8c/KPlXyLkuB7DTC7LRAzlch8KiOOxTehVIuVdQyurdujLk8kOqWzmzFEUrnmX1+ecEYH4w6QPCM1OZHBzvoHhbKnjodvNObvmvhxk6ixTHQoSdeeNmRcgsPj7maCD5a4tcj6IqcCBTvT+gxBbCjIZsn7XgBsJhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712797445; c=relaxed/simple;
-	bh=Eb0PJ1vYwrl0NMtQT60fNBI5AJMQSh9o4iVlR3khSMw=;
+	s=arc-20240116; t=1712797452; c=relaxed/simple;
+	bh=DHoqFzvR8h5e0Ka81U5pi4ylSFr7lfzO4yBmabLLGH0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PcVsNZv8llAJAGtgT9yqxgM40tL/3qTGyJgBA6/z/sKGKOn37FnJqieUcYqGpMRJztYwX2PTMSp0Q1J08h87vdO7l0ff55iUVVMl0r/misJB6Aj9ukYjMKZVJHK0GKacHiEOSAJYyBCv8u0LOamVCqBE8Rr+IyVoQyWl9ftIc5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f1Ki49ck; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538BFC433C7;
-	Thu, 11 Apr 2024 01:03:59 +0000 (UTC)
+	 MIME-Version; b=CIj49r1cnTL9PTvWKSYFADsIysxQhUG4MevAFxN49aliKMEtEQGo23ZlwKTwmshLVD/C7jHBfKILcR1GpWwoMfI1MrJSN5F6yOrtuEu8GgCYx/ZiobWeHT9vfcEPOchwexfl8J4VgcWfOkAvhyKI4QCgFkRYpSsejN8WPByH+I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2tLgnTO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C463EC433C7;
+	Thu, 11 Apr 2024 01:04:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712797445;
-	bh=Eb0PJ1vYwrl0NMtQT60fNBI5AJMQSh9o4iVlR3khSMw=;
+	s=k20201202; t=1712797451;
+	bh=DHoqFzvR8h5e0Ka81U5pi4ylSFr7lfzO4yBmabLLGH0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f1Ki49ckuhHVHkIvDsQy/YFcmG18xuICkkRr5jzffuQRuaZkr4HLIBGf0e5uPgK9u
-	 MDPYjhKUYPnhrUkhA1LSEtp0UHpvMV4BQ/88ORr2+4fW/s4Wvb8QjE08vLz2K/tVdh
-	 mrh14O3l5s1uwOG5cfUfNu1p9jGgUCW/RvWBNirGJkBS+BX/zouwg7Q/0zOIy9xyik
-	 JDN3eCZTkbQcHVui1HqdkfXkAz8O+/SbnII0wvplkrCLONxc0jSCOmM1UpfzeYjv4u
-	 r0PUl1yZI0nWK6Jxha2s8ooMBnZ7l80+PiycpZmSAGXH5Zkr/+tKsIqw9+UAOxQYmJ
-	 7Ig0Hzji3Uy1g==
+	b=F2tLgnTOhrXYzLea29+C8wWkjfueJJKh4q00kJJ3aVNXrJsCy3R1r7AFRy7OlFiCE
+	 ckjRsvqIyzkk/4Nrw7Pm5BRyeir4BOFvEi3tuLWLmt+K4AhCpf7Gu9rPFbwnplfYqU
+	 o2daSFPd5BiIZRRChhEadDOJKHJwPhb/o34n/Y5xxAF41XLo3XkhUv+f4H65Sun6hG
+	 7W6yp1r2nh80cwzyXA9c8f5MhruRcOkhCnbZ5mm5uiG9ViL4VBEyV78irhGBWBwyBB
+	 IjFUxlAAdCEBVCYu/mFhxkZ9ta6oL5P5b8CraruH//qwTB8x4qDBk7D8+ZaycXb8y3
+	 njVqgV+Xm8mcQ==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 05/14] selftests/bpf: Use connect_to_addr in sk_assign
-Date: Thu, 11 Apr 2024 09:03:13 +0800
-Message-Id: <55a16644cf8b53e2bbf305fbd9ae21c6f8ad3cbf.1712796967.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 06/14] selftests/bpf: Use log_err in network_helpers
+Date: Thu, 11 Apr 2024 09:03:14 +0800
+Message-Id: <b8b4c185bb87b7bdb170f7ca8ec8960d27d05423.1712796967.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1712796967.git.tanggeliang@kylinos.cn>
 References: <cover.1712796967.git.tanggeliang@kylinos.cn>
@@ -75,69 +75,63 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch uses public helper connect_to_addr() exported in
-network_helpers.h instead of the local defined function connect_to_server()
-in prog_tests/sk_assign.c. This can avoid duplicate code.
-
-The code that sets SO_SNDTIMEO timeout as timeo_sec (3s) can be dropped,
-since connect_to_addr() sets default timeout as 3s.
+The helpers ASSERT_OK/GE/OK_PTR should avoid using in public functions.
+This patch uses log_err() to replace them in network_helpers.c.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- .../selftests/bpf/prog_tests/sk_assign.c      | 26 +------------------
- 1 file changed, 1 insertion(+), 25 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-index 130aafe8cff6..b574e162ce6e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-@@ -23,8 +23,6 @@
- #define NS_SELF "/proc/self/ns/net"
- #define SERVER_MAP_PATH "/sys/fs/bpf/tc/globals/server_map"
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 7ddeb6698ec7..91b014784dd9 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -447,22 +447,30 @@ struct nstoken *open_netns(const char *name)
+ 	struct nstoken *token;
  
--static const struct timeval timeo_sec = { .tv_sec = 3 };
--static const size_t timeo_optlen = sizeof(timeo_sec);
- static int stop, duration;
+ 	token = calloc(1, sizeof(struct nstoken));
+-	if (!ASSERT_OK_PTR(token, "malloc token"))
++	if (!token) {
++		log_err("malloc token");
+ 		return NULL;
++	}
  
- static bool
-@@ -74,28 +72,6 @@ configure_stack(void)
- 	return true;
+ 	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
+-	if (!ASSERT_GE(token->orig_netns_fd, 0, "open /proc/self/ns/net"))
++	if (token->orig_netns_fd <= 0) {
++		log_err("open /proc/self/ns/net");
+ 		goto fail;
++	}
+ 
+ 	snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns", name);
+ 	nsfd = open(nspath, O_RDONLY | O_CLOEXEC);
+-	if (!ASSERT_GE(nsfd, 0, "open netns fd"))
++	if (nsfd <= 0) {
++		log_err("open netns fd");
+ 		goto fail;
++	}
+ 
+ 	err = setns(nsfd, CLONE_NEWNET);
+ 	close(nsfd);
+-	if (!ASSERT_OK(err, "setns"))
++	if (err) {
++		log_err("setns");
+ 		goto fail;
++	}
+ 
+ 	return token;
+ fail:
+@@ -475,7 +483,8 @@ void close_netns(struct nstoken *token)
+ 	if (!token)
+ 		return;
+ 
+-	ASSERT_OK(setns(token->orig_netns_fd, CLONE_NEWNET), "setns");
++	if (setns(token->orig_netns_fd, CLONE_NEWNET))
++		log_err("setns");
+ 	close(token->orig_netns_fd);
+ 	free(token);
  }
- 
--static int
--connect_to_server(const struct sockaddr *addr, socklen_t len, int type)
--{
--	int fd = -1;
--
--	fd = socket(addr->sa_family, type, 0);
--	if (CHECK_FAIL(fd == -1))
--		goto out;
--	if (CHECK_FAIL(setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo_sec,
--				  timeo_optlen)))
--		goto close_out;
--	if (CHECK_FAIL(connect(fd, addr, len)))
--		goto close_out;
--
--	goto out;
--close_out:
--	close(fd);
--	fd = -1;
--out:
--	return fd;
--}
--
- static in_port_t
- get_port(int fd)
- {
-@@ -138,7 +114,7 @@ run_test(int server_fd, const struct sockaddr *addr, socklen_t len, int type)
- 	in_port_t port;
- 	int ret = 1;
- 
--	client = connect_to_server(addr, len, type);
-+	client = connect_to_addr((struct sockaddr_storage *)addr, len, type);
- 	if (client == -1) {
- 		perror("Cannot connect to server");
- 		goto out;
 -- 
 2.40.1
 
