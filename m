@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-7655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60A9E8A053D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 03:04:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C89FC8A0540
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 03:04:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C4AB2862E4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 01:04:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3341BB23C5B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 01:04:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EEA95FDD2;
-	Thu, 11 Apr 2024 01:04:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79988604CE;
+	Thu, 11 Apr 2024 01:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMSYUceg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCGlJ73o"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E66EEB5;
-	Thu, 11 Apr 2024 01:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51EC3EEB5;
+	Thu, 11 Apr 2024 01:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712797472; cv=none; b=Wkz3Y/3TdrWeqjWwgieHyS2Q0tZT3mO+H6CZRCHEVwLGp8l5c+zW2e3GFL76c7NmbxSg2MFU7zDzYgsNtGzmtbCNUYca7gTGk0nuEJxg2JtEQyWjqe4gFEu5kOVpUnPlpUy15jYQ8YHDXIoejXySaegrBtPOdzcFUbYbPUXa0z8=
+	t=1712797478; cv=none; b=q6M5n5mtcO9RZIbzdnxl7Jf6oZkZdY08RCvMKlYcxcbZBPkcokyTuXdOuvC1iwLqqePq5kU7iw3a+q+zxSsjR7TC+Ht37Opg+acnlFn8INmesizd4XR1xl0WCeQEFhxazx46DbiF4XbYiii7w6lOQqsYFhRamnfdUcUrnimUds8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712797472; c=relaxed/simple;
-	bh=OeODH0klwt+6i/ftihxA/lIrmuSswUPkNOdx9aZwfUc=;
+	s=arc-20240116; t=1712797478; c=relaxed/simple;
+	bh=Pz4ujWmcp2brvLUaNw44/Jpxi7AGSx14STq9+IUuYNg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QF0izMf5WwR1Rc2GsjxmZIMH/daj3SFgHOFM2CSRNWWYuAgZF7gr4U+iHGfkI2iCsQoBSjW+JVZE3ReDLAsLAQoYZXr5uon9qAua+8u3gQXJmvcJs5WzBQ263CFCquruI/bwaDCd7R0ZOSV6HvylAASfAItZHeKaBw4AatJaXk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMSYUceg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1588FC433C7;
-	Thu, 11 Apr 2024 01:04:25 +0000 (UTC)
+	 MIME-Version; b=KKj3EdwX4pHlYFJDq2rBJcforacG4I/8CzxbQnuEbTFnlNUxpaWfTxXapYFRVsDhYPzojdPFy+gp+wgJXNDWGYJhKSmHwwrC/KeaVWI6g5AkQetLckKmoAMo5QsDiM1eJwg/+u5wLWH+We6p9ozJ9jFjS8kfpA3FAWe4WZUDpWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCGlJ73o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B2DC43399;
+	Thu, 11 Apr 2024 01:04:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712797471;
-	bh=OeODH0klwt+6i/ftihxA/lIrmuSswUPkNOdx9aZwfUc=;
+	s=k20201202; t=1712797477;
+	bh=Pz4ujWmcp2brvLUaNw44/Jpxi7AGSx14STq9+IUuYNg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iMSYUcegY5kgEHrb8bQs3BbZI9+G88/ru6J5KlSk8dsQr/8vcggrGznGw8E0bYD25
-	 7aHFFvhPPogco86DpG2LGtvFpaIiji3g9QUNPflAlPzsW4N2N5I/k3CVGeGpPy9n7n
-	 X00LPGTx/bkFqGSzcG3CPtHoavLBIR1aB4oukaebsQpkTBvT8hTr6k4sseV8tAT/cl
-	 g4cUazW0JkNM2UA4zFurmw+DWfF80L8OuiTziS4YxbqTc0DGceQI3DqSaOh8DsFvpn
-	 xzX56Jn9SjNxqP5zN4i6qUl/RPicbH06PtDSjRHXCWPnKXyZmYU+ZnTnUQqQwvxniI
-	 WrhKt3KwvUzvg==
+	b=ZCGlJ73oHRuLypSwtlMZoeg2hl9Qrdb1gaEo4gDhAHiGj2KbYC525K655ZPBsx1IR
+	 rG9Tcm4tXvhMs8/qT7qs4HbaxYt2DUkbC6DyOKqp7Cj7Kqp5cxH8wt9PdURQyuwVnj
+	 oDaH6ig5ZgwT9TKlledWRA/VcyorumRlacm0Tx8ZrBoq/NT5UO7sgqE3tXu4phPg6C
+	 upVTta2ru6+JHKvIv5GZELCveV0wVuWNwXyI6dOmX8aSrpy/GhjUff9SxYFJzkTHDc
+	 O6EO/sf/aaKvuR3uLUDjEdd28p0i0b7Av5DvvU5BOAu64RHyy7vUIwNb20HbTsIwYp
+	 0Ao8kJf5E5o5A==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 09/14] selftests/bpf: Add function pointer for __start_server
-Date: Thu, 11 Apr 2024 09:03:17 +0800
-Message-Id: <eedd84f856fe2c9101ab4b7086276e4830370839.1712796967.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 10/14] selftests/bpf: Add start_server_setsockopt helper
+Date: Thu, 11 Apr 2024 09:03:18 +0800
+Message-Id: <3285ff8422870c291a4d20d2f1e79fe0bc8d9557.1712796967.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1712796967.git.tanggeliang@kylinos.cn>
 References: <cover.1712796967.git.tanggeliang@kylinos.cn>
@@ -75,94 +75,46 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-__start_server() sets SO_REUSPORT through setsockopt() when the parameter
-'reuseport' is set. This patch makes it more flexible by accepting a
-function pointer named setsockopt.
-
-Then the original start_reuseport_server() can be implemented by passing
-in a newly defined setsockopt_reuse() function pointer to __start_server().
+This patch adds a new helper start_server_setsockopt(), which is a wrapper
+of __start_server(), and accepts a function pointer setsockopt as a
+parameter.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 22 +++++++++++--------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 6 ++++++
+ tools/testing/selftests/bpf/network_helpers.h | 2 ++
+ 2 files changed, 8 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 91b014784dd9..2a389e8c2503 100644
+index 2a389e8c2503..227ed132b84a 100644
 --- a/tools/testing/selftests/bpf/network_helpers.c
 +++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -79,9 +79,9 @@ int settimeo(int fd, int timeout_ms)
- #define save_errno_close(fd) ({ int __save = errno; close(fd); errno = __save; })
- 
- static int __start_server(int type, int protocol, const struct sockaddr *addr,
--			  socklen_t addrlen, int timeout_ms, bool reuseport)
-+			  socklen_t addrlen, int timeout_ms,
-+			  int *(*setsockopt)(int fd, int val), int val)
- {
--	int on = 1;
- 	int fd;
- 
- 	fd = socket(addr->sa_family, type, protocol);
-@@ -93,9 +93,8 @@ static int __start_server(int type, int protocol, const struct sockaddr *addr,
- 	if (settimeo(fd, timeout_ms))
- 		goto error_close;
- 
--	if (reuseport &&
--	    setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &on, sizeof(on))) {
--		log_err("Failed to set SO_REUSEPORT");
-+	if (setsockopt && setsockopt(fd, val)) {
-+		log_err("Failed to set sockopt");
- 		goto error_close;
- 	}
- 
-@@ -128,7 +127,7 @@ static int start_server_proto(int family, int type, int protocol,
- 		return -1;
- 
- 	return __start_server(type, protocol, (struct sockaddr *)&addr,
--			      addrlen, timeout_ms, false);
-+			      addrlen, timeout_ms, NULL, 0);
+@@ -194,6 +194,12 @@ int start_server_addr(const struct sockaddr *addr, socklen_t addrlen, int type)
+ 	return __start_server(type, 0, addr, addrlen, 0, NULL, 0);
  }
  
- int start_server(int family, int type, const char *addr_str, __u16 port,
-@@ -144,6 +143,11 @@ int start_mptcp_server(int family, const char *addr_str, __u16 port,
- 				  port, timeout_ms);
- }
- 
-+static int setsockopt_reuse(int fd, int on)
++int start_server_setsockopt(const struct sockaddr *addr, socklen_t addrlen, int type,
++			    int *(*setsockopt)(int fd, int val), int val)
 +{
-+	return setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &on, sizeof(on));
++	return __start_server(type, 0, addr, addrlen, 0, setsockopt, val);
 +}
 +
- int *start_reuseport_server(int family, int type, const char *addr_str,
- 			    __u16 port, int timeout_ms, unsigned int nr_listens)
- {
-@@ -163,7 +167,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 		return NULL;
- 
- 	fds[0] = __start_server(type, 0, (struct sockaddr *)&addr, addrlen,
--				timeout_ms, true);
-+				timeout_ms, (void *)setsockopt_reuse, 1);
- 	if (fds[0] == -1)
- 		goto close_fds;
- 	nr_fds = 1;
-@@ -173,7 +177,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 
- 	for (; nr_fds < nr_listens; nr_fds++) {
- 		fds[nr_fds] = __start_server(type, 0, (struct sockaddr *)&addr,
--					     addrlen, timeout_ms, true);
-+					     addrlen, timeout_ms, (void *)setsockopt_reuse, 1);
- 		if (fds[nr_fds] == -1)
- 			goto close_fds;
- 	}
-@@ -187,7 +191,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 
- int start_server_addr(const struct sockaddr *addr, socklen_t addrlen, int type)
- {
--	return __start_server(type, 0, addr, addrlen, 0, 0);
-+	return __start_server(type, 0, addr, addrlen, 0, NULL, 0);
- }
- 
  void free_fds(int *fds, unsigned int nr_close_fds)
+ {
+ 	if (fds) {
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 738b1764f562..543295230062 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -55,6 +55,8 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
+ 			    __u16 port, int timeout_ms,
+ 			    unsigned int nr_listens);
+ int start_server_addr(const struct sockaddr *addr, socklen_t addrlen, int type);
++int start_server_setsockopt(const struct sockaddr *addr, socklen_t addrlen, int type,
++			    int *(*setsockopt)(int fd, int val), int val);
+ void free_fds(int *fds, unsigned int nr_close_fds);
+ int connect_to_addr(const struct sockaddr_storage *addr, socklen_t len, int type);
+ int connect_to_fd(int server_fd, int timeout_ms);
 -- 
 2.40.1
 
