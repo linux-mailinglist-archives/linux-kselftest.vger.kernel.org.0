@@ -1,71 +1,84 @@
-Return-Path: <linux-kselftest+bounces-7677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0151B8A07DD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 07:44:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6239D8A09BC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 09:27:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DAF41F2116A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 05:44:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA0AEB28805
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 07:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D580713C9D1;
-	Thu, 11 Apr 2024 05:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF58D13E8A1;
+	Thu, 11 Apr 2024 07:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DoOkRg6p"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B2yq9Rak"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7ED2EADD;
-	Thu, 11 Apr 2024 05:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8629B13E3EA
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 07:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712814221; cv=none; b=qEjkjeldtjMGqY+XHqEljdUJCcPEupN9JltRhUEqyxNaYjZbZWjqfYzcJnl+HwnaJLlszE1f8aQUpyjSY3vLdrIFg7U1qWfLw782oWDALT4vhJB4aspHLokKUsCBbXjxezm2XLREr1itInD3h9uVHSBTtYMlrGNaK1LrXYeJRrg=
+	t=1712820383; cv=none; b=hxPdFy4Lh6mv2H8PQ91VvZIS84wl676jEi3tNrlAyEjJM6ksrkwtKnrLh18FlHNvdGFtqiBG73qqO+EsrYmatMUKr0EhgC+VxoCJTUeDpFFu1gCnWIfhvr6nG8kyDRCKq28x2ZW0O8eEey+USjLzoSGMQtstpLlPr42n4Ifk41w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712814221; c=relaxed/simple;
-	bh=P2QlzZZXD/atcoF2vwTJ7B2lr4396SBnG+qkncx9yvU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cnyq9CeqFtw937gcllRfYCcgg6YQWeuUE6CpZ0v1VSZ17xgLJDfedbouc4GmYVjzvhjp4lfyMlD6uXREhiLcD8LR1bAmpHboklxmnAHhKSf9eq3I+kqMWmjCOVwJxwFeek9H1AfhX/aIYNl4diN9147hvgF4WydTnMEJOFEHMxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DoOkRg6p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6061BC433F1;
-	Thu, 11 Apr 2024 05:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712814221;
-	bh=P2QlzZZXD/atcoF2vwTJ7B2lr4396SBnG+qkncx9yvU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DoOkRg6pFfzdUhTYJlOZQnh2weRLhSGbYir0EBnkXFUFQeb7nRMyTX2p4c/5ay7Tj
-	 3tRHbt6UCm6h0jVU67ZXkYH3DUyhIjMWBDb6TQYOERmupbVCLrFp2AWQFqHdqg8CZV
-	 Qj2X4vGdjTf+GMwcUYIvGdtprdRT7wNMFvEdPRxtnEdwsXzR7CCLlJc4WIFIB25zBj
-	 wOhm0+msD/0GhHnd8qLGG7ZdYy3VuOq/a9JJBnEVfLnYQqpA7mW7X3EoYMX5zA24FS
-	 222Uy2h+ZrC8wbmDrvHzqFsQs3yK8oTavx4Iv0uXdX/nZmO5aK0Oa3MrE/+ktNwByU
-	 KBFuKkaXYCoRA==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Export send_recv_data helper
-Date: Thu, 11 Apr 2024 13:43:12 +0800
-Message-Id: <5231103be91fadcce3674a589542c63b6a5eedd4.1712813933.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1712813933.git.tanggeliang@kylinos.cn>
-References: <cover.1712813933.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1712820383; c=relaxed/simple;
+	bh=u4Zt6ncn47IgJB14JDZFwjyqGxYcviEbMnt3l0dVYJg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uMWedbhnraGrBGlOsdhX9Q70gQXKwfJIvPjddm9uOnx/wCGcu876Ea+zCEupee8jjw/E/jPvGcQFHMBFTDsrE46gdM5L8G7SE7Ff1etv8tofDvPxYZwLQvQ5WEgC/8lzZTkFkPtHF6XsvM6UKNmPqb1ifC2z1n7dJa9Ur2rktpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B2yq9Rak; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712820381; x=1744356381;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=u4Zt6ncn47IgJB14JDZFwjyqGxYcviEbMnt3l0dVYJg=;
+  b=B2yq9RakZBhX/QBU9GCpqQ8ISnZfXqczB5YY7btJdZ9ss0GLDdjZAb+U
+   gkz9LV+g+HdH3fIrH+CbT2FLsRj/K1sU782K2FaCoB3mQwwUdOGaZgz0O
+   onCXP1bS7WCn70tmBJ+awNDDKzYF1oy2ItOLDa41vQQ7cOP3UQjmlfl19
+   RB2LDGayLVUcMvkjmuV4VYsEpY2/6ScY2aSjN+pQtqZ+eLMFKalMcC9iy
+   3P1n3ka4wQvFCaVvxl65Kef/UTU1sWQG1F5iY7Uu8iKwnNkGeM7NuNULY
+   e8/o4GoISbqSK8Ruol01c1WJ5xF/WGo8rBfl/GdMwBEzZLeRqOj0CzwVd
+   w==;
+X-CSE-ConnectionGUID: 8EhH22QcRyKS6wQBOEFHWA==
+X-CSE-MsgGUID: H1JtXnHWTh6F4gc/op+RSA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8074400"
+X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
+   d="scan'208";a="8074400"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 00:26:04 -0700
+X-CSE-ConnectionGUID: lJ3/DrzzRJORhGhCD+Jd/A==
+X-CSE-MsgGUID: PvvaWwV2Qnyx++zeZKMVHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
+   d="scan'208";a="20848555"
+Received: from vkasired-desk2.fm.intel.com ([10.105.128.132])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 00:26:04 -0700
+From: Vivek Kasireddy <vivek.kasireddy@intel.com>
+To: dri-devel@lists.freedesktop.org,
+	linux-mm@kvack.org
+Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Hugh Dickins <hughd@google.com>,
+	Peter Xu <peterx@redhat.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dongwon Kim <dongwon.kim@intel.com>,
+	Junxiao Chang <junxiao.chang@intel.com>,
+	linux-kselftest@vger.kernel.org,
+	Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH v14 8/8] selftests/udmabuf: Add tests to verify data after page migration
+Date: Wed, 10 Apr 2024 23:59:44 -0700
+Message-ID: <20240411070157.3318425-9-vivek.kasireddy@intel.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240411070157.3318425-1-vivek.kasireddy@intel.com>
+References: <20240411070157.3318425-1-vivek.kasireddy@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,246 +87,327 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Since the memfd pages associated with a udmabuf may be migrated
+as part of udmabuf create, we need to verify the data coherency
+after successful migration. The new tests added in this patch try
+to do just that using 4k sized pages and also 2 MB sized huge
+pages for the memfd.
 
-This patch extracts the code to send and receive data into a new
-helper named send_recv_data() in network_helpers.c and export it
-in network_helpers.h.
+Successful completion of the tests would mean that there is no
+disconnect between the memfd pages and the ones associated with
+a udmabuf. And, these tests can also be augmented in the future
+to test newer udmabuf features (such as handling memfd hole punch).
 
-This helper will be used for MPTCP BPF selftests.
+The idea for these tests comes from a patch by Mike Kravetz here:
+https://lists.freedesktop.org/archives/dri-devel/2023-June/410623.html
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+v1->v2: (suggestions from Shuah)
+- Use ksft_* functions to print and capture results of tests
+- Use appropriate KSFT_* status codes for exit()
+- Add Mike Kravetz's suggested-by tag
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: Dongwon Kim <dongwon.kim@intel.com>
+Cc: Junxiao Chang <junxiao.chang@intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 96 +++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 81 +---------------
- 3 files changed, 98 insertions(+), 80 deletions(-)
+ .../selftests/drivers/dma-buf/udmabuf.c       | 214 +++++++++++++++---
+ 1 file changed, 183 insertions(+), 31 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 04175e16195a..bb72cbb6c9ee 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -545,3 +545,99 @@ int set_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
- 	close(sockfd);
- 	return 0;
- }
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+index c812080e304e..6062723a172e 100644
+--- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+@@ -9,52 +9,162 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <malloc.h>
++#include <stdbool.h>
+ 
+ #include <sys/ioctl.h>
+ #include <sys/syscall.h>
++#include <sys/mman.h>
+ #include <linux/memfd.h>
+ #include <linux/udmabuf.h>
++#include "../../kselftest.h"
+ 
+ #define TEST_PREFIX	"drivers/dma-buf/udmabuf"
+ #define NUM_PAGES       4
++#define NUM_ENTRIES     4
++#define MEMFD_SIZE      1024 /* in pages */
+ 
+-static int memfd_create(const char *name, unsigned int flags)
++static unsigned int page_size;
 +
-+struct send_recv_arg {
-+	int		fd;
-+	uint32_t	bytes;
-+	int		stop;
-+};
-+
-+static void *send_recv_server(void *arg)
++static int create_memfd_with_seals(off64_t size, bool hpage)
 +{
-+	struct send_recv_arg *a = (struct send_recv_arg *)arg;
-+	ssize_t nr_sent = 0, bytes = 0;
-+	char batch[1500];
-+	int err = 0, fd;
++	int memfd, ret;
++	unsigned int flags = MFD_ALLOW_SEALING;
 +
-+	fd = accept(a->fd, NULL, NULL);
-+	while (fd == -1) {
-+		if (errno == EINTR)
-+			continue;
-+		err = -errno;
-+		goto done;
++	if (hpage)
++		flags |= MFD_HUGETLB;
++
++	memfd = memfd_create("udmabuf-test", flags);
++	if (memfd < 0) {
++		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
 +	}
 +
-+	if (settimeo(fd, 0)) {
-+		err = -errno;
-+		goto done;
++	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
++	if (ret < 0) {
++		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
 +	}
 +
-+	while (bytes < a->bytes && !READ_ONCE(a->stop)) {
-+		nr_sent = send(fd, &batch,
-+			       MIN(a->bytes - bytes, sizeof(batch)), 0);
-+		if (nr_sent == -1 && errno == EINTR)
-+			continue;
-+		if (nr_sent == -1) {
-+			err = -errno;
-+			break;
-+		}
-+		bytes += nr_sent;
++	ret = ftruncate(memfd, size);
++	if (ret == -1) {
++		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
 +	}
 +
-+	if (bytes != a->bytes)
-+		log_err("Failed to send");
-+
-+done:
-+	if (fd >= 0)
-+		close(fd);
-+	if (err) {
-+		WRITE_ONCE(a->stop, 1);
-+		return ERR_PTR(err);
-+	}
-+	return NULL;
++	return memfd;
 +}
 +
-+int send_recv_data(int lfd, int fd, uint32_t total_bytes)
++static int create_udmabuf_list(int devfd, int memfd, off64_t memfd_size)
 +{
-+	ssize_t nr_recv = 0, bytes = 0;
-+	struct send_recv_arg arg = {
-+		.fd	= lfd,
-+		.bytes	= total_bytes,
-+		.stop	= 0,
-+	};
-+	pthread_t srv_thread;
-+	void *thread_ret;
-+	char batch[1500];
-+	int err = 0;
++	struct udmabuf_create_list *list;
++	int ubuf_fd, i;
 +
-+	err = pthread_create(&srv_thread, NULL, send_recv_server, (void *)&arg);
-+	if (err) {
-+		log_err("Failed to pthread_create");
-+		return err;
++	list = malloc(sizeof(struct udmabuf_create_list) +
++		      sizeof(struct udmabuf_create_item) * NUM_ENTRIES);
++	if (!list) {
++		ksft_print_msg("%s: [FAIL, udmabuf-malloc]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
 +	}
 +
-+	/* recv total_bytes */
-+	while (bytes < total_bytes && !READ_ONCE(arg.stop)) {
-+		nr_recv = recv(fd, &batch,
-+			       MIN(total_bytes - bytes, sizeof(batch)), 0);
-+		if (nr_recv == -1 && errno == EINTR)
-+			continue;
-+		if (nr_recv == -1) {
-+			err = -errno;
-+			break;
-+		}
-+		bytes += nr_recv;
++	for (i = 0; i < NUM_ENTRIES; i++) {
++		list->list[i].memfd  = memfd;
++		list->list[i].offset = i * (memfd_size / NUM_ENTRIES);
++		list->list[i].size   = getpagesize() * NUM_PAGES;
 +	}
 +
-+	if (bytes != total_bytes)
-+		log_err("Failed to recv");
-+
-+	WRITE_ONCE(arg.stop, 1);
-+	pthread_join(srv_thread, &thread_ret);
-+	if (IS_ERR(thread_ret) && !err) {
-+		log_err("Failed to thread_ret");
-+		err = PTR_ERR(thread_ret);
++	list->count = NUM_ENTRIES;
++	list->flags = UDMABUF_FLAGS_CLOEXEC;
++	ubuf_fd = ioctl(devfd, UDMABUF_CREATE_LIST, list);
++	free(list);
++	if (ubuf_fd < 0) {
++		ksft_print_msg("%s: [FAIL, udmabuf-create]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
 +	}
 +
-+	return err;
++	return ubuf_fd;
 +}
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 6457445cc6e2..70f4e4c92733 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -76,6 +76,7 @@ struct nstoken;
-  */
- struct nstoken *open_netns(const char *name);
- void close_netns(struct nstoken *token);
-+int send_recv_data(int lfd, int fd, uint32_t total_bytes);
- 
- static __u16 csum_fold(__u32 csum)
++
++static void write_to_memfd(void *addr, off64_t size, char chr)
++{
++	int i;
++
++	for (i = 0; i < size / page_size; i++) {
++		*((char *)addr + (i * page_size)) = chr;
++	}
++}
++
++static void *mmap_fd(int fd, off64_t size)
  {
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index 8f23b59574ff..0d811d08504a 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -32,75 +32,15 @@ static int settcpca(int fd, const char *tcp_ca)
- 	return 0;
+-	return syscall(__NR_memfd_create, name, flags);
++	void *addr;
++
++	addr = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
++	if (addr == MAP_FAILED) {
++		ksft_print_msg("%s: ubuf_fd mmap fail\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return addr;
++}
++
++static int compare_chunks(void *addr1, void *addr2, off64_t memfd_size)
++{
++	off64_t off;
++	int i = 0, j, k = 0, ret = 0;
++	char char1, char2;
++
++	while (i < NUM_ENTRIES) {
++		off = i * (memfd_size / NUM_ENTRIES);
++		for (j = 0; j < NUM_PAGES; j++, k++) {
++			char1 = *((char *)addr1 + off + (j * getpagesize()));
++			char2 = *((char *)addr2 + (k * getpagesize()));
++			if (char1 != char2) {
++				ret = -1;
++				goto err;
++			}
++		}
++		i++;
++	}
++err:
++	munmap(addr1, memfd_size);
++	munmap(addr2, NUM_ENTRIES * NUM_PAGES * getpagesize());
++	return ret;
  }
  
--struct send_recv_arg {
--	int		fd;
--	uint32_t	bytes;
--	int		stop;
--};
--
--static void *server(void *arg)
--{
--	struct send_recv_arg *a = (struct send_recv_arg *)arg;
--	ssize_t nr_sent = 0, bytes = 0;
--	char batch[1500];
--	int err = 0, fd;
--
--	fd = accept(a->fd, NULL, NULL);
--	while (fd == -1) {
--		if (errno == EINTR)
--			continue;
--		err = -errno;
--		goto done;
--	}
--
--	if (settimeo(fd, 0)) {
--		err = -errno;
--		goto done;
--	}
--
--	while (bytes < a->bytes && !READ_ONCE(a->stop)) {
--		nr_sent = send(fd, &batch,
--			       MIN(a->bytes - bytes, sizeof(batch)), 0);
--		if (nr_sent == -1 && errno == EINTR)
--			continue;
--		if (nr_sent == -1) {
--			err = -errno;
--			break;
--		}
--		bytes += nr_sent;
--	}
--
--	ASSERT_EQ(bytes, a->bytes, "send");
--
--done:
--	if (fd >= 0)
--		close(fd);
--	if (err) {
--		WRITE_ONCE(a->stop, 1);
--		return ERR_PTR(err);
--	}
--	return NULL;
--}
--
- static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
+ int main(int argc, char *argv[])
  {
--	ssize_t nr_recv = 0, bytes = 0;
--	struct send_recv_arg arg = {
--		.bytes	= total_bytes,
--		.stop	= 0,
--	};
- 	int lfd = -1, fd = -1;
--	pthread_t srv_thread;
--	void *thread_ret;
--	char batch[1500];
- 	int err;
+ 	struct udmabuf_create create;
+ 	int devfd, memfd, buf, ret;
+-	off_t size;
+-	void *mem;
++	off64_t size;
++	void *addr1, *addr2;
++
++	ksft_print_header();
++	ksft_set_plan(6);
  
- 	lfd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
- 	if (!ASSERT_NEQ(lfd, -1, "socket"))
- 		return;
- 
--	arg.fd = lfd;
--
- 	fd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (!ASSERT_NEQ(fd, -1, "socket")) {
- 		close(lfd);
-@@ -132,26 +72,7 @@ static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- 			goto done;
+ 	devfd = open("/dev/udmabuf", O_RDWR);
+ 	if (devfd < 0) {
+-		printf("%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
+-		       TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg(
++			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
++			TEST_PREFIX);
++		exit(KSFT_SKIP);
  	}
  
--	err = pthread_create(&srv_thread, NULL, server, (void *)&arg);
--	if (!ASSERT_OK(err, "pthread_create"))
--		goto done;
--
--	/* recv total_bytes */
--	while (bytes < total_bytes && !READ_ONCE(arg.stop)) {
--		nr_recv = recv(fd, &batch,
--			       MIN(total_bytes - bytes, sizeof(batch)), 0);
--		if (nr_recv == -1 && errno == EINTR)
--			continue;
--		if (nr_recv == -1)
--			break;
--		bytes += nr_recv;
--	}
--
--	ASSERT_EQ(bytes, total_bytes, "recv");
--
--	WRITE_ONCE(arg.stop, 1);
--	pthread_join(srv_thread, &thread_ret);
--	ASSERT_OK(IS_ERR(thread_ret), "thread_ret");
-+	ASSERT_OK(send_recv_data(lfd, fd, total_bytes), "send_recv_data");
+ 	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
+ 	if (memfd < 0) {
+-		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
  
- done:
- 	close(lfd);
+ 	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
+ 	if (ret < 0) {
+-		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
+ 
+-
+ 	size = getpagesize() * NUM_PAGES;
+ 	ret = ftruncate(memfd, size);
+ 	if (ret == -1) {
+-		printf("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
+-		exit(1);
++		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
+ 	}
+ 
+ 	memset(&create, 0, sizeof(create));
+@@ -64,44 +174,86 @@ int main(int argc, char *argv[])
+ 	create.offset = getpagesize()/2;
+ 	create.size   = getpagesize();
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-1]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-1]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-1]\n", TEST_PREFIX);
+ 
+ 	/* should fail (size not multiple of page) */
+ 	create.memfd  = memfd;
+ 	create.offset = 0;
+ 	create.size   = getpagesize()/2;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-2]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-2]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-2]\n", TEST_PREFIX);
+ 
+ 	/* should fail (not memfd) */
+ 	create.memfd  = 0; /* stdin */
+ 	create.offset = 0;
+ 	create.size   = size;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-3]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-3]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-3]\n", TEST_PREFIX);
+ 
+ 	/* should work */
++	page_size = getpagesize();
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
+ 	create.memfd  = memfd;
+ 	create.offset = 0;
+ 	create.size   = size;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf < 0) {
+-		printf("%s: [FAIL,test-4]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf < 0)
++		ksft_test_result_fail("%s: [FAIL,test-4]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-4]\n", TEST_PREFIX);
++
++	munmap(addr1, size);
++	close(buf);
++	close(memfd);
++
++	/* should work (migration of 4k size pages)*/
++	size = MEMFD_SIZE * page_size;
++	memfd = create_memfd_with_seals(size, false);
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
++	buf = create_udmabuf_list(devfd, memfd, size);
++	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
++	write_to_memfd(addr1, size, 'b');
++	ret = compare_chunks(addr1, addr2, size);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL,test-5]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-5]\n", TEST_PREFIX);
++
++	close(buf);
++	close(memfd);
++
++	/* should work (migration of 2MB size huge pages)*/
++	page_size = getpagesize() * 512; /* 2 MB */
++	size = MEMFD_SIZE * page_size;
++	memfd = create_memfd_with_seals(size, true);
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
++	buf = create_udmabuf_list(devfd, memfd, size);
++	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
++	write_to_memfd(addr1, size, 'b');
++	ret = compare_chunks(addr1, addr2, size);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL,test-6]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-6]\n", TEST_PREFIX);
+ 
+-	fprintf(stderr, "%s: ok\n", TEST_PREFIX);
+ 	close(buf);
+ 	close(memfd);
+ 	close(devfd);
++
++	ksft_print_msg("%s: ok\n", TEST_PREFIX);
++	ksft_print_cnts();
++
+ 	return 0;
+ }
 -- 
-2.40.1
+2.43.0
 
 
