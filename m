@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-7734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FA3E8A2192
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 00:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E6748A219C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 00:11:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7419282E83
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 22:06:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 407BA2829DE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 22:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3F43D0BE;
-	Thu, 11 Apr 2024 22:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E1B3D0D0;
+	Thu, 11 Apr 2024 22:11:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r2hgHFzU"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KofOAfKU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C468E3BB43
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 22:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C353BBC3
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 22:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712873203; cv=none; b=F9pQdUwNp1V4fGhtAMoq+6un74wliOKtIqYG5IXJ83LiCkIrpoxO78c8fIP1e35ujaVdYLubLk+tu+SHwiadw6a02mhHSTujV1Wq5uFQgu+k3Gkb9lzNEPDkktGyKXXQa2HLFWHWZV42hc+ZrgO5WyVK3Jt4Sg6thc0kOtJu/eE=
+	t=1712873469; cv=none; b=Jb/rqGXZ6GrCGQ0KQx13ix5PYrvwGLcJqkApvxVoDKpG9qY0/SFEE21kdJ8bJenUOVwl5e/2CazSdASo0gvDTkI/P1yfsUpzAnfQ3cAXjB+lp+UcvhvWQlQVGaQHF0gamGcbjVTZXRF2AdDmIjVbuhK5BsNnbgZJCklBc/CJYcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712873203; c=relaxed/simple;
-	bh=0Xyv19EghUifd9+9xgpuBxGMiVy/Mahmkwft001FzSA=;
+	s=arc-20240116; t=1712873469; c=relaxed/simple;
+	bh=YovsqAjWOCgiX3y7T70jgLTQVBbxF5anD9vAfnfYdhM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e6i5Ku5f/jryTgy3NocD2IrxC9sVcFTLXzxgHow8Q6L9QxtVJ3J+xXHhyj+UGddssGuYUKyvk7TBHSknS1yEXV5K6U9sSNEwgbsOW/HUvD+YYovloA754MK8e42fTzWTLKRGoURZuqh98KPu6tdw9x04nVLWc3Bsl5p+sJES6Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r2hgHFzU; arc=none smtp.client-ip=95.215.58.183
+	 In-Reply-To:Content-Type; b=miWsDP89FKlFI6t4GXjdLwZpxNL3eYYp3JDA6o+bJofVA6/+rxEkTn6ceA27XDar0ciTXr6p7Q39mbDYKhc/J8COrBe6QiEozJsEuaiMVksuBnlgw9T5NNFLU1Of6NlW0ZZzP0gHWxXQbNWLbpmJFNLKQPwUT4I/Z/tNuEgt92Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KofOAfKU; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <b4bd4b9a-e1bb-4df3-8c25-90546983c3ae@linux.dev>
+Message-ID: <4d19829e-6e96-445f-8e2a-47f58b921281@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712873196;
+	t=1712873464;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vDVdF6u7LoJwrJJMazph9x80XfQux0mBz6DzY3CMbJc=;
-	b=r2hgHFzUHxQtMKKL/B6AuxGaj1HNL1cwsDql3DE4FoSV/PAP1iTqp/1G12Epb9SYFhx67J
-	/olMFh8J2wYNZt04+bylE9YrV1WlKpKr4ziS19CNSSq60UhVZTi1rjpVLrLPeFiXbQddxi
-	cFWlZCuajf+D3kTXTkgLokWkU5uc87M=
-Date: Thu, 11 Apr 2024 15:06:28 -0700
+	bh=sfS9cBg99UiFImxcmuWdb++52NGG618WTFy3c2EUH2g=;
+	b=KofOAfKUsTJDEgaAXM9gbut2zlXhSB4zn9jN4bmjnTDzX6rKzBVihrjsnYSOXOw/CYkza/
+	5dsWdKdN0nVGoN2bk8cs3VEQ+xLgCc0iFebXGKJ1bzQ4TGkCR4lXOTcuHgAZQy1uUDqKsz
+	pV0JPGbnXUsH82+2m7txubW7xItCrc8=
+Date: Thu, 11 Apr 2024 15:10:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 01/14] selftests/bpf: Add start_server_addr
- helper
+Subject: Re: [PATCH bpf-next v2 11/14] selftests/bpf: Use
+ start_server_setsockopt in sockopt_inherit
 To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
  John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
  Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
  Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <cover.1712796967.git.tanggeliang@kylinos.cn>
- <504f2687adeeeb15eba0038be473fa98a865a6d8.1712796967.git.tanggeliang@kylinos.cn>
-Content-Language: en-US
+ <cf65883b5ad52bfe99e0dc02b6213aa0eaf51ead.1712796967.git.tanggeliang@kylinos.cn>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <504f2687adeeeb15eba0038be473fa98a865a6d8.1712796967.git.tanggeliang@kylinos.cn>
+Content-Language: en-US
+In-Reply-To: <cf65883b5ad52bfe99e0dc02b6213aa0eaf51ead.1712796967.git.tanggeliang@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -74,66 +74,93 @@ X-Migadu-Flow: FLOW_OUT
 On 4/10/24 6:03 PM, Geliang Tang wrote:
 > From: Geliang Tang <tanggeliang@kylinos.cn>
 > 
-> In order to pair up with connect_to addr(), this patch adds a new helper
-> start_server_addr(), which is a wrapper of __start_server(), and accepts an
-> argument 'addr' of 'struct sockaddr' type instead of a string type argument
-> like start_server().
-
-Thanks for the cleanup work in the set.
-
+> Include network_helpers.h in prog_tests/sockopt_inherit.c, use public
+> helpers make_sockaddr() and start_server_setsockopt() instead of the
+> local defined function start_server(). This can avoid duplicate code.
+> 
+> Add a helper setsockopt_loop() to set SOL_CUSTOM sockopt looply, and
+> pass it to start_server_setsockopt().
 > 
 > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 > ---
->   tools/testing/selftests/bpf/network_helpers.c | 5 +++++
->   tools/testing/selftests/bpf/network_helpers.h | 1 +
->   2 files changed, 6 insertions(+)
+>   .../bpf/prog_tests/sockopt_inherit.c          | 33 ++++++++-----------
+>   1 file changed, 14 insertions(+), 19 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index ca16ef2b648e..7ddeb6698ec7 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -185,6 +185,11 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
->   	return NULL;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+> index 917f486db826..f000d9229765 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   #include <test_progs.h>
+>   #include "cgroup_helpers.h"
+> +#include "network_helpers.h"
+>   
+>   #include "sockopt_inherit.skel.h"
+>   
+> @@ -98,23 +99,12 @@ static void *server_thread(void *arg)
+>   	return (void *)(long)err;
 >   }
 >   
-> +int start_server_addr(const struct sockaddr *addr, socklen_t addrlen, int type)
-
-nit. Move "int type" to the first argument which is closer to how the socket 
-syscall is doing it. It is unfortunate that the existing connect_to_addr() has 
-it at the last arg but its usage seems to be limited to sock_addr.c, so should 
-be an easy change.
-
-Although there is an "addrlen", connect_to_addr() and some other helpers are 
-using "sockaddr_storage" instead of "sockaddr", so may as well use that to have 
-a consistent usage.
-
-Also add a network_helper_opts arg at the end for the future needs (e.g. 
-timeout), so something like this:
-
-int start_server_addr_opts(int type, const struct sockaddr_storage *addr,
-			   socklen_t addrlen,
-			   const struct network_helper_opts *opts);
-
-pw-bot: cr
-
-> +{
-> +	return __start_server(type, 0, addr, addrlen, 0, 0);
-> +}
-> +
->   void free_fds(int *fds, unsigned int nr_close_fds)
+> -static int start_server(void)
+> +static int setsockopt_loop(int fd, int val)
 >   {
->   	if (fds) {
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-> index 70f4e4c92733..89f59b65ce76 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -53,6 +53,7 @@ int start_mptcp_server(int family, const char *addr, __u16 port,
->   int *start_reuseport_server(int family, int type, const char *addr_str,
->   			    __u16 port, int timeout_ms,
->   			    unsigned int nr_listens);
-> +int start_server_addr(const struct sockaddr *addr, socklen_t addrlen, int type);
->   void free_fds(int *fds, unsigned int nr_close_fds);
->   int connect_to_addr(const struct sockaddr_storage *addr, socklen_t len, int type);
->   int connect_to_fd(int server_fd, int timeout_ms);
+> -	struct sockaddr_in addr = {
+> -		.sin_family = AF_INET,
+> -		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
+> -	};
+>   	char buf;
+>   	int err;
+> -	int fd;
+>   	int i;
+>   
+> -	fd = socket(AF_INET, SOCK_STREAM, 0);
+> -	if (fd < 0) {
+> -		log_err("Failed to create server socket");
+> -		return -1;
+> -	}
+> -
+>   	for (i = CUSTOM_INHERIT1; i <= CUSTOM_LISTENER; i++) {
+>   		buf = 0x01;
+>   		err = setsockopt(fd, SOL_CUSTOM, i, &buf, 1);
+> @@ -125,13 +115,18 @@ static int start_server(void)
+>   		}
+>   	}
+>   
+> -	if (bind(fd, (const struct sockaddr *)&addr, sizeof(addr)) < 0) {
+> -		log_err("Failed to bind socket");
+> -		close(fd);
+> -		return -1;
+> -	}
+> +	return 0;
+> +}
+>   
+> -	return fd;
+> +static int start_server_lo(void)
+> +{
+> +	struct sockaddr_storage addr;
+> +	socklen_t addrlen;
+> +
+> +	if (make_sockaddr(AF_INET, "127.0.0.1", 0, &addr, &addrlen))
+> +		return -1;
+> +	return start_server_setsockopt((struct sockaddr *)&addr, addrlen,
+> +				       SOCK_STREAM, (void *)setsockopt_loop, 0);
+
+The start_server_setsockopt is only limited to integer socket option. It is not 
+very flexible. It seems this is the only test that will be useful. Lets drop 
+start_server_setsockopt addition from this set for now and discuss it separately.
+
+>   }
+>   
+>   static void run_test(int cgroup_fd)
+> @@ -160,7 +155,7 @@ static void run_test(int cgroup_fd)
+>   	if (!ASSERT_OK_PTR(link_setsockopt, "cg-attach-setsockopt"))
+>   		goto close_bpf_object;
+>   
+> -	server_fd = start_server();
+> +	server_fd = start_server_lo();
+>   	if (!ASSERT_GE(server_fd, 0, "start_server"))
+>   		goto close_bpf_object;
+>   
 
 
