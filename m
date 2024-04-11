@@ -1,97 +1,176 @@
-Return-Path: <linux-kselftest+bounces-7722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B46F18A1F5A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 21:20:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9BB48A1F71
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 21:25:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCA8E1C23297
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 19:20:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FF7D1F2B2A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 19:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41A4610E;
-	Thu, 11 Apr 2024 19:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C222F15E8C;
+	Thu, 11 Apr 2024 19:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nBmI0q+4"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C+lXujML"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C43101DA;
-	Thu, 11 Apr 2024 19:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9285D2E821
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 19:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712863231; cv=none; b=LYo1RA+2fRSCXzGkPfElCqBn4gN4UUPmIb/+iuOgIyZ69VkRpSyG8J/OcKsm3Ib61h4QHMBgOA6WheGYQq9RlG+pYvyasZu/uagfgg8/znG1mr7woMS2NycDjsk8/vGEZ2cnSZzHLrHqBlQU73CMgijad09PqaR0IX/DO/hBRXQ=
+	t=1712863414; cv=none; b=du/vnDorC0b447v++UoRiHEJUOoow0/j2thTvF0aUqNFubTTlkJZGXZsUFh9l7NcVUGwMysKnpDbHwWAMIgxvrpm7OKZWmUzWClGsYmhkEKJbWYk853U73+TxksSrIp6Lq+gTSX9oxr0w3pCf6SwWJLU8W6FtFHBPrv97DvqCKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712863231; c=relaxed/simple;
-	bh=ik3MMjYXoqChMChoiyUUXem6QskYR691W4CBolpgBUI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=f3sKnP5ax7CV34439BboqUyxcSgShMcgQFlk+xvZE8QicSte+l977DKRHncEQIB94483AN7HQxH/TiGkMt7n2+XrvT0UxcPlPURyVYZY4+FypuO1GgvrNKq5lBhk1rvlBpCrUUB8rJoN7wYvpwNbiagWE5wmc+BZ2UwTfCOniuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nBmI0q+4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 62D55C2BBFC;
-	Thu, 11 Apr 2024 19:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712863230;
-	bh=ik3MMjYXoqChMChoiyUUXem6QskYR691W4CBolpgBUI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nBmI0q+4WLAxexUxYH9aCgK6EFUKd37i9kjY4MUAJqDLxvwGlGyH0b+e01XmBLSiU
-	 dDeiwnzC5/4YsxPZRJ+RtZWGVfby7hQXd6wtmHMYLfBctTk7KqLpZpYiGvPmAmibYz
-	 QTWozDZlK8JatmBvoHygUzRtHnhtYyLHcoiMtV0YFRqd5HLhHdJBItiv0r598dsH0S
-	 94/ns1c5E+jSrPm4WSopz78nwp/r8r1VHYdzn2+djutKjvfLOONuyMwGpcyX0aYkjM
-	 MSfeGJyTYtBocNq0/KpiigBOoxke1VWjdq9SddF7qAYPXD/vqhUKSZLHQmrcH1XRTO
-	 7hAy9jD1DD5fQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E975C433E9;
-	Thu, 11 Apr 2024 19:20:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712863414; c=relaxed/simple;
+	bh=P4wCNLmtXPLsDqGfupgn4JTY+JEmagcCUnkDyIsmNW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bo3Tr2Bd90mLyGWTYnwSpRo87UI09gHnVGKbqnC/p16wFWr/arx/KZ4AXTTQ2x+0/LmXGLVryZyPKueSbhpeVmyZtxWjKQwKJoe24syWYzxVjFAYQEBJshW35q8irjcWGJf0zMfiwa/7RBteYxb5kpORkZzcvftFHAqkfqKM9I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C+lXujML; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <a0e2e9f2-9993-4c25-aace-f624986cf874@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712863410;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NaltdheOilOpkmrqvkPu9UV2s+iUUvoBTjYEuk47i1A=;
+	b=C+lXujMLofgkOBT1Bmw6WrKHQAP9NBN26FRgHVCRdwAjwNAYRQ9mTH8HDljxR1NKbUE+97
+	4u5f5WuMolcm+BLlGAM5BPZNzeg7cSZ9SMNFtUzVs0QyZbffX9UfgYSGOzvksd+4xjx7xB
+	+cccVM9dHq4awF0UNyJFlUQATIsr+g4=
+Date: Thu, 11 Apr 2024 12:23:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 0/2] export send_recv_data
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171286323031.10483.1616573340590505149.git-patchwork-notify@kernel.org>
-Date: Thu, 11 Apr 2024 19:20:30 +0000
-References: <cover.1712813933.git.tanggeliang@kylinos.cn>
-In-Reply-To: <cover.1712813933.git.tanggeliang@kylinos.cn>
+Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Export send_recv_data
+ helper
 To: Geliang Tang <geliang@kernel.org>
-Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- tanggeliang@kylinos.cn, bpf@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kselftest@vger.kernel.org
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org
+References: <cover.1712813933.git.tanggeliang@kylinos.cn>
+ <5231103be91fadcce3674a589542c63b6a5eedd4.1712813933.git.tanggeliang@kylinos.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <5231103be91fadcce3674a589542c63b6a5eedd4.1712813933.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+On 4/10/24 10:43 PM, Geliang Tang wrote:
+> +static void *send_recv_server(void *arg)
+> +{
+> +	struct send_recv_arg *a = (struct send_recv_arg *)arg;
+> +	ssize_t nr_sent = 0, bytes = 0;
+> +	char batch[1500];
+> +	int err = 0, fd;
+> +
+> +	fd = accept(a->fd, NULL, NULL);
+> +	while (fd == -1) {
+> +		if (errno == EINTR)
+> +			continue;
+> +		err = -errno;
+> +		goto done;
+> +	}
+> +
+> +	if (settimeo(fd, 0)) {
+> +		err = -errno;
+> +		goto done;
+> +	}
+> +
+> +	while (bytes < a->bytes && !READ_ONCE(a->stop)) {
+> +		nr_sent = send(fd, &batch,
+> +			       MIN(a->bytes - bytes, sizeof(batch)), 0);
+> +		if (nr_sent == -1 && errno == EINTR)
+> +			continue;
+> +		if (nr_sent == -1) {
+> +			err = -errno;
+> +			break;
+> +		}
+> +		bytes += nr_sent;
+> +	}
+> +
+> +	if (bytes != a->bytes)
+> +		log_err("Failed to send");
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+I logged the "bytes" and "a->bytes" here.
 
-On Thu, 11 Apr 2024 13:43:10 +0800 you wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> v5:
->  - address Martin's comments for v4 (thanks).
->  - update patch 2, use 'return err' instead of 'return -1/0'.
->  - drop patch 3 in v4.
-> 
-> [...]
+> +
+> +done:
+> +	if (fd >= 0)
+> +		close(fd);
+> +	if (err) {
+> +		WRITE_ONCE(a->stop, 1);
+> +		return ERR_PTR(err);
+> +	}
+> +	return NULL;
+> +}
+> +
+> +int send_recv_data(int lfd, int fd, uint32_t total_bytes)
+> +{
+> +	ssize_t nr_recv = 0, bytes = 0;
+> +	struct send_recv_arg arg = {
+> +		.fd	= lfd,
+> +		.bytes	= total_bytes,
+> +		.stop	= 0,
+> +	};
+> +	pthread_t srv_thread;
+> +	void *thread_ret;
+> +	char batch[1500];
+> +	int err = 0;
+> +
+> +	err = pthread_create(&srv_thread, NULL, send_recv_server, (void *)&arg);
+> +	if (err) {
+> +		log_err("Failed to pthread_create");
+> +		return err;
+> +	}
+> +
+> +	/* recv total_bytes */
+> +	while (bytes < total_bytes && !READ_ONCE(arg.stop)) {
+> +		nr_recv = recv(fd, &batch,
+> +			       MIN(total_bytes - bytes, sizeof(batch)), 0);
+> +		if (nr_recv == -1 && errno == EINTR)
+> +			continue;
+> +		if (nr_recv == -1) {
+> +			err = -errno;
+> +			break;
+> +		}
+> +		bytes += nr_recv;
+> +	}
+> +
+> +	if (bytes != total_bytes)
+> +		log_err("Failed to recv");
 
-Here is the summary with links:
-  - [bpf-next,v5,1/2] selftests/bpf: Add struct send_recv_arg
-    https://git.kernel.org/bpf/bpf-next/c/68acca6e6f99
-  - [bpf-next,v5,2/2] selftests/bpf: Export send_recv_data helper
-    https://git.kernel.org/bpf/bpf-next/c/dc34e44ea6a1
+Same here.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> +
+> +	WRITE_ONCE(arg.stop, 1);
+> +	pthread_join(srv_thread, &thread_ret);
+> +	if (IS_ERR(thread_ret) && !err) {
 
+Removed the "&& !err: check. The thread_ret error should always be logged.
+
+Applied. Thanks.
+
+> +		log_err("Failed to thread_ret");
+> +		err = PTR_ERR(thread_ret);
+> +	}
+> +
+> +	return err;
+> +}
 
 
