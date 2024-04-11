@@ -1,199 +1,139 @@
-Return-Path: <linux-kselftest+bounces-7733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93F308A20F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 23:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA3E8A2192
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 00:06:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 497682864CD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 21:35:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7419282E83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 22:06:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4C7376FE;
-	Thu, 11 Apr 2024 21:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3F43D0BE;
+	Thu, 11 Apr 2024 22:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hY0KhRdA"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r2hgHFzU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB5C12E6C;
-	Thu, 11 Apr 2024 21:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C468E3BB43
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 22:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712871314; cv=none; b=UeoqVOtb6Fy6N4pN9lfHp4KLklGH9+ZrNvFbqbeT5BInnlxO4tpEd0xjx/0RrF9IjT3oAmPQcKsbwvTEM668wz4Mn/mUlGilt0mEMXk4E2XG456yL0jwYwRcutVt/Nbx9mxXbTttgYjS+LHVDpuW9TZuULNbI1lsbQCZwqnbEaM=
+	t=1712873203; cv=none; b=F9pQdUwNp1V4fGhtAMoq+6un74wliOKtIqYG5IXJ83LiCkIrpoxO78c8fIP1e35ujaVdYLubLk+tu+SHwiadw6a02mhHSTujV1Wq5uFQgu+k3Gkb9lzNEPDkktGyKXXQa2HLFWHWZV42hc+ZrgO5WyVK3Jt4Sg6thc0kOtJu/eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712871314; c=relaxed/simple;
-	bh=PI/v7zf9imTyUebgJBxjgjFvglA8DKk7b3zyb8bg0zA=;
-	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=ZTu+Vo1af/oo8ZL/Jey2qCm2rKNDxAtBwllvGIqC+l8AfRHJo7BXtDx4HitIpyIqAMLpRJ4EgymQUbnT9l6gVzIc5WAtDR/8HiDCKVEM7uKskqm0FF0wRa5JgA04NuL4tKvg5QYneU2MBL879acOf5stzsOcce7l4i1+a+HaF24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hY0KhRdA; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6ea09b6c826so116841a34.0;
-        Thu, 11 Apr 2024 14:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712871312; x=1713476112; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5GZWFnKLGg7a3pKfMnIks+tuuAhpazBSCLZ0rJ/5h14=;
-        b=hY0KhRdA2sufJT+SvloV2MLviTO/Yw0AOvLsFdhOXZBoVNnJU9LuNwLIDLI85hu9ow
-         S7jzr+uxIAwfcJd3hXvPUhfJNaJkfchoGDCVfxD/WyhBr7aEu+eosvAKha3NFbonTbmR
-         +pooynTW4rRGG0oz2BsbqHBh6w4GNj1B/ubK91ab9S2ZYWoZYbO4FaAy83L4eixZBXic
-         oq8FIcRumAZiDC6V+Wd5if/8ZHptC2NoUNqR8JBHFAac7E8pQQhZAxXzuGAHLcfGV9wX
-         ncQs8iKRCj0zs/Ykxu0X0R4wk1DCKqo8Z0nvOQv6mHUfSuXFIQv8rrhfMWkaKhzqrCoT
-         6saA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712871312; x=1713476112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5GZWFnKLGg7a3pKfMnIks+tuuAhpazBSCLZ0rJ/5h14=;
-        b=Zp8xjwjMggGxsjfu8H5MXjB0PgOBVMSxxUgpOfTiJG0cZ4/dNcRCC5y2OTFWYkvgbJ
-         yRWRTWRuyPjLCWPDgjtOLLSSwrL5ej98sszEpK0sGmiR5UMEiTAuKkxbYj+VnzxRAb4V
-         qHXEAZLzOuLx3cdsENt+0gncghiCzskXM8/PnlszrbHLGQayz1EgTuY5h6o9Gdhe3qQK
-         cD7jsxEqBnrX9g/lRACYBShJ+mq5OEMdYDz+T0NQKTfcCLyKyMzHmiUGVazrG15k7k13
-         XfibF8GEx2DMWEqolmFyHZ0QV5AoCVlkzeSV8BvKU4pzfjyHa19klRpZ3wyJb3Cxf7es
-         RBMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW2x9htW0XJopaka4YgUDct+aRyhNIUaZaHkxyJR4NEYibshh1NZQpawvnUhE0QYO2ZZqY0uAgFR0sf/shQzUc497qva1m21vwhVODSqjH75wvpOPH7bQE8XNfaFprF2pSmCdCyiBSZW0bCGXIr6j+9eVi99MLNPEBthaMRONgSI03adQyb
-X-Gm-Message-State: AOJu0Yzlvs70+k4FrNLCySUNIm57dpkaX8pedeNjuZMZ7LJn9XB7bLYa
-	PMD1xojwEjkmaXDvWSnz5Wrl8Cg+UzIY9QTF4sfbg/2KinRc9Nq4
-X-Google-Smtp-Source: AGHT+IGBrsgvGLTizvk744f8oyIMHrJWHSIqgTxKQfaqnLIiNH0J/w7yGGl2xFsjVWo8ezLtQIgZbg==
-X-Received: by 2002:a9d:7c89:0:b0:6ea:1fbc:459f with SMTP id q9-20020a9d7c89000000b006ea1fbc459fmr1057772otn.0.1712871312264;
-        Thu, 11 Apr 2024 14:35:12 -0700 (PDT)
-Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
-        by smtp.gmail.com with ESMTPSA id bp37-20020a05620a45a500b0078ec8690764sm537078qkb.87.2024.04.11.14.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 14:35:11 -0700 (PDT)
-Date: Thu, 11 Apr 2024 17:35:11 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Richard Gobert <richardbgobert@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- dsahern@kernel.org, 
- aduyck@mirantis.com, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <6618578fc34fa_36e52529429@willemb.c.googlers.com.notmuch>
-In-Reply-To: <24daf0f8-1e81-4bdb-81f3-0f95bf4392f4@gmail.com>
-References: <20240410153423.107381-1-richardbgobert@gmail.com>
- <20240410153423.107381-6-richardbgobert@gmail.com>
- <66174ec5bbd29_2d6bc629481@willemb.c.googlers.com.notmuch>
- <24daf0f8-1e81-4bdb-81f3-0f95bf4392f4@gmail.com>
-Subject: Re: [PATCH net-next v6 5/6] net: gro: move L3 flush checks to
- tcp_gro_receive and udp_gro_receive_segment
+	s=arc-20240116; t=1712873203; c=relaxed/simple;
+	bh=0Xyv19EghUifd9+9xgpuBxGMiVy/Mahmkwft001FzSA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e6i5Ku5f/jryTgy3NocD2IrxC9sVcFTLXzxgHow8Q6L9QxtVJ3J+xXHhyj+UGddssGuYUKyvk7TBHSknS1yEXV5K6U9sSNEwgbsOW/HUvD+YYovloA754MK8e42fTzWTLKRGoURZuqh98KPu6tdw9x04nVLWc3Bsl5p+sJES6Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r2hgHFzU; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <b4bd4b9a-e1bb-4df3-8c25-90546983c3ae@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712873196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vDVdF6u7LoJwrJJMazph9x80XfQux0mBz6DzY3CMbJc=;
+	b=r2hgHFzUHxQtMKKL/B6AuxGaj1HNL1cwsDql3DE4FoSV/PAP1iTqp/1G12Epb9SYFhx67J
+	/olMFh8J2wYNZt04+bylE9YrV1WlKpKr4ziS19CNSSq60UhVZTi1rjpVLrLPeFiXbQddxi
+	cFWlZCuajf+D3kTXTkgLokWkU5uc87M=
+Date: Thu, 11 Apr 2024 15:06:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 01/14] selftests/bpf: Add start_server_addr
+ helper
+To: Geliang Tang <geliang@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1712796967.git.tanggeliang@kylinos.cn>
+ <504f2687adeeeb15eba0038be473fa98a865a6d8.1712796967.git.tanggeliang@kylinos.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <504f2687adeeeb15eba0038be473fa98a865a6d8.1712796967.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Richard Gobert wrote:
-> Willem de Bruijn wrote:
-> > Richard Gobert wrote:
-> >> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags,
-> >> iph->id, ...) against all packets in a loop. These flush checks are used
-> >> currently only in tcp flows in GRO.
-> >>
-> >> These checks need to be done only once in tcp_gro_receive and only against
-> >> the found p skb, since they only affect flush and not same_flow.
-> > 
-> > I don't quite understand where the performance improvements arise.
-> > As inet_gro_receive will skip any p that does not match:
-> > 
-> >       if (!NAPI_GRO_CB(p)->same_flow)
-> >               continue;
-> > 
-> >       iph2 = (struct iphdr *)(p->data + off);
-> >       /* The above works because, with the exception of the top
-> >        * (inner most) layer, we only aggregate pkts with the same
-> >        * hdr length so all the hdrs we'll need to verify will start
-> >        * at the same offset.
-> >        */
-> >       if ((iph->protocol ^ iph2->protocol) |
-> >           ((__force u32)iph->saddr ^ (__force u32)iph2->saddr) |
-> >           ((__force u32)iph->daddr ^ (__force u32)iph2->daddr)) {
-> >               NAPI_GRO_CB(p)->same_flow = 0;
-> >               continue;
-> >       }
-> > 
-> > So these checks are already only performed against a p that matches.
-> >  
+On 4/10/24 6:03 PM, Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
 > 
-> 
-> Thanks for the review!
-> 
-> flush/flush_id is calculated for all other p with same_flow = 1 (which is
-> not always determined to be 0 before inet_gro_receive) and same src/dst
-> addr in the bucket. Moving it to udp_gro_receive_segment/tcp_gro_receive
-> will make it run only once when a matching p is found.
+> In order to pair up with connect_to addr(), this patch adds a new helper
+> start_server_addr(), which is a wrapper of __start_server(), and accepts an
+> argument 'addr' of 'struct sockaddr' type instead of a string type argument
+> like start_server().
 
-So this optimization is for flows that are the same up to having the
-same saddr/daddr. Aside from stress tests, it seems rare to have many
-concurrent flows between the same pair of machines?
+Thanks for the cleanup work in the set.
 
 > 
-> In addition, UDP flows where skb_gro_receive_list is called -
-> flush/flush_id is not relevant and does not need to be calculated. 
-
-That makes sense
-
-> In these
-> cases total CPU time in GRO should drop. I could post perf numbers for
-> this flow as well.
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
+>   tools/testing/selftests/bpf/network_helpers.c | 5 +++++
+>   tools/testing/selftests/bpf/network_helpers.h | 1 +
+>   2 files changed, 6 insertions(+)
 > 
-> 
-> >> Leveraging the previous commit in the series, in which correct network
-> >> header offsets are saved for both outer and inner network headers -
-> >> allowing these checks to be done only once, in tcp_gro_receive. As a
-> > 
-> > Comments should be updated to reflect both TCP and L4 UDP. Can
-> > generalize to transport callbacks.
-> > 
-> >> result, NAPI_GRO_CB(p)->flush is not used at all. In addition, flush_id
-> >> checks are more declarative and contained in inet_gro_flush, thus removing
-> >> the need for flush_id in napi_gro_cb.
-> >>
-> >> This results in less parsing code for UDP flows and non-loop flush tests
-> >> for TCP flows.
-> > 
-> > This moves network layer tests out of the network layer callbacks into
-> > helpers called from the transport layer callback. And then the helper
-> > has to look up the network layer header and demultiplex the protocol
-> > again:
-> > 
-> >     +		if (((struct iphdr *)nh)->version == 6)
-> >     +			flush |= ipv6_gro_flush(nh, nh2);
-> >     +		else
-> >     +			flush |= inet_gro_flush(nh, nh2, p, i != encap_mark);
-> > 
-> > That just seems a bit roundabout.
-> 
-> IMO this commit could be a part of a larger change, where all
-> loops in gro_list_prepare, inet_gro_receive and ipv6_gro_receive can be
-> removed, and the logic for finding a matching p will be moved to L4.  This
-> means that when p is found, the rest of the gro_list would not need to be
-> traversed and thus would not even dirty cache lines at all. I can provide a
-> code snippet which would explain it better.
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+> index ca16ef2b648e..7ddeb6698ec7 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
+> @@ -185,6 +185,11 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
+>   	return NULL;
+>   }
+>   
+> +int start_server_addr(const struct sockaddr *addr, socklen_t addrlen, int type)
 
-These loops are exactly the mechanism to find a matching p. Though
-with all the callbacks perhaps not the most efficient model. The
-hashtable should have solved much of that.
+nit. Move "int type" to the first argument which is closer to how the socket 
+syscall is doing it. It is unfortunate that the existing connect_to_addr() has 
+it at the last arg but its usage seems to be limited to sock_addr.c, so should 
+be an easy change.
 
-Yes, please share a snippet to understand how you would replace this.
+Although there is an "addrlen", connect_to_addr() and some other helpers are 
+using "sockaddr_storage" instead of "sockaddr", so may as well use that to have 
+a consistent usage.
 
-In the meantime, I do suggest sending the first two patches to net,
-as they have Fixes tags. And then follow up with this for net-next
-separately.
+Also add a network_helper_opts arg at the end for the future needs (e.g. 
+timeout), so something like this:
+
+int start_server_addr_opts(int type, const struct sockaddr_storage *addr,
+			   socklen_t addrlen,
+			   const struct network_helper_opts *opts);
+
+pw-bot: cr
+
+> +{
+> +	return __start_server(type, 0, addr, addrlen, 0, 0);
+> +}
+> +
+>   void free_fds(int *fds, unsigned int nr_close_fds)
+>   {
+>   	if (fds) {
+> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+> index 70f4e4c92733..89f59b65ce76 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.h
+> +++ b/tools/testing/selftests/bpf/network_helpers.h
+> @@ -53,6 +53,7 @@ int start_mptcp_server(int family, const char *addr, __u16 port,
+>   int *start_reuseport_server(int family, int type, const char *addr_str,
+>   			    __u16 port, int timeout_ms,
+>   			    unsigned int nr_listens);
+> +int start_server_addr(const struct sockaddr *addr, socklen_t addrlen, int type);
+>   void free_fds(int *fds, unsigned int nr_close_fds);
+>   int connect_to_addr(const struct sockaddr_storage *addr, socklen_t len, int type);
+>   int connect_to_fd(int server_fd, int timeout_ms);
+
 
