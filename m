@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-7663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 302AF8A0585
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 03:29:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CD318A058A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 03:29:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C38D61F21632
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 01:29:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AF95B248F8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 01:29:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80D269DE4;
-	Thu, 11 Apr 2024 01:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB63757E6;
+	Thu, 11 Apr 2024 01:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AdQeKtR+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8HCLEYN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F07269D0A;
-	Thu, 11 Apr 2024 01:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8356873171;
+	Thu, 11 Apr 2024 01:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712798921; cv=none; b=YLnsT6jmlUKohjuseuCQQYjxs1qbriORnk0LnFkonw1Nc+qIM7Cwf2E/q4qx0asiSuUhfd1b/vA41lzEMMH/IeiSdtJj/3Hh/4z673oDkDIBBSXrWT7NEm+lCcSoF6OQNMsODIcIbPUCMJD8ZabzTKDWBjjGskU+QJxXbLpRCH4=
+	t=1712798922; cv=none; b=sC38ZbWp/dcKuDT0+8JOzWu5a1i8tweIO/6LHtuSlEx4ygq3QDwv/g52kKvk/6s1SbUbptCHm0AfNEeSI8kALgJfgqRnCHcNWb0EbtU3PeU42PK8vudDvcP3M7LS2iozXboN+mEAW2wYX8055JSaKTKoEEINRIQIBzGCJOBrFTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712798921; c=relaxed/simple;
-	bh=Vfp9UyJOM8kMpvSyXcIKRtaJ0zyB4mIgfD2CwgNCQVY=;
+	s=arc-20240116; t=1712798922; c=relaxed/simple;
+	bh=Nc//R23kY+H8e6cmo3oUSxdKd7WcTbsgmfEiJlWrS7k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fxnF1qgrYVawBIoR6jBbKHQxPStXfN7b6sqVIBAjzUHE9/PFuaMCQahqf6e/Gb/nBoT9aOfJPgCKB9AIPwCoKP9vEqQZde9qWstpXnQCDbkiX2dCxruWYcaxVxX7jHxd08JwEqWxyjfbLcHW4uN2QM3dfzsZg6uozGdopHNpd4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AdQeKtR+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD4CC433F1;
+	 MIME-Version; b=QA6r1rAeHZ8gltdPRP6oPZ1asSyCk8sctAf20vorKXifPDVk3o2StGrCAZb0X6EWJI3vUflkMB4X/WElWxM50Kx8dm7216gcpLva75kXnuPXiayAnwYMOV4hLqiRti1EMqOE8mU2z3XL7PPYE2jLsnADiHywpGYQZVtGnB8kLUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8HCLEYN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B8DC43330;
 	Thu, 11 Apr 2024 01:28:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712798921;
-	bh=Vfp9UyJOM8kMpvSyXcIKRtaJ0zyB4mIgfD2CwgNCQVY=;
+	s=k20201202; t=1712798922;
+	bh=Nc//R23kY+H8e6cmo3oUSxdKd7WcTbsgmfEiJlWrS7k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AdQeKtR+qCBjWICspR0vy/IahEeGkhri/1IP/Gv7WxC6maxfhizZ0c06v5oB/h1m3
-	 rh13c1Wd9g838zzQtciVKPfcZoADvLEbYVWB0ryher0n5Po6r5O85BtZKctzW0bXpe
-	 V6GkV3X1fPr7TnQ+LVYxmo2z6EIBmbfuaOId4GwrCvmvJT4wXUGnJAUCWBzBFHHhLS
-	 n13jvbNa7lGbNMb3zktVsFdryeXlfTRE/1+ydOKfwUh7epEnp834uHo79qk2AlIllH
-	 o54mM9zpbuqUL2d7eFeMUT9wpspNjQ71fRU5+cM4mzMQUQ2UFWV2f+OrHSKDgrPNr5
-	 ZGBS6hXOBbIyA==
+	b=b8HCLEYNCaS+fmwPyXQXurckLZj/gsPQryrvcqrU0vldac0IXeKwb6vOyNI/2HcMe
+	 N01wnL3XYmcOD+UZ524YtNgpGp9Qopxr4f25d1Fj9pBUD1g5MbskllTyTkOwvZmES8
+	 wj715FLSv5ICoKYsCGv/UqQg+0rCtx7qOnmX34mLbHCM/8i7diRUoiraiByubYgi1U
+	 JVVOtUH54UvoVmbsg1/89u2XS1zhR0CfD8Vsg3+MUmQ0mfUX7Yk01/ACtCdmaSYLag
+	 /VWB1I6ps2WC0hEqX8mpjiy2ioP9cZeBlPVIzMbvSstcdCu9QJnKobcRNP/G30Pxpq
+	 GEwcwDI4IqgfQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -49,12 +49,10 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	petrm@nvidia.com,
 	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	donald.hunter@gmail.com,
-	jiri@resnulli.us
-Subject: [PATCH net-next 2/6] tools: ynl: don't return None for dumps
-Date: Wed, 10 Apr 2024 18:28:11 -0700
-Message-ID: <20240411012815.174400-3-kuba@kernel.org>
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 3/6] selftests: net: print report check location in python tests
+Date: Wed, 10 Apr 2024 18:28:12 -0700
+Message-ID: <20240411012815.174400-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240411012815.174400-1-kuba@kernel.org>
 References: <20240411012815.174400-1-kuba@kernel.org>
@@ -66,43 +64,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-YNL currently reports None for empty dump:
+Developing Python tests is a bit annoying because when test fails
+we only print the fail message and no info about which exact check
+led to it. Print the location (the first line of this example is new):
 
- $ cli.py ...netdev.yaml --dump page-pool-get
- None
-
-This doesn't matter for the CLI but when writing YNL based tests
-having to deal with either list or None is annoying. Limit the
-None conversion to non-dump ops:
-
- $ cli.py ...netdev.yaml --dump page-pool-get
- []
+  # At /root/ksft-net-drv/./net/nl_netdev.py line 38:
+  # Check failed 0 != 10
+  not ok 3 nl_netdev.page_pool_check
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-CC: donald.hunter@gmail.com
-CC: jiri@resnulli.us
----
- tools/net/ynl/lib/ynl.py | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/lib/py/ksft.py | 25 ++++++++++++----------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/tools/net/ynl/lib/ynl.py b/tools/net/ynl/lib/ynl.py
-index 0ba5f6fb8747..a67f7b6fef92 100644
---- a/tools/net/ynl/lib/ynl.py
-+++ b/tools/net/ynl/lib/ynl.py
-@@ -995,9 +995,11 @@ genl_family_name_to_id = None
-                     rsp_msg.update(self._decode_struct(decoded.raw, op.fixed_header))
-                 rsp.append(rsp_msg)
+diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+index c7210525981c..5838aadd95a7 100644
+--- a/tools/testing/selftests/net/lib/py/ksft.py
++++ b/tools/testing/selftests/net/lib/py/ksft.py
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
  
-+        if dump:
-+            return rsp
-         if not rsp:
-             return None
--        if not dump and len(rsp) == 1:
-+        if len(rsp) == 1:
-             return rsp[0]
-         return rsp
+ import builtins
++import inspect
+ from .consts import KSFT_MAIN_NAME
  
+ KSFT_RESULT = None
+@@ -18,32 +19,34 @@ KSFT_RESULT = None
+     print("#", *objs, **kwargs)
+ 
+ 
++def _fail(*args):
++    global KSFT_RESULT
++    KSFT_RESULT = False
++
++    frame = inspect.stack()[2]
++    ksft_pr("At " + frame.filename + " line " + str(frame.lineno) + ":")
++    ksft_pr(" ".join([str(a) for a in args]))
++
++
+ def ksft_eq(a, b, comment=""):
+     global KSFT_RESULT
+     if a != b:
+-        KSFT_RESULT = False
+-        ksft_pr("Check failed", a, "!=", b, comment)
++        _fail("Check failed", a, "!=", b, comment)
+ 
+ 
+ def ksft_true(a, comment=""):
+-    global KSFT_RESULT
+     if not a:
+-        KSFT_RESULT = False
+-        ksft_pr("Check failed", a, "does not eval to True", comment)
++        _fail("Check failed", a, "does not eval to True", comment)
+ 
+ 
+ def ksft_in(a, b, comment=""):
+-    global KSFT_RESULT
+     if a not in b:
+-        KSFT_RESULT = False
+-        ksft_pr("Check failed", a, "not in", b, comment)
++        _fail("Check failed", a, "not in", b, comment)
+ 
+ 
+ def ksft_ge(a, b, comment=""):
+-    global KSFT_RESULT
+     if a < b:
+-        KSFT_RESULT = False
+-        ksft_pr("Check failed", a, "<", b, comment)
++        _fail("Check failed", a, "<", b, comment)
+ 
+ 
+ def ktap_result(ok, cnt=1, case="", comment=""):
 -- 
 2.44.0
 
