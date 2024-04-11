@@ -1,133 +1,173 @@
-Return-Path: <linux-kselftest+bounces-7689-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7690-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6BB8A0E4F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 12:13:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B07728A13A1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 13:55:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E1281C21861
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 10:13:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6963C286CC5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 11:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C94914659A;
-	Thu, 11 Apr 2024 10:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8836D14A4C9;
+	Thu, 11 Apr 2024 11:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLpjHaTj"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="bP56bhYa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D984A145B26;
-	Thu, 11 Apr 2024 10:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E29714A094;
+	Thu, 11 Apr 2024 11:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712830402; cv=none; b=HWSMFFcx1DwCY+01G7DWyVRAJc3AqlwwIlvx/JhaF3YY6nZ5xRxXYmTJN/nm7EGgzFKJcmBYAeTYdaUKwQ6x/zuZJWX6loLq/YUgD15vf/NG6hgu5BczOM2/BDwl3tJ2wVN2dza7FfGhu3tXGHVUjUUdn8eVm+0cPYWW4aqZ8RA=
+	t=1712836521; cv=none; b=elUc1XiTYlcaZfD3O3nyGnMus5utac1TQbH3jr8A6FBP/w7NuXnDw/kK0QNOs0RVqEHc9TmEJvhrdrT9asGTwDpk2QmNtQNROgN3Jaxw1lq9BjlJLmdk7b2svOUY9N/ZUUuJ3CdM+iL7i/tkyZpEtJP/n0mWBtLj5tkDs4HEkzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712830402; c=relaxed/simple;
-	bh=7jkWxiqDf4hXETQDU9Nt6va15AgnN1v7Sne4wEe1qHM=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
-	 MIME-Version:Content-Type; b=lZwlsvNYDolGd5eCkImZmYFkZmGIv2NyIC2Oijwqdij+uSTtEIj4TyjI/ShBfpgK0dzoxaZGg448RaQAmdloLfX30Wfruxtl0eCu0xfmly5/xzTGZ42LO5eynAMVpo7NDLz536ScF1J53lnFtKDUj7oxpjf/7kRV9Pg/aBNlIIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLpjHaTj; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-417db45fe01so2182005e9.1;
-        Thu, 11 Apr 2024 03:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712830399; x=1713435199; darn=vger.kernel.org;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WE8U3zGdK8Nrqs01p6ZxRuiZLRiPxorjr1UvrNrkKTQ=;
-        b=iLpjHaTjt7o4uuZrFjX+KjvHKaOIl0U6vTQU1MhA0UFODsE6lBNQ63qNAOGQFPyz8T
-         K9JQSPy0pQeyT3IFZ8VzenDTgyLM4H04UmLqeIpfLHGXe8lKUWwScLua/gTJ0sUrLej6
-         0jQowbREQqSCy07uYW3C2i0PuUv+pruk6X7nRotgDeBNFHhl7IoKUl7G3g7MGaCEfoWc
-         gnpafCC9opzorR+v+eDAKTCcSUmraSHcOh+pqK3yb0E5spPWUIMqEkqaqtCJ8tNwq6oo
-         WbMl/4448Qn9lcgYGdqyfzBGBh1OUvw4+ljF3ElyKZdRAs8dgBmAJmLVA5VDCSQvyD8Z
-         SEgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712830399; x=1713435199;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WE8U3zGdK8Nrqs01p6ZxRuiZLRiPxorjr1UvrNrkKTQ=;
-        b=Y7EgFj/OKvUKoIiVD4cLmaRCXgaRp+UbIkizC2qTtqZzplZXFhnlSxoUXjz6aMCGnQ
-         H//KV7ixtU4piqoKP+qx03XMPPNnTVhKi/FfKH/CSU5TAOfyUVjUHK/rdXZGJGVp7RlF
-         IxzFYvLNJRJ7NMEGOt/CWG05CMVGVsjD8bkduLa4cZDT7CUZon9q+mjM7ssHJhYolF7N
-         LYRuuN8bIIdiswV4hCr5SXDL776ActHkHQ6m8k/LqJ/tOmB+ACX4i+uyMi2svZ8q5bPI
-         eQi7Lzv/rUh743TvS0fVIiZe4xO+78rZPmdU699a4GKxHiDwM4fl1XZKkYfKITGVPSSd
-         ODdg==
-X-Forwarded-Encrypted: i=1; AJvYcCW0woWRzfS/bogm4VBhAY/WLXs+y6jRd8G3GQahWhHFi5XJAR2em2s8k2akjbiVtKm3okkeVVe1oNYfkhJFbkjw/YtaDzu/fQCy3lifvKP+4SfB1JMdr5TBmyUlx3mC91Hu32O5G5dO
-X-Gm-Message-State: AOJu0YybptRIUEZ6AAgip48eFBv1BWco6NVSnWTUFJrFyP19bZHHYhmp
-	eqjMlUsYCrHzW5Ih2jco9xb1U7sTDvkSGI/3u129yLCXzP1eIDs0etYgz+J7
-X-Google-Smtp-Source: AGHT+IHWPSKsfcJo5pCFGZX46mw1dAD9NlcMzCMOiKZSr0BpbdPE9asKlxbwORafP/jPftmuKaal+A==
-X-Received: by 2002:a5d:4a51:0:b0:343:3542:b6aa with SMTP id v17-20020a5d4a51000000b003433542b6aamr3394460wrs.58.1712830399204;
-        Thu, 11 Apr 2024 03:13:19 -0700 (PDT)
-Received: from imac ([2a02:8010:60a0:0:9995:9b8b:815b:e336])
-        by smtp.gmail.com with ESMTPSA id c18-20020a5d5292000000b00341b451a31asm1405488wrv.36.2024.04.11.03.13.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 03:13:18 -0700 (PDT)
-From: Donald Hunter <donald.hunter@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net,  netdev@vger.kernel.org,  edumazet@google.com,
-  pabeni@redhat.com,  shuah@kernel.org,  petrm@nvidia.com,
-  linux-kselftest@vger.kernel.org,  jiri@resnulli.us
-Subject: Re: [PATCH net-next 2/6] tools: ynl: don't return None for dumps
-In-Reply-To: <20240411012815.174400-3-kuba@kernel.org> (Jakub Kicinski's
-	message of "Wed, 10 Apr 2024 18:28:11 -0700")
-Date: Thu, 11 Apr 2024 11:12:46 +0100
-Message-ID: <m24jc8i4wx.fsf@gmail.com>
-References: <20240411012815.174400-1-kuba@kernel.org>
-	<20240411012815.174400-3-kuba@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1712836521; c=relaxed/simple;
+	bh=qUHLbICK+OzVzpgAugTLlBx/+ikYrtOfR4K8Nx4oYfw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sr3rCctWzL7tBgODvASomc3yId/sR/r0qOevb+lhYrs04lcZ2vFqAXLmxjEASs19YdSI3sh8LIxJ8exVBpJO6SSir1VdeyVsoOJwgItQ5SVCPNUocZx+HY8eFqa+cvJkANTgbwd+YlfZjOSR6P5qhjGAypIXIdanB+uZAyaIdcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=bP56bhYa; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1712836519; x=1744372519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qUHLbICK+OzVzpgAugTLlBx/+ikYrtOfR4K8Nx4oYfw=;
+  b=bP56bhYazXE6fy9pzuspJ00L7+mAYf9fViRTI/B1qbtIWpCrX5UoQgUr
+   bsim6FASELIQkXU8tHt60EukTZDXe0LjQuo4NSLV+7S/Fj3JtebeURRLi
+   cDS+/LaqmRv/U5HpGBa+A5vS1tV67B+o49zbWnUQhS2Zp97F3DZX0S+Pr
+   Bz3kT3FrCrjtDT/8reOa+zOyVND2f//FmvRwndqA4tZT4Q010JJw77jTu
+   A5YlSZEczLKN3i8aWAsom5h5/zlz22O0DNnmIfW+KJVpFhf0gxZq8I5Ms
+   o2jQu7ShpC9vB/21on4GXcydv0LkNlmK2kcWIQ5JyG8s/qJPJBrhbBwbg
+   g==;
+X-CSE-ConnectionGUID: z5vJuW0ISXO47ggJt+rbgA==
+X-CSE-MsgGUID: mQWA4GzKR12LP6aGbYLBwA==
+X-IronPort-AV: E=Sophos;i="6.07,193,1708412400"; 
+   d="asc'?scan'208";a="251356126"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Apr 2024 04:55:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 11 Apr 2024 04:54:36 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 11 Apr 2024 04:54:33 -0700
+Date: Thu, 11 Apr 2024 12:53:43 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+CC: Deepak Gupta <debug@rivosinc.com>, Conor Dooley <conor@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Anup Patel <anup@brainfault.org>, Shuah
+ Khan <shuah@kernel.org>, Atish Patra <atishp@atishpatra.org>,
+	<linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 07/10] riscv: add ISA extension parsing for Zcmop
+Message-ID: <20240411-backwater-opal-00c9aed2231e@wendy>
+References: <20240410091106.749233-1-cleger@rivosinc.com>
+ <20240410091106.749233-8-cleger@rivosinc.com>
+ <ZhcFeVYUQJmBAKuv@debug.ba.rivosinc.com>
+ <20240410-jawless-cavalry-a3eaf9c562a4@spud>
+ <20240410-judgingly-appease-5df493852b70@spud>
+ <ZhcTiakvfbjb2hon@debug.ba.rivosinc.com>
+ <1287e6e9-cb8e-4a78-9195-ce29f1c4bace@rivosinc.com>
+ <20240411-superglue-errant-b32e5118695f@wendy>
+ <c86f9fa8-e273-4509-83fa-f21d3265d5c9@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="jM0CNQ7ZIr2lhGV/"
+Content-Disposition: inline
+In-Reply-To: <c86f9fa8-e273-4509-83fa-f21d3265d5c9@rivosinc.com>
 
-Jakub Kicinski <kuba@kernel.org> writes:
+--jM0CNQ7ZIr2lhGV/
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> YNL currently reports None for empty dump:
->
->  $ cli.py ...netdev.yaml --dump page-pool-get
->  None
->
-> This doesn't matter for the CLI but when writing YNL based tests
-> having to deal with either list or None is annoying. Limit the
-> None conversion to non-dump ops:
->
->  $ cli.py ...netdev.yaml --dump page-pool-get
->  []
+On Thu, Apr 11, 2024 at 11:08:21AM +0200, Cl=E9ment L=E9ger wrote:
+> >> If we consider to have potentially broken isa string (ie extensions
+> >> dependencies not correctly handled), then we'll need some way to
+> >> validate this within the kernel.
+> >=20
+> > No, the DT passed to the kernel should be correct and we by and large we
+> > should not have to do validation of it. What I meant above was writing
+> > the binding so that something invalid will not pass dtbs_check.
+>=20
+> Acked, I was mainly answering Deepak question about dependencies wrt to
+> using __RISCV_ISA_EXT_SUPERSET() which does not seems to be relevant
+> since we expect a correct isa string to be passed.
 
-Makes sense and I'll need to update my --multi patch to retain this
-behaviour.
+Ahh, okay.
 
-Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
+> But as you stated, DT
+> validation clearly make sense. I think a lot of extensions strings would
+> benefit such support (All the Zv* depends on V, etc).
 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: donald.hunter@gmail.com
-> CC: jiri@resnulli.us
-> ---
->  tools/net/ynl/lib/ynl.py | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/net/ynl/lib/ynl.py b/tools/net/ynl/lib/ynl.py
-> index 0ba5f6fb8747..a67f7b6fef92 100644
-> --- a/tools/net/ynl/lib/ynl.py
-> +++ b/tools/net/ynl/lib/ynl.py
-> @@ -995,9 +995,11 @@ genl_family_name_to_id = None
->                      rsp_msg.update(self._decode_struct(decoded.raw, op.fixed_header))
->                  rsp.append(rsp_msg)
->  
-> +        if dump:
-> +            return rsp
->          if not rsp:
->              return None
-> -        if not dump and len(rsp) == 1:
-> +        if len(rsp) == 1:
->              return rsp[0]
->          return rsp
+I think it is actually as simple something like this, which makes it
+invalid to have "d" without "f":
+
+| diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Do=
+cumentation/devicetree/bindings/riscv/extensions.yaml
+| index 468c646247aa..594828700cbe 100644
+| --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+| +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+| @@ -484,5 +484,20 @@ properties:
+|              Registers in the AX45MP datasheet.
+|              https://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-=
+5.0.0-Datasheet.pdf
+| =20
+| +allOf:
+| +  - if:
+| +      properties:
+| +        riscv,isa-extensions:
+| +          contains:
+| +            const: "d"
+| +          not:
+| +            contains:
+| +              const: "f"
+| +    then:
+| +      properties:
+| +        riscv,isa-extensions:
+| +          false
+| +
+| +
+|  additionalProperties: true
+|  ...
+
+If you do have d without f, the checker will say:
+cpu@2: riscv,isa-extensions: False schema does not allow ['i', 'm', 'a', 'd=
+', 'c']
+
+At least that's readable, even though not clear about what to do. I wish
+the former could be said about the wall of text you get for /each/
+undocumented entry in the string.
+
+--jM0CNQ7ZIr2lhGV/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhfPRwAKCRB4tDGHoIJi
+0stXAP9uCAN5bZHcv91EPinTAeqedRCedCrkE5YEE9f8JUyrxgD8CAHddpGznZHx
+TNOtc9GaDiQRS4tdrlJo9+Hn1Puv4w0=
+=k3aJ
+-----END PGP SIGNATURE-----
+
+--jM0CNQ7ZIr2lhGV/--
 
