@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-7692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B2C88A1466
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 14:25:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0DCF8A1470
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 14:25:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 521F8286BB3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 12:24:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E610B25003
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Apr 2024 12:25:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B5514D290;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A049714D6F7;
 	Thu, 11 Apr 2024 12:24:52 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4127114B065;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4135114B088;
 	Thu, 11 Apr 2024 12:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712838291; cv=none; b=BgCSzYVM2K8muFaj+rDow0sIL0+/DN+MImIPYB6tJaUVojI5Wj/Hpf6OgA/ixIcnoatPq7Wv4lrUKpTtvudx+j/V+lrIt74xZ79tmoSr4YduTeJLRxZlI0rlJPx2Jc4y3G6Dk4vyp+JNIP8lruDyw5cGOgTVMS8B6Um4Rk2e3YM=
+	t=1712838292; cv=none; b=S7Ic5Xg3NzjL/2dJSUPMMRVAHGenAXbkmgztmSEHYp0dNAk+nZGBLNWf81+9DirnED+BC3FhodMZxl5g0Wgjb92Wh8icckj8Lx0Vfbn5Js/4J9OxJ6TlmQgdzx+YZDFJKNYR0IRWNAaKVL2KBHw2hoxQ5kAoydSczmRzLjBRCRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712838291; c=relaxed/simple;
-	bh=fwgl1GTGHGzkaAtpBuo+SpKRhCLO3wfbmSrfL9XjCII=;
+	s=arc-20240116; t=1712838292; c=relaxed/simple;
+	bh=EW2iAiwMwOkSrRQ0vUzdwPhYyYwZEWBIXPC9Nsme4/M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NhWDjpCVIRLBwhh+LXVv9sHKQ9qqKvP2Qi/1aADWBwiiV+txpysTo6js/qvjsCT2e7j+gs14Ur7FcoE5pws+0Sv0054E7rexI7w1J5SRsaxMS8Hs/K8urknY/y/LGVfq+B6mhW/m7JJT2HyO2w+Z5YGUueC4yuVY4kCVnzxzshU=
+	 MIME-Version; b=MSjmK8fCmlP041VMuu10yvvWLqjJrBC2h9Wut4OFdsT1p+uoeoFyNJhdoxiIgX3D5cI3LBmKiciPZZ+uax/XZmAE1r2Ouu0VcV11XLMtS8bJwbwFzBMAF9WIgxt54MDeUFjvzz/SCheaKO6JyRkXpX8+fcvVGFpHu+/8VvLqRDs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4VFf5g2zj6z4f3khT;
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4VFf5g3TC3z4f3khV;
 	Thu, 11 Apr 2024 20:24:39 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 486441A058E;
+	by mail.maildlp.com (Postfix) with ESMTP id 5D2DD1A0572;
 	Thu, 11 Apr 2024 20:24:46 +0800 (CST)
 Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP4 (Coremail) with SMTP id gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S7;
-	Thu, 11 Apr 2024 20:24:45 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S8;
+	Thu, 11 Apr 2024 20:24:46 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
 	Roberto Sassu <roberto.sassu@huawei.com>,
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Subject: [PATCH bpf-next v3 05/11] bpf: Avoid progs for different hooks calling each other with tail call
-Date: Thu, 11 Apr 2024 20:27:46 +0800
-Message-Id: <20240411122752.2873562-6-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next v3 06/11] bpf: Fix compare error in function retval_range_within
+Date: Thu, 11 Apr 2024 20:27:47 +0800
+Message-Id: <20240411122752.2873562-7-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
 References: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
@@ -81,10 +81,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr1xtF4fZw1fZr4Uur43GFg_yoW5Gw4fpF
-	ZrAa4DCr48Wr47XrZ7Gw4xZr15Aw4kKw42gw1aq3409F1jqrZ5W3WYgFWav345GrWfJrWS
-	g3W2grWDC34rZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S8
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfWF4kKw15tF1kuw13twb_yoW8Zr1fpF
+	1rGryqyw4DWr43u3yjyr4kArWrt3WYq3y7KFWkC34Fyw15tryqgF4DKw4akrW5KrW8Ww1S
+	qF12v3yYqa4UuaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -102,83 +102,49 @@ X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-LSM and tracing bpf programs are hooked to kernel functions which may
-have different types. That is, the hook functions may have different
-parameters, different return types, or different return ranges. progs
-attached to different hook types may receive different context structures
-or return different return types or different return ranges, so they
-should not be allowed to call each other with tail call.
+After checking lsm hook return range in verifier, the test case
+"test_progs -t test_lsm" failed, and the failure log says:
 
+libbpf: prog 'test_int_hook': BPF program load failed: Invalid argument
+libbpf: prog 'test_int_hook': -- BEGIN PROG LOAD LOG --
+0: R1=ctx() R10=fp0
+; int BPF_PROG(test_int_hook, struct vm_area_struct *vma, @ lsm.c:89
+0: (79) r0 = *(u64 *)(r1 +24)         ; R0_w=scalar(smin=smin32=-4095,smax=smax32=0) R1=ctx()
+
+[...]
+
+24: (b4) w0 = -1                      ; R0_w=0xffffffff
+; int BPF_PROG(test_int_hook, struct vm_area_struct *vma, @ lsm.c:89
+25: (95) exit
+At program exit the register R0 has smin=4294967295 smax=4294967295 should have been in [-4095, 0]
+
+It can be seen that instruction "w0 = -1" zero extended -1 to 64-bit
+register r0, setting both smin and smax values of r0 to 4294967295.
+This resulted in a false reject when r0 was checked with range [-4095, 0].
+
+Given bpf_retval_range is a 32-bit range, this patch fixes it by
+changing the compare between r0 and return range from 64-bit
+operation to 32-bit operation.
+
+Fixes: 8fa4ecd49b81 ("bpf: enforce exact retval range on subprog/callback exit")
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- include/linux/bpf.h |  1 +
- kernel/bpf/core.c   | 22 ++++++++++++++++++----
- 2 files changed, 19 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7aedb4827a94..dea7f1bdd2e6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -292,6 +292,7 @@ struct bpf_map {
- 	 * same prog type, JITed flag and xdp_has_frags flag.
- 	 */
- 	struct {
-+		const struct btf_type *attach_func_proto;
- 		spinlock_t lock;
- 		enum bpf_prog_type type;
- 		bool jited;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index a41718eaeefe..6dd176481b71 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2303,6 +2303,7 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 05c7c5f2bec0..5393d576c76f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9879,7 +9879,7 @@ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
+ 
+ static bool retval_range_within(struct bpf_retval_range range, const struct bpf_reg_state *reg)
  {
- 	enum bpf_prog_type prog_type = resolve_prog_type(fp);
- 	bool ret;
-+	struct bpf_prog_aux *aux = fp->aux;
+-	return range.minval <= reg->smin_value && reg->smax_value <= range.maxval;
++	return range.minval <= reg->s32_min_value && reg->s32_max_value <= range.maxval;
+ }
  
- 	if (fp->kprobe_override)
- 		return false;
-@@ -2312,9 +2313,8 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
- 	 * in the case of devmap and cpumap). Until device checks
- 	 * are implemented, prohibit adding dev-bound programs to program maps.
- 	 */
--	if (bpf_prog_is_dev_bound(fp->aux))
-+	if (bpf_prog_is_dev_bound(aux))
- 		return false;
--
- 	spin_lock(&map->owner.lock);
- 	if (!map->owner.type) {
- 		/* There's no owner yet where we could check for
-@@ -2322,12 +2322,26 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
- 		 */
- 		map->owner.type  = prog_type;
- 		map->owner.jited = fp->jited;
--		map->owner.xdp_has_frags = fp->aux->xdp_has_frags;
-+		map->owner.xdp_has_frags = aux->xdp_has_frags;
-+		map->owner.attach_func_proto = aux->attach_func_proto;
- 		ret = true;
- 	} else {
- 		ret = map->owner.type  == prog_type &&
- 		      map->owner.jited == fp->jited &&
--		      map->owner.xdp_has_frags == fp->aux->xdp_has_frags;
-+		      map->owner.xdp_has_frags == aux->xdp_has_frags;
-+		if (ret &&
-+		    map->owner.attach_func_proto != aux->attach_func_proto) {
-+			switch (prog_type) {
-+			case BPF_PROG_TYPE_TRACING:
-+			case BPF_PROG_TYPE_LSM:
-+			case BPF_PROG_TYPE_EXT:
-+			case BPF_PROG_TYPE_STRUCT_OPS:
-+				ret = false;
-+				break;
-+			default:
-+				break;
-+			}
-+		}
- 	}
- 	spin_unlock(&map->owner.lock);
- 
+ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
 -- 
 2.30.2
 
