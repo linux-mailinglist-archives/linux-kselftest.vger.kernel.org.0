@@ -1,140 +1,156 @@
-Return-Path: <linux-kselftest+bounces-7776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7777-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B0DD8A271B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 08:51:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF0B8A28C1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 10:04:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 790221F22BDB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 06:51:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B2C41C2229C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 08:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB04482FF;
-	Fri, 12 Apr 2024 06:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D438150286;
+	Fri, 12 Apr 2024 08:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="lXqK8B1b"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qwc7pFR8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2082.outbound.protection.outlook.com [40.107.96.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E26B51033
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 06:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712904577; cv=none; b=miWGHNHh3lqlguEERh8wrfGJA1HVemao5UFfW6aUM1qWHN9C+nkhNvkM1XslpLuT4MUvE2LKXSnR9dxghCz7RWwa1fCzYjw0L/KZAe3DzkWglxuU9nRkqgSCgwhvUHhDC6RARu3dpcjjXt+EJ/SV2n5UbimSoO0q9I3gEIdgyZI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712904577; c=relaxed/simple;
-	bh=HTwXq4dfdPMm84nIH+ARCZR286B+TcB5da8GClM6ty0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=k5n652JB9na65lXrx9i3WUZTi4Iq8Zutj8h6CRPGjsOgBO9RzaRfHzSbfeVwL8WrR2Wfc848dwocvC76YojWIr/72qla7brpjQorF+7WThM+PBVasVdorOqxPGvMHv5byOS73wWEdXoTSO1SFs6k32aK2h45W1axdhYp6xwYATc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=lXqK8B1b; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1e2b137d666so5014225ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 23:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1712904576; x=1713509376; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v6E6ZusRhlxuRh8LTz85NPr0A8l1rMIJWkDOWsfceGk=;
-        b=lXqK8B1bf+ydQAIRJSxlk+JFBVbFAlmZEOGdoLw+uvbIXhZZyJP2d9nFAc89iw2jqF
-         8pHWMmrotqiZ5OYIbSYRBMps55WVwusV0b0GYvn3y5vTZ9KJaxw58izkQ5M2wA8l0kkQ
-         rQQP9zChf32/mA4svWcTvXLXZAqrexcRMKz2xQLxzBdwIp5+/CZ7vHTm4y299sGhq14A
-         FiIs890N4zgCul5epcDZ4S73DJxFdYI804CHOl2ywQ3/P1fCqNF2ybtYv2hlDeTiQFl1
-         8DNZ3FcJMo+zGySJvzwz55g0IrAJJQc6yzpl6lRNMqC/m+Yj0ZwaPugZ3t1xsL5Z1Wov
-         YuWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712904576; x=1713509376;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v6E6ZusRhlxuRh8LTz85NPr0A8l1rMIJWkDOWsfceGk=;
-        b=hj55ZZ8OIVCLrOulrdZsa088j50fv8MXaKSEmanHq1pn+tFcsVu17cc+VCktYonb60
-         4Iq92Txpa7wMd3d6AWp4IqxZptxVVWF4hpoENkcO+l+LUBTk/K60NlXlxSMz3yErkzeN
-         kmToA1Puchn2lE+GMlVT6ykAvKWGIPZHjOwfcpAeqeka80nRE3H5TFHw8oLh/CeXMSOY
-         sp42hKQvExLduIxTY8XWgI6qv5M3clueeQgwbjlvDzUMimg1kTOeIxRLQbVa93YwFluK
-         6Nk7PKiWv523LVKOFyN0+eWmk45s5zQDXmoOX0bHBBjysOzotqFt7TxqLcymItgwrWYh
-         /apA==
-X-Forwarded-Encrypted: i=1; AJvYcCXpy0x8l0y80ZDlr8BpThj6ShSNt4PoLPM0Lm3RkZzK2p0AbUPYwIIu0yDNFUBpY4+ctZ8cREQ4b/oIaZL26VmrLPxl0G3CLNrVqng2dACk
-X-Gm-Message-State: AOJu0YxhdJvo+AwzvEFr5f956zz+MPY5ZvVtuWVYDzaZG+ZTFGK8mloe
-	OIzk9LvKLRgOoCnVvNaTK9fDK28ctO6O5Msu9purZbSzcx0sCc6OpWa7lmdzeKk=
-X-Google-Smtp-Source: AGHT+IFN+2rlBM0atFvz5drmpqdxYuReC7akcGJxFgtrZUemr79CcqpTCReQ9/O3Fl7hLYkZ38tKJA==
-X-Received: by 2002:a17:902:b187:b0:1e0:b62c:460d with SMTP id s7-20020a170902b18700b001e0b62c460dmr1459758plr.38.1712904575557;
-        Thu, 11 Apr 2024 23:49:35 -0700 (PDT)
-Received: from [127.0.1.1] (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id q8-20020a170902b10800b001e107222eb5sm2258818plr.191.2024.04.11.23.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 23:49:35 -0700 (PDT)
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Fri, 12 Apr 2024 14:49:05 +0800
-Subject: [PATCH v4 9/9] selftest: run vector prctl test for ZVE32X
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D601B50277;
+	Fri, 12 Apr 2024 08:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712908997; cv=fail; b=cMeuRp6dJKox11Kb1OxV3rZ+IcB2bglPmHOz1w7LK4sTrg/QW++zVBVttvcfpy2/E/anXJEFS4WHxpY33V+Azm1sk+9S9p72DfKTFmmeAjf96pwAA/UJH9OiAQMOWtVwdBd/TPiLMmm9oHuUpEgpGKq9MuqK8N/4FKDicxcuqDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712908997; c=relaxed/simple;
+	bh=mBuBVDfA8I56CMocji1Yhy/UuYuawbiNh6lTuhqy7pE=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=opXAUykfXjYTkKWppsrU6nisF+R9jLKP/AMAAW4IxLLZv1TVyLDJZua34xjtijeRLhwWH3SPkhHoTrIO0iFjlMEN+0tp3T8EBRnyF1yVpNRLfWEGNmE5RVOS6ImFLT0U4dqfEj2dxXy5ATO14p4GHmpvoUMaSKeW9Tg3VA4ISU4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qwc7pFR8; arc=fail smtp.client-ip=40.107.96.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fA0xoM/1vazLM3gRztF/3jO97i/Tq/CAq0uaWPNFMR60XVS7DbDTZZ+wOA4TBKLqbhnDJ4oOEMigV8BIJz0Rnn0URLTmk1diO6ovAD8GinsoqiB4KWnxRUuHSVK8pk+L11MZU2FN3a4wjPGCMZnCEB6P4Yl4FZAoTmSQH8nZooLYIIEYF06HNBGsufy2XbJ0Da0fOU424zt8vRLvpyW0Za06U7qvdN3y30vLCWrAdgqLPL3b1Y0Sy35ivh5LnY1XiCo+XDKMNhLA6XuO/tYOsePxe9/YLXk26ZtYb6uuPAZ/7Mj8sajX1kL6KJUagTmncdqUPMZwLS/E4Ub8tdlnHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Sx9+moljp9OARB+DVgUsaDbLjbdmTAN8/fWE4kcMrN4=;
+ b=bG0sceotVc5f00myHSUAMGk90ObIvPitkD3c5AcGyDfZ7BsttJE/VZgX2Kpscgpu5hrziS2lobD4nyu4UFKZhwezpVNyxvK/SCy0589VG2LVEIcbQX54GprAZD/sja+0/TU+LSjbel3J+nMWPaMpr9nvtHNR29a91XaB43QHX5FUWXq30+sLqT0C9sO5JoL0umzF6e7GVQLCBtEUd1dR7qPKJEruENKpQemPY8Ft9C1BsEcM6CuqXgO0KFRCco0Ah1Y4K1cqAP5JboZpG6Q3nlGKnsjhNcd048S66bZFn5UMRtk05RHous45Yu43sn06b5sdu82QtxYqRUEmoMTnMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Sx9+moljp9OARB+DVgUsaDbLjbdmTAN8/fWE4kcMrN4=;
+ b=qwc7pFR8C6kxqVSnT5DIVU/gMv7tDnQeSenYCg3tc4fkPIIUmlGfQstzKGEZWXL+DdUxMLwBYCoVuapGXOLy2SM11iRoN3/dgfKf6WIPUkqcOkYFNMh2QxVmGvinSv3K4+5CH9W9VFpQdsXfOau8IXfE3Bb+rShZ+wE37vz3lXB1y6vlJiJ7aId9U9/7kCbcef55x5E5snasyDU/BI8Os8D7Akgvn/+5zzM4nm79XAcediAv/42WA4ZF2fRxlxlQMS1imau1hwxDfWCoPli6ms7IC/VeNYDEjfqaAYcWy2RNOyKhhBN6TLonMFl78mzi2SsZAmqxGuo3P6acIFeWUQ==
+Received: from SJ0PR13CA0180.namprd13.prod.outlook.com (2603:10b6:a03:2c7::35)
+ by PH0PR12MB7485.namprd12.prod.outlook.com (2603:10b6:510:1e9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.55; Fri, 12 Apr
+ 2024 08:03:07 +0000
+Received: from CO1PEPF000044F1.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c7:cafe::94) by SJ0PR13CA0180.outlook.office365.com
+ (2603:10b6:a03:2c7::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7495.12 via Frontend
+ Transport; Fri, 12 Apr 2024 08:03:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1PEPF000044F1.mail.protection.outlook.com (10.167.241.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7452.22 via Frontend Transport; Fri, 12 Apr 2024 08:03:06 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 12 Apr
+ 2024 01:02:52 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Fri, 12 Apr
+ 2024 01:02:48 -0700
+References: <20240411012815.174400-1-kuba@kernel.org>
+ <20240411012815.174400-4-kuba@kernel.org>
+User-agent: mu4e 1.8.11; emacs 28.3
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <shuah@kernel.org>, <petrm@nvidia.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 3/6] selftests: net: print report check
+ location in python tests
+Date: Fri, 12 Apr 2024 09:45:40 +0200
+In-Reply-To: <20240411012815.174400-4-kuba@kernel.org>
+Message-ID: <87h6g7f1p7.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240412-zve-detection-v4-9-e0c45bb6b253@sifive.com>
-References: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
-In-Reply-To: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Conor Dooley <conor.dooley@microchip.com>, Heiko Stuebner <heiko@sntech.de>, 
- Andy Chiu <andy.chiu@sifive.com>, Guo Ren <guoren@kernel.org>, 
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Jonathan Corbet <corbet@lwn.net>, Evan Green <evan@rivosinc.com>, 
- =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Palmer Dabbelt <palmer@rivosinc.com>, 
- Vincent Chen <vincent.chen@sifive.com>, 
- Greentime Hu <greentime.hu@sifive.com>, devicetree@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.13-dev-a684c
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F1:EE_|PH0PR12MB7485:EE_
+X-MS-Office365-Filtering-Correlation-Id: 568f77df-1ef4-47a1-cd20-08dc5ac6fcad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	BmnUUWhIe8AbGfZvxNowlBMvTLPCqYlNrsQmIjTtz0NhurkumAJoDBT1DqFTJl/cNTwt/Ul+ILHvfVt1UJDmQ1WwL1BhiMMnk5YSxGt8AGF0B7wa0duHs88mRZf9EaLMR46UYV0zprP+XhJU9XOrKnbQ13ZaTSnIH5aj+XHY4PbvgpwyJvmt2DQEmBW4uaWFs0rN7h4xTO/Q27rgc08UldRoh/sCc8MPlVmyf95oV5QWcWaTpGwg/M8LipguxrUih+yD5Goa9daxIpfT3w2AVeZ97xPigePwBt3Ngv8PC/P0rCoQCvNX253wA7jzZ9sr9ysurHvTTj0+OGQ1ojbKrAzJYhOMw9CnHkKSbCHy6E2kFgg0vmKg3Aqr+eSumBNVoV14DVhDIrcn+TVMTN4dl4nn99s2zS/nsOKTZGgRdPd1u9BnpdtjwB2+FXK3TUlA/NW7QAb+dLnrrVzf1/PhT46zY+aaB3YYTt1GZneMp9/tx8Jvvla4Lk47v3uuUW/IgRIc9505RgXCilPIZ038pEPtJ2z9Edxtnozkpw82FG0Lh/qhr3s9rJAZzQYk/Brl3rLF7zdYo0vqfuGDkSdsOPs/N9W5WSrkPK8k+Gw+6ETC9OzAXOPC6Fof4Z9U14fKEGWcy8j2kbKkaolSshyffdfc2xIFHb3o6pyFtaSHZ4rMU8STQ+TWn8tCeUTyk1/o/nb709betNn+15aUdssNfcEcIuygLllQx8VMNQux7WTMlz7W7sRNovCpQ9V9MdjY
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(376005)(82310400014)(1800799015);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2024 08:03:06.8103
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 568f77df-1ef4-47a1-cd20-08dc5ac6fcad
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044F1.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7485
 
-The minimal requirement for running Vector subextension on Linux is
-ZVE32X. So change the test accordingly to run prctl as long as it find
-it.
 
-Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
----
-Changelog v4:
- - new patch since v4
----
- tools/testing/selftests/riscv/vector/vstate_prctl.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Jakub Kicinski <kuba@kernel.org> writes:
 
-diff --git a/tools/testing/selftests/riscv/vector/vstate_prctl.c b/tools/testing/selftests/riscv/vector/vstate_prctl.c
-index 27668fb3b6d0..895177f6bf4c 100644
---- a/tools/testing/selftests/riscv/vector/vstate_prctl.c
-+++ b/tools/testing/selftests/riscv/vector/vstate_prctl.c
-@@ -88,16 +88,16 @@ int main(void)
- 		return -2;
- 	}
- 
--	if (!(pair.value & RISCV_HWPROBE_IMA_V)) {
-+	if (!(pair.value & RISCV_HWPROBE_EXT_ZVE32X)) {
- 		rc = prctl(PR_RISCV_V_GET_CONTROL);
- 		if (rc != -1 || errno != EINVAL) {
--			ksft_test_result_fail("GET_CONTROL should fail on kernel/hw without V\n");
-+			ksft_test_result_fail("GET_CONTROL should fail on kernel/hw without ZVE32X\n");
- 			return -3;
- 		}
- 
- 		rc = prctl(PR_RISCV_V_SET_CONTROL, PR_RISCV_V_VSTATE_CTRL_ON);
- 		if (rc != -1 || errno != EINVAL) {
--			ksft_test_result_fail("GET_CONTROL should fail on kernel/hw without V\n");
-+			ksft_test_result_fail("SET_CONTROL should fail on kernel/hw without ZVE32X\n");
- 			return -4;
- 		}
- 
+> Developing Python tests is a bit annoying because when test fails
+> we only print the fail message and no info about which exact check
+> led to it. Print the location (the first line of this example is new):
+>
+>   # At /root/ksft-net-drv/./net/nl_netdev.py line 38:
+>   # Check failed 0 != 10
+>   not ok 3 nl_netdev.page_pool_check
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
--- 
-2.44.0.rc2
+Reviewed-by: Petr Machata <petrm@nvidia.com>
 
+> +def _fail(*args):
+> +    global KSFT_RESULT
+> +    KSFT_RESULT = False
+> +
+> +    frame = inspect.stack()[2]
+> +    ksft_pr("At " + frame.filename + " line " + str(frame.lineno) + ":")
+> +    ksft_pr(" ".join([str(a) for a in args]))
+
+I think this could have just been ksft_pr(*args) like before, but
+whatever.
+
+> +
+>  def ksft_eq(a, b, comment=""):
+>      global KSFT_RESULT
+>      if a != b:
+> -        KSFT_RESULT = False
+> -        ksft_pr("Check failed", a, "!=", b, comment)
+> +        _fail("Check failed", a, "!=", b, comment)
 
