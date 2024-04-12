@@ -1,192 +1,154 @@
-Return-Path: <linux-kselftest+bounces-7858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CADA98A35F5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 20:48:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68A668A3606
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 20:52:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2FC07B24D92
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 18:48:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2430D2848D9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 18:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9EA14F119;
-	Fri, 12 Apr 2024 18:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14AF814F12A;
+	Fri, 12 Apr 2024 18:52:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ov4WZNsL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="34ITugh9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D07502A9;
-	Fri, 12 Apr 2024 18:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B4014F120
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 18:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712947675; cv=none; b=sog8O0786ptJKsg4W1RgFBa2/5wizhdpAIxPL20lSeq4cMN0Y9AS/R5aS0PnrKdmwPa9x+s9RWzjdEECAviNYcSdY9RKXt/oOiCy6NH4trkhMoSNHlNFtXYsGQzaB8PvR+w1F0+1oGGMgkeEtXlu1jHpmHW8tmW6hEgUHt0xNSY=
+	t=1712947936; cv=none; b=khGJ5O9hJXanAMCY3vh7PnLSHfdQu9Ec6/QltVdSKxqSFDOMkp5HrFRkeiHhxqisZ5UO0zrrJb7112wkkfQaVoeMk4s6TAFL/196HFmas9BHFRckjcSOwMV8RlsAKHtNWmuGPHFwdRii40pbLYTaeCV8eq5lf6nghmgXnBAWF2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712947675; c=relaxed/simple;
-	bh=n5GAgtmQ/zrZB8bAJR7g5z1ea43EI9hfIxBwHjcASrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GeeeOYWvcnSEupzTKXnga2O8uGWONq/toLe/+sAqCqjzZqzKWTfyKdkjH6boKss/pY9Cfea38R3ObJq3WnXpk6k7ubxUdz8Jn1zQjkM5ZK7UI8CT4IYnfWwN9i52TGuVcZFSHZjnUqjEmvLlAIgr0sgsWwU50bbOW7JgsTIXeqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ov4WZNsL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB36C113CC;
-	Fri, 12 Apr 2024 18:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712947674;
-	bh=n5GAgtmQ/zrZB8bAJR7g5z1ea43EI9hfIxBwHjcASrA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ov4WZNsLgMqwV02D7qCGrlgn+4CXZEGcpdO/TzMjlw0QaGJPdMXfuabow7LmE1wyp
-	 9yp9pZjgTqZfXUHi4kYz/nrLdEXSd+7oLiFEvKSZ4fFVOUcsk7R7mbl+VJWDcrtzba
-	 ACMVbEJiDTuVNMs3+ZSLWIlmitOKl+JtGSCsjhrbj4Dwp1XNAWoLeiQYh2YRTY9oNt
-	 nj71v6w6v+74c7G4EoIopUhCrWUpLrqoMG8BVb/WNrATeww5DHbZQRZKldyCNw6wWB
-	 NCYS5X7RRSFrlH62HqZzU7NtwEteokB4/uPHBtiJru1eveA2uSmMAbd/V3S+EmomnA
-	 q3gEwWScvYpgQ==
-Date: Fri, 12 Apr 2024 19:47:48 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Evan Green <evan@rivosinc.com>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 02/19] riscv: cpufeature: Fix thead vector hwcap removal
-Message-ID: <20240412-eastcoast-disparity-9c9e7d178df5@spud>
-References: <20240411-dev-charlie-support_thead_vector_6_9-v1-0-4af9815ec746@rivosinc.com>
- <20240411-dev-charlie-support_thead_vector_6_9-v1-2-4af9815ec746@rivosinc.com>
- <20240412-tuesday-resident-d9d07e75463c@wendy>
- <ZhlrdGXfSushUNTp@ghost>
+	s=arc-20240116; t=1712947936; c=relaxed/simple;
+	bh=OyrP4TVWNsr72SJzygQcNpcL4PlM53A2VcvjVO/eZhk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=MmA9AfVFITDOy6u+CcC5tDq7StTZo/8T1QKsGZcjwgVsSxg+iczu2gC1Eb6N72StOpK8FJ42qHDKcJagG1tdfdMU0oc2tngANebbHmMRNIjAB5w41oqaznsw8dMMCVeMi3v6PeFyoUDFo5bK9GKFaf7fhIada79R0g3g/gfxtuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=34ITugh9; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2a49440f7b5so1139615a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 11:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712947934; x=1713552734; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SyQF6Zi4eRkAq1X13L/9PEbNKEusnz+wu9E7jYgcU3o=;
+        b=34ITugh9TG5LamaTU852JQezJaSqWa3jQAikAqaAWANX+KtlF97UzadfpDOvt2coIg
+         eFGSHtWqfJKrYCRXrrS0XaU8iKgcFBeRoNLYZxwILsc+k6lfJDX+Zs5DVX9ZqF7Otz5/
+         gsEn7gyISVaMc2dAov5ffhUzGRdFR6H8MzkvQRCrXJcfRFkj1T2GZ2LVoVAEf2njeDC2
+         qlrYB/v+aLpZHf3VWI59HoZQN9SufR9S/Rq+y7qtbGVwzeCQWQderxhnNk2ec/pTHqkI
+         3iHaIuDwbFz/kEJG8/fk25/8Yun44ZXvXTmOxiy1sf3zpuuIq1htKS5W4GCU6Re2LUKP
+         WAeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712947934; x=1713552734;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SyQF6Zi4eRkAq1X13L/9PEbNKEusnz+wu9E7jYgcU3o=;
+        b=jl+dNTqPNycIDHRI8M3IJFVWTVu+eoOVYAHAW2uvh1zBCTpnb/zze8mZ1KRTZyhcBS
+         /jElK+4SvRSvQ9ZwA9TCrU5VslEMZI2G8zlxLwjzG/jrQvOIHohiZ9OMVl/pZVdpTfPf
+         2bjzMdY1EetLhCzkshtwzrJ0yYK7/DVsbCgrJK003Jr735gBYz/lQOOLGg7G49eFTc4Q
+         5lDauJ9QhDsJnqzkQXYS7sPQmpdSclNzxMOniOuryIeI3ebSzn7vXsoWcze8wZvrbwhn
+         mzXeGBmsxw0wYunkvRVa9RPX3G8MMNiExD6gtgMqdJxpJ0SDZTLnydnFg9wARLW4tGr2
+         0ndQ==
+X-Gm-Message-State: AOJu0YzDY6F12+YZv3xGMI/T68EQYmPgIvWeQI9sli29jp7klFVXMtRz
+	Y856IR0lCMQAV7npmBMsJRNXI845EMJEVr/Wv4aUSc93xIpVtE4wxHM7ts/1JMMvXYBFLPyou50
+	LBw==
+X-Google-Smtp-Source: AGHT+IH/DlhV/yE3OZLMgufqxrATefoUtIDwFGAReeza6owVpNTXpXXxGPYWycSNjN5WSVNzaIq1/C+dsig=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:180d:b0:2a5:22cd:25f3 with SMTP id
+ lw13-20020a17090b180d00b002a522cd25f3mr9381pjb.2.1712947933824; Fri, 12 Apr
+ 2024 11:52:13 -0700 (PDT)
+Date: Fri, 12 Apr 2024 11:52:12 -0700
+In-Reply-To: <0d366f20-e332-45a9-8545-4513fdce6e21@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="rke11NB5BctjFg+6"
-Content-Disposition: inline
-In-Reply-To: <ZhlrdGXfSushUNTp@ghost>
+Mime-Version: 1.0
+References: <20240322163351.150673-1-zide.chen@intel.com> <ZhCCub4ajIvpvrBk@google.com>
+ <0d366f20-e332-45a9-8545-4513fdce6e21@intel.com>
+Message-ID: <ZhmC3PbYQlChDg-t@google.com>
+Subject: Re: [PATCH] selftests/rseq: take large C-state exit latency into consideration
+From: Sean Christopherson <seanjc@google.com>
+To: Zide Chen <zide.chen@intel.com>
+Cc: linux-kselftest@vger.kernel.org, pbonzini@redhat.com
+Content-Type: text/plain; charset="us-ascii"
 
+On Fri, Apr 12, 2024, Zide Chen wrote:
+> On 4/5/2024 4:01 PM, Sean Christopherson wrote:
+> > On Fri, Mar 22, 2024, Zide Chen wrote:
+> >> Currently, the migration worker delays 1-10 us, assuming that one
+> >> KVM_RUN iteration only takes a few microseconds.  But if C-state exit
+> >> latencies are large enough, for example, hundreds or even thousands
+> >> of microseconds on server CPUs, it may happen that it's not able to
+> >> bring the target CPU out of C-state before the migration worker starts
+> >> to migrate it to the next CPU.
+> >>
+> >> If the system workload is light, most CPUs could be at a certain level
+> >> of C-state, and the vCPU thread may waste milliseconds before it can
+> >> actually migrate to a new CPU.
+> > 
+> > Well fudge.  That's definitely not on my bingo sheet.
+> > 
+> >> Thus, the tests may be inefficient in such systems, and in some cases
+> >> it may fail the migration/KVM_RUN ratio sanity check.
+> >>
+> >> Since we are not able to turn off the cpuidle sub-system in run time,
+> >> this patch creates an idle thread on every CPU to prevent them from
+> >> entering C-states.
+> > 
+> > First off, huge thanks for debugging this!  That must have been quite the task
+> > (no pun intended).
+> > 
+> > While spinning up threads on every CPU is a clever way to ensure they don't go
+> > into a deep sleep state, I'm not exactly excited about the idea of putting every
+> > reachable CPU into a busy loop.  And while this doesn't add _that_ much complexity,
+> > I'm not sure the benefit (preserving the assert for all systems) is worth it.  I
+> > also don't want to arbitrarily prevent idle task (as in, the kernel's idle task)
+> > interactions.  E.g. it's highly (highly) unlikely, but not impossible for there
+> > to be a bug that's unique to idle tasks, or C-states, or other edge case.
+> > 
+> > Are there any metrics/stats that can be (easily) checked to grant an exception
+> > to the sanity check?  That's a very hand-wavy question, as I'm not even sure what
+> > type of stat we'd want to look at.  Actual runtime of a task, maybe?
+> > 
+> > If that's not easy, what if we add an off-by-default command line option to skip
+> > the sanity check?  I was resistant to simply deleting the assert in the past, but
+> > that was mainly because I didn't want to delete it without understanding what was
+> > causing problems.  That would allow CI environments to opt-out as needed, while
+> > still keeping the sanity check alive for enough systems to make it useful.
+> 
+> Sorry for not replying earlier. I overlooked your email from my inbox. :)
+> 
+> Alternative to the busy loop, how about using the /dev/cpu_dma_latency
+> interface to disable c-states (I wish I had learned this before writing
+> the initial patch)? The good thing is it can do automatic cleanup when
+> it closes the fd.
 
---rke11NB5BctjFg+6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's probably not practical to touch /dev/cpu_dma_latency in code, e.g. on my
+system it's fully root-only.  And forcing rseq_test to run as root, or be bookended
+with script commands to toggle /dev/cpu_dma_latency, is not a net positive.
+Lastly, fiddling with a system-wide knob in a KVM selftests is opening a can of
+worms I don't want to open.
 
-On Fri, Apr 12, 2024 at 10:12:20AM -0700, Charlie Jenkins wrote:
-> On Fri, Apr 12, 2024 at 11:25:47AM +0100, Conor Dooley wrote:
-> > On Thu, Apr 11, 2024 at 09:11:08PM -0700, Charlie Jenkins wrote:
-> > > The riscv_cpuinfo struct that contains mvendorid and marchid is not
-> > > populated until all harts are booted which happens after the DT parsi=
-ng.
-> > > Use the vendorid/archid values from the DT if available or assume all
-> > > harts have the same values as the boot hart as a fallback.
-> > >=20
-> > > Fixes: d82f32202e0d ("RISC-V: Ignore V from the riscv,isa DT property=
- on older T-Head CPUs")
-> >=20
-> > If this is our only use case for getting the mvendorid/marchid stuff
-> > from dt, then I don't think we should add it. None of the devicetrees
-> > that the commit you're fixing here addresses will have these properties
-> > and if they did have them, they'd then also be new enough to hopefully
-> > not have "v" either - the issue is they're using whatever crap the
-> > vendor shipped.
->=20
-> Yes, the DT those shipped with will not have the property in the DT so
-> will fall back on the boot hart. The addition of the DT properties allow
-> future heterogenous systems to be able to function.
+However, we could have the failing TEST_ASSERT() explicitly call out
+/dev/cpu_dma_latency as a knob to try changing if the assert is failing.  If we
+do that *and* add a command line option to skip the sanity check, that seems like
+it would give users sufficient flexibility to avoid false positives, while still
+maintaining good coverage.
 
-I think you've kinda missed the point about what the original code was
-actually doing here. Really the kernel should not be doing validation of
-the devicetree at all, but I was trying to avoid people shooting
-themselves in the foot by doing something simple that would work for
-their (incorrect) vendor dtbs.
-Future heterogenous systems should be using riscv,isa-extensions, which
-is totally unaffected by this codepath (and setting actual values for
-mimpid/marchid too ideally!).
-
-> > If we're gonna get the information from DT, we already have something
-> > that we can look at to perform the disable as the cpu compatibles give
-> > us enough information to make the decision.
-> >=20
-> > I also think that we could just cache the boot CPU's marchid/mvendorid,
-> > since we already have to look at it in riscv_fill_cpu_mfr_info(), avoid
-> > repeating these ecalls on all systems.
->=20
-> Yeah that is a minor optimization that can I can apply.
->=20
-> >=20
-> > Perhaps for now we could just look at the boot CPU alone? To my
-> > knowledge the systems that this targets all have homogeneous
-> > marchid/mvendorid values of 0x0.
->=20
-> They have an mvendorid of 0x5b7.
-
-That was a braino, clearly I should have typed "mimpid".
-
-> This is already falling back on the boot CPU, but that is not a solution
-> that scales. Even though all systems currently have homogenous
-> marchid/mvendorid I am hesitant to assert that all systems are
-> homogenous without providing an option to override this.
-
-There are already is an option. Use the non-deprecated property in your
-new system for describing what extesions you support. We don't need to
-add any more properties (for now at least).
-
-> The overhead is
-> looking for a field in the DT which does not seem to be impactful enough
-> to prevent the addition of this option.
->=20
-> >=20
-> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> >=20
-> > > @@ -514,12 +521,23 @@ static void __init riscv_fill_hwcap_from_isa_st=
-ring(unsigned long *isa2hwcap)
-> > >  				pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-> > >  				continue;
-> > >  			}
-> > > +			if (of_property_read_u64(node, "riscv,vendorid", &this_vendorid) =
-< 0) {
-> > > +				pr_warn("Unable to find \"riscv,vendorid\" devicetree entry, usi=
-ng boot hart mvendorid instead\n");
-> >=20
-> > This should 100% not be a warning, it's not a required property in the
-> > binding.
->=20
-> Yes definitely, thank you.
->=20
-> - Charlie
->=20
-> >=20
-> > Cheers,
-> > Conor.
-> >=20
-> > > +				this_vendorid =3D boot_vendorid;
-> > > +			}
-> >=20
->=20
->=20
-
---rke11NB5BctjFg+6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhmB0wAKCRB4tDGHoIJi
-0r9KAPwO8kmedwyuPwdW6Gb81xo2SPmPzyE4KeaKjpG7a9zWkQEA+zkrz2aDcEPv
-K4koNCrLQrkE4YZhML29KEex9nHPOAg=
-=7PfL
------END PGP SIGNATURE-----
-
---rke11NB5BctjFg+6--
+> The reason why I still think of disabling c-states is, even in the low
+> c-states exit latency setup, it can still increase the chances of
+> successful migration.
+> 
+> Otherwise, I can implement a command line option to skip the sanity
+> check, as I was not able to find out a metrics/stats that is easy and
+> reliable to indicate that the scheduler is not able to wake up the
+> target CPU before the task is scheduled to another CPU.
 
