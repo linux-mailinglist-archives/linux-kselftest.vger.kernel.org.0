@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-7788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C6FE8A2CAE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 12:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 702658A2D57
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 13:26:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82DD6B218A4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 10:42:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC6AAB22FD6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 11:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7B5C3F9D5;
-	Fri, 12 Apr 2024 10:42:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B7554914;
+	Fri, 12 Apr 2024 11:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="GJNxqNCO"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="c4Lh99Ue"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A704C20310;
-	Fri, 12 Apr 2024 10:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03A354918;
+	Fri, 12 Apr 2024 11:26:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712918526; cv=none; b=MJsbeDvxaVokNh5XDiiZyAX8Gdzbvbjuo0fZy9JU188lc+DDNT6rtmjA8vaFDw0FKlWpEcKDjdGBGyWelybFU/xVgBVsi+HSn16HnRmkrw67KcI6t+lhqUr1aeZiSewcQxq5E+ZhRAhSHSCpR9Yi41gwy7aYUz+Yhv0O3reEc2k=
+	t=1712921202; cv=none; b=F2wRJRVRsS74oHx7d85BaHr/ImjUhO3hVYB1+0n/rRp/Z9twa9jZetyzNMXxN2xAYcYOphPaj+9rlNPvdQCersLbcqtbR9g0qDvnB9gDD+c8sMnoT/FdDR1EL1STsvOUak7JvFEw5q7HlwkXqcBml7oKreRtbNc80Sfvz02Rvog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712918526; c=relaxed/simple;
-	bh=X/p/ft+IL0tus7dW1yBsZJutmsAr0uojLmY1LWYjZes=;
+	s=arc-20240116; t=1712921202; c=relaxed/simple;
+	bh=z+QWmlRkXyiZHeyBdGOBMyt0lCNZkClZvYp8kEJVhsQ=;
 	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CjSykpl8DynrJekHBiF5mbdmqpEl5mQuy3E3XppnrYIJcl4A2svqfZVBlpLc+RRLOJOylx5eh02d20Sc8461yfTrQSpHMLrxUboP8F35MmOZRE/ppXiVE0ivFtfyHW3fSEGKQLt8pmC4gLgVfdEGg4+081KwK6WWfHPF9CDcVBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=GJNxqNCO; arc=none smtp.client-ip=68.232.153.233
+	 Content-Type:Content-Disposition:In-Reply-To; b=oyjEpVtZbPdbPpKRW1oPa+lwHAbGPYe7KRkuS7QuRexr6tF9WYZRcbj9skc8U/CruEaZALDy4rVt32eFZ4uQMvBOtL45JEkm9cvieN7xgfs3yIT5XoNSk0RuuQtI3kdYeK6FI6AQk14QmlIgVaJolN091O6p8L8BKUIzZwOvvqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=c4Lh99Ue; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1712918524; x=1744454524;
+  t=1712921200; x=1744457200;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=X/p/ft+IL0tus7dW1yBsZJutmsAr0uojLmY1LWYjZes=;
-  b=GJNxqNCOgW14345HFh2W//scsLVA5YXzVszRvY5ns/CCFepjKdJ2fyK4
-   jRN00EWC47Y3OQcvTDu++GS0E8OQ+q9Z3uMa789dHSCLAGi7YQsZ06ndy
-   kbljM56PtNzPcdVWhf9d4xxkXsJf4IiyCexleQhs59Ava6+UG8KhfDTnN
-   gKR8+7m9oG09u/RZx1gfEbYy/d2VrYOzvg81llx8IOwLaz6pgesBLKxKW
-   hupzj1RqqWVDusfd2C9vJFZ6eg1D+ZkHBO+D1mKFiAHZW0QDNfortM35R
-   jbbkEhrwBcNanlSikW/7BvC+yrSjynU2t/eSvFy2NXHALA3nlec62dlhk
+  bh=z+QWmlRkXyiZHeyBdGOBMyt0lCNZkClZvYp8kEJVhsQ=;
+  b=c4Lh99UeYj4OVZPo8ToZKnV67HgdkbhLPdqx1NykFNqIIQTax6+JcWzT
+   QCNOXOkr79UwP099CD182TDlD4S4O6up3dmqejjYTuoBAI8FtuzSeFE+g
+   frdXqe2UB8RSRGKR9trxXTzpsPGGh+0iCMF9WgDj+DRFrNRJCnr3yX/Ot
+   lWUu5LKipiztOrbNZ2scUqPcNdO0JCo6SBzZnecivW5AnO9GE/TvxHOaW
+   BEYGgBzLpeL/m6/e9CBhA56U0GtYRh4YABFSRuUrxJqNHElXxx3twNG/1
+   MgcXGdCBSreVxjoeC4/jBu52WsO9+3oMl38Dvr8g+L+NjshhtiBUuScSD
    g==;
-X-CSE-ConnectionGUID: tAWyHYMtQVGntX8nk/B7jA==
-X-CSE-MsgGUID: 13SAqUUaRYm44u3/FKnbdQ==
+X-CSE-ConnectionGUID: mMLqTC6MQs2jRulaBFM8hA==
+X-CSE-MsgGUID: cKKh0uYiRwyg+O5MVbf/Iw==
 X-IronPort-AV: E=Sophos;i="6.07,195,1708412400"; 
-   d="asc'?scan'208";a="20728192"
+   d="asc'?scan'208";a="22708176"
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Apr 2024 03:42:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Apr 2024 04:26:38 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 12 Apr 2024 03:41:33 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ 15.1.2507.35; Fri, 12 Apr 2024 04:26:37 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 12 Apr 2024 03:41:29 -0700
-Date: Fri, 12 Apr 2024 11:40:38 +0100
+ Transport; Fri, 12 Apr 2024 04:26:33 -0700
+Date: Fri, 12 Apr 2024 12:25:42 +0100
 From: Conor Dooley <conor.dooley@microchip.com>
 To: Charlie Jenkins <charlie@rivosinc.com>
 CC: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
@@ -76,11 +76,10 @@ CC: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
 	<palmer@rivosinc.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-sunxi@lists.linux.dev>, <linux-doc@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 07/19] riscv: Optimize
- riscv_cpu_isa_extension_(un)likely()
-Message-ID: <20240412-aerosol-heritage-cec1eca172fb@wendy>
+Subject: Re: [PATCH 05/19] riscv: Fix extension subset checking
+Message-ID: <20240412-underuse-manliness-56d328666ce9@wendy>
 References: <20240411-dev-charlie-support_thead_vector_6_9-v1-0-4af9815ec746@rivosinc.com>
- <20240411-dev-charlie-support_thead_vector_6_9-v1-7-4af9815ec746@rivosinc.com>
+ <20240411-dev-charlie-support_thead_vector_6_9-v1-5-4af9815ec746@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,74 +87,62 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="YUt35LWoARaS+0kq"
+	protocol="application/pgp-signature"; boundary="q4bmFTLuVU/tA/Al"
 Content-Disposition: inline
-In-Reply-To: <20240411-dev-charlie-support_thead_vector_6_9-v1-7-4af9815ec746@rivosinc.com>
+In-Reply-To: <20240411-dev-charlie-support_thead_vector_6_9-v1-5-4af9815ec746@rivosinc.com>
 
---YUt35LWoARaS+0kq
+--q4bmFTLuVU/tA/Al
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 11, 2024 at 09:11:13PM -0700, Charlie Jenkins wrote:
-> When alternatives are disabled, riscv_cpu_isa_extension_(un)likely()
-> checks if the current cpu supports the selected extension if not all
-> cpus support the extension. It is sufficient to only check if the
-> current cpu supports the extension.
->=20
-> The alternatives code to handle if all cpus support an extension is
-> factored out into a new function to support this.
+On Thu, Apr 11, 2024 at 09:11:11PM -0700, Charlie Jenkins wrote:
+> This loop is supposed to check if ext->subset_ext_ids[j] is valid, rather
+> than if ext->subset_ext_ids[i] is valid, before setting the extension
+> id ext->subset_ext_ids[j] in isainfo->isa.
 >=20
 > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
+> Fixes: 0d8295ed975b ("riscv: add ISA extension parsing for scalar crypto")
 
->  static __always_inline bool riscv_cpu_has_extension_unlikely(int cpu, co=
-nst unsigned long ext)
->  {
-> -	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) && riscv_has_extension_unlikel=
-y(ext))
-> -		return true;
-> +	compiletime_assert(ext < RISCV_ISA_EXT_MAX,
-> +			   "ext must be < RISCV_ISA_EXT_MAX");
-> =20
-> -	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
-> +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) && __riscv_has_extension_unlik=
-ely_alternatives(ext))
-> +		return true;
-> +	else
-> +		return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
->  }
-
-static __always_inline bool riscv_cpu_has_extension_likely(int cpu, const u=
-nsigned long ext)
-{
-	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) && riscv_has_extension_likely(ext=
-))
-		return true;
-
-	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
-}
-
-This is the code as things stand. If alternatives are disabled, the if
-statement becomes if (0 && foo) which will lead to the function call
-getting constant folded away and all you end up with is the call to
-__riscv_isa_extension_available(). Unless I am missing something, I don't
-think this patch has any affect?
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
 Thanks,
 Conor.
 
+> ---
+>  arch/riscv/kernel/cpufeature.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index cd156adbeb66..5eb52d270a9a 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -617,7 +617,7 @@ static int __init riscv_fill_hwcap_from_ext_list(unsi=
+gned long *isa2hwcap)
+> =20
+>  			if (ext->subset_ext_size) {
+>  				for (int j =3D 0; j < ext->subset_ext_size; j++) {
+> -					if (riscv_isa_extension_check(ext->subset_ext_ids[i]))
+> +					if (riscv_isa_extension_check(ext->subset_ext_ids[j]))
+>  						set_bit(ext->subset_ext_ids[j], isainfo->isa);
+>  				}
+>  			}
+>=20
+> --=20
+> 2.44.0
+>=20
 
---YUt35LWoARaS+0kq
+--q4bmFTLuVU/tA/Al
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhkPpgAKCRB4tDGHoIJi
-0gSNAQC+oMqT7zoEL9RxUhkl7uImpatcHajgjd6QJ8PnV2xTcgD/YMRe1XytJnd7
-9pJBNiy2EcDN51fcQvf7s4vI9GM9Awc=
-=Tq3D
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhkaNgAKCRB4tDGHoIJi
+0jF+AP0aO4m1oyhnqLkpU2nu54aTKQxfBfGaf5fonL4sFryyhgD/dWIvHo6yBxxP
+Nl1Ow+f7aIxbclA0UIvZgnXGzIHIIgQ=
+=wY2O
 -----END PGP SIGNATURE-----
 
---YUt35LWoARaS+0kq--
+--q4bmFTLuVU/tA/Al--
 
