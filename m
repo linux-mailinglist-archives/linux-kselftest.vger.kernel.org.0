@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-7768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7769-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5964B8A26FB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 08:49:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D3E68A26FF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 08:49:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14C74288915
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 06:49:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D847F288D80
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 06:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90EC481AA;
-	Fri, 12 Apr 2024 06:49:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDEB94AED1;
+	Fri, 12 Apr 2024 06:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="mJjHeDEN"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="EfP5Y3JD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A7B46558
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 06:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8C44AECB
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 06:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712904548; cv=none; b=D3s8GsDvbQUSK0fNdsChPw/r1jrcLY3n1iMODxuHqbF5ISIrxOyXpA3jt24N65tCL4YneLVkIQHVsJgp1ISa39zzbFNOb01teAlRycA4hxcaUddO8Mj3sgCg8acSoL582MzW9cSkUcU8aGiafhL5XjHukpuyofuhY4Q1V7NVaRw=
+	t=1712904552; cv=none; b=fLk6DG3nEzMWHQKbY5U0vQu39uK29dFHJ6zXlaIAhdAdccFf5ck4ts3DHWX/lPtqcTXMai8SOt3bfFsm45PIlEFyDajmD4Du55SnLKN+M5hpLF3LkCJAwSglpRnztitd513cR2JsFlt0eKr3sGKD5jgQCO+Wc09nfwO4gy8IbRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712904548; c=relaxed/simple;
-	bh=v5lsx72T+bwwkalmCViShoyQqewfBPUAjK8ziKGVSKw=;
+	s=arc-20240116; t=1712904552; c=relaxed/simple;
+	bh=NsUylxIFobwN7mTvqQ5dHkwxBlT1LzawwF+eu4628ng=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IwfxTFBRxOObCmDNsYeKHslRwBCjP28YPWzxzg1prfPCs/Te5Z/y5s2KUGtNIKs4sh7TjjJdZodOxiakuh1XhIv8ZMIKRNhGYEigoOdD7CATcXw0Zpbw4N5FGuFLXzjnIHr6623AlPRAPoSGHeVaEJYTmKq049mYvDftGxzr8k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=mJjHeDEN; arc=none smtp.client-ip=209.85.210.174
+	 In-Reply-To:To:Cc; b=t8QaJjHNqdnTyQ0pJ9/z3omqhhIPl5R5xQzQCu70BPudRLDojPPmQ3Z7WMf+wlvX/iwZf4xSF05DbTbQf7Tsm/qOSdsTLgCR/oqAf84CQ+harQpRzN78KMghrqIn64wn2y9Zt5hTeF57xKUFy6OTMQ5JCO1VM9JdbMjlFa+oli0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=EfP5Y3JD; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ecf1bb7f38so595374b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 23:49:07 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e36b7e7dd2so5421255ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 23:49:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1712904547; x=1713509347; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1712904550; x=1713509350; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=srXw+GM0AbxLDkn2sukHjOTHYGaz4TEKS2v/bKB+HwE=;
-        b=mJjHeDENzgG4gDckyAKh9nUWEQvpsykJTysvaHQg+0FZVclPPl7jziP1Sd8XitEerd
-         uF4oYbbNXMxkb3o9ZPPnRd+pB+eklLTV1n2pou/6m3mtzThBA7B97hurWEL3FpQQkcbt
-         B4z9vOtuYdADtpz3QQhStgbOYBrJsaJEMWVwnYCuL697Z+up/YlFPrMZDBvlt6k17klD
-         etmxmqDxrkPEwmWHMm88r0Nzjk7c0VIgYHAwMyp0eF5hsqIyicqWJRk6+aU86MPlEfAk
-         9DNCvqvzoiKUKjLKpyF7VycrlEmu42jbj2X9FSLsJ7oHawx3gsAT8jNMDpIB4UKEL+fT
-         BGiw==
+        bh=IE7PNdtEhi9KW+zIWld3aHVp99xlyaQhdGOlf9pdhFA=;
+        b=EfP5Y3JDJcAe3tp3DTSUggpyZaJor/q98gZCEQUdgAz2B742tFl7gL6XB5A8jPl83X
+         t/cq5/mYqlupYPA2nkkEpGi58eeWbDOGCxgJHkkun7ryfQxJ6vDhrSVUVKci8XR5ZST0
+         pNDXJHSW9aaZUQeaIosZ3lsU6vbL/4V0ZqG3HhDPStFEQK2hinQgXGdMDRttpm4R9Vmt
+         lcxA26iVYR3qfUH5yyNDQf6j8/Yz5aGXwVa8FbV6i/pRDzPWzeKwpJIpFoZkeBsFOy16
+         AsD6uyniZIXyAt8ttgQpv9CWkodxziNibHSHr1pM6PyfjaMUQk60nNtsJ5J+KsEdGJ0q
+         wN4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712904547; x=1713509347;
+        d=1e100.net; s=20230601; t=1712904550; x=1713509350;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=srXw+GM0AbxLDkn2sukHjOTHYGaz4TEKS2v/bKB+HwE=;
-        b=cwHetfi5clRWJOWT/t1MdsbGziiEQmjEkwSHYcorhSo0pqttjqF+VxKbp3dWfE1qj2
-         Gohc+0R58R9mEAK6SaQKcM8WCPSX6gPxFVWNbsXL6o1siiQZLX6WZoPEePfnmqgtENBf
-         /SSwbOTY0F5EXPxfoqdHFqKD5UcZcOmGLdih2382DZ7yLS/JRhe21OZnrwDB7K9PoFo9
-         56Z+76tCYxJOG0YCWsa2Mvb2OmZ0a72UAtvlkJd9gHsubislhEvS5UCeaHblqhjzFJKz
-         qk02DRZ40wCkIfXnQ6XA6Ye6eJkHmHwD9/RxCfjrBAGAzvXtAWeBjQzxT4+dOUTGZp00
-         h/+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV7AfbuGtb1M6qiV2tusykWApktMw+Jh0oLDXYVaBEzI2vwpWnW7MPVhw0USnY0rd+xP0IGJYckB5eaiCtpAuLh7qNPvHfI3d8o1QByGO6k
-X-Gm-Message-State: AOJu0YxcJNg23zYlOkn/oue8q4RdZGK1kz/ksxII0zWzknL5BpdRGG9N
-	pBOfornbswKN52nyjfl55Ua/NAhotUvEshChGL9ifgMZKOugE+Yx9hXtOJjXhmw=
-X-Google-Smtp-Source: AGHT+IF5X1v/E+xWlHK5pNpmDBocfNqmMv4DyaPfDHN3Yc/L8+Q+p/aEL01S9Eh4YMSg/dpHO62FGw==
-X-Received: by 2002:a05:6a20:bf2a:b0:1a3:afdc:fe5 with SMTP id gc42-20020a056a20bf2a00b001a3afdc0fe5mr1702435pzb.42.1712904546736;
-        Thu, 11 Apr 2024 23:49:06 -0700 (PDT)
+        bh=IE7PNdtEhi9KW+zIWld3aHVp99xlyaQhdGOlf9pdhFA=;
+        b=baMq5Gf9zIMWn977lqBAbheUYGWVEppi6BJWQZmIEta/fs1w9A8KbRjYI23edzU5a2
+         PiSuMdmLwwe7/4rbGSNs+8e6boNdClRzaiCH7GSXrCHCIex4wkSWZx5SVw6OISz3VkOm
+         EfCQfafidNC4zJGhdtaTMmaCXwwzWSFKLatgUyRI/vyvzw1ZMUoQtJrJm8wGESq4U14e
+         gOl6Sja+xqptwLhf5YMqNupURnRarKyf33IQ5qI2XwhjkhDIYt9Bo584RFO0SsG834D1
+         EsrVym2UvxaKYPK/mTopKn0igapwGJahBd6k8CJKKB8ZqQyWKOJvpJfM5qXvCzAVeXpb
+         uHqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdc0bZ6f/Vf/epVJEdHCrEnRWhIvoenlMcDPjHt8Xw11oIgVcjE7d7wchCvhcf62WBZD4tYxQFGiJMJLGq+LmFoFER+O19mt8v+wADpN+N
+X-Gm-Message-State: AOJu0YzkQdI2wh7N2Jw2HJjL+i++PYvDe4VK/5ZgnzmOCcKQfsgpe/uT
+	uJBLEUq99096OqZPt1OWvCFJtVKUJYU3CyMNaHcXr3q6unbK94DjUbMmjNPSVqU=
+X-Google-Smtp-Source: AGHT+IE8CTAbzbIbDZAwGKJBJYZimAcWW4i3f7cikqAXGoGmEwow1T9cytWYxzK5BB3Uu6leAZrAPw==
+X-Received: by 2002:a17:903:1210:b0:1e2:adad:75f4 with SMTP id l16-20020a170903121000b001e2adad75f4mr2046388plh.28.1712904550318;
+        Thu, 11 Apr 2024 23:49:10 -0700 (PDT)
 Received: from [127.0.1.1] (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id q8-20020a170902b10800b001e107222eb5sm2258818plr.191.2024.04.11.23.49.03
+        by smtp.gmail.com with ESMTPSA id q8-20020a170902b10800b001e107222eb5sm2258818plr.191.2024.04.11.23.49.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 23:49:06 -0700 (PDT)
+        Thu, 11 Apr 2024 23:49:10 -0700 (PDT)
 From: Andy Chiu <andy.chiu@sifive.com>
-Date: Fri, 12 Apr 2024 14:48:57 +0800
-Subject: [PATCH v4 1/9] riscv: vector: add a comment when calling
- riscv_setup_vsize()
+Date: Fri, 12 Apr 2024 14:48:58 +0800
+Subject: [PATCH v4 2/9] riscv: smp: fail booting up smp if inconsistent
+ vlen is detected
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240412-zve-detection-v4-1-e0c45bb6b253@sifive.com>
+Message-Id: <20240412-zve-detection-v4-2-e0c45bb6b253@sifive.com>
 References: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
 In-Reply-To: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -98,34 +98,101 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.13-dev-a684c
 
-The function would fail when it detects the calling hart's vlen doesn't
-match the first one's. The boot hart is the first hart calling this
-function during riscv_fill_hwcap, so it is impossible to fail here. Add
-a comment about this behavior.
+Currently we only support Vector for SMP platforms, that is, all SMP
+cores have the same vlenb. If we happen to detect a mismatching vlen, it
+is better to just fail bootting it up to prevent further race/scheduling
+issues.
 
+Also, move .Lsecondary_park forward and chage `tail smp_callin` into a
+regular call in the early assembly. So a core would be parked right
+after a return from smp_callin. Note that a successful smp_callin
+does not return.
+
+Fixes: 7017858eb2d7 ("riscv: Introduce riscv_v_vsize to record size of Vector context")
+Reported-by: Conor Dooley <conor.dooley@microchip.com>
+Closes: https://lore.kernel.org/linux-riscv/20240228-vicinity-cornstalk-4b8eb5fe5730@spud/
 Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
 ---
+Changelog v4:
+ - update comment also in the assembly code (Yunhui)
 Changelog v2:
- - update the comment (Conor)
+ - update commit message to explain asm code change (Conor)
 ---
- arch/riscv/kernel/cpufeature.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/riscv/kernel/head.S    | 19 ++++++++++++-------
+ arch/riscv/kernel/smpboot.c | 14 +++++++++-----
+ 2 files changed, 21 insertions(+), 12 deletions(-)
 
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 3ed2359eae35..d22b12072579 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -683,6 +683,10 @@ void __init riscv_fill_hwcap(void)
- 	}
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 4236a69c35cb..a00f7523cb91 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -165,9 +165,20 @@ secondary_start_sbi:
+ #endif
+ 	call .Lsetup_trap_vector
+ 	scs_load_current
+-	tail smp_callin
++	call smp_callin
+ #endif /* CONFIG_SMP */
  
- 	if (elf_hwcap & COMPAT_HWCAP_ISA_V) {
++.align 2
++.Lsecondary_park:
++	/*
++	 * Park this hart if we:
++	 *  - have too many harts on CONFIG_RISCV_BOOT_SPINWAIT
++	 *  - receive an early trap, before setup_trap_vector finished
++	 *  - fail in smp_callin(), as a successful one wouldn't return
++	 */
++	wfi
++	j .Lsecondary_park
++
+ .align 2
+ .Lsetup_trap_vector:
+ 	/* Set trap vector to exception handler */
+@@ -181,12 +192,6 @@ secondary_start_sbi:
+ 	csrw CSR_SCRATCH, zero
+ 	ret
+ 
+-.align 2
+-.Lsecondary_park:
+-	/* We lack SMP support or have too many harts, so park this hart */
+-	wfi
+-	j .Lsecondary_park
+-
+ SYM_CODE_END(_start)
+ 
+ SYM_CODE_START(_start_kernel)
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index d41090fc3203..673437ccc13d 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -214,6 +214,15 @@ asmlinkage __visible void smp_callin(void)
+ 	struct mm_struct *mm = &init_mm;
+ 	unsigned int curr_cpuid = smp_processor_id();
+ 
++	if (has_vector()) {
 +		/*
-+		 * This callsite can't fail here. It cannot fail when called on
-+		 * the boot hart.
++		 * Return as early as possible so the hart with a mismatching
++		 * vlen won't boot.
 +		 */
- 		riscv_v_setup_vsize();
- 		/*
- 		 * ISA string in device tree might have 'v' flag, but
++		if (riscv_v_setup_vsize())
++			return;
++	}
++
+ 	/* All kernel threads share the same mm context.  */
+ 	mmgrab(mm);
+ 	current->active_mm = mm;
+@@ -226,11 +235,6 @@ asmlinkage __visible void smp_callin(void)
+ 	numa_add_cpu(curr_cpuid);
+ 	set_cpu_online(curr_cpuid, 1);
+ 
+-	if (has_vector()) {
+-		if (riscv_v_setup_vsize())
+-			elf_hwcap &= ~COMPAT_HWCAP_ISA_V;
+-	}
+-
+ 	riscv_user_isa_enable();
+ 
+ 	/*
 
 -- 
 2.44.0.rc2
