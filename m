@@ -1,132 +1,218 @@
-Return-Path: <linux-kselftest+bounces-7779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6104B8A28EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 10:09:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F3E8A28F5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 10:14:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 169932823B8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 08:09:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6F9F1C21D94
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 08:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08F34DA1B;
-	Fri, 12 Apr 2024 08:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A4E4F200;
+	Fri, 12 Apr 2024 08:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ENw8HPZh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VsbuqPSj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119264BAA6;
-	Fri, 12 Apr 2024 08:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712909388; cv=fail; b=cdc2W3t+LT9bYgPusffxuQ8UhQvWqmgHvPzQijQv4RCtQlpl5iYqeIGGJ3G1+vunR8WsqQJJREXn0FRzCVxEd4mblIEdvoAA9d1GHI0d66bz7H372OhR6JAW7Msx66eV3/p6/BlhRpY3R9yWrYoRmn736gZ/NyjbeKkIyUY9Awc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712909388; c=relaxed/simple;
-	bh=B1Qg1YSl+kiM/gkCdaaM0YQ0mQ6DsI81pp7FMgzqtPU=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=LLHw7UIdyIbCdt5UDGKezt0IA+KEYhpJOQ3+8Yca8kcmzDRcJh5ljBZyVMTg0SgcLfCTCeRUC5AQEJAcQgXRGPSuYh/Szr2kE2AAvE6kdq0IFbOc19I/LEWoK26frZxx7IbavFXJH10k0GqCOk590m/DIXOGutIbmoSiBSNOulg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ENw8HPZh; arc=fail smtp.client-ip=40.107.93.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eYbP+QD+OzDkNEcGquSr1LrHAAm6Zn6LOZIamiCtYtksLlMBAARnHV6WJF8Nmq6TsFAXc9iEzhaq2Y+QCnFsXPeJUWvSt4WdPbPS3HquewMVAPQif+e8Fx5srIDhrXWSAjsm58R2lwDDM3Z/tAGvx+EI5hyoF89VePnykJjpFmwVcWpihUZjHgp+xD4CuShiluIQF/3XiiH0veyMtFowOACqdKGiDd7FrC9zNv8GYz83Zk0wmX96yXrLWvorRFYuELKj5rYSYrGBuusJ/mvIzo8M+R5k/E7RhSMT29CKTJAO+Jt8jcykicO+XzcB7FpVR3gKEk9TIEc4A+GOxR5f2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B1Qg1YSl+kiM/gkCdaaM0YQ0mQ6DsI81pp7FMgzqtPU=;
- b=gtLzYlauTRavozXw2lF/A4YBh/MisORPopX1SyTePOJTykBLA/Y8pOHFEUth0GJDeLeBs/l4He8MQIKZGrJ2+7iMhPNDRF4OpRE0zxmK77g8oHoom2Vml0y1eAk4YXGIy9YaHNO+VtrCFESZviBwVmNipT7fKyF8Ov1N/0b+Nu0Mqu8GzBmWogmvcZDyvl5khyyT9rJou4WmVaVhExObwzb7JAGm4+bFElSsbBq4AJaJ50BSshqay1d2qq29hjXJ4WaiTI4q9Cfu2owjG0zMtZy9eYohZfPEbiBBeDCFLq//LuU50niNSvNlz7ZQTi9BCr7twrD9vdJr5LQCAqx8Qw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B1Qg1YSl+kiM/gkCdaaM0YQ0mQ6DsI81pp7FMgzqtPU=;
- b=ENw8HPZh1ZWrkdGdtIw1SS4z6RY6ah8LdcfxuDfMr/RLf0E3+OtUViNXLWvGqjWBIshwBaH+UoUCIhSGDGpkV5pvF+zUNgPrua/YeO2A56KrUmFtAJA9liB4vTJFHpJRFMrJDDOb92nyQ6FegDApmEfkXVecnxXcn6Xa4bCVHpWTkMYQl7vMd9t+ETCvl3JkX+qnK/LSVhYZuMGtVGnXRehY9kMvcV2uNcBIov5WQs8YwvmIdpzQMWVYJtr6XcbYv66tdV7M30tpCh72hEhoKgiBGnRBf1U6oUlLozQvPpZ9Ubct0rIyWLa1GY8OH4644qggrEOH49ImkMmbuRoBBg==
-Received: from PH7PR17CA0008.namprd17.prod.outlook.com (2603:10b6:510:324::8)
- by MW3PR12MB4348.namprd12.prod.outlook.com (2603:10b6:303:5f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Fri, 12 Apr
- 2024 08:09:40 +0000
-Received: from SN1PEPF000252A2.namprd05.prod.outlook.com
- (2603:10b6:510:324:cafe::1d) by PH7PR17CA0008.outlook.office365.com
- (2603:10b6:510:324::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.26 via Frontend
- Transport; Fri, 12 Apr 2024 08:09:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SN1PEPF000252A2.mail.protection.outlook.com (10.167.242.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Fri, 12 Apr 2024 08:09:40 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 12 Apr
- 2024 01:09:27 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Fri, 12 Apr
- 2024 01:09:23 -0700
-References: <20240411012815.174400-1-kuba@kernel.org>
- <20240411012815.174400-6-kuba@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <shuah@kernel.org>, <petrm@nvidia.com>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 5/6] selftests: net: support use of
- NetdevSimDev under "with" in python
-Date: Fri, 12 Apr 2024 10:07:06 +0200
-In-Reply-To: <20240411012815.174400-6-kuba@kernel.org>
-Message-ID: <878r1jf1e7.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D65182DF;
+	Fri, 12 Apr 2024 08:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712909688; cv=none; b=eGs+AS4U1YsQ3+7G6ya3fECnLk3prDcaWD5eACd0cmSJd7e1lgtBmwfha7UnySF2uEEjQANFZKZDDt+ftdikox6tfaUJJcEeR/6X0H5HJ+lYY2adt84ryV7ZuCw7AG5/IqK6E01WhxKVRa1iFeW3J/QsPqen6qxMKymOmB/Phdc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712909688; c=relaxed/simple;
+	bh=a0qLjKxBtHOgn5g9o5nOx2EYCPyMSiqw+0xX4M9kGIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S+R4NT95LaO/2Kr5WNSNfdXZpy0PNpP+l+BwEZSib/ajj1TCUwWgRoYfr/D99xuHsX/0nsbKnuy3WbGzfXhb3b07AEOD+nY2SjSFvv7U0MhEauqwkMHOcFyMN8iM7kdiaNZu7NSSLrKzruog8WkdxklJu91cjLkkk5XqaI0XpSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VsbuqPSj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BC2C113CC;
+	Fri, 12 Apr 2024 08:14:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712909687;
+	bh=a0qLjKxBtHOgn5g9o5nOx2EYCPyMSiqw+0xX4M9kGIc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VsbuqPSjh+B2tJ+Uyah1zXHR6JlX4N5f8YbdxPNONWaEBIATj8ttmX1l5FLu7ueHz
+	 AYmgnLICRoHKgEpYpJiqcvLMGJNGMtoAuoUZxA3nlGCar6T2YPbCiVf9YjoXPc3Qom
+	 cvqwyvrPL2IWYCn5jncvbetK86nSvdXXBelSagCeM+dBECRqKeX/SJ/G2DTa8Z/znm
+	 XDc2J/wrtWTkXmllHmI/5SpiOj5C+e5cI3J0xZHZgb3xXdVSITD5VUDtFgSA0SG8sO
+	 Cluol/CW6q17bNjTrBqxE+uTZJfxYJHyG6XZcSEVMk8ZNxwAvaFh+I/FRCcSysVB1Z
+	 4KR3Bs2MKy2hw==
+Date: Fri, 12 Apr 2024 10:14:40 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH RFC bpf-next v6 2/6] bpf: Add support for
+ KF_ARG_PTR_TO_TIMER
+Message-ID: <ujmvbzbu4yzubk5jvpy5saclqi2yhwu7c6fsgs4dinvzekazh2@khwefybboea2>
+References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
+ <20240408-hid-bpf-sleepable-v6-2-0499ddd91b94@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000252A2:EE_|MW3PR12MB4348:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c9a2766-9896-4e9a-2bbb-08dc5ac7e753
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	rb3W3BIuAQyAyj28zQvNQ7TesQ1UZVzIhaDFeyW+TXhx1i84KGngn8Ou3g4Ihld6NUGGxTIFrsew3Fgpz8Tx1ODCkRhNTq27Z6/urkBVOSYwAzX6oIzw9NaIBxJLWeVdjASz+5/UKe5jsZciTa5yOWC6B1Km2p9HEp60nsCnYC+JiRGpgG0YLzWS02e++PckBncsPEDYozAhQSDmz3FOd5tcGNV1HP7h8LhEB/MTELRjkh1fpVT7XYSsTq813VpIp6SHQUC2eht1wK3P0mixOGKCAufOvHtdW7HtMhEty+WRAVz+ARtJvXFkaky2wXgBq2OXkGt+uipiblH8gISdTChyYtMy5MQ7muOfbNI6pqTwbHAS7srDpGpVLIJ8om+XbMQAyb9MfMF9BKr43rBSyZWW+InmOeKL63U+wF7PSKb66Dq6/vlXM+MbyERuKEzm9VZ4PMHPaJVcEqX6770GDh4aRQ4BbpvH0pa/rMaw5Aj7/oxqOq8wJ5uRPcp1eYmcQ8nQ8ZwQKipcuf33hKkfg1CbIjGz8+JVaQPpJ8sEElF9cgJd5OHXYSvhYRq7Nb/ZlVQkdRuOIZPmeUf892zn8uiogPuo9/tBZhI7pxGnrhkT/Xa8SEPtTJbdHzBc5YQ9q5lAaiBf2bX9TheIhN/3YnKay+Ppfk/ctHFEn8h1N8NLau1NlOJ0vM8IvzF+rdCDY4XmXe+hP0vYOWAyv4s0Qj9z/5gAvr5QkvoP4sH6mPDzvUv660eNPHPJNHZMhb8c
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(82310400014)(1800799015)(376005)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2024 08:09:40.4028
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c9a2766-9896-4e9a-2bbb-08dc5ac7e753
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF000252A2.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4348
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240408-hid-bpf-sleepable-v6-2-0499ddd91b94@kernel.org>
 
+On Apr 08 2024, bentiss@kernel.org wrote:
+> From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> 
+> Introduce support for KF_ARG_PTR_TO_TIMER. The kfuncs will use bpf_timer
+> as argument and that will be recognized as timer argument by verifier.
+> bpf_timer_kern casting can happen inside kfunc, but using bpf_timer in
+> argument makes life easier for users who work with non-kern type in BPF
+> progs.
+> 
+> Fix up process_timer_func's meta argument usage (ignore if NULL) so that
+> we can share the same checks for helpers and kfuncs. meta argument is
+> only needed to ensure bpf_timer_init's timer and map arguments are
+> coming from the same map (map_uid logic is necessary for correct
+> inner-map handling).
+> 
+> No such concerns will be necessary for kfuncs as timer initialization
+> happens using helpers, hence pass NULL to process_timer_func from kfunc
+> argument handling code to ignore it.
+> 
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> 
+> ---
+> 
+> changes in v6:
+> - used Kumar's version of the patch
+> - reverted `+BTF_ID(struct, bpf_timer_kern)`
 
-Jakub Kicinski <kuba@kernel.org> writes:
+My bad. While working on bpf_wq I realized I shouldn't have touched this
+part. See below:
 
-> Using "with" on an entire driver test env is supported already,
-> but it's also useful to use "with" on an individual nsim.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> 
+> changes in v5:
+> - also check for the reg offset
+> 
+> changes in v4:
+> - enforce KF_ARG_PTR_TO_TIMER to be of type PTR_TO_MAP_VALUE
+> 
+> new in v3 (split from v2 02/10)
+> ---
+>  kernel/bpf/verifier.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ca6cacf7b42f..ccfe9057d8dc 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7568,12 +7568,16 @@ static int process_timer_func(struct bpf_verifier_env *env, int regno,
+>  			val + reg->off, map->record->timer_off);
+>  		return -EINVAL;
+>  	}
+> +	/* meta is only needed for bpf_timer_init to match timer and map */
+> +	if (!meta)
+> +		goto out;
+>  	if (meta->map_ptr) {
+>  		verbose(env, "verifier bug. Two map pointers in a timer helper\n");
+>  		return -EFAULT;
+>  	}
+>  	meta->map_uid = reg->map_uid;
+>  	meta->map_ptr = map;
+> +out:
+>  	return 0;
+>  }
+>  
+> @@ -10826,6 +10830,7 @@ enum {
+>  	KF_ARG_LIST_NODE_ID,
+>  	KF_ARG_RB_ROOT_ID,
+>  	KF_ARG_RB_NODE_ID,
+> +	KF_ARG_TIMER_ID,
+>  };
+>  
+>  BTF_ID_LIST(kf_arg_btf_ids)
+> @@ -10834,6 +10839,7 @@ BTF_ID(struct, bpf_list_head)
+>  BTF_ID(struct, bpf_list_node)
+>  BTF_ID(struct, bpf_rb_root)
+>  BTF_ID(struct, bpf_rb_node)
+> +BTF_ID(struct, bpf_timer_kern)
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+As Kumar originally put, this should be BTF_ID(struct, bpf_timer), and
+he explained everything in the commit message. I was just too dumb to
+understand it properly.
+
+(Adding a comment here in case we want to extend bpf_timer API in the
+future, and so this patch will be useful).
+
+Cheers,
+Benjamin
+
+>  
+>  static bool __is_kfunc_ptr_arg_type(const struct btf *btf,
+>  				    const struct btf_param *arg, int type)
+> @@ -10877,6 +10883,11 @@ static bool is_kfunc_arg_rbtree_node(const struct btf *btf, const struct btf_par
+>  	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_RB_NODE_ID);
+>  }
+>  
+> +static bool is_kfunc_arg_timer(const struct btf *btf, const struct btf_param *arg)
+> +{
+> +	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_TIMER_ID);
+> +}
+> +
+>  static bool is_kfunc_arg_callback(struct bpf_verifier_env *env, const struct btf *btf,
+>  				  const struct btf_param *arg)
+>  {
+> @@ -10946,6 +10957,7 @@ enum kfunc_ptr_arg_type {
+>  	KF_ARG_PTR_TO_NULL,
+>  	KF_ARG_PTR_TO_CONST_STR,
+>  	KF_ARG_PTR_TO_MAP,
+> +	KF_ARG_PTR_TO_TIMER,
+>  };
+>  
+>  enum special_kfunc_type {
+> @@ -11102,6 +11114,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
+>  	if (is_kfunc_arg_map(meta->btf, &args[argno]))
+>  		return KF_ARG_PTR_TO_MAP;
+>  
+> +	if (is_kfunc_arg_timer(meta->btf, &args[argno]))
+> +		return KF_ARG_PTR_TO_TIMER;
+> +
+>  	if ((base_type(reg->type) == PTR_TO_BTF_ID || reg2btf_ids[base_type(reg->type)])) {
+>  		if (!btf_type_is_struct(ref_t)) {
+>  			verbose(env, "kernel function %s args#%d pointer type %s %s is not supported\n",
+> @@ -11735,6 +11750,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>  		case KF_ARG_PTR_TO_CALLBACK:
+>  		case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
+>  		case KF_ARG_PTR_TO_CONST_STR:
+> +		case KF_ARG_PTR_TO_TIMER:
+>  			/* Trusted by default */
+>  			break;
+>  		default:
+> @@ -12021,6 +12037,15 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>  			if (ret)
+>  				return ret;
+>  			break;
+> +		case KF_ARG_PTR_TO_TIMER:
+> +			if (reg->type != PTR_TO_MAP_VALUE) {
+> +				verbose(env, "arg#%d doesn't point to a map value\n", i);
+> +				return -EINVAL;
+> +			}
+> +			ret = process_timer_func(env, regno, NULL);
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+>  		}
+>  	}
+>  
+> 
+> -- 
+> 2.44.0
+> 
 
