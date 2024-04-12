@@ -1,142 +1,173 @@
-Return-Path: <linux-kselftest+bounces-7820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6D9D8A3405
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 18:47:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F288B8A340F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 18:52:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E7E51C21528
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 16:47:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A52B4285521
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 16:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46F8148313;
-	Fri, 12 Apr 2024 16:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7749814A09E;
+	Fri, 12 Apr 2024 16:52:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KehtsQ3f"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CG2YHcOn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF44C14A639
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 16:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49BC14B073
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 16:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712940434; cv=none; b=bLZDAIaqEcG8lowIm0aKWZ2PSrPVHY4uTW+pMANmkP7lL23/o6JJL4e8StXjISVi+vj+wgh1/xi6mR9AMFRnnwG3YMaESXH++3MnwQp2ykJT4ZI9WqQuFAMLZAdI/d2ocTCU4gJWlebvA9O4Vs3KUN11yWuADFL1lhnBvtrs7g8=
+	t=1712940767; cv=none; b=fU/Y/Uecc3p2xs9cQ+y8alKl6AYicF+A/0mHnBrKn2wsBVq6NYWj1zEkDZ1zWd181AxHOTCy0NbNqkJe9EK3SkJ5yvRXk4MZ3/dXfoRKsuoveEKnXVFxbPCmB4Y6MJcAUihSsvMPYCJo7IEcF3vXRS4vNR+gsTa1RkRE/2A35Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712940434; c=relaxed/simple;
-	bh=723TyUM84tFd/tNvuYS/SabsJNTtPpFWjxVSgSpvVNc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u4sGDo35K/dlLSeZyYKjIDyWU/NJ/m5VEjBpktMsHD4n5lQ+3BmJf7AlsYEV0gecXIcnFtAhHlAmLZyevuU7c39u4aF1kZTzrZq/SgpuSMDO1KeFUOMql4soVvNvenPWE18eYzwWG6tLGd1QvJXhXeVWXM54q4rSRX9zEJMS3Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KehtsQ3f; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712940433; x=1744476433;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=723TyUM84tFd/tNvuYS/SabsJNTtPpFWjxVSgSpvVNc=;
-  b=KehtsQ3fBxKd7ipGr8EizLilC5CjJgCaGj2u2n6Vnoy2xvZ2tKIWcxqy
-   Bp7OLOCamV6ZvotpQGK54i6ZRCnAeTfUavXDoLrT+9TfwEKrlRYo7HVNm
-   RY60pkbd2lH7rbbXMklOIZNFQd1O2jG8wfGaySnaUoARYiHnB1gMCAV4F
-   /xmrp95J9Gtda0u4uZk0BGaTmr8NzP78DaKW0O0xARICBT6/4uH7pz8Vt
-   cjy6U/NRO5s0/M7psF800NScRCJXBky8UhT5WbjWgnSq0qJGZ+/v6lnOC
-   dTu2pQJaBRXOzjXNlBxupKBcJti0uqOITllDywJ4h/n37jtgPNSzq0T9G
-   Q==;
-X-CSE-ConnectionGUID: FTy8B/dRTIaiZE4zhGuppA==
-X-CSE-MsgGUID: HhwdqmDnRUyK1DsH6WQbQQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="25917094"
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="25917094"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 09:47:12 -0700
-X-CSE-ConnectionGUID: 7yd/4pDaQ4C+y4gF/pL9zA==
-X-CSE-MsgGUID: eLGOAeRyQAaD7zcJ8ydvAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="25928693"
-Received: from soc-cp83kr3.jf.intel.com (HELO [10.24.10.40]) ([10.24.10.40])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 09:47:12 -0700
-Message-ID: <0d366f20-e332-45a9-8545-4513fdce6e21@intel.com>
-Date: Fri, 12 Apr 2024 09:47:12 -0700
+	s=arc-20240116; t=1712940767; c=relaxed/simple;
+	bh=usmj1mNoKthI5m8l3Dk3m0aCP+Dn54ILjAR1+C5OQ2w=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=W+/vEYjXvrwS1cRrPttscdJG25zeF1n+WsMwVVL0BQw+gfBR6LgDRX8iW/aEvC6Oq4Z6WJ1e1566IDAePzSaXTLUE5rV2M27dljGwN8yWTypvtNGFeCyyPlUM5afZvodlezAUm8PBulmFn0tjK8Cz1bs5o5X4YQLzF76uO4dkuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CG2YHcOn; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6180514a5ffso12998577b3.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 09:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712940765; x=1713545565; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vQ3wry0bRnSowFxbBNPWKPghb31lBBPlIMBNxACr2OA=;
+        b=CG2YHcOni6AEmlQmicX+mS5T8GEIbabjEioW43Twavrb7oS7ALRRZZu5owzqsGNEyR
+         qlvHOvHmVpsN3sfYMRIZuz6DRLDwFf7QFj++azKzXYkNlayAh70uxajwA4MYOC4SqdfH
+         HMXzKLuQRnHTOZvm+bkY3g6gK8ynJK2d3evXEyD8mVjkHUk2KA5ZRJ0nDIp9WRmJ8Qw8
+         QFYWQwXheg1LE1W9HRkznh32p4iGWY1RPK+SNt5LY+m3bgd6PSafZcWg6A91DZ9+Y3RZ
+         1G7/ZCepk90a9uLuZxDznMZ2f+XYvIuYatPZgMsYRoURUPk0SATnQ3jULWQVrVAY6AQ5
+         ONTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712940765; x=1713545565;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vQ3wry0bRnSowFxbBNPWKPghb31lBBPlIMBNxACr2OA=;
+        b=U9R8cE1WfHubNLFyfAPhF7mqNXSYD4LJ9mTS7hQHcoX9ROdySFXrH5tvb26akewbmP
+         DUaM5xdhEUvwudkCcflOS/G2uXERJS7u5C7yDXwXbGZIJYSLBR0bvAO9o8bqxbykI64N
+         kj1hAzeE5VFW1KXrKCNBJp0gG9uEyFFpTr3ZzZLc3uCBT01DIOByRWU3zAxbN9AOMyzv
+         nJQC5wUSmgBbI8pQj0O1gJg7TxNN0ymUl/O5EkvT6DWhw+x+FDtZ79mRhcTdcJFsyXQ9
+         s4fFTpl12y2s5rsjRdYTq3xZcfqyV9S8kSMsValEtskoStO+IEgEcSPlpGz7icfAQvqv
+         oX0w==
+X-Forwarded-Encrypted: i=1; AJvYcCU5VC+2fn5Edhb0exwYNX5KpZzSXLTbApS4vaaLXS9NplorfH+iYI2NCYBEUy0C/X/iOoR2dogOHZtuk4/ohiuY3iQ/8AstLvQpNUzkOfze
+X-Gm-Message-State: AOJu0YwJ3FB9FWXW26/WLE80kl5yFdaaHJ+ITsHmemevLX5u5rFXkGp1
+	Cp7jZmAsFlikrAFOAPweh15rnfXN76Yst+aB0ksMO5Jdn5MKXcusa+TWt7esD+xs7FtA9RGjng=
+	=
+X-Google-Smtp-Source: AGHT+IF9WYo61DUMT0LJwtbVzY7nTOoh6B3GbB8pT2/kXoroFpERZxCmf6idfLJrdqRCRd+UeikUEizhGg==
+X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
+ (user=jrife job=sendgmr) by 2002:a81:4c55:0:b0:618:3525:2bb4 with SMTP id
+ z82-20020a814c55000000b0061835252bb4mr1435298ywa.3.1712940765015; Fri, 12 Apr
+ 2024 09:52:45 -0700 (PDT)
+Date: Fri, 12 Apr 2024 11:52:21 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/rseq: take large C-state exit latency into
- consideration
-To: Sean Christopherson <seanjc@google.com>
-Cc: linux-kselftest@vger.kernel.org, pbonzini@redhat.com
-References: <20240322163351.150673-1-zide.chen@intel.com>
- <ZhCCub4ajIvpvrBk@google.com>
-Content-Language: en-US
-From: "Chen, Zide" <zide.chen@intel.com>
-In-Reply-To: <ZhCCub4ajIvpvrBk@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.683.g7961c838ac-goog
+Message-ID: <20240412165230.2009746-1-jrife@google.com>
+Subject: [PATCH v2 bpf-next 0/6] selftests/bpf: Add sockaddr tests for kernel networking
+From: Jordan Rife <jrife@google.com>
+To: bpf@vger.kernel.org
+Cc: Jordan Rife <jrife@google.com>, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Kui-Feng Lee <thinker.li@gmail.com>, Artem Savkov <asavkov@redhat.com>, 
+	Dave Marchevsky <davemarchevsky@fb.com>, Menglong Dong <imagedong@tencent.com>, Daniel Xu <dxu@dxuuu.xyz>, 
+	David Vernet <void@manifault.com>, Daan De Meyer <daan.j.demeyer@gmail.com>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
+This patch series adds test coverage for BPF sockaddr hooks and their
+interactions with kernel socket functions (i.e. kernel_bind(),
+kernel_connect(), kernel_sendmsg(), sock_sendmsg(),
+kernel_getpeername(), and kernel_getsockname()) while also rounding out
+IPv4 and IPv6 sockaddr hook coverage in prog_tests/sock_addr.c.
 
+As with v1 of this patch series, we add regression coverage for the
+issues addressed by these patches,
 
-On 4/5/2024 4:01 PM, Sean Christopherson wrote:
-> On Fri, Mar 22, 2024, Zide Chen wrote:
->> Currently, the migration worker delays 1-10 us, assuming that one
->> KVM_RUN iteration only takes a few microseconds.  But if C-state exit
->> latencies are large enough, for example, hundreds or even thousands
->> of microseconds on server CPUs, it may happen that it's not able to
->> bring the target CPU out of C-state before the migration worker starts
->> to migrate it to the next CPU.
->>
->> If the system workload is light, most CPUs could be at a certain level
->> of C-state, and the vCPU thread may waste milliseconds before it can
->> actually migrate to a new CPU.
-> 
-> Well fudge.  That's definitely not on my bingo sheet.
-> 
->> Thus, the tests may be inefficient in such systems, and in some cases
->> it may fail the migration/KVM_RUN ratio sanity check.
->>
->> Since we are not able to turn off the cpuidle sub-system in run time,
->> this patch creates an idle thread on every CPU to prevent them from
->> entering C-states.
-> 
-> First off, huge thanks for debugging this!  That must have been quite the task
-> (no pun intended).
-> 
-> While spinning up threads on every CPU is a clever way to ensure they don't go
-> into a deep sleep state, I'm not exactly excited about the idea of putting every
-> reachable CPU into a busy loop.  And while this doesn't add _that_ much complexity,
-> I'm not sure the benefit (preserving the assert for all systems) is worth it.  I
-> also don't want to arbitrarily prevent idle task (as in, the kernel's idle task)
-> interactions.  E.g. it's highly (highly) unlikely, but not impossible for there
-> to be a bug that's unique to idle tasks, or C-states, or other edge case.
-> 
-> Are there any metrics/stats that can be (easily) checked to grant an exception
-> to the sanity check?  That's a very hand-wavy question, as I'm not even sure what
-> type of stat we'd want to look at.  Actual runtime of a task, maybe?
-> 
-> If that's not easy, what if we add an off-by-default command line option to skip
-> the sanity check?  I was resistant to simply deleting the assert in the past, but
-> that was mainly because I didn't want to delete it without understanding what was
-> causing problems.  That would allow CI environments to opt-out as needed, while
-> still keeping the sanity check alive for enough systems to make it useful.
+- commit 0bdf399342c5("net: Avoid address overwrite in kernel_connect")
+- commit 86a7e0b69bd5("net: prevent rewrite of msg_name in sock_sendmsg()")
+- commit c889a99a21bf("net: prevent address rewrite in kernel_bind()")
+- commit 01b2885d9415("net: Save and restore msg_namelen in sock_sendmsg")
 
-Sorry for not replying earlier. I overlooked your email from my inbox. :)
+but broaden the focus a bit.
 
-Alternative to the busy loop, how about using the /dev/cpu_dma_latency
-interface to disable c-states (I wish I had learned this before writing
-the initial patch)? The good thing is it can do automatic cleanup when
-it closes the fd.
+In order to extend prog_tests/sock_addr.c to test these kernel
+functions, we add a set of new kfuncs that wrap individual socket
+operations to bpf_testmod and invoke them through set of corresponding
+SYSCALL programs (progs/sock_addr_kern.c). Each test case can be
+configured to use a different set of "sock_ops" depending on whether it
+is testing kernel calls (kernel_bind(), kernel_connect(), etc.) or
+system calls (bind(), connect(), etc.).
 
-The reason why I still think of disabling c-states is, even in the low
-c-states exit latency setup, it can still increase the chances of
-successful migration.
+=======
+Patches
+=======
+* Patch 1 fixes the sock_addr bind test program to work for big endian
+  architectures such as s390x.
+* Patch 2 introduces the new kfuncs to bpf_testmod.
+* Patch 3 introduces the BPF program which allows us to invoke these
+  kfuncs invividually from the test program.
+* Patch 4 lays the groundwork for IPv4 and IPv6 sockaddr hook coverage
+  by migrating much of the environment setup logic from
+  bpf/test_sock_addr.sh into prog_tests/sock_addr.c and adds test cases
+  to cover bind4/6, connect4/6, sendmsg4/6 and recvmsg4/6 hooks.
+* Patch 5 makes the set of socket operations for each test case
+  configurable, laying the groundwork for Patch 6.
+* Patch 6 introduces two sets of sock_ops that invoke the kernel
+  equivalents of connect(), bind(), etc. and uses these to add coverage
+  for the kernel socket functions.
 
-Otherwise, I can implement a command line option to skip the sanity
-check, as I was not able to find out a metrics/stats that is easy and
-reliable to indicate that the scheduler is not able to wake up the
-target CPU before the task is scheduled to another CPU.
+=======
+Changes
+=======
+v1->v2
+------
+* Dropped test_progs/sock_addr_kern.c and the sock_addr_kern test module
+  in favor of simply expanding bpf_testmod and test_progs/sock_addr.c.
+* Migrated environment setup logic from bpf/test_sock_addr.sh into
+  prog_tests/sock_addr.c rather than invoking the script from the test
+  program.
+* Added kfuncs to bpf_testmod as well as the sock_addr_kern BPF program
+  to enable us to invoke kernel socket functions from
+  test_progs/sock_addr.c.
+* Added test coverage for kernel socket functions to
+  test_progs/sock_addr.c.
+
+Link: https://lore.kernel.org/bpf/20240329191907.1808635-1-jrife@google.com/T/#u
+
+Jordan Rife (6):
+  selftests/bpf: Fix bind program for big endian systems
+  selftests/bpf: Implement socket kfuncs for bpf_testmod
+  selftests/bpf: Implement BPF programs for kernel socket operations
+  selftests/bpf: Add IPv4 and IPv6 sockaddr test cases
+  selftests/bpf: Make sock configurable for each test case
+  selftests/bpf: Add kernel socket operation tests
+
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 139 +++
+ .../bpf/bpf_testmod/bpf_testmod_kfunc.h       |  27 +
+ .../selftests/bpf/prog_tests/sock_addr.c      | 940 +++++++++++++++---
+ .../testing/selftests/bpf/progs/bind4_prog.c  |  18 +-
+ .../testing/selftests/bpf/progs/bind6_prog.c  |  18 +-
+ tools/testing/selftests/bpf/progs/bind_prog.h |  19 +
+ .../selftests/bpf/progs/sock_addr_kern.c      |  65 ++
+ 7 files changed, 1077 insertions(+), 149 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/bind_prog.h
+ create mode 100644 tools/testing/selftests/bpf/progs/sock_addr_kern.c
+
+-- 
+2.44.0.478.gd926399ef9-goog
+
 
