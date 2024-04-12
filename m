@@ -1,152 +1,91 @@
-Return-Path: <linux-kselftest+bounces-7784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 377728A2BAD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 11:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E73228A2BBB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 12:01:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E15EA1F2305F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 09:58:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98D0A1F2319C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 10:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0089852F92;
-	Fri, 12 Apr 2024 09:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C98653378;
+	Fri, 12 Apr 2024 10:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="hxydG2DY"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xmcw5Ldy";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Iit2OFQH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CE14E1D5;
-	Fri, 12 Apr 2024 09:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4053F5467B;
+	Fri, 12 Apr 2024 10:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712915915; cv=none; b=Vz+u+TJlWL5//WvUwhqPSQWrQ1EiYeEat215wKSM1d7KAT7DU2QpK8MktWKU1kyFnLgtenvWKGkNtLnvZD//eC/il5dM5MoK5w65k1IWuXF+EtEiTbawx+SDVSaTcq3NeKJlyHkoxP1LU+uKBcEe3NCnpiMQTpGN3KIGPNbHPnw=
+	t=1712916077; cv=none; b=MPxoiOCy2i4miAXxJN/c+I/tOGv7LGkPFkZtBdTWzB/eP7S5DTuoFCquEvpNdMQNuVnjimzc35HEG7milKMpfaJvCNuPURV5LBT1JfX/rKv3lwJWEenjtuwzzxv0wHkiD0LBHllkdCvPTWewTGjbJCbyR7RvRGfTTpsuwnKR+7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712915915; c=relaxed/simple;
-	bh=QndV9TT9pmDT+fXwJI9iOQE9VYOlSdccevWqhWNEacg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m0s/DE0NS6lmxiRYPPzTc2iyecUaSpgi41V5rT2k+GagHgVY6M4PVggQ2T9PY6/tyommsvZ9Kv759FN7WdDvbGYDhcBjlGrtKL+bFVx48uoiadji4iAkoTk2zyghQM9J/YwIItdhQXBaLKaLNBAt43sdpauMOsngK/ELNtAYM04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=hxydG2DY; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1712915914; x=1744451914;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QndV9TT9pmDT+fXwJI9iOQE9VYOlSdccevWqhWNEacg=;
-  b=hxydG2DY9EC4gf9jhE6POyrRgP9gVbeFSIfbtTDRlNoYlmjNkHKDWyZg
-   lGFUk5KqlVY2Sv0yT/qSMD2y2dzKI9B/4M5LJNQSlbWtj8TLy0msjE0eD
-   xwvbJLM5WzQJ3Q6n/PLrPO2YviF8UHYbHEX1p34HgTmhwjCR3t2mmBGHD
-   Lw9uuYAFksj4VHQZEvdS5t/nVd72Vz7zhCBytqZv9wxQwfoL5ycyJ/jdA
-   FM6pz1ejiW2UNcrQJ8eX9RMCctyOP6V0G8fDxpFLpTPf1FNj8Tk7TOQ9+
-   uUI/UdWagxerd3YS0v3Z9jImbhVyi4YuOveGpm2o0KxcosWYQV6QqDL3R
-   A==;
-X-CSE-ConnectionGUID: OGnVlqFaSN2/PpP1KY9laQ==
-X-CSE-MsgGUID: +7SHxj1mSZiXXuIvu13hXg==
-X-IronPort-AV: E=Sophos;i="6.07,195,1708412400"; 
-   d="asc'?scan'208";a="20723575"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Apr 2024 02:58:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 12 Apr 2024 02:58:16 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 12 Apr 2024 02:58:12 -0700
-Date: Fri, 12 Apr 2024 10:57:21 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-CC: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
-	<jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Evan Green
-	<evan@rivosinc.com>, =?iso-8859-1?Q?Cl=E9ment_L=E9ger?=
-	<cleger@rivosinc.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<shuah@kernel.org>, <linux-riscv@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Palmer Dabbelt
-	<palmer@rivosinc.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-sunxi@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 01/19] dt-bindings: riscv: Add vendorid and archid
-Message-ID: <20240412-revocable-dosage-99265debe66b@wendy>
-References: <20240411-dev-charlie-support_thead_vector_6_9-v1-0-4af9815ec746@rivosinc.com>
- <20240411-dev-charlie-support_thead_vector_6_9-v1-1-4af9815ec746@rivosinc.com>
+	s=arc-20240116; t=1712916077; c=relaxed/simple;
+	bh=/b/JY6+q8uW4ss7SkNT5zl6FCSo3lR6uNSQwGZE1dYE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ojTWtxQiBanoubI5Trn1L1PYQ8iqKANA3XthLuOCu7UCJ4Qc1IWpfSBCRBfM3aVoRI4lMqJXxmIlr3j7UCEp4GPQ2lslM9vICV+RhlozCVEVED5AVQ58ma1WVA+lt6vQrGLXpFldCR7LU5cbZK8RbUwa1E+7kzufjXNU1+NAU5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xmcw5Ldy; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Iit2OFQH; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712916074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lusYEh2FsMdpjmzFxzQyoNMi7sLpNoE7TBXwdEbGwiI=;
+	b=xmcw5LdydkXw1n+fKYwVQ3fVFKzHOSPeHwdu9hjDlheWB8djh/KMrpi66NDJ0vZgLI1DuV
+	WzUjwxhyddhGRawKvxxJ7FQ6soE2ZOhi9+QFt/2awG/+HvAzluHcJ/lJAWXSZinMCZoKWR
+	4U7K1z5L8qeUz3PoXtmzCW2DhQBrbQlF0L3INm8OgapyxoA4lIOU9xvI1EBzTf/Ml5mIaV
+	SlFdTI8AxnPOf4jsD7po2a9rcw9GcRgSgd1e2V9wvCgvBDgYeU04wECnroNchxmAK3o99p
+	u2ErLPXovEvwojjjGaUzw+P2p0hWGd+0h4fupRiusoMxL6oSsPV7tSFGmCh+Fw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712916074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lusYEh2FsMdpjmzFxzQyoNMi7sLpNoE7TBXwdEbGwiI=;
+	b=Iit2OFQHJ4cfHZdR273Hy/TtXz6YDSWchh1/+Q6fY10oYOX3HYFciGRh9VyZw8rMSVLdBd
+	eqAkVcuLM7GsHtCg==
+To: Shuah Khan <skhan@linuxfoundation.org>, John Stultz
+ <jstultz@google.com>, LKML <linux-kernel@vger.kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Lee Jones <joneslee@google.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests: timers: Fix valid-adjtimex signed left-shift
+ undefined behavior
+In-Reply-To: <dcb1a59b-55a0-4a33-99a5-3800660b04b1@linuxfoundation.org>
+References: <20240409202222.2830476-1-jstultz@google.com>
+ <dcb1a59b-55a0-4a33-99a5-3800660b04b1@linuxfoundation.org>
+Date: Fri, 12 Apr 2024 12:01:14 +0200
+Message-ID: <87v84mzyqd.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="YzIxShuT9j2BnF76"
-Content-Disposition: inline
-In-Reply-To: <20240411-dev-charlie-support_thead_vector_6_9-v1-1-4af9815ec746@rivosinc.com>
+Content-Type: text/plain
 
---YzIxShuT9j2BnF76
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Shuah!
 
-On Thu, Apr 11, 2024 at 09:11:07PM -0700, Charlie Jenkins wrote:
-> vendorid and marchid are required during devicetree parsing to determine
-> known hardware capabilities. This parsing happens before the whole
-> system has booted, so only the boot hart is online and able to report
-> the value of its vendorid and archid.
+On Thu, Apr 11 2024 at 15:01, Shuah Khan wrote:
+>
+> Applied to linux-kselftest next for Linux6.10-rc1.
 
-I'll comment on the kernel patch, but this is not needed.
+I took this already through my tree as I have more timer selftest
+related stuff pending and coming up soon along with actual kernel
+changes.
 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Document=
-ation/devicetree/bindings/riscv/cpus.yaml
-> index d87dd50f1a4b..c21d7374636c 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -94,6 +94,17 @@ properties:
->      description:
->        The blocksize in bytes for the Zicboz cache operations.
-> =20
-> +  riscv,vendorid:
-> +    $ref: /schemas/types.yaml#/definitions/uint64
-> +    description:
-> +      Same value as the mvendorid CSR.
-> +
-> +  riscv,archid:
-> +    $ref: /schemas/types.yaml#/definitions/uint64
-> +    description:
-> +      Same value as the marchid CSR.
-> +
-> +
->    # RISC-V has multiple properties for cache op block sizes as the sizes
->    # differ between individual CBO extensions
->    cache-op-block-size: false
->=20
-> --=20
-> 2.44.0
->=20
+Thanks,
 
---YzIxShuT9j2BnF76
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhkFgQAKCRB4tDGHoIJi
-0taCAP4tYStLi/B4J7M5neONl/q/8R8/ZSNYoUC3mB5o++Qa+gD7BOaDcH4iTfuG
-7JqZQnqsXKTRSQOes4E+V+bAkjzkYQU=
-=x06j
------END PGP SIGNATURE-----
-
---YzIxShuT9j2BnF76--
+        tglx
 
