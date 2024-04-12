@@ -1,231 +1,143 @@
-Return-Path: <linux-kselftest+bounces-7807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B5318A3044
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 16:15:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A7508A308F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 16:26:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CAE6B233BF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 14:15:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A73E1F21B89
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 14:26:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF36F127E20;
-	Fri, 12 Apr 2024 14:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087EF127E0D;
+	Fri, 12 Apr 2024 14:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMOkwjqD"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="aaK8eDl8";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="aaK8eDl8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875B0127E1A;
-	Fri, 12 Apr 2024 14:14:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB918626D;
+	Fri, 12 Apr 2024 14:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712931284; cv=none; b=UtUtgHD0eEXi+q9sFOawRBsKkiOVD55UDkMcENNPm6ASS3+asMlESWgFqsyh/utxrVmf8UpVf9NniPHyeLP3HtoFp94MOVq+3og4ZHtWjitMMbssm2TEHfOaRE7ag1yziLIbeQlw/HA6hOaggoiCM4C9TSCS29IC2a8exu8hxdw=
+	t=1712931808; cv=none; b=AeZKmNNueRC8lcZf14NRx8JfJZXJyz2uOgdamYEsvR/l/Tl3kNP+TMpsOufY4/ZJnAGxb7B2Bxm30kQThMqP4ZG4Br+NiAbDqW7I3IkVv/E8qxdWKmV86OWe8ABdqba8WLvhdDpLG2t1FLCfWgGE+qXGlTYaXMinsRLSSad/jRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712931284; c=relaxed/simple;
-	bh=a/xwDv1uI1eJafNxyFB3fcAD3BCfsSqkG8l2bCUThIE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zsez1QACwutgbNm1jcGFsYFEmmsdkbdknsGFhqPLiV/4B2wwBgDQ3kEEaxH7xt8A9Cvhq9Z73efCJ80wFc2YhmRm8Zxn0udXYuMXWi6V0CIrzitlsKZXqLjI/RvMcPV6LrSPDRLTJgUm/GNRV21I5L5/JkhOAvDtv5vATvjPO/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMOkwjqD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E38C4AF0E;
-	Fri, 12 Apr 2024 14:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712931284;
-	bh=a/xwDv1uI1eJafNxyFB3fcAD3BCfsSqkG8l2bCUThIE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WMOkwjqDeZMrtWjW+EuM5BRU0pg3VGxVxY+Q+U6Q4DpJ9kJ76D+Oh1d5MmDn4rH7X
-	 z1wEHdYOEm+O9623Vi4+U/qiGn9dIMNjGJ92bVwUT0TPf946y0D8NYiuARivdOHqVD
-	 5aP1B/eof8Rh96k7F3sdyVA0GKA4Z+l3G7ujzlyLeLfGsQiDADuE/sbNX3J5c2l5OY
-	 vZo1KGjAPoQRxnvBYOk50bpICinlCgrDcFfeaj4wQo7p+ke4tJj5L8Ug1dtGn6GECC
-	 i5YTyKMtLFoPsmQltHQYm5LcS/IpQD9MyzB5YdG5iIwL9rrPJyuN5lubgjjPFtUE7S
-	 fa1QweTOEhVZA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 6/6] selftests: net: exercise page pool reporting via netlink
-Date: Fri, 12 Apr 2024 07:14:36 -0700
-Message-ID: <20240412141436.828666-7-kuba@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240412141436.828666-1-kuba@kernel.org>
-References: <20240412141436.828666-1-kuba@kernel.org>
+	s=arc-20240116; t=1712931808; c=relaxed/simple;
+	bh=JxNUt0WI8VJtqkr1vI04CciRk6AsgIvjNELyWKMNfaI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kwi/v3swpW0G79F3dc51+tSgxRK1wjg6KmkBvFBWzeYyBRFaPkVbUJwc41dsVvb2cfOI5SNkuVhqCy6+CwSXyE5y10R3gXIf0nCqQX9vdnFJ7Zw1YrGyxX4yYrkrgvnUW1AB787cJwnGc+LA9I4fwQy6pMU1Sot9UQVC1/Mbgas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=aaK8eDl8; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=aaK8eDl8; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8170B3835A;
+	Fri, 12 Apr 2024 14:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712931805; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JxNUt0WI8VJtqkr1vI04CciRk6AsgIvjNELyWKMNfaI=;
+	b=aaK8eDl8BbXj/V9hd6/mjA++UiyT5kZSEtZ189Pvr4jHoHuZz9d+z4mZzyui0I2g6ZS9+b
+	SuZrlvcQKWtdyZltI/Kt3evj81rlqpDyiLMckCFuyKea/bA5Oc+Q+d4wp8GTMglf/6LLHY
+	dfoGgS7VsdYJXfExdxGLfjyMWE/llbo=
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712931805; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JxNUt0WI8VJtqkr1vI04CciRk6AsgIvjNELyWKMNfaI=;
+	b=aaK8eDl8BbXj/V9hd6/mjA++UiyT5kZSEtZ189Pvr4jHoHuZz9d+z4mZzyui0I2g6ZS9+b
+	SuZrlvcQKWtdyZltI/Kt3evj81rlqpDyiLMckCFuyKea/bA5Oc+Q+d4wp8GTMglf/6LLHY
+	dfoGgS7VsdYJXfExdxGLfjyMWE/llbo=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 66F6C1368B;
+	Fri, 12 Apr 2024 14:23:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id FUDyGN1DGWZvcAAAD6G6ig
+	(envelope-from <mkoutny@suse.com>); Fri, 12 Apr 2024 14:23:25 +0000
+Date: Fri, 12 Apr 2024 16:23:24 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Subject: Re: Re: [RFC PATCH v3 2/9] cgroup/pids: Separate semantics of
+ pids.events related to pids.max
+Message-ID: <w7cenotcuudapq4zsq6mybfvaqyljgy5hez3uc3byqzdn44yi6@76yfnhg4irt6>
+References: <20240405170548.15234-1-mkoutny@suse.com>
+ <20240405170548.15234-3-mkoutny@suse.com>
+ <ZhQvmnnxhiVo1duU@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="746pwchwjxtzohce"
+Content-Disposition: inline
+In-Reply-To: <ZhQvmnnxhiVo1duU@slm.duckdns.org>
+X-Spam-Flag: NO
+X-Spam-Score: -5.75
+X-Spam-Level: 
+X-Spamd-Result: default: False [-5.75 / 50.00];
+	BAYES_HAM(-2.85)[99.34%];
+	SIGNED_PGP(-2.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
 
-Add a Python test for the basic ops.
 
-  # ./net/nl_netdev.py
-  KTAP version 1
-  1..3
-  ok 1 nl_netdev.empty_check
-  ok 2 nl_netdev.lo_check
-  ok 3 nl_netdev.page_pool_check
-  # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+--746pwchwjxtzohce
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - move up / down to the test
- - add helper for getting pp
- - add busy_wait helper
- - rename undeteched
----
- tools/testing/selftests/net/lib/py/ksft.py | 12 ++++
- tools/testing/selftests/net/lib/py/nsim.py |  1 +
- tools/testing/selftests/net/nl_netdev.py   | 76 +++++++++++++++++++++-
- 3 files changed, 87 insertions(+), 2 deletions(-)
+On Mon, Apr 08, 2024 at 07:55:38AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> The whole series make sense to me.
 
-diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index 793e4761645e..3769b9197213 100644
---- a/tools/testing/selftests/net/lib/py/ksft.py
-+++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -2,6 +2,7 @@
- 
- import builtins
- import inspect
-+import time
- import traceback
- from .consts import KSFT_MAIN_NAME
- 
-@@ -50,6 +51,17 @@ KSFT_RESULT = None
-         _fail("Check failed", a, "<", b, comment)
- 
- 
-+def ksft_busy_wait(cond, sleep=0.005, deadline=1, comment=""):
-+    end = time.monotonic() + deadline
-+    while True:
-+        if cond():
-+            return
-+        if time.monotonic() > end:
-+            _fail("Waiting for condition timed out", comment)
-+            return
-+        time.sleep(sleep)
-+
-+
- def ktap_result(ok, cnt=1, case="", comment=""):
-     res = ""
-     if not ok:
-diff --git a/tools/testing/selftests/net/lib/py/nsim.py b/tools/testing/selftests/net/lib/py/nsim.py
-index 94aa32f59fdb..06896cdf7c18 100644
---- a/tools/testing/selftests/net/lib/py/nsim.py
-+++ b/tools/testing/selftests/net/lib/py/nsim.py
-@@ -28,6 +28,7 @@ from .utils import cmd, ip
-         self.dfs_dir = "%s/ports/%u/" % (nsimdev.dfs_dir, port_index)
-         ret = ip("-j link show dev %s" % ifname, ns=ns)
-         self.dev = json.loads(ret.stdout)[0]
-+        self.ifindex = self.dev["ifindex"]
- 
-     def dfs_write(self, path, val):
-         self.nsimdev.dfs_write(f'ports/{self.port_index}/' + path, val)
-diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-index 2b8b488fb419..6909b1760739 100755
---- a/tools/testing/selftests/net/nl_netdev.py
-+++ b/tools/testing/selftests/net/nl_netdev.py
-@@ -1,7 +1,9 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
--from lib.py import ksft_run, ksft_pr, ksft_eq, ksft_ge, NetdevFamily
-+import time
-+from lib.py import ksft_run, ksft_pr, ksft_eq, ksft_ge, ksft_busy_wait
-+from lib.py import NetdevFamily, NetdevSimDev, ip
- 
- 
- def empty_check(nf) -> None:
-@@ -15,9 +17,79 @@ from lib.py import ksft_run, ksft_pr, ksft_eq, ksft_ge, NetdevFamily
-     ksft_eq(len(lo_info['xdp-rx-metadata-features']), 0)
- 
- 
-+def page_pool_check(nf) -> None:
-+    with NetdevSimDev() as nsimdev:
-+        nsim = nsimdev.nsims[0]
-+
-+        def up():
-+            ip(f"link set dev {nsim.ifname} up")
-+
-+        def down():
-+            ip(f"link set dev {nsim.ifname} down")
-+
-+        def get_pp():
-+            pp_list = nf.page_pool_get({}, dump=True)
-+            return [pp for pp in pp_list if pp.get("ifindex") == nsim.ifindex]
-+
-+        # No page pools when down
-+        down()
-+        ksft_eq(len(get_pp()), 0)
-+
-+        # Up, empty page pool appears
-+        up()
-+        pp_list = get_pp()
-+        ksft_ge(len(pp_list), 0)
-+        refs = sum([pp["inflight"] for pp in pp_list])
-+        ksft_eq(refs, 0)
-+
-+        # Down, it disappears, again
-+        down()
-+        pp_list = get_pp()
-+        ksft_eq(len(pp_list), 0)
-+
-+        # Up, allocate a page
-+        up()
-+        nsim.dfs_write("pp_hold", "y")
-+        pp_list = nf.page_pool_get({}, dump=True)
-+        refs = sum([pp["inflight"] for pp in pp_list if pp.get("ifindex") == nsim.ifindex])
-+        ksft_ge(refs, 1)
-+
-+        # Now let's leak a page
-+        down()
-+        pp_list = get_pp()
-+        ksft_eq(len(pp_list), 1)
-+        refs = sum([pp["inflight"] for pp in pp_list])
-+        ksft_eq(refs, 1)
-+        attached = [pp for pp in pp_list if "detach-time" not in pp]
-+        ksft_eq(len(attached), 0)
-+
-+        # New pp can get created, and we'll have two
-+        up()
-+        pp_list = get_pp()
-+        attached = [pp for pp in pp_list if "detach-time" not in pp]
-+        detached = [pp for pp in pp_list if "detach-time" in pp]
-+        ksft_eq(len(attached), 1)
-+        ksft_eq(len(detached), 1)
-+
-+        # Free the old page and the old pp is gone
-+        nsim.dfs_write("pp_hold", "n")
-+        # Freeing check is once a second so we may need to retry
-+        ksft_busy_wait(lambda: len(get_pp()) == 1, deadline=2)
-+
-+        # And down...
-+        down()
-+        ksft_eq(len(get_pp()), 0)
-+
-+        # Last, leave the page hanging for destroy, nothing to check
-+        # we're trying to exercise the orphaning path in the kernel
-+        up()
-+        nsim.dfs_write("pp_hold", "y")
-+
-+
- def main() -> None:
-     nf = NetdevFamily()
--    ksft_run([empty_check, lo_check], args=(nf, ))
-+    ksft_run([empty_check, lo_check, page_pool_check],
-+             args=(nf, ))
- 
- 
- if __name__ == "__main__":
--- 
-2.44.0
+Including the migration charging?
+(Asking whether I should keep it stacked in v4 posting.)
 
+Thanks,
+Michal
+
+--746pwchwjxtzohce
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZhlD1wAKCRAGvrMr/1gc
+jqWHAP43KM4VxC2WEkbxsocIW9835Ah5tJFCnWq+L9dCH0YYeQEAgf4YC5EsufMc
+emrWLa4i67lHae7Mxu5+aJkQVhJQ2AY=
+=vxlD
+-----END PGP SIGNATURE-----
+
+--746pwchwjxtzohce--
 
