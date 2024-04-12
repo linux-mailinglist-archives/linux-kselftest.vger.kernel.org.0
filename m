@@ -1,260 +1,154 @@
-Return-Path: <linux-kselftest+bounces-7781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B65828A29C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 10:51:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F02E8A2A38
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 11:04:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F87A1F226E4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 08:51:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E825128489A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 09:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD8BF7581A;
-	Fri, 12 Apr 2024 08:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC10159165;
+	Fri, 12 Apr 2024 08:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XBkbwxeD"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NhvAawsX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8ED06F525
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 08:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B932353E2C
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 08:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712911425; cv=none; b=n9RTpHwMn5M/mOBiacsBtEMlHDjIL3yGdO02OToO1tkcOzfOw2xKB0iQLG+U6H6BA4S4tZAdBuJejfojmCjXWHSdWdh6tCTUx+O5pOfAOyb6C4Wsst0eJNRhtYQgFsQ1oh5MOyfSybqVq0VLoXxj+1gLbHUZEtHi7buXOSwgt8s=
+	t=1712912039; cv=none; b=BnUgWXorvIYDVeWgieMHc/21PSWe4sjc/DcKXD/evOfMc+6YHdEAMa/PH9oFsAeMHRNw//lmeOXhdiAEnMiKPD+wjv5bEoEhNkN+5ul+cBXMxz3qp+VJCelbvXYQGap3Guf4qefs62SiicxvdoiUzVY2/LFLjY/kk9MA3qiAWAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712911425; c=relaxed/simple;
-	bh=j7Y4ZpRE0Th2mRGXrMufOMFA5pgpOzLmfPeNzLiOs4E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rWRyMyhFS1ZuRFjugqnYgsd8QtlJqThI6rfQRry8J8cqdoe8fcwnV0pcP0YGAKFDe9v12jZTGAKo82s1EG6uee7yrQCM6PgqEWDmL9qfj8UXHeHaSIMtvPS0eEUI9w6Eo3wqCs917KYOcyLl2CkdxIlvZPrMV2bZMeXJGnAz89Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XBkbwxeD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712911422;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=WhIdLWivIqIvKp3FSm9AKW2RcexApWfnR7lW4YKH3gc=;
-	b=XBkbwxeDPSiyjyudeIz2aT1e/kknGLHpY+mIdG0+MCuyaKL9akmvqF1yZsKpcyfgupjPry
-	Da9/5FRT+tAGozKMRPJ7VT3TIfYVIv8apZkdiI2xO3CiHu9HcN9paXY92Xd+4v/seAGHs5
-	8U6ltEt34S0HH6KOiFJqVy+8Aq3LaM0=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-463-nKXeVBXSP6uT3Uv1kyZYYA-1; Fri,
- 12 Apr 2024 04:43:37 -0400
-X-MC-Unique: nKXeVBXSP6uT3Uv1kyZYYA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34CAE1C05AAC;
-	Fri, 12 Apr 2024 08:43:37 +0000 (UTC)
-Received: from t14s.redhat.com (unknown [10.39.193.165])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 616F2C13FA0;
-	Fri, 12 Apr 2024 08:43:34 +0000 (UTC)
-From: David Hildenbrand <david@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	David Hildenbrand <david@redhat.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Thomas Huth <thuth@redhat.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v1] KVM: s390x: selftests: Add shared zeropage test
-Date: Fri, 12 Apr 2024 10:43:29 +0200
-Message-ID: <20240412084329.30315-1-david@redhat.com>
+	s=arc-20240116; t=1712912039; c=relaxed/simple;
+	bh=Rm+Jhy2CPEMYHiZu4p8My94JcsMyZsaQrqOVLaEHKfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QiaZB3llicHhnEtB89H0HVwValubbxIZHcklELgO1hTFuuUA1mwL5x1NdF6LZxCGI9f114FXy9wtwCblolmHCF86RzMJg/o+6Mf8E/nUtm6nap+VYupDCNEZKfdIPCdPq+1QfcIvSZ/p21Ebmu4f2VjChzqLVh9rnyzcmj+G610=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NhvAawsX; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d895e2c6efso7386641fa.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 01:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1712912036; x=1713516836; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9HCv5WXEXkcM3e4s9GxwuVLanaiJtfT2xDBOPBy8Ztg=;
+        b=NhvAawsXAsmL6+8taXeMueUTUfIHzdon+4e/rTZ6ouZTW+kmC81lcsWljfmwwHOZZg
+         xjpPpXq+oboTBP7LL2PBd0+Q0TogBbcOdveJSXUtoh6RybXjPcOvPwGR5c69VP1dm8DB
+         C6WdVZBXfO9tDFEIB6BnME05LPMCOFiPW6N0Qi8VNukFV4tC5vvnffESY5PN+mBA8BNt
+         QdG4K0ZPIH+tHDk2PFsG2D3etLwI7PP6+E6qD8pyGHRANcKfJtJbf+tp4xPbAeiRRpqT
+         hNgvqw24AzWDQdINb+cUAJ0vVr07db/EiyTOcNfXBvLeD+uqvArd1Oylj1bdGpCl9Gks
+         /DbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712912036; x=1713516836;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9HCv5WXEXkcM3e4s9GxwuVLanaiJtfT2xDBOPBy8Ztg=;
+        b=DEBGHU61rrvH78B8xcMklhf+3Qys/PDizKMtUONHvmDzG0nc0HB4XA6y0HDTE33Hut
+         N7i0TzE0qOEGPCSF2eWJDaWFnwrFjZII5kr7siRcyxEB03C4woh0qU1EtI3C489I6r7L
+         h0e2hJO9P4PbRnE2oAk9J+yT3ljS63sV/D9m4JfB+DfGxi3BGsoPsoOlLXbj4V46B+LH
+         4tlh7SFTlFQViuf2LVxmAQQgL/OB5E0gpe58y0mZNkhCQOkZmHdV57xQUtMOgwpdbjkO
+         ILt22HSi2Rbz9YgnsYjtHWKHaIXoEYtNekuSoupI6em/y9v+X9q3cA2om8jkf794B9/j
+         2daw==
+X-Forwarded-Encrypted: i=1; AJvYcCXl543kW/U3FweqDHDv0NuHOZ49sBZrfniK6xLIACO6bQs5txMdlLCAeCGnp6YUf/iLSeSkxXrg+q6X8E7uKtAQ+thfAVcHP4v5plivGmAS
+X-Gm-Message-State: AOJu0Yx/ZC6V8chM3s4LPtPSHPUbFQefmi2ieFwYLE9PpqdKmaa6u3Tw
+	eBEUMQdMWR5HhnZURVM4gFl+liZywlSMoaJ0Mu/hmUl5lpdWZrrH8ln3/OovC1k=
+X-Google-Smtp-Source: AGHT+IFSyvhmvV600yckuR3RXXhnT/HiMaiPPbLP9Bpktx86rW2y3WG1OuM9vSWWo5pDGj5dTLztzA==
+X-Received: by 2002:a05:651c:205c:b0:2d9:eb66:6d39 with SMTP id t28-20020a05651c205c00b002d9eb666d39mr1130573ljo.19.1712912035823;
+        Fri, 12 Apr 2024 01:53:55 -0700 (PDT)
+Received: from u94a ([2401:e180:8863:5c39:2e5:46b1:443c:b5c1])
+        by smtp.gmail.com with ESMTPSA id z184-20020a6265c1000000b006ed4c430acesm2522658pfb.40.2024.04.12.01.53.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Apr 2024 01:53:55 -0700 (PDT)
+Date: Fri, 12 Apr 2024 16:53:35 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Dave Thaler <dthaler1968@googlemail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Brendan Jackman <jackmanb@chromium.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Khadija Kamran <kamrankhadijadj@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>, 
+	John Johansen <john.johansen@canonical.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
+	bpf@ietf.org, David Vernet <void@manifault.com>
+Subject: Re: [PATCH bpf-next v3 06/11] bpf: Fix compare error in function
+ retval_range_within
+Message-ID: <m3pwq4fhoh4pecl5mahz7fhjiav4atebtbr22jfk4eqqq5hiya@g3vsc2zqlcy6>
+References: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
+ <20240411122752.2873562-7-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411122752.2873562-7-xukuohai@huaweicloud.com>
 
-Let's test that we can have shared zeropages in our process as long as
-storage keys are not getting used, that shared zeropages are properly
-unshared (replaced by anonymous pages) once storage keys are enabled,
-and that no new shared zeropages are populated after storage keys
-were enabled.
+On Thu, Apr 11, 2024 at 08:27:47PM +0800, Xu Kuohai wrote:
+> [...]
+> 24: (b4) w0 = -1                      ; R0_w=0xffffffff
+> ; int BPF_PROG(test_int_hook, struct vm_area_struct *vma, @ lsm.c:89
+> 25: (95) exit
+> At program exit the register R0 has smin=4294967295 smax=4294967295 should have been in [-4095, 0]
+> 
+> It can be seen that instruction "w0 = -1" zero extended -1 to 64-bit
+> register r0, setting both smin and smax values of r0 to 4294967295.
+> This resulted in a false reject when r0 was checked with range [-4095, 0].
+> 
+> Given bpf_retval_range is a 32-bit range, this patch fixes it by
+> changing the compare between r0 and return range from 64-bit
+> operation to 32-bit operation.
+> 
+> Fixes: 8fa4ecd49b81 ("bpf: enforce exact retval range on subprog/callback exit")
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  kernel/bpf/verifier.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 05c7c5f2bec0..5393d576c76f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9879,7 +9879,7 @@ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
+>  
+>  static bool retval_range_within(struct bpf_retval_range range, const struct bpf_reg_state *reg)
+>  {
+> -	return range.minval <= reg->smin_value && reg->smax_value <= range.maxval;
+> +	return range.minval <= reg->s32_min_value && reg->s32_max_value <= range.maxval;
 
-We require the new pagemap interface to detect the shared zeropage.
+Logic-wise LGTM
 
-On an old kernel (zeropages always disabled):
-	# ./s390x/shared_zeropage_test
-	TAP version 13
-	1..3
-	not ok 1 Shared zeropages should be enabled
-	ok 2 Shared zeropage should be gone
-	ok 3 Shared zeropages should be disabled
-	# Totals: pass:2 fail:1 xfail:0 xpass:0 skip:0 error:0
+While the status-quo is that the return value is always truncated to
+32-bit, looking back there was an attempt to use 64-bit return value for
+bpf_prog_run[1] (not merged due to issue on 32-bit architectures). Also
+from the reading of BPF standardization ABI it would be inferred that
+return value is in 64-bit range:
 
-On a fixed kernel:
-	# ./s390x/shared_zeropage_test
-	TAP version 13
-	1..3
-	ok 1 Shared zeropages should be enabled
-	ok 2 Shared zeropage should be gone
-	ok 3 Shared zeropages should be disabled
-	# Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+  BPF has 10 general purpose registers and a read-only frame pointer register,
+  all of which are 64-bits wide.
+  
+  The BPF calling convention is defined as:
+  
+  * R0: return value from function calls, and exit value for BPF programs
+  ...
 
-Testing of UFFDIO_ZEROPAGE can be added later.
+So add relevant people into the thread for opinions.
 
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Janosch Frank <frankja@linux.ibm.com>
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: Thomas Huth <thuth@redhat.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-To get it right this time, test the relevant cases.
-
-v3 of fixes are at:
- https://lore.kernel.org/all/20240411161441.910170-1-david@redhat.com/T/#u
-
----
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../kvm/s390x/shared_zeropage_test.c          | 110 ++++++++++++++++++
- 2 files changed, 111 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/s390x/shared_zeropage_test.c
-
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 741c7dc16afc..ed4ad591f193 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -180,6 +180,7 @@ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
- TEST_GEN_PROGS_s390x += s390x/tprot
- TEST_GEN_PROGS_s390x += s390x/cmma_test
- TEST_GEN_PROGS_s390x += s390x/debug_test
-+TEST_GEN_PROGS_s390x += s390x/shared_zeropage_test
- TEST_GEN_PROGS_s390x += demand_paging_test
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += guest_print_test
-diff --git a/tools/testing/selftests/kvm/s390x/shared_zeropage_test.c b/tools/testing/selftests/kvm/s390x/shared_zeropage_test.c
-new file mode 100644
-index 000000000000..74e829748fb1
---- /dev/null
-+++ b/tools/testing/selftests/kvm/s390x/shared_zeropage_test.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Test shared zeropage handling (with/without storage keys)
-+ *
-+ * Copyright (C) 2024, Red Hat, Inc.
-+ */
-+#include <sys/mman.h>
-+
-+#include <linux/fs.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "kselftest.h"
-+
-+static void set_storage_key(void *addr, uint8_t skey)
-+{
-+	asm volatile("sske %0,%1" : : "d" (skey), "a" (addr));
-+}
-+
-+static void guest_code(void)
-+{
-+	/* Issue some storage key instruction. */
-+	set_storage_key((void *)0, 0x98);
-+	GUEST_DONE();
-+}
-+
-+/*
-+ * Returns 1 if the shared zeropage is mapped, 0 if something else is mapped.
-+ * Returns < 0 on error or if nothing is mapped.
-+ */
-+static int maps_shared_zeropage(int pagemap_fd, void *addr)
-+{
-+	struct page_region region;
-+	struct pm_scan_arg arg = {
-+		.start = (uintptr_t)addr,
-+		.end = (uintptr_t)addr + 4096,
-+		.vec = (uintptr_t)&region,
-+		.vec_len = 1,
-+		.size = sizeof(struct pm_scan_arg),
-+		.category_mask = PAGE_IS_PFNZERO,
-+		.category_anyof_mask = PAGE_IS_PRESENT,
-+		.return_mask = PAGE_IS_PFNZERO,
-+	};
-+	return ioctl(pagemap_fd, PAGEMAP_SCAN, &arg);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	char *mem, *page0, *page1, *page2, tmp;
-+	const size_t pagesize = getpagesize();
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	int pagemap_fd;
-+
-+	ksft_print_header();
-+	ksft_set_plan(3);
-+
-+	/*
-+	 * We'll use memory that is not mapped into the VM for simplicity.
-+	 * Shared zeropages are enabled/disabled per-process.
-+	 */
-+	mem = mmap(0, 3 * pagesize, PROT_READ, MAP_PRIVATE|MAP_ANON, -1, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "mmap() failed");
-+
-+	/* Disable THP. Ignore errors on older kernels. */
-+	madvise(mem, 3 * pagesize, MADV_NOHUGEPAGE);
-+
-+	page0 = mem;
-+	page1 = page0 + pagesize;
-+	page2 = page1 + pagesize;
-+
-+	/* Can we even detect shared zeropages? */
-+	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-+	TEST_REQUIRE(pagemap_fd >= 0);
-+
-+	tmp = *page0;
-+	asm volatile("" : "+r" (tmp));
-+	TEST_REQUIRE(maps_shared_zeropage(pagemap_fd, page0) == 1);
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+
-+	/* Verify that we get the shared zeropage after VM creation. */
-+	tmp = *page1;
-+	asm volatile("" : "+r" (tmp));
-+	ksft_test_result(maps_shared_zeropage(pagemap_fd, page1) == 1,
-+			 "Shared zeropages should be enabled\n");
-+
-+	/*
-+	 * Let our VM execute a storage key instruction that should
-+	 * unshare all shared zeropages.
-+	 */
-+	vcpu_run(vcpu);
-+	get_ucall(vcpu, &uc);
-+	TEST_ASSERT_EQ(uc.cmd, UCALL_DONE);
-+
-+	/* Verify that we don't have a shared zeropage anymore. */
-+	ksft_test_result(!maps_shared_zeropage(pagemap_fd, page1),
-+			 "Shared zeropage should be gone\n");
-+
-+	/* Verify that we don't get any new shared zeropages. */
-+	tmp = *page2;
-+	asm volatile("" : "+r" (tmp));
-+	ksft_test_result(!maps_shared_zeropage(pagemap_fd, page2),
-+			 "Shared zeropages should be disabled\n");
-+
-+	kvm_vm_free(vm);
-+
-+	ksft_finished();
-+}
--- 
-2.44.0
-
+1: https://lore.kernel.org/bpf/20221115193911.u6prvskdzr5jevni@apollo/
 
