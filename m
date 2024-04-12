@@ -1,108 +1,214 @@
-Return-Path: <linux-kselftest+bounces-7860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 492DA8A3607
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 20:52:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D2CE8A3615
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 20:59:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ABBB1C2091A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 18:52:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03FC72855FE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 18:59:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 705ED14F13B;
-	Fri, 12 Apr 2024 18:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51AB814F9D7;
+	Fri, 12 Apr 2024 18:59:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kw77vnIE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mw30pxNB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0C114F136;
-	Fri, 12 Apr 2024 18:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C86523778;
+	Fri, 12 Apr 2024 18:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712947951; cv=none; b=EQ0YAwq0ePIlOb7bR/OPLQ1NpzzectJnMKm5xThHwSqQR1qLq7lASJnQoHpcZNaoBjLroUqBDrNIEUPoT5GFGnWietBkQbiSinBw1KDZORNfBDg0Xy8BP+8HYuAHstGWhb82PADONXBfw+zeCr50pmcfyTyc8Pb4YsG8yrNS5gg=
+	t=1712948388; cv=none; b=ndJDRGObN2wFfzVe8RAsUfk1QR6ZyA+pAo1jv5pW0JUJpHDkh45qOCryLriE+RFYHpe6g0Bz2oWMkbH26LeEWfa3TI67r9U6NBjcW+Q+BjDF7QLsmaOSIyhV2K0fuxiChMaVr3PYq3X+XVff1MEz878d7Bl6rR/vnBIfQ36JC1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712947951; c=relaxed/simple;
-	bh=mTcXGw4nugqGSRxGCjG4A4MX8meoxqzJ4oLOi0eBJCU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZZ65762ykOET7F3fLpRLuINAFfBvGCCJZXZRTK1AoF+LcMViC5IUZg/jJNbl9WEEi5uetghMryV2oT6l69k2Ae5ERvpYabnGN4nhAC2b27c34noxkmd7VDPLhmpBUwTMBoSqiiMeW0wWrH3m/SE+BvfNuENKsviMpEOrAzJx4AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kw77vnIE; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-56bdf81706aso1469287a12.2;
-        Fri, 12 Apr 2024 11:52:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712947947; x=1713552747; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iHtXmJuMK5U+UHjTruXgW8Ixfi7zQSR0MmnJiv0r0VI=;
-        b=kw77vnIEi+zHV3UZgsZWA6Rcvd4XAXaabBAWCnGYVWKNy8qVvdQIOxCcuyjnG2lQpI
-         XlchWN2t7WvQHamDZSU4eC3a/YS13pw+trtksQfDrnvk+9oCNvX7VLv/GF4S91lZxuqe
-         JFIBqQW4zPiEw6ztMYlqYYuZlkcgaz6FAvhjt/qZQktFu/a3IhsTS6f2ZaKvYBpPfmIz
-         nClSwHVIlArTh/wKiKMHza3X2va3NQyD6119k++SaR5QpbiDKVTgE60s9+AgIXuT8qsF
-         pBg3Tlok0k74a03YBoxHCD6Wzm/s5KJkj/S8wZ0Vlx8haQ4c5Bc0Xh24xMwNPFArTaaV
-         lftg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712947947; x=1713552747;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iHtXmJuMK5U+UHjTruXgW8Ixfi7zQSR0MmnJiv0r0VI=;
-        b=qDrL8uRFijMKuGPHm5ZLxJeaOVQRE0seah0ew80CvsIbyt++wKf68F7IBshBw8/Y5s
-         Go6N3NKe6ktQKuelUv980QYb9EQOT6Pcf8Ea4bqnQGqB4nIImGsoSwGkPY3FKytcRhlN
-         TQwHzXDgXihxk4x2Ufn6V/T1Q47PBoasTaCOYphOqEtoTMRJk8T6tY3mupX8dS3VoQtH
-         QAibgfBIDuYoMJ+VgnmXiOFg5QRD68cYsQe+CqbeQn8FM2P4IFJHunmQs4c5nrnvLWxw
-         UtNuiPI3JsAicQdwCrDEjQRLxxTNRglfvIJDsVr91gdXPLdo0dJAwFIgMV6Evuj22Qdp
-         Gkrg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMjELUIHkz31t50MnGnttxJVPBmsswTOVxFgflrGJfuL7DnFdwVOhaXfZxRAyQO3skTBne6dolNe52PaH/iN3NauUdyCTly8gDXZ5EPstDTs7KnK+eIYg+QkDlpWC38Vx+6R2t
-X-Gm-Message-State: AOJu0Yzd6jh67pI6VCU+m+fluiWLDwxSMw4921Xp3AawrOKlGpvS5L8D
-	tT4Gv4+MOTyeWNi+EngcnH4L9MZ78zgSo382VkZSkbc4LTPlGTO9
-X-Google-Smtp-Source: AGHT+IEjJuMiPSy1BzMREQ4B6uMKfyuDaIcn1eUOa6GD7uqmlWt4T9TGBAfSFgr/vI5sXt/kYtUMgQ==
-X-Received: by 2002:a50:c05a:0:b0:56c:2785:ca34 with SMTP id u26-20020a50c05a000000b0056c2785ca34mr2212442edd.5.1712947947132;
-        Fri, 12 Apr 2024 11:52:27 -0700 (PDT)
-Received: from [192.168.100.206] ([89.28.99.140])
-        by smtp.gmail.com with ESMTPSA id r6-20020aa7cb86000000b0056e3707323bsm1917169edt.97.2024.04.12.11.52.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Apr 2024 11:52:26 -0700 (PDT)
-Message-ID: <905e8d82b369b5de22936c202b19d783f594c33f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/14] use start_server and connect_to
- helpers
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Fri, 12 Apr 2024 21:52:24 +0300
-In-Reply-To: <cover.1712796967.git.tanggeliang@kylinos.cn>
-References: <cover.1712796967.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1712948388; c=relaxed/simple;
+	bh=LuLEqLX3JLgh1GzFv1vsjyQM7SgJUCT9K8xbIt5Uo5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lVBg/f3dvk6ryI1pkO7wnpFh2qYFdBMRvT/szNM1jRA718i5AHM/VG7ageOQPdKABQCDvuXI+8WWz8muaL176yzJ4Q2JDCaG+s+z2o1r+R61l/Lk2XFqtgyJ/p0vrAaemt13ibWk2e6n10Pz3SOynbpfh56ifWsohF7RiTcfo20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mw30pxNB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C9DBC2BBFC;
+	Fri, 12 Apr 2024 18:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712948387;
+	bh=LuLEqLX3JLgh1GzFv1vsjyQM7SgJUCT9K8xbIt5Uo5Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mw30pxNB+RuhG0Eg6RLHx0nvRwAHBHW+UMA78SHhSenayouFGw636u5+aZEMbs48u
+	 Z4OdOpjIHXdliZT0DbX3uwJ021wUPeRQ5VYMQiGoX+GmVJlQo//SARrCfV0uajBvt+
+	 pesRNDzSUTKDdgRfgX1eDrFzi72ikiW4TW7bvtbMf8Q3ZYz2WUZmXSBJlRALj7D+wf
+	 JPiii9gXxroeixv8+8Mp+JI+bRqaFLipDLSi9+4rUFgGPfqzc5WHMXfTInHUKEYKtF
+	 ztbHkT9vIdkVVsWnTFcPYgyvkVy9sjrF1NafQ6QIQONuZChPON/S1loIowHoead7r1
+	 3hHVQMi2LTdtQ==
+Date: Fri, 12 Apr 2024 19:59:40 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 06/19] riscv: Extend cpufeature.c to detect vendor
+ extensions
+Message-ID: <20240412-factsheet-attain-1a2d1c5306a2@spud>
+References: <20240411-dev-charlie-support_thead_vector_6_9-v1-0-4af9815ec746@rivosinc.com>
+ <20240411-dev-charlie-support_thead_vector_6_9-v1-6-4af9815ec746@rivosinc.com>
+ <20240412-sprawl-product-1e1d02e25bca@wendy>
+ <ZhloHGxa5jRRR9xg@ghost>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="CsanCPP69sx4whwN"
+Content-Disposition: inline
+In-Reply-To: <ZhloHGxa5jRRR9xg@ghost>
 
-On Thu, 2024-04-11 at 09:03 +0800, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
->=20
-> v2:
->  - update patch 6 only, fix errors reported by CI.
->=20
-> This patchset uses public helpers start_server_* and connect_to_* defined
-> in network_helpers.c to drop duplicate code.
 
-Modulo feedback from Martin and connect_to_addr() not setting default
-timeout this series looks good, thank you.
+--CsanCPP69sx4whwN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Apr 12, 2024 at 09:58:04AM -0700, Charlie Jenkins wrote:
+> On Fri, Apr 12, 2024 at 01:30:08PM +0100, Conor Dooley wrote:
+> > On Thu, Apr 11, 2024 at 09:11:12PM -0700, Charlie Jenkins wrote:
+> > >  static void __init riscv_parse_isa_string(unsigned long *this_hwcap,=
+ struct riscv_isainfo *isainfo,
+> >=20
+> > > -					  unsigned long *isa2hwcap, const char *isa)
+> > > +					struct riscv_isainfo *isavendorinfo, unsigned long vendorid,
+> > > +					unsigned long *isa2hwcap, const char *isa)
+> > >  {
+> > >  	/*
+> > >  	 * For all possible cpus, we have already validated in
+> > > @@ -349,8 +384,30 @@ static void __init riscv_parse_isa_string(unsign=
+ed long *this_hwcap, struct risc
+> > >  		const char *ext =3D isa++;
+> > >  		const char *ext_end =3D isa;
+> > >  		bool ext_long =3D false, ext_err =3D false;
+> > > +		struct riscv_isainfo *selected_isainfo =3D isainfo;
+> > > +		const struct riscv_isa_ext_data *selected_riscv_isa_ext =3D riscv_=
+isa_ext;
+> > > +		size_t selected_riscv_isa_ext_count =3D riscv_isa_ext_count;
+> > > +		unsigned int id_offset =3D 0;
+> > > =20
+> > >  		switch (*ext) {
+> > > +		case 'x':
+> > > +		case 'X':
+> >=20
+> > One quick remark is that we should not go and support this stuff via
+> > riscv,isa in my opinion, only allowing it for the riscv,isa-extensions
+> > parsing. We don't have a way to define meanings for vendor extensions in
+> > this way. ACPI also uses this codepath and at the moment the kernel's
+> > docs say we're gonna follow isa string parsing rules in a specific vers=
+ion
+> > of the ISA manual. While that manual provides a format for the string a=
+nd
+> > meanings for standard extensions, there's nothing in there that allows =
+us
+> > to get consistent meanings for specific vendor extensions, so I think we
+> > should avoid intentionally supporting this here.
+>=20
+> Getting a "consistent meaning" is managed by a vendor.
+
+IOW, there's absolutely no guarantee of a consistent meaning.
+
+> If a vendor
+> supports a vendor extension and puts it in their DT/ACPI table it's up
+> to them to ensure that it works. How does riscv,isa-extensions allow for
+> a consistent meaning?
+
+The definitions for each string contain links to exact versions of
+specifications that they correspond to.
+
+> >=20
+> > I'd probably go as far as to actively skip vendor extensions in
+> > riscv_parse_isa_string() to avoid any potential issues.
+> >=20
+> > > +			bool found;
+> > > +
+> > > +			found =3D get_isa_vendor_ext(vendorid,
+> > > +						   &selected_riscv_isa_ext,
+> > > +						   &selected_riscv_isa_ext_count);
+> > > +			selected_isainfo =3D isavendorinfo;
+> > > +			id_offset =3D RISCV_ISA_VENDOR_EXT_BASE;
+> > > +			if (!found) {
+> > > +				pr_warn("No associated vendor extensions with vendor id: %lx\n",
+> > > +					vendorid);
+> >=20
+> > This should not be a warning, anything we don't understand should be
+> > silently ignored to avoid spamming just because the kernel has not grown
+> > support for it yet.
+>=20
+> Sounds good.
+>=20
+> - Charlie
+>=20
+> >=20
+> > Thanks,
+> > Conor.
+> >=20
+> > > +				for (; *isa && *isa !=3D '_'; ++isa)
+> > > +					;
+> > > +				ext_err =3D true;
+> > > +				break;
+> > > +			}
+> > > +			fallthrough;
+> > >  		case 's':
+> > >  			/*
+> > >  			 * Workaround for invalid single-letter 's' & 'u' (QEMU).
+> > > @@ -366,8 +423,6 @@ static void __init riscv_parse_isa_string(unsigne=
+d long *this_hwcap, struct risc
+> > >  			}
+> > >  			fallthrough;
+> > >  		case 'S':
+> > > -		case 'x':
+> > > -		case 'X':
+> > >  		case 'z':
+> > >  		case 'Z':
+> > >  			/*
+> > > @@ -476,8 +531,10 @@ static void __init riscv_parse_isa_string(unsign=
+ed long *this_hwcap, struct risc
+> > >  				set_bit(nr, isainfo->isa);
+> > >  			}
+> > >  		} else {
+> > > -			for (int i =3D 0; i < riscv_isa_ext_count; i++)
+> > > -				match_isa_ext(&riscv_isa_ext[i], ext, ext_end, isainfo);
+> > > +			for (int i =3D 0; i < selected_riscv_isa_ext_count; i++)
+> > > +				match_isa_ext(&selected_riscv_isa_ext[i], ext,
+> > > +					      ext_end, selected_isainfo,
+> > > +					      id_offset);
+> > >  		}
+> > >  	}
+> > >  }
+>=20
+>=20
+
+--CsanCPP69sx4whwN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhmEnAAKCRB4tDGHoIJi
+0pNvAP0cufmJeVfjqNNvS2amdK3cPxp6+XoZZuLVZYI1W7JTkAD9Etz7Xt95pEBt
+HBVc3vyRX/GytuvTJoIkVsfPSrRlpA0=
+=aGbN
+-----END PGP SIGNATURE-----
+
+--CsanCPP69sx4whwN--
 
