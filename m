@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-7793-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D498A8A2DA9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 13:38:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F48A8A2DB1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 13:40:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A8E9281C68
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 11:38:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 995DEB21954
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Apr 2024 11:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF05854646;
-	Fri, 12 Apr 2024 11:38:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3498C54FA0;
+	Fri, 12 Apr 2024 11:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="B4ybTsXF"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="jNdm1F9P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF245674E;
-	Fri, 12 Apr 2024 11:38:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D67A535BF;
+	Fri, 12 Apr 2024 11:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712921909; cv=none; b=oDt+yQddqy8ypjSYxfP8MnkCzruYTYP7oKC1WoPYjrWkUI6UH/4fvvK+xXwXQ03NleLePeG6kLQwAHp8hNIo1ZHBmQetjxDCjq8+Dqkd7K9LnpVVwaTcBVIl2AZ9IrgQAI9810mtQcW+zCHchVOytUAGNT/zqgv3WTELajROwXU=
+	t=1712922016; cv=none; b=j22lBi7CysNzd/7wV5pCgjh+FEWywISPdUcYdU/saj25Bk3sOOilUgbbP47qv8WvQXceMxj11vp88ajFtcg1lB5vIh3vJO8dCC99WiBNFv5Ox6MWlhpdAUtJZOb6Fm8OGo+8hip8bCTxqV+7ErI8FZi3nS6k2gyLJ1L9WrGgwRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712921909; c=relaxed/simple;
-	bh=aWPWXWwePYJ7mcthXXcnh6W3EMOk6ujdepGmdYxSc0c=;
+	s=arc-20240116; t=1712922016; c=relaxed/simple;
+	bh=vWrwURI6uGqGzEOsz/9U6rKnDuH3RZniZsq0pIueHuI=;
 	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HJsq8TpNdeQlIWq3QaksZlpxXCxO5vuYVnkRj1GUUTVPsAL5NGr6GtAMsk8Q8P4FAtIfXkpiyiOVOAiD/YHWd0bAWIyu+c4yI5CaYS2q6Oh/ePYJRAc53uRdUcgxTxyRMERlWvMsvGWVD7lx5mc2dCDo//8PnjFK7r0egy/guUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=B4ybTsXF; arc=none smtp.client-ip=68.232.153.233
+	 Content-Type:Content-Disposition:In-Reply-To; b=UfPWm3uKPlL1JCkBhkOvlz3nlSJ9yJMtbehirQV5WJWf0HFJtFe5NiY7JGG4mVBidLiEab2fRSTe33RMUKQOtL++wNDKmXcJmU3yBfPFMeltAsV1VE28Hm7EvFSaOTkLB5bmoYX8eU96drLnlKZzZLMOMptucETmgkT057FROk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=jNdm1F9P; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1712921908; x=1744457908;
+  t=1712922014; x=1744458014;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=aWPWXWwePYJ7mcthXXcnh6W3EMOk6ujdepGmdYxSc0c=;
-  b=B4ybTsXFVrSB7obR05QAb5IRs7584qdbH4++gFBdVj1o6VZ1GfDS8Irv
-   ePwPuu8FILMnb3ZHUU+FAnj/rvxWpr6TGXCL48kFh73NFnNGXWNRErmgw
-   DFPE+XUOoVsl9f1hajG8b9N47NMY8JVfslhQcs70iCuqzLIANti+pLrkQ
-   BH7d6NeZCu68DKm3qih8nDAx5Y+E0IXTbRr27q5iAF7pKBnxTv91dktKU
-   BBbZjnsR4cF6DXhPBFGlSJGM0E4lul8NbajMJIzeCTpi1BNZciYjNZFvv
-   mX9zvcFKwFQauGWYd5XPAYDskpGoXSwQnLr2o+zCctuVpKn6Gpzvhrcq9
-   Q==;
-X-CSE-ConnectionGUID: ++lz7ARxTeyfeBIEUobjog==
-X-CSE-MsgGUID: KH8PpH+1RGyAV72cISUUNA==
+  bh=vWrwURI6uGqGzEOsz/9U6rKnDuH3RZniZsq0pIueHuI=;
+  b=jNdm1F9PnMm/YluZBMYuP8Lt+bCLyf5Yat8+q4XDohQr97BVOHQVDIT2
+   sLIRjvmickPnqs2YiQqu2enxT+P9Estc/HaHnqgyYy9/oNC7Si4AmM5/8
+   CU41yOLwVVP4U3YSzzFZELB6hS5Uw6VyUvMgxExtxas60MozbOai4xHbK
+   ZG13Mpzw4oA3JKnUJXw7v99egIbfiWN6rt2Or1x66Dz8umjt+ehGujBHm
+   eF40kQe4y6XVMB3ACRYgCsvv41xA5oxIJmz6p0Hhph+CVKzVcIAixA+c9
+   WDPJb+JEYw6mk71FwICNnEO9Xcdm5I908GJQw4dnbcabenAVp7knP6+9U
+   w==;
+X-CSE-ConnectionGUID: i+DXDR/OTgiZjECvCk7SnA==
+X-CSE-MsgGUID: LNJas4KrQx+JcZi4m5YrkA==
 X-IronPort-AV: E=Sophos;i="6.07,196,1708412400"; 
-   d="asc'?scan'208";a="20734020"
+   d="asc'?scan'208";a="21275385"
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Apr 2024 04:38:27 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Apr 2024 04:40:13 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 12 Apr 2024 04:38:03 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
+ 15.1.2507.35; Fri, 12 Apr 2024 04:40:10 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 12 Apr 2024 04:37:59 -0700
-Date: Fri, 12 Apr 2024 12:37:08 +0100
+ Transport; Fri, 12 Apr 2024 04:40:06 -0700
+Date: Fri, 12 Apr 2024 12:39:15 +0100
 From: Conor Dooley <conor.dooley@microchip.com>
 To: Charlie Jenkins <charlie@rivosinc.com>
 CC: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
@@ -76,11 +76,10 @@ CC: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
 	<palmer@rivosinc.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-sunxi@lists.linux.dev>, <linux-doc@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 15/19] riscv: hwcap: Add v to hwcap if xtheadvector
- enabled
-Message-ID: <20240412-thrill-amnesty-019897f21466@wendy>
+Subject: Re: [PATCH 16/19] riscv: hwprobe: Add vendor extension probing
+Message-ID: <20240412-candle-duffel-a612bab6e2a7@wendy>
 References: <20240411-dev-charlie-support_thead_vector_6_9-v1-0-4af9815ec746@rivosinc.com>
- <20240411-dev-charlie-support_thead_vector_6_9-v1-15-4af9815ec746@rivosinc.com>
+ <20240411-dev-charlie-support_thead_vector_6_9-v1-16-4af9815ec746@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,85 +87,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ibtP5+Ck2kdPiHYk"
+	protocol="application/pgp-signature"; boundary="mRHPCw/Vg3OkuwNh"
 Content-Disposition: inline
-In-Reply-To: <20240411-dev-charlie-support_thead_vector_6_9-v1-15-4af9815ec746@rivosinc.com>
+In-Reply-To: <20240411-dev-charlie-support_thead_vector_6_9-v1-16-4af9815ec746@rivosinc.com>
 
---ibtP5+Ck2kdPiHYk
+--mRHPCw/Vg3OkuwNh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 11, 2024 at 09:11:21PM -0700, Charlie Jenkins wrote:
-> xtheadvector is not vector 1.0 compatible, but it can leverage all of
-> the same save/restore routines as vector plus
-> riscv_v_first_use_handler(). vector 1.0 and xtheadvector are mutually
-> exclusive so there is no risk of overlap.
+On Thu, Apr 11, 2024 at 09:11:22PM -0700, Charlie Jenkins wrote:
 
-I think this not okay to do - if a program checks hwcap to see if vector
-is supported they'll get told it is on T-Head system where only the 0.7.1
-is.
-
->=20
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  arch/riscv/kernel/cpufeature.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
-e.c
-> index 41a4d2028428..59f628b1341c 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -647,9 +647,13 @@ static void __init riscv_fill_hwcap_from_isa_string(=
-unsigned long *isa2hwcap)
->  		 * Many vendors with T-Head CPU cores which implement the 0.7.1
->  		 * version of the vector specification put "v" into their DTs.
->  		 * CPU cores with the ratified spec will contain non-zero
-> -		 * marchid.
-> +		 * marchid. Only allow "v" to be set if xtheadvector is present.
->  		 */
-> -		if (acpi_disabled && this_vendorid =3D=3D THEAD_VENDOR_ID &&
-> +		if (__riscv_isa_vendor_extension_available(isavendorinfo->isa,
-> +							   RISCV_ISA_VENDOR_EXT_XTHEADVECTOR)) {
-> +			this_hwcap |=3D isa2hwcap[RISCV_ISA_EXT_v];
-> +			set_bit(RISCV_ISA_EXT_v, isainfo->isa);
-> +		} else if (acpi_disabled && this_vendorid =3D=3D THEAD_VENDOR_ID &&
->  		    this_archid =3D=3D 0x0) {
->  			this_hwcap &=3D ~isa2hwcap[RISCV_ISA_EXT_v];
->  			clear_bit(RISCV_ISA_EXT_v, isainfo->isa);
-> @@ -776,6 +780,15 @@ static int __init riscv_fill_hwcap_from_ext_list(uns=
-igned long *isa2hwcap)
-> =20
->  		of_node_put(cpu_node);
-> =20
-> +		/*
-> +		 * Enable kernel vector routines if xtheadvector is present
-> +		 */
-> +		if (__riscv_isa_vendor_extension_available(isavendorinfo->isa,
-> +							   RISCV_ISA_VENDOR_EXT_XTHEADVECTOR)) {
-> +			this_hwcap |=3D isa2hwcap[RISCV_ISA_EXT_v];
-> +			set_bit(RISCV_ISA_EXT_v, isainfo->isa);
-> +		}
+> +static void hwprobe_isa_vendor_ext0(struct riscv_hwprobe *pair,
+> +				    const struct cpumask *cpus)
+> +{
+> +	int cpu;
+> +	u64 missing = 0;
 > +
->  		/*
->  		 * All "okay" harts should have same isa. Set HWCAP based on
->  		 * common capabilities of every "okay" hart, in case they don't.
->=20
-> --=20
-> 2.44.0
->=20
+> +	pair->value = 0;
+> +
+> +	struct riscv_hwprobe mvendorid = {
+> +		.key = RISCV_HWPROBE_KEY_MVENDORID,
+> +		.value = 0
+> +	};
+> +
+> +	hwprobe_arch_id(&mvendorid, cpus);
+> +
+> +	/* Set value to zero if CPUs in the set do not have the same vendor. */
+> +	if (mvendorid.value == -1ULL)
+> +		return;
+> +
+> +	/*
+> +	 * Loop through and record vendor extensions that 1) anyone has, and
+> +	 * 2) anyone doesn't have.
+> +	 */
+> +	for_each_cpu(cpu, cpus) {
+> +		struct riscv_isainfo *isavendorinfo = &hart_isa_vendor[cpu];
+> +
+> +#define VENDOR_EXT_KEY(ext)								\
+> +	do {										\
+> +		if (__riscv_isa_vendor_extension_available(isavendorinfo->isa,		\
+> +							 RISCV_ISA_VENDOR_EXT_##ext))	\
+> +			pair->value |= RISCV_HWPROBE_VENDOR_EXT_##ext;			\
+> +		else									\
+> +			missing |= RISCV_HWPROBE_VENDOR_EXT_##ext;			\
+> +	} while (false)
+> +
+> +	/*
+> +	 * Only use VENDOR_EXT_KEY() for extensions which can be exposed to userspace,
+> +	 * regardless of the kernel's configuration, as no other checks, besides
+> +	 * presence in the hart_vendor_isa bitmap, are made.
+> +	 */
+> +	VENDOR_EXT_KEY(XTHEADVECTOR);
 
---ibtP5+Ck2kdPiHYk
+Reading the comment here, I don't think you can do this. All vector
+support in userspace is continent on kernel configuration options.
+
+> +
+> +#undef VENDOR_EXT_KEY
+> +	}
+> +
+> +	/* Now turn off reporting features if any CPU is missing it. */
+> +	pair->value &= ~missing;
+> +}
+
+--mRHPCw/Vg3OkuwNh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhkc5AAKCRB4tDGHoIJi
-0gKCAP4v+esN57jD+BTAcXXG/qusYjMQbk1rVAldJniCgV0x0gEAibLnaoOuNXqF
-Pa0786aCvAvHYTWbBfJ/ykNix6NyKQI=
-=b/XX
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhkdYwAKCRB4tDGHoIJi
+0oeDAP4tnQJ0meOXf8oUmHOUiJb0NFMEHSi8MWLLKw5qh80wlwD/R11jlcsqR/Uh
+O70O3h3uu21ywXzH0Akw/ETQIVC34As=
+=Jjh4
 -----END PGP SIGNATURE-----
 
---ibtP5+Ck2kdPiHYk--
+--mRHPCw/Vg3OkuwNh--
 
