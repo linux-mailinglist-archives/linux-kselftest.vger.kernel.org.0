@@ -1,140 +1,164 @@
-Return-Path: <linux-kselftest+bounces-7904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 820D58A3A40
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 03:51:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 927758A3A8B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 04:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DAF9283C31
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 01:51:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1AADDB22FC9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 02:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2CDD272;
-	Sat, 13 Apr 2024 01:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jk9/sFzc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E836168DA;
+	Sat, 13 Apr 2024 02:47:26 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EBE8C1A;
-	Sat, 13 Apr 2024 01:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA55101D5;
+	Sat, 13 Apr 2024 02:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712973059; cv=none; b=O2J1eMl+KPt9TvScmEfH27FO7k9uD1IkQpN+Cfj7uCs5UOwgkViLJDDbzxrYDoy7dknHChwelBFg/G1+bc1XuZQuJEyNEI6wqeJmBQQ+Kv7lz+xLTgkLBgnSvZGmXw5nrdvf+OgWmb+kGBgjzIjiF+I1va4Rsl0OFapwi0e3k2o=
+	t=1712976446; cv=none; b=pvy2jMc2oc10XUCqEmPSjANhZ42fu/8hiljPkU52dNBj81fGPympoTgvNck6yfxPBZ65MSoIcprlJa8d1uwNPykMipKfooUf5kt5jzpoGp8GB9qttS1r4uPm+G2z8Jh1flPxd6B/51kiHNUYKdkmhoKMJpH/FMJtE5DyEwXJJMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712973059; c=relaxed/simple;
-	bh=wA/RPdttBexHgU+bBZVYr/ZfCaV8CxDw9/T2dT+Y+HM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MA7ys4TnlRlAXfUei7MKED/8K9VtbWGMh5lSr2Gb5q9N5omIsTYRuFgaYxjEXL+QUssWHMw0T3q2jyvqQ+vcHVR+9qxr/D9lPtdzVCmGjzyYH4TChL5h4h0XfpU59oJna+OWjt1CS60OwEWBdq9M0GQHJlwuJP7F+yxtjH5xujA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jk9/sFzc; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2a4df5d83c7so917358a91.0;
-        Fri, 12 Apr 2024 18:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712973057; x=1713577857; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/jYHLvRaUJ+lBVWUfhvMvFS8ppGNLYChc1nBTlFCR4=;
-        b=jk9/sFzcUoDfOMKrRupnYhasbcJ1hb4YVuksONO530sOB9AToOVWnmPSi55VuhxY6o
-         ykFKc1XShOynkXFCH7LTOMaZmByIaZCr6TLISY8qx48Eyn3gcrU+plJIuHJrz0X8NkBB
-         SFyFALyjHHIDZgPzwhAQjDWzLiAQrMTLRdMuUozo36h+Jy00/As+LPk3RlZBUGHsm5fV
-         IefbuGBLuO+GjFKYSoequn56WdjOEArMpab4w9G/WWdsBrGPDvlmmzXUURQyVLqjwpOa
-         JnxVpwtDztCg0b3EKdi2WycUGKNq4MP/ZGUq9e0zHSCcB0HcvL/nEPDDWCjyWHMTdC51
-         r9BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712973057; x=1713577857;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s/jYHLvRaUJ+lBVWUfhvMvFS8ppGNLYChc1nBTlFCR4=;
-        b=hdf+snM2p6GVscayJKrxrl8Gm/uuge2kZkjebNVHbBgoUVyrsSVAuNBqQMVHV2k6oF
-         q9K/HsAXnq8mOlVFYBgq7FyoGaHxA2yZ4xCXc4WjTufEHggcS84G76sHmunjaCyF/BMm
-         /xi0HVudM84ILFNFQ35FwcEuLDihqokOfG7zH0OqXrM0oWrUEC0yyxyiy95Xg/lz2xUq
-         tka8/eBWVd1Prlqj9NGwxVSKV/cygMhSxNz0MTufkXfBf7Xew2mb/WH12H7c1NNUYyVz
-         tWDNnCxQism5Z1JUfa6LAj3PfwRQ0CFRD33vyRa5CPytLrbaAyMTOFGAFZk0casBsEAu
-         Z51Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUa5ofFvFEguW3SlFglYGsYlSQL6Oq10tLfdIsSM9Bg6he26T7UpyNEhSMd4nrXVeOsbbBLbCRUVYXR198WPSJdoVwB+AxLLPqjyLom8M/Humz36LKN05QcP48IdJnusvJ2n2tzLTvrxu5jn7ckOmbD4imgRxU6q3dQF7SeUioWof4sVQ+e
-X-Gm-Message-State: AOJu0YzZpdvzb2vMOtyYNJWoMFSsqXaRW9dZqPa1XYhW7iH+jGLuXRfx
-	1pwOh/Ev/C6o+VQdb8skY+WQ8pVhh7pgSVvNMCtT8mY6ikjoDK7zxulhNTkBhyXwIbVDAybcMXN
-	7kvtfOv7FRr0zdFweKNDnzW6xgMo=
-X-Google-Smtp-Source: AGHT+IEnA2gF8Fop3YlgII3fFzng5P/PNmy1T4aHT3kJcllvkCoJFI+g7ex3/xElJrGaG4o+QWSsiVsCLRo41rcNmMI=
-X-Received: by 2002:a17:90a:e015:b0:2a2:f35f:f13c with SMTP id
- u21-20020a17090ae01500b002a2f35ff13cmr4040677pjy.46.1712973057271; Fri, 12
- Apr 2024 18:50:57 -0700 (PDT)
+	s=arc-20240116; t=1712976446; c=relaxed/simple;
+	bh=4IWaTwtyOQ2skuNnfQppbzaME0kK8u+dyItDzAgSiJs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=doWoCJpgAkoKMqyQa0d3DTDKM4mLiuZ7Gj80tYxRuAKJF9g+PwrQAYYYW8XcydxgcC9vEdpR6xN6sYGVEsv1FRe8lb6bcUc1Cnjxi39Jo6Iqa/aJNO5cIPsYoj/sfL092GNtOlBFmINXuls5L7KedQUPLsCbri3QfUln/roowJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4VGd7H6Bw8ztSkM;
+	Sat, 13 Apr 2024 10:44:27 +0800 (CST)
+Received: from canpemm500008.china.huawei.com (unknown [7.192.105.151])
+	by mail.maildlp.com (Postfix) with ESMTPS id C304F140157;
+	Sat, 13 Apr 2024 10:47:14 +0800 (CST)
+Received: from [10.67.111.115] (10.67.111.115) by
+ canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Sat, 13 Apr 2024 10:47:14 +0800
+Message-ID: <33503bb2-6248-426b-a614-9f0f92899d70@huawei.com>
+Date: Sat, 13 Apr 2024 10:47:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com> <20240413-tcp-ao-selftests-fixes-v1-4-f9c41c96949d@gmail.com>
-In-Reply-To: <20240413-tcp-ao-selftests-fixes-v1-4-f9c41c96949d@gmail.com>
-From: Dmitry Safonov <0x7f454c46@gmail.com>
-Date: Sat, 13 Apr 2024 02:50:46 +0100
-Message-ID: <CAJwJo6bjzgL7Y_EPOL1rYqSz5MNO60iKtCFF-_guq48FwxwKKg@mail.gmail.com>
-Subject: Re: [PATCH net 4/4] selftests/tcp_ao: Printing fixes to confirm with format-security
-To: 0x7f454c46@gmail.com
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftests/ftrace: traceonoff_triggers: strip off names
+Content-Language: en-US
+To: Steven Rostedt <rostedt@goodmis.org>, <shuah@kernel.org>
+CC: <mhiramat@kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230818013226.2182299-1-zouyipeng@huawei.com>
+ <20230821111358.7540bdc9@gandalf.local.home>
+From: Yipeng Zou <zouyipeng@huawei.com>
+In-Reply-To: <20230821111358.7540bdc9@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500008.china.huawei.com (7.192.105.151)
 
-On Sat, 13 Apr 2024 at 02:43, Dmitry Safonov via B4 Relay
-<devnull+0x7f454c46.gmail.com@kernel.org> wrote:
->
-> From: Dmitry Safonov <0x7f454c46@gmail.com>
->
-> On my new laptop with packages from nixos-unstable, gcc 12.3.0 produces
-> > lib/setup.c: In function =E2=80=98__test_msg=E2=80=99:
-> > lib/setup.c:20:9: error: format not a string literal and no format argu=
-ments [-Werror=3Dformat-security]
-> >    20 |         ksft_print_msg(buf);
-> >       |         ^~~~~~~~~~~~~~
-> > lib/setup.c: In function =E2=80=98__test_ok=E2=80=99:
-> > lib/setup.c:26:9: error: format not a string literal and no format argu=
-ments [-Werror=3Dformat-security]
-> >    26 |         ksft_test_result_pass(buf);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~
-> > lib/setup.c: In function =E2=80=98__test_fail=E2=80=99:
-> > lib/setup.c:32:9: error: format not a string literal and no format argu=
-ments [-Werror=3Dformat-security]
-> >    32 |         ksft_test_result_fail(buf);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~
-> > lib/setup.c: In function =E2=80=98__test_xfail=E2=80=99:
-> > lib/setup.c:38:9: error: format not a string literal and no format argu=
-ments [-Werror=3Dformat-security]
-> >    38 |         ksft_test_result_xfail(buf);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~
-> > lib/setup.c: In function =E2=80=98__test_error=E2=80=99:
-> > lib/setup.c:44:9: error: format not a string literal and no format argu=
-ments [-Werror=3Dformat-security]
-> >    44 |         ksft_test_result_error(buf);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~
-> > lib/setup.c: In function =E2=80=98__test_skip=E2=80=99:
-> > lib/setup.c:50:9: error: format not a string literal and no format argu=
-ments [-Werror=3Dformat-security]
-> >    50 |         ksft_test_result_skip(buf);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~
-> > cc1: some warnings being treated as errors
->
-> As the buffer was already pre-printed into, print it as a string
-> rather than a format-string.
->
-> Fixes: cfbab37b3da0 ("selftests/net: Add TCP-AO library")
-> Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 
-And this one as well,
+在 2023/8/21 23:13, Steven Rostedt 写道:
+> On Fri, 18 Aug 2023 09:32:26 +0800
+> Yipeng Zou <zouyipeng@huawei.com> wrote:
+>
+>> The func_traceonoff_triggers.tc sometimes goes to fail
+>> on my board, Kunpeng-920.
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>
+> Shuah, can you take this through your tree?
+>
+> -- Steve
 
-Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Link: https://lore.kernel.org/all/0c6d4f0d-2064-4444-986b-1d1ed782135f@coll=
-abora.com/
+Hi:
 
---=20
-             Dmitry
+     I just notice that it haven't been picked in Linux-next.
+
+     It's there other issue about this patch?
+
+>> [root@localhost]# ./ftracetest ./test.d/ftrace/func_traceonoff_triggers.tc -l fail.log
+>> === Ftrace unit tests ===
+>> [1] ftrace - test for function traceon/off triggers     [FAIL]
+>> [2] (instance)  ftrace - test for function traceon/off triggers [UNSUPPORTED]
+>>
+>> I look up the log, and it shows that the md5sum is different between csum1 and csum2.
+>>
+>> ++ cnt=611
+>> ++ sleep .1
+>> +++ cnt_trace
+>> +++ grep -v '^#' trace
+>> +++ wc -l
+>> ++ cnt2=611
+>> ++ '[' 611 -ne 611 ']'
+>> +++ cat tracing_on
+>> ++ on=0
+>> ++ '[' 0 '!=' 0 ']'
+>> +++ md5sum trace
+>> ++ csum1='76896aa74362fff66a6a5f3cf8a8a500  trace'
+>> ++ sleep .1
+>> +++ md5sum trace
+>> ++ csum2='ee8625a21c058818fc26e45c1ed3f6de  trace'
+>> ++ '[' '76896aa74362fff66a6a5f3cf8a8a500  trace' '!=' 'ee8625a21c058818fc26e45c1ed3f6de  trace' ']'
+>> ++ fail 'Tracing file is still changing'
+>> ++ echo Tracing file is still changing
+>> Tracing file is still changing
+>> ++ exit_fail
+>> ++ exit 1
+>>
+>> So I directly dump the trace file before md5sum, the diff shows that:
+>>
+>> [root@localhost]# diff trace_1.log trace_2.log -y --suppress-common-lines
+>> dockerd-12285   [036] d.... 18385.510290: sched_stat | <...>-12285   [036] d.... 18385.510290: sched_stat
+>> dockerd-12285   [036] d.... 18385.510291: sched_swit | <...>-12285   [036] d.... 18385.510291: sched_swit
+>> <...>-740       [044] d.... 18385.602859: sched_stat | kworker/44:1-740 [044] d.... 18385.602859: sched_stat
+>> <...>-740       [044] d.... 18385.602860: sched_swit | kworker/44:1-740 [044] d.... 18385.602860: sched_swit
+>>
+>> And we can see that <...> filed be filled with names.
+>>
+>> We can strip off the names there to fix that.
+>>
+>> After strip off the names:
+>>
+>> kworker/u257:0-12 [019] d..2.  2528.758910: sched_stat | -12 [019] d..2.  2528.758910: sched_stat_runtime: comm=k
+>> kworker/u257:0-12 [019] d..2.  2528.758912: sched_swit | -12 [019] d..2.  2528.758912: sched_switch: prev_comm=kw
+>> <idle>-0          [000] d.s5.  2528.762318: sched_waki | -0  [000] d.s5.  2528.762318: sched_waking: comm=sshd pi
+>> <idle>-0          [037] dNh2.  2528.762326: sched_wake | -0  [037] dNh2.  2528.762326: sched_wakeup: comm=sshd pi
+>> <idle>-0          [037] d..2.  2528.762334: sched_swit | -0  [037] d..2.  2528.762334: sched_switch: prev_comm=sw
+>>
+>> Fixes: d87b29179aa0 ("selftests: ftrace: Use md5sum to take less time of checking logs")
+>> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>> Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+>> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>> ---
+>>   .../ftrace/test.d/ftrace/func_traceonoff_triggers.tc         | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
+>> index aee22289536b..1b57771dbfdf 100644
+>> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
+>> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
+>> @@ -90,9 +90,10 @@ if [ $on != "0" ]; then
+>>       fail "Tracing is not off"
+>>   fi
+>>   
+>> -csum1=`md5sum trace`
+>> +# Cannot rely on names being around as they are only cached, strip them
+>> +csum1=`cat trace | sed -e 's/^ *[^ ]*\(-[0-9][0-9]*\)/\1/' | md5sum`
+>>   sleep $SLEEP_TIME
+>> -csum2=`md5sum trace`
+>> +csum2=`cat trace | sed -e 's/^ *[^ ]*\(-[0-9][0-9]*\)/\1/' | md5sum`
+>>   
+>>   if [ "$csum1" != "$csum2" ]; then
+>>       fail "Tracing file is still changing"
+>
+-- 
+Regards,
+Yipeng Zou
+
 
