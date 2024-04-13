@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-7903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 058C08A3A3C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 03:50:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 820D58A3A40
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 03:51:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3539F1C2124A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 01:50:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DAF9283C31
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 01:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F5EBE71;
-	Sat, 13 Apr 2024 01:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2CDD272;
+	Sat, 13 Apr 2024 01:50:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fNrSaqOH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jk9/sFzc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DD546BA;
-	Sat, 13 Apr 2024 01:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EBE8C1A;
+	Sat, 13 Apr 2024 01:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712973017; cv=none; b=KXVrmwZL+RR4l5UbDUImOmMu9uhNdrxv6vCSjcC31MSHUs7fE+7BDq9sXy71+7rHFNMcsWtpU9otlKVfWWZW8aZT8O3uYLfQk/rWXqkLwrGGKlk4H7cZFWyFJPX1Zn8FGn5COO01Qq3hZnMtGtpNTjPsLEGWi88BDsd4VM3qtow=
+	t=1712973059; cv=none; b=O2J1eMl+KPt9TvScmEfH27FO7k9uD1IkQpN+Cfj7uCs5UOwgkViLJDDbzxrYDoy7dknHChwelBFg/G1+bc1XuZQuJEyNEI6wqeJmBQQ+Kv7lz+xLTgkLBgnSvZGmXw5nrdvf+OgWmb+kGBgjzIjiF+I1va4Rsl0OFapwi0e3k2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712973017; c=relaxed/simple;
-	bh=nK7S4AX7MvARgqM6BBHBiwuYAnJjjYfTAUaMHXm0s7s=;
+	s=arc-20240116; t=1712973059; c=relaxed/simple;
+	bh=wA/RPdttBexHgU+bBZVYr/ZfCaV8CxDw9/T2dT+Y+HM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U2xrzWrmLvbFu6S7YoamNJgG24hdzIuz8Uxv9pD54RlnmzlwGyu9NpcvFhnL9FxI30t31x0LLuStMhaQCNnSc2I/V0uB8/e2z7df8eTOzZMrljFk+tA+SKcWcGz6Kb9mi8hg/K/JMHrNabMmMGu/h07lAU1nSQrz+BE863OTn9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fNrSaqOH; arc=none smtp.client-ip=209.85.216.52
+	 To:Cc:Content-Type; b=MA7ys4TnlRlAXfUei7MKED/8K9VtbWGMh5lSr2Gb5q9N5omIsTYRuFgaYxjEXL+QUssWHMw0T3q2jyvqQ+vcHVR+9qxr/D9lPtdzVCmGjzyYH4TChL5h4h0XfpU59oJna+OWjt1CS60OwEWBdq9M0GQHJlwuJP7F+yxtjH5xujA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jk9/sFzc; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a2d0ca3c92so986493a91.0;
-        Fri, 12 Apr 2024 18:50:15 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2a4df5d83c7so917358a91.0;
+        Fri, 12 Apr 2024 18:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712973015; x=1713577815; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712973057; x=1713577857; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4GoxZ/DDCn693PM29RJyJPYwUobIu0pR6Xc9xkzx0qE=;
-        b=fNrSaqOHzM3eH+01xq9bOJj41HrL/gZ+mehDlcXFXKa5e1VGoCAYLXjb/3PJGxwPtC
-         Q54QYm90XtMzOQkwGS9+T8XOmnlDguCL4jFm8RmPAwv3EGPyzbh505QXTAivmI9slmdG
-         vIcp5ZY6FydAMNksZ0O+N1cm6cnQsNg6u5f1j8+bzVlAGO/2usosmlxXMGRIpMe8MJob
-         dvy9KOQemat+M+Ii3kyC7DDzKsY3kUNabCmsKYvp2nTjXdfnJlgPzrnvTNuxWw/abXqa
-         2790AeMb/Vhgrt1bidNo29EuTRDuEKXyRJYXhRRmf+q0/9DdmEj1L1v6H1AiA1nDOpRJ
-         SzBg==
+        bh=s/jYHLvRaUJ+lBVWUfhvMvFS8ppGNLYChc1nBTlFCR4=;
+        b=jk9/sFzcUoDfOMKrRupnYhasbcJ1hb4YVuksONO530sOB9AToOVWnmPSi55VuhxY6o
+         ykFKc1XShOynkXFCH7LTOMaZmByIaZCr6TLISY8qx48Eyn3gcrU+plJIuHJrz0X8NkBB
+         SFyFALyjHHIDZgPzwhAQjDWzLiAQrMTLRdMuUozo36h+Jy00/As+LPk3RlZBUGHsm5fV
+         IefbuGBLuO+GjFKYSoequn56WdjOEArMpab4w9G/WWdsBrGPDvlmmzXUURQyVLqjwpOa
+         JnxVpwtDztCg0b3EKdi2WycUGKNq4MP/ZGUq9e0zHSCcB0HcvL/nEPDDWCjyWHMTdC51
+         r9BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712973015; x=1713577815;
+        d=1e100.net; s=20230601; t=1712973057; x=1713577857;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4GoxZ/DDCn693PM29RJyJPYwUobIu0pR6Xc9xkzx0qE=;
-        b=fuD2pBeQVB+nQD6sgfPTnK0wbD150HtcMJ+iL1VG3s1h6Z+mrjdV9WanzuxVem19+I
-         9H+UBASz5VVwgTwk7CFEusa7TYaYOyaTGnNDWH/VFs/cMdUI8IGVAKMigTVySDZwfEAp
-         ZSxe2LDbhtMrkKaSTZwG5JGWea8SiRX83sSdYM33+0dumaW4R4g/2iPIM+06ePB7yntH
-         MYN/2EtggHsPFMXXIWv0C/Nsrpp/YgKNX/uIfKeHQjYCLUZk1b8PJUgLWFNGPxMrgwpI
-         6vYeZJrntMzrwdcJF0ffyPAy0VyqKYWVbROBW/71Xbfccy0BOkPOg+Gv+9GFUzsrP4Je
-         0u0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUxNLpc1aY7giA4IA0O1sicXLYUnKBeNfzC9Pnk/bB5IXJOP/RpQCZDnWl2NDEocXc6J/uSH2fZY5yOoqHd7xvgUdLCJDH1tV2nW5dQoxaKkZntyN68CDYihaQDbgxnAbyLKS1a4KU5pyEL36UQDSU58bPw+X1Mod+8/ka/gi49NWzB/J2Y
-X-Gm-Message-State: AOJu0Ywcs26gQ9iWqRuV9HrO7Vj0DxhWGMEAarPmUBJ9QnsPWi/FEpgp
-	Ne/HjsqfhPlQmc7tsrkTJPwflZS5GmCZ4FK2XrfVsh4RyAJwN4dKdlaXmsv66MZQGD1XnnliRsJ
-	gzrD+scO+3jT4pXdFMnsI/dSlD/0=
-X-Google-Smtp-Source: AGHT+IH6BUPdU+NoMidFc6+jlwGqlMb9lQWMamK9mVH+ehSf6Wk5SSCtqrn3kznnpDURD5OV1Dq7BRw/BiLOHFJ83j8=
-X-Received: by 2002:a17:90b:8cb:b0:2a5:3c66:25a8 with SMTP id
- ds11-20020a17090b08cb00b002a53c6625a8mr10160280pjb.15.1712973015100; Fri, 12
- Apr 2024 18:50:15 -0700 (PDT)
+        bh=s/jYHLvRaUJ+lBVWUfhvMvFS8ppGNLYChc1nBTlFCR4=;
+        b=hdf+snM2p6GVscayJKrxrl8Gm/uuge2kZkjebNVHbBgoUVyrsSVAuNBqQMVHV2k6oF
+         q9K/HsAXnq8mOlVFYBgq7FyoGaHxA2yZ4xCXc4WjTufEHggcS84G76sHmunjaCyF/BMm
+         /xi0HVudM84ILFNFQ35FwcEuLDihqokOfG7zH0OqXrM0oWrUEC0yyxyiy95Xg/lz2xUq
+         tka8/eBWVd1Prlqj9NGwxVSKV/cygMhSxNz0MTufkXfBf7Xew2mb/WH12H7c1NNUYyVz
+         tWDNnCxQism5Z1JUfa6LAj3PfwRQ0CFRD33vyRa5CPytLrbaAyMTOFGAFZk0casBsEAu
+         Z51Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUa5ofFvFEguW3SlFglYGsYlSQL6Oq10tLfdIsSM9Bg6he26T7UpyNEhSMd4nrXVeOsbbBLbCRUVYXR198WPSJdoVwB+AxLLPqjyLom8M/Humz36LKN05QcP48IdJnusvJ2n2tzLTvrxu5jn7ckOmbD4imgRxU6q3dQF7SeUioWof4sVQ+e
+X-Gm-Message-State: AOJu0YzZpdvzb2vMOtyYNJWoMFSsqXaRW9dZqPa1XYhW7iH+jGLuXRfx
+	1pwOh/Ev/C6o+VQdb8skY+WQ8pVhh7pgSVvNMCtT8mY6ikjoDK7zxulhNTkBhyXwIbVDAybcMXN
+	7kvtfOv7FRr0zdFweKNDnzW6xgMo=
+X-Google-Smtp-Source: AGHT+IEnA2gF8Fop3YlgII3fFzng5P/PNmy1T4aHT3kJcllvkCoJFI+g7ex3/xElJrGaG4o+QWSsiVsCLRo41rcNmMI=
+X-Received: by 2002:a17:90a:e015:b0:2a2:f35f:f13c with SMTP id
+ u21-20020a17090ae01500b002a2f35ff13cmr4040677pjy.46.1712973057271; Fri, 12
+ Apr 2024 18:50:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com> <20240413-tcp-ao-selftests-fixes-v1-3-f9c41c96949d@gmail.com>
-In-Reply-To: <20240413-tcp-ao-selftests-fixes-v1-3-f9c41c96949d@gmail.com>
+References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com> <20240413-tcp-ao-selftests-fixes-v1-4-f9c41c96949d@gmail.com>
+In-Reply-To: <20240413-tcp-ao-selftests-fixes-v1-4-f9c41c96949d@gmail.com>
 From: Dmitry Safonov <0x7f454c46@gmail.com>
-Date: Sat, 13 Apr 2024 02:50:03 +0100
-Message-ID: <CAJwJo6buDyTvL5Hh0Mhbrd-pzzom6m0D5==ujvKi3g5ejBURQg@mail.gmail.com>
-Subject: Re: [PATCH net 3/4] selftests/tcp_ao: Fix fscanf() call for format-security
+Date: Sat, 13 Apr 2024 02:50:46 +0100
+Message-ID: <CAJwJo6bjzgL7Y_EPOL1rYqSz5MNO60iKtCFF-_guq48FwxwKKg@mail.gmail.com>
+Subject: Re: [PATCH net 4/4] selftests/tcp_ao: Printing fixes to confirm with format-security
 To: 0x7f454c46@gmail.com
 Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
@@ -90,21 +90,46 @@ On Sat, 13 Apr 2024 at 02:43, Dmitry Safonov via B4 Relay
 >
 > From: Dmitry Safonov <0x7f454c46@gmail.com>
 >
-> On my new laptop with packages from nixos-unstable, gcc 12.3.0 produces:
-> > lib/proc.c: In function =E2=80=98netstat_read_type=E2=80=99:
-> > lib/proc.c:89:9: error: format not a string literal and no format argum=
-ents [-Werror=3Dformat-security]
-> >    89 |         if (fscanf(fnetstat, type->header_name) =3D=3D EOF)
-> >       |         ^~
+> On my new laptop with packages from nixos-unstable, gcc 12.3.0 produces
+> > lib/setup.c: In function =E2=80=98__test_msg=E2=80=99:
+> > lib/setup.c:20:9: error: format not a string literal and no format argu=
+ments [-Werror=3Dformat-security]
+> >    20 |         ksft_print_msg(buf);
+> >       |         ^~~~~~~~~~~~~~
+> > lib/setup.c: In function =E2=80=98__test_ok=E2=80=99:
+> > lib/setup.c:26:9: error: format not a string literal and no format argu=
+ments [-Werror=3Dformat-security]
+> >    26 |         ksft_test_result_pass(buf);
+> >       |         ^~~~~~~~~~~~~~~~~~~~~
+> > lib/setup.c: In function =E2=80=98__test_fail=E2=80=99:
+> > lib/setup.c:32:9: error: format not a string literal and no format argu=
+ments [-Werror=3Dformat-security]
+> >    32 |         ksft_test_result_fail(buf);
+> >       |         ^~~~~~~~~~~~~~~~~~~~~
+> > lib/setup.c: In function =E2=80=98__test_xfail=E2=80=99:
+> > lib/setup.c:38:9: error: format not a string literal and no format argu=
+ments [-Werror=3Dformat-security]
+> >    38 |         ksft_test_result_xfail(buf);
+> >       |         ^~~~~~~~~~~~~~~~~~~~~~
+> > lib/setup.c: In function =E2=80=98__test_error=E2=80=99:
+> > lib/setup.c:44:9: error: format not a string literal and no format argu=
+ments [-Werror=3Dformat-security]
+> >    44 |         ksft_test_result_error(buf);
+> >       |         ^~~~~~~~~~~~~~~~~~~~~~
+> > lib/setup.c: In function =E2=80=98__test_skip=E2=80=99:
+> > lib/setup.c:50:9: error: format not a string literal and no format argu=
+ments [-Werror=3Dformat-security]
+> >    50 |         ksft_test_result_skip(buf);
+> >       |         ^~~~~~~~~~~~~~~~~~~~~
 > > cc1: some warnings being treated as errors
 >
-> Here the selftests lib parses header name, while expectes non-space word
-> ending with a column.
+> As the buffer was already pre-printed into, print it as a string
+> rather than a format-string.
 >
 > Fixes: cfbab37b3da0 ("selftests/net: Add TCP-AO library")
 > Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 
-Actually, now I see that it was also reported, adding
+And this one as well,
 
 Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Link: https://lore.kernel.org/all/0c6d4f0d-2064-4444-986b-1d1ed782135f@coll=
