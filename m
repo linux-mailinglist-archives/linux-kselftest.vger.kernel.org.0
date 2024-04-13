@@ -1,261 +1,310 @@
-Return-Path: <linux-kselftest+bounces-7910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 701E18A3F58
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 00:10:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D8868A3F5A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 00:11:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 906991C20A6A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 22:10:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06DE51F215BE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Apr 2024 22:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 951B856B72;
-	Sat, 13 Apr 2024 22:10:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C876B56B85;
+	Sat, 13 Apr 2024 22:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tEQySvwH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLZcUPp9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892A456B64;
-	Sat, 13 Apr 2024 22:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713046243; cv=fail; b=lMerbfOYNk+leq2fpOcmPy/aNnxNtfqCDmZv2Zm+wEo2QKd0BDn9PzB4ppMBveXFCbMn0KHJgd02oIsqG7gnE8Cf4brRFl2AqEjMqOQUc4Sfo7fmtWQOArHUEeM947Xj5w64H7DxYX8Njuwx7K25ORLN5X2iyMq6Pm+87QrDbHM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713046243; c=relaxed/simple;
-	bh=Cwm2It0pRrVWliufBDS//8AqT2kHBz/WIWOQ4uz4E8I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=fq1llK6/7Y2r0zhht299vt928XjtEBEiQNeqCK7WngEI+LI0Gv/jdWRoYMexFI6NGmsrfac1xq0IEeJ0st+x7LMtSj+ehHlZ/ZSgCV9b3DCOhgUKdONSibTWelvcjBs/6srOT4YckQCVKrUCS4/GJzW2cF0k1zSTSj5Ra9EFsdE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tEQySvwH; arc=fail smtp.client-ip=40.107.93.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OIgD+H+LqqjxwEHwtrLFEkwDhGKDYUwgegic8h2GcW7+TiLVMR7Dyl652OdMs28jnFtAVaR+1FQMvlFGQtURQ1vVLeVwhdzZYI15lgpNrNa8mvRbewosF7m3w1Eg981sbJdq0HOb0WViITpF0Dfcl457hth95Smyz3aYlyIPo/T8rYmEPGWw9n+dMsJ0KNbwdBUcr3XcKxHtRjtKlJBxObr/abgDZM/HZ2Ny06b8nRFnIRwbohNOx/TcmCvL+jQ2+LvhrKYjPyDHI2m4fFj4X8W0CReHKcTuvE3dgSMfLI/9G2nqWRc3cCtAyEB2Pws5fLg9LSOzIFR2itbrpGQt/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2REl4WPya79rcYfdIPjE545vRUwPlOtzqP5BDaa5/60=;
- b=RXjR8eD53H7xgmkxUMckbq2k5l8sAKnwML2SMWFk25CX1ioHovuD6kPatc9bgk6kUZcAhPERfDEwZ1QfCXlQ/JvNgtXHN6ihD80Q13giYmSoeyyRzMot9k2o/9LlMp8hYwuiTV0LZH51bBvimQK0AoafE3a0mj+/W6EdlJUBztCrttGg74qoJ1ilQob3hhGQZiNdNiPhE1HcPj9WJ9C13Jh/redrOCQvWm4vItqCJATNf6wQOwzBNGJp+1y9DwSdpAo7F0SI6A5WDvEzDEF2EaKiKZLRJQRcyH51fElA/n5/M0iXljK0acPHx7ZvaT9aaP0teE0xtBhr34YE8D76+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=valentinobst.de smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2REl4WPya79rcYfdIPjE545vRUwPlOtzqP5BDaa5/60=;
- b=tEQySvwH3qjHExNBCh3oMGVKH4USZxiMogB/V6z2K44LTuPqhLPPcXill3q484x/fzDMHz/FJMGHf9FKdcihYKaRiXh55wnfaoKXskqVo2VJkFYC4trZwv/7qTjcY6Uoa0+3+y32Imk7tNwaeA1jksW5vl8eDMsmrEem8MnmjwpT1MOCoAwjGIHHhc8OMX7kNXVdMR5BZvNJT5MP/enZX9OUcLVcDqZZ2RJ8HsvUeuPvY+LBvEgu3Ka+SIknFkAhgvjUT5yTYw5MLdKrvnXxEPVC9gv5QWV1SgfT3mhsGN4vstdXY9HMZ7QGSPx2sVP885/acnjhSa3Muzv7Pvv03A==
-Received: from BL0PR01CA0029.prod.exchangelabs.com (2603:10b6:208:71::42) by
- MN2PR12MB4343.namprd12.prod.outlook.com (2603:10b6:208:26f::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.56; Sat, 13 Apr 2024 22:10:37 +0000
-Received: from BL6PEPF00020E61.namprd04.prod.outlook.com
- (2603:10b6:208:71:cafe::4b) by BL0PR01CA0029.outlook.office365.com
- (2603:10b6:208:71::42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.31 via Frontend
- Transport; Sat, 13 Apr 2024 22:10:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF00020E61.mail.protection.outlook.com (10.167.249.22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Sat, 13 Apr 2024 22:10:36 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sat, 13 Apr
- 2024 15:10:19 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Sat, 13 Apr
- 2024 15:10:18 -0700
-Message-ID: <6d398f1d-6882-40fb-8ced-7fe6bee2aee7@nvidia.com>
-Date: Sat, 13 Apr 2024 15:10:17 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AAE56B74;
+	Sat, 13 Apr 2024 22:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713046270; cv=none; b=EV7uZ5nfQ9ComXlCKLckEDLoUH1wcvI4URMwiLJJZcepK9VrzHKhRJ2Q07pY+5V3mMcCPzbGbMU7MY3pYtI/l/rlnQGHLhJ1ZJ3J/8mUQdX0+TiotyF9SJyVKNhTqIyOS4cKiq1IH7UpT0STDbfw5fWj4o9e1XrMYOKMONeYz6w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713046270; c=relaxed/simple;
+	bh=aXOBWMvMO7ho0steJlaL6buOfsyAqhe6GhZwED4vdCA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t5ZRDgAiv+UjUm92mLJnEWtZrpyXDXcdZIKivQCj1TVX0h/2YDGu1ijNVpX59SXsaNJ7Way8YDFimAPX/KMntBG+K7fEMac82/Ec5fKKX8BMWROPfB4xFxlcNLtwdLI76myGYRgvcH3se7keVg2k3rn5m8zwq83cffQtliU9LcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLZcUPp9; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713046269; x=1744582269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aXOBWMvMO7ho0steJlaL6buOfsyAqhe6GhZwED4vdCA=;
+  b=cLZcUPp9qZu9tAeZKrHZcyZZD9dDkO4R8BmzUFv6M2Do1D45luUIsIq6
+   dmbB6kMSS8gRLAonYdLuydEcPZDnkhtOlpXcfB4F8MZbYjLlMMa6TowNi
+   J78SSArev388NEJf6RRU2uB6BAXeeEaJiqnKXzleVqSsw9htaxhrOt86H
+   cd/PuZFhM8TijMCsHxPcIBC64N06wfHYq8pjWDe95HVdvrjJ0v8p4b9OV
+   2pze2teX5PKAbIu+73xTlYnFi447lKGN1r8h2RTENyzpO8Uj4otTHz1RB
+   wHfQtBIglywlE9C4xWCWio0nFGDjitLEXqsH9EZ1PL5SIaWmoJjHTmeZW
+   w==;
+X-CSE-ConnectionGUID: xgXbrBk6RPe1PNjEOqukxQ==
+X-CSE-MsgGUID: 4ZvAtuQOSvuu4m7lSleyJg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11043"; a="8649040"
+X-IronPort-AV: E=Sophos;i="6.07,199,1708416000"; 
+   d="scan'208";a="8649040"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2024 15:11:08 -0700
+X-CSE-ConnectionGUID: oNYeaU4eRpaX0kmlpzKmrQ==
+X-CSE-MsgGUID: Ogf1VbZmTaGfvNpSHEZ+Yw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,199,1708416000"; 
+   d="scan'208";a="52503573"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 13 Apr 2024 15:11:03 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rvlaO-00034K-0o;
+	Sat, 13 Apr 2024 22:11:00 +0000
+Date: Sun, 14 Apr 2024 06:10:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Charlie Jenkins <charlie@rivosinc.com>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Charlie Jenkins <charlie@rivosinc.com>
+Subject: Re: [PATCH 06/19] riscv: Extend cpufeature.c to detect vendor
+ extensions
+Message-ID: <202404140621.x9B02eF8-lkp@intel.com>
+References: <20240411-dev-charlie-support_thead_vector_6_9-v1-6-4af9815ec746@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: default to host arch for LLVM builds
-To: Valentin Obst <kernel@valentinobst.de>, Shuah Khan <shuah@kernel.org>
-CC: Anders Roxell <anders.roxell@linaro.org>, Benjamin Poirier
-	<bpoirier@nvidia.com>, Guillaume Tucker <guillaume.tucker@collabora.com>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>, Mark Brown <broonie@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00020E61:EE_|MN2PR12MB4343:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3144ca0-5855-42fd-98b8-08dc5c068c06
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	sU5rWSwKtsg07jg9Up6JHal0UhFm5sLErVVw0YVOJWS/ZBAjE90LXfgusuG4q04+HrlmBaS4x7/GlcpxmF5WTRnj3QkrQu5wRNS0ZaFCIinyuXL5TPwte7xjWNinNQfYoFGxE7YQ+3ksXbMrWDWR/G2UGqUpgqM2YxF2vJXln5cEkIJ37u45bUF5Jxa/55aZTDQwSq3RZ769o3ufC8hEdTPNQFQQ8HpCU5tWLzJ5eXcurMwKu3jHZcIxLVWcF7DtrY+Z/YI3QmG/oXf4H444OH3TB+FzZyRtjzeWBhEbO1D5e5EBVDu7yCZkLhGEzAhCYZ6fTa19jPJhpJRP4NyIZY6TggHvzd+zmEBEsi74E4frNb6B0RN/HZ3r7st5xFKQ+fxr11lF5/4noBtCJOwxds+xd0QEi2eSFMwf/tpzzvKxnEQSjX+igrluCzLe9QssO+27xpxKnOU/giYg0N5esMh/bk/fJfXmz35f6kOkpUAsD5VZsedwnqR4QcQ7jS5wH3VIODHhSaXxXlqiTJH9MFWbzID3wvS7Sd/9v3ckQJ9VhOIGuoI98syI6fYqAG4M0to7Y7mWzQBK1zC570a8rdUwL6wkbV+0ezGYk3/3viT2nd/VxDg5RHhQWp0j4r5CS4X9McCLoxroeg35ttlGPUNfzHvU9MJygMKB5X1DYo1sOuFu/ra+Q9k6zmjXSYrPfXhwriutzYyJ0dxp4SYTUD8VKUWhpkoiPTCYvDTuNpTkr84DytjvNr7XS1Ei+mNJ
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(1800799015)(376005)(7416005)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2024 22:10:36.6694
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3144ca0-5855-42fd-98b8-08dc5c068c06
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00020E61.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4343
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411-dev-charlie-support_thead_vector_6_9-v1-6-4af9815ec746@rivosinc.com>
 
-On 3/29/24 3:49 AM, Valentin Obst wrote:
-> Align the behavior for gcc and clang builds by interpreting unset
-> `ARCH` and `CROSS_COMPILE` variables in `LLVM` builds as a sign that the
-> user wants to build for the host architecture.
-> 
-> This patch preserves the properties that setting the `ARCH` variable to an
-> unknown value will trigger an error that complains about insufficient
-> information, and that a set `CROSS_COMPILE` variable will override the
-> target triple that is determined based on presence/absence of `ARCH`.
-> 
-> When compiling with clang, i.e., `LLVM` is set, an unset `ARCH` variable in
-> combination with an unset `CROSS_COMPILE` variable, i.e., compiling for
-> the host architecture, leads to compilation failures since `lib.mk` can
-> not determine the clang target triple. In this case, the following error
-> message is displayed for each subsystem that does not set `ARCH` in its
-> own Makefile before including `lib.mk` (lines wrapped at 75 chrs):
-> 
->    make[1]: Entering directory '/mnt/build/linux/tools/testing/selftests/
->     sysctl'
->    ../lib.mk:33: *** Specify CROSS_COMPILE or add '--target=' option to
->     lib.mk.  Stop.
->    make[1]: Leaving directory '/mnt/build/linux/tools/testing/selftests/
->     sysctl'
+Hi Charlie,
 
-Thanks for fixing this.
+kernel test robot noticed the following build errors:
 
-And yes, the selftests "normal" (non-cross-compile) build is *broken*
-right now, for clang. I didn't realize from the patch title that this is
-actually a significant fix. Maybe we should change the subject line (patch
-title) to something like:
+[auto build test ERROR on 4cece764965020c22cff7665b18a012006359095]
 
-     [PATCH] selftests: fix the clang build: default to host arch for LLVM builds
+url:    https://github.com/intel-lab-lkp/linux/commits/Charlie-Jenkins/dt-bindings-riscv-Add-vendorid-and-archid/20240412-121709
+base:   4cece764965020c22cff7665b18a012006359095
+patch link:    https://lore.kernel.org/r/20240411-dev-charlie-support_thead_vector_6_9-v1-6-4af9815ec746%40rivosinc.com
+patch subject: [PATCH 06/19] riscv: Extend cpufeature.c to detect vendor extensions
+config: riscv-randconfig-r133-20240413 (https://download.01.org/0day-ci/archive/20240414/202404140621.x9B02eF8-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce: (https://download.01.org/0day-ci/archive/20240414/202404140621.x9B02eF8-lkp@intel.com/reproduce)
 
-?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404140621.x9B02eF8-lkp@intel.com/
 
-Just a thought. The "Fixes:" tag covers it already, I realize.
+All errors (new ones prefixed by >>):
 
-Anyway, this looks correct, and fixes that aspect of the build for me, so
-either way, please feel free to add:
-
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+>> arch/riscv/kernel/cpufeature.c:395:4: error: expected expression
+     395 |                         bool found;
+         |                         ^
+>> arch/riscv/kernel/cpufeature.c:397:4: error: use of undeclared identifier 'found'
+     397 |                         found = get_isa_vendor_ext(vendorid,
+         |                         ^
+   arch/riscv/kernel/cpufeature.c:402:9: error: use of undeclared identifier 'found'
+     402 |                         if (!found) {
+         |                              ^
+   3 errors generated.
 
 
-thanks,
+vim +395 arch/riscv/kernel/cpufeature.c
+
+   370	
+   371	static void __init riscv_parse_isa_string(unsigned long *this_hwcap, struct riscv_isainfo *isainfo,
+   372						struct riscv_isainfo *isavendorinfo, unsigned long vendorid,
+   373						unsigned long *isa2hwcap, const char *isa)
+   374	{
+   375		/*
+   376		 * For all possible cpus, we have already validated in
+   377		 * the boot process that they at least contain "rv" and
+   378		 * whichever of "32"/"64" this kernel supports, and so this
+   379		 * section can be skipped.
+   380		 */
+   381		isa += 4;
+   382	
+   383		while (*isa) {
+   384			const char *ext = isa++;
+   385			const char *ext_end = isa;
+   386			bool ext_long = false, ext_err = false;
+   387			struct riscv_isainfo *selected_isainfo = isainfo;
+   388			const struct riscv_isa_ext_data *selected_riscv_isa_ext = riscv_isa_ext;
+   389			size_t selected_riscv_isa_ext_count = riscv_isa_ext_count;
+   390			unsigned int id_offset = 0;
+   391	
+   392			switch (*ext) {
+   393			case 'x':
+   394			case 'X':
+ > 395				bool found;
+   396	
+ > 397				found = get_isa_vendor_ext(vendorid,
+   398							   &selected_riscv_isa_ext,
+   399							   &selected_riscv_isa_ext_count);
+   400				selected_isainfo = isavendorinfo;
+   401				id_offset = RISCV_ISA_VENDOR_EXT_BASE;
+   402				if (!found) {
+   403					pr_warn("No associated vendor extensions with vendor id: %lx\n",
+   404						vendorid);
+   405					for (; *isa && *isa != '_'; ++isa)
+   406						;
+   407					ext_err = true;
+   408					break;
+   409				}
+   410				fallthrough;
+   411			case 's':
+   412				/*
+   413				 * Workaround for invalid single-letter 's' & 'u' (QEMU).
+   414				 * No need to set the bit in riscv_isa as 's' & 'u' are
+   415				 * not valid ISA extensions. It works unless the first
+   416				 * multi-letter extension in the ISA string begins with
+   417				 * "Su" and is not prefixed with an underscore.
+   418				 */
+   419				if (ext[-1] != '_' && ext[1] == 'u') {
+   420					++isa;
+   421					ext_err = true;
+   422					break;
+   423				}
+   424				fallthrough;
+   425			case 'S':
+   426			case 'z':
+   427			case 'Z':
+   428				/*
+   429				 * Before attempting to parse the extension itself, we find its end.
+   430				 * As multi-letter extensions must be split from other multi-letter
+   431				 * extensions with an "_", the end of a multi-letter extension will
+   432				 * either be the null character or the "_" at the start of the next
+   433				 * multi-letter extension.
+   434				 *
+   435				 * Next, as the extensions version is currently ignored, we
+   436				 * eliminate that portion. This is done by parsing backwards from
+   437				 * the end of the extension, removing any numbers. This may be a
+   438				 * major or minor number however, so the process is repeated if a
+   439				 * minor number was found.
+   440				 *
+   441				 * ext_end is intended to represent the first character *after* the
+   442				 * name portion of an extension, but will be decremented to the last
+   443				 * character itself while eliminating the extensions version number.
+   444				 * A simple re-increment solves this problem.
+   445				 */
+   446				ext_long = true;
+   447				for (; *isa && *isa != '_'; ++isa)
+   448					if (unlikely(!isalnum(*isa)))
+   449						ext_err = true;
+   450	
+   451				ext_end = isa;
+   452				if (unlikely(ext_err))
+   453					break;
+   454	
+   455				if (!isdigit(ext_end[-1]))
+   456					break;
+   457	
+   458				while (isdigit(*--ext_end))
+   459					;
+   460	
+   461				if (tolower(ext_end[0]) != 'p' || !isdigit(ext_end[-1])) {
+   462					++ext_end;
+   463					break;
+   464				}
+   465	
+   466				while (isdigit(*--ext_end))
+   467					;
+   468	
+   469				++ext_end;
+   470				break;
+   471			default:
+   472				/*
+   473				 * Things are a little easier for single-letter extensions, as they
+   474				 * are parsed forwards.
+   475				 *
+   476				 * After checking that our starting position is valid, we need to
+   477				 * ensure that, when isa was incremented at the start of the loop,
+   478				 * that it arrived at the start of the next extension.
+   479				 *
+   480				 * If we are already on a non-digit, there is nothing to do. Either
+   481				 * we have a multi-letter extension's _, or the start of an
+   482				 * extension.
+   483				 *
+   484				 * Otherwise we have found the current extension's major version
+   485				 * number. Parse past it, and a subsequent p/minor version number
+   486				 * if present. The `p` extension must not appear immediately after
+   487				 * a number, so there is no fear of missing it.
+   488				 *
+   489				 */
+   490				if (unlikely(!isalpha(*ext))) {
+   491					ext_err = true;
+   492					break;
+   493				}
+   494	
+   495				if (!isdigit(*isa))
+   496					break;
+   497	
+   498				while (isdigit(*++isa))
+   499					;
+   500	
+   501				if (tolower(*isa) != 'p')
+   502					break;
+   503	
+   504				if (!isdigit(*++isa)) {
+   505					--isa;
+   506					break;
+   507				}
+   508	
+   509				while (isdigit(*++isa))
+   510					;
+   511	
+   512				break;
+   513			}
+   514	
+   515			/*
+   516			 * The parser expects that at the start of an iteration isa points to the
+   517			 * first character of the next extension. As we stop parsing an extension
+   518			 * on meeting a non-alphanumeric character, an extra increment is needed
+   519			 * where the succeeding extension is a multi-letter prefixed with an "_".
+   520			 */
+   521			if (*isa == '_')
+   522				++isa;
+   523	
+   524			if (unlikely(ext_err))
+   525				continue;
+   526			if (!ext_long) {
+   527				int nr = tolower(*ext) - 'a';
+   528	
+   529				if (riscv_isa_extension_check(nr)) {
+   530					*this_hwcap |= isa2hwcap[nr];
+   531					set_bit(nr, isainfo->isa);
+   532				}
+   533			} else {
+   534				for (int i = 0; i < selected_riscv_isa_ext_count; i++)
+   535					match_isa_ext(&selected_riscv_isa_ext[i], ext,
+   536						      ext_end, selected_isainfo,
+   537						      id_offset);
+   538			}
+   539		}
+   540	}
+   541	
+
 -- 
-John Hubbard
-NVIDIA
-
-> 
-> In the same scenario a gcc build would default to the host architecture,
-> i.e., it would use plain `gcc`.
-> 
-> Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Valentin Obst <kernel@valentinobst.de>
-> ---
-> I am not entirely sure whether this behavior is in fact known and intended
-> and whether the way to obtain the host target triple is sufficiently
-> general. The flag was introduced in llvm-8 with [1], it will be an error in
-> older clang versions.
-> 
-> The target triple you get with `-print-target-triple` may not be the
-> same that you would get when explicitly setting ARCH to you host
-> architecture. For example on my x86_64 system it get
-> `x86_64-pc-linux-gnu` instead of `x86_64-linux-gnu`, similar deviations
-> were observed when testing other clang binaries on compiler-explorer,
-> e.g., [2].
-> 
-> An alternative could be to simply do:
-> 
->        ARCH ?= $(shell uname -m)
-> 
-> before using it to select the target. Possibly with some post processing,
-> but at that point we would likely be replicating `scripts/subarch.include`.
-> This is what some subsystem Makefiles do before including `lib.mk`. This
-> change might make it possible to remove the explicit setting of `ARCH` from
-> the few subsystem Makefiles that do it.
-> 
-> [1]: https://reviews.llvm.org/D50755
-> [2]: https://godbolt.org/z/r7Gn9bvv1
-> 
-> Changes in v1:
-> - Shortened commit message.
-> - Link to RFC: https://lore.kernel.org/r/20240303-selftests-libmk-llvm-rfc-v1-1-9ab53e365e31@valentinobst.de
-> ---
->   tools/testing/selftests/lib.mk | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index da2cade3bab0..8ae203d8ed7f 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -7,6 +7,8 @@ else ifneq ($(filter -%,$(LLVM)),)
->   LLVM_SUFFIX := $(LLVM)
->   endif
-> 
-> +CLANG := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-> +
->   CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
->   CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
->   CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
-> @@ -18,7 +20,13 @@ CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
->   CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
->   CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
->   CLANG_TARGET_FLAGS_x86_64       := x86_64-linux-gnu
-> -CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
-> +
-> +# Default to host architecture if ARCH is not explicitly given.
-> +ifeq ($(ARCH),)
-> +CLANG_TARGET_FLAGS := $(shell $(CLANG) -print-target-triple)
-> +else
-> +CLANG_TARGET_FLAGS := $(CLANG_TARGET_FLAGS_$(ARCH))
-> +endif
-> 
->   ifeq ($(CROSS_COMPILE),)
->   ifeq ($(CLANG_TARGET_FLAGS),)
-> @@ -30,7 +38,7 @@ else
->   CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
->   endif # CROSS_COMPILE
-> 
-> -CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
-> +CC := $(CLANG) $(CLANG_FLAGS) -fintegrated-as
->   else
->   CC := $(CROSS_COMPILE)gcc
->   endif # LLVM
-> 
-> ---
-> base-commit: 4cece764965020c22cff7665b18a012006359095
-> change-id: 20240303-selftests-libmk-llvm-rfc-5fe3cfa9f094
-> 
-> Best regards,
-> --
-> Valentin Obst <kernel@valentinobst.de>
-> 
-
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
