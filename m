@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-7912-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47DD68A3FCF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 02:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 508208A3FD5
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 03:15:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A366FB20F0A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 00:56:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACDDDB20C8E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 01:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68966F9F0;
-	Sun, 14 Apr 2024 00:56:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E58B101E6;
+	Sun, 14 Apr 2024 01:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJd1QCTj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ri3lec7L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DF63214;
-	Sun, 14 Apr 2024 00:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD22A28EC;
+	Sun, 14 Apr 2024 01:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713056161; cv=none; b=eo+96CGZPxouRoa+f7KQNNe7yQAOAb8j7jwaXzqGvtA44RIC1Res4coQHu3N+LVOsCkSRzaRUUTTQxkYlhqJRdvqdxEKsv0hCwjas6rRzfiPkrgHmksxv8+jy0yWfhUfngJCQ6XVhnZEW5qzghuNGlWQaCQstvRjrLU9AiqPu8E=
+	t=1713057330; cv=none; b=oAaFbbKv+gH7K+KKvXoaSGkMDA6UooTHOcL+jQPDcAA/OKrivT6QESjDkyLvB3KSOWmfhgegy2ND1N8/aSqwrggpP8ceRtGs/FL2soXazPOscysDL/H6eBXZL2k2UCohfZ9DpiZ4gjRg5H9frLpSEcRzNS8yTZSSSjN8gv4TRog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713056161; c=relaxed/simple;
-	bh=kGfXnmNtUKAtFIseVa6WI/n9HHYWtkzy7aRGv0qO5Lo=;
+	s=arc-20240116; t=1713057330; c=relaxed/simple;
+	bh=W/juxec0rDn1Gl/Ih629Zefv8Pt2+BZrC5+L6AhJXfo=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=vDfOxxojYTnydRbhtV7AZBETqbT1fBkyIwUBtXz80TzpeBSr2ItjECJfsV+p97Y5Wie777BA6Ep5Uy5mYCECnieCOsq1U7+AequxIyLYDz6jlKGGtVQzO7hd8vsDcchlO/lIFQnY9HlFzlc9kl4r0Jso7XY8rlr9pFCfPT5a2LY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DJd1QCTj; arc=none smtp.client-ip=209.85.219.52
+	 Mime-Version:Content-Type; b=ktmYnpOyq72ynpN5L1qSS/uCmInrErOFL5zLrArMEyy1oS2IU8JFc5GRmfWKHVGSaWra8Nz3UXipqyn444FUOaRlCCBagvCodgAs5Oe9MZIzX43Xy3r+gd/qhiRvRhUBfpAriFrpnK/2BCdns6SC9wRl8D7Q9XE/u69zyvW2efU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ri3lec7L; arc=none smtp.client-ip=209.85.222.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-699320fcbc1so15009266d6.3;
-        Sat, 13 Apr 2024 17:55:59 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-78edc49861aso33734185a.3;
+        Sat, 13 Apr 2024 18:15:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713056159; x=1713660959; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713057327; x=1713662127; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zNZ+oOPCoNS4CcsBKvvFZNRK7O8XiSWoEaUwUPk9uNo=;
-        b=DJd1QCTjzsd/VGILXnYMkulGiNr5HpBKDMbHhOFFKbVyF2S7pGnXw6Mus6hgXp6jm+
-         XUwmp4BqGCChVQ+N+qf+k0lPtNLJ94VP8zXRoqkjtpGOH6nfFrF7IHWFKTGc3aRQ+EBx
-         BUnMDh9RuEqqJBChCVCv/Bz7mt4PZnsKrlBeeDE3Aqs0+gdCwHdrpC2aEebmw1t6YMwz
-         kgE7WcNeA1S/ruu5m6gS9dzaXfx2YUKqxsdZ9T25/IYYpIn4sk9kdKTe0lKqle7cTt18
-         kkez5ppd5+j9Yu9i6w3cCZb9gfbaoMZSzsgnwxDDX+8DVBoKAKPZLhlD16k/3xmVsToS
-         Vn+Q==
+        bh=H7eRVp2VH/Cs4kA/J+hb9FmUFgAGZZsiG5M5GE7Zk78=;
+        b=Ri3lec7L/VWHYaaw0F3ODD144mYC+d83pEyUB+3+9TPKlBfdoFLtTq9ebSzIKaos/q
+         ErBRT5sWFWs/9bWe9rBXBp0LJHYI7m7DNKiSzUVFOM2lvjDpW0HGeWwKypoMdnhIuXyK
+         GGcqYIQvv0MQpyebTSyTl1IfA8/S6yPMHpebBnl9L9BZl1ShDwS7JTkLSHBrrOyDpYnc
+         Jq2888Chgulil1luLaXUJ+/Bg6EJWvif1SXq1Yed5YZcPLo412xCXnpaSu/xMVVB4lkA
+         pUgTuwU73a8YioW9JSAZCERm555VEP6fSVNyVxOsYjfOWirAvdk/Je/pfSr5Pcnt1iUo
+         rv/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713056159; x=1713660959;
+        d=1e100.net; s=20230601; t=1713057327; x=1713662127;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=zNZ+oOPCoNS4CcsBKvvFZNRK7O8XiSWoEaUwUPk9uNo=;
-        b=E8LeDGS8qoUaQ+VqrYTbjvJK2DZOe0C0CgZ6LkIdFCnPoVUlnJngxvMLaVu3p5voNG
-         spzb2LXtetJNNKRZFYLYV6wBymmCwtT6PIiGAqDZWGrnTdzcklosiiP07cjHnNuEiDBz
-         GcKbrTkV+5qRzL+pVmkHj1jNwlN05tBCJ71O+7F2V1q8pneAUU1GyBOYabW0U3VVhC3L
-         fDVUntrot4wvJ9FChAZI79fWpyodOHrl0znhJ2+v3xypfkvyHIVIstgKX5+xh6Yot9pM
-         wcGoaKo+TakEg72Ev7ljixCAGAXQ4ql/YBHI+C/lVZy/5lkY6Na1e8ZB59/ELAIrBWXN
-         usBA==
-X-Forwarded-Encrypted: i=1; AJvYcCW73QsK7ym54mDAHEhBlkf2yZ5KjKh4oKXa0Z2Z21IGnsyNbcFLycohz1Bx2VZTV0BjL8wh09OU//r5i1dwZ13pn3ihFhoUtraXACYw2JWJflMhcy61LHFouoBTnMTNKpg2TZhnMzC99CffsXq3sZf/lXwxDhc91j7+snzVFsfvqzikte1C
-X-Gm-Message-State: AOJu0YxciSNIdyXHGlBLpo7vVwO18bGWuHWeYGQi4oi1rAoJHTwYLHyA
-	uezwHu8UUPEM25DV07077pK6IXt9kwuZ2xhPxDymKYDeqcWqK+9E
-X-Google-Smtp-Source: AGHT+IFa3ku7DLHF/teLmehAzpVA4kaLVjjalgzXYxniMfR2sFwQjq1dvcBXyfr/sMNxQKtMnWy+TQ==
-X-Received: by 2002:a05:6214:516:b0:69b:1f75:e702 with SMTP id px22-20020a056214051600b0069b1f75e702mr6824288qvb.35.1713056158743;
-        Sat, 13 Apr 2024 17:55:58 -0700 (PDT)
+        bh=H7eRVp2VH/Cs4kA/J+hb9FmUFgAGZZsiG5M5GE7Zk78=;
+        b=X/uCKHKDZdPj3KskdAx+ovhwnt62mB4V3q7CN1T2ANrjfAn/ZkolyFRLy0LTjlkvv5
+         Ka9t/lTuRgoOimnWPNdS+qHlEiWJnRgsp0yskq9IjZNW0pTUKceY+oClM6wt/FAWnZGL
+         vbcpDIO4GeeWw3R/JJh4mnosKfPiSQWG7Tz1Wx3nItIr3g3EetIOt+IDlInerHYhs7dY
+         z1pR9Jh+3c1PUBwSayDc3LoAv8GiKeOPVfcb8pEzcdjOVE7iiDEvA8i8hoM7vKgpjIaJ
+         GBpZss0KVaiGY/45u/R/68mkY0h6EGK7T9/kKj4/AQMO2e9cYlDahBGgVQYUdcSJUYID
+         Ew2A==
+X-Forwarded-Encrypted: i=1; AJvYcCUkJ6Zah/OihU7eqXQYZewMCO4GXe9EP8eJEhwTAICxvNiqrIP6Az7cCblgY5RDzM/yA6ym2iXVNhtEPq4RsgptivDsHJ03NXfPMA6S3VtTVdGiCEztIhi//XrscAXjB3qOP/P1lKWqNHH9huKtdfhIi3Ei+1WyvRtGJFt8Q7UwW/A0oySP
+X-Gm-Message-State: AOJu0YwndISRvRqJHca3ZRc8Z+ayPKRwxC/sG9D2UW+9uASgsuSoH8GT
+	jWfZpfe0rbj32sOnMzGn8jL6Es046+PRLtRCIc0uAX9+urtcCNGhMM2SSw==
+X-Google-Smtp-Source: AGHT+IE1JfuvkIDBn+zEpFSgIhDTAKBivJPsmSekKkewerjhH1CDvAUm1W/KfzRdutQD8L9SsU33VQ==
+X-Received: by 2002:a0c:fbc4:0:b0:69b:57db:b6b4 with SMTP id n4-20020a0cfbc4000000b0069b57dbb6b4mr5760457qvp.21.1713057327476;
+        Sat, 13 Apr 2024 18:15:27 -0700 (PDT)
 Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
-        by smtp.gmail.com with ESMTPSA id d18-20020a0cfe92000000b0069b3e70937dsm4309240qvs.81.2024.04.13.17.55.58
+        by smtp.gmail.com with ESMTPSA id y3-20020a0ceac3000000b0069b5ead3a9csm2289098qvp.119.2024.04.13.18.15.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Apr 2024 17:55:58 -0700 (PDT)
-Date: Sat, 13 Apr 2024 20:55:57 -0400
+        Sat, 13 Apr 2024 18:15:27 -0700 (PDT)
+Date: Sat, 13 Apr 2024 21:15:26 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Richard Gobert <richardbgobert@gmail.com>, 
  davem@davemloft.net, 
@@ -81,11 +81,12 @@ To: Richard Gobert <richardbgobert@gmail.com>,
  linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org
 Cc: Richard Gobert <richardbgobert@gmail.com>
-Message-ID: <661b299dbed73_3cb63829464@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240412155533.115507-4-richardbgobert@gmail.com>
+Message-ID: <661b2e2ef3396_3cb63829493@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240412155533.115507-2-richardbgobert@gmail.com>
 References: <20240412155533.115507-1-richardbgobert@gmail.com>
- <20240412155533.115507-4-richardbgobert@gmail.com>
-Subject: Re: [PATCH net-next v7 3/3] selftests/net: add flush id selftests
+ <20240412155533.115507-2-richardbgobert@gmail.com>
+Subject: Re: [PATCH net-next v7 1/3] net: gro: add {inner_}network_offset to
+ napi_gro_cb
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,49 +98,56 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Richard Gobert wrote:
-> Added flush id selftests to test different cases where DF flag is set or
-> unset and id value changes in the following packets. All cases where the
-> packets should coalesce or should not coalesce are tested.
+> This patch adds network_offset and inner_network_offset to napi_gro_cb, and
+> makes sure both are set correctly. In the common path there's only one
+> write (skb_gro_reset_offset).
 > 
 > Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
-
-Thanks for adding tests. Minor point below only. The tests pass both
-before and after your series, right? Then immediately a nice
-validation that the optimization has no unintended side-effects.
-
 > ---
->  tools/testing/selftests/net/gro.c | 144 ++++++++++++++++++++++++++++++
->  1 file changed, 144 insertions(+)
+>  drivers/net/geneve.c           |  1 +
+>  drivers/net/vxlan/vxlan_core.c |  1 +
+>  include/net/gro.h              | 18 ++++++++++++++++--
+>  net/8021q/vlan_core.c          |  2 ++
+>  net/core/gro.c                 |  1 +
+>  net/ethernet/eth.c             |  1 +
+>  net/ipv4/af_inet.c             |  5 +----
+>  net/ipv4/gre_offload.c         |  1 +
+>  net/ipv6/ip6_offload.c         |  8 ++++----
+>  9 files changed, 28 insertions(+), 10 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-> index 353e1e867fbb..74ab06953c38 100644
-> --- a/tools/testing/selftests/net/gro.c
-> +++ b/tools/testing/selftests/net/gro.c
-> @@ -617,6 +617,120 @@ static void add_ipv6_exthdr(void *buf, void *optpkt, __u8 exthdr_type, char *ext
->  	iph->payload_len = htons(ntohs(iph->payload_len) + MIN_EXTHDR_SIZE);
->  }
+> diff --git a/net/ipv4/gre_offload.c b/net/ipv4/gre_offload.c
+> index d4520c3f7c09..ae596285d78c 100644
+> --- a/net/ipv4/gre_offload.c
+> +++ b/net/ipv4/gre_offload.c
+> @@ -224,6 +224,7 @@ static struct sk_buff *gre_gro_receive(struct list_head *head,
+>  	/* Adjusted NAPI_GRO_CB(skb)->csum after skb_gro_pull()*/
+>  	skb_gro_postpull_rcsum(skb, greh, grehlen);
 >  
-> +static void fix_ip4_checksum(struct iphdr *iph)
-> +{
-> +	iph->check = 0;
-> +	iph->check = checksum_fold(iph, sizeof(struct iphdr), 0);
-> +}
-> +
-> +static void send_flush_id_case(int fd, struct sockaddr_ll *daddr, int tcase)
-> +{
-> +	bool send_three = false;
-> +	static char buf1[MAX_HDR_LEN + PAYLOAD_LEN];
-> +	static char buf2[MAX_HDR_LEN + PAYLOAD_LEN];
-> +	static char buf3[MAX_HDR_LEN + PAYLOAD_LEN];
-> +
-> +	create_packet(buf1, 0, 0, PAYLOAD_LEN, 0);
-> +	create_packet(buf2, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
-> +	create_packet(buf3, PAYLOAD_LEN * 2, 0, PAYLOAD_LEN, 0);
-> +
-> +	struct iphdr *iph1 = (struct iphdr *)(buf1 + ETH_HLEN);
-> +	struct iphdr *iph2 = (struct iphdr *)(buf2 + ETH_HLEN);
-> +	struct iphdr *iph3 = (struct iphdr *)(buf3 + ETH_HLEN);
-> +
+> +	NAPI_GRO_CB(skb)->inner_network_offset = hlen;
+>  	pp = call_gro_receive(ptype->callbacks.gro_receive, head, skb);
+>  	flush = 0;
 
-minor: variable defintions before code, and reverse chrismas tree.
+Nice that this even works for ETH_P_TEB, as eth_gro_receive will
+overwrite the offset written here.
+  
+  
+>  	list_for_each_entry(p, head, list) {
+>  		const struct ipv6hdr *iph2;
+> @@ -327,6 +325,7 @@ static struct sk_buff *sit_ip6ip6_gro_receive(struct list_head *head,
+>  	}
+>  
+>  	NAPI_GRO_CB(skb)->encap_mark = 1;
+> +	NAPI_GRO_CB(skb)->inner_network_offset = skb_gro_offset(skb);
+>  
+>  	return ipv6_gro_receive(head, skb);
+>  }
+> @@ -342,6 +341,7 @@ static struct sk_buff *ip4ip6_gro_receive(struct list_head *head,
+>  	}
+>  
+>  	NAPI_GRO_CB(skb)->encap_mark = 1;
+> +	NAPI_GRO_CB(skb)->inner_network_offset = skb_gro_offset(skb);
+
+Do we still need encap_mark, or is it always set at the same time that
+inner_network_offset becomes non-zero?
+
 
