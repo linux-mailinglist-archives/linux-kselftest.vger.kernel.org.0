@@ -1,119 +1,201 @@
-Return-Path: <linux-kselftest+bounces-7915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52A238A4101
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 09:42:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C57D38A4114
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 09:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA8A7B20CDE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 07:42:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58A70282A0E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 07:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E091208A8;
-	Sun, 14 Apr 2024 07:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDD321345;
+	Sun, 14 Apr 2024 07:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NsmLywl4"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="oTWaWeHu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B6A1B95A;
-	Sun, 14 Apr 2024 07:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C15215E9B;
+	Sun, 14 Apr 2024 07:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713080564; cv=none; b=BOle6LmIyCN1pG3Z0rOlp/Qt2Fzt15tZ44bcjzbUpv2C4i4KJ99kMsygcBUl/06oLs5B02//r7DHOqACMZs1jlCH5H5F+xVL5v12IXLPOC4uYz+bfZZ3akFXOEgZ0qKaI1rF0eQEByeDxTLKot7K/YGcQfzVJp/ih4Y3SoDR/o8=
+	t=1713081401; cv=none; b=PwgMA71XRYSCoCP6IpYgw4kxF6IDlY53NjBf+JdMLmK1RyimODOwxsBNjRNgPGU/YsaGHSIDkNVgMyB6PgZycc/B0eRReOBn5UIQCji4OZI8xoDM4qXZ5Mk8ezBl2M4drtzPpPgz6I8XN/Pj00oWUx6y0G0V4OcvYWLde00/1Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713080564; c=relaxed/simple;
-	bh=6ykjIOAiBTxAiHLB66C2NCpr8txrh6E+cO0uOmmMD4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AQASohzEwMhp069T7T2fo3BHoTHRJbkJWtVFiVo94R6EfzEW9SUzJt35uOWpDb4YAUXIgCr3seUlJ5JJKIl0D1nKKkL/pcfgs65YT5rOB8C0J5N4cVnU6eIOSAiGM+AzXFwZYTmlloBArNahbdm5U4Ahn3+LmfiuuqnPYHHUX8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NsmLywl4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB96CC072AA;
-	Sun, 14 Apr 2024 07:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713080564;
-	bh=6ykjIOAiBTxAiHLB66C2NCpr8txrh6E+cO0uOmmMD4g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NsmLywl4iNGNTHtupw2OuDIiGfTyBkJ5uvaHX4sOTTqDSdplEUtw0indT1FmDqTOX
-	 Uu8QwmdLfL75QuRUzpyyLwQed/6l6XHGBxZCFbYURYZkuIHNwL5f4ibQaC3kmV889m
-	 vCwfNMFWLBzzHfMGVyEUKt0g6t3azcILi72V5OcPcfTJswR7YHULYKsaQQf0nV3Nin
-	 Jd3KODzja7A4SLRwaJPdcZDetlenDlbiPC1Ay+wEOz77W2ZlZF2iWiTJ2Kucs67Z6a
-	 /8/Yq9grG3+kR83s4LaAeJWdDOvwhT0IngSJVkpcLWwJvEksY8Qo8OhMQRgdMEUH7P
-	 IZH6NtISNZ9mA==
-Date: Sun, 14 Apr 2024 16:42:37 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, John Stultz <jstultz@google.com>,
-	Marco Elver <elver@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-	Edward Liaw <edliaw@google.com>,
-	Carlos Llamas <cmllamas@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] selftests: fix build failure with NOLIBC
-Message-ID: <ZhuI7TRZ111I3mBU@finisterre.sirena.org.uk>
-References: <87r0fmbe65.ffs@tglx>
- <CANDhNCoGRnXLYRzQWpy2ZzsuAXeraqT4R13tHXmiUtGzZRD3gA@mail.gmail.com>
- <87o7aqb6uw.ffs@tglx>
- <CANDhNCreA6nJp4ZUhgcxNB5Zye1aySDoU99+_GDS57HAF4jZ_Q@mail.gmail.com>
- <87frw2axv0.ffs@tglx>
- <20240404145408.GD7153@redhat.com>
- <87le5t9f14.ffs@tglx>
- <20240406150950.GA3060@redhat.com>
- <f0523b3a-ea08-4615-b0fb-5b504a2d39df@sirena.org.uk>
- <20240412123536.GA32444@redhat.com>
+	s=arc-20240116; t=1713081401; c=relaxed/simple;
+	bh=txG+MaiGhkYK6WZayglTtsGLPC9RsnrKCz2cnhHMAtg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YFxidvVyRY9q9MgW6rBNqiL43FnnAuBR39wj1K3bKv6mKu2TGcUoDuJIbwK17cmTnE2VUr3ZsIhBAl2yKr3up2sEAJXoIYbkwaUq9ucdQJI3cLhfhHWAa6MZesuCXr8ZLOwe6MX+X+EI08VRvn+boeRGbgB75dIx6lGvEjaRPSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=oTWaWeHu; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1713081388;
+	bh=txG+MaiGhkYK6WZayglTtsGLPC9RsnrKCz2cnhHMAtg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=oTWaWeHuxUAT50GTvGTwOMRFrD2NUDOHWRd5cI7jxTMSQUSghN4eDwDr1v8soR7LM
+	 86elWuuny7t4N+Wn+CJ7HEi6q56rTdP5N9eyh9K8VOk0vHvsmHDoG8EKs31SIf84vt
+	 +/G/Y/dIjO3jpWoR1pK6ngcf1ccBXYFt2hcRqKe0=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Sun, 14 Apr 2024 09:56:23 +0200
+Subject: [PATCH] tools/nolibc: add support for uname(2)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="RDirHntfewS0PWXo"
-Content-Disposition: inline
-In-Reply-To: <20240412123536.GA32444@redhat.com>
-X-Cookie: You might have mail.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240414-nolibc-uname-v1-1-28a1fdbd5c64@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIACaMG2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDE0MT3bz8nMykZN3SvMTcVN2UVGMLS9NEExMj0zQloJaCotS0zAqwcdG
+ xtbUA0uBRgF4AAAA=
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1713081387; l=3814;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=txG+MaiGhkYK6WZayglTtsGLPC9RsnrKCz2cnhHMAtg=;
+ b=iSSLGnCYRC5zFPlphtA8E3uU1uI7QrmwEbQ5wteqb1DtG8koyghnwfl11QJTXB5WelscFbjuU
+ 4RAJBHppMilDQrg2YMcU28DkJ42anKlzxR4bLNYjIKYW2x7sf9Km13M
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
+All supported kernels are assumed to use struct new_utsname.
+This is validated in test_uname().
 
---RDirHntfewS0PWXo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+uname(2) can for example be used in ksft_min_kernel_version() from the
+kernels selftest framework.
 
-On Fri, Apr 12, 2024 at 02:35:36PM +0200, Oleg Nesterov wrote:
-> As Mark explains ksft_min_kernel_version() can't be compiled with nolibc,
-> it doesn't implement uname().
->=20
-> Fixes: 6d029c25b71f ("selftests/timers/posix_timers: Reimplement check_ti=
-mer_distribution()")
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Closes: https://lore.kernel.org/all/f0523b3a-ea08-4615-b0fb-5b504a2d39df@=
-sirena.org.uk/
-> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+Link: https://lore.kernel.org/lkml/20240412123536.GA32444@redhat.com/
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/sys.h                   | 27 ++++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 42 ++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+)
 
-Makes sense to me given that there's not likely to be any immediate
-users.
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index dda9dffd1d74..7b82bc3cf107 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -22,6 +22,7 @@
+ #include <linux/stat.h>  /* for statx() */
+ #include <linux/prctl.h>
+ #include <linux/resource.h>
++#include <linux/utsname.h>
+ 
+ #include "arch.h"
+ #include "errno.h"
+@@ -1139,6 +1140,32 @@ int umount2(const char *path, int flags)
+ }
+ 
+ 
++/*
++ * int uname(struct utsname *buf);
++ */
++
++struct utsname {
++	char sysname[65];
++	char nodename[65];
++	char release[65];
++	char version[65];
++	char machine[65];
++	char domainname[65];
++};
++
++static __attribute__((unused))
++int sys_uname(struct utsname *buf)
++{
++	return my_syscall1(__NR_uname, buf);
++}
++
++static __attribute__((unused))
++int uname(struct utsname *buf)
++{
++	return __sysret(sys_uname(buf));
++}
++
++
+ /*
+  * int unlink(const char *path);
+  */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 6ba4f8275ac4..3c9a9bd38194 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -27,6 +27,7 @@
+ #include <sys/syscall.h>
+ #include <sys/sysmacros.h>
+ #include <sys/time.h>
++#include <sys/utsname.h>
+ #include <sys/wait.h>
+ #include <dirent.h>
+ #include <errno.h>
+@@ -761,6 +762,45 @@ int test_stat_timestamps(void)
+ 	return 0;
+ }
+ 
++int test_uname(void)
++{
++	struct utsname buf;
++	char osrelease[sizeof(buf.release)];
++	ssize_t r;
++	int fd;
++
++	memset(&buf.domainname, 'P', sizeof(buf.domainname));
++
++	if (uname(&buf))
++		return 1;
++
++	if (strncmp("Linux", buf.sysname, sizeof(buf.sysname)))
++		return 1;
++
++	fd = open("/proc/sys/kernel/osrelease", O_RDONLY);
++	if (fd == -1)
++		return 1;
++
++	r = read(fd, osrelease, sizeof(osrelease));
++	if (r == -1)
++		return 1;
++
++	close(fd);
++
++	if (osrelease[r - 1] == '\n')
++		r--;
++
++	/* Validate one of the later fields to ensure field sizes are correct */
++	if (strncmp(osrelease, buf.release, r))
++		return 1;
++
++	/* Ensure the field domainname is set, it is missing from struct old_utsname */
++	if (strnlen(buf.domainname, sizeof(buf.domainname)) == sizeof(buf.domainname))
++		return 1;
++
++	return 0;
++}
++
+ int test_mmap_munmap(void)
+ {
+ 	int ret, fd, i, page_size;
+@@ -966,6 +1006,8 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
+ 		CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
+ 		CASE_TEST(symlink_root);      EXPECT_SYSER(1, symlink("/", "/"), -1, EEXIST); break;
++		CASE_TEST(uname);             EXPECT_SYSZR(1, test_uname()); break;
++		CASE_TEST(uname_fault);       EXPECT_SYSER(1, uname(NULL), -1, EFAULT); break;
+ 		CASE_TEST(unlink_root);       EXPECT_SYSER(1, unlink("/"), -1, EISDIR); break;
+ 		CASE_TEST(unlink_blah);       EXPECT_SYSER(1, unlink("/proc/self/blah"), -1, ENOENT); break;
+ 		CASE_TEST(wait_child);        EXPECT_SYSER(1, wait(&tmp), -1, ECHILD); break;
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+---
+base-commit: 4cece764965020c22cff7665b18a012006359095
+change-id: 20240414-nolibc-uname-de3895a4425f
 
---RDirHntfewS0PWXo
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYbiOoACgkQJNaLcl1U
-h9DjfAf+NeKWvpY1kfNztkGXC5XgmSPRN72mmjwoz5S5ADSj6eACj6FVUx8dMLmx
-MboAtU5eBumh83kzmDd64LH3zoNrC47WBOgPc8DNJ+Rojo+M1+9wA1EnC0qbPQyT
-0H4LAFT2+/erlxSCrXcI/ValOLvD7+OOlEpObFMbFzyCT3cLQhQe/7o1gkjvArBC
-Y39UmP6cvV69IhQ0VRg2F+xvOZTBrD4h2THuRwD6FXnMt/kYfcKpFO0BeB+XvbvV
-r+7KTIQ8fkxw19JNuwSpzOM7M1Y9gJcsyN+bIZf1ctwOullXzAv2hh1IruVehXfA
-Ey2qL/O9t3pwtZT3MddpQbx8KoJpAg==
-=MeqW
------END PGP SIGNATURE-----
-
---RDirHntfewS0PWXo--
 
