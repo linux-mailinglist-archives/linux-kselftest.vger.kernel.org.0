@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-7920-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7921-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0B268A4288
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 15:18:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79B368A428A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 15:18:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52CC6B212F8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 13:18:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEF691F211A1
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 13:18:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4490647F79;
-	Sun, 14 Apr 2024 13:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B404C629;
+	Sun, 14 Apr 2024 13:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WE6XktZc"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GdNcO6Wv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B9F45BFA;
-	Sun, 14 Apr 2024 13:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261724CB3D;
+	Sun, 14 Apr 2024 13:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713100673; cv=none; b=SLnYJ9vlp43QYwUpodbumtt+nhkGbeI53xE+l0VOyE5KHIa9qM2eDVBc8wrm5qr9uixhveevP+wIHUcdRNzqB8nEsvSdzBlX3ABEmjdvabZX35UZeHVdL0ezQVhw2fLmSywp5/VMlpvkaFLRKymbVLRZR0maUOxLuoLyGyiK/1k=
+	t=1713100676; cv=none; b=OZfxH9oi71VH0YjgZvqR/LVGobEbPdueaAXjbyjl0ERqlS7EKlOqUR1CcTk3MlSN/xsGn3NfrouRMPADafQt0Pw7G1Z3vVmL0bK6A7ze2bimrjCqFnx93zup192b881AxpzkIfKaAUQW3aBG4VMforBMsxKUtVg+NH67ElyJH/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713100673; c=relaxed/simple;
-	bh=LgG/w5qdFetHcwqOkNqngUxFET9OESjfCC+ZDPdjLeA=;
+	s=arc-20240116; t=1713100676; c=relaxed/simple;
+	bh=3JC88Zejlt6mBk8q/isEPV+6ylxeGUKKA4ZKsL+rtqM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ME58qtXa0GiMnYSzEcC1M7bOqSeKYx0f1nwTasNSjlRf15MqfWZiNgTEM6UVyUcWfoW5CYntd3do7M5WsmX+gstXRvtpuiDlQTdswg4Ajjx0MJXYrArbW3LjW4OtsRiqTH//UUkQtbo0KZa9lk4txdWR0+Qqw7r7t6h0ikY9P9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WE6XktZc; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=IAXiMPiHlk97NkWdvyoczwzDWC3vfJQ1LObTypWgd0JfzeNvTO3glmqCKWWv17i6MESqk9sF/lJp6WLLgbxJANawtBh3aqzpmyEuNxX1urXjZq3ZbLwU2aQ0/NSfW49rtJrgZYD6U5PAc40rbM6d6OLDO5dt/D1/7DF1dLZoiw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GdNcO6Wv; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713100670;
-	bh=LgG/w5qdFetHcwqOkNqngUxFET9OESjfCC+ZDPdjLeA=;
+	s=mail; t=1713100673;
+	bh=3JC88Zejlt6mBk8q/isEPV+6ylxeGUKKA4ZKsL+rtqM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WE6XktZci+fvrtTY8njC/bMd24bbIXySAl5RjmCtus+qvsW+hgreB/e2pskSc3Ptk
-	 7UEoHxF9TuhTXLyn8djP9XBAUDbci0jA8TXQRLeU8raxZ6oeam3+WOkkWWs5sI+oX0
-	 J96bC6PmbyP0lbmBPP9dY/JPDTAeANy4dLcOz0EeNm8Sd/Nqfkm9ay+P5zpCIBmYB7
-	 ZignZFLLQ/Vn+rG6/e0lO2RTxRUQWK1AtUWFZhKvF0Y0d6zuVcS01/C55ozoYHZal5
-	 tO10eBgRrgkj43NTt2HahVtd2hlxcC93tpyaOLb0m1NTFdmhCHXwlV/dIUJTJ/QPhe
-	 Ib3UKnBlbbusw==
+	b=GdNcO6WvbLnTIMK/loHKZRMZMNJT7xXRhFVdm8qh45QhPQllev2gHVrf1AlMHgQVk
+	 sVr5G9eCRBVzpHAUp7Pi8ZRFv7Nk6lqYuusQ2srnuXxv4TIrJ7X4Jcfgio/intcBcR
+	 mHT7UOVodoGdXSVneH9gjBms1foik+9Ek69+hNygTZ1PMaJ8LIuGdfo6FTo5DbYv4J
+	 4kZ8Wxxshfc+FqhuBq0UP5L2mOdkyGkUZVUwZLv6Q7PA5d843Nceu96FaQI2Vvvmuw
+	 IgzVal6dUgOkBpGyoN5LD+Z8oBqBcRi1xBLs3i//Tk0pJwMyxoe2q9/PKU8F01+hJC
+	 heVOqp104Ct2Q==
 Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B8AE03781104;
-	Sun, 14 Apr 2024 13:17:47 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5310637811CE;
+	Sun, 14 Apr 2024 13:17:51 +0000 (UTC)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Shuah Khan <shuah@kernel.org>,
 	Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: kernel@collabora.com
-Subject: [PATCH 2/4] selftests: x86: corrupt_xstate_header: conform test to TAP format output
-Date: Sun, 14 Apr 2024 18:18:05 +0500
-Message-Id: <20240414131807.2253344-3-usama.anjum@collabora.com>
+Subject: [PATCH 3/4] selftests: fsgsbase_restore: conform test to TAP format output
+Date: Sun, 14 Apr 2024 18:18:06 +0500
+Message-Id: <20240414131807.2253344-4-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240414131807.2253344-1-usama.anjum@collabora.com>
 References: <20240414131807.2253344-1-usama.anjum@collabora.com>
@@ -73,89 +73,239 @@ functional change is intended other than the layout of output messages.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- .../selftests/x86/corrupt_xstate_header.c     | 30 +++++++++++--------
- 1 file changed, 18 insertions(+), 12 deletions(-)
+ .../testing/selftests/x86/fsgsbase_restore.c  | 117 +++++++++---------
+ 1 file changed, 57 insertions(+), 60 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/corrupt_xstate_header.c b/tools/testing/selftests/x86/corrupt_xstate_header.c
-index cf9ce8fbb656c..119ff74763c6d 100644
---- a/tools/testing/selftests/x86/corrupt_xstate_header.c
-+++ b/tools/testing/selftests/x86/corrupt_xstate_header.c
-@@ -39,7 +39,7 @@ static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
- 	sa.sa_flags = SA_SIGINFO | flags;
- 	sigemptyset(&sa.sa_mask);
- 	if (sigaction(sig, &sa, 0))
--		err(1, "sigaction");
-+		ksft_exit_fail_perror("sigaction");
+diff --git a/tools/testing/selftests/x86/fsgsbase_restore.c b/tools/testing/selftests/x86/fsgsbase_restore.c
+index 6fffadc515791..32e5b1b4be16f 100644
+--- a/tools/testing/selftests/x86/fsgsbase_restore.c
++++ b/tools/testing/selftests/x86/fsgsbase_restore.c
+@@ -30,6 +30,7 @@
+ #include <sys/ptrace.h>
+ #include <sys/wait.h>
+ #include <stdint.h>
++#include "../kselftest.h"
+ 
+ #define EXPECTED_VALUE 0x1337f00d
+ 
+@@ -46,18 +47,18 @@ static unsigned int dereference_seg_base(void)
+ 	return ret;
  }
  
- static void sigusr1(int sig, siginfo_t *info, void *uc_void)
-@@ -48,26 +48,29 @@ static void sigusr1(int sig, siginfo_t *info, void *uc_void)
- 	uint8_t *fpstate = (uint8_t *)uc->uc_mcontext.fpregs;
- 	uint64_t *xfeatures = (uint64_t *)(fpstate + 512);
- 
--	printf("\tWreck XSTATE header\n");
-+	ksft_print_msg("Wreck XSTATE header\n");
- 	/* Wreck the first reserved bytes in the header */
- 	*(xfeatures + 2) = 0xfffffff;
- }
- 
- static void sigsegv(int sig, siginfo_t *info, void *uc_void)
+-static void init_seg(void)
++static int init_seg(void)
  {
--	printf("\tGot SIGSEGV\n");
-+	ksft_print_msg("Got SIGSEGV\n");
+ 	unsigned int *target = mmap(
+ 		NULL, sizeof(unsigned int),
+ 		PROT_READ | PROT_WRITE,
+ 		MAP_PRIVATE | MAP_ANONYMOUS | MAP_32BIT, -1, 0);
+ 	if (target == MAP_FAILED)
+-		err(1, "mmap");
++		ksft_exit_fail_perror("mmap");
+ 
+ 	*target = EXPECTED_VALUE;
+ 
+-	printf("\tsegment base address = 0x%lx\n", (unsigned long)target);
++	ksft_print_msg("segment base address = 0x%lx\n", (unsigned long)target);
+ 
+ 	struct user_desc desc = {
+ 		.entry_number    = 0,
+@@ -71,7 +72,7 @@ static void init_seg(void)
+ 		.useable         = 0
+ 	};
+ 	if (syscall(SYS_modify_ldt, 1, &desc, sizeof(desc)) == 0) {
+-		printf("\tusing LDT slot 0\n");
++		ksft_print_msg("using LDT slot 0\n");
+ 		asm volatile ("mov %0, %" SEG :: "rm" ((unsigned short)0x7));
+ 	} else {
+ 		/* No modify_ldt for us (configured out, perhaps) */
+@@ -97,14 +98,16 @@ static void init_seg(void)
+ 		munmap(low_desc, sizeof(desc));
+ 
+ 		if (ret != 0) {
+-			printf("[NOTE]\tcould not create a segment -- can't test anything\n");
+-			exit(0);
++			ksft_print_msg("could not create a segment -- can't test anything\n");
++			return KSFT_SKIP;
+ 		}
+-		printf("\tusing GDT slot %d\n", desc.entry_number);
++		ksft_print_msg("using GDT slot %d\n", desc.entry_number);
+ 
+ 		unsigned short sel = (unsigned short)((desc.entry_number << 3) | 0x3);
+ 		asm volatile ("mov %0, %" SEG :: "rm" (sel));
+ 	}
++
++	return 0;
  }
  
- int main(void)
- {
- 	cpu_set_t set;
+ static void tracee_zap_segment(void)
+@@ -115,7 +118,7 @@ static void tracee_zap_segment(void)
+ 	 * we modify a segment register in order to make sure that ptrace
+ 	 * can correctly restore segment registers.
+ 	 */
+-	printf("\tTracee: in tracee_zap_segment()\n");
++	ksft_print_msg("Tracee: in tracee_zap_segment()\n");
  
+ 	/*
+ 	 * Write a nonzero selector with base zero to the segment register.
+@@ -130,70 +133,72 @@ static void tracee_zap_segment(void)
+ 
+ 	pid_t pid = getpid(), tid = syscall(SYS_gettid);
+ 
+-	printf("\tTracee is going back to sleep\n");
++	ksft_print_msg("Tracee is going back to sleep\n");
+ 	syscall(SYS_tgkill, pid, tid, SIGSTOP);
+ 
+ 	/* Should not get here. */
+-	while (true) {
+-		printf("[FAIL]\tTracee hit unreachable code\n");
+-		pause();
+-	}
++	ksft_exit_fail_msg("Tracee hit unreachable code\n");
+ }
+ 
+ int main()
+ {
+-	printf("\tSetting up a segment\n");
+-	init_seg();
++	int ret;
++
 +	ksft_print_header();
 +	ksft_set_plan(2);
 +
- 	sethandler(SIGUSR1, sigusr1, 0);
- 	sethandler(SIGSEGV, sigsegv, 0);
++	ksft_print_msg("Setting up a segment\n");
++
++	ret = init_seg();
++	if (ret)
++		return ret;
  
- 	if (!xsave_enabled()) {
--		printf("[SKIP] CR4.OSXSAVE disabled.\n");
--		return 0;
-+		ksft_print_msg("CR4.OSXSAVE disabled.\n");
-+		return KSFT_SKIP;
+ 	unsigned int val = dereference_seg_base();
+-	if (val != EXPECTED_VALUE) {
+-		printf("[FAIL]\tseg[0] == %x; should be %x\n", val, EXPECTED_VALUE);
+-		return 1;
+-	}
+-	printf("[OK]\tThe segment points to the right place.\n");
++	ksft_test_result(val == EXPECTED_VALUE, "The segment points to the right place.\n");
+ 
+ 	pid_t chld = fork();
+ 	if (chld < 0)
+-		err(1, "fork");
++		ksft_exit_fail_perror("fork");
+ 
+ 	if (chld == 0) {
+ 		prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0, 0);
+ 
+ 		if (ptrace(PTRACE_TRACEME, 0, 0, 0) != 0)
+-			err(1, "PTRACE_TRACEME");
++			ksft_exit_fail_perror("PTRACE_TRACEME");
+ 
+ 		pid_t pid = getpid(), tid = syscall(SYS_gettid);
+ 
+-		printf("\tTracee will take a nap until signaled\n");
++		ksft_print_msg("Tracee will take a nap until signaled\n");
+ 		syscall(SYS_tgkill, pid, tid, SIGSTOP);
+ 
+-		printf("\tTracee was resumed.  Will re-check segment.\n");
++		ksft_print_msg("Tracee was resumed. Will re-check segment.\n");
+ 
+ 		val = dereference_seg_base();
+-		if (val != EXPECTED_VALUE) {
+-			printf("[FAIL]\tseg[0] == %x; should be %x\n", val, EXPECTED_VALUE);
+-			exit(1);
++
++		if (val == EXPECTED_VALUE) {
++			ksft_print_msg("The segment points to the right place.\n");
++			return EXIT_SUCCESS;
+ 		}
+ 
+-		printf("[OK]\tThe segment points to the right place.\n");
+-		exit(0);
++		ksft_print_msg("seg[0] == %x; should be %x\n", val, EXPECTED_VALUE);
++		return EXIT_FAILURE;
  	}
  
- 	CPU_ZERO(&set);
-@@ -79,18 +82,21 @@ int main(void)
- 	 */
- 	sched_setaffinity(getpid(), sizeof(set), &set);
+ 	int status;
  
--	printf("[RUN]\tSend ourselves a signal\n");
-+	ksft_print_msg("Send ourselves a signal\n");
- 	raise(SIGUSR1);
+ 	/* Wait for SIGSTOP. */
+ 	if (waitpid(chld, &status, 0) != chld || !WIFSTOPPED(status))
+-		err(1, "waitpid");
++		ksft_exit_fail_perror("waitpid");
  
--	printf("[OK]\tBack from the signal.  Now schedule.\n");
-+	ksft_test_result_pass("Back from the signal. Now schedule.\n");
-+
- 	pid_t child = fork();
--	if (child < 0)
--		err(1, "fork");
- 	if (child == 0)
- 		return 0;
--	if (child)
-+
-+	if (child < 0) {
-+		ksft_test_result_fail("fork: %s\n", strerror(errno));
-+	} else if (child) {
- 		waitpid(child, NULL, 0);
--	printf("[OK]\tBack in the main thread.\n");
-+		ksft_test_result_pass("Back in the main thread.\n");
-+	}
+ 	struct user_regs_struct regs;
  
- 	/*
- 	 * We could try to confirm that extended state is still preserved
-@@ -98,5 +104,5 @@ int main(void)
- 	 * a warning in the kernel logs.
- 	 */
+ 	if (ptrace(PTRACE_GETREGS, chld, NULL, &regs) != 0)
+-		err(1, "PTRACE_GETREGS");
++		ksft_exit_fail_perror("PTRACE_GETREGS");
  
+ #ifdef __x86_64__
+-	printf("\tChild GS=0x%lx, GSBASE=0x%lx\n", (unsigned long)regs.gs, (unsigned long)regs.gs_base);
++	ksft_print_msg("Child GS=0x%lx, GSBASE=0x%lx\n", (unsigned long)regs.gs, (unsigned long)regs.gs_base);
+ #else
+-	printf("\tChild FS=0x%lx\n", (unsigned long)regs.xfs);
++	ksft_print_msg("Child FS=0x%lx\n", (unsigned long)regs.xfs);
+ #endif
+ 
+ 	struct user_regs_struct regs2 = regs;
+@@ -204,42 +209,34 @@ int main()
+ 	regs2.eip = (unsigned long)tracee_zap_segment;
+ #endif
+ 
+-	printf("\tTracer: redirecting tracee to tracee_zap_segment()\n");
++	ksft_print_msg("Tracer: redirecting tracee to tracee_zap_segment()\n");
+ 	if (ptrace(PTRACE_SETREGS, chld, NULL, &regs2) != 0)
+-		err(1, "PTRACE_GETREGS");
++		ksft_exit_fail_perror("PTRACE_GETREGS");
+ 	if (ptrace(PTRACE_CONT, chld, NULL, NULL) != 0)
+-		err(1, "PTRACE_GETREGS");
++		ksft_exit_fail_perror("PTRACE_GETREGS");
+ 
+ 	/* Wait for SIGSTOP. */
+ 	if (waitpid(chld, &status, 0) != chld || !WIFSTOPPED(status))
+-		err(1, "waitpid");
++		ksft_exit_fail_perror("waitpid");
+ 
+-	printf("\tTracer: restoring tracee state\n");
++	ksft_print_msg("Tracer: restoring tracee state\n");
+ 	if (ptrace(PTRACE_SETREGS, chld, NULL, &regs) != 0)
+-		err(1, "PTRACE_GETREGS");
++		ksft_exit_fail_perror("PTRACE_GETREGS");
+ 	if (ptrace(PTRACE_DETACH, chld, NULL, NULL) != 0)
+-		err(1, "PTRACE_GETREGS");
++		ksft_exit_fail_perror("PTRACE_GETREGS");
+ 
+ 	/* Wait for SIGSTOP. */
+ 	if (waitpid(chld, &status, 0) != chld)
+-		err(1, "waitpid");
+-
+-	if (WIFSIGNALED(status)) {
+-		printf("[FAIL]\tTracee crashed\n");
+-		return 1;
+-	}
+-
+-	if (!WIFEXITED(status)) {
+-		printf("[FAIL]\tTracee stopped for an unexpected reason: %d\n", status);
+-		return 1;
+-	}
+-
+-	int exitcode = WEXITSTATUS(status);
+-	if (exitcode != 0) {
+-		printf("[FAIL]\tTracee reported failure\n");
+-		return 1;
+-	}
+-
+-	printf("[OK]\tAll is well.\n");
 -	return 0;
++		ksft_exit_fail_perror("waitpid");
++
++	if (WIFSIGNALED(status))
++		ksft_test_result_fail("Tracee crashed\n");
++	else if (!WIFEXITED(status))
++		ksft_test_result_fail("Tracee stopped for an unexpected reason: %d\n", status);
++	else if (WEXITSTATUS(status) != 0)
++		ksft_test_result_fail("Tracee reported failure\n");
++	else
++		ksft_test_result_pass("Tracee exited correctly\n");
++
 +	ksft_finished();
  }
 -- 
