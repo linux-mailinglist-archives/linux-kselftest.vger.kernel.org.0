@@ -1,103 +1,93 @@
-Return-Path: <linux-kselftest+bounces-7925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D426D8A4330
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 16:39:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AE2D8A43B5
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 18:10:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A7502818D1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 14:39:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AC5EB2254E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Apr 2024 16:10:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E5013442C;
-	Sun, 14 Apr 2024 14:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F539134CEA;
+	Sun, 14 Apr 2024 16:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="U6WKyjZy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0pTNk6c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E2E12D771;
-	Sun, 14 Apr 2024 14:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0774204F;
+	Sun, 14 Apr 2024 16:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713105569; cv=none; b=idoLk+YHPfHKC0RdhjVIiag0sTIU699bpnlTYIslVV4gq14TX+Z8xJlo73KE4CD0PnY4CsoAEm1aAZ7b5nCq/jepu5zNQOfBNbIwV5HcAX1MhiZWq5Vx3u2VtWJ7CaA2d6wWchHXYqjHfQaU0i0GG3sNYtj3e0Qi4Hm7zoR2Xyk=
+	t=1713111027; cv=none; b=eedKxIAOK79S5vLMQJIf7tIPqbMogxJSjMnXg2KeDJMbUMpeuUiAIZ2zpXoKkm3Fw0RLbEtw5TIQrBB6ipeqAJQYet3uy8Z8JSKwcdI0REyUTryFCObfcVlc+gQhniw6G8gRfx6+Qc2Wo9iBF3HktGi/1v6wKkLZk7BEGpG4x6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713105569; c=relaxed/simple;
-	bh=QnrMKwGOYsOZJ210O+bWTxyLQa0cpJ6kdUhnlA2EYfY=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=NM4FYOwpy/F6jmZBzdz8t7vmjdjUd/E3J55uimIILmt7HA6oyGjhboBoOL/jXVErh2GFnclfXPAsITESm6IWWqhl3pNozLtFUILMxl52VQ9yf39Q+DJ+Kd1tyeo7RU12JbDYolDLDcCsR7ufIPUSuBLxZRiYnW8NOsz/oVrF5wE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=U6WKyjZy; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713105566;
-	bh=QnrMKwGOYsOZJ210O+bWTxyLQa0cpJ6kdUhnlA2EYfY=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=U6WKyjZyqs+5BMU6c8fF9j2xs3t/zVe7fKj95t0PpCdXG/b6OQxdkECLeL0hWpfl7
-	 P1GSsaERrMuMe8Kzzj3v7hg4LBRQEqP83gADAkJ1SQYZEFwiXPGI8hJaiU1yA1tVHC
-	 uGfxsBLiKD+qrkteSwGyns7SJEOhCybQJ/HscUb/rtg+tbg4OvUDvZ5qM/K1Z2LlU2
-	 FOpcSZaQVoa6H4EVrivon+YK7KV6WembjojYrZSwnAfSByPdsNnfXfBLREAobwZt+b
-	 izA6AnZDE+mOC69/trGjFKd3vo3rMwrfjJmcjGSwyZnjki+6n30xSaTfiunn1Biioq
-	 USOyaXY5vdedA==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8D4F237809CE;
-	Sun, 14 Apr 2024 14:39:23 +0000 (UTC)
-Message-ID: <b7c437f5-ac70-4611-908d-b665d8e02679@collabora.com>
-Date: Sun, 14 Apr 2024 19:39:58 +0500
+	s=arc-20240116; t=1713111027; c=relaxed/simple;
+	bh=GQ91brGH7ot9MixWssd4TprxKrsg8x2E2K9LgthC60A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=bhWbRbs5OaRH5yZ9XjBoile1TuwlkxWlESTEUEUYj5E/CYybERVgTYSpZI2p9JbdEr1D7Jph5uIGj4Xium4Y2pdggit5QobodO8+tvVDPLeBZjc2QHqL6s1Az5WCZ3ytEStPUaOMvC4+7nlRtG4pZ1YR4mgAeMGrRp0KSEqG/H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0pTNk6c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 73B32C2BD11;
+	Sun, 14 Apr 2024 16:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713111026;
+	bh=GQ91brGH7ot9MixWssd4TprxKrsg8x2E2K9LgthC60A=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=l0pTNk6cS78Qen0Foka219q73WeB9WHPAPcFZr4c7CzeiaR1OABqbKkZGvUF35NkT
+	 9PoETL6kCQ4KGsqeup9WSJab2Y3b8uBqj2Prqzc5wZrHkHWHFP9UQNW+emSMt6HCZn
+	 KC86XEGDeUtpu0marwLsJJq0bDK2AlW8/l085iaL7VPrFOHKWy6fux1mirQYBowpK2
+	 9z/UDcrGBI8yVadtobpw1Pcw2HCzI2bqcNndilCQ7WYsRS9rUcFZEq/5sh6luq9Sy3
+	 R8ubmJkGl0jiRU7kQ8sbrc/+OS6CI1pNtLSMOgkwVlVr9GdZRVd88zsKc/hOcGWA/g
+	 ukhLa6d30DqIw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5D985C32750;
+	Sun, 14 Apr 2024 16:10:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Kevin Tian <kevin.tian@intel.com>, Shuah Khan <shuah@kernel.org>,
- kernel@collabora.com, iommu@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: iommu: add config needed for iommufd_fail_nth
-To: Jason Gunthorpe <jgg@ziepe.ca>
-References: <20240325090048.1423908-1-usama.anjum@collabora.com>
- <45b4d209-675a-4b42-b62c-6644bafa36c0@collabora.com>
- <20240405001020.GB5792@ziepe.ca>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240405001020.GB5792@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 0/1] net: change maximum number of UDP segments to 128
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171311102637.24550.17026723901858878369.git-patchwork-notify@kernel.org>
+Date: Sun, 14 Apr 2024 16:10:26 +0000
+References: <20240411051124.386817-1-yuri.benditovich@daynix.com>
+In-Reply-To: <20240411051124.386817-1-yuri.benditovich@daynix.com>
+To: Yuri Benditovich <yuri.benditovich@daynix.com>
+Cc: willemdebruijn.kernel@gmail.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, jasowang@redhat.com,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, yan@daynix.com, andrew@daynix.com
 
-On 4/5/24 5:10 AM, Jason Gunthorpe wrote:
-> On Mon, Mar 25, 2024 at 02:11:41PM +0500, Muhammad Usama Anjum wrote:
->> On 3/25/24 2:00 PM, Muhammad Usama Anjum wrote:
->>> Add FAULT_INJECTION_DEBUG_FS and FAILSLAB configurations which are
->>> needed by iommufd_fail_nth test.
->>>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>> While building and running these tests on x86, defconfig had these
->>> configs enabled. But ARM64's defconfig doesn't enable these configs.
->>> Hence the config options are being added explicitly in this patch.
->> Please disregard this extra comment. Overall this patch is needed to enable
->> these config options of x86 and ARM both.
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 11 Apr 2024 08:11:23 +0300 you wrote:
+> v1->v2:
+> Fixed placement of 'Fixed:' line
+> Extended commit message
 > 
-> I picked this and the other patch up, thanks
-Not sure why but I'm unable to find this patch in next and in your tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/jgg/iommufd.git/log/?h=for-next
-
-Maybe this patch was missed?
-
-
+> Yuri Benditovich (1):
+>   net: change maximum number of UDP segments to 128
 > 
-> Jason
-> 
+> [...]
 
+Here is the summary with links:
+  - [net,v2,1/1] net: change maximum number of UDP segments to 128
+    https://git.kernel.org/netdev/net/c/1382e3b6a350
+
+You are awesome, thank you!
 -- 
-BR,
-Muhammad Usama Anjum
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
