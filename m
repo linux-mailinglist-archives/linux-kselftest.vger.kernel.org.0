@@ -1,165 +1,299 @@
-Return-Path: <linux-kselftest+bounces-7968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 839B08A52FA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:22:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C7948A556C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:44:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD7AAB20A72
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:22:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0775E1F22AC8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1961757E1;
-	Mon, 15 Apr 2024 14:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dvSHlq4f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C42CA433C9;
+	Mon, 15 Apr 2024 14:44:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D8C74E25
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 14:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B121D52B;
+	Mon, 15 Apr 2024 14:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713190936; cv=none; b=C2NhoBw8PFAEOxz4J7g4lXRA+JVWD2hA7CB8LjjdEn6LuWs4UGKYE6VvzpDDFTdVXhdnbZKAa33eRl30uA42ZEnvk8YjoXozSIFkEZevX782aFjcMD5pV2DZAhoq6F2epgZ6vz2NOyuHQ2t/CmvPJdEF1+xXBuHsLO4eRV+F4+w=
+	t=1713192254; cv=none; b=kyWL+NloTl6CAKcSc7+j/wcUfLcShp+ARNSPxWQp3VwY1iU9z6n9ZoHNa1sj/FVofQfucQ4IrBMqz2K6Na6sGVJDD6MSGuP5QYGgpqypmf40K1I36L7IxbXLm0oIA4SMUA8/Q1mnX8CHCmbrzh+SurViI6KagVx4W+rdL4wWb6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713190936; c=relaxed/simple;
-	bh=N6BsmOpUFv1NdzAIhR7wG4F9QbFYaKztoAW+/nHUQH4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KTmPWByYZTBWSADodsyzC37B82teSo0cJpYh3P7LZ0SCGM4wOZADxT+RFxWg6VsHkuZnPy+3FKZ860e9l2tMJkFFfeSJU5hEYSVWca1xpEg9or1KlKCntUYcPMzcZVRmpsleLeXnHVJeVKXYzVDQdgUGMe3XzVJxnFTzayGhi4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dvSHlq4f; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713190934;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=1PbOJBRpspxdDa6pRJjCuw+ncvorVUgjMaFCtffqZ+Q=;
-	b=dvSHlq4ffl9La6scN3ja6neyqrTkmRvMbdijqJyANEVsfbidiQGhGNQb815FooC27p1FNq
-	cwNGx5babAkcrg3M+2h3HhbkCPZmXHP5k8cEyp7LhcF58PYNoMNlE8Tiv3p+BMoING5Fv8
-	qwaRIVbL644ii/9QoHe/kCcs/wI44sA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-689-z-pZk_jWP2-Z4eLNnpCS_Q-1; Mon, 15 Apr 2024 10:22:12 -0400
-X-MC-Unique: z-pZk_jWP2-Z4eLNnpCS_Q-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-41552c04845so12173835e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 07:22:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713190931; x=1713795731;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1PbOJBRpspxdDa6pRJjCuw+ncvorVUgjMaFCtffqZ+Q=;
-        b=Ao9uA3o1SPsucMW0SYBvUfZiMLx8gS1C0Rf1NglUkQc3K5QfChsZQD7kL0WyzJ1LYL
-         dVBCqnzgqG+nuw3MhxMFb+PZOs/D7MLEUnpmk0KCihHDrYfkBnvR5n9k9RXJD0nCCcPl
-         EvU92QZpEJhXUu5lq85hBLmbfF5yQExvbM1kbz324X4Tz5wkN3K9Fb2AlxA2RILXAsUx
-         jmmI25rBxneiXwqMImdqTHyubYH2D56fUJ6U0l6XxL/O6haTrPICZe7ke4wOkKhomWSD
-         PaZ9XTXdecHdZVsc4fl1CNiUPHrmLYT1waFCVv5zWrax8iyUgL6Q73Ve2xGqoNWnlcgO
-         EsrA==
-X-Forwarded-Encrypted: i=1; AJvYcCUSpM9ubZzngiel2831cDMQBqaZvqMsmpdfdeb+cjnxpq/o0U/mC9rM1jsxStOq88bsyaMszzyDpvLJ8TQpOicLu6hM3Ht/rGyDmXy2ppjD
-X-Gm-Message-State: AOJu0Yz9FTIMkD8dikFGWTwFIpBkHfb2QAd6ZFERLRz0pV4va4SIuXih
-	M/fw3R6mLRZRoV45nE18EUPmuQ4xDMkMoszzQaftRz7vE4JFn20kWh7ihNXNqOLldwa/y0YUUU8
-	wZiRlrPS8Vz7MAbMlHPwoq7rVWfJ46yZJ2tNepmdw9Draub5353rpEXi0UuC/fbIhkNb83pp+4A
-	==
-X-Received: by 2002:a05:600c:1c81:b0:418:7401:b15f with SMTP id k1-20020a05600c1c8100b004187401b15fmr1322458wms.38.1713190931712;
-        Mon, 15 Apr 2024 07:22:11 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGDak1eTKoWVr2U+6dT5ZcLn1063lRhwGMlTXR2A2YuvZAJE2t6UbWSYNg3COoiiV+lBsHBiw==
-X-Received: by 2002:a05:600c:1c81:b0:418:7401:b15f with SMTP id k1-20020a05600c1c8100b004187401b15fmr1322438wms.38.1713190931354;
-        Mon, 15 Apr 2024 07:22:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:d800:568a:6ea7:5272:797c? (p200300cbc706d800568a6ea75272797c.dip0.t-ipconnect.de. [2003:cb:c706:d800:568a:6ea7:5272:797c])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05600c46cc00b00417bab31bd2sm16449015wmo.26.2024.04.15.07.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Apr 2024 07:22:10 -0700 (PDT)
-Message-ID: <513a9e86-6159-43dd-8b70-f903637f2cd0@redhat.com>
-Date: Mon, 15 Apr 2024 16:22:09 +0200
+	s=arc-20240116; t=1713192254; c=relaxed/simple;
+	bh=6HcZNB2GKTsycYKJe1NGj3TZRbra4cpuJ4EXp3SFi0A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Vmiax9pfoSvE5YL+CkAKGXUHFZCJ/gOgz+gNPJOpOKCxZ3E51UWgSAey6pBbaZ7xDvI0aqoeNiIdwwgTljSPoD8p1dr+9VhvEwbTBWTNyzuguoek7c1CtS9QL7KwMFn+QFXCylzQaOEAXMqm+xKWmW09GHbdbt1pCpuO3p3hGvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VJ86p2SThz9v7Jj;
+	Mon, 15 Apr 2024 22:04:18 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 783A7140801;
+	Mon, 15 Apr 2024 22:25:01 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwBnoSWrOB1myEJGBg--.9473S2;
+	Mon, 15 Apr 2024 15:25:00 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: corbet@lwn.net,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	akpm@linux-foundation.org,
+	shuah@kernel.org,
+	mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
+	mic@digikod.net
+Cc: linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	linux-integrity@vger.kernel.org,
+	wufan@linux.microsoft.com,
+	pbrobinson@gmail.com,
+	zbyszek@in.waw.pl,
+	hch@lst.de,
+	mjg59@srcf.ucam.org,
+	pmatilai@redhat.com,
+	jannh@google.com,
+	dhowells@redhat.com,
+	jikos@kernel.org,
+	mkoutny@suse.com,
+	ppavlu@suse.com,
+	petr.vorel@gmail.com,
+	mzerqung@0pointer.de,
+	kgold@linux.ibm.com,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v4 00/14] security: digest_cache LSM
+Date: Mon, 15 Apr 2024 16:24:22 +0200
+Message-Id: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] KVM: s390x: selftests: Add shared zeropage test
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>, Thomas Huth <thuth@redhat.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-References: <20240412084329.30315-1-david@redhat.com>
- <Zh03fI2oA0UkE0Kp@tuxmaker.boeblingen.de.ibm.com>
-Content-Language: en-US
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <Zh03fI2oA0UkE0Kp@tuxmaker.boeblingen.de.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwBnoSWrOB1myEJGBg--.9473S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr4rXFy5tw4UZF4DWw43GFg_yoWfKr1xp3
+	ykC3W5Kws5ZFy7Aw4xAF129r1Fqa95KF47Gws7Xr13ZrWYqryFy3WIkw17Zry3XrWUXa1S
+	vw47KF15Ww1DJaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+	xVAaw2AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+	IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+	6rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI
+	8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
+	6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2Kf
+	nxnUUI43ZEXa7IU0NzVUUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj5h0qAABs8
 
-On 15.04.24 16:19, Alexander Gordeev wrote:
-> On Fri, Apr 12, 2024 at 10:43:29AM +0200, David Hildenbrand wrote:
-> Hi David,
->>   tools/testing/selftests/kvm/Makefile          |   1 +
->>   .../kvm/s390x/shared_zeropage_test.c          | 110 ++++++++++++++++++
->>   2 files changed, 111 insertions(+)
->>   create mode 100644 tools/testing/selftests/kvm/s390x/shared_zeropage_test.c
-> 
-> Tested-by: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Thanks Alexander, especially also for discovering that nasty ifdef bug!
+Integrity detection and protection has long been a desirable feature, to
+reach a large user base and mitigate the risk of flaws in the software
+and attacks.
+
+However, while solutions exist, they struggle to reach the large user
+base, due to requiring higher than desired constraints on performance,
+flexibility and configurability, that only security conscious people are
+willing to accept.
+
+This is where the new digest_cache LSM comes into play, it offers
+additional support for new and existing integrity solutions, to make
+them faster and easier to deploy.
+
+The full documentation with the motivation and the solution details can be
+found in patch 14.
+
+The IMA integration patch set will be introduced separately. Also a PoC
+based on the current version of IPE can be provided.
+
+v3:
+- Rewrite documentation, and remove the installation instructions since
+  they are now included in the README of digest-cache-tools
+- Add digest cache event notifier
+- Drop digest_cache_was_reset(), and send instead to asynchronous
+  notifications
+- Fix digest_cache LSM Kconfig style issues (suggested by Randy Dunlap)
+- Propagate digest cache reset to directory entries
+- Destroy per directory entry mutex
+- Introduce RESET_USER bit, to clear the dig_user pointer on
+  set/removexattr
+- Replace 'file content' with 'file data' (suggested by Mimi)
+- Introduce per digest cache mutex and replace verif_data_lock spinlock
+- Track changes of security.digest_list xattr
+- Stop tracking file_open and use file_release instead also for file writes
+- Add error messages in digest_cache_create()
+- Load/unload testing kernel module automatically during execution of test
+- Add tests for digest cache event notifier
+- Add test for ftruncate()
+- Remove DIGEST_CACHE_RESET_PREFETCH_BUF command in test and clear the
+  buffer on read instead
+
+v2:
+- Include the TLV parser in this patch set (from user asymmetric keys and
+  signatures)
+- Move from IMA and make an independent LSM
+- Remove IMA-specific stuff from this patch set
+- Add per algorithm hash table
+- Expect all digest lists to be in the same directory and allow changing
+  the default directory
+- Support digest lookup on directories, when there is no
+  security.digest_list xattr
+- Add seq num to digest list file name, to impose ordering on directory
+  iteration
+- Add a new data type DIGEST_LIST_ENTRY_DATA for the nested data in the
+  tlv digest list format
+- Add the concept of verification data attached to digest caches
+- Add the reset mechanism to track changes on digest lists and directory
+  containing the digest lists
+- Add kernel selftests
+
+v1:
+- Add documentation in Documentation/security/integrity-digest-cache.rst
+- Pass the mask of IMA actions to digest_cache_alloc()
+- Add a reference count to the digest cache
+- Remove the path parameter from digest_cache_get(), and rely on the
+  reference count to avoid the digest cache disappearing while being used
+- Rename the dentry_to_check parameter of digest_cache_get() to dentry
+- Rename digest_cache_get() to digest_cache_new() and add
+  digest_cache_get() to set the digest cache in the iint of the inode for
+  which the digest cache was requested
+- Add dig_owner and dig_user to the iint, to distinguish from which inode
+  the digest cache was created from, and which is using it; consequently it
+  makes the digest cache usable to measure/appraise other digest caches
+  (support not yet enabled)
+- Add dig_owner_mutex and dig_user_mutex to serialize accesses to dig_owner
+  and dig_user until they are initialized
+- Enforce strong synchronization and make the contenders wait until
+  dig_owner and dig_user are assigned to the iint the first time
+- Move checking IMA actions on the digest list earlier, and fail if no
+  action were performed (digest cache not usable)
+- Remove digest_cache_put(), not needed anymore with the introduction of
+  the reference count
+- Fail immediately in digest_cache_lookup() if the digest algorithm is
+  not set in the digest cache
+- Use 64 bit mask for IMA actions on the digest list instead of 8 bit
+- Return NULL in the inline version of digest_cache_get()
+- Use list_add_tail() instead of list_add() in the iterator
+- Copy the digest list path to a separate buffer in digest_cache_iter_dir()
+- Use digest list parsers verified with Frama-C
+- Explicitly disable (for now) the possibility in the IMA policy to use the
+  digest cache to measure/appraise other digest lists
+- Replace exit(<value>) with return <value> in manage_digest_lists.c
+
+Roberto Sassu (14):
+  lib: Add TLV parser
+  security: Introduce the digest_cache LSM
+  digest_cache: Add securityfs interface
+  digest_cache: Add hash tables and operations
+  digest_cache: Populate the digest cache from a digest list
+  digest_cache: Parse tlv digest lists
+  digest_cache: Parse rpm digest lists
+  digest_cache: Add management of verification data
+  digest_cache: Add support for directories
+  digest cache: Prefetch digest lists if requested
+  digest_cache: Reset digest cache on file/directory change
+  digest_cache: Notify digest cache events
+  selftests/digest_cache: Add selftests for digest_cache LSM
+  docs: Add documentation of the digest_cache LSM
+
+ Documentation/security/digest_cache.rst       | 763 ++++++++++++++++
+ Documentation/security/index.rst              |   1 +
+ MAINTAINERS                                   |  16 +
+ include/linux/digest_cache.h                  | 117 +++
+ include/linux/kernel_read_file.h              |   1 +
+ include/linux/tlv_parser.h                    |  28 +
+ include/uapi/linux/lsm.h                      |   1 +
+ include/uapi/linux/tlv_digest_list.h          |  72 ++
+ include/uapi/linux/tlv_parser.h               |  59 ++
+ include/uapi/linux/xattr.h                    |   6 +
+ lib/Kconfig                                   |   3 +
+ lib/Makefile                                  |   3 +
+ lib/tlv_parser.c                              | 214 +++++
+ lib/tlv_parser.h                              |  17 +
+ security/Kconfig                              |  11 +-
+ security/Makefile                             |   1 +
+ security/digest_cache/Kconfig                 |  33 +
+ security/digest_cache/Makefile                |  11 +
+ security/digest_cache/dir.c                   | 252 ++++++
+ security/digest_cache/htable.c                | 268 ++++++
+ security/digest_cache/internal.h              | 290 +++++++
+ security/digest_cache/main.c                  | 570 ++++++++++++
+ security/digest_cache/modsig.c                |  66 ++
+ security/digest_cache/notifier.c              | 135 +++
+ security/digest_cache/parsers/parsers.h       |  15 +
+ security/digest_cache/parsers/rpm.c           | 223 +++++
+ security/digest_cache/parsers/tlv.c           | 299 +++++++
+ security/digest_cache/populate.c              | 163 ++++
+ security/digest_cache/reset.c                 | 235 +++++
+ security/digest_cache/secfs.c                 |  87 ++
+ security/digest_cache/verif.c                 | 119 +++
+ security/security.c                           |   3 +-
+ tools/testing/selftests/Makefile              |   1 +
+ .../testing/selftests/digest_cache/.gitignore |   3 +
+ tools/testing/selftests/digest_cache/Makefile |  24 +
+ .../testing/selftests/digest_cache/all_test.c | 815 ++++++++++++++++++
+ tools/testing/selftests/digest_cache/common.c |  78 ++
+ tools/testing/selftests/digest_cache/common.h | 135 +++
+ .../selftests/digest_cache/common_user.c      |  47 +
+ .../selftests/digest_cache/common_user.h      |  17 +
+ tools/testing/selftests/digest_cache/config   |   1 +
+ .../selftests/digest_cache/generators.c       | 248 ++++++
+ .../selftests/digest_cache/generators.h       |  19 +
+ .../selftests/digest_cache/testmod/Makefile   |  16 +
+ .../selftests/digest_cache/testmod/kern.c     | 564 ++++++++++++
+ .../selftests/lsm/lsm_list_modules_test.c     |   3 +
+ 46 files changed, 6047 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/security/digest_cache.rst
+ create mode 100644 include/linux/digest_cache.h
+ create mode 100644 include/linux/tlv_parser.h
+ create mode 100644 include/uapi/linux/tlv_digest_list.h
+ create mode 100644 include/uapi/linux/tlv_parser.h
+ create mode 100644 lib/tlv_parser.c
+ create mode 100644 lib/tlv_parser.h
+ create mode 100644 security/digest_cache/Kconfig
+ create mode 100644 security/digest_cache/Makefile
+ create mode 100644 security/digest_cache/dir.c
+ create mode 100644 security/digest_cache/htable.c
+ create mode 100644 security/digest_cache/internal.h
+ create mode 100644 security/digest_cache/main.c
+ create mode 100644 security/digest_cache/modsig.c
+ create mode 100644 security/digest_cache/notifier.c
+ create mode 100644 security/digest_cache/parsers/parsers.h
+ create mode 100644 security/digest_cache/parsers/rpm.c
+ create mode 100644 security/digest_cache/parsers/tlv.c
+ create mode 100644 security/digest_cache/populate.c
+ create mode 100644 security/digest_cache/reset.c
+ create mode 100644 security/digest_cache/secfs.c
+ create mode 100644 security/digest_cache/verif.c
+ create mode 100644 tools/testing/selftests/digest_cache/.gitignore
+ create mode 100644 tools/testing/selftests/digest_cache/Makefile
+ create mode 100644 tools/testing/selftests/digest_cache/all_test.c
+ create mode 100644 tools/testing/selftests/digest_cache/common.c
+ create mode 100644 tools/testing/selftests/digest_cache/common.h
+ create mode 100644 tools/testing/selftests/digest_cache/common_user.c
+ create mode 100644 tools/testing/selftests/digest_cache/common_user.h
+ create mode 100644 tools/testing/selftests/digest_cache/config
+ create mode 100644 tools/testing/selftests/digest_cache/generators.c
+ create mode 100644 tools/testing/selftests/digest_cache/generators.h
+ create mode 100644 tools/testing/selftests/digest_cache/testmod/Makefile
+ create mode 100644 tools/testing/selftests/digest_cache/testmod/kern.c
 
 -- 
-Cheers,
-
-David / dhildenb
+2.34.1
 
 
