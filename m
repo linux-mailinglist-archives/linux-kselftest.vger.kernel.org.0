@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-7933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7934-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D560D8A480D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 08:31:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BD498A480E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 08:31:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40266B21D4E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 06:31:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48912282FCA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 06:31:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C249129B0;
-	Mon, 15 Apr 2024 06:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C926139;
+	Mon, 15 Apr 2024 06:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nhOUIsaW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ue7TP1Y0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97AFA1CF8A;
-	Mon, 15 Apr 2024 06:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064B31BF53;
+	Mon, 15 Apr 2024 06:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713162702; cv=none; b=oVbG8+F9H0bPoSpGZAILMAt1ct6J2S9WX3A3PADUiZV80rwAUS+q4gGSyf1g8768YiDjP+zP31XAEr6a7u8OddtAt6wA7hOUjQR/CEDhekH0PnFElBtFoSZJzziEqo9p0WT3he4VaYQknWPrhwVFWTbFBfsnMba6EPi2zo4PeLw=
+	t=1713162709; cv=none; b=kKS22033kpe3b4aVEUGajXJCovzipf4iFFxmqatNnmkqd8VWBsp/IpvA1HzXD7m1qdxmyHDuf7x3BUE/NZkKNDd3rE+/jENYWmKeNJEgWTleW3uc9e/LazZiSu1OBAdQ6QpSs9ZfgfyVDc7YIhlGTHmQ6R4mLri9477L4Eq/zXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713162702; c=relaxed/simple;
-	bh=fKbXIiKuYssY4VB9Gno3DXKEvI8risDYWZFnED80jcU=;
+	s=arc-20240116; t=1713162709; c=relaxed/simple;
+	bh=NHEB9TokBCk2Zcvs5aYjfmxZ3CANdUFDFp4WT/vneAU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ryADD2ASKHlY08CcjF8kTs4+ivxQeq9idZZnk0SKWbrMUKxpkWi9JRriCcMWuLZhXN/Fd1LInJE/2wVYr1TKCggKebTKc8Z89TYR+ZiGYJh12lcCuDFkcD8k7KnwX26tORRadA8VItLPkFybWC2Nomr4D+cmnXggp935P8sX0i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nhOUIsaW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C992C113CC;
-	Mon, 15 Apr 2024 06:31:36 +0000 (UTC)
+	 MIME-Version; b=smrVZCsvGFSYvWL8invLTfnvZyQt5V9tCX1msk0n01mPYM5gAI62UDIJT6awxaiCjTHbDhqvbu3iobMyPKVTcgiRvtercNY9X3Iv3Qje2AwyTmA8swjEYtMnjrakPx/I9OpeMR3KgWl4oyT7j9p9JecArMwJPfWV6SQD6hbbWQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ue7TP1Y0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8104C2BD11;
+	Mon, 15 Apr 2024 06:31:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713162702;
-	bh=fKbXIiKuYssY4VB9Gno3DXKEvI8risDYWZFnED80jcU=;
+	s=k20201202; t=1713162708;
+	bh=NHEB9TokBCk2Zcvs5aYjfmxZ3CANdUFDFp4WT/vneAU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nhOUIsaWZfsRh6b0uWNP+V/46kLR+ImeFMIcGXkWCLz7nKT9avbw9zC4gMYUgpKXv
-	 L09+gevU8DzXUklHalFBqgoRdhUuStesPiyoqDNSXjuDH72j8CWKBt4h/uyYFB9vS1
-	 tgeg/bMbe7PKnO/T3EMoZy/NNzrjZ9IhJa9Gs2L6p/DF+DZ5SO2pTE2D4TIX391r+d
-	 +5B9dLjQIf4htR0kFLI548Ut1oCyORy6CAUzPnNcsMY4OtOM8xc4wUn8iOau3EYiq1
-	 WWRyXwLuoXhpFHeJhaiquxJdRAK1h32g/YVP8N6bUZ6tgNmUDoMVLb+Zc0vYdI67GV
-	 KOWstHp3+8sNw==
+	b=Ue7TP1Y09SRvxEyZiCBdv56CTK/mFPrQ14Ufv+fqzFHmmCWrXkip07+x7NE+d5gh0
+	 vJER4KfS+hqyuQQv7aNvWpj78AWdCXccFhT4Jg9VCjPbxoka9dKqiQL7YV9Z8OOuJY
+	 8UGavu2cG2qL6TnCe+Y5gIlOE/NLbQjSlQVBOFL1vv8OgqZ4a4ThKWB43/3pRhmtsk
+	 +kFZscxxV9IBLJSdqqqB6e43Wp06PMDng7WlNwgrsXSPzl9Nx998cwvwHf1wDWHvFJ
+	 LH2dj2/1JY5VNS9GDiL+s8/lFiEqHCxswRKo2Mp+IVLS1UF7n6vQ+M2D1CXKkIGsDB
+	 VzKZgVm19omsw==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 2/9] selftests/bpf: Add start_server_addr* helpers
-Date: Mon, 15 Apr 2024 14:31:11 +0800
-Message-Id: <b91517285bb6c53225d4b92f543b3e819d109113.1713161975.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v3 3/9] selftests/bpf: Use start_server_addr in cls_redirect
+Date: Mon, 15 Apr 2024 14:31:12 +0800
+Message-Id: <6b14b2c38ebfd1221555d3de3d413a0460282712.1713161975.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1713161974.git.tanggeliang@kylinos.cn>
 References: <cover.1713161974.git.tanggeliang@kylinos.cn>
@@ -75,61 +75,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-In order to pair up with connect_to_addr(), this patch adds a new helper
-start_server_addr(), and another one start_server_addr_opts(), which is
-a wrapper of __start_server(), only added a network_helper_opts arg at
-the end.
-
-They all accept an argument 'addr' of 'struct sockaddr_storage' type
-instead of a string type argument like start_server().
+Include network_helpers.h in prog_tests/cls_redirect.c, use the newly
+added public helper start_server_addr() instead of the local defined
+function start_server(). This can avoid duplicate code.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 16 ++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  3 +++
- 2 files changed, 19 insertions(+)
+ .../selftests/bpf/prog_tests/cls_redirect.c   | 20 ++-----------------
+ 1 file changed, 2 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 3759948439a7..92c980b18afd 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -185,6 +185,22 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 	return NULL;
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/cls_redirect.c b/tools/testing/selftests/bpf/prog_tests/cls_redirect.c
+index 2a55f717fc07..4050d470d2a2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cls_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/cls_redirect.c
+@@ -10,6 +10,7 @@
+ #include <netinet/tcp.h>
  
-+int start_server_addr_opts(int type, const struct sockaddr_storage *addr, socklen_t len,
-+			   const struct network_helper_opts *opts)
-+{
-+	return __start_server(type, 0, (struct sockaddr *)addr, len,
-+			      opts->timeout_ms, 0);
-+}
-+
-+int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t len)
-+{
-+	struct network_helper_opts opts = {
-+		.timeout_ms = 0,
-+	};
-+
-+	return start_server_addr_opts(type, addr, len, &opts);
-+}
-+
- void free_fds(int *fds, unsigned int nr_close_fds)
+ #include <test_progs.h>
++#include "network_helpers.h"
+ 
+ #include "progs/test_cls_redirect.h"
+ #include "test_cls_redirect.skel.h"
+@@ -35,23 +36,6 @@ struct tuple {
+ 	struct addr_port dst;
+ };
+ 
+-static int start_server(const struct sockaddr *addr, socklen_t len, int type)
+-{
+-	int fd = socket(addr->sa_family, type, 0);
+-	if (CHECK_FAIL(fd == -1))
+-		return -1;
+-	if (CHECK_FAIL(bind(fd, addr, len) == -1))
+-		goto err;
+-	if (type == SOCK_STREAM && CHECK_FAIL(listen(fd, 128) == -1))
+-		goto err;
+-
+-	return fd;
+-
+-err:
+-	close(fd);
+-	return -1;
+-}
+-
+ static int connect_to_server(const struct sockaddr *addr, socklen_t len,
+ 			     int type)
  {
- 	if (fds) {
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index ac4da5fdcc95..9e6fcc89a8d0 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -53,6 +53,9 @@ int start_mptcp_server(int family, const char *addr, __u16 port,
- int *start_reuseport_server(int family, int type, const char *addr_str,
- 			    __u16 port, int timeout_ms,
- 			    unsigned int nr_listens);
-+int start_server_addr_opts(int type, const struct sockaddr_storage *addr, socklen_t len,
-+			   const struct network_helper_opts *opts);
-+int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t len);
- void free_fds(int *fds, unsigned int nr_close_fds);
- int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t len);
- int connect_to_fd(int server_fd, int timeout_ms);
+@@ -98,7 +82,7 @@ static bool set_up_conn(const struct sockaddr *addr, socklen_t len, int type,
+ 	socklen_t slen = sizeof(ss);
+ 	struct sockaddr *sa = (struct sockaddr *)&ss;
+ 
+-	*server = start_server(addr, len, type);
++	*server = start_server_addr(type, (struct sockaddr_storage *)addr, len);
+ 	if (*server < 0)
+ 		return false;
+ 
 -- 
 2.40.1
 
