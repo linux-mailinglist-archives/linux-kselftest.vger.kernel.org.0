@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-7974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F5C78A537D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:28:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7650B8A538F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:28:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C29531C208DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:28:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D093284F57
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416EF679E5;
-	Mon, 15 Apr 2024 14:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D581480C0C;
+	Mon, 15 Apr 2024 14:27:24 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D556757EA;
-	Mon, 15 Apr 2024 14:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0D180BFE;
+	Mon, 15 Apr 2024 14:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713191224; cv=none; b=n6LVE9+6ecRZ5fNjPtLzaRZcw5mBI/zNEJZhW90QfZmCqBgaJOM2NpqUOAX3HcakcgHXETF+sAB2y5R4DpWmojIvhGzTNDGxUMK0VMnCgKBLbOU0L/gjigVbtCFYwbiHQtrRuEb1e7P7FAA4ni5XexRRqDfNcgwonExMu5nKfhU=
+	t=1713191244; cv=none; b=vAOndsF4bbm8zbz9ODylacTCinxt2bNjIk4SkZlQgUIYH5aF1TkOn19b9lfkxo2YJFRnDSdKIUihecf4DGtCD7Zibqou/cja7YIz9lQA7R+rz1tWC+/gYrWG1CSkZrkVkkTLfztcuc+1MC3XIPE7DZmTYQZHfLvGA+MiSdSpkQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713191224; c=relaxed/simple;
-	bh=1w6+ARBuKc1e3AGxOhMbRPheBxo51IgHoyMaEowjJCw=;
+	s=arc-20240116; t=1713191244; c=relaxed/simple;
+	bh=xMiwM8N6A0QvO6nnvH3L0ZOn6X5TyXl/kn0pTzA3sls=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gyQp3HzI40XazwxIKsH3PV3/QQP1HD/4HqjKb2+ydc6O4dCQjSi96Db/ktbo2aokyx5htqFBzqzw0ej/Wi+fCwYD9AhetR38G9gmSDCQYxu81FieMvuq02NFPW/BDR4NY5MzId2CCQExiSHMpODqpbeBUjJfeknul+yvM6nycLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+	 MIME-Version; b=EV7J4gr1wZf1NLvkZorlxYJuB4aBZLRJF3fS5UoLTFOu8GSTozGYgZ9Xu/23KJsIIEojv4nLIp1Tk7GOThZtwAbKNG89O8C4W1o23buvJxhskJoY4+z0NnZPYbJGrQvLekPbNEjZHKZoB+2MgfCluAiBGEG9nZjx4ez36D0BznM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VJ88t2X8Mz9xGYB;
-	Mon, 15 Apr 2024 22:06:06 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VJ8GP2kNwz9xGnC;
+	Mon, 15 Apr 2024 22:10:53 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id D47AD1407FC;
-	Mon, 15 Apr 2024 22:26:56 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 05E4F140801;
+	Mon, 15 Apr 2024 22:27:13 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBnoSWrOB1myEJGBg--.9473S9;
-	Mon, 15 Apr 2024 15:26:56 +0100 (CET)
+	by APP2 (Coremail) with SMTP id GxC2BwBnoSWrOB1myEJGBg--.9473S10;
+	Mon, 15 Apr 2024 15:27:12 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	paul@paul-moore.com,
@@ -71,9 +71,9 @@ Cc: linux-security-module@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 07/14] digest_cache: Parse rpm digest lists
-Date: Mon, 15 Apr 2024 16:24:29 +0200
-Message-Id: <20240415142436.2545003-8-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v4 08/14] digest_cache: Add management of verification data
+Date: Mon, 15 Apr 2024 16:24:30 +0200
+Message-Id: <20240415142436.2545003-9-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
 References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
@@ -84,10 +84,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwBnoSWrOB1myEJGBg--.9473S9
-X-Coremail-Antispam: 1UD129KBjvJXoW3GryrtF43AF18Xry5XFWkZwb_yoWfCF47pa
-	sxGr17trs5XF1xAw4xAF17tr1xt34DtFsrXrW8urnayrZFyr1UA3W8AryIvry5JrWDZFy7
-	Gr4YgF17Xr4DJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:GxC2BwBnoSWrOB1myEJGBg--.9473S10
+X-Coremail-Antispam: 1UD129KBjvJXoW3uFWkJw1DAF4DGF4rCFy8Zrb_yoWkury5p3
+	s29F1Dtr4rZr13Jw17AF129r1rtFZ5tF47Jw48ur13ZF47Xr1jy3W8A34UuryrJrW8ua17
+	tr47Kw1Uur1DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -102,308 +102,342 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3GryrtF43AF18Xry5XFWkZwb_yoWfCF47pa
 	c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
 	AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZE
 	Xa7IU04rW7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5x11gAAsF
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj5h0twAAsi
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Implement a simple parser of RPM headers, that extracts the digest and the
-algorithm of the packaged files from the RPMTAG_FILEDIGESTS and
-RPMTAG_FILEDIGESTALGO section, and add them to the digest cache.
+The digest_cache LSM can support other LSMs in their decisions of granting
+access to file data and metadata.
 
-The rpm digest list parser has been verified with Frama-C
-(https://frama-c.com/).
+However, the information alone about whether a digest was found in a digest
+cache might not be sufficient, because for example those LSMs wouldn't know
+whether the digest cache itself was created from authentic data.
 
-The analysis has been done on this file:
+Introduce digest_cache_verif_set() to let the same LSMs (or a chosen
+integrity provider) evaluate the digest list being read during the creation
+of the digest cache, by implementing the kernel_post_read_file LSM hook,
+and let them attach their verification data to that digest cache.
 
-https://github.com/robertosassu/rpm-formal/blob/main/validate_rpm.c
+Reserve space in the file descriptor security blob for the digest cache
+pointer. Also introduce digest_cache_to_file_sec() to set that pointer
+before calling kernel_read_file() in digest_cache_populate(), and
+digest_cache_from_file_sec() to retrieve the pointer back from the file
+descriptor passed by LSMs with digest_cache_verif_set().
 
-Here is the result of the analysis:
+Multiple providers are supported, in the event there are multiple
+integrity LSMs active. Each provider should also provide an unique verifier
+ID as an argument to digest_cache_verif_set(), so that verification data
+can be distinguished.
 
-[eva:summary] ====== ANALYSIS SUMMARY ======
----------------------------------------------------------------------------
-7 functions analyzed (out of 7): 100% coverage.
-In these functions, 228 statements reached (out of 246): 92% coverage.
----------------------------------------------------------------------------
-No errors or warnings raised during the analysis.
----------------------------------------------------------------------------
-0 alarms generated by the analysis.
----------------------------------------------------------------------------
-Evaluation of the logical properties reached by the analysis:
-Assertions        6 valid     0 unknown     0 invalid      6 total
-Preconditions    29 valid     0 unknown     0 invalid     29 total
-100% of the logical properties reached have been proven.
----------------------------------------------------------------------------
+A caller of digest_cache_get() can retrieve back the verification data by
+calling digest_cache_verif_get() and passing a digest cache pointer and the
+desired verifier ID.
+
+Since directory digest caches are not populated themselves, LSMs have to do
+a lookup first to get the digest cache containing the digest, call
+digest_cache_from_found_t() to convert the returned digest_cache_found_t
+type to a digest cache pointer, and pass that to digest_cache_verif_get().
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/digest_cache/Makefile          |   1 +
- security/digest_cache/parsers/parsers.h |   2 +
- security/digest_cache/parsers/rpm.c     | 223 ++++++++++++++++++++++++
- security/digest_cache/populate.c        |   2 +
- 4 files changed, 228 insertions(+)
- create mode 100644 security/digest_cache/parsers/rpm.c
+ include/linux/digest_cache.h     |  17 +++++
+ security/digest_cache/Makefile   |   2 +-
+ security/digest_cache/internal.h |  40 +++++++++++
+ security/digest_cache/main.c     |   5 ++
+ security/digest_cache/populate.c |   2 +
+ security/digest_cache/verif.c    | 116 +++++++++++++++++++++++++++++++
+ 6 files changed, 181 insertions(+), 1 deletion(-)
+ create mode 100644 security/digest_cache/verif.c
 
+diff --git a/include/linux/digest_cache.h b/include/linux/digest_cache.h
+index 4872700ac205..9db8128513ca 100644
+--- a/include/linux/digest_cache.h
++++ b/include/linux/digest_cache.h
+@@ -44,6 +44,10 @@ void digest_cache_put(struct digest_cache *digest_cache);
+ digest_cache_found_t digest_cache_lookup(struct dentry *dentry,
+ 					 struct digest_cache *digest_cache,
+ 					 u8 *digest, enum hash_algo algo);
++int digest_cache_verif_set(struct file *file, const char *verif_id, void *data,
++			   size_t size);
++void *digest_cache_verif_get(struct digest_cache *digest_cache,
++			     const char *verif_id);
+ 
+ #else
+ static inline struct digest_cache *digest_cache_get(struct dentry *dentry)
+@@ -62,5 +66,18 @@ digest_cache_lookup(struct dentry *dentry, struct digest_cache *digest_cache,
+ 	return 0UL;
+ }
+ 
++static inline int digest_cache_verif_set(struct file *file,
++					 const char *verif_id, void *data,
++					 size_t size)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline void *digest_cache_verif_get(struct digest_cache *digest_cache,
++					   const char *verif_id)
++{
++	return NULL;
++}
++
+ #endif /* CONFIG_SECURITY_DIGEST_CACHE */
+ #endif /* _LINUX_DIGEST_CACHE_H */
 diff --git a/security/digest_cache/Makefile b/security/digest_cache/Makefile
-index a383b6ef2550..eca4076497e6 100644
+index eca4076497e6..37a473c7bc28 100644
 --- a/security/digest_cache/Makefile
 +++ b/security/digest_cache/Makefile
-@@ -7,3 +7,4 @@ obj-$(CONFIG_SECURITY_DIGEST_CACHE) += digest_cache.o
- digest_cache-y := main.o secfs.o htable.o populate.o modsig.o
+@@ -4,7 +4,7 @@
+ 
+ obj-$(CONFIG_SECURITY_DIGEST_CACHE) += digest_cache.o
+ 
+-digest_cache-y := main.o secfs.o htable.o populate.o modsig.o
++digest_cache-y := main.o secfs.o htable.o populate.o modsig.o verif.o
  
  digest_cache-y += parsers/tlv.o
-+digest_cache-y += parsers/rpm.o
-diff --git a/security/digest_cache/parsers/parsers.h b/security/digest_cache/parsers/parsers.h
-index 1bbae426ab9f..3f00d29ed92a 100644
---- a/security/digest_cache/parsers/parsers.h
-+++ b/security/digest_cache/parsers/parsers.h
-@@ -11,3 +11,5 @@
+ digest_cache-y += parsers/rpm.o
+diff --git a/security/digest_cache/internal.h b/security/digest_cache/internal.h
+index cc6752a8683e..4929d25e7972 100644
+--- a/security/digest_cache/internal.h
++++ b/security/digest_cache/internal.h
+@@ -17,6 +17,21 @@
+ #define INIT_IN_PROGRESS	0	/* Digest cache being initialized. */
+ #define INVALID			1	/* Digest cache marked as invalid. */
  
- int digest_list_parse_tlv(struct digest_cache *digest_cache, const u8 *data,
- 			  size_t data_len);
-+int digest_list_parse_rpm(struct digest_cache *digest_cache, const u8 *data,
-+			  size_t data_len);
-diff --git a/security/digest_cache/parsers/rpm.c b/security/digest_cache/parsers/rpm.c
++/**
++ * struct digest_cache_verif
++ * @list: Linked list
++ * @verif_id: Identifier of who verified the digest list
++ * @data: Opaque data set by the digest list verifier
++ *
++ * This structure contains opaque data containing the result of verification
++ * of the digest list by a verifier.
++ */
++struct digest_cache_verif {
++	struct list_head list;
++	char *verif_id;
++	void *data;
++};
++
+ /**
+  * struct read_work - Structure to schedule reading a digest list
+  * @work: Work structure
+@@ -71,6 +86,8 @@ struct htable {
+  * @ref_count: Number of references to the digest cache
+  * @path_str: Path of the digest list the digest cache was created from
+  * @flags: Control flags
++ * @verif_data: Verification data regarding the digest list
++ * @mutex: Protect digest cache modifications
+  *
+  * This structure represents a cache of digests extracted from a digest list.
+  */
+@@ -79,6 +96,8 @@ struct digest_cache {
+ 	atomic_t ref_count;
+ 	char *path_str;
+ 	unsigned long flags;
++	struct list_head verif_data;
++	struct mutex mutex;
+ };
+ 
+ /**
+@@ -130,6 +149,24 @@ digest_cache_unref(struct digest_cache *digest_cache)
+ 	return (ref_is_zero) ? digest_cache : NULL;
+ }
+ 
++static inline void digest_cache_to_file_sec(const struct file *file,
++					    struct digest_cache *digest_cache)
++{
++	struct digest_cache **digest_cache_sec;
++
++	digest_cache_sec = file->f_security + digest_cache_blob_sizes.lbs_file;
++	*digest_cache_sec = digest_cache;
++}
++
++static inline struct digest_cache *
++digest_cache_from_file_sec(const struct file *file)
++{
++	struct digest_cache **digest_cache_sec;
++
++	digest_cache_sec = file->f_security + digest_cache_blob_sizes.lbs_file;
++	return *digest_cache_sec;
++}
++
+ /* main.c */
+ struct digest_cache *digest_cache_create(struct dentry *dentry,
+ 					 struct path *digest_list_path,
+@@ -153,4 +190,7 @@ int digest_cache_populate(struct digest_cache *digest_cache,
+ /* modsig.c */
+ size_t digest_cache_strip_modsig(__u8 *data, size_t data_len);
+ 
++/* verif.c */
++void digest_cache_verif_free(struct digest_cache *digest_cache);
++
+ #endif /* _DIGEST_CACHE_INTERNAL_H */
+diff --git a/security/digest_cache/main.c b/security/digest_cache/main.c
+index 6e9ed1b5040a..f3475b36e566 100644
+--- a/security/digest_cache/main.c
++++ b/security/digest_cache/main.c
+@@ -49,6 +49,8 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
+ 	atomic_set(&digest_cache->ref_count, 1);
+ 	digest_cache->flags = 0UL;
+ 	INIT_LIST_HEAD(&digest_cache->htables);
++	INIT_LIST_HEAD(&digest_cache->verif_data);
++	mutex_init(&digest_cache->mutex);
+ 
+ 	pr_debug("New digest cache %s (ref count: %d)\n",
+ 		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
+@@ -65,6 +67,8 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
+ static void digest_cache_free(struct digest_cache *digest_cache)
+ {
+ 	digest_cache_htable_free(digest_cache);
++	digest_cache_verif_free(digest_cache);
++	mutex_destroy(&digest_cache->mutex);
+ 
+ 	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
+ 	kfree(digest_cache->path_str);
+@@ -336,6 +340,7 @@ EXPORT_SYMBOL_GPL(digest_cache_put);
+ 
+ struct lsm_blob_sizes digest_cache_blob_sizes __ro_after_init = {
+ 	.lbs_inode = sizeof(struct digest_cache_security),
++	.lbs_file = sizeof(struct digest_cache *),
+ };
+ 
+ /**
+diff --git a/security/digest_cache/populate.c b/security/digest_cache/populate.c
+index 1770c8385017..9c2fc2295310 100644
+--- a/security/digest_cache/populate.c
++++ b/security/digest_cache/populate.c
+@@ -123,6 +123,8 @@ int digest_cache_populate(struct digest_cache *digest_cache,
+ 		return PTR_ERR(file);
+ 	}
+ 
++	digest_cache_to_file_sec(file, digest_cache);
++
+ 	w.data = NULL;
+ 	w.file = file;
+ 	INIT_WORK_ONSTACK(&w.work, digest_cache_read_digest_list);
+diff --git a/security/digest_cache/verif.c b/security/digest_cache/verif.c
 new file mode 100644
-index 000000000000..6c7fe9c9121c
+index 000000000000..04023240d3b4
 --- /dev/null
-+++ b/security/digest_cache/parsers/rpm.c
-@@ -0,0 +1,223 @@
++++ b/security/digest_cache/verif.c
+@@ -0,0 +1,116 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2017-2024 Huawei Technologies Duesseldorf GmbH
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Parse an rpm digest list (RPM package header).
++ * Manage verification data regarding digest lists.
 + */
 +
-+#define pr_fmt(fmt) "RPM DIGEST LIST: "fmt
-+#include <linux/module.h>
-+
-+#include "parsers.h"
-+
-+#define RPMTAG_FILEDIGESTS 1035
-+#define RPMTAG_FILEDIGESTALGO 5011
-+
-+#define RPM_INT32_TYPE 4
-+#define RPM_STRING_ARRAY_TYPE 8
-+
-+struct rpm_hdr {
-+	u32 magic;
-+	u32 reserved;
-+	u32 tags;
-+	u32 datasize;
-+} __packed;
-+
-+struct rpm_entryinfo {
-+	s32 tag;
-+	u32 type;
-+	s32 offset;
-+	u32 count;
-+} __packed;
-+
-+enum pgp_algos {
-+	DIGEST_ALGO_MD5		=  1,
-+	DIGEST_ALGO_SHA1	=  2,
-+	DIGEST_ALGO_RMD160	=  3,
-+	/* 4, 5, 6, and 7 are reserved. */
-+	DIGEST_ALGO_SHA256	=  8,
-+	DIGEST_ALGO_SHA384	=  9,
-+	DIGEST_ALGO_SHA512	= 10,
-+	DIGEST_ALGO_SHA224	= 11,
-+};
-+
-+static const enum hash_algo pgp_algo_mapping[DIGEST_ALGO_SHA224 + 1] = {
-+	[DIGEST_ALGO_MD5]	= HASH_ALGO_MD5,
-+	[DIGEST_ALGO_SHA1]	= HASH_ALGO_SHA1,
-+	[DIGEST_ALGO_RMD160]	= HASH_ALGO_RIPE_MD_160,
-+	[4]			= HASH_ALGO__LAST,
-+	[5]			= HASH_ALGO__LAST,
-+	[6]			= HASH_ALGO__LAST,
-+	[7]			= HASH_ALGO__LAST,
-+	[DIGEST_ALGO_SHA256]	= HASH_ALGO_SHA256,
-+	[DIGEST_ALGO_SHA384]	= HASH_ALGO_SHA384,
-+	[DIGEST_ALGO_SHA512]	= HASH_ALGO_SHA512,
-+	[DIGEST_ALGO_SHA224]	= HASH_ALGO_SHA224,
-+};
++#define pr_fmt(fmt) "DIGEST CACHE: "fmt
++#include "internal.h"
 +
 +/**
-+ * digest_list_parse_rpm - Parse an rpm digest list
-+ * @digest_cache: Digest cache
-+ * @data: Data to parse
-+ * @data_len: Length of @data
++ * free_verif - Free a digest_cache_verif structure
++ * @verif: digest_cache_verif structure
 + *
-+ * This function parses an rpm digest list.
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
++ * Free the space allocated for a digest_cache_verif structure.
 + */
-+int digest_list_parse_rpm(struct digest_cache *digest_cache, const u8 *data,
-+			  size_t data_len)
++static void free_verif(struct digest_cache_verif *verif)
 +{
-+	const unsigned char rpm_header_magic[8] = {
-+		0x8e, 0xad, 0xe8, 0x01, 0x00, 0x00, 0x00, 0x00
-+	};
-+	const struct rpm_hdr *hdr;
-+	const struct rpm_entryinfo *entry;
-+	u32 tags, max_tags, datasize;
-+	u32 digests_count, max_digests_count;
-+	u32 digests_offset, algo_offset;
-+	u32 digest_len, pkg_pgp_algo, i;
-+	bool algo_offset_set = false, digests_offset_set = false;
-+	enum hash_algo pkg_kernel_algo = HASH_ALGO_MD5;
-+	u8 rpm_digest[SHA512_DIGEST_SIZE];
-+	int ret;
-+
-+	if (data_len < sizeof(*hdr)) {
-+		pr_debug("Not enough data for RPM header, current %ld, expected: %ld\n",
-+			 data_len, sizeof(*hdr));
-+		return -EINVAL;
-+	}
-+
-+	if (memcmp(data, rpm_header_magic, sizeof(rpm_header_magic))) {
-+		pr_debug("RPM header magic mismatch\n");
-+		return -EINVAL;
-+	}
-+
-+	hdr = (const struct rpm_hdr *)data;
-+	data += sizeof(*hdr);
-+	data_len -= sizeof(*hdr);
-+
-+	tags = __be32_to_cpu(hdr->tags);
-+	max_tags = data_len / sizeof(*entry);
-+
-+	/* Finite termination on tags loop. */
-+	if (tags > max_tags)
-+		return -EINVAL;
-+
-+	datasize = __be32_to_cpu(hdr->datasize);
-+	if (datasize != data_len - tags * sizeof(*entry))
-+		return -EINVAL;
-+
-+	pr_debug("Scanning %d RPM header sections\n", tags);
-+	for (i = 0; i < tags; i++) {
-+		if (data_len < sizeof(*entry))
-+			return -EINVAL;
-+
-+		entry = (const struct rpm_entryinfo *)data;
-+		data += sizeof(*entry);
-+		data_len -= sizeof(*entry);
-+
-+		switch (__be32_to_cpu(entry->tag)) {
-+		case RPMTAG_FILEDIGESTS:
-+			if (__be32_to_cpu(entry->type) != RPM_STRING_ARRAY_TYPE)
-+				return -EINVAL;
-+
-+			digests_offset = __be32_to_cpu(entry->offset);
-+			digests_count = __be32_to_cpu(entry->count);
-+			digests_offset_set = true;
-+
-+			pr_debug("Found RPMTAG_FILEDIGESTS at offset %u, count: %u\n",
-+				 digests_offset, digests_count);
-+			break;
-+		case RPMTAG_FILEDIGESTALGO:
-+			if (__be32_to_cpu(entry->type) != RPM_INT32_TYPE)
-+				return -EINVAL;
-+
-+			algo_offset = __be32_to_cpu(entry->offset);
-+			algo_offset_set = true;
-+
-+			pr_debug("Found RPMTAG_FILEDIGESTALGO at offset %u\n",
-+				 algo_offset);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	if (!digests_offset_set)
-+		return 0;
-+
-+	if (algo_offset_set) {
-+		if (algo_offset >= data_len)
-+			return -EINVAL;
-+
-+		if (data_len - algo_offset < sizeof(u32))
-+			return -EINVAL;
-+
-+		pkg_pgp_algo = *(u32 *)&data[algo_offset];
-+		pkg_pgp_algo = __be32_to_cpu(pkg_pgp_algo);
-+		if (pkg_pgp_algo > DIGEST_ALGO_SHA224) {
-+			pr_debug("Unknown PGP algo %d\n", pkg_pgp_algo);
-+			return -EINVAL;
-+		}
-+
-+		pkg_kernel_algo = pgp_algo_mapping[pkg_pgp_algo];
-+		if (pkg_kernel_algo >= HASH_ALGO__LAST) {
-+			pr_debug("Unknown mapping for PGP algo %d\n",
-+				 pkg_pgp_algo);
-+			return -EINVAL;
-+		}
-+
-+		pr_debug("Found mapping for PGP algo %d: %s\n", pkg_pgp_algo,
-+			 hash_algo_name[pkg_kernel_algo]);
-+	}
-+
-+	digest_len = hash_digest_size[pkg_kernel_algo];
-+
-+	if (digests_offset > data_len)
-+		return -EINVAL;
-+
-+	/* Worst case, every digest is a \0. */
-+	max_digests_count = data_len - digests_offset;
-+
-+	/* Finite termination on digests_count loop. */
-+	if (digests_count > max_digests_count)
-+		return -EINVAL;
-+
-+	ret = digest_cache_htable_init(digest_cache, digests_count,
-+				       pkg_kernel_algo);
-+	if (ret < 0)
-+		return ret;
-+
-+	for (i = 0; i < digests_count; i++) {
-+		if (digests_offset == data_len)
-+			return -EINVAL;
-+
-+		if (!data[digests_offset]) {
-+			digests_offset++;
-+			continue;
-+		}
-+
-+		if (data_len - digests_offset < digest_len * 2 + 1)
-+			return -EINVAL;
-+
-+		ret = hex2bin(rpm_digest, (const char *)&data[digests_offset],
-+			      digest_len);
-+		if (ret < 0) {
-+			pr_debug("Invalid hex format for digest %s\n",
-+				 &data[digests_offset]);
-+			return -EINVAL;
-+		}
-+
-+		ret = digest_cache_htable_add(digest_cache, rpm_digest,
-+					      pkg_kernel_algo);
-+		if (ret < 0)
-+			return ret;
-+
-+		digests_offset += digest_len * 2 + 1;
-+	}
-+
-+	return ret;
++	kfree(verif->data);
++	kfree(verif->verif_id);
++	kfree(verif);
 +}
-diff --git a/security/digest_cache/populate.c b/security/digest_cache/populate.c
-index 13645ec4bb2b..1770c8385017 100644
---- a/security/digest_cache/populate.c
-+++ b/security/digest_cache/populate.c
-@@ -68,6 +68,8 @@ static int digest_cache_parse_digest_list(struct digest_cache *digest_cache,
- 
- 	if (!strncmp(format, "tlv-", 4))
- 		ret = digest_list_parse_tlv(digest_cache, data, data_len);
-+	else if (!strncmp(format, "rpm-", 4))
-+		ret = digest_list_parse_rpm(digest_cache, data, data_len);
- 
- 	return ret;
- }
++
++/**
++ * digest_cache_verif_set - Set digest cache verification data
++ * @file: File descriptor of the digest list being read to populate digest cache
++ * @verif_id: Verifier ID
++ * @data: Verification data (opaque)
++ * @size: Size of @data
++ *
++ * This function lets a verifier supply verification data about a digest list
++ * being read to populate the digest cache.
++ *
++ * Return: Zero on success, -ENOMEM if out of memory.
++ */
++int digest_cache_verif_set(struct file *file, const char *verif_id, void *data,
++			   size_t size)
++{
++	struct digest_cache *digest_cache = digest_cache_from_file_sec(file);
++	struct digest_cache_verif *new_verif;
++
++	/*
++	 * All allocations must be atomic (non-sleepable) since kprobe does not
++	 * allow otherwise (kprobe is needed for testing).
++	 */
++	new_verif = kzalloc(sizeof(*new_verif), GFP_ATOMIC);
++	if (!new_verif)
++		return -ENOMEM;
++
++	new_verif->verif_id = kstrdup(verif_id, GFP_ATOMIC);
++	if (!new_verif->verif_id) {
++		free_verif(new_verif);
++		return -ENOMEM;
++	}
++
++	new_verif->data = kmemdup(data, size, GFP_ATOMIC);
++	if (!new_verif->data) {
++		free_verif(new_verif);
++		return -ENOMEM;
++	}
++
++	mutex_lock(&digest_cache->mutex);
++	list_add_tail_rcu(&new_verif->list, &digest_cache->verif_data);
++	mutex_unlock(&digest_cache->mutex);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(digest_cache_verif_set);
++
++/**
++ * digest_cache_verif_get - Get digest cache verification data
++ * @digest_cache: Digest cache
++ * @verif_id: Verifier ID
++ *
++ * This function returns the verification data previously set by a verifier
++ * with digest_cache_verif_set().
++ *
++ * Return: Verification data if found, NULL otherwise.
++ */
++void *digest_cache_verif_get(struct digest_cache *digest_cache,
++			     const char *verif_id)
++{
++	struct digest_cache_verif *verif;
++	void *verif_data = NULL;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(verif, &digest_cache->verif_data, list) {
++		if (!strcmp(verif->verif_id, verif_id)) {
++			verif_data = verif->data;
++			break;
++		}
++	}
++	rcu_read_unlock();
++
++	return verif_data;
++}
++EXPORT_SYMBOL_GPL(digest_cache_verif_get);
++
++/**
++ * digest_cache_verif_free - Free all digest_cache_verif structures
++ * @digest_cache: Digest cache
++ *
++ * This function frees the space allocated for all digest_cache_verif
++ * structures in the digest cache.
++ */
++void digest_cache_verif_free(struct digest_cache *digest_cache)
++{
++	struct digest_cache_verif *p, *q;
++
++	/* No need to lock, called when nobody else has a digest cache ref. */
++	list_for_each_entry_safe(p, q, &digest_cache->verif_data, list) {
++		list_del(&p->list);
++		free_verif(p);
++	}
++}
 -- 
 2.34.1
 
