@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-7979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A10E8A53D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:31:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AC818A53E5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BC19B22F9D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:31:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6A421F20ECB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:32:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C9482490;
-	Mon, 15 Apr 2024 14:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D7882481;
+	Mon, 15 Apr 2024 14:29:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418A4823DC;
-	Mon, 15 Apr 2024 14:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5817581F;
+	Mon, 15 Apr 2024 14:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713191361; cv=none; b=bDk3bfqtvDyMdt3xueuA2pvoQOcgy62qTpEcFN5Wkp37Z+jDQHUrIRQtUcbe3rXs6WICdSgLuGrwgGZZssB7fQRUDcmrYpicr71UNMKraXO8xFpLx/Grl14pLOG4aKf+P6WHlceZVCBNqsPOMLydA7i2Etg2Yp7jBKxMOPNrmvM=
+	t=1713191372; cv=none; b=RuHtcp/Eu58Gujt9rVT7Y/eVskVBuOLXd5dK9Zomz8XdzxVKbAlxPUiUvp02Dr6fFfGy5pQ+e89WX2xSKAVMXXJaQsUMyOC3A9gcRghQVuUzA68NahFsHBuRP6zcvEaggNsak5Bvhk7AV4mbiB3M0gnZfPF1erZYOo2VHk6hGRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713191361; c=relaxed/simple;
-	bh=dnWjNkGIv3OkvSkFNREESjtu76QJwGMv7HmwSq55nC4=;
+	s=arc-20240116; t=1713191372; c=relaxed/simple;
+	bh=eZVYIloM9fbMgIPKvwe5elCHLztDhHM/7Cp7llmzsw8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rLP/dE3lQ9HVQELqQWUzTwv/qaF6RVkLmp0TCWCMJroauBpwwYJZQKPPn6iMvRqaFHyriard6r2ITkUj89GkCoeRf2+/5g91ncUNL2OXkzXjju1wyoAazCtec8WWfyB7TpsCiiB4lwmBPH5LSQCK5mlGb1qOfWdaKScgqTKU54Y=
+	 MIME-Version; b=Wb3zbKM+gJSnYhaQLimQOWPdl9RuuhuUQZLZdg0i2bBOOoxKS+p+w2tp/N5Yl2MYjwGkJ354CYu64NScZHxu1RVo2jU9QvP+UzV+3pAdyeD/TdY34qCzQ7JoCv38xe9HKrex8fit/NTOhNUWzIFyAiANa6K0TG3ngjOy45FQpKw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VJ8CW3X5Mz9xGX7;
-	Mon, 15 Apr 2024 22:08:23 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VJ8Ck4rrHz9v7PM;
+	Mon, 15 Apr 2024 22:08:34 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 8A22B1404DA;
-	Mon, 15 Apr 2024 22:29:06 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 9E0DE140801;
+	Mon, 15 Apr 2024 22:29:22 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHshqQOR1mrL1NBg--.21472S3;
-	Mon, 15 Apr 2024 15:29:05 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwAHshqQOR1mrL1NBg--.21472S4;
+	Mon, 15 Apr 2024 15:29:21 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	paul@paul-moore.com,
@@ -71,9 +71,9 @@ Cc: linux-security-module@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 11/14] digest_cache: Reset digest cache on file/directory change
-Date: Mon, 15 Apr 2024 16:24:33 +0200
-Message-Id: <20240415142436.2545003-12-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v4 12/14] digest_cache: Notify digest cache events
+Date: Mon, 15 Apr 2024 16:24:34 +0200
+Message-Id: <20240415142436.2545003-13-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
 References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
@@ -84,13 +84,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwAHshqQOR1mrL1NBg--.21472S3
-X-Coremail-Antispam: 1UD129KBjvAXoW3tF17Ar1UGF4rKr4xAr45Awb_yoW8XFyfGo
-	ZYvFsrJw10gFy5ZFs8u3W7AayDuayagw1xZr1kKrZ8ZF10vFyUG3ZrC3WDJFy5Jr18Gr97
-	A3s7X3y8XrWUtr97n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+X-CM-TRANSID:LxC2BwAHshqQOR1mrL1NBg--.21472S4
+X-Coremail-Antispam: 1UD129KBjvAXoW3tw47KFyfCFWxXr47uF4xtFb_yoW8Wry7Go
+	ZYyF47uw48WFy5uFWkCFy7AayUW3ySgw4xAr1kGrZ8ZF18t34UJ3Z7GF1DJFy3Gr18GrZ7
+	A34kX3yUJFW8Jr97n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
 	AaLaJ3UjIYCTnIWjp_UUUOe7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
 	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
-	4l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	yl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
 	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
 	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
 	xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
@@ -101,392 +101,456 @@ X-Coremail-Antispam: 1UD129KBjvAXoW3tF17Ar1UGF4rKr4xAr45Awb_yoW8XFyfGo
 	1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
 	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
 	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0xZFpf9x
-	07j4hFxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5x15gACs3
+	07j4MKtUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj5h0wAAAsV
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Register six new LSM hooks, path_truncate, file_release, inode_unlink,
-inode_rename, inode_post_setxattr and inode_post_removexattr, to monitor
-digest lists/directory modifications.
+Introduce digest_cache_register_notifier() and
+digest_cache_unregister_notifier() to let the subscribers know about events
+occurring on digest caches. Subscribers should provide a callback, to be
+invoked for every notification.
 
-If an action affects a digest list or the parent directory, the new LSM
-hook implementations call digest_cache_reset_owner() to set the RESET bit
-(if unset) on the digest cache pointed to by dig_owner in the inode
-security blob. This will cause next calls to digest_cache_get() and
-digest_cache_create() to respectively put and clear dig_user and dig_owner,
-and request a new digest cache.
+Introduce a notification list for each digest cache, and populate it with
+inodes passed to digest_cache_get(), when dig_user of that inode is still
+NULL so that there are no duplicates.
 
-If an action affects a file using a digest cache, the new LSM hook
-implementations call digest_cache_reset_user() to set the RESET_USER bit
-(if unset) on the digest cache pointed to by dig_user in the inode security
-blob. This will cause next calls to digest_cache_get() to put and clear
-dig_user, and retrieve the digest cache again.
+Then, on setting the RESET bit, emit a DIGEST_CACHE_RESET notification,
+passing the affected digest cache and inodes, so that subscribers can
+eventually invalidate a cached security decision on that inode.
 
-That does not affect other users of the old digest cache, since that one
-remains valid as long as the reference count is greater than zero. However,
-they will be notified in a subsequent patch about the reset, so that they
-can eventually request a new digest cache.
+On a file digest cache reset, emit a DIGEST_CACHE_RESET notification also
+for the parent directory digest cache and the inodes using it, since
+requestors might have looked up digests through that digest cache. Those
+requestors will see changes by performing another lookup.
 
-Recreating a file digest cache means reading the digest list again and
-extracting the digests. Recreating a directory digest cache, instead, does
-not mean recreating the digest cache for directory entries, since those
-digest caches are likely already stored in the inode security blob. It
-would happen however for new files.
+On setting the RESET_USER bit, emit a notification only for the inode
+signaled by the LSM hook, since only the link between that inode and its
+digest cache is changing (due to changing the security.digest_list xattr).
 
-Dig_owner reset for file digest caches is done on path_truncate, when a
-digest list is truncated (there is no inode_truncate, file_truncate does
-not catch operations through the truncate() system call), file_release,
-when a digest list opened for write is being closed, inode_unlink, when a
-digest list is removed, and inode_rename when a digest list is renamed.
-
-Dig_owner reset for directory digest caches is done on file_release, when a
-new digest list is written in the digest list directory, on inode_unlink,
-when a digest list is deleted from that directory, and finally on
-inode_rename, when a digest list is moved to/from that directory.
-
-Dig_user reset is always done on inode_post_setxattr and
-inode_post_removexattr, when the security.digest_list xattr is respectively
-set or removed from a file using a digest cache.
-
-With the exception of file_release, which will always be executed (cannot
-be denied), and inode_post_setxattr and inode_post_removexattr, which are
-executed after the actual operation, the other LSM hooks are not optimal,
-since the digest_cache LSM does not know whether or not the operation will
-be allowed also by other LSMs. If the operation is denied, the digest_cache
-LSM would do an unnecessary reset.
+Finally, free the notification list with digest_cache_notify_inodes_free(),
+when the digest cache is freed.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/digest_cache/Kconfig    |   1 +
- security/digest_cache/Makefile   |   3 +-
- security/digest_cache/dir.c      |   6 +
- security/digest_cache/internal.h |  14 +++
- security/digest_cache/main.c     |  19 +++
- security/digest_cache/reset.c    | 197 +++++++++++++++++++++++++++++++
- 6 files changed, 239 insertions(+), 1 deletion(-)
- create mode 100644 security/digest_cache/reset.c
+ include/linux/digest_cache.h     |  34 ++++++++
+ security/digest_cache/Makefile   |   2 +-
+ security/digest_cache/internal.h |  26 ++++++
+ security/digest_cache/main.c     |  12 +++
+ security/digest_cache/notifier.c | 135 +++++++++++++++++++++++++++++++
+ security/digest_cache/reset.c    |  42 +++++++++-
+ 6 files changed, 248 insertions(+), 3 deletions(-)
+ create mode 100644 security/digest_cache/notifier.c
 
-diff --git a/security/digest_cache/Kconfig b/security/digest_cache/Kconfig
-index cb4fa44e8f2a..54ba3a585073 100644
---- a/security/digest_cache/Kconfig
-+++ b/security/digest_cache/Kconfig
-@@ -2,6 +2,7 @@
- config SECURITY_DIGEST_CACHE
- 	bool "Digest_cache LSM"
- 	select TLV_PARSER
-+	select SECURITY_PATH
- 	default n
- 	help
- 	  This option enables an LSM maintaining a cache of digests
+diff --git a/include/linux/digest_cache.h b/include/linux/digest_cache.h
+index 9db8128513ca..950f3a58a861 100644
+--- a/include/linux/digest_cache.h
++++ b/include/linux/digest_cache.h
+@@ -15,6 +15,28 @@
+ 
+ struct digest_cache;
+ 
++/**
++ * enum digest_cache_event - Events occurring on a digest cache
++ *
++ * This enum lists all the events occurring on a digest cache, to be notified
++ * outside the digest_cache LSM.
++ */
++enum digest_cache_event {
++	DIGEST_CACHE_RESET,
++};
++
++/**
++ * struct digest_cache_event_data - Information on digest cache events
++ * @digest_cache: Digest cache
++ * @inode: Inode for which the digest cache was requested
++ *
++ * This structure holds information about events occurring on a digest cache.
++ */
++struct digest_cache_event_data {
++	struct digest_cache *digest_cache;
++	struct inode *inode;
++};
++
+ /**
+  * typedef digest_cache_found_t - Digest cache reference as numeric value
+  *
+@@ -48,6 +70,8 @@ int digest_cache_verif_set(struct file *file, const char *verif_id, void *data,
+ 			   size_t size);
+ void *digest_cache_verif_get(struct digest_cache *digest_cache,
+ 			     const char *verif_id);
++int digest_cache_register_notifier(struct notifier_block *nb);
++int digest_cache_unregister_notifier(struct notifier_block *nb);
+ 
+ #else
+ static inline struct digest_cache *digest_cache_get(struct dentry *dentry)
+@@ -79,5 +103,15 @@ static inline void *digest_cache_verif_get(struct digest_cache *digest_cache,
+ 	return NULL;
+ }
+ 
++static inline int digest_cache_register_notifier(struct notifier_block *nb)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int digest_cache_unregister_notifier(struct notifier_block *nb)
++{
++	return -EOPNOTSUPP;
++}
++
+ #endif /* CONFIG_SECURITY_DIGEST_CACHE */
+ #endif /* _LINUX_DIGEST_CACHE_H */
 diff --git a/security/digest_cache/Makefile b/security/digest_cache/Makefile
-index e417da0383ab..3d5e600a2c45 100644
+index 3d5e600a2c45..7577b099c170 100644
 --- a/security/digest_cache/Makefile
 +++ b/security/digest_cache/Makefile
-@@ -4,7 +4,8 @@
- 
+@@ -5,7 +5,7 @@
  obj-$(CONFIG_SECURITY_DIGEST_CACHE) += digest_cache.o
  
--digest_cache-y := main.o secfs.o htable.o populate.o modsig.o verif.o dir.o
-+digest_cache-y := main.o secfs.o htable.o populate.o modsig.o verif.o dir.o \
-+		  reset.o
+ digest_cache-y := main.o secfs.o htable.o populate.o modsig.o verif.o dir.o \
+-		  reset.o
++		  reset.o notifier.o
  
  digest_cache-y += parsers/tlv.o
  digest_cache-y += parsers/rpm.o
-diff --git a/security/digest_cache/dir.c b/security/digest_cache/dir.c
-index a7d203c15386..937177660242 100644
---- a/security/digest_cache/dir.c
-+++ b/security/digest_cache/dir.c
-@@ -148,6 +148,12 @@ digest_cache_dir_lookup_digest(struct dentry *dentry,
- 
- 	list_for_each_entry(dir_entry, &digest_cache->dir_entries, list) {
- 		mutex_lock(&dir_entry->digest_cache_mutex);
-+		if (dir_entry->digest_cache &&
-+		    test_bit(RESET, &dir_entry->digest_cache->flags)) {
-+			digest_cache_put(dir_entry->digest_cache);
-+			dir_entry->digest_cache = NULL;
-+		}
-+
- 		if (!dir_entry->digest_cache) {
- 			cache = digest_cache_create(dentry, digest_list_path,
- 						    digest_cache->path_str,
 diff --git a/security/digest_cache/internal.h b/security/digest_cache/internal.h
-index c13b35f6b2c0..c816929c4743 100644
+index c816929c4743..d930132cc963 100644
 --- a/security/digest_cache/internal.h
 +++ b/security/digest_cache/internal.h
-@@ -18,6 +18,8 @@
- #define INVALID			1	/* Digest cache marked as invalid. */
- #define IS_DIR			2	/* Digest cache created from dir. */
- #define DIR_PREFETCH		3	/* Prefetching requested for dir. */
-+#define RESET			4	/* Digest cache to be recreated. */
-+#define RESET_USER		5	/* Dig_user pointer to be released. */
+@@ -21,6 +21,19 @@
+ #define RESET			4	/* Digest cache to be recreated. */
+ #define RESET_USER		5	/* Dig_user pointer to be released. */
  
++/**
++ * struct notify_inode - Structure with inode for which notification is emitted
++ * @list: Linked list
++ * @inode: Inode for which a notification is emitted
++ *
++ * This structure contains an inode for which a notification of a digest cache
++ * event is emitted.
++ */
++struct notify_inode {
++	struct list_head list;
++	struct inode *inode;
++};
++
  /**
   * struct readdir_callback - Structure to store information for dir iteration
-@@ -247,4 +249,16 @@ digest_cache_dir_lookup_filename(struct dentry *dentry,
- 				 char *filename);
- void digest_cache_dir_free(struct digest_cache *digest_cache);
+  * @ctx: Context structure
+@@ -126,6 +139,7 @@ struct htable {
+  * @path_str: Path of the digest list the digest cache was created from
+  * @flags: Control flags
+  * @verif_data: Verification data regarding the digest list
++ * @notify_inodes: List of inodes for which a notification is emitted
+  * @mutex: Protect digest cache modifications
+  *
+  * This structure represents a cache of digests extracted from a digest list.
+@@ -137,6 +151,7 @@ struct digest_cache {
+ 	char *path_str;
+ 	unsigned long flags;
+ 	struct list_head verif_data;
++	struct list_head notify_inodes;
+ 	struct mutex mutex;
+ };
  
-+/* reset.c */
-+int digest_cache_path_truncate(const struct path *path);
-+void digest_cache_file_release(struct file *file);
-+int digest_cache_inode_unlink(struct inode *dir, struct dentry *dentry);
-+int digest_cache_inode_rename(struct inode *old_dir, struct dentry *old_dentry,
-+			      struct inode *new_dir, struct dentry *new_dentry);
-+void digest_cache_inode_post_setxattr(struct dentry *dentry, const char *name,
-+				      const void *value, size_t size,
-+				      int flags);
-+void digest_cache_inode_post_removexattr(struct dentry *dentry,
-+					 const char *name);
+@@ -261,4 +276,15 @@ void digest_cache_inode_post_setxattr(struct dentry *dentry, const char *name,
+ void digest_cache_inode_post_removexattr(struct dentry *dentry,
+ 					 const char *name);
+ 
++/* notifier.c */
++int digest_cache_notify_inode_add(struct digest_cache *digest_cache,
++				  struct inode *inode);
++void digest_cache_notify_inodes_free(struct digest_cache *digest_cache);
++void digest_cache_notify(struct digest_cache *digest_cache, struct inode *inode,
++			 enum digest_cache_event event);
++void digest_cache_notify_multiple(struct digest_cache *digest_cache,
++				  enum digest_cache_event event);
++int digest_cache_register_notifier(struct notifier_block *nb);
++int digest_cache_unregister_notifier(struct notifier_block *nb);
 +
  #endif /* _DIGEST_CACHE_INTERNAL_H */
 diff --git a/security/digest_cache/main.c b/security/digest_cache/main.c
-index a5616fd07c1d..ce3518a33c80 100644
+index ce3518a33c80..6fe0864f938f 100644
 --- a/security/digest_cache/main.c
 +++ b/security/digest_cache/main.c
-@@ -169,6 +169,11 @@ struct digest_cache *digest_cache_create(struct dentry *dentry,
+@@ -51,6 +51,7 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
+ 	INIT_LIST_HEAD(&digest_cache->htables);
+ 	INIT_LIST_HEAD(&digest_cache->verif_data);
+ 	INIT_LIST_HEAD(&digest_cache->dir_entries);
++	INIT_LIST_HEAD(&digest_cache->notify_inodes);
+ 	mutex_init(&digest_cache->mutex);
  
- 	/* Serialize check and assignment of dig_owner. */
- 	mutex_lock(&dig_sec->dig_owner_mutex);
-+	if (dig_sec->dig_owner && test_bit(RESET, &dig_sec->dig_owner->flags)) {
-+		digest_cache_put(dig_sec->dig_owner);
-+		dig_sec->dig_owner = NULL;
-+	}
-+
- 	if (dig_sec->dig_owner) {
- 		/* Increment ref. count for reference returned to the caller. */
- 		digest_cache = digest_cache_ref(dig_sec->dig_owner);
-@@ -403,6 +408,13 @@ struct digest_cache *digest_cache_get(struct dentry *dentry)
+ 	pr_debug("New digest cache %s (ref count: %d)\n",
+@@ -70,6 +71,7 @@ static void digest_cache_free(struct digest_cache *digest_cache)
+ 	digest_cache_htable_free(digest_cache);
+ 	digest_cache_verif_free(digest_cache);
+ 	digest_cache_dir_free(digest_cache);
++	digest_cache_notify_inodes_free(digest_cache);
+ 	mutex_destroy(&digest_cache->mutex);
  
- 	/* Serialize accesses to inode for which the digest cache is used. */
- 	mutex_lock(&dig_sec->dig_user_mutex);
-+	if (dig_sec->dig_user &&
-+	    (test_bit(RESET, &dig_sec->dig_user->flags) ||
-+	     test_bit(RESET_USER, &dig_sec->dig_user->flags))) {
-+		digest_cache_put(dig_sec->dig_user);
-+		dig_sec->dig_user = NULL;
-+	}
-+
- 	if (!dig_sec->dig_user) {
- 		down_read(&default_path_sem);
+ 	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
+@@ -398,6 +400,7 @@ struct digest_cache *digest_cache_get(struct dentry *dentry)
+ 	struct digest_cache_security *dig_sec;
+ 	struct digest_cache *digest_cache = NULL;
+ 	struct inode *inode = d_backing_inode(dentry);
++	int ret;
+ 
+ 	if (!digest_cache_enabled)
+ 		return NULL;
+@@ -420,6 +423,15 @@ struct digest_cache *digest_cache_get(struct dentry *dentry)
  		/* Consume extra reference from digest_cache_create(). */
-@@ -491,6 +503,13 @@ static void digest_cache_inode_free_security(struct inode *inode)
- static struct security_hook_list digest_cache_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(inode_alloc_security, digest_cache_inode_alloc_security),
- 	LSM_HOOK_INIT(inode_free_security, digest_cache_inode_free_security),
-+	LSM_HOOK_INIT(path_truncate, digest_cache_path_truncate),
-+	LSM_HOOK_INIT(file_release, digest_cache_file_release),
-+	LSM_HOOK_INIT(inode_unlink, digest_cache_inode_unlink),
-+	LSM_HOOK_INIT(inode_rename, digest_cache_inode_rename),
-+	LSM_HOOK_INIT(inode_post_setxattr, digest_cache_inode_post_setxattr),
-+	LSM_HOOK_INIT(inode_post_removexattr,
-+		      digest_cache_inode_post_removexattr),
- };
+ 		dig_sec->dig_user = digest_cache_new(dentry);
+ 		up_read(&default_path_sem);
++
++		if (dig_sec->dig_user) {
++			ret = digest_cache_notify_inode_add(dig_sec->dig_user,
++							    inode);
++			if (ret < 0) {
++				digest_cache_put(dig_sec->dig_user);
++				dig_sec->dig_user = NULL;
++			}
++		}
+ 	}
  
- /**
-diff --git a/security/digest_cache/reset.c b/security/digest_cache/reset.c
+ 	if (dig_sec->dig_user)
+diff --git a/security/digest_cache/notifier.c b/security/digest_cache/notifier.c
 new file mode 100644
-index 000000000000..e07222b0e0e8
+index 000000000000..06e4730e4434
 --- /dev/null
-+++ b/security/digest_cache/reset.c
-@@ -0,0 +1,197 @@
++++ b/security/digest_cache/notifier.c
+@@ -0,0 +1,135 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ * Copyright (C) 2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Reset digest cache on digest lists/directory modifications.
++ * Implement the notifier of the digest_cache LSM.
 + */
 +
 +#define pr_fmt(fmt) "DIGEST CACHE: "fmt
++
 +#include "internal.h"
 +
++static BLOCKING_NOTIFIER_HEAD(chain);
++
++static const char * const events_str[] = {
++	[DIGEST_CACHE_RESET] = __stringify(DIGEST_CACHE_RESET),
++};
++
 +/**
-+ * digest_cache_reset_owner - Reset dig_owner
-+ * @inode: Inode of the digest list/directory containing the digest list
-+ * @reason: Reason for reset
++ * digest_cache_notify_inode_add - Add inode to digest cache notification list
++ * @digest_cache: Digest cache
++ * @inode: Inode to add
 + *
-+ * This function sets the RESET bit of the digest cache pointed to by dig_owner
-+ * (if unset), so that digest_cache_get() and digest_cache_create() respectively
-+ * release and clear dig_user and dig_owner in the inode security blob. This
-+ * causes new callers of digest_cache_get() to get a new digest cache.
++ * This function adds an inode to the digest cache notification list, so that
++ * notifications are emitted for that inode.
++ *
++ * Return: Zero on success, -ENOMEM on error.
 + */
-+static void digest_cache_reset_owner(struct inode *inode, const char *reason)
++int digest_cache_notify_inode_add(struct digest_cache *digest_cache,
++				  struct inode *inode)
 +{
-+	struct digest_cache_security *dig_sec;
++	struct notify_inode *notify_inode;
 +
-+	dig_sec = digest_cache_get_security(inode);
-+	if (unlikely(!dig_sec))
-+		return;
++	notify_inode = kmalloc(sizeof(*notify_inode), GFP_KERNEL);
++	if (!notify_inode)
++		return -ENOMEM;
 +
-+	mutex_lock(&dig_sec->dig_owner_mutex);
-+	if (dig_sec->dig_owner &&
-+	    !test_and_set_bit(RESET, &dig_sec->dig_owner->flags))
-+		pr_debug("Resetting %s (dig_owner), reason: %s\n",
-+			 dig_sec->dig_owner->path_str, reason);
-+	mutex_unlock(&dig_sec->dig_owner_mutex);
++	notify_inode->inode = inode;
++
++	mutex_lock(&digest_cache->mutex);
++	list_add_tail(&notify_inode->list, &digest_cache->notify_inodes);
++	pr_debug("Added inode %lu to notification list of digest cache %s\n",
++		 inode->i_ino, digest_cache->path_str);
++	mutex_unlock(&digest_cache->mutex);
++	return 0;
 +}
 +
 +/**
-+ * digest_cache_reset_user - Reset dig_user
-+ * @inode: Inode of the file using the digest cache
-+ * @reason: Reason for reset
++ * digest_cache_notify_inodes_free - Free digest cache notification list
++ * @digest_cache: Digest cache
 + *
-+ * This function sets the RESET_USER bit (if unset), so that digest_cache_get()
-+ * clears the dig_user pointer in the inode security blob and determines again
-+ * the digest list inode to get a digest cache from.
++ * This function removes all inodes from the notification list of the passed
++ * digest cache and frees the memory. Does not need locking, since it is called
++ * only at the time the digest cache is freed.
 + */
-+static void digest_cache_reset_user(struct inode *inode, const char *reason)
++void digest_cache_notify_inodes_free(struct digest_cache *digest_cache)
 +{
-+	struct digest_cache_security *dig_sec;
++	struct notify_inode *p, *q;
 +
-+	dig_sec = digest_cache_get_security(inode);
-+	if (unlikely(!dig_sec))
-+		return;
-+
-+	mutex_lock(&dig_sec->dig_user_mutex);
-+	if (dig_sec->dig_user &&
-+	    !test_and_set_bit(RESET_USER, &dig_sec->dig_user->flags))
-+		pr_debug("Resetting %s (dig_user), reason: %s\n",
-+			 dig_sec->dig_user->path_str, reason);
-+	mutex_unlock(&dig_sec->dig_user_mutex);
++	list_for_each_entry_safe(p, q, &digest_cache->notify_inodes, list) {
++		list_del(&p->list);
++		pr_debug("Removed inode %lu from notification list of digest cache %s\n",
++			 p->inode->i_ino, digest_cache->path_str);
++		kfree(p);
++	}
 +}
 +
 +/**
-+ * digest_cache_path_truncate - A file is being truncated
-+ * @path: File path
++ * digest_cache_notify - Emit notification for an inode
++ * @digest_cache: Digest cache
++ * @inode: Inode for which a digest cache is used
++ * @event: Event to notify
 + *
-+ * This function is called when a file is being truncated. If the inode is a
-+ * digest list, it resets the inode dig_owner, to force rebuilding the digest
++ * This function emits a notification of a digest cache event for an affected
++ * inode.
++ */
++void digest_cache_notify(struct digest_cache *digest_cache, struct inode *inode,
++			 enum digest_cache_event event)
++{
++	struct digest_cache_event_data event_data = {
++		.digest_cache = digest_cache,
++		.inode = inode,
++	};
++
++	pr_debug("Notify event %s for inode %lu using digest cache %s\n",
++		 events_str[event], inode->i_ino, digest_cache->path_str);
++
++	blocking_notifier_call_chain(&chain, event, &event_data);
++}
++
++/**
++ * digest_cache_notify_multiple - Emit notification for all inodes in the list
++ * @digest_cache: Digest cache
++ * @event: Event to notify
++ *
++ * This function emits a notification for all inodes in the notification list
++ * of the passed digest cache.
++ */
++void digest_cache_notify_multiple(struct digest_cache *digest_cache,
++				  enum digest_cache_event event)
++{
++	struct notify_inode *p;
++
++	list_for_each_entry(p, &digest_cache->notify_inodes, list)
++		digest_cache_notify(digest_cache, p->inode, event);
++}
++
++/**
++ * digest_cache_register_notifier() - Register a digest cache notifier
++ * @nb: Notifier block with the callback
++ *
++ * This function registers a new notifier for events occurring on digest caches.
++ *
++ * Return: Zero on success, -EEXIST on error.
++ */
++int digest_cache_register_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_register(&chain, nb);
++}
++EXPORT_SYMBOL(digest_cache_register_notifier);
++
++/**
++ * digest_cache_unregister_notifier() - Unregister a digest cache notifier
++ * @nb: Notifier block with the callback
++ *
++ * This function unregisters a previously registered notifier.
++ *
++ * Return: Zero on success, -ENOENT on error.
++ */
++int digest_cache_unregister_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_unregister(&chain, nb);
++}
++EXPORT_SYMBOL(digest_cache_unregister_notifier);
+diff --git a/security/digest_cache/reset.c b/security/digest_cache/reset.c
+index e07222b0e0e8..bb3b4108ba3b 100644
+--- a/security/digest_cache/reset.c
++++ b/security/digest_cache/reset.c
+@@ -10,6 +10,29 @@
+ #define pr_fmt(fmt) "DIGEST CACHE: "fmt
+ #include "internal.h"
+ 
++/**
++ * digest_cache_notify_dir_entry_reset - Notify dir entry reset
++ * @dir: Directory containing the digest lists
++ *
++ * Emit a notification for the directory containing the digest lists about a
++ * reset occurring on a directory entry.
++ */
++
++static void digest_cache_notify_dir_entry_reset(struct inode *dir)
++{
++	struct digest_cache_security *dir_dig_sec;
++
++	dir_dig_sec = digest_cache_get_security(dir);
++	if (unlikely(!dir_dig_sec))
++		return;
++
++	mutex_lock(&dir_dig_sec->dig_owner_mutex);
++	if (dir_dig_sec->dig_owner)
++		digest_cache_notify_multiple(dir_dig_sec->dig_owner,
++					     DIGEST_CACHE_RESET);
++	mutex_unlock(&dir_dig_sec->dig_owner_mutex);
++}
++
+ /**
+  * digest_cache_reset_owner - Reset dig_owner
+  * @inode: Inode of the digest list/directory containing the digest list
+@@ -19,6 +42,9 @@
+  * (if unset), so that digest_cache_get() and digest_cache_create() respectively
+  * release and clear dig_user and dig_owner in the inode security blob. This
+  * causes new callers of digest_cache_get() to get a new digest cache.
++ *
++ * After setting RESET, it emits a notification for all inodes using the digest
 + * cache.
-+ *
-+ * Return: Zero.
-+ */
-+int digest_cache_path_truncate(const struct path *path)
-+{
-+	struct inode *inode = d_backing_inode(path->dentry);
-+
-+	if (!S_ISREG(inode->i_mode))
-+		return 0;
-+
-+	digest_cache_reset_owner(inode, "file_truncate");
-+	return 0;
-+}
-+
-+/**
-+ * digest_cache_file_release - Last reference of a file desc is being released
-+ * @file: File descriptor
-+ *
-+ * This function is called when the last reference of a file descriptor is
-+ * being released. If the inode is a regular file and was opened for write, or
-+ * the parent inode is the digest list directory and the file was created, it
-+ * resets the inode dig_owner, to force rebuilding the digest cache.
-+ */
-+void digest_cache_file_release(struct file *file)
-+{
-+	struct inode *dir = d_backing_inode(file_dentry(file)->d_parent);
-+
-+	if (!S_ISREG(file_inode(file)->i_mode) || !(file->f_mode & FMODE_WRITE))
-+		return;
-+
-+	digest_cache_reset_owner(file_inode(file), "file_file_release");
-+	if (file->f_mode & FMODE_CREATED)
-+		digest_cache_reset_owner(dir, "dir_file_release");
-+}
-+
-+/**
-+ * digest_cache_inode_unlink - An inode is being removed
-+ * @dir: Inode of the affected directory
-+ * @dentry: Dentry of the inode being removed
-+ *
-+ * This function is called when an existing inode is being removed. If the
-+ * inode is a digest list, or the parent inode is the digest list directory and
-+ * the inode is a regular file, it resets the affected inode dig_owner, to force
-+ * rebuilding the digest cache.
-+ *
-+ * Return: Zero.
-+ */
-+int digest_cache_inode_unlink(struct inode *dir, struct dentry *dentry)
-+{
-+	struct inode *inode = d_backing_inode(dentry);
-+
-+	if (!S_ISREG(inode->i_mode))
-+		return 0;
-+
-+	digest_cache_reset_owner(inode, "file_unlink");
-+	digest_cache_reset_owner(dir, "dir_unlink");
-+	return 0;
-+}
-+
-+/**
-+ * digest_cache_inode_rename - An inode is being renamed
-+ * @old_dir: Inode of the directory containing the inode being renamed
-+ * @old_dentry: Dentry of the inode being renamed
-+ * @new_dir: Directory where the inode will be placed into
-+ * @new_dentry: Dentry of the inode after being renamed
-+ *
-+ * This function is called when an existing inode is being moved from a
-+ * directory to another (rename). If the inode is a digest list, or that inode
-+ * is moved from/to the digest list directory, it resets the affected inode
-+ * dig_owner, to force rebuilding the digest cache.
-+ *
-+ * Return: Zero.
-+ */
-+int digest_cache_inode_rename(struct inode *old_dir, struct dentry *old_dentry,
-+			      struct inode *new_dir, struct dentry *new_dentry)
-+{
-+	struct inode *old_inode = d_backing_inode(old_dentry);
-+
-+	if (!S_ISREG(old_inode->i_mode))
-+		return 0;
-+
-+	digest_cache_reset_owner(old_inode, "file_rename");
-+	digest_cache_reset_owner(old_dir, "dir_rename_from");
-+	digest_cache_reset_owner(new_dir, "dir_rename_to");
-+	return 0;
-+}
-+
-+/**
-+ * digest_cache_inode_post_setxattr() - An xattr was set
-+ * @dentry: file
-+ * @name: xattr name
-+ * @value: xattr value
-+ * @size: size of xattr value
-+ * @flags: flags
-+ *
-+ * This function is called after an xattr was set on an existing inode. If the
-+ * inode points to a digest cache and the xattr set is security.digest_list, it
-+ * resets dig_user in the inode security blob, to force retrieving a fresh
-+ * digest cache.
-+ */
-+void digest_cache_inode_post_setxattr(struct dentry *dentry, const char *name,
-+				      const void *value, size_t size, int flags)
-+{
-+	if (strcmp(name, XATTR_NAME_DIGEST_LIST))
-+		return;
-+
-+	digest_cache_reset_user(d_backing_inode(dentry), "file_setxattr");
-+}
-+
-+/**
-+ * digest_cache_inode_post_removexattr() - An xattr was removed
-+ * @dentry: file
-+ * @name: xattr name
-+ *
-+ * This function is called after an xattr was removed from an existing inode.
-+ * If the inode points to a digest cache and the xattr removed is
-+ * security.digest_list, it resets dig_user in the inode security blob, to
-+ * force retrieving a fresh digest cache.
-+ */
-+void digest_cache_inode_post_removexattr(struct dentry *dentry,
-+					 const char *name)
-+{
-+	if (strcmp(name, XATTR_NAME_DIGEST_LIST))
-+		return;
-+
-+	digest_cache_reset_user(d_backing_inode(dentry), "file_removexattr");
-+}
+  */
+ static void digest_cache_reset_owner(struct inode *inode, const char *reason)
+ {
+@@ -30,9 +56,12 @@ static void digest_cache_reset_owner(struct inode *inode, const char *reason)
+ 
+ 	mutex_lock(&dig_sec->dig_owner_mutex);
+ 	if (dig_sec->dig_owner &&
+-	    !test_and_set_bit(RESET, &dig_sec->dig_owner->flags))
++	    !test_and_set_bit(RESET, &dig_sec->dig_owner->flags)) {
+ 		pr_debug("Resetting %s (dig_owner), reason: %s\n",
+ 			 dig_sec->dig_owner->path_str, reason);
++		digest_cache_notify_multiple(dig_sec->dig_owner,
++					     DIGEST_CACHE_RESET);
++	}
+ 	mutex_unlock(&dig_sec->dig_owner_mutex);
+ }
+ 
+@@ -55,9 +84,12 @@ static void digest_cache_reset_user(struct inode *inode, const char *reason)
+ 
+ 	mutex_lock(&dig_sec->dig_user_mutex);
+ 	if (dig_sec->dig_user &&
+-	    !test_and_set_bit(RESET_USER, &dig_sec->dig_user->flags))
++	    !test_and_set_bit(RESET_USER, &dig_sec->dig_user->flags)) {
+ 		pr_debug("Resetting %s (dig_user), reason: %s\n",
+ 			 dig_sec->dig_user->path_str, reason);
++		digest_cache_notify(dig_sec->dig_user, inode,
++				    DIGEST_CACHE_RESET);
++	}
+ 	mutex_unlock(&dig_sec->dig_user_mutex);
+ }
+ 
+@@ -74,11 +106,14 @@ static void digest_cache_reset_user(struct inode *inode, const char *reason)
+ int digest_cache_path_truncate(const struct path *path)
+ {
+ 	struct inode *inode = d_backing_inode(path->dentry);
++	struct inode *dir = d_backing_inode(path->dentry->d_parent);
+ 
+ 	if (!S_ISREG(inode->i_mode))
+ 		return 0;
+ 
+ 	digest_cache_reset_owner(inode, "file_truncate");
++	/* Dir digest cache users should know a dir entry changed. */
++	digest_cache_notify_dir_entry_reset(dir);
+ 	return 0;
+ }
+ 
+@@ -101,6 +136,9 @@ void digest_cache_file_release(struct file *file)
+ 	digest_cache_reset_owner(file_inode(file), "file_file_release");
+ 	if (file->f_mode & FMODE_CREATED)
+ 		digest_cache_reset_owner(dir, "dir_file_release");
++	else
++		/* Dir digest cache users should know a dir entry changed. */
++		digest_cache_notify_dir_entry_reset(dir);
+ }
+ 
+ /**
 -- 
 2.34.1
 
