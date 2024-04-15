@@ -1,91 +1,130 @@
-Return-Path: <linux-kselftest+bounces-7984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 288968A5459
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:36:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D4CE8A5565
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:44:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A9E81C2208C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:36:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF5C7B22BFA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF10219EA;
-	Mon, 15 Apr 2024 14:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A9E21EEE3;
+	Mon, 15 Apr 2024 14:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxN8UDoi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YtBpYTUZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B1938DFB;
-	Mon, 15 Apr 2024 14:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749BE2119
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 14:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713191604; cv=none; b=mcY7km2p3sNYgP0Nt/aWFlgRSbHlD3d494Xw9vrJ7wQvre5itHzGe37WARM0jc1qC91xvF2sMQ28/RM3tZS6q9bUM4sEKnab5DIrutsHW2IkI3Uf6GPBQeT+BxNSL9T6KtQH4cEmoJJE7cAY0eExjWglqZyqai5e2mz0UaEZvUc=
+	t=1713192243; cv=none; b=gUz1/aTT5OZJ9vjwEh3MNWeI0SDTtyslrW4drzPKsrBMOhSbZodDovqZHmZL7t0ohM3DeSNCUmWQiDXo+pEFhs/mZHJBM/wUF+BltXkXO2gpTVE+RVR8S8Ttc7iytOgyllG219x+PUSMHcVFZNsYcxSgw9C3ZswCYmg/Q+SXjpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713191604; c=relaxed/simple;
-	bh=bLWH1Ef4kYzeWAf/m3vrZaUDTCdIFw73/tOxogcATRA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DZbqIWmxyM4H5NOGVwSExjVxxMVZXLOP0+ZvftwkCzMy4XYlCwE1k2CQZs2uHgwSHSdcHfU8KvXK3mo/7FcPTBjTAXyiCLm3XbDdMlMVJxqk8Pa0U12/J4vjlHbBVnS4N8DX+HUzn3YQyILo7YjfXXwPSRtxMqM4SrDY8UIgdog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxN8UDoi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2718CC2BD10;
-	Mon, 15 Apr 2024 14:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713191604;
-	bh=bLWH1Ef4kYzeWAf/m3vrZaUDTCdIFw73/tOxogcATRA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hxN8UDoiUisW6p8hHsy9b/csjGv2yGzRvG9KjGiuBwsrrPzMuFrnv7Bb2YCH+4Z93
-	 EPKBYmJcFcSbOHFz0CJlRb6/AvnebPRDR0VvAexrbseoUZL9bGuwFAR+CY+yBepQJr
-	 dqbmr1hVwbfpT3X0vG0jvTwtNxETF3f+IqiXcmxn/fFD0Nlk58kWtyEa2+FL/Ghj5M
-	 0eHV+E/IAZkJKwVYSSxWLLcz54Q+KAJwcw34izT7jf19/jxO2Bj/p9yw+UUN7xTXgT
-	 xQ3boCdDHpyVJ5ZuNLcyG8ocBSjwntM/J+WhivV0gfk7ZjrydRViDFlNbllkNOgzoA
-	 IN9IdVOxCtxlg==
-Date: Mon, 15 Apr 2024 07:33:23 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- shuah@kernel.org, petrm@nvidia.com, linux-kselftest@vger.kernel.org,
- willemb@google.com
-Subject: Re: [PATCH net-next 5/5] selftests: drv-net: add a trivial ping
- test
-Message-ID: <20240415073323.351c888b@kernel.org>
-In-Reply-To: <49deeded3764fd43b9af23f2f6e1b8f4ab599910.camel@redhat.com>
-References: <20240412233705.1066444-1-kuba@kernel.org>
-	<20240412233705.1066444-6-kuba@kernel.org>
-	<49deeded3764fd43b9af23f2f6e1b8f4ab599910.camel@redhat.com>
+	s=arc-20240116; t=1713192243; c=relaxed/simple;
+	bh=KehpfQl+nFVwyeBbKTZT+XW0EbxiUmM5b6iOnH+si1k=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Q2As0NTxvowqKoq1m9n76RrP9oeZgALeM5QWtu0E3Vw0GogI/bZBhDFVMRXuxc/019p2u259C2RhVB5LwA4L9HjJl0a3ug2GwsLZneGEhelxPOTlwqfjOOjSJw8xRrN3ppIuSyMEsjSY2R5YiWtxId5lNKe1HavzsXRRXIoFArI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YtBpYTUZ; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4187fb76386so1105505e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 07:44:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1713192241; x=1713797041; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0bmcD1dsKmxdOPG1Zb6XlpeF2OhOoXu9RprsqunU6bk=;
+        b=YtBpYTUZMBbri/hmJ5zxlLFpf7YBqdISk+18XFkh+nFFjaeOsNfXfLmswIdU8UnoTh
+         EVO8YaKQSjN3PFoQNbplnaPRLqFMAR3mrmU8WaDBB+TDSxrbTZIAk+8jm1sj3fG6WItn
+         j7V70Y2siCesj6mcdo187WBOJrcfVLu4RfImvEve8vkia11SQLFgUvV32fU1n++XMpj1
+         oiHeYUG6mt5rVtjF8hkj7RHxl6pZCMOrlkUDvT47lP0WcXqc9XXygNmry8PUyPOSO6wk
+         iJckUWhfXJazU5/LGqfFaj0pjm5gL+ideoyXozsAfhCDwzmMtTVaADokMjOtxEwRHdJu
+         pV4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713192241; x=1713797041;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0bmcD1dsKmxdOPG1Zb6XlpeF2OhOoXu9RprsqunU6bk=;
+        b=NWmlNRIr68wnxmpFrKXESh0pYS5/HXssHTuc8V7Mo7/uykq/uSoAuRGapXAdddMpon
+         cpKfAGPRs1tLMdtm8YMjzQHeg2EBZQXkeWKdFIy7KTKrz/PK2G2IEHcIpn7ZJhwVcpqP
+         tCq+BgURiCFNro+xhvK/Gt65kNTN3gpAzbC48o2aSmdInSu6+j3Mev9a00Qg9xjFvgl/
+         0462039nlprOwVsBzN93EIJ33RUJQvhnHQtEC+d2cYgLNG0U1YoIVVZuj/F6HCR0AsCi
+         3EyjFzaYf9XF/SBPQYiSPGqALJ/e+aV/RcdvAbvZCirmpz2fRcuGT9o0BpCN//O5GFxf
+         NNnA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6LiWi06yzZl0h4UPctx6GFo8s8Yb2jd8TWvYqnG1QgmYNRY3+bEjqF8eE/0VagRARVGo8lrgfFQrV2GwyKiSIPvtnzxpIk9maoFCjutOg
+X-Gm-Message-State: AOJu0Yz5kICDeol+jarb4CRBpco6faHY1VqNpElCbkYjLV6q8gwJxNcd
+	6mv7w294xYCGXShXHT2nhHaLX2DwWDJ0YFA9BU1/aGfWo4Ip+wk5eWNQZIxhHOz3HJyQXw6Sen2
+	eZwkpL2EV7w==
+X-Google-Smtp-Source: AGHT+IFEmFS1HiEMaFINlIUIUMR/6wAm50IL2RKmWT9wBF0Ao1Ak+ndSv5qjpwOV71WeC8xHyrbagpOvd2bt2Q==
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a05:600c:458d:b0:416:a53f:38fd with SMTP
+ id r13-20020a05600c458d00b00416a53f38fdmr32504wmo.1.1713192240874; Mon, 15
+ Apr 2024 07:44:00 -0700 (PDT)
+Date: Mon, 15 Apr 2024 14:43:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIACk9HWYC/x3MQQqAIBBA0avErBtIS5CuEi2ixhoqDackiO6et
+ HyL/x8QikwCbfFApMTCwWeosoBxGfxMyFM26Eo3VaMMrmlHoc2dJKegDyjXFFANxjhbK2ethtw ekRzf/7fr3/cDxrlkFWcAAAA=
+X-Mailer: b4 0.14-dev
+Message-ID: <20240415-kvm-selftests-no-sudo-v1-1-95153ad5f470@google.com>
+Subject: [PATCH] KVM: selftests: Avoid assuming "sudo" exists
+From: Brendan Jackman <jackmanb@google.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, 15 Apr 2024 11:31:05 +0200 Paolo Abeni wrote:
-> On Fri, 2024-04-12 at 16:37 -0700, Jakub Kicinski wrote:
-> > +def ping_v4(cfg) -> None:
-> > +    if not cfg.v4:
-> > +        raise KsftXfailEx()
-> > +
-> > +    cmd(f"ping -c 1 -W0.5 {cfg.ep_v4}")
-> > +    cmd(f"ping -c 1 -W0.5 {cfg.v4}", host=3Dcfg.endpoint) =20
->=20
-> Very minor nit, I personally find a bit more readable:
->=20
-> 	cfg.endpoint.cmd()
->=20
-> Which is already supported by the current infra, right?
->=20
-> With both endpoint possibly remote could be:
->=20
-> 	cfg.ep1.cmd()
-> 	cfg.ep2.cmd()
+I ran into a failure running this test on a minimal rootfs.
 
-As I said in the cover letter, I don't want to push us too much towards
-classes. The argument format make local and local+remote tests look more
-similar.
+Can be fixed by just skipping the "sudo" in case we are already root.
 
-I could be wrong =F0=9F=A4=B7=EF=B8=8F
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+ tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+index 7cbb409801eea..0e56822e8e0bf 100755
+--- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
++++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+@@ -13,10 +13,21 @@ NX_HUGE_PAGES_RECOVERY_RATIO=$(cat /sys/module/kvm/parameters/nx_huge_pages_reco
+ NX_HUGE_PAGES_RECOVERY_PERIOD=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms)
+ HUGE_PAGES=$(cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
+ 
++# If we're already root, the host might not have sudo.
++if [ $(whoami) == "root" ]; then
++	function maybe_sudo () {
++		"$@"
++	}
++else
++	function maybe_sudo () {
++		sudo "$@"
++	}
++fi
++
+ set +e
+ 
+ function sudo_echo () {
+-	echo "$1" | sudo tee -a "$2" > /dev/null
++	echo "$1" | maybe_sudo tee -a "$2" > /dev/null
+ }
+ 
+ NXECUTABLE="$(dirname $0)/nx_huge_pages_test"
+
+---
+base-commit: 2c71fdf02a95b3dd425b42f28fd47fb2b1d22702
+change-id: 20240415-kvm-selftests-no-sudo-1a55f831f882
+
+Best regards,
+-- 
+Brendan Jackman <jackmanb@google.com>
+
 
