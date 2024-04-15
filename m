@@ -1,117 +1,147 @@
-Return-Path: <linux-kselftest+bounces-7989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B4638A5598
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EF6A8A5643
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 17:23:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14C19B22049
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:52:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A08AAB20E38
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 15:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05BAA71B4F;
-	Mon, 15 Apr 2024 14:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B51477F08;
+	Mon, 15 Apr 2024 15:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="J/8KNIn1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSbHdCYO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3611E52A;
-	Mon, 15 Apr 2024 14:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020DD42047;
+	Mon, 15 Apr 2024 15:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713192735; cv=none; b=teWM4QxOkdC57y3VMLjXrZi6TNpyfMTbnbdV0wf4oVrKVdNz0YtN3qLvGRLXY1J+tuZRXckXRbZc04YfwSCafGUDsQmUmZHwO+zQat+gZXIMtf789gDSSW0hAPaxS6M/qg9lgfR6BdEN22qJsW/lcEy3ZTKFaP3cl50g8jOaJFY=
+	t=1713194606; cv=none; b=kjaU7+4VK5B421Gqxk+9cU1DwRNzMybdP8RYtza0KvxhA2+c4udhaE6x3k6UuOEumhK77HT9iiIOIajWn0vnvnsYd70COKVXH+RDaaeypwS7y60MJv+akulKkJqRGO+G6nDyIAQ4zhWkWMvDZ45iSF0+ZtRvDokCzbtWhYtEgv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713192735; c=relaxed/simple;
-	bh=JrjwZDSK1xsC8X65AoUHKJtl1BMmtd6zoPIlPcHRKQc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ahcjPBElUOtWS/uhZj6eKJsmRRdqvQZDdtsZC9qVyhnE+LJCGFfNVwG3NDcaQxMP5XkVy9oweVz+kaVokV3ll4srMwVSVinmbbbBU2TLY/jGhEqzaQNrk08Yw2vwY2eKXawszFLkQn1NlYiiA9zpCKTdMRwLTqnFEXm3W9PD+Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=J/8KNIn1; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43FETQDr007066;
-	Mon, 15 Apr 2024 14:52:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=O96ldazLk0ZQV95WUC8Xi+BiOKFMt4aoAGFLPkYn+VQ=;
- b=J/8KNIn1oIscZmC7O3HOGKiwpt6FFUuR04bNP5NFAAnTq7uhT6m4v1LHwcBR2m5paXpL
- TmTYZu9o3EgBCt0z/PqyPbfnqHEsjAZhY4ImLyp/hTnRDJQJ5ajdv4Ja9rFTAPvnxEU5
- tFCfsgg6NPWo6cVtYPwwM8hXCU7PNilfpGnAjCTxnr+uFgS1AjlzLXiaslJvY2SaqxEb
- nZxFwYDxb36sqRLrhGm8XTP7eDXu6b2ZP1YCcBmu3K4Q+E7NIq+1JGpeo/8OkIk0nM5T
- R25uEkxHYz0+0sHlyi15poFjS/AhhHkCQLrYvIHtdMtawmOLAoOScAX6tIE9fuxN6tFe FQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xh4r0r80v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Apr 2024 14:52:09 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43FEq9Nw010129;
-	Mon, 15 Apr 2024 14:52:09 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xh4r0r80t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Apr 2024 14:52:09 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43FCNOrr023681;
-	Mon, 15 Apr 2024 14:52:08 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xg5cnre1a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Apr 2024 14:52:08 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43FEq2i211403734
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 15 Apr 2024 14:52:04 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8A5572004D;
-	Mon, 15 Apr 2024 14:52:02 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 64D7320043;
-	Mon, 15 Apr 2024 14:52:02 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 15 Apr 2024 14:52:02 +0000 (GMT)
-Date: Mon, 15 Apr 2024 16:52:01 +0200
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v1] KVM: s390x: selftests: Add shared zeropage test
-Message-ID: <Zh0/EaRmNqGAo0Bo@tuxmaker.boeblingen.de.ibm.com>
-References: <20240412084329.30315-1-david@redhat.com>
+	s=arc-20240116; t=1713194606; c=relaxed/simple;
+	bh=/+oTadXQg/wcougv+ZALkoCYykeGX5ekKxZJ0VZOuq4=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=BmTF2M44tbOr1eUz3Vh4wKUMj3PiGuDbXW9ykDpPVKlAMkqBHdvl1pi96gzbIWgLnMicTWtNEFNS+Eb3J+xRNrgohsEMHPrHXGiqqliCHW0FLj06ta1ZOaB+H5+M+G4004a2pkiRXjeWODGCJY4x66lMS++HM9EcN8xag0HKdhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSbHdCYO; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-78edc3e7cd9so120219085a.1;
+        Mon, 15 Apr 2024 08:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713194604; x=1713799404; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=00+WKqcWxRVODtQrBSLLMAMkHkC+vdMV1Sj6f4X1gSU=;
+        b=ZSbHdCYOdJyyF9wrkWF9v7lNTTjY6in1YkebGN+3WQZ1UIIzXcIMpiU0wWYvvSeWMq
+         vHxWFrVbOP5DVLy1bt3Nbr/cXBE4X4fsp+iD+w5dANRAjK37WJWv5QlZwH9d9bg0QOKz
+         IHSJwTh5bDTMUgEWYEZFNxwDbQdEb5mN3by6LAr7G78vfVBRA4sPAH8sTLcIqJGWO4nX
+         1Z52G2RLom0IWJcRkvwgRvS5FFD3LR3uDG24cAtYC4NeQv/lJhZnuZd7BTaiFynov6KL
+         RXbCRZfuL8VbPte/LV1tsqR6PyDsp2DpA5AdLmtKs3HjAN0hfVh0Xu8P4uVNgBoCwvLQ
+         X7AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713194604; x=1713799404;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=00+WKqcWxRVODtQrBSLLMAMkHkC+vdMV1Sj6f4X1gSU=;
+        b=Y/PbpKe2S6COBLNSvKfICfDbbjGAFKxt6sFcRAXx2xy47mDW/bIu6f187qFPN9ARsA
+         sjiVY3Phg3C1b4a8KUIS3BCEQUS7pNIVWPDGb3IFoec2IytT3m0VZjbvtpEm605MJA2p
+         fxHpWf0kJVbHBwg/SVdjfZu7Xw9R3Z+fV+NtObnapXTSmBJjVX1olSYUNANQAKN/EIrT
+         EKUNBqeZKUHAw7sC0o8dwqzP4WStBIvSAVliC0L/xQpow1ZSxdN/DRx3l11FvGqrlGQU
+         YKrjVS98rf3hSpY4Dae0+KldZSx2vZIoq1KKe4uqjb63TMwp5fVfuhzYr0/WU+FpSFcu
+         fbjw==
+X-Forwarded-Encrypted: i=1; AJvYcCXBmF84oQ4JEbiNAf7hfUDrOd7cyECDbkry4HISocmdijNfaI42cqQ0eja8jA33eHLoxhF3P96lyJCehh+0Ws8OBa7qKx5xnsUmGc7Zkh9nSU5ttLksB9JvSKIUDgyStw4OjwqTDl4w
+X-Gm-Message-State: AOJu0Yws9Iiyo5ZZMGbVu2FkCwDfMaNXegJr0/08ma5fzCcjJmMTwuGJ
+	WDCAX1BmUHvvTL6T2YZazeu0E8w73BRiWowPB0qRziX9VzY6ykDj5aDRnw==
+X-Google-Smtp-Source: AGHT+IHwieKmMqQzpF0d5qwkxZiJ0yZ1tr6e0f2uoDSlK/bp5Ah8N9HxZ7fDo8gtqGR4ClhHrdJQ7Q==
+X-Received: by 2002:a05:620a:2119:b0:78d:7588:c19b with SMTP id l25-20020a05620a211900b0078d7588c19bmr11290215qkl.40.1713194603992;
+        Mon, 15 Apr 2024 08:23:23 -0700 (PDT)
+Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
+        by smtp.gmail.com with ESMTPSA id a19-20020a05620a439300b0078d6ef5fd07sm6398565qkp.50.2024.04.15.08.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Apr 2024 08:23:23 -0700 (PDT)
+Date: Mon, 15 Apr 2024 11:23:23 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, 
+ netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ shuah@kernel.org, 
+ petrm@nvidia.com, 
+ linux-kselftest@vger.kernel.org, 
+ willemb@google.com
+Message-ID: <661d466b7c11b_1073d29442@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240415071639.03c9cfd6@kernel.org>
+References: <20240412233705.1066444-1-kuba@kernel.org>
+ <20240412233705.1066444-2-kuba@kernel.org>
+ <661c0cae8110a_3e773229418@willemb.c.googlers.com.notmuch>
+ <20240415071639.03c9cfd6@kernel.org>
+Subject: Re: [PATCH net-next 1/5] selftests: drv-net: define endpoint
+ structures
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240412084329.30315-1-david@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: RpJoQoTbB6ln9BBhjyX_vPpnUfie5PFK
-X-Proofpoint-ORIG-GUID: avAcKcN0NG5JppCJT0GGz0-e2SO3sBMk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-15_12,2024-04-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=788 mlxscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1015 adultscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404150096
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 12, 2024 at 10:43:29AM +0200, David Hildenbrand wrote:
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../kvm/s390x/shared_zeropage_test.c          | 110 ++++++++++++++++++
->  2 files changed, 111 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/s390x/shared_zeropage_test.c
+Jakub Kicinski wrote:
+> On Sun, 14 Apr 2024 13:04:46 -0400 Willem de Bruijn wrote:
+> > 1. Cleaning up remote state in all conditions, including timeout/kill.
+> > 
+> >    Some tests require a setup phase before the test, and a matching
+> >    cleanup phase. If any of the configured state is variable (even
+> >    just a randomized filepath) this needs to be communicated to the
+> >    cleanup phase. The remote filepath is handled well here. But if
+> >    a test needs per-test setup? Say, change MTU or an Ethtool feature.
+> >    Multiple related tests may want to share a setup/cleanup.
+> > 
+> >    Related: some tests may need benefit from a lightweight stateless
+> >    check phase to detect preconditions before committing to any setup.
+> >    Again, say an Ethtool feature like rx-gro-hw, or AF_XDP metadata rx.
+> 
+> I think this falls into the "frameworking debate" we were having with
+> Petr. The consensus seems to be to keep things as simple as possible.
 
-Applied, thanks, David!
+Makes sense. We can find the sticking points as we go along.
+
+tools/testing/selftests/net already has a couple of hardware feature
+tests, that probably see little use now that they require manual
+testing (csum, gro, toeplitz, ..). Really excited to include them in
+this infra to hopefully see more regular testing across more hardware.
+
+> If we see that tests are poorly written and would benefit from extra
+> structure we should try impose some, but every local custom is
+> something people will have to learn.
+
+The above were just observations from embedding tests like those
+mentioned in our internal custom test framework. Especially with
+heterogenous hardware, a lot of it is "can we run this test on this
+platform", or "disable this feature as it interacts with the tested
+feature" (e.g., HW-GRO and csum.c).
+
+> timeout/kill is provided to us already by the kselftest harness.
+> 
+> > 2. Synchronizing peers. Often both peers need to be started at the
+> >    same time, but then the client may need to wait until the server
+> >    is listening. Paolo added a nice local script to detect a listening
+> >    socket with sockstat. Less of a problem with TCP tests than UDP or
+> >    raw packet tests.
+> 
+> Yes, definitely. We should probably add that with the first test that
+> needs it.
+
+
 
