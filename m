@@ -1,308 +1,131 @@
-Return-Path: <linux-kselftest+bounces-8011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 627FD8A5995
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 20:11:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C2D98A59D4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 20:23:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 670641C20C10
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 18:11:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5ED51F23044
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 18:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67264139CEC;
-	Mon, 15 Apr 2024 18:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2097E13AD0E;
+	Mon, 15 Apr 2024 18:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YezVzfj4"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Dev3Q9U6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FBF71B50;
-	Mon, 15 Apr 2024 18:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04CE13C91A
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 18:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713204710; cv=none; b=Mf6McYlSZlMJ+LBub+r39NOa/gov0h3goyK1QqlkY8saySP/EZU5F4VqCDlook0vaZVUtXmNgZz50/Pdi60NEcomQ+KvcKqU41UtPkwoRn0OIY06L8dFs9Agp6IcUAc/SOMctdL7a15WBTszcgmRcsPkkUbO7WsVmuouuILjxBc=
+	t=1713205294; cv=none; b=aKpmHx1pGYNLJJqm1saXdYXFLeWOwKZpZk+Y7ooKilqKUaGrn8oJ/JznA7y5TPfRvRvArutrV6jGoV6WZAUZlSStvR5daRsBz93CAGQtFt3hgsj11YH+87bufydje0sKPPmPa6kRNH5uQwcF5NrqSymuZjDxnVC5UslJ1eM7XyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713204710; c=relaxed/simple;
-	bh=jo07CigfaCbbeFT8fMA4YCCzv+cQB8i9RNH1Lx+BdsI=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=h6tDPGKOJ8qQa3ksRfUihce7jpG3KWdKC6sKozyTF7Qxjbsi5QaIFhqH4MsNR/ftkml6rsVkf5TWaZbUSNR2iBi210pJ4VTjYr4g4fWTNpTXl6C0UsbuVSCskHmpfAACAk/2A3IKrsHt9TI7ugYkyQIthAGa9Q2K17/e8GXVD5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=YezVzfj4; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713204706;
-	bh=jo07CigfaCbbeFT8fMA4YCCzv+cQB8i9RNH1Lx+BdsI=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=YezVzfj4oodAmHUI0krKFfGkqUk1aha55UXahQLtEL+f3qRRlmnpQrvGWDNXk3Ite
-	 3yqXuGo2cXXsxjw2dOyfm1Mrqcu3AjH/aY99dEgWLuOk6xhrKUwCdyiDIALtBvUock
-	 lXd76Dwt97XDzYJ8LCRcopx6E3ZMqfTtdkZug1D/zu4q7XopdWr0WnOHLEPePi/6KO
-	 YejzwXGHJY4c/uAItA3FZ28psVOSppjbLOO0NGAZ/wZxwGEOZqeArhUTzim2iLyOA1
-	 NWymJt3//H408AO3aCCGl91ye02ExIQ0FQdupseIgSnzZc/2ZQ4yFuPnonJ4Aaso7x
-	 3mtSMMgBqt5VQ==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 366E43781107;
-	Mon, 15 Apr 2024 18:11:38 +0000 (UTC)
-Message-ID: <d7ed2809-95d5-453a-9169-abf14a52b2e4@collabora.com>
-Date: Mon, 15 Apr 2024 23:12:11 +0500
+	s=arc-20240116; t=1713205294; c=relaxed/simple;
+	bh=umxCZeWTQDH3zMqqM6T6ZP1c8rPGI3duZNpIriEi1gA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JTfBh3VcFSrJ4j1LGeLdhKF3kenL6tzdmh6YZaMN8XAbljhK+tGUTN6Faqz5diHPuUgGm54Db9+jTZG8BjHWvcMOW3aOsDZzgcyNt1k30ZRFitUQ6Fyip61hDD4xxq36njEqzpiSr4vcKj6NQefDKZJupQYTS4ZZytGqJH5BSI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Dev3Q9U6; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5171a529224so4476121e87.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 11:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1713205290; x=1713810090; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yXQXQf6BkxnxREYjP8+VxnnUlawTjdMp0f5jlbh5Zh4=;
+        b=Dev3Q9U6dmX6v6OzlaIWAqGZiFlGAPqpDUfWzg1j6yNrBSHfQcy62zz+7XHqLED/hZ
+         CULwX6srrQoCH27AW97FN24nPMgsherSHNkwv8SApphzm1nxTCYVwAzIer7iq4yLOpep
+         ha357bAe/4SWiYbkhqOU66SngXp2KHzZcdfiE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713205290; x=1713810090;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yXQXQf6BkxnxREYjP8+VxnnUlawTjdMp0f5jlbh5Zh4=;
+        b=MgdJQZ9jazul7WFiGy2RNeTHRvAdOjOJvpabtR6j9DPYQUFAA7bPBapzTWgxPURu9O
+         sM2H1fiKCd/NBYXKZ9Sz3AnDwAqSYEHu4qDWeiWXsnphhDMO9Krz7du3Uv3gJWO2XH6p
+         ngxAGquK0eGrrX2B3ra6tDDCzh+E6dftk1eSSJ5htyAFjRVTJXHdRyLM48lSZlAKy3cW
+         0kW4+ycCYz5P4knsqYZeQUdaAogjiUXGaa/oIpMFs7aNKxEgW7tP2g1JESzvudD+/cc2
+         Kgeu8JjyU8vVAMIVRACXgGiOgpNklV3AoNJArn9GtBN9ROcQlXJcyEKwUzextfXlWEyQ
+         NNOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWHLoEx7pw9jpFk4bxhFzqRiG8uuvhj4jdYb+KtIcxliUPyKH/ZEKqnwGPFknbUPvKW+ZSzfV5zwuR1DIGZ8wmhdr4fmn3CqyHRvLkVBgZ4
+X-Gm-Message-State: AOJu0Yz0V/rHucsbkGILGyTwGeBNuHWcH7EFuZ2q8d7YX2hRUBh2OvD9
+	ROsOQMgMOBRhp21fqrZa4wTprwXR7+2EyiiH2bLs51VPIkX7RNLqYUJeF6QJe2yz5IycwpmsxE9
+	u6KGbrw==
+X-Google-Smtp-Source: AGHT+IG6eiEcWuYXwl3GNxt3FFVLM3LALDZ7O+iGQVvJQ02fepxLoHoeiUjpf5dR09j9ARBUHwtxJg==
+X-Received: by 2002:ac2:47fb:0:b0:518:b58c:522c with SMTP id b27-20020ac247fb000000b00518b58c522cmr3520640lfp.50.1713205290051;
+        Mon, 15 Apr 2024 11:21:30 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id p32-20020a056402502000b0056bfca6f1c0sm5115902eda.15.2024.04.15.11.21.29
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Apr 2024 11:21:29 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a46a7208eedso503517766b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 11:21:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUXXF+5cn8Tk90sjE3C85E/3D15AlGmH6KP8v384IChw/u9xQWduxqg01LiS6DtKveS9TBwxFKNXa0GhWQF/P94+3N9u38LPpNshmwbu1Zt
+X-Received: by 2002:a17:906:110e:b0:a52:320a:6320 with SMTP id
+ h14-20020a170906110e00b00a52320a6320mr6421452eja.51.1713205289339; Mon, 15
+ Apr 2024 11:21:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, jeffxu@google.com,
- jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- pedro.falcato@gmail.com, dave.hansen@intel.com,
- linux-hardening@vger.kernel.org, deraadt@openbsd.org
+References: <20240415163527.626541-1-jeffxu@chromium.org> <20240415163527.626541-2-jeffxu@chromium.org>
+ <d7ed2809-95d5-453a-9169-abf14a52b2e4@collabora.com>
+In-Reply-To: <d7ed2809-95d5-453a-9169-abf14a52b2e4@collabora.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 15 Apr 2024 11:21:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiPPBab9FkjZhFogr7rwKgZyAqU1xx9xqK4Cqkq0LdeLg@mail.gmail.com>
+Message-ID: <CAHk-=wiPPBab9FkjZhFogr7rwKgZyAqU1xx9xqK4Cqkq0LdeLg@mail.gmail.com>
 Subject: Re: [PATCH v10 1/5] mseal: Wire up mseal syscall
-To: jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org,
- jannh@google.com, sroettger@google.com, willy@infradead.org,
- gregkh@linuxfoundation.org, torvalds@linux-foundation.org, corbet@lwn.net,
- Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com,
- rdunlap@infradead.org
-References: <20240415163527.626541-1-jeffxu@chromium.org>
- <20240415163527.626541-2-jeffxu@chromium.org>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240415163527.626541-2-jeffxu@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org, 
+	jannh@google.com, sroettger@google.com, willy@infradead.org, 
+	gregkh@linuxfoundation.org, corbet@lwn.net, Liam.Howlett@oracle.com, 
+	surenb@google.com, merimus@google.com, rdunlap@infradead.org, 
+	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
+	linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 4/15/24 9:35 PM, jeffxu@chromium.org wrote:
-> From: Jeff Xu <jeffxu@chromium.org>
-> 
-> Wire up mseal syscall for all architectures.
-It isn't logical to wire up something which isn't present. Please first add
-the mseal() and then wire up. Please swap first and second patches. I've
-seen this same comment before.
+On Mon, 15 Apr 2024 at 11:11, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> It isn't logical to wire up something which isn't present
 
-> 
-> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
->  arch/arm/tools/syscall.tbl                  | 1 +
->  arch/arm64/include/asm/unistd.h             | 2 +-
->  arch/arm64/include/asm/unistd32.h           | 2 ++
->  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
->  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
->  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
->  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
->  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
->  arch/s390/kernel/syscalls/syscall.tbl       | 1 +
->  arch/sh/kernel/syscalls/syscall.tbl         | 1 +
->  arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
->  arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
->  arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
->  arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
->  include/uapi/asm-generic/unistd.h           | 5 ++++-
->  kernel/sys_ni.c                             | 1 +
->  19 files changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-> index 8ff110826ce2..d8f96362e9f8 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -501,3 +501,4 @@
->  569	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  570	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  571	common	lsm_list_modules		sys_lsm_list_modules
-> +572	common  mseal				sys_mseal
-> diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-> index b6c9e01e14f5..2ed7d229c8f9 100644
-> --- a/arch/arm/tools/syscall.tbl
-> +++ b/arch/arm/tools/syscall.tbl
-> @@ -475,3 +475,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal				sys_mseal
-> diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-> index 491b2b9bd553..1346579f802f 100644
-> --- a/arch/arm64/include/asm/unistd.h
-> +++ b/arch/arm64/include/asm/unistd.h
-> @@ -39,7 +39,7 @@
->  #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
->  #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
->  
-> -#define __NR_compat_syscalls		462
-> +#define __NR_compat_syscalls		463
->  #endif
->  
->  #define __ARCH_WANT_SYS_CLONE
-> diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-> index 7118282d1c79..266b96acc014 100644
-> --- a/arch/arm64/include/asm/unistd32.h
-> +++ b/arch/arm64/include/asm/unistd32.h
-> @@ -929,6 +929,8 @@ __SYSCALL(__NR_lsm_get_self_attr, sys_lsm_get_self_attr)
->  __SYSCALL(__NR_lsm_set_self_attr, sys_lsm_set_self_attr)
->  #define __NR_lsm_list_modules 461
->  __SYSCALL(__NR_lsm_list_modules, sys_lsm_list_modules)
-> +#define __NR_mseal 462
-> +__SYSCALL(__NR_mseal, sys_mseal)
->  
->  /*
->   * Please add new compat syscalls above this comment and update
-> diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-> index 7fd43fd4c9f2..22a3cbd4c602 100644
-> --- a/arch/m68k/kernel/syscalls/syscall.tbl
-> +++ b/arch/m68k/kernel/syscalls/syscall.tbl
-> @@ -461,3 +461,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal				sys_mseal
-> diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-> index b00ab2cabab9..2b81a6bd78b2 100644
-> --- a/arch/microblaze/kernel/syscalls/syscall.tbl
-> +++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-> @@ -467,3 +467,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal				sys_mseal
-> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> index 83cfc9eb6b88..cc869f5d5693 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> @@ -400,3 +400,4 @@
->  459	n32	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	n32	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	n32	lsm_list_modules		sys_lsm_list_modules
-> +462	n32	mseal				sys_mseal
-> diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> index 532b855df589..1464c6be6eb3 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> @@ -376,3 +376,4 @@
->  459	n64	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	n64	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	n64	lsm_list_modules		sys_lsm_list_modules
-> +462	n64	mseal				sys_mseal
-> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> index f45c9530ea93..008ebe60263e 100644
-> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> @@ -449,3 +449,4 @@
->  459	o32	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	o32	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	o32	lsm_list_modules		sys_lsm_list_modules
-> +462	o32	mseal				sys_mseal
-> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-> index b236a84c4e12..b13c21373974 100644
-> --- a/arch/parisc/kernel/syscalls/syscall.tbl
-> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
-> @@ -460,3 +460,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal				sys_mseal
-> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-> index 17173b82ca21..3656f1ca7a21 100644
-> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
-> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-> @@ -548,3 +548,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal				sys_mseal
-> diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-> index 095bb86339a7..bd0fee24ad10 100644
-> --- a/arch/s390/kernel/syscalls/syscall.tbl
-> +++ b/arch/s390/kernel/syscalls/syscall.tbl
-> @@ -464,3 +464,4 @@
->  459  common	lsm_get_self_attr	sys_lsm_get_self_attr		sys_lsm_get_self_attr
->  460  common	lsm_set_self_attr	sys_lsm_set_self_attr		sys_lsm_set_self_attr
->  461  common	lsm_list_modules	sys_lsm_list_modules		sys_lsm_list_modules
-> +462  common	mseal			sys_mseal			sys_mseal
-> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-> index 86fe269f0220..bbf83a2db986 100644
-> --- a/arch/sh/kernel/syscalls/syscall.tbl
-> +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> @@ -464,3 +464,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal				sys_mseal
-> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-> index b23d59313589..ac6c281ccfe0 100644
-> --- a/arch/sparc/kernel/syscalls/syscall.tbl
-> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
-> @@ -507,3 +507,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal 				sys_mseal
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-> index 5f8591ce7f25..7fd1f57ad3d3 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -466,3 +466,4 @@
->  459	i386	lsm_get_self_attr	sys_lsm_get_self_attr
->  460	i386	lsm_set_self_attr	sys_lsm_set_self_attr
->  461	i386	lsm_list_modules	sys_lsm_list_modules
-> +462	i386	mseal 			sys_mseal
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> index 7e8d46f4147f..52df0dec70da 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -383,6 +383,7 @@
->  459	common	lsm_get_self_attr	sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr	sys_lsm_set_self_attr
->  461	common	lsm_list_modules	sys_lsm_list_modules
-> +462 	common  mseal			sys_mseal
->  
->  #
->  # Due to a historical design error, certain syscalls are numbered differently
-> diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-> index dd116598fb25..67083fc1b2f5 100644
-> --- a/arch/xtensa/kernel/syscalls/syscall.tbl
-> +++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-> @@ -432,3 +432,4 @@
->  459	common	lsm_get_self_attr		sys_lsm_get_self_attr
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
-> +462	common	mseal 				sys_mseal
-> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> index 75f00965ab15..d983c48a3b6a 100644
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -842,8 +842,11 @@ __SYSCALL(__NR_lsm_set_self_attr, sys_lsm_set_self_attr)
->  #define __NR_lsm_list_modules 461
->  __SYSCALL(__NR_lsm_list_modules, sys_lsm_list_modules)
->  
-> +#define __NR_mseal 462
-> +__SYSCALL(__NR_mseal, sys_mseal)
-> +
->  #undef __NR_syscalls
-> -#define __NR_syscalls 462
-> +#define __NR_syscalls 463
->  
->  /*
->   * 32 bit systems traditionally used different
-> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-> index faad00cce269..d7eee421d4bc 100644
-> --- a/kernel/sys_ni.c
-> +++ b/kernel/sys_ni.c
-> @@ -196,6 +196,7 @@ COND_SYSCALL(migrate_pages);
->  COND_SYSCALL(move_pages);
->  COND_SYSCALL(set_mempolicy_home_node);
->  COND_SYSCALL(cachestat);
-> +COND_SYSCALL(mseal);
->  
->  COND_SYSCALL(perf_event_open);
->  COND_SYSCALL(accept4);
+Actually, with system calls, the rules end up being almost opposite.
 
--- 
-BR,
-Muhammad Usama Anjum
+There's no point in adding the code if it's not reachable. So adding
+the system call code before adding the wiring makes no sense.
+
+So you have two cases: add the stubs first, or add the code first.
+Neither does anything without the other.
+
+So then you go "add both in the same commit" option, which ends up
+being horrible from a "review the code" standpoint. The two parts are
+entirely different and mixing them up makes the patch very unclear
+(and has very different target audiences for reviewing it - the MM
+people really shouldn't have to look at the architecture wiring
+parts).
+
+End result: there are no "this is the logical ordering" cases.
+
+But the "wire up system calls" part actually has some reasons to be first:
+
+ - it reserves the system call number
+
+ - it adds the "when system call isn't enabled, return -ENOSYS"
+conditional system call logic
+
+so I actually tend prefer this ordering when it comes to system calls.
+
+                Linus
 
