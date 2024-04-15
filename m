@@ -1,133 +1,94 @@
-Return-Path: <linux-kselftest+bounces-8019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BBC88A5A5D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 21:06:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9511C8A5A77
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 21:18:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6235B1C22C97
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 19:06:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AA55281443
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 19:18:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A95C155A4F;
-	Mon, 15 Apr 2024 19:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D087155A57;
+	Mon, 15 Apr 2024 19:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="f7WPDdUE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/IedQxl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00333155A43
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 19:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9D7B656;
+	Mon, 15 Apr 2024 19:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713207997; cv=none; b=uE6Z09pNP6aiI8sUhMwWC+46pgqCxAbPpU/MVw+qYS3QRhbet2l0wvTqkJOjo9z2iTSPU6G8i9NPKpZzAtAUKzmQkY+EgSBq5UGrjAkcsTz6KB1zAkYtVEtx1mHT6gJvktg8jpy5UPKOrm9rXtK9CDwcvaHTri2LfQ9JtgULtZ4=
+	t=1713208696; cv=none; b=KDizSGK2SFePO6fxJKBqAukjTTQ9C42ca4qRkkmoiXxg8P/qV2UOY4O+4A2XuzoEiN+KwfgRY0dUQlP1P+RZBYnlyrMv+T/EZPHdrluxSDZIUNTyJ0lXOMgaaBnE75OaAMB4RQMUscQLoFLeXcN7Csl1+tMAT+nQaxBCDZiHk8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713207997; c=relaxed/simple;
-	bh=m0cv+vQ4FxsfF8+H/JsI6f1Z4BEinsqnnKmlS1cGG5c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RE2v6Z62jK2bf13uBS2O2GHPgKQ3rKgp2jeFQ0QbjN9h1NW3Aum5HLywAA2UcfKeTXW7dhBAs9TrUnVDNhQ7PCwLULtgJRVLROsuecYtWWs5yO7HbMsx/+oaRqwhCZML4pKzH8r1yvcY6jCCMffeR4bGYvyxfHH8hehwS7FbkoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=f7WPDdUE; arc=none smtp.client-ip=209.85.161.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5ac61cf3fffso2312318eaf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 12:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713207995; x=1713812795; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5+R/ybS65h0q9J8q+4GnE188fVdCairXnx6GTX1PC9g=;
-        b=f7WPDdUEMQ9/mrxAdxUVprhRElk7OuaHb0kE6X3Fs8T/bRw0Rn6tlLGxDeYlZSt/hs
-         5cU55log9yZMPbz+Cbaa6sMVjhO3xmYIjvsZd+5slrUk9sqZDxTvkh0e8T42E33Y7/SM
-         LgTrBQ48Zs1nHvc4sSPvD8Ay9/Bv7b66EvyyQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713207995; x=1713812795;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5+R/ybS65h0q9J8q+4GnE188fVdCairXnx6GTX1PC9g=;
-        b=Otuma3lTP/JAP85qJzIdKFZ4D9pBiwseU5yCWIuJWMeee0zLmvEYMY591g9lQu6YjQ
-         +GILEtHnLVBWsa/sjNHX7IRkHS5p10Ei2R7yCfrSKFlSgZ+/9d0ykF/gIkc5HhkfC3wX
-         XxnmDRX9p5T4atOrgJv5QAczi4Xc5yjGY2nXmULDhAztoYxRAW/wXODmTlI9ZczkDDHe
-         L3PPnd8cY7Bz6kB5loZULB6R+s+DXRiYW5Z/FHI8nUJGJmIbfsJ6rYyiyuDzOcB1mmnh
-         HeAXvla0xwWZYMRABwG+zqRDPJzDNvMd6Ic2BMuDjxEjFamnTPVT8esX9E8FKKoUClwN
-         W+dw==
-X-Forwarded-Encrypted: i=1; AJvYcCX0YgJuOavQnl/5xEypMgPH+tPSwPT9JRVseQG5i32Jx2TbaXm0BsMCop7wLcSrz64/OEuKARexRAOtA6JwCN2AHe0PS6n2E+vdbgighRSp
-X-Gm-Message-State: AOJu0Yz7SE4avrmo0csDrP9QypIF5AlroY157NEKpretGwBwwQbvfEzh
-	mqMSwbiNfJJK8CephMgN3kTZgRMKgXgwubjaTgKaAMKVwWFqHeQ5ZYhJULhzW8j0pez7PfgTZBj
-	7uQI6DInadjrEjTEEsqETfMm0RyqGYK6T33Gf
-X-Google-Smtp-Source: AGHT+IFeZVlFC3hebTTY0W9m7/2weeINMaNykhc3VQBObIAt9ccZjDkiZxllqsbIVZX9tMYAc1TB6JHY+I3uT3kYIW0=
-X-Received: by 2002:a05:6871:58aa:b0:222:8943:df2b with SMTP id
- ok42-20020a05687158aa00b002228943df2bmr12366733oac.16.1713207995078; Mon, 15
- Apr 2024 12:06:35 -0700 (PDT)
+	s=arc-20240116; t=1713208696; c=relaxed/simple;
+	bh=l43s5enpTB78eTa8KUqaYnEl1V9huOL5aW+sGjjMR8E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=a57ZbtIeHb0zGJGvqmQ4RHEDuWJ6qlSYvhYus6l2RAOmElx8InHWwXeaIWYjYdVVJ84NTSCCEmlDJJrtef77Z42EUBD0rS+321NIs7bDDTc5Otef1D1kkv+C8dp871726WlNVTiveFznDkCatcchOrPRfxr6jFVKfsksj4hmXCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/IedQxl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0808BC113CC;
+	Mon, 15 Apr 2024 19:18:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713208695;
+	bh=l43s5enpTB78eTa8KUqaYnEl1V9huOL5aW+sGjjMR8E=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=G/IedQxlmWRW3pj5FjO/T1SOt970IN5oEjjT6VSSR1V3p8jpZ0D9eqI8IZeiz8UWo
+	 kDLKUbiDP/V3kEl0bDRMXCK7XmHRe7pUNf+8t2WxbaIbYkUngaw+D6NQ7qpaq3x93f
+	 KZY0MvcDM0qWXQOFTUUy7KlNSMJe13GkuP0GE4v5HyAPagwVRIywv/cEPgHZQBre8T
+	 zt+tV4dJiuNXxiIFYMmY5o1E3POqSgQOIwdb98pC97ujJg6DNKNCg3CQRJAADXDktq
+	 3C9BQrQFV35BgTpkOjpdf5qFiwzQub3MTcKUtOnmhlZrM4HdmgSaQZWSuZ5G5m34ms
+	 LSAzjj0nXB9qA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240415163527.626541-1-jeffxu@chromium.org> <20240415163527.626541-2-jeffxu@chromium.org>
- <d7ed2809-95d5-453a-9169-abf14a52b2e4@collabora.com> <CAHk-=wiPPBab9FkjZhFogr7rwKgZyAqU1xx9xqK4Cqkq0LdeLg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiPPBab9FkjZhFogr7rwKgZyAqU1xx9xqK4Cqkq0LdeLg@mail.gmail.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Mon, 15 Apr 2024 12:06:24 -0700
-Message-ID: <CABi2SkW+X4+m2odCHKVDzYYWPgvebxX_mr97NsKCRfkx641sHA@mail.gmail.com>
-Subject: Re: [PATCH v10 1/5] mseal: Wire up mseal syscall
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, akpm@linux-foundation.org, 
-	keescook@chromium.org, jannh@google.com, sroettger@google.com, 
-	willy@infradead.org, gregkh@linuxfoundation.org, corbet@lwn.net, 
-	Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com, 
-	rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org, 
-	groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
-	dave.hansen@intel.com, linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 15 Apr 2024 22:18:07 +0300
+Message-Id: <D0KXSLRDNSGJ.2EIFU7NWC20DI@kernel.org>
+Cc: <linux-security-module@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+ <linux-integrity@vger.kernel.org>, <wufan@linux.microsoft.com>,
+ <pbrobinson@gmail.com>, <zbyszek@in.waw.pl>, <hch@lst.de>,
+ <mjg59@srcf.ucam.org>, <pmatilai@redhat.com>, <jannh@google.com>,
+ <dhowells@redhat.com>, <jikos@kernel.org>, <mkoutny@suse.com>,
+ <ppavlu@suse.com>, <petr.vorel@gmail.com>, <mzerqung@0pointer.de>,
+ <kgold@linux.ibm.com>, "Roberto Sassu" <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v4 00/14] security: digest_cache LSM
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <corbet@lwn.net>,
+ <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+ <akpm@linux-foundation.org>, <shuah@kernel.org>,
+ <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+ <mic@digikod.net>
+X-Mailer: aerc 0.17.0
+References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
 
-On Mon, Apr 15, 2024 at 11:21=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon Apr 15, 2024 at 5:24 PM EEST, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> On Mon, 15 Apr 2024 at 11:11, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
-> >
-> > It isn't logical to wire up something which isn't present
+> Integrity detection and protection has long been a desirable feature, to
+> reach a large user base and mitigate the risk of flaws in the software
+> and attacks.
 >
-> Actually, with system calls, the rules end up being almost opposite.
+> However, while solutions exist, they struggle to reach the large user
+> base, due to requiring higher than desired constraints on performance,
+> flexibility and configurability, that only security conscious people are
+> willing to accept.
 >
-> There's no point in adding the code if it's not reachable. So adding
-> the system call code before adding the wiring makes no sense.
->
-> So you have two cases: add the stubs first, or add the code first.
-> Neither does anything without the other.
->
-> So then you go "add both in the same commit" option, which ends up
-> being horrible from a "review the code" standpoint. The two parts are
-> entirely different and mixing them up makes the patch very unclear
-> (and has very different target audiences for reviewing it - the MM
-> people really shouldn't have to look at the architecture wiring
-> parts).
->
-> End result: there are no "this is the logical ordering" cases.
->
-> But the "wire up system calls" part actually has some reasons to be first=
-:
->
->  - it reserves the system call number
->
->  - it adds the "when system call isn't enabled, return -ENOSYS"
-> conditional system call logic
->
-> so I actually tend prefer this ordering when it comes to system calls.
->
-I confirm that the wire up change can be merged by its own, i.e. build
-will pass, and  -ENOSYS will be returned at runtime.
+> This is where the new digest_cache LSM comes into play, it offers
+> additional support for new and existing integrity solutions, to make
+> them faster and easier to deploy.
 
-Thanks Linus for clarifying this.
--Jeff
+Sorry for nitpicking but what are the existing integrity solutions,=20
+and how does it help with this struggle? I.e. what is the gist here?
 
-
->                 Linus
+BR, Jarkko
 
