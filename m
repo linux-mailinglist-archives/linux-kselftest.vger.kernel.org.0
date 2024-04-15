@@ -1,130 +1,199 @@
-Return-Path: <linux-kselftest+bounces-7948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE93C8A4AFE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 10:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DBFE8A4B24
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 11:10:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A575E283555
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 08:57:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8F57283DEC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 09:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 259B73BB25;
-	Mon, 15 Apr 2024 08:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5187E3D969;
+	Mon, 15 Apr 2024 09:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W9yeDeEy"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ZZZSUQJ0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01493B28F
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 08:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6C13BBEB
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 09:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713171459; cv=none; b=bsn7zF3sHgpyFeNy8qqdE1VjqUTdtqEyF8iXVoA2xpgT57KkVJViuonl/QWfAUwvG039Yf7iWZ7AuHeQUi3FJL5DuTmdnOsN7D5K+TOyw06LmWnQc5bVSZCqPwbi/vycGoHgs8gtaA4mr0apS7js6YfLaeZm5iInKvRRTQYP708=
+	t=1713172231; cv=none; b=eG0VwCjngl+U+JUHRIKkV1VslIaK137PNLHJXI9Lp8ezzBsUtBKIg/sOHTepfzmCUBQC1cSR5Zv/bBM0r4UWefRdFK4zn9SFg607kloLU8072YJi4j8ra+cKf/Ir8P2Rz8ws3OWRqiXcxmPNsgMvdl5KeanhbWOvAVPPCcSNklc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713171459; c=relaxed/simple;
-	bh=zp5e940X3u3st6xg3L//Pooz+yaI/lcgU4mUKSk2k8g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DXSu2hWmLJq6YMe28ygvEjuyTE8RY2xSWzDGqxIscUAyUc6OBn/NxUqn3kjUFNrQ5RrzTUO1hdBne5R+u1+izFqEkkPAB733/6f8th9mSthQWHU8m1G0b7ZWxQYAdL5cJYhUITgDPHy5MOyFs9QfAw2Ave+be0j2oOP5wMVJrkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W9yeDeEy; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713171456;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=DWrFJzCVUw53JFvGtRjf167nqgGMuA0cn1Z6LKZ4sTY=;
-	b=W9yeDeEyyotlHd+jq8qkI9LAWiSnVh94gSWnV0/L/gVjTAzXNvWhJp4gj8MzKQVjwg0c6K
-	YOgZDFNu+6OnD2efsF7as0B7pfCB4CJS8cjb8kmnx9PRGf0o4Wu4IIHaA10LIWM0zDmeGH
-	+t8UG1b4nbtC4vqphBlq/mUNDs6oXYs=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-492-zLIVvX8NPti2dlAfKjmU3A-1; Mon, 15 Apr 2024 04:57:35 -0400
-X-MC-Unique: zLIVvX8NPti2dlAfKjmU3A-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-343b9425ed1so676498f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 01:57:34 -0700 (PDT)
+	s=arc-20240116; t=1713172231; c=relaxed/simple;
+	bh=fZt9c9X/Jc+Z+PWYJ4t8R4woVCVorw+BDVxxptvoH5c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mrXqTmaoxgYHjD/MKyamWk/JhfTVFoAI+FVn0kOSDa4gqs1b02qoZVxIQUQrsPY6pcfTPBlHBMx5Ag+6pSLdePeoUaW5Vj15B49Eax9BJEb5r95nhN1Vv4YPmCnRK1AbpPx0zdjBlTF5t3qhW3ITACIVMWG9poESHLSoh4WwPBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ZZZSUQJ0; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-345606e8ac0so621652f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 02:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713172226; x=1713777026; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CMipTzrco8cuX1DyV3x6d9zPt5GQCAGmWbkRX0s3Bkk=;
+        b=ZZZSUQJ03c9MlL1ui6P6baX25LWjbkV2t/Tr+m6koC6TVUZRiS8xKQYkJSlQCcjS2C
+         JHZ4UhD++dHDfNscz88rSZn4ZEBN3WEb9ao5LyOjjz5+iMruZ/7Zm2oosrHSef4mtNN4
+         s4gLQ0Dt6901BpqfjG/oWiIvjWVr1qDXMCdtKLXQdLlFyqcVfARTXrRzQK9Q2GANRUxf
+         eD2csgR4vZKloLzlSDOYRgRUF1Pakd8rWHE4cz4cFqXhGEErKECnh4RsXFblohCBDtvp
+         VqHOH5u6/51eYfXBlyLVFeFqbGQzYU8l3VTHqRW/9ZAmherm5CvBRM6uRESNJ4uW1XxI
+         RZHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713171453; x=1713776253;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
+        d=1e100.net; s=20230601; t=1713172226; x=1713777026;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DWrFJzCVUw53JFvGtRjf167nqgGMuA0cn1Z6LKZ4sTY=;
-        b=XqmZVrt8BckAXArQkrVb0jH3hbjACP+qtK351O0NDGZRC6IKxguTL4gNJ5STvk6ySd
-         M6MB1j5Wim17rOrDw1cqMKnOzO+pWvZLv8oJCafXe8ExwWd0+VYZpXNoIkn/7lzgqCr4
-         O0jHiGN38JpIURvmYwSc2CLofnX3X+TG6An+i7Kh9BQm5y6RIqtT8lmp78lg+H+oAPhB
-         2m5hqnxF07X9TjAo/HohXil+pYrI4BhBKn6SaLXb16XFUuPZbKxFPGK64bnQ1eFnbKqm
-         9v27y+WivK8PWwn3+5oEe+BtskZjGwKw4bVAvDBieM5zTdFL1btIBFe73yP7qW6akv/w
-         GC4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUGygY21KYNTU/a/RtxvaHsP8HdnTn2QNvn6Gi7iYjLt1hl8mfA+7I8IngE6HkL4NaQYh/6GyfQ1MFvfVvdF/FfnBjHF7t5J/4g0Qt7zSKU
-X-Gm-Message-State: AOJu0YwujpKt1FX3BYh41+baanu1iXb5NU2A8Z4Ik85Cs7xYw3N8ZmtS
-	NdG0geK+STuup4KE0NEJR11TnvmkNOPh7ns6F+WBfwbjkT5/OtdmF3PubmiPeMOgCpX5mQ0pUs0
-	KRqbaEDWTlGxOjOkOExLhDxTvzDDaeCro+GL52je8nbBWu6GNOo02PyQOK4XWjePr3k1DeRFp1w
-	==
-X-Received: by 2002:a05:6000:1ac8:b0:343:f2e0:449c with SMTP id i8-20020a0560001ac800b00343f2e0449cmr7833932wry.0.1713171453675;
-        Mon, 15 Apr 2024 01:57:33 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF5PQarc7Sex8gSxDiriNRhUIJkY/+VHG8X+7ae2Oj9UbaObjKQ9viu3O7MIU7Cxc4rtdo2+w==
-X-Received: by 2002:a05:6000:1ac8:b0:343:f2e0:449c with SMTP id i8-20020a0560001ac800b00343f2e0449cmr7833916wry.0.1713171453342;
-        Mon, 15 Apr 2024 01:57:33 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-228-238.dyn.eolo.it. [146.241.228.238])
-        by smtp.gmail.com with ESMTPSA id z11-20020a5d44cb000000b00345920fcb45sm11486883wrr.13.2024.04.15.01.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 01:57:32 -0700 (PDT)
-Message-ID: <a80414c647940747c37a8c750bad4290ec81bd66.camel@redhat.com>
-Subject: Re: [PATCH net-next 1/5] selftests: drv-net: define endpoint
- structures
-From: Paolo Abeni <pabeni@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, shuah@kernel.org, 
-	petrm@nvidia.com, linux-kselftest@vger.kernel.org, willemb@google.com
-Date: Mon, 15 Apr 2024 10:57:31 +0200
-In-Reply-To: <20240412233705.1066444-2-kuba@kernel.org>
-References: <20240412233705.1066444-1-kuba@kernel.org>
-	 <20240412233705.1066444-2-kuba@kernel.org>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+        bh=CMipTzrco8cuX1DyV3x6d9zPt5GQCAGmWbkRX0s3Bkk=;
+        b=wwIooRP+4AXD7aaZNFBw0Lr3MPQu5Nu84TGFzpWkUGaChohSc/xaA8JwAULfaIGxuh
+         thN8wIblsbSKoUCFzwsTyVvY7SsuGTCm2YoJqbD3spinrwXL67I3XQ4CV6/qdGI0UmMM
+         m3CLzF4B2nGxncKD4jnuTnDi3w4BdE0toVxSFrO0Gwv8Gtl+1ac/flnVzX2FMfdt2Kg2
+         Ftcz0XQwLW+u4V1vwAYB5+9IJhg1vU02wNzav0lBC3girMSuHXhan9dexFlQPaVJK+aV
+         C6yNsxrTHf9Czd3zsEmVHAGAEW+qUpY+bLvBMdV1HQmM2U7TRkxFLvSJJDEY0Y2h7nN1
+         SaNA==
+X-Forwarded-Encrypted: i=1; AJvYcCXtMwZqpdDa5GMQcK8rQ7aBsHWHQ8ANNW8BeXDCZCH16PvdzRNz6RrgU1E+1PUQaZLVdX+TSrP6tOANfqp2XIakPLaqaE2Zn15ICZLRLHLc
+X-Gm-Message-State: AOJu0YwPmeEzfzQHv8aLSch4QYGTPEBr4SyNVH6uFyctyUUpO3kPhO7L
+	4AmtyL3v8pTgJwo593FhrzLtXFvVG4Rfd47u4FHN24m1M1BClpUW1ofTGmKF4OU=
+X-Google-Smtp-Source: AGHT+IFOI8wiMfFK+eh+wkDTy9pH4EpksT9wRNII+klZpSBWS3ghE8Ipz2Lv/Q5ZldsUWaH3Q3GfEg==
+X-Received: by 2002:a05:600c:3b1f:b0:416:7b2c:df05 with SMTP id m31-20020a05600c3b1f00b004167b2cdf05mr6832257wms.1.1713172226355;
+        Mon, 15 Apr 2024 02:10:26 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:999:a3a0:b1f5:d56c:abf9:b394? ([2a01:e0a:999:a3a0:b1f5:d56c:abf9:b394])
+        by smtp.gmail.com with ESMTPSA id gw7-20020a05600c850700b004146e58cc35sm18937831wmb.46.2024.04.15.02.10.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Apr 2024 02:10:25 -0700 (PDT)
+Message-ID: <5eda3278-24bc-4c17-a741-523ad5ff79f7@rivosinc.com>
+Date: Mon, 15 Apr 2024 11:10:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/10] riscv: add ISA extension parsing for Zcmop
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Deepak Gupta <debug@rivosinc.com>, Conor Dooley <conor@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
+ Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+References: <20240410091106.749233-1-cleger@rivosinc.com>
+ <20240410091106.749233-8-cleger@rivosinc.com>
+ <ZhcFeVYUQJmBAKuv@debug.ba.rivosinc.com>
+ <20240410-jawless-cavalry-a3eaf9c562a4@spud>
+ <20240410-judgingly-appease-5df493852b70@spud>
+ <ZhcTiakvfbjb2hon@debug.ba.rivosinc.com>
+ <1287e6e9-cb8e-4a78-9195-ce29f1c4bace@rivosinc.com>
+ <20240411-superglue-errant-b32e5118695f@wendy>
+ <c86f9fa8-e273-4509-83fa-f21d3265d5c9@rivosinc.com>
+ <20240411-backwater-opal-00c9aed2231e@wendy>
+Content-Language: en-US
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <20240411-backwater-opal-00c9aed2231e@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2024-04-12 at 16:37 -0700, Jakub Kicinski wrote:
-> +class Endpoint:
-> +    def __init__(self, name):
-> +        self.name =3D name
-> +        self._tmpdir =3D None
-> +
-> +    def __del__(self):
-> +        if self._tmpdir:
-> +            self.cmd("rm -rf " + self._tmpdir)
-> +            self._tmpdir =3D None
-> +
-> +    def cmd(self, comm, *args):
-> +        c =3D cmd("ssh " + self.name + " " + shlex.quote(comm), *args)
-> +        return c.stdout, c.stderr, c.ret
 
-If I read correctly the above will do a full ssh handshake for each
-command. If the test script/setup is complex, I think/fear the overhead
-could become a bit cumbersome.
 
-Would using something alike Fabric to create a single connection at
-endpoint instantiation time and re-using it for all the command be too
-much?=20
+On 11/04/2024 13:53, Conor Dooley wrote:
+> On Thu, Apr 11, 2024 at 11:08:21AM +0200, Clément Léger wrote:
+>>>> If we consider to have potentially broken isa string (ie extensions
+>>>> dependencies not correctly handled), then we'll need some way to
+>>>> validate this within the kernel.
+>>>
+>>> No, the DT passed to the kernel should be correct and we by and large we
+>>> should not have to do validation of it. What I meant above was writing
+>>> the binding so that something invalid will not pass dtbs_check.
+>>
+>> Acked, I was mainly answering Deepak question about dependencies wrt to
+>> using __RISCV_ISA_EXT_SUPERSET() which does not seems to be relevant
+>> since we expect a correct isa string to be passed.
+> 
+> Ahh, okay.
+> 
+>> But as you stated, DT
+>> validation clearly make sense. I think a lot of extensions strings would
+>> benefit such support (All the Zv* depends on V, etc).
+> 
+> I think it is actually as simple something like this, which makes it
+> invalid to have "d" without "f":
+> 
+> | diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> | index 468c646247aa..594828700cbe 100644
+> | --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> | +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> | @@ -484,5 +484,20 @@ properties:
+> |              Registers in the AX45MP datasheet.
+> |              https://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
+> |  
+> | +allOf:
+> | +  - if:
+> | +      properties:
+> | +        riscv,isa-extensions:
+> | +          contains:
+> | +            const: "d"
+> | +          not:
+> | +            contains:
+> | +              const: "f"
+> | +    then:
+> | +      properties:
+> | +        riscv,isa-extensions:
+> | +          false
+> | +
+> | +
+> |  additionalProperties: true
+> |  ...
+> 
+> If you do have d without f, the checker will say:
+> cpu@2: riscv,isa-extensions: False schema does not allow ['i', 'm', 'a', 'd', 'c']
+> 
+> At least that's readable, even though not clear about what to do. I wish
 
+That looks really readable indeed but the messages that result from
+errors are not so informative.
+
+It tried playing with various constructs and found this one to yield a
+comprehensive message:
+
++allOf:
++  - if:
++      properties:
++        riscv,isa-extensions:
++          contains:
++            const: zcf
++          not:
++            contains:
++              const: zca
++    then:
++      properties:
++        riscv,isa-extensions:
++          items:
++            anyOf:
++              - const: zca
+
+arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dtb: cpu@0:
+riscv,isa-extensions:10: 'anyOf' conditional failed, one must be fixed:
+        'zca' was expected
+        from schema $id: http://devicetree.org/schemas/riscv/extensions.yaml
+
+Even though dt-bindings-check passed, not sure if this is totally a
+valid construct though...
 
 Thanks,
 
-Paolo
+Clément
 
+> the former could be said about the wall of text you get for /each/
+> undocumented entry in the string.
 
