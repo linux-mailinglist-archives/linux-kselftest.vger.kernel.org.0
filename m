@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-7981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-7982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB9E88A53EF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 414338A53FF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 16:33:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CF65282C59
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:32:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECA7E28471D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Apr 2024 14:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF727E0F4;
-	Mon, 15 Apr 2024 14:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C49F84D08;
+	Mon, 15 Apr 2024 14:30:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA78478C77;
-	Mon, 15 Apr 2024 14:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E69B381C4;
+	Mon, 15 Apr 2024 14:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713191389; cv=none; b=kyN4Iff3YPT/d/pNQWFBabW0toudDla/fmeu7rSRN3XPTs4b5E72OHlHya9SfrQvA8q7sw5/nXpAgfWQdUf0+On+ZaW1wwanoO8poHB1YTflc/HtyyK2X9YonvpB+qmnYe2mMncD2DirAJHFNXenu0oxIorTK/0vbd4hVc2G05E=
+	t=1713191409; cv=none; b=mBcqRrCiAUTgF5sQDSXDyeniYVg5TjK/scnfrqJr2TZyC+jAE5PBSebFe+9y9KFWBvQVLoyVbwJCGquMQe3H72+VuYfp+oddnL5tHk18KBiezYXXsxWl2ZTMqLRSRemFGCFrFcxeDQWjnVMW7hImf7g2PZboDwP0FgPKq/tFERQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713191389; c=relaxed/simple;
-	bh=uW5ce0MT/s8qLg2fU8N1Qb8qkkjPn4e04mkOujCtXMQ=;
+	s=arc-20240116; t=1713191409; c=relaxed/simple;
+	bh=YzQ4i5qrhN9V57ocPuGAtqUzHjSjdvr1xff+mlGg8B0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Xb2DPMFop3oIEDrko0XB46wrxe1uh44tgiV3slyHFr1xT531NU43JCG6JuHkhSQKaXtMT4Y9sK1U7TMSdcajDK03+YeMZ0WVJmxE0dk6ObhO5QxgYHFiGpJQvN8PkgX8zAaHKew9CEGF+CERqay6IOLUp6BAi4HEsqgv797shgg=
+	 MIME-Version; b=tm7jqgNMY/6U86We0GyzYkRe0qbcFYdXEqGoBcPQES1Hj55R1FLMqgRLOq4X+2NfH9XlD/ImV8lBZAIUwcbJsvXGsYaK1wV9LwflFo9zjio4UcDp4pouLidcmZc0hvcR3qYob2aX++q6MZ9dt0nSGJNBPiQlI29AaC32smIUZ1Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VJ8K80HcVz9xGnM;
-	Mon, 15 Apr 2024 22:13:16 +0800 (CST)
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VJ8KY0xlnz9v7HR;
+	Mon, 15 Apr 2024 22:13:37 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 7DB851406BF;
-	Mon, 15 Apr 2024 22:29:39 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id AC8BB1405DF;
+	Mon, 15 Apr 2024 22:29:55 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHshqQOR1mrL1NBg--.21472S5;
-	Mon, 15 Apr 2024 15:29:38 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwAHshqQOR1mrL1NBg--.21472S6;
+	Mon, 15 Apr 2024 15:29:54 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	paul@paul-moore.com,
@@ -71,9 +71,9 @@ Cc: linux-security-module@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 13/14] selftests/digest_cache: Add selftests for digest_cache LSM
-Date: Mon, 15 Apr 2024 16:24:35 +0200
-Message-Id: <20240415142436.2545003-14-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v4 14/14] docs: Add documentation of the digest_cache LSM
+Date: Mon, 15 Apr 2024 16:24:36 +0200
+Message-Id: <20240415142436.2545003-15-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
 References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
@@ -84,2152 +84,828 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwAHshqQOR1mrL1NBg--.21472S5
-X-Coremail-Antispam: 1UD129KBjvAXoWfKFWxuw1Dtr1rtFWxCr47twb_yoWxGw15Xo
-	Za9r4UJw18Wr17CFWkuF13Jay5Ww43t34xJryrXrWqqF1FyryUK3Wvka15Jry5Wryrtr9x
-	ZFsaqw13ArW8tr97n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUOe7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
-	Wl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
-	xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-	WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-	AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr
-	1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0xZFpf9x
-	07j4T5LUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5x16AABs6
+X-CM-TRANSID:LxC2BwAHshqQOR1mrL1NBg--.21472S6
+X-Coremail-Antispam: 1UD129KBjvAXoWftryDGw1xCF1rGFy8AryxKrg_yoW5urWUGo
+	ZY9r4jyw1UKr15ZF4kCFnrAw13GwnYgwn7Ar18Kw45WF1rXFW5J3WDC3WUGFW3Jr4rGr9r
+	A348J3yUJF1Utrn3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUOx7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
+	0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x02
+	67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+	C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+	7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
+	kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+	6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wr
+	v_Gr1UMIIYY7kG6xAYrwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
+	CI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnI
+	WIevJa73UjIFyTuYvjxU9eOJUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj5h0wgABsW
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add tests to verify the correctness of the digest_cache LSM, in all_test.c.
-
-Add the kernel module digest_cache_kern.ko, to let all_test call the API
-of the digest_cache LSM through the newly introduced digest_cache_test file
-in securityfs.
-
-Test coverage information:
-
-File 'security/digest_cache/notifier.c'
-Lines executed:100.00% of 31
-File 'security/digest_cache/reset.c'
-Lines executed:98.36% of 61
-File 'security/digest_cache/main.c'
-Lines executed:90.29% of 206
-File 'security/digest_cache/modsig.c'
-Lines executed:42.86% of 21
-File 'security/digest_cache/htable.c'
-Lines executed:93.02% of 86
-File 'security/digest_cache/populate.c'
-Lines executed:92.86% of 56
-File 'security/digest_cache/verif.c'
-Lines executed:89.74% of 39
-File 'security/digest_cache/dir.c'
-Lines executed:90.62% of 96
-File 'security/digest_cache/secfs.c'
-Lines executed:57.14% of 21
-File 'security/digest_cache/parsers/tlv.c'
-Lines executed:79.75% of 79
-File 'security/digest_cache/parsers/rpm.c'
-Lines executed:88.46% of 78
+Add the documentation of the digest_cache LSM in Documentation/security.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- .../testing/selftests/digest_cache/.gitignore |   3 +
- tools/testing/selftests/digest_cache/Makefile |  24 +
- .../testing/selftests/digest_cache/all_test.c | 815 ++++++++++++++++++
- tools/testing/selftests/digest_cache/common.c |  78 ++
- tools/testing/selftests/digest_cache/common.h | 135 +++
- .../selftests/digest_cache/common_user.c      |  47 +
- .../selftests/digest_cache/common_user.h      |  17 +
- tools/testing/selftests/digest_cache/config   |   1 +
- .../selftests/digest_cache/generators.c       | 248 ++++++
- .../selftests/digest_cache/generators.h       |  19 +
- .../selftests/digest_cache/testmod/Makefile   |  16 +
- .../selftests/digest_cache/testmod/kern.c     | 564 ++++++++++++
- 14 files changed, 1969 insertions(+)
- create mode 100644 tools/testing/selftests/digest_cache/.gitignore
- create mode 100644 tools/testing/selftests/digest_cache/Makefile
- create mode 100644 tools/testing/selftests/digest_cache/all_test.c
- create mode 100644 tools/testing/selftests/digest_cache/common.c
- create mode 100644 tools/testing/selftests/digest_cache/common.h
- create mode 100644 tools/testing/selftests/digest_cache/common_user.c
- create mode 100644 tools/testing/selftests/digest_cache/common_user.h
- create mode 100644 tools/testing/selftests/digest_cache/config
- create mode 100644 tools/testing/selftests/digest_cache/generators.c
- create mode 100644 tools/testing/selftests/digest_cache/generators.h
- create mode 100644 tools/testing/selftests/digest_cache/testmod/Makefile
- create mode 100644 tools/testing/selftests/digest_cache/testmod/kern.c
+ Documentation/security/digest_cache.rst | 763 ++++++++++++++++++++++++
+ Documentation/security/index.rst        |   1 +
+ MAINTAINERS                             |   1 +
+ 3 files changed, 765 insertions(+)
+ create mode 100644 Documentation/security/digest_cache.rst
 
+diff --git a/Documentation/security/digest_cache.rst b/Documentation/security/digest_cache.rst
+new file mode 100644
+index 000000000000..f7c2b1bcf25b
+--- /dev/null
++++ b/Documentation/security/digest_cache.rst
+@@ -0,0 +1,763 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++================
++Digest_cache LSM
++================
++
++Introduction
++============
++
++Integrity detection and protection has long been a desirable feature, to
++reach a large user base and mitigate the risk of flaws in the software and
++attacks.
++
++However, while solutions exist, they struggle to reach the large user base,
++due to requiring higher than desired constraints on performance,
++flexibility and configurability, that only security conscious people are
++willing to accept.
++
++This is where the new digest_cache LSM comes into play, it offers
++additional support for new and existing integrity solutions, to make them
++faster and easier to deploy.
++
++
++Motivation
++==========
++
++The digest_cache LSM helps to address two important shortcomings of the
++Integrity Measurement Architecture (IMA): predictability of the Platform
++Configuration Registers (PCRs), and the provisioning of reference values to
++compare the calculated file digest against.
++
++Remote attestation, according to Trusted Computing Group (TCG)
++specifications, is done by replicating the PCR extend operation in
++software with the digests in the event log (in this case the IMA
++measurement list), and by comparing the obtained value with the PCR value
++signed by the TPM with the quote operation.
++
++Due to how the extend operation is performed, if measurements are done in
++a different order, the final PCR value will be different. That means that
++if measurements are done in parallel, there is no way to predict what the
++final PCR value will be, making impossible to seal data to a PCR value. If
++the PCR value was predictable, a system could for example prove its
++integrity by unsealing and using its private key, without sending every
++time the full list of measurements.
++
++Provisioning reference values for file digests is also a difficult task.
++The solution so far was to add file signatures to RPM packages, and
++possibly to DEB packages, so that IMA can verify them. While this undoubtly
++works, it also requires Linux distribution vendors to support the feature
++by rebuilding all their packages, and eventually extending their PKI to
++perform the additional signatures. It could also require developers extra
++work to deal with the additional data.
++
++On the other hand, since often packages carry the file digests themselves,
++it won't be actually needed to add file signatures. If the kernel was able
++to extract the file digests by itself, all the tasks mentioned above for
++the Linux distribution vendors won't be needed too. All current and past
++Linux distributions can be easily retrofitted to enable IMA appraisal with
++the file digests from the packages.
++
++Narrowing down the scope of a package parser to only extract specific
++information makes it small enough to accurately verify that it cannot harm
++the kernel. In fact, the parsers included with the digest_cache LSM have
++been verified with the formal verification tool Frama-C, albeit with a
++limited buffer size (the verification time grows considerably with bigger
++buffer sizes). The parsers with the Frama-C assertions are available here:
++
++https://github.com/robertosassu/rpm-formal/
++
++Frama-C asserts that the parsers don't read beyond their assigned buffer
++for any byte combination.
++
++An additional mitigation against corrupted digest lists consists in
++verifying the signature of the package first, before attempting to extract
++the file digests.
++
++
++Solution
++========
++
++The digest_cache LSM can help IMA to extend a PCR in a deterministic way.
++If IMA knows that a file comes from a Linux distribution, it can measure
++files in a different way: measure the list of digests coming from the
++distribution (e.g. RPM package headers), and subsequently measure a file if
++it is not found in that list.
++
++If the system executes known files, it does not matter in which order they
++are executed, because the PCR is not extended. That however means that the
++lists of digests must be measured in a deterministic way. The digest_cache
++LSM has a prefetching mechanism to make this happen, consisting in
++sequentially reading digest lists in a directory until it finds the
++requested one.
++
++The resulting IMA measurement list however has a disadvantage: it does not
++tell to remote verifiers whether files with digest in the measured digest
++lists have been accessed or not and when. Also the IMA measurement list
++would change after a software update.
++
++The digest_cache LSM can also help IMA for appraisal. Currently, IMA has
++to evaluate the signature of each file individually, and expects that the
++Linux vendors include those signatures together with the files in the
++packages.
++
++With the digest_cache LSM, IMA can simply lookup in the list of digests
++extracted from package headers, once the signature of those headers has
++been verified. The same approach can be followed by other LSMs, such as
++Integrity Policy Enforcement (IPE).
++
++
++Design
++======
++
++Digest cache
++------------
++
++Main idea
++~~~~~~~~~
++
++The digest_cache LSM extracts digests from a file, referred to as a digest
++list, and stores them in kernel memory in a structure named digest_cache.
++
++The digest_cache structure contains a set of per algorithm hash tables,
++where digests are stored, the digest list pathname, a reference counter,
++the integrity state of the digest list, and the inodes for which the digest
++cache is used.
++
++If a digest cache is created from a directory, its hash tables are empty
++and instead it contains a snapshot of the directory entries discovered with
++iterate_dir().
++
++The integrity state of digest caches created from regular files is
++evaluated independently by other LSMs, for example by verifying the
++signature of the digest list, and is provided to the digest_cache LSM
++through a dedicated API.
++
++The extracted digests can be used as reference values initially for
++integrity verification of file data and at a later stage for integrity
++verification of file metadata.
++
++The digest_cache LSM can extract digests from a digest list, only if it has
++a parser for its format. Currently, it supports a TLV-based and the RPM
++package header formats, and can support more in the future.
++
++
++Digest list lookup
++~~~~~~~~~~~~~~~~~~
++
++In order to build a digest cache and return it to the caller for performing
++a query, the digest_cache LSM must know which digest list to use. There are
++a few alternatives.
++
++(1) There is only one digest list and its path is specified as default
++location at build-time in the kernel configuration or at run-time through
++securityfs. The digest_cache LSM builds a single digest cache from that
++digest list and returns it to the caller.
++
++(2) The default location is a directory containing multiple digest lists.
++Unlike (1), the digest_cache LSM does not know which digest list to select,
++and creates an iterator with a snapshot of the directory entries. During a
++query, the digest_cache LSMs iteratively creates a digest cache for each
++directory entry and searches for the digest until there is a match.
++
++(3) Same as (2), but the digest list file name is stored as value of the
++new security.digest_list xattr in the inode for which the digest cache is
++requested. The digest_cache LSM can directly retrieve the digest list using
++the default directory as the base path and the xattr value as last path
++component.
++
++(4) Similar to (3), but the digest_cache LSM still creates a directory
++iterator like in (2). It reads digest lists with a file name that does not
++match the security.digest_list xattr, to trigger a measurement, and creates
++a digest cache from the matching one. This is also known as the prefetching
++mechanism, introduced later.
++
++
++Digest cache creation
++~~~~~~~~~~~~~~~~~~~~~
++
++Digest list naming convention
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++Once the digest_cache LSM selected the digest list to use, it reads the
++file and calls the appropriate parser to extract the digests, based on the
++filename prefix.
++
++The expected digest list file name format is::
++
++ <digest list format>-<file name>
++
++where format can be for example ``tlv`` or ``rpm``, which make the
++digest_cache LSM call respectively the TLV or RPM parser.
++
++Alternatively, also the following format is supported::
++
++ <seq num>-<digest list format>-<file name>
++
++``<seq num>-`` defines how directory entries should be ordered in the
++directory iterator.
++
++Digest cache create API
++^^^^^^^^^^^^^^^^^^^^^^^
++
++The digest_cache LSM offers an API for parsers to initialize and add
++digests to the digest cache hash tables.
++
++It exposes digest_cache_htable_init() to initialize a hash table for a
++given algorithm, and to size it depending on the number of digests to add,
++normally known by the parsers before adding digests.
++
++The number of hash table slots is determined by dividing the number of
++digests to add by the desired average collision depth. The latter can be
++changed in the kernel configuration, to have a different tradeoff between
++digest lookup speed and memory occupation.
++
++It also exposes digest_cache_htable_add(), to let parsers add extracted
++digests to the new hash table. If parsers need to add digests created with
++different algorithms, they can create as many hash tables as they need.
++
++Finally, parsers can also call digest_cache_htable_lookup() to lookup a
++digest in the passed digest_cache.
++
++Digest cache caching on create
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++Since the same digest cache can be requested multiple times for
++verification of different inodes (e.g. installed files belonging to the
++same software package), a pointer to the newly created digest cache (named
++dig_owner) is stored in the inode security blob of the digest list.
++
++Dig_owner check and assignment is protected by the dig_owner_mutex, also
++stored in the inode security blob. The first requestor instantiates and
++populates the new digest cache. The other lock contenders wait until the
++lock is released and until the first requestor clears the INIT_IN_PROGRESS
++bit in the digest cache bit mask. The latter is needed to avoid lock
++inversion with the code tracking changes on digest lists/default directory.
++
++
++Digest cache request
++~~~~~~~~~~~~~~~~~~~~
++
++Users of the digest_cache LSM can request a digest cache by calling
++digest_cache_get(), passing the inode for which they need a digest cache,
++and can release it with digest_cache_put() once they are done. As mentioned
++above, the digest_cache LSM determines which digest list the digest cache
++should be built/retrieved from.
++
++Digest cache caching on request
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++To avoid having to find the digest list inode for every digest_cache_get()
++call, also a pointer to the retrieved digest cache (named dig_user) is
++stored in the security blob of the inode for which the digest cache is
++requested.
++
++Dig_user is also protected by its own dig_user_mutex (stored in the same
++inode security blob) for check and assignment. Multiple requestors of a
++digest cache for the same inode have to wait until the first requestor
++finds the digest list inode and obtains the digest cache.
++
++Digest cache reference count
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++Since digest cache pointers are stored in the inode security blobs and
++returned to the digest_cache_get() callers, the digest_cache LSM must track
++how many pointers are around, to avoid freeing a digest cache while it is
++still in use.
++
++The digest_cache LSM records the number of such pointers in a per digest
++cache reference count, and increments it every time the pointer is stored
++in a new inode security blob (either dig_owner or dig_user), or returned by
++digest_cache_get(), and decrements it when an inode is evicted from memory
++or a caller of digest_cache_get() calls digest_cache_put().
++
++
++Digest lookup
++~~~~~~~~~~~~~
++
++After a caller of digest_cache_get() obtains the desired digest cache, it
++can perform operations on it. The most important operation is querying for
++a digest, which can be performed by calling digest_cache_lookup().
++
++digest_cache_lookup() returns a numeric reference (digest_cache_found_t
++type), representing the digest cache containing the queried digest. It is
++not a pointer, to avoid it being accidentally passed to digest_cache_put().
++
++If the digest_cache LSM took the option (2) (multiple digest lists in the
++default directory but which one to use is unknown), digest_cache_get()
++returns an iterator instead, to be passed to digest_cache_lookup().
++
++Only the latter finally returns the digest cache containing the searched
++digest. If the digest is not found, digest_cache_lookup() returns zero.
++
++
++Verification data
++~~~~~~~~~~~~~~~~~
++
++Until now, the caller of the digest_cache LSM is assumed to always trust
++the returned digest cache from being created from authentic data. Or, there
++are security measures in place but not able to correlate reading a digest
++list with building a digest cache from it.
++
++The digest_cache LSM introduces a new mechanism for integrity providers to
++store verification data, i.e. their evaluation result of a digest list. It
++also allows callers of digest_cache_get() to later retrieve that
++information and decide whether or not they should use that digest cache.
++
++It achieves that by reserving space in the file descriptor security blob,
++and by setting the digest cache pointer in the digest list file descriptor.
++
++The digest_cache LSM supports multiple integrity providers at the same
++time, since multiple LSMs can implement the kernel_post_read_file LSM hook.
++Each provider is expected to choose an unique ID, so that the verification
++data can be given back through the same ID.
++
++Those integrity providers should implement the kernel_post_read_file LSM
++hook and call digest_cache_verif_set(), passing the digest list file
++descriptor, the unique ID and their evaluation result of the digest list.
++
++Callers of digest_cache_get() can call digest_cache_verif_get() to get
++the verification data, passing the returned digest cache pointer and the
++desired integrity provider ID. However, if the digest cache returned was an
++iterator, that call results in a NULL pointer, since the iterator is
++not populated with any digest list.
++
++In that case, those callers have to call digest_cache_lookup() to get the
++numeric reference of the digest cache containing the digest (thus populated
++from a digest list), and pass it to digest_cache_verif_get() after
++conversion to a digest cache pointer (with digest_cache_from_found_t()).
++
++
++Tracking changes
++~~~~~~~~~~~~~~~~
++
++After a digest cache has been built and its pointer has been set in the
++inode security blob, it might happen that there are changes in the digest
++lists, in the default directory and in the value of the
++security.digest_list xattr.
++
++All these changes may influence which digest cache is returned to callers
++of digest_cache_get() and which digests in the digest cache might be
++searched.
++
++The digest_cache LSM monitors such changes by registering to multiple LSM
++hooks (path_truncate, file_release, inode_unlink, inode_rename,
++inode_post_setxattr and inode_post_removexattr). Except for the last two,
++it accesses the dig_owner pointer in the affected inode security blob and
++sets the RESET bit.
++
++The next time that digest cache is requested, both dig_user and dig_owner
++are passed to digest_cache_put() and cleared. A new digest cache is
++created, as if there wasn't one in the first place.
++
++For the last two hooks, the RESET_USER bit is set instead, to limit
++clearing dig_user, since only retrieval of the digest list could change
++after modifying the security.digest_list xattr, and not the digest cache
++itself.
++
++Nothing changes for callers of digest_cache_get(), since they still hold
++the old digest cache pointer, despite that has been replaced in the inode
++security blobs. The old digest cache pointer will not be freed until those
++callers also call digest_cache_put() and the reference count reaches zero.
++
++Notify changes
++~~~~~~~~~~~~~~
++
++While new calls to digest_cache_get() result in a new digest cache to be
++returned, resetting the previous digest cache does not reflect in a reset
++of possibly cached security decisions based on that digest cache.
++
++IMA for example, would not be able to recheck a file digest against a
++modified digest cache, since it is not aware of the reset in the first
++place.
++
++Introduce a subscription-based notification mechanism, that dispatches to
++the interested parties events which include the type of event (e.g. reset)
++and the digest cache and inodes affected. A user of the digest_cache LSM
++can become a subscriber by calling digest_cache_register_notifier() and can
++unsubscribe by calling digest_cache_unregister_notifier().
++
++During a digest_cache_get(), add the inode for which the digest cache was
++requested to a notification list of the same digest cache. When the RESET
++bit is set, emit a event for each inode in that notification list, so that
++IMA and the other integrity providers can eventually invalidate their
++cached security decision on that inode.
++
++On a file digest cache reset, notify also users of the parent directory
++digest cache, since they might have looked up digests through that digest
++cache. Those users will see changes by performing another lookup.
++
++When the RESET_USER bit is set, emit a notification just for the inode
++signalled by the LSM hook, since the operation causing a reset
++(set/removexattr) only affects the link between the inode and the digest
++cache, and not the digest cache itself.
++
++Prefetching mechanism
++~~~~~~~~~~~~~~~~~~~~~
++
++One of the objectives of the digest_cache LSM is to make a TPM PCR
++predictable, by having digest lists measured in a deterministic order.
++Without the prefetching mechanism, digest lists are measured in a
++non-deterministic order, since the inodes for which a digest cache can be
++requested are accessed in a non-deterministic order too.
++
++The prefetching mechanism, when enabled by setting the new
++security.dig_prefetch xattr to 1, forces digest lists to be looked up by
++their file name in the list of the directory entries of the iterator
++created for the default directory.
++
++The predictability of the PCR is ensured by reading both matching and
++non-matching digest lists during the search, so that integrity providers
++can measure them, and by only creating a digest cache for the matching one.
++In this way, it does not matter if a digest list later in the list of
++directory entries is requested before a earlier one, since all digest lists
++until that point are measured anyway.
++
++However, while this mechanism ensures predictability of the PCR, it could
++also introduce significant latencies, especially if the matching digest
++list is very late in the list of directory entries. Before a digest cache
++is returned from that digest list, hundreds or thousands of digest lists
++could have to be read first.
++
++Then, the ``[<seq num>-]`` prefix in the digest list file name comes at
++hand, since it determines the order of directory entries in the iterator
++(entries with lower seq nums are before entries with higher seq nums).
++Digest lists without that prefix are added at the end of iterator list,
++in the same order as iterate_dir() shows them.
++
++With ``[<seq num>-]``, the latency of digest cache creation when the
++prefetching mechanism is enabled can be significantly reduced for example
++by ordering digest lists by their appearance in the IMA measurement list,
++since that list reflects the order in which digest lists are requested at
++boot.
++
++While digest lists can be requested in a slightly different order due to
++the non-deterministic access to inodes, the differences should be minimal,
++causing only fewer extra digest lists to be read before the right one is
++found.
++
++Ordering directory entries can also improve digest queries requiring
++iteration on all digest lists in the default directory. If directory
++entries are ordered by their appearance in the IMA measurement list, a
++digest is found faster because most likely it is searched in the same
++order as when the IMA measurement list was recorded, and thus its
++digest list comes earlier than the others in the list of the directory
++entries of the iterator.
++
++
++Data structures and API
++=======================
++
++Data structures
++---------------
++
++These are the data structures defined and used internally by the
++digest_cache LSM.
++
++.. kernel-doc:: security/digest_cache/internal.h
++
++
++Public API
++----------
++
++This API is meant to be used by users of the digest_cache LSM.
++
++.. kernel-doc:: include/linux/digest_cache.h
++		:identifiers: digest_cache_found_t
++		              digest_cache_from_found_t
++
++.. kernel-doc:: security/digest_cache/main.c
++		:identifiers: digest_cache_get digest_cache_put
++
++.. kernel-doc:: security/digest_cache/htable.c
++		:identifiers: digest_cache_lookup
++
++.. kernel-doc:: security/digest_cache/verif.c
++		:identifiers: digest_cache_verif_set digest_cache_verif_get
++
++.. kernel-doc:: security/digest_cache/notifier.c
++		:identifiers: digest_cache_register_notifier
++			      digest_cache_unregister_notifier
++
++
++Parser API
++----------
++
++This API is meant to be used by digest list parsers.
++
++.. kernel-doc:: security/digest_cache/htable.c
++		:identifiers: digest_cache_htable_init
++		              digest_cache_htable_add
++			      digest_cache_htable_lookup
++
++
++Digest List Formats
++===================
++
++tlv
++---
++
++The Type-Length-Value (TLV) format was chosen for its extensibility.
++Additional fields can be added without breaking compatibility with old
++versions of the parser.
++
++The layout of a tlv digest list is the following::
++
++ [header: DIGEST_LIST_FILE, num fields, total len]
++ [field: DIGEST_LIST_ALGO, length, value]
++ [field: DIGEST_LIST_ENTRY#1, length, value (below)]
++  |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
++  |- [DIGEST_LIST_ENTRY_DIGEST#1, length, file digest]
++  |- [DIGEST_LIST_ENTRY_PATH#1, length, file path]
++ [field: DIGEST_LIST_ENTRY#N, length, value (below)]
++  |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
++  |- [DIGEST_LIST_ENTRY_DIGEST#N, length, file digest]
++  |- [DIGEST_LIST_ENTRY_PATH#N, length, file path]
++
++DIGEST_LIST_ALGO is a field to specify the algorithm of the file digest.
++DIGEST_LIST_ENTRY is a nested TLV structure with the following fields:
++DIGEST_LIST_ENTRY_DIGEST contains the file digest; DIGEST_LIST_ENTRY_PATH
++contains the file path.
++
++
++rpm
++---
++
++The rpm digest list is basically a subset of the RPM package header.
++Its format is::
++
++ [RPM magic number]
++ [RPMTAG_IMMUTABLE]
++
++RPMTAG_IMMUTABLE is a section of the full RPM header containing the part
++of the header that was signed, and whose signature is stored in the
++RPMTAG_RSAHEADER section.
++
++
++Appended Signature
++------------------
++
++Digest lists can have a module-style appended signature, that can be used
++for appraisal with IMA. The signature type can be PKCS#7, as for kernel
++modules, or a different type.
++
++
++History
++=======
++
++The original name of this work was IMA Digest Lists, which was somehow
++considered too invasive. The code was moved to a separate component named
++DIGLIM (DIGest Lists Integrity Module), with the purpose of removing the
++complexity away of IMA, and also adding the possibility of using it with
++other kernel components (e.g. Integrity Policy Enforcement, or IPE).
++
++The design changed significantly, so DIGLIM was renamed to digest_cache
++LSM, as the name better reflects what the new component does.
++
++Since it was originally proposed, in 2017, this work grew up a lot thanks
++to various comments/suggestions. It became integrally part of the openEuler
++distribution since end of 2020.
++
++The most important difference between the old the current version is moving
++from a centralized repository of file digests to a per-package repository.
++This significantly reduces the memory pressure, since digest lists are
++loaded into kernel memory only when they are actually needed. Also, file
++digests are automatically unloaded from kernel memory at the same time
++inodes are evicted from memory during reclamation.
++
++
++Performance
++===========
++
++System specification
++--------------------
++
++The tests have been performed on a Fedora 38 virtual machine with 4 cores
++(AMD EPYC-Rome, no hyperthreading), 16 GB of RAM, no TPM/TPM passthrough/
++emulated. The QEMU process has been pinned to 4 real CPU cores and its
++priority was set to -20.
++
++
++Benchmark tool
++--------------
++
++The digest_cache LSM has been tested with an ad-hoc benchmark tool that
++creates 20000 files with a random size up to 100 bytes and randomly adds
++their digest to one of 303 digest lists. The number of digest lists has
++been derived from the ratio (66) digests/packages (124174/1883) found in
++the testing virtual machine (hence, 20000/66 = 303). IMA signatures have
++been done with ECDSA NIST P-384.
++
++The benchmark tool then creates a list of 20000 files to be accessed,
++randomly chosen (there can be duplicates). This is necessary to make the
++results reproducible across reboots (by always replaying the same
++operations). The benchmark reads (sequentially and in parallel) the files
++from the list 2 times, flushing the kernel caches before each read.
++
++Each test has been performed 5 times, and the average value is taken.
++
++
++Purpose of the benchmark
++------------------------
++
++The purpose of the benchmark is to show the performance difference of IMA
++between the current behavior, and by using the digest_cache LSM.
++
++
++IMA measurement policy: no cache
++--------------------------------
++
++.. code-block:: bash
++
++ measure func=FILE_CHECK fowner=2001 pcr=12
++
++
++IMA measurement policy: cache
++-----------------------------
++
++.. code-block:: bash
++
++ measure func=DIGEST_LIST_CHECK pcr=12
++ measure func=FILE_CHECK fowner=2001 digest_cache=data pcr=12
++
++
++IMA Measurement Results
++-----------------------
++
++Sequential
++~~~~~~~~~~
++
++This test was performed reading files sequentially, and waiting for the
++current read to terminate before beginning a new one.
++
++::
++
++                      +-------+------------------------+-----------+
++                      | meas. | time no/p/vTPM (sec.)  | slab (KB) |
++ +--------------------+-------+------------------------+-----------+
++ | no cache           | 12313 | 33.65 / 102.51 / 47.13 |   84170   |
++ +--------------------+-------+------------------------+-----------+
++ | cache, no prefetch |   304 | 34.04 / 33.32 / 33.09  |   81159   |
++ +--------------------+-------+------------------------+-----------+
++ | cache, prefetch    |   304 | 34.02 / 33.31 / 33.15  |   81122   |
++ +--------------------+-------+------------------------+-----------+
++
++The table shows that 12313 measurements (boot_aggregate + files) have been
++made without the digest cache, and 304 with the digest cache
++(boot_aggregate + digest lists). Consequently, the memory occupation
++without the cache is higher due to the higher number of measurements.
++
++Not surprisingly, for the same reason, also the test time is significantly
++higher without the digest cache when the physical or virtual TPM is used.
++
++In terms of pure performance, first number in the third column, it can be
++seen that there are not really performance differences between using or not
++using the digest cache.
++
++Prefetching does not add overhead, also because digest lists were ordered
++according to their appearance in the IMA measurement list (which minimize
++the digest lists to prefetch).
++
++
++Parallel
++~~~~~~~~
++
++This test was performed reading files in parallel, not waiting for the
++current read to terminate.
++
++::
++
++                      +-------+-----------------------+-----------+
++                      | meas. | time no/p/vTPM (sec.) | slab (KB) |
++ +--------------------+-------+-----------------------+-----------+
++ | no cache           | 12313 | 14.08 / 79.09 / 22.70 |   85138   |
++ +--------------------+-------+-----------------------+-----------+
++ | cache, no prefetch |   304 | 14.44 / 15.11 / 14.96 |   85777   |
++ +--------------------+-------+-----------------------+-----------+
++ | cache, prefetch    |   304 | 14.30 / 15.41 / 14.40 |   83294   |
++ +--------------------+-------+-----------------------+-----------+
++
++Also in this case, the physical TPM causes the biggest delay especially
++without digest cache, where a higher number of measurements need to be
++extended in the TPM.
++
++The digest_cache LSM does not introduce a noticeable overhead in all
++scenarios.
++
++
++IMA appraisal policy: no cache
++------------------------------
++
++.. code-block:: bash
++
++ appraise func=FILE_CHECK fowner=2001
++
++
++IMA appraisal policy: cache
++---------------------------
++
++.. code-block:: bash
++
++ appraise func=DIGEST_LIST_CHECK
++ appraise func=FILE_CHECK fowner=2001 digest_cache=data
++
++
++IMA Appraisal Results
++---------------------
++
++Sequential
++~~~~~~~~~~
++
++This test was performed reading files sequentially, and waiting for the
++current read to terminate before beginning a new one.
++
++::
++
++                              +-------------+-------------+-----------+
++                              |    files    | time (sec.) | slab (KB) |
++ +----------------------------+-------------+-------------+-----------+
++ | appraise (ECDSA sig)       |    12312    |    96.74    |   78827   |
++ +----------------------------+-------------+-------------+-----------+
++ | appraise (cache)           | 12312 + 303 |    33.09    |   80854   |
++ +----------------------------+-------------+-------------+-----------+
++ | appraise (cache, prefetch) | 12312 + 303 |    33.42    |   81050   |
++ +----------------------------+-------------+-------------+-----------+
++
++This test shows a huge performance difference from verifying the signature
++of 12312 files as opposed to just verifying the signature of 303 digest
++lists, and looking up the digest of the files being read.
++
++There are some differences in terms of memory occupation, which is quite
++expected due to the fact that we have to take into account the digest
++caches loaded in memory, while with the standard appraisal they don't
++exist.
++
++
++Parallel
++~~~~~~~~
++
++This test was performed reading files in parallel, not waiting for the
++current read to terminate.
++
++::
++
++                              +-------------+-------------+-----------+
++                              |    files    | time (sec.) | slab (KB) |
++ +----------------------------+-------------+-------------+-----------+
++ | appraise (ECDSA sig)       |    12312    |    27.68    |   80596   |
++ +----------------------------+-------------+-------------+-----------+
++ | appraise (cache)           | 12313 + 303 |    14.96    |   80778   |
++ +----------------------------+-------------+-------------+-----------+
++ | appraise (cache, prefetch) | 12313 + 303 |    14.78    |   83354   |
++ +----------------------------+-------------+-------------+-----------+
++
++The difference is less marked when performing the read in parallel. Also,
++more memory seems to be occupied in the prefetch case.
++
++
++How to Test
++===========
++
++Please follow the instructions here:
++
++https://github.com/linux-integrity/digest-cache-tools
+diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
+index 59f8fc106cb0..34933e13c509 100644
+--- a/Documentation/security/index.rst
++++ b/Documentation/security/index.rst
+@@ -19,3 +19,4 @@ Security Documentation
+    digsig
+    landlock
+    secrets/index
++   digest_cache
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 72801a88449c..d7f700da009e 100644
+index d7f700da009e..67b1fb3ab0ac 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -6198,6 +6198,7 @@ M:	Roberto Sassu <roberto.sassu@huawei.com>
+@@ -6197,6 +6197,7 @@ DIGEST_CACHE LSM
+ M:	Roberto Sassu <roberto.sassu@huawei.com>
  L:	linux-security-module@vger.kernel.org
  S:	Maintained
++F:	Documentation/security/digest_cache.rst
  F:	security/digest_cache/
-+F:	tools/testing/selftests/digest_cache/
+ F:	tools/testing/selftests/digest_cache/
  
- DIGITEQ AUTOMOTIVE MGB4 V4L2 DRIVER
- M:	Martin Tuma <martin.tuma@digiteqautomotive.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 15b6a111c3be..3c5965a62d28 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -13,6 +13,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += damon
-+TARGETS += digest_cache
- TARGETS += dmabuf-heaps
- TARGETS += drivers/dma-buf
- TARGETS += drivers/s390x/uvdevice
-diff --git a/tools/testing/selftests/digest_cache/.gitignore b/tools/testing/selftests/digest_cache/.gitignore
-new file mode 100644
-index 000000000000..392096e18f4e
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/.gitignore
-@@ -0,0 +1,3 @@
-+/*.mod
-+/*_test
-+/*.ko
-diff --git a/tools/testing/selftests/digest_cache/Makefile b/tools/testing/selftests/digest_cache/Makefile
-new file mode 100644
-index 000000000000..6b1e0d3c08cf
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/Makefile
-@@ -0,0 +1,24 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_GEN_PROGS_EXTENDED = digest_cache_kern.ko
-+TEST_GEN_PROGS := all_test
-+
-+$(OUTPUT)/%.ko: $(wildcard common.[ch]) testmod/Makefile testmod/kern.c
-+	$(call msg,MOD,,$@)
-+	$(Q)$(MAKE) -C testmod
-+	$(Q)cp testmod/digest_cache_kern.ko $@
-+
-+LOCAL_HDRS += common.h common_user.h generators.h
-+CFLAGS += -ggdb -Wall -Wextra $(KHDR_INCLUDES)
-+
-+OVERRIDE_TARGETS := 1
-+override define CLEAN
-+	$(call msg,CLEAN)
-+	$(Q)$(MAKE) -C testmod clean
-+	rm -Rf $(TEST_GEN_PROGS)
-+	rm -Rf $(OUTPUT)/common.o $(OUTPUT)/common_user.o $(OUTPUT)/generators.o
-+	rm -Rf $(OUTPUT)/common.mod
-+endef
-+
-+include ../lib.mk
-+
-+$(OUTPUT)/all_test: common.c common.h common_user.c common_user.h generators.c
-diff --git a/tools/testing/selftests/digest_cache/all_test.c b/tools/testing/selftests/digest_cache/all_test.c
-new file mode 100644
-index 000000000000..9f45e522c43c
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/all_test.c
-@@ -0,0 +1,815 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the tests of the digest_cache LSM.
-+ */
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <limits.h>
-+#include <fts.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/xattr.h>
-+#include <sys/syscall.h>
-+#include <linux/module.h>
-+
-+#include "generators.h"
-+
-+#include "../kselftest_harness.h"
-+#include "../../../../include/uapi/linux/xattr.h"
-+
-+#define BASE_DIR_TEMPLATE "/tmp/digest_cache_test_dirXXXXXX"
-+#define DIGEST_LISTS_SUBDIR "digest_lists"
-+#define NUM_DIGEST_LISTS_PREFETCH MAX_WORKS
-+
-+FIXTURE(shared_data) {
-+	char base_dir[sizeof(BASE_DIR_TEMPLATE)];
-+	char digest_lists_dir[sizeof(BASE_DIR_TEMPLATE) +
-+			      sizeof(DIGEST_LISTS_SUBDIR)];
-+	int base_dirfd, digest_lists_dirfd, kernfd, pathfd, cmd_len;
-+	int notify_inodesfd;
-+};
-+
-+FIXTURE_SETUP(shared_data)
-+{
-+	char cmd[1024];
-+	int fd, i, cmd_len;
-+
-+	/* Create the base directory. */
-+	snprintf(self->base_dir, sizeof(self->base_dir), BASE_DIR_TEMPLATE);
-+	ASSERT_NE(NULL, mkdtemp(self->base_dir));
-+
-+	/* Open base directory. */
-+	self->base_dirfd = open(self->base_dir, O_RDONLY | O_DIRECTORY);
-+	ASSERT_NE(-1, self->base_dirfd);
-+
-+	/* Create the digest_lists subdirectory. */
-+	snprintf(self->digest_lists_dir, sizeof(self->digest_lists_dir),
-+		 "%s/%s", self->base_dir, DIGEST_LISTS_SUBDIR);
-+	ASSERT_EQ(0, mkdirat(self->base_dirfd, DIGEST_LISTS_SUBDIR, 0600));
-+	self->digest_lists_dirfd = openat(self->base_dirfd, DIGEST_LISTS_SUBDIR,
-+					  O_RDONLY | O_DIRECTORY);
-+	ASSERT_NE(-1, self->digest_lists_dirfd);
-+
-+	fd = open("digest_cache_kern.ko", O_RDONLY);
-+	ASSERT_LT(0, fd);
-+
-+	ASSERT_EQ(0, syscall(SYS_finit_module, fd, "", 0));
-+	close(fd);
-+
-+	/* Open kernel test interface. */
-+	self->kernfd = open(DIGEST_CACHE_TEST_INTERFACE, O_RDWR, 0600);
-+	ASSERT_NE(-1, self->kernfd);
-+
-+	/* Open kernel notify inodes interface. */
-+	self->notify_inodesfd = open(DIGEST_CACHE_NOTIFY_INODES_INTERFACE,
-+				     O_RDWR, 0600);
-+	ASSERT_NE(-1, self->notify_inodesfd);
-+
-+	/* Open kernel digest list path interface. */
-+	self->pathfd = open(DIGEST_CACHE_PATH_INTERFACE, O_RDWR, 0600);
-+	ASSERT_NE(-1, self->pathfd);
-+
-+	/* Write the path of the digest lists directory. */
-+	ASSERT_LT(0, write(self->pathfd, self->digest_lists_dir,
-+			   strlen(self->digest_lists_dir)));
-+
-+	/* Ensure that no verifier is enabled at the beginning of a test. */
-+	for (i = 0; i < VERIF__LAST; i++) {
-+		cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s",
-+				   commands_str[DIGEST_CACHE_DISABLE_VERIF],
-+				   verifs_str[i]);
-+		ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+	}
-+}
-+
-+FIXTURE_TEARDOWN(shared_data)
-+{
-+	FTS *fts = NULL;
-+	FTSENT *ftsent;
-+	int fts_flags = (FTS_PHYSICAL | FTS_COMFOLLOW | FTS_NOCHDIR | FTS_XDEV);
-+	char *paths[2] = { self->base_dir, NULL };
-+	char cmd[1024];
-+	int cmd_len;
-+
-+	/* Close digest_lists subdirectory. */
-+	close(self->digest_lists_dirfd);
-+
-+	/* Close base directory. */
-+	close(self->base_dirfd);
-+
-+	/* Delete files and directories. */
-+	fts = fts_open(paths, fts_flags, NULL);
-+	if (fts) {
-+		while ((ftsent = fts_read(fts)) != NULL) {
-+			switch (ftsent->fts_info) {
-+			case FTS_DP:
-+				rmdir(ftsent->fts_accpath);
-+				break;
-+			case FTS_F:
-+			case FTS_SL:
-+			case FTS_SLNONE:
-+			case FTS_DEFAULT:
-+				unlink(ftsent->fts_accpath);
-+				break;
-+			default:
-+				break;
-+			}
-+		}
-+	}
-+
-+	/* Release digest cache reference, if the test was interrupted. */
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s",
-+			   commands_str[DIGEST_CACHE_PUT]);
-+	write(self->kernfd, cmd, cmd_len);
-+
-+	/* Close kernel notify inodes interface. */
-+	close(self->notify_inodesfd);
-+
-+	/* Close kernel test interface. */
-+	close(self->kernfd);
-+
-+	/* Close kernel digest list path interface. */
-+	close(self->pathfd);
-+
-+	syscall(SYS_delete_module, "digest_cache_kern", 0);
-+}
-+
-+static int query_test(int kernfd, char *base_dir, char *filename,
-+		      enum hash_algo algo, int start_number, int num_digests)
-+{
-+	u8 digest[MAX_DIGEST_SIZE] = { 0 };
-+	char digest_str[MAX_DIGEST_SIZE * 2 + 1] = { 0 };
-+	int digest_len = hash_digest_size[algo];
-+	char cmd[1024];
-+	int ret, i, cmd_len;
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s/%s",
-+			   commands_str[DIGEST_CACHE_GET], base_dir, filename);
-+	ret = write(kernfd, cmd, cmd_len);
-+	if (ret != cmd_len)
-+		return -errno;
-+
-+	ret = 0;
-+
-+	*(u32 *)digest = start_number;
-+
-+	for (i = 0; i < num_digests; i++) {
-+		bin2hex(digest_str, digest, digest_len);
-+
-+		cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s/%s|%s:%s",
-+				   commands_str[DIGEST_CACHE_LOOKUP], base_dir,
-+				   filename, hash_algo_name[algo], digest_str);
-+		ret = write(kernfd, cmd, cmd_len);
-+		if (ret != cmd_len) {
-+			ret = -errno;
-+			goto out;
-+		} else {
-+			ret = 0;
-+		}
-+
-+		(*(u32 *)digest)++;
-+	}
-+out:
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s",
-+			   commands_str[DIGEST_CACHE_PUT]);
-+	write(kernfd, cmd, cmd_len);
-+	return ret;
-+}
-+
-+static enum pgp_algos get_pgp_algo(enum hash_algo algo)
-+{
-+	unsigned long i;
-+
-+	for (i = DIGEST_ALGO_MD5; i < ARRAY_SIZE(pgp_algo_mapping); i++)
-+		if (pgp_algo_mapping[i] == algo)
-+			return i;
-+
-+	return DIGEST_ALGO_SHA224 + 1;
-+}
-+
-+static void test_parser(struct _test_data_shared_data *self,
-+			struct __test_metadata *_metadata,
-+			char *digest_list_filename, char *filename,
-+			enum hash_algo algo, int start_number, int num_digests,
-+			unsigned int failure)
-+{
-+	int expected_ret = (failure) ? -ENOENT : 0;
-+
-+	if (!strncmp(digest_list_filename, "tlv-", 4)) {
-+		ASSERT_EQ(0, gen_tlv_list(self->digest_lists_dirfd,
-+					  digest_list_filename, algo,
-+					  start_number, num_digests,
-+					  (enum tlv_failures)failure));
-+	} else if (!strncmp(digest_list_filename, "rpm-", 4)) {
-+		enum pgp_algos pgp_algo = get_pgp_algo(algo);
-+
-+		if (pgp_algo == DIGEST_ALGO_SHA224 + 1)
-+			return;
-+
-+		ASSERT_EQ(0, gen_rpm_list(self->digest_lists_dirfd,
-+					  digest_list_filename, algo, pgp_algo,
-+					  start_number, num_digests,
-+					  (enum rpm_failures)failure));
-+	}
-+
-+	ASSERT_EQ(0, create_file(self->base_dirfd, filename,
-+				 digest_list_filename));
-+	ASSERT_EQ(expected_ret, query_test(self->kernfd, self->base_dir,
-+					   filename, algo, start_number,
-+					   num_digests));
-+
-+	unlinkat(self->digest_lists_dirfd, digest_list_filename, 0);
-+	unlinkat(self->base_dirfd, filename, 0);
-+}
-+
-+/*
-+ * Verify that the tlv digest list parser returns success on well-formatted
-+ * digest lists, for each defined hash algorithm.
-+ */
-+TEST_F(shared_data, tlv_parser_ok)
-+{
-+	enum hash_algo algo;
-+
-+	/* Test every known algorithm. */
-+	for (algo = 0; algo < HASH_ALGO__LAST; algo++)
-+		test_parser(self, _metadata, "tlv-digest_list", "file", algo,
-+			    0, 5, TLV_NO_FAILURE);
-+}
-+
-+/*
-+ * Verify that the tlv digest list parser returns failure on invalid digest
-+ * lists.
-+ */
-+TEST_F(shared_data, tlv_parser_error)
-+{
-+	enum tlv_failures failure;
-+
-+	/* Test every failure. */
-+	for (failure = 0; failure < TLV_FAILURE__LAST; failure++)
-+		test_parser(self, _metadata, "tlv-digest_list", "file",
-+			    HASH_ALGO_SHA224, 0, 1, failure);
-+}
-+
-+/*
-+ * Verify that the rpm digest list parser returns success on well-formatted
-+ * digest lists, for each defined hash algorithm.
-+ */
-+TEST_F(shared_data, rpm_parser_ok)
-+{
-+	enum hash_algo algo;
-+
-+	/* Test every known algorithm. */
-+	for (algo = 0; algo < HASH_ALGO__LAST; algo++)
-+		test_parser(self, _metadata, "rpm-digest_list", "file", algo,
-+			    0, 5, RPM_NO_FAILURE);
-+}
-+
-+/*
-+ * Verify that the rpm digest list parser returns failure on invalid digest
-+ * lists.
-+ */
-+TEST_F(shared_data, rpm_parser_error)
-+{
-+	enum rpm_failures failure;
-+
-+	/* Test every failure. */
-+	for (failure = 0; failure < RPM_FAILURE__LAST; failure++)
-+		test_parser(self, _metadata, "rpm-digest_list", "file",
-+			    HASH_ALGO_SHA224, 0, 1, failure);
-+}
-+
-+static void test_default_path(struct _test_data_shared_data *self,
-+			      struct __test_metadata *_metadata, bool file)
-+{
-+	char path[PATH_MAX];
-+	size_t path_len;
-+
-+	if (file) {
-+		path_len = snprintf(path, sizeof(path),
-+				    "%s/%s/tlv-digest_list", self->base_dir,
-+				    DIGEST_LISTS_SUBDIR);
-+		ASSERT_LT(0, write(self->pathfd, path, path_len));
-+	}
-+
-+	ASSERT_EQ(0, gen_tlv_list(self->digest_lists_dirfd, "tlv-digest_list",
-+				  HASH_ALGO_SHA1, 0, 1, TLV_NO_FAILURE));
-+
-+	ASSERT_EQ(0, create_file(self->base_dirfd, "file", NULL));
-+
-+	ASSERT_EQ(0, query_test(self->kernfd, self->base_dir, "file",
-+				HASH_ALGO_SHA1, 0, 1));
-+}
-+
-+/*
-+ * Verify that the digest cache created from the default path (regular file)
-+ * can be retrieved and used for lookup.
-+ */
-+TEST_F(shared_data, default_path_file)
-+{
-+	test_default_path(self, _metadata, true);
-+}
-+
-+/*
-+ * Verify that the digest cache created from the default path (directory)
-+ * can be retrieved and used for lookup.
-+ */
-+TEST_F(shared_data, default_path_dir)
-+{
-+	test_default_path(self, _metadata, false);
-+}
-+
-+static void notify_inode_init(struct _test_data_shared_data *self,
-+			      struct __test_metadata *_metadata)
-+{
-+	/* Clear buffer. */
-+	ASSERT_EQ(1, write(self->notify_inodesfd, "1", 1));
-+}
-+
-+static void notify_inodes_check(struct _test_data_shared_data *self,
-+				struct __test_metadata *_metadata,
-+				char *filenames)
-+{
-+	char notify_inodes_buf[1024] = { 0 };
-+	char notify_inodes_buf_kernel[1024] = { 0 };
-+	char *filename, *filenames_copy, *buf_ptr = notify_inodes_buf;
-+	struct stat st;
-+	int fd;
-+
-+	ASSERT_LT(0, read(self->notify_inodesfd, notify_inodes_buf_kernel,
-+			  sizeof(notify_inodes_buf_kernel)));
-+
-+	filenames_copy = strdup(filenames);
-+	ASSERT_NE(NULL, filenames_copy);
-+
-+	while ((filename = strsep(&filenames_copy, ","))) {
-+		fd = openat(self->base_dirfd, filename, O_RDONLY);
-+		ASSERT_NE(-1, fd);
-+		ASSERT_EQ(0, fstat(fd, &st));
-+		close(fd);
-+
-+		buf_ptr += snprintf(buf_ptr,
-+				    sizeof(notify_inodes_buf) -
-+				    (buf_ptr - notify_inodes_buf), "%s%lu",
-+				    notify_inodes_buf[0] ? "," : "", st.st_ino);
-+	}
-+
-+	free(filenames_copy);
-+
-+	ASSERT_EQ(0, strcmp(notify_inodes_buf, notify_inodes_buf_kernel));
-+}
-+
-+static void test_file_changes(struct _test_data_shared_data *self,
-+			      struct __test_metadata *_metadata,
-+			      enum file_changes change)
-+{
-+	char digest_list_filename[] = "tlv-digest_list";
-+	char digest_list_filename_new[] = "tlv-digest_list6";
-+	char digest_list_filename_xattr[] = "tlv-digest_list7";
-+	char digest_list_path[sizeof(self->digest_lists_dir) +
-+			      sizeof(digest_list_filename)];
-+	int fd;
-+
-+	ASSERT_EQ(0, gen_tlv_list(self->digest_lists_dirfd,
-+				  digest_list_filename, HASH_ALGO_SHA1, 0, 1,
-+				  TLV_NO_FAILURE));
-+
-+	ASSERT_EQ(0, create_file(self->base_dirfd, "file",
-+				 digest_list_filename));
-+
-+	ASSERT_EQ(0, query_test(self->kernfd, self->base_dir, "file",
-+				HASH_ALGO_SHA1, 0, 1));
-+
-+	notify_inode_init(self, _metadata);
-+
-+	switch (change) {
-+	case FILE_WRITE:
-+		fd = openat(self->digest_lists_dirfd, digest_list_filename,
-+			    O_WRONLY);
-+		ASSERT_NE(-1, fd);
-+
-+		ASSERT_EQ(4, write(fd, "1234", 4));
-+		close(fd);
-+		break;
-+	case FILE_TRUNCATE:
-+		snprintf(digest_list_path, sizeof(digest_list_path),
-+			 "%s/%s", self->digest_lists_dir, digest_list_filename);
-+		ASSERT_EQ(0, truncate(digest_list_path, 4));
-+		break;
-+	case FILE_FTRUNCATE:
-+		fd = openat(self->digest_lists_dirfd, digest_list_filename,
-+			    O_WRONLY);
-+		ASSERT_NE(-1, fd);
-+		ASSERT_EQ(0, ftruncate(fd, 4));
-+		close(fd);
-+		break;
-+	case FILE_UNLINK:
-+		ASSERT_EQ(0, unlinkat(self->digest_lists_dirfd,
-+				      digest_list_filename, 0));
-+		break;
-+	case FILE_RENAME:
-+		ASSERT_EQ(0, renameat(self->digest_lists_dirfd,
-+				      digest_list_filename,
-+				      self->digest_lists_dirfd,
-+				      digest_list_filename_new));
-+		break;
-+	case FILE_SETXATTR:
-+		fd = openat(self->base_dirfd, "file", O_WRONLY);
-+		ASSERT_NE(-1, fd);
-+
-+		ASSERT_EQ(0, fsetxattr(fd, XATTR_NAME_DIGEST_LIST,
-+				       digest_list_filename_xattr,
-+				       strlen(digest_list_filename_xattr) + 1,
-+				       0));
-+		close(fd);
-+		break;
-+	case FILE_REMOVEXATTR:
-+		fd = openat(self->base_dirfd, "file", O_WRONLY);
-+		ASSERT_NE(-1, fd);
-+
-+		ASSERT_EQ(0, fremovexattr(fd, XATTR_NAME_DIGEST_LIST));
-+		close(fd);
-+
-+		/*
-+		 * Removing security.digest_list does not cause a failure,
-+		 * the digest can be still retrieved via directory lookup.
-+		 */
-+		ASSERT_EQ(0, query_test(self->kernfd, self->base_dir, "file",
-+					HASH_ALGO_SHA1, 0, 1));
-+
-+		notify_inodes_check(self, _metadata, "file");
-+		return;
-+	default:
-+		break;
-+	}
-+
-+	ASSERT_NE(0, query_test(self->kernfd, self->base_dir, "file",
-+				HASH_ALGO_SHA1, 0, 1));
-+
-+	notify_inodes_check(self, _metadata, "file");
-+}
-+
-+/*
-+ * Verify that operations on a digest list cause a reset of the digest cache,
-+ * and that the digest is not found in the invalid/missing digest list.
-+ */
-+TEST_F(shared_data, file_reset)
-+{
-+	enum file_changes change;
-+
-+	/* Test for every file change. */
-+	for (change = 0; change < FILE_CHANGE__LAST; change++)
-+		test_file_changes(self, _metadata, change);
-+}
-+
-+static void query_test_with_failures(struct _test_data_shared_data *self,
-+				     struct __test_metadata *_metadata,
-+				     int start_number, int num_digests,
-+				     int *removed, int num_removed)
-+{
-+	int i, j, expected_ret;
-+
-+	for (i = start_number; i < start_number + num_digests; i++) {
-+		expected_ret = 0;
-+
-+		for (j = 0; j < num_removed; j++) {
-+			if (removed[j] == i) {
-+				expected_ret = -ENOENT;
-+				break;
-+			}
-+		}
-+
-+		ASSERT_EQ(expected_ret, query_test(self->kernfd, self->base_dir,
-+						   "file", HASH_ALGO_SHA1, i,
-+						   1));
-+	}
-+}
-+
-+/*
-+ * Verify that changes in the digest list directory are monitored and that
-+ * a digest cannot be found if the respective digest list file has been moved
-+ * away from the directory, and that a digest can be found if the respective
-+ * digest list has been moved/created in the directory.
-+ */
-+TEST_F(shared_data, dir_reset)
-+{
-+	char digest_list_filename[NAME_MAX + 1];
-+	int i, removed[10];
-+
-+	for (i = 0; i < 10; i++) {
-+		snprintf(digest_list_filename, sizeof(digest_list_filename),
-+			 "tlv-digest_list%d", i);
-+		ASSERT_EQ(0, gen_tlv_list(self->digest_lists_dirfd,
-+					  digest_list_filename, HASH_ALGO_SHA1,
-+					  i, 1, TLV_NO_FAILURE));
-+	}
-+
-+	ASSERT_EQ(0, create_file(self->base_dirfd, "file", NULL));
-+	/* The second file is to have duplicate notifications (file and dir). */
-+	ASSERT_EQ(0, create_file(self->base_dirfd, "file2",
-+				 "tlv-digest_list7"));
-+	/* The query adds file2 inode to the file digest cache notif. list. */
-+	ASSERT_NE(0, query_test(self->kernfd, self->base_dir, "file2",
-+				HASH_ALGO_SHA1, 0, 1));
-+
-+	query_test_with_failures(self, _metadata, 0, 10, removed, 0);
-+
-+	notify_inode_init(self, _metadata);
-+	ASSERT_EQ(0, unlinkat(self->digest_lists_dirfd, "tlv-digest_list7", 0));
-+	/* File notification comes before directory notification. */
-+	notify_inodes_check(self, _metadata, "file2,file");
-+
-+	removed[0] = 7;
-+
-+	query_test_with_failures(self, _metadata, 0, 10, removed, 1);
-+
-+	notify_inode_init(self, _metadata);
-+	ASSERT_EQ(0, renameat(self->digest_lists_dirfd, "tlv-digest_list6",
-+			      self->base_dirfd, "tlv-digest_list6"));
-+	notify_inodes_check(self, _metadata, "file");
-+
-+	removed[1] = 6;
-+
-+	query_test_with_failures(self, _metadata, 0, 10, removed, 2);
-+
-+	notify_inode_init(self, _metadata);
-+	ASSERT_EQ(0, renameat(self->base_dirfd, "tlv-digest_list6",
-+			      self->digest_lists_dirfd, "tlv-digest_list6"));
-+	notify_inodes_check(self, _metadata, "file");
-+
-+	query_test_with_failures(self, _metadata, 0, 10, removed, 1);
-+
-+	notify_inode_init(self, _metadata);
-+	ASSERT_EQ(0, gen_tlv_list(self->digest_lists_dirfd, "tlv-digest_list10",
-+				  HASH_ALGO_SHA1, 10, 1, TLV_NO_FAILURE));
-+	notify_inodes_check(self, _metadata, "file");
-+
-+	query_test_with_failures(self, _metadata, 0, 11, removed, 1);
-+}
-+
-+static void _check_verif_data(struct _test_data_shared_data *self,
-+			      struct __test_metadata *_metadata,
-+			      char *digest_list_filename, int num,
-+			      enum hash_algo algo, bool check_dir)
-+{
-+	char digest_list_filename_kernel[NAME_MAX + 1];
-+	char cmd[1024], number[20];
-+	u8 digest[MAX_DIGEST_SIZE] = { 0 };
-+	char digest_str[MAX_DIGEST_SIZE * 2 + 1] = { 0 };
-+	int len, cmd_len;
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s/file",
-+			   commands_str[DIGEST_CACHE_GET], self->base_dir);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	/*
-+	 * If a directory digest cache was requested, we need to do a lookup,
-+	 * to make the kernel module retrieve verification data from the digest
-+	 * cache of the directory entry.
-+	 */
-+	if (check_dir) {
-+		*(u32 *)digest = num;
-+
-+		bin2hex(digest_str, digest, hash_digest_size[algo]);
-+
-+		cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s/file|%s:%s",
-+				   commands_str[DIGEST_CACHE_LOOKUP],
-+				   self->base_dir, hash_algo_name[algo],
-+				   digest_str);
-+		ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+	}
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s",
-+			   commands_str[DIGEST_CACHE_SET_VERIF],
-+			   verifs_str[VERIF_FILENAMES]);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	ASSERT_LT(0, read(self->kernfd, digest_list_filename_kernel,
-+			  sizeof(digest_list_filename_kernel)));
-+	ASSERT_EQ(0, strcmp(digest_list_filename, digest_list_filename_kernel));
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s",
-+			   commands_str[DIGEST_CACHE_SET_VERIF],
-+			   verifs_str[VERIF_NUMBER]);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	len = read(self->kernfd, number, sizeof(number) - 1);
-+	ASSERT_LT(0, len);
-+	number[len] = '\0';
-+	ASSERT_EQ(num, atoi(number));
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s",
-+			   commands_str[DIGEST_CACHE_PUT]);
-+	write(self->kernfd, cmd, cmd_len);
-+}
-+
-+static void check_verif_data(struct _test_data_shared_data *self,
-+			     struct __test_metadata *_metadata)
-+{
-+	char digest_list_filename[NAME_MAX + 1];
-+	char cmd[1024];
-+	int i, cmd_len;
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s",
-+			   commands_str[DIGEST_CACHE_ENABLE_VERIF],
-+			   verifs_str[VERIF_FILENAMES]);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s",
-+			   commands_str[DIGEST_CACHE_ENABLE_VERIF],
-+			   verifs_str[VERIF_NUMBER]);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	/*
-+	 * Reverse order is intentional, so that directory entries are created
-+	 * in the opposite order as when they are searched (when prefetching is
-+	 * requested).
-+	 */
-+	for (i = 10; i >= 0; i--) {
-+		snprintf(digest_list_filename, sizeof(digest_list_filename),
-+			 "%d-tlv-digest_list%d", i, i);
-+		ASSERT_EQ(0, gen_tlv_list(self->digest_lists_dirfd,
-+					  digest_list_filename, HASH_ALGO_SHA1,
-+					  i, 1, TLV_NO_FAILURE));
-+
-+		ASSERT_EQ(0, create_file(self->base_dirfd, "file",
-+					 digest_list_filename));
-+
-+		_check_verif_data(self, _metadata, digest_list_filename, i,
-+				  HASH_ALGO_SHA1, false);
-+
-+		ASSERT_EQ(0, unlinkat(self->base_dirfd, "file", 0));
-+	}
-+
-+	ASSERT_EQ(0, create_file(self->base_dirfd, "file", NULL));
-+
-+	for (i = 0; i < 11; i++) {
-+		snprintf(digest_list_filename, sizeof(digest_list_filename),
-+			 "%d-tlv-digest_list%d", i, i);
-+		_check_verif_data(self, _metadata, digest_list_filename, i,
-+				  HASH_ALGO_SHA1, true);
-+	}
-+
-+	ASSERT_EQ(0, unlinkat(self->base_dirfd, "file", 0));
-+}
-+
-+/*
-+ * Verify that the correct verification data can be retrieved from the digest
-+ * caches (without digest list prefetching).
-+ */
-+TEST_F(shared_data, verif_data_no_prefetch)
-+{
-+	check_verif_data(self, _metadata);
-+}
-+
-+/*
-+ * Verify that the correct verification data can be retrieved from the digest
-+ * caches (with digest list prefetching).
-+ */
-+TEST_F(shared_data, verif_data_prefetch)
-+{
-+	ASSERT_EQ(0, lsetxattr(self->base_dir, XATTR_NAME_DIG_PREFETCH,
-+			       "1", 1, 0));
-+
-+	check_verif_data(self, _metadata);
-+}
-+
-+static void check_prefetch_list(struct _test_data_shared_data *self,
-+				struct __test_metadata *_metadata,
-+				int start_number, int end_number)
-+{
-+	char digest_list_filename[NAME_MAX + 1], filename[NAME_MAX + 1];
-+	char digest_lists[1024], digest_lists_kernel[1024] = { 0 };
-+	char cmd[1024];
-+	int i, cmd_len;
-+
-+	snprintf(filename, sizeof(filename), "file%d", end_number);
-+	snprintf(digest_list_filename, sizeof(digest_list_filename),
-+		 "%d-tlv-digest_list%d", end_number, end_number);
-+	ASSERT_EQ(0, create_file(self->base_dirfd, filename,
-+				 digest_list_filename));
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s/%s",
-+			   commands_str[DIGEST_CACHE_GET], self->base_dir,
-+			   filename);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	ASSERT_LT(0, read(self->kernfd, digest_lists, sizeof(digest_lists)));
-+
-+	for (i = start_number; i <= end_number; i++) {
-+		if (digest_lists_kernel[0])
-+			strcat(digest_lists_kernel, ",");
-+
-+		snprintf(digest_list_filename, sizeof(digest_list_filename),
-+			 "%d-tlv-digest_list%d", i, i);
-+		strcat(digest_lists_kernel, digest_list_filename);
-+	}
-+
-+	ASSERT_EQ(0, strcmp(digest_lists, digest_lists_kernel));
-+
-+	ASSERT_EQ(0, unlinkat(self->base_dirfd, filename, 0));
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s",
-+			   commands_str[DIGEST_CACHE_PUT]);
-+	write(self->kernfd, cmd, cmd_len);
-+}
-+
-+static void check_prefetch_list_async(struct _test_data_shared_data *self,
-+				      struct __test_metadata *_metadata)
-+{
-+	char digest_list_filename[NAME_MAX + 1], filename[NAME_MAX + 1];
-+	char digest_lists[1024], digest_lists_kernel[1024] = { 0 };
-+	char cmd[1024];
-+	int i, cmd_len;
-+
-+	for (i = 0; i < NUM_DIGEST_LISTS_PREFETCH; i++) {
-+		snprintf(filename, sizeof(filename), "file%d",
-+			 NUM_DIGEST_LISTS_PREFETCH - 1 - i);
-+		snprintf(digest_list_filename, sizeof(digest_list_filename),
-+			 "%d-tlv-digest_list%d", i, i);
-+		ASSERT_EQ(0, create_file(self->base_dirfd, filename,
-+					 digest_list_filename));
-+	}
-+
-+	/* Do batch of get/put to test the kernel for concurrent requests. */
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s/file|%d|%d",
-+			   commands_str[DIGEST_CACHE_GET_PUT_ASYNC],
-+			   self->base_dir, 0, NUM_DIGEST_LISTS_PREFETCH - 1);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	ASSERT_LT(0, read(self->kernfd, digest_lists, sizeof(digest_lists)));
-+
-+	for (i = 0; i < NUM_DIGEST_LISTS_PREFETCH; i++) {
-+		if (digest_lists_kernel[0])
-+			strcat(digest_lists_kernel, ",");
-+
-+		snprintf(digest_list_filename, sizeof(digest_list_filename),
-+			 "%d-tlv-digest_list%d", i, i);
-+		strcat(digest_lists_kernel, digest_list_filename);
-+	}
-+
-+	ASSERT_EQ(0, strcmp(digest_lists, digest_lists_kernel));
-+}
-+
-+static void prepare_prefetch(struct _test_data_shared_data *self,
-+			     struct __test_metadata *_metadata)
-+{
-+	char digest_list_filename[NAME_MAX + 1];
-+	char cmd[1024];
-+	int i, cmd_len;
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s",
-+			   commands_str[DIGEST_CACHE_ENABLE_VERIF],
-+			   verifs_str[VERIF_PREFETCH]);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	cmd_len = snprintf(cmd, sizeof(cmd), "%s|%s",
-+			   commands_str[DIGEST_CACHE_SET_VERIF],
-+			   verifs_str[VERIF_PREFETCH]);
-+	ASSERT_EQ(cmd_len, write(self->kernfd, cmd, cmd_len));
-+
-+	for (i = NUM_DIGEST_LISTS_PREFETCH - 1; i >= 0; i--) {
-+		snprintf(digest_list_filename, sizeof(digest_list_filename),
-+			 "%d-tlv-digest_list%d", i, i);
-+		ASSERT_EQ(0, gen_tlv_list(self->digest_lists_dirfd,
-+					  digest_list_filename, HASH_ALGO_SHA1,
-+					  i, 1, TLV_NO_FAILURE));
-+	}
-+
-+	ASSERT_EQ(0, fsetxattr(self->digest_lists_dirfd,
-+			       XATTR_NAME_DIG_PREFETCH, "1", 1, 0));
-+}
-+
-+/*
-+ * Verify that digest lists are prefetched when requested, in the correct order
-+ * (synchronous version).
-+ */
-+TEST_F(shared_data, prefetch_sync)
-+{
-+	int i;
-+
-+	prepare_prefetch(self, _metadata);
-+
-+	for (i = 2; i < NUM_DIGEST_LISTS_PREFETCH; i += 3)
-+		check_prefetch_list(self, _metadata, i - 2, i);
-+}
-+
-+/*
-+ * Verify that digest lists are prefetched when requested, in the correct order
-+ * (asynchronous version).
-+ */
-+TEST_F(shared_data, prefetch_async)
-+{
-+	prepare_prefetch(self, _metadata);
-+
-+	check_prefetch_list_async(self, _metadata);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/digest_cache/common.c b/tools/testing/selftests/digest_cache/common.c
-new file mode 100644
-index 000000000000..2123f7d937ce
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/common.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Add common code for testing the digest_cache LSM.
-+ */
-+
-+#include "common.h"
-+
-+const char *commands_str[DIGEST_CACHE__LAST] = {
-+	[DIGEST_CACHE_GET] = "get",
-+	[DIGEST_CACHE_LOOKUP] = "lookup",
-+	[DIGEST_CACHE_PUT] = "put",
-+	[DIGEST_CACHE_ENABLE_VERIF] = "enable_verif",
-+	[DIGEST_CACHE_DISABLE_VERIF] = "disable_verif",
-+	[DIGEST_CACHE_SET_VERIF] = "set_verif",
-+	[DIGEST_CACHE_GET_PUT_ASYNC] = "get_put_async",
-+};
-+
-+const char *const hash_algo_name[HASH_ALGO__LAST] = {
-+	[HASH_ALGO_MD4]		= "md4",
-+	[HASH_ALGO_MD5]		= "md5",
-+	[HASH_ALGO_SHA1]	= "sha1",
-+	[HASH_ALGO_RIPE_MD_160]	= "rmd160",
-+	[HASH_ALGO_SHA256]	= "sha256",
-+	[HASH_ALGO_SHA384]	= "sha384",
-+	[HASH_ALGO_SHA512]	= "sha512",
-+	[HASH_ALGO_SHA224]	= "sha224",
-+	[HASH_ALGO_RIPE_MD_128]	= "rmd128",
-+	[HASH_ALGO_RIPE_MD_256]	= "rmd256",
-+	[HASH_ALGO_RIPE_MD_320]	= "rmd320",
-+	[HASH_ALGO_WP_256]	= "wp256",
-+	[HASH_ALGO_WP_384]	= "wp384",
-+	[HASH_ALGO_WP_512]	= "wp512",
-+	[HASH_ALGO_TGR_128]	= "tgr128",
-+	[HASH_ALGO_TGR_160]	= "tgr160",
-+	[HASH_ALGO_TGR_192]	= "tgr192",
-+	[HASH_ALGO_SM3_256]	= "sm3",
-+	[HASH_ALGO_STREEBOG_256] = "streebog256",
-+	[HASH_ALGO_STREEBOG_512] = "streebog512",
-+	[HASH_ALGO_SHA3_256]    = "sha3-256",
-+	[HASH_ALGO_SHA3_384]    = "sha3-384",
-+	[HASH_ALGO_SHA3_512]    = "sha3-512",
-+};
-+
-+const int hash_digest_size[HASH_ALGO__LAST] = {
-+	[HASH_ALGO_MD4]		= MD5_DIGEST_SIZE,
-+	[HASH_ALGO_MD5]		= MD5_DIGEST_SIZE,
-+	[HASH_ALGO_SHA1]	= SHA1_DIGEST_SIZE,
-+	[HASH_ALGO_RIPE_MD_160]	= RMD160_DIGEST_SIZE,
-+	[HASH_ALGO_SHA256]	= SHA256_DIGEST_SIZE,
-+	[HASH_ALGO_SHA384]	= SHA384_DIGEST_SIZE,
-+	[HASH_ALGO_SHA512]	= SHA512_DIGEST_SIZE,
-+	[HASH_ALGO_SHA224]	= SHA224_DIGEST_SIZE,
-+	[HASH_ALGO_RIPE_MD_128]	= RMD128_DIGEST_SIZE,
-+	[HASH_ALGO_RIPE_MD_256]	= RMD256_DIGEST_SIZE,
-+	[HASH_ALGO_RIPE_MD_320]	= RMD320_DIGEST_SIZE,
-+	[HASH_ALGO_WP_256]	= WP256_DIGEST_SIZE,
-+	[HASH_ALGO_WP_384]	= WP384_DIGEST_SIZE,
-+	[HASH_ALGO_WP_512]	= WP512_DIGEST_SIZE,
-+	[HASH_ALGO_TGR_128]	= TGR128_DIGEST_SIZE,
-+	[HASH_ALGO_TGR_160]	= TGR160_DIGEST_SIZE,
-+	[HASH_ALGO_TGR_192]	= TGR192_DIGEST_SIZE,
-+	[HASH_ALGO_SM3_256]	= SM3256_DIGEST_SIZE,
-+	[HASH_ALGO_STREEBOG_256] = STREEBOG256_DIGEST_SIZE,
-+	[HASH_ALGO_STREEBOG_512] = STREEBOG512_DIGEST_SIZE,
-+	[HASH_ALGO_SHA3_256]    = SHA3_256_DIGEST_SIZE,
-+	[HASH_ALGO_SHA3_384]    = SHA3_384_DIGEST_SIZE,
-+	[HASH_ALGO_SHA3_512]    = SHA3_512_DIGEST_SIZE,
-+};
-+
-+const char *verifs_str[] = {
-+	[VERIF_FILENAMES] = "filenames",
-+	[VERIF_NUMBER] = "number",
-+	[VERIF_PREFETCH] = "prefetch",
-+};
-diff --git a/tools/testing/selftests/digest_cache/common.h b/tools/testing/selftests/digest_cache/common.h
-new file mode 100644
-index 000000000000..e52e4b137807
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/common.h
-@@ -0,0 +1,135 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Header of common.c.
-+ */
-+
-+#ifndef _COMMON_H
-+#define _COMMON_H
-+#include <linux/types.h>
-+
-+#include "../../../../include/uapi/linux/hash_info.h"
-+
-+#define MD5_DIGEST_SIZE 16
-+#define SHA1_DIGEST_SIZE 20
-+#define RMD160_DIGEST_SIZE 20
-+#define SHA256_DIGEST_SIZE 32
-+#define SHA384_DIGEST_SIZE 48
-+#define SHA512_DIGEST_SIZE 64
-+#define SHA224_DIGEST_SIZE 28
-+#define RMD128_DIGEST_SIZE 16
-+#define RMD256_DIGEST_SIZE 32
-+#define RMD320_DIGEST_SIZE 40
-+#define WP256_DIGEST_SIZE 32
-+#define WP384_DIGEST_SIZE 48
-+#define WP512_DIGEST_SIZE 64
-+#define TGR128_DIGEST_SIZE 16
-+#define TGR160_DIGEST_SIZE 20
-+#define TGR192_DIGEST_SIZE 24
-+#define SM3256_DIGEST_SIZE 32
-+#define STREEBOG256_DIGEST_SIZE 32
-+#define STREEBOG512_DIGEST_SIZE 64
-+#define SHA3_224_DIGEST_SIZE	(224 / 8)
-+#define SHA3_256_DIGEST_SIZE	(256 / 8)
-+#define SHA3_384_DIGEST_SIZE	(384 / 8)
-+#define SHA3_512_DIGEST_SIZE	(512 / 8)
-+
-+#define DIGEST_CACHE_TEST_INTERFACE "/sys/kernel/security/digest_cache_test"
-+#define DIGEST_CACHE_PATH_INTERFACE "/sys/kernel/security/digest_cache_path"
-+#define DIGEST_CACHE_NOTIFY_INODES_INTERFACE  \
-+	"/sys/kernel/security/digest_cache_notify_inodes"
-+#define MAX_DIGEST_SIZE 64
-+
-+#define RPMTAG_FILEDIGESTS 1035
-+#define RPMTAG_FILEDIGESTALGO 5011
-+
-+#define RPM_INT32_TYPE 4
-+#define RPM_STRING_ARRAY_TYPE 8
-+
-+#define MAX_WORKS 21
-+
-+typedef __u8 u8;
-+typedef __u16 u16;
-+typedef __u32 u32;
-+typedef __s32 s32;
-+typedef __u64 u64;
-+
-+enum commands {
-+	DIGEST_CACHE_GET,		// args: <path>
-+	DIGEST_CACHE_LOOKUP,		// args: <algo>|<digest>
-+	DIGEST_CACHE_PUT,		// args:
-+	DIGEST_CACHE_ENABLE_VERIF,	// args: <verif name>
-+	DIGEST_CACHE_DISABLE_VERIF,	// args: <verif name>
-+	DIGEST_CACHE_SET_VERIF,		// args: <verif name>
-+	DIGEST_CACHE_GET_PUT_ASYNC,	// args: <path>|<start#>|<end#>
-+	DIGEST_CACHE__LAST,
-+};
-+
-+enum tlv_failures { TLV_NO_FAILURE,
-+		    TLV_FAILURE_ALGO_LEN,
-+		    TLV_FAILURE_HDR_LEN,
-+		    TLV_FAILURE_ALGO_MISMATCH,
-+		    TLV_FAILURE_NUM_DIGESTS,
-+		    TLV_FAILURE__LAST
-+};
-+
-+enum rpm_failures { RPM_NO_FAILURE,
-+		    RPM_FAILURE_WRONG_MAGIC,
-+		    RPM_FAILURE_BAD_DATA_OFFSET,
-+		    RPM_FAILURE_WRONG_TAGS,
-+		    RPM_FAILURE_WRONG_DIGEST_COUNT,
-+		    RPM_FAILURE_DIGEST_WRONG_TYPE,
-+		    RPM_FAILURE__LAST
-+};
-+
-+enum file_changes { FILE_WRITE,
-+		    FILE_TRUNCATE,
-+		    FILE_FTRUNCATE,
-+		    FILE_UNLINK,
-+		    FILE_RENAME,
-+		    FILE_SETXATTR,
-+		    FILE_REMOVEXATTR,
-+		    FILE_CHANGE__LAST
-+};
-+
-+enum VERIFS {
-+	VERIF_FILENAMES,
-+	VERIF_NUMBER,
-+	VERIF_PREFETCH,
-+	VERIF__LAST
-+};
-+
-+enum pgp_algos {
-+	DIGEST_ALGO_MD5		=  1,
-+	DIGEST_ALGO_SHA1	=  2,
-+	DIGEST_ALGO_RMD160	=  3,
-+	/* 4, 5, 6, and 7 are reserved. */
-+	DIGEST_ALGO_SHA256	=  8,
-+	DIGEST_ALGO_SHA384	=  9,
-+	DIGEST_ALGO_SHA512	= 10,
-+	DIGEST_ALGO_SHA224	= 11,
-+};
-+
-+struct rpm_hdr {
-+	u32 magic;
-+	u32 reserved;
-+	u32 tags;
-+	u32 datasize;
-+} __attribute__ ((__packed__));
-+
-+struct rpm_entryinfo {
-+	s32 tag;
-+	u32 type;
-+	s32 offset;
-+	u32 count;
-+} __attribute__ ((__packed__));
-+
-+extern const char *commands_str[DIGEST_CACHE__LAST];
-+extern const char *const hash_algo_name[HASH_ALGO__LAST];
-+extern const int hash_digest_size[HASH_ALGO__LAST];
-+extern const char *verifs_str[VERIF__LAST];
-+
-+#endif /* _COMMON_H */
-diff --git a/tools/testing/selftests/digest_cache/common_user.c b/tools/testing/selftests/digest_cache/common_user.c
-new file mode 100644
-index 000000000000..1bacadad6b6a
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/common_user.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Add common code in user space for testing the digest_cache LSM.
-+ */
-+
-+#include <stddef.h>
-+
-+#include "common_user.h"
-+
-+static const char hex_asc[] = "0123456789abcdef";
-+
-+#define hex_asc_lo(x)   hex_asc[((x) & 0x0f)]
-+#define hex_asc_hi(x)   hex_asc[((x) & 0xf0) >> 4]
-+
-+const enum hash_algo pgp_algo_mapping[DIGEST_ALGO_SHA224 + 1] = {
-+	[DIGEST_ALGO_MD5]	= HASH_ALGO_MD5,
-+	[DIGEST_ALGO_SHA1]	= HASH_ALGO_SHA1,
-+	[DIGEST_ALGO_RMD160]	= HASH_ALGO_RIPE_MD_160,
-+	[4]			= HASH_ALGO__LAST,
-+	[5]			= HASH_ALGO__LAST,
-+	[6]			= HASH_ALGO__LAST,
-+	[7]			= HASH_ALGO__LAST,
-+	[DIGEST_ALGO_SHA256]	= HASH_ALGO_SHA256,
-+	[DIGEST_ALGO_SHA384]	= HASH_ALGO_SHA384,
-+	[DIGEST_ALGO_SHA512]	= HASH_ALGO_SHA512,
-+	[DIGEST_ALGO_SHA224]	= HASH_ALGO_SHA224,
-+};
-+
-+static inline char *hex_byte_pack(char *buf, unsigned char byte)
-+{
-+	*buf++ = hex_asc_hi(byte);
-+	*buf++ = hex_asc_lo(byte);
-+	return buf;
-+}
-+
-+char *bin2hex(char *dst, const void *src, size_t count)
-+{
-+	const unsigned char *_src = src;
-+
-+	while (count--)
-+		dst = hex_byte_pack(dst, *_src++);
-+	return dst;
-+}
-diff --git a/tools/testing/selftests/digest_cache/common_user.h b/tools/testing/selftests/digest_cache/common_user.h
-new file mode 100644
-index 000000000000..4eef52cc5c27
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/common_user.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Header of common_user.c.
-+ */
-+
-+#include <linux/types.h>
-+#include <stddef.h>
-+
-+#include "common.h"
-+
-+extern const enum hash_algo pgp_algo_mapping[DIGEST_ALGO_SHA224 + 1];
-+
-+char *bin2hex(char *dst, const void *src, size_t count);
-diff --git a/tools/testing/selftests/digest_cache/config b/tools/testing/selftests/digest_cache/config
-new file mode 100644
-index 000000000000..075a06cc4f8e
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/config
-@@ -0,0 +1 @@
-+CONFIG_SECURITY_DIGEST_CACHE=y
-diff --git a/tools/testing/selftests/digest_cache/generators.c b/tools/testing/selftests/digest_cache/generators.c
-new file mode 100644
-index 000000000000..c7791a3589f2
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/generators.c
-@@ -0,0 +1,248 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Generate digest lists for testing.
-+ */
-+
-+#include <stddef.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+#include <limits.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/xattr.h>
-+#include <asm/byteorder.h>
-+
-+#include "generators.h"
-+#include "../../../../include/uapi/linux/hash_info.h"
-+#include "../../../../include/uapi/linux/xattr.h"
-+#include "../../../../include/uapi/linux/tlv_digest_list.h"
-+#include "../../../../include/uapi/linux/tlv_parser.h"
-+
-+int gen_tlv_list(int temp_dirfd, char *digest_list_filename,
-+		 enum hash_algo algo, int start_number, int num_digests,
-+		 enum tlv_failures failure)
-+{
-+	u64 _algo = __cpu_to_be64(algo);
-+	u8 digest[MAX_DIGEST_SIZE] = { 0 };
-+	int digest_len = hash_digest_size[algo];
-+	int digest_len_to_copy = digest_len;
-+	int ret, fd, i;
-+
-+	struct tlv_data_entry algo_entry = {
-+		.field = __cpu_to_be64(DIGEST_LIST_ALGO),
-+		.length = __cpu_to_be64(sizeof(_algo)),
-+	};
-+
-+	struct tlv_data_entry entry_digest = {
-+		.field = __cpu_to_be64(DIGEST_LIST_ENTRY_DIGEST),
-+		.length = __cpu_to_be64(digest_len),
-+	};
-+
-+	struct tlv_hdr entry_hdr = {
-+		.data_type = __cpu_to_be64(DIGEST_LIST_ENTRY_DATA),
-+		._reserved = 0,
-+		.num_entries = __cpu_to_be64(1),
-+		.total_len = __cpu_to_be64(sizeof(entry_digest) + digest_len),
-+	};
-+
-+	struct tlv_data_entry entry_entry = {
-+		.field = __cpu_to_be64(DIGEST_LIST_ENTRY),
-+		.length = __cpu_to_be64(sizeof(entry_hdr) +
-+					__be64_to_cpu(entry_hdr.total_len)),
-+	};
-+
-+	struct tlv_hdr hdr = {
-+		.data_type = __cpu_to_be64(DIGEST_LIST_FILE),
-+		._reserved = 0,
-+		.num_entries = __cpu_to_be64(1 + num_digests),
-+		.total_len = __cpu_to_be64(sizeof(algo_entry) +
-+					   __be64_to_cpu(algo_entry.length) +
-+					   num_digests * (sizeof(entry_entry) +
-+					   __be64_to_cpu(entry_entry.length)))
-+	};
-+
-+	switch (failure) {
-+	case TLV_FAILURE_ALGO_LEN:
-+		algo_entry.length = algo_entry.length / 2;
-+		break;
-+	case TLV_FAILURE_HDR_LEN:
-+		hdr.total_len--;
-+		break;
-+	case TLV_FAILURE_ALGO_MISMATCH:
-+		_algo = __cpu_to_be64(algo - 1);
-+		break;
-+	case TLV_FAILURE_NUM_DIGESTS:
-+		num_digests = 0;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	fd = openat(temp_dirfd, digest_list_filename,
-+		    O_WRONLY | O_CREAT | O_TRUNC, 0600);
-+	if (fd == -1)
-+		return -errno;
-+
-+	ret = write(fd, (u8 *)&hdr, sizeof(hdr));
-+	if (ret != sizeof(hdr))
-+		return -errno;
-+
-+	ret = write(fd, (u8 *)&algo_entry, sizeof(algo_entry));
-+	if (ret != sizeof(algo_entry))
-+		return -errno;
-+
-+	ret = write(fd, (u8 *)&_algo, sizeof(_algo));
-+	if (ret != sizeof(_algo))
-+		return -errno;
-+
-+	*(u32 *)digest = start_number;
-+
-+	for (i = 0; i < num_digests; i++) {
-+		ret = write(fd, (u8 *)&entry_entry, sizeof(entry_entry));
-+		if (ret != sizeof(entry_entry))
-+			return -errno;
-+
-+		ret = write(fd, (u8 *)&entry_hdr, sizeof(entry_hdr));
-+		if (ret != sizeof(entry_hdr))
-+			return -errno;
-+
-+		ret = write(fd, (u8 *)&entry_digest, sizeof(entry_digest));
-+		if (ret != sizeof(entry_digest))
-+			return -errno;
-+
-+		ret = write(fd, digest, digest_len_to_copy);
-+		if (ret != digest_len_to_copy)
-+			return -errno;
-+
-+		(*(u32 *)digest)++;
-+	}
-+
-+	close(fd);
-+	return 0;
-+}
-+
-+int gen_rpm_list(int temp_dirfd, char *digest_list_filename,
-+		 enum hash_algo algo, enum pgp_algos pgp_algo, int start_number,
-+		 int num_digests, enum rpm_failures failure)
-+{
-+	u32 _pgp_algo = __cpu_to_be32(pgp_algo);
-+	u8 digest[MAX_DIGEST_SIZE] = { 0 };
-+	char digest_str[MAX_DIGEST_SIZE * 2 + 1];
-+	struct rpm_hdr hdr;
-+	struct rpm_entryinfo algo_entry, digest_entry;
-+	int digest_len = hash_digest_size[algo];
-+	int ret, fd, d_len, i;
-+
-+	d_len = hash_digest_size[algo] * 2 + 1;
-+
-+	hdr.magic = __cpu_to_be32(0x8eade801);
-+	hdr.reserved = 0;
-+	hdr.tags = __cpu_to_be32(1);
-+
-+	/*
-+	 * Skip the algo section, to ensure that the parser recognizes MD5 as
-+	 * the default hash algorithm.
-+	 */
-+	if (algo != HASH_ALGO_MD5)
-+		hdr.tags = __cpu_to_be32(2);
-+
-+	hdr.datasize = __cpu_to_be32(d_len * num_digests);
-+
-+	if (algo != HASH_ALGO_MD5)
-+		hdr.datasize = __cpu_to_be32(sizeof(u32) + d_len * num_digests);
-+
-+	digest_entry.tag = __cpu_to_be32(RPMTAG_FILEDIGESTS);
-+	digest_entry.type = __cpu_to_be32(RPM_STRING_ARRAY_TYPE);
-+	digest_entry.offset = 0;
-+	digest_entry.count = __cpu_to_be32(num_digests);
-+
-+	algo_entry.tag = __cpu_to_be32(RPMTAG_FILEDIGESTALGO);
-+	algo_entry.type = __cpu_to_be32(RPM_INT32_TYPE);
-+	algo_entry.offset = __cpu_to_be32(d_len * num_digests);
-+	algo_entry.count = __cpu_to_be32(1);
-+
-+	switch (failure) {
-+	case RPM_FAILURE_WRONG_MAGIC:
-+		hdr.magic++;
-+		break;
-+	case RPM_FAILURE_BAD_DATA_OFFSET:
-+		algo_entry.offset = __cpu_to_be32(UINT_MAX);
-+		break;
-+	case RPM_FAILURE_WRONG_TAGS:
-+		hdr.tags = __cpu_to_be32(2 + 10);
-+		break;
-+	case RPM_FAILURE_WRONG_DIGEST_COUNT:
-+		/* We need to go beyond the algorithm, to fail. */
-+		digest_entry.count = __cpu_to_be32(num_digests + 5);
-+		break;
-+	case RPM_FAILURE_DIGEST_WRONG_TYPE:
-+		digest_entry.type = __cpu_to_be32(RPM_INT32_TYPE);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	fd = openat(temp_dirfd, digest_list_filename,
-+		    O_WRONLY | O_CREAT | O_TRUNC, 0600);
-+	if (fd == -1)
-+		return -errno;
-+
-+	ret = write(fd, (u8 *)&hdr, sizeof(hdr));
-+	if (ret != sizeof(hdr))
-+		return -errno;
-+
-+	if (algo != HASH_ALGO_MD5) {
-+		ret = write(fd, (u8 *)&algo_entry, sizeof(algo_entry));
-+		if (ret != sizeof(algo_entry))
-+			return -errno;
-+	}
-+
-+	ret = write(fd, (u8 *)&digest_entry, sizeof(digest_entry));
-+	if (ret != sizeof(digest_entry))
-+		return -errno;
-+
-+	*(u32 *)digest = start_number;
-+
-+	for (i = 0; i < num_digests; i++) {
-+		bin2hex(digest_str, digest, digest_len);
-+
-+		ret = write(fd, (u8 *)digest_str, d_len);
-+		if (ret != d_len)
-+			return -errno;
-+
-+		(*(u32 *)digest)++;
-+	}
-+
-+	if (algo != HASH_ALGO_MD5) {
-+		ret = write(fd, (u8 *)&_pgp_algo, sizeof(_pgp_algo));
-+		if (ret != sizeof(_pgp_algo))
-+			return -errno;
-+	}
-+
-+	close(fd);
-+	return 0;
-+}
-+
-+int create_file(int temp_dirfd, char *filename, char *digest_list_filename)
-+{
-+	int ret = 0, fd;
-+
-+	fd = openat(temp_dirfd, filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-+	if (fd == -1)
-+		return -errno;
-+
-+	if (!digest_list_filename)
-+		goto out;
-+
-+	ret = fsetxattr(fd, XATTR_NAME_DIGEST_LIST, digest_list_filename,
-+			strlen(digest_list_filename) + 1, 0);
-+	if (ret == -1)
-+		ret = -errno;
-+out:
-+	close(fd);
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/digest_cache/generators.h b/tools/testing/selftests/digest_cache/generators.h
-new file mode 100644
-index 000000000000..1c83e531b799
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/generators.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Header of generators.c.
-+ */
-+
-+#include "common.h"
-+#include "common_user.h"
-+
-+int gen_tlv_list(int temp_dirfd, char *digest_list_filename,
-+		 enum hash_algo algo, int start_number, int num_digests,
-+		 enum tlv_failures failure);
-+int gen_rpm_list(int temp_dirfd, char *digest_list_filename,
-+		 enum hash_algo algo, enum pgp_algos pgp_algo, int start_number,
-+		 int num_digests, enum rpm_failures failure);
-+int create_file(int temp_dirfd, char *filename, char *digest_list_filename);
-diff --git a/tools/testing/selftests/digest_cache/testmod/Makefile b/tools/testing/selftests/digest_cache/testmod/Makefile
-new file mode 100644
-index 000000000000..1ba1c7f08658
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/testmod/Makefile
-@@ -0,0 +1,16 @@
-+KDIR ?= ../../../../..
-+
-+MODULES = digest_cache_kern.ko
-+
-+obj-m += digest_cache_kern.o
-+
-+digest_cache_kern-y := kern.o ../common.o
-+
-+all:
-+	+$(Q)$(MAKE) -C $(KDIR) M=$$PWD modules
-+
-+clean:
-+	+$(Q)$(MAKE) -C $(KDIR) M=$$PWD clean
-+
-+install: all
-+	+$(Q)$(MAKE) -C $(KDIR) M=$$PWD modules_install
-diff --git a/tools/testing/selftests/digest_cache/testmod/kern.c b/tools/testing/selftests/digest_cache/testmod/kern.c
-new file mode 100644
-index 000000000000..7215ef638e66
---- /dev/null
-+++ b/tools/testing/selftests/digest_cache/testmod/kern.c
-@@ -0,0 +1,564 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the kernel module to interact with the digest_cache LSM.
-+ */
-+
-+#define pr_fmt(fmt) "DIGEST CACHE TEST: "fmt
-+#include <linux/module.h>
-+#include <linux/namei.h>
-+#include <linux/security.h>
-+#include <linux/dynamic_debug.h>
-+#include <linux/digest_cache.h>
-+#include <linux/kprobes.h>
-+#include <linux/cpu.h>
-+#include <linux/kernel_read_file.h>
-+#include <crypto/hash_info.h>
-+
-+#include "../common.h"
-+
-+struct verif {
-+	int (*update)(struct file *file);
-+	ssize_t (*read)(struct file *file, char __user *buf, size_t datalen,
-+			loff_t *ppos);
-+	bool enabled;
-+};
-+
-+struct read_work {
-+	struct work_struct work;
-+	char *path_str;
-+	int ret;
-+};
-+
-+static struct dentry *test, *notify_inodes;
-+static struct digest_cache *digest_cache;
-+static digest_cache_found_t found;
-+static int cur_verif_index;
-+static u8 prefetch_buf[4096];
-+static u8 notify_inodes_buf[4096];
-+static struct read_work w[MAX_WORKS];
-+
-+static int filenames_update(struct file *file)
-+{
-+	char *filename = (char *)file->f_path.dentry->d_name.name;
-+
-+	return digest_cache_verif_set(file, "filenames", filename,
-+				      strlen(filename) + 1);
-+}
-+
-+static int number_update(struct file *file)
-+{
-+	const char *filename = file_dentry(file)->d_name.name;
-+	size_t filename_len = strlen(filename);
-+	u64 number = U64_MAX;
-+	int ret;
-+
-+	while (filename_len) {
-+		if (filename[filename_len - 1] < '0' ||
-+		    filename[filename_len - 1] > '9')
-+			break;
-+
-+		filename_len--;
-+	}
-+
-+	ret = kstrtoull(filename + filename_len, 10, &number);
-+	if (ret < 0) {
-+		pr_debug("Failed to convert filename %s into number\n",
-+			 file_dentry(file)->d_name.name);
-+		return ret;
-+	}
-+
-+	return digest_cache_verif_set(file, "number", &number, sizeof(number));
-+}
-+
-+static ssize_t filenames_read(struct file *file, char __user *buf,
-+			      size_t datalen, loff_t *ppos)
-+{
-+	loff_t _ppos = 0;
-+	char *filenames_list;
-+
-+	filenames_list = digest_cache_verif_get(found ?
-+				digest_cache_from_found_t(found) : digest_cache,
-+				verifs_str[VERIF_FILENAMES]);
-+	if (!filenames_list)
-+		return -ENOENT;
-+
-+	return simple_read_from_buffer(buf, datalen, &_ppos, filenames_list,
-+				       strlen(filenames_list) + 1);
-+}
-+
-+static ssize_t number_read(struct file *file, char __user *buf, size_t datalen,
-+			   loff_t *ppos)
-+{
-+	loff_t _ppos = 0;
-+	u64 *number;
-+	char temp[20];
-+	ssize_t len;
-+
-+	number = digest_cache_verif_get(found ?
-+					digest_cache_from_found_t(found) :
-+					digest_cache, verifs_str[VERIF_NUMBER]);
-+	if (!number)
-+		return -ENOENT;
-+
-+	len = snprintf(temp, sizeof(temp), "%llu", *number);
-+
-+	return simple_read_from_buffer(buf, datalen, &_ppos, temp, len);
-+}
-+
-+static int prefetch_update(struct file *file)
-+{
-+	char *filename = (char *)file->f_path.dentry->d_name.name;
-+	char *start_ptr = prefetch_buf, *end_ptr;
-+	int ret;
-+
-+	ret = digest_cache_verif_set(file, "probe_digest_cache", "1", 1);
-+	if (!ret) {
-+		/* Don't include duplicates of requested digest lists. */
-+		while ((end_ptr = strchrnul(start_ptr, ','))) {
-+			if (end_ptr > start_ptr &&
-+			    !strncmp(start_ptr, filename, end_ptr - start_ptr))
-+				return 0;
-+
-+			if (!*end_ptr)
-+				break;
-+
-+			start_ptr = end_ptr + 1;
-+		}
-+	}
-+
-+	if (prefetch_buf[0])
-+		strlcat(prefetch_buf, ",", sizeof(prefetch_buf));
-+
-+	strlcat(prefetch_buf, filename, sizeof(prefetch_buf));
-+	return 0;
-+}
-+
-+static ssize_t prefetch_read(struct file *file, char __user *buf,
-+			     size_t datalen, loff_t *ppos)
-+{
-+	loff_t _ppos = 0;
-+	ssize_t ret;
-+
-+	ret = simple_read_from_buffer(buf, datalen, &_ppos, prefetch_buf,
-+				       strlen(prefetch_buf) + 1);
-+	memset(prefetch_buf, 0, sizeof(prefetch_buf));
-+	return ret;
-+}
-+
-+static int test_digest_cache_change(struct notifier_block *nb,
-+				    unsigned long event, void *data)
-+{
-+	struct digest_cache_event_data *event_data = data;
-+	char i_ino_str[10];
-+
-+	if (event != DIGEST_CACHE_RESET)
-+		return NOTIFY_DONE;
-+
-+	if (notify_inodes_buf[0])
-+		strlcat(notify_inodes_buf, ",", sizeof(notify_inodes_buf));
-+
-+	snprintf(i_ino_str, sizeof(i_ino_str), "%lu", event_data->inode->i_ino);
-+	strlcat(notify_inodes_buf, i_ino_str, sizeof(notify_inodes_buf));
-+	return 0;
-+}
-+
-+static struct notifier_block digest_cache_notifier = {
-+	.notifier_call = test_digest_cache_change,
-+};
-+
-+static ssize_t write_notify_inodes(struct file *file, const char __user *buf,
-+			     size_t datalen, loff_t *ppos)
-+{
-+	memset(notify_inodes_buf, 0, sizeof(notify_inodes_buf));
-+	return datalen;
-+}
-+
-+static ssize_t read_notify_inodes(struct file *file, char __user *buf,
-+				  size_t datalen, loff_t *ppos)
-+{
-+	loff_t _ppos = 0;
-+
-+	return simple_read_from_buffer(buf, datalen, &_ppos, notify_inodes_buf,
-+				       strlen(notify_inodes_buf) + 1);
-+}
-+
-+static struct verif verifs_methods[] = {
-+	[VERIF_FILENAMES] = { .update = filenames_update,
-+			      .read = filenames_read },
-+	[VERIF_NUMBER] = { .update = number_update, .read = number_read },
-+	[VERIF_PREFETCH] = { .update = prefetch_update, .read = prefetch_read },
-+};
-+
-+static void digest_cache_get_put_work(struct work_struct *work)
-+{
-+	struct read_work *w = container_of(work, struct read_work, work);
-+	struct digest_cache *digest_cache;
-+	struct path path;
-+
-+	w->ret = kern_path(w->path_str, 0, &path);
-+	if (w->ret < 0)
-+		return;
-+
-+	digest_cache = digest_cache_get(path.dentry);
-+
-+	path_put(&path);
-+
-+	if (!digest_cache) {
-+		w->ret = -ENOENT;
-+		return;
-+	}
-+
-+	digest_cache_put(digest_cache);
-+	w->ret = 0;
-+}
-+
-+static int digest_cache_get_put_async(char *path_str, int start_number,
-+				      int end_number)
-+{
-+	int ret = 0, i;
-+
-+	cpus_read_lock();
-+	for (i = start_number; i <= end_number; i++) {
-+		w[i].path_str = kasprintf(GFP_KERNEL, "%s%u", path_str, i);
-+		if (!w[i].path_str) {
-+			ret = -ENOMEM;
-+			break;
-+		}
-+
-+		INIT_WORK_ONSTACK(&w[i].work, digest_cache_get_put_work);
-+		schedule_work_on(i % num_online_cpus(), &w[i].work);
-+	}
-+	cpus_read_unlock();
-+
-+	for (i = start_number; i <= end_number; i++) {
-+		if (!w[i].path_str)
-+			continue;
-+
-+		flush_work(&w[i].work);
-+		destroy_work_on_stack(&w[i].work);
-+		kfree(w[i].path_str);
-+		w[i].path_str = NULL;
-+		if (!ret)
-+			ret = w[i].ret;
-+	}
-+
-+	return ret;
-+}
-+
-+static ssize_t write_request(struct file *file, const char __user *buf,
-+			     size_t datalen, loff_t *ppos)
-+{
-+	char *data, *data_ptr, *cmd_str, *path_str, *algo_str, *digest_str;
-+	char *verif_name_str, *start_number_str, *end_number_str;
-+	u8 digest[64];
-+	struct path path;
-+	int ret, cmd, algo, verif_index, start_number, end_number;
-+
-+	data = memdup_user_nul(buf, datalen);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
-+	data_ptr = data;
-+
-+	cmd_str = strsep(&data_ptr, "|");
-+	if (!cmd_str) {
-+		pr_debug("No command\n");
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	cmd = match_string(commands_str, DIGEST_CACHE__LAST, cmd_str);
-+	if (cmd < 0) {
-+		pr_err("Unknown command %s\n", cmd_str);
-+		ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	switch (cmd) {
-+	case DIGEST_CACHE_GET:
-+		found = 0UL;
-+
-+		path_str = strsep(&data_ptr, "|");
-+		if (!path_str) {
-+			pr_debug("No path\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		ret = kern_path(path_str, 0, &path);
-+		if (ret < 0) {
-+			pr_debug("Cannot find file %s\n", path_str);
-+			goto out;
-+		}
-+
-+		if (digest_cache) {
-+			pr_debug("Digest cache exists, doing a put\n");
-+			digest_cache_put(digest_cache);
-+		}
-+
-+		digest_cache = digest_cache_get(path.dentry);
-+		ret = digest_cache ? 0 : -ENOENT;
-+		pr_debug("digest cache get %s, ret: %d\n", path_str, ret);
-+		path_put(&path);
-+		break;
-+	case DIGEST_CACHE_LOOKUP:
-+		if (!digest_cache) {
-+			pr_debug("No digest cache\n");
-+			ret = -ENOENT;
-+			goto out;
-+		}
-+
-+		path_str = strsep(&data_ptr, "|");
-+		if (!path_str) {
-+			pr_debug("No path\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		algo_str = strsep(&data_ptr, ":");
-+		digest_str = data_ptr;
-+
-+		if (!algo_str || !digest_str) {
-+			pr_debug("No algo or digest\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		algo = match_string(hash_algo_name, HASH_ALGO__LAST, algo_str);
-+		if (algo < 0) {
-+			pr_err("Unknown algorithm %s", algo_str);
-+			ret = -ENOENT;
-+			goto out;
-+		}
-+
-+		ret = hex2bin(digest, digest_str, hash_digest_size[algo]);
-+		if (ret < 0) {
-+			pr_debug("Invalid digest %s\n", digest_str);
-+			goto out;
-+		}
-+
-+		ret = kern_path(path_str, 0, &path);
-+		if (ret < 0) {
-+			pr_debug("Cannot find file %s\n", path_str);
-+			goto out;
-+		}
-+
-+		ret = -ENOENT;
-+
-+		found = digest_cache_lookup(path.dentry, digest_cache, digest,
-+					    algo);
-+		path_put(&path);
-+		if (found)
-+			ret = 0;
-+
-+		pr_debug("%s:%s lookup %s, ret: %d\n", algo_str, digest_str,
-+			 path_str, ret);
-+		break;
-+	case DIGEST_CACHE_PUT:
-+		if (digest_cache) {
-+			digest_cache_put(digest_cache);
-+			digest_cache = NULL;
-+		}
-+		ret = 0;
-+		pr_debug("digest cache put, ret: %d\n", ret);
-+		break;
-+	case DIGEST_CACHE_ENABLE_VERIF:
-+	case DIGEST_CACHE_DISABLE_VERIF:
-+		memset(prefetch_buf, 0, sizeof(prefetch_buf));
-+		fallthrough;
-+	case DIGEST_CACHE_SET_VERIF:
-+		verif_name_str = strsep(&data_ptr, "|");
-+		if (!verif_name_str) {
-+			pr_debug("No verifier name\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		verif_index = match_string(verifs_str, ARRAY_SIZE(verifs_str),
-+					   verif_name_str);
-+		if (verif_index < 0) {
-+			pr_err("Unknown verifier name %s\n", verif_name_str);
-+			ret = -ENOENT;
-+			goto out;
-+		}
-+
-+		if (cmd == DIGEST_CACHE_ENABLE_VERIF)
-+			verifs_methods[verif_index].enabled = true;
-+		else if (cmd == DIGEST_CACHE_DISABLE_VERIF)
-+			verifs_methods[verif_index].enabled = false;
-+		else
-+			cur_verif_index = verif_index;
-+
-+		ret = 0;
-+		pr_debug("digest cache %s %s, ret: %d\n", cmd_str,
-+			 verif_name_str, ret);
-+		break;
-+	case DIGEST_CACHE_GET_PUT_ASYNC:
-+		path_str = strsep(&data_ptr, "|");
-+		if (!path_str) {
-+			pr_debug("No path\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		start_number_str = strsep(&data_ptr, "|");
-+		if (!start_number_str) {
-+			pr_debug("No start number\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		ret = kstrtoint(start_number_str, 10, &start_number);
-+		if (ret < 0) {
-+			pr_debug("Invalid start number %s\n", start_number_str);
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		end_number_str = strsep(&data_ptr, "|");
-+		if (!end_number_str) {
-+			pr_debug("No end number\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		ret = kstrtoint(end_number_str, 10, &end_number);
-+		if (ret < 0) {
-+			pr_debug("Invalid end number %s\n", end_number_str);
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		if (end_number - start_number >= MAX_WORKS) {
-+			pr_debug("Too many works (%d), max %d\n",
-+				 end_number - start_number, MAX_WORKS - 1);
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		ret = digest_cache_get_put_async(path_str, start_number,
-+						 end_number);
-+		pr_debug("digest cache %s on %s, start: %d, end: %d, ret: %d\n",
-+			 cmd_str, path_str, start_number, end_number, ret);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+out:
-+	kfree(data);
-+	return ret ?: datalen;
-+}
-+
-+static ssize_t read_request(struct file *file, char __user *buf, size_t datalen,
-+			    loff_t *ppos)
-+{
-+	return verifs_methods[cur_verif_index].read(file, buf, datalen, ppos);
-+}
-+
-+static const struct file_operations digest_cache_test_ops = {
-+	.open = generic_file_open,
-+	.write = write_request,
-+	.read = read_request,
-+	.llseek = generic_file_llseek,
-+};
-+
-+static const struct file_operations digest_cache_notify_inodes_ops = {
-+	.open = generic_file_open,
-+	.write = write_notify_inodes,
-+	.read = read_notify_inodes,
-+	.llseek = generic_file_llseek,
-+};
-+
-+static int __kprobes kernel_post_read_file_hook(struct kprobe *p,
-+						struct pt_regs *regs)
-+{
-+#ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-+	struct file *file = (struct file *)regs_get_kernel_argument(regs, 0);
-+	enum kernel_read_file_id id = regs_get_kernel_argument(regs, 3);
-+#else
-+	struct file *file = NULL;
-+	enum kernel_read_file_id id = READING_UNKNOWN;
-+#endif
-+	int ret, i;
-+
-+	if (id != READING_DIGEST_LIST)
-+		return 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(verifs_methods); i++) {
-+		if (!verifs_methods[i].enabled)
-+			continue;
-+
-+		ret = verifs_methods[i].update(file);
-+		if (ret < 0)
-+			return 0;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct kprobe kp = {
-+	.symbol_name = "security_kernel_post_read_file",
-+};
-+
-+static int __init digest_cache_test_init(void)
-+{
-+	int ret;
-+
-+	kp.pre_handler = kernel_post_read_file_hook;
-+
-+	ret = register_kprobe(&kp);
-+	if (ret < 0) {
-+		pr_err("register_kprobe failed, returned %d\n", ret);
-+		return ret;
-+	}
-+
-+	test = securityfs_create_file("digest_cache_test", 0660, NULL, NULL,
-+				      &digest_cache_test_ops);
-+	if (IS_ERR(test)) {
-+		ret = PTR_ERR(test);
-+		goto out_kprobe;
-+	}
-+
-+	notify_inodes = securityfs_create_file("digest_cache_notify_inodes",
-+					       0660, NULL, NULL,
-+					       &digest_cache_notify_inodes_ops);
-+	if (IS_ERR(notify_inodes)) {
-+		ret = PTR_ERR(notify_inodes);
-+		goto out_test;
-+	}
-+
-+	ret = digest_cache_register_notifier(&digest_cache_notifier);
-+	if (ret < 0)
-+		goto out_notify_inodes;
-+
-+	return 0;
-+
-+out_notify_inodes:
-+	securityfs_remove(notify_inodes);
-+out_test:
-+	securityfs_remove(test);
-+out_kprobe:
-+	unregister_kprobe(&kp);
-+	return ret;
-+}
-+
-+static void __exit digest_cache_test_fini(void)
-+{
-+	if (digest_cache)
-+		digest_cache_put(digest_cache);
-+
-+	digest_cache_unregister_notifier(&digest_cache_notifier);
-+	securityfs_remove(notify_inodes);
-+	securityfs_remove(test);
-+	unregister_kprobe(&kp);
-+	pr_debug("kprobe at %p unregistered\n", kp.addr);
-+}
-+
-+module_init(digest_cache_test_init);
-+module_exit(digest_cache_test_fini);
-+MODULE_LICENSE("GPL");
 -- 
 2.34.1
 
