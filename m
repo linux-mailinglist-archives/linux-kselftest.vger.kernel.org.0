@@ -1,111 +1,185 @@
-Return-Path: <linux-kselftest+bounces-8218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B2E8A74D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 21:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B60628A7507
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 21:40:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D17191F21BA5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 19:33:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CC761F21445
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 19:40:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37AAA1386C6;
-	Tue, 16 Apr 2024 19:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF071384BC;
+	Tue, 16 Apr 2024 19:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BU5V0bVT"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gIPnfds+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DEA13541F;
-	Tue, 16 Apr 2024 19:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3748613E
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 19:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713295969; cv=none; b=T4BP92vnhL1zdfyZg0jcPN3LF3cBuqtdScufX/Y5BWZMbGmV9VGIML1Zs7LorOTj3sGJ7d9oQzT0vo3HVTlg37Co/Agjnl4jPU2lcnC2KhkcLAkt9euHXJ5Qnryi09xyegHWhEYjv03AIIb5AS3ca4VT/DL1cK8iNX9FwTZj48o=
+	t=1713296439; cv=none; b=liJ7thDWbtcrpZnLcDpNdFy3K1cyRIlNVcgymrH7onAfn+ZrrHk+HRwHtdvQMn09CKU0dghjUPymWZDhHQsgUq973xqGh3mDMM1cgEo9VQWjun+A27HoTY6Vtaql6NzdisrWNJvjd/1QMShhzgggn38yIio91BWFcGNkrGK2VAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713295969; c=relaxed/simple;
-	bh=I/hO0eOe4YB6IzK+K1OjKqka2paD2+CJJ6h1/oiAmAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ICvDKZ/r5+OdbjbsPFeFmEtXKszILis5pg66ujR/75QpWWpepal8mA4mz5uoYlJhmGKIoZeO+0VUQORPIyBCq/rOz3Trt6PknCWdgzYZ9xu+MWGZCySs8rLsHMxr+AToxcS54dxUDPjtFpDja+l9vcPQHUz5RKlmfuHPNLR3jfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BU5V0bVT; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e3f17c6491so41201315ad.2;
-        Tue, 16 Apr 2024 12:32:47 -0700 (PDT)
+	s=arc-20240116; t=1713296439; c=relaxed/simple;
+	bh=RvR6Qs/XmUof5Nbp59FmfgdsMMPaxV8slV+aC7LWifg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=KXwnm8zq/lEfdsLmrp1c9+c5ZC/pcsCcY7IfvYcwChPOxNlg9dPzN+8f0dRKeDlyvrT/+tHCP6BcTA/J0dDT3aXe8ufBApMFD9lLKgE5xw6qYETH89HME7qj6NEwKhEGHKlE2bI4WPf9MPhBfl9bWqxNg0x/irmBMjTYYQ+LjTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gIPnfds+; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-233e41de0caso1551481fac.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 12:40:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713295967; x=1713900767; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bEDpy+KIDUbfpAeVl3AnQZ5WnXTO3Q8SS3ZqkxRNcqQ=;
-        b=BU5V0bVTB7Y/yV7gL1rSr1QbF9U3PYLvSgJA86SixydqPaUGTC/NT2Rq3wS1z3gost
-         650gWffwcM9Ka2/1FdCRD5DdXIzpzsKI5YVl8rd5+fdrFdCY4+7LtjlF0ec9BBesSEaY
-         1Ixa4eLV/azElt1HZ4E1lu+e7lQjGGyY7yYcP6IqMMlRPWamcX8WgJM4ytaNzYHbM9g2
-         TrccC1u5/ossIzdCrhqdGIv1looqWD8lRC9Sbq06h2nlkRyYfIeB50UuPgZfcYk5RHf8
-         NADXQgNGdknP/IvA6A/BjvJorwkfpYbMUIh/kiWMfnoH0KIezCiGSV3rwhNi01K5QcZk
-         6b2Q==
+        d=chromium.org; s=google; t=1713296437; x=1713901237; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KwEv4Z/MXON03xxjjs3as0fX96oGOhkKVq/HAbUMzow=;
+        b=gIPnfds+AZmqgVlPcM05vY2KMGCvBFfZX+tCc4fa3kNhn9OmFIDYBvKWgmrN9p3LWl
+         KmOkk74I4nLya8fELsVfokSYibTpF0NjFRsKW9m1cKQ+qDP4smksUnQvgbp1ayHnsoBn
+         OX/556GWj6ENvVZEM4uqvtskjAUpcN9ZtZSAE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713295967; x=1713900767;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bEDpy+KIDUbfpAeVl3AnQZ5WnXTO3Q8SS3ZqkxRNcqQ=;
-        b=XjcRSJBunm8zsNn5zOeMWCux4GeVc9rQ1QZoTHlO1zfspsxo1shS/Shl08U64LP0Uw
-         6foi7wRvVnGS5RYlmp9jZJil4iyqsA/GudMO7qNx62DkD2trA7iqseDNpud8iZrTTH4U
-         +BVnfeqyZKprwCgTe0J2MsJceYWlacfS+4E4Vc6wAycw83+yvoIGlyS1+QqDBEGJA99c
-         TO2bThxhG0iYGEEJfSF5Dkr4NfBeJRFhUr6mucLQoP+HNqm3QKIm1a5AmYz5dvUXled6
-         hxpJBUBqxKhHkliTElMg71qiuT4BhWdpTILQhjDYQVrenSKjKT0GvbynY19f+TFnZpCq
-         Wtkg==
-X-Forwarded-Encrypted: i=1; AJvYcCW64BmkA9cByQrmWcLRLbEtWs+I0hplf237eV+NLM4sEyzTB+guoDmJI19mPnjayTTxGBUT0drowy7569aQZcIYNRZ8bPlf1ME1GV3pjanLLDPXx4yBbarBZGxL2g5I5ahBOpht0hc5pEM07O6bhQUSm9JYyLTvJO8+O3JrOhuirdBR5X6KRum0
-X-Gm-Message-State: AOJu0YxzA/bAEzZNMX41xh4CSzaf1kLbrM2v6E/fCX6KJRwBc9BrIG+q
-	Mb6GEw0+yYYAjKlmNDhOfHX10szV1kMz3cFPV6A5qmZEbf5xCUG/
-X-Google-Smtp-Source: AGHT+IEbbLHhwWxyXlCIk8S/OXxwgKIsI413Xgv8iveLC01IeJL80AMj/0wSuruUOvFGACrPYE4apQ==
-X-Received: by 2002:a17:90b:3b48:b0:2a5:24ab:1a94 with SMTP id ot8-20020a17090b3b4800b002a524ab1a94mr11123312pjb.49.1713295966910;
-        Tue, 16 Apr 2024 12:32:46 -0700 (PDT)
-Received: from localhost (dhcp-141-239-158-86.hawaiiantel.net. [141.239.158.86])
-        by smtp.gmail.com with ESMTPSA id g33-20020a631121000000b005f05c9ee8d3sm9019948pgl.93.2024.04.16.12.32.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 12:32:46 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Tue, 16 Apr 2024 09:32:45 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: Re: [PATCH v4 0/6] pids controller events rework
-Message-ID: <Zh7SXQSobt9qIQRG@slm.duckdns.org>
-References: <20240416142014.27630-1-mkoutny@suse.com>
+        d=1e100.net; s=20230601; t=1713296437; x=1713901237;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KwEv4Z/MXON03xxjjs3as0fX96oGOhkKVq/HAbUMzow=;
+        b=OKW5i8al3gmh+mfB5hjAYrpY3MoSAXXVy9o4P3ydKeWNyLNj5e+WON9VMdvSK8jb2I
+         b9uq+noagjjjsHZaCB4LWIkKsHu+Xza6RnmYRDkx6Hxjh8Nj6vxHm5b1MjzYVVFxlTWW
+         UMuqrMjYrGRgmvZS3LyLeF8UxbUeFt4UjmfZQFsQ2ed/xVjtjoRnQpQIGdz+vPj7qwx8
+         KZPa+ZHW1RQq2xpuPoJqumMU0Z/EagHAuQkkmmleT2GTrq7Nf/fi2DNfr6qVGEaq0Sjr
+         RztWQb2a/T7LXwKV/+h9jDC/YIrvfhY7/+s81oJxpkVsTKxTw/TE/7dIgS2VECzUh17L
+         lE7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXJgZl+WTQtvCazgiGbW3PenLZRYP6gAvGAK2pLjK27aOEslsKtaILl/8qmj19i5BeRYDcelM7cxIdhor6zKNWKJYIRV6pM40H4zSk5uPvB
+X-Gm-Message-State: AOJu0Yy/mWCwZLyYzvLLup2ydrH7nUROhm57UGCdzMBA0LjLfCcYpsuT
+	xWZTiFMtPDHpXhmBlR9db/d8045xZU0rga73mMmsBRkbEIaw0zJ2P90q7Lr8WsYQ9keMwY07gj9
+	wNVSBQOprJhMopiCOlHDcbS6hc8uzP5DCWd9q
+X-Google-Smtp-Source: AGHT+IFpMnnuBnQ5Arki390SOLtA3w0Zzb02W+aYx36dAai5mD00AOXWCVWabXOS8NOrnI69HIi0pttIqRN879o1qMk=
+X-Received: by 2002:a05:6870:d14d:b0:22a:4249:f409 with SMTP id
+ f13-20020a056870d14d00b0022a4249f409mr16854617oac.4.1713296437395; Tue, 16
+ Apr 2024 12:40:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240416142014.27630-1-mkoutny@suse.com>
+References: <20240415163527.626541-1-jeffxu@chromium.org> <znrbeb744774vre5dkeg7kjnnt7uuifs6xw63udcyupwj3veqh@rpcqs7dmoxi6>
+In-Reply-To: <znrbeb744774vre5dkeg7kjnnt7uuifs6xw63udcyupwj3veqh@rpcqs7dmoxi6>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Tue, 16 Apr 2024 12:40:26 -0700
+Message-ID: <CABi2SkU8B27O28jjTDajFpENgUHhntuRAMKFUMXr6A6AxZeyiQ@mail.gmail.com>
+Subject: Re: [PATCH v10 0/5] Introduce mseal
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, jeffxu@chromium.org, akpm@linux-foundation.org, 
+	keescook@chromium.org, jannh@google.com, sroettger@google.com, 
+	willy@infradead.org, gregkh@linuxfoundation.org, 
+	torvalds@linux-foundation.org, usama.anjum@collabora.com, corbet@lwn.net, 
+	surenb@google.com, merimus@google.com, rdunlap@infradead.org, 
+	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
+	linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 16, 2024 at 04:20:08PM +0200, Michal Koutný wrote:
-> This makes pids.events:max affine to pids.max limit.
-> 
-> How are the new events supposed to be useful?
-> 
-> - pids.events.local:max
->   - tells that cgroup's limit is hit (too tight?)
-> - pids.events:*
->   - "only" directs top-down search to cgroups of interest
+On Tue, Apr 16, 2024 at 8:13=E2=80=AFAM Liam R. Howlett <Liam.Howlett@oracl=
+e.com> wrote:
+>
+> * jeffxu@chromium.org <jeffxu@chromium.org> [240415 12:35]:
+> > From: Jeff Xu <jeffxu@chromium.org>
+> >
+> > This is V10 version, it rebases v9 patch to 6.9.rc3.
+> > We also applied and tested mseal() in chrome and chromebook.
+> >
+> > ------------------------------------------------------------------
+> ...
+>
+> > MM perf benchmarks
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > This patch adds a loop in the mprotect/munmap/madvise(DONTNEED) to
+> > check the VMAs=E2=80=99 sealing flag, so that no partial update can be =
+made,
+> > when any segment within the given memory range is sealed.
+> >
+> > To measure the performance impact of this loop, two tests are developed=
+.
+> > [8]
+> >
+> > The first is measuring the time taken for a particular system call,
+> > by using clock_gettime(CLOCK_MONOTONIC). The second is using
+> > PERF_COUNT_HW_REF_CPU_CYCLES (exclude user space). Both tests have
+> > similar results.
+> >
+> > The tests have roughly below sequence:
+> > for (i =3D 0; i < 1000, i++)
+> >     create 1000 mappings (1 page per VMA)
+> >     start the sampling
+> >     for (j =3D 0; j < 1000, j++)
+> >         mprotect one mapping
+> >     stop and save the sample
+> >     delete 1000 mappings
+> > calculates all samples.
+>
+>
+> Thank you for doing this performance testing.
+>
+> >
+> > Below tests are performed on Intel(R) Pentium(R) Gold 7505 @ 2.00GHz,
+> > 4G memory, Chromebook.
+> >
+> > Based on the latest upstream code:
+> > The first test (measuring time)
+> > syscall__     vmas    t       t_mseal delta_ns        per_vma %
+> > munmap__      1       909     944     35      35      104%
+> > munmap__      2       1398    1502    104     52      107%
+> > munmap__      4       2444    2594    149     37      106%
+> > munmap__      8       4029    4323    293     37      107%
+> > munmap__      16      6647    6935    288     18      104%
+> > munmap__      32      11811   12398   587     18      105%
+> > mprotect      1       439     465     26      26      106%
+> > mprotect      2       1659    1745    86      43      105%
+> > mprotect      4       3747    3889    142     36      104%
+> > mprotect      8       6755    6969    215     27      103%
+> > mprotect      16      13748   14144   396     25      103%
+> > mprotect      32      27827   28969   1142    36      104%
+> > madvise_      1       240     262     22      22      109%
+> > madvise_      2       366     442     76      38      121%
+> > madvise_      4       623     751     128     32      121%
+> > madvise_      8       1110    1324    215     27      119%
+> > madvise_      16      2127    2451    324     20      115%
+> > madvise_      32      4109    4642    534     17      113%
+> >
+> > The second test (measuring cpu cycle)
+> > syscall__     vmas    cpu     cmseal  delta_cpu       per_vma %
+> > munmap__      1       1790    1890    100     100     106%
+> > munmap__      2       2819    3033    214     107     108%
+> > munmap__      4       4959    5271    312     78      106%
+> > munmap__      8       8262    8745    483     60      106%
+> > munmap__      16      13099   14116   1017    64      108%
+> > munmap__      32      23221   24785   1565    49      107%
+> > mprotect      1       906     967     62      62      107%
+> > mprotect      2       3019    3203    184     92      106%
+> > mprotect      4       6149    6569    420     105     107%
+> > mprotect      8       9978    10524   545     68      105%
+> > mprotect      16      20448   21427   979     61      105%
+> > mprotect      32      40972   42935   1963    61      105%
+> > madvise_      1       434     497     63      63      115%
+> > madvise_      2       752     899     147     74      120%
+> > madvise_      4       1313    1513    200     50      115%
+> > madvise_      8       2271    2627    356     44      116%
+> > madvise_      16      4312    4883    571     36      113%
+> > madvise_      32      8376    9319    943     29      111%
+> >
+>
+> If I am reading this right, madvise() is affected more than the other
+> calls?  Is that expected or do we need to have a closer look?
+>
+The madvise() has a bigger percentage (per_vma %), but it also has a
+smaller base value (cpu).
 
-Generally look great to me. If you resend with the couple nits addressed,
-I'll apply the rest of the series.
-
-Thanks.
-
--- 
-tejun
+-Jeff
 
