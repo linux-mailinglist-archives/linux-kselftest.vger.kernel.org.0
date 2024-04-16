@@ -1,183 +1,148 @@
-Return-Path: <linux-kselftest+bounces-8220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1805E8A7510
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 21:43:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E89DB8A75C8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 22:39:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4EADFB213B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 19:43:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F2991C21128
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 20:39:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E795F1384AD;
-	Tue, 16 Apr 2024 19:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45D240849;
+	Tue, 16 Apr 2024 20:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dvTpRwW7"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ssQW8vIR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D60137C33
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 19:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686C51E4A8
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 20:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713296625; cv=none; b=nM5XODDcUq6KmKb8xePd0t7F2yW0U0FiVgNeDt8nDU8N7daAeBJIqSjmid/ny7XNltd+PxlCGG6gw2zed+twe/qcYwBbNsADRCNDucXn3kaQqBuML5KNirhqPm8XeMDjsLTJPwiUYvUU8WS8WVcRE5+2Bj7pOdETHstvhwESDco=
+	t=1713299979; cv=none; b=MAQpuSuZygVLtNwlYB/SLCDnOWfHv7tHok3Os4QUYlWySJ+4jsAdZRcodI1eJttkuMHNdK2z7gaUjxs18atc+AA9GAQgB6uwF5dRF7ZnU6c4KXhdHhu96flMaX/WELmd7SU+CcEf7+zUSRglhfOxDju76XLij6CJNAqm+dQkPq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713296625; c=relaxed/simple;
-	bh=0IPQk3Y6FYUcjy+k00KnrGq4MmM1NUsayaT1wvyAFWs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eYSKOC0YBzmSdl9QujmHfz5MhO9xkRmsMTEBbItMuu2M+g/P4UL9iatpA3JSspaa9+HTI21d+9m9qRUHYva3xPvFAbISTZJc4yT9wNvOB4P/mRxr+/CDj1uhJIBCkC8npJcZYWo3GTLTa52txMEm40OUH8dcrCur9iEPBbc5+WQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dvTpRwW7; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713296624; x=1744832624;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0IPQk3Y6FYUcjy+k00KnrGq4MmM1NUsayaT1wvyAFWs=;
-  b=dvTpRwW7UIspBrkfKtSWQ3PHd30jutaMBRB43LqRvUhLCGvX5uidh+JI
-   qQEQPOew1/1em4NHT+lYJDpuNPJOGZk10QnK1Zjz/4fZ4vdqKYM2FMu34
-   WMRHwPSojo9+y8aNzsDff1hoUBCLBnxeJcD1x+knX8UHrg5ZtbMP7wZ3R
-   u7zsOpsrT2KvFy5ZDO4vsBBCAehEWnTcQpmMW9ZxeGeUXtdPl20xD3nm5
-   fXbOzxfnQq20FGRw2FVKa8jpj2RXaFFcp5zJhXiX1aQvlb5vIJMsTzMHQ
-   /C2GhZIaaDcotLvlM+WsC1BaLaxS3sNafgALrFGOVlba99LGTGlx5/+LL
-   A==;
-X-CSE-ConnectionGUID: TEy3zDLWS3GOGCuSUUfqNw==
-X-CSE-MsgGUID: WVQZQ0BpRfKIxu58agpLxQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="19319747"
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="19319747"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:43:43 -0700
-X-CSE-ConnectionGUID: Q1Ys6zb/TC6tUmsXULbUeQ==
-X-CSE-MsgGUID: k7XRWl5jT1i/JX0DKRPzbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="22425545"
-Received: from soc-cp83kr3.jf.intel.com (HELO [10.24.10.71]) ([10.24.10.71])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:43:34 -0700
-Message-ID: <2fd55858-2124-45e3-89f5-eb9faf733429@intel.com>
-Date: Tue, 16 Apr 2024 12:43:35 -0700
+	s=arc-20240116; t=1713299979; c=relaxed/simple;
+	bh=83pdUfUUCdF5WrGmIF1GO0LUgsvG5H+wRIvNQRdgzmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l/kzRgW0ciAUtnKkn6TaNdL2WDVN94lfK6K3CyKo2W2kx2/6gQ8MtUepmUm0i8e8NBG9hLKfmJRmT2RUrLbcfIB/Vubvr6JS7CoCdIMTIcV8EkvjJBVGwl03pBDwLDVskJt6VFi4Ut2txbUq4A8CfQSmpSdn2L0XE4LoCJPLdlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ssQW8vIR; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e3ff14f249so1174755ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 13:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713299977; x=1713904777; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BMsxIpE4Z9nqdYgum8o4M/KssYPkdpnJdREANM4LfZ4=;
+        b=ssQW8vIRunxIy7lC6PDn3XcfeNOontz5cjIBQxhwfMOIiH1ClJZPWOoyydgc0vxNJf
+         rx5vNo4mCBe0krsS1Ozx7fbaCmsuGx3cGC+OOeX5+MFZQt7yySoua+CgnT4oBqcuEDro
+         ANymcYwQU1aUDK/KYwxplgAPubazLqJzb+X81gD5pKDC4PPhlIDCMW4B4iiHFKhpBbFr
+         f2hWm/IIVDl9XgWkcbE9t8WBy3xk4UM8YOUayX/SJqq1qsCFqdC0B/i3F4inL5V8beAM
+         J/t2xIxOrpQx8jBd+1GPM/GdGwk8JJ/YzIfYPNrNlxtQKkiIlvBewbJSRJOdc6Q7YQmZ
+         6o+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713299977; x=1713904777;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BMsxIpE4Z9nqdYgum8o4M/KssYPkdpnJdREANM4LfZ4=;
+        b=Yp4NMDjzaXulV2RUuD7pV2eXps/niDRAbKp124FZMYqsrXmHYhhnjHXjYOXtZm6LyP
+         HKBCQG82INGqsucgqg/zrPNhFxPsCrgcuLCxXDi+uMYOhpcYYbKwscfbXHnAr7X+BlP+
+         bKQ20sQUm+jueME+Vg4DFxUi0GBFlR0Jt3e/OfzQEg2EFAUz5la5fEtpchAJn5obOAnd
+         8SaKZdj+8zL1SnIgY90ZnAu77dys4AStGspBQ4URHKHc1SodpRYUdOXy0WEtAYIDQ2/D
+         oV3QC2licziVpixJxNpACw5i/vfMCS+GXdWWatWsIDsEHAHwgfIjO56HFRoJKgjuDpPH
+         ZKvw==
+X-Forwarded-Encrypted: i=1; AJvYcCUxbJelk76dwn3wr5FAJjoz/IXUIsuvgYHMGZu0hJa57Gsl7e6qZ1UQSu9KBwo5ZV/t0EHz7aVmUQp4YPiGqhkJfEiwb/rESeP/BzcpfyCC
+X-Gm-Message-State: AOJu0Yxg3dykNe+K+ORQcjM4FhmV0gvRVLMJ7syFKjz/nXzeghHcBTFx
+	+0rzDMW9Ynm0XbnBhkRJPLYF6lhEznOkbxE4bqSH/UnLeFimGAHe8RR/fD6PVuQ=
+X-Google-Smtp-Source: AGHT+IH1gf91D0Jx8EX2o/Z8Zgr/8lKTTJMrgChMy1jkDn9GpdgrT/0VA+/pYw0KTlvpLVreUrkRWg==
+X-Received: by 2002:a17:902:e811:b0:1e4:6cd7:30b3 with SMTP id u17-20020a170902e81100b001e46cd730b3mr4087832plg.23.1713299976719;
+        Tue, 16 Apr 2024 13:39:36 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id u22-20020a1709026e1600b001e2ba8605dfsm8797603plk.150.2024.04.16.13.39.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Apr 2024 13:39:36 -0700 (PDT)
+Date: Tue, 16 Apr 2024 13:39:33 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 04/17] riscv: dts: allwinner: Add xtheadvector to the
+ D1/D1s devicetree
+Message-ID: <Zh7iBRUybq1BAReT@ghost>
+References: <20240415-dev-charlie-support_thead_vector_6_9-v2-0-c7d68c603268@rivosinc.com>
+ <20240415-dev-charlie-support_thead_vector_6_9-v2-4-c7d68c603268@rivosinc.com>
+ <20240416-scorer-easeful-4dae3c18465d@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] KVM: selftests: Take large C-state exit latency into
- consideration
-To: Sean Christopherson <seanjc@google.com>
-Cc: linux-kselftest@vger.kernel.org, pbonzini@redhat.com
-References: <20240413053749.74313-1-zide.chen@intel.com>
- <Zh226A1xyCW6PtZ5@google.com>
-Content-Language: en-US
-From: "Chen, Zide" <zide.chen@intel.com>
-In-Reply-To: <Zh226A1xyCW6PtZ5@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240416-scorer-easeful-4dae3c18465d@spud>
 
-
-
-On 4/15/2024 4:23 PM, Sean Christopherson wrote:
-> On Fri, Apr 12, 2024, Zide Chen wrote:
->> Currently, the migration worker delays 1-10 us, assuming that one
->> KVM_RUN iteration only takes a few microseconds.  But if C-state exit
->> latencies are large enough, for example, hundreds or even thousands
->> of microseconds on server CPUs, it may happen that it's not able to
->> bring the target CPU out of C-state before the migration worker starts
->> to migrate it to the next CPU.
->>
->> If the system workload is light, most CPUs could be at a certain level
->> of C-state, which may result in less successful migrations and fail the
->> migration/KVM_RUN ratio sanity check.
->>
->> This patch adds a command line option to skip the sanity check in
->> this case.
->>
->> Additionally, seems it's reasonable to randomize the length of usleep(),
->> other than delay in a fixed pattern.
+On Tue, Apr 16, 2024 at 04:28:19PM +0100, Conor Dooley wrote:
+> On Mon, Apr 15, 2024 at 09:12:01PM -0700, Charlie Jenkins wrote:
+> > The D1/D1s SoCs support xtheadvector which should be included in the
+> > devicetree. Also include vendorid for the cpu.
+> > 
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > index 64c3c2e6cbe0..4788bb50afa2 100644
+> > --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > @@ -27,7 +27,8 @@ cpu0: cpu@0 {
+> >  			riscv,isa = "rv64imafdc";
+> >  			riscv,isa-base = "rv64i";
+> >  			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zicntr", "zicsr",
+> > -					       "zifencei", "zihpm";
+> > +					       "zifencei", "zihpm", "xtheadvector";
 > 
-> This belongs in a separate patch.  And while it's reasonable on the surface, I
-> doubt think it buys us anything, and it makes an already non-deterministic test
-> even less deterministic.  In other words, unless a random sleep time helps find
-> more bugs or finds the original bug faster, just drop the randomization.
+> 
+> > +			riscv,vendorid = <0x00000000 0x0000005b7>;
+> 
+> Isn't this effectively useless given there's only one CPU here?
+> We also already know the vendor of the hart, because the compatible says
+> it is a "thead,c906" so this doesn't provide any new information.
 
-OK, I will drop it.
-> 
->> V2:
->> - removed the busy loop implementation
->> - add the new "-s" option
-> 
-> This belongs in the ignored part of the patch...
->>
->> Signed-off-by: Zide Chen <zide.chen@intel.com>
-> 
-> ...down here.
+Yes, it was simply to provide an example of using this field to make it
+easier for somebody who wants to use it in the future. I can remove it
+if it's confusing.
 
-My bad. Will move it here.
+- Charlie
 
 > 
->> ---
->>  tools/testing/selftests/kvm/rseq_test.c | 37 +++++++++++++++++++++++--
->>  1 file changed, 34 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
->> index 28f97fb52044..515cfa32a925 100644
->> --- a/tools/testing/selftests/kvm/rseq_test.c
->> +++ b/tools/testing/selftests/kvm/rseq_test.c
->> @@ -150,7 +150,7 @@ static void *migration_worker(void *__rseq_tid)
->>  		 * Use usleep() for simplicity and to avoid unnecessary kernel
->>  		 * dependencies.
->>  		 */
->> -		usleep((i % 10) + 1);
->> +		usleep((rand() % 10) + 1);
->>  	}
->>  	done = true;
->>  	return NULL;
->> @@ -186,12 +186,35 @@ static void calc_min_max_cpu(void)
->>  		       "Only one usable CPU, task migration not possible");
->>  }
->>  
->> +static void usage(const char *name)
-> 
-> Uber nit, "help()" is more common than "usage()".
+> >  			#cooling-cells = <2>;
+> >  
+> >  			cpu0_intc: interrupt-controller {
+> > 
+> > -- 
+> > 2.44.0
+> > 
 
-OK, will do.
-
-> 
->> @@ -254,9 +279,15 @@ int main(int argc, char *argv[])
->>  	 * getcpu() to stabilize.  A 2:1 migration:KVM_RUN ratio is a fairly
->>  	 * conservative ratio on x86-64, which can do _more_ KVM_RUNs than
->>  	 * migrations given the 1us+ delay in the migration task.
->> +	 *
->> +	 * Another reason why it may have small migration:KVM_RUN ratio is that,
->> +	 * on systems with large C-state exit latency, it may happen quite often
->> +	 * that the scheduler is not able to wake up the target CPU before the
->> +	 * vCPU thread is scheduled to another CPU.
->>  	 */
->> -	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
->> -		    "Only performed %d KVM_RUNs, task stalled too much?", i);
->> +	TEST_ASSERT(skip_sanity_check || i > (NR_TASK_MIGRATIONS / 2),
->> +		    "Only performed %d KVM_RUNs, task stalled too much? "
->> +		    "Try to turn off C-states or run it with the -s option", i);
-> 
-> I think it's worth explicitly telling the user how to reduce CPU wakeup latency.
-
-OK, I will add more details in the TEST_ASSERT() statement.
-
-> Also, are C-states called that on other architectures?  E.g. maybe this to avoid
-> confusing the user?  Not a big deal, e.g. I've no objection whatsoever to the
-> comment, but it seems easy enough to avoid confusing the user.
-
-Yes, I agree C-State is not the best term here. I can remove the word
-C-state from this patch.
-
-Initially I thought it's OK since C-State is an arch independent term
-from ACPI spec. But in Linux, it's not adopted by other arch code other
-than x86 and ARM.  Furthermore, the ARM Architecture Reference Manual
-simply uses "low power mode" and doesn't adopt the term C-State.
 
 
