@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDD318A67F9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 12:14:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1EF48A67FD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 12:14:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79AC628263B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 10:14:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52DA61F21BB2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 10:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA11F126F1D;
-	Tue, 16 Apr 2024 10:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06311272DF;
+	Tue, 16 Apr 2024 10:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ngomNeS9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+t1n6it"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B201186250;
-	Tue, 16 Apr 2024 10:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F1B1272BA;
+	Tue, 16 Apr 2024 10:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713262479; cv=none; b=R+xBo1uJO43vttMCOPhw81jcXFSdB6tJd5eyPxuxISmT2k0SUUOkRFlRlF9yDAUStaOrc0XGJgcAcecvqLJizTsNTd8xDJIl2c4NBB/qYzzLLArjU1FaM1DwNdgXhpRmKy1WMmM2ZzV94Q2GeBRoIRaAiyjmrtRQrpXXKm7WiUY=
+	t=1713262485; cv=none; b=fBmsNZ9h5e90hMQU2s6H8ZTEK7QdJ0lykZLFlWo5ab7d0Etukp3dUZBxsC1w2k1WnPW1fFPSyD49sFdzHdvE7D/54xobPnb7c1ci8udfmVOT/IfrL218tyB67MifzeYUbtVkE9kZZ7LNikv0CPUjXPU2yUqczdaFGiQ53us1qUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713262479; c=relaxed/simple;
-	bh=iu9Nt/eRnvrJD5oDNxZeMq9GCmOe6kMmAtqO73M1w5w=;
+	s=arc-20240116; t=1713262485; c=relaxed/simple;
+	bh=gPaD6ZJyxD4PgHJQ62WTuuIeGVpHrnbCX8NFKI8kpRY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=vA2Lm7tVyCf/xnsM+g6qUzWm7S8QDYqrKyhCX769X8jzqq2JmaRlddATdlgxgGYJTOW+uBeog7b1torU9e5lv3UCDug09kRgF+WwPSfTMA5nEHpNfjpcybcadBqp+Ke2+uYsydwoYTZvzjV/UEFSaFcka5ujfkBtHAQYdJCDrck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ngomNeS9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38CFC4AF07;
-	Tue, 16 Apr 2024 10:14:33 +0000 (UTC)
+	 MIME-Version; b=Narf07AtXTwjfy+gua3FvSsqe1au8bedvvlWS71Kr1FF1qaAB5xwMo26Kr/NT1vS2Ia4AWrthel6vvuE+rFikld3qPeGluqop+8jqf/8cSZAsWvoZIJqi7++9HuVsfMzHIupEvTjfWRuPUDPJpREARS4m3AKTXfGpc744nDpRf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+t1n6it; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0050C3277B;
+	Tue, 16 Apr 2024 10:14:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713262479;
-	bh=iu9Nt/eRnvrJD5oDNxZeMq9GCmOe6kMmAtqO73M1w5w=;
+	s=k20201202; t=1713262485;
+	bh=gPaD6ZJyxD4PgHJQ62WTuuIeGVpHrnbCX8NFKI8kpRY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ngomNeS9sFkSJiFY2SftQLNfyvWnn/yBGFzfn3ZwTfgosCadFL/f3QKx/hEz8BENJ
-	 CTHFU4uT3KzPaiNthxndndnpmR7dxxbFVIPKFog1Mi/JSla25d1eMBeFOMzJOL6c3r
-	 Ns3m5SAvcY05brDzBgcXO5L3dFH84vZ3MLrChXfgO/T+NLQe5HhJsSGrlmg/hf1/H1
-	 jZiKlKw0bkdcFKlO3VbUzsMOQz+o63RKzSoeqDHeK+Wgx/n8nSK5jtqQxxQWc/1s/A
-	 QcnoTCiWMHvQ+0Ew9kTw284rx0wRbyNoicwOKLi9sC3dCByHUgwSCEgXvS/n5BArvR
-	 24xTL4x+x22jw==
+	b=p+t1n6it++epyLjfopbsxQhdnhpX19IDElkBJxhK5EJGIUcmKlA2Fo/D6EP4uZyNq
+	 3eovMO1vOkWJVqT6Ph1hytqkAsPxLQd3x9k68B78UwANABhyuEoiCWwQuIieDTqEtT
+	 djo2jiw5uXXS5JlyV+4fgkeEPcRJ3n01ZvBozKdUQA/Nko3KJwQC8cf6kb6R7rG2tz
+	 wxEjM9i8XNOPWIlNpH6mWgEP/NWWmxPcRyvSQi6MQno32AKYMyV1ZZ0dWwQ//jOoMx
+	 dEiBw4Gs8cBKrRpqmvKAhOsh6gGSVTsP/xUgw+lmXYTl91r4XJa/0cGENqcAJu7VkB
+	 UPFeFysdUYV8A==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -60,9 +60,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next v4 04/14] selftests/bpf: Use connect_to_addr in cls_redirect
-Date: Tue, 16 Apr 2024 18:13:50 +0800
-Message-Id: <50f65e54ec143b2800fbe308204e10f78be98559.1713262052.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v4 05/14] selftests/bpf: Use start_server_addr in sk_assign
+Date: Tue, 16 Apr 2024 18:13:51 +0800
+Message-Id: <ae308c91ae256b4271dc35903e457c8b5d29f4de.1713262052.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1713262052.git.tanggeliang@kylinos.cn>
 References: <cover.1713262052.git.tanggeliang@kylinos.cn>
@@ -76,50 +76,70 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch uses public helper connect_to_addr() exported in
-network_helpers.h instead of the local defined function connect_to_server()
-in prog_tests/cls_redirect.c. This can avoid duplicate code.
+Include network_helpers.h in prog_tests/sk_assign.c, use the newly
+added public helper start_server_addr() instead of the local defined
+function start_server(). This can avoid duplicate code.
+
+The code that sets SO_RCVTIMEO timeout as timeo_sec (3s) can be dropped,
+since start_server_addr() sets default timeout as 3s.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- .../selftests/bpf/prog_tests/cls_redirect.c    | 18 +-----------------
- 1 file changed, 1 insertion(+), 17 deletions(-)
+ .../selftests/bpf/prog_tests/sk_assign.c      | 28 ++-----------------
+ 1 file changed, 3 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cls_redirect.c b/tools/testing/selftests/bpf/prog_tests/cls_redirect.c
-index 4050d470d2a2..9aa2f3b12884 100644
---- a/tools/testing/selftests/bpf/prog_tests/cls_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cls_redirect.c
-@@ -36,22 +36,6 @@ struct tuple {
- 	struct addr_port dst;
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+index 1374b626a985..fa8f757c0edd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
++++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+@@ -15,6 +15,7 @@
+ #include <unistd.h>
  
--static int connect_to_server(const struct sockaddr *addr, socklen_t len,
--			     int type)
+ #include "test_progs.h"
++#include "network_helpers.h"
+ 
+ #define BIND_PORT 1234
+ #define CONNECT_PORT 4321
+@@ -73,30 +74,6 @@ configure_stack(void)
+ 	return true;
+ }
+ 
+-static int
+-start_server(const struct sockaddr *addr, socklen_t len, int type)
 -{
--	int fd = socket(addr->sa_family, type, 0);
+-	int fd;
+-
+-	fd = socket(addr->sa_family, type, 0);
 -	if (CHECK_FAIL(fd == -1))
--		return -1;
--	if (CHECK_FAIL(connect(fd, addr, len)))
--		goto err;
+-		goto out;
+-	if (CHECK_FAIL(setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo_sec,
+-				  timeo_optlen)))
+-		goto close_out;
+-	if (CHECK_FAIL(bind(fd, addr, len) == -1))
+-		goto close_out;
+-	if (type == SOCK_STREAM && CHECK_FAIL(listen(fd, 128) == -1))
+-		goto close_out;
 -
--	return fd;
--
--err:
+-	goto out;
+-close_out:
 -	close(fd);
--	return -1;
+-	fd = -1;
+-out:
+-	return fd;
 -}
 -
- static bool fill_addr_port(const struct sockaddr *sa, struct addr_port *ap)
+ static int
+ connect_to_server(const struct sockaddr *addr, socklen_t len, int type)
  {
- 	const struct sockaddr_in6 *in6;
-@@ -89,7 +73,7 @@ static bool set_up_conn(const struct sockaddr *addr, socklen_t len, int type,
- 	if (CHECK_FAIL(getsockname(*server, sa, &slen)))
- 		goto close_server;
- 
--	*conn = connect_to_server(sa, slen, type);
-+	*conn = connect_to_addr(type, (struct sockaddr_storage *)sa, slen);
- 	if (*conn < 0)
- 		goto close_server;
+@@ -310,7 +287,8 @@ void test_sk_assign(void)
+ 			continue;
+ 		prepare_addr(test->addr, test->family, BIND_PORT, false);
+ 		addr = (const struct sockaddr *)test->addr;
+-		server = start_server(addr, test->len, test->type);
++		server = start_server_addr(test->type,
++					   (const struct sockaddr_storage *)addr, test->len);
+ 		if (server == -1)
+ 			goto close;
  
 -- 
 2.40.1
