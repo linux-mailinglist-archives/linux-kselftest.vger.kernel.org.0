@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-8059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 146928A5FD2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 03:11:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A94298A5FB4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 03:11:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C18F528336D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 01:11:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 156EDB21908
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 01:10:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A4322F1E;
-	Tue, 16 Apr 2024 01:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EAAD11C92;
+	Tue, 16 Apr 2024 01:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="NnUpG/0f"
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="dsntb5iW"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0976AC2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5787523D;
 	Tue, 16 Apr 2024 01:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713229832; cv=none; b=TfgJxp4glqo+qXzo83CEVdHVyqAglzO6QjWrG84a2HN0FPSrRcJslFUscCXuh1uuerbW9AhHrtR1jcxJv71cMbRplhTF3AQCMGHnQVv3kAu2tx0gjfqMvkpuuhh9+wURFriBIykApHc7kCjBe4LukroXMMRgPQX/7dQIz2rpBTo=
+	t=1713229831; cv=none; b=CsakYweMWytl0GLZZu44Cb++WojtrZmsWn0RvKJhxsp8sJ/XVBX6GkkPmkaCbDqzMiMF92JT1dBJjzLmM9a6rcw8/ym93Y+taEs6abvGfFcYB4ewE5y+JNqs52mzI1uf9zuVZniZzLHn35obXXBA3jvBxfMoun3VXBzmXHj70/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713229832; c=relaxed/simple;
-	bh=c+LLrvBoCuPfC4CclqS/TQ4HIIJMP43vsE7lYq1LxX4=;
+	s=arc-20240116; t=1713229831; c=relaxed/simple;
+	bh=CXhiKahb0eDgSiGeD4X7ssoSM82vjMLS/jKkCaqodDQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bpHaxGh+kGauSoY/f24ZCAtlEzEM4cHN20ggkCSz8O+hjNJkk62aruT+NNmK+NQIDarrAoybYVcEIFODcLHwmrovd9vpBDwRaohr4sSIvkUxDhID220wVOeLEI9t0IFj/zsmr+Rpsb5GCdAfPRUxZOyUi6RzE9+RXYoFgfgiycs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=NnUpG/0f; arc=none smtp.client-ip=4.36.192.163
+	 MIME-Version; b=sMDqnBSGjY1Xt4GCxFJoECA3bpovwhVhdRsGb29l36A3d12pr2ggTEdBmT2pQiiIeXluej/lIwgQerjS/VFveIkRZEUGQ3SWkVIBD6kHxXdU53jY+JchiHlrLEiPR/w6BR++pa7Mxry69U3SZToVCl7aSy808WkSt8IDrSKLop0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=dsntb5iW; arc=none smtp.client-ip=4.36.192.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=JMqQ+0LCTlI6uyQYIwA0XTuobJBuM0j6P3qXqvgCk9c=; b=NnUpG/0fLKDcjGxOL5VGKlqWps
-	2Q6i4CkWE8imrbZt95QfIye1NvdHugB/jv5dNhvOiKFLZue1DT3mVtG9lYeuuL0noJiJEggRJC7aY
-	Y5KeICnYWVIbtz4lUL0BjzpKiMK27PYSzKJG6cYiCsEYMrtZW7Rd2dMnjcDT3DKqzktnyM0GyO4O6
-	Ge7wi0ic90zseCCY+5MvZCW1Wkn+DnHzXfTDq/TeYpaWhxzu4qKNvovLKi0jMCdoqbA+vlRnv3bcS
-	EaF2oFk+DebKD7bCyBtqrwS5IwWqB+25M8H3fCtwTZZ7tPBwLm/0dl1Bv1HQ+ydKBop1lyNx02KgF
-	RCHx0F9Q==;
+	bh=7IUzCTQo6Yc6I84GM6d0m/2enQYUr8L54oRJIiZTpag=; b=dsntb5iWwqLlHEsFg7GCRVwW41
+	cV8GEjsbWEaALvnV1s0/aP+waWGYsLaiH6GotVEKTBOg/N76dfLrUlboryK/VBzG9vZ9vL6PZef38
+	LnV7yo/K5gQ2w1VhNgbW6qPNDjOdo/N1U3K8LZTODyb/ucWtBh7SizwxtuUm3NHoFix8T30tsmX5B
+	vpsTC1VSZKzD+TG0QqSO65fxepK7knEITaFLsjGYituc9SrBVw6VfZYdOnBkIBv8C3L7HWbhxNtwD
+	NmGBkuRuJs67++5b3wuWTN0GOI3EfOi9BflrRkYedjTJIH9uPtQDjBwYK2LlMVBbN7IwQo3Gd1Dwo
+	BnE0bBhA==;
 Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
 	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <zfigura@codeweavers.com>)
-	id 1rwXL0-00FbQv-0G;
+	id 1rwXL0-00FbQv-0q;
 	Mon, 15 Apr 2024 20:10:18 -0500
 From: Elizabeth Figura <zfigura@codeweavers.com>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -66,9 +66,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Waiman Long <longman@redhat.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [PATCH v4 07/27] ntsync: Introduce NTSYNC_IOC_EVENT_SET.
-Date: Mon, 15 Apr 2024 20:08:17 -0500
-Message-ID: <20240416010837.333694-8-zfigura@codeweavers.com>
+Subject: [PATCH v4 08/27] ntsync: Introduce NTSYNC_IOC_EVENT_RESET.
+Date: Mon, 15 Apr 2024 20:08:18 -0500
+Message-ID: <20240416010837.333694-9-zfigura@codeweavers.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240416010837.333694-1-zfigura@codeweavers.com>
 References: <20240416010837.333694-1-zfigura@codeweavers.com>
@@ -80,52 +80,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This corresponds to the NT syscall NtSetEvent().
+This corresponds to the NT syscall NtResetEvent().
 
-This sets the event to the signaled state, and returns its previous state.
+This sets the event to the unsignaled state, and returns its previous state.
 
 Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 ---
- drivers/misc/ntsync.c       | 37 +++++++++++++++++++++++++++++++++++++
+ drivers/misc/ntsync.c       | 22 ++++++++++++++++++++++
  include/uapi/linux/ntsync.h |  1 +
- 2 files changed, 38 insertions(+)
+ 2 files changed, 23 insertions(+)
 
 diff --git a/drivers/misc/ntsync.c b/drivers/misc/ntsync.c
-index 3e125c805c00..69f359241cf6 100644
+index 69f359241cf6..ae78425c87d1 100644
 --- a/drivers/misc/ntsync.c
 +++ b/drivers/misc/ntsync.c
-@@ -473,6 +473,41 @@ static int ntsync_mutex_kill(struct ntsync_obj *mutex, void __user *argp)
- 	return ret;
+@@ -508,6 +508,26 @@ static int ntsync_event_set(struct ntsync_obj *event, void __user *argp)
+ 	return 0;
  }
  
-+static int ntsync_event_set(struct ntsync_obj *event, void __user *argp)
++static int ntsync_event_reset(struct ntsync_obj *event, void __user *argp)
 +{
-+	struct ntsync_device *dev = event->dev;
 +	__u32 prev_state;
 +
 +	if (event->type != NTSYNC_TYPE_EVENT)
 +		return -EINVAL;
 +
-+	if (atomic_read(&event->all_hint) > 0) {
-+		spin_lock(&dev->wait_all_lock);
-+		spin_lock_nest_lock(&event->lock, &dev->wait_all_lock);
++	spin_lock(&event->lock);
 +
-+		prev_state = event->u.event.signaled;
-+		event->u.event.signaled = true;
-+		try_wake_all_obj(dev, event);
-+		try_wake_any_event(event);
++	prev_state = event->u.event.signaled;
++	event->u.event.signaled = false;
 +
-+		spin_unlock(&event->lock);
-+		spin_unlock(&dev->wait_all_lock);
-+	} else {
-+		spin_lock(&event->lock);
-+
-+		prev_state = event->u.event.signaled;
-+		event->u.event.signaled = true;
-+		try_wake_any_event(event);
-+
-+		spin_unlock(&event->lock);
-+	}
++	spin_unlock(&event->lock);
 +
 +	if (put_user(prev_state, (__u32 __user *)argp))
 +		return -EFAULT;
@@ -136,24 +121,24 @@ index 3e125c805c00..69f359241cf6 100644
  static int ntsync_obj_release(struct inode *inode, struct file *file)
  {
  	struct ntsync_obj *obj = file->private_data;
-@@ -496,6 +531,8 @@ static long ntsync_obj_ioctl(struct file *file, unsigned int cmd,
- 		return ntsync_mutex_unlock(obj, argp);
- 	case NTSYNC_IOC_MUTEX_KILL:
+@@ -533,6 +553,8 @@ static long ntsync_obj_ioctl(struct file *file, unsigned int cmd,
  		return ntsync_mutex_kill(obj, argp);
-+	case NTSYNC_IOC_EVENT_SET:
-+		return ntsync_event_set(obj, argp);
+ 	case NTSYNC_IOC_EVENT_SET:
+ 		return ntsync_event_set(obj, argp);
++	case NTSYNC_IOC_EVENT_RESET:
++		return ntsync_event_reset(obj, argp);
  	default:
  		return -ENOIOCTLCMD;
  	}
 diff --git a/include/uapi/linux/ntsync.h b/include/uapi/linux/ntsync.h
-index 0d133f2eaf0b..65329d15a472 100644
+index 65329d15a472..657542107328 100644
 --- a/include/uapi/linux/ntsync.h
 +++ b/include/uapi/linux/ntsync.h
-@@ -52,5 +52,6 @@ struct ntsync_wait_args {
- #define NTSYNC_IOC_SEM_POST		_IOWR('N', 0x81, __u32)
+@@ -53,5 +53,6 @@ struct ntsync_wait_args {
  #define NTSYNC_IOC_MUTEX_UNLOCK		_IOWR('N', 0x85, struct ntsync_mutex_args)
  #define NTSYNC_IOC_MUTEX_KILL		_IOW ('N', 0x86, __u32)
-+#define NTSYNC_IOC_EVENT_SET		_IOR ('N', 0x88, __u32)
+ #define NTSYNC_IOC_EVENT_SET		_IOR ('N', 0x88, __u32)
++#define NTSYNC_IOC_EVENT_RESET		_IOR ('N', 0x89, __u32)
  
  #endif
 -- 
