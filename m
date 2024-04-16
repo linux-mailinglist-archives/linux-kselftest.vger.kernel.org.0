@@ -1,185 +1,183 @@
-Return-Path: <linux-kselftest+bounces-8219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B60628A7507
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 21:40:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1805E8A7510
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 21:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CC761F21445
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 19:40:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4EADFB213B7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 19:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF071384BC;
-	Tue, 16 Apr 2024 19:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E795F1384AD;
+	Tue, 16 Apr 2024 19:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gIPnfds+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dvTpRwW7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3748613E
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 19:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D60137C33
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 19:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713296439; cv=none; b=liJ7thDWbtcrpZnLcDpNdFy3K1cyRIlNVcgymrH7onAfn+ZrrHk+HRwHtdvQMn09CKU0dghjUPymWZDhHQsgUq973xqGh3mDMM1cgEo9VQWjun+A27HoTY6Vtaql6NzdisrWNJvjd/1QMShhzgggn38yIio91BWFcGNkrGK2VAA=
+	t=1713296625; cv=none; b=nM5XODDcUq6KmKb8xePd0t7F2yW0U0FiVgNeDt8nDU8N7daAeBJIqSjmid/ny7XNltd+PxlCGG6gw2zed+twe/qcYwBbNsADRCNDucXn3kaQqBuML5KNirhqPm8XeMDjsLTJPwiUYvUU8WS8WVcRE5+2Bj7pOdETHstvhwESDco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713296439; c=relaxed/simple;
-	bh=RvR6Qs/XmUof5Nbp59FmfgdsMMPaxV8slV+aC7LWifg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=KXwnm8zq/lEfdsLmrp1c9+c5ZC/pcsCcY7IfvYcwChPOxNlg9dPzN+8f0dRKeDlyvrT/+tHCP6BcTA/J0dDT3aXe8ufBApMFD9lLKgE5xw6qYETH89HME7qj6NEwKhEGHKlE2bI4WPf9MPhBfl9bWqxNg0x/irmBMjTYYQ+LjTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gIPnfds+; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-233e41de0caso1551481fac.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 12:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713296437; x=1713901237; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KwEv4Z/MXON03xxjjs3as0fX96oGOhkKVq/HAbUMzow=;
-        b=gIPnfds+AZmqgVlPcM05vY2KMGCvBFfZX+tCc4fa3kNhn9OmFIDYBvKWgmrN9p3LWl
-         KmOkk74I4nLya8fELsVfokSYibTpF0NjFRsKW9m1cKQ+qDP4smksUnQvgbp1ayHnsoBn
-         OX/556GWj6ENvVZEM4uqvtskjAUpcN9ZtZSAE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713296437; x=1713901237;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KwEv4Z/MXON03xxjjs3as0fX96oGOhkKVq/HAbUMzow=;
-        b=OKW5i8al3gmh+mfB5hjAYrpY3MoSAXXVy9o4P3ydKeWNyLNj5e+WON9VMdvSK8jb2I
-         b9uq+noagjjjsHZaCB4LWIkKsHu+Xza6RnmYRDkx6Hxjh8Nj6vxHm5b1MjzYVVFxlTWW
-         UMuqrMjYrGRgmvZS3LyLeF8UxbUeFt4UjmfZQFsQ2ed/xVjtjoRnQpQIGdz+vPj7qwx8
-         KZPa+ZHW1RQq2xpuPoJqumMU0Z/EagHAuQkkmmleT2GTrq7Nf/fi2DNfr6qVGEaq0Sjr
-         RztWQb2a/T7LXwKV/+h9jDC/YIrvfhY7/+s81oJxpkVsTKxTw/TE/7dIgS2VECzUh17L
-         lE7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXJgZl+WTQtvCazgiGbW3PenLZRYP6gAvGAK2pLjK27aOEslsKtaILl/8qmj19i5BeRYDcelM7cxIdhor6zKNWKJYIRV6pM40H4zSk5uPvB
-X-Gm-Message-State: AOJu0Yy/mWCwZLyYzvLLup2ydrH7nUROhm57UGCdzMBA0LjLfCcYpsuT
-	xWZTiFMtPDHpXhmBlR9db/d8045xZU0rga73mMmsBRkbEIaw0zJ2P90q7Lr8WsYQ9keMwY07gj9
-	wNVSBQOprJhMopiCOlHDcbS6hc8uzP5DCWd9q
-X-Google-Smtp-Source: AGHT+IFpMnnuBnQ5Arki390SOLtA3w0Zzb02W+aYx36dAai5mD00AOXWCVWabXOS8NOrnI69HIi0pttIqRN879o1qMk=
-X-Received: by 2002:a05:6870:d14d:b0:22a:4249:f409 with SMTP id
- f13-20020a056870d14d00b0022a4249f409mr16854617oac.4.1713296437395; Tue, 16
- Apr 2024 12:40:37 -0700 (PDT)
+	s=arc-20240116; t=1713296625; c=relaxed/simple;
+	bh=0IPQk3Y6FYUcjy+k00KnrGq4MmM1NUsayaT1wvyAFWs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eYSKOC0YBzmSdl9QujmHfz5MhO9xkRmsMTEBbItMuu2M+g/P4UL9iatpA3JSspaa9+HTI21d+9m9qRUHYva3xPvFAbISTZJc4yT9wNvOB4P/mRxr+/CDj1uhJIBCkC8npJcZYWo3GTLTa52txMEm40OUH8dcrCur9iEPBbc5+WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dvTpRwW7; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713296624; x=1744832624;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0IPQk3Y6FYUcjy+k00KnrGq4MmM1NUsayaT1wvyAFWs=;
+  b=dvTpRwW7UIspBrkfKtSWQ3PHd30jutaMBRB43LqRvUhLCGvX5uidh+JI
+   qQEQPOew1/1em4NHT+lYJDpuNPJOGZk10QnK1Zjz/4fZ4vdqKYM2FMu34
+   WMRHwPSojo9+y8aNzsDff1hoUBCLBnxeJcD1x+knX8UHrg5ZtbMP7wZ3R
+   u7zsOpsrT2KvFy5ZDO4vsBBCAehEWnTcQpmMW9ZxeGeUXtdPl20xD3nm5
+   fXbOzxfnQq20FGRw2FVKa8jpj2RXaFFcp5zJhXiX1aQvlb5vIJMsTzMHQ
+   /C2GhZIaaDcotLvlM+WsC1BaLaxS3sNafgALrFGOVlba99LGTGlx5/+LL
+   A==;
+X-CSE-ConnectionGUID: TEy3zDLWS3GOGCuSUUfqNw==
+X-CSE-MsgGUID: WVQZQ0BpRfKIxu58agpLxQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="19319747"
+X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
+   d="scan'208";a="19319747"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:43:43 -0700
+X-CSE-ConnectionGUID: Q1Ys6zb/TC6tUmsXULbUeQ==
+X-CSE-MsgGUID: k7XRWl5jT1i/JX0DKRPzbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
+   d="scan'208";a="22425545"
+Received: from soc-cp83kr3.jf.intel.com (HELO [10.24.10.71]) ([10.24.10.71])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:43:34 -0700
+Message-ID: <2fd55858-2124-45e3-89f5-eb9faf733429@intel.com>
+Date: Tue, 16 Apr 2024 12:43:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415163527.626541-1-jeffxu@chromium.org> <znrbeb744774vre5dkeg7kjnnt7uuifs6xw63udcyupwj3veqh@rpcqs7dmoxi6>
-In-Reply-To: <znrbeb744774vre5dkeg7kjnnt7uuifs6xw63udcyupwj3veqh@rpcqs7dmoxi6>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Tue, 16 Apr 2024 12:40:26 -0700
-Message-ID: <CABi2SkU8B27O28jjTDajFpENgUHhntuRAMKFUMXr6A6AxZeyiQ@mail.gmail.com>
-Subject: Re: [PATCH v10 0/5] Introduce mseal
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, jeffxu@chromium.org, akpm@linux-foundation.org, 
-	keescook@chromium.org, jannh@google.com, sroettger@google.com, 
-	willy@infradead.org, gregkh@linuxfoundation.org, 
-	torvalds@linux-foundation.org, usama.anjum@collabora.com, corbet@lwn.net, 
-	surenb@google.com, merimus@google.com, rdunlap@infradead.org, 
-	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
-	linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2] KVM: selftests: Take large C-state exit latency into
+ consideration
+To: Sean Christopherson <seanjc@google.com>
+Cc: linux-kselftest@vger.kernel.org, pbonzini@redhat.com
+References: <20240413053749.74313-1-zide.chen@intel.com>
+ <Zh226A1xyCW6PtZ5@google.com>
+Content-Language: en-US
+From: "Chen, Zide" <zide.chen@intel.com>
+In-Reply-To: <Zh226A1xyCW6PtZ5@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 16, 2024 at 8:13=E2=80=AFAM Liam R. Howlett <Liam.Howlett@oracl=
-e.com> wrote:
->
-> * jeffxu@chromium.org <jeffxu@chromium.org> [240415 12:35]:
-> > From: Jeff Xu <jeffxu@chromium.org>
-> >
-> > This is V10 version, it rebases v9 patch to 6.9.rc3.
-> > We also applied and tested mseal() in chrome and chromebook.
-> >
-> > ------------------------------------------------------------------
-> ...
->
-> > MM perf benchmarks
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > This patch adds a loop in the mprotect/munmap/madvise(DONTNEED) to
-> > check the VMAs=E2=80=99 sealing flag, so that no partial update can be =
-made,
-> > when any segment within the given memory range is sealed.
-> >
-> > To measure the performance impact of this loop, two tests are developed=
-.
-> > [8]
-> >
-> > The first is measuring the time taken for a particular system call,
-> > by using clock_gettime(CLOCK_MONOTONIC). The second is using
-> > PERF_COUNT_HW_REF_CPU_CYCLES (exclude user space). Both tests have
-> > similar results.
-> >
-> > The tests have roughly below sequence:
-> > for (i =3D 0; i < 1000, i++)
-> >     create 1000 mappings (1 page per VMA)
-> >     start the sampling
-> >     for (j =3D 0; j < 1000, j++)
-> >         mprotect one mapping
-> >     stop and save the sample
-> >     delete 1000 mappings
-> > calculates all samples.
->
->
-> Thank you for doing this performance testing.
->
-> >
-> > Below tests are performed on Intel(R) Pentium(R) Gold 7505 @ 2.00GHz,
-> > 4G memory, Chromebook.
-> >
-> > Based on the latest upstream code:
-> > The first test (measuring time)
-> > syscall__     vmas    t       t_mseal delta_ns        per_vma %
-> > munmap__      1       909     944     35      35      104%
-> > munmap__      2       1398    1502    104     52      107%
-> > munmap__      4       2444    2594    149     37      106%
-> > munmap__      8       4029    4323    293     37      107%
-> > munmap__      16      6647    6935    288     18      104%
-> > munmap__      32      11811   12398   587     18      105%
-> > mprotect      1       439     465     26      26      106%
-> > mprotect      2       1659    1745    86      43      105%
-> > mprotect      4       3747    3889    142     36      104%
-> > mprotect      8       6755    6969    215     27      103%
-> > mprotect      16      13748   14144   396     25      103%
-> > mprotect      32      27827   28969   1142    36      104%
-> > madvise_      1       240     262     22      22      109%
-> > madvise_      2       366     442     76      38      121%
-> > madvise_      4       623     751     128     32      121%
-> > madvise_      8       1110    1324    215     27      119%
-> > madvise_      16      2127    2451    324     20      115%
-> > madvise_      32      4109    4642    534     17      113%
-> >
-> > The second test (measuring cpu cycle)
-> > syscall__     vmas    cpu     cmseal  delta_cpu       per_vma %
-> > munmap__      1       1790    1890    100     100     106%
-> > munmap__      2       2819    3033    214     107     108%
-> > munmap__      4       4959    5271    312     78      106%
-> > munmap__      8       8262    8745    483     60      106%
-> > munmap__      16      13099   14116   1017    64      108%
-> > munmap__      32      23221   24785   1565    49      107%
-> > mprotect      1       906     967     62      62      107%
-> > mprotect      2       3019    3203    184     92      106%
-> > mprotect      4       6149    6569    420     105     107%
-> > mprotect      8       9978    10524   545     68      105%
-> > mprotect      16      20448   21427   979     61      105%
-> > mprotect      32      40972   42935   1963    61      105%
-> > madvise_      1       434     497     63      63      115%
-> > madvise_      2       752     899     147     74      120%
-> > madvise_      4       1313    1513    200     50      115%
-> > madvise_      8       2271    2627    356     44      116%
-> > madvise_      16      4312    4883    571     36      113%
-> > madvise_      32      8376    9319    943     29      111%
-> >
->
-> If I am reading this right, madvise() is affected more than the other
-> calls?  Is that expected or do we need to have a closer look?
->
-The madvise() has a bigger percentage (per_vma %), but it also has a
-smaller base value (cpu).
 
--Jeff
+
+On 4/15/2024 4:23 PM, Sean Christopherson wrote:
+> On Fri, Apr 12, 2024, Zide Chen wrote:
+>> Currently, the migration worker delays 1-10 us, assuming that one
+>> KVM_RUN iteration only takes a few microseconds.  But if C-state exit
+>> latencies are large enough, for example, hundreds or even thousands
+>> of microseconds on server CPUs, it may happen that it's not able to
+>> bring the target CPU out of C-state before the migration worker starts
+>> to migrate it to the next CPU.
+>>
+>> If the system workload is light, most CPUs could be at a certain level
+>> of C-state, which may result in less successful migrations and fail the
+>> migration/KVM_RUN ratio sanity check.
+>>
+>> This patch adds a command line option to skip the sanity check in
+>> this case.
+>>
+>> Additionally, seems it's reasonable to randomize the length of usleep(),
+>> other than delay in a fixed pattern.
+> 
+> This belongs in a separate patch.  And while it's reasonable on the surface, I
+> doubt think it buys us anything, and it makes an already non-deterministic test
+> even less deterministic.  In other words, unless a random sleep time helps find
+> more bugs or finds the original bug faster, just drop the randomization.
+
+OK, I will drop it.
+> 
+>> V2:
+>> - removed the busy loop implementation
+>> - add the new "-s" option
+> 
+> This belongs in the ignored part of the patch...
+>>
+>> Signed-off-by: Zide Chen <zide.chen@intel.com>
+> 
+> ...down here.
+
+My bad. Will move it here.
+
+> 
+>> ---
+>>  tools/testing/selftests/kvm/rseq_test.c | 37 +++++++++++++++++++++++--
+>>  1 file changed, 34 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+>> index 28f97fb52044..515cfa32a925 100644
+>> --- a/tools/testing/selftests/kvm/rseq_test.c
+>> +++ b/tools/testing/selftests/kvm/rseq_test.c
+>> @@ -150,7 +150,7 @@ static void *migration_worker(void *__rseq_tid)
+>>  		 * Use usleep() for simplicity and to avoid unnecessary kernel
+>>  		 * dependencies.
+>>  		 */
+>> -		usleep((i % 10) + 1);
+>> +		usleep((rand() % 10) + 1);
+>>  	}
+>>  	done = true;
+>>  	return NULL;
+>> @@ -186,12 +186,35 @@ static void calc_min_max_cpu(void)
+>>  		       "Only one usable CPU, task migration not possible");
+>>  }
+>>  
+>> +static void usage(const char *name)
+> 
+> Uber nit, "help()" is more common than "usage()".
+
+OK, will do.
+
+> 
+>> @@ -254,9 +279,15 @@ int main(int argc, char *argv[])
+>>  	 * getcpu() to stabilize.  A 2:1 migration:KVM_RUN ratio is a fairly
+>>  	 * conservative ratio on x86-64, which can do _more_ KVM_RUNs than
+>>  	 * migrations given the 1us+ delay in the migration task.
+>> +	 *
+>> +	 * Another reason why it may have small migration:KVM_RUN ratio is that,
+>> +	 * on systems with large C-state exit latency, it may happen quite often
+>> +	 * that the scheduler is not able to wake up the target CPU before the
+>> +	 * vCPU thread is scheduled to another CPU.
+>>  	 */
+>> -	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
+>> -		    "Only performed %d KVM_RUNs, task stalled too much?", i);
+>> +	TEST_ASSERT(skip_sanity_check || i > (NR_TASK_MIGRATIONS / 2),
+>> +		    "Only performed %d KVM_RUNs, task stalled too much? "
+>> +		    "Try to turn off C-states or run it with the -s option", i);
+> 
+> I think it's worth explicitly telling the user how to reduce CPU wakeup latency.
+
+OK, I will add more details in the TEST_ASSERT() statement.
+
+> Also, are C-states called that on other architectures?  E.g. maybe this to avoid
+> confusing the user?  Not a big deal, e.g. I've no objection whatsoever to the
+> comment, but it seems easy enough to avoid confusing the user.
+
+Yes, I agree C-State is not the best term here. I can remove the word
+C-state from this patch.
+
+Initially I thought it's OK since C-State is an arch independent term
+from ACPI spec. But in Linux, it's not adopted by other arch code other
+than x86 and ARM.  Furthermore, the ARM Architecture Reference Manual
+simply uses "low power mode" and doesn't adopt the term C-State.
+
 
