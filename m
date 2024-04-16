@@ -1,76 +1,77 @@
-Return-Path: <linux-kselftest+bounces-8082-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14C638A622E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 06:14:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DFC48A6231
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 06:14:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A75B01F23850
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 04:14:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E90A32855D1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 04:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF0F6BB33;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94F86CDAC;
 	Tue, 16 Apr 2024 04:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Qa9eSp7H"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="cDeT3Qj3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60EF5A4E9
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 04:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEA45FBA5
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 04:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713240739; cv=none; b=cfwJ+o+x+vKC4pudosiLSvM/ovElkaZNHSpsoYSi+9NMwV0NIQqgpWsPCOpqAhasjjv2ikuMhse5bh73cI3XajWVG9FR64ldk9UICX5EHRmtbw2QRBeUwj4mfvxLEPC8pPvcPYGzA1qtDPwbJsycY/eyTpa2+uHHyZOBZr9DYlk=
+	t=1713240739; cv=none; b=RUXbXdv/AX9ZX2RZvROL2llwoa50X+nkDR5Q4tEb9+fiQehC7ij0ks4f6yRWsH8oN43qjyCoKrv4lJgtcZZLbzZG2rhvMkuXJD8cF2e4hUo0i6P1TPObn4fF3Q5f9fg0llgUfwkX/QCb2B7yOAFHWHTzbDo4Ab19uGeh8vKmYoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713240739; c=relaxed/simple;
-	bh=pB2VSPvj33lI/8AQbCi/3smUxH+y5ljsCL7cqqiQMp0=;
+	bh=wcB/ebDhkfkPBVDQxoUt3AjUlhzpSXzz59SF5DkeLyE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HHz5k/DYnT1jI1Xqdve3RpuGbFY47TNkUv4gANtjphFAnHIBelK1iEKSNSS2gbPVxoXfK3drlgfJegS1zYMR2x3flr9DOeUPUap6fJKg7LJk3dlwR0MLAB6PWscf/7PaKhulyABxvUsTvt75frDzL4mAQ5dGjmiOHNIKbEDSs4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Qa9eSp7H; arc=none smtp.client-ip=209.85.210.173
+	 In-Reply-To:To:Cc; b=gnv+L2pqTc9fkXPxswqkDCVdZT+sBvNu6yUm+PyremqSI8COIbtyq9Of9Rk9O9V+XxfOSW74GaLQGAlhKKFX1A9Vb3VfDwLBBZyPhU6aABgOH4poOqxMO0bk+xR6YM+9VpaTSl/ZGclp4ILAvfTZ1kqFHC3V1iJgaS0W2FM9GD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=cDeT3Qj3; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso1657182b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 21:12:17 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-22f746c56a2so1958463fac.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 21:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713240737; x=1713845537; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lt9+WFFQa5ypEuNBueQsHraOx3Sw6YlRb9NPkxzQDbc=;
-        b=Qa9eSp7HEMvyb/z5skEPZ7hdYXGhHogvjum8g7rKG6Hn4Aw6D743nMlCeLdQDOenbb
-         SmQs1DUKgy6Nf0okAxZNgDYHgN36m/hArC1TiAtu0BYUcQeJLyIdWmoTT8w9HyGrAEQg
-         /enYdahEHcCQOyktQScWF6/l3+u6y5VHaZeJMC73FAfj2OIhRfxA8b/wDGVL63J1qrcd
-         /+gn/FMnQsSFVLCiVWykKTLavVggrzelij9fIaRqWQzVAerd3zsb8ehNtfeE8Y83j4Cq
-         abureW3D6jMnEp8QWqvspYozb2stcB8SBQfj1gEA5kr7vVr69KSiRME8aZ9CS+ISUsuN
-         8ncQ==
+        bh=bC8+jsiLZWKY+UGyCwiSu3stdoXyccUkl5+IF/7wAA4=;
+        b=cDeT3Qj3bLx4GNuLOw0ISv28Gn/Fwp611oxVPxfXbuzKX85sYeKKPy+UV2YZN1aORO
+         vLbASYQTnJ2o7RvAYZbBTRSLiQjN8N6TFgxRihZtK0w8hg5BthG8d4eBSxPcST9iQGUY
+         U2o6JbIqKX836rV1WKRO3H8XPzZTE3fVQpLLSnfT0RC2QgtYxHFiA8e1M0mmxkuZ55pL
+         g3XZAZbDpYcx2m8Ert82AvpPVnzp43eDporioWQIYTObP0Jw2nPQK3VRImCVWHFGONpS
+         BtPTlKz60PWIvg0mimj3eE1VgAKI/prV99ZsOkKOC9iIjqghxwzLs+AT98OrUddBqRjb
+         tbpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1713240737; x=1713845537;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lt9+WFFQa5ypEuNBueQsHraOx3Sw6YlRb9NPkxzQDbc=;
-        b=Mw+4v1ASfd/vBtNKY9iOaqQi6L8dHJOb/eMY/fpFpSx6YeJNrLg6Jnw7SphM/gmpDS
-         rDZrP6MPvtZrKEQ2Nb5byNxlbgmTwEreJt3uXPMV5TQTdzD/jTG5E8gVW9HF4RmzAmSU
-         LciV+WnUE0I8ck5SOJm+Zpn+jokkPE2ynvXcGaLC2ROxinLZCDVBFjM1J3jik4ofScVR
-         +cpQFRe+HlJbR5hDeHYNx4g28D88exI31xMEF1iUr72AaI3K3fUXzIpzyf8auUxlQuKE
-         5DCX798A+phy9JCDg0l8vN6ZaezlKriO4CfS/EjqeOovyh5Qk/P+og4Blxt6p7Jy4ONu
-         yLJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUL3NLc8v5AlFVeBlxHWEdASaSCziAh+A2pjb+JHyOYMFcalNYPOhmGcabK0Eg/o0pN3ZZbYcZ1Bt4fbIVc1/+sN3R5eon1Aud5EA5cqTKY
-X-Gm-Message-State: AOJu0Yz+ljGj/tTsnJxl+aXuAF/y5bkBVrXweFmKMmvrcW9ADG6clqg8
-	dfza/EL3ZA0KlN0gVQUavhx5hokv2khUpuBRR+O0urF/bv4jW8pJTznjw3cGvMY=
-X-Google-Smtp-Source: AGHT+IHCNCA1HXhs7dCFTKMFTWnzq8i+GYhA6+4Dbcx+4s0UknMRIzl057VqWDeyJSsM3TdjS4r2BA==
-X-Received: by 2002:a05:6a00:2308:b0:6e7:3223:4556 with SMTP id h8-20020a056a00230800b006e732234556mr11616992pfh.32.1713240735967;
-        Mon, 15 Apr 2024 21:12:15 -0700 (PDT)
+        bh=bC8+jsiLZWKY+UGyCwiSu3stdoXyccUkl5+IF/7wAA4=;
+        b=Qc+wEEVvOV3A8eDmbhUbiAgtzVcowEoLlMvpUXo+0QOMWDP8wRyebBrxTtRobowHUP
+         kA2aOWMIW3o0D6W1jrCV3N9b8uBajeGw99HcWDgmRPRj3Z6fWgSZ1vvfTit8uTLq1kkT
+         3wh70cKqvf9LMJwPfV92I7lxTNvVEUoSRzYq2kmbXawFvPiHdowG4R0HhmCoqXs6Jv10
+         uSGF1cc/zrseANB4njUyCllD3QAw5vIp+geCJdl8TQ5EbfPyT+Hd5EqsZY13io/TQekt
+         al7772nQAKW/ojqrFYNIEdYyWkctHpHTwqueVh0HcB208QNAuTo24J86od74ngCXi9sy
+         zjxw==
+X-Forwarded-Encrypted: i=1; AJvYcCWWujvkmM4Lg3VumTGtB0L59RfXG7O4iZd/LYYrz5tBvcFRfJn4SCNoE1xcieUnyfA6VGZg0s484pibEURJcEyl6A6EHi4WPnq9htvu5kU4
+X-Gm-Message-State: AOJu0YwUgiahOey9FmqBljKCLS70z2BzG5Yjy3H8Pd1PxTJqwyq6Zze0
+	hM1Ghp8wi9BbIACQhO6KYmp2Ik4HOQZtP+J4St6yhReo6kAddPR7YcFmfwH2MQUWtYZwZoWx/Vv
+	G
+X-Google-Smtp-Source: AGHT+IHkqiMkVjxP3CYqN1RvGEvTVB4gtmkT8yxeTu0gT+YMQ6rgsqh73ctLt3AZ3AdSqqJmE2B/vA==
+X-Received: by 2002:a05:6870:b293:b0:22d:f859:2225 with SMTP id c19-20020a056870b29300b0022df8592225mr15026805oao.6.1713240737601;
+        Mon, 15 Apr 2024 21:12:17 -0700 (PDT)
 Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id z184-20020a6265c1000000b006ed4c430acesm8383149pfb.40.2024.04.15.21.12.14
+        by smtp.gmail.com with ESMTPSA id z184-20020a6265c1000000b006ed4c430acesm8383149pfb.40.2024.04.15.21.12.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 21:12:15 -0700 (PDT)
+        Mon, 15 Apr 2024 21:12:16 -0700 (PDT)
 From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Mon, 15 Apr 2024 21:12:06 -0700
-Subject: [PATCH v2 09/17] riscv: uaccess: Add alternative for xtheadvector
- uaccess
+Date: Mon, 15 Apr 2024 21:12:07 -0700
+Subject: [PATCH v2 10/17] RISC-V: define the elements of the VCSR vector
+ CSR
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,7 +80,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240415-dev-charlie-support_thead_vector_6_9-v2-9-c7d68c603268@rivosinc.com>
+Message-Id: <20240415-dev-charlie-support_thead_vector_6_9-v2-10-c7d68c603268@rivosinc.com>
 References: <20240415-dev-charlie-support_thead_vector_6_9-v2-0-c7d68c603268@rivosinc.com>
 In-Reply-To: <20240415-dev-charlie-support_thead_vector_6_9-v2-0-c7d68c603268@rivosinc.com>
 To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -96,44 +97,47 @@ Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>, 
  linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Charlie Jenkins <charlie@rivosinc.com>
+ Charlie Jenkins <charlie@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>, 
+ Heiko Stuebner <heiko@sntech.de>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1713240719; l=1060;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1713240719; l=954;
  i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
- bh=pB2VSPvj33lI/8AQbCi/3smUxH+y5ljsCL7cqqiQMp0=;
- b=dG18cYHtMBrx7rXL/eDJ2J/MEkXppkdVPVqNGAzWfC+Il8JQEsduUE1vvr/F4ONbgf1PyHIwe
- CJzJ8zZcdQTAxXdraBfQwbJEfD2R9/JWH+8NHRtQIw3nfMBSlLS4cMj
+ bh=C7F1c584ODJM4qF9TPT5kMoM8fDlOPYyEMw6010Mea8=;
+ b=gL5a3gZt7YmAzdC8JCIo8MXcZ7fbdc6iO361KpgkRlf5taEU4xnmrghYwi1t5py6BJP8PyQO9
+ P2I8p9MxL5KDfEXe96mXU4uz3Aeg9WWgIVAt+oJLRgmHkwkJ4xayrK0
 X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
  pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
 
-At this time, use the fallback uaccess routines rather than customizing
-the vectorized uaccess routines to be compatible with xtheadvector.
+From: Heiko Stuebner <heiko@sntech.de>
 
+The VCSR CSR contains two elements VXRM[2:1] and VXSAT[0].
+
+Define constants for those to access the elements in a readable way.
+
+Acked-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
- arch/riscv/lib/uaccess.S | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/riscv/include/asm/csr.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/riscv/lib/uaccess.S b/arch/riscv/lib/uaccess.S
-index bc22c078aba8..1fe798666aee 100644
---- a/arch/riscv/lib/uaccess.S
-+++ b/arch/riscv/lib/uaccess.S
-@@ -5,6 +5,7 @@
- #include <asm/csr.h>
- #include <asm/hwcap.h>
- #include <asm/alternative-macros.h>
-+#include <asm/vendorid_list.h>
+diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+index 2468c55933cd..13bc99c995d1 100644
+--- a/arch/riscv/include/asm/csr.h
++++ b/arch/riscv/include/asm/csr.h
+@@ -215,6 +215,11 @@
+ #define SMSTATEEN0_SSTATEEN0_SHIFT	63
+ #define SMSTATEEN0_SSTATEEN0		(_ULL(1) << SMSTATEEN0_SSTATEEN0_SHIFT)
  
- 	.macro fixup op reg addr lbl
- 100:
-@@ -15,6 +16,7 @@
- SYM_FUNC_START(__asm_copy_to_user)
- #ifdef CONFIG_RISCV_ISA_V
- 	ALTERNATIVE("j fallback_scalar_usercopy", "nop", 0, RISCV_ISA_EXT_v, CONFIG_RISCV_ISA_V)
-+	ALTERNATIVE("nop", "j fallback_scalar_usercopy", THEAD_VENDOR_ID, RISCV_ISA_VENDOR_EXT_XTHEADVECTOR, CONFIG_RISCV_ISA_XTHEADVECTOR)
- 	REG_L	t0, riscv_v_usercopy_threshold
- 	bltu	a2, t0, fallback_scalar_usercopy
- 	tail enter_vector_usercopy
++/* VCSR flags */
++#define VCSR_VXRM_MASK			3
++#define VCSR_VXRM_SHIFT			1
++#define VCSR_VXSAT_MASK			1
++
+ /* symbolic CSR names: */
+ #define CSR_CYCLE		0xc00
+ #define CSR_TIME		0xc01
 
 -- 
 2.44.0
