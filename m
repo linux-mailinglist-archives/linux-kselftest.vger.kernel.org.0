@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-8154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8A518A6DFD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 16:23:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3EC28A6DF8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 16:23:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CEF7B272CE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 14:23:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A7E0282B12
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 14:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00181332BE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB5E61332B6;
 	Tue, 16 Apr 2024 14:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="lfsb+EnN";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="lfsb+EnN"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="VtMx5FyC";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="VtMx5FyC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC108130A4B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C4B13175E;
 	Tue, 16 Apr 2024 14:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713277219; cv=none; b=p61NJ3CLoile8tsXTgsDKs0QOWEqLZmTZBunqlCh3s1C4iwGC8aGEqUlJatIDDTqWU5J6tjgHr1Es0EOZR4p/eaCUJHoC5TdTNFRBLfwdiFZICSi6tNNry0f7pJu2iJyIBqQD3BHStqPfiH23B1tc8YLyMPWqjVPsl/qfBHDFCw=
+	t=1713277219; cv=none; b=SNgAxbUpTkNURyT/GRKwgKBAcTX9Ih6z0/9Af9OFtO4v5+XCFN6frFuxGXwnNJf1tV2LIz/3tjXL9sZaeNy09f0FW3pCy8NHgKBS9ohF5Tja6StoQwW7tc6f3Pwp4Bdo0Aj9G4JJmWMT0MG2HTj7CJ9jScIVC7RzxH5sHxft4LE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713277219; c=relaxed/simple;
-	bh=JX6xd6eKoSVT/WlpPp/PH4f5xocxKUURNataKL1beVo=;
+	bh=ubGo9+oTOS6QkbCEkb9Q6EFpn/e6bGuz7bkTFXxC8/0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZY+LkoknC14XiFVO8gHlficO2oMr2n7jOFbYK72zlovincT1GrwXA1Fomohh1SN0zuhyF8sU3/dwE7yYh4Xgpeh86zBIJRXrhnisQ1KhEjD0iKjFuI3S9OadKW2kep8CTqD88GagFnKA2jm1YsaGE2AbFjDuT5WYAcuqiJlJF8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=lfsb+EnN; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=lfsb+EnN; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version:Content-Type; b=Gex4OeG+nI4laQyeqcR950cXKaHLDa88XhbnYf9znEDhRxclbiWoMvt9rgmUru+yKXYtdOTDttOH0yluPc9+QjH3Zqw+4o+a5G2Ivi3y4Zt0uCblEmIEQmifx8FKdMhiOrT083cO5QTOzl2Wd48X5R+8JzodMyy3CXmCjcrx/Ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=VtMx5FyC; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=VtMx5FyC; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3193B3754E;
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4931B37BEF;
 	Tue, 16 Apr 2024 14:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
 	t=1713277216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=CjNmC9MQWUXNQEGaN9XnQq9166q4BWnQwi+RQgxW1U4=;
-	b=lfsb+EnNQpcdKNe144vcv6BVWWU4Ne5dpNLuzY7+08RUcFGUB9cFo3uWSfESLx0x5YZ91D
-	ZIW0Fb5rG/vck2JCuAnwcTe72gLfDqltVy7lqcRv01HnAuj9FQolmxAw3/H3n01U6AkPmF
-	/OFyxXX3Xgiw76Ru5PvE8LmXsf01Ylc=
+	bh=sEHppgTc66ahiza21E2iZYSu3pjbMVVB7MdpEadnVeQ=;
+	b=VtMx5FyCqqRb+Kz9dksJAxMjxwWJ2r6oNcRmiXT2Na3oem9yMhoepW19YbTFAX/hJuPiwl
+	NAR18es08he70+xqQpqpN+mztLOoh4G9b6P9wrfG10FpxTzq1/JArFZWyQMwAedD0UCa/Q
+	iBJP5Tm5f9ANhya0Gj/EpcQDf+cFP10=
 Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
@@ -54,19 +54,19 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=CjNmC9MQWUXNQEGaN9XnQq9166q4BWnQwi+RQgxW1U4=;
-	b=lfsb+EnNQpcdKNe144vcv6BVWWU4Ne5dpNLuzY7+08RUcFGUB9cFo3uWSfESLx0x5YZ91D
-	ZIW0Fb5rG/vck2JCuAnwcTe72gLfDqltVy7lqcRv01HnAuj9FQolmxAw3/H3n01U6AkPmF
-	/OFyxXX3Xgiw76Ru5PvE8LmXsf01Ylc=
+	bh=sEHppgTc66ahiza21E2iZYSu3pjbMVVB7MdpEadnVeQ=;
+	b=VtMx5FyCqqRb+Kz9dksJAxMjxwWJ2r6oNcRmiXT2Na3oem9yMhoepW19YbTFAX/hJuPiwl
+	NAR18es08he70+xqQpqpN+mztLOoh4G9b6P9wrfG10FpxTzq1/JArFZWyQMwAedD0UCa/Q
+	iBJP5Tm5f9ANhya0Gj/EpcQDf+cFP10=
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1947913931;
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2F41713942;
 	Tue, 16 Apr 2024 14:20:16 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kFcIBiCJHmbAbQAAD6G6ig
+	id eGFmCyCJHmbAbQAAD6G6ig
 	(envelope-from <mkoutny@suse.com>); Tue, 16 Apr 2024 14:20:16 +0000
 From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
 To: cgroups@vger.kernel.org,
@@ -79,9 +79,9 @@ Cc: Tejun Heo <tj@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <shuah@kernel.org>,
 	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v4 3/6] cgroup/pids: Make event counters hierarchical
-Date: Tue, 16 Apr 2024 16:20:11 +0200
-Message-ID: <20240416142014.27630-4-mkoutny@suse.com>
+Subject: [PATCH v4 4/6] cgroup/pids: Add pids.events.local
+Date: Tue, 16 Apr 2024 16:20:12 +0200
+Message-ID: <20240416142014.27630-5-mkoutny@suse.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240416142014.27630-1-mkoutny@suse.com>
 References: <20240416142014.27630-1-mkoutny@suse.com>
@@ -94,116 +94,183 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Level: 
-X-Spamd-Result: default: False [-0.75 / 50.00];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
 	MID_CONTAINS_FROM(1.00)[];
-	BAYES_HAM(-0.45)[78.91%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_TLS_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RL6j1h7wxugqfdyj8pnx7tibp9)];
 	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	RCVD_COUNT_TWO(0.00)[2];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Spam-Score: -0.75
+X-Spam-Score: -3.30
 X-Spam-Flag: NO
 
-The pids.events file should honor the hierarchy, so make the events
-propagate from their origin up to the root on the unified hierarchy. The
-legacy behavior remains non-hierarchical.
+Hierarchical counting of events is not practical for watching when a
+particular pids.max is being hit. Therefore introduce .local flavor of
+events file (akin to memory controller) that collects only events
+relevant to given cgroup.
+
+The file is only added to the default hierarchy.
 
 Signed-off-by: Michal Koutný <mkoutny@suse.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst |  2 +-
- kernel/cgroup/pids.c                    | 46 ++++++++++++++++---------
- 2 files changed, 31 insertions(+), 17 deletions(-)
+ kernel/cgroup/pids.c | 88 +++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 71 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 108b03dfb26a..aa97e9f91c51 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -241,7 +241,7 @@ cgroup v2 currently supports the following mount options.
- 
-   pid_localevents
-         Represent fork failures inside cgroup's pids.events:max (not its limit
--        being hit).
-+        being hit) and exclude subtree events from pids.events.
- 
- 
- Organizing Processes and Threads
 diff --git a/kernel/cgroup/pids.c b/kernel/cgroup/pids.c
-index ea1fc6b37c0d..4ad28109c1c8 100644
+index 4ad28109c1c8..6cd15c3785d4 100644
 --- a/kernel/cgroup/pids.c
 +++ b/kernel/cgroup/pids.c
-@@ -238,6 +238,34 @@ static void pids_cancel_attach(struct cgroup_taskset *tset)
- 	}
- }
+@@ -57,10 +57,12 @@ struct pids_cgroup {
+ 	atomic64_t			limit;
+ 	int64_t				watermark;
  
-+static void pids_event(struct pids_cgroup *pids_forking,
-+		       struct pids_cgroup *pids_over_limit)
-+{
-+	struct pids_cgroup *p = pids_forking;
-+	bool limit = false;
-+
-+	for (; parent_pids(p); p = parent_pids(p)) {
-+		/* Only log the first time limit is hit. */
-+		if (atomic64_inc_return(&p->events[PIDCG_FORKFAIL]) == 1) {
-+			pr_info("cgroup: fork rejected by pids controller in ");
-+			pr_cont_cgroup_path(p->css.cgroup);
-+			pr_cont("\n");
-+		}
-+		cgroup_file_notify(&p->events_file);
-+
-+		if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
-+		    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
-+			break;
-+
-+		if (p == pids_over_limit)
-+			limit = true;
-+		if (limit)
-+			atomic64_inc(&p->events[PIDCG_MAX]);
-+
-+		cgroup_file_notify(&p->events_file);
-+	}
-+}
-+
- /*
-  * task_css_check(true) in pids_can_fork() and pids_cancel_fork() relies
-  * on cgroup_threadgroup_change_begin() held by the copy_process().
-@@ -254,23 +282,9 @@ static int pids_can_fork(struct task_struct *task, struct css_set *cset)
- 		css = task_css_check(current, pids_cgrp_id, true);
- 	pids = css_pids(css);
- 	err = pids_try_charge(pids, 1, &pids_over_limit);
--	if (err) {
--		/* compatibility on v1 where events were notified in leaves. */
--		if (!cgroup_subsys_on_dfl(pids_cgrp_subsys))
--			pids_over_limit = pids;
--
+-	/* Handle for "pids.events" */
++	/* Handles for pids.events[.local] */
+ 	struct cgroup_file		events_file;
++	struct cgroup_file		events_local_file;
+ 
+ 	atomic64_t			events[NR_PIDCG_EVENTS];
++	atomic64_t			events_local[NR_PIDCG_EVENTS];
+ };
+ 
+ static struct pids_cgroup *css_pids(struct cgroup_subsys_state *css)
+@@ -244,21 +246,23 @@ static void pids_event(struct pids_cgroup *pids_forking,
+ 	struct pids_cgroup *p = pids_forking;
+ 	bool limit = false;
+ 
+-	for (; parent_pids(p); p = parent_pids(p)) {
 -		/* Only log the first time limit is hit. */
--		if (atomic64_inc_return(&pids->events[PIDCG_FORKFAIL]) == 1) {
+-		if (atomic64_inc_return(&p->events[PIDCG_FORKFAIL]) == 1) {
 -			pr_info("cgroup: fork rejected by pids controller in ");
--			pr_cont_cgroup_path(pids->css.cgroup);
+-			pr_cont_cgroup_path(p->css.cgroup);
 -			pr_cont("\n");
 -		}
--		atomic64_inc(&pids_over_limit->events[PIDCG_MAX]);
-+	if (err)
-+		pids_event(pids, pids_over_limit);
+-		cgroup_file_notify(&p->events_file);
+-
+-		if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
+-		    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
+-			break;
++	/* Only log the first time limit is hit. */
++	if (atomic64_inc_return(&p->events_local[PIDCG_FORKFAIL]) == 1) {
++		pr_info("cgroup: fork rejected by pids controller in ");
++		pr_cont_cgroup_path(p->css.cgroup);
++		pr_cont("\n");
++	}
++	cgroup_file_notify(&p->events_local_file);
++	if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
++	    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
++		return;
  
--		cgroup_file_notify(&pids->events_file);
--		if (pids_over_limit != pids)
--			cgroup_file_notify(&pids_over_limit->events_file);
--	}
- 	return err;
+-		if (p == pids_over_limit)
++	for (; parent_pids(p); p = parent_pids(p)) {
++		if (p == pids_over_limit) {
+ 			limit = true;
++			atomic64_inc(&p->events_local[PIDCG_MAX]);
++			cgroup_file_notify(&p->events_local_file);
++		}
+ 		if (limit)
+ 			atomic64_inc(&p->events[PIDCG_MAX]);
+ 
+@@ -368,20 +372,68 @@ static s64 pids_peak_read(struct cgroup_subsys_state *css,
+ 	return READ_ONCE(pids->watermark);
  }
  
+-static int pids_events_show(struct seq_file *sf, void *v)
++static int __pids_events_show(struct seq_file *sf, bool local)
+ {
+ 	struct pids_cgroup *pids = css_pids(seq_css(sf));
+ 	enum pidcg_event pe = PIDCG_MAX;
++	atomic64_t *events;
+ 
+ 	if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
+-	    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
++	    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS) {
+ 		pe = PIDCG_FORKFAIL;
++		local = true;
++	}
++	events = local ? pids->events_local : pids->events;
+ 
+-	seq_printf(sf, "max %lld\n", (s64)atomic64_read(&pids->events[pe]));
++	seq_printf(sf, "max %lld\n", (s64)atomic64_read(&events[pe]));
++	return 0;
++}
++
++static int pids_events_show(struct seq_file *sf, void *v)
++{
++	__pids_events_show(sf, false);
++	return 0;
++}
++
++static int pids_events_local_show(struct seq_file *sf, void *v)
++{
++	__pids_events_show(sf, true);
+ 	return 0;
+ }
+ 
+ static struct cftype pids_files[] = {
++	{
++		.name = "max",
++		.write = pids_max_write,
++		.seq_show = pids_max_show,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "current",
++		.read_s64 = pids_current_read,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "peak",
++		.flags = CFTYPE_NOT_ON_ROOT,
++		.read_s64 = pids_peak_read,
++	},
++	{
++		.name = "events",
++		.seq_show = pids_events_show,
++		.file_offset = offsetof(struct pids_cgroup, events_file),
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "events.local",
++		.seq_show = pids_events_local_show,
++		.file_offset = offsetof(struct pids_cgroup, events_local_file),
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{ }	/* terminate */
++};
++
++static struct cftype pids_files_legacy[] = {
+ 	{
+ 		.name = "max",
+ 		.write = pids_max_write,
+@@ -407,6 +459,7 @@ static struct cftype pids_files[] = {
+ 	{ }	/* terminate */
+ };
+ 
++
+ struct cgroup_subsys pids_cgrp_subsys = {
+ 	.css_alloc	= pids_css_alloc,
+ 	.css_free	= pids_css_free,
+@@ -416,5 +469,6 @@ struct cgroup_subsys pids_cgrp_subsys = {
+ 	.cancel_fork	= pids_cancel_fork,
+ 	.release	= pids_release,
+ 	.dfl_cftypes	= pids_files,
++	.legacy_cftypes = pids_files_legacy,
+ 	.threaded	= true,
+ };
 -- 
 2.44.0
 
