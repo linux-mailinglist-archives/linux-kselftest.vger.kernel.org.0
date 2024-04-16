@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC318A5F68
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 02:46:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24E9C8A5F6A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 02:46:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2ED31F21F17
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 00:46:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 152B81C211DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 00:46:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C1A4C98;
-	Tue, 16 Apr 2024 00:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0477483;
+	Tue, 16 Apr 2024 00:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QSQkfxyl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jY8AMBh+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986D03D7A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063486AC0;
 	Tue, 16 Apr 2024 00:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713228363; cv=none; b=YnZQX/TXoQtWwkIs9Fe2bgwDsO7qK5akl/1urYHXowPC7P5JeyZvGtkzpuAOeVMAQGxCNIPbgEvDUvKxRa924Ppr3+2gS5DpEfywv+D6tvoR8W6JIvLU/WDZrysh7r/0PMmvOJRbmP/Zx60Sf/Kx9IQTIJcy4SR/Fm9tlu7VnPI=
+	t=1713228364; cv=none; b=louOktdfTyXRaj0u7sHxa/1n5Q9BlQBVzwOHguGj/tp7ZL5EFDtS0IUPoQfz5iBc6jEucy8hFBzvfTMBLWeujTlwDokS7ebkoE0hyNkOmdJUn4EZVC6t1nnP/xjWsAXcaxeRRPcxRDgqsD1v43EJOMWpWbi6xS3tdOmqZEONJt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713228363; c=relaxed/simple;
-	bh=7pnzslXkSvchRavsLakdswzhlJdLRYa1UEolq6woMV0=;
+	s=arc-20240116; t=1713228364; c=relaxed/simple;
+	bh=Sq1yJX/p7e6wKVnfy1b9yJfgXqWpseordfnRF9WlYKc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q9nK2Rl8ezXzGe4rdY3iWhrXYrmonNos0HtkjPECVDXTiuXkwHtHBw46eNtmgXorw0YWw07pWGKT3tBPqGnkSmuOJXN/lIJtDZkm0qvSpuhCHcYps61UAkbSg/AOv/7RILHbbZMm2wsVVxyGi71qU9Pa3hjiZm7tukzlu4EgQmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QSQkfxyl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB903C2BD11;
-	Tue, 16 Apr 2024 00:46:02 +0000 (UTC)
+	 MIME-Version; b=Ay8sSgzvYW5MrmzMZXFn7N5hJUpK8umldFzoAsMq8V8DGkoE8EJZ6YC6vDndFCfZiTHdwPO00ZoTmDsDhCNIrb6EOrnj0iBeJJ2GYxukNIHoBx+5ez41+MQeuPcyV98uFDcpXe4OIBwJVwmlHgTzlehzwg83ltULbxt/bf3NYXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jY8AMBh+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DDA6C113CC;
+	Tue, 16 Apr 2024 00:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1713228363;
-	bh=7pnzslXkSvchRavsLakdswzhlJdLRYa1UEolq6woMV0=;
+	bh=Sq1yJX/p7e6wKVnfy1b9yJfgXqWpseordfnRF9WlYKc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QSQkfxylBHNUhOdARpP2zjR3Z2oq4gZ1icsg8IiyFVqbrS+8XXD/nINN4+l/jGeaq
-	 Pv0nUDHZ7rccmNZ2N8aTx9bZsfoKMXf07Ohm1C9B8lBcNsjMr5r5dRkGLUFT2oyMOL
-	 BFyy/BtJLjwjd01R9N9+PDL7VEYnLcoLZQeQRzmBhGxZ2C+98HvVVIJegNqyg5xe9G
-	 E08lNcT9utWgiZg+VbbcGwQ8BMdw9cQDOFqaWmdNXsjS5W4P6a/A0+j1r7lEu4vP5U
-	 ItGAh0JDZmZeSTI4EDhNm0LX3/H9hq2rljkpFnK2XgV3n/Lk9EmiVdP00izIXCh1Ah
-	 0HSh5QuSR2Bkw==
+	b=jY8AMBh+7m788lOlgV621O5uFvim2azwXq1hACDg66DBreX3QDW+vj7FbAlHt8j2K
+	 ZaqLoYeaB5HWWRuc6Op8a30iKT0Eq985uqKgjwth73ZRVjX5GQBg8JoF3bqUP/MYms
+	 utBABHw4lXbFaN/O3n/ZzM5JDdY0TyfT8sGK/tav1KqDh+RRgz7fRQYMe5cwGbjT/n
+	 X7or2hsLRzN/6Byx7JTDAYEsoOQkSddl+7LJBSVgpraj2RQZT43kKm+lVEwLSVxQPn
+	 3ekaopYkI9ke6Bppt4hf15/CnWczcmsbNgj+Kbv35sfoAHeNG7a5gIpRIcdNPT70Gf
+	 a9JB42PgnUcCg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 2/6] selftests: drv-net: add config for netdevsim
-Date: Mon, 15 Apr 2024 17:45:52 -0700
-Message-ID: <20240416004556.1618804-3-kuba@kernel.org>
+Subject: [PATCH net-next v2 3/6] selftests: drv-net: define endpoint structures
+Date: Mon, 15 Apr 2024 17:45:53 -0700
+Message-ID: <20240416004556.1618804-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240416004556.1618804-1-kuba@kernel.org>
 References: <20240416004556.1618804-1-kuba@kernel.org>
@@ -65,25 +65,194 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Real driver testing will obviously require enabling more
-options, but will require more manual setup in the first
-place. For CIs running purely software tests we need
-to enable netdevsim.
+Define the remote endpoint "model". To execute most meaningful device
+driver tests we need to be able to communicate with a remote system,
+and have it send traffic to the device under test.
+
+Various test environments will have different requirements.
+
+0) "Local" netdevsim-based testing can simply use net namespaces.
+netdevsim supports connecting two devices now, to form a veth-like
+construct.
+
+1) Similarly on hosts with multiple NICs, the NICs may be connected
+together with a loopback cable or internal device loopback.
+One interface may be placed into separate netns, and tests
+would proceed much like in the netdevsim case. Note that
+the loopback config or the moving of one interface
+into a netns is not expected to be part of selftest code.
+
+2) Some systems may need to communicate with the remote endpoint
+via SSH.
+
+3) Last but not least environment may have its own custom communication
+method.
+
+Fundamentally we only need two operations:
+ - run a command remotely
+ - deploy a binary (if some tool we need is built as part of kselftests)
+
+Wrap these two in a class. Use dynamic loading to load the Remote
+class. This will allow very easy definition of other communication
+methods without bothering upstream code base.
+
+Stick to the "simple" / "no unnecessary abstractions" model for
+referring to the remote endpoints. The host / remote object are
+passed as an argument to the usual cmd() or ip() invocation.
+For example:
+
+ ip("link show", json=True, host=remote)
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/drivers/net/config | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/net/config
+ .../selftests/drivers/net/lib/py/__init__.py  |  1 +
+ .../selftests/drivers/net/lib/py/remote.py    | 13 +++++++
+ .../drivers/net/lib/py/remote_netns.py        | 15 ++++++++
+ .../drivers/net/lib/py/remote_ssh.py          | 34 +++++++++++++++++++
+ tools/testing/selftests/net/lib/py/utils.py   | 19 ++++++-----
+ 5 files changed, 73 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/lib/py/remote.py
+ create mode 100644 tools/testing/selftests/drivers/net/lib/py/remote_netns.py
+ create mode 100644 tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
 
-diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index 4653dffcd962..4789c1a4282d 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -15,3 +15,4 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
+     sys.exit(4)
+ 
+ from .env import *
++from .remote import Remote
+diff --git a/tools/testing/selftests/drivers/net/lib/py/remote.py b/tools/testing/selftests/drivers/net/lib/py/remote.py
 new file mode 100644
-index 000000000000..f6a58ce8a230
+index 000000000000..d86b997d27d4
 --- /dev/null
-+++ b/tools/testing/selftests/drivers/net/config
-@@ -0,0 +1,2 @@
-+CONFIG_IPV6=y
-+CONFIG_NETDEVSIM=m
++++ b/tools/testing/selftests/drivers/net/lib/py/remote.py
+@@ -0,0 +1,13 @@
++# SPDX-License-Identifier: GPL-2.0
++
++import importlib
++
++_modules = {}
++
++def Remote(kind, args):
++    global _modules
++
++    if kind not in _modules:
++        _modules[kind] = importlib.import_module("..remote_" + kind, __name__)
++
++    return getattr(_modules[kind], "Remote")(args)
+diff --git a/tools/testing/selftests/drivers/net/lib/py/remote_netns.py b/tools/testing/selftests/drivers/net/lib/py/remote_netns.py
+new file mode 100644
+index 000000000000..7d8ab7a1bf92
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/lib/py/remote_netns.py
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0
++
++from lib.py import cmd
++
++
++class Remote:
++    def __init__(self, name):
++        self.name = name
++
++    def cmd(self, *args):
++        c = cmd(*args, ns=self.name)
++        return c.stdout, c.stderr, c.ret
++
++    def deploy(self, what):
++        return what
+diff --git a/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py b/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
+new file mode 100644
+index 000000000000..c056b15991ff
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
+@@ -0,0 +1,34 @@
++# SPDX-License-Identifier: GPL-2.0
++
++import os
++import shlex
++import string
++import random
++
++from lib.py import cmd
++
++
++class Remote:
++    def __init__(self, name):
++        self.name = name
++        self._tmpdir = None
++
++    def __del__(self):
++        if self._tmpdir:
++            self.cmd("rm -rf " + self._tmpdir)
++            self._tmpdir = None
++
++    def cmd(self, comm, *args):
++        c = cmd("ssh " + self.name + " " + shlex.quote(comm), *args)
++        return c.stdout, c.stderr, c.ret
++
++    def _mktmp(self):
++        return ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
++
++    def deploy(self, what):
++        if not self._tmpdir:
++            self._tmpdir = "/tmp/" + self._mktmp()
++            self.cmd("mkdir " + self._tmpdir)
++        file_name = self._tmpdir + "/" + self._mktmp() + os.path.basename(what)
++        cmd(f"scp {what} {self.name}:{file_name}")
++        return file_name
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 19612348c30d..d47d684d9e02 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -4,10 +4,8 @@ import json as _json
+ import subprocess
+ 
+ class cmd:
+-    def __init__(self, comm, shell=True, fail=True, ns=None, background=False):
++    def __init__(self, comm, shell=True, fail=True, ns=None, background=False, host=None):
+         if ns:
+-            if isinstance(ns, NetNS):
+-                ns = ns.name
+             comm = f'ip netns exec {ns} ' + comm
+ 
+         self.stdout = None
+@@ -15,10 +13,13 @@ import subprocess
+         self.ret = None
+ 
+         self.comm = comm
+-        self.proc = subprocess.Popen(comm, shell=shell, stdout=subprocess.PIPE,
+-                                     stderr=subprocess.PIPE)
+-        if not background:
+-            self.process(terminate=False, fail=fail)
++        if host:
++            self.stdout, self.stderr, self.ret = host.cmd(comm)
++        else:
++            self.proc = subprocess.Popen(comm, shell=shell, stdout=subprocess.PIPE,
++                                         stderr=subprocess.PIPE)
++            if not background:
++                self.process(terminate=False, fail=fail)
+ 
+     def process(self, terminate=True, fail=None):
+         if terminate:
+@@ -37,12 +38,12 @@ import subprocess
+                             (self.proc.args, stdout, stderr))
+ 
+ 
+-def ip(args, json=None, ns=None):
++def ip(args, json=None, ns=None, host=None):
+     cmd_str = "ip "
+     if json:
+         cmd_str += '-j '
+     cmd_str += args
+-    cmd_obj = cmd(cmd_str, ns=ns)
++    cmd_obj = cmd(cmd_str, ns=ns, host=host)
+     if json:
+         return _json.loads(cmd_obj.stdout)
+     return cmd_obj
 -- 
 2.44.0
 
