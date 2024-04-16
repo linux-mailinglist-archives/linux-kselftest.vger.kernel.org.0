@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-8147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B0088A6DAA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 16:15:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 058278A6DAF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 16:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D6BF1C21B9A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 14:15:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E6B0B2528D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 14:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB90135418;
-	Tue, 16 Apr 2024 14:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3AD13698A;
+	Tue, 16 Apr 2024 14:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PYfPuUOi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhqJ333w"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DCB1353F9;
-	Tue, 16 Apr 2024 14:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E302136679;
+	Tue, 16 Apr 2024 14:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713276655; cv=none; b=L1m/bW+fzSvMfOhBkmIQx//BkCaea80LPWZBmv5Lz5s6SDYkqOiW+36M/oE6aOK/xfuwGwKKnwf39Vx0c29gZpB7Uk05Sf649ISAmARYHwK99umcBwq2wTNMlOFtJT9mDeGyknZWdAKo7nhLbbhxnydC8g2dUwY2ogpx1XyN9eI=
+	t=1713276659; cv=none; b=O0cZHtp4a5KEQrAD7M87eyLrlPHsETqSr3Z7eZfXaXKPOGl17eM48ICr0Tb/lymRv5LKhDvVBD+3HejClYc9lK5QnJMPYSfu441otzgTNFezoZ0kIpjSxCy8J860rV2HVxgJJPXBm3FWKtsm4oToyFQ6p7+XV6PgeESiIgu9XIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713276655; c=relaxed/simple;
-	bh=PPXK46VhuHV4LHvO9/F2U+mh0gqt3BI4LddQFjAfCcI=;
+	s=arc-20240116; t=1713276659; c=relaxed/simple;
+	bh=lm2FY30vt1roT/QaHJVcBSUumMbZDrssuz719s9NomA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OGPpgsDibmWyKBnu6Cf90dMsqcG8ebdoUhyctaHUfm8eyZ33vOeScYGmb/NlHpjEPwohZE3boVdacoGtcCedhJCpmqREkbeEbnJGJ9fUu4EQ4xksdo6C1BMsV3WRMcSkrGQuHvU04ig9oXoh1FJ2sain8Yfs2ZGy/y04PJ3J5HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PYfPuUOi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0F2C4AF4D;
-	Tue, 16 Apr 2024 14:10:51 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=FNlBFVIeJwpKs8TALBDRaE1k8hqTq1fCldb3kBogBl1gvBRuWieLKERGYobfcJejOoeIXWw03ax94Ny+BHbxllKVepCpV70rtkW793l66ocLze/EZE7oE3ECW9ti4EAOl80y2XFySIpP5/hWtXAakbCDK/zxTONzVhroxJ7Bj2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhqJ333w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE162C4AF12;
+	Tue, 16 Apr 2024 14:10:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713276655;
-	bh=PPXK46VhuHV4LHvO9/F2U+mh0gqt3BI4LddQFjAfCcI=;
+	s=k20201202; t=1713276659;
+	bh=lm2FY30vt1roT/QaHJVcBSUumMbZDrssuz719s9NomA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=PYfPuUOiPYH+zBB1jAahr4hRLjQ2z792X+k9Z1/8kfEwqoooWDCW/2Gs0EVJQH2K+
-	 O5bFY9lBhiSQKwbdCkBOh7SePT4sKACP/gJKifr6/YlU3rGe8V00LFnw+s79Uanyxg
-	 +5QpAHkHzs5kVpLKyI5E2tMDwjpbeT+qssPW4KH6d7L23888I9jZR7OHZSqqUaXHNZ
-	 cUlPmqroYZJwdR54vSQzgaXUyF4er4/rdbuZzop+m+h/TAQCpyJsGdOxEb5j8gbJFa
-	 OdEm8kR9v5pWG2IGlMi97QDPjw/NAEpVV0BtMyZvlxOntRCLSq4uzixikaHy8tV5VC
-	 OAW3YC5bnsdnA==
+	b=YhqJ333wGn6nuZFHU/tBSelQsDeTtLfq3RQC1eyOeo3BMOR0QGAC3Yx3RuTfUF7MG
+	 EMeIO5M1+NVfUmSsgJxkntwgv4HyYXRZDCNipM484DuYubMTjuHr0qtG6HBJt+3o4T
+	 zKDo+7WeoZe0pb386rRvmfotzB1GskiiFHWYitVxn/Tv3ShmXRtJxHCxpdwMuNOrUg
+	 raGglP+EF0kolAO/lFpfpjE3hZCYh4gIrZkYxWXWfj6a0zo0m+DcGoWEqLGiK22Z7+
+	 dj0hYaaV4idWzlWUXqutU9GWyQutbJNW8t9KT9pzkG/nfOPP37JoxTlhGshiSw6zJo
+	 gmpJbtApgWkhw==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 16 Apr 2024 16:08:28 +0200
-Subject: [PATCH bpf-next 15/18] bpf: wq: add bpf_wq_set_callback_impl
+Date: Tue, 16 Apr 2024 16:08:29 +0200
+Subject: [PATCH bpf-next 16/18] selftests/bpf: add checks for
+ bpf_wq_set_callback()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240416-bpf_wq-v1-15-c9e66092f842@kernel.org>
+Message-Id: <20240416-bpf_wq-v1-16-c9e66092f842@kernel.org>
 References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
 In-Reply-To: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -67,222 +68,316 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1713276593; l=7703;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1713276593; l=9344;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=PPXK46VhuHV4LHvO9/F2U+mh0gqt3BI4LddQFjAfCcI=;
- b=RSyFLk/zlbBQyIZ8BLnNNTu7HjvoidQ1Ic4eaTp/8ry4ZigR7hwKkRmYcGeNKAO4wZSx0mO4m
- yvpMFsvDgWmCDxCQ7HjFjP6ksfusw6wwj219GTvDpgQl9wCLJBGqWx4
+ bh=lm2FY30vt1roT/QaHJVcBSUumMbZDrssuz719s9NomA=;
+ b=/XoRuGyVUIfvPUGrvgIEt3q9x4Yth7kpYX8XtHKjbLPbv3uYuPrLvbiMLfBQYTsnyO56dmjDo
+ eqdo3l7tOW8AFjqXyx7B7SPcz5H9M97IEkbrmWcDXXay0SQWqo3kyU4
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-In the verifier, we need to teach it that the mentioned callback is
-is an async call.
-We look at the provided flags and set the callback to be sleepable if
-BPF_F_WQ_SLEEPABLE is set.
+We assign the callback and set everything up.
+The actual tests of these callbacks will be done when bpf_wq_start() is
+available.
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- kernel/bpf/helpers.c  | 22 +++++++++++++++++
- kernel/bpf/verifier.c | 68 ++++++++++++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 87 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/bpf_experimental.h     |   5 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c        |   5 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h  |   1 +
+ tools/testing/selftests/bpf/progs/wq.c             |  47 +++++++--
+ tools/testing/selftests/bpf/progs/wq_failures.c    | 115 +++++++++++++++++++++
+ 5 files changed, 165 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 9ac1b8bb3a01..e5c8adc44619 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1362,6 +1362,13 @@ static int __bpf_async_set_callback(struct bpf_async_kern *async, void *callback
- 		ret = -EINVAL;
- 		goto out;
- 	}
-+	if (type == BPF_ASYNC_TYPE_WQ) {
-+		/* check that flags_k is consistent with work->flags */
-+		if ((flags ^ cb->flags) & BPF_F_WQ_SLEEPABLE) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+	}
- 	if (!atomic64_read(&cb->map->usercnt)) {
- 		/* maps with timers must be either held by user space
- 		 * or pinned in bpffs. Otherwise timer might still be
-@@ -2721,6 +2728,20 @@ __bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *map, unsigned int flags)
- 	return __bpf_async_init(async, map, flags, BPF_ASYNC_TYPE_WQ);
- }
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index 6af6f2a43e6d..272604f9c4a5 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -471,4 +471,9 @@ extern struct cgroup_subsys_state *bpf_iter_css_next(struct bpf_iter_css *it) __
+ extern void bpf_iter_css_destroy(struct bpf_iter_css *it) __weak __ksym;
  
-+__bpf_kfunc int bpf_wq_set_callback_impl(struct bpf_wq *wq,
-+					 int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
-+					 unsigned int flags__k,
-+					 void *aux__ign)
-+{
-+	struct bpf_prog_aux *aux = (struct bpf_prog_aux *)aux__ign;
-+	struct bpf_async_kern *async = (struct bpf_async_kern *)wq;
-+
-+	if (flags__k & ~BPF_F_WQ_SLEEPABLE)
-+		return -EINVAL;
-+
-+	return __bpf_async_set_callback(async, callback_fn, aux, flags__k, BPF_ASYNC_TYPE_WQ);
-+}
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(generic_btf_ids)
-@@ -2799,6 +2820,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_size)
- BTF_ID_FLAGS(func, bpf_dynptr_clone)
- BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
- BTF_ID_FLAGS(func, bpf_wq_init)
-+BTF_ID_FLAGS(func, bpf_wq_set_callback_impl)
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6a45d88244c6..947cd544ffab 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -501,8 +501,12 @@ static bool is_dynptr_ref_function(enum bpf_func_id func_id)
- }
- 
- static bool is_sync_callback_calling_kfunc(u32 btf_id);
-+static bool is_async_callback_calling_kfunc(u32 btf_id);
-+static bool is_callback_calling_kfunc(u32 btf_id);
- static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
- 
-+static bool is_bpf_wq_set_callback_impl_kfunc(u32 btf_id);
-+
- static bool is_sync_callback_calling_function(enum bpf_func_id func_id)
- {
- 	return func_id == BPF_FUNC_for_each_map_elem ||
-@@ -530,7 +534,8 @@ static bool is_sync_callback_calling_insn(struct bpf_insn *insn)
- 
- static bool is_async_callback_calling_insn(struct bpf_insn *insn)
- {
--	return bpf_helper_call(insn) && is_async_callback_calling_function(insn->imm);
-+	return (bpf_helper_call(insn) && is_async_callback_calling_function(insn->imm)) ||
-+	       (bpf_pseudo_kfunc_call(insn) && is_async_callback_calling_kfunc(insn->imm));
- }
- 
- static bool is_may_goto_insn(struct bpf_insn *insn)
-@@ -9536,7 +9541,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	 */
- 	env->subprog_info[subprog].is_cb = true;
- 	if (bpf_pseudo_kfunc_call(insn) &&
--	    !is_sync_callback_calling_kfunc(insn->imm)) {
-+	    !is_callback_calling_kfunc(insn->imm)) {
- 		verbose(env, "verifier bug: kfunc %s#%d not marked as callback-calling\n",
- 			func_id_name(insn->imm), insn->imm);
- 		return -EFAULT;
-@@ -9550,7 +9555,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	if (is_async_callback_calling_insn(insn)) {
- 		struct bpf_verifier_state *async_cb;
- 
--		/* there is no real recursion here. timer callbacks are async */
-+		/* there is no real recursion here. timer and workqueue callbacks are async */
- 		env->subprog_info[subprog].is_async_cb = true;
- 		async_cb = push_async_cb(env, env->subprog_info[subprog].start,
- 					 insn_idx, subprog, is_sleepable);
-@@ -11042,6 +11047,7 @@ enum special_kfunc_type {
- 	KF_bpf_throw,
- 	KF_bpf_iter_css_task_new,
- 	KF_bpf_wq_init,
-+	KF_bpf_wq_set_callback_impl,
- };
- 
- BTF_SET_START(special_kfunc_set)
-@@ -11069,6 +11075,7 @@ BTF_ID(func, bpf_throw)
- BTF_ID(func, bpf_iter_css_task_new)
+ extern int bpf_wq_init(struct bpf_wq *wq, void *map, unsigned int flags) __weak __ksym;
++extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
++		int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
++		unsigned int flags__k, void *aux__ign) __ksym;
++#define bpf_wq_set_callback(timer, cb, flags) \
++	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
  #endif
- BTF_ID(func, bpf_wq_init)
-+BTF_ID(func, bpf_wq_set_callback_impl)
- BTF_SET_END(special_kfunc_set)
- 
- BTF_ID_LIST(special_kfunc_list)
-@@ -11100,6 +11107,7 @@ BTF_ID(func, bpf_iter_css_task_new)
- BTF_ID_UNUSED
- #endif
- BTF_ID(func, bpf_wq_init)
-+BTF_ID(func, bpf_wq_set_callback_impl)
- 
- static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
- {
-@@ -11431,12 +11439,28 @@ static bool is_sync_callback_calling_kfunc(u32 btf_id)
- 	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl];
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 39ad96a18123..eb2b78552ca2 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -494,6 +494,10 @@ __bpf_kfunc static u32 bpf_kfunc_call_test_static_unused_arg(u32 arg, u32 unused
+ 	return arg;
  }
  
-+static bool is_async_callback_calling_kfunc(u32 btf_id)
++__bpf_kfunc void bpf_kfunc_call_test_sleepable(void)
 +{
-+	return btf_id == special_kfunc_list[KF_bpf_wq_set_callback_impl];
 +}
 +
- static bool is_bpf_throw_kfunc(struct bpf_insn *insn)
+ BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
+ BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
+@@ -520,6 +524,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS | KF_RCU)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_sleepable, KF_SLEEPABLE)
+ BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
+ 
+ static int bpf_testmod_ops_init(struct btf *btf)
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+index 7c664dd61059..ce5cd763561c 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+@@ -96,6 +96,7 @@ void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
+ void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
+ 
+ void bpf_kfunc_call_test_destructive(void) __ksym;
++void bpf_kfunc_call_test_sleepable(void) __ksym;
+ 
+ void bpf_kfunc_call_test_offset(struct prog_test_ref_kfunc *p);
+ struct prog_test_member *bpf_kfunc_call_memb_acquire(void);
+diff --git a/tools/testing/selftests/bpf/progs/wq.c b/tools/testing/selftests/bpf/progs/wq.c
+index f92466eb8fb1..c0a094c84834 100644
+--- a/tools/testing/selftests/bpf/progs/wq.c
++++ b/tools/testing/selftests/bpf/progs/wq.c
+@@ -49,7 +49,9 @@ struct {
+ 	__type(value, struct elem);
+ } lru SEC(".maps");
+ 
+-static int test_elem_callback(void *map, int *key)
++static int test_elem_callback(void *map, int *key,
++		int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
++		u64 callback_flags)
  {
- 	return bpf_pseudo_kfunc_call(insn) && insn->off == 0 &&
- 	       insn->imm == special_kfunc_list[KF_bpf_throw];
- }
+ 	struct elem init = {}, *val;
+ 	struct bpf_wq *wq;
+@@ -63,13 +65,18 @@ static int test_elem_callback(void *map, int *key)
+ 		return -2;
  
-+static bool is_bpf_wq_set_callback_impl_kfunc(u32 btf_id)
-+{
-+	return btf_id == special_kfunc_list[KF_bpf_wq_set_callback_impl];
-+}
-+
-+static bool is_callback_calling_kfunc(u32 btf_id)
-+{
-+	return is_sync_callback_calling_kfunc(btf_id) ||
-+	       is_async_callback_calling_kfunc(btf_id);
-+}
-+
- static bool is_rbtree_lock_required_kfunc(u32 btf_id)
- {
- 	return is_bpf_rbtree_api_kfunc(btf_id);
-@@ -12244,6 +12268,22 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		}
- 	}
+ 	wq = &val->w;
+-	if (bpf_wq_init(wq, map, 0) != 0)
++	if (bpf_wq_init(wq, map, callback_flags) != 0)
+ 		return -3;
  
-+	if (is_bpf_wq_set_callback_impl_kfunc(meta.func_id)) {
-+		if (!meta.arg_constant.found) {
-+			verbose(env, "kfunc %s#%d failed flags verification\n",
-+				func_name, meta.func_id);
-+			return -EINVAL;
-+		}
-+		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
-+					 !!(meta.arg_constant.value & BPF_F_WQ_SLEEPABLE),
-+					 set_timer_callback_state);
-+		if (err) {
-+			verbose(env, "kfunc %s#%d failed callback verification\n",
-+				func_name, meta.func_id);
-+			return err;
-+		}
-+	}
++	if (bpf_wq_set_callback(wq, callback_fn, callback_flags))
++		return -4;
 +
- 	rcu_lock = is_kfunc_bpf_rcu_read_lock(&meta);
- 	rcu_unlock = is_kfunc_bpf_rcu_read_unlock(&meta);
- 
-@@ -19681,6 +19721,28 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		   desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
- 		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
- 		*cnt = 1;
-+	} else if (is_bpf_wq_set_callback_impl_kfunc(desc->func_id)) {
-+		/* The verifier will process callback_fn as many times as necessary
-+		 * with different maps and the register states prepared by
-+		 * set_timer_callback_state will be accurate.
-+		 *
-+		 * The following use case is valid:
-+		 *   map1 is shared by prog1, prog2, prog3.
-+		 *   prog1 calls bpf_timer_init for some map1 elements
-+		 *   prog2 calls bpf_timer_set_callback for some map1 elements.
-+		 *     Those that were not bpf_timer_init-ed will return -EINVAL.
-+		 *   prog3 calls bpf_timer_start for some map1 elements.
-+		 *     Those that were not both bpf_timer_init-ed and
-+		 *     bpf_timer_set_callback-ed will return -EINVAL.
-+		 */
-+		struct bpf_insn ld_addrs[2] = {
-+			BPF_LD_IMM64(BPF_REG_4, (long)env->prog->aux),
-+		};
-+
-+		insn_buf[0] = ld_addrs[0];
-+		insn_buf[1] = ld_addrs[1];
-+		insn_buf[2] = *insn;
-+		*cnt = 3;
- 	}
  	return 0;
  }
+ 
+-static int test_hmap_elem_callback(void *map, int *key)
++static int test_hmap_elem_callback(void *map, int *key,
++		int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
++		u64 callback_flags)
+ {
+ 	struct hmap_elem init = {}, *val;
+ 	struct bpf_wq *wq;
+@@ -85,6 +92,28 @@ static int test_hmap_elem_callback(void *map, int *key)
+ 	if (bpf_wq_init(wq, map, 0) != 0)
+ 		return -3;
+ 
++	if (bpf_wq_set_callback(wq, callback_fn, callback_flags))
++		return -4;
++
++	return 0;
++}
++
++__u32 ok;
++__u32 ok_sleepable;
++
++/* callback for non sleepable workqueue */
++static int wq_callback(void *map, int *key, struct bpf_wq *work)
++{
++	bpf_kfunc_common_test();
++	ok |= (1 << *key);
++	return 0;
++}
++
++/* callback for sleepable workqueue */
++static int wq_cb_sleepable(void *map, int *key, struct bpf_wq *work)
++{
++	bpf_kfunc_call_test_sleepable();
++	ok_sleepable |= (1 << *key);
+ 	return 0;
+ }
+ 
+@@ -96,7 +125,8 @@ long test_call_array_sleepable(void *ctx)
+ {
+ 	int key = 0;
+ 
+-	return test_elem_callback(&array, &key);
++	return test_elem_callback(&array, &key, wq_cb_sleepable,
++				  BPF_F_WQ_SLEEPABLE);
+ }
+ 
+ SEC("syscall")
+@@ -107,7 +137,8 @@ long test_syscall_array_sleepable(void *ctx)
+ {
+ 	int key = 1;
+ 
+-	return test_elem_callback(&array, &key);
++	return test_elem_callback(&array, &key, wq_cb_sleepable,
++				  BPF_F_WQ_SLEEPABLE);
+ }
+ 
+ SEC("tc")
+@@ -118,7 +149,7 @@ long test_call_hash_sleepable(void *ctx)
+ {
+ 	int key = 2;
+ 
+-	return test_hmap_elem_callback(&hmap, &key);
++	return test_hmap_elem_callback(&hmap, &key, wq_callback, 0);
+ }
+ 
+ SEC("tc")
+@@ -130,7 +161,7 @@ long test_call_hash_malloc_sleepable(void *ctx)
+ {
+ 	int key = 3;
+ 
+-	return test_hmap_elem_callback(&hmap_malloc, &key);
++	return test_hmap_elem_callback(&hmap_malloc, &key, wq_callback, 0);
+ }
+ 
+ SEC("tc")
+@@ -141,5 +172,5 @@ long test_call_lru_sleepable(void *ctx)
+ {
+ 	int key = 4;
+ 
+-	return test_elem_callback(&lru, &key);
++	return test_elem_callback(&lru, &key, wq_callback, 0);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/wq_failures.c b/tools/testing/selftests/bpf/progs/wq_failures.c
+index a08b6c93a195..efde14516358 100644
+--- a/tools/testing/selftests/bpf/progs/wq_failures.c
++++ b/tools/testing/selftests/bpf/progs/wq_failures.c
+@@ -27,6 +27,20 @@ struct {
+ 	__type(value, struct elem);
+ } lru SEC(".maps");
+ 
++/* callback for non sleepable workqueue */
++static int wq_callback(void *map, int *key, struct bpf_wq *work)
++{
++	bpf_kfunc_common_test();
++	return 0;
++}
++
++/* callback for sleepable workqueue */
++static int wq_cb_sleepable(void *map, int *key, struct bpf_wq *work)
++{
++	bpf_kfunc_call_test_sleepable();
++	return 0;
++}
++
+ SEC("tc")
+ /* test that bpf_wq_init takes a map as a second argument
+  */
+@@ -80,3 +94,104 @@ long test_wq_init_wrong_map(void *ctx)
+ 
+ 	return 0;
+ }
++
++SEC("?tc")
++__log_level(2)
++__failure
++/* check that bpf_wq_set_callback() can not be called with a
++ * sleepable callback without BPF_F_WQ_SLEEPABLE
++ */
++__msg("mark_precise: frame0: regs=r1 stack= before")
++__msg(": (85) call bpf_kfunc_call_test_sleepable#") /* anchor message */
++__msg("program must be sleepable to call sleepable kfunc bpf_kfunc_call_test_sleepable")
++long test_call_sleepable_callback_missing_flag(void *ctx)
++{
++	int key = 0;
++	struct bpf_wq *wq;
++
++	wq = bpf_map_lookup_elem(&array, &key);
++	if (wq) {
++		bpf_wq_init(wq, &array, 0);
++		bpf_wq_set_callback(wq, wq_cb_sleepable, 0);
++	}
++
++	return 0;
++}
++
++SEC("tc")
++/* check that calling a non sleepable callback with
++ * bpf_wq_set_callback() while providing BPF_F_WQ_SLEEPABLE
++ * fails.
++ */
++__retval(3)
++long test_call_non_sleepable_callback_wrong_flag(void *ctx)
++{
++	int key = 1;
++	struct bpf_wq *wq;
++
++	wq = bpf_map_lookup_elem(&array, &key);
++	if (!wq)
++		return 1;
++
++	if (bpf_wq_init(wq, &array, 0))
++		return 2;
++
++	if (bpf_wq_set_callback(wq, wq_callback, BPF_F_WQ_SLEEPABLE))
++		return 3;
++
++	return -22;
++}
++
++SEC("?tc")
++__log_level(2)
++__failure
++/* check that the first argument of bpf_wq_set_callback()
++ * is a correct bpf_wq pointer.
++ */
++__msg("mark_precise: frame0: regs=r1 stack= before")
++__msg(": (85) call bpf_wq_set_callback_impl#") /* anchor message */
++__msg("arg#0 doesn't point to a map value")
++long test_wrong_wq_pointer(void *ctx)
++{
++	int key = 0;
++	struct bpf_wq *wq;
++
++	wq = bpf_map_lookup_elem(&array, &key);
++	if (!wq)
++		return 1;
++
++	if (bpf_wq_init(wq, &array, 0))
++		return 2;
++
++	if (bpf_wq_set_callback((void *)&wq, wq_callback, 0))
++		return 3;
++
++	return -22;
++}
++
++SEC("?tc")
++__log_level(2)
++__failure
++/* check that the first argument of bpf_wq_set_callback()
++ * is a correct bpf_wq pointer.
++ */
++__msg("mark_precise: frame0: regs=r1 stack= before")
++__msg(": (85) call bpf_wq_set_callback_impl#") /* anchor message */
++__msg("off 1 doesn't point to 'struct bpf_wq' that is at 0")
++long test_wrong_wq_pointer_offset(void *ctx)
++{
++	int key = 0;
++	struct bpf_wq *wq;
++
++	wq = bpf_map_lookup_elem(&array, &key);
++	if (!wq)
++		return 1;
++
++	if (bpf_wq_init(wq, &array, 0))
++		return 2;
++
++	if (bpf_wq_set_callback((void *)wq + 1, wq_cb_sleepable, 0))
++		return 3;
++
++	return -22;
++}
 
 -- 
 2.44.0
