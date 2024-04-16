@@ -1,125 +1,106 @@
-Return-Path: <linux-kselftest+bounces-8172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B1758A6F89
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 17:18:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DFE58A6FAF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 17:23:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46AB7281B53
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 15:18:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13A461F226DC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 15:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAFE2130A60;
-	Tue, 16 Apr 2024 15:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEBCE130E35;
+	Tue, 16 Apr 2024 15:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u8Vpkrwr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PK+gwsCx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5565A130496
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 15:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CFD12B154
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 15:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713280717; cv=none; b=nyuh2d6OA9Y1JZk109jrYJtsaZvRfa/8jnV+d3vUp7KYVHPIPfcMtIN1Q+YU8/Xw1oMDTJrEDDpcqSBOCIQVlpCnEzZA3QzwSpHGkuGCi1cnG4R4tN+E0uu8pEYsbBDwZq0vFwLcmyA+QproepsmmqW1LfaCdqQHTKepOS0BRDU=
+	t=1713280984; cv=none; b=GI36DnAXBeqrkd8LhpivgoalnH/G/K7uvpiFHxWypRw7AD8+bPKJP2ogPm8ntWfT8bQF9M65sKdv2D38rRcvef+jrKJWEoe96adgyuomR9NZKCGoO5j2MuUJTjdofIyDpU2MRYfy05gM7jcUfpQ13GB3DP7McmieCxG6es+Q6q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713280717; c=relaxed/simple;
-	bh=lYE1WwVWduqiUKk0/Fr7P7qfuRFB+3QoYoBsKP9XdJ8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=XmQ2r5D3VmJj0zNsNTDaH/Fsf7DDuolNOn+xprhaE4G7UVcy42VWjTKVpO9jXXO4fi6iarnE9l53L/08XA8tHlXTUufjzXsaPn48KUcJPNV65nyTOzIwYqZfbYiRGnsT54ODVLHO7qHyswLUClGf6zT3ZYawPGj8LRGclqRdLb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u8Vpkrwr; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1713280984; c=relaxed/simple;
+	bh=VgjJ1sQnYJM7vPGFLgOyl5MiheSdj8kCxc/E8B7aS+o=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=lyBdryUr8sHNdDujVfJSYWKO2Zv5hSFgE8otFBb1gLV7bjwl7dXoljqz4BCJHFG2rSxE2V3Wc1U9cFb9M9A+7M2+n2da7ZtTFna0JdmPxu8K1Tz/odwftkxJoIkI2b9p4Mh5WK7ApIcUl35BTF1549NLxM6i0D2fY2pPVZoKolE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PK+gwsCx; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-418426e446bso68995e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 08:18:36 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1e2b1b90148so36580585ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 08:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713280714; x=1713885514; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P7xPJ4NgaRqZ7lnpDudSOzBFLojU78EScRSM6wvzvKk=;
-        b=u8VpkrwrF0WFsuA3GGhf/Lxd1SsvcP77c/ULglw5r0AKH8/bb82svzCjOjmgEX2nA9
-         QYiBiPJK2anos/fTkWQwBd4li3uuUHyxT61WtS1YwP3ijJf5hM2t5Czz1HwYSfhw1yUE
-         SiVNT+jzxV2pZ2C2XELbhSRwFh4biD5kVNmBOD+V5Sg2eAtin2EwIGv13uiJh3MHf0eB
-         0tEkzbcPF8c/ffbRm3KJZpg6lDn/fx7cNgSFGQJ/N8peYJAn1hEW+7BkZgvmFxoU6kYr
-         I+UaVXCdF4B9qC170YW5v7Np+5VAz9wj12fLP+kuCLlORoZ94JRyG182LwcNl83xsKE+
-         Pe8A==
+        d=google.com; s=20230601; t=1713280982; x=1713885782; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zno1kdsfWaJ1DeTq0hPq9ZAZ6Z0lEil6bV0PacUdpzY=;
+        b=PK+gwsCxbzcZ7SjqnIbKPtxi2Gy4YpxFYZ0jffwDBF9DuhqpY/QieWu2AlgHnPE0iu
+         ko1RUCAFixMAs+Bdsc+/28tauPNfxaOCvMPdAAosYGjHBfeC83KzWEljkyrwmLgtC5Yg
+         wOY41jq5I+dKb3tSroPOZIJVaunsAmfVQ2eIF/B86lv4ac2Bw1f41JiCrU0b9aR37WTU
+         z7Eq9nbt3wqy66rvvXMbhQazynTxWanLQvADnEhJuFVD0NGd4dFtk5MwfJshRVaG6HJc
+         8ooyPDmxDd+QSyfMVohuGUDjgnwooWmk/iS78Km1ZuKGRbwXQIf1XB723fqkA8LOb0WT
+         djmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713280714; x=1713885514;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P7xPJ4NgaRqZ7lnpDudSOzBFLojU78EScRSM6wvzvKk=;
-        b=s+Y1ls5X9/+7iB7vr0TGhLG69wmIKp22N94R5vmantf52CwS1FacMlideykYmR3zZm
-         UR8Gu3n4zy9pvldHihYF5H3D8c7YtIhVlLAVZtpHElTCnS/Qzj404yKq+XEjfcjYmKXF
-         XeoXLQqUwU3wQYTRwiQdbC7HSoaERBBooh0nCL6FunbnzvrpxCXGtzb5jl58hqmJXykv
-         u+LzETnpps3N0rZ4+hj5XgLNwrutl3mWm1hOus8mNkBJ9+rq/1h5T5ISPRMij2evmQu3
-         t17kpQZ1919dANzdER3LoeQ2cqD4rHuj2yhSngc6ucxBJMztFT5rHN/N4J7eW3TxGQds
-         qsaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPG8lYXUX7UfpvRTOYkuN8C611pSXDVt0YGs9Gu04sMZjYhHguAJUu9wqMNbBDnIzLrzXWI0EN/Ttwjwb5qKxdWShwiuEZheSujn9XLKDM
-X-Gm-Message-State: AOJu0YwWXoLphvGK3VJoemDZZbeI6kxC8XaN93bS87nHweF5/pselxg1
-	yXdCmmTzytwMNwX79txRKrdSPG7ZptiNjL0o/O9mrbKzHrFyvE/KhIIlQ4PZJp4KzdmAFX3OqTc
-	tsQRjRqM/Or4MxFgzTMGLiIP6O2d6KpHwLNzl
-X-Google-Smtp-Source: AGHT+IEeH9C9bC1RaxsNelMnFwqD5KOxfvmXYJRoKyxe3Q7CaWZjnpYXhJ/saHUxjHvV1zQnpGdajAJ/hjr7wymfVm8=
-X-Received: by 2002:a05:600c:1c8f:b0:416:bc07:a3c9 with SMTP id
- k15-20020a05600c1c8f00b00416bc07a3c9mr210315wms.6.1713280714469; Tue, 16 Apr
- 2024 08:18:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713280982; x=1713885782;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zno1kdsfWaJ1DeTq0hPq9ZAZ6Z0lEil6bV0PacUdpzY=;
+        b=v1DmMSq6XDP5pgV4LhXB/rBw2AXvCNgwubjRv0B/VncNi/d//808qBhuBFUKaj1s0b
+         0dNwvcH13sXOsmZ/O7scNEjWo7L5hkF+RPieuH5BTpV35zDm89Z6T7piYxVhgOHwqlyT
+         h9aaATuMSIpENqc4Fy0lmIRTqrHUPTdEQ8KIshUI02KDVYczrqz1qZdX8qHEV3cF77w8
+         VYjw5gJRl0wEipmT35y3dJfdI55cs3SAH3bdTn900IT5rvuT47TDTxi6MlkL/cXTsLYu
+         LoewaEAo1t56DMknLo+FDRL2gKE39gWwPTtlkSF21SgLUm96xpwPJYic751/uPaHdhaQ
+         aV4w==
+X-Forwarded-Encrypted: i=1; AJvYcCX5a8eazudRYiOxwtmTBb+HbVh7jMcbkG04ppuiG+jWFPODQJnfVB/JspCpU9NSKx0bV/3s2mpAmBXGuXlSJ2tuJ4yN1+5taTF1QZXMhHRv
+X-Gm-Message-State: AOJu0Yys1pufJaF8LBt7vGleOBWxlcIvPPOSaBEW8hid1c3pYNE1PKYW
+	RVXa44QoIMlQdhJx3v1h/Epx0o+/0w3unV+Qnk/qDPeG/giK25e5saDIlE/1A0L6a8ZK434yQ67
+	qEw==
+X-Google-Smtp-Source: AGHT+IHT1pC5s1cugeqIXTNqxkxUA1cuAiRf5voHQMAwSwbg8G3jOgahsrnw3GT8HRend6+dNGkM2RXcehg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:1d2:b0:1e4:5896:55fe with SMTP id
+ e18-20020a17090301d200b001e4589655femr374739plh.4.1713280981894; Tue, 16 Apr
+ 2024 08:23:01 -0700 (PDT)
+Date: Tue, 16 Apr 2024 08:23:00 -0700
+In-Reply-To: <20240416151048.1682352-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240415163527.626541-1-jeffxu@chromium.org> <20240415163527.626541-3-jeffxu@chromium.org>
- <v22gngid25vcufvdfbv3pdymq3s72c47pizr23tkrmbbyiqoe4@y5yxseh6thnf>
-In-Reply-To: <v22gngid25vcufvdfbv3pdymq3s72c47pizr23tkrmbbyiqoe4@y5yxseh6thnf>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 16 Apr 2024 17:17:56 +0200
-Message-ID: <CAG48ez2ezHXVWg4y7yUx9Wi1CKk_KeU_7RJVBqkABjQhM=HbBg@mail.gmail.com>
-Subject: Re: [PATCH v10 2/5] mseal: add mseal syscall
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, akpm@linux-foundation.org, 
-	torvalds@linux-foundation.org, jeffxu@chromium.org, keescook@chromium.org, 
-	jannh@google.com, sroettger@google.com, willy@infradead.org, 
-	gregkh@linuxfoundation.org, usama.anjum@collabora.com, corbet@lwn.net, 
-	surenb@google.com, merimus@google.com, rdunlap@infradead.org, 
-	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
-	linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20240416151048.1682352-1-kuba@kernel.org>
+Message-ID: <Zh6X1NkQJd6ETTo7@google.com>
+Subject: Re: [PATCH net] selftests: kselftest_harness: fix Clang warning about
+ zero-length format
+From: Sean Christopherson <seanjc@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, shuah@kernel.org, keescook@chromium.org, 
+	usama.anjum@collabora.com, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Apr 16, 2024 at 4:59=E2=80=AFPM Liam R. Howlett <Liam.Howlett@oracl=
-e.com> wrote:
-> * jeffxu@chromium.org <jeffxu@chromium.org> [240415 12:35]:
-> > From: Jeff Xu <jeffxu@chromium.org>
-> >
-> > The new mseal() is an syscall on 64 bit CPU, and with
-> > following signature:
-> >
-> > int mseal(void addr, size_t len, unsigned long flags)
-> > addr/len: memory range.
-> > flags: reserved.
-[...]
-> No per-vma change is checked prior to entering a per-vma modification
-> loop today. This means that mseal() differs in behaviour in "up-front
-> failure" vs "partial change failure" that exists in every other
-> function.
->
-> I'm not saying it's wrong or that it's right - I'm just wondering what
-> the direction is here.  Either we should do as much up-front as
-> possible or keep with tradition and have (partial) success where
-> possible.
+On Tue, Apr 16, 2024, Jakub Kicinski wrote:
+> Apparently it's more legal to pass the format as NULL, than
+> it is to use an empty string. Clang complains about empty
+> formats:
+> 
+> ./../kselftest_harness.h:1207:30: warning: format string is empty
+> [-Wformat-zero-length]
+>  1207 |            diagnostic ? "%s" : "", diagnostic);
+>       |                                 ^~
+> 1 warning generated.
+> 
+> Reported-by: Sean Christopherson <seanjc@google.com>
+> Link: https://lore.kernel.org/all/20240409224256.1581292-1-seanjc@google.com
+> Fixes: 378193eff339 ("selftests: kselftest_harness: let PASS / FAIL provide diagnostic")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-FWIW, in the current version, I think ENOMEM can happen both in the
-up-front check (for calling the syscall on unmapped ranges) as well as
-in the later loop (for VMA splitting failure).
+Thanks Jakub!
 
-I think no matter what we do, a process that gets an error other than
-ENOSYS from mseal() will probably not get much actionable information
-from the return value... no matter whether sealing worked partly or
-not at all, the process will have the same choice between either
-exiting (if it treats sealing failure as a fatal error for security
-reasons) or continuing as if the sealing had worked.
+Tested-by: Sean Christopherson <seanjc@google.com>
 
