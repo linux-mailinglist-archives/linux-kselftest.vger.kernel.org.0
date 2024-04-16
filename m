@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-8125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E09438A685F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 12:29:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FABC8A686F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 12:31:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EE571C20AA2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 10:29:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8D31B20E91
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Apr 2024 10:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D07127B6A;
-	Tue, 16 Apr 2024 10:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5918A3E493;
+	Tue, 16 Apr 2024 10:31:00 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8C4127B68;
-	Tue, 16 Apr 2024 10:29:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FDE3FC2;
+	Tue, 16 Apr 2024 10:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713263351; cv=none; b=INWqhP///fIFHJRMESXGDUUqMzNkLjz2oQ4XfT3fToc5yVhsxoyGzLqgJcBxTENv1S31m8a/CV6FltKfVNjzOZ0UvGlNtAAaOFoZDQ2oLoMhhTG8JEmtkGzCxGtSd1UNPYp3TeknnWpW5cX4YjwKuJHHRbYPwum1csIuMnZ7ZzA=
+	t=1713263460; cv=none; b=cjs3A7pqMU8JJ0YiKQ4hdzAl2tVcuV/Z8qf8mEB+NHSWbkiVVqAZ+dlMLUdg+KPQ6Vs1ggVSyc/hjdVQWle0WkCdnNGL8KNJxunsNU4ZZS9CvSVurpTPsXAK/Xm3H1AgmAIS2x0a7+GWIqfaQMa76Y+Vq6r3otfn6uYwRcuhxXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713263351; c=relaxed/simple;
-	bh=ZzPOgUIu2iqgsMNDy3eA6Aeo5UgBkwHPfi1EbvkNucA=;
+	s=arc-20240116; t=1713263460; c=relaxed/simple;
+	bh=WWCNZs0Y/Imm6JUkm+YXhD2Etj/MR7ALE+ciRBBDYvI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lXqKrb/E5x2INduITzWLyOkPKIYPn7xnc/joshvqbOqdNv01Ia7T8fYT8vX96PdYYsRMMWbClmYfb8z67vn5ZvgOn8vK4uCscIP7/LJnIkq79pDi2I0oNvT0zN5xTQXd4FOnZyiOzlR2ByTnIHiSyf3T2roFBi3ZuPu4JLjTuZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+	 In-Reply-To:Content-Type; b=n5B1Li0w36PmakuQVQZPXEzF1V0fNtFeudkdxvBin7QspFh1E/G31OoSWSv9dT8heBtg/GFOmTUGn147jPVd81yqagoC4GP+HZpw1qmFLARVke+3hPQtTBKdN0cVi7plrNgao29uiDPiXK0E4pl0G8kQdfIX1TVP2lV+fS4XS7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VJfqs3VTtz9xrnW;
-	Tue, 16 Apr 2024 18:08:09 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id E324E140444;
-	Tue, 16 Apr 2024 18:29:03 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4VJfz44Sq8z9xFQw;
+	Tue, 16 Apr 2024 18:14:24 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 9B05C14037F;
+	Tue, 16 Apr 2024 18:30:54 +0800 (CST)
 Received: from [10.81.220.53] (unknown [10.81.220.53])
-	by APP2 (Coremail) with SMTP id GxC2BwDHsyfaUh5mjhpUBg--.18102S2;
-	Tue, 16 Apr 2024 11:29:03 +0100 (CET)
-Message-ID: <96bf8818-641c-4e73-ba64-14a85eef4dcb@huaweicloud.com>
-Date: Tue, 16 Apr 2024 12:28:39 +0200
+	by APP1 (Coremail) with SMTP id LxC2BwA3KxRKUx5mGodbBg--.12483S2;
+	Tue, 16 Apr 2024 11:30:53 +0100 (CET)
+Message-ID: <83740576-4a69-4acd-8d5b-d56a4fed98bc@huaweicloud.com>
+Date: Tue, 16 Apr 2024 12:30:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,7 +47,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/14] digest_cache: Add hash tables and operations
+Subject: Re: [PATCH v4 09/14] digest_cache: Add support for directories
 To: Jarkko Sakkinen <jarkko@kernel.org>, corbet@lwn.net, paul@paul-moore.com,
  jmorris@namei.org, serge@hallyn.com, akpm@linux-foundation.org,
  shuah@kernel.org, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
@@ -62,529 +62,473 @@ Cc: linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
  mzerqung@0pointer.de, kgold@linux.ibm.com,
  Roberto Sassu <roberto.sassu@huawei.com>
 References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
- <20240415142436.2545003-5-roberto.sassu@huaweicloud.com>
- <D0KY6ORXBNXP.1EVHFHMS89OK6@kernel.org>
+ <20240415142436.2545003-10-roberto.sassu@huaweicloud.com>
+ <D0KY93YU8UHT.1B9WG77UEFRX5@kernel.org>
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <D0KY6ORXBNXP.1EVHFHMS89OK6@kernel.org>
+In-Reply-To: <D0KY93YU8UHT.1B9WG77UEFRX5@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:GxC2BwDHsyfaUh5mjhpUBg--.18102S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3KryrtrWkKF4kXF4xGw43GFg_yoW8ArykWo
-	Z0kF47Jw48WFy5ur1DCFy7Za1Uu34Fgw1xAr4kXrWUZ3Wvqa4UC3ZrCFn8JFW3Xr18GrZ7
-	A3Z7J3yUJFW0qr93n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUYn7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+X-CM-TRANSID:LxC2BwA3KxRKUx5mGodbBg--.12483S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3uw4rGr17Cw18Ww4rGr1rWFg_yoW8WrWfuo
+	ZavF47Aw48WFyUZr1DCFyxZa1Uu34Ygw1xAr4ktFZrZ3W0qFWUG3ZrCF1DJFW5Xr18JFZ7
+	A3Z7J3yUJFWUtr93n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUY87kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
 	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
 	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
 	7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
 	0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
-	F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
 	kC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
 	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
 	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI
 	42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIx
-	AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-	x4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj5h7vwAAsk
+	AIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+	87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAPBF1jj5x9CwABsQ
 
-On 4/15/2024 9:36 PM, Jarkko Sakkinen wrote:
+On 4/15/2024 9:39 PM, Jarkko Sakkinen wrote:
 > On Mon Apr 15, 2024 at 5:24 PM EEST, Roberto Sassu wrote:
 >> From: Roberto Sassu <roberto.sassu@huawei.com>
 >>
->> Add a linked list of hash tables to the digest cache, one per algorithm,
->> containing the digests extracted from digest lists.
+>> In the environments where xattrs are not available (e.g. in the initial ram
+>> disk), the digest_cache LSM cannot precisely determine which digest list in
+>> a directory contains the desired reference digest. However, although
+>> slower, it would be desirable to search the digest in all digest lists of
+>> that directory.
 >>
->> The number of hash table slots is determined by dividing the number of
->> digests to add to the average depth of the collision list defined with
->> CONFIG_DIGEST_CACHE_HTABLE_DEPTH (currently set to 30). It can be changed
->> in the kernel configuration.
+>> This done in two steps. When a digest cache is being created,
+>> digest_cache_create() invokes digest_cache_dir_create(), to generate the
+>> list of current directory entries. Entries are placed in the list in
+>> ascending order by the <seq num> if prepended to the file name, or at the
+>> end of the list if not.
 >>
->> Add digest_cache_htable_init() and digest_cache_htable_add(), to be called
->> by digest list parsers, in order to allocate the hash tables and to add
->> extracted digests.
+>> The resulting digest cache has the IS_DIR bit set, to distinguish it from
+>> the digest caches created from regular files.
 >>
->> Add digest_cache_htable_free(), to let the digest_cache LSM free the hash
->> tables at the time a digest cache is freed.
+>> Second, when a digest is searched in a directory digest cache,
+>> digest_cache_lookup() invokes digest_cache_dir_lookup_digest() to
+>> iteratively search that digest in each directory entry generated by
+>> digest_cache_dir_create().
 >>
->> Add digest_cache_htable_lookup() to search a digest in the hash table of a
->> digest cache for a given algorithm.
+>> That list is stable, even if new files are added or deleted from that
+>> directory. A subsequent patch will invalidate the digest cache, forcing
+>> next callers of digest_cache_get() to get a new directory digest cache with
+>> the updated list of directory entries.
 >>
->> Add digest_cache_lookup() to the public API, to let users of the
->> digest_cache LSM search a digest in a digest cache and, in a subsequent
->> patch, to search it in the digest caches for each directory entry.
+>> If the current directory entry does not have a digest cache reference,
+>> digest_cache_dir_lookup_digest() invokes digest_cache_create() to create a
+>> new digest cache for that entry. In either case,
+>> digest_cache_dir_lookup_digest() calls then digest_cache_htable_lookup()
+>> with the new/existing digest cache to search the digest. Check and
+>> assignment of the digest cache in a directory entry is protected by the
+>> per entry digest_cache_mutex.
 >>
->> Return the digest cache containing the digest, as a different type,
->> digest_cache_found_t to avoid it being accidentally put. Also, introduce
->> digest_cache_from_found_t() to explicitly convert it back to a digest cache
->> for further use (e.g. retrieving verification data, introduced later).
+>> The iteration stops when the digest is found. In that case,
+>> digest_cache_dir_lookup_digest() returns the digest cache reference of the
+>> current directory entry as the digest_cache_found_t type, so that callers
+>> of digest_cache_lookup() don't mistakenly try to call digest_cache_put()
+>> with that reference.
 >>
->> Finally, add digest_cache_hash_key() to compute the hash table key from the
->> first two bytes of the digest (modulo the number of slots).
+>> This new reference type will be used to retrieve information about the
+>> digest cache containing the digest, which is not known in advance until the
+>> digest search is performed.
+>>
+>> The order of the list of directory entries influences the speed of the
+>> digest search. A search terminates faster if less digest caches have to be
+>> created. One way to optimize it could be to order the list of digest lists
+>> in the same way of when they are requested at boot.
+>>
+>> Finally, digest_cache_dir_free() releases the digest cache references
+>> stored in the list of directory entries, and frees the list itself.
 >>
 >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 >> ---
->>   include/linux/digest_cache.h     |  34 +++++
->>   security/digest_cache/Kconfig    |  11 ++
 >>   security/digest_cache/Makefile   |   2 +-
->>   security/digest_cache/htable.c   | 250 +++++++++++++++++++++++++++++++
->>   security/digest_cache/internal.h |  43 ++++++
->>   security/digest_cache/main.c     |   3 +
->>   6 files changed, 342 insertions(+), 1 deletion(-)
->>   create mode 100644 security/digest_cache/htable.c
+>>   security/digest_cache/dir.c      | 193 +++++++++++++++++++++++++++++++
+>>   security/digest_cache/htable.c   |  22 +++-
+>>   security/digest_cache/internal.h |  45 +++++++
+>>   security/digest_cache/main.c     |  12 ++
+>>   5 files changed, 271 insertions(+), 3 deletions(-)
+>>   create mode 100644 security/digest_cache/dir.c
 >>
->> diff --git a/include/linux/digest_cache.h b/include/linux/digest_cache.h
->> index e79f94a60b0f..4872700ac205 100644
->> --- a/include/linux/digest_cache.h
->> +++ b/include/linux/digest_cache.h
->> @@ -11,12 +11,39 @@
->>   #define _LINUX_DIGEST_CACHE_H
->>   
->>   #include <linux/fs.h>
->> +#include <crypto/hash_info.h>
->>   
->>   struct digest_cache;
->>   
->> +/**
->> + * typedef digest_cache_found_t - Digest cache reference as numeric value
->> + *
->> + * This new type represents a digest cache reference that should not be put.
->> + */
->> +typedef unsigned long digest_cache_found_t;
->> +
->> +/**
->> + * digest_cache_from_found_t - Convert digest_cache_found_t to digest cache ptr
->> + * @found: digest_cache_found_t value
->> + *
->> + * Convert the digest_cache_found_t returned by digest_cache_lookup() to a
->> + * digest cache pointer, so that it can be passed to the other functions of the
->> + * API.
->> + *
->> + * Return: Digest cache pointer.
->> + */
->> +static inline struct digest_cache *
->> +digest_cache_from_found_t(digest_cache_found_t found)
->> +{
->> +	return (struct digest_cache *)found;
->> +}
->> +
->>   #ifdef CONFIG_SECURITY_DIGEST_CACHE
->>   struct digest_cache *digest_cache_get(struct dentry *dentry);
->>   void digest_cache_put(struct digest_cache *digest_cache);
->> +digest_cache_found_t digest_cache_lookup(struct dentry *dentry,
->> +					 struct digest_cache *digest_cache,
->> +					 u8 *digest, enum hash_algo algo);
->>   
->>   #else
->>   static inline struct digest_cache *digest_cache_get(struct dentry *dentry)
->> @@ -28,5 +55,12 @@ static inline void digest_cache_put(struct digest_cache *digest_cache)
->>   {
->>   }
->>   
->> +static inline digest_cache_found_t
->> +digest_cache_lookup(struct dentry *dentry, struct digest_cache *digest_cache,
->> +		    u8 *digest, enum hash_algo algo)
->> +{
->> +	return 0UL;
->> +}
->> +
->>   #endif /* CONFIG_SECURITY_DIGEST_CACHE */
->>   #endif /* _LINUX_DIGEST_CACHE_H */
->> diff --git a/security/digest_cache/Kconfig b/security/digest_cache/Kconfig
->> index dfabe5d6e3ca..71017954e5c5 100644
->> --- a/security/digest_cache/Kconfig
->> +++ b/security/digest_cache/Kconfig
->> @@ -18,3 +18,14 @@ config DIGEST_LIST_DEFAULT_PATH
->>   	  It can be changed at run-time, by writing the new path to the
->>   	  securityfs interface. Digest caches created with the old path are
->>   	  not affected by the change.
->> +
->> +config DIGEST_CACHE_HTABLE_DEPTH
->> +	int
->> +	default 30
->> +	help
->> +	  Desired average depth of the collision list in the digest cache
->> +	  hash tables.
->> +
->> +	  A smaller number will increase the amount of hash table slots, and
->> +	  make the search faster. A bigger number will decrease the number of
->> +	  hash table slots, but make the search slower.
 >> diff --git a/security/digest_cache/Makefile b/security/digest_cache/Makefile
->> index 1330655e33b1..7e00c53d8f55 100644
+>> index 37a473c7bc28..e417da0383ab 100644
 >> --- a/security/digest_cache/Makefile
 >> +++ b/security/digest_cache/Makefile
->> @@ -4,4 +4,4 @@
+>> @@ -4,7 +4,7 @@
 >>   
 >>   obj-$(CONFIG_SECURITY_DIGEST_CACHE) += digest_cache.o
 >>   
->> -digest_cache-y := main.o secfs.o
->> +digest_cache-y := main.o secfs.o htable.o
->> diff --git a/security/digest_cache/htable.c b/security/digest_cache/htable.c
+>> -digest_cache-y := main.o secfs.o htable.o populate.o modsig.o verif.o
+>> +digest_cache-y := main.o secfs.o htable.o populate.o modsig.o verif.o dir.o
+>>   
+>>   digest_cache-y += parsers/tlv.o
+>>   digest_cache-y += parsers/rpm.o
+>> diff --git a/security/digest_cache/dir.c b/security/digest_cache/dir.c
 >> new file mode 100644
->> index 000000000000..d2d5d8f5e5b1
+>> index 000000000000..7bfcdd5f7ef1
 >> --- /dev/null
->> +++ b/security/digest_cache/htable.c
->> @@ -0,0 +1,250 @@
+>> +++ b/security/digest_cache/dir.c
+>> @@ -0,0 +1,193 @@
 >> +// SPDX-License-Identifier: GPL-2.0
 >> +/*
 >> + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
 >> + *
 >> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 >> + *
->> + * Implement hash table operations for the digest cache.
+>> + * Manage digest caches from directories.
 >> + */
 >> +
 >> +#define pr_fmt(fmt) "DIGEST CACHE: "fmt
-> 
-> For easier grepping from kernel tree i'd suggest to name this accordingly i.e.
-> just "digest_cache".
-
-Ok, no problem.
-
+>> +#include <linux/init_task.h>
+>> +
 >> +#include "internal.h"
 >> +
 >> +/**
->> + * digest_cache_hash_key - Compute hash key
->> + * @digest: Digest cache
->> + * @num_slots: Number of slots in the hash table
+>> + * digest_cache_dir_iter - Digest cache directory iterator
+>> + * @__ctx: iterate_dir() context
+>> + * @name: Name of file in the accessed directory
+>> + * @namelen: String length of @name
+>> + * @offset: Current position in the directory stream (see man readdir)
+>> + * @ino: Inode number
+>> + * @d_type: File type
 >> + *
->> + * This function computes a hash key based on the first two bytes of the
->> + * digest and the number of slots of the hash table.
+>> + * This function stores the names of the files in the containing directory in
+>> + * a linked list. If they are in the format <seq num>-<format>-<name>, this
+>> + * function orders them by seq num, so that digest lists are processed in the
+>> + * desired order. Otherwise, if <seq num>- is not included, it adds the name at
+>> + * the end of the list.
 >> + *
->> + * Return: Hash key.
+>> + * Return: True to continue processing, false to stop.
 >> + */
->> +static inline unsigned int digest_cache_hash_key(u8 *digest,
->> +						 unsigned int num_slots)
+>> +static bool digest_cache_dir_iter(struct dir_context *__ctx, const char *name,
+>> +				  int namelen, loff_t offset, u64 ino,
+>> +				  unsigned int d_type)
 >> +{
->> +	/* Same as ima_hash_key() but parametrized. */
->> +	return (digest[0] | digest[1] << 8) % num_slots;
+>> +	struct readdir_callback *ctx = container_of(__ctx, typeof(*ctx), ctx);
+>> +	struct dir_entry *new_entry, *p;
+>> +	unsigned int seq_num;
+>> +	char *separator;
+>> +	int ret;
+>> +
+>> +	if (!strcmp(name, ".") || !strcmp(name, ".."))
+>> +		return true;
+>> +
+>> +	if (d_type != DT_REG)
+>> +		return true;
+>> +
+>> +	new_entry = kmalloc(sizeof(*new_entry) + namelen + 1, GFP_KERNEL);
+>> +	if (!new_entry)
+>> +		return false;
+>> +
+>> +	memcpy(new_entry->name, name, namelen);
+>> +	new_entry->name[namelen] = '\0';
+>> +	new_entry->seq_num = UINT_MAX;
+>> +	new_entry->digest_cache = NULL;
+>> +	mutex_init(&new_entry->digest_cache_mutex);
+>> +
+>> +	if (new_entry->name[0] < '0' || new_entry->name[0] > '9')
+>> +		goto out;
+>> +
+>> +	separator = strchr(new_entry->name, '-');
+>> +	if (!separator)
+>> +		goto out;
+>> +
+>> +	*separator = '\0';
+>> +	ret = kstrtouint(new_entry->name, 10, &seq_num);
+>> +	*separator = '-';
+>> +	if (ret < 0)
+>> +		goto out;
+>> +
+>> +	new_entry->seq_num = seq_num;
+>> +
+>> +	list_for_each_entry(p, ctx->head, list) {
+>> +		if (seq_num <= p->seq_num) {
+>> +			list_add(&new_entry->list, p->list.prev);
+>> +			pr_debug("Added %s before %s in dir list\n",
+>> +				 new_entry->name, p->name);
+>> +			return true;
+>> +		}
+>> +	}
+>> +out:
+>> +	list_add_tail(&new_entry->list, ctx->head);
+>> +	pr_debug("Added %s to tail of dir list\n", new_entry->name);
+>> +	return true;
 >> +}
 >> +
 >> +/**
->> + * lookup_htable - Lookup a hash table
+>> + * digest_cache_dir_create - Create a directory digest cache
 >> + * @digest_cache: Digest cache
->> + * @algo: Algorithm of the desired hash table
+>> + * @digest_list_path: Path structure of the digest list directory
 >> + *
->> + * This function searches the hash table for a given algorithm in the digest
->> + * cache.
->> + *
->> + * Return: A hash table if found, NULL otherwise.
->> + */
->> +static struct htable *lookup_htable(struct digest_cache *digest_cache,
->> +				    enum hash_algo algo)
->> +{
->> +	struct htable *h;
->> +
->> +	list_for_each_entry(h, &digest_cache->htables, next)
->> +		if (h->algo == algo)
->> +			return h;
->> +
->> +	return NULL;
->> +}
->> +
->> +/**
->> + * digest_cache_htable_init - Allocate and initialize the hash table
->> + * @digest_cache: Digest cache
->> + * @num_digests: Number of digests to add to the digest cache
->> + * @algo: Algorithm of the digests
->> + *
->> + * This function allocates and initializes the hash table for a given algorithm.
->> + * The number of slots depends on the number of digests to add to the digest
->> + * cache, and the constant CONFIG_DIGEST_CACHE_HTABLE_DEPTH stating the desired
->> + * average depth of the collision list.
+>> + * This function iterates over the entries of a directory, and creates a linked
+>> + * list of file names from that directory.
 >> + *
 >> + * Return: Zero on success, a POSIX error code otherwise.
 >> + */
->> +int digest_cache_htable_init(struct digest_cache *digest_cache, u64 num_digests,
->> +			     enum hash_algo algo)
+>> +int digest_cache_dir_create(struct digest_cache *digest_cache,
+>> +			    struct path *digest_list_path)
 >> +{
->> +	struct htable *h;
->> +	int i;
+>> +	struct file *dir_file;
+>> +	struct readdir_callback buf = {
+>> +		.ctx.actor = digest_cache_dir_iter,
+>> +	};
+>> +	int ret;
 >> +
->> +	h = lookup_htable(digest_cache, algo);
->> +	if (h)
->> +		return 0;
->> +
->> +	h = kmalloc(sizeof(*h), GFP_KERNEL);
->> +	if (!h)
->> +		return -ENOMEM;
->> +
->> +	h->num_slots = DIV_ROUND_UP(num_digests,
->> +				    CONFIG_DIGEST_CACHE_HTABLE_DEPTH);
->> +	h->slots = kmalloc_array(h->num_slots, sizeof(*h->slots), GFP_KERNEL);
->> +	if (!h->slots) {
->> +		kfree(h);
->> +		return -ENOMEM;
+>> +	dir_file = dentry_open(digest_list_path, O_RDONLY, &init_cred);
+>> +	if (IS_ERR(dir_file)) {
+>> +		pr_debug("Cannot access %s, ret: %ld\n", digest_cache->path_str,
+>> +			 PTR_ERR(dir_file));
+>> +		return PTR_ERR(dir_file);
 >> +	}
 >> +
->> +	for (i = 0; i < h->num_slots; i++)
->> +		INIT_HLIST_HEAD(&h->slots[i]);
+>> +	buf.head = &digest_cache->dir_entries;
+>> +	ret = iterate_dir(dir_file, &buf.ctx);
+>> +	if (ret < 0)
+>> +		pr_debug("Failed to iterate directory %s\n",
+>> +			 digest_cache->path_str);
 >> +
->> +	h->num_digests = 0;
->> +	h->algo = algo;
->> +
->> +	list_add_tail(&h->next, &digest_cache->htables);
->> +
->> +	pr_debug("Initialized hash table for digest list %s, digests: %llu, slots: %u, algo: %s\n",
->> +		 digest_cache->path_str, num_digests, h->num_slots,
->> +		 hash_algo_name[algo]);
->> +	return 0;
+>> +	fput(dir_file);
+>> +	return ret;
 >> +}
 >> +
 >> +/**
->> + * digest_cache_htable_add - Add a new digest to the digest cache
->> + * @digest_cache: Digest cache
->> + * @digest: Digest to add
->> + * @algo: Algorithm of digest
->> + *
->> + * This function, invoked by a digest list parser, adds a digest extracted
->> + * from a digest list to the digest cache.
->> + *
->> + * Return: Zero on success, a POSIX error code otherwise.
->> + */
->> +int digest_cache_htable_add(struct digest_cache *digest_cache, u8 *digest,
->> +			    enum hash_algo algo)
->> +{
->> +	struct htable *h;
->> +	struct digest_cache_entry *entry;
->> +	unsigned int key;
->> +	int digest_len;
->> +
->> +	h = lookup_htable(digest_cache, algo);
->> +	if (!h) {
->> +		pr_debug("No hash table for algorithm %s was found in digest cache %s, initialize one\n",
->> +			 hash_algo_name[algo], digest_cache->path_str);
->> +		return -ENOENT;
->> +	}
->> +
->> +	digest_len = hash_digest_size[algo];
->> +
->> +	entry = kmalloc(sizeof(*entry) + digest_len, GFP_KERNEL);
->> +	if (!entry)
->> +		return -ENOMEM;
->> +
->> +	memcpy(entry->digest, digest, digest_len);
->> +
->> +	key = digest_cache_hash_key(digest, h->num_slots);
->> +	hlist_add_head(&entry->hnext, &h->slots[key]);
->> +	h->num_digests++;
->> +	pr_debug("Added digest %s:%*phN to digest cache %s, num of %s digests: %llu\n",
->> +		 hash_algo_name[algo], digest_len, digest,
->> +		 digest_cache->path_str, hash_algo_name[algo], h->num_digests);
->> +	return 0;
->> +}
->> +
->> +/**
->> + * digest_cache_htable_lookup - Search a digest in the digest cache
+>> + * digest_cache_dir_lookup_digest - Lookup a digest
 >> + * @dentry: Dentry of the file whose digest is looked up
+>> + * @digest_list_path: Path structure of the digest list directory
 >> + * @digest_cache: Digest cache
 >> + * @digest: Digest to search
 >> + * @algo: Algorithm of the digest to search
 >> + *
->> + * This function searches the passed digest and algorithm in the passed digest
->> + * cache.
+>> + * This function iterates over the linked list created by
+>> + * digest_cache_dir_create() and looks up the digest in the digest cache of
+>> + * each entry.
 >> + *
->> + * Return: Zero if the digest is found, -ENOENT if not.
+>> + * Return: A digest_cache_found_t value if the digest if found, zero otherwise.
 >> + */
->> +int digest_cache_htable_lookup(struct dentry *dentry,
+>> +digest_cache_found_t
+>> +digest_cache_dir_lookup_digest(struct dentry *dentry,
+>> +			       struct path *digest_list_path,
 >> +			       struct digest_cache *digest_cache, u8 *digest,
 >> +			       enum hash_algo algo)
 >> +{
->> +	struct digest_cache_entry *entry;
->> +	struct htable *h;
->> +	unsigned int key;
->> +	int digest_len;
->> +	int search_depth = 0;
->> +
->> +	h = lookup_htable(digest_cache, algo);
->> +	if (!h)
->> +		return -ENOENT;
->> +
->> +	digest_len = hash_digest_size[algo];
->> +	key = digest_cache_hash_key(digest, h->num_slots);
->> +
->> +	hlist_for_each_entry(entry, &h->slots[key], hnext) {
->> +		if (!memcmp(entry->digest, digest, digest_len)) {
->> +			pr_debug("Cache hit at depth %d for file %s, digest %s:%*phN in digest cache %s\n",
->> +				 search_depth, dentry->d_name.name,
->> +				 hash_algo_name[algo], digest_len, digest,
->> +				 digest_cache->path_str);
->> +
->> +			return 0;
->> +		}
->> +
->> +		search_depth++;
->> +	}
->> +
->> +	pr_debug("Cache miss for file %s, digest %s:%*phN in digest cache %s\n",
->> +		 dentry->d_name.name, hash_algo_name[algo], digest_len, digest,
->> +		 digest_cache->path_str);
->> +	return -ENOENT;
->> +}
->> +
->> +/**
->> + * digest_cache_lookup - Search a digest in the digest cache
->> + * @dentry: Dentry of the file whose digest is looked up
->> + * @digest_cache: Digest cache
->> + * @digest: Digest to search
->> + * @algo: Algorithm of the digest to search
->> + *
->> + * This function calls digest_cache_htable_lookup() to search a digest in the
->> + * passed digest cache, obtained with digest_cache_get().
->> + *
->> + * It returns the digest cache reference as the digest_cache_found_t type, to
->> + * avoid that the digest cache is accidentally put. The digest_cache_found_t
->> + * type can be converted back to a digest cache pointer, by
->> + * calling digest_cache_from_found_t().
->> + *
->> + * Return: A positive digest_cache_found_t if the digest is found, zero if not.
->> + */
->> +digest_cache_found_t digest_cache_lookup(struct dentry *dentry,
->> +					 struct digest_cache *digest_cache,
->> +					 u8 *digest, enum hash_algo algo)
->> +{
+>> +	struct digest_cache *cache;
+>> +	struct dir_entry *dir_entry;
 >> +	int ret;
 >> +
->> +	ret = digest_cache_htable_lookup(dentry, digest_cache, digest, algo);
->> +	return (!ret) ? (digest_cache_found_t)digest_cache : 0UL;
+>> +	list_for_each_entry(dir_entry, &digest_cache->dir_entries, list) {
+>> +		mutex_lock(&dir_entry->digest_cache_mutex);
+>> +		if (!dir_entry->digest_cache) {
+>> +			cache = digest_cache_create(dentry, digest_list_path,
+>> +						    digest_cache->path_str,
+>> +						    dir_entry->name);
+>> +			/* Ignore digest caches that cannot be instantiated. */
+>> +			if (!cache) {
+>> +				mutex_unlock(&dir_entry->digest_cache_mutex);
+>> +				continue;
+>> +			}
+>> +
+>> +			/* Consume extra ref. from digest_cache_create(). */
+>> +			dir_entry->digest_cache = cache;
+>> +		}
+>> +		mutex_unlock(&dir_entry->digest_cache_mutex);
+>> +
+>> +		ret = digest_cache_htable_lookup(dentry,
+>> +						 dir_entry->digest_cache,
+>> +						 digest, algo);
+>> +		if (!ret)
+>> +			return (digest_cache_found_t)dir_entry->digest_cache;
+>> +	}
+>> +
+>> +	return 0UL;
 >> +}
->> +EXPORT_SYMBOL_GPL(digest_cache_lookup);
 >> +
 >> +/**
->> + * digest_cache_htable_free - Free the hash tables
+>> + * digest_cache_dir_free - Free the stored file list and put digest caches
 >> + * @digest_cache: Digest cache
 >> + *
->> + * This function removes all digests from all hash tables in the digest cache,
->> + * and frees the memory.
+>> + * This function frees the file list created by digest_cache_create(), and puts
+>> + * the digest cache if a reference exists.
 >> + */
->> +void digest_cache_htable_free(struct digest_cache *digest_cache)
+>> +void digest_cache_dir_free(struct digest_cache *digest_cache)
 >> +{
->> +	struct htable *h, *h_tmp;
->> +	struct digest_cache_entry *p;
->> +	struct hlist_node *q;
->> +	int i;
+>> +	struct dir_entry *p, *q;
 >> +
->> +	list_for_each_entry_safe(h, h_tmp, &digest_cache->htables, next) {
->> +		for (i = 0; i < h->num_slots; i++) {
->> +			hlist_for_each_entry_safe(p, q, &h->slots[i], hnext) {
->> +				hlist_del(&p->hnext);
->> +				pr_debug("Removed digest %s:%*phN from digest cache %s\n",
->> +					 hash_algo_name[h->algo],
->> +					 hash_digest_size[h->algo], p->digest,
->> +					 digest_cache->path_str);
->> +				kfree(p);
->> +			}
->> +		}
+>> +	list_for_each_entry_safe(p, q, &digest_cache->dir_entries, list) {
+>> +		if (p->digest_cache)
+>> +			digest_cache_put(p->digest_cache);
 >> +
->> +		list_del(&h->next);
->> +		kfree(h->slots);
->> +		kfree(h);
+>> +		list_del(&p->list);
+>> +		mutex_destroy(&p->digest_cache_mutex);
+>> +		kfree(p);
 >> +	}
 >> +}
->> diff --git a/security/digest_cache/internal.h b/security/digest_cache/internal.h
->> index bbf5eefe5c82..f6ffeaa25288 100644
->> --- a/security/digest_cache/internal.h
->> +++ b/security/digest_cache/internal.h
->> @@ -16,8 +16,40 @@
->>   /* Digest cache bits in flags. */
->>   #define INIT_IN_PROGRESS	0	/* Digest cache being initialized. */
+>> diff --git a/security/digest_cache/htable.c b/security/digest_cache/htable.c
+>> index d2d5d8f5e5b1..8cf7400dfcf4 100644
+>> --- a/security/digest_cache/htable.c
+>> +++ b/security/digest_cache/htable.c
+>> @@ -8,6 +8,8 @@
+>>    */
 >>   
->> +/**
->> + * struct digest_cache_entry - Entry of a digest cache hash table
->> + * @hnext: Pointer to the next element in the collision list
->> + * @digest: Stored digest
->> + *
->> + * This structure represents an entry of a digest cache hash table, storing a
->> + * digest.
->> + */
->> +struct digest_cache_entry {
->> +	struct hlist_node hnext;
->> +	u8 digest[];
->> +} __packed;
+>>   #define pr_fmt(fmt) "DIGEST CACHE: "fmt
+>> +#include <linux/namei.h>
+>> +
+>>   #include "internal.h"
+>>   
+>>   /**
+>> @@ -210,10 +212,26 @@ digest_cache_found_t digest_cache_lookup(struct dentry *dentry,
+>>   					 struct digest_cache *digest_cache,
+>>   					 u8 *digest, enum hash_algo algo)
+>>   {
+>> +	struct path digest_list_path;
+>> +	digest_cache_found_t found;
+>>   	int ret;
+>>   
+>> -	ret = digest_cache_htable_lookup(dentry, digest_cache, digest, algo);
+>> -	return (!ret) ? (digest_cache_found_t)digest_cache : 0UL;
+>> +	if (!test_bit(IS_DIR, &digest_cache->flags)) {
+>> +		ret = digest_cache_htable_lookup(dentry, digest_cache, digest,
+>> +						 algo);
+>> +		return (!ret) ? (digest_cache_found_t)digest_cache : 0UL;
 > 
-> Please correct me if I'm wrong but I don't think __packed has any use
-> here as the definition of hlist_node is:
+> s/(!ret)/!ret/
 > 
-> 
-> struct hlist_node {
-> 	struct hlist_node *next, **pprev;
-> };
-> 
-> It is naturally aligned to begin with.
+> I'd consider tho just use plain if-statement, ternary operator is best
+> to be avoided other than macros
 
-You're right. __packed is not needed (no reordering).
+Ok.
 
 Thanks
 
 Roberto
 
+>> +	}
+>> +
+>> +	ret = kern_path(digest_cache->path_str, 0, &digest_list_path);
+>> +	if (ret < 0) {
+>> +		pr_debug("Cannot find path %s\n", digest_cache->path_str);
+>> +		return 0UL;
+>> +	}
+>> +
+>> +	found = digest_cache_dir_lookup_digest(dentry, &digest_list_path,
+>> +					       digest_cache, digest, algo);
+>> +	path_put(&digest_list_path);
+>> +	return found;
+>>   }
+>>   EXPORT_SYMBOL_GPL(digest_cache_lookup);
+>>   
+>> diff --git a/security/digest_cache/internal.h b/security/digest_cache/internal.h
+>> index 4929d25e7972..b7afca8e04da 100644
+>> --- a/security/digest_cache/internal.h
+>> +++ b/security/digest_cache/internal.h
+>> @@ -16,6 +16,39 @@
+>>   /* Digest cache bits in flags. */
+>>   #define INIT_IN_PROGRESS	0	/* Digest cache being initialized. */
+>>   #define INVALID			1	/* Digest cache marked as invalid. */
+>> +#define IS_DIR			2	/* Digest cache created from dir. */
 >> +
 >> +/**
->> + * struct htable - Hash table
->> + * @next: Next hash table in the linked list
->> + * @slots: Hash table slots
->> + * @num_slots: Number of slots
->> + * @num_digests: Number of digests stored in the hash table
->> + * @algo: Algorithm of the digests
+>> + * struct readdir_callback - Structure to store information for dir iteration
+>> + * @ctx: Context structure
+>> + * @head: Head of linked list of directory entries
 >> + *
->> + * This structure is a hash table storing digests of file data or metadata.
+>> + * This structure stores information to be passed from the iterate_dir() caller
+>> + * to the directory iterator.
 >> + */
->> +struct htable {
->> +	struct list_head next;
->> +	struct hlist_head *slots;
->> +	unsigned int num_slots;
->> +	u64 num_digests;
->> +	enum hash_algo algo;
+>> +struct readdir_callback {
+>> +	struct dir_context ctx;
+>> +	struct list_head *head;
 >> +};
 >> +
+>> +/**
+>> + * struct dir_entry - Directory entry
+>> + * @list: Linked list of directory entries
+>> + * @digest_cache: Digest cache associated to the directory entry
+>> + * @digest_cache_mutex: Protects @digest_cache
+>> + * @seq_num: Sequence number of the directory entry from file name
+>> + * @name: File name of the directory entry
+>> + *
+>> + * This structure represents a directory entry with a digest cache created
+>> + * from that entry.
+>> + */
+>> +struct dir_entry {
+>> +	struct list_head list;
+>> +	struct digest_cache *digest_cache;
+>> +	struct mutex digest_cache_mutex;
+>> +	unsigned int seq_num;
+>> +	char name[];
+>> +} __packed;
+>>   
+>>   /**
+>>    * struct digest_cache_verif
+>> @@ -83,6 +116,7 @@ struct htable {
 >>   /**
 >>    * struct digest_cache - Digest cache
->> + * @htables: Hash tables (one per algorithm)
+>>    * @htables: Hash tables (one per algorithm)
+>> + * @dir_entries: List of files in a directory and the digest cache
 >>    * @ref_count: Number of references to the digest cache
 >>    * @path_str: Path of the digest list the digest cache was created from
 >>    * @flags: Control flags
->> @@ -25,6 +57,7 @@
->>    * This structure represents a cache of digests extracted from a digest list.
+>> @@ -93,6 +127,7 @@ struct htable {
 >>    */
 >>   struct digest_cache {
->> +	struct list_head htables;
+>>   	struct list_head htables;
+>> +	struct list_head dir_entries;
 >>   	atomic_t ref_count;
 >>   	char *path_str;
 >>   	unsigned long flags;
->> @@ -84,4 +117,14 @@ struct digest_cache *digest_cache_create(struct dentry *dentry,
->>   					 struct path *digest_list_path,
->>   					 char *path_str, char *filename);
+>> @@ -193,4 +228,14 @@ size_t digest_cache_strip_modsig(__u8 *data, size_t data_len);
+>>   /* verif.c */
+>>   void digest_cache_verif_free(struct digest_cache *digest_cache);
 >>   
->> +/* htable.c */
->> +int digest_cache_htable_init(struct digest_cache *digest_cache, u64 num_digests,
->> +			     enum hash_algo algo);
->> +int digest_cache_htable_add(struct digest_cache *digest_cache, u8 *digest,
->> +			    enum hash_algo algo);
->> +int digest_cache_htable_lookup(struct dentry *dentry,
+>> +/* dir.c */
+>> +int digest_cache_dir_create(struct digest_cache *digest_cache,
+>> +			    struct path *digest_list_path);
+>> +digest_cache_found_t
+>> +digest_cache_dir_lookup_digest(struct dentry *dentry,
+>> +			       struct path *digest_list_path,
 >> +			       struct digest_cache *digest_cache, u8 *digest,
 >> +			       enum hash_algo algo);
->> +void digest_cache_htable_free(struct digest_cache *digest_cache);
+>> +void digest_cache_dir_free(struct digest_cache *digest_cache);
 >> +
 >>   #endif /* _DIGEST_CACHE_INTERNAL_H */
 >> diff --git a/security/digest_cache/main.c b/security/digest_cache/main.c
->> index 661c8d106791..0b201af6432c 100644
+>> index f3475b36e566..15f1486610a3 100644
 >> --- a/security/digest_cache/main.c
 >> +++ b/security/digest_cache/main.c
->> @@ -48,6 +48,7 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
->>   
->>   	atomic_set(&digest_cache->ref_count, 1);
+>> @@ -50,6 +50,7 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
 >>   	digest_cache->flags = 0UL;
->> +	INIT_LIST_HEAD(&digest_cache->htables);
+>>   	INIT_LIST_HEAD(&digest_cache->htables);
+>>   	INIT_LIST_HEAD(&digest_cache->verif_data);
+>> +	INIT_LIST_HEAD(&digest_cache->dir_entries);
+>>   	mutex_init(&digest_cache->mutex);
 >>   
 >>   	pr_debug("New digest cache %s (ref count: %d)\n",
->>   		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
->> @@ -63,6 +64,8 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
->>    */
->>   static void digest_cache_free(struct digest_cache *digest_cache)
+>> @@ -68,6 +69,7 @@ static void digest_cache_free(struct digest_cache *digest_cache)
 >>   {
->> +	digest_cache_htable_free(digest_cache);
->> +
+>>   	digest_cache_htable_free(digest_cache);
+>>   	digest_cache_verif_free(digest_cache);
+>> +	digest_cache_dir_free(digest_cache);
+>>   	mutex_destroy(&digest_cache->mutex);
+>>   
 >>   	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
->>   	kfree(digest_cache->path_str);
->>   	kmem_cache_free(digest_cache_cache, digest_cache);
+>> @@ -185,6 +187,16 @@ struct digest_cache *digest_cache_create(struct dentry *dentry,
+>>   			/* Prevent usage of partially-populated digest cache. */
+>>   			set_bit(INVALID, &digest_cache->flags);
+>>   		}
+>> +	} else if (S_ISDIR(inode->i_mode)) {
+>> +		set_bit(IS_DIR, &dig_sec->dig_owner->flags);
+>> +
+>> +		ret = digest_cache_dir_create(digest_cache, digest_list_path);
+>> +		if (ret < 0) {
+>> +			pr_debug("Failed to create dir digest cache, ret: %d (keep digest cache)\n",
+>> +				 ret);
+>> +			/* Prevent usage of partially-populated digest cache. */
+>> +			set_bit(INVALID, &dig_sec->dig_owner->flags);
+>> +		}
+>>   	}
+>>   
+>>   	/* Creation complete, notify the other lock contenders. */
 > 
 > 
 > BR, Jarkko
