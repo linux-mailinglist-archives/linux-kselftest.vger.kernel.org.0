@@ -1,274 +1,239 @@
-Return-Path: <linux-kselftest+bounces-8237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8238-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F23DF8A7B5B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 06:25:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BA468A7B97
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 06:54:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93CB428356C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 04:25:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3EA91F229FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 04:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93BA43144;
-	Wed, 17 Apr 2024 04:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="IkgCYkNP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE5E32182;
+	Wed, 17 Apr 2024 04:54:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1B041C7C
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Apr 2024 04:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A75249FF;
+	Wed, 17 Apr 2024 04:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713327925; cv=none; b=Vte5CYsiRI5PxNudeMKtsHykRREx80si+XK0xE4tBW4LTe2zcJWVEWjGMJtw7jlASD4dmGO3z53vSGCrNpwzo7bXrRTNawhJ6RxTJ5HGZ/1ZP0RSMg+eR7w6NJ0QmHAgPg45JchWgH7MNube5vN4JhFh02o8pCHwEKC9GqF4AGo=
+	t=1713329654; cv=none; b=k2pihs2cNFBvpxis9Xs3GXeISl9Athf0buoF8maGWL8yaJIlsxVPBANfKz3/nFUlbVxmzK/DG4Sfpsy4KtD0FenOuNG0JsYTkFr/ZrnTaG5cIEsfBF/vYRNFbRSlsuCJhWECK6N10gtkU/jgCwXS0NImFMrFBpMcynTwLOOm6Zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713327925; c=relaxed/simple;
-	bh=rFwkC511KvsC0YP2FZrFpvy2jy7jJpi7upeWgfMoueg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tXzzHcxTCX3Z5mOvB8wFU/fGK9BuiviIDmlSXlIV+TQvEDyuTVZ2mLXQMKEfeG6ZKct6LZtrK0PzNxxgpcv7BaYpkGmWWHtb0kp1KES+NqXWmbRlxpy647FPdQDhOJ0wf2v2EltNKaqDO6/FjGFHAM8rmjyDVGk0h0G45ymM0ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=IkgCYkNP; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3c70ef25e19so1542021b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Apr 2024 21:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713327922; x=1713932722; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e2tZ+yG9t3/35QrGeru3QI9bqAmKuIVqOJ+PisGAvLA=;
-        b=IkgCYkNPxxMVBd4CKylSE3fOvUc5M5HuGcZodYPZBhtTY2Vhih+fJBHSqJEXd9AFoR
-         PdxfgKpx8vlQvzhHAeGpYEhyjYPKXjfm9UYFdcCJU1XpIV8oAZN+n2NaURbnmHjcwKwn
-         DrFZDi9q7+leX0QWj/RkS6VbJH3ZN0+rTQbQ/vR8roK64NoD0gNVE9oPHhsQszWrIZjc
-         Mu6V8xFlo1dZu2TXou71wuL44dXQXQP4ErRrA2vdv3c9pd+VYy0MH20HYzre69Y/5MFA
-         pQHucHlvDmUzenjtzYTr01sz49eMrHwj1xt8ES5OVMxX9r2uAh29cq5LV0IvjzG/BsiA
-         mFXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713327922; x=1713932722;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e2tZ+yG9t3/35QrGeru3QI9bqAmKuIVqOJ+PisGAvLA=;
-        b=C4/F4BuuqOwQbD2MKQLv2YmDc9VOAl6MaFgBQ04PCHjZk/AwxMT9wjjScqRiT8YPLB
-         SLDe5X3saqb6+LWAm74NgzBtRKKGcGcfDlMOmqNWe+JjCMdDB5riJ0U8h39nDB1WGKvo
-         dsVotH232oMSIfG8WeSNETyn+PHn0ojVt0k4cn1nNACT8GZ/heLt5S8zbSmKkSov58x+
-         jGZBLWl7QDyQMlSmsoiXl06KJS6A4DUnz+w/mghnTVZhj9pRgnCOGF4WJttr0mEaPE0g
-         g6P6U8OI5ca9HvoBtjlwi6dS+RqG9Ge8JrHdEF1AH5rFneHZLy47bOWa54foJQlVqCM5
-         E/8g==
-X-Forwarded-Encrypted: i=1; AJvYcCV6TuGaQbhAgozmurzWVLHiwR7hYARHZENu8+anIs2vCRhfHXXx+TgQ471ORr7+iWeqx23sraWciBmvG4bQkO51/aVNAofDRdDs4V7OMu7L
-X-Gm-Message-State: AOJu0YxKY7Gm8b1XJbLAUpj30y3oFw746maV37jZB64/4TA08OHgku9F
-	LIINhJ6xbbisRuCeiUhiph1pzHgdDkqYua8vQ3j9f1VQzEFmtjHRk+BFp910XZk=
-X-Google-Smtp-Source: AGHT+IGWLA0NcQXbZEfFdR3YsDPfVHr118QZ4WjhomG+9rzHNhvOanaWIT94NHLW+jEwwRIrKftHvw==
-X-Received: by 2002:a05:6808:298b:b0:3c5:f473:f35e with SMTP id ex11-20020a056808298b00b003c5f473f35emr16376428oib.12.1713327922458;
-        Tue, 16 Apr 2024 21:25:22 -0700 (PDT)
-Received: from ghost ([2601:647:5700:6860:6b78:3121:f067:eafa])
-        by smtp.gmail.com with ESMTPSA id v29-20020aa799dd000000b006ea6f189976sm9733237pfi.163.2024.04.16.21.25.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 21:25:21 -0700 (PDT)
-Date: Tue, 16 Apr 2024 21:25:18 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Evan Green <evan@rivosinc.com>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 02/19] riscv: cpufeature: Fix thead vector hwcap removal
-Message-ID: <Zh9PLhUZmCF5mLXc@ghost>
-References: <20240411-dev-charlie-support_thead_vector_6_9-v1-2-4af9815ec746@rivosinc.com>
- <20240412-tuesday-resident-d9d07e75463c@wendy>
- <ZhlrdGXfSushUNTp@ghost>
- <20240412-eastcoast-disparity-9c9e7d178df5@spud>
- <ZhmeLoPS+tsfqv1T@ghost>
- <20240412-chemist-haunt-0a30a8f280ca@spud>
- <ZhmoPuoR00aS6qZp@ghost>
- <20240413-sharper-unlivable-5a65660b19e2@spud>
- <Zh3xrTfjjk3b4GHb@ghost>
- <20240416-husband-flavored-96c1dad58b6e@wendy>
+	s=arc-20240116; t=1713329654; c=relaxed/simple;
+	bh=JI37h1l7RHQE/Ptwu/oRf7eLUHTa3FG+1z1JEcX3tmY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=BUERd1P4O4yWqHZ4CDS/nVu+ynG+FZCLfa316GUS3/biO9ma8vb1H1cNYtJ9ZUtdGP1n8jZgdZQC79LS4aKeeZhKPjnYQNXoI//0ynlwRHnTSRbgiRRiAFKMxMa2x+ebmbovxaEe0eQkYsyApx2ksdffvhtTL1OVzK2XXjrpxE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDC86339;
+	Tue, 16 Apr 2024 21:54:37 -0700 (PDT)
+Received: from [10.162.43.16] (e116581.arm.com [10.162.43.16])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FDB33F738;
+	Tue, 16 Apr 2024 21:54:05 -0700 (PDT)
+Message-ID: <815f887c-3625-4715-806a-d5533373b20a@arm.com>
+Date: Wed, 17 Apr 2024 10:23:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240416-husband-flavored-96c1dad58b6e@wendy>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] selftests/arm: Add mm test
+From: Dev Jain <dev.jain@arm.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>, shuah@kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Anshuman.Khandual@arm.com, suzuki.poulose@arm.com, ryan.roberts@arm.com,
+ rob.herring@arm.com, Catalin.Marinas@arm.com, broonie@kernel.org,
+ will@kernel.org, mark.rutland@arm.com
+References: <20240405084410.256788-1-dev.jain@arm.com>
+ <20240405084410.256788-2-dev.jain@arm.com>
+ <ac9b16a7-f294-44d4-8243-488db97a009e@collabora.com>
+ <2dfae66f-1e34-40e5-a6a1-344ff4422028@arm.com>
+Content-Language: en-US
+In-Reply-To: <2dfae66f-1e34-40e5-a6a1-344ff4422028@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 16, 2024 at 08:36:33AM +0100, Conor Dooley wrote:
-> On Mon, Apr 15, 2024 at 08:34:05PM -0700, Charlie Jenkins wrote:
-> > On Sat, Apr 13, 2024 at 12:40:26AM +0100, Conor Dooley wrote:
-> > > On Fri, Apr 12, 2024 at 02:31:42PM -0700, Charlie Jenkins wrote:
-> > > > On Fri, Apr 12, 2024 at 10:27:47PM +0100, Conor Dooley wrote:
-> > > > > On Fri, Apr 12, 2024 at 01:48:46PM -0700, Charlie Jenkins wrote:
-> > > > > > On Fri, Apr 12, 2024 at 07:47:48PM +0100, Conor Dooley wrote:
-> > > > > > > On Fri, Apr 12, 2024 at 10:12:20AM -0700, Charlie Jenkins wrote:
-> > > 
-> > > > > > > > This is already falling back on the boot CPU, but that is not a solution
-> > > > > > > > that scales. Even though all systems currently have homogenous
-> > > > > > > > marchid/mvendorid I am hesitant to assert that all systems are
-> > > > > > > > homogenous without providing an option to override this.
-> > > > > > > 
-> > > > > > > There are already is an option. Use the non-deprecated property in your
-> > > > > > > new system for describing what extesions you support. We don't need to
-> > > > > > > add any more properties (for now at least).
-> > > > > > 
-> > > > > > The issue is that it is not possible to know which vendor extensions are
-> > > > > > associated with a vendor. That requires a global namespace where each
-> > > > > > extension can be looked up in a table. I have opted to have a
-> > > > > > vendor-specific namespace so that vendors don't have to worry about
-> > > > > > stepping on other vendor's toes (or the other way around). In order to
-> > > > > > support that, the vendorid of the hart needs to be known prior.
-> > > > > 
-> > > > > Nah, I think you're mixing up something like hwprobe and having
-> > > > > namespaces there with needing namespacing on the devicetree probing side
-> > > > > too. You don't need any vendor namespacing, it's perfectly fine (IMO)
-> > > > > for a vendor to implement someone else's extension and I think we should
-> > > > > allow probing any vendors extension on any CPU.
-> > > > 
-> > > > I am not mixing it up. Sure a vendor can implement somebody else's
-> > > > extension, they just need to add it to their namespace too.
-> > > 
-> > > I didn't mean that you were mixing up how your implementation worked, my
-> > > point was that you're mixing up the hwprobe stuff which may need
-> > > namespacing for $a{b,p}i_reason and probing from DT which does not.
-> > > I don't think that the kernel should need to be changed at all if
-> > > someone shows up and implements another vendor's extension - we already
-> > > have far too many kernel changes required to display support for
-> > > extensions and I don't welcome potential for more.
-> > 
-> > Yes I understand where you are coming from. We do not want it to require
-> > very many changes to add an extension. With this framework, there are
-> > the same number of changes to add a vendor extension as there is to add
-> > a standard extension. 
-> 
-> No, it is actually subtly different. Even if the kernel already supports
-> the extension, it needs to be patched for each vendor
-> 
-> > There is the upfront cost of creating the struct
-> > for the first vendor extension from a vendor, but after that the
-> > extension only needs to be added to the associated vendor's file (I am
-> > extracting this out to a vendor file in the next version). This is also
-> > a very easy task since the fields from a different vendor can be copied
-> > and adapted.
-> > 
-> > > Another thing I just thought of was systems where the SoC vendor
-> > > implements some extension that gets communicated in the ISA string but
-> > > is not the vendor in mvendorid in their various CPUs. I wouldn't want to
-> > > see several different entries in structs (or several different hwprobe
-> > > keys, but that's another story) for this situation because you're only
-> > > allowing probing what's in the struct matching the vendorid.
-> > 
-> > Since the isa string is a per-hart field, the vendor associated with the
-> > hart will be used.
-> 
-> I don't know if you just didn't really read what I said or didn't
-> understand it, but this response doesn't address my comment.
 
-I read what you said! This question seemed to me as another variant of
-"what happens when one vendor implements an extension from a different
-vendor", and since we already discussed that I was trying to figure out
-what you were actually asking.
+On 4/10/24 09:45, Dev Jain wrote:
+>
+> On 4/7/24 02:53, Muhammad Usama Anjum wrote:
+>> On 4/5/24 1:44 PM, Dev Jain wrote:
+>>> This patch tests the 4GB VA restriction for 32-bit processes; it is 
+>>> required
+>>> to test the compat layer, whether the kernel knows that it is 
+>>> running a 32-bit
+>>> process or not. Chunks are allocated until the VA gets exhausted; 
+>>> mmap must
+>>> fail beyond 4GB. This is asserted against the VA mappings found
+>>> in /proc/self/maps.
+>>>
+>>> Signed-off-by: Dev Jain <dev.jain@arm.com>
+>>> ---
+>>>   tools/testing/selftests/arm/mm/compat_va.c | 94 
+>>> ++++++++++++++++++++++
+>>>   1 file changed, 94 insertions(+)
+>>>   create mode 100644 tools/testing/selftests/arm/mm/compat_va.c
+>>>
+>>> diff --git a/tools/testing/selftests/arm/mm/compat_va.c 
+>>> b/tools/testing/selftests/arm/mm/compat_va.c
+>>> new file mode 100644
+>>> index 000000000000..3a78f240bc87
+>>> --- /dev/null
+>>> +++ b/tools/testing/selftests/arm/mm/compat_va.c
+>>> @@ -0,0 +1,94 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Copyright (C) 2024 ARM Limited
+>>> + *
+>>> + * Author : Dev Jain <dev.jain@arm.com>
+>>> + *
+>>> + * Tests 4GB VA restriction for 32 bit process
+>>> + */
+>>> +
+>>> +#define _GNU_SOURCE
+>>> +#include <stdio.h>
+>>> +#include <stdlib.h>
+>>> +#include <unistd.h>
+>>> +#include <sys/mman.h>
+>>> +
+>>> +#include <linux/sizes.h>
+>>> +#include <kselftest.h>
+>>> +
+>>> +#define MAP_CHUNK_SIZE    SZ_1M
+>>> +#define NR_CHUNKS_4G    (SZ_1G / MAP_CHUNK_SIZE) * 4    /* prevent 
+>>> overflow */
+>>> +
+>>> +static int validate_address_hint(void)
+>>> +{
+>>> +    char *ptr;
+>>> +
+>>> +    ptr = mmap((void *) (1UL << 29), MAP_CHUNK_SIZE, PROT_READ |
+>>> +           PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>>> +
+>>> +    if (ptr == MAP_FAILED)
+>>> +        return 0;
+>>> +
+>>> +    return 1;
+>> Usually we return negative value instead of positive one which indicates
+>> error situation.
+>>
+>>> +}
+>>> +
+>>> +int main(int argc, char *argv[])
+>>> +{
+>>> +    char *ptr[NR_CHUNKS_4G + 3];
+>>> +    char line[1000];
+>>> +    const char *file_name;
+>>> +    int chunks;
+>>> +    FILE *file;
+>>> +    int i;
+>>> +
+>>> +    ksft_print_header();
+>>> +    ksft_set_plan(1);
+>> There are multiple test cases. Instead of saying there is only 1 test.
+>> There should be multiple ksft_test_result{_pass,_fail} statements for 
+>> each
+>> sub-tests.
+>
+>
+> My initial idea was to treat this as a single logical test, as I
+>
+> am asserting the restriction on the number of chunks against
+>
+> the VMAs. I guess your approach is cleaner; thanks.
 
-> Consider SoC vendor S buys CPUs from vendors A & B and asks both of them
-> to implement Xsjam. The CPUs are have the vendorid of either A or B,
-> depending on who made it. This scenario should not result in two
-> different hwprobe keys nor two different in-kernel riscv_has_vendor_ext()
-> checks to see if the extension is supported. *If* the extension is vendor
-> namespaced, it should be to the SoC vendor whose extension it is, not
-> the individual CPU vendors that implemented it.
-> 
-> Additionally, consider that CPUs from both vendors are in the same SoC
-> and all CPUs support Xsjam. Linux only supports homogeneous extensions
-> so we should be able to detect that all CPUs support the extension and
-> use it in a driver etc, but that's either not going to work (or be
-> difficult to orchestrate) with different mappings per CPU vendor. I saw
-> your v2 cover letter, in which you said:
->   Only patch vendor extension if all harts are associated with the same
->   vendor. This is the best chance the kernel has for working properly if
->   there are multiple vendors.
-> I don't think that level of paranoia is required: if firmware tells us
-> that an extension is supported, then we can trust that those extensions
-> have been implemented correctly. If the fear of implementation bugs is
-> what is driving the namespacing that you've gone for, I don't think that
-> it is required and we can simplify things, with the per-vendor structs
-> being the vendor of the extension (so SoC vendor S in my example), not
-> A and B who are the vendors of the CPU IP.
-> 
-> Thanks,
-> Conor.
-> 
 
-Thank you for expanding upon this idea further. This solution of
-indexing the extensions based on the vendor who proposed them does make
-a lot of sense. There are some key differences here of note. When
-vendors are able to mix vendor extensions, defining a bitmask that
-contains all of the vendor extensions gets a bit messier. I see two
-possible solutions.
+Thinking again, using a lot of return statements is in fact making the 
+code easier
 
-1. Vendor keys cannot overlap between vendors. A set bit in the bitmask
-is associated with exactly one extension.
+to follow. If I just set a variable ret = 0/1 and use it to pass or 
+fail, I'll have to
 
-2. Vendor keys can overlap between vendors. There is a vendor bitmask
-per vendor. When setting/checking a vendor extension, first index into
-the vendor extension bitmask with the vendor associated with the
-extension and then with the key of the vendor extension.
+unnecessarily use a lot of if/else statements. Take a look at the 
+examples below.
 
-A third option would be to use the standard extension framework. This
-causes the standard extension list to become populated with extensions
-that most harts will never implement so I am opposed to that.
+>
+>>
+>>> +
+>>> +    /* try allocation beyond 4 GB */
+>>> +    for (i = 0; i < NR_CHUNKS_4G + 3; ++i) {
+>>> +        ptr[i] = mmap(NULL, MAP_CHUNK_SIZE, PROT_READ | PROT_WRITE,
+>>> +                  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>>> +
+>>> +        if (ptr[i] == MAP_FAILED) {
+>>> +            if (validate_address_hint())
+>>> +                ksft_exit_fail_msg("VA exhaustion failed\n");
+>>> +            break;
 
-This problem carries over into hwprobe since the schemes proposed by
-Evan and I both rely on the mvendorid of harts associated with the
-cpumask. To have this level of support in hwprobe for SoCs with a mix of
-vendors but the same extensions I again see two options:
 
-1. Vendor keys cannot overlap between vendors. A set bit in the bitmask
-is associated with exactly one extension. This bitmask would be returned
-by the vendor extension hwprobe key.
+I will have to set ret value here, forcing two statements inside the if 
+block.
 
-2. Vendor keys can overlap between vendors. There is an hwprobe key per
-vendor. Automatic resolution of the vendor doesn't work because the
-vendor-specific feature being requested (extensions in the case) may be
-of a vendor that is different than the hart's vendor, in otherwords
-there are two variables necessary: the vendor and a way to ask hwprobe
-for a list of the vendor extensions. With hwprobe there is only the
-"key" that can be used to encode these variables simultaneously. We
-could have something like a HWPROBE_THEAD_EXT_0 key that would return
-all thead vendor extensions supported by the harts corresponding to the
-cpumask.
+>>> +        }
+>>> +    }
+>>> +
+>>> +    chunks = i;
+>>> +    if (chunks >= NR_CHUNKS_4G) {
+>>> +        ksft_test_result_fail("mmapped chunks beyond 4GB\n");
+>>> +        ksft_finished();
+>>> +    }
+>>> +
+>>> +    /* parse /proc/self/maps, confirm 32 bit VA mappings */
+>>> +    file_name = "/proc/self/maps";
+>>> +    file = fopen(file_name, "r");
+>>> +    if (file == NULL)
+>>> +        ksft_exit_fail_msg("/proc/self/maps cannot be opened\n");
+>>> +
 
-I didn't list the option that we shove all of the vendor extensions into
-the same fields that are used for standard extensions because that will
-fill up the standard extension probing with all of the vendor extensions
-that most SoCs will not care about.
 
-The second option for hwprobe is nice because there are "only" 64 values
-supported in the returned bitmask so if there ends up being a lot of
-vendor extensions that need to be exposed, then we would end up with a
-lot of unused bits on most systems.
+I will have to set ret here, and enclose the below while statement inside
 
-For the internal kernel structures it matters less (or doesn't matter at
-all) since it's not exposed to userspace and it can always change.
-Having consistency is nice for developers though so it would be my
-preference to have schemes that reflect each other for the in-kernel
-structures and hwprobe.
+an else block. In short, saving the value of ret will require if/else blocks
 
-Thank you for working this problem out with me. I know there is a lot of
-text I am pushing here, hopefully we can design something that doesn't
-need to be re-written in the future.
+if I were to use it in the end in ksft_test_result(). When I use ksft_exit
 
-- Charlie
+statements, it is clear that a problem was spotted here, and there is
 
+no need to study the remaining code.
+
+>>> +    while (fgets(line, sizeof(line), file)) {
+>>> +        const char *whitespace_loc, *hyphen_loc;
+>>> +
+>>> +        hyphen_loc = strchr(line, '-');
+>>> +        whitespace_loc = strchr(line, ' ');
+>>> +
+>>> +        if (!(hyphen_loc && whitespace_loc)) {
+>>> +            ksft_test_result_skip("Unexpected format");
+>>> +            ksft_finished();
+>> I'm unable to follow as there are too many return statements. If you 
+>> divide
+>> the test into multiple sub-tests, you can skip/pass/fail each 
+>> sub-test easily.
+>>
+>>> +        }
+>>> +
+>>> +        if ((hyphen_loc - line > 8) ||
+>>> +            (whitespace_loc - hyphen_loc) > 9) {
+>>> +            ksft_test_result_fail("Memory map more than 32 bits\n");
+>>> +            ksft_finished();
+>>> +        }
+>>> +    }
+>>> +
+>>> +    for (int i = 0; i < chunks; ++i)
+>>> +        munmap(ptr[i], MAP_CHUNK_SIZE);
+>>> +
+>>> +    ksft_test_result_pass("Test\n");
+>>> +    ksft_finished();
+>>> +}
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
