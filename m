@@ -1,145 +1,181 @@
-Return-Path: <linux-kselftest+bounces-8255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8256-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E436B8A857F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 16:01:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 687C18A86AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 16:51:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 215F81C211F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 14:01:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26B0E1F212B1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 14:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970AA1411C4;
-	Wed, 17 Apr 2024 14:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8DE1428F7;
+	Wed, 17 Apr 2024 14:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQJl4ST/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0TE9tNy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EEF140E3D;
-	Wed, 17 Apr 2024 14:01:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5966C1411DB;
+	Wed, 17 Apr 2024 14:50:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713362497; cv=none; b=LQb3750zmU5UXKXW09Izz1mxysH+bDWmdyNfyju4MC+rs6TOTTHwB6V5Nhcatg7I8zTVyRUWihsB3Jn1lqZAUOpGQyBnM8eEtPciGyUfBDCowXHi8pNQSsYz3A9gwVZLlQmI8xox00/Lwc9GJBW0Cm63NpZyAakhHuvxZ0C0Nms=
+	t=1713365431; cv=none; b=PmZPPlZXynEAKggAjouHzX14Pdyy4w0WC0oOv0skEX3CEuXwRxaoiys2sHGc13uFK4UABAWFFnGtatfozAKoI9q7Kf9DOXJtHtGtZ9+4ljUfCc0tIirCgpyHX3W9rit+NajDFEWA9tt/CuM7Vp5L4qXWCYZGGvIxIpqm1XHPSWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713362497; c=relaxed/simple;
-	bh=CU+HeyH/ojny8KZnhNOlUonCof6xRoup05E6NQI+eDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ojyw0gZTTxu56yj6RWw5KWndTWsXG+NPntGnXYGDA/5827iZLQKxXdTa6w033Ker67OVslER9QD1Cmpj30lc3+b/21/+suiIrRs1OalL1Q0az7IM8XItDwkTOSw+K9tMUS0jN6a8l/zaQDLsWHM5hDCtujyBxNB2Lzy/Er3KE8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQJl4ST/; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-434c695ec3dso24098481cf.0;
-        Wed, 17 Apr 2024 07:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713362495; x=1713967295; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p1tT3cYXJu3UEQ4P60TpLumIC3N8bqb0igmiPgrEPJw=;
-        b=MQJl4ST/PqOmBVGK85WSDGRFz5z1vGJMZVn+/BybRzPQRrifNZm7Nmf9QQxQeF9Qm2
-         lempYDBSDABxo5EYkGAlH6bdj3SmPRTa7T6BlhZR4uHD5jT7oB/vbCTB8gF6lCT9RWbM
-         mm4VEUkGnzq2scEh+EpLdMxYfFnEMa0apnJiwP9eAzPqkkr8gu4zypVBkIMt/YYT7CMU
-         h5Tctswzq5Zg8pcVfGzpGqslBi/1SHFi8rcbPpYSpcLp1HUvTqmUgY7qP7FdX+Nl/FtQ
-         UiRNMKPvnEBZ0NDdAigJs2opeUBML4rSVTmdJUf9LjPXl5gekkk108U7x8LDQBj02TTZ
-         UDIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713362495; x=1713967295;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=p1tT3cYXJu3UEQ4P60TpLumIC3N8bqb0igmiPgrEPJw=;
-        b=LdxZduobMbtcZ8qg4x8KiXILDNbTVUrjXOt730XDAqEyvOmiYBdP5cB6VTJlzBKw1M
-         JgDsrf0gD0BZ5FzBRerdFXI12ZOQ6+gcdemqGSSdQvkAWxa93ZQgJgpytcmQTjpTOINw
-         zZ4lQvVji8BgTSaJ1zUeugGvl+KHjAvkH5MTTUlgLatd0tPqh0NZJYVCcjnu1GBvRB4l
-         9AduRvrLWV4zpajg3reOS6nHuC/64jolSwExJuY8xaHjU5/AiGKHKmn/cFAlsU6eB+M0
-         Sl4/JY+HcBe+qdRPo0cQBOM/blDnfs67Ru40Ot7EgNyzFzTpYVq9DPqKCb1mk84FO1J5
-         aj7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWpI+fLc2DX+GW0SbaJjILLzAq+iU7h6gtGcpq7ZSNHSv/jKsKFObX+cj7gg6ecjb+7U3wUjIsVsUI92EN/HvPKWsjmlSMGALKuazHUIHHdhKhh609bmxKP2+ljpUx+xclzO5LoQnxogJdS8r64CcB5V/4VNbRIJHCN78oBuEehQARPV+sr
-X-Gm-Message-State: AOJu0Yx7ZTOVhV6NfA51d1DQ9e54kP1tZbN2U5uG2MNwWf8d8zO8ZBcX
-	HdVFH+GTYpANW/3XZMiVqBhJPypLs7GSCeqpegKmTfOsgZK+mHYJzxaO+w==
-X-Google-Smtp-Source: AGHT+IGwTfoazo/W+mHuGauFRi22Q3/jlm0lmB2lmKtHEYWXxKWBX4U6oEuNpob9eIHzQul5Jfwrbg==
-X-Received: by 2002:ac8:5ad5:0:b0:434:e71b:f9e1 with SMTP id d21-20020ac85ad5000000b00434e71bf9e1mr21367015qtd.10.1713362494869;
-        Wed, 17 Apr 2024 07:01:34 -0700 (PDT)
-Received: from debian ([146.70.204.204])
-        by smtp.gmail.com with ESMTPSA id kg26-20020a05622a761a00b00434c1eedb0esm8088375qtb.36.2024.04.17.07.01.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Apr 2024 07:01:34 -0700 (PDT)
-Message-ID: <ec343187-caea-4b60-af7c-f232e31d2cf2@gmail.com>
-Date: Wed, 17 Apr 2024 16:01:22 +0200
+	s=arc-20240116; t=1713365431; c=relaxed/simple;
+	bh=FykH/T46P+7wCQWaQbgZ5I3yQADVR9jYDVfl8lpXZM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NfnvJLmgJ1D/1SovZLX32Y3CPm69iGic+Z7cBFHhyi4/8tOyAU2DyteJ3FI8Vw+yrVnCiKF7cMx+QFzQ8R4vkWD7fj7120JFDJ4T/E1dA3O7qc8JS5mn7kcUMi+8NNmVGG3T15RTYbkRYi6mJ82UozaqpgHpe5/tlXORW17xut8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0TE9tNy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0ADC072AA;
+	Wed, 17 Apr 2024 14:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713365431;
+	bh=FykH/T46P+7wCQWaQbgZ5I3yQADVR9jYDVfl8lpXZM8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S0TE9tNy0I6n0GmJCfpRHv5LLvD0sH8KvnXmmKZyKXPN+5gEXa1Q4AzpPYORPb1xh
+	 6FZSy9x854VCtsJj3uGAdR0tZAl4NgVGuKIpFvzOv7wQ/K1slgqe+H/pZwCHuXNc+I
+	 OdqHsqKaB1sZzrNKlgxgQSHT6SVN4ew8Xt1FvR89JkG94e9Y5WUwwr6m3CcTva7TVU
+	 axGqATm2OFiDzneSdmBmoG6CAyUFtgtaE6OtFXe+jyNkvltWV5OGGXBYFS1/HqHN+1
+	 VATui1UTMFtHkyEBpfjqFA3OoMm0FuBmS5Qtw6Vov597ADDOjsY7mHjcUEne6ZAG6x
+	 lLhgT/5aLIfzg==
+Date: Wed, 17 Apr 2024 15:50:24 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 13/17] riscv: vector: Support xtheadvector save/restore
+Message-ID: <20240417-semisweet-willed-1ce1098d8c41@spud>
+References: <20240415-dev-charlie-support_thead_vector_6_9-v2-0-c7d68c603268@rivosinc.com>
+ <20240415-dev-charlie-support_thead_vector_6_9-v2-13-c7d68c603268@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v7 3/3] selftests/net: add flush id selftests
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240412155533.115507-1-richardbgobert@gmail.com>
- <20240412155533.115507-4-richardbgobert@gmail.com>
- <661b299dbed73_3cb63829464@willemb.c.googlers.com.notmuch>
-From: Richard Gobert <richardbgobert@gmail.com>
-In-Reply-To: <661b299dbed73_3cb63829464@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="TWtuz8+j2Sj8ixHN"
+Content-Disposition: inline
+In-Reply-To: <20240415-dev-charlie-support_thead_vector_6_9-v2-13-c7d68c603268@rivosinc.com>
 
-Willem de Bruijn wrote:
-> Richard Gobert wrote:
->> Added flush id selftests to test different cases where DF flag is set or
->> unset and id value changes in the following packets. All cases where the
->> packets should coalesce or should not coalesce are tested.
->>
->> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
-> 
-> Thanks for adding tests. Minor point below only. The tests pass both
-> before and after your series, right? Then immediately a nice
-> validation that the optimization has no unintended side-effects.
-> 
 
-Yes, the logic is preserved - tests pass both in net-next and after
-applying the patch :)
+--TWtuz8+j2Sj8ixHN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> ---
->>  tools/testing/selftests/net/gro.c | 144 ++++++++++++++++++++++++++++++
->>  1 file changed, 144 insertions(+)
->>
->> diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
->> index 353e1e867fbb..74ab06953c38 100644
->> --- a/tools/testing/selftests/net/gro.c
->> +++ b/tools/testing/selftests/net/gro.c
->> @@ -617,6 +617,120 @@ static void add_ipv6_exthdr(void *buf, void *optpkt, __u8 exthdr_type, char *ext
->>  	iph->payload_len = htons(ntohs(iph->payload_len) + MIN_EXTHDR_SIZE);
->>  }
->>  
->> +static void fix_ip4_checksum(struct iphdr *iph)
->> +{
->> +	iph->check = 0;
->> +	iph->check = checksum_fold(iph, sizeof(struct iphdr), 0);
->> +}
->> +
->> +static void send_flush_id_case(int fd, struct sockaddr_ll *daddr, int tcase)
->> +{
->> +	bool send_three = false;
->> +	static char buf1[MAX_HDR_LEN + PAYLOAD_LEN];
->> +	static char buf2[MAX_HDR_LEN + PAYLOAD_LEN];
->> +	static char buf3[MAX_HDR_LEN + PAYLOAD_LEN];
->> +
->> +	create_packet(buf1, 0, 0, PAYLOAD_LEN, 0);
->> +	create_packet(buf2, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
->> +	create_packet(buf3, PAYLOAD_LEN * 2, 0, PAYLOAD_LEN, 0);
->> +
->> +	struct iphdr *iph1 = (struct iphdr *)(buf1 + ETH_HLEN);
->> +	struct iphdr *iph2 = (struct iphdr *)(buf2 + ETH_HLEN);
->> +	struct iphdr *iph3 = (struct iphdr *)(buf3 + ETH_HLEN);
->> +
-> 
-> minor: variable defintions before code, and reverse chrismas tree.
+On Mon, Apr 15, 2024 at 09:12:10PM -0700, Charlie Jenkins wrote:
 
-Good catch, I'll apply these changes and push v8 when the relevant series
-for net will be merged. Thanks!
+> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+> index 6727d1d3b8f2..f42eaa8178e9 100644
+> --- a/arch/riscv/kernel/vector.c
+> +++ b/arch/riscv/kernel/vector.c
+> @@ -33,10 +33,24 @@ int riscv_v_setup_vsize(void)
+>  {
+>  	unsigned long this_vsize;
+> =20
+> -	/* There are 32 vector registers with vlenb length. */
+> -	riscv_v_enable();
+> -	this_vsize =3D csr_read(CSR_VLENB) * 32;
+> -	riscv_v_disable();
+> +	/*
+> +	 * This is called before alternatives have been patched so can't use
+> +	 * riscv_has_vendor_extension_unlikely
+
+() after that function name please.
+
+> +	 */
+> +	if (has_xtheadvector_no_alternatives()) {
+> +		/*
+> +		 * Although xtheadvector states that th.vlenb exists and
+> +		 * overlaps with the vector 1.0 vlenb, an illegal instruction is
+> +		 * raised if read. These systems all currently have a fixed
+> +		 * vector length of 128, so hardcode that value.
+
+I had this written before the meeting, so pasting it anyway:
+-- >8 --
+=46rom 5ed25d0f841e755b8dd4f1f6a3ea824601758d8e Mon Sep 17 00:00:00 2001
+=46rom: Conor Dooley <conor.dooley@microchip.com>
+Date: Wed, 17 Apr 2024 14:39:36 +0100
+Subject: [PATCH] dt-bindings: riscv: cpus: add a vlen register length prope=
+rty
+
+Add a property analogous to the vlenb CSR so that software can detect
+the vector length of each CPU prior to it being brought online.
+Currently software has to assume that the vector length read from the
+boot CPU applies to all possible CPUs. On T-Head CPUs implementing
+pre-ratification vector, reading the th.vlenb CSR may produce an illegal
+instruction trap, so this property is required on such systems.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+We could actually enforce the latter since we know the compatibles of
+the relevant CPUs and can tell if xtheadvector is present.
+---
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentat=
+ion/devicetree/bindings/riscv/cpus.yaml
+index d067f2a468ee..2a6449a0f1d7 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -95,6 +95,12 @@ properties:
+     description:
+       The blocksize in bytes for the Zicboz cache operations.
+=20
++  riscv,vlenb:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      VLEN/8, the vector register length in bytes. This property is requir=
+ed in
++      systems where the vector register length is not identical on all har=
+ts.
++
+   # RISC-V has multiple properties for cache op block sizes as the sizes
+   # differ between individual CBO extensions
+   cache-op-block-size: false
+--=20
+2.43.0
+
+
+
+> +		 */
+> +		this_vsize =3D 128;
+> +	} else {
+> +		/* There are 32 vector registers with vlenb length. */
+> +		riscv_v_enable();
+> +		this_vsize =3D csr_read(CSR_VLENB) * 32;
+> +		riscv_v_disable();
+> +	}
+
+--TWtuz8+j2Sj8ixHN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZh/hsAAKCRB4tDGHoIJi
+0uymAQC52tKEjWhnlrK5EZxs57FTgtZequO5iT1oxcXhr1buWwD/eH4/QhI+A7+a
+rSSXaCKwy6W28YxEUDpHe9r7Re8SMgs=
+=l2tD
+-----END PGP SIGNATURE-----
+
+--TWtuz8+j2Sj8ixHN--
 
