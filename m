@@ -1,52 +1,82 @@
-Return-Path: <linux-kselftest+bounces-8261-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1FC38A8871
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 18:08:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 033668A88A0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 18:16:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76CF61F21358
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 16:08:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0595FB24A70
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 16:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14BB61487D2;
-	Wed, 17 Apr 2024 16:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F061F147C9E;
+	Wed, 17 Apr 2024 16:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mxulp7+t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AECC1487C0
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Apr 2024 16:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F85884E14;
+	Wed, 17 Apr 2024 16:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713370077; cv=none; b=TzYQZx2CdFb0mELnlEZtP0pQlqNTBmNNq5UhXcqGymN5+MMn0Feb5GGFwQLdmT1QabnffhW+4NJXIDeU/CxNEi5vSHc49kf5uB/Y+dbjR2h9QC29cJC3k/4a+zQPTgE0VDIwQZofUegKOV7RoInW1DpKNRnhGu2XDKMFKQAZiYQ=
+	t=1713370589; cv=none; b=qT22NlYHDHp3Lj3lnHkXajKoA4DCCYHY4Fu9R74HwNAVRPyPpCvjaZJKmAVc7xxVLwXhulqwtbdIsIKrzQg/NK2EErYLZPVfCPtvAkqJK1b3blap3OVwncf/GNlGAD9ARdMTzxw5B+2ccsa9+EEPXmJ2KpP/t/6n6wJvzurKKFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713370077; c=relaxed/simple;
-	bh=CQbouKF6TmFvPaEviWNdSnywfj9tnXssXppxPfpOkUI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IOBoNcw3E06g6dwl2E1LcjqxBs4DhVTNi52P/IfHbrUIAi9wet8b1WSssRj8HmX9RuKmZp0FsO7y3pEhbsDcAZG115d4XsYOl33ZmBOREg+S9jWFml9I9TddnmE/vJEJSuIikVvp6san5/5OF2aEQ8CpQ74O7m5OEdM/70sdb/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B002339;
-	Wed, 17 Apr 2024 09:08:21 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B64F3F792;
-	Wed, 17 Apr 2024 09:07:52 -0700 (PDT)
-From: Ryan Roberts <ryan.roberts@arm.com>
+	s=arc-20240116; t=1713370589; c=relaxed/simple;
+	bh=Krgol5AK1VFttgbaqcU7tHbCyGc9k/AScToO1HICDbc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZFn8t7Bp7e6b3tFPaI251u37VeR73kvxOCPOYrqHgoOGo1axo6eaFdS+Eyn6QhUkcpu+9h1cQh8KiPEbc2U/HlbJdTqDWKjG3nhl5uvQ03V9I2b+5m+wiTPZ83uA6BA1mzVp/eo+CuLI5Vanr4YDB+aIw2sPetU9aA0Yj56PIQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mxulp7+t; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5176f217b7bso10366170e87.0;
+        Wed, 17 Apr 2024 09:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713370586; x=1713975386; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pe+uR9BPb/oqFUBU5dono2lVV+upurW6YfGvFkf6LsY=;
+        b=Mxulp7+t/ArDfdC6wem3JPnAxzZ4QJtXE17ITGarSF7Q5Af5yF2Feso/f/awHqYfog
+         qhC0XFrryUh7h+PWflK6xpCiYqwWD3+L7ka0CploYtWFMVWG2ZK8FCLlJkrY4tzZHzpl
+         0FWClTAzyOWu51cJYVp1orQwbSYfOPiDNsI/MPto3lkUklYv4YoBFK9KsvXuZaTjSVck
+         IqqQlCFIJjsUGVuhfq/+xj+PIUZ9S0FJtrdpXyE9/E5Gn/G92Jd2OFHQ9LK9gLazzJ7s
+         3y8E2zUyXbQOsrLyzuuvX6zHruidZqcsTqndMQ68TPta8eWCstggPZiu/eCiUUsulPS1
+         Cwxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713370586; x=1713975386;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pe+uR9BPb/oqFUBU5dono2lVV+upurW6YfGvFkf6LsY=;
+        b=YQdHQor4fmfqWfCrDW8kSxMJyWJ7sE7lnBj+xdbnN2zxL7dOU6VEZOzBcJBxsVgDaZ
+         pwnibW1QbY53/shGNoN3iGXRkV32ykMOlPkr0NtChyaACsXbxSm/9llZNuT2r6l7Qd/1
+         krMlBK/W9NhG/rxoHyuCLy8zs5ysGYEaktnR8wla5zFKLkSNi3vS1AHGfOp/Tk25Rkc6
+         mxGx62Yz4yPl3+BKqDv3R4GznEd56l6c2vHlQS9m7ZKVLxbAuvnC5ir0mNiF+cX8HguM
+         ndHcLqo9TfbR1PLaCShgROpL4OFchS2dH871/tyxdunUGp0l1BF/WMlXHaRxpYCYuvf3
+         yfLg==
+X-Forwarded-Encrypted: i=1; AJvYcCXjj4e6L7EbwubVX5nJmPXm2jUJIJb3aOCqcLlRrhp3SFqy4bjb6yOOx78L7ezB8CrtAqVdmJ11M8BK5BGFVFQypJNYLd/0/WSaRq/8MorFVDJ/Xb0aqPSo+2JLEVQP/dXzCRtKt8soO+axsCZ1
+X-Gm-Message-State: AOJu0YzHZ/8UyNs6yNPaKiJXLWz1e1tGG1qgXAbGsZ+LJZZDeI2qeHsV
+	IAJCc5kT8EkhoDVOnHOLFshbIHDp/6siN2xObY2IHS7m7CBzAU7FnQING0dZZBM3zQ==
+X-Google-Smtp-Source: AGHT+IEkY7P4AFWYwkYyKLfr8cDK0pP3jwxY/48uBiMdWNhvCs8rvo+P8wHKjnGAFlSJYjn5hRYL6g==
+X-Received: by 2002:ac2:53b3:0:b0:518:c2a5:5a3b with SMTP id j19-20020ac253b3000000b00518c2a55a3bmr8662347lfh.46.1713370586260;
+        Wed, 17 Apr 2024 09:16:26 -0700 (PDT)
+Received: from localhost ([185.204.1.218])
+        by smtp.gmail.com with ESMTPSA id o1-20020a056512052100b00513d1e9ce7esm1983196lfc.90.2024.04.17.09.16.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Apr 2024 09:16:25 -0700 (PDT)
+From: Amer Al Shanawany <amer.shanawany@gmail.com>
 To: Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Amer Al Shanawany <amer.shanawany@gmail.com>,
+	Miklos Szeredi <mszeredi@redhat.com>,
 	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel test robot <yujie.liu@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] selftests: Fix asan linkage to work with clang
-Date: Wed, 17 Apr 2024 17:07:40 +0100
-Message-Id: <20240417160740.2019530-1-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
+	linux-kernel@vger.kernel.org
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH] selftests: filesystems: add missing stddef header
+Date: Wed, 17 Apr 2024 18:16:23 +0200
+Message-Id: <20240417161623.37166-1-amer.shanawany@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,68 +85,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Both fchmodat2 and openat2 statically link against libasan (for
-explanation of why, look at the fixes commit). This is done using
-`-static-libasan`. However, it turns out that clang uses a different
-option, `-static-libsan`. This caused clang to fail to compile the
-tests.
+fix compiler warning and errors when compiling statmount test.
 
-Fix this by using cc-option to figure out which variant to use.
-
-While we are at it, stop passing helpers.h as a compilation unit. This
-was causing another clang error due to name conflict with helpers.c's
-object file. This header shouldn't be directly compiled anyway.
-
-Fixes: c652df8a4a9d ("selftests: link libasan statically for tests with -fsanitize=address")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
 ---
+ tools/testing/selftests/filesystems/statmount/statmount_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applies on v6.9-rc4.
-
-Thanks,
-Ryan
-
- tools/testing/selftests/fchmodat2/Makefile | 5 ++++-
- tools/testing/selftests/openat2/Makefile   | 7 +++++--
- 2 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-index 71ec34bf1501..a68bb5a00797 100644
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -1,6 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
-+# We need this for the "cc-option" macro.
-+include ../../../build/Build.include
-
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-+CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
- TEST_GEN_PROGS := fchmodat2_test
-
- include ../lib.mk
-diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-index 254d676a2689..02af9b6ca5eb 100644
---- a/tools/testing/selftests/openat2/Makefile
-+++ b/tools/testing/selftests/openat2/Makefile
-@@ -1,8 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
-+# We need this for the "cc-option" macro.
-+include ../../../build/Build.include
-
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
-+CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
- TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
-
- include ../lib.mk
-
--$(TEST_GEN_PROGS): helpers.c helpers.h
-+$(TEST_GEN_PROGS): helpers.c
---
-2.25.1
+diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+index 3eafd7da58e2..e6d7c4f1c85b 100644
+--- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
++++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+@@ -3,6 +3,7 @@
+ #define _GNU_SOURCE
+ 
+ #include <assert.h>
++#include <stddef.h>
+ #include <stdint.h>
+ #include <sched.h>
+ #include <fcntl.h>
+-- 
+2.34.1
 
 
