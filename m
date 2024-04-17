@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-8252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 174D88A840F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 15:17:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91C758A8508
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 15:42:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C30DB253A0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 13:17:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C406282E32
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 13:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81EBB13D60E;
-	Wed, 17 Apr 2024 13:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415FF13F443;
+	Wed, 17 Apr 2024 13:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rqLKBuk1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uxe+qeP1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4703B13C9AD;
-	Wed, 17 Apr 2024 13:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B63213F42D;
+	Wed, 17 Apr 2024 13:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713359835; cv=none; b=czmQyiN4YNlIXR9QYP+cHsHCqJHBLI71203R25DeqwL1ZzilRejrIyCPg3lRtFMpsW7mxTgzBvLCtTU53pcvBo2Nv3L1fTSh40jox2v6QEzjwO64isYMb8N3GTLPqfd9Fdc58CK8b0ZvrOAB0bFujtHuuEPJBJanN9XsdBSr9NY=
+	t=1713361369; cv=none; b=s1eVofJMpRFwv78YN4aOgmSyuOFrjRBvhNoo5F5G1BWtV6Q53aSkh5tr1KXr7ZDBk+8a/BiJ0W73yNLjOoqIGEo1OEoeFXy1XsM83vpKuM1NHUDzY5ms/kwIs5yIX3YaabiSibKrN7132JDB/0GEecku8ArOkijM4k1BgZbRrc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713359835; c=relaxed/simple;
-	bh=alhGN+BKV7wgbVup4sXt3hrvumvenMTPAR+TvP2En3Y=;
+	s=arc-20240116; t=1713361369; c=relaxed/simple;
+	bh=exPu4RcMsk/1+QRfafTnptMZ6ljl6Uz5WGS7JHUbSG0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VI5QAsARPPV0bN4BfxuYZTjmlYUMzFOLIeLGd5awA/KKALvZmuCFh4+9AkEfjVFjCa4CsDYvgRG6SbUtHiPbarmY1dgWNvxXQBzTQ0iRuiJipNapx46odEqtj4IPpNjmh2JEQa1HZ1yj9WFn8XEG9JMybAsOJFLaucuEzoeP4So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rqLKBuk1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E54BC072AA;
-	Wed, 17 Apr 2024 13:17:10 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=egP+pxChIbjkio5fh0Qp70ri3zC5f3//VplYa1aSJgOCWj2DWBFR0V4gP2y/nt/eEcVygegi7zFbvENH/T4mukcWaAUOYL172cD8mRcwcBi4h2zxWm9jcM3XPvqVLCbMfESFY+YEAUEkVsXXa2wYK+prjJadzekarrEkDHPlH9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uxe+qeP1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D799C3277B;
+	Wed, 17 Apr 2024 13:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713359834;
-	bh=alhGN+BKV7wgbVup4sXt3hrvumvenMTPAR+TvP2En3Y=;
+	s=k20201202; t=1713361368;
+	bh=exPu4RcMsk/1+QRfafTnptMZ6ljl6Uz5WGS7JHUbSG0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rqLKBuk1m5MKL9KVN45H3pwRnjDOdWra/5JlEDljYsjkHbjtEluLcRSZBvoTD4uG5
-	 yqoGOZx3DST5aACiilAzj5Ee05RFDVT0orpP3CQDULHkWy/EJkytIowN71HyADeZyX
-	 2ozOcx2clYuILK7rSdtJ8mFAo4ZyyL9LsFG4/gGPZdNVnEhSdG2n/bkZ7khozcTb9x
-	 ts0aVnzhznRHNSuoxk48yCiB1y8DEOnN1t8VldlHNMk1wzwJRhZri6sw5mNlcEhR3E
-	 unRMZMrSMeEt6G+OSSmOnGFKgDQhwi+EcxX5QhwO4RMbJ1x8wpCnHzvg0XacSVmIWH
-	 rs08zpsoxouUw==
-Date: Wed, 17 Apr 2024 14:17:08 +0100
+	b=uxe+qeP1yFDPT1hD9RgNKZpz03zbMYoYMhxqPRwisGF9SsPrzxEkUxX75wQv3zBhA
+	 BRx4qPfoMxWPdmJwOIK9wFA+qQYzEG1dHt/VODsEgTHspeEyo2FRzPdK/fhuAus2Q8
+	 ylR0jMTstUpWiASwRHCg56D+AUdM2rw88Zawp5HQxNXB+vJajPhhiKr+NK9Y/hMrkH
+	 P5SN9ZALpHHXlYBftOidVumzDmLewTgO400T9jwqyCuXvtQ/odwwW1dahLq0xrtTMx
+	 KE+MFqbTrbccApemLfMPMIb0sr3ngW/lgmXlnzVM1lPk7ua6IcTNR3De9KsJ29aUhp
+	 8KxeJSNxWvmBQ==
+Date: Wed, 17 Apr 2024 14:42:41 +0100
 From: Conor Dooley <conor@kernel.org>
 To: Charlie Jenkins <charlie@rivosinc.com>
 Cc: Rob Herring <robh@kernel.org>,
@@ -59,12 +59,12 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
 	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH v2 00/17] riscv: Support vendor extensions and
- xtheadvector
-Message-ID: <20240417-rubdown-ferment-c07abead4edc@spud>
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 06/17] riscv: Extend cpufeature.c to detect vendor
+ extensions
+Message-ID: <20240417-automaker-baton-bd816e1bd975@spud>
 References: <20240415-dev-charlie-support_thead_vector_6_9-v2-0-c7d68c603268@rivosinc.com>
+ <20240415-dev-charlie-support_thead_vector_6_9-v2-6-c7d68c603268@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,34 +72,49 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="YH2gLI+t3mGjNp/D"
+	protocol="application/pgp-signature"; boundary="p0QSKblu8bR1+Anb"
 Content-Disposition: inline
-In-Reply-To: <20240415-dev-charlie-support_thead_vector_6_9-v2-0-c7d68c603268@rivosinc.com>
+In-Reply-To: <20240415-dev-charlie-support_thead_vector_6_9-v2-6-c7d68c603268@rivosinc.com>
 
 
---YH2gLI+t3mGjNp/D
+--p0QSKblu8bR1+Anb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 15, 2024 at 09:11:57PM -0700, Charlie Jenkins wrote:
-> This patch series ended up much larger than expected, please bear with
-> me! The goal here is to support vendor extensions, starting at probing
-> the device tree and ending with reporting to userspace.
+On Mon, Apr 15, 2024 at 09:12:03PM -0700, Charlie Jenkins wrote:
 
-btw, patches 7 to 13 (inclusive) have compilation issues, eg:
-  ../arch/riscv/kernel/sys_hwprobe.c:16:10: fatal error: 'asm/vendor/thead.h' file not found
+> @@ -351,6 +343,14 @@ static void __init riscv_parse_isa_string(unsigned l=
+ong *this_hwcap, struct risc
+>  		bool ext_long =3D false, ext_err =3D false;
+> =20
+>  		switch (*ext) {
+> +		case 'x':
+> +		case 'X':
+> +			pr_warn("Vendor extensions are ignored in riscv,isa. Use riscv,isa-ex=
+tensions instead.");
 
+Was looking for something and noticed this - pr_warn_once() I think.
 
---YH2gLI+t3mGjNp/D
+> +			/*
+> +			 * In canonical order, the remaining extensions in the
+> +			 * isa string will be vendor extensions so exit.
+> +			 */
+> +			break;
+>  		case 's':
+>  			/*
+>  			 * Workaround for invalid single-letter 's' & 'u' (QEMU).
+
+--p0QSKblu8bR1+Anb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZh/L1AAKCRB4tDGHoIJi
-0siXAQDBDEKygyQs+AVjskeLlKrUS4PfJcdGnHVWOEesZlMVawEAx9vUmP2ewJ52
-ZeM2jwhjqH1xTmob4w9HdNOB+io3vgM=
-=p6Hb
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZh/R0QAKCRB4tDGHoIJi
+0vzZAQCEhpBLtL/EDT9fUbss6os6B1Bq+MiUtQnftDZaXWVoyAD+LTrtP2tTsvuJ
+r6qruyvOjKVA6j/gDB5rHH3TKzICzwk=
+=MO+X
 -----END PGP SIGNATURE-----
 
---YH2gLI+t3mGjNp/D--
+--p0QSKblu8bR1+Anb--
 
