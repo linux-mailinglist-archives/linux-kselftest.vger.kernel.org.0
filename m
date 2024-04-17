@@ -1,849 +1,297 @@
-Return-Path: <linux-kselftest+bounces-8259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8260-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABF168A87E0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 17:40:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B2E8A8864
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 18:02:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63A4528796F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 15:40:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DEE3B221A4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 16:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707C415E1F7;
-	Wed, 17 Apr 2024 15:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE3251487E4;
+	Wed, 17 Apr 2024 16:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iZLrwoXJ"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="fgH0htXd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CE913C3EF;
-	Wed, 17 Apr 2024 15:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA42148301
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Apr 2024 16:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713368241; cv=none; b=kAbAlJhW6JJ3AXajOZci6jVrl+sVxONMwIYAHp2uji9AKDy2lV7oM6BRzvra59qLKjGoniZsj4ywSXQlD4OV5Q3eBPebBlRAEjXXcdYu2pNCbCaaO4s0juGaQ6OJfgc+xoQ8Njp+ddPdCfhrhJMN3f+Iuz/estSt7R98F6WpQ1E=
+	t=1713369765; cv=none; b=TTAu5Yv4Hbf1XJI2JCeFW4qh7xvXpfjXiUxx+9t41+6dXbscllGjmT3zdcBAcSD1db3E7neK99feKzPCOlWIwskjXanB2DF+pGTBkB5fJItWSOeJgAo73WQlmqcVIMfoSyCuZSWiU0/29DHzAAfVHoUM8frVPRgLtVImdfYJdlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713368241; c=relaxed/simple;
-	bh=JfzOhH8Ke+eMa566lzerBe6MT2M+20uBK6LSEGG2Q7Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BhHSd60zgj0a2KwyjdDJIt7YcfUWVQo5UsAxpa1hXSdpLAKo2iZxZvgYiuHvxQnhjz+E+L9fjfks6H9zmN67fhFP0WQF2KrC0R5Ya6xGFmERmCuM4tN6GdVXjWGPBTjuKVBoMJaQkcB1zEcXdjTxrsHV1hyQBfLar1jD4a28tuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iZLrwoXJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 611FFC072AA;
-	Wed, 17 Apr 2024 15:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713368240;
-	bh=JfzOhH8Ke+eMa566lzerBe6MT2M+20uBK6LSEGG2Q7Q=;
-	h=From:Date:Subject:To:Cc:From;
-	b=iZLrwoXJguugmazh+Me3UvuAcfWXx8tys3VGVdsgRV53QpsUs4PWHpjqOc3Ujl5Vj
-	 IFGmpeImVEqw9QHq2Ebczu0kI8Xfxvx5fnCjR0bWOebATdQTy1tM2cmOYY6gEP5q5Y
-	 x2TWrE+7DMMye+0JdPyIbvJfsXk+U16exIZdvzS0y8dagYEu9PUdrQyHcAaW1KHuMV
-	 e+LIz++5oclQsTeSAqT60owP7Tv6RCjs71P+jKrvb4S6pyodWGM6TAqZJefIdPQCoC
-	 YERpEzRJNnT+3dhOjzjRWjTsqkR/xDeEhWS+zA04jS4XK+phd/39zS77L/MGH6dUWG
-	 c/3K9af7sTYMg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 17 Apr 2024 08:37:15 -0700
-Subject: [PATCH] selftests: Make ksft_exit functions return void instead of
- int
+	s=arc-20240116; t=1713369765; c=relaxed/simple;
+	bh=9i5GLFu0+txx2oabKEnFrp3VW7oPnVCY8MLnNIpHG6Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DIBgaj9wpx1E0Pku+jeOtuhyAHWF8u0rUXVV8v5atlOcQB1ZNY6pSX+A16ysaN0Ff6TNv6pzdWHABZ1fkx1ibaiMyeiOOQj2Av9IOA+ZO30H2Lkibs54MNFbyFit+tCsXo665xHoN7lCrqKKZ8/P6jRqGg1gZVXuxFUuaYxmclQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=fgH0htXd; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-518a3e0d2ecso7616953e87.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Apr 2024 09:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713369762; x=1713974562; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nq5XbwnS+WFQsMRXNS2/WLzQBLtULwJiFEsG0xNKfbk=;
+        b=fgH0htXdSSmMkNY4k7dHlDgp2o3+1XlO+F9VYbFNb/a8jtysrIUYzJmEWrrFSZeUb/
+         9T3ydVYP2tCiJECXf4t0k84xgJBUJD7Ymx5CPJA3Y6KLsPd2HUxl8KWtm2D4XkxFu7ca
+         AvwMY8KRFCHPkkqT8+CcRjWm0sQAkdJfcmKRwABZhRzmHHK640gDwkdnebz5j6Wxv+9b
+         RcnpoirM+nGWuYhkJw/QlA3yNPWavPwNNBjuYKi2C1ATmLLdAcGUsjtb3ptoxAMrxbg2
+         /ZJYqxVg263o/zfrUofXA5crcV34dXne4hWqwYf6tbaY7UiI1wSU4fUBAl/c4QRs3vnw
+         lvfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713369762; x=1713974562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nq5XbwnS+WFQsMRXNS2/WLzQBLtULwJiFEsG0xNKfbk=;
+        b=OrJ96EljnX7GU2vbFxOt8oc3U/OgUMEjqja75w6u7cwvnFPMPlUM/G4W7elPywh+hf
+         CNkvaQWgVyYVLQsVrt4KZarJ8aHd5op6yAWZqpLPnaJ5Utd/sDEdEjM+E9wbIv7GomJn
+         /p14I1XT/AG/ygR/VYPbbaZORlCJQhCb3f7mggHAC/WFF1fcOFJUG1l5Q6qqGAZ3P7Vw
+         J//gxOd1GvvX1ZRqlVnhlIpEeQDm+SzBdbKniJtjKG92QacU+OHYIIVMrkbYcyF2R8ug
+         YGVwQRvmdaOKK/s0owFrKvU/tpM08uiZm7BFlOmw+XsP8OTory0xVutrQ2oJFbMLDmub
+         8+zQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkj8CjjOyQ+99WUwL+ebkoYl9iXCGlN8E64RA9bE6MJhzspT3UG3zP3MDPg4IqHzKCxBfEis3b9hISAozRiPBtPi6RicUTSgxYuewIElAB
+X-Gm-Message-State: AOJu0YzSBcezxpCgutc7xbfVv5Q/Z3r+lDTjNv483XYN6jnxKHzSBlLD
+	W8/iFbZpuqRCsHN4GEpr/CAOcG3P0DVWsMQpB2QnIruR8mxT3rYAFnKMuBG4b2/vPFYE3u7A1PZ
+	2C54YERILiA7GUPc6QRq90Br7xkd6pz6vZbN0ZA==
+X-Google-Smtp-Source: AGHT+IF8BRyARCNzXyuNmvDkP/q1Tseio1Ma+qwRSuwJ80RZCervHmYYgcn37QyLe3LgnNKBKhZMr/6HOn2onwEGNlw=
+X-Received: by 2002:ac2:538c:0:b0:515:9c73:e29a with SMTP id
+ g12-20020ac2538c000000b005159c73e29amr12657720lfh.66.1713369761613; Wed, 17
+ Apr 2024 09:02:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240417-ksft-exit-int-to-void-v1-1-eff48fdbab39@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKrsH2YC/x3MTQqAIBBA4avErBvItN+rRAvLqYZAQyWE6O5Jy
- 2/x3gOBPFOAsXjA082Bnc0QZQHroe1OyCYb6qpWlRItnmGLSIkjso0YHd6ODTZaD2aRvZDdALm
- 9PG2c/u80v+8HxkCz5WcAAAA=
-To: shuah@kernel.org
-Cc: tglx@linutronix.de, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=27467; i=nathan@kernel.org;
- h=from:subject:message-id; bh=JfzOhH8Ke+eMa566lzerBe6MT2M+20uBK6LSEGG2Q7Q=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGnybzZEb9cv+daqxHvyerXWVO4A1tqblZ8n1dbWiCRt9
- bqquW5nRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiIrz7D/6JdZ4+w/Ht8bsVb
- zwiXgzK39sfM5xCKXun2cO28Hz8e1Ckx/NO/4MpbWDkt5d/FHYFFS9i0gs/FPrjn2Z7MV6UoMld
- wExsA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20240411-dev-charlie-support_thead_vector_6_9-v1-2-4af9815ec746@rivosinc.com>
+ <20240412-tuesday-resident-d9d07e75463c@wendy> <ZhlrdGXfSushUNTp@ghost>
+ <20240412-eastcoast-disparity-9c9e7d178df5@spud> <ZhmeLoPS+tsfqv1T@ghost>
+ <20240412-chemist-haunt-0a30a8f280ca@spud> <ZhmoPuoR00aS6qZp@ghost>
+ <20240413-sharper-unlivable-5a65660b19e2@spud> <Zh3xrTfjjk3b4GHb@ghost>
+ <20240416-husband-flavored-96c1dad58b6e@wendy> <Zh9PLhUZmCF5mLXc@ghost>
+In-Reply-To: <Zh9PLhUZmCF5mLXc@ghost>
+From: Evan Green <evan@rivosinc.com>
+Date: Wed, 17 Apr 2024 09:02:05 -0700
+Message-ID: <CALs-HssYAHrBy-uYKNT_zS02F_65qJZh80OD-W1RrmmYosFU=Q@mail.gmail.com>
+Subject: Re: [PATCH 02/19] riscv: cpufeature: Fix thead vector hwcap removal
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>, Conor Dooley <conor@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Palmer Dabbelt <palmer@rivosinc.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit f7d5bcd35d42 ("selftests: kselftest: Mark functions that
-unconditionally call exit() as __noreturn") marked functions that call
-exit() as __noreturn but it did not change the return type of these
-functions from 'void' to 'int' like it should have (since a noreturn
-function by definition cannot return an integer because it does not
-return...) because there are many tests that return the result of the
-ksft_exit function, even though it has never been used due to calling
-exit().
+On Tue, Apr 16, 2024 at 9:25=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.c=
+om> wrote:
+>
+> On Tue, Apr 16, 2024 at 08:36:33AM +0100, Conor Dooley wrote:
+> > On Mon, Apr 15, 2024 at 08:34:05PM -0700, Charlie Jenkins wrote:
+> > > On Sat, Apr 13, 2024 at 12:40:26AM +0100, Conor Dooley wrote:
+> > > > On Fri, Apr 12, 2024 at 02:31:42PM -0700, Charlie Jenkins wrote:
+> > > > > On Fri, Apr 12, 2024 at 10:27:47PM +0100, Conor Dooley wrote:
+> > > > > > On Fri, Apr 12, 2024 at 01:48:46PM -0700, Charlie Jenkins wrote=
+:
+> > > > > > > On Fri, Apr 12, 2024 at 07:47:48PM +0100, Conor Dooley wrote:
+> > > > > > > > On Fri, Apr 12, 2024 at 10:12:20AM -0700, Charlie Jenkins w=
+rote:
+> > > >
+> > > > > > > > > This is already falling back on the boot CPU, but that is=
+ not a solution
+> > > > > > > > > that scales. Even though all systems currently have homog=
+enous
+> > > > > > > > > marchid/mvendorid I am hesitant to assert that all system=
+s are
+> > > > > > > > > homogenous without providing an option to override this.
+> > > > > > > >
+> > > > > > > > There are already is an option. Use the non-deprecated prop=
+erty in your
+> > > > > > > > new system for describing what extesions you support. We do=
+n't need to
+> > > > > > > > add any more properties (for now at least).
+> > > > > > >
+> > > > > > > The issue is that it is not possible to know which vendor ext=
+ensions are
+> > > > > > > associated with a vendor. That requires a global namespace wh=
+ere each
+> > > > > > > extension can be looked up in a table. I have opted to have a
+> > > > > > > vendor-specific namespace so that vendors don't have to worry=
+ about
+> > > > > > > stepping on other vendor's toes (or the other way around). In=
+ order to
+> > > > > > > support that, the vendorid of the hart needs to be known prio=
+r.
+> > > > > >
+> > > > > > Nah, I think you're mixing up something like hwprobe and having
+> > > > > > namespaces there with needing namespacing on the devicetree pro=
+bing side
+> > > > > > too. You don't need any vendor namespacing, it's perfectly fine=
+ (IMO)
+> > > > > > for a vendor to implement someone else's extension and I think =
+we should
+> > > > > > allow probing any vendors extension on any CPU.
+> > > > >
+> > > > > I am not mixing it up. Sure a vendor can implement somebody else'=
+s
+> > > > > extension, they just need to add it to their namespace too.
+> > > >
+> > > > I didn't mean that you were mixing up how your implementation worke=
+d, my
+> > > > point was that you're mixing up the hwprobe stuff which may need
+> > > > namespacing for $a{b,p}i_reason and probing from DT which does not.
+> > > > I don't think that the kernel should need to be changed at all if
+> > > > someone shows up and implements another vendor's extension - we alr=
+eady
+> > > > have far too many kernel changes required to display support for
+> > > > extensions and I don't welcome potential for more.
+> > >
+> > > Yes I understand where you are coming from. We do not want it to requ=
+ire
+> > > very many changes to add an extension. With this framework, there are
+> > > the same number of changes to add a vendor extension as there is to a=
+dd
+> > > a standard extension.
+> >
+> > No, it is actually subtly different. Even if the kernel already support=
+s
+> > the extension, it needs to be patched for each vendor
+> >
+> > > There is the upfront cost of creating the struct
+> > > for the first vendor extension from a vendor, but after that the
+> > > extension only needs to be added to the associated vendor's file (I a=
+m
+> > > extracting this out to a vendor file in the next version). This is al=
+so
+> > > a very easy task since the fields from a different vendor can be copi=
+ed
+> > > and adapted.
+> > >
+> > > > Another thing I just thought of was systems where the SoC vendor
+> > > > implements some extension that gets communicated in the ISA string =
+but
+> > > > is not the vendor in mvendorid in their various CPUs. I wouldn't wa=
+nt to
+> > > > see several different entries in structs (or several different hwpr=
+obe
+> > > > keys, but that's another story) for this situation because you're o=
+nly
+> > > > allowing probing what's in the struct matching the vendorid.
+> > >
+> > > Since the isa string is a per-hart field, the vendor associated with =
+the
+> > > hart will be used.
+> >
+> > I don't know if you just didn't really read what I said or didn't
+> > understand it, but this response doesn't address my comment.
+>
+> I read what you said! This question seemed to me as another variant of
+> "what happens when one vendor implements an extension from a different
+> vendor", and since we already discussed that I was trying to figure out
+> what you were actually asking.
+>
+> > Consider SoC vendor S buys CPUs from vendors A & B and asks both of the=
+m
+> > to implement Xsjam. The CPUs are have the vendorid of either A or B,
+> > depending on who made it. This scenario should not result in two
+> > different hwprobe keys nor two different in-kernel riscv_has_vendor_ext=
+()
+> > checks to see if the extension is supported. *If* the extension is vend=
+or
+> > namespaced, it should be to the SoC vendor whose extension it is, not
+> > the individual CPU vendors that implemented it.
+> >
+> > Additionally, consider that CPUs from both vendors are in the same SoC
+> > and all CPUs support Xsjam. Linux only supports homogeneous extensions
+> > so we should be able to detect that all CPUs support the extension and
+> > use it in a driver etc, but that's either not going to work (or be
+> > difficult to orchestrate) with different mappings per CPU vendor. I saw
+> > your v2 cover letter, in which you said:
+> >   Only patch vendor extension if all harts are associated with the same
+> >   vendor. This is the best chance the kernel has for working properly i=
+f
+> >   there are multiple vendors.
+> > I don't think that level of paranoia is required: if firmware tells us
+> > that an extension is supported, then we can trust that those extensions
+> > have been implemented correctly. If the fear of implementation bugs is
+> > what is driving the namespacing that you've gone for, I don't think tha=
+t
+> > it is required and we can simplify things, with the per-vendor structs
+> > being the vendor of the extension (so SoC vendor S in my example), not
+> > A and B who are the vendors of the CPU IP.
+> >
+> > Thanks,
+> > Conor.
+> >
+>
+> Thank you for expanding upon this idea further. This solution of
+> indexing the extensions based on the vendor who proposed them does make
+> a lot of sense. There are some key differences here of note. When
+> vendors are able to mix vendor extensions, defining a bitmask that
+> contains all of the vendor extensions gets a bit messier. I see two
+> possible solutions.
+>
+> 1. Vendor keys cannot overlap between vendors. A set bit in the bitmask
+> is associated with exactly one extension.
+>
+> 2. Vendor keys can overlap between vendors. There is a vendor bitmask
+> per vendor. When setting/checking a vendor extension, first index into
+> the vendor extension bitmask with the vendor associated with the
+> extension and then with the key of the vendor extension.
+>
+> A third option would be to use the standard extension framework. This
+> causes the standard extension list to become populated with extensions
+> that most harts will never implement so I am opposed to that.
+>
+> This problem carries over into hwprobe since the schemes proposed by
+> Evan and I both rely on the mvendorid of harts associated with the
+> cpumask. To have this level of support in hwprobe for SoCs with a mix of
+> vendors but the same extensions I again see two options:
+>
+> 1. Vendor keys cannot overlap between vendors. A set bit in the bitmask
+> is associated with exactly one extension. This bitmask would be returned
+> by the vendor extension hwprobe key.
+>
+> 2. Vendor keys can overlap between vendors. There is an hwprobe key per
+> vendor. Automatic resolution of the vendor doesn't work because the
+> vendor-specific feature being requested (extensions in the case) may be
+> of a vendor that is different than the hart's vendor, in otherwords
+> there are two variables necessary: the vendor and a way to ask hwprobe
+> for a list of the vendor extensions. With hwprobe there is only the
+> "key" that can be used to encode these variables simultaneously. We
+> could have something like a HWPROBE_THEAD_EXT_0 key that would return
+> all thead vendor extensions supported by the harts corresponding to the
+> cpumask.
 
-Prior to adding __noreturn, the compiler would not know that the functions
-that call exit() will not return, so code like
+I was a big proponent of the vendor namespacing in hwprobe, as I liked
+the tidiness of it, and felt it could handle most cases (including
+mix-n-matching multiple mvendorids in a single SoC). However my
+balloon lost its air after chatting with Palmer, as there's one case
+it really can't handle: white labeling. This is where I buy a THead
+(for instance) CPU for my SoC, including all its vendor extensions,
+and do nothing but change the mvendorid to my own. If this is a thing,
+then the vendor extensions basically have to be a single global
+namespace in hwprobe (sigh).
 
-  void ksft_exit_fail(void)
-  {
-    exit(1);
-  }
-
-  void ksft_exit_pass(void)
-  {
-    exit(0);
-  }
-
-  int main(void)
-  {
-    int ret;
-
-    ret = foo();
-    if (ret)
-      ksft_exit_fail();
-    ksft_exit_pass();
-  }
-
-would cause the compiler to complain that main() does not return an
-integer, even though when ksft_exit_pass() is called, exit() will cause
-the program to terminate. So ksft_exit_...() returns int to make the
-compiler happy.
-
-  int ksft_exit_fail(void)
-  {
-    exit(1);
-  }
-
-  int ksft_exit_pass(void)
-  {
-    exit(0);
-  }
-
-  int main(void)
-  {
-    int ret;
-
-    ret = foo();
-    if (ret)
-      return ksft_exit_fail();
-    return ksft_exit_pass();
-  }
-
-While this results in no warnings, it is weird semantically and it has
-issues as noted in the aforementioned __noreturn change. Now that
-__noreturn has been added to these functions, it is much cleaner to
-change the functions to 'void' and eliminate the return statements, as
-it has been made clear to the compiler that these functions terminate
-the program. Drop the return before all instances of ksft_exit_...() in
-a mechanical way. Only two manually changes were made to transform
-
-  return !ret ? ksft_exit_pass() : ksft_exit_fail();
-
-into the more idiomatic
-
-  if (ret)
-    ksft_exit_fail();
-  ksft_exit_pass();
-
-as well as a few style clean ups now that the code is shorter.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- tools/testing/selftests/clone3/clone3_clear_sighand.c        |  2 +-
- tools/testing/selftests/clone3/clone3_set_tid.c              |  4 +++-
- tools/testing/selftests/ipc/msgque.c                         | 11 +++++------
- tools/testing/selftests/kselftest.h                          | 12 ++++++------
- .../selftests/membarrier/membarrier_test_multi_thread.c      |  2 +-
- .../selftests/membarrier/membarrier_test_single_thread.c     |  2 +-
- tools/testing/selftests/mm/compaction_test.c                 |  6 +++---
- tools/testing/selftests/mm/cow.c                             |  2 +-
- tools/testing/selftests/mm/gup_longterm.c                    |  2 +-
- tools/testing/selftests/mm/gup_test.c                        |  4 ++--
- tools/testing/selftests/mm/ksm_functional_tests.c            |  2 +-
- tools/testing/selftests/mm/madv_populate.c                   |  2 +-
- tools/testing/selftests/mm/mkdirty.c                         |  2 +-
- tools/testing/selftests/mm/pagemap_ioctl.c                   |  4 ++--
- tools/testing/selftests/mm/soft-dirty.c                      |  2 +-
- tools/testing/selftests/pidfd/pidfd_fdinfo_test.c            |  2 +-
- tools/testing/selftests/pidfd/pidfd_open_test.c              |  4 +++-
- tools/testing/selftests/pidfd/pidfd_poll_test.c              |  2 +-
- tools/testing/selftests/pidfd/pidfd_test.c                   |  2 +-
- tools/testing/selftests/resctrl/resctrl_tests.c              |  6 +++---
- tools/testing/selftests/sync/sync_test.c                     |  3 +--
- tools/testing/selftests/timers/adjtick.c                     |  4 ++--
- tools/testing/selftests/timers/alarmtimer-suspend.c          |  4 ++--
- tools/testing/selftests/timers/change_skew.c                 |  4 ++--
- tools/testing/selftests/timers/freq-step.c                   |  4 ++--
- tools/testing/selftests/timers/leap-a-day.c                  | 10 +++++-----
- tools/testing/selftests/timers/leapcrash.c                   |  4 ++--
- tools/testing/selftests/timers/mqueue-lat.c                  |  4 ++--
- tools/testing/selftests/timers/posix_timers.c                | 12 ++++++------
- tools/testing/selftests/timers/raw_skew.c                    |  6 +++---
- tools/testing/selftests/timers/set-2038.c                    |  4 ++--
- tools/testing/selftests/timers/set-tai.c                     |  4 ++--
- tools/testing/selftests/timers/set-timer-lat.c               |  4 ++--
- tools/testing/selftests/timers/set-tz.c                      |  4 ++--
- tools/testing/selftests/timers/skew_consistency.c            |  4 ++--
- tools/testing/selftests/timers/threadtest.c                  |  2 +-
- tools/testing/selftests/timers/valid-adjtimex.c              |  6 +++---
- tools/testing/selftests/x86/lam.c                            |  2 +-
- 38 files changed, 81 insertions(+), 79 deletions(-)
-
-diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-index 54a8b2445be9..ce0426786828 100644
---- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
-+++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-@@ -120,5 +120,5 @@ int main(int argc, char **argv)
- 
- 	test_clone3_clear_sighand();
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
-index fbf813a5a06f..bfb0da2b4fdd 100644
---- a/tools/testing/selftests/clone3/clone3_set_tid.c
-+++ b/tools/testing/selftests/clone3/clone3_set_tid.c
-@@ -412,5 +412,7 @@ int main(int argc, char *argv[])
- out:
- 	ret = 0;
- 
--	return !ret ? ksft_exit_pass() : ksft_exit_fail();
-+	if (ret)
-+		ksft_exit_fail();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
-index 656c43c24044..c75ea4094870 100644
---- a/tools/testing/selftests/ipc/msgque.c
-+++ b/tools/testing/selftests/ipc/msgque.c
-@@ -198,13 +198,12 @@ int main(int argc, char **argv)
- 	struct msgque_data msgque;
- 
- 	if (getuid() != 0)
--		return ksft_exit_skip(
--				"Please run the test as root - Exiting.\n");
-+		ksft_exit_skip("Please run the test as root - Exiting.\n");
- 
- 	msgque.key = ftok(argv[0], 822155650);
- 	if (msgque.key == -1) {
- 		printf("Can't make key: %d\n", -errno);
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 	}
- 
- 	msgque.msq_id = msgget(msgque.key, IPC_CREAT | IPC_EXCL | 0666);
-@@ -243,13 +242,13 @@ int main(int argc, char **argv)
- 		printf("Failed to test queue: %d\n", err);
- 		goto err_out;
- 	}
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- 
- err_destroy:
- 	if (msgctl(msgque.msq_id, IPC_RMID, NULL)) {
- 		printf("Failed to destroy queue: %d\n", -errno);
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 	}
- err_out:
--	return ksft_exit_fail();
-+	ksft_exit_fail();
- }
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 9bb1664bcf95..f4221691a7da 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -327,13 +327,13 @@ void ksft_test_result_code(int exit_code, const char *test_name,
- 		break;						\
- 	} } while (0)
- 
--static inline __noreturn int ksft_exit_pass(void)
-+static inline __noreturn void ksft_exit_pass(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_PASS);
- }
- 
--static inline __noreturn int ksft_exit_fail(void)
-+static inline __noreturn void ksft_exit_fail(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_FAIL);
-@@ -360,7 +360,7 @@ static inline __noreturn int ksft_exit_fail(void)
- 		  ksft_cnt.ksft_xfail +	\
- 		  ksft_cnt.ksft_xskip)
- 
--static inline __noreturn __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
-+static inline __noreturn __printf(1, 2) void ksft_exit_fail_msg(const char *msg, ...)
- {
- 	int saved_errno = errno;
- 	va_list args;
-@@ -388,19 +388,19 @@ static inline __noreturn void ksft_exit_fail_perror(const char *msg)
- #endif
- }
- 
--static inline __noreturn int ksft_exit_xfail(void)
-+static inline __noreturn void ksft_exit_xfail(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_XFAIL);
- }
- 
--static inline __noreturn int ksft_exit_xpass(void)
-+static inline __noreturn void ksft_exit_xpass(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_XPASS);
- }
- 
--static inline __noreturn __printf(1, 2) int ksft_exit_skip(const char *msg, ...)
-+static inline __noreturn __printf(1, 2) void ksft_exit_skip(const char *msg, ...)
- {
- 	int saved_errno = errno;
- 	va_list args;
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c b/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
-index a9cc17facfb3..4e14dba81234 100644
---- a/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
-@@ -69,5 +69,5 @@ int main(int argc, char **argv)
- 	/* Multi-threaded */
- 	test_mt_membarrier();
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_single_thread.c b/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
-index 4cdc8b1d124c..fa3f1d6c37a0 100644
---- a/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
-@@ -24,5 +24,5 @@ int main(int argc, char **argv)
- 
- 	test_membarrier_get_registrations(/*cmd=*/0);
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-index 533999b6c284..4f42eb7d7636 100644
---- a/tools/testing/selftests/mm/compaction_test.c
-+++ b/tools/testing/selftests/mm/compaction_test.c
-@@ -177,7 +177,7 @@ int main(int argc, char **argv)
- 	ksft_print_header();
- 
- 	if (prereq() || geteuid())
--		return ksft_exit_skip("Prerequisites unsatisfied\n");
-+		ksft_exit_skip("Prerequisites unsatisfied\n");
- 
- 	ksft_set_plan(1);
- 
-@@ -225,7 +225,7 @@ int main(int argc, char **argv)
- 	}
- 
- 	if (check_compaction(mem_free, hugepage_size) == 0)
--		return ksft_exit_pass();
-+		ksft_exit_pass();
- 
--	return ksft_exit_fail();
-+	ksft_exit_fail();
- }
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index 363bf5f801be..fe078d6e1806 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -1779,5 +1779,5 @@ int main(int argc, char **argv)
- 	if (err)
- 		ksft_exit_fail_msg("%d out of %d tests failed\n",
- 				   err, ksft_test_num());
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
-index ad168d35b23b..d7eaca5bbe9b 100644
---- a/tools/testing/selftests/mm/gup_longterm.c
-+++ b/tools/testing/selftests/mm/gup_longterm.c
-@@ -456,5 +456,5 @@ int main(int argc, char **argv)
- 	if (err)
- 		ksft_exit_fail_msg("%d out of %d tests failed\n",
- 				   err, ksft_test_num());
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/gup_test.c b/tools/testing/selftests/mm/gup_test.c
-index 18a49c70d4c6..bd335cf9bc0e 100644
---- a/tools/testing/selftests/mm/gup_test.c
-+++ b/tools/testing/selftests/mm/gup_test.c
-@@ -228,7 +228,7 @@ int main(int argc, char **argv)
- 			break;
- 		}
- 		ksft_test_result_skip("Please run this test as root\n");
--		return ksft_exit_pass();
-+		ksft_exit_pass();
- 	}
- 
- 	p = mmap(NULL, size, PROT_READ | PROT_WRITE, flags, filed, 0);
-@@ -267,5 +267,5 @@ int main(int argc, char **argv)
- 
- 	free(tid);
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index d615767e396b..508287560c45 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -646,5 +646,5 @@ int main(int argc, char **argv)
- 	if (err)
- 		ksft_exit_fail_msg("%d out of %d tests failed\n",
- 				   err, ksft_test_num());
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
-index 17bcb07f19f3..ef7d911da13e 100644
---- a/tools/testing/selftests/mm/madv_populate.c
-+++ b/tools/testing/selftests/mm/madv_populate.c
-@@ -307,5 +307,5 @@ int main(int argc, char **argv)
- 	if (err)
- 		ksft_exit_fail_msg("%d out of %d tests failed\n",
- 				   err, ksft_test_num());
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/mkdirty.c b/tools/testing/selftests/mm/mkdirty.c
-index 301abb99e027..b8a7efe9204e 100644
---- a/tools/testing/selftests/mm/mkdirty.c
-+++ b/tools/testing/selftests/mm/mkdirty.c
-@@ -375,5 +375,5 @@ int main(void)
- 	if (err)
- 		ksft_exit_fail_msg("%d out of %d tests failed\n",
- 				   err, ksft_test_num());
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index d59517ed3d48..2d785aca72a5 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -1484,7 +1484,7 @@ int main(int argc, char *argv[])
- 	ksft_print_header();
- 
- 	if (init_uffd())
--		return ksft_exit_pass();
-+		ksft_exit_pass();
- 
- 	ksft_set_plan(115);
- 
-@@ -1660,5 +1660,5 @@ int main(int argc, char *argv[])
- 	userfaultfd_tests();
- 
- 	close(pagemap_fd);
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
-index 7dbfa53d93a0..d9dbf879748b 100644
---- a/tools/testing/selftests/mm/soft-dirty.c
-+++ b/tools/testing/selftests/mm/soft-dirty.c
-@@ -209,5 +209,5 @@ int main(int argc, char **argv)
- 
- 	close(pagemap_fd);
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-index 01cc37bf611c..f062a986e382 100644
---- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-@@ -307,5 +307,5 @@ int main(int argc, char **argv)
- 	test_pidfd_fdinfo_nspid();
- 	test_pidfd_dead_fdinfo();
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/pidfd/pidfd_open_test.c b/tools/testing/selftests/pidfd/pidfd_open_test.c
-index 8a59438ccc78..c62564c264b1 100644
---- a/tools/testing/selftests/pidfd/pidfd_open_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_open_test.c
-@@ -159,5 +159,7 @@ int main(int argc, char **argv)
- 	if (pidfd >= 0)
- 		close(pidfd);
- 
--	return !ret ? ksft_exit_pass() : ksft_exit_fail();
-+	if (ret)
-+		ksft_exit_fail();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-index 610811275357..55d74a50358f 100644
---- a/tools/testing/selftests/pidfd/pidfd_poll_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-@@ -112,5 +112,5 @@ int main(int argc, char **argv)
- 	}
- 
- 	ksft_test_result_pass("pidfd poll test: pass\n");
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index c081ae91313a..9faa686f90e4 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -572,5 +572,5 @@ int main(int argc, char **argv)
- 	test_pidfd_send_signal_exited_fail();
- 	test_pidfd_send_signal_recycled_pid_fail();
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 348d17cb2a84..ecbb7605a981 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -247,13 +247,13 @@ int main(int argc, char **argv)
- 	 * 2. We execute perf commands
- 	 */
- 	if (geteuid() != 0)
--		return ksft_exit_skip("Not running as root. Skipping...\n");
-+		ksft_exit_skip("Not running as root. Skipping...\n");
- 
- 	if (!check_resctrlfs_support())
--		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
-+		ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
- 
- 	if (umount_resctrlfs())
--		return ksft_exit_skip("resctrl FS unmount failed.\n");
-+		ksft_exit_skip("resctrl FS unmount failed.\n");
- 
- 	filter_dmesg();
- 
-diff --git a/tools/testing/selftests/sync/sync_test.c b/tools/testing/selftests/sync/sync_test.c
-index 414a617db993..93db5aa246a3 100644
---- a/tools/testing/selftests/sync/sync_test.c
-+++ b/tools/testing/selftests/sync/sync_test.c
-@@ -109,6 +109,5 @@ int main(void)
- 		ksft_exit_fail_msg("%d out of %d sync tests failed\n",
- 					err, ksft_test_num());
- 
--	/* need this return to keep gcc happy */
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/adjtick.c b/tools/testing/selftests/timers/adjtick.c
-index 47e05fdc32c5..205b76a4abb4 100644
---- a/tools/testing/selftests/timers/adjtick.c
-+++ b/tools/testing/selftests/timers/adjtick.c
-@@ -205,7 +205,7 @@ int main(int argc, char **argv)
- 	adjtimex(&tx1);
- 
- 	if (err)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/testing/selftests/timers/alarmtimer-suspend.c
-index 4332b494103d..ad52e608b88e 100644
---- a/tools/testing/selftests/timers/alarmtimer-suspend.c
-+++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
-@@ -173,6 +173,6 @@ int main(void)
- 		timer_delete(tm1);
- 	}
- 	if (final_ret)
--		return ksft_exit_fail();
--	return ksft_exit_pass();
-+		ksft_exit_fail();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/change_skew.c b/tools/testing/selftests/timers/change_skew.c
-index 992a77f2a74c..4421cd562c24 100644
---- a/tools/testing/selftests/timers/change_skew.c
-+++ b/tools/testing/selftests/timers/change_skew.c
-@@ -89,8 +89,8 @@ int main(int argc, char **argv)
- 
- 	if (ret) {
- 		printf("[FAIL]");
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 	}
- 	printf("[OK]");
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/freq-step.c b/tools/testing/selftests/timers/freq-step.c
-index 4b76450d78d1..73b636f89fdc 100644
---- a/tools/testing/selftests/timers/freq-step.c
-+++ b/tools/testing/selftests/timers/freq-step.c
-@@ -257,7 +257,7 @@ int main(int argc, char **argv)
- 	set_frequency(0.0);
- 
- 	if (fails)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/leap-a-day.c b/tools/testing/selftests/timers/leap-a-day.c
-index 23eb398c8140..986abbdb1521 100644
---- a/tools/testing/selftests/timers/leap-a-day.c
-+++ b/tools/testing/selftests/timers/leap-a-day.c
-@@ -268,7 +268,7 @@ int main(int argc, char **argv)
- 		if (ret < 0) {
- 			printf("Error: Problem setting STA_INS/STA_DEL!: %s\n",
- 							time_state_str(ret));
--			return ksft_exit_fail();
-+			ksft_exit_fail();
- 		}
- 
- 		/* Validate STA_INS was set */
-@@ -277,7 +277,7 @@ int main(int argc, char **argv)
- 		if (tx.status != STA_INS && tx.status != STA_DEL) {
- 			printf("Error: STA_INS/STA_DEL not set!: %s\n",
- 							time_state_str(ret));
--			return ksft_exit_fail();
-+			ksft_exit_fail();
- 		}
- 
- 		if (tai_time) {
-@@ -295,7 +295,7 @@ int main(int argc, char **argv)
- 		se.sigev_value.sival_int = 0;
- 		if (timer_create(CLOCK_REALTIME, &se, &tm1) == -1) {
- 			printf("Error: timer_create failed\n");
--			return ksft_exit_fail();
-+			ksft_exit_fail();
- 		}
- 		its1.it_value.tv_sec = next_leap;
- 		its1.it_value.tv_nsec = 0;
-@@ -366,7 +366,7 @@ int main(int argc, char **argv)
- 		if (error_found) {
- 			printf("Errors observed\n");
- 			clear_time_state();
--			return ksft_exit_fail();
-+			ksft_exit_fail();
- 		}
- 		printf("\n");
- 		if ((iterations != -1) && !(--iterations))
-@@ -374,5 +374,5 @@ int main(int argc, char **argv)
- 	}
- 
- 	clear_time_state();
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/leapcrash.c b/tools/testing/selftests/timers/leapcrash.c
-index f70802c5dd0d..8fd065eec904 100644
---- a/tools/testing/selftests/timers/leapcrash.c
-+++ b/tools/testing/selftests/timers/leapcrash.c
-@@ -87,7 +87,7 @@ int main(void)
- 		tv.tv_usec = 0;
- 		if (settimeofday(&tv, NULL)) {
- 			printf("Error: You're likely not running with proper (ie: root) permissions\n");
--			return ksft_exit_fail();
-+			ksft_exit_fail();
- 		}
- 		tx.modes = 0;
- 		adjtimex(&tx);
-@@ -104,5 +104,5 @@ int main(void)
- 		fflush(stdout);
- 	}
- 	printf("[OK]\n");
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/mqueue-lat.c b/tools/testing/selftests/timers/mqueue-lat.c
-index 7916cf5cc6ff..f3179a605bba 100644
---- a/tools/testing/selftests/timers/mqueue-lat.c
-+++ b/tools/testing/selftests/timers/mqueue-lat.c
-@@ -107,8 +107,8 @@ int main(int argc, char **argv)
- 	ret = mqueue_lat_test();
- 	if (ret < 0) {
- 		printf("[FAILED]\n");
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 	}
- 	printf("[OK]\n");
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index c001dd79179d..07c81c0093c0 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -260,16 +260,16 @@ int main(int argc, char **argv)
- 	ksft_print_msg("based timers if other threads run on the CPU...\n");
- 
- 	if (check_itimer(ITIMER_VIRTUAL) < 0)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
- 	if (check_itimer(ITIMER_PROF) < 0)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
- 	if (check_itimer(ITIMER_REAL) < 0)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
- 	if (check_timer_create(CLOCK_THREAD_CPUTIME_ID) < 0)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
- 	/*
- 	 * It's unfortunately hard to reliably test a timer expiration
-@@ -281,10 +281,10 @@ int main(int argc, char **argv)
- 	 * find a better solution.
- 	 */
- 	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
- 	if (check_timer_distribution() < 0)
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
- 	ksft_finished();
- }
-diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
-index 6eba203f9da7..030143eb09b4 100644
---- a/tools/testing/selftests/timers/raw_skew.c
-+++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -137,11 +137,11 @@ int main(int argc, char **argv)
- 		if (tx1.offset || tx2.offset ||
- 		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
- 			printf("	[SKIP]\n");
--			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
-+			ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
- 		}
- 		printf("	[FAILED]\n");
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 	}
- 	printf("	[OK]\n");
--	return  ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/set-2038.c b/tools/testing/selftests/timers/set-2038.c
-index 688cfd81b531..f7d978721b9e 100644
---- a/tools/testing/selftests/timers/set-2038.c
-+++ b/tools/testing/selftests/timers/set-2038.c
-@@ -128,6 +128,6 @@ int main(int argc, char *argv[])
- 	/* restore clock */
- 	settime(start);
- 	if (ret)
--		return ksft_exit_fail();
--	return ksft_exit_pass();
-+		ksft_exit_fail();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/set-tai.c b/tools/testing/selftests/timers/set-tai.c
-index 8c4179ee2ca2..5b67462efcd6 100644
---- a/tools/testing/selftests/timers/set-tai.c
-+++ b/tools/testing/selftests/timers/set-tai.c
-@@ -61,9 +61,9 @@ int main(int argc, char **argv)
- 		ret = get_tai();
- 		if (ret != i) {
- 			printf("[FAILED] expected: %i got %i\n", i, ret);
--			return ksft_exit_fail();
-+			ksft_exit_fail();
- 		}
- 	}
- 	printf("[OK]\n");
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
-index 50da45437daa..7ce240c89b21 100644
---- a/tools/testing/selftests/timers/set-timer-lat.c
-+++ b/tools/testing/selftests/timers/set-timer-lat.c
-@@ -278,6 +278,6 @@ int main(void)
- 		ret |= do_timer_oneshot(clock_id, 0);
- 	}
- 	if (ret)
--		return ksft_exit_fail();
--	return ksft_exit_pass();
-+		ksft_exit_fail();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/set-tz.c b/tools/testing/selftests/timers/set-tz.c
-index 62bd33eb16f0..20daaf1782b7 100644
---- a/tools/testing/selftests/timers/set-tz.c
-+++ b/tools/testing/selftests/timers/set-tz.c
-@@ -102,9 +102,9 @@ int main(int argc, char **argv)
- 	printf("[OK]\n");
- 
- 	set_tz(min, dst);
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- 
- err:
- 	set_tz(min, dst);
--	return ksft_exit_fail();
-+	ksft_exit_fail();
- }
-diff --git a/tools/testing/selftests/timers/skew_consistency.c b/tools/testing/selftests/timers/skew_consistency.c
-index 63913f75b384..c8e6bffe4e0a 100644
---- a/tools/testing/selftests/timers/skew_consistency.c
-+++ b/tools/testing/selftests/timers/skew_consistency.c
-@@ -70,8 +70,8 @@ int main(int argc, char **argv)
- 
- 	if (ret) {
- 		printf("[FAILED]\n");
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 	}
- 	printf("[OK]\n");
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/threadtest.c b/tools/testing/selftests/timers/threadtest.c
-index 80aed4bf06fb..76b38e41d9c7 100644
---- a/tools/testing/selftests/timers/threadtest.c
-+++ b/tools/testing/selftests/timers/threadtest.c
-@@ -189,5 +189,5 @@ int main(int argc, char **argv)
- 	/* die */
- 	if (ret)
- 		ksft_exit_fail();
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-index d13ebde20322..d500884801d8 100644
---- a/tools/testing/selftests/timers/valid-adjtimex.c
-+++ b/tools/testing/selftests/timers/valid-adjtimex.c
-@@ -320,10 +320,10 @@ int validate_set_offset(void)
- int main(int argc, char **argv)
- {
- 	if (validate_freq())
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
- 	if (validate_set_offset())
--		return ksft_exit_fail();
-+		ksft_exit_fail();
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 215b8150b7cc..820db4864292 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -1237,5 +1237,5 @@ int main(int argc, char **argv)
- 
- 	ksft_set_plan(tests_cnt);
- 
--	return ksft_exit_pass();
-+	ksft_exit_pass();
- }
-
----
-base-commit: 00ab560eb0e3f9725521c9fec2e8992e9e7e6c29
-change-id: 20240416-ksft-exit-int-to-void-5aa9db381379
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+I do like Charlie's idea of at least letting vendors allocate a key at
+a time, eg HWPROBE_THEAD_EXT_0, rather than racing to allocate a bit
+at a time in a key like HWPROBE_VENDOR_EXT_0. That gives it some
+semblance of organization, and still gives us a chance of a
+cleanup/deprecation path for vendors that stop producing chips.
+-Evan
 
