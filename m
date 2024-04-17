@@ -1,137 +1,119 @@
-Return-Path: <linux-kselftest+bounces-8247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 260398A7D28
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 09:36:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C4DC8A7D78
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 09:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3991B1C211FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 07:36:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF5A8B21D9E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 07:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0743D6F072;
-	Wed, 17 Apr 2024 07:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DB96E61E;
+	Wed, 17 Apr 2024 07:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TmvVx0ZN"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3yTtksiP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A186E616;
-	Wed, 17 Apr 2024 07:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE559335C7;
+	Wed, 17 Apr 2024 07:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713339279; cv=none; b=rPuwBURweuBx7Q3POjunels34a/E9kZIsMNUBxW8XuFnwRjYiZU/v+2ckT6/gWCHfsI8SYFRMyFrvCf1i/w+PJJdgeh5RHq11tkbVVA/vUyzOsz6tvSnLrXeJsswBShs3b7IaBR1djauAQaOowtMJalb4ChmaorVlpj3XR4DPWA=
+	t=1713340508; cv=none; b=a/cF9GmSUlZFEof30hlBm3JYMmzJIbQg9rbuu0GCbs88l0BYLHHQy6Eh7MZQlfGmp9jMc53JfhkRw6rwZZhjfHQOwHGWp+aCfG0xSdoFC+yYxJ3E0maT8GGiHsGBU5vL1fXvA44c22SflUb0PhDvjR07Af73uM9RfgVvGP1ii7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713339279; c=relaxed/simple;
-	bh=TSbOVFiFLZWCXwYugO2FU/IRct1/VyAQo4tDv3bJTd0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HxkDfFHHw2ktzRr6OeN8yx+467QYDmr/sGU7cYjb0gJDPeRI/jcqGRW0sG4UtWwL0sJpkJ1wKeN4Adt5DwJW0Sd70yEhAdq5NjIlcwlRmzAvm4s+3H0Xqk3xJsm6oTMg5me3K62f4+4mAiHSPExAMVfM+q3D12lsUL2f9PgvaaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TmvVx0ZN; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713339279; x=1744875279;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TSbOVFiFLZWCXwYugO2FU/IRct1/VyAQo4tDv3bJTd0=;
-  b=TmvVx0ZN6bct+VSm6yE7Sd3yjxYHfS1TjV785ACS1ZkFqATLTEy97xZh
-   G/CkyhHhG0bEdZndbPTCKOf7HVcBpiVSg0UJzgAws20isddB1wYH2Cvlr
-   qAKaDX17C9cvVX4xVoMAQ4/1bONBAKq6C30DaTAjyFoVlVhRgLb9MS/h6
-   GS5gXdkaeUC6mU3X1+nY5M5o1sqDWqROnbwHbF5BnzqpozY96ydm636sb
-   A715PukSvWyztzxTleDccRKu9sSNTya7XFwCLKyGqpYYT3WMAg5vQdr7C
-   w3fjRTpinW1tTFJxFnGRKg/3acHbViGvas2iGLKjwf/l+6J53ffH0oDYg
-   A==;
-X-CSE-ConnectionGUID: EsM6pM42SQmrwLIEDsddKQ==
-X-CSE-MsgGUID: +dXVNzcdSQ2Kg+Qsl+2Dqw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="20236854"
-X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
-   d="scan'208";a="20236854"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 00:34:38 -0700
-X-CSE-ConnectionGUID: AIHGA92dR2+JRFIHooY0Kg==
-X-CSE-MsgGUID: cwPquw+USl+YrotQUtS/MA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
-   d="scan'208";a="23135785"
-Received: from yujie-x299.sh.intel.com ([10.239.159.77])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 00:34:36 -0700
-From: Yujie Liu <yujie.liu@intel.com>
-To: linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] selftests/intel_pstate: Add validity check for cpu min/max frequency
-Date: Wed, 17 Apr 2024 15:28:05 +0800
-Message-Id: <20240417072805.1168550-1-yujie.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1713340508; c=relaxed/simple;
+	bh=eyDrtd8fUNME9ytWdgxZfVi8GNq/KoV62xE9EnUFfHE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=JTUFbp3rtbl1eG8IQ1Nsv+6Wep/1eiiTqMU1YKU1NTbFgOPrbeAPqqDEjpdFyeZMdT4Mj6r12oSB0oaMO3XO51OFTnUPNAC+kwm4dsL4jkbXsjs5nbnSkEvrVw9v55EFJyPZn3COGGWwjcnFHQDiNTEl28mCWxXJRinmCBh14rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=3yTtksiP; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713340504;
+	bh=eyDrtd8fUNME9ytWdgxZfVi8GNq/KoV62xE9EnUFfHE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=3yTtksiPCVFoeSAS+27BkLyLucN3NoGrPOyo4ISVg1IdQID/8bNhxbfqx0Y76DQxC
+	 zOyFT+u4zHXHXsMsYGTC7gi4LfLyxIirfsTyO4iRNYUgZOpgJxIJHkHIm7/Nxnj1gR
+	 kaTL/ceRYWj4T/2XbMCEdUM2jRdMk/ryPlvefbjqix96ZHI2PX4Mm2xgKi/d8EsdTD
+	 3YDdrN2zv/PHEOUtr4eA9Z8nOKdagCyhL/OCQD2kgHBPw5UZ5s//T672VUPwtdy4Ot
+	 3W1JKgwBX0ne2uj0e3VMipN7HhNnaDlpkTN5Dq7t+SPyBggeDyiSIRZTnoVE4HEKc1
+	 r4uf+1xqjCH2A==
+Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1EEFE3780629;
+	Wed, 17 Apr 2024 07:55:00 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] selftests: mm: Fix undeclared function error
+Date: Wed, 17 Apr 2024 12:55:30 +0500
+Message-Id: <20240417075530.3807625-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-If libcpupower is not properly installed somehow, the cpupower tool
-cannot work, and cpu min_freq and max_freq are not correctly assigned,
-but the code can still keep going and gives an "ok" result at last,
-which seems not to be the expected behavior of this test.
+Fix the error reported by clang:
 
-    tools/testing/selftests/intel_pstate# make run_tests
-    TAP version 13
-    1..1
-    # selftests: intel_pstate: run.sh
-    # cpupower: error while loading shared libraries: libcpupower.so.1: cannot open shared object file: No such file or directory
-    # ./run.sh: line 90: / 1000: syntax error: operand expected (error token is "/ 1000")
-    # cpupower: error while loading shared libraries: libcpupower.so.1: cannot open shared object file: No such file or directory
-    # ./run.sh: line 92: / 1000: syntax error: operand expected (error token is "/ 1000")
-    # ========================================================================
-    # The marketing frequency of the cpu is 3400 MHz
-    # The maximum frequency of the cpu is  MHz
-    # The minimum frequency of the cpu is  MHz
-    # Target	      Actual	    Difference	  MSR(0x199)	max_perf_pct
-    ok 1 selftests: intel_pstate: run.sh
+In file included from mdwe_test.c:17:
+./../kselftest_harness.h:1169:2: error: call to undeclared function
+'asprintf'; ISO C99 and later do not support implicit function
+declarations [-Wimplicit-function-declaration]
+ 1169 |         asprintf(&test_name, "%s%s%s.%s", f->name,
+      |         ^
+1 warning generated.
 
-Fix this by adding null checks as well as [ $var -eq $var ] checks to
-confirm that both min_freq and max_freq are valid integers. The fixed
-result will have a "# SKIP" suffix and looks like:
+The gcc reports it as warning:
 
-    tools/testing/selftests/intel_pstate# make run_tests
-    TAP version 13
-    1..1
-    # selftests: intel_pstate: run.sh
-    # cpupower: error while loading shared libraries: libcpupower.so.1: cannot open shared object file: No such file or directory
-    # ./run.sh: line 90: / 1000: syntax error: operand expected (error token is "/ 1000")
-    # cpupower: error while loading shared libraries: libcpupower.so.1: cannot open shared object file: No such file or directory
-    # ./run.sh: line 92: / 1000: syntax error: operand expected (error token is "/ 1000")
-    # Cannot get cpu frequency info
-    ok 1 selftests: intel_pstate: run.sh # SKIP
+In file included from mdwe_test.c:17:
+../kselftest_harness.h: In function ‘__run_test’:
+../kselftest_harness.h:1169:9: warning: implicit declaration of function
+‘asprintf’; did you mean ‘vsprintf’? [-Wimplicit-function-declaration]
+ 1169 |         asprintf(&test_name, "%s%s%s.%s", f->name,
+      |         ^~~~~~~~
+      |         vsprintf
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Yujie Liu <yujie.liu@intel.com>
+Fix this by setting _GNU_SOURCE macro needed to get exposure to the
+asprintf().
+
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/intel_pstate/run.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/mm/mdwe_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
-index e7008f614ad7..e81758cd1fb5 100755
---- a/tools/testing/selftests/intel_pstate/run.sh
-+++ b/tools/testing/selftests/intel_pstate/run.sh
-@@ -91,6 +91,11 @@ min_freq=$(($_min_freq / 1000))
- _max_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $2 } ')
- max_freq=$(($_max_freq / 1000))
+diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
+index 200bedcdc32e9..1e01d3ddc11c5 100644
+--- a/tools/testing/selftests/mm/mdwe_test.c
++++ b/tools/testing/selftests/mm/mdwe_test.c
+@@ -7,6 +7,7 @@
+ #include <linux/mman.h>
+ #include <linux/prctl.h>
  
-+{ [ $min_freq ] && [ $min_freq -eq $min_freq ] &&
-+  [ $max_freq ] && [ $max_freq -eq $max_freq ]; } || {
-+        echo "Cannot get cpu frequency info"
-+        exit $ksft_skip
-+}
- 
- [ $EVALUATE_ONLY -eq 0 ] && for freq in `seq $max_freq -100 $min_freq`
- do
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <sys/auxv.h>
 -- 
-2.34.1
+2.39.2
 
 
