@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-8270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68ED28A8D36
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 22:46:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A93FE8A8DF0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 23:28:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F2BC1F22B0A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 20:46:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 653AD2819DE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 21:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F664597B;
-	Wed, 17 Apr 2024 20:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00636651AF;
+	Wed, 17 Apr 2024 21:28:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkJ1tHT2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9Dy/zGs"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4339F79D8;
-	Wed, 17 Apr 2024 20:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4118F4A;
+	Wed, 17 Apr 2024 21:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713386798; cv=none; b=KwNoiLReZRou3Hw0FMXGQBcRfmX9LYF8varODuW806oZt4Bp3GjW0YrFSB9Rit1FDmNNCOYMGb1Q9z79iiVK81bQH9BLs9V4jyfbOxucu4HJkYQ9MR5l0iZdvJdFdI9TlppYj4TKFuKrDj823nmMTlE3FAv6jNxsbRj7+2sAHug=
+	t=1713389324; cv=none; b=NZV+y7s5Lv1LlAjX1GI/Iw3M+Zf9taMzsbXsv742KnoHznbIlK9iJqvS+/7LSB9n3lBtJ4sqyfHaBbrJ1vc5eXzZPYE3DuaA2////Uresa7WrpXp+UaVKPVp8oZBi1nRdHfBVwlHov0HzJEUYu0xRdQo3aYL7+yXscFi3YONULo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713386798; c=relaxed/simple;
-	bh=vpW2uBcFnTTkU4Vdy3ReQVcKp2u1xZV+wBorG7RxKjk=;
+	s=arc-20240116; t=1713389324; c=relaxed/simple;
+	bh=CcUwRC1ONYjbKMJcsLelzN8dCXZuvmUYbPtOjD1wORI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=neTCyl00IJdlz1MUNgXpsKMFOTcTKnJ9Y0ziFqNAiffFGvNYhi+HMo2HuYeld1zfbzxijgkKQxfvhVryvrb9YmZBqUwNidysmcF9j6M2zi14ru/JuZHit0F9RPKau7qzoECaH4m/FJ//2gnqpHS9VYVxgqOAwIeatRDaeRN9mZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkJ1tHT2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6943BC116B1;
-	Wed, 17 Apr 2024 20:46:37 +0000 (UTC)
+	 MIME-Version:Content-Type; b=JzgJN9pM2kWZlusBvSWrZKFyiqe5a/QjLS96raKZtjLgLcw0x8q0xRzy5jRKk97bEBiZpze5ecFII+LDhx3Q5TztnEUBL8yGhJmt+SKM+T+z9RnqJUcaN3uhA3cJs41HfeJJ2xo7sRw+LsN89bGuVqdmGhXrCNgo40vmKFSG1gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9Dy/zGs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F626C072AA;
+	Wed, 17 Apr 2024 21:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713386797;
-	bh=vpW2uBcFnTTkU4Vdy3ReQVcKp2u1xZV+wBorG7RxKjk=;
+	s=k20201202; t=1713389324;
+	bh=CcUwRC1ONYjbKMJcsLelzN8dCXZuvmUYbPtOjD1wORI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=RkJ1tHT27y+k0lu2QQRUrGTpEPA5UU3iWd9URd2ZdTybNiuCSoZJcWvzIScLEJTo3
-	 j2PHHyRu4FLB7fZoCfA2IziVIfmuO8kBmqRWrcMfkjT0kR6w4Wo1zZ42afTut8q4NE
-	 H4KxdWsQUxkRcixhNeIf0xLD2kViqQ3efDUTiKxw+v8SifzNUCBsDSOYfRgAEHSXDF
-	 xsECzz55hNl+R/no/eoZhtY9gEai/b9oJ7oFZQ2khaHbGdCNs8B+/tHeQaYr2Widzb
-	 D8yF16M1VOyUYZa0O/DnxSIKz43pjAF944uhasya9+85A4NRFg8oRuuMKg4J1UFUo5
-	 NTNgavSRXsFZg==
-Date: Wed, 17 Apr 2024 13:46:36 -0700
+	b=G9Dy/zGslStluiYRn7O++1NbHg+TqBYAGJ8DDoKpYpx9roNHiKCyzIyjRw95XNMbY
+	 RWbKkHVzCQm0Ej/XuQdAv0xjmuFcfyCMXng+pZSMyj73Zh7eS7EVH/fnqtM2NmMcYM
+	 TrDLCjn8THg8qjacMX7k3VJhzh59uDT4k86gRmDerfU8oSud49vXrxpR3sRfsw2RCS
+	 YejpqSRKNzOPGKhDcOcVRYQVHsjJyQqpLZdFWh6BudeS3OQSP/drseCPAjQ92k3FFg
+	 lqJ//dng8qosZsI+hKC7bFLAgmuDqgNbHRCUGrWLFHwFLFQiNCDmrWRpfBkSofX9Gy
+	 oayyLMgNCMWtQ==
+Date: Wed, 17 Apr 2024 14:28:43 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Dmitry Safonov <0x7f454c46@gmail.com>
 Cc: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>,
@@ -51,11 +51,12 @@ Cc: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH net 0/4] selftests/net/tcp_ao: A bunch of fixes for
  TCP-AO selftests
-Message-ID: <20240417134636.102f0120@kernel.org>
-In-Reply-To: <CAJwJo6Yw4S1wCcimRVy=P8h0Ez0UDt-yw2jqSY-ph3TKsQVVGA@mail.gmail.com>
+Message-ID: <20240417142843.27a221f8@kernel.org>
+In-Reply-To: <20240417134636.102f0120@kernel.org>
 References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com>
 	<20240416072809.3ae7c3d3@kernel.org>
 	<CAJwJo6Yw4S1wCcimRVy=P8h0Ez0UDt-yw2jqSY-ph3TKsQVVGA@mail.gmail.com>
+	<20240417134636.102f0120@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,60 +66,16 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 17 Apr 2024 19:47:18 +0100 Dmitry Safonov wrote:
-> 1. [ 240.001391][ T833] Possible interrupt unsafe locking scenario:
-> [  240.001391][  T833]
-> [  240.001635][  T833]        CPU0                    CPU1
-> [  240.001797][  T833]        ----                    ----
-> [  240.001958][  T833]   lock(&p->alloc_lock);
-> [  240.002083][  T833]                                local_irq_disable();
-> [  240.002284][  T833]                                lock(&ndev->lock);
-> [  240.002490][  T833]                                lock(&p->alloc_lock);
-> [  240.002709][  T833]   <Interrupt>
-> [  240.002819][  T833]     lock(&ndev->lock);
-> [  240.002937][  T833]
-> [  240.002937][  T833]  *** DEADLOCK ***
+On Wed, 17 Apr 2024 13:46:36 -0700 Jakub Kicinski wrote:
+> > I can spend some time on them after I verify that my fix for -stable
+> > is actually fixing an issue I think it fixes.
+> > Seems like your automation + my selftests are giving some fruits, hehe.  
 > 
-> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/537021/14-self-connect-ipv6/stderr
-> 
-> 2. [  251.411647][   T71] WARNING: SOFTIRQ-safe -> SOFTIRQ-unsafe lock
-> order detected
-> [  251.411986][   T71] 6.9.0-rc1-virtme #1 Not tainted
-> [  251.412214][   T71] -----------------------------------------------------
-> [  251.412533][   T71] kworker/u16:1/71 [HC0[0]:SC0[2]:HE1:SE0] is
-> trying to acquire:
-> [  251.412837][   T71] ffff888005182c28 (&p->alloc_lock){+.+.}-{2:2},
-> at: __get_task_comm+0x27/0x70
-> [  251.413214][   T71]
-> [  251.413214][   T71] and this task is already holding:
-> [  251.413527][   T71] ffff88802f83efd8 (&ul->lock){+.-.}-{2:2}, at:
-> rt6_uncached_list_flush_dev+0x138/0x840
-> [  251.413887][   T71] which would create a new lock dependency:
-> [  251.414153][   T71]  (&ul->lock){+.-.}-{2:2} -> (&p->alloc_lock){+.+.}-{2:2}
-> [  251.414464][   T71]
-> [  251.414464][   T71] but this new dependency connects a SOFTIRQ-irq-safe lock:
-> [  251.414808][   T71]  (&ul->lock){+.-.}-{2:2}
-> 
-> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/537201/17-icmps-discard-ipv4/stderr
-> 
-> 3. [ 264.280734][ C3] Possible unsafe locking scenario:
-> [  264.280734][    C3]
-> [  264.280968][    C3]        CPU0                    CPU1
-> [  264.281117][    C3]        ----                    ----
-> [  264.281263][    C3]   lock((&tw->tw_timer));
-> [  264.281427][    C3]
-> lock(&hashinfo->ehash_locks[i]);
-> [  264.281647][    C3]                                lock((&tw->tw_timer));
-> [  264.281834][    C3]   lock(&hashinfo->ehash_locks[i]);
-> 
-> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/547461/19-self-connect-ipv4/stderr
-> 
-> I can spend some time on them after I verify that my fix for -stable
-> is actually fixing an issue I think it fixes.
-> Seems like your automation + my selftests are giving some fruits, hehe.
+> Oh, very interesting, I don't recall these coming up before.
 
-Oh, very interesting, I don't recall these coming up before.
+Correction, these are old, and if I plug the branch names here:
+https://netdev.bots.linux.dev/contest.html
+there is a whole bunch of tests failing that day.
 
-We try to extract crashes but apparently we're missing lockdep splats.
-I'll try to improve the extraction logic...
+Keep in mind these run pre-commit so not all failures are flakes.
 
