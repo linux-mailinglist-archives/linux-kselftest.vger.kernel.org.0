@@ -1,153 +1,124 @@
-Return-Path: <linux-kselftest+bounces-8269-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D75058A8C97
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 22:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68ED28A8D36
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 22:46:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BC511F22967
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 20:04:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F2BC1F22B0A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Apr 2024 20:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E3647F7C;
-	Wed, 17 Apr 2024 20:03:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F664597B;
+	Wed, 17 Apr 2024 20:46:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="P1f3RaYc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkJ1tHT2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24D641C7C;
-	Wed, 17 Apr 2024 20:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4339F79D8;
+	Wed, 17 Apr 2024 20:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713384190; cv=none; b=Jsn+b/kuZDMGT1oGoPfbhBl6fu4duMtk4GPmE3TbvTV2p5wjbZ4fndlGTFBzHcJuCQk815QyAOeNKzPq4togTFj+LsYQ1Zzlv3i+HTz3Wsa0l8EfnDBmH7asbtG8g+LNg8LmYTgyYasJRqolY14YdFoRpEHcjE42Oim77U4r2+c=
+	t=1713386798; cv=none; b=KwNoiLReZRou3Hw0FMXGQBcRfmX9LYF8varODuW806oZt4Bp3GjW0YrFSB9Rit1FDmNNCOYMGb1Q9z79iiVK81bQH9BLs9V4jyfbOxucu4HJkYQ9MR5l0iZdvJdFdI9TlppYj4TKFuKrDj823nmMTlE3FAv6jNxsbRj7+2sAHug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713384190; c=relaxed/simple;
-	bh=1gUuVn+QjUd7F5bm51RwKzR6j6BmbQzEDGn5JENwhyo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=euCeY19nJTf2cp1TmWC2DGO+7rSHMjtn9zp1sPk8eWO5FfYKhaa3saYXfh3M8l2pe3Ssejh+L5lfqPSFk733ic2Vp+CPpcO1Pc4lqV/XhyOSfP0IzFzCOhYE8l/89zT3UsQSQj+27XfkzmwELCHqzA7CczlQzjEyfL/54rlqT/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=P1f3RaYc; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=8xZy/0NtF+dV+KHcJxF6iRNziuvt+mIUzs1R/Wc34/k=; b=P1f3RaYcYjmQe13JJtjSwquN0U
-	U4p4slLzfeBTaq/2KgWu+sL0pIHjRSKxKTGGdt7yYjj9++wr68kfwE5+WrCm7qWqgCWmuh4l4Wlkg
-	ibi9u/l/QNtS9BMqlDHfkItTqOWIqTR1qvYMBvdN9gmTKo4y/K0l4rLpMpZR1lLUT/P/PWvKXiRVY
-	Abq5b+5glRFq0RcQYJTL1QKMSd0EQbu8PHwcFsLhpts2Y0xOfZcicDWeWvmpGdn5MxIyw++A4GZkk
-	/27UKEb1GyF9ARASBfGcnfYPftM4BH+jg5O62lcjreJ/aPYCoYFkwlC7WA0Xg/JY3Ph04Ovzwn3+Y
-	lFXytdEA==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
-	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1rxBUn-00HOiY-26;
-	Wed, 17 Apr 2024 15:03:07 -0500
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- wine-devel@winehq.org,
- =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
- Wolfram Sang <wsa@kernel.org>, Arkadiusz Hiler <ahiler@codeweavers.com>,
- Andy Lutomirski <luto@kernel.org>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
- Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v4 02/27] ntsync: Introduce NTSYNC_IOC_WAIT_ALL.
-Date: Wed, 17 Apr 2024 15:03:05 -0500
-Message-ID: <3479054.QJadu78ljV@camazotz>
-In-Reply-To: <20240417113703.GL30852@noisy.programming.kicks-ass.net>
-References:
- <20240416010837.333694-1-zfigura@codeweavers.com>
- <20240416010837.333694-3-zfigura@codeweavers.com>
- <20240417113703.GL30852@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1713386798; c=relaxed/simple;
+	bh=vpW2uBcFnTTkU4Vdy3ReQVcKp2u1xZV+wBorG7RxKjk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=neTCyl00IJdlz1MUNgXpsKMFOTcTKnJ9Y0ziFqNAiffFGvNYhi+HMo2HuYeld1zfbzxijgkKQxfvhVryvrb9YmZBqUwNidysmcF9j6M2zi14ru/JuZHit0F9RPKau7qzoECaH4m/FJ//2gnqpHS9VYVxgqOAwIeatRDaeRN9mZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkJ1tHT2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6943BC116B1;
+	Wed, 17 Apr 2024 20:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713386797;
+	bh=vpW2uBcFnTTkU4Vdy3ReQVcKp2u1xZV+wBorG7RxKjk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RkJ1tHT27y+k0lu2QQRUrGTpEPA5UU3iWd9URd2ZdTybNiuCSoZJcWvzIScLEJTo3
+	 j2PHHyRu4FLB7fZoCfA2IziVIfmuO8kBmqRWrcMfkjT0kR6w4Wo1zZ42afTut8q4NE
+	 H4KxdWsQUxkRcixhNeIf0xLD2kViqQ3efDUTiKxw+v8SifzNUCBsDSOYfRgAEHSXDF
+	 xsECzz55hNl+R/no/eoZhtY9gEai/b9oJ7oFZQ2khaHbGdCNs8B+/tHeQaYr2Widzb
+	 D8yF16M1VOyUYZa0O/DnxSIKz43pjAF944uhasya9+85A4NRFg8oRuuMKg4J1UFUo5
+	 NTNgavSRXsFZg==
+Date: Wed, 17 Apr 2024 13:46:36 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/4] selftests/net/tcp_ao: A bunch of fixes for
+ TCP-AO selftests
+Message-ID: <20240417134636.102f0120@kernel.org>
+In-Reply-To: <CAJwJo6Yw4S1wCcimRVy=P8h0Ez0UDt-yw2jqSY-ph3TKsQVVGA@mail.gmail.com>
+References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com>
+	<20240416072809.3ae7c3d3@kernel.org>
+	<CAJwJo6Yw4S1wCcimRVy=P8h0Ez0UDt-yw2jqSY-ph3TKsQVVGA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wednesday, 17 April 2024 06:37:03 CDT Peter Zijlstra wrote:
-> On Mon, Apr 15, 2024 at 08:08:12PM -0500, Elizabeth Figura wrote:
-> > +	if (atomic_read(&sem->all_hint) > 0) {
-> > +		spin_lock(&dev->wait_all_lock);
-> > +		spin_lock_nest_lock(&sem->lock, &dev->wait_all_lock);
-> > =20
-> > +		prev_count =3D sem->u.sem.count;
-> > +		ret =3D post_sem_state(sem, args);
-> > +		if (!ret) {
-> > +			try_wake_all_obj(dev, sem);
-> > +			try_wake_any_sem(sem);
-> > +		}
-> > =20
-> > +		spin_unlock(&sem->lock);
-> > +		spin_unlock(&dev->wait_all_lock);
-> > +	} else {
-> > +		spin_lock(&sem->lock);
-> > +
-> > +		prev_count =3D sem->u.sem.count;
-> > +		ret =3D post_sem_state(sem, args);
-> > +		if (!ret)
-> > +			try_wake_any_sem(sem);
-> > +
-> > +		spin_unlock(&sem->lock);
-> > +	}
-> > =20
-> >  	if (!ret && put_user(prev_count, user_args))
-> >  		ret =3D -EFAULT;
->=20
-> vs.
->=20
-> > +	/* queue ourselves */
-> > +
-> > +	spin_lock(&dev->wait_all_lock);
-> > +
-> > +	for (i =3D 0; i < args.count; i++) {
-> > +		struct ntsync_q_entry *entry =3D &q->entries[i];
-> > +		struct ntsync_obj *obj =3D entry->obj;
-> > +
-> > +		atomic_inc(&obj->all_hint);
-> > +
-> > +		/*
-> > +		 * obj->all_waiters is protected by dev->wait_all_lock rather
-> > +		 * than obj->lock, so there is no need to acquire obj->lock
-> > +		 * here.
-> > +		 */
-> > +		list_add_tail(&entry->node, &obj->all_waiters);
-> > +	}
->=20
-> This looks racy, consider:
->=20
-> 	atomic_read(all_hints) /* 0 */
->=20
-> 				spin_lock(wait_all_lock)
-> 				atomic_inc(all_hint)	/* 1 */
-> 				list_add_tail()
->=20
-> 	spin_lock(sem->lock)
-> 	/* try_wake_all_obj() missing */
->=20
->=20
->=20
->=20
-> I've not yet thought about if this is harmful or not, but if not, it
-> definitely needs a comment.
->=20
-> Anyway, I need a break, maybe more this evening.
+On Wed, 17 Apr 2024 19:47:18 +0100 Dmitry Safonov wrote:
+> 1. [ 240.001391][ T833] Possible interrupt unsafe locking scenario:
+> [  240.001391][  T833]
+> [  240.001635][  T833]        CPU0                    CPU1
+> [  240.001797][  T833]        ----                    ----
+> [  240.001958][  T833]   lock(&p->alloc_lock);
+> [  240.002083][  T833]                                local_irq_disable();
+> [  240.002284][  T833]                                lock(&ndev->lock);
+> [  240.002490][  T833]                                lock(&p->alloc_lock);
+> [  240.002709][  T833]   <Interrupt>
+> [  240.002819][  T833]     lock(&ndev->lock);
+> [  240.002937][  T833]
+> [  240.002937][  T833]  *** DEADLOCK ***
+> 
+> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/537021/14-self-connect-ipv6/stderr
+> 
+> 2. [  251.411647][   T71] WARNING: SOFTIRQ-safe -> SOFTIRQ-unsafe lock
+> order detected
+> [  251.411986][   T71] 6.9.0-rc1-virtme #1 Not tainted
+> [  251.412214][   T71] -----------------------------------------------------
+> [  251.412533][   T71] kworker/u16:1/71 [HC0[0]:SC0[2]:HE1:SE0] is
+> trying to acquire:
+> [  251.412837][   T71] ffff888005182c28 (&p->alloc_lock){+.+.}-{2:2},
+> at: __get_task_comm+0x27/0x70
+> [  251.413214][   T71]
+> [  251.413214][   T71] and this task is already holding:
+> [  251.413527][   T71] ffff88802f83efd8 (&ul->lock){+.-.}-{2:2}, at:
+> rt6_uncached_list_flush_dev+0x138/0x840
+> [  251.413887][   T71] which would create a new lock dependency:
+> [  251.414153][   T71]  (&ul->lock){+.-.}-{2:2} -> (&p->alloc_lock){+.+.}-{2:2}
+> [  251.414464][   T71]
+> [  251.414464][   T71] but this new dependency connects a SOFTIRQ-irq-safe lock:
+> [  251.414808][   T71]  (&ul->lock){+.-.}-{2:2}
+> 
+> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/537201/17-icmps-discard-ipv4/stderr
+> 
+> 3. [ 264.280734][ C3] Possible unsafe locking scenario:
+> [  264.280734][    C3]
+> [  264.280968][    C3]        CPU0                    CPU1
+> [  264.281117][    C3]        ----                    ----
+> [  264.281263][    C3]   lock((&tw->tw_timer));
+> [  264.281427][    C3]
+> lock(&hashinfo->ehash_locks[i]);
+> [  264.281647][    C3]                                lock((&tw->tw_timer));
+> [  264.281834][    C3]   lock(&hashinfo->ehash_locks[i]);
+> 
+> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/547461/19-self-connect-ipv4/stderr
+> 
+> I can spend some time on them after I verify that my fix for -stable
+> is actually fixing an issue I think it fixes.
+> Seems like your automation + my selftests are giving some fruits, hehe.
 
-Ach. I wrote this with the idea that the race isn't meaningful, but
-looking at it again you're right=E2=80=94there is a harmful race here.
+Oh, very interesting, I don't recall these coming up before.
 
-I think it should be fixable by moving the atomic_read inside the lock,
-though.
-
-
+We try to extract crashes but apparently we're missing lockdep splats.
+I'll try to improve the extraction logic...
 
