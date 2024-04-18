@@ -1,116 +1,119 @@
-Return-Path: <linux-kselftest+bounces-8342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AE658A9E37
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 17:22:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C2608A9E46
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 17:25:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 093231F2115C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 15:22:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E7391C21CED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 15:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9551616C691;
-	Thu, 18 Apr 2024 15:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C395116C69F;
+	Thu, 18 Apr 2024 15:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TUCv9OEb"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="he8nYJjF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mout.web.de (mout.web.de [212.227.15.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022F016C6B2
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 15:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F2C161935;
+	Thu, 18 Apr 2024 15:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713453699; cv=none; b=eZOXY9t+dcDiZUtK0EmGifnq5c1X6ox+xV9/O5FUAMWYdWlmzNZBaMsW6QViIcyX0AiYwT67889R1MrNl6BRR2tOyD9MNjo3azL/iDrq+m8fMi4fIP29nHznWUltBstFWaqKFr75ro8yvVFBJxUCK9ZmTlan1fUmhkg6naPywbw=
+	t=1713453896; cv=none; b=BzbBVE/0nB0GMLiqEY20qoMKmHWWsaLJY6NgZumIn08G4CLvjuYa3YYSHGHatcNeP7sjrt5Shl7V9235K2YX0so2ytSr6bjHUFaaI8wjegyji4bKQqyYzRwseZWZLj0CIZd8Shlyqkgj5GTn2Sdc4zvVLVDvEpoXn2MbSjTbUw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713453699; c=relaxed/simple;
-	bh=CQohQLqvPc/tHvgWJq7mh9PQ9WJ3XLzzwtQN4cmxGqc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uQbbb+Y7jrcTQ+nTWIvfhkjciLJ25AVN9YZgj7IIRwTsRDgXjjH7Vfb3SG90Ognd/dfKOwJxkECg8mtLZP3uaZf5M/Msnj2d1sGobm5OZo6BrZOkUfBtj9AW3qWYP1OayKhwFGGy+R/8ip0+epJ1CqLbQr3drcUEo6rUqu788lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TUCv9OEb; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713453696;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CQohQLqvPc/tHvgWJq7mh9PQ9WJ3XLzzwtQN4cmxGqc=;
-	b=TUCv9OEbc/VwiFRchQLCoHUsxqu1pjymec/cKtmFJC1LSm9VtDI5Fz5ZbbJAPIgrWbOJe7
-	VdXFYGrfXDut4UY84b0u5EwiOdlCXjyyw56ffkoEc1mLmTpq0EFU/lYGb/OOZNr7AfrTYi
-	xsOKT3CxOAbgiK1mAXgJGGbtvJThanI=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-599-K0nNN4fwN9izwLJQK5ztYw-1; Thu, 18 Apr 2024 11:21:34 -0400
-X-MC-Unique: K0nNN4fwN9izwLJQK5ztYw-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-437acd0cb2bso5300401cf.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 08:21:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713453694; x=1714058494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CQohQLqvPc/tHvgWJq7mh9PQ9WJ3XLzzwtQN4cmxGqc=;
-        b=UT9TFl6bRfbZyzrsR/wIdnMjXPXQf5HE93Dg5uml52LjG1A0XugQHjuMw765euEIcy
-         x4Nz6ANhrmjZeEj4VQWznLsBVoiKkwh6NkRUsp5aY/cTghKGxZj3jqfCEHMT0vUZvXX7
-         EWvGmbjz3v3j01AxuSRnrdQ+1qyHVhFK61CdsqTxij1XfHRrBO6vOg8gNs5Bb/Q2bkYh
-         vO9VxP/jKwpboOGUSOMA+vAWOhzEpEsFOVaIMuFfOi/8c+aamhR9ho7yyMnZtF1c+5I1
-         L/OFZxPKUUycoJE228QZoHtsQ7AxUZs4io7HjDTeXHu694ZYUfPJ5eFcMauVTVtUtQj0
-         sDiw==
-X-Forwarded-Encrypted: i=1; AJvYcCX5EXZddhZQ1d1ujNPbtZzjdsmmph1ujnrdhAOgRMStUeCiLNGVRRzpXydSUToO9o5NsUFYJC1YghJd0UPgtqjoVfc5g02Hg4Iwd9j1RHcL
-X-Gm-Message-State: AOJu0YxspdNP47uOMjI0R8dJ4S/6iIwqRzcge0tDBXtI66orxMVISTDf
-	moUhsd/U/PtoxS/DmFCMiN86DADZXf/ecoc43bAkmVfvIi6528/e347gFWTJbm7UllFCqOYvb1U
-	MPDGchJI1RHLBqa8rARjwv1YEgo+i0d6X7er8nrLNKDTzP55qVn1wwTtKZ39+g6/pj1olaKtPKP
-	xst+nJL1HXnH+qoFBq1sBuPuAPPsiadvlIwYbguLK8
-X-Received: by 2002:a05:622a:164e:b0:434:68ad:bc6d with SMTP id y14-20020a05622a164e00b0043468adbc6dmr3752450qtj.52.1713453694197;
-        Thu, 18 Apr 2024 08:21:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEYZwCA+06wOvVVCIasxw9xTrMHDeFH+2lLqLF9z2iIkb9Ub+iZ6WZb5a1fMomaWqQomkeAzQiYpEptyX8KM74=
-X-Received: by 2002:a05:622a:164e:b0:434:68ad:bc6d with SMTP id
- y14-20020a05622a164e00b0043468adbc6dmr3752430qtj.52.1713453693884; Thu, 18
- Apr 2024 08:21:33 -0700 (PDT)
+	s=arc-20240116; t=1713453896; c=relaxed/simple;
+	bh=K6si/qWNSSEtfjq7a1SEzSelcRddlzdgf8u7W2c9iVw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=ide1gCuZmhqz9ilRq+akFd2qTMrdqnsclvRCigCxZzVZlJcakCEmGGkzL2Fz8XbrX59UVDgFqHK3UuOtrZHeINRFgrHcGM1B5C8EFTN/dZR5iDo0OBxs4coASUPHo+cNINlCGceSSTnOyHf+zgJ9DKwm8sS2HqSQL4we+pM3CUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=he8nYJjF; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1713453888; x=1714058688; i=markus.elfring@web.de;
+	bh=Vq9VWrH+gFfZimn1lXPfohIhS0gZTVPNGthLTor5jMs=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=he8nYJjF8NSkYh7XVLsTbYt46l2oJtjrf7sFBEZI087XsHoijwCi8SYflOC5S93i
+	 oMhyfqoTtyFw1N+LevQ8O6PaHdplLpvhhGvgCQ72vbALXvqA2PjJ3NpiCqIhX9xfF
+	 P59EoYB4Gjn41LvycD3FkWHGAvrafh1rzC2YY2vUKAxVTHj4v++/cV7T8SnEOJMFF
+	 4kz0SgAUv/BJqoWXrOCqYNvcEnpxUXs5+szlWh418GNU1aSh6dcs4VVV9/fLJjI6R
+	 lNROEawpPyXDiWszg2NeHJA+LnFOEnW/gZRt0SeR4OsfYp+6mOamj22AWiZA7zE0N
+	 aNnTiHfLSFH/EYUC6w==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mf3qY-1sdvze1UwU-00dp4F; Thu, 18
+ Apr 2024 17:24:48 +0200
+Message-ID: <9ff84256-c7d2-48e5-b06b-09a993db2c39@web.de>
+Date: Thu, 18 Apr 2024 17:24:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418131754.58217-2-wander@redhat.com> <b96697ff-3177-4559-a410-104ca3a1110f@web.de>
-In-Reply-To: <b96697ff-3177-4559-a410-104ca3a1110f@web.de>
-From: Wander Lairson Costa <wander@redhat.com>
-Date: Thu, 18 Apr 2024 12:21:22 -0300
-Message-ID: <CAAq0SU=HJ8nysYWBj6_FGbRv5QyetdV0xJJKpn2oy6Hub7-6QQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: unregister the device on error
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+To: Wander Lairson Costa <wander@redhat.com>, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240418131754.58217-3-wander@redhat.com>
+Subject: Re: [PATCH 2/2] kunit: avoid memory leak on device register error
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240418131754.58217-3-wander@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:18nIa5u5Z6yCz71VW5nr+AuTvLfOR5QY3AKj//R8Y/Oo6/3krry
+ w1YOHjzYkwn4FfejR8lTSWBz/3UydDAgMyIUgBAKBqnAKL4FCkRKsJ+479V3zLa/USpSBby
+ FLbnIHJmC/Ar/AhmHrVapw3NTVc7a0pgN0Xg9MrHxaRE4jNqudCHNH4GwzRlWocpDLgLxxc
+ FG7pD6xuD/cIfev6+yqXA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:bv2N6UDqpNk=;q+yVHgJcfitJbCwRSNQKvalCrrl
+ IZYAYamBlDjlWvVcnOizvwlPw+NxUcyMOspNOoS2UyZwweBn2AkLnJsVWgUqysNBvDViwk9Fn
+ nWwS38GPvESSAwElOVg8JhdaSOxyb4VFrAfiVMmnVZbfpsNf5Qwzg6VAh0nRugpHhlpN0JF4d
+ fBC/5Gjgax30/DmJI1LlML5/H3SPfEYhHt/7r4LFv5CHB716p4eQLWi9sfTjkHCHfkzLTd4BF
+ tKYDeSho6nIVLGdSHmvFKI0Hdcw3OyGwkYrB7kW+hSeSzrVwYZqVCJR8RmggBHXLu6DVlKAu3
+ sMAEwKXiANQ/jvP4AwRXXuKthFK3H+urBcAZc4W8BVREKD7mfMvheD/kjfeFFHyZRFrcs/mXt
+ Q8UxoC5g5ni2a4fqqVoXVfjG5qc+HGSFdrXdQIUBUOvXGodk/Pjyx5jd3G487OBiGavX1Vg2R
+ nSyKGQEYK/ZCTOLfr+H7Zcz/l2DoqqSYsDAVmFfOTle3kJy6d/H9705q2gL1Y+DyR8qSaFons
+ 7s4RxSji2dky2zs08/keO09kiFT4abU5fArXvtxGOTSJOLcqAHFqJ71wG98vrHEE90VrGcom1
+ enXJeOvyqN0U5P1vJcWwKb0nij8iIpTIBLFXd9tXZ4G22jxfgDsVGAZTjFyM7chhRLt7RoiVQ
+ HUQkcm1AX6aO4/JDl0YwDy1tzC+2I1v+vUSCSDJ4D7ZWWUHFH6gPK3G0LvF+jrS5MEPDUFHO7
+ gZwFss9kH77P7ARAeUPXsZWN2x8rhvmg8Wkmx2s0J+YJuLZt0RbZ7VoHnjhUZvtOi5jC+n0OL
+ 8DHXPjUYxrtlqjTGBf9T62XfAhspE4KMmFizrhSQ4cIDM=
 
-On Thu, Apr 18, 2024 at 12:06=E2=80=AFPM Markus Elfring <Markus.Elfring@web=
-.de> wrote:
->
-> > kunit_init_device() should unregister the device on bus register error.
->
+> If the device register fails, free the allocated memory before
+> returning.
+
+* I suggest to use the word =E2=80=9Cregistration=E2=80=9D (instead of =E2=
+=80=9Cregister=E2=80=9D)
+  in the commit message.
+
+* Would you like to add the tag =E2=80=9CFixes=E2=80=9D accordingly?
 
 
-> * Would another imperative wording be desirable also for this change desc=
-ription?
+> +++ b/lib/kunit/device.c
+> @@ -131,6 +131,7 @@ static struct kunit_device *kunit_device_register_in=
+ternal(struct kunit *test,
+>  	err =3D device_register(&kunit_dev->dev);
+>  	if (err) {
+>  		put_device(&kunit_dev->dev);
+> +		kfree(kunit_dev);
+>  		return ERR_PTR(err);
+>  	}
 
-It makes sense, I will change the comment description.
+Common error handling code can be used instead
+if an additional label would be applied for a corresponding jump target.
 
->
-> * Will the tag =E2=80=9CFixes=E2=80=9D become relevant here?
+How do you think about to increase the application of scope-based resource=
+ management here?
 
-I often forget this tag. I will add it.
-
->
-> Regards,
-> Markus
->
-
+Regards,
+Markus
 
