@@ -1,126 +1,154 @@
-Return-Path: <linux-kselftest+bounces-8305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17A448A9657
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 11:38:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 802C58A96CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 11:55:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAD211F22E42
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 09:38:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 351911F235DD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 09:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BB115B0F4;
-	Thu, 18 Apr 2024 09:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA2115B542;
+	Thu, 18 Apr 2024 09:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mhsXI73V"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="n6YUKBVw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6F015ADB7
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 09:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40B015AAAD;
+	Thu, 18 Apr 2024 09:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713433090; cv=none; b=ZBAPIH8JTExWMRtrkXdC3QoQon3a2Xpep2MArC+sWpb1kbfLoLzDr1GY5b1npLGc/2kK85LE3I2R0QLgptbJXlEhrFoGD7XGYf385ZIY+LDy9W16i2+G4ee5Cy5YK7wfl81GRUttf6/oiqkGaelTCgEwY5xLGhvwVjhjJ7IxkgI=
+	t=1713434114; cv=none; b=jdbIG+gEqDwBV1Nl1TkLb6K8KIav2KKwh6IORb6poLhE9DdLyJbY5Iji2MgivFGCq/lRX34tiL+WkY8WGILT1u7qjG7Lt/bMSjXgInr67GyyPl8nkUyN39BzANI/jdLUdTytyYwxOCjoCqtjpL/2KDKCgBPqjKM1YovQIT9H/tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713433090; c=relaxed/simple;
-	bh=8ShK6BZyhaLHMQr2Rr9oA5Mcbeoqx2IAhm4x1HZZarY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=bal7mCiQ82DOGJ7lDvpTQ3sN2OMsfyNgDMSCmWdkA90wWvuSc10XKY5Hr5xOfBmECApjW6e9B1pdgM4XV7t8jSGipiSAroMqM5NkQbNRJnQVzKzA5eDqfAShXuca9+nTKjLlSWNDqx754rRA45ZLzT7EBXtuL+JfW/OjjTIONG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mhsXI73V; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4dcf9659603so175717e0c.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 02:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713433088; x=1714037888; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mFeVdDbx/Wm34+9Q/l7q6aDREQ/YSdgqO8vqBbzLk1U=;
-        b=mhsXI73VMPWUEUoYwOKdhcm25q6sApNfMi4+JI243+p4o7OZSdviVUSedRHUscUK+k
-         j8J7Pnca/Abv2qITf4DQqs7cT9yr0yADQwzcyHvgNf4pIn5ladBM6Oa4O34wNg/gvLBT
-         XIqqKQedTV4ghDHUDLogMsCD4XNYVRznbqCIFE8a21PrkmiBZV1FE/jE0jpKONqIB8xO
-         PCEBbTybI8o4f2eur37erNZTn0zv3scv3GasA0aZsd9pf9qgVnqg4Aq4a010SPmzYmzb
-         xiljnkW8XCEhlZhNWfUTP+TbpfLPdYVfd9eECWZGVby1izJ8sYWEe7AZ/DPlDTrMaJSa
-         Ln0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713433088; x=1714037888;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mFeVdDbx/Wm34+9Q/l7q6aDREQ/YSdgqO8vqBbzLk1U=;
-        b=YQxU7B0cFvtdZ1m7V3fYFgQPSGbOFVJrGBb2I6tRI23mAhoBy2r4Ymmt3VDoZxbqmu
-         6lxvcoSBgl5A1rdhaLvKamZQUe5Vu40vqJvmatF6Ot0gHUimUuQbZZohPDmCbUA2nTvU
-         r/3vltoDEFgif7Vqi2coYMQ7Gxd+VoX8hs0rNUVr5/MuUUKjNxwzfdbNkszA4NfxBszT
-         HCr+lFEjSUcLpWcOU+iYbQdgso6cQRA0QyJr9a5Tv7JeV60RUExIqtVg12yWMbYhlKQC
-         COYjjH6fHmwj/9/bOvlZO5XX3Y0JKAx/F0d0CCKfuZSvtiWaHsA5akzycyX87K2zxhrn
-         JjHw==
-X-Forwarded-Encrypted: i=1; AJvYcCWEDt5uVw2wgsf6GZzXSpEB+gzhNGKXwKl4mW61TSo8dX0ORwNe7cefgDAbwRO7G+hwQHKFCWAdizon0T6O1WmbClDyB5yTVEpWsdpcm7wC
-X-Gm-Message-State: AOJu0Yy/g4f4IdWVWXBEGIGBlS26uUUFWEX+wkSzndZu7VtF9dtxqL07
-	xxb2/WQfcXdR60/bLzH0UpCFViQm0fFq2Adwm0lFO7tsb0L8aR4O94X/2PU5QZoUXTJVZChfIcP
-	usuK6HgpKu1uGZRhofb73obhCym4cXYb+bcnK4SrGHE4uuiteXrw=
-X-Google-Smtp-Source: AGHT+IEoDIR/L/aazTWb4Qg2+VKVTMbhyKp0gSJZ3qS35wjNaK3q5yTn60lPAs6KLT11MyJ/yXVClp46VBRESQ9PGlA=
-X-Received: by 2002:a05:6122:1da5:b0:4d4:17c5:8605 with SMTP id
- gg37-20020a0561221da500b004d417c58605mr2452601vkb.7.1713433088326; Thu, 18
- Apr 2024 02:38:08 -0700 (PDT)
+	s=arc-20240116; t=1713434114; c=relaxed/simple;
+	bh=duaR1AnrObmqETtxDghvr7defhHd1q2pgv4fpE/MLDo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VruC80sYECNONcb+ArLC/6ky0kIQuW9mqHH907ndPYf9CH3v/QdaSCmus/NzJYWmnyk9dBDxLsUtVmapfob9ROnGDCCU8mwdi7NwRXqIwpZT46mEPF/SWsucs082dnEQuAi/Y1AhyHV2Y3i1v1zp+bWOgNzDs0aZjrwbK5iJeVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=n6YUKBVw; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1713434112; x=1744970112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=duaR1AnrObmqETtxDghvr7defhHd1q2pgv4fpE/MLDo=;
+  b=n6YUKBVwvB2ol+qn2y164nnedPopKC3VvGAAVR6OBjd6GAr19/BmMgF6
+   lFdadHIlPA4BP13v7XA1IMZPbvaMdfgrcfuYXEl1mKOZ2sVA7s5rNRAvn
+   rCLlpYkwUZKLX8C00NT1dNpH/cos6I6zD6r2Dz7R7WDQ2fKv+NwA1J3Z6
+   lBDh2a+UBuNPZbwGcomAKsr1XIVSvpgx6Z4B7ehxuoAEokg8aVTI05/Fk
+   6osCeQb3ne7x6vhQBxQfsbygRCVTST+rnZX68N8ZApuqkd+ySTf/HN1Oc
+   VS3NfjkL2RZPt/5j7CWX/mmEjLhicRMOtPrkDfX3XQiUqhj9DheiT5i0i
+   Q==;
+X-CSE-ConnectionGUID: ECU7hUHwT6yX4X4vObkvLg==
+X-CSE-MsgGUID: G7MHUU6ZS1qzj52fb6t0/g==
+X-IronPort-AV: E=Sophos;i="6.07,211,1708412400"; 
+   d="asc'?scan'208";a="188872991"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Apr 2024 02:55:11 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 18 Apr 2024 02:54:31 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 18 Apr 2024 02:54:27 -0700
+Date: Thu, 18 Apr 2024 10:54:12 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Andy Chiu <andy.chiu@sifive.com>
+CC: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Heiko Stuebner
+	<heiko@sntech.de>, Guo Ren <guoren@kernel.org>, Conor Dooley
+	<conor@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Jonathan Corbet <corbet@lwn.net>, Evan
+ Green <evan@rivosinc.com>, =?iso-8859-1?Q?Cl=E9ment_L=E9ger?=
+	<cleger@rivosinc.com>, Shuah Khan <shuah@kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>, Palmer
+ Dabbelt <palmer@rivosinc.com>, Vincent Chen <vincent.chen@sifive.com>,
+	Greentime Hu <greentime.hu@sifive.com>, <devicetree@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v4 1/9] riscv: vector: add a comment when calling
+ riscv_setup_vsize()
+Message-ID: <20240418-harsh-childlike-94403aa132b3@wendy>
+References: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
+ <20240412-zve-detection-v4-1-e0c45bb6b253@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 18 Apr 2024 15:07:57 +0530
-Message-ID: <CA+G9fYvJ7=rahqJ9g35=XzEvAq9+zAiq8PNhBE-ceb2EED2gnA@mail.gmail.com>
-Subject: selftests: resctrl: cat_test.c: In function 'noncont_cat_run_test':
- ../kselftest.h:74:9: error: impossible constraint in 'asm' 74 | __asm__
- __volatile__ ("cpuid\n\t"
-To: open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>
-Cc: Fenghua Yu <fenghua.yu@intel.com>, Reinette Chatre <reinette.chatre@intel.com>, 
-	Shuah Khan <shuah@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="stxnFH69aESRe/Ix"
+Content-Disposition: inline
+In-Reply-To: <20240412-zve-detection-v4-1-e0c45bb6b253@sifive.com>
 
-The Linux next building selftests with gcc-13 found these build warnings
-and errors.
+--stxnFH69aESRe/Ix
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Fri, Apr 12, 2024 at 02:48:57PM +0800, Andy Chiu wrote:
+> The function would fail when it detects the calling hart's vlen doesn't
+> match the first one's. The boot hart is the first hart calling this
+> function during riscv_fill_hwcap, so it is impossible to fail here. Add
+> a comment about this behavior.
+>=20
+> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+> ---
+> Changelog v2:
+>  - update the comment (Conor)
+> ---
+>  arch/riscv/kernel/cpufeature.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 3ed2359eae35..d22b12072579 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -683,6 +683,10 @@ void __init riscv_fill_hwcap(void)
+>  	}
+> =20
+>  	if (elf_hwcap & COMPAT_HWCAP_ISA_V) {
+> +		/*
+> +		 * This callsite can't fail here. It cannot fail when called on
+> +		 * the boot hart.
 
-Build log:
----------
-Path:
-selftests/resctrl/resctrl_tests/
+I am loathe to comment on this again, so=20
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+but you could just write this as "This cannot fail when called on the
+boot hart."
 
-In file included from resctrl.h:24,
-                 from cat_test.c:11:
-cat_test.c: In function 'noncont_cat_run_test':
-../kselftest.h:74:9: error: impossible constraint in 'asm'
-   74 |         __asm__ __volatile__ ("cpuid\n\t"
-         \
-      |         ^~~~~~~
-cat_test.c:308:17: note: in expansion of macro '__cpuid_count'
-  308 |                 __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-      |                 ^~~~~~~~~~~~~
-../kselftest.h:74:9: error: impossible constraint in 'asm'
-   74 |         __asm__ __volatile__ ("cpuid\n\t"
-         \
-      |         ^~~~~~~
-cat_test.c:310:17: note: in expansion of macro '__cpuid_count'
-  310 |                 __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-      |                 ^~~~~~~~~~~~~
+Cheers,
+Conor.
 
-Steps to reproduce:
----
-tuxmake --runtime podman --target-arch arm64 --toolchain gcc-13 \
-  --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2fDW3wG8BqWxf0afUI5f4wkArPi/config
-\
-  debugkernel dtbs dtbs-legacy headers kernel kselftest modules
+> +		 */
+>  		riscv_v_setup_vsize();
+>  		/*
+>  		 * ISA string in device tree might have 'v' flag, but
+>=20
+> --=20
+> 2.44.0.rc2
+>=20
 
-Links:
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2fDW3wG8BqWxf0afUI5f4wkArPi/
+--stxnFH69aESRe/Ix
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-Linaro LKFT
-https://lkft.linaro.org
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZiDtuAAKCRB4tDGHoIJi
+0vBwAP98Il+vXK4C3r4MkJnr98Iu2kDKN2juNFv17/2CzU01XAD8DKAV9cWacroD
+OxgMcDQ3nbE0Mhf3iWlSh55SQQYoqQ4=
+=At92
+-----END PGP SIGNATURE-----
+
+--stxnFH69aESRe/Ix--
 
