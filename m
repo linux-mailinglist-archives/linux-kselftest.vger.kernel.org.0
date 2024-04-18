@@ -1,142 +1,163 @@
-Return-Path: <linux-kselftest+bounces-8362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE7F98AA2DA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 21:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D72BA8AA360
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 21:52:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC9C21C20A26
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 19:35:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 126C91C23170
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 19:52:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60DF317F36F;
-	Thu, 18 Apr 2024 19:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7CBF199EA2;
+	Thu, 18 Apr 2024 19:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7bPKhWe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJPRQcZp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70DA17BB2C;
-	Thu, 18 Apr 2024 19:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0CC190676;
+	Thu, 18 Apr 2024 19:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713468936; cv=none; b=r/GhNMDEiQoXjJA06GORZZ82qcIOeFVPHyCqGrxqs+YokgLqnCRzic18gR4GjtTQQ/xrNX79/eUOv89H2igrTxgd7l6NHxPJkhhl01GKwLUzjWbJc25pnjPkqxQqtgEjUs+GvxqZB1b3DoZUYEeGLB0s8mlzdlljd4jsbquIWvA=
+	t=1713469694; cv=none; b=IldV99ZhYo6KD/Mu3BUCyIObSWFFCzzdU1SgT11i/Umr67y6dYqFfWIGrVy7kpqvKcrBwEiNDUF5aNPBzOs8n5BsV2ZyZRacBmz98xS3hn3j6uzamn1eEHpDWo6lFB5qOnVtz6l3jIT64ItPfdhM0LbwMXsK2xwh3lRXCWHmipY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713468936; c=relaxed/simple;
-	bh=OzBOmiPfCAiq6pIsQFQkEaHriJFCH3cvPlNRRS9d+m8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=fMVAE5jm4ih+TlRijlZrpyptjCE4q82qcUUFl/d3rWydD9sSGwvs55+whQjEPpSK37HkoAf/F3LrjH/XvQn2i3tYiCbpKq9R5/O20jzNKGE1kAdoePXIaPz45vrICQwIiPGNzxhesaiMYl3c6HrArvBRse2W9c0+h5LSEgqYW+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g7bPKhWe; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-699320fcbc1so8350746d6.3;
-        Thu, 18 Apr 2024 12:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713468934; x=1714073734; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0PFMTMR+Bmu2rlw/d5DDVMiLx3235SXmGWbOxpv+fu8=;
-        b=g7bPKhWeF1d5yGleqTJ7KTnJ8C+F2u+B8OhTTJWO3uWhfnhnG94V8bJIXzHgnTMYQn
-         suXOufDghcb5efAhNzAY1bg8h05ukdeIepDdieB9NgdN93rGey31qGPr337YPa4WQPE5
-         GC+Uwjc6EtJS5SP0JkUfk9UvASvKKEidfChAanb/tDdzvQpgfqmPl7iWgIhWu6Lv/TEN
-         1H7cdgV/U2F6rVhu4P8WzLW88ivI1dmVElTGaON+WRFm0dFNU1B7Er83th0g8w7rzeeq
-         sCpScS27IOhwAFG/J2QwYFIRWA+mklROgSc17mFqxHQGny+ZVPS8984XVSXJxSQjE0Cb
-         2icQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713468934; x=1714073734;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0PFMTMR+Bmu2rlw/d5DDVMiLx3235SXmGWbOxpv+fu8=;
-        b=EF5A1NXjJMnqF0cSE7KDivAUVmWk9h2T8s4QNw5qY8UC1gpAvr47wu9hATbmFJW6eh
-         TXMy90RsxfcK78EHMfpPexXms3ZLoclynF6SBEJ0cX4Po85f9l5dk86RUgkL1zFj8Myf
-         2SL2m16g0a6yplLMlaST+go2vOMfGsEIRt+RUeUg4BqhJURRZDmWLJuadChIaveLSdwT
-         KXZTqOJydF1k0ZQEZtMxw988ffvWEuTTXa/DJqbHbPkyT4OlqzVv3SYB+XaRvrFD5BAM
-         JPyr0/e/x4yZ+eUJ/sxJqMdqjq2lH4BqFrLPlh/qIXKMxTwFx5Pjgqr/ptaMUbJ+wCnk
-         b31Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVQYmhk/Cq8gLyTZcGdMBpLv58aGozIXv1dP2Qx9ihQum6D1Uw/Ob5bgO/uJy17W2+LM1lr/MGuwvGRxwSXekA6RS+PCElzUSkBetOPaxlF751YWn+E8Dkhi6EtklLRhMNjuxfld/JM
-X-Gm-Message-State: AOJu0YzasqS9DaGX2aYLQdqevqNYa0lbEqO0rtXCnhRwzYibQDpMIeV8
-	DdoBqDDcMnM8QYUd8lz2w+tnf9n2RcBBUlHisHYGzFYNJ4kkyl+a
-X-Google-Smtp-Source: AGHT+IFpPZ0WwZ0qwB8imyUxvVkbkiPbf+zBUOfCiBjGAIaguZY3UQE7N2k0bQJD1ly5QG1Svlz1iA==
-X-Received: by 2002:a05:6214:1549:b0:69c:a51d:4041 with SMTP id t9-20020a056214154900b0069ca51d4041mr3883262qvw.45.1713468933794;
-        Thu, 18 Apr 2024 12:35:33 -0700 (PDT)
-Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
-        by smtp.gmail.com with ESMTPSA id s5-20020a0c8d45000000b0069b4ddcbd42sm926014qvb.0.2024.04.18.12.35.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Apr 2024 12:35:33 -0700 (PDT)
-Date: Thu, 18 Apr 2024 15:35:33 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- petrm@nvidia.com, 
+	s=arc-20240116; t=1713469694; c=relaxed/simple;
+	bh=OmUmZ/bnXeCow6bbFJBnXFl2ZoWC0wNBfhjT9hW/AYY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MPmiFsvD5LfBoIvGKSUYpc39Kcn+jYbsjBtfsNBzrN8dcPl7ofHb0NGxIS3jb5Rb4kFHdj25ZIZ9wrKpqBuYnjhB6RwRuDVSvTHn6LCwXof1nDNiEPCWYeYDwv+VA8HAYglzbX51lDEKbXPdm/3x4QxgwzjoSTQQKYPd+fL3mBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJPRQcZp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B77C113CC;
+	Thu, 18 Apr 2024 19:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713469694;
+	bh=OmUmZ/bnXeCow6bbFJBnXFl2ZoWC0wNBfhjT9hW/AYY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LJPRQcZpProwGjh9Z8otCZ0M9wMBqR6OML/+gw9DS1Tr0OcvTWZ0ZFFF3vxVzlCw7
+	 Y+tTR2zlcqFbSJMsbpbDY/NcFflYnxh+9H7rkPMPXcjWPW6T8Ud2KdZJr+fCHP7jTy
+	 ybVzZoWWy/RpNpM1P4PvAAkd5JlOLNDZrH4fDnlnSmSllycHz9vtT2KhzdQtHn0Y+Q
+	 Aiwjqr5Y4Tyk74t14BU5UlNwxebWwu3Q2Q8YlncVLlfaotmNgSnDEBG61A85SRZrUL
+	 Ol+9I9o2WLLcdp6MalO+cU5Xa5fp+IeXOvW3ex6DDniqol0n8BQnYoTvVQi+bNr9+e
+	 2D1tgas0kdM9A==
+Date: Thu, 18 Apr 2024 12:48:12 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, petrm@nvidia.com,
  linux-kselftest@vger.kernel.org
-Message-ID: <6621760535c64_f818029464@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240418120628.381fd081@kernel.org>
+Subject: Re: [PATCH net-next v3 8/8] selftests: drv-net: add a TCP ping test
+ case (and useful helpers)
+Message-ID: <20240418124812.48788da6@kernel.org>
+In-Reply-To: <662131d77b55d_ec9b92945@willemb.c.googlers.com.notmuch>
 References: <20240417231146.2435572-1-kuba@kernel.org>
- <20240417231146.2435572-8-kuba@kernel.org>
- <66212d8b82945_ec9b9294aa@willemb.c.googlers.com.notmuch>
- <20240418120628.381fd081@kernel.org>
-Subject: Re: [PATCH net-next v3 7/8] selftests: net: support matching cases by
- name prefix
+	<20240417231146.2435572-9-kuba@kernel.org>
+	<662131d77b55d_ec9b92945@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Jakub Kicinski wrote:
-> On Thu, 18 Apr 2024 10:26:19 -0400 Willem de Bruijn wrote:
-> > > -def ksft_run(cases, args=()):
-> > > +def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
-> > > +    cases = cases or []
-> > > +
-> > > +    if globs and case_pfx:
-> > > +        for key, value in globs.items():
-> > > +            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])  
-> > 
-> > stats -> starts
-> > 
-> > for the reader, just spell out prefix instead of pfx?
-> > 
-> > perhaps less pythonic, but just
-> > 
-> >     if key.startswith(prefix) and callable(value):
-> >       cases.append(value)
+On Thu, 18 Apr 2024 10:44:39 -0400 Willem de Bruijn wrote:
+> > +def test_tcp(cfg) -> None:
+> > +    port = random.randrange(1024 + (1 << 15))
+> > +    with bkg(f"nc -l {cfg.addr} {port}") as nc:
+> > +        wait_port_listen(port)
+> > +
+> > +        cmd(f"echo ping | nc {cfg.addr} {port}",
+> > +            shell=True, host=cfg.remote)
+> > +    ksft_eq(nc.stdout.strip(), "ping")
+> > +
+> > +    port = random.randrange(1024 + (1 << 15))
+> > +    with bkg(f"nc -l {cfg.remote_addr} {port}", host=cfg.remote) as nc:
+> > +        wait_port_listen(port, host=cfg.remote)
+> > +
+> > +        cmd(f"echo ping | nc {cfg.remote_addr} {port}", shell=True)
+> > +    ksft_eq(nc.stdout.strip(), "ping")
+> > +  
 > 
-> like this?
+> There are different netcat implementations floating around.
 > 
-> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-> index fe4025dc5a16..8018bf98a9d2 100644
-> --- a/tools/testing/selftests/net/lib/py/ksft.py
-> +++ b/tools/testing/selftests/net/lib/py/ksft.py
-> @@ -86,9 +86,12 @@ KSFT_RESULT_ALL = True
->  
->      if globs and case_pfx:
->          for key, value in globs.items():
-> -            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])
-> -            if callable(value) and stats_with_pfx:
-> -                cases.append(value)
-> +            if not callable(value):
-> +                continue
-> +            for prefix in case_pfx:
-> +                if key.startswith(prefix):
-> +                    cases.append(value)
-> +                    break
+> I notice that I have to pass -N on the client to terminate the
+> connection after EOF. Else both peers keep the connection open,
+> waiting for input. And explicitly pass -6 if passing an IPv6
+> address. I think this is the one that ships with Debian..
 
-Yes. I would not have brought this up if it wasn't for the typo as
-well. Python developers perhaps find this less pythonic, but I do find
-it easier to follow.
+Right, 100% laziness on my part. Mostly because socat requires
+bracketed IPv6. But once I tried it I also run into the premature
+termination problem, so ended up with this diff on top:
 
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 579c5b34e6fd..2f62270d59fa 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -110,6 +110,10 @@ from .remote import Remote
+         self.addr = self.v6 if self.v6 else self.v4
+         self.remote_addr = self.remote_v6 if self.remote_v6 else self.remote_v4
+ 
++        # Bracketed addresses, some commands need IPv6 to be inside []
++        self.baddr = f"[{self.v6}]" if self.v6 else self.v4
++        self.remote_baddr = f"[{self.remote_v6}]" if self.remote_v6 else self.remote_v4
++
+         self.ifname = self.dev['ifname']
+         self.ifindex = self.dev['ifindex']
+ 
+diff --git a/tools/testing/selftests/drivers/net/ping.py b/tools/testing/selftests/drivers/net/ping.py
+index 8532e3be72ba..985b06ce2e81 100755
+--- a/tools/testing/selftests/drivers/net/ping.py
++++ b/tools/testing/selftests/drivers/net/ping.py
+@@ -27,18 +27,20 @@ from lib.py import bkg, cmd, wait_port_listen
+ 
+ def test_tcp(cfg) -> None:
+     port = random.randrange(1024 + (1 << 15))
+-    with bkg(f"nc -l {cfg.addr} {port}") as nc:
++
++    with bkg(f"socat -t 2 -u TCP-LISTEN:{port} STDOUT", exit_wait=True) as nc:
+         wait_port_listen(port)
+ 
+-        cmd(f"echo ping | nc {cfg.addr} {port}",
++        cmd(f"echo ping | socat -t 2 -u STDIN TCP:{cfg.baddr}:{port}",
+             shell=True, host=cfg.remote)
+     ksft_eq(nc.stdout.strip(), "ping")
+ 
+     port = random.randrange(1024 + (1 << 15))
+-    with bkg(f"nc -l {cfg.remote_addr} {port}", host=cfg.remote) as nc:
++    with bkg(f"socat -t 2 -u TCP-LISTEN:{port} STDOUT", host=cfg.remote,
++             exit_wait=True) as nc:
+         wait_port_listen(port, host=cfg.remote)
+ 
+-        cmd(f"echo ping | nc {cfg.remote_addr} {port}", shell=True)
++        cmd(f"echo ping | socat -t 2 -u STDIN TCP:{cfg.remote_baddr}:{port}", shell=True)
+     ksft_eq(nc.stdout.strip(), "ping")
+ 
+ 
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 6bacdc99d21b..85a6a9bb35fd 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -42,15 +42,17 @@ import time
+ 
+ 
+ class bkg(cmd):
+-    def __init__(self, comm, shell=True, fail=True, ns=None, host=None):
++    def __init__(self, comm, shell=True, fail=True, ns=None, host=None,
++                 exit_wait=False):
+         super().__init__(comm, background=True,
+                          shell=shell, fail=fail, ns=ns, host=host)
++        self.terminate = not exit_wait
+ 
+     def __enter__(self):
+         return self
+ 
+     def __exit__(self, ex_type, ex_value, ex_tb):
+-        return self.process()
++        return self.process(terminate=self.terminate)
+ 
+ 
+ def ip(args, json=None, ns=None, host=None):
 
