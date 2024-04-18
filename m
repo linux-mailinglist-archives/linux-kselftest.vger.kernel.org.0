@@ -1,260 +1,164 @@
-Return-Path: <linux-kselftest+bounces-8344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F79C8A9E75
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 17:31:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF6B68A9F25
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 17:53:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 886D81F23226
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 15:31:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9473B24FCC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 15:53:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AAA016D327;
-	Thu, 18 Apr 2024 15:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B042316F85E;
+	Thu, 18 Apr 2024 15:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="2YttR71l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zi83tpc6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8241D16C84A;
-	Thu, 18 Apr 2024 15:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFAC16C84E;
+	Thu, 18 Apr 2024 15:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713454283; cv=none; b=cv8bw77iSkn9Pn7owAT1JB0JWeYUhLeCcEYOjS5OAHHsU9k9TgSUG5uSTcDqTMvv0cG0txpM9e/wtfTZJS/cmOjT1+uaXVTS7CGpQ43ZFbYT06fRjxG+AOo9dzJ3yXityuBAqy7maoI4xJyae8FMODMVK8ciWXgo9XjpLQI7Eec=
+	t=1713455579; cv=none; b=mgwJHIXDG9K1R/X6afqfXz/TL+4m4iw7kDkIqhQOjnckwMBoW0BwEdJ7ACvRzSKpQgnKgFbjLHiB8x3hLp6Ro9YWl5A6K3dk5hRdDjbMSPBoL97tbPhpEvL65xW1C7eD7gKD3EC1XNug81tbKoKsoXHRCTe1HaZJofTezzbIVPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713454283; c=relaxed/simple;
-	bh=JuSoF/w8806XRpwQQcO6JP05+Jq2I3SdVOtm2SB0vRQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oWYS6Def1z9+je0A+I9aVuCwkZY2T5dUwStYgX56YcB2HJhEUcsC/oJr1nGTZOhx6pgRuw+uPoHpsbX5sWUtkAdcVsoBk7EI/dH2F/wXf3MIcPgfgURRX7fwTwcrg4kiyqQAJXmiJgI2JHAI05jgVvF83rXttY4LZezU0yFX4dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=2YttR71l; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713454279;
-	bh=JuSoF/w8806XRpwQQcO6JP05+Jq2I3SdVOtm2SB0vRQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=2YttR71lcYfTYNxL1JnRrfB3PGpymI0znps3FXAoT2lCUuN5gNDijebmmMWg9PjHe
-	 z1Jd95s8lOMNLWz3msoGwSD2F94M96lxQlquM8h724515gYwfeHZ3l4mrIyD+ggj7p
-	 pochh//OUkslB7q1kWK9UiMOO6dat8iqNqZtBH/qHHgBWVSgQsG7476kT8/jWxbv5c
-	 YyYxFoE7X73RlU1+fWlHXelL52kOXinBNXJqYOA0YDuDvAXjWya6T17vgG2GcvbdET
-	 NlduIQaoKnJuvKKMTR30V3Thb77IwV+vXDVww3yMzWm/kZnkWCFGJ5TXGnSEGlaV9Z
-	 Xo5G5QL4y9LIQ==
-Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 48EDE3782117;
-	Thu, 18 Apr 2024 15:31:17 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: cpufreq: conform test to TAP
-Date: Thu, 18 Apr 2024 20:31:45 +0500
-Message-Id: <20240418153146.2095230-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1713455579; c=relaxed/simple;
+	bh=6yP7DNU81gVVaBLvr4Yz015ghuSP2nPtHJYZrJGgZkw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r4zEJ044xwT1oY1h2EVH5GK0AiFyTzpSf9XnahgKwT3rIwCqjL1jHhBNYEoHb8lLMqnwQZjwN4dJTrRTalT7E3XjuVT3uw/LTVmiun1OyVq/RCWptDNdme/izA5reAd6t3xxuY8sAga+gfGwRP66qjqhGcBXh4fpJ7kVqSQsbnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zi83tpc6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3773FC113CC;
+	Thu, 18 Apr 2024 15:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713455579;
+	bh=6yP7DNU81gVVaBLvr4Yz015ghuSP2nPtHJYZrJGgZkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zi83tpc6ru6TyArQhR6ravdTE5SWs2XiYm2p5hQUcjNinfQDw2cHCSmtmm6RwfWZV
+	 mptYHPMCzvu4Y0fz5PNnv4MkCgjUVgtC/A7m6CcFgB8RkDUgOANAcuBIZWN7X2b3Fi
+	 v/xjqf97txq8FkqnuDHLw3th53BtVEFnlXTFtnkRQJuyijFHXeKtoA/ux82SRH+ba0
+	 7PHwOlUjBi8jQfeGgz9stAJ4AFCbmooPwKFAj4gzV6saPUSUc1j4wy9OIQDsThF2vT
+	 tNRVlc3dBP7B7wp3WPYnzVcAFyHYu5IV7X3TotEjKuTGgrugDkjP2sbVgNymPmtKrU
+	 lNW6hPVqMU+nA==
+Date: Thu, 18 Apr 2024 08:52:56 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Andy Chiu <andy.chiu@sifive.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Heiko Stuebner <heiko@sntech.de>,
+	Guo Ren <guoren@kernel.org>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Jonathan Corbet <corbet@lwn.net>, Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Vincent Chen <vincent.chen@sifive.com>,
+	Greentime Hu <greentime.hu@sifive.com>, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Joel Granados <j.granados@samsung.com>,
+	Jerry Shih <jerry.shih@sifive.com>
+Subject: Re: [PATCH v4 7/9] riscv: vector: adjust minimum Vector requirement
+ to ZVE32X
+Message-ID: <20240418155256.GA2410@sol.localdomain>
+References: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
+ <20240412-zve-detection-v4-7-e0c45bb6b253@sifive.com>
+ <20240418-brook-chili-4d3e61d1a55c@wendy>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240418-brook-chili-4d3e61d1a55c@wendy>
 
-This test outputs lots of information. Let's conform the core part of
-the test to TAP and leave the information printing messages for now.
-Include ktap_helpers.sh to print conformed logs. Use KSFT_* macros to
-return the correct exit code for the kselftest framework and CIs to
-understand the exit status.
+Hi Conor,
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/cpufreq/cpufreq.sh |  3 +-
- tools/testing/selftests/cpufreq/main.sh    | 47 +++++++++++++---------
- tools/testing/selftests/cpufreq/module.sh  |  6 +--
- 3 files changed, 31 insertions(+), 25 deletions(-)
+On Thu, Apr 18, 2024 at 12:02:10PM +0100, Conor Dooley wrote:
+> +CC Eric, Jerry
+> 
+> On Fri, Apr 12, 2024 at 02:49:03PM +0800, Andy Chiu wrote:
+> > Make has_vector take one argument. This argument represents the minimum
+> > Vector subextension that the following Vector actions assume.
+> > 
+> > Also, change riscv_v_first_use_handler(), and boot code that calls
+> > riscv_v_setup_vsize() to accept the minimum Vector sub-extension,
+> > ZVE32X.
+> > 
+> > Most kernel/user interfaces requires minimum of ZVE32X. Thus, programs
+> > compiled and run with ZVE32X should be supported by the kernel on most
+> > aspects. This includes context-switch, signal, ptrace, prctl, and
+> > hwprobe.
+> > 
+> > One exception is that ELF_HWCAP returns 'V' only if full V is supported
+> > on the platform. This means that the system without a full V must not
+> > rely on ELF_HWCAP to tell whether it is allowable to execute Vector
+> > without first invoking a prctl() check.
+> > 
+> > Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+> > Acked-by: Joel Granados <j.granados@samsung.com>
+> 
+> I'm not sure that I like this patch to be honest. As far as I can tell,
+> every user here of has_vector(ext) is ZVE32X, so why bother actually
+> having an argument?
+> 
+> Could we just document that has_vector() is just a tyre kick of "is
+> there a vector unit and are we allowed to use it", and anything
+> requiring more than the bare-minimum (so zve32x?)must explicitly check
+> for that form of vector using riscv_has_extension_[un]likely()?
+> 
+> Finally, the in-kernel crypto stuff or other things that use
+> can_use_simd() to check for vector support - do they all function correctly
+> with all of the vector flavours? I don't understand the vector
+> extensions well enough to evaluate that - I know that they do check for
+> the individual extensions like Zvkb during probe but don't have anything
+> for the vector version (at least in the chacha20 and sha256 glue code).
+> If they don't, then we need to make sure those drivers do not probe with
+> the cut-down variants.
 
-diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
-index b583a2fb45042..a8b1dbc0a3a5b 100755
---- a/tools/testing/selftests/cpufreq/cpufreq.sh
-+++ b/tools/testing/selftests/cpufreq/cpufreq.sh
-@@ -178,8 +178,7 @@ cpufreq_basic_tests()
- 
- 	count=$(count_cpufreq_managed_cpus)
- 	if [ $count = 0 ]; then
--		printf "No cpu is managed by cpufreq core, exiting\n"
--		exit;
-+		ktap_exit_fail_msg "No cpu is managed by cpufreq core, exiting\n"
- 	else
- 		printf "CPUFreq manages: $count CPUs\n\n"
- 	fi
-diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
-index 60ce18ed06660..a0eb84cf7167f 100755
---- a/tools/testing/selftests/cpufreq/main.sh
-+++ b/tools/testing/selftests/cpufreq/main.sh
-@@ -7,15 +7,15 @@ source governor.sh
- source module.sh
- source special-tests.sh
- 
-+DIR="$(dirname $(readlink -f "$0"))"
-+source "${DIR}"/../kselftest/ktap_helpers.sh
-+
- FUNC=basic	# do basic tests by default
- OUTFILE=cpufreq_selftest
- SYSFS=
- CPUROOT=
- CPUFREQROOT=
- 
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
--
- helpme()
- {
- 	printf "Usage: $0 [-h] [-todg args]
-@@ -32,7 +32,7 @@ helpme()
- 	[-d <driver's module name: only with \"-t modtest>\"]
- 	[-g <governor's module name: only with \"-t modtest>\"]
- 	\n"
--	exit 2
-+	exit "${KSFT_FAIL}"
- }
- 
- prerequisite()
-@@ -40,8 +40,8 @@ prerequisite()
- 	msg="skip all tests:"
- 
- 	if [ $UID != 0 ]; then
--		echo $msg must be run as root >&2
--		exit $ksft_skip
-+		ktap_skip_all "$msg must be run as root"
-+		exit "${KSFT_SKIP}"
- 	fi
- 
- 	taskset -p 01 $$
-@@ -49,21 +49,21 @@ prerequisite()
- 	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
- 
- 	if [ ! -d "$SYSFS" ]; then
--		echo $msg sysfs is not mounted >&2
--		exit 2
-+		ktap_skip_all "$msg sysfs is not mounted"
-+		exit "${KSFT_SKIP}"
- 	fi
- 
- 	CPUROOT=$SYSFS/devices/system/cpu
- 	CPUFREQROOT="$CPUROOT/cpufreq"
- 
- 	if ! ls $CPUROOT/cpu* > /dev/null 2>&1; then
--		echo $msg cpus not available in sysfs >&2
--		exit 2
-+		ktap_skip_all "$msg cpus not available in sysfs"
-+		exit "${KSFT_SKIP}"
- 	fi
- 
- 	if ! ls $CPUROOT/cpufreq > /dev/null 2>&1; then
--		echo $msg cpufreq directory not available in sysfs >&2
--		exit 2
-+		ktap_skip_all "$msg cpufreq directory not available in sysfs"
-+		exit "${KSFT_SKIP}"
- 	fi
- }
- 
-@@ -105,8 +105,7 @@ do_test()
- 	count=$(count_cpufreq_managed_cpus)
- 
- 	if [ $count = 0 -a $FUNC != "modtest" ]; then
--		echo "No cpu is managed by cpufreq core, exiting"
--		exit 2;
-+		ktap_exit_fail_msg "No cpu is managed by cpufreq core, exiting"
- 	fi
- 
- 	case "$FUNC" in
-@@ -125,8 +124,7 @@ do_test()
- 		"modtest")
- 		# Do we have modules in place?
- 		if [ -z $DRIVER_MOD ] && [ -z $GOVERNOR_MOD ]; then
--			echo "No driver or governor module passed with -d or -g"
--			exit 2;
-+			ktap_exit_fail_msg "No driver or governor module passed with -d or -g"
- 		fi
- 
- 		if [ $DRIVER_MOD ]; then
-@@ -137,8 +135,7 @@ do_test()
- 			fi
- 		else
- 			if [ $count = 0 ]; then
--				echo "No cpu is managed by cpufreq core, exiting"
--				exit 2;
-+				ktap_exit_fail_msg "No cpu is managed by cpufreq core, exiting"
- 			fi
- 
- 			module_governor_test $GOVERNOR_MOD
-@@ -162,7 +159,7 @@ do_test()
- 		;;
- 
- 		*)
--		echo "Invalid [-f] function type"
-+		ktap_print_msg "Invalid [-f] function type"
- 		helpme
- 		;;
- 	esac
-@@ -186,13 +183,25 @@ dmesg_dumps()
- 	dmesg >> $1.dmesg_full.txt
- }
- 
-+ktap_print_header
-+
- # Parse arguments
- parse_arguments $@
- 
-+ktap_set_plan 1
-+
- # Make sure all requirements are met
- prerequisite
- 
- # Run requested functions
- clear_dumps $OUTFILE
- do_test | tee -a $OUTFILE.txt
-+if [ "${PIPESTATUS[0]}" -ne 0 ]; then
-+    exit ${PIPESTATUS[0]};
-+fi
- dmesg_dumps $OUTFILE
-+
-+ktap_test_pass "Completed successfully"
-+
-+ktap_print_totals
-+exit "${KSFT_PASS}"
-diff --git a/tools/testing/selftests/cpufreq/module.sh b/tools/testing/selftests/cpufreq/module.sh
-index 22563cd122e7d..7f2667e0ae2da 100755
---- a/tools/testing/selftests/cpufreq/module.sh
-+++ b/tools/testing/selftests/cpufreq/module.sh
-@@ -24,16 +24,14 @@ test_basic_insmod_rmmod()
- 	# insert module
- 	insmod $1
- 	if [ $? != 0 ]; then
--		printf "Insmod $1 failed\n"
--		exit;
-+		ktap_exit_fail_msg "Insmod $1 failed\n"
- 	fi
- 
- 	printf "Removing $1 module\n"
- 	# remove module
- 	rmmod $1
- 	if [ $? != 0 ]; then
--		printf "rmmod $1 failed\n"
--		exit;
-+		ktap_exit_fail_msg "rmmod $1 failed\n"
- 	fi
- 
- 	printf "\n"
--- 
-2.39.2
+As far as I know, none of the RISC-V vector crypto code has been tested with
+Zve* yet.  Currently it always checks for VLEN >= 128, which should exclude most
+Zve* implementations.
 
+Currently it doesn't check for EEW >= 64, even though it sometimes assumes that.
+It looks like a check for EEW >= 64 needs to be added in order to exclude Zve32x
+and Zve32f implementations that don't support EEW == 64.
+
+If it would be useful to do so, we should be able to enable some of the code
+with a smaller VLEN and/or EEW once it has been tested in those configurations.
+Some of it should work, but some of it won't be able to work.  (For example, the
+SHA512 instructions require EEW==64.)
+
+Also note that currently all the RISC-V vector crypto code only supports riscv64
+(XLEN=64).  Similarly, that could be relaxed in the future if people really need
+the vector crypto acceleration on 32-bit CPUs...  But similarly, the code would
+need to be revised and tested in that configuration.
+
+> Eric/Jerry (although read the previous paragraph too):
+> I noticed that the sha256 glue code calls crypto_simd_usable(), and in
+> turn may_use_simd() before kernel_vector_begin(). The chacha20 glue code
+> does not call either, which seems to violate the edict in
+> kernel_vector_begin()'s kerneldoc:
+> "Must not be called unless may_use_simd() returns true."
+
+skcipher algorithms can only be invoked in process and softirq context.  This
+differs from shash algorithms which can be invoked in any context.
+
+My understanding is that, like arm64, RISC-V always allows non-nested
+kernel-mode vector to be used in process and softirq context -- and in fact,
+this was intentionally done in order to support use cases like this.  So that's
+why the RISC-V skcipher algorithms don't check for may_use_simd() before calling
+kernel_vector_begin().
+
+Has that changed?  If so, why?
+
+Some architectures like x86 do provide no-SIMD fallbacks for all skcipher
+algorithms, but it's very annoying to do.  We were hoping to avoid that in
+RISC-V.
+
+- Eric
 
