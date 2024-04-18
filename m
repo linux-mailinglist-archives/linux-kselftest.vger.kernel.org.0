@@ -1,112 +1,91 @@
-Return-Path: <linux-kselftest+bounces-8328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F04B88A9A6A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 14:53:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E418A9B02
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 15:18:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC25D282D2B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 12:53:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2E9AB21D79
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 13:18:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC1912880F;
-	Thu, 18 Apr 2024 12:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA2215FCED;
+	Thu, 18 Apr 2024 13:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BCz1GL0A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF681EA8F;
-	Thu, 18 Apr 2024 12:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C7D15F404
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 13:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713444781; cv=none; b=QtYwkf0Ve5JoW9bDwJZf56UlBdgazkVSksmf64gL6FRu+ZTK+kVEFjV1SM59eIBY2zwbPtBSKvB+EGhNWngrtrEhV58B1BzrA+ZnHP1B144fiLBdliTQrn9OLM0lSYKIpWcPZeTIazhAB4XBIVlJHsCaZ8JGHhFx6FrOmUIBO9I=
+	t=1713446286; cv=none; b=ZvOT5GUvvranGW5Lq5fzESPeai1BQyCwRxGrj5goNr3WOFAX5PEgm6ujmS+w1cWEC9JAWkpDAWnak4CFQrvMQJR3BD31qHQNLw8GJUjxAS14hVq14K7WoLYdODjfD7zf9SbeR7jPSfQ5EoOD3NXSOsizJIdObkJ6JdEn+FQ833U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713444781; c=relaxed/simple;
-	bh=chR6ij2HPD0n94HeheQrXEw9wvJW6PqsAZOmneyaWdY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jwHKPtggErIQ8cwCGDlH265axapOTveBY5ZUR3774BySH82+RROZn0Y8AOpY9Hd4LJYmlVa4VTWOnXAA33qiJvMCFyFpB+x3od0HHkVpjyRqvooco/P3ZE6LpyedisQUDyhWP8KLyfpYYQ5LCFWZJDowRezU78lkAvxa8Cpo8TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F6E0339;
-	Thu, 18 Apr 2024 05:53:26 -0700 (PDT)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 73FFF3F738;
-	Thu, 18 Apr 2024 05:52:57 -0700 (PDT)
-Date: Thu, 18 Apr 2024 13:52:50 +0100
-From: Joey Gouly <joey.gouly@arm.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: mm: restore settings from only parent process
-Message-ID: <20240418125250.GA2941398@e124191.cambridge.arm.com>
-References: <20240314094045.157149-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1713446286; c=relaxed/simple;
+	bh=DXGn4qVv3QckU8tQRWbJr0FqwlVzB+OywFLorem+Pzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GqCCT7IGav2jXasKG5RNk8NFK2yQ0P/CgSdRggMUJuiLIFWzv4RY2FOTJQYzAkz5OXU4lDsRAVSTk+OnFevfwNqaG7N9SetcTJySAV99cUTRz3QgiK5ASiunvj+Jwq7VDlzVc2GyFzJ8XtB6b5eBlmcj4BKoWLoMAaYRwvMZlLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BCz1GL0A; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713446283;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=flXWdtTxGnWZOnWp6rT3waOHYiUoEw2A69kXCBp6sk4=;
+	b=BCz1GL0AlzhzTQrNwq2gFQrG2ayGBmm6LcXLxJO8jkBaH0x/sRbSXMZ+JsKyhvPNiV/KW4
+	YTwXpNu4q9XR3fRarGMLQTVNk5FpRouHlsYDTO7ttDd0SzIjQD1LbaUmyIXh6i1UhaT5sy
+	lyEJ0cyCzjNWuIEqZGQ59TkArASxE/s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-614-JogV6t9rPumfDMhvbxkkvA-1; Thu, 18 Apr 2024 09:18:00 -0400
+X-MC-Unique: JogV6t9rPumfDMhvbxkkvA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78D99834FB3;
+	Thu, 18 Apr 2024 13:18:00 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.22.16.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 53BDAC26D24;
+	Thu, 18 Apr 2024 13:17:58 +0000 (UTC)
+From: Wander Lairson Costa <wander@redhat.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
+	kunit-dev@googlegroups.com (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
+	linux-kernel@vger.kernel.org (open list)
+Cc: Wander Lairson Costa <wander@redhat.com>
+Subject: [PATCH 0/2] kunit: fix minor error path mistakes
+Date: Thu, 18 Apr 2024 10:17:51 -0300
+Message-ID: <20240418131754.58217-1-wander@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240314094045.157149-1-usama.anjum@collabora.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-Hi again,
+Hi,
 
-On Thu, Mar 14, 2024 at 02:40:45PM +0500, Muhammad Usama Anjum wrote:
-> The atexit() is called from parent process as well as forked processes.
-> Hence the child restores the settings at exit while the parent is still
-> executing. Fix this by checking pid of atexit() calling process and only
-> restore THP number from parent process.
-> 
-> Fixes: c23ea61726d5 ("selftests/mm: protection_keys: save/restore nr_hugepages settings")
-> Tested-by: Joey Gouly <joey.gouly@arm.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/mm/protection_keys.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-> index f822ae31af22e..374a308174d2b 100644
-> --- a/tools/testing/selftests/mm/protection_keys.c
-> +++ b/tools/testing/selftests/mm/protection_keys.c
-> @@ -1745,9 +1745,12 @@ void pkey_setup_shadow(void)
->  	shadow_pkey_reg = __read_pkey_reg();
->  }
->  
-> +pid_t parent_pid;
-> +
->  void restore_settings_atexit(void)
->  {
-> -	cat_into_file(buf, "/proc/sys/vm/nr_hugepages");
-> +	if (parent_pid == getpid())
-> +		cat_into_file(buf, "/proc/sys/vm/nr_hugepages");
->  }
->  
->  void save_settings(void)
-> @@ -1773,6 +1776,7 @@ void save_settings(void)
->  		exit(__LINE__);
->  	}
->  
-> +	parent_pid = getpid();
->  	atexit(restore_settings_atexit);
->  	close(fd);
->  }
+These two patches fix some minor error path mistakes in the device
+module.
 
-After more testing, this is not actually enough. It passes sometimes, which is
-why I gave my Tested-by, but it can still fail the same way as I originally
-said.
+Wander Lairson Costa (2):
+  kunit: unregister the device on error
+  kunit: avoid memory leak on device register error
 
-assert() at protection_keys.c::812 test_nr: 19 iteration: 1
-running abort_hooks()...
-errno at assert: 12
+ lib/kunit/device.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I think the parent process needs to wait for all it's child processes (recursively).
-This is due to the test_pkey_alloc_exhaust() calling become_child(), where it
-exits, and that exit may be from the original PID.
+-- 
+2.44.0
 
-Thanks,
-Joey
 
