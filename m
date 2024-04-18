@@ -1,484 +1,145 @@
-Return-Path: <linux-kselftest+bounces-8303-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A8B98A9647
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 11:35:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E05398A9652
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 11:37:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E6EF1C21F54
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 09:35:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DA281C2182E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 09:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E1A15ADB0;
-	Thu, 18 Apr 2024 09:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E876115B0FD;
+	Thu, 18 Apr 2024 09:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WBSI2Lo7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lQYA8nsS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24C215AD93;
-	Thu, 18 Apr 2024 09:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D1415ADBB
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 09:37:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713432932; cv=none; b=JuUMOljPoh+euiw+z5VdcZtnLLEYf6NoLynkHvGFR5WonDVqkCtu3ejZUweSIHeLoHEkQTC6vk8Ed+GQEKJ/3paP2ENvl04CxbMx3oDOTepU3DtGeA3gTc/52iqgiR7RPAA9Zb/Gr5iK9n4wn/S7kB+pWySVnbn2RRly1h6oOto=
+	t=1713433057; cv=none; b=cqlg5YoJchaSWav26V3xsCupVoKwusClE2/kquoqTGVP+p1Fen2uvFYgdZ2Rcx2No49SaaObOOEj2HwDqPxx82dj6UNF7Sz7e5H67uG2doButC9s4UAPe8ewXI35r11aVJvLd2D10sg8AwIEgDwI4IGVePFZvP3UsbJCVCvdpEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713432932; c=relaxed/simple;
-	bh=+0kwtJoZt9tJauUmdcEXI5iVzfFnGfehiVYt+0ac7ZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kq2rn5ZKFMC+sY3QGYCYNS1aMgR6ZzZEVBTcO8IctuKELw2zmHuPy2M/iZ3Z7/injOBuKEuK21lDsr8A1rU4rE1Hr82zr/Y9exU9QFrpoth8FX4VtQ/Ev9KfTvRpHXIJLjEjtuyWElTY/BDQhBCHTPVkqPC7T1k0IDYNi5bGxjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WBSI2Lo7; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=oGTILeKlc6FTPHbw4RWanUk3Gk5WS73q7r0ZL6hmbeM=; b=WBSI2Lo7KyxcxRncGNM3Aqqb2a
-	TtMi/VxdoqBKPSXEEbbFXCsKNSCQgp1+u7tIBQ37qRBS0PxdAxjLLyHJgJ8dMBK+hXutRYoPFMAgA
-	+xGWCxVYWfh3Iy3e043YfoYZP06AXvCHUqVXVbYHgNX76dnfiI1fjQN3k0ldPFsWfG1uwQuwdTzoh
-	HqgTtI8NruY+2/nvYFhFpSw+3HnSXrzux3FOAk1pblabXMxcn/VL5mAFaB0jRyEZiCYD8ktdzlTS6
-	4spoD9Gr+hb5Wju62icQRtusgD6Z04Eg/mZ6xjLEAUCNcN0ySY5hkPDeJ7Igbu0FU2gt7nU5UGPLU
-	d0T3nt+g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rxOAh-0000000Bw9a-3p7z;
-	Thu, 18 Apr 2024 09:35:12 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 90DF7300362; Thu, 18 Apr 2024 11:35:11 +0200 (CEST)
-Date: Thu, 18 Apr 2024 11:35:11 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Elizabeth Figura <zfigura@codeweavers.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-	wine-devel@winehq.org,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Arkadiusz Hiler <ahiler@codeweavers.com>,
-	Andy Lutomirski <luto@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v4 02/27] ntsync: Introduce NTSYNC_IOC_WAIT_ALL.
-Message-ID: <20240418093511.GQ40213@noisy.programming.kicks-ass.net>
-References: <20240416010837.333694-1-zfigura@codeweavers.com>
- <20240416010837.333694-3-zfigura@codeweavers.com>
- <20240417113703.GL30852@noisy.programming.kicks-ass.net>
- <3479054.QJadu78ljV@camazotz>
+	s=arc-20240116; t=1713433057; c=relaxed/simple;
+	bh=oKebPGc7csYied+Trqn6NoQuTo1kiGGrhWQNjyzLyFU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=aixQ0JwwVcf2umn/j2KyhCOM21thvLOqdB/o2o/P18OWvcGTqeeKx9bKqLRMw8IXKf9HT5U6h8r1Ic61aSEN2OIecuDwcuhsKJ7JCbAwKJp6T5gDILeLeCXPkgL3h62FWNjdxM6mEjBvI9DYIogSW4FbVeLbaKbTHdEthMOFfzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lQYA8nsS; arc=none smtp.client-ip=209.85.217.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-479e45cc9e7so188652137.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 02:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713433055; x=1714037855; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=R+5jHDSpgy+V7CAH4lxvvOy3F/SpQIh5uBt2JeDM398=;
+        b=lQYA8nsSlFbSyRwvmCNnYGoNSVDHN2i0dP5KcJlO1cW8gEV5NnstNZIG4PCjkowhGt
+         1TU2xFS/Zd3O1kVJIzr4OeZSIjicr3qlTW2Al021gNtSjM9oibmZ5APbkvkrdov1CMb9
+         /yDNRO6J5gsa2HVvIxoAk8b+woXLnDO1U3YFwBOILykDY2E5b5iLDrH+uYjOEeu8uAve
+         QHCD5TPvpjPKuYHb+vdf3/l6ana1LhEWd+qgDcEapqCvzMQ7ieSv0FMHLTpxphn8T1bU
+         JxmQ1ilux0+S2qFjJlvQ0AtjcQ9obHIs2wqRAtxqXohNNwlxuRwM75BBtah4AgdkS4kD
+         meVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713433055; x=1714037855;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R+5jHDSpgy+V7CAH4lxvvOy3F/SpQIh5uBt2JeDM398=;
+        b=XxePSDTz19tvNRZtp8GxJ6V4kctstDtSltCoAH7QtgBvXsESx++pfZjK7gZ+uE5PWs
+         oXCgdsEJuTt5qEZVZ95GZ6VhBwd3T0LqoNYQSrC9nkm82rAsw8FeyMroegLoTYrzjg9B
+         GSnSJIOL0Eieo1Vx4jpfKbZjAiHW1hqv7rY/4IEZmL4Sgu5jEit4EGCw1A9ZaLQ05o0x
+         rad8uVAKRzTyFgEMskHUKjKWIH6Cgx1iC3E89PfP372aM8ORULSlsJhCohNrDh4jZp2e
+         V3FzmcsFmIluwyjkjbqRFhD1f9u0it3nBd06Xmwj+2VnXq+a1/V2I8xhDVkIhA/I+GSK
+         bJ+g==
+X-Gm-Message-State: AOJu0Yw45pvDVM/275/qiwurBO0WzgI1qTpZJtUTYROXl5FuwILLpHZ3
+	GUNt3fE74iAwYOqe5AZ6csZQBdNuBOwhDX1ZNaR2Zi9WcF1eKB3ym4M8HyT/JA8MNE34cYJyYuK
+	uU1Lg7VrVL4CNx/fbnQ8iD0DEBcqvHVxHTRK4s8H7RSW91bu2Ww8=
+X-Google-Smtp-Source: AGHT+IGUiLjVF51AxMwojfexM6qeVP3BXEPl/EhnR3F2ljxY1JpFWs3N20simlQ0PqdaxtXXPMv54pqI1R7waXf5uug=
+X-Received: by 2002:a05:6102:f08:b0:47b:99c5:50fc with SMTP id
+ v8-20020a0561020f0800b0047b99c550fcmr3113575vss.1.1713433054849; Thu, 18 Apr
+ 2024 02:37:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3479054.QJadu78ljV@camazotz>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 18 Apr 2024 15:07:23 +0530
+Message-ID: <CA+G9fYvacWNZsmizotfcwD35xBq0999_EAV0wZgwjdi46yivgg@mail.gmail.com>
+Subject: selftests: mm: seal_elf.c:140:45: warning: format '%s' expects
+ argument of type 'char *', but argument 5 has type 'char (*)[5]' [-Wformat=]
+To: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	lkft-triage@lists.linaro.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Apr 17, 2024 at 03:03:05PM -0500, Elizabeth Figura wrote:
+The Linux next building selftests with gcc-13 found these build warnings
+and errors.
 
-> Ach. I wrote this with the idea that the race isn't meaningful, but
-> looking at it again you're right—there is a harmful race here.
-> 
-> I think it should be fixable by moving the atomic_read inside the lock,
-> though.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Right, I've ended up with the (as yet untested) below. I'll see if I can
-find time later to actually test things.
+Build log:
+---------
+PATH:
+selftests/mm/seal_elf
 
+seal_elf.c: In function 'test_seal_elf':
+seal_elf.c:140:45: warning: format '%s' expects argument of type 'char
+*', but argument 5 has type 'char (*)[5]' [-Wformat=]
+  140 |                 if (sscanf(line, "%lx-%lx %4s %*x %*x:%*x %*u
+%255[^\n]",
+      |                                           ~~^
+      |                                             |
+      |                                             char *
+  141 |                         &addr_start, &addr_end, &prot,
+&filename) == 4) {
+      |                                                 ~~~~~
+      |                                                 |
+      |                                                 char (*)[5]
+seal_elf.c:140:69: warning: format '%[^
+   ' expects argument of type 'char *', but argument 6 has type 'char
+(*)[256]' [-Wformat=]
+  140 |                 if (sscanf(line, "%lx-%lx %4s %*x %*x:%*x %*u
+%255[^\n]",
+      |                                                               ~~~~~~^~
+      |                                                                     |
+      |
+     char *
+  141 |                         &addr_start, &addr_end, &prot,
+&filename) == 4) {
+      |                                                        ~~~~~~~~~
+      |                                                        |
+      |                                                        char (*)[256]
+seal_elf.c:110:13: warning: unused variable 'size' [-Wunused-variable]
+  110 |         int size = 0;
+      |             ^~~~
+/usr/lib/gcc-cross/aarch64-linux-gnu/13/../../../../aarch64-linux-gnu/bin/ld:
+/tmp/cczODkiZ.o: in function `test_seal_elf':
+seal_elf.c:(.text+0x738): undefined reference to `sys_mprotect'
+/usr/lib/gcc-cross/aarch64-linux-gnu/13/../../../../aarch64-linux-gnu/bin/ld:
+seal_elf.c:(.text+0x794): undefined reference to `sys_mprotect'
+/usr/lib/gcc-cross/aarch64-linux-gnu/13/../../../../aarch64-linux-gnu/bin/ld:
+seal_elf.c:(.text+0x944): undefined reference to `sys_mprotect'
+collect2: error: ld returned 1 exit status
+
+Steps to reproduce:
 ---
+tuxmake --runtime podman --target-arch arm64 --toolchain gcc-13 \
+  --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2fDW3wG8BqWxf0afUI5f4wkArPi/config
+\
+  debugkernel dtbs dtbs-legacy headers kernel kselftest modules
 
---- a/drivers/misc/ntsync.c
-+++ b/drivers/misc/ntsync.c
-@@ -18,6 +18,7 @@
- #include <linux/sched/signal.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-+#include <linux/mutex.h>
- #include <uapi/linux/ntsync.h>
- 
- #define NTSYNC_NAME	"ntsync"
-@@ -43,6 +44,7 @@ enum ntsync_type {
- 
- struct ntsync_obj {
- 	spinlock_t lock;
-+	int dev_locked;
- 
- 	enum ntsync_type type;
- 
-@@ -132,7 +134,7 @@ struct ntsync_device {
- 	 * wait_all_lock is taken first whenever multiple objects must be locked
- 	 * at the same time.
- 	 */
--	spinlock_t wait_all_lock;
-+	struct mutex wait_all_lock;
- 
- 	struct file *file;
- };
-@@ -157,6 +159,56 @@ static bool is_signaled(struct ntsync_ob
- }
- 
- /*
-+ * XXX write coherent comment on the locking
-+ */
-+
-+static void dev_lock_obj(struct ntsync_device *dev, struct ntsync_obj *obj)
-+{
-+	lockdep_assert_held(&dev->wait_all_lock);
-+	WARN_ON_ONCE(obj->dev != dev);
-+	spin_lock(&obj->lock);
-+	obj->dev_locked = 1;
-+	spin_unlock(&obj->lock);
-+}
-+
-+static void dev_unlock_obj(struct ntsync_device *dev, struct ntsync_obj *obj)
-+{
-+	lockdep_assert_held(&dev->wait_all_lock);
-+	WARN_ON_ONCE(obj->dev != dev);
-+	spin_lock(&obj->lock);
-+	obj->dev_locked = 0;
-+	spin_unlock(&obj->lock);
-+}
-+
-+static void obj_lock(struct ntsync_obj *obj)
-+{
-+	struct ntsync_device *dev = obj->dev;
-+
-+	for (;;) {
-+		spin_lock(&obj->lock);
-+		if (likely(!obj->dev_locked))
-+			break;
-+
-+		spin_unlock(&obj->lock);
-+		mutex_lock(&dev->wait_all_lock);
-+		spin_lock(&obj->lock);
-+		/*
-+		 * obj->dev_locked should be set and released under the same
-+		 * wait_all_lock section, since we now own this lock, it should
-+		 * be clear.
-+		 */
-+		WARN_ON_ONCE(obj->dev_locked);
-+		spin_unlock(&obj->lock);
-+		mutex_unlock(&dev->wait_all_lock);
-+	}
-+}
-+
-+static void obj_unlock(struct ntsync_obj *obj)
-+{
-+	spin_unlock(&obj->lock);
-+}
-+
-+/*
-  * "locked_obj" is an optional pointer to an object which is already locked and
-  * should not be locked again. This is necessary so that changing an object's
-  * state and waking it can be a single atomic operation.
-@@ -175,7 +227,7 @@ static void try_wake_all(struct ntsync_d
- 
- 	for (i = 0; i < count; i++) {
- 		if (q->entries[i].obj != locked_obj)
--			spin_lock_nest_lock(&q->entries[i].obj->lock, &dev->wait_all_lock);
-+			dev_lock_obj(dev, q->entries[i].obj);
- 	}
- 
- 	for (i = 0; i < count; i++) {
-@@ -211,7 +263,7 @@ static void try_wake_all(struct ntsync_d
- 
- 	for (i = 0; i < count; i++) {
- 		if (q->entries[i].obj != locked_obj)
--			spin_unlock(&q->entries[i].obj->lock);
-+			dev_unlock_obj(dev, q->entries[i].obj);
- 	}
- }
- 
-@@ -231,6 +283,7 @@ static void try_wake_any_sem(struct ntsy
- 	struct ntsync_q_entry *entry;
- 
- 	lockdep_assert_held(&sem->lock);
-+	WARN_ON_ONCE(sem->type != NTSYNC_TYPE_SEM);
- 
- 	list_for_each_entry(entry, &sem->any_waiters, node) {
- 		struct ntsync_q *q = entry->q;
-@@ -251,6 +304,7 @@ static void try_wake_any_mutex(struct nt
- 	struct ntsync_q_entry *entry;
- 
- 	lockdep_assert_held(&mutex->lock);
-+	WARN_ON_ONCE(mutex->type != NTSYNC_TYPE_MUTEX);
- 
- 	list_for_each_entry(entry, &mutex->any_waiters, node) {
- 		struct ntsync_q *q = entry->q;
-@@ -302,6 +356,7 @@ static int post_sem_state(struct ntsync_
- 	__u32 sum;
- 
- 	lockdep_assert_held(&sem->lock);
-+	WARN_ON_ONCE(sem->type != NTSYNC_TYPE_SEM);
- 
- 	if (check_add_overflow(sem->u.sem.count, count, &sum) ||
- 	    sum > sem->u.sem.max)
-@@ -316,6 +371,7 @@ static int ntsync_sem_post(struct ntsync
- 	struct ntsync_device *dev = sem->dev;
- 	__u32 __user *user_args = argp;
- 	__u32 prev_count;
-+	bool all = false;
- 	__u32 args;
- 	int ret;
- 
-@@ -325,28 +381,27 @@ static int ntsync_sem_post(struct ntsync
- 	if (sem->type != NTSYNC_TYPE_SEM)
- 		return -EINVAL;
- 
--	if (atomic_read(&sem->all_hint) > 0) {
--		spin_lock(&dev->wait_all_lock);
--		spin_lock_nest_lock(&sem->lock, &dev->wait_all_lock);
--
--		prev_count = sem->u.sem.count;
--		ret = post_sem_state(sem, args);
--		if (!ret) {
-+	obj_lock(sem);
-+	all = atomic_read(&sem->all_hint);
-+	if (unlikely(all)) {
-+		obj_unlock(sem);
-+		mutex_lock(&dev->wait_all_lock);
-+		dev_lock_obj(dev, sem);
-+	}
-+
-+	prev_count = sem->u.sem.count;
-+	ret = post_sem_state(sem, args);
-+	if (!ret) {
-+		if (all)
- 			try_wake_all_obj(dev, sem);
--			try_wake_any_sem(sem);
--		}
-+		try_wake_any_sem(sem);
-+	}
- 
--		spin_unlock(&sem->lock);
--		spin_unlock(&dev->wait_all_lock);
-+	if (all) {
-+		dev_unlock_obj(dev, sem);
-+		mutex_unlock(&dev->wait_all_lock);
- 	} else {
--		spin_lock(&sem->lock);
--
--		prev_count = sem->u.sem.count;
--		ret = post_sem_state(sem, args);
--		if (!ret)
--			try_wake_any_sem(sem);
--
--		spin_unlock(&sem->lock);
-+		obj_unlock(sem);
- 	}
- 
- 	if (!ret && put_user(prev_count, user_args))
-@@ -376,6 +431,7 @@ static int ntsync_mutex_unlock(struct nt
- 	struct ntsync_mutex_args __user *user_args = argp;
- 	struct ntsync_device *dev = mutex->dev;
- 	struct ntsync_mutex_args args;
-+	bool all = false;
- 	__u32 prev_count;
- 	int ret;
- 
-@@ -387,28 +443,27 @@ static int ntsync_mutex_unlock(struct nt
- 	if (mutex->type != NTSYNC_TYPE_MUTEX)
- 		return -EINVAL;
- 
--	if (atomic_read(&mutex->all_hint) > 0) {
--		spin_lock(&dev->wait_all_lock);
--		spin_lock_nest_lock(&mutex->lock, &dev->wait_all_lock);
--
--		prev_count = mutex->u.mutex.count;
--		ret = unlock_mutex_state(mutex, &args);
--		if (!ret) {
-+	obj_lock(mutex);
-+	all = atomic_read(&mutex->all_hint);
-+	if (unlikely(all)) {
-+		obj_unlock(mutex);
-+		mutex_lock(&dev->wait_all_lock);
-+		dev_lock_obj(dev, mutex);
-+	}
-+
-+	prev_count = mutex->u.mutex.count;
-+	ret = unlock_mutex_state(mutex, &args);
-+	if (!ret) {
-+		if (all)
- 			try_wake_all_obj(dev, mutex);
--			try_wake_any_mutex(mutex);
--		}
-+		try_wake_any_mutex(mutex);
-+	}
- 
--		spin_unlock(&mutex->lock);
--		spin_unlock(&dev->wait_all_lock);
-+	if (all) {
-+		dev_unlock_obj(dev, mutex);
-+		mutex_unlock(&dev->wait_all_lock);
- 	} else {
--		spin_lock(&mutex->lock);
--
--		prev_count = mutex->u.mutex.count;
--		ret = unlock_mutex_state(mutex, &args);
--		if (!ret)
--			try_wake_any_mutex(mutex);
--
--		spin_unlock(&mutex->lock);
-+		obj_unlock(mutex);
- 	}
- 
- 	if (!ret && put_user(prev_count, &user_args->count))
-@@ -437,6 +492,7 @@ static int kill_mutex_state(struct ntsyn
- static int ntsync_mutex_kill(struct ntsync_obj *mutex, void __user *argp)
- {
- 	struct ntsync_device *dev = mutex->dev;
-+	bool all = false;
- 	__u32 owner;
- 	int ret;
- 
-@@ -448,26 +504,26 @@ static int ntsync_mutex_kill(struct ntsy
- 	if (mutex->type != NTSYNC_TYPE_MUTEX)
- 		return -EINVAL;
- 
--	if (atomic_read(&mutex->all_hint) > 0) {
--		spin_lock(&dev->wait_all_lock);
--		spin_lock_nest_lock(&mutex->lock, &dev->wait_all_lock);
-+	obj_lock(mutex);
-+	all = atomic_read(&mutex->all_hint);
-+	if (unlikely(all)) {
-+		obj_unlock(mutex);
-+		mutex_lock(&dev->wait_all_lock);
-+		dev_lock_obj(dev, mutex);
-+	}
- 
--		ret = kill_mutex_state(mutex, owner);
--		if (!ret) {
-+	ret = kill_mutex_state(mutex, owner);
-+	if (!ret) {
-+		if (all)
- 			try_wake_all_obj(dev, mutex);
--			try_wake_any_mutex(mutex);
--		}
-+		try_wake_any_mutex(mutex);
-+	}
- 
--		spin_unlock(&mutex->lock);
--		spin_unlock(&dev->wait_all_lock);
-+	if (all) {
-+		dev_unlock_obj(dev, mutex);
-+		mutex_unlock(&dev->wait_all_lock);
- 	} else {
--		spin_lock(&mutex->lock);
--
--		ret = kill_mutex_state(mutex, owner);
--		if (!ret)
--			try_wake_any_mutex(mutex);
--
--		spin_unlock(&mutex->lock);
-+		obj_unlock(mutex);
- 	}
- 
- 	return ret;
-@@ -477,35 +533,35 @@ static int ntsync_event_set(struct ntsyn
- {
- 	struct ntsync_device *dev = event->dev;
- 	__u32 prev_state;
-+	bool all = false;
- 
- 	if (event->type != NTSYNC_TYPE_EVENT)
- 		return -EINVAL;
- 
--	if (atomic_read(&event->all_hint) > 0) {
--		spin_lock(&dev->wait_all_lock);
--		spin_lock_nest_lock(&event->lock, &dev->wait_all_lock);
-+	obj_lock(event);
-+	all = atomic_read(&event->all_hint);
-+	if (unlikely(all)) {
-+		obj_unlock(event);
-+		mutex_lock(&dev->wait_all_lock);
-+		dev_lock_obj(dev, event);
-+	}
- 
--		prev_state = event->u.event.signaled;
--		event->u.event.signaled = true;
-+	prev_state = event->u.event.signaled;
-+	event->u.event.signaled = true;
-+	if (all)
- 		try_wake_all_obj(dev, event);
--		try_wake_any_event(event);
--		if (pulse)
--			event->u.event.signaled = false;
--
--		spin_unlock(&event->lock);
--		spin_unlock(&dev->wait_all_lock);
-+	try_wake_any_event(event);
-+	if (pulse)
-+		event->u.event.signaled = false;
-+
-+	if (all) {
-+		dev_unlock_obj(dev, event);
-+		mutex_unlock(&dev->wait_all_lock);
- 	} else {
--		spin_lock(&event->lock);
--
--		prev_state = event->u.event.signaled;
--		event->u.event.signaled = true;
--		try_wake_any_event(event);
--		if (pulse)
--			event->u.event.signaled = false;
--
--		spin_unlock(&event->lock);
-+		obj_unlock(event);
- 	}
- 
-+
- 	if (put_user(prev_state, (__u32 __user *)argp))
- 		return -EFAULT;
- 
-@@ -984,7 +1040,7 @@ static int ntsync_wait_all(struct ntsync
- 
- 	/* queue ourselves */
- 
--	spin_lock(&dev->wait_all_lock);
-+	mutex_lock(&dev->wait_all_lock);
- 
- 	for (i = 0; i < args.count; i++) {
- 		struct ntsync_q_entry *entry = &q->entries[i];
-@@ -1004,7 +1060,7 @@ static int ntsync_wait_all(struct ntsync
- 
- 	try_wake_all(dev, q, NULL);
- 
--	spin_unlock(&dev->wait_all_lock);
-+	mutex_unlock(&dev->wait_all_lock);
- 
- 	/* sleep */
- 
-@@ -1012,7 +1068,7 @@ static int ntsync_wait_all(struct ntsync
- 
- 	/* and finally, unqueue */
- 
--	spin_lock(&dev->wait_all_lock);
-+	mutex_lock(&dev->wait_all_lock);
- 
- 	for (i = 0; i < args.count; i++) {
- 		struct ntsync_q_entry *entry = &q->entries[i];
-@@ -1029,7 +1085,7 @@ static int ntsync_wait_all(struct ntsync
- 		put_obj(obj);
- 	}
- 
--	spin_unlock(&dev->wait_all_lock);
-+	mutex_unlock(&dev->wait_all_lock);
- 
- 	signaled = atomic_read(&q->signaled);
- 	if (signaled != -1) {
-@@ -1056,7 +1112,7 @@ static int ntsync_char_open(struct inode
- 	if (!dev)
- 		return -ENOMEM;
- 
--	spin_lock_init(&dev->wait_all_lock);
-+	mutex_init(&dev->wait_all_lock);
- 
- 	file->private_data = dev;
- 	dev->file = file;
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2fDW3wG8BqWxf0afUI5f4wkArPi/
+
+--
+Linaro LKFT
+https://lkft.linaro.org
 
