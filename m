@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-8290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8291-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D19538A90A7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 03:30:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A43D88A90A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 03:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F081B2192F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 01:30:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 908321C21BBE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 01:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D959D8488;
-	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD3E1A5A2;
+	Thu, 18 Apr 2024 01:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7B/Cum6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsVBNbwk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B903A27E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E543BB3D;
 	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713403829; cv=none; b=EdIP5JiIx8PYOfkbbfBEvSN2Cl5685C6xmicDB8qYcVeOQL8fPfnM5JPUrsWlvYZYTIyCxYK6wZH4Ztv77qOVBCf9H4Bhz2ObXsfwBCa0kAUGM0DwoiTMNCaMsa9UNX6MySDDZXvh/SFM2NMa15Wvzprja1dGZU8qbqaUWasJt4=
+	t=1713403829; cv=none; b=PBQQbofK4Ncqr5mTiM6CUnCkXKwpnEJQgPwX9usecB02g36wzsZvsdbTmjnX7LLbBHaild3qzXS+lwOQSDSA91eObHSzGsfyPooHNfuUgg/3aYKvGKTcRJkfTfR9fJ+3Ohh7MJvz03kzvKNaLanscfomgtBUraCBXWYtw+I6i2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713403829; c=relaxed/simple;
-	bh=37D7Qm9pn82o9Kl06A8JCo2MtQzsjr0UlaxhfTbtgIs=;
+	bh=ZyhzTg/s0PUG65KrOeKffnLgw7Xx/VbURcWtjVQpvUA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=krApiA6KSVVZXQ1E8E2jzUPVNW+tQj+UaPWQKRQY3b6g0pfcvFcI8HbnNszahB6pHzkhPMMEVVbS1vZxg8yXkiCPz9FUjxeLqv3Ln+AFrR4qYGoJ0ShYH/Wu+Es/w2QhYg1LZyTGqMJJirObwjW7DWHZMSSmSZmZXDsiQ3L0pNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7B/Cum6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79F66C3277B;
+	 In-Reply-To:To:Cc; b=NDT9LMumFuGfqiR9j5Nk2ZbL945Bv4B3M/T+UrCFHjLnTtw35EU130c+Xe017goKbM0sAw/LMSc6P6SVCGi8UdK9bfLSsRryA3ICEb4vuXaIKQhCGGJ66M9e9uEa7TEgoJnLHoMi8x8xJBIc290d3KledH0rpzDkZjEFiQL3ov8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsVBNbwk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 86E12C32781;
 	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1713403829;
-	bh=37D7Qm9pn82o9Kl06A8JCo2MtQzsjr0UlaxhfTbtgIs=;
+	bh=ZyhzTg/s0PUG65KrOeKffnLgw7Xx/VbURcWtjVQpvUA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=d7B/Cum6/5GIc5W+gqWZSDXuaJYBJuaCQJ5LIC2MAEBunR6+lqNYB76tZTYFov26U
-	 C92F06GJmdi/vxgUXXU2fZeOX1XzvsUnUSf7qIuPe16krdmDkgmCn7kVfdAcZKQxvi
-	 gOsALURSB8lPoiDCZFvUYkXfZKhE0aqzewVFKz1st/GhD1aUW3cAcMJUWjMHw2AMq/
-	 6ub3zT6RprqN96AUNnupw+Zhx/LGl0ijwIBFocRIN6Z/+ZLFFpTLeoot3raR4x53BK
-	 n6AyTbWQB1MuTS07wS6WQZcuGKAna0vnxSl/m+SOJ8uH1j8q2wRRVj2RX1eomNJjYb
-	 eJrE3iF6WBleQ==
+	b=HsVBNbwkc2xe9UjEO6lUgdFWOfJ1klrwgjWb/Uj+Q0yy/36hZ2bYbhf6JEM56Z01y
+	 dFdPF2sz/1EDXxd0Xh8ovka+QeDG8BuHaZk9K2KmCYSF+uOyHK9fbZs5NP4xcgg0mk
+	 maQouCruGovroH6bzc6wqnifsRIJHP10NoGqiWtrNO2LLMvdWVQPeFk1qvMpZA+D5h
+	 11AU3tGVj+JDTXiXchAz9rlgGyAItDnWKMg2j6jqEMoxO8tyIrTuurGm0wz9PYI1tq
+	 AHswrQS4qFcG4ZRYPQunFItMJCDWfDIyl61wFT3Ia8BgLkVKU31UJ0kcgvgqE9PgSo
+	 YJ7prqjMGkiOw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6735AC43617;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71500C4361B;
 	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -52,42 +52,37 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: adopt BPF's approach to quieter builds
+Subject: Re: [PATCH net-next] selftests: openvswitch: Fix escape chars in regexp.
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171340382940.22183.477575234617803213.git-patchwork-notify@kernel.org>
+ <171340382946.22183.15564390234017793825.git-patchwork-notify@kernel.org>
 Date: Thu, 18 Apr 2024 01:30:29 +0000
-References: <20240411190534.444918-1-kuba@kernel.org>
-In-Reply-To: <20240411190534.444918-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: shuah@kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev
+References: <20240416090913.2028475-1-amorenoz@redhat.com>
+In-Reply-To: <20240416090913.2028475-1-amorenoz@redhat.com>
+To: Adrian Moreno <amorenoz@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, pabeni@redhat.com,
+ edumazet@google.com, dev@openvswitch.org, linux-kselftest@vger.kernel.org,
+ pshelar@ovn.org, aconole@redhat.com, davem@davemloft.net, shuah@kernel.org,
+ kuba@kernel.org
 
 Hello:
 
 This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 11 Apr 2024 12:05:34 -0700 you wrote:
-> selftest build is fairly noisy, it's easy to miss warnings.
-> It's standard practice to add alternative messages in
-> the Makefile. I was grepping for existing solutions,
-> and found that bpf already has the right knobs.
+On Tue, 16 Apr 2024 11:09:13 +0200 you wrote:
+> Character sequences starting with `\` are interpreted by python as
+> escaped Unicode characters. However, they have other meaning in
+> regular expressions (e.g: "\d").
 > 
-> Move them to lib.mk and adopt in net.
-> Convert the basic rules in lib.mk.
+> It seems Python >= 3.12 starts emitting a SyntaxWarning when these
+> escaped sequences are not recognized as valid Unicode characters.
 > 
 > [...]
 
 Here is the summary with links:
-  - selftests: adopt BPF's approach to quieter builds
-    https://git.kernel.org/netdev/net-next/c/6fc6d7f59376
+  - [net-next] selftests: openvswitch: Fix escape chars in regexp.
+    https://git.kernel.org/netdev/net-next/c/3fde60afe1f8
 
 You are awesome, thank you!
 -- 
