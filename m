@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-8364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B425F8AA2DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 21:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B65418AA30A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 21:43:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8A091C21133
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 19:35:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E696A1C22968
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 19:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32C2180A7E;
-	Thu, 18 Apr 2024 19:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C54180A81;
+	Thu, 18 Apr 2024 19:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s3BzLU7p"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W6hynQcT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B833016C685;
-	Thu, 18 Apr 2024 19:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5082C17AD72;
+	Thu, 18 Apr 2024 19:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713468936; cv=none; b=AjTKiU0jQuiYBIYtTr3JZnjREyFOY0BfYEpOPMFH0dpuXAMxcPuKsllsh+iGwOCHY3sLTc6yhhcJ4Wa81vkRfUK+S/3d/TrGAxZJGdKnHRQnWRE8UbKFwFRQ8ZslRcHMWRQ2m2LBZH9N3ml6vzWS9mT8cxKpfeR2PC4quYg9NcM=
+	t=1713469370; cv=none; b=rgjScYALs98xbKrVEGjnx7zVmb571yEqbFeH2rQC+WvOE/g9Qot/dUjMydY+NHIK+pa8gO26OwD27YuiL3QyE8UvMZyvztdM56a3LXUFXFoWtaKFzVdNlZUSH2WFLrjkjGaUnsq18B4AlH6O+Hxpt+ZoTPLBUhUYLfGh2jRQF+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713468936; c=relaxed/simple;
-	bh=JKGFa9sz7QyekmxyWQFygVp67YYhYdhgHlu8T+5UxpM=;
+	s=arc-20240116; t=1713469370; c=relaxed/simple;
+	bh=+x/Ch8/rLQKhFImvy/1gmd+onkqt2sec9kcVyeKMedA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NNfpZHsF0TFuYZiIGPm3VO+kfDMaJTiYrZTnTchNXcMcpD4hwba20wGZgWKKuRwI2ORXVklsJ+2hIU7z7psOecjFqtORf1bNIG4NJ1TZUb39xla3TdpP6wOuFtbMYVogyQ48sXFtxkow7SiNglKPe8p5AQ0vDZSO8XzUO9TbZJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=s3BzLU7p; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=uRtkXQJVOWvtpdxztjpEk6rGOew2KyUM46ohOCMXxzuLNg1+ZrGw4gUBC0l3EoSJWS5FvHTw7RK4w1lfgF4iI88OWc6AwASSFQvadfNJFwc90zOk2hNJ9SR4IghrmaCRUPdDun11wzyP9mgFoMeuEx2O+U0eXaoYlb4tunAcEtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W6hynQcT; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
-	To:From:Reply-To:Content-ID:Content-Description;
-	bh=IJ7ojklGe6C7OcPuYyGjBpiocDUVfUqqbYBD/wEt+QA=; b=s3BzLU7pIoQcHXqc//GYTikH6C
-	IeHxY1P1niKHfR858ae9F/G8iooJ48guK9n/guLPFRj2JqDD1CAA4nUKDtPUhOfJOAo9OmR9U/iCE
-	vdhA7RJrrB9iffq+DOLC3LCcQ/1r9Yt393IfsqX3IyPWxqCcSvsBrP1aau52pvmVTlw1B2rAWB38A
-	WjDbFMoSC9QmG/sDw3C1naL/PznFjXESHpPRDZrz5rwfnjf3x9PnhP7gtFP9bzfKRiaMXkmVKK/JJ
-	P7CW7P9CvfoXeRLBP5JITfGtuChPJultjMJLA3+8mQ1W07Akt5QJJD+X6+0eqwK52xA7sAbvL7A/d
-	d244Np2g==;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=DsRkkj21wdFnjvCf8MfVBZJ9Wy3vTixas3qGCzeZKtE=; b=W6hynQcTwTJUOBp2RgYGprnKoF
+	muRGbh3xkhi3uc6BbSI0fr+dHP8h7lEiEz4Aah7SRdg3rk2mhWIHyWruk2J0t1i/T6anOCUwfKoeZ
+	Bs6AT4vuqGLzI/GsrycUsCsaWtgFBpmV8YLD5PdA82YGOlpl5s0na9r2rhAobhFUfZt3rwoWogakZ
+	Q+cU27nSSUTbwa+kQXbik43ktIGwEQdUgMDhKjWs5keU9chINIJ/jwk7Ec6p/kUbRIr9mtNIWYksq
+	iS//oTu//7qZXRIVCWDqIQdlPDSv5oQIUOrueMRFCg+523mkocNvw4w/BZZQuuIJFmGN+xzSlaPeM
+	NY0mkmWw==;
 Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rxXXf-000000060xd-1Hnd;
-	Thu, 18 Apr 2024 19:35:31 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rxXXf-0000000C8MN-2qgM;
+	Thu, 18 Apr 2024 19:35:32 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rxXXe-00000000AsW-3Hto;
+	id 1rxXXe-00000000Asa-3b4r;
 	Thu, 18 Apr 2024 20:35:30 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
@@ -68,9 +68,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	jalliste@amazon.co.uk,
 	sveith@amazon.de
-Subject: [PATCH 04/10] KVM: selftests: Add KVM/PV clock selftest to prove timer correction
-Date: Thu, 18 Apr 2024 20:34:43 +0100
-Message-ID: <20240418193528.41780-5-dwmw2@infradead.org>
+Subject: [PATCH 05/10] KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
+Date: Thu, 18 Apr 2024 20:34:44 +0100
+Message-ID: <20240418193528.41780-6-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240418193528.41780-1-dwmw2@infradead.org>
 References: <20240418193528.41780-1-dwmw2@infradead.org>
@@ -80,280 +80,57 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-From: Jack Allister <jalliste@amazon.com>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-A VM's KVM/PV clock has an inherent relationship to its TSC (guest). When
-either the host system live-updates or the VM is live-migrated this pairing
-of the two clock sources should stay the same.
+KVM does make an attempt to cope with non-constant TSC, and has notifiers
+to handle host TSC frequency changes. However, it *only* adjusts the KVM
+clock, and doesn't adjust TSC frequency scaling when the host changes.
 
-In reality this is not the case without some correction taking place. Two
-new IOCTLs (KVM_GET_CLOCK_GUEST/KVM_SET_CLOCK_GUEST) can be utilized to
-perform a correction on the PVTI (PV time information) structure held by
-KVM to effectively fixup the kvmclock_offset prior to the guest VM resuming
-in either a live-update/migration scenario.
+This is presumably because non-constant TSCs were fixed in hardware long
+before TSC scaling was implemented, so there should never be real CPUs
+which have TSC scaling but *not* CONSTANT_TSC.
 
-This test proves that without the necessary fixup there is a perceived
-change in the guest TSC & KVM/PV clock relationship before and after a LU/
-LM takes place.
+Such a combination could potentially happen in some odd L1 nesting
+environment, but it isn't worth trying to support it. Just make the
+dependency explicit.
 
-The following steps are made to verify there is a delta in the relationship
-and that it can be corrected:
-
-1. PVTI is sampled by guest at boot (let's call this PVTI0).
-2. Induce a change in PVTI data (KVM_REQ_MASTERCLOCK_UPDATE).
-3. PVTI is sampled by guest after change (PVTI1).
-4. Correction is requested by usermode to KVM using PVTI0.
-5. PVTI is sampled by guest after correction (PVTI2).
-
-The guest the records a singular TSC reference point in time and uses it to
-calculate 3 KVM clock values utilizing the 3 recorded PVTI prior. Let's
-call each clock value CLK[0-2].
-
-In a perfect world CLK[0-2] should all be the same value if the KVM clock
-& TSC relationship is preserved across the LU/LM (or faked in this test),
-however it is not.
-
-A delta can be observed between CLK0-CLK1 due to KVM recalculating the PVTI
-(and the inaccuracies associated with that). A delta of ~3500ns can be
-observed if guest TSC scaling to half host TSC frequency is also enabled,
-where as without scaling this is observed at ~180ns.
-
-With the correction it should be possible to achieve a delta of ±1ns.
-
-An option to enable guest TSC scaling is available via invoking the tester
-with -s/--scale-tsc.
-
-Example of the test output below:
-* selftests: kvm: pvclock_test
-* scaling tsc from 2999999KHz to 1499999KHz
-* before=5038374946 uncorrected=5038371437 corrected=5038374945
-* delta_uncorrected=3509 delta_corrected=1
-
-Signed-off-by: Jack Allister <jalliste@amazon.com>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-CC: Paul Durrant <paul@xen.org>
-CC: Dongli Zhang <dongli.zhang@oracle.com>
 ---
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/x86_64/pvclock_test.c       | 192 ++++++++++++++++++
- 2 files changed, 193 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/pvclock_test.c
+ arch/x86/kvm/svm/svm.c | 3 ++-
+ arch/x86/kvm/vmx/vmx.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 871e2de3eb05..e33f56fedb0c 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -87,6 +87,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/pmu_counters_test
- TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
- TEST_GEN_PROGS_x86_64 += x86_64/private_mem_conversions_test
- TEST_GEN_PROGS_x86_64 += x86_64/private_mem_kvm_exits_test
-+TEST_GEN_PROGS_x86_64 += x86_64/pvclock_test
- TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
- TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
- TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
-diff --git a/tools/testing/selftests/kvm/x86_64/pvclock_test.c b/tools/testing/selftests/kvm/x86_64/pvclock_test.c
-new file mode 100644
-index 000000000000..376ffb730a53
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/pvclock_test.c
-@@ -0,0 +1,192 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright © 2024, Amazon.com, Inc. or its affiliates.
-+ *
-+ * Tests for pvclock API
-+ * KVM_SET_CLOCK_GUEST/KVM_GET_CLOCK_GUEST
-+ */
-+#include <asm/pvclock.h>
-+#include <asm/pvclock-abi.h>
-+#include <sys/stat.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+
-+enum {
-+	STAGE_FIRST_BOOT,
-+	STAGE_UNCORRECTED,
-+	STAGE_CORRECTED
-+};
-+
-+#define KVMCLOCK_GPA 0xc0000000ull
-+#define KVMCLOCK_SIZE sizeof(struct pvclock_vcpu_time_info)
-+
-+static void trigger_pvti_update(vm_paddr_t pvti_pa)
-+{
-+	/*
-+	 * We need a way to trigger KVM to update the fields
-+	 * in the PV time info. The easiest way to do this is
-+	 * to temporarily switch to the old KVM system time
-+	 * method and then switch back to the new one.
-+	 */
-+	wrmsr(MSR_KVM_SYSTEM_TIME, pvti_pa | KVM_MSR_ENABLED);
-+	wrmsr(MSR_KVM_SYSTEM_TIME_NEW, pvti_pa | KVM_MSR_ENABLED);
-+}
-+
-+static void guest_code(vm_paddr_t pvti_pa)
-+{
-+	struct pvclock_vcpu_time_info *pvti_va =
-+		(struct pvclock_vcpu_time_info *)pvti_pa;
-+
-+	struct pvclock_vcpu_time_info pvti_boot;
-+	struct pvclock_vcpu_time_info pvti_uncorrected;
-+	struct pvclock_vcpu_time_info pvti_corrected;
-+	uint64_t cycles_boot;
-+	uint64_t cycles_uncorrected;
-+	uint64_t cycles_corrected;
-+	uint64_t tsc_guest;
-+
-+	/*
-+	 * Setup the KVMCLOCK in the guest & store the original
-+	 * PV time structure that is used.
-+	 */
-+	wrmsr(MSR_KVM_SYSTEM_TIME_NEW, pvti_pa | KVM_MSR_ENABLED);
-+	pvti_boot = *pvti_va;
-+	GUEST_SYNC(STAGE_FIRST_BOOT);
-+
-+	/*
-+	 * Trigger an update of the PVTI, if we calculate
-+	 * the KVM clock using this structure we'll see
-+	 * a delta from the TSC.
-+	 */
-+	trigger_pvti_update(pvti_pa);
-+	pvti_uncorrected = *pvti_va;
-+	GUEST_SYNC(STAGE_UNCORRECTED);
-+
-+	/*
-+	 * The test should have triggered the correction by this
-+	 * point in time. We have a copy of each of the PVTI structs
-+	 * at each stage now.
-+	 *
-+	 * Let's sample the timestamp at a SINGLE point in time and
-+	 * then calculate what the KVM clock would be using the PVTI
-+	 * from each stage.
-+	 *
-+	 * Then return each of these values to the tester.
-+	 */
-+	pvti_corrected = *pvti_va;
-+	tsc_guest = rdtsc();
-+
-+	cycles_boot = __pvclock_read_cycles(&pvti_boot, tsc_guest);
-+	cycles_uncorrected = __pvclock_read_cycles(&pvti_uncorrected, tsc_guest);
-+	cycles_corrected = __pvclock_read_cycles(&pvti_corrected, tsc_guest);
-+
-+	GUEST_SYNC_ARGS(STAGE_CORRECTED, cycles_boot, cycles_uncorrected,
-+			cycles_corrected, 0);
-+}
-+
-+static void run_test(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
-+{
-+	struct pvclock_vcpu_time_info pvti_before;
-+	uint64_t before, uncorrected, corrected;
-+	int64_t delta_uncorrected, delta_corrected;
-+	struct ucall uc;
-+	uint64_t ucall_reason;
-+
-+	/* Loop through each stage of the test. */
-+	while (true) {
-+
-+		/* Start/restart the running vCPU code. */
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+		/* Retrieve and verify our stage. */
-+		ucall_reason = get_ucall(vcpu, &uc);
-+		TEST_ASSERT(ucall_reason == UCALL_SYNC,
-+			    "Unhandled ucall reason=%lu",
-+			    ucall_reason);
-+
-+		/* Run host specific code relating to stage. */
-+		switch (uc.args[1]) {
-+		case STAGE_FIRST_BOOT:
-+			/* Store the KVM clock values before an update. */
-+			vcpu_ioctl(vcpu, KVM_GET_CLOCK_GUEST, &pvti_before);
-+
-+			/* Sleep for a set amount of time to increase delta. */
-+			sleep(5);
-+			break;
-+
-+		case STAGE_UNCORRECTED:
-+			/* Restore the KVM clock values. */
-+			vcpu_ioctl(vcpu, KVM_SET_CLOCK_GUEST, &pvti_before);
-+			break;
-+
-+		case STAGE_CORRECTED:
-+			/* Query the clock information and verify delta. */
-+			before = uc.args[2];
-+			uncorrected = uc.args[3];
-+			corrected = uc.args[4];
-+
-+			delta_uncorrected = before - uncorrected;
-+			delta_corrected = before - corrected;
-+
-+			pr_info("before=%lu uncorrected=%lu corrected=%lu\n",
-+				before, uncorrected, corrected);
-+
-+			pr_info("delta_uncorrected=%ld delta_corrected=%ld\n",
-+				delta_uncorrected, delta_corrected);
-+
-+			TEST_ASSERT((delta_corrected <= 1) && (delta_corrected >= -1),
-+				    "larger than expected delta detected = %ld", delta_corrected);
-+			return;
-+		}
-+	}
-+}
-+
-+static void configure_pvclock(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
-+{
-+	unsigned int gpages;
-+
-+	gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, KVMCLOCK_SIZE);
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    KVMCLOCK_GPA, 1, gpages, 0);
-+	virt_map(vm, KVMCLOCK_GPA, KVMCLOCK_GPA, gpages);
-+
-+	vcpu_args_set(vcpu, 1, KVMCLOCK_GPA);
-+}
-+
-+static void configure_scaled_tsc(struct kvm_vcpu *vcpu)
-+{
-+	uint64_t tsc_khz;
-+
-+	tsc_khz =  __vcpu_ioctl(vcpu, KVM_GET_TSC_KHZ, NULL);
-+	pr_info("scaling tsc from %ldKHz to %ldKHz\n", tsc_khz, tsc_khz / 2);
-+	tsc_khz /= 2;
-+	vcpu_ioctl(vcpu, KVM_SET_TSC_KHZ, (void *)tsc_khz);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	bool scale_tsc;
-+
-+	scale_tsc = argc > 1 && (!strncmp(argv[1], "-s", 3) ||
-+				 !strncmp(argv[1], "--scale-tsc", 10));
-+
-+	TEST_REQUIRE(sys_clocksource_is_based_on_tsc());
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+
-+	configure_pvclock(vm, vcpu);
-+
-+	if (scale_tsc)
-+		configure_scaled_tsc(vcpu);
-+
-+	run_test(vm, vcpu);
-+
-+	return 0;
-+}
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 0f3b59da0d4a..4d3ec1c3231e 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -5202,7 +5202,8 @@ static __init int svm_hardware_setup(void)
+ 		kvm_enable_efer_bits(EFER_FFXSR);
+ 
+ 	if (tsc_scaling) {
+-		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR)) {
++		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR) ||
++		    !boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
+ 			tsc_scaling = false;
+ 		} else {
+ 			pr_info("TSC scaling supported\n");
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 6780313914f8..bee830adf744 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -8428,7 +8428,7 @@ __init int vmx_hardware_setup(void)
+ 	if (!enable_apicv || !cpu_has_vmx_ipiv())
+ 		enable_ipiv = false;
+ 
+-	if (cpu_has_vmx_tsc_scaling())
++	if (cpu_has_vmx_tsc_scaling() && boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
+ 		kvm_caps.has_tsc_control = true;
+ 
+ 	kvm_caps.max_tsc_scaling_ratio = KVM_VMX_TSC_MULTIPLIER_MAX;
 -- 
 2.44.0
 
