@@ -1,145 +1,164 @@
-Return-Path: <linux-kselftest+bounces-8301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8302-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCF298A94AC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 10:10:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 409398A956A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 10:55:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD5031C20840
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 08:10:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB6F4281AEB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 08:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF8A7D09A;
-	Thu, 18 Apr 2024 08:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1D115AAD9;
+	Thu, 18 Apr 2024 08:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOZhNQIr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OvR69bnr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108777C0A9;
-	Thu, 18 Apr 2024 08:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3C015AABE
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 08:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713427798; cv=none; b=i/yqgcOV+aQWr7gKn6bAxnzoe0g7RsA67RrnBT2fdMTwHf9+l7xNAbMOleUjvDb/X47/+aqGurmhOBVCHmAz/mOX+HO6K5RR6covrcVngS4n4WUbgPIq38QxSM+GPOBZQo8EyQkcwsu0Ko/grisJRj7lRht6RZpSPcUtR9K0dxQ=
+	t=1713430529; cv=none; b=A0U0XuqlL/oE18woDSmWRi5AGF9CCJza870V2TmTECwLNKFkI15P3nmztiPLqQQDcbtXSsSTMLT0XTXP45UcYKixv+nywAnlr2AZxnCU1PAF+twry5rZP63sNciOZo1rzmoCGEN4Bmx2K6dzCSzkQMZpyEStbkE27BBddlLSZGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713427798; c=relaxed/simple;
-	bh=NkME+wGXKoMaC+mSfB5Ca3k1HSHdXjtu8rQopoF3pBc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jfK9PTWlM8+Gb5gfnx0Zpbb7DnVyQzN4S69mbt15b5HrnMmd6LIayNBhjR5Ae/93ASmg02XYLwEHQEjr/htZq764yU1WWfcMYE8FyBFYdKmZKwFEAD7Bx0lec5JiT+f4PAELfCaEcV3csWyaJCIbNqzS5lXSgj7kAbGudU6Q07E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOZhNQIr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34181C113CC;
-	Thu, 18 Apr 2024 08:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713427797;
-	bh=NkME+wGXKoMaC+mSfB5Ca3k1HSHdXjtu8rQopoF3pBc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vOZhNQIr86GBU++nKCmGIiMxBsfAXBedrxAJ2Ah5dHy1i8VMX+/FAaQtg3CaP2EGh
-	 NJgu0qVq14n/SMdGAE4GR7CK8Q2UuNSbM3d2oAmfI9My2sxjYKOWwjsNceZk7dV2Z0
-	 0Yw5f8Hj2KZBAhMwevlbbJOlLFj1343KcO+Odt46dyJEyNkD2p9QAJEb1mDLuFjIAA
-	 M2uRTPPt//mCEfL+NGBUPF+WNtfmAWV4sdNpr7+aWY1UPvxAfTiNfiUclRU8nvKQrV
-	 loPUCju8WwVPpJtP723mwzrCp6XHAEbZMZ4jp+hAF25QPSlcETbHazqrfDA7Y6NAuw
-	 dqAgJtVk0w/lQ==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next v5 6/6] selftests/bpf: Use connect_to_addr in sk_assign
-Date: Thu, 18 Apr 2024 16:09:12 +0800
-Message-Id: <98fdd384872bda10b2adb052e900a2212c9047b9.1713427236.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1713427236.git.tanggeliang@kylinos.cn>
-References: <cover.1713427236.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1713430529; c=relaxed/simple;
+	bh=/tb4QbVu8c2QRsgW5XBC6GGQL9b2y9oos5e54hq7gZs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PuboodJuYXzj0GhoQS3HvunfZsx6vi1ncTB+Amq/p0UxNtBn+VktgU6BzP9c6++dZXjTpxjT1AeOUqDun/cPbSnUUdWPfr3/3Gyo0sUqUQV66zI/jLmVu71dg92dIN3x25IZNo1trpZUw+kntg4x4FqQb16XRFa6/dwdGj9QHW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OvR69bnr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713430527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4YlIQQIdea0zY9K7SGuaix12g/A/bXwMZDxEbsfa9Qo=;
+	b=OvR69bnr/X/zx3ecpKg76TAsaj9z5okvmhXBHGtk1+c2UpMnbe0XGq9sAwJzgYohUFJ8jA
+	hKJTyQqVn6FaMJI5tb9KKIBooHPo6nyW4oBR8SajZDIDDQKYuMBBvNM7kvNzoRZ9i54IWd
+	51CC/PptEqyRIcbeOE+XyQKpzE9G+rQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-219-5YP8iDRjOLOOVW92yho75Q-1; Thu, 18 Apr 2024 04:55:25 -0400
+X-MC-Unique: 5YP8iDRjOLOOVW92yho75Q-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5684c1abc7fso297638a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 01:55:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713430524; x=1714035324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4YlIQQIdea0zY9K7SGuaix12g/A/bXwMZDxEbsfa9Qo=;
+        b=JytZ5b1bSpsIyDbeR+8ntPVoHcMFy7UtCbFbkt/2LhEFyOBmLUC+umfh2+t982/Kiz
+         BB+6ojfPMK1vN8OPoBSGRI95H/tChCffqI3OX5xkcsvm/mSTJK8KkmgLLxngQpu1WrO0
+         uk3Y2b5HOoZ1P5Wkb4zM/WeIgHwUL51toNQUw9OiU/zF4C8urlDoIMxMmL4KFEFgmwNI
+         0+glncxg93fxYmwUq5zqQ2nuML88PgxykAqAZLXLAgUov0VBduRlnnTLFwDZ2l4ONUNr
+         mG+gHf/kPoIkkc6r+G9awY1WKl7ozLRmxa6h4eUIcUbPbi2zFtPk9gvAG16saTqke2pN
+         Xr6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVBegHgLLjVBMgNkODr1nChO01uPZOg/NJm8bChzF+ueWkdesbuU9qP4DNJOMdqjBSsuFYKve8B70SWWoU/JZeE7pVbD4V+XuBS0Pqk6BF3
+X-Gm-Message-State: AOJu0YzEHz8HmbPcpIg9Adi3aacBeEa3vP6uxRap8YdSuIFQEPQ2L7Zb
+	yherLPF/VxsmUqLRUBNFQ/W2uGUXIjyzYc/aiLLaI68pTvcn9Q0OiU9/TB1vw9fUevLfzcd28W4
+	Oxvdq0l9tC8tl4eOKBFqwwFaP5D4MpXzPU1Rrstg/Dly/2XTxMCjFNMt54EA4e7RL1PjSLbcYPG
+	ew1/ZTaYsPf2vu29fqBvq1CBjyEF3OZlIWEkKxbk3X
+X-Received: by 2002:a50:d70b:0:b0:566:d333:45e8 with SMTP id t11-20020a50d70b000000b00566d33345e8mr1330867edi.20.1713430524362;
+        Thu, 18 Apr 2024 01:55:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFxI+7tuc8Le9HhsVxIWdWWRsOFfxFhBkIX4vcIcKLU6knTudbsJ0kY7SSOQ7z7lM64duYb3lMTtZqcPMqH8sc=
+X-Received: by 2002:a50:d70b:0:b0:566:d333:45e8 with SMTP id
+ t11-20020a50d70b000000b00566d33345e8mr1330856edi.20.1713430523993; Thu, 18
+ Apr 2024 01:55:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org> <20240416-bpf_wq-v1-16-c9e66092f842@kernel.org>
+ <CAPhsuW46OYRj2TrqSeD4bPTN3bxbpj7DaFJnc3g0a--Gkjj2AQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW46OYRj2TrqSeD4bPTN3bxbpj7DaFJnc3g0a--Gkjj2AQ@mail.gmail.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date: Thu, 18 Apr 2024 10:55:11 +0200
+Message-ID: <CAO-hwJJ7e-h7RwPGPe=GZf6F5+WpWyHcLHqBFiv-3HRafdZjeA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 16/18] selftests/bpf: add checks for bpf_wq_set_callback()
+To: Song Liu <song@kernel.org>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Thu, Apr 18, 2024 at 5:25=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+>
+> On Tue, Apr 16, 2024 at 7:11=E2=80=AFAM Benjamin Tissoires <bentiss@kerne=
+l.org> wrote:
+> [...]
+>
+> > +SEC("?tc")
+> > +__log_level(2)
+> > +__failure
+> > +/* check that the first argument of bpf_wq_set_callback()
+> > + * is a correct bpf_wq pointer.
+> > + */
+> > +__msg("mark_precise: frame0: regs=3Dr1 stack=3D before")
+>
+> This line and some other "mark_precise" lines are causing issues for
+> test_progs-no_alu32 in the CI. I can reproduce it in my local tests.
+>
 
-This patch uses public helper connect_to_addr() exported in
-network_helpers.h instead of the local defined function connect_to_server()
-in prog_tests/sk_assign.c. This can avoid duplicate code.
+Indeed. I can also reproduce locally. Here, it only happens for
+test_wq_init_nomap() and test_wq_init_wrong_map().
+TBH, I'm not sure what "precise" means, I just copied the checks from
+timer_failures.c.
 
-The code that sets SO_SNDTIMEO timeout as timeo_sec (3s) can be dropped,
-since connect_to_addr() sets default timeout as 3s.
+>
+> I am not quite sure what is the best fix. Maybe we can just
+> remove it.
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- .../selftests/bpf/prog_tests/sk_assign.c      | 26 +------------------
- 1 file changed, 1 insertion(+), 25 deletions(-)
+Given that most of the code is shared with timer, but given that we
+are working with kfuncs, we are not using the same r0 registers.
+So yeah, I would think we could rely on the timer tests for precise,
+and drop them here...
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-index b066b6b88d7c..0b9bd1d6f7cc 100644
---- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-@@ -23,8 +23,6 @@
- #define NS_SELF "/proc/self/ns/net"
- #define SERVER_MAP_PATH "/sys/fs/bpf/tc/globals/server_map"
- 
--static const struct timeval timeo_sec = { .tv_sec = 3 };
--static const size_t timeo_optlen = sizeof(timeo_sec);
- static int stop, duration;
- 
- static bool
-@@ -74,28 +72,6 @@ configure_stack(void)
- 	return true;
- }
- 
--static int
--connect_to_server(const struct sockaddr *addr, socklen_t len, int type)
--{
--	int fd = -1;
--
--	fd = socket(addr->sa_family, type, 0);
--	if (CHECK_FAIL(fd == -1))
--		goto out;
--	if (CHECK_FAIL(setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo_sec,
--				  timeo_optlen)))
--		goto close_out;
--	if (CHECK_FAIL(connect(fd, addr, len)))
--		goto close_out;
--
--	goto out;
--close_out:
--	close(fd);
--	fd = -1;
--out:
--	return fd;
--}
--
- static in_port_t
- get_port(int fd)
- {
-@@ -138,7 +114,7 @@ run_test(int server_fd, const struct sockaddr *addr, socklen_t len, int type)
- 	in_port_t port;
- 	int ret = 1;
- 
--	client = connect_to_server(addr, len, type);
-+	client = connect_to_addr(type, (struct sockaddr_storage *)addr, len, NULL);
- 	if (client == -1) {
- 		perror("Cannot connect to server");
- 		goto out;
--- 
-2.40.1
+Cheers,
+Benjamin
+
+>
+>
+> Thanks,
+> Song
+>
+> > +__msg(": (85) call bpf_wq_set_callback_impl#") /* anchor message */
+> > +__msg("off 1 doesn't point to 'struct bpf_wq' that is at 0")
+> > +long test_wrong_wq_pointer_offset(void *ctx)
+> > +{
+> > +       int key =3D 0;
+> > +       struct bpf_wq *wq;
+> > +
+> > +       wq =3D bpf_map_lookup_elem(&array, &key);
+> > +       if (!wq)
+> > +               return 1;
+> > +
+> > +       if (bpf_wq_init(wq, &array, 0))
+> > +               return 2;
+> > +
+> > +       if (bpf_wq_set_callback((void *)wq + 1, wq_cb_sleepable, 0))
+> > +               return 3;
+> > +
+> > +       return -22;
+> > +}
+> >
+> > --
+> > 2.44.0
+> >
+>
 
 
