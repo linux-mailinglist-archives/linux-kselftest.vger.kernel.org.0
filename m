@@ -1,91 +1,98 @@
-Return-Path: <linux-kselftest+bounces-8289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 253618A9029
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 02:49:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D19538A90A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 03:30:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5EA3282CFF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 00:49:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F081B2192F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 01:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9D2523D;
-	Thu, 18 Apr 2024 00:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D959D8488;
+	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hXoMgPLq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7B/Cum6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2014C69
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 00:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B903A27E;
+	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713401373; cv=none; b=lcPgmmTq7pZDJS0TK20SI9n3Il/G8MSAy3hTj6o6ayRfhdfaqKFci6mGhr/w77oIk5NVsgXVEE0OixxqgTH8fITer3ZNqIm+7x6Dd0Xl6kMVVB/b8dQZxhOSViBQHEiC7hPo+leKxrn+XtOc5opRmArwpfosT7ZCg+7rZ0hAqzA=
+	t=1713403829; cv=none; b=EdIP5JiIx8PYOfkbbfBEvSN2Cl5685C6xmicDB8qYcVeOQL8fPfnM5JPUrsWlvYZYTIyCxYK6wZH4Ztv77qOVBCf9H4Bhz2ObXsfwBCa0kAUGM0DwoiTMNCaMsa9UNX6MySDDZXvh/SFM2NMa15Wvzprja1dGZU8qbqaUWasJt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713401373; c=relaxed/simple;
-	bh=F/SkmoQvSLWZ7QJaggfJvpFq6OEWRVn9qMxeTf9LvM0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xq2tn3iWCnI9g5m1xd/rBporsIvIwC+WfeE8jt38q4kN0DhdoLIl9Q+f3/77fAKTK283VCfFl80bf3zxDP0igVYk1157JWv6olLTzR2mizJZzFSwilvPzWsCu9ehmGPQ2wXHWSFtZyy6s82JWMQ796o7NpCh9OoQGMSPo4vpN/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hXoMgPLq; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <f164369a-2b6b-45e0-8e3e-aa0035038cb6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1713401369;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O2R/bhzkqU116/NpQeIcCt+dReP6JwLb0WVDt23oS7A=;
-	b=hXoMgPLqYrqlqpzea3HP+pt6VK3cxm6EshAaFRPTEnsnLBh2zaFKZQVkNYFAtDpmLc86yG
-	0Wzk7FLlGlY1zPsF6jGDTYDDakEUSNcH/aPeJb4T9XDDvkPhY1QyenFGm568QZYLiTqPOJ
-	/AJ1zVymfUEs+gqxa5g9gbAnQq8l3pA=
-Date: Wed, 17 Apr 2024 17:49:20 -0700
+	s=arc-20240116; t=1713403829; c=relaxed/simple;
+	bh=37D7Qm9pn82o9Kl06A8JCo2MtQzsjr0UlaxhfTbtgIs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=krApiA6KSVVZXQ1E8E2jzUPVNW+tQj+UaPWQKRQY3b6g0pfcvFcI8HbnNszahB6pHzkhPMMEVVbS1vZxg8yXkiCPz9FUjxeLqv3Ln+AFrR4qYGoJ0ShYH/Wu+Es/w2QhYg1LZyTGqMJJirObwjW7DWHZMSSmSZmZXDsiQ3L0pNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7B/Cum6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 79F66C3277B;
+	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713403829;
+	bh=37D7Qm9pn82o9Kl06A8JCo2MtQzsjr0UlaxhfTbtgIs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=d7B/Cum6/5GIc5W+gqWZSDXuaJYBJuaCQJ5LIC2MAEBunR6+lqNYB76tZTYFov26U
+	 C92F06GJmdi/vxgUXXU2fZeOX1XzvsUnUSf7qIuPe16krdmDkgmCn7kVfdAcZKQxvi
+	 gOsALURSB8lPoiDCZFvUYkXfZKhE0aqzewVFKz1st/GhD1aUW3cAcMJUWjMHw2AMq/
+	 6ub3zT6RprqN96AUNnupw+Zhx/LGl0ijwIBFocRIN6Z/+ZLFFpTLeoot3raR4x53BK
+	 n6AyTbWQB1MuTS07wS6WQZcuGKAna0vnxSl/m+SOJ8uH1j8q2wRRVj2RX1eomNJjYb
+	 eJrE3iF6WBleQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6735AC43617;
+	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 bpf-next 4/6] selftests/bpf: Add IPv4 and IPv6 sockaddr
- test cases
-To: Jordan Rife <jrife@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Kui-Feng Lee <thinker.li@gmail.com>,
- Artem Savkov <asavkov@redhat.com>, Dave Marchevsky <davemarchevsky@fb.com>,
- Menglong Dong <imagedong@tencent.com>, Daniel Xu <dxu@dxuuu.xyz>,
- David Vernet <void@manifault.com>, Daan De Meyer <daan.j.demeyer@gmail.com>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-References: <20240412165230.2009746-1-jrife@google.com>
- <20240412165230.2009746-5-jrife@google.com>
- <3df13496-a644-4a3a-9f9b-96ccc070f2a3@linux.dev>
- <CADKFtnQDJbSFRS4oyEsn3ZBDAN7T6EvxXUNdrz1kU3Bnhzfgug@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CADKFtnQDJbSFRS4oyEsn3ZBDAN7T6EvxXUNdrz1kU3Bnhzfgug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests: adopt BPF's approach to quieter builds
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171340382940.22183.477575234617803213.git-patchwork-notify@kernel.org>
+Date: Thu, 18 Apr 2024 01:30:29 +0000
+References: <20240411190534.444918-1-kuba@kernel.org>
+In-Reply-To: <20240411190534.444918-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: shuah@kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev
 
-On 4/17/24 10:08 AM, Jordan Rife wrote:
->> Can the test_sock_addr.{c,sh} be retired after this patch?
-> I know it's not used in the BPF CI tests, but is it still used in any
-> other contexts?
+Hello:
 
-If anyone depends on the test_sock_addr binary, it will have to start using 
-"./test_progs -t sock_addr".
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-The test_sock_addr.{c,sh} can be retired as long as all its tests are migrated 
-to sock_addr.c
+On Thu, 11 Apr 2024 12:05:34 -0700 you wrote:
+> selftest build is fairly noisy, it's easy to miss warnings.
+> It's standard practice to add alternative messages in
+> the Makefile. I was grepping for existing solutions,
+> and found that bpf already has the right knobs.
+> 
+> Move them to lib.mk and adopt in net.
+> Convert the basic rules in lib.mk.
+> 
+> [...]
+
+Here is the summary with links:
+  - selftests: adopt BPF's approach to quieter builds
+    https://git.kernel.org/netdev/net-next/c/6fc6d7f59376
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
