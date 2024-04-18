@@ -1,83 +1,82 @@
-Return-Path: <linux-kselftest+bounces-8333-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8334-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F21D8A9B1B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 15:21:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7B618A9B1F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 15:21:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8176A1F22F94
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 13:21:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 057FF1C2267A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Apr 2024 13:21:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C05C15D5CC;
-	Thu, 18 Apr 2024 13:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821C515FA91;
+	Thu, 18 Apr 2024 13:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="ZMTrLA0F"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="gUTmnMoj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A871465BA
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 13:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2064E15F404
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 13:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713446464; cv=none; b=kc5545oZh1q32zHCjegOVxHezwfKHEptyqnoN3Q0+jKjeG9t7Bpj6LAdcO+NsMD5aQdDeu69URp2I7PvDYMfdYaVWMjBPzclUGQRsqRiw8Hrj4/WJG4oKFr5m6CBA6PgTBZ+N0nyoghzvITwERiI17w60crHcTS2MeBlfP9rXFg=
+	t=1713446490; cv=none; b=JxCbFWSONR9+q82PvYI2z/lzXWOGWxO2qm394RS6XkZ6IXuSrfJRirEViMP4dIZYZAkhdEQECO69/d/Y++RwRdFBwpbVLQxQjaWibI4GmRFC1k3pqAWce+8dx1Io0CeYL/2zHvX3Br5kn+AV7M++WgAhE0fMCNlM5eCotTByMTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713446464; c=relaxed/simple;
-	bh=JqL8HdevsKRqjAkEG5tIhzoaeVLlnpPsK5b0X1/woVM=;
+	s=arc-20240116; t=1713446490; c=relaxed/simple;
+	bh=xCkZWZsd5MbyA9NOc8fkXFwd6tpKTJgqXPaccDVFJJU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OHuAX6gnGofWH7qqYCn1n0yboTfUkKLuYPN48cAHBqdgD7tLSGAKFWbsKvTo/z7sOQB8u6pltOnUQ6AIZhAhi44UyUxoEx6qL3t6wNqy0UApuhsuK69IPXmDKcKHsc8ClaKsqJQN8hNhQCuxOn4PClhpxoYpCFWNUJLTIT+uYkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=ZMTrLA0F; arc=none smtp.client-ip=209.85.166.176
+	 To:Cc:Content-Type; b=NtCxcF1OCeFNIQJyrMSEBv9S/zI7mkl+2r8TvzS1KEtIh+wuLFLMzULVF4I0taANGg5lCEko6REkE5aBZGVYvMMjF/A5O6zLaeR5T/HbQ8JoYYB5xFkM1UmVGgERxYiWECUl8s9iy5gT3aunP0QhhDKbZRMuCs/tPbSBmJE9JTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=gUTmnMoj; arc=none smtp.client-ip=209.85.166.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-36b2fcff072so2722245ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 06:21:02 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-36b30909b01so3067105ab.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 06:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1713446462; x=1714051262; darn=vger.kernel.org;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1713446488; x=1714051288; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5RDk8w/VcIuRs4a1b2sKCJYfS/2Ok3UGeivw5IblcRI=;
-        b=ZMTrLA0Fofcaiem1qp/oqG4qWhAO+r1bUCCfNqCvFuXHjHZRcqVBFMCY/tVghSb7RR
-         8wdJjZa8EzybKazELUAxtoemjKZfloumLLCT6zkvcZ0TVpfx3Y30j3t11cSgeCcN12g5
-         7luuxOidvw/BaQi6L0L7F+/0LrVDCm76qxP0czEsflnFuZ1X4cJEwqfCYIVt9ZdlfrfT
-         O/veTEt3EHb2oLvxXvxh0ORKRpstDC9CiY7xQ3LZmnBxaO3FNMie6QVpCZQ3qD5IKPf5
-         IlvqyIARYXcO4wAp5UMOaAw5BfVX7V0+r03Fslsr1TCVLiUWqpbGKDPsWqUDSZYTELZ+
-         PvWA==
+        bh=JO0ozNsqTpxBsROn3x3SanAr//Rutf3lUig74CS14aw=;
+        b=gUTmnMojQcAZ+zR440uQFQcsuAARj0DB1VvGNV3zfZfs6KmN/un01BR93KkxEVK86b
+         Yy2I/YRMBjV0P065f6RFwCj+HAT2J8VWhJUkAdFDFu2LQ0S7M7AtUOD3Snw1yDt/C8Rl
+         hVIUXUW5+JosBkUvozfCGSpFuL0tKjcg35iSDM44XTsv8Q5Dg1YJTYdaq8tK8Ph9GtbV
+         ITw9lBGrsyEkmdf0s0lORQuHWvz6crD3QduRWDhDNdHivK/9RyyOE6Y3U6qvOq+5dGkM
+         JEs0Bk9b6VwLGXavabelFkzHaS3ZEysoXLLvjhD8BpdOUVzgDKpr9uBUdohcudRZvX8Q
+         Px3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713446462; x=1714051262;
+        d=1e100.net; s=20230601; t=1713446488; x=1714051288;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5RDk8w/VcIuRs4a1b2sKCJYfS/2Ok3UGeivw5IblcRI=;
-        b=pJtKqyNWlpdnaWd+UdDEpIx7KVOV/Q4sW81zXr2m9CjYyGWyei7vw7w3pjQFIznt5A
-         nQhyRs7raTYwUoIQGaiaKWa5ee3Km3I5okLabue6J+qleJl741hYRfYLMnxE0HVcIPTO
-         mPZE61dinIESPlyeijkJHtHesoIFMpNE/21tW6tDrIHMCqY3lxsErnQyzLuB14xRxSjp
-         vxZSyK02kGsbyPLlSESzG07A0tPSzSQwajuCzKvbhlmyS23r7zj8QOflXf2Dhcl/xlXa
-         UbWDOE7MrTQveFUZNGNZtGEwgAKgjQtew0a8OIJNOEiqIUaIWwQ1y7P/NgTtyP4L9ILE
-         jNxg==
-X-Forwarded-Encrypted: i=1; AJvYcCX6y7hG/tgHTzxr1/Uu7hQnf0jTsXG7BZ2kNqVSzP+Qj543XfK8bQzgq0X9LoR0FWtG+Lpl3bBEVZkrz7Q1OjFqtTxO54NVe+S0AmFvcSzZ
-X-Gm-Message-State: AOJu0YzAfhRW/O3ELvsCA2OckbigxFVenX5Cf2LC9XmFfUXx4KA955xg
-	xDV4yM8mfyKe4YyZwRqsj1p9N1EhH2sbS7Et6V0p+BzY/IEAFcEq/wRpju4JgrR9x2dZ44zvsI0
-	9luLF/GLEnHSuCKpUH70qzWRr2UNqqKIiVfTzfA==
-X-Google-Smtp-Source: AGHT+IF4F3+EsOd9Km5fe/tUcyJysRUEm3trePDQa9sseGq5flNeCiOAYf6iwo1deI+stz+PjTd2Ud2CltxcxL5sdMA=
-X-Received: by 2002:a05:6e02:1787:b0:36b:e53:57ea with SMTP id
- y7-20020a056e02178700b0036b0e5357eamr3796568ilu.16.1713446462126; Thu, 18 Apr
- 2024 06:21:02 -0700 (PDT)
+        bh=JO0ozNsqTpxBsROn3x3SanAr//Rutf3lUig74CS14aw=;
+        b=DLBXyBDQQEG6uTcyFvhEU7LJrb0neQ/tObADpPMcpMBldb6+xxPw2oyDsW6hZzeBzA
+         RS1iQSkx/hx62MtoLsPXs5+7saLW9f/fj+TMW3oV48upd8cBYP/AzrOM3ZsVB7S9dq+m
+         d7DgEkAs6sDzlirqpFhGdkgr+SDfPGULCFA5C/W3aXtAJQMRJKJj3dvBY15bMg5EVtt2
+         ayjGmnzpODeDCf434kgODzs01HmtbtXLUucGczFnvhmK2W6A3uBKmOTwqzRK243yXRQM
+         UU9l8mcoTS0g+Uzc84KuD0GQL1Fm3TRIBZRecQ/lSv/veOZCVGIWKjAKopf0h7Or7hre
+         rUnw==
+X-Forwarded-Encrypted: i=1; AJvYcCXeXX9orBY9qrv7MRfTWm/XTnGZuB2ILfpk+DPAqCi/aO1cO9YwP9me3P3DYUqVGLpzqFYhrKOUoBd6UkQI8XWyeBH2otYSBMJYaYTghlAT
+X-Gm-Message-State: AOJu0Yxxw3i425xdzw6uqHHOHfdaIuEn2HyWhMQVCzNLxZ+tVj3kRSgW
+	wqjDRm4MHWX/217ULKP+H2n7gj9a5T2ys1S+C/GwSKgWPWhUneSAkEEMyRl9C33nsy1/XHM6Nj2
+	F+NMHgbmVaZCHHyr0Lt0edSDAcPqYpAluuHpOnQ==
+X-Google-Smtp-Source: AGHT+IFYxMvNR0jXCZIG1KPR1/WCDVRMgUDvpXntlv1WYC3zuUPdvb9LjVkJtYSDV5Al2WTKHOMIUCYgVBtJncbys6A=
+X-Received: by 2002:a05:6e02:219c:b0:36a:3ef4:aa0a with SMTP id
+ j28-20020a056e02219c00b0036a3ef4aa0amr3216818ila.24.1713446488311; Thu, 18
+ Apr 2024 06:21:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418124300.1387978-1-cleger@rivosinc.com> <20240418124300.1387978-8-cleger@rivosinc.com>
-In-Reply-To: <20240418124300.1387978-8-cleger@rivosinc.com>
+References: <20240418124300.1387978-1-cleger@rivosinc.com> <20240418124300.1387978-12-cleger@rivosinc.com>
+In-Reply-To: <20240418124300.1387978-12-cleger@rivosinc.com>
 From: Anup Patel <anup@brainfault.org>
-Date: Thu, 18 Apr 2024 18:50:50 +0530
-Message-ID: <CAAhSdy2fVUYqYySn8rbdD5Dgc2fqXXjG_u=qe7=_MHPfqVBoBg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] KVM: riscv: selftests: Add some Zc* extensions
- to get-reg-list test
+Date: Thu, 18 Apr 2024 18:51:16 +0530
+Message-ID: <CAAhSdy3bjKQhRRFLhNtCGNG=f9cj=LHhr0sPWdeFFR9KpC3RVw@mail.gmail.com>
+Subject: Re: [PATCH v2 11/12] RISC-V: KVM: Allow Zcmop extension for Guest/VM
 To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
 	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
@@ -93,8 +92,8 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Apr 18, 2024 at 6:14=E2=80=AFPM Cl=C3=A9ment L=C3=A9ger <cleger@riv=
 osinc.com> wrote:
 >
-> The KVM RISC-V allows Zca, Zcf, Zcd and Zcb extensions for Guest/VM so
-> add these extensions to get-reg-list test.
+> Extend the KVM ISA extension ONE_REG interface to allow KVM user space
+> to detect and enable Zcmop extension for Guest/VM.
 >
 > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
 
@@ -107,69 +106,44 @@ Thanks,
 Anup
 
 > ---
->  tools/testing/selftests/kvm/riscv/get-reg-list.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>  arch/riscv/include/uapi/asm/kvm.h | 1 +
+>  arch/riscv/kvm/vcpu_onereg.c      | 2 ++
+>  2 files changed, 3 insertions(+)
 >
-> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/tes=
-ting/selftests/kvm/riscv/get-reg-list.c
-> index 40107bb61975..61cad4514197 100644
-> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> @@ -55,6 +55,10 @@ bool filter_reg(__u64 reg)
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZBKC:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZBKX:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZBS:
-> +       case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZCA:
-> +       case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZCB:
-> +       case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZCD:
-> +       case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZCF:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZFA:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZFH:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZFHMIN:
-> @@ -421,6 +425,10 @@ static const char *isa_ext_single_id_to_str(__u64 re=
-g_off)
->                 KVM_ISA_EXT_ARR(ZBKC),
->                 KVM_ISA_EXT_ARR(ZBKX),
->                 KVM_ISA_EXT_ARR(ZBS),
-> +               KVM_ISA_EXT_ARR(ZCA),
-> +               KVM_ISA_EXT_ARR(ZCB),
-> +               KVM_ISA_EXT_ARR(ZCD),
-> +               KVM_ISA_EXT_ARR(ZCF),
->                 KVM_ISA_EXT_ARR(ZFA),
->                 KVM_ISA_EXT_ARR(ZFH),
->                 KVM_ISA_EXT_ARR(ZFHMIN),
-> @@ -945,6 +953,10 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zbkb, ZBKB);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbkc, ZBKC);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbkx, ZBKX);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbs, ZBS);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA),
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB),
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD),
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF),
->  KVM_ISA_EXT_SIMPLE_CONFIG(zfa, ZFA);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zfh, ZFH);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zfhmin, ZFHMIN);
-> @@ -1001,6 +1013,10 @@ struct vcpu_reg_list *vcpu_configs[] =3D {
->         &config_zbkc,
->         &config_zbkx,
->         &config_zbs,
-> +       &config_zca,
-> +       &config_zcb,
-> +       &config_zcd,
-> +       &config_zcf,
->         &config_zfa,
->         &config_zfh,
->         &config_zfhmin,
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/=
+asm/kvm.h
+> index 57db3fea679f..0366389a0bae 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -172,6 +172,7 @@ enum KVM_RISCV_ISA_EXT_ID {
+>         KVM_RISCV_ISA_EXT_ZCB,
+>         KVM_RISCV_ISA_EXT_ZCD,
+>         KVM_RISCV_ISA_EXT_ZCF,
+> +       KVM_RISCV_ISA_EXT_ZCMOP,
+>         KVM_RISCV_ISA_EXT_MAX,
+>  };
+>
+> diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
+> index a2747a6dbdb6..77a0d337faeb 100644
+> --- a/arch/riscv/kvm/vcpu_onereg.c
+> +++ b/arch/riscv/kvm/vcpu_onereg.c
+> @@ -52,6 +52,7 @@ static const unsigned long kvm_isa_ext_arr[] =3D {
+>         KVM_ISA_EXT_ARR(ZCB),
+>         KVM_ISA_EXT_ARR(ZCD),
+>         KVM_ISA_EXT_ARR(ZCF),
+> +       KVM_ISA_EXT_ARR(ZCMOP),
+>         KVM_ISA_EXT_ARR(ZFA),
+>         KVM_ISA_EXT_ARR(ZFH),
+>         KVM_ISA_EXT_ARR(ZFHMIN),
+> @@ -136,6 +137,7 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsign=
+ed long ext)
+>         case KVM_RISCV_ISA_EXT_ZCB:
+>         case KVM_RISCV_ISA_EXT_ZCD:
+>         case KVM_RISCV_ISA_EXT_ZCF:
+> +       case KVM_RISCV_ISA_EXT_ZCMOP:
+>         case KVM_RISCV_ISA_EXT_ZFA:
+>         case KVM_RISCV_ISA_EXT_ZFH:
+>         case KVM_RISCV_ISA_EXT_ZFHMIN:
 > --
 > 2.43.0
 >
