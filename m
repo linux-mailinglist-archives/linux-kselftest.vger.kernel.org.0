@@ -1,235 +1,388 @@
-Return-Path: <linux-kselftest+bounces-8394-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E26AD8AA7D5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:59:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0668B8AA7EB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 07:26:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B0B91C22476
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 04:59:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 560C8B25121
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 05:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55AFBA50;
-	Fri, 19 Apr 2024 04:58:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18E2947B;
+	Fri, 19 Apr 2024 05:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jZQsci3R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aqpr+oMS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F548F5B
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 04:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC99829A2;
+	Fri, 19 Apr 2024 05:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713502737; cv=none; b=E6wRLu3YgRmklMa6NloDRsoNPi8erQIbf1NR3hP7lBybipIAWcwm5EpbE8dKs/DeW+eh6zGMOHf1VKU0ORWjYYJ0u3vavTwnGLvph/DF3+VvkQgEfKopRSgcs3L17eQ0pnol8l21wm2N9karHWQAymu2XT9gNZSDnveQDx7QDnE=
+	t=1713504352; cv=none; b=ohNBa6/4kG0zn2yGSlUVsjJGILEZTnwd87joQqz+/twcglWnp9jFgeLyMggka379Gxltx07g0CjRKniM6NikPk9rGGeXPdWsMocBx+RDDMNvoUixhodrgYwCeE0TuzCPMx0coM8yGhbJEe4lCOvMAqIWRddVidxivU9tI8PgpDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713502737; c=relaxed/simple;
-	bh=z0koi5ss+vsVHghpIpH7SpmThNHdhFIZ5FPxPPwBJ9I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ov3LpvR7CrXMV6DEbtIgAUtE3RTm5a4gfU05yjHosxUCDAIywZruCUax5tXGIBjWwcqAnUQsTxQDd5Em7pSxIEHeA6dehqrM/iKbiv1oCQQhZU36qgmIqkUIizXq1SvRNoHn3WmVuQ5wscTfuxPRc5/P0YAuUbm9JRGFx+ExDTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jZQsci3R; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-436ed871225so142841cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 21:58:55 -0700 (PDT)
+	s=arc-20240116; t=1713504352; c=relaxed/simple;
+	bh=NK6nXDlUgCrw4uyVpqqQ00JqC9iyCcFWXBfyV19Z9mU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cfQQEW5rRRr2Hd6zLfDbEJ11rgXyVysiBc59Z/kWJuC49r7Sxv5bPgBViAT1Bt8MzZEhRv0F782LrKOqa6OL7cbml4Btr7X78q/ciiRsnYk5pLnmRmKG+zOWzpC9v0TSxPE9gdcTtkDrIyjhJo/ifpV9XePugdTXZi0tExwYlrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aqpr+oMS; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e3ca4fe4cfso12948365ad.2;
+        Thu, 18 Apr 2024 22:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713502735; x=1714107535; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lg2zRPimmnMEi7heBKGKFMqA/gIf5bCR+FfKa4gTmfA=;
-        b=jZQsci3RblzJloY81F7qrJC/YjiGOEuywQrPlHqpOGflAYIjzZBT4yqAmou9TgNdbZ
-         fcEiEGSeJnMEsAsbuR7NE5BCc/Pd6lBt3a0+W55+MjN+TcdzJNsjTaRHFHQ17Li9sT0x
-         I242OO7O7c5h4alOTD4tPwBc5gLL+OvLUaBfH+aeE+bMZnZ2yDAlOb3xZrSCsjZrXwCH
-         Z01Hvq0iLFZQTKVyhhARFFpwQWiz5mUuxrV65OkHhPPCV/HJCRuFseCsZsoVK46tpGCv
-         PKmv/giUnNIFxfQK7dmMvXvgooZTRHQts1C/kV50gG9UDnGHN/igsRV4UOeEtFxYBafa
-         sZHA==
+        d=gmail.com; s=20230601; t=1713504350; x=1714109150; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kbo7yYGh5l3kEMedzYyyDWEw4aSZznfXYf/RpNYFzjQ=;
+        b=aqpr+oMSLEbWLPgPNe2kFYz2n1GpkhDAFmJCZ6dYO/phnBcNUgdPGQPTcDiEfyCUkf
+         YBmWH8Qf1Oe644YnwGFdYW7HrVsMS4XgggPNZ4vVW3AfosCDtM2oy/0Z3niWisbNUM4L
+         y9ttrt7MaeJkRO+Iy6vjiZGd1zdULrsqNlEx/poSBSzbux+Xh8jqW1hcNSH166YAv6j0
+         2AEp/Smygx09W27DEDvLCD5EOxjnPba8dkEXv3JTvp1/RtwtELgf35sZZWoOQ7zbZj4J
+         sSD35TZ5TXynkAoN/b+M6WOHe4uJugu2dzvVaYUABxSJ6NrNoxFxT/abpNtrQQVTL1aW
+         abcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713502735; x=1714107535;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lg2zRPimmnMEi7heBKGKFMqA/gIf5bCR+FfKa4gTmfA=;
-        b=DQH7mCZp/Qc1x3TX/oLgNWJUl8gMUUfYCdIdSkhyfrWEHSnmDIhrDGxWUFmElEV1Ii
-         mc6wIHti1GdUVjn7a9F6OS/sly9B5Gy6MUi3ZCAEXj2dtvaywAo+IoDPzGSjzqFpL7Ie
-         DCRy1B9qi5m0T01FFYzdgvxifSDSwfRW0zA6t2Za9PIL92M6gGPA/fcXkh1roiyAGkXh
-         rjxhxgEOH1of3OyF79l/9In6zE3+XRBS9P0hTlug9Vi15axywZbGVgQJq08zRhWk0s4p
-         /Mt6dVKWUE0MsfCBPPhzeOFqSn2XxSCcVqqo3pImOLPBzYShHpXRA9xS61dpULn4HZfF
-         roKA==
-X-Forwarded-Encrypted: i=1; AJvYcCXfcRVBg7M17t+EaV+swENM/9cslhLFGhIG+MZDV41ZzDSPOex/EY5qV1Cwn9J2QGTZpDKU9ye06kPp5x4N98YURiiEitkg5feFecR2S8hJ
-X-Gm-Message-State: AOJu0Yw7sLLQgRA5VDDSqSZ4RtRazvSTEwIPXdk9lVl5XNJqU0SKTe+q
-	vHN5bEvLra9KOYXWeeblSfEnHhLIOUuQ8WhBrsEqAn4cmbTspWZEHC9KyUjLpqrXKh0mFJWVGk7
-	TtQfSRYAzzyjUlU7rDiPn6GxuSqGCPMV6+kbP
-X-Google-Smtp-Source: AGHT+IEtA4+CpARfB5vsmh3tcDAFtCecqb318nZ1xGMNN45xDP9fukg8WpYQrN3dnZW/45r+OVJ5eg1lH1FLEzj/8fM=
-X-Received: by 2002:a05:622a:181e:b0:434:3688:f093 with SMTP id
- t30-20020a05622a181e00b004343688f093mr100837qtc.27.1713502734921; Thu, 18 Apr
- 2024 21:58:54 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713504350; x=1714109150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kbo7yYGh5l3kEMedzYyyDWEw4aSZznfXYf/RpNYFzjQ=;
+        b=WovJEgMpjsk2lQ5f2f3SzU1XSfYeOcNuqz2d3Hu3LoKzSCFTchza1eIk1bO3KEZ6qC
+         BoazdRRuicrogF3swCEzA/5s4ux2GLwG+eyN+HhHWJsKLmETDYePhdehK3uVZQ843ilW
+         MOoWEEQeQHhddrYGKjrYP/D2om4UYwless8xm/CAnRd9g+2U1Q3/MxocUCBP04I3MKKk
+         HaU1h0HvtxPHTsqjYzoTMWiNSnvK0camx4hkm+NjoM+TJYbwql3Ab5a5avXEKOMHtT41
+         o4YKtEOyrFwjoxyilZYVWmJJX0Pu/P5vXTiD2/sNee+U+OA73Iyfmb1i6lHfyl7CuDLz
+         NU7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUjgwYivvB6uRA31RCADPZiDPq7/aBKRYTvRxfexvmntHwblPYVJpGtfXJ+seik2AIpzDbq8UmZ3xfItT60KwFKgD5fpojrs05iISK64QPBWNNS34HAK/wMwrFImwR4bCQzKCb/XBFTMm36ZdNuXJF9M1QA6gEFGS6hZeXrZcfFCPln
+X-Gm-Message-State: AOJu0YzfcpAi4cWBiAxsUDhXQ943UB4QH9TVw0VhxQIlRKLsrueUjOAx
+	UTQrxmApJeJyYg4cEyCA3ygymEb/2qCSQ4KCd2dCM7BOFGVMN+1b
+X-Google-Smtp-Source: AGHT+IHnxEj+Mi8+nB+NgQNxNsL0rtNE5eoI6rcIMV/IRbBiwvywPhG5aPA95gIGqaijtJgdP+bKFw==
+X-Received: by 2002:a17:902:f790:b0:1e8:cc30:b527 with SMTP id q16-20020a170902f79000b001e8cc30b527mr1311558pln.2.1713504350037;
+        Thu, 18 Apr 2024 22:25:50 -0700 (PDT)
+Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::5:fbcc])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170903110600b001e668c1060bsm2448360plh.122.2024.04.18.22.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Apr 2024 22:25:49 -0700 (PDT)
+Date: Thu, 18 Apr 2024 22:25:45 -0700
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 11/18] bpf: wq: add bpf_wq_init
+Message-ID: <f7awluzevpzqhqo5a65dxlfoo3dhkvbpntb4a5uueq2v7gjj7b@ddoyfpeymg3u>
+References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
+ <20240416-bpf_wq-v1-11-c9e66092f842@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418210236.194190-1-wander@redhat.com> <20240418210236.194190-3-wander@redhat.com>
-In-Reply-To: <20240418210236.194190-3-wander@redhat.com>
-From: David Gow <davidgow@google.com>
-Date: Fri, 19 Apr 2024 12:58:44 +0800
-Message-ID: <CABVgOSncx1eS_8EWsNkoDOj+TaNsaW8MpjG8XaFY2Q8JXo+oqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] kunit: avoid memory leak on device register error
-To: Wander Lairson Costa <wander@redhat.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Maxime Ripard <mripard@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
-	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <linux-kselftest@vger.kernel.org>, 
-	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <kunit-dev@googlegroups.com>, open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000dcb98506166bf1d6"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240416-bpf_wq-v1-11-c9e66092f842@kernel.org>
 
---000000000000dcb98506166bf1d6
-Content-Type: text/plain; charset="UTF-8"
-
-On Fri, 19 Apr 2024 at 05:02, Wander Lairson Costa <wander@redhat.com> wrote:
->
-> If the device register fails, free the allocated memory before
-> returning.
->
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
+On Tue, Apr 16, 2024 at 04:08:24PM +0200, Benjamin Tissoires wrote:
+> We need to teach the verifier about the second argument which is declared
+> as void * but which is of type KF_ARG_PTR_TO_MAP. We could have dropped
+> this extra case if we declared the second argument as struct bpf_map *,
+> but that means users will have to do extra casting to have their program
+> compile.
+> 
+> We also need to duplicate the timer code for the checking if the map
+> argument is matching the provided workqueue.
+> 
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> 
 > ---
+> 
+> Note that the timer code when matching for the map is checking for
+> constant map pointers. I wonder if this needs to be enforced too
+> (being constant?)
+> ---
+>  include/uapi/linux/bpf.h |   9 ++++
+>  kernel/bpf/helpers.c     | 114 ++++++++++++++++++++++++++++++++++++++++++++++-
+>  kernel/bpf/verifier.c    |   6 +++
+>  3 files changed, 127 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index e4ae83550fb3..519f6019d158 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -7502,4 +7502,13 @@ struct bpf_iter_num {
+>  	__u64 __opaque[1];
+>  } __attribute__((aligned(8)));
+>  
+> +/*
+> + * Flags to control bpf_wq_init() and bpf_wq_set_callback() behaviour.
+> + *     - BPF_F_WQ_SLEEPABLE: the callback needs to run in
+> + *       a sleepable context
+> + */
+> +enum {
+> +	BPF_F_WQ_SLEEPABLE = (1ULL << 0),
+> +};
 
-Thanks.
+Just started looking at the patch set. The first reaction that
+this flag is odd. Why add it? wq provides sleepable ctx.
+Why would the program ask to be non-sleepable in wq?
+If it needs to callback to run in rcu cs, it can use bpf_rcu_read_lock() kfunc
+as the first call in such callback and it will be equivalent
+to not-passing this BPF_F_WQ_SLEEPABLE flag.
+It seem it can be dropped and complexity reduced.
+The verifier complications in later patches due to this flag too...
+I just don't see the point.
 
-I'm not sure this is correct, though... Shouldn't put_device() free this for us?
-
-The documentation for device_register() says to never free a device
-after device_register() has been called, even if it fails:
-https://docs.kernel.org/driver-api/infrastructure.html#c.device_register
-
-Or am I missing something?
-
-Cheers,
--- David
-
-
->  lib/kunit/device.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/lib/kunit/device.c b/lib/kunit/device.c
-> index 25c81ed465fb..bc2e2032e505 100644
-> --- a/lib/kunit/device.c
-> +++ b/lib/kunit/device.c
-> @@ -119,10 +119,8 @@ static struct kunit_device *kunit_device_register_internal(struct kunit *test,
->         kunit_dev->owner = test;
->
->         err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
-> -       if (err) {
-> -               kfree(kunit_dev);
-> -               return ERR_PTR(err);
-> -       }
-> +       if (err)
-> +               goto error;
->
->         kunit_dev->dev.release = kunit_device_release;
->         kunit_dev->dev.bus = &kunit_bus_type;
-> @@ -131,7 +129,7 @@ static struct kunit_device *kunit_device_register_internal(struct kunit *test,
->         err = device_register(&kunit_dev->dev);
->         if (err) {
->                 put_device(&kunit_dev->dev);
-> -               return ERR_PTR(err);
-> +               goto error;
->         }
->
->         kunit_dev->dev.dma_mask = &kunit_dev->dev.coherent_dma_mask;
-> @@ -140,6 +138,9 @@ static struct kunit_device *kunit_device_register_internal(struct kunit *test,
->         kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
->
->         return kunit_dev;
-> +error:
-> +       kfree(kunit_dev);
-> +       return ERR_PTR(err);
+> +
+>  #endif /* _UAPI__LINUX_BPF_H__ */
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 9fd12d480b8b..9ac1b8bb3a01 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1109,11 +1109,18 @@ struct bpf_hrtimer {
+>  	struct hrtimer timer;
+>  };
+>  
+> -/* the actual struct hidden inside uapi struct bpf_timer */
+> +struct bpf_work {
+> +	struct bpf_async_cb cb;
+> +	struct work_struct work;
+> +	struct work_struct delete_work;
+> +};
+> +
+> +/* the actual struct hidden inside uapi struct bpf_timer and bpf_wq */
+>  struct bpf_async_kern {
+>  	union {
+>  		struct bpf_async_cb *cb;
+>  		struct bpf_hrtimer *timer;
+> +		struct bpf_work *work;
+>  	};
+>  	/* bpf_spin_lock is used here instead of spinlock_t to make
+>  	 * sure that it always fits into space reserved by struct bpf_timer
+> @@ -1124,6 +1131,7 @@ struct bpf_async_kern {
+>  
+>  enum bpf_async_type {
+>  	BPF_ASYNC_TYPE_TIMER = 0,
+> +	BPF_ASYNC_TYPE_WQ,
+>  };
+>  
+>  static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+> @@ -1167,11 +1175,75 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+>  	return HRTIMER_NORESTART;
 >  }
->
->  /*
-> --
-> 2.44.0
->
+>  
+> +static void bpf_wq_work(struct work_struct *work)
+> +{
+> +	struct bpf_work *w = container_of(work, struct bpf_work, work);
+> +	struct bpf_tramp_run_ctx __maybe_unused run_ctx;
+> +	struct bpf_prog *prog = w->cb.prog;
+> +	unsigned int flags = w->cb.flags;
+> +	struct bpf_map *map = w->cb.map;
+> +	bpf_callback_t callback_fn;
+> +	void *value = w->cb.value;
+> +	void *key;
+> +	u32 idx;
+> +
+> +	BTF_TYPE_EMIT(struct bpf_wq);
+> +
+> +	callback_fn = READ_ONCE(w->cb.callback_fn);
+> +	if (!callback_fn || !prog)
+> +		return;
+> +
+> +	if (map->map_type == BPF_MAP_TYPE_ARRAY) {
+> +		struct bpf_array *array = container_of(map, struct bpf_array, map);
+> +
+> +		/* compute the key */
+> +		idx = ((char *)value - array->value) / array->elem_size;
+> +		key = &idx;
+> +	} else { /* hash or lru */
+> +		key = value - round_up(map->key_size, 8);
+> +	}
+> +
+> +	run_ctx.bpf_cookie = 0;
+> +
+> +	if (flags & BPF_F_WQ_SLEEPABLE) {
+> +		if (!__bpf_prog_enter_sleepable_recur(prog, &run_ctx)) {
+> +			/* recursion detected */
+> +			__bpf_prog_exit_sleepable_recur(prog, 0, &run_ctx);
+> +			return;
+> +		}
+> +	} else {
+> +		if (!__bpf_prog_enter_recur(prog, &run_ctx)) {
+> +			/* recursion detected */
+> +			__bpf_prog_exit_recur(prog, 0, &run_ctx);
+> +			return;
+> +		}
+> +	}
+> +
+> +	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+> +	/* The verifier checked that return value is zero. */
+> +
+> +	if (flags & BPF_F_WQ_SLEEPABLE)
+> +		__bpf_prog_exit_sleepable_recur(prog, 0 /* bpf_prog_run does runtime stats */,
+> +						&run_ctx);
+> +	else
+> +		__bpf_prog_exit_recur(prog, 0, &run_ctx);
+> +}
+> +
+> +static void bpf_wq_delete_work(struct work_struct *work)
+> +{
+> +	struct bpf_work *w = container_of(work, struct bpf_work, delete_work);
+> +
+> +	cancel_work_sync(&w->work);
+> +
+> +	kfree_rcu(w, cb.rcu);
+> +}
+> +
+>  static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u64 flags,
+>  			    enum bpf_async_type type)
+>  {
+>  	struct bpf_async_cb *cb;
+>  	struct bpf_hrtimer *t;
+> +	struct bpf_work *w;
+>  	clockid_t clockid;
+>  	size_t size;
+>  	int ret = 0;
+> @@ -1183,6 +1255,9 @@ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u
+>  	case BPF_ASYNC_TYPE_TIMER:
+>  		size = sizeof(struct bpf_hrtimer);
+>  		break;
+> +	case BPF_ASYNC_TYPE_WQ:
+> +		size = sizeof(struct bpf_work);
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -1201,13 +1276,22 @@ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u
+>  		goto out;
+>  	}
+>  
+> -	if (type == BPF_ASYNC_TYPE_TIMER) {
+> +	switch (type) {
+> +	case BPF_ASYNC_TYPE_TIMER:
+>  		clockid = flags & (MAX_CLOCKS - 1);
+>  		t = (struct bpf_hrtimer *)cb;
+>  
+>  		hrtimer_init(&t->timer, clockid, HRTIMER_MODE_REL_SOFT);
+>  		t->timer.function = bpf_timer_cb;
+>  		cb->value = (void *)async - map->record->timer_off;
+> +		break;
+> +	case BPF_ASYNC_TYPE_WQ:
+> +		w = (struct bpf_work *)cb;
+> +
+> +		INIT_WORK(&w->work, bpf_wq_work);
+> +		INIT_WORK(&w->delete_work, bpf_wq_delete_work);
+> +		cb->value = (void *)async - map->record->wq_off;
+> +		break;
+>  	}
+>  	cb->map = map;
+>  	cb->prog = NULL;
+> @@ -1473,7 +1557,19 @@ void bpf_timer_cancel_and_free(void *val)
+>   */
+>  void bpf_wq_cancel_and_free(void *val)
+>  {
+> +	struct bpf_work *work;
+> +
+>  	BTF_TYPE_EMIT(struct bpf_wq);
+> +
+> +	work = (struct bpf_work *)__bpf_async_cancel_and_free(val);
+> +	if (!work)
+> +		return;
+> +	/* Trigger cancel of the sleepable work, but *do not* wait for
+> +	 * it to finish if it was running as we might not be in a
+> +	 * sleepable context.
+> +	 * kfree will be called once the work has finished.
+> +	 */
+> +	schedule_work(&work->delete_work);
+>  }
+>  
+>  BPF_CALL_2(bpf_kptr_xchg, void *, map_value, void *, ptr)
+> @@ -2612,6 +2708,19 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+>  	WARN(1, "A call to BPF exception callback should never return\n");
+>  }
+>  
+> +__bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *map, unsigned int flags)
+> +{
+> +	struct bpf_async_kern *async = (struct bpf_async_kern *)wq;
+> +
+> +	BUILD_BUG_ON(sizeof(struct bpf_async_kern) > sizeof(struct bpf_wq));
+> +	BUILD_BUG_ON(__alignof__(struct bpf_async_kern) != __alignof__(struct bpf_wq));
+> +
+> +	if (flags & ~BPF_F_WQ_SLEEPABLE)
+> +		return -EINVAL;
+> +
+> +	return __bpf_async_init(async, map, flags, BPF_ASYNC_TYPE_WQ);
+> +}
+> +
+>  __bpf_kfunc_end_defs();
+>  
+>  BTF_KFUNCS_START(generic_btf_ids)
+> @@ -2689,6 +2798,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
+>  BTF_ID_FLAGS(func, bpf_dynptr_size)
+>  BTF_ID_FLAGS(func, bpf_dynptr_clone)
+>  BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
+> +BTF_ID_FLAGS(func, bpf_wq_init)
+>  BTF_KFUNCS_END(common_btf_ids)
+>  
+>  static const struct btf_kfunc_id_set common_kfunc_set = {
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 112faf2cd7e9..5e8c1e65fe8c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11038,6 +11038,7 @@ enum special_kfunc_type {
+>  	KF_bpf_percpu_obj_drop_impl,
+>  	KF_bpf_throw,
+>  	KF_bpf_iter_css_task_new,
+> +	KF_bpf_wq_init,
+>  };
+>  
+>  BTF_SET_START(special_kfunc_set)
+> @@ -11064,6 +11065,7 @@ BTF_ID(func, bpf_throw)
+>  #ifdef CONFIG_CGROUPS
+>  BTF_ID(func, bpf_iter_css_task_new)
+>  #endif
+> +BTF_ID(func, bpf_wq_init)
+>  BTF_SET_END(special_kfunc_set)
+>  
+>  BTF_ID_LIST(special_kfunc_list)
+> @@ -11094,6 +11096,7 @@ BTF_ID(func, bpf_iter_css_task_new)
+>  #else
+>  BTF_ID_UNUSED
+>  #endif
+> +BTF_ID(func, bpf_wq_init)
+>  
+>  static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
+>  {
+> @@ -11171,6 +11174,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
+>  	if (is_kfunc_arg_wq(meta->btf, &args[argno]))
+>  		return KF_ARG_PTR_TO_WORKQUEUE;
+>  
+> +	if (meta->func_id == special_kfunc_list[KF_bpf_wq_init] && argno == 1)
+> +		return KF_ARG_PTR_TO_MAP;
+> +
 
---000000000000dcb98506166bf1d6
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Hmm. This function has this bit:
+        if (is_kfunc_arg_map(meta->btf, &args[argno]))
+                return KF_ARG_PTR_TO_MAP;
 
-MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-7xDrOPfX3COqq162RFg/MFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
-BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
-Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
-FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
-YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
-AK0lDd6/eSh3qHmXaw1YUfIFy07B25BEcTvWgOdla99gF1O7sOsdYaTz/DFkZI5ghjgaPJCovgla
-mRMfNcxZCfoBtsB7mAS6iOYjuwFOZxi9cv6jhfiON6b89QWdMaPeDddg/F2Q0bxZ9Z2ZEBxyT34G
-wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
-5PHxFaT2a5Td/fj5yJ5hRSrqy/nj/hjT14w3/ZdX5uWg+cus6VjiiR/5qGSZRjHt8JoApD6t6/tg
-ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
-MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
-IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIL56kAejH7/ZrhvsQs2CvaNGqDJhYdmbj9mUIp6iiBBdMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDQxOTA0NTg1NVowaQYJKoZIhvcNAQkPMVww
-WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCMlSIl
-qvIYPGSTeWbOGP9HioRXuIlV1MeLtwr9/wizSBDP5NK6mFFQP21ln8mti18jst1QbLlyRi/DQFMx
-dcWhMDjMOUyeWiiYtLC6IpBIGj6ZgjspyyowioY9ETaJvH70iAZcbLCPE8G9pnckSzPrKZAtkMEr
-EnoxKyPSCLpC+4hPXEvvZiURVOG6u+8BIWw1YCCg46xPXBpqfov1xDOEFTNd5p4kaSG5su6HT6px
-oS3s8niNFKaOmGiOrqncl6xjCOGySLNLXOQbJ6xv/sH6O9oJePQhA0RyqwhvzxqrEErGF5T0ZNLW
-xOarLOSdri8JNsHw0zm/VTYiJ34OehQ6
---000000000000dcb98506166bf1d6--
+Just do:
++__bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *map__map, ...
+
+It was specifically added for bpf_arena_alloc_pages to pass pointer to a map.
+In case of arena map type it's used as:
+struct {
+        __uint(type, BPF_MAP_TYPE_ARENA);
+        ...
+} arena SEC(".maps");
+
+page = bpf_arena_alloc_pages(&arena, ...)
+libbpf and the verifier do the right thing.
+I think it should work here as well.
 
