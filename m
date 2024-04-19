@@ -1,230 +1,116 @@
-Return-Path: <linux-kselftest+bounces-8446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF8FD8AB250
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:50:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45D068AB254
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:50:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F31691C2346B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:50:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0206A283E52
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:50:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6966B12FF9A;
-	Fri, 19 Apr 2024 15:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB3B1304AF;
+	Fri, 19 Apr 2024 15:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cXF3MH9U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmYMhp6L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3452712F361;
-	Fri, 19 Apr 2024 15:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B131304A5;
+	Fri, 19 Apr 2024 15:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713541768; cv=none; b=t6KZLjCf4lACE1BE7kznBNG8qf6yacZKAkzybTGxT4+dW3PmKbTOT+uwyzAKGGIF4PP4h7C/klVlqMRHYKz7Ma1zB+Z+kDtjUh4v0pjypVaDp1x8JwkdFHFiTRYN/vCGpkKY4ybQeyJYzlU4Wg00aCrPzGh6wl468ceHlBifvtI=
+	t=1713541791; cv=none; b=gZs1g8EC/zaLNAgpYCBluhOhdZ9l6N0TbkSCx1Nb+XIFq/o5TV6RdD+NE/WZhggekbyVwuZvQxGL9++F8N87Z+erLccpOA7TdCH8oVMRzIK2l6eZ4rhNJ91GBQuR3+FOQH7zpuBq/mb1BR/ccApl/4Hj13cqefNRMpEPQ7vNrDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713541768; c=relaxed/simple;
-	bh=MMNCu9qXo/Sui8C3tMfJ7lzuoTJCSLI1PUO4ACRkh8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qJ6i3sVogZDql9IK1FPHjM//a/a0+aWriVDV1PSuWxinBgR/rIb/vt0ZzSJN9lScLjnky2zAh0vVxWZtwM2lNMygkt2MxcvqENFA3P4LGgxlrNoe/n2JiAOs6OqAl89C99F1d/joDO+mHSX0Aw2IkReTp8XWKloY1hggs//LHDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cXF3MH9U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F25C2BD10;
-	Fri, 19 Apr 2024 15:49:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713541768;
-	bh=MMNCu9qXo/Sui8C3tMfJ7lzuoTJCSLI1PUO4ACRkh8M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cXF3MH9UhHZaW5c+fQbICV8+tqL8zZd3GbsK+MMtlVnuI+U9MykD5EdYMbnqzGiQA
-	 clolbwi+WJpRnCi8Bgt+tEF57vK45kHXEgAivOzflaV60ugfWPJize6jQXFRFHwjyr
-	 VRS95okpFhaUArffiB/+u6m+wylmbq/z7sLeQsbFvkITQqoo7UuMHWOkDxb5E4UPYj
-	 yAg41C5DHBDH+t2YzcwksmCMBm7ZYDOWSL2q4WPfoHN6O8DqUXWH6xY+zsUNil7480
-	 D0X+YTTKNs+W1AwuRvHl2QI8DgHMxQgN51X8xpUibgE1yudXL+nOsnAy3LXdkfDXNg
-	 tmjlh9MV2WO1A==
-Date: Fri, 19 Apr 2024 16:49:16 +0100
-From: Conor Dooley <conor@kernel.org>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
-	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 03/12] dt-bindings: riscv: add Zc* extension rules
- implied by C extension
-Message-ID: <20240419-blinked-timid-da722ec6ddc4@spud>
-References: <20240418124300.1387978-1-cleger@rivosinc.com>
- <20240418124300.1387978-4-cleger@rivosinc.com>
+	s=arc-20240116; t=1713541791; c=relaxed/simple;
+	bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=juM07VQTd6gHNjixM6Iu4vpBI7CoQFXGMwneKN/2bSRrEzHhtW3eAu7e6QN/Jn/hCd0xftRjnbI/cbeqdmLM3yrSS69q4fN6gg081sl1c027LTjm2vfgsmQjVm0g03B5FL9GiLioE0/EfyCQLCEWJd0U14U6tiaDgP5ecsBWaEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kmYMhp6L; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2da01cb187cso38815321fa.0;
+        Fri, 19 Apr 2024 08:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713541788; x=1714146588; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
+        b=kmYMhp6LRdt/pghJaBvQj6WbF6GqXMtpUAEhZK0d2NdAFc6DCgAZqfSnb4plb5Zd+l
+         58cn/Z9mUPVU8LZpZgBVMGRo1doOHE8s3odLMyWdKZrqcmh3oVMPDaz6ACTLr6DqrG/N
+         7/Ejhfq+3pJ9aRsZBAMeTHWbkkCGBeNnLqFUUAJ/D2lTd+Z1WsfHIFQ6ka1UHTLCEwGW
+         5efgVwRq6vhcMF6m+ped9WKAlH84SHWYU9b2pAW9GxEiGoSxo9jxizM+Tov729mEBZOt
+         HKE20TKgnhFYwgZYebOaLUGC3CKwmGmYKEuE/1+CYTaljYQwMD6Vc5yReg3TZ7l3skl/
+         +2fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713541788; x=1714146588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
+        b=G+z/Fu7vFcNFFrquMB4/fDHgbGXC+49mTakdt0GHgTYH22yXDNdo28IxJFsNRX1Opk
+         R0866oqyI9igAQS8Yeb4xEBDqnZP8c1ki3sb27qtbyDjS88XLDstxqw00OUXJGT/4Lli
+         CPUnBl1SNRlh3uPjDrKaDAGLpYgGMH4EfD9HNz2MaCF39w6IA4GRdWBd5lmcckN9gITJ
+         qOFIS75wTxGCDXaw2N5O4w+3URZaybNiScNaL+pZQmFIoe7ro3g6kwlQm/f2n3PjHgVn
+         t4incPZds7I7VkIL//G+0j17UDt+nSimXyraB5rSo6Mh4ZP6NgYbtNR/xQLpn/sliV0T
+         flRA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzG3Ww9PtQwC+9qqzZ0+RqyzRwynmM8cpl3umth9xsVfHg/uzOBD4O/7hHpLZ6QF+cE2J/yMfKNplWmNO/aeWl8/swEym5FojOex7RG11Ydj8e5mbeVZrqg0t0ySYfD0/2tLCmgs2ciGr21tHcsI4Q+0KuMXB9Dv6O8xrFLTmASwd0
+X-Gm-Message-State: AOJu0YzuvAL0JSGR2Qby7NKpfwCiH3MWWmA7Ggf6R8PPwc8JCxgH/WTQ
+	IiqiIrdeM1LluReDIcdVb5jmU7XecjthSpsZVwdAb4RdAp0fVpzasM7/YBjEKrmXDci5J8dMCaY
+	NewhrAC8zJ1gZxvdW8/1clIQPTrk3G2/y
+X-Google-Smtp-Source: AGHT+IH04YykqEPooeOpjDIaG5sd/QHb2gYVKjVVnbzLd0iOOjJo3/w0oYTDMe3y+t0h1QyYwoWJkv8kcRg4hn+1y0U=
+X-Received: by 2002:a2e:bea7:0:b0:2d6:fa7a:a670 with SMTP id
+ a39-20020a2ebea7000000b002d6fa7aa670mr2311881ljr.33.1713541787684; Fri, 19
+ Apr 2024 08:49:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="DpdcO0rlxZdj1hXZ"
-Content-Disposition: inline
-In-Reply-To: <20240418124300.1387978-4-cleger@rivosinc.com>
-
-
---DpdcO0rlxZdj1hXZ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org> <20240416-bpf_wq-v1-17-c9e66092f842@kernel.org>
+ <khz5omyjsd2iklm66bi3na4gdxw2cpwhb3c2xwu4fjxkaefi77@puck4pfltjgm> <b7akvvt67m7w6hdfq5vboojnzyjbntxrjioh6nuqziz4pzia3d@6x2le6iz6cor>
+In-Reply-To: <b7akvvt67m7w6hdfq5vboojnzyjbntxrjioh6nuqziz4pzia3d@6x2le6iz6cor>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 19 Apr 2024 08:49:36 -0700
+Message-ID: <CAADnVQ+hPNQ3-fVj-5qt+UrT8yPavE9L7AaphsLLEKwve21P-g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 17/18] bpf: add bpf_wq_start
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 18, 2024 at 02:42:26PM +0200, Cl=E9ment L=E9ger wrote:
-> As stated by Zc* spec:
->=20
-> "As C defines the same instructions as Zca, Zcf and Zcd, the rule is that:
->  - C always implies Zca
->  - C+F implies Zcf (RV32 only)
->  - C+D implies Zcd"
->=20
-> Add additionnal validation rules to enforce this in dts.
+On Fri, Apr 19, 2024 at 8:14=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
+org> wrote:
+>
+>
+> Honestly I just felt the patch series was big enough for a PoC and
+> comparison with sleepable bpf_timer. But if we think this needs not to
+> be added, I guess that works too :)
 
-I'll get it out of the way: NAK, and the dts patch is the perfect
-example of why. I don't want us to have to continually update
-devicetrees. If these are implied due to being subsets of other
-extensions, then software should be able to enable them when that
-other extension is present.
+It certainly did its job to compare the two and imo bpf_wq with kfunc appro=
+ach
+looks cleaner overall and will be easier to extend in the long term.
 
-My fear is that, and a quick look at the "add probing" commit seemed to
-confirm it, new subsets would require updates to the dts, even though
-the existing extension is perfectly sufficient to determine presence.
+I mean that we'll be adding 3 kfuncs initially:
+bpf_wq_init, bpf_wq_start, bpf_wq_set_callback.
 
-I definitely want to avoid continual updates to the devicetree for churn
-reasons whenever subsets are added, but not turning on the likes of Zca
-when C is present because "the bindings were updated to enforce this"
-is a complete blocker. I do concede that having two parents makes that
-more difficult and will likely require some changes to how we probe - do
-we need to have a "second round" type thing?
-Taking Zcf as an example, maybe something like making both of C and F into
-"standard" supersets and adding a case to riscv_isa_extension_check()
-that would mandate that Zca and F are enabled before enabling it, and we
-would ensure that C implies Zca before it implies Zcf?
+imo that's good enough to land it and get some exposure.
+I'll be using it right away to refactor bpf_arena_alloc.h into
+actual arena allocator for bpf progs that is not just a selftest.
 
-Given we'd be relying on ordering, we have to perform the same implication
-for both F and C and make sure that the "implies" struct has Zca before Zcf.
-I don't really like that suggestion, hopefully there's a nicer way of doing
-that, but I don't like the dt stuff here.
-
-Thanks,
-Conor.
-
->=20
-> Signed-off-by: Cl=E9ment L=E9ger <cleger@rivosinc.com>
-> ---
->  .../devicetree/bindings/riscv/cpus.yaml       |  8 +++--
->  .../devicetree/bindings/riscv/extensions.yaml | 34 +++++++++++++++++++
->  2 files changed, 39 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Document=
-ation/devicetree/bindings/riscv/cpus.yaml
-> index d87dd50f1a4b..c4e2c65437b1 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -168,7 +168,7 @@ examples:
->                  i-cache-size =3D <16384>;
->                  reg =3D <0>;
->                  riscv,isa-base =3D "rv64i";
-> -                riscv,isa-extensions =3D "i", "m", "a", "c";
-> +                riscv,isa-extensions =3D "i", "m", "a", "c", "zca";
-> =20
->                  cpu_intc0: interrupt-controller {
->                          #interrupt-cells =3D <1>;
-> @@ -194,7 +194,8 @@ examples:
->                  reg =3D <1>;
->                  tlb-split;
->                  riscv,isa-base =3D "rv64i";
-> -                riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c";
-> +                riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "=
-zca",
-> +                                       "zcd";
-> =20
->                  cpu_intc1: interrupt-controller {
->                          #interrupt-cells =3D <1>;
-> @@ -215,7 +216,8 @@ examples:
->                  compatible =3D "riscv";
->                  mmu-type =3D "riscv,sv48";
->                  riscv,isa-base =3D "rv64i";
-> -                riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c";
-> +                riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "=
-zca",
-> +                                       "zcd";
-> =20
->                  interrupt-controller {
->                          #interrupt-cells =3D <1>;
-> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Do=
-cumentation/devicetree/bindings/riscv/extensions.yaml
-> index db7daf22b863..0172cbaa13ca 100644
-> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> @@ -549,6 +549,23 @@ properties:
->                  const: zca
->              - contains:
->                  const: f
-> +      # C extension implies Zca
-> +      - if:
-> +          contains:
-> +            const: c
-> +        then:
-> +          contains:
-> +            const: zca
-> +      # C extension implies Zcd if d
-> +      - if:
-> +          allOf:
-> +            - contains:
-> +                const: c
-> +            - contains:
-> +                const: d
-> +        then:
-> +          contains:
-> +            const: zcd
-> =20
->  allOf:
->    # Zcf extension does not exists on rv64
-> @@ -566,6 +583,23 @@ allOf:
->            not:
->              contains:
->                const: zcf
-> +  # C extension implies Zcf if f on rv32 only
-> +  - if:
-> +      properties:
-> +        riscv,isa-extensions:
-> +          allOf:
-> +            - contains:
-> +                const: c
-> +            - contains:
-> +                const: f
-> +        riscv,isa-base:
-> +          contains:
-> +            const: rv32i
-> +    then:
-> +      properties:
-> +        riscv,isa-extensions:
-> +          contains:
-> +            const: zcf
-> =20
->  additionalProperties: true
->  ...
-> --=20
-> 2.43.0
->=20
-
---DpdcO0rlxZdj1hXZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZiKSfAAKCRB4tDGHoIJi
-0p0bAQCI0ZdOO2q+xaWhcL7Krk9HCdLpniOsKdATTU8zMWqUWgEA7ccpybuwBzK1
-KglS0OiA5rjSvLYmJv2WgOCxlKn58AQ=
-=l0RY
------END PGP SIGNATURE-----
-
---DpdcO0rlxZdj1hXZ--
+I'm currently working on locks for bpf_arena.
+Kumar has a patch set that adds bpf_preempt_disble kfunc and
+coupled with bpf_wq we'll have all mechanisms to build
+arbitrary data structures/algorithms as bpf programs.
 
