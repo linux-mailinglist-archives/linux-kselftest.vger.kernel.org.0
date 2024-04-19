@@ -1,273 +1,385 @@
-Return-Path: <linux-kselftest+bounces-8435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7997D8AB126
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 16:57:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9637C8AB171
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:13:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DE5B1C20C6C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 14:57:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC9F6B2216B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4DD812F38D;
-	Fri, 19 Apr 2024 14:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691AD12FB08;
+	Fri, 19 Apr 2024 15:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mK8j5xNf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QqQiVzdc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2886412E1EA
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 14:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D3A12E1D2;
+	Fri, 19 Apr 2024 15:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713538645; cv=none; b=ETeqFUi0pLkqS7VyzsvQLlAkQREg87yvLQAhEQv0K/UvR4cQiNVizu0sPvC0tViEm29XJa0BdsWVTfmFkhpP24frva086d6V/uJG4sKmDC9Y7e7aIcMtRDUQsxB9sf76Lo2u5K9hEs4c2COJYGzBqmOlTbM5V0oB04O+YoLFlBw=
+	t=1713539562; cv=none; b=WWs0tONlLd2G38fxKLZYDrlvNpSChd2gcozmwKkFDiS5wNVVnaKDHnTWOCm78VvUc29Q2rUfNFqlVIBudPlUFesVTTGyXqLeST8lQsFgaZU0XoJDaB1H8/t20Mp7lzwRKxE+ie47sfHbdZ+1BOKC3RG4k6JPg/3dGe3mzU3RGug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713538645; c=relaxed/simple;
-	bh=E2/Sbo9wsFk/yubi6m+7XX4X7pYv4XkeuGVrTw/r0VI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qxqAatViskIMQIeG2tXb3CKBpGR99tE4aHVs6+coT0zXYwJnjHGY/C+S5szE391Z08hWSTizgX/vHgMoxz6XwHeOTDOZ6OGeBDbpCFvHtG1hM6NwLDaxu1Fi5m6yBe5V6VyrAqLew7XlrP+mlsX5IRvXSYMlDvzxgUmv1zzcwrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mK8j5xNf; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-de480576c3cso1197730276.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 07:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713538643; x=1714143443; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=anU0O+Cl/8esjZTwZGOybpvL5bNXBFd1hgsJ4evVImA=;
-        b=mK8j5xNfzIHf/dYXQOnooehI9EfYLR1KO/ti9whQoJie4dKFc36BnydXI3GCA9WaEE
-         lWbg3zQV3qfQhV+suiWCGgf05K0tFrxjS90jn/g/TcJItvIjgDujAorImgHcoeLF5TyV
-         SMJIlr0FezMzawV1y41BUmNqwudCKAmSQ6t8YVKj8VMWnmIO/tfCNZNVTBTePvYt0wc5
-         5U4LGbZfM6UcXGtCqoa0YuaV7UJcL7GRwzbJVzNxoedPNzK72KgD8emPlHiaiy3GJ+MK
-         vLKZM4vm9//8/yBKXRFdeo/TfNOKJ2wQNurQ9n/Xo50cBjmu5ufuZjg+6IA9VFmsYU2c
-         qOuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713538643; x=1714143443;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=anU0O+Cl/8esjZTwZGOybpvL5bNXBFd1hgsJ4evVImA=;
-        b=FM6+1XiWzG6z8i6pi1Ua38s2IElZmb6V/pRovUAXElYaJCoILdtq8xiiHyW8dLrJac
-         MUE0HdhCu8krTXC3zw6rCk0QTVYiBWZpXiVDQ1jD0MI1nQoKORkiz0i5Pj3ldhBNr/ZB
-         k8ie+p9UDd+Ohv0RQF0OKf34tw8lkOFLcA5E8icvGQKgdcQjHHK9Mqq+FWx6i+7zPffz
-         3KxuixZEPJHmWc4bZjE2fqUrYPXIokMZyKOgCObBEEzQZ7xC8sT9fnp5PalQt8T1mf5p
-         nl6S/yZ3X76pIPCai6Yu8Vx0UrBHcSR0Ex6AD2I567Qf3e1SjweX+TlQPHeKHbLwrPXE
-         pKlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVGA41i5Yhsvng/iC7msTXfMk2jHdJKAE2ohHFuMsKoc9jIuDr5U08g8HLnWz33J9/7GADWlru+T7hN+R6Ma/kFZjkJ/M5nwpUHyxfisH2g
-X-Gm-Message-State: AOJu0YwQEMN3/pUX4Y5UxarF48aHRXBs/n8KzIadj7X70aDdKUS2wI7/
-	o1pny2k+1hBv5a4L8bQmIbAsRr41DWTxJVHaoNFXGW/ImYMMcZ9k9q6rd9foyf+r8ZCWbBsrzjl
-	I/4vdCU33/Vt7fUqXKRwRlt0cEC+1DH2gW8Zn
-X-Google-Smtp-Source: AGHT+IF7adSkE8wdnmiPyn4mVpG1NnzdXX/L7t8LedIMavDd8o7JUrBILI8u9VoVAMm7bza+xIeN6iKCZv+uvX8mkfQ=
-X-Received: by 2002:a25:2f87:0:b0:dc6:57d0:ac9 with SMTP id
- v129-20020a252f87000000b00dc657d00ac9mr2225865ybv.6.1713538642865; Fri, 19
- Apr 2024 07:57:22 -0700 (PDT)
+	s=arc-20240116; t=1713539562; c=relaxed/simple;
+	bh=e8jDoNGFX0rqlpAvs8UdIrNhZ46T5XKH6s5dmkm16Ng=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NuENIdUsKDEq44SK5dfAopyqgOLAAZsti3yadJ6SC8qXR4ZuIPa36nlaz7X8voFl7T9EG+53HQTIjg+kX8ieh38xenCeAnk/kPGH1XWEOWIZZ30SXsBU/kZTYD8QBIDWdofyt+qCMuBCY/4w4icmu4/qPH2JMgiFVizT/MG6wwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QqQiVzdc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50040C072AA;
+	Fri, 19 Apr 2024 15:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713539561;
+	bh=e8jDoNGFX0rqlpAvs8UdIrNhZ46T5XKH6s5dmkm16Ng=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QqQiVzdcJbZSp3BoVKo42KHTESeKANyOYRPmevwjBqeytpDpJirld1vIo630gluEJ
+	 F4Styu9sr1682IIaGmUbizADbK72Gel8pXKnWCeCzjPzIIYNseGGR42fit082EZpyd
+	 1danMCDHTW7wx9eVbc7bVRppN+biIa+I6c0IDj7Zzxg+I3HBxb7bjgs+6/lXI91xL2
+	 JlvxsBD4kjuMbJ8cPE4rHPR3onhiGALV93OT9dSQCjHA64zfKSiXv49m5kZWlTgHjn
+	 4iHlEEG8top2qVgGCrI8rtYFi+2A6c63afpW6AYrYujSP34FvyvRdO4rQjvc4rpBNw
+	 AF7YE683T1l6A==
+Date: Fri, 19 Apr 2024 17:12:35 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 11/18] bpf: wq: add bpf_wq_init
+Message-ID: <tqj7biswz4ktars2mjrog35sijfgnm2nmvqrzbldphksbtj4kj@qd3digliqsjm>
+References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
+ <20240416-bpf_wq-v1-11-c9e66092f842@kernel.org>
+ <f7awluzevpzqhqo5a65dxlfoo3dhkvbpntb4a5uueq2v7gjj7b@ddoyfpeymg3u>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415163527.626541-1-jeffxu@chromium.org> <znrbeb744774vre5dkeg7kjnnt7uuifs6xw63udcyupwj3veqh@rpcqs7dmoxi6>
- <CABi2SkU8B27O28jjTDajFpENgUHhntuRAMKFUMXr6A6AxZeyiQ@mail.gmail.com>
- <CAJuCfpFLwJg4n7wPpT+u9vC4XHoLE_BPPZ0tDKf7W45hGky4_Q@mail.gmail.com> <CABi2SkXCC8tvuHTiZ=tYcZw0sQ2SswQqDuFuQi5bKArW9+Nbaw@mail.gmail.com>
-In-Reply-To: <CABi2SkXCC8tvuHTiZ=tYcZw0sQ2SswQqDuFuQi5bKArW9+Nbaw@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 19 Apr 2024 07:57:08 -0700
-Message-ID: <CAJuCfpEM0b-_gCbMqcUVvKedqXsSE4di7oqzeQGofVNsHRAqCg@mail.gmail.com>
-Subject: Re: [PATCH v10 0/5] Introduce mseal
-To: Jeff Xu <jeffxu@chromium.org>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, akpm@linux-foundation.org, 
-	keescook@chromium.org, jannh@google.com, sroettger@google.com, 
-	willy@infradead.org, gregkh@linuxfoundation.org, 
-	torvalds@linux-foundation.org, usama.anjum@collabora.com, corbet@lwn.net, 
-	merimus@google.com, rdunlap@infradead.org, jeffxu@google.com, 
-	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
-	dave.hansen@intel.com, linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f7awluzevpzqhqo5a65dxlfoo3dhkvbpntb4a5uueq2v7gjj7b@ddoyfpeymg3u>
 
-On Thu, Apr 18, 2024 at 6:22=E2=80=AFPM Jeff Xu <jeffxu@chromium.org> wrote=
-:
->
-> On Thu, Apr 18, 2024 at 1:19=E2=80=AFPM Suren Baghdasaryan <surenb@google=
-.com> wrote:
-> >
-> > On Tue, Apr 16, 2024 at 12:40=E2=80=AFPM Jeff Xu <jeffxu@chromium.org> =
-wrote:
-> > >
-> > > On Tue, Apr 16, 2024 at 8:13=E2=80=AFAM Liam R. Howlett <Liam.Howlett=
-@oracle.com> wrote:
-> > > >
-> > > > * jeffxu@chromium.org <jeffxu@chromium.org> [240415 12:35]:
-> > > > > From: Jeff Xu <jeffxu@chromium.org>
-> > > > >
-> > > > > This is V10 version, it rebases v9 patch to 6.9.rc3.
-> > > > > We also applied and tested mseal() in chrome and chromebook.
-> > > > >
-> > > > > -----------------------------------------------------------------=
--
-> > > > ...
-> > > >
-> > > > > MM perf benchmarks
-> > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > > This patch adds a loop in the mprotect/munmap/madvise(DONTNEED) t=
-o
-> > > > > check the VMAs=E2=80=99 sealing flag, so that no partial update c=
-an be made,
-> > > > > when any segment within the given memory range is sealed.
-> > > > >
-> > > > > To measure the performance impact of this loop, two tests are dev=
-eloped.
-> > > > > [8]
-> > > > >
-> > > > > The first is measuring the time taken for a particular system cal=
-l,
-> > > > > by using clock_gettime(CLOCK_MONOTONIC). The second is using
-> > > > > PERF_COUNT_HW_REF_CPU_CYCLES (exclude user space). Both tests hav=
-e
-> > > > > similar results.
-> > > > >
-> > > > > The tests have roughly below sequence:
-> > > > > for (i =3D 0; i < 1000, i++)
-> > > > >     create 1000 mappings (1 page per VMA)
-> > > > >     start the sampling
-> > > > >     for (j =3D 0; j < 1000, j++)
-> > > > >         mprotect one mapping
-> > > > >     stop and save the sample
-> > > > >     delete 1000 mappings
-> > > > > calculates all samples.
-> > > >
-> > > >
-> > > > Thank you for doing this performance testing.
-> > > >
-> > > > >
-> > > > > Below tests are performed on Intel(R) Pentium(R) Gold 7505 @ 2.00=
-GHz,
-> > > > > 4G memory, Chromebook.
-> > > > >
-> > > > > Based on the latest upstream code:
-> > > > > The first test (measuring time)
-> > > > > syscall__     vmas    t       t_mseal delta_ns        per_vma %
-> > > > > munmap__      1       909     944     35      35      104%
-> > > > > munmap__      2       1398    1502    104     52      107%
-> > > > > munmap__      4       2444    2594    149     37      106%
-> > > > > munmap__      8       4029    4323    293     37      107%
-> > > > > munmap__      16      6647    6935    288     18      104%
-> > > > > munmap__      32      11811   12398   587     18      105%
-> > > > > mprotect      1       439     465     26      26      106%
-> > > > > mprotect      2       1659    1745    86      43      105%
-> > > > > mprotect      4       3747    3889    142     36      104%
-> > > > > mprotect      8       6755    6969    215     27      103%
-> > > > > mprotect      16      13748   14144   396     25      103%
-> > > > > mprotect      32      27827   28969   1142    36      104%
-> > > > > madvise_      1       240     262     22      22      109%
-> > > > > madvise_      2       366     442     76      38      121%
-> > > > > madvise_      4       623     751     128     32      121%
-> > > > > madvise_      8       1110    1324    215     27      119%
-> > > > > madvise_      16      2127    2451    324     20      115%
-> > > > > madvise_      32      4109    4642    534     17      113%
-> > > > >
-> > > > > The second test (measuring cpu cycle)
-> > > > > syscall__     vmas    cpu     cmseal  delta_cpu       per_vma %
-> > > > > munmap__      1       1790    1890    100     100     106%
-> > > > > munmap__      2       2819    3033    214     107     108%
-> > > > > munmap__      4       4959    5271    312     78      106%
-> > > > > munmap__      8       8262    8745    483     60      106%
-> > > > > munmap__      16      13099   14116   1017    64      108%
-> > > > > munmap__      32      23221   24785   1565    49      107%
-> > > > > mprotect      1       906     967     62      62      107%
-> > > > > mprotect      2       3019    3203    184     92      106%
-> > > > > mprotect      4       6149    6569    420     105     107%
-> > > > > mprotect      8       9978    10524   545     68      105%
-> > > > > mprotect      16      20448   21427   979     61      105%
-> > > > > mprotect      32      40972   42935   1963    61      105%
-> > > > > madvise_      1       434     497     63      63      115%
-> > > > > madvise_      2       752     899     147     74      120%
-> > > > > madvise_      4       1313    1513    200     50      115%
-> > > > > madvise_      8       2271    2627    356     44      116%
-> > > > > madvise_      16      4312    4883    571     36      113%
-> > > > > madvise_      32      8376    9319    943     29      111%
-> > > > >
-> > > >
-> > > > If I am reading this right, madvise() is affected more than the oth=
-er
-> > > > calls?  Is that expected or do we need to have a closer look?
-> > > >
-> > > The madvise() has a bigger percentage (per_vma %), but it also has a
-> > > smaller base value (cpu).
-> >
-> > Sorry, it's unclear to me what the "vmas" column denotes. Is that how
-> > many VMAs were created before timing the syscall? If so, then 32 is
-> > the max that you show here while you seem to have tested with 1000
-> > VMAs. What is the overhead with 1000 VMAs?
->
-> The vmas column is the number of VMA used in one call.
->
-> For example: for 32 and mprotect(ptr,size), the memory range used in
-> mprotect has 32 VMAs.
+On Apr 18 2024, Alexei Starovoitov wrote:
+> On Tue, Apr 16, 2024 at 04:08:24PM +0200, Benjamin Tissoires wrote:
+> > We need to teach the verifier about the second argument which is declared
+> > as void * but which is of type KF_ARG_PTR_TO_MAP. We could have dropped
+> > this extra case if we declared the second argument as struct bpf_map *,
+> > but that means users will have to do extra casting to have their program
+> > compile.
+> > 
+> > We also need to duplicate the timer code for the checking if the map
+> > argument is matching the provided workqueue.
+> > 
+> > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> > 
+> > ---
+> > 
+> > Note that the timer code when matching for the map is checking for
+> > constant map pointers. I wonder if this needs to be enforced too
+> > (being constant?)
+> > ---
+> >  include/uapi/linux/bpf.h |   9 ++++
+> >  kernel/bpf/helpers.c     | 114 ++++++++++++++++++++++++++++++++++++++++++++++-
+> >  kernel/bpf/verifier.c    |   6 +++
+> >  3 files changed, 127 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index e4ae83550fb3..519f6019d158 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -7502,4 +7502,13 @@ struct bpf_iter_num {
+> >  	__u64 __opaque[1];
+> >  } __attribute__((aligned(8)));
+> >  
+> > +/*
+> > + * Flags to control bpf_wq_init() and bpf_wq_set_callback() behaviour.
+> > + *     - BPF_F_WQ_SLEEPABLE: the callback needs to run in
+> > + *       a sleepable context
+> > + */
+> > +enum {
+> > +	BPF_F_WQ_SLEEPABLE = (1ULL << 0),
+> > +};
+> 
+> Just started looking at the patch set. The first reaction that
+> this flag is odd. Why add it? wq provides sleepable ctx.
+> Why would the program ask to be non-sleepable in wq?
 
-Ok, so the 32 here denotes how many VMAs one mprotect() call spans?
+That was one of my questions: do we need it? Apparently not :)
 
->
-> It also matters how many memory ranges are in-use at the time of the
-> test, This is where 1000 comes in. The test creates 1000 memory
-> ranges, each memory range has 32 vmas, then calls mprotect on the 1000
-> memory range. (the pseudocode was included in the original email)
+If not, then that simplifies the series by a lot: patch 1/18 can be
+dropped and 14/18 can be stripped down and squashed in 15/18.
 
-So, if each range has 32 vmas and you have 1000 ranges then you are
-creating 32000 vmas? Sorry, your pseudocode does not clarify that. My
-current understanding is this:
+> If it needs to callback to run in rcu cs, it can use bpf_rcu_read_lock() kfunc
+> as the first call in such callback and it will be equivalent
+> to not-passing this BPF_F_WQ_SLEEPABLE flag.
+> It seem it can be dropped and complexity reduced.
 
-for (i =3D 0; i < 1000, i++)
-    mmap N*1000 areas (N=3D[1-32])
-    start the sampling
-    for (j =3D 0; j < 1000, j++)
-        mprotect N areas with one syscall
-    stop and save the sample
-    munmap N*1000 areas
-calculates all samples.
+yep :)
 
-Is that correct?
+> The verifier complications in later patches due to this flag too...
+> I just don't see the point.
 
->
-> > My worry is that if the overhead grows linearly with the number of
-> > VMAs then the effects will be quite noticeable on Android where an
-> > application with a few thousand VMAs is not so unusual.
-> >
-> The overhead is likely to grow linearly with the number of VMA, since
-> it takes time to retrieve VMA's metadata.
->
-> Let's use one data sample to look at impact:
->
-> Test: munmap 1000 memory range, each memory range has 1 VMA
->
-> syscall__       vmas    t       t_mseal delta_ns        per_vma %
-> munmap__        1       909     944     35      35      104%
->
-> For those 1000 munmap calls, sealing adds 35000 ns in total, or 35 ns per=
- call.
->
-> The delta seems to be insignificant. e.g. it will take about 28571
-> munmap call to have 1 ms difference (1000000/35=3D28571)
->
-> When I look at the data from 5.10 to 6.8, for the same munmap call,
-> 6.8 adds 552 ns per call, which is 15 times bigger.
->
-> syscall__       vmas    t_5_10  t_6_8   delta_ns        per_vma %
-> munmap__        1       357     909     552     552     254%
+It's something I added while adding the tests. And some tests were passing
+in case I was having a non sleepable callback. But if we have
+bpf_rcu_read_lock(), we are all fine and can reduce the complexity.
 
-I'm not yet claiming the overhead is too high. I want to understand
-first what is being measured here.
-Thanks,
-Suren.
+> 
+> > +
+> >  #endif /* _UAPI__LINUX_BPF_H__ */
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index 9fd12d480b8b..9ac1b8bb3a01 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -1109,11 +1109,18 @@ struct bpf_hrtimer {
+> >  	struct hrtimer timer;
+> >  };
+> >  
+> > -/* the actual struct hidden inside uapi struct bpf_timer */
+> > +struct bpf_work {
+> > +	struct bpf_async_cb cb;
+> > +	struct work_struct work;
+> > +	struct work_struct delete_work;
+> > +};
+> > +
+> > +/* the actual struct hidden inside uapi struct bpf_timer and bpf_wq */
+> >  struct bpf_async_kern {
+> >  	union {
+> >  		struct bpf_async_cb *cb;
+> >  		struct bpf_hrtimer *timer;
+> > +		struct bpf_work *work;
+> >  	};
+> >  	/* bpf_spin_lock is used here instead of spinlock_t to make
+> >  	 * sure that it always fits into space reserved by struct bpf_timer
+> > @@ -1124,6 +1131,7 @@ struct bpf_async_kern {
+> >  
+> >  enum bpf_async_type {
+> >  	BPF_ASYNC_TYPE_TIMER = 0,
+> > +	BPF_ASYNC_TYPE_WQ,
+> >  };
+> >  
+> >  static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+> > @@ -1167,11 +1175,75 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+> >  	return HRTIMER_NORESTART;
+> >  }
+> >  
+> > +static void bpf_wq_work(struct work_struct *work)
+> > +{
+> > +	struct bpf_work *w = container_of(work, struct bpf_work, work);
+> > +	struct bpf_tramp_run_ctx __maybe_unused run_ctx;
+> > +	struct bpf_prog *prog = w->cb.prog;
+> > +	unsigned int flags = w->cb.flags;
+> > +	struct bpf_map *map = w->cb.map;
+> > +	bpf_callback_t callback_fn;
+> > +	void *value = w->cb.value;
+> > +	void *key;
+> > +	u32 idx;
+> > +
+> > +	BTF_TYPE_EMIT(struct bpf_wq);
+> > +
+> > +	callback_fn = READ_ONCE(w->cb.callback_fn);
+> > +	if (!callback_fn || !prog)
+> > +		return;
+> > +
+> > +	if (map->map_type == BPF_MAP_TYPE_ARRAY) {
+> > +		struct bpf_array *array = container_of(map, struct bpf_array, map);
+> > +
+> > +		/* compute the key */
+> > +		idx = ((char *)value - array->value) / array->elem_size;
+> > +		key = &idx;
+> > +	} else { /* hash or lru */
+> > +		key = value - round_up(map->key_size, 8);
+> > +	}
+> > +
+> > +	run_ctx.bpf_cookie = 0;
+> > +
+> > +	if (flags & BPF_F_WQ_SLEEPABLE) {
+> > +		if (!__bpf_prog_enter_sleepable_recur(prog, &run_ctx)) {
+> > +			/* recursion detected */
+> > +			__bpf_prog_exit_sleepable_recur(prog, 0, &run_ctx);
+> > +			return;
+> > +		}
+> > +	} else {
+> > +		if (!__bpf_prog_enter_recur(prog, &run_ctx)) {
+> > +			/* recursion detected */
+> > +			__bpf_prog_exit_recur(prog, 0, &run_ctx);
+> > +			return;
+> > +		}
+> > +	}
+> > +
+> > +	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+> > +	/* The verifier checked that return value is zero. */
+> > +
+> > +	if (flags & BPF_F_WQ_SLEEPABLE)
+> > +		__bpf_prog_exit_sleepable_recur(prog, 0 /* bpf_prog_run does runtime stats */,
+> > +						&run_ctx);
+> > +	else
+> > +		__bpf_prog_exit_recur(prog, 0, &run_ctx);
+> > +}
+> > +
+> > +static void bpf_wq_delete_work(struct work_struct *work)
+> > +{
+> > +	struct bpf_work *w = container_of(work, struct bpf_work, delete_work);
+> > +
+> > +	cancel_work_sync(&w->work);
+> > +
+> > +	kfree_rcu(w, cb.rcu);
+> > +}
+> > +
+> >  static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u64 flags,
+> >  			    enum bpf_async_type type)
+> >  {
+> >  	struct bpf_async_cb *cb;
+> >  	struct bpf_hrtimer *t;
+> > +	struct bpf_work *w;
+> >  	clockid_t clockid;
+> >  	size_t size;
+> >  	int ret = 0;
+> > @@ -1183,6 +1255,9 @@ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u
+> >  	case BPF_ASYNC_TYPE_TIMER:
+> >  		size = sizeof(struct bpf_hrtimer);
+> >  		break;
+> > +	case BPF_ASYNC_TYPE_WQ:
+> > +		size = sizeof(struct bpf_work);
+> > +		break;
+> >  	default:
+> >  		return -EINVAL;
+> >  	}
+> > @@ -1201,13 +1276,22 @@ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u
+> >  		goto out;
+> >  	}
+> >  
+> > -	if (type == BPF_ASYNC_TYPE_TIMER) {
+> > +	switch (type) {
+> > +	case BPF_ASYNC_TYPE_TIMER:
+> >  		clockid = flags & (MAX_CLOCKS - 1);
+> >  		t = (struct bpf_hrtimer *)cb;
+> >  
+> >  		hrtimer_init(&t->timer, clockid, HRTIMER_MODE_REL_SOFT);
+> >  		t->timer.function = bpf_timer_cb;
+> >  		cb->value = (void *)async - map->record->timer_off;
+> > +		break;
+> > +	case BPF_ASYNC_TYPE_WQ:
+> > +		w = (struct bpf_work *)cb;
+> > +
+> > +		INIT_WORK(&w->work, bpf_wq_work);
+> > +		INIT_WORK(&w->delete_work, bpf_wq_delete_work);
+> > +		cb->value = (void *)async - map->record->wq_off;
+> > +		break;
+> >  	}
+> >  	cb->map = map;
+> >  	cb->prog = NULL;
+> > @@ -1473,7 +1557,19 @@ void bpf_timer_cancel_and_free(void *val)
+> >   */
+> >  void bpf_wq_cancel_and_free(void *val)
+> >  {
+> > +	struct bpf_work *work;
+> > +
+> >  	BTF_TYPE_EMIT(struct bpf_wq);
+> > +
+> > +	work = (struct bpf_work *)__bpf_async_cancel_and_free(val);
+> > +	if (!work)
+> > +		return;
+> > +	/* Trigger cancel of the sleepable work, but *do not* wait for
+> > +	 * it to finish if it was running as we might not be in a
+> > +	 * sleepable context.
+> > +	 * kfree will be called once the work has finished.
+> > +	 */
+> > +	schedule_work(&work->delete_work);
+> >  }
+> >  
+> >  BPF_CALL_2(bpf_kptr_xchg, void *, map_value, void *, ptr)
+> > @@ -2612,6 +2708,19 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+> >  	WARN(1, "A call to BPF exception callback should never return\n");
+> >  }
+> >  
+> > +__bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *map, unsigned int flags)
+> > +{
+> > +	struct bpf_async_kern *async = (struct bpf_async_kern *)wq;
+> > +
+> > +	BUILD_BUG_ON(sizeof(struct bpf_async_kern) > sizeof(struct bpf_wq));
+> > +	BUILD_BUG_ON(__alignof__(struct bpf_async_kern) != __alignof__(struct bpf_wq));
+> > +
+> > +	if (flags & ~BPF_F_WQ_SLEEPABLE)
+> > +		return -EINVAL;
+> > +
+> > +	return __bpf_async_init(async, map, flags, BPF_ASYNC_TYPE_WQ);
+> > +}
+> > +
+> >  __bpf_kfunc_end_defs();
+> >  
+> >  BTF_KFUNCS_START(generic_btf_ids)
+> > @@ -2689,6 +2798,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_size)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_clone)
+> >  BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
+> > +BTF_ID_FLAGS(func, bpf_wq_init)
+> >  BTF_KFUNCS_END(common_btf_ids)
+> >  
+> >  static const struct btf_kfunc_id_set common_kfunc_set = {
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 112faf2cd7e9..5e8c1e65fe8c 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -11038,6 +11038,7 @@ enum special_kfunc_type {
+> >  	KF_bpf_percpu_obj_drop_impl,
+> >  	KF_bpf_throw,
+> >  	KF_bpf_iter_css_task_new,
+> > +	KF_bpf_wq_init,
+> >  };
+> >  
+> >  BTF_SET_START(special_kfunc_set)
+> > @@ -11064,6 +11065,7 @@ BTF_ID(func, bpf_throw)
+> >  #ifdef CONFIG_CGROUPS
+> >  BTF_ID(func, bpf_iter_css_task_new)
+> >  #endif
+> > +BTF_ID(func, bpf_wq_init)
+> >  BTF_SET_END(special_kfunc_set)
+> >  
+> >  BTF_ID_LIST(special_kfunc_list)
+> > @@ -11094,6 +11096,7 @@ BTF_ID(func, bpf_iter_css_task_new)
+> >  #else
+> >  BTF_ID_UNUSED
+> >  #endif
+> > +BTF_ID(func, bpf_wq_init)
+> >  
+> >  static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
+> >  {
+> > @@ -11171,6 +11174,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
+> >  	if (is_kfunc_arg_wq(meta->btf, &args[argno]))
+> >  		return KF_ARG_PTR_TO_WORKQUEUE;
+> >  
+> > +	if (meta->func_id == special_kfunc_list[KF_bpf_wq_init] && argno == 1)
+> > +		return KF_ARG_PTR_TO_MAP;
+> > +
+> 
+> Hmm. This function has this bit:
+>         if (is_kfunc_arg_map(meta->btf, &args[argno]))
+>                 return KF_ARG_PTR_TO_MAP;
+> 
+> Just do:
+> +__bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *map__map, ...
 
->
->
-> > >
-> > > -Jeff
+Oh, nice. I haven't noticed that. I'll try it in v2.
+
+Cheers,
+Benjamin
+
+> 
+> It was specifically added for bpf_arena_alloc_pages to pass pointer to a map.
+> In case of arena map type it's used as:
+> struct {
+>         __uint(type, BPF_MAP_TYPE_ARENA);
+>         ...
+> } arena SEC(".maps");
+> 
+> page = bpf_arena_alloc_pages(&arena, ...)
+> libbpf and the verifier do the right thing.
+> I think it should work here as well.
 
