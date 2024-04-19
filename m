@@ -1,128 +1,98 @@
-Return-Path: <linux-kselftest+bounces-8452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42EAF8AB279
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:53:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACFAE8AB286
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:55:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B4D0B22622
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:53:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69FF12866D8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:55:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94103130481;
-	Fri, 19 Apr 2024 15:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 825501304B5;
+	Fri, 19 Apr 2024 15:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BBssYoT4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cr4H5TbJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3454D110;
-	Fri, 19 Apr 2024 15:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573711304A5;
+	Fri, 19 Apr 2024 15:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713542034; cv=none; b=lar4/Yb8GMKH4ISYNxKt0Rzefd+rpa3W2T6Wz1f8CncMS8+wWuI9fRuPaaq70POtL/SsDT9yLi6IBzc0hrH2uQYmG9Xyce6r1GcC9BCiO/puv2qvoUaYJB1oM5+aK0osvonochJfVQHKK2077vl2Y/bStPlhKGreCtXi1rHp47w=
+	t=1713542130; cv=none; b=j0ekU7IL0tRrbV7TrniHlHcOglxounnqsR08h5w+4RE/PYamYiEeHiHr8cVlnvQDS04VKo4udWKG1T8z9PdG0D27UoNgb61Bs93QErZpVZTa6MN1jrmvkiJ/2ACua8Dyk9HoxB4C8VxrIGEbfDWV6GjTksFKUUwiExFSXdR8SvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713542034; c=relaxed/simple;
-	bh=cBJc/5ludq5tsm/6USaCmEXWAHt4KSBZz6I974uN9Po=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LZ5YYWX7SSnf/Bgh/H6z/ESIj4VZLmlI+s8/FIMTyL8fyvmOFtVECWx6+Hs6F5hekQAzlGK2HSn6xwYuTlOwXxT9tTsAWjtZADN5BZ+BstGxSfrbU1TgezLOic1hGvMztFaowm5jQJNCHy23w4jQgK588/Yb3MCcVzR5M9WFFFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BBssYoT4; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a52aa665747so258645166b.2;
-        Fri, 19 Apr 2024 08:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713542031; x=1714146831; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fwQuiJSvzr8PFiUAI47KhzIHYFmwFwN2S6DtxceXDh0=;
-        b=BBssYoT4cjbf6Ev039DE21SLr+WIpAMtiN5uGJ1nIExtxVJ5Vea6jtjXnA9aCMEqNn
-         5fltdOV5WvLzOrBXNx/EaSboyNoaHODIgu2WvPqB4NTnxkPavH7ArQX0LaxXem9jh39V
-         CZ1MtuckYeqZDcdEiNYfkbZV3jTfNy2ZdouHWUyeOdfliT+2HcgcvqSX9NZVvDQYOJ7Q
-         jZTo/51E6CtyW/INwXJ+0UG30F+o6YtQQyD0paGSenoODFCv/JJfulz9iUdaKYdDECYD
-         LtF3SMj0C1GRblHC8Eo3MJGT/ErshBPjjXh1ZIXv3MEgOgYCqcweH8Bgfkz79sCAXjjq
-         YTGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713542031; x=1714146831;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fwQuiJSvzr8PFiUAI47KhzIHYFmwFwN2S6DtxceXDh0=;
-        b=oBgsR6XDDjoU3kBvoApZvabWo2BI8ZOQiTVqcJVsqCfELbh8yNymHj4ntzEl7ykWbY
-         c/vuFX5xTzb+DczePUl+l4U5PQNW50PX01C8K6mlhlhOiDnFnhfJhenCfXAGWSqnVPkz
-         zQv+DxTHRUam3TT0zWDI8we/B2j6hFxw9Z9VeKWNUSZT7LtVPxqcC653mO0MF72h/Sae
-         RT7kCfjTkZmBqkknAXrl+8JCwD7IM4uFctR5qgWiyuataiioa28brkyJbthwxUjgD4ZD
-         X3xVrrc6Xd68ihXdcKv6jcUV3VfkbOQNiATIGncCSRI7B0GbFuoMhfC6r0nfpNrWgnMW
-         /XFw==
-X-Forwarded-Encrypted: i=1; AJvYcCUEo51p9RJ0GLGJve7IIBhKWc49dKqVdRGS//w0M++1bAOhSjDyJbdEOjdtAkILL47kqxYdZ27FM/BUBd5HXHVFFCAXEH9oACbHjpRGOJpA+exWgMokaquXPvutgJs74UpCiU9r8kQ2P7unWQLqHDrQ9cVorJuQYEe8RJVrBMNFp3UjSoNO8hbtRwxQXeu0R5urW0GgcO9GRTqhLc1G
-X-Gm-Message-State: AOJu0YzM74PyMmKQcw9hX/MOSIXJxM0YeJ27y6YHhxe9gu35bHrwOT/S
-	5CdJw4ZLfIzx058tIIO7O8HReuW9LgMrjeHifkIDo569mIAc3GyU
-X-Google-Smtp-Source: AGHT+IGXLJwP1kkQdWIyL4VAo03CJGrcXSsdNIvYNktqHUK6leBuGOUh95WBNddN8oRcDWn2xbsV/A==
-X-Received: by 2002:a17:906:3406:b0:a51:e5c7:55b7 with SMTP id c6-20020a170906340600b00a51e5c755b7mr1953078ejb.47.1713542031092;
-        Fri, 19 Apr 2024 08:53:51 -0700 (PDT)
-Received: from [192.168.18.253] (54-240-197-236.amazon.com. [54.240.197.236])
-        by smtp.gmail.com with ESMTPSA id p25-20020a17090635d900b00a51d8a3a632sm2308501ejb.168.2024.04.19.08.53.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Apr 2024 08:53:50 -0700 (PDT)
-From: Paul Durrant <xadimgnik@gmail.com>
-X-Google-Original-From: Paul Durrant <paul@xen.org>
-Message-ID: <b668e938-a48f-4295-a9ec-e66f0abd1bb0@xen.org>
-Date: Fri, 19 Apr 2024 16:53:49 +0100
+	s=arc-20240116; t=1713542130; c=relaxed/simple;
+	bh=AdnkUZ4BxyxoMF4croWKhJcA1cUJ96+sbBUrt1HWBp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m1CyVP5yGzrPAm3rCXkLiHaeBfjauac+bSLkNkGh7PdguMJn0baZTGP/MdIAUapMeGFDV6TnoyKTjz+iSXLf8GQFNJ6uNrWCyVLTT8zoY/q4/gB2L9kJCeqYW/B2zoDxvI4dts+D8TFvBImw6Y9uCtaW/ZjRiUweyP1QwgSAN3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cr4H5TbJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C06EC3277B;
+	Fri, 19 Apr 2024 15:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713542129;
+	bh=AdnkUZ4BxyxoMF4croWKhJcA1cUJ96+sbBUrt1HWBp0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cr4H5TbJTo7tzx1BNWZxjH7hWqblNLozEhIN3T5lkjSv12y8/Fpf7nkpyD91BrAZe
+	 qEgJGBsPr8dBFGZdPrlnvROC7IWkMie/odW5skJyu0TVte72KgLsYETxBA+K9r+fLk
+	 I5gPpmSzTiICULjPr30mt/FV9IOLL0lroMhU+ENYMeIwdTB/bfSwi+GhfDc9vlOKVB
+	 +BiU2To0dds8a+DtM1kLzluQmbeowvwVNG+xWGrakBKL5/+ErHlehhXu/DQSGlqCPS
+	 3uIEEYDqrD82OrWkYny9a20MMYkbAidfh2QHBVvu+S3QdtY+NRfvsDmdmikdbJ9f8W
+	 i8pLYKb08RScA==
+Date: Fri, 19 Apr 2024 17:55:23 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 11/18] bpf: wq: add bpf_wq_init
+Message-ID: <6zslg7atmsexqi3htt7auka3gvwx7pouxva4zsxv2pn5syun35@hgqunkasn2id>
+References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
+ <20240416-bpf_wq-v1-11-c9e66092f842@kernel.org>
+ <f7awluzevpzqhqo5a65dxlfoo3dhkvbpntb4a5uueq2v7gjj7b@ddoyfpeymg3u>
+ <tqj7biswz4ktars2mjrog35sijfgnm2nmvqrzbldphksbtj4kj@qd3digliqsjm>
+ <CAADnVQKpC_11C3LNia6uGD5yAe5QeViYHD6TEHKBtEi3L6awLg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: paul@xen.org
-Subject: Re: [PATCH 07/10] KVM: x86: Avoid NTP frequency skew for KVM clock on
- 32-bit host
-To: David Woodhouse <dwmw2@infradead.org>, kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Sean Christopherson <seanjc@google.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Oliver Upton <oliver.upton@linux.dev>, Marcelo Tosatti
- <mtosatti@redhat.com>, jalliste@amazon.co.uk, sveith@amazon.de
-References: <20240418193528.41780-1-dwmw2@infradead.org>
- <20240418193528.41780-8-dwmw2@infradead.org>
-Content-Language: en-US
-Organization: Xen Project
-In-Reply-To: <20240418193528.41780-8-dwmw2@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQKpC_11C3LNia6uGD5yAe5QeViYHD6TEHKBtEi3L6awLg@mail.gmail.com>
 
-On 18/04/2024 20:34, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+On Apr 19 2024, Alexei Starovoitov wrote:
+> On Fri, Apr 19, 2024 at 8:12 AM Benjamin Tissoires <bentiss@kernel.org> wrote:
+> >
+> >
+> > It's something I added while adding the tests. And some tests were passing
+> > in case I was having a non sleepable callback. But if we have
+> > bpf_rcu_read_lock(), we are all fine and can reduce the complexity.
 > 
-> Commit 53fafdbb8b21 ("KVM: x86: switch KVMCLOCK base to monotonic raw
-> clock") did so only for 64-bit hosts, by capturing the boot offset from
-> within the existing clocksource notifier update_pvclock_gtod().
-> 
-> That notifier was added in commit 16e8d74d2da9 ("KVM: x86: notifier for
-> clocksource changes") but only on x86_64, because its original purpose
-> was just to disable the "master clock" mode which is only supported on
-> x86_64.
-> 
-> Now that the notifier is used for more than disabling master clock mode,
-> (well, OK, more than a decade later but clocks are hard), enable it for
-> the 32-bit build too so that get_kvmclock_base_ns() can be unaffected by
-> NTP sync on 32-bit too.
-> 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->   arch/x86/kvm/x86.c | 18 ++++++------------
->   1 file changed, 6 insertions(+), 12 deletions(-)
-> 
+> Not quite following what was the issue.
+> Since the verifier is unconditionally verifying such callback as sleepable
+> the callback won't be able to access rcu pointers without doing
+> explicit bpf_rcu_read_lock() first (and few other code patterns
+> might be rejected), but that's a good thing.
 
-Reviewed-by: Paul Durrant <paul@xen.org>
+Oh, I missed that. Well, given that the verifier enforces everything, I
+guess we are good :)
 
+> Maybe next to set_cb kfunc add a comment that wq callbacks are sleepable.
+> I think bpf prog writers are often with kernel background,
+> so it will be their natural assumption that cb is sleepable.
+
+I assume so as well.
+
+Cheers,
+Benjamin
 
