@@ -1,129 +1,138 @@
-Return-Path: <linux-kselftest+bounces-8402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E1858AA84E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 08:15:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F8FF8AA854
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 08:18:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A150284174
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:15:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45A241F21EEF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5A6C144;
-	Fri, 19 Apr 2024 06:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BA8BC144;
+	Fri, 19 Apr 2024 06:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="jPEmfXN1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gb+cY2GX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB8FB667;
-	Fri, 19 Apr 2024 06:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E074B667;
+	Fri, 19 Apr 2024 06:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713507342; cv=none; b=dSsE58/dr28tPxHPkyYsBAXUvNodJsiJhjfWieIOMiGf4F8YnKHbftCzoYglqSKZTpx20nF7WznFnEUWnr6iUyAxBP4a0hEu5Rfen09gfz+xBR6FfvqxIYxCoN5nPh2WT/fldAxGj0IsG7SDoxse7DVNSAN847nZrOdxYtfzYiY=
+	t=1713507534; cv=none; b=nVhwY09XbqokCYcv38eRRaqwkmX29WQPjWTP9o+upcuhFPzDsg/kQ5KrVRv2psw1kdqkR6g7L2lqceGzsvayKj5fScs9XY9PHOeM4l4YIPNEBtS0R+fYDCv1hUnbq8htEbAURFd42VTcrsQICZoM19RNZjFIrj9bN+pz537O+d0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713507342; c=relaxed/simple;
-	bh=QE1SDfhNjvPtChP7Aj1UbHskIeF99ihKXjAVio0OQFI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=btk/UCmA+lRApc4tHqk/z0zH8esiGmldSuJZt2wvudg8ss9BQCz83orrLjTJfZlH9LLyxoJ/qpL6FlD5PUM1gwA76TkDg8igLDCDNcOix4IPdZiLzyBhQA1gYOOMV3sJRVU2y12x87mfcNuiN/748Qi60Wg3l9WNXR6Z5L54tQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=jPEmfXN1; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1713507326; x=1714112126; i=markus.elfring@web.de;
-	bh=SZj8ghAjaLE6nyctSaVo0FKCiOsfPBVQxbO6b2IlqcU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=jPEmfXN1C7JBdJLHpnDWAqi+4KlfDrwl0j6uaHfBQms2mAPneVjv122no8KQW7St
-	 uQLwBBzmINXWbvxrmsrN8LOPy8EDIy5W4mMZ0h1ZlB75Na6owz7xvr3ULETZU+86x
-	 n/xqkEQ4WB+/TpDZ1O13xEMZGBPJWPveTUvg5N8Q83yrNRLCyMHEW7JRWu1nBXyq7
-	 GSK+R5vSrPA/5wPkVATbTfZ4qd/d0SRbjZI78FixCbBrsU82xGws9sD753QG5lxmD
-	 kUML4tFHiNLioa9S/3wVMbxz198qcmub8zotBJMsbYU10taDwvTlV6gCKRntTU8UO
-	 3K2woMyP8ArF10Rnbg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mi4yz-1sbj6l2DtR-00e4QZ; Fri, 19
- Apr 2024 08:15:26 +0200
-Message-ID: <b18c2e4b-bf61-41ad-b5f9-8e52d7651cca@web.de>
-Date: Fri, 19 Apr 2024 08:15:25 +0200
+	s=arc-20240116; t=1713507534; c=relaxed/simple;
+	bh=kEsvu7vcp/eaJtdZNoGBObrUsef0VK0b5+uiY0D3hEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fKiLjQoU3n8tgXLRLe8qJe/sTsxhyrqujsVUJMJ3owVd3/Pr+fEaoR8ZNbnmWJ1QQgm6ixkfAzxrv5lx1Tp4M5g/uY47E+I7mvjOqMzk5wVfZAwwDQqoeyawQPMcDkB9e/Nkc5sWM6eWRC7xOwF1oynVK2bQb/XKNbHSlt5pyiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gb+cY2GX; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e3f6f03594so13903775ad.0;
+        Thu, 18 Apr 2024 23:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713507532; x=1714112332; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=poWGN5JQViLc0iD9MOEsvcT5w8/SJjK3ZixJJE0DRNU=;
+        b=Gb+cY2GXM7qDryuZDXiMwhcKZ5WgonDJ6M7x5ZIPCw47CfjMItHjjUAVVehmaC8Uvv
+         Bm345C2kRSJFZR1vea8ds8Dn4rRjPfpGTFoqNWwkkNJ6Ih23opjd87YXQiIH4WMDadJm
+         3cAa2HlhMLhrZYlZaoemx3yAvhHWElZkFhWJcqs5NbeUh2f83zS+NRArefLP/sV6H3de
+         UDupBsk6mlrUYQeC9eDDQXjHF0VtZ6v/gewsxb49EDBngVTU1trDfLw4mD87PLhYipdK
+         vH2IXdzAoohAZraCHyPdhb8VcIgyoctJBFvvF3Qtt4MreDhxGqZb8apN9OzHeTDPMEol
+         k7cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713507532; x=1714112332;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=poWGN5JQViLc0iD9MOEsvcT5w8/SJjK3ZixJJE0DRNU=;
+        b=A40sxiKfg4CIoVC0LYW/ysQUvzz6lQHtd0dRQraeRDoF4Q3i5ecm/uIWqinfFKGg7d
+         HlzqmpSAHxIGv9yG2VjpDvVFyLKL4XxOsY0cmE7PddNPRVHJRqJU7LcQT4iPamsl4OXe
+         cPy7ESGUz9/BhZzL7F7RAKKpVS0pUC63fUOEFKjBZekHE/i+0R80UfFuB+4GKJkGhgBo
+         xOt++0CQnCdwdnTO9PcQPMbB+lRLm1kfI0e307cHKaooGOER8xjA48/9uIt2TJt8w965
+         zz2eTw2bqFdfW+eqvtixGNwMrtMCXXojqrIhMIzgNwikXeT9o2sHP0tk6++qfc317ybb
+         5wQA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfMqd99U48Y4GDpJ2I5L1Gx014UF/2mzxPiaukBcjRUjdNlfh7YO+k2OcDLp5yGUJQazo0sik8XtARYBogw3u3JHhf3seXvao+kAE5YhMZtCpU4QrqVkNADSNrHSIMO2/W2aQliHIr+w6urKWGtQl5Bs5NW6LFvtZW4F3TWKAEHda5
+X-Gm-Message-State: AOJu0Yw8Q/GsVuDlIGiYo4e9ZGTfoIm4lD2myRleFJ0ngWQkboQw2zKB
+	uGPl8vYovx2rdU28KM4wxP/vFTAcwdP3NQyoECK2rwxtozQRx+pM
+X-Google-Smtp-Source: AGHT+IGZBO4S0Urrc41F7lSiTQp/yby76+VaES64OQoWUNWzAhzgGywbYNfVeRhAKLQylOaVLE/GiA==
+X-Received: by 2002:a17:902:b083:b0:1e4:3f6d:20f6 with SMTP id p3-20020a170902b08300b001e43f6d20f6mr1160365plr.30.1713507532384;
+        Thu, 18 Apr 2024 23:18:52 -0700 (PDT)
+Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::5:fbcc])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170902654100b001e2a7ed52d0sm2602586pln.239.2024.04.18.23.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Apr 2024 23:18:52 -0700 (PDT)
+Date: Thu, 18 Apr 2024 23:18:48 -0700
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 17/18] bpf: add bpf_wq_start
+Message-ID: <khz5omyjsd2iklm66bi3na4gdxw2cpwhb3c2xwu4fjxkaefi77@puck4pfltjgm>
+References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
+ <20240416-bpf_wq-v1-17-c9e66092f842@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Wander Lairson Costa <wander@redhat.com>, kunit-dev@googlegroups.com,
- linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>,
- Maxime Ripard <mripard@kernel.org>, Rae Moar <rmoar@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20240418210236.194190-3-wander@redhat.com>
-Subject: Re: [PATCH v3 2/2] kunit: avoid memory leak on device register error
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240418210236.194190-3-wander@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZP2boipMNyD0mUm2bcuILUQveBlG0LOrEz6OlCpvASrlP3tL2JY
- NcsIIynp8Eo239IN/by3VEO+uIe8DYM1TMM5mk3WVh/0jRhnAfvT6XgrY6VoKpwn980i24O
- MoW3W7z1VbvroUsD76AZdKwsFE88Z8K1MPo5OOQvnY44GFxOxe9AqpXBXDp+pt/8+KfZIG5
- s2+aW6/gzdSAHAv2T1pJg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:3TBxCb/ezkM=;2p/RewvegXEDpauwRjt8uiNch3s
- BH9X8Z6Ifc02VySwy7N/3ezTh1/yaBHXewJLwqZ3XkTONVbAtZm53zjAUKPxXk+hAlQnHkuPl
- bAa9qPs72S/lN/xINB5gpjYiDZKSuW40KY4zWPjWms1ab69T7wMJ1+d+3TGxFXBNviWzX0KHI
- ibPH+jyyroU9jgHpNL4nPiTRiNjH1o70oXhUab9dYtdxxQbJL4ehHHdBEYsv0LDKoZ+1b/WWe
- YTCzyCe30fMQeelSK4iwj7m0xgVAcWCHahDE57LH3bKIo+rotVhH1ks99nSyPpxqHcmV0OnF1
- YwtsXYy9IzLC0fJL4vSyaHiq8xo6WDkERga++NBY60Tny654I1c+DPbtHSwZ8lvstFrqlk8AR
- DrXqpO9sTtlZ61PVHmGH7dsHt81+dBeM64diTS+fHJ/Ch5Gxo2WlVgx7gl1r3nfMCXjD+iW/n
- mfQUyfvlB+T0/EfzNLYCR02OHVLTEyGGjn/1PIHj8EfDMOzXFL542fj3xbP42djJxOizxRLlc
- /Ck03GxTgyIGoLiAZI1b1vsTT1MMaoHFzk1EXtf8nNk5HvNq/kROZ1gBg/d5jjuL1MYwLXVWf
- 2mgccO115L2ARCk3npieuIVAzTMiOOEpZ+eHsd+Ed9FclhQ7EIQed92fAMtBCABOWiE0XUxNa
- JIwwTOnk3rJCzzwsq0DvYiD1To9omy6HAnfeROv+hXSejQvhuexmTGr8bvu4rMZkXo007Jtv/
- nVvO5I1t+ntMT6XEg4Y0uKIfM7QSWofLkg1SGiUSq+QjnvTP5CVLMR8qR4swN7gHW8/YrjqbT
- Rp3tRDZZ9YjYiLcDmU+zjdxNOP6+/wnPodaCdCYHuj0OQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240416-bpf_wq-v1-17-c9e66092f842@kernel.org>
 
-> If the device register fails, free the allocated memory before
-> returning.
-
-Can a description variant (like the following) be more appropriate?
-
-   Free the allocated memory (after a device registration failure)
-   before returning.
-   Thus add a jump target so that a bit of exception handling can be bette=
-r
-   reused at the end of this function implementation.
-
-
-Would you like to replace the word =E2=80=9Cregister=E2=80=9D by =E2=80=9C=
-registration=E2=80=9D also
-in the summary phrase?
-
-
-=E2=80=A6
-> +++ b/lib/kunit/device.c
-=E2=80=A6
-> @@ -140,6 +138,9 @@ static struct kunit_device *kunit_device_register_in=
-ternal(struct kunit *test,
->  	kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
->
->  	return kunit_dev;
-> +error:
-> +	kfree(kunit_dev);
-> +	return ERR_PTR(err);
+On Tue, Apr 16, 2024 at 04:08:30PM +0200, Benjamin Tissoires wrote:
+> again, copy/paste from bpf_timer_start().
+> 
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> ---
+>  kernel/bpf/helpers.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index e5c8adc44619..ed5309a37eda 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2728,6 +2728,29 @@ __bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *map, unsigned int flags)
+>  	return __bpf_async_init(async, map, flags, BPF_ASYNC_TYPE_WQ);
 >  }
-=E2=80=A6
+>  
+> +__bpf_kfunc int bpf_wq_start(struct bpf_wq *wq, unsigned int flags)
+> +{
+> +	struct bpf_async_kern *async = (struct bpf_async_kern *)wq;
+> +	struct bpf_work *w;
+> +	int ret = 0;
+> +
+> +	if (in_nmi())
+> +		return -EOPNOTSUPP;
+> +	if (flags)
+> +		return -EINVAL;
+> +	__bpf_spin_lock_irqsave(&async->lock);
+> +	w = async->work;
+> +	if (!w || !w->cb.prog) {
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	schedule_work(&w->work);
+> +out:
+> +	__bpf_spin_unlock_irqrestore(&async->lock);
 
-I find it nicer to use a label like free_device.
-
-Regards,
-Markus
+Looks like you're not adding wq_cancel kfunc in this patch set and
+it's probably a good thing not to expose async cancel to bpf users,
+since it's a foot gun.
+Even when we eventually add wq_cancel_sync kfunc it will not be
+removing a callback.
+So we can drop spinlock here.
+READ_ONCE of w and cb would be enough.
+Since they cannot get back to NULL once init-ed and cb is set.
 
