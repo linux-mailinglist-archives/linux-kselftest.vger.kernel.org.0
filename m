@@ -1,106 +1,131 @@
-Return-Path: <linux-kselftest+bounces-8405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D958AA897
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 08:46:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 749C48AA966
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 09:44:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD9F71C20F42
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:46:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B4A81F21BBD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 07:44:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9323537165;
-	Fri, 19 Apr 2024 06:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W/owIBop"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E9D43ACA;
+	Fri, 19 Apr 2024 07:44:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A6E2E3F2
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 06:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9EF74D137;
+	Fri, 19 Apr 2024 07:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713509186; cv=none; b=f//O05Zd6dvtLzuFX1IH6l29ojLvWl7vu3nCVBFMrNh6mKEGK8hz0RvZaCyNXGSd7HnuoBMweTj1acF80I1YuoG+XnahQhvVh9AGHE5XikKTE0RrABLXk1mQ1NsV2T/cjGzCMbtgcingIM+Hwi5Vg7WNlRtoMzfd5sceMpL8LsE=
+	t=1713512645; cv=none; b=CDfsqR18KemEBGjW5ACG2fMjNQQ4GzlGipk8mH2CxcXM6MymCWTvK8UuVdvOckLA2K2GK8Sz/KpaEhgrLynty0uEEhsaloBy6eeekw6oex2NftN2RGoC4X+zaoPMgEr1aGjwfWT42J23IlDx7H9LdeODvDc4b3GmPJLzJfuMpXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713509186; c=relaxed/simple;
-	bh=u0HF41IZwgeTJDQsNauxGr+WavqSpst5cZbgaiLVR9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rJf4ExbFz8Z6e/7odyssWxPPZqEKl8WcyuQviGO5JTeUC8aajNB8NHUjpbCe+ndru8NMUGhWygHYYC8c0cT7bM8SlDydOopQ8SfAezZjELrZ+ihvlMDTZAt9W3WlE9Xpx2xynoeFSB+7zpUtB0Qxa5cOpDfXt49oaeXXEX/tYP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=W/owIBop; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6ecee1f325bso1585987b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 23:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713509184; x=1714113984; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=likPAjK9PgGVk5+qxCMBfysBI+F/PO0e/FyQV2RaWbo=;
-        b=W/owIBopzOD7dPCYJ2XOmjBD+ELNGChEk1AqkXfin1HLtKqfC9Ro/ZUoMfdXCX641z
-         N5qEgS77nHwatWXeSznhLBAayJa1oFLHEdmQcbM47Le2Pj9jGun9voRXQdxgATb41XCZ
-         C8TMcsf065eZSJfUnVDgH9tfKWim8b84uKJNfi/IjpcJJyjUWIKof5KtcA6E4WKI3Wj4
-         7QO649qpB260BNFADZdchzMGoMtTwMj80tLpIV0lQ3bL7UZQSkoporjWDEP3FIwsBQKQ
-         4s21A7NzVh32IltPh3eCde9z5ECph6UrD16Np+cIOaHtYbUW+UXWI0jH4uVf3j+65hSJ
-         XQNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713509184; x=1714113984;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=likPAjK9PgGVk5+qxCMBfysBI+F/PO0e/FyQV2RaWbo=;
-        b=Y2ZWke7j4BcOXSGYCJX+FtJvaekPRRvothykvPZizkFpmGT1kAlaVKhXCDqJoPNJxK
-         sA8m+QRG0hx21r6ODBI7QDs2qTPIHp5pEYV/wFKAetRDYkO/xBuapOKufIdgrSj8shdV
-         Up55jYDy+Xt61WG/Vk+xetygNBSbk3C8AdjCVXrKI0r84DSzEO0WI3etplpvoJm4YB4X
-         Vb+U4hUBK2v3I3LWgWgg/XYRcyXFTz/LhbIJZ4LFS+xaIURFQOj9inLuyUo9BVD/N5Sl
-         F8GRLohiWdoyDP7+6ofMI4SzIsSOeTzY8eCpGHivkvHKLe8xs8EXyIX8RBfFByVR6geO
-         GCIw==
-X-Forwarded-Encrypted: i=1; AJvYcCWYtvNj63wfoKciNkdaoRDCJt70ecaDQGTjq4S9caK9EdeoQn0q8iGDDj3Ai5CJXXrNHPl7puJvL6OS6Yt4L12QV81vswGs6iGYv6ku0yjV
-X-Gm-Message-State: AOJu0Yye73ueRz9d6ZcvPdqwrZWun3EEn9kKUWYXvJJwYpjMwdBN/Gc5
-	XFUu4KcUaz0tpnM6hczWh3StGSskBxBW1eaNday8GoKN6UrOk9FuxAjeGlmzSgo=
-X-Google-Smtp-Source: AGHT+IHJdn4XMlV/f4j2y8kUhBIVDEUhNZSWwAvnrLM5ep4RxiBIGPPNC3RiVuCyXUa4Dmo0aTOsfA==
-X-Received: by 2002:a05:6a20:5653:b0:1a7:bc31:933b with SMTP id is19-20020a056a20565300b001a7bc31933bmr1492291pzc.47.1713509184494;
-        Thu, 18 Apr 2024 23:46:24 -0700 (PDT)
-Received: from localhost ([122.172.87.52])
-        by smtp.gmail.com with ESMTPSA id k124-20020a633d82000000b005f7d61ec8afsm905236pga.91.2024.04.18.23.46.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Apr 2024 23:46:23 -0700 (PDT)
-Date: Fri, 19 Apr 2024 12:16:21 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	kernel@collabora.com, linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: cpufreq: conform test to TAP
-Message-ID: <20240419064621.a4qcqt6ck26te6up@vireshk-i7>
-References: <20240418153146.2095230-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1713512645; c=relaxed/simple;
+	bh=4puIi/iIsSa4ouWs2lBAfu9cJ1fC9wmjL4uk0fMNooQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GwdGsXow9Vu8vwym9uAh4NkqdnkauqJA2Jyk+xzTS0/QDPmauiL4NN4eubBwBLJBv3IjHyjIaupCcAZfATiGzT1W/iDSCmwkHK6lZ48UyuJi9XJF+nWYANQob+bJrZ8OU3e0BIx1TkpvEnbbutp+yE0N5xYrmzxNPzMyO22UFus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E48F62F;
+	Fri, 19 Apr 2024 00:44:23 -0700 (PDT)
+Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 93E4A3F792;
+	Fri, 19 Apr 2024 00:43:53 -0700 (PDT)
+From: Ryan Roberts <ryan.roberts@arm.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	David Hildenbrand <david@redhat.com>,
+	Shivansh Vij <shivanshvij@outlook.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 0/5] arm64/mm: uffd write-protect and soft-dirty tracking
+Date: Fri, 19 Apr 2024 08:43:39 +0100
+Message-Id: <20240419074344.2643212-1-ryan.roberts@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240418153146.2095230-1-usama.anjum@collabora.com>
+Content-Transfer-Encoding: 8bit
 
-On 18-04-24, 20:31, Muhammad Usama Anjum wrote:
-> This test outputs lots of information. Let's conform the core part of
-> the test to TAP and leave the information printing messages for now.
-> Include ktap_helpers.sh to print conformed logs. Use KSFT_* macros to
-> return the correct exit code for the kselftest framework and CIs to
-> understand the exit status.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/cpufreq/cpufreq.sh |  3 +-
->  tools/testing/selftests/cpufreq/main.sh    | 47 +++++++++++++---------
->  tools/testing/selftests/cpufreq/module.sh  |  6 +--
->  3 files changed, 31 insertions(+), 25 deletions(-)
+Hi All,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+This series adds uffd write-protect and soft-dirty tracking support for arm64. I
+consider the soft-dirty support (patches 3 and 4) as RFC - see rationale below.
 
--- 
-viresh
+Previous attempts to add these features have failed because of a perceived lack
+of available PTE SW bits. However it actually turns out that there are 2
+available but they are hidden. PTE_PROT_NONE was previously occupying a SW bit,
+but it only applies when PTE_VALID is clear, so this is moved to overlay PTE_UXN
+in patch 1, freeing up the SW bit. Bit 63 is marked as "IGNORED" in the Arm ARM,
+but it does not currently indicate "reserved for SW use" like it does for the
+other SW bits. I've confirmed with the spec owner that this is an oversight; the
+bit is intended to be reserved for SW use and the spec will clarify this in a
+future update.
+
+So we have our two bits; patch 2 enables uffd-wp, patch 3 enables soft-dirty and
+patches 4 and 5 sort out the selftests so that the soft-dirty tests are compiled
+for, and run on arm64.
+
+That said, these are the last 2 SW bits and we may want to keep 1 bit in reserve
+for future use. soft-dirty is only used for CRIU to my knowledge, and it is
+thought that their use case could be solved with the more generic uffd-wp. So
+unless somebody makes a clear case for the inclusion of soft-dirty support, we
+are probably better off dropping patches 3 and 4 and keeping bit 63 for future
+use. Although note that the most recent attempt to add soft-dirty for arm64 was
+last month [1] so I'd like to give Shivansh Vij the opportunity to make the
+case.
+
+---8<---
+As an appendix, I've also experimented with adding an "extended SW bits" region
+linked by the `struct ptdesc` (which you can always find from the `pte_t *`). If
+demonstrated to work, this would act as an insurance policy in case we ever need
+more SW bits in future, giving us confidence to merge soft-dirty now.
+Unfortunately this approach suffers from 2 problems; 1) its slow; my fork()
+microbenchmark takes 40% longer in the worst case. 2) it is not possible to read
+the HW pte and the extended SW bits atomically so it is impossible to implement
+ptep_get_lockess() in its current form. So I've abandoned this experiment. (I
+can provide more details if there is interest).
+---8<---
+
+[1] https://lore.kernel.org/linux-arm-kernel/MW4PR12MB687563EFB56373E8D55DDEABB92B2@MW4PR12MB6875.namprd12.prod.outlook.com/
+
+Thanks,
+Ryan
+
+
+Ryan Roberts (5):
+  arm64/mm: Move PTE_PROT_NONE and PMD_PRESENT_INVALID
+  arm64/mm: Add uffd write-protect support
+  arm64/mm: Add soft-dirty page tracking support
+  selftests/mm: Enable soft-dirty tests on arm64
+  selftests/mm: soft-dirty should fail if a testcase fails
+
+ arch/arm64/Kconfig                         |   2 +
+ arch/arm64/include/asm/pgtable-prot.h      |  20 +++-
+ arch/arm64/include/asm/pgtable.h           | 118 +++++++++++++++++++--
+ arch/arm64/mm/contpte.c                    |   6 +-
+ arch/arm64/mm/fault.c                      |   3 +-
+ arch/arm64/mm/hugetlbpage.c                |   6 +-
+ tools/testing/selftests/mm/Makefile        |   5 +-
+ tools/testing/selftests/mm/madv_populate.c |  26 +----
+ tools/testing/selftests/mm/run_vmtests.sh  |   5 +-
+ tools/testing/selftests/mm/soft-dirty.c    |   2 +-
+ 10 files changed, 141 insertions(+), 52 deletions(-)
+
+--
+2.25.1
+
 
