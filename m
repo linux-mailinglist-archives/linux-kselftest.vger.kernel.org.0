@@ -1,116 +1,133 @@
-Return-Path: <linux-kselftest+bounces-8447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45D068AB254
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:50:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2F9F8AB257
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0206A283E52
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:50:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A8C5286084
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB3B1304AF;
-	Fri, 19 Apr 2024 15:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA05130AF7;
+	Fri, 19 Apr 2024 15:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmYMhp6L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e9+9WSiP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B131304A5;
-	Fri, 19 Apr 2024 15:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA84B130AD3;
+	Fri, 19 Apr 2024 15:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713541791; cv=none; b=gZs1g8EC/zaLNAgpYCBluhOhdZ9l6N0TbkSCx1Nb+XIFq/o5TV6RdD+NE/WZhggekbyVwuZvQxGL9++F8N87Z+erLccpOA7TdCH8oVMRzIK2l6eZ4rhNJ91GBQuR3+FOQH7zpuBq/mb1BR/ccApl/4Hj13cqefNRMpEPQ7vNrDs=
+	t=1713541795; cv=none; b=qwKY/WrIa/x/KibvROiHLIGs8oUJdZf7n9VFj8A7djTxaCrt1wXykdE3F57ROE/PgfcMGVGO6R90lDDafJvzVKWarKvlFH7peLKtr2vsx81H6LXP8VaxxOJLgdwmP+LdzKlTyPu+XBIokyzI27KvV/xK+jOLrmFcthbn2O+Aluw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713541791; c=relaxed/simple;
-	bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=juM07VQTd6gHNjixM6Iu4vpBI7CoQFXGMwneKN/2bSRrEzHhtW3eAu7e6QN/Jn/hCd0xftRjnbI/cbeqdmLM3yrSS69q4fN6gg081sl1c027LTjm2vfgsmQjVm0g03B5FL9GiLioE0/EfyCQLCEWJd0U14U6tiaDgP5ecsBWaEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kmYMhp6L; arc=none smtp.client-ip=209.85.208.177
+	s=arc-20240116; t=1713541795; c=relaxed/simple;
+	bh=3RFiDxez2acLIv9fQtWjSUCFeGh7FTIM9bGr4s+3eCI=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=qUSxvHI/1CW5KB3KQjEujEF5T0YlJg1bAj1W31iANjLrX3IMCHhz9xLrvw89l0we/B7qUxkZtEATfKfxSIGNpEq7i73RbtT22G9t9S4ODNCQP9Ae0/ElATczoYSacrscqGHTdaEYSaoi0OneMi8GKrGJsEex47HPifOZYEPFihM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e9+9WSiP; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2da01cb187cso38815321fa.0;
-        Fri, 19 Apr 2024 08:49:49 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-516d1ecaf25so2852118e87.2;
+        Fri, 19 Apr 2024 08:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713541788; x=1714146588; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
-        b=kmYMhp6LRdt/pghJaBvQj6WbF6GqXMtpUAEhZK0d2NdAFc6DCgAZqfSnb4plb5Zd+l
-         58cn/Z9mUPVU8LZpZgBVMGRo1doOHE8s3odLMyWdKZrqcmh3oVMPDaz6ACTLr6DqrG/N
-         7/Ejhfq+3pJ9aRsZBAMeTHWbkkCGBeNnLqFUUAJ/D2lTd+Z1WsfHIFQ6ka1UHTLCEwGW
-         5efgVwRq6vhcMF6m+ped9WKAlH84SHWYU9b2pAW9GxEiGoSxo9jxizM+Tov729mEBZOt
-         HKE20TKgnhFYwgZYebOaLUGC3CKwmGmYKEuE/1+CYTaljYQwMD6Vc5yReg3TZ7l3skl/
-         +2fA==
+        d=gmail.com; s=20230601; t=1713541792; x=1714146592; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XTjTrX8k/OV8D/4FwhpKGos9bwoXHtumU35pP/xvPFY=;
+        b=e9+9WSiPH9Xp00OMES6T9bIfFbA+p4XB4/aF18gPHZtaoqHUMrI7ENdSb/9riIad4t
+         4g2X6iwSeAeOP7Ep2RTxWmcVP1ASFCkmIlnVXFbVzfnho5Bio4wS/cey1wPXP/Vmw9ag
+         O7q2iXVpnbOuAzhIqNL7ORnq4L7KrKEefuQT9XxEWldIrT745qkcQOLAwDBYn1WWlUMQ
+         zypBi94DBiT9THsrMYxGh3y7rzpy2RiXjeG84i7ybbcbvMWQOeF5O/BKn4sp7duBWqe7
+         u9P6kyNUA9YvW5N3PIr9+y+cgdWw2BrA20TPcov+OuaN0k87J1gqdx3uSZjy36tSStKT
+         FnHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713541788; x=1714146588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
-        b=G+z/Fu7vFcNFFrquMB4/fDHgbGXC+49mTakdt0GHgTYH22yXDNdo28IxJFsNRX1Opk
-         R0866oqyI9igAQS8Yeb4xEBDqnZP8c1ki3sb27qtbyDjS88XLDstxqw00OUXJGT/4Lli
-         CPUnBl1SNRlh3uPjDrKaDAGLpYgGMH4EfD9HNz2MaCF39w6IA4GRdWBd5lmcckN9gITJ
-         qOFIS75wTxGCDXaw2N5O4w+3URZaybNiScNaL+pZQmFIoe7ro3g6kwlQm/f2n3PjHgVn
-         t4incPZds7I7VkIL//G+0j17UDt+nSimXyraB5rSo6Mh4ZP6NgYbtNR/xQLpn/sliV0T
-         flRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUzG3Ww9PtQwC+9qqzZ0+RqyzRwynmM8cpl3umth9xsVfHg/uzOBD4O/7hHpLZ6QF+cE2J/yMfKNplWmNO/aeWl8/swEym5FojOex7RG11Ydj8e5mbeVZrqg0t0ySYfD0/2tLCmgs2ciGr21tHcsI4Q+0KuMXB9Dv6O8xrFLTmASwd0
-X-Gm-Message-State: AOJu0YzuvAL0JSGR2Qby7NKpfwCiH3MWWmA7Ggf6R8PPwc8JCxgH/WTQ
-	IiqiIrdeM1LluReDIcdVb5jmU7XecjthSpsZVwdAb4RdAp0fVpzasM7/YBjEKrmXDci5J8dMCaY
-	NewhrAC8zJ1gZxvdW8/1clIQPTrk3G2/y
-X-Google-Smtp-Source: AGHT+IH04YykqEPooeOpjDIaG5sd/QHb2gYVKjVVnbzLd0iOOjJo3/w0oYTDMe3y+t0h1QyYwoWJkv8kcRg4hn+1y0U=
-X-Received: by 2002:a2e:bea7:0:b0:2d6:fa7a:a670 with SMTP id
- a39-20020a2ebea7000000b002d6fa7aa670mr2311881ljr.33.1713541787684; Fri, 19
- Apr 2024 08:49:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713541792; x=1714146592;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XTjTrX8k/OV8D/4FwhpKGos9bwoXHtumU35pP/xvPFY=;
+        b=CQLwrxZosoD/E56Z5dKVgl6xwxSFklpQO8kJN6zQiZ6VXu56+AS5hEN8+wD2hxr0oe
+         vUrzdP5sfGT5Yv3xkIW30G7tL9Cn18sm/6C9otQ7tmyBcf99vujx9rXeKAjLVzocznso
+         8Hrq4ecMcLiTaGms7Iw1y/2wy23R6Y2L+FnFLArqUkAOHmcY41HCBH3ssn3TuZGb/aTf
+         GnPGb/1LDGJIUyocWaUH1QJIXJWzy45LPCIcV5e2UCNDuA+MSd+chyaDKeCjPwWAktz6
+         XwFw/0oSbzvHUKUwRG2OpNBU68DkENaP9yMTmOQFHnUfILM1eslmkJbIEvp2gBhLR/eR
+         TEig==
+X-Forwarded-Encrypted: i=1; AJvYcCVN42plrEqGTrBo0+3xrrvb3ZtOAvLjNMGSTTGJTZef43naQrEgK6d5FNWq7kl+elJMJleRAejVXvqPkx/yRo7K+Yt4wcuJdeXbzNd/Qp8ffhoDWPTog1Jg2rV2yTatv1bcoRPa+mUNclA57OYhAOWFdrWar8hcJvUQSvdFiGizHZjIcHqKN3FOKCDS/KiqVFzLv/oWIFYaCjZpPl44
+X-Gm-Message-State: AOJu0YxGZDJ79oCFyXmgjfgRfPGOo2cqnBOz7BYzUzJSR4I84I5sAoje
+	Fgwf6/7lQ9jOEBR/eBe56dm5nfY3BsCaR+glqKF8nowFqIu9j9/Z
+X-Google-Smtp-Source: AGHT+IGcX6lS6veqQqFahWGmcR+WcN6ooev8tXvu2kdoTkGGDXWaB4LRz/cu4Z6BuJpEFCW9f4FolQ==
+X-Received: by 2002:a19:7501:0:b0:516:a115:4a4d with SMTP id y1-20020a197501000000b00516a1154a4dmr1601293lfe.68.1713541791631;
+        Fri, 19 Apr 2024 08:49:51 -0700 (PDT)
+Received: from [192.168.18.253] (54-240-197-236.amazon.com. [54.240.197.236])
+        by smtp.gmail.com with ESMTPSA id t8-20020a170906a10800b00a4e253c8735sm2357376ejy.52.2024.04.19.08.49.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Apr 2024 08:49:51 -0700 (PDT)
+From: Paul Durrant <xadimgnik@gmail.com>
+X-Google-Original-From: Paul Durrant <paul@xen.org>
+Message-ID: <21bc05cf-0227-4d57-8cfa-81097b95535b@xen.org>
+Date: Fri, 19 Apr 2024 16:49:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org> <20240416-bpf_wq-v1-17-c9e66092f842@kernel.org>
- <khz5omyjsd2iklm66bi3na4gdxw2cpwhb3c2xwu4fjxkaefi77@puck4pfltjgm> <b7akvvt67m7w6hdfq5vboojnzyjbntxrjioh6nuqziz4pzia3d@6x2le6iz6cor>
-In-Reply-To: <b7akvvt67m7w6hdfq5vboojnzyjbntxrjioh6nuqziz4pzia3d@6x2le6iz6cor>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 19 Apr 2024 08:49:36 -0700
-Message-ID: <CAADnVQ+hPNQ3-fVj-5qt+UrT8yPavE9L7AaphsLLEKwve21P-g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 17/18] bpf: add bpf_wq_start
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Reply-To: paul@xen.org
+Subject: Re: [PATCH 06/10] KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the
+ documentation on TSC migration
+To: David Woodhouse <dwmw2@infradead.org>, kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Sean Christopherson <seanjc@google.com>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Oliver Upton <oliver.upton@linux.dev>, Marcelo Tosatti
+ <mtosatti@redhat.com>, jalliste@amazon.co.uk, sveith@amazon.de
+References: <20240418193528.41780-1-dwmw2@infradead.org>
+ <20240418193528.41780-7-dwmw2@infradead.org>
+Content-Language: en-US
+Organization: Xen Project
+In-Reply-To: <20240418193528.41780-7-dwmw2@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 19, 2024 at 8:14=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
-org> wrote:
->
->
-> Honestly I just felt the patch series was big enough for a PoC and
-> comparison with sleepable bpf_timer. But if we think this needs not to
-> be added, I guess that works too :)
+On 18/04/2024 20:34, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> The documentation on TSC migration using KVM_VCPU_TSC_OFFSET is woefully
+> inadequate. It ignores TSC scaling, and ignores the fact that the host
+> TSC may differ from one host to the next (and in fact because of the way
+> the kernel calibrates it, it generally differs from one boot to the next
+> even on the same hardware).
+> 
+> Add KVM_VCPU_TSC_SCALE to extract the actual scale ratio and frac_bits,
+> and attempt to document the *awful* process that we're requiring userspace
+> to follow to merely preserve the TSC across migration.
+> 
+> I may have thrown up in my mouth a little when writing that documentation.
+> It's an awful API. If we do this, we should be ashamed of ourselves.
+> (I also haven't tested the documented process yet).
+> 
+> Let's use Simon's KVM_VCPU_TSC_VALUE instead.
+> https://lore.kernel.org/all/20230202165950.483430-1-sveith@amazon.de/
+> 
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> ---
+>   Documentation/virt/kvm/devices/vcpu.rst | 115 ++++++++++++++++++------
+>   arch/x86/include/uapi/asm/kvm.h         |   6 ++
+>   arch/x86/kvm/x86.c                      |  15 ++++
+>   3 files changed, 109 insertions(+), 27 deletions(-)
+> 
 
-It certainly did its job to compare the two and imo bpf_wq with kfunc appro=
-ach
-looks cleaner overall and will be easier to extend in the long term.
+Reviewed-by: Paul Durrant <paul@xen.org>
 
-I mean that we'll be adding 3 kfuncs initially:
-bpf_wq_init, bpf_wq_start, bpf_wq_set_callback.
-
-imo that's good enough to land it and get some exposure.
-I'll be using it right away to refactor bpf_arena_alloc.h into
-actual arena allocator for bpf progs that is not just a selftest.
-
-I'm currently working on locks for bpf_arena.
-Kumar has a patch set that adds bpf_preempt_disble kfunc and
-coupled with bpf_wq we'll have all mechanisms to build
-arbitrary data structures/algorithms as bpf programs.
 
