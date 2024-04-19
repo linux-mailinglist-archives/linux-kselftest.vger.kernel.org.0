@@ -1,211 +1,129 @@
-Return-Path: <linux-kselftest+bounces-8401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFB568AA840
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 08:09:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E1858AA84E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 08:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E54C1C21155
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:09:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A150284174
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E129DC8E0;
-	Fri, 19 Apr 2024 06:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5A6C144;
+	Fri, 19 Apr 2024 06:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="VbNi7X53"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="jPEmfXN1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B0BB66C
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 06:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB8FB667;
+	Fri, 19 Apr 2024 06:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713506964; cv=none; b=WPk6k7rTunoBobDBZfhi3rHmaGf1/281mft/X1mKIOHadPxXJvjdpjAxO1ZNJCVFvEHy1xwsG/sVxYszY6l1HVLIj2uMmqSZ4pVeOp0RBg4vWO71/FGA2orKobZ7XxtzDmZrGKppqr5HOzx+TKtfJiyL56glIdXsc6ZYsU5V6ew=
+	t=1713507342; cv=none; b=dSsE58/dr28tPxHPkyYsBAXUvNodJsiJhjfWieIOMiGf4F8YnKHbftCzoYglqSKZTpx20nF7WznFnEUWnr6iUyAxBP4a0hEu5Rfen09gfz+xBR6FfvqxIYxCoN5nPh2WT/fldAxGj0IsG7SDoxse7DVNSAN847nZrOdxYtfzYiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713506964; c=relaxed/simple;
-	bh=elPfsV609mZWZMdsMAwYLpbQHMPL6SUn7OhzB1+3T1k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gLq7nY+vFwKzXkOY68+IwzdVEsl9SDpTPBDa/oKpslERPloPhYKLgbBgL+wYW/+GAEgScWvp6zBOtdLt7PeVHM40r1YlShyMBJ/BklvBchvNsnlJjjnLRSHwZN8yXcGhkOIiR2ukE6WYsyGLMIdBFBLYD1m2ytqvNg6AbMFp7kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=VbNi7X53; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2351c03438cso569218fac.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 23:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1713506961; x=1714111761; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7kErwDd2As93lkNVtXxpSNeg6N1vaOM5yfF2rI/SIas=;
-        b=VbNi7X53rWtX79EOjlQGwTGaV0PdQu+Qai3Q86Gb+xdJ5A/VlK2s9vCqiPH/E9m9t2
-         ShsAoadciOUnaMwPhjOPyAkdK3T7TIUVINKSuoFYs7jWbF6kdHrBxih3yaRUo+EmOyFI
-         UVH3Ql8DREoEEoDI1nMoJYwJ9g3a2iFkeQSLLlaoYVPxC2JM5SFHiCakWSDv+rUS6JGi
-         R3gLEV4hihEg4+Za021JzcSrEjLEyscTmqmaIpb/lPXfFQz6ibTTMaBw+fso9EaUD4o6
-         YsO5IOsU8RsPuK05rc6zbImXNVVL5fSqIB1iQeS/oZYGl/FiUT/Q9YrcvPZ5A3I6RcDP
-         aphg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713506961; x=1714111761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7kErwDd2As93lkNVtXxpSNeg6N1vaOM5yfF2rI/SIas=;
-        b=lvACQ2dB2uJFyooe3Aeca6cURczYjDlVS6QuYfYHOZnD4yjkxC3pFWTZuvyaMlyjo5
-         BezRLUZwzWXc81JG3rN7AKDqftNaF1EQ9q8aKPe78aya97r4oHblVEAqpNUg4Jt5g7kX
-         0+dxAcwAK7H2h0u1AOA8/wdN+d1ri4PcgwziakU9JQfzXPRvr7u4kFWWt1W8RjRAIPij
-         BM9TcQRjbBhgMkpLZLCC2kzdOts8zRwWpNS9Lrbwq4930iivhzWUIxl3E0pD5Ru5NDjZ
-         JQ3NTStfOWI7gNxXdmnr3oKW/VFx7zNOPKGu8wWF2EWa6ZSVT4ad3+g/os2++qoNBnEs
-         Z6Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbT2kRalTTmWPsyNANdG1+y6ijVHIJZ5M95QLNZFxfY+KluTPtYIdfPHZ9u7FwbZIobpnnF5w+uIBPDvLTL9oD+s6mLrDyHko762J2oyRe
-X-Gm-Message-State: AOJu0Yy4GZ1VLTfQCAe/VZnocaLgnwLczgqosy05QrDoiw93uSnNbZqO
-	A3l9xpMQeGXPN4pgk56rKLQ4btPrUuyCc922ev7Rl/JN/Coz6ux//LCtPQJifhvRMrZOCCzXR7l
-	gB5DLXh0KLB6i32/XDeY5ziDaGbe4mGnzJueKCw==
-X-Google-Smtp-Source: AGHT+IFiJTLnnWExlyf1jzE8UHpYFqX2X9xmHGVJevF5AC5Z2o5R2kV7+PY0ghjCFO++qBKYcDqZsz70DYQOwrd6nAc=
-X-Received: by 2002:a05:6870:968e:b0:22e:7d06:d489 with SMTP id
- o14-20020a056870968e00b0022e7d06d489mr1319197oaq.19.1713506961126; Thu, 18
- Apr 2024 23:09:21 -0700 (PDT)
+	s=arc-20240116; t=1713507342; c=relaxed/simple;
+	bh=QE1SDfhNjvPtChP7Aj1UbHskIeF99ihKXjAVio0OQFI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=btk/UCmA+lRApc4tHqk/z0zH8esiGmldSuJZt2wvudg8ss9BQCz83orrLjTJfZlH9LLyxoJ/qpL6FlD5PUM1gwA76TkDg8igLDCDNcOix4IPdZiLzyBhQA1gYOOMV3sJRVU2y12x87mfcNuiN/748Qi60Wg3l9WNXR6Z5L54tQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=jPEmfXN1; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1713507326; x=1714112126; i=markus.elfring@web.de;
+	bh=SZj8ghAjaLE6nyctSaVo0FKCiOsfPBVQxbO6b2IlqcU=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=jPEmfXN1C7JBdJLHpnDWAqi+4KlfDrwl0j6uaHfBQms2mAPneVjv122no8KQW7St
+	 uQLwBBzmINXWbvxrmsrN8LOPy8EDIy5W4mMZ0h1ZlB75Na6owz7xvr3ULETZU+86x
+	 n/xqkEQ4WB+/TpDZ1O13xEMZGBPJWPveTUvg5N8Q83yrNRLCyMHEW7JRWu1nBXyq7
+	 GSK+R5vSrPA/5wPkVATbTfZ4qd/d0SRbjZI78FixCbBrsU82xGws9sD753QG5lxmD
+	 kUML4tFHiNLioa9S/3wVMbxz198qcmub8zotBJMsbYU10taDwvTlV6gCKRntTU8UO
+	 3K2woMyP8ArF10Rnbg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mi4yz-1sbj6l2DtR-00e4QZ; Fri, 19
+ Apr 2024 08:15:26 +0200
+Message-ID: <b18c2e4b-bf61-41ad-b5f9-8e52d7651cca@web.de>
+Date: Fri, 19 Apr 2024 08:15:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com> <20240412-zve-detection-v4-2-e0c45bb6b253@sifive.com>
-In-Reply-To: <20240412-zve-detection-v4-2-e0c45bb6b253@sifive.com>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Fri, 19 Apr 2024 14:09:10 +0800
-Message-ID: <CAEEQ3wn97huwhpvTJH7kD2R=xagNRWd=YcoYwGOU17BRYNopgw@mail.gmail.com>
-Subject: Re: [External] [PATCH v4 2/9] riscv: smp: fail booting up smp if
- inconsistent vlen is detected
-To: Andy Chiu <andy.chiu@sifive.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor.dooley@microchip.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>, Conor Dooley <conor@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Evan Green <evan@rivosinc.com>, 
-	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>, 
-	Vincent Chen <vincent.chen@sifive.com>, Greentime Hu <greentime.hu@sifive.com>, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+To: Wander Lairson Costa <wander@redhat.com>, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Matti Vaittinen <mazziesaccount@gmail.com>,
+ Maxime Ripard <mripard@kernel.org>, Rae Moar <rmoar@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240418210236.194190-3-wander@redhat.com>
+Subject: Re: [PATCH v3 2/2] kunit: avoid memory leak on device register error
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240418210236.194190-3-wander@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ZP2boipMNyD0mUm2bcuILUQveBlG0LOrEz6OlCpvASrlP3tL2JY
+ NcsIIynp8Eo239IN/by3VEO+uIe8DYM1TMM5mk3WVh/0jRhnAfvT6XgrY6VoKpwn980i24O
+ MoW3W7z1VbvroUsD76AZdKwsFE88Z8K1MPo5OOQvnY44GFxOxe9AqpXBXDp+pt/8+KfZIG5
+ s2+aW6/gzdSAHAv2T1pJg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:3TBxCb/ezkM=;2p/RewvegXEDpauwRjt8uiNch3s
+ BH9X8Z6Ifc02VySwy7N/3ezTh1/yaBHXewJLwqZ3XkTONVbAtZm53zjAUKPxXk+hAlQnHkuPl
+ bAa9qPs72S/lN/xINB5gpjYiDZKSuW40KY4zWPjWms1ab69T7wMJ1+d+3TGxFXBNviWzX0KHI
+ ibPH+jyyroU9jgHpNL4nPiTRiNjH1o70oXhUab9dYtdxxQbJL4ehHHdBEYsv0LDKoZ+1b/WWe
+ YTCzyCe30fMQeelSK4iwj7m0xgVAcWCHahDE57LH3bKIo+rotVhH1ks99nSyPpxqHcmV0OnF1
+ YwtsXYy9IzLC0fJL4vSyaHiq8xo6WDkERga++NBY60Tny654I1c+DPbtHSwZ8lvstFrqlk8AR
+ DrXqpO9sTtlZ61PVHmGH7dsHt81+dBeM64diTS+fHJ/Ch5Gxo2WlVgx7gl1r3nfMCXjD+iW/n
+ mfQUyfvlB+T0/EfzNLYCR02OHVLTEyGGjn/1PIHj8EfDMOzXFL542fj3xbP42djJxOizxRLlc
+ /Ck03GxTgyIGoLiAZI1b1vsTT1MMaoHFzk1EXtf8nNk5HvNq/kROZ1gBg/d5jjuL1MYwLXVWf
+ 2mgccO115L2ARCk3npieuIVAzTMiOOEpZ+eHsd+Ed9FclhQ7EIQed92fAMtBCABOWiE0XUxNa
+ JIwwTOnk3rJCzzwsq0DvYiD1To9omy6HAnfeROv+hXSejQvhuexmTGr8bvu4rMZkXo007Jtv/
+ nVvO5I1t+ntMT6XEg4Y0uKIfM7QSWofLkg1SGiUSq+QjnvTP5CVLMR8qR4swN7gHW8/YrjqbT
+ Rp3tRDZZ9YjYiLcDmU+zjdxNOP6+/wnPodaCdCYHuj0OQ=
 
-Hi Andy,
+> If the device register fails, free the allocated memory before
+> returning.
 
-On Fri, Apr 12, 2024 at 2:50=E2=80=AFPM Andy Chiu <andy.chiu@sifive.com> wr=
-ote:
->
-> Currently we only support Vector for SMP platforms, that is, all SMP
-> cores have the same vlenb. If we happen to detect a mismatching vlen, it
-> is better to just fail bootting it up to prevent further race/scheduling
-> issues.
->
-> Also, move .Lsecondary_park forward and chage `tail smp_callin` into a
-> regular call in the early assembly. So a core would be parked right
-> after a return from smp_callin. Note that a successful smp_callin
-> does not return.
->
-> Fixes: 7017858eb2d7 ("riscv: Introduce riscv_v_vsize to record size of Ve=
-ctor context")
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Closes: https://lore.kernel.org/linux-riscv/20240228-vicinity-cornstalk-4=
-b8eb5fe5730@spud/
-> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-> ---
-> Changelog v4:
->  - update comment also in the assembly code (Yunhui)
-> Changelog v2:
->  - update commit message to explain asm code change (Conor)
-> ---
->  arch/riscv/kernel/head.S    | 19 ++++++++++++-------
->  arch/riscv/kernel/smpboot.c | 14 +++++++++-----
->  2 files changed, 21 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> index 4236a69c35cb..a00f7523cb91 100644
-> --- a/arch/riscv/kernel/head.S
-> +++ b/arch/riscv/kernel/head.S
-> @@ -165,9 +165,20 @@ secondary_start_sbi:
->  #endif
->         call .Lsetup_trap_vector
->         scs_load_current
-> -       tail smp_callin
-> +       call smp_callin
->  #endif /* CONFIG_SMP */
->
-> +.align 2
-> +.Lsecondary_park:
-> +       /*
-> +        * Park this hart if we:
-> +        *  - have too many harts on CONFIG_RISCV_BOOT_SPINWAIT
-> +        *  - receive an early trap, before setup_trap_vector finished
-> +        *  - fail in smp_callin(), as a successful one wouldn't return
-> +        */
-> +       wfi
-> +       j .Lsecondary_park
-> +
->  .align 2
->  .Lsetup_trap_vector:
->         /* Set trap vector to exception handler */
-> @@ -181,12 +192,6 @@ secondary_start_sbi:
->         csrw CSR_SCRATCH, zero
->         ret
->
-> -.align 2
-> -.Lsecondary_park:
-> -       /* We lack SMP support or have too many harts, so park this hart =
-*/
-> -       wfi
-> -       j .Lsecondary_park
-> -
->  SYM_CODE_END(_start)
->
->  SYM_CODE_START(_start_kernel)
-> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-> index d41090fc3203..673437ccc13d 100644
-> --- a/arch/riscv/kernel/smpboot.c
-> +++ b/arch/riscv/kernel/smpboot.c
-> @@ -214,6 +214,15 @@ asmlinkage __visible void smp_callin(void)
->         struct mm_struct *mm =3D &init_mm;
->         unsigned int curr_cpuid =3D smp_processor_id();
->
-> +       if (has_vector()) {
-> +               /*
-> +                * Return as early as possible so the hart with a mismatc=
-hing
-> +                * vlen won't boot.
-> +                */
-> +               if (riscv_v_setup_vsize())
-> +                       return;
-> +       }
-> +
->         /* All kernel threads share the same mm context.  */
->         mmgrab(mm);
->         current->active_mm =3D mm;
-> @@ -226,11 +235,6 @@ asmlinkage __visible void smp_callin(void)
->         numa_add_cpu(curr_cpuid);
->         set_cpu_online(curr_cpuid, 1);
->
-> -       if (has_vector()) {
-> -               if (riscv_v_setup_vsize())
-> -                       elf_hwcap &=3D ~COMPAT_HWCAP_ISA_V;
-> -       }
-> -
->         riscv_user_isa_enable();
->
->         /*
->
-> --
-> 2.44.0.rc2
->
->
+Can a description variant (like the following) be more appropriate?
 
-Reviewed-by: Yunhui Cui <cuiyunhui@bytedance.com>
+   Free the allocated memory (after a device registration failure)
+   before returning.
+   Thus add a jump target so that a bit of exception handling can be bette=
+r
+   reused at the end of this function implementation.
 
 
-Thanks,
-Yunhui
+Would you like to replace the word =E2=80=9Cregister=E2=80=9D by =E2=80=9C=
+registration=E2=80=9D also
+in the summary phrase?
+
+
+=E2=80=A6
+> +++ b/lib/kunit/device.c
+=E2=80=A6
+> @@ -140,6 +138,9 @@ static struct kunit_device *kunit_device_register_in=
+ternal(struct kunit *test,
+>  	kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
+>
+>  	return kunit_dev;
+> +error:
+> +	kfree(kunit_dev);
+> +	return ERR_PTR(err);
+>  }
+=E2=80=A6
+
+I find it nicer to use a label like free_device.
+
+Regards,
+Markus
 
