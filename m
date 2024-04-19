@@ -1,254 +1,179 @@
-Return-Path: <linux-kselftest+bounces-8414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22E108AABB0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 11:45:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB3A68AACB5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 12:21:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45B631C20A41
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 09:45:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46330B216AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 10:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268DD7BAF3;
-	Fri, 19 Apr 2024 09:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3337CF25;
+	Fri, 19 Apr 2024 10:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JPN0L4D0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bu5qyPGA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835C17B3FE
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 09:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713519922; cv=none; b=l7ZuxCygZNjWFOrmg6qOd2PVsAiLf91we0k0p60zV2sbc9VZf9aKnIMKvanI95clGeGhm/ImLC11y4Vc5V3cd+vYDbvZpX/HPyCo4nB0Tj+H13Va5yx6EEMo5rS/pGJAyhufJ5vd7s4nGV0X3Hevx3W+XSv9YtwBkSRwnlO9rvM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713519922; c=relaxed/simple;
-	bh=HMHZQ81dP0SN0T90W2TrPTOiS2bN4YfJlg8/lAMBsaQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MpJ3r5KeWL5OqWzpJpYAeS/rpJ5G7OrYGh0ftyvpZS3j0WuIpQUvT+bOk+HcnwN3lo3YzOPATBvssB/bwmSfdnUbxGR93j6q5lCUKE2SjZhAQlCXpfA6z+1GTDx22vRKDg8ntCPaK3yRsURAQf9u1vcp0ePaOEjLCH0iMPwvgdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JPN0L4D0; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713519919;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=MCoyntaCRZuUkWRpN1//7gRrd2DlONoI5NwEvNCqyxk=;
-	b=JPN0L4D06QbjOY45vwyDtRzJhEwWD8nE+qAV4pYr5fo989HARQXCbIh/4Dkht6gOCB7gBH
-	Bltx/rEqOQD3FJSLyieJZ/3iwiq6HnERC5yNNwstFP4qXFmcHRdDqXMRj4IY05SvG4iJp8
-	n72qFijZwFJXrREMUG9kPxy3RqeJ6ug=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-134-a3rPit-fOlaZvG03CVdnKQ-1; Fri, 19 Apr 2024 05:45:17 -0400
-X-MC-Unique: a3rPit-fOlaZvG03CVdnKQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4183909fec8so15343285e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 02:45:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713519916; x=1714124716;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MCoyntaCRZuUkWRpN1//7gRrd2DlONoI5NwEvNCqyxk=;
-        b=Nz/xYE2EL6/0GGXVLXzVVZDlu6IKZefGMZse9hidj/ejIvp69p+jYduo+SCMj0jzu7
-         zGnpYzzez8dhMxiCz7USTLTjLF/pi7AHfU85Fkqft1/+ijkb8ejcoYZz5nKer0S9kVCy
-         FrBydvSCYuNWt8TCCZVZxfwiSkn7XlYGXwz88SvDioOjfHjWyrLbmRAXwSYH0KAbIqEb
-         QoKYSv+bYTrbjgGZVaV4eFmFooK+oCJ0Nle9gZQ5Uo9YgmpYivXYujnu9FP5jG92N4JD
-         QOqPIg4p04Gr1iJm9Co5x6/34IwJ+R65/FfjIABOa5OAdMgTm7zUZyWWJIdDVAIYvFXk
-         upzg==
-X-Forwarded-Encrypted: i=1; AJvYcCVNAk4TJxoprATo3UgQBfhDrwS9wBYnrB4PEKzB8M/ac41AIz3tfjGOwD7O1xCWoSq8M+M1+bGN/0Yt1Ckd8xampa1n+N/bX6WsbPpA72vm
-X-Gm-Message-State: AOJu0YyYKLUOEgvqAM/kPKIcyaNLqTuJGwvJug44OTDAFoyPgLS5XqSF
-	BnlX/10ePWRWceCUdLSkoXl08cPXpaTpa8PiPZDh0cwnwGnyJw0bPjDsUAEQ8pjJSgDon+bwgLZ
-	wN9+KPULkJ8tW5BJ6KfHNff8TH2NPUc/ZmXuY2Ei2W6W9yBwYahgeaSF67QuHtSVwSg==
-X-Received: by 2002:a05:600c:1c9b:b0:416:4641:5947 with SMTP id k27-20020a05600c1c9b00b0041646415947mr1253925wms.34.1713519916648;
-        Fri, 19 Apr 2024 02:45:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG+/K45FeDxn6FkpbTtTiQddRh21Cb9uK8JSBlB/0djaFPbu8uI1joLih9P8K/TBbgBp5xLDw==
-X-Received: by 2002:a05:600c:1c9b:b0:416:4641:5947 with SMTP id k27-20020a05600c1c9b00b0041646415947mr1253904wms.34.1713519916154;
-        Fri, 19 Apr 2024 02:45:16 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c716:f300:c9f0:f643:6aa2:16? (p200300cbc716f300c9f0f6436aa20016.dip0.t-ipconnect.de. [2003:cb:c716:f300:c9f0:f643:6aa2:16])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05600c358f00b00418ef96472asm4485815wmq.0.2024.04.19.02.45.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Apr 2024 02:45:15 -0700 (PDT)
-Message-ID: <c936083b-68b7-4d8f-a8fc-d188e646f390@redhat.com>
-Date: Fri, 19 Apr 2024 11:45:14 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1DF7BAF9;
+	Fri, 19 Apr 2024 10:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713522109; cv=fail; b=kKDnNjNBSdsRBHpdg0K8Bq2hDJWK03oSgKjKBOflPg8pBDTzN880vnl6yn083S7UKxw2PGqYMKJOcrNpj2pYBup+lUO3G06Bb9A3CV3mHhKJ4BK4GGycZe5+ZsinM/RC6Exa2kz/uO0FSKN/lUAaMB/bF3Uv0y9/LouHZBUOfRg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713522109; c=relaxed/simple;
+	bh=cDQxxzPiT3+qvmQBZiEfjthw6j/h+skwbQTJ1lB2TWg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=NZC2TJ5csUd2gY7NsVNbKrGj2AoOF4dx1j0if4Ld2+96dUO7tBkfi/afRUGMKdLNdhqXi+u/9AAFsyOvMflEkcW/+h3l50FUbemh8Uzm9NVxZVNtCKeR9wlTSwU7qzbGRLjUAT9HMLCWr50t4vb68WK1ZmbUYG/xnT2j8uEIMxM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bu5qyPGA; arc=fail smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713522108; x=1745058108;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=cDQxxzPiT3+qvmQBZiEfjthw6j/h+skwbQTJ1lB2TWg=;
+  b=Bu5qyPGAGONB2qVVjmItik2WZI69g1nJmuOghuppgIWi7z2yoK1XWArs
+   afwrx/YzuFpv5u6m1VzK2TVYbC5SM+9J3oaFNKAh1vmcPD+EG49jFaMhY
+   xe0WPd5b+sTxX+NhNW4jl18RxB2U1F/VN+qrX0rqL5o6vuqvxqWsosG2v
+   YH2bMca1fc5zyM0B+F7lASAt6Yupva3mtkvAj6Mth0C13w2vuuamsc13L
+   0FRc8+RKaiJRNwEeq3UldG9GHtYIwVO34ovGBsjRM6x/aTp6JP1ZGJjR5
+   gRDf0KGTCPqQUS8MPoIGeRy25cqVecRckkjkKX8bTzCNJFr84wPJHDkCL
+   A==;
+X-CSE-ConnectionGUID: HP5Tu35zTEutmyd3hPXYMA==
+X-CSE-MsgGUID: TBvOVHb6Qx+CQKl4+UYSPg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="19726461"
+X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
+   d="scan'208";a="19726461"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 03:21:47 -0700
+X-CSE-ConnectionGUID: uTIFFEqeRKu3qBfp5ZRxtQ==
+X-CSE-MsgGUID: KkDeNWXCQHur6eR0qS4Byg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
+   d="scan'208";a="23275652"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa009.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 19 Apr 2024 03:21:47 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 19 Apr 2024 03:21:46 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Fri, 19 Apr 2024 03:21:46 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 19 Apr 2024 03:21:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b01ZU3zRqXj4OGH8oNXF6VJxbcyvruMJEcq6bY/JjpSLBuW5q/p/RWoy1eYBGRVFpc9pkFJVEo6d1qjb1K+68yIPoUNjbo6il4sp0+YMJfAKG2R0EVz8DD963OSQdNCM6rvxFozyiq9FZM1KQKG1OfP8nBk/xlFgoCd3ec5fe6yPAsO6PL93y+VS8w76L6IF8yIVPc3jr7LWhiQVZvtnLs0FcHmoEZrTZQTaviItmWKTintPlHixMc1BQBux4Qu2WifIOtwiNc6uwRMl6Rv2OCo9TXZVbMkAc6998CtI/zpPWvrkk5sYveXWTndwkcvf1nvTQKzxOhrkYwax+BqJSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cDQxxzPiT3+qvmQBZiEfjthw6j/h+skwbQTJ1lB2TWg=;
+ b=nr3w9Y0YJhgR/h+2KRNdKFUeYXVGtNauHNvqtaUV37nFq8uzb5DzNa6MQ2v7KgVffVUr9rOrzfcfVOqhKloDehjt4IjyKb/LZWl77PfHd1E2t6R1+Iw6VNy+nGsZDhZDc660qGjToYHdDdgFZT1205lzbbXJ9vaV1f62gbm029l28f4AyNH3A/xKpofFktduxjBy7Fh8rs7F1MNkfhPfUoVd5NlT52PqqJuLP/3o1ukIUe4YVGYdCLOiLx/jZhvi6x970Ee5eyacDTkZYLqFAda7AjevaRGyRirUhFKVu52DREJP2r5CfcdHfwDI0tF92YC1ZanUutr9GDBoAFpGOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH3PR11MB8660.namprd11.prod.outlook.com (2603:10b6:610:1ce::13)
+ by SA2PR11MB4875.namprd11.prod.outlook.com (2603:10b6:806:11a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.14; Fri, 19 Apr
+ 2024 10:21:43 +0000
+Received: from CH3PR11MB8660.namprd11.prod.outlook.com
+ ([fe80::5135:2255:52ba:c64e]) by CH3PR11MB8660.namprd11.prod.outlook.com
+ ([fe80::5135:2255:52ba:c64e%4]) with mapi id 15.20.7519.010; Fri, 19 Apr 2024
+ 10:21:43 +0000
+Date: Fri, 19 Apr 2024 18:21:31 +0800
+From: Chao Gao <chao.gao@intel.com>
+To: Xin Li <xin3.li@intel.com>
+CC: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<seanjc@google.com>, <pbonzini@redhat.com>, <corbet@lwn.net>,
+	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+	<shuah@kernel.org>, <vkuznets@redhat.com>, <peterz@infradead.org>,
+	<ravi.v.shankar@intel.com>, <xin@zytor.com>
+Subject: Re: [PATCH v2 03/25] KVM: VMX: Add support for the secondary VM exit
+ controls
+Message-ID: <ZiJFq2XFKEukLX8X@chao-email>
+References: <20240207172646.3981-1-xin3.li@intel.com>
+ <20240207172646.3981-4-xin3.li@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240207172646.3981-4-xin3.li@intel.com>
+X-ClientProxiedBy: SI2P153CA0031.APCP153.PROD.OUTLOOK.COM (2603:1096:4:190::7)
+ To CH3PR11MB8660.namprd11.prod.outlook.com (2603:10b6:610:1ce::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/5] arm64/mm: uffd write-protect and soft-dirty
- tracking
-To: Shivansh Vij <shivanshvij@outlook.com>,
- Ryan Roberts <ryan.roberts@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Joey Gouly <joey.gouly@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Mike Rapoport <rppt@linux.ibm.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20240419074344.2643212-1-ryan.roberts@arm.com>
- <24999e38-e4f7-4616-8eae-dfdeba327558@arm.com>
- <MW4PR12MB6875618342F088BE6F4ECBB2B90D2@MW4PR12MB6875.namprd12.prod.outlook.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <MW4PR12MB6875618342F088BE6F4ECBB2B90D2@MW4PR12MB6875.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR11MB8660:EE_|SA2PR11MB4875:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5e3305c-b1bd-4d8b-1ab6-08dc605a826b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|1800799015|366007|7416005;
+X-Microsoft-Antispam-Message-Info: mq2h1YxTNUh/hqHnrzA2xvdsfD/YrIYU4DISVmxZduGgtXyR0ZlEWms3MC7cOgmf7fuWMSIxefieOxuqVYX1LiOG6RgK8Mvz2akKB62BGfTtA3epFsp5a40GU6K9q164zt5d+3vo7qfDvkXNCxirGfpukd6ZeB8RccbXf8idknM+5DAh7hFhz3vW/cwLIV5575k/Sm2/5qT6naUXsSk/XoMQfYqoneBta0TiLrQdBEeS5grhT4UXEke/2/VJCGNyEQ5P+86IPsa+aUfuLNFkJgpdwPCAprb89aPb2fgvxiB7/++9njvJFiwsJ/VmntLbuN+0DCUALxm6yvmn9qtHlWw8GcQks9hr71dtpu485PesflXmBUeWsmE/fRKOA8DX4MVpsqgcOG8skokXS7XWu7XuCm+M+LgWpxPd+v1C3HXULwv0dbpSUKtj1Z6oaDaCsJrhJ/+VqLtxwIYPictm/l6U4SzAlvbak6hLYZRfeWNWMt5Pmx3LAhqzOzuWvG2wN4mjklBAeGfShyY60E+ucXZuMfCjHxw/vkGYHkT9cxk3PsDSrWzlJXts/xd8DuGHmq9QHhKpleNFAMa0rrUNQq9sGFLqyHJcu1AIKTN+Wrv/HgGizDfAOn5oUkLLUtHX0D2fYfdeX09w7KqBd3Tyfsixx1LaBQZlx1NZIyFn5og=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB8660.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007)(7416005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aDFeJb4thG32DpqXoMbtw9DHH+e0zxwiTfCWIs19N30xJwn11DLPyvntg6BT?=
+ =?us-ascii?Q?zmsg87Y7SIlK78Jt28ZDrpEHO050/5mEj7IZaFF7MkJrWl9NyHfvy6/Kqvnb?=
+ =?us-ascii?Q?Eb9IwT2Xett7N7tLgXCpAVdIERcSWJMoY9oKqJu9NXw6GuSR4VzVmt6IxuCF?=
+ =?us-ascii?Q?oWv6pvHrTkL0Nu/kFk3hDJXuvx8HduzpN8OsOj0eJ3e36ta90yzoYkehqVTh?=
+ =?us-ascii?Q?ZTGKPCzK+ZsSBMQmh6epnQMbkknCnFCh+CH899GPMkDOLsXqItfDPMvpzI86?=
+ =?us-ascii?Q?EkM+bob9gDtwK1x3uoKfDp/oK6AXneOTYFcAzV6jCqXrEplHz3wr3LUNnsGz?=
+ =?us-ascii?Q?Ye5hBwZe1LsrYN3jCp3vk19If9EiLW+UePLHlcmwCB95Fpb4UdGrSwN3tlqn?=
+ =?us-ascii?Q?+ZbZTfItBe7Qz5L7tRCAa+Y2lFX3N2rjYcfp/CHd46NoeJv/EDNA920xlWNA?=
+ =?us-ascii?Q?nAJP2lJQ7peLWQPYMQk3kRKTWGquSAOuNTYyGfaTGB/L+w1FmBZ3oBAmtxAB?=
+ =?us-ascii?Q?yPd6NWWOxrWjG1Ek0KvWDiJMNI5ph7X719+agQ44CNtHeTKoDpdtet3OUg1+?=
+ =?us-ascii?Q?2o6WFA9YmUlIwmzlAZv7uwtFr6312QRy1EVCfvDey6Qrh4EnMSlQwThNAv7F?=
+ =?us-ascii?Q?EmPgcbEBs/FjC7J3HMHQcvo6Ed9Dk0mvmc5cV8qnIisBmJp8KWpCKYy41Lci?=
+ =?us-ascii?Q?ZO1nwW+MW3Q1qviLbXCcz9RUiKK5wbs5vxk6NAsAoxKIJUPoLaqOR7ov5rSN?=
+ =?us-ascii?Q?UDAwh1FGI9uMed0KpXv5vIxbik/OdmDXDYCq3Xf1ZB2oH5oJTj5Qf0gHFWUD?=
+ =?us-ascii?Q?vUXEps69cmnXzBQaDi83h1/j6iVMBboolsG6A/9noh799NsxYOKedmNK8Np/?=
+ =?us-ascii?Q?7LYrOlE5eQ3Jj7lqSZughtprEIEFce6j9jVrFoyEtO5674tzNlxh8f0OaYHC?=
+ =?us-ascii?Q?B2MXsvKt+qAAB8Gfb2expmcZ6EbFirRPM5FfGXtnd71kni47/Z2arA0RiFrm?=
+ =?us-ascii?Q?zvl3N+58H3lqQtBlajaGDlmuRFkdYyXrxAVwzmCQZo47MF52C/7SFsfMK2Wo?=
+ =?us-ascii?Q?/RYGEF9Y5Y0IeaW/YbB+2dJO7zyJl6y35ueJSO6AKICjkDkx2B/5HHjWDCQW?=
+ =?us-ascii?Q?B2X698z5JZ/bvrOkk02qtwM2ZD+sa4BSRxme93u28ScU7dPQycPJVqBle1XD?=
+ =?us-ascii?Q?2KVHkqMkM26GY9AMcVg6m3QfVWmi22bI8ouGSbe8vfwk3HnBeuienMAqjrR8?=
+ =?us-ascii?Q?OHkKz8yLOjiEKI2FdjcGtiDgBZlqx4ysGz2PbOG2qk8a+u+Tu2DbBQ4Ic6W2?=
+ =?us-ascii?Q?nQMBE5pRAUku5Wo76BnQ2SK1pURx50o9E233OupMrXYCdlpdOzB81XkbhLY9?=
+ =?us-ascii?Q?G08K1mRbk/SOt37ZR0HdrqhB9V097IV/iqcLiDM01XAESNPr+DzFwupYRxkf?=
+ =?us-ascii?Q?e1cMy8CrYxiDsk6If3wGl87Olbv5SIiImYk4naO2TwHWhEZc64wWbARv2iTQ?=
+ =?us-ascii?Q?T4+WlS8McVI5/vBY9aeDNsmnQ6utDJGcZFO1j4QFMAIlJ7cJ5gKwELdz0kJw?=
+ =?us-ascii?Q?OYytJsm8UygfxMneV6oPx7636Fx8QeJoOpKCmZIy?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5e3305c-b1bd-4d8b-1ab6-08dc605a826b
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB8660.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2024 10:21:43.2465
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ngxMoHZVGjP6P1z2GZiHO9YM2u8FRTrPT6TnPlSk1cgOlzq6eA53/X8uZjm5kt0lUtcz3w8zkxRYy+PKoGzw6g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4875
+X-OriginatorOrg: intel.com
 
-On 19.04.24 10:33, Shivansh Vij wrote:
-> (Sorry about the previous HTML email, accidentally used the wrong email client)
-> 
-> Hey All,
-> 
->> On 19/04/2024 08:43, Ryan Roberts wrote:
->>> Hi All,
->>>
->>> This series adds uffd write-protect and soft-dirty tracking support for arm64. I
->>> consider the soft-dirty support (patches 3 and 4) as RFC - see rationale below.
->>>
->>> Previous attempts to add these features have failed because of a perceived lack
->>> of available PTE SW bits. However it actually turns out that there are 2
->>> available but they are hidden. PTE_PROT_NONE was previously occupying a SW bit,
->>> but it only applies when PTE_VALID is clear, so this is moved to overlay PTE_UXN
->>> in patch 1, freeing up the SW bit. Bit 63 is marked as "IGNORED" in the Arm ARM,
->>> but it does not currently indicate "reserved for SW use" like it does for the
->>> other SW bits. I've confirmed with the spec owner that this is an oversight; the
->>> bit is intended to be reserved for SW use and the spec will clarify this in a
->>> future update.
->>>
->>> So we have our two bits; patch 2 enables uffd-wp, patch 3 enables soft-dirty and
->>> patches 4 and 5 sort out the selftests so that the soft-dirty tests are compiled
->>> for, and run on arm64.
->>>
->>> That said, these are the last 2 SW bits and we may want to keep 1 bit in reserve
->>> for future use. soft-dirty is only used for CRIU to my knowledge, and it is
->>> thought that their use case could be solved with the more generic uffd-wp. So
->>> unless somebody makes a clear case for the inclusion of soft-dirty support, we
->>> are probably better off dropping patches 3 and 4 and keeping bit 63 for future
->>> use. Although note that the most recent attempt to add soft-dirty for arm64 was
->>> last month [1] so I'd like to give Shivansh Vij the opportunity to make the
->>> case.
->>
->> Ugh, forgot to mention that this applies on top of v6.9-rc3, and all the uffd-wp
->> and soft-dirty tests in the mm selftests suite run and pass. And no regressions
->> are observed in any of the other selftests.
-> 
-> Appreciate the opportunity to provide input here.
-> 
-> I personally don't know of any applications other than CRIU that make heavy use of soft-dirty, and my use case is specifically focused on adding live-migration support to CRIU on ARM.
-> 
-> Cloud providers like AWS have pretty massive discounts for ARM-based spot instances (90% last time I checked), and having live-migration in CRIU would allow more applications to take advantage of that.
-> 
-> As Ryan mentioned, there are two ways to achieve this - add dirty tracking to ARM (Patch 3/4), or tear out the existing dirty tracking code in CRIU and replace it with uffd-wp.
-> 
-> I picked option one (dirty tracking in arm) because it seems to be the simplest way to move forward, whereas it would be a relatively heavy effort to add uffd-wp support to CRIU.
-> 
->  From a performance perspective I am also a little worried that uffd will be slower than just tracking the dirty bits asynchronously with sw dirty, but maybe that's not as much of a concern with the addition of uffd-wp async.
-> 
-> With all this being said, I'll defer to the wisdom of the crowd about which approach makes more sense - after all, with this patch we should get uffd-wp support on arm so at least there will be _a_ way forward for CRIU (albeit one requiring slightly more work).
+On Wed, Feb 07, 2024 at 09:26:23AM -0800, Xin Li wrote:
+>Enable the secondary VM exit controls to prepare for FRED enabling.
+>
+>The activation of the secondary VM exit controls is off now, and it
+>will be switched on when a VMX feature needing it is enabled.
+>
+>Signed-off-by: Xin Li <xin3.li@intel.com>
+>Tested-by: Shan Kang <shan.kang@intel.com>
 
-Ccing Mike and Peter. In 2017, Mike gave a presentation "Memory tracking 
-for iterative container migration"[1] at LPC
-
-Some key points are still true I think:
-(1) More flexible and robust than soft-dirty
-(2) May obsolete soft-dirty
-
-We further recently added a new UFFD_FEATURE_WP_ASYNC feature as part of 
-[2], because getting soft-dirty return reliable results in some cases 
-turned out rather hard to fix.
-
-We might still have to optimize that approach for some very sparse large 
-VMAs, but that should be solvable.
-
-  "The major defect of this approach of dirty tracking is we need to
-  populate the pgtables when tracking starts. Soft-dirty doesn't do it
-  like that. It's unwanted in the case where the range of memory to track
-  is huge and unpopulated (e.g., tracking updates on a 10G file with
-  mmap() on top, without having any page cache installed yet). One way to
-  improve this is to allow pte markers exist for larger than PTE level
-  for PMD+. That will not change the interface if to implemented, so we
-  can leave that for later.")[3]
-
-
-If we can avoid adding soft-dirty on arm64 that would be great. This 
-will require work on the CRIU side. One downside of uffd-wp is that it 
-is currently not as avilable on architectures as soft-dirty.
-
-But I'll throw in another idea: do we really need soft-dirty and uffd-wp 
-to exist at the same time in the same process (or the VMA?). In theory, 
-we could have a VMA flag that defines the semantics of the bit and 
-simply have arch code use a single, abstracted PTE bit. Requires a bit 
-more work, though, but the benfit would be that architecturs that do 
-support soft-dirty could support uffd-wp.
-
-
-[1] 
-https://blog.linuxplumbersconf.org/2017/ocw//system/presentations/4724/original/Memory%20tracking%20for%20iterative%20container%20migration.pdf
-[2] 
-https://lore.kernel.org/all/20230821141518.870589-1-usama.anjum@collabora.com/
-[3] 
-https://lore.kernel.org/all/20230821141518.870589-2-usama.anjum@collabora.com/
-
--- 
-Cheers,
-
-David / dhildenb
+Reviewed-by: Chao Gao <chao.gao@intel.com>
 
 
