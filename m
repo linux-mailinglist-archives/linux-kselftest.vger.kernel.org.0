@@ -1,133 +1,160 @@
-Return-Path: <linux-kselftest+bounces-8393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8394-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 151EC8AA7D3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:59:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E26AD8AA7D5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:59:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A0E9284393
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 04:58:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B0B91C22476
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 04:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81AC8F40;
-	Fri, 19 Apr 2024 04:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55AFBA50;
+	Fri, 19 Apr 2024 04:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xwLOfr0W"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jZQsci3R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D434522E
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 04:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F548F5B
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 04:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713502735; cv=none; b=AU5qodI+9ZvFleCvdRyxTKyjopJrHdAzqnoJwwPmyXcSZCi2B0/ZOC+Awk/On2F3BN3Pl77OipDjlPzRL/3unri3qMhKD0TI1hooBcKzHY77aKNpGddsjUMFk3GUTiJSAER8GDJmDxp5FWMuwN0HisXibnKAn4bxObbOQVhI0Kg=
+	t=1713502737; cv=none; b=E6wRLu3YgRmklMa6NloDRsoNPi8erQIbf1NR3hP7lBybipIAWcwm5EpbE8dKs/DeW+eh6zGMOHf1VKU0ORWjYYJ0u3vavTwnGLvph/DF3+VvkQgEfKopRSgcs3L17eQ0pnol8l21wm2N9karHWQAymu2XT9gNZSDnveQDx7QDnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713502735; c=relaxed/simple;
-	bh=oA3XEXRaqWJt/I5ZhRUCDMDYPTw6smg6NSBazQ0aYTY=;
+	s=arc-20240116; t=1713502737; c=relaxed/simple;
+	bh=z0koi5ss+vsVHghpIpH7SpmThNHdhFIZ5FPxPPwBJ9I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AcViCaI8KkbPDDWFSC4Gi8qul/xqviRPh3iPGAYopK/5xe3v5INC7PngUKtK8fO07OKI0FNX4JCnBtWFvyCGJaTh1D4QX+YahC/xKcsHWsC/grljHnH4nvoPOxMR4Q5mnGUrz5hk8Pw0DWlhNh3LhqjeiF/fZBiyAdq8zKSWIUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xwLOfr0W; arc=none smtp.client-ip=209.85.160.181
+	 To:Cc:Content-Type; b=ov3LpvR7CrXMV6DEbtIgAUtE3RTm5a4gfU05yjHosxUCDAIywZruCUax5tXGIBjWwcqAnUQsTxQDd5Em7pSxIEHeA6dehqrM/iKbiv1oCQQhZU36qgmIqkUIizXq1SvRNoHn3WmVuQ5wscTfuxPRc5/P0YAuUbm9JRGFx+ExDTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jZQsci3R; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-434b5abbb0dso141121cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 21:58:54 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-436ed871225so142841cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Apr 2024 21:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713502733; x=1714107533; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1713502735; x=1714107535; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GNEKbjGkHnYYSm5QTwWiK+sxeHw2gsDFaNZQVygQsGU=;
-        b=xwLOfr0WTbhB6fZwXTzQXW3+7O5i0//C3Y1DxwrLRJ124faeieBHY0POh2tMEFnjN9
-         8nh80/6yT+DDiJTPIgF7MtUju3C/BHLPeYKW7idvKYyMQ2iSo4y8xQcbK4iTSs/gT9ES
-         OgJx0+Nf3sM0bx1h+N/zMhu7t4A2NO7aKalQNHeooBDaPA8W5m4fjOat2DDu+Jrp2Fbt
-         +Ej0PfuvivatCB2GSNLMfE9GnD5pDGenKoc2lWCM7E2A9JSc1Zi3Eto6z9FUvqnyoGEx
-         HAIZhzD8fnupUDyjV1vmy9LdiXvNRoRKopzZYJ59439XBLVVfKQNH7xCofcBs1bH7MrM
-         XLzA==
+        bh=lg2zRPimmnMEi7heBKGKFMqA/gIf5bCR+FfKa4gTmfA=;
+        b=jZQsci3RblzJloY81F7qrJC/YjiGOEuywQrPlHqpOGflAYIjzZBT4yqAmou9TgNdbZ
+         fcEiEGSeJnMEsAsbuR7NE5BCc/Pd6lBt3a0+W55+MjN+TcdzJNsjTaRHFHQ17Li9sT0x
+         I242OO7O7c5h4alOTD4tPwBc5gLL+OvLUaBfH+aeE+bMZnZ2yDAlOb3xZrSCsjZrXwCH
+         Z01Hvq0iLFZQTKVyhhARFFpwQWiz5mUuxrV65OkHhPPCV/HJCRuFseCsZsoVK46tpGCv
+         PKmv/giUnNIFxfQK7dmMvXvgooZTRHQts1C/kV50gG9UDnGHN/igsRV4UOeEtFxYBafa
+         sZHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713502733; x=1714107533;
+        d=1e100.net; s=20230601; t=1713502735; x=1714107535;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GNEKbjGkHnYYSm5QTwWiK+sxeHw2gsDFaNZQVygQsGU=;
-        b=cx8xUKDGTabR+IiWU9yQqF+9v6ipD/ByYr33mHzIAkdqH9rh2HGV+Py/+rjCq9RrXE
-         tM5hV5EYDaKQOoP3Xm+RFe90Dvn3m+Z+o6ykTZG4al+2Hfo9+fBIw29uqVvS6qesgbJe
-         CnJg3Y0UkCcx9fmdSASqAes4J3hVIZ+nqkRPW1HCMJlidb6zXTZVM5/f2alkSc5OukwS
-         w2cbw66oCUHWR3YnxZKacbCkXlsPOISfdtQjN2+my0EA8A/roUnkpg6gVE04nGrwwq5D
-         hRuOkUrD9K+5EguUc23GcLXFcsARX4Djfen1D3e5tYzGW76MTk/ptb5IRTxrEsYTVcyM
-         tHGA==
-X-Forwarded-Encrypted: i=1; AJvYcCURbed8gENFo8+o8y7gdcta7rGOzsKH50z83YtFxMkS8ddMllpOgKCjrfhgu14hJgwt0DeSPXJOQjUsreLdV4j1cHJJajSkciYQt8MfpOBM
-X-Gm-Message-State: AOJu0YzpUimwCw7Lbr5PaibX49JuO+E+EVngXhmaEwQixy1k5IrD9cVM
-	TWTdhvmBnZlcWhBO30HY8yNji5stx8tmZSJwN68tUzsG6nY06BsSxVytl5NP40nxi4SXLvIdXtc
-	p2j/wfknzikmLtLKZDkhGRfKkRG5X3dVWCGoi
-X-Google-Smtp-Source: AGHT+IFJCCs7RE2v/lCajru437Sglk3XPRi1WKbCas/hsQW1Op5YytNMbFL+1ff2t02JnWF/uqWhYobMk8XU605Fp6w=
-X-Received: by 2002:a05:622a:2d2:b0:434:7926:b8fc with SMTP id
- a18-20020a05622a02d200b004347926b8fcmr149141qtx.5.1713502733088; Thu, 18 Apr
- 2024 21:58:53 -0700 (PDT)
+        bh=lg2zRPimmnMEi7heBKGKFMqA/gIf5bCR+FfKa4gTmfA=;
+        b=DQH7mCZp/Qc1x3TX/oLgNWJUl8gMUUfYCdIdSkhyfrWEHSnmDIhrDGxWUFmElEV1Ii
+         mc6wIHti1GdUVjn7a9F6OS/sly9B5Gy6MUi3ZCAEXj2dtvaywAo+IoDPzGSjzqFpL7Ie
+         DCRy1B9qi5m0T01FFYzdgvxifSDSwfRW0zA6t2Za9PIL92M6gGPA/fcXkh1roiyAGkXh
+         rjxhxgEOH1of3OyF79l/9In6zE3+XRBS9P0hTlug9Vi15axywZbGVgQJq08zRhWk0s4p
+         /Mt6dVKWUE0MsfCBPPhzeOFqSn2XxSCcVqqo3pImOLPBzYShHpXRA9xS61dpULn4HZfF
+         roKA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfcRVBg7M17t+EaV+swENM/9cslhLFGhIG+MZDV41ZzDSPOex/EY5qV1Cwn9J2QGTZpDKU9ye06kPp5x4N98YURiiEitkg5feFecR2S8hJ
+X-Gm-Message-State: AOJu0Yw7sLLQgRA5VDDSqSZ4RtRazvSTEwIPXdk9lVl5XNJqU0SKTe+q
+	vHN5bEvLra9KOYXWeeblSfEnHhLIOUuQ8WhBrsEqAn4cmbTspWZEHC9KyUjLpqrXKh0mFJWVGk7
+	TtQfSRYAzzyjUlU7rDiPn6GxuSqGCPMV6+kbP
+X-Google-Smtp-Source: AGHT+IEtA4+CpARfB5vsmh3tcDAFtCecqb318nZ1xGMNN45xDP9fukg8WpYQrN3dnZW/45r+OVJ5eg1lH1FLEzj/8fM=
+X-Received: by 2002:a05:622a:181e:b0:434:3688:f093 with SMTP id
+ t30-20020a05622a181e00b004343688f093mr100837qtc.27.1713502734921; Thu, 18 Apr
+ 2024 21:58:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418210236.194190-1-wander@redhat.com> <20240418210236.194190-2-wander@redhat.com>
-In-Reply-To: <20240418210236.194190-2-wander@redhat.com>
+References: <20240418210236.194190-1-wander@redhat.com> <20240418210236.194190-3-wander@redhat.com>
+In-Reply-To: <20240418210236.194190-3-wander@redhat.com>
 From: David Gow <davidgow@google.com>
-Date: Fri, 19 Apr 2024 12:58:39 +0800
-Message-ID: <CABVgOSmBaxc+ZLt8mUYiHSUsrLWDHK=uj73MfyZtghrm3vj8yA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] kunit: unregister the device on error
+Date: Fri, 19 Apr 2024 12:58:44 +0800
+Message-ID: <CABVgOSncx1eS_8EWsNkoDOj+TaNsaW8MpjG8XaFY2Q8JXo+oqQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] kunit: avoid memory leak on device register error
 To: Wander Lairson Costa <wander@redhat.com>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Maxime Ripard <mripard@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
 	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <linux-kselftest@vger.kernel.org>, 
 	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <kunit-dev@googlegroups.com>, open list <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c2352306166bf15c"
+	boundary="000000000000dcb98506166bf1d6"
 
---000000000000c2352306166bf15c
+--000000000000dcb98506166bf1d6
 Content-Type: text/plain; charset="UTF-8"
 
 On Fri, 19 Apr 2024 at 05:02, Wander Lairson Costa <wander@redhat.com> wrote:
 >
-> kunit_init_device() should unregister the device on bus register error,
-> but mistakenly it tries to unregister the bus.
->
-> Unregister the device instead of the bus.
+> If the device register fails, free the allocated memory before
+> returning.
 >
 > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
 > Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
 > ---
 
-Nice catch!
+Thanks.
 
-Reviewed-by: David Gow <davidgow@google.com>
+I'm not sure this is correct, though... Shouldn't put_device() free this for us?
+
+The documentation for device_register() says to never free a device
+after device_register() has been called, even if it fails:
+https://docs.kernel.org/driver-api/infrastructure.html#c.device_register
+
+Or am I missing something?
 
 Cheers,
 -- David
 
 
->  lib/kunit/device.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  lib/kunit/device.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 >
 > diff --git a/lib/kunit/device.c b/lib/kunit/device.c
-> index abc603730b8e..25c81ed465fb 100644
+> index 25c81ed465fb..bc2e2032e505 100644
 > --- a/lib/kunit/device.c
 > +++ b/lib/kunit/device.c
-> @@ -51,7 +51,7 @@ int kunit_bus_init(void)
+> @@ -119,10 +119,8 @@ static struct kunit_device *kunit_device_register_internal(struct kunit *test,
+>         kunit_dev->owner = test;
 >
->         error = bus_register(&kunit_bus_type);
->         if (error)
-> -               bus_unregister(&kunit_bus_type);
-> +               root_device_unregister(kunit_bus_device);
->         return error;
+>         err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
+> -       if (err) {
+> -               kfree(kunit_dev);
+> -               return ERR_PTR(err);
+> -       }
+> +       if (err)
+> +               goto error;
+>
+>         kunit_dev->dev.release = kunit_device_release;
+>         kunit_dev->dev.bus = &kunit_bus_type;
+> @@ -131,7 +129,7 @@ static struct kunit_device *kunit_device_register_internal(struct kunit *test,
+>         err = device_register(&kunit_dev->dev);
+>         if (err) {
+>                 put_device(&kunit_dev->dev);
+> -               return ERR_PTR(err);
+> +               goto error;
+>         }
+>
+>         kunit_dev->dev.dma_mask = &kunit_dev->dev.coherent_dma_mask;
+> @@ -140,6 +138,9 @@ static struct kunit_device *kunit_device_register_internal(struct kunit *test,
+>         kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
+>
+>         return kunit_dev;
+> +error:
+> +       kfree(kunit_dev);
+> +       return ERR_PTR(err);
 >  }
 >
+>  /*
 > --
 > 2.44.0
 >
 
---000000000000c2352306166bf15c
+--000000000000dcb98506166bf1d6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -195,14 +222,14 @@ wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
 ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIDKFdpbd3X+mI8udaeRkZkAW9kgv8i6ysBLaKbXlu2QJMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDQxOTA0NTg1M1owaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIL56kAejH7/ZrhvsQs2CvaNGqDJhYdmbj9mUIp6iiBBdMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDQxOTA0NTg1NVowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAuLTS2
-HB1bEjmny9QwYuaHYcxLi/UPxhiJ6ZBYwbN5S5yqkTPHVoI6hHiv5oTDcyXyf3Fk3HxVafufbbIp
-Cv7XPrfPWYhN1CKOBzyKHHFEwr7HpzbJqgDsbxTr9fMDbapHPN68E1+gRB5M/Gsg9eJDhKNaQPlU
-JX+BuIYDVVNcEwjT0hm2TzuVuOa/cbAWdc2gcQzgZHWFy+kfY2AoOoiAS7UrNGweh/AGb0daUvf6
-xankVUctErwtJKqrJgFd/EBCuErez08c6Kq/uzfP84R5LWep/pDaXj7RBb+pK1iuksUvFrCNxiJt
-g73tmZ3HGRh0FvGGfPA+cbAvfEW9wJg/
---000000000000c2352306166bf15c--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCMlSIl
+qvIYPGSTeWbOGP9HioRXuIlV1MeLtwr9/wizSBDP5NK6mFFQP21ln8mti18jst1QbLlyRi/DQFMx
+dcWhMDjMOUyeWiiYtLC6IpBIGj6ZgjspyyowioY9ETaJvH70iAZcbLCPE8G9pnckSzPrKZAtkMEr
+EnoxKyPSCLpC+4hPXEvvZiURVOG6u+8BIWw1YCCg46xPXBpqfov1xDOEFTNd5p4kaSG5su6HT6px
+oS3s8niNFKaOmGiOrqncl6xjCOGySLNLXOQbJ6xv/sH6O9oJePQhA0RyqwhvzxqrEErGF5T0ZNLW
+xOarLOSdri8JNsHw0zm/VTYiJ34OehQ6
+--000000000000dcb98506166bf1d6--
 
