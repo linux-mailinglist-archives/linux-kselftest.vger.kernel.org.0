@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-8460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD1258AB339
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 18:18:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C75A8AB34F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 18:26:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90E371F23242
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 16:18:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D19E1F22B1C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 16:26:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0E8131180;
-	Fri, 19 Apr 2024 16:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07F8131180;
+	Fri, 19 Apr 2024 16:26:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="O8L8D7FD"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Lo39iPXb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A92130A5B;
-	Fri, 19 Apr 2024 16:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29ADB2AE90
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Apr 2024 16:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713543521; cv=none; b=SkkR65gDiN8aoBPTNwMGNevkyciu/ON5A4bTAVabxPcMtLxP7nMnLdQSMhqc4sb5VeBNiUj588YpBLHru0CFJiULYQttzEtQLsTQ7QleRUReYJVVdb95x/Vj5DXpF+ElLZzOAltPAWTVwY9B9jeIbbY5PoFFl9quFcSrFiEE7FI=
+	t=1713544015; cv=none; b=V29XIvRgPJLrsCpxarIEykMS4BbyCHHCyws4SJtA7h9bbnCMcfcR7h8XsdnitPgVnGwqPR+UBsK+8am2g2A86lWmTRVFM56A3XMbkPCyU6VghvGJzP/0XH2ewHipBKcvDbTWXNTIiFDFz82yx74pHaiY/aKkUg+NgMK/i9+/Yck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713543521; c=relaxed/simple;
-	bh=d5n73mg0TsW5GuosMrClZ4WiLXJso87FcN0NbBIHvS4=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=bg+iT/TQzxNLGwDBbxRJFueC9gPb9GD938qV+m3MLjJL4KWG2IaHPUfZSufF6EqFIfWT1S+mt5XCHoQhCUvTRo55c6L3a8l23dmLR0hZ0WShc2PwfRp64U5VZcdmKh8TKo39/HuKzwr4fXOqH9Ij23tezOocX0JJ+zieKkNtRus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=O8L8D7FD; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1713543503; x=1714148303; i=markus.elfring@web.de;
-	bh=cp7wx4staeqTlQLIoJHFIJDuZ7q4wbooJhXwZ3E13aI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=O8L8D7FDvRzDbQx8Uv7WkfIulajzVOibFPeUxPDc6Xs2LXI4t1algojKdWOz2YHy
-	 1eTWEDvYcWXwM1UCsco8RPjsUsv+9tR2X/wu0s+7XQ1sd/ZMYmoNFh5hVNcCVqeyJ
-	 s/p9VaWAyXAetjaXLMfUB0YlS44SZHk8VBcEDQLfU6S0/FRWAsFarlIL3dXfPmN/1
-	 UT3CJAbBoNAio01TVgky9ssXyl2Dxv7iO8y2VFtXP0mCTHN03SDqrOsBzIIA7nJvS
-	 PRVUTPW2F3tQEgsO6XjetSf1hvsy7/YvFb2HvsbV/guLM+y7Igz37mZZAK1BPCDHx
-	 MBqAzwXwa6TCKaEqUg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MXGOI-1sDsxt1yZS-00YjnS; Fri, 19
- Apr 2024 18:18:23 +0200
-Message-ID: <4dd9babe-1e4d-46d9-b3dc-cc8978e74e5f@web.de>
-Date: Fri, 19 Apr 2024 18:18:22 +0200
+	s=arc-20240116; t=1713544015; c=relaxed/simple;
+	bh=D+wsIPoBQVcBpGYpWlOPWEl5tnQocJdK14Ye5RZEtlk=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=nFiK1/iHmAcYipo0/Dmv9qvavwWPvf0FSQKFoky7TblJjbPOwmgCmoYOTuqAD3kZc+8s9G5IoRwdzpPUjHaWtcV0+yMI70Eh5x3H9MhUrVrRxv8d5fqxQv+oXNdqEIKaUsMzY20q5+E87RRvhD8VL3ufaLhCO/8cPEPNUdDUEng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Lo39iPXb; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713544012;
+	bh=D+wsIPoBQVcBpGYpWlOPWEl5tnQocJdK14Ye5RZEtlk=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=Lo39iPXb2/C3XqF8+SzGAJ/HcRYQshoAPD8Ce+DesJH6tVyEJjizKN8nIwlB33I02
+	 JgNyg3qSRgc7mk5C9Rc4QTrLLfr9jJwu0uJGfAdOfQDs3MDei7jXG3v/LdZEpbF1UI
+	 vrlK/meGBJ23Zy7l9g9wbv8brjNPGDnPhSTLOTu+jqC73AZPl+to219oKXvp4yBLLy
+	 wC/2cP/RhteJvZmuT1usQexx06Bq8CP8IsPaf1X2+ThJ/51GOWSqQC8mb+/ErZMImz
+	 jWAR95H8vB7eLtX9EWPScAhcBVktF0FrGYS9msdJXJ2rWN5/4rtuqMZC8/08U7MyhG
+	 4JlX4EOovJ2LA==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 48F18378214A;
+	Fri, 19 Apr 2024 16:26:49 +0000 (UTC)
+Message-ID: <88265824-ae69-4250-af0d-d30eed114569@collabora.com>
+Date: Fri, 19 Apr 2024 21:27:14 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,50 +57,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Wander Lairson Costa <wander@redhat.com>, kunit-dev@googlegroups.com,
- linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>,
- Maxime Ripard <mripard@kernel.org>, Rae Moar <rmoar@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20240419132504.9488-1-wander@redhat.com>
-Subject: Re: [PATCH v4 0/2] kunit: fix minor error path mistakes
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240419132504.9488-1-wander@redhat.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, jeffxu@google.com,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ kernel test robot <yujie.liu@intel.com>
+Subject: Re: [PATCH 1/1] selftest mm/mseal: fix compile warning
+To: jeffxu@chromium.org, akpm@linux-foundation.org
+References: <20240419034350.127838-1-jeffxu@chromium.org>
+ <20240419034350.127838-2-jeffxu@chromium.org>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240419034350.127838-2-jeffxu@chromium.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:dZ1kl0cheQ9TcwOAvAzY8L/APqrmRjRzbU5lO0gAxDHka065H8N
- jaOTnJd72niJ6S/+s763D3sNhi3yfHXE2vALXIkKhaC6OW9GtLyA507HEEILJuDrQBnfPyH
- WCdA25Y5nnpALcb3Xe8hxui96dWz3pqQ1xZroX+wjBQ+LDCfueLlq+gzfeSJm9RXc+n+33o
- dFMuJ+/lPohZnkYYJq/xQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:2XhgTCe4k7s=;H2Vad0xjTrY2+MTRzxpgG+Hi6Tt
- RukFgRsyr5MMsS/DW9DZkbkG+glCdye7rzl2Bj9T2/jGLrmIOvBRqd+3DZDRb9DxsXDutwjG6
- 4leCNG4FwnsPGKTnkcOK9fTkYZSl/cY18Kk6GAP/cHDoSYRU7NLz9+rrPshf3hE+ZlukL0A99
- xRZRwH1Y2KrkI2U0BkPw7yox3ae7JBiKcpbFpefuTAt0ejo67SW7Gc5FZeurCpxa+7IY7ZuSA
- 4xxcjs5n3hspeD4a1Dv04J8rMlriYpG778RcAknu661W5gHUAYFYhosi/vvp0kP5iiKjHJ7L/
- P0MyGUcCb+ChAB759btrRTigx3vM9QWictiymqrDKAMQ3yXMpIsntjBE/7WcZki+45NWx0hZT
- K6GeTi/uqPBPPAQTos9yf7VZrjP5biuhlL/4Ho59KzMNIU0iXhU8tV+q0mwPstZNA1+Xl2K0N
- JpKRxPTaE3v1VOU+beg6Xb74fAd5ms20ehEMIO13AY5CLsyAJn5o9kd7OEaSXZaZU96Hfo/aZ
- maOStfC0x7ljsgSI88HgbKSlRS9Ephv8CANBpTsqSTocXEELgNW8c8ptAmoFwWZnTWU6mH6RP
- zJJurdqJX52FrdKRYh5MvhaKINIuvD2A4B7aX37P4k/H0DfXfpAvWmbYdO+N8caQbzTWz53ky
- 7ysAfGFZ9jsyOTE6lhQxx7iL9aIe/Ya4JJ8BWvnfliMh6BdiC7cb9Q/RPOPyQvFgkJm7Ms93r
- O4c0IA5HLELgzXCnFmxR4n7onhe6/wTmDVC/3x1l3o1p5ksPYanvsIYA1eb3oRduHBaognZa1
- u/bB0lyz03QMtDvI98B2cPNx9BD2Sdo9kHOIldYI8O4Sc=
+Content-Transfer-Encoding: 7bit
 
-=E2=80=A6
-> * Remove some changes requested by Marcus Elfring,
+On 4/19/24 8:43 AM, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@chromium.org>
+> 
+> fix compile warning reported by test robot
+> 
+> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Closes: https://lore.kernel.org/r/202404190226.OfJOewV8-lkp@intel.com/
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-I became curious how affected software components can evolve further.
+> ---
+>  tools/testing/selftests/mm/mseal_test.c | 3 +--
+>  tools/testing/selftests/mm/seal_elf.c   | 3 +--
+>  2 files changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+> index 4a326334726d..35cdae93e580 100644
+> --- a/tools/testing/selftests/mm/mseal_test.c
+> +++ b/tools/testing/selftests/mm/mseal_test.c
+> @@ -79,7 +79,7 @@ static unsigned long get_vma_size(void *addr, int *prot)
+>  		return 0;
+>  
+>  	while (fgets(line, sizeof(line), maps)) {
+> -		if (sscanf(line, "%lx-%lx %4s", &addr_start, &addr_end, &protstr) == 3) {
+> +		if (sscanf(line, "%lx-%lx %4s", &addr_start, &addr_end, (char *) &protstr) == 3) {
+>  			if (addr_start == (uintptr_t) addr) {
+>  				size = addr_end - addr_start;
+>  				if (protstr[0] == 'r')
+> @@ -208,7 +208,6 @@ static u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
+>  
+>  static void set_pkey(int pkey, unsigned long pkey_value)
+>  {
+> -	unsigned long mask = (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE);
+>  	u64 new_pkey_reg;
+>  
+>  	new_pkey_reg = set_pkey_bits(__read_pkey_reg(), pkey, pkey_value);
+> diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selftests/mm/seal_elf.c
+> index 7143dc4f1b10..b7e72f9804f8 100644
+> --- a/tools/testing/selftests/mm/seal_elf.c
+> +++ b/tools/testing/selftests/mm/seal_elf.c
+> @@ -105,7 +105,6 @@ static void test_seal_elf(void)
+>  	int ret;
+>  	FILE *maps;
+>  	char line[512];
+> -	int size = 0;
+>  	uintptr_t  addr_start, addr_end;
+>  	char prot[5];
+>  	char filename[256];
+> @@ -136,7 +135,7 @@ static void test_seal_elf(void)
+>  	 */
+>  	while (fgets(line, sizeof(line), maps)) {
+>  		if (sscanf(line, "%lx-%lx %4s %*x %*x:%*x %*u %255[^\n]",
+> -			&addr_start, &addr_end, &prot, &filename) == 4) {
+> +			&addr_start, &addr_end, (char *)&prot, (char *)&filename) == 4) {
+>  			if (strlen(filename)) {
+>  				/*
+>  				 * seal the mapping if read only.
 
-
->   as I was alerted he is a known troll.
-
-I would appreciate if this interpretation will be reconsidered somehow.
-
-Regards,
-Markus
+-- 
+BR,
+Muhammad Usama Anjum
 
