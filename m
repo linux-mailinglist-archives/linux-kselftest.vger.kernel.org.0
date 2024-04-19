@@ -1,55 +1,54 @@
-Return-Path: <linux-kselftest+bounces-8422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7EE68AAED5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 14:52:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3150D8AAED8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 14:52:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1241DB219EF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 12:52:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E3B11C218AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 12:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A7E85631;
-	Fri, 19 Apr 2024 12:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C698565F;
+	Fri, 19 Apr 2024 12:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="b7nsP3Cw"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="g6vcS7Zh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1794D137;
-	Fri, 19 Apr 2024 12:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8642C8563B;
+	Fri, 19 Apr 2024 12:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713531129; cv=none; b=HG7hR8kiL4EtxcvDIpaiehSarx0b7WKqDGGjfCkOfY1yzgto1eB0WMIDkMfZNTqH+nrtIjifU3NC4cX2JWpYPHVt8cmld9yq4vr63fW8AxW/lxljJModIeXP9Z3dYED7RYk2ujDiVSMsObKUxcMSSuW6anTj7LnsFTZAmIbyvVo=
+	t=1713531174; cv=none; b=uZKeYNz+7uD7oUBPR8Vl4KhFxPWnWQHnhj31I4U0dvbCpilb97Q6ZmRtqNgPz8MJtLL5ovaIW8jgtdImYMjHNJIzWs/TUldPSQ81+BnjoUFNSxxyUAuobrsg/xefdR0Rom124kRehBV2fNPnQpsf890Et5YopBO372e83DCRZEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713531129; c=relaxed/simple;
-	bh=Wp6p4pM7sMSjMzfUlyba631lKZP2PLARyhUM0ofGv+U=;
+	s=arc-20240116; t=1713531174; c=relaxed/simple;
+	bh=kAT+R3YnmcMWhcay1NNgbxYxoVw+Xu9c6mKu5iN8XdY=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pItwozFnlOTBFzVj3b4e3K4xJf3na3BpdxGDUnFdaHQqJudBiTXRpRIhJi7lixuapDpzjg5t3/dbtNcgGuR2JhXlUYbLVSiqDgTTHcTXrGTOixQyXieFHvgTEVl+b8FKjea/5aK2702fHEaPwZi1f9uJLcvaACKIiH0JUtBAQl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=b7nsP3Cw; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=FPEMOOhO7eqvgXu5i5EmDRoibRTS0AZBGtY8IVlrwHtZAVHgP8FbXBwDVZf9mePZps3d2/C1+aXVlvqxl+hJBEEPpa8aVdpNlvEPzyau8aW0A1RehUPc5AQWq3an880EJP7P7p8n1jntJY39jiMnur1sKixUEhQdFJtzlpGIgGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=g6vcS7Zh; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=sSKFy7D/dmB/oF984z3LfPtEgeoxTcZItiyNrK7PKig=; b=b7nsP3Cw2KRmL4GgsuQx1NHh4F
-	ETcewaDmSBMFt6drZ/paozRNyWF7xidCKusY03ynz6AwiiskV1reJqldQ2do2SQwacZvej7QNpgUN
-	BwfJXk7LRLeSf8yMvFtTetPTNFhlLBIdHPGeIGJAWoQgl4Jz9Ig53P8iMXzjjEleX2W5qNNPXXCVE
-	OAcnZe3cbrWW+cKRE/Mil3cIiipIKM6VSNwYZTqhxoskk/AwfMmeNSRePf5vud5CegxQNXPCFSSin
-	aMIPOoF64cmus3FAh+lfGZSOS/yN/G+oAw2owJvwphdMePEmtGEDWZ1J9UCudC5AwX2po6dUu/75H
-	RLptfE2A==;
+	bh=kAT+R3YnmcMWhcay1NNgbxYxoVw+Xu9c6mKu5iN8XdY=; b=g6vcS7Zh1AnsQuf4aCy4TIJgG4
+	QkZVkwqdMSrmE+Rp8mWWNp45hj2MRLuh1yP0IfXI6Tw5b3eww3HvJfCOLE2GdyfoE1r56lQpDRmMi
+	TvmIySlB+mhTvLf16BnOh8u0MBkbp2UsWBuc3VhTHYDWO8HVKEOjMvdm/3RYGUIFh7e4V0Hx/sDxZ
+	gTXc1Juv7RhjYG7b2lAyKNHk55KuOtJuR6xz0dkY8GVBw0+dfWYrSpPET8FzLN6GSGHLbiUpe5oQr
+	5rFewUmE4gmqEVsTgxNBOgkSXswjqlY3xO9BQzZfSH2UCtkKqCGPeYy6zb9QPyQIM+D2M+p9yGE2Z
+	EtVqLqmg==;
 Received: from [2001:8b0:10b:5:c08e:a4fc:45a2:fa90] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rxnig-00000007g89-3PVk;
-	Fri, 19 Apr 2024 12:51:59 +0000
-Message-ID: <4cb5e38cfce2dbd73635177842e79d479fc2942f.camel@infradead.org>
-Subject: [PATCH 11/10] KVM: x86: Fix software TSC upscaling in
- kvm_update_guest_time()
+	id 1rxnjW-00000007gEE-2EPm;
+	Fri, 19 Apr 2024 12:52:51 +0000
+Message-ID: <a6723ac9e0169839cb33e8022a47c2de213866ac.camel@infradead.org>
+Subject: Re: [RFC PATCH 0/10] Cleaning up the KVM clock mess
 From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org, Dongli Zhang <dongli.zhang@oracle.com>
+To: kvm@vger.kernel.org
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
  Sean Christopherson <seanjc@google.com>, Thomas Gleixner
  <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
@@ -58,12 +57,13 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
  <shuah@kernel.org>, linux-doc@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Oliver Upton
  <oliver.upton@linux.dev>, Marcelo Tosatti <mtosatti@redhat.com>, 
- jalliste@amazon.co.uk, sveith@amazon.de
-Date: Fri, 19 Apr 2024 13:51:58 +0100
+ jalliste@amazon.co.uk, sveith@amazon.de, Dongli Zhang
+ <dongli.zhang@oracle.com>
+Date: Fri, 19 Apr 2024 13:52:49 +0100
 In-Reply-To: <20240418193528.41780-1-dwmw2@infradead.org>
 References: <20240418193528.41780-1-dwmw2@infradead.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-9m/obiVYTdW3eVni6Ppk"
+	boundary="=-F+ZAV3X8oAmmyvjhh9O5"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,167 +74,27 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-9m/obiVYTdW3eVni6Ppk
+--=-F+ZAV3X8oAmmyvjhh9O5
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Thu, 2024-04-18 at 20:34 +0100, David Woodhouse wrote:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KVM: x86: Remove periodic global clock upd=
+ates
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KVM: x86: Kill KVM_REQ_GLOBAL_CLOCK_UPDATE
 
-There was some confusion in kvm_update_guest_time() when software needs
-to advance the guest TSC.
+Meh, I might have to put those back. They were originally introduced to
+cope with NTP frequency skew which is no longer a problem, but we now
+know there's a systemic skew even between the host CLOCK_MONOTONIC_RAW
+and the KVM clock as calculated via the guest's TSC.
 
-In master clock mode, there are two points of time which need to be taken
-into account. First there is the master clock reference point, stored in
-kvm->arch.master_kernel_ns (and associated host TSC ->master_cycle_now).
-Secondly, there is the time *now*, at the point kvm_update_guest_time()
-is being called.
-
-With software TSC upscaling, the guest TSC is getting further and further
-ahead of the host TSC as time elapses. So at time "now", the guest TSC
-should be further ahead of the host, than it was at master_kernel_ns.
-
-The adjustment in kvm_update_guest_time() was not taking that into
-account, and was only advancing the guest TSC by the appropriate amount
-for master_kernel_ns, *not* the current time.
-
-Fix it to calculate them both correctly.
-
-Since the KVM clock reference point in master_kernel_ns might actually
-be *earlier* than the reference point used for the guest TSC
-(vcpu->last_tsc_nsec), this might lead to a negative delta. Fix the
-compute_guest_tsc() function to cope with negative numbers, which
-then means there is no need to force a master clock update when the
-guest TSC is written.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
-Untested. Thrown on the pile at
-https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/clocks
-which we'll be testing more next week...
-
- arch/x86/kvm/x86.c | 61 +++++++++++++++++++++++++++++++++-------------
- 1 file changed, 44 insertions(+), 17 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5cd92f4b4c97..a78adef698bd 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2488,10 +2488,19 @@ static int kvm_set_tsc_khz(struct kvm_vcpu *vcpu, u=
-32 user_tsc_khz)
-=20
- static u64 compute_guest_tsc(struct kvm_vcpu *vcpu, s64 kernel_ns)
- {
--	u64 tsc =3D pvclock_scale_delta(kernel_ns-vcpu->arch.this_tsc_nsec,
--				      vcpu->arch.virtual_tsc_mult,
--				      vcpu->arch.virtual_tsc_shift);
--	tsc +=3D vcpu->arch.this_tsc_write;
-+	s64 delta =3D kernel_ns - vcpu->arch.this_tsc_nsec;
-+	u64 tsc =3D vcpu->arch.this_tsc_write;
-+
-+	/* pvclock_scale_delta cannot cope with negative deltas */
-+	if (delta >=3D 0)
-+		tsc +=3D pvclock_scale_delta(delta,
-+					   vcpu->arch.virtual_tsc_mult,
-+					   vcpu->arch.virtual_tsc_shift);
-+	else
-+		tsc -=3D pvclock_scale_delta(-delta,
-+					   vcpu->arch.virtual_tsc_mult,
-+					   vcpu->arch.virtual_tsc_shift);
-+
- 	return tsc;
- }
-=20
-@@ -2502,7 +2511,7 @@ static inline bool gtod_is_based_on_tsc(int mode)
- }
- #endif
-=20
--static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool new_generat=
-ion)
-+static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu)
- {
- #ifdef CONFIG_X86_64
- 	struct kvm_arch *ka =3D &vcpu->kvm->arch;
-@@ -2519,12 +2528,9 @@ static void kvm_track_tsc_matching(struct kvm_vcpu *=
-vcpu, bool new_generation)
-=20
- 	/*
- 	 * Request a masterclock update if the masterclock needs to be toggled
--	 * on/off, or when starting a new generation and the masterclock is
--	 * enabled (compute_guest_tsc() requires the masterclock snapshot to be
--	 * taken _after_ the new generation is created).
-+	 * on/off.
- 	 */
--	if ((ka->use_master_clock && new_generation) ||
--	    (ka->use_master_clock !=3D use_master_clock))
-+	if ((ka->use_master_clock !=3D use_master_clock))
- 		kvm_make_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu);
-=20
- 	trace_kvm_track_tsc(vcpu->vcpu_id, ka->nr_vcpus_matched_tsc,
-@@ -2702,7 +2708,7 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vc=
-pu, u64 offset, u64 tsc,
- 	vcpu->arch.this_tsc_nsec =3D kvm->arch.cur_tsc_nsec;
- 	vcpu->arch.this_tsc_write =3D kvm->arch.cur_tsc_write;
-=20
--	kvm_track_tsc_matching(vcpu, !matched);
-+	kvm_track_tsc_matching(vcpu);
- }
-=20
- static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
-@@ -3296,8 +3302,6 @@ static int kvm_guest_time_update(struct kvm_vcpu *v)
- 		kernel_ns =3D get_kvmclock_base_ns();
- 	}
-=20
--	tsc_timestamp =3D kvm_read_l1_tsc(v, host_tsc);
--
- 	/*
- 	 * We may have to catch up the TSC to match elapsed wall clock
- 	 * time for two reasons, even if kvmclock is used.
-@@ -3309,11 +3313,34 @@ static int kvm_guest_time_update(struct kvm_vcpu *v=
-)
- 	 *	very slowly.
- 	 */
- 	if (vcpu->tsc_catchup) {
--		u64 tsc =3D compute_guest_tsc(v, kernel_ns);
--		if (tsc > tsc_timestamp) {
--			adjust_tsc_offset_guest(v, tsc - tsc_timestamp);
--			tsc_timestamp =3D tsc;
-+		uint64_t now_guest_tsc_adjusted;
-+		uint64_t now_guest_tsc_unadjusted;
-+		int64_t now_guest_tsc_delta;
-+
-+		tsc_timestamp =3D compute_guest_tsc(v, kernel_ns);
-+
-+		if (use_master_clock) {
-+			uint64_t now_host_tsc;
-+			int64_t now_kernel_ns;
-+
-+			if (!kvm_get_time_and_clockread(&now_kernel_ns, &now_host_tsc)) {
-+				now_kernel_ns =3D get_kvmclock_base_ns();
-+				now_host_tsc =3D rdtsc();
-+			}
-+			now_guest_tsc_adjusted =3D compute_guest_tsc(v, now_kernel_ns);
-+			now_guest_tsc_unadjusted =3D kvm_read_l1_tsc(v, now_host_tsc);
-+		} else {
-+			now_guest_tsc_adjusted =3D tsc_timestamp;
-+			now_guest_tsc_unadjusted =3D kvm_read_l1_tsc(v, kernel_ns);
- 		}
-+
-+		now_guest_tsc_delta =3D now_guest_tsc_adjusted -
-+			now_guest_tsc_unadjusted;
-+
-+		if (now_guest_tsc_delta > 0)
-+			adjust_tsc_offset_guest(v, now_guest_tsc_delta);
-+	} else {
-+		tsc_timestamp =3D kvm_read_l1_tsc(v, host_tsc);
- 	}
-=20
- 	local_irq_restore(flags);
---=20
-2.34.1
+So at least when !ka->use_master_clock I think the forced resync does
+need to happen.
 
 
 
---=-9m/obiVYTdW3eVni6Ppk
+--=-F+ZAV3X8oAmmyvjhh9O5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -326,25 +186,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNDE5MTI1MTU4WjAvBgkqhkiG9w0BCQQxIgQgrGapJ0XE
-BffyDPmd8OPbqHwsNxa/b8SLDOWHAgjtMtowgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNDE5MTI1MjQ5WjAvBgkqhkiG9w0BCQQxIgQg0u4p0DAg
+xQtdo/XAvVwUEWoxMLpfEioFmtcBRDQ8Agswgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCoT3r/PEj2UdGaDt+eMmxe4C6sPkatiZjO
-UBmPpNGuFW4MY4mpICVoGjEs/acDaz3h4sD8PsJ/+5B1OwTYgJ4IIECPq6WlvfOn6ku0plaSzk/B
-98iKrZbvEdoWh627bLRhpqljKfEsOTjPhL1pAQuDucd7380oRGbNnQE50ftfDzrq1kBw/g/3E++7
-qd9tswY/lyaqGAi68ACuD6QDw2JvuF5gg2rwirT+An/cLL5dgorem7YyG4IZbdb9XbIRkJNtGyzK
-R7cd295fw7DdjcoKj5+TIeIsWQnZJJMdfpdIPsRHoQrWggN+B0qoQpXldM644nvszKJRC9MGwEtH
-w20GZB6R9mkZsnxWuLCD+suGbkEy0AlSyMEbeWl/tcjKKGgFl5xyGz3RVwPlLkKzQH6tHtVHHB5O
-jY7WY7Djs7y7CEL6WLnzv5CPrM4apyeo/7m322ED8/nCX1zwpcC1C5sfjC8ZYe3IApwOJYOt/jSM
-IUUXTeJbJL4duX7pfhK9myouwBsWa0j9+qvcb5andztpRr2k/MCovltAuhhcaY7WwIUUpUP+2Q5G
-gC7hGbQysDQRcSIhTAxOCKemQxnqjgFUgWFctB0RgY0jpYwHua5L5Rh38AQFtCDnVAc2e6cAM39k
-hirdaTJc7b+Ee/HkFV7SdEODEQ7lF7Gf+Tyy1NR+7AAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCW0uPUxZzGgmtiBDmM6qS/BdSkbe3IYIXM
+pHeqKMd8qMpep+sklSkXLD5gN+o4dw9Cqa0xx3ZqRqKea4zM4A2SUGaujo9KAoF16oJkam8uQ97P
+vsnRABZ0I9WpzP0WXBlapUXdzSDr/wOrYCVI12H50iTH0HS3r8hTYJdyCPx6wp/lMC55BJrGQSdx
+tWlK70iV91ha0oow8p7beHKAwv1y5BX6VAzceXDLzPI3Xh3BH5wwn9pN1ee2lNAPc0UO7q+fJKfJ
+g+QZsCfGxhgp9LpYnct7a2mNTnaRZQWjzZ1l6AYCbXtUIhtib7RSpCKgMm7ZTzUXCvrlJUjTYWaG
+fMqWzbvoZUgDu+WVKbJ3xOl8DFnMRAK8Vx6i1rlIWu1T+VwS0Qpa9TTS4OUsGYI4SCD1IWBWFOdY
+H1frNScONgPRIQvmJIqqlE9OA0BzPLwp+zXprrP7LgH2f6sQUTxxlkueX+2KLJy8tEKQ9Sp0n0sL
+hu3RHFuNKY+RZbQ2UraHcrrqheRS6ANK1+059cpfI4wnoNSEnLHPqHku3dS7RM6fHcPSQBQ3sD5a
+fAayN7sIe0Bc1DAQD66AStZi5dV81EJG4FdCl3mkoV6eptO46YNbHx7FzIViKSU/Bd0C6pbGgSWy
+BwBETm2K7Zj4Hkwf5leVxN5lu9PeVTalyMePbZCsHwAAAAAAAA==
 
 
---=-9m/obiVYTdW3eVni6Ppk--
+--=-F+ZAV3X8oAmmyvjhh9O5--
 
