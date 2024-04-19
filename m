@@ -1,37 +1,38 @@
-Return-Path: <linux-kselftest+bounces-8406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 749C48AA966
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 09:44:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D60338AA968
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 09:44:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B4A81F21BBD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 07:44:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 932382843AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 07:44:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E9D43ACA;
-	Fri, 19 Apr 2024 07:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3482F4B5DA;
+	Fri, 19 Apr 2024 07:44:06 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9EF74D137;
-	Fri, 19 Apr 2024 07:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9579FC15D;
+	Fri, 19 Apr 2024 07:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713512645; cv=none; b=CDfsqR18KemEBGjW5ACG2fMjNQQ4GzlGipk8mH2CxcXM6MymCWTvK8UuVdvOckLA2K2GK8Sz/KpaEhgrLynty0uEEhsaloBy6eeekw6oex2NftN2RGoC4X+zaoPMgEr1aGjwfWT42J23IlDx7H9LdeODvDc4b3GmPJLzJfuMpXM=
+	t=1713512646; cv=none; b=TyiGBcfXeD84R7GlaaTeVVYkW6m0upB9NwoadIRaNIufW5pYadC1X0WAH+37WHT030HitPyxtaG34LVNu5uk4C7QqODNWI8ja1cQyjm1XqoMDJZGTYneJ14qgVtNITJSiZ1KT1/JgAF038XasHdVEnTVDefskgmL7UnWPMT/Wv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713512645; c=relaxed/simple;
-	bh=4puIi/iIsSa4ouWs2lBAfu9cJ1fC9wmjL4uk0fMNooQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GwdGsXow9Vu8vwym9uAh4NkqdnkauqJA2Jyk+xzTS0/QDPmauiL4NN4eubBwBLJBv3IjHyjIaupCcAZfATiGzT1W/iDSCmwkHK6lZ48UyuJi9XJF+nWYANQob+bJrZ8OU3e0BIx1TkpvEnbbutp+yE0N5xYrmzxNPzMyO22UFus=
+	s=arc-20240116; t=1713512646; c=relaxed/simple;
+	bh=hAY0+3UrRpRD+oKDHhysTAMhrmtmVoJ4mxOOyBbhG0g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Iee6kPKZsVGbHzBKFX8rcW5yXww4IkEnYelJhEnb3w9teaJfww92ZGR7/ZXTvf45FYaDd/VyDQ0fGQCR26vjSGjyb9ppx1LiPagRSmf0NhTQ6hFg1JtOwxZdEA83FfEd/PxHxJo/wI3GLpTAHTGuuVXdYUJvp19oW4lNx5XK+NA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E48F62F;
-	Fri, 19 Apr 2024 00:44:23 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C18F339;
+	Fri, 19 Apr 2024 00:44:26 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 93E4A3F792;
-	Fri, 19 Apr 2024 00:43:53 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D9543F792;
+	Fri, 19 Apr 2024 00:43:55 -0700 (PDT)
 From: Ryan Roberts <ryan.roberts@arm.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -48,10 +49,12 @@ Cc: Ryan Roberts <ryan.roberts@arm.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 0/5] arm64/mm: uffd write-protect and soft-dirty tracking
-Date: Fri, 19 Apr 2024 08:43:39 +0100
-Message-Id: <20240419074344.2643212-1-ryan.roberts@arm.com>
+Subject: [PATCH v1 1/5] arm64/mm: Move PTE_PROT_NONE and PMD_PRESENT_INVALID
+Date: Fri, 19 Apr 2024 08:43:40 +0100
+Message-Id: <20240419074344.2643212-2-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240419074344.2643212-1-ryan.roberts@arm.com>
+References: <20240419074344.2643212-1-ryan.roberts@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,71 +63,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi All,
+Previously PTE_PROT_NONE was occupying bit 58, one of the bits reserved
+for SW use when the PTE is valid. This is a waste of those precious SW
+bits since PTE_PROT_NONE can only ever be set when valid is clear.
+Instead let's overlay it on what would be a HW bit if valid was set.
 
-This series adds uffd write-protect and soft-dirty tracking support for arm64. I
-consider the soft-dirty support (patches 3 and 4) as RFC - see rationale below.
+We need to be careful about which HW bit to choose since some of them
+must be preserved; when pte_present() is true (as it is for a
+PTE_PROT_NONE pte), it is legitimate for the core to call various
+accessors, e.g. pte_dirty(), pte_write() etc. There are also some
+accessors that are private to the arch which must continue to be
+honoured, e.g. pte_user(), pte_user_exec() etc.
 
-Previous attempts to add these features have failed because of a perceived lack
-of available PTE SW bits. However it actually turns out that there are 2
-available but they are hidden. PTE_PROT_NONE was previously occupying a SW bit,
-but it only applies when PTE_VALID is clear, so this is moved to overlay PTE_UXN
-in patch 1, freeing up the SW bit. Bit 63 is marked as "IGNORED" in the Arm ARM,
-but it does not currently indicate "reserved for SW use" like it does for the
-other SW bits. I've confirmed with the spec owner that this is an oversight; the
-bit is intended to be reserved for SW use and the spec will clarify this in a
-future update.
+So we choose to overlay PTE_UXN; This effectively means that whenever a
+pte has PTE_PROT_NONE set, it will always report pte_user_exec() ==
+false, which is obviously always correct.
 
-So we have our two bits; patch 2 enables uffd-wp, patch 3 enables soft-dirty and
-patches 4 and 5 sort out the selftests so that the soft-dirty tests are compiled
-for, and run on arm64.
+As a result of this change, we must shuffle the layout of the
+arch-specific swap pte so that PTE_PROT_NONE is always zero and not
+overlapping with any other field. As a result of this, there is no way
+to keep the `type` field contiguous without conflicting with
+PMD_PRESENT_INVALID (bit 59), which must also be 0 for a swap pte. So
+let's move PMD_PRESENT_INVALID to bit 60.
 
-That said, these are the last 2 SW bits and we may want to keep 1 bit in reserve
-for future use. soft-dirty is only used for CRIU to my knowledge, and it is
-thought that their use case could be solved with the more generic uffd-wp. So
-unless somebody makes a clear case for the inclusion of soft-dirty support, we
-are probably better off dropping patches 3 and 4 and keeping bit 63 for future
-use. Although note that the most recent attempt to add soft-dirty for arm64 was
-last month [1] so I'd like to give Shivansh Vij the opportunity to make the
-case.
+In the end, this frees up bit 58 for future use as a proper SW bit (e.g.
+soft-dirty or uffd-wp).
 
----8<---
-As an appendix, I've also experimented with adding an "extended SW bits" region
-linked by the `struct ptdesc` (which you can always find from the `pte_t *`). If
-demonstrated to work, this would act as an insurance policy in case we ever need
-more SW bits in future, giving us confidence to merge soft-dirty now.
-Unfortunately this approach suffers from 2 problems; 1) its slow; my fork()
-microbenchmark takes 40% longer in the worst case. 2) it is not possible to read
-the HW pte and the extended SW bits atomically so it is impossible to implement
-ptep_get_lockess() in its current form. So I've abandoned this experiment. (I
-can provide more details if there is interest).
----8<---
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+---
+ arch/arm64/include/asm/pgtable-prot.h |  4 ++--
+ arch/arm64/include/asm/pgtable.h      | 16 +++++++++-------
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-[1] https://lore.kernel.org/linux-arm-kernel/MW4PR12MB687563EFB56373E8D55DDEABB92B2@MW4PR12MB6875.namprd12.prod.outlook.com/
+diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+index dd9ee67d1d87..ef952d69fd04 100644
+--- a/arch/arm64/include/asm/pgtable-prot.h
++++ b/arch/arm64/include/asm/pgtable-prot.h
+@@ -18,14 +18,14 @@
+ #define PTE_DIRTY		(_AT(pteval_t, 1) << 55)
+ #define PTE_SPECIAL		(_AT(pteval_t, 1) << 56)
+ #define PTE_DEVMAP		(_AT(pteval_t, 1) << 57)
+-#define PTE_PROT_NONE		(_AT(pteval_t, 1) << 58) /* only when !PTE_VALID */
++#define PTE_PROT_NONE		(PTE_UXN)		 /* Reuse PTE_UXN; only when !PTE_VALID */
 
-Thanks,
-Ryan
+ /*
+  * This bit indicates that the entry is present i.e. pmd_page()
+  * still points to a valid huge page in memory even if the pmd
+  * has been invalidated.
+  */
+-#define PMD_PRESENT_INVALID	(_AT(pteval_t, 1) << 59) /* only when !PMD_SECT_VALID */
++#define PMD_PRESENT_INVALID	(_AT(pteval_t, 1) << 60) /* only when !PMD_SECT_VALID */
 
+ #define _PROT_DEFAULT		(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED)
+ #define _PROT_SECT_DEFAULT	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S)
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index afdd56d26ad7..23aabff4fa6f 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -1248,20 +1248,22 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+  * Encode and decode a swap entry:
+  *	bits 0-1:	present (must be zero)
+  *	bits 2:		remember PG_anon_exclusive
+- *	bits 3-7:	swap type
+- *	bits 8-57:	swap offset
+- *	bit  58:	PTE_PROT_NONE (must be zero)
++ *	bits 4-53:	swap offset
++ *	bit  54:	PTE_PROT_NONE (overlays PTE_UXN) (must be zero)
++ *	bits 55-59:	swap type
++ *	bit  60:	PMD_PRESENT_INVALID (must be zero)
+  */
+-#define __SWP_TYPE_SHIFT	3
++#define __SWP_TYPE_SHIFT	55
+ #define __SWP_TYPE_BITS		5
+-#define __SWP_OFFSET_BITS	50
+ #define __SWP_TYPE_MASK		((1 << __SWP_TYPE_BITS) - 1)
+-#define __SWP_OFFSET_SHIFT	(__SWP_TYPE_BITS + __SWP_TYPE_SHIFT)
++#define __SWP_OFFSET_SHIFT	4
++#define __SWP_OFFSET_BITS	50
+ #define __SWP_OFFSET_MASK	((1UL << __SWP_OFFSET_BITS) - 1)
 
-Ryan Roberts (5):
-  arm64/mm: Move PTE_PROT_NONE and PMD_PRESENT_INVALID
-  arm64/mm: Add uffd write-protect support
-  arm64/mm: Add soft-dirty page tracking support
-  selftests/mm: Enable soft-dirty tests on arm64
-  selftests/mm: soft-dirty should fail if a testcase fails
+ #define __swp_type(x)		(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
+ #define __swp_offset(x)		(((x).val >> __SWP_OFFSET_SHIFT) & __SWP_OFFSET_MASK)
+-#define __swp_entry(type,offset) ((swp_entry_t) { ((type) << __SWP_TYPE_SHIFT) | ((offset) << __SWP_OFFSET_SHIFT) })
++#define __swp_entry(type, offset) ((swp_entry_t) { ((unsigned long)(type) << __SWP_TYPE_SHIFT) | \
++						   ((unsigned long)(offset) << __SWP_OFFSET_SHIFT) })
 
- arch/arm64/Kconfig                         |   2 +
- arch/arm64/include/asm/pgtable-prot.h      |  20 +++-
- arch/arm64/include/asm/pgtable.h           | 118 +++++++++++++++++++--
- arch/arm64/mm/contpte.c                    |   6 +-
- arch/arm64/mm/fault.c                      |   3 +-
- arch/arm64/mm/hugetlbpage.c                |   6 +-
- tools/testing/selftests/mm/Makefile        |   5 +-
- tools/testing/selftests/mm/madv_populate.c |  26 +----
- tools/testing/selftests/mm/run_vmtests.sh  |   5 +-
- tools/testing/selftests/mm/soft-dirty.c    |   2 +-
- 10 files changed, 141 insertions(+), 52 deletions(-)
-
+ #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
+ #define __swp_entry_to_pte(swp)	((pte_t) { (swp).val })
 --
 2.25.1
 
