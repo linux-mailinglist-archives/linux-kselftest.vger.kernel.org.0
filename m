@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-8442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2708AB224
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:40:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20C698AB231
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 17:44:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61B3BB21A10
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:40:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44C9A1C23044
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 15:44:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C62012FF73;
-	Fri, 19 Apr 2024 15:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A790413049F;
+	Fri, 19 Apr 2024 15:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jOuv7DAV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OXq2LmeR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F54D127B72;
-	Fri, 19 Apr 2024 15:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE46012FF73;
+	Fri, 19 Apr 2024 15:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713541228; cv=none; b=gTyCkhgNZyaaMKOuw3tetApnLUinXTSKrXX74TfTUjpMrKxwRsBGI0mGRHR2KOOaEh3rJ2qtqsGEqgd765CmWT/b0GCeipDCTSDCcVMBBB+Ee7s88Gw+EnbRYeeRcURqrjhg2PXsSVVL8VkFMUJRezvuOcildMldHKieMfJc5iM=
+	t=1713541465; cv=none; b=MC5f5xxllDugXNUMS0t0qNYJCIyvU+0etKl+TU8HNU7pKkd+Lr3exccYKRDi4uSmz4JehNhlO5GBefb5ohqox+oykOqKhp3IfVyKzTuXFwQni+3RSnXUYrynNNMPw75LBa1W0l0xft/EhLcjpM//F+4GnGTBEUsaXq8WarfxJcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713541228; c=relaxed/simple;
-	bh=AEa9Db21HYUQoGZhPwjxKDITrfhTcZ6zba7+bIZ3STk=;
+	s=arc-20240116; t=1713541465; c=relaxed/simple;
+	bh=lYDUng3zyDugK8BrflMA/jnRdbV5oE26tBqySkDKEiQ=;
 	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Xaq3/QkbQ001+Tb6I3f64n6758wkG+5WLIWwp7CPV3U5tWEpsB6BnaAZmkt6fr22lzcpzxs490oCxqrdmwwaFXaHgE8hcIZJ1NRFzBtALluPL2ejqAs7lm50+nftwFxv5sDk4sG7STQSmpuDUoPJ69YDm39ZSyz8kNv+kIlnfJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jOuv7DAV; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:Content-Type; b=hR6g+oAKpRQNv2x2bWq5B53GGrfFalIVanimetGikkSeEB1aBffsqe+6c9Xg3jK4VJTt52IWY1jOB3OGEDLepl2flsQ3bs9pCrk3at7gVJubrFqK7nc88mziREe/FP4uxSFTgUbiD5ICQPMmC2zTnw4wd2nIodng9XRU96jsk0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OXq2LmeR; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-418c2bf2f55so16228585e9.2;
-        Fri, 19 Apr 2024 08:40:26 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-347c197a464so1511751f8f.2;
+        Fri, 19 Apr 2024 08:44:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713541225; x=1714146025; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713541462; x=1714146262; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:content-language
          :references:cc:to:subject:reply-to:user-agent:mime-version:date
          :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPOI4f3jBnuy6s0MKt8vEVdK8XbKNvqKvZPjyoowk0Q=;
-        b=jOuv7DAVl9d7YLwN+rpwJiYvRwXkefZvseFxnxWt65EBdGtMfRkP8AsHKlkriYMSfx
-         0vLd9OIbQd895aVDS8dNymkll/87QHQSKblt42pl617wh4+O+UPKd2rmC/W7Yc0IBOO1
-         zNAEdT+FAsrKOmXGIyxE2RJjKZI5RnlajFWLVhE3y+835n98aPpTqcmAiAT/dWkCq5ib
-         VQMiSVFupQjnl55WmNPoLLqOpzgSiaK+WoTZ0vDLARp9YB6roUqEA3PfVxGMzB9onSbh
-         7/ojZe/CafKPNMJM4uWbSfpF5fGkfM97QwP5cYAOEowMh4q6x3HpiV8zaSvMoVdks4Ga
-         kDRQ==
+        bh=iwR4/zvoUZaMVzb1AoLxvMh/sYoHHxpsQAJ6TJC4TqI=;
+        b=OXq2LmeR+4Ebc4mAsKcF5EDA0S96QS2bt+sU3iwywGeoQNjaL7d2Ed2qMajVdYdaKe
+         nMPsXo9gPiusdeLVXjsyzpIvmPO0ceuD9ki7PsVJnEIXioO7gKot4M7Lle4chkp9SzZK
+         4DeCNGacdNWRNBNnr2cq49HKDQ41S6Sr3fgawZAav0ZDnJCtYXNy6Mk4zfZRD9wLxva3
+         XAt3bhSW9T+u+XM/f6cS2zfAhbSTIChQHGyH4xtDqWz2hE2gNqqCiBXjRYsHEIyjDYcC
+         W7rJn+RguP+4CaRCZeTQ355nPfD8nqTaQCHwMlRosHfDfOIz8m2SyCUQb/SqUWVFIJRn
+         If2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713541225; x=1714146025;
+        d=1e100.net; s=20230601; t=1713541462; x=1714146262;
         h=content-transfer-encoding:in-reply-to:organization:content-language
          :references:cc:to:subject:reply-to:user-agent:mime-version:date
          :message-id:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FPOI4f3jBnuy6s0MKt8vEVdK8XbKNvqKvZPjyoowk0Q=;
-        b=c98H4e+qkfvLa7cuXI70A+bQggAKhk8fIs0/s4TlFYfSxqNt/ArTsKwTUusis/oSZp
-         ak5+a+rLdCWKkUen/DHpmpI1CPNs7l2WOwVQuAvLv05OsB7K0NSZngIwllffeeApT5tJ
-         fDndfamL1MhNRJvbg5TakhdZEZDQGz1FSPY3kZ7xWIZPzt/U67QXIXcvjFJdp6bUSmGq
-         F/b20YPOROW72QaONMonl39dwXSkubWqAXWNfUXJAQqy7QIJf90C1rUigMWYXOTm+QM3
-         YbjseoiumsZ4Kyf0YLF8Rq/kwf72HT2N34XPfRG6IwFv7Nqa6sQULD3GvjGlKj+m6xQl
-         UgpA==
-X-Forwarded-Encrypted: i=1; AJvYcCXSLAYvxpO079rmBQCB+nVSCtcJ0EZ5N11qohEZOa4tTGJg8gocyqT2WV3Epp84qB1cy4f+aRlyCQn9g0QRMVHa7EzDJ+b34G/4c5GHdtDXja5w8mHFF1iifCphdt3YRKbEUsStgJza73rxmGqoUDerRhGXFfn0Nxpm+1zIfcFGwfXQG7/VuHHVSPPW6xpQQivwy6psWUzFAOoDZOGR
-X-Gm-Message-State: AOJu0YzBazFbHgZuwyLnoFgSNhE1GMhqavgG+iD9PC1H0hD7Lzmti4q3
-	kWA281ewdYHow2ZyA95oHVa2xcy5ITCfzLckyXWlXkN0dppQZ24C
-X-Google-Smtp-Source: AGHT+IEJFRsh9CvoX43K871m/lDU7m2JK6yrjHyhdC7aUpB37ShRaAvsfj1b9O46sPDf2LBsXi82uw==
-X-Received: by 2002:a05:600c:1e25:b0:419:cf15:f3af with SMTP id ay37-20020a05600c1e2500b00419cf15f3afmr361412wmb.25.1713541225326;
-        Fri, 19 Apr 2024 08:40:25 -0700 (PDT)
+        bh=iwR4/zvoUZaMVzb1AoLxvMh/sYoHHxpsQAJ6TJC4TqI=;
+        b=OA6aA/Yf2IXw4BLBeEnLA1l7Bsx+ex2nENkjfxuUqL/eMNbfCdlxk/E/azsjuzK4RA
+         EV5oQcV8XE435pTd4MTKMT4FH2Z1Td9i2+iCMt4K9jNiFXEJ6HgDPz8i1fFMx8Pms5QF
+         LCAnEx2SYu963h+2hhsp3mBErzeF4+dIOu019ebmUBDQbzWIPp70W/597tpDSqQFr/dW
+         k76OPPrhi47C73OPlikHtwb62EPNaBWeM0YnJHaPJpAmi7waYwkvSo1Mv0xQmnIe3AgS
+         2oMXsWbW5yiY4ANmQDaXA9JBGC0v2g6ncGCi3XaVtzeaz9MINeQAaGrGaQwk6TsUtsKx
+         rj5A==
+X-Forwarded-Encrypted: i=1; AJvYcCVuuCVIo6zpHMFpXzwXcqoKxV8dNlPROxiWMWMs8Q9R/FFIwmkRVJjCLWhV8S/RkpPIyaxKWJQKERYtmLTxGT1gNsEc0+TLaLf92craQk0ZoR4lOt+X/JtC18WHx/GRJ4AkIxuIoh0/LWkcrpnwFhUm7kI0QVo96KltM/MCp2/JoUbsX4Yrt2r3pLmOOIIJl06So4QryKmLvbi9md8R
+X-Gm-Message-State: AOJu0YwtoToV4A96Ryd9ZvQg5LPKP5RsEFAmRe9mjgLsvQK6pMNIkaLS
+	954gb4jLrQ6rCZjXvLjZl6nrh47H2KCBtoH3fGHiS01zl7uI8oQx
+X-Google-Smtp-Source: AGHT+IFoa4JkwAbOryKRhP1sG+WC+Z1aqdpD7RZxKj3isiQJ+N1R1tBcBqjmCln8bkMKVlDA1NqtMA==
+X-Received: by 2002:a5d:4082:0:b0:343:b5f0:f511 with SMTP id o2-20020a5d4082000000b00343b5f0f511mr1431301wrp.12.1713541462144;
+        Fri, 19 Apr 2024 08:44:22 -0700 (PDT)
 Received: from [192.168.18.253] (54-240-197-236.amazon.com. [54.240.197.236])
-        by smtp.gmail.com with ESMTPSA id n2-20020a05600c4f8200b0041884b79b81sm6868526wmq.1.2024.04.19.08.40.24
+        by smtp.gmail.com with ESMTPSA id o12-20020a5d62cc000000b00349c42f2559sm4720095wrv.11.2024.04.19.08.44.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Apr 2024 08:40:25 -0700 (PDT)
+        Fri, 19 Apr 2024 08:44:21 -0700 (PDT)
 From: Paul Durrant <xadimgnik@gmail.com>
 X-Google-Original-From: Paul Durrant <paul@xen.org>
-Message-ID: <9985611d-1e0b-48f3-8eb5-fc3e1279b5a5@xen.org>
-Date: Fri, 19 Apr 2024 16:40:23 +0100
+Message-ID: <8f793f1b-5080-4b0e-a41d-5fee769c0d5a@xen.org>
+Date: Fri, 19 Apr 2024 16:44:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,8 +80,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Reply-To: paul@xen.org
-Subject: Re: [PATCH 03/10] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for accurate
- KVM clock migration
+Subject: Re: [PATCH 04/10] KVM: selftests: Add KVM/PV clock selftest to prove
+ timer correction
 To: David Woodhouse <dwmw2@infradead.org>, kvm@vger.kernel.org
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
  Sean Christopherson <seanjc@google.com>, Thomas Gleixner
@@ -93,169 +93,73 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
  Oliver Upton <oliver.upton@linux.dev>, Marcelo Tosatti
  <mtosatti@redhat.com>, jalliste@amazon.co.uk, sveith@amazon.de
 References: <20240418193528.41780-1-dwmw2@infradead.org>
- <20240418193528.41780-4-dwmw2@infradead.org>
+ <20240418193528.41780-5-dwmw2@infradead.org>
 Content-Language: en-US
 Organization: Xen Project
-In-Reply-To: <20240418193528.41780-4-dwmw2@infradead.org>
+In-Reply-To: <20240418193528.41780-5-dwmw2@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 18/04/2024 20:34, David Woodhouse wrote:
 > From: Jack Allister <jalliste@amazon.com>
 > 
-> In the common case (where kvm->arch.use_master_clock is true), the KVM
-> clock is defined as a simple arithmetic function of the guest TSC, based on
-> a reference point stored in kvm->arch.master_kernel_ns and
-> kvm->arch.master_cycle_now.
+> A VM's KVM/PV clock has an inherent relationship to its TSC (guest). When
+> either the host system live-updates or the VM is live-migrated this pairing
+> of the two clock sources should stay the same.
 > 
-> The existing KVM_[GS]ET_CLOCK functionality does not allow for this
-> relationship to be precisely saved and restored by userspace. All it can
-> currently do is set the KVM clock at a given UTC reference time, which is
-> necessarily imprecise.
+> In reality this is not the case without some correction taking place. Two
+> new IOCTLs (KVM_GET_CLOCK_GUEST/KVM_SET_CLOCK_GUEST) can be utilized to
+> perform a correction on the PVTI (PV time information) structure held by
+> KVM to effectively fixup the kvmclock_offset prior to the guest VM resuming
+> in either a live-update/migration scenario.
 > 
-> So on live update, the guest TSC can remain cycle accurate at precisely the
-> same offset from the host TSC, but there is no way for userspace to restore
-> the KVM clock accurately.
+> This test proves that without the necessary fixup there is a perceived
+> change in the guest TSC & KVM/PV clock relationship before and after a LU/
+> LM takes place.
 > 
-> Even on live migration to a new host, where the accuracy of the guest time-
-> keeping is fundamentally limited by the accuracy of wallclock
-> synchronization between the source and destination hosts, the clock jump
-> experienced by the guest's TSC and its KVM clock should at least be
-> *consistent*. Even when the guest TSC suffers a discontinuity, its KVM
-> clock should still remain the *same* arithmetic function of the guest TSC,
-> and not suffer an *additional* discontinuity.
+> The following steps are made to verify there is a delta in the relationship
+> and that it can be corrected:
 > 
-> To allow for accurate migration of the KVM clock, add per-vCPU ioctls which
-> save and restore the actual PV clock info in pvclock_vcpu_time_info.
+> 1. PVTI is sampled by guest at boot (let's call this PVTI0).
+> 2. Induce a change in PVTI data (KVM_REQ_MASTERCLOCK_UPDATE).
+> 3. PVTI is sampled by guest after change (PVTI1).
+> 4. Correction is requested by usermode to KVM using PVTI0.
+> 5. PVTI is sampled by guest after correction (PVTI2).
 > 
-> The restoration in KVM_SET_CLOCK_GUEST works by creating a new reference
-> point in time just as kvm_update_masterclock() does, and calculating the
-> corresponding guest TSC value. This guest TSC value is then passed through
-> the user-provided pvclock structure to generate the *intended* KVM clock
-> value at that point in time, and through the *actual* KVM clock calculation.
-> Then kvm->arch.kvmclock_offset is adjusted to eliminate for the difference.
+> The guest the records a singular TSC reference point in time and uses it to
+> calculate 3 KVM clock values utilizing the 3 recorded PVTI prior. Let's
+> call each clock value CLK[0-2].
 > 
-> Where kvm->arch.use_master_clock is false (because the host TSC is
-> unreliable, or the guest TSCs are configured strangely), the KVM clock
-> is *not* defined as a function of the guest TSC so KVM_GET_CLOCK_GUEST
-> returns an error. In this case, as documented, userspace shall use the
-> legacy KVM_GET_CLOCK ioctl. The loss of precision is acceptable in this
-> case since the clocks are imprecise in this mode anyway.
+> In a perfect world CLK[0-2] should all be the same value if the KVM clock
+> & TSC relationship is preserved across the LU/LM (or faked in this test),
+> however it is not.
 > 
-> On *restoration*, if kvm->arch.use_master_clock is false, an error is
-> returned for similar reasons and userspace shall fall back to using
-> KVM_SET_CLOCK. This does mean that, as documented, userspace needs to use
-> *both* KVM_GET_CLOCK_GUEST and KVM_GET_CLOCK and send both results with the
-> migration data (unless the intent is to refuse to resume on a host with bad
-> TSC).
+> A delta can be observed between CLK0-CLK1 due to KVM recalculating the PVTI
+> (and the inaccuracies associated with that). A delta of ~3500ns can be
+> observed if guest TSC scaling to half host TSC frequency is also enabled,
+> where as without scaling this is observed at ~180ns.
 > 
-> (It may have been possible to make KVM_SET_CLOCK_GUEST "good enough" in the
-> non-masterclock mode, as that mode is necessarily imprecise anyway. The
-> explicit fallback allows userspace to deliberately fail migration to a host
-> with misbehaving TSC where master clock mode wouldn't be active.)
+> With the correction it should be possible to achieve a delta of ±1ns.
 > 
-> Co-developed-by: David Woodhouse <dwmw@amazon.co.uk>
+> An option to enable guest TSC scaling is available via invoking the tester
+> with -s/--scale-tsc.
+> 
+> Example of the test output below:
+> * selftests: kvm: pvclock_test
+> * scaling tsc from 2999999KHz to 1499999KHz
+> * before=5038374946 uncorrected=5038371437 corrected=5038374945
+> * delta_uncorrected=3509 delta_corrected=1
+> 
 > Signed-off-by: Jack Allister <jalliste@amazon.com>
 > Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 > CC: Paul Durrant <paul@xen.org>
 > CC: Dongli Zhang <dongli.zhang@oracle.com>
 > ---
->   Documentation/virt/kvm/api.rst |  37 ++++++++
->   arch/x86/kvm/x86.c             | 156 +++++++++++++++++++++++++++++++++
->   include/uapi/linux/kvm.h       |   3 +
->   3 files changed, 196 insertions(+)
+>   tools/testing/selftests/kvm/Makefile          |   1 +
+>   .../selftests/kvm/x86_64/pvclock_test.c       | 192 ++++++++++++++++++
+>   2 files changed, 193 insertions(+)
+>   create mode 100644 tools/testing/selftests/kvm/x86_64/pvclock_test.c
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index f0b76ff5030d..758f6fc08fe5 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6352,6 +6352,43 @@ a single guest_memfd file, but the bound ranges must not overlap).
->   
->   See KVM_SET_USER_MEMORY_REGION2 for additional details.
->   
-> +4.143 KVM_GET_CLOCK_GUEST
-> +----------------------------
-> +
-> +:Capability: none
-> +:Architectures: x86_64
-> +:Type: vcpu ioctl
-> +:Parameters: struct pvclock_vcpu_time_info (out)
-> +:Returns: 0 on success, <0 on error
-> +
-> +Retrieves the current time information structure used for KVM/PV clocks,
-> +in precisely the form advertised to the guest vCPU, which gives parameters
-> +for a direct conversion from a guest TSC value to nanoseconds.
-> +
-> +When the KVM clock not is in "master clock" mode, for example because the
-> +host TSC is unreliable or the guest TSCs are oddly configured, the KVM clock
-> +is actually defined by the host CLOCK_MONOTONIC_RAW instead of the guest TSC.
-> +In this case, the KVM_GET_CLOCK_GUEST ioctl returns -EINVAL.
-> +
-> +4.144 KVM_SET_CLOCK_GUEST
-> +----------------------------
-> +
-> +:Capability: none
-> +:Architectures: x86_64
-> +:Type: vcpu ioctl
-> +:Parameters: struct pvclock_vcpu_time_info (in)
-> +:Returns: 0 on success, <0 on error
-> +
-> +Sets the KVM clock (for the whole VM) in terms of the vCPU TSC, using the
-> +pvclock structure as returned by KVM_GET_CLOCK_GUEST. This allows the precise
-> +arithmetic relationship between guest TSC and KVM clock to be preserved by
-> +userspace across migration.
-> +
-> +When the KVM clock is not in "master clock" mode, and the KVM clock is actually
-> +defined by the host CLOCK_MONOTONIC_RAW, this ioctl returns -EINVAL. Userspace
-> +may choose to set the clock using the less precise KVM_SET_CLOCK ioctl, or may
-> +choose to fail, denying migration to a host whose TSC is misbehaving.
-> +
->   5. The kvm_run structure
->   ========================
->   
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 23281c508c27..42abce7b4fc9 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -5868,6 +5868,154 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
->   	}
->   }
->   
-> +#ifdef CONFIG_X86_64
-> +static int kvm_vcpu_ioctl_get_clock_guest(struct kvm_vcpu *v, void __user *argp)
-> +{
-> +	struct pvclock_vcpu_time_info *hv_clock = &v->arch.hv_clock;
-> +
-> +	/*
-> +	 * If KVM_REQ_CLOCK_UPDATE is already pending, or if the hv_clock has
-> +	 * never been generated at all, call kvm_guest_time_update() to do so.
-> +	 * Might as well use the PVCLOCK_TSC_STABLE_BIT as the check for ever
-> +	 * having been written.
-> +	 */
-> +	if (kvm_check_request(KVM_REQ_CLOCK_UPDATE, v) ||
-> +	    !(hv_clock->flags & PVCLOCK_TSC_STABLE_BIT)) {
-> +		if (kvm_guest_time_update(v))
-> +			return -EINVAL;
-
-nit: simple nested if, so you could use &&
-
-> +	}
-> +
-> +	/*
-> +	 * PVCLOCK_TSC_STABLE_BIT is set in use_master_clock mode where the
-> +	 * KVM clock is defined in terms of the guest TSC. Otherwise, it is
-> +	 * is defined by the host CLOCK_MONOTONIC_RAW, and userspace should
-> +	 * use the legacy KVM_[GS]ET_CLOCK to migrate it.
-> +	 */
-> +	if (!(hv_clock->flags & PVCLOCK_TSC_STABLE_BIT))
-> +		return -EINVAL;
-> +
-> +	if (copy_to_user(argp, hv_clock, sizeof(*hv_clock)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
 
 Reviewed-by: Paul Durrant <paul@xen.org>
 
