@@ -1,86 +1,58 @@
-Return-Path: <linux-kselftest+bounces-8399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 427568AA830
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 08:05:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB58C8AA836
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 08:07:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 364E31C20E0F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:05:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BA121F21646
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Apr 2024 06:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C929C121;
-	Fri, 19 Apr 2024 06:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73822C129;
+	Fri, 19 Apr 2024 06:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J7adLZnY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WNlDWGD6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1DF883D;
-	Fri, 19 Apr 2024 06:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F077C121;
+	Fri, 19 Apr 2024 06:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713506715; cv=none; b=ZVxw8lD3eJq0Sf2UIX4010TQCwaAcFTPsJGG3VhSlHhTg11aGjTG2iwxBn5ml4f3GhX0mu/gQNhWo5yNaMbSsda6LWHOrTrO2VlP+SSadRh7pcxeqfOoMZYb7g4MsGhzJ+Eys06k50T4d06DRoB5+DzKTN1m/QtjSBwH7FI/E44=
+	t=1713506828; cv=none; b=kxD5dF4zadK8qUOoebkK4rmt+XDhqpCy903NwFRodDd4rQO1hbGh0sSsF/SV7pVEjg548UJYb6qfDwmOwJGz9EZ1VZqJyni7iwQ9RgCUJ4hWv8LyeKzFM4IweWdOJMVBwZRxSCQaf7+UhQHclDzUY/za3WXBgsZ6gVAKW6HjBEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713506715; c=relaxed/simple;
-	bh=Xs4qN48j4cQd3Py06qFO9cZzzc7akLDHwk4EwSAaGw0=;
+	s=arc-20240116; t=1713506828; c=relaxed/simple;
+	bh=q/7us5n3dTmlIJdrg9CFZY9TJi5va1SRXgR2lP4H0mY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rCiKBJ45nFm9i6tKDdHf7EGlqcUlq5zqe6WRFp50HihOx/pzIMVPV2mjgaSMx1TQ0t1w9qZAQL2gxjWaCflZjOfBhR3VpPLIIkPgt2RizWuZvRXOHHo513gbAALW9Ikcx/HLExl7U3FNp7Ftd5CqJ6pPtbLaE3ilBXqkOiT6+ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J7adLZnY; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e83a2a4f2cso10000675ad.1;
-        Thu, 18 Apr 2024 23:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713506713; x=1714111513; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H8omKplIPAi499atqXdwcLykhK2vn2gCUsgEUak78Ic=;
-        b=J7adLZnYiivT3B3v++PaihU0adXmUVwi4dyHLHCgnrExiriMFcz0ulr2RwgqLg2p0n
-         8iX3fApuGd3o7KTViL3IMN4gbv4RuajMrw80yvOCzUjuXvRUpO5rybmYSM4qAcPzfOYM
-         AZaMXcswldTVP2QkvNw8C48BNgeh9eoFhIB2AB/3VNhZGMa/73DrzCGuZpKs2r1LflU+
-         6+ncnip08KtM5bGGOBm0VJ/NvKPHeYa3Lw/jft6LMPCh6f3aceWnJIriaC70ZF04V+vl
-         wMx04bSJo0AcaX7K/2XRNpHZ1+z+hQYAf1U0qxTrTj6tlT8PrnBVF1g9GIAA1d/Pz4qn
-         8heQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713506713; x=1714111513;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H8omKplIPAi499atqXdwcLykhK2vn2gCUsgEUak78Ic=;
-        b=Ey8X+QEQtPXBiPBjbQA3eDQpHDVIiwltVN9XKllaAs5/HrziL6HM/Cv2yD5kaftz3d
-         GGIt76eR+D8escVfcMEYDloKUiABX5O51ET6V/eF0opLt8wnYnSA2d05nZLzyTRoPpJ5
-         MN3PQLKJrJs3H2ddrSAkcYwR+NTlbjxDRTy6Gz4Ms3Lk+bsYkvcLYCrAGsv0/OnJGuQe
-         67e6BCOQEEO1lr5nTbnADXaiIEcTDCzawBgTxUTK1eqcKaZrv1QmFQtFQV486ICwLPgh
-         zeutVxDr3inqeZBi85SafrvO94nf+hJCObDeVTtz6J3gWQc0rZNqp5dh6Q/UynPk0Lia
-         TucQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwtxbzHbAveOh5FO4y8Bpt1ppuOdU8hqYxidaXDfoKJ7W9buPbcV9XU62hpvnWVUICQJR0bg9V5bEInSQSTcMHCgVQ7+1rGRbVNskkpOHNtjUjAbINXtPQAbMq9QtlGODeF+BxrfLeiImE/Fb6Qsiz/NdXBE62FnXBgTNT5H/8WIwA
-X-Gm-Message-State: AOJu0YwmDCeMrwDlAMJbMeSSFpSywvlEhBE6l3d7+xXp3j7DrUYAGqG7
-	vpKtj+V1oNQt1XMhImTwRY9mMDnM7llf3SpQ5ZwCne+4QnzXIug1dTPXCQ==
-X-Google-Smtp-Source: AGHT+IFIfVBfVza+5cuWpXb6ItwjPh2irMimhA5vYrc6K6X0+e0Mmr8f3XZMvdKNkb+BsERhPo0GeA==
-X-Received: by 2002:a17:903:11c9:b0:1e1:214:1b7d with SMTP id q9-20020a17090311c900b001e102141b7dmr1140762plh.61.1713506712987;
-        Thu, 18 Apr 2024 23:05:12 -0700 (PDT)
-Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::5:fbcc])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902f54a00b001e61d87e4aasm2529638plf.185.2024.04.18.23.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Apr 2024 23:05:12 -0700 (PDT)
-Date: Thu, 18 Apr 2024 23:05:09 -0700
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 09/18] bpf: allow struct bpf_wq to be embedded
- in arraymaps and hashmaps
-Message-ID: <4y3abjilpoamebie7gmgn7cvs2s6m2eq3asd3huuw2xenx5fgp@lwyzs3ghxevp>
-References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
- <20240416-bpf_wq-v1-9-c9e66092f842@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QErT8QvQ+5Ul7XRg7jmhlZS4glxBy2XJMN1ThSNIhnGVkEskMyamzAX3T9l9eKqo7iYmt4yFieBC2R78L2dfWZ19092IarjYGRy0C2+LTv5cTDFbzN44qDR0hmFPeyThnAViz0HqyHjPCtI5p8FaDom+XkYMzwE20YdA7EZT+zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WNlDWGD6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66657C072AA;
+	Fri, 19 Apr 2024 06:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1713506827;
+	bh=q/7us5n3dTmlIJdrg9CFZY9TJi5va1SRXgR2lP4H0mY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WNlDWGD6iNGT6PbaoXLOdz2U8frQN5uu+XH9/a305fwMcZ+YW6LM3StUJal4BnEsl
+	 zurirrLPoWLcU45cp9pIVZstKy3XZ1WNko1G5WY5kqKfkFKmVwb5mZUAHdKUO9CrL8
+	 wXrxf31NkhOdV5NLXji5TSN0G3sgcA75CnCaVXXM=
+Date: Fri, 19 Apr 2024 08:07:04 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: Wander Lairson Costa <wander@redhat.com>, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>, Rae Moar <rmoar@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] kunit: unregister the device on error
+Message-ID: <2024041949-print-cried-85fd@gregkh>
+References: <20240418210236.194190-2-wander@redhat.com>
+ <405247be-09e9-4a2d-9363-93b5862fc615@web.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,16 +61,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240416-bpf_wq-v1-9-c9e66092f842@kernel.org>
+In-Reply-To: <405247be-09e9-4a2d-9363-93b5862fc615@web.de>
 
-On Tue, Apr 16, 2024 at 04:08:22PM +0200, Benjamin Tissoires wrote:
->  			WRITE_ONCE(*(u64 *)field_ptr, 0);
-> @@ -1119,6 +1127,8 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
->  				}
->  				break;
->  			case BPF_TIMER:
-> +				fallthrough;
-> +			case BPF_WORKQUEUE:
+On Fri, Apr 19, 2024 at 07:40:43AM +0200, Markus Elfring wrote:
+> > kunit_init_device() should unregister the device on bus register error,
+> > but mistakenly it tries to unregister the bus.
+> 
+> Would the following description variant be more appropriate?
+> 
+>    kunit_init_device() should unregister the device on bus registration error.
+>    But it mistakenly tries to unregister the bus.
 
-fallthrough is unnecessary when cases are back to back.
+Hi,
+
+This is the semi-friendly patch-bot of Greg Kroah-Hartman.
+
+Markus, you seem to have sent a nonsensical or otherwise pointless
+review comment to a patch submission on a Linux kernel developer mailing
+list.  I strongly suggest that you not do this anymore.  Please do not
+bother developers who are actively working to produce patches and
+features with comments that, in the end, are a waste of time.
+
+Patch submitter, please ignore Markus's suggestion; you do not need to
+follow it at all.  The person/bot/AI that sent it is being ignored by
+almost all Linux kernel maintainers for having a persistent pattern of
+behavior of producing distracting and pointless commentary, and
+inability to adapt to feedback.  Please feel free to also ignore emails
+from them.
+
+thanks,
+
+greg k-h's patch email bot
 
