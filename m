@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DE7D8ABB77
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 13:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BD398ABB79
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 13:56:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15BFD2826EE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 11:56:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1963B2826FF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 11:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086DF2C86A;
-	Sat, 20 Apr 2024 11:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725A8374F7;
+	Sat, 20 Apr 2024 11:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYzqeTsN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brDM3Iu3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D488D17584;
-	Sat, 20 Apr 2024 11:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497C417584;
+	Sat, 20 Apr 2024 11:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713614205; cv=none; b=VIVSniwfOQvD7bWg8HICUUQZQJ/tJWj+eBnK/q2whsksBOBkJ3/rePiJyhHlQGeXTmRZhwi8eaLwe7M5MssYnfGZiX4REWMdS7Hlex9oMGwo1Hyqybdw8VZMRXG5vLlcnrJDlZPqmoL7uaISGrHCLpD6X46v7CIRlUCLLHaKwnY=
+	t=1713614210; cv=none; b=IGnxI7KxTFDVZHhJUhCLpN4I9S00TcCfdbHVlSzK0zrbVSrefdKFiGvpOdFgvI7CUw19wcQiWbRwkQyWl42NzYt1S0H86ZSPtpO6W17DtWdBQ7Y3+R2TINklVRBp11mIPTmR4dqAUneO0ec1auJCufwqkvA0jfpq24z7CDBgOxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713614205; c=relaxed/simple;
-	bh=YokjWLbOM68ZNxD/zFddfKnH2yFKGoD4M611tv+Xno4=;
+	s=arc-20240116; t=1713614210; c=relaxed/simple;
+	bh=jrl1Q8k60ciLPsX20sgnJKGF7MqpxZTGU0gS0o+suss=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZHswddHDCHvzL82LocXgI+6p9d7q508zofWFzWy7274q14+S3Wa+T0LNp7SB2DhTIwYJSzGWmDGtHl94inpcboskt8KwssjVxVCMrEBGlplaqpLC+vIIhuytgW1X6WHWThmiqygizE/+utDoqPJBV+bI6K88nvIdYfJh1SnF2DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYzqeTsN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F7B3C32783;
-	Sat, 20 Apr 2024 11:56:41 +0000 (UTC)
+	 MIME-Version; b=FCIKF3F9iJB/x9oAtEbNTM4gzoXw/rVuWjD+YOGmtxy+8K9R1lann1shcFMDRJWyraEbAuk06E3lYlF0g8dd/JBrgq5Fn/QK0h/HBcHe1mjZ0UgrA/zcd6Vr/4ch1R7BEGKbKEVDwKFTh9MuYFuxyNR6CmuGKTlz5nL+KkHWLA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brDM3Iu3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2846C116B1;
+	Sat, 20 Apr 2024 11:56:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713614205;
-	bh=YokjWLbOM68ZNxD/zFddfKnH2yFKGoD4M611tv+Xno4=;
+	s=k20201202; t=1713614209;
+	bh=jrl1Q8k60ciLPsX20sgnJKGF7MqpxZTGU0gS0o+suss=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KYzqeTsNN+QOe2vsdjx+o8EfLSw+nILcefcLSavlUlXgbHgTW+apjW01evvlGiiew
-	 QPqHkdbPiVRBdBMN2Y+vjd+6G7gJkusEr19Q1tv/wvSA1q4Ez0gUNyvlZ9axdTulnS
-	 jVefUhJgfd525zACHadxuvjuF6evipLm2IuzVGudvaJS5pU2sl50TcqgqLld6S1b94
-	 rlXcvLUpmDKC3211JtWDlRAF4TRRBsC+4Xq0h02XJdL4zXytnoKqYX5X33H4y67ZQA
-	 sM8STvYsmwM6JDikti1SmF3a3EjY8TXdGG0OJTY/ABE28HXs5RBMNFzpayz3/SU5+q
-	 x28Jz9wcY4adw==
+	b=brDM3Iu3VOoPmXI82QpJhkyYbOZli5sKX6vdrbho5Z3ONcU5fXmDbh0CS9aVYvhzA
+	 4mrCLdTrtzVQBSAKsc3y+9bxZma6f3nqp3/J8QBFAmfuyXJ+Q4FI/EAZRvKNyAwqub
+	 WSCQaZrvX2+hn56n7E2OC8UtblAWp6yMEkUHX3cam3aylMxlwZmY0I1exa7t7MwBZs
+	 EhNOVaO5/a06p/oqAjXXvROffvhDabubo4od8FukkXWIb7O2194toF25CDibr3R/LZ
+	 viKMP5mFFcQPFNfKUhnxs/K0LmyiswDyUwmFwn81gAcY7AU3Te4YPel1h88jYfzfvq
+	 QQ5VkD2Z3Wfuw==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -60,9 +60,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next 3/5] selftests/bpf: Use start_server_addr in test_sock_addr
-Date: Sat, 20 Apr 2024 19:55:41 +0800
-Message-Id: <05e46352d9ff930316119b349e43a17241497022.1713613543.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 4/5] selftests/bpf: Use connect_to_addr in test_sock_addr
+Date: Sat, 20 Apr 2024 19:55:42 +0800
+Message-Id: <4679faffe1366ea9924b1027662b7dc09bf1a4de.1713613543.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1713613543.git.tanggeliang@kylinos.cn>
 References: <cover.1713613543.git.tanggeliang@kylinos.cn>
@@ -76,126 +76,74 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Include network_helpers.h in test_sock_addr.c, use the newly added public
-helper start_server_addr() instead of the local defined function
-start_server(). This can avoid duplicate code.
-
-In order to use functions defined in network_helpers.c in test_sock_addr.c,
-Makefile needs to be updated and <Linux/err.h> needs to be included in
-network_helpers.h to avoid compilation errors.
+This patch uses public network helper connect_to_addr() exported in
+network_helpers.h instead of the local defined function connect_to_server()
+in test_sock_addr.c. This can avoid duplicate code.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/Makefile          |  3 +-
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- tools/testing/selftests/bpf/test_sock_addr.c  | 38 ++-----------------
- 3 files changed, 7 insertions(+), 35 deletions(-)
+ tools/testing/selftests/bpf/test_sock_addr.c | 36 ++------------------
+ 1 file changed, 2 insertions(+), 34 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index f06c527eee34..2182a5af68c4 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -278,11 +278,12 @@ UNPRIV_HELPERS  := $(OUTPUT)/unpriv_helpers.o
- TRACE_HELPERS	:= $(OUTPUT)/trace_helpers.o
- JSON_WRITER		:= $(OUTPUT)/json_writer.o
- CAP_HELPERS	:= $(OUTPUT)/cap_helpers.o
-+NETWORK_HELPERS := $(OUTPUT)/network_helpers.o
- 
- $(OUTPUT)/test_dev_cgroup: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_sock: $(CGROUP_HELPERS) $(TESTING_HELPERS)
--$(OUTPUT)/test_sock_addr: $(CGROUP_HELPERS) $(TESTING_HELPERS)
-+$(OUTPUT)/test_sock_addr: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(NETWORK_HELPERS)
- $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
- $(OUTPUT)/get_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index aef297dfa6ca..5a8c5cf4ec1a 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -11,6 +11,7 @@ typedef __u16 __sum16;
- #include <linux/ipv6.h>
- #include <linux/ethtool.h>
- #include <linux/sockios.h>
-+#include <linux/err.h>
- #include <netinet/tcp.h>
- #include <bpf/bpf_endian.h>
- #include <net/if.h>
 diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
-index 80c42583f597..ca4fb142b7b7 100644
+index ca4fb142b7b7..2e29dd9d8fc3 100644
 --- a/tools/testing/selftests/bpf/test_sock_addr.c
 +++ b/tools/testing/selftests/bpf/test_sock_addr.c
-@@ -19,6 +19,7 @@
- #include <bpf/libbpf.h>
- 
- #include "cgroup_helpers.h"
-+#include "network_helpers.h"
- #include "testing_helpers.h"
- #include "bpf_util.h"
- 
-@@ -939,37 +940,6 @@ static int cmp_peer_addr(int sock1, const struct sockaddr_storage *addr2)
+@@ -940,38 +940,6 @@ static int cmp_peer_addr(int sock1, const struct sockaddr_storage *addr2)
  	return cmp_sock_addr(getpeername, sock1, addr2, /*cmp_port*/ 1);
  }
  
--static int start_server(int type, const struct sockaddr_storage *addr,
--			socklen_t addr_len)
+-static int connect_to_server(int type, const struct sockaddr_storage *addr,
+-			     socklen_t addr_len)
 -{
--	int fd;
+-	int domain;
+-	int fd = -1;
 -
--	fd = socket(addr->ss_family, type, 0);
+-	domain = addr->ss_family;
+-
+-	if (domain != AF_INET && domain != AF_INET6) {
+-		log_err("Unsupported address family");
+-		goto err;
+-	}
+-
+-	fd = socket(domain, type, 0);
 -	if (fd == -1) {
--		log_err("Failed to create server socket");
--		goto out;
+-		log_err("Failed to create client socket");
+-		goto err;
 -	}
 -
--	if (bind(fd, (const struct sockaddr *)addr, addr_len) == -1) {
--		log_err("Failed to bind server socket");
--		goto close_out;
--	}
--
--	if (type == SOCK_STREAM) {
--		if (listen(fd, 128) == -1) {
--			log_err("Failed to listen on server socket");
--			goto close_out;
--		}
+-	if (connect(fd, (const struct sockaddr *)addr, addr_len) == -1) {
+-		log_err("Fail to connect to server");
+-		goto err;
 -	}
 -
 -	goto out;
--close_out:
+-err:
 -	close(fd);
 -	fd = -1;
 -out:
 -	return fd;
 -}
 -
- static int connect_to_server(int type, const struct sockaddr_storage *addr,
- 			     socklen_t addr_len)
+ int init_pktinfo(int domain, struct cmsghdr *cmsg)
  {
-@@ -1178,7 +1148,7 @@ static int run_bind_test_case(const struct sock_addr_test *test)
- 	if (init_addrs(test, &requested_addr, &expected_addr, NULL))
+ 	struct in6_pktinfo *pktinfo6;
+@@ -1156,7 +1124,7 @@ static int run_bind_test_case(const struct sock_addr_test *test)
  		goto err;
  
--	servfd = start_server(test->type, &requested_addr, addr_len);
-+	servfd = start_server_addr(test->type, &requested_addr, addr_len, NULL);
+ 	/* Try to connect to server just in case */
+-	clientfd = connect_to_server(test->type, &expected_addr, addr_len);
++	clientfd = connect_to_addr(test->type, &expected_addr, addr_len, NULL);
+ 	if (clientfd == -1)
+ 		goto err;
+ 
+@@ -1188,7 +1156,7 @@ static int run_connect_test_case(const struct sock_addr_test *test)
  	if (servfd == -1)
  		goto err;
  
-@@ -1214,7 +1184,7 @@ static int run_connect_test_case(const struct sock_addr_test *test)
- 		goto err;
- 
- 	/* Prepare server to connect to */
--	servfd = start_server(test->type, &expected_addr, addr_len);
-+	servfd = start_server_addr(test->type, &expected_addr, addr_len, NULL);
- 	if (servfd == -1)
- 		goto err;
- 
-@@ -1271,7 +1241,7 @@ static int run_xmsg_test_case(const struct sock_addr_test *test, int max_cmsg)
- 		goto err;
- 
- 	/* Prepare server to sendmsg to */
--	servfd = start_server(test->type, &server_addr, addr_len);
-+	servfd = start_server_addr(test->type, &server_addr, addr_len, NULL);
- 	if (servfd == -1)
+-	clientfd = connect_to_server(test->type, &requested_addr, addr_len);
++	clientfd = connect_to_addr(test->type, &requested_addr, addr_len, NULL);
+ 	if (clientfd == -1)
  		goto err;
  
 -- 
