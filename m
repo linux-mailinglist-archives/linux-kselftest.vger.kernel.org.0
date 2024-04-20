@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 873038AB914
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 04:54:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 892D28AB916
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 04:54:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B988B1C20D83
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 02:54:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17DBC1F21693
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 02:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D075CFC1C;
-	Sat, 20 Apr 2024 02:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7900814012;
+	Sat, 20 Apr 2024 02:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHwS0G5K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YavDvFLG"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94E9134BF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6841426E;
 	Sat, 20 Apr 2024 02:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713581563; cv=none; b=lD/fb2WOdAESk9wsHmIDL+JTc4n3E262KZz4vPa9r6jQvTKztdSjZ2za/XQ5G6ezIO/3gIryZpRQm6j0XC2KW6GxSW0kX2uWHZrpNReEKd7vo9c6aCInCWrN+jeqz80OH3zsp4ZexGM2cu4m21Yp2rursjX9Eu0C31d8ZMC/LRw=
+	t=1713581564; cv=none; b=rZZ2ayGq2HkmUQS2FmTa+b6J64gUdt8DTAcJwoDY8zsnLaf76dPTNsrDR+Wx/Kco+xvqEWtcYLNQid/ZsqWCPgJR+0IV8UJtnWnn94mnD9BQBj7eIZOU4GbCQr6gBzktx0NXXqIDZKzjh/LUaV5ANcp1+FsbgOkHzWZYCxZVuZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713581563; c=relaxed/simple;
-	bh=2aBKBmiU5u7RKO297YDu3WlUAOmbxnH+Jhv/GmAxX/Q=;
+	s=arc-20240116; t=1713581564; c=relaxed/simple;
+	bh=SFq2qn8W6z/9AHmC2T4sUixcO6gC82gBDSfp9sejXE0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r2M1d2lfZmei54KNQfijqqEbk7CIKE38EnC84vDoLGy61/M31BA0x9pk5hHv9usSl0N3Bfacq07SgayrlvACUx+qPPDe4FXaKgdWbfCILJ0JaNcPXWmv3gIhKYo8OVNRbl94sWOV6MWcNSwtmCxvkVAcOCe/HIAFI0nUaMcC/kA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHwS0G5K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1895C4AF08;
-	Sat, 20 Apr 2024 02:52:42 +0000 (UTC)
+	 MIME-Version; b=A65oBeWryAo7UnjPJIk5QMBUdZKbEwUN01sPzOtFCuj0TYq4G3eR5DMx8WGG9c+rN7G80HAOS7iZJUFFonFEO7KVYb4KGB9mtpBhYiyTDBzHBxsLSddOR2ptQ4srYjJQFWTw+ntZurp8Y4x63mfJTIlJN+FSxd/93WpmdwrmfVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YavDvFLG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B0F0C072AA;
+	Sat, 20 Apr 2024 02:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1713581563;
-	bh=2aBKBmiU5u7RKO297YDu3WlUAOmbxnH+Jhv/GmAxX/Q=;
+	bh=SFq2qn8W6z/9AHmC2T4sUixcO6gC82gBDSfp9sejXE0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lHwS0G5KDZDTn7VRSC6yknsjAdVszHLbHMXrgZBX77MuxdIPiUP5dcUy+F8zYPXVP
-	 yY74e/J7Ccov0G4XlUtn2cpz1bsjZPsSHtF3sEyLIF6RKFxSW3JCvNaf3/lHlmGuNf
-	 FHBKCKYUZupuPL1gor2zh6P0kkik21+xq6biojrC6vTvU8ZWji940Rkb7JuNiWHfa+
-	 +IdDarxiWfVYRVsJ6Mn7U52OOcWiDHONQhBa5MS0uFKE9XA17lCc53bGjzwxNTUn2k
-	 xbNpTv/z1eMKe3MpQFp4YxxZROfjuO9xkCG390bSvs4DxK/05bGH8uLWtsBvLno19O
-	 WRszNYOFpjxGw==
+	b=YavDvFLG+UlQi74UOwJA43tnyhVqdOP7GErGLKNz+JHa76kfxz6aSfR5Vavwr8/72
+	 0Q5k6I/r6JXOBwHvDFhRHfXXXsQ7yzSCoRyxphV296iOxL5FCE4bVls066urWID2VW
+	 jwGuukcFuUM9T4ayIjmcvFVcoJMWBrsC3ggiFgmp5UO5XNQ09b+8SA1Ncxw/ysmhsU
+	 PR4DLKzCngnD9/BSK9PZr0ptvQ64NN9Gzpkmnxf6zpIupZjA7sc9wAUEeBY1TpnoN3
+	 XxdOAuos+9ansT7Gu5w3Ga8iFJjKJKP3gvq08Y44+Pm8vz0vRjf5v+lb0NT4STUKus
+	 +wawAxr/29iig==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v5 5/7] selftests: net: support matching cases by name prefix
-Date: Fri, 19 Apr 2024 19:52:35 -0700
-Message-ID: <20240420025237.3309296-6-kuba@kernel.org>
+Subject: [PATCH net-next v5 6/7] selftests: drv-net: add a TCP ping test case (and useful helpers)
+Date: Fri, 19 Apr 2024 19:52:36 -0700
+Message-ID: <20240420025237.3309296-7-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240420025237.3309296-1-kuba@kernel.org>
 References: <20240420025237.3309296-1-kuba@kernel.org>
@@ -65,62 +65,155 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-While writing tests with a lot more cases I got tired of having
-to jump back and forth to add the name of the test to the ksft_run()
-list. Most unittest frameworks do some name matching, e.g. assume
-that functions with names starting with test_ are test cases.
+More complex tests often have to spawn a background process,
+like a server which will respond to requests or tcpdump.
 
-Support similar flow in ksft_run(). Let the author list the desired
-prefixes. globals() need to be passed explicitly, IDK how to work
-around that.
+Add support for creating such processes using the with keyword:
+
+  with bkg("my-daemon", ..):
+     # my-daemon is alive in this block
+
+My initial thought was to add this support to cmd() directly
+but it runs the command in the constructor, so by the time
+we __enter__ it's too late to make sure we used "background=True".
+
+Second useful helper transplanted from net_helper.sh is
+wait_port_listen().
+
+The test itself uses socat, which insists on v6 addresses
+being wrapped in [], it's not the only command which requires
+this format, so add the wrapped address to env. The hope
+is to save test code from checking if address is v6.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-v4:
- - spell the code out a little to make it clearer
----
- tools/testing/selftests/drivers/net/ping.py |  3 +--
- tools/testing/selftests/net/lib/py/ksft.py  | 13 ++++++++++++-
- 2 files changed, 13 insertions(+), 3 deletions(-)
+ .../selftests/drivers/net/lib/py/env.py       |  5 +++
+ tools/testing/selftests/drivers/net/ping.py   | 21 ++++++++-
+ tools/testing/selftests/net/lib/py/utils.py   | 43 +++++++++++++++++++
+ 3 files changed, 68 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 579c5b34e6fd..dd5cb0226a31 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -110,6 +110,11 @@ from .remote import Remote
+         self.addr = self.v6 if self.v6 else self.v4
+         self.remote_addr = self.remote_v6 if self.remote_v6 else self.remote_v4
+ 
++        self.addr_ipver = "6" if self.v6 else "4"
++        # Bracketed addresses, some commands need IPv6 to be inside []
++        self.baddr = f"[{self.v6}]" if self.v6 else self.v4
++        self.remote_baddr = f"[{self.remote_v6}]" if self.remote_v6 else self.remote_v4
++
+         self.ifname = self.dev['ifname']
+         self.ifindex = self.dev['ifindex']
+ 
 diff --git a/tools/testing/selftests/drivers/net/ping.py b/tools/testing/selftests/drivers/net/ping.py
-index e75908d7c558..9f65a0764aab 100755
+index 9f65a0764aab..4b49de59231c 100755
 --- a/tools/testing/selftests/drivers/net/ping.py
 +++ b/tools/testing/selftests/drivers/net/ping.py
-@@ -18,8 +18,7 @@ from lib.py import cmd
+@@ -2,8 +2,9 @@
+ # SPDX-License-Identifier: GPL-2.0
  
+ from lib.py import ksft_run, ksft_exit
++from lib.py import ksft_eq
+ from lib.py import NetDrvEpEnv
+-from lib.py import cmd
++from lib.py import bkg, cmd, wait_port_listen, rand_port
+ 
+ 
+ def test_v4(cfg) -> None:
+@@ -16,6 +17,24 @@ from lib.py import cmd
+     cmd(f"ping -c 1 -W0.5 {cfg.v6}", host=cfg.remote)
+ 
+ 
++def test_tcp(cfg) -> None:
++    port = rand_port()
++    listen_cmd = f"socat -{cfg.addr_ipver} -t 2 -u TCP-LISTEN:{port},reuseport STDOUT"
++
++    with bkg(listen_cmd, exit_wait=True) as nc:
++        wait_port_listen(port)
++
++        cmd(f"echo ping | socat -t 2 -u STDIN TCP:{cfg.baddr}:{port}",
++            shell=True, host=cfg.remote)
++    ksft_eq(nc.stdout.strip(), "ping")
++
++    with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as nc:
++        wait_port_listen(port, host=cfg.remote)
++
++        cmd(f"echo ping | socat -t 2 -u STDIN TCP:{cfg.remote_baddr}:{port}", shell=True)
++    ksft_eq(nc.stdout.strip(), "ping")
++
++
  def main() -> None:
      with NetDrvEpEnv(__file__) as cfg:
--        ksft_run([test_v4, test_v6],
--                 args=(cfg, ))
-+        ksft_run(globs=globals(), case_pfx={"test_"}, args=(cfg, ))
-     ksft_exit()
+         ksft_run(globs=globals(), case_pfx={"test_"}, args=(cfg, ))
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 7347d0c0ff05..d3715e6c21f2 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -1,7 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- 
-diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index e7f79f6185b0..f84e9fdd0032 100644
---- a/tools/testing/selftests/net/lib/py/ksft.py
-+++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -99,7 +99,18 @@ KSFT_RESULT_ALL = True
-     print(res)
- 
- 
--def ksft_run(cases, args=()):
-+def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
-+    cases = cases or []
+ import json as _json
++import random
++import re
+ import subprocess
++import time
 +
-+    if globs and case_pfx:
-+        for key, value in globs.items():
-+            if not callable(value):
-+                continue
-+            for prefix in case_pfx:
-+                if key.startswith(prefix):
-+                    cases.append(value)
-+                    break
-+
-     totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
  
-     print("KTAP version 1")
+ class cmd:
+     def __init__(self, comm, shell=True, fail=True, ns=None, background=False, host=None):
+@@ -38,6 +42,20 @@ import subprocess
+                             (self.proc.args, stdout, stderr))
+ 
+ 
++class bkg(cmd):
++    def __init__(self, comm, shell=True, fail=True, ns=None, host=None,
++                 exit_wait=False):
++        super().__init__(comm, background=True,
++                         shell=shell, fail=fail, ns=ns, host=host)
++        self.terminate = not exit_wait
++
++    def __enter__(self):
++        return self
++
++    def __exit__(self, ex_type, ex_value, ex_tb):
++        return self.process(terminate=self.terminate)
++
++
+ def ip(args, json=None, ns=None, host=None):
+     cmd_str = "ip "
+     if json:
+@@ -47,3 +65,28 @@ import subprocess
+     if json:
+         return _json.loads(cmd_obj.stdout)
+     return cmd_obj
++
++
++def rand_port():
++    """
++    Get unprivileged port, for now just random, one day we may decide to check if used.
++    """
++    return random.randint(1024, 65535)
++
++
++def wait_port_listen(port, proto="tcp", ns=None, host=None, sleep=0.005, deadline=5):
++    end = time.monotonic() + deadline
++
++    pattern = f":{port:04X} .* "
++    if proto == "tcp": # for tcp protocol additionally check the socket state
++        pattern += "0A"
++    pattern = re.compile(pattern)
++
++    while True:
++        data = cmd(f'cat /proc/net/{proto}*', ns=ns, host=host, shell=True).stdout
++        for row in data.split("\n"):
++            if pattern.search(row):
++                return
++        if time.monotonic() > end:
++            raise Exception("Waiting for port listen timed out")
++        time.sleep(sleep)
 -- 
 2.44.0
 
