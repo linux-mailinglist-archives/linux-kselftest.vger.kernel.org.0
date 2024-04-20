@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8519-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8520-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452A98AB8C7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 04:36:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE348AB8C9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 04:36:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7681A1C20A56
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 02:36:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9555281F33
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 02:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A356FD0;
-	Sat, 20 Apr 2024 02:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A678BEE;
+	Sat, 20 Apr 2024 02:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKcDwhyU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fO85k0jY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3F36FB0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21AD3846B;
 	Sat, 20 Apr 2024 02:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713580557; cv=none; b=C6zXWYr/FED7CKGbXCO+BpPDP+VzB5H4MHYfGTVtVncVyXzjY93ovmozRoFEleTVMtNLklr+102NttTRuiOPci/6v9V2uMsP7oEEcIdNkc2K1+tiVJm3OkyPgSCYSttgWugRmQaFeuuWIST8m6JqsDUAM1xtRVZB6AcrdSS6kzY=
+	t=1713580558; cv=none; b=FhUCcYaKkRi7KrP7Vt+egqe149tiPgOkzYkK2HKmuh2bMgY415fqgtthQL7WArLP6rHTiS+Qun/lRxTTF7Zi1Y/69+RNygukNFuhv3J3hUfYDwJAYiWU60hYw06WqTN869s+nv6KcCGRsFqVirX6Id8Ff56qEznqMm7lPpt2esg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713580557; c=relaxed/simple;
-	bh=9s0PpQWr+QekpYHM80WK83YbLRvMu+xsycegi6JRwoU=;
+	s=arc-20240116; t=1713580558; c=relaxed/simple;
+	bh=spQJtF/HsP8yoN5+KzKsqhBojxsYdBcRuNU80ChfsUc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hlB9mJbtP0MhgZfaoIbhh2e1Au7cIb8QoQ7qvsn1v0yvPMEyoFtCPDkQkv3KDPkuoZcJ6z3klRyIvSFbTnb+ZtUGqhNq71S0N8Gcmtp+V5E8F+S5vYGgWuoITPRr/f9ns/oJHKTOT0vdGefFDMY8p8TiVTxsQv0liaYeDVpZ0uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKcDwhyU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E504C32782;
-	Sat, 20 Apr 2024 02:35:56 +0000 (UTC)
+	 MIME-Version; b=f4yPTbEnG7E6khgjgKJ4xMrE0WGgupqnamnlMLBp+KjDFQaUACOoYWmVAvNut4K1NOYaqc2zW9HsDBqKVEt3AfU8dAesmKTaTp5kV72phuvdx8hYBJvd7IkzXpOAk2dQO+NWKAJYkm6NP85reQZQ6IMKSyKv32jh2IKkCs7NjtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fO85k0jY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F575C2BD10;
+	Sat, 20 Apr 2024 02:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1713580557;
-	bh=9s0PpQWr+QekpYHM80WK83YbLRvMu+xsycegi6JRwoU=;
+	bh=spQJtF/HsP8yoN5+KzKsqhBojxsYdBcRuNU80ChfsUc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fKcDwhyUtlxyE2rnnvzoQcaDVaXqUWzTl97q1c2w5WX2M7MfJubVJawK/52xtyBSt
-	 3pGkhgA8cYX15LriihvFCyqQE1Psqi8nsBzh9cYvWb1ZmdVdZGF914N0acEwLAxnUc
-	 OjRYz+g1tvc3QU+idpW+wb0LpzwpMfARXaVpjU/f0Y4fk3MzpOdzL2WdIKQh/Z9N/5
-	 flw2bA24Kwv2wk+7yX7sSbsJaYIWYHvBpW8vD6idkVkRTkiTjCFU57iHl7t6p41+0l
-	 GRryejlcvFh6wmjci7CmymRn/t2sz8cWV5ScN3fEBjMLXJRaH5ZI0oKMV+oBhJf5QX
-	 uhwaEDnHWaMZg==
+	b=fO85k0jYNwJnRkR9WX02vYYauE+qjt0DhLo0OzWM0xkwF8zVh7z2uUittp4LBKUZQ
+	 I9wuM5Ue8gJT8Fad2LPRIYrcdcuOhO2XyQ64R9wl43hZQhrvPY94ebI95P+Rn2AgHN
+	 PnybFxwpLKMp3zi8uPndZLz+EgNVNgL3oARnEdXbGTQXriZLArfKsNffq1ts50jPa/
+	 XcZTNoaQRqBempKfJp61LiTXRHUeEattCo4+2ykR3pkwud/cfrorZx5cS6SDgokhbM
+	 kdRis06G2P0/h77TAlutqHblWGKcG2dO1dgr5cDDVzFFa16taQA2dxK7MAWBVOywxJ
+	 KfrwF4GiZT2AQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	dsahern@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 1/4] netdev: support dumping a single netdev in qstats
-Date: Fri, 19 Apr 2024 19:35:39 -0700
-Message-ID: <20240420023543.3300306-2-kuba@kernel.org>
+Subject: [PATCH net-next 2/4] netlink: move extack writing helpers
+Date: Fri, 19 Apr 2024 19:35:40 -0700
+Message-ID: <20240420023543.3300306-3-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240420023543.3300306-1-kuba@kernel.org>
 References: <20240420023543.3300306-1-kuba@kernel.org>
@@ -66,119 +66,157 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Having to filter the right ifindex in the tests is a bit tedious.
-Add support for dumping qstats for a single ifindex.
+Next change will need them in netlink_dump_done(), pure move.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- Documentation/netlink/specs/netdev.yaml |  1 +
- net/core/netdev-genl-gen.c              |  1 +
- net/core/netdev-genl.c                  | 52 ++++++++++++++++++-------
- 3 files changed, 41 insertions(+), 13 deletions(-)
+ net/netlink/af_netlink.c | 126 +++++++++++++++++++--------------------
+ 1 file changed, 63 insertions(+), 63 deletions(-)
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 76352dbd2be4..679c4130707c 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -486,6 +486,7 @@ name: netdev
-       dump:
-         request:
-           attributes:
-+            - ifindex
-             - scope
-         reply:
-           attributes:
-diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
-index 8d8ace9ef87f..8350a0afa9ec 100644
---- a/net/core/netdev-genl-gen.c
-+++ b/net/core/netdev-genl-gen.c
-@@ -70,6 +70,7 @@ static const struct nla_policy netdev_napi_get_dump_nl_policy[NETDEV_A_NAPI_IFIN
- 
- /* NETDEV_CMD_QSTATS_GET - dump */
- static const struct nla_policy netdev_qstats_get_nl_policy[NETDEV_A_QSTATS_SCOPE + 1] = {
-+	[NETDEV_A_QSTATS_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
- 	[NETDEV_A_QSTATS_SCOPE] = NLA_POLICY_MASK(NLA_UINT, 0x1),
- };
- 
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 7004b3399c2b..dd6510f2c652 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -639,6 +639,24 @@ netdev_nl_stats_by_netdev(struct net_device *netdev, struct sk_buff *rsp,
- 	return -EMSGSIZE;
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index dc8c3c01d51b..c5bb09597831 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2165,6 +2165,69 @@ __nlmsg_put(struct sk_buff *skb, u32 portid, u32 seq, int type, int len, int fla
  }
+ EXPORT_SYMBOL(__nlmsg_put);
  
-+static int
-+netdev_nl_qstats_get_dump_one(struct net_device *netdev, unsigned int scope,
-+			      struct sk_buff *skb, const struct genl_info *info,
-+			      struct netdev_nl_dump_ctx *ctx)
++static size_t
++netlink_ack_tlv_len(struct netlink_sock *nlk, int err,
++		    const struct netlink_ext_ack *extack)
 +{
-+	if (!netdev->stat_ops)
++	size_t tlvlen;
++
++	if (!extack || !test_bit(NETLINK_F_EXT_ACK, &nlk->flags))
 +		return 0;
 +
-+	switch (scope) {
-+	case 0:
-+		return netdev_nl_stats_by_netdev(netdev, skb, info);
-+	case NETDEV_QSTATS_SCOPE_QUEUE:
-+		return netdev_nl_stats_by_queue(netdev, skb, info, ctx);
-+	}
++	tlvlen = 0;
++	if (extack->_msg)
++		tlvlen += nla_total_size(strlen(extack->_msg) + 1);
++	if (extack->cookie_len)
++		tlvlen += nla_total_size(extack->cookie_len);
 +
-+	return -EINVAL;	/* Should not happen, per netlink policy */
++	/* Following attributes are only reported as error (not warning) */
++	if (!err)
++		return tlvlen;
++
++	if (extack->bad_attr)
++		tlvlen += nla_total_size(sizeof(u32));
++	if (extack->policy)
++		tlvlen += netlink_policy_dump_attr_size_estimate(extack->policy);
++	if (extack->miss_type)
++		tlvlen += nla_total_size(sizeof(u32));
++	if (extack->miss_nest)
++		tlvlen += nla_total_size(sizeof(u32));
++
++	return tlvlen;
 +}
 +
- int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
- 				struct netlink_callback *cb)
++static void
++netlink_ack_tlv_fill(struct sk_buff *in_skb, struct sk_buff *skb,
++		     struct nlmsghdr *nlh, int err,
++		     const struct netlink_ext_ack *extack)
++{
++	if (extack->_msg)
++		WARN_ON(nla_put_string(skb, NLMSGERR_ATTR_MSG, extack->_msg));
++	if (extack->cookie_len)
++		WARN_ON(nla_put(skb, NLMSGERR_ATTR_COOKIE,
++				extack->cookie_len, extack->cookie));
++
++	if (!err)
++		return;
++
++	if (extack->bad_attr &&
++	    !WARN_ON((u8 *)extack->bad_attr < in_skb->data ||
++		     (u8 *)extack->bad_attr >= in_skb->data + in_skb->len))
++		WARN_ON(nla_put_u32(skb, NLMSGERR_ATTR_OFFS,
++				    (u8 *)extack->bad_attr - (u8 *)nlh));
++	if (extack->policy)
++		netlink_policy_dump_write_attr(skb, extack->policy,
++					       NLMSGERR_ATTR_POLICY);
++	if (extack->miss_type)
++		WARN_ON(nla_put_u32(skb, NLMSGERR_ATTR_MISS_TYPE,
++				    extack->miss_type));
++	if (extack->miss_nest &&
++	    !WARN_ON((u8 *)extack->miss_nest < in_skb->data ||
++		     (u8 *)extack->miss_nest > in_skb->data + in_skb->len))
++		WARN_ON(nla_put_u32(skb, NLMSGERR_ATTR_MISS_NEST,
++				    (u8 *)extack->miss_nest - (u8 *)nlh));
++}
++
+ /*
+  * It looks a bit ugly.
+  * It would be better to create kernel thread.
+@@ -2406,69 +2469,6 @@ int __netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
+ }
+ EXPORT_SYMBOL(__netlink_dump_start);
+ 
+-static size_t
+-netlink_ack_tlv_len(struct netlink_sock *nlk, int err,
+-		    const struct netlink_ext_ack *extack)
+-{
+-	size_t tlvlen;
+-
+-	if (!extack || !test_bit(NETLINK_F_EXT_ACK, &nlk->flags))
+-		return 0;
+-
+-	tlvlen = 0;
+-	if (extack->_msg)
+-		tlvlen += nla_total_size(strlen(extack->_msg) + 1);
+-	if (extack->cookie_len)
+-		tlvlen += nla_total_size(extack->cookie_len);
+-
+-	/* Following attributes are only reported as error (not warning) */
+-	if (!err)
+-		return tlvlen;
+-
+-	if (extack->bad_attr)
+-		tlvlen += nla_total_size(sizeof(u32));
+-	if (extack->policy)
+-		tlvlen += netlink_policy_dump_attr_size_estimate(extack->policy);
+-	if (extack->miss_type)
+-		tlvlen += nla_total_size(sizeof(u32));
+-	if (extack->miss_nest)
+-		tlvlen += nla_total_size(sizeof(u32));
+-
+-	return tlvlen;
+-}
+-
+-static void
+-netlink_ack_tlv_fill(struct sk_buff *in_skb, struct sk_buff *skb,
+-		     struct nlmsghdr *nlh, int err,
+-		     const struct netlink_ext_ack *extack)
+-{
+-	if (extack->_msg)
+-		WARN_ON(nla_put_string(skb, NLMSGERR_ATTR_MSG, extack->_msg));
+-	if (extack->cookie_len)
+-		WARN_ON(nla_put(skb, NLMSGERR_ATTR_COOKIE,
+-				extack->cookie_len, extack->cookie));
+-
+-	if (!err)
+-		return;
+-
+-	if (extack->bad_attr &&
+-	    !WARN_ON((u8 *)extack->bad_attr < in_skb->data ||
+-		     (u8 *)extack->bad_attr >= in_skb->data + in_skb->len))
+-		WARN_ON(nla_put_u32(skb, NLMSGERR_ATTR_OFFS,
+-				    (u8 *)extack->bad_attr - (u8 *)nlh));
+-	if (extack->policy)
+-		netlink_policy_dump_write_attr(skb, extack->policy,
+-					       NLMSGERR_ATTR_POLICY);
+-	if (extack->miss_type)
+-		WARN_ON(nla_put_u32(skb, NLMSGERR_ATTR_MISS_TYPE,
+-				    extack->miss_type));
+-	if (extack->miss_nest &&
+-	    !WARN_ON((u8 *)extack->miss_nest < in_skb->data ||
+-		     (u8 *)extack->miss_nest > in_skb->data + in_skb->len))
+-		WARN_ON(nla_put_u32(skb, NLMSGERR_ATTR_MISS_NEST,
+-				    (u8 *)extack->miss_nest - (u8 *)nlh));
+-}
+-
+ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
+ 		 const struct netlink_ext_ack *extack)
  {
-@@ -646,6 +664,7 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
- 	const struct genl_info *info = genl_info_dump(cb);
- 	struct net *net = sock_net(skb->sk);
- 	struct net_device *netdev;
-+	unsigned int ifindex;
- 	unsigned int scope;
- 	int err = 0;
- 
-@@ -653,21 +672,28 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
- 	if (info->attrs[NETDEV_A_QSTATS_SCOPE])
- 		scope = nla_get_uint(info->attrs[NETDEV_A_QSTATS_SCOPE]);
- 
--	rtnl_lock();
--	for_each_netdev_dump(net, netdev, ctx->ifindex) {
--		if (!netdev->stat_ops)
--			continue;
-+	ifindex = 0;
-+	if (info->attrs[NETDEV_A_QSTATS_IFINDEX])
-+		ifindex = nla_get_u32(info->attrs[NETDEV_A_QSTATS_IFINDEX]);
- 
--		switch (scope) {
--		case 0:
--			err = netdev_nl_stats_by_netdev(netdev, skb, info);
--			break;
--		case NETDEV_QSTATS_SCOPE_QUEUE:
--			err = netdev_nl_stats_by_queue(netdev, skb, info, ctx);
--			break;
-+	rtnl_lock();
-+	if (ifindex) {
-+		netdev = __dev_get_by_index(net, ifindex);
-+		if (netdev && netdev->stat_ops) {
-+			err = netdev_nl_qstats_get_dump_one(netdev, scope, skb,
-+							    info, ctx);
-+		} else {
-+			NL_SET_BAD_ATTR(info->extack,
-+					info->attrs[NETDEV_A_QSTATS_IFINDEX]);
-+			err = netdev ? -EOPNOTSUPP : -ENODEV;
-+		}
-+	} else {
-+		for_each_netdev_dump(net, netdev, ctx->ifindex) {
-+			err = netdev_nl_qstats_get_dump_one(netdev, scope, skb,
-+							    info, ctx);
-+			if (err < 0)
-+				break;
- 		}
--		if (err < 0)
--			break;
- 	}
- 	rtnl_unlock();
- 
 -- 
 2.44.0
 
