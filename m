@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62E5C8AB912
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 04:54:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 873038AB914
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 04:54:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1D7D1F21D17
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 02:54:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B988B1C20D83
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Apr 2024 02:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49009D52A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D075CFC1C;
 	Sat, 20 Apr 2024 02:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AYAL/5Zq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHwS0G5K"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216EE12E5D;
-	Sat, 20 Apr 2024 02:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94E9134BF;
+	Sat, 20 Apr 2024 02:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713581563; cv=none; b=YQK/7eW1VXxohPchfUtIN/ww8E5G3Mm4eUheEckkkvFD3dJPWv2Cm1im1sPs+k7xAv/aV2QGH9jxXnTLEIGKuCCdaAz4PWFJakvhXAN3oxu/xGp0XoBsNnl/KXQR7dbtdeIEDE0LmboMHicL3g4iWTC15qoQqTXrRFhjGjFmmpc=
+	t=1713581563; cv=none; b=lD/fb2WOdAESk9wsHmIDL+JTc4n3E262KZz4vPa9r6jQvTKztdSjZ2za/XQ5G6ezIO/3gIryZpRQm6j0XC2KW6GxSW0kX2uWHZrpNReEKd7vo9c6aCInCWrN+jeqz80OH3zsp4ZexGM2cu4m21Yp2rursjX9Eu0C31d8ZMC/LRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713581563; c=relaxed/simple;
-	bh=Xcg/4YWNTZU4GPQmaDdLsBXVgUTYXSPrMsnia87nxsg=;
+	bh=2aBKBmiU5u7RKO297YDu3WlUAOmbxnH+Jhv/GmAxX/Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rQY60G9uv9BZvAeFR1IQNilTBo8Dj5TlaDYW0YylTG7xRkX7Jdv+3MhDX2ZOFJh5iic1b8BnM9KV2ff/jwGh1uqgI4g0c2rUjR8cBa5XDuBePcUUv97XE2ig0+C2jYD8mb63Xhda6CIZaKpN02XFSMhto8ZwhdfHavuL5LZtfJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AYAL/5Zq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E04BC2BD11;
+	 MIME-Version; b=r2M1d2lfZmei54KNQfijqqEbk7CIKE38EnC84vDoLGy61/M31BA0x9pk5hHv9usSl0N3Bfacq07SgayrlvACUx+qPPDe4FXaKgdWbfCILJ0JaNcPXWmv3gIhKYo8OVNRbl94sWOV6MWcNSwtmCxvkVAcOCe/HIAFI0nUaMcC/kA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHwS0G5K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1895C4AF08;
 	Sat, 20 Apr 2024 02:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713581562;
-	bh=Xcg/4YWNTZU4GPQmaDdLsBXVgUTYXSPrMsnia87nxsg=;
+	s=k20201202; t=1713581563;
+	bh=2aBKBmiU5u7RKO297YDu3WlUAOmbxnH+Jhv/GmAxX/Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AYAL/5Zqev8NfUHkKuP+MlamFPrRSBsxOXZoJIl5MA4jvESqszJqmmudtSRVIJeei
-	 +IoWDgf3B52Vv/r+bB9ZaKOKGS+GYv1wUT94ij56Vn3oEnjnmw86B0HdD/7bqK7XjI
-	 y1XvuVorStz4WM6JaQuw2TXBFgRpi+ldWiZT/KuP9sdzGfZTjzsgn2+wm7AFvlkc9+
-	 HDCbkyBz3rHHGHnhv+XlvVAAVpn8eKzh0eheVWMp1Shiur42kCT6qFc8k3xjCN9HkO
-	 HiksQ2HpuaJBce4VIcaH/jfueGfuyGqrBnoL2by+A04VhqI+TEq/mp8G2a9GOKFw4Z
-	 6gKf/wn53zPlg==
+	b=lHwS0G5KDZDTn7VRSC6yknsjAdVszHLbHMXrgZBX77MuxdIPiUP5dcUy+F8zYPXVP
+	 yY74e/J7Ccov0G4XlUtn2cpz1bsjZPsSHtF3sEyLIF6RKFxSW3JCvNaf3/lHlmGuNf
+	 FHBKCKYUZupuPL1gor2zh6P0kkik21+xq6biojrC6vTvU8ZWji940Rkb7JuNiWHfa+
+	 +IdDarxiWfVYRVsJ6Mn7U52OOcWiDHONQhBa5MS0uFKE9XA17lCc53bGjzwxNTUn2k
+	 xbNpTv/z1eMKe3MpQFp4YxxZROfjuO9xkCG390bSvs4DxK/05bGH8uLWtsBvLno19O
+	 WRszNYOFpjxGw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v5 4/7] selftests: drv-net: add a trivial ping test
-Date: Fri, 19 Apr 2024 19:52:34 -0700
-Message-ID: <20240420025237.3309296-5-kuba@kernel.org>
+Subject: [PATCH net-next v5 5/7] selftests: net: support matching cases by name prefix
+Date: Fri, 19 Apr 2024 19:52:35 -0700
+Message-ID: <20240420025237.3309296-6-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240420025237.3309296-1-kuba@kernel.org>
 References: <20240420025237.3309296-1-kuba@kernel.org>
@@ -65,113 +65,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a very simple test for testing with a remote system.
-Both IPv4 and IPv6 connectivity is optional, later change
-will add checks to skip tests based on available addresses.
+While writing tests with a lot more cases I got tired of having
+to jump back and forth to add the name of the test to the ksft_run()
+list. Most unittest frameworks do some name matching, e.g. assume
+that functions with names starting with test_ are test cases.
 
-Using netdevsim:
-
- $ ./run_kselftest.sh -t drivers/net:ping.py
- TAP version 13
- 1..1
- # timeout set to 45
- # selftests: drivers/net: ping.py
- # KTAP version 1
- # 1..2
- # ok 1 ping.test_v4
- # ok 2 ping.test_v6
- # # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
- ok 1 selftests: drivers/net: ping.py
-
-Command line SSH:
-
- $ NETIF=virbr0 REMOTE_TYPE=ssh REMOTE_ARGS=root@192.168.122.123 \
-    LOCAL_V4=192.168.122.1 REMOTE_V4=192.168.122.123 \
-    ./tools/testing/selftests/drivers/net/ping.py
- KTAP version 1
- 1..2
- ok 1 ping.test_v4
- ok 2 ping.test_v6 # SKIP Test requires IPv6 connectivity
- # Totals: pass:1 fail:0 xfail:1 xpass:0 skip:0 error:0
-
-Existing devices placed in netns (and using net.config):
-
- $ cat drivers/net/net.config
- NETIF=veth0
- REMOTE_TYPE=netns
- REMOTE_ARGS=red
- LOCAL_V4="192.168.1.1"
- REMOTE_V4="192.168.1.2"
-
- $ ./run_kselftest.sh -t drivers/net:ping.py
- TAP version 13
- 1..1
- # timeout set to 45
- # selftests: drivers/net: ping.py
- # KTAP version 1
- # 1..2
- # ok 1 ping.test_v4
- # ok 2 ping.test_v6 # SKIP Test requires IPv6 connectivity
- # # Totals: pass:1 fail:0 xfail:1 xpass:0 skip:0 error:0
+Support similar flow in ksft_run(). Let the author list the desired
+prefixes. globals() need to be passed explicitly, IDK how to work
+around that.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
 v4:
- - move adding the "require_XYZ()" checks to last patch
+ - spell the code out a little to make it clearer
 ---
- tools/testing/selftests/drivers/net/Makefile |  5 +++-
- tools/testing/selftests/drivers/net/ping.py  | 27 ++++++++++++++++++++
- 2 files changed, 31 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/ping.py
+ tools/testing/selftests/drivers/net/ping.py |  3 +--
+ tools/testing/selftests/net/lib/py/ksft.py  | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 379cdb1960a7..754ec643768a 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -2,6 +2,9 @@
- 
- TEST_INCLUDES := $(wildcard lib/py/*.py)
- 
--TEST_PROGS := stats.py
-+TEST_PROGS := \
-+	ping.py \
-+	stats.py \
-+# end of TEST_PROGS
- 
- include ../../lib.mk
 diff --git a/tools/testing/selftests/drivers/net/ping.py b/tools/testing/selftests/drivers/net/ping.py
-new file mode 100755
-index 000000000000..e75908d7c558
---- /dev/null
+index e75908d7c558..9f65a0764aab 100755
+--- a/tools/testing/selftests/drivers/net/ping.py
 +++ b/tools/testing/selftests/drivers/net/ping.py
-@@ -0,0 +1,27 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
+@@ -18,8 +18,7 @@ from lib.py import cmd
+ 
+ def main() -> None:
+     with NetDrvEpEnv(__file__) as cfg:
+-        ksft_run([test_v4, test_v6],
+-                 args=(cfg, ))
++        ksft_run(globs=globals(), case_pfx={"test_"}, args=(cfg, ))
+     ksft_exit()
+ 
+ 
+diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+index e7f79f6185b0..f84e9fdd0032 100644
+--- a/tools/testing/selftests/net/lib/py/ksft.py
++++ b/tools/testing/selftests/net/lib/py/ksft.py
+@@ -99,7 +99,18 @@ KSFT_RESULT_ALL = True
+     print(res)
+ 
+ 
+-def ksft_run(cases, args=()):
++def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
++    cases = cases or []
 +
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import NetDrvEpEnv
-+from lib.py import cmd
++    if globs and case_pfx:
++        for key, value in globs.items():
++            if not callable(value):
++                continue
++            for prefix in case_pfx:
++                if key.startswith(prefix):
++                    cases.append(value)
++                    break
 +
-+
-+def test_v4(cfg) -> None:
-+    cmd(f"ping -c 1 -W0.5 {cfg.remote_v4}")
-+    cmd(f"ping -c 1 -W0.5 {cfg.v4}", host=cfg.remote)
-+
-+
-+def test_v6(cfg) -> None:
-+    cmd(f"ping -c 1 -W0.5 {cfg.remote_v6}")
-+    cmd(f"ping -c 1 -W0.5 {cfg.v6}", host=cfg.remote)
-+
-+
-+def main() -> None:
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([test_v4, test_v6],
-+                 args=(cfg, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
+     totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
+ 
+     print("KTAP version 1")
 -- 
 2.44.0
 
