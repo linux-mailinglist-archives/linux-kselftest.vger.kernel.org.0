@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-8582-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 364478ABFA5
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Apr 2024 16:47:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D8D8ABFAD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Apr 2024 17:00:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D38741F21454
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Apr 2024 14:47:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A168828178A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Apr 2024 15:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1BD17BC2;
-	Sun, 21 Apr 2024 14:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA0BE18044;
+	Sun, 21 Apr 2024 14:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CxvwQP8T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z7C7xHwd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF7810A3C;
-	Sun, 21 Apr 2024 14:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5122C101DE;
+	Sun, 21 Apr 2024 14:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713710840; cv=none; b=R/GCjMUExnKaWO9Em7dnpTPJ28pIcIIuOuYOPLP/G9Xg9Pjg+V0bP1XUbS8CFB3DLtEBbKth6HQZkQVZd7Zn8NOJQWdsB6i26vmJu8lz1vcpW0V2msuZ1mVuRbbAPQkL6GCSRfqwth0KAkpkj2sWK/lX39vZJyCfycXqxGQOnCs=
+	t=1713711596; cv=none; b=D5JobiZY/RZifZMi6htn6XPHWVk6HuU2romx35LXsFN3AWnmMy+zN9cYG6yfg2dfVouxOXjXwwGU9/eZMw6/m+YBf9ztGTpuZ/V7EDKuTAa2bMLMu3+FkfhC+xfpHxNHV5OXWzHCpefPFP+HxyFX6D1USs5eMRoZRBK8cmzHijI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713710840; c=relaxed/simple;
-	bh=1MVDXkIkLu+31dgg42UixSS3lU9y6EjMItKxvfEfbVM=;
+	s=arc-20240116; t=1713711596; c=relaxed/simple;
+	bh=0oHyOxyJe89t+eFluzMBl1X02mgr03UnWbGysWYg+S8=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=P64V6XubRHYaHh14DeNMEbgJt0LC7jg2HxngOuqf6iMahfn18kV+pG1jKRSstOyd+KaoJvAKnBZcw7B2ThApVx3M3N8wiUtj3M+YW/Gbs23VAsLaAmM6vM/L5pGiaPVPBAIJAdqUz0NBiZpcIOR6xBlU3mLuKdXLGbtGCwaK0Co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CxvwQP8T; arc=none smtp.client-ip=209.85.161.43
+	 Mime-Version:Content-Type; b=MDADdh5Ni+vYC6cXdyDs6n8H4xdXhknlJ0sYe7+HXrTy4iMCKX3YTuwTh64vsyKQx7jSNSqrvbXoUvExMaXFNQGTOJMTtCe0CTy4juM8tNjs7FZdOOBh4j/I+AT4cfDlWakSO6DTxWkNBAIgxLc0HCu+n8uF0Wg6HiXqoPuKHt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z7C7xHwd; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5aa3af24775so2585738eaf.0;
-        Sun, 21 Apr 2024 07:47:19 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6969388c36fso16088296d6.1;
+        Sun, 21 Apr 2024 07:59:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713710838; x=1714315638; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713711594; x=1714316394; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e6DewHTI1xOOKPoL2CHAtSGTVefkyM1uCnfzqZO37Tg=;
-        b=CxvwQP8Tqk2GAEDppzT+bGicicRZQ+U0qiAiWCRLC2U0yl1aik92/5iizIxSGYjZXi
-         YquWmX2j6IxhVMPHe6K72UeiBmLx5m6ZTrxmLnYcSMdsfbJ/zPO4Cm+/J23SzjFE+xEt
-         wWR7oADwh+a+brcz71w1qjYstv3pfnelodRmJB0cfe8oJQugsJd8ffnv8F7WKVjdvWng
-         8rf1MIH08t8oFZR9kuPSh7k5qliODhpMLSxDLa+62Xmrb3yMNs4hQrLuiqh3jhGUOikw
-         3w1yO0NON9JxaB8gJAmV47D+aAftxRe149sq8KFty1NUMd809cdk/E+Yfkcz2LcIdIat
-         HoJg==
+        bh=ppCs1gVFA6/mDvzLlpSI1Fe+HMDGRm5Acwq7gckfLBU=;
+        b=Z7C7xHwdW7CGxVh6OxETw9Fk83eWj4bpNULppHbD/qzClZqyC4u3+dgtYhWYJuCzre
+         B3mchdBecB5Nzsnww3l68kanHMrxhiiB/EHXPiQ80FxygCRUzrOPcusfsBXK1GKYHKS3
+         6EgPnkR2uIpm167UiobuzKP2Ra/yDyQ1N0GN/FnbvLAOBxZFGIVz97FVn4zjnFsU05Yv
+         WqjPP7K7vK9SMvTMAYW2lNWVFDX6nNW7ntMqNULh7HsNkHmj0EKqOp9FgvY72BWYuLbS
+         y3KY5gVkBgXqfFU30MnHPxEY3ORLUZ+UARCE03Dg25RQ5fL2UFbooEOA7mY8SKOi7evz
+         D4Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713710838; x=1714315638;
+        d=1e100.net; s=20230601; t=1713711594; x=1714316394;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=e6DewHTI1xOOKPoL2CHAtSGTVefkyM1uCnfzqZO37Tg=;
-        b=F5Phttvm7mhY1VMTOUMhGRCHJimnCYgcZYgDOmLJP1nSsLG3zluWDhAx8oLKgR8bah
-         IijuDIpVhQolqzc7PpAnJ7y1gMXrbOs5ema6yvMVL0ZcI0fmqjIYmAu5jxC10DF6bhvx
-         JB1hXTE28Lty75xy8JUhW5satLndgNVzCyamJ9vQzH2kUObySGPfzsnfXUtlhxMd12MN
-         hl56DbmO6e1D2LzlhIwSxybjJ7bn5kygnOb5Fh8YTROKNuX5AvW1k9UZDgjUX39xGV0s
-         mmltAdWQWlOKykAidCwV93d6rjxkMN3A6DvshkPmCJev9k0e+ZU6k7VQN7RlCYRJRz3k
-         sfhg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOtizGvm2bY7F+lZpRXEHThtL6ZsxQPzQ5lawDBDvYOzXxzkBq15GP/e5rbo3IbTEw/MAse1zKQhSI6hXuJavWlA0BxTVZCXGDIGKbdoZX
-X-Gm-Message-State: AOJu0YwVoDRzx1soitbrWeGpfJoiTT/KAZkwsxx+eg/E+7CGejYFudR3
-	JGAL3qaHmyouVljRsaoEsp3oOqno3l6SIqAJJIuN8aANjLXG28/U
-X-Google-Smtp-Source: AGHT+IE0XztwoR29xhql47OOZy9KKaTWe6U3LARIOGFBlItpID9/uPHk0oEVi74+vwMBKGRu4Ar17w==
-X-Received: by 2002:a05:6358:5bc1:b0:183:d2fa:ff5c with SMTP id i1-20020a0563585bc100b00183d2faff5cmr11804663rwf.12.1713710838300;
-        Sun, 21 Apr 2024 07:47:18 -0700 (PDT)
+        bh=ppCs1gVFA6/mDvzLlpSI1Fe+HMDGRm5Acwq7gckfLBU=;
+        b=CceVj6Lac/RQ+Vk6y9NGqAtA4hwNJM8cCuvd21QTGF5ynzNbF8mTjYAnVxRWyExEET
+         ZkTfqzHWaY9Jlg3nwJDXAS80UBOYdQ5GFrwGvNrZlL/irg8InhDQc2H+c30kPb0UieMq
+         KHhfKtsDYiyja2Pt5fzzntpdH/Fb11jSxLIVu58ocqoheGt3DEqJVjT1BYALAKbO7MRa
+         PBhOxN5SZ3crPvhDNa0dUt5gjidJMQczP7kbRPVOwwxWyq6cFDbNJaURRkcIfz0y5pQg
+         Ve3kHuZCq71pMiQ4fsL5gdKHWVIBg0hbA1g5628L4E+W7onpNxr2HQ6vj2LK1lF6uQVH
+         DmvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUVYWzVQCte6G6n23baByMYi95YWtM5HoEqBRHb7FJ9EcNKTAuoWcXx+G0NSsIwgkHtW0aPyBfBX+dORmloBrIR/fCRmkoAitF+CVFEIq17
+X-Gm-Message-State: AOJu0Yzck5Ahc/er8q1HbpaExBCaV1HWk+laZcIZV64YC/v8llo5CLMw
+	sE8CgGgmCllaBs/6thhD6iej3kyhUm7Hskb4VMIPUx1pwK9XDlKkvQpbdg==
+X-Google-Smtp-Source: AGHT+IEo6gIDelw6Rc1Y+DLRxklx3Roldh1J8aHJ8VL38fOKDdeM1KMgLtL49S9951UaFlYgThXvtg==
+X-Received: by 2002:a0c:c344:0:b0:69b:3923:94d5 with SMTP id j4-20020a0cc344000000b0069b392394d5mr7451933qvi.52.1713711594282;
+        Sun, 21 Apr 2024 07:59:54 -0700 (PDT)
 Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
-        by smtp.gmail.com with ESMTPSA id d17-20020a0cf0d1000000b006a04769b5a7sm3359356qvl.110.2024.04.21.07.47.17
+        by smtp.gmail.com with ESMTPSA id w5-20020a0c9c45000000b0069b27dad8c7sm3413677qve.101.2024.04.21.07.59.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Apr 2024 07:47:17 -0700 (PDT)
-Date: Sun, 21 Apr 2024 10:47:17 -0400
+        Sun, 21 Apr 2024 07:59:53 -0700 (PDT)
+Date: Sun, 21 Apr 2024 10:59:53 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Jakub Kicinski <kuba@kernel.org>, 
  davem@davemloft.net
@@ -79,11 +79,12 @@ Cc: netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  willemdebruijn.kernel@gmail.com, 
  Jakub Kicinski <kuba@kernel.org>
-Message-ID: <662526f58a70c_1dff9929430@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240420025237.3309296-1-kuba@kernel.org>
+Message-ID: <662529e994190_1e22622942a@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240420025237.3309296-8-kuba@kernel.org>
 References: <20240420025237.3309296-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next v5 0/7] selftests: drv-net: support testing with
- a remote system
+ <20240420025237.3309296-8-kuba@kernel.org>
+Subject: Re: [PATCH net-next v5 7/7] selftests: drv-net: add require_XYZ()
+ helpers for validating env
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,56 +96,38 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Jakub Kicinski wrote:
-> Hi!
+> Wrap typical checks like whether given command used by the test
+> is available in helpers.
 > 
-> Implement support for tests which require access to a remote system /
-> endpoint which can generate traffic.
-> This series concludes the "groundwork" for upstream driver tests.
-> 
-> I wanted to support the three models which came up in discussions:
->  - SW testing with netdevsim
->  - "local" testing with two ports on the same system in a loopback
->  - "remote" testing via SSH
-> so there is a tiny bit of an abstraction which wraps up how "remote"
-> commands are executed. Otherwise hopefully there's nothing surprising.
-> 
-> I'm only adding a ping test. I had a bigger one written but I was
-> worried we'll get into discussing the details of the test itself
-> and how I chose to hack up netdevsim, instead of the test infra...
-> So that test will be a follow up :)
-> 
-> v5:
->  - fix rand port generation, and wrap it in a helper in case
->    the random thing proves to be flaky
->  - reuseaddr
->  - explicitly select the address family
-> v4: https://lore.kernel.org/all/20240418233844.2762396-1-kuba@kernel.org
->  - improve coding style of patch 5
->  - switch from netcat to socat (patch 6)
->  - support exit_wait for bkg() in context manager
->  - add require_XYZ() helpers (patch 7)
->  - increase timeouts a little (1,3 -> 5 sec)
-> v3: https://lore.kernel.org/all/20240417231146.2435572-1-kuba@kernel.org
->  - first two patches are new
->  - make Remote::cmd() return Popen() object (patch 3)
->  - always operate on absolute paths (patch 3)
->  - last two patches are new
-> v2: https://lore.kernel.org/all/20240416004556.1618804-1-kuba@kernel.org
->  - rename endpoint -> remote
->  - use 2001:db8:: v6 prefix
->  - add a note about persistent SSH connections
->  - add the kernel config
-> v1: https://lore.kernel.org/all/20240412233705.1066444-1-kuba@kernel.org
-> 
-> Jakub Kicinski (7):
->   selftests: drv-net: define endpoint structures
->   selftests: drv-net: factor out parsing of the env
->   selftests: drv-net: construct environment for running tests which
->     require an endpoint
->   selftests: drv-net: add a trivial ping test
->   selftests: net: support matching cases by name prefix
->   selftests: drv-net: add a TCP ping test case (and useful helpers)
->   selftests: drv-net: add require_XYZ() helpers for validating env
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+>  def test_v4(cfg) -> None:
+> +    cfg.require_v4()
+> +
+
+Probably every platform has ping. But since it is not a built-int and
+this patch adds cfg.require_cmd, maybe add it for ping if respinning.
+
+>      cmd(f"ping -c 1 -W0.5 {cfg.remote_v4}")
+>      cmd(f"ping -c 1 -W0.5 {cfg.v4}", host=cfg.remote)
+>  
+>  
+>  def test_v6(cfg) -> None:
+> +    cfg.require_v6()
+> +
+>      cmd(f"ping -c 1 -W0.5 {cfg.remote_v6}")
+>      cmd(f"ping -c 1 -W0.5 {cfg.v6}", host=cfg.remote)
+>  
+>  
+>  def test_tcp(cfg) -> None:
+> +    cfg.require_cmd("socat", remote=True)
+> +
+>      port = rand_port()
+>      listen_cmd = f"socat -{cfg.addr_ipver} -t 2 -u TCP-LISTEN:{port},reuseport STDOUT"
+>  
+> -- 
+> 2.44.0
+> 
+
+
 
