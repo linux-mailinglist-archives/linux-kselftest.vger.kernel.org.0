@@ -1,115 +1,84 @@
-Return-Path: <linux-kselftest+bounces-8632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9037B8AD314
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 19:08:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC56D8AD340
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 19:21:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C109C1C21667
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 17:08:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A72DB213E4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 17:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4381C153BC6;
-	Mon, 22 Apr 2024 17:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A76153BE0;
+	Mon, 22 Apr 2024 17:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MybUg73y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DIJ9ieH5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE31815380C;
-	Mon, 22 Apr 2024 17:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27616153BCF;
+	Mon, 22 Apr 2024 17:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713805713; cv=none; b=n5/kW9sbqj+yPxYkrQjg3QPZ8L2GnybPYAlL2gROaN+faIu80BdfKGhQLghCxQl8hDzZcHDbpLytIqyo8EIw59LzcppwZ3xYl30c3C55YHnw8MBXcIpkFAwGA6yc2fkMJjkW+6b7rzZGXmEPSxy8kIlkRk3VZaIRAYLuWWTZ/iw=
+	t=1713806475; cv=none; b=p9TdXOTd0e3ST7xm2gA5CX7vT8aCiwhIRBUfK1lfifx05Iat2R3XWE2L7ThLMIGQ/BTDMEKgnHHybAlHG0Pxe6fey9PUh5qdpVuLj3iUsXjEK33aUi31Q0nLMNxDdZGE8AmaC61xjN6sk0OmRAyaZEmHBAeCjTn2vkErlMGhJmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713805713; c=relaxed/simple;
-	bh=CpRjxn+7n9MiCWeFV86YpJfJEt1nihvk65CDyghsTR4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cvMo/GxawJ9F4tCCnrxVbmM3N7AgmxouUNPUlYljJHLJkOLT+py5EjhiFQZP4e9p646cP2erL+wP8JUm1OM+LGhjXDzE/bU/lvKer3Nb0zo8azSEOUOQ6y9GQTPBbZgw6HhnN368gCIL51k5K/lAzseUMxIPtfPVkYxH5i9JcMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=MybUg73y; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713805703;
-	bh=CpRjxn+7n9MiCWeFV86YpJfJEt1nihvk65CDyghsTR4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=MybUg73yac1GBnq24R27cKOgM2lqmEswhEQB0t3ihw9uDCCZ2fsW+Vd9FapDb6rG4
-	 xsR2mmgLBHnhGVxw40zH4RhVH1VZwxqxVsdFPjgwdJF+9/MdS0xE4FtzQjwGjkW3rM
-	 R78FPxaaFidlORkNIBs5w+nIdSZjIovCTbsdCAtTD8ieyoyMWjpDrDAuDM5hsgv89H
-	 wJolXV2WvfcmwmXOITekaDbhUVmQMdILVZqNibGEZwxLl8lLp9r8Qsvv/6fMzTnOW8
-	 n0XHLePgWVgN1chDKO1dgPAlEk8JvaVCdkULPeL1oqZE8ZoRFO12dsN/joCHCFeDvL
-	 d9JEgFgcAOCBg==
-Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C6F7037820E2;
-	Mon, 22 Apr 2024 17:08:19 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] selftests: kvm: fix undeclared function error
-Date: Mon, 22 Apr 2024 22:08:42 +0500
-Message-Id: <20240422170842.2073979-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1713806475; c=relaxed/simple;
+	bh=FV2TUJKtwirxm+DazLdq+MAfYd7Y+YmL4J1Jaqx2Izc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eWw+gytKMj27HKvsRqWOrKToClq+RUkzSMGINF5KY4zHmmR7FsLJW1B6wJYVEhTaeOYxGnS0ornaGwvFVOGk52yiMPk5LIEk8tUCYiGbvaFxnSfdN6ZyZfvaOwWMJp3UDlkIyUtLs9XvniEx7M+PmkubDXT+m5LdJgoMGu2oUXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DIJ9ieH5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E67C113CC;
+	Mon, 22 Apr 2024 17:21:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713806474;
+	bh=FV2TUJKtwirxm+DazLdq+MAfYd7Y+YmL4J1Jaqx2Izc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DIJ9ieH5lXiEuSkFe73f4Pcnx7rkadU0wqXw23nokeklWX8Zm7ECLOdagMtbrWUlB
+	 cR8EfZOOD7wdefTzUbaxPmt94ksDywAbhnzzyA49ow6zR21g/JOfyYOAcJ0RK6JM9V
+	 KZBwfbcGkM1bF66kcSVz9wOo9R2wZHiuVbJiM6aqNh5+0zg6Twt7hr+etKIKeCvQS7
+	 f3ZgazFmhqpDOK0vwitrJHp/CxKl7szWwcLkEq9ocvxPEpPxqXCd3kczr16iv96ovs
+	 JirZcx7x0cSYwH5pGl6LE7S/rdxna8jDIxIblMdh4Bkof5WL2gDVYcB8bufUwJ6jKY
+	 GB8cmY/GQo21A==
+Date: Mon, 22 Apr 2024 18:21:08 +0100
+From: Will Deacon <will@kernel.org>
+To: Dev Jain <dev.jain@arm.com>
+Cc: shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Anshuman.Khandual@arm.com, suzuki.poulose@arm.com,
+	ryan.roberts@arm.com, rob.herring@arm.com, Catalin.Marinas@arm.com,
+	broonie@kernel.org, mark.rutland@arm.com, linux@armlinux.org.uk
+Subject: Re: [PATCH v2 0/4] A new selftests/ directory for arm compatibility
+ testing
+Message-ID: <20240422172108.GD6223@willie-the-truck>
+References: <20240422070717.2194201-1-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240422070717.2194201-1-dev.jain@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Include kvm_test_harness.h first which will include kselftest_harness.h
-for _GNU_SOURCE to get defined first before inclusion of stdio.h. It
-is required for declaration of asprintf(). It removes the following
-build error caught by clang-17:
+On Mon, Apr 22, 2024 at 12:37:13PM +0530, Dev Jain wrote:
+> This series introduces the selftests/arm directory, which tests 32 and 64-bit
+> kernel compatibility with 32-bit ELFs running on the Aarch platform.
+> The need for this bucket of tests is that 32 bit applications built on legacy
+> ARM architecture must not break on the new Aarch64 platforms and the 64-bit
+> kernel. The kernel must emulate the data structures, system calls and the
+> registers according to Aarch32, when running a 32-bit process; this directory
+> fills that testing requirement.
+> 
+> One may find similarity between this directory and selftests/arm64; it is
+> advisable to refer to that since a lot has been copied from there itself.
 
-In file included from x86_64/fix_hypercall_test.c:12:
-In file included from include/kvm_test_harness.h:11:
-../kselftest_harness.h:1169:2: error: call to undeclared function
-'asprintf'; ISO C99 and later do not support implicit function declarations
-[-Wimplicit-function-declaration]
- 1169 |         asprintf(&test_name, "%s%s%s.%s", f->name,
-      |         ^
+Isn't this going to be difficult to maintain if we have two divergent copies
+of the same stuff? From a very quick skim, a bunch of the signals stuff is
+idential to what we have on arm64...
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-index f3c2239228b10..75306dcfaad6c 100644
---- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-@@ -4,12 +4,12 @@
-  *
-  * Tests for KVM paravirtual feature disablement
-  */
-+#include "kvm_test_harness.h"
- #include <asm/kvm_para.h>
- #include <linux/kvm_para.h>
- #include <linux/stringify.h>
- #include <stdint.h>
- 
--#include "kvm_test_harness.h"
- #include "apic.h"
- #include "test_util.h"
- #include "kvm_util.h"
--- 
-2.39.2
-
+Will
 
