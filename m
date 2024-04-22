@@ -1,83 +1,122 @@
-Return-Path: <linux-kselftest+bounces-8620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF1E68ACEA7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 15:48:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27C708ACEAA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 15:49:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61D2A1F21EC6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 13:48:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C530DB20D03
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 13:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C256F14F9F8;
-	Mon, 22 Apr 2024 13:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5246414F9FA;
+	Mon, 22 Apr 2024 13:49:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9UExLxU"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QDXBjjql"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9891B5028B;
-	Mon, 22 Apr 2024 13:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B001A14F9FF;
+	Mon, 22 Apr 2024 13:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713793707; cv=none; b=ckaH4aHuit6nuIkSKkbV5CiJRpTVSuVveowHiW1jVkaDYO0N6RemSVVqzPGyIZRC7t9YC/uA1zCqz40pHJA9M2ldqYSMKNxtIHtMMfo89WIGpexCoKedriR7zDNSLntU/GWiojrmN6ei8etcdGOgmOnL6DAhZ6otMWvmAFEp+Dw=
+	t=1713793748; cv=none; b=WgCIf1UVdeTbPxatxpYnyj1FBMFEql2LkNCvY6caVs3VhXoZrwqMCgL/S9kiXP/xsZohOHdcTL7y/YtBS2OEXtx93cbYXMzEPrmpK/htD2HyQdMs9r2D8MxlBst+B8kzGHCROnfaEkrlsuDC7AL2v+aZYUWxjQLVNvULs+GyO6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713793707; c=relaxed/simple;
-	bh=jIfESBYcn4GIuY3V7ZuPe1Yco422+VcolBLfi8XrwhU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MtsQTQhdhwLcqJ8ceckZxBXbcUcjkpdHT+v8kS3yqK/bW7rWI1bdwHb3s9iCpjXCCAMAyq3VMaOgV/QhH6TfEXd9OkeirU81tawxKaALhild48Gqx8Y9PmXD9qUZ5LudVPVeEzXDr99/DbJ4LlDV7sO6CiIy3i/eCR1C0g3OCv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9UExLxU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B758CC113CC;
-	Mon, 22 Apr 2024 13:48:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713793707;
-	bh=jIfESBYcn4GIuY3V7ZuPe1Yco422+VcolBLfi8XrwhU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=s9UExLxUjV2Jdr4ZkIexniSi2cfn4NHasbXvbOF9KkABZoaB8KVs2Ai9OncOGYrV/
-	 aYTyXjqLOFx5KKeyP3YMyVuswag2GU6Ptb/IfrMLyoUm5iIAyJKYh+plbosgmCFBvB
-	 tXBwChNajwlLuWW+TUrywzqhgSJ9OCmj3zMdhzQY6w88OC+K2JzHRbRVTpfQS6GpkF
-	 ZbJOOVL7anRl8OGeDDu/O8oE2kgyBj+/SPhQOU4MCZeXomsMXasBwr9bZotWNCYO+H
-	 lW4r2pUrHE/6EXQscp+RzgmokJx+RD7ex3CLcv1iHnqbcnqvEoMW2DdKkrJFhIilZ4
-	 oGI4k6ryOmlsw==
-Date: Mon, 22 Apr 2024 06:48:25 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: David Ahern <dsahern@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
- netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org,
- sdf@google.com, amritha.nambiar@intel.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/4] netdev: support dumping a single netdev in
- qstats
-Message-ID: <20240422064825.18850cc3@kernel.org>
-In-Reply-To: <a1340c70-bbc9-4b23-8e9a-1bc401132721@kernel.org>
-References: <20240420023543.3300306-1-kuba@kernel.org>
-	<20240420023543.3300306-2-kuba@kernel.org>
-	<CANn89iK-wnNeH+9-Oe6xi9OjoY5jcZCowJ5wDL7hJz1tRhMfQQ@mail.gmail.com>
-	<a1340c70-bbc9-4b23-8e9a-1bc401132721@kernel.org>
+	s=arc-20240116; t=1713793748; c=relaxed/simple;
+	bh=TquHs7URRWUMNqGjefXsApBJcgMXy4dLpEqb8Yor0AE=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=oW2SWGEyB4T4miVoDTgE9Wep3u/4Nq/NbqxdJOyzHiCgRpOcDCoparTMoPbEr2o1dRSTFhq+w2majLPVBJrPkMPr3OiqHj0AW1fBD28qO+rnVT62HeButkc3qw+gHFo67bVfdQNTgTbBMLi0eb3GRkvi1ySXnPQ0jQstKaFxKvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=QDXBjjql; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713793744;
+	bh=TquHs7URRWUMNqGjefXsApBJcgMXy4dLpEqb8Yor0AE=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=QDXBjjqlWcEdRmYHyX7ArYRnBRD84bIGhiYEgGTkG5yGUyA9nFKMtJ6tZXmgNQpb8
+	 d3/nQRbHbjUAdgsyzQavpNbo/DJfNBy45op8+GQVBHqJ5B64IqkknqfPa87uQbfc74
+	 0ChWRGVmdT2t99Am2+7crmKDfeeReWvEYCrgdAmNDg8PALspUw5wPYqqe0wQ/SslnS
+	 YpsFE7OpDLXJmB2Jhzuu3FxHCdNlD5KhMhujvVkSuxpCkqIRizeYhQBewwOLNbttS8
+	 8wO+PGfcUFL6TxweuwmLCuq5bXvpXhQQ+RZxBS4hAVJxeFHdcjtB1MKRyof75Ll8Tu
+	 3R1t7jTALkxtg==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3D69237820E2;
+	Mon, 22 Apr 2024 13:49:01 +0000 (UTC)
+Message-ID: <9cba6633-b1dc-4cde-b326-609855c6418a@collabora.com>
+Date: Mon, 22 Apr 2024 18:49:30 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: Re: [PATCH v2] selftests: filesystems: add missing stddef header
+To: Amer Al Shanawany <amer.shanawany@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Miklos Szeredi <mszeredi@redhat.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <df1df586-188e-4290-9986-7b7cd31710e3@collabora.com>
+ <20240422131659.30222-1-amer.shanawany@gmail.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240422131659.30222-1-amer.shanawany@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, 21 Apr 2024 13:32:24 -0600 David Ahern wrote:
-> On 4/21/24 1:17 PM, Eric Dumazet wrote:
-> > I wonder if NLM_F_DUMP_FILTERED should not be reported to user space ?  
+On 4/22/24 6:16 PM, Amer Al Shanawany wrote:
+> fix compiler warning and errors when compiling statmount test.
 > 
-> good point. We do set that flag for other dumps when a filter has been
-> used to limit data returned.
+> gcc 12.3 (Ubuntu 12.3.0-1ubuntu1~22.04)
+> 
+> statmount_test.c:572:24: warning: implicit declaration of function
+> ‘offsetof’ [-Wimplicit-function-declaration]
+>   572 | #define str_off(memb) (offsetof(struct statmount, memb) /
+> sizeof(uint32_t))
+>       |                        ^~~~~~~~
+> statmount_test.c:598:51: note: in expansion of macro ‘str_off’
+>   598 |         test_statmount_string(STATMOUNT_MNT_ROOT,
+> str_off(mnt_root), "mount root");
+>       |
+> ^~~~~~~
+> statmount_test.c:18:1: note: ‘offsetof’ is defined in header
+> ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+>    17 | #include "../../kselftest.h"
+>   +++ |+#include <stddef.h>
+> 
+> Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
+You missed the reviewed-by tag from previous iteration. Putting it here again:
 
-That flag appears to be a, hm, historic workaround?
-If I was to guess what the motivation was I'd say that it's because
-"old school netlink" didn't reject unknown attributes. And you wanted
-to know whether the kernel did the filtering or you have to filter
-again in user space? Am I close? :)
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-The flag is mostly used in the IP stack, I'd rather try to deprecate 
-it than propagate it to new genetlink families which do full input
-validation, rendering the flag 100% unnecessary.
+> ---
+> V1 -> V2 added compiler warning in the patch message
+> 
+>  tools/testing/selftests/filesystems/statmount/statmount_test.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+> index 3eafd7da58e2..e6d7c4f1c85b 100644
+> --- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
+> +++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+> @@ -3,6 +3,7 @@
+>  #define _GNU_SOURCE
+>  
+>  #include <assert.h>
+> +#include <stddef.h>
+>  #include <stdint.h>
+>  #include <sched.h>
+>  #include <fcntl.h>
+
+-- 
+BR,
+Muhammad Usama Anjum
 
