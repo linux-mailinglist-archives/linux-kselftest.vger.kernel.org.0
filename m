@@ -1,75 +1,83 @@
-Return-Path: <linux-kselftest+bounces-8619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C2848ACE5D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 15:35:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF1E68ACEA7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 15:48:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE1A4B216DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 13:35:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61D2A1F21EC6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 13:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8A014F9D3;
-	Mon, 22 Apr 2024 13:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C256F14F9F8;
+	Mon, 22 Apr 2024 13:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="VmQC1AnE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9UExLxU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38633399F
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 13:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9891B5028B;
+	Mon, 22 Apr 2024 13:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713792949; cv=none; b=bZ2QUvdpYXjP1KYliYwOPd1XQCMZA7MQXC9EFd7UL9NWwiTb7Z7wb7qWkoaGP8mVlArLev40cu3l6DCm5lHgfyHEMvtXpqFyOEvk39s1qwgyL4Qnevok7WPwttPBQsDB9V1pJMf/DwgpFwdfu11Iaxe0ApXhxGHf7U3hSjSj8Ck=
+	t=1713793707; cv=none; b=ckaH4aHuit6nuIkSKkbV5CiJRpTVSuVveowHiW1jVkaDYO0N6RemSVVqzPGyIZRC7t9YC/uA1zCqz40pHJA9M2ldqYSMKNxtIHtMMfo89WIGpexCoKedriR7zDNSLntU/GWiojrmN6ei8etcdGOgmOnL6DAhZ6otMWvmAFEp+Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713792949; c=relaxed/simple;
-	bh=8ei9GbJZW97AshSmMUhY3QUz1TIss6EgYgqIK+FZiT4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=K6dZ/crKcG84kWmSbh3Fx5oMHtFBjUYzUHLglK/t4nZxPxbntFMlcACT6f+d5UXUdwfEqCWJj7ALHZmaQptsbe+seFTBGFJHmhVN5Ta1s1yXH6LxnC6TDDwO872Js5ZLJgbSOTAEXVgyK+Qfsoy8uTl/+T/9mu/KDW6krl2iPhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=VmQC1AnE; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1713792945;
-	bh=8ei9GbJZW97AshSmMUhY3QUz1TIss6EgYgqIK+FZiT4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=VmQC1AnEp5KshUWP5OrTUahsLDLn7rRptYebO2HDfidykAJXNQMqwvnTsA0dTHJHQ
-	 Btwys8Y5eOQVoJj023GQ7E1j2YGsL0LoovuKQzMYOHnMyB3SZUfHZ+toYKYVUYOZ6J
-	 AYh9I6qaifGsAQYm6ZUJnzaafutw5m3pChbDYqA+lJLgz9nNbjmHiTQOCXNSfvvkmo
-	 9PGIlwZKNTiiz/1E7L0ywoc2IpCAHBD9eJZuTtOd++uxd51W0Kl13WMd3wLtrZzUvt
-	 NgjVhdtWLcqpQCd0KIx6pCkidOb1VmF+FeAOizVMHFrJw0X6F/Dxe63SDK2Bqs0Ouq
-	 rE1VNZJSWDFFw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNR8d1MWnz4wc1;
-	Mon, 22 Apr 2024 23:35:45 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: linuxppc-dev@lists.ozlabs.org
-Cc: maddy@linux.ibm.com, spoorthy@linux.ibm.com,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/powerpc: Install tests in sub-directories
-In-Reply-To: <20240422132746.1790844-1-mpe@ellerman.id.au>
-References: <20240422132746.1790844-1-mpe@ellerman.id.au>
-Date: Mon, 22 Apr 2024 23:35:44 +1000
-Message-ID: <87h6ftjz9r.fsf@mail.lhotse>
+	s=arc-20240116; t=1713793707; c=relaxed/simple;
+	bh=jIfESBYcn4GIuY3V7ZuPe1Yco422+VcolBLfi8XrwhU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MtsQTQhdhwLcqJ8ceckZxBXbcUcjkpdHT+v8kS3yqK/bW7rWI1bdwHb3s9iCpjXCCAMAyq3VMaOgV/QhH6TfEXd9OkeirU81tawxKaALhild48Gqx8Y9PmXD9qUZ5LudVPVeEzXDr99/DbJ4LlDV7sO6CiIy3i/eCR1C0g3OCv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9UExLxU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B758CC113CC;
+	Mon, 22 Apr 2024 13:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713793707;
+	bh=jIfESBYcn4GIuY3V7ZuPe1Yco422+VcolBLfi8XrwhU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=s9UExLxUjV2Jdr4ZkIexniSi2cfn4NHasbXvbOF9KkABZoaB8KVs2Ai9OncOGYrV/
+	 aYTyXjqLOFx5KKeyP3YMyVuswag2GU6Ptb/IfrMLyoUm5iIAyJKYh+plbosgmCFBvB
+	 tXBwChNajwlLuWW+TUrywzqhgSJ9OCmj3zMdhzQY6w88OC+K2JzHRbRVTpfQS6GpkF
+	 ZbJOOVL7anRl8OGeDDu/O8oE2kgyBj+/SPhQOU4MCZeXomsMXasBwr9bZotWNCYO+H
+	 lW4r2pUrHE/6EXQscp+RzgmokJx+RD7ex3CLcv1iHnqbcnqvEoMW2DdKkrJFhIilZ4
+	 oGI4k6ryOmlsw==
+Date: Mon, 22 Apr 2024 06:48:25 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: David Ahern <dsahern@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+ netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ sdf@google.com, amritha.nambiar@intel.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/4] netdev: support dumping a single netdev in
+ qstats
+Message-ID: <20240422064825.18850cc3@kernel.org>
+In-Reply-To: <a1340c70-bbc9-4b23-8e9a-1bc401132721@kernel.org>
+References: <20240420023543.3300306-1-kuba@kernel.org>
+	<20240420023543.3300306-2-kuba@kernel.org>
+	<CANn89iK-wnNeH+9-Oe6xi9OjoY5jcZCowJ5wDL7hJz1tRhMfQQ@mail.gmail.com>
+	<a1340c70-bbc9-4b23-8e9a-1bc401132721@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Michael Ellerman <mpe@ellerman.id.au> writes:
-> The sources for the powerpc selftests are arranged into sub-directories.
-> However when the tests are built and installed, the sub-directories are
-> squashed, losing the structure.
+On Sun, 21 Apr 2024 13:32:24 -0600 David Ahern wrote:
+> On 4/21/24 1:17 PM, Eric Dumazet wrote:
+> > I wonder if NLM_F_DUMP_FILTERED should not be reported to user space ?  
+> 
+> good point. We do set that flag for other dumps when a filter has been
+> used to limit data returned.
 
-This is missing a preparatory patch, new version coming.
+That flag appears to be a, hm, historic workaround?
+If I was to guess what the motivation was I'd say that it's because
+"old school netlink" didn't reject unknown attributes. And you wanted
+to know whether the kernel did the filtering or you have to filter
+again in user space? Am I close? :)
 
-cheers
+The flag is mostly used in the IP stack, I'd rather try to deprecate 
+it than propagate it to new genetlink families which do full input
+validation, rendering the flag 100% unnecessary.
 
