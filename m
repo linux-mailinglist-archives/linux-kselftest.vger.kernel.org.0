@@ -1,298 +1,265 @@
-Return-Path: <linux-kselftest+bounces-8599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EE6A8AC4C5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 09:09:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B98A78AC81C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 10:56:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD889282282
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 07:09:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708C52818BB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 08:56:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D5E4AEFD;
-	Mon, 22 Apr 2024 07:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F3F54919;
+	Mon, 22 Apr 2024 08:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Zq86nSpI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 753F34AEE0;
-	Mon, 22 Apr 2024 07:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0859453E27
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 08:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713769748; cv=none; b=Zcr3Fo3etY1vYCUwDWpZFpCgMqDwFb+Iq0oPkTM0upHJ9yCNG+IW1RBtzULwJK9TATh32oNswAaf2NsSHDvFFCTZF7X7EvyGz7hh7/bVqE3zUas+4HX0hP98T2Lrg21r4nN9PwmEaRan8tsI3DfHGpcMgJ0yxmXGmivqv50bb6E=
+	t=1713775991; cv=none; b=oiAlc3IxzdzuYzC1DccJlxy6zUYSJX4Wu4Zwc9iCVei2y55qqGpRLDhs9LOGMk+IuFPANIQdFGbU1rMJoGl+L3NwQV24biUqXlT4igS69BONpwH/Dl80dZOVX+dsFvL2ovxJQdlscK666OiYRi/2Dmu2BBb4UIwdX5phUhUVQYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713769748; c=relaxed/simple;
-	bh=28b+Uc5vS3cu/g0Cy9Nux8bRU5W6BmMuyGIHQvZIBjc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Xhclm5pHm5dKyrwmyfuj2qOTztn9zdFwKTLLZi7SM+z/ebvMh28fehaZ8+b6aO6hP2fwsCyrL+rx8/+k52I7aWZvfbaq4PG8PX7qRFFvnBAvwl2u7mPDi2eFH7xxmSAkOOECtvHLJEFc7V+L1yZYtqOsNQT8zp5LzjYeQsHF1TU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33D641476;
-	Mon, 22 Apr 2024 00:09:34 -0700 (PDT)
-Received: from e116581.blr.arm.com (e116581.arm.com [10.162.41.8])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 24BCB3F7BD;
-	Mon, 22 Apr 2024 00:09:00 -0700 (PDT)
-From: Dev Jain <dev.jain@arm.com>
-To: shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Anshuman.Khandual@arm.com,
-	suzuki.poulose@arm.com,
-	ryan.roberts@arm.com,
-	rob.herring@arm.com,
-	Catalin.Marinas@arm.com,
-	broonie@kernel.org,
-	will@kernel.org,
-	mark.rutland@arm.com,
-	linux@armlinux.org.uk,
-	Dev Jain <dev.jain@arm.com>
-Subject: [PATCH v2 4/4] selftests: Add build infrastructure along with README
-Date: Mon, 22 Apr 2024 12:37:17 +0530
-Message-Id: <20240422070717.2194201-5-dev.jain@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240422070717.2194201-1-dev.jain@arm.com>
-References: <20240422070717.2194201-1-dev.jain@arm.com>
+	s=arc-20240116; t=1713775991; c=relaxed/simple;
+	bh=nleU09vurZd5AuLxgNnsP+QcvquS4B0Ob3oAXLFJzZc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g2lTQuWtG2aeYiOV/yYHIsKGWSNpkWMAshfxSZqafbSSGvg0EOSZu5RB6eD/4LfdXz7ZcJUCUiWgg6R6g0xkLJNUx/Pw62IYzgceDVfvkZ1EKHXCW4mQ0Jv/KTH7lxeZdzVQEYIHe0XZ2gcFkTf5JtxIrAb/ecueH2korqqXpAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Zq86nSpI; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-349fd1d3723so858705f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 01:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713775986; x=1714380786; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+/fvR+HwOJPjnOfbOHG69UP92YiSjqkbM928Puj2/Go=;
+        b=Zq86nSpI55jjwJBRIYNddD+VzEJWuOhqk1Rm2LOKURki/miaj2WjRcgZrFyL/IRSAj
+         JfGEWF4V33MWATfv/PFv+mv9F8CjDCj+EfC4w2BxLGxkWh8+ZgDoA/o4OnEuSEG2fVWV
+         Id18sPk7FGHd1NQLtaQ8DJsUR5s/MLRNMTLBM5qyPf9UuKihYqJvT3UFBNoGmRWttFl1
+         POrkx1e2leTn1ELL6x0Jf8KNS5Mo8LWcar9E5RpqCv+V1ZbDJH6ngspMixoTYJClZsNa
+         OgZ3e23QXU7NipSQJ9HpWkIP85vMu22LTRo1VpzATES+Z7nmA8uCdbQKx765d/ZZhIH1
+         xjug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713775986; x=1714380786;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+/fvR+HwOJPjnOfbOHG69UP92YiSjqkbM928Puj2/Go=;
+        b=H+BLGEsWA3c0y+EyFSTrnKlT66adz+104h6CJ5uRRXrqeFcSd48IVay3scP9ijpe7E
+         T7S+7jrYu8scyFwMWGVSaf0HjpKru3oHIoupfYlFpnvcQZ3PoDy3LHs+lF0KnfVOSPGV
+         GPYwzCtCOqMTSc03ZOZcXIeTc3XY026SsnlVhJZ8WljLJ83VFfO2K8rri1ISGD/aJl/0
+         SgFxfKoaxjTw23vMwy50ESKeJIaWjQ4MqJ0KfL376iHirK9yVFKrcSh0fiwpeqNKcsfN
+         /54ct/PkI0BOLt+88yurAcZcSSCk4tWNIWnxJ2+tBUgwYi86umP4D9uLZb5r4KWkJ+2t
+         SbTA==
+X-Forwarded-Encrypted: i=1; AJvYcCVr/6bcAA9pjyzL9vpNYmapx7j6RmawtKur/Cpo1jkcIJq6xArSszoPdZ4ZW9yuJUIMNVrYv165pKbbqPuC6Ri4TL+f4NNrsZwMdMW/5bl9
+X-Gm-Message-State: AOJu0YygvHLeDHpu7dM9SAMO+fFb7JPxr0Fu6JplvAa5w5O0Hv5YNmnQ
+	oQfhzRopbcqBEt4c/CxZGMFiObK17tiQwMwSXvC6cNVgJASAVVLwf2PE408Z+Ps=
+X-Google-Smtp-Source: AGHT+IFE4R9zCUkzHMX1ToR2kyTpvZV9gQXHpyVa4BPp1ldGkiKbLmpz+4IIFAyNc6nOuO6PT/9Ayg==
+X-Received: by 2002:a05:600c:3baa:b0:418:1303:c3d1 with SMTP id n42-20020a05600c3baa00b004181303c3d1mr7145059wms.3.1713775986113;
+        Mon, 22 Apr 2024 01:53:06 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:999:a3a0:dc65:11af:998:225e? ([2a01:e0a:999:a3a0:dc65:11af:998:225e])
+        by smtp.gmail.com with ESMTPSA id g7-20020a05600c310700b0041a92bb0c10sm25826wmo.2.2024.04.22.01.53.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Apr 2024 01:53:05 -0700 (PDT)
+Message-ID: <f89c79f7-a09e-4fcf-8e16-0875202ade4a@rivosinc.com>
+Date: Mon, 22 Apr 2024 10:53:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/12] dt-bindings: riscv: add Zc* extension rules
+ implied by C extension
+To: Conor Dooley <conor@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
+ Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+References: <20240418124300.1387978-1-cleger@rivosinc.com>
+ <20240418124300.1387978-4-cleger@rivosinc.com>
+ <20240419-blinked-timid-da722ec6ddc4@spud>
+Content-Language: en-US
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <20240419-blinked-timid-da722ec6ddc4@spud>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add arm target, individual Makefile targets, and instructions to build the
-tests, along with .gitignore files and a config file.
 
-Signed-off-by: Dev Jain <dev.jain@arm.com>
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/arm/Makefile          | 57 +++++++++++++++++++
- tools/testing/selftests/arm/README            | 31 ++++++++++
- tools/testing/selftests/arm/config            |  1 +
- tools/testing/selftests/arm/elf/.gitignore    |  2 +
- tools/testing/selftests/arm/elf/Makefile      |  6 ++
- tools/testing/selftests/arm/mm/.gitignore     |  2 +
- tools/testing/selftests/arm/mm/Makefile       |  6 ++
- tools/testing/selftests/arm/signal/.gitignore |  3 +
- tools/testing/selftests/arm/signal/Makefile   | 30 ++++++++++
- 10 files changed, 139 insertions(+)
- create mode 100644 tools/testing/selftests/arm/Makefile
- create mode 100644 tools/testing/selftests/arm/README
- create mode 100644 tools/testing/selftests/arm/config
- create mode 100644 tools/testing/selftests/arm/elf/.gitignore
- create mode 100644 tools/testing/selftests/arm/elf/Makefile
- create mode 100644 tools/testing/selftests/arm/mm/.gitignore
- create mode 100644 tools/testing/selftests/arm/mm/Makefile
- create mode 100644 tools/testing/selftests/arm/signal/.gitignore
- create mode 100644 tools/testing/selftests/arm/signal/Makefile
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index e1504833654d..3966d2541ef7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- TARGETS += alsa
- TARGETS += amd-pstate
-+TARGETS += arm
- TARGETS += arm64
- TARGETS += bpf
- TARGETS += breakpoints
-diff --git a/tools/testing/selftests/arm/Makefile b/tools/testing/selftests/arm/Makefile
-new file mode 100644
-index 000000000000..039224bc006e
---- /dev/null
-+++ b/tools/testing/selftests/arm/Makefile
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
-+ifneq (,$(filter $(ARCH),aarch64 arm64 arm armv7l armv8l))
-+ARM_SUBTARGETS ?= mm signal elf
-+else
-+ARM_SUBTARGETS :=
-+endif
-+
-+CFLAGS := -Wall -O2 -g -static
-+
-+# A proper top_srcdir is needed by KSFT(lib.mk)
-+top_srcdir = $(realpath ../../../../)
-+
-+# Additional include paths needed by kselftest.h and local headers
-+CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
-+
-+CFLAGS += -I$(top_srcdir)/tools/include
-+
-+export CFLAGS
-+export top_srcdir
-+
-+all:
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		mkdir -p $$BUILD_TARGET;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+install: all
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+run_tests: all
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+# Avoid any output on non arm on emit_tests
-+emit_tests:
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+clean:
-+	@for DIR in $(ARM_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+.PHONY: all clean install run_tests emit_tests
-diff --git a/tools/testing/selftests/arm/README b/tools/testing/selftests/arm/README
-new file mode 100644
-index 000000000000..1a05c043d7ee
---- /dev/null
-+++ b/tools/testing/selftests/arm/README
-@@ -0,0 +1,31 @@
-+KSelfTest ARM
-+===============
-+
-+- This is a series of compatibility tests, wherein the source files are
-+  built statically into a 32 bit ELF; they should pass on both 32 and 64
-+  bit kernels. They are not built or run but just skipped completely when
-+  env-variable ARCH is found to be different than 'arm64' or 'arm' and
-+  `uname -m` reports other than 'aarch64', 'armv7l' or 'armv8l'.
-+
-+- Please ensure that the test kernel is built with CONFIG_COMPAT enabled.
-+
-+- Holding true the above, ARM KSFT tests can be run within the KSelfTest
-+  framework using standard Linux top-level-makefile targets. Please set
-+  $(CROSS_COMPILE) to 'arm-linux-gnueabi-' or 'arm-linux-gnueabihf-'.
-+
-+      $ make TARGETS=arm kselftest-clean
-+      $ make $(CROSS_COMPILE) TARGETS=arm kselftest
-+
-+      or
-+
-+      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
-+		INSTALL_PATH=<your-installation-path> install
-+
-+      or, alternatively, only specific arm/ subtargets can be picked:
-+
-+      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
-+		ARM_SUBTARGETS="signal" INSTALL_PATH=<your-installation-path> \
-+			install
-+
-+   Further details on building and running KFST can be found in:
-+     Documentation/dev-tools/kselftest.rst
-diff --git a/tools/testing/selftests/arm/config b/tools/testing/selftests/arm/config
-new file mode 100644
-index 000000000000..9b072bae787e
---- /dev/null
-+++ b/tools/testing/selftests/arm/config
-@@ -0,0 +1 @@
-+CONFIG_COMPAT=y
-diff --git a/tools/testing/selftests/arm/elf/.gitignore b/tools/testing/selftests/arm/elf/.gitignore
-new file mode 100644
-index 000000000000..41458ecbcd72
---- /dev/null
-+++ b/tools/testing/selftests/arm/elf/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+parse_elf
-diff --git a/tools/testing/selftests/arm/elf/Makefile b/tools/testing/selftests/arm/elf/Makefile
-new file mode 100644
-index 000000000000..86636fe02994
---- /dev/null
-+++ b/tools/testing/selftests/arm/elf/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 ARM Limited
-+
-+TEST_GEN_PROGS := parse_elf
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/arm/mm/.gitignore b/tools/testing/selftests/arm/mm/.gitignore
-new file mode 100644
-index 000000000000..eb28169bb1b5
---- /dev/null
-+++ b/tools/testing/selftests/arm/mm/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+compat_va
-diff --git a/tools/testing/selftests/arm/mm/Makefile b/tools/testing/selftests/arm/mm/Makefile
-new file mode 100644
-index 000000000000..d8bfa45df98c
---- /dev/null
-+++ b/tools/testing/selftests/arm/mm/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 ARM Limited
-+
-+TEST_GEN_PROGS := compat_va
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/arm/signal/.gitignore b/tools/testing/selftests/arm/signal/.gitignore
-new file mode 100644
-index 000000000000..26929e3c20ea
---- /dev/null
-+++ b/tools/testing/selftests/arm/signal/.gitignore
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+mangle_cpsr_aif_bits
-+mangle_cpsr_invalid_compat_toggle
-diff --git a/tools/testing/selftests/arm/signal/Makefile b/tools/testing/selftests/arm/signal/Makefile
-new file mode 100644
-index 000000000000..3540a25de75a
---- /dev/null
-+++ b/tools/testing/selftests/arm/signal/Makefile
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 ARM Limited
-+
-+# Additional include paths needed by kselftest.h and local headers
-+CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
-+
-+SRCS := $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
-+PROGS := $(patsubst %.c,%,$(SRCS))
-+
-+# Generated binaries to be installed by top KSFT script
-+TEST_GEN_PROGS := $(notdir $(PROGS))
-+
-+# Get Kernel headers installed and use them.
-+
-+# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
-+# to account for any OUTPUT target-dirs optionally provided by
-+# the toplevel makefile
-+include ../../lib.mk
-+
-+$(TEST_GEN_PROGS): $(PROGS)
-+	cp $(PROGS) $(OUTPUT)/
-+
-+# Common test-unit targets to build common-layout test-cases executables
-+# Needs secondary expansion to properly include the testcase c-file in pre-reqs
-+COMMON_SOURCES := test_signals.c test_signals_utils.c
-+COMMON_HEADERS := test_signals.h test_signals_utils.h
-+
-+.SECONDEXPANSION:
-+$(PROGS): $$@.c ${COMMON_SOURCES} ${COMMON_HEADERS}
-+	$(CC) $(CFLAGS) ${@}.c ${COMMON_SOURCES} -o $@
--- 
-2.39.2
+On 19/04/2024 17:49, Conor Dooley wrote:
+> On Thu, Apr 18, 2024 at 02:42:26PM +0200, Clément Léger wrote:
+>> As stated by Zc* spec:
+>>
+>> "As C defines the same instructions as Zca, Zcf and Zcd, the rule is that:
+>>  - C always implies Zca
+>>  - C+F implies Zcf (RV32 only)
+>>  - C+D implies Zcd"
+>>
+>> Add additionnal validation rules to enforce this in dts.
+> 
+> I'll get it out of the way: NAK, and the dts patch is the perfect
+> example of why. I don't want us to have to continually update
+> devicetrees. If these are implied due to being subsets of other
+> extensions, then software should be able to enable them when that
+> other extension is present.
 
+Acked.
+
+> 
+> My fear is that, and a quick look at the "add probing" commit seemed to
+> confirm it, new subsets would require updates to the dts, even though
+> the existing extension is perfectly sufficient to determine presence.
+> 
+> I definitely want to avoid continual updates to the devicetree for churn
+> reasons whenever subsets are added, but not turning on the likes of Zca
+> when C is present because "the bindings were updated to enforce this"
+> is a complete blocker. I do concede that having two parents makes that
+> more difficult and will likely require some changes to how we probe - do
+> we need to have a "second round" type thing?
+
+Yeah, I understand. At first, I actually did the modifications in the
+ISA probing loop with some dependency probing (ie loop while we don't
+have a stable extension state). But I thought that it was not actually
+our problem but rather the ISA string provider. For instance, Qemu
+provides them.
+
+
+> Taking Zcf as an example, maybe something like making both of C and F into
+> "standard" supersets and adding a case to riscv_isa_extension_check()
+> that would mandate that Zca and F are enabled before enabling it, and we
+> would ensure that C implies Zca before it implies Zcf?
+
+I'm afraid that riscv_isa_extension_check() will become a rat nest so
+rather than going that way, I would be in favor of adding a validation
+callback for the extensions if needed.
+
+> 
+> Given we'd be relying on ordering, we have to perform the same implication
+> for both F and C and make sure that the "implies" struct has Zca before Zcf.
+> I don't really like that suggestion, hopefully there's a nicer way of doing
+> that, but I don't like the dt stuff here.
+
+I guess the "cleanest" way would be to have some "defered-like"
+mechanism in ISA probing which would allow to handle ordering as well as
+dependencies/implies for extensions. For Zca, Zcf, we actually do not
+have ordering problems but I think it would be a bit broken not to
+support that as well.
+
+I can actually revive the work mentioned above to handle that and see if
+it works ok.
+
+Clément
+
+> 
+> Thanks,
+> Conor.
+> 
+>>
+>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+>> ---
+>>  .../devicetree/bindings/riscv/cpus.yaml       |  8 +++--
+>>  .../devicetree/bindings/riscv/extensions.yaml | 34 +++++++++++++++++++
+>>  2 files changed, 39 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+>> index d87dd50f1a4b..c4e2c65437b1 100644
+>> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+>> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+>> @@ -168,7 +168,7 @@ examples:
+>>                  i-cache-size = <16384>;
+>>                  reg = <0>;
+>>                  riscv,isa-base = "rv64i";
+>> -                riscv,isa-extensions = "i", "m", "a", "c";
+>> +                riscv,isa-extensions = "i", "m", "a", "c", "zca";
+>>  
+>>                  cpu_intc0: interrupt-controller {
+>>                          #interrupt-cells = <1>;
+>> @@ -194,7 +194,8 @@ examples:
+>>                  reg = <1>;
+>>                  tlb-split;
+>>                  riscv,isa-base = "rv64i";
+>> -                riscv,isa-extensions = "i", "m", "a", "f", "d", "c";
+>> +                riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zca",
+>> +                                       "zcd";
+>>  
+>>                  cpu_intc1: interrupt-controller {
+>>                          #interrupt-cells = <1>;
+>> @@ -215,7 +216,8 @@ examples:
+>>                  compatible = "riscv";
+>>                  mmu-type = "riscv,sv48";
+>>                  riscv,isa-base = "rv64i";
+>> -                riscv,isa-extensions = "i", "m", "a", "f", "d", "c";
+>> +                riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zca",
+>> +                                       "zcd";
+>>  
+>>                  interrupt-controller {
+>>                          #interrupt-cells = <1>;
+>> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+>> index db7daf22b863..0172cbaa13ca 100644
+>> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+>> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+>> @@ -549,6 +549,23 @@ properties:
+>>                  const: zca
+>>              - contains:
+>>                  const: f
+>> +      # C extension implies Zca
+>> +      - if:
+>> +          contains:
+>> +            const: c
+>> +        then:
+>> +          contains:
+>> +            const: zca
+>> +      # C extension implies Zcd if d
+>> +      - if:
+>> +          allOf:
+>> +            - contains:
+>> +                const: c
+>> +            - contains:
+>> +                const: d
+>> +        then:
+>> +          contains:
+>> +            const: zcd
+>>  
+>>  allOf:
+>>    # Zcf extension does not exists on rv64
+>> @@ -566,6 +583,23 @@ allOf:
+>>            not:
+>>              contains:
+>>                const: zcf
+>> +  # C extension implies Zcf if f on rv32 only
+>> +  - if:
+>> +      properties:
+>> +        riscv,isa-extensions:
+>> +          allOf:
+>> +            - contains:
+>> +                const: c
+>> +            - contains:
+>> +                const: f
+>> +        riscv,isa-base:
+>> +          contains:
+>> +            const: rv32i
+>> +    then:
+>> +      properties:
+>> +        riscv,isa-extensions:
+>> +          contains:
+>> +            const: zcf
+>>  
+>>  additionalProperties: true
+>>  ...
+>> -- 
+>> 2.43.0
+>>
 
