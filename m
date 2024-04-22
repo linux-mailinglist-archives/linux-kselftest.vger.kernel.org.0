@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-8610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC06E8ACC34
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 13:41:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BED858ACC38
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 13:41:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF10E1C20BB3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 11:41:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499861F2240A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 11:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1537814A084;
-	Mon, 22 Apr 2024 11:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66BE1465BE;
+	Mon, 22 Apr 2024 11:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="rh3Q8AbY"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="VpPbZLaw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2F9147C89
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 11:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2122714430B
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 11:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713786037; cv=none; b=n0EtmWA3d4caDWW/ldIbzL5h1Fhzg0ocw4sI1bi6MbHbJnR2HG1HWMyPmTDlcODJII83Gvr40xfRSxkTSf+/0OJQhqX33qaTuKnfZFZPPTWXVJsFxAyYtwSqtjynoCRJOICfbcv+5lZsWeynG56tVjxZ9INhjIVP2RvuQMOPKRA=
+	t=1713786089; cv=none; b=R/xZSK6d83VuOaeG+CYSAVE82tRD0JECnr03tm2xcLcYZh21x2o6CXue+9TltfoANkMT6AkBr2SOMH9+S7eRQF2by2qMnfL7xEcxU2L5zroxEBujUWR+7vpHfRahVjSgVlYKIsOL5IQtlP4vHVEwGSyMviyIXwKuYMJoI0wyE38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713786037; c=relaxed/simple;
-	bh=S2ElplkPZSfF2L7wz1LM5GrMF4tPupfPWF9zkAeRnkY=;
+	s=arc-20240116; t=1713786089; c=relaxed/simple;
+	bh=7KJ7vDaSx0rWHDQDkmEvrUR/MLLStUJAcboh4KtxB9U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oKWAMW+5H6lOsQkqLhKk1Vnb3EfEgMO7MfwL5ML5UT2qkdxBYvSwRLUyggjLE95WLD/b8gFBBZ3bh98d/1GeqbPCnErEl6vOZzIvFHQWAaZXLns/+3uDV/ScwNlO3wZuhHWCnhtjPdhBHdhSEyRMrud/hP9RhgLXfMfI4GHrbxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=rh3Q8AbY; arc=none smtp.client-ip=209.85.221.54
+	 In-Reply-To:Content-Type; b=J0RWUFv+WKP15PUxecD6PSW7OogyCBwLFZPHqNZIHCc0lqvYuiDyuje9owACKcVYoGGLAhkmw0hBUQcK0pIXzkLD34Tty21WDKKb5V0Tt1ULPdL6W22ve1ednLvUKGs/es+riz2J6zdpcPhfdNooim40xG5cQ5Z+MgW29gfvBg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=VpPbZLaw; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-345606e8ac0so508712f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 04:40:34 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-347c6d6fc02so651861f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 04:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713786033; x=1714390833; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713786086; x=1714390886; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JyXuxvG0jo0EeYgJFE9/eMqNg1Z05zXTsUVqLHCMuBs=;
-        b=rh3Q8AbY6SxcFR4Iu9v713m/F+O4M2zPgGt6qMAK+CxcKDMUmOPKodJTjM/IZk31pL
-         rtdnqzuY08hbG40+7T6eKxn1YbVFrMUYwHcYoxybIL9m66x/NSy6lDFK+cRO1D1l81cx
-         6/LQ/G8hGcay5xcMvu87v6EQRw6DxHmjhxB8mBQ1Tl9QXfcytLJl+OLsb8k5MDmAnqxv
-         GHiRABOe0n8a0WRlUVlBUCpMv7ceWtr3kjY973jRzNQ8HIhqtNw7C36SD1PiFTbQ43On
-         LM5kBs2VGLpYfSDPJwyrWSNT3QBSvrFKYPeldGoo2ugQNYw3OaxO9YfzcEFNM9HiTRz3
-         EYrQ==
+        bh=KGqDQHMjrZlO15Rvq0SOqA/APBPIM6ni8f7xyO7pFgU=;
+        b=VpPbZLawUMlZNudFUcwqgbbVCA+9/pMgghQHKBrkUkE8sybZstKBydDy/pfM6SxepJ
+         d+k2XT7Tn3xD14gDFnU9lGhVDRfOO+EV6tjQsI0y9nBL6RnYkmEfsTL3segsGTBecIR1
+         udn7j9Rh94qThGRhqXETDDMrefqqyERUndHs2FrdnRD5QXUps4NZRcKBQySkySo3qZtq
+         rG/s8OiwpJOtmjQQDDlHdnxQ4JDW9tlrJDMccDtvpfZO87r5ZL/b4lDqbMdIR/m69mMw
+         pGBpvX1THj8hCT9tFnQ/rY5UQb7/Z8gpd9fCXmsBDh/o13mkKC+UqutoMP8nCkPG0HUG
+         5jqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713786033; x=1714390833;
+        d=1e100.net; s=20230601; t=1713786086; x=1714390886;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JyXuxvG0jo0EeYgJFE9/eMqNg1Z05zXTsUVqLHCMuBs=;
-        b=swZK7uZCxm34KJU4f1Y5Rfhgu2hbbc3dfCnRDxuMUKKjbWVZ6nJFyzn5tSh9+tjpMD
-         YVoVwoDNQHe+1S67RmT5UHrqald4P0+uxICYYaJFSguW5iI4ekSZ9d8Y4kU5bwd4exV4
-         XHs7DLcaUKRx93YVdsLpA7/kDLHtuhGEW6fbp8QtSBX4hyKZH9YFSKBdhDkVtLyDOaF1
-         4DTmdcWlc3Id8BydMlD+uVcb78ennOf08v10g0FfEM+Y+tNkZ6XvRZXIDhfDCj5MZBUs
-         Jz97zzeYjZpEC4X8sIzxAEwjlw9Q3mlPEgAJSAvDS6ncbtJYGlkpYSWybcbRU46oQX/k
-         6+pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQL6lm6qITAxStixk6VVrAJLGauekd65Uw50AUGlQgK6iW81BNPjS9TSUs8hoBXz8Okg7zwK4iJVJ7WOdU84Pm4XkV4qKx7Olr8RyB23Xz
-X-Gm-Message-State: AOJu0YzauAKUZACizwYYZkD4+Tq+oF/7tnl8idIFe7rso+1Jj+K6pHQz
-	+64T4MinjHx2LsdoKXMdmWRSd24r0bz/nQxgeI6oHIU1DUdORJEXRK0MZxcFxiY=
-X-Google-Smtp-Source: AGHT+IEBsytwGUl5ywdsyAtA0Tb7Bwan6wxkhWaIQk4aXEJurWpLAppFPSp2ncjaO6l/2n4gpEGi6w==
-X-Received: by 2002:a5d:6392:0:b0:346:500f:9297 with SMTP id p18-20020a5d6392000000b00346500f9297mr6203710wru.2.1713786033161;
-        Mon, 22 Apr 2024 04:40:33 -0700 (PDT)
+        bh=KGqDQHMjrZlO15Rvq0SOqA/APBPIM6ni8f7xyO7pFgU=;
+        b=LxptNmoz8OHPqNKWl2tvxdxtBihPCePGg8Y2MvafEEIF8FyUAfEjyWu2ZfXqeTTVcI
+         zCGbU6hwHVgQgeOII9qghL9r2LGDXahRyoxqJud3B8hsFOrvDdXgrpC2ljOTpTmrDpr4
+         FatvO3twkOITNlv7GfvqmqVW5Bho4ZlWf0j4+IJSS2NgOpRfpWX9MQHx3XteHS2Mq0mt
+         1KbNAHlyPP7+ds0TD50S8sYL7cW8AzwPZ2lVj5esrL1dhNMnHIOK0vCA/jv5WJmZRrnB
+         mxhXQa3G4nl1AH1wgUa2Cs0S4+MRURHtRDO8NL9gJ1CFILt8oARle8dRuqdxUGzN3tN+
+         qqMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSp5Y1hgho1rnf2L+cxlhMGDj6O5aJsROfHCGPMBLnZ/f42JBQHpxqNwN3+2nexpIAY0Mzy0TIqFe5O2EibEK1j1J7e8/y/L2qinnKaghi
+X-Gm-Message-State: AOJu0YxW4lUquZJXX4PqxeFwigYJCrTpBTygma2AxSGy0i9CDP9fZoJ6
+	hhvgeQqrS8w1FH9zhGx1CWZUEfcpYtR+IkC0YowDjS1utngVbB/xBEyeircVMuI=
+X-Google-Smtp-Source: AGHT+IHTzRl5EROPxdfWdXZvfgKbo2IebGI7y5OdOSFbmkZ4wmW+9Re1DyIi+sB900+gcrU8oHywLQ==
+X-Received: by 2002:a05:600c:468f:b0:418:9941:ca28 with SMTP id p15-20020a05600c468f00b004189941ca28mr6743806wmo.2.1713786086657;
+        Mon, 22 Apr 2024 04:41:26 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:999:a3a0:9f43:3ca4:162c:d540? ([2a01:e0a:999:a3a0:9f43:3ca4:162c:d540])
-        by smtp.gmail.com with ESMTPSA id w17-20020a5d6811000000b0034a2ba13588sm10715492wru.42.2024.04.22.04.40.32
+        by smtp.gmail.com with ESMTPSA id m25-20020a05600c3b1900b0041816c3049csm16496334wms.11.2024.04.22.04.41.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 04:40:32 -0700 (PDT)
-Message-ID: <5050cd12-45fd-4228-9d9f-ba70ab21f737@rivosinc.com>
-Date: Mon, 22 Apr 2024 13:40:32 +0200
+        Mon, 22 Apr 2024 04:41:26 -0700 (PDT)
+Message-ID: <7d06aaa0-cafc-4396-b5d9-8b64b6a1e643@rivosinc.com>
+Date: Mon, 22 Apr 2024 13:41:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,8 +76,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/12] dt-bindings: riscv: add Zc* extension rules
- implied by C extension
+Subject: Re: [PATCH v2 04/12] riscv: add ISA parsing for Zca, Zcf, Zcd and Zcb
 To: Conor Dooley <conor.dooley@microchip.com>
 Cc: Conor Dooley <conor@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
  Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
@@ -90,102 +89,94 @@ Cc: Conor Dooley <conor@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
  devicetree@vger.kernel.org, kvm@vger.kernel.org,
  kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
 References: <20240418124300.1387978-1-cleger@rivosinc.com>
- <20240418124300.1387978-4-cleger@rivosinc.com>
- <20240419-blinked-timid-da722ec6ddc4@spud>
- <f89c79f7-a09e-4fcf-8e16-0875202ade4a@rivosinc.com>
- <20240422-stumbling-aliens-b408eebe1f32@wendy>
+ <20240418124300.1387978-5-cleger@rivosinc.com>
+ <20240419-clinic-amusing-d23b1b6d2af2@spud>
+ <6ab9e591-f2f2-4267-8bdd-169ef0243e14@rivosinc.com>
+ <20240422-daylight-sassy-ff3b0d867fef@wendy>
+ <032530b8-a26e-494f-bd9c-3e1661add5d4@rivosinc.com>
+ <20240422-matchbook-unlikable-59987a8d8b1f@wendy>
 Content-Language: en-US
 From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20240422-stumbling-aliens-b408eebe1f32@wendy>
+In-Reply-To: <20240422-matchbook-unlikable-59987a8d8b1f@wendy>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 
 
-On 22/04/2024 13:19, Conor Dooley wrote:
-> On Mon, Apr 22, 2024 at 10:53:04AM +0200, Clément Léger wrote:
->> On 19/04/2024 17:49, Conor Dooley wrote:
->>> On Thu, Apr 18, 2024 at 02:42:26PM +0200, Clément Léger wrote:
->>>> As stated by Zc* spec:
+On 22/04/2024 13:36, Conor Dooley wrote:
+> On Mon, Apr 22, 2024 at 01:14:26PM +0200, Clément Léger wrote:
+>> On 22/04/2024 11:35, Conor Dooley wrote:
+>>> On Mon, Apr 22, 2024 at 10:53:10AM +0200, Clément Léger wrote:
+>>>> On 19/04/2024 17:51, Conor Dooley wrote:
+>>>>> On Thu, Apr 18, 2024 at 02:42:27PM +0200, Clément Léger wrote:
+>>>>>> The Zc* standard extension for code reduction introduces new extensions.
+>>>>>> This patch adds support for Zca, Zcf, Zcd and Zcb. Zce, Zcmt and Zcmp
+>>>>>> are left out of this patch since they are targeting microcontrollers/
+>>>>>> embedded CPUs instead of application processors.
+>>>>>>
+>>>>>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+>>>>>> ---
+>>>>>>  arch/riscv/include/asm/hwcap.h | 4 ++++
+>>>>>>  arch/riscv/kernel/cpufeature.c | 4 ++++
+>>>>>>  2 files changed, 8 insertions(+)
+>>>>>>
+>>>>>> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+>>>>>> index 543e3ea2da0e..b7551bad341b 100644
+>>>>>> --- a/arch/riscv/include/asm/hwcap.h
+>>>>>> +++ b/arch/riscv/include/asm/hwcap.h
+>>>>>> @@ -82,6 +82,10 @@
+>>>>>>  #define RISCV_ISA_EXT_ZACAS		73
+>>>>>>  #define RISCV_ISA_EXT_XANDESPMU		74
+>>>>>>  #define RISCV_ISA_EXT_ZIMOP		75
+>>>>>> +#define RISCV_ISA_EXT_ZCA		76
+>>>>>> +#define RISCV_ISA_EXT_ZCB		77
+>>>>>> +#define RISCV_ISA_EXT_ZCD		78
+>>>>>> +#define RISCV_ISA_EXT_ZCF		79
+>>>>>>  
+>>>>>>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
+>>>>>>  
+>>>>>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+>>>>>> index 115ba001f1bc..09dee071274d 100644
+>>>>>> --- a/arch/riscv/kernel/cpufeature.c
+>>>>>> +++ b/arch/riscv/kernel/cpufeature.c
+>>>>>> @@ -261,6 +261,10 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>>>>>>  	__RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
+>>>>>>  	__RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
+>>>>>>  	__RISCV_ISA_EXT_DATA(zfhmin, RISCV_ISA_EXT_ZFHMIN),
+>>>>>> +	__RISCV_ISA_EXT_DATA(zca, RISCV_ISA_EXT_ZCA),
+>>>>>> +	__RISCV_ISA_EXT_DATA(zcb, RISCV_ISA_EXT_ZCB),
+>>>>>> +	__RISCV_ISA_EXT_DATA(zcd, RISCV_ISA_EXT_ZCD),
+>>>>>> +	__RISCV_ISA_EXT_DATA(zcf, RISCV_ISA_EXT_ZCF),
+>>>>>>  	__RISCV_ISA_EXT_DATA(zba, RISCV_ISA_EXT_ZBA),
+>>>>>>  	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
+>>>>>>  	__RISCV_ISA_EXT_DATA(zbc, RISCV_ISA_EXT_ZBC),
+>>>>>
+>>>>> Ye, this looks exactly like what I "feared".
 >>>>
->>>> "As C defines the same instructions as Zca, Zcf and Zcd, the rule is that:
->>>>  - C always implies Zca
->>>>  - C+F implies Zcf (RV32 only)
->>>>  - C+D implies Zcd"
->>>>
->>>> Add additionnal validation rules to enforce this in dts.
+>>>> Ok but for instance, Qemu actually set Zc* based on C/F/D. So the ISA
+>>>> string containing theses dependencies should actually also be allowed.
+>>>> So should we simply ignore them in the ISA string and always do our own
+>>>> "post-processing" based on C/F/D?
 >>>
->>> I'll get it out of the way: NAK, and the dts patch is the perfect
->>> example of why. I don't want us to have to continually update
->>> devicetrees. If these are implied due to being subsets of other
->>> extensions, then software should be able to enable them when that
->>> other extension is present.
+>>> I'm not familiar with the contents of all of these extensions, but I
+>>> assume the reasoning for splitting them out is that you can implement
+>>> them but not maybe not implement C (or something similar)? If that's the
+>>> case, you cannot always imply.
 >>
->> Acked.
->>
->>>
->>> My fear is that, and a quick look at the "add probing" commit seemed to
->>> confirm it, new subsets would require updates to the dts, even though
->>> the existing extension is perfectly sufficient to determine presence.
->>>
->>> I definitely want to avoid continual updates to the devicetree for churn
->>> reasons whenever subsets are added, but not turning on the likes of Zca
->>> when C is present because "the bindings were updated to enforce this"
->>> is a complete blocker. I do concede that having two parents makes that
->>> more difficult and will likely require some changes to how we probe - do
->>> we need to have a "second round" type thing?
->>
->> Yeah, I understand. At first, I actually did the modifications in the
->> ISA probing loop with some dependency probing (ie loop while we don't
->> have a stable extension state). But I thought that it was not actually
->> our problem but rather the ISA string provider. For instance, Qemu
->> provides them.
+>> Yeah, they can be implemented independently so we need to be able to
+>> parse them independently.
 > 
+>> However, the kernel currently requires C
 > 
-> A newer version of QEMU might, but not all do, so I'm not sure that using
-> it is a good example. My expectations is that a devicetree will be written
-> to the standards of the day and not be updated as subsets are released.
-> 
-> If this were the first instance of a superset/bundle I'd be prepared to
-> accept an argument that we should not infer anything - but it's not and
-> we'd be introducing inconsistency with the crypto stuff. I know that both
-> scenarios are different in terms of extension history given that this is
-> splitting things into a subset and that was a superset/bundle created at
-> the same time, but they're not really that different in terms of the
-> DT/ACPI to user "interface".
-> 
->>> Taking Zcf as an example, maybe something like making both of C and F into
->>> "standard" supersets and adding a case to riscv_isa_extension_check()
->>> that would mandate that Zca and F are enabled before enabling it, and we
->>> would ensure that C implies Zca before it implies Zcf?
->>
->> I'm afraid that riscv_isa_extension_check() will become a rat nest so
->> rather than going that way, I would be in favor of adding a validation
->> callback for the extensions if needed.
-> 
-> IOW, extension check split out per extension moving to be a callback?
-> 
->>> Given we'd be relying on ordering, we have to perform the same implication
->>> for both F and C and make sure that the "implies" struct has Zca before Zcf.
->>> I don't really like that suggestion, hopefully there's a nicer way of doing
->>> that, but I don't like the dt stuff here.
->>
->> I guess the "cleanest" way would be to have some "defered-like"
->> mechanism in ISA probing which would allow to handle ordering as well as
->> dependencies/implies for extensions. For Zca, Zcf, we actually do not
->> have ordering problems but I think it would be a bit broken not to
->> support that as well.
-> 
-> We could, I suppose, enable all detected extensions on a CPU and run the
-> aforemention callback, disabling them if conditions are not met?
-> 
-> Is that something like what you're suggesting?
+> No it doesn't!
+> There's a Kconfig option that controls whether or not we build with
+> compressed instructions.
 
-Yep, exactly. First parse the ISA blindly in a bitmap, (either from
-riscv,isa string, riscv,isa-extensions, or ACPI). Then in a second time,
-verify the ISA extensions by validating extension and looping until we
-reach a stable set.
+Acked, missed that. That is then advocating to keep separate Zc* extensions.
 
-Clément
-
+> 
+>> so we
+>> should always have Zca/Zcf/Zcd. But if that changes in the future, then,
+>> that won't be true anymore. Better keep it generic probably
+> 
 
