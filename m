@@ -1,618 +1,322 @@
-Return-Path: <linux-kselftest+bounces-8630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9DEB8AD185
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 18:06:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4F998AD29E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 18:46:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 197F01C227EE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 16:06:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B6FC28C369
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 16:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6545153596;
-	Mon, 22 Apr 2024 16:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5787F154443;
+	Mon, 22 Apr 2024 16:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="IIcG8VoT"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="S5R4c28H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC1A153581
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 16:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD3B154445;
+	Mon, 22 Apr 2024 16:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713802000; cv=none; b=nCdrBuKHmKnddzAZTYetnY6M27Fi/vO6JMwfSK18iUr95Vce7Awd8aQ02rk4GId/QmWU9XbOM79MCPxRjHC8PqGgju5sp5KzL1SHbAzv/W7huwXJrBL+Mu5iGccCnCxIx/j2djhhr0M3rSmpN2ddd0I8NWwpDETQyRuRwAR9TbU=
+	t=1713804278; cv=none; b=PRYh+UQQoIMx6QWEntfufWNHTuXYc/V6pW6DLPfdtB/+QK7ryDua442SXE+gI5AO+Q5jzLFDrK5Y9lLpTN7hrOklHPNlqeTE/7/OVfKRmCP93FcTy9Owk/PjYODiD10Q1c28P1/rYZ5Od6AUpsoJWs09EsGmtdZ4CGf7cikeUBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713802000; c=relaxed/simple;
-	bh=Pq+IwXgfHTea7oJCPx8f0hI/Vb/vVGxsxYuy44v4DeA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sisaYYon/ElZEHvtN/kBTV6/YE85BN3W4SV84PjbIe+LkIk5s/ah5OPql6Kcf4BebR9fyiDxT8jJ5SD3xqsRDgttE41sR4NKWcVzCftwQix7I8NVR+d+ytLNf1YBkFJGiNoSJ4gB/chH1oyj7h8Qe9oADtTDgGPkHIknOwsnrrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=IIcG8VoT; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7da41c6aa37so209595939f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 09:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1713801997; x=1714406797; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BlLfyhn8mWAgG7LaLhxMl3R58E+jwif8sheVl+iy1w0=;
-        b=IIcG8VoTCr8mu9cwpSsXGGXktxndx/hACq95wQSrxDkurBp0mc1m9Ymb/R/KPHNO2k
-         KR9ILjTUekAsUUmYMs2oNaZU164jeMnVx+xeVBcp58xzx5LYrSYIf9fTeJQwhRjYaV1e
-         oobRoziWNtu1Fj107nDZHx6fBAlcmK4yzdDzluohRd+hNUba1tCL7aCbZc7rQSSiIzqe
-         j7/JMc8/fvAwdpYWgfMI+8Alcn20R8w1nT0MA1NBoG7NK4qbqb92WdtqOzCHwOXPv+Co
-         PVLnEghw0l1P+m/tuYpAikqsElUXFPOxZwrdr/58yQu1HncBLZpGT2yutcZ8/yOY53EU
-         gi+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713801997; x=1714406797;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BlLfyhn8mWAgG7LaLhxMl3R58E+jwif8sheVl+iy1w0=;
-        b=P6nPBItDhwxKf+/6gtxD3C+5Dv2EJHWNBDteE0x+L+XRyE9C0idJwgjG7uehawPSLM
-         sr9KeVHzKjijVZ6JvsuxfE0gf4aM3XbFLaQeCJ8EfwlbnIafrIAtIjcK8KdXtGqDjDr8
-         t8Y8nDsguBHB3u0nvYmrm047iwtT4beCnKOiCWI2PkJj27VzijVmmmM4No/lmqPEVvPn
-         bewAn7tKVUOC/pZWu1GpWZYjMPU8Fj+jyqTUDI89K4cihAhzl+oMADNcpiXmj+CePD9A
-         LCPdGTuHeqmunpTfHvZ22J4/nTRWTaOWLObjhP79szPKZaD2rOpRWP2NNIYbYL9VG0sa
-         4CQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUe/DrOLL7nlaCzKDRQzIf0DzbBd3sPQvwC3iQdb49chuhbfCEfh8uSl4ZfLiZbBT2MdwVS3FqprBqPhRQFEsMkjEEDtbPHUdGu19vNBKFF
-X-Gm-Message-State: AOJu0YzQs1zMx7KJdFe2w8ef7raElaBDWhJShEceCJnNRhriIJUfj1Bu
-	Sif9gCIPA0RuW05ix9KeGHxogHqkR6pAU2JRrJAFfem4Iq7cLdGra7Eors3z/k0=
-X-Google-Smtp-Source: AGHT+IHBf94x35l+oMBJgIxz+ytLVCtBSrQBtpGSPysagcxu6+2BlEIhEOOjWWFTa2t1aFkTGkHKmw==
-X-Received: by 2002:a05:6602:6c1c:b0:7d5:e4a5:c20a with SMTP id ik28-20020a0566026c1c00b007d5e4a5c20amr16513177iob.12.1713801996902;
-        Mon, 22 Apr 2024 09:06:36 -0700 (PDT)
-Received: from [100.64.0.1] ([170.85.6.197])
-        by smtp.gmail.com with ESMTPSA id i17-20020a0566022c9100b007da1efc9b3asm2642998iow.43.2024.04.22.09.06.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 09:06:36 -0700 (PDT)
-Message-ID: <2f43393d-2488-40c8-abde-4dc82a64a829@sifive.com>
-Date: Mon, 22 Apr 2024 11:06:32 -0500
+	s=arc-20240116; t=1713804278; c=relaxed/simple;
+	bh=YgGg+cUEuzZRN/ZW0m92CCFObtBiPZx/Yz7WWM7m4wc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kNnC0pbsFStDx51bZ+MRnzYyvn83MCeWHx9Iu4NcXkfyglhB/JPjObjdJknybTABQQ4iBQyBD3bOYi4ePSfyaqxfBwRVyVIeu5EMURkKyGJKARNXwaI/dT+GkQXsSSy66KCxYdQkDdMGnDcGbl9T06+BMFVIO54fa2M6r2EyYaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=S5R4c28H; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=YgGg+cUEuzZRN/ZW0m92CCFObtBiPZx/Yz7WWM7m4wc=; b=S5R4c28HXD3Z//5OyZiH6eTT0t
+	N2dTosTLGUsUsiDkP5TcpvVWr6dqVwt56eTOQHhTgXWwEP6PeCjRf3ocMEcOefSab19hnxlcQcSb9
+	NV4ZKZniXewtCwQtVq6KHw2gb8ZG5vVXIctBypy4QsJWLa0yxlrxD/Qj+C0qec5Cb7g6Cant3HlSu
+	9xGT3n0MmIXRx2nVStfsA1dQ9Td52SPzHmpl0LdpcvD8ajtTo9HlPUWx+W3A7neA0/A9m9vMk3EI5
+	mcxUTMCdW7wEhTETjWfUNrzmNCs26ipXdtX3JFeR/EhOOLjwlKzfgumCrzqTK9TTHtgsVOr85Jm+s
+	fK77TCwQ==;
+Received: from [2001:8b0:10b:5:8814:318f:1e06:e78] (helo=u3832b3a9db3152.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rywmO-0000000EaZt-2c2B;
+	Mon, 22 Apr 2024 16:44:32 +0000
+Message-ID: <0bb540291542fd37b2d0f6d39ebf1c9f35fa1ac3.camel@infradead.org>
+Subject: Re: [PATCH 02/10] KVM: x86: Improve accuracy of KVM clock when TSC
+ scaling is in force
+From: David Woodhouse <dwmw2@infradead.org>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, Sean
+ Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>,  Paul Durrant <paul@xen.org>, Shuah Khan
+ <shuah@kernel.org>, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Oliver Upton
+ <oliver.upton@linux.dev>, Marcelo Tosatti <mtosatti@redhat.com>, 
+ jalliste@amazon.co.uk, sveith@amazon.de
+Date: Mon, 22 Apr 2024 17:44:31 +0100
+In-Reply-To: <CABgObfbK0aqqmAz7Z2efX4hNf7WRBYpoJ1a07oKMZdFXS2r0+g@mail.gmail.com>
+References: <20240418193528.41780-1-dwmw2@infradead.org>
+	 <20240418193528.41780-3-dwmw2@infradead.org>
+	 <CABgObfa0j34iEh81hhd7-t7ZM1GKAsvJb5xP6EoD2-c-8TnPqQ@mail.gmail.com>
+	 <a35e69e07b9cd297dac9993c886667add144e833.camel@infradead.org>
+	 <CABgObfbK0aqqmAz7Z2efX4hNf7WRBYpoJ1a07oKMZdFXS2r0+g@mail.gmail.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-kMnqTVDkh4tbIOg2M2ET"
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 09/24] drivers/perf: riscv: Implement SBI PMU snapshot
- function
-To: Atish Patra <atishp@rivosinc.com>, Anup Patel <anup@brainfault.org>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>,
- Conor Dooley <conor.dooley@microchip.com>,
- Andrew Jones <ajones@ventanamicro.com>, Ajay Kaher
- <ajay.kaher@broadcom.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alexghiti@rivosinc.com>, Juergen Gross <jgross@suse.com>,
- kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>,
- virtualization@lists.linux.dev, Will Deacon <will@kernel.org>,
- x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20240420151741.962500-1-atishp@rivosinc.com>
- <20240420151741.962500-10-atishp@rivosinc.com>
-From: Samuel Holland <samuel.holland@sifive.com>
-Content-Language: en-US
-In-Reply-To: <20240420151741.962500-10-atishp@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-Hi Atish,
 
-On 2024-04-20 10:17 AM, Atish Patra wrote:
-> SBI v2.0 SBI introduced PMU snapshot feature which adds the following
-> features.
-> 
-> 1. Read counter values directly from the shared memory instead of
-> csr read.
-> 2. Start multiple counters with initial values with one SBI call.
-> 
-> These functionalities optimizes the number of traps to the higher
-> privilege mode. If the kernel is in VS mode while the hypervisor
-> deploy trap & emulate method, this would minimize all the hpmcounter
-> CSR read traps. If the kernel is running in S-mode, the benefits
-> reduced to CSR latency vs DRAM/cache latency as there is no trap
-> involved while accessing the hpmcounter CSRs.
-> 
-> In both modes, it does saves the number of ecalls while starting
-> multiple counter together with an initial values. This is a likely
-> scenario if multiple counters overflow at the same time.
-> 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  drivers/perf/riscv_pmu.c       |   1 +
->  drivers/perf/riscv_pmu_sbi.c   | 265 ++++++++++++++++++++++++++++++---
->  include/linux/perf/riscv_pmu.h |   6 +
->  3 files changed, 255 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
-> index b4efdddb2ad9..36d348753d05 100644
-> --- a/drivers/perf/riscv_pmu.c
-> +++ b/drivers/perf/riscv_pmu.c
-> @@ -408,6 +408,7 @@ struct riscv_pmu *riscv_pmu_alloc(void)
->  		cpuc->n_events = 0;
->  		for (i = 0; i < RISCV_MAX_COUNTERS; i++)
->  			cpuc->events[i] = NULL;
-> +		cpuc->snapshot_addr = NULL;
->  	}
->  	pmu->pmu = (struct pmu) {
->  		.event_init	= riscv_pmu_event_init,
-> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> index 4eacd89141a9..2694110f1cff 100644
-> --- a/drivers/perf/riscv_pmu_sbi.c
-> +++ b/drivers/perf/riscv_pmu_sbi.c
-> @@ -58,6 +58,9 @@ PMU_FORMAT_ATTR(event, "config:0-47");
->  PMU_FORMAT_ATTR(firmware, "config:63");
->  
->  static bool sbi_v2_available;
-> +static DEFINE_STATIC_KEY_FALSE(sbi_pmu_snapshot_available);
-> +#define sbi_pmu_snapshot_available() \
-> +	static_branch_unlikely(&sbi_pmu_snapshot_available)
->  
->  static struct attribute *riscv_arch_formats_attr[] = {
->  	&format_attr_event.attr,
-> @@ -508,14 +511,105 @@ static int pmu_sbi_event_map(struct perf_event *event, u64 *econfig)
->  	return ret;
->  }
->  
-> +static void pmu_sbi_snapshot_free(struct riscv_pmu *pmu)
-> +{
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		struct cpu_hw_events *cpu_hw_evt = per_cpu_ptr(pmu->hw_events, cpu);
-> +
-> +		if (!cpu_hw_evt->snapshot_addr)
-> +			continue;
-> +
-> +		free_page((unsigned long)cpu_hw_evt->snapshot_addr);
-> +		cpu_hw_evt->snapshot_addr = NULL;
-> +		cpu_hw_evt->snapshot_addr_phys = 0;
-> +	}
-> +}
-> +
-> +static int pmu_sbi_snapshot_alloc(struct riscv_pmu *pmu)
-> +{
-> +	int cpu;
-> +	struct page *snapshot_page;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		struct cpu_hw_events *cpu_hw_evt = per_cpu_ptr(pmu->hw_events, cpu);
-> +
-> +		snapshot_page = alloc_page(GFP_ATOMIC | __GFP_ZERO);
-> +		if (!snapshot_page) {
-> +			pmu_sbi_snapshot_free(pmu);
-> +			return -ENOMEM;
-> +		}
-> +		cpu_hw_evt->snapshot_addr = page_to_virt(snapshot_page);
-> +		cpu_hw_evt->snapshot_addr_phys = page_to_phys(snapshot_page);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int pmu_sbi_snapshot_disable(void)
-> +{
-> +	struct sbiret ret;
-> +
-> +	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_SNAPSHOT_SET_SHMEM, SBI_SHMEM_DISABLE,
-> +			SBI_SHMEM_DISABLE, 0, 0, 0, 0);
-> +	if (ret.error) {
-> +		pr_warn("failed to disable snapshot shared memory\n");
-> +		return sbi_err_map_linux_errno(ret.error);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int pmu_sbi_snapshot_setup(struct riscv_pmu *pmu, int cpu)
-> +{
-> +	struct cpu_hw_events *cpu_hw_evt;
-> +	struct sbiret ret = {0};
-> +
-> +	cpu_hw_evt = per_cpu_ptr(pmu->hw_events, cpu);
-> +	if (!cpu_hw_evt->snapshot_addr_phys)
-> +		return -EINVAL;
-> +
-> +	if (cpu_hw_evt->snapshot_set_done)
-> +		return 0;
-> +
-> +	if (IS_ENABLED(CONFIG_32BIT))
-> +		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_SNAPSHOT_SET_SHMEM,
-> +				cpu_hw_evt->snapshot_addr_phys,
-> +				(u64)(cpu_hw_evt->snapshot_addr_phys) >> 32, 0, 0, 0, 0);
-> +	else
-> +		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_SNAPSHOT_SET_SHMEM,
-> +				cpu_hw_evt->snapshot_addr_phys, 0, 0, 0, 0, 0);
-> +
-> +	/* Free up the snapshot area memory and fall back to SBI PMU calls without snapshot */
-> +	if (ret.error) {
-> +		if (ret.error != SBI_ERR_NOT_SUPPORTED)
-> +			pr_warn("pmu snapshot setup failed with error %ld\n", ret.error);
-> +		return sbi_err_map_linux_errno(ret.error);
-> +	}
-> +
-> +	cpu_hw_evt->snapshot_set_done = true;
-> +
-> +	return 0;
-> +}
-> +
->  static u64 pmu_sbi_ctr_read(struct perf_event *event)
->  {
->  	struct hw_perf_event *hwc = &event->hw;
->  	int idx = hwc->idx;
->  	struct sbiret ret;
->  	u64 val = 0;
-> +	struct riscv_pmu *pmu = to_riscv_pmu(event->pmu);
-> +	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
-> +	struct riscv_pmu_snapshot_data *sdata = cpu_hw_evt->snapshot_addr;
->  	union sbi_pmu_ctr_info info = pmu_ctr_list[idx];
->  
-> +	/* Read the value from the shared memory directly only if counter is stopped */
-> +	if (sbi_pmu_snapshot_available() & (hwc->state & PERF_HES_STOPPED)) {
+--=-kMnqTVDkh4tbIOg2M2ET
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-nit: logical && between the two conditions
+On Mon, 2024-04-22 at 17:54 +0200, Paolo Bonzini wrote:
+> On Mon, Apr 22, 2024 at 5:39=E2=80=AFPM David Woodhouse <dwmw2@infradead.=
+org> wrote:
+>=20
+> > > ... especially considering that you did use a 64-bit integer here
+> > > (though---please use u64 not uint64_t; and BTW if you want to add a
+> > > patch to change kvm_get_time_scale() to u64, please do.
+> >=20
+> > Meh, I'm used to programming in C. Yes, I *am* old enough to have been
+> > doing this since the last decade of the 1900s, but it *has* been a long
+> > time since 1999, and my fingers have learned :)
+>=20
+> Oh, I am on the same page (working on both QEMU and Linux, adapting my
+> muscle memory to the context sucks) but u64/s64 is the preferred
+> spelling and I have been asked to use them before.
 
-> +		val = sdata->ctr_values[idx];
-> +		return val;
-> +	}
-> +
->  	if (pmu_sbi_is_fw_event(event)) {
->  		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_FW_READ,
->  				hwc->idx, 0, 0, 0, 0, 0);
-> @@ -565,6 +659,7 @@ static void pmu_sbi_ctr_start(struct perf_event *event, u64 ival)
->  	struct hw_perf_event *hwc = &event->hw;
->  	unsigned long flag = SBI_PMU_START_FLAG_SET_INIT_VALUE;
->  
-> +	/* There is no benefit setting SNAPSHOT FLAG for a single counter */
->  #if defined(CONFIG_32BIT)
->  	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, hwc->idx,
->  			1, flag, ival, ival >> 32, 0);
-> @@ -585,16 +680,36 @@ static void pmu_sbi_ctr_stop(struct perf_event *event, unsigned long flag)
->  {
->  	struct sbiret ret;
->  	struct hw_perf_event *hwc = &event->hw;
-> +	struct riscv_pmu *pmu = to_riscv_pmu(event->pmu);
-> +	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
-> +	struct riscv_pmu_snapshot_data *sdata = cpu_hw_evt->snapshot_addr;
->  
->  	if ((hwc->flags & PERF_EVENT_FLAG_USER_ACCESS) &&
->  	    (hwc->flags & PERF_EVENT_FLAG_USER_READ_CNT))
->  		pmu_sbi_reset_scounteren((void *)event);
->  
-> +	if (sbi_pmu_snapshot_available())
-> +		flag |= SBI_PMU_STOP_FLAG_TAKE_SNAPSHOT;
-> +
->  	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP, hwc->idx, 1, flag, 0, 0, 0);
-> -	if (ret.error && (ret.error != SBI_ERR_ALREADY_STOPPED) &&
-> -		flag != SBI_PMU_STOP_FLAG_RESET)
-> +	if (!ret.error && sbi_pmu_snapshot_available()) {
-> +		/*
-> +		 * The counter snapshot is based on the index base specified by hwc->idx.
-> +		 * The actual counter value is updated in shared memory at index 0 when counter
-> +		 * mask is 0x01. To ensure accurate counter values, it's necessary to transfer
-> +		 * the counter value to shared memory. However, if hwc->idx is zero, the counter
-> +		 * value is already correctly updated in shared memory, requiring no further
-> +		 * adjustment.
-> +		 */
-> +		if (hwc->idx > 0) {
-> +			sdata->ctr_values[hwc->idx] = sdata->ctr_values[0];
-> +			sdata->ctr_values[0] = 0;
-> +		}
-> +	} else if (ret.error && (ret.error != SBI_ERR_ALREADY_STOPPED) &&
-> +		flag != SBI_PMU_STOP_FLAG_RESET) {
->  		pr_err("Stopping counter idx %d failed with error %d\n",
->  			hwc->idx, sbi_err_map_linux_errno(ret.error));
-> +	}
->  }
->  
->  static int pmu_sbi_find_num_ctrs(void)
-> @@ -652,12 +767,39 @@ static inline void pmu_sbi_stop_all(struct riscv_pmu *pmu)
->  static inline void pmu_sbi_stop_hw_ctrs(struct riscv_pmu *pmu)
->  {
->  	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
-> +	struct riscv_pmu_snapshot_data *sdata = cpu_hw_evt->snapshot_addr;
-> +	unsigned long flag = 0;
->  	int i;
-> +	struct sbiret ret;
-> +	unsigned long temp_ctr_values[64] = {0};
-> +	unsigned long ctr_val, temp_ctr_overflow_mask = 0;
->  
-> -	for (i = 0; i < BITS_TO_LONGS(RISCV_MAX_COUNTERS); i++)
-> +	if (sbi_pmu_snapshot_available())
-> +		flag = SBI_PMU_STOP_FLAG_TAKE_SNAPSHOT;
-> +
-> +	for (i = 0; i < BITS_TO_LONGS(RISCV_MAX_COUNTERS); i++) {
->  		/* No need to check the error here as we can't do anything about the error */
-> -		sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP, i * BITS_PER_LONG,
-> -			  cpu_hw_evt->used_hw_ctrs[i], 0, 0, 0, 0);
-> +		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP, i * BITS_PER_LONG,
-> +				cpu_hw_evt->used_hw_ctrs[i], flag, 0, 0, 0);
-> +		if (!ret.error && sbi_pmu_snapshot_available()) {
-> +			/* Save the counter values to avoid clobbering */
-> +			temp_ctr_values[i * BITS_PER_LONG + i] = sdata->ctr_values[i];
-> +			/* Save the overflow mask to avoid clobbering */
-> +			if (BIT(i) & sdata->ctr_overflow_mask)
-> +				temp_ctr_overflow_mask |= BIT(i + i * BITS_PER_LONG);
+Ever heard of Jury Nullification... ? :)
 
-`i` is iterating over longs here, not individual counters. Using `i` twice in
-the same expression like this makes no sense.
+> > Heh, looks like it was you who made it uint64_t, in 2016. In a commit
+> > (3ae13faac) which said "Prepare for improving the precision in the next
+> > patch"... which never came, AFAICT?
+>=20
+> Yes, it was posted as
+> https://lore.kernel.org/lkml/1454944711-33022-5-git-send-email-pbonzini@r=
+edhat.com/
+> but not committed.
 
-And again, since you made temp_ctr_overflow_mask an `unsigned long`, this BIT
-expression overflows during the second iteration of the loop on riscv32.
+Ah, thanks. So that isn't about arithmetic precision, but about dealing
+with the mess we had where the KVM clock was afflicted by NTP skew.
 
-> +		}
-> +	}
-> +
-> +	/* Restore the counter values to the shared memory */
-> +	if (sbi_pmu_snapshot_available()) {
-> +		for (i = 0; i < 64; i++) {
-> +			ctr_val = temp_ctr_values[i];
-> +			if (ctr_val)
-> +				sdata->ctr_values[i] = ctr_val;
+We live in a much saner world now where it's simply based on the guest
+TSC (or, in pathological cases, the host's CLOCK_MONOTONIC_RAW.=20
 
-It is entirely possible for the correct value of a counter to be zero when some
-other counter overflows. But here if a counter with value zero is clobbered by a
-nonzero value, the correct value will not be restored.
+> As an aside, we discovered later that the patch you list as "Fixes"
+> fixed another tricky bug: before, kvmclock could jump if the TSC is
+> set within the 250 ppm tolerance that does not activate TSC scaling.
+> This is possible after a first live migration, and then the second
+> live migration used the guest TSC frequency *that userspace desired*
+> instead of the *actual* TSC frequency.
 
-> +			if (temp_ctr_overflow_mask)
-> +				sdata->ctr_overflow_mask = temp_ctr_overflow_mask;
+Given our saner world where the KVM clock now *isn't* adjusted for NTP
+skew, that "bug" was probably better left unfixed. In fact, I may give
+some thought to reverting commit 78db6a503796 completely.
 
-This doesn't need to be inside the loop. And if temp_ctr_overflow_mask is the
-64-bit combination of the two 32-bit values from the SBI calls (which seems to
-be the intention), then we already know there is at least one set bit, since
-this is called from the overflow IRQ handler.
+Perhaps we should call that "definition E". I think we're up to five
+now? But no, let's not add historical ones to the taxonomy :)
 
-> +		}
-> +	}
->  }
->  
->  /*
-> @@ -666,11 +808,10 @@ static inline void pmu_sbi_stop_hw_ctrs(struct riscv_pmu *pmu)
->   * while the overflowed counters need to be started with updated initialization
->   * value.
->   */
-> -static inline void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
-> -					       unsigned long ctr_ovf_mask)
-> +static inline void pmu_sbi_start_ovf_ctrs_sbi(struct cpu_hw_events *cpu_hw_evt,
-> +					      u64 ctr_ovf_mask)
->  {
->  	int idx = 0, i;
-> -	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
->  	struct perf_event *event;
->  	unsigned long flag = SBI_PMU_START_FLAG_SET_INIT_VALUE;
->  	unsigned long ctr_start_mask = 0;
-> @@ -706,6 +847,48 @@ static inline void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
->  	}
->  }
->  
-> +static inline void pmu_sbi_start_ovf_ctrs_snapshot(struct cpu_hw_events *cpu_hw_evt,
-> +						   u64 ctr_ovf_mask)
-> +{
-> +	int idx = 0;
-> +	struct perf_event *event;
-> +	unsigned long flag = SBI_PMU_START_FLAG_INIT_SNAPSHOT;
-> +	u64 max_period, init_val = 0;
-> +	struct hw_perf_event *hwc;
-> +	struct riscv_pmu_snapshot_data *sdata = cpu_hw_evt->snapshot_addr;
-> +
-> +	for_each_set_bit(idx, cpu_hw_evt->used_hw_ctrs, RISCV_MAX_COUNTERS) {
-> +		if (ctr_ovf_mask & BIT(idx)) {
-> +			event = cpu_hw_evt->events[idx];
-> +			hwc = &event->hw;
-> +			max_period = riscv_pmu_ctr_get_width_mask(event);
-> +			init_val = local64_read(&hwc->prev_count) & max_period;
-> +			sdata->ctr_values[idx] = init_val;
-> +		}
-> +		/*
-> +		 * We do not need to update the non-overflow counters the previous
-> +		 * value should have been there already.
-> +		 */
-> +	}
-> +
-> +	for (idx = 0; idx < BITS_TO_LONGS(RISCV_MAX_COUNTERS); idx++) {
-> +		/* Start all the counters in a single shot */
-> +		sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx * BITS_PER_LONG,
-> +			  cpu_hw_evt->used_hw_ctrs[idx], flag, 0, 0, 0);
+I believe Jack's KVM_SET_CLOCK_GUEST fixes the fundamental issue there
+of the clock jumping on migration. It's just a special case of the
+breakage in KVM_REQ_MASTERCLOCK_UPDATE, where the KVM clock has happily
+been running as a direct function of the guest TSC, and when we yank it
+back to some other definition when we create a new masterclock
+reference point.
 
-This doesn't work either... for riscv32 you have to copy the initial values for
-counters 32-63 to ctr_values indexes 0-31, since that is where the SBI
-implementation expects to find them. And since this clobbers counters 0-31,
-those need to be preserved somewhere. That's why I recommended a shadow copy of
-ctr_values -- globally, not local to pmu_sbi_stop_hw_ctrs().
+With KVM_SET_CLOCK_GUEST, the KVM clock is restored as a function of
+the guest TSC, rather than=C2=A0based on realtime/CLOCK_MONOTONIC_RAW/etc.
 
-Also, you need SBI_PMU_START_FLAG_INIT_SNAPSHOT here to actually load the values
-from shared memory, so this is broken on riscv64 as well.
+So even though a new masterclock reference is taken in the new kernel
+(and the scaling factors in the pvclock may be slightly different, as
+we discussed in the comment you responded to), the ka->kvmclock_offset
+is adjusted so that the value of the KVM clock at *that* moment when
+the new reference is taken, is precisely what it would have been under
+the old kvmclock regime for the contemporary guest TSC value.
 
-> +	}
-> +}
-> +
-> +static void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
-> +					u64 ctr_ovf_mask)
-> +{
-> +	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
-> +
-> +	if (sbi_pmu_snapshot_available())
-> +		pmu_sbi_start_ovf_ctrs_snapshot(cpu_hw_evt, ctr_ovf_mask);
-> +	else
-> +		pmu_sbi_start_ovf_ctrs_sbi(cpu_hw_evt, ctr_ovf_mask);
-> +}
-> +
->  static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->  {
->  	struct perf_sample_data data;
-> @@ -716,9 +899,10 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->  	struct riscv_pmu *pmu;
->  	struct perf_event *event;
->  	unsigned long overflow;
-> -	unsigned long overflowed_ctrs = 0;
-> +	u64 overflowed_ctrs = 0;
->  	struct cpu_hw_events *cpu_hw_evt = dev;
->  	u64 start_clock = sched_clock();
-> +	struct riscv_pmu_snapshot_data *sdata = cpu_hw_evt->snapshot_addr;
->  
->  	if (WARN_ON_ONCE(!cpu_hw_evt))
->  		return IRQ_NONE;
-> @@ -740,7 +924,10 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->  	pmu_sbi_stop_hw_ctrs(pmu);
->  
->  	/* Overflow status register should only be read after counter are stopped */
-> -	ALT_SBI_PMU_OVERFLOW(overflow);
-> +	if (sbi_pmu_snapshot_available())
-> +		overflow = sdata->ctr_overflow_mask;
 
-Overflow is `unsigned long`, so this assignment truncates ctr_overflow_mask on
-riscv32.
 
-Was this series tested on riscv32?
 
-Regards,
-Samuel
+> Before:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 this_tsc_khz =3D __this_cpu_re=
+ad(cpu_tsc_khz);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (unlikely(vcpu->hw_tsc_khz =
+!=3D this_tsc_khz)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 tgt_tsc_khz =3D vcpu->virtual_tsc_khz;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 kvm_get_time_scale(NSEC_PER_SEC / 1000, tgt_tsc_khz,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &vcpu->h=
+v_clock.tsc_shift,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &vcpu->h=
+v_clock.tsc_to_system_mul);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 vcpu->hw_tsc_khz =3D this_tsc_khz;
+>=20
+> After:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tgt_tsc_khz =3D __this_cpu_rea=
+d(cpu_tsc_khz);
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // tgt_tsc_khz unchanged becau=
+se TSC scaling was not enabled
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tgt_tsc_khz =3D kvm_scale_tsc(=
+v, tgt_tsc_khz);
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (unlikely(vcpu->hw_tsc_khz =
+!=3D tgt_tsc_khz)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 kvm_get_time_scale(NSEC_PER_SEC / 1000, tgt_tsc_khz,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &vcpu->h=
+v_clock.tsc_shift,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &vcpu->h=
+v_clock.tsc_to_system_mul);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 vcpu->hw_tsc_khz =3D tgt_tsc_khz;
+>=20
+> So in the first case kvm_get_time_scale uses vcpu->virtual_tsc_khz, in
+> the second case it uses __this_cpu_read(cpu_tsc_khz).
+>=20
+> This then caused a mismatch between the actual guest frequency and
+> what is used by kvm_guest_time_update, which only becomes visible when
+> migration resets the clock with KVM_GET/SET_CLOCK. KVM_GET_CLOCK
+> returns what _should have been_ the same value read by the guest, but
+> it's wrong.
 
-> +	else
-> +		ALT_SBI_PMU_OVERFLOW(overflow);
->  
->  	/*
->  	 * Overflow interrupt pending bit should only be cleared after stopping
-> @@ -766,9 +953,14 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->  		if (!info || info->type != SBI_PMU_CTR_TYPE_HW)
->  			continue;
->  
-> -		/* compute hardware counter index */
-> -		hidx = info->csr - CSR_CYCLE;
-> -		/* check if the corresponding bit is set in sscountovf */
-> +		if (sbi_pmu_snapshot_available())
-> +			/* SBI implementation already updated the logical indicies */
-> +			hidx = lidx;
-> +		else
-> +			/* compute hardware counter index */
-> +			hidx = info->csr - CSR_CYCLE;
-> +
-> +		/* check if the corresponding bit is set in sscountovf or overflow mask in shmem */
->  		if (!(overflow & BIT(hidx)))
->  			continue;
->  
-> @@ -778,7 +970,10 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->  		 */
->  		overflowed_ctrs |= BIT(lidx);
->  		hw_evt = &event->hw;
-> +		/* Update the event states here so that we know the state while reading */
-> +		hw_evt->state |= PERF_HES_STOPPED;
->  		riscv_pmu_event_update(event);
-> +		hw_evt->state |= PERF_HES_UPTODATE;
->  		perf_sample_data_init(&data, 0, hw_evt->last_period);
->  		if (riscv_pmu_event_set_period(event)) {
->  			/*
-> @@ -791,6 +986,8 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->  			 */
->  			perf_event_overflow(event, &data, regs);
->  		}
-> +		/* Reset the state as we are going to start the counter after the loop */
-> +		hw_evt->state = 0;
->  	}
->  
->  	pmu_sbi_start_overflow_mask(pmu, overflowed_ctrs);
-> @@ -822,6 +1019,9 @@ static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
->  		enable_percpu_irq(riscv_pmu_irq, IRQ_TYPE_NONE);
->  	}
->  
-> +	if (sbi_pmu_snapshot_available())
-> +		return pmu_sbi_snapshot_setup(pmu, cpu);
-> +
->  	return 0;
->  }
->  
-> @@ -834,6 +1034,9 @@ static int pmu_sbi_dying_cpu(unsigned int cpu, struct hlist_node *node)
->  	/* Disable all counters access for user mode now */
->  	csr_write(CSR_SCOUNTEREN, 0x0);
->  
-> +	if (sbi_pmu_snapshot_available())
-> +		return pmu_sbi_snapshot_disable();
-> +
->  	return 0;
->  }
->  
-> @@ -942,6 +1145,12 @@ static inline void riscv_pm_pmu_unregister(struct riscv_pmu *pmu) { }
->  
->  static void riscv_pmu_destroy(struct riscv_pmu *pmu)
->  {
-> +	if (sbi_v2_available) {
-> +		if (sbi_pmu_snapshot_available()) {
-> +			pmu_sbi_snapshot_disable();
-> +			pmu_sbi_snapshot_free(pmu);
-> +		}
-> +	}
->  	riscv_pm_pmu_unregister(pmu);
->  	cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
->  }
-> @@ -1109,10 +1318,6 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
->  	pmu->event_unmapped = pmu_sbi_event_unmapped;
->  	pmu->csr_index = pmu_sbi_csr_index;
->  
-> -	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
-> -	if (ret)
-> -		return ret;
-> -
->  	ret = riscv_pm_pmu_register(pmu);
->  	if (ret)
->  		goto out_unregister;
-> @@ -1121,8 +1326,34 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto out_unregister;
->  
-> +	/* SBI PMU Snapsphot is only available in SBI v2.0 */
-> +	if (sbi_v2_available) {
-> +		ret = pmu_sbi_snapshot_alloc(pmu);
-> +		if (ret)
-> +			goto out_unregister;
-> +
-> +		ret = pmu_sbi_snapshot_setup(pmu, smp_processor_id());
-> +		if (ret) {
-> +			/* Snapshot is an optional feature. Continue if not available */
-> +			pmu_sbi_snapshot_free(pmu);
-> +		} else {
-> +			pr_info("SBI PMU snapshot detected\n");
-> +			/*
-> +			 * We enable it once here for the boot cpu. If snapshot shmem setup
-> +			 * fails during cpu hotplug process, it will fail to start the cpu
-> +			 * as we can not handle hetergenous PMUs with different snapshot
-> +			 * capability.
-> +			 */
-> +			static_branch_enable(&sbi_pmu_snapshot_available);
-> +		}
-> +	}
-> +
->  	register_sysctl("kernel", sbi_pmu_sysctl_table);
->  
-> +	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
-> +	if (ret)
-> +		goto out_unregister;
-> +
->  	return 0;
->  
->  out_unregister:
-> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
-> index 43282e22ebe1..c3fa90970042 100644
-> --- a/include/linux/perf/riscv_pmu.h
-> +++ b/include/linux/perf/riscv_pmu.h
-> @@ -39,6 +39,12 @@ struct cpu_hw_events {
->  	DECLARE_BITMAP(used_hw_ctrs, RISCV_MAX_COUNTERS);
->  	/* currently enabled firmware counters */
->  	DECLARE_BITMAP(used_fw_ctrs, RISCV_MAX_COUNTERS);
-> +	/* The virtual address of the shared memory where counter snapshot will be taken */
-> +	void *snapshot_addr;
-> +	/* The physical address of the shared memory where counter snapshot will be taken */
-> +	phys_addr_t snapshot_addr_phys;
-> +	/* Boolean flag to indicate setup is already done */
-> +	bool snapshot_set_done;
->  };
->  
->  struct riscv_pmu {
+Hm? Until I fixed it in this series, KVM_GET_CLOCK didn't even *try*
+scaling via the guest's TSC frequency, did it? It just converted from
+the *host* TSC to nanoseconds (since master_kernel_now) directly. Which
+was even *more* broken :)
 
+
+--=-kMnqTVDkh4tbIOg2M2ET
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNDIyMTY0NDMxWjAvBgkqhkiG9w0BCQQxIgQgwKuCn9fR
+7e4O9lfC81u5KJKKEnQYc+vzEwQXtnvArB4wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBGPUHP2rcees1IGAseL1Ntw6+VC/yjYlOO
+oNQV0D1+1IUviuNuP3YMRde98onFoygTl+N/usgyMsojGDly82/VBc61l6mMiHswCxCf2aC1n5BT
+vCnUXfHJnL6pyEwpcSm2z4zFUI1B3eHNTxwv2wxy8HdbRGnQiXiea4I5vchplINFw+MBXrZ28GSR
+algHlYsDyC3QFTMGGRHzeFhvQigzuLGWeElaNwTtrcDhgG2jOpvSrgwtOEz3zJYbyRZzC5abwwVw
+PFKnbKrd8/YBFBUBURpaAPUrksCwmCqvcRzML4pRWub4oei08zOP27QBfz+tTkmkF+G7IRYeFKRL
+RRtiO5Q5tHFKRENe6tHUQa3HWJKADO5klEKzPFRzMcGiDFYQLynlHyZFvrFSHsujaYE0hs2Za9XR
+Ory1jBXExHDhZFqGjZVKEvxr2PqC7OSsCCOM8v4tI3Q8Rp9LHrHd02RoB5PJ0fv+A0I2vxSolv31
+yNync6y9GYj47KjTYRAJkwtrwhLX4jOgVc198NnT3roa6aSNcozc2Tfu3/to1lx0/MLyP0rsX+SZ
+pS2VFrv00IcRRC2oAMw5tNofn0v4FCGF660N8yyMRxjJ0rjXXhex28NT4zQ1udXH7gInmhx2OVgA
+4Xx1G58QQZmTvflxjkDnlkxwO6r4xLVoGIf0g9fsqAAAAAAAAA==
+
+
+--=-kMnqTVDkh4tbIOg2M2ET--
 
