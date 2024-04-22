@@ -1,227 +1,300 @@
-Return-Path: <linux-kselftest+bounces-8593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D8EC8AC3B7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 07:32:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D64B8AC417
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 08:22:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1C491C21898
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 05:32:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E880D28237D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 06:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1B31803E;
-	Mon, 22 Apr 2024 05:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2DB33FB3B;
+	Mon, 22 Apr 2024 06:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="o6tQD90I"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jRTcbJQG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431FF1759F
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 05:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D593F9D5
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Apr 2024 06:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713763972; cv=none; b=mTwyVpu8t1bHoU6MNAovTJTNsuVredpdn+XwBfYq/mJS6sUtUvVNZNkip2yK5WggG9w/pCKxb/scPm3DYMf2i6ZuWomOa3/jXQSGvcvJAJF1QjqlI7l6ZVygyeP9cpJ6kTTx9KJEFdLGBDZuhy+5MzHSLKHs2FyQS0wWSH+ydJI=
+	t=1713766923; cv=none; b=W4r0OeixPffg7IJgcGA/2PN39rc2ttD63h4UqDX8lq0r7s2IvoAya/ndgrafbO9dyUOA7Fc6WpaJmZEkXUA6qj3UZzVKxSb4rwpWPb0A8tufWjaW5J8b//3ZKPFuMQx7TxJSilqWbLfxI/VJ3gifCdjLKOxzSZxiodv5OqnidDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713763972; c=relaxed/simple;
-	bh=BwCdWcMLmgKeTy/zl1TsPBXPPuxkE/Xsmo260vkgIDo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DgnW6ZXKPbu7aAUJBxhL5PAdiEtwrkjeKGLv5naHvcOMwRAgBYoiNOQpirhNPYY2HqXgJ1xMcjT3GdqkUuAGbQx5Pf5snMaOjtpaKbP8Yz7U5ZWTXvTTu7SMEmGjrKE4VyubxDNOEag8U0e0dJCKKj/3jtFb/hAaT5kfqgVysdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=o6tQD90I; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-36bff60429cso9407575ab.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Apr 2024 22:32:51 -0700 (PDT)
+	s=arc-20240116; t=1713766923; c=relaxed/simple;
+	bh=SGZSK0ustsY1Lf9KVstOIQKwZBL7OEMrqFJf4TCxONU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Jek5lfa3F8cYHO1xyVcVkV/mtWsEPf6fF5aHE+8aQOzkNtozDH6wFpIqv4XfayHAY8uA4eI5A5ZQU/pBy9OS89a86HcDNWygb2nGiExQRUKXnQSFfCANPTFCjMJSfEXSMmGjUql2MES/A3FH6Gyo+C6f1hcWwuM4d/Jphm/PHiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jRTcbJQG; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5d8bcf739e5so4984065a12.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Apr 2024 23:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1713763970; x=1714368770; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+mSLO7qsMu9ScrRVYm3QHz5Wa7uqrp1Jo4sRqwEm41k=;
-        b=o6tQD90ICgKGUhcbrhk1jF3W+tlwQyTzOMCPEuDBKXwb7XAeo2TRjRwTAGKDHdsGBX
-         4t/GLY8tVkSf5IQ7cDbqBdQRiKlYUV2yWxdhi7+MrHdhuMP0d7kULVF61AWI+kl/ALtH
-         VmtSmgQQ/LxURYZZjf7JZxM4vSOYG2XuVWcTnzVVmvfd2OQ9T9d/M43yOF2piP9ncmBZ
-         i0/Y/WGQAV9wZON4/r+Egvl03Ma0PgSKEuvw57rs6UwMznjUI2yTi4AD9w7HrMowtZTm
-         OuVRzWteq23FoVe+983P33VvHrVz+rzc4axkuGn/HJC+MfliELkHuOxMlm8mgLps3dxL
-         z2ig==
+        d=google.com; s=20230601; t=1713766921; x=1714371721; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BgHnvH0SifwgzbjlbM6L8Ym3RK63epZLUnxr0JyiQ3A=;
+        b=jRTcbJQGaunoOGQvCeHdIQpMCAL92UC8oPiuo6XwcMDQD+lMDPqm143TjC/wcb83Jy
+         okV0zAUbq74VH4+Tv99GuwuM+CrqDWr+FDgOl6UMPCvJnGQfFaTY4luWfgh9Z7AoI80k
+         uF/v+Us0YZrONkl5Slm23pmHNAnTIK5bsCf3cZ9sLJ2TFMItf33Kvftuyh9yTNHAh/xp
+         9naCsyAWV95cqGROrCRtImhKcLHZAikYWXQbEO1PTzhurOnhj0+tP/4hmKyX9uYKFVNm
+         /DupFhSee9qpkJsRuBv0S3We0Q9lnUDqExpke9SzkvAXkBOAyJd/IImD43/OYN2BA5Y3
+         gTTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713763970; x=1714368770;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+mSLO7qsMu9ScrRVYm3QHz5Wa7uqrp1Jo4sRqwEm41k=;
-        b=hMbHHucHJzVvZ1j80nZzebOMh/bvSBxUmyFuzkUfZRNxL3LcpEVemMwaTN8urHxgJU
-         UJAyPWhlAvnVbMyjAUe0OU5cl5CuZ9bg+3YDAadz4R8A4UYORBuH+13M9HVXSL0eBgB5
-         VNn3NdmAv2F1cLGqwJnn/AGGssWP6VRqHtPU9sLukptNFBDISvdmEfsceW7CWqIW4db3
-         4Kc67kp4C1MQW4kifqQ3q/dJbT6xoQme/ZYADtuP0ZXV4xxyz7OkKWVOgqZRB4J0Z917
-         J+/+FSULwFrv1/qNM3ur1ehZ0F/YB22iV4Tj0vR+N9mUD3sKOtM2AJK5z7n7N4rj9huA
-         JO7A==
-X-Forwarded-Encrypted: i=1; AJvYcCUk/5GZw8Gbjz8QSiV7pGc3QYfvFbLkLX0BaTB1OfM2I4GoMBVbwQJgN1mel11z8N8IEdLRjXkp8TThOcb6PPPqAuJ/4g7o5zZvpGovUXty
-X-Gm-Message-State: AOJu0YxEJdxUxc1Yi71+P+NSmYQnHGpgFxaUYDrkSZNyiaamsSV4Vn9Q
-	QeluFrCmbfselKUxzd/NrGZWOcVWeMnR71hRw5zwcZN0QmjP3EsBav1Kfn5rdCOLLPkJFZyI2tg
-	PNnjLpRoWZmAcsSQrFAMoAT2j2iutmVJw4pOXyg==
-X-Google-Smtp-Source: AGHT+IEqy96d9EYvPfCKQbMdPNUPl6DZT781YdOhP9O47wLCNvRvtopYWldFwJankgX0sYeovuf51APBEHy0ooQ/k/Q=
-X-Received: by 2002:a05:6e02:144d:b0:36a:686:b3bf with SMTP id
- p13-20020a056e02144d00b0036a0686b3bfmr13479495ilo.17.1713763970407; Sun, 21
- Apr 2024 22:32:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713766921; x=1714371721;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BgHnvH0SifwgzbjlbM6L8Ym3RK63epZLUnxr0JyiQ3A=;
+        b=Gg87jiSq8NtQ3lRTXKyDBKRhG/5lLHR958/Ja2WvTzNcFZawayAFvC1VsByuHXZS/Q
+         sAAzB4knLF13N2QDcHQbIc4Ab0sdR3hhLn93tltYaK4+ReSUTWyrWl0VBTqeCVFJWNFt
+         ZYBj3UiGtv+YgDk4oPi5uuRXBj4TsfAZSstxVC5MdGgEgZszBe04+TWTJr/yG1sHDOpv
+         y4+MnLapeEFWAF503rIzdiDdk+VKb332oy86KJWyFqTQh6znTRQLX480mgoIrlQTDVwJ
+         UVj5Kyq98r7VwFilFwmpK2Hr5jVKFjbJaP58Hxu53vsewIR0dowYhLtAJv4Px5yhtqTO
+         HAtw==
+X-Forwarded-Encrypted: i=1; AJvYcCX6g8kGwRh4LBsZNxP+/tNaBskD64D2HLsMt06vLQsgUk7094VkrssZjPJqbWLcdloVnta0OFA6RGd3I0n1BpFIncHejMucLo2eU6fh6VH7
+X-Gm-Message-State: AOJu0Yw+vcHFIjn9cYvLBrEdY2d6nfbgpc3c26HbB7wtSSmAJgmIO+rl
+	VIt+E+5jPRvx1VSlqsp25lFt2WjqeiqvsvkTMwPYwbcC9fuSraILEAaaEJN/ga+csmWaJJzbXvQ
+	irA==
+X-Google-Smtp-Source: AGHT+IG60hX85zyqhoN/GGQeaHC9TWv2bBTAYTzrGgW8aBKeakB6ufmF0DHNgdD+A/EpTFGn21ykx8dr8NA=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a05:6a02:8c3:b0:5fc:52b3:a014 with SMTP id
+ ch3-20020a056a0208c300b005fc52b3a014mr21986pgb.4.1713766921226; Sun, 21 Apr
+ 2024 23:22:01 -0700 (PDT)
+Date: Mon, 22 Apr 2024 06:21:43 +0000
+In-Reply-To: <2024041509-triangle-parlor-1783@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240420151741.962500-1-atishp@rivosinc.com> <20240420151741.962500-25-atishp@rivosinc.com>
-In-Reply-To: <20240420151741.962500-25-atishp@rivosinc.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Mon, 22 Apr 2024 11:02:39 +0530
-Message-ID: <CAAhSdy0Bo1+SomNva+A_Phd=gu_+wcqXTV_-ioqCCVEr1cXJBA@mail.gmail.com>
-Subject: Re: [PATCH v8 24/24] KVM: riscv: selftests: Add commandline option
- for SBI PMU test
-To: Atish Patra <atishp@rivosinc.com>
-Cc: linux-kernel@vger.kernel.org, Andrew Jones <ajones@ventanamicro.com>, 
-	Ajay Kaher <ajay.kaher@broadcom.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, samuel.holland@sifive.com, 
-	Conor Dooley <conor.dooley@microchip.com>, Juergen Gross <jgross@suse.com>, 
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, 
-	Will Deacon <will@kernel.org>, x86@kernel.org
+Mime-Version: 1.0
+References: <2024041509-triangle-parlor-1783@gregkh>
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+Message-ID: <20240422062148.642140-1-edliaw@google.com>
+Subject: [PATCH 6.6.y] selftests/timers/posix_timers: Reimplement check_timer_distribution()
+From: Edward Liaw <edliaw@google.com>
+To: stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Marco Elver <elver@google.com>
+Cc: kernel-team@android.com, Oleg Nesterov <oleg@redhat.com>, 
+	Edward Liaw <edliaw@google.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 20, 2024 at 5:18=E2=80=AFAM Atish Patra <atishp@rivosinc.com> w=
-rote:
->
-> SBI PMU test comprises of multiple tests and user may want to run
-> only a subset depending on the platform. The most common case would
-> be to run all to validate all the tests. However, some platform may
-> not support all events or all ISA extensions.
->
-> The commandline option allows user to disable any set of tests if
-> they want to.
->
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+From: Oleg Nesterov <oleg@redhat.com>
 
-LGTM.
+check_timer_distribution() runs ten threads in a busy loop and tries to
+test that the kernel distributes a process posix CPU timer signal to every
+thread over time.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+There is not guarantee that this is true even after commit bcb7ee79029d
+("posix-timers: Prefer delivery of signals to the current thread") because
+that commit only avoids waking up the sleeping process leader thread, but
+that has nothing to do with the actual signal delivery.
 
-Regards,
-Anup
+As the signal is process wide the first thread which observes sigpending
+and wins the race to lock sighand will deliver the signal. Testing shows
+that this hangs on a regular base because some threads never win the race.
 
-> ---
->  .../selftests/kvm/riscv/sbi_pmu_test.c        | 73 ++++++++++++++++---
->  1 file changed, 64 insertions(+), 9 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/tes=
-ting/selftests/kvm/riscv/sbi_pmu_test.c
-> index 0fd9b76ae838..69bb94e6b227 100644
-> --- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> +++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> @@ -33,6 +33,13 @@ static unsigned long counter_mask_available;
->
->  static bool illegal_handler_invoked;
->
-> +#define SBI_PMU_TEST_BASIC     BIT(0)
-> +#define SBI_PMU_TEST_EVENTS    BIT(1)
-> +#define SBI_PMU_TEST_SNAPSHOT  BIT(2)
-> +#define SBI_PMU_TEST_OVERFLOW  BIT(3)
-> +
-> +static int disabled_tests;
-> +
->  unsigned long pmu_csr_read_num(int csr_num)
->  {
->  #define switchcase_csr_read(__csr_num, __val)          {\
-> @@ -608,19 +615,67 @@ static void test_vm_events_overflow(void *guest_cod=
-e)
->         test_vm_destroy(vm);
->  }
->
-> -int main(void)
-> +static void test_print_help(char *name)
-> +{
-> +       pr_info("Usage: %s [-h] [-d <test name>]\n", name);
-> +       pr_info("\t-d: Test to disable. Available tests are 'basic', 'eve=
-nts', 'snapshot', 'overflow'\n");
-> +       pr_info("\t-h: print this help screen\n");
-> +}
-> +
-> +static bool parse_args(int argc, char *argv[])
-> +{
-> +       int opt;
-> +
-> +       while ((opt =3D getopt(argc, argv, "hd:")) !=3D -1) {
-> +               switch (opt) {
-> +               case 'd':
-> +                       if (!strncmp("basic", optarg, 5))
-> +                               disabled_tests |=3D SBI_PMU_TEST_BASIC;
-> +                       else if (!strncmp("events", optarg, 6))
-> +                               disabled_tests |=3D SBI_PMU_TEST_EVENTS;
-> +                       else if (!strncmp("snapshot", optarg, 8))
-> +                               disabled_tests |=3D SBI_PMU_TEST_SNAPSHOT=
-;
-> +                       else if (!strncmp("overflow", optarg, 8))
-> +                               disabled_tests |=3D SBI_PMU_TEST_OVERFLOW=
-;
-> +                       else
-> +                               goto done;
-> +                       break;
-> +               case 'h':
-> +               default:
-> +                       goto done;
-> +               }
-> +       }
-> +
-> +       return true;
-> +done:
-> +       test_print_help(argv[0]);
-> +       return false;
-> +}
-> +
-> +int main(int argc, char *argv[])
->  {
-> -       test_vm_basic_test(test_pmu_basic_sanity);
-> -       pr_info("SBI PMU basic test : PASS\n");
-> +       if (!parse_args(argc, argv))
-> +               exit(KSFT_SKIP);
-> +
-> +       if (!(disabled_tests & SBI_PMU_TEST_BASIC)) {
-> +               test_vm_basic_test(test_pmu_basic_sanity);
-> +               pr_info("SBI PMU basic test : PASS\n");
-> +       }
->
-> -       test_vm_events_test(test_pmu_events);
-> -       pr_info("SBI PMU event verification test : PASS\n");
-> +       if (!(disabled_tests & SBI_PMU_TEST_EVENTS)) {
-> +               test_vm_events_test(test_pmu_events);
-> +               pr_info("SBI PMU event verification test : PASS\n");
-> +       }
->
-> -       test_vm_events_snapshot_test(test_pmu_events_snaphost);
-> -       pr_info("SBI PMU event verification with snapshot test : PASS\n")=
-;
-> +       if (!(disabled_tests & SBI_PMU_TEST_SNAPSHOT)) {
-> +               test_vm_events_snapshot_test(test_pmu_events_snaphost);
-> +               pr_info("SBI PMU event verification with snapshot test : =
-PASS\n");
-> +       }
->
-> -       test_vm_events_overflow(test_pmu_events_overflow);
-> -       pr_info("SBI PMU event verification with overflow test : PASS\n")=
-;
-> +       if (!(disabled_tests & SBI_PMU_TEST_OVERFLOW)) {
-> +               test_vm_events_overflow(test_pmu_events_overflow);
-> +               pr_info("SBI PMU event verification with overflow test : =
-PASS\n");
-> +       }
->
->         return 0;
->  }
-> --
-> 2.34.1
->
+The comment "This primarily tests that the kernel does not favour any one."
+is wrong. The kernel does favour a thread which hits the timer interrupt
+when CLOCK_PROCESS_CPUTIME_ID expires.
+
+Rewrite the test so it only checks that the group leader sleeping in join()
+never receives SIGALRM and the thread which burns CPU cycles receives all
+signals.
+
+In older kernels which do not have commit bcb7ee79029d ("posix-timers:
+Prefer delivery of signals to the current thread") the test-case fails
+immediately, the very 1st tick wakes the leader up. Otherwise it quickly
+succeeds after 100 ticks.
+
+CI testing wants to use newer selftest versions on stable kernels. In this
+case the test is guaranteed to fail.
+
+So check in the failure case whether the kernel version is less than v6.3
+and skip the test result in that case.
+
+[ tglx: Massaged change log, renamed the version check helper ]
+[ edliaw: 071af0c9e582 ("selftests: timers: Convert posix_timers test to
+  generate KTAP output") wasn't merged to 6.6.y, so resolved merge
+  conflicts. ]
+
+Fixes: e797203fb3ba ("selftests/timers/posix_timers: Test delivery of signals across threads")
+Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20240409133802.GD29396@redhat.com
+(cherry picked from commit 6d029c25b71f2de2838a6f093ce0fa0e69336154)
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/kselftest.h           | 13 +++
+ tools/testing/selftests/timers/posix_timers.c | 99 +++++++++----------
+ 2 files changed, 59 insertions(+), 53 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 529d29a35900..68d5a93dff8d 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -49,6 +49,7 @@
+ #include <unistd.h>
+ #include <stdarg.h>
+ #include <stdio.h>
++#include <sys/utsname.h>
+ #endif
+ 
+ #ifndef ARRAY_SIZE
+@@ -327,4 +328,16 @@ static inline int ksft_exit_skip(const char *msg, ...)
+ 	exit(KSFT_SKIP);
+ }
+ 
++static inline int ksft_min_kernel_version(unsigned int min_major,
++					  unsigned int min_minor)
++{
++	unsigned int major, minor;
++	struct utsname info;
++
++	if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
++		ksft_exit_fail_msg("Can't parse kernel version\n");
++
++	return major > min_major || (major == min_major && minor >= min_minor);
++}
++
+ #endif /* __KSELFTEST_H */
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index 9a42403eaff7..aaec7f9845c5 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -188,78 +188,71 @@ static int check_timer_create(int which)
+ 	return 0;
+ }
+ 
+-int remain;
+-__thread int got_signal;
++static pthread_t ctd_thread;
++static volatile int ctd_count, ctd_failed;
+ 
+-static void *distribution_thread(void *arg)
++static void ctd_sighandler(int sig)
+ {
+-	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
+-	return NULL;
++	if (pthread_self() != ctd_thread)
++		ctd_failed = 1;
++	ctd_count--;
+ }
+ 
+-static void distribution_handler(int nr)
++static void *ctd_thread_func(void *arg)
+ {
+-	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
+-		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
+-}
+-
+-/*
+- * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
+- * timer signals. This primarily tests that the kernel does not favour any one.
+- */
+-static int check_timer_distribution(void)
+-{
+-	int err, i;
+-	timer_t id;
+-	const int nthreads = 10;
+-	pthread_t threads[nthreads];
+ 	struct itimerspec val = {
+ 		.it_value.tv_sec = 0,
+ 		.it_value.tv_nsec = 1000 * 1000,
+ 		.it_interval.tv_sec = 0,
+ 		.it_interval.tv_nsec = 1000 * 1000,
+ 	};
++	timer_t id;
+ 
+-	printf("Check timer_create() per process signal distribution... ");
+-	fflush(stdout);
++	/* 1/10 seconds to ensure the leader sleeps */
++	usleep(10000);
+ 
+-	remain = nthreads + 1;  /* worker threads + this thread */
+-	signal(SIGALRM, distribution_handler);
+-	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
+-	if (err < 0) {
+-		perror("Can't create timer\n");
+-		return -1;
+-	}
+-	err = timer_settime(id, 0, &val, NULL);
+-	if (err < 0) {
+-		perror("Can't set timer\n");
+-		return -1;
+-	}
++	ctd_count = 100;
++	if (timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id))
++		return "Can't create timer\n";
++	if (timer_settime(id, 0, &val, NULL))
++		return "Can't set timer\n";
+ 
+-	for (i = 0; i < nthreads; i++) {
+-		if (pthread_create(&threads[i], NULL, distribution_thread, NULL)) {
+-			perror("Can't create thread\n");
+-			return -1;
+-		}
+-	}
++	while (ctd_count > 0 && !ctd_failed)
++		;
+ 
+-	/* Wait for all threads to receive the signal. */
+-	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++	if (timer_delete(id))
++		return "Can't delete timer\n";
+ 
+-	for (i = 0; i < nthreads; i++) {
+-		if (pthread_join(threads[i], NULL)) {
+-			perror("Can't join thread\n");
+-			return -1;
+-		}
+-	}
++	return NULL;
++}
+ 
+-	if (timer_delete(id)) {
+-		perror("Can't delete timer\n");
+-		return -1;
+-	}
++/*
++ * Test that only the running thread receives the timer signal.
++ */
++static int check_timer_distribution(void)
++{
++	const char *errmsg;
+ 
+-	printf("[OK]\n");
++	signal(SIGALRM, ctd_sighandler);
++
++	errmsg = "Can't create thread\n";
++	if (pthread_create(&ctd_thread, NULL, ctd_thread_func, NULL))
++		goto err;
++
++	errmsg = "Can't join thread\n";
++	if (pthread_join(ctd_thread, (void **)&errmsg) || errmsg)
++		goto err;
++
++	if (!ctd_failed)
++		ksft_test_result_pass("check signal distribution\n");
++	else if (ksft_min_kernel_version(6, 3))
++		ksft_test_result_fail("check signal distribution\n");
++	else
++		ksft_test_result_skip("check signal distribution (old kernel)\n");
+ 	return 0;
++err:
++	ksft_print_msg(errmsg);
++	return -1;
+ }
+ 
+ int main(int argc, char **argv)
+-- 
+2.44.0.769.g3c40516874-goog
+
 
