@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 821358AD901
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 01:24:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF69D8AD903
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 01:24:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDD5F1F23580
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 23:24:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 732FD2829D8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Apr 2024 23:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 493B6446B6;
-	Mon, 22 Apr 2024 23:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55A1945970;
+	Mon, 22 Apr 2024 23:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s8yAgiDA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4h5Fj6N"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E6E2942F;
-	Mon, 22 Apr 2024 23:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224CE45948;
+	Mon, 22 Apr 2024 23:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713828247; cv=none; b=NMHf8CJfgTCfa/UuC5GieYg4u5uR5wVfiPLjYOMCkST/xy/FhdQiRawTgzdSMn3M22A7r/zW/naYx9Etzm9OuaetkMy4ZzItJA/nVu2sbpyC+zoPU/qT/f07ZX3is3H+V5oFgTvP8qQVWGkxqiMDNiI+WVqbqUglM9h4fXPwxzU=
+	t=1713828248; cv=none; b=Zu+WYaKXEDVBkHH0WvnblW4/Cp1PIBp5AIoZ4z0EdFHWpBW8DdLaywO+OvDf/7nU5jaH/6tfHwzRnJ04TgmFMQdnd1UYnQVuPGDXiQSuSQWLCFqy3kMPZM5F8gb8PTq6viAu4eq4PYfDqKNmUR8o4QwUAhIzOQJl5O3KRrkKJD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713828247; c=relaxed/simple;
-	bh=v3XW2cYQ79gqDMbF1UVESANI0NiQDi505TJ8KLujo5k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mulC7ptUOK1PmkPxdYk00nUKMamoFbWqdYfOUsu1UNATzmsZyYqVtN4n0BYY/rh4nSU31E4oSxq5Shzg9MyDXP3fvhRslmJ7rtQcbc1oCpZwUSBcYTzJaco7Z/9tZ7Vr93PEBu0zRtpT8RpvRvPZLY1jVsQtd3TzTtbek9282w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s8yAgiDA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B6DC113CC;
-	Mon, 22 Apr 2024 23:24:05 +0000 (UTC)
+	s=arc-20240116; t=1713828248; c=relaxed/simple;
+	bh=RhgBYQ/jwdi1c/nCIzi+HG9YSv7lRWKVXMsqPbXSBH8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lh+jVUrs3ujWMHHs4GbRS9XizjKUlIYfWasfeB3MJyNzLwLYEGoGixD2Iqo75KYfnlEcO1Eh/X7DDMCBL38CPmJ/rIqwIvm5IVgXGfXP4fGucCENynJYoD2vDL4Kf75REkGT+L4tbeTjbTNTgHUItDn1z3McKrie+x2OKEmFvmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4h5Fj6N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D223AC32782;
+	Mon, 22 Apr 2024 23:24:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713828246;
-	bh=v3XW2cYQ79gqDMbF1UVESANI0NiQDi505TJ8KLujo5k=;
-	h=From:To:Cc:Subject:Date:From;
-	b=s8yAgiDABYJJ5Q6dUW0bQqyeiS8he+8GKi6+qSH2CUjwIshTMK2Pmweg6oyFqcvce
-	 fVdaffWRShYGJ8PlgFk6UIM0a/ie3FY+avPhCyXknhkizTBzYmS5oRAhifjXIU9Bj+
-	 3yXDzzPDC6LWdVFOYJZu0hFT3i++tZF7ZxJxtV5FUSOUPdgWpTFmtU/Tqol6EZF+K2
-	 ZtqURe1IlXFEDkPbwts/B7hBcH09GXRFg3IDbs4sG+Rjns3fMnvf0BUERcRsl4FcCv
-	 /FxhJEqvCwwDxYbI3yzO2R7Ln2N9AlRiVGL5xMah5oMP2YeUmzixTqQjeLRTfZy1nT
-	 X6Kgf1sBnttMA==
+	s=k20201202; t=1713828247;
+	bh=RhgBYQ/jwdi1c/nCIzi+HG9YSv7lRWKVXMsqPbXSBH8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=k4h5Fj6Ni7nws9ihZfaTstAcUvyZgG+Ib5kkIF3xiI/82HqM4SR9BETIai838XQm6
+	 8Gt7wk6uRqxLSdbujN/byH2+fug75oSNKrCAZ3eeKOe/cm8WTM9//fk7KuQYU3JF1N
+	 dZa87oyjGkcpefbem//md1yhe6aVumM/5GSbdctPZtYPwU9t68iPxaJDuyWp+CzGdj
+	 GDtTTfl4shHBL2b2uxxH6Lw0fdRnswJAkn1CC+tC9Rwgl1b5t3YQ3WT2O4giL93PGc
+	 S1lcE+kp+K8sVGjiQ/4kLPI6McNjQyW/yxfs3c+k+9l6S0DzDcZ2O3YzggKO1WQOvu
+	 qhlw5jByDsaEg==
 From: Stephen Boyd <sboyd@kernel.org>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>
@@ -61,10 +62,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v4 00/10] clk: Add kunit tests for fixed rate and parent data
-Date: Mon, 22 Apr 2024 16:23:53 -0700
-Message-ID: <20240422232404.213174-1-sboyd@kernel.org>
+Subject: [PATCH v4 01/10] of: Add test managed wrappers for of_overlay_apply()/of_node_put()
+Date: Mon, 22 Apr 2024 16:23:54 -0700
+Message-ID: <20240422232404.213174-2-sboyd@kernel.org>
 X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+In-Reply-To: <20240422232404.213174-1-sboyd@kernel.org>
+References: <20240422232404.213174-1-sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,110 +76,322 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series adds unit tests for the clk fixed rate basic type and
-the clk registration functions that use struct clk_parent_data. To get
-there, we add support for loading device tree overlays onto the live DTB
-along with probing platform drivers to bind to device nodes in the
-overlays. With this series, we're able to exercise some of the code in
-the common clk framework that uses devicetree lookups to find parents
-and the fixed rate clk code that scans device tree directly and creates
-clks. Please review.
+Add test managed wrappers for of_overlay_apply() that automatically
+removes the overlay when the test is finished. This API is intended for
+use by KUnit tests that test code which relies on 'struct device_node's
+and of_*() APIs.
 
-I Cced everyone to all the patches so they get the full context. I'm
-hoping I can take the whole pile through the clk tree as they all build
-upon each other. Or the DT part can be merged through the DT tree to
-reduce the dependencies.
+KUnit tests will call of_overlay_apply_kunit() to load an overlay that's
+been built into the kernel image. When the test is complete, the overlay
+will be removed.
 
-Changes from v3 (https://lore.kernel.org/r/20230327222159.3509818-1-sboyd@kernel.org):
- * No longer depend on Frank's series[1] because it was merged upstream[2]
- * Use kunit_add_action_or_reset() to shorten code
- * Skip tests properly when CONFIG_OF_OVERLAY isn't set
+This has a few benefits:
 
-Changes from v2 (https://lore.kernel.org/r/20230315183729.2376178-1-sboyd@kernel.org):
- * Overlays don't depend on __symbols__ node
- * Depend on Frank's always create root node if CONFIG_OF series[1]
- * Added kernel-doc to KUnit API doc
- * Fixed some kernel-doc on functions
- * More test cases for fixed rate clk
+ 1) It keeps the tests hermetic because the overlay is removed when the
+    test is complete. Tests won't even be aware that an overlay was
+    loaded in another test.
 
-Changes from v1 (https://lore.kernel.org/r/20230302013822.1808711-1-sboyd@kernel.org):
- * Don't depend on UML, use unittest data approach to attach nodes
- * Introduce overlay loading API for KUnit
- * Move platform_device KUnit code to drivers/base/test
- * Use #define macros for constants shared between unit tests and
-   overlays
- * Settle on "test" as a vendor prefix
- * Make KUnit wrappers have "_kunit" postfix
+ 2) The overlay code can live right next to the unit test that loads it.
+    The overlay and the unit test can be compiled into one kernel module
+    if desired.
 
-[1] https://lore.kernel.org/r/20230317053415.2254616-1-frowand.list@gmail.com
-[2] https://lore.kernel.org/r/20240308195737.GA1174908-robh@kernel.org
+ 3) We can test different device tree configurations by loading
+    different overlays. The overlays can be written for a specific test,
+    and there can be many of them loaded per-test without needing to jam
+    all possible combinations into one DTB.
 
-Stephen Boyd (10):
-  of: Add test managed wrappers for of_overlay_apply()/of_node_put()
-  dt-bindings: vendor-prefixes: Add "test" vendor for KUnit and friends
-  dt-bindings: test: Add KUnit empty node binding
-  of: Add a KUnit test for overlays and test managed APIs
-  platform: Add test managed platform_device/driver APIs
-  dt-bindings: kunit: Add fixed rate clk consumer test
-  clk: Add test managed clk provider/consumer APIs
-  clk: Add KUnit tests for clk fixed rate basic type
-  dt-bindings: clk: Add KUnit clk_parent_data test
-  clk: Add KUnit tests for clks registered with struct clk_parent_data
+ 4) It also allows KUnit to test device tree dependent code on any
+    architecture, not just UML. This allows KUnit tests to test
+    architecture specific device tree code.
 
- Documentation/dev-tools/kunit/api/clk.rst     |  10 +
- Documentation/dev-tools/kunit/api/index.rst   |  21 +
- Documentation/dev-tools/kunit/api/of.rst      |  13 +
- .../dev-tools/kunit/api/platformdevice.rst    |  10 +
- .../bindings/clock/test,clk-parent-data.yaml  |  47 ++
- .../bindings/test/test,clk-fixed-rate.yaml    |  35 ++
- .../devicetree/bindings/test/test,empty.yaml  |  30 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- drivers/base/test/Makefile                    |   3 +
- drivers/base/test/platform_kunit-test.c       | 140 ++++++
- drivers/base/test/platform_kunit.c            | 174 +++++++
- drivers/clk/.kunitconfig                      |   2 +
- drivers/clk/Kconfig                           |   9 +
- drivers/clk/Makefile                          |   9 +-
- drivers/clk/clk-fixed-rate_test.c             | 377 +++++++++++++++
- drivers/clk/clk-fixed-rate_test.h             |   8 +
- drivers/clk/clk_kunit.c                       | 198 ++++++++
- drivers/clk/clk_parent_data_test.h            |  10 +
- drivers/clk/clk_test.c                        | 451 +++++++++++++++++-
- drivers/clk/kunit_clk_fixed_rate_test.dtso    |  19 +
- drivers/clk/kunit_clk_parent_data_test.dtso   |  28 ++
- drivers/of/.kunitconfig                       |   1 +
- drivers/of/Kconfig                            |  10 +
- drivers/of/Makefile                           |   2 +
- drivers/of/kunit_overlay_test.dtso            |   9 +
- drivers/of/of_kunit.c                         |  99 ++++
- drivers/of/overlay_test.c                     | 115 +++++
- include/kunit/clk.h                           |  28 ++
- include/kunit/of.h                            |  94 ++++
- include/kunit/platform_device.h               |  15 +
- 30 files changed, 1967 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/dev-tools/kunit/api/clk.rst
+There are some potential pitfalls though. Test authors need to be
+careful to not overwrite properties in the live tree. The easiest way to
+do this is to add and remove nodes with a 'kunit-' prefix, almost
+guaranteeing that the same node won't be present in the tree loaded at
+boot.
+
+Suggested-by: Rob Herring <robh@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ Documentation/dev-tools/kunit/api/index.rst | 11 +++
+ Documentation/dev-tools/kunit/api/of.rst    | 13 +++
+ drivers/of/Makefile                         |  1 +
+ drivers/of/of_kunit.c                       | 99 +++++++++++++++++++++
+ include/kunit/of.h                          | 94 +++++++++++++++++++
+ 5 files changed, 218 insertions(+)
  create mode 100644 Documentation/dev-tools/kunit/api/of.rst
- create mode 100644 Documentation/dev-tools/kunit/api/platformdevice.rst
- create mode 100644 Documentation/devicetree/bindings/clock/test,clk-parent-data.yaml
- create mode 100644 Documentation/devicetree/bindings/test/test,clk-fixed-rate.yaml
- create mode 100644 Documentation/devicetree/bindings/test/test,empty.yaml
- create mode 100644 drivers/base/test/platform_kunit-test.c
- create mode 100644 drivers/base/test/platform_kunit.c
- create mode 100644 drivers/clk/clk-fixed-rate_test.c
- create mode 100644 drivers/clk/clk-fixed-rate_test.h
- create mode 100644 drivers/clk/clk_kunit.c
- create mode 100644 drivers/clk/clk_parent_data_test.h
- create mode 100644 drivers/clk/kunit_clk_fixed_rate_test.dtso
- create mode 100644 drivers/clk/kunit_clk_parent_data_test.dtso
- create mode 100644 drivers/of/kunit_overlay_test.dtso
  create mode 100644 drivers/of/of_kunit.c
- create mode 100644 drivers/of/overlay_test.c
- create mode 100644 include/kunit/clk.h
  create mode 100644 include/kunit/of.h
- create mode 100644 include/kunit/platform_device.h
 
-
-base-commit: 4cece764965020c22cff7665b18a012006359095
+diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
+index 2d8f756aab56..282befa17edf 100644
+--- a/Documentation/dev-tools/kunit/api/index.rst
++++ b/Documentation/dev-tools/kunit/api/index.rst
+@@ -9,11 +9,15 @@ API Reference
+ 	test
+ 	resource
+ 	functionredirection
++	of
+ 
+ 
+ This page documents the KUnit kernel testing API. It is divided into the
+ following sections:
+ 
++Core KUnit API
++==============
++
+ Documentation/dev-tools/kunit/api/test.rst
+ 
+  - Documents all of the standard testing API
+@@ -25,3 +29,10 @@ Documentation/dev-tools/kunit/api/resource.rst
+ Documentation/dev-tools/kunit/api/functionredirection.rst
+ 
+  - Documents the KUnit Function Redirection API
++
++Driver KUnit API
++================
++
++Documentation/dev-tools/kunit/api/of.rst
++
++ - Documents the KUnit device tree (OF) API
+diff --git a/Documentation/dev-tools/kunit/api/of.rst b/Documentation/dev-tools/kunit/api/of.rst
+new file mode 100644
+index 000000000000..8587591c3e78
+--- /dev/null
++++ b/Documentation/dev-tools/kunit/api/of.rst
+@@ -0,0 +1,13 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++====================
++Device Tree (OF) API
++====================
++
++The KUnit device tree API is used to test device tree (of_*) dependent code.
++
++.. kernel-doc:: include/kunit/of.h
++   :internal:
++
++.. kernel-doc:: drivers/of/of_kunit.c
++   :export:
+diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+index 251d33532148..0dfd05079313 100644
+--- a/drivers/of/Makefile
++++ b/drivers/of/Makefile
+@@ -19,6 +19,7 @@ obj-y	+= kexec.o
+ endif
+ endif
+ 
++obj-$(CONFIG_KUNIT) += of_kunit.o
+ obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
+ 
+ obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+diff --git a/drivers/of/of_kunit.c b/drivers/of/of_kunit.c
+new file mode 100644
+index 000000000000..f63527268a51
+--- /dev/null
++++ b/drivers/of/of_kunit.c
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test managed device tree APIs
++ */
++
++#include <linux/of.h>
++#include <linux/of_fdt.h>
++
++#include <kunit/of.h>
++#include <kunit/test.h>
++#include <kunit/resource.h>
++
++static void of_overlay_fdt_apply_kunit_exit(void *ovcs_id)
++{
++	of_overlay_remove(ovcs_id);
++}
++
++/**
++ * of_overlay_fdt_apply_kunit() - Test managed of_overlay_fdt_apply()
++ * @test: test context
++ * @overlay_fdt: device tree overlay to apply
++ * @overlay_fdt_size: size in bytes of @overlay_fdt
++ * @ovcs_id: identifier of overlay, used to remove the overlay
++ *
++ * Just like of_overlay_fdt_apply(), except the overlay is managed by the test
++ * case and is automatically removed with of_overlay_remove() after the test
++ * case concludes.
++ *
++ * Return: 0 on success, negative errno on failure
++ */
++int of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
++			       u32 overlay_fdt_size, int *ovcs_id)
++{
++	int ret;
++	int *copy_id;
++
++	if (!IS_ENABLED(CONFIG_OF_OVERLAY))
++		kunit_skip(test, "requires CONFIG_OF_OVERLAY");
++	if (!IS_ENABLED(CONFIG_OF_EARLY_FLATTREE))
++		kunit_skip(test, "requires CONFIG_OF_EARLY_FLATTREE for root node");
++
++	copy_id = kunit_kmalloc(test, sizeof(*copy_id), GFP_KERNEL);
++	if (!copy_id)
++		return -ENOMEM;
++
++	ret = of_overlay_fdt_apply(overlay_fdt, overlay_fdt_size,
++				   ovcs_id, NULL);
++	if (ret)
++		return ret;
++
++	*copy_id = *ovcs_id;
++
++	return kunit_add_action_or_reset(test, of_overlay_fdt_apply_kunit_exit,
++					 copy_id);
++}
++EXPORT_SYMBOL_GPL(of_overlay_fdt_apply_kunit);
++
++/**
++ * __of_overlay_apply_kunit() - Test managed of_overlay_fdt_apply() variant
++ * @test: test context
++ * @overlay_begin: start address of overlay to apply
++ * @overlay_end: end address of overlay to apply
++ *
++ * This is mostly internal API. See of_overlay_apply_kunit() for the wrapper
++ * that makes this easier to use.
++ *
++ * Similar to of_overlay_fdt_apply(), except the overlay is managed by the test
++ * case and is automatically removed with of_overlay_remove() after the test
++ * case concludes.
++ *
++ * Return: 0 on success, negative errno on failure
++ */
++int __of_overlay_apply_kunit(struct kunit *test, u8 *overlay_begin,
++			     const u8 *overlay_end)
++{
++	int unused;
++
++	return of_overlay_fdt_apply_kunit(test, overlay_begin,
++					  overlay_end - overlay_begin,
++					  &unused);
++}
++EXPORT_SYMBOL_GPL(__of_overlay_apply_kunit);
++
++/**
++ * of_node_put_kunit() - Test managed of_node_put()
++ * @test: test context
++ * @node: node to pass to `of_node_put()`
++ *
++ * Just like of_node_put(), except the node is managed by the test case and is
++ * automatically put with of_node_put() after the test case concludes.
++ */
++void of_node_put_kunit(struct kunit *test, struct device_node *node)
++{
++	if (kunit_add_action(test, (kunit_action_t *)&of_node_put, node)) {
++		KUNIT_FAIL(test,
++			   "Can't allocate a kunit resource to put of_node\n");
++	}
++}
++EXPORT_SYMBOL_GPL(of_node_put_kunit);
+diff --git a/include/kunit/of.h b/include/kunit/of.h
+new file mode 100644
+index 000000000000..9981442ba578
+--- /dev/null
++++ b/include/kunit/of.h
+@@ -0,0 +1,94 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _KUNIT_OF_H
++#define _KUNIT_OF_H
++
++#include <kunit/test.h>
++
++struct device_node;
++
++#ifdef CONFIG_OF
++
++int of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
++			       u32 overlay_fdt_size, int *ovcs_id);
++int __of_overlay_apply_kunit(struct kunit *test, u8 *overlay_begin,
++			     const u8 *overlay_end);
++
++void of_node_put_kunit(struct kunit *test, struct device_node *node);
++
++#else
++
++static inline int
++of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
++			   u32 overlay_fdt_size, int *ovcs_id)
++{
++	kunit_skip(test, "requires CONFIG_OF");
++	return -EINVAL;
++}
++
++static inline int
++__of_overlay_apply_kunit(struct kunit *test, u8 *overlay_begin,
++			 const u8 *overlay_end)
++{
++	kunit_skip(test, "requires CONFIG_OF");
++	return -EINVAL;
++}
++
++static inline
++void of_node_put_kunit(struct kunit *test, struct device_node *node)
++{
++	kunit_skip(test, "requires CONFIG_OF");
++}
++
++#endif /* !CONFIG_OF */
++
++/**
++ * of_overlay_apply_kunit() - Test managed of_overlay_fdt_apply() for built-in overlays
++ * @test: test context
++ * @overlay_name: name of overlay to apply
++ *
++ * This macro is used to apply a device tree overlay built with the
++ * cmd_dt_S_dtbo rule in scripts/Makefile.lib that has been compiled into the
++ * kernel image or KUnit test module. The overlay is automatically removed when
++ * the test is finished.
++ *
++ * Unit tests that need device tree nodes should compile an overlay file with
++ * @overlay_name\.dtbo.o in their Makefile along with their unit test and then
++ * load the overlay during their test. The @overlay_name matches the filename
++ * of the overlay without the dtbo filename extension. If CONFIG_OF_OVERLAY is
++ * not enabled, the @test will be skipped.
++ *
++ * In the Makefile
++ *
++ * .. code-block:: none
++ *
++ *	obj-$(CONFIG_OF_OVERLAY_KUNIT_TEST) += overlay_test.o kunit_overlay_test.dtbo.o
++ *
++ * In the test
++ *
++ * .. code-block:: c
++ *
++ *	static void of_overlay_kunit_of_overlay_apply(struct kunit *test)
++ *	{
++ *		struct device_node *np;
++ *
++ *		KUNIT_ASSERT_EQ(test, 0,
++ *				of_overlay_apply_kunit(test, kunit_overlay_test));
++ *
++ *		np = of_find_node_by_name(NULL, "test-kunit");
++ *		KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
++ *		of_node_put(np);
++ *	}
++ *
++ * Return: 0 on success, negative errno on failure.
++ */
++#define of_overlay_apply_kunit(test, overlay_name)		\
++({								\
++	extern uint8_t __dtbo_##overlay_name##_begin[];		\
++	extern uint8_t __dtbo_##overlay_name##_end[];		\
++								\
++	__of_overlay_apply_kunit((test),			\
++			__dtbo_##overlay_name##_begin,		\
++			__dtbo_##overlay_name##_end);		\
++})
++
++#endif
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
