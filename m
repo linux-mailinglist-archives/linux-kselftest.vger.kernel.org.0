@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B1E78ADAC7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 02:20:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EDD58ADAE3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 02:23:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A3DD1C213A7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 00:20:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D36851F20C3A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 00:23:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 250CB1C0DD2;
-	Mon, 22 Apr 2024 23:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF58B1C8FB1;
+	Mon, 22 Apr 2024 23:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fxv5pDOm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kFnUcEP9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDB41C0DCE;
-	Mon, 22 Apr 2024 23:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07BD158DA1;
+	Mon, 22 Apr 2024 23:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830335; cv=none; b=n3nK72hsG4swTg4yoA0t4GI/GQkhBu8RsvaWC8EmHuX3LXNtaVgACLFW7NmKcLJlHLnVl+EnpUIQk6rDfbbiQm3wCQLATf7DggaVGKDYYnSdm9ZEU2JXpooX7C6mKZhC/l5AbHVx1Vfg1m1CX1h0WFgO5+9OfPtQb/vavOg0K94=
+	t=1713830357; cv=none; b=tgjNKuPrekLJS2mA49tVNUq+dbGa7NyBy2Gr5v6KcqugQPj27xB/HpHSpPhOW6cKAeYny6PljB5SdohkpbuRhP8DwC5YLpXnq4i7N6EY0pTzepyyaQJmxKkZ+I3xKTPsn/hXjSauh8y6UDJrkT+oaIJE4P6OdCHH3/wQygxM0Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830335; c=relaxed/simple;
+	s=arc-20240116; t=1713830357; c=relaxed/simple;
 	bh=WQkBgi+Eaxxbb+FX/HL3Sm6zB6RvXwCNsTnQSDnjwh0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j9EI77hmcYIqU7dl+6T8au6QO241Kaa+e7dLoXUsURM1mVeXlyHO1miaS8d//U8/Z1bppNeUkdyqrL9UWkGp9Rxjw1StmA4fr5bgVOmIdpqK80c23tG4kDTo4lpG6HFdhD+TKNCRZtaWM7sWEMPdu9u8Cp6qqsIxsiqlfPadJis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fxv5pDOm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53CA5C32782;
-	Mon, 22 Apr 2024 23:58:53 +0000 (UTC)
+	 MIME-Version; b=b8KuBjzf/LYtUtR3H+sDr+rRJ8+tOqoNQBcL/uZ0tUbxSdL5f9ZzwrxbfYte+JvLYYPaceq0M/LK5QdzhT9jnUd4WfKfAkwbFUqi+C9go/pwX9czpF3GuX5wdDtzCsz9LAH4paBYPh+pPIaQ9xzLY5S+pykQirFG4O/jacsgZQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kFnUcEP9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64EBBC4AF08;
+	Mon, 22 Apr 2024 23:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830334;
+	s=k20201202; t=1713830357;
 	bh=WQkBgi+Eaxxbb+FX/HL3Sm6zB6RvXwCNsTnQSDnjwh0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fxv5pDOmuuNRXWS0h2WilA+Xzp3xZ4sS6lVOp4B2IaXMJ/tOyRxUpkUcoRPQSKVug
-	 kSLcLJM8AiI6C/v9I48T+W+KabrCezdyW6nBRs7ljti0+EywJ+M4z7NL9fgIuGl/pr
-	 4S8n3mS97Wi80OD1tTSxg/A9K06akqCzppRYalZz0CszX/zaySX4qDplXkvsigV7AD
-	 AbyRTyyBc15ea7Le4UHTM/m5EpNpkEsVS7zUaWQ+FPO2QPXGIpRC4MhlNvGRjhWpZj
-	 Jf9JMb6mgalcwc0EaRqWsTDbohY2qGqYUhBSUfWIjzGRrYEYqWZR9wOPrZq97peqEU
-	 UzODJfvj/+m9g==
+	b=kFnUcEP9E5lgPEKOM9GYPYukV1h/uixc25cftIt7aW2Y1x6EXnT/N04blY6vx0vvy
+	 Xfr3eMW9emN27QOL6cWooAWC+sPKjcQCdLOQxU4aQInzLzUnddcgUHPa9AWEBaicKw
+	 owAdBbu4sZPbUaHcsdicn34NXLi7hNtWlHUZShPOxe62ElhHS7Cv8CuUR8JCp/ZT8C
+	 6GdXNSYCN5mkUgwvr0OBaNsgTGiIHD5eieEfxEOvUWCN4lQ4nlRymP3Okk8JZjPolR
+	 tWowUMFIbwGK3yl4KpkDCv0T9B7Wi6BcKJsc7JoZaQIXQteydU66V2KZJJ3svVElDo
+	 FgsvCPQ9tELMQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: John Stultz <jstultz@google.com>,
 	nathan@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 9/9] selftests: timers: Fix valid-adjtimex signed left-shift undefined behavior
-Date: Mon, 22 Apr 2024 19:19:50 -0400
-Message-ID: <20240422231955.1613650-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 8/9] selftests: timers: Fix valid-adjtimex signed left-shift undefined behavior
+Date: Mon, 22 Apr 2024 19:20:13 -0400
+Message-ID: <20240422232020.1615476-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422231955.1613650-1-sashal@kernel.org>
-References: <20240422231955.1613650-1-sashal@kernel.org>
+In-Reply-To: <20240422232020.1615476-1-sashal@kernel.org>
+References: <20240422232020.1615476-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.215
+X-stable-base: Linux 5.4.274
 Content-Transfer-Encoding: 8bit
 
 From: John Stultz <jstultz@google.com>
